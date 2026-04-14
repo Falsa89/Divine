@@ -11,7 +11,6 @@ const CATEGORIES = [
   {
     title: 'Combattimento',
     items: [
-      { label: 'Formazione Squadra', icon: '\u2694\uFE0F', route: '/team-grid', gradient: ['#FF4444', '#CC2222'] as const },
       { label: 'Fusione Eroi', icon: '\uD83D\uDD2E', route: '/fusion', gradient: ['#FF8844', '#CC6622'] as const },
       { label: 'Equipaggiamento', icon: '\uD83D\uDDE1\uFE0F', route: '/equipment', gradient: ['#44CC88', '#229966'] as const },
       { label: 'Oggetti Esclusivi', icon: '\uD83D\uDC51', route: '/exclusive', gradient: ['#FFD700', '#CC9900'] as const },
