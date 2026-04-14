@@ -348,3 +348,45 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         frags = random.randint(5, 25)
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"dimension_frags": frags}}, upsert=True)
         return {"dimension_frags_earned": frags}
+
+    # ==================== SOUL FORGE - ESSENCE SYSTEM ====================
+    SOUL_ESSENCE_VALUES = {1: 5, 2: 10, 3: 25, 4: 100, 5: 300}
+    LEVEL_BONUS_RATE = 0.02  # +2% per livello
+
+    class SoulForgeRequest(BaseModel):
+        hero_ids: list
+
+    @router.post("/soul/forge")
+    async def soul_forge(req: SoulForgeRequest, current_user: dict = Depends(get_current_user)):
+        """Sacrifice heroes to gain soul_essence."""
+        uid = current_user["id"]
+        if not req.hero_ids:
+            raise HTTPException(400, "Seleziona almeno un eroe!")
+        # Deduplicate
+        unique_ids = list(dict.fromkeys(req.hero_ids))
+        total_essence = 0
+        for uhid in unique_ids:
+            uh = await db.user_heroes.find_one({"id": uhid, "user_id": uid})
+            if not uh:
+                raise HTTPException(404, f"Eroe {uhid} non trovato o non tuo")
+            # Skip heroes in active team
+            team = await db.teams.find_one({"user_id": uid, "is_active": True})
+            if team and any(p.get("user_hero_id") == uhid for p in team.get("formation", [])):
+                raise HTTPException(400, "Non puoi sacrificare un eroe nel team attivo!")
+            stars = uh.get("stars", 1)
+            level = uh.get("level", 1)
+            base_value = SOUL_ESSENCE_VALUES.get(min(stars, 5), 5)
+            level_bonus = 1 + (level * LEVEL_BONUS_RATE)
+            essence = int(base_value * level_bonus)
+            total_essence += essence
+            await db.user_heroes.delete_one({"id": uhid, "user_id": uid})
+        # Add soul_essence to user
+        await db.users.update_one(
+            {"id": uid},
+            {"$inc": {"soul_essence": total_essence}},
+        )
+        user = await db.users.find_one({"id": uid})
+        return {
+            "gained_essence": total_essence,
+            "new_balance": user.get("soul_essence", 0),
+        }
