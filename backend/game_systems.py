@@ -23,6 +23,7 @@ from routes import (
     register_achievement_routes,
     register_push_routes,
 )
+from routes.synergies import register_synergy_routes
 
 
 def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):
@@ -45,5 +46,6 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     register_soul_forge_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
     register_achievement_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
     register_push_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+    register_synergy_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
     return router

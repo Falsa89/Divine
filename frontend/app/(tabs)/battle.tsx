@@ -45,8 +45,23 @@ export default function BattleTab() {
   const [constellations, setConstellations] = useState<any[]>([]);
   const [selectedConstellation, setSelectedConstellation] = useState<string | null>(null);
   const [showConstellations, setShowConstellations] = useState(false);
+  const [synergies, setSynergies] = useState<any[]>([]);
 
   useEffect(() => { loadData(); }, []);
+
+  // Load synergies whenever grid changes
+  useEffect(() => {
+    const loadSynergies = async () => {
+      try {
+        const syn = await apiCall('/api/synergies/team');
+        setSynergies(syn.active_synergies || []);
+      } catch (e) {
+        setSynergies([]);
+      }
+    };
+    if (filledCount > 0) loadSynergies();
+    else setSynergies([]);
+  }, [grid]);
 
   const loadData = async () => {
     try {
@@ -309,6 +324,29 @@ export default function BattleTab() {
               ))}
             </ScrollView>
           )}
+
+          {/* Active Synergies Display */}
+          {synergies.length > 0 && (
+            <View style={s.synergiesBar}>
+              <Text style={s.synergiesTitle}>{'\u2728'} SINERGIE ATTIVE ({synergies.length})</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.synergiesList}>
+                {synergies.map((syn: any, i: number) => {
+                  const catColor = syn.category === 'mythological' ? '#FFD700' : syn.category === 'elemental' ? '#44AAFF' : '#44DD88';
+                  return (
+                    <View key={syn.id || i} style={[s.synergyChip, { borderColor: catColor + '50', backgroundColor: catColor + '08' }]}>
+                      <Text style={s.synergyIcon}>{syn.icon}</Text>
+                      <View>
+                        <Text style={[s.synergyName, { color: catColor }]} numberOfLines={1}>{syn.name}</Text>
+                        <Text style={s.synergyBuffs} numberOfLines={1}>
+                          {Object.entries(syn.buffs || {}).map(([k, v]: [string, any]) => `${k}+${Math.round(v * 100)}%`).join(' ')}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
         </View>
 
         {/* RIGHT: Hero Roster */}
@@ -470,6 +508,20 @@ const s = StyleSheet.create({
   },
   constItemIcon: { fontSize: 16 },
   constItemName: { fontSize: 7, fontWeight: '800' },
+  // Synergies
+  synergiesBar: {
+    backgroundColor: 'rgba(255,215,0,0.04)', borderRadius: 6, padding: 5,
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.12)', marginTop: 2,
+  },
+  synergiesTitle: { color: COLORS.gold, fontSize: 7, fontWeight: '900', letterSpacing: 0.5, marginBottom: 3 },
+  synergiesList: { gap: 4 },
+  synergyChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    paddingHorizontal: 6, paddingVertical: 3, borderRadius: 5, borderWidth: 1,
+  },
+  synergyIcon: { fontSize: 12 },
+  synergyName: { fontSize: 7, fontWeight: '800' },
+  synergyBuffs: { fontSize: 6, color: COLORS.textMuted },
   // Roster Panel
   rosterPanel: { flex: 1, gap: 3 },
   classIndicator: {

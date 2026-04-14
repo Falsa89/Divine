@@ -12,9 +12,45 @@ from battle_core import (
     calculate_adjacency_bonus, ELEMENT_SKILLS, PASSIVE_SKILLS,
     POSITION_BUFFS, FORMATION_PATTERNS,
 )
+from synergy_system import calculate_team_synergies, get_all_synergy_definitions, get_element_multiplier
 
 
 def register_battle_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
+
+    # ==================== SYNERGY ENDPOINTS ====================
+    @router.get("/synergies/guide")
+    async def get_synergy_guide():
+        """Get all synergy definitions for the guide/encyclopedia."""
+        return get_all_synergy_definitions()
+
+    @router.get("/synergies/team")
+    async def get_team_synergies(current_user: dict = Depends(get_current_user)):
+        """Get active synergies for the current team."""
+        uid = current_user["id"]
+        team = await db.teams.find_one({"user_id": uid, "is_active": True})
+        if not team or not team.get("formation"):
+            return {"active_synergies": [], "total_buffs": {}, "synergy_count": 0}
+
+        names, elements, classes = [], [], []
+        for pos in team.get("formation", []):
+            uhid = pos.get("user_hero_id")
+            if not uhid:
+                continue
+            uh = await db.user_heroes.find_one({"id": uhid, "user_id": uid})
+            if not uh:
+                continue
+            hero = await db.heroes.find_one({"id": uh["hero_id"]})
+            if hero:
+                names.append(hero.get("name", ""))
+                elements.append(hero.get("element", "neutral"))
+                classes.append(hero.get("hero_class", "DPS"))
+            else:
+                names.append(uh.get("hero_name", ""))
+                elements.append(uh.get("hero_element", "neutral"))
+                classes.append(uh.get("hero_class", "DPS"))
+
+        result = calculate_team_synergies(names, elements, classes)
+        return result
 
     @router.get("/battle/skills")
     async def get_skill_info():
@@ -64,11 +100,29 @@ def register_battle_routes(router, db, get_current_user, serialize_doc, calculat
             for stat, val in adj_result['bonus'].items():
                 if stat in char and val > 0:
                     char[stat] = int(char[stat] * (1 + val))
+
+        # === SYNERGY BONUSES (applied automatically) ===
+        team_names = [c.get("name", "") for c in player_team]
+        team_elements = [c.get("element", "neutral") for c in player_team]
+        team_classes = [c.get("hero_class", "DPS") for c in player_team]
+        synergy_result = calculate_team_synergies(team_names, team_elements, team_classes)
+        synergy_buffs = synergy_result.get("total_buffs", {})
+        # Apply synergy buffs to all team members
+        for char in player_team:
+            for stat, val in synergy_buffs.items():
+                if stat in char:
+                    if isinstance(char[stat], int):
+                        char[stat] = int(char[stat] * (1 + val))
+                    elif isinstance(char[stat], float):
+                        char[stat] = round(char[stat] + val, 4)
+
         team_power = sum(c['attack'] + c['hp'] // 10 + c['defense'] for c in player_team)
         enemy_team = generate_enemy_team(int(team_power * 0.15), count=min(len(player_team), 6))
         result = simulate_battle(player_team, enemy_team)
         result['active_formations'] = active_formations
         result['adjacency_pairs'] = adj_result['adjacent_pairs']
+        result['active_synergies'] = synergy_result.get('active_synergies', [])
+        result['synergy_buffs'] = synergy_buffs
         if result['victory']:
             gold_reward = int(team_power * 0.5)
             exp_reward = int(team_power * 0.2)

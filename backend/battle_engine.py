@@ -652,6 +652,25 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
                 if stat in char and val > 0:
                     char[stat] = int(char[stat] * (1 + val))
         
+        # === SYNERGY BONUSES (applied automatically in real-time) ===
+        try:
+            from synergy_system import calculate_team_synergies
+            team_names = [c.get("name", "") for c in player_team]
+            team_elements = [c.get("element", "neutral") for c in player_team]
+            team_classes = [c.get("hero_class", "DPS") for c in player_team]
+            synergy_result = calculate_team_synergies(team_names, team_elements, team_classes)
+            synergy_buffs = synergy_result.get("total_buffs", {})
+            for char in player_team:
+                for stat, val in synergy_buffs.items():
+                    if stat in char:
+                        if isinstance(char[stat], int):
+                            char[stat] = int(char[stat] * (1 + val))
+                        elif isinstance(char[stat], float):
+                            char[stat] = round(char[stat] + val, 4)
+        except Exception:
+            synergy_result = {"active_synergies": [], "total_buffs": {}}
+            synergy_buffs = {}
+
         # Generate enemy team (weaker for fair play)
         team_power = sum(c['attack'] + c['hp'] // 10 + c['defense'] for c in player_team)
         enemy_team = generate_enemy_team(int(team_power * 0.15), count=min(6, len(player_team)))
@@ -660,6 +679,8 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
         result = simulate_battle(player_team, enemy_team)
         result['active_formations'] = active_formations
         result['adjacency_pairs'] = adj_result['adjacent_pairs']
+        result['active_synergies'] = synergy_result.get('active_synergies', [])
+        result['synergy_buffs'] = synergy_buffs
         
         # Awards on victory
         if result['victory']:
