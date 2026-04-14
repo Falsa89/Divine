@@ -13,6 +13,7 @@ interface User {
   max_stamina: number;
   titles: string[];
   active_title: string;
+  guild_id?: string | null;
 }
 
 interface AuthContextType {
