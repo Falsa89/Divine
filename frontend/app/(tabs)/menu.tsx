@@ -19,6 +19,7 @@ const CATEGORIES = [
     title: 'Progressione',
     items: [
       { label: 'Artefatti & Costellazioni', icon: '\uD83D\uDC8E', route: '/artifacts', gradient: ['#BB55FF', '#8833CC'] as const },
+      { label: 'Soul Forge', icon: '\uD83D\uDC80', route: '/soul-forge', gradient: ['#9944FF', '#6622CC'] as const },
       { label: 'Aure & Cosmetici', icon: '\u2728', route: '/cosmetics', gradient: ['#FFD700', '#DD9900'] as const },
       { label: 'Achievement', icon: '\uD83C\uDFC5', route: '/achievements', gradient: ['#FFD700', '#CC9900'] as const },
       { label: 'Battle Pass', icon: '\u2B50', route: '/battlepass', gradient: ['#FF6B35', '#DD4422'] as const },

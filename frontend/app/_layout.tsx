@@ -57,6 +57,7 @@ export default function RootLayout() {
           <Stack.Screen name="economy" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="achievements" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="hero-detail" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="soul-forge" options={{ animation: 'slide_from_bottom' }} />
         </Stack>
         </NotificationProvider>
       </AuthProvider>
