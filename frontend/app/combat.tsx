@@ -41,7 +41,15 @@ export default function CombatScreen() {
   const [logLines, setLogLines] = useState<any[]>([]);
   const [spriteStates, setSpriteStates] = useState<Record<string, SpriteData>>({});
   const timerRef = useRef<any>(null);
+  const allTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const logRef = useRef<ScrollView>(null);
+
+  // Helper: traccia ogni setTimeout per cleanup sicuro
+  const safeTimeout = (fn: () => void, ms: number) => {
+    const id = setTimeout(fn, ms);
+    allTimers.current.push(id);
+    return id;
+  };
 
   // Screen-level animations
   const flash = useSharedValue(0);
@@ -56,7 +64,7 @@ export default function CombatScreen() {
   const ultStyle = useAnimatedStyle(() => ({ transform: [{ scale: ultScale.value }], opacity: ultOp.value }));
   const vsStyle = useAnimatedStyle(() => ({ transform: [{ scale: vsScale.value }], opacity: vsOp.value }));
 
-  useEffect(() => { startBattle(); return () => { if (timerRef.current) clearTimeout(timerRef.current); }; }, []);
+  useEffect(() => { startBattle(); return () => { if (timerRef.current) clearTimeout(timerRef.current); allTimers.current.forEach(id => clearTimeout(id)); allTimers.current = []; }; }, []);
 
   const initSpriteState = (id: string): SpriteData => ({ state: 'idle', damage: null, healAmt: null, isCrit: false });
 
@@ -90,7 +98,7 @@ export default function CombatScreen() {
       vsScale.value = 0; vsOp.value = 0;
       vsScale.value = withSequence(withTiming(1.3, { duration: 300 }), withTiming(1, { duration: 200 }));
       vsOp.value = withSequence(withTiming(1, { duration: 200 }), withDelay(600, withTiming(0, { duration: 200 })));
-      setTimeout(() => { setPhase('fighting'); if (r.battle_log?.length) playLog(r, 0, 0); }, 1400);
+      safeTimeout(() => { setPhase('fighting'); if (r.battle_log?.length) playLog(r, 0, 0); }, 1400);
     } catch (e: any) { setError(e.message || 'Errore'); setPhase('result'); }
   };
 
@@ -98,7 +106,7 @@ export default function CombatScreen() {
 
   const addLog = (entry: any) => {
     setLogLines(prev => [...prev.slice(-8), entry]);
-    setTimeout(() => logRef.current?.scrollToEnd({ animated: true }), 50);
+    safeTimeout(() => logRef.current?.scrollToEnd({ animated: true }), 50);
   };
 
   const playLog = useCallback((res: any, ti: number, ai: number) => {
@@ -113,7 +121,7 @@ export default function CombatScreen() {
     const t = res.battle_log[ti]; setTurn(ti + 1);
     if (ai >= t.actions.length) {
       resetSpriteStates();
-      timerRef.current = setTimeout(() => playLog(res, ti + 1, 0), delay() * 0.3);
+      timerRef.current = safeTimeout(() => playLog(res, ti + 1, 0), delay() * 0.3);
       return;
     }
     const a = t.actions[ai];
@@ -131,7 +139,7 @@ export default function CombatScreen() {
       addLog({ type: 'ultimate', actor: a.actor, skill: a.skill?.name, team: a.team, element: a.element });
 
       // Apply damage after a beat
-      timerRef.current = setTimeout(() => {
+      timerRef.current = safeTimeout(() => {
         setShowUlt(false);
         updateHP(a);
         if (a.targets) {
@@ -140,7 +148,7 @@ export default function CombatScreen() {
           });
         }
         addLog({ type: 'attack', actor: a.actor, skill: a.skill?.name, damage: a.total_damage, crit: a.crit, team: a.team, targets: a.targets?.map((t: any) => t.name).join(', ') });
-        timerRef.current = setTimeout(() => playLog(res, ti, ai + 1), delay() * 0.6);
+        timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.6);
       }, delay() * 1.2);
     } else if (a.type === 'attack') {
       // Set attacker to attack state
@@ -156,7 +164,7 @@ export default function CombatScreen() {
       }
 
       // Delay then show hit on targets
-      timerRef.current = setTimeout(() => {
+      timerRef.current = safeTimeout(() => {
         updateHP(a);
         if (a.targets) {
           a.targets.forEach((tgt: any) => {
@@ -164,25 +172,25 @@ export default function CombatScreen() {
           });
         }
         addLog({ type: 'attack', actor: a.actor, skill: a.skill?.name, damage: a.total_damage, crit: a.crit, team: a.team, targets: a.targets?.map((t: any) => t.name).join(', ') });
-        timerRef.current = setTimeout(() => playLog(res, ti, ai + 1), delay() * 0.5);
+        timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.5);
       }, delay() * 0.4);
     } else if (a.type === 'heal') {
       setSpriteState(a.actor_id, { state: 'heal', healAmt: a.amount || 0, isCrit: false });
       updateHP(a);
       addLog({ type: 'heal', actor: a.actor, amount: a.amount });
-      timerRef.current = setTimeout(() => playLog(res, ti, ai + 1), delay() * 0.5);
+      timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.5);
     } else if (a.type === 'dot') {
       if (a.target_id) setSpriteState(a.target_id, { state: 'hit', damage: a.damage || 0, isCrit: false });
       updateHP(a);
       addLog({ type: 'dot', target: a.target, damage: a.damage, effect: (a as any).effect_name });
-      timerRef.current = setTimeout(() => playLog(res, ti, ai + 1), delay() * 0.4);
+      timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.4);
     } else if (a.type === 'dodge') {
       if (a.target_id) setSpriteState(a.target_id, { state: 'dodge', damage: null, isCrit: false });
       addLog({ type: 'dodge', target: a.target });
-      timerRef.current = setTimeout(() => playLog(res, ti, ai + 1), delay() * 0.4);
+      timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.4);
     } else {
       addLog({ type: 'skip', actor: a.actor });
-      timerRef.current = setTimeout(() => playLog(res, ti, ai + 1), delay() * 0.3);
+      timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.3);
     }
   }, [speed]);
 
@@ -203,6 +211,8 @@ export default function CombatScreen() {
 
   const skip = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
+    allTimers.current.forEach(id => clearTimeout(id));
+    allTimers.current = [];
     if (result) {
       setTeamA(result.team_a_final); setTeamB(result.team_b_final);
       [...(result.team_a_final || []), ...(result.team_b_final || [])].forEach((c: any) => {
