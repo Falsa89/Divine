@@ -16,7 +16,6 @@ from .forge import register_forge_routes
 from .soul_forge import register_soul_forge_routes
 from .achievements import register_achievement_routes
 from .push_notifications import register_push_routes
-from .battle import register_battle_routes
 from .heroes import register_heroes_routes
 
 __all__ = [
