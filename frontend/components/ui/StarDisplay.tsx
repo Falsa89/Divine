@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated, {
+  useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing,
+} from 'react-native-reanimated';
 
 interface StarDisplayProps {
   stars: number;
@@ -52,6 +55,8 @@ export default function StarDisplay({ stars, size = 14 }: StarDisplayProps) {
           </View>
           {/* Top highlight (emboss) */}
           <View style={[styles.redHighlight, { width: size * 0.35, height: size * 0.2, top: size * 0.08, borderRadius: size * 0.2 }]} />
+          {/* Shimmer overlay */}
+          <RedShimmer size={size} delay={i * 400} />
         </View>
       ))}
 
@@ -73,6 +78,35 @@ export default function StarDisplay({ stars, size = 14 }: StarDisplayProps) {
           </View>
         </View>
       ))}
+    </View>
+  );
+}
+
+/**
+ * RedShimmer - Luce diagonale che attraversa la stella rossa.
+ * Loop continuo, leggero e performante (useNativeDriver via Reanimated).
+ */
+function RedShimmer({ size, delay }: { size: number; delay: number }) {
+  const translateX = useSharedValue(-size);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      translateX.value = withRepeat(
+        withTiming(size * 1.5, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
+        -1,
+        false,
+      );
+    }, delay);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }, { rotate: '25deg' }],
+  }));
+
+  return (
+    <View style={[styles.shimmerClip, { width: size, height: size, borderRadius: size * 0.15 }]} pointerEvents="none">
+      <Animated.View style={[styles.shimmerBar, animStyle, { width: size * 0.35, height: size * 2 }]} />
     </View>
   );
 }
@@ -187,5 +221,17 @@ const styles = StyleSheet.create({
   yellowGlow: {
     position: 'absolute',
     backgroundColor: 'rgba(245,158,11,0.2)',
+  },
+  // Shimmer (red stars only)
+  shimmerClip: {
+    position: 'absolute',
+    overflow: 'hidden',
+  },
+  shimmerBar: {
+    position: 'absolute',
+    left: 0,
+    top: -10,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 4,
   },
 });
