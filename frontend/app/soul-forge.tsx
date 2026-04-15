@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import Animated, { FadeIn, FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import StarDisplay from '../components/ui/StarDisplay';
 import { COLORS, RARITY, ELEMENTS } from '../constants/theme';
 
 const ESSENCE_VALUES: Record<number, number> = { 1: 5, 2: 10, 3: 25, 4: 100, 5: 300 };
@@ -149,9 +150,9 @@ export default function SoulForgeScreen() {
                         </View>
                       )}
                       <Text style={[s.heroName, { color: rarCol }]} numberOfLines={1}>{h.hero_name}</Text>
-                      <Text style={s.heroStars}>
-                        {stars <= 6 ? '\u2B50'.repeat(stars) : `${stars}\u2B50`}
-                      </Text>
+                      <View style={s.heroStars}>
+                        <StarDisplay stars={stars} size={8} />
+                      </View>
                       <Text style={s.heroLvl}>Lv.{h.level || 1}</Text>
                       <Text style={s.heroEssence}>{'\uD83D\uDC80'} {essence}</Text>
                     </TouchableOpacity>
@@ -179,10 +180,10 @@ export default function SoulForgeScreen() {
             <View style={s.valueTable}>
               <Text style={s.tableTitle}>VALORI BASE</Text>
               {Object.entries(ESSENCE_VALUES).map(([star, val]) => (
-                <View key={star} style={s.tableRow}>
-                  <Text style={s.tableStar}>{'\u2B50'.repeat(Number(star))}</Text>
-                  <Text style={s.tableVal}>{val}</Text>
-                </View>
+                  <View key={star} style={s.tableRow}>
+                    <StarDisplay stars={Number(star)} size={10} />
+                    <Text style={s.tableVal}>{val}</Text>
+                  </View>
               ))}
               <Text style={s.tableNote}>+2% per livello eroe</Text>
             </View>
@@ -278,7 +279,7 @@ const s = StyleSheet.create({
   heroImgPh: { width: 40, height: 40, borderRadius: 8, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
   heroInit: { fontSize: 18, fontWeight: '900' },
   heroName: { fontSize: 7, fontWeight: '800', marginTop: 3, textAlign: 'center' },
-  heroStars: { fontSize: 6, color: '#FFD700', marginTop: 1 },
+  heroStars: { marginTop: 1 },
   heroLvl: { fontSize: 6, color: 'rgba(255,255,255,0.4)', marginTop: 1 },
   heroEssence: { fontSize: 7, color: '#C877FF', fontWeight: '700', marginTop: 2 },
   // Forge Panel
