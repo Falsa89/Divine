@@ -10,6 +10,7 @@ interface HeroIdleAnimationProps {
   stars: number;
   size: number;
   color?: string;
+  disableParticles?: boolean;
 }
 
 /**
@@ -19,9 +20,9 @@ interface HeroIdleAnimationProps {
  * 6★+:   aura glow pulsante
  * 7★+:   particelle luce flottanti (max 4)
  */
-export default function HeroIdleAnimation({ children, stars, size, color = '#FFD700' }: HeroIdleAnimationProps) {
+export default function HeroIdleAnimation({ children, stars, size, color = '#FFD700', disableParticles = false }: HeroIdleAnimationProps) {
   const showAura = stars >= 6;
-  const showParticles = stars >= 7;
+  const showParticles = stars >= 7 && !disableParticles;
 
   return (
     <View style={[st.container, { width: size, height: size }]}>

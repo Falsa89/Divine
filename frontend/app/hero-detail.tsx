@@ -361,28 +361,63 @@ export default function HeroDetailScreen() {
 
       {/* Fullscreen Image Modal */}
       <Modal visible={showFullscreen} transparent animationType="fade" onRequestClose={() => setShowFullscreen(false)}>
-        <Pressable style={s.fsOverlay} onPress={() => setShowFullscreen(false)}>
-          <View style={s.fsContent}>
-            <HeroIdleAnimation stars={stars} size={240} color={col}>
-              {data.image ? (
-                <View style={[s.fsImgWrap, { borderColor: rarCol }]}>
-                  <Image source={{ uri: data.image }} style={s.fsImg} resizeMode="contain" />
-                </View>
-              ) : (
-                <View style={[s.fsImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
-                  <Text style={[s.fsInit, { color: col }]}>{data.name?.[0]}</Text>
-                </View>
-              )}
-            </HeroIdleAnimation>
-            <Text style={[s.fsName, { color: rarCol }]}>{data.name}</Text>
-            <View style={s.fsStars}>
-              {stars <= 12 ? <StarDisplay stars={stars} size={18} /> : <TranscendenceStars stars={stars} size={18} />}
-            </View>
-            <Text style={s.fsHint}>Tocca per chiudere</Text>
-          </View>
-        </Pressable>
+        <View style={s.fsOverlay}>
+          <FullscreenHero
+            data={data}
+            stars={stars}
+            col={col}
+            rarCol={rarCol}
+            onClose={() => setShowFullscreen(false)}
+          />
+        </View>
       </Modal>
     </LinearGradient>
+  );
+}
+
+/** Fullscreen hero view - mounts animation after delay to avoid crash */
+function FullscreenHero({ data, stars, col, rarCol, onClose }: {
+  data: any; stars: number; col: string; rarCol: string; onClose: () => void;
+}) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 80);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!data) return null;
+
+  return (
+    <View style={s.fsContent}>
+      {ready ? (
+        <HeroIdleAnimation stars={stars} size={140} color={col} disableParticles>
+          {data.image ? (
+            <View style={[s.fsImgWrap, { borderColor: rarCol }]}>
+              <Image source={{ uri: data.image }} style={s.fsImg} resizeMode="contain" />
+            </View>
+          ) : (
+            <View style={[s.fsImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
+              <Text style={[s.fsInit, { color: col }]}>{data.name?.[0]}</Text>
+            </View>
+          )}
+        </HeroIdleAnimation>
+      ) : (
+        <View style={[s.fsImgWrap, { borderColor: rarCol }]}>
+          {data.image ? (
+            <Image source={{ uri: data.image }} style={s.fsImg} resizeMode="contain" />
+          ) : (
+            <Text style={[s.fsInit, { color: col }]}>{data.name?.[0]}</Text>
+          )}
+        </View>
+      )}
+      <Text style={[s.fsName, { color: rarCol }]}>{data.name}</Text>
+      <View style={s.fsStars}>
+        {stars <= 12 ? <StarDisplay stars={stars} size={18} /> : <TranscendenceStars stars={stars} size={18} />}
+      </View>
+      <Pressable onPress={onClose} style={s.fsCloseBtn}>
+        <Text style={s.fsCloseTxt}>CHIUDI</Text>
+      </Pressable>
+    </View>
   );
 }
 
@@ -522,27 +557,36 @@ const s = StyleSheet.create({
   },
   fsContent: {
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
   fsImgWrap: {
-    width: 240,
-    height: 240,
-    borderRadius: 20,
+    width: 140,
+    height: 140,
+    borderRadius: 16,
     borderWidth: 2,
     overflow: 'hidden',
     backgroundColor: '#0A0A20',
   },
   fsImg: { width: '100%', height: '100%' },
   fsImgPh: {
-    width: 240,
-    height: 240,
-    borderRadius: 20,
+    width: 140,
+    height: 140,
+    borderRadius: 16,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  fsInit: { fontSize: 80, fontWeight: '900' },
-  fsName: { fontSize: 22, fontWeight: '900', letterSpacing: 1 },
+  fsInit: { fontSize: 56, fontWeight: '900' },
+  fsName: { fontSize: 20, fontWeight: '900', letterSpacing: 1 },
   fsStars: { height: 24, justifyContent: 'center', alignItems: 'center' },
-  fsHint: { color: 'rgba(255,255,255,0.25)', fontSize: 10, marginTop: 16 },
+  fsCloseBtn: {
+    marginTop: 16,
+    paddingHorizontal: 28,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
+  },
+  fsCloseTxt: { color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: '800', letterSpacing: 1 },
 });
