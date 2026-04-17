@@ -8,6 +8,8 @@ import { useAuth } from '../context/AuthContext';
 import ScreenHeader from '../components/ui/ScreenHeader';
 import TabSelector from '../components/ui/TabSelector';
 import GradientButton from '../components/ui/GradientButton';
+import StarDisplay from '../components/ui/StarDisplay';
+import TranscendenceStars from '../components/ui/TranscendenceStars';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../constants/theme';
 
 const STAT_LABELS: Record<string, string> = {
@@ -144,7 +146,9 @@ export default function HeroDetailScreen() {
               )}
               <View style={s.heroInfo}>
                 <Text style={[s.heroName, { color: rarCol }]}>{data.name}</Text>
-                <Text style={s.heroStars}>{starText}</Text>
+                <View style={s.heroStars}>
+                  {stars <= 12 ? <StarDisplay stars={stars} size={12} /> : <TranscendenceStars stars={stars} size={12} />}
+                </View>
                 <Text style={s.heroMeta}>
                   {ELEMENTS.icons[data.element] || ''} {data.element} {'\u2022'} {CLASSES.icons[data.hero_class] || ''} {data.hero_class} {'\u2022'} Lv.{data.level}/{data.level_cap}
                 </Text>

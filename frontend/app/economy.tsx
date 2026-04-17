@@ -8,6 +8,8 @@ import { useAuth } from '../context/AuthContext';
 import ScreenHeader from '../components/ui/ScreenHeader';
 import TabSelector from '../components/ui/TabSelector';
 import GradientButton from '../components/ui/GradientButton';
+import StarDisplay from '../components/ui/StarDisplay';
+import TranscendenceStars from '../components/ui/TranscendenceStars';
 import { COLORS } from '../constants/theme';
 
 type Tab = 'wallet' | 'soul_forge' | 'shops';
@@ -135,7 +137,11 @@ export default function EconomyScreen() {
                 >
                   <LinearGradient colors={['rgba(255,68,68,0.08)', 'transparent']} style={st.heroRInner}>
                     <Text style={st.heroRN} numberOfLines={1}>{h.hero_name}</Text>
-                    <Text style={st.heroRS}>{h.stars || h.hero_rarity || 1}\u2B50</Text>
+                    <View style={st.heroRS}>
+                      {(h.stars || h.hero_rarity || 1) <= 12
+                        ? <StarDisplay stars={h.stars || h.hero_rarity || 1} size={8} />
+                        : <TranscendenceStars stars={h.stars || h.hero_rarity || 1} size={8} />}
+                    </View>
                   </LinearGradient>
                 </TouchableOpacity>
               ))}

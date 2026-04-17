@@ -9,6 +9,8 @@ import { apiCall } from '../../utils/api';
 import { registerForPushNotifications } from '../../utils/pushNotifications';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import ResourceBadge from '../../components/ui/ResourceBadge';
+import StarDisplay from '../../components/ui/StarDisplay';
+import TranscendenceStars from '../../components/ui/TranscendenceStars';
 import { COLORS, RARITY, ELEMENTS } from '../../constants/theme';
 import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat, withTiming,
@@ -178,10 +180,13 @@ export default function HomeTab() {
           </Animated.View>
           <Animated.View entering={FadeIn.delay(200)}>
             <Text style={[s.heroName, { color: rc }]}>{mainHero?.hero_name || 'Nessun eroe'}</Text>
-            <Text style={s.heroStars}>
-              {mainHero ? '\u2B50'.repeat(Math.min(mainHero.hero_rarity || 0, 6)) : ''}
-              {(mainHero?.hero_rarity || 0) > 6 ? ` +${(mainHero?.hero_rarity || 0) - 6}` : ''}
-            </Text>
+            <View style={s.heroStars}>
+              {mainHero ? (
+                (mainHero.stars || mainHero.hero_rarity || 0) <= 12
+                  ? <StarDisplay stars={mainHero.stars || mainHero.hero_rarity || 0} size={10} />
+                  : <TranscendenceStars stars={mainHero.stars || mainHero.hero_rarity || 0} size={10} />
+              ) : null}
+            </View>
             <Text style={s.heroClass}>
               {mainHero?.hero_class || ''} {'\u2022'} {mainHero?.hero_element?.toUpperCase() || ''}
             </Text>
