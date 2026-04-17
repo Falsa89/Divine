@@ -10,6 +10,7 @@ import TabSelector from '../components/ui/TabSelector';
 import GradientButton from '../components/ui/GradientButton';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
+import HeroIdleAnimation from '../components/ui/HeroIdleAnimation';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../constants/theme';
 
 const STAT_LABELS: Record<string, string> = {
@@ -135,14 +136,18 @@ export default function HeroDetailScreen() {
           >
             <View style={s.heroTop}>
               {data.image ? (
-                <View style={[s.heroImgWrap, { borderColor: rarCol }]}>
-                  <Image source={{ uri: data.image }} style={s.heroImg} />
-                  <LinearGradient colors={['transparent', col + '30']} style={s.heroImgGrad} />
-                </View>
+                <HeroIdleAnimation stars={stars} size={64} color={col}>
+                  <View style={[s.heroImgWrap, { borderColor: rarCol }]}>
+                    <Image source={{ uri: data.image }} style={s.heroImg} />
+                    <LinearGradient colors={['transparent', col + '30']} style={s.heroImgGrad} />
+                  </View>
+                </HeroIdleAnimation>
               ) : (
-                <View style={[s.heroImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
-                  <Text style={[s.heroImgInit, { color: col }]}>{data.name?.[0]}</Text>
-                </View>
+                <HeroIdleAnimation stars={stars} size={64} color={col}>
+                  <View style={[s.heroImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
+                    <Text style={[s.heroImgInit, { color: col }]}>{data.name?.[0]}</Text>
+                  </View>
+                </HeroIdleAnimation>
               )}
               <View style={s.heroInfo}>
                 <Text style={[s.heroName, { color: rarCol }]}>{data.name}</Text>

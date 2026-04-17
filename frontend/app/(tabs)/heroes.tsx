@@ -12,6 +12,7 @@ import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import ScreenHeader from '../../components/ui/ScreenHeader';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
+import HeroIdleAnimation from '../../components/ui/HeroIdleAnimation';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -191,15 +192,17 @@ export default function HeroesTab() {
                   onLongPress={() => router.push({ pathname: '/hero-detail', params: { id: h.id } })}
                   activeOpacity={0.7}
                 >
-                  <AnimatedHeroPortrait
-                    imageUrl={h.hero_image}
-                    name={h.hero_name || '?'}
-                    rarity={Math.min(h.hero_rarity || 1, 6)}
-                    element={h.hero_element}
-                    size={48}
-                    showName
-                    showStars
-                  />
+                  <HeroIdleAnimation stars={stars} size={48} color={ELEMENTS.colors[h.hero_element] || col}>
+                    <AnimatedHeroPortrait
+                      imageUrl={h.hero_image}
+                      name={h.hero_name || '?'}
+                      rarity={Math.min(h.hero_rarity || 1, 6)}
+                      element={h.hero_element}
+                      size={48}
+                      showName
+                      showStars
+                    />
+                  </HeroIdleAnimation>
                   {stars > 6 && (
                     <View style={s.starBadge}>
                       <View style={s.starBadgeInner}>
@@ -230,13 +233,15 @@ export default function HeroesTab() {
               style={[s.detail, { borderColor: RARITY.colors[Math.min(selected.stars || selected.hero_rarity || 1, 6)] || '#888' }]}
             >
               {selected.hero_image ? (
-                <View style={s.detImgWrap}>
-                  <Image source={{ uri: selected.hero_image }} style={s.detImg} resizeMode="cover" />
-                  <LinearGradient
-                    colors={['transparent', 'rgba(10,10,40,0.8)']}
-                    style={s.detImgOverlay}
-                  />
-                </View>
+                <HeroIdleAnimation stars={selected.stars || selected.hero_rarity || 1} size={90} color={ELEMENTS.colors[selected.hero_element] || '#FFD700'}>
+                  <View style={s.detImgWrap}>
+                    <Image source={{ uri: selected.hero_image }} style={s.detImg} resizeMode="cover" />
+                    <LinearGradient
+                      colors={['transparent', 'rgba(10,10,40,0.8)']}
+                      style={s.detImgOverlay}
+                    />
+                  </View>
+                </HeroIdleAnimation>
               ) : (
                 <View style={[s.detImgPh, { backgroundColor: (ELEMENTS.colors[selected.hero_element] || '#888') + '20' }]}>
                   <Text style={[s.detInit, { color: ELEMENTS.colors[selected.hero_element] }]}>{selected.hero_name?.[0]}</Text>
