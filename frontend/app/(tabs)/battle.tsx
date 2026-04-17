@@ -8,6 +8,8 @@ import { useRouter } from 'expo-router';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
+import StarDisplay from '../../components/ui/StarDisplay';
+import TranscendenceStars from '../../components/ui/TranscendenceStars';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../../constants/theme';
 
 const COLUMNS = [
@@ -272,9 +274,11 @@ export default function BattleTab() {
                         <View style={s.cellInfo}>
                           <Text style={[s.cellName, { color: rarCol }]} numberOfLines={1}>{hero.hero_name}</Text>
                           <Text style={s.cellMeta}>{ELEMENTS.icons[hero.hero_element] || ''} {CLASSES.icons[hero.hero_class] || ''} Lv.{hero.level}</Text>
-                          <Text style={s.cellStars}>
-                            {(hero.stars || hero.hero_rarity || 1) <= 6 ? '\u2B50'.repeat(Math.min(hero.stars || hero.hero_rarity || 1, 6)) : `${hero.stars}\u2B50`}
-                          </Text>
+                          <View style={s.cellStars}>
+                            {(hero.stars || hero.hero_rarity || 1) <= 12
+                              ? <StarDisplay stars={hero.stars || hero.hero_rarity || 1} size={6} />
+                              : <TranscendenceStars stars={hero.stars || hero.hero_rarity || 1} size={6} />}
+                          </View>
                         </View>
                         <View style={s.removeBtn}><Text style={s.removeX}>{'\u00D7'}</Text></View>
                       </View>
@@ -409,9 +413,11 @@ export default function BattleTab() {
                       <View style={s.heroInfo}>
                         <Text style={[s.heroName, { color: rarCol }]} numberOfLines={1}>{h.hero_name}</Text>
                         <Text style={s.heroMeta}>{ELEMENTS.icons[h.hero_element] || ''} {CLASSES.icons[h.hero_class] || ''} Lv.{h.level}</Text>
-                        <Text style={s.heroStars}>
-                          {(h.stars || h.hero_rarity || 1) <= 6 ? '\u2B50'.repeat(Math.min(h.stars || h.hero_rarity || 1, 6)) : `${h.stars}\u2B50`}
-                        </Text>
+                        <View style={s.heroStars}>
+                          {(h.stars || h.hero_rarity || 1) <= 12
+                            ? <StarDisplay stars={h.stars || h.hero_rarity || 1} size={6} />
+                            : <TranscendenceStars stars={h.stars || h.hero_rarity || 1} size={6} />}
+                        </View>
                       </View>
                     </TouchableOpacity>
                   );

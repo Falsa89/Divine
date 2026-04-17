@@ -9,6 +9,7 @@ import Animated, { FadeIn, FadeInDown, FadeInUp, ZoomIn } from 'react-native-rea
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import StarDisplay from '../components/ui/StarDisplay';
+import TranscendenceStars from '../components/ui/TranscendenceStars';
 import { COLORS, RARITY, ELEMENTS } from '../constants/theme';
 
 const ESSENCE_VALUES: Record<number, number> = { 1: 5, 2: 10, 3: 25, 4: 100, 5: 300 };
@@ -151,7 +152,7 @@ export default function SoulForgeScreen() {
                       )}
                       <Text style={[s.heroName, { color: rarCol }]} numberOfLines={1}>{h.hero_name}</Text>
                       <View style={s.heroStars}>
-                        <StarDisplay stars={stars} size={8} />
+                        {stars <= 12 ? <StarDisplay stars={stars} size={8} /> : <TranscendenceStars stars={stars} size={8} />}
                       </View>
                       <Text style={s.heroLvl}>Lv.{h.level || 1}</Text>
                       <Text style={s.heroEssence}>{'\uD83D\uDC80'} {essence}</Text>

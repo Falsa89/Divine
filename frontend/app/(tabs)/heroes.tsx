@@ -10,6 +10,8 @@ import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import ScreenHeader from '../../components/ui/ScreenHeader';
+import StarDisplay from '../../components/ui/StarDisplay';
+import TranscendenceStars from '../../components/ui/TranscendenceStars';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -128,12 +130,11 @@ export default function HeroesTab() {
                     showStars
                   />
                   {stars > 6 && (
-                    <LinearGradient
-                      colors={[col, col + 'CC']}
-                      style={s.starBadge}
-                    >
-                      <Text style={s.starBadgeTxt}>{stars}\u2B50</Text>
-                    </LinearGradient>
+                    <View style={s.starBadge}>
+                      {stars <= 12
+                        ? <StarDisplay stars={stars} size={8} />
+                        : <TranscendenceStars stars={stars} size={8} />}
+                    </View>
                   )}
                   <Text style={s.cardLvl}>Lv.{h.level || 1}</Text>
                 </TouchableOpacity>
