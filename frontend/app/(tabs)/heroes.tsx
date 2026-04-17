@@ -77,11 +77,6 @@ export default function HeroesTab() {
     </LinearGradient>
   );
 
-  const starDisplay = (stars: number) => {
-    if (stars <= 6) return '\u2B50'.repeat(stars);
-    return `${stars}\u2B50`;
-  };
-
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.c}>
       {/* Header */}
@@ -207,9 +202,11 @@ export default function HeroesTab() {
                   />
                   {stars > 6 && (
                     <View style={s.starBadge}>
-                      {stars <= 12
-                        ? <StarDisplay stars={stars} size={8} />
-                        : <TranscendenceStars stars={stars} size={8} />}
+                      <View style={s.starBadgeInner}>
+                        {stars <= 12
+                          ? <StarDisplay stars={stars} size={8} />
+                          : <TranscendenceStars stars={stars} size={8} />}
+                      </View>
                     </View>
                   )}
                   <Text style={s.cardLvl}>Lv.{h.level || 1}</Text>
@@ -248,7 +245,11 @@ export default function HeroesTab() {
               <Text style={[s.detName, { color: RARITY.colors[Math.min(selected.stars || selected.hero_rarity || 1, 6)] }]}>
                 {selected.hero_name}
               </Text>
-              <Text style={s.detStars}>{starDisplay(selected.stars || selected.hero_rarity || 1)}</Text>
+              <View style={s.detStarsWrap}>
+                {(selected.stars || selected.hero_rarity || 1) <= 12
+                  ? <StarDisplay stars={selected.stars || selected.hero_rarity || 1} size={10} />
+                  : <TranscendenceStars stars={selected.stars || selected.hero_rarity || 1} size={10} />}
+              </View>
               <Text style={[s.detElem, { color: ELEMENTS.colors[selected.hero_element] }]}>
                 {CLASSES.icons[selected.hero_class] || ''} {selected.hero_class} {'\u2022'} {selected.hero_element?.toUpperCase()}
               </Text>
@@ -352,9 +353,15 @@ const s = StyleSheet.create({
     position: 'absolute',
     top: 2,
     right: 2,
-    paddingHorizontal: 4,
+    paddingHorizontal: 2,
     paddingVertical: 1,
     borderRadius: 6,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  starBadgeInner: {
+    height: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   starBadgeTxt: { color: '#000', fontSize: 7, fontWeight: '900' },
   cardLvl: { color: COLORS.textMuted, fontSize: 8, marginTop: 1, fontWeight: '600' },
@@ -380,7 +387,13 @@ const s = StyleSheet.create({
   },
   detInit: { fontSize: 36, fontWeight: '900' },
   detName: { fontSize: 13, fontWeight: '900', textAlign: 'center', paddingHorizontal: 8, marginTop: 4 },
-  detStars: { color: COLORS.gold, fontSize: 10, textAlign: 'center', marginTop: 2 },
+  detStarsWrap: {
+    height: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 2,
+  },
   detElem: { fontSize: 9, fontWeight: '700', textAlign: 'center', marginTop: 2 },
   statGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 2, marginTop: 6, paddingHorizontal: 8 },
   statItem: {
