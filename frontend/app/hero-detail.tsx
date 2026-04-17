@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator, Image, Modal, Pressable, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator, Image, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
@@ -37,7 +37,6 @@ export default function HeroDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('stats');
   const [acting, setActing] = useState(false);
-  const [showFullscreen, setShowFullscreen] = useState(false);
 
   const heroId = params.id as string;
 
@@ -136,7 +135,7 @@ export default function HeroDetailScreen() {
             style={[s.heroCard, { borderColor: col + '40' }]}
           >
             <View style={s.heroTop}>
-              <TouchableOpacity onPress={() => setShowFullscreen(true)} activeOpacity={0.8}>
+              <TouchableOpacity onPress={() => router.push({ pathname: '/hero-viewer', params: { heroId: params.id as string } })} activeOpacity={0.8}>
                 {data.image ? (
                   <HeroIdleAnimation stars={stars} size={80} color={col}>
                     <View style={[s.heroImgWrap, { borderColor: rarCol }]}>
@@ -358,66 +357,7 @@ export default function HeroDetailScreen() {
           </Animated.View>
         )}
       </ScrollView>
-
-      {/* Fullscreen Image Modal */}
-      <Modal visible={showFullscreen} transparent animationType="fade" onRequestClose={() => setShowFullscreen(false)}>
-        <View style={s.fsOverlay}>
-          <FullscreenHero
-            data={data}
-            stars={stars}
-            col={col}
-            rarCol={rarCol}
-            onClose={() => setShowFullscreen(false)}
-          />
-        </View>
-      </Modal>
     </LinearGradient>
-  );
-}
-
-/** Fullscreen hero view - mounts animation after delay to avoid crash */
-function FullscreenHero({ data, stars, col, rarCol, onClose }: {
-  data: any; stars: number; col: string; rarCol: string; onClose: () => void;
-}) {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setReady(true), 80);
-    return () => clearTimeout(t);
-  }, []);
-
-  if (!data) return null;
-
-  return (
-    <View style={s.fsContent}>
-      {ready ? (
-        <HeroIdleAnimation stars={stars} size={140} color={col} disableParticles>
-          {data.image ? (
-            <View style={[s.fsImgWrap, { borderColor: rarCol }]}>
-              <Image source={{ uri: data.image }} style={s.fsImg} resizeMode="contain" />
-            </View>
-          ) : (
-            <View style={[s.fsImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
-              <Text style={[s.fsInit, { color: col }]}>{data.name?.[0]}</Text>
-            </View>
-          )}
-        </HeroIdleAnimation>
-      ) : (
-        <View style={[s.fsImgWrap, { borderColor: rarCol }]}>
-          {data.image ? (
-            <Image source={{ uri: data.image }} style={s.fsImg} resizeMode="contain" />
-          ) : (
-            <Text style={[s.fsInit, { color: col }]}>{data.name?.[0]}</Text>
-          )}
-        </View>
-      )}
-      <Text style={[s.fsName, { color: rarCol }]}>{data.name}</Text>
-      <View style={s.fsStars}>
-        {stars <= 12 ? <StarDisplay stars={stars} size={18} /> : <TranscendenceStars stars={stars} size={18} />}
-      </View>
-      <Pressable onPress={onClose} style={s.fsCloseBtn}>
-        <Text style={s.fsCloseTxt}>CHIUDI</Text>
-      </Pressable>
-    </View>
   );
 }
 
@@ -548,45 +488,4 @@ const s = StyleSheet.create({
   },
   totalTitle: { color: COLORS.success, fontSize: 11, fontWeight: '800', marginBottom: 4 },
   totalStat: { color: COLORS.success, fontSize: 9, fontWeight: '600' },
-  // Fullscreen modal
-  fsOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.92)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  fsContent: {
-    alignItems: 'center',
-    gap: 10,
-  },
-  fsImgWrap: {
-    width: 140,
-    height: 140,
-    borderRadius: 16,
-    borderWidth: 2,
-    overflow: 'hidden',
-    backgroundColor: '#0A0A20',
-  },
-  fsImg: { width: '100%', height: '100%' },
-  fsImgPh: {
-    width: 140,
-    height: 140,
-    borderRadius: 16,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fsInit: { fontSize: 56, fontWeight: '900' },
-  fsName: { fontSize: 20, fontWeight: '900', letterSpacing: 1 },
-  fsStars: { height: 24, justifyContent: 'center', alignItems: 'center' },
-  fsCloseBtn: {
-    marginTop: 16,
-    paddingHorizontal: 28,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-  },
-  fsCloseTxt: { color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: '800', letterSpacing: 1 },
 });

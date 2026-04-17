@@ -14,30 +14,19 @@ interface HeroIdleAnimationProps {
 }
 
 /**
- * HeroIdleAnimation - Wrapper animato per immagini eroi.
- * Il container resta fermo. Solo l'immagine (children) respira.
- * Aura e particelle sono layer separati in position absolute.
+ * HeroIdleAnimation
+ *
+ * Container resta FERMO. Solo children (immagine) scala leggermente.
+ * Aura: layer absolute DIETRO.
+ * Particelle: layer absolute SOPRA.
  */
 export default function HeroIdleAnimation({ children, stars, size, color = '#FFD700', disableParticles = false }: HeroIdleAnimationProps) {
   const showAura = stars >= 6;
   const showParticles = stars >= 7 && !disableParticles;
 
-  return (
-    <View style={[st.container, { width: size, height: size }]}>
-      {/* Layer 0: Aura glow — behind everything */}
-      {showAura && <AuraGlow size={size} color={color} stars={stars} />}
-      {/* Layer 1: Breathing image — only children scale, container stays fixed */}
-      <BreathingImage stars={stars} size={size}>{children}</BreathingImage>
-      {/* Layer 2: Particles — on top, absolute */}
-      {showParticles && <Particles size={size} color={color} count={Math.min(stars - 6, 4)} />}
-    </View>
-  );
-}
-
-/** Breathing: very subtle scale on the image only, container untouched */
-function BreathingImage({ children, stars, size }: { children: React.ReactNode; stars: number; size: number }) {
+  // Breathing: solo sull'immagine (children)
   const scale = useSharedValue(1);
-  const target = stars >= 10 ? 1.025 : stars >= 7 ? 1.02 : 1.015;
+  const target = stars >= 10 ? 1.02 : stars >= 7 ? 1.018 : 1.012;
 
   useEffect(() => {
     scale.value = withRepeat(
@@ -48,47 +37,48 @@ function BreathingImage({ children, stars, size }: { children: React.ReactNode; 
     );
   }, []);
 
-  const anim = useAnimatedStyle(() => ({
+  const breathStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
 
-  // Fixed-size box so scale doesn't push layout
   return (
-    <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-      <Animated.View style={anim}>
+    <View style={[st.root, { width: size, height: size }]}>
+      {/* Layer 0: Aura — absolute, behind */}
+      {showAura && <AuraGlow size={size} color={color} stars={stars} />}
+
+      {/* Layer 1: Image with breathing — container fixed, only content scales */}
+      <Animated.View style={[st.imageLayer, { width: size, height: size }, breathStyle]}>
         {children}
       </Animated.View>
+
+      {/* Layer 2: Particles — absolute, on top */}
+      {showParticles && <ParticleLayer size={size} color={color} count={Math.min(stars - 6, 4)} />}
     </View>
   );
 }
 
-/** Aura: glow behind image, position absolute, no layout impact */
 function AuraGlow({ size, color, stars }: { size: number; color: string; stars: number }) {
-  const opacity = useSharedValue(0.1);
-  const maxOp = stars >= 10 ? 0.35 : stars >= 7 ? 0.25 : 0.15;
+  const opacity = useSharedValue(0.08);
+  const maxOp = stars >= 10 ? 0.3 : stars >= 7 ? 0.2 : 0.12;
 
   useEffect(() => {
     opacity.value = withRepeat(
       withSequence(
         withTiming(maxOp, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0.08, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.06, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
       ), -1, true,
     );
   }, []);
 
-  const anim = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
+  const anim = useAnimatedStyle(() => ({ opacity: opacity.value }));
+  const sp = size * 0.2;
 
-  const spread = size * 0.18;
   return (
     <Animated.View
       style={[st.aura, anim, {
-        width: size + spread * 2,
-        height: size + spread * 2,
-        borderRadius: (size + spread * 2) / 2,
-        left: -spread,
-        top: -spread,
+        width: size + sp * 2, height: size + sp * 2,
+        borderRadius: (size + sp * 2) / 2,
+        left: -sp, top: -sp,
         backgroundColor: color,
       }]}
       pointerEvents="none"
@@ -96,10 +86,9 @@ function AuraGlow({ size, color, stars }: { size: number; color: string; stars: 
   );
 }
 
-/** Particles: floating light dots, absolute on top */
-function Particles({ size, color, count }: { size: number; color: string; count: number }) {
+function ParticleLayer({ size, color, count }: { size: number; color: string; count: number }) {
   return (
-    <View style={[st.particleLayer, { width: size, height: size }]} pointerEvents="none">
+    <View style={[st.particles, { width: size, height: size }]} pointerEvents="none">
       {Array.from({ length: count }).map((_, i) => (
         <Particle key={i} size={size} color={color} index={i} total={count} />
       ))}
@@ -112,61 +101,52 @@ function Particle({ size, color, index, total }: {
 }) {
   const angle = (index / total) * Math.PI * 2 + Math.PI * 0.3;
   const radius = size * 0.42;
-  const baseX = Math.cos(angle) * radius;
-  const baseY = Math.sin(angle) * radius;
-  const pSize = Math.max(2, size * 0.055);
+  const bx = Math.cos(angle) * radius;
+  const by = Math.sin(angle) * radius;
+  const ps = Math.max(2, size * 0.05);
 
-  const translateY = useSharedValue(0);
-  const opacity = useSharedValue(0);
+  const ty = useSharedValue(0);
+  const op = useSharedValue(0);
 
   useEffect(() => {
     const dur = 2200 + index * 350;
-    translateY.value = withDelay(index * 250,
-      withRepeat(
-        withSequence(
-          withTiming(-size * 0.12, { duration: dur, easing: Easing.inOut(Easing.ease) }),
-          withTiming(size * 0.04, { duration: dur * 0.7, easing: Easing.inOut(Easing.ease) }),
-        ), -1, true,
-      ),
+    ty.value = withDelay(index * 250,
+      withRepeat(withSequence(
+        withTiming(-size * 0.1, { duration: dur, easing: Easing.inOut(Easing.ease) }),
+        withTiming(size * 0.03, { duration: dur * 0.7, easing: Easing.inOut(Easing.ease) }),
+      ), -1, true),
     );
-    opacity.value = withDelay(index * 250,
-      withRepeat(
-        withSequence(
-          withTiming(0.7, { duration: dur * 0.5, easing: Easing.inOut(Easing.ease) }),
-          withTiming(0, { duration: dur * 0.5, easing: Easing.inOut(Easing.ease) }),
-        ), -1, true,
-      ),
+    op.value = withDelay(index * 250,
+      withRepeat(withSequence(
+        withTiming(0.65, { duration: dur * 0.5, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0, { duration: dur * 0.5, easing: Easing.inOut(Easing.ease) }),
+      ), -1, true),
     );
   }, []);
 
   const anim = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-    opacity: opacity.value,
+    transform: [{ translateY: ty.value }],
+    opacity: op.value,
   }));
 
   return (
-    <Animated.View
-      style={[st.particle, anim, {
-        width: pSize,
-        height: pSize,
-        borderRadius: pSize / 2,
-        backgroundColor: color,
-        left: size / 2 + baseX - pSize / 2,
-        top: size / 2 + baseY - pSize / 2,
-      }]}
-    />
+    <Animated.View style={[st.dot, anim, {
+      width: ps, height: ps, borderRadius: ps / 2, backgroundColor: color,
+      left: size / 2 + bx - ps / 2, top: size / 2 + by - ps / 2,
+    }]} />
   );
 }
 
 const st = StyleSheet.create({
-  container: { alignItems: 'center', justifyContent: 'center' },
-  aura: { position: 'absolute' },
-  particleLayer: { position: 'absolute', top: 0, left: 0 },
-  particle: {
+  root: { position: 'relative' },
+  aura: { position: 'absolute', zIndex: 0 },
+  imageLayer: { zIndex: 1, alignItems: 'center', justifyContent: 'center' },
+  particles: { position: 'absolute', top: 0, left: 0, zIndex: 2 },
+  dot: {
     position: 'absolute',
     shadowColor: '#fff',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.5,
     shadowRadius: 2,
   },
 });
