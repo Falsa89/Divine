@@ -137,12 +137,7 @@ export default function HeroDetailScreen() {
             <View style={s.heroTop}>
               <TouchableOpacity onPress={() => router.push({ pathname: '/hero-viewer', params: { heroId: params.id as string } })} activeOpacity={0.8}>
                 {data.image ? (
-                  <HeroIdleAnimation stars={stars} size={80} color={col}>
-                    <View style={[s.heroImgWrap, { borderColor: rarCol }]}>
-                      <Image source={{ uri: data.image }} style={s.heroImg} />
-                      <LinearGradient colors={['transparent', col + '30']} style={s.heroImgGrad} />
-                    </View>
-                  </HeroIdleAnimation>
+                  <HeroIdleAnimation imageUri={data.image} stars={stars} size={80} color={col} borderRadius={10} />
                 ) : (
                   <HeroIdleAnimation stars={stars} size={80} color={col}>
                     <View style={[s.heroImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>

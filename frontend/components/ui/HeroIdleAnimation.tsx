@@ -1,30 +1,39 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ImageSourcePropType } from 'react-native';
 import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat, withTiming,
   withSequence, withDelay, Easing,
 } from 'react-native-reanimated';
 
+const AnimatedImage = Animated.Image;
+
 interface HeroIdleAnimationProps {
-  children: React.ReactNode;
+  /** Pass imageUri for direct Animated.Image (preferred). */
+  imageUri?: string;
+  /** Fallback: wrap static children. */
+  children?: React.ReactNode;
   stars: number;
   size: number;
   color?: string;
   disableParticles?: boolean;
+  /** Border radius for the image. Default 12. */
+  borderRadius?: number;
 }
 
 /**
  * HeroIdleAnimation
  *
- * Container resta FERMO. Solo children (immagine) scala leggermente.
+ * Container FERMO. Transform applicato direttamente ad Animated.Image.
  * Aura: layer absolute DIETRO.
  * Particelle: layer absolute SOPRA.
  */
-export default function HeroIdleAnimation({ children, stars, size, color = '#FFD700', disableParticles = false }: HeroIdleAnimationProps) {
+export default function HeroIdleAnimation({
+  imageUri, children, stars, size, color = '#FFD700',
+  disableParticles = false, borderRadius = 12,
+}: HeroIdleAnimationProps) {
   const showAura = stars >= 6;
   const showParticles = stars >= 7 && !disableParticles;
 
-  // Breathing: solo sull'immagine (children)
   const scale = useSharedValue(1);
   const target = stars >= 10 ? 1.02 : stars >= 7 ? 1.018 : 1.012;
 
@@ -43,15 +52,23 @@ export default function HeroIdleAnimation({ children, stars, size, color = '#FFD
 
   return (
     <View style={[st.root, { width: size, height: size }]}>
-      {/* Layer 0: Aura — absolute, behind */}
       {showAura && <AuraGlow size={size} color={color} stars={stars} />}
 
-      {/* Layer 1: Image with breathing — container fixed, only content scales */}
-      <Animated.View style={[st.imageLayer, { width: size, height: size }, breathStyle]}>
-        {children}
-      </Animated.View>
+      {imageUri ? (
+        <AnimatedImage
+          source={{ uri: imageUri }}
+          style={[
+            { width: size, height: size, borderRadius, zIndex: 1 },
+            breathStyle,
+          ]}
+          resizeMode="cover"
+        />
+      ) : (
+        <Animated.View style={[st.childLayer, { width: size, height: size }, breathStyle]}>
+          {children}
+        </Animated.View>
+      )}
 
-      {/* Layer 2: Particles — absolute, on top */}
       {showParticles && <ParticleLayer size={size} color={color} count={Math.min(stars - 6, 4)} />}
     </View>
   );
@@ -71,15 +88,14 @@ function AuraGlow({ size, color, stars }: { size: number; color: string; stars: 
   }, []);
 
   const anim = useAnimatedStyle(() => ({ opacity: opacity.value }));
-  const sp = size * 0.2;
+  const sp = size * 0.18;
 
   return (
     <Animated.View
       style={[st.aura, anim, {
         width: size + sp * 2, height: size + sp * 2,
         borderRadius: (size + sp * 2) / 2,
-        left: -sp, top: -sp,
-        backgroundColor: color,
+        left: -sp, top: -sp, backgroundColor: color,
       }]}
       pointerEvents="none"
     />
@@ -140,7 +156,7 @@ function Particle({ size, color, index, total }: {
 const st = StyleSheet.create({
   root: { position: 'relative' },
   aura: { position: 'absolute', zIndex: 0 },
-  imageLayer: { zIndex: 1, alignItems: 'center', justifyContent: 'center' },
+  childLayer: { zIndex: 1, alignItems: 'center', justifyContent: 'center' },
   particles: { position: 'absolute', top: 0, left: 0, zIndex: 2 },
   dot: {
     position: 'absolute',
