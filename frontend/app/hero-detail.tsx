@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator, Image, Modal, Pressable, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
@@ -37,6 +37,7 @@ export default function HeroDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('stats');
   const [acting, setActing] = useState(false);
+  const [showFullscreen, setShowFullscreen] = useState(false);
 
   const heroId = params.id as string;
 
@@ -135,20 +136,22 @@ export default function HeroDetailScreen() {
             style={[s.heroCard, { borderColor: col + '40' }]}
           >
             <View style={s.heroTop}>
-              {data.image ? (
-                <HeroIdleAnimation stars={stars} size={64} color={col}>
-                  <View style={[s.heroImgWrap, { borderColor: rarCol }]}>
-                    <Image source={{ uri: data.image }} style={s.heroImg} />
-                    <LinearGradient colors={['transparent', col + '30']} style={s.heroImgGrad} />
-                  </View>
-                </HeroIdleAnimation>
-              ) : (
-                <HeroIdleAnimation stars={stars} size={64} color={col}>
-                  <View style={[s.heroImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
-                    <Text style={[s.heroImgInit, { color: col }]}>{data.name?.[0]}</Text>
-                  </View>
-                </HeroIdleAnimation>
-              )}
+              <TouchableOpacity onPress={() => setShowFullscreen(true)} activeOpacity={0.8}>
+                {data.image ? (
+                  <HeroIdleAnimation stars={stars} size={80} color={col}>
+                    <View style={[s.heroImgWrap, { borderColor: rarCol }]}>
+                      <Image source={{ uri: data.image }} style={s.heroImg} />
+                      <LinearGradient colors={['transparent', col + '30']} style={s.heroImgGrad} />
+                    </View>
+                  </HeroIdleAnimation>
+                ) : (
+                  <HeroIdleAnimation stars={stars} size={80} color={col}>
+                    <View style={[s.heroImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
+                      <Text style={[s.heroImgInit, { color: col }]}>{data.name?.[0]}</Text>
+                    </View>
+                  </HeroIdleAnimation>
+                )}
+              </TouchableOpacity>
               <View style={s.heroInfo}>
                 <Text style={[s.heroName, { color: rarCol }]}>{data.name}</Text>
                 <View style={s.heroStars}>
@@ -355,6 +358,30 @@ export default function HeroDetailScreen() {
           </Animated.View>
         )}
       </ScrollView>
+
+      {/* Fullscreen Image Modal */}
+      <Modal visible={showFullscreen} transparent animationType="fade" onRequestClose={() => setShowFullscreen(false)}>
+        <Pressable style={s.fsOverlay} onPress={() => setShowFullscreen(false)}>
+          <View style={s.fsContent}>
+            <HeroIdleAnimation stars={stars} size={240} color={col}>
+              {data.image ? (
+                <View style={[s.fsImgWrap, { borderColor: rarCol }]}>
+                  <Image source={{ uri: data.image }} style={s.fsImg} resizeMode="contain" />
+                </View>
+              ) : (
+                <View style={[s.fsImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
+                  <Text style={[s.fsInit, { color: col }]}>{data.name?.[0]}</Text>
+                </View>
+              )}
+            </HeroIdleAnimation>
+            <Text style={[s.fsName, { color: rarCol }]}>{data.name}</Text>
+            <View style={s.fsStars}>
+              {stars <= 12 ? <StarDisplay stars={stars} size={18} /> : <TranscendenceStars stars={stars} size={18} />}
+            </View>
+            <Text style={s.fsHint}>Tocca per chiudere</Text>
+          </View>
+        </Pressable>
+      </Modal>
     </LinearGradient>
   );
 }
@@ -486,4 +513,36 @@ const s = StyleSheet.create({
   },
   totalTitle: { color: COLORS.success, fontSize: 11, fontWeight: '800', marginBottom: 4 },
   totalStat: { color: COLORS.success, fontSize: 9, fontWeight: '600' },
+  // Fullscreen modal
+  fsOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.92)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fsContent: {
+    alignItems: 'center',
+    gap: 12,
+  },
+  fsImgWrap: {
+    width: 240,
+    height: 240,
+    borderRadius: 20,
+    borderWidth: 2,
+    overflow: 'hidden',
+    backgroundColor: '#0A0A20',
+  },
+  fsImg: { width: '100%', height: '100%' },
+  fsImgPh: {
+    width: 240,
+    height: 240,
+    borderRadius: 20,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fsInit: { fontSize: 80, fontWeight: '900' },
+  fsName: { fontSize: 22, fontWeight: '900', letterSpacing: 1 },
+  fsStars: { height: 24, justifyContent: 'center', alignItems: 'center' },
+  fsHint: { color: 'rgba(255,255,255,0.25)', fontSize: 10, marginTop: 16 },
 });
