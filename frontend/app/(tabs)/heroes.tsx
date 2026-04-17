@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ScrollView,
-  ActivityIndicator, Image, Dimensions,
+  ActivityIndicator, Image, Dimensions, TextInput,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -23,6 +23,9 @@ export default function HeroesTab() {
   const [selected, setSelected] = useState<any>(null);
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('rarity');
+  const [searchText, setSearchText] = useState('');
+  const [minStars, setMinStars] = useState(1);
+  const [classFilter, setClassFilter] = useState('all');
 
   useEffect(() => { load(); }, []);
   const load = async () => {
@@ -32,15 +35,41 @@ export default function HeroesTab() {
     } catch(e){} finally { setLoading(false); }
   };
 
-  const sorted = [...heroes].sort((a: any, b: any) => {
-    if (sortBy === 'rarity') return (b.stars || b.hero_rarity || 0) - (a.stars || a.hero_rarity || 0);
-    if (sortBy === 'level') return (b.level || 0) - (a.level || 0);
-    if (sortBy === 'class') return (a.hero_class || '').localeCompare(b.hero_class || '');
-    return 0;
-  });
-
   const elements = ['all', 'fire', 'water', 'earth', 'wind', 'thunder', 'light', 'shadow'];
-  const filtered = filter === 'all' ? sorted : sorted.filter((h: any) => h.hero_element === filter);
+  const classOptions = ['all', 'DPS', 'Tank', 'Support'];
+  const starOptions = [1, 3, 5, 7, 10, 13];
+
+  const filtered = useMemo(() => {
+    let list = [...heroes];
+    // Search
+    if (searchText.trim()) {
+      const q = searchText.trim().toLowerCase();
+      list = list.filter(h => (h.hero_name || '').toLowerCase().includes(q));
+    }
+    // Element
+    if (filter !== 'all') list = list.filter(h => h.hero_element === filter);
+    // Class
+    if (classFilter !== 'all') list = list.filter(h => h.hero_class === classFilter);
+    // Min stars
+    if (minStars > 1) list = list.filter(h => (h.stars || h.hero_rarity || 1) >= minStars);
+    // Sort: primary by selected, secondary always stars DESC then level DESC
+    list.sort((a: any, b: any) => {
+      if (sortBy === 'rarity') {
+        const diff = (b.stars || b.hero_rarity || 0) - (a.stars || a.hero_rarity || 0);
+        return diff !== 0 ? diff : (b.level || 0) - (a.level || 0);
+      }
+      if (sortBy === 'level') {
+        const diff = (b.level || 0) - (a.level || 0);
+        return diff !== 0 ? diff : (b.stars || b.hero_rarity || 0) - (a.stars || a.hero_rarity || 0);
+      }
+      if (sortBy === 'class') {
+        const diff = (a.hero_class || '').localeCompare(b.hero_class || '');
+        return diff !== 0 ? diff : (b.stars || b.hero_rarity || 0) - (a.stars || a.hero_rarity || 0);
+      }
+      return 0;
+    });
+    return list;
+  }, [heroes, searchText, filter, classFilter, minStars, sortBy]);
 
   if (loading) return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B']} style={s.c}>
@@ -60,13 +89,45 @@ export default function HeroesTab() {
         title="Collezione Eroi"
         rightContent={
           <View style={s.countBadge}>
-            <Text style={s.countText}>{heroes.length} eroi</Text>
+            <Text style={s.countText}>{filtered.length}/{heroes.length}</Text>
           </View>
         }
       />
 
       {/* Filters */}
-      <View style={s.filterRow}>
+      <View style={s.filterSection}>
+        {/* Search + sort row */}
+        <View style={s.searchRow}>
+          <View style={s.searchBox}>
+            <Text style={s.searchIcon}>Q</Text>
+            <TextInput
+              style={s.searchInput}
+              placeholder="Cerca eroe..."
+              placeholderTextColor="rgba(255,255,255,0.25)"
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+            {searchText.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchText('')} style={s.searchClear}>
+                <Text style={s.searchClearTxt}>X</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={s.sortRow}>
+            {(['rarity', 'level', 'class'] as string[]).map(sb => (
+              <TouchableOpacity
+                key={sb}
+                style={[s.sortBtn, sortBy === sb && s.sortBtnA]}
+                onPress={() => setSortBy(sb)}
+              >
+                <Text style={[s.sortTxt, sortBy === sb && s.sortTxtA]}>
+                  {sb === 'rarity' ? 'Stelle' : sb === 'level' ? 'Livello' : 'Classe'}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+        {/* Element + class + stars filters */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.filters}>
           {elements.map(f => {
             const isActive = filter === f;
@@ -78,25 +139,40 @@ export default function HeroesTab() {
                 onPress={() => setFilter(f)}
               >
                 <Text style={[s.fTxt, isActive && { color: elemColor }]}>
-                  {f === 'all' ? 'Tutti' : f[0].toUpperCase() + f.slice(1)}
+                  {f === 'all' ? 'Tutti' : (ELEMENTS.icons[f] || '') + ' ' + f[0].toUpperCase() + f.slice(1)}
                 </Text>
               </TouchableOpacity>
             );
           })}
-        </ScrollView>
-        <View style={s.sortRow}>
-          {(['rarity', 'level', 'class'] as string[]).map(sb => (
+          <View style={s.filterDivider} />
+          {classOptions.map(c => {
+            const isActive = classFilter === c;
+            const clsColor = c !== 'all' ? (CLASSES.colors[c] || COLORS.accent) : COLORS.accent;
+            return (
+              <TouchableOpacity
+                key={c}
+                style={[s.fBtn, isActive && { backgroundColor: clsColor + '20', borderColor: clsColor }]}
+                onPress={() => setClassFilter(c)}
+              >
+                <Text style={[s.fTxt, isActive && { color: clsColor }]}>
+                  {c === 'all' ? 'Tutte' : (CLASSES.icons[c] || '') + ' ' + c}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+          <View style={s.filterDivider} />
+          {starOptions.map(ms => (
             <TouchableOpacity
-              key={sb}
-              style={[s.sortBtn, sortBy === sb && s.sortBtnA]}
-              onPress={() => setSortBy(sb)}
+              key={ms}
+              style={[s.fBtn, minStars === ms && { backgroundColor: COLORS.gold + '20', borderColor: COLORS.gold }]}
+              onPress={() => setMinStars(minStars === ms ? 1 : ms)}
             >
-              <Text style={[s.sortTxt, sortBy === sb && s.sortTxtA]}>
-                {sb === 'rarity' ? '\u2B50' : sb === 'level' ? 'Lv' : '\u2694'}
+              <Text style={[s.fTxt, minStars === ms && { color: COLORS.gold }]}>
+                {ms}+
               </Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       <View style={s.body}>
@@ -226,9 +302,22 @@ const s = StyleSheet.create({
     borderColor: COLORS.borderAccent,
   },
   countText: { color: COLORS.accent, fontSize: 10, fontWeight: '700' },
+  // Filter section
+  filterSection: { gap: 3, paddingBottom: 2 },
+  searchRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 6 },
+  searchBox: {
+    flex: 1, flexDirection: 'row', alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 6,
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)',
+    paddingHorizontal: 8, height: 28,
+  },
+  searchIcon: { color: 'rgba(255,255,255,0.2)', fontSize: 10, fontWeight: '900', marginRight: 4 },
+  searchInput: { flex: 1, color: '#fff', fontSize: 10, padding: 0 },
+  searchClear: { padding: 2 },
+  searchClearTxt: { color: 'rgba(255,255,255,0.4)', fontSize: 9, fontWeight: '900' },
+  filterDivider: { width: 1, height: 14, backgroundColor: 'rgba(255,255,255,0.1)', marginHorizontal: 2 },
   // Filters
-  filterRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 4 },
-  filters: { gap: 4, paddingHorizontal: 8, alignItems: 'center' },
+  filters: { gap: 3, paddingHorizontal: 8, alignItems: 'center' },
   fBtn: {
     paddingHorizontal: 10,
     paddingVertical: 4,
