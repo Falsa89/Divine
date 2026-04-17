@@ -14,8 +14,8 @@ export default function HeroViewerScreen() {
   const [hero, setHero] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // Image fills available space
-  const imgSize = Math.min(width * 0.85, height * 0.75);
+  // Image fills entire screen
+  const imgSize = Math.max(width, height);
 
   useEffect(() => {
     if (!heroId) return;
@@ -82,6 +82,7 @@ const s = StyleSheet.create({
   root: {
     flex: 1, backgroundColor: '#000',
     justifyContent: 'center', alignItems: 'center',
+    overflow: 'hidden',
   },
   scene: { alignItems: 'center' },
   ph: {

@@ -35,19 +35,26 @@ export default function HeroIdleAnimation({
   const showParticles = stars >= 7 && !disableParticles;
 
   const scale = useSharedValue(1);
-  const target = stars >= 10 ? 1.02 : stars >= 7 ? 1.018 : 1.012;
+  const translateY = useSharedValue(0);
+  const scaleTarget = stars >= 10 ? 1.02 : stars >= 7 ? 1.018 : 1.012;
 
   useEffect(() => {
     scale.value = withRepeat(
       withSequence(
-        withTiming(target, { duration: 1400, easing: Easing.inOut(Easing.ease) }),
+        withTiming(scaleTarget, { duration: 1400, easing: Easing.inOut(Easing.ease) }),
         withTiming(1, { duration: 1300, easing: Easing.inOut(Easing.ease) }),
+      ), -1, true,
+    );
+    translateY.value = withRepeat(
+      withSequence(
+        withTiming(-1.5, { duration: 1400, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0, { duration: 1300, easing: Easing.inOut(Easing.ease) }),
       ), -1, true,
     );
   }, []);
 
   const breathStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+    transform: [{ scale: scale.value }, { translateY: translateY.value }],
   }));
 
   return (
@@ -75,14 +82,14 @@ export default function HeroIdleAnimation({
 }
 
 function AuraGlow({ size, color, stars }: { size: number; color: string; stars: number }) {
-  const opacity = useSharedValue(0.08);
-  const maxOp = stars >= 10 ? 0.3 : stars >= 7 ? 0.2 : 0.12;
+  const opacity = useSharedValue(0.04);
+  const maxOp = stars >= 10 ? 0.15 : stars >= 7 ? 0.10 : 0.06;
 
   useEffect(() => {
     opacity.value = withRepeat(
       withSequence(
         withTiming(maxOp, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0.06, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.03, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
       ), -1, true,
     );
   }, []);
