@@ -82,6 +82,10 @@ export default function BattleDebugOverlay({ enabled, bfRect, layout, units }: P
   const L = layout;
 
   // Linee della griglia 3x3 per ogni team (bounding box logico di ogni cella).
+  // IMPORTANTE: le dimensioni slotW/slotH qui DEVONO combaciare esattamente col
+  // wrapper assoluto in combat.tsx (width: size, height: size * 1.25).
+  // Se divergono, il debug overlay mente — le box dell'overlay non coincidono
+  // più con le celle reali rese sul schermo.
   const drawGridLines = (team: Team) => {
     const color = team === 'A' ? C.A : C.B;
     const lines: React.ReactNode[] = [];
@@ -91,8 +95,8 @@ export default function BattleDebugOverlay({ enabled, bfRect, layout, units }: P
         const sizeA = [L.supSize, L.dpsSize, L.tankSize];
         const sizeB = [L.tankSize, L.dpsSize, L.supSize];
         const size = team === 'A' ? sizeA[col] : sizeB[col];
-        const slotW = size + 6;
-        const slotH = size * 1.25;
+        const slotW = size;
+        const slotH = Math.round(size * 1.25);
         lines.push(
           <View
             key={`dbg_cell_${team}_${col}_${row}`}
@@ -119,8 +123,8 @@ export default function BattleDebugOverlay({ enabled, bfRect, layout, units }: P
     units.map(u => {
       const home = getHomePosition(u.team, u.col, u.row, L);
       const color = u.team === 'A' ? C.A : C.B;
-      const slotW = u.size + 6;
-      const slotH = u.size * 1.25;
+      const slotW = u.size;
+      const slotH = Math.round(u.size * 1.25);
       return (
         <React.Fragment key={`dbg_u_${u.team}_${u.id}`}>
           {/* Bounding box reale del wrapper assoluto */}

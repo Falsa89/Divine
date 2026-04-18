@@ -628,21 +628,28 @@ export default function CombatScreen() {
             const colSizesA = [L.supSize, L.dpsSize, L.tankSize];
             const colSizesB = [L.tankSize, L.dpsSize, L.supSize];
 
+            // Geometria wrapper UNIFICATA con BattleSprite:
+            //   width  = size   (larghezza della cella = larghezza dello sprite)
+            //   height = size * 1.25   (altezza ritratto; il bottom del wrapper
+            //                           coincide col suolo → home.y)
+            // Il wrapper è la HOME assoluta: NON contiene transform. I motion
+            // transform (attacco/hit/skill) vengono applicati solo al motion
+            // container INTERNO a BattleSprite — il wrapper resta immutabile.
             for (let col = 0; col < 3; col++) {
               for (let row = 0; row < 3; row++) {
                 // Team A
                 const cA = gridA[col][row];
                 if (cA) {
                   const size = colSizesA[col];
+                  const slotH = Math.round(size * 1.25);
                   const home = getHomePosition('A', col, row, L);
                   const ss = getSpriteState(cA.id);
-                  const slotW = size + 6;
                   const zIndex = 10 + (2 - row);
                   debugUnits.push({
                     team: 'A', col, row, id: cA.id, name: cA.name,
                     state: ss.state, facing: 'right', size, zIndex,
                   });
-                  if (BATTLE_DEBUG) dbg('render A', { id: cA.id, col, row, homeX: Math.round(home.x), homeY: Math.round(home.y), size, state: ss.state });
+                  if (BATTLE_DEBUG) dbg('render A', { id: cA.id, col, row, homeX: Math.round(home.x), homeY: Math.round(home.y), size, slotH, state: ss.state });
                   sprites.push(
                     <Animated.View
                       key={`a_${cA.id}`}
@@ -650,9 +657,10 @@ export default function CombatScreen() {
                       pointerEvents="box-none"
                       style={{
                         position: 'absolute',
-                        left: home.x - slotW / 2,
+                        left: home.x - size / 2,
                         bottom: home.y,
-                        width: slotW,
+                        width: size,
+                        height: slotH,
                         zIndex,
                       }}
                     >
@@ -665,6 +673,7 @@ export default function CombatScreen() {
                         showHeal={ss.healAmt}
                         isCrit={ss.isCrit}
                         size={size}
+                        debug={BATTLE_DEBUG}
                       />
                     </Animated.View>
                   );
@@ -673,14 +682,15 @@ export default function CombatScreen() {
                 const cB = gridB[col][row];
                 if (cB) {
                   const size = colSizesB[col];
+                  const slotH = Math.round(size * 1.25);
                   const home = getHomePosition('B', col, row, L);
                   const ss = getSpriteState(cB.id);
-                  const slotW = size + 6;
                   const zIndex = 10 + (2 - row);
                   debugUnits.push({
                     team: 'B', col, row, id: cB.id, name: cB.name,
                     state: ss.state, facing: 'left', size, zIndex,
                   });
+                  if (BATTLE_DEBUG) dbg('render B', { id: cB.id, col, row, homeX: Math.round(home.x), homeY: Math.round(home.y), size, slotH, state: ss.state });
                   sprites.push(
                     <Animated.View
                       key={`b_${cB.id}`}
@@ -688,9 +698,10 @@ export default function CombatScreen() {
                       pointerEvents="box-none"
                       style={{
                         position: 'absolute',
-                        left: home.x - slotW / 2,
+                        left: home.x - size / 2,
                         bottom: home.y,
-                        width: slotW,
+                        width: size,
+                        height: slotH,
                         zIndex,
                       }}
                     >
@@ -703,6 +714,7 @@ export default function CombatScreen() {
                         showHeal={ss.healAmt}
                         isCrit={ss.isCrit}
                         size={size}
+                        debug={BATTLE_DEBUG}
                       />
                     </Animated.View>
                   );

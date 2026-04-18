@@ -1,3 +1,34 @@
+/**
+ * BattleSprite — geometria a 3 layer espliciti.
+ *
+ * Decisioni di design (post-bug "mobile drift/overflow"):
+ *
+ * 1. Il WRAPPER ESTERNO (in combat.tsx) definisce la home position assoluta
+ *    (left/bottom/width/height). BattleSprite NON tocca mai la propria
+ *    posizione globale — riempie il wrapper esattamente (width:size, height:frameH).
+ *    → Niente più mismatch size+16 vs slotW=size+6 che produceva 10px di
+ *      sbordamento orizzontale su mobile.
+ *
+ * 2. Il ROOT di BattleSprite è un box CONOSCIUTO e STABILE: size × frameH.
+ *    Tutti i layer interni sono posizionati in absolute rispetto a questo box,
+ *    con left/right/bottom espliciti. Niente più layer absolute "inchiodati a 0,0"
+ *    che su native producevano offset orizzontali.
+ *
+ * 3. TRE GEOMETRIE UNIFICATE: sprite-sheet, hero image e placeholder occupano
+ *    tutti ESATTAMENTE size × frameH. Niente più placeholder enormi su mobile
+ *    perché erano size*1.25 mentre gli sprite-sheet erano size×size.
+ *
+ * 4. ANCORAGGIO AL SUOLO COERENTE: il character frame ha
+ *    justifyContent:'flex-end' → l'Image con resizeMode:'contain' si ancora
+ *    al bordo inferiore del frame, i "piedi" del personaggio sono a bottom=0
+ *    del wrapper, che a sua volta è a bottom=home.y dal pavimento del
+ *    battlefield. Il terreno è quindi una linea coerente per TUTTE le unità.
+ *
+ * 5. MOTION LAYER LOCALE: translateX/Y/rotate/scale sono applicati SOLO al
+ *    motion container interno (mai al wrapper globale né al root).
+ *    Quando torna a (0,0,0,1) lo sprite è nella sua home esatta.
+ *    → Non può mai "scorrere fuori" dalla cella.
+ */
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import Animated, {
@@ -11,8 +42,7 @@ import Constants from 'expo-constants';
 
 type SpriteState = 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
 
-// Frame mapping: sprite sheet has 4 frames horizontally
-// 0=idle, 1=attack, 2=hit, 3=skill
+// Frame mapping: 4 frames horizontally → 0=idle, 1=attack, 2=hit, 3=skill
 const STATE_TO_FRAME: Record<SpriteState, number> = {
   idle: 0, attack: 1, hit: 2, skill: 3, ultimate: 3, dead: 2, heal: 0, dodge: 0,
 };
@@ -26,29 +56,39 @@ interface Props {
   showHeal?: number | null;
   isCrit?: boolean;
   size?: number;
+  /** Se true, disegna bordo tratteggiato interno + anchor dot sul suolo.
+   *  Passato da combat.tsx tramite BATTLE_DEBUG per il debug visivo mirato. */
+  debug?: boolean;
 }
 
 export default function BattleSprite({
   character, state, isEnemy = false, hpPercent,
-  showDamage, showHeal, isCrit, size = 80,
+  showDamage, showHeal, isCrit, size = 80, debug = false,
 }: Props) {
   const elemColor = ELEMENTS.colors[character?.element || character?.hero_element] || '#888';
   const rarColor = RARITY.colors[Math.min(character?.rarity || character?.hero_rarity || 1, 6)] || '#888';
   const heroName = character?.name || character?.hero_name || '?';
 
-  // Build sprite URL
+  // Geometria locale stabile.
+  //   frameW = larghezza cella (== size passato dal wrapper)
+  //   frameH = altezza cella (size * 1.25, ratio ritratto).
+  // Tutti i layer interni sono dimensionati in funzione di queste due costanti.
+  const frameW = size;
+  const frameH = Math.round(size * 1.25);
+
+  // Sprite URL (sprite sheet mode, es. bot con atlas PNG)
   const backendUrl = Constants.expoConfig?.extra?.EXPO_BACKEND_URL || '';
   const spriteUrl = character?.sprite_url ? `${backendUrl}${character.sprite_url}` : null;
   const heroImage = character?.hero_image || character?.image;
+  const hasSpriteSheet = !!spriteUrl;
 
-  // Current frame based on state
+  // Current frame based on state (solo per sprite sheet)
   const [currentFrame, setCurrentFrame] = useState(0);
+  useEffect(() => { setCurrentFrame(STATE_TO_FRAME[state] || 0); }, [state]);
 
-  useEffect(() => {
-    setCurrentFrame(STATE_TO_FRAME[state] || 0);
-  }, [state]);
-
-  // Animation values
+  // --- Animation shared values ------------------------------------------------
+  // idleY/transX/bodyRot/spriteScale/spriteOp sono LOCALI: transform del motion
+  // container interno, mai del wrapper globale.
   const idleY = useSharedValue(0);
   const transX = useSharedValue(0);
   const bodyRot = useSharedValue(0);
@@ -63,7 +103,7 @@ export default function BattleSprite({
   const healFloatY = useSharedValue(0);
   const healFloatOp = useSharedValue(0);
 
-  // Idle animation
+  // --- Idle breathing ---------------------------------------------------------
   useEffect(() => {
     if (state === 'dead') return;
     idleY.value = withRepeat(withSequence(
@@ -80,30 +120,22 @@ export default function BattleSprite({
     ), -1, true);
   }, [state !== 'dead']);
 
-  // State animations
+  // --- State animations -------------------------------------------------------
   useEffect(() => {
     const dir = isEnemy ? -1 : 1;
-    // Cancella qualsiasi animazione pendente su transX/bodyRot/scale PRIMA
-    // di avviarne una nuova → impedisce l'accumulo di offset che produceva
-    // l'effetto "scroll lungo lo schermo" su mobile quando azioni consecutive
-    // sovrapponevano le transition senza mai tornare alla home position.
+    // Cancella animazioni pendenti per prevenire accumulo di offset → mai drift.
     cancelAnimation(transX);
     cancelAnimation(bodyRot);
     cancelAnimation(spriteScale);
-    // Size-aware dash: calibrato rispetto alla taglia reale del sprite (size)
-    // invece di pixel fissi. Su mobile (size~137) dash breve; su desktop
-    // (size~180) proporzionale. Niente mai oltre il 15% di size → le unità
-    // restano ancorate alla propria cella griglia.
-    const ATTACK_DASH = Math.round(size * 0.10);   // ~14 mobile / ~18 desktop
-    const ATTACK_LUNGE = Math.round(size * 0.12);  // micro extra di impatto
+    // Dash size-aware: proporzionale al size locale, mai oltre ~12%.
+    const ATTACK_DASH = Math.round(size * 0.10);
+    const ATTACK_LUNGE = Math.round(size * 0.12);
     const SKILL_DASH = Math.round(size * 0.07);
     const HIT_KNOCK = Math.round(size * 0.05);
     const DODGE_STEP = Math.round(size * 0.10);
     switch (state) {
       case 'idle':
-        // Re-anchor esplicito: se arriviamo in idle da qualsiasi stato
-        // precedente, forziamo un ritorno rapido alla home (transX=0,
-        // rot=0, scale=1). Garantisce che le unità non driftino mai.
+        // Re-anchor esplicito alla home locale.
         transX.value = withTiming(0, { duration: 180 });
         bodyRot.value = withTiming(0, { duration: 180 });
         spriteScale.value = withTiming(1, { duration: 180 });
@@ -113,7 +145,7 @@ export default function BattleSprite({
         transX.value = withSequence(
           withTiming(dir * ATTACK_DASH, { duration: 140 }),
           withTiming(dir * ATTACK_LUNGE, { duration: 60 }),
-          withTiming(0, { duration: 260 }),        // ritorno deciso alla home
+          withTiming(0, { duration: 260 }),
         );
         spriteScale.value = withSequence(withTiming(1.08, { duration: 120 }), withTiming(1, { duration: 220 }));
         break;
@@ -158,7 +190,7 @@ export default function BattleSprite({
     }
   }, [state, isCrit, size]);
 
-  // Damage float
+  // --- Damage / Heal float triggers ------------------------------------------
   useEffect(() => {
     if (showDamage && showDamage > 0) {
       dmgY.value = 0; dmgOp.value = 0; dmgScale.value = isCrit ? 0.3 : 0.5;
@@ -167,7 +199,6 @@ export default function BattleSprite({
       dmgScale.value = withSpring(isCrit ? 1.5 : 1.1);
     }
   }, [showDamage]);
-
   useEffect(() => {
     if (showHeal && showHeal > 0) {
       healFloatY.value = 0; healFloatOp.value = 0;
@@ -176,7 +207,20 @@ export default function BattleSprite({
     }
   }, [showHeal]);
 
-  const mainStyle = useAnimatedStyle(() => ({
+  // --- Facing --------------------------------------------------------------
+  // Ogni asset ha un "native facing" noto. Hoplite combat_base: lancia a sx.
+  // Team A (non-enemy) guarda a destra, Team B a sinistra.
+  const isHoplite = isGreekHoplite(
+    character?.hero_id || character?.id,
+    character?.hero_name || character?.name,
+  );
+  const nativeFacing: 'left' | 'right' = isHoplite ? 'left' : 'right';
+  const targetFacing: 'left' | 'right' = isEnemy ? 'left' : 'right';
+  const facingScaleX = nativeFacing !== targetFacing ? -1 : 1;
+
+  // --- Animated styles -------------------------------------------------------
+  // motionStyle applicato al motion container INTERNO (layer 2). Mai al root.
+  const motionStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: transX.value },
       { translateY: idleY.value },
@@ -186,7 +230,9 @@ export default function BattleSprite({
     opacity: spriteOp.value,
   }));
   const hitStyle = useAnimatedStyle(() => ({ opacity: hitFlash.value }));
-  const auraStyle = useAnimatedStyle(() => ({ opacity: auraOp.value, transform: [{ scale: auraSc.value }] }));
+  const auraStyle = useAnimatedStyle(() => ({
+    opacity: auraOp.value, transform: [{ scale: auraSc.value }],
+  }));
   const dmgStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: dmgY.value }, { scale: dmgScale.value }], opacity: dmgOp.value,
   }));
@@ -194,128 +240,285 @@ export default function BattleSprite({
     transform: [{ translateY: healFloatY.value }], opacity: healFloatOp.value,
   }));
 
-  const hpColor = hpPercent > 60 ? '#44DD88' : hpPercent > 30 ? '#FFAA33' : '#FF3344';
-  const frameWidth = size;
-  const hasSpriteSheet = !!spriteUrl;
-
-  // ---- Facing: ogni eroe guarda il proprio avversario ----
-  // Regola: Team A (isEnemy=false) guarda a DESTRA, Team B (isEnemy=true) guarda a SINISTRA
-  // Ogni asset ha un "native facing": direzione in cui è disegnato di default.
-  //   - combat_base.png di Hoplite: lancia estesa a sinistra → native 'left'
-  //   - asset frontali generici (stockcake): si comportano bene con flip (simmetrico)
-  //     → native 'right' (convenzione di default)
-  // Flip solo se nativeFacing !== targetFacing.
-  const isHoplite = isGreekHoplite(
-    character?.hero_id || character?.id,
-    character?.hero_name || character?.name,
-  );
-  const nativeFacing: 'left' | 'right' = isHoplite ? 'left' : 'right';
-  const targetFacing: 'left' | 'right' = isEnemy ? 'left' : 'right';
-  const facingScaleX = nativeFacing !== targetFacing ? -1 : 1;
+  // --- Geometria dei layer ---------------------------------------------------
+  const auraSize = Math.round(size * 1.15);                   // leggermente più larga del char
+  const auraInset = Math.round((frameW - auraSize) / 2);       // centraggio orizzontale
+  const shadowW = Math.round(size * 0.7);
+  const shadowInset = Math.round((frameW - shadowW) / 2);
+  const elemBadgeSize = Math.max(14, Math.min(22, Math.round(size * 0.13)));
+  const elemBadgeFont = Math.round(elemBadgeSize * 0.55);
 
   return (
-    <View style={[s.root, { width: size + 16 }]}>
-      {/* Damage float */}
-      <Animated.View style={[s.floatNum, dmgStyle]} pointerEvents="none">
-        <Text style={[s.dmgText, isCrit && s.critText, { color: isCrit ? '#FFD700' : '#FF4444' }]}>
-          {isCrit ? 'CRIT! ' : ''}-{showDamage?.toLocaleString()}
-        </Text>
-      </Animated.View>
-      {/* Heal float */}
-      <Animated.View style={[s.floatNum, healFStyle]} pointerEvents="none">
-        <Text style={s.healFText}>+{showHeal?.toLocaleString()}</Text>
-      </Animated.View>
+    // ========================================================================
+    //  ROOT: box CONOSCIUTO size × frameH. Riempie esattamente il wrapper
+    //  globale (combat.tsx). overflow:'visible' per aura/damage che sborda.
+    // ========================================================================
+    <View style={[s.root, { width: frameW, height: frameH }, debug && s.debugRoot]}>
 
-      {/* Aura glow */}
-      <Animated.View style={[s.aura, { backgroundColor: elemColor, width: size + 20, height: size + 20, borderRadius: (size + 20) / 2 }, auraStyle]} />
+      {/* -- LAYER BG-1: Aura glow ---------------------------------------- */}
+      {/* Absolute centrato orizzontalmente, ancorato vicino ai piedi       */}
+      {/* (bottom:0 = suolo). Mai inchiodato a 0,0.                         */}
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          {
+            position: 'absolute',
+            left: auraInset,
+            bottom: 0,
+            width: auraSize,
+            height: auraSize,
+            borderRadius: auraSize / 2,
+            backgroundColor: elemColor,
+          },
+          auraStyle,
+        ]}
+      />
 
-      <Animated.View style={mainStyle}>
-        {/* Sprite Sheet Display */}
-        {hasSpriteSheet ? (
-          <View style={[s.spriteFrame, { width: size, height: size, borderRadius: size * 0.1, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
-            {/* Clip the sprite sheet to show only the current frame */}
-            <View style={{ width: size, height: size, overflow: 'hidden' }}>
+      {/* -- LAYER BG-2: Shadow ellittica al suolo ----------------------- */}
+      {/* NON segue il motion del character → resta al suolo quando attacca. */}
+      <View
+        pointerEvents="none"
+        style={{
+          position: 'absolute',
+          left: shadowInset,
+          bottom: 2,
+          width: shadowW,
+          height: 6,
+          borderRadius: 20,
+          backgroundColor: '#000',
+          opacity: state === 'dead' ? 0.1 : 0.3,
+        }}
+      />
+
+      {/* -- LAYER 2: Motion container (fill assoluto, bottom-anchored) -- */}
+      {/* Applica qui E SOLO qui translateX/Y/rot/scale locali.            */}
+      <Animated.View
+        pointerEvents="box-none"
+        style={[
+          {
+            position: 'absolute',
+            left: 0, right: 0, top: 0, bottom: 0,
+            alignItems: 'center',
+            justifyContent: 'flex-end',      // piedi al suolo
+          },
+          motionStyle,
+        ]}
+      >
+        {/* Character frame — stessa geometria per tutti i render path. */}
+        <View
+          style={{
+            width: frameW,
+            height: frameH,
+            borderRadius: 8,
+            overflow: 'hidden',
+            alignItems: 'center',
+            justifyContent: 'flex-end',      // il contenuto si ancora al bottom
+            backgroundColor: 'transparent',
+          }}
+        >
+          {/* Facing flip container — scaleX applicato solo qui.              */}
+          {/* Gli overlay (hit flash, badge, debug) NON devono essere flippati. */}
+          <View
+            style={{
+              width: frameW,
+              height: frameH,
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              transform: [{ scaleX: facingScaleX }],
+            }}
+          >
+            {hasSpriteSheet ? (
+              // Sprite sheet mode: atlas 4 frame orizzontali, ogni frame size×frameH.
+              <View style={{ width: frameW, height: frameH, overflow: 'hidden' }}>
+                <Image
+                  source={{ uri: spriteUrl }}
+                  style={{
+                    width: frameW * 4,
+                    height: frameH,
+                    marginLeft: -currentFrame * frameW,
+                  }}
+                  resizeMode="cover"
+                />
+              </View>
+            ) : heroImage ? (
+              // Combat pose (es. Hoplite combat_base.png). contain preserva aspect
+              // ratio, justifyContent:'flex-end' del parent ancora ai piedi.
               <Image
-                source={{ uri: spriteUrl }}
-                style={{
-                  width: size * 4,
-                  height: size,
-                  marginLeft: -currentFrame * size,
-                }}
-                resizeMode="cover"
+                source={heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)}
+                style={{ width: frameW, height: frameH }}
+                resizeMode="contain"
               />
-            </View>
-            {/* Hit flash */}
-            <Animated.View style={[s.hitFlashOv, { borderRadius: size * 0.08 }, hitStyle]} />
-            {/* Element badge */}
-            <View style={[s.elemBadge, { backgroundColor: elemColor }]}>
-              <Text style={s.elemIcon}>{ELEMENTS.icons[character?.element || character?.hero_element] || ''}</Text>
-            </View>
+            ) : (
+              // Placeholder (bot senza asset): stessa geometria size × frameH.
+              <LinearGradient
+                colors={[elemColor + '40', elemColor + '15']}
+                style={{
+                  width: frameW,
+                  height: frameH,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: rarColor + '60',
+                  borderRadius: 6,
+                }}
+              >
+                <Text style={{ color: elemColor, fontSize: Math.round(frameW * 0.4), fontWeight: '900' }}>
+                  {heroName[0]}
+                </Text>
+              </LinearGradient>
+            )}
           </View>
-        ) : heroImage ? (
-          // Frame verticale per figure battle (combat pose side-view).
-          // Altezza > larghezza per dare presenza alla figura intera, ancorata ai piedi.
-          <View style={[s.imgFrame, { width: size, height: size * 1.25, borderRadius: 8, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
-            <Image
-              source={heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)}
-              style={[s.heroImg, { width: size - 4, height: size * 1.25 - 4, borderRadius: 6 }]}
-              resizeMode="contain"
+
+          {/* Hit flash overlay — fuori dal facing flip, copre tutto il frame. */}
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              {
+                position: 'absolute',
+                left: 0, right: 0, top: 0, bottom: 0,
+                backgroundColor: '#FF4444',
+                borderRadius: 8,
+                zIndex: 10,
+              },
+              hitStyle,
+            ]}
+          />
+
+          {/* Element badge — bottom-right, fuori dal facing flip. */}
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 3,
+              right: 3,
+              width: elemBadgeSize,
+              height: elemBadgeSize,
+              borderRadius: elemBadgeSize / 2,
+              backgroundColor: elemColor,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 1.5,
+              borderColor: 'rgba(0,0,0,0.4)',
+              zIndex: 15,
+            }}
+          >
+            <Text style={{ fontSize: elemBadgeFont, color: '#fff' }}>
+              {ELEMENTS.icons[character?.element || character?.hero_element] || ''}
+            </Text>
+          </View>
+
+          {/* DEBUG: bordo tratteggiato interno del character frame (giallo). */}
+          {debug && (
+            <View
+              pointerEvents="none"
+              style={{
+                position: 'absolute',
+                left: 0, right: 0, top: 0, bottom: 0,
+                borderWidth: 1,
+                borderColor: '#FFFF00',
+                borderStyle: 'dashed',
+                zIndex: 20,
+              }}
             />
-            <Animated.View style={[s.hitFlashOv, { borderRadius: 6 }, hitStyle]} />
-            <View style={[s.elemBadge, { backgroundColor: elemColor }]}>
-              <Text style={s.elemIcon}>{ELEMENTS.icons[character?.element || character?.hero_element] || ''}</Text>
-            </View>
-          </View>
-        ) : (
-          <View style={[s.imgFrame, { width: size, height: size * 1.25, borderRadius: 8, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
-            <LinearGradient colors={[elemColor + '40', elemColor + '15']} style={[s.placeholder, { width: size - 4, height: size * 1.25 - 4, borderRadius: 6 }]}>
-              <Text style={[s.initText, { color: elemColor, fontSize: size * 0.4 }]}>{heroName[0]}</Text>
-            </LinearGradient>
-            <Animated.View style={[s.hitFlashOv, { borderRadius: 6 }, hitStyle]} />
-            <View style={[s.elemBadge, { backgroundColor: elemColor }]}>
-              <Text style={s.elemIcon}>{ELEMENTS.icons[character?.element || character?.hero_element] || ''}</Text>
-            </View>
-          </View>
-        )}
-        <View style={[s.shadow, { width: size * 0.7, opacity: state === 'dead' ? 0.1 : 0.3 }]} />
+          )}
+        </View>
+      </Animated.View>
+
+      {/* DEBUG: anchor dot sul suolo (bottom-center) — segna home.y reale. */}
+      {debug && (
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            left: frameW / 2 - 4,
+            bottom: -4,
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: '#FF00FF',
+            borderWidth: 1,
+            borderColor: '#FFF',
+            zIndex: 50,
+          }}
+        />
+      )}
+
+      {/* -- LAYER FG-1: Damage float (absolute, centrato) ---------------- */}
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          {
+            position: 'absolute',
+            top: -8,
+            left: 0,
+            right: 0,
+            alignItems: 'center',
+            zIndex: 200,
+          },
+          dmgStyle,
+        ]}
+      >
+        {showDamage && showDamage > 0 ? (
+          <Text
+            style={[
+              s.dmgText,
+              isCrit && s.critText,
+              { color: isCrit ? '#FFD700' : '#FF4444' },
+            ]}
+          >
+            {isCrit ? 'CRIT! ' : ''}-{showDamage.toLocaleString()}
+          </Text>
+        ) : null}
+      </Animated.View>
+
+      {/* -- LAYER FG-2: Heal float (absolute, centrato) ------------------ */}
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          {
+            position: 'absolute',
+            top: -8,
+            left: 0,
+            right: 0,
+            alignItems: 'center',
+            zIndex: 200,
+          },
+          healFStyle,
+        ]}
+      >
+        {showHeal && showHeal > 0 ? (
+          <Text style={s.healFText}>+{showHeal.toLocaleString()}</Text>
+        ) : null}
       </Animated.View>
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  root: { alignItems: 'center', marginHorizontal: 2 },
-  floatNum: { position: 'absolute', top: -15, zIndex: 200, alignItems: 'center' },
-  dmgText: { fontSize: 14, fontWeight: '900', textShadowColor: '#000', textShadowRadius: 6, textShadowOffset: { width: 1, height: 1 } },
+  root: {
+    // Box conosciuto, immutabile durante la battle. Niente alignItems: il
+    // posizionamento di ogni layer è ESPLICITO via left/right/top/bottom.
+    overflow: 'visible',
+    backgroundColor: 'transparent',
+  },
+  debugRoot: {
+    // Bordo esterno arancione quando debug=true → conferma la cella effettiva.
+    borderWidth: 1,
+    borderColor: '#FFB347',
+  },
+  dmgText: {
+    fontSize: 14,
+    fontWeight: '900',
+    textShadowColor: '#000',
+    textShadowRadius: 6,
+    textShadowOffset: { width: 1, height: 1 },
+  },
   critText: { fontSize: 18, letterSpacing: 2 },
-  healFText: { fontSize: 14, fontWeight: '900', color: '#44DD88', textShadowColor: '#000', textShadowRadius: 6, textShadowOffset: { width: 1, height: 1 } },
-  aura: { position: 'absolute', top: -2 },
-  spriteFrame: {
-    borderWidth: 0,
-    overflow: 'hidden',
-    backgroundColor: 'transparent',
+  healFText: {
+    fontSize: 14,
+    fontWeight: '900',
+    color: '#44DD88',
+    textShadowColor: '#000',
+    textShadowRadius: 6,
+    textShadowOffset: { width: 1, height: 1 },
   },
-  imgFrame: {
-    borderWidth: 0,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  heroImg: {},
-  placeholder: { alignItems: 'center', justifyContent: 'center' },
-  initText: { fontWeight: '900' },
-  hitFlashOv: { ...StyleSheet.absoluteFillObject, backgroundColor: '#FF4444', zIndex: 10 },
-  elemBadge: {
-    position: 'absolute', bottom: 2, right: 2,
-    width: 18, height: 18, borderRadius: 9,
-    alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1.5, borderColor: 'rgba(0,0,0,0.4)',
-  },
-  elemIcon: { fontSize: 10 },
-  shadow: { height: 6, borderRadius: 20, backgroundColor: '#000', marginTop: 3 },
-  heroName: { fontSize: 9, fontWeight: '900', marginTop: 2, textAlign: 'center', letterSpacing: 0.5 },
-  hpWrap: { marginTop: 2, alignItems: 'center' },
-  hpBg: { width: '100%', height: 5, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 3, overflow: 'hidden' },
-  hpFill: { height: '100%', borderRadius: 3 },
 });
