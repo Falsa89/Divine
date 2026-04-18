@@ -8,6 +8,7 @@ import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
 import { heroBattleImageSource, heroImageSource, GREEK_HOPLITE_COMBAT_BASE } from '../components/ui/hopliteAssets';
 import { pickBattleBackground, BattleBgResult, preloadBattleAsset } from '../components/ui/battleBackgrounds';
+import { buildBattleLayout, getHomePosition } from '../components/battle/motionSystem';
 import Animated, {
   useSharedValue, useAnimatedStyle, withTiming, withSequence,
   withDelay, withRepeat, FadeIn, FadeInDown, FadeInUp, Easing,
@@ -114,6 +115,11 @@ export default function CombatScreen() {
   const shakeStyle = useAnimatedStyle(() => ({ transform: [{ translateX: shakeX.value }] }));
   const ultStyle = useAnimatedStyle(() => ({ transform: [{ scale: ultScale.value }], opacity: ultOp.value }));
   const vsStyle = useAnimatedStyle(() => ({ transform: [{ scale: vsScale.value }], opacity: vsOp.value }));
+
+  // Layout battle calcolato una volta per render (reattivo a winW/winH):
+  // contiene dimensioni sprite + rowStep usati dall'architettura motion a
+  // due livelli (home position assoluta + action motion relativa).
+  const battleLayout = React.useMemo(() => buildBattleLayout(winW, winH), [winW, winH]);
 
   useEffect(() => { startBattle(); return () => { if (timerRef.current) clearTimeout(timerRef.current); allTimers.current.forEach(id => clearTimeout(id)); allTimers.current = []; }; }, []);
 
@@ -540,7 +546,18 @@ export default function CombatScreen() {
           </View>
         </View>
 
-        {/* ===== BATTLEFIELD CENTER: Animated Sprites ===== */}
+        {/* ===== BATTLEFIELD CENTER: Absolute-positioned sprites ===== */}
+        {/*
+           ARCHITETTURA MOTION (due livelli indipendenti):
+             1. HOME POSITION — wrapper <View position:absolute> posizionato
+                con left/bottom calcolati da getHomePosition(team,col,row,layout).
+                NON dipende da flex/reflow → è immune al drift da re-render.
+             2. ACTION MOTION — transform locale applicato DENTRO BattleSprite
+                (transX/transY/rotate/scale). È puramente additivo alla home e
+                torna sempre a 0 alla fine. Future skill (approach_target,
+                backstab_target, move_to_center, charge_line) useranno lo stesso
+                meccanismo passando un MotionIntent esplicito.
+        */}
         <View style={st.battlefield}>
           <LinearGradient
             colors={['transparent', 'rgba(30,20,10,0.12)', 'rgba(20,15,8,0.3)']}
@@ -549,78 +566,93 @@ export default function CombatScreen() {
             end={{ x: 0.5, y: 1 }}
           />
 
-          {/* Team A sprites - LEFT (3 cols x 3 rows, x=1/4/7 ↦ col 0/1/2, y=1/4/7 ↦ row 0/1/2) */}
-          <View style={st.teamGrid}>
-            {(() => {
-              const gridA = buildFormationGrid(teamA, false);
-              // Responsive sizing: calcolato dal viewport reale.
-              //   - budget verticale = winH - topHud(70) - logPanel(46) - padding(28) - buffer(10)
-              //   - budget / 1.25 (frame aspect) = max sprite width possibile
-              //   - clamp 80..180 per evitare valori degeneri su device estremi
-              // Front line (Tank, col=2) = 100%, DPS col=1 = 86%, Support col=0 = 71%.
-              const availH = Math.max(160, winH - 70 - 46 - 28 - 10);
-              const rowStep = Math.max(32, Math.min(48, winH * 0.06));
-              const tankSize = Math.max(80, Math.min(180, Math.floor((availH - rowStep * 2) / 1.25)));
-              const dpsSize = Math.round(tankSize * 0.86);
-              const supSize = Math.round(tankSize * 0.71);
-              const SIZE_BY_COL = [supSize, dpsSize, tankSize] as const;
-              return [0, 1, 2].map(col => (
-                <View key={`a_col_${col}`} style={[st.gridCol, { width: SIZE_BY_COL[col] + 6 }]}>
-                  {[0, 1, 2].map(row => {
-                    const c = gridA[col][row];
-                    if (!c) return <View key={`a_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL[col] + 6, height: rowStep }]} />;
-                    const ss = getSpriteState(c.id);
-                    return (
-                      <Animated.View
-                        key={c.id}
-                        entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)}
-                        style={[st.spriteSlot, { width: SIZE_BY_COL[col] + 6, height: rowStep, zIndex: 10 - row }]}
-                      >
-                        <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL[col]} />
-                      </Animated.View>
-                    );
-                  })}
-                </View>
-              ));
-            })()}
-          </View>
-
-          {/* VS divider */}
-          <View style={st.vsCenter}>
+          {/* VS center line (solo estetica, non impatta il layout assoluto) */}
+          <View style={st.vsCenter} pointerEvents="none">
             <LinearGradient colors={['transparent', COLORS.accent + '20', 'transparent']} style={st.vsCenterLine} />
           </View>
 
-          {/* Team B sprites - RIGHT (mirror: x=7 ↦ col 0 front, x=1 ↦ col 2 back) */}
-          <View style={st.teamGrid}>
-            {(() => {
-              const gridB = buildFormationGrid(teamB, true);
-              // Mirror + sizing responsive coerente con Team A.
-              const availH = Math.max(160, winH - 70 - 46 - 28 - 10);
-              const rowStep = Math.max(32, Math.min(48, winH * 0.06));
-              const tankSize = Math.max(80, Math.min(180, Math.floor((availH - rowStep * 2) / 1.25)));
-              const dpsSize = Math.round(tankSize * 0.86);
-              const supSize = Math.round(tankSize * 0.71);
-              const SIZE_BY_COL_B = [tankSize, dpsSize, supSize] as const;
-              return [0, 1, 2].map(col => (
-                <View key={`b_col_${col}`} style={[st.gridCol, { width: SIZE_BY_COL_B[col] + 6 }]}>
-                  {[0, 1, 2].map(row => {
-                    const c = gridB[col][row];
-                    if (!c) return <View key={`b_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL_B[col] + 6, height: rowStep }]} />;
-                    const ss = getSpriteState(c.id);
-                    return (
-                      <Animated.View
-                        key={c.id}
-                        entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)}
-                        style={[st.spriteSlot, { width: SIZE_BY_COL_B[col] + 6, height: rowStep, zIndex: 10 - row }]}
-                      >
-                        <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL_B[col]} />
-                      </Animated.View>
-                    );
-                  })}
-                </View>
-              ));
-            })()}
-          </View>
+          {(() => {
+            // LAYOUT calcolato una volta per render. getHomePosition è stabile
+            // rispetto ai re-render (dipende solo da winW/winH).
+            const gridA = buildFormationGrid(teamA, false);
+            const gridB = buildFormationGrid(teamB, true);
+            const L = battleLayout;
+            const sprites: React.ReactNode[] = [];
+            const colSizesA = [L.supSize, L.dpsSize, L.tankSize];
+            const colSizesB = [L.tankSize, L.dpsSize, L.supSize];
+
+            for (let col = 0; col < 3; col++) {
+              for (let row = 0; row < 3; row++) {
+                // Team A
+                const cA = gridA[col][row];
+                if (cA) {
+                  const size = colSizesA[col];
+                  const home = getHomePosition('A', col, row, L);
+                  const ss = getSpriteState(cA.id);
+                  const slotW = size + 6;
+                  sprites.push(
+                    <Animated.View
+                      key={`a_${cA.id}`}
+                      entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)}
+                      pointerEvents="box-none"
+                      style={{
+                        position: 'absolute',
+                        left: home.x - slotW / 2,
+                        bottom: home.y,
+                        width: slotW,
+                        zIndex: 10 + (2 - row),  // front row (2) sopra back rows
+                      }}
+                    >
+                      <BattleSprite
+                        character={cA}
+                        state={ss.state}
+                        isEnemy={false}
+                        hpPercent={getHpPct(cA)}
+                        showDamage={ss.damage}
+                        showHeal={ss.healAmt}
+                        isCrit={ss.isCrit}
+                        size={size}
+                      />
+                    </Animated.View>
+                  );
+                }
+                // Team B
+                const cB = gridB[col][row];
+                if (cB) {
+                  const size = colSizesB[col];
+                  const home = getHomePosition('B', col, row, L);
+                  const ss = getSpriteState(cB.id);
+                  const slotW = size + 6;
+                  sprites.push(
+                    <Animated.View
+                      key={`b_${cB.id}`}
+                      entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)}
+                      pointerEvents="box-none"
+                      style={{
+                        position: 'absolute',
+                        left: home.x - slotW / 2,
+                        bottom: home.y,
+                        width: slotW,
+                        zIndex: 10 + (2 - row),
+                      }}
+                    >
+                      <BattleSprite
+                        character={cB}
+                        state={ss.state}
+                        isEnemy={true}
+                        hpPercent={getHpPct(cB)}
+                        showDamage={ss.damage}
+                        showHeal={ss.healAmt}
+                        isCrit={ss.isCrit}
+                        size={size}
+                      />
+                    </Animated.View>
+                  );
+                }
+              }
+            }
+            return sprites;
+          })()}
         </View>
 
         {/* Action Log - bottom */}
@@ -797,11 +829,9 @@ const st = StyleSheet.create({
   // ====== BATTLEFIELD ======
   battlefield: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',        // ancorato al fondo → azione bassa/centrale, no spazio morto sotto
-    justifyContent: 'center',
-    paddingHorizontal: 4,
-    paddingBottom: 28,             // respiro sopra log — alza leggermente la scena per miglior bilanciamento
+    // NO flexDirection/alignItems → i children sono posizionati in absolute
+    // via getHomePosition(). Il battlefield è solo il container relativo.
+    position: 'relative',
     overflow: 'visible',
   },
   groundPlane: {
@@ -838,10 +868,14 @@ const st = StyleSheet.create({
     overflow: 'visible',
   },
   vsCenter: {
-    width: 22,
+    position: 'absolute',
+    left: '50%',
+    top: 10,
+    bottom: 10,
+    width: 2,
+    marginLeft: -1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 2,
   },
   vsCenterLine: {
     width: 2,
