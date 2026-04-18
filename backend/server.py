@@ -334,11 +334,57 @@ register_items_routes(items_router, db, get_current_user)
 app.include_router(items_router)
 
 # ===================== SEED =====================
+# Mappa nome eroe → faction canonica (valori che il resolver background
+# accetta direttamente: greek/norse/egyptian/japanese/celtic).
+# NON scrivere mai alias asset (nordic/egypt) nel DB — quelli restano
+# SOLO nel registry di /app/frontend/components/ui/battleBackgrounds.ts.
+HERO_FACTION_MAP: dict = {
+    # --- Greek pantheon + nymph / minor ----------------------------------
+    "Hoplite": "greek",
+    "Athena": "greek", "Aphrodite": "greek", "Artemis": "greek",
+    "Medusa": "greek", "Hera": "greek", "Persephone": "greek",
+    "Nyx": "greek", "Demeter": "greek", "Hecate": "greek",
+    "Selene": "greek", "Iris": "greek", "Echo": "greek",
+    "Daphne": "greek", "Chloris": "greek", "Aura": "greek",
+    "Hestia": "greek", "Nike": "greek", "Psyche": "greek",
+    # --- Japanese pantheon (Shinto) --------------------------------------
+    "Amaterasu": "japanese", "Tsukuyomi": "japanese",
+    "Susanoo": "japanese", "Izanami": "japanese",
+    "Sakuya": "japanese", "Kaguya": "japanese",
+    "Inari": "japanese", "Benzaiten": "japanese",
+    "Raijin": "japanese", "Fujin": "japanese",
+    # --- Norse pantheon --------------------------------------------------
+    "Freya": "norse", "Valkyrie": "norse",
+    # Egyptian / Celtic: nessun eroe attualmente presente nel roster.
+}
+
+def resolve_hero_faction(name: str, existing: str | None = None) -> str | None:
+    """Ritorna la faction per il nome eroe. Se esiste già un valore
+    canonico lo preserva (evita di sovrascrivere eventuali fix manuali)."""
+    if existing and str(existing).lower() in {"greek", "norse", "egyptian", "japanese", "celtic"}:
+        return existing
+    return HERO_FACTION_MAP.get(name)
+
 @app.on_event("startup")
 async def seed_database():
     """Seed heroes if not present"""
     count = await db.heroes.count_documents({})
     if count >= 30:
+        # Migrazione one-shot: popola il campo faction sui record DB esistenti
+        # che non ce l'hanno (o ce l'hanno nullo). Solo update mirati per
+        # nome presente in HERO_FACTION_MAP. Nessun altro campo viene toccato.
+        missing = await db.heroes.find(
+            {"$or": [{"faction": None}, {"faction": {"$exists": False}}]},
+            {"name": 1, "faction": 1},
+        ).to_list(1000)
+        updated = 0
+        for h in missing:
+            f = resolve_hero_faction(h.get("name", ""), h.get("faction"))
+            if f:
+                await db.heroes.update_one({"_id": h["_id"]}, {"$set": {"faction": f}})
+                updated += 1
+        if updated:
+            print(f"[faction-migration] Populated faction on {updated} existing heroes")
         return
     
     await db.heroes.delete_many({})
@@ -380,6 +426,9 @@ async def seed_database():
     for hero in heroes_data:
         if "id" not in hero:
             hero["id"] = str(uuid.uuid4())
+        # Popolamento faction: preserva eventuale valore già presente (es.
+        # greek_hoplite nel seed), altrimenti risolve via HERO_FACTION_MAP.
+        hero["faction"] = resolve_hero_faction(hero.get("name", ""), hero.get("faction"))
         hero["created_at"] = datetime.utcnow()
         await db.heroes.insert_one(hero)
     
