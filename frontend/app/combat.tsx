@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
-import { heroBattleImageSource } from '../components/ui/hopliteAssets';
+import { heroBattleImageSource, heroImageSource } from '../components/ui/hopliteAssets';
 import Animated, {
   useSharedValue, useAnimatedStyle, withTiming, withSequence,
   withDelay, withRepeat, FadeIn, FadeInDown, FadeInUp, Easing,
@@ -406,7 +406,9 @@ export default function CombatScreen() {
       <View key={c.id} style={[st.hudCard, dead && { opacity: 0.35 }]}>
         <View style={[st.hudImg, { borderColor: rarCol }]}>
           {img ? (
-            <Image source={heroBattleImageSource(img, c.hero_id || c.id, c.hero_name || c.name)} style={st.hudImgInner} resizeMode="cover" />
+            // Top HUD portrait = SPLASH ART (UI context), NON combat pose.
+            // Regola pipeline: le top hero cards usano sempre la splash, mai combat_base né idle.
+            <Image source={heroImageSource(img, c.hero_id || c.id, c.hero_name || c.name)} style={st.hudImgInner} resizeMode="cover" />
           ) : (
             <View style={[st.hudImgPh, { backgroundColor: (EC[c.element] || '#888') + '25' }]}>
               <Text style={[st.hudInit, { color: EC[c.element] || '#888' }]}>{(c.name || '?')[0]}</Text>
@@ -709,7 +711,7 @@ const st = StyleSheet.create({
     alignItems: 'flex-end',        // ancorato al fondo → azione bassa/centrale, no spazio morto sotto
     justifyContent: 'center',
     paddingHorizontal: 4,
-    paddingBottom: 10,             // piccolo gap di respiro sopra log + shadow room
+    paddingBottom: 28,             // respiro sopra log — alza leggermente la scena per miglior bilanciamento
     overflow: 'visible',
   },
   groundPlane: {
@@ -717,7 +719,7 @@ const st = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '78%',                 // pavimento più alto → maggiore ancoraggio visivo scena
+    height: '68%',                 // pavimento più bilanciato, non schiaccia la scena verso il fondo
   },
   teamGrid: {
     // Non più flex:1 → i due team si avvicinano al centro, no vuoto eccessivo
