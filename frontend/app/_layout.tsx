@@ -58,6 +58,7 @@ export default function RootLayout() {
           <Stack.Screen name="achievements" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="hero-detail" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="hero-viewer" options={{ headerShown: false, animation: 'fade' }} />
+          <Stack.Screen name="sprite-test" options={{ headerShown: false, animation: 'slide_from_right' }} />
           <Stack.Screen name="soul-forge" options={{ animation: 'slide_from_bottom' }} />
         </Stack>
         </NotificationProvider>

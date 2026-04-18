@@ -33,6 +33,7 @@ const CATEGORIES = [
       { label: 'Negozio Oggetti', icon: '\uD83D\uDED2', route: '/item-shop', gradient: ['#44DD88', '#22AA66'] as const },
       { label: 'Negozio', icon: '\uD83C\uDFEA', route: '/shop', gradient: ['#44AAFF', '#2288CC'] as const },
       { label: 'VIP', icon: '\uD83D\uDC51', route: '/vip', gradient: ['#FFD700', '#DD9900'] as const },
+      { label: 'Sprite Test', icon: '\uD83C\uDFAC', route: '/sprite-test', gradient: ['#FF6B35', '#CC4400'] as const },
     ],
   },
   {
