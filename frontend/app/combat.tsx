@@ -472,17 +472,23 @@ export default function CombatScreen() {
           <View style={st.teamGrid}>
             {(() => {
               const gridA = buildFormationGrid(teamA, false);
-              // front line (Tank, col=2) più grande; back (Support, col=0) più piccolo.
-              // Scale definite una sola volta — riutilizzabili per futuri combat asset.
-              const SIZE_BY_COL = [112, 128, 150] as const;
+              // Approccio cinematic aggressivo: front line (Tank, col=2) molto grande,
+              // back (Support, col=0) più piccolo. Slot width adattivo per colonna.
+              // Row-step compatto (48px) con overflow visible → righe si sovrappongono
+              // creando profondità 2.5D senza rompere la griglia 3x3 formazione.
+              const SIZE_BY_COL = [128, 155, 180] as const;
               return [0, 1, 2].map(col => (
-                <View key={`a_col_${col}`} style={st.gridCol}>
+                <View key={`a_col_${col}`} style={[st.gridCol, { width: SIZE_BY_COL[col] + 6 }]}>
                   {[0, 1, 2].map(row => {
                     const c = gridA[col][row];
-                    if (!c) return <View key={`a_${col}_${row}`} style={st.emptySlot} />;
+                    if (!c) return <View key={`a_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL[col] + 6 }]} />;
                     const ss = getSpriteState(c.id);
                     return (
-                      <Animated.View key={c.id} entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
+                      <Animated.View
+                        key={c.id}
+                        entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)}
+                        style={[st.spriteSlot, { width: SIZE_BY_COL[col] + 6, zIndex: 10 - row }]}
+                      >
                         <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL[col]} />
                       </Animated.View>
                     );
@@ -501,16 +507,20 @@ export default function CombatScreen() {
           <View style={st.teamGrid}>
             {(() => {
               const gridB = buildFormationGrid(teamB, true);
-              // Mirror: col 0 è Tank front line per Team B
-              const SIZE_BY_COL_B = [150, 128, 112] as const;
+              // Mirror: col 0 è Tank front line per Team B (più grande)
+              const SIZE_BY_COL_B = [180, 155, 128] as const;
               return [0, 1, 2].map(col => (
-                <View key={`b_col_${col}`} style={st.gridCol}>
+                <View key={`b_col_${col}`} style={[st.gridCol, { width: SIZE_BY_COL_B[col] + 6 }]}>
                   {[0, 1, 2].map(row => {
                     const c = gridB[col][row];
-                    if (!c) return <View key={`b_${col}_${row}`} style={st.emptySlot} />;
+                    if (!c) return <View key={`b_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL_B[col] + 6 }]} />;
                     const ss = getSpriteState(c.id);
                     return (
-                      <Animated.View key={c.id} entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
+                      <Animated.View
+                        key={c.id}
+                        entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)}
+                        style={[st.spriteSlot, { width: SIZE_BY_COL_B[col] + 6, zIndex: 10 - row }]}
+                      >
                         <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL_B[col]} />
                       </Animated.View>
                     );
@@ -696,37 +706,44 @@ const st = StyleSheet.create({
   battlefield: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',        // ancorato al fondo → azione bassa/centrale, no spazio morto sotto
     justifyContent: 'center',
     paddingHorizontal: 4,
+    paddingBottom: 10,             // piccolo gap di respiro sopra log + shadow room
+    overflow: 'visible',
   },
   groundPlane: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: '60%',
+    height: '78%',                 // pavimento più alto → maggiore ancoraggio visivo scena
   },
   teamGrid: {
     // Non più flex:1 → i due team si avvicinano al centro, no vuoto eccessivo
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-end',        // ancora i personaggi al suolo
-    gap: 6,
-    paddingHorizontal: 4,
+    gap: 4,
+    paddingHorizontal: 2,
+    overflow: 'visible',
   },
   gridCol: {
     justifyContent: 'flex-end',    // ancoraggio al suolo nella colonna
     alignItems: 'center',
-    gap: 4,
+    overflow: 'visible',           // sprite più alti dello slot si espandono verso l'alto
   },
   emptySlot: {
-    width: 150,
-    height: 190,
+    // Row-step compatto → le 3 righe della griglia 3x3 restano tutte visibili
+    // senza clippare, e gli sprite (size*1.25) si sovrappongono con effetto profondità.
+    width: 160,
+    height: 48,
   },
   spriteSlot: {
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end',    // sprite ancorato al fondo dello slot, eccesso esce verso l'alto
+    height: 48,                    // row-step → depth stagger tra righe
+    overflow: 'visible',
   },
   vsCenter: {
     width: 22,
@@ -756,7 +773,7 @@ const st = StyleSheet.create({
   },
   // Log Panel
   logPanel: {
-    height: 52,
+    height: 46,
     backgroundColor: 'rgba(6,6,20,0.95)',
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,107,53,0.1)',
