@@ -653,7 +653,6 @@ export default function CombatScreen() {
                   sprites.push(
                     <Animated.View
                       key={`a_${cA.id}`}
-                      entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)}
                       pointerEvents="box-none"
                       style={{
                         position: 'absolute',
@@ -694,7 +693,6 @@ export default function CombatScreen() {
                   sprites.push(
                     <Animated.View
                       key={`b_${cB.id}`}
-                      entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)}
                       pointerEvents="box-none"
                       style={{
                         position: 'absolute',

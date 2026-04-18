@@ -47,6 +47,21 @@ const STATE_TO_FRAME: Record<SpriteState, number> = {
   idle: 0, attack: 1, hit: 2, skill: 3, ultimate: 3, dead: 2, heal: 0, dodge: 0,
 };
 
+// =============================================================================
+// MOUNT TRACKING — diagnostica remount involontari
+// -----------------------------------------------------------------------------
+// Registry module-level (sopravvive a re-render di combat.tsx). Ogni unità
+// logica (per character.id) incrementa il counter al mount e logga unmount.
+// Se durante una battle vedi `m2` o superiore apparire sullo sprite, vuol
+// dire che il sistema sta effettivamente RIMONTANDO l'unità — va indagato.
+// Invece, se tutti gli sprite restano a `m1` per tutta la battle, la
+// identity React è stabile → il bug dev'essere altrove.
+// =============================================================================
+const MOUNT_REGISTRY: Record<string, number> = {};
+function sproutId(c: any): string {
+  return String(c?.id ?? c?.hero_id ?? c?.user_hero_id ?? c?.name ?? 'unknown');
+}
+
 interface Props {
   character: any;
   state: SpriteState;
@@ -85,6 +100,31 @@ export default function BattleSprite({
   // Current frame based on state (solo per sprite sheet)
   const [currentFrame, setCurrentFrame] = useState(0);
   useEffect(() => { setCurrentFrame(STATE_TO_FRAME[state] || 0); }, [state]);
+
+  // =========================================================================
+  // MOUNT TRACKING (deps [] → runs once per REAL mount/unmount)
+  // Se questa funzione gira più volte durante la stessa battle per la stessa
+  // unità, abbiamo una conferma diretta che il componente viene rimontato.
+  // In debug mode mostra anche un badge "mN" sul sprite per ispezione visiva.
+  // =========================================================================
+  const charKey = sproutId(character);
+  const [mountCount] = useState<number>(() => {
+    MOUNT_REGISTRY[charKey] = (MOUNT_REGISTRY[charKey] || 0) + 1;
+    return MOUNT_REGISTRY[charKey];
+  });
+  useEffect(() => {
+    if (debug) {
+      // eslint-disable-next-line no-console
+      console.log('[BATTLE_DEBUG][MOUNT]', charKey, 'mount#=', MOUNT_REGISTRY[charKey], 'size=', size, 'enemy=', isEnemy);
+    }
+    return () => {
+      if (debug) {
+        // eslint-disable-next-line no-console
+        console.log('[BATTLE_DEBUG][UNMOUNT]', charKey, 'prevMount#=', MOUNT_REGISTRY[charKey]);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // --- Animation shared values ------------------------------------------------
   // idleY/transX/bodyRot/spriteScale/spriteOp sono LOCALI: transform del motion
@@ -440,6 +480,33 @@ export default function BattleSprite({
             zIndex: 50,
           }}
         />
+      )}
+
+      {/* DEBUG: badge mount count (top-left). Se durante la battaglia vedi
+           m2, m3... su una unità, vuol dire che è stata RIMONTATA (bug di
+           identity React). Se resta m1 per tutta la battle, la identity è
+           stabile → bug di re-entry era nel prop `entering` del wrapper
+           (layout animation Reanimated che si ri-triggerava). */}
+      {debug && (
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: 2,
+            left: 2,
+            paddingHorizontal: 4,
+            paddingVertical: 1,
+            borderRadius: 3,
+            backgroundColor: mountCount > 1 ? '#FF0055' : '#00E5FF',
+            zIndex: 60,
+            borderWidth: 1,
+            borderColor: '#FFF',
+          }}
+        >
+          <Text style={{ color: '#000', fontSize: 8, fontWeight: '900', fontFamily: 'monospace' }}>
+            m{mountCount}
+          </Text>
+        </View>
       )}
 
       {/* -- LAYER FG-1: Damage float (absolute, centrato) ---------------- */}
