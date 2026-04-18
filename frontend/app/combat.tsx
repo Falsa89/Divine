@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
 import { heroBattleImageSource, heroImageSource } from '../components/ui/hopliteAssets';
+import { pickBattleBackground, BattleBgResult } from '../components/ui/battleBackgrounds';
 import Animated, {
   useSharedValue, useAnimatedStyle, withTiming, withSequence,
   withDelay, withRepeat, FadeIn, FadeInDown, FadeInUp, Easing,
@@ -29,6 +30,7 @@ interface SpriteData {
 
 export default function CombatScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string }>();
   const { refreshUser } = useAuth();
   const [phase, setPhase] = useState<Phase>('loading');
   const [result, setResult] = useState<any>(null);
@@ -41,6 +43,9 @@ export default function CombatScreen() {
   const [error, setError] = useState('');
   const [logLines, setLogLines] = useState<any[]>([]);
   const [spriteStates, setSpriteStates] = useState<Record<string, SpriteData>>({});
+  // Background della battaglia: scelto UNA SOLA volta all'inizio di ogni fight
+  // e memorizzato qui per restare deterministicamente fisso durante la battaglia.
+  const [battleBg, setBattleBg] = useState<BattleBgResult | null>(null);
   const timerRef = useRef<any>(null);
   const allTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const logRef = useRef<ScrollView>(null);
@@ -133,6 +138,23 @@ export default function CombatScreen() {
       const tB = (r.team_b_final || []).map((c: any) => ({ ...c, current_hp: c.max_hp || c.hp || 10000, max_hp_battle: c.max_hp || c.hp || 10000, is_alive: true }));
       setTeamA(tA);
       setTeamB(tB);
+      // ---- Battle background selection (deterministic per-battle) ----------
+      // Prio 1: campaign → route param (?campaignFaction=norse) o backend r.campaign_faction
+      // Prio 2: dominant faction across both teams
+      // Tie-breaker: Team A dominant
+      // Fallback: gradient neutro (source=null)
+      const campaignFaction = (params?.campaignFaction as string)
+        || (params?.campaign_faction as string)
+        || r?.campaign_faction
+        || r?.context?.campaign_faction
+        || null;
+      const bg = pickBattleBackground({
+        campaignFaction,
+        teamA: tA,
+        teamB: tB,
+        // variantIndex omesso → random, memorizzato in state sotto → fisso per la battaglia
+      });
+      setBattleBg(bg);
       // Init all sprite states
       const states: Record<string, SpriteData> = {};
       [...tA, ...tB].forEach(c => { states[c.id] = initSpriteState(c.id); });
@@ -424,8 +446,38 @@ export default function CombatScreen() {
     );
   };
 
+  // Wrapper dinamico: se è stato scelto uno sfondo fazione usa un pattern
+  // Image absolute-fill (più affidabile su RN Web di ImageBackground) con overlay
+  // scuro per leggibilità. Altrimenti fallback al gradient neutro.
+  const BattleWrapper = ({ children }: { children: React.ReactNode }) => {
+    if (battleBg?.source) {
+      return (
+        <View style={{ flex: 1, backgroundColor: '#060614' }}>
+          <Image
+            source={battleBg.source}
+            style={StyleSheet.absoluteFillObject}
+            resizeMode="cover"
+            fadeDuration={200}
+          />
+          {/* Overlay scuro per garantire leggibilità HUD/log/sprites */}
+          <LinearGradient
+            colors={['rgba(6,6,20,0.55)', 'rgba(10,8,24,0.30)', 'rgba(6,6,20,0.6)']}
+            style={StyleSheet.absoluteFillObject}
+            pointerEvents="none"
+          />
+          <View style={{ flex: 1 }}>{children}</View>
+        </View>
+      );
+    }
+    return (
+      <LinearGradient colors={['#060614', '#0A0A24', '#0D0820']} style={{ flex: 1 }}>
+        {children}
+      </LinearGradient>
+    );
+  };
+
   return (
-    <LinearGradient colors={['#060614', '#0A0A24', '#0D0820']} style={{ flex: 1 }}>
+    <BattleWrapper>
       <Animated.View style={[{ flex: 1 }, shakeStyle]}>
         {/* Flash overlay */}
         <Animated.View style={[st.flashOv, flashStyle]} pointerEvents="none" />
@@ -601,7 +653,7 @@ export default function CombatScreen() {
           </View>
         )}
       </Animated.View>
-    </LinearGradient>
+    </BattleWrapper>
   );
 }
 

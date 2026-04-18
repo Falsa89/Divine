@@ -291,8 +291,8 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
         "battle_log": battle_log,
         "team_a_survivors": team_a_alive_count,
         "team_b_survivors": team_b_alive_count,
-        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_a],
-        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
+        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_a],
+        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
         "mvp": max(team_a, key=lambda c: c['total_damage_dealt'])['name'] if victory else None,
     }
     
@@ -463,6 +463,7 @@ def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, posit
         'name': hero_data.get('name', 'Sconosciuto'),
         'element': element,
         'rarity': rarity,
+        'faction': hero_data.get('faction'),  # needed for battle background resolver
         'image': hero_data.get('image_url') or hero_data.get('image'),
         'hero_class': hero_data.get('hero_class', 'DPS'),
         'sprite_url': f"/api/sprites/{hero_data.get('id', '')}" if hero_data.get('sprite_sheet_base64') else None,
