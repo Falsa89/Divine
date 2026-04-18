@@ -49,6 +49,11 @@ export default function CombatScreen() {
   // Background della battaglia: scelto UNA SOLA volta all'inizio di ogni fight
   // e memorizzato qui per restare deterministicamente fisso durante la battaglia.
   const [battleBg, setBattleBg] = useState<BattleBgResult | null>(null);
+  // Battlefield REAL rect (misurato via onLayout). Source of truth per le
+  // home positions. Fallback a null → il layout assoluto non viene montato
+  // finché non abbiamo le misure vere del container → su mobile le unità
+  // non finiscono fuori asse per colpa del viewport globale.
+  const [bfRect, setBfRect] = useState<{ w: number; h: number } | null>(null);
   const timerRef = useRef<any>(null);
   const allTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const logRef = useRef<ScrollView>(null);
@@ -116,10 +121,16 @@ export default function CombatScreen() {
   const ultStyle = useAnimatedStyle(() => ({ transform: [{ scale: ultScale.value }], opacity: ultOp.value }));
   const vsStyle = useAnimatedStyle(() => ({ transform: [{ scale: vsScale.value }], opacity: vsOp.value }));
 
-  // Layout battle calcolato una volta per render (reattivo a winW/winH):
-  // contiene dimensioni sprite + rowStep usati dall'architettura motion a
-  // due livelli (home position assoluta + action motion relativa).
-  const battleLayout = React.useMemo(() => buildBattleLayout(winW, winH), [winW, winH]);
+  // Layout battle calcolato dal RECT REALE del battlefield (misurato onLayout).
+  // Fallback ai winW/winH solo finché il rect non è pronto — le home positions
+  // non vengono utilizzate finché layoutReady==true (vedi rendering più sotto).
+  // Reattivo solo a cambi significativi (orientation/resize) grazie alle deps.
+  const layoutReady = !!bfRect && bfRect.w > 0 && bfRect.h > 0;
+  const battleLayout = React.useMemo(() => {
+    const w = bfRect?.w ?? winW;
+    const h = bfRect?.h ?? Math.max(160, winH - 70 - 46);
+    return buildBattleLayout(w, h);
+  }, [bfRect?.w, bfRect?.h, winW, winH]);
 
   useEffect(() => { startBattle(); return () => { if (timerRef.current) clearTimeout(timerRef.current); allTimers.current.forEach(id => clearTimeout(id)); allTimers.current = []; }; }, []);
 
@@ -551,14 +562,31 @@ export default function CombatScreen() {
            ARCHITETTURA MOTION (due livelli indipendenti):
              1. HOME POSITION — wrapper <View position:absolute> posizionato
                 con left/bottom calcolati da getHomePosition(team,col,row,layout).
-                NON dipende da flex/reflow → è immune al drift da re-render.
+                Il layout viene dal RECT REALE del battlefield (onLayout) → non
+                dipende più dal viewport globale, né da stime di safe area.
+                Immune al drift da re-render.
              2. ACTION MOTION — transform locale applicato DENTRO BattleSprite
                 (transX/transY/rotate/scale). È puramente additivo alla home e
                 torna sempre a 0 alla fine. Future skill (approach_target,
                 backstab_target, move_to_center, charge_line) useranno lo stesso
                 meccanismo passando un MotionIntent esplicito.
         */}
-        <View style={st.battlefield}>
+        <View
+          style={st.battlefield}
+          onLayout={e => {
+            const { width, height } = e.nativeEvent.layout;
+            if (width > 0 && height > 0) {
+              // Aggiorna solo se il rect è cambiato significativamente (>2px)
+              // per evitare ricalcoli spuri su ogni re-render.
+              setBfRect(prev => {
+                if (!prev || Math.abs(prev.w - width) > 2 || Math.abs(prev.h - height) > 2) {
+                  return { w: width, h: height };
+                }
+                return prev;
+              });
+            }
+          }}
+        >
           <LinearGradient
             colors={['transparent', 'rgba(30,20,10,0.12)', 'rgba(20,15,8,0.3)']}
             style={st.groundPlane}
@@ -571,9 +599,9 @@ export default function CombatScreen() {
             <LinearGradient colors={['transparent', COLORS.accent + '20', 'transparent']} style={st.vsCenterLine} />
           </View>
 
-          {(() => {
-            // LAYOUT calcolato una volta per render. getHomePosition è stabile
-            // rispetto ai re-render (dipende solo da winW/winH).
+          {/* Sprites renderizzati SOLO quando il rect del battlefield è noto.
+              Evita di calcolare home positions su fallback winW/winH errati. */}
+          {layoutReady && (() => {
             const gridA = buildFormationGrid(teamA, false);
             const gridB = buildFormationGrid(teamB, true);
             const L = battleLayout;
@@ -600,7 +628,7 @@ export default function CombatScreen() {
                         left: home.x - slotW / 2,
                         bottom: home.y,
                         width: slotW,
-                        zIndex: 10 + (2 - row),  // front row (2) sopra back rows
+                        zIndex: 10 + (2 - row),
                       }}
                     >
                       <BattleSprite

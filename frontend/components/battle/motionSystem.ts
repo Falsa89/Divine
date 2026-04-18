@@ -97,21 +97,44 @@ export interface MotionPlan {
 // ---- Layout helpers ---------------------------------------------------------
 
 /**
- * Calcola le metriche del battle layout a partire dal viewport.
- * Una sola volta per render — usata con useMemo nel componente.
+ * Calcola le metriche del battle layout dal RECT REALE del battlefield
+ * (misurato via onLayout). Prima ricevevamo il viewport globale (winW/winH)
+ * e sottraevamo paddings stimati — ma su mobile le stime non combaciavano
+ * con la safe area reale → unità fuori asse. Ora accetta direttamente il
+ * rect del container battlefield: la source of truth è la misura del DOM/UI.
+ *
+ * Il tankSize è vincolato da DUE criteri contemporaneamente:
+ *   1. VERTICALE  — sprite frame (size*1.25) deve entrare nel budget di fieldH
+ *                   al netto del row stagger.
+ *   2. ORIZZONTALE — 2 team × (support + dps + tank) + VS + margin deve entrare
+ *                   nella larghezza reale del battlefield. Altrimenti su
+ *                   landscape stretti (mobile) gli sprite vengono tagliati ai
+ *                   bordi.
+ * Si sceglie il minimo dei due → garantisce che tutte le 12 unità siano
+ * visibili dentro il rect reale del container.
+ *
+ * @param bfW  larghezza reale del battlefield container
+ * @param bfH  altezza reale del battlefield container
  */
-export function buildBattleLayout(winW: number, winH: number): BattleLayout {
-  // Budget verticale battlefield = winH - topHud(70) - logPanel(46) - padding(10)
-  const fieldH = Math.max(140, winH - 70 - 46 - 10);
-  // Row step: stagger tra righe (back/mid/front). Proporzionale all'altezza.
-  const rowStep = Math.max(18, Math.min(36, Math.round(winH * 0.05)));
-  // Tank size: riempie il budget senza far overflow con la row più indietro.
-  // sprite frame altezza = size * 1.25 (combat pose portrait)
-  // → availH per sprite front = fieldH - 2*rowStep (rows 0,1 stagger in alto)
-  const tankSize = Math.max(80, Math.min(180, Math.floor((fieldH - rowStep * 2) / 1.25)));
+export function buildBattleLayout(bfW: number, bfH: number): BattleLayout {
+  // fieldH = l'altezza utile per gli sprite DENTRO il battlefield.
+  const fieldH = Math.max(120, bfH - 8);
+  const rowStep = Math.max(14, Math.min(34, Math.round(bfH * 0.10)));
+
+  // Vincolo 1 — verticale: size * 1.25 + stagger rows ≤ fieldH
+  const maxByHeight = Math.floor((fieldH - rowStep * 2) / 1.25);
+
+  // Vincolo 2 — orizzontale: spazio per entrambi i team + VS + margini
+  // teamWidth = (supSize + dpsSize + tankSize) + 3*slot_pad (6 cad. = 18)
+  // con supSize=0.71t, dpsSize=0.86t → teamWidth ≈ 2.57 t + 18
+  // totalUsed ≈ 2 * teamWidth + VS(32) + side_margins(32) ≈ 5.15 t + 100
+  // → t ≤ (bfW - 100) / 5.15
+  const maxByWidth = Math.floor((bfW - 100) / 5.15);
+
+  const tankSize = Math.max(72, Math.min(180, Math.min(maxByHeight, maxByWidth)));
   const dpsSize = Math.round(tankSize * 0.86);
   const supSize = Math.round(tankSize * 0.71);
-  return { winW, winH, fieldH, tankSize, dpsSize, supSize, rowStep };
+  return { winW: bfW, winH: bfH, fieldH, tankSize, dpsSize, supSize, rowStep };
 }
 
 /**
