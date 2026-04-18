@@ -448,6 +448,145 @@ async def health():
     bot_count = await db.users.count_documents({"is_bot": True})
     return {"status": "ok", "game": "Divine Waifus", "version": "1.0.0", "bots": bot_count}
 
+# ===================== EXPO GO CONNECT HELPER =====================
+# Pagina HTML auto-contenuta: il dev apre questa URL dal browser del telefono
+# e può toccare il pulsante "Open in Expo Go" (deep link exp://) per lanciare
+# Expo Go direttamente con l'URL diretto (preview.emergentagent.com), senza
+# passare dal proxy cluster-2.preview.emergentcf.cloud che al momento è 403.
+# Include anche il QR code generato lato server in SVG (no dipendenze JS).
+@app.get("/api/expo-connect")
+async def expo_connect():
+    from fastapi.responses import HTMLResponse
+    import qrcode
+    import qrcode.image.svg
+    import io
+    # Usa l'hostname del request per costruire l'URL — funziona sia in preview
+    # che in locale. Default → preview.emergentagent.com.
+    host = os.getenv("EXPO_PUBLIC_PREVIEW_HOST", "game-portal-327.preview.emergentagent.com")
+    exp_url = f"exp://{host}"
+    https_url = f"https://{host}"
+
+    # Genera QR come SVG inline (nessuna dipendenza extra client-side)
+    factory = qrcode.image.svg.SvgImage
+    qr_img = qrcode.make(exp_url, image_factory=factory, box_size=10, border=2)
+    buf = io.BytesIO()
+    qr_img.save(buf)
+    qr_svg = buf.getvalue().decode("utf-8")
+    # Rimuove xml declaration per embedding inline
+    qr_svg = qr_svg.replace('<?xml version="1.0" encoding="UTF-8"?>\n', '')
+
+    html = f"""<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Divine Waifus · Connect Expo Go</title>
+<style>
+  * {{ box-sizing: border-box; }}
+  body {{
+    margin: 0; padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0D0D2B 0%, #1A0A2E 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }}
+  h1 {{
+    font-size: 22px; letter-spacing: 2px; margin: 0 0 8px 0; color: #FFD700;
+    text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  }}
+  .sub {{ font-size: 12px; color: #aaa; margin-bottom: 28px; text-align: center; }}
+  .card {{
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 14px;
+    padding: 22px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }}
+  .btn-open {{
+    display: block; text-decoration: none;
+    background: linear-gradient(135deg, #FF6B35 0%, #FF4444 100%);
+    color: #fff;
+    font-size: 18px; font-weight: 900; letter-spacing: 1px;
+    text-align: center;
+    padding: 18px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(255,107,53,0.4);
+    margin-bottom: 18px;
+    transition: transform 0.1s;
+  }}
+  .btn-open:active {{ transform: scale(0.97); }}
+  .qr-wrap {{
+    background: #fff; border-radius: 10px; padding: 14px;
+    margin: 18px auto; width: fit-content;
+  }}
+  .qr-wrap svg {{ display: block; width: 220px; height: 220px; }}
+  .url-box {{
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #44AAFF;
+    word-break: break-all;
+    margin: 10px 0;
+  }}
+  .step {{
+    background: rgba(68,170,255,0.08);
+    border-left: 3px solid #44AAFF;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin: 8px 0;
+  }}
+  .step strong {{ color: #FFD700; }}
+  .footer {{
+    font-size: 10px; color: #666; margin-top: 24px; text-align: center;
+  }}
+  .warn {{
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.3);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 11px;
+    color: #FF8888;
+    margin-bottom: 16px;
+  }}
+</style>
+</head>
+<body>
+  <h1>⚔️ DIVINE WAIFUS</h1>
+  <div class="sub">Expo Go Connect · Dev Bypass</div>
+
+  <div class="card">
+    <div class="warn">
+      Il proxy QR di default è al momento <b>offline</b>.
+      Usa questa pagina per connettere Expo Go direttamente.
+    </div>
+
+    <a class="btn-open" href="{exp_url}">📱 Apri in Expo Go</a>
+
+    <div class="step"><strong>Metodo 1:</strong> Tocca il pulsante qui sopra dal browser del telefono. Expo Go si aprirà automaticamente.</div>
+
+    <div class="step"><strong>Metodo 2:</strong> Apri Expo Go → "Scan QR code" e inquadra il QR qui sotto.</div>
+
+    <div class="qr-wrap">
+      {qr_svg}
+    </div>
+
+    <div class="step"><strong>Metodo 3:</strong> Copia e incolla l'URL manualmente in Expo Go.</div>
+    <div class="url-box">{exp_url}</div>
+  </div>
+
+  <div class="footer">Divine Waifus dev console · {host}</div>
+</body>
+</html>
+"""
+    return HTMLResponse(content=html)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
