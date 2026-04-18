@@ -83,36 +83,68 @@ export default function BattleSprite({
   // State animations
   useEffect(() => {
     const dir = isEnemy ? -1 : 1;
+    // Cancella qualsiasi animazione pendente su transX/bodyRot/scale PRIMA
+    // di avviarne una nuova → impedisce l'accumulo di offset che produceva
+    // l'effetto "scroll lungo lo schermo" su mobile quando azioni consecutive
+    // sovrapponevano le transition senza mai tornare alla home position.
+    cancelAnimation(transX);
+    cancelAnimation(bodyRot);
+    cancelAnimation(spriteScale);
+    // Size-aware dash: calibrato rispetto alla taglia reale del sprite (size)
+    // invece di pixel fissi. Su mobile (size~137) dash breve; su desktop
+    // (size~180) proporzionale. Niente mai oltre il 15% di size → le unità
+    // restano ancorate alla propria cella griglia.
+    const ATTACK_DASH = Math.round(size * 0.10);   // ~14 mobile / ~18 desktop
+    const ATTACK_LUNGE = Math.round(size * 0.12);  // micro extra di impatto
+    const SKILL_DASH = Math.round(size * 0.07);
+    const HIT_KNOCK = Math.round(size * 0.05);
+    const DODGE_STEP = Math.round(size * 0.10);
     switch (state) {
+      case 'idle':
+        // Re-anchor esplicito: se arriviamo in idle da qualsiasi stato
+        // precedente, forziamo un ritorno rapido alla home (transX=0,
+        // rot=0, scale=1). Garantisce che le unità non driftino mai.
+        transX.value = withTiming(0, { duration: 180 });
+        bodyRot.value = withTiming(0, { duration: 180 });
+        spriteScale.value = withTiming(1, { duration: 180 });
+        spriteOp.value = withTiming(1, { duration: 180 });
+        break;
       case 'attack':
         transX.value = withSequence(
-          withTiming(dir * 22, { duration: 120 }),
-          withTiming(dir * 26, { duration: 50 }),
-          withTiming(0, { duration: 220 }),
+          withTiming(dir * ATTACK_DASH, { duration: 140 }),
+          withTiming(dir * ATTACK_LUNGE, { duration: 60 }),
+          withTiming(0, { duration: 260 }),        // ritorno deciso alla home
         );
-        spriteScale.value = withSequence(withTiming(1.1, { duration: 100 }), withTiming(1, { duration: 200 }));
+        spriteScale.value = withSequence(withTiming(1.08, { duration: 120 }), withTiming(1, { duration: 220 }));
         break;
       case 'hit':
         transX.value = withSequence(
-          withTiming(-dir * 10, { duration: 60 }), withTiming(-dir * 6, { duration: 40 }), withTiming(0, { duration: 200 }),
+          withTiming(-dir * HIT_KNOCK, { duration: 70 }),
+          withTiming(0, { duration: 220 }),
         );
         hitFlash.value = withSequence(withTiming(0.6, { duration: 50 }), withTiming(0, { duration: 200 }));
-        spriteScale.value = withSequence(withTiming(0.92, { duration: 60 }), withTiming(1, { duration: 150 }));
-        bodyRot.value = withSequence(withTiming(-dir * 6, { duration: 60 }), withTiming(0, { duration: 180 }));
+        spriteScale.value = withSequence(withTiming(0.94, { duration: 70 }), withTiming(1, { duration: 180 }));
+        bodyRot.value = withSequence(withTiming(-dir * 4, { duration: 70 }), withTiming(0, { duration: 200 }));
         break;
       case 'skill':
       case 'ultimate':
         auraOp.value = withSequence(withTiming(0.8, { duration: 150 }), withDelay(400, withTiming(0.15, { duration: 300 })));
         auraSc.value = withSequence(withTiming(1.5, { duration: 200 }), withTiming(1, { duration: 300 }));
-        transX.value = withSequence(withTiming(dir * 16, { duration: 150 }), withTiming(0, { duration: 250 }));
-        spriteScale.value = withSequence(withTiming(1.15, { duration: 150 }), withTiming(1, { duration: 250 }));
+        transX.value = withSequence(
+          withTiming(dir * SKILL_DASH, { duration: 160 }),
+          withTiming(0, { duration: 280 }),
+        );
+        spriteScale.value = withSequence(withTiming(1.12, { duration: 160 }), withTiming(1, { duration: 280 }));
         break;
       case 'heal':
         auraOp.value = withSequence(withTiming(0.6, { duration: 300 }), withTiming(0.15, { duration: 500 }));
         idleY.value = withSequence(withTiming(-5, { duration: 250 }), withTiming(0, { duration: 250 }));
         break;
       case 'dodge':
-        transX.value = withSequence(withTiming(-dir * 28, { duration: 100 }), withDelay(200, withTiming(0, { duration: 250 })));
+        transX.value = withSequence(
+          withTiming(-dir * DODGE_STEP, { duration: 110 }),
+          withDelay(180, withTiming(0, { duration: 240 })),
+        );
         spriteOp.value = withSequence(withTiming(0.3, { duration: 80 }), withTiming(1, { duration: 200 }));
         break;
       case 'dead':
@@ -124,7 +156,7 @@ export default function BattleSprite({
         auraOp.value = withTiming(0, { duration: 300 });
         break;
     }
-  }, [state, isCrit]);
+  }, [state, isCrit, size]);
 
   // Damage float
   useEffect(() => {

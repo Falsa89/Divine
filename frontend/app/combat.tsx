@@ -182,7 +182,15 @@ export default function CombatScreen() {
     } catch (e: any) { setError(e.message || 'Errore'); setPhase('result'); }
   };
 
-  const delay = () => 1100 / speed;
+  // Speed profile chiaro:
+  //   1x = base leggibile (rallentata rispetto alla versione precedente)
+  //   2x = accelerata
+  //   3x = molto accelerata
+  // I multiplier 0.3/0.4/0.5/0.6/1.2 moltiplicati con delay() danno i tempi
+  // delle varie fasi (attacco → hit → log → next action). Il base a 1700ms
+  // rende ogni action leggibile: ~680ms dash + return, ~850ms gap al next.
+  const SPEED_BASE: Record<number, number> = { 1: 1700, 2: 950, 3: 580 };
+  const delay = () => (SPEED_BASE[speed] ?? 1700);
 
   const addLog = (entry: any) => {
     setLogLines(prev => [...prev.slice(-8), entry]);
