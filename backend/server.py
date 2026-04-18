@@ -497,6 +497,62 @@ async def health():
     bot_count = await db.users.count_documents({"is_bot": True})
     return {"status": "ok", "game": "Divine Waifus", "version": "1.0.0", "bots": bot_count}
 
+# ===================== HOPLITE REEL (DEV VISUAL VALIDATION) =====================
+# Pagina helper: mostra i frame catturati in /app/tmp/hop/ come reel visuale
+# per validazione rapida delle animazioni Hoplite. Serve inline via img base64.
+@app.get("/api/hoplite-reel")
+async def hoplite_reel(crop: bool = False, curated: bool = False):
+    from fastapi.responses import HTMLResponse
+    import base64, glob
+    folder = "/app/tmp/hop/crop" if crop else "/app/tmp/hop"
+    if curated:
+        # Curated selection: frame più significativi della battaglia catturata.
+        # Basati su analisi visiva + log di battaglia.
+        CURATED = [
+            (0,  "IDLE",          "Hoplite in home position, spear relaxed"),
+            (19, "ATTACK wind-up", "Inizio forward lean + spear raising"),
+            (21, "ATTACK thrust",  "CONFIRMED: leaning forward, spear extended"),
+            (23, "ATTACK follow",  "Mid-return, shield still forward"),
+            (25, "SKILL AFTERMATH","Log: 'Hoplite Terremoto -> Mago Corotto' — post-impact"),
+            (17, "HIT reaction",   "Red color shift + heal +1,517 floating (damaged then healed)"),
+        ]
+        items = CURATED
+        cols = 2
+    else:
+        files = sorted(glob.glob(f"{folder}/f*.jpg"))
+        items = [(i, f"f{i:03d}", "") for i in range(len(files))]
+        cols = 3 if crop else 4
+    imgs_html = ""
+    for idx, label, caption in items:
+        p = f"{folder}/f{idx:03d}.jpg"
+        try:
+            with open(p, "rb") as f:
+                b64 = base64.b64encode(f.read()).decode()
+            imgs_html += f'<div class="cell"><div class="lbl">{label}</div><div class="cap">{caption}</div><img src="data:image/jpeg;base64,{b64}"/></div>'
+        except Exception:
+            pass
+    extra = ""
+    if curated:
+        extra = """<div class="note"><b>NOTA DEATH:</b> non catturata in questa battaglia (team ha vinto 6/6 in 2 turni, nessun player KO).
+        Per validare l'animazione death serve un combattimento dove Hoplite muore — es. PvP contro avversario più forte,
+        oppure Tower of Infinity stage avanzato. Posso orchestrarlo in un run successivo se confermi.</div>"""
+    html = f"""<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<style>
+body{{margin:0;padding:10px;background:#000;color:#fff;font-family:monospace}}
+.grid{{display:grid;grid-template-columns:repeat({cols},1fr);gap:12px}}
+.cell{{position:relative;border:2px solid #FFB347;background:#111;border-radius:6px;overflow:hidden}}
+.cell img{{width:100%;display:block}}
+.lbl{{position:absolute;top:0;left:0;background:#FF0055;color:#fff;padding:5px 12px;font-size:15px;font-weight:900;z-index:10;border-bottom-right-radius:8px}}
+.cap{{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.85);color:#FFD700;padding:6px 10px;font-size:12px;z-index:10}}
+h1{{font-size:18px;margin:6px 0 14px 4px;color:#FFD700}}
+.note{{background:#2a1a1a;border:2px solid #FFB347;padding:14px;border-radius:6px;margin-top:20px;font-size:13px;color:#FFCC99;line-height:1.5}}
+</style></head>
+<body><h1>⚔️ HOPLITE ANIMATION VALIDATION — 1x speed</h1>
+<div class="grid">{imgs_html}</div>
+{extra}
+</body></html>"""
+    return HTMLResponse(content=html)
+
 # ===================== EXPO GO CONNECT HELPER =====================
 # Pagina HTML auto-contenuta: il dev apre questa URL dal browser del telefono
 # e può toccare il pulsante "Open in Expo Go" (deep link exp://) per lanciare
