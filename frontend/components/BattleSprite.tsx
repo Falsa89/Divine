@@ -6,7 +6,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ELEMENTS, RARITY } from '../constants/theme';
-import { heroBattleImageSource } from './ui/hopliteAssets';
+import { heroBattleImageSource, isGreekHoplite } from './ui/hopliteAssets';
 import Constants from 'expo-constants';
 
 type SpriteState = 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
@@ -166,6 +166,21 @@ export default function BattleSprite({
   const frameWidth = size;
   const hasSpriteSheet = !!spriteUrl;
 
+  // ---- Facing: ogni eroe guarda il proprio avversario ----
+  // Regola: Team A (isEnemy=false) guarda a DESTRA, Team B (isEnemy=true) guarda a SINISTRA
+  // Ogni asset ha un "native facing": direzione in cui è disegnato di default.
+  //   - combat_base.png di Hoplite: lancia estesa a sinistra → native 'left'
+  //   - asset frontali generici (stockcake): si comportano bene con flip (simmetrico)
+  //     → native 'right' (convenzione di default)
+  // Flip solo se nativeFacing !== targetFacing.
+  const isHoplite = isGreekHoplite(
+    character?.hero_id || character?.id,
+    character?.hero_name || character?.name,
+  );
+  const nativeFacing: 'left' | 'right' = isHoplite ? 'left' : 'right';
+  const targetFacing: 'left' | 'right' = isEnemy ? 'left' : 'right';
+  const facingScaleX = nativeFacing !== targetFacing ? -1 : 1;
+
   return (
     <View style={[s.root, { width: size + 16 }]}>
       {/* Damage float */}
@@ -185,7 +200,7 @@ export default function BattleSprite({
       <Animated.View style={mainStyle}>
         {/* Sprite Sheet Display */}
         {hasSpriteSheet ? (
-          <View style={[s.spriteFrame, { width: size, height: size, borderRadius: size * 0.1, borderColor: rarColor }]}>
+          <View style={[s.spriteFrame, { width: size, height: size, borderRadius: size * 0.1, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
             {/* Clip the sprite sheet to show only the current frame */}
             <View style={{ width: size, height: size, overflow: 'hidden' }}>
               <Image
@@ -206,7 +221,7 @@ export default function BattleSprite({
             </View>
           </View>
         ) : heroImage ? (
-          <View style={[s.imgFrame, { width: size, height: size, borderRadius: size * 0.15, borderColor: rarColor, transform: [{ scaleX: isEnemy ? -1 : 1 }] }]}>
+          <View style={[s.imgFrame, { width: size, height: size, borderRadius: size * 0.15, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
             <Image source={heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)} style={[s.heroImg, { width: size - 4, height: size - 4, borderRadius: size * 0.12 }]} resizeMode="cover" />
             <Animated.View style={[s.hitFlashOv, { borderRadius: size * 0.12 }, hitStyle]} />
             <View style={[s.elemBadge, { backgroundColor: elemColor }]}>
@@ -214,7 +229,7 @@ export default function BattleSprite({
             </View>
           </View>
         ) : (
-          <View style={[s.imgFrame, { width: size, height: size, borderRadius: size * 0.15, borderColor: rarColor, transform: [{ scaleX: isEnemy ? -1 : 1 }] }]}>
+          <View style={[s.imgFrame, { width: size, height: size, borderRadius: size * 0.15, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
             <LinearGradient colors={[elemColor + '40', elemColor + '15']} style={[s.placeholder, { width: size - 4, height: size - 4, borderRadius: size * 0.12 }]}>
               <Text style={[s.initText, { color: elemColor, fontSize: size * 0.4 }]}>{heroName[0]}</Text>
             </LinearGradient>

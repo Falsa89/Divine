@@ -480,7 +480,7 @@ export default function CombatScreen() {
                     const ss = getSpriteState(c.id);
                     return (
                       <Animated.View key={c.id} entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
-                        <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 2 ? 68 : col === 1 ? 62 : 56} />
+                        <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 2 ? 116 : col === 1 ? 102 : 88} />
                       </Animated.View>
                     );
                   })}
@@ -506,7 +506,7 @@ export default function CombatScreen() {
                     const ss = getSpriteState(c.id);
                     return (
                       <Animated.View key={c.id} entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
-                        <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 0 ? 68 : col === 1 ? 62 : 56} />
+                        <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 0 ? 116 : col === 1 ? 102 : 88} />
                       </Animated.View>
                     );
                   })}
@@ -706,20 +706,22 @@ const st = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    gap: 2,
+    alignItems: 'flex-end',      // ancora i personaggi al suolo
+    gap: 10,
+    paddingBottom: 16,
   },
   gridCol: {
-    justifyContent: 'center',
+    justifyContent: 'flex-end',  // ancoraggio al suolo dentro ogni colonna
     alignItems: 'center',
-    gap: 2,
+    gap: 6,
   },
   emptySlot: {
-    width: 70,
-    height: 100,
+    width: 96,
+    height: 120,
   },
   spriteSlot: {
     alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   vsCenter: {
     width: 28,
