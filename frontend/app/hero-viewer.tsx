@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator, useWindowDimensio
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import HeroIdleAnimation from '../components/ui/HeroIdleAnimation';
+import HeroHopliteIdle from '../components/ui/HeroHopliteIdle';
+import { isHopliteHero } from '../components/ui/HeroPortrait';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
 import { RARITY, ELEMENTS } from '../constants/theme';
@@ -46,21 +48,25 @@ export default function HeroViewerScreen() {
   return (
     <Pressable style={s.root} onPress={() => router.back()}>
       <View style={s.scene}>
-        <HeroIdleAnimation
-          imageUri={imgUri || undefined}
-          stars={stars}
-          size={imgSize}
-          color={elemCol}
-          borderRadius={0}
-        >
-          {!imgUri && (
-            <View style={[s.ph, { width: imgSize, height: imgSize, borderColor: rarCol }]}>
-              <Text style={[s.phTxt, { color: elemCol, fontSize: imgSize * 0.35 }]}>
-                {(hero.name || hero.hero_name || '?')[0]}
-              </Text>
-            </View>
-          )}
-        </HeroIdleAnimation>
+        {isHopliteHero(hero.name || hero.hero_name) ? (
+          <HeroHopliteIdle size={imgSize} animated />
+        ) : (
+          <HeroIdleAnimation
+            imageUri={imgUri || undefined}
+            stars={stars}
+            size={imgSize}
+            color={elemCol}
+            borderRadius={0}
+          >
+            {!imgUri && (
+              <View style={[s.ph, { width: imgSize, height: imgSize, borderColor: rarCol }]}>
+                <Text style={[s.phTxt, { color: elemCol, fontSize: imgSize * 0.35 }]}>
+                  {(hero.name || hero.hero_name || '?')[0]}
+                </Text>
+              </View>
+            )}
+          </HeroIdleAnimation>
+        )}
 
         {/* Info overlay at bottom */}
         <View style={s.info}>

@@ -11,6 +11,7 @@ import GradientButton from '../components/ui/GradientButton';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
 import HeroIdleAnimation from '../components/ui/HeroIdleAnimation';
+import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../constants/theme';
 
 const STAT_LABELS: Record<string, string> = {
@@ -136,7 +137,11 @@ export default function HeroDetailScreen() {
           >
             <View style={s.heroTop}>
               <TouchableOpacity onPress={() => router.push({ pathname: '/hero-viewer', params: { heroId: params.id as string } })} activeOpacity={0.8}>
-                {data.image ? (
+                {isHopliteHero(data.name) ? (
+                  <View style={{ width: 80, height: 80, borderRadius: 10, overflow: 'hidden', borderWidth: 2, borderColor: col + '80', backgroundColor: col + '15' }}>
+                    <HeroPortrait heroName={data.name} size={80} animated />
+                  </View>
+                ) : data.image ? (
                   <HeroIdleAnimation imageUri={data.image} stars={stars} size={80} color={col} borderRadius={10} />
                 ) : (
                   <HeroIdleAnimation stars={stars} size={80} color={col}>

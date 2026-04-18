@@ -30,7 +30,7 @@ px = im.load()
 # Il personaggio è posizionato verso destra-centro (spear estesa a sinistra)
 BBOX = {
     "hair":        (470, 55,  310, 360),   # pennacchio + capelli fluenti ✓
-    "head_helmet": (515, 100, 190, 150),   # elmo dorato + viso ✓
+    "head_helmet": (505, 130, 230, 180),   # elmo + viso (ampliato verso basso e lati) ✓
     "torso":       (515, 225, 250, 320),   # petto + addome + cintura (ampliato)
     "spear_arm":   (0,   315, 610, 150),   # braccio sinistro + lancia intera ✓
     "shield_arm":  (680, 340, 345, 475),   # braccio destro + scudo rotondo (esteso fino al bordo)
@@ -59,16 +59,40 @@ def in_bbox(x: int, y: int, bbox) -> bool:
 
 
 def is_hair_color(r: int, g: int, b: int) -> bool:
-    """Rileva rosso/bruno dei capelli e del pennacchio (distinguendoli dal dorato dell'elmo)."""
+    """Rileva rosso/bruno di capelli/pennacchio. Distingue da oro, pelle e pelle in ombra."""
     if r < 60:
         return False
     if r > 245 and g > 245 and b > 245:
-        return False  # highlight bianco puro
+        return False
+    if not (r > g and g > b):
+        return False
+    # pelle ha b alto (>135) o b/r alto (>0.58) anche in ombra
+    if b > 135:
+        return False
+    br_ratio = b / max(1, r)
+    if br_ratio >= 0.58:
+        return False
+    # oro elmo ha g molto vicino a r (r-g piccolo vs g-b grande).
+    # capelli: r-g abbastanza grande rispetto a g-b
+    rg = r - g
+    gb = g - b
+    return rg >= gb * 0.75 and rg >= 15
+
+
+def is_skirt_cloth(r: int, g: int, b: int) -> bool:
+    """Rileva il tessuto rosso-arancio della gonna. Distingue da pelle e bronzo dei sandali/greave."""
+    if r < 50:
+        return False
+    if not (r > g and g >= b):
+        return False
+    # gonna satura: g/r basso (<0.55), b basso (<120)
     gr = g / max(1, r)
-    br = b / max(1, r)
-    # capelli/pennacchio: dominante rosso, g/r basso (<0.70), b/r molto basso (<0.62)
-    # oro elmo ha g/r ~0.75-0.85, pelle g/r ~0.82-0.92
-    return gr < 0.70 and br < 0.62
+    if gr >= 0.55:
+        return False  # oro/bronzo/pelle hanno g/r alto
+    if b > 120:
+        return False  # pelle ha b alto
+    # saturazione alta (arancione acceso)
+    return True
 
 
 def dist_to_bbox(x: int, y: int, bbox) -> float:
@@ -102,12 +126,34 @@ def main():
                 salvaged += 1
                 continue
 
-            if "hair" in candidates and len(candidates) > 1:
+            if "hair" in candidates and "head_helmet" in candidates:
+                # Conflitto hair vs head_helmet: colore dominante decide
+                if is_hair_color(r, g, b):
+                    winner = "hair"
+                else:
+                    # Non-hair in zona testa → head_helmet (elmo/viso)
+                    non_hair = [n for n in candidates if n != "hair"]
+                    winner = max(non_hair, key=lambda n: PRIORITY[n])
+            elif "hair" in candidates and len(candidates) > 1:
+                # Altri overlap con hair: solo colore decide
                 if is_hair_color(r, g, b):
                     winner = "hair"
                 else:
                     non_hair = [n for n in candidates if n != "hair"]
                     winner = max(non_hair, key=lambda n: PRIORITY[n])
+            elif "legs" in candidates and "skirt" in candidates:
+                # Conflitto legs vs skirt: colore dominante decide
+                if is_skirt_cloth(r, g, b):
+                    winner = "skirt"
+                else:
+                    # Pelle/bronzo/sandalo → gambe
+                    winner = "legs"
+                    # se anche torso/shield_arm nell'overlap, mantieni priorità per quelli
+                    other = [n for n in candidates if n not in ("legs", "skirt")]
+                    if other:
+                        top_other = max(other, key=lambda n: PRIORITY[n])
+                        if PRIORITY[top_other] > PRIORITY["legs"]:
+                            winner = top_other
             else:
                 winner = max(candidates, key=lambda n: PRIORITY[n])
 
