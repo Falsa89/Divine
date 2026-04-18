@@ -12,11 +12,15 @@ import { buildBattleLayout, getHomePosition } from '../components/battle/motionS
 import BattleDebugOverlay, { DebugUnitInfo } from '../components/battle/BattleDebugOverlay';
 
 /**
- * BATTLE_DEBUG — costante hardcoded per attivare/disattivare l'overlay di
- * debug nativo + log console verbose su Expo Go. Togli a mano quando il
- * bug è risolto. NON è pensato per produzione.
+ * BATTLE_DEBUG — flag per attivare overlay di debug nativo + log console
+ * verbose. Mettere a `true` solo quando si deve diagnosticare un bug di
+ * layout/motion su mobile. In produzione/normale uso deve essere `false`:
+ *   - disattiva BattleDebugOverlay (banner rosso + grid + bounding box)
+ *   - disattiva il badge mount `mN` e l'anchor dot sul BattleSprite
+ *   - silenzia tutti i console.log taggati [BATTLE_DEBUG]
+ * Tutta l'infrastruttura resta nel codice, pronta per essere riattivata.
  */
-const BATTLE_DEBUG = true;
+const BATTLE_DEBUG = false;
 const dbg = (...args: any[]) => { if (BATTLE_DEBUG) console.log('[BATTLE_DEBUG]', ...args); };
 import Animated, {
   useSharedValue, useAnimatedStyle, withTiming, withSequence,
@@ -217,15 +221,24 @@ export default function CombatScreen() {
     } catch (e: any) { setError(e.message || 'Errore'); setPhase('result'); }
   };
 
-  // Speed profile chiaro:
-  //   1x = base leggibile (rallentata rispetto alla versione precedente)
-  //   2x = accelerata
-  //   3x = molto accelerata
-  // I multiplier 0.3/0.4/0.5/0.6/1.2 moltiplicati con delay() danno i tempi
-  // delle varie fasi (attacco → hit → log → next action). Il base a 1700ms
-  // rende ogni action leggibile: ~680ms dash + return, ~850ms gap al next.
-  const SPEED_BASE: Record<number, number> = { 1: 1700, 2: 950, 3: 580 };
-  const delay = () => (SPEED_BASE[speed] ?? 1700);
+  // =========================================================================
+  // Speed profile — differenze REALI e percepibili tra i tre livelli.
+  //   1x = 1500ms   → base leggibile, pacing "guarda il combattimento"
+  //   2x = 650ms    → ~2.3× più veloce, le azioni scorrono rapide
+  //   3x = 300ms    → ~5× più veloce, quasi continuo, "skip-through"
+  //
+  // BUGFIX: prima la speed NON cambiava davvero a metà battle perché
+  // `playLog` è un useCallback scheduling ricorsivo via setTimeout: una
+  // volta partito, il callback cattura la propria `delay` in closure e
+  // continua a usarla all'infinito anche se l'utente clicca un altro
+  // pulsante. Fix: speedRef (mutato subito da setSpeed via useEffect)
+  // → delay() legge dal ref, quindi TUTTI i tick successivi vedono il
+  // nuovo moltiplicatore anche se sono pianificati da un callback stale.
+  // =========================================================================
+  const SPEED_BASE: Record<number, number> = { 1: 1500, 2: 650, 3: 300 };
+  const speedRef = useRef(speed);
+  useEffect(() => { speedRef.current = speed; }, [speed]);
+  const delay = () => (SPEED_BASE[speedRef.current] ?? 1500);
 
   const addLog = (entry: any) => {
     setLogLines(prev => [...prev.slice(-8), entry]);
