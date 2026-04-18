@@ -1,47 +1,50 @@
 /**
  * HeroPortrait
  * ------------
- * Wrapper intelligente che mostra il rig animato per eroi specifici,
- * oppure fa fallback a un'Image normale.
+ * Rende il portrait di un eroe.
  *
- * Mappa nome eroe → rig component. Per ora solo Greek Hoplite (mappato a "Athena").
+ * Regole:
+ * - Per Greek Hoplite → usa SEMPRE la splash art (non il rig).
+ * - Per gli altri eroi → usa l'imageUri remoto.
+ * - Se `useRig=true` ed è Greek Hoplite, usa il rig animato (solo per combat / preview).
  */
 import React from 'react';
 import { View, Image, ImageStyle, StyleProp, ViewStyle } from 'react-native';
 import HeroHopliteIdle from './HeroHopliteIdle';
-
-// Nomi eroe che usano il rig Greek Hoplite (case-insensitive)
-const HOPLITE_HEROES = ['athena', 'hoplite', 'greek hoplite', 'spartana'];
+import {
+  isGreekHoplite,
+  resolveHeroImageSource,
+  GREEK_HOPLITE_SPLASH,
+} from './hopliteAssets';
 
 type Props = {
-  heroName?: string;
+  heroId?: string | null;
+  heroName?: string | null;
   imageUri?: string | number | null;
   size: number;
+  /** se true e è Greek Hoplite → usa il rig animato invece della splash (solo combat/preview) */
+  useRig?: boolean;
   animated?: boolean;
-  /** stile applicato al fallback Image */
   style?: StyleProp<ImageStyle>;
-  /** contenitore esterno (es. bordi, background) */
   containerStyle?: StyleProp<ViewStyle>;
-  /** fallback quando non c'è immagine */
   fallback?: React.ReactNode;
 };
 
-function isHopliteHero(name?: string): boolean {
-  if (!name) return false;
-  const n = name.toLowerCase().trim();
-  return HOPLITE_HEROES.some(k => n.includes(k));
-}
-
 export default function HeroPortrait({
+  heroId,
   heroName,
   imageUri,
   size,
+  useRig = false,
   animated = true,
   style,
   containerStyle,
   fallback,
 }: Props) {
-  if (isHopliteHero(heroName)) {
+  const isHoplite = isGreekHoplite(heroId, heroName);
+
+  // Rig mode: solo se esplicitamente richiesto via useRig
+  if (isHoplite && useRig) {
     return (
       <View style={[{ width: size, height: size, overflow: 'hidden' }, containerStyle]}>
         <HeroHopliteIdle size={size} animated={animated} />
@@ -49,16 +52,42 @@ export default function HeroPortrait({
     );
   }
 
-  if (!imageUri) {
-    return <View style={[{ width: size, height: size }, containerStyle]}>{fallback}</View>;
+  // Greek Hoplite standard → splash art
+  if (isHoplite) {
+    return (
+      <View style={[{ width: size, height: size }, containerStyle]}>
+        <Image
+          source={GREEK_HOPLITE_SPLASH}
+          style={[{ width: size, height: size }, style]}
+          resizeMode="cover"
+        />
+      </View>
+    );
   }
 
-  const source = typeof imageUri === 'string' ? { uri: imageUri } : imageUri;
+  // Altri eroi: usa imageUri remoto
+  const resolved = resolveHeroImageSource(
+    typeof imageUri === 'string' ? imageUri : null,
+    heroId,
+    heroName,
+  );
+  if (!resolved && typeof imageUri === 'number') {
+    // asset require() passato direttamente
+    return (
+      <View style={[{ width: size, height: size }, containerStyle]}>
+        <Image source={imageUri} style={[{ width: size, height: size }, style]} resizeMode="cover" />
+      </View>
+    );
+  }
+  if (!resolved) {
+    return <View style={[{ width: size, height: size }, containerStyle]}>{fallback}</View>;
+  }
   return (
     <View style={[{ width: size, height: size }, containerStyle]}>
-      <Image source={source} style={[{ width: size, height: size }, style]} resizeMode="cover" />
+      <Image source={resolved} style={[{ width: size, height: size }, style]} resizeMode="cover" />
     </View>
   );
 }
 
-export { isHopliteHero };
+// Re-export per compatibilità con import esistenti
+export { isGreekHoplite as isHopliteHero } from './hopliteAssets';

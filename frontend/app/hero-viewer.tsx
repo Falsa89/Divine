@@ -1,26 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, Image, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import HeroIdleAnimation from '../components/ui/HeroIdleAnimation';
-import HeroHopliteIdle from '../components/ui/HeroHopliteIdle';
-import { isHopliteHero } from '../components/ui/HeroPortrait';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
+import {
+  isGreekHoplite,
+  GREEK_HOPLITE_SPLASH,
+  GREEK_HOPLITE_ID,
+  GREEK_HOPLITE_NAME,
+  resolveHeroImageSource,
+} from '../components/ui/hopliteAssets';
 import { RARITY, ELEMENTS } from '../constants/theme';
 
 export default function HeroViewerScreen() {
   const router = useRouter();
-  const { heroId } = useLocalSearchParams<{ heroId: string }>();
+  const params = useLocalSearchParams<{ heroId?: string; heroName?: string }>();
+  const heroId = params.heroId;
+  const heroNameParam = params.heroName;
   const { width, height } = useWindowDimensions();
   const [hero, setHero] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // Image fills entire screen
   const imgSize = Math.max(width, height);
 
+  // Short-circuit: se è Greek Hoplite usa splash locale, nessuna API necessaria
+  const isHoplite =
+    isGreekHoplite(heroId, heroNameParam) ||
+    (heroId && String(heroId).startsWith(GREEK_HOPLITE_ID));
+
   useEffect(() => {
-    if (!heroId) return;
+    if (isHoplite) {
+      setHero({
+        id: GREEK_HOPLITE_ID,
+        name: GREEK_HOPLITE_NAME,
+        hero_name: GREEK_HOPLITE_NAME,
+        stars: 5,
+        hero_rarity: 5,
+        element: 'earth',
+        hero_element: 'earth',
+      });
+      setLoading(false);
+      return;
+    }
+    if (!heroId) {
+      setLoading(false);
+      return;
+    }
     (async () => {
       try {
         const d = await apiCall(`/api/hero/detail/${heroId}`);
@@ -28,7 +55,7 @@ export default function HeroViewerScreen() {
       } catch {}
       finally { setLoading(false); }
     })();
-  }, [heroId]);
+  }, [heroId, isHoplite]);
 
   if (loading) return (
     <View style={s.root}><ActivityIndicator size="large" color="#9944FF" /></View>
@@ -48,8 +75,13 @@ export default function HeroViewerScreen() {
   return (
     <Pressable style={s.root} onPress={() => router.back()}>
       <View style={s.scene}>
-        {isHopliteHero(hero.name || hero.hero_name) ? (
-          <HeroHopliteIdle size={imgSize} animated />
+        {isHoplite ? (
+          // Greek Hoplite: splash art fullscreen (cover)
+          <Image
+            source={GREEK_HOPLITE_SPLASH}
+            style={{ width: imgSize, height: imgSize }}
+            resizeMode="contain"
+          />
         ) : (
           <HeroIdleAnimation
             imageUri={imgUri || undefined}
@@ -68,7 +100,7 @@ export default function HeroViewerScreen() {
           </HeroIdleAnimation>
         )}
 
-        {/* Info overlay at bottom */}
+        {/* Info overlay al bottom */}
         <View style={s.info}>
           <Text style={[s.name, { color: rarCol }]}>{hero.name || hero.hero_name}</Text>
           <View style={s.starsRow}>

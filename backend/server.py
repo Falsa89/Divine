@@ -162,7 +162,7 @@ async def get_hero(hero_id: str):
 
 @app.get("/api/user/heroes")
 async def get_user_heroes(current_user: dict = Depends(get_current_user)):
-    user_heroes = await db.user_heroes.find({"user_id": current_user["id"]}).to_list(200)
+    user_heroes = await db.user_heroes.find({"user_id": current_user["id"]}).to_list(1000)
     result = []
     for uh in user_heroes:
         hero = await db.heroes.find_one({"id": uh["hero_id"]})
@@ -172,7 +172,7 @@ async def get_user_heroes(current_user: dict = Depends(get_current_user)):
                 "hero_name": hero.get("name"),
                 "hero_element": hero.get("element"),
                 "hero_rarity": hero.get("rarity"),
-                "hero_image": hero.get("image_url") or hero.get("image_base64"),
+                "hero_image": hero.get("image_url") or hero.get("image_base64") or hero.get("image"),
                 "hero_stats": hero.get("base_stats"),
                 "hero_class": hero.get("hero_class"),
             }
@@ -344,6 +344,7 @@ async def seed_database():
     await db.heroes.delete_many({})
     
     heroes_data = [
+        {"id": "greek_hoplite", "name": "Greek Hoplite", "rarity": 5, "element": "earth", "hero_class": "Tank", "image": "asset:greek_hoplite:splash", "base_stats": {"hp": 14500, "attack": 2000, "defense": 1400, "speed": 108, "crit_rate": 0.12, "crit_damage": 1.5}},
         {"name": "Amaterasu", "rarity": 6, "element": "fire", "hero_class": "DPS", "base_stats": {"hp": 12000, "attack": 2800, "defense": 900, "speed": 130, "crit_rate": 0.25, "crit_damage": 2.0}},
         {"name": "Tsukuyomi", "rarity": 6, "element": "dark", "hero_class": "DPS", "base_stats": {"hp": 11000, "attack": 3000, "defense": 800, "speed": 140, "crit_rate": 0.30, "crit_damage": 2.2}},
         {"name": "Susanoo", "rarity": 6, "element": "wind", "hero_class": "Tank", "base_stats": {"hp": 15000, "attack": 2200, "defense": 1400, "speed": 110, "crit_rate": 0.15, "crit_damage": 1.6}},
@@ -377,7 +378,8 @@ async def seed_database():
     ]
     
     for hero in heroes_data:
-        hero["id"] = str(uuid.uuid4())
+        if "id" not in hero:
+            hero["id"] = str(uuid.uuid4())
         hero["created_at"] = datetime.utcnow()
         await db.heroes.insert_one(hero)
     

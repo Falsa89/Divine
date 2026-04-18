@@ -9,8 +9,7 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
-import HeroHopliteIdle from '../../components/ui/HeroHopliteIdle';
-import { isHopliteHero } from '../../components/ui/HeroPortrait';
+import { isGreekHoplite, GREEK_HOPLITE_SPLASH, resolveHeroImageSource } from '../../components/ui/hopliteAssets';
 import ScreenHeader from '../../components/ui/ScreenHeader';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
@@ -194,6 +193,7 @@ export default function HeroesTab() {
                   activeOpacity={0.7}
                 >
                   <AnimatedHeroPortrait
+                    heroId={h.hero_id || h.id}
                     imageUrl={h.hero_image}
                     name={h.hero_name || '?'}
                     rarity={Math.min(h.hero_rarity || 1, 6)}
@@ -231,9 +231,9 @@ export default function HeroesTab() {
               colors={['rgba(20,20,60,0.9)', 'rgba(10,10,40,0.95)']}
               style={[s.detail, { borderColor: RARITY.colors[Math.min(selected.stars || selected.hero_rarity || 1, 6)] || '#888' }]}
             >
-              {isHopliteHero(selected.hero_name) ? (
-                <View style={[s.detImgWrap, { alignItems: 'center', justifyContent: 'center' }]}>
-                  <HeroHopliteIdle size={90} animated />
+              {isGreekHoplite(selected.hero_id || selected.id, selected.hero_name) ? (
+                <View style={s.detImgWrap}>
+                  <Image source={GREEK_HOPLITE_SPLASH} style={s.detImg} resizeMode="cover" />
                   <LinearGradient
                     colors={['transparent', 'rgba(10,10,40,0.8)']}
                     style={s.detImgOverlay}
