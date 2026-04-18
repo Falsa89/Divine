@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
-import { heroImageSource } from '../components/ui/hopliteAssets';
+import { heroBattleImageSource } from '../components/ui/hopliteAssets';
 import Animated, {
   useSharedValue, useAnimatedStyle, withTiming, withSequence,
   withDelay, withRepeat, FadeIn, FadeInDown, FadeInUp, Easing,
@@ -44,6 +44,49 @@ export default function CombatScreen() {
   const timerRef = useRef<any>(null);
   const allTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const logRef = useRef<ScrollView>(null);
+
+  // ---- Mappatura coordinate formazione → griglia display 3x3 ----
+  // Backend usa sistema 1/4/7 per x (colonne) e y (righe).
+  //   x=1 → Support, x=4 → DPS, x=7 → Tank
+  //   y=1 → top,    y=4 → mid, y=7 → bottom
+  // Team A (player, left side): support a SX (back), tank a DX (front line)
+  // Team B (enemy, right side): mirror → tank a SX (front line), support a DX (back)
+  const X_MAP_A: Record<number, number> = { 1: 0, 4: 1, 7: 2 };
+  const X_MAP_B: Record<number, number> = { 1: 2, 4: 1, 7: 0 };
+  const Y_MAP: Record<number, number> = { 1: 0, 4: 1, 7: 2 };
+
+  type GridCell = any | null;
+  type Grid3x3 = GridCell[][]; // grid[col][row]
+
+  const buildFormationGrid = (team: any[] | null | undefined, mirror: boolean): Grid3x3 => {
+    const g: Grid3x3 = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
+    ];
+    if (!team) return g;
+    const xMap = mirror ? X_MAP_B : X_MAP_A;
+    team.forEach((c, idx) => {
+      const rawX = Number(c?.grid_x);
+      const rawY = Number(c?.grid_y);
+      // Se il backend non manda grid_x/grid_y (fallback), degrade come la vecchia logica
+      // basata sull'indice (sequential fill row-major per Team A, mirror per Team B).
+      let col: number;
+      let row: number;
+      if (Number.isFinite(rawX) && Number.isFinite(rawY) && xMap[rawX] !== undefined && Y_MAP[rawY] !== undefined) {
+        col = xMap[rawX];
+        row = Y_MAP[rawY];
+      } else {
+        // fallback deterministico: riempie col 0..2, row 0..2 in ordine
+        col = Math.floor(idx / 3);
+        row = idx % 3;
+      }
+      if (col >= 0 && col < 3 && row >= 0 && row < 3 && !g[col][row]) {
+        g[col][row] = c;
+      }
+    });
+    return g;
+  };
 
   // Helper: traccia ogni setTimeout per cleanup sicuro
   const safeTimeout = (fn: () => void, ms: number) => {
@@ -363,7 +406,7 @@ export default function CombatScreen() {
       <View key={c.id} style={[st.hudCard, dead && { opacity: 0.35 }]}>
         <View style={[st.hudImg, { borderColor: rarCol }]}>
           {img ? (
-            <Image source={heroImageSource(img, c.hero_id || c.id, c.hero_name || c.name)} style={st.hudImgInner} resizeMode="cover" />
+            <Image source={heroBattleImageSource(img, c.hero_id || c.id, c.hero_name || c.name)} style={st.hudImgInner} resizeMode="cover" />
           ) : (
             <View style={[st.hudImgPh, { backgroundColor: (EC[c.element] || '#888') + '25' }]}>
               <Text style={[st.hudInit, { color: EC[c.element] || '#888' }]}>{(c.name || '?')[0]}</Text>
@@ -425,23 +468,25 @@ export default function CombatScreen() {
             end={{ x: 0.5, y: 1 }}
           />
 
-          {/* Team A sprites - LEFT (3 cols x 3 rows) */}
+          {/* Team A sprites - LEFT (3 cols x 3 rows, x=1/4/7 ↦ col 0/1/2, y=1/4/7 ↦ row 0/1/2) */}
           <View style={st.teamGrid}>
-            {[0, 1, 2].map(col => (
-              <View key={`a_col_${col}`} style={st.gridCol}>
-                {[0, 1, 2].map(row => {
-                  const idx = col * 3 + row;
-                  const c = teamA[idx];
-                  if (!c) return <View key={`a_${col}_${row}`} style={st.emptySlot} />;
-                  const ss = getSpriteState(c.id);
-                  return (
-                    <Animated.View key={c.id} entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
-                      <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 2 ? 68 : col === 1 ? 62 : 56} />
-                    </Animated.View>
-                  );
-                })}
-              </View>
-            ))}
+            {(() => {
+              const gridA = buildFormationGrid(teamA, false);
+              return [0, 1, 2].map(col => (
+                <View key={`a_col_${col}`} style={st.gridCol}>
+                  {[0, 1, 2].map(row => {
+                    const c = gridA[col][row];
+                    if (!c) return <View key={`a_${col}_${row}`} style={st.emptySlot} />;
+                    const ss = getSpriteState(c.id);
+                    return (
+                      <Animated.View key={c.id} entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
+                        <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 2 ? 68 : col === 1 ? 62 : 56} />
+                      </Animated.View>
+                    );
+                  })}
+                </View>
+              ));
+            })()}
           </View>
 
           {/* VS divider */}
@@ -449,23 +494,25 @@ export default function CombatScreen() {
             <LinearGradient colors={['transparent', COLORS.accent + '20', 'transparent']} style={st.vsCenterLine} />
           </View>
 
-          {/* Team B sprites - RIGHT (3 cols x 3 rows) */}
+          {/* Team B sprites - RIGHT (mirror: x=7 ↦ col 0 front, x=1 ↦ col 2 back) */}
           <View style={st.teamGrid}>
-            {[0, 1, 2].map(col => (
-              <View key={`b_col_${col}`} style={st.gridCol}>
-                {[0, 1, 2].map(row => {
-                  const idx = col * 3 + row;
-                  const c = teamB[idx];
-                  if (!c) return <View key={`b_${col}_${row}`} style={st.emptySlot} />;
-                  const ss = getSpriteState(c.id);
-                  return (
-                    <Animated.View key={c.id} entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
-                      <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 0 ? 68 : col === 1 ? 62 : 56} />
-                    </Animated.View>
-                  );
-                })}
-              </View>
-            ))}
+            {(() => {
+              const gridB = buildFormationGrid(teamB, true);
+              return [0, 1, 2].map(col => (
+                <View key={`b_col_${col}`} style={st.gridCol}>
+                  {[0, 1, 2].map(row => {
+                    const c = gridB[col][row];
+                    if (!c) return <View key={`b_${col}_${row}`} style={st.emptySlot} />;
+                    const ss = getSpriteState(c.id);
+                    return (
+                      <Animated.View key={c.id} entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
+                        <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 0 ? 68 : col === 1 ? 62 : 56} />
+                      </Animated.View>
+                    );
+                  })}
+                </View>
+              ));
+            })()}
           </View>
         </View>
 

@@ -44,9 +44,10 @@ export function isHopliteSentinel(imageUrl?: string | null): boolean {
 }
 
 /**
- * Risolve il source di un'Image eroe.
- * Se è Greek Hoplite o se image è il sentinel, ritorna la splash locale.
- * Altrimenti ritorna {uri: imageUrl} per le immagini remote.
+ * Risolve il source di un'Image eroe per contesti UI (list / detail / fullscreen viewer).
+ * Per Hoplite → splash.png
+ * Per il sentinel backend → splash.png
+ * Per altri eroi → {uri: remoteUrl}
  * Ritorna null se non c'è nulla da mostrare.
  */
 export function resolveHeroImageSource(
@@ -61,9 +62,8 @@ export function resolveHeroImageSource(
 }
 
 /**
- * Come resolveHeroImageSource ma senza null: se l'input è invalido,
- * ritorna un oggetto {uri:''} sicuro (Image accetta).
- * Utile per Image/Animated.Image direttamente.
+ * Versione UI-safe senza null (ritorna {uri:''} se mancante).
+ * Usa questa SOLO per UI (list/detail/fullscreen viewer), mai in battle.
  */
 export function heroImageSource(
   imageUrl?: string | null,
@@ -72,5 +72,24 @@ export function heroImageSource(
 ): ImageSourcePropType {
   const src = resolveHeroImageSource(imageUrl, heroId, heroName);
   if (src) return src;
+  return { uri: '' };
+}
+
+/**
+ * Risolve il source di un'Image eroe per il contesto BATTLE.
+ *  - Per Hoplite → COMBAT_BASE (pose laterale da combattimento)
+ *  - Per il sentinel backend (es. asset:greek_hoplite:splash) → COMBAT_BASE
+ *  - Per altri eroi → {uri: remoteUrl}
+ *
+ * Non ritorna mai la splash per Hoplite: la splash è solo UI.
+ */
+export function heroBattleImageSource(
+  imageUrl?: string | null,
+  heroId?: string | null,
+  heroName?: string | null
+): ImageSourcePropType {
+  if (isGreekHoplite(heroId, heroName)) return GREEK_HOPLITE_COMBAT_BASE;
+  if (imageUrl && imageUrl.startsWith('asset:greek_hoplite')) return GREEK_HOPLITE_COMBAT_BASE;
+  if (imageUrl) return { uri: imageUrl };
   return { uri: '' };
 }

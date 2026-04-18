@@ -6,7 +6,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ELEMENTS, RARITY } from '../constants/theme';
-import { heroImageSource } from './ui/hopliteAssets';
+import { heroBattleImageSource } from './ui/hopliteAssets';
 import Constants from 'expo-constants';
 
 type SpriteState = 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
@@ -207,7 +207,7 @@ export default function BattleSprite({
           </View>
         ) : heroImage ? (
           <View style={[s.imgFrame, { width: size, height: size, borderRadius: size * 0.15, borderColor: rarColor, transform: [{ scaleX: isEnemy ? -1 : 1 }] }]}>
-            <Image source={heroImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)} style={[s.heroImg, { width: size - 4, height: size - 4, borderRadius: size * 0.12 }]} resizeMode="cover" />
+            <Image source={heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)} style={[s.heroImg, { width: size - 4, height: size - 4, borderRadius: size * 0.12 }]} resizeMode="cover" />
             <Animated.View style={[s.hitFlashOv, { borderRadius: size * 0.12 }, hitStyle]} />
             <View style={[s.elemBadge, { backgroundColor: elemColor }]}>
               <Text style={s.elemIcon}>{ELEMENTS.icons[character?.element || character?.hero_element] || ''}</Text>

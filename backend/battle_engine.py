@@ -291,8 +291,8 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
         "battle_log": battle_log,
         "team_a_survivors": team_a_alive_count,
         "team_b_survivors": team_b_alive_count,
-        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "sprite_url": c.get('sprite_url')} for c in team_a],
-        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "sprite_url": c.get('sprite_url')} for c in team_b],
+        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_a],
+        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
         "mvp": max(team_a, key=lambda c: c['total_damage_dealt'])['name'] if victory else None,
     }
     
@@ -534,6 +534,13 @@ def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, posit
                             char[stat] = char[stat] * (1 + buff_val)
                 char['position_zone'] = role_data['name']
                 break
+        # Preserve original formation coordinates for UI grid rendering
+        char['grid_x'] = position.get('x', 1)
+        char['grid_y'] = position.get('y', 1)
+    else:
+        # default center (non dovrebbe accadere in battle reali)
+        char['grid_x'] = 4
+        char['grid_y'] = 4
     
     char['max_hp'] = char['hp']
     
@@ -553,6 +560,11 @@ def generate_enemy_team(power_level: int, count: int = 6) -> list:
     for i in range(count):
         element = elements[i % len(elements)]
         mult = power_level / 10000
+        # Grid positioning 3x3: 6 enemies usano 2 righe (1,4) x 3 colonne (1,4,7)
+        col_idx = i % 3        # 0,1,2
+        row_idx = i // 3       # 0,1 (per 6 unità), 2 solo se count>6
+        grid_x = 1 + col_idx * 3   # → 1 / 4 / 7
+        grid_y = 1 + row_idx * 3   # → 1 / 4 / 7
         enemy = {
             'id': f'enemy_{i}',
             'name': random.choice(enemy_names),
@@ -581,6 +593,8 @@ def generate_enemy_team(power_level: int, count: int = 6) -> list:
             'healing_received': 1.0,
             'skills': ELEMENT_SKILLS.get(element, ELEMENT_SKILLS['neutral']),
             'passives': PASSIVE_SKILLS.get(min(int(mult), 6), PASSIVE_SKILLS[1]),
+            'grid_x': grid_x,
+            'grid_y': grid_y,
         }
         enemies.append(enemy)
     
