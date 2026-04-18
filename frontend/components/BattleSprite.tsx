@@ -38,6 +38,7 @@ import Animated, {
 import { LinearGradient } from 'expo-linear-gradient';
 import { ELEMENTS, RARITY } from '../constants/theme';
 import { heroBattleImageSource, isGreekHoplite } from './ui/hopliteAssets';
+import { getAnimationProfile } from './battle/heroBattleAnimations';
 import Constants from 'expo-constants';
 
 type SpriteState = 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
@@ -127,10 +128,14 @@ export default function BattleSprite({
   }, []);
 
   // --- Animation shared values ------------------------------------------------
-  // idleY/transX/bodyRot/spriteScale/spriteOp sono LOCALI: transform del motion
-  // container interno, mai del wrapper globale.
+  // idleY/transX/transY/bodyRot/spriteScale/spriteOp sono LOCALI: transform
+  // del motion container interno, mai del wrapper globale.
+  //   idleY   = respirazione idle loop (±3px)
+  //   transY  = motion verticale COMBAT (es. jump del Terremoto, sink morte).
+  //             Additivo a idleY nel transform finale → breath + combat.
   const idleY = useSharedValue(0);
   const transX = useSharedValue(0);
+  const transY = useSharedValue(0);
   const bodyRot = useSharedValue(0);
   const spriteScale = useSharedValue(1);
   const spriteOp = useSharedValue(1);
@@ -142,6 +147,13 @@ export default function BattleSprite({
   const dmgScale = useSharedValue(0.5);
   const healFloatY = useSharedValue(0);
   const healFloatOp = useSharedValue(0);
+
+  // --- Resolver profilo animazioni per-eroe ----------------------------------
+  // Hoplite riceve HOPLITE_PROFILE (spear+shield tank), tutti gli altri
+  // eroi usano DEFAULT_PROFILE che preserva il comportamento pre-refactor.
+  const animProfile = React.useMemo(() => getAnimationProfile(character), [
+    character?.hero_id, character?.id, character?.hero_name, character?.name,
+  ]);
 
   // --- Idle breathing ---------------------------------------------------------
   useEffect(() => {
@@ -161,74 +173,34 @@ export default function BattleSprite({
   }, [state !== 'dead']);
 
   // --- State animations -------------------------------------------------------
+  // Delega al profilo dell'eroe. Il profilo conosce la fantasia (spear thrust,
+  // Terremoto, kneel death, ecc.) e applica withSequence sui shared values.
+  // BattleSprite resta "dumb" rispetto all'identità dell'eroe → pattern
+  // pulito e riutilizzabile per i prossimi eroi (basta aggiungere un profilo).
   useEffect(() => {
     const dir = isEnemy ? -1 : 1;
-    // Cancella animazioni pendenti per prevenire accumulo di offset → mai drift.
+    // Cancella animazioni pendenti per prevenire accumulo offset → no drift.
     cancelAnimation(transX);
+    cancelAnimation(transY);
     cancelAnimation(bodyRot);
     cancelAnimation(spriteScale);
-    // Dash size-aware: proporzionale al size locale, mai oltre ~12%.
-    const ATTACK_DASH = Math.round(size * 0.10);
-    const ATTACK_LUNGE = Math.round(size * 0.12);
-    const SKILL_DASH = Math.round(size * 0.07);
-    const HIT_KNOCK = Math.round(size * 0.05);
-    const DODGE_STEP = Math.round(size * 0.10);
+    const handles = {
+      transX, transY, bodyRot, spriteScale, spriteOp,
+      auraOp, auraSc, hitFlash, idleY,
+    };
+    const ctx = { size, isEnemy, dir };
     switch (state) {
-      case 'idle':
-        // Re-anchor esplicito alla home locale.
-        transX.value = withTiming(0, { duration: 180 });
-        bodyRot.value = withTiming(0, { duration: 180 });
-        spriteScale.value = withTiming(1, { duration: 180 });
-        spriteOp.value = withTiming(1, { duration: 180 });
-        break;
-      case 'attack':
-        transX.value = withSequence(
-          withTiming(dir * ATTACK_DASH, { duration: 140 }),
-          withTiming(dir * ATTACK_LUNGE, { duration: 60 }),
-          withTiming(0, { duration: 260 }),
-        );
-        spriteScale.value = withSequence(withTiming(1.08, { duration: 120 }), withTiming(1, { duration: 220 }));
-        break;
-      case 'hit':
-        transX.value = withSequence(
-          withTiming(-dir * HIT_KNOCK, { duration: 70 }),
-          withTiming(0, { duration: 220 }),
-        );
-        hitFlash.value = withSequence(withTiming(0.6, { duration: 50 }), withTiming(0, { duration: 200 }));
-        spriteScale.value = withSequence(withTiming(0.94, { duration: 70 }), withTiming(1, { duration: 180 }));
-        bodyRot.value = withSequence(withTiming(-dir * 4, { duration: 70 }), withTiming(0, { duration: 200 }));
-        break;
-      case 'skill':
-      case 'ultimate':
-        auraOp.value = withSequence(withTiming(0.8, { duration: 150 }), withDelay(400, withTiming(0.15, { duration: 300 })));
-        auraSc.value = withSequence(withTiming(1.5, { duration: 200 }), withTiming(1, { duration: 300 }));
-        transX.value = withSequence(
-          withTiming(dir * SKILL_DASH, { duration: 160 }),
-          withTiming(0, { duration: 280 }),
-        );
-        spriteScale.value = withSequence(withTiming(1.12, { duration: 160 }), withTiming(1, { duration: 280 }));
-        break;
-      case 'heal':
-        auraOp.value = withSequence(withTiming(0.6, { duration: 300 }), withTiming(0.15, { duration: 500 }));
-        idleY.value = withSequence(withTiming(-5, { duration: 250 }), withTiming(0, { duration: 250 }));
-        break;
-      case 'dodge':
-        transX.value = withSequence(
-          withTiming(-dir * DODGE_STEP, { duration: 110 }),
-          withDelay(180, withTiming(0, { duration: 240 })),
-        );
-        spriteOp.value = withSequence(withTiming(0.3, { duration: 80 }), withTiming(1, { duration: 200 }));
-        break;
-      case 'dead':
-        cancelAnimation(idleY); cancelAnimation(auraSc); cancelAnimation(auraOp);
-        idleY.value = 0;
-        bodyRot.value = withTiming(isEnemy ? -20 : 20, { duration: 600 });
-        spriteOp.value = withTiming(0.25, { duration: 800 });
-        spriteScale.value = withTiming(0.85, { duration: 600 });
-        auraOp.value = withTiming(0, { duration: 300 });
-        break;
+      case 'idle':     animProfile.idleReset(handles, ctx); break;
+      case 'attack':   animProfile.attack(handles, ctx); break;
+      case 'hit':      animProfile.hit(handles, ctx); break;
+      case 'skill':    animProfile.skill(handles, ctx); break;
+      case 'ultimate': animProfile.ultimate(handles, ctx); break;
+      case 'heal':     animProfile.heal(handles, ctx); break;
+      case 'dodge':    animProfile.dodge(handles, ctx); break;
+      case 'dead':     animProfile.death(handles, ctx); break;
     }
-  }, [state, isCrit, size]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, isCrit, size, animProfile]);
 
   // --- Damage / Heal float triggers ------------------------------------------
   useEffect(() => {
@@ -260,10 +232,12 @@ export default function BattleSprite({
 
   // --- Animated styles -------------------------------------------------------
   // motionStyle applicato al motion container INTERNO (layer 2). Mai al root.
+  // translateY = idleY (breathing loop) + transY (combat motion: jump Terremoto,
+  // sink death, ecc.) → breath e combat-motion coesistono senza conflitti.
   const motionStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: transX.value },
-      { translateY: idleY.value },
+      { translateY: idleY.value + transY.value },
       { rotate: `${bodyRot.value}deg` },
       { scale: spriteScale.value },
     ],
