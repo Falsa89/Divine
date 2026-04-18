@@ -29,6 +29,7 @@
  *   celtic    → celtic_bg_*.png
  */
 import { ImageSourcePropType } from 'react-native';
+import { Asset } from 'expo-asset';
 
 export type FactionKey = 'greek' | 'norse' | 'egyptian' | 'japanese' | 'celtic';
 
@@ -202,4 +203,25 @@ export function pickBattleBackground(ctx: BattleBgContext): BattleBgResult {
     reason: 'fallback_gradient',
     variantIndex,
   };
+}
+
+/**
+ * Preload (decode + cache) di un asset locale richiesto con require().
+ * Cross-platform: su native scarica/decodifica in memoria, su web pre-carica
+ * l'URL fetched. Se l'asset è null o l'operazione fallisce, ritorna comunque
+ * (non blocca la battle — la pipeline riprende col fallback gradient).
+ */
+export async function preloadBattleAsset(source: ImageSourcePropType | null | undefined): Promise<boolean> {
+  if (!source) return true;
+  try {
+    const asset = Asset.fromModule(source as any);
+    if (!asset.downloaded) {
+      await asset.downloadAsync();
+    }
+    return true;
+  } catch (e) {
+    // Non blocchiamo la battle se il preload fallisce: il rendering sarà
+    // comunque eseguito, con un possibile pop-in visivo invece di crash.
+    return false;
+  }
 }

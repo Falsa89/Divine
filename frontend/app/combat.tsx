@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
-import { heroBattleImageSource, heroImageSource } from '../components/ui/hopliteAssets';
-import { pickBattleBackground, BattleBgResult } from '../components/ui/battleBackgrounds';
+import { heroBattleImageSource, heroImageSource, GREEK_HOPLITE_COMBAT_BASE } from '../components/ui/hopliteAssets';
+import { pickBattleBackground, BattleBgResult, preloadBattleAsset } from '../components/ui/battleBackgrounds';
 import Animated, {
   useSharedValue, useAnimatedStyle, withTiming, withSequence,
   withDelay, withRepeat, FadeIn, FadeInDown, FadeInUp, Easing,
@@ -32,6 +32,8 @@ export default function CombatScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string }>();
   const { refreshUser } = useAuth();
+  // Reattivo a rotation/resize: su mobile dà le dim reali del viewport.
+  const { width: winW, height: winH } = useWindowDimensions();
   const [phase, setPhase] = useState<Phase>('loading');
   const [result, setResult] = useState<any>(null);
   const [turn, setTurn] = useState(0);
@@ -155,6 +157,18 @@ export default function CombatScreen() {
         // variantIndex omesso → random, memorizzato in state sotto → fisso per la battaglia
       });
       setBattleBg(bg);
+      // ---- Preload asset critici PRIMA di avviare la scena ----------------
+      // Evita su mobile/Expo Go il flash nero iniziale dovuto al tempo di
+      // decode dei PNG di sfondo (~3 MB ciascuno). Timeout di safety per
+      // non bloccare mai la battle se il preload fallisce.
+      const preloadTimeout = new Promise<void>(res => setTimeout(res, 2500));
+      await Promise.race([
+        Promise.all([
+          preloadBattleAsset(bg.source),
+          preloadBattleAsset(GREEK_HOPLITE_COMBAT_BASE),
+        ]).then(() => undefined),
+        preloadTimeout,
+      ]);
       // Init all sprite states
       const states: Record<string, SpriteData> = {};
       [...tA, ...tB].forEach(c => { states[c.id] = initSpriteState(c.id); });
@@ -447,11 +461,12 @@ export default function CombatScreen() {
   };
 
   // Wrapper dinamico: se è stato scelto uno sfondo fazione renderizza l'Image
-  // absolute-fill con width/height '100%' espliciti (evita fasce nere dovute
-  // alle dim native del PNG). Su RN Web resizeMode:'cover' non si mappa a
-  // object-fit:cover → si ottiene un fill/stretch. È accettato come tradeoff:
-  // le immagini 3:2 su schermo 16:9/16:10 hanno stretch minimo. Su nativo
-  // iOS/Android resizeMode:'cover' funziona correttamente → cropping reale.
+  // absolute-fill con width/height ESPLICITI presi da useWindowDimensions
+  // (pattern cross-platform affidabile su iOS/Android/Web — evita il bug
+  // RN-Web dell'Image che altrimenti userebbe le dimensioni native del PNG
+  // e lascerebbe fasce nere, e evita anche che su native 'width:100%' si
+  // comporti in modo diverso dal previsto).
+  // resizeMode="cover" gestisce il crop su tutte le piattaforme.
   // Overlay scuro MOLTO leggero: il bg resta dominante e nitido.
   const BattleWrapper = ({ children }: { children: React.ReactNode }) => {
     if (battleBg?.source) {
@@ -459,7 +474,7 @@ export default function CombatScreen() {
         <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
           <Image
             source={battleBg.source}
-            style={[StyleSheet.absoluteFillObject, { width: '100%', height: '100%' }]}
+            style={{ position: 'absolute', top: 0, left: 0, width: winW, height: winH }}
             resizeMode="cover"
             fadeDuration={200}
           />
@@ -530,22 +545,28 @@ export default function CombatScreen() {
           <View style={st.teamGrid}>
             {(() => {
               const gridA = buildFormationGrid(teamA, false);
-              // Approccio cinematic aggressivo: front line (Tank, col=2) molto grande,
-              // back (Support, col=0) più piccolo. Slot width adattivo per colonna.
-              // Row-step compatto (48px) con overflow visible → righe si sovrappongono
-              // creando profondità 2.5D senza rompere la griglia 3x3 formazione.
-              const SIZE_BY_COL = [128, 155, 180] as const;
+              // Responsive sizing: calcolato dal viewport reale.
+              //   - budget verticale = winH - topHud(70) - logPanel(46) - padding(28) - buffer(10)
+              //   - budget / 1.25 (frame aspect) = max sprite width possibile
+              //   - clamp 80..180 per evitare valori degeneri su device estremi
+              // Front line (Tank, col=2) = 100%, DPS col=1 = 86%, Support col=0 = 71%.
+              const availH = Math.max(160, winH - 70 - 46 - 28 - 10);
+              const rowStep = Math.max(32, Math.min(48, winH * 0.06));
+              const tankSize = Math.max(80, Math.min(180, Math.floor((availH - rowStep * 2) / 1.25)));
+              const dpsSize = Math.round(tankSize * 0.86);
+              const supSize = Math.round(tankSize * 0.71);
+              const SIZE_BY_COL = [supSize, dpsSize, tankSize] as const;
               return [0, 1, 2].map(col => (
                 <View key={`a_col_${col}`} style={[st.gridCol, { width: SIZE_BY_COL[col] + 6 }]}>
                   {[0, 1, 2].map(row => {
                     const c = gridA[col][row];
-                    if (!c) return <View key={`a_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL[col] + 6 }]} />;
+                    if (!c) return <View key={`a_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL[col] + 6, height: rowStep }]} />;
                     const ss = getSpriteState(c.id);
                     return (
                       <Animated.View
                         key={c.id}
                         entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)}
-                        style={[st.spriteSlot, { width: SIZE_BY_COL[col] + 6, zIndex: 10 - row }]}
+                        style={[st.spriteSlot, { width: SIZE_BY_COL[col] + 6, height: rowStep, zIndex: 10 - row }]}
                       >
                         <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL[col]} />
                       </Animated.View>
@@ -565,19 +586,24 @@ export default function CombatScreen() {
           <View style={st.teamGrid}>
             {(() => {
               const gridB = buildFormationGrid(teamB, true);
-              // Mirror: col 0 è Tank front line per Team B (più grande)
-              const SIZE_BY_COL_B = [180, 155, 128] as const;
+              // Mirror + sizing responsive coerente con Team A.
+              const availH = Math.max(160, winH - 70 - 46 - 28 - 10);
+              const rowStep = Math.max(32, Math.min(48, winH * 0.06));
+              const tankSize = Math.max(80, Math.min(180, Math.floor((availH - rowStep * 2) / 1.25)));
+              const dpsSize = Math.round(tankSize * 0.86);
+              const supSize = Math.round(tankSize * 0.71);
+              const SIZE_BY_COL_B = [tankSize, dpsSize, supSize] as const;
               return [0, 1, 2].map(col => (
                 <View key={`b_col_${col}`} style={[st.gridCol, { width: SIZE_BY_COL_B[col] + 6 }]}>
                   {[0, 1, 2].map(row => {
                     const c = gridB[col][row];
-                    if (!c) return <View key={`b_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL_B[col] + 6 }]} />;
+                    if (!c) return <View key={`b_${col}_${row}`} style={[st.emptySlot, { width: SIZE_BY_COL_B[col] + 6, height: rowStep }]} />;
                     const ss = getSpriteState(c.id);
                     return (
                       <Animated.View
                         key={c.id}
                         entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)}
-                        style={[st.spriteSlot, { width: SIZE_BY_COL_B[col] + 6, zIndex: 10 - row }]}
+                        style={[st.spriteSlot, { width: SIZE_BY_COL_B[col] + 6, height: rowStep, zIndex: 10 - row }]}
                       >
                         <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL_B[col]} />
                       </Animated.View>
