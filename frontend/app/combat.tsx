@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -446,26 +446,30 @@ export default function CombatScreen() {
     );
   };
 
-  // Wrapper dinamico: se è stato scelto uno sfondo fazione usa un pattern
-  // Image absolute-fill (più affidabile su RN Web di ImageBackground) con overlay
-  // scuro per leggibilità. Altrimenti fallback al gradient neutro.
+  // Wrapper dinamico: se è stato scelto uno sfondo fazione renderizza l'Image
+  // absolute-fill con width/height '100%' espliciti (evita fasce nere dovute
+  // alle dim native del PNG). Su RN Web resizeMode:'cover' non si mappa a
+  // object-fit:cover → si ottiene un fill/stretch. È accettato come tradeoff:
+  // le immagini 3:2 su schermo 16:9/16:10 hanno stretch minimo. Su nativo
+  // iOS/Android resizeMode:'cover' funziona correttamente → cropping reale.
+  // Overlay scuro MOLTO leggero: il bg resta dominante e nitido.
   const BattleWrapper = ({ children }: { children: React.ReactNode }) => {
     if (battleBg?.source) {
       return (
-        <View style={{ flex: 1, backgroundColor: '#060614' }}>
+        <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
           <Image
             source={battleBg.source}
-            style={StyleSheet.absoluteFillObject}
+            style={[StyleSheet.absoluteFillObject, { width: '100%', height: '100%' }]}
             resizeMode="cover"
             fadeDuration={200}
           />
-          {/* Overlay scuro per garantire leggibilità HUD/log/sprites */}
+          {/* Overlay scuro molto leggero — il bg DEVE restare dominante */}
           <LinearGradient
-            colors={['rgba(6,6,20,0.55)', 'rgba(10,8,24,0.30)', 'rgba(6,6,20,0.6)']}
+            colors={['rgba(6,6,20,0.20)', 'rgba(10,8,24,0.02)', 'rgba(6,6,20,0.28)']}
             style={StyleSheet.absoluteFillObject}
             pointerEvents="none"
           />
-          <View style={{ flex: 1 }}>{children}</View>
+          {children}
         </View>
       );
     }
