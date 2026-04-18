@@ -472,6 +472,9 @@ export default function CombatScreen() {
           <View style={st.teamGrid}>
             {(() => {
               const gridA = buildFormationGrid(teamA, false);
+              // front line (Tank, col=2) più grande; back (Support, col=0) più piccolo.
+              // Scale definite una sola volta — riutilizzabili per futuri combat asset.
+              const SIZE_BY_COL = [112, 128, 150] as const;
               return [0, 1, 2].map(col => (
                 <View key={`a_col_${col}`} style={st.gridCol}>
                   {[0, 1, 2].map(row => {
@@ -480,7 +483,7 @@ export default function CombatScreen() {
                     const ss = getSpriteState(c.id);
                     return (
                       <Animated.View key={c.id} entering={SlideInLeft.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
-                        <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 2 ? 116 : col === 1 ? 102 : 88} />
+                        <BattleSprite character={c} state={ss.state} isEnemy={false} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL[col]} />
                       </Animated.View>
                     );
                   })}
@@ -498,6 +501,8 @@ export default function CombatScreen() {
           <View style={st.teamGrid}>
             {(() => {
               const gridB = buildFormationGrid(teamB, true);
+              // Mirror: col 0 è Tank front line per Team B
+              const SIZE_BY_COL_B = [150, 128, 112] as const;
               return [0, 1, 2].map(col => (
                 <View key={`b_col_${col}`} style={st.gridCol}>
                   {[0, 1, 2].map(row => {
@@ -506,7 +511,7 @@ export default function CombatScreen() {
                     const ss = getSpriteState(c.id);
                     return (
                       <Animated.View key={c.id} entering={SlideInRight.delay((col * 3 + row) * 50).duration(250)} style={st.spriteSlot}>
-                        <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={col === 0 ? 116 : col === 1 ? 102 : 88} />
+                        <BattleSprite character={c} state={ss.state} isEnemy={true} hpPercent={getHpPct(c)} showDamage={ss.damage} showHeal={ss.healAmt} isCrit={ss.isCrit} size={SIZE_BY_COL_B[col]} />
                       </Animated.View>
                     );
                   })}
@@ -693,41 +698,41 @@ const st = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
   },
   groundPlane: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: '50%',
+    height: '60%',
   },
   teamGrid: {
-    flex: 1,
+    // Non più flex:1 → i due team si avvicinano al centro, no vuoto eccessivo
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-end',      // ancora i personaggi al suolo
-    gap: 10,
-    paddingBottom: 16,
+    alignItems: 'flex-end',        // ancora i personaggi al suolo
+    gap: 6,
+    paddingHorizontal: 4,
   },
   gridCol: {
-    justifyContent: 'flex-end',  // ancoraggio al suolo dentro ogni colonna
+    justifyContent: 'flex-end',    // ancoraggio al suolo nella colonna
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
   emptySlot: {
-    width: 96,
-    height: 120,
+    width: 150,
+    height: 190,
   },
   spriteSlot: {
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
   vsCenter: {
-    width: 28,
+    width: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 4,
+    marginHorizontal: 2,
   },
   vsCenterLine: {
     width: 2,

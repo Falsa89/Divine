@@ -221,19 +221,25 @@ export default function BattleSprite({
             </View>
           </View>
         ) : heroImage ? (
-          <View style={[s.imgFrame, { width: size, height: size, borderRadius: size * 0.15, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
-            <Image source={heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)} style={[s.heroImg, { width: size - 4, height: size - 4, borderRadius: size * 0.12 }]} resizeMode="cover" />
-            <Animated.View style={[s.hitFlashOv, { borderRadius: size * 0.12 }, hitStyle]} />
+          // Frame verticale per figure battle (combat pose side-view).
+          // Altezza > larghezza per dare presenza alla figura intera, ancorata ai piedi.
+          <View style={[s.imgFrame, { width: size, height: size * 1.25, borderRadius: 8, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
+            <Image
+              source={heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)}
+              style={[s.heroImg, { width: size - 4, height: size * 1.25 - 4, borderRadius: 6 }]}
+              resizeMode="contain"
+            />
+            <Animated.View style={[s.hitFlashOv, { borderRadius: 6 }, hitStyle]} />
             <View style={[s.elemBadge, { backgroundColor: elemColor }]}>
               <Text style={s.elemIcon}>{ELEMENTS.icons[character?.element || character?.hero_element] || ''}</Text>
             </View>
           </View>
         ) : (
-          <View style={[s.imgFrame, { width: size, height: size, borderRadius: size * 0.15, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
-            <LinearGradient colors={[elemColor + '40', elemColor + '15']} style={[s.placeholder, { width: size - 4, height: size - 4, borderRadius: size * 0.12 }]}>
+          <View style={[s.imgFrame, { width: size, height: size * 1.25, borderRadius: 8, borderColor: rarColor, transform: [{ scaleX: facingScaleX }] }]}>
+            <LinearGradient colors={[elemColor + '40', elemColor + '15']} style={[s.placeholder, { width: size - 4, height: size * 1.25 - 4, borderRadius: 6 }]}>
               <Text style={[s.initText, { color: elemColor, fontSize: size * 0.4 }]}>{heroName[0]}</Text>
             </LinearGradient>
-            <Animated.View style={[s.hitFlashOv, { borderRadius: size * 0.12 }, hitStyle]} />
+            <Animated.View style={[s.hitFlashOv, { borderRadius: 6 }, hitStyle]} />
             <View style={[s.elemBadge, { backgroundColor: elemColor }]}>
               <Text style={s.elemIcon}>{ELEMENTS.icons[character?.element || character?.hero_element] || ''}</Text>
             </View>
