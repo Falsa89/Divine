@@ -9,6 +9,15 @@ import BattleSprite from '../components/BattleSprite';
 import { heroBattleImageSource, heroImageSource, GREEK_HOPLITE_COMBAT_BASE } from '../components/ui/hopliteAssets';
 import { pickBattleBackground, BattleBgResult, preloadBattleAsset } from '../components/ui/battleBackgrounds';
 import { buildBattleLayout, getHomePosition } from '../components/battle/motionSystem';
+import BattleDebugOverlay, { DebugUnitInfo } from '../components/battle/BattleDebugOverlay';
+
+/**
+ * BATTLE_DEBUG — costante hardcoded per attivare/disattivare l'overlay di
+ * debug nativo + log console verbose su Expo Go. Togli a mano quando il
+ * bug è risolto. NON è pensato per produzione.
+ */
+const BATTLE_DEBUG = true;
+const dbg = (...args: any[]) => { if (BATTLE_DEBUG) console.log('[BATTLE_DEBUG]', ...args); };
 import Animated, {
   useSharedValue, useAnimatedStyle, withTiming, withSequence,
   withDelay, withRepeat, FadeIn, FadeInDown, FadeInUp, Easing,
@@ -129,18 +138,27 @@ export default function CombatScreen() {
   const battleLayout = React.useMemo(() => {
     const w = bfRect?.w ?? winW;
     const h = bfRect?.h ?? Math.max(160, winH - 70 - 46);
-    return buildBattleLayout(w, h);
+    const L = buildBattleLayout(w, h);
+    dbg('battleLayout recompute', { bfW: w, bfH: h, tank: L.tankSize, dps: L.dpsSize, sup: L.supSize, rowStep: L.rowStep });
+    return L;
   }, [bfRect?.w, bfRect?.h, winW, winH]);
 
   useEffect(() => { startBattle(); return () => { if (timerRef.current) clearTimeout(timerRef.current); allTimers.current.forEach(id => clearTimeout(id)); allTimers.current = []; }; }, []);
 
+  // BATTLE_DEBUG — trace phase/layout/rect changes con log [BATTLE_DEBUG]
+  useEffect(() => {
+    dbg('phase change', { phase, layoutReady, bfW: bfRect?.w, bfH: bfRect?.h, winW, winH, bgReason: battleBg?.reason, bgFaction: battleBg?.faction });
+  }, [phase, layoutReady, bfRect?.w, bfRect?.h, winW, winH, battleBg?.faction]);
+
   const initSpriteState = (id: string): SpriteData => ({ state: 'idle', damage: null, healAmt: null, isCrit: false });
 
   const setSpriteState = (id: string, data: Partial<SpriteData>) => {
+    if (BATTLE_DEBUG && data.state) dbg('sprite state', { id, state: data.state });
     setSpriteStates(prev => ({ ...prev, [id]: { ...(prev[id] || initSpriteState(id)), ...data } }));
   };
 
   const resetSpriteStates = () => {
+    dbg('resetSpriteStates (end of turn)');
     setSpriteStates(prev => {
       const n: Record<string, SpriteData> = {};
       Object.keys(prev).forEach(k => { n[k] = { ...prev[k], state: prev[k].state === 'dead' ? 'dead' : 'idle', damage: null, healAmt: null, isCrit: false }; });
@@ -574,12 +592,12 @@ export default function CombatScreen() {
         <View
           style={st.battlefield}
           onLayout={e => {
-            const { width, height } = e.nativeEvent.layout;
+            const { width, height, x, y } = e.nativeEvent.layout;
+            dbg('onLayout battlefield', { w: width, h: height, x, y, winW, winH });
             if (width > 0 && height > 0) {
-              // Aggiorna solo se il rect è cambiato significativamente (>2px)
-              // per evitare ricalcoli spuri su ogni re-render.
               setBfRect(prev => {
                 if (!prev || Math.abs(prev.w - width) > 2 || Math.abs(prev.h - height) > 2) {
+                  dbg('bfRect UPDATED', { prevW: prev?.w, prevH: prev?.h, newW: width, newH: height });
                   return { w: width, h: height };
                 }
                 return prev;
@@ -606,6 +624,7 @@ export default function CombatScreen() {
             const gridB = buildFormationGrid(teamB, true);
             const L = battleLayout;
             const sprites: React.ReactNode[] = [];
+            const debugUnits: DebugUnitInfo[] = [];
             const colSizesA = [L.supSize, L.dpsSize, L.tankSize];
             const colSizesB = [L.tankSize, L.dpsSize, L.supSize];
 
@@ -618,6 +637,12 @@ export default function CombatScreen() {
                   const home = getHomePosition('A', col, row, L);
                   const ss = getSpriteState(cA.id);
                   const slotW = size + 6;
+                  const zIndex = 10 + (2 - row);
+                  debugUnits.push({
+                    team: 'A', col, row, id: cA.id, name: cA.name,
+                    state: ss.state, facing: 'right', size, zIndex,
+                  });
+                  if (BATTLE_DEBUG) dbg('render A', { id: cA.id, col, row, homeX: Math.round(home.x), homeY: Math.round(home.y), size, state: ss.state });
                   sprites.push(
                     <Animated.View
                       key={`a_${cA.id}`}
@@ -628,7 +653,7 @@ export default function CombatScreen() {
                         left: home.x - slotW / 2,
                         bottom: home.y,
                         width: slotW,
-                        zIndex: 10 + (2 - row),
+                        zIndex,
                       }}
                     >
                       <BattleSprite
@@ -651,6 +676,11 @@ export default function CombatScreen() {
                   const home = getHomePosition('B', col, row, L);
                   const ss = getSpriteState(cB.id);
                   const slotW = size + 6;
+                  const zIndex = 10 + (2 - row);
+                  debugUnits.push({
+                    team: 'B', col, row, id: cB.id, name: cB.name,
+                    state: ss.state, facing: 'left', size, zIndex,
+                  });
                   sprites.push(
                     <Animated.View
                       key={`b_${cB.id}`}
@@ -661,7 +691,7 @@ export default function CombatScreen() {
                         left: home.x - slotW / 2,
                         bottom: home.y,
                         width: slotW,
-                        zIndex: 10 + (2 - row),
+                        zIndex,
                       }}
                     >
                       <BattleSprite
@@ -679,7 +709,17 @@ export default function CombatScreen() {
                 }
               }
             }
-            return sprites;
+            return (
+              <>
+                {sprites}
+                <BattleDebugOverlay
+                  enabled={BATTLE_DEBUG}
+                  bfRect={bfRect}
+                  layout={L}
+                  units={debugUnits}
+                />
+              </>
+            );
           })()}
         </View>
 
