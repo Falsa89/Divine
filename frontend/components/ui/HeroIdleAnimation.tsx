@@ -4,6 +4,7 @@ import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat, withTiming,
   withSequence, withDelay, Easing,
 } from 'react-native-reanimated';
+import { heroImageSource } from './hopliteAssets';
 
 const AnimatedImage = Animated.Image;
 
@@ -63,7 +64,7 @@ export default function HeroIdleAnimation({
 
       {imageUri ? (
         <AnimatedImage
-          source={{ uri: imageUri }}
+          source={heroImageSource(imageUri)}
           style={[
             { width: size, height: size, borderRadius, zIndex: 1 },
             breathStyle,

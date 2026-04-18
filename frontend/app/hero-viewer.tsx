@@ -23,7 +23,10 @@ export default function HeroViewerScreen() {
   const [hero, setHero] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  const imgSize = Math.max(width, height);
+  // Per splash art portrait, usiamo altezza-bound: image occupa quasi tutta l'altezza,
+  // larghezza proporzionale (splash è 1024x1024 -> square, ma vogliamo evitare crop)
+  const portraitHeight = Math.round(height * 0.95);
+  const portraitWidth = portraitHeight;  // splash è quadrata; fallback se altre splash fossero portrait
 
   // Short-circuit: se è Greek Hoplite usa splash locale, nessuna API necessaria
   const isHoplite =
@@ -76,23 +79,23 @@ export default function HeroViewerScreen() {
     <Pressable style={s.root} onPress={() => router.back()}>
       <View style={s.scene}>
         {isHoplite ? (
-          // Greek Hoplite: splash art fullscreen (cover)
+          // Greek Hoplite: splash art verticale, massimizzata sull'altezza
           <Image
             source={GREEK_HOPLITE_SPLASH}
-            style={{ width: imgSize, height: imgSize }}
+            style={{ width: portraitWidth, height: portraitHeight }}
             resizeMode="contain"
           />
         ) : (
           <HeroIdleAnimation
             imageUri={imgUri || undefined}
             stars={stars}
-            size={imgSize}
+            size={portraitHeight}
             color={elemCol}
             borderRadius={0}
           >
             {!imgUri && (
-              <View style={[s.ph, { width: imgSize, height: imgSize, borderColor: rarCol }]}>
-                <Text style={[s.phTxt, { color: elemCol, fontSize: imgSize * 0.35 }]}>
+              <View style={[s.ph, { width: portraitHeight, height: portraitHeight, borderColor: rarCol }]}>
+                <Text style={[s.phTxt, { color: elemCol, fontSize: portraitHeight * 0.35 }]}>
                   {(hero.name || hero.hero_name || '?')[0]}
                 </Text>
               </View>

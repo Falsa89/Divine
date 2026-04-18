@@ -11,6 +11,7 @@ import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import ResourceBadge from '../../components/ui/ResourceBadge';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
+import { heroImageSource } from '../../components/ui/hopliteAssets';
 import { COLORS, RARITY, ELEMENTS } from '../../constants/theme';
 import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat, withTiming,
@@ -162,7 +163,7 @@ export default function HomeTab() {
           <Animated.View style={[s.heroContainer, heroFloat]}>
             {mainHero?.hero_image ? (
               <View style={[s.heroFrame, { borderColor: rc }]}>
-                <Image source={{ uri: mainHero.hero_image }} style={s.heroImg} resizeMode="cover" />
+                <Image source={heroImageSource(mainHero.hero_image, mainHero.hero_id, mainHero.hero_name)} style={s.heroImg} resizeMode="cover" />
                 <LinearGradient
                   colors={['transparent', rc + '40']}
                   style={s.heroFrameGradient}

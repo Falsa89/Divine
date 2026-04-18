@@ -232,10 +232,14 @@ export default function HeroesTab() {
               style={[s.detail, { borderColor: RARITY.colors[Math.min(selected.stars || selected.hero_rarity || 1, 6)] || '#888' }]}
             >
               {isGreekHoplite(selected.hero_id || selected.id, selected.hero_name) ? (
-                <View style={s.detImgWrap}>
-                  <Image source={GREEK_HOPLITE_SPLASH} style={s.detImg} resizeMode="cover" />
+                <View style={s.detImgPortraitWrap}>
+                  <Image
+                    source={GREEK_HOPLITE_SPLASH}
+                    style={s.detImgPortrait}
+                    resizeMode="contain"
+                  />
                   <LinearGradient
-                    colors={['transparent', 'rgba(10,10,40,0.8)']}
+                    colors={['transparent', 'rgba(10,10,40,0.9)']}
                     style={s.detImgOverlay}
                   />
                 </View>
@@ -388,6 +392,16 @@ const s = StyleSheet.create({
   },
   detImgWrap: { width: '100%', height: 90, position: 'relative' },
   detImg: { width: '100%', height: '100%' },
+  // Layout portrait per splash verticali (es. Hoplite): più alto, image intera con resizeMode contain
+  detImgPortraitWrap: {
+    width: '100%',
+    height: 170,
+    position: 'relative',
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  detImgPortrait: { width: '100%', height: '100%' },
   detImgOverlay: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 40 },
   detImgPh: {
     width: '100%',

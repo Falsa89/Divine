@@ -344,7 +344,7 @@ async def seed_database():
     await db.heroes.delete_many({})
     
     heroes_data = [
-        {"id": "greek_hoplite", "name": "Greek Hoplite", "rarity": 5, "element": "earth", "hero_class": "Tank", "image": "asset:greek_hoplite:splash", "base_stats": {"hp": 14500, "attack": 2000, "defense": 1400, "speed": 108, "crit_rate": 0.12, "crit_damage": 1.5}},
+        {"id": "greek_hoplite", "name": "Hoplite", "rarity": 3, "element": "earth", "faction": "greek", "hero_class": "Tank", "image": "asset:greek_hoplite:splash", "base_stats": {"hp": 8500, "attack": 1200, "defense": 1100, "speed": 95, "crit_rate": 0.10, "crit_damage": 1.5}},
         {"name": "Amaterasu", "rarity": 6, "element": "fire", "hero_class": "DPS", "base_stats": {"hp": 12000, "attack": 2800, "defense": 900, "speed": 130, "crit_rate": 0.25, "crit_damage": 2.0}},
         {"name": "Tsukuyomi", "rarity": 6, "element": "dark", "hero_class": "DPS", "base_stats": {"hp": 11000, "attack": 3000, "defense": 800, "speed": 140, "crit_rate": 0.30, "crit_damage": 2.2}},
         {"name": "Susanoo", "rarity": 6, "element": "wind", "hero_class": "Tank", "base_stats": {"hp": 15000, "attack": 2200, "defense": 1400, "speed": 110, "crit_rate": 0.15, "crit_damage": 1.6}},
