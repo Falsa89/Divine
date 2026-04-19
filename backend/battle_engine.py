@@ -686,9 +686,13 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
             synergy_result = {"active_synergies": [], "total_buffs": {}}
             synergy_buffs = {}
 
-        # Generate enemy team (weaker for fair play)
+        # Generate enemy team — dimensione INDIPENDENTE dalla squadra player.
+        # Il team nemico è SEMPRE pieno (6 unità) così l'utente può testare
+        # battaglie asimmetriche (es. 3 vs 6, 4 vs 6) per osservare
+        # idle/attack/skill dei suoi eroi in pace senza che il gioco
+        # "rispecchi" automaticamente il lato opposto.
         team_power = sum(c['attack'] + c['hp'] // 10 + c['defense'] for c in player_team)
-        enemy_team = generate_enemy_team(int(team_power * 0.15), count=min(6, len(player_team)))
+        enemy_team = generate_enemy_team(int(team_power * 0.15), count=6)
         
         # Simulate battle
         result = simulate_battle(player_team, enemy_team)

@@ -76,11 +76,18 @@ interface Props {
   /** Se true, disegna bordo tratteggiato interno + anchor dot sul suolo.
    *  Passato da combat.tsx tramite BATTLE_DEBUG per il debug visivo mirato. */
   debug?: boolean;
+  /**
+   * actionInstanceId — propagato down a HeroHopliteRig. Identifica in
+   * modo univoco OGNI invocazione logica di attack/skill dispatchata
+   * dal sistema battle. I frame player partono UNA sola volta per id.
+   */
+  actionInstanceId?: number;
 }
 
 export default function BattleSprite({
   character, state, isEnemy = false, hpPercent,
   showDamage, showHeal, isCrit, size = 80, debug = false,
+  actionInstanceId,
 }: Props) {
   const elemColor = ELEMENTS.colors[character?.element || character?.hero_element] || '#888';
   const rarColor = RARITY.colors[Math.min(character?.rarity || character?.hero_rarity || 1, 6)] || '#888';
@@ -389,7 +396,7 @@ export default function BattleSprite({
               // Il rig usa BASE 1024 × 1024 quadrato, lo ancoriamo al bottom
               // del frame portrait (size × size*1.25) via justifyContent.
               <View style={{ width: frameW, height: frameH, alignItems: 'center', justifyContent: 'flex-end' }}>
-                <HeroHopliteRig size={frameW} state={state as any} />
+                <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} />
               </View>
             ) : heroImage ? (
               // Combat pose (es. Hoplite combat_base.png). contain preserva aspect

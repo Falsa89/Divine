@@ -36,7 +36,7 @@
  */
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import HeroHopliteIdleFrame from './HeroHopliteIdleFrame';
+import HeroHopliteIdleLoop from './HeroHopliteIdleLoop';
 import HeroHopliteAffondo from './HeroHopliteAffondo';
 import HeroHopliteGuardiaFerrea from './HeroHopliteGuardiaFerrea';
 
@@ -46,34 +46,48 @@ export type HopliteRigState =
 type Props = {
   size: number;
   state?: HopliteRigState;
-  /** LEGACY: non più usato (il rig anatomico è stato rimosso). */
+  /**
+   * actionInstanceId — sorgente esterna univoca per ogni invocazione
+   * logica di attack/skill. Generato in combat.tsx (incrementale per
+   * ogni dispatch di stato attack o skill) e passato down attraverso
+   * BattleSprite. I player frame-based partono SOLO quando cambia
+   * questo id, non quando cambia `state`.
+   *
+   * Perché questo pattern risolve definitivamente il doppio trigger:
+   *  - `state === 'attack'` può essere rivalutato molte volte durante
+   *    una sola azione (hp update, damage float, isCrit su target, ecc.)
+   *  - Ogni rivalutazione creava un potenziale restart del frame player
+   *  - `actionInstanceId` invece cambia SOLO quando il sistema battle
+   *    dispatcha una NUOVA azione. È la verità della state machine
+   *    battle, non un derivato della visibilità.
+   */
+  actionInstanceId?: number;
+  /** LEGACY: non più usato. */
   animated?: boolean;
   /** LEGACY: non più usato. */
   safeFill?: boolean;
 };
 
-export default function HeroHopliteRig({ size, state = 'idle' }: Props) {
+export default function HeroHopliteRig({
+  size,
+  state = 'idle',
+  actionInstanceId = 0,
+}: Props) {
   // ───────────────────────────────────────────────────────────────────────
   // VISIBILITY MAP
-  //   - idle/hit/dead/heal/dodge/stress → mostra frame statico idle
-  //   - attack                          → mostra Affondo player attivo
-  //   - skill                           → mostra Guardia Ferrea player attivo
   // ───────────────────────────────────────────────────────────────────────
   const attackActive = state === 'attack';
   const skillActive = state === 'skill';
   const showIdle = !attackActive && !skillActive;
 
   // ═══════════════════════════════════════════════════════════════════════
-  // PLAY KEYS — hardening anti "doppio trigger".
-  //
-  //   Un solo playback per ogni invocazione logica. Il key viene
-  //   incrementato SOLO alla transizione non-attack → attack (o
-  //   non-skill → skill). Confrontiamo via prevStateRef per evitare
-  //   re-render spuri che non cambiano veramente lo state.
-  //
-  //   Il player interno ha un secondo livello di protezione
-  //   (`lastPlayedKeyRef`): anche se React rieseguisse l'effect senza
-  //   motivo, la guard impedisce un doppio playback dello stesso key.
+  // PLAY KEYS — snapshottiamo l'actionInstanceId al momento della
+  // transizione logica (non-attack → attack, non-skill → skill) e lo
+  // passiamo ai player. Così, se actionInstanceId cambia DURANTE uno
+  // stato 'attack' già attivo (caso che non dovrebbe capitare ma
+  // proteggiamoci comunque), il player NON riparte. Parte solo quando
+  // il parent dichiara una NUOVA invocazione passando un nuovo id E lo
+  // stato transisce verso attack/skill.
   // ═══════════════════════════════════════════════════════════════════════
   const [attackPlayKey, setAttackPlayKey] = React.useState(0);
   const [skillPlayKey, setSkillPlayKey] = React.useState(0);
@@ -81,21 +95,23 @@ export default function HeroHopliteRig({ size, state = 'idle' }: Props) {
   React.useEffect(() => {
     const prev = prevStateRef.current;
     if (state === 'attack' && prev !== 'attack') {
-      setAttackPlayKey(k => k + 1);
+      // Transizione valida: snapshotta l'actionInstanceId come nuovo playKey.
+      setAttackPlayKey(actionInstanceId || 0);
     }
     if (state === 'skill' && prev !== 'skill') {
-      setSkillPlayKey(k => k + 1);
+      setSkillPlayKey(actionInstanceId || 0);
     }
     prevStateRef.current = state;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   return (
     <View style={[styles.root, { width: size, height: size }]}>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          LAYER 1 — IDLE FRAME (statico, reference-approved)
+          LAYER 1 — IDLE FRAME-BASED ANIMATO (loop reference-approved)
+          Crossfade sobrio tra 2 frame + micro-breathing sul wrapper.
           Sempre montato, visibile quando NON è in attack/skill.
-          Nessun breathing, nessun transform, zero rig frazionato.
          ═══════════════════════════════════════════════════════════════════ */}
       <View
         pointerEvents="none"
@@ -104,7 +120,7 @@ export default function HeroHopliteRig({ size, state = 'idle' }: Props) {
           { opacity: showIdle ? 1 : 0 },
         ]}
       >
-        <HeroHopliteIdleFrame size={size} />
+        <HeroHopliteIdleLoop size={size} animated={showIdle} />
       </View>
 
       {/* ═══════════════════════════════════════════════════════════════════

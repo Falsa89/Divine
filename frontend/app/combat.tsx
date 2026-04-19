@@ -42,6 +42,15 @@ interface SpriteData {
   damage: number | null;
   healAmt: number | null;
   isCrit: boolean;
+  /**
+   * actionInstanceId — identificatore univoco dell'invocazione corrente
+   * di un'azione visiva (attack/skill/ultimate/heal/hit/dodge).
+   * Incrementato da `nextActionId()` SOLO quando il sistema battle
+   * dispatcha una NUOVA azione. I frame player (Hoplite Affondo,
+   * Guardia Ferrea) partono UNA sola volta per ogni nuovo id, immuni
+   * a re-render spuri di React.
+   */
+  actionInstanceId: number;
 }
 
 export default function CombatScreen() {
@@ -160,7 +169,17 @@ export default function CombatScreen() {
     dbg('phase change', { phase, layoutReady, bfW: bfRect?.w, bfH: bfRect?.h, winW, winH, bgReason: battleBg?.reason, bgFaction: battleBg?.faction });
   }, [phase, layoutReady, bfRect?.w, bfRect?.h, winW, winH, battleBg?.faction]);
 
-  const initSpriteState = (id: string): SpriteData => ({ state: 'idle', damage: null, healAmt: null, isCrit: false });
+  const initSpriteState = (id: string): SpriteData => ({ state: 'idle', damage: null, healAmt: null, isCrit: false, actionInstanceId: 0 });
+
+  // ═════════════════════════════════════════════════════════════════════
+  // Counter monotonico per generare actionInstanceId univoci.
+  // Ref → non triggera re-render, valore preservato tra play cycle.
+  // ═════════════════════════════════════════════════════════════════════
+  const actionCounterRef = useRef(0);
+  const nextActionId = () => {
+    actionCounterRef.current += 1;
+    return actionCounterRef.current;
+  };
 
   const setSpriteState = (id: string, data: Partial<SpriteData>) => {
     if (BATTLE_DEBUG && data.state) dbg('sprite state', { id, state: data.state });
@@ -323,7 +342,7 @@ export default function CombatScreen() {
     // Animate based on action type
     if (a.skill_type === 'sp') {
       // ULTIMATE
-      setSpriteState(a.actor_id, { state: 'ultimate', damage: null, isCrit: false });
+      setSpriteState(a.actor_id, { state: 'ultimate', damage: null, isCrit: false, actionInstanceId: nextActionId() });
       setShowUlt(true);
       setUltInfo({ char: a.actor || '', skill: a.skill?.name || '', element: a.element || 'neutral' });
       ultScale.value = 0; ultOp.value = 0;
@@ -338,15 +357,15 @@ export default function CombatScreen() {
         updateHP(a);
         if (a.targets) {
           a.targets.forEach((tgt: any) => {
-            setSpriteState(tgt.id, { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit });
+            setSpriteState(tgt.id, { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit, actionInstanceId: nextActionId() });
           });
         }
         addLog({ type: 'attack', actor: a.actor, skill: a.skill?.name, damage: a.total_damage, crit: a.crit, team: a.team, targets: a.targets?.map((t: any) => t.name).join(', ') });
         timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.6);
       }, delay() * 1.2);
     } else if (a.type === 'attack') {
-      // Set attacker to attack state
-      setSpriteState(a.actor_id, { state: a.skill_type === 'active' ? 'skill' : 'attack', damage: null, isCrit: false });
+      // Set attacker to attack state (o skill se skill_type === 'active')
+      setSpriteState(a.actor_id, { state: a.skill_type === 'active' ? 'skill' : 'attack', damage: null, isCrit: false, actionInstanceId: nextActionId() });
 
       // Screen shake for crits
       if (a.crit) {
@@ -362,24 +381,24 @@ export default function CombatScreen() {
         updateHP(a);
         if (a.targets) {
           a.targets.forEach((tgt: any) => {
-            setSpriteState(tgt.id, { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit });
+            setSpriteState(tgt.id, { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit, actionInstanceId: nextActionId() });
           });
         }
         addLog({ type: 'attack', actor: a.actor, skill: a.skill?.name, damage: a.total_damage, crit: a.crit, team: a.team, targets: a.targets?.map((t: any) => t.name).join(', ') });
         timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.5);
       }, delay() * 0.4);
     } else if (a.type === 'heal') {
-      setSpriteState(a.actor_id, { state: 'heal', healAmt: a.amount || 0, isCrit: false });
+      setSpriteState(a.actor_id, { state: 'heal', healAmt: a.amount || 0, isCrit: false, actionInstanceId: nextActionId() });
       updateHP(a);
       addLog({ type: 'heal', actor: a.actor, amount: a.amount });
       timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.5);
     } else if (a.type === 'dot') {
-      if (a.target_id) setSpriteState(a.target_id, { state: 'hit', damage: a.damage || 0, isCrit: false });
+      if (a.target_id) setSpriteState(a.target_id, { state: 'hit', damage: a.damage || 0, isCrit: false, actionInstanceId: nextActionId() });
       updateHP(a);
       addLog({ type: 'dot', target: a.target, damage: a.damage, effect: (a as any).effect_name });
       timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.4);
     } else if (a.type === 'dodge') {
-      if (a.target_id) setSpriteState(a.target_id, { state: 'dodge', damage: null, isCrit: false });
+      if (a.target_id) setSpriteState(a.target_id, { state: 'dodge', damage: null, isCrit: false, actionInstanceId: nextActionId() });
       addLog({ type: 'dodge', target: a.target });
       timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.4);
     } else {
@@ -747,6 +766,7 @@ export default function CombatScreen() {
                         isCrit={ss.isCrit}
                         size={size}
                         debug={BATTLE_DEBUG}
+                        actionInstanceId={ss.actionInstanceId}
                       />
                     </Animated.View>
                   );
@@ -787,6 +807,7 @@ export default function CombatScreen() {
                         isCrit={ss.isCrit}
                         size={size}
                         debug={BATTLE_DEBUG}
+                        actionInstanceId={ss.actionInstanceId}
                       />
                     </Animated.View>
                   );
