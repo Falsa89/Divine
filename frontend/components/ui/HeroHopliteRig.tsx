@@ -78,28 +78,32 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
 
   // =========================================================================
   // COMBAT DELTAS — shared values dedicati all'attack
-  // Valori in coordinate canvas 1024 (poi scalati da `scale`). Tutti a 0
-  // significa idle puro. L'attack li anima in sequenza tramite withSequence
-  // e poi torna a 0 (ritorno in guardia).
+  //
+  // BUGFIX: prima usavo anche translateX sui layer (spearTX -180, torsoTX -14, ecc.)
+  // ma questo staccava visivamente i layer tra loro (il pivot si sposta col
+  // translate → la "spalla" di spear_arm non coincide più con quella del torso).
+  // Fix: SOLO ROTAZIONI intorno ai pivot anatomici → i giunti restano
+  // aderenti (una spalla ruota, non trasla). Per compensare ampiezza visiva,
+  // aumentiamo le rotazioni E deleghiamo al wrapper esterno (BattleSprite
+  // HOPLITE_PROFILE) uno shift del corpo intero → nessun detach perché tutti
+  // i layer si muovono insieme solidali al wrapper.
   // =========================================================================
-  const spearTX = useSharedValue(0);    // translateX del braccio lancia (-= forward)
-  const spearRot = useSharedValue(0);   // rotazione spalla lancia (gradi)
-  const torsoTX = useSharedValue(0);    // translateX torso (push forward micro)
-  const torsoRot = useSharedValue(0);   // rotazione torso (negativo = lean forward)
-  const shieldRot = useSharedValue(0);  // rotazione scudo (-= brace in guardia)
-  const shieldTX = useSharedValue(0);   // translateX scudo (segue il torso)
-  const headRot = useSharedValue(0);    // tilt testa sul target
-  const skirtTX = useSharedValue(0);    // follow-through gonna
+  const spearRot = useSharedValue(0);   // rotazione braccio lancia (alla spalla)
+  const torsoRot = useSharedValue(0);   // rotazione torso (pivot bacino) — mantenuta piccola
+  const shieldRot = useSharedValue(0);  // rotazione scudo (alla spalla dx)
+  const headRot = useSharedValue(0);    // tilt testa/casco
+  const skirtRot = useSharedValue(0);   // rotazione gonna (follow-through)
 
   // =========================================================================
-  // ATTACK SEQUENCE — "Affondo di Falange"
+  // ATTACK SEQUENCE — "Affondo di Falange" (solo rotazioni, no translate)
   // =========================================================================
   React.useEffect(() => {
     // Reset ad ogni cambio state per evitare accumulo drift.
-    cancelAnimation(spearTX); cancelAnimation(spearRot);
-    cancelAnimation(torsoTX); cancelAnimation(torsoRot);
-    cancelAnimation(shieldRot); cancelAnimation(shieldTX);
-    cancelAnimation(headRot); cancelAnimation(skirtTX);
+    cancelAnimation(spearRot);
+    cancelAnimation(torsoRot);
+    cancelAnimation(shieldRot);
+    cancelAnimation(headRot);
+    cancelAnimation(skirtRot);
 
     if (state === 'attack') {
       const RETR = 150;   // Fase 1: Ritrazione
@@ -107,66 +111,52 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
       const IMP  = 90;    // Fase 3: Impatto (hold)
       const RET  = 300;   // Fase 4: Ritorno in guardia
 
-      // SPEAR ARM — protagonista del movimento
-      //   ritrazione: tira indietro (+X = backward, +rot = alza la punta)
-      //   affondo:    spinge avanti (-X forte, rot decisa verso orizzontale)
-      //   impatto:    posizione di massimo allungamento, piccolo hold
-      //   ritorno:    elastico out.quad al punto 0
-      spearTX.value = withSequence(
-        withTiming(70,   { duration: RETR, easing: Easing.out(Easing.quad) }),
-        withTiming(-180, { duration: THRU, easing: Easing.in(Easing.cubic) }),
-        withTiming(-200, { duration: IMP }),
-        withTiming(0,    { duration: RET,  easing: Easing.out(Easing.quad) }),
-      );
+      // SPEAR ARM — solo rotazione attorno alla spalla sx (pivot 570, 390)
+      //   ritrazione: +12° (braccio si alza un po', hand va leggermente indietro)
+      //   affondo: -22° (forte rotazione forward, hand si abbassa e spinge avanti)
+      //   impatto: -26° (hold massima rotazione)
+      //   ritorno: 0 con easeOut
+      // Nota: NESSUN translate → la spalla del layer coincide SEMPRE col pivot
+      // anatomico (570, 390) che è la posizione della spalla sul torso.
       spearRot.value = withSequence(
-        withTiming(8,  { duration: RETR }),   // punta in alto in ritrazione
-        withTiming(-3, { duration: THRU }),   // orizzontale durante il thrust
+        withTiming(12,  { duration: RETR, easing: Easing.out(Easing.quad) }),
+        withTiming(-22, { duration: THRU, easing: Easing.in(Easing.cubic) }),
+        withTiming(-26, { duration: IMP }),
+        withTiming(0,   { duration: RET,  easing: Easing.out(Easing.quad) }),
+      );
+
+      // TORSO — rotazione microscopica (pivot bacino). Deliberatamente piccola
+      // perché il torso ruota attorno al bacino MA la "spalla" del torso non
+      // è nello stesso punto del pivot spear_arm → rotating troppo crea
+      // disallineamento. ±1° è il limite sicuro.
+      torsoRot.value = withSequence(
+        withTiming(1,  { duration: RETR }),
+        withTiming(-1, { duration: THRU }),
+        withTiming(-1, { duration: IMP }),
+        withTiming(0,  { duration: RET }),
+      );
+
+      // SHIELD ARM — piccola rotazione per brace/follow-up alla spalla dx
+      shieldRot.value = withSequence(
+        withTiming(-2, { duration: RETR }),
+        withTiming(-5, { duration: THRU }),
         withTiming(-4, { duration: IMP }),
         withTiming(0,  { duration: RET }),
       );
 
-      // TORSO — accompagna il thrust ma senza esagerare (disciplina)
-      //   lean forward 4° + micro push 14px
-      torsoRot.value = withSequence(
-        withTiming(2,  { duration: RETR }),
+      // HEAD — focus stabile sul target (tilt piccolo, disciplina tank)
+      headRot.value = withSequence(
+        withTiming(-2, { duration: RETR }),
         withTiming(-4, { duration: THRU }),
         withTiming(-3, { duration: IMP }),
         withTiming(0,  { duration: RET }),
       );
-      torsoTX.value = withSequence(
-        withTiming(4,   { duration: RETR }),
-        withTiming(-14, { duration: THRU }),
-        withTiming(-12, { duration: IMP }),
-        withTiming(0,   { duration: RET }),
-      );
 
-      // SHIELD ARM — resta in guardia ma segue il torso (brace leggero)
-      shieldRot.value = withSequence(
-        withTiming(-3, { duration: RETR }),  // brace più stretto in ritrazione
-        withTiming(-5, { duration: THRU }),
-        withTiming(-4, { duration: IMP }),
-        withTiming(0,  { duration: RET }),
-      );
-      shieldTX.value = withSequence(
-        withTiming(-2, { duration: RETR }),
-        withTiming(-6, { duration: THRU }),
-        withTiming(-5, { duration: IMP }),
-        withTiming(0,  { duration: RET }),
-      );
-
-      // HEAD — focus stabile sul target (tilt piccolo, disciplina)
-      headRot.value = withSequence(
-        withTiming(-2, { duration: RETR }),
-        withTiming(-3, { duration: THRU }),
-        withTiming(-2, { duration: IMP }),
-        withTiming(0,  { duration: RET }),
-      );
-
-      // SKIRT — piccolo follow-through (inerzia panno)
-      skirtTX.value = withSequence(
-        withTiming(3,  { duration: RETR }),
-        withTiming(-5, { duration: THRU }),
-        withTiming(-3, { duration: IMP }),
+      // SKIRT — piccolo follow-through rotazione (pivot vita)
+      skirtRot.value = withSequence(
+        withTiming(1,  { duration: RETR }),
+        withTiming(-2, { duration: THRU }),
+        withTiming(-1, { duration: IMP }),
         withTiming(0,  { duration: RET }),
       );
     } else {
@@ -174,27 +164,26 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
       // Le altre animazioni di combat (skill/hit/dead) non sono implementate
       // nel rig in questo step — saranno aggiunte nei prossimi task.
       const D = 200;
-      spearTX.value = withTiming(0, { duration: D });
       spearRot.value = withTiming(0, { duration: D });
-      torsoTX.value = withTiming(0, { duration: D });
       torsoRot.value = withTiming(0, { duration: D });
       shieldRot.value = withTiming(0, { duration: D });
-      shieldTX.value = withTiming(0, { duration: D });
       headRot.value = withTiming(0, { duration: D });
-      skirtTX.value = withTiming(0, { duration: D });
+      skirtRot.value = withTiming(0, { duration: D });
     }
   }, [state]);
 
   // =========================================================================
-  // STYLES PER-LAYER — idle baseline + combat delta
+  // STYLES PER-LAYER — idle baseline + combat delta (SOLO ROTAZIONI)
+  // Gli idle translate (hair sway, shield phase) sono mantenuti molto piccoli
+  // (±1.5px) perché fanno parte del respiro: impercettibili come detach.
+  // I combat deltas sono TUTTI rotazioni sui pivot anatomici → no detach.
   // =========================================================================
 
-  // TORSO: scale Y respiro + combat lean/push
+  // TORSO: scaleY respiro + rotazione combat minima (pivot bacino)
   const torsoStyle = useAnimatedStyle(() => {
     const s = 1 + 0.015 * breath.value;
     return {
       transform: [
-        { translateX: torsoTX.value },
         { translateY: -0.8 * breath.value },
         { rotate: `${torsoRot.value}deg` },
         { scaleY: s },
@@ -202,38 +191,41 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
     };
   });
 
-  // HEAD GROUP (head_helmet + hair): segue idle + tilt combat
+  // HEAD GROUP (head_helmet + hair): idle sway + tilt combat
   const headGroupStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: 1.5 * hairPhase.value + torsoTX.value * 0.8 },
+      { translateX: 1.5 * hairPhase.value },    // idle sway — ±1.5px invisibile
       { translateY: -1.6 * breath.value },
       { rotate: `${0.6 * hairPhase.value + headRot.value}deg` },
     ],
   }));
 
-  // SHIELD ARM: idle sway + combat brace
+  // SHIELD ARM: idle sway + rotazione brace alla spalla dx
   const shieldStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: 0.6 * shieldPhase.value + shieldTX.value },
+      { translateX: 0.6 * shieldPhase.value },  // idle sway ±0.6px
       { translateY: 1.0 * shieldPhase.value },
       { rotate: `${0.5 * shieldPhase.value + shieldRot.value}deg` },
     ],
   }));
 
-  // SPEAR ARM: protagonista dell'attack
+  // SPEAR ARM: protagonista — SOLO ROTAZIONE alla spalla sx (pivot 570, 390).
+  // Nessun translate → la spalla del layer resta esattamente sul pivot
+  // anatomico (coincidente con la spalla del torso). Il braccio ruota
+  // solidale, la connessione alla spalla è preservata in ogni frame.
   const spearStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: spearTX.value },
-      { translateY: -0.4 * breath.value },
+      { translateY: -0.4 * breath.value },  // solo respiro (micro)
       { rotate: `${spearRot.value}deg` },
     ],
   }));
 
-  // SKIRT: idle + follow-through
+  // SKIRT: idle sway + piccola rotazione follow-through
   const skirtStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: 0.6 * hairPhase.value + skirtTX.value },
+      { translateX: 0.6 * hairPhase.value },   // idle sway
       { translateY: -0.3 * breath.value },
+      { rotate: `${skirtRot.value}deg` },
     ],
   }));
 

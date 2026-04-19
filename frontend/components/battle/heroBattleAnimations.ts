@@ -189,32 +189,34 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
   name: 'hoplite',
 
   // --- ATTACK: "Affondo di Falange" ---------------------------------------
-  // Il movimento reale è completamente INTERNO al rig a layer di Hoplite
-  // (vedi /app/frontend/components/ui/HeroHopliteRig.tsx): braccio lancia
-  // che tira indietro e si affonda, torso che accompagna, scudo in guardia,
-  // testa focalizzata sul target. Le gambe restano FISSE (disciplina tank).
+  // Motion split:
+  //   - INTERNO (HeroHopliteRig): SOLO rotazioni ai pivot anatomici
+  //     → il braccio lancia ruota alla spalla senza staccarsi dal corpo.
+  //   - ESTERNO (qui): shift + scale del corpo intero → visibilità del thrust
+  //     senza deformare i singoli layer. Muove TUTTO l'sprite insieme
+  //     (wrapper → rig → layer), quindi nessun layer si stacca dagli altri.
   //
-  // Il wrapper esterno di BattleSprite fa quindi SOLO un minuscolo weight-
-  // shift (~2% size) per dare peso complessivo al corpo e un appena
-  // percepibile "settle" di scala — ma niente dash orizzontali né body
-  // rotation che deformino la silhouette. Così l'animazione è disciplinata,
-  // leggibile, e non drifta mai dalla cella.
+  // Il shift esterno è ~5% size: abbastanza da dare peso al movimento,
+  // troppo piccolo per creare drift percepibile dalla cella.
   attack: (h, c) => {
-    const SHIFT = Math.round(c.size * 0.02);  // 2% (default era 10-12%)
+    const RETR_SHIFT = Math.round(c.size * 0.02);  // micro step indietro in wind-up
+    const THRUST_SHIFT = Math.round(c.size * 0.05); // step forward al thrust
     h.transX.value = withSequence(
-      withTiming(-c.dir * Math.round(c.size * 0.015), { duration: 150 }), // micro back
-      withTiming(c.dir * SHIFT, { duration: 160 }),                        // micro forward
-      withTiming(c.dir * SHIFT, { duration: 90 }),                         // hold
-      withTiming(0, { duration: 300, easing: Easing.out(Easing.quad) }),   // ritorno
+      withTiming(-c.dir * RETR_SHIFT,  { duration: 150, easing: Easing.out(Easing.quad) }),
+      withTiming(c.dir * THRUST_SHIFT, { duration: 160, easing: Easing.in(Easing.cubic) }),
+      withTiming(c.dir * THRUST_SHIFT, { duration: 90 }),   // hold
+      withTiming(0,                    { duration: 300, easing: Easing.out(Easing.quad) }),
     );
+    // Scale: micro crouch in wind-up, micro stretch al thrust, ritorno
     h.spriteScale.value = withSequence(
-      withTiming(1.00, { duration: 150 }),  // niente crouch (rig fa il suo)
-      withTiming(1.03, { duration: 160 }),  // micro scale forward per peso
-      withTiming(1.02, { duration: 90 }),
+      withTiming(0.99, { duration: 150 }),
+      withTiming(1.04, { duration: 160 }),
+      withTiming(1.03, { duration: 90 }),
       withTiming(1,    { duration: 300 }),
     );
-    // bodyRot a 0: la silhouette NON deve inclinarsi globalmente — i layer
-    // interni del rig (torso/testa) fanno il lean controllato.
+    // bodyRot SEMPRE 0: nessuna rotazione globale del sprite (il rig interno
+    // gestisce le rotazioni per-parte). Ruotare il wrapper ruoterebbe anche
+    // i badge/overlay/floats → confusione visiva.
     h.bodyRot.value = withTiming(0, { duration: 200 });
   },
 
