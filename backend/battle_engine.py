@@ -275,7 +275,15 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
                 char['action_cycle_idx'] = (char['action_cycle_idx'] + 1) % len(cycle_slots)
 
                 if slot == 'attack':
-                    action = execute_skill(char, target, enemies, skills['nad'], 'nad', team_id)
+                    # Hero-specific attack name override:
+                    # Hoplite NAD = "Affondo di Falange" (non "Pugno di Terra")
+                    attack_data = dict(skills['nad'])
+                    char_hero_id_a = str(char.get('hero_id', ''))
+                    char_name_a = str(char.get('name', ''))
+                    if char_hero_id_a == 'greek_hoplite' or 'Hoplite' in char_name_a:
+                        attack_data['name'] = 'Affondo di Falange'
+                        attack_data['description'] = 'Thrust lineare con la lancia da guardia neutra.'
+                    action = execute_skill(char, target, enemies, attack_data, 'nad', team_id)
                     char['rage'] = min(char['max_rage'], char['rage'] + 20)
                 elif slot == 'skill_1':
                     # Hero-specific skill name override:
