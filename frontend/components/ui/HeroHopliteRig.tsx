@@ -91,16 +91,27 @@ export default function HeroHopliteRig({
   // Continuano SEMPRE (anche durante l'attack) perché la vita del personaggio
   // non deve "congelarsi" mentre colpisce.
   // =========================================================================
+  // =========================================================================
+  // IDLE BREATHING — rig-based, loop continuo sinusoidale.
+  // Reference LOCKED: contact sheet approvata da utente (5 keyframe:
+  //   IDLE BASE → BREATH IN START → BREATH PEAK → SETTLE → LOOP RETURN).
+  // Filosofia: "oplita già pronto in battaglia, respira e fa micro
+  // aggiustamenti di guardia senza mai perdere assetto".
+  //
+  // Loop period: 2800ms (respiro disciplinato, ~21 BPM — lento e controllato).
+  // Mathematical perfect loop: sin(cycle*2π) → 0 at cycle 0 e 1 → no snap.
+  // =========================================================================
   const cycle = useSharedValue(0);
   React.useEffect(() => {
     if (!animated) return;
     cycle.value = 0;
     cycle.value = withRepeat(
-      withTiming(1, { duration: 2500, easing: Easing.linear }),
+      withTiming(1, { duration: 2800, easing: Easing.linear }),
       -1, false,
     );
   }, [animated]);
   const breath = useDerivedValue(() => Math.sin(cycle.value * Math.PI * 2));
+  // Fasi leggermente sfasate per dare organicità (non tutto si muove in sync)
   const hairPhase = useDerivedValue(() => Math.sin(cycle.value * Math.PI * 2 + Math.PI / 3));
   const shieldPhase = useDerivedValue(() => Math.sin(cycle.value * Math.PI * 2 - Math.PI / 4));
 
@@ -288,33 +299,30 @@ export default function HeroHopliteRig({
   }, [state]);
 
   // =========================================================================
-  // STYLES PER-LAYER — parent-child chain.
-  //
-  // Gerarchia di trasformazioni ereditate:
-  //   pelvis (breath)
-  //     └─ skirt   (local sway + skirtRot)
-  //     └─ torso   (torsoRot + breath scaleY)
-  //          ├─ hair       (headStyle, z-back)
-  //          ├─ shield_arm (shieldRot, child-of-torso)
-  //          ├─ spear_arm  (spearRot,  child-of-torso)
-  //          └─ head_group (headRot, z-front)
-  //
-  // Principio: ogni "accent" locale è PICCOLO perché la massa base è già
-  // mossa dal parent. In passato i translate idle erano duplicati in ogni
-  // layer (hair/spear/shield) perché non c'era gerarchia → ora si ereditano.
+  // =========================================================================
+  // STYLES per layer (REFERENCE-LOCKED idle).
+  // Ampiezze calibrate sui 5 frame della contact sheet approvata:
+  //   - chest rises ~4-5px al PEAK (visibile ma disciplinato)
+  //   - head micro-tilt ~0.8° (lettura "attento ma fermo")
+  //   - shield micro-oscillazione ~0.4° (segue la spalla)
+  //   - gonna micro-sway (follow-through minimo)
+  //   - lancia PRESSOCHÉ ferma (disciplina tank)
+  //   - gambe FISSE (foundation rigida)
+  // Tutti i valori sono in unità di canvas 1024×1024 (poi scalato a `size`).
   // =========================================================================
 
-  // PELVIS: respiro (traslazione molto piccola del bacino)
+  // PELVIS: micro-lift del bacino (respiro sollevato). Reference mostra
+  // il torso che sale ~4px → a canvas 1024, sollevamento di ~1.2 unità.
   const pelvisStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: -0.6 * breath.value },
+      { translateY: -1.2 * breath.value },  // ±1.2 unità canvas
     ],
   }));
 
-  // TORSO: respiro scaleY + rotazione combat (pivot bacino 640,540).
-  // Le braccia e la testa sono child e ereditano questa rotazione.
+  // TORSO: espansione toracica (scaleY) + rotazione combat locale.
+  // scaleY ±1.5% → ad altezza torso ~300 unità, espansione visibile di ~4.5 unità.
   const torsoStyle = useAnimatedStyle(() => {
-    const s = 1 + 0.012 * breath.value;  // leggera espansione toracica
+    const s = 1 + 0.015 * breath.value;
     return {
       transform: [
         { rotate: `${torsoRot.value}deg` },
@@ -323,34 +331,35 @@ export default function HeroHopliteRig({
     };
   });
 
-  // SHIELD ARM — accento LOCALE alla spalla dx, applicato DOPO il transform
-  // del torso. Se torso ruota 5°, shield ruota 5° + shieldRot locale.
+  // SHIELD ARM — micro oscillazione che segue la spalla (shieldPhase sfasato).
+  // ±0.4° di rotazione → tip dello scudo oscilla ~2-3 unità, quasi impercettibile.
   const shieldStyle = useAnimatedStyle(() => ({
     transform: [
-      { rotate: `${0.3 * shieldPhase.value + shieldRot.value}deg` },
+      { rotate: `${0.4 * shieldPhase.value + shieldRot.value}deg` },
     ],
   }));
 
-  // SPEAR ARM — accento LOCALE alla spalla sx, idem.
+  // SPEAR ARM — QUASI FERMO durante idle (disciplina tank). Micro oscillazione
+  // ~0.15° per dare vita senza "dipingere" movimento sulla lancia.
   const spearStyle = useAnimatedStyle(() => ({
     transform: [
-      { rotate: `${spearRot.value}deg` },
+      { rotate: `${0.15 * breath.value + spearRot.value}deg` },
     ],
   }));
 
-  // HEAD GROUP — ruota al base collo (620, 280). Hair sway idle + headRot.
-  // Applicato sia all'hair (z-back) sia all'head_helmet group (z-front).
+  // HEAD GROUP — micro tilt (~0.8°) che segue il respiro. Reference mostra la
+  // testa che si alza leggermente al PEAK ("chin up attento").
   const headStyle = useAnimatedStyle(() => ({
     transform: [
-      { rotate: `${0.5 * hairPhase.value + headRot.value}deg` },
+      { rotate: `${0.8 * hairPhase.value + headRot.value}deg` },
     ],
   }));
 
-  // SKIRT: sibling del torso, segue il BACINO (non il torso).
-  // Idle sway micro + rotazione combat locale.
+  // SKIRT — micro sway (follow-through). Reference mostra gonna essenzialmente
+  // ferma → valore molto basso (±0.5 unità di translate).
   const skirtStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: 0.4 * hairPhase.value },
+      { translateX: 0.5 * hairPhase.value },
       { rotate: `${skirtRot.value}deg` },
     ],
   }));
