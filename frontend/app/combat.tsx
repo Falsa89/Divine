@@ -7,9 +7,11 @@ import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
 import { heroBattleImageSource, heroImageSource, GREEK_HOPLITE_COMBAT_BASE } from '../components/ui/hopliteAssets';
+import { HOPLITE_BATTLE_ASSET_MANIFEST } from '../components/ui/hopliteAssetManifest';
 import { pickBattleBackground, BattleBgResult, preloadBattleAsset } from '../components/ui/battleBackgrounds';
 import { buildBattleLayout, getHomePosition } from '../components/battle/motionSystem';
 import BattleDebugOverlay, { DebugUnitInfo } from '../components/battle/BattleDebugOverlay';
+import BattleLoadingScreen from '../components/battle/BattleLoadingScreen';
 
 /**
  * BATTLE_DEBUG — flag per attivare overlay di debug nativo + log console
@@ -67,6 +69,10 @@ export default function CombatScreen() {
   // finché non abbiamo le misure vere del container → su mobile le unità
   // non finiscono fuori asse per colpa del viewport globale.
   const [bfRect, setBfRect] = useState<{ w: number; h: number } | null>(null);
+  // Preload progress tracking per loading screen reale
+  const [preloadLoaded, setPreloadLoaded] = useState(0);
+  const [preloadTotal, setPreloadTotal] = useState(0);
+  const [preloadLabel, setPreloadLabel] = useState('');
   const timerRef = useRef<any>(null);
   const allTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const logRef = useRef<ScrollView>(null);
@@ -196,18 +202,51 @@ export default function CombatScreen() {
         // variantIndex omesso → random, memorizzato in state sotto → fisso per la battaglia
       });
       setBattleBg(bg);
-      // ---- Preload asset critici PRIMA di avviare la scena ----------------
-      // Evita su mobile/Expo Go il flash nero iniziale dovuto al tempo di
-      // decode dei PNG di sfondo (~3 MB ciascuno). Timeout di safety per
-      // non bloccare mai la battle se il preload fallisce.
-      const preloadTimeout = new Promise<void>(res => setTimeout(res, 2500));
-      await Promise.race([
-        Promise.all([
-          preloadBattleAsset(bg.source),
-          preloadBattleAsset(GREEK_HOPLITE_COMBAT_BASE),
-        ]).then(() => undefined),
-        preloadTimeout,
-      ]);
+      // ═════════════════════════════════════════════════════════════════════
+      // PRELOAD ASSET CRITICI — progress-tracked, visibile nella loading UI.
+      // ---------------------------------------------------------------------
+      // Manifest completo:
+      //   - bg battaglia (1 immagine ~3MB)
+      //   - combat_base.png di Hoplite (fallback pose laterale)
+      //   - 12 asset rig Hoplite (7 layer + 5 safe fill)
+      //   - 8 frame Affondo di Falange
+      //   - 6 frame Guardia Ferrea
+      // Totale: ~28 asset. Preloadati PRIMA di passare a 'preparing' →
+      // la battle parte senza decode lazy, niente "ricaricamento visivo"
+      // quando i frame attack/skill entrano in scena per la prima volta.
+      //
+      // Timeout di safety 3500ms: se per qualche motivo un asset non
+      // decoda (es. cache corrotta, file mancante), la battle parte
+      // comunque — meglio una piccola latenza sul primo attack che
+      // una UI bloccata sulla loading screen all'infinito.
+      // ═════════════════════════════════════════════════════════════════════
+      const preloadAssets: any[] = [];
+      if (bg.source) preloadAssets.push({ src: bg.source, label: `bg · ${bg.faction || 'neutral'}` });
+      preloadAssets.push({ src: GREEK_HOPLITE_COMBAT_BASE, label: 'hoplite · combat_base' });
+      HOPLITE_BATTLE_ASSET_MANIFEST.forEach((src, idx) => {
+        preloadAssets.push({ src, label: `hoplite · asset #${idx + 1}` });
+      });
+      setPreloadTotal(preloadAssets.length);
+      setPreloadLoaded(0);
+      setPreloadLabel('Inizializzazione…');
+
+      let loadedCount = 0;
+      const loadOne = async (item: { src: any; label: string }) => {
+        try {
+          await preloadBattleAsset(item.src);
+        } catch {
+          // ignora — fallback silenzioso, l'asset verrà decodato a caldo
+        } finally {
+          loadedCount += 1;
+          // Batch update via functional setState evita race condition
+          setPreloadLoaded(loadedCount);
+          setPreloadLabel(item.label);
+        }
+      };
+
+      const preloadAll = Promise.all(preloadAssets.map(loadOne)).then(() => undefined);
+      const preloadTimeout = new Promise<void>(res => setTimeout(res, 3500));
+      await Promise.race([preloadAll, preloadTimeout]);
       // Init all sprite states
       const states: Record<string, SpriteData> = {};
       [...tA, ...tB].forEach(c => { states[c.id] = initSpriteState(c.id); });
@@ -361,15 +400,18 @@ export default function CombatScreen() {
   const getHpPct = (c: any) => c.max_hp_battle > 0 ? (c.current_hp / c.max_hp_battle) * 100 : 0;
   const getSpriteState = (id: string) => spriteStates[id] || initSpriteState(id);
 
-  // LOADING
-  if (phase === 'loading') return (
-    <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B']} style={st.fc}>
-      <Animated.View entering={ZoomIn.duration(300)}>
-        <Text style={st.loadIcon}>{'\u2694\uFE0F'}</Text>
-      </Animated.View>
-      <Text style={st.loadTxt}>Preparazione Battaglia...</Text>
-    </LinearGradient>
-  );
+  // LOADING — preload reale con progress bar
+  if (phase === 'loading') {
+    const progress = preloadTotal > 0 ? preloadLoaded / preloadTotal : 0;
+    return (
+      <BattleLoadingScreen
+        progress={progress}
+        loaded={preloadLoaded}
+        total={preloadTotal}
+        label={preloadLabel}
+      />
+    );
+  }
 
   // PREPARING - VS splash
   if (phase === 'preparing') return (

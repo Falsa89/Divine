@@ -70,19 +70,31 @@ export default function HeroHopliteRig({
   safeFill = true,
 }: Props) {
   // ───────────────────────────────────────────────────────────────────────
-  // ATTACK / SKILL OVERRIDE — frame-based sequences (reference LOCKED)
+  // MOUNT STABILE — no early return, no unmount/mount su switch state.
   // ---------------------------------------------------------------------
-  // - state 'attack' → HeroHopliteAffondo (8 keyframe, Affondo di Falange)
-  // - state 'skill'  → HeroHopliteGuardiaFerrea (6 keyframe, Guardia Ferrea)
-  // Il rig anatomico parent-child resta attivo per tutti gli altri stati
-  // (idle, hit, dead, heal, dodge, stress).
+  // Il BUG precedente:
+  //   if (state === 'attack') return <HeroHopliteAffondo />
+  //   if (state === 'skill')  return <HeroHopliteGuardiaFerrea />
+  // ad ogni transizione state distruggeva il componente corrente e
+  // montava il nuovo. Gli asset (12 layer rig + 8 affondo + 6 guardia)
+  // venivano decodati ogni volta → flash/lag percepibile.
+  //
+  // Il FIX:
+  //   Tutti e 3 i render path (rig idle / Affondo / GuardiaFerrea) sono
+  //   montati insieme come overlay assoluti. La visibilità è controllata
+  //   da `opacity + pointerEvents`; i player frame-based ricevono
+  //   `active` in modo che la loro sequenza parta solo quando richiesta.
+  //
+  //   Conseguenze:
+  //    - require() risolti UNA sola volta (al primo mount del rig in battle).
+  //    - Image cache nativa popolata al primo render → decode istantaneo
+  //      per tutti i frame successivi.
+  //    - Shared values del breathing loop NON vengono mai distrutti →
+  //      il respiro non si "resetta" visivamente tra attack e idle.
   // ───────────────────────────────────────────────────────────────────────
-  if (state === 'attack') {
-    return <HeroHopliteAffondo size={size} />;
-  }
-  if (state === 'skill') {
-    return <HeroHopliteGuardiaFerrea size={size} />;
-  }
+  const showIdleRig = state !== 'attack' && state !== 'skill';
+  const attackActive = state === 'attack';
+  const skillActive  = state === 'skill';
 
   const scale = size / BASE;
 
@@ -394,59 +406,107 @@ export default function HeroHopliteRig({
 
   return (
     <View style={[styles.root, { width: size, height: size }]}>
-      <View style={{ width: BASE, height: BASE, transform: [{ scale }], transformOrigin: '0 0' as any }}>
+      {/* ═══════════════════════════════════════════════════════════════════
+          LAYER 1 — RIG ANATOMICO (idle + transitori neutri)
+          Sempre montato. Visibile solo quando NON è in attack/skill.
+          Gli shared values del breathing restano vivi → quando riappare
+          non "ri-parte" da zero, continua il suo loop.
+         ═══════════════════════════════════════════════════════════════════ */}
+      <View
+        pointerEvents="none"
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            opacity: showIdleRig ? 1 : 0,
+          },
+        ]}
+      >
+        <View style={{ width: BASE, height: BASE, transform: [{ scale }], transformOrigin: '0 0' as any }}>
 
-        {/* ─── FOUNDATION: gambe fisse ─────────────────────────────────────── */}
-        <StaticImg src={A.legs} />
+          {/* ─── FOUNDATION: gambe fisse ─────────────────────────────────────── */}
+          <StaticImg src={A.legs} />
 
-        {/* ─── PELVIS group: breath, root dell'upper body ─────────────────── */}
-        <Animated.View style={[styles.layer, pelvisStyle]}>
+          {/* ─── PELVIS group: breath, root dell'upper body ─────────────────── */}
+          <Animated.View style={[styles.layer, pelvisStyle]}>
 
-          {/* hip_fill: bridge vita (sibling di skirt/torso, static) */}
-          {safeFill && <StaticImg src={A.hip_fill} />}
+            {/* hip_fill: bridge vita (sibling di skirt/torso, static) */}
+            {safeFill && <StaticImg src={A.hip_fill} />}
 
-          {/* Skirt: sibling del torso (segue il bacino, NON il torso) */}
-          <Animated.View style={[styles.layer, pivot(660, 690), skirtStyle]}>
-            <StaticImg src={A.skirt} />
+            {/* Skirt: sibling del torso (segue il bacino, NON il torso) */}
+            <Animated.View style={[styles.layer, pivot(660, 690), skirtStyle]}>
+              <StaticImg src={A.skirt} />
+            </Animated.View>
+
+            {/* Torso: parent di braccia + testa */}
+            <Animated.View style={[styles.layer, pivot(640, 540), torsoStyle]}>
+
+              {/* Hair al back del torso (z-lowest dentro torso), rotates con head */}
+              <Animated.View style={[styles.layer, pivot(620, 280), headStyle]}>
+                <StaticImg src={A.hair} />
+              </Animated.View>
+
+              {/* Torso image */}
+              <StaticImg src={A.torso} />
+
+              {/* Helper fills (child del torso: si muovono CON il torso) */}
+              {safeFill && <StaticImg src={A.under_arm_spear} />}
+              {safeFill && <StaticImg src={A.shoulder_shield_fill} />}
+
+              {/* Shield arm: ruota alla spalla dx, dentro il frame torso */}
+              <Animated.View style={[styles.layer, pivot(700, 440), shieldStyle]}>
+                <StaticImg src={A.shield_arm} />
+              </Animated.View>
+
+              {/* Fill dietro spalla sx (sotto spear_arm ma sopra torso) */}
+              {safeFill && <StaticImg src={A.shoulder_spear_fill} />}
+
+              {/* Spear arm: ruota alla spalla sx, dentro il frame torso */}
+              <Animated.View style={[styles.layer, pivot(570, 390), spearStyle]}>
+                <StaticImg src={A.spear_arm} />
+              </Animated.View>
+
+              {/* Head group: ruota al base collo, dentro il frame torso */}
+              <Animated.View style={[styles.layer, pivot(620, 280), headStyle]}>
+                {safeFill && <StaticImg src={A.neck_fill} />}
+                <StaticImg src={A.head_helmet} />
+              </Animated.View>
+
+            </Animated.View>
           </Animated.View>
 
-          {/* Torso: parent di braccia + testa */}
-          <Animated.View style={[styles.layer, pivot(640, 540), torsoStyle]}>
+        </View>
+      </View>
 
-            {/* Hair al back del torso (z-lowest dentro torso), rotates con head */}
-            <Animated.View style={[styles.layer, pivot(620, 280), headStyle]}>
-              <StaticImg src={A.hair} />
-            </Animated.View>
+      {/* ═══════════════════════════════════════════════════════════════════
+          LAYER 2 — AFFONDO DI FALANGE (attack, frame-based)
+          Sempre montato. Visibile + sequenza attiva solo se state==='attack'.
+         ═══════════════════════════════════════════════════════════════════ */}
+      <View
+        pointerEvents="none"
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            opacity: attackActive ? 1 : 0,
+          },
+        ]}
+      >
+        <HeroHopliteAffondo size={size} active={attackActive} />
+      </View>
 
-            {/* Torso image */}
-            <StaticImg src={A.torso} />
-
-            {/* Helper fills (child del torso: si muovono CON il torso) */}
-            {safeFill && <StaticImg src={A.under_arm_spear} />}
-            {safeFill && <StaticImg src={A.shoulder_shield_fill} />}
-
-            {/* Shield arm: ruota alla spalla dx, dentro il frame torso */}
-            <Animated.View style={[styles.layer, pivot(700, 440), shieldStyle]}>
-              <StaticImg src={A.shield_arm} />
-            </Animated.View>
-
-            {/* Fill dietro spalla sx (sotto spear_arm ma sopra torso) */}
-            {safeFill && <StaticImg src={A.shoulder_spear_fill} />}
-
-            {/* Spear arm: ruota alla spalla sx, dentro il frame torso */}
-            <Animated.View style={[styles.layer, pivot(570, 390), spearStyle]}>
-              <StaticImg src={A.spear_arm} />
-            </Animated.View>
-
-            {/* Head group: ruota al base collo, dentro il frame torso */}
-            <Animated.View style={[styles.layer, pivot(620, 280), headStyle]}>
-              {safeFill && <StaticImg src={A.neck_fill} />}
-              <StaticImg src={A.head_helmet} />
-            </Animated.View>
-
-          </Animated.View>
-        </Animated.View>
-
+      {/* ═══════════════════════════════════════════════════════════════════
+          LAYER 3 — GUARDIA FERREA (skill, frame-based)
+          Sempre montato. Visibile + sequenza attiva solo se state==='skill'.
+         ═══════════════════════════════════════════════════════════════════ */}
+      <View
+        pointerEvents="none"
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            opacity: skillActive ? 1 : 0,
+          },
+        ]}
+      >
+        <HeroHopliteGuardiaFerrea size={size} active={skillActive} />
       </View>
     </View>
   );

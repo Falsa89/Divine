@@ -8,6 +8,16 @@
  *   1. IDLE           2. ANCHOR        3. SHIELD FORWARD
  *   4. PULSE PEAK     5. HOLD END      6. RETURN
  *
+ * ─────────────────────────────────────────────────────────────────────────
+ * PATTERN DI MOUNT STABILE (no "ricaricamento visivo")
+ * ─────────────────────────────────────────────────────────────────────────
+ * Stesso design di HeroHopliteAffondo: montato UNA VOLTA in overlay
+ * assoluto dentro HeroHopliteRig e attivato via prop `active`.
+ *  - active=false → reset a frame 0, nessun timer.
+ *  - active=true  → sequenza parte da frame 0 fino a completamento.
+ *  - require() dei 6 asset centralizzati in hopliteAssetManifest → decode
+ *    una sola volta, nessun flash su switch state.
+ *
  * Timing (totale ~1060ms):
  *   #1 IDLE            0 →  80ms   (entry snapshot)
  *   #2 ANCHOR         80 → 230ms   (raccolta, scudo su)
@@ -21,15 +31,9 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
+import { HOPLITE_GUARDIA_ASSETS } from './hopliteAssetManifest';
 
-const FRAMES = [
-  require('../../assets/heroes/greek_hoplite/guardia_ferrea/frame_1.png'),
-  require('../../assets/heroes/greek_hoplite/guardia_ferrea/frame_2.png'),
-  require('../../assets/heroes/greek_hoplite/guardia_ferrea/frame_3.png'),
-  require('../../assets/heroes/greek_hoplite/guardia_ferrea/frame_4.png'),
-  require('../../assets/heroes/greek_hoplite/guardia_ferrea/frame_5.png'),
-  require('../../assets/heroes/greek_hoplite/guardia_ferrea/frame_6.png'),
-];
+const FRAMES = HOPLITE_GUARDIA_ASSETS;
 
 const FRAME_DURATIONS_MS = [
   80,   // 1. IDLE
@@ -47,21 +51,31 @@ const FEET_CX_IN_FRAME = 210;
 const FEET_CY_IN_FRAME = 390;
 
 // Costanti di allineamento con HeroHopliteRig (stesse di HeroHopliteAffondo).
-// Guardiscono che idle (rig) e skill (frame) abbiano i piedi alla stessa y.
 const RIG_FEET_Y_NORM = 800 / 1024;  // 0.781
 const RIG_BODY_H_NORM = 0.683;
 const FRAME_BODY_H_PX = 288;          // altezza corpo media (audit 278..301 ex. glow)
 
 type Props = {
   size: number;
+  /** Gate di attivazione della sequenza. Transizione false→true = START. */
+  active?: boolean;
   onDone?: () => void;
 };
 
-export default function HeroHopliteGuardiaFerrea({ size, onDone }: Props) {
+export default function HeroHopliteGuardiaFerrea({ size, active = true, onDone }: Props) {
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    if (!active) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      setIndex(0);
+      return;
+    }
+
     let cancelled = false;
     let i = 0;
     const advance = () => {
@@ -81,9 +95,13 @@ export default function HeroHopliteGuardiaFerrea({ size, onDone }: Props) {
     advance();
     return () => {
       cancelled = true;
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
 
   // Scale & position: stesso schema del Affondo player → zero salto feet
   const frameScale = (RIG_BODY_H_NORM * size) / FRAME_BODY_H_PX;
@@ -99,8 +117,6 @@ export default function HeroHopliteGuardiaFerrea({ size, onDone }: Props) {
 
   return (
     <View style={[styles.root, { width: size, height: size }]} pointerEvents="none">
-      {/* scaleX=-1 interno per cancellare il flip applicato da BattleSprite
-          (team player). Coerente con HeroHopliteAffondo. */}
       <View style={{
         position: 'absolute',
         top: boxTop,
@@ -113,6 +129,7 @@ export default function HeroHopliteGuardiaFerrea({ size, onDone }: Props) {
           source={FRAMES[index]}
           style={{ width: renderedW, height: renderedH }}
           resizeMode="contain"
+          fadeDuration={0}
         />
       </View>
     </View>
