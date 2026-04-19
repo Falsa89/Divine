@@ -15,7 +15,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from motor.motor_asyncio import AsyncIOMotorClient
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+
+# emergentintegrations is optional - if the private package isn't reachable we
+# gracefully degrade to the built-in fallback chat lines instead of crashing.
+try:
+    from emergentintegrations.llm.chat import LlmChat, UserMessage  # type: ignore
+    _LLM_AVAILABLE = True
+except Exception as _llm_err:  # pragma: no cover
+    LlmChat = None  # type: ignore
+    UserMessage = None  # type: ignore
+    _LLM_AVAILABLE = False
+    print(f"[bot_system] emergentintegrations non disponibile ({_llm_err}); uso fallback chat.")
 
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.getenv("DB_NAME", "divine_waifus")
@@ -98,6 +108,8 @@ async def generate_bot_chat(bot_name: str, personality: str, context: str = "") 
         return _fallback_chat(personality)
     
     try:
+        if not _LLM_AVAILABLE or not LLM_KEY:
+            return _fallback_chat(personality)
         system_msg = f"""Sei '{bot_name}', un giocatore del gioco mobile 'Divine Waifus' (RPG gacha con dee mitologiche anime).
 {PERSONALITIES.get(personality, PERSONALITIES['casual'])}
 
