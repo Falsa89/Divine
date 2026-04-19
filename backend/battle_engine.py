@@ -180,26 +180,43 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
     battle_log = []
     turn = 0
     
+    # ══════════════════════════════════════════════════════════════════════
+    # RAGE SYSTEM — regole finali (Msg 498):
+    #   range: 0..150 (cap hard 150)
+    #   ultimate READY quando rage >= 100 (soglia di attivazione)
+    #   overflow (>100) scala SOLO l'effetto principale della ultimate:
+    #       multiplier = 1 + max(0, rage - 100) / 100
+    #   ultimate cast → rage resettata a 0
+    #   rage guadagnata SOLO su colpi che vanno a segno:
+    #       attaccante: +25 (attack), +35 (skill_1), +40 (skill_2)
+    #       difensore:  +10 per colpo subito
+    #       miss/dodge: +0 a entrambi
+    #   rarity <= 3 (★1..3) NON ha ultimate e non la lancia mai.
+    # ══════════════════════════════════════════════════════════════════════
+    RAGE_CAP = 150
+    ULT_READY_THRESHOLD = 100
+    RAGE_GAIN_ATTACK = 25
+    RAGE_GAIN_SKILL_1 = 35
+    RAGE_GAIN_SKILL_2 = 40
+    RAGE_GAIN_DEFENDER_HIT = 10
+    
     # Initialize combat state
     for char in team_a + team_b:
         char['current_hp'] = char.get('max_hp', char.get('hp', 10000))
         char['max_hp_battle'] = char['current_hp']
-        # ── RAGE SYSTEM (ex sp_gauge) ──────────────────────────────────────
-        # rage sostituisce semanticamente sp_gauge. Supporta `start_rage` /
-        # `initial_rage` dai character data (per passive future tipo
-        # "entra in battaglia con 20 rage"). Fallback 0 se non specificato.
-        char['max_rage'] = int(char.get('max_rage', 100))
+        # Rage: cap 150, display threshold a 100 (ult ready)
+        char['max_rage'] = RAGE_CAP
+        char['rage_threshold'] = ULT_READY_THRESHOLD
         char['rage'] = int(char.get('start_rage', char.get('initial_rage', 0)))
         # Legacy alias — mantenuto per codice che ancora legge sp_gauge
         char['sp_gauge'] = char['rage']
-        # ── ACTION CYCLE ────────────────────────────────────────────────────
-        # action_cycle_idx ruota su ['attack', 'skill_1', 'skill_2'] (saltando
-        # gli slot assenti per l'eroe). Parte sempre da 'attack' → first action
-        # è ATTACK (era invece skill col vecchio cooldown).
+        # Cycle: attack → skill_1 → skill_2 → loop (saltando slot assenti)
         char['action_cycle_idx'] = 0
         char['status_effects'] = []
         char['is_alive'] = True
         char['total_damage_dealt'] = 0
+        # has_ultimate: rarità ≤ 3 NON ha ultimate (per volontà utente)
+        char['has_ultimate'] = int(char.get('rarity', 1)) > 3
     
     while turn < max_turns:
         turn += 1
@@ -241,22 +258,19 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
             target = min(enemies, key=lambda e: e['current_hp'])  # Target lowest HP
             
             # ═════════════════════════════════════════════════════════════
-            # ACTION SELECTION — nuovo cycle deterministico + rage.
+            # ACTION SELECTION — cycle deterministico + rage (Msg 498).
             # ---------------------------------------------------------------
-            # Regola gameplay (dall'utente):
-            #   ultimate → appena la rage è al massimo
-            #   altrimenti cycle: attack → skill_1 → skill_2 → attack → ...
-            #   se una skill è assente per questo eroe, salta lo slot
-            # Rage grows +20 per attack, +25 per skill (cap max_rage).
+            # Priorità:
+            #   1. Se rage ≥ 100 E l'eroe HA l'ultimate → lancia ultimate
+            #      (overflow oltre 100 scala solo l'effetto principale).
+            #   2. Altrimenti cycle: attack → skill_1 → skill_2 → loop
+            #      (saltando gli slot assenti).
+            # Rage guadagnata SOLO su colpi a segno (dopo execute_skill).
             # ═════════════════════════════════════════════════════════════
             element = char.get('element', 'neutral')
             skills = ELEMENT_SKILLS.get(element, ELEMENT_SKILLS['neutral'])
 
-            # Costruisci gli slot del cycle disponibili per questo eroe.
-            # Per ora l'engine elementale supporta solo 'nad' (attack) e 'sad'
-            # (skill_1). 'skill_2' è un placeholder estendibile per eroi
-            # futuri che avranno skill_2 dedicata (hero-specific override).
-            hero_id = char.get('hero_id', '')
+            # Slot del cycle disponibili per questo eroe.
             has_skill_1 = bool(skills.get('sad'))
             has_skill_2 = bool(char.get('skill_2'))  # hero-specific, opt-in
 
@@ -265,18 +279,27 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
             if has_skill_2: cycle_slots.append('skill_2')
 
             action = None
-            if char['rage'] >= char['max_rage']:
-                # ULTIMATE — consuma tutta la rage
-                action = execute_skill(char, target, enemies, skills['sp'], 'sp', team_id)
+            used_rage_at_cast = 0
+            rage_gain_if_hit = 0
+            # --- ULTIMATE ---
+            if char['rage'] >= ULT_READY_THRESHOLD and char.get('has_ultimate', False):
+                # Overflow multiplier: 1 + max(0, rage-100)/100
+                # Es: rage=100 → 1.00x, rage=125 → 1.25x, rage=150 → 1.50x
+                overflow_mult = 1.0 + max(0, char['rage'] - ULT_READY_THRESHOLD) / 100.0
+                action = execute_skill(
+                    char, target, enemies, skills['sp'], 'sp', team_id,
+                    overflow_multiplier=overflow_mult,
+                )
+                # Reset rage dopo il cast (before defender gain below)
                 char['rage'] = 0
-                char['sp_gauge'] = 0  # legacy alias
+                char['sp_gauge'] = 0
+                # Attaccante NON guadagna rage sul cast ult (azzeramento)
+                rage_gain_if_hit = 0
             else:
                 slot = cycle_slots[char['action_cycle_idx'] % len(cycle_slots)]
                 char['action_cycle_idx'] = (char['action_cycle_idx'] + 1) % len(cycle_slots)
 
                 if slot == 'attack':
-                    # Hero-specific attack name override:
-                    # Hoplite NAD = "Affondo di Falange" (non "Pugno di Terra")
                     attack_data = dict(skills['nad'])
                     char_hero_id_a = str(char.get('hero_id', ''))
                     char_name_a = str(char.get('name', ''))
@@ -284,12 +307,8 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
                         attack_data['name'] = 'Affondo di Falange'
                         attack_data['description'] = 'Thrust lineare con la lancia da guardia neutra.'
                     action = execute_skill(char, target, enemies, attack_data, 'nad', team_id)
-                    char['rage'] = min(char['max_rage'], char['rage'] + 20)
+                    rage_gain_if_hit = RAGE_GAIN_ATTACK
                 elif slot == 'skill_1':
-                    # Hero-specific skill name override:
-                    # Hoplite usa "Guardia Ferrea" (non "Terremoto" che è il
-                    # default earth SAD). Controllo sia hero_id sia name
-                    # (in base a dove il char data viene iniettato).
                     skill_data = dict(skills['sad'])
                     char_hero_id = str(char.get('hero_id', ''))
                     char_name = str(char.get('name', ''))
@@ -297,12 +316,27 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
                         skill_data['name'] = 'Guardia Ferrea'
                         skill_data['description'] = 'Stance difensiva Phalanx: riduce damage in arrivo.'
                     action = execute_skill(char, target, enemies, skill_data, 'sad', team_id)
-                    char['rage'] = min(char['max_rage'], char['rage'] + 25)
+                    rage_gain_if_hit = RAGE_GAIN_SKILL_1
                 elif slot == 'skill_2':
                     skill_data = char['skill_2']
                     action = execute_skill(char, target, enemies, skill_data, 'sad', team_id)
-                    char['rage'] = min(char['max_rage'], char['rage'] + 25)
-                char['sp_gauge'] = char['rage']  # legacy alias
+                    rage_gain_if_hit = RAGE_GAIN_SKILL_2
+
+                # Rage gain SOLO se il colpo è andato a segno (non dodge)
+                if action and action.get('type') != 'dodge':
+                    char['rage'] = min(RAGE_CAP, char['rage'] + rage_gain_if_hit)
+
+            # Difensori colpiti: +10 rage ciascuno (per QUALSIASI tipo di hit,
+            # ultimate inclusa). Applicato solo se action non è dodge.
+            if action and action.get('type') != 'dodge':
+                hit_ids = [t['id'] for t in action.get('targets', []) if t.get('damage', 0) > 0]
+                if hit_ids:
+                    all_chars_set = team_a + team_b
+                    for c in all_chars_set:
+                        if c.get('id') in hit_ids and c['is_alive']:
+                            c['rage'] = min(RAGE_CAP, c.get('rage', 0) + RAGE_GAIN_DEFENDER_HIT)
+                            c['sp_gauge'] = c['rage']
+            char['sp_gauge'] = char['rage']  # legacy alias
             
             if action:
                 turn_log['actions'].append(action)
@@ -347,16 +381,21 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
         "battle_log": battle_log,
         "team_a_survivors": team_a_alive_count,
         "team_b_survivors": team_b_alive_count,
-        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 100), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_a],
-        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 100), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
+        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 150), "rage_threshold": c.get('rage_threshold', 100), "has_ultimate": c.get('has_ultimate', False), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_a],
+        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 150), "rage_threshold": c.get('rage_threshold', 100), "has_ultimate": c.get('has_ultimate', False), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
         "mvp": max(team_a, key=lambda c: c['total_damage_dealt'])['name'] if victory else None,
     }
     
     return result
 
 
-def execute_skill(attacker: dict, target: dict, all_enemies: list, skill: dict, skill_type: str, team_id: str) -> dict:
-    """Execute a skill and return the action log"""
+def execute_skill(attacker: dict, target: dict, all_enemies: list, skill: dict, skill_type: str, team_id: str, overflow_multiplier: float = 1.0) -> dict:
+    """Execute a skill and return the action log.
+    
+    overflow_multiplier: applicato SOLO all'effetto principale della
+    ultimate (damage se offensiva, heal se cura, shield se difensiva).
+    Default 1.0 per attacchi non-ultimate.
+    """
     
     atk = attacker.get('attack', 1000)
     dfn = target.get('defense', 500)
@@ -373,6 +412,10 @@ def execute_skill(attacker: dict, target: dict, all_enemies: list, skill: dict, 
     base_damage = max(1, atk - dfn * 0.5)
     damage_mult = skill.get('damage_mult', 1.0)
     total_damage = int(base_damage * damage_mult * random.uniform(0.9, 1.1))
+    
+    # Ultimate overflow: scala SOLO l'effetto principale (danno offensivo)
+    if skill_type == 'sp' and overflow_multiplier > 1.0:
+        total_damage = int(total_damage * overflow_multiplier)
     
     # Crit check
     crit = False
