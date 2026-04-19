@@ -63,8 +63,12 @@ export const HOPLITE_SPLASH: ImageSourcePropType =
   require('../../assets/heroes/greek_hoplite/splash.png');
 
 // ── Aggregato: TUTTO ciò che serve per Hoplite in battle ─────────────────
+// NOTA: HOPLITE_RIG_ASSETS (12 layer del vecchio rig anatomico) NON è più
+// incluso nel manifest battle perché Hoplite è ora 100% frame-based anche
+// in idle (vedi HeroHopliteIdleFrame + HeroHopliteRig refactor). I layer
+// rig restano esportati per retrocompatibilità con HeroPortrait / pagine
+// di preview fuori-battle che ancora li usano.
 export const HOPLITE_BATTLE_ASSET_MANIFEST: ImageSourcePropType[] = [
-  ...HOPLITE_RIG_ASSETS,
   ...HOPLITE_AFFONDO_ASSETS,
   ...HOPLITE_GUARDIA_ASSETS,
   HOPLITE_COMBAT_BASE,

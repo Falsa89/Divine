@@ -164,7 +164,26 @@ export default function CombatScreen() {
 
   const setSpriteState = (id: string, data: Partial<SpriteData>) => {
     if (BATTLE_DEBUG && data.state) dbg('sprite state', { id, state: data.state });
-    setSpriteStates(prev => ({ ...prev, [id]: { ...(prev[id] || initSpriteState(id)), ...data } }));
+    setSpriteStates(prev => {
+      const cur = prev[id] || initSpriteState(id);
+      // ═════════════════════════════════════════════════════════════════
+      // Guard anti-doppio-trigger: se i campi richiesti in `data`
+      // sono GIÀ uguali a quelli correnti, NON creiamo un nuovo
+      // oggetto → React skippa il re-render → niente ri-esecuzione
+      // dei useEffect di BattleSprite/HeroHopliteRig → no restart
+      // animazione. Senza questa guard, dispatch ridondanti (es.
+      // setSpriteState(id, {state:'attack'}) quando già 'attack')
+      // creerebbero un nuovo reference per prev[id] e Reanimated
+      // riceverebbe un nuovo ciclo di effect → potenziale doppio
+      // playback dei frame.
+      // ═════════════════════════════════════════════════════════════════
+      let changed = false;
+      for (const k of Object.keys(data)) {
+        if ((cur as any)[k] !== (data as any)[k]) { changed = true; break; }
+      }
+      if (!changed) return prev;
+      return { ...prev, [id]: { ...cur, ...data } };
+    });
   };
 
   const resetSpriteStates = () => {
