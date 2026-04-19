@@ -204,63 +204,24 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
     h.bodyRot.value    = withTiming(0, { duration: 80 });
   },
 
-  // --- SKILL "GUARDIA FERREA": Iron defensive stance — MASS-FIRST pass ----
-  // v2 (mass-first): delega più movimento al wrapper globale (corpo intero
-  // si abbassa + comprime) per compensare i delta per-layer ridotti nel rig.
-  // Obiettivo: leggere "il corpo si chiude" come massa unica, non layer
-  // indipendenti che si aprono.
+  // --- SKILL "GUARDIA FERREA" — frame-based (REFERENCE LOCKED) ------------
+  // Gli asset pre-renderizzati (guardia_ferrea/frame_1..6.png) contengono
+  // GIÀ il crouch, la chiusura difensiva, lo shield forward e il pulse
+  // concentrato sullo scudo. Il wrapper esterno NON deve aggiungere
+  // translation/scale/aura, altrimenti si avrebbe doppio movimento e
+  // il glow dell'aura-ring si sovrapporrebbe al pulse dei frame.
   //
-  // Timing (totale ~1050ms):
-  //   ANC 180ms  → anchor
-  //   HLD 600ms  → hold + SINGLE shield pulse a metà
-  //   REL 270ms  → release
-  //
-  // Vincoli UX:
-  //   - transX = 0 (nessuno step-back)
-  //   - sink +3% (era +2%) → crouch più marcato
-  //   - spriteScale 0.96 (era 0.98) → compressione più evidente
-  //   - Single pulse marcato (non doppio)
-  skill: (h, c) => {
-    const ANC = 180;
-    const HLD = 600;
-    const REL = 270;
-    const SINK = Math.round(c.size * 0.03);  // crouch globale (era 0.02)
-
-    // HORIZONTAL: zero, la skill è radicata
-    h.transX.value = withTiming(0, { duration: 80 });
-
-    // VERTICAL: crouch più marcato → maggior senso di "chiusura"
-    h.transY.value = withSequence(
-      withTiming(SINK, { duration: ANC, easing: Easing.out(Easing.quad) }),
-      withTiming(SINK, { duration: HLD }),
-      withTiming(0,    { duration: REL, easing: Easing.out(Easing.quad) }),
-    );
-
-    // BODY SCALE: compressione più evidente (0.96) → massa unica che si chiude
-    h.spriteScale.value = withSequence(
-      withTiming(0.96, { duration: ANC }),
-      withTiming(0.96, { duration: HLD }),
-      withTiming(1,    { duration: REL }),
-    );
-
-    // --- SHIELD PULSE — singolo, marcato, a metà hold ---------------------
-    const PULSE_DELAY = ANC + 170;  // 350ms dall'inizio
-
-    h.auraOp.value = withSequence(
-      withDelay(PULSE_DELAY, withTiming(0.7, { duration: 150, easing: Easing.out(Easing.quad) })),
-      withTiming(0.1, { duration: 280 }),
-      withTiming(0,   { duration: REL }),
-    );
-    h.auraSc.value = withSequence(
-      withDelay(PULSE_DELAY, withTiming(1.5, { duration: 180, easing: Easing.out(Easing.quad) })),
-      withTiming(1, { duration: 280 }),
-    );
-    h.hitFlash.value = withSequence(
-      withDelay(PULSE_DELAY, withTiming(0.25, { duration: 120 })),
-      withTiming(0, { duration: 200 }),
-    );
-
-    h.bodyRot.value = withTiming(0, { duration: 200 });
+  // → Tutto il wrapper resta a 0/neutro durante la skill, il visual è
+  //   interamente gestito dai 6 frame.
+  skill: (h, _c) => {
+    h.transX.value      = withTiming(0, { duration: 80 });
+    h.transY.value      = withTiming(0, { duration: 80 });
+    h.spriteScale.value = withTiming(1, { duration: 80 });
+    h.bodyRot.value     = withTiming(0, { duration: 80 });
+    // Aura/hitFlash esterni azzerati: il pulse è nel frame 4 (PULSE PEAK)
+    h.auraOp.value      = withTiming(0, { duration: 80 });
+    h.auraSc.value      = withTiming(1, { duration: 80 });
+    h.hitFlash.value    = withTiming(0, { duration: 80 });
   },
 
   ultimate: (h, c) => HOPLITE_PROFILE.skill(h, c),

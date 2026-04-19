@@ -48,6 +48,7 @@ import Animated, {
   cancelAnimation, Easing,
 } from 'react-native-reanimated';
 import HeroHopliteAffondo from './HeroHopliteAffondo';
+import HeroHopliteGuardiaFerrea from './HeroHopliteGuardiaFerrea';
 
 const BASE = 1024;
 
@@ -69,15 +70,18 @@ export default function HeroHopliteRig({
   safeFill = true,
 }: Props) {
   // ───────────────────────────────────────────────────────────────────────
-  // ATTACK OVERRIDE — frame-based sequence (reference LOCKED)
-  // L'Affondo di Falange è stato approvato come sequenza pittorica di 8
-  // keyframe. Durante state === 'attack' bypassiamo completamente il rig
-  // anatomico e renderizziamo i frame swappati nei timing approvati.
-  // Il rig anatomico resta attivo per tutti gli altri stati (idle, skill,
-  // hit, dead, heal, dodge, stress).
+  // ATTACK / SKILL OVERRIDE — frame-based sequences (reference LOCKED)
+  // ---------------------------------------------------------------------
+  // - state 'attack' → HeroHopliteAffondo (8 keyframe, Affondo di Falange)
+  // - state 'skill'  → HeroHopliteGuardiaFerrea (6 keyframe, Guardia Ferrea)
+  // Il rig anatomico parent-child resta attivo per tutti gli altri stati
+  // (idle, hit, dead, heal, dodge, stress).
   // ───────────────────────────────────────────────────────────────────────
   if (state === 'attack') {
     return <HeroHopliteAffondo size={size} />;
+  }
+  if (state === 'skill') {
+    return <HeroHopliteGuardiaFerrea size={size} />;
   }
 
   const scale = size / BASE;
