@@ -46,16 +46,16 @@ const FRAME_DURATIONS_MS = [
 // Canvas nativo dei frame (520×400, feet baseline comune a tutta la suite)
 const FRAME_W = 520;
 const FRAME_H = 400;
-// Feet Y reale misurato dal bbox alpha dei PNG idle: 382 (non 390!)
+// Feet Y REALE dei nuovi PNG idle rigenerati (allineato ad Affondo: 390)
 const FEET_CX_IN_FRAME = 260;
-const FEET_CY_IN_FRAME = 382;
+const FEET_CY_IN_FRAME = 390;
 
 // Allineamento feet-to-ground (stesso schema di Affondo/GuardiaFerrea)
 const RIG_FEET_Y_NORM = 800 / 1024;
 const RIG_BODY_H_NORM = 0.683;
-// Body height REALE misurata dai PNG idle (bbox 59..382 = 323px).
-// Prima era 341 (preso dall'Affondo) → causava render ~5.3% più piccolo.
-const FRAME_BODY_H_PX = 323;
+// Body height REALE dei nuovi PNG idle rigenerati: 341 (identica ad Affondo
+// → zero differenza di scala tra idle/attack/skill).
+const FRAME_BODY_H_PX = 341;
 
 type Props = {
   size: number;
