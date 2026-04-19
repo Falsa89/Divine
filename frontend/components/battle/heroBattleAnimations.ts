@@ -180,8 +180,8 @@ export const DEFAULT_PROFILE: HeroAnimProfile = {
 // GREEK HOPLITE PROFILE — spear + shield frontliner
 // --------------------------------------------------------------------------
 // Fantasia: oplita greco con lancia + scudo. Tank/frontliner con peso.
-//   Attack   → Spear thrust (wind-up → explosive thrust → follow-through)
-//   Skill    → TERREMOTO (crouch → jump → ground slam → shockwave + aftershock)
+//   Attack   → "Affondo di Falange" (spear thrust lineare, body push forward)
+//   Skill    → "GUARDIA FERREA" (iron stance difensiva, single shield pulse)
 //   Hit      → Tank stagger solido (poco knockback, più "piantato")
 //   Death    → Kneel + collapse (sink → fall sideways + fade)
 // ==========================================================================
@@ -219,46 +219,67 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
     h.bodyRot.value = withTiming(0, { duration: 200 });
   },
 
-  // --- SKILL "TERREMOTO": Earthquake slam ----------------------------------
-  // 1) Crouch: si abbassa caricando la mossa
-  // 2) Jump: scatta in alto (leap)
-  // 3) Slam: crash a terra con forte impatto (scale burst + aura + hit flash)
-  // 4) Aftershock: piccolo rimbalzo secondario per chiudere il movimento
-  // Nessun movimento orizzontale — è una skill verticale di "ground pound".
+  // --- SKILL "GUARDIA FERREA": Iron defensive stance ----------------------
+  // Difensiva, non offensiva. L'oplita pianta i piedi e alza lo scudo
+  // mentre un singolo pulse metallico illumina lo scudo.
+  //
+  // Timing (totale ~1050ms):
+  //   ANC 180ms  → anchor (wrapper: crouch + peso al suolo; rig: scudo su)
+  //   HLD 600ms  → hold (posa tenuta + SINGLE shield pulse a metà)
+  //   REL 270ms  → release (ritorno morbido)
+  //
+  // Vincoli dall'UX brief:
+  //   - NESSUNO step-back visibile → transX stays at 0 per tutto il tempo
+  //   - Singolo pulse più marcato (non doppio)
+  //   - Lancia sobria (gestita nel rig: +4°, non protagonista)
+  //   - Hoplite deve "piantarsi", non fare un passo
   skill: (h, c) => {
-    const CROUCH = Math.round(c.size * 0.05);
-    const JUMP = Math.round(c.size * 0.18);
-    // Y motion (note: translateY positivo = giù visivamente; negativo = su).
+    const ANC = 180;
+    const HLD = 600;
+    const REL = 270;
+    const SINK = Math.round(c.size * 0.02);  // micro-crouch "piantato"
+
+    // HORIZONTAL MOVEMENT — ZERO. La skill è radicata al suolo.
+    // Cancella qualsiasi residuo e forza a 0.
+    h.transX.value = withTiming(0, { duration: 80 });
+
+    // VERTICAL — crouch leggero, hold, ritorno.
     h.transY.value = withSequence(
-      withTiming(CROUCH, { duration: 180, easing: Easing.inOut(Easing.quad) }),  // si abbassa
-      withTiming(-JUMP, { duration: 180, easing: Easing.out(Easing.quad) }),     // salta su
-      withTiming(0, { duration: 110, easing: Easing.in(Easing.cubic) }),         // crash
-      withTiming(-Math.round(c.size * 0.03), { duration: 60 }),                   // rimbalzo
-      withTiming(0, { duration: 140 }),                                           // settle
+      withTiming(SINK, { duration: ANC, easing: Easing.out(Easing.quad) }),
+      withTiming(SINK, { duration: HLD }),
+      withTiming(0,    { duration: REL, easing: Easing.out(Easing.quad) }),
     );
+
+    // BODY SCALE — peso al suolo (0.98) durante anchor+hold, poi torno a 1.
     h.spriteScale.value = withSequence(
-      withTiming(0.92, { duration: 180 }),  // crouch squash
-      withTiming(1.10, { duration: 180 }),  // stretch in jump
-      withTiming(1.22, { duration: 90 }),   // SLAM impact
-      withTiming(0.96, { duration: 80 }),   // squash on landing
-      withTiming(1, { duration: 150 }),
+      withTiming(0.98, { duration: ANC }),
+      withTiming(0.98, { duration: HLD }),
+      withTiming(1,    { duration: REL }),
     );
-    // Aura burst: esplode al momento dello slam (delay = crouch+jump = 360ms)
+
+    // --- SHIELD PULSE — singolo, marcato, a metà hold ---------------------
+    // Timing: parte 170ms dentro l'HOLD (t ≈ 350ms dall'inizio skill) →
+    // è il punto di max lettura della posa difensiva.
+    // Forma: ramp-up 150ms → decay 330ms → fade finale col release.
+    const PULSE_DELAY = ANC + 170;  // 350ms dall'inizio
+
     h.auraOp.value = withSequence(
-      withDelay(360, withTiming(0.9, { duration: 100 })),
-      withDelay(120, withTiming(0.15, { duration: 350 })),
+      withDelay(PULSE_DELAY, withTiming(0.7, { duration: 150, easing: Easing.out(Easing.quad) })),
+      withTiming(0.1, { duration: 280 }),
+      withTiming(0,   { duration: REL }),
     );
     h.auraSc.value = withSequence(
-      withDelay(360, withTiming(1.8, { duration: 150 })),
-      withTiming(1, { duration: 350 }),
+      withDelay(PULSE_DELAY, withTiming(1.5, { duration: 180, easing: Easing.out(Easing.quad) })),
+      withTiming(1, { duration: 280 }),
     );
-    // Hit flash al momento dell'impatto — dà sensazione di shockwave
+    // Brillio metallico sincronizzato col pulse (legge come "scudo scintilla")
     h.hitFlash.value = withSequence(
-      withDelay(360, withTiming(0.4, { duration: 80 })),
+      withDelay(PULSE_DELAY, withTiming(0.25, { duration: 120 })),
       withTiming(0, { duration: 200 }),
     );
-    // Bloccato orizzontalmente (ground-pound stance)
-    h.transX.value = withTiming(0, { duration: 200 });
+
+    // Nessuna rotazione globale del wrapper (le rotazioni sono per-layer nel rig)
+    h.bodyRot.value = withTiming(0, { duration: 200 });
   },
 
   ultimate: (h, c) => HOPLITE_PROFILE.skill(h, c),

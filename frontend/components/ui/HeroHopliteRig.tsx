@@ -168,10 +168,69 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
         withTiming(-1, { duration: IMP }),
         withTiming(0,  { duration: RET }),
       );
+    } else if (state === 'skill') {
+      // =====================================================================
+      // SKILL — "GUARDIA FERREA" (difensiva)
+      // ---------------------------------------------------------------------
+      // Concept: iron stance breve e leggibile. L'oplita pianta i piedi,
+      // alza lo scudo, raccoglie la lancia e tiene una posa difensiva
+      // stabile. Nessuno step-back (lo decide il wrapper esterno), nessun
+      // lunge, nessun jump.
+      //
+      // Timing (totale ~1050ms):
+      //   ANC 180ms  → anchor (alza scudo, raccoglie lancia)
+      //   HLD 600ms  → hold (posa tenuta + pulse sullo scudo via wrapper)
+      //   REL 270ms  → release (ritorno morbido)
+      //
+      // Filosofia degli angoli (disciplina tank):
+      //   - shield alzato a -12° (pivot spalla dx → va su/avanti)
+      //   - lancia raccolta a +4° (tip lievemente alta, posa "pronta" non
+      //     "in spinta") — deliberatamente sobria per non leggere come attacco
+      //   - torso -2° → chiude la linea verso il nemico
+      //   - testa -4° → sguardo sopra il bordo scudo, concentrata
+      //   - skirt +1° → micro follow-through (peso su piedi)
+      // =====================================================================
+      const ANC = 180;
+      const HLD = 600;
+      const REL = 270;
+
+      // SPEAR ARM — sobria, +4° max (posa di difesa, non di affondo)
+      spearRot.value = withSequence(
+        withTiming(4,  { duration: ANC, easing: Easing.out(Easing.quad) }),
+        withTiming(4,  { duration: HLD }),
+        withTiming(0,  { duration: REL, easing: Easing.out(Easing.quad) }),
+      );
+
+      // SHIELD ARM — alzato a -12° (rotazione su/avanti attorno spalla dx)
+      shieldRot.value = withSequence(
+        withTiming(-12, { duration: ANC, easing: Easing.out(Easing.quad) }),
+        withTiming(-12, { duration: HLD }),
+        withTiming(0,   { duration: REL, easing: Easing.out(Easing.quad) }),
+      );
+
+      // TORSO — chiude la linea verso il nemico (-2°)
+      torsoRot.value = withSequence(
+        withTiming(-2, { duration: ANC }),
+        withTiming(-2, { duration: HLD }),
+        withTiming(0,  { duration: REL }),
+      );
+
+      // HEAD — sguardo concentrato sopra il bordo dello scudo
+      headRot.value = withSequence(
+        withTiming(-4, { duration: ANC }),
+        withTiming(-4, { duration: HLD }),
+        withTiming(0,  { duration: REL }),
+      );
+
+      // SKIRT — micro follow-through (peso su piedi radicati)
+      skirtRot.value = withSequence(
+        withTiming(1, { duration: ANC }),
+        withTiming(1, { duration: HLD }),
+        withTiming(0, { duration: REL }),
+      );
     } else {
-      // Tutti gli altri state: ritorno morbido a 0 (idle pulito).
-      // Le altre animazioni di combat (skill/hit/dead) non sono implementate
-      // nel rig in questo step — saranno aggiunte nei prossimi task.
+      // Tutti gli altri state (hit, dead, heal, dodge): ritorno morbido a 0
+      // (idle pulito). Saranno implementati nei prossimi task.
       const D = 200;
       spearRot.value = withTiming(0, { duration: D });
       torsoRot.value = withTiming(0, { duration: D });

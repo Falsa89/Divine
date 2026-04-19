@@ -58,6 +58,9 @@ export default function HoplitePreview() {
         <Pressable style={[styles.btn, styles.btnRed]} onPress={() => trigger('attack')}>
           <Text style={styles.btnTxt}>AFFONDO DI FALANGE</Text>
         </Pressable>
+        <Pressable style={[styles.btn, styles.btnBlue]} onPress={() => trigger('skill')}>
+          <Text style={styles.btnTxt}>GUARDIA FERREA</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -91,5 +94,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   btnRed: { backgroundColor: '#FF4444' },
+  btnBlue: { backgroundColor: '#3b82c7' },
   btnTxt: { color: '#fff', fontWeight: '900', fontSize: 13, letterSpacing: 1 },
 });
