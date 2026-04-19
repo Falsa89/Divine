@@ -501,13 +501,50 @@ async def health():
 # Pagina helper: mostra i frame catturati in /app/tmp/hop/ come reel visuale
 # per validazione rapida delle animazioni Hoplite. Serve inline via img base64.
 @app.get("/api/hoplite-reel")
-async def hoplite_reel(crop: bool = False, curated: bool = False):
+async def hoplite_reel(crop: bool = False, curated: bool = False, v2: bool = False):
     from fastapi.responses import HTMLResponse
     import base64, glob
+    if v2:
+        # V2: frames del nuovo rig (cartella /app/tmp/hop2), con label per fase.
+        CURATED2 = [
+            ("00_idle.png",         "IDLE baseline",    "Pose base — spear level, shield up, legs radicate"),
+            ("01_windup.png",       "RITRAZIONE",       "Phase 1 (~80ms) — spear tirato indietro +70, rot +8°, torso +2°"),
+            ("02_thrust_mid.png",   "AFFONDO mid",      "Phase 2 (~190ms) — spear in corsa, torso -4° lean forward"),
+            ("03_impact.png",       "AFFONDO peak",     "Phase 2 end (~290ms) — spear thrust max -180, massima estensione"),
+            ("04_impact_end.png",   "IMPATTO hold",     "Phase 3 (~370ms) — hold a -200, max thrust + body weight forward"),
+            ("05_return.png",       "RITORNO guardia",  "Phase 4 (~550ms) — rientro easing out, torso si raddrizza"),
+            ("06_idle_back.png",    "IDLE ripristino",  "Post-return (~850ms) — tutto a 0, home position recuperata"),
+        ]
+        imgs_html = ""
+        for fname, label, caption in CURATED2:
+            p = f"/app/tmp/hop2/{fname}"
+            try:
+                with open(p, "rb") as f:
+                    b64 = base64.b64encode(f.read()).decode()
+                imgs_html += f'<div class="cell"><div class="lbl">{label}</div><div class="cap">{caption}</div><img src="data:image/png;base64,{b64}"/></div>'
+            except Exception:
+                pass
+        html = f"""<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<style>
+body{{margin:0;padding:16px;background:#0a0a0a;color:#fff;font-family:monospace}}
+.grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}}
+.cell{{position:relative;border:2px solid #FFB347;background:#0a0a0a;border-radius:8px;overflow:hidden}}
+.cell img{{width:100%;display:block}}
+.lbl{{position:absolute;top:0;left:0;background:#FF0055;color:#fff;padding:6px 14px;font-size:15px;font-weight:900;z-index:10;border-bottom-right-radius:10px;letter-spacing:1px}}
+.cap{{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.88);color:#FFD700;padding:8px 12px;font-size:12px;z-index:10}}
+h1{{font-size:22px;margin:6px 0 18px 4px;color:#FFD700}}
+.legend{{background:#1a1410;border:1px solid #FFB347;padding:14px;border-radius:6px;margin-bottom:20px;font-size:12px;color:#FFCC99;line-height:1.6}}
+</style></head>
+<body>
+<h1>⚔️ HOPLITE — AFFONDO DI FALANGE (RIG-BASED LAYER ANIMATION)</h1>
+<div class="legend">
+<b>PIPELINE:</b> 7 layer PNG separati (hair / legs / skirt / torso / shield_arm / spear_arm / head_helmet) · pivot anatomici (bacino, spalla sx lancia, spalla dx scudo) · idle breathing SEMPRE attivo in background · combat deltas additivi on top · gambe FISSE (disciplina tank) · no drift dalla cella.
+</div>
+<div class="grid">{imgs_html}</div>
+</body></html>"""
+        return HTMLResponse(content=html)
     folder = "/app/tmp/hop/crop" if crop else "/app/tmp/hop"
     if curated:
-        # Curated selection: frame più significativi della battaglia catturata.
-        # Basati su analisi visiva + log di battaglia.
         CURATED = [
             (0,  "IDLE",          "Hoplite in home position, spear relaxed"),
             (19, "ATTACK wind-up", "Inizio forward lean + spear raising"),

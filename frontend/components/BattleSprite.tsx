@@ -39,6 +39,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ELEMENTS, RARITY } from '../constants/theme';
 import { heroBattleImageSource, isGreekHoplite } from './ui/hopliteAssets';
 import { getAnimationProfile } from './battle/heroBattleAnimations';
+import HeroHopliteRig from './ui/HeroHopliteRig';
 import Constants from 'expo-constants';
 
 type SpriteState = 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
@@ -353,6 +354,19 @@ export default function BattleSprite({
                   }}
                   resizeMode="cover"
                 />
+              </View>
+            ) : isHoplite ? (
+              // HOPLITE — rig a layer (HeroHopliteRig). Invece di renderizzare
+              // la combat_base.png intera, montiamo i 7 layer PNG separati
+              // (hair/legs/skirt/torso/shield_arm/spear_arm/head_helmet) e
+              // animiamo le parti del corpo secondo lo state corrente
+              // (idle → respiro; attack → Affondo di Falange con wind-up +
+              // thrust + impatto + ritorno in guardia). Le gambe restano
+              // sempre fisse → silhouette stabile, disciplina tank.
+              // Il rig usa BASE 1024 × 1024 quadrato, lo ancoriamo al bottom
+              // del frame portrait (size × size*1.25) via justifyContent.
+              <View style={{ width: frameW, height: frameH, alignItems: 'center', justifyContent: 'flex-end' }}>
+                <HeroHopliteRig size={frameW} state={state as any} />
               </View>
             ) : heroImage ? (
               // Combat pose (es. Hoplite combat_base.png). contain preserva aspect

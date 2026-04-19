@@ -188,35 +188,34 @@ export const DEFAULT_PROFILE: HeroAnimProfile = {
 export const HOPLITE_PROFILE: HeroAnimProfile = {
   name: 'hoplite',
 
-  // --- ATTACK: Spear thrust ------------------------------------------------
-  // 1) Wind-up: mezzo passo indietro + leggera crouch
-  // 2) Thrust: scatto esplosivo in avanti (ampio)
-  // 3) Hold: la lancia resta estesa un momento per lettura dell'impatto
-  // 4) Return: rientro deciso alla home
+  // --- ATTACK: "Affondo di Falange" ---------------------------------------
+  // Il movimento reale è completamente INTERNO al rig a layer di Hoplite
+  // (vedi /app/frontend/components/ui/HeroHopliteRig.tsx): braccio lancia
+  // che tira indietro e si affonda, torso che accompagna, scudo in guardia,
+  // testa focalizzata sul target. Le gambe restano FISSE (disciplina tank).
+  //
+  // Il wrapper esterno di BattleSprite fa quindi SOLO un minuscolo weight-
+  // shift (~2% size) per dare peso complessivo al corpo e un appena
+  // percepibile "settle" di scala — ma niente dash orizzontali né body
+  // rotation che deformino la silhouette. Così l'animazione è disciplinata,
+  // leggibile, e non drifta mai dalla cella.
   attack: (h, c) => {
-    const WIND = Math.round(c.size * 0.04);
-    const THRUST = Math.round(c.size * 0.18);   // notevolmente più ampio del default 0.10
-    const HOLD = Math.round(c.size * 0.14);
+    const SHIFT = Math.round(c.size * 0.02);  // 2% (default era 10-12%)
     h.transX.value = withSequence(
-      withTiming(-c.dir * WIND, { duration: 110, easing: Easing.out(Easing.quad) }),
-      withTiming(c.dir * THRUST, { duration: 90, easing: Easing.in(Easing.cubic) }),
-      withTiming(c.dir * HOLD, { duration: 100 }),
-      withTiming(0, { duration: 300, easing: Easing.out(Easing.quad) }),
+      withTiming(-c.dir * Math.round(c.size * 0.015), { duration: 150 }), // micro back
+      withTiming(c.dir * SHIFT, { duration: 160 }),                        // micro forward
+      withTiming(c.dir * SHIFT, { duration: 90 }),                         // hold
+      withTiming(0, { duration: 300, easing: Easing.out(Easing.quad) }),   // ritorno
     );
-    // Body torque: lean indietro → avanti → settle
-    h.bodyRot.value = withSequence(
-      withTiming(-c.dir * 3, { duration: 110 }),
-      withTiming(c.dir * 4, { duration: 90 }),
-      withTiming(c.dir * 2, { duration: 100 }),
-      withTiming(0, { duration: 280 }),
-    );
-    // Scale: crouch wind-up → punch forward → settle
     h.spriteScale.value = withSequence(
-      withTiming(0.97, { duration: 110 }),  // crouch
-      withTiming(1.10, { duration: 90 }),   // thrust peak
-      withTiming(1.05, { duration: 100 }),
-      withTiming(1, { duration: 280 }),
+      withTiming(1.00, { duration: 150 }),  // niente crouch (rig fa il suo)
+      withTiming(1.03, { duration: 160 }),  // micro scale forward per peso
+      withTiming(1.02, { duration: 90 }),
+      withTiming(1,    { duration: 300 }),
     );
+    // bodyRot a 0: la silhouette NON deve inclinarsi globalmente — i layer
+    // interni del rig (torso/testa) fanno il lean controllato.
+    h.bodyRot.value = withTiming(0, { duration: 200 });
   },
 
   // --- SKILL "TERREMOTO": Earthquake slam ----------------------------------
