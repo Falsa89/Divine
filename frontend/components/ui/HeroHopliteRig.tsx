@@ -47,6 +47,7 @@ import Animated, {
   withRepeat, withSequence, withTiming, withDelay,
   cancelAnimation, Easing,
 } from 'react-native-reanimated';
+import HeroHopliteAffondo from './HeroHopliteAffondo';
 
 const BASE = 1024;
 
@@ -67,6 +68,18 @@ export default function HeroHopliteRig({
   animated = true,
   safeFill = true,
 }: Props) {
+  // ───────────────────────────────────────────────────────────────────────
+  // ATTACK OVERRIDE — frame-based sequence (reference LOCKED)
+  // L'Affondo di Falange è stato approvato come sequenza pittorica di 8
+  // keyframe. Durante state === 'attack' bypassiamo completamente il rig
+  // anatomico e renderizziamo i frame swappati nei timing approvati.
+  // Il rig anatomico resta attivo per tutti gli altri stati (idle, skill,
+  // hit, dead, heal, dodge, stress).
+  // ───────────────────────────────────────────────────────────────────────
+  if (state === 'attack') {
+    return <HeroHopliteAffondo size={size} />;
+  }
+
   const scale = size / BASE;
 
   // =========================================================================

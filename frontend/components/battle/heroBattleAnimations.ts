@@ -189,34 +189,19 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
   name: 'hoplite',
 
   // --- ATTACK: "Affondo di Falange" ---------------------------------------
-  // Motion split (post-fix thrust lineare):
-  //   - INTERNO (HeroHopliteRig): solo rotazioni piccole (±8°) → braccio
-  //     resta quasi orizzontale, la spalla non si stacca MAI dal torso.
-  //   - ESTERNO (qui): body push forward ampliato a ~8% size → il thrust
-  //     visibile è dato dallo spostamento del corpo intero, non dal braccio
-  //     che si abbassa. Questo è anatomicamente ciò che fa un oplita: il
-  //     corpo spinge, la lancia va in linea col bersaglio.
+  // REFERENCE LOCKED: l'attack è ora renderizzato da HeroHopliteAffondo con
+  // gli 8 keyframe approvati (frame_1.png … frame_8.png). Il lunge forward,
+  // la ritrazione e il peak sono TUTTI dentro i frame stessi → il wrapper
+  // esterno NON deve aggiungere translation/scale, altrimenti si avrebbe
+  // doppio movimento e la silhouette drift-erebbe dal riferimento.
   //
-  // Il shift di 8% resta sotto la soglia di drift percepibile perché torna
-  // a 0 nel RITORNO (300ms easeOut), e il size del sprite in battle è
-  // limitato da tankSize ≤ ~150 quindi 8% = max ~12px visivi = shift
-  // disciplinato, non un dash.
-  attack: (h, c) => {
-    const RETR_BACK = Math.round(c.size * 0.025);  // micro step back nel wind-up
-    const THRUST_FWD = Math.round(c.size * 0.08);   // body push forward al thrust
-    h.transX.value = withSequence(
-      withTiming(-c.dir * RETR_BACK,  { duration: 150, easing: Easing.out(Easing.quad) }),
-      withTiming(c.dir * THRUST_FWD,  { duration: 160, easing: Easing.in(Easing.cubic) }),
-      withTiming(c.dir * THRUST_FWD,  { duration: 90 }),   // hold al max
-      withTiming(0,                   { duration: 300, easing: Easing.out(Easing.quad) }),
-    );
-    h.spriteScale.value = withSequence(
-      withTiming(0.98, { duration: 150 }),  // micro crouch
-      withTiming(1.05, { duration: 160 }),  // stretch forward (peso sul colpo)
-      withTiming(1.04, { duration: 90 }),
-      withTiming(1,    { duration: 300 }),
-    );
-    h.bodyRot.value = withTiming(0, { duration: 200 });
+  // Qui teniamo solo micro-aura/flash di supporto (se mai serviranno in
+  // futuro); per ora tutto a 0 → frame-only, fedele alla reference.
+  attack: (h, _c) => {
+    h.transX.value     = withTiming(0, { duration: 80 });
+    h.transY.value     = withTiming(0, { duration: 80 });
+    h.spriteScale.value = withTiming(1, { duration: 80 });
+    h.bodyRot.value    = withTiming(0, { duration: 80 });
   },
 
   // --- SKILL "GUARDIA FERREA": Iron defensive stance — MASS-FIRST pass ----
