@@ -59,12 +59,20 @@ type Props = {
   size: number;
   /** Gate di attivazione della sequenza. Transizione false→true = START. */
   active?: boolean;
+  /**
+   * Chiave univoca per ogni invocazione della skill. Parte UNA sola
+   * volta per ogni valore di playKey. Stessa logica di HeroHopliteAffondo:
+   * il parent incrementa playKey solo alla transizione non-skill → skill,
+   * prevenendo doppi trigger causati da re-render spuri.
+   */
+  playKey?: number;
   onDone?: () => void;
 };
 
-export default function HeroHopliteGuardiaFerrea({ size, active = true, onDone }: Props) {
+export default function HeroHopliteGuardiaFerrea({ size, active = true, playKey = 0, onDone }: Props) {
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastPlayedKeyRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!active) {
@@ -75,6 +83,8 @@ export default function HeroHopliteGuardiaFerrea({ size, active = true, onDone }
       setIndex(0);
       return;
     }
+    if (lastPlayedKeyRef.current === playKey) return;
+    lastPlayedKeyRef.current = playKey;
 
     let cancelled = false;
     let i = 0;
@@ -101,7 +111,7 @@ export default function HeroHopliteGuardiaFerrea({ size, active = true, onDone }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active]);
+  }, [playKey, active]);
 
   // Scale & position: stesso schema del Affondo player → zero salto feet
   const frameScale = (RIG_BODY_H_NORM * size) / FRAME_BODY_H_PX;

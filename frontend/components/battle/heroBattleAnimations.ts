@@ -149,7 +149,10 @@ export const DEFAULT_PROFILE: HeroAnimProfile = {
       withTiming(0.6, { duration: 300 }),
       withTiming(0.15, { duration: 500 }),
     );
-    h.idleY.value = withSequence(
+    // Float up-and-back: usiamo transY (combat motion) invece di idleY
+    // (che non è più in loop). Coerente con la policy "no movimento
+    // generico, solo stati approvati".
+    h.transY.value = withSequence(
       withTiming(-5, { duration: 250 }),
       withTiming(0, { duration: 250 }),
     );

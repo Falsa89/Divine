@@ -80,30 +80,50 @@ type Props = {
    * Se omesso è `true` per retrocompatibilità con i preview isolati.
    */
   active?: boolean;
+  /**
+   * Chiave univoca per ogni invocazione dell'attack.
+   * La sequenza parte UNA sola volta per ogni valore di playKey. Il parent
+   * (HeroHopliteRig) incrementa playKey solo alla transizione
+   * non-attack → attack, prevenendo doppi trigger causati da re-render
+   * con `active: true → true` o microrimbalzi true→false→true.
+   *
+   * Se `playKey` resta costante, nessuna sequenza parte (anche se
+   * `active` diventa true per errore).
+   */
+  playKey?: number;
   /** Callback opzionale a fine sequenza */
   onDone?: () => void;
 };
 
-export default function HeroHopliteAffondo({ size, active = true, onDone }: Props) {
+export default function HeroHopliteAffondo({ size, active = true, playKey = 0, onDone }: Props) {
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Tracciamo l'ultimo playKey davvero eseguito → difesa contro
+  // ri-esecuzione spuria (es. React fast-refresh in dev).
+  const lastPlayedKeyRef = useRef<number | null>(null);
 
   // =========================================================================
-  // SEQUENZA — parte solo su transizione false→true di `active`.
-  // Quando `active` torna false: clear timeout e rimaniamo al frame corrente
-  // (il parent normalmente ci nasconde via opacity, quindi è invisibile).
+  // SEQUENZA — parte SOLO quando playKey cambia E active=true.
+  // Il pattern `playKey` garantisce:
+  //  - UN solo playback per ogni invocazione logica dell'attack (anche se
+  //    `active` oscilla per colpa di re-render spuri).
+  //  - Nessun restart se il parent re-renderizza senza incrementare playKey.
+  //  - Cleanup corretto quando playKey cambia prima che la seq sia finita
+  //    (edge case improbabile: attack re-triggered a metà).
   // =========================================================================
   useEffect(() => {
+    // Se active è false, cleanup e reset a frame 0 (ready for next play)
     if (!active) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
-      // Reset all'entry-frame così la prossima volta che `active` ridiventa
-      // true la sequenza parte pulita dal frame 0.
       setIndex(0);
       return;
     }
+    // Se abbiamo già eseguito questo esatto playKey, NON ripartire.
+    if (lastPlayedKeyRef.current === playKey) return;
+    lastPlayedKeyRef.current = playKey;
 
     let cancelled = false;
     let i = 0;
@@ -132,8 +152,11 @@ export default function HeroHopliteAffondo({ size, active = true, onDone }: Prop
         timeoutRef.current = null;
       }
     };
+    // Deps: playKey è il trigger univoco; active è letto dentro e abilita/
+    // disabilita l'esecuzione. Non mettiamo `onDone` nelle deps per evitare
+    // restart se il parent passa una closure nuova ad ogni render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active]);
+  }, [playKey, active]);
 
   // =========================================================================
   // SCALE + POSITION per allineamento con HeroHopliteRig.

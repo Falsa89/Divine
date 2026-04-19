@@ -72,29 +72,43 @@ export default function HeroHopliteRig({
   // ───────────────────────────────────────────────────────────────────────
   // MOUNT STABILE — no early return, no unmount/mount su switch state.
   // ---------------------------------------------------------------------
-  // Il BUG precedente:
-  //   if (state === 'attack') return <HeroHopliteAffondo />
-  //   if (state === 'skill')  return <HeroHopliteGuardiaFerrea />
-  // ad ogni transizione state distruggeva il componente corrente e
-  // montava il nuovo. Gli asset (12 layer rig + 8 affondo + 6 guardia)
-  // venivano decodati ogni volta → flash/lag percepibile.
-  //
-  // Il FIX:
-  //   Tutti e 3 i render path (rig idle / Affondo / GuardiaFerrea) sono
-  //   montati insieme come overlay assoluti. La visibilità è controllata
-  //   da `opacity + pointerEvents`; i player frame-based ricevono
-  //   `active` in modo che la loro sequenza parta solo quando richiesta.
-  //
-  //   Conseguenze:
-  //    - require() risolti UNA sola volta (al primo mount del rig in battle).
-  //    - Image cache nativa popolata al primo render → decode istantaneo
-  //      per tutti i frame successivi.
-  //    - Shared values del breathing loop NON vengono mai distrutti →
-  //      il respiro non si "resetta" visivamente tra attack e idle.
+  // [see full comment above]
   // ───────────────────────────────────────────────────────────────────────
   const showIdleRig = state !== 'attack' && state !== 'skill';
   const attackActive = state === 'attack';
   const skillActive  = state === 'skill';
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // PLAY KEYS — fix definitivo del "doppio trigger" attack/skill.
+  // ---------------------------------------------------------------------
+  // Il problema precedente: HeroHopliteAffondo/GuardiaFerrea partivano su
+  // useEffect([active]). Se il parent BattleSprite ri-renderizzava con
+  // `state` invariato ma altre props diverse (es. damage float, hp update,
+  // size change per layout), il render produceva `active: true → true`
+  // senza mount/unmount — ma React può comunque re-invocare l'effect
+  // cleanup+setup in certi scenari (StrictMode dev, fast refresh, o
+  // cambi di identità del wrapper View). Risultato: la sequenza dei
+  // frame ripartiva a metà → "l'attack sembra partire due volte".
+  //
+  // FIX: passiamo un `playKey` ai player. playKey incrementa UNA volta
+  // sola, alla TRANSIZIONE logica `non-attack → attack` (o `non-skill →
+  // skill`). I player eseguono la sequenza SOLO se playKey cambia (guard
+  // interno con lastPlayedKeyRef). Così anche se React re-monta/re-inietta
+  // l'effect, la sequenza non parte una seconda volta.
+  // ═══════════════════════════════════════════════════════════════════════
+  const [attackPlayKey, setAttackPlayKey] = React.useState(0);
+  const [skillPlayKey, setSkillPlayKey] = React.useState(0);
+  const prevStateRef = React.useRef<HopliteRigState>(state);
+  React.useEffect(() => {
+    const prev = prevStateRef.current;
+    if (state === 'attack' && prev !== 'attack') {
+      setAttackPlayKey(k => k + 1);
+    }
+    if (state === 'skill' && prev !== 'skill') {
+      setSkillPlayKey(k => k + 1);
+    }
+    prevStateRef.current = state;
+  }, [state]);
 
   const scale = size / BASE;
 
@@ -323,18 +337,20 @@ export default function HeroHopliteRig({
   // Tutti i valori sono in unità di canvas 1024×1024 (poi scalato a `size`).
   // =========================================================================
 
-  // PELVIS: micro-lift del bacino (respiro sollevato). Reference mostra
-  // il torso che sale ~4px → a canvas 1024, sollevamento di ~1.2 unità.
+  // PELVIS: lift del bacino (respiro sollevato). Aumentato da ±1.2u a ±8u
+  // di canvas (a size=140px equivale a ~1.1px reali → leggibile senza
+  // diventare "pomposo"). Resta sobrio e disciplinato, consistent con il
+  // linguaggio del tank.
   const pelvisStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: -1.2 * breath.value },  // ±1.2 unità canvas
+      { translateY: -8 * breath.value },  // ±8 unità canvas
     ],
   }));
 
   // TORSO: espansione toracica (scaleY) + rotazione combat locale.
-  // scaleY ±1.5% → ad altezza torso ~300 unità, espansione visibile di ~4.5 unità.
+  // Aumentato da ±1.5% a ±2.5% → espansione più leggibile a size piccole.
   const torsoStyle = useAnimatedStyle(() => {
-    const s = 1 + 0.015 * breath.value;
+    const s = 1 + 0.025 * breath.value;
     return {
       transform: [
         { rotate: `${torsoRot.value}deg` },
@@ -344,34 +360,35 @@ export default function HeroHopliteRig({
   });
 
   // SHIELD ARM — micro oscillazione che segue la spalla (shieldPhase sfasato).
-  // ±0.4° di rotazione → tip dello scudo oscilla ~2-3 unità, quasi impercettibile.
+  // Aumentata da ±0.4° a ±0.9° per leggibilità.
   const shieldStyle = useAnimatedStyle(() => ({
     transform: [
-      { rotate: `${0.4 * shieldPhase.value + shieldRot.value}deg` },
+      { rotate: `${0.9 * shieldPhase.value + shieldRot.value}deg` },
     ],
   }));
 
-  // SPEAR ARM — QUASI FERMO durante idle (disciplina tank). Micro oscillazione
-  // ~0.15° per dare vita senza "dipingere" movimento sulla lancia.
+  // SPEAR ARM — QUASI FERMO durante idle (disciplina tank). Aumentato
+  // leggermente da ±0.15° a ±0.35° — ancora minimo, ma visibile che la
+  // lancia "vibra" col respiro invece di essere congelata.
   const spearStyle = useAnimatedStyle(() => ({
     transform: [
-      { rotate: `${0.15 * breath.value + spearRot.value}deg` },
+      { rotate: `${0.35 * breath.value + spearRot.value}deg` },
     ],
   }));
 
-  // HEAD GROUP — micro tilt (~0.8°) che segue il respiro. Reference mostra la
-  // testa che si alza leggermente al PEAK ("chin up attento").
+  // HEAD GROUP — micro tilt. Aumentato da ±0.8° a ±1.5° → "chin up attento"
+  // più leggibile alla scala di battle.
   const headStyle = useAnimatedStyle(() => ({
     transform: [
-      { rotate: `${0.8 * hairPhase.value + headRot.value}deg` },
+      { rotate: `${1.5 * hairPhase.value + headRot.value}deg` },
     ],
   }));
 
-  // SKIRT — micro sway (follow-through). Reference mostra gonna essenzialmente
-  // ferma → valore molto basso (±0.5 unità di translate).
+  // SKIRT — micro sway (follow-through). Aumentato da ±0.5u a ±2.5u
+  // translate → accenno visibile di movimento del panno.
   const skirtStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: 0.5 * hairPhase.value },
+      { translateX: 2.5 * hairPhase.value },
       { rotate: `${skirtRot.value}deg` },
     ],
   }));
@@ -490,7 +507,7 @@ export default function HeroHopliteRig({
           },
         ]}
       >
-        <HeroHopliteAffondo size={size} active={attackActive} />
+        <HeroHopliteAffondo size={size} active={attackActive} playKey={attackPlayKey} />
       </View>
 
       {/* ═══════════════════════════════════════════════════════════════════
@@ -506,7 +523,7 @@ export default function HeroHopliteRig({
           },
         ]}
       >
-        <HeroHopliteGuardiaFerrea size={size} active={skillActive} />
+        <HeroHopliteGuardiaFerrea size={size} active={skillActive} playKey={skillPlayKey} />
       </View>
     </View>
   );

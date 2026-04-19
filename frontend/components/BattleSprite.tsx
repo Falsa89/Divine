@@ -157,20 +157,31 @@ export default function BattleSprite({
   ]);
 
   // --- Idle breathing ---------------------------------------------------------
+  // ═════════════════════════════════════════════════════════════════════════
+  // RIMOSSO IL BREATHING GENERICO GLOBALE.
+  // ---------------------------------------------------------------------------
+  // Prima c'era un withRepeat su idleY (±3px), auraSc e auraOp applicato a
+  // TUTTI gli eroi al mount. Questo creava:
+  //   (a) un "bob verticale" generico su ogni personaggio,
+  //   (b) un pulse aura costante sotto ogni sprite,
+  //   (c) una SOVRAPPOSIZIONE con il breathing specifico del rig Hoplite →
+  //       il rig-based idle veniva mascherato e sembrava "il vecchio idle".
+  //
+  // Regola corretta (dall'utente):
+  //   "In battle devono animarsi solo gli stati approvati (idle/attack/skill/
+  //    hit/death). Se un eroe non ha un'animazione specifica, resta statico."
+  //
+  // Quindi qui idleY/auraSc/auraOp vengono solo INIZIALIZZATI a valori neutri
+  // e mai messi in loop. Gli eroi che hanno un rig/profilo dedicato (Hoplite)
+  // avranno il loro breathing INTERNO al rig. Gli altri restano statici,
+  // coerenti con la policy.
+  // ═════════════════════════════════════════════════════════════════════════
   useEffect(() => {
     if (state === 'dead') return;
-    idleY.value = withRepeat(withSequence(
-      withTiming(-3, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
-      withTiming(3, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
-    ), -1, true);
-    auraSc.value = withRepeat(withSequence(
-      withTiming(1.12, { duration: 1500 }),
-      withTiming(0.95, { duration: 1500 }),
-    ), -1, true);
-    auraOp.value = withRepeat(withSequence(
-      withTiming(0.4, { duration: 1200 }),
-      withTiming(0.1, { duration: 1200 }),
-    ), -1, true);
+    idleY.value = 0;
+    auraSc.value = 1;
+    auraOp.value = 0; // nessun glow di base — si attiva solo durante skill
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state !== 'dead']);
 
   // --- State animations -------------------------------------------------------
@@ -178,6 +189,18 @@ export default function BattleSprite({
   // Terremoto, kneel death, ecc.) e applica withSequence sui shared values.
   // BattleSprite resta "dumb" rispetto all'identità dell'eroe → pattern
   // pulito e riutilizzabile per i prossimi eroi (basta aggiungere un profilo).
+  //
+  // ⚠ DEPS FIX (no double-trigger):
+  //   Prima le deps erano [state, isCrit, size, animProfile] → qualunque
+  //   ri-render del parent che cambiava `isCrit` (es. damage float su
+  //   targets) o `size` (layout responsive) faceva ri-scattare questo
+  //   effect DURANTE una singola action → Hoplite attack/skill potevano
+  //   "ripartire a metà", visivamente sembrava doppio trigger.
+  //
+  //   Ora le deps sono SOLO [state]. La sequenza parte una volta per
+  //   cambio-di-stato, esattamente ciò che ci serve. isCrit è letto al
+  //   momento dell'invocazione via closure → il valore al momento del
+  //   trigger è quello che conta.
   useEffect(() => {
     const dir = isEnemy ? -1 : 1;
     // Cancella animazioni pendenti per prevenire accumulo offset → no drift.
@@ -201,7 +224,7 @@ export default function BattleSprite({
       case 'dead':     animProfile.death(handles, ctx); break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, isCrit, size, animProfile]);
+  }, [state]);
 
   // --- Damage / Heal float triggers ------------------------------------------
   useEffect(() => {
