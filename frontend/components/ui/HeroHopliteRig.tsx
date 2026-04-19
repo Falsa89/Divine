@@ -1,30 +1,44 @@
 /**
  * HeroHopliteRig
  * ---------------
- * Rig a layer del Greek Hoplite unificato per idle + attack (Affondo di Falange).
- * Usa gli stessi 7 layer PNG di HeroHopliteIdle con i medesimi pivot anatomici.
+ * Rig anatomico parent-child del Greek Hoplite.
+ * Usa i 7 layer PNG originali + 5 helper rig_safe (underpaint).
  *
- * FILOSOFIA
- *  - Gambe sempre FISSE (disciplina tank, silhouette stabile).
- *  - Torso, braccia e testa si muovono in modo controllato con pivot anatomici.
- *  - Idle breathing resta SEMPRE attivo in background; gli effetti combat
- *    sono DELTA additivi applicati on top → la respirazione non si spezza.
- *  - Niente deformazione dell'immagine intera — nessuna scala del sprite
- *    complessivo, solo transform per-layer.
- *  - Niente drift esterno: tutto il movimento è locale al rig.
+ * GERARCHIA (parent → child, composizione delle trasformazioni):
+ *
+ *   canvas (1024×1024, scale globale)
+ *   ├── legs                                [foundation, static]
+ *   └── pelvis  (breath translateY)
+ *       ├── hip_fill                        [helper, static bridge]
+ *       ├── skirt  (local sway, skirtRot@660,690)   [sibling del torso]
+ *       └── torso  (torsoRot@640,540, breath scaleY)
+ *           ├── hair            (headStyle, z-back, ereditata da torso)
+ *           ├── torso image
+ *           ├── under_arm_spear               [helper, child torso]
+ *           ├── shoulder_shield_fill          [helper, child torso]
+ *           ├── shield_arm  (shieldRot@700,440)
+ *           ├── shoulder_spear_fill           [helper, child torso]
+ *           ├── spear_arm   (spearRot@570,390)
+ *           └── head_group  (headRot@620,280)
+ *               ├── neck_fill                 [helper]
+ *               └── head_helmet
+ *
+ * PROPRIETÀ GARANTITE
+ *  - Se torso ruota 5°, TUTTE le braccia + testa ruotano insieme al torso
+ *    (trasformazione ereditata), più la loro rotazione locale small-accent.
+ *  - Se shield_arm ruota −6°, la spalla dx resta aderente al torso perché
+ *    il pivot è applicato NEL frame già trasformato del torso.
+ *  - Skirt segue il bacino (pelvis), NON il torso → stabilità tank.
+ *  - Legs sono foundation rigida, mai animate.
+ *  - Helper fills sono child del loro parent anatomico (torso/head) →
+ *    si muovono CON la parte giusta, coprono le giunture in modo coerente.
  *
  * SISTEMA DI COORDINATE
- *  - canvas nativo 1024x1024
- *  - Hoplite nativamente guarda a SINISTRA (combat_base.png)
- *  - quindi "forward" (verso il nemico) in frame nativo = -X
- *  - il wrapper esterno di BattleSprite applica scaleX=-1 per team player
- *    → flip visivo: quando usato nel campo, il thrust va verso destra
- *
- * ANIMAZIONE ATTACK — "AFFONDO DI FALANGE" (~700ms totali)
- *   Fase 1: RITRAZIONE    (150ms) — spear_arm +X (indietro), rot CCW, torso rot back
- *   Fase 2: AFFONDO       (160ms) — spear_arm thrust -X forward, torso rot forward
- *   Fase 3: IMPATTO       (90ms)  — hold estremo posizione thrust
- *   Fase 4: RITORNO GUARDIA (300ms) — tutto a 0 con easing out
+ *  - canvas nativo 1024×1024
+ *  - Hoplite nativamente guarda a SINISTRA
+ *  - Ogni Animated.View è 1024×1024 absoluteFill → transformOrigin in
+ *    coordinate canvas è identico a ogni livello di nesting.
+ *  - BattleSprite esterno applica scaleX=-1 per team player.
  */
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
@@ -35,41 +49,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 const BASE = 1024;
-
-/**
- * LAYER STACK — drawn bottom → top.
- *
- * Layer tipo `rig/*.png` = artwork originale del character.
- * Layer tipo `rig_safe/*.png` = helper animation-safe (flag helper=true):
- *   - NON ruotano con le animazioni (sono ancorati al corpo)
- *   - stanno DIETRO al limb che devono "supportare"
- *   - in idle/neutral sono coperti dal limb → invisibili
- *   - quando il limb ruota, riempiono il vuoto dietro la giuntura
- *
- * Ordine motivato:
- *   hair → legs → skirt → hip_fill → torso → under_arm_spear →
- *   shoulder_shield_fill → shield_arm → shoulder_spear_fill →
- *   spear_arm → neck_fill → head_helmet
- */
-const LAYERS = [
-  { key: 'hair',                 src: require('../../assets/heroes/greek_hoplite/rig/hair.png'),                      pivot: { x: 625, y: 235 } },
-  { key: 'legs',                 src: require('../../assets/heroes/greek_hoplite/rig/legs.png'),                      pivot: { x: 690, y: 800 } },
-  { key: 'skirt',                src: require('../../assets/heroes/greek_hoplite/rig/skirt.png'),                     pivot: { x: 660, y: 690 } },
-  // safe helper: bridge vita ↔ gonna
-  { key: 'hip_fill',             src: require('../../assets/heroes/greek_hoplite/rig_safe/hip_fill.png'),             pivot: { x: 650, y: 565 }, helper: true },
-  { key: 'torso',                src: require('../../assets/heroes/greek_hoplite/rig/torso.png'),                     pivot: { x: 640, y: 540 } },
-  // safe helper: riempimento ascella / pettorale spear
-  { key: 'under_arm_spear',      src: require('../../assets/heroes/greek_hoplite/rig_safe/under_arm_spear.png'),      pivot: { x: 605, y: 460 }, helper: true },
-  // safe helper: disco dietro spalla dx (shield)
-  { key: 'shoulder_shield_fill', src: require('../../assets/heroes/greek_hoplite/rig_safe/shoulder_shield_fill.png'), pivot: { x: 690, y: 450 }, helper: true },
-  { key: 'shield_arm',           src: require('../../assets/heroes/greek_hoplite/rig/shield_arm.png'),                pivot: { x: 700, y: 440 } },
-  // safe helper: disco dietro spalla sx (spear)
-  { key: 'shoulder_spear_fill',  src: require('../../assets/heroes/greek_hoplite/rig_safe/shoulder_spear_fill.png'),  pivot: { x: 590, y: 420 }, helper: true },
-  { key: 'spear_arm',            src: require('../../assets/heroes/greek_hoplite/rig/spear_arm.png'),                 pivot: { x: 570, y: 390 } },
-  // safe helper: disco base collo sotto head
-  { key: 'neck_fill',            src: require('../../assets/heroes/greek_hoplite/rig_safe/neck_fill.png'),            pivot: { x: 620, y: 280 }, helper: true },
-  { key: 'head_helmet',          src: require('../../assets/heroes/greek_hoplite/rig/head_helmet.png'),               pivot: { x: 610, y: 245 } },
-];
 
 export type HopliteRigState = 'idle' | 'attack' | 'skill' | 'hit' | 'dead' | 'heal' | 'dodge' | 'stress';
 
@@ -292,97 +271,156 @@ export default function HeroHopliteRig({
   }, [state]);
 
   // =========================================================================
-  // STYLES PER-LAYER — idle baseline + combat delta (SOLO ROTAZIONI)
-  // Gli idle translate (hair sway, shield phase) sono mantenuti molto piccoli
-  // (±1.5px) perché fanno parte del respiro: impercettibili come detach.
-  // I combat deltas sono TUTTI rotazioni sui pivot anatomici → no detach.
+  // STYLES PER-LAYER — parent-child chain.
+  //
+  // Gerarchia di trasformazioni ereditate:
+  //   pelvis (breath)
+  //     └─ skirt   (local sway + skirtRot)
+  //     └─ torso   (torsoRot + breath scaleY)
+  //          ├─ hair       (headStyle, z-back)
+  //          ├─ shield_arm (shieldRot, child-of-torso)
+  //          ├─ spear_arm  (spearRot,  child-of-torso)
+  //          └─ head_group (headRot, z-front)
+  //
+  // Principio: ogni "accent" locale è PICCOLO perché la massa base è già
+  // mossa dal parent. In passato i translate idle erano duplicati in ogni
+  // layer (hair/spear/shield) perché non c'era gerarchia → ora si ereditano.
   // =========================================================================
 
-  // TORSO: scaleY respiro + rotazione combat minima (pivot bacino)
+  // PELVIS: respiro (traslazione molto piccola del bacino)
+  const pelvisStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: -0.6 * breath.value },
+    ],
+  }));
+
+  // TORSO: respiro scaleY + rotazione combat (pivot bacino 640,540).
+  // Le braccia e la testa sono child e ereditano questa rotazione.
   const torsoStyle = useAnimatedStyle(() => {
-    const s = 1 + 0.015 * breath.value;
+    const s = 1 + 0.012 * breath.value;  // leggera espansione toracica
     return {
       transform: [
-        { translateY: -0.8 * breath.value },
         { rotate: `${torsoRot.value}deg` },
         { scaleY: s },
       ],
     };
   });
 
-  // HEAD GROUP (head_helmet + hair): idle sway + tilt combat
-  const headGroupStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: 1.5 * hairPhase.value },    // idle sway — ±1.5px invisibile
-      { translateY: -1.6 * breath.value },
-      { rotate: `${0.6 * hairPhase.value + headRot.value}deg` },
-    ],
-  }));
-
-  // SHIELD ARM: idle sway + rotazione brace alla spalla dx
+  // SHIELD ARM — accento LOCALE alla spalla dx, applicato DOPO il transform
+  // del torso. Se torso ruota 5°, shield ruota 5° + shieldRot locale.
   const shieldStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: 0.6 * shieldPhase.value },  // idle sway ±0.6px
-      { translateY: 1.0 * shieldPhase.value },
-      { rotate: `${0.5 * shieldPhase.value + shieldRot.value}deg` },
+      { rotate: `${0.3 * shieldPhase.value + shieldRot.value}deg` },
     ],
   }));
 
-  // SPEAR ARM: protagonista — SOLO ROTAZIONE alla spalla sx (pivot 570, 390).
-  // Nessun translate → la spalla del layer resta esattamente sul pivot
-  // anatomico (coincidente con la spalla del torso). Il braccio ruota
-  // solidale, la connessione alla spalla è preservata in ogni frame.
+  // SPEAR ARM — accento LOCALE alla spalla sx, idem.
   const spearStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: -0.4 * breath.value },  // solo respiro (micro)
       { rotate: `${spearRot.value}deg` },
     ],
   }));
 
-  // SKIRT: idle sway + piccola rotazione follow-through
+  // HEAD GROUP — ruota al base collo (620, 280). Hair sway idle + headRot.
+  // Applicato sia all'hair (z-back) sia all'head_helmet group (z-front).
+  const headStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotate: `${0.5 * hairPhase.value + headRot.value}deg` },
+    ],
+  }));
+
+  // SKIRT: sibling del torso, segue il BACINO (non il torso).
+  // Idle sway micro + rotazione combat locale.
   const skirtStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: 0.6 * hairPhase.value },   // idle sway
-      { translateY: -0.3 * breath.value },
+      { translateX: 0.4 * hairPhase.value },
       { rotate: `${skirtRot.value}deg` },
     ],
   }));
 
-  // LEGS: FISSE (disciplina tank)
-  // HELPER layers (hip_fill, under_arm_spear, shoulder_*_fill, neck_fill):
-  // completamente statici → nessun animStyle, nessuna rotazione. Sono
-  // "ancorati al corpo" per coprire i gap delle giunture in animazione.
-  const styleMap: Record<string, any> = {
-    hair:        headGroupStyle,
-    head_helmet: headGroupStyle,
-    torso:       torsoStyle,
-    spear_arm:   spearStyle,
-    shield_arm:  shieldStyle,
-    skirt:       skirtStyle,
-    legs:        null,
-    // helpers: null (statici)
-  };
+  // ─── Utility: Animated layer wrapper con pivot canvas ─────────────────────
+  const pivot = (x: number, y: number) =>
+    ({ transformOrigin: `${x}px ${y}px` as any });
 
-  const renderLayers = LAYERS.filter(l => safeFill || !(l as any).helper);
+  // Static image layer (no transform). Used for legs and for helper fills
+  // whose transform is inherited from the parent wrapper.
+  const StaticImg: React.FC<{ src: any }> = ({ src }) => (
+    <View style={styles.layer}>
+      <Image source={src} style={styles.layerImg} resizeMode="contain" />
+    </View>
+  );
+
+  // ─── Require map (comodità) ────────────────────────────────────────────────
+  const A = {
+    hair:                 require('../../assets/heroes/greek_hoplite/rig/hair.png'),
+    legs:                 require('../../assets/heroes/greek_hoplite/rig/legs.png'),
+    skirt:                require('../../assets/heroes/greek_hoplite/rig/skirt.png'),
+    torso:                require('../../assets/heroes/greek_hoplite/rig/torso.png'),
+    shield_arm:           require('../../assets/heroes/greek_hoplite/rig/shield_arm.png'),
+    spear_arm:            require('../../assets/heroes/greek_hoplite/rig/spear_arm.png'),
+    head_helmet:          require('../../assets/heroes/greek_hoplite/rig/head_helmet.png'),
+    hip_fill:             require('../../assets/heroes/greek_hoplite/rig_safe/hip_fill.png'),
+    under_arm_spear:      require('../../assets/heroes/greek_hoplite/rig_safe/under_arm_spear.png'),
+    shoulder_shield_fill: require('../../assets/heroes/greek_hoplite/rig_safe/shoulder_shield_fill.png'),
+    shoulder_spear_fill:  require('../../assets/heroes/greek_hoplite/rig_safe/shoulder_spear_fill.png'),
+    neck_fill:            require('../../assets/heroes/greek_hoplite/rig_safe/neck_fill.png'),
+  };
 
   return (
     <View style={[styles.root, { width: size, height: size }]}>
       <View style={{ width: BASE, height: BASE, transform: [{ scale }], transformOrigin: '0 0' as any }}>
-        {renderLayers.map(layer => {
-          const animStyle = styleMap[layer.key];
-          const pivotStyle = { transformOrigin: `${layer.pivot.x}px ${layer.pivot.y}px` as any };
-          const content = (
-            <Image source={layer.src} style={styles.layerImg} resizeMode="contain" />
-          );
-          if (!animStyle) {
-            return (<View key={layer.key} style={styles.layer}>{content}</View>);
-          }
-          return (
-            <Animated.View key={layer.key} style={[styles.layer, pivotStyle, animStyle]}>
-              {content}
+
+        {/* ─── FOUNDATION: gambe fisse ─────────────────────────────────────── */}
+        <StaticImg src={A.legs} />
+
+        {/* ─── PELVIS group: breath, root dell'upper body ─────────────────── */}
+        <Animated.View style={[styles.layer, pelvisStyle]}>
+
+          {/* hip_fill: bridge vita (sibling di skirt/torso, static) */}
+          {safeFill && <StaticImg src={A.hip_fill} />}
+
+          {/* Skirt: sibling del torso (segue il bacino, NON il torso) */}
+          <Animated.View style={[styles.layer, pivot(660, 690), skirtStyle]}>
+            <StaticImg src={A.skirt} />
+          </Animated.View>
+
+          {/* Torso: parent di braccia + testa */}
+          <Animated.View style={[styles.layer, pivot(640, 540), torsoStyle]}>
+
+            {/* Hair al back del torso (z-lowest dentro torso), rotates con head */}
+            <Animated.View style={[styles.layer, pivot(620, 280), headStyle]}>
+              <StaticImg src={A.hair} />
             </Animated.View>
-          );
-        })}
+
+            {/* Torso image */}
+            <StaticImg src={A.torso} />
+
+            {/* Helper fills (child del torso: si muovono CON il torso) */}
+            {safeFill && <StaticImg src={A.under_arm_spear} />}
+            {safeFill && <StaticImg src={A.shoulder_shield_fill} />}
+
+            {/* Shield arm: ruota alla spalla dx, dentro il frame torso */}
+            <Animated.View style={[styles.layer, pivot(700, 440), shieldStyle]}>
+              <StaticImg src={A.shield_arm} />
+            </Animated.View>
+
+            {/* Fill dietro spalla sx (sotto spear_arm ma sopra torso) */}
+            {safeFill && <StaticImg src={A.shoulder_spear_fill} />}
+
+            {/* Spear arm: ruota alla spalla sx, dentro il frame torso */}
+            <Animated.View style={[styles.layer, pivot(570, 390), spearStyle]}>
+              <StaticImg src={A.spear_arm} />
+            </Animated.View>
+
+            {/* Head group: ruota al base collo, dentro il frame torso */}
+            <Animated.View style={[styles.layer, pivot(620, 280), headStyle]}>
+              {safeFill && <StaticImg src={A.neck_fill} />}
+              <StaticImg src={A.head_helmet} />
+            </Animated.View>
+
+          </Animated.View>
+        </Animated.View>
+
       </View>
     </View>
   );
