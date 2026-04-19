@@ -1,60 +1,57 @@
 /**
- * HeroHopliteIdleLoop — IDLE FRAME-BASED (HARD SWAP + SCALE ALIGNED)
- * ===================================================================
+ * HeroHopliteIdleLoop — IDLE FRAME-BASED (HARD SWAP, REFERENCE v2)
+ * ==================================================================
  *
- * Usa i 5 frame idle DEDICATI (idle_01..idle_05.png). Loop a 5 fasi con
- * SWAP FRAME NETTI — NESSUN CROSSFADE DI OPACITY.
+ * Source of truth: nuova idle sheet approvata dall'utente (v2, 5 pose).
+ *   1. IDLE BASE           — spear dietro, guardia neutra
+ *   2. BREATH IN START     — spear scende laterale
+ *   3. GUARD TIGHT PEAK    — spear forward, stance compatta (key peak)
+ *   4. SETTLE OPEN         — spear torna laterale
+ *   5. LOOP RETURN         — ritorno a IDLE BASE (loop seamless)
  *
- * ANCHOR GEOMETRY (misurata dai PNG reali, non assunta):
- *   canvas: 520×400
- *   bbox corpo: (x:140..379, y:59..382)   → body_h = 323px
- *   feet Y:  382  (era 390 wrongly)
- *   body_h:  323  (era 341 wrongly → frame era ~5.3% più piccolo)
+ * TIMING (richiesto utente — frame 3 più corto per evitare sensazione attack-like):
+ *   Frame 1 → 520ms   (stabile)
+ *   Frame 2 → 360ms   (transizione)
+ *   Frame 3 → 260ms   (peak breve, evita "attack-like")
+ *   Frame 4 → 360ms   (transizione)
+ *   Frame 5 → 520ms   (stabile, pre-loop)
+ *   Totale ciclo = 2020ms
  *
- * Questi due valori sono la VERA ragione per cui l'idle risultava
- * visibilmente più piccolo dell'Affondo (che ha body_h=341 reali) e
- * leggermente più in basso.
+ * RENDERING:
+ *  - Un solo <Image> renderizzato alla volta → ZERO ghosting, ZERO alone.
+ *  - Swap frame netti (setTimeout + state swap), NO opacity crossfade.
+ *  - Nessun translateY / scaleY / bob wrapper.
+ *  - scaleX: -1 per facing coerente con Affondo/GuardiaFerrea.
  *
- * LEGGIBILITÀ:
- *  - Timing non-uniforme (emphasis su breath peak):
- *      #1 IDLE BASE     480ms   (baseline, pausa respiro)
- *      #2 BREATH IN     360ms   (transizione fluida)
- *      #3 BREATH PEAK   620ms   (KEY — posa caratteristica tenuta più a lungo)
- *      #4 SETTLE        360ms   (ritorno)
- *      #5 LOOP RETURN   480ms   (pre-loop)
- *    Total cycle: 2300ms (era 3000ms → più vivo).
- *  - Un solo <Image> renderizzato → zero ghosting, zero alone.
- *
- * Canvas/scale identici a Affondo/GuardiaFerrea → ZERO scatto quando
- * BattleSprite transiziona tra idle ↔ attack ↔ skill.
+ * GEOMETRIA (allineata ad Affondo/GuardiaFerrea):
+ *   Canvas 520×400, feet anchor (260, 390), body_h reale = 341px.
+ *   → stessa presenza scenica, zero scatto su transizioni idle↔attack↔skill.
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 
-const FRAMES = HOPLITE_IDLE_ASSETS;    // 5 frame idle dedicati
+const FRAMES = HOPLITE_IDLE_ASSETS;    // 5 frame idle (sheet v2)
 
-// Durate per-frame (ms) — non uniformi per enfatizzare breath peak
+// Durate per-frame (ms) — da richiesta utente Msg 510
 const FRAME_DURATIONS_MS = [
-  480,  // #1 IDLE BASE
+  520,  // #1 IDLE BASE
   360,  // #2 BREATH IN START
-  620,  // #3 BREATH PEAK (key anchor)
-  360,  // #4 SETTLE
-  480,  // #5 LOOP RETURN
+  260,  // #3 GUARD TIGHT PEAK  (più corto: evita sensazione attack-like)
+  360,  // #4 SETTLE OPEN
+  520,  // #5 LOOP RETURN
 ];
 
-// Canvas nativo dei frame (520×400, feet baseline comune a tutta la suite)
+// Canvas nativo dei frame (520×400, feet baseline comune alla suite)
 const FRAME_W = 520;
 const FRAME_H = 400;
-// Feet Y REALE dei nuovi PNG idle rigenerati (allineato ad Affondo: 390)
 const FEET_CX_IN_FRAME = 260;
 const FEET_CY_IN_FRAME = 390;
 
 // Allineamento feet-to-ground (stesso schema di Affondo/GuardiaFerrea)
 const RIG_FEET_Y_NORM = 800 / 1024;
 const RIG_BODY_H_NORM = 0.683;
-// Body height REALE dei nuovi PNG idle rigenerati: 341 (identica ad Affondo
-// → zero differenza di scala tra idle/attack/skill).
+// Body height REALE dei PNG v2 = 341px (esattamente come Affondo)
 const FRAME_BODY_H_PX = 341;
 
 type Props = {
