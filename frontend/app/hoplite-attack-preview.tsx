@@ -25,11 +25,15 @@ import {
 } from '../components/battle/heroBattleAnimations';
 
 export default function HoplitePreview() {
-  const params = useLocalSearchParams<{ state?: string; size?: string; facing?: string }>();
+  const params = useLocalSearchParams<{
+    state?: string; size?: string; facing?: string; safe?: string;
+  }>();
   const forcedState = (params.state as HopliteRigState) || null;
   const size = parseInt(params.size as string, 10) || 400;
   const facing = (params.facing as string) || 'right';
   const facingScaleX = facing === 'right' ? -1 : 1;
+  // safe defaults to true; ?safe=false disables the safe helpers for A/B.
+  const safeFill = params.safe !== 'false';
 
   const [state, setState] = useState<HopliteRigState>(forcedState || 'idle');
 
@@ -134,7 +138,7 @@ export default function HoplitePreview() {
           {/* Body wrapper — applica transX/transY/scale come BattleSprite */}
           <Animated.View style={[styles.body, { width: size, height: size }, bodyStyle]}>
             <View style={{ transform: [{ scaleX: facingScaleX }] }}>
-              <HeroHopliteRig size={size} state={state} />
+              <HeroHopliteRig size={size} state={state} safeFill={safeFill} />
             </View>
             {/* Hit flash overlay — sovrapposto al rig, come in BattleSprite */}
             <Animated.View
@@ -144,7 +148,9 @@ export default function HoplitePreview() {
           </Animated.View>
         </View>
       </View>
-      <Text style={styles.label}>state: {state} · size: {size}</Text>
+      <Text style={styles.label}>
+        state: {state} · size: {size} · safe: {safeFill ? 'ON' : 'OFF'}
+      </Text>
       <View style={styles.btns}>
         <Pressable style={styles.btn} onPress={() => trigger('idle')}>
           <Text style={styles.btnTxt}>IDLE</Text>
@@ -154,6 +160,9 @@ export default function HoplitePreview() {
         </Pressable>
         <Pressable style={[styles.btn, styles.btnBlue]} onPress={() => trigger('skill')}>
           <Text style={styles.btnTxt}>GUARDIA FERREA</Text>
+        </Pressable>
+        <Pressable style={[styles.btn, styles.btnViolet]} onPress={() => trigger('stress' as HopliteRigState)}>
+          <Text style={styles.btnTxt}>STRESS</Text>
         </Pressable>
       </View>
     </View>
@@ -207,5 +216,6 @@ const styles = StyleSheet.create({
   },
   btnRed: { backgroundColor: '#FF4444' },
   btnBlue: { backgroundColor: '#3b82c7' },
+  btnViolet: { backgroundColor: '#8844CC' },
   btnTxt: { color: '#fff', fontWeight: '900', fontSize: 13, letterSpacing: 1 },
 });

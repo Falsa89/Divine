@@ -36,26 +36,58 @@ import Animated, {
 
 const BASE = 1024;
 
+/**
+ * LAYER STACK — drawn bottom → top.
+ *
+ * Layer tipo `rig/*.png` = artwork originale del character.
+ * Layer tipo `rig_safe/*.png` = helper animation-safe (flag helper=true):
+ *   - NON ruotano con le animazioni (sono ancorati al corpo)
+ *   - stanno DIETRO al limb che devono "supportare"
+ *   - in idle/neutral sono coperti dal limb → invisibili
+ *   - quando il limb ruota, riempiono il vuoto dietro la giuntura
+ *
+ * Ordine motivato:
+ *   hair → legs → skirt → hip_fill → torso → under_arm_spear →
+ *   shoulder_shield_fill → shield_arm → shoulder_spear_fill →
+ *   spear_arm → neck_fill → head_helmet
+ */
 const LAYERS = [
-  { key: 'hair',        src: require('../../assets/heroes/greek_hoplite/rig/hair.png'),        pivot: { x: 625, y: 235 } },
-  { key: 'legs',        src: require('../../assets/heroes/greek_hoplite/rig/legs.png'),        pivot: { x: 690, y: 800 } },
-  { key: 'skirt',       src: require('../../assets/heroes/greek_hoplite/rig/skirt.png'),       pivot: { x: 660, y: 690 } },
-  { key: 'torso',       src: require('../../assets/heroes/greek_hoplite/rig/torso.png'),       pivot: { x: 640, y: 540 } }, // bacino
-  { key: 'shield_arm',  src: require('../../assets/heroes/greek_hoplite/rig/shield_arm.png'),  pivot: { x: 700, y: 440 } }, // spalla dx
-  { key: 'spear_arm',   src: require('../../assets/heroes/greek_hoplite/rig/spear_arm.png'),   pivot: { x: 570, y: 390 } }, // spalla sx
-  { key: 'head_helmet', src: require('../../assets/heroes/greek_hoplite/rig/head_helmet.png'), pivot: { x: 610, y: 245 } }, // base collo
+  { key: 'hair',                 src: require('../../assets/heroes/greek_hoplite/rig/hair.png'),                      pivot: { x: 625, y: 235 } },
+  { key: 'legs',                 src: require('../../assets/heroes/greek_hoplite/rig/legs.png'),                      pivot: { x: 690, y: 800 } },
+  { key: 'skirt',                src: require('../../assets/heroes/greek_hoplite/rig/skirt.png'),                     pivot: { x: 660, y: 690 } },
+  // safe helper: bridge vita ↔ gonna
+  { key: 'hip_fill',             src: require('../../assets/heroes/greek_hoplite/rig_safe/hip_fill.png'),             pivot: { x: 650, y: 565 }, helper: true },
+  { key: 'torso',                src: require('../../assets/heroes/greek_hoplite/rig/torso.png'),                     pivot: { x: 640, y: 540 } },
+  // safe helper: riempimento ascella / pettorale spear
+  { key: 'under_arm_spear',      src: require('../../assets/heroes/greek_hoplite/rig_safe/under_arm_spear.png'),      pivot: { x: 605, y: 460 }, helper: true },
+  // safe helper: disco dietro spalla dx (shield)
+  { key: 'shoulder_shield_fill', src: require('../../assets/heroes/greek_hoplite/rig_safe/shoulder_shield_fill.png'), pivot: { x: 690, y: 450 }, helper: true },
+  { key: 'shield_arm',           src: require('../../assets/heroes/greek_hoplite/rig/shield_arm.png'),                pivot: { x: 700, y: 440 } },
+  // safe helper: disco dietro spalla sx (spear)
+  { key: 'shoulder_spear_fill',  src: require('../../assets/heroes/greek_hoplite/rig_safe/shoulder_spear_fill.png'),  pivot: { x: 590, y: 420 }, helper: true },
+  { key: 'spear_arm',            src: require('../../assets/heroes/greek_hoplite/rig/spear_arm.png'),                 pivot: { x: 570, y: 390 } },
+  // safe helper: disco base collo sotto head
+  { key: 'neck_fill',            src: require('../../assets/heroes/greek_hoplite/rig_safe/neck_fill.png'),            pivot: { x: 620, y: 280 }, helper: true },
+  { key: 'head_helmet',          src: require('../../assets/heroes/greek_hoplite/rig/head_helmet.png'),               pivot: { x: 610, y: 245 } },
 ];
 
-export type HopliteRigState = 'idle' | 'attack' | 'skill' | 'hit' | 'dead' | 'heal' | 'dodge';
+export type HopliteRigState = 'idle' | 'attack' | 'skill' | 'hit' | 'dead' | 'heal' | 'dodge' | 'stress';
 
 type Props = {
   size: number;
   state?: HopliteRigState;
   /** Disabilita il breathing idle (es. morte). Default true. */
   animated?: boolean;
+  /** Se false, NON renderizza gli helper safe (per confronto before/after). Default true. */
+  safeFill?: boolean;
 };
 
-export default function HeroHopliteRig({ size, state = 'idle', animated = true }: Props) {
+export default function HeroHopliteRig({
+  size,
+  state = 'idle',
+  animated = true,
+  safeFill = true,
+}: Props) {
   const scale = size / BASE;
 
   // =========================================================================
@@ -227,15 +259,35 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
 
       // SKIRT — nulla, peso al suolo è già gestito dal sink globale
       skirtRot.value = withTiming(0, { duration: ANC });
+    } else if (state === 'stress') {
+      // =====================================================================
+      // STRESS POSE — solo per validazione visiva del rig pack animation-safe.
+      // Applica rotazioni DELIBERATAMENTE grandi su tutti i layer mobili per
+      // esporre potenziali gap delle giunture. Se i fill safe funzionano,
+      // anche con questi angoli estremi non si deve vedere il vuoto dietro
+      // spalle/collo/vita.
+      // Angoli stress (volutamente sopra i limiti operativi delle skill reali):
+      //   spear  -18° (grande apertura braccio lancia)
+      //   shield -22° (shield braced high)
+      //   torso   -4° (ruota leggermente)
+      //   head    -8° (tilt evidente)
+      //   skirt   +5°
+      // =====================================================================
+      const D = 220;
+      spearRot.value  = withTiming(-18, { duration: D, easing: Easing.out(Easing.quad) });
+      shieldRot.value = withTiming(-22, { duration: D, easing: Easing.out(Easing.quad) });
+      torsoRot.value  = withTiming(-4,  { duration: D });
+      headRot.value   = withTiming(-8,  { duration: D });
+      skirtRot.value  = withTiming(5,   { duration: D });
     } else {
-      // Tutti gli altri state (hit, dead, heal, dodge): ritorno morbido a 0
-      // (idle pulito). Saranno implementati nei prossimi task.
+      // idle / hit / dead / heal / dodge: ritorno morbido a 0 (idle pulito).
+      // Gli stati hit/dead/heal/dodge non sono ancora implementati nel rig.
       const D = 200;
-      spearRot.value = withTiming(0, { duration: D });
-      torsoRot.value = withTiming(0, { duration: D });
+      spearRot.value  = withTiming(0, { duration: D });
+      torsoRot.value  = withTiming(0, { duration: D });
       shieldRot.value = withTiming(0, { duration: D });
-      headRot.value = withTiming(0, { duration: D });
-      skirtRot.value = withTiming(0, { duration: D });
+      headRot.value   = withTiming(0, { duration: D });
+      skirtRot.value  = withTiming(0, { duration: D });
     }
   }, [state]);
 
@@ -297,6 +349,9 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
   }));
 
   // LEGS: FISSE (disciplina tank)
+  // HELPER layers (hip_fill, under_arm_spear, shoulder_*_fill, neck_fill):
+  // completamente statici → nessun animStyle, nessuna rotazione. Sono
+  // "ancorati al corpo" per coprire i gap delle giunture in animazione.
   const styleMap: Record<string, any> = {
     hair:        headGroupStyle,
     head_helmet: headGroupStyle,
@@ -305,12 +360,15 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
     shield_arm:  shieldStyle,
     skirt:       skirtStyle,
     legs:        null,
+    // helpers: null (statici)
   };
+
+  const renderLayers = LAYERS.filter(l => safeFill || !(l as any).helper);
 
   return (
     <View style={[styles.root, { width: size, height: size }]}>
       <View style={{ width: BASE, height: BASE, transform: [{ scale }], transformOrigin: '0 0' as any }}>
-        {LAYERS.map(layer => {
+        {renderLayers.map(layer => {
           const animStyle = styleMap[layer.key];
           const pivotStyle = { transformOrigin: `${layer.pivot.x}px ${layer.pivot.y}px` as any };
           const content = (
