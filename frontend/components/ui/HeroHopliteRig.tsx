@@ -170,64 +170,63 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
       );
     } else if (state === 'skill') {
       // =====================================================================
-      // SKILL — "GUARDIA FERREA" (difensiva)
+      // SKILL — "GUARDIA FERREA" (difensiva) — MASS-FIRST PASS
       // ---------------------------------------------------------------------
-      // Concept: iron stance breve e leggibile. L'oplita pianta i piedi,
-      // alza lo scudo, raccoglie la lancia e tiene una posa difensiva
-      // stabile. Nessuno step-back (lo decide il wrapper esterno), nessun
-      // lunge, nessun jump.
+      // v2: ridotti drasticamente i delta per-layer per evitare la
+      // "scomposizione" della silhouette. L'idea: il corpo intero si abbassa
+      // + comprime (wrapper: sink + scale), e sopra questa massa c'è UN SOLO
+      // piccolo accento (scudo che sale appena). Tutti gli altri layer
+      // restano quasi-glued al corpo → silhouette compatta, lettura "chiuso
+      // dietro lo scudo" invece di "rig che si apre".
       //
-      // Timing (totale ~1050ms):
-      //   ANC 180ms  → anchor (alza scudo, raccoglie lancia)
-      //   HLD 600ms  → hold (posa tenuta + pulse sullo scudo via wrapper)
+      // Timing invariato (~1050ms):
+      //   ANC 180ms  → anchor (shield +crouch si attivano)
+      //   HLD 600ms  → hold (posa tenuta + shield pulse via wrapper)
       //   REL 270ms  → release (ritorno morbido)
       //
-      // Filosofia degli angoli (disciplina tank):
-      //   - shield alzato a -12° (pivot spalla dx → va su/avanti)
-      //   - lancia raccolta a +4° (tip lievemente alta, posa "pronta" non
-      //     "in spinta") — deliberatamente sobria per non leggere come attacco
-      //   - torso -2° → chiude la linea verso il nemico
-      //   - testa -4° → sguardo sopra il bordo scudo, concentrata
-      //   - skirt +1° → micro follow-through (peso su piedi)
+      // Angoli v2 (mass-first):
+      //   - shield   -6° (era -12°) → ancora protagonista ma spalla glued
+      //   - spear    +1° (era +4°)  → quasi fermo, spalla sx glued
+      //   - torso     0° (era -2°)  → rimossa, torso resta solidale braccia
+      //   - head     -1° (era -4°)  → solo un accenno di focus
+      //   - skirt     0° (era +1°)  → peso al suolo senza swing
+      //
+      // La massa la fa il wrapper (HOPLITE_PROFILE.skill): sink +3% + scale 0.96
+      // → "il corpo si chiude" è il messaggio globale, non i layer che si
+      // spostano l'uno dall'altro.
       // =====================================================================
       const ANC = 180;
       const HLD = 600;
       const REL = 270;
 
-      // SPEAR ARM — sobria, +4° max (posa di difesa, non di affondo)
+      // SPEAR ARM — quasi fermo (+1°), solo hint di raccolta
       spearRot.value = withSequence(
-        withTiming(4,  { duration: ANC, easing: Easing.out(Easing.quad) }),
-        withTiming(4,  { duration: HLD }),
+        withTiming(1,  { duration: ANC, easing: Easing.out(Easing.quad) }),
+        withTiming(1,  { duration: HLD }),
         withTiming(0,  { duration: REL, easing: Easing.out(Easing.quad) }),
       );
 
-      // SHIELD ARM — alzato a -12° (rotazione su/avanti attorno spalla dx)
+      // SHIELD ARM — accento PRINCIPALE ma ridotto (-6°), la spalla non si
+      // allontana più dal torso in modo visibile.
       shieldRot.value = withSequence(
-        withTiming(-12, { duration: ANC, easing: Easing.out(Easing.quad) }),
-        withTiming(-12, { duration: HLD }),
-        withTiming(0,   { duration: REL, easing: Easing.out(Easing.quad) }),
+        withTiming(-6, { duration: ANC, easing: Easing.out(Easing.quad) }),
+        withTiming(-6, { duration: HLD }),
+        withTiming(0,  { duration: REL, easing: Easing.out(Easing.quad) }),
       );
 
-      // TORSO — chiude la linea verso il nemico (-2°)
-      torsoRot.value = withSequence(
-        withTiming(-2, { duration: ANC }),
-        withTiming(-2, { duration: HLD }),
-        withTiming(0,  { duration: REL }),
-      );
+      // TORSO — FERMO. Se il torso ruota e le braccia ruotano su pivot
+      // diversi, si apre la silhouette. Tieniamo torso solidale.
+      torsoRot.value = withTiming(0, { duration: ANC });
 
-      // HEAD — sguardo concentrato sopra il bordo dello scudo
+      // HEAD — micro focus (-1°), quasi impercettibile ma aggiunge intenzione
       headRot.value = withSequence(
-        withTiming(-4, { duration: ANC }),
-        withTiming(-4, { duration: HLD }),
+        withTiming(-1, { duration: ANC }),
+        withTiming(-1, { duration: HLD }),
         withTiming(0,  { duration: REL }),
       );
 
-      // SKIRT — micro follow-through (peso su piedi radicati)
-      skirtRot.value = withSequence(
-        withTiming(1, { duration: ANC }),
-        withTiming(1, { duration: HLD }),
-        withTiming(0, { duration: REL }),
-      );
+      // SKIRT — nulla, peso al suolo è già gestito dal sink globale
+      skirtRot.value = withTiming(0, { duration: ANC });
     } else {
       // Tutti gli altri state (hit, dead, heal, dodge): ritorno morbido a 0
       // (idle pulito). Saranno implementati nei prossimi task.

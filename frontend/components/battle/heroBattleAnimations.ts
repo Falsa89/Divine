@@ -219,48 +219,46 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
     h.bodyRot.value = withTiming(0, { duration: 200 });
   },
 
-  // --- SKILL "GUARDIA FERREA": Iron defensive stance ----------------------
-  // Difensiva, non offensiva. L'oplita pianta i piedi e alza lo scudo
-  // mentre un singolo pulse metallico illumina lo scudo.
+  // --- SKILL "GUARDIA FERREA": Iron defensive stance — MASS-FIRST pass ----
+  // v2 (mass-first): delega più movimento al wrapper globale (corpo intero
+  // si abbassa + comprime) per compensare i delta per-layer ridotti nel rig.
+  // Obiettivo: leggere "il corpo si chiude" come massa unica, non layer
+  // indipendenti che si aprono.
   //
   // Timing (totale ~1050ms):
-  //   ANC 180ms  → anchor (wrapper: crouch + peso al suolo; rig: scudo su)
-  //   HLD 600ms  → hold (posa tenuta + SINGLE shield pulse a metà)
-  //   REL 270ms  → release (ritorno morbido)
+  //   ANC 180ms  → anchor
+  //   HLD 600ms  → hold + SINGLE shield pulse a metà
+  //   REL 270ms  → release
   //
-  // Vincoli dall'UX brief:
-  //   - NESSUNO step-back visibile → transX stays at 0 per tutto il tempo
-  //   - Singolo pulse più marcato (non doppio)
-  //   - Lancia sobria (gestita nel rig: +4°, non protagonista)
-  //   - Hoplite deve "piantarsi", non fare un passo
+  // Vincoli UX:
+  //   - transX = 0 (nessuno step-back)
+  //   - sink +3% (era +2%) → crouch più marcato
+  //   - spriteScale 0.96 (era 0.98) → compressione più evidente
+  //   - Single pulse marcato (non doppio)
   skill: (h, c) => {
     const ANC = 180;
     const HLD = 600;
     const REL = 270;
-    const SINK = Math.round(c.size * 0.02);  // micro-crouch "piantato"
+    const SINK = Math.round(c.size * 0.03);  // crouch globale (era 0.02)
 
-    // HORIZONTAL MOVEMENT — ZERO. La skill è radicata al suolo.
-    // Cancella qualsiasi residuo e forza a 0.
+    // HORIZONTAL: zero, la skill è radicata
     h.transX.value = withTiming(0, { duration: 80 });
 
-    // VERTICAL — crouch leggero, hold, ritorno.
+    // VERTICAL: crouch più marcato → maggior senso di "chiusura"
     h.transY.value = withSequence(
       withTiming(SINK, { duration: ANC, easing: Easing.out(Easing.quad) }),
       withTiming(SINK, { duration: HLD }),
       withTiming(0,    { duration: REL, easing: Easing.out(Easing.quad) }),
     );
 
-    // BODY SCALE — peso al suolo (0.98) durante anchor+hold, poi torno a 1.
+    // BODY SCALE: compressione più evidente (0.96) → massa unica che si chiude
     h.spriteScale.value = withSequence(
-      withTiming(0.98, { duration: ANC }),
-      withTiming(0.98, { duration: HLD }),
+      withTiming(0.96, { duration: ANC }),
+      withTiming(0.96, { duration: HLD }),
       withTiming(1,    { duration: REL }),
     );
 
     // --- SHIELD PULSE — singolo, marcato, a metà hold ---------------------
-    // Timing: parte 170ms dentro l'HOLD (t ≈ 350ms dall'inizio skill) →
-    // è il punto di max lettura della posa difensiva.
-    // Forma: ramp-up 150ms → decay 330ms → fade finale col release.
     const PULSE_DELAY = ANC + 170;  // 350ms dall'inizio
 
     h.auraOp.value = withSequence(
@@ -272,13 +270,11 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
       withDelay(PULSE_DELAY, withTiming(1.5, { duration: 180, easing: Easing.out(Easing.quad) })),
       withTiming(1, { duration: 280 }),
     );
-    // Brillio metallico sincronizzato col pulse (legge come "scudo scintilla")
     h.hitFlash.value = withSequence(
       withDelay(PULSE_DELAY, withTiming(0.25, { duration: 120 })),
       withTiming(0, { duration: 200 }),
     );
 
-    // Nessuna rotazione globale del wrapper (le rotazioni sono per-layer nel rig)
     h.bodyRot.value = withTiming(0, { duration: 200 });
   },
 
