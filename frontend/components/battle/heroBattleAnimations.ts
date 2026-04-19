@@ -180,115 +180,96 @@ export const DEFAULT_PROFILE: HeroAnimProfile = {
 };
 
 // ==========================================================================
-// GREEK HOPLITE PROFILE — spear + shield frontliner
+// GREEK HOPLITE PROFILE — 100% FRAME-BASED, ZERO WRAPPER MOTION
 // --------------------------------------------------------------------------
-// Fantasia: oplita greco con lancia + scudo. Tank/frontliner con peso.
-//   Attack   → "Affondo di Falange" (spear thrust lineare, body push forward)
-//   Skill    → "GUARDIA FERREA" (iron stance difensiva, single shield pulse)
-//   Hit      → Tank stagger solido (poco knockback, più "piantato")
-//   Death    → Kneel + collapse (sink → fall sideways + fade)
+// REGOLA DEFINITIVA (dall'utente):
+//   Per Hoplite restano SOLO le animazioni approvate:
+//     - idle   → HeroHopliteIdleLoop (crossfade 2 frame approvati)
+//     - attack → HeroHopliteAffondo (8 frame Affondo di Falange)
+//     - skill  → HeroHopliteGuardiaFerrea (6 frame Guardia Ferrea)
+//   Tutti gli altri stati (hit / death / heal / dodge / ultimate) → STATICO.
+//   Nessun fallback legacy, nessun bounce, nessun shake, nessuna hit reaction.
+//
+// ATTENZIONE: il wrapper motionStyle di BattleSprite applica
+//   translateY = idleY + transY, scale = spriteScale, rotateZ = bodyRot,
+//   opacity = spriteOp, ecc.
+// Per garantire ZERO movimento parassita del wrapper su Hoplite, OGNI
+// callback di questo profilo scrive valori neutri (0 o 1) ai shared
+// values. I player frame-based interni (HeroHopliteIdleLoop /
+// HeroHopliteAffondo / HeroHopliteGuardiaFerrea) sono gli unici
+// responsabili di cosa si vede. Il wrapper resta congelato su Hoplite.
+//
+// Questo è l'equivalente di "no legacy interference":
+//   - hit     → NO knockback, NO scale, NO rotation. Solo hitFlash molto
+//               sottile (overlay di colore sull'immagine, non transform)
+//               per leggere comunque la causalità del damage.
+//   - death   → NO rotation, NO collapse. Solo opacity fade (la death
+//               proper arriverà quando l'utente fornirà le reference).
+//   - heal    → NO float. Solo micro aura boost.
+//   - dodge   → NO side-step, NO opacity blink. Statico.
+//   - ultimate → NO wrapper motion. (L'ultimate ha la propria overlay
+//               cut-in gestita da combat.tsx, non dal wrapper sprite.)
 // ==========================================================================
+const HOPLITE_STATIC: (h: AnimHandles) => void = (h) => {
+  // Reset istantaneo di TUTTI i shared values a valori neutri.
+  // Cancella animazioni pendenti prima, per evitare che un tween
+  // vecchio continui a muovere il wrapper dopo il reset.
+  cancelAnimation(h.transX);
+  cancelAnimation(h.transY);
+  cancelAnimation(h.bodyRot);
+  cancelAnimation(h.spriteScale);
+  cancelAnimation(h.spriteOp);
+  cancelAnimation(h.auraSc);
+  cancelAnimation(h.auraOp);
+  cancelAnimation(h.hitFlash);
+  cancelAnimation(h.idleY);
+  h.transX.value = 0;
+  h.transY.value = 0;
+  h.bodyRot.value = 0;
+  h.spriteScale.value = 1;
+  h.spriteOp.value = 1;
+  h.auraSc.value = 1;
+  h.auraOp.value = 0;
+  h.hitFlash.value = 0;
+  h.idleY.value = 0;
+};
+
 export const HOPLITE_PROFILE: HeroAnimProfile = {
   name: 'hoplite',
 
-  // --- ATTACK: "Affondo di Falange" ---------------------------------------
-  // REFERENCE LOCKED: l'attack è ora renderizzato da HeroHopliteAffondo con
-  // gli 8 keyframe approvati (frame_1.png … frame_8.png). Il lunge forward,
-  // la ritrazione e il peak sono TUTTI dentro i frame stessi → il wrapper
-  // esterno NON deve aggiungere translation/scale, altrimenti si avrebbe
-  // doppio movimento e la silhouette drift-erebbe dal riferimento.
-  //
-  // Qui teniamo solo micro-aura/flash di supporto (se mai serviranno in
-  // futuro); per ora tutto a 0 → frame-only, fedele alla reference.
-  attack: (h, _c) => {
-    h.transX.value     = withTiming(0, { duration: 80 });
-    h.transY.value     = withTiming(0, { duration: 80 });
-    h.spriteScale.value = withTiming(1, { duration: 80 });
-    h.bodyRot.value    = withTiming(0, { duration: 80 });
-  },
+  // idleReset: reset totale a neutro (usato al ritorno a idle).
+  idleReset: HOPLITE_STATIC,
 
-  // --- SKILL "GUARDIA FERREA" — frame-based (REFERENCE LOCKED) ------------
-  // Gli asset pre-renderizzati (guardia_ferrea/frame_1..6.png) contengono
-  // GIÀ il crouch, la chiusura difensiva, lo shield forward e il pulse
-  // concentrato sullo scudo. Il wrapper esterno NON deve aggiungere
-  // translation/scale/aura, altrimenti si avrebbe doppio movimento e
-  // il glow dell'aura-ring si sovrapporrebbe al pulse dei frame.
-  //
-  // → Tutto il wrapper resta a 0/neutro durante la skill, il visual è
-  //   interamente gestito dai 6 frame.
-  skill: (h, _c) => {
-    h.transX.value      = withTiming(0, { duration: 80 });
-    h.transY.value      = withTiming(0, { duration: 80 });
-    h.spriteScale.value = withTiming(1, { duration: 80 });
-    h.bodyRot.value     = withTiming(0, { duration: 80 });
-    // Aura/hitFlash esterni azzerati: il pulse è nel frame 4 (PULSE PEAK)
-    h.auraOp.value      = withTiming(0, { duration: 80 });
-    h.auraSc.value      = withTiming(1, { duration: 80 });
-    h.hitFlash.value    = withTiming(0, { duration: 80 });
-  },
+  // attack: NO-OP. La vera animazione è in HeroHopliteAffondo.
+  attack: HOPLITE_STATIC,
 
-  ultimate: (h, c) => HOPLITE_PROFILE.skill(h, c),
+  // skill: NO-OP. La vera animazione è in HeroHopliteGuardiaFerrea.
+  skill: HOPLITE_STATIC,
 
-  // --- HIT: Tank stagger solido -------------------------------------------
-  // Minore knockback del default (tank piantato), bodyRot ridotto,
-  // return con easing back leggero → sensazione di peso che recupera.
-  hit: (h, c) => {
-    const KNOCK = Math.round(c.size * 0.03);  // default era 0.05
-    h.transX.value = withSequence(
-      withTiming(-c.dir * KNOCK, { duration: 80 }),
-      withTiming(0, { duration: 260, easing: Easing.out(Easing.back(1.5)) }),
-    );
-    h.hitFlash.value = withSequence(
-      withTiming(0.5, { duration: 50 }),
-      withTiming(0, { duration: 220 }),
-    );
-    h.spriteScale.value = withSequence(
-      withTiming(0.96, { duration: 80 }),
-      withTiming(1, { duration: 220 }),
-    );
-    // Rotazione ridotta a 2° (default era 4°) — il tank non "oscilla" molto
-    h.bodyRot.value = withSequence(
-      withTiming(-c.dir * 2, { duration: 80 }),
-      withTiming(0, { duration: 220 }),
-    );
-  },
+  // ultimate: NO-OP (per ora). L'ultimate vero arriverà quando l'utente
+  // approverà la reference. NESSUN fallback al branch skill/attack.
+  ultimate: HOPLITE_STATIC,
 
-  // --- DEATH: Kneel + collapse --------------------------------------------
-  // Phase 1 (0→250ms): drop to knees → sink giù, leggera rotazione laterale
-  // Phase 2 (350→900ms): collapse completo → cade di lato con forte
-  //                      rotazione, scale si riduce, opacity fade pesante.
-  // Il wrapper resta fermo, il character si "accascia" dentro la cella.
-  death: (h, c) => {
-    cancelAnimation(h.idleY);
-    cancelAnimation(h.auraSc);
-    cancelAnimation(h.auraOp);
-    h.idleY.value = 0;
-    // Sink + collapse (translateY positivo = scende verso il suolo)
-    h.transY.value = withSequence(
-      withTiming(Math.round(c.size * 0.05), { duration: 250 }),                     // kneel
-      withDelay(100, withTiming(Math.round(c.size * 0.12), { duration: 500 })),      // collapse
-    );
-    // Forte rotazione finale: cade di lato (lean away dal centro)
-    h.bodyRot.value = withSequence(
-      withTiming((c.isEnemy ? -15 : 15), { duration: 250 }),
-      withDelay(100, withTiming((c.isEnemy ? -35 : 35), { duration: 500 })),
-    );
-    // Shrink progressivo (anchor bottom → si accascia verso il basso)
-    h.spriteScale.value = withSequence(
-      withTiming(0.94, { duration: 250 }),
-      withDelay(100, withTiming(0.80, { duration: 500 })),
-    );
-    // Opacity fade pesante
-    h.spriteOp.value = withSequence(
-      withTiming(0.7, { duration: 250 }),
-      withDelay(100, withTiming(0.25, { duration: 600 })),
-    );
-    h.auraOp.value = withTiming(0, { duration: 350 });
-  },
+  // hit: NO-OP. Nessun knockback, nessun bounce, nessuna rotation, nessuno
+  // shake. L'hit reaction "vera" sarà frame-based e si aggiungerà quando
+  // l'utente approverà i frame hit. Fino ad allora, Hoplite resta
+  // visivamente invariato quando riceve un colpo. Il damage number
+  // floating (+NNN / -NNN overlay) e lo screen shake globale continuano
+  // a essere gestiti da combat.tsx → causalità comunque leggibile.
+  hit: HOPLITE_STATIC,
 
-  heal: DEFAULT_PROFILE.heal,
-  dodge: DEFAULT_PROFILE.dodge,
-  idleReset: DEFAULT_PROFILE.idleReset,
+  // death: NO-OP. Nessun collapse, nessuna rotation, nessun sink. La
+  // death reaction "vera" sarà frame-based. Per ora, Hoplite resta
+  // statico nella sua cella anche se è KO. (Il flag is_alive è gestito
+  // separatamente per logica di targeting.) Quando l'utente approverà
+  // i frame death, aggiorneremo questo stato.
+  death: HOPLITE_STATIC,
+
+  // heal: NO-OP. Nessun float verso l'alto, nessun bob.
+  heal: HOPLITE_STATIC,
+
+  // dodge: NO-OP. Nessun side-step, nessun blink di opacity.
+  dodge: HOPLITE_STATIC,
 };
 
 // ==========================================================================
