@@ -34,6 +34,15 @@ export const HOPLITE_RIG_ASSETS: ImageSourcePropType[] = [
   require('../../assets/heroes/greek_hoplite/rig_safe/neck_fill.png'),
 ];
 
+// ── IDLE (loop reference-approved): 5 keyframe dedicati ──────────────────
+export const HOPLITE_IDLE_ASSETS: ImageSourcePropType[] = [
+  require('../../assets/heroes/greek_hoplite/idle/idle_01.png'),
+  require('../../assets/heroes/greek_hoplite/idle/idle_02.png'),
+  require('../../assets/heroes/greek_hoplite/idle/idle_03.png'),
+  require('../../assets/heroes/greek_hoplite/idle/idle_04.png'),
+  require('../../assets/heroes/greek_hoplite/idle/idle_05.png'),
+];
+
 // ── AFFONDO DI FALANGE (attack): 8 keyframe ──────────────────────────────
 export const HOPLITE_AFFONDO_ASSETS: ImageSourcePropType[] = [
   require('../../assets/heroes/greek_hoplite/affondo/frame_1.png'),
@@ -69,6 +78,7 @@ export const HOPLITE_SPLASH: ImageSourcePropType =
 // rig restano esportati per retrocompatibilità con HeroPortrait / pagine
 // di preview fuori-battle che ancora li usano.
 export const HOPLITE_BATTLE_ASSET_MANIFEST: ImageSourcePropType[] = [
+  ...HOPLITE_IDLE_ASSETS,
   ...HOPLITE_AFFONDO_ASSETS,
   ...HOPLITE_GUARDIA_ASSETS,
   HOPLITE_COMBAT_BASE,

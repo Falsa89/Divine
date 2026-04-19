@@ -158,15 +158,28 @@ export const DEFAULT_PROFILE: HeroAnimProfile = {
     );
   },
 
+  // ──────────────────────────────────────────────────────────────────────
+  // UNIVERSAL DODGE — backward shift pulito, mantiene la posa idle.
+  // ---------------------------------------------------------------------
+  // L'eroe resta nella sua posa (no flip, no rotation, no scale punch),
+  // scivola indietro ~12% della sua size in 130ms, rimane fermo 60ms
+  // (eviti il colpo), poi rientra dolcemente al punto di partenza in
+  // 240ms con easing out.back per un settle morbido.
+  //
+  // Niente opacity blink legacy → in game dev feedback recente da
+  // utente: "NON voglio dodge unica per personaggio, solo una dodge
+  // universale semplice". Questa è quella.
+  // ──────────────────────────────────────────────────────────────────────
   dodge: (h, c) => {
-    const DODGE_STEP = Math.round(c.size * 0.10);
+    const BACK = Math.round(c.size * 0.12);
     h.transX.value = withSequence(
-      withTiming(-c.dir * DODGE_STEP, { duration: 110 }),
-      withDelay(180, withTiming(0, { duration: 240 })),
+      withTiming(-c.dir * BACK, { duration: 130, easing: Easing.out(Easing.quad) }),
+      withDelay(60, withTiming(0, { duration: 240, easing: Easing.out(Easing.back(1.3)) })),
     );
+    // opacity pulse molto sottile, solo per "hint" di evasione
     h.spriteOp.value = withSequence(
-      withTiming(0.3, { duration: 80 }),
-      withTiming(1, { duration: 200 }),
+      withTiming(0.85, { duration: 80 }),
+      withTiming(1, { duration: 300 }),
     );
   },
 
@@ -268,8 +281,11 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
   // heal: NO-OP. Nessun float verso l'alto, nessun bob.
   heal: HOPLITE_STATIC,
 
-  // dodge: NO-OP. Nessun side-step, nessun blink di opacity.
-  dodge: HOPLITE_STATIC,
+  // dodge: USA la dodge universale (backward shift) — richiesta esplicita
+  // dell'utente: "dodge universale, non unica per personaggio". Hoplite
+  // si sposta indietro quanto basta per evitare il colpo mantenendo la
+  // posa idle del frame-based loop.
+  dodge: (h, c) => DEFAULT_PROFILE.dodge(h, c),
 };
 
 // ==========================================================================

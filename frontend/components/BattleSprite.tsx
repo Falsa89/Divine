@@ -335,6 +335,43 @@ export default function BattleSprite({
         }}
       />
 
+      {/* -- HP BAR sul personaggio --------------------------------------- */}
+      {/* Barra HP chiara visibile, posizionata SOPRA il character frame.   */}
+      {/* NON segue il motion → resta stabile anche durante attack/dodge.   */}
+      {/* Accetta hpPercent sia come 0..1 sia come 0..100 (auto-normalize). */}
+      {(() => {
+        if (state === 'dead') return null;
+        const raw = typeof hpPercent === 'number' ? hpPercent : 0;
+        const pct = Math.max(0, Math.min(100, raw > 1 ? raw : raw * 100));
+        return (
+          <View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              top: 2,
+              left: Math.round(frameW * 0.1),
+              width: Math.round(frameW * 0.8),
+              height: 5,
+              backgroundColor: 'rgba(0,0,0,0.75)',
+              borderRadius: 3,
+              borderWidth: 1,
+              borderColor: 'rgba(255,255,255,0.35)',
+              overflow: 'hidden',
+            }}
+          >
+            <View
+              style={{
+                width: `${pct}%`,
+                height: '100%',
+                backgroundColor:
+                  pct > 50 ? '#4ADE80' :
+                  pct > 25 ? '#FBBF24' : '#EF4444',
+              }}
+            />
+          </View>
+        );
+      })()}
+
       {/* -- LAYER 2: Motion container (fill assoluto, bottom-anchored) -- */}
       {/* Applica qui E SOLO qui translateX/Y/rot/scale locali.            */}
       <Animated.View

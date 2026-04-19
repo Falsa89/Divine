@@ -2,39 +2,25 @@
  * HeroHopliteIdleLoop — IDLE FRAME-BASED ANIMATO
  * ================================================
  *
- * Player idle per Greek Hoplite: loop sobrio a 2 frame reference-approved
- * con crossfade continuo e micro-breathing sul wrapper globale.
+ * Usa i 5 frame idle DEDICATI approvati (idle_01..idle_05.png), NON i
+ * frame dell'Affondo. Loop a 5 fasi con crossfade smoothed.
  *
- * FRAME USATI (reference-approved, da Affondo di Falange contact sheet):
- *   Frame A = HOPLITE_AFFONDO_ASSETS[0] — "IDLE entry snapshot"
- *             (posa base, guardia neutra)
- *   Frame B = HOPLITE_AFFONDO_ASSETS[7] — "IDLE finale (home)"
- *             (posa settle, stance post-attack)
+ * TIMING (cycle totale 3000ms):
+ *   frame #1 hold+fade   0 → 600ms
+ *   frame #2 hold+fade  600 → 1200ms
+ *   frame #3 hold+fade 1200 → 1800ms
+ *   frame #4 hold+fade 1800 → 2400ms
+ *   frame #5 hold+fade 2400 → 3000ms
+ *   → loop dal frame #1
  *
- * Tra i due frame c'è una micro-differenza di postura (stance leggermente
- * diversa). Alternandoli con crossfade lento simuliamo un respiro
- * disciplinato, senza lampeggi, senza snap.
+ * RENDERING:
+ *  - Tutti i 5 Image sempre montati come overlay assoluti
+ *  - Opacity gestita da useDerivedValue (blend crossfade lineare)
+ *  - Nessun translateY sul wrapper → ZERO saltello
+ *  - Nessun scaleY/breathing extra → frame è unica fonte di movimento
+ *  - scaleX: -1 per facing coerente con Affondo/GuardiaFerrea
  *
- * TIMING (loop totale 2800ms):
- *   - Frame A hold   :   0 → 1100ms  (opacity A=1, B=0)
- *   - Crossfade A→B  :  1100 → 1400ms (300ms smooth)
- *   - Frame B hold   :  1400 → 2500ms (opacity B=1, A=0)
- *   - Crossfade B→A  :  2500 → 2800ms (300ms smooth)
- *   - Loop
- *
- * MICRO-BREATHING (sobrio, disciplinato, applicato all'intero wrapper):
- *   - translateY sinusoidale ±2px (micro-lift del respiro)
- *   - scaleY 1.0 ↔ 1.012 (espansione toracica molto lieve)
- *   - Periodo 2800ms sincronizzato col crossfade
- *   - NB: è un transform del WRAPPER (unico Image intera), NON del rig
- *     frazionato. La silhouette resta un PNG completo e intero.
- *
- * POLICY (dall'utente):
- *  - NON lampeggiante
- *  - NON nervoso
- *  - NON snap
- *  - NON troppo vivo
- *  - Sobrio, leggero, continuo, stabile, disciplinato
+ * Geometria identica a Affondo/GuardiaFerrea per transizioni seamless.
  */
 import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
@@ -42,12 +28,13 @@ import Animated, {
   useSharedValue, useAnimatedStyle, useDerivedValue,
   withRepeat, withTiming, Easing,
 } from 'react-native-reanimated';
-import { HOPLITE_AFFONDO_ASSETS } from './hopliteAssetManifest';
+import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 
-const FRAME_A = HOPLITE_AFFONDO_ASSETS[0];   // IDLE entry (base)
-const FRAME_B = HOPLITE_AFFONDO_ASSETS[7];   // IDLE settle (home)
+const FRAMES = HOPLITE_IDLE_ASSETS;          // 5 frame idle dedicati
+const N = FRAMES.length;                      // 5
+const LOOP_MS = 3000;                         // ciclo completo (~0.6s per frame)
 
-// Canvas nativo (condiviso con Affondo/GuardiaFerrea)
+// Canvas nativo dei frame idle (stesso sistema Affondo: 520×400, feet 260/390)
 const FRAME_W = 520;
 const FRAME_H = 400;
 const FEET_CX_IN_FRAME = 260;
@@ -58,117 +45,87 @@ const RIG_FEET_Y_NORM = 800 / 1024;
 const RIG_BODY_H_NORM = 0.683;
 const FRAME_BODY_H_PX = 341;
 
-// Timing del loop (ms)
-const LOOP_MS = 2800;
-const HOLD_MS = 1100;
-const FADE_MS = 300;
-
 type Props = {
   size: number;
-  /** Se false, mette in pausa il loop (es. quando il frame è coperto dall'attack). */
+  /** Se false, mette in pausa il loop (es. durante attack/skill). */
   animated?: boolean;
 };
 
+/**
+ * Blend opacity per il frame all'indice i.
+ * Ciclo diviso in N segmenti uguali; in ogni segmento il frame attivo
+ * fade-in (prima metà) e fade-out (seconda metà). Il frame successivo
+ * fa il complementare → crossfade continuo senza mai frame scuri.
+ */
+function segmentOpacity(cyclePos: number, i: number): number {
+  'worklet';
+  const segLen = 1 / N;               // lunghezza segmento normalizzata
+  const center = (i + 0.5) * segLen;  // centro del segmento i
+  // distanza dal centro, con wrapping circolare (loop)
+  let d = Math.abs(cyclePos - center);
+  if (d > 0.5) d = 1 - d;
+  // opacity = 1 al centro, 0 a segLen (fuori dal range)
+  const t = 1 - (d / segLen);
+  return Math.max(0, Math.min(1, t));
+}
+
 export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
-  // ═══════════════════════════════════════════════════════════════════════
-  // cycle: 0 → 1 linearmente su LOOP_MS, ripetuto all'infinito.
-  // È la "fase del respiro" universale. Da cycle derivano via useDerivedValue
-  // le opacità dei 2 frame e il micro-bob + scaleY sul wrapper.
-  // ═══════════════════════════════════════════════════════════════════════
   const cycle = useSharedValue(0);
+
   useEffect(() => {
     cycle.value = 0;
     if (!animated) return;
     cycle.value = withRepeat(
       withTiming(1, { duration: LOOP_MS, easing: Easing.linear }),
-      -1,
-      false,
+      -1, false,
     );
   }, [animated]);
 
-  // Opacità dei due frame — smooth crossfade senza mai entrambi a 0.
-  // Convertiamo cycle [0..1] in segmenti: hold A → fade A→B → hold B → fade B→A
-  const opacityA = useDerivedValue(() => {
-    const t = cycle.value * LOOP_MS; // ms nel loop
-    if (t < HOLD_MS) return 1;                                   // hold A
-    if (t < HOLD_MS + FADE_MS) return 1 - (t - HOLD_MS) / FADE_MS; // fade A→B
-    if (t < 2 * HOLD_MS + FADE_MS) return 0;                     // hold B
-    return (t - 2 * HOLD_MS - FADE_MS) / FADE_MS;                // fade B→A
-  });
-  const opacityB = useDerivedValue(() => 1 - opacityA.value);
+  // Opacity per ogni frame (useDerivedValue × 5)
+  const op0 = useDerivedValue(() => segmentOpacity(cycle.value, 0));
+  const op1 = useDerivedValue(() => segmentOpacity(cycle.value, 1));
+  const op2 = useDerivedValue(() => segmentOpacity(cycle.value, 2));
+  const op3 = useDerivedValue(() => segmentOpacity(cycle.value, 3));
+  const op4 = useDerivedValue(() => segmentOpacity(cycle.value, 4));
 
-  // Micro-breathing sinusoidale sul wrapper (unica immagine → frame-based puro).
-  // breath ∈ [-1, 1], periodo = LOOP_MS.
-  const breath = useDerivedValue(() => Math.sin(cycle.value * Math.PI * 2));
+  const s0 = useAnimatedStyle(() => ({ opacity: op0.value }));
+  const s1 = useAnimatedStyle(() => ({ opacity: op1.value }));
+  const s2 = useAnimatedStyle(() => ({ opacity: op2.value }));
+  const s3 = useAnimatedStyle(() => ({ opacity: op3.value }));
+  const s4 = useAnimatedStyle(() => ({ opacity: op4.value }));
+  const styles_arr = [s0, s1, s2, s3, s4];
 
-  // ═══════════════════════════════════════════════════════════════════════
-  // Container style (transform del singolo asset-frame wrapper).
-  //
-  // RIMOSSO il translateY breathing: l'utente riportava "il personaggio
-  // saltella sulla posizione". Un translateY ±2px a 2.8s loop produce
-  // proprio quel micro-bob verticale del contenitore → sembra che il
-  // personaggio saltelli in place.
-  //
-  // TENIAMO SOLO scaleY sottile (±0.8%): è un'espansione verticale
-  // IN-PLACE (non muove il baseline). Il personaggio non sale/scende,
-  // si espande-contrae leggermente → respiro disciplinato, NO saltello.
-  //
-  // La vera animazione percepita resta il CROSSFADE tra FRAME_A e
-  // FRAME_B che cambia la posa ogni ~1.4 secondi.
-  // ═══════════════════════════════════════════════════════════════════════
-  const containerStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scaleY: 1 + 0.008 * breath.value },    // ±0.8% espansione sottile
-      { scaleX: -1 },                          // facing (coerente con Affondo/Guardia)
-    ],
-  }));
-
-  const frameAStyle = useAnimatedStyle(() => ({ opacity: opacityA.value }));
-  const frameBStyle = useAnimatedStyle(() => ({ opacity: opacityB.value }));
-
-  // Geometria di rendering (identica a Affondo/GuardiaFerrea).
+  // Geometria
   const frameScale = (RIG_BODY_H_NORM * size) / FRAME_BODY_H_PX;
   const renderedH = FRAME_H * frameScale;
   const renderedW = FRAME_W * frameScale;
-
   const rigFeetYInCell  = RIG_FEET_Y_NORM * size;
   const frameFeetYInBox = FEET_CY_IN_FRAME * frameScale;
   const frameFeetXInBox = FEET_CX_IN_FRAME * frameScale;
-
   const boxTop  = rigFeetYInCell - frameFeetYInBox;
   const boxLeft = size / 2 - frameFeetXInBox;
 
   return (
     <View style={[styles.root, { width: size, height: size }]} pointerEvents="none">
-      <Animated.View style={[
-        {
-          position: 'absolute',
-          top: boxTop,
-          left: boxLeft,
-          width: renderedW,
-          height: renderedH,
-        },
-        containerStyle,
-      ]}>
-        {/* Frame A — idle base (opacità gestita dall'animazione di crossfade). */}
-        <Animated.View style={[StyleSheet.absoluteFillObject, frameAStyle]}>
-          <Image
-            source={FRAME_A}
-            style={{ width: renderedW, height: renderedH }}
-            resizeMode="contain"
-            fadeDuration={0}
-          />
-        </Animated.View>
-        {/* Frame B — idle settle (opacità complementare). */}
-        <Animated.View style={[StyleSheet.absoluteFillObject, frameBStyle]}>
-          <Image
-            source={FRAME_B}
-            style={{ width: renderedW, height: renderedH }}
-            resizeMode="contain"
-            fadeDuration={0}
-          />
-        </Animated.View>
-      </Animated.View>
+      <View style={{
+        position: 'absolute',
+        top: boxTop,
+        left: boxLeft,
+        width: renderedW,
+        height: renderedH,
+        transform: [{ scaleX: -1 }],
+      }}>
+        {FRAMES.map((src, i) => (
+          <Animated.View key={i} style={[StyleSheet.absoluteFillObject, styles_arr[i]]}>
+            <Image
+              source={src}
+              style={{ width: renderedW, height: renderedH }}
+              resizeMode="contain"
+              fadeDuration={0}
+            />
+          </Animated.View>
+        ))}
+      </View>
     </View>
   );
 }

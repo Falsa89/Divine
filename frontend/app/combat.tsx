@@ -82,6 +82,11 @@ export default function CombatScreen() {
   const [preloadLoaded, setPreloadLoaded] = useState(0);
   const [preloadTotal, setPreloadTotal] = useState(0);
   const [preloadLabel, setPreloadLabel] = useState('');
+  // Pause: quando true, playLog non avanza (il timer interno controlla
+  // pausedRef prima di ogni safeTimeout → no-op fino a unpause).
+  const [isPaused, setIsPaused] = useState(false);
+  const pausedRef = useRef(false);
+  useEffect(() => { pausedRef.current = isPaused; }, [isPaused]);
   const timerRef = useRef<any>(null);
   const allTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const logRef = useRef<ScrollView>(null);
@@ -130,10 +135,23 @@ export default function CombatScreen() {
   };
 
   // Helper: traccia ogni setTimeout per cleanup sicuro
+  // safeTimeout con supporto PAUSA: se pausedRef.current è true, il timer
+  // si reinnesca ogni 120ms finché la pausa non viene rilasciata → il
+  // playback riprende esattamente dove era stato interrotto senza reset.
   const safeTimeout = (fn: () => void, ms: number) => {
-    const id = setTimeout(fn, ms);
-    allTimers.current.push(id);
-    return id;
+    const tick = (remaining: number) => {
+      const id = setTimeout(() => {
+        if (pausedRef.current) {
+          // pausa attiva → riprogramma tra 120ms senza consumare il tempo
+          tick(remaining);
+        } else {
+          fn();
+        }
+      }, Math.max(0, remaining));
+      allTimers.current.push(id);
+      return id;
+    };
+    return tick(ms);
   };
 
   // Screen-level animations
@@ -599,12 +617,14 @@ export default function CombatScreen() {
     const rarCol = RARITY_COLORS[Math.min(c.rarity || 1, 6)] || '#888';
     const img = c.hero_image || c.image;
     const dead = !c.is_alive || hp <= 0;
+    // Rage (ex sp_gauge) — letto live da spriteStates o dal character data.
+    const rageCur = spriteStates[c.id]?.rage ?? c.rage ?? c.sp_gauge ?? 0;
+    const rageMax = c.max_rage ?? 100;
+    const ragePct = rageMax > 0 ? Math.max(0, Math.min(100, (rageCur / rageMax) * 100)) : 0;
     return (
       <View key={c.id} style={[st.hudCard, dead && { opacity: 0.35 }]}>
         <View style={[st.hudImg, { borderColor: rarCol }]}>
           {img ? (
-            // Top HUD portrait = SPLASH ART (UI context), NON combat pose.
-            // Regola pipeline: le top hero cards usano sempre la splash, mai combat_base né idle.
             <Image source={heroImageSource(img, c.hero_id || c.id, c.hero_name || c.name)} style={st.hudImgInner} resizeMode="cover" />
           ) : (
             <View style={[st.hudImgPh, { backgroundColor: (EC[c.element] || '#888') + '25' }]}>
@@ -615,6 +635,10 @@ export default function CombatScreen() {
         <View style={st.hudHpOuter}>
           <View style={st.hudHpBg}>
             <View style={[st.hudHpFill, { width: `${Math.max(0, hp)}%`, backgroundColor: hpCol }]} />
+          </View>
+          {/* Rage bar — giallo/oro, più sottile dell'HP */}
+          <View style={st.hudRageBg}>
+            <View style={[st.hudRageFill, { width: `${ragePct}%` }]} />
           </View>
         </View>
       </View>
@@ -671,6 +695,13 @@ export default function CombatScreen() {
               <Text style={st.turnNum}>{turn}</Text>
             </View>
             <View style={st.spds}>
+              <TouchableOpacity
+                style={[st.pauseBtn, isPaused && st.pauseBtnActive]}
+                onPress={() => setIsPaused(p => !p)}
+                activeOpacity={0.7}
+              >
+                <Text style={st.pauseTxt}>{isPaused ? '\u25B6' : '\u23F8'}</Text>
+              </TouchableOpacity>
               {[1, 2, 3].map(s => (
                 <TouchableOpacity key={s} style={[st.spdBtn, speed === s && st.spdA]} onPress={() => setSpeed(s)}>
                   <Text style={[st.spdTxt, speed === s && { color: COLORS.accent }]}>{s}x</Text>
@@ -983,46 +1014,77 @@ const st = StyleSheet.create({
   },
   hudCard: {
     alignItems: 'center',
-    width: 38,
+    width: 50,
   },
   hudImg: {
-    width: 32,
-    height: 32,
-    borderRadius: 6,
-    borderWidth: 1.5,
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    borderWidth: 2,
     overflow: 'hidden',
     backgroundColor: '#0A0A20',
   },
   hudImgInner: {
-    width: 29,
-    height: 29,
-    borderRadius: 4,
+    width: 40,
+    height: 40,
+    borderRadius: 6,
   },
   hudImgPh: {
-    width: 29,
-    height: 29,
-    borderRadius: 4,
+    width: 40,
+    height: 40,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
   hudInit: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '900',
   },
   hudHpOuter: {
-    width: 32,
-    marginTop: 2,
+    width: 44,
+    marginTop: 3,
   },
   hudHpBg: {
     width: '100%',
-    height: 3,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    height: 4,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 2,
     overflow: 'hidden',
   },
   hudHpFill: {
     height: '100%',
     borderRadius: 2,
+  },
+  hudRageBg: {
+    width: '100%',
+    height: 3,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 2,
+    overflow: 'hidden',
+    marginTop: 2,
+  },
+  hudRageFill: {
+    height: '100%',
+    borderRadius: 2,
+    backgroundColor: '#FFC629',  // giallo rage
+  },
+  pauseBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+    marginRight: 6,
+  },
+  pauseBtnActive: {
+    backgroundColor: 'rgba(255,107,53,0.25)',
+    borderColor: COLORS.accent,
+  },
+  pauseTxt: {
+    color: '#FFF',
+    fontSize: 13,
+    fontWeight: '800',
   },
   // ====== BATTLEFIELD ======
   battlefield: {
@@ -1096,23 +1158,23 @@ const st = StyleSheet.create({
     fontWeight: '900',
   },
   // Log Panel
-  // Battle log — più leggibile, respiro aumentato, testo più grande
+  // Battle log — grande e leggibile in mobile reale
   logPanel: {
-    height: 80,
-    backgroundColor: 'rgba(6,6,20,0.92)',
+    height: 110,
+    backgroundColor: 'rgba(6,6,20,0.94)',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255,107,53,0.25)',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    borderTopColor: 'rgba(255,107,53,0.32)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
-  logContent: { gap: 4, paddingBottom: 4 },
+  logContent: { gap: 5, paddingBottom: 6 },
   logLine: { paddingVertical: 2 },
   logText: {
-    color: '#E8E8EC',
-    fontSize: 13,
-    lineHeight: 17,
+    color: '#F0F0F6',
+    fontSize: 14,
+    lineHeight: 19,
     fontWeight: '500',
-    textShadowColor: 'rgba(0,0,0,0.8)',
+    textShadowColor: 'rgba(0,0,0,0.85)',
     textShadowRadius: 2,
   },
   // Flash
