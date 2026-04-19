@@ -1,96 +1,169 @@
 /**
- * HeroHopliteIdleLoop — IDLE FRAME-BASED (HARD SWAP, SHEET v3 DEFINITIVA)
- * =========================================================================
+ * HeroHopliteIdleLoop — IDLE FRAME-BASED (RESUME-AWARE + DIAG)
+ * =============================================================
  *
- * Source of truth DEFINITIVA: idle sheet v3 approvata dall'utente
- * (layout 3 top-row + 2 bottom-row, 5 pose).
+ * FIX CAUSA STRUTTURALE del problema "2 frame percepiti in battle":
+ * quando il player era messo in pausa (animated=false) durante un
+ * attack/skill e poi ripreso (animated=true), il vecchio codice
+ * schedulava un setTimeout FRESCO con la FULL duration del frame
+ * corrente → se gli attacchi interrompevano più velocemente della
+ * durata del frame, l'idxRef non avanzava MAI.
  *
- *   1. IDLE BASE          — (top-left)    spear al fianco rilassato
- *   2. BREATH IN START    — (top-center)  spear inizia a salire
- *   3. GUARD TIGHT PEAK   — (top-right)   spear FORWARD esteso (peak teso)
- *   4. SETTLE OPEN        — (bottom-left) stance apre, spear indietro
- *   5. LOOP RETURN        — (bottom-right) ritorno a IDLE BASE
+ * Fix applicato:
+ * - Traccia `frameStartAt`: timestamp di quando il frame corrente è
+ *   entrato in scena (come tempo "logico", pausa-aware).
+ * - Al pause: accumula elapsed da frameStartAt nel frame corrente.
+ * - Al resume: schedula solo il TEMPO RESIDUO (holdMs - elapsed).
+ * - Se residuo ≤ 0 al resume, avanza subito al frame successivo.
  *
- * TIMING DEFINITIVO (richiesto utente Msg 512):
- *   Frame 1 → 520ms   (stabile — IDLE BASE)
- *   Frame 2 → 280ms   (transizione breath in)
- *   Frame 3 → 220ms   (PEAK TESO — il più corto, evita sensazione attack-like)
- *   Frame 4 → 320ms   (settle open)
- *   Frame 5 → 520ms   (stabile — pre-loop)
- *   Totale ciclo = 1860ms
- *
- * RENDERING:
- *  - Un solo <Image> renderizzato alla volta → ZERO ghosting.
- *  - Swap frame netti (setTimeout ricorsivo + state), NO crossfade opacity.
- *  - Nessun translateY / scaleY / bob wrapper.
- *  - scaleX: -1 per facing coerente con Affondo/GuardiaFerrea.
- *
- * GEOMETRIA (allineata ad Affondo/GuardiaFerrea):
- *   Canvas 520×400, feet anchor (260, 390), body_h = 341px esatto.
- *   → stessa presenza scenica, zero scatto su transizioni idle↔attack↔skill.
+ * Così l'idle progredisce nel tempo logico anche se ripetutamente
+ * interrotto da brevi pause di attack/skill.
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Text } from 'react-native';
 import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 
-const FRAMES = HOPLITE_IDLE_ASSETS;    // 5 frame idle (sheet v3 definitiva)
+// ═════════════════════════════════════════════════════════════════════
+// Flag diagnostica — true per abilitare log Metro + badge visivo.
+// Set false per production.
+// ═════════════════════════════════════════════════════════════════════
+export const HOPLITE_IDLE_DIAG = true;
 
-// Durate per-frame (ms) — DEFINITIVE da richiesta utente Msg 512
-const FRAME_DURATIONS_MS = [
-  520,  // #1 IDLE BASE
-  280,  // #2 BREATH IN START
-  220,  // #3 GUARD TIGHT PEAK (peak teso — più corto di tutti)
-  320,  // #4 SETTLE OPEN
-  520,  // #5 LOOP RETURN
-];
+const FRAMES = HOPLITE_IDLE_ASSETS;
 
-// Canvas nativo dei frame (520×400, feet baseline comune alla suite)
+// TIMING DIAGNOSTICO TEMPORANEO: 1000ms uniforme per vedere chiaramente
+// ciascun frame su Expo Go. Tornerà al timing production quando il bug
+// sarà risolto e confermato.
+const FRAME_DURATIONS_MS_DIAG = [1000, 1000, 1000, 1000, 1000];
+const FRAME_DURATIONS_MS_PROD = [520, 280, 220, 320, 520];
+const FRAME_DURATIONS_MS = HOPLITE_IDLE_DIAG
+  ? FRAME_DURATIONS_MS_DIAG
+  : FRAME_DURATIONS_MS_PROD;
+
+// Canvas nativo dei frame (520×400, feet baseline comune)
 const FRAME_W = 520;
 const FRAME_H = 400;
 const FEET_CX_IN_FRAME = 260;
 const FEET_CY_IN_FRAME = 390;
 
-// Allineamento feet-to-ground (stesso schema di Affondo/GuardiaFerrea)
+// Allineamento feet-to-ground
 const RIG_FEET_Y_NORM = 800 / 1024;
 const RIG_BODY_H_NORM = 0.683;
-// Body height REALE dei PNG v3 = 341px (exact match con Affondo)
 const FRAME_BODY_H_PX = 341;
+
+let IDLE_MOUNT_COUNTER = 0;
 
 type Props = {
   size: number;
-  /** Se false, mette in pausa il loop (es. durante attack/skill). */
   animated?: boolean;
 };
 
 export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
   const [idx, setIdx] = useState(0);
+  const [cyclesCompleted, setCyclesCompleted] = useState(0);
   const idxRef = useRef(0);
+  const cyclesRef = useRef(0);
+
+  // Resume-aware timing state
+  const frameStartAtRef = useRef<number>(Date.now());  // timestamp logico di inizio frame
+  const elapsedInFrameRef = useRef<number>(0);         // ms accumulati nel frame corrente (paused → no accumulo)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const instanceIdRef = useRef<number | null>(null);
+  if (instanceIdRef.current === null) {
+    IDLE_MOUNT_COUNTER += 1;
+    instanceIdRef.current = IDLE_MOUNT_COUNTER;
+    if (HOPLITE_IDLE_DIAG) {
+      console.log(`[IDLE_DIAG] MOUNT instance#${instanceIdRef.current}`);
+    }
+  }
+
   useEffect(() => {
+    if (HOPLITE_IDLE_DIAG) {
+      console.log(
+        `[IDLE_DIAG] i#${instanceIdRef.current} effect animated=${animated} idx=${idxRef.current} elapsedInFrame=${elapsedInFrameRef.current}`
+      );
+    }
+
+    // --- PAUSA ---
     if (!animated) {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+        // Accumula elapsed del frame corrente (pausa-aware)
+        const now = Date.now();
+        elapsedInFrameRef.current += now - frameStartAtRef.current;
+        if (HOPLITE_IDLE_DIAG) {
+          console.log(
+            `[IDLE_DIAG] i#${instanceIdRef.current} PAUSED on frame ${idxRef.current + 1}/5 (elapsed ${elapsedInFrameRef.current}/${FRAME_DURATIONS_MS[idxRef.current]}ms)`
+          );
+        }
+      }
       return;
     }
+
+    // --- RESUME / START ---
+    frameStartAtRef.current = Date.now();
     let cancelled = false;
-    const scheduleNext = () => {
+
+    const advanceAndSchedule = () => {
       if (cancelled) return;
-      const holdMs = FRAME_DURATIONS_MS[idxRef.current];
-      timeoutRef.current = setTimeout(() => {
-        if (cancelled) return;
-        idxRef.current = (idxRef.current + 1) % FRAMES.length;
-        setIdx(idxRef.current);
-        scheduleNext();
-      }, holdMs);
+      // Avanza frame
+      const next = (idxRef.current + 1) % FRAMES.length;
+      if (next === 0) {
+        cyclesRef.current += 1;
+        setCyclesCompleted(cyclesRef.current);
+        if (HOPLITE_IDLE_DIAG) {
+          console.log(`[IDLE_DIAG] i#${instanceIdRef.current} CYCLE DONE #${cyclesRef.current}`);
+        }
+      }
+      idxRef.current = next;
+      setIdx(next);
+      // Reset counters per nuovo frame
+      frameStartAtRef.current = Date.now();
+      elapsedInFrameRef.current = 0;
+      if (HOPLITE_IDLE_DIAG) {
+        console.log(`[IDLE_DIAG] i#${instanceIdRef.current} → frame ${next + 1}/5`);
+      }
+      // Schedula il prossimo advance
+      schedule();
     };
-    scheduleNext();
+
+    const schedule = () => {
+      if (cancelled || !animated) return;
+      const holdMs = FRAME_DURATIONS_MS[idxRef.current];
+      const remaining = Math.max(0, holdMs - elapsedInFrameRef.current);
+      if (HOPLITE_IDLE_DIAG) {
+        console.log(
+          `[IDLE_DIAG] i#${instanceIdRef.current} schedule frame ${idxRef.current + 1}/5 remaining=${remaining}ms (full=${holdMs}, elapsed=${elapsedInFrameRef.current})`
+        );
+      }
+      timeoutRef.current = setTimeout(advanceAndSchedule, remaining);
+    };
+
+    schedule();
+
     return () => {
       cancelled = true;
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
   }, [animated]);
 
-  // Geometria (usa body_h e feet_cy REALI dei frame idle)
+  // Unmount log
+  useEffect(() => {
+    return () => {
+      if (HOPLITE_IDLE_DIAG) {
+        console.log(
+          `[IDLE_DIAG] UNMOUNT i#${instanceIdRef.current} (final idx=${idxRef.current}, cycles=${cyclesRef.current})`
+        );
+      }
+    };
+  }, []);
+
+  // Geometria
   const frameScale = (RIG_BODY_H_NORM * size) / FRAME_BODY_H_PX;
   const renderedH = FRAME_H * frameScale;
   const renderedW = FRAME_W * frameScale;
@@ -110,7 +183,6 @@ export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
         height: renderedH,
         transform: [{ scaleX: -1 }],
       }}>
-        {/* UN SOLO frame renderizzato alla volta → swap netto, zero ghosting */}
         <Image
           source={FRAMES[idx]}
           style={{ width: renderedW, height: renderedH }}
@@ -118,10 +190,37 @@ export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
           fadeDuration={0}
         />
       </View>
+      {HOPLITE_IDLE_DIAG && (
+        <View style={styles.diagBadge} pointerEvents="none">
+          <Text style={styles.diagText}>
+            {`i#${instanceIdRef.current}·f${idx + 1}/5·c${cyclesCompleted}`}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: { overflow: 'visible' },
+  diagBadge: {
+    position: 'absolute',
+    top: -22,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 9999,
+  },
+  diagText: {
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    color: '#FFD700',
+    fontSize: 10,
+    fontWeight: '900',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    fontFamily: 'monospace',
+    borderWidth: 1,
+    borderColor: '#FFD700',
+  },
 });
