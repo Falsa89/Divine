@@ -51,9 +51,13 @@ const FRAME_DURATIONS_MS = [
 ];
 
 // Dimensioni native dei frame (tutti uguali per costruzione).
-// Aspect ratio 384:640 = 0.6 (portrait), character anchored al bottom.
-const FRAME_W = 384;
-const FRAME_H = 640;
+// Canvas 520×400 con feet anchor a (260, 390) → piedi sempre in fondo-centro.
+// Questo canvas include safe margin su TUTTI i lati → nessun clipping.
+const FRAME_W = 520;
+const FRAME_H = 400;
+// Dove sono i piedi nel canvas del frame (usato per ground-align in render)
+const FEET_CX_IN_FRAME = 260;
+const FEET_CY_IN_FRAME = 390;
 
 type Props = {
   /** Dimensione quadrata della cella in px (come HeroHopliteRig) */
@@ -94,25 +98,44 @@ export default function HeroHopliteAffondo({ size, onDone }: Props) {
     };
   }, []);
 
-  // Render: stesso box della cella (size×size) con il frame scaled per adattarsi
-  // mantenendo aspect ratio. Il frame 384×900 è più alto che largo, quindi
-  // limitiamo per altezza (fit contain) → il personaggio resta proporzionato.
-  // Alignment: bottom center → i piedi stanno sulla linea del terreno.
-  const frameScale = size / FRAME_H;
-  const renderedW = FRAME_W * frameScale;
+  // =========================================================================
+  // SCALE + POSITION per allineamento con HeroHopliteRig.
+  // Obiettivo: feet del frame allineati ai feet del rig → ZERO scatto
+  // quando BattleSprite passa da idle (rig) a attack (frame-based).
+  //
+  // Rig (1024×1024):
+  //   - character body height in canvas ≈ 700 px
+  //   - feet y in canvas ≈ 800 px → normalized 800/1024 = 0.781
+  // Frame (520×400):
+  //   - character body height in canvas ≈ 341 px (costante cross-frame)
+  //   - feet pos (260, 390) → normalized 390/400 = 0.975
+  // =========================================================================
+  const RIG_FEET_Y_NORM = 800 / 1024;        // 0.781
+  const RIG_BODY_H_NORM = 0.683;              // 700/1024 approx
+  const FRAME_BODY_H_PX = 341;                // altezza corpo nativa nel frame
+
+  // Scala il frame così che il corpo renda alla stessa altezza del rig
+  const frameScale = (RIG_BODY_H_NORM * size) / FRAME_BODY_H_PX;
   const renderedH = FRAME_H * frameScale;
+  const renderedW = FRAME_W * frameScale;
+
+  // Posizionamento: piedi sul terreno alla stessa y del rig
+  const rigFeetYInCell   = RIG_FEET_Y_NORM * size;
+  const frameFeetYInBox  = FEET_CY_IN_FRAME * frameScale;
+  const frameFeetXInBox  = FEET_CX_IN_FRAME * frameScale;
+
+  const boxTop  = rigFeetYInCell - frameFeetYInBox;  // solitamente ~0
+  const boxLeft = size / 2 - frameFeetXInBox;         // center feet on cell
 
   return (
     <View style={[styles.root, { width: size, height: size }]} pointerEvents="none">
-      {/* INNER scaleX=-1: le reference sono pre-renderizzate facing RIGHT,
-          mentre il rig (e quindi il wrapper BattleSprite) si aspetta un
-          asset che NATIVAMENTE guarda a LEFT. Mirroriamo internamente così
-          questo componente combacia perfettamente con il flip che BattleSprite
-          applica per team player (scaleX=-1) o lascia intatto per enemy. */}
+      {/* Frame box posizionato con feet allineati al rig.
+          overflow: visible → la punta della lancia può estendersi fuori
+          dai bounds della cella senza venir tagliata (desired behavior). */}
       <View style={{
         position: 'absolute',
-        bottom: 0,
-        left: (size - renderedW) / 2,
+        top: boxTop,
+        left: boxLeft,
         width: renderedW,
         height: renderedH,
         transform: [{ scaleX: -1 }],
@@ -128,5 +151,5 @@ export default function HeroHopliteAffondo({ size, onDone }: Props) {
 }
 
 const styles = StyleSheet.create({
-  root: { overflow: 'visible' },
+  root: { overflow: 'visible' },  // spear tip può estendersi fuori dalla cella
 });
