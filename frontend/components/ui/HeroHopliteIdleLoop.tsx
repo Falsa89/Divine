@@ -1,44 +1,46 @@
 /**
- * HeroHopliteIdleLoop — IDLE FRAME-BASED (HARD SWAP, REFERENCE v2)
- * ==================================================================
+ * HeroHopliteIdleLoop — IDLE FRAME-BASED (HARD SWAP, SHEET v3 DEFINITIVA)
+ * =========================================================================
  *
- * Source of truth: nuova idle sheet approvata dall'utente (v2, 5 pose).
- *   1. IDLE BASE           — spear dietro, guardia neutra
- *   2. BREATH IN START     — spear scende laterale
- *   3. GUARD TIGHT PEAK    — spear forward, stance compatta (key peak)
- *   4. SETTLE OPEN         — spear torna laterale
- *   5. LOOP RETURN         — ritorno a IDLE BASE (loop seamless)
+ * Source of truth DEFINITIVA: idle sheet v3 approvata dall'utente
+ * (layout 3 top-row + 2 bottom-row, 5 pose).
  *
- * TIMING (richiesto utente — frame 3 più corto per evitare sensazione attack-like):
- *   Frame 1 → 520ms   (stabile)
- *   Frame 2 → 360ms   (transizione)
- *   Frame 3 → 260ms   (peak breve, evita "attack-like")
- *   Frame 4 → 360ms   (transizione)
- *   Frame 5 → 520ms   (stabile, pre-loop)
- *   Totale ciclo = 2020ms
+ *   1. IDLE BASE          — (top-left)    spear al fianco rilassato
+ *   2. BREATH IN START    — (top-center)  spear inizia a salire
+ *   3. GUARD TIGHT PEAK   — (top-right)   spear FORWARD esteso (peak teso)
+ *   4. SETTLE OPEN        — (bottom-left) stance apre, spear indietro
+ *   5. LOOP RETURN        — (bottom-right) ritorno a IDLE BASE
+ *
+ * TIMING DEFINITIVO (richiesto utente Msg 512):
+ *   Frame 1 → 520ms   (stabile — IDLE BASE)
+ *   Frame 2 → 280ms   (transizione breath in)
+ *   Frame 3 → 220ms   (PEAK TESO — il più corto, evita sensazione attack-like)
+ *   Frame 4 → 320ms   (settle open)
+ *   Frame 5 → 520ms   (stabile — pre-loop)
+ *   Totale ciclo = 1860ms
  *
  * RENDERING:
- *  - Un solo <Image> renderizzato alla volta → ZERO ghosting, ZERO alone.
- *  - Swap frame netti (setTimeout + state swap), NO opacity crossfade.
+ *  - Un solo <Image> renderizzato alla volta → ZERO ghosting.
+ *  - Swap frame netti (setTimeout ricorsivo + state), NO crossfade opacity.
  *  - Nessun translateY / scaleY / bob wrapper.
  *  - scaleX: -1 per facing coerente con Affondo/GuardiaFerrea.
  *
  * GEOMETRIA (allineata ad Affondo/GuardiaFerrea):
- *   Canvas 520×400, feet anchor (260, 390), body_h reale = 341px.
+ *   Canvas 520×400, feet anchor (260, 390), body_h = 341px esatto.
  *   → stessa presenza scenica, zero scatto su transizioni idle↔attack↔skill.
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 
-const FRAMES = HOPLITE_IDLE_ASSETS;    // 5 frame idle (sheet v2)
+const FRAMES = HOPLITE_IDLE_ASSETS;    // 5 frame idle (sheet v3 definitiva)
 
-// Durate per-frame (ms) — da richiesta utente Msg 510
+// Durate per-frame (ms) — DEFINITIVE da richiesta utente Msg 512
 const FRAME_DURATIONS_MS = [
   520,  // #1 IDLE BASE
-  360,  // #2 BREATH IN START
-  260,  // #3 GUARD TIGHT PEAK  (più corto: evita sensazione attack-like)
-  360,  // #4 SETTLE OPEN
+  280,  // #2 BREATH IN START
+  220,  // #3 GUARD TIGHT PEAK (peak teso — più corto di tutti)
+  320,  // #4 SETTLE OPEN
   520,  // #5 LOOP RETURN
 ];
 
@@ -51,7 +53,7 @@ const FEET_CY_IN_FRAME = 390;
 // Allineamento feet-to-ground (stesso schema di Affondo/GuardiaFerrea)
 const RIG_FEET_Y_NORM = 800 / 1024;
 const RIG_BODY_H_NORM = 0.683;
-// Body height REALE dei PNG v2 = 341px (esattamente come Affondo)
+// Body height REALE dei PNG v3 = 341px (exact match con Affondo)
 const FRAME_BODY_H_PX = 341;
 
 type Props = {
