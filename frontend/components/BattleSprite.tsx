@@ -251,13 +251,24 @@ export default function BattleSprite({
   }, [showHeal]);
 
   // --- Facing --------------------------------------------------------------
-  // Ogni asset ha un "native facing" noto. Hoplite combat_base: lancia a sx.
-  // Team A (non-enemy) guarda a destra, Team B a sinistra.
+  // Ogni asset ha un "native facing" noto (cioè la direzione in cui il
+  // personaggio appare quando è renderizzato dal proprio player SENZA il
+  // wrapper esterno di BattleSprite). Team A (non-enemy) guarda a destra,
+  // Team B a sinistra.
+  //
+  // HOPLITE: i 3 frame player (HeroHopliteIdleLoop, HeroHopliteAffondo,
+  // HeroHopliteGuardiaFerrea) hanno TUTTI un `scaleX: -1` hardcoded
+  // internamente, quindi il loro output nativo è già orientato a DESTRA.
+  // Se qui dichiariamo 'left' (come combat_base.png originale), applichiamo
+  // un secondo flip che cancella il primo → Hoplite guarderebbe il proprio
+  // team invece del nemico (bug facing). Quindi nativeFacing='right' è
+  // corretto per far sì che Team A (target='right') non flippi, e Team B
+  // (target='left') flippi una sola volta.
   const isHoplite = isGreekHoplite(
     character?.hero_id || character?.id,
     character?.hero_name || character?.name,
   );
-  const nativeFacing: 'left' | 'right' = isHoplite ? 'left' : 'right';
+  const nativeFacing: 'left' | 'right' = isHoplite ? 'right' : 'right';
   const targetFacing: 'left' | 'right' = isEnemy ? 'left' : 'right';
   const facingScaleX = nativeFacing !== targetFacing ? -1 : 1;
 
