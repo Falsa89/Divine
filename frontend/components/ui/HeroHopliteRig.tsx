@@ -112,17 +112,26 @@ export default function HeroHopliteRig({ size, state = 'idle', animated = true }
       const RET  = 300;   // Fase 4: Ritorno in guardia
 
       // SPEAR ARM — solo rotazione attorno alla spalla sx (pivot 570, 390)
-      //   ritrazione: +12° (braccio si alza un po', hand va leggermente indietro)
-      //   affondo: -22° (forte rotazione forward, hand si abbassa e spinge avanti)
-      //   impatto: -26° (hold massima rotazione)
-      //   ritorno: 0 con easeOut
-      // Nota: NESSUN translate → la spalla del layer coincide SEMPRE col pivot
-      // anatomico (570, 390) che è la posizione della spalla sul torso.
+      //
+      // Design del gesto — "Affondo di falange":
+      // il braccio NON cala in basso, resta quasi-orizzontale durante tutto
+      // il thrust. Il movimento "forward" visibile è dato dal body push
+      // esterno (wrapper transX nel HOPLITE_PROFILE.attack). Così il colpo
+      // legge come affondo LINEARE disciplinato, non come sweep diagonale.
+      //
+      //   ritrazione: +8°  (spear tip si alza un po', classica "aim" falange)
+      //   affondo mid: +2° (torna verso orizzontale, body inizia il push)
+      //   affondo peak: -2° (orizzontale, lancia in linea col bersaglio)
+      //   impatto: -4° (micro-dip hold, max forward)
+      //   ritorno: 0° (home)
+      //
+      // Angoli volutamente ridotti (±8° max) → disciplina tank + spalla
+      // sempre integra (nessun translate, pivot statico sulla spalla).
       spearRot.value = withSequence(
-        withTiming(12,  { duration: RETR, easing: Easing.out(Easing.quad) }),
-        withTiming(-22, { duration: THRU, easing: Easing.in(Easing.cubic) }),
-        withTiming(-26, { duration: IMP }),
-        withTiming(0,   { duration: RET,  easing: Easing.out(Easing.quad) }),
+        withTiming(8,  { duration: RETR, easing: Easing.out(Easing.quad) }),
+        withTiming(-2, { duration: THRU, easing: Easing.in(Easing.cubic) }),
+        withTiming(-4, { duration: IMP }),
+        withTiming(0,  { duration: RET, easing: Easing.out(Easing.quad) }),
       );
 
       // TORSO — rotazione microscopica (pivot bacino). Deliberatamente piccola

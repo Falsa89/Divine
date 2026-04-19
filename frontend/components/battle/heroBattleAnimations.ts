@@ -189,34 +189,33 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
   name: 'hoplite',
 
   // --- ATTACK: "Affondo di Falange" ---------------------------------------
-  // Motion split:
-  //   - INTERNO (HeroHopliteRig): SOLO rotazioni ai pivot anatomici
-  //     → il braccio lancia ruota alla spalla senza staccarsi dal corpo.
-  //   - ESTERNO (qui): shift + scale del corpo intero → visibilità del thrust
-  //     senza deformare i singoli layer. Muove TUTTO l'sprite insieme
-  //     (wrapper → rig → layer), quindi nessun layer si stacca dagli altri.
+  // Motion split (post-fix thrust lineare):
+  //   - INTERNO (HeroHopliteRig): solo rotazioni piccole (±8°) → braccio
+  //     resta quasi orizzontale, la spalla non si stacca MAI dal torso.
+  //   - ESTERNO (qui): body push forward ampliato a ~8% size → il thrust
+  //     visibile è dato dallo spostamento del corpo intero, non dal braccio
+  //     che si abbassa. Questo è anatomicamente ciò che fa un oplita: il
+  //     corpo spinge, la lancia va in linea col bersaglio.
   //
-  // Il shift esterno è ~5% size: abbastanza da dare peso al movimento,
-  // troppo piccolo per creare drift percepibile dalla cella.
+  // Il shift di 8% resta sotto la soglia di drift percepibile perché torna
+  // a 0 nel RITORNO (300ms easeOut), e il size del sprite in battle è
+  // limitato da tankSize ≤ ~150 quindi 8% = max ~12px visivi = shift
+  // disciplinato, non un dash.
   attack: (h, c) => {
-    const RETR_SHIFT = Math.round(c.size * 0.02);  // micro step indietro in wind-up
-    const THRUST_SHIFT = Math.round(c.size * 0.05); // step forward al thrust
+    const RETR_BACK = Math.round(c.size * 0.025);  // micro step back nel wind-up
+    const THRUST_FWD = Math.round(c.size * 0.08);   // body push forward al thrust
     h.transX.value = withSequence(
-      withTiming(-c.dir * RETR_SHIFT,  { duration: 150, easing: Easing.out(Easing.quad) }),
-      withTiming(c.dir * THRUST_SHIFT, { duration: 160, easing: Easing.in(Easing.cubic) }),
-      withTiming(c.dir * THRUST_SHIFT, { duration: 90 }),   // hold
-      withTiming(0,                    { duration: 300, easing: Easing.out(Easing.quad) }),
+      withTiming(-c.dir * RETR_BACK,  { duration: 150, easing: Easing.out(Easing.quad) }),
+      withTiming(c.dir * THRUST_FWD,  { duration: 160, easing: Easing.in(Easing.cubic) }),
+      withTiming(c.dir * THRUST_FWD,  { duration: 90 }),   // hold al max
+      withTiming(0,                   { duration: 300, easing: Easing.out(Easing.quad) }),
     );
-    // Scale: micro crouch in wind-up, micro stretch al thrust, ritorno
     h.spriteScale.value = withSequence(
-      withTiming(0.99, { duration: 150 }),
-      withTiming(1.04, { duration: 160 }),
-      withTiming(1.03, { duration: 90 }),
+      withTiming(0.98, { duration: 150 }),  // micro crouch
+      withTiming(1.05, { duration: 160 }),  // stretch forward (peso sul colpo)
+      withTiming(1.04, { duration: 90 }),
       withTiming(1,    { duration: 300 }),
     );
-    // bodyRot SEMPRE 0: nessuna rotazione globale del sprite (il rig interno
-    // gestisce le rotazioni per-parte). Ruotare il wrapper ruoterebbe anche
-    // i badge/overlay/floats → confusione visiva.
     h.bodyRot.value = withTiming(0, { duration: 200 });
   },
 
