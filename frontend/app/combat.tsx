@@ -364,8 +364,33 @@ export default function CombatScreen() {
         timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.6);
       }, delay() * 1.2);
     } else if (a.type === 'attack') {
-      // Set attacker to attack state (o skill se skill_type === 'active')
-      setSpriteState(a.actor_id, { state: a.skill_type === 'active' ? 'skill' : 'attack', damage: null, isCrit: false, actionInstanceId: nextActionId() });
+      // ═════════════════════════════════════════════════════════════════
+      // MAPPING attack vs skill — FIX CRITICO.
+      // ---------------------------------------------------------------
+      // Il backend (battle_engine.py execute_skill) marca lo skill_type
+      // con uno di questi 3 valori:
+      //   'nad' — Normal Attack (attack base, low cooldown)
+      //   'sad' — Strong Active Damage (SKILL attiva con cooldown)
+      //   'sp'  — Super/Ultimate (gestito sopra in un branch separato)
+      //
+      // Il codice precedente checkava `a.skill_type === 'active'` che
+      // NON ESISTE nel payload backend → la condizione era sempre FALSE
+      // → ogni action finiva sul branch 'attack' anche quando era una
+      // SKILL (sad). Risultato: Guardia Ferrea non si attivava MAI in
+      // battle reale, Hoplite sembrava usare SEMPRE Affondo di Falange.
+      //
+      // FIX: checkare `'sad'` → state 'skill' → HeroHopliteRig monta
+      // Layer 3 (HeroHopliteGuardiaFerrea) con playKey fresco.
+      // Tutto il resto ('nad' e qualsiasi valore sconosciuto) → 'attack'
+      // → HeroHopliteAffondo.
+      // ═════════════════════════════════════════════════════════════════
+      const isSkillAction = a.skill_type === 'sad';
+      setSpriteState(a.actor_id, {
+        state: isSkillAction ? 'skill' : 'attack',
+        damage: null,
+        isCrit: false,
+        actionInstanceId: nextActionId(),
+      });
 
       // Screen shake for crits
       if (a.crit) {
@@ -1071,17 +1096,25 @@ const st = StyleSheet.create({
     fontWeight: '900',
   },
   // Log Panel
+  // Battle log — più leggibile, respiro aumentato, testo più grande
   logPanel: {
-    height: 46,
-    backgroundColor: 'rgba(6,6,20,0.95)',
+    height: 80,
+    backgroundColor: 'rgba(6,6,20,0.92)',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255,107,53,0.1)',
-    paddingHorizontal: 12,
-    paddingVertical: 3,
+    borderTopColor: 'rgba(255,107,53,0.25)',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
   },
-  logContent: { gap: 1 },
-  logLine: { paddingVertical: 1 },
-  logText: { color: '#ccc', fontSize: 10 },
+  logContent: { gap: 4, paddingBottom: 4 },
+  logLine: { paddingVertical: 2 },
+  logText: {
+    color: '#E8E8EC',
+    fontSize: 13,
+    lineHeight: 17,
+    fontWeight: '500',
+    textShadowColor: 'rgba(0,0,0,0.8)',
+    textShadowRadius: 2,
+  },
   // Flash
   flashOv: { ...StyleSheet.absoluteFillObject, backgroundColor: '#fff', zIndex: 100 },
   // Ultimate

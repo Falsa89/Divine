@@ -101,12 +101,25 @@ export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
   // breath ∈ [-1, 1], periodo = LOOP_MS.
   const breath = useDerivedValue(() => Math.sin(cycle.value * Math.PI * 2));
 
+  // ═══════════════════════════════════════════════════════════════════════
   // Container style (transform del singolo asset-frame wrapper).
+  //
+  // RIMOSSO il translateY breathing: l'utente riportava "il personaggio
+  // saltella sulla posizione". Un translateY ±2px a 2.8s loop produce
+  // proprio quel micro-bob verticale del contenitore → sembra che il
+  // personaggio saltelli in place.
+  //
+  // TENIAMO SOLO scaleY sottile (±0.8%): è un'espansione verticale
+  // IN-PLACE (non muove il baseline). Il personaggio non sale/scende,
+  // si espande-contrae leggermente → respiro disciplinato, NO saltello.
+  //
+  // La vera animazione percepita resta il CROSSFADE tra FRAME_A e
+  // FRAME_B che cambia la posa ogni ~1.4 secondi.
+  // ═══════════════════════════════════════════════════════════════════════
   const containerStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateY: -2 * breath.value },         // micro-lift ±2px
-      { scaleY: 1 + 0.012 * breath.value },      // micro espansione toracica ±1.2%
-      { scaleX: -1 },                            // facing (coerente con Affondo/Guardia)
+      { scaleY: 1 + 0.008 * breath.value },    // ±0.8% espansione sottile
+      { scaleX: -1 },                          // facing (coerente con Affondo/Guardia)
     ],
   }));
 
