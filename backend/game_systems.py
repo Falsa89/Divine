@@ -22,6 +22,7 @@ from routes import (
     register_soul_forge_routes,
     register_achievement_routes,
     register_push_routes,
+    register_sanctuary_routes,
 )
 from routes.synergies import register_synergy_routes
 
@@ -47,5 +48,7 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     register_achievement_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
     register_push_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
     register_synergy_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+    # Sanctuary (home hero + affinity + constellation) — note: signature differs (no calculate_hero_power)
+    register_sanctuary_routes(router, db, get_current_user, serialize_doc)
 
     return router

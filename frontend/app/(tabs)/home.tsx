@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image, Dimensions, ScrollView,
+  View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions, ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 import { apiCall } from '../../utils/api';
 import { registerForPushNotifications } from '../../utils/pushNotifications';
-import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import ResourceBadge from '../../components/ui/ResourceBadge';
-import StarDisplay from '../../components/ui/StarDisplay';
-import TranscendenceStars from '../../components/ui/TranscendenceStars';
-import { heroImageSource } from '../../components/ui/hopliteAssets';
-import { COLORS, RARITY, ELEMENTS } from '../../constants/theme';
-import Animated, {
-  useSharedValue, useAnimatedStyle, withRepeat, withTiming,
-  withSequence, Easing, FadeInDown, FadeIn,
-} from 'react-native-reanimated';
+import HomeHeroSplash from '../../components/home/HomeHeroSplash';
+import { COLORS } from '../../constants/theme';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 const { width: W, height: H } = Dimensions.get('window');
 
@@ -37,38 +31,27 @@ const RIGHT_MODES = [
 export default function HomeTab() {
   const { user, logout, refreshUser } = useAuth();
   const router = useRouter();
-  const [heroes, setHeroes] = useState<any[]>([]);
-  const [mainHero, setMainHero] = useState<any>(null);
+  const [homeHero, setHomeHero] = useState<any>(null);
+  const [homeSource, setHomeSource] = useState<string>('');
+  const [inTutorial, setInTutorial] = useState<boolean>(true);
+  const [heroCount, setHeroCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
-
-  const floatY = useSharedValue(0);
-  const glowOp = useSharedValue(0.2);
-  const glowScale = useSharedValue(1);
-
-  useEffect(() => {
-    floatY.value = withRepeat(withSequence(
-      withTiming(-8, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
-      withTiming(8, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
-    ), -1, true);
-    glowOp.value = withRepeat(withSequence(
-      withTiming(0.7, { duration: 2000 }), withTiming(0.2, { duration: 2000 }),
-    ), -1, true);
-    glowScale.value = withRepeat(withSequence(
-      withTiming(1.2, { duration: 2000 }), withTiming(1, { duration: 2000 }),
-    ), -1, true);
-  }, []);
-
-  const heroFloat = useAnimatedStyle(() => ({ transform: [{ translateY: floatY.value }] }));
-  const glow = useAnimatedStyle(() => ({ opacity: glowOp.value, transform: [{ scale: glowScale.value }] }));
 
   useEffect(() => { loadData(); }, []);
   useEffect(() => { registerForPushNotifications().catch(() => {}); }, []);
 
   const loadData = async () => {
     try {
-      const uh = await apiCall('/api/user/heroes');
-      setHeroes(uh);
-      if (uh.length > 0) setMainHero(uh.sort((a: any, b: any) => (b.hero_rarity || 0) - (a.hero_rarity || 0))[0]);
+      const [hh, uh] = await Promise.all([
+        apiCall('/api/sanctuary/home-hero').catch(() => null),
+        apiCall('/api/user/heroes').catch(() => []),
+      ]);
+      if (hh?.hero) {
+        setHomeHero(hh.hero);
+        setHomeSource(hh.source || '');
+        setInTutorial(!!hh.in_tutorial);
+      }
+      setHeroCount(Array.isArray(uh) ? uh.length : 0);
       await refreshUser();
     } catch (e) {} finally { setLoading(false); }
   };
@@ -78,8 +61,6 @@ export default function HomeTab() {
       <ActivityIndicator size="large" color={COLORS.accent} />
     </LinearGradient>
   );
-
-  const rc = mainHero ? (RARITY.colors[Math.min(mainHero.hero_rarity || 1, 6)] || '#888') : '#888';
 
   return (
     <LinearGradient
@@ -155,46 +136,22 @@ export default function HomeTab() {
           ))}
         </ScrollView>
 
-        {/* Center Hero Display */}
+        {/* Center Hero Splash — ANIMATO (respiro + blink) */}
         <View style={s.centerCol}>
-          {/* Glow ring */}
-          <Animated.View style={[s.heroGlowOuter, glow, { borderColor: rc + '30' }]} />
-          <Animated.View style={[s.heroGlowInner, glow, { backgroundColor: rc + '15' }]} />
-
-          <Animated.View style={[s.heroContainer, heroFloat]}>
-            {mainHero?.hero_image ? (
-              <View style={[s.heroFrame, { borderColor: rc }]}>
-                <Image source={heroImageSource(mainHero.hero_image, mainHero.hero_id, mainHero.hero_name)} style={s.heroImg} resizeMode="cover" />
-                <LinearGradient
-                  colors={['transparent', rc + '40']}
-                  style={s.heroFrameGradient}
-                />
-              </View>
-            ) : (
-              <AnimatedHeroPortrait
-                imageUrl={null}
-                name={mainHero?.hero_name || '?'}
-                rarity={mainHero?.hero_rarity || 1}
-                element={mainHero?.hero_element}
-                size={120}
-              />
-            )}
-          </Animated.View>
-          <Animated.View entering={FadeIn.delay(200)}>
-            <Text style={[s.heroName, { color: rc }]}>{mainHero?.hero_name || 'Nessun eroe'}</Text>
-            <View style={s.heroStars}>
-              {mainHero ? (
-                (mainHero.stars || mainHero.hero_rarity || 0) <= 12
-                  ? <StarDisplay stars={mainHero.stars || mainHero.hero_rarity || 0} size={10} />
-                  : <TranscendenceStars stars={mainHero.stars || mainHero.hero_rarity || 0} size={10} />
-              ) : null}
-            </View>
-            <Text style={s.heroClass}>
-              {mainHero?.hero_class || ''} {'\u2022'} {mainHero?.hero_element?.toUpperCase() || ''}
-            </Text>
-          </Animated.View>
+          <HomeHeroSplash
+            hero={homeHero}
+            source={homeSource}
+            inTutorial={inTutorial}
+            width={Math.min(W * 0.48, 260)}
+            height={Math.min(H * 0.55, 380)}
+            onPress={() => {
+              if (homeHero?.id) {
+                router.push({ pathname: '/sanctuary', params: { heroId: homeHero.id } } as any);
+              }
+            }}
+          />
           <View style={s.collBadge}>
-            <Text style={s.collText}>{heroes.length} eroi nella collezione</Text>
+            <Text style={s.collText}>{heroCount} eroi nella collezione</Text>
           </View>
           {/* COMBATTI button */}
           <TouchableOpacity
