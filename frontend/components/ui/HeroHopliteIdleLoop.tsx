@@ -13,11 +13,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 
-export const HOPLITE_IDLE_DIAG = true;
+export const HOPLITE_IDLE_DIAG = false;
 
 const FRAMES = HOPLITE_IDLE_ASSETS;
+// TIMING production rapido (Msg 520): frame 3 più corto, 1 e 5 stabili
 const FRAME_DURATIONS_MS_DIAG = [1200, 1200, 1200, 1200, 1200];
-const FRAME_DURATIONS_MS_PROD = [520, 280, 220, 320, 520];
+const FRAME_DURATIONS_MS_PROD = [360, 200, 150, 200, 360];  // cycle 1270ms
 const FRAME_DURATIONS_MS = HOPLITE_IDLE_DIAG ? FRAME_DURATIONS_MS_DIAG : FRAME_DURATIONS_MS_PROD;
 const FRAME_COLORS = ['#FF2929', '#29FF5A', '#2980FF', '#FFD700', '#B829FF'];
 

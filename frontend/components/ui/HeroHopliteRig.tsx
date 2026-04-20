@@ -116,14 +116,20 @@ export default function HeroHopliteRig({
 
       {/* ═══════════════════════════════════════════════════════════════════
           LAYER 1 — IDLE FRAME-BASED ANIMATO (loop reference-approved)
-          Crossfade sobrio tra 2 frame + micro-breathing sul wrapper.
           Sempre montato, visibile quando NON è in attack/skill.
+
+          FACING: i PNG idle sono esportati con direzione nativa DIFFERENTE
+          dai PNG affondo/guardia (verificato empiricamente su Expo Go — 
+          l'utente ha confermato che attack/skill sono orientati corretti
+          col flip standard, mentre idle è specchiato). Compensiamo qui con
+          un `scaleX: -1` locale applicato SOLO al layer idle, così l'output
+          finale di tutti e 3 i layer è coerente.
          ═══════════════════════════════════════════════════════════════════ */}
       <View
         pointerEvents="none"
         style={[
           StyleSheet.absoluteFillObject,
-          { opacity: showIdle ? 1 : 0 },
+          { opacity: showIdle ? 1 : 0, transform: [{ scaleX: -1 }] },
         ]}
       >
         <HeroHopliteIdleLoop size={size} animated={showIdle} />

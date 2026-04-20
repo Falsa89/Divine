@@ -28,6 +28,7 @@ const LEFT_MODES = [
 ];
 const RIGHT_MODES = [
   { id: 'events', label: 'Eventi', sub: 'Giornalieri', icon: '\uD83C\uDF89', gradient: ['#44AAFF', '#2288CC'] as const, route: '/events' },
+  { id: 'collection', label: 'Collezione', sub: 'Tutti gli Eroi', icon: '\uD83D\uDCDA', gradient: ['#FF88DD', '#CC4499'] as const, route: '/hero-collection' },
   { id: 'equip', label: 'Equip', sub: 'Equipaggia', icon: '\uD83D\uDDE1\uFE0F', gradient: ['#44CC88', '#229966'] as const, route: '/equipment' },
   { id: 'exclusive', label: 'Esclusivi', sub: 'Armi Uniche', icon: '\uD83D\uDC51', gradient: ['#FFD700', '#DD9900'] as const, route: '/exclusive' },
   { id: 'cosmetics', label: 'Aure', sub: 'Cosmetici', icon: '\u2728', gradient: ['#BB55FF', '#8833CC'] as const, route: '/cosmetics' },
