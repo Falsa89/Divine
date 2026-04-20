@@ -46,7 +46,10 @@ export default function TabsLayout() {
         ),
       }}
     >
-      <Tabs.Screen name="home" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Home" icon={"\u2302"} focused={focused} /> }} />
+      <Tabs.Screen name="home" options={{
+        tabBarStyle: { display: 'none' },   // Home usa la sua BottomNav custom
+        tabBarIcon: ({ focused }) => <TabIcon label="Home" icon={"\u2302"} focused={focused} />,
+      }} />
       <Tabs.Screen name="heroes" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Eroi" icon={"\u2694\uFE0F"} focused={focused} /> }} />
       <Tabs.Screen name="battle" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Battaglia" icon={"\uD83D\uDD25"} focused={focused} /> }} />
       <Tabs.Screen name="gacha" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Evoca" icon={"\u2B50"} focused={focused} /> }} />
