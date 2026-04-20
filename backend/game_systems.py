@@ -25,6 +25,7 @@ from routes import (
     register_sanctuary_routes,
 )
 from routes.synergies import register_synergy_routes
+from routes.server_time import register_server_time_routes
 
 
 def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):
@@ -50,5 +51,8 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     register_synergy_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
     # Sanctuary (home hero + affinity + constellation) — note: signature differs (no calculate_hero_power)
     register_sanctuary_routes(router, db, get_current_user, serialize_doc)
+
+    # Server time (no auth required; deriva fase dawn/day/sunset/night per la home)
+    register_server_time_routes(router)
 
     return router

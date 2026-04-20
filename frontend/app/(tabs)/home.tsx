@@ -39,13 +39,21 @@ import { apiCall } from '../../utils/api';
 import { registerForPushNotifications } from '../../utils/pushNotifications';
 import HomeHeroSplash from '../../components/home/HomeHeroSplash';
 import { COLORS } from '../../constants/theme';
+import {
+  HOME_BACKGROUNDS, HOME_PANELS, HOME_BUTTONS, HOME_NAV_ICONS,
+  HOME_BANNERS, HOME_PLAY_SHIELD, HOME_ROUTES,
+  resolveHomeBackground, type HomeScene,
+} from '../../constants/homeAssetsManifest';
+import { AssetSlot, ButtonAssetSlot } from '../../components/home/AssetSlot';
+import { useServerTimePhase, type TimePhase } from '../../utils/serverTimePhase';
 
 const { width: W, height: H } = Dimensions.get('window');
 
-// Background asset locale (scenico, niente dominante "fantasy generic")
-const HOME_BG = require('../../assets/home_bg/temple_night.jpg');
-
-/* ─────────────────────────── DESIGN TOKENS ─────────────────────────── */
+/* ─────────────────────────── DESIGN TOKENS ───────────────────────────
+ * NB: TOKENS NEUTRI, NON UNA DIREZIONE ARTISTICA FINALE.
+ *     Quando arriveranno gli asset definitivi dal team art, i pannelli
+ *     useranno frame-immagine e questi gradient "placeholder" scompariranno.
+ * ─────────────────────────────────────────────────────────────────── */
 const GOLD       = '#FFD700';
 const GOLD_WARM  = '#C9A759';
 const GOLD_PALE  = '#F7D563';
@@ -54,6 +62,12 @@ const NIGHT_1    = '#0A1838';
 const NIGHT_2    = '#0F2148';
 const NIGHT_3    = '#1B3570';
 const CRIMSON    = '#B22222';
+
+/** Scena homepage corrente. In futuro sar\u00e0 data da `user.home_scene`. */
+const CURRENT_SCENE: HomeScene = 'default';
+
+/** Mostra in alto un piccolo badge "FASE: night" utile in dev/QA. */
+const SHOW_PHASE_BADGE = true;
 
 /* ==================================================================== */
 export default function HomeTab() {
@@ -65,7 +79,9 @@ export default function HomeTab() {
   const [loading, setLoading] = useState(true);
   const [overflowOpen, setOverflowOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
-  const [serverTime, setServerTime] = useState<string>('');
+
+  // SERVER TIME + FASE TEMPORALE centralizzata (unico hook, nessun hardcode)
+  const { phase, formatted: serverTime, synced } = useServerTimePhase(60);
 
   const loadData = useCallback(async () => {
     try {
@@ -84,24 +100,17 @@ export default function HomeTab() {
 
   useEffect(() => { registerForPushNotifications().catch(() => {}); }, []);
 
-  // Server time tick ogni 10s
-  useEffect(() => {
-    const fmt = () => {
-      const d = new Date();
-      const hh = String(d.getUTCHours()).padStart(2, '0');
-      const mm = String(d.getUTCMinutes()).padStart(2, '0');
-      const ss = String(d.getUTCSeconds()).padStart(2, '0');
-      setServerTime(`${hh}:${mm}:${ss} UTC`);
-    };
-    fmt();
-    const id = setInterval(fmt, 10000);
-    return () => clearInterval(id);
-  }, []);
-
   const onHeroTap = () => {
     if (homeHero?.id) {
       router.push({ pathname: '/sanctuary', params: { heroId: homeHero.id } } as any);
     }
+  };
+
+  // Helper: route utility che evita hardcode sparsi; '' = apre overflow/chat in-home.
+  const goTo = (key: keyof typeof HOME_ROUTES) => {
+    const route = HOME_ROUTES[key];
+    if (!route) { setOverflowOpen(true); return; }
+    router.push(route as any);
   };
 
   if (loading) {
@@ -114,8 +123,8 @@ export default function HomeTab() {
 
   return (
     <View style={s.container}>
-      {/* BLOCCO 1 — BACKGROUND */}
-      <HomeBackground />
+      {/* BLOCCO 1 — BACKGROUND (asset-driven per scena \u00d7 fase) */}
+      <HomeBackground scene={CURRENT_SCENE} phase={phase} />
 
       {/* BLOCCO 2 — HERO LAYER (sopra bg, sotto UI) */}
       <View style={s.heroLayer} pointerEvents="box-none">
@@ -133,23 +142,25 @@ export default function HomeTab() {
       <HomeProfilePanel user={user} router={router} />
 
       {/* BLOCCO 4 — VALUTE (top-right) */}
-      <HomeCurrencyBar user={user} onAddGems={() => router.push('/shop' as any)} />
+      <HomeCurrencyBar user={user} onAddGems={() => goTo('gemsPlus')} />
 
       {/* BLOCCO 5 — TOP ACTIONS (sotto valute, destra) */}
-      <HomeTopActions router={router} />
+      <HomeTopActions goTo={goTo} />
 
       {/* BLOCCO 6 — LEFT UTILITY STACK */}
       <HomeLeftUtilityStack
         serverTime={serverTime}
-        onSpOffer={() => router.push('/shop' as any)}
-        router={router}
+        phase={phase}
+        synced={synced}
+        onSpOffer={() => goTo('spOffer')}
+        goTo={goTo}
       />
 
       {/* BLOCCO 7 — RIGHT MODE PANEL (Arena/Blessing/Trial/Battle/Research) */}
-      <HomeModePanel router={router} onOverflow={() => setOverflowOpen(true)} />
+      <HomeModePanel goTo={goTo} />
 
       {/* BLOCCO 8 — MAIN BANNER (summon rate-up) */}
-      <HomeMainBanner router={router} homeHero={homeHero} />
+      <HomeMainBanner onPress={() => goTo('mainBanner')} homeHero={homeHero} />
 
       {/* BLOCCO 9 — CHAT / NOTIFICHE (bottom-left, sopra bottom nav) */}
       <HomeChatNotifPanel
@@ -159,7 +170,7 @@ export default function HomeTab() {
 
       {/* BLOCCO 10 — BOTTOM NAV CUSTOM (10 slot, PLAY centrale) */}
       <HomeBottomNav
-        router={router}
+        goTo={goTo}
         onChat={() => setChatOpen(true)}
         onMenu={() => setOverflowOpen(true)}
       />
@@ -170,44 +181,41 @@ export default function HomeTab() {
         onClose={() => setOverflowOpen(false)}
         router={router}
       />
+
+      {/* Badge fase temporale (dev/QA). Disattivabile con SHOW_PHASE_BADGE=false */}
+      {SHOW_PHASE_BADGE ? (
+        <View style={s.phaseBadge} pointerEvents="none">
+          <Text style={s.phaseBadgeTxt}>
+            {synced ? 'S' : '~'}  {phase.toUpperCase()}  {serverTime}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 1 — HomeBackground
- *  ImageBackground scenico + vignettatura blu notte + bloom oro sottile
+ *  BLOCCO 1 — HomeBackground (asset-driven)
+ *  Legge manifest[scena][fase] + fallback tecnico neutro se mancante.
+ *  L'overlay blu \u00e8 volutamente MINIMALE per non "colorare" l'asset
+ *  definitivo quando arriver\u00e0.
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeBackground() {
+function HomeBackground({ scene, phase }: { scene: HomeScene; phase: TimePhase }) {
+  const asset = resolveHomeBackground(scene, phase);
+  // Fallback neutro se NESSUN asset per la scena/fase (scena nuova non ancora pop.)
+  if (!asset) {
+    return (
+      <LinearGradient
+        colors={[NIGHT_0, NIGHT_1, NIGHT_2]}
+        style={StyleSheet.absoluteFill}
+      />
+    );
+  }
   return (
     <View style={StyleSheet.absoluteFill}>
-      <ImageBackground
-        source={HOME_BG}
-        style={StyleSheet.absoluteFill}
-        resizeMode="cover"
-      >
-        {/* overlay blu notte per uniformare al tema */}
-        <LinearGradient
-          colors={['rgba(8,14,38,0.55)', 'rgba(8,14,38,0.20)', 'rgba(8,14,38,0.75)']}
-          locations={[0, 0.45, 1]}
-          style={StyleSheet.absoluteFill}
-        />
-        {/* Bloom oro sottile al centro-orizzonte (sotto l'eroe) */}
-        <LinearGradient
-          colors={['transparent', 'rgba(255,200,80,0.10)', 'transparent']}
-          locations={[0.3, 0.55, 0.85]}
-          style={StyleSheet.absoluteFill}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-        />
-        {/* Vignettatura bordi */}
-        <LinearGradient
-          colors={['rgba(0,0,0,0.35)', 'transparent', 'rgba(0,0,0,0.35)']}
-          locations={[0, 0.2, 1]}
-          style={StyleSheet.absoluteFill}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}
-        />
+      <ImageBackground source={asset} style={StyleSheet.absoluteFill} resizeMode="cover">
+        {/* Overlay minimale per leggibilit\u00e0 UI. Nessun bloom decorativo. */}
+        <View style={s.bgReadabilityOverlay} />
       </ImageBackground>
     </View>
   );
@@ -349,14 +357,14 @@ function HomeCurrencyBar({ user, onAddGems }: any) {
  *  BLOCCO 5 — HomeTopActions
  *  Wheel / Quest / Event + slot evento 1/2 (nascosti se vuoti)
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeTopActions({ router }: any) {
+function HomeTopActions({ goTo }: any) {
   // Slot evento: array di eventi attivi (vuoti → NON renderizzati)
   const eventSlots: Array<{ key: string; icon: string; label: string; onPress: () => void }> = [];
 
   const base = [
-    { key: 'wheel', icon: '\uD83C\uDFA1', label: 'WHEEL', onPress: () => router.push('/(tabs)/gacha' as any) },
-    { key: 'quest', icon: '\uD83D\uDCDC', label: 'QUEST', onPress: () => router.push('/quests' as any) },
-    { key: 'event', icon: '\uD83C\uDF81', label: 'EVENT', onPress: () => router.push('/events' as any) },
+    { key: 'wheel', icon: '\uD83C\uDFA1', label: 'WHEEL', onPress: () => goTo('wheel') },
+    { key: 'quest', icon: '\uD83D\uDCDC', label: 'QUEST', onPress: () => goTo('quest') },
+    { key: 'event', icon: '\uD83C\uDF81', label: 'EVENT', onPress: () => goTo('event') },
   ];
 
   const items = [...base, ...eventSlots];
@@ -365,12 +373,16 @@ function HomeTopActions({ router }: any) {
     <View style={s.topActionsRow}>
       {items.map(it => (
         <TouchableOpacity key={it.key} style={s.topActBtn} activeOpacity={0.75} onPress={it.onPress}>
-          <LinearGradient
-            colors={['rgba(27,53,112,0.95)', 'rgba(10,24,56,0.85)']}
-            style={s.topActIconBox}
-          >
-            <Text style={s.topActIco}>{it.icon}</Text>
-          </LinearGradient>
+          <ButtonAssetSlot
+            asset={(HOME_BUTTONS as any)[it.key]}
+            state="default"
+            style={s.topActIconBox as any}
+            fallback={
+              <View style={s.placeholderFill}>
+                <Text style={s.topActIco}>{it.icon}</Text>
+              </View>
+            }
+          />
           <Text style={s.topActLabel}>{it.label}</Text>
         </TouchableOpacity>
       ))}
@@ -382,12 +394,13 @@ function HomeTopActions({ router }: any) {
  *  BLOCCO 6 — HomeLeftUtilityStack
  *  Server time / SP Offer / Box 2 / Box 3
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeLeftUtilityStack({ serverTime, onSpOffer, router }: any) {
+function HomeLeftUtilityStack({ serverTime, phase, synced, onSpOffer, goTo }: any) {
   return (
     <View style={s.leftStack}>
       <View style={s.serverTimeBox}>
-        <Text style={s.serverLabel}>{'\uD83D\uDD50'} SERVER TIME</Text>
+        <Text style={s.serverLabel}>{'\uD83D\uDD50'} SERVER TIME {synced ? '' : '·sync'}</Text>
         <Text style={s.serverValue}>{serverTime}</Text>
+        <Text style={s.serverPhase}>fase: {phase}</Text>
       </View>
 
       <TouchableOpacity style={s.spOfferBtn} onPress={onSpOffer} activeOpacity={0.85}>
@@ -413,7 +426,7 @@ function HomeLeftUtilityStack({ serverTime, onSpOffer, router }: any) {
           <TouchableOpacity
             key={i}
             style={s.crystalPack}
-            onPress={() => router.push('/shop' as any)}
+            onPress={() => goTo('goldPlus')}
             activeOpacity={0.85}
           >
             <LinearGradient
@@ -438,13 +451,13 @@ function HomeLeftUtilityStack({ serverTime, onSpOffer, router }: any) {
  *  BLOCCO 7 — HomeModePanel
  *  Arena / Blessing / Trial / Battle / Research (verticale, a destra)
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeModePanel({ router, onOverflow }: any) {
-  const modes = [
-    { key: 'arena',    label: 'ARENA',    ico: '\u2694\uFE0F', onPress: () => router.push('/arena' as any) },
-    { key: 'blessing', label: 'BLESSING', ico: '\uD83D\uDCFF', onPress: () => router.push('/blessings' as any) },
-    { key: 'trial',    label: 'TRIAL',    ico: '\u26AA',       onPress: () => router.push('/tower' as any) },
-    { key: 'battle',   label: 'BATTLE',   ico: '\u2620\uFE0F', onPress: () => router.push('/story' as any) },
-    { key: 'research', label: 'RESEARCH', ico: '\uD83D\uDD2C', onPress: onOverflow },
+function HomeModePanel({ goTo }: any) {
+  const modes: Array<{ key: any; label: string; ico: string }> = [
+    { key: 'arena',    label: 'ARENA',    ico: '\u2694\uFE0F' },
+    { key: 'blessing', label: 'BLESSING', ico: '\uD83D\uDCFF' },
+    { key: 'trial',    label: 'TRIAL',    ico: '\u26AA'       },
+    { key: 'battle',   label: 'BATTLE',   ico: '\u2620\uFE0F' },
+    { key: 'research', label: 'RESEARCH', ico: '\uD83D\uDD2C' },
   ];
   return (
     <View style={s.modePanel}>
@@ -452,16 +465,23 @@ function HomeModePanel({ router, onOverflow }: any) {
         <TouchableOpacity
           key={m.key}
           style={s.modeTile}
-          onPress={m.onPress}
+          onPress={() => goTo(m.key)}
           activeOpacity={0.82}
         >
-          <LinearGradient
-            colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
-            style={s.modeTileInner}
-          >
-            <Text style={s.modeIco}>{m.ico}</Text>
-            <Text style={s.modeLabel}>{m.label}</Text>
-          </LinearGradient>
+          <ButtonAssetSlot
+            asset={(HOME_BUTTONS as any)[m.key]}
+            state="default"
+            style={s.modeTileInner as any}
+            fallback={
+              <LinearGradient
+                colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
+                style={s.modeTileInnerFallback}
+              >
+                <Text style={s.modeIco}>{m.ico}</Text>
+                <Text style={s.modeLabel}>{m.label}</Text>
+              </LinearGradient>
+            }
+          />
         </TouchableOpacity>
       ))}
     </View>
@@ -472,33 +492,34 @@ function HomeModePanel({ router, onOverflow }: any) {
  *  BLOCCO 8 — HomeMainBanner
  *  Summon banner rate-up (artwork hero in primo piano)
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeMainBanner({ router, homeHero }: any) {
+function HomeMainBanner({ onPress, homeHero }: any) {
   const featuredName = homeHero?.name || 'Hoplite';
   return (
     <TouchableOpacity
       style={s.mainBanner}
-      onPress={() => router.push('/(tabs)/gacha' as any)}
+      onPress={onPress}
       activeOpacity={0.88}
     >
-      <LinearGradient
-        colors={['rgba(27,53,112,0.97)', 'rgba(8,15,40,0.95)']}
-        start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-        style={s.bannerInner}
+      <AssetSlot
+        asset={HOME_BANNERS.summonMain.frame}
+        style={s.bannerInnerAbs as any}
       >
         <LinearGradient
-          colors={['rgba(255,215,0,0.15)', 'transparent']}
-          style={StyleSheet.absoluteFill}
-        />
-        <View style={s.bannerLeft}>
-          <Text style={s.bannerTag}>RATE-UP</Text>
-          <Text style={s.bannerTitle} numberOfLines={1}>{featuredName}</Text>
-          <Text style={s.bannerSub}>Evoca ora</Text>
-          <View style={s.bannerBtn}>
-            <Text style={s.bannerBtnTxt}>SUMMON {'\u203A'}</Text>
+          colors={['rgba(27,53,112,0.97)', 'rgba(8,15,40,0.95)']}
+          start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+          style={s.bannerInner}
+        >
+          <View style={s.bannerLeft}>
+            <Text style={s.bannerTag}>RATE-UP</Text>
+            <Text style={s.bannerTitle} numberOfLines={1}>{featuredName}</Text>
+            <Text style={s.bannerSub}>Evoca ora</Text>
+            <View style={s.bannerBtn}>
+              <Text style={s.bannerBtnTxt}>SUMMON {'\u203A'}</Text>
+            </View>
           </View>
-        </View>
-        <Text style={s.bannerSparkle}>{'\u2728'}</Text>
-      </LinearGradient>
+          <Text style={s.bannerSparkle}>{'\u2728'}</Text>
+        </LinearGradient>
+      </AssetSlot>
     </TouchableOpacity>
   );
 }
@@ -561,19 +582,22 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
 /* ═══════════════════════════════════════════════════════════════════
  *  BLOCCO 10 — HomeBottomNav (custom, 10 slot, PLAY centrale)
  *  Chat · Bag · Artifact · Skill · Team   [PLAY]   Guild · Shop · Forge · Menu
+ *
+ *  Asset-driven: ogni icona passa dal manifest `HOME_NAV_ICONS`.
+ *  Routing centralizzato: `HOME_ROUTES[key]`; '' = azione in-home (chat/overflow).
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeBottomNav({ router, onChat, onMenu }: any) {
-  const left = [
+function HomeBottomNav({ goTo, onChat, onMenu }: any) {
+  const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
     { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
-    { key: 'bag',      label: 'BAG',      ico: '\uD83C\uDF92', onPress: () => router.push('/equipment' as any) },
-    { key: 'artifact', label: 'ARTIFACT', ico: '\uD83D\uDD2E', onPress: () => router.push('/artifacts' as any) },
-    { key: 'skill',    label: 'SKILL',    ico: '\uD83D\uDCDA', onPress: onMenu },
-    { key: 'team',     label: 'TEAM',     ico: '\uD83D\uDC65', onPress: () => router.push('/(tabs)/heroes' as any) },
+    { key: 'bag',      label: 'BAG',      ico: '\uD83C\uDF92', onPress: () => goTo('bag') },
+    { key: 'artifact', label: 'ARTIFACT', ico: '\uD83D\uDD2E', onPress: () => goTo('artifact') },
+    { key: 'skill',    label: 'SKILL',    ico: '\uD83D\uDCDA', onPress: () => goTo('skill') },
+    { key: 'team',     label: 'TEAM',     ico: '\uD83D\uDC65', onPress: () => goTo('team') },
   ];
-  const right = [
-    { key: 'guild', label: 'GUILD', ico: '\uD83D\uDEE1\uFE0F', onPress: () => router.push('/guild' as any) },
-    { key: 'shop',  label: 'SHOP',  ico: '\uD83C\uDFEA',        onPress: () => router.push('/shop' as any) },
-    { key: 'forge', label: 'FORGE', ico: '\u2692\uFE0F',         onPress: () => router.push('/soul-forge' as any) },
+  const right: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
+    { key: 'guild', label: 'GUILD', ico: '\uD83D\uDEE1\uFE0F', onPress: () => goTo('guild') },
+    { key: 'shop',  label: 'SHOP',  ico: '\uD83C\uDFEA',        onPress: () => goTo('shop') },
+    { key: 'forge', label: 'FORGE', ico: '\u2692\uFE0F',         onPress: () => goTo('forge') },
     { key: 'menu',  label: 'MENU',  ico: '\u2630',               onPress: onMenu },
   ];
 
@@ -585,25 +609,32 @@ function HomeBottomNav({ router, onChat, onMenu }: any) {
         style={s.bottomNavBg}
       />
       <View style={s.navSide}>
-        {left.map(n => <NavBtn key={n.key} {...n} />)}
+        {left.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
       </View>
-      <PlayShield onPress={() => router.push('/combat' as any)} />
+      <PlayShield onPress={() => goTo('play')} />
       <View style={s.navSide}>
-        {right.map(n => <NavBtn key={n.key} {...n} />)}
+        {right.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
       </View>
     </View>
   );
 }
 
-function NavBtn({ label, ico, onPress }: any) {
+function NavBtn({ label, ico, onPress, navKey }: any) {
   return (
     <TouchableOpacity style={s.navBtn} onPress={onPress} activeOpacity={0.75}>
-      <LinearGradient
-        colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
-        style={s.navIconWrap}
-      >
-        <Text style={s.navIco}>{ico}</Text>
-      </LinearGradient>
+      <ButtonAssetSlot
+        asset={navKey ? (HOME_NAV_ICONS as any)[navKey] : undefined}
+        state="default"
+        style={s.navIconWrap as any}
+        fallback={
+          <LinearGradient
+            colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
+            style={s.navIconWrapFallback}
+          >
+            <Text style={s.navIco}>{ico}</Text>
+          </LinearGradient>
+        }
+      />
       <Text style={s.navLabel}>{label}</Text>
     </TouchableOpacity>
   );
@@ -612,19 +643,26 @@ function NavBtn({ label, ico, onPress }: any) {
 function PlayShield({ onPress }: { onPress: () => void }) {
   return (
     <TouchableOpacity style={s.playShield} onPress={onPress} activeOpacity={0.85}>
-      <LinearGradient
-        colors={[GOLD_PALE, GOLD, '#B8902A']}
-        start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
-        style={s.playShieldOuter}
-      >
-        <LinearGradient
-          colors={[NIGHT_3, NIGHT_2, NIGHT_0]}
-          style={s.playShieldInner}
-        >
-          <Text style={s.playText}>PLAY</Text>
-          <Text style={s.playSubText}>AUTO</Text>
-        </LinearGradient>
-      </LinearGradient>
+      <ButtonAssetSlot
+        asset={HOME_PLAY_SHIELD}
+        state="default"
+        style={{ flex: 1 }}
+        fallback={
+          <LinearGradient
+            colors={[GOLD_PALE, GOLD, '#B8902A']}
+            start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+            style={s.playShieldOuter}
+          >
+            <LinearGradient
+              colors={[NIGHT_3, NIGHT_2, NIGHT_0]}
+              style={s.playShieldInner}
+            >
+              <Text style={s.playText}>PLAY</Text>
+              <Text style={s.playSubText}>AUTO</Text>
+            </LinearGradient>
+          </LinearGradient>
+        }
+      />
     </TouchableOpacity>
   );
 }
@@ -1041,5 +1079,52 @@ const s = StyleSheet.create({
   modalItemLabel: {
     color: '#fff', fontSize: 9, fontWeight: '800',
     textAlign: 'center',
+  },
+
+  /* ─────────── SLOT ASSET-DRIVEN (fallback tecnici neutri) ─────────── */
+  bgReadabilityOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(8,14,38,0.30)', // overlay minimale per leggibilità UI, nessun bloom
+  },
+  placeholderFill: {
+    flex: 1, width: '100%', height: '100%',
+    alignItems: 'center', justifyContent: 'center',
+    backgroundColor: 'rgba(27,53,112,0.92)',
+    borderRadius: 18,
+  },
+  modeTileInnerFallback: {
+    flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2,
+  },
+  navIconWrapFallback: {
+    flex: 1, width: '100%', height: '100%',
+    alignItems: 'center', justifyContent: 'center',
+    borderRadius: 8,
+  },
+  bannerInnerAbs: {
+    flex: 1, overflow: 'hidden',
+  },
+
+  /* Server time phase (dev info) */
+  serverPhase: {
+    color: GOLD_PALE, fontSize: 8, fontWeight: '700',
+    marginTop: 2, letterSpacing: 0.4, textTransform: 'uppercase',
+  },
+
+  /* Badge fase temporale (dev/QA) */
+  phaseBadge: {
+    position: 'absolute',
+    top: 4, left: '50%',
+    transform: [{ translateX: -90 }],
+    width: 180,
+    paddingHorizontal: 8, paddingVertical: 3,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.45)',
+    zIndex: 99,
+    alignItems: 'center',
+  },
+  phaseBadgeTxt: {
+    color: GOLD_PALE, fontSize: 9, fontWeight: '900',
+    letterSpacing: 0.6,
   },
 });
