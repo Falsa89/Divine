@@ -133,7 +133,6 @@ export default function HeroHopliteGuardiaFerrea({ size, active = true, playKey 
         left: boxLeft,
         width: renderedW,
         height: renderedH,
-        transform: [{ scaleX: -1 }],
       }}>
         <Image
           source={FRAMES[index]}

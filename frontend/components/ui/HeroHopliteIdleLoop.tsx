@@ -181,7 +181,6 @@ export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
         left: boxLeft,
         width: renderedW,
         height: renderedH,
-        transform: [{ scaleX: -1 }],
       }}>
         <Image
           source={FRAMES[idx]}
@@ -193,7 +192,7 @@ export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
       {HOPLITE_IDLE_DIAG && (
         <View style={styles.diagBadge} pointerEvents="none">
           <Text style={styles.diagText}>
-            {`i#${instanceIdRef.current}·f${idx + 1}/5·c${cyclesCompleted}`}
+            {`i#${instanceIdRef.current}·f${idx + 1}/5·c${cyclesCompleted}·src${String(FRAMES[idx]).slice(-6)}`}
           </Text>
         </View>
       )}

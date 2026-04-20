@@ -250,25 +250,22 @@ export default function BattleSprite({
     }
   }, [showHeal]);
 
-  // --- Facing --------------------------------------------------------------
-  // Ogni asset ha un "native facing" noto (cioè la direzione in cui il
-  // personaggio appare quando è renderizzato dal proprio player SENZA il
-  // wrapper esterno di BattleSprite). Team A (non-enemy) guarda a destra,
-  // Team B a sinistra.
-  //
-  // HOPLITE: i 3 frame player (HeroHopliteIdleLoop, HeroHopliteAffondo,
-  // HeroHopliteGuardiaFerrea) hanno TUTTI un `scaleX: -1` hardcoded
-  // internamente, quindi il loro output nativo è già orientato a DESTRA.
-  // Se qui dichiariamo 'left' (come combat_base.png originale), applichiamo
-  // un secondo flip che cancella il primo → Hoplite guarderebbe il proprio
-  // team invece del nemico (bug facing). Quindi nativeFacing='right' è
-  // corretto per far sì che Team A (target='right') non flippi, e Team B
-  // (target='left') flippi una sola volta.
+  // --- Facing (SINGLE SOURCE OF TRUTH) -----------------------------------
+  // Per Hoplite TUTTI i 3 player (idle, affondo, guardia_ferrea) sono stati
+  // refactored per NON applicare flip interno: renderizzano i PNG sorgente
+  // "as-is" (native-facing LEFT, perché i PNG sono esportati con il
+  // personaggio rivolto a sinistra). L'UNICO flip avviene qui, tramite
+  // `facingScaleX` applicato al wrapper esterno di BattleSprite. Così:
+  //  - Team A (non-enemy, lato sinistro) → targetFacing='right' ≠ native='left'
+  //      → scaleX=-1 → character flipped a destra → guarda il nemico ✓
+  //  - Team B (enemy, lato destro) → targetFacing='left' == native='left'
+  //      → scaleX=+1 → character rimane a sinistra → guarda il nemico ✓
+  // Questa regola vale COERENTEMENTE per idle, attack e skill.
   const isHoplite = isGreekHoplite(
     character?.hero_id || character?.id,
     character?.hero_name || character?.name,
   );
-  const nativeFacing: 'left' | 'right' = isHoplite ? 'right' : 'right';
+  const nativeFacing: 'left' | 'right' = isHoplite ? 'left' : 'right';
   const targetFacing: 'left' | 'right' = isEnemy ? 'left' : 'right';
   const facingScaleX = nativeFacing !== targetFacing ? -1 : 1;
 

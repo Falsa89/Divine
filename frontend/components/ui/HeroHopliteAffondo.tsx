@@ -186,7 +186,6 @@ export default function HeroHopliteAffondo({ size, active = true, playKey = 0, o
         left: boxLeft,
         width: renderedW,
         height: renderedH,
-        transform: [{ scaleX: -1 }],
       }}>
         <Image
           source={FRAMES[index]}
