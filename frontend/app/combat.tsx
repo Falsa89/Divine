@@ -63,6 +63,7 @@ export default function CombatScreen() {
   const [result, setResult] = useState<any>(null);
   const [turn, setTurn] = useState(0);
   const [teamA, setTeamA] = useState<any[]>([]);
+  const affinityGrantedRef = React.useRef<boolean>(false);
   const [teamB, setTeamB] = useState<any[]>([]);
   const [speed, setSpeed] = useState(1);
   const [showUlt, setShowUlt] = useState(false);
@@ -234,6 +235,7 @@ export default function CombatScreen() {
 
   const startBattle = async () => {
     setPhase('loading'); setError(''); setLogLines([]);
+    affinityGrantedRef.current = false;
     try {
       const r = await apiCall('/api/battle/simulate', { method: 'POST' });
       setResult(r);
@@ -333,6 +335,34 @@ export default function CombatScreen() {
   const SPEED_BASE: Record<number, number> = { 1: 1500, 2: 650, 3: 300 };
   const speedRef = useRef(speed);
   useEffect(() => { speedRef.current = speed; }, [speed]);
+  const grantAffinity = async (team: any[]) => {
+    if (affinityGrantedRef.current) return;
+    affinityGrantedRef.current = true;
+    try {
+      const heroIds = Array.from(new Set(
+        (team || [])
+          .map((c: any) => c.hero_id || c.id)
+          .filter(Boolean),
+      ));
+      if (heroIds.length === 0) return;
+      const res = await apiCall('/api/sanctuary/affinity/gain', {
+        method: 'POST',
+        body: JSON.stringify({ hero_ids: heroIds, source: 'battle_complete' }),
+      });
+      // If any hero leveled up, console.log for now (in futuro: toast UI)
+      if (Array.isArray(res?.results)) {
+        const lvUps = res.results.filter((r: any) => r.leveled_up);
+        if (lvUps.length) {
+          console.log('[Affinity] level-ups:', lvUps.map((r: any) =>
+            `${r.hero_name} -> Lv ${r.level} (${r.new_title})`
+          ).join(', '));
+        }
+      }
+    } catch (e) {
+      console.warn('[Affinity] gain failed', e);
+    }
+  };
+
   const delay = () => (SPEED_BASE[speedRef.current] ?? 1500);
 
   const addLog = (entry: any) => {
@@ -347,7 +377,9 @@ export default function CombatScreen() {
       [...(res.team_a_final || []), ...(res.team_b_final || [])].forEach((c: any) => {
         if (!c.is_alive) setSpriteState(c.id, { state: 'dead' });
       });
-      setPhase('result'); refreshUser(); return;
+      setPhase('result'); refreshUser();
+      grantAffinity(res.team_a_final || []);
+      return;
     }
     const t = res.battle_log[ti]; setTurn(ti + 1);
     if (ai >= t.actions.length) {
@@ -475,6 +507,7 @@ export default function CombatScreen() {
         if (!c.is_alive) setSpriteState(c.id, { state: 'dead' });
       });
       setPhase('result'); refreshUser();
+      grantAffinity(result.team_a_final || []);
     }
   };
 

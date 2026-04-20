@@ -349,33 +349,46 @@ export default function SanctuaryScreen() {
 
             <Text style={st.sectionTitle}>Struttura Sfide</Text>
             <View style={st.infoBlock}>
+              <Text style={st.infoBullet}>{'\u2022'} Costellazione di {hero.name} {'\u2192'} 9 stage totali</Text>
               <Text style={st.infoBullet}>{'\u2022'} Eroe {hero.name} OBBLIGATORIO nel team</Text>
               <Text style={st.infoBullet}>{'\u2022'} Nemici in vantaggio crescente</Text>
-              <Text style={st.infoBullet}>{'\u2022'} Ogni {con.boss_every} battaglie: BOSS</Text>
-              <Text style={st.infoBullet}>{'\u2022'} Drop boss: 1-3 Frammenti d'Anima</Text>
+              <Text style={st.infoBullet}>{'\u2022'} Boss agli stage 3, 6 e 9</Text>
+              <Text style={st.infoBullet}>{'\u2022'} Drop boss: 1{'\u2013'}3 Frammenti d'Anima</Text>
               <Text style={st.infoBullet}>{'\u2022'} Frammenti specifici per {hero.name}, usabili solo per la sua costellazione</Text>
             </View>
 
-            {/* Preview stage list */}
-            <Text style={st.sectionTitle}>Prossimi Stage</Text>
-            {[1, 2, 3, 4, 5, 6].map(i => {
-              const stage = con.highest_stage + i - (con.highest_stage > 0 ? 0 : 0);
-              // Ma la logica: mostriamo stage current+1 ... current+6
-              const s = con.highest_stage + i;
+            {/* Preview stage list — 9 stage totali (boss a 3, 6, 9) */}
+            <Text style={st.sectionTitle}>Progressione (9 Stage)</Text>
+            <Text style={st.dailyDesc}>
+              La costellazione di {hero.name} ha 9 stage con boss agli stage 3, 6 e 9.
+              Completando tutti e 9 si sblocca la costellazione massima.
+            </Text>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(s => {
               const isBoss = s % con.boss_every === 0;
-              const isNext = i === 1;
+              const isCleared = s <= con.highest_stage;
+              const isNext = s === con.highest_stage + 1;
               return (
                 <View key={s} style={[
                   st.stageRow,
+                  isCleared && { borderColor: '#44DD8840', backgroundColor: 'rgba(68,221,136,0.06)' },
                   isNext && { borderColor: '#FFD70080', backgroundColor: 'rgba(255,215,0,0.05)' },
-                  isBoss && !isNext && { borderColor: '#FF4D6D40' },
+                  isBoss && !isNext && !isCleared && { borderColor: '#FF4D6D40' },
                 ]}>
-                  <Text style={[st.stageNum, isBoss && { color: '#FF4D6D' }]}>
+                  <Text style={[
+                    st.stageNum,
+                    isBoss && !isCleared && { color: '#FF4D6D' },
+                    isCleared && { color: '#44DD88' },
+                  ]}>
                     Stage {s}
                   </Text>
-                  <Text style={[st.stageLabel, isBoss && { color: '#FF4D6D', fontWeight: '900' }]}>
+                  <Text style={[
+                    st.stageLabel,
+                    isBoss && !isCleared && { color: '#FF4D6D', fontWeight: '900' },
+                    isCleared && { color: '#44DD88' },
+                  ]}>
                     {isBoss ? '\u2620\uFE0F BOSS \u2192 Frammenti d\u0027Anima' : 'Battaglia standard'}
                   </Text>
+                  {isCleared && <Text style={st.stageNext}>{'\u2705'}</Text>}
                   {isNext && <Text style={st.stageNext}>{'\uD83D\uDCCD'}</Text>}
                 </View>
               );
@@ -419,27 +432,29 @@ export default function SanctuaryScreen() {
             ) : null}
 
             <View style={st.actionCard}>
-              <Text style={st.actionTitle}>{'\uD83C\uDFE0'} Imposta come Home Hero</Text>
+              <Text style={st.actionTitle}>{'\uD83C\uDFE0'} Seleziona come Home Hero</Text>
               <Text style={st.actionDesc}>
                 {data.is_home
-                  ? `${hero.name} è già il tuo eroe mostrato in homepage.`
+                  ? `${hero.name} è attualmente il tuo eroe in homepage. Puoi riconfermare qui o visitare un altro Santuario per cambiare.`
                   : `Mostra ${hero.name} come splash principale nella homepage.`}
               </Text>
               <TouchableOpacity
                 onPress={setHomeHero}
-                disabled={acting || data.is_home || (!data.is_owned && !isBorea)}
+                disabled={acting || (!data.is_owned && !isBorea)}
                 style={st.actionBtnWrap}
+                activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={data.is_home ? ['#444', '#333'] : ['#FFD700', '#CC9900']}
+                  colors={data.is_home ? ['#44DD88', '#2A8855'] : ['#FFD700', '#CC9900']}
                   start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
                   style={st.actionBtn}
                 >
-                  <Text style={[
-                    st.actionBtnTxt,
-                    { color: data.is_home ? '#888' : '#1a0e2e' },
-                  ]}>
-                    {data.is_home ? 'Già Home Hero' : (acting ? '...' : 'Imposta come Home')}
+                  <Text style={[st.actionBtnTxt, { color: '#0a0612' }]}>
+                    {acting
+                      ? '...'
+                      : data.is_home
+                        ? `\u2705 Attivo in Homepage \u2022 Riconferma`
+                        : 'Seleziona eroe'}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>

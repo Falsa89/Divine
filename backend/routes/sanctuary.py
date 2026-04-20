@@ -143,6 +143,7 @@ def _compute_affinity_progress(exp: int, level: int):
 # ===================== COSTELLAZIONE =====================
 CONSTELLATION_DAILY_HERO_LIMIT = 3  # massimo 3 eroi al giorno
 CONSTELLATION_BOSS_EVERY = 3        # boss ogni 3 stage
+CONSTELLATION_TOTAL_STAGES = 9      # Progressione fissa a 9 stage (boss a 3, 6, 9)
 CONSTELLATION_BOSS_FRAGMENT_MIN = 1
 CONSTELLATION_BOSS_FRAGMENT_MAX = 3
 
@@ -395,6 +396,8 @@ def register_sanctuary_routes(router, db, get_current_user, serialize_doc):
                 "next_stage": next_stage,
                 "next_is_boss": next_is_boss,
                 "boss_every": CONSTELLATION_BOSS_EVERY,
+                "total_stages": CONSTELLATION_TOTAL_STAGES,
+                "is_complete": highest >= CONSTELLATION_TOTAL_STAGES,
                 "fragments": con.get("fragments", 0),
                 "fragment_name": f"Frammenti d'Anima di {hero.get('name')}",
                 "daily_limit": CONSTELLATION_DAILY_HERO_LIMIT,
@@ -513,6 +516,10 @@ def register_sanctuary_routes(router, db, get_current_user, serialize_doc):
         highest = con.get("highest_stage", 0)
         if req.stage > highest + 1:
             raise HTTPException(400, f"Devi completare prima lo stage {highest + 1}")
+        if req.stage > CONSTELLATION_TOTAL_STAGES:
+            raise HTTPException(400, f"La costellazione ha un massimo di {CONSTELLATION_TOTAL_STAGES} stage")
+        if highest >= CONSTELLATION_TOTAL_STAGES:
+            raise HTTPException(400, "Costellazione già completata")
 
         # Daily quota check
         today_str = date.today().isoformat()

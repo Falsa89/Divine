@@ -16,10 +16,10 @@ import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 export const HOPLITE_IDLE_DIAG = false;
 
 const FRAMES = HOPLITE_IDLE_ASSETS;
-// TIMING production (Msg 420): ulteriormente velocizzato — ciclo ~795ms totale
-// Frame 3 (peak breath) più corto, 1/5 stabili. Non deve sembrare nervoso.
+// TIMING production (Msg 422): ulteriore micro-step di velocità.
+// Frame 3 (peak breath) corto, 1/5 stabili. Non deve sembrare nervoso.
 const FRAME_DURATIONS_MS_DIAG = [1200, 1200, 1200, 1200, 1200];
-const FRAME_DURATIONS_MS_PROD = [220, 130, 95, 130, 220];  // cycle ~795ms
+const FRAME_DURATIONS_MS_PROD = [190, 120, 90, 120, 190];  // cycle ~710ms (-10% vs 795)
 const FRAME_DURATIONS_MS = HOPLITE_IDLE_DIAG ? FRAME_DURATIONS_MS_DIAG : FRAME_DURATIONS_MS_PROD;
 const FRAME_COLORS = ['#FF2929', '#29FF5A', '#2980FF', '#FFD700', '#B829FF'];
 
@@ -58,12 +58,13 @@ const FRAME_H = 400;
 const FEET_CX_IN_FRAME = 260;
 const FEET_CY_IN_FRAME = 390;
 const RIG_FEET_Y_NORM = 800 / 1024;
-const RIG_BODY_H_NORM = 0.683;
-// FRAME_BODY_H_PX — altezza corpo NATIVA nei PNG idle (misurata dai 5 frame).
-// I frame idle hanno bordi trasparenti più ampi dell'Affondo, quindi il body
-// reale è ~300px invece dei 341 dell'Affondo. Scalare sul body REALE garantisce
-// parità scenica: idle e attack/skill appaiono della stessa altezza visiva.
-const FRAME_BODY_H_PX = 300;
+// MISURA REALE (Msg 422): body_h=341 su tutti i 5 frame idle (bbox alpha).
+// Uguale a Affondo peak (342). L'idle appare visivamente piu' piccolo perche'
+// attack/skill si muovono dinamicamente (feet_cx si sposta 40px + arco del salto)
+// mentre idle e' statico => meno "spazio scenico". Compenso alzando RIG_BODY_H_NORM
+// di +8% solo qui => parita' visiva senza falsificare il FRAME_BODY_H_PX.
+const RIG_BODY_H_NORM = 0.74;           // era 0.683 (compensazione staticita')
+const FRAME_BODY_H_PX = 341;            // valore REALE misurato con PIL su PNG
 
 type Props = {
   size: number;
