@@ -542,6 +542,86 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
             "power": calculate_hero_power(hero, uh),
         }
 
+    # ==================== ENCYCLOPEDIA (catalog base hero, not instance) ====================
+    @router.get("/hero/encyclopedia/{hero_id}")
+    async def get_hero_encyclopedia(hero_id: str):
+        """Encyclopedia-style view for the Hero Collection.
+        Returns BOTH a 'base' (Lv 1, base stars) and 'max' (Lv 100 ref, max stars
+        actually reachable for this hero's base rarity) projection.
+        No user_heroes instance required — works for unowned heroes too.
+        """
+        hero = await db.heroes.find_one({"id": hero_id})
+        if not hero:
+            raise HTTPException(status_code=404, detail="Eroe non trovato")
+
+        base_rarity = hero.get("rarity", 1)
+        base_stats = hero.get("base_stats", {}) or {}
+        element = hero.get("element", "fire")
+        hero_class = hero.get("hero_class", "DPS")
+
+        # ---- BASE projection ----
+        base_level = 1
+        base_stars = base_rarity
+        base_level_cap = STAR_LEVEL_CAPS.get(base_stars, 30)
+        base_effective_stats = dict(base_stats)  # at lv 1, multiplier = 1
+        base_skills = get_hero_skills(element, hero_class, base_stars, False)
+
+        # ---- MAX projection ----
+        # Target: Lv 100 reference, stelle = massimo realmente raggiungibile per la base rarity
+        max_stars = MAX_STARS_BY_BASE.get(base_rarity, 6)
+        max_star_cap = STAR_LEVEL_CAPS.get(max_stars, 30)
+        # L'utente ha chiesto Lv 100 come riferimento, limitato al cap reale
+        max_level = min(100, max_star_cap)
+        level_mult_int = 1 + (max_level - 1) * 0.05
+        max_effective_stats = {}
+        for k, v in base_stats.items():
+            if isinstance(v, bool):
+                max_effective_stats[k] = v
+            elif isinstance(v, int):
+                max_effective_stats[k] = int(v * level_mult_int)
+            elif isinstance(v, float):
+                max_effective_stats[k] = round(v * (1 + (max_level - 1) * 0.01), 3)
+            else:
+                max_effective_stats[k] = v
+        max_skills = get_hero_skills(element, hero_class, max_stars, False)
+
+        # Power preview (usa stars+level del profilo MAX)
+        try:
+            max_power = calculate_hero_power(hero, {"stars": max_stars, "level": max_level})
+        except Exception:
+            max_power = None
+        try:
+            base_power = calculate_hero_power(hero, {"stars": base_stars, "level": base_level})
+        except Exception:
+            base_power = None
+
+        return {
+            "hero_id": hero.get("id"),
+            "name": hero.get("name"),
+            "description": hero.get("description"),
+            "element": element,
+            "hero_class": hero_class,
+            "rarity": base_rarity,
+            "faction": hero.get("faction"),
+            "image": hero.get("image_url"),
+            "base": {
+                "level": base_level,
+                "level_cap": base_level_cap,
+                "stars": base_stars,
+                "stats": base_effective_stats,
+                "skills": base_skills,
+                "power": base_power,
+            },
+            "max": {
+                "level": max_level,
+                "level_cap": max_star_cap,
+                "stars": max_stars,
+                "stats": max_effective_stats,
+                "skills": max_skills,
+                "power": max_power,
+            },
+        }
+
     # ==================== STAR FUSION SYSTEM (Hokage Crisis style) ====================
     @router.get("/fusion/info/{user_hero_id}")
     async def get_fusion_info(user_hero_id: str, current_user: dict = Depends(get_current_user)):

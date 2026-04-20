@@ -17,14 +17,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity, StyleSheet,
-  ActivityIndicator, Modal, Image as RNImage,
+  ActivityIndicator, Image as RNImage,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
-
-const API = process.env.EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_BACKEND_URL || '';
+import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
+import { apiCall } from '../utils/api';
 
 type Hero = {
   id: string;
@@ -66,21 +66,17 @@ export default function HeroCollection() {
   const [loading, setLoading] = useState(true);
   const [allHeroes, setAllHeroes] = useState<Hero[]>([]);
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set());
-  const [selected, setSelected] = useState<Hero | null>(null);
   const [filterRarity, setFilterRarity] = useState<FilterRarity>('all');
   const [filterOwned, setFilterOwned] = useState<FilterOwned>('all');
 
   useEffect(() => {
     (async () => {
       try {
-        const headers: Record<string, string> = {};
-        if (token) headers['Authorization'] = `Bearer ${token}`;
-        const [allRes, ownedRes] = await Promise.all([
-          fetch(`${API}/api/heroes`),
-          fetch(`${API}/api/user/heroes`, { headers }),
+        // `/api/heroes` è pubblica; `/api/user/heroes` richiede il token (gestito da apiCall).
+        const [all, owned] = await Promise.all([
+          apiCall('/api/heroes').catch(() => []),
+          apiCall('/api/user/heroes').catch(() => []),
         ]);
-        const all = await allRes.json();
-        const owned = await ownedRes.json();
         setAllHeroes(Array.isArray(all) ? all : []);
         const ids = new Set<string>(
           (Array.isArray(owned) ? owned : [])
@@ -121,11 +117,9 @@ export default function HeroCollection() {
   const completionPct = totalHeroes > 0 ? Math.round((totalOwned / totalHeroes) * 100) : 0;
 
   const openHero = (h: Hero) => {
-    if (ownedIds.has(h.id)) {
-      router.push({ pathname: '/hero-detail', params: { id: h.id } } as any);
-    } else {
-      setSelected(h);
-    }
+    // Sempre apre la scheda enciclopedia (catalogo), indipendentemente dal possesso.
+    // La scheda di inventario (hero-detail) si raggiunge solo da menu inventario.
+    router.push({ pathname: '/hero-encyclopedia', params: { id: h.id } } as any);
   };
 
   return (
@@ -219,7 +213,11 @@ export default function HeroCollection() {
                 >
                   {/* Portrait */}
                   <View style={st.portraitBox}>
-                    {h.image_url ? (
+                    {isHopliteHero(h.id, h.name) ? (
+                      <View style={!owned && st.portraitLocked}>
+                        <HeroPortrait heroId={h.id} heroName={h.name} size={90} />
+                      </View>
+                    ) : h.image_url ? (
                       <RNImage
                         source={{ uri: h.image_url }}
                         style={[st.portrait, !owned && st.portraitLocked]}
@@ -261,73 +259,8 @@ export default function HeroCollection() {
         </ScrollView>
       )}
 
-      {/* Locked Hero Modal */}
-      <Modal
-        visible={!!selected}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setSelected(null)}
-      >
-        <View style={st.modalBackdrop}>
-          <View style={st.modalBox}>
-            {selected && (
-              <>
-                <View style={st.modalHeader}>
-                  <Text style={st.modalTitle}>{selected.name}</Text>
-                  <TouchableOpacity onPress={() => setSelected(null)}>
-                    <Text style={st.modalClose}>{'\u2715'}</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={[st.modalPortrait, { borderColor: RARITY_COLOR[selected.rarity || 1] || '#666' }]}>
-                  {selected.image_url ? (
-                    <RNImage
-                      source={{ uri: selected.image_url }}
-                      style={[st.modalImg, st.portraitLocked]}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <View style={st.portraitFallback}><Text style={st.portraitFallbackTxt}>{selected.name?.[0]}</Text></View>
-                  )}
-                  <View style={st.modalLockOverlay}>
-                    <Text style={st.modalLockIcon}>{'\uD83D\uDD12'}</Text>
-                    <Text style={st.modalLockTxt}>NON POSSEDUTO</Text>
-                  </View>
-                </View>
-                <View style={st.modalStats}>
-                  <StatRow label="Rarità" value={`${'\u2605'.repeat(selected.rarity || 1)} ${RARITY_LABEL[selected.rarity || 1]}`} color={RARITY_COLOR[selected.rarity || 1]} />
-                  <StatRow label="Elemento" value={`${ELEMENT_EMOJI[(selected.element || 'neutral').toLowerCase()] || ''} ${selected.element || '-'}`} />
-                  <StatRow label="Classe" value={selected.hero_class || '-'} />
-                  <StatRow label="Fazione" value={selected.faction || '-'} />
-                  {selected.max_hp && <StatRow label="HP Base" value={String(selected.max_hp)} />}
-                  {selected.attack && <StatRow label="ATK Base" value={String(selected.attack)} />}
-                  {selected.defense && <StatRow label="DEF Base" value={String(selected.defense)} />}
-                </View>
-                {selected.description && (
-                  <Text style={st.modalDesc}>{selected.description}</Text>
-                )}
-                <TouchableOpacity
-                  style={st.gachaBtn}
-                  onPress={() => { setSelected(null); router.push('/(tabs)/gacha' as any); }}
-                >
-                  <LinearGradient colors={['#FFD700', '#CC9900']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={st.gachaBtnInner}>
-                    <Text style={st.gachaBtnTxt}>{'\uD83C\uDFB0 Prova al Gacha'}</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
+      {/* Locked modal rimosso: ora tutti i click vanno alla scheda enciclopedia */}
     </SafeAreaView>
-  );
-}
-
-function StatRow({ label, value, color }: { label: string; value: string; color?: string }) {
-  return (
-    <View style={st.statRow}>
-      <Text style={st.statLabel}>{label}</Text>
-      <Text style={[st.statValue, color && { color }]}>{value}</Text>
-    </View>
   );
 }
 

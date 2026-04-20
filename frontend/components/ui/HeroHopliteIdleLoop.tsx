@@ -16,9 +16,9 @@ import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 export const HOPLITE_IDLE_DIAG = false;
 
 const FRAMES = HOPLITE_IDLE_ASSETS;
-// TIMING production rapido (Msg 520): frame 3 più corto, 1 e 5 stabili
+// TIMING production (Msg 418): ulteriormente velocizzato — ciclo ~930ms totale
 const FRAME_DURATIONS_MS_DIAG = [1200, 1200, 1200, 1200, 1200];
-const FRAME_DURATIONS_MS_PROD = [360, 200, 150, 200, 360];  // cycle 1270ms
+const FRAME_DURATIONS_MS_PROD = [260, 150, 110, 150, 260];  // cycle ~930ms
 const FRAME_DURATIONS_MS = HOPLITE_IDLE_DIAG ? FRAME_DURATIONS_MS_DIAG : FRAME_DURATIONS_MS_PROD;
 const FRAME_COLORS = ['#FF2929', '#29FF5A', '#2980FF', '#FFD700', '#B829FF'];
 
@@ -47,8 +47,8 @@ function tick() {
     subscribers.forEach(fn => fn(currentFrameIdx));
   }
 }
-// Avvia il ticker una volta
-setInterval(tick, 150);
+// Avvia il ticker una volta — tick 40ms per onorare anche il frame più corto (~110ms)
+setInterval(tick, 40);
 
 // ═══════════════════════════════════════════════════════════════════════
 
