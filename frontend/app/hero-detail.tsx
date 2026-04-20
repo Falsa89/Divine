@@ -195,6 +195,52 @@ export default function HeroDetailScreen() {
           </LinearGradient>
         </Animated.View>
 
+        {/* SANTUARIO ACCESS BLOCK — 3 shortcut dal Hero Detail */}
+        <Animated.View entering={FadeInDown.delay(50)} style={s.sanctRow}>
+          <TouchableOpacity
+            style={s.sanctBtnWrap}
+            activeOpacity={0.8}
+            onPress={() => router.push({ pathname: '/sanctuary', params: { heroId: data.hero_id || data.id } } as any)}
+          >
+            <LinearGradient
+              colors={['#FFD70022', '#FFD70008']}
+              start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+              style={[s.sanctBtn, { borderColor: '#FFD70060' }]}
+            >
+              <Text style={s.sanctIcon}>{'\uD83C\uDFDB\uFE0F'}</Text>
+              <Text style={[s.sanctLabel, { color: '#FFD700' }]}>Santuario</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={s.sanctBtnWrap}
+            activeOpacity={0.8}
+            onPress={() => router.push({ pathname: '/sanctuary', params: { heroId: data.hero_id || data.id, tab: 'affinity' } } as any)}
+          >
+            <LinearGradient
+              colors={['#FF88DD22', '#FF88DD08']}
+              start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+              style={[s.sanctBtn, { borderColor: '#FF88DD60' }]}
+            >
+              <Text style={s.sanctIcon}>{'\uD83D\uDC96'}</Text>
+              <Text style={[s.sanctLabel, { color: '#FF88DD' }]}>Affinità</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={s.sanctBtnWrap}
+            activeOpacity={0.8}
+            onPress={() => router.push({ pathname: '/sanctuary', params: { heroId: data.hero_id || data.id, tab: 'constellation' } } as any)}
+          >
+            <LinearGradient
+              colors={['#4ECDC422', '#4ECDC408']}
+              start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+              style={[s.sanctBtn, { borderColor: '#4ECDC460' }]}
+            >
+              <Text style={s.sanctIcon}>{'\u2728'}</Text>
+              <Text style={[s.sanctLabel, { color: '#4ECDC4' }]}>Costellazione</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </Animated.View>
+
         {/* Tab selector */}
         <TabSelector tabs={TABS} active={tab} onChange={setTab} accentColor={col} />
 
@@ -403,6 +449,11 @@ const s = StyleSheet.create({
   expFill: { height: '100%', borderRadius: 3 },
   expTxt: { color: COLORS.textMuted, fontSize: 7, marginTop: 2 },
   levelUpBtnWrap: { alignSelf: 'flex-start', borderRadius: 8, overflow: 'hidden', marginTop: 4 },
+  sanctRow: { flexDirection: 'row', gap: 8, marginTop: 10 },
+  sanctBtnWrap: { flex: 1, borderRadius: 10, overflow: 'hidden' },
+  sanctBtn: { paddingVertical: 10, paddingHorizontal: 6, borderRadius: 10, borderWidth: 1, alignItems: 'center', gap: 3 },
+  sanctIcon: { fontSize: 16 },
+  sanctLabel: { fontSize: 10, fontWeight: '900', letterSpacing: 0.3 },
   levelUpBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 8 },
   levelUpTxt: { color: '#fff', fontSize: 10, fontWeight: '900', letterSpacing: 0.5 },
   // Stats

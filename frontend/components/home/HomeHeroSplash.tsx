@@ -1,24 +1,28 @@
 /**
- * HomeHeroSplash
- * ================
+ * HomeHeroSplash — VERSIONE PROVVISORIA PULITA (Msg 424)
+ * ========================================================
  * Splash grande dell'eroe corrente di homepage.
  *
- * Animazioni PREMIUM non-battle-like:
- *  - RESPIRO (robust): scaleY oscilla tra 1.000 e 1.008 su 4500ms con easing
- *    sin. Ampiezza volutamente micro (0.8%) → leggibile ma mai invadente.
- *  - BLINK (robust): opacity dell'Image scende a 0.82 per 90ms ogni 4-7s
- *    random. Simula lo sbattito palpebra SENZA dover mappare la regione
- *    occhi di ogni eroe → funziona su qualsiasi splash (robusto al 100%).
+ * STATO ATTUALE (transizione):
+ *  - RESPIRO GLOBALE MICRO (scaleY 1.000 → 1.004 in 5000ms, sinusoidale).
+ *    Ampiezza volutamente MINIMALE. Lasciato solo per non avere splash
+ *    completamente statico. Questa NON è la soluzione finale.
+ *  - BLINK GLOBALE RIMOSSO (era opacity pulse su TUTTO lo splash,
+ *    riconosciuto come placeholder tecnico non corretto).
+ *
+ * PROSSIMA FASE (nuovo motore dedicato, non ancora implementato):
+ *  - Blink REALE sugli occhi via regione `eyes` da heroAnimationConfig.
+ *  - Respiro LOCALIZZATO sul torace via regione `chest`.
+ *  - Extra capelli/accessori solo per eroi 5★ e 6★+.
+ *  - NESSUN movimento globale dell'intera immagine.
  *
  * Tap → callback onPress (apre /sanctuary).
- * Se l'image_url è null (es. Borea senza asset o Hoplite local), usa
- * HeroPortrait che gestisce le regole di fallback locali.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image as RNImage } from 'react-native';
 import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat, withTiming,
-  withSequence, withDelay, Easing, cancelAnimation,
+  withSequence, Easing, cancelAnimation,
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import HeroPortrait, { isHopliteHero } from '../ui/HeroPortrait';
@@ -45,45 +49,21 @@ type Props = {
 };
 
 export default function HomeHeroSplash({ hero, source, inTutorial, width, height, onPress }: Props) {
+  // RESPIRO globale MINIMALE (provvisorio — sarà sostituito da breath localizzato su torace)
   const breathScaleY = useSharedValue(1);
-  const blinkOpacity = useSharedValue(1);
 
   useEffect(() => {
-    // RESPIRO: ampiezza micro, durata lunga, sinusoidale
     breathScaleY.value = withRepeat(
       withSequence(
-        withTiming(1.008, { duration: 2250, easing: Easing.inOut(Easing.sin) }),
-        withTiming(1.000, { duration: 2250, easing: Easing.inOut(Easing.sin) }),
+        withTiming(1.004, { duration: 2500, easing: Easing.inOut(Easing.sin) }),
+        withTiming(1.000, { duration: 2500, easing: Easing.inOut(Easing.sin) }),
       ), -1, false,
     );
-
-    // BLINK: schedulato pseudo-random via withDelay+withRepeat
-    const scheduleBlink = () => {
-      // Ogni "tick" = 5-7s pausa + 90ms blink + 100ms recover
-      const pauseMs = 5000 + Math.random() * 2000;
-      blinkOpacity.value = withSequence(
-        withDelay(pauseMs, withTiming(0.82, { duration: 90, easing: Easing.out(Easing.quad) })),
-        withTiming(1, { duration: 110, easing: Easing.out(Easing.quad) }),
-      );
-    };
-    // Partenza dopo breve delay
-    const firstBlink = setTimeout(scheduleBlink, 2000);
-    // Ripeti ogni ~6s (robusto anche senza callback onFinish)
-    const interval = setInterval(scheduleBlink, 6500);
-
-    return () => {
-      cancelAnimation(breathScaleY);
-      cancelAnimation(blinkOpacity);
-      clearTimeout(firstBlink);
-      clearInterval(interval);
-    };
+    return () => { cancelAnimation(breathScaleY); };
   }, []);
 
   const breathStyle = useAnimatedStyle(() => ({
     transform: [{ scaleY: breathScaleY.value }],
-  }));
-  const blinkStyle = useAnimatedStyle(() => ({
-    opacity: blinkOpacity.value,
   }));
 
   if (!hero) {
@@ -113,36 +93,34 @@ export default function HomeHeroSplash({ hero, source, inTutorial, width, height
         end={{ x: 0.5, y: 1 }}
       />
 
-      {/* Splash ANIMATO */}
+      {/* Splash — solo respiro globale MICRO (provvisorio) */}
       <Animated.View style={[st.splashWrap, breathStyle, { height, width }]}>
-        <Animated.View style={[blinkStyle, { flex: 1 }]}>
-          {isHop ? (
-            <HeroPortrait heroId={hero.id} heroName={hero.name} size={Math.min(width, height)} />
-          ) : hero.image_url ? (
-            <RNImage
-              source={{ uri: hero.image_url }}
-              style={{ width: '100%', height: '100%' }}
-              resizeMode="cover"
-            />
-          ) : (
-            // Fallback stilizzato per Borea / eroi senza asset
-            <LinearGradient
-              colors={isBorea
-                ? ['#4A7BFF', '#1B2A4E', '#0A1020']
-                : [col + '60', col + '20', '#0A0612']}
-              style={st.fallback}
-              start={{ x: 0.3, y: 0 }}
-              end={{ x: 0.7, y: 1 }}
-            >
-              <Text style={[st.fallbackIcon, { color: col }]}>
-                {isBorea ? '\uD83C\uDF2C\uFE0F' : hero.name?.[0]}
-              </Text>
-              {isBorea && (
-                <Text style={st.fallbackSub}>Vento del Nord</Text>
-              )}
-            </LinearGradient>
-          )}
-        </Animated.View>
+        {isHop ? (
+          <HeroPortrait heroId={hero.id} heroName={hero.name} size={Math.min(width, height)} variant="card" />
+        ) : hero.image_url ? (
+          <RNImage
+            source={{ uri: hero.image_url }}
+            style={{ width: '100%', height: '100%' }}
+            resizeMode="cover"
+          />
+        ) : (
+          // Fallback stilizzato per Borea / eroi senza asset
+          <LinearGradient
+            colors={isBorea
+              ? ['#4A7BFF', '#1B2A4E', '#0A1020']
+              : [col + '60', col + '20', '#0A0612']}
+            style={st.fallback}
+            start={{ x: 0.3, y: 0 }}
+            end={{ x: 0.7, y: 1 }}
+          >
+            <Text style={[st.fallbackIcon, { color: col }]}>
+              {isBorea ? '\uD83C\uDF2C\uFE0F' : hero.name?.[0]}
+            </Text>
+            {isBorea && (
+              <Text style={st.fallbackSub}>Vento del Nord</Text>
+            )}
+          </LinearGradient>
+        )}
       </Animated.View>
 
       {/* Gradient overlay bottom per leggibilità label */}

@@ -42,9 +42,10 @@ export default function SanctuaryScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const heroId = params.heroId as string;
+  const initialTab = (params.tab as Tab) || 'overview';
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<Tab>('overview');
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [acting, setActing] = useState(false);
 
   const load = useCallback(async () => {
@@ -174,7 +175,7 @@ export default function SanctuaryScreen() {
           <Animated.View entering={FadeIn} style={{ gap: 12 }}>
             <View style={[st.splashBig, { borderColor: rarCol + '60' }]}>
               {isHop ? (
-                <HeroPortrait heroId={hero.id} heroName={hero.name} size={280} />
+                <HeroPortrait heroId={hero.id} heroName={hero.name} size={280} variant="detail" />
               ) : hero.image_url ? (
                 <RNImage source={{ uri: hero.image_url }} style={st.splashImg} resizeMode="cover" />
               ) : (
@@ -432,29 +433,32 @@ export default function SanctuaryScreen() {
             ) : null}
 
             <View style={st.actionCard}>
-              <Text style={st.actionTitle}>{'\uD83C\uDFE0'} Seleziona come Home Hero</Text>
+              <Text style={st.actionTitle}>{'\uD83C\uDFE0'} Eroe della Homepage</Text>
               <Text style={st.actionDesc}>
                 {data.is_home
-                  ? `${hero.name} è attualmente il tuo eroe in homepage. Puoi riconfermare qui o visitare un altro Santuario per cambiare.`
-                  : `Mostra ${hero.name} come splash principale nella homepage.`}
+                  ? `${hero.name} è ATTUALMENTE il tuo eroe in homepage. Apri il Santuario di un altro eroe e premi "Imposta come eroe homepage" per sostituirlo.`
+                  : `Imposta ${hero.name} come splash principale nella homepage. Sostituirà l'eroe attualmente attivo.`}
               </Text>
               <TouchableOpacity
                 onPress={setHomeHero}
-                disabled={acting || (!data.is_owned && !isBorea)}
+                disabled={acting || data.is_home || (!data.is_owned && !isBorea)}
                 style={st.actionBtnWrap}
                 activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={data.is_home ? ['#44DD88', '#2A8855'] : ['#FFD700', '#CC9900']}
+                  colors={data.is_home ? ['#2a4a3a', '#1a2e25'] : ['#FFD700', '#CC9900']}
                   start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
                   style={st.actionBtn}
                 >
-                  <Text style={[st.actionBtnTxt, { color: '#0a0612' }]}>
+                  <Text style={[
+                    st.actionBtnTxt,
+                    { color: data.is_home ? '#44DD88' : '#1a0e2e' },
+                  ]}>
                     {acting
                       ? '...'
                       : data.is_home
-                        ? `\u2705 Attivo in Homepage \u2022 Riconferma`
-                        : 'Seleziona eroe'}
+                        ? `\u2705 Attuale Eroe Homepage`
+                        : `\uD83C\uDFE0 Imposta come eroe homepage`}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>

@@ -22,8 +22,27 @@ const HOPLITE_NAME_ALIASES = ['hoplite', 'greek hoplite', 'spartana'];
 // "usa la splash locale" invece di un URL remoto.
 export const GREEK_HOPLITE_IMAGE_SENTINEL = 'asset:greek_hoplite:splash';
 
-// Splash art = immagine PRINCIPALE (lista / dettaglio / fullscreen)
-export const GREEK_HOPLITE_SPLASH: ImageSourcePropType = require('../../assets/heroes/greek_hoplite/splash.png');
+// ──────────────────────────────────────────────────────────────────────
+// ECCEZIONE STORICA ASSET (Msg 424):
+// I file di greek_hoplite NON seguono la convenzione standard.
+//  - base.png   → è il VERO splash/card (UI piccolo, homepage, collection)
+//  - splash.png → è in realtà il DETAIL/fullscreen art
+// I file non vengono rinominati per non rompere storia git/cache.
+// Il mapping qui rispetta il loro vero utilizzo UX.
+// Vedi /app/frontend/components/ui/heroAssetManifest.ts per la convenzione
+// pulita che seguiranno TUTTI i prossimi eroi (card.png / detail.png / combat_base.png).
+// ──────────────────────────────────────────────────────────────────────
+
+// Card art = splash piccolo per UI (list / homepage / collection grid)
+export const GREEK_HOPLITE_CARD: ImageSourcePropType = require('../../assets/heroes/greek_hoplite/base.png');
+
+// Detail art = fullscreen grande (santuario, hero-detail, encyclopedia)
+export const GREEK_HOPLITE_DETAIL: ImageSourcePropType = require('../../assets/heroes/greek_hoplite/splash.png');
+
+// Alias legacy: molti consumer esistenti usano GREEK_HOPLITE_SPLASH.
+// Lo manteniamo PUNTANDO AL CARD (quello corretto per UI piccolo).
+// Se serve il fullscreen, usare esplicitamente GREEK_HOPLITE_DETAIL.
+export const GREEK_HOPLITE_SPLASH: ImageSourcePropType = GREEK_HOPLITE_CARD;
 
 // Combat base = usata solo dal rig / preview, NON come immagine principale
 export const GREEK_HOPLITE_COMBAT_BASE: ImageSourcePropType = require('../../assets/heroes/greek_hoplite/combat_base.png');
@@ -44,9 +63,8 @@ export function isHopliteSentinel(imageUrl?: string | null): boolean {
 }
 
 /**
- * Risolve il source di un'Image eroe per contesti UI (list / detail / fullscreen viewer).
- * Per Hoplite → splash.png
- * Per il sentinel backend → splash.png
+ * Risolve il source per contesti UI PICCOLI (list / card / homepage splash / collection).
+ * Per Hoplite → base.png (vero splash)
  * Per altri eroi → {uri: remoteUrl}
  * Ritorna null se non c'è nulla da mostrare.
  */
@@ -55,8 +73,24 @@ export function resolveHeroImageSource(
   heroId?: string | null,
   heroName?: string | null
 ): ImageSourcePropType | null {
-  if (isGreekHoplite(heroId, heroName)) return GREEK_HOPLITE_SPLASH;
-  if (imageUrl && imageUrl.startsWith('asset:greek_hoplite')) return GREEK_HOPLITE_SPLASH;
+  if (isGreekHoplite(heroId, heroName)) return GREEK_HOPLITE_CARD;
+  if (imageUrl && imageUrl.startsWith('asset:greek_hoplite')) return GREEK_HOPLITE_CARD;
+  if (imageUrl) return { uri: imageUrl };
+  return null;
+}
+
+/**
+ * Risolve il source per FULLSCREEN / DETAIL grande (santuario, hero-detail, encyclopedia).
+ * Per Hoplite → splash.png (il vero fullscreen art)
+ * Per altri eroi → {uri: remoteUrl} (non abbiamo ancora detail separati per gli altri)
+ */
+export function resolveHeroDetailImageSource(
+  imageUrl?: string | null,
+  heroId?: string | null,
+  heroName?: string | null
+): ImageSourcePropType | null {
+  if (isGreekHoplite(heroId, heroName)) return GREEK_HOPLITE_DETAIL;
+  if (imageUrl && imageUrl.startsWith('asset:greek_hoplite')) return GREEK_HOPLITE_DETAIL;
   if (imageUrl) return { uri: imageUrl };
   return null;
 }

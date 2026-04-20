@@ -4,7 +4,9 @@
  * Rende il portrait di un eroe.
  *
  * Regole:
- * - Per Greek Hoplite → usa SEMPRE la splash art (non il rig).
+ * - Per Greek Hoplite → usa l'asset locale corretto in base al parametro `variant`.
+ *     - variant='card' (default) → base.png (UI piccolo, homepage, collection)
+ *     - variant='detail'         → splash.png (fullscreen grande, santuario, encyclopedia)
  * - Per gli altri eroi → usa l'imageUri remoto.
  * - Se `useRig=true` ed è Greek Hoplite, usa il rig animato (solo per combat / preview).
  */
@@ -14,7 +16,9 @@ import HeroHopliteIdle from './HeroHopliteIdle';
 import {
   isGreekHoplite,
   resolveHeroImageSource,
-  GREEK_HOPLITE_SPLASH,
+  resolveHeroDetailImageSource,
+  GREEK_HOPLITE_CARD,
+  GREEK_HOPLITE_DETAIL,
 } from './hopliteAssets';
 
 type Props = {
@@ -22,6 +26,8 @@ type Props = {
   heroName?: string | null;
   imageUri?: string | number | null;
   size: number;
+  /** 'card' per UI piccola (default), 'detail' per fullscreen grande */
+  variant?: 'card' | 'detail';
   /** se true e è Greek Hoplite → usa il rig animato invece della splash (solo combat/preview) */
   useRig?: boolean;
   animated?: boolean;
@@ -35,6 +41,7 @@ export default function HeroPortrait({
   heroName,
   imageUri,
   size,
+  variant = 'card',
   useRig = false,
   animated = true,
   style,
@@ -52,12 +59,13 @@ export default function HeroPortrait({
     );
   }
 
-  // Greek Hoplite standard → splash art
+  // Greek Hoplite standard → card (UI) o detail (fullscreen)
   if (isHoplite) {
+    const hopliteSource = variant === 'detail' ? GREEK_HOPLITE_DETAIL : GREEK_HOPLITE_CARD;
     return (
       <View style={[{ width: size, height: size }, containerStyle]}>
         <Image
-          source={GREEK_HOPLITE_SPLASH}
+          source={hopliteSource}
           style={[{ width: size, height: size }, style]}
           resizeMode="cover"
         />
@@ -65,8 +73,9 @@ export default function HeroPortrait({
     );
   }
 
-  // Altri eroi: usa imageUri remoto
-  const resolved = resolveHeroImageSource(
+  // Altri eroi: usa imageUri remoto (resolver varia in base a variant)
+  const resolver = variant === 'detail' ? resolveHeroDetailImageSource : resolveHeroImageSource;
+  const resolved = resolver(
     typeof imageUri === 'string' ? imageUri : null,
     heroId,
     heroName,
