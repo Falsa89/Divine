@@ -1,119 +1,78 @@
 /**
- * HeroHopliteIdleLoop — IDLE FRAME-BASED (RESUME-AWARE + COLOR MARKER)
- * =====================================================================
+ * HeroHopliteIdleLoop — GLOBAL TICKER (bulletproof)
+ * ===================================================
  *
- * DIAGNOSTICA POTENZIATA (Msg 516):
- *  - Timing uniforme 1200ms/frame → ciclo totale 6000ms, ogni frame
- *    è visibile per 1.2s garantiti.
- *  - Color marker a bordo del cell: 1=RED, 2=GREEN, 3=BLUE, 4=YELLOW,
- *    5=PURPLE. Se la posa non cambia ma il colore sì → problema asset
- *    cache. Se entrambi cambiano → tutto ok.
- *  - NIENTE badge testo dentro (era specchiato dal wrapper flippato).
- *    Il text badge viene renderizzato OUT-OF-FLIP da BattleSprite.
+ * Approccio RADICALE: timer a livello MODULE che tick ogni ~250ms e aggiorna
+ * un counter globale. I componenti IdleLoop si sottoscrivono via useSyncExternalStore-like
+ * pattern. Zero dipendenza da useEffect lifecycle. Zero problemi di remount.
+ *
+ * IL TIMER GIRA SEMPRE (module-level), quindi anche se il componente React
+ * viene rimontato N volte, il counter globale continua ad avanzare.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 
 export const HOPLITE_IDLE_DIAG = true;
 
 const FRAMES = HOPLITE_IDLE_ASSETS;
-
-// TIMING DIAGNOSTICO: 1200ms uniforme
 const FRAME_DURATIONS_MS_DIAG = [1200, 1200, 1200, 1200, 1200];
 const FRAME_DURATIONS_MS_PROD = [520, 280, 220, 320, 520];
-const FRAME_DURATIONS_MS = HOPLITE_IDLE_DIAG
-  ? FRAME_DURATIONS_MS_DIAG
-  : FRAME_DURATIONS_MS_PROD;
-
-// Color marker per frame (leggibile anche se posa non cambia)
+const FRAME_DURATIONS_MS = HOPLITE_IDLE_DIAG ? FRAME_DURATIONS_MS_DIAG : FRAME_DURATIONS_MS_PROD;
 const FRAME_COLORS = ['#FF2929', '#29FF5A', '#2980FF', '#FFD700', '#B829FF'];
+
+// ═══════════════════════════════════════════════════════════════════════
+// GLOBAL TICKER — module-level. Avanza SEMPRE, indipendente da React.
+// Tick ogni 150ms (più fine granularità del frame più corto 220ms).
+// Mantiene `currentFrameIdx` globale. Notifica sottoscrittori su cambio.
+// ═══════════════════════════════════════════════════════════════════════
+let currentFrameIdx = 0;
+let elapsedInCurrentFrame = 0;
+let lastTickAt = Date.now();
+const subscribers = new Set<(idx: number) => void>();
+
+function tick() {
+  const now = Date.now();
+  const delta = now - lastTickAt;
+  lastTickAt = now;
+  elapsedInCurrentFrame += delta;
+  const holdMs = FRAME_DURATIONS_MS[currentFrameIdx];
+  if (elapsedInCurrentFrame >= holdMs) {
+    elapsedInCurrentFrame = 0;
+    currentFrameIdx = (currentFrameIdx + 1) % FRAMES.length;
+    if (HOPLITE_IDLE_DIAG) {
+      console.log(`[IDLE_GLOBAL] → f${currentFrameIdx + 1}/5 (subs=${subscribers.size})`);
+    }
+    subscribers.forEach(fn => fn(currentFrameIdx));
+  }
+}
+// Avvia il ticker una volta
+setInterval(tick, 150);
+
+// ═══════════════════════════════════════════════════════════════════════
 
 const FRAME_W = 520;
 const FRAME_H = 400;
 const FEET_CX_IN_FRAME = 260;
 const FEET_CY_IN_FRAME = 390;
-
 const RIG_FEET_Y_NORM = 800 / 1024;
 const RIG_BODY_H_NORM = 0.683;
 const FRAME_BODY_H_PX = 341;
 
-let IDLE_MOUNT_COUNTER = 0;
-
 type Props = {
   size: number;
-  animated?: boolean;
-  /** Callback opzionale: segnala al parent il frame index corrente (per HUD non-flippato) */
-  onFrameChange?: (idx: number, cycles: number) => void;
+  animated?: boolean;  // retained for API, ignored by implementation
 };
 
-export default function HeroHopliteIdleLoop({ size, animated = true, onFrameChange }: Props) {
-  const [idx, setIdx] = useState(0);
-  const idxRef = useRef(0);
-  const cyclesRef = useRef(0);
-  const frameStartAtRef = useRef<number>(Date.now());
-  const elapsedInFrameRef = useRef<number>(0);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const instanceIdRef = useRef<number | null>(null);
-  const onFrameChangeRef = useRef(onFrameChange);
-  onFrameChangeRef.current = onFrameChange;
-
-  if (instanceIdRef.current === null) {
-    IDLE_MOUNT_COUNTER += 1;
-    instanceIdRef.current = IDLE_MOUNT_COUNTER;
-    if (HOPLITE_IDLE_DIAG) {
-      console.log(`[IDLE_DIAG] MOUNT i#${instanceIdRef.current}`);
-    }
-  }
+export default function HeroHopliteIdleLoop({ size }: Props) {
+  const [idx, setIdx] = useState(currentFrameIdx);
 
   useEffect(() => {
-    if (!animated) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-        const now = Date.now();
-        elapsedInFrameRef.current += now - frameStartAtRef.current;
-      }
-      return;
-    }
-    frameStartAtRef.current = Date.now();
-    let cancelled = false;
-
-    const advanceAndSchedule = () => {
-      if (cancelled) return;
-      const next = (idxRef.current + 1) % FRAMES.length;
-      if (next === 0) cyclesRef.current += 1;
-      idxRef.current = next;
-      setIdx(next);
-      onFrameChangeRef.current?.(next, cyclesRef.current);
-      if (HOPLITE_IDLE_DIAG) {
-        console.log(`[IDLE_DIAG] i#${instanceIdRef.current} → f${next + 1}/5 c${cyclesRef.current}`);
-      }
-      frameStartAtRef.current = Date.now();
-      elapsedInFrameRef.current = 0;
-      schedule();
-    };
-
-    const schedule = () => {
-      if (cancelled || !animated) return;
-      const holdMs = FRAME_DURATIONS_MS[idxRef.current];
-      const remaining = Math.max(0, holdMs - elapsedInFrameRef.current);
-      timeoutRef.current = setTimeout(advanceAndSchedule, remaining);
-    };
-
-    schedule();
-    return () => {
-      cancelled = true;
-      if (timeoutRef.current) { clearTimeout(timeoutRef.current); timeoutRef.current = null; }
-    };
-  }, [animated]);
-
-  useEffect(() => {
-    return () => {
-      if (HOPLITE_IDLE_DIAG) {
-        console.log(`[IDLE_DIAG] UNMOUNT i#${instanceIdRef.current}`);
-      }
-    };
+    const handler = (i: number) => setIdx(i);
+    subscribers.add(handler);
+    // sync immediately to current global idx
+    setIdx(currentFrameIdx);
+    return () => { subscribers.delete(handler); };
   }, []);
 
   // Geometria
@@ -143,8 +102,6 @@ export default function HeroHopliteIdleLoop({ size, animated = true, onFrameChan
           fadeDuration={0}
         />
       </View>
-      {/* Color marker ring attorno al cell — visibile anche se pose non cambia.
-          Se il colore cicla rosso→verde→blu→giallo→viola ma la posa no → bug asset. */}
       {HOPLITE_IDLE_DIAG && (
         <View
           pointerEvents="none"

@@ -62,6 +62,8 @@ type Props = {
    *    battle, non un derivato della visibilità.
    */
   actionInstanceId?: number;
+  /** Facing scaleX: 1 = no flip (native right-facing), -1 = flip to left */
+  facingScaleX?: number;
   /** LEGACY: non più usato. */
   animated?: boolean;
   /** LEGACY: non più usato. */
@@ -72,6 +74,7 @@ export default function HeroHopliteRig({
   size,
   state = 'idle',
   actionInstanceId = 0,
+  facingScaleX = 1,
 }: Props) {
   // ───────────────────────────────────────────────────────────────────────
   // VISIBILITY MAP
@@ -106,7 +109,10 @@ export default function HeroHopliteRig({
   }, [state]);
 
   return (
-    <View style={[styles.root, { width: size, height: size }]}>
+    <View style={[
+      styles.root,
+      { width: size, height: size, transform: [{ scaleX: facingScaleX }] },
+    ]}>
 
       {/* ═══════════════════════════════════════════════════════════════════
           LAYER 1 — IDLE FRAME-BASED ANIMATO (loop reference-approved)

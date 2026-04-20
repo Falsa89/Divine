@@ -251,21 +251,21 @@ export default function BattleSprite({
   }, [showHeal]);
 
   // --- Facing (SINGLE SOURCE OF TRUTH) -----------------------------------
-  // Per Hoplite TUTTI i 3 player (idle, affondo, guardia_ferrea) sono stati
-  // refactored per NON applicare flip interno: renderizzano i PNG sorgente
-  // "as-is" (native-facing LEFT, perché i PNG sono esportati con il
-  // personaggio rivolto a sinistra). L'UNICO flip avviene qui, tramite
-  // `facingScaleX` applicato al wrapper esterno di BattleSprite. Così:
-  //  - Team A (non-enemy, lato sinistro) → targetFacing='right' ≠ native='left'
-  //      → scaleX=-1 → character flipped a destra → guarda il nemico ✓
-  //  - Team B (enemy, lato destro) → targetFacing='left' == native='left'
-  //      → scaleX=+1 → character rimane a sinistra → guarda il nemico ✓
-  // Questa regola vale COERENTEMENTE per idle, attack e skill.
+  // Verificato via AI vision analysis dei PNG sorgente: i 5 idle + 8 affondo +
+  // 6 guardia_ferrea PNG sono TUTTI nativamente RIGHT-facing (spear/face
+  // orientati a destra nell'art originale).
+  // Con `nativeFacing='right'`:
+  //  - Team A (isEnemy=false, target='right') → native==target → scaleX=+1
+  //    (nessun flip) → character rimane RIGHT → guarda Team B enemy ✓
+  //  - Team B (isEnemy=true, target='left') → native!=target → scaleX=-1
+  //    (flip) → character renderizzato LEFT → guarda Team A enemy ✓
+  // Il flip è applicato su un wrapper View STATIC e NON-ANIMATO (non dentro
+  // Animated.View) → niente nested-scaleX composition bugs iOS/Android.
   const isHoplite = isGreekHoplite(
     character?.hero_id || character?.id,
     character?.hero_name || character?.name,
   );
-  const nativeFacing: 'left' | 'right' = isHoplite ? 'left' : 'right';
+  const nativeFacing: 'left' | 'right' = isHoplite ? 'right' : 'right';
   const targetFacing: 'left' | 'right' = isEnemy ? 'left' : 'right';
   const facingScaleX = nativeFacing !== targetFacing ? -1 : 1;
 
@@ -274,20 +274,15 @@ export default function BattleSprite({
   // translateY = idleY (breathing loop) + transY (combat motion: jump Terremoto,
   // sink death, ecc.) → breath e combat-motion coesistono senza conflitti.
   //
-  // FACING FIX (Msg 518 troubleshoot): il facingScaleX STATICO è stato spostato
-  // DENTRO questa transform list per evitare nested-scaleX composition bugs su
-  // iOS/Android (RN issue #48673). Precedentemente era su un wrapper View
-  // separato → nested transforms producevano facing errato su mobile.
-  // scaleX combinato con il scale animato: scaleX = facingScaleX × spriteScale.value
-  // mentre scaleY = spriteScale.value → il flip direzionale rimane isolato
-  // dagli scale animati durante attack/skill.
+  // FACING: il flip facingScaleX è applicato a un wrapper View DEDICATO e
+  // SEPARATO dagli altri transform, posizionato OUTSIDE this Animated.View.
+  // Vedi render: <View outer-facing-flip>{<Animated.View motionStyle>...}</View>
   const motionStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: transX.value },
       { translateY: idleY.value + transY.value },
       { rotate: `${bodyRot.value}deg` },
-      { scaleX: facingScaleX * spriteScale.value },
-      { scaleY: spriteScale.value },
+      { scale: spriteScale.value },
     ],
     opacity: spriteOp.value,
   }));
@@ -415,14 +410,9 @@ export default function BattleSprite({
             backgroundColor: 'transparent',
           }}
         >
-          {/* Inner container (precedentemente aveva scaleX per il facing;
-              ora il facing è consolidato nel motionStyle sopra per evitare
-              nested-scaleX composition bugs su iOS/Android). Qui resta solo
-              l'ancoraggio layout del contenuto. Gli overlay (hit flash,
-              badge, debug) NON devono essere flippati ma essendo nel parent
-              motion container ricevono facingScaleX dal motionStyle stesso —
-              accettabile perché sono comunque dentro la cella del personaggio
-              e il flip è l'orientamento naturale del sprite. */}
+          {/* Static plain View: NO scaleX qui. Il facing è delegato come
+              prop ad HeroHopliteRig che lo applica direttamente al proprio
+              root → evita nested transform composition bugs su iOS/Android. */}
           <View
             style={{
               width: frameW,
@@ -455,7 +445,7 @@ export default function BattleSprite({
               // Il rig usa BASE 1024 × 1024 quadrato, lo ancoriamo al bottom
               // del frame portrait (size × size*1.25) via justifyContent.
               <View style={{ width: frameW, height: frameH, alignItems: 'center', justifyContent: 'flex-end' }}>
-                <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} />
+                <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} facingScaleX={facingScaleX} />
               </View>
             ) : heroImage ? (
               // Combat pose (es. Hoplite combat_base.png). contain preserva aspect
