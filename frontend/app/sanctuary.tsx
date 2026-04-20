@@ -436,36 +436,41 @@ export default function SanctuaryScreen() {
               <Text style={st.actionTitle}>{'\uD83C\uDFE0'} Eroe della Homepage</Text>
               <Text style={st.actionDesc}>
                 {data.is_home
-                  ? `${hero.name} è ATTUALMENTE il tuo eroe in homepage. Apri il Santuario di un altro eroe e premi "Imposta come eroe homepage" per sostituirlo.`
-                  : `Imposta ${hero.name} come splash principale nella homepage. Sostituirà l'eroe attualmente attivo.`}
+                  ? `${hero.name} è ATTUALMENTE il tuo eroe mostrato in homepage.`
+                  : `Apri la lista dei tuoi eroi posseduti per scegliere chi mostrare in homepage.`}
               </Text>
               <TouchableOpacity
-                onPress={setHomeHero}
-                disabled={acting || data.is_home || (!data.is_owned && !isBorea)}
+                onPress={() => router.push('/select-home-hero' as any)}
                 style={st.actionBtnWrap}
                 activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={data.is_home ? ['#2a4a3a', '#1a2e25'] : ['#FFD700', '#CC9900']}
+                  colors={['#FFD700', '#CC9900']}
                   start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
                   style={st.actionBtn}
                 >
-                  <Text style={[
-                    st.actionBtnTxt,
-                    { color: data.is_home ? '#44DD88' : '#1a0e2e' },
-                  ]}>
-                    {acting
-                      ? '...'
-                      : data.is_home
-                        ? `\u2705 Attuale Eroe Homepage`
-                        : `\uD83C\uDFE0 Imposta come eroe homepage`}
+                  <Text style={[st.actionBtnTxt, { color: '#1a0e2e' }]}>
+                    {'\uD83D\uDCCB'} Seleziona eroe homepage
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
-              {!data.is_owned && !isBorea && (
-                <Text style={st.actionWarn}>
-                  {'\u26A0\uFE0F'} Devi prima possedere questo eroe.
-                </Text>
+              {data.is_owned && !data.is_home && (
+                <TouchableOpacity
+                  onPress={setHomeHero}
+                  disabled={acting}
+                  style={[st.actionBtnWrap, { marginTop: 6 }]}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={['rgba(255,255,255,0.08)', 'rgba(255,255,255,0.02)']}
+                    start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                    style={[st.actionBtn, { borderWidth: 1, borderColor: '#FFD70060' }]}
+                  >
+                    <Text style={[st.actionBtnTxt, { color: '#FFD700', fontSize: 12 }]}>
+                      {acting ? '...' : `\u26A1 Scorciatoia: imposta ${hero.name}`}
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               )}
             </View>
 

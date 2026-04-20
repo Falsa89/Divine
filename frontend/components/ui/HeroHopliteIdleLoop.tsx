@@ -16,10 +16,10 @@ import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 export const HOPLITE_IDLE_DIAG = false;
 
 const FRAMES = HOPLITE_IDLE_ASSETS;
-// TIMING production (Msg 422): ulteriore micro-step di velocità.
-// Frame 3 (peak breath) corto, 1/5 stabili. Non deve sembrare nervoso.
+// TIMING production (Msg 426): step ulteriore — ciclo ~595ms
+// Frame 3 peak sempre il più corto. Prudente: -16% ma non frenetico.
 const FRAME_DURATIONS_MS_DIAG = [1200, 1200, 1200, 1200, 1200];
-const FRAME_DURATIONS_MS_PROD = [190, 120, 90, 120, 190];  // cycle ~710ms (-10% vs 795)
+const FRAME_DURATIONS_MS_PROD = [160, 100, 75, 100, 160];  // cycle ~595ms
 const FRAME_DURATIONS_MS = HOPLITE_IDLE_DIAG ? FRAME_DURATIONS_MS_DIAG : FRAME_DURATIONS_MS_PROD;
 const FRAME_COLORS = ['#FF2929', '#29FF5A', '#2980FF', '#FFD700', '#B829FF'];
 

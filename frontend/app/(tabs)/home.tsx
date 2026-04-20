@@ -136,23 +136,20 @@ export default function HomeTab() {
           ))}
         </ScrollView>
 
-        {/* Center Hero Splash — ANIMATO (respiro + blink) */}
+        {/* Center Hero Splash — SOLO immagine, senza card/cornice/label */}
         <View style={s.centerCol}>
           <HomeHeroSplash
             hero={homeHero}
             source={homeSource}
             inTutorial={inTutorial}
-            width={Math.min(W * 0.48, 260)}
-            height={Math.min(H * 0.55, 380)}
+            width={Math.min(W * 0.52, 280)}
+            height={Math.min(H * 0.58, 400)}
             onPress={() => {
               if (homeHero?.id) {
                 router.push({ pathname: '/sanctuary', params: { heroId: homeHero.id } } as any);
               }
             }}
           />
-          <View style={s.collBadge}>
-            <Text style={s.collText}>{heroCount} eroi nella collezione</Text>
-          </View>
           {/* COMBATTI button */}
           <TouchableOpacity
             onPress={() => router.push('/combat' as any)}
