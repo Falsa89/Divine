@@ -273,12 +273,21 @@ export default function BattleSprite({
   // motionStyle applicato al motion container INTERNO (layer 2). Mai al root.
   // translateY = idleY (breathing loop) + transY (combat motion: jump Terremoto,
   // sink death, ecc.) → breath e combat-motion coesistono senza conflitti.
+  //
+  // FACING FIX (Msg 518 troubleshoot): il facingScaleX STATICO è stato spostato
+  // DENTRO questa transform list per evitare nested-scaleX composition bugs su
+  // iOS/Android (RN issue #48673). Precedentemente era su un wrapper View
+  // separato → nested transforms producevano facing errato su mobile.
+  // scaleX combinato con il scale animato: scaleX = facingScaleX × spriteScale.value
+  // mentre scaleY = spriteScale.value → il flip direzionale rimane isolato
+  // dagli scale animati durante attack/skill.
   const motionStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: transX.value },
       { translateY: idleY.value + transY.value },
       { rotate: `${bodyRot.value}deg` },
-      { scale: spriteScale.value },
+      { scaleX: facingScaleX * spriteScale.value },
+      { scaleY: spriteScale.value },
     ],
     opacity: spriteOp.value,
   }));
@@ -406,15 +415,20 @@ export default function BattleSprite({
             backgroundColor: 'transparent',
           }}
         >
-          {/* Facing flip container — scaleX applicato solo qui.              */}
-          {/* Gli overlay (hit flash, badge, debug) NON devono essere flippati. */}
+          {/* Inner container (precedentemente aveva scaleX per il facing;
+              ora il facing è consolidato nel motionStyle sopra per evitare
+              nested-scaleX composition bugs su iOS/Android). Qui resta solo
+              l'ancoraggio layout del contenuto. Gli overlay (hit flash,
+              badge, debug) NON devono essere flippati ma essendo nel parent
+              motion container ricevono facingScaleX dal motionStyle stesso —
+              accettabile perché sono comunque dentro la cella del personaggio
+              e il flip è l'orientamento naturale del sprite. */}
           <View
             style={{
               width: frameW,
               height: frameH,
               alignItems: 'center',
               justifyContent: 'flex-end',
-              transform: [{ scaleX: facingScaleX }],
             }}
           >
             {hasSpriteSheet ? (

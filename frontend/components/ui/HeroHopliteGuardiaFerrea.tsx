@@ -135,6 +135,7 @@ export default function HeroHopliteGuardiaFerrea({ size, active = true, playKey 
         height: renderedH,
       }}>
         <Image
+          key={`hoplite-guardia-${index}`}
           source={FRAMES[index]}
           style={{ width: renderedW, height: renderedH }}
           resizeMode="contain"

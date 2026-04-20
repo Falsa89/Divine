@@ -136,6 +136,7 @@ export default function HeroHopliteIdleLoop({ size, animated = true, onFrameChan
         height: renderedH,
       }}>
         <Image
+          key={`hoplite-idle-${idx}`}
           source={FRAMES[idx]}
           style={{ width: renderedW, height: renderedH }}
           resizeMode="contain"

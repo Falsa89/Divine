@@ -188,6 +188,7 @@ export default function HeroHopliteAffondo({ size, active = true, playKey = 0, o
         height: renderedH,
       }}>
         <Image
+          key={`hoplite-affondo-${index}`}
           source={FRAMES[index]}
           style={{ width: renderedW, height: renderedH }}
           resizeMode="contain"
