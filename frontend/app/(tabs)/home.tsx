@@ -1,29 +1,36 @@
 /**
- * HOME — REDESIGN MODULARE LANDSCAPE (Msg 428)
- * ================================================
+ * HOME — SHELL VISIVA PREMIUM v2 (Fase A)
+ * ================================================================
  *
- * Struttura ispirata alla reference fantasy castle provided.
+ * Palette: GOLD (#FFD700 / #C9A759 / #F7D563) + DEEP BLUE
+ *          (#0A1838 / #0F2148 / #1B3570 / #243A6A).
+ * Accenti: cremisi (#B22222) solo per urgenza/notifiche/SP Offer.
  *
- * BLOCCHI SEPARATI (non flatten):
- *   1. HomeBackground       — sfondo scenico (gradient + patterns, pronto per asset futuro)
- *   2. HomeProfilePanel     — top-left user info
- *   3. HomeCurrencyBar      — top-right gold/gem
- *   4. HomeTopActions       — wheel/quest/event/bonus
- *   5. HomeLeftUtilityStack — server time, SP offer, crystal packs
- *   6. HomeHeroLayer        — splash libero (solo immagine, tap = Sanctuary)
- *   7. HomeModePanel        — arena/blessing/trial
- *   8. HomeMainBanner       — battle/research tiles
- *   9. HomeBottomNav        — bag/artifact/skill/team/PLAY/guild/shop/forge/home/menu
- *  10. HomeOverflowPanel    — modal overflow per feature non ancora mappate
+ * Componenti modulari (nessun flatten, testi veri, bottoni veri):
+ *   BLOCCO 1  — HomeBackground       (ImageBackground scenico + overlay blu notte)
+ *   BLOCCO 2  — HomeHeroLayer        (splash libero, NO frame/NO label/NO testo)
+ *   BLOCCO 3  — HomeProfilePanel     (top-left: avatar, lv, exp, power, VIP, spirito, titolo)
+ *   BLOCCO 4  — HomeCurrencyBar      (top-right: Gold+, Gems+)
+ *   BLOCCO 5  — HomeTopActions       (Wheel/Quest/Event + slot evento opzionali nascosti se vuoti)
+ *   BLOCCO 6  — HomeLeftUtilityStack (Server time / SP Offer / Box 2 / Box 3)
+ *   BLOCCO 7  — HomeModePanel        (Arena / Blessing / Trial / Battle / Research)
+ *   BLOCCO 8  — HomeMainBanner       (Summon banner rate-up con artwork hero)
+ *   BLOCCO 9  — HomeChatNotifPanel   (chat + feed notifiche, espandibile)
+ *   BLOCCO 10 — HomeBottomNav        (custom 10 slot: Chat, Bag, Artifact, Skill, Team,
+ *                                     PLAY [centrale], Guild, Shop, Forge, Menu)
+ *   BLOCCO 11 — HomeOverflowPanel    (pannello con tutte le feature residue)
  *
- * REFRESH LIVE: uso `useFocusEffect` — ogni volta che la Home tab torna
- * in foreground (es. dopo router.back() da /select-home-hero) i dati si
- * ricaricano. Il cambio eroe homepage è IMMEDIATO senza restart app.
+ * REFRESH LIVE: useFocusEffect → /api/sanctuary/home-hero ri-fetch
+ *   ad ogni focus della tab. Cambio eroe IMMEDIATO senza restart.
+ *
+ * NO animazioni globali fake (blink/opacity). Hero statico.
+ * NO testi/card/border sotto/intorno al personaggio.
  */
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
-  View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Dimensions,
-  ScrollView, Modal, Image as RNImage,
+  View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
+  Dimensions, ScrollView, Modal, ImageBackground,
+  Image as RNImage,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -34,8 +41,21 @@ import HomeHeroSplash from '../../components/home/HomeHeroSplash';
 import { COLORS } from '../../constants/theme';
 
 const { width: W, height: H } = Dimensions.get('window');
-const isLandscape = W > H;
 
+// Background asset locale (scenico, niente dominante "fantasy generic")
+const HOME_BG = require('../../assets/home_bg/temple_night.jpg');
+
+/* ─────────────────────────── DESIGN TOKENS ─────────────────────────── */
+const GOLD       = '#FFD700';
+const GOLD_WARM  = '#C9A759';
+const GOLD_PALE  = '#F7D563';
+const NIGHT_0    = '#05091A';
+const NIGHT_1    = '#0A1838';
+const NIGHT_2    = '#0F2148';
+const NIGHT_3    = '#1B3570';
+const CRIMSON    = '#B22222';
+
+/* ==================================================================== */
 export default function HomeTab() {
   const { user, refreshUser } = useAuth();
   const router = useRouter();
@@ -44,6 +64,7 @@ export default function HomeTab() {
   const [inTutorial, setInTutorial] = useState<boolean>(true);
   const [loading, setLoading] = useState(true);
   const [overflowOpen, setOverflowOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [serverTime, setServerTime] = useState<string>('');
 
   const loadData = useCallback(async () => {
@@ -58,22 +79,19 @@ export default function HomeTab() {
     } finally { setLoading(false); }
   }, [refreshUser]);
 
-  // FIX REFRESH LIVE: useFocusEffect garantisce refetch ogni volta che la
-  // Home tab torna in foreground (es. dopo router.back() da select-home-hero).
-  // Nessun restart app richiesto.
-  useFocusEffect(
-    useCallback(() => {
-      loadData();
-    }, [loadData])
-  );
+  // REFRESH LIVE: refetch su ogni focus della tab (post-select hero etc.)
+  useFocusEffect(useCallback(() => { loadData(); }, [loadData]));
 
   useEffect(() => { registerForPushNotifications().catch(() => {}); }, []);
 
-  // Tick server time ogni 10s
+  // Server time tick ogni 10s
   useEffect(() => {
     const fmt = () => {
       const d = new Date();
-      setServerTime(d.toISOString().replace('T', ' ').slice(0, 19) + ' (UTC)');
+      const hh = String(d.getUTCHours()).padStart(2, '0');
+      const mm = String(d.getUTCMinutes()).padStart(2, '0');
+      const ss = String(d.getUTCSeconds()).padStart(2, '0');
+      setServerTime(`${hh}:${mm}:${ss} UTC`);
     };
     fmt();
     const id = setInterval(fmt, 10000);
@@ -88,8 +106,8 @@ export default function HomeTab() {
 
   if (loading) {
     return (
-      <LinearGradient colors={['#0D0820', '#0A0612']} style={s.container}>
-        <ActivityIndicator size="large" color={COLORS.accent} />
+      <LinearGradient colors={[NIGHT_0, NIGHT_1]} style={s.container}>
+        <ActivityIndicator size="large" color={GOLD} />
       </LinearGradient>
     );
   }
@@ -99,46 +117,54 @@ export default function HomeTab() {
       {/* BLOCCO 1 — BACKGROUND */}
       <HomeBackground />
 
-      {/* BLOCCO 6 — HERO LAYER (sopra background, dietro UI) */}
+      {/* BLOCCO 2 — HERO LAYER (sopra bg, sotto UI) */}
       <View style={s.heroLayer} pointerEvents="box-none">
         <HomeHeroSplash
           hero={homeHero}
           source={homeSource}
           inTutorial={inTutorial}
-          width={Math.min(W * 0.55, 380)}
-          height={Math.min(H * 0.75, 560)}
+          width={Math.min(W * 0.55, 420)}
+          height={Math.min(H * 0.80, 600)}
           onPress={onHeroTap}
         />
       </View>
 
-      {/* BLOCCO 2 — TOP LEFT PROFILE */}
-      <HomeProfilePanel user={user} onPress={() => router.push('/profile' as any)} />
+      {/* BLOCCO 3 — PROFILO (top-left) */}
+      <HomeProfilePanel user={user} router={router} />
 
-      {/* BLOCCO 3 — TOP RIGHT CURRENCY */}
+      {/* BLOCCO 4 — VALUTE (top-right) */}
       <HomeCurrencyBar user={user} onAddGems={() => router.push('/shop' as any)} />
 
-      {/* BLOCCO 4 — TOP ACTIONS (sotto currency) */}
-      <HomeTopActions router={router} onOverflow={() => setOverflowOpen(true)} />
+      {/* BLOCCO 5 — TOP ACTIONS (sotto valute, destra) */}
+      <HomeTopActions router={router} />
 
-      {/* BLOCCO 5 — LEFT UTILITY STACK */}
+      {/* BLOCCO 6 — LEFT UTILITY STACK */}
       <HomeLeftUtilityStack
         serverTime={serverTime}
-        onSpOffer={() => setOverflowOpen(true)}
+        onSpOffer={() => router.push('/shop' as any)}
         router={router}
       />
 
-      {/* BLOCCO 7 — RIGHT MODE PANEL */}
+      {/* BLOCCO 7 — RIGHT MODE PANEL (Arena/Blessing/Trial/Battle/Research) */}
       <HomeModePanel router={router} onOverflow={() => setOverflowOpen(true)} />
 
-      {/* BLOCCO 8 — MAIN BANNER (battle + research tiles) */}
-      <HomeMainBanner router={router} onOverflow={() => setOverflowOpen(true)} />
+      {/* BLOCCO 8 — MAIN BANNER (summon rate-up) */}
+      <HomeMainBanner router={router} homeHero={homeHero} />
 
-      {/* NOTE: la Bottom Nav custom (10 slot stile reference) è stata
-         temporaneamente sostituita dalla tab bar nativa di expo-router
-         (HOME / EROI / BATTAGLIA / EVOCA / MENU). In un futuro step
-         la tab bar verrà nascosta e HomeBottomNav riattivata con 10 slot. */}
+      {/* BLOCCO 9 — CHAT / NOTIFICHE (bottom-left, sopra bottom nav) */}
+      <HomeChatNotifPanel
+        open={chatOpen}
+        onToggle={() => setChatOpen(v => !v)}
+      />
 
-      {/* BLOCCO 10 — OVERFLOW PANEL (Modal) */}
+      {/* BLOCCO 10 — BOTTOM NAV CUSTOM (10 slot, PLAY centrale) */}
+      <HomeBottomNav
+        router={router}
+        onChat={() => setChatOpen(true)}
+        onMenu={() => setOverflowOpen(true)}
+      />
+
+      {/* BLOCCO 11 — OVERFLOW (feature residue) */}
       <HomeOverflowPanel
         open={overflowOpen}
         onClose={() => setOverflowOpen(false)}
@@ -150,110 +176,201 @@ export default function HomeTab() {
 
 /* ═══════════════════════════════════════════════════════════════════
  *  BLOCCO 1 — HomeBackground
+ *  ImageBackground scenico + vignettatura blu notte + bloom oro sottile
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeBackground() {
   return (
     <View style={StyleSheet.absoluteFill}>
-      <LinearGradient
-        colors={['#1e3a7a', '#3a5bbf', '#7ba6e0', '#c9b993', '#8b6f3c']}
+      <ImageBackground
+        source={HOME_BG}
         style={StyleSheet.absoluteFill}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        locations={[0, 0.3, 0.55, 0.78, 1]}
-      />
-      {/* Overlay sottile per vignettatura */}
-      <LinearGradient
-        colors={['transparent', 'rgba(10,6,30,0.25)']}
-        style={StyleSheet.absoluteFill}
-      />
+        resizeMode="cover"
+      >
+        {/* overlay blu notte per uniformare al tema */}
+        <LinearGradient
+          colors={['rgba(8,14,38,0.55)', 'rgba(8,14,38,0.20)', 'rgba(8,14,38,0.75)']}
+          locations={[0, 0.45, 1]}
+          style={StyleSheet.absoluteFill}
+        />
+        {/* Bloom oro sottile al centro-orizzonte (sotto l'eroe) */}
+        <LinearGradient
+          colors={['transparent', 'rgba(255,200,80,0.10)', 'transparent']}
+          locations={[0.3, 0.55, 0.85]}
+          style={StyleSheet.absoluteFill}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+        />
+        {/* Vignettatura bordi */}
+        <LinearGradient
+          colors={['rgba(0,0,0,0.35)', 'transparent', 'rgba(0,0,0,0.35)']}
+          locations={[0, 0.2, 1]}
+          style={StyleSheet.absoluteFill}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+        />
+      </ImageBackground>
     </View>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 2 — HomeProfilePanel
+ *  BLOCCO 3 — HomeProfilePanel
+ *  Pannello profilo premium con decorazione gold-on-navy
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeProfilePanel({ user, onPress }: any) {
-  const name = user?.nickname || user?.name || 'Player';
-  const power = user?.power || user?.total_power || 0;
-  const level = user?.level || 1;
-  const exp = user?.exp || 0;
-  const expMax = user?.exp_to_next || 1000;
-  const vip = user?.vip_level || 0;
+function HomeProfilePanel({ user, router }: any) {
+  const name    = user?.nickname || user?.name || 'Player';
+  const power   = user?.power || user?.total_power || 0;
+  const level   = user?.level || 1;
+  const exp     = user?.exp || 0;
+  const expMax  = user?.exp_to_next || 1000;
+  const vip     = user?.vip_level || 0;
   const spirito = user?.spirito || user?.spirit || 0;
+  const title   = user?.title || 'Apprendista';
+
   return (
-    <TouchableOpacity style={s.profileWrap} onPress={onPress} activeOpacity={0.85}>
-      <View style={s.profileAvatar}>
-        <Text style={s.profileInitial}>{String(name)[0]?.toUpperCase() || 'P'}</Text>
-        <View style={s.profileLvBadge}>
-          <Text style={s.profileLvTxt}>{level}</Text>
-        </View>
-      </View>
-      <View style={s.profileBody}>
-        <Text style={s.profileName} numberOfLines={1}>{name}</Text>
-        <Text style={s.profilePower}>Power {Number(power).toLocaleString()}</Text>
-        <View style={s.expBarBg}>
-          <View style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }]} />
-        </View>
-        <View style={s.profileRow}>
-          <View style={s.vipPill}>
-            <Text style={s.vipTxt}>VIP {vip}</Text>
-          </View>
-          {spirito > 0 && (
-            <View style={s.spiritoPill}>
-              <Text style={s.spiritoIco}>{'\uD83D\uDD2E'}</Text>
-              <Text style={s.spiritoTxt}>SPIRITO {spirito}</Text>
+    <View style={s.profileWrap}>
+      <LinearGradient
+        colors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
+        style={s.profilePanel}
+      >
+        {/* ROW 1 — Avatar + Nome + Lv */}
+        <View style={s.profileRow1}>
+          <TouchableOpacity
+            onPress={() => router.push('/profile' as any)}
+            activeOpacity={0.8}
+            style={s.avatarFrame}
+          >
+            <LinearGradient
+              colors={[GOLD_PALE, GOLD, GOLD_WARM]}
+              style={s.avatarRing}
+            >
+              <View style={s.avatarInner}>
+                <Text style={s.avatarInitial}>
+                  {String(name)[0]?.toUpperCase() || 'P'}
+                </Text>
+              </View>
+            </LinearGradient>
+            <View style={s.lvBadge}>
+              <Text style={s.lvBadgeTxt}>{level}</Text>
             </View>
-          )}
+          </TouchableOpacity>
+          <View style={{ flex: 1, marginLeft: 10 }}>
+            <Text style={s.profName} numberOfLines={1}>{name}</Text>
+            <View style={s.expWrap}>
+              <View style={s.expBarBg}>
+                <LinearGradient
+                  colors={[GOLD_PALE, GOLD]}
+                  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                  style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }]}
+                />
+              </View>
+              <Text style={s.expTxt}>{exp}/{expMax}</Text>
+            </View>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+
+        {/* ROW 2 — Power */}
+        <TouchableOpacity
+          style={s.powerRow}
+          onPress={() => router.push('/profile' as any)}
+          activeOpacity={0.8}
+        >
+          <Text style={s.powerIcon}>{'\u26A1'}</Text>
+          <Text style={s.powerLbl}>POWER</Text>
+          <Text style={s.powerVal}>{Number(power).toLocaleString()}</Text>
+        </TouchableOpacity>
+
+        {/* ROW 3 — VIP / Spirito / Titolo */}
+        <View style={s.pillsRow}>
+          <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
+            onPress={() => router.push('/vip' as any)}>
+            <Text style={s.vipStar}>{'\u2605'}</Text>
+            <Text style={s.vipTxt}>VIP {vip}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
+            onPress={() => router.push('/profile' as any)}>
+            <Text style={s.spiritoIco}>{'\uD83D\uDD2E'}</Text>
+            <Text style={s.spiritoTxt}>SP {spirito}</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
+          onPress={() => router.push('/achievements' as any)}>
+          <Text style={s.titleTxt} numberOfLines={1}>{'\u2756'}  {title}</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </View>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 3 — HomeCurrencyBar
+ *  BLOCCO 4 — HomeCurrencyBar
+ *  Gold + Gems con pulsanti "+"
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeCurrencyBar({ user, onAddGems }: any) {
   const gold = user?.gold || 0;
   const gems = user?.diamonds || user?.gems || 0;
   return (
     <View style={s.currencyWrap}>
-      <View style={s.currencyPill}>
+      <LinearGradient
+        colors={['rgba(20,33,72,0.95)', 'rgba(8,15,40,0.85)']}
+        style={[s.currencyPill, { borderColor: 'rgba(255,215,0,0.65)' }]}
+      >
         <Text style={s.currencyIco}>{'\uD83D\uDCB0'}</Text>
         <Text style={s.currencyTxt}>{Number(gold).toLocaleString()}</Text>
-        <TouchableOpacity style={s.plusBtn} onPress={onAddGems}>
-          <Text style={s.plusTxt}>+</Text>
+        <TouchableOpacity style={s.plusBtn} onPress={onAddGems} activeOpacity={0.7}>
+          <LinearGradient
+            colors={[GOLD_PALE, GOLD]}
+            style={s.plusBtnInner}
+          >
+            <Text style={s.plusTxt}>+</Text>
+          </LinearGradient>
         </TouchableOpacity>
-      </View>
-      <View style={s.currencyPill}>
+      </LinearGradient>
+      <LinearGradient
+        colors={['rgba(20,33,72,0.95)', 'rgba(8,15,40,0.85)']}
+        style={[s.currencyPill, { borderColor: 'rgba(100,170,255,0.65)' }]}
+      >
         <Text style={s.currencyIco}>{'\uD83D\uDC8E'}</Text>
         <Text style={s.currencyTxt}>{Number(gems).toLocaleString()}</Text>
-        <TouchableOpacity style={s.plusBtn} onPress={onAddGems}>
-          <Text style={s.plusTxt}>+</Text>
+        <TouchableOpacity style={s.plusBtn} onPress={onAddGems} activeOpacity={0.7}>
+          <LinearGradient
+            colors={['#6EC8FF', '#2C7DD8']}
+            style={s.plusBtnInner}
+          >
+            <Text style={[s.plusTxt, { color: '#fff' }]}>+</Text>
+          </LinearGradient>
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
     </View>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 4 — HomeTopActions (wheel/quest/event/bonus)
+ *  BLOCCO 5 — HomeTopActions
+ *  Wheel / Quest / Event + slot evento 1/2 (nascosti se vuoti)
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeTopActions({ router, onOverflow }: any) {
-  const items = [
-    { key: 'wheel', icon: '\uD83C\uDFAF', label: 'WHEEL', onPress: () => router.push('/(tabs)/gacha' as any) },
-    { key: 'quest', icon: '\uD83D\uDCDC', label: 'QUEST', onPress: onOverflow },
+function HomeTopActions({ router }: any) {
+  // Slot evento: array di eventi attivi (vuoti → NON renderizzati)
+  const eventSlots: Array<{ key: string; icon: string; label: string; onPress: () => void }> = [];
+
+  const base = [
+    { key: 'wheel', icon: '\uD83C\uDFA1', label: 'WHEEL', onPress: () => router.push('/(tabs)/gacha' as any) },
+    { key: 'quest', icon: '\uD83D\uDCDC', label: 'QUEST', onPress: () => router.push('/quests' as any) },
     { key: 'event', icon: '\uD83C\uDF81', label: 'EVENT', onPress: () => router.push('/events' as any) },
-    { key: 'bonus', icon: '\uD83D\uDCBC', label: 'BONUS', onPress: onOverflow },
   ];
+
+  const items = [...base, ...eventSlots];
+
   return (
     <View style={s.topActionsRow}>
       {items.map(it => (
         <TouchableOpacity key={it.key} style={s.topActBtn} activeOpacity={0.75} onPress={it.onPress}>
-          <View style={s.topActIconBox}>
+          <LinearGradient
+            colors={['rgba(27,53,112,0.95)', 'rgba(10,24,56,0.85)']}
+            style={s.topActIconBox}
+          >
             <Text style={s.topActIco}>{it.icon}</Text>
-          </View>
+          </LinearGradient>
           <Text style={s.topActLabel}>{it.label}</Text>
         </TouchableOpacity>
       ))}
@@ -262,30 +379,54 @@ function HomeTopActions({ router, onOverflow }: any) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 5 — HomeLeftUtilityStack (server time + SP Offer + crystals)
+ *  BLOCCO 6 — HomeLeftUtilityStack
+ *  Server time / SP Offer / Box 2 / Box 3
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeLeftUtilityStack({ serverTime, onSpOffer, router }: any) {
   return (
     <View style={s.leftStack}>
       <View style={s.serverTimeBox}>
-        <Text style={s.serverLabel}>SERVER TIME</Text>
+        <Text style={s.serverLabel}>{'\uD83D\uDD50'} SERVER TIME</Text>
         <Text style={s.serverValue}>{serverTime}</Text>
       </View>
-      <TouchableOpacity style={s.spOfferBtn} onPress={onSpOffer} activeOpacity={0.8}>
+
+      <TouchableOpacity style={s.spOfferBtn} onPress={onSpOffer} activeOpacity={0.85}>
         <LinearGradient
-          colors={['#B22222', '#7A1010']}
+          colors={['#D13B3B', '#8A1515']}
           start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
           style={s.spOfferGrad}
         >
-          <Text style={s.spOfferTxt}>SP OFFER</Text>
+          <Text style={s.spOfferBadge}>SP</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={s.spOfferTitle}>SP OFFER</Text>
+            <Text style={s.spOfferSub}>Bundle esclusivo</Text>
+          </View>
+          <Text style={s.spOfferArrow}>{'\u203A'}</Text>
         </LinearGradient>
       </TouchableOpacity>
+
       <View style={s.crystalRow}>
-        {[{ c: 2, g: 100 }, { c: 3, g: 150 }].map((x, i) => (
-          <TouchableOpacity key={i} style={s.crystalPack} onPress={() => router.push('/shop' as any)}>
-            <Text style={s.crystalNum}>{x.c}</Text>
-            <Text style={s.crystalIco}>{'\uD83D\uDC8E'}</Text>
-            <Text style={s.crystalPrice}>{x.g}{'\uD83D\uDC8E'}</Text>
+        {[
+          { tier: 2, gems: 100,  col1: '#1D4C8A', col2: '#0A1F3C' },
+          { tier: 3, gems: 150,  col1: '#4B2080', col2: '#1A0A3C' },
+        ].map((x, i) => (
+          <TouchableOpacity
+            key={i}
+            style={s.crystalPack}
+            onPress={() => router.push('/shop' as any)}
+            activeOpacity={0.85}
+          >
+            <LinearGradient
+              colors={[x.col1, x.col2]}
+              style={s.crystalPackInner}
+            >
+              <Text style={s.crystalTier}>×{x.tier}</Text>
+              <Text style={s.crystalIco}>{'\uD83D\uDC8E'}</Text>
+              <View style={s.crystalPriceWrap}>
+                <Text style={s.crystalPriceIco}>{'\uD83D\uDC8E'}</Text>
+                <Text style={s.crystalPrice}>{x.gems}</Text>
+              </View>
+            </LinearGradient>
           </TouchableOpacity>
         ))}
       </View>
@@ -294,20 +435,28 @@ function HomeLeftUtilityStack({ serverTime, onSpOffer, router }: any) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 7 — HomeModePanel (Arena / Blessing / Trial)
+ *  BLOCCO 7 — HomeModePanel
+ *  Arena / Blessing / Trial / Battle / Research (verticale, a destra)
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeModePanel({ router, onOverflow }: any) {
   const modes = [
     { key: 'arena',    label: 'ARENA',    ico: '\u2694\uFE0F', onPress: () => router.push('/arena' as any) },
-    { key: 'blessing', label: 'BLESSING', ico: '\uD83D\uDCFF', onPress: onOverflow },
-    { key: 'trial',    label: 'TRIAL',    ico: '\u26AA',       onPress: () => router.push('/story' as any) },
+    { key: 'blessing', label: 'BLESSING', ico: '\uD83D\uDCFF', onPress: () => router.push('/blessings' as any) },
+    { key: 'trial',    label: 'TRIAL',    ico: '\u26AA',       onPress: () => router.push('/tower' as any) },
+    { key: 'battle',   label: 'BATTLE',   ico: '\u2620\uFE0F', onPress: () => router.push('/story' as any) },
+    { key: 'research', label: 'RESEARCH', ico: '\uD83D\uDD2C', onPress: onOverflow },
   ];
   return (
     <View style={s.modePanel}>
       {modes.map(m => (
-        <TouchableOpacity key={m.key} style={s.modeTile} onPress={m.onPress} activeOpacity={0.8}>
+        <TouchableOpacity
+          key={m.key}
+          style={s.modeTile}
+          onPress={m.onPress}
+          activeOpacity={0.82}
+        >
           <LinearGradient
-            colors={['rgba(255,255,255,0.10)', 'rgba(0,0,0,0.35)']}
+            colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
             style={s.modeTileInner}
           >
             <Text style={s.modeIco}>{m.ico}</Text>
@@ -320,136 +469,236 @@ function HomeModePanel({ router, onOverflow }: any) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 8 — HomeMainBanner (Battle + Research tiles)
+ *  BLOCCO 8 — HomeMainBanner
+ *  Summon banner rate-up (artwork hero in primo piano)
  * ═══════════════════════════════════════════════════════════════════ */
-function HomeMainBanner({ router, onOverflow }: any) {
+function HomeMainBanner({ router, homeHero }: any) {
+  const featuredName = homeHero?.name || 'Hoplite';
   return (
-    <View style={s.mainBanner}>
-      <TouchableOpacity style={s.bannerTile} onPress={() => router.push('/combat' as any)} activeOpacity={0.85}>
-        <LinearGradient
-          colors={['rgba(100,20,40,0.75)', 'rgba(20,10,20,0.85)']}
-          style={s.bannerTileInner}
-        >
-          <Text style={s.bannerIco}>{'\u2694\uFE0F'}</Text>
-          <Text style={s.bannerLabel}>BATTLE</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-      <TouchableOpacity style={s.bannerTile} onPress={onOverflow} activeOpacity={0.85}>
-        <LinearGradient
-          colors={['rgba(40,40,90,0.75)', 'rgba(15,15,30,0.85)']}
-          style={s.bannerTileInner}
-        >
-          <Text style={s.bannerIco}>{'\uD83D\uDD2C'}</Text>
-          <Text style={s.bannerLabel}>RESEARCH</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 9 — HomeBottomNav (10 slot)
- * ═══════════════════════════════════════════════════════════════════ */
-function HomeBottomNav({ router, onMenu }: any) {
-  const ICON = (i: string) => <Text style={s.navIco}>{i}</Text>;
-  const nav = [
-    { key: 'bag',      label: 'BAG',      ico: ICON('\uD83C\uDF92'), onPress: onMenu },
-    { key: 'artifact', label: 'ARTIFACT', ico: ICON('\uD83D\uDD2E'), onPress: () => router.push('/artifacts' as any) },
-    { key: 'skill',    label: 'SKILL',    ico: ICON('\uD83D\uDCDA'), onPress: onMenu },
-    { key: 'team',     label: 'TEAM',     ico: ICON('\uD83D\uDC65'), onPress: () => router.push('/hero-collection' as any) },
-  ];
-  const navRight = [
-    { key: 'guild', label: 'GUILD', ico: ICON('\uD83D\uDEE1\uFE0F'), onPress: () => router.push('/guild' as any) },
-    { key: 'shop',  label: 'SHOP',  ico: ICON('\uD83C\uDFEA'),       onPress: () => router.push('/shop' as any) },
-    { key: 'forge', label: 'FORGE', ico: ICON('\u2692\uFE0F'),        onPress: onMenu },
-    { key: 'menu',  label: 'MENU',  ico: ICON('\u2630'),              onPress: onMenu },
-  ];
-  return (
-    <View style={s.bottomNav} pointerEvents="box-none">
-      <View style={s.bottomNavSide}>
-        {nav.map(n => (
-          <TouchableOpacity key={n.key} style={s.navBtn} onPress={n.onPress} activeOpacity={0.7}>
-            <View style={s.navIconWrap}>{n.ico}</View>
-            <Text style={s.navLabel}>{n.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <TouchableOpacity
-        style={s.playShield}
-        onPress={() => router.push('/combat' as any)}
-        activeOpacity={0.85}
+    <TouchableOpacity
+      style={s.mainBanner}
+      onPress={() => router.push('/(tabs)/gacha' as any)}
+      activeOpacity={0.88}
+    >
+      <LinearGradient
+        colors={['rgba(27,53,112,0.97)', 'rgba(8,15,40,0.95)']}
+        start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+        style={s.bannerInner}
       >
         <LinearGradient
-          colors={['#B22222', '#7A0A1A', '#4A0510']}
-          style={s.playShieldInner}
-          start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}
-        >
-          <Text style={s.playText}>PLAY</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-      <View style={s.bottomNavSide}>
-        {navRight.map(n => (
-          <TouchableOpacity key={n.key} style={s.navBtn} onPress={n.onPress} activeOpacity={0.7}>
-            <View style={s.navIconWrap}>{n.ico}</View>
-            <Text style={s.navLabel}>{n.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+          colors={['rgba(255,215,0,0.15)', 'transparent']}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={s.bannerLeft}>
+          <Text style={s.bannerTag}>RATE-UP</Text>
+          <Text style={s.bannerTitle} numberOfLines={1}>{featuredName}</Text>
+          <Text style={s.bannerSub}>Evoca ora</Text>
+          <View style={s.bannerBtn}>
+            <Text style={s.bannerBtnTxt}>SUMMON {'\u203A'}</Text>
+          </View>
+        </View>
+        <Text style={s.bannerSparkle}>{'\u2728'}</Text>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ *  BLOCCO 9 — HomeChatNotifPanel
+ *  Pannello chat + notifiche, espandibile
+ * ═══════════════════════════════════════════════════════════════════ */
+function HomeChatNotifPanel({ open, onToggle }: any) {
+  // Messaggi mock iniziali: in futuro arriveranno dal backend chat + sistema
+  const feed = [
+    { type: 'system', txt: 'Benvenuto in Divine Waifus. Tap su PLAY per iniziare.' },
+    { type: 'system', txt: 'Nuovo evento: "Prova del Fuoco" disponibile per 48h.' },
+    { type: 'chat',   from: 'Aether', txt: 'qualcuno per arena?' },
+    { type: 'chat',   from: 'Nyx',    txt: 'boss di gilda alle 21' },
+  ];
+
+  return (
+    <View style={[s.chatPanel, open && s.chatPanelOpen]}>
+      <LinearGradient
+        colors={['rgba(11,23,60,0.88)', 'rgba(8,15,40,0.92)']}
+        style={s.chatInner}
+      >
+        <TouchableOpacity style={s.chatHeader} onPress={onToggle} activeOpacity={0.8}>
+          <Text style={s.chatIco}>{'\uD83D\uDCAC'}</Text>
+          <Text style={s.chatTitle}>CHAT · NOTIFICHE</Text>
+          <Text style={s.chatToggle}>{open ? '\u25BC' : '\u25B2'}</Text>
+        </TouchableOpacity>
+        {open ? (
+          <ScrollView style={s.chatBody} showsVerticalScrollIndicator={false}>
+            {feed.map((m, i) => (
+              <View key={i} style={s.chatMsg}>
+                {m.type === 'system' ? (
+                  <>
+                    <Text style={s.chatSysTag}>[SISTEMA]</Text>
+                    <Text style={s.chatMsgTxt}>{m.txt}</Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={s.chatFrom}>{m.from}:</Text>
+                    <Text style={s.chatMsgTxt}>{m.txt}</Text>
+                  </>
+                )}
+              </View>
+            ))}
+          </ScrollView>
+        ) : (
+          <View style={s.chatPreview}>
+            <Text style={s.chatPreviewTag}>[SISTEMA]</Text>
+            <Text style={s.chatPreviewTxt} numberOfLines={1}>
+              {feed[0]?.txt}
+            </Text>
+          </View>
+        )}
+      </LinearGradient>
     </View>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 10 — HomeOverflowPanel (Modal)
+ *  BLOCCO 10 — HomeBottomNav (custom, 10 slot, PLAY centrale)
+ *  Chat · Bag · Artifact · Skill · Team   [PLAY]   Guild · Shop · Forge · Menu
  * ═══════════════════════════════════════════════════════════════════ */
-type OverflowItem = { key: string; label: string; icon: string; onPress: () => void; note?: string };
+function HomeBottomNav({ router, onChat, onMenu }: any) {
+  const left = [
+    { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
+    { key: 'bag',      label: 'BAG',      ico: '\uD83C\uDF92', onPress: () => router.push('/equipment' as any) },
+    { key: 'artifact', label: 'ARTIFACT', ico: '\uD83D\uDD2E', onPress: () => router.push('/artifacts' as any) },
+    { key: 'skill',    label: 'SKILL',    ico: '\uD83D\uDCDA', onPress: onMenu },
+    { key: 'team',     label: 'TEAM',     ico: '\uD83D\uDC65', onPress: () => router.push('/(tabs)/heroes' as any) },
+  ];
+  const right = [
+    { key: 'guild', label: 'GUILD', ico: '\uD83D\uDEE1\uFE0F', onPress: () => router.push('/guild' as any) },
+    { key: 'shop',  label: 'SHOP',  ico: '\uD83C\uDFEA',        onPress: () => router.push('/shop' as any) },
+    { key: 'forge', label: 'FORGE', ico: '\u2692\uFE0F',         onPress: () => router.push('/soul-forge' as any) },
+    { key: 'menu',  label: 'MENU',  ico: '\u2630',               onPress: onMenu },
+  ];
+
+  return (
+    <View style={s.bottomNav} pointerEvents="box-none">
+      <LinearGradient
+        colors={['rgba(8,15,40,0.0)', 'rgba(5,9,26,0.92)']}
+        locations={[0, 0.35]}
+        style={s.bottomNavBg}
+      />
+      <View style={s.navSide}>
+        {left.map(n => <NavBtn key={n.key} {...n} />)}
+      </View>
+      <PlayShield onPress={() => router.push('/combat' as any)} />
+      <View style={s.navSide}>
+        {right.map(n => <NavBtn key={n.key} {...n} />)}
+      </View>
+    </View>
+  );
+}
+
+function NavBtn({ label, ico, onPress }: any) {
+  return (
+    <TouchableOpacity style={s.navBtn} onPress={onPress} activeOpacity={0.75}>
+      <LinearGradient
+        colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
+        style={s.navIconWrap}
+      >
+        <Text style={s.navIco}>{ico}</Text>
+      </LinearGradient>
+      <Text style={s.navLabel}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
+function PlayShield({ onPress }: { onPress: () => void }) {
+  return (
+    <TouchableOpacity style={s.playShield} onPress={onPress} activeOpacity={0.85}>
+      <LinearGradient
+        colors={[GOLD_PALE, GOLD, '#B8902A']}
+        start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+        style={s.playShieldOuter}
+      >
+        <LinearGradient
+          colors={[NIGHT_3, NIGHT_2, NIGHT_0]}
+          style={s.playShieldInner}
+        >
+          <Text style={s.playText}>PLAY</Text>
+          <Text style={s.playSubText}>AUTO</Text>
+        </LinearGradient>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ *  BLOCCO 11 — HomeOverflowPanel (feature residue)
+ * ═══════════════════════════════════════════════════════════════════ */
+type OverflowItem = { key: string; label: string; icon: string; onPress: () => void };
 
 function HomeOverflowPanel({ open, onClose, router }: any) {
-  // Feature NON ancora mappate nei bottoni principali → qui tutte accessibili.
   const items: OverflowItem[] = [
     { key: 'story',      label: 'Storia',           icon: '\uD83D\uDCDC', onPress: () => { onClose(); router.push('/story' as any); } },
     { key: 'tower',      label: 'Torre',            icon: '\uD83C\uDFEF', onPress: () => { onClose(); router.push('/tower' as any); } },
-    { key: 'raid',       label: 'Raid',             icon: '\uD83D\uDD25', onPress: () => { onClose(); router.push('/raids' as any); } },
+    { key: 'raid',       label: 'Raid',             icon: '\uD83D\uDD25', onPress: () => { onClose(); router.push('/raid' as any); } },
     { key: 'events',     label: 'Eventi',           icon: '\uD83C\uDF1F', onPress: () => { onClose(); router.push('/events' as any); } },
     { key: 'auras',      label: 'Aure',             icon: '\u2728',       onPress: () => { onClose(); router.push('/(tabs)/cosmetics' as any); } },
-    { key: 'exclusive',  label: 'Esclusivi',        icon: '\uD83D\uDC51', onPress: () => { onClose(); router.push('/exclusive-items' as any); } },
+    { key: 'exclusive',  label: 'Esclusivi',        icon: '\uD83D\uDC51', onPress: () => { onClose(); router.push('/exclusive' as any); } },
     { key: 'equip',      label: 'Equipaggiamento',  icon: '\u2694\uFE0F', onPress: () => { onClose(); router.push('/equipment' as any); } },
     { key: 'battlepass', label: 'Battle Pass',      icon: '\uD83C\uDFC6', onPress: () => { onClose(); router.push('/battlepass' as any); } },
-    { key: 'achievements', label: 'Achievements',   icon: '\uD83C\uDFC5', onPress: () => { onClose(); router.push('/achievements' as any); } },
+    { key: 'achievements', label: 'Obiettivi',      icon: '\uD83C\uDFC5', onPress: () => { onClose(); router.push('/achievements' as any); } },
     { key: 'mail',       label: 'Posta',            icon: '\u2709\uFE0F', onPress: () => { onClose(); router.push('/mail' as any); } },
     { key: 'friends',    label: 'Amici',            icon: '\uD83D\uDC65', onPress: () => { onClose(); router.push('/friends' as any); } },
-    { key: 'quests',     label: 'Quest Giornaliere',icon: '\u2705',       onPress: () => { onClose(); router.push('/quests' as any); } },
-    { key: 'bonus',      label: 'Bonus Giornalieri',icon: '\uD83C\uDF81', onPress: () => { onClose(); router.push('/bonus' as any); note: 'daily'; } },
+    { key: 'quests',     label: 'Quest',            icon: '\u2705',       onPress: () => { onClose(); router.push('/quests' as any); } },
     { key: 'blessing',   label: 'Benedizioni',      icon: '\uD83D\uDCFF', onPress: () => { onClose(); router.push('/blessings' as any); } },
     { key: 'research',   label: 'Ricerca',          icon: '\uD83D\uDD2C', onPress: () => { onClose(); router.push('/research' as any); } },
-    { key: 'forge',      label: 'Fucina',           icon: '\u2692\uFE0F', onPress: () => { onClose(); router.push('/forge' as any); } },
-    { key: 'bag',        label: 'Zaino',            icon: '\uD83C\uDF92', onPress: () => { onClose(); router.push('/bag' as any); } },
-    { key: 'skills',     label: 'Abilità',          icon: '\uD83D\uDCDA', onPress: () => { onClose(); router.push('/skills' as any); } },
+    { key: 'collection', label: 'Collezione Eroi',  icon: '\uD83D\uDCDA', onPress: () => { onClose(); router.push('/hero-collection' as any); } },
+    { key: 'sanctuary',  label: 'Santuario',        icon: '\u26E9\uFE0F', onPress: () => { onClose(); router.push('/sanctuary' as any); } },
+    { key: 'gvg',        label: 'Conquista',        icon: '\uD83C\uDFF0', onPress: () => { onClose(); router.push('/gvg' as any); } },
+    { key: 'plaza',      label: 'Piazza',           icon: '\uD83C\uDFDB\uFE0F', onPress: () => { onClose(); router.push('/plaza' as any); } },
+    { key: 'territory',  label: 'Territorio',       icon: '\uD83D\uDDFA\uFE0F', onPress: () => { onClose(); router.push('/territory' as any); } },
+    { key: 'rankings',   label: 'Classifiche',      icon: '\uD83D\uDCCA', onPress: () => { onClose(); router.push('/rankings' as any); } },
+    { key: 'servers',    label: 'Server',           icon: '\uD83C\uDF10', onPress: () => { onClose(); router.push('/servers' as any); } },
+    { key: 'pvp',        label: 'Arena PVP',        icon: '\uD83E\uDD4A', onPress: () => { onClose(); router.push('/pvp' as any); } },
+    { key: 'economy',    label: 'Economia',         icon: '\uD83D\uDCB9', onPress: () => { onClose(); router.push('/economy' as any); } },
     { key: 'spoffer',    label: 'SP Offer',         icon: '\uD83D\uDCB3', onPress: () => { onClose(); router.push('/shop' as any); } },
-    { key: 'collection', label: 'Collezione Eroi',  icon: '\uD83D\uDC65', onPress: () => { onClose(); router.push('/hero-collection' as any); } },
   ];
 
   return (
     <Modal visible={open} animationType="slide" transparent onRequestClose={onClose}>
       <View style={s.modalBackdrop}>
-        <View style={s.modalCard}>
+        <LinearGradient
+          colors={['rgba(11,23,60,0.98)', 'rgba(5,9,26,0.98)']}
+          style={s.modalCard}
+        >
           <View style={s.modalHeader}>
-            <Text style={s.modalTitle}>{'\u2630'}  Menu</Text>
-            <TouchableOpacity onPress={onClose}><Text style={s.modalClose}>{'\u2715'}</Text></TouchableOpacity>
+            <Text style={s.modalTitle}>{'\u2630'}  MENU — FEATURE AGGIUNTIVE</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Text style={s.modalClose}>{'\u2715'}</Text>
+            </TouchableOpacity>
           </View>
           <Text style={s.modalSub}>
-            Contenitore temporaneo con tutte le feature. Verranno riposizionate nei pulsanti principali negli aggiornamenti successivi.
+            Contenitore temporaneo: le feature verranno riposizionate nei pulsanti
+            principali negli aggiornamenti successivi.
           </Text>
           <ScrollView contentContainerStyle={s.modalGrid}>
             {items.map(it => (
-              <TouchableOpacity key={it.key} style={s.modalItem} onPress={it.onPress} activeOpacity={0.75}>
-                <Text style={s.modalItemIco}>{it.icon}</Text>
-                <Text style={s.modalItemLabel}>{it.label}</Text>
+              <TouchableOpacity
+                key={it.key}
+                style={s.modalItem}
+                onPress={it.onPress}
+                activeOpacity={0.78}
+              >
+                <LinearGradient
+                  colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
+                  style={s.modalItemInner}
+                >
+                  <Text style={s.modalItemIco}>{it.icon}</Text>
+                  <Text style={s.modalItemLabel}>{it.label}</Text>
+                </LinearGradient>
               </TouchableOpacity>
             ))}
-            <View style={{ height: 20 }} />
+            <View style={{ height: 24 }} />
           </ScrollView>
-        </View>
+        </LinearGradient>
       </View>
     </Modal>
   );
@@ -459,212 +708,338 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
  *  STYLES
  * ═══════════════════════════════════════════════════════════════════ */
 const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0612' },
+  container: { flex: 1, backgroundColor: NIGHT_0, justifyContent: 'center', alignItems: 'center' },
 
-  /* HERO LAYER — centrato (leggermente a destra come reference), evita la tab bar */
+  /* HERO LAYER — leggermente a destra per far respirare il lato sinistro (profilo/chat) */
   heroLayer: {
     position: 'absolute',
-    top: 0, bottom: 80, left: 0, right: 0,
+    top: 0, bottom: 68, left: 0, right: 0,
     alignItems: 'center', justifyContent: 'center',
     zIndex: 1,
   },
 
-  /* BLOCCO 2 — PROFILE */
+  /* BLOCCO 3 — PROFILE PANEL */
   profileWrap: {
-    position: 'absolute', top: 12, left: 10,
-    flexDirection: 'row', gap: 10, alignItems: 'flex-start',
+    position: 'absolute', top: 8, left: 8,
     zIndex: 20,
+    width: 232,
   },
-  profileAvatar: {
+  profilePanel: {
+    borderRadius: 10,
+    borderWidth: 1.5, borderColor: GOLD_WARM,
+    paddingHorizontal: 8, paddingVertical: 8,
+    shadowColor: '#000', shadowOpacity: 0.6, shadowOffset: { width: 0, height: 3 }, shadowRadius: 6,
+    elevation: 8,
+  },
+  profileRow1: { flexDirection: 'row', alignItems: 'center' },
+  avatarFrame: { position: 'relative' },
+  avatarRing: {
     width: 46, height: 46, borderRadius: 23,
-    backgroundColor: '#2a2a4e',
-    borderWidth: 2, borderColor: '#FFD700',
+    padding: 2,
+    shadowColor: GOLD, shadowOpacity: 0.8, shadowRadius: 6,
+  },
+  avatarInner: {
+    flex: 1, borderRadius: 21,
+    backgroundColor: NIGHT_1,
     alignItems: 'center', justifyContent: 'center',
   },
-  profileInitial: { color: '#FFD700', fontSize: 18, fontWeight: '900' },
-  profileLvBadge: {
-    position: 'absolute', bottom: -4, right: -4,
-    backgroundColor: '#1a1a2e', borderRadius: 10,
-    borderWidth: 1, borderColor: '#FFD700',
-    paddingHorizontal: 5, minWidth: 20, alignItems: 'center',
+  avatarInitial: { color: GOLD, fontSize: 20, fontWeight: '900' },
+  lvBadge: {
+    position: 'absolute', bottom: -4, right: -6,
+    backgroundColor: NIGHT_0, borderRadius: 10,
+    borderWidth: 1.5, borderColor: GOLD,
+    paddingHorizontal: 5, paddingVertical: 1, minWidth: 22, alignItems: 'center',
   },
-  profileLvTxt: { color: '#FFD700', fontSize: 9, fontWeight: '900' },
-  profileBody: { minWidth: 110, maxWidth: 200 },
-  profileName: { color: '#FFD700', fontSize: 13, fontWeight: '900' },
-  profilePower: { color: '#FFF', fontSize: 10, fontWeight: '700', marginTop: 1 },
+  lvBadgeTxt: { color: GOLD, fontSize: 10, fontWeight: '900' },
+  profName: { color: GOLD, fontSize: 14, fontWeight: '900', letterSpacing: 0.4 },
+  expWrap: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 5 },
   expBarBg: {
-    height: 4, backgroundColor: 'rgba(255,255,255,0.18)',
-    borderRadius: 2, overflow: 'hidden', marginTop: 4,
+    flex: 1, height: 6, backgroundColor: 'rgba(0,0,0,0.55)',
+    borderRadius: 3, overflow: 'hidden',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.35)',
   },
-  expBarFill: { height: '100%', backgroundColor: '#FFD700' },
-  profileRow: { flexDirection: 'row', gap: 5, marginTop: 4 },
+  expBarFill: { height: '100%' },
+  expTxt: { color: '#E8E8F0', fontSize: 8, fontWeight: '800' },
+
+  powerRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    marginTop: 6, paddingVertical: 3, paddingHorizontal: 6,
+    backgroundColor: 'rgba(255,215,0,0.08)',
+    borderRadius: 5,
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.30)',
+  },
+  powerIcon: { fontSize: 12 },
+  powerLbl: { color: GOLD_PALE, fontSize: 9, fontWeight: '900', letterSpacing: 0.6 },
+  powerVal: { color: '#fff', fontSize: 11, fontWeight: '900', marginLeft: 'auto' },
+
+  pillsRow: { flexDirection: 'row', gap: 5, marginTop: 5 },
   vipPill: {
-    backgroundColor: 'rgba(178,34,34,0.65)',
-    paddingHorizontal: 6, paddingVertical: 1, borderRadius: 4,
-    borderWidth: 1, borderColor: '#FFD700',
+    flexDirection: 'row', alignItems: 'center', gap: 3,
+    backgroundColor: 'rgba(178,34,34,0.55)',
+    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4,
+    borderWidth: 1, borderColor: GOLD,
   },
-  vipTxt: { color: '#FFD700', fontSize: 9, fontWeight: '900' },
+  vipStar: { color: GOLD, fontSize: 9 },
+  vipTxt: { color: GOLD, fontSize: 9, fontWeight: '900' },
   spiritoPill: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
-    backgroundColor: 'rgba(60,20,120,0.7)',
-    paddingHorizontal: 5, paddingVertical: 1, borderRadius: 4,
+    backgroundColor: 'rgba(60,20,120,0.55)',
+    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4,
     borderWidth: 1, borderColor: '#B05CFF',
   },
   spiritoIco: { fontSize: 9 },
-  spiritoTxt: { color: '#FF6B6B', fontSize: 8, fontWeight: '900' },
+  spiritoTxt: { color: '#FFE0FF', fontSize: 9, fontWeight: '900' },
+  titleBadge: {
+    marginTop: 5, paddingVertical: 3, paddingHorizontal: 6,
+    backgroundColor: 'rgba(15,33,72,0.75)',
+    borderRadius: 4, borderLeftWidth: 2, borderLeftColor: GOLD,
+  },
+  titleTxt: { color: '#D8E0FF', fontSize: 10, fontWeight: '700', fontStyle: 'italic' },
 
-  /* BLOCCO 3 — CURRENCY */
+  /* BLOCCO 4 — CURRENCY */
   currencyWrap: {
-    position: 'absolute', top: 12, right: 10,
+    position: 'absolute', top: 10, right: 10,
     flexDirection: 'row', gap: 6, zIndex: 20,
   },
   currencyPill: {
     flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: 'rgba(20,20,40,0.80)',
-    paddingHorizontal: 6, paddingVertical: 4, borderRadius: 14,
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.5)',
+    paddingLeft: 8, paddingRight: 4, paddingVertical: 3, borderRadius: 16,
+    borderWidth: 1.5,
+    shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 4,
+    elevation: 5,
   },
-  currencyIco: { fontSize: 12 },
-  currencyTxt: { color: '#fff', fontSize: 10, fontWeight: '900' },
-  plusBtn: {
-    width: 18, height: 18, borderRadius: 9,
-    backgroundColor: '#FFD700',
-    alignItems: 'center', justifyContent: 'center',
+  currencyIco: { fontSize: 14 },
+  currencyTxt: { color: '#fff', fontSize: 12, fontWeight: '900', minWidth: 40 },
+  plusBtn: { width: 22, height: 22, borderRadius: 11 },
+  plusBtnInner: {
+    flex: 1, borderRadius: 11, alignItems: 'center', justifyContent: 'center',
+    borderWidth: 1, borderColor: 'rgba(0,0,0,0.25)',
   },
-  plusTxt: { color: '#1a0e2e', fontSize: 12, fontWeight: '900' },
+  plusTxt: { color: '#1a0e2e', fontSize: 14, fontWeight: '900' },
 
-  /* BLOCCO 4 — TOP ACTIONS */
+  /* BLOCCO 5 — TOP ACTIONS */
   topActionsRow: {
-    position: 'absolute', top: 60, right: 10,
+    position: 'absolute', top: 58, right: 10,
     flexDirection: 'row', gap: 6, zIndex: 19,
   },
   topActBtn: { alignItems: 'center', width: 42 },
   topActIconBox: {
-    width: 34, height: 34, borderRadius: 17,
-    backgroundColor: 'rgba(30,30,50,0.7)',
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.45)',
+    width: 36, height: 36, borderRadius: 18,
+    borderWidth: 1.5, borderColor: 'rgba(255,215,0,0.55)',
     alignItems: 'center', justifyContent: 'center',
+    shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 4,
   },
-  topActIco: { fontSize: 16 },
-  topActLabel: { color: '#fff', fontSize: 8, fontWeight: '800', marginTop: 2 },
+  topActIco: { fontSize: 17 },
+  topActLabel: { color: GOLD_PALE, fontSize: 8, fontWeight: '900', marginTop: 3, letterSpacing: 0.5 },
 
-  /* BLOCCO 5 — LEFT STACK */
+  /* BLOCCO 6 — LEFT STACK */
   leftStack: {
-    position: 'absolute', top: 120, left: 10,
-    width: 130, gap: 8, zIndex: 18,
+    position: 'absolute', top: 152, left: 8,
+    width: 140, gap: 6, zIndex: 18,
   },
   serverTimeBox: {
-    backgroundColor: 'rgba(15,15,30,0.8)',
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)',
-    paddingHorizontal: 8, paddingVertical: 5, borderRadius: 6,
+    backgroundColor: 'rgba(8,15,40,0.85)',
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.20)',
+    paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6,
+    borderLeftWidth: 2, borderLeftColor: GOLD_WARM,
   },
-  serverLabel: { color: '#AAA', fontSize: 8, fontWeight: '900' },
-  serverValue: { color: '#fff', fontSize: 9, fontWeight: '700', marginTop: 2 },
-  spOfferBtn: { borderRadius: 4, overflow: 'hidden' },
-  spOfferGrad: {
-    paddingVertical: 6, borderRadius: 4, alignItems: 'center',
-    borderWidth: 1, borderColor: '#FFD700',
-  },
-  spOfferTxt: { color: '#FFF', fontSize: 11, fontWeight: '900', letterSpacing: 1 },
-  crystalRow: { flexDirection: 'row', gap: 6 },
-  crystalPack: {
-    flex: 1, aspectRatio: 0.7,
-    backgroundColor: 'rgba(15,15,30,0.85)',
-    borderWidth: 1, borderColor: 'rgba(70,163,255,0.45)',
-    borderRadius: 6, alignItems: 'center', justifyContent: 'center', paddingVertical: 4,
-  },
-  crystalNum: { color: '#fff', fontSize: 16, fontWeight: '900' },
-  crystalIco: { fontSize: 24, marginVertical: 2 },
-  crystalPrice: { color: '#46A3FF', fontSize: 9, fontWeight: '800' },
+  serverLabel: { color: GOLD_PALE, fontSize: 8, fontWeight: '900', letterSpacing: 0.5 },
+  serverValue: { color: '#fff', fontSize: 11, fontWeight: '800', marginTop: 2, letterSpacing: 0.3 },
 
-  /* BLOCCO 7 — MODE PANEL */
+  spOfferBtn: { borderRadius: 6, overflow: 'hidden', marginTop: 2 },
+  spOfferGrad: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    paddingHorizontal: 8, paddingVertical: 8,
+    borderRadius: 6,
+    borderWidth: 1.5, borderColor: GOLD,
+  },
+  spOfferBadge: {
+    color: GOLD, fontSize: 12, fontWeight: '900',
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    paddingHorizontal: 6, paddingVertical: 1,
+    borderRadius: 4,
+    borderWidth: 1, borderColor: GOLD,
+  },
+  spOfferTitle: { color: '#fff', fontSize: 11, fontWeight: '900', letterSpacing: 1 },
+  spOfferSub: { color: 'rgba(255,255,255,0.75)', fontSize: 8, fontWeight: '700' },
+  spOfferArrow: { color: GOLD, fontSize: 18, fontWeight: '900' },
+
+  crystalRow: { flexDirection: 'row', gap: 5 },
+  crystalPack: {
+    flex: 1, borderRadius: 6, overflow: 'hidden',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.35)',
+  },
+  crystalPackInner: {
+    paddingVertical: 6, alignItems: 'center', gap: 2,
+  },
+  crystalTier: { color: GOLD, fontSize: 14, fontWeight: '900' },
+  crystalIco: { fontSize: 22, marginVertical: 0 },
+  crystalPriceWrap: {
+    flexDirection: 'row', alignItems: 'center', gap: 2,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    paddingHorizontal: 6, paddingVertical: 1, borderRadius: 4,
+  },
+  crystalPriceIco: { fontSize: 9 },
+  crystalPrice: { color: '#fff', fontSize: 9, fontWeight: '900' },
+
+  /* BLOCCO 7 — MODE PANEL (right rail) */
   modePanel: {
-    position: 'absolute', top: 115, right: 8,
-    width: 72, gap: 6, zIndex: 18,
+    position: 'absolute', top: 108, right: 8,
+    width: 62, gap: 5, zIndex: 18,
   },
   modeTile: {
-    width: '100%', aspectRatio: 1.05, borderRadius: 6, overflow: 'hidden',
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.4)',
+    width: '100%', aspectRatio: 1, borderRadius: 6, overflow: 'hidden',
+    borderWidth: 1.5, borderColor: 'rgba(255,215,0,0.50)',
+    shadowColor: '#000', shadowOpacity: 0.45, shadowRadius: 3,
   },
-  modeTileInner: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 4 },
-  modeIco: { fontSize: 26 },
-  modeLabel: { color: '#fff', fontSize: 9, fontWeight: '900', letterSpacing: 0.5 },
+  modeTileInner: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2 },
+  modeIco: { fontSize: 22 },
+  modeLabel: { color: GOLD_PALE, fontSize: 8, fontWeight: '900', letterSpacing: 0.5 },
 
-  /* BLOCCO 8 — MAIN BANNER — sopra la tab bar nativa (~60px) */
+  /* BLOCCO 8 — MAIN BANNER (summon rate-up) */
   mainBanner: {
-    position: 'absolute', bottom: 70, right: 10,
-    flexDirection: 'row', gap: 6, zIndex: 17,
+    position: 'absolute', bottom: 70, right: 78,
+    width: 170, height: 62,
+    borderRadius: 8, overflow: 'hidden',
+    borderWidth: 1.5, borderColor: GOLD,
+    zIndex: 17,
+    shadowColor: GOLD, shadowOpacity: 0.3, shadowRadius: 6,
   },
-  bannerTile: {
-    width: 80, height: 70, borderRadius: 6, overflow: 'hidden',
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.45)',
+  bannerInner: {
+    flex: 1, flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 10, paddingVertical: 6, overflow: 'hidden',
   },
-  bannerTileInner: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 4 },
-  bannerIco: { fontSize: 20 },
-  bannerLabel: { color: '#fff', fontSize: 10, fontWeight: '900' },
+  bannerLeft: { flex: 1 },
+  bannerTag: {
+    color: NIGHT_0, fontSize: 8, fontWeight: '900',
+    backgroundColor: GOLD,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 5, paddingVertical: 1,
+    borderRadius: 3, letterSpacing: 0.5,
+  },
+  bannerTitle: {
+    color: GOLD, fontSize: 14, fontWeight: '900',
+    marginTop: 2, letterSpacing: 0.3,
+  },
+  bannerSub: { color: 'rgba(255,255,255,0.75)', fontSize: 8, fontWeight: '700' },
+  bannerBtn: {
+    marginTop: 3, alignSelf: 'flex-start',
+    backgroundColor: 'rgba(255,215,0,0.2)',
+    paddingHorizontal: 8, paddingVertical: 2,
+    borderRadius: 4, borderWidth: 1, borderColor: GOLD,
+  },
+  bannerBtnTxt: { color: GOLD, fontSize: 9, fontWeight: '900', letterSpacing: 0.8 },
+  bannerSparkle: {
+    position: 'absolute', right: 8, top: 6,
+    fontSize: 20,
+  },
 
-  /* BLOCCO 9 — BOTTOM NAV */
+  /* BLOCCO 9 — CHAT / NOTIF PANEL */
+  chatPanel: {
+    position: 'absolute', bottom: 68, left: 8,
+    width: 230, height: 64,
+    borderRadius: 8, overflow: 'hidden',
+    borderWidth: 1.5, borderColor: 'rgba(255,215,0,0.45)',
+    zIndex: 17,
+  },
+  chatPanelOpen: {
+    height: 170,
+  },
+  chatInner: { flex: 1 },
+  chatHeader: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    paddingHorizontal: 8, paddingVertical: 5,
+    borderBottomWidth: 1, borderBottomColor: 'rgba(255,215,0,0.25)',
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
+  chatIco: { fontSize: 12 },
+  chatTitle: { color: GOLD_PALE, fontSize: 9, fontWeight: '900', letterSpacing: 0.6, flex: 1 },
+  chatToggle: { color: GOLD, fontSize: 10, fontWeight: '900' },
+  chatBody: { flex: 1, paddingHorizontal: 8, paddingVertical: 4 },
+  chatMsg: { flexDirection: 'row', gap: 5, marginBottom: 3, alignItems: 'flex-start' },
+  chatSysTag: { color: '#F7B85C', fontSize: 9, fontWeight: '900' },
+  chatFrom: { color: '#6EC8FF', fontSize: 9, fontWeight: '900' },
+  chatMsgTxt: { color: '#E8E8F0', fontSize: 9, fontWeight: '600', flex: 1 },
+  chatPreview: {
+    flexDirection: 'row', gap: 5, paddingHorizontal: 8, paddingVertical: 5,
+    alignItems: 'center',
+  },
+  chatPreviewTag: { color: '#F7B85C', fontSize: 8, fontWeight: '900' },
+  chatPreviewTxt: { color: '#E8E8F0', fontSize: 9, fontWeight: '600', flex: 1 },
+
+  /* BLOCCO 10 — BOTTOM NAV */
   bottomNav: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
     flexDirection: 'row', alignItems: 'flex-end',
-    paddingBottom: 8, paddingHorizontal: 6,
-    backgroundColor: 'rgba(10,6,30,0.82)',
-    borderTopWidth: 1, borderTopColor: 'rgba(255,215,0,0.25)',
+    paddingBottom: 6, paddingHorizontal: 6,
     zIndex: 25,
+    height: 64,
   },
-  bottomNavSide: {
-    flex: 1, flexDirection: 'row', justifyContent: 'space-around',
-    alignItems: 'flex-end', gap: 2,
+  bottomNavBg: { ...StyleSheet.absoluteFillObject },
+  navSide: {
+    flex: 1, flexDirection: 'row',
+    justifyContent: 'space-around', alignItems: 'flex-end',
   },
-  navBtn: { alignItems: 'center', paddingVertical: 4, paddingHorizontal: 2, minWidth: 40 },
+  navBtn: { alignItems: 'center', paddingVertical: 3, minWidth: 38 },
   navIconWrap: {
-    width: 36, height: 36, borderRadius: 6,
-    backgroundColor: 'rgba(30,30,50,0.7)',
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.3)',
+    width: 38, height: 38, borderRadius: 8,
+    borderWidth: 1.2, borderColor: 'rgba(255,215,0,0.45)',
     alignItems: 'center', justifyContent: 'center',
+    shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 3,
   },
-  navIco: { fontSize: 16 },
-  navLabel: { color: '#FFD700', fontSize: 8, fontWeight: '900', marginTop: 2 },
+  navIco: { fontSize: 17 },
+  navLabel: { color: GOLD_PALE, fontSize: 8, fontWeight: '900', marginTop: 2, letterSpacing: 0.4 },
 
+  /* PLAY CENTRALE */
   playShield: {
-    width: 72, height: 96, marginHorizontal: 4,
-    marginTop: -18,
+    width: 72, height: 84,
+    marginHorizontal: 4, marginTop: -22,
+  },
+  playShieldOuter: {
+    flex: 1, borderRadius: 12,
+    padding: 2.5,
+    shadowColor: GOLD, shadowOpacity: 0.8, shadowRadius: 8, elevation: 12,
   },
   playShieldInner: {
     flex: 1, borderRadius: 10,
-    borderWidth: 2, borderColor: '#FFD700',
     alignItems: 'center', justifyContent: 'center',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.3)',
   },
-  playText: { color: '#FFD700', fontSize: 20, fontWeight: '900', letterSpacing: 1 },
+  playText: { color: GOLD, fontSize: 21, fontWeight: '900', letterSpacing: 2, textShadowColor: '#000', textShadowRadius: 4 },
+  playSubText: { color: GOLD_PALE, fontSize: 8, fontWeight: '800', letterSpacing: 1.5, marginTop: 1 },
 
-  /* BLOCCO 10 — OVERFLOW MODAL */
+  /* BLOCCO 11 — OVERFLOW MODAL */
   modalBackdrop: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.7)',
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.75)',
     justifyContent: 'flex-end',
   },
   modalCard: {
-    backgroundColor: '#12122e',
     borderTopLeftRadius: 18, borderTopRightRadius: 18,
-    paddingTop: 12, paddingHorizontal: 12, paddingBottom: 6,
-    maxHeight: '85%',
-    borderTopWidth: 2, borderTopColor: '#FFD700',
+    paddingTop: 14, paddingHorizontal: 14, paddingBottom: 6,
+    maxHeight: '90%',
+    borderTopWidth: 2, borderTopColor: GOLD,
   },
   modalHeader: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 6,
   },
-  modalTitle: { color: '#FFD700', fontSize: 17, fontWeight: '900' },
+  modalTitle: { color: GOLD, fontSize: 15, fontWeight: '900', letterSpacing: 0.6 },
   modalClose: { color: '#fff', fontSize: 22, paddingHorizontal: 6 },
-  modalSub: { color: '#BBB', fontSize: 11, marginBottom: 10, fontStyle: 'italic' },
+  modalSub: { color: '#B0B8D8', fontSize: 10, marginBottom: 12, fontStyle: 'italic' },
   modalGrid: {
-    flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between',
+    flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'flex-start',
   },
   modalItem: {
-    width: '31%', aspectRatio: 1,
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.25)',
-    borderRadius: 10, alignItems: 'center', justifyContent: 'center', gap: 6,
+    width: '15.5%', aspectRatio: 1,
+    borderRadius: 8, overflow: 'hidden',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.30)',
   },
-  modalItemIco: { fontSize: 28 },
-  modalItemLabel: { color: '#fff', fontSize: 10, fontWeight: '800', textAlign: 'center', paddingHorizontal: 4 },
+  modalItemInner: {
+    flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3, padding: 4,
+  },
+  modalItemIco: { fontSize: 22 },
+  modalItemLabel: {
+    color: '#fff', fontSize: 9, fontWeight: '800',
+    textAlign: 'center',
+  },
 });
