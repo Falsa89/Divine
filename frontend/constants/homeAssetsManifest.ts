@@ -75,6 +75,8 @@ export type PanelAsset = {
   decor?: any;
   /** se vero, frame è 9-slice (lo useremo con ImageBackground + capInsets) */
   nineSlice?: boolean;
+  /** margini interni del 9-slice in pixel dell'asset sorgente */
+  capInsets?: { top: number; left: number; bottom: number; right: number };
 };
 
 export type PanelKey =
@@ -97,6 +99,143 @@ export const HOME_PANELS: Record<PanelKey, PanelAsset> = {
   crystalPack: {},
   serverTime:  {},
 };
+
+/* ══════════════════════════════════════════════════════════════════════
+ *   SLOT MANIFEST — GRANULARE PER BLOCCO (drop-in ready per Pack A/B/…)
+ * ══════════════════════════════════════════════════════════════════════
+ *
+ * Ogni blocco homepage ha un oggetto-manifest con TUTTI gli slot possibili
+ * in formato `slot?: any`. Quando arriva un Pack:
+ *   1) si aggiungono i `require(...)` nel manifest corretto
+ *   2) nessun refactor del componente richiesto → drop-in immediato
+ *
+ * Fintanto che i slot sono `undefined`, i componenti cadono sul fallback
+ * visivo attuale (gradient/placeholder) SENZA cambi visibili.
+ *
+ * Per 9-slice usare `capInsets` in px dell'asset sorgente.
+ */
+
+/* ───── Pack A — Profile Panel (TOP-LEFT) ───── */
+export type ProfilePanelAssets = {
+  /** Frame principale del panel (9-slice o full-bleed) */
+  frame?: any;
+  /** Overlay decorativo (filigrane/cornici oro); opzionale */
+  decor?: any;
+  nineSlice?: boolean;
+  capInsets?: { top: number; left: number; bottom: number; right: number };
+
+  /** Cornice dorata intorno all'avatar (ring+glow) */
+  avatarRing?: any;
+  /** Sfondo avatar quando non c'è immagine user (portrait generico) */
+  avatarPlaceholder?: any;
+  /** Badge numero livello (cerchio sotto avatar) */
+  lvBadge?: any;
+
+  /** Traccia barra EXP (sfondo) */
+  expBarBg?: any;
+  /** Fill barra EXP (può essere tileable) */
+  expBarFill?: any;
+
+  /** Riga power: frame/cornice full-width */
+  powerRow?: any;
+  /** Icona lightning power (overrides emoji ⚡) */
+  powerIcon?: any;
+
+  /** Pill VIP */
+  vipBadge?: any;
+  /** Pill Spirito */
+  spiritoBadge?: any;
+  /** Pill Titolo attivo */
+  titleBadge?: any;
+};
+export const HOME_PROFILE_PANEL: ProfilePanelAssets = {
+  // Tutti i slot undefined → fallback visivo identico all'attuale.
+  // Quando arriva il Pack A: aggiungere qui frame / avatarRing / lvBadge / …
+};
+
+/* ───── Pack B — Currency Bar (TOP-RIGHT) ───── */
+export type CurrencyPillAssets = {
+  /** Frame pill (9-slice consigliato) */
+  frame?: any;
+  nineSlice?: boolean;
+  capInsets?: { top: number; left: number; bottom: number; right: number };
+  /** Icona moneta (gold bag / gem) */
+  icon?: any;
+  /** Pulsante "+" (singolo asset con stati opzionali) */
+  plusBtn?: ButtonAsset;
+};
+export type CurrencyBarAssets = {
+  gold?: CurrencyPillAssets;
+  gems?: CurrencyPillAssets;
+};
+export const HOME_CURRENCY_BAR: CurrencyBarAssets = {
+  gold: {},
+  gems: {},
+};
+
+/* ───── Pack C — Top Actions (Wheel/Quest/Event, TOP-RIGHT sotto valute) ───── */
+export type TopActionsAssets = {
+  /** Frame comune a tutti i 3 bottoni (opzionale; se mancante si usa HOME_BUTTONS per-button) */
+  commonFrame?: ButtonAsset;
+  /** Override icone singole (se HOME_BUTTONS[key].default non basta) */
+  iconWheel?: any;
+  iconQuest?: any;
+  iconEvent?: any;
+};
+export const HOME_TOP_ACTIONS: TopActionsAssets = {};
+
+/* ───── Pack D — Left Utility Stack (server time, SP offer, crystal packs) ───── */
+export type LeftStackAssets = {
+  /** Frame box Server Time */
+  serverTimeFrame?: any;
+  /** Badge piccolo icona clock (override 🕐) */
+  serverTimeIcon?: any;
+
+  /** Frame SP Offer (bundle esclusivo) */
+  spOfferFrame?: any;
+  spOfferBadge?: any;        // badge "SP" a sinistra
+  spOfferArrow?: any;        // freccia ›
+
+  /** Frame comune crystal pack (se shared) */
+  crystalPackFrame?: any;
+  /** Frame specifico per tier (2, 3, 4, 5…) — sovrascrive crystalPackFrame */
+  crystalPackFrameByTier?: Record<number, any>;
+  /** Icona gem pack (override 💎) */
+  crystalPackIcon?: any;
+};
+export const HOME_LEFT_STACK: LeftStackAssets = {};
+
+/* ───── Pack E — Right Mode Panel (Arena/Blessing/Trial/Battle/Research) ───── */
+export type ModePanelAssets = {
+  /** Frame comune a tutti i 5 mode button (se i singoli HOME_BUTTONS non bastano) */
+  commonFrame?: ButtonAsset;
+  /** Icone singole (override); usate se HOME_BUTTONS[key].default è undefined */
+  iconArena?: any;
+  iconBlessing?: any;
+  iconTrial?: any;
+  iconBattle?: any;
+  iconResearch?: any;
+};
+export const HOME_MODE_PANEL_ASSETS: ModePanelAssets = {};
+
+/* ───── Pack F — Main Banner (Summon rate-up) ───── */
+export type MainBannerAssets = {
+  /** Frame principale del banner (9-slice consigliato) */
+  frame?: any;
+  nineSlice?: boolean;
+  capInsets?: { top: number; left: number; bottom: number; right: number };
+  /** Ribbon "RATE-UP" decorativo */
+  ribbon?: any;
+  /** Badge "RATE-UP" alternativo (piccolo tag) */
+  rateUpBadge?: any;
+  /** Bottone SUMMON CTA */
+  summonCta?: ButtonAsset;
+  /** Cornice intorno all'artwork hero featured */
+  characterFrame?: any;
+  /** Sparkle/FX decorativo (override ✨) */
+  sparkle?: any;
+};
+export const HOME_MAIN_BANNER_ASSETS: MainBannerAssets = {};
 
 /* ────────────────────────────── BUTTONS ────────────────────────────── */
 /**

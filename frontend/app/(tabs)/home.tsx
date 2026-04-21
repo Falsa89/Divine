@@ -45,8 +45,12 @@ import {
   HOME_BACKGROUNDS, HOME_PANELS, HOME_BUTTONS, HOME_NAV_ICONS,
   HOME_BANNERS, HOME_PLAY_SHIELD, HOME_NAV_BAR_BASE, HOME_SIDE_FRAME,
   HOME_NAV_ICON_IMAGES, HOME_ROUTES, resolveHomeBackground, type HomeScene,
+  HOME_PROFILE_PANEL, HOME_CURRENCY_BAR, HOME_TOP_ACTIONS,
+  HOME_LEFT_STACK, HOME_MODE_PANEL_ASSETS, HOME_MAIN_BANNER_ASSETS,
 } from '../../constants/homeAssetsManifest';
-import { AssetSlot, ButtonAssetSlot } from '../../components/home/AssetSlot';
+import { AssetSlot, ButtonAssetSlot, type ButtonAsset } from '../../components/home/AssetSlot';
+import { AssetBackedGradient } from '../../components/home/AssetBackedGradient';
+import { SlotImage } from '../../components/home/SlotImage';
 import { useServerTimePhase, type TimePhase } from '../../utils/serverTimePhase';
 import { preloadAssets } from '../../utils/preloadAssets';
 import HomeLoadingScreen from '../../components/home/HomeLoadingScreen';
@@ -421,8 +425,12 @@ function HomeProfilePanel({ user, router }: any) {
 
   return (
     <View style={s.profileWrap}>
-      <LinearGradient
-        colors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
+      {/* ROOT FRAME — asset-driven (Pack A). Fallback: gradient originale. */}
+      <AssetBackedGradient
+        source={HOME_PROFILE_PANEL.frame}
+        decorSource={HOME_PROFILE_PANEL.decor}
+        capInsets={HOME_PROFILE_PANEL.capInsets}
+        fallbackColors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
         style={s.profilePanel}
       >
         {/* ROW 1 — Avatar + Nome + Lv */}
@@ -432,30 +440,66 @@ function HomeProfilePanel({ user, router }: any) {
             activeOpacity={0.8}
             style={s.avatarFrame}
           >
-            <LinearGradient
-              colors={[GOLD_PALE, GOLD, GOLD_WARM]}
+            {/* AVATAR RING — asset-driven (Pack A.avatarRing). Fallback: gradient gold. */}
+            <AssetBackedGradient
+              source={HOME_PROFILE_PANEL.avatarRing}
+              fallbackColors={[GOLD_PALE, GOLD, GOLD_WARM]}
               style={s.avatarRing}
             >
               <View style={s.avatarInner}>
-                <Text style={s.avatarInitial}>
-                  {String(name)[0]?.toUpperCase() || 'P'}
-                </Text>
+                {HOME_PROFILE_PANEL.avatarPlaceholder ? (
+                  <RNImage
+                    source={HOME_PROFILE_PANEL.avatarPlaceholder}
+                    style={{ width: '100%', height: '100%', borderRadius: 999 }}
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <Text style={s.avatarInitial}>
+                    {String(name)[0]?.toUpperCase() || 'P'}
+                  </Text>
+                )}
               </View>
-            </LinearGradient>
+            </AssetBackedGradient>
+            {/* LV BADGE — asset-driven overlay (Pack A.lvBadge). Fallback: View circolare */}
             <View style={s.lvBadge}>
+              {HOME_PROFILE_PANEL.lvBadge ? (
+                <RNImage
+                  source={HOME_PROFILE_PANEL.lvBadge}
+                  style={StyleSheet.absoluteFill as any}
+                  resizeMode="contain"
+                />
+              ) : null}
               <Text style={s.lvBadgeTxt}>{level}</Text>
             </View>
           </TouchableOpacity>
           <View style={{ flex: 1, marginLeft: 10 }}>
             <Text style={s.profName} numberOfLines={1}>{name}</Text>
             <View style={s.expWrap}>
-              <View style={s.expBarBg}>
-                <LinearGradient
-                  colors={[GOLD_PALE, GOLD]}
-                  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
-                  style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }]}
-                />
-              </View>
+              {/* EXP BAR — track + fill asset-driven. Fallback: View+gradient. */}
+              {HOME_PROFILE_PANEL.expBarBg ? (
+                <View style={s.expBarBg}>
+                  <RNImage
+                    source={HOME_PROFILE_PANEL.expBarBg}
+                    style={StyleSheet.absoluteFill as any}
+                    resizeMode="stretch"
+                  />
+                  <AssetBackedGradient
+                    source={HOME_PROFILE_PANEL.expBarFill}
+                    fallbackColors={[GOLD_PALE, GOLD]}
+                    fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
+                    style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
+                  />
+                </View>
+              ) : (
+                <View style={s.expBarBg}>
+                  <AssetBackedGradient
+                    source={HOME_PROFILE_PANEL.expBarFill}
+                    fallbackColors={[GOLD_PALE, GOLD]}
+                    fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
+                    style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
+                  />
+                </View>
+              )}
               <Text style={s.expTxt}>{exp}/{expMax}</Text>
             </View>
           </View>
@@ -467,7 +511,22 @@ function HomeProfilePanel({ user, router }: any) {
           onPress={() => router.push('/profile' as any)}
           activeOpacity={0.8}
         >
-          <Text style={s.powerIcon}>{'\u26A1'}</Text>
+          {HOME_PROFILE_PANEL.powerRow ? (
+            <RNImage
+              source={HOME_PROFILE_PANEL.powerRow}
+              style={StyleSheet.absoluteFill as any}
+              resizeMode="stretch"
+            />
+          ) : null}
+          {HOME_PROFILE_PANEL.powerIcon ? (
+            <RNImage
+              source={HOME_PROFILE_PANEL.powerIcon}
+              style={{ width: 18, height: 18 }}
+              resizeMode="contain"
+            />
+          ) : (
+            <Text style={s.powerIcon}>{'\u26A1'}</Text>
+          )}
           <Text style={s.powerLbl}>POWER</Text>
           <Text style={s.powerVal}>{Number(power).toLocaleString()}</Text>
         </TouchableOpacity>
@@ -476,20 +535,41 @@ function HomeProfilePanel({ user, router }: any) {
         <View style={s.pillsRow}>
           <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
             onPress={() => router.push('/vip' as any)}>
+            {HOME_PROFILE_PANEL.vipBadge ? (
+              <RNImage
+                source={HOME_PROFILE_PANEL.vipBadge}
+                style={StyleSheet.absoluteFill as any}
+                resizeMode="stretch"
+              />
+            ) : null}
             <Text style={s.vipStar}>{'\u2605'}</Text>
             <Text style={s.vipTxt}>VIP {vip}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
             onPress={() => router.push('/profile' as any)}>
+            {HOME_PROFILE_PANEL.spiritoBadge ? (
+              <RNImage
+                source={HOME_PROFILE_PANEL.spiritoBadge}
+                style={StyleSheet.absoluteFill as any}
+                resizeMode="stretch"
+              />
+            ) : null}
             <Text style={s.spiritoIco}>{'\uD83D\uDD2E'}</Text>
             <Text style={s.spiritoTxt}>SP {spirito}</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
           onPress={() => router.push('/achievements' as any)}>
+          {HOME_PROFILE_PANEL.titleBadge ? (
+            <RNImage
+              source={HOME_PROFILE_PANEL.titleBadge}
+              style={StyleSheet.absoluteFill as any}
+              resizeMode="stretch"
+            />
+          ) : null}
           <Text style={s.titleTxt} numberOfLines={1}>{'\u2756'}  {title}</Text>
         </TouchableOpacity>
-      </LinearGradient>
+      </AssetBackedGradient>
     </View>
   );
 }
@@ -501,38 +581,63 @@ function HomeProfilePanel({ user, router }: any) {
 function HomeCurrencyBar({ user, onAddGems }: any) {
   const gold = user?.gold || 0;
   const gems = user?.diamonds || user?.gems || 0;
+  const goldCfg = HOME_CURRENCY_BAR.gold || {};
+  const gemsCfg = HOME_CURRENCY_BAR.gems || {};
   return (
     <View style={s.currencyWrap}>
-      <LinearGradient
-        colors={['rgba(20,33,72,0.95)', 'rgba(8,15,40,0.85)']}
+      {/* GOLD PILL — asset-driven (Pack B.gold). Fallback: gradient+border. */}
+      <AssetBackedGradient
+        source={goldCfg.frame}
+        capInsets={goldCfg.capInsets}
+        fallbackColors={['rgba(20,33,72,0.95)', 'rgba(8,15,40,0.85)']}
         style={[s.currencyPill, { borderColor: 'rgba(255,215,0,0.65)' }]}
       >
-        <Text style={s.currencyIco}>{'\uD83D\uDCB0'}</Text>
+        {goldCfg.icon ? (
+          <RNImage source={goldCfg.icon} style={{ width: 18, height: 18 }} resizeMode="contain" />
+        ) : (
+          <Text style={s.currencyIco}>{'\uD83D\uDCB0'}</Text>
+        )}
         <Text style={s.currencyTxt}>{Number(gold).toLocaleString()}</Text>
         <TouchableOpacity style={s.plusBtn} onPress={onAddGems} activeOpacity={0.7}>
-          <LinearGradient
-            colors={[GOLD_PALE, GOLD]}
-            style={s.plusBtnInner}
-          >
-            <Text style={s.plusTxt}>+</Text>
-          </LinearGradient>
+          <ButtonAssetSlot
+            asset={goldCfg.plusBtn}
+            state="default"
+            style={s.plusBtnInner as any}
+            fallback={
+              <LinearGradient colors={[GOLD_PALE, GOLD]} style={s.plusBtnInner}>
+                <Text style={s.plusTxt}>+</Text>
+              </LinearGradient>
+            }
+          />
         </TouchableOpacity>
-      </LinearGradient>
-      <LinearGradient
-        colors={['rgba(20,33,72,0.95)', 'rgba(8,15,40,0.85)']}
+      </AssetBackedGradient>
+
+      {/* GEMS PILL — asset-driven (Pack B.gems). Fallback: gradient+border. */}
+      <AssetBackedGradient
+        source={gemsCfg.frame}
+        capInsets={gemsCfg.capInsets}
+        fallbackColors={['rgba(20,33,72,0.95)', 'rgba(8,15,40,0.85)']}
         style={[s.currencyPill, { borderColor: 'rgba(100,170,255,0.65)' }]}
       >
-        <Text style={s.currencyIco}>{'\uD83D\uDC8E'}</Text>
+        {gemsCfg.icon ? (
+          <RNImage source={gemsCfg.icon} style={{ width: 18, height: 18 }} resizeMode="contain" />
+        ) : (
+          <Text style={s.currencyIco}>{'\uD83D\uDC8E'}</Text>
+        )}
         <Text style={s.currencyTxt}>{Number(gems).toLocaleString()}</Text>
         <TouchableOpacity style={s.plusBtn} onPress={onAddGems} activeOpacity={0.7}>
-          <LinearGradient
-            colors={['#6EC8FF', '#2C7DD8']}
-            style={s.plusBtnInner}
-          >
-            <Text style={[s.plusTxt, { color: '#fff' }]}>+</Text>
-          </LinearGradient>
+          <ButtonAssetSlot
+            asset={gemsCfg.plusBtn}
+            state="default"
+            style={s.plusBtnInner as any}
+            fallback={
+              <LinearGradient colors={['#6EC8FF', '#2C7DD8']} style={s.plusBtnInner}>
+                <Text style={[s.plusTxt, { color: '#fff' }]}>+</Text>
+              </LinearGradient>
+            }
+          />
         </TouchableOpacity>
-      </LinearGradient>
+      </AssetBackedGradient>
     </View>
   );
 }
@@ -546,30 +651,43 @@ function HomeTopActions({ goTo }: any) {
   const eventSlots: Array<{ key: string; icon: string; label: string; onPress: () => void }> = [];
 
   const base = [
-    { key: 'wheel', icon: '\uD83C\uDFA1', label: 'WHEEL', onPress: () => goTo('wheel') },
-    { key: 'quest', icon: '\uD83D\uDCDC', label: 'QUEST', onPress: () => goTo('quest') },
-    { key: 'event', icon: '\uD83C\uDF81', label: 'EVENT', onPress: () => goTo('event') },
+    { key: 'wheel', icon: '\uD83C\uDFA1', label: 'WHEEL', onPress: () => goTo('wheel'), iconOverride: HOME_TOP_ACTIONS.iconWheel },
+    { key: 'quest', icon: '\uD83D\uDCDC', label: 'QUEST', onPress: () => goTo('quest'), iconOverride: HOME_TOP_ACTIONS.iconQuest },
+    { key: 'event', icon: '\uD83C\uDF81', label: 'EVENT', onPress: () => goTo('event'), iconOverride: HOME_TOP_ACTIONS.iconEvent },
   ];
 
   const items = [...base, ...eventSlots];
 
   return (
     <View style={s.topActionsRow}>
-      {items.map(it => (
-        <TouchableOpacity key={it.key} style={s.topActBtn} activeOpacity={0.75} onPress={it.onPress}>
-          <ButtonAssetSlot
-            asset={(HOME_BUTTONS as any)[it.key]}
-            state="default"
-            style={s.topActIconBox as any}
-            fallback={
-              <View style={s.placeholderFill}>
-                <Text style={s.topActIco}>{it.icon}</Text>
-              </View>
-            }
-          />
-          <Text style={s.topActLabel}>{it.label}</Text>
-        </TouchableOpacity>
-      ))}
+      {items.map(it => {
+        // Asset resolution: priorità a asset specifico (HOME_BUTTONS[key]),
+        // poi frame comune (HOME_TOP_ACTIONS.commonFrame), poi fallback emoji.
+        const specificAsset = (HOME_BUTTONS as any)[it.key] as ButtonAsset | undefined;
+        const hasSpecific = !!(specificAsset && (specificAsset.default || specificAsset.pressed));
+        const mergedAsset: ButtonAsset | undefined = hasSpecific
+          ? specificAsset
+          : HOME_TOP_ACTIONS.commonFrame;
+        return (
+          <TouchableOpacity key={it.key} style={s.topActBtn} activeOpacity={0.75} onPress={it.onPress}>
+            <ButtonAssetSlot
+              asset={mergedAsset}
+              state="default"
+              style={s.topActIconBox as any}
+              fallback={
+                <View style={s.placeholderFill}>
+                  {(it as any).iconOverride ? (
+                    <RNImage source={(it as any).iconOverride} style={{ width: 28, height: 28 }} resizeMode="contain" />
+                  ) : (
+                    <Text style={s.topActIco}>{it.icon}</Text>
+                  )}
+                </View>
+              }
+            />
+            <Text style={s.topActLabel}>{it.label}</Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
@@ -581,51 +699,82 @@ function HomeTopActions({ goTo }: any) {
 function HomeLeftUtilityStack({ serverTime, phase, synced, onSpOffer, goTo }: any) {
   return (
     <View style={s.leftStack}>
+      {/* SERVER TIME BOX — asset-driven frame (Pack D.serverTimeFrame). */}
       <View style={s.serverTimeBox}>
-        <Text style={s.serverLabel}>{'\uD83D\uDD50'} SERVER TIME {synced ? '' : '·sync'}</Text>
+        {HOME_LEFT_STACK.serverTimeFrame ? (
+          <RNImage
+            source={HOME_LEFT_STACK.serverTimeFrame}
+            style={StyleSheet.absoluteFill as any}
+            resizeMode="stretch"
+          />
+        ) : null}
+        <Text style={s.serverLabel}>
+          {HOME_LEFT_STACK.serverTimeIcon ? '' : '\uD83D\uDD50 '}
+          SERVER TIME {synced ? '' : '·sync'}
+        </Text>
         <Text style={s.serverValue}>{serverTime}</Text>
         <Text style={s.serverPhase}>fase: {phase}</Text>
       </View>
 
+      {/* SP OFFER — asset-driven frame (Pack D.spOfferFrame). Fallback: gradient red. */}
       <TouchableOpacity style={s.spOfferBtn} onPress={onSpOffer} activeOpacity={0.85}>
-        <LinearGradient
-          colors={['#D13B3B', '#8A1515']}
-          start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+        <AssetBackedGradient
+          source={HOME_LEFT_STACK.spOfferFrame}
+          fallbackColors={['#D13B3B', '#8A1515']}
+          fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 1 }}
           style={s.spOfferGrad}
         >
-          <Text style={s.spOfferBadge}>SP</Text>
+          {HOME_LEFT_STACK.spOfferBadge ? (
+            <RNImage source={HOME_LEFT_STACK.spOfferBadge} style={{ width: 28, height: 28 }} resizeMode="contain" />
+          ) : (
+            <Text style={s.spOfferBadge}>SP</Text>
+          )}
           <View style={{ flex: 1 }}>
             <Text style={s.spOfferTitle}>SP OFFER</Text>
             <Text style={s.spOfferSub}>Bundle esclusivo</Text>
           </View>
-          <Text style={s.spOfferArrow}>{'\u203A'}</Text>
-        </LinearGradient>
+          {HOME_LEFT_STACK.spOfferArrow ? (
+            <RNImage source={HOME_LEFT_STACK.spOfferArrow} style={{ width: 14, height: 14 }} resizeMode="contain" />
+          ) : (
+            <Text style={s.spOfferArrow}>{'\u203A'}</Text>
+          )}
+        </AssetBackedGradient>
       </TouchableOpacity>
 
+      {/* CRYSTAL PACKS — frame asset-driven per-tier (Pack D.crystalPackFrameByTier). */}
       <View style={s.crystalRow}>
         {[
           { tier: 2, gems: 100,  col1: '#1D4C8A', col2: '#0A1F3C' },
           { tier: 3, gems: 150,  col1: '#4B2080', col2: '#1A0A3C' },
-        ].map((x, i) => (
-          <TouchableOpacity
-            key={i}
-            style={s.crystalPack}
-            onPress={() => goTo('goldPlus')}
-            activeOpacity={0.85}
-          >
-            <LinearGradient
-              colors={[x.col1, x.col2]}
-              style={s.crystalPackInner}
+        ].map((x, i) => {
+          const perTier = HOME_LEFT_STACK.crystalPackFrameByTier?.[x.tier];
+          const frameSrc = perTier || HOME_LEFT_STACK.crystalPackFrame;
+          return (
+            <TouchableOpacity
+              key={i}
+              style={s.crystalPack}
+              onPress={() => goTo('goldPlus')}
+              activeOpacity={0.85}
             >
-              <Text style={s.crystalTier}>×{x.tier}</Text>
-              <Text style={s.crystalIco}>{'\uD83D\uDC8E'}</Text>
-              <View style={s.crystalPriceWrap}>
-                <Text style={s.crystalPriceIco}>{'\uD83D\uDC8E'}</Text>
-                <Text style={s.crystalPrice}>{x.gems}</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        ))}
+              <AssetBackedGradient
+                source={frameSrc}
+                fallbackColors={[x.col1, x.col2]}
+                style={s.crystalPackInner}
+              >
+                <Text style={s.crystalTier}>×{x.tier}</Text>
+                {HOME_LEFT_STACK.crystalPackIcon ? (
+                  <RNImage source={HOME_LEFT_STACK.crystalPackIcon} style={{ width: 28, height: 28 }} resizeMode="contain" />
+                ) : (
+                  <Text style={s.crystalIco}>{'\uD83D\uDC8E'}</Text>
+                )}
+                <View style={s.crystalPriceWrap}>
+                  <Text style={s.crystalPriceIco}>{'\uD83D\uDC8E'}</Text>
+                  <Text style={s.crystalPrice}>{x.gems}</Text>
+                </View>
+              </AssetBackedGradient>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </View>
   );
@@ -636,38 +785,49 @@ function HomeLeftUtilityStack({ serverTime, phase, synced, onSpOffer, goTo }: an
  *  Arena / Blessing / Trial / Battle / Research (verticale, a destra)
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeModePanel({ goTo }: any) {
-  const modes: Array<{ key: any; label: string; ico: string }> = [
-    { key: 'arena',    label: 'ARENA',    ico: '\u2694\uFE0F' },
-    { key: 'blessing', label: 'BLESSING', ico: '\uD83D\uDCFF' },
-    { key: 'trial',    label: 'TRIAL',    ico: '\u26AA'       },
-    { key: 'battle',   label: 'BATTLE',   ico: '\u2620\uFE0F' },
-    { key: 'research', label: 'RESEARCH', ico: '\uD83D\uDD2C' },
+  const modes: Array<{ key: any; label: string; ico: string; iconOverride?: any }> = [
+    { key: 'arena',    label: 'ARENA',    ico: '\u2694\uFE0F', iconOverride: HOME_MODE_PANEL_ASSETS.iconArena },
+    { key: 'blessing', label: 'BLESSING', ico: '\uD83D\uDCFF', iconOverride: HOME_MODE_PANEL_ASSETS.iconBlessing },
+    { key: 'trial',    label: 'TRIAL',    ico: '\u26AA'      , iconOverride: HOME_MODE_PANEL_ASSETS.iconTrial },
+    { key: 'battle',   label: 'BATTLE',   ico: '\u2620\uFE0F', iconOverride: HOME_MODE_PANEL_ASSETS.iconBattle },
+    { key: 'research', label: 'RESEARCH', ico: '\uD83D\uDD2C', iconOverride: HOME_MODE_PANEL_ASSETS.iconResearch },
   ];
   return (
     <View style={s.modePanel}>
-      {modes.map(m => (
-        <TouchableOpacity
-          key={m.key}
-          style={s.modeTile}
-          onPress={() => goTo(m.key)}
-          activeOpacity={0.82}
-        >
-          <ButtonAssetSlot
-            asset={(HOME_BUTTONS as any)[m.key]}
-            state="default"
-            style={s.modeTileInner as any}
-            fallback={
-              <LinearGradient
-                colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
-                style={s.modeTileInnerFallback}
-              >
-                <Text style={s.modeIco}>{m.ico}</Text>
-                <Text style={s.modeLabel}>{m.label}</Text>
-              </LinearGradient>
-            }
-          />
-        </TouchableOpacity>
-      ))}
+      {modes.map(m => {
+        const specificAsset = (HOME_BUTTONS as any)[m.key] as ButtonAsset | undefined;
+        const hasSpecific = !!(specificAsset && (specificAsset.default || specificAsset.pressed));
+        const mergedAsset: ButtonAsset | undefined = hasSpecific
+          ? specificAsset
+          : HOME_MODE_PANEL_ASSETS.commonFrame;
+        return (
+          <TouchableOpacity
+            key={m.key}
+            style={s.modeTile}
+            onPress={() => goTo(m.key)}
+            activeOpacity={0.82}
+          >
+            <ButtonAssetSlot
+              asset={mergedAsset}
+              state="default"
+              style={s.modeTileInner as any}
+              fallback={
+                <LinearGradient
+                  colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
+                  style={s.modeTileInnerFallback}
+                >
+                  {m.iconOverride ? (
+                    <RNImage source={m.iconOverride} style={{ width: 26, height: 26 }} resizeMode="contain" />
+                  ) : (
+                    <Text style={s.modeIco}>{m.ico}</Text>
+                  )}
+                  <Text style={s.modeLabel}>{m.label}</Text>
+                </LinearGradient>
+              }
+            />
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
@@ -684,26 +844,57 @@ function HomeMainBanner({ onPress, homeHero }: any) {
       onPress={onPress}
       activeOpacity={0.88}
     >
-      <AssetSlot
-        asset={HOME_BANNERS.summonMain.frame}
-        style={s.bannerInnerAbs as any}
+      {/* FRAME principale del banner — Pack F.frame (9-slice opzionale). */}
+      <AssetBackedGradient
+        source={HOME_MAIN_BANNER_ASSETS.frame || HOME_BANNERS.summonMain.frame}
+        capInsets={HOME_MAIN_BANNER_ASSETS.capInsets}
+        fallbackColors={['rgba(27,53,112,0.97)', 'rgba(8,15,40,0.95)']}
+        fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 1 }}
+        style={s.bannerInner}
       >
-        <LinearGradient
-          colors={['rgba(27,53,112,0.97)', 'rgba(8,15,40,0.95)']}
-          start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-          style={s.bannerInner}
-        >
-          <View style={s.bannerLeft}>
+        {/* Ribbon "RATE-UP" decorativo (opzionale) */}
+        {HOME_MAIN_BANNER_ASSETS.ribbon ? (
+          <RNImage
+            source={HOME_MAIN_BANNER_ASSETS.ribbon}
+            style={{ position: 'absolute', top: -6, left: -4, width: 80, height: 22 }}
+            resizeMode="contain"
+            pointerEvents="none"
+          />
+        ) : null}
+        <View style={s.bannerLeft}>
+          {HOME_MAIN_BANNER_ASSETS.rateUpBadge ? (
+            <RNImage
+              source={HOME_MAIN_BANNER_ASSETS.rateUpBadge}
+              style={{ width: 60, height: 16, marginBottom: 2 }}
+              resizeMode="contain"
+            />
+          ) : (
             <Text style={s.bannerTag}>RATE-UP</Text>
-            <Text style={s.bannerTitle} numberOfLines={1}>{featuredName}</Text>
-            <Text style={s.bannerSub}>Evoca ora</Text>
-            <View style={s.bannerBtn}>
-              <Text style={s.bannerBtnTxt}>SUMMON {'\u203A'}</Text>
-            </View>
-          </View>
+          )}
+          <Text style={s.bannerTitle} numberOfLines={1}>{featuredName}</Text>
+          <Text style={s.bannerSub}>Evoca ora</Text>
+          {/* SUMMON CTA — ButtonAsset opzionale (Pack F.summonCta). */}
+          <ButtonAssetSlot
+            asset={HOME_MAIN_BANNER_ASSETS.summonCta}
+            state="default"
+            style={s.bannerBtn as any}
+            fallback={
+              <View style={s.bannerBtn}>
+                <Text style={s.bannerBtnTxt}>SUMMON {'\u203A'}</Text>
+              </View>
+            }
+          />
+        </View>
+        {HOME_MAIN_BANNER_ASSETS.sparkle ? (
+          <RNImage
+            source={HOME_MAIN_BANNER_ASSETS.sparkle}
+            style={{ width: 22, height: 22, position: 'absolute', right: 10, top: 10 }}
+            resizeMode="contain"
+          />
+        ) : (
           <Text style={s.bannerSparkle}>{'\u2728'}</Text>
-        </LinearGradient>
-      </AssetSlot>
+        )}
+      </AssetBackedGradient>
     </TouchableOpacity>
   );
 }
