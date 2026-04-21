@@ -88,6 +88,10 @@ export default function HomeTab() {
   // pulsanti/icone uno alla volta dopo il login.
   const [preloadDone, setPreloadDone] = useState(false);
   const [preloadProgress, setPreloadProgress] = useState({ done: 0, total: 0 });
+  // Ref anti-restart: il preload gate DEVE partire UNA SOLA VOLTA per sessione.
+  // Senza questo ref, cambi a `homeHero` / `phase` (useFocusEffect + sync server time)
+  // ri-scatenano il useEffect, cancellano l'hard timer e azzerano il counter.
+  const preloadStartedRef = useRef<boolean>(false);
 
   // SERVER TIME + FASE TEMPORALE centralizzata (unico hook, nessun hardcode)
   const { phase, formatted: serverTime, synced } = useServerTimePhase(60);
@@ -109,13 +113,25 @@ export default function HomeTab() {
 
   useEffect(() => { registerForPushNotifications().catch(() => {}); }, []);
 
-  // PRELOAD GATE: una volta sincronizzata la fase + caricato homeHero,
-  // prefetchiamo TUTTI gli asset core della home. Finché non terminiamo,
-  // mostriamo HomeLoadingScreen.
+  // PRELOAD GATE: appena loadData è finito (hero + user), prefetchiamo TUTTI
+  // gli asset core della home in parallelo. NON dipendiamo da `synced`:
+  // la sync temporale può arrivare in ritardo ma non deve bloccare la UI.
+  //
+  // Garanzie (richieste utente):
+  //  - Nessun deadlock su `synced` → non è dipendenza del preload.
+  //  - Hard timeout globale di 4s: se per qualunque motivo il preload non
+  //    si conclude (network stallato, asset rotto, bug expo-asset su web),
+  //    la home viene sbloccata comunque.
+  //  - Promise.allSettled + timeout per-asset (3s) in preloadAssets().
+  //  - Un asset fallito NON blocca gli altri né la home.
+  //  - `preloadStartedRef` garantisce che il gate parta UNA SOLA VOLTA,
+  //    impedendo a cambi su homeHero/phase di riavviarlo e cancellare il
+  //    hard timer.
   useEffect(() => {
-    if (loading) return;     // aspetta che loadData sia finito (hero + user)
-    if (!synced) return;     // aspetta sync server time (per background corretto)
-    if (preloadDone) return; // già fatto
+    if (loading) return;              // aspetta loadData (hero + user)
+    if (preloadDone) return;          // già sbloccata
+    if (preloadStartedRef.current) return; // già avviato in questa sessione
+    preloadStartedRef.current = true;
 
     const coreAssets: any[] = [
       // Background della fase corrente (più fallback per sicurezza)
@@ -136,24 +152,47 @@ export default function HomeTab() {
       HOME_SIDE_FRAME.pressed,
       // 9 icone nav
       ...Object.values(HOME_NAV_ICON_IMAGES),
-      // Hero home: se è un asset locale (require), aggiungilo; se remote URI, passalo diretto
+      // Hero home: string URI remota o require locale — preloadAssets le gestisce entrambe
       homeHero?.asset_splash || homeHero?.asset_base || homeHero?.image_url,
     ];
 
     let canceled = false;
+
+    // HARD TIMEOUT GLOBALE: qualunque cosa succeda, dopo 4s sblocchiamo.
+    const HARD_TIMEOUT_MS = 4000;
+    const hardTimer = setTimeout(() => {
+      if (canceled) return;
+      console.warn('[HomePreload] hard timeout reached — unblocking UI');
+      setPreloadDone(true);
+    }, HARD_TIMEOUT_MS);
+
     (async () => {
-      const res = await preloadAssets(coreAssets, (done, total) => {
-        if (!canceled) setPreloadProgress({ done, total });
-      });
-      if (!canceled) {
-        // Log utile per debug
-        console.log(`[HomePreload] ${res.loaded}/${res.total} loaded, ${res.failed} failed`);
-        setPreloadDone(true);
+      try {
+        const res = await preloadAssets(coreAssets, (done, total) => {
+          if (!canceled) setPreloadProgress({ done, total });
+        });
+        if (!canceled) {
+          console.log(`[HomePreload] ${res.loaded}/${res.total} loaded, ${res.failed} failed`);
+        }
+      } catch (e) {
+        console.warn('[HomePreload] error (ignored):', e);
+      } finally {
+        if (!canceled) {
+          clearTimeout(hardTimer);
+          setPreloadDone(true);
+        }
       }
     })();
 
-    return () => { canceled = true; };
-  }, [loading, synced, phase, homeHero, preloadDone]);
+    return () => {
+      canceled = true;
+      clearTimeout(hardTimer);
+    };
+    // NOTA: `synced` NON è nella dep list → il preload non è mai bloccato
+    // dalla sync del server time. `homeHero`/`phase` sono letti ma non
+    // dependenti: il ref `preloadStartedRef` garantisce single-run.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   const onHeroTap = () => {
     if (homeHero?.id) {
