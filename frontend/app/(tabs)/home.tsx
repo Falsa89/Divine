@@ -47,6 +47,8 @@ import {
 } from '../../constants/homeAssetsManifest';
 import { AssetSlot, ButtonAssetSlot } from '../../components/home/AssetSlot';
 import { useServerTimePhase, type TimePhase } from '../../utils/serverTimePhase';
+import { preloadAssets } from '../../utils/preloadAssets';
+import HomeLoadingScreen from '../../components/home/HomeLoadingScreen';
 
 const { width: W, height: H } = Dimensions.get('window');
 
@@ -81,6 +83,12 @@ export default function HomeTab() {
   const [overflowOpen, setOverflowOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
 
+  // PRELOAD GATE: blocca il render della home fino a quando gli asset core
+  // sono stati prefetchati nella cache del renderer. Evita il "pop-in" dei
+  // pulsanti/icone uno alla volta dopo il login.
+  const [preloadDone, setPreloadDone] = useState(false);
+  const [preloadProgress, setPreloadProgress] = useState({ done: 0, total: 0 });
+
   // SERVER TIME + FASE TEMPORALE centralizzata (unico hook, nessun hardcode)
   const { phase, formatted: serverTime, synced } = useServerTimePhase(60);
 
@@ -101,6 +109,52 @@ export default function HomeTab() {
 
   useEffect(() => { registerForPushNotifications().catch(() => {}); }, []);
 
+  // PRELOAD GATE: una volta sincronizzata la fase + caricato homeHero,
+  // prefetchiamo TUTTI gli asset core della home. Finché non terminiamo,
+  // mostriamo HomeLoadingScreen.
+  useEffect(() => {
+    if (loading) return;     // aspetta che loadData sia finito (hero + user)
+    if (!synced) return;     // aspetta sync server time (per background corretto)
+    if (preloadDone) return; // già fatto
+
+    const coreAssets: any[] = [
+      // Background della fase corrente (più fallback per sicurezza)
+      resolveHomeBackground('default', phase),
+      HOME_BACKGROUNDS.default.night,
+      HOME_BACKGROUNDS.default.day,
+      HOME_BACKGROUNDS.default.dawn,
+      HOME_BACKGROUNDS.default.sunset,
+      // Bottom nav
+      HOME_NAV_BAR_BASE,
+      // PLAY states (tutti e 3 preload ESPLICITO)
+      HOME_PLAY_SHIELD.idle,
+      HOME_PLAY_SHIELD.pressed,
+      HOME_PLAY_SHIELD.selected,
+      // Frame side buttons
+      HOME_SIDE_FRAME.default,
+      HOME_SIDE_FRAME.selected,
+      HOME_SIDE_FRAME.pressed,
+      // 9 icone nav
+      ...Object.values(HOME_NAV_ICON_IMAGES),
+      // Hero home: se è un asset locale (require), aggiungilo; se remote URI, passalo diretto
+      homeHero?.asset_splash || homeHero?.asset_base || homeHero?.image_url,
+    ];
+
+    let canceled = false;
+    (async () => {
+      const res = await preloadAssets(coreAssets, (done, total) => {
+        if (!canceled) setPreloadProgress({ done, total });
+      });
+      if (!canceled) {
+        // Log utile per debug
+        console.log(`[HomePreload] ${res.loaded}/${res.total} loaded, ${res.failed} failed`);
+        setPreloadDone(true);
+      }
+    })();
+
+    return () => { canceled = true; };
+  }, [loading, synced, phase, homeHero, preloadDone]);
+
   const onHeroTap = () => {
     if (homeHero?.id) {
       router.push({ pathname: '/sanctuary', params: { heroId: homeHero.id } } as any);
@@ -114,11 +168,13 @@ export default function HomeTab() {
     router.push(route as any);
   };
 
-  if (loading) {
+  if (loading || !preloadDone) {
     return (
-      <LinearGradient colors={[NIGHT_0, NIGHT_1]} style={s.container}>
-        <ActivityIndicator size="large" color={GOLD} />
-      </LinearGradient>
+      <HomeLoadingScreen
+        done={preloadProgress.done}
+        total={preloadProgress.total}
+        label={loading ? 'CARICAMENTO DATI…' : 'PREPARAZIONE HOMEPAGE…'}
+      />
     );
   }
 
@@ -798,6 +854,18 @@ function PlayShield({ onPress, width = 72, height = 86, bottom = 10 }: PlayShiel
   const [playState, setPlayState] = useState<PlayState>('idle');
   const confirmedRef = useRef<boolean>(false);
   const navTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // RESET ON FOCUS: quando la home riprende focus (es. ritorno da battle),
+  // qualsiasi residuo di 'pressed' / 'confirm' viene azzerato. PLAY torna
+  // sempre a 'idle' all'ingresso nella home.
+  useFocusEffect(useCallback(() => {
+    setPlayState('idle');
+    confirmedRef.current = false;
+    if (navTimerRef.current) {
+      clearTimeout(navTimerRef.current);
+      navTimerRef.current = null;
+    }
+  }, []));
 
   useEffect(() => () => {
     if (navTimerRef.current) clearTimeout(navTimerRef.current);
