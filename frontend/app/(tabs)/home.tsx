@@ -26,11 +26,11 @@
  * NO animazioni globali fake (blink/opacity). Hero statico.
  * NO testi/card/border sotto/intorno al personaggio.
  */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
   Dimensions, ScrollView, Modal, ImageBackground, Pressable,
-  Image as RNImage,
+  Animated, Image as RNImage,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -581,10 +581,16 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
 
 /* ═══════════════════════════════════════════════════════════════════
  *  BLOCCO 10 — HomeBottomNav (custom, 10 slot, PLAY centrale)
- *  Chat · Bag · Artifact · Skill · Team   [PLAY]   Guild · Shop · Forge · Menu
  *
- *  Asset-driven: ogni icona passa dal manifest `HOME_NAV_ICONS`.
- *  Routing centralizzato: `HOME_ROUTES[key]`; '' = azione in-home (chat/overflow).
+ *  LAYOUT MOBILE-FIRST con ancoraggio esplicito alla BARRA BASE:
+ *   - `bottomNavBarBase` è il riferimento visivo (centrata, aspect preservato)
+ *   - Tutti i 9 side buttons + PLAY sono posizionati in ASSOLUTO e condividono
+ *     la STESSA baseline → si siedono in modo coerente sulla fascia piatta
+ *     della barra, non in flex-row disallineato.
+ *   - PLAY è centrato orizzontalmente e verticalmente sulla zona stemma della
+ *     barra (sporge in alto col suo height).
+ *   - Dimensioni calibrate per essere leggibili su smartphone stretti
+ *     (~360px di larghezza minima del viewport).
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
@@ -603,9 +609,7 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
 
   return (
     <View style={s.bottomNav} pointerEvents="box-none">
-      {/* BARRA BASE — elemento decorativo CENTRALE attorno al PLAY.
-          Aspect ratio preservato (contain); le aree laterali restano pulite
-          in attesa dei side buttons finali. */}
+      {/* (1) BARRA BASE — elemento decorativo centrale, baseline visiva */}
       {HOME_NAV_BAR_BASE ? (
         <RNImage
           source={HOME_NAV_BAR_BASE}
@@ -614,12 +618,16 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
           pointerEvents="none"
         />
       ) : null}
-      <View style={[s.navSide, s.navSideLeft]}>
-        {left.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
-      </View>
-      <PlayShield onPress={() => goTo('play')} />
-      <View style={[s.navSide, s.navSideRight]}>
-        {right.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
+
+      {/* (2) ROW INNER: tutti i bottoni condividono la STESSA baseline */}
+      <View style={s.navInnerRow} pointerEvents="box-none">
+        <View style={s.navSideGroup}>
+          {left.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
+        </View>
+        <PlayShield onPress={() => goTo('play')} />
+        <View style={s.navSideGroup}>
+          {right.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
+        </View>
       </View>
     </View>
   );
@@ -697,21 +705,32 @@ function NavBtn({ label, ico, onPress, navKey }: any) {
 const PLAY_GLOW_ENABLED = false; // cambia a true per attivare l'overlay glow
 
 function PlayShield({ onPress, selected = false }: { onPress: () => void; selected?: boolean }) {
-  // Stato interno per alternare gli asset idle/pressed in modo visibile.
-  // Usiamo onPressIn/onPressOut esplicitamente (più affidabile del callback
-  // `pressed` di Pressable su web in certe condizioni).
   const [isPressed, setIsPressed] = useState(false);
 
-  // Priorità asset: pressed (se in press attivo) > selected > idle
+  // Animazione IDLE: pulsazione continua leggera ma percepibile.
+  // scale 1 → 1.05 → 1 ogni ~2s. Si blocca quando il pulsante è pressed.
+  const idleScale = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (isPressed) return; // stop pulse during press
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(idleScale, { toValue: 1.05, duration: 900,  useNativeDriver: true }),
+        Animated.timing(idleScale, { toValue: 1.00, duration: 900,  useNativeDriver: true }),
+      ])
+    );
+    loop.start();
+    return () => { loop.stop(); };
+  }, [isPressed, idleScale]);
+
+  // Priorità asset: pressed > selected > idle
   let src = HOME_PLAY_SHIELD.idle;
   if (isPressed && HOME_PLAY_SHIELD.pressed) src = HOME_PLAY_SHIELD.pressed;
   else if (selected && HOME_PLAY_SHIELD.selected) src = HOME_PLAY_SHIELD.selected;
 
-  // Micro-feedback UI SECONDARIO: solo un lievissimo translateY verso il basso.
-  // Il cambio principale DEVE essere lo swap dell'asset, non lo shrink.
-  const feedbackTransform = isPressed
-    ? [{ translateY: 3 }]
-    : [{ translateY: 0 }];
+  // Transform composito: pulse idle (scale animato) + depression pressed (translateY + scale down)
+  const animatedStyle = isPressed
+    ? { transform: [{ scale: 0.90 }, { translateY: 6 }] }
+    : { transform: [{ scale: idleScale }] };
 
   return (
     <Pressable
@@ -720,8 +739,7 @@ function PlayShield({ onPress, selected = false }: { onPress: () => void; select
       onPressOut={() => setIsPressed(false)}
       style={s.playShield}
     >
-      <View style={[s.playShieldInnerImg, { transform: feedbackTransform }]}>
-        {/* Glow opzionale (disattivato) */}
+      <Animated.View style={[s.playShieldInnerImg, animatedStyle]}>
         {PLAY_GLOW_ENABLED && HOME_PLAY_SHIELD.glow ? (
           <RNImage
             source={HOME_PLAY_SHIELD.glow}
@@ -730,8 +748,6 @@ function PlayShield({ onPress, selected = false }: { onPress: () => void; select
             pointerEvents="none"
           />
         ) : null}
-
-        {/* Asset principale — idle/pressed/selected via SWAP */}
         {src ? (
           <RNImage
             source={src}
@@ -739,7 +755,6 @@ function PlayShield({ onPress, selected = false }: { onPress: () => void; select
             resizeMode="contain"
           />
         ) : (
-          // Fallback tecnico se manifest vuoto
           <LinearGradient
             colors={[GOLD_PALE, GOLD, '#B8902A']}
             style={s.playShieldOuter}
@@ -747,12 +762,9 @@ function PlayShield({ onPress, selected = false }: { onPress: () => void; select
             <Text style={s.playText}>PLAY</Text>
           </LinearGradient>
         )}
-
-        {/* Overlay scuro semi-trasparente quando pressed per RAFFORZARE la
-            percezione del cambio di stato (gli asset idle/pressed sono quasi
-            identici graficamente, quindi senza overlay il cambio è impercettibile). */}
+        {/* Overlay scuro quando pressed: rafforza il feedback percepito */}
         {isPressed ? <View style={s.playPressedOverlay} pointerEvents="none" /> : null}
-      </View>
+      </Animated.View>
     </Pressable>
   );
 }
@@ -1095,40 +1107,45 @@ const s = StyleSheet.create({
   chatPreviewTag: { color: '#F7B85C', fontSize: 8, fontWeight: '900' },
   chatPreviewTxt: { color: '#E8E8F0', fontSize: 9, fontWeight: '600', flex: 1 },
 
-  /* BLOCCO 10 — BOTTOM NAV */
+  /* BLOCCO 10 — BOTTOM NAV — mobile-first (base w≈360–420) */
   bottomNav: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
-    flexDirection: 'row', alignItems: 'flex-end',
-    paddingBottom: 10, paddingHorizontal: 14,
+    height: 92,
     zIndex: 25,
-    height: 96,
   },
   bottomNavBg: { ...StyleSheet.absoluteFillObject },
-  /* Barra base: elemento decorativo CENTRALE attorno al PLAY.
-     Aspect 2.33:1 preservato, centrata. Ridotta a 420x180 per un'integrazione
-     più pulita (il grande stemma centrale della barra coincide con il PLAY
-     che gli si innesta dentro). Le aree laterali restano pulite. */
+  /* Barra base: riferimento visivo. Dimensioni adatte a mobile (360x154).
+     Aspect 2.33:1 preservato. Ancorata al centro-basso del container.
+     bottom: -2 per far "sedere" la barra sul bordo inferiore. */
   bottomNavBarBase: {
     position: 'absolute',
-    bottom: -4,            // leggera immersione per sembrare ancorata al bordo
+    bottom: -2,
     left: '50%',
-    marginLeft: -210,       // metà della width per centrare (width/2 = 420/2 = 210)
-    width: 420,
-    height: 180,            // 420 / 2.33 aspect preservato
+    marginLeft: -180,
+    width: 360,
+    height: 154,
   },
-  /* Le due aree laterali: flex:1 ma con justifyContent che avvicina le icone
-     verso il centro (vicino al PLAY) invece di distribuirle su tutta la larghezza */
-  navSide: {
-    flex: 1, flexDirection: 'row',
+  /* Row inner: tutti i bottoni condividono QUESTA baseline (bottom allineato).
+     Posizionata sulla fascia piatta della barra. alignItems 'flex-end' → tutte
+     le basi dei bottoni si allineano alla stessa y. */
+  navInnerRow: {
+    position: 'absolute',
+    left: 0, right: 0,
+    bottom: 8,           // baseline comune di tutti i bottoni
+    height: 60,
+    flexDirection: 'row',
     alignItems: 'flex-end',
-    paddingBottom: 4,
+    justifyContent: 'center',
     gap: 4,
   },
-  navSideLeft:  { justifyContent: 'flex-end' },
-  navSideRight: { justifyContent: 'flex-start' },
-  navBtn: { alignItems: 'center', width: 54, marginHorizontal: 1 },
+  navSideGroup: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 2,
+  },
+  navBtn: { alignItems: 'center', width: 42, marginHorizontal: 1 },
   navFrameWrap: {
-    width: 54, height: 62,
+    width: 42, height: 48,
     alignItems: 'center', justifyContent: 'flex-start',
     position: 'relative',
   },
@@ -1137,20 +1154,18 @@ const s = StyleSheet.create({
     width: '100%', height: '100%',
     left: 0, top: 0,
   },
-  /* Area alta del frame: ospita l'icona (emoji per ora). Occupata ~60% altezza. */
+  /* Area alta: icona centrata (~60% dell'altezza) */
   navIconArea: {
     position: 'absolute',
-    top: 8, left: 0, right: 0, height: 34,
+    top: 5, left: 0, right: 0, height: 27,
     alignItems: 'center', justifyContent: 'center',
   },
-  /* Fascia bassa: ospita la label. Altezza fissa ~16px. */
+  /* Fascia bassa: label */
   navLabelArea: {
     position: 'absolute',
-    bottom: 4, left: 2, right: 2, height: 14,
+    bottom: 3, left: 1, right: 1, height: 11,
     alignItems: 'center', justifyContent: 'center',
   },
-  /* Overlay scuro quando pressed: rafforza il cambio di stato (il pressed asset
-     è oggi mappato a idle, quindi senza overlay il cambio sarebbe invisibile). */
   navPressedOverlay: {
     position: 'absolute',
     left: '12%', top: '10%',
@@ -1158,13 +1173,13 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.22)',
     borderRadius: 6,
   },
-  navIco: { fontSize: 18 },
+  navIco: { fontSize: 15 },
   navIconImg: {
     width: '100%', height: '100%',
   },
   navLabel: {
-    color: GOLD_PALE, fontSize: 8, fontWeight: '900',
-    letterSpacing: 0.3, textAlign: 'center',
+    color: GOLD_PALE, fontSize: 7, fontWeight: '900',
+    letterSpacing: 0.2, textAlign: 'center',
   },
 
   /* ── vecchi stili icon-wrap (mantengo come fallback per compatibilità) ── */
@@ -1175,10 +1190,12 @@ const s = StyleSheet.create({
     shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 3,
   },
 
-  /* PLAY CENTRALE */
+  /* PLAY CENTRALE — mobile-first. Ancora alla stessa baseline dei side buttons
+     (bottom 8 nel navInnerRow) ma con altezza maggiore per sporgere verso l'alto
+     sopra la fascia piatta e dentro lo stemma centrale della barra base. */
   playShield: {
-    width: 96, height: 116,
-    marginHorizontal: 6, marginTop: -38,
+    width: 72, height: 86,
+    marginHorizontal: 4,
     alignItems: 'center', justifyContent: 'center',
   },
   playShieldInnerImg: {
@@ -1194,19 +1211,14 @@ const s = StyleSheet.create({
     left: '-25%', top: '-25%',
     opacity: 0.85,
   },
-  /* Overlay scuro quando pressed: RAFFORZA il cambio stato (gli asset idle e
-     pressed forniti sono visivamente molto simili). Semi-trasparente,
-     solo sull'area del PLAY. Si aggiunge allo swap dell'asset, non lo sostituisce. */
   playPressedOverlay: {
     position: 'absolute',
     left: '6%', top: '6%', right: '6%', bottom: '6%',
-    backgroundColor: 'rgba(0,0,0,0.25)',
+    backgroundColor: 'rgba(0,0,0,0.28)',
     borderRadius: 10,
   },
-  /* Fallback tecnico (usato solo se asset PLAY mancano dal manifest) */
   playShieldOuter: {
-    flex: 1, borderRadius: 12,
-    padding: 2.5,
+    flex: 1, borderRadius: 12, padding: 2.5,
     shadowColor: GOLD, shadowOpacity: 0.8, shadowRadius: 8, elevation: 12,
   },
   playShieldInner: {
