@@ -29,7 +29,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
-  Dimensions, ScrollView, Modal, ImageBackground,
+  Dimensions, ScrollView, Modal, ImageBackground, Pressable,
   Image as RNImage,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -41,7 +41,7 @@ import HomeHeroSplash from '../../components/home/HomeHeroSplash';
 import { COLORS } from '../../constants/theme';
 import {
   HOME_BACKGROUNDS, HOME_PANELS, HOME_BUTTONS, HOME_NAV_ICONS,
-  HOME_BANNERS, HOME_PLAY_SHIELD, HOME_ROUTES,
+  HOME_BANNERS, HOME_PLAY_SHIELD, HOME_NAV_BAR_BASE, HOME_ROUTES,
   resolveHomeBackground, type HomeScene,
 } from '../../constants/homeAssetsManifest';
 import { AssetSlot, ButtonAssetSlot } from '../../components/home/AssetSlot';
@@ -603,11 +603,21 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
 
   return (
     <View style={s.bottomNav} pointerEvents="box-none">
-      <LinearGradient
-        colors={['rgba(8,15,40,0.0)', 'rgba(5,9,26,0.92)']}
-        locations={[0, 0.35]}
-        style={s.bottomNavBg}
-      />
+      {/* BARRA BASE — asset-driven: nav_bar_base.png (cornice dorata + slot centrale) */}
+      {HOME_NAV_BAR_BASE ? (
+        <RNImage
+          source={HOME_NAV_BAR_BASE}
+          style={s.bottomNavBarBase}
+          resizeMode="stretch"
+          pointerEvents="none"
+        />
+      ) : (
+        <LinearGradient
+          colors={['rgba(8,15,40,0.0)', 'rgba(5,9,26,0.92)']}
+          locations={[0, 0.35]}
+          style={s.bottomNavBg}
+        />
+      )}
       <View style={s.navSide}>
         {left.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
       </View>
@@ -640,30 +650,67 @@ function NavBtn({ label, ico, onPress, navKey }: any) {
   );
 }
 
-function PlayShield({ onPress }: { onPress: () => void }) {
+/**
+ * PlayShield — asset-driven.
+ * Stati cablati in runtime:
+ *   - idle    (default)
+ *   - pressed (durante il tap, fornito da Pressable)
+ *
+ * Stati preparati nel manifest ma NON ancora usati in runtime:
+ *   - selected  (sarà usato quando il PLAY farà parte di una selezione persistente)
+ *   - glow      (overlay FX opzionale, default OFF per evitare layering sporco)
+ *
+ * NOTA: il testo "PLAY" è BAKED negli asset. Nessun <Text> sovrapposto.
+ */
+const PLAY_GLOW_ENABLED = false; // cambia a true per attivare l'overlay glow
+
+function PlayShield({ onPress, selected = false }: { onPress: () => void; selected?: boolean }) {
+  const renderShield = (pressed: boolean) => {
+    // Priorità stati: pressed > selected > idle
+    let src = HOME_PLAY_SHIELD.idle;
+    if (pressed && HOME_PLAY_SHIELD.pressed) src = HOME_PLAY_SHIELD.pressed;
+    else if (selected && HOME_PLAY_SHIELD.selected) src = HOME_PLAY_SHIELD.selected;
+
+    if (src) {
+      return (
+        <View style={s.playShieldInnerImg}>
+          {PLAY_GLOW_ENABLED && HOME_PLAY_SHIELD.glow ? (
+            <RNImage
+              source={HOME_PLAY_SHIELD.glow}
+              style={s.playGlowOverlay}
+              resizeMode="contain"
+              pointerEvents="none"
+            />
+          ) : null}
+          <RNImage
+            source={src}
+            style={s.playShieldImg}
+            resizeMode="contain"
+          />
+        </View>
+      );
+    }
+    // Fallback tecnico se asset mancanti
+    return (
+      <LinearGradient
+        colors={[GOLD_PALE, GOLD, '#B8902A']}
+        start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+        style={s.playShieldOuter}
+      >
+        <LinearGradient
+          colors={[NIGHT_3, NIGHT_2, NIGHT_0]}
+          style={s.playShieldInner}
+        >
+          <Text style={s.playText}>PLAY</Text>
+        </LinearGradient>
+      </LinearGradient>
+    );
+  };
+
   return (
-    <TouchableOpacity style={s.playShield} onPress={onPress} activeOpacity={0.85}>
-      <ButtonAssetSlot
-        asset={HOME_PLAY_SHIELD}
-        state="default"
-        style={{ flex: 1 }}
-        fallback={
-          <LinearGradient
-            colors={[GOLD_PALE, GOLD, '#B8902A']}
-            start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
-            style={s.playShieldOuter}
-          >
-            <LinearGradient
-              colors={[NIGHT_3, NIGHT_2, NIGHT_0]}
-              style={s.playShieldInner}
-            >
-              <Text style={s.playText}>PLAY</Text>
-              <Text style={s.playSubText}>AUTO</Text>
-            </LinearGradient>
-          </LinearGradient>
-        }
-      />
-    </TouchableOpacity>
+    <Pressable onPress={onPress} style={s.playShield}>
+      {({ pressed }) => renderShield(pressed)}
+    </Pressable>
   );
 }
 
@@ -1009,14 +1056,26 @@ const s = StyleSheet.create({
   bottomNav: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
     flexDirection: 'row', alignItems: 'flex-end',
-    paddingBottom: 6, paddingHorizontal: 6,
+    paddingBottom: 6, paddingHorizontal: 30,
     zIndex: 25,
-    height: 64,
+    height: 96,
   },
   bottomNavBg: { ...StyleSheet.absoluteFillObject },
+  /* Barra base asset-driven: immagine che riempie tutta la bottom nav.
+     resizeMode="stretch" la forza a occupare l'intera larghezza senza lasciare buchi
+     laterali (accettiamo un leggero stretch orizzontale: la barra è prevalentemente
+     piatta, si deforma solo in modo trascurabile; i dettagli verticali — spikes
+     e scudo centrale — restano con le proporzioni corrette perché l'altezza
+     è fissa a 96px, vicina alla proporzione originale). */
+  bottomNavBarBase: {
+    position: 'absolute',
+    left: 0, right: 0, bottom: 0,
+    width: '100%', height: 96,
+  },
   navSide: {
     flex: 1, flexDirection: 'row',
     justifyContent: 'space-around', alignItems: 'flex-end',
+    paddingBottom: 8,
   },
   navBtn: { alignItems: 'center', paddingVertical: 3, minWidth: 38 },
   navIconWrap: {
@@ -1030,9 +1089,24 @@ const s = StyleSheet.create({
 
   /* PLAY CENTRALE */
   playShield: {
-    width: 72, height: 84,
-    marginHorizontal: 4, marginTop: -22,
+    width: 108, height: 132,
+    marginHorizontal: 4, marginTop: -46,
+    alignItems: 'center', justifyContent: 'center',
   },
+  playShieldInnerImg: {
+    width: '100%', height: '100%',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  playShieldImg: {
+    width: '100%', height: '100%',
+  },
+  playGlowOverlay: {
+    position: 'absolute',
+    width: '150%', height: '150%',
+    left: '-25%', top: '-25%',
+    opacity: 0.85,
+  },
+  /* Fallback tecnico (usato solo se asset PLAY mancano dal manifest) */
   playShieldOuter: {
     flex: 1, borderRadius: 12,
     padding: 2.5,

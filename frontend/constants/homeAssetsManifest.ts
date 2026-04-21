@@ -148,7 +148,32 @@ export const HOME_NAV_ICONS: Record<NavKey, ButtonAsset> = {
 };
 
 /* ─────────────────────────── PLAY SHIELD (central) ─────────────────────────── */
-export const HOME_PLAY_SHIELD: ButtonAsset = {};
+/**
+ * Il pulsante centrale PLAY ha 3 stati visivi + 1 overlay FX separato (glow).
+ * Il testo "PLAY" è BAKED negli asset: NON sovrapporre testo PLAY da codice.
+ */
+export type PlayShieldAsset = {
+  idle?: any;
+  pressed?: any;
+  selected?: any;
+  disabled?: any;
+  /** overlay decorativo separato; la UI lo attiva via `usePlayGlow` flag */
+  glow?: any;
+};
+
+export const HOME_PLAY_SHIELD: PlayShieldAsset = {
+  idle:     require('../assets/home_nav/nav_btn_play_idle.png'),
+  pressed:  require('../assets/home_nav/nav_btn_play_pressed.png'),
+  selected: require('../assets/home_nav/nav_btn_play_selected.png'),
+  glow:     require('../assets/home_nav/nav_btn_play_glow.png'),
+};
+
+/* ─────────────────────────── BOTTOM NAV BAR BASE ─────────────────────────── */
+/**
+ * Frame/sfondo della bottom nav custom (decorazione dorata con cornice + slot
+ * centrale vuoto per lo scudo PLAY). Se `undefined` → fallback gradient in UI.
+ */
+export const HOME_NAV_BAR_BASE: any = require('../assets/home_nav/nav_bar_base.png');
 
 /* ─────────────────────────── BANNERS ─────────────────────────── */
 export type BannerAsset = {
