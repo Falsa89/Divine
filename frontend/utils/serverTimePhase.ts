@@ -52,12 +52,32 @@ export function getTimePhase(serverDate: Date): TimePhase {
  * Hook: sincronizza con /api/server-time UNA VOLTA al mount, poi mantiene
  * un offset client↔server e aggiorna la fase ogni `tickSec` secondi
  * (default 60s; più che sufficiente per una rotazione alba/giorno/…).
+ *
+ * DEV/QA OVERRIDE:
+ *   URL query `?phase=dawn|day|sunset|night` forza la fase indicata
+ *   ignorando il server time. Utile per screenshot/test visivi.
  */
 export function useServerTimePhase(tickSec: number = 60) {
   const offsetMsRef = useRef<number>(0);
   const [serverNow, setServerNow] = useState<Date>(() => new Date());
   const [phase, setPhase] = useState<TimePhase>(() => getTimePhase(new Date()));
   const [synced, setSynced] = useState(false);
+
+  // Dev override via:
+  //   1) window.__DW_FORCE_PHASE__ (settato da QA via addInitScript, NON strippato da router)
+  //   2) URL query ?phase=... o hash #phase=... (fallback quando 1 non disponibile)
+  const overridePhase: TimePhase | null = (() => {
+    try {
+      const g: any = (globalThis as any)?.__DW_FORCE_PHASE__;
+      if (g && ['dawn', 'day', 'sunset', 'night'].includes(g)) return g as TimePhase;
+      const loc: any = (globalThis as any)?.location;
+      const src = (loc?.search || '') + '&' + (loc?.hash || '').replace(/^#/, '?').slice(1);
+      const params = new URLSearchParams(src);
+      const p = params.get('phase');
+      if (p && ['dawn', 'day', 'sunset', 'night'].includes(p)) return p as TimePhase;
+    } catch {}
+    return null;
+  })();
 
   // Sync offset su mount
   useEffect(() => {
@@ -70,29 +90,29 @@ export function useServerTimePhase(tickSec: number = 60) {
         offsetMsRef.current = serverMs - Date.now();
         const now = new Date(Date.now() + offsetMsRef.current);
         setServerNow(now);
-        setPhase(getTimePhase(now));
+        setPhase(overridePhase || getTimePhase(now));
         setSynced(true);
       } catch {
         // Fallback: UTC del device (coerente su tutti i client)
         offsetMsRef.current = 0;
         const now = new Date();
         setServerNow(now);
-        setPhase(getTimePhase(now));
+        setPhase(overridePhase || getTimePhase(now));
       }
     })();
     return () => { canceled = true; };
-  }, []);
+  }, [overridePhase]);
 
   // Tick periodico: aggiorna serverNow + ricalcola phase
   useEffect(() => {
     const id = setInterval(() => {
       const now = new Date(Date.now() + offsetMsRef.current);
       setServerNow(now);
-      const newPhase = getTimePhase(now);
+      const newPhase = overridePhase || getTimePhase(now);
       setPhase(prev => (prev === newPhase ? prev : newPhase));
     }, Math.max(5, tickSec) * 1000);
     return () => clearInterval(id);
-  }, [tickSec]);
+  }, [tickSec, overridePhase]);
 
   const formatted = useMemo(() => {
     const d = serverNow;

@@ -39,10 +39,10 @@ export type BackgroundManifest = { [K in HomeScene]: BackgroundVariants };
  */
 export const HOME_BACKGROUNDS: BackgroundManifest = {
   default: {
-    dawn:   undefined,
-    day:    undefined,
-    sunset: undefined,
-    night:  require('../assets/home_bg/temple_night.jpg'),
+    dawn:   require('../assets/home_bg/home_bg_default_dawn.png'),
+    day:    require('../assets/home_bg/home_bg_default_day.png'),
+    sunset: require('../assets/home_bg/home_bg_default_sunset.png'),
+    night:  require('../assets/home_bg/home_bg_default_night.png'),
   },
   celtic:   { dawn: undefined, day: undefined, sunset: undefined, night: undefined },
   nordic:   { dawn: undefined, day: undefined, sunset: undefined, night: undefined },
