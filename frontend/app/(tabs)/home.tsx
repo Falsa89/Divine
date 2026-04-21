@@ -31,6 +31,7 @@ import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
   Dimensions, ScrollView, Modal, ImageBackground, Pressable,
   useWindowDimensions, Image as RNImage,
+  Animated, InteractionManager,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -92,6 +93,25 @@ export default function HomeTab() {
   // Senza questo ref, cambi a `homeHero` / `phase` (useFocusEffect + sync server time)
   // ri-scatenano il useEffect, cancellano l'hard timer e azzerano il counter.
   const preloadStartedRef = useRef<boolean>(false);
+
+  // ─── CROSSFADE GATE (anti-blackout) ─────────────────────────────────────
+  // Il loading non è più un "early return" che smonta la loading screen e
+  // mount-a poi la home (finestra di ~1-3 frame di blackout). La home viene
+  // montata subito sotto un OVERLAY (LoadingScreen) che fa fade-out SOLO
+  // quando la scena è visivamente pronta al primo frame utile.
+  //
+  // "Visivamente pronta" ≡ tutte queste condizioni vere:
+  //   1) `!loading`           → dati utente/hero già caricati
+  //   2) `preloadDone`        → asset core in cache (o hard timeout scattato)
+  //   3) `homeFirstFrameReady`→ onLayout del root home triggerato + 2×rAF +
+  //                             InteractionManager.runAfterInteractions ok
+  //
+  // Solo allora parte un Animated.timing(opacity 1→0) sull'overlay. A fine
+  // animazione l'overlay viene smontato.
+  const [homeFirstFrameReady, setHomeFirstFrameReady] = useState(false);
+  const [overlayMounted, setOverlayMounted] = useState(true);
+  const overlayOpacity = useRef(new Animated.Value(1)).current;
+  const firstFrameSignaledRef = useRef<boolean>(false);
 
   // SERVER TIME + FASE TEMPORALE centralizzata (unico hook, nessun hardcode)
   const { phase, formatted: serverTime, synced } = useServerTimePhase(60);
@@ -194,6 +214,45 @@ export default function HomeTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
+  // ─── FIRST-FRAME SIGNAL ────────────────────────────────────────────────
+  // Chiamato da `onLayout` del root della home montata. L'evento `onLayout`
+  // fires DOPO che React Native ha committato il layout di quel nodo. Con
+  // un doppio requestAnimationFrame aspettiamo che il paint del frame
+  // successivo sia stato schedulato, e con InteractionManager aspettiamo
+  // che eventuali transizioni/interactions mount-time siano smaltite.
+  // Solo allora la scena è davvero "visibile" e possiamo fadeare via
+  // l'overlay senza rischio di blackout.
+  const handleHomeRootLayout = useCallback(() => {
+    if (firstFrameSignaledRef.current) return;
+    firstFrameSignaledRef.current = true;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        InteractionManager.runAfterInteractions(() => {
+          setHomeFirstFrameReady(true);
+        });
+      });
+    });
+  }, []);
+
+  // ─── OVERLAY FADE-OUT ──────────────────────────────────────────────────
+  // Parte SOLO quando tutte e 3 le condizioni sono soddisfatte. Non usiamo
+  // mai delay arbitrari né progress finti al 99%: questo useEffect reagisce
+  // esclusivamente allo stato reale.
+  useEffect(() => {
+    const ready = !loading && preloadDone && homeFirstFrameReady;
+    if (!ready) return;
+    if (!overlayMounted) return;
+    const anim = Animated.timing(overlayOpacity, {
+      toValue: 0,
+      duration: 260,
+      useNativeDriver: true,
+    });
+    anim.start(({ finished }) => {
+      if (finished) setOverlayMounted(false);
+    });
+    return () => { anim.stop(); };
+  }, [loading, preloadDone, homeFirstFrameReady, overlayMounted, overlayOpacity]);
+
   const onHeroTap = () => {
     if (homeHero?.id) {
       router.push({ pathname: '/sanctuary', params: { heroId: homeHero.id } } as any);
@@ -207,85 +266,114 @@ export default function HomeTab() {
     router.push(route as any);
   };
 
-  if (loading || !preloadDone) {
-    return (
-      <HomeLoadingScreen
-        done={preloadProgress.done}
-        total={preloadProgress.total}
-        label={loading ? 'CARICAMENTO DATI…' : 'PREPARAZIONE HOMEPAGE…'}
-      />
-    );
-  }
+  // NOTA: NON usiamo più early-return `if (loading || !preloadDone) return <Loading/>`
+  // perché causava un blackout di 1-3 frame tra unmount del loading e primo paint
+  // della home. Ora rendiamo SEMPRE la home (quando !loading) sotto un overlay
+  // di loading che fa fade-out solo quando la scena è visivamente pronta.
+
+  const overlayBlocksUI = loading || !preloadDone || !homeFirstFrameReady;
 
   return (
     <View style={s.container}>
-      {/* BLOCCO 1 — BACKGROUND (asset-driven per scena \u00d7 fase) */}
-      <HomeBackground scene={CURRENT_SCENE} phase={phase} />
+      {/* HOME — montata appena i dati base sono disponibili. Resta "sotto"
+          l'overlay fino a `homeFirstFrameReady`. In questo modo React ha
+          tempo di completare layout + primo paint mentre l'utente vede ancora
+          la loading screen → zero blackout. */}
+      {!loading && (
+        <View style={StyleSheet.absoluteFillObject} onLayout={handleHomeRootLayout}>
+          {/* BLOCCO 1 — BACKGROUND (asset-driven per scena × fase) */}
+          <HomeBackground scene={CURRENT_SCENE} phase={phase} />
 
-      {/* BLOCCO 2 — HERO LAYER (sopra bg, sotto UI) */}
-      <View style={s.heroLayer} pointerEvents="box-none">
-        <HomeHeroSplash
-          hero={homeHero}
-          source={homeSource}
-          inTutorial={inTutorial}
-          width={Math.min(W * 0.55, 420)}
-          height={Math.min(H * 0.80, 600)}
-          onPress={onHeroTap}
-        />
-      </View>
+          {/* BLOCCO 2 — HERO LAYER (sopra bg, sotto UI) */}
+          <View style={s.heroLayer} pointerEvents="box-none">
+            <HomeHeroSplash
+              hero={homeHero}
+              source={homeSource}
+              inTutorial={inTutorial}
+              width={Math.min(W * 0.55, 420)}
+              height={Math.min(H * 0.80, 600)}
+              onPress={onHeroTap}
+            />
+          </View>
 
-      {/* BLOCCO 3 — PROFILO (top-left) */}
-      <HomeProfilePanel user={user} router={router} />
+          {/* BLOCCO 3 — PROFILO (top-left) */}
+          <HomeProfilePanel user={user} router={router} />
 
-      {/* BLOCCO 4 — VALUTE (top-right) */}
-      <HomeCurrencyBar user={user} onAddGems={() => goTo('gemsPlus')} />
+          {/* BLOCCO 4 — VALUTE (top-right) */}
+          <HomeCurrencyBar user={user} onAddGems={() => goTo('gemsPlus')} />
 
-      {/* BLOCCO 5 — TOP ACTIONS (sotto valute, destra) */}
-      <HomeTopActions goTo={goTo} />
+          {/* BLOCCO 5 — TOP ACTIONS (sotto valute, destra) */}
+          <HomeTopActions goTo={goTo} />
 
-      {/* BLOCCO 6 — LEFT UTILITY STACK */}
-      <HomeLeftUtilityStack
-        serverTime={serverTime}
-        phase={phase}
-        synced={synced}
-        onSpOffer={() => goTo('spOffer')}
-        goTo={goTo}
-      />
+          {/* BLOCCO 6 — LEFT UTILITY STACK */}
+          <HomeLeftUtilityStack
+            serverTime={serverTime}
+            phase={phase}
+            synced={synced}
+            onSpOffer={() => goTo('spOffer')}
+            goTo={goTo}
+          />
 
-      {/* BLOCCO 7 — RIGHT MODE PANEL (Arena/Blessing/Trial/Battle/Research) */}
-      <HomeModePanel goTo={goTo} />
+          {/* BLOCCO 7 — RIGHT MODE PANEL (Arena/Blessing/Trial/Battle/Research) */}
+          <HomeModePanel goTo={goTo} />
 
-      {/* BLOCCO 8 — MAIN BANNER (summon rate-up) */}
-      <HomeMainBanner onPress={() => goTo('mainBanner')} homeHero={homeHero} />
+          {/* BLOCCO 8 — MAIN BANNER (summon rate-up) */}
+          <HomeMainBanner onPress={() => goTo('mainBanner')} homeHero={homeHero} />
 
-      {/* BLOCCO 9 — CHAT / NOTIFICHE (bottom-left, sopra bottom nav) */}
-      <HomeChatNotifPanel
-        open={chatOpen}
-        onToggle={() => setChatOpen(v => !v)}
-      />
+          {/* BLOCCO 9 — CHAT / NOTIFICHE (bottom-left, sopra bottom nav) */}
+          <HomeChatNotifPanel
+            open={chatOpen}
+            onToggle={() => setChatOpen(v => !v)}
+          />
 
-      {/* BLOCCO 10 — BOTTOM NAV CUSTOM (10 slot, PLAY centrale) */}
-      <HomeBottomNav
-        goTo={goTo}
-        onChat={() => setChatOpen(true)}
-        onMenu={() => setOverflowOpen(true)}
-      />
+          {/* BLOCCO 10 — BOTTOM NAV CUSTOM (10 slot, PLAY centrale) */}
+          <HomeBottomNav
+            goTo={goTo}
+            onChat={() => setChatOpen(true)}
+            onMenu={() => setOverflowOpen(true)}
+          />
 
-      {/* BLOCCO 11 — OVERFLOW (feature residue) */}
-      <HomeOverflowPanel
-        open={overflowOpen}
-        onClose={() => setOverflowOpen(false)}
-        router={router}
-      />
+          {/* BLOCCO 11 — OVERFLOW (feature residue) */}
+          <HomeOverflowPanel
+            open={overflowOpen}
+            onClose={() => setOverflowOpen(false)}
+            router={router}
+          />
 
-      {/* Badge fase temporale (dev/QA). Disattivabile con SHOW_PHASE_BADGE=false */}
-      {SHOW_PHASE_BADGE ? (
-        <View style={s.phaseBadge} pointerEvents="none">
-          <Text style={s.phaseBadgeTxt}>
-            {synced ? 'S' : '~'}  {phase.toUpperCase()}  {serverTime}
-          </Text>
+          {/* Badge fase temporale (dev/QA). Disattivabile con SHOW_PHASE_BADGE=false */}
+          {SHOW_PHASE_BADGE ? (
+            <View style={s.phaseBadge} pointerEvents="none">
+              <Text style={s.phaseBadgeTxt}>
+                {synced ? 'S' : '~'}  {phase.toUpperCase()}  {serverTime}
+              </Text>
+            </View>
+          ) : null}
         </View>
-      ) : null}
+      )}
+
+      {/* OVERLAY LOADING — crossfade anti-blackout. Coperto fino a che la
+          scena non è visivamente pronta, poi fade-out 260ms, poi unmount. */}
+      {overlayMounted && (
+        <Animated.View
+          style={[
+            StyleSheet.absoluteFillObject,
+            { opacity: overlayOpacity, zIndex: 9999 },
+          ]}
+          pointerEvents={overlayBlocksUI ? 'auto' : 'none'}
+        >
+          <HomeLoadingScreen
+            done={preloadProgress.done}
+            total={preloadProgress.total}
+            label={
+              loading
+                ? 'CARICAMENTO DATI…'
+                : !preloadDone
+                  ? 'PREPARAZIONE HOMEPAGE…'
+                  : 'AVVIO SCENA…'
+            }
+          />
+        </Animated.View>
+      )}
     </View>
   );
 }
