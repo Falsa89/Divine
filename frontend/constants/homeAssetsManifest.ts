@@ -149,8 +149,18 @@ export type ProfilePanelAssets = {
   titleBadge?: any;
 };
 export const HOME_PROFILE_PANEL: ProfilePanelAssets = {
-  // Tutti i slot undefined → fallback visivo identico all'attuale.
-  // Quando arriva il Pack A: aggiungere qui frame / avatarRing / lvBadge / …
+  // Pack A (integrato). Asset depositati in assets/home_panels/profile/.
+  // NOTA: il frame ha aspect ratio 3.2:1 (landscape) mentre il box del
+  // panel attuale è portrait → stretch introdurrà deformazione. Layout
+  // non viene modificato su richiesta utente; l'integrazione serve a
+  // validare la resa in scena.
+  frame:      require('../assets/home_panels/profile/home_profile_panel_frame.png'),
+  avatarRing: require('../assets/home_panels/profile/home_profile_avatar_ring.png'),
+  expBarBg:   require('../assets/home_panels/profile/home_profile_exp_bar_bg.png'),
+  expBarFill: require('../assets/home_panels/profile/home_profile_exp_bar_fill.png'),
+  lvBadge:    require('../assets/home_panels/profile/home_profile_level_badge.png'),
+  // Slot non popolati in Pack A (restano su fallback):
+  // decor, avatarPlaceholder, powerRow, powerIcon, vipBadge, spiritoBadge, titleBadge
 };
 
 /* ───── Pack B — Currency Bar (TOP-RIGHT) ───── */

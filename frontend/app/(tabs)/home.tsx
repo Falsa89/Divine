@@ -176,6 +176,12 @@ export default function HomeTab() {
       HOME_SIDE_FRAME.pressed,
       // 9 icone nav
       ...Object.values(HOME_NAV_ICON_IMAGES),
+      // Pack A — Profile Panel (drop-in): 5 asset caricati prima del fade-in
+      HOME_PROFILE_PANEL.frame,
+      HOME_PROFILE_PANEL.avatarRing,
+      HOME_PROFILE_PANEL.expBarBg,
+      HOME_PROFILE_PANEL.expBarFill,
+      HOME_PROFILE_PANEL.lvBadge,
       // Hero home: string URI remota o require locale — preloadAssets le gestisce entrambe
       homeHero?.asset_splash || homeHero?.asset_base || homeHero?.image_url,
     ];
@@ -465,7 +471,7 @@ function HomeProfilePanel({ user, router }: any) {
               {HOME_PROFILE_PANEL.lvBadge ? (
                 <RNImage
                   source={HOME_PROFILE_PANEL.lvBadge}
-                  style={StyleSheet.absoluteFill as any}
+                  style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
                   resizeMode="contain"
                 />
               ) : null}
@@ -480,7 +486,7 @@ function HomeProfilePanel({ user, router }: any) {
                 <View style={s.expBarBg}>
                   <RNImage
                     source={HOME_PROFILE_PANEL.expBarBg}
-                    style={StyleSheet.absoluteFill as any}
+                    style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
                     resizeMode="stretch"
                   />
                   <AssetBackedGradient
@@ -514,7 +520,7 @@ function HomeProfilePanel({ user, router }: any) {
           {HOME_PROFILE_PANEL.powerRow ? (
             <RNImage
               source={HOME_PROFILE_PANEL.powerRow}
-              style={StyleSheet.absoluteFill as any}
+              style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
               resizeMode="stretch"
             />
           ) : null}
@@ -538,7 +544,7 @@ function HomeProfilePanel({ user, router }: any) {
             {HOME_PROFILE_PANEL.vipBadge ? (
               <RNImage
                 source={HOME_PROFILE_PANEL.vipBadge}
-                style={StyleSheet.absoluteFill as any}
+                style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
                 resizeMode="stretch"
               />
             ) : null}
@@ -550,7 +556,7 @@ function HomeProfilePanel({ user, router }: any) {
             {HOME_PROFILE_PANEL.spiritoBadge ? (
               <RNImage
                 source={HOME_PROFILE_PANEL.spiritoBadge}
-                style={StyleSheet.absoluteFill as any}
+                style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
                 resizeMode="stretch"
               />
             ) : null}
@@ -563,7 +569,7 @@ function HomeProfilePanel({ user, router }: any) {
           {HOME_PROFILE_PANEL.titleBadge ? (
             <RNImage
               source={HOME_PROFILE_PANEL.titleBadge}
-              style={StyleSheet.absoluteFill as any}
+              style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
               resizeMode="stretch"
             />
           ) : null}
@@ -704,7 +710,7 @@ function HomeLeftUtilityStack({ serverTime, phase, synced, onSpOffer, goTo }: an
         {HOME_LEFT_STACK.serverTimeFrame ? (
           <RNImage
             source={HOME_LEFT_STACK.serverTimeFrame}
-            style={StyleSheet.absoluteFill as any}
+            style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
             resizeMode="stretch"
           />
         ) : null}
