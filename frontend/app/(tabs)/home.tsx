@@ -30,8 +30,9 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
   Dimensions, ScrollView, Modal, ImageBackground, Pressable,
-  Animated, Image as RNImage,
+  Animated, useWindowDimensions, Image as RNImage,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
@@ -580,19 +581,44 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- *  BLOCCO 10 — HomeBottomNav (custom, 10 slot, PLAY centrale)
+ *  BLOCCO 10 — HomeBottomNav
  *
- *  LAYOUT MOBILE-FIRST con ancoraggio esplicito alla BARRA BASE:
- *   - `bottomNavBarBase` è il riferimento visivo (centrata, aspect preservato)
- *   - Tutti i 9 side buttons + PLAY sono posizionati in ASSOLUTO e condividono
- *     la STESSA baseline → si siedono in modo coerente sulla fascia piatta
- *     della barra, non in flex-row disallineato.
- *   - PLAY è centrato orizzontalmente e verticalmente sulla zona stemma della
- *     barra (sporge in alto col suo height).
- *   - Dimensioni calibrate per essere leggibili su smartphone stretti
- *     (~360px di larghezza minima del viewport).
+ *  LAYOUT — mobile-first, ancoraggio ASSOLUTO al centro della barra base.
+ *  ─────────────────────────────────────────────────────────────────────
+ *  Il problema del layout precedente era che il row aveva 5+4 bottoni con
+ *  `justifyContent: center`: la somma asimmetrica spostava PLAY di mezzo
+ *  pulsante rispetto al vero centro visivo della barra.
+ *
+ *  Nuovo sistema:
+ *   - `bottomNavBarBase` è l'ÀNCORA: posizionata a `left: 50% - barW/2`
+ *   - `PlayShield` usa lo STESSO ancoraggio: `left: 50% - playW/2`
+ *     → PLAY è MATEMATICAMENTE centrato sulla barra, indipendentemente dal
+ *       numero di pulsanti laterali
+ *   - I gruppi sinistra/destra sono posizionati con `right: 50% + halfPlayW + gap`
+ *     e `left: 50% + halfPlayW + gap` → simmetrici attorno al PLAY
+ *   - Tutte le dimensioni scalano proporzionalmente al viewport (mobile-first
+ *     ma responsive a tablet / desktop) tramite `useWindowDimensions`.
+ *   - `useSafeAreaInsets().bottom` aggiunge padding per notch iPhone / gesture bar Android.
+ *
+ *  Nessun offset hardcoded viewport-specifico.
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeBottomNav({ goTo, onChat, onMenu }: any) {
+  const { width: vw } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
+  // === RESPONSIVE METRICS ===
+  // Barra base: 55% del viewport, cap 420px, min 300px (iPhone SE landscape)
+  const BAR_W = Math.max(300, Math.min(vw * 0.55, 420));
+  const BAR_H = BAR_W / 2.333;                // aspect del PNG source
+  const PLAY_W = Math.max(58, BAR_W * 0.20);  // ~20% della barra
+  const PLAY_H = PLAY_W * (86 / 72);          // aspect shield
+  const SIDE_W = Math.max(34, BAR_W * 0.115); // ~11.5% della barra
+  const SIDE_H = SIDE_W * (48 / 42);          // aspect frame
+  const SIDE_GAP = Math.max(1, BAR_W * 0.004);
+  const GROUP_GAP = Math.max(2, BAR_W * 0.005); // gap tra PLAY e gruppo laterale
+  const NAV_H = BAR_H * 0.62;                 // container solo la fascia bassa della barra (quella "piatta")
+  const BTN_BOTTOM = insets.bottom + 8;       // baseline comune tutti i bottoni (safe-area aware)
+
   const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
     { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
     { key: 'bag',      label: 'BAG',      ico: '\uD83C\uDF92', onPress: () => goTo('bag') },
@@ -607,54 +633,97 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
     { key: 'menu',  label: 'MENU',  ico: '\u2630',               onPress: onMenu },
   ];
 
+  // marginHorizontal per i side-group (dalla centerline): halfPlay + gap
+  const flankOffset = PLAY_W / 2 + GROUP_GAP;
+
   return (
-    <View style={s.bottomNav} pointerEvents="box-none">
-      {/* (1) BARRA BASE — elemento decorativo centrale, baseline visiva */}
+    <View
+      style={[s.bottomNav, { height: BAR_H + insets.bottom }]}
+      pointerEvents="box-none"
+    >
+      {/* (1) BARRA BASE — àncora visiva. Centrata matematicamente al viewport. */}
       {HOME_NAV_BAR_BASE ? (
         <RNImage
           source={HOME_NAV_BAR_BASE}
-          style={s.bottomNavBarBase}
+          style={{
+            position: 'absolute',
+            bottom: insets.bottom - 2,
+            left: '50%',
+            width: BAR_W,
+            height: BAR_H,
+            transform: [{ translateX: -BAR_W / 2 }],
+          }}
           resizeMode="contain"
           pointerEvents="none"
         />
       ) : null}
 
-      {/* (2) ROW INNER: tutti i bottoni condividono la STESSA baseline */}
-      <View style={s.navInnerRow} pointerEvents="box-none">
-        <View style={s.navSideGroup}>
-          {left.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
-        </View>
-        <PlayShield onPress={() => goTo('play')} />
-        <View style={s.navSideGroup}>
-          {right.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
-        </View>
+      {/* (2) PLAY SHIELD — ancoraggio CENTRATO MATEMATICAMENTE sulla barra */}
+      <PlayShield
+        onPress={() => goTo('play')}
+        width={PLAY_W}
+        height={PLAY_H}
+        bottom={BTN_BOTTOM}
+      />
+
+      {/* (3) GRUPPO SINISTRA — posizionato a destra del centro, orientato verso DX,
+             simmetrico al gruppo destra rispetto al PLAY */}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: BTN_BOTTOM,
+          right: '50%',
+          marginRight: flankOffset,
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          gap: SIDE_GAP,
+        }}
+      >
+        {left.map(n => (
+          <NavBtn key={n.key} navKey={n.key} {...n} width={SIDE_W} height={SIDE_H} />
+        ))}
+      </View>
+
+      {/* (4) GRUPPO DESTRA — posizionato a sinistra del centro, orientato verso SX */}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: BTN_BOTTOM,
+          left: '50%',
+          marginLeft: flankOffset,
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          gap: SIDE_GAP,
+        }}
+      >
+        {right.map(n => (
+          <NavBtn key={n.key} navKey={n.key} {...n} width={SIDE_W} height={SIDE_H} />
+        ))}
       </View>
     </View>
   );
 }
 
-function NavBtn({ label, ico, onPress, navKey }: any) {
-  // onPressIn/Out per mostrare visivamente il frame pressed (quando arriverà;
-  // per ora mappa a idle → nessun cambio ma la logica è già cablata).
+function NavBtn({ label, ico, onPress, navKey, width = 42, height = 48 }: any) {
   const [pressed, setPressed] = useState(false);
 
-  // Frame (background)
-  const frameSrc =
-    (pressed ? HOME_SIDE_FRAME.pressed : undefined) ||
-    HOME_SIDE_FRAME.default;
-
-  // Icona PNG dedicata per questo slot (se fornita dal manifest)
+  const frameSrc = (pressed ? HOME_SIDE_FRAME.pressed : undefined) || HOME_SIDE_FRAME.default;
   const iconSrc = navKey ? (HOME_NAV_ICON_IMAGES as any)[navKey] : undefined;
+
+  // Aree interne proporzionali (icona alta 60%, label bassa 20%)
+  const iconTop = Math.round(height * 0.10);
+  const iconH   = Math.round(height * 0.55);
+  const labelBottom = Math.round(height * 0.06);
+  const labelH  = Math.round(height * 0.22);
 
   return (
     <Pressable
       onPress={onPress}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
-      style={s.navBtn}
+      style={{ alignItems: 'center', width }}
     >
-      <View style={s.navFrameWrap}>
-        {/* Frame asset (sfondo comune) */}
+      <View style={{ width, height, position: 'relative' }}>
         {frameSrc ? (
           <RNImage
             source={frameSrc}
@@ -663,27 +732,22 @@ function NavBtn({ label, ico, onPress, navKey }: any) {
             pointerEvents="none"
           />
         ) : null}
-
-        {/* Icona: PNG dedicata se presente nel manifest, altrimenti emoji fallback */}
-        <View style={s.navIconArea} pointerEvents="none">
+        <View
+          style={[s.navIconArea, { top: iconTop, height: iconH }]}
+          pointerEvents="none"
+        >
           {iconSrc ? (
-            <RNImage
-              source={iconSrc}
-              style={s.navIconImg}
-              resizeMode="contain"
-            />
+            <RNImage source={iconSrc} style={s.navIconImg} resizeMode="contain" />
           ) : (
             <Text style={s.navIco}>{ico}</Text>
           )}
         </View>
-
-        {/* Label (fascia bassa) */}
-        <View style={s.navLabelArea} pointerEvents="none">
+        <View
+          style={[s.navLabelArea, { bottom: labelBottom, height: labelH }]}
+          pointerEvents="none"
+        >
           <Text style={s.navLabel} numberOfLines={1}>{label}</Text>
         </View>
-
-        {/* Micro-dim overlay quando pressed (rafforza il feedback, utile finché
-            il frame pressed asset è mappato a idle) */}
         {pressed ? <View style={s.navPressedOverlay} pointerEvents="none" /> : null}
       </View>
     </Pressable>
@@ -704,42 +768,89 @@ function NavBtn({ label, ico, onPress, navKey }: any) {
  */
 const PLAY_GLOW_ENABLED = false; // cambia a true per attivare l'overlay glow
 
-function PlayShield({ onPress, selected = false }: { onPress: () => void; selected?: boolean }) {
-  const [isPressed, setIsPressed] = useState(false);
+/**
+ * PlayShield — asset-driven con pressed-visible-time garantito.
+ *
+ *  TIMING LOGIC:
+ *    - onPressIn   → isPressed=true, marca t0
+ *    - onPressOut  → mantiene pressed almeno `PRESS_MIN_VISIBLE_MS` da t0
+ *    - onPress     → ritarda la navigazione dello stesso `remaining` così
+ *                    l'asset pressed è visibile per almeno ~180ms PRIMA della
+ *                    transizione di scena
+ *
+ *  NESSUNA idle-breathing animation (requirement esplicito: mantenere idle
+ *  stabile e premium quando non esiste asset idle-animation dedicato).
+ *  L'unica trasformazione runtime è un micro translateY di 3px al press,
+ *  secondario rispetto allo swap dell'asset idle→pressed.
+ */
+const PRESS_MIN_VISIBLE_MS = 180;   // tempo minimo in cui il pressed è sullo schermo
+const PLAY_PRESS_SHIFT_Y   = 3;     // micro-feedback secondario (NON sostitutivo)
 
-  // Animazione IDLE: pulsazione continua leggera ma percepibile.
-  // scale 1 → 1.05 → 1 ogni ~2s. Si blocca quando il pulsante è pressed.
-  const idleScale = useRef(new Animated.Value(1)).current;
-  useEffect(() => {
-    if (isPressed) return; // stop pulse during press
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(idleScale, { toValue: 1.05, duration: 900,  useNativeDriver: true }),
-        Animated.timing(idleScale, { toValue: 1.00, duration: 900,  useNativeDriver: true }),
-      ])
-    );
-    loop.start();
-    return () => { loop.stop(); };
-  }, [isPressed, idleScale]);
+type PlayShieldProps = {
+  onPress: () => void;
+  selected?: boolean;
+  width?: number;
+  height?: number;
+  bottom?: number;
+};
+
+function PlayShield({ onPress, selected = false, width = 72, height = 86, bottom = 10 }: PlayShieldProps) {
+  const [isPressed, setIsPressed] = useState(false);
+  const pressStartRef = useRef<number>(0);
+  const releaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (releaseTimerRef.current) clearTimeout(releaseTimerRef.current);
+    if (navTimerRef.current) clearTimeout(navTimerRef.current);
+  }, []);
+
+  const handlePressIn = () => {
+    if (releaseTimerRef.current) clearTimeout(releaseTimerRef.current);
+    pressStartRef.current = Date.now();
+    setIsPressed(true);
+  };
+
+  const handlePressOut = () => {
+    // Mantiene il pressed visibile per almeno PRESS_MIN_VISIBLE_MS dal press-in
+    const elapsed = Date.now() - pressStartRef.current;
+    const remaining = Math.max(0, PRESS_MIN_VISIBLE_MS - elapsed);
+    if (releaseTimerRef.current) clearTimeout(releaseTimerRef.current);
+    releaseTimerRef.current = setTimeout(() => setIsPressed(false), remaining);
+  };
+
+  // onPress = tap completato (press-in + release). Ritardo la navigazione per
+  // garantire che l'asset pressed sia stato percepito prima della transizione.
+  const handlePress = () => {
+    const elapsed = Date.now() - pressStartRef.current;
+    const remaining = Math.max(0, PRESS_MIN_VISIBLE_MS - elapsed);
+    if (navTimerRef.current) clearTimeout(navTimerRef.current);
+    navTimerRef.current = setTimeout(() => onPress(), remaining);
+  };
 
   // Priorità asset: pressed > selected > idle
   let src = HOME_PLAY_SHIELD.idle;
   if (isPressed && HOME_PLAY_SHIELD.pressed) src = HOME_PLAY_SHIELD.pressed;
   else if (selected && HOME_PLAY_SHIELD.selected) src = HOME_PLAY_SHIELD.selected;
 
-  // Transform composito: pulse idle (scale animato) + depression pressed (translateY + scale down)
-  const animatedStyle = isPressed
-    ? { transform: [{ scale: 0.90 }, { translateY: 6 }] }
-    : { transform: [{ scale: idleScale }] };
+  // Trasformazione SECONDARIA. No scale-pulse, no breathing, no arcade shrink.
+  const transform = isPressed ? [{ translateY: PLAY_PRESS_SHIFT_Y }] : [{ translateY: 0 }];
 
   return (
     <Pressable
-      onPress={onPress}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
-      style={s.playShield}
+      onPress={handlePress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={{
+        position: 'absolute',
+        bottom,
+        left: '50%',
+        width, height,
+        transform: [{ translateX: -width / 2 }],
+        alignItems: 'center', justifyContent: 'center',
+      }}
     >
-      <Animated.View style={[s.playShieldInnerImg, animatedStyle]}>
+      <View style={[s.playShieldInnerImg, { transform }]}>
         {PLAY_GLOW_ENABLED && HOME_PLAY_SHIELD.glow ? (
           <RNImage
             source={HOME_PLAY_SHIELD.glow}
@@ -762,9 +873,9 @@ function PlayShield({ onPress, selected = false }: { onPress: () => void; select
             <Text style={s.playText}>PLAY</Text>
           </LinearGradient>
         )}
-        {/* Overlay scuro quando pressed: rafforza il feedback percepito */}
+        {/* Overlay scuro: rafforza il feedback percepibile anche su asset simili */}
         {isPressed ? <View style={s.playPressedOverlay} pointerEvents="none" /> : null}
-      </Animated.View>
+      </View>
     </Pressable>
   );
 }
@@ -1107,63 +1218,26 @@ const s = StyleSheet.create({
   chatPreviewTag: { color: '#F7B85C', fontSize: 8, fontWeight: '900' },
   chatPreviewTxt: { color: '#E8E8F0', fontSize: 9, fontWeight: '600', flex: 1 },
 
-  /* BLOCCO 10 — BOTTOM NAV — mobile-first (base w≈360–420) */
+  /* BLOCCO 10 — BOTTOM NAV (solo proprietà base; positioning fatto inline
+     tramite useWindowDimensions per essere responsive) */
   bottomNav: {
     position: 'absolute', bottom: 0, left: 0, right: 0,
-    height: 92,
     zIndex: 25,
   },
   bottomNavBg: { ...StyleSheet.absoluteFillObject },
-  /* Barra base: riferimento visivo. Dimensioni adatte a mobile (360x154).
-     Aspect 2.33:1 preservato. Ancorata al centro-basso del container.
-     bottom: -2 per far "sedere" la barra sul bordo inferiore. */
-  bottomNavBarBase: {
-    position: 'absolute',
-    bottom: -2,
-    left: '50%',
-    marginLeft: -180,
-    width: 360,
-    height: 154,
-  },
-  /* Row inner: tutti i bottoni condividono QUESTA baseline (bottom allineato).
-     Posizionata sulla fascia piatta della barra. alignItems 'flex-end' → tutte
-     le basi dei bottoni si allineano alla stessa y. */
-  navInnerRow: {
-    position: 'absolute',
-    left: 0, right: 0,
-    bottom: 8,           // baseline comune di tutti i bottoni
-    height: 60,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    gap: 4,
-  },
-  navSideGroup: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 2,
-  },
-  navBtn: { alignItems: 'center', width: 42, marginHorizontal: 1 },
-  navFrameWrap: {
-    width: 42, height: 48,
-    alignItems: 'center', justifyContent: 'flex-start',
-    position: 'relative',
-  },
   navFrameImg: {
     position: 'absolute',
     width: '100%', height: '100%',
     left: 0, top: 0,
   },
-  /* Area alta: icona centrata (~60% dell'altezza) */
   navIconArea: {
     position: 'absolute',
-    top: 5, left: 0, right: 0, height: 27,
+    left: 0, right: 0,
     alignItems: 'center', justifyContent: 'center',
   },
-  /* Fascia bassa: label */
   navLabelArea: {
     position: 'absolute',
-    bottom: 3, left: 1, right: 1, height: 11,
+    left: 1, right: 1,
     alignItems: 'center', justifyContent: 'center',
   },
   navPressedOverlay: {
