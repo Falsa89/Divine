@@ -175,6 +175,25 @@ export const HOME_PLAY_SHIELD: PlayShieldAsset = {
  */
 export const HOME_NAV_BAR_BASE: any = require('../assets/home_nav/nav_bar_base.png');
 
+/* ─────────────────────────── SIDE BUTTON FRAME ─────────────────────────── */
+/**
+ * Frame COMUNE per i 9 side buttons della bottom nav (chat/bag/artifact/skill/
+ * team/guild/shop/forge/menu). In questo step NON abbiamo ancora icone singole
+ * per ciascun pulsante: usiamo il frame comune + emoji centrale come icona.
+ *
+ * Stati:
+ *  - idle     → nav_btn_side_idle.png     (REALE)
+ *  - selected → nav_btn_side_selected.png (REALE)
+ *  - pressed  → idle (TODO: asset pressed futuro)
+ *  - disabled → idle (TODO: asset disabled futuro)
+ */
+export const HOME_SIDE_FRAME: ButtonAsset = {
+  default:  require('../assets/home_nav/nav_btn_side_idle.png'),
+  selected: require('../assets/home_nav/nav_btn_side_selected.png'),
+  pressed:  require('../assets/home_nav/nav_btn_side_idle.png'),      // TODO pressed reale
+  disabled: require('../assets/home_nav/nav_btn_side_idle.png'),      // TODO disabled reale
+};
+
 /* ─────────────────────────── BANNERS ─────────────────────────── */
 export type BannerAsset = {
   /** sfondo frame (può contenere decoro dorato) */
