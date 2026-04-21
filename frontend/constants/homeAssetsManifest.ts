@@ -178,8 +178,7 @@ export const HOME_NAV_BAR_BASE: any = require('../assets/home_nav/nav_bar_base.p
 /* ─────────────────────────── SIDE BUTTON FRAME ─────────────────────────── */
 /**
  * Frame COMUNE per i 9 side buttons della bottom nav (chat/bag/artifact/skill/
- * team/guild/shop/forge/menu). In questo step NON abbiamo ancora icone singole
- * per ciascun pulsante: usiamo il frame comune + emoji centrale come icona.
+ * team/guild/shop/forge/menu).
  *
  * Stati:
  *  - idle     → nav_btn_side_idle.png     (REALE)
@@ -192,6 +191,26 @@ export const HOME_SIDE_FRAME: ButtonAsset = {
   selected: require('../assets/home_nav/nav_btn_side_selected.png'),
   pressed:  require('../assets/home_nav/nav_btn_side_idle.png'),      // TODO pressed reale
   disabled: require('../assets/home_nav/nav_btn_side_idle.png'),      // TODO disabled reale
+};
+
+/* ─────────────────────────── SIDE BUTTON ICON IMAGES ─────────────────────────── */
+/**
+ * Icone PNG singole per ciascuno dei 9 side buttons. Vanno SOPRA il frame
+ * comune (HOME_SIDE_FRAME). Se un'icona manca (`undefined`), il NavBtn
+ * mostra l'emoji fallback.
+ *
+ * Mapping 1:1 con i file canonici forniti dall'art team:
+ */
+export const HOME_NAV_ICON_IMAGES: Record<NavKey, any> = {
+  chat:     require('../assets/home_nav/icons/icon_nav_chat.png'),
+  bag:      require('../assets/home_nav/icons/icon_nav_bag.png'),
+  artifact: require('../assets/home_nav/icons/icon_nav_artifact.png'),
+  skill:    require('../assets/home_nav/icons/icon_nav_skill.png'),
+  team:     require('../assets/home_nav/icons/icon_nav_team.png'),
+  guild:    require('../assets/home_nav/icons/icon_nav_guild.png'),
+  shop:     require('../assets/home_nav/icons/icon_nav_shop.png'),
+  forge:    require('../assets/home_nav/icons/icon_nav_forge.png'),
+  menu:     require('../assets/home_nav/icons/icon_nav_menu.png'),
 };
 
 /* ─────────────────────────── BANNERS ─────────────────────────── */

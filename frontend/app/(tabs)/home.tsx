@@ -42,7 +42,7 @@ import { COLORS } from '../../constants/theme';
 import {
   HOME_BACKGROUNDS, HOME_PANELS, HOME_BUTTONS, HOME_NAV_ICONS,
   HOME_BANNERS, HOME_PLAY_SHIELD, HOME_NAV_BAR_BASE, HOME_SIDE_FRAME,
-  HOME_ROUTES, resolveHomeBackground, type HomeScene,
+  HOME_NAV_ICON_IMAGES, HOME_ROUTES, resolveHomeBackground, type HomeScene,
 } from '../../constants/homeAssetsManifest';
 import { AssetSlot, ButtonAssetSlot } from '../../components/home/AssetSlot';
 import { useServerTimePhase, type TimePhase } from '../../utils/serverTimePhase';
@@ -630,11 +630,13 @@ function NavBtn({ label, ico, onPress, navKey }: any) {
   // per ora mappa a idle → nessun cambio ma la logica è già cablata).
   const [pressed, setPressed] = useState(false);
 
-  // Scelta asset: selected NON gestito qui (nessun side button è persistent-selected
-  // nella home). pressed usa asset pressed (futuro); ora coincide con idle.
-  const src =
+  // Frame (background)
+  const frameSrc =
     (pressed ? HOME_SIDE_FRAME.pressed : undefined) ||
     HOME_SIDE_FRAME.default;
+
+  // Icona PNG dedicata per questo slot (se fornita dal manifest)
+  const iconSrc = navKey ? (HOME_NAV_ICON_IMAGES as any)[navKey] : undefined;
 
   return (
     <Pressable
@@ -644,24 +646,36 @@ function NavBtn({ label, ico, onPress, navKey }: any) {
       style={s.navBtn}
     >
       <View style={s.navFrameWrap}>
-        {src ? (
+        {/* Frame asset (sfondo comune) */}
+        {frameSrc ? (
           <RNImage
-            source={src}
+            source={frameSrc}
             style={s.navFrameImg}
             resizeMode="contain"
             pointerEvents="none"
           />
         ) : null}
-        {/* Icona (emoji centrale, nell'area alta del frame) */}
+
+        {/* Icona: PNG dedicata se presente nel manifest, altrimenti emoji fallback */}
         <View style={s.navIconArea} pointerEvents="none">
-          <Text style={s.navIco}>{ico}</Text>
+          {iconSrc ? (
+            <RNImage
+              source={iconSrc}
+              style={s.navIconImg}
+              resizeMode="contain"
+            />
+          ) : (
+            <Text style={s.navIco}>{ico}</Text>
+          )}
         </View>
-        {/* Label (nella fascia bassa del frame) */}
+
+        {/* Label (fascia bassa) */}
         <View style={s.navLabelArea} pointerEvents="none">
           <Text style={s.navLabel} numberOfLines={1}>{label}</Text>
         </View>
-        {/* Micro-dim overlay quando pressed (visibile anche se il frame pressed
-            è oggi identico all'idle) */}
+
+        {/* Micro-dim overlay quando pressed (rafforza il feedback, utile finché
+            il frame pressed asset è mappato a idle) */}
         {pressed ? <View style={s.navPressedOverlay} pointerEvents="none" /> : null}
       </View>
     </Pressable>
@@ -1145,6 +1159,9 @@ const s = StyleSheet.create({
     borderRadius: 6,
   },
   navIco: { fontSize: 18 },
+  navIconImg: {
+    width: '100%', height: '100%',
+  },
   navLabel: {
     color: GOLD_PALE, fontSize: 8, fontWeight: '900',
     letterSpacing: 0.3, textAlign: 'center',
