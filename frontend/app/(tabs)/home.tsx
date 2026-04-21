@@ -176,12 +176,9 @@ export default function HomeTab() {
       HOME_SIDE_FRAME.pressed,
       // 9 icone nav
       ...Object.values(HOME_NAV_ICON_IMAGES),
-      // Pack A — Profile Panel (drop-in): 5 asset caricati prima del fade-in
-      HOME_PROFILE_PANEL.frame,
-      HOME_PROFILE_PANEL.avatarRing,
-      HOME_PROFILE_PANEL.expBarBg,
-      HOME_PROFILE_PANEL.expBarFill,
-      HOME_PROFILE_PANEL.lvBadge,
+      // Pack A Profile Panel RITIRATO (asset in RGB senza alpha → checkerboard baked).
+      // Re-aggiungere qui al re-export RGBA da parte dell'art team:
+      //   HOME_PROFILE_PANEL.frame, .avatarRing, .expBarBg, .expBarFill, .lvBadge
       // Hero home: string URI remota o require locale — preloadAssets le gestisce entrambe
       homeHero?.asset_splash || homeHero?.asset_base || homeHero?.image_url,
     ];

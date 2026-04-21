@@ -149,18 +149,26 @@ export type ProfilePanelAssets = {
   titleBadge?: any;
 };
 export const HOME_PROFILE_PANEL: ProfilePanelAssets = {
-  // Pack A (integrato). Asset depositati in assets/home_panels/profile/.
-  // NOTA: il frame ha aspect ratio 3.2:1 (landscape) mentre il box del
-  // panel attuale è portrait → stretch introdurrà deformazione. Layout
-  // non viene modificato su richiesta utente; l'integrazione serve a
-  // validare la resa in scena.
-  frame:      require('../assets/home_panels/profile/home_profile_panel_frame.png'),
-  avatarRing: require('../assets/home_panels/profile/home_profile_avatar_ring.png'),
-  expBarBg:   require('../assets/home_panels/profile/home_profile_exp_bar_bg.png'),
-  expBarFill: require('../assets/home_panels/profile/home_profile_exp_bar_fill.png'),
-  lvBadge:    require('../assets/home_panels/profile/home_profile_level_badge.png'),
-  // Slot non popolati in Pack A (restano su fallback):
-  // decor, avatarPlaceholder, powerRow, powerIcon, vipBadge, spiritoBadge, titleBadge
+  // ⚠️ Pack A RITIRATO dall'integrazione runtime.
+  // Motivo tecnico: TUTTI i 10 PNG del pack (panel_frame, avatar_ring,
+  // exp_bar_bg/fill, level_badge + i nuovi panel_left/middle/right_cap
+  // ed exp_left/middle_cap) sono stati esportati in modalità RGB SENZA
+  // canale alpha. Il pattern a scacchi / matte bianco visibile nel
+  // runtime è pixel veri dentro l'asset, non artifact del renderer.
+  //
+  // Finché l'art team non riesporta il pack in RGBA con alpha pulito,
+  // il profile panel resta sul fallback gradient originale (premium,
+  // coerente con il resto della home).
+  //
+  // Per re-integrare: rimettere i require qui sotto UNA VOLTA
+  // verificato (PIL / Photoshop) che im.mode == 'RGBA' e che i
+  // pixel di background hanno alpha=0.
+  //
+  // frame:      require('../assets/home_panels/profile/home_profile_panel_frame.png'),
+  // avatarRing: require('../assets/home_panels/profile/home_profile_avatar_ring.png'),
+  // expBarBg:   require('../assets/home_panels/profile/home_profile_exp_bar_bg.png'),
+  // expBarFill: require('../assets/home_panels/profile/home_profile_exp_bar_fill.png'),
+  // lvBadge:    require('../assets/home_panels/profile/home_profile_level_badge.png'),
 };
 
 /* ───── Pack B — Currency Bar (TOP-RIGHT) ───── */
