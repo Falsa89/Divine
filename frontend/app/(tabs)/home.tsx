@@ -30,7 +30,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
   Dimensions, ScrollView, Modal, ImageBackground, Pressable,
-  Animated, useWindowDimensions, Image as RNImage,
+  useWindowDimensions, Image as RNImage,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -766,75 +766,76 @@ function NavBtn({ label, ico, onPress, navKey, width = 42, height = 48 }: any) {
  *
  * NOTA: il testo "PLAY" è BAKED negli asset. Nessun <Text> sovrapposto.
  */
-const PLAY_GLOW_ENABLED = false; // cambia a true per attivare l'overlay glow
+// GLOW: disabilitato completamente. Verrà rivalutato in una passata futura
+// come asset dedicato o effetto speciale separato. Per ora non renderizzato.
 
 /**
- * PlayShield — asset-driven con pressed-visible-time garantito.
+ * PlayShield — action button con state machine a 3 stati:
+ *   'idle'    → asset nav_btn_play_idle.png      (stato base stabile)
+ *   'pressed' → asset nav_btn_play_pressed.png   (mentre il tocco è giù)
+ *   'confirm' → asset nav_btn_play_selected.png  (breve release-confirm prima della nav)
  *
- *  TIMING LOGIC:
- *    - onPressIn   → isPressed=true, marca t0
- *    - onPressOut  → mantiene pressed almeno `PRESS_MIN_VISIBLE_MS` da t0
- *    - onPress     → ritarda la navigazione dello stesso `remaining` così
- *                    l'asset pressed è visibile per almeno ~180ms PRIMA della
- *                    transizione di scena
+ * Flow:
+ *   onPressIn  → state = 'pressed'  (IMMEDIATO, 0 ms)
+ *   held       → resta 'pressed'
+ *   onPress    → state = 'confirm' per CONFIRM_VISIBLE_MS, poi navigazione
+ *   cancel     → (release fuori area) torna a 'idle' senza nav
  *
- *  NESSUNA idle-breathing animation (requirement esplicito: mantenere idle
- *  stabile e premium quando non esiste asset idle-animation dedicato).
- *  L'unica trasformazione runtime è un micro translateY di 3px al press,
- *  secondario rispetto allo swap dell'asset idle→pressed.
+ * NESSUN overlay artificiale, NESSUN translateY, NESSUNO scale/breathing,
+ * NESSUN glow. Il feedback avviene SOLO via swap dell'asset approvato.
  */
-const PRESS_MIN_VISIBLE_MS = 180;   // tempo minimo in cui il pressed è sullo schermo
-const PLAY_PRESS_SHIFT_Y   = 3;     // micro-feedback secondario (NON sostitutivo)
+type PlayState = 'idle' | 'pressed' | 'confirm';
+const CONFIRM_VISIBLE_MS = 120;
 
 type PlayShieldProps = {
   onPress: () => void;
-  selected?: boolean;
   width?: number;
   height?: number;
   bottom?: number;
 };
 
-function PlayShield({ onPress, selected = false, width = 72, height = 86, bottom = 10 }: PlayShieldProps) {
-  const [isPressed, setIsPressed] = useState(false);
-  const pressStartRef = useRef<number>(0);
-  const releaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+function PlayShield({ onPress, width = 72, height = 86, bottom = 10 }: PlayShieldProps) {
+  const [playState, setPlayState] = useState<PlayState>('idle');
+  const confirmedRef = useRef<boolean>(false);
   const navTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => () => {
-    if (releaseTimerRef.current) clearTimeout(releaseTimerRef.current);
     if (navTimerRef.current) clearTimeout(navTimerRef.current);
   }, []);
 
+  // (1) Press-in: PRESSED attivo immediatamente, senza ritardi.
   const handlePressIn = () => {
-    if (releaseTimerRef.current) clearTimeout(releaseTimerRef.current);
-    pressStartRef.current = Date.now();
-    setIsPressed(true);
-  };
-
-  const handlePressOut = () => {
-    // Mantiene il pressed visibile per almeno PRESS_MIN_VISIBLE_MS dal press-in
-    const elapsed = Date.now() - pressStartRef.current;
-    const remaining = Math.max(0, PRESS_MIN_VISIBLE_MS - elapsed);
-    if (releaseTimerRef.current) clearTimeout(releaseTimerRef.current);
-    releaseTimerRef.current = setTimeout(() => setIsPressed(false), remaining);
-  };
-
-  // onPress = tap completato (press-in + release). Ritardo la navigazione per
-  // garantire che l'asset pressed sia stato percepito prima della transizione.
-  const handlePress = () => {
-    const elapsed = Date.now() - pressStartRef.current;
-    const remaining = Math.max(0, PRESS_MIN_VISIBLE_MS - elapsed);
+    confirmedRef.current = false;
     if (navTimerRef.current) clearTimeout(navTimerRef.current);
-    navTimerRef.current = setTimeout(() => onPress(), remaining);
+    setPlayState('pressed');
   };
 
-  // Priorità asset: pressed > selected > idle
-  let src = HOME_PLAY_SHIELD.idle;
-  if (isPressed && HOME_PLAY_SHIELD.pressed) src = HOME_PLAY_SHIELD.pressed;
-  else if (selected && HOME_PLAY_SHIELD.selected) src = HOME_PLAY_SHIELD.selected;
+  // (2) Press valido (release dentro area): CONFIRM breve, poi nav.
+  const handlePress = () => {
+    confirmedRef.current = true;
+    setPlayState('confirm');
+    if (navTimerRef.current) clearTimeout(navTimerRef.current);
+    navTimerRef.current = setTimeout(() => {
+      onPress();   // navigazione dopo il breve confirm state
+    }, CONFIRM_VISIBLE_MS);
+  };
 
-  // Trasformazione SECONDARIA. No scale-pulse, no breathing, no arcade shrink.
-  const transform = isPressed ? [{ translateY: PLAY_PRESS_SHIFT_Y }] : [{ translateY: 0 }];
+  // (3) Press-out: se il tap NON è stato confermato (drag fuori / cancel),
+  //     torna a idle. Se è stato confermato, la sequenza confirm→nav è già in corso.
+  const handlePressOut = () => {
+    if (!confirmedRef.current) {
+      setPlayState('idle');
+    }
+    // else: la transizione è gestita da handlePress, non tocchiamo lo stato
+  };
+
+  // Asset selection: swap REALE dell'immagine. NIENTE overlay, niente transform extra.
+  let src = HOME_PLAY_SHIELD.idle;
+  if (playState === 'pressed' && HOME_PLAY_SHIELD.pressed) {
+    src = HOME_PLAY_SHIELD.pressed;
+  } else if (playState === 'confirm' && HOME_PLAY_SHIELD.selected) {
+    src = HOME_PLAY_SHIELD.selected;
+  }
 
   return (
     <Pressable
@@ -850,32 +851,14 @@ function PlayShield({ onPress, selected = false, width = 72, height = 86, bottom
         alignItems: 'center', justifyContent: 'center',
       }}
     >
-      <View style={[s.playShieldInnerImg, { transform }]}>
-        {PLAY_GLOW_ENABLED && HOME_PLAY_SHIELD.glow ? (
-          <RNImage
-            source={HOME_PLAY_SHIELD.glow}
-            style={s.playGlowOverlay}
-            resizeMode="contain"
-            pointerEvents="none"
-          />
-        ) : null}
-        {src ? (
-          <RNImage
-            source={src}
-            style={s.playShieldImg}
-            resizeMode="contain"
-          />
-        ) : (
-          <LinearGradient
-            colors={[GOLD_PALE, GOLD, '#B8902A']}
-            style={s.playShieldOuter}
-          >
-            <Text style={s.playText}>PLAY</Text>
-          </LinearGradient>
-        )}
-        {/* Overlay scuro: rafforza il feedback percepibile anche su asset simili */}
-        {isPressed ? <View style={s.playPressedOverlay} pointerEvents="none" /> : null}
-      </View>
+      {src ? (
+        <RNImage source={src} style={s.playShieldImg} resizeMode="contain" />
+      ) : (
+        // Fallback tecnico solo se il manifest è vuoto
+        <LinearGradient colors={[GOLD_PALE, GOLD, '#B8902A']} style={s.playShieldOuter}>
+          <Text style={s.playText}>PLAY</Text>
+        </LinearGradient>
+      )}
     </Pressable>
   );
 }
@@ -1272,24 +1255,8 @@ const s = StyleSheet.create({
     marginHorizontal: 4,
     alignItems: 'center', justifyContent: 'center',
   },
-  playShieldInnerImg: {
-    width: '100%', height: '100%',
-    alignItems: 'center', justifyContent: 'center',
-  },
   playShieldImg: {
     width: '100%', height: '100%',
-  },
-  playGlowOverlay: {
-    position: 'absolute',
-    width: '150%', height: '150%',
-    left: '-25%', top: '-25%',
-    opacity: 0.85,
-  },
-  playPressedOverlay: {
-    position: 'absolute',
-    left: '6%', top: '6%', right: '6%', bottom: '6%',
-    backgroundColor: 'rgba(0,0,0,0.28)',
-    borderRadius: 10,
   },
   playShieldOuter: {
     flex: 1, borderRadius: 12, padding: 2.5,
