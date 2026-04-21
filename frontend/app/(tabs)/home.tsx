@@ -603,21 +603,17 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
 
   return (
     <View style={s.bottomNav} pointerEvents="box-none">
-      {/* BARRA BASE — asset-driven: nav_bar_base.png (cornice dorata + slot centrale) */}
+      {/* BARRA BASE — elemento decorativo CENTRALE attorno al PLAY.
+          Aspect ratio preservato (contain); le aree laterali restano pulite
+          in attesa dei side buttons finali. */}
       {HOME_NAV_BAR_BASE ? (
         <RNImage
           source={HOME_NAV_BAR_BASE}
           style={s.bottomNavBarBase}
-          resizeMode="stretch"
+          resizeMode="contain"
           pointerEvents="none"
         />
-      ) : (
-        <LinearGradient
-          colors={['rgba(8,15,40,0.0)', 'rgba(5,9,26,0.92)']}
-          locations={[0, 0.35]}
-          style={s.bottomNavBg}
-        />
-      )}
+      ) : null}
       <View style={s.navSide}>
         {left.map(n => <NavBtn key={n.key} navKey={n.key} {...n} />)}
       </View>
@@ -671,9 +667,15 @@ function PlayShield({ onPress, selected = false }: { onPress: () => void; select
     if (pressed && HOME_PLAY_SHIELD.pressed) src = HOME_PLAY_SHIELD.pressed;
     else if (selected && HOME_PLAY_SHIELD.selected) src = HOME_PLAY_SHIELD.selected;
 
+    // Micro-feedback UI quando pressed: lieve scale-down, translateY verso il basso,
+    // piccola riduzione opacità. Leggero, non arcade. Rafforza il cambio d'asset.
+    const feedbackStyle = pressed
+      ? { transform: [{ scale: 0.94 }, { translateY: 4 }], opacity: 0.90 }
+      : { transform: [{ scale: 1 }, { translateY: 0 }], opacity: 1 };
+
     if (src) {
       return (
-        <View style={s.playShieldInnerImg}>
+        <View style={[s.playShieldInnerImg, feedbackStyle]}>
           {PLAY_GLOW_ENABLED && HOME_PLAY_SHIELD.glow ? (
             <RNImage
               source={HOME_PLAY_SHIELD.glow}
@@ -692,18 +694,20 @@ function PlayShield({ onPress, selected = false }: { onPress: () => void; select
     }
     // Fallback tecnico se asset mancanti
     return (
-      <LinearGradient
-        colors={[GOLD_PALE, GOLD, '#B8902A']}
-        start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
-        style={s.playShieldOuter}
-      >
+      <View style={[s.playShieldInnerImg, feedbackStyle]}>
         <LinearGradient
-          colors={[NIGHT_3, NIGHT_2, NIGHT_0]}
-          style={s.playShieldInner}
+          colors={[GOLD_PALE, GOLD, '#B8902A']}
+          start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+          style={s.playShieldOuter}
         >
-          <Text style={s.playText}>PLAY</Text>
+          <LinearGradient
+            colors={[NIGHT_3, NIGHT_2, NIGHT_0]}
+            style={s.playShieldInner}
+          >
+            <Text style={s.playText}>PLAY</Text>
+          </LinearGradient>
         </LinearGradient>
-      </LinearGradient>
+      </View>
     );
   };
 
@@ -1061,16 +1065,18 @@ const s = StyleSheet.create({
     height: 96,
   },
   bottomNavBg: { ...StyleSheet.absoluteFillObject },
-  /* Barra base asset-driven: immagine che riempie tutta la bottom nav.
-     resizeMode="stretch" la forza a occupare l'intera larghezza senza lasciare buchi
-     laterali (accettiamo un leggero stretch orizzontale: la barra è prevalentemente
-     piatta, si deforma solo in modo trascurabile; i dettagli verticali — spikes
-     e scudo centrale — restano con le proporzioni corrette perché l'altezza
-     è fissa a 96px, vicina alla proporzione originale). */
+  /* Barra base asset-driven.
+     IMPORTANTE: NON stretchata full-width. È un elemento decorativo CENTRALE
+     attorno al PLAY. Larghezza fissa con aspect ratio preservato (source 1916x821
+     → 2.33:1). Centrata orizzontalmente, ancorata al bottom. Le aree laterali
+     restano pulite (trasparenti) in attesa dei side buttons finali. */
   bottomNavBarBase: {
     position: 'absolute',
-    left: 0, right: 0, bottom: 0,
-    width: '100%', height: 96,
+    bottom: 0,
+    left: '50%',
+    marginLeft: -270,   // metà della width per centrare
+    width: 540,
+    height: 232,        // 540 / 2.33 aspect preservato
   },
   navSide: {
     flex: 1, flexDirection: 'row',
