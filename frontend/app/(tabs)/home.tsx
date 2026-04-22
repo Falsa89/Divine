@@ -84,7 +84,7 @@ const SHOW_PHASE_BADGE = false;
  * in un box flottante. DEVE essere TRUE durante le pass di debug layout, poi
  * disattivato prima della release.
  */
-const SHOW_DEV_METRICS = false;
+const SHOW_DEV_METRICS = true;
 
 /* ═══════════════════════════════════════════════════════════════════
  *  computeHomeMetrics — pure function, source-of-truth per TUTTI i
@@ -583,7 +583,7 @@ function HomeProfilePanel({ user, router }: any) {
   // (iPad ≥ 768 vh) nel ramo desktop.
   const { width: vw, height: vh } = useWindowDimensions();
   const M = computeHomeMetrics(vw, vh);
-  const { isPhone, isTablet, panelW, panelRatio,
+  const { isPhone, isTablet, panelW, panelRatio, panelH,
           padL, padR, padT, padB,
           avSize, avFrameW, avInit, avLeft, avTop,
           lvSize, lvFont,
@@ -593,16 +593,17 @@ function HomeProfilePanel({ user, router }: any) {
   // Open/Close del selector avatar/frame (stub tecnico)
   const [selectorOpen, setSelectorOpen] = React.useState<false | 'avatar' | 'frame'>(false);
 
-  // ═══ HARD VISUAL DEBUG BOXES (v7.2) ═══════════════════════════════════
-  // Attivato via `SHOW_DEV_METRICS`. Solo phone: bordi e background
-  // traslucidi per rivelare la STRUTTURA REALE del layout renderizzato.
-  //   - profileWrap     → border CIAN   (outer container, aspectRatio forzato)
-  //   - profilePanel    → bg MAGENTA    (content area post-padding)
-  //   - avatarFrame     → border GIALLO (avatar absolute)
-  //   - profileRow1     → bg VERDE      (name + exp)
-  //   - powerRow        → bg ARANCIONE  (power stat)
-  //   - pillsRow        → bg ROSSO      (VIP / SP / title)
-  const DEBUG = SHOW_DEV_METRICS && isPhone;
+  // ═══ HARD VISUAL DEBUG BOXES (v8.1) ═══════════════════════════════════
+  // Attivato via `SHOW_DEV_METRICS`. Ora attivo su TUTTI i tier (non solo
+  // phone): serve capire se il device reale dell'utente cade nel ramo
+  // phone, tablet, o desktop. I colori restano consistenti.
+  //   - profileWrap     → border CIAN
+  //   - profilePanel    → bg MAGENTA (0.2 alpha)
+  //   - avatarFrame     → border GIALLO
+  //   - profileRow1     → bg VERDE   (name + exp)
+  //   - powerRow        → bg ARANCIO (power stat)
+  //   - pillsRow        → bg ROSSO   (pills)
+  const DEBUG = SHOW_DEV_METRICS;
   const dbg = (color: string) => (DEBUG ? {
     backgroundColor: color,
     borderWidth: 1, borderColor: '#FF00FF',
@@ -612,7 +613,22 @@ function HomeProfilePanel({ user, router }: any) {
   } : null);
 
   return (
-    <View style={[s.profileWrap, { width: panelW, aspectRatio: panelRatio }, dbgBorder('#00FFFF')]}>
+    <View style={[
+      s.profileWrap,
+      {
+        // FIX ROOT CAUSE v8.2:
+        // Sostituito `aspectRatio: panelRatio` con `height: panelH` esplicito.
+        // `aspectRatio` su RN Web non è sempre affidabile: alcuni bundler
+        // lasciano l'altezza a `auto`, il che permette all'<Image absoluteFill>
+        // interna di dettare la dimensione finale → il frame art appariva
+        // MOLTO più grande del container previsto (visibile nel debug capture).
+        // Con height esplicita + overflow:hidden il container è bloccato.
+        width: panelW,
+        height: panelH,
+        overflow: 'hidden',
+      },
+      dbgBorder('#00FFFF'),
+    ]}>
       <AssetBackedGradient
         source={HOME_PROFILE_PANEL.frame}
         decorSource={HOME_PROFILE_PANEL.decor}
@@ -847,19 +863,25 @@ function HomeDevMetrics() {
   const insets = useSafeAreaInsets();
   const M = computeHomeMetrics(vw, vh);
   const tier = M.isPhone ? 'PHONE' : M.isTablet ? 'TABLET' : 'DESKTOP';
+  const aspect = (vw / vh).toFixed(2);
   const rows = [
     { k: 'TIER',    v: tier },
     { k: 'vw',      v: vw },
     { k: 'vh',      v: vh },
+    { k: 'vw/vh',   v: aspect },
+    { k: 'insetsT', v: insets.top },
+    { k: 'insetsB', v: insets.bottom },
     { k: 'panelW',  v: M.panelW },
     { k: 'panelH',  v: M.panelH },
+    { k: 'pRatio',  v: M.panelRatio },
     { k: 'avSize',  v: M.avSize },
     { k: 'avFrame', v: M.avFrameW },
+    { k: 'avLeft',  v: M.avLeft },
+    { k: 'avTop',   v: M.avTop ?? -1 },
     { k: 'BAR_W',   v: M.BAR_W },
     { k: 'BAR_H_V', v: M.BAR_H_VISIBLE },
     { k: 'PLAY_W',  v: M.PLAY_W },
     { k: 'SIDE_W',  v: M.SIDE_W },
-    { k: 'BTN_BOT', v: insets.bottom + M.BTN_BOTTOM_NO_INSETS },
   ];
   // Console log strutturato (utile per la lettura remota):
   // eslint-disable-next-line no-console
@@ -1674,9 +1696,11 @@ const s = StyleSheet.create({
   profileWrap: {
     position: 'absolute', top: 6, left: 6,
     zIndex: 20,
-    // width + aspectRatio vengono passati inline da HomeProfilePanel:
-    //   mobile: 220 × (220/2.7) = 220 × 81
-    //   desktop: 340 × (340/3) = 340 × 113
+    overflow: 'hidden',    // v8.2: blocca frame art entro bounds del container
+    // width + height passati inline (height esplicita, non aspectRatio)
+    //   mobile: 340 × 113.3
+    //   tablet: 300 × 102.4  
+    //   desktop: 340 × 113.3
   },
   profilePanel: {
     // NO border CSS legacy, NO borderRadius legacy, NO shadow:
