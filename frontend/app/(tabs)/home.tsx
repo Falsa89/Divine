@@ -75,7 +75,7 @@ const CRIMSON    = '#B22222';
 const CURRENT_SCENE: HomeScene = 'default';
 
 /** Mostra in alto un piccolo badge "FASE: night" utile in dev/QA. */
-const SHOW_PHASE_BADGE = true;
+const SHOW_PHASE_BADGE = false;
 
 /* ==================================================================== */
 export default function HomeTab() {
@@ -118,7 +118,7 @@ export default function HomeTab() {
   const firstFrameSignaledRef = useRef<boolean>(false);
 
   // SERVER TIME + FASE TEMPORALE centralizzata (unico hook, nessun hardcode)
-  const { phase, formatted: serverTime, synced } = useServerTimePhase(60);
+  const { phase, formatted: serverTime, synced } = useServerTimePhase(1);
 
   const loadData = useCallback(async () => {
     try {
@@ -474,36 +474,26 @@ function HomeProfilePanel({ user, router }: any) {
           </View>
         </View>
 
-        {/* TEXT BLOCK — area destra del frame (dopo paddingLeft:96 del panel) */}
+        {/* TEXT BLOCK — area destra del frame (dopo paddingLeft:104 del panel) */}
         <View style={s.profileRow1}>
           <View style={{ flex: 1 }}>
             <Text style={s.profName} numberOfLines={1}>{name}</Text>
             <View style={s.expWrap}>
-              {/* EXP BAR — track + fill asset-driven. Fallback: View+gradient. */}
-              {HOME_PROFILE_PANEL.expBarBg ? (
-                <View style={s.expBarBg}>
+              <View style={s.expBarBg}>
+                {HOME_PROFILE_PANEL.expBarBg ? (
                   <RNImage
                     source={HOME_PROFILE_PANEL.expBarBg}
                     style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
                     resizeMode="stretch"
                   />
-                  <AssetBackedGradient
-                    source={HOME_PROFILE_PANEL.expBarFill}
-                    fallbackColors={[GOLD_PALE, GOLD]}
-                    fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
-                    style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
-                  />
-                </View>
-              ) : (
-                <View style={s.expBarBg}>
-                  <AssetBackedGradient
-                    source={HOME_PROFILE_PANEL.expBarFill}
-                    fallbackColors={[GOLD_PALE, GOLD]}
-                    fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
-                    style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
-                  />
-                </View>
-              )}
+                ) : null}
+                <AssetBackedGradient
+                  source={HOME_PROFILE_PANEL.expBarFill}
+                  fallbackColors={[GOLD_PALE, GOLD]}
+                  fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
+                  style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
+                />
+              </View>
               <Text style={s.expTxt}>{exp}/{expMax}</Text>
             </View>
           </View>
@@ -525,7 +515,7 @@ function HomeProfilePanel({ user, router }: any) {
           {HOME_PROFILE_PANEL.powerIcon ? (
             <RNImage
               source={HOME_PROFILE_PANEL.powerIcon}
-              style={{ width: 18, height: 18 }}
+              style={{ width: 14, height: 14 }}
               resizeMode="contain"
             />
           ) : (
@@ -535,7 +525,7 @@ function HomeProfilePanel({ user, router }: any) {
           <Text style={s.powerVal}>{Number(power).toLocaleString()}</Text>
         </TouchableOpacity>
 
-        {/* ROW 3 — VIP / Spirito / Titolo */}
+        {/* ROW 3 — VIP / Spirito / Titolo (tutto inline per massima compattezza) */}
         <View style={s.pillsRow}>
           <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
             onPress={() => router.push('/vip' as any)}>
@@ -561,18 +551,18 @@ function HomeProfilePanel({ user, router }: any) {
             <Text style={s.spiritoIco}>{'\uD83D\uDD2E'}</Text>
             <Text style={s.spiritoTxt}>SP {spirito}</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
+            onPress={() => router.push('/achievements' as any)}>
+            {HOME_PROFILE_PANEL.titleBadge ? (
+              <RNImage
+                source={HOME_PROFILE_PANEL.titleBadge}
+                style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
+                resizeMode="stretch"
+              />
+            ) : null}
+            <Text style={s.titleTxt} numberOfLines={1}>{'\u2756'} {title}</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
-          onPress={() => router.push('/achievements' as any)}>
-          {HOME_PROFILE_PANEL.titleBadge ? (
-            <RNImage
-              source={HOME_PROFILE_PANEL.titleBadge}
-              style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-              resizeMode="stretch"
-            />
-          ) : null}
-          <Text style={s.titleTxt} numberOfLines={1}>{'\u2756'}  {title}</Text>
-        </TouchableOpacity>
       </AssetBackedGradient>
     </View>
   );
@@ -986,8 +976,13 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
 
   // === RESPONSIVE METRICS ===
   // Barra base: 55% del viewport, cap 420px, min 300px (iPhone SE landscape)
-  const BAR_W = Math.max(300, Math.min(vw * 0.55, 420));
-  const BAR_H = BAR_W / 2.333;                // aspect del PNG source
+  // BAR_W: larghezza effettiva della barra. Range mobile-first:
+  //  - min 320 (safeguard su viewport molto stretti, es. 360×640)
+  //  - max 560 (più presence su tablet/landscape senza squash visivo)
+  //  - percent 62% vw (leggermente più ampia del precedente 55% per dare
+  //    respiro ai side buttons senza distorcere l'asset — ratio preservato).
+  const BAR_W = Math.max(320, Math.min(vw * 0.62, 560));
+  const BAR_H = BAR_W / 2.334;                // aspect ratio NATIVO dell'asset nav_bar_base (1916x821)
   const PLAY_W = Math.max(58, BAR_W * 0.20);  // ~20% della barra
   const PLAY_H = PLAY_W * (86 / 72);          // aspect shield
   const SIDE_W = Math.max(34, BAR_W * 0.115); // ~11.5% della barra
@@ -1057,9 +1052,12 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
           gap: SIDE_GAP,
         }}
       >
-        {left.map(n => (
-          <NavBtn key={n.key} navKey={n.key} {...n} width={SIDE_W} height={SIDE_H} />
-        ))}
+        {left.map(n => {
+          const { key, ...rest } = n;
+          return (
+            <NavBtn key={key} navKey={key} {...rest} width={SIDE_W} height={SIDE_H} />
+          );
+        })}
       </View>
 
       {/* (4) GRUPPO DESTRA — posizionato a sinistra del centro, orientato verso SX */}
@@ -1074,9 +1072,12 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
           gap: SIDE_GAP,
         }}
       >
-        {right.map(n => (
-          <NavBtn key={n.key} navKey={n.key} {...n} width={SIDE_W} height={SIDE_H} />
-        ))}
+        {right.map(n => {
+          const { key, ...rest } = n;
+          return (
+            <NavBtn key={key} navKey={key} {...rest} width={SIDE_W} height={SIDE_H} />
+          );
+        })}
       </View>
     </View>
   );
@@ -1353,78 +1354,98 @@ const s = StyleSheet.create({
     // NO border CSS legacy, NO borderRadius legacy, NO shadow:
     // il nuovo frame asset fornisce bordo/ombra/profondità premium.
     width: '100%', height: '100%',
-    paddingTop: 6, paddingBottom: 8,
-    paddingLeft: 96,         // spazio per oval avatar integrato nel frame
-    paddingRight: 24,
+    // Padding allineato alle ZONE SICURE del frame Pack A v2:
+    //  - top: 20 (ben sotto il bordo decorativo superiore + gemma centrata)
+    //  - bottom: 18 (sopra il slot titolo basso del frame)
+    //  - left: 104 (spazio per oval avatar integrato + gemma sinistra)
+    //  - right: 42 (spazio per gemma destra decorativa)
+    paddingTop: 20, paddingBottom: 18,
+    paddingLeft: 104,
+    paddingRight: 42,
     justifyContent: 'center',
   },
   profileRow1: { flexDirection: 'row', alignItems: 'center' },
   // Avatar dentro lo slot oval del frame (posizionamento absolute calibrato)
   avatarFrame: {
     position: 'absolute',
-    left: 4, top: 4, bottom: 4,
-    width: 92,
+    left: 6, top: 0, bottom: 0,
+    width: 98,
     alignItems: 'center', justifyContent: 'center',
   },
-  // Portrait circle: si inscrive nell'oval del frame
+  // Portrait circle: si inscrive nell'oval del frame (più grande + cornice dorata premium)
   avatarInner: {
-    width: 62, height: 72, borderRadius: 36,  // oval leggermente verticale come il frame
+    width: 66, height: 78, borderRadius: 40,  // oval leggermente verticale
     overflow: 'hidden',
     backgroundColor: NIGHT_1,
     alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.35)',
+    // Cornice dorata sottile per dare contrasto col frame illustrato dietro
+    borderWidth: 2, borderColor: GOLD,
+    shadowColor: GOLD, shadowOpacity: 0.55, shadowRadius: 5,
+    elevation: 4,
   },
-  avatarInitial: { color: GOLD, fontSize: 24, fontWeight: '900' },
+  avatarInitial: { color: GOLD, fontSize: 26, fontWeight: '900' },
   lvBadge: {
+    // Posizione calibrata sull'angolo basso-dx dell'oval del frame
     position: 'absolute',
-    bottom: -2, right: 2,
-    width: 34, height: 34,
+    bottom: -4, right: -2,
+    width: 38, height: 38,
     alignItems: 'center', justifyContent: 'center',
-    // NO backgroundColor / NO border CSS: l'asset lvBadge fornisce la forma completa.
   },
-  lvBadgeTxt: { color: '#fff', fontSize: 12, fontWeight: '900', textShadowColor: '#000', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 },
-  profName: { color: GOLD, fontSize: 15, fontWeight: '900', letterSpacing: 0.4 },
-  expWrap: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 },
+  lvBadgeTxt: {
+    color: '#fff', fontSize: 13, fontWeight: '900',
+    textShadowColor: '#000', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2,
+  },
+  profName: {
+    color: GOLD, fontSize: 14, fontWeight: '900', letterSpacing: 0.4,
+    marginBottom: 1,
+  },
+  expWrap: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    marginTop: 2,
+  },
   expBarBg: {
-    flex: 1, height: 10,
-    borderRadius: 5, overflow: 'hidden',
-    // Fallback color se l'asset expBarBg è undefined; col nuovo asset RGBA questo
-    // è trasparente-coperto.
+    flex: 1, height: 12,
+    borderRadius: 6, overflow: 'hidden',
+    // Fallback color se l'asset expBarBg è undefined; con asset RGBA l'overlay lo copre.
     backgroundColor: 'rgba(0,0,0,0.35)',
   },
   expBarFill: { height: '100%' },
-  expTxt: { color: '#E8E8F0', fontSize: 9, fontWeight: '800' },
+  expTxt: {
+    color: '#F0E8D8', fontSize: 9, fontWeight: '800',
+    minWidth: 40, textAlign: 'right',
+  },
 
   powerRow: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    marginTop: 4, paddingVertical: 2, paddingHorizontal: 6,
-    // Niente border/bg CSS: coerenza con panel asset-driven.
-    borderRadius: 4,
+    marginTop: 3, paddingVertical: 1, paddingHorizontal: 2,
+    borderRadius: 3,
   },
-  powerIcon: { fontSize: 12 },
+  powerIcon: { fontSize: 11, color: GOLD_PALE },
   powerLbl: { color: GOLD_PALE, fontSize: 9, fontWeight: '900', letterSpacing: 0.6 },
   powerVal: { color: '#fff', fontSize: 11, fontWeight: '900', marginLeft: 'auto' },
 
-  pillsRow: { flexDirection: 'row', gap: 5, marginTop: 3 },
+  pillsRow: { flexDirection: 'row', gap: 5, marginTop: 3, alignItems: 'center' },
   vipPill: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
-    backgroundColor: 'rgba(178,34,34,0.45)',
-    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 3,
+    backgroundColor: 'rgba(178,34,34,0.5)',
+    paddingHorizontal: 6, paddingVertical: 1, borderRadius: 3,
   },
-  vipStar: { color: GOLD, fontSize: 9 },
+  vipStar: { color: GOLD, fontSize: 8 },
   vipTxt: { color: GOLD, fontSize: 9, fontWeight: '900' },
   spiritoPill: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
-    backgroundColor: 'rgba(60,20,120,0.45)',
-    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 3,
+    backgroundColor: 'rgba(60,20,120,0.5)',
+    paddingHorizontal: 6, paddingVertical: 1, borderRadius: 3,
   },
-  spiritoIco: { fontSize: 9 },
+  spiritoIco: { fontSize: 8 },
   spiritoTxt: { color: '#FFE0FF', fontSize: 9, fontWeight: '900' },
+  // "Apprendista" → pill flex-row nella stessa riga dei VIP/SP (più ordinato)
   titleBadge: {
-    marginTop: 2, paddingVertical: 2, paddingHorizontal: 6,
-    // Niente borderLeft/bg CSS: il frame ha già uno slot "titolo" in basso.
+    flexDirection: 'row', alignItems: 'center',
+    paddingVertical: 1, paddingHorizontal: 4,
+    marginLeft: 'auto',
   },
-  titleTxt: { color: '#D8E0FF', fontSize: 10, fontWeight: '700', fontStyle: 'italic' },
+  titleTxt: { color: '#D8E0FF', fontSize: 9, fontWeight: '700', fontStyle: 'italic' },
 
   /* BLOCCO 4 — CURRENCY */
   currencyWrap: {

@@ -110,7 +110,7 @@ export function useServerTimePhase(tickSec: number = 60) {
       setServerNow(now);
       const newPhase = overridePhase || getTimePhase(now);
       setPhase(prev => (prev === newPhase ? prev : newPhase));
-    }, Math.max(5, tickSec) * 1000);
+    }, Math.max(1, tickSec) * 1000);
     return () => clearInterval(id);
   }, [tickSec, overridePhase]);
 
