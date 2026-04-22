@@ -465,26 +465,25 @@ function HomeProfilePanel({ user, router }: any) {
   const isTablet = vh >= 500 && vh < 900;
   const isMobile = isPhone;   // alias locale (non esportato)
 
-  // ─── PANEL MOBILE RECALIBRATION (v3 — leggibile, non "desktop rimpicciolito") ─
-  // Precedente pass v2 (210×80, font 8-11pt) risultava micro-scalato su
-  // phone landscape reale: DPR 3x su iPhone rendeva i font 8-9pt ai limiti
-  // della leggibilità HIG. Ora: panel più presente (250×89), typography
-  // dichiaratamente pensata per smartphone landscape.
-  const panelW     = isPhone ? 250 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 2.8 : 2.9;
-  // Slot avatar occupa ~34% della panelW sul frame 3:1 → mantiene proporzione
-  // corretta con ring decor. 250 * 0.34 = 85.
+  // ─── PANEL MOBILE RECALIBRATION (v4 — respiro verticale + grid) ───
+  // Precedente v3 (250×89, ratio 2.8): l'altezza effettiva era insufficiente
+  // per 4 righe di contenuto (name, exp, power, pills) con padding standard.
+  // Inoltre `justifyContent: 'center'` su profilePanel comprimeva tutto al
+  // centro verticale. Fix: ratio 2.5 → panelH 104 pt, grid `space-between`
+  // (implementato come righe con margin reali).
+  const panelW     = isPhone ? 260 : isTablet ? 300 : 340;
+  const panelRatio = isPhone ? 2.5 : isTablet ? 2.9 : 3;
+  // Slot avatar ~34% panelW (frame premium 3:1 → slot sinistro proporzionale).
   const padL     = isPhone ? Math.round(panelW * 0.34) : isTablet ? 92 : 104;
-  const padR     = isPhone ? 22  : isTablet ? 32 : 42;
-  const padT     = isPhone ? 11  : isTablet ? 16 : 20;
-  const padB     = isPhone ? 11  : isTablet ? 15 : 18;
+  const padR     = isPhone ? 28  : isTablet ? 32 : 42;
+  const padT     = isPhone ? 8   : isTablet ? 16 : 20;
+  const padB     = isPhone ? 8   : isTablet ? 15 : 18;
 
   // ─── AVATAR — dimensioni bilanciate col panel ───────────────────────
-  // panelH = 250/2.8 = 89.3 → avFrameW target ≈ 75% panelH = 67 → 68
-  // avSize (portrait) ≈ 70% avFrameW = 47.6 → 48 (1:1 perfetto)
-  const avSize   = isPhone ? 48 : isTablet ? 60 : 72;
-  const avFrameW = isPhone ? 68 : isTablet ? 82 : 98;
-  const avInit   = isPhone ? 19 : isTablet ? 22 : 26;
+  // panelH = 260/2.5 = 104 → avFrameW ~70% = 72, avSize ~70% avFrameW = 50
+  const avSize   = isPhone ? 50 : isTablet ? 60 : 72;
+  const avFrameW = isPhone ? 72 : isTablet ? 82 : 98;
+  const avInit   = isPhone ? 20 : isTablet ? 22 : 26;
   // Anchor: slot centrato a 17% panelW (standard frame 3:1 premium).
   //   17% di 250 = 42.5 → avLeft = 42.5 - 34 = 8.5 → 9
   const avLeft   = isPhone
@@ -524,22 +523,17 @@ function HomeProfilePanel({ user, router }: any) {
           { paddingLeft: padL, paddingRight: padR, paddingTop: padT, paddingBottom: padB },
         ]}
       >
-        {/* AVATAR + LV BADGE — tap apre AvatarFrameSelector (tab Avatar).
-            ARCHITETTURA REALE basata su verifica PIL dell'asset:
-              ► `home_profile_avatar_ring.png` NON è un ring trasparente-in-
-                mezzo. Center pixel verificato = (244,244,244, alpha 255)
-                → FULLY OPAQUE. È un *portrait placeholder composito*:
-                cornice dorata + inner area bianca-crema dove l'utente caricherà
-                la sua foto avatar. Usarlo come overlay TOP avrebbe coperto
-                la foto utente → errore logico.
-              ► Corretta architettura:
-                1. avatarRing come BASE (si vede sempre, forma lo slot).
-                2. User avatar / initial POSIZIONATA SOPRA nel centro crema.
-                3. lvBadge sopra tutto nell'angolo SE.
-              ► Quando in futuro l'utente caricherà un avatar:
-                renderizzare l'immagine come cerchio cropped sopra il ring,
-                sostituendo l'inner crema. Il ring dorato resta visibile
-                come cornice. */}
+        {/* AVATAR + LV BADGE — architettura fallback-safe.
+            LAYERS (Z-order dal basso all'alto):
+              (0) BASE MEDAGLIONE SOLIDO — sempre renderizzato. Riempimento
+                  radiale dark-core + bordo dorato CSS. Garantisce che anche
+                  se `avatarRing` fallisse il load (network/cache/build), NON
+                  si veda mai checkerboard o fondo trasparente: l'avatar ha
+                  SEMPRE una base visiva intenzionale e coerente.
+              (1) AVATAR RING (asset decor PNG) — overlay che copre la base
+                  con la cornice oro+inner crema quando caricato.
+              (2) PORTRAIT IMAGE / INITIAL — sopra la base, nel centro crema.
+              (3) LV BADGE — angolo SE. */}
         <View
           style={[
             s.avatarFrame,
@@ -551,10 +545,9 @@ function HomeProfilePanel({ user, router }: any) {
           ]}
           pointerEvents="box-none"
         >
-          {/* (1) AVATAR RING — BASE layer (cornice+inner crema, asset-driven) */}
           <TouchableOpacity
             onPress={() => setSelectorOpen('avatar')}
-            onLongPress={() => setSelectorOpen('frame')}  // long-press: tab Frames
+            onLongPress={() => setSelectorOpen('frame')}
             activeOpacity={0.85}
             style={{
               position: 'absolute',
@@ -563,6 +556,21 @@ function HomeProfilePanel({ user, router }: any) {
               alignItems: 'center', justifyContent: 'center',
             }}
           >
+            {/* (0) BASE MEDAGLIONE SOLIDO — sempre presente (fallback-safe) */}
+            <LinearGradient
+              colors={[NIGHT_2, NIGHT_0]}
+              start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+              style={{
+                position: 'absolute',
+                left: (avFrameW - avSize) / 2,
+                top:  (avFrameW - avSize) / 2,
+                width: avSize, height: avSize,
+                borderRadius: avSize / 2,
+                borderWidth: 1.5, borderColor: GOLD_WARM,
+              }}
+            />
+
+            {/* (1) RING ASSET — overlay decorativo (copre la base quando caricato) */}
             {HOME_PROFILE_PANEL.avatarRing ? (
               <RNImage
                 source={HOME_PROFILE_PANEL.avatarRing}
@@ -574,23 +582,16 @@ function HomeProfilePanel({ user, router }: any) {
                 resizeMode="contain"
                 pointerEvents="none"
               />
-            ) : (
-              // Fallback tecnico se ring asset mancante: cerchio NIGHT+border
-              <View
-                style={[
-                  s.avatarInner,
-                  { width: avSize, height: avSize, borderRadius: avSize / 2 },
-                ]}
-              />
-            )}
+            ) : null}
 
-            {/* (2) INITIAL / USER PORTRAIT — sopra il ring, centrato nell'inner. */}
+            {/* (2) USER PORTRAIT / INITIAL — sopra tutto, centrato.
+                Colore dark contrast se ring attivo (inner crema); gold se no ring. */}
             {HOME_PROFILE_PANEL.avatarPlaceholder ? (
               <RNImage
                 source={HOME_PROFILE_PANEL.avatarPlaceholder}
                 style={{
-                  width: avSize, height: avSize, borderRadius: avSize / 2,
-                  // Sopra il ring base
+                  width: avSize - 6, height: avSize - 6,
+                  borderRadius: (avSize - 6) / 2,
                 }}
                 resizeMode="cover"
               />
@@ -600,9 +601,10 @@ function HomeProfilePanel({ user, router }: any) {
                   s.avatarInitial,
                   {
                     fontSize: avInit,
-                    // Dark contrast sopra l'inner crema del ring
-                    color: NIGHT_1,
-                    textShadowColor: 'rgba(255,255,255,0.6)',
+                    color: HOME_PROFILE_PANEL.avatarRing ? NIGHT_1 : GOLD,
+                    textShadowColor: HOME_PROFILE_PANEL.avatarRing
+                      ? 'rgba(255,255,255,0.6)'
+                      : 'rgba(0,0,0,0.9)',
                     textShadowOffset: { width: 0, height: 1 },
                     textShadowRadius: 1,
                   },
@@ -631,7 +633,18 @@ function HomeProfilePanel({ user, router }: any) {
                 style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
                 resizeMode="contain"
               />
-            ) : null}
+            ) : (
+              // FALLBACK badge solido (se asset mancante → nessun checkerboard)
+              <View
+                style={{
+                  position: 'absolute', left: 0, top: 0,
+                  width: '100%', height: '100%',
+                  borderRadius: lvSize / 2,
+                  backgroundColor: CRIMSON,
+                  borderWidth: 1.5, borderColor: GOLD,
+                }}
+              />
+            )}
             <Text style={[s.lvBadgeTxt, { fontSize: lvFont }]}>{level}</Text>
           </View>
         </View>
@@ -656,7 +669,7 @@ function HomeProfilePanel({ user, router }: any) {
                   style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
                 />
               </View>
-              <Text style={[s.expTxt, { fontSize: expFS }]}>{exp}/{expMax}</Text>
+              <Text style={[s.expTxt, { fontSize: expFS }]} numberOfLines={1}>{exp}/{expMax}</Text>
             </View>
           </View>
         </View>
@@ -1118,31 +1131,28 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   const isMobile = isPhone;   // alias interno (compat)
 
   // === BAR_W ===
-  // Phone: cap 360 (era 400) → meno dominante. 46% vw (era 50%).
-  // Tablet: invariato dal pass precedente.
-  // Desktop: invariato.
+  // Phone: cap 380 (era 360) con 0.48vw (era 0.46). Lieve aumento per
+  // permettere SIDE_W più larghi (fix label troncate "ARTI..." / "FOR...").
+  // Il guadagno in altezza è trascurabile grazie al ratio-clip.
   const BAR_W = isPhone
-    ? Math.max(260, Math.min(vw * 0.46, 360))
+    ? Math.max(280, Math.min(vw * 0.48, 380))
     : isTablet
       ? Math.max(320, Math.min(vw * 0.58, 520))
       : Math.max(320, Math.min(vw * 0.62, 560));
 
   // === BAR_H ===
-  // Phone: clip ulteriore → 42% del full (era 50%), clamp 18% vh (era 22%).
-  //   A vw=844, BAR_W=360 → BAR_H_FULL = 154.2 → visible = min(64.8, 70.2) = 64.8 → 16.6% vh ✅
-  // Tablet: 65% del full con clamp 25% vh.
-  // Desktop: ratio naturale full (invariato).
-  const BAR_RATIO_FULL = 1916 / 821;      // 2.334 nativo
+  // Phone: 42% FULL con clamp 17% vh (più basso di prima: 18%→17%).
+  //   A vw=844, BAR_W=380 → BAR_H_FULL=162.8, visible=min(68.4, 66.3)=66.3pt → 17% vh ✅
+  const BAR_RATIO_FULL = 1916 / 821;
   const BAR_H_FULL     = BAR_W / BAR_RATIO_FULL;
   const BAR_H_VISIBLE  = isPhone
-    ? Math.min(BAR_H_FULL * 0.42, vh * 0.18)
+    ? Math.min(BAR_H_FULL * 0.42, vh * 0.17)
     : isTablet
       ? Math.min(BAR_H_FULL * 0.65, vh * 0.25)
       : BAR_H_FULL;
   const BAR_H = BAR_H_VISIBLE;
 
   // === PLAY ===
-  // Phone: 15% barra (era 17%), clamp 18% vh (era 21%) → PLAY meno debordante.
   const PLAY_W = isPhone
     ? Math.max(50, Math.min(BAR_W * 0.15, vh * 0.18))
     : isTablet
@@ -1151,33 +1161,41 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   const PLAY_H = PLAY_W * (86 / 72);
 
   // === SIDE ICONS ===
-  // Phone: 7.5% barra (era 8%) → meno presenti, coerenti con barra ridotta.
+  // Phone: 9.5% BAR_W (era 7.5%). A BAR_W=380 → SIDE_W=36.1 (era 32 → +13%).
+  // Questo dà respiro alla label area per contenere parole come "ARTIFACT",
+  // "SKILL", "FORGE" senza troncare. Combinato con abbreviazioni mobile
+  // per i 2 label critici (ARTIFACT→ARTI, FORGE→FORG), elimina gli ellissis.
   const SIDE_W = isPhone
-    ? Math.max(32, BAR_W * 0.075)
+    ? Math.max(36, BAR_W * 0.095)
     : isTablet
       ? Math.max(34, BAR_W * 0.085)
       : Math.max(34, BAR_W * 0.090);
   const SIDE_H = SIDE_W * (48 / 42);
-  const SIDE_GAP  = Math.max(1, BAR_W * (isPhone ? 0.0022 : 0.003));
-  const GROUP_GAP = Math.max(3, BAR_W * (isPhone ? 0.009  : 0.012));
+  const SIDE_GAP  = Math.max(1, BAR_W * (isPhone ? 0.0020 : 0.003));
+  const GROUP_GAP = Math.max(3, BAR_W * (isPhone ? 0.008  : 0.012));
 
   // === BTN_BOTTOM ===
-  // Phone: *0.18 (era *0.20) → icone rimangono al centro della fascia piatta
-  // anche con BAR_H_VISIBLE ridotta.
   const BTN_BOTTOM = insets.bottom + 4 + Math.round(BAR_H_VISIBLE * (isPhone ? 0.18 : 0.22));
 
+  // LABEL MOBILE ABBREVIATIONS
+  // Phone landscape ha ~36 pt per il label box (SIDE_W − 2 padding).
+  // Parole >5 char con font 8pt (≈5.2 pt/char) saturano: ARTIFACT, FORGE.
+  // Soluzione: abbreviazioni dedicate solo per phone, mantenendo fullLabel
+  // come fallback su tablet/desktop.
+  const mkLabel = (full: string, short: string) => (isPhone ? short : full);
+
   const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
-    { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
-    { key: 'bag',      label: 'BAG',      ico: '\uD83C\uDF92', onPress: () => goTo('bag') },
-    { key: 'artifact', label: 'ARTIFACT', ico: '\uD83D\uDD2E', onPress: () => goTo('artifact') },
-    { key: 'skill',    label: 'SKILL',    ico: '\uD83D\uDCDA', onPress: () => goTo('skill') },
-    { key: 'team',     label: 'TEAM',     ico: '\uD83D\uDC65', onPress: () => goTo('team') },
+    { key: 'chat',     label: 'CHAT',                          ico: '\uD83D\uDCAC', onPress: onChat },
+    { key: 'bag',      label: 'BAG',                           ico: '\uD83C\uDF92', onPress: () => goTo('bag') },
+    { key: 'artifact', label: mkLabel('ARTIFACT', 'ARTI'),     ico: '\uD83D\uDD2E', onPress: () => goTo('artifact') },
+    { key: 'skill',    label: 'SKILL',                         ico: '\uD83D\uDCDA', onPress: () => goTo('skill') },
+    { key: 'team',     label: 'TEAM',                          ico: '\uD83D\uDC65', onPress: () => goTo('team') },
   ];
   const right: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
-    { key: 'guild', label: 'GUILD', ico: '\uD83D\uDEE1\uFE0F', onPress: () => goTo('guild') },
-    { key: 'shop',  label: 'SHOP',  ico: '\uD83C\uDFEA',        onPress: () => goTo('shop') },
-    { key: 'forge', label: 'FORGE', ico: '\u2692\uFE0F',         onPress: () => goTo('forge') },
-    { key: 'menu',  label: 'MENU',  ico: '\u2630',               onPress: onMenu },
+    { key: 'guild', label: 'GUILD',                          ico: '\uD83D\uDEE1\uFE0F', onPress: () => goTo('guild') },
+    { key: 'shop',  label: 'SHOP',                           ico: '\uD83C\uDFEA',        onPress: () => goTo('shop') },
+    { key: 'forge', label: mkLabel('FORGE', 'FORG'),         ico: '\u2692\uFE0F',         onPress: () => goTo('forge') },
+    { key: 'menu',  label: 'MENU',                           ico: '\u2630',               onPress: onMenu },
   ];
 
   // marginHorizontal per i side-group (dalla centerline): halfPlay + gap
@@ -1314,7 +1332,12 @@ function NavBtn({ label, ico, onPress, navKey, width = 42, height = 48 }: any) {
           style={[s.navLabelArea, { bottom: labelBottom, height: labelH }]}
           pointerEvents="none"
         >
-          <Text style={s.navLabel} numberOfLines={1}>{label}</Text>
+          <Text
+            style={s.navLabel}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.82}
+          >{label}</Text>
         </View>
         {pressed ? <View style={s.navPressedOverlay} pointerEvents="none" /> : null}
       </View>
@@ -1544,15 +1567,10 @@ const s = StyleSheet.create({
     // NO border CSS legacy, NO borderRadius legacy, NO shadow:
     // il nuovo frame asset fornisce bordo/ombra/profondità premium.
     width: '100%', height: '100%',
-    // Padding allineato alle ZONE SICURE del frame Pack A v2:
-    //  - top: 20 (ben sotto il bordo decorativo superiore + gemma centrata)
-    //  - bottom: 18 (sopra il slot titolo basso del frame)
-    //  - left: 104 (spazio per oval avatar integrato + gemma sinistra)
-    //  - right: 42 (spazio per gemma destra decorativa)
-    paddingTop: 20, paddingBottom: 18,
-    paddingLeft: 104,
-    paddingRight: 42,
-    justifyContent: 'center',
+    // v4: ANCORAGGIO AL TOP (era justifyContent:center che comprimeva tutto).
+    // Adesso il contenuto segue la grid naturale row-by-row con gli spacing
+    // definiti da profileRow1/powerRow/pillsRow (marginTop espliciti).
+    justifyContent: 'flex-start',
   },
   profileRow1: { flexDirection: 'row', alignItems: 'center' },
   // Avatar dentro lo slot oval del frame — posizionamento absolute slot-based.
@@ -1588,19 +1606,21 @@ const s = StyleSheet.create({
     marginBottom: 1,
   },
   expWrap: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
+    flexDirection: 'row', alignItems: 'center', gap: 5,
     marginTop: 2,
   },
   expBarBg: {
     flex: 1, height: 12,
     borderRadius: 6, overflow: 'hidden',
-    // Fallback color se l'asset expBarBg è undefined; con asset RGBA l'overlay lo copre.
     backgroundColor: 'rgba(0,0,0,0.35)',
   },
   expBarFill: { height: '100%' },
   expTxt: {
     color: '#F0E8D8', fontSize: 9, fontWeight: '800',
-    minWidth: 40, textAlign: 'right',
+    // v4: minWidth rimosso (era 40) → permette al text di shrink-fit
+    // quando lo spazio interno è stretto (phone panel 152pt content area).
+    // numberOfLines:1 garantisce comunque una riga sola.
+    textAlign: 'right',
   },
 
   powerRow: {
@@ -1612,7 +1632,11 @@ const s = StyleSheet.create({
   powerLbl: { color: GOLD_PALE, fontSize: 9, fontWeight: '900', letterSpacing: 0.6 },
   powerVal: { color: '#fff', fontSize: 11, fontWeight: '900', marginLeft: 'auto' },
 
-  pillsRow: { flexDirection: 'row', gap: 5, marginTop: 3, alignItems: 'center' },
+  pillsRow: {
+    flexDirection: 'row', flexWrap: 'wrap',
+    columnGap: 5, rowGap: 3,
+    marginTop: 3, alignItems: 'center',
+  },
   vipPill: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
     backgroundColor: 'rgba(178,34,34,0.5)',
@@ -1627,11 +1651,13 @@ const s = StyleSheet.create({
   },
   spiritoIco: { fontSize: 8 },
   spiritoTxt: { color: '#FFE0FF', fontSize: 9, fontWeight: '900' },
-  // "Apprendista" → pill flex-row nella stessa riga dei VIP/SP (più ordinato)
+  // "Apprendista" → ora flusso naturale inline con VIP/SP (non più pushed-right).
+  // Il marginLeft:auto creava squilibrio su phone landscape (titolo schiacciato
+  // a destra, VIP+SP compressi a sinistra). Ora tutti i pill usano il gap
+  // comune della pillsRow → distribuzione armonica.
   titleBadge: {
     flexDirection: 'row', alignItems: 'center',
     paddingVertical: 1, paddingHorizontal: 4,
-    marginLeft: 'auto',
   },
   titleTxt: { color: '#D8E0FF', fontSize: 9, fontWeight: '700', fontStyle: 'italic' },
 
@@ -1825,7 +1851,11 @@ const s = StyleSheet.create({
   },
   navLabelArea: {
     position: 'absolute',
-    left: 1, right: 1,
+    // v4: padding esterno 0 (era left/right:1) → usa TUTTO SIDE_W-2 per il label.
+    // Con numberOfLines:1 + adjustsFontSizeToFit il label resta leggibile senza
+    // ellissi brutte. Abbreviazioni mobile (ARTI/FORG) garantiscono che anche
+    // i label più lunghi stiano entro il budget.
+    left: 0, right: 0,
     alignItems: 'center', justifyContent: 'center',
   },
   navPressedOverlay: {
