@@ -639,7 +639,10 @@ function HomeProfilePanel({ user, router }: any) {
           {
             paddingLeft: padL, paddingRight: padR,
             paddingTop: padT, paddingBottom: padB,
-            justifyContent: isPhone ? 'space-between' : 'flex-start',
+            // v12: La distribuzione PHONE è stata MOVATA al cluster wrapper
+            // interno. `profilePanel` ha 1 solo normal-flow child (il cluster,
+            // avatar è absolute) → space-between qui non distribuiva nulla.
+            justifyContent: 'flex-start',
           },
           DEBUG ? { backgroundColor: 'rgba(255,0,255,0.2)' } : null,
         ]}
@@ -772,37 +775,34 @@ function HomeProfilePanel({ user, router }: any) {
         </View>
 
         {/* ═══════════════════════════════════════════════════════════════
-         *  PHONE CLUSTER v11 — HARD DETERMINISTIC CONSTRAINTS
+         *  PHONE CLUSTER v12 — DISTRIBUZIONE STRUTTURALE MOVATA QUI
          *  ────────────────────────────────────────────────────────────
-         *  Mismatch preview↔real-device v10: cluster era `width: 160 +
-         *  flexShrink: 0 + flexGrow: 0`, ma in RN/RN-Web i flex items hanno
-         *  `minWidth: 'auto'` (= min-content) di default. Se il content
-         *  interno ha intrinsic width > 160 (testo row, inline elements),
-         *  il container ESPANDE oltre width:160.
+         *  Root cause v11: `justifyContent: 'space-between'` era su
+         *  `profilePanel`, ma quel container ha solo 1 normal-flow child
+         *  (questo cluster; avatar è absolute) → la distribuzione non
+         *  funzionava. I rows restavano top-stacked.
          *
-         *  Fix v11: 4 vincoli HARD combinati.
-         *    1) `width: 150` (ridotto da 160 per safety)
-         *    2) `maxWidth: 150` (redundancy, safety)
-         *    3) `minWidth: 0`  (DISABILITA min-content auto → permette shrink)
-         *    4) `overflow: 'hidden'` (clip finale qualsiasi spill)
-         *  Ogni inner View flex riceve anch'essa `minWidth: 0`.
-         *
-         *  Risultato: il cluster è BLOCCATO a 150pt su QUALSIASI device,
-         *  indipendentemente da intrinsic content width o font rendering.
+         *  Fix v12: la distribuzione strutturale PHONE è spostata al
+         *  wrapper interno (QUESTO View). Ora:
+         *    - height: '100%' → riempie tutta l'altezza disponibile
+         *    - justifyContent: 'space-between' → Row1 top, Row2 center, Row3 bot
+         *    - alignItems: 'flex-start' → allinea children a sinistra
+         *  Desktop/tablet: `flex: 1` come prima.
          * ═══════════════════════════════════════════════════════════════ */}
         <View
           style={[
-            isPhone
-              ? {
-                  width: 150,
-                  maxWidth: 150,
-                  minWidth: 0,
-                  overflow: 'hidden',
-                  alignSelf: 'flex-start',
-                  flexShrink: 0,
-                  flexGrow: 0,
-                }
-              : { flex: 1 },
+            isPhone ? {
+              width: 150,
+              maxWidth: 150,
+              minWidth: 0,
+              height: '100%',                    // ← fill altezza disponibile
+              overflow: 'hidden',
+              alignSelf: 'flex-start',
+              flexShrink: 0,
+              flexGrow: 0,
+              justifyContent: 'space-between',   // ← row1 top · row2 center · row3 bot
+              alignItems: 'flex-start',          // ← compact rows, no stretch
+            } : { flex: 1 },
             DEBUG ? { backgroundColor: 'rgba(0,220,255,0.35)', borderWidth: 2, borderColor: '#00FFFF' } : null,
           ]}
         >
@@ -838,9 +838,13 @@ function HomeProfilePanel({ user, router }: any) {
             </View>
           </View>
 
-          {/* ROW 2 — POWER compact */}
+          {/* ROW 2 — POWER compact (alignSelf flex-start → no stretch a cluster width) */}
           <TouchableOpacity
-            style={[s.powerRow, dbg('rgba(255,165,0,0.28)')]}
+            style={[
+              s.powerRow,
+              isPhone ? { alignSelf: 'flex-start' } : null,
+              dbg('rgba(255,165,0,0.28)'),
+            ]}
             onPress={() => router.push('/profile' as any)}
             activeOpacity={0.8}
           >
@@ -849,8 +853,15 @@ function HomeProfilePanel({ user, router }: any) {
             <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
           </TouchableOpacity>
 
-          {/* ROW 3 — Status pills compact, no wrap */}
-          <View style={[s.pillsRow, { flexWrap: 'nowrap' }, dbg('rgba(255,0,0,0.25)')]}>
+          {/* ROW 3 — Status pills compact, no wrap, alignSelf flex-start */}
+          <View
+            style={[
+              s.pillsRow,
+              { flexWrap: 'nowrap' },
+              isPhone ? { alignSelf: 'flex-start' } : null,
+              dbg('rgba(255,0,0,0.25)'),
+            ]}
+          >
             <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
               onPress={() => router.push('/vip' as any)}>
               <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
