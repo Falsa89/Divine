@@ -81,6 +81,7 @@ const SHOW_PHASE_BADGE = false;
 export default function HomeTab() {
   const { user, refreshUser } = useAuth();
   const router = useRouter();
+  const insets = useSafeAreaInsets();  // notch/safe-area per iPhone landscape
   const [homeHero, setHomeHero] = useState<any>(null);
   const [homeSource, setHomeSource] = useState<string>('');
   const [inTutorial, setInTutorial] = useState<boolean>(true);
@@ -291,10 +292,12 @@ export default function HomeTab() {
           la loading screen → zero blackout. */}
       {!loading && (
         <View style={StyleSheet.absoluteFillObject} onLayout={handleHomeRootLayout}>
-          {/* BLOCCO 1 — BACKGROUND (asset-driven per scena × fase) */}
+          {/* BLOCCO 1 — BACKGROUND full-bleed SOTTO il notch (vogliamo
+              il castello/cielo che arriva fino al bordo fisico del device) */}
           <HomeBackground scene={CURRENT_SCENE} phase={phase} />
 
-          {/* BLOCCO 2 — HERO LAYER (sopra bg, sotto UI) */}
+          {/* BLOCCO 2 — HERO LAYER full-bleed (hero centrato nello schermo,
+              anche lui può "respirare" sotto il dynamic island) */}
           <View style={s.heroLayer} pointerEvents="box-none">
             <HomeHeroSplash
               hero={homeHero}
@@ -306,58 +309,75 @@ export default function HomeTab() {
             />
           </View>
 
-          {/* BLOCCO 3 — PROFILO (top-left) */}
-          <HomeProfilePanel user={user} router={router} />
+          {/* SAFE-AREA WRAPPER — contiene tutti i pannelli UI interattivi.
+              Gli insets left/right proteggono dal notch/dynamic island
+              iPhone in landscape, top/bottom da status-bar/gesture-bar.
+              I pannelli figli usano position absolute con coordinate
+              relative a QUESTO wrapper, quindi "left:6" parte automaticamente
+              DOPO il notch. */}
+          <View
+            pointerEvents="box-none"
+            style={{
+              position: 'absolute',
+              left: insets.left,
+              right: insets.right,
+              top: insets.top,
+              bottom: 0,
+            }}
+          >
+            {/* BLOCCO 3 — PROFILO (top-left) */}
+            <HomeProfilePanel user={user} router={router} />
 
-          {/* BLOCCO 4 — VALUTE (top-right) */}
-          <HomeCurrencyBar user={user} onAddGems={() => goTo('gemsPlus')} />
+            {/* BLOCCO 4 — VALUTE (top-right) */}
+            <HomeCurrencyBar user={user} onAddGems={() => goTo('gemsPlus')} />
 
-          {/* BLOCCO 5 — TOP ACTIONS (sotto valute, destra) */}
-          <HomeTopActions goTo={goTo} />
+            {/* BLOCCO 5 — TOP ACTIONS (sotto valute, destra) */}
+            <HomeTopActions goTo={goTo} />
 
-          {/* BLOCCO 6 — LEFT UTILITY STACK */}
-          <HomeLeftUtilityStack
-            serverTime={serverTime}
-            phase={phase}
-            synced={synced}
-            onSpOffer={() => goTo('spOffer')}
-            goTo={goTo}
-          />
+            {/* BLOCCO 6 — LEFT UTILITY STACK */}
+            <HomeLeftUtilityStack
+              serverTime={serverTime}
+              phase={phase}
+              synced={synced}
+              onSpOffer={() => goTo('spOffer')}
+              goTo={goTo}
+            />
 
-          {/* BLOCCO 7 — RIGHT MODE PANEL (Arena/Blessing/Trial/Battle/Research) */}
-          <HomeModePanel goTo={goTo} />
+            {/* BLOCCO 7 — RIGHT MODE PANEL (Arena/Blessing/Trial/Battle/Research) */}
+            <HomeModePanel goTo={goTo} />
 
-          {/* BLOCCO 8 — MAIN BANNER (summon rate-up) */}
-          <HomeMainBanner onPress={() => goTo('mainBanner')} homeHero={homeHero} />
+            {/* BLOCCO 8 — MAIN BANNER (summon rate-up) */}
+            <HomeMainBanner onPress={() => goTo('mainBanner')} homeHero={homeHero} />
 
-          {/* BLOCCO 9 — CHAT / NOTIFICHE (bottom-left, sopra bottom nav) */}
-          <HomeChatNotifPanel
-            open={chatOpen}
-            onToggle={() => setChatOpen(v => !v)}
-          />
+            {/* BLOCCO 9 — CHAT / NOTIFICHE (bottom-left, sopra bottom nav) */}
+            <HomeChatNotifPanel
+              open={chatOpen}
+              onToggle={() => setChatOpen(v => !v)}
+            />
 
-          {/* BLOCCO 10 — BOTTOM NAV CUSTOM (10 slot, PLAY centrale) */}
-          <HomeBottomNav
-            goTo={goTo}
-            onChat={() => setChatOpen(true)}
-            onMenu={() => setOverflowOpen(true)}
-          />
+            {/* BLOCCO 10 — BOTTOM NAV CUSTOM (10 slot, PLAY centrale) */}
+            <HomeBottomNav
+              goTo={goTo}
+              onChat={() => setChatOpen(true)}
+              onMenu={() => setOverflowOpen(true)}
+            />
 
-          {/* BLOCCO 11 — OVERFLOW (feature residue) */}
-          <HomeOverflowPanel
-            open={overflowOpen}
-            onClose={() => setOverflowOpen(false)}
-            router={router}
-          />
+            {/* BLOCCO 11 — OVERFLOW (feature residue) */}
+            <HomeOverflowPanel
+              open={overflowOpen}
+              onClose={() => setOverflowOpen(false)}
+              router={router}
+            />
 
-          {/* Badge fase temporale (dev/QA). Disattivabile con SHOW_PHASE_BADGE=false */}
-          {SHOW_PHASE_BADGE ? (
-            <View style={s.phaseBadge} pointerEvents="none">
-              <Text style={s.phaseBadgeTxt}>
-                {synced ? 'S' : '~'}  {phase.toUpperCase()}  {serverTime}
-              </Text>
-            </View>
-          ) : null}
+            {/* Badge fase temporale (dev/QA). Disattivabile con SHOW_PHASE_BADGE=false */}
+            {SHOW_PHASE_BADGE ? (
+              <View style={s.phaseBadge} pointerEvents="none">
+                <Text style={s.phaseBadgeTxt}>
+                  {synced ? 'S' : '~'}  {phase.toUpperCase()}  {serverTime}
+                </Text>
+              </View>
+            ) : null}
+          </View>
         </View>
       )}
 
@@ -985,12 +1005,20 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   const BAR_H = BAR_W / 2.334;                // aspect ratio NATIVO dell'asset nav_bar_base (1916x821)
   const PLAY_W = Math.max(58, BAR_W * 0.20);  // ~20% della barra
   const PLAY_H = PLAY_W * (86 / 72);          // aspect shield
-  const SIDE_W = Math.max(34, BAR_W * 0.115); // ~11.5% della barra
+  // SIDE_W: 4 buttons per lato devono stare DENTRO la metà sinistra/destra
+  // della barra base (metà laterale ≈ 40% della BAR_W, con PLAY_W 20% centrale).
+  // Fix overflow: max 9.5% per consentire 4 icone + 3 gap entro 40% della barra.
+  const SIDE_W = Math.max(34, BAR_W * 0.090);
   const SIDE_H = SIDE_W * (48 / 42);          // aspect frame
-  const SIDE_GAP = Math.max(1, BAR_W * 0.004);
-  const GROUP_GAP = Math.max(2, BAR_W * 0.005); // gap tra PLAY e gruppo laterale
+  const SIDE_GAP = Math.max(1, BAR_W * 0.003);
+  const GROUP_GAP = Math.max(4, BAR_W * 0.012); // gap tra PLAY e gruppo laterale (più ampio per non coprire PLAY)
   const NAV_H = BAR_H * 0.62;                 // container solo la fascia bassa della barra (quella "piatta")
-  const BTN_BOTTOM = insets.bottom + 8;       // baseline comune tutti i bottoni (safe-area aware)
+  // BTN_BOTTOM: offset dei NavBtn dal bordo inferiore del viewport.
+  // Calibrato per centrare l'icon box negli slot decorativi della barra
+  // base (gli slot piatti sono nella zona centrale-bassa della barra).
+  // Prima: insets.bottom + 8 → icona troppo bassa, sotto la barra.
+  // Ora: aggiungiamo BAR_H*0.18 → icon box dentro gli slot.
+  const BTN_BOTTOM = insets.bottom + 8 + Math.round(BAR_H * 0.18);
 
   const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
     { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
@@ -1372,13 +1400,12 @@ const s = StyleSheet.create({
     width: 98,
     alignItems: 'center', justifyContent: 'center',
   },
-  // Portrait circle: si inscrive nell'oval del frame (più grande + cornice dorata premium)
+  // Portrait CERCHIO PERFETTO (non più oval allungato)
   avatarInner: {
-    width: 66, height: 78, borderRadius: 40,  // oval leggermente verticale
+    width: 72, height: 72, borderRadius: 36,
     overflow: 'hidden',
     backgroundColor: NIGHT_1,
     alignItems: 'center', justifyContent: 'center',
-    // Cornice dorata sottile per dare contrasto col frame illustrato dietro
     borderWidth: 2, borderColor: GOLD,
     shadowColor: GOLD, shadowOpacity: 0.55, shadowRadius: 5,
     elevation: 4,
