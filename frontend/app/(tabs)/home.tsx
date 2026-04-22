@@ -84,7 +84,7 @@ const SHOW_PHASE_BADGE = false;
  * in un box flottante. DEVE essere TRUE durante le pass di debug layout, poi
  * disattivato prima della release.
  */
-const SHOW_DEV_METRICS = true;
+const SHOW_DEV_METRICS = false;
 
 /* ═══════════════════════════════════════════════════════════════════
  *  computeHomeMetrics — pure function, source-of-truth per TUTTI i
@@ -118,14 +118,14 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const isTablet  = vh >= 500 && vh < 900;
   const isDesktop = vh >= 900;
 
-  // ── PROFILE PANEL ──
+  // ── PROFILE PANEL (v6 — micro-polish: respiro top + gerarchia rilassata) ──
   const panelW     = isPhone ? 290 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 2.35 : isTablet ? 2.9 : 3;
+  const panelRatio = isPhone ? 2.30 : isTablet ? 2.9 : 3;   // 2.35→2.30 (+2 pt h)
   const panelH     = panelW / panelRatio;
   const padL = isPhone ? Math.round(panelW * 0.32) : isTablet ? 92 : 104;
   const padR = isPhone ? 30 : isTablet ? 32 : 42;
-  const padT = isPhone ? 12 : isTablet ? 16 : 20;
-  const padB = isPhone ? 10 : isTablet ? 15 : 18;
+  const padT = isPhone ? 16 : isTablet ? 16 : 20;           // 12→16: name respira sotto bordo
+  const padB = isPhone ? 8  : isTablet ? 15 : 18;           // 10→8: bilancia col top
   const avSize   = isPhone ? 56 : isTablet ? 60 : 72;
   const avFrameW = isPhone ? 80 : isTablet ? 82 : 98;
   const avInit   = isPhone ? 22 : isTablet ? 22 : 26;
@@ -144,34 +144,34 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const expFS    = isPhone ? 10 : 9;
   const expH     = isPhone ? 10 : 12;
 
-  // ── BOTTOM NAV ──
+  // ── BOTTOM NAV (v6 — micro-recupero presenza premium) ──
   const BAR_W = isPhone
-    ? Math.max(260, Math.min(vw * 0.44, 340))
+    ? Math.max(260, Math.min(vw * 0.46, 360))        // 0.44→0.46, cap 340→360
     : isTablet
       ? Math.max(320, Math.min(vw * 0.58, 520))
       : Math.max(320, Math.min(vw * 0.62, 560));
   const BAR_RATIO_FULL = 1916 / 821;
   const BAR_H_FULL     = BAR_W / BAR_RATIO_FULL;
   const BAR_H_VISIBLE  = isPhone
-    ? Math.min(BAR_H_FULL * 0.38, vh * 0.14)
+    ? Math.min(BAR_H_FULL * 0.42, vh * 0.155)        // 0.38/0.14 → 0.42/0.155
     : isTablet
       ? Math.min(BAR_H_FULL * 0.65, vh * 0.25)
       : BAR_H_FULL;
   const PLAY_W = isPhone
-    ? Math.max(46, Math.min(BAR_W * 0.15, vh * 0.16))
+    ? Math.max(50, Math.min(BAR_W * 0.16, vh * 0.17))  // 0.15/0.16 → 0.16/0.17
     : isTablet
       ? Math.max(56, BAR_W * 0.18)
       : Math.max(58, BAR_W * 0.20);
   const PLAY_H = PLAY_W * (86 / 72);
   const SIDE_W = isPhone
-    ? Math.max(34, BAR_W * 0.092)
+    ? Math.max(36, BAR_W * 0.092)                     // min 34→36 (più leggibile)
     : isTablet
       ? Math.max(34, BAR_W * 0.085)
       : Math.max(34, BAR_W * 0.090);
   const SIDE_H = SIDE_W * (48 / 42);
   const SIDE_GAP  = Math.max(1, BAR_W * (isPhone ? 0.0020 : 0.003));
-  const GROUP_GAP = Math.max(3, BAR_W * (isPhone ? 0.007  : 0.012));
-  const BTN_BOTTOM_NO_INSETS = 3 + Math.round(BAR_H_VISIBLE * (isPhone ? 0.16 : 0.22));
+  const GROUP_GAP = Math.max(3, BAR_W * (isPhone ? 0.008  : 0.012));
+  const BTN_BOTTOM_NO_INSETS = 3 + Math.round(BAR_H_VISIBLE * (isPhone ? 0.17 : 0.22));
 
   return {
     vw, vh, isPhone, isTablet, isDesktop,
@@ -1687,7 +1687,7 @@ const s = StyleSheet.create({
 
   powerRow: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    marginTop: 3, paddingVertical: 1, paddingHorizontal: 2,
+    marginTop: 5, paddingVertical: 1, paddingHorizontal: 2,
     borderRadius: 3,
   },
   powerIcon: { fontSize: 11, color: GOLD_PALE },
@@ -1697,7 +1697,7 @@ const s = StyleSheet.create({
   pillsRow: {
     flexDirection: 'row', flexWrap: 'wrap',
     columnGap: 5, rowGap: 3,
-    marginTop: 3, alignItems: 'center',
+    marginTop: 5, alignItems: 'center',
   },
   vipPill: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
