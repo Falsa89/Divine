@@ -176,9 +176,12 @@ export default function HomeTab() {
       HOME_SIDE_FRAME.pressed,
       // 9 icone nav
       ...Object.values(HOME_NAV_ICON_IMAGES),
-      // Pack A Profile Panel RITIRATO (asset in RGB senza alpha → checkerboard baked).
-      // Re-aggiungere qui al re-export RGBA da parte dell'art team:
-      //   HOME_PROFILE_PANEL.frame, .avatarRing, .expBarBg, .expBarFill, .lvBadge
+      // Pack A v2 — Profile Panel (drop-in RGBA): 5 asset caricati prima del fade-in
+      HOME_PROFILE_PANEL.frame,
+      HOME_PROFILE_PANEL.avatarRing,
+      HOME_PROFILE_PANEL.expBarBg,
+      HOME_PROFILE_PANEL.expBarFill,
+      HOME_PROFILE_PANEL.lvBadge,
       // Hero home: string URI remota o require locale — preloadAssets le gestisce entrambe
       homeHero?.asset_splash || homeHero?.asset_base || homeHero?.image_url,
     ];
@@ -436,46 +439,44 @@ function HomeProfilePanel({ user, router }: any) {
         fallbackColors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
         style={s.profilePanel}
       >
-        {/* ROW 1 — Avatar + Nome + Lv */}
-        <View style={s.profileRow1}>
+        {/* AVATAR — dentro l'oval slot integrato nel frame (Pack A v2).
+            Non uso l'asset `avatarRing` come overlay perché il frame
+            include già la cornice oval; il portrait va direttamente
+            dentro quello slot. */}
+        <View style={s.avatarFrame} pointerEvents="box-none">
           <TouchableOpacity
             onPress={() => router.push('/profile' as any)}
             activeOpacity={0.8}
-            style={s.avatarFrame}
+            style={s.avatarInner}
           >
-            {/* AVATAR RING — asset-driven (Pack A.avatarRing). Fallback: gradient gold. */}
-            <AssetBackedGradient
-              source={HOME_PROFILE_PANEL.avatarRing}
-              fallbackColors={[GOLD_PALE, GOLD, GOLD_WARM]}
-              style={s.avatarRing}
-            >
-              <View style={s.avatarInner}>
-                {HOME_PROFILE_PANEL.avatarPlaceholder ? (
-                  <RNImage
-                    source={HOME_PROFILE_PANEL.avatarPlaceholder}
-                    style={{ width: '100%', height: '100%', borderRadius: 999 }}
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <Text style={s.avatarInitial}>
-                    {String(name)[0]?.toUpperCase() || 'P'}
-                  </Text>
-                )}
-              </View>
-            </AssetBackedGradient>
-            {/* LV BADGE — asset-driven overlay (Pack A.lvBadge). Fallback: View circolare */}
-            <View style={s.lvBadge}>
-              {HOME_PROFILE_PANEL.lvBadge ? (
-                <RNImage
-                  source={HOME_PROFILE_PANEL.lvBadge}
-                  style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-                  resizeMode="contain"
-                />
-              ) : null}
-              <Text style={s.lvBadgeTxt}>{level}</Text>
-            </View>
+            {HOME_PROFILE_PANEL.avatarPlaceholder ? (
+              <RNImage
+                source={HOME_PROFILE_PANEL.avatarPlaceholder}
+                style={{ width: '100%', height: '100%' }}
+                resizeMode="cover"
+              />
+            ) : (
+              <Text style={s.avatarInitial}>
+                {String(name)[0]?.toUpperCase() || 'P'}
+              </Text>
+            )}
           </TouchableOpacity>
-          <View style={{ flex: 1, marginLeft: 10 }}>
+          {/* LV BADGE (asset Pack A v2 — stemma alato con numero sopra) */}
+          <View style={s.lvBadge} pointerEvents="none">
+            {HOME_PROFILE_PANEL.lvBadge ? (
+              <RNImage
+                source={HOME_PROFILE_PANEL.lvBadge}
+                style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
+                resizeMode="contain"
+              />
+            ) : null}
+            <Text style={s.lvBadgeTxt}>{level}</Text>
+          </View>
+        </View>
+
+        {/* TEXT BLOCK — area destra del frame (dopo paddingLeft:96 del panel) */}
+        <View style={s.profileRow1}>
+          <View style={{ flex: 1 }}>
             <Text style={s.profName} numberOfLines={1}>{name}</Text>
             <View style={s.expWrap}>
               {/* EXP BAR — track + fill asset-driven. Fallback: View+gradient. */}
@@ -1341,81 +1342,87 @@ const s = StyleSheet.create({
     zIndex: 1,
   },
 
-  /* BLOCCO 3 — PROFILE PANEL */
+  /* BLOCCO 3 — PROFILE PANEL (Pack A v2 asset-driven, frame landscape 3:1) */
   profileWrap: {
-    position: 'absolute', top: 8, left: 8,
+    position: 'absolute', top: 6, left: 6,
     zIndex: 20,
-    width: 232,
+    width: 340,              // allargato per rispettare frame 3:1
+    aspectRatio: 3,          // preserva proporzioni native del frame (3:1)
   },
   profilePanel: {
-    borderRadius: 10,
-    borderWidth: 1.5, borderColor: GOLD_WARM,
-    paddingHorizontal: 8, paddingVertical: 8,
-    shadowColor: '#000', shadowOpacity: 0.6, shadowOffset: { width: 0, height: 3 }, shadowRadius: 6,
-    elevation: 8,
+    // NO border CSS legacy, NO borderRadius legacy, NO shadow:
+    // il nuovo frame asset fornisce bordo/ombra/profondità premium.
+    width: '100%', height: '100%',
+    paddingTop: 6, paddingBottom: 8,
+    paddingLeft: 96,         // spazio per oval avatar integrato nel frame
+    paddingRight: 24,
+    justifyContent: 'center',
   },
   profileRow1: { flexDirection: 'row', alignItems: 'center' },
-  avatarFrame: { position: 'relative' },
-  avatarRing: {
-    width: 46, height: 46, borderRadius: 23,
-    padding: 2,
-    shadowColor: GOLD, shadowOpacity: 0.8, shadowRadius: 6,
-  },
-  avatarInner: {
-    flex: 1, borderRadius: 21,
-    backgroundColor: NIGHT_1,
+  // Avatar dentro lo slot oval del frame (posizionamento absolute calibrato)
+  avatarFrame: {
+    position: 'absolute',
+    left: 4, top: 4, bottom: 4,
+    width: 92,
     alignItems: 'center', justifyContent: 'center',
   },
-  avatarInitial: { color: GOLD, fontSize: 20, fontWeight: '900' },
-  lvBadge: {
-    position: 'absolute', bottom: -4, right: -6,
-    backgroundColor: NIGHT_0, borderRadius: 10,
-    borderWidth: 1.5, borderColor: GOLD,
-    paddingHorizontal: 5, paddingVertical: 1, minWidth: 22, alignItems: 'center',
-  },
-  lvBadgeTxt: { color: GOLD, fontSize: 10, fontWeight: '900' },
-  profName: { color: GOLD, fontSize: 14, fontWeight: '900', letterSpacing: 0.4 },
-  expWrap: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 5 },
-  expBarBg: {
-    flex: 1, height: 6, backgroundColor: 'rgba(0,0,0,0.55)',
-    borderRadius: 3, overflow: 'hidden',
+  // Portrait circle: si inscrive nell'oval del frame
+  avatarInner: {
+    width: 62, height: 72, borderRadius: 36,  // oval leggermente verticale come il frame
+    overflow: 'hidden',
+    backgroundColor: NIGHT_1,
+    alignItems: 'center', justifyContent: 'center',
     borderWidth: 1, borderColor: 'rgba(255,215,0,0.35)',
   },
+  avatarInitial: { color: GOLD, fontSize: 24, fontWeight: '900' },
+  lvBadge: {
+    position: 'absolute',
+    bottom: -2, right: 2,
+    width: 34, height: 34,
+    alignItems: 'center', justifyContent: 'center',
+    // NO backgroundColor / NO border CSS: l'asset lvBadge fornisce la forma completa.
+  },
+  lvBadgeTxt: { color: '#fff', fontSize: 12, fontWeight: '900', textShadowColor: '#000', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 2 },
+  profName: { color: GOLD, fontSize: 15, fontWeight: '900', letterSpacing: 0.4 },
+  expWrap: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 },
+  expBarBg: {
+    flex: 1, height: 10,
+    borderRadius: 5, overflow: 'hidden',
+    // Fallback color se l'asset expBarBg è undefined; col nuovo asset RGBA questo
+    // è trasparente-coperto.
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
   expBarFill: { height: '100%' },
-  expTxt: { color: '#E8E8F0', fontSize: 8, fontWeight: '800' },
+  expTxt: { color: '#E8E8F0', fontSize: 9, fontWeight: '800' },
 
   powerRow: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
-    marginTop: 6, paddingVertical: 3, paddingHorizontal: 6,
-    backgroundColor: 'rgba(255,215,0,0.08)',
-    borderRadius: 5,
-    borderWidth: 1, borderColor: 'rgba(255,215,0,0.30)',
+    marginTop: 4, paddingVertical: 2, paddingHorizontal: 6,
+    // Niente border/bg CSS: coerenza con panel asset-driven.
+    borderRadius: 4,
   },
   powerIcon: { fontSize: 12 },
   powerLbl: { color: GOLD_PALE, fontSize: 9, fontWeight: '900', letterSpacing: 0.6 },
   powerVal: { color: '#fff', fontSize: 11, fontWeight: '900', marginLeft: 'auto' },
 
-  pillsRow: { flexDirection: 'row', gap: 5, marginTop: 5 },
+  pillsRow: { flexDirection: 'row', gap: 5, marginTop: 3 },
   vipPill: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
-    backgroundColor: 'rgba(178,34,34,0.55)',
-    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4,
-    borderWidth: 1, borderColor: GOLD,
+    backgroundColor: 'rgba(178,34,34,0.45)',
+    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 3,
   },
   vipStar: { color: GOLD, fontSize: 9 },
   vipTxt: { color: GOLD, fontSize: 9, fontWeight: '900' },
   spiritoPill: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
-    backgroundColor: 'rgba(60,20,120,0.55)',
-    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4,
-    borderWidth: 1, borderColor: '#B05CFF',
+    backgroundColor: 'rgba(60,20,120,0.45)',
+    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 3,
   },
   spiritoIco: { fontSize: 9 },
   spiritoTxt: { color: '#FFE0FF', fontSize: 9, fontWeight: '900' },
   titleBadge: {
-    marginTop: 5, paddingVertical: 3, paddingHorizontal: 6,
-    backgroundColor: 'rgba(15,33,72,0.75)',
-    borderRadius: 4, borderLeftWidth: 2, borderLeftColor: GOLD,
+    marginTop: 2, paddingVertical: 2, paddingHorizontal: 6,
+    // Niente borderLeft/bg CSS: il frame ha già uno slot "titolo" in basso.
   },
   titleTxt: { color: '#D8E0FF', fontSize: 10, fontWeight: '700', fontStyle: 'italic' },
 
