@@ -51,6 +51,7 @@ import {
 import { AssetSlot, ButtonAssetSlot, type ButtonAsset } from '../../components/home/AssetSlot';
 import { AssetBackedGradient } from '../../components/home/AssetBackedGradient';
 import { SlotImage } from '../../components/home/SlotImage';
+import { AvatarFrameSelector } from '../../components/home/AvatarFrameSelector';
 import { useServerTimePhase, type TimePhase } from '../../utils/serverTimePhase';
 import { preloadAssets } from '../../utils/preloadAssets';
 import HomeLoadingScreen from '../../components/home/HomeLoadingScreen';
@@ -449,25 +450,62 @@ function HomeProfilePanel({ user, router }: any) {
   const spirito = user?.spirito || user?.spirit || 0;
   const title   = user?.title || 'Apprendista';
 
+  // ─── Mobile-first responsive sizing ────────────────────────────────
+  // Su mobile landscape (larghezze ~600-950pt), il panel deve essere
+  // sensibilmente più compatto per non dominare la scena e per integrarsi
+  // meglio con gli altri blocchi safe-area.
+  const { width: vw } = useWindowDimensions();
+  const isMobile = vw < 900;  // iPhone landscape fino a iPad landscape piccolo
+
+  // Panel dimensions
+  const panelW   = isMobile ? 252 : 340;
+  const padL     = isMobile ? 76  : 104;
+  const padR     = isMobile ? 30  : 42;
+  const padT     = isMobile ? 14  : 20;
+  const padB     = isMobile ? 12  : 18;
+
+  // Avatar: SEMPRE 1:1 cerchio perfetto (niente aspectRatio forzato dal container)
+  const avSize   = isMobile ? 46 : 72;
+  const avFrameW = isMobile ? 70 : 98;
+  const avInit   = isMobile ? 18 : 26;
+
+  // Level badge
+  const lvSize   = isMobile ? 26 : 38;
+  const lvFont   = isMobile ? 10 : 13;
+
+  // Text sizes
+  const nameFS   = isMobile ? 11 : 14;
+  const pwrFS    = isMobile ? 10 : 11;
+  const pwrLblFS = isMobile ?  8 :  9;
+  const pillFS   = isMobile ?  8 :  9;
+  const expFS    = isMobile ?  8 :  9;
+  const expH     = isMobile ?  8 : 12;
+
+  // Open/Close del selector avatar/frame (stub tecnico)
+  const [selectorOpen, setSelectorOpen] = React.useState<false | 'avatar' | 'frame'>(false);
+
   return (
-    <View style={s.profileWrap}>
-      {/* ROOT FRAME — asset-driven (Pack A). Fallback: gradient originale. */}
+    <View style={[s.profileWrap, { width: panelW }]}>
       <AssetBackedGradient
         source={HOME_PROFILE_PANEL.frame}
         decorSource={HOME_PROFILE_PANEL.decor}
         capInsets={HOME_PROFILE_PANEL.capInsets}
         fallbackColors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
-        style={s.profilePanel}
+        style={[
+          s.profilePanel,
+          { paddingLeft: padL, paddingRight: padR, paddingTop: padT, paddingBottom: padB },
+        ]}
       >
-        {/* AVATAR — dentro l'oval slot integrato nel frame (Pack A v2).
-            Non uso l'asset `avatarRing` come overlay perché il frame
-            include già la cornice oval; il portrait va direttamente
-            dentro quello slot. */}
-        <View style={s.avatarFrame} pointerEvents="box-none">
+        {/* AVATAR + LV BADGE — tap apre AvatarFrameSelector (tab Avatar) */}
+        <View style={[s.avatarFrame, { width: avFrameW }]} pointerEvents="box-none">
           <TouchableOpacity
-            onPress={() => router.push('/profile' as any)}
+            onPress={() => setSelectorOpen('avatar')}
+            onLongPress={() => setSelectorOpen('frame')}  // long-press: tab Frames
             activeOpacity={0.8}
-            style={s.avatarInner}
+            style={[
+              s.avatarInner,
+              { width: avSize, height: avSize, borderRadius: avSize / 2 },
+            ]}
           >
             {HOME_PROFILE_PANEL.avatarPlaceholder ? (
               <RNImage
@@ -476,13 +514,15 @@ function HomeProfilePanel({ user, router }: any) {
                 resizeMode="cover"
               />
             ) : (
-              <Text style={s.avatarInitial}>
+              <Text style={[s.avatarInitial, { fontSize: avInit }]}>
                 {String(name)[0]?.toUpperCase() || 'P'}
               </Text>
             )}
           </TouchableOpacity>
-          {/* LV BADGE (asset Pack A v2 — stemma alato con numero sopra) */}
-          <View style={s.lvBadge} pointerEvents="none">
+          <View
+            style={[s.lvBadge, { width: lvSize, height: lvSize }]}
+            pointerEvents="none"
+          >
             {HOME_PROFILE_PANEL.lvBadge ? (
               <RNImage
                 source={HOME_PROFILE_PANEL.lvBadge}
@@ -490,16 +530,16 @@ function HomeProfilePanel({ user, router }: any) {
                 resizeMode="contain"
               />
             ) : null}
-            <Text style={s.lvBadgeTxt}>{level}</Text>
+            <Text style={[s.lvBadgeTxt, { fontSize: lvFont }]}>{level}</Text>
           </View>
         </View>
 
-        {/* TEXT BLOCK — area destra del frame (dopo paddingLeft:104 del panel) */}
+        {/* TEXT BLOCK */}
         <View style={s.profileRow1}>
           <View style={{ flex: 1 }}>
-            <Text style={s.profName} numberOfLines={1}>{name}</Text>
+            <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>{name}</Text>
             <View style={s.expWrap}>
-              <View style={s.expBarBg}>
+              <View style={[s.expBarBg, { height: expH, borderRadius: expH / 2 }]}>
                 {HOME_PROFILE_PANEL.expBarBg ? (
                   <RNImage
                     source={HOME_PROFILE_PANEL.expBarBg}
@@ -514,76 +554,49 @@ function HomeProfilePanel({ user, router }: any) {
                   style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
                 />
               </View>
-              <Text style={s.expTxt}>{exp}/{expMax}</Text>
+              <Text style={[s.expTxt, { fontSize: expFS }]}>{exp}/{expMax}</Text>
             </View>
           </View>
         </View>
 
-        {/* ROW 2 — Power */}
+        {/* POWER */}
         <TouchableOpacity
           style={s.powerRow}
           onPress={() => router.push('/profile' as any)}
           activeOpacity={0.8}
         >
-          {HOME_PROFILE_PANEL.powerRow ? (
-            <RNImage
-              source={HOME_PROFILE_PANEL.powerRow}
-              style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-              resizeMode="stretch"
-            />
-          ) : null}
-          {HOME_PROFILE_PANEL.powerIcon ? (
-            <RNImage
-              source={HOME_PROFILE_PANEL.powerIcon}
-              style={{ width: 14, height: 14 }}
-              resizeMode="contain"
-            />
-          ) : (
-            <Text style={s.powerIcon}>{'\u26A1'}</Text>
-          )}
-          <Text style={s.powerLbl}>POWER</Text>
-          <Text style={s.powerVal}>{Number(power).toLocaleString()}</Text>
+          <Text style={[s.powerIcon, { fontSize: pwrFS + 1 }]}>{'\u26A1'}</Text>
+          <Text style={[s.powerLbl, { fontSize: pwrLblFS }]}>POWER</Text>
+          <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
         </TouchableOpacity>
 
-        {/* ROW 3 — VIP / Spirito / Titolo (tutto inline per massima compattezza) */}
+        {/* PILLS RIGA UNICA: VIP · SP · Title */}
         <View style={s.pillsRow}>
           <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
             onPress={() => router.push('/vip' as any)}>
-            {HOME_PROFILE_PANEL.vipBadge ? (
-              <RNImage
-                source={HOME_PROFILE_PANEL.vipBadge}
-                style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-                resizeMode="stretch"
-              />
-            ) : null}
-            <Text style={s.vipStar}>{'\u2605'}</Text>
-            <Text style={s.vipTxt}>VIP {vip}</Text>
+            <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
+            <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
             onPress={() => router.push('/profile' as any)}>
-            {HOME_PROFILE_PANEL.spiritoBadge ? (
-              <RNImage
-                source={HOME_PROFILE_PANEL.spiritoBadge}
-                style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-                resizeMode="stretch"
-              />
-            ) : null}
-            <Text style={s.spiritoIco}>{'\uD83D\uDD2E'}</Text>
-            <Text style={s.spiritoTxt}>SP {spirito}</Text>
+            <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
+            <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
             onPress={() => router.push('/achievements' as any)}>
-            {HOME_PROFILE_PANEL.titleBadge ? (
-              <RNImage
-                source={HOME_PROFILE_PANEL.titleBadge}
-                style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-                resizeMode="stretch"
-              />
-            ) : null}
-            <Text style={s.titleTxt} numberOfLines={1}>{'\u2756'} {title}</Text>
+            <Text style={[s.titleTxt, { fontSize: pillFS }]} numberOfLines={1}>
+              {'\u2756'} {title}
+            </Text>
           </TouchableOpacity>
         </View>
       </AssetBackedGradient>
+
+      {/* STUB SELECTOR — avatar (tap breve) / frame (long-press) */}
+      <AvatarFrameSelector
+        visible={!!selectorOpen}
+        initialTab={selectorOpen === 'frame' ? 'frame' : 'avatar'}
+        onClose={() => setSelectorOpen(false)}
+      />
     </View>
   );
 }
@@ -996,12 +1009,15 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
 
   // === RESPONSIVE METRICS ===
   // Barra base: 55% del viewport, cap 420px, min 300px (iPhone SE landscape)
-  // BAR_W: larghezza effettiva della barra. Range mobile-first:
-  //  - min 320 (safeguard su viewport molto stretti, es. 360×640)
-  //  - max 560 (più presence su tablet/landscape senza squash visivo)
-  //  - percent 62% vw (leggermente più ampia del precedente 55% per dare
-  //    respiro ai side buttons senza distorcere l'asset — ratio preservato).
-  const BAR_W = Math.max(320, Math.min(vw * 0.62, 560));
+  // Mobile-first scaling: su landscape mobile (vw < 900) riduciamo leggermente
+  // la presenza della bottom nav per non comprimere verticalmente la scena.
+  const isMobile = vw < 900;
+  // BAR_W: larghezza effettiva della barra.
+  //  - mobile:  min 280 — max 440 — 54% vw (più contenuta, lascia respirare sidebars)
+  //  - tablet+: min 320 — max 560 — 62% vw (più presence)
+  const BAR_W = isMobile
+    ? Math.max(280, Math.min(vw * 0.54, 440))
+    : Math.max(320, Math.min(vw * 0.62, 560));
   const BAR_H = BAR_W / 2.334;                // aspect ratio NATIVO dell'asset nav_bar_base (1916x821)
   const PLAY_W = Math.max(58, BAR_W * 0.20);  // ~20% della barra
   const PLAY_H = PLAY_W * (86 / 72);          // aspect shield
@@ -1371,11 +1387,11 @@ const s = StyleSheet.create({
     zIndex: 1,
   },
 
-  /* BLOCCO 3 — PROFILE PANEL (Pack A v2 asset-driven, frame landscape 3:1) */
+  /* BLOCCO 3 — PROFILE PANEL (Pack A v2 asset-driven, MOBILE-FIRST) */
   profileWrap: {
     position: 'absolute', top: 6, left: 6,
     zIndex: 20,
-    width: 340,              // allargato per rispettare frame 3:1
+    // width dinamica da HomeProfilePanel (252 mobile / 340 desktop)
     aspectRatio: 3,          // preserva proporzioni native del frame (3:1)
   },
   profilePanel: {
