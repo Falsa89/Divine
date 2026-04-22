@@ -772,36 +772,47 @@ function HomeProfilePanel({ user, router }: any) {
         </View>
 
         {/* ═══════════════════════════════════════════════════════════════
-         *  PHONE-SPECIFIC CLUSTER WRAPPER (v10)
+         *  PHONE CLUSTER v11 — HARD DETERMINISTIC CONSTRAINTS
          *  ────────────────────────────────────────────────────────────
-         *  Fix definitivo: TUTTI i 3 content rows sono racchiusi in un
-         *  UNICO cluster container con `width: 170` fisso + alignSelf
-         *  flex-start. Questo IMPOSSIBILITA ai children di estendersi
-         *  oltre la larghezza del cluster, indipendentemente dai loro
-         *  stili individuali (flex, flexDirection:row, ecc.).
+         *  Mismatch preview↔real-device v10: cluster era `width: 160 +
+         *  flexShrink: 0 + flexGrow: 0`, ma in RN/RN-Web i flex items hanno
+         *  `minWidth: 'auto'` (= min-content) di default. Se il content
+         *  interno ha intrinsic width > 160 (testo row, inline elements),
+         *  il container ESPANDE oltre width:160.
          *
-         *  Il cluster wrapper è BG-colorato (cian light) quando DEBUG
-         *  attivo → si vede direttamente che le 3 rows stanno DENTRO
-         *  il bounding box del cluster compatto.
+         *  Fix v11: 4 vincoli HARD combinati.
+         *    1) `width: 150` (ridotto da 160 per safety)
+         *    2) `maxWidth: 150` (redundancy, safety)
+         *    3) `minWidth: 0`  (DISABILITA min-content auto → permette shrink)
+         *    4) `overflow: 'hidden'` (clip finale qualsiasi spill)
+         *  Ogni inner View flex riceve anch'essa `minWidth: 0`.
          *
-         *  Desktop/Tablet: cluster con `flex: 1` → stretch naturale
-         *  (comportamento invariato).
+         *  Risultato: il cluster è BLOCCATO a 150pt su QUALSIASI device,
+         *  indipendentemente da intrinsic content width o font rendering.
          * ═══════════════════════════════════════════════════════════════ */}
         <View
           style={[
             isPhone
-              ? { width: 160, alignSelf: 'flex-start', flexShrink: 0, flexGrow: 0 }
+              ? {
+                  width: 150,
+                  maxWidth: 150,
+                  minWidth: 0,
+                  overflow: 'hidden',
+                  alignSelf: 'flex-start',
+                  flexShrink: 0,
+                  flexGrow: 0,
+                }
               : { flex: 1 },
             DEBUG ? { backgroundColor: 'rgba(0,220,255,0.35)', borderWidth: 2, borderColor: '#00FFFF' } : null,
           ]}
         >
           {/* ROW 1 — Name + Subtitle + Exp bar (compact) */}
-          <View style={[s.profileRow1, dbg('rgba(0,255,0,0.35)')]}>
-            <View style={isPhone ? { width: '100%' } : { flex: 1 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap' }}>
-                <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>{name}</Text>
+          <View style={[s.profileRow1, { minWidth: 0 }, dbg('rgba(0,255,0,0.35)')]}>
+            <View style={isPhone ? { width: '100%', minWidth: 0 } : { flex: 1 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap', minWidth: 0 }}>
+                <Text style={[s.profName, { fontSize: nameFS, flexShrink: 1 }]} numberOfLines={1}>{name}</Text>
                 {isPhone ? (
-                  <Text style={[s.titleTxt, { fontSize: pillFS - 1, marginLeft: 5 }]} numberOfLines={1}>
+                  <Text style={[s.titleTxt, { fontSize: pillFS - 1, marginLeft: 5, flexShrink: 1 }]} numberOfLines={1}>
                     {'\u2756'} {title}
                   </Text>
                 ) : null}
