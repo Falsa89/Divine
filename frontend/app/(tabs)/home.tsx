@@ -52,6 +52,7 @@ import { AssetSlot, ButtonAssetSlot, type ButtonAsset } from '../../components/h
 import { AssetBackedGradient } from '../../components/home/AssetBackedGradient';
 import { SlotImage } from '../../components/home/SlotImage';
 import { AvatarFrameSelector } from '../../components/home/AvatarFrameSelector';
+import { DevMetricsOverlay } from '../../components/home/DevMetricsOverlay';
 import { useServerTimePhase, type TimePhase } from '../../utils/serverTimePhase';
 import { preloadAssets } from '../../utils/preloadAssets';
 import HomeLoadingScreen from '../../components/home/HomeLoadingScreen';
@@ -77,6 +78,112 @@ const CURRENT_SCENE: HomeScene = 'default';
 
 /** Mostra in alto un piccolo badge "FASE: night" utile in dev/QA. */
 const SHOW_PHASE_BADGE = false;
+
+/**
+ * DEV METRICS OVERLAY — mostra i valori runtime reali del layout responsive
+ * in un box flottante. DEVE essere TRUE durante le pass di debug layout, poi
+ * disattivato prima della release.
+ */
+const SHOW_DEV_METRICS = true;
+
+/* ═══════════════════════════════════════════════════════════════════
+ *  computeHomeMetrics — pure function, source-of-truth per TUTTI i
+ *  componenti responsive. Lo stesso calcolo è usato in:
+ *   - HomeProfilePanel     (panelW/panelRatio/avSize/avFrameW/etc.)
+ *   - HomeBottomNav        (BAR_W/BAR_H_VISIBLE/PLAY_W/SIDE_W/etc.)
+ *   - DevMetricsOverlay    (lettura runtime reale per QA)
+ *  Garantisce consistenza: i valori nell'overlay sono ESATTAMENTE quelli
+ *  applicati nel rendering.
+ * ═══════════════════════════════════════════════════════════════════ */
+type HomeMetrics = {
+  vw: number; vh: number;
+  isPhone: boolean; isTablet: boolean; isDesktop: boolean;
+  // Profile panel
+  panelW: number; panelRatio: number; panelH: number;
+  padL: number; padR: number; padT: number; padB: number;
+  avSize: number; avFrameW: number; avInit: number;
+  avLeft: number; avTop: number | undefined;
+  lvSize: number; lvFont: number;
+  nameFS: number; pwrFS: number; pwrLblFS: number;
+  pillFS: number; expFS: number; expH: number;
+  // Bottom nav
+  BAR_W: number; BAR_H_FULL: number; BAR_H_VISIBLE: number;
+  PLAY_W: number; PLAY_H: number;
+  SIDE_W: number; SIDE_H: number;
+  SIDE_GAP: number; GROUP_GAP: number;
+  BTN_BOTTOM_NO_INSETS: number;  // insets.bottom aggiunto al render
+};
+function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
+  const isPhone   = vh < 500;
+  const isTablet  = vh >= 500 && vh < 900;
+  const isDesktop = vh >= 900;
+
+  // ── PROFILE PANEL ──
+  const panelW     = isPhone ? 290 : isTablet ? 300 : 340;
+  const panelRatio = isPhone ? 2.35 : isTablet ? 2.9 : 3;
+  const panelH     = panelW / panelRatio;
+  const padL = isPhone ? Math.round(panelW * 0.32) : isTablet ? 92 : 104;
+  const padR = isPhone ? 30 : isTablet ? 32 : 42;
+  const padT = isPhone ? 12 : isTablet ? 16 : 20;
+  const padB = isPhone ? 10 : isTablet ? 15 : 18;
+  const avSize   = isPhone ? 56 : isTablet ? 60 : 72;
+  const avFrameW = isPhone ? 80 : isTablet ? 82 : 98;
+  const avInit   = isPhone ? 22 : isTablet ? 22 : 26;
+  const avLeft   = isPhone
+    ? Math.round(panelW * 0.16 - avFrameW / 2)
+    : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
+  const avTop    = (isPhone || isTablet)
+    ? Math.round(panelH * 0.50 - avFrameW / 2)
+    : undefined;
+  const lvSize   = isPhone ? 28 : isTablet ? 32 : 38;
+  const lvFont   = isPhone ? 11 : isTablet ? 12 : 13;
+  const nameFS   = isPhone ? 13 : 14;
+  const pwrFS    = isPhone ? 11 : 11;
+  const pwrLblFS = isPhone ? 10 : 9;
+  const pillFS   = isPhone ? 10 : 9;
+  const expFS    = isPhone ? 10 : 9;
+  const expH     = isPhone ? 10 : 12;
+
+  // ── BOTTOM NAV ──
+  const BAR_W = isPhone
+    ? Math.max(260, Math.min(vw * 0.44, 340))
+    : isTablet
+      ? Math.max(320, Math.min(vw * 0.58, 520))
+      : Math.max(320, Math.min(vw * 0.62, 560));
+  const BAR_RATIO_FULL = 1916 / 821;
+  const BAR_H_FULL     = BAR_W / BAR_RATIO_FULL;
+  const BAR_H_VISIBLE  = isPhone
+    ? Math.min(BAR_H_FULL * 0.38, vh * 0.14)
+    : isTablet
+      ? Math.min(BAR_H_FULL * 0.65, vh * 0.25)
+      : BAR_H_FULL;
+  const PLAY_W = isPhone
+    ? Math.max(46, Math.min(BAR_W * 0.15, vh * 0.16))
+    : isTablet
+      ? Math.max(56, BAR_W * 0.18)
+      : Math.max(58, BAR_W * 0.20);
+  const PLAY_H = PLAY_W * (86 / 72);
+  const SIDE_W = isPhone
+    ? Math.max(34, BAR_W * 0.092)
+    : isTablet
+      ? Math.max(34, BAR_W * 0.085)
+      : Math.max(34, BAR_W * 0.090);
+  const SIDE_H = SIDE_W * (48 / 42);
+  const SIDE_GAP  = Math.max(1, BAR_W * (isPhone ? 0.0020 : 0.003));
+  const GROUP_GAP = Math.max(3, BAR_W * (isPhone ? 0.007  : 0.012));
+  const BTN_BOTTOM_NO_INSETS = 3 + Math.round(BAR_H_VISIBLE * (isPhone ? 0.16 : 0.22));
+
+  return {
+    vw, vh, isPhone, isTablet, isDesktop,
+    panelW, panelRatio, panelH, padL, padR, padT, padB,
+    avSize, avFrameW, avInit, avLeft, avTop,
+    lvSize, lvFont,
+    nameFS, pwrFS, pwrLblFS, pillFS, expFS, expH,
+    BAR_W, BAR_H_FULL, BAR_H_VISIBLE,
+    PLAY_W, PLAY_H, SIDE_W, SIDE_H, SIDE_GAP, GROUP_GAP,
+    BTN_BOTTOM_NO_INSETS,
+  };
+}
 
 /* ==================================================================== */
 export default function HomeTab() {
@@ -378,6 +485,11 @@ export default function HomeTab() {
                 </Text>
               </View>
             ) : null}
+
+            {/* DEV METRICS OVERLAY — runtime real values */}
+            {SHOW_DEV_METRICS ? (
+              <HomeDevMetrics />
+            ) : null}
           </View>
         </View>
       )}
@@ -455,58 +567,14 @@ function HomeProfilePanel({ user, router }: any) {
   // vw<900, che falliva su iPhone 14 Pro Max 932×430). vh<500 cattura TUTTI
   // gli smartphone landscape (SE 375 → Pro Max 430) e lascia i tablet
   // (iPad ≥ 768 vh) nel ramo desktop.
-  const { height: vh, width: vw } = useWindowDimensions();
-  // ─── RESPONSIVE TIERS (phoneLandscape / tablet / desktop) ──────────
-  //   phoneLandscape: vh < 500        (iPhone SE 375 → Pro Max 430)
-  //   tablet:         500 ≤ vh < 900  (iPad mini/air landscape)
-  //   desktop:        vh ≥ 900        (web desktop)
-  // NB: "isMobile" mantenuto come alias di phoneLandscape per compat locale.
-  const isPhone  = vh < 500;
-  const isTablet = vh >= 500 && vh < 900;
-  const isMobile = isPhone;   // alias locale (non esportato)
-
-  // ─── PANEL MOBILE RECALIBRATION (v4 — respiro verticale + grid) ───
-  // Precedente v3 (250×89, ratio 2.8): l'altezza effettiva era insufficiente
-  // per 4 righe di contenuto (name, exp, power, pills) con padding standard.
-  // Inoltre `justifyContent: 'center'` su profilePanel comprimeva tutto al
-  // centro verticale. Fix: ratio 2.5 → panelH 104 pt, grid `space-between`
-  // (implementato come righe con margin reali).
-  const panelW     = isPhone ? 260 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 2.5 : isTablet ? 2.9 : 3;
-  // Slot avatar ~34% panelW (frame premium 3:1 → slot sinistro proporzionale).
-  const padL     = isPhone ? Math.round(panelW * 0.34) : isTablet ? 92 : 104;
-  const padR     = isPhone ? 28  : isTablet ? 32 : 42;
-  const padT     = isPhone ? 8   : isTablet ? 16 : 20;
-  const padB     = isPhone ? 8   : isTablet ? 15 : 18;
-
-  // ─── AVATAR — dimensioni bilanciate col panel ───────────────────────
-  // panelH = 260/2.5 = 104 → avFrameW ~70% = 72, avSize ~70% avFrameW = 50
-  const avSize   = isPhone ? 50 : isTablet ? 60 : 72;
-  const avFrameW = isPhone ? 72 : isTablet ? 82 : 98;
-  const avInit   = isPhone ? 20 : isTablet ? 22 : 26;
-  // Anchor: slot centrato a 17% panelW (standard frame 3:1 premium).
-  //   17% di 250 = 42.5 → avLeft = 42.5 - 34 = 8.5 → 9
-  const avLeft   = isPhone
-    ? Math.round(panelW * 0.17 - avFrameW / 2)
-    : isTablet
-      ? Math.round(panelW * 0.15 - avFrameW / 2)
-      : 6;
-  // avTop: centro verticale dello slot del frame (50% panelH − avFrameW/2)
-  const avTop    = isPhone || isTablet
-    ? Math.round((panelW / panelRatio) * 0.50 - avFrameW / 2)
-    : undefined;
-
-  // ─── LEVEL BADGE — scalato col ring ─────────────────────────────────
-  const lvSize   = isPhone ? 26 : isTablet ? 32 : 38;
-  const lvFont   = isPhone ? 10 : isTablet ? 12 : 13;
-
-  // ─── TYPOGRAPHY — leggibile su DPR 3x smartphone (minimum 10pt) ─────
-  const nameFS   = isPhone ? 13 : isTablet ? 13 : 14;
-  const pwrFS    = isPhone ? 11 : isTablet ? 11 : 11;
-  const pwrLblFS = isPhone ? 10 : 9;
-  const pillFS   = isPhone ? 10 : 9;
-  const expFS    = isPhone ? 10 : 9;
-  const expH     = isPhone ? 10 : 12;
+  const { width: vw, height: vh } = useWindowDimensions();
+  const M = computeHomeMetrics(vw, vh);
+  const { isPhone, isTablet, panelW, panelRatio,
+          padL, padR, padT, padB,
+          avSize, avFrameW, avInit, avLeft, avTop,
+          lvSize, lvFont,
+          nameFS, pwrFS, pwrLblFS, pillFS, expFS, expH } = M;
+  const isMobile = isPhone;  // alias locale
 
   // Open/Close del selector avatar/frame (stub tecnico)
   const [selectorOpen, setSelectorOpen] = React.useState<false | 'avatar' | 'frame'>(false);
@@ -714,6 +782,43 @@ function HomeProfilePanel({ user, router }: any) {
       />
     </View>
   );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ *  HomeDevMetrics — wrapper per DevMetricsOverlay: legge vw/vh runtime,
+ *  calcola le metriche via la pura funzione `computeHomeMetrics` e le
+ *  presenta in un box flottante top-right. Attivabile via SHOW_DEV_METRICS.
+ * ═══════════════════════════════════════════════════════════════════ */
+function HomeDevMetrics() {
+  const { width: vw, height: vh } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const M = computeHomeMetrics(vw, vh);
+  const tier = M.isPhone ? 'PHONE' : M.isTablet ? 'TABLET' : 'DESKTOP';
+  const rows = [
+    { k: 'TIER',    v: tier },
+    { k: 'vw',      v: vw },
+    { k: 'vh',      v: vh },
+    { k: 'panelW',  v: M.panelW },
+    { k: 'panelH',  v: M.panelH },
+    { k: 'avSize',  v: M.avSize },
+    { k: 'avFrame', v: M.avFrameW },
+    { k: 'BAR_W',   v: M.BAR_W },
+    { k: 'BAR_H_V', v: M.BAR_H_VISIBLE },
+    { k: 'PLAY_W',  v: M.PLAY_W },
+    { k: 'SIDE_W',  v: M.SIDE_W },
+    { k: 'BTN_BOT', v: insets.bottom + M.BTN_BOTTOM_NO_INSETS },
+  ];
+  // Console log strutturato (utile per la lettura remota):
+  // eslint-disable-next-line no-console
+  console.log('[HomeMetrics]', JSON.stringify({
+    tier, vw, vh,
+    panelW: M.panelW, panelH: +M.panelH.toFixed(1),
+    avSize: M.avSize, avFrameW: M.avFrameW,
+    BAR_W: +M.BAR_W.toFixed(1), BAR_H_VISIBLE: +M.BAR_H_VISIBLE.toFixed(1),
+    PLAY_W: +M.PLAY_W.toFixed(1), SIDE_W: +M.SIDE_W.toFixed(1),
+    BTN_BOTTOM: +(insets.bottom + M.BTN_BOTTOM_NO_INSETS).toFixed(1),
+  }));
+  return <DevMetricsOverlay rows={rows} />;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1122,60 +1227,17 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   const { width: vw, height: vh } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  // === RESPONSIVE TIERS ===
-  //   phoneLandscape: vh < 500  (iPhone/Android phones landscape)
-  //   tablet:         500 ≤ vh < 900
-  //   desktop:        vh ≥ 900
-  const isPhone  = vh < 500;
-  const isTablet = vh >= 500 && vh < 900;
-  const isMobile = isPhone;   // alias interno (compat)
-
-  // === BAR_W ===
-  // Phone: cap 380 (era 360) con 0.48vw (era 0.46). Lieve aumento per
-  // permettere SIDE_W più larghi (fix label troncate "ARTI..." / "FOR...").
-  // Il guadagno in altezza è trascurabile grazie al ratio-clip.
-  const BAR_W = isPhone
-    ? Math.max(280, Math.min(vw * 0.48, 380))
-    : isTablet
-      ? Math.max(320, Math.min(vw * 0.58, 520))
-      : Math.max(320, Math.min(vw * 0.62, 560));
-
-  // === BAR_H ===
-  // Phone: 42% FULL con clamp 17% vh (più basso di prima: 18%→17%).
-  //   A vw=844, BAR_W=380 → BAR_H_FULL=162.8, visible=min(68.4, 66.3)=66.3pt → 17% vh ✅
-  const BAR_RATIO_FULL = 1916 / 821;
-  const BAR_H_FULL     = BAR_W / BAR_RATIO_FULL;
-  const BAR_H_VISIBLE  = isPhone
-    ? Math.min(BAR_H_FULL * 0.42, vh * 0.17)
-    : isTablet
-      ? Math.min(BAR_H_FULL * 0.65, vh * 0.25)
-      : BAR_H_FULL;
+  // === METRICS via pure function (source-of-truth condivisa) ===
+  const M = computeHomeMetrics(vw, vh);
+  const { isPhone, isTablet,
+          BAR_W, BAR_H_FULL, BAR_H_VISIBLE,
+          PLAY_W, PLAY_H, SIDE_W, SIDE_H,
+          SIDE_GAP, GROUP_GAP, BTN_BOTTOM_NO_INSETS } = M;
   const BAR_H = BAR_H_VISIBLE;
+  const isMobile = isPhone;   // alias interno
 
-  // === PLAY ===
-  const PLAY_W = isPhone
-    ? Math.max(50, Math.min(BAR_W * 0.15, vh * 0.18))
-    : isTablet
-      ? Math.max(56, BAR_W * 0.18)
-      : Math.max(58, BAR_W * 0.20);
-  const PLAY_H = PLAY_W * (86 / 72);
-
-  // === SIDE ICONS ===
-  // Phone: 9.5% BAR_W (era 7.5%). A BAR_W=380 → SIDE_W=36.1 (era 32 → +13%).
-  // Questo dà respiro alla label area per contenere parole come "ARTIFACT",
-  // "SKILL", "FORGE" senza troncare. Combinato con abbreviazioni mobile
-  // per i 2 label critici (ARTIFACT→ARTI, FORGE→FORG), elimina gli ellissis.
-  const SIDE_W = isPhone
-    ? Math.max(36, BAR_W * 0.095)
-    : isTablet
-      ? Math.max(34, BAR_W * 0.085)
-      : Math.max(34, BAR_W * 0.090);
-  const SIDE_H = SIDE_W * (48 / 42);
-  const SIDE_GAP  = Math.max(1, BAR_W * (isPhone ? 0.0020 : 0.003));
-  const GROUP_GAP = Math.max(3, BAR_W * (isPhone ? 0.008  : 0.012));
-
-  // === BTN_BOTTOM ===
-  const BTN_BOTTOM = insets.bottom + 4 + Math.round(BAR_H_VISIBLE * (isPhone ? 0.18 : 0.22));
+  // BTN_BOTTOM effettivo: base calcolata + insets.bottom (safe-area, notch)
+  const BTN_BOTTOM = insets.bottom + BTN_BOTTOM_NO_INSETS;
 
   // LABEL MOBILE ABBREVIATIONS
   // Phone landscape ha ~36 pt per il label box (SIDE_W − 2 padding).
