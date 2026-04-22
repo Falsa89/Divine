@@ -771,11 +771,25 @@ function HomeProfilePanel({ user, router }: any) {
           </View>
         </View>
 
-        {/* TEXT BLOCK — phone usa 3 rows compatte senza wrap; desktop/tablet
-            mantengono la struttura 4-rows tradizionale. */}
+        {/* ═══════════════════════════════════════════════════════════════
+         *  PHONE-SPECIFIC CONTENT RECOMPOSITION (v9)
+         *  ────────────────────────────────────────────────────────────
+         *  Problema pre-v9 (confermato dal debug screen dell'utente):
+         *  le 3 rows (green/orange/red) si estendevano per tutta la
+         *  larghezza del container (340pt) → contenuto fuori dalla zona
+         *  decorata gold del frame → coperto dal sprite Hoplite → appariva
+         *  come "overlay separati" invece di panel coeso.
+         *
+         *  Fix: limitare la larghezza delle 3 rows a 190pt (PHONE_CONTENT_MAX)
+         *  con `alignSelf: flex-start`. Risultato: un COMPACT INFO CLUSTER
+         *  adiacente all'avatar che sta entro la zona decorata dorata del
+         *  frame. Desktop/tablet: `flex: 1` stretch come prima.
+         * ═══════════════════════════════════════════════════════════════ */}
+        {(() => { const PHONE_CONTENT_MAX = 190; return null; })()}
+
+        {/* ROW 1 — Name + Subtitle (Apprendista) + Exp bar compact */}
         <View style={[s.profileRow1, dbg('rgba(0,255,0,0.25)')]}>
-          <View style={{ flex: 1 }}>
-            {/* Name + subtitle (Apprendista) inline su phone per compattezza */}
+          <View style={isPhone ? { maxWidth: 190, alignSelf: 'flex-start' } : { flex: 1 }}>
             <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap' }}>
               <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>{name}</Text>
               {isPhone ? (
@@ -808,9 +822,13 @@ function HomeProfilePanel({ user, router }: any) {
           </View>
         </View>
 
-        {/* POWER */}
+        {/* ROW 2 — POWER compact */}
         <TouchableOpacity
-          style={[s.powerRow, dbg('rgba(255,165,0,0.28)')]}
+          style={[
+            s.powerRow,
+            isPhone ? { maxWidth: 190, alignSelf: 'flex-start' } : null,
+            dbg('rgba(255,165,0,0.28)'),
+          ]}
           onPress={() => router.push('/profile' as any)}
           activeOpacity={0.8}
         >
@@ -819,9 +837,15 @@ function HomeProfilePanel({ user, router }: any) {
           <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
         </TouchableOpacity>
 
-        {/* PILLS — phone: solo VIP + SP (niente wrap, titolo già nel name row).
-            tablet/desktop: riga completa VIP + SP + Title come prima. */}
-        <View style={[s.pillsRow, { flexWrap: 'nowrap' }, dbg('rgba(255,0,0,0.25)')]}>
+        {/* ROW 3 — Status pills (VIP + SP) compact, no wrap */}
+        <View
+          style={[
+            s.pillsRow,
+            { flexWrap: 'nowrap' },
+            isPhone ? { maxWidth: 190, alignSelf: 'flex-start' } : null,
+            dbg('rgba(255,0,0,0.25)'),
+          ]}
+        >
           <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
             onPress={() => router.push('/vip' as any)}>
             <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
