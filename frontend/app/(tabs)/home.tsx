@@ -772,98 +772,93 @@ function HomeProfilePanel({ user, router }: any) {
         </View>
 
         {/* ═══════════════════════════════════════════════════════════════
-         *  PHONE-SPECIFIC CONTENT RECOMPOSITION (v9)
+         *  PHONE-SPECIFIC CLUSTER WRAPPER (v10)
          *  ────────────────────────────────────────────────────────────
-         *  Problema pre-v9 (confermato dal debug screen dell'utente):
-         *  le 3 rows (green/orange/red) si estendevano per tutta la
-         *  larghezza del container (340pt) → contenuto fuori dalla zona
-         *  decorata gold del frame → coperto dal sprite Hoplite → appariva
-         *  come "overlay separati" invece di panel coeso.
+         *  Fix definitivo: TUTTI i 3 content rows sono racchiusi in un
+         *  UNICO cluster container con `width: 170` fisso + alignSelf
+         *  flex-start. Questo IMPOSSIBILITA ai children di estendersi
+         *  oltre la larghezza del cluster, indipendentemente dai loro
+         *  stili individuali (flex, flexDirection:row, ecc.).
          *
-         *  Fix: limitare la larghezza delle 3 rows a 190pt (PHONE_CONTENT_MAX)
-         *  con `alignSelf: flex-start`. Risultato: un COMPACT INFO CLUSTER
-         *  adiacente all'avatar che sta entro la zona decorata dorata del
-         *  frame. Desktop/tablet: `flex: 1` stretch come prima.
+         *  Il cluster wrapper è BG-colorato (cian light) quando DEBUG
+         *  attivo → si vede direttamente che le 3 rows stanno DENTRO
+         *  il bounding box del cluster compatto.
+         *
+         *  Desktop/Tablet: cluster con `flex: 1` → stretch naturale
+         *  (comportamento invariato).
          * ═══════════════════════════════════════════════════════════════ */}
-        {(() => { const PHONE_CONTENT_MAX = 190; return null; })()}
-
-        {/* ROW 1 — Name + Subtitle (Apprendista) + Exp bar compact */}
-        <View style={[s.profileRow1, dbg('rgba(0,255,0,0.25)')]}>
-          <View style={isPhone ? { maxWidth: 190, alignSelf: 'flex-start' } : { flex: 1 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap' }}>
-              <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>{name}</Text>
-              {isPhone ? (
-                <Text
-                  style={[s.titleTxt, { fontSize: pillFS - 1, marginLeft: 6 }]}
-                  numberOfLines={1}
-                >
-                  {'\u2756'} {title}
-                </Text>
-              ) : null}
-            </View>
-            <View style={s.expWrap}>
-              <View style={[s.expBarBg, { height: expH, borderRadius: expH / 2 }]}>
-                {HOME_PROFILE_PANEL.expBarBg ? (
-                  <RNImage
-                    source={HOME_PROFILE_PANEL.expBarBg}
-                    style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-                    resizeMode="stretch"
-                  />
-                ) : null}
-                <AssetBackedGradient
-                  source={HOME_PROFILE_PANEL.expBarFill}
-                  fallbackColors={[GOLD_PALE, GOLD]}
-                  fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
-                  style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
-                />
-              </View>
-              <Text style={[s.expTxt, { fontSize: expFS }]} numberOfLines={1}>{exp}/{expMax}</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* ROW 2 — POWER compact */}
-        <TouchableOpacity
-          style={[
-            s.powerRow,
-            isPhone ? { maxWidth: 190, alignSelf: 'flex-start' } : null,
-            dbg('rgba(255,165,0,0.28)'),
-          ]}
-          onPress={() => router.push('/profile' as any)}
-          activeOpacity={0.8}
-        >
-          <Text style={[s.powerIcon, { fontSize: pwrFS + 1 }]}>{'\u26A1'}</Text>
-          <Text style={[s.powerLbl, { fontSize: pwrLblFS }]}>POWER</Text>
-          <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
-        </TouchableOpacity>
-
-        {/* ROW 3 — Status pills (VIP + SP) compact, no wrap */}
         <View
           style={[
-            s.pillsRow,
-            { flexWrap: 'nowrap' },
-            isPhone ? { maxWidth: 190, alignSelf: 'flex-start' } : null,
-            dbg('rgba(255,0,0,0.25)'),
+            isPhone
+              ? { width: 160, alignSelf: 'flex-start', flexShrink: 0, flexGrow: 0 }
+              : { flex: 1 },
+            DEBUG ? { backgroundColor: 'rgba(0,220,255,0.35)', borderWidth: 2, borderColor: '#00FFFF' } : null,
           ]}
         >
-          <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
-            onPress={() => router.push('/vip' as any)}>
-            <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
-            <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
+          {/* ROW 1 — Name + Subtitle + Exp bar (compact) */}
+          <View style={[s.profileRow1, dbg('rgba(0,255,0,0.35)')]}>
+            <View style={isPhone ? { width: '100%' } : { flex: 1 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap' }}>
+                <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>{name}</Text>
+                {isPhone ? (
+                  <Text style={[s.titleTxt, { fontSize: pillFS - 1, marginLeft: 5 }]} numberOfLines={1}>
+                    {'\u2756'} {title}
+                  </Text>
+                ) : null}
+              </View>
+              <View style={s.expWrap}>
+                <View style={[s.expBarBg, { height: expH, borderRadius: expH / 2 }]}>
+                  {HOME_PROFILE_PANEL.expBarBg ? (
+                    <RNImage
+                      source={HOME_PROFILE_PANEL.expBarBg}
+                      style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
+                      resizeMode="stretch"
+                    />
+                  ) : null}
+                  <AssetBackedGradient
+                    source={HOME_PROFILE_PANEL.expBarFill}
+                    fallbackColors={[GOLD_PALE, GOLD]}
+                    fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
+                    style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
+                  />
+                </View>
+                <Text style={[s.expTxt, { fontSize: expFS }]} numberOfLines={1}>{exp}/{expMax}</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* ROW 2 — POWER compact */}
+          <TouchableOpacity
+            style={[s.powerRow, dbg('rgba(255,165,0,0.28)')]}
+            onPress={() => router.push('/profile' as any)}
+            activeOpacity={0.8}
+          >
+            <Text style={[s.powerIcon, { fontSize: pwrFS + 1 }]}>{'\u26A1'}</Text>
+            <Text style={[s.powerLbl, { fontSize: pwrLblFS }]}>POWER</Text>
+            <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
-            onPress={() => router.push('/profile' as any)}>
-            <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
-            <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
-          </TouchableOpacity>
-          {isPhone ? null : (
-            <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
-              onPress={() => router.push('/achievements' as any)}>
-              <Text style={[s.titleTxt, { fontSize: pillFS }]} numberOfLines={1}>
-                {'\u2756'} {title}
-              </Text>
+
+          {/* ROW 3 — Status pills compact, no wrap */}
+          <View style={[s.pillsRow, { flexWrap: 'nowrap' }, dbg('rgba(255,0,0,0.25)')]}>
+            <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
+              onPress={() => router.push('/vip' as any)}>
+              <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
+              <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
             </TouchableOpacity>
-          )}
+            <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
+              onPress={() => router.push('/profile' as any)}>
+              <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
+              <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
+            </TouchableOpacity>
+            {isPhone ? null : (
+              <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
+                onPress={() => router.push('/achievements' as any)}>
+                <Text style={[s.titleTxt, { fontSize: pillFS }]} numberOfLines={1}>
+                  {'\u2756'} {title}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </AssetBackedGradient>
 
