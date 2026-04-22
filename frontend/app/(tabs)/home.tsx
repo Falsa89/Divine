@@ -451,41 +451,49 @@ function HomeProfilePanel({ user, router }: any) {
   const title   = user?.title || 'Apprendista';
 
   // ─── Mobile-first responsive sizing ────────────────────────────────
-  // Su mobile landscape (larghezze ~600-950pt), il panel deve essere
-  // sensibilmente più compatto per non dominare la scena e per integrarsi
-  // meglio con gli altri blocchi safe-area.
-  const { width: vw } = useWindowDimensions();
-  const isMobile = vw < 900;  // iPhone landscape fino a iPad landscape piccolo
+  // Mobile landscape detection basata su ALTEZZA viewport (più robusta di
+  // vw<900, che falliva su iPhone 14 Pro Max 932×430). vh<500 cattura TUTTI
+  // gli smartphone landscape (SE 375 → Pro Max 430) e lascia i tablet
+  // (iPad ≥ 768 vh) nel ramo desktop.
+  const { height: vh } = useWindowDimensions();
+  const isMobile = vh < 500;
 
-  // Panel dimensions
-  const panelW   = isMobile ? 252 : 340;
-  const padL     = isMobile ? 76  : 104;
-  const padR     = isMobile ? 30  : 42;
-  const padT     = isMobile ? 14  : 20;
-  const padB     = isMobile ? 12  : 18;
+  // Panel dimensions — mobile: meno invasivo (220 invece di 252),
+  // aspect più alto (2.7) per dare respiro verticale al contenuto.
+  const panelW     = isMobile ? 220 : 340;
+  const panelRatio = isMobile ? 2.7 : 3;
+  // padL proporzionale al panelW (quota avatar ≈ 32% del panel su mobile,
+  // 30% su desktop) — elimina il magic number hardcoded.
+  const padL     = isMobile ? Math.round(panelW * 0.32) : 104;  // ~70 mobile
+  const padR     = isMobile ? 22  : 42;
+  const padT     = isMobile ? 10  : 20;
+  const padB     = isMobile ? 10  : 18;
 
-  // Avatar: SEMPRE 1:1 cerchio perfetto (niente aspectRatio forzato dal container)
-  const avSize   = isMobile ? 46 : 72;
-  const avFrameW = isMobile ? 70 : 98;
-  const avInit   = isMobile ? 18 : 26;
+  // Avatar: SEMPRE 1:1 cerchio perfetto, leggermente più piccolo su mobile
+  // per INCASTONARSI nello slot ovale del frame (non "appoggiarsi sopra").
+  const avSize   = isMobile ? 40 : 72;
+  const avFrameW = isMobile ? 62 : 98;
+  const avInit   = isMobile ? 16 : 26;
+  // Anchor avatar: proporzionale al panel (≈3.5% su mobile, ~2% su desktop).
+  const avLeft   = isMobile ? Math.round(panelW * 0.035) : 6;
 
-  // Level badge
-  const lvSize   = isMobile ? 26 : 38;
-  const lvFont   = isMobile ? 10 : 13;
+  // Level badge — mobile compatto ma ancora tap-friendly
+  const lvSize   = isMobile ? 24 : 38;
+  const lvFont   = isMobile ?  9 : 13;
 
-  // Text sizes
-  const nameFS   = isMobile ? 11 : 14;
+  // Text sizes — rispetto minimum leggibile iOS/Android (≥9pt)
+  const nameFS   = isMobile ? 12 : 14;
   const pwrFS    = isMobile ? 10 : 11;
-  const pwrLblFS = isMobile ?  8 :  9;
-  const pillFS   = isMobile ?  8 :  9;
-  const expFS    = isMobile ?  8 :  9;
-  const expH     = isMobile ?  8 : 12;
+  const pwrLblFS = isMobile ?  9 :  9;
+  const pillFS   = isMobile ?  9 :  9;
+  const expFS    = isMobile ?  9 :  9;
+  const expH     = isMobile ?  9 : 12;
 
   // Open/Close del selector avatar/frame (stub tecnico)
   const [selectorOpen, setSelectorOpen] = React.useState<false | 'avatar' | 'frame'>(false);
 
   return (
-    <View style={[s.profileWrap, { width: panelW }]}>
+    <View style={[s.profileWrap, { width: panelW, aspectRatio: panelRatio }]}>
       <AssetBackedGradient
         source={HOME_PROFILE_PANEL.frame}
         decorSource={HOME_PROFILE_PANEL.decor}
@@ -497,7 +505,7 @@ function HomeProfilePanel({ user, router }: any) {
         ]}
       >
         {/* AVATAR + LV BADGE — tap apre AvatarFrameSelector (tab Avatar) */}
-        <View style={[s.avatarFrame, { width: avFrameW }]} pointerEvents="box-none">
+        <View style={[s.avatarFrame, { width: avFrameW, left: avLeft }]} pointerEvents="box-none">
           <TouchableOpacity
             onPress={() => setSelectorOpen('avatar')}
             onLongPress={() => setSelectorOpen('frame')}  // long-press: tab Frames
@@ -1004,37 +1012,62 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
  *  Nessun offset hardcoded viewport-specifico.
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeBottomNav({ goTo, onChat, onMenu }: any) {
-  const { width: vw } = useWindowDimensions();
+  const { width: vw, height: vh } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
   // === RESPONSIVE METRICS ===
-  // Barra base: 55% del viewport, cap 420px, min 300px (iPhone SE landscape)
-  // Mobile-first scaling: su landscape mobile (vw < 900) riduciamo leggermente
-  // la presenza della bottom nav per non comprimere verticalmente la scena.
-  const isMobile = vw < 900;
+  // Mobile landscape detection basata su ALTEZZA viewport:
+  //   vh < 500 → phone landscape (iPhone SE 375 ÷ Pro Max 430)
+  //   vh ≥ 500 → tablet/desktop (iPad 768+)
+  // Il precedente `vw < 900` mandava iPhone 14/15 Pro Max (932px) nel
+  // ramo desktop → bottom nav gigantesca. Ora invece risolto.
+  const isMobile = vh < 500;
   // BAR_W: larghezza effettiva della barra.
   //  - mobile:  min 280 — max 440 — 54% vw (più contenuta, lascia respirare sidebars)
   //  - tablet+: min 320 — max 560 — 62% vw (più presence)
   const BAR_W = isMobile
     ? Math.max(280, Math.min(vw * 0.54, 440))
     : Math.max(320, Math.min(vw * 0.62, 560));
-  const BAR_H = BAR_W / 2.334;                // aspect ratio NATIVO dell'asset nav_bar_base (1916x821)
-  const PLAY_W = Math.max(58, BAR_W * 0.20);  // ~20% della barra
-  const PLAY_H = PLAY_W * (86 / 72);          // aspect shield
-  // SIDE_W: 4 buttons per lato devono stare DENTRO la metà sinistra/destra
-  // della barra base (metà laterale ≈ 40% della BAR_W, con PLAY_W 20% centrale).
-  // Fix overflow: max 9.5% per consentire 4 icone + 3 gap entro 40% della barra.
-  const SIDE_W = Math.max(34, BAR_W * 0.090);
-  const SIDE_H = SIDE_W * (48 / 42);          // aspect frame
+
+  // BAR_H — FIX CRITICO MOBILE
+  // L'asset HOME_NAV_BAR_BASE è 1916×821 (ratio 2.334). La metà superiore
+  // dell'asset è decorazione (portale/ali/teschi); la fascia funzionale
+  // di sotto occupa ~60% dell'altezza. Applicare ratio 2.334 integrale
+  // su mobile faceva prendere alla nav il ~48% dell'altezza viewport.
+  //
+  // Strategia: su MOBILE usiamo la fascia VISIBILE (ratio effettivo 4.25),
+  // clippando la parte alta della decorazione tramite overflow:hidden nel
+  // container e posizionando l'immagine full-ratio allineata al bottom.
+  // In questo modo l'asset NON viene distorto (contain preserva aspect),
+  // ma la nav occupa solo ~25% dell'altezza viewport.
+  const BAR_RATIO_FULL    = 1916 / 821;          // 2.334 (nativo)
+  const BAR_H_FULL        = BAR_W / BAR_RATIO_FULL;
+  const BAR_H_VISIBLE     = isMobile
+    ? Math.min(BAR_H_FULL * 0.55, vh * 0.26)     // clamp a 26% vh max
+    : BAR_H_FULL;
+  const BAR_H             = BAR_H_VISIBLE;       // alias esplicito usato sotto
+
+  // PLAY: medaglia centrale. Si alza SOPRA la barra (intenzionale),
+  // ma su mobile la ridimensioniamo proporzionalmente al viewport per
+  // non essere debordante.
+  const PLAY_W = isMobile
+    ? Math.max(56, Math.min(BAR_W * 0.19, vh * 0.24))
+    : Math.max(58, BAR_W * 0.20);
+  const PLAY_H = PLAY_W * (86 / 72);             // aspect shield
+
+  // SIDE icons: tap-friendly ≥44pt su mobile (HIG iOS)
+  const SIDE_W = isMobile
+    ? Math.max(38, BAR_W * 0.085)
+    : Math.max(34, BAR_W * 0.090);
+  const SIDE_H = SIDE_W * (48 / 42);
   const SIDE_GAP = Math.max(1, BAR_W * 0.003);
-  const GROUP_GAP = Math.max(4, BAR_W * 0.012); // gap tra PLAY e gruppo laterale (più ampio per non coprire PLAY)
-  const NAV_H = BAR_H * 0.62;                 // container solo la fascia bassa della barra (quella "piatta")
-  // BTN_BOTTOM: offset dei NavBtn dal bordo inferiore del viewport.
-  // Calibrato per centrare l'icon box negli slot decorativi della barra
-  // base (gli slot piatti sono nella zona centrale-bassa della barra).
-  // Prima: insets.bottom + 8 → icona troppo bassa, sotto la barra.
-  // Ora: aggiungiamo BAR_H*0.18 → icon box dentro gli slot.
-  const BTN_BOTTOM = insets.bottom + 8 + Math.round(BAR_H * 0.18);
+  const GROUP_GAP = Math.max(4, BAR_W * 0.012);
+
+  // BTN_BOTTOM: ora in funzione della VISIBLE band, non del BAR_H pieno.
+  // La fascia funzionale dove stanno gli slot icona occupa ~30% dal bottom
+  // dell'asset full; avendo ridotto la visibile a 55% del full, riposiziono
+  // gli slot sul 22% del visible (centro geometrico della fascia piatta).
+  const BTN_BOTTOM = insets.bottom + 6 + Math.round(BAR_H_VISIBLE * 0.22);
 
   const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
     { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
@@ -1058,21 +1091,36 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
       style={[s.bottomNav, { height: BAR_H + insets.bottom }]}
       pointerEvents="box-none"
     >
-      {/* (1) BARRA BASE — àncora visiva. Centrata matematicamente al viewport. */}
+      {/* (1) BARRA BASE — àncora visiva. Centrata matematicamente al viewport.
+          Contenitore a VISIBLE height con overflow:hidden. L'immagine è
+          renderizzata al suo aspect ratio NATURALE (no stretch) e ancorata
+          al bottom del contenitore: se BAR_H_VISIBLE < BAR_H_FULL (mobile),
+          la decorazione superiore dell'asset viene clippata — la fascia
+          funzionale (slot icone + medaglione) resta integralmente visibile. */}
       {HOME_NAV_BAR_BASE ? (
-        <RNImage
-          source={HOME_NAV_BAR_BASE}
+        <View
           style={{
             position: 'absolute',
             bottom: insets.bottom - 2,
             left: '50%',
             width: BAR_W,
-            height: BAR_H,
+            height: BAR_H_VISIBLE,
             transform: [{ translateX: -BAR_W / 2 }],
+            overflow: 'hidden',
           }}
-          resizeMode="contain"
           pointerEvents="none"
-        />
+        >
+          <RNImage
+            source={HOME_NAV_BAR_BASE}
+            style={{
+              position: 'absolute',
+              bottom: 0, left: 0,
+              width: BAR_W,
+              height: BAR_H_FULL,   // aspect NATURALE, nessuno stretch
+            }}
+            resizeMode="contain"
+          />
+        </View>
       ) : null}
 
       {/* (2) PLAY SHIELD — ancoraggio CENTRATO MATEMATICAMENTE sulla barra */}
@@ -1391,8 +1439,9 @@ const s = StyleSheet.create({
   profileWrap: {
     position: 'absolute', top: 6, left: 6,
     zIndex: 20,
-    // width dinamica da HomeProfilePanel (252 mobile / 340 desktop)
-    aspectRatio: 3,          // preserva proporzioni native del frame (3:1)
+    // width + aspectRatio vengono passati inline da HomeProfilePanel:
+    //   mobile: 220 × (220/2.7) = 220 × 81
+    //   desktop: 340 × (340/3) = 340 × 113
   },
   profilePanel: {
     // NO border CSS legacy, NO borderRadius legacy, NO shadow:
@@ -1410,9 +1459,11 @@ const s = StyleSheet.create({
   },
   profileRow1: { flexDirection: 'row', alignItems: 'center' },
   // Avatar dentro lo slot oval del frame (posizionamento absolute calibrato)
+  // NOTA: `left` viene passato inline da HomeProfilePanel (avLeft proporzionale
+  // al panelW → robusto tra mobile e desktop). Non più hardcoded qui.
   avatarFrame: {
     position: 'absolute',
-    left: 6, top: 0, bottom: 0,
+    top: 0, bottom: 0,
     width: 98,
     alignItems: 'center', justifyContent: 'center',
   },
@@ -1695,7 +1746,7 @@ const s = StyleSheet.create({
     width: '100%', height: '100%',
   },
   navLabel: {
-    color: GOLD_PALE, fontSize: 7, fontWeight: '900',
+    color: GOLD_PALE, fontSize: 8, fontWeight: '900',
     letterSpacing: 0.2, textAlign: 'center',
   },
 
