@@ -84,7 +84,7 @@ const SHOW_PHASE_BADGE = false;
  * in un box flottante. DEVE essere TRUE durante le pass di debug layout, poi
  * disattivato prima della release.
  */
-const SHOW_DEV_METRICS = true;
+const SHOW_DEV_METRICS = false;
 
 /* ═══════════════════════════════════════════════════════════════════
  *  computeHomeMetrics — pure function, source-of-truth per TUTTI i
@@ -118,33 +118,43 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const isTablet  = vh >= 500 && vh < 900;
   const isDesktop = vh >= 900;
 
-  // ── PROFILE PANEL (v7 — final premium polish su real device) ──
-  // Feedback real-screen: contenuto ancora troppo appeso al top frame edge.
-  // Lowering: padT 16→20, row spacing più generoso per gerarchia premium.
-  const panelW     = isPhone ? 290 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 2.30 : isTablet ? 2.9 : 3;
-  const panelH     = panelW / panelRatio;
-  const padL = isPhone ? Math.round(panelW * 0.32) : isTablet ? 92 : 104;
-  const padR = isPhone ? 30 : isTablet ? 32 : 42;
-  const padT = isPhone ? 20 : isTablet ? 16 : 20;    // 16→20 (name non più attaccato)
-  const padB = isPhone ? 10 : isTablet ? 15 : 18;    // 8→10 (bilancia)
-  const avSize   = isPhone ? 56 : isTablet ? 60 : 72;
-  const avFrameW = isPhone ? 80 : isTablet ? 82 : 98;
-  const avInit   = isPhone ? 22 : isTablet ? 22 : 26;
+  // ── PROFILE PANEL (v8 — structural fix: match asset ratio + content reflow) ──
+  // DEBUG DISCOVERY: frame asset è 2172×724 ratio 3.0 nativo. Forzare ratio
+  // 2.30 causava (a) deformazione stretch del frame art, (b) overflow del
+  // contenuto (pillsRow+Apprendista) sotto il bordo visibile del frame.
+  //
+  // Fix strutturale:
+  //   - panelRatio = 3.0 (match asset → nessuno stretch)
+  //   - panelW      = 340 (più largo per compensare la minor altezza)
+  //   - Content reflow phone: 3 rows compatte che stanno entro l'altezza
+  //     naturale del frame:
+  //       Row 1: Name + Subtitle (Apprendista) + exp counter
+  //       Row 2: Exp bar full width
+  //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
+  const panelW     = isPhone ? 340 : isTablet ? 300 : 340;
+  const panelRatio = isPhone ? 3.0 : isTablet ? 2.9 : 3;   // match asset ratio
+  const panelH     = panelW / panelRatio;                   // 113.3 phone
+  const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
+  const padR = isPhone ? 24 : isTablet ? 32 : 42;
+  const padT = isPhone ? 12 : isTablet ? 16 : 20;
+  const padB = isPhone ? 10 : isTablet ? 15 : 18;
+  const avSize   = isPhone ? 54 : isTablet ? 60 : 72;
+  const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;
+  const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? Math.round(panelW * 0.16 - avFrameW / 2)
+    ? Math.round(panelW * 0.15 - avFrameW / 2)
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = (isPhone || isTablet)
     ? Math.round(panelH * 0.50 - avFrameW / 2)
     : undefined;
-  const lvSize   = isPhone ? 28 : isTablet ? 32 : 38;
-  const lvFont   = isPhone ? 11 : isTablet ? 12 : 13;
+  const lvSize   = isPhone ? 26 : isTablet ? 32 : 38;
+  const lvFont   = isPhone ? 10 : isTablet ? 12 : 13;
   const nameFS   = isPhone ? 13 : 14;
   const pwrFS    = isPhone ? 11 : 11;
   const pwrLblFS = isPhone ? 10 : 9;
   const pillFS   = isPhone ? 10 : 9;
-  const expFS    = isPhone ? 10 : 9;
-  const expH     = isPhone ? 10 : 12;
+  const expFS    = isPhone ? 9 : 9;
+  const expH     = isPhone ? 8 : 12;
 
   // ── BOTTOM NAV (v7 — very light premium rebalance) ──
   // Real device feedback: nav troppo "stripped/flat". Micro-recupero presenza
@@ -583,8 +593,26 @@ function HomeProfilePanel({ user, router }: any) {
   // Open/Close del selector avatar/frame (stub tecnico)
   const [selectorOpen, setSelectorOpen] = React.useState<false | 'avatar' | 'frame'>(false);
 
+  // ═══ HARD VISUAL DEBUG BOXES (v7.2) ═══════════════════════════════════
+  // Attivato via `SHOW_DEV_METRICS`. Solo phone: bordi e background
+  // traslucidi per rivelare la STRUTTURA REALE del layout renderizzato.
+  //   - profileWrap     → border CIAN   (outer container, aspectRatio forzato)
+  //   - profilePanel    → bg MAGENTA    (content area post-padding)
+  //   - avatarFrame     → border GIALLO (avatar absolute)
+  //   - profileRow1     → bg VERDE      (name + exp)
+  //   - powerRow        → bg ARANCIONE  (power stat)
+  //   - pillsRow        → bg ROSSO      (VIP / SP / title)
+  const DEBUG = SHOW_DEV_METRICS && isPhone;
+  const dbg = (color: string) => (DEBUG ? {
+    backgroundColor: color,
+    borderWidth: 1, borderColor: '#FF00FF',
+  } : null);
+  const dbgBorder = (color: string) => (DEBUG ? {
+    borderWidth: 1.5, borderColor: color,
+  } : null);
+
   return (
-    <View style={[s.profileWrap, { width: panelW, aspectRatio: panelRatio }]}>
+    <View style={[s.profileWrap, { width: panelW, aspectRatio: panelRatio }, dbgBorder('#00FFFF')]}>
       <AssetBackedGradient
         source={HOME_PROFILE_PANEL.frame}
         decorSource={HOME_PROFILE_PANEL.decor}
@@ -595,24 +623,9 @@ function HomeProfilePanel({ user, router }: any) {
           {
             paddingLeft: padL, paddingRight: padR,
             paddingTop: padT, paddingBottom: padB,
-            // ╔══ STRUCTURAL PHONE FIX (v7.1) ══════════════════════════════╗
-            // ║ Phone landscape usa una composizione STRUTTURALMENTE        ║
-            // ║ DIVERSA dal desktop: invece di stackare 3 righe              ║
-            // ║ (name+exp | power | pills) con flex-start al top, sul       ║
-            // ║ phone la flex container distribuisce le righe con           ║
-            // ║ `space-between` → Row 1 anchored top, Row 2 centered,       ║
-            // ║ Row 3 anchored bottom. Questo usa TUTTO lo spazio            ║
-            // ║ verticale del frame phone-specific (126 pt) invece di       ║
-            // ║ lasciare vuoto il metà basso.                               ║
-            // ║                                                               ║
-            // ║ Tablet/Desktop: invariato (`flex-start` preserva layout      ║
-            // ║ tradizionale quando il frame è più largo e ospita le 3      ║
-            // ║ righe naturalmente al top).                                  ║
-            // ║ L'avatar è `position: absolute` → NON partecipa al flex      ║
-            // ║ flow, quindi la distribuzione 3-row non lo sposta.           ║
-            // ╚══════════════════════════════════════════════════════════════╝
             justifyContent: isPhone ? 'space-between' : 'flex-start',
           },
+          DEBUG ? { backgroundColor: 'rgba(255,0,255,0.2)' } : null,
         ]}
       >
         {/* AVATAR + LV BADGE — architettura fallback-safe.
@@ -634,6 +647,7 @@ function HomeProfilePanel({ user, router }: any) {
               left: avLeft,
               top: avTop,
             },
+            dbgBorder('#FFFF00'),
           ]}
           pointerEvents="box-none"
         >
@@ -741,10 +755,22 @@ function HomeProfilePanel({ user, router }: any) {
           </View>
         </View>
 
-        {/* TEXT BLOCK */}
-        <View style={s.profileRow1}>
+        {/* TEXT BLOCK — phone usa 3 rows compatte senza wrap; desktop/tablet
+            mantengono la struttura 4-rows tradizionale. */}
+        <View style={[s.profileRow1, dbg('rgba(0,255,0,0.25)')]}>
           <View style={{ flex: 1 }}>
-            <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>{name}</Text>
+            {/* Name + subtitle (Apprendista) inline su phone per compattezza */}
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap' }}>
+              <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>{name}</Text>
+              {isPhone ? (
+                <Text
+                  style={[s.titleTxt, { fontSize: pillFS - 1, marginLeft: 6 }]}
+                  numberOfLines={1}
+                >
+                  {'\u2756'} {title}
+                </Text>
+              ) : null}
+            </View>
             <View style={s.expWrap}>
               <View style={[s.expBarBg, { height: expH, borderRadius: expH / 2 }]}>
                 {HOME_PROFILE_PANEL.expBarBg ? (
@@ -768,7 +794,7 @@ function HomeProfilePanel({ user, router }: any) {
 
         {/* POWER */}
         <TouchableOpacity
-          style={s.powerRow}
+          style={[s.powerRow, dbg('rgba(255,165,0,0.28)')]}
           onPress={() => router.push('/profile' as any)}
           activeOpacity={0.8}
         >
@@ -777,8 +803,9 @@ function HomeProfilePanel({ user, router }: any) {
           <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
         </TouchableOpacity>
 
-        {/* PILLS RIGA UNICA: VIP · SP · Title */}
-        <View style={s.pillsRow}>
+        {/* PILLS — phone: solo VIP + SP (niente wrap, titolo già nel name row).
+            tablet/desktop: riga completa VIP + SP + Title come prima. */}
+        <View style={[s.pillsRow, { flexWrap: 'nowrap' }, dbg('rgba(255,0,0,0.25)')]}>
           <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
             onPress={() => router.push('/vip' as any)}>
             <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
@@ -789,12 +816,14 @@ function HomeProfilePanel({ user, router }: any) {
             <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
             <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
-            onPress={() => router.push('/achievements' as any)}>
-            <Text style={[s.titleTxt, { fontSize: pillFS }]} numberOfLines={1}>
-              {'\u2756'} {title}
-            </Text>
-          </TouchableOpacity>
+          {isPhone ? null : (
+            <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
+              onPress={() => router.push('/achievements' as any)}>
+              <Text style={[s.titleTxt, { fontSize: pillFS }]} numberOfLines={1}>
+                {'\u2756'} {title}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </AssetBackedGradient>
 
