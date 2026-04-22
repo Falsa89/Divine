@@ -458,36 +458,50 @@ function HomeProfilePanel({ user, router }: any) {
   const { height: vh } = useWindowDimensions();
   const isMobile = vh < 500;
 
-  // Panel dimensions — mobile: meno invasivo (220 invece di 252),
-  // aspect più alto (2.7) per dare respiro verticale al contenuto.
-  const panelW     = isMobile ? 220 : 340;
-  const panelRatio = isMobile ? 2.7 : 3;
-  // padL proporzionale al panelW (quota avatar ≈ 32% del panel su mobile,
-  // 30% su desktop) — elimina il magic number hardcoded.
-  const padL     = isMobile ? Math.round(panelW * 0.32) : 104;  // ~70 mobile
-  const padR     = isMobile ? 22  : 42;
-  const padT     = isMobile ? 10  : 20;
-  const padB     = isMobile ? 10  : 18;
+  // ─── PANEL MOBILE RECALIBRATION ────────────────────────────────────
+  // Misure calibrate sul frame reale 3:1 premium (decor + slot ovale sinistro).
+  // Mobile: panelW 210 (era 220), ratio 2.6 per dare più respiro verticale.
+  const panelW     = isMobile ? 210 : 340;
+  const panelRatio = isMobile ? 2.6 : 3;
+  // padL = quota sinistra del frame occupata dallo slot ovale dell'avatar.
+  // Sul frame reale lo slot oval va dal ~3% al ~32% della panel width.
+  // Il content (testi) DEVE iniziare dopo la fine dello slot → padL = 34% mobile.
+  const padL     = isMobile ? Math.round(panelW * 0.34) : 104;   // ~71 mobile
+  const padR     = isMobile ? 18  : 42;
+  const padT     = isMobile ? 9   : 20;
+  const padB     = isMobile ? 9   : 18;
 
-  // Avatar: SEMPRE 1:1 cerchio perfetto, leggermente più piccolo su mobile
-  // per INCASTONARSI nello slot ovale del frame (non "appoggiarsi sopra").
-  const avSize   = isMobile ? 40 : 72;
-  const avFrameW = isMobile ? 62 : 98;
-  const avInit   = isMobile ? 16 : 26;
-  // Anchor avatar: proporzionale al panel (≈3.5% su mobile, ~2% su desktop).
-  const avLeft   = isMobile ? Math.round(panelW * 0.035) : 6;
+  // ─── AVATAR — geometria slot-based (non più flex-centered) ─────────
+  // Lo slot ovale del frame è centrato attorno al 17% della panelW (dal bordo
+  // sinistro), a un'altezza pari al 50% della panelH. Il portrait occupa ~55%
+  // della panelH (target: "incastonato" nel ring decor, non "appoggiato sopra").
+  //
+  // Per panelH = 210/2.6 = 80.8 → avSize = round(80.8 * 0.55) = 44.
+  // In realtà il ring asset ha un bordo dorato spesso che cresce oltre l'avatar;
+  // serve un avFrameW più generoso (ring+glow) che contiene il portrait.
+  const avSize   = isMobile ? 42 : 72;   // portrait/initial
+  const avFrameW = isMobile ? 56 : 98;   // contiene ring + glow
+  const avInit   = isMobile ? 17 : 26;
+  // Anchor: slot centrato a 17% panelW. Offset = 17% - (avFrameW/2)/panelW.
+  //   17% di 210 = 35.7 → avLeft = 35.7 - 28 = 7.7 → 8 px
+  const avLeft   = isMobile ? Math.round(panelW * 0.17 - avFrameW / 2) : 6;
+  // avTop: offset sottile dal top del panel per allineare al centro dello slot
+  //   panelH*0.50 = 40.4 → top = 40.4 - avFrameW/2 (cerchio) = 40.4-28 = 12.4 → 12
+  const avTop    = isMobile ? Math.round((panelW / panelRatio) * 0.50 - avFrameW / 2) : undefined;
 
-  // Level badge — mobile compatto ma ancora tap-friendly
-  const lvSize   = isMobile ? 24 : 38;
+  // ─── LEVEL BADGE — ancorato all'angolo SUD-EST dello slot avatar ────
+  // Il badge è visivamente "incastrato" sotto-destra del ring. Su mobile
+  // riduciamo a 22×22 per non dominare rispetto al ring (avFrameW 56).
+  const lvSize   = isMobile ? 22 : 38;
   const lvFont   = isMobile ?  9 : 13;
 
-  // Text sizes — rispetto minimum leggibile iOS/Android (≥9pt)
-  const nameFS   = isMobile ? 12 : 14;
+  // ─── TYPOGRAPHY polish — leggibile ma rispetta lo spazio interno (58% panelW) ─
+  const nameFS   = isMobile ? 11 : 14;
   const pwrFS    = isMobile ? 10 : 11;
   const pwrLblFS = isMobile ?  9 :  9;
   const pillFS   = isMobile ?  9 :  9;
-  const expFS    = isMobile ?  9 :  9;
-  const expH     = isMobile ?  9 : 12;
+  const expFS    = isMobile ?  8 :  9;
+  const expH     = isMobile ?  8 : 12;
 
   // Open/Close del selector avatar/frame (stub tecnico)
   const [selectorOpen, setSelectorOpen] = React.useState<false | 'avatar' | 'frame'>(false);
@@ -504,31 +518,105 @@ function HomeProfilePanel({ user, router }: any) {
           { paddingLeft: padL, paddingRight: padR, paddingTop: padT, paddingBottom: padB },
         ]}
       >
-        {/* AVATAR + LV BADGE — tap apre AvatarFrameSelector (tab Avatar) */}
-        <View style={[s.avatarFrame, { width: avFrameW, left: avLeft }]} pointerEvents="box-none">
+        {/* AVATAR + LV BADGE — tap apre AvatarFrameSelector (tab Avatar).
+            ARCHITETTURA REALE basata su verifica PIL dell'asset:
+              ► `home_profile_avatar_ring.png` NON è un ring trasparente-in-
+                mezzo. Center pixel verificato = (244,244,244, alpha 255)
+                → FULLY OPAQUE. È un *portrait placeholder composito*:
+                cornice dorata + inner area bianca-crema dove l'utente caricherà
+                la sua foto avatar. Usarlo come overlay TOP avrebbe coperto
+                la foto utente → errore logico.
+              ► Corretta architettura:
+                1. avatarRing come BASE (si vede sempre, forma lo slot).
+                2. User avatar / initial POSIZIONATA SOPRA nel centro crema.
+                3. lvBadge sopra tutto nell'angolo SE.
+              ► Quando in futuro l'utente caricherà un avatar:
+                renderizzare l'immagine come cerchio cropped sopra il ring,
+                sostituendo l'inner crema. Il ring dorato resta visibile
+                come cornice. */}
+        <View
+          style={[
+            s.avatarFrame,
+            {
+              width: avFrameW, height: avFrameW,
+              left: avLeft,
+              top: avTop,
+            },
+          ]}
+          pointerEvents="box-none"
+        >
+          {/* (1) AVATAR RING — BASE layer (cornice+inner crema, asset-driven) */}
           <TouchableOpacity
             onPress={() => setSelectorOpen('avatar')}
             onLongPress={() => setSelectorOpen('frame')}  // long-press: tab Frames
-            activeOpacity={0.8}
-            style={[
-              s.avatarInner,
-              { width: avSize, height: avSize, borderRadius: avSize / 2 },
-            ]}
+            activeOpacity={0.85}
+            style={{
+              position: 'absolute',
+              left: 0, top: 0,
+              width: avFrameW, height: avFrameW,
+              alignItems: 'center', justifyContent: 'center',
+            }}
           >
+            {HOME_PROFILE_PANEL.avatarRing ? (
+              <RNImage
+                source={HOME_PROFILE_PANEL.avatarRing}
+                style={{
+                  position: 'absolute',
+                  left: 0, top: 0,
+                  width: avFrameW, height: avFrameW,
+                }}
+                resizeMode="contain"
+                pointerEvents="none"
+              />
+            ) : (
+              // Fallback tecnico se ring asset mancante: cerchio NIGHT+border
+              <View
+                style={[
+                  s.avatarInner,
+                  { width: avSize, height: avSize, borderRadius: avSize / 2 },
+                ]}
+              />
+            )}
+
+            {/* (2) INITIAL / USER PORTRAIT — sopra il ring, centrato nell'inner. */}
             {HOME_PROFILE_PANEL.avatarPlaceholder ? (
               <RNImage
                 source={HOME_PROFILE_PANEL.avatarPlaceholder}
-                style={{ width: '100%', height: '100%' }}
+                style={{
+                  width: avSize, height: avSize, borderRadius: avSize / 2,
+                  // Sopra il ring base
+                }}
                 resizeMode="cover"
               />
             ) : (
-              <Text style={[s.avatarInitial, { fontSize: avInit }]}>
+              <Text
+                style={[
+                  s.avatarInitial,
+                  {
+                    fontSize: avInit,
+                    // Dark contrast sopra l'inner crema del ring
+                    color: NIGHT_1,
+                    textShadowColor: 'rgba(255,255,255,0.6)',
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: 1,
+                  },
+                ]}
+              >
                 {String(name)[0]?.toUpperCase() || 'P'}
               </Text>
             )}
           </TouchableOpacity>
+
+          {/* (3) Level badge — angolo SE sopra ring */}
           <View
-            style={[s.lvBadge, { width: lvSize, height: lvSize }]}
+            style={[
+              s.lvBadge,
+              {
+                width: lvSize, height: lvSize,
+                right: -Math.round(lvSize * 0.15),
+                bottom: -Math.round(lvSize * 0.10),
+              },
+            ]}
             pointerEvents="none"
           >
             {HOME_PROFILE_PANEL.lvBadge ? (
@@ -1023,10 +1111,10 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   // ramo desktop → bottom nav gigantesca. Ora invece risolto.
   const isMobile = vh < 500;
   // BAR_W: larghezza effettiva della barra.
-  //  - mobile:  min 280 — max 440 — 54% vw (più contenuta, lascia respirare sidebars)
-  //  - tablet+: min 320 — max 560 — 62% vw (più presence)
+  //  - mobile:  min 260 — max 400 — 50% vw (meno dominante, più elegante)
+  //  - tablet+: min 320 — max 560 — 62% vw (invariato)
   const BAR_W = isMobile
-    ? Math.max(280, Math.min(vw * 0.54, 440))
+    ? Math.max(260, Math.min(vw * 0.50, 400))
     : Math.max(320, Math.min(vw * 0.62, 560));
 
   // BAR_H — FIX CRITICO MOBILE
@@ -1035,39 +1123,34 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   // di sotto occupa ~60% dell'altezza. Applicare ratio 2.334 integrale
   // su mobile faceva prendere alla nav il ~48% dell'altezza viewport.
   //
-  // Strategia: su MOBILE usiamo la fascia VISIBILE (ratio effettivo 4.25),
+  // Strategia: su MOBILE usiamo la fascia VISIBILE (ratio effettivo 4.5),
   // clippando la parte alta della decorazione tramite overflow:hidden nel
   // container e posizionando l'immagine full-ratio allineata al bottom.
   // In questo modo l'asset NON viene distorto (contain preserva aspect),
-  // ma la nav occupa solo ~25% dell'altezza viewport.
+  // ma la nav occupa solo ~22% dell'altezza viewport.
   const BAR_RATIO_FULL    = 1916 / 821;          // 2.334 (nativo)
   const BAR_H_FULL        = BAR_W / BAR_RATIO_FULL;
   const BAR_H_VISIBLE     = isMobile
-    ? Math.min(BAR_H_FULL * 0.55, vh * 0.26)     // clamp a 26% vh max
+    ? Math.min(BAR_H_FULL * 0.50, vh * 0.22)     // ridotto: 50% del full, clamp 22% vh
     : BAR_H_FULL;
   const BAR_H             = BAR_H_VISIBLE;       // alias esplicito usato sotto
 
-  // PLAY: medaglia centrale. Si alza SOPRA la barra (intenzionale),
-  // ma su mobile la ridimensioniamo proporzionalmente al viewport per
-  // non essere debordante.
+  // PLAY: medaglia centrale. Mobile: ~17% barra, clamp 21% vh.
   const PLAY_W = isMobile
-    ? Math.max(56, Math.min(BAR_W * 0.19, vh * 0.24))
+    ? Math.max(52, Math.min(BAR_W * 0.17, vh * 0.21))
     : Math.max(58, BAR_W * 0.20);
   const PLAY_H = PLAY_W * (86 / 72);             // aspect shield
 
-  // SIDE icons: tap-friendly ≥44pt su mobile (HIG iOS)
+  // SIDE icons: tap-friendly ≥40pt su mobile (trade-off vs barra ridotta).
   const SIDE_W = isMobile
-    ? Math.max(38, BAR_W * 0.085)
+    ? Math.max(34, BAR_W * 0.080)
     : Math.max(34, BAR_W * 0.090);
   const SIDE_H = SIDE_W * (48 / 42);
-  const SIDE_GAP = Math.max(1, BAR_W * 0.003);
-  const GROUP_GAP = Math.max(4, BAR_W * 0.012);
+  const SIDE_GAP = Math.max(1, BAR_W * 0.0025);     // leggermente più stretto
+  const GROUP_GAP = Math.max(3, BAR_W * 0.010);     // leggermente più stretto
 
-  // BTN_BOTTOM: ora in funzione della VISIBLE band, non del BAR_H pieno.
-  // La fascia funzionale dove stanno gli slot icona occupa ~30% dal bottom
-  // dell'asset full; avendo ridotto la visibile a 55% del full, riposiziono
-  // gli slot sul 22% del visible (centro geometrico della fascia piatta).
-  const BTN_BOTTOM = insets.bottom + 6 + Math.round(BAR_H_VISIBLE * 0.22);
+  // BTN_BOTTOM: ricalibrato sulla VISIBLE band più bassa.
+  const BTN_BOTTOM = insets.bottom + 4 + Math.round(BAR_H_VISIBLE * 0.20);
 
   const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
     { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
@@ -1458,31 +1541,28 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   profileRow1: { flexDirection: 'row', alignItems: 'center' },
-  // Avatar dentro lo slot oval del frame (posizionamento absolute calibrato)
-  // NOTA: `left` viene passato inline da HomeProfilePanel (avLeft proporzionale
-  // al panelW → robusto tra mobile e desktop). Non più hardcoded qui.
+  // Avatar dentro lo slot oval del frame — posizionamento absolute slot-based.
+  // top/left/width/height passati inline da HomeProfilePanel (avTop/avLeft
+  // proporzionali al panel). Non più flex-center generico.
   avatarFrame: {
     position: 'absolute',
-    top: 0, bottom: 0,
-    width: 98,
-    alignItems: 'center', justifyContent: 'center',
+    // NB: nessun `top: 0, bottom: 0, justifyContent: 'center'`:
+    //     l'avatar è ora ancorato al vero slot del frame (premium look).
   },
-  // Portrait CERCHIO PERFETTO (non più oval allungato)
+  // Portrait CERCHIO PERFETTO. NO borderWidth/shadow legacy: il ring asset
+  // (avatarRing overlay) fornisce bordo+glow premium; il border CSS
+  // duplicato creava il fastidioso "cerchio appoggiato sopra".
   avatarInner: {
     width: 72, height: 72, borderRadius: 36,
     overflow: 'hidden',
     backgroundColor: NIGHT_1,
     alignItems: 'center', justifyContent: 'center',
-    borderWidth: 2, borderColor: GOLD,
-    shadowColor: GOLD, shadowOpacity: 0.55, shadowRadius: 5,
-    elevation: 4,
   },
   avatarInitial: { color: GOLD, fontSize: 26, fontWeight: '900' },
   lvBadge: {
-    // Posizione calibrata sull'angolo basso-dx dell'oval del frame
+    // Posizione calibrata inline da HomeProfilePanel (right/bottom proporzionali
+    // a lvSize). Solo proprietà non dipendenti dalla dimensione qui.
     position: 'absolute',
-    bottom: -4, right: -2,
-    width: 38, height: 38,
     alignItems: 'center', justifyContent: 'center',
   },
   lvBadgeTxt: {
