@@ -807,10 +807,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* TITLE SLOT — lime (v13.5: width 90→75, right boundary x=270) */}
+            {/* TITLE SLOT — lime (v13.6: width 75→60, right boundary x=255) */}
             <View
               style={[
-                { position: 'absolute', top: 12, left: 195, width: 75, height: 18,
+                { position: 'absolute', top: 12, left: 195, width: 60, height: 18,
                   justifyContent: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#B0FF00' } : null,
               ]}
@@ -822,10 +822,10 @@ function HomeProfilePanel({ user, router }: any) {
             </View>
 
             {/* EXP SLOT — blu (barra + valore numerico, stesso blocco visivo)
-                v13.5: width 185→170, right boundary x=270 */}
+                v13.6: width 170→155, right boundary x=255 */}
             <View
               style={[
-                { position: 'absolute', top: 36, left: 100, width: 170, height: 20,
+                { position: 'absolute', top: 36, left: 100, width: 155, height: 20,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#1E90FF' } : null,
               ]}
@@ -856,10 +856,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* POWER SLOT — arancio (v13.5: width 185→170, right boundary x=270) */}
+            {/* POWER SLOT — arancio (v13.6: width 170→155, right boundary x=255) */}
             <TouchableOpacity
               style={[
-                { position: 'absolute', top: 60, left: 100, width: 170, height: 20,
+                { position: 'absolute', top: 60, left: 100, width: 155, height: 20,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF8800' } : null,
               ]}
@@ -874,10 +874,10 @@ function HomeProfilePanel({ user, router }: any) {
             </TouchableOpacity>
 
             {/* STATUS SLOT — rosso (VIP + SP badges)
-                v13.5: width 185→170, right boundary x=270 */}
+                v13.6: width 170→155, right boundary x=255 */}
             <View
               style={[
-                { position: 'absolute', top: 82, left: 100, width: 170, height: 24,
+                { position: 'absolute', top: 82, left: 100, width: 155, height: 24,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF0000' } : null,
               ]}
