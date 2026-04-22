@@ -455,53 +455,59 @@ function HomeProfilePanel({ user, router }: any) {
   // vw<900, che falliva su iPhone 14 Pro Max 932×430). vh<500 cattura TUTTI
   // gli smartphone landscape (SE 375 → Pro Max 430) e lascia i tablet
   // (iPad ≥ 768 vh) nel ramo desktop.
-  const { height: vh } = useWindowDimensions();
-  const isMobile = vh < 500;
+  const { height: vh, width: vw } = useWindowDimensions();
+  // ─── RESPONSIVE TIERS (phoneLandscape / tablet / desktop) ──────────
+  //   phoneLandscape: vh < 500        (iPhone SE 375 → Pro Max 430)
+  //   tablet:         500 ≤ vh < 900  (iPad mini/air landscape)
+  //   desktop:        vh ≥ 900        (web desktop)
+  // NB: "isMobile" mantenuto come alias di phoneLandscape per compat locale.
+  const isPhone  = vh < 500;
+  const isTablet = vh >= 500 && vh < 900;
+  const isMobile = isPhone;   // alias locale (non esportato)
 
-  // ─── PANEL MOBILE RECALIBRATION ────────────────────────────────────
-  // Misure calibrate sul frame reale 3:1 premium (decor + slot ovale sinistro).
-  // Mobile: panelW 210 (era 220), ratio 2.6 per dare più respiro verticale.
-  const panelW     = isMobile ? 210 : 340;
-  const panelRatio = isMobile ? 2.6 : 3;
-  // padL = quota sinistra del frame occupata dallo slot ovale dell'avatar.
-  // Sul frame reale lo slot oval va dal ~3% al ~32% della panel width.
-  // Il content (testi) DEVE iniziare dopo la fine dello slot → padL = 34% mobile.
-  const padL     = isMobile ? Math.round(panelW * 0.34) : 104;   // ~71 mobile
-  const padR     = isMobile ? 18  : 42;
-  const padT     = isMobile ? 9   : 20;
-  const padB     = isMobile ? 9   : 18;
+  // ─── PANEL MOBILE RECALIBRATION (v3 — leggibile, non "desktop rimpicciolito") ─
+  // Precedente pass v2 (210×80, font 8-11pt) risultava micro-scalato su
+  // phone landscape reale: DPR 3x su iPhone rendeva i font 8-9pt ai limiti
+  // della leggibilità HIG. Ora: panel più presente (250×89), typography
+  // dichiaratamente pensata per smartphone landscape.
+  const panelW     = isPhone ? 250 : isTablet ? 300 : 340;
+  const panelRatio = isPhone ? 2.8 : 2.9;
+  // Slot avatar occupa ~34% della panelW sul frame 3:1 → mantiene proporzione
+  // corretta con ring decor. 250 * 0.34 = 85.
+  const padL     = isPhone ? Math.round(panelW * 0.34) : isTablet ? 92 : 104;
+  const padR     = isPhone ? 22  : isTablet ? 32 : 42;
+  const padT     = isPhone ? 11  : isTablet ? 16 : 20;
+  const padB     = isPhone ? 11  : isTablet ? 15 : 18;
 
-  // ─── AVATAR — geometria slot-based (non più flex-centered) ─────────
-  // Lo slot ovale del frame è centrato attorno al 17% della panelW (dal bordo
-  // sinistro), a un'altezza pari al 50% della panelH. Il portrait occupa ~55%
-  // della panelH (target: "incastonato" nel ring decor, non "appoggiato sopra").
-  //
-  // Per panelH = 210/2.6 = 80.8 → avSize = round(80.8 * 0.55) = 44.
-  // In realtà il ring asset ha un bordo dorato spesso che cresce oltre l'avatar;
-  // serve un avFrameW più generoso (ring+glow) che contiene il portrait.
-  const avSize   = isMobile ? 42 : 72;   // portrait/initial
-  const avFrameW = isMobile ? 56 : 98;   // contiene ring + glow
-  const avInit   = isMobile ? 17 : 26;
-  // Anchor: slot centrato a 17% panelW. Offset = 17% - (avFrameW/2)/panelW.
-  //   17% di 210 = 35.7 → avLeft = 35.7 - 28 = 7.7 → 8 px
-  const avLeft   = isMobile ? Math.round(panelW * 0.17 - avFrameW / 2) : 6;
-  // avTop: offset sottile dal top del panel per allineare al centro dello slot
-  //   panelH*0.50 = 40.4 → top = 40.4 - avFrameW/2 (cerchio) = 40.4-28 = 12.4 → 12
-  const avTop    = isMobile ? Math.round((panelW / panelRatio) * 0.50 - avFrameW / 2) : undefined;
+  // ─── AVATAR — dimensioni bilanciate col panel ───────────────────────
+  // panelH = 250/2.8 = 89.3 → avFrameW target ≈ 75% panelH = 67 → 68
+  // avSize (portrait) ≈ 70% avFrameW = 47.6 → 48 (1:1 perfetto)
+  const avSize   = isPhone ? 48 : isTablet ? 60 : 72;
+  const avFrameW = isPhone ? 68 : isTablet ? 82 : 98;
+  const avInit   = isPhone ? 19 : isTablet ? 22 : 26;
+  // Anchor: slot centrato a 17% panelW (standard frame 3:1 premium).
+  //   17% di 250 = 42.5 → avLeft = 42.5 - 34 = 8.5 → 9
+  const avLeft   = isPhone
+    ? Math.round(panelW * 0.17 - avFrameW / 2)
+    : isTablet
+      ? Math.round(panelW * 0.15 - avFrameW / 2)
+      : 6;
+  // avTop: centro verticale dello slot del frame (50% panelH − avFrameW/2)
+  const avTop    = isPhone || isTablet
+    ? Math.round((panelW / panelRatio) * 0.50 - avFrameW / 2)
+    : undefined;
 
-  // ─── LEVEL BADGE — ancorato all'angolo SUD-EST dello slot avatar ────
-  // Il badge è visivamente "incastrato" sotto-destra del ring. Su mobile
-  // riduciamo a 22×22 per non dominare rispetto al ring (avFrameW 56).
-  const lvSize   = isMobile ? 22 : 38;
-  const lvFont   = isMobile ?  9 : 13;
+  // ─── LEVEL BADGE — scalato col ring ─────────────────────────────────
+  const lvSize   = isPhone ? 26 : isTablet ? 32 : 38;
+  const lvFont   = isPhone ? 10 : isTablet ? 12 : 13;
 
-  // ─── TYPOGRAPHY polish — leggibile ma rispetta lo spazio interno (58% panelW) ─
-  const nameFS   = isMobile ? 11 : 14;
-  const pwrFS    = isMobile ? 10 : 11;
-  const pwrLblFS = isMobile ?  9 :  9;
-  const pillFS   = isMobile ?  9 :  9;
-  const expFS    = isMobile ?  8 :  9;
-  const expH     = isMobile ?  8 : 12;
+  // ─── TYPOGRAPHY — leggibile su DPR 3x smartphone (minimum 10pt) ─────
+  const nameFS   = isPhone ? 13 : isTablet ? 13 : 14;
+  const pwrFS    = isPhone ? 11 : isTablet ? 11 : 11;
+  const pwrLblFS = isPhone ? 10 : 9;
+  const pillFS   = isPhone ? 10 : 9;
+  const expFS    = isPhone ? 10 : 9;
+  const expH     = isPhone ? 10 : 12;
 
   // Open/Close del selector avatar/frame (stub tecnico)
   const [selectorOpen, setSelectorOpen] = React.useState<false | 'avatar' | 'frame'>(false);
@@ -1103,54 +1109,62 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
   const { width: vw, height: vh } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  // === RESPONSIVE METRICS ===
-  // Mobile landscape detection basata su ALTEZZA viewport:
-  //   vh < 500 → phone landscape (iPhone SE 375 ÷ Pro Max 430)
-  //   vh ≥ 500 → tablet/desktop (iPad 768+)
-  // Il precedente `vw < 900` mandava iPhone 14/15 Pro Max (932px) nel
-  // ramo desktop → bottom nav gigantesca. Ora invece risolto.
-  const isMobile = vh < 500;
-  // BAR_W: larghezza effettiva della barra.
-  //  - mobile:  min 260 — max 400 — 50% vw (meno dominante, più elegante)
-  //  - tablet+: min 320 — max 560 — 62% vw (invariato)
-  const BAR_W = isMobile
-    ? Math.max(260, Math.min(vw * 0.50, 400))
-    : Math.max(320, Math.min(vw * 0.62, 560));
+  // === RESPONSIVE TIERS ===
+  //   phoneLandscape: vh < 500  (iPhone/Android phones landscape)
+  //   tablet:         500 ≤ vh < 900
+  //   desktop:        vh ≥ 900
+  const isPhone  = vh < 500;
+  const isTablet = vh >= 500 && vh < 900;
+  const isMobile = isPhone;   // alias interno (compat)
 
-  // BAR_H — FIX CRITICO MOBILE
-  // L'asset HOME_NAV_BAR_BASE è 1916×821 (ratio 2.334). La metà superiore
-  // dell'asset è decorazione (portale/ali/teschi); la fascia funzionale
-  // di sotto occupa ~60% dell'altezza. Applicare ratio 2.334 integrale
-  // su mobile faceva prendere alla nav il ~48% dell'altezza viewport.
-  //
-  // Strategia: su MOBILE usiamo la fascia VISIBILE (ratio effettivo 4.5),
-  // clippando la parte alta della decorazione tramite overflow:hidden nel
-  // container e posizionando l'immagine full-ratio allineata al bottom.
-  // In questo modo l'asset NON viene distorto (contain preserva aspect),
-  // ma la nav occupa solo ~22% dell'altezza viewport.
-  const BAR_RATIO_FULL    = 1916 / 821;          // 2.334 (nativo)
-  const BAR_H_FULL        = BAR_W / BAR_RATIO_FULL;
-  const BAR_H_VISIBLE     = isMobile
-    ? Math.min(BAR_H_FULL * 0.50, vh * 0.22)     // ridotto: 50% del full, clamp 22% vh
-    : BAR_H_FULL;
-  const BAR_H             = BAR_H_VISIBLE;       // alias esplicito usato sotto
+  // === BAR_W ===
+  // Phone: cap 360 (era 400) → meno dominante. 46% vw (era 50%).
+  // Tablet: invariato dal pass precedente.
+  // Desktop: invariato.
+  const BAR_W = isPhone
+    ? Math.max(260, Math.min(vw * 0.46, 360))
+    : isTablet
+      ? Math.max(320, Math.min(vw * 0.58, 520))
+      : Math.max(320, Math.min(vw * 0.62, 560));
 
-  // PLAY: medaglia centrale. Mobile: ~17% barra, clamp 21% vh.
-  const PLAY_W = isMobile
-    ? Math.max(52, Math.min(BAR_W * 0.17, vh * 0.21))
-    : Math.max(58, BAR_W * 0.20);
-  const PLAY_H = PLAY_W * (86 / 72);             // aspect shield
+  // === BAR_H ===
+  // Phone: clip ulteriore → 42% del full (era 50%), clamp 18% vh (era 22%).
+  //   A vw=844, BAR_W=360 → BAR_H_FULL = 154.2 → visible = min(64.8, 70.2) = 64.8 → 16.6% vh ✅
+  // Tablet: 65% del full con clamp 25% vh.
+  // Desktop: ratio naturale full (invariato).
+  const BAR_RATIO_FULL = 1916 / 821;      // 2.334 nativo
+  const BAR_H_FULL     = BAR_W / BAR_RATIO_FULL;
+  const BAR_H_VISIBLE  = isPhone
+    ? Math.min(BAR_H_FULL * 0.42, vh * 0.18)
+    : isTablet
+      ? Math.min(BAR_H_FULL * 0.65, vh * 0.25)
+      : BAR_H_FULL;
+  const BAR_H = BAR_H_VISIBLE;
 
-  // SIDE icons: tap-friendly ≥40pt su mobile (trade-off vs barra ridotta).
-  const SIDE_W = isMobile
-    ? Math.max(34, BAR_W * 0.080)
-    : Math.max(34, BAR_W * 0.090);
+  // === PLAY ===
+  // Phone: 15% barra (era 17%), clamp 18% vh (era 21%) → PLAY meno debordante.
+  const PLAY_W = isPhone
+    ? Math.max(50, Math.min(BAR_W * 0.15, vh * 0.18))
+    : isTablet
+      ? Math.max(56, BAR_W * 0.18)
+      : Math.max(58, BAR_W * 0.20);
+  const PLAY_H = PLAY_W * (86 / 72);
+
+  // === SIDE ICONS ===
+  // Phone: 7.5% barra (era 8%) → meno presenti, coerenti con barra ridotta.
+  const SIDE_W = isPhone
+    ? Math.max(32, BAR_W * 0.075)
+    : isTablet
+      ? Math.max(34, BAR_W * 0.085)
+      : Math.max(34, BAR_W * 0.090);
   const SIDE_H = SIDE_W * (48 / 42);
-  const SIDE_GAP = Math.max(1, BAR_W * 0.0025);     // leggermente più stretto
-  const GROUP_GAP = Math.max(3, BAR_W * 0.010);     // leggermente più stretto
+  const SIDE_GAP  = Math.max(1, BAR_W * (isPhone ? 0.0022 : 0.003));
+  const GROUP_GAP = Math.max(3, BAR_W * (isPhone ? 0.009  : 0.012));
 
-  // BTN_BOTTOM: ricalibrato sulla VISIBLE band più bassa.
-  const BTN_BOTTOM = insets.bottom + 4 + Math.round(BAR_H_VISIBLE * 0.20);
+  // === BTN_BOTTOM ===
+  // Phone: *0.18 (era *0.20) → icone rimangono al centro della fascia piatta
+  // anche con BAR_H_VISIBLE ridotta.
+  const BTN_BOTTOM = insets.bottom + 4 + Math.round(BAR_H_VISIBLE * (isPhone ? 0.18 : 0.22));
 
   const left: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
     { key: 'chat',     label: 'CHAT',     ico: '\uD83D\uDCAC', onPress: onChat },
