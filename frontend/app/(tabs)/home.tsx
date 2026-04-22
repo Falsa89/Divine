@@ -775,113 +775,193 @@ function HomeProfilePanel({ user, router }: any) {
         </View>
 
         {/* ═══════════════════════════════════════════════════════════════
-         *  PHONE CLUSTER v12 — DISTRIBUZIONE STRUTTURALE MOVATA QUI
-         *  ────────────────────────────────────────────────────────────
-         *  Root cause v11: `justifyContent: 'space-between'` era su
-         *  `profilePanel`, ma quel container ha solo 1 normal-flow child
-         *  (questo cluster; avatar è absolute) → la distribuzione non
-         *  funzionava. I rows restavano top-stacked.
-         *
-         *  Fix v12: la distribuzione strutturale PHONE è spostata al
-         *  wrapper interno (QUESTO View). Ora:
-         *    - height: '100%' → riempie tutta l'altezza disponibile
-         *    - justifyContent: 'space-between' → Row1 top, Row2 center, Row3 bot
-         *    - alignItems: 'flex-start' → allinea children a sinistra
-         *  Desktop/tablet: `flex: 1` come prima.
+         *  v13 — SPLIT BRANCHES:
+         *    - PHONE: SLOT-ANCHORED ABSOLUTE LAYOUT (no flex, no gap, no
+         *      wrapper flow). 5 slot con coordinate assolute (top/left/
+         *      width/height) ancorati al panelW=340 × panelH=113 reale.
+         *    - TABLET/DESKTOP: branch flex-flow esistente (immutato).
          * ═══════════════════════════════════════════════════════════════ */}
-        <View
-          style={[
-            isPhone ? {
-              width: 150,
-              maxWidth: 150,
-              minWidth: 0,
-              height: '100%',                    // ← fill altezza disponibile
-              overflow: 'hidden',
-              alignSelf: 'flex-start',
-              flexShrink: 0,
-              flexGrow: 0,
-              justifyContent: 'space-between',   // ← row1 top · row2 center · row3 bot
-              alignItems: 'flex-start',          // ← compact rows, no stretch
-            } : { flex: 1 },
-            DEBUG ? { backgroundColor: 'rgba(0,220,255,0.35)', borderWidth: 2, borderColor: '#00FFFF' } : null,
-          ]}
-        >
-          {/* ROW 1 — Name + Subtitle + Exp bar (compact) */}
-          <View style={[s.profileRow1, { minWidth: 0 }, dbg('rgba(0,255,0,0.35)')]}>
-            <View style={isPhone ? { width: '100%', minWidth: 0 } : { flex: 1 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap', minWidth: 0 }}>
-                <Text style={[s.profName, { fontSize: nameFS, flexShrink: 1 }]} numberOfLines={1}>{name}</Text>
-                {isPhone ? (
-                  <Text style={[s.titleTxt, { fontSize: pillFS - 1, marginLeft: 5, flexShrink: 1 }]} numberOfLines={1}>
-                    {'\u2756'} {title}
-                  </Text>
-                ) : null}
-              </View>
-              <View style={s.expWrap}>
-                <View style={[s.expBarBg, { height: expH, borderRadius: expH / 2 }]}>
-                  {HOME_PROFILE_PANEL.expBarBg ? (
-                    <RNImage
-                      source={HOME_PROFILE_PANEL.expBarBg}
-                      style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
-                      resizeMode="stretch"
-                    />
-                  ) : null}
-                  <AssetBackedGradient
-                    source={HOME_PROFILE_PANEL.expBarFill}
-                    fallbackColors={[GOLD_PALE, GOLD]}
-                    fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
-                    style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
-                  />
-                </View>
-                <Text style={[s.expTxt, { fontSize: expFS }]} numberOfLines={1}>{exp}/{expMax}</Text>
-              </View>
+        {isPhone ? (
+          // ─────────────────────────────────────────────────────────────
+          // PHONE v13 — ABSOLUTE SLOTS (deterministic coordinates)
+          // Coordinate calibrate sul frame panelW=340 × panelH=113.3:
+          //   avatar:     left=13  top=19  76×76    (già absolute)
+          //   nameSlot:   left=100 top=10  90×20    border VERDE
+          //   titleSlot:  left=195 top=12  137×18   border LIME
+          //   expSlot:    left=100 top=36  232×20   border BLU  (bar+val)
+          //   powerSlot:  left=100 top=60  232×20   border ARANCIO
+          //   statusSlot: left=100 top=82  232×24   border ROSSO (VIP+SP)
+          // ─────────────────────────────────────────────────────────────
+          <>
+            {/* NAME SLOT — verde */}
+            <View
+              style={[
+                { position: 'absolute', top: 10, left: 100, width: 90, height: 20,
+                  justifyContent: 'center' },
+                DEBUG ? { borderWidth: 1.5, borderColor: '#00FF00' } : null,
+              ]}
+              pointerEvents="box-none"
+            >
+              <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>
+                {name}
+              </Text>
             </View>
-          </View>
 
-          {/* ROW 2 — POWER compact (alignSelf flex-start → no stretch a cluster width) */}
-          <TouchableOpacity
-            style={[
-              s.powerRow,
-              isPhone ? { alignSelf: 'flex-start' } : null,
-              dbg('rgba(255,165,0,0.28)'),
-            ]}
-            onPress={() => router.push('/profile' as any)}
-            activeOpacity={0.8}
-          >
-            <Text style={[s.powerIcon, { fontSize: pwrFS + 1 }]}>{'\u26A1'}</Text>
-            <Text style={[s.powerLbl, { fontSize: pwrLblFS }]}>POWER</Text>
-            <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
-          </TouchableOpacity>
+            {/* TITLE SLOT — lime */}
+            <View
+              style={[
+                { position: 'absolute', top: 12, left: 195, width: 137, height: 18,
+                  justifyContent: 'center' },
+                DEBUG ? { borderWidth: 1.5, borderColor: '#B0FF00' } : null,
+              ]}
+              pointerEvents="box-none"
+            >
+              <Text style={[s.titleTxt, { fontSize: pillFS - 1 }]} numberOfLines={1}>
+                {'\u2756'} {title}
+              </Text>
+            </View>
 
-          {/* ROW 3 — Status pills compact, no wrap, alignSelf flex-start */}
+            {/* EXP SLOT — blu (barra + valore numerico, stesso blocco visivo) */}
+            <View
+              style={[
+                { position: 'absolute', top: 36, left: 100, width: 232, height: 20,
+                  flexDirection: 'row', alignItems: 'center' },
+                DEBUG ? { borderWidth: 1.5, borderColor: '#1E90FF' } : null,
+              ]}
+              pointerEvents="box-none"
+            >
+              <View
+                style={[
+                  s.expBarBg,
+                  { flex: 1, height: expH, borderRadius: expH / 2, marginRight: 6 },
+                ]}
+              >
+                {HOME_PROFILE_PANEL.expBarBg ? (
+                  <RNImage
+                    source={HOME_PROFILE_PANEL.expBarBg}
+                    style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
+                    resizeMode="stretch"
+                  />
+                ) : null}
+                <AssetBackedGradient
+                  source={HOME_PROFILE_PANEL.expBarFill}
+                  fallbackColors={[GOLD_PALE, GOLD]}
+                  fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
+                  style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
+                />
+              </View>
+              <Text style={[s.expTxt, { fontSize: expFS }]} numberOfLines={1}>
+                {exp}/{expMax}
+              </Text>
+            </View>
+
+            {/* POWER SLOT — arancio */}
+            <TouchableOpacity
+              style={[
+                { position: 'absolute', top: 60, left: 100, width: 232, height: 20,
+                  flexDirection: 'row', alignItems: 'center' },
+                DEBUG ? { borderWidth: 1.5, borderColor: '#FF8800' } : null,
+              ]}
+              onPress={() => router.push('/profile' as any)}
+              activeOpacity={0.8}
+            >
+              <Text style={[s.powerIcon, { fontSize: pwrFS + 1, marginRight: 4 }]}>{'\u26A1'}</Text>
+              <Text style={[s.powerLbl, { fontSize: pwrLblFS, marginRight: 6 }]}>POWER</Text>
+              <Text style={[s.powerVal, { fontSize: pwrFS }]} numberOfLines={1}>
+                {Number(power).toLocaleString()}
+              </Text>
+            </TouchableOpacity>
+
+            {/* STATUS SLOT — rosso (VIP + SP badges) */}
+            <View
+              style={[
+                { position: 'absolute', top: 82, left: 100, width: 232, height: 24,
+                  flexDirection: 'row', alignItems: 'center' },
+                DEBUG ? { borderWidth: 1.5, borderColor: '#FF0000' } : null,
+              ]}
+              pointerEvents="box-none"
+            >
+              <TouchableOpacity style={[s.vipPill, { marginRight: 6 }]} activeOpacity={0.7}
+                onPress={() => router.push('/vip' as any)}>
+                <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
+                <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
+                onPress={() => router.push('/profile' as any)}>
+                <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
+                <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          // ─────────────────────────────────────────────────────────────
+          // TABLET / DESKTOP — ramo flex-flow INVARIATO (approvato)
+          // ─────────────────────────────────────────────────────────────
           <View
             style={[
-              s.pillsRow,
-              { flexWrap: 'nowrap' },
-              isPhone ? { alignSelf: 'flex-start' } : null,
-              dbg('rgba(255,0,0,0.25)'),
+              { flex: 1 },
+              DEBUG ? { backgroundColor: 'rgba(0,220,255,0.35)', borderWidth: 2, borderColor: '#00FFFF' } : null,
             ]}
           >
-            <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
-              onPress={() => router.push('/vip' as any)}>
-              <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
-              <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
+            {/* ROW 1 — Name + Exp bar */}
+            <View style={[s.profileRow1, { minWidth: 0 }, dbg('rgba(0,255,0,0.35)')]}>
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap', minWidth: 0 }}>
+                  <Text style={[s.profName, { fontSize: nameFS, flexShrink: 1 }]} numberOfLines={1}>{name}</Text>
+                </View>
+                <View style={s.expWrap}>
+                  <View style={[s.expBarBg, { height: expH, borderRadius: expH / 2 }]}>
+                    {HOME_PROFILE_PANEL.expBarBg ? (
+                      <RNImage
+                        source={HOME_PROFILE_PANEL.expBarBg}
+                        style={[StyleSheet.absoluteFillObject as any, { width: '100%', height: '100%' }]}
+                        resizeMode="stretch"
+                      />
+                    ) : null}
+                    <AssetBackedGradient
+                      source={HOME_PROFILE_PANEL.expBarFill}
+                      fallbackColors={[GOLD_PALE, GOLD]}
+                      fallbackStart={{ x: 0, y: 0 }} fallbackEnd={{ x: 1, y: 0 }}
+                      style={[s.expBarFill, { width: `${Math.min(100, (exp / expMax) * 100)}%` }] as any}
+                    />
+                  </View>
+                  <Text style={[s.expTxt, { fontSize: expFS }]} numberOfLines={1}>{exp}/{expMax}</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* ROW 2 — POWER */}
+            <TouchableOpacity
+              style={[s.powerRow, dbg('rgba(255,165,0,0.28)')]}
+              onPress={() => router.push('/profile' as any)}
+              activeOpacity={0.8}
+            >
+              <Text style={[s.powerIcon, { fontSize: pwrFS + 1 }]}>{'\u26A1'}</Text>
+              <Text style={[s.powerLbl, { fontSize: pwrLblFS }]}>POWER</Text>
+              <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
-              onPress={() => router.push('/profile' as any)}>
-              <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
-              <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
-            </TouchableOpacity>
-            {isPhone ? null : (
+
+            {/* ROW 3 — Status pills + title badge */}
+            <View style={[s.pillsRow, { flexWrap: 'nowrap' }, dbg('rgba(255,0,0,0.25)')]}>
+              <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
+                onPress={() => router.push('/vip' as any)}>
+                <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
+                <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
+                onPress={() => router.push('/profile' as any)}>
+                <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
+                <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
+              </TouchableOpacity>
               <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
                 onPress={() => router.push('/achievements' as any)}>
                 <Text style={[s.titleTxt, { fontSize: pillFS }]} numberOfLines={1}>
                   {'\u2756'} {title}
                 </Text>
               </TouchableOpacity>
-            )}
+            </View>
           </View>
-        </View>
+        )}
       </AssetBackedGradient>
 
       {/* STUB SELECTOR — avatar (tap breve) / frame (long-press) */}
