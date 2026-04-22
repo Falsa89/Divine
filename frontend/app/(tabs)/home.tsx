@@ -592,7 +592,27 @@ function HomeProfilePanel({ user, router }: any) {
         fallbackColors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
         style={[
           s.profilePanel,
-          { paddingLeft: padL, paddingRight: padR, paddingTop: padT, paddingBottom: padB },
+          {
+            paddingLeft: padL, paddingRight: padR,
+            paddingTop: padT, paddingBottom: padB,
+            // ╔══ STRUCTURAL PHONE FIX (v7.1) ══════════════════════════════╗
+            // ║ Phone landscape usa una composizione STRUTTURALMENTE        ║
+            // ║ DIVERSA dal desktop: invece di stackare 3 righe              ║
+            // ║ (name+exp | power | pills) con flex-start al top, sul       ║
+            // ║ phone la flex container distribuisce le righe con           ║
+            // ║ `space-between` → Row 1 anchored top, Row 2 centered,       ║
+            // ║ Row 3 anchored bottom. Questo usa TUTTO lo spazio            ║
+            // ║ verticale del frame phone-specific (126 pt) invece di       ║
+            // ║ lasciare vuoto il metà basso.                               ║
+            // ║                                                               ║
+            // ║ Tablet/Desktop: invariato (`flex-start` preserva layout      ║
+            // ║ tradizionale quando il frame è più largo e ospita le 3      ║
+            // ║ righe naturalmente al top).                                  ║
+            // ║ L'avatar è `position: absolute` → NON partecipa al flex      ║
+            // ║ flow, quindi la distribuzione 3-row non lo sposta.           ║
+            // ╚══════════════════════════════════════════════════════════════╝
+            justifyContent: isPhone ? 'space-between' : 'flex-start',
+          },
         ]}
       >
         {/* AVATAR + LV BADGE — architettura fallback-safe.
