@@ -807,10 +807,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* TITLE SLOT — lime (v13.6: width 75→60, right boundary x=255) */}
+            {/* TITLE SLOT — lime (v13.7: width 60→72, right x=267, recupera testo "Apprendista") */}
             <View
               style={[
-                { position: 'absolute', top: 12, left: 195, width: 60, height: 18,
+                { position: 'absolute', top: 12, left: 195, width: 72, height: 18,
                   justifyContent: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#B0FF00' } : null,
               ]}
@@ -856,10 +856,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* POWER SLOT — arancio (v13.6: width 170→155, right boundary x=255) */}
+            {/* POWER SLOT — arancio (v13.7: width 155→150, right x=250) */}
             <TouchableOpacity
               style={[
-                { position: 'absolute', top: 60, left: 100, width: 155, height: 20,
+                { position: 'absolute', top: 60, left: 100, width: 150, height: 20,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF8800' } : null,
               ]}
@@ -874,10 +874,10 @@ function HomeProfilePanel({ user, router }: any) {
             </TouchableOpacity>
 
             {/* STATUS SLOT — rosso (VIP + SP badges)
-                v13.6: width 170→155, right boundary x=255 */}
+                v13.7: width 155→150, right x=250 */}
             <View
               style={[
-                { position: 'absolute', top: 82, left: 100, width: 155, height: 24,
+                { position: 'absolute', top: 82, left: 100, width: 150, height: 24,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF0000' } : null,
               ]}
