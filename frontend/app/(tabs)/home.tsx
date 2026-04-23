@@ -132,8 +132,8 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   //       Row 2: Exp bar full width
   //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
   const panelW     = isPhone ? 340 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 3.0 : isTablet ? 2.9 : 3;   // match asset ratio
-  const panelH     = panelW / panelRatio;                   // 113.3 phone
+  const panelRatio = isPhone ? 2.8 : isTablet ? 2.9 : 3;   // v14: phone 3.0→2.8 (fix schiacciamento frame; panelH 113→121)
+  const panelH     = panelW / panelRatio;                   // 121.4 phone
   const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
@@ -822,10 +822,10 @@ function HomeProfilePanel({ user, router }: any) {
             </View>
 
             {/* EXP SLOT — blu (barra + valore numerico, stesso blocco visivo)
-                v13.9: top 36→38 (polish verticale) */}
+                v13.7 baseline ripristinata */}
             <View
               style={[
-                { position: 'absolute', top: 38, left: 100, width: 148, height: 20,
+                { position: 'absolute', top: 36, left: 100, width: 155, height: 20,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#1E90FF' } : null,
               ]}
@@ -856,10 +856,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* POWER SLOT — arancio (v13.9: top 60→62, polish verticale) */}
+            {/* POWER SLOT — arancio (v13.7 baseline ripristinata) */}
             <TouchableOpacity
               style={[
-                { position: 'absolute', top: 62, left: 100, width: 142, height: 20,
+                { position: 'absolute', top: 60, left: 100, width: 150, height: 20,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF8800' } : null,
               ]}
@@ -874,10 +874,10 @@ function HomeProfilePanel({ user, router }: any) {
             </TouchableOpacity>
 
             {/* STATUS SLOT — rosso (VIP + SP badges)
-                v13.9: top 82→86, polish verticale */}
+                v13.7 baseline ripristinata */}
             <View
               style={[
-                { position: 'absolute', top: 86, left: 100, width: 142, height: 24,
+                { position: 'absolute', top: 82, left: 100, width: 150, height: 24,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF0000' } : null,
               ]}
