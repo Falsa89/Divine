@@ -142,11 +142,13 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? Math.round(panelW * 0.15 - avFrameW / 2)
+    ? 18                                                         // v14.1: 13→18 (ring meglio seduto nella sede decorativa sinistra del frame)
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
-  const avTop    = (isPhone || isTablet)
-    ? Math.round(panelH * 0.50 - avFrameW / 2)
-    : undefined;
+  const avTop    = isPhone
+    ? 30                                                         // v14.1: 23→30 (ring abbassato nella sede, compensa padding trasparente asimmetrico del PNG)
+    : isTablet
+      ? Math.round(panelH * 0.50 - avFrameW / 2)
+      : undefined;
   const lvSize   = isPhone ? 26 : isTablet ? 32 : 38;
   const lvFont   = isPhone ? 10 : isTablet ? 12 : 13;
   const nameFS   = isPhone ? 13 : 14;
