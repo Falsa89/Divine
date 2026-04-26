@@ -142,10 +142,10 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? 21                                                         // v14.2: 18→21 (+3 destra, ring più seduto nella sede)
+    ? 19                                                         // v14.3: 21→19 (avvicina al centro geometrico sede PNG x=53)
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 33                                                         // v14.2: 30→33 (+3 basso, riduce sensazione "troppo alto")
+    ? 30                                                         // v14.3: 33→30 (avvicina al centro geometrico sede PNG y=61)
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
