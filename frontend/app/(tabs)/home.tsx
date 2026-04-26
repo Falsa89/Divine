@@ -84,7 +84,7 @@ const SHOW_PHASE_BADGE = false;
  * in un box flottante. DEVE essere TRUE durante le pass di debug layout, poi
  * disattivato prima della release.
  */
-const SHOW_DEV_METRICS = true;
+const SHOW_DEV_METRICS = false;
 
 /* ═══════════════════════════════════════════════════════════════════
  *  computeHomeMetrics — pure function, source-of-truth per TUTTI i
