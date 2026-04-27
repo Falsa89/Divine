@@ -679,11 +679,12 @@ export default function CombatScreen() {
   };
 
   // Wrapper dinamico: se è stato scelto uno sfondo fazione renderizza l'Image
-  // absolute-fill con width/height ESPLICITI presi da useWindowDimensions
-  // (pattern cross-platform affidabile su iOS/Android/Web — evita il bug
-  // RN-Web dell'Image che altrimenti userebbe le dimensioni native del PNG
-  // e lascerebbe fasce nere, e evita anche che su native 'width:100%' si
-  // comporti in modo diverso dal previsto).
+  // come absolute-fill ANCORATO AL PARENT (top/left/right/bottom = 0). Pattern
+  // cross-platform che risolve sia il bug RN-Web (Image senza dimensioni
+  // userebbe la size nativa del PNG) sia il bug mobile reale: usare
+  // `width: winW, height: winH` da useWindowDimensions può divergere dalle
+  // dimensioni effettive del parent flex:1 in landscape edge-to-edge / notch /
+  // cutout, lasciando fasce del backgroundColor scuro ai bordi.
   // resizeMode="cover" gestisce il crop su tutte le piattaforme.
   // Overlay scuro MOLTO leggero: il bg resta dominante e nitido.
   const BattleWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -692,7 +693,7 @@ export default function CombatScreen() {
         <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
           <Image
             source={battleBg.source}
-            style={{ position: 'absolute', top: 0, left: 0, width: winW, height: winH }}
+            style={StyleSheet.absoluteFillObject}
             resizeMode="cover"
             fadeDuration={200}
           />
