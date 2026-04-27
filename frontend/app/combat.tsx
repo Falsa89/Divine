@@ -12,6 +12,7 @@ import { pickBattleBackground, BattleBgResult, preloadBattleAsset } from '../com
 import { buildBattleLayout, getHomePosition } from '../components/battle/motionSystem';
 import BattleDebugOverlay, { DebugUnitInfo } from '../components/battle/BattleDebugOverlay';
 import BattleLoadingScreen from '../components/battle/BattleLoadingScreen';
+import ChatComposer from '../components/chat/ChatComposer';
 
 /**
  * BATTLE_DEBUG — flag per attivare overlay di debug nativo + log console
@@ -87,6 +88,12 @@ export default function CombatScreen() {
   const showLogRef = useRef(false);
   useEffect(() => { showLogRef.current = showLog; }, [showLog]);
   const [logTab, setLogTab] = useState<'log' | 'chat'>('log');
+  // v16.5 — Battle chat composer (tab 'chat' del drawer). Tenta POST a
+  // /api/plaza/chat (chat globale piazza). Se fallisce, fallback locale
+  // così l'utente vede comunque il proprio messaggio. Refresh pull non
+  // è schedulato durante battle (zero impatto su perf): solo invii.
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const chatScrollRef = useRef<ScrollView>(null);
   const [spriteStates, setSpriteStates] = useState<Record<string, SpriteData>>({});
   // Background della battaglia: scelto UNA SOLA volta all'inizio di ogni fight
   // e memorizzato qui per restare deterministicamente fisso durante la battaglia.
@@ -422,6 +429,26 @@ export default function CombatScreen() {
     if (showLogRef.current) {
       setLogLines(nextArr);
       safeTimeout(() => logRef.current?.scrollToEnd({ animated: true }), 50);
+    }
+  };
+
+  // v16.5 — BATTLE CHAT SEND
+  // Tenta l'endpoint plaza globale. Se ko, fallback locale (echo) così
+  // l'utente vede comunque il proprio messaggio. Non blocca la battle.
+  const sendBattleChat = async (msg: string) => {
+    const localEntry = {
+      id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      username: 'Tu',
+      message: msg,
+      ts: Date.now(),
+      _local: true,
+    };
+    setChatMessages(prev => [...prev.slice(-29), localEntry]);
+    safeTimeout(() => chatScrollRef.current?.scrollToEnd({ animated: true }), 60);
+    try {
+      await apiCall('/api/plaza/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
+    } catch {
+      // network ko — il messaggio resta come local-echo
     }
   };
 
@@ -1120,9 +1147,32 @@ export default function CombatScreen() {
                 </ScrollView>
               ) : (
                 <View style={st.chatBody}>
-                  <Text style={st.chatEmpty}>
-                    Chat in arrivo. La chat globale è disponibile nella Plaza.
-                  </Text>
+                  {/* v16.5 — CHAT TAB */}
+                  <ScrollView
+                    ref={chatScrollRef}
+                    showsVerticalScrollIndicator
+                    contentContainerStyle={{ paddingBottom: 6, gap: 4 }}
+                    style={{ flex: 1 }}
+                  >
+                    {chatMessages.length === 0 ? (
+                      <Text style={st.chatEmpty}>
+                        Nessun messaggio. Scrivi qualcosa qui sotto.
+                      </Text>
+                    ) : (
+                      chatMessages.map((m: any) => (
+                        <View key={m.id || m._id} style={st.chatMsgRow}>
+                          <Text style={st.chatMsgUser}>{m.username || 'utente'}:</Text>
+                          <Text style={st.chatMsgTxt}>{m.message}</Text>
+                        </View>
+                      ))
+                    )}
+                  </ScrollView>
+                  <ChatComposer
+                    onSend={sendBattleChat}
+                    placeholder={'Scrivi durante la battle\u2026'}
+                    compact
+                    maxLength={160}
+                  />
                 </View>
               )}
             </View>
@@ -1514,6 +1564,24 @@ const st = StyleSheet.create({
     fontStyle: 'italic',
     textAlign: 'center',
     marginTop: 12,
+  },
+  // v16.5 — Battle Chat tab message rows
+  chatMsgRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 4,
+    flexWrap: 'wrap',
+  },
+  chatMsgUser: {
+    color: COLORS.accent,
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  chatMsgTxt: {
+    color: '#E8E8F2',
+    fontSize: 11,
+    flexShrink: 1,
+    lineHeight: 15,
   },
   logContent: { gap: 4, paddingBottom: 6 },
   logLine: { paddingVertical: 1 },

@@ -5,6 +5,7 @@ import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import ChatComposer from '../components/chat/ChatComposer';
 
 const AURA_COLORS: Record<string,string> = { flame:'#ff4444', ice:'#44aaff', thunder:'#ffd700', shadow:'#9944ff', divine:'#ffd700', celestial:'#ffffff' };
 const FRAME_COLORS: Record<string,string> = { bronze:'#cd7f32', silver:'#c0c0c0', gold:'#ffd700', diamond:'#44ddff', legendary:'#ff4444', divine:'#ffd700' };
@@ -15,8 +16,6 @@ export default function PlazaScreen() {
   const [players, setPlayers] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [chatMsg, setChatMsg] = useState('');
-  const [sending, setSending] = useState(false);
   const chatRef = useRef<ScrollView>(null);
 
   useEffect(() => { load(); const iv = setInterval(loadChat, 8000); return () => clearInterval(iv); }, []);
@@ -24,10 +23,9 @@ export default function PlazaScreen() {
   const load = async () => { try { const [p, c] = await Promise.all([apiCall('/api/plaza'), apiCall('/api/plaza/chat')]); setPlayers(p.players||[]); setMessages(c||[]); } catch(e){} finally { setLoading(false); } };
   const loadChat = async () => { try { const c = await apiCall('/api/plaza/chat'); setMessages(c||[]); } catch(e){} };
 
-  const sendMsg = async () => {
-    if (!chatMsg.trim()) return;
-    setSending(true);
-    try { await apiCall('/api/plaza/chat', { method:'POST', body: JSON.stringify({message:chatMsg}) }); setChatMsg(''); await loadChat(); } catch(e){} finally { setSending(false); }
+  const sendMsg = async (msg: string) => {
+    await apiCall('/api/plaza/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
+    await loadChat();
   };
 
   if (loading) return <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B']} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}><ActivityIndicator size="large" color="#ff6b35" /></LinearGradient>;
@@ -70,10 +68,12 @@ export default function PlazaScreen() {
             {messages.length === 0 && <Text style={s.emptyChat}>Nessun messaggio ancora</Text>}
           </ScrollView>
           <View style={s.chatInput}>
-            <TextInput style={s.input} placeholder="Scrivi..." placeholderTextColor="#555" value={chatMsg} onChangeText={setChatMsg} onSubmitEditing={sendMsg} />
-            <TouchableOpacity style={[s.sendBtn, sending&&{opacity:0.5}]} onPress={sendMsg} disabled={sending}>
-              <Text style={s.sendTxt}>Invia</Text>
-            </TouchableOpacity>
+            <ChatComposer
+              onSend={sendMsg}
+              placeholder={'Scrivi alla piazza\u2026'}
+              compact
+              maxLength={200}
+            />
           </View>
         </View>
       </View>
