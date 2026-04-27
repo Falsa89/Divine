@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform, useWindowDimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform, useWindowDimensions, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -70,6 +70,12 @@ export default function CombatScreen() {
   const [ultInfo, setUltInfo] = useState({ char: '', skill: '', element: 'neutral' });
   const [error, setError] = useState('');
   const [logLines, setLogLines] = useState<any[]>([]);
+  // v16.1 — Battle Log overlay: il log non è più una fascia fissa che eat-up
+  // 110pt di battle viewport. È un overlay on-demand ispirato al pattern
+  // chat (panels/tabs). Default tab = 'log', tab 'chat' è placeholder per
+  // futura integrazione plaza-chat in-battle (no scope creep ora).
+  const [showLog, setShowLog] = useState(false);
+  const [logTab, setLogTab] = useState<'log' | 'chat'>('log');
   const [spriteStates, setSpriteStates] = useState<Record<string, SpriteData>>({});
   // Background della battaglia: scelto UNA SOLA volta all'inizio di ogni fight
   // e memorizzato qui per restare deterministicamente fisso durante la battaglia.
@@ -745,6 +751,16 @@ export default function CombatScreen() {
             <TouchableOpacity onPress={skip} activeOpacity={0.7} style={st.skipBtn}>
               <Text style={st.skipTxt}>{'\u23E9'} SALTA</Text>
             </TouchableOpacity>
+            {/* v16.1 — Toggle Battle Log overlay (chat-style). NON impatta
+                turn/skip/pause logic, è solo un trigger visual. */}
+            <TouchableOpacity onPress={() => setShowLog(true)} activeOpacity={0.7} style={st.logBtn}>
+              <Text style={st.logBtnTxt}>{'\uD83D\uDCDC'} LOG</Text>
+              {logLines.length > 0 ? (
+                <View style={st.logBtnBadge}>
+                  <Text style={st.logBtnBadgeTxt}>{logLines.length > 99 ? '99+' : logLines.length}</Text>
+                </View>
+              ) : null}
+            </TouchableOpacity>
           </View>
           {/* Hero portrait cards */}
           <View style={st.cardRow}>
@@ -918,53 +934,114 @@ export default function CombatScreen() {
           })()}
         </View>
 
-        {/* Action Log - bottom */}
-        <View style={st.logPanel}>
-          <ScrollView
-            ref={logRef}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={st.logContent}
-          >
-            {logLines.map((entry, i) => (
-              <View key={i} style={st.logLine}>
-                {entry.type === 'attack' && (
-                  <Text style={st.logText} numberOfLines={1}>
-                    <Text style={{ color: entry.team === 'team_a' ? '#44AAFF' : '#FF4444' }}>{entry.actor}</Text>
-                    {' '}{entry.skill || 'Attacco'} {'\u2192'} {entry.targets}
-                    {' '}<Text style={{ color: entry.crit ? '#FFD700' : '#FF8844' }}>-{entry.damage?.toLocaleString()}</Text>
-                    {entry.crit && <Text style={{ color: '#FFD700' }}> CRIT!</Text>}
+        {/* v16.1 — RIMOSSO log inline fisso (era 110pt di altezza che
+            comprimeva il battle viewport). Sostituito dall'overlay Modal
+            qui sotto, accessibile via il bottone "📜 LOG" nel turnRow. */}
+
+        {/* v16.1 — BATTLE LOG OVERLAY (chat-style, tabs-ready) ============
+            Pannello modale on-demand. Default tab "log" mostra le stesse
+            linee del vecchio log inline. Tab "chat" è placeholder per
+            futura integrazione plaza-chat in-battle. transparent + animationType="fade" → nessun lag perceived
+            durante battle, niente push/pop di stack che impatti la
+            performance del playLog scheduler. */}
+        <Modal
+          visible={showLog}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowLog(false)}
+        >
+          <View style={st.logOvBackdrop} pointerEvents="box-none">
+            <TouchableOpacity
+              style={StyleSheet.absoluteFillObject}
+              activeOpacity={1}
+              onPress={() => setShowLog(false)}
+            />
+            <View style={st.logOvPanel}>
+              {/* Header: tabs + close */}
+              <View style={st.logOvHeader}>
+                <TouchableOpacity
+                  onPress={() => setLogTab('log')}
+                  style={[st.logOvTab, logTab === 'log' && st.logOvTabActive]}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[st.logOvTabTxt, logTab === 'log' && st.logOvTabTxtActive]}>
+                    {'\uD83D\uDCDC'} Battle Log
                   </Text>
-                )}
-                {entry.type === 'ultimate' && (
-                  <Text style={st.logText}>
-                    <Text style={{ color: '#FFD700' }}>{'\u2B50'} {entry.actor} usa {entry.skill}!</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setLogTab('chat')}
+                  style={[st.logOvTab, logTab === 'chat' && st.logOvTabActive]}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[st.logOvTabTxt, logTab === 'chat' && st.logOvTabTxtActive]}>
+                    {'\uD83D\uDCAC'} Chat
                   </Text>
-                )}
-                {entry.type === 'heal' && (
-                  <Text style={st.logText}>
-                    <Text style={{ color: '#44DD88' }}>{'\u2764\uFE0F'} {entry.actor} +{entry.amount?.toLocaleString()} HP</Text>
-                  </Text>
-                )}
-                {entry.type === 'dot' && (
-                  <Text style={st.logText}>
-                    <Text style={{ color: '#FF8844' }}>{'\uD83D\uDD25'} {entry.target} -{entry.damage?.toLocaleString()} ({entry.effect})</Text>
-                  </Text>
-                )}
-                {entry.type === 'dodge' && (
-                  <Text style={st.logText}>
-                    <Text style={{ color: '#44DD99' }}>{'\uD83D\uDCA8'} {entry.target} schiva!</Text>
-                  </Text>
-                )}
-                {entry.type === 'skip' && (
-                  <Text style={st.logText}>
-                    <Text style={{ color: '#666' }}>{entry.actor} bloccato</Text>
-                  </Text>
-                )}
+                </TouchableOpacity>
+                <View style={{ flex: 1 }} />
+                <TouchableOpacity onPress={() => setShowLog(false)} style={st.logOvClose} activeOpacity={0.7}>
+                  <Text style={st.logOvCloseTxt}>{'\u2715'}</Text>
+                </TouchableOpacity>
               </View>
-            ))}
-          </ScrollView>
-        </View>
+
+              {/* Body */}
+              {logTab === 'log' ? (
+                <ScrollView
+                  ref={logRef}
+                  horizontal={false}
+                  showsVerticalScrollIndicator
+                  contentContainerStyle={st.logContent}
+                  style={st.logOvScroll}
+                >
+                  {logLines.length === 0 ? (
+                    <Text style={st.logOvEmpty}>Nessun evento registrato.</Text>
+                  ) : (
+                    logLines.map((entry, i) => (
+                      <View key={i} style={st.logLine}>
+                        {entry.type === 'attack' && (
+                          <Text style={st.logText}>
+                            <Text style={{ color: entry.team === 'team_a' ? '#44AAFF' : '#FF4444' }}>{entry.actor}</Text>
+                            {' '}{entry.skill || 'Attacco'} {'\u2192'} {entry.targets}
+                            {' '}<Text style={{ color: entry.crit ? '#FFD700' : '#FF8844' }}>-{entry.damage?.toLocaleString()}</Text>
+                            {entry.crit && <Text style={{ color: '#FFD700' }}> CRIT!</Text>}
+                          </Text>
+                        )}
+                        {entry.type === 'ultimate' && (
+                          <Text style={st.logText}>
+                            <Text style={{ color: '#FFD700' }}>{'\u2B50'} {entry.actor} usa {entry.skill}!</Text>
+                          </Text>
+                        )}
+                        {entry.type === 'heal' && (
+                          <Text style={st.logText}>
+                            <Text style={{ color: '#44DD88' }}>{'\u2764\uFE0F'} {entry.actor} +{entry.amount?.toLocaleString()} HP</Text>
+                          </Text>
+                        )}
+                        {entry.type === 'dot' && (
+                          <Text style={st.logText}>
+                            <Text style={{ color: '#FF8844' }}>{'\uD83D\uDD25'} {entry.target} -{entry.damage?.toLocaleString()} ({entry.effect})</Text>
+                          </Text>
+                        )}
+                        {entry.type === 'dodge' && (
+                          <Text style={st.logText}>
+                            <Text style={{ color: '#44DD99' }}>{'\uD83D\uDCA8'} {entry.target} schiva!</Text>
+                          </Text>
+                        )}
+                        {entry.type === 'skip' && (
+                          <Text style={st.logText}>
+                            <Text style={{ color: '#666' }}>{entry.actor} bloccato</Text>
+                          </Text>
+                        )}
+                      </View>
+                    ))
+                  )}
+                </ScrollView>
+              ) : (
+                <View style={st.logOvScroll}>
+                  <Text style={st.logOvEmpty}>Chat in arrivo. Per ora la chat globale è disponibile nella Plaza.</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        </Modal>
 
         {/* Ultimate Cut-in Overlay */}
         {showUlt && (
@@ -1192,14 +1269,113 @@ const st = StyleSheet.create({
     fontWeight: '900',
   },
   // Log Panel
-  // Battle log — grande e leggibile in mobile reale
-  logPanel: {
-    height: 110,
-    backgroundColor: 'rgba(6,6,20,0.94)',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,107,53,0.32)',
-    paddingHorizontal: 16,
+  // v16.1 — Battle log RIMOSSO dalla scena fissa, ora è un overlay modale
+  // tabs-ready (vedi logOv*). I sub-style logContent/logLine/logText sono
+  // ancora referenziati dal Modal → mantenuti.
+  logBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,107,53,0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,107,53,0.32)',
+    gap: 4,
+    marginLeft: 6,
+  },
+  logBtnTxt: {
+    color: COLORS.accent,
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  logBtnBadge: {
+    minWidth: 18,
+    height: 16,
+    borderRadius: 8,
+    paddingHorizontal: 4,
+    backgroundColor: COLORS.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 2,
+  },
+  logBtnBadgeTxt: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '900',
+  },
+  // Overlay modale (chat-style)
+  logOvBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+  },
+  logOvPanel: {
+    width: '92%',
+    maxWidth: 720,
+    height: '78%',
+    backgroundColor: 'rgba(10,10,28,0.97)',
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,107,53,0.45)',
+    overflow: 'hidden',
+  },
+  logOvHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.08)',
+    gap: 4,
+  },
+  logOvTab: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+  },
+  logOvTabActive: {
+    backgroundColor: 'rgba(255,107,53,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,107,53,0.5)',
+  },
+  logOvTabTxt: {
+    color: 'rgba(255,255,255,0.55)',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+  },
+  logOvTabTxtActive: {
+    color: '#fff',
+  },
+  logOvClose: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logOvCloseTxt: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '900',
+  },
+  logOvScroll: {
+    flex: 1,
+    paddingHorizontal: 14,
     paddingVertical: 10,
+  },
+  logOvEmpty: {
+    color: 'rgba(255,255,255,0.45)',
+    fontSize: 12,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 16,
   },
   logContent: { gap: 5, paddingBottom: 6 },
   logLine: { paddingVertical: 2 },
