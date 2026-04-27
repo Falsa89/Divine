@@ -85,6 +85,7 @@ const SHOW_PHASE_BADGE = false;
  * disattivato prima della release.
  */
 const SHOW_DEV_METRICS = false;
+const SHOW_MEDALLION_DEBUG = true;   // v15.6A: temp overlay calibration avatar/medallion phone (true ON solo per questa pass)
 
 /* ═══════════════════════════════════════════════════════════════════
  *  computeHomeMetrics — pure function, source-of-truth per TUTTI i
@@ -776,6 +777,75 @@ function HomeProfilePanel({ user, router }: any) {
             <Text style={[s.lvBadgeTxt, { fontSize: lvFont }]}>{level}</Text>
           </View>
         </View>
+
+        {/* ═══════════════════════════════════════════════════════════════
+         *  v15.6A — MEDALLION CALIBRATION OVERLAY (DEV ONLY, phone)
+         *  Toggle: SHOW_MEDALLION_DEBUG.
+         *  Magenta = avatar attuale (bounds + crosshair center).
+         *  Cyan    = medallion target stimato dal cropped PNG (291,331 → in 398×120 = 55.6, 63.2).
+         *           Inner safe area target: ~28pt diameter (ratio 28/105 dal PNG analysis).
+         * ═══════════════════════════════════════════════════════════════ */}
+        {SHOW_MEDALLION_DEBUG && isPhone ? (() => {
+          const avCenterX = (avLeft ?? 0) + avFrameW / 2;
+          const avCenterY = (avTop ?? 0) + avFrameW / 2;
+          // Medallion target estimato dal PNG cropped: center (291,331) px scaled to panel
+          const medCenterX = 291 / 2082 * panelW;       // ≈ 55.7 in 398
+          const medCenterY = 331 / 628  * panelH;       // ≈ 63.2 in 120
+          const medInnerW  = 148 / 2082 * panelW;       // ≈ 28.3
+          const medInnerH  = 562 / 628  * panelH;       // ≈ 107.4 (verticalmente esteso)
+          const CROSS = 12;
+          return (
+            <View
+              pointerEvents="none"
+              style={{ position: 'absolute', left: 0, top: 0, width: panelW, height: panelH }}
+            >
+              {/* MEDALLION TARGET — cyan ellipse safe area */}
+              <View
+                style={{
+                  position: 'absolute',
+                  left: medCenterX - medInnerW / 2,
+                  top:  medCenterY - medInnerH / 2,
+                  width: medInnerW,
+                  height: medInnerH,
+                  borderWidth: 1.5,
+                  borderColor: '#00FFFF',
+                  borderRadius: medInnerW / 2,
+                  backgroundColor: 'rgba(0,255,255,0.07)',
+                }}
+              />
+              {/* MEDALLION TARGET — cyan crosshair */}
+              <View style={{ position: 'absolute', left: medCenterX - CROSS, top: medCenterY - 1, width: CROSS * 2, height: 2, backgroundColor: '#00FFFF' }} />
+              <View style={{ position: 'absolute', left: medCenterX - 1, top: medCenterY - CROSS, width: 2, height: CROSS * 2, backgroundColor: '#00FFFF' }} />
+              {/* MED label */}
+              <Text style={{ position: 'absolute', left: medCenterX + 6, top: medCenterY + 2, color: '#00FFFF', fontSize: 9, fontWeight: '900' }}>MED</Text>
+
+              {/* AVATAR ACTUAL — magenta circle bounds */}
+              <View
+                style={{
+                  position: 'absolute',
+                  left: avLeft, top: avTop,
+                  width: avFrameW, height: avFrameW,
+                  borderWidth: 1.5,
+                  borderColor: '#FF00FF',
+                  borderRadius: avFrameW / 2,
+                  backgroundColor: 'rgba(255,0,255,0.06)',
+                }}
+              />
+              {/* AVATAR ACTUAL — magenta crosshair */}
+              <View style={{ position: 'absolute', left: avCenterX - CROSS, top: avCenterY - 1, width: CROSS * 2, height: 2, backgroundColor: '#FF00FF' }} />
+              <View style={{ position: 'absolute', left: avCenterX - 1, top: avCenterY - CROSS, width: 2, height: CROSS * 2, backgroundColor: '#FF00FF' }} />
+              {/* AVA label */}
+              <Text style={{ position: 'absolute', left: avCenterX - 32, top: avCenterY - 14, color: '#FF00FF', fontSize: 9, fontWeight: '900' }}>AVA</Text>
+
+              {/* Delta info top-right of overlay zone */}
+              <View style={{ position: 'absolute', left: 4, top: panelH - 18, paddingHorizontal: 4, paddingVertical: 1, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 3 }}>
+                <Text style={{ color: '#fff', fontSize: 8, fontWeight: '900' }}>
+                  Δ X={(medCenterX - avCenterX).toFixed(1)}  Δ Y={(medCenterY - avCenterY).toFixed(1)}
+                </Text>
+              </View>
+            </View>
+          );
+        })() : null}
 
         {/* ═══════════════════════════════════════════════════════════════
          *  v13 — SPLIT BRANCHES:
