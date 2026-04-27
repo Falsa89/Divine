@@ -133,9 +133,14 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   //       Row 2: Exp bar full width
   //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
   // v15.8: PHONE height-driven, panelH 124→128 (+4) altro micro scale-up frame premium
+  // v15.12: PHONE FRAME SCALE-UP (+12.5%) panelH 128→144 → panelW 424→477
+  //   Goal: more credible medallion housing room + better text breathing.
+  //   Avatar is intentionally LEFT FROZEN (avLeft 15, avTop 14, avFrameW 68,
+  //   avSize 44) — next pass will enlarge & re-seat it into the new housing.
+  //   Geometry preserved (panelRatio invariato), no clipping (contain mode).
   const panelRatio = isPhone ? 3.3153 : isTablet ? 2.9 : 3;
-  const panelH     = isPhone ? 128 : (isTablet ? 300 / 2.9 : 340 / 3);   // +4pt vs v15.7
-  const panelW     = isPhone ? Math.round(128 * 3.3153) : isTablet ? 300 : 340;   // = 424
+  const panelH     = isPhone ? 144 : (isTablet ? 300 / 2.9 : 340 / 3);   // v15.12: 128→144 (+16, +12.5%)
+  const panelW     = isPhone ? Math.round(144 * 3.3153) : isTablet ? 300 : 340;   // v15.12: = 477 (was 424)
   const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
