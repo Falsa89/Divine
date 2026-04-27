@@ -617,7 +617,15 @@ function HomeProfilePanel({ user, router }: any) {
   } : null);
 
   return (
-    <View style={[
+    <View
+      onLayout={(e) => {
+        const { width, height } = e.nativeEvent.layout;
+        // v15.10: diagnostic onLayout — verifica geometria reale del frame su device fisico
+        if (typeof console !== 'undefined') {
+          console.log(`[v15.10 profileWrap layout] rendered=${width.toFixed(2)}×${height.toFixed(2)} ratio=${(width/height).toFixed(4)} expected=${panelW}×${panelH} ratio=${(panelW/panelH).toFixed(4)}`);
+        }
+      }}
+      style={[
       s.profileWrap,
       {
         // FIX ROOT CAUSE v8.2:
@@ -630,6 +638,12 @@ function HomeProfilePanel({ user, router }: any) {
         width: panelW,
         height: panelH,
         overflow: 'hidden',
+        // v15.10: HARDENING — defensive flex props per prevenire shrink/grow
+        // anche se profileWrap è position:absolute (su web/some bundlers il
+        // computed layout può comunque applicare flex su absolute children
+        // se parent ha display:flex anomalo)
+        flexShrink: 0,
+        flexGrow: 0,
       },
       dbgBorder('#00FFFF'),
     ]}>
@@ -637,6 +651,7 @@ function HomeProfilePanel({ user, router }: any) {
         source={HOME_PROFILE_PANEL.frame}
         decorSource={HOME_PROFILE_PANEL.decor}
         capInsets={HOME_PROFILE_PANEL.capInsets}
+        resizeMode="cover"
         fallbackColors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
         style={[
           s.profilePanel,
