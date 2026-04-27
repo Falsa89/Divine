@@ -145,14 +145,22 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
   const padB = isPhone ? 10 : isTablet ? 15 : 18;
-  const avSize   = isPhone ? 44 : isTablet ? 60 : 72;     // v15.4: phone 50→44 (−6) → white circle più piccolo, più decoro gold del medaglione respira attorno (effetto embedded)
-  const avFrameW = isPhone ? 68 : isTablet ? 82 : 98;     // v15.4: phone 72→68 (−4) → ring esterno tighter, breathing 12pt fra avSize e avFrameW
-  const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
+  // v15.13: PHONE AVATAR REFIT — housing più grande (panelH 144) richiede avatar più
+  // grande per riempire l'apertura visibile in modo "embedded". L'anchor matematico
+  // (avLeft, avTop) resta invariato grazie al trucco di scaling proporzionale:
+  //   - Vecchio center proporzionale: (15+68/2, 14+68/2)/(424,128) = (11.56%, 37.5%)
+  //   - Nuovo center pixel atteso:    (0.1156×477, 0.375×144) = (55.1, 54.0)
+  //   - Soluzione che lascia avLeft=15 e avTop=14: avFrameW = 80 (anchor-preserving)
+  // avSize 44→54 mantiene rapporto avSize/avFrameW ~0.675 (era 0.647) → avatar
+  // visibilmente più "filled" nel medaglione, senza sembrare clipped.
+  const avSize   = isPhone ? 54 : isTablet ? 60 : 72;     // v15.13: phone 44→54 (+10, +22.7%) — più riempimento del medaglione housing
+  const avFrameW = isPhone ? 80 : isTablet ? 82 : 98;     // v15.13: phone 68→80 (+12, +17.6%) — ring esterno scalato per nuovo housing
+  const avInit   = isPhone ? 25 : isTablet ? 22 : 26;     // v15.13: phone 21→25 (proporzionale a avSize)
   const avLeft   = isPhone
-    ? 15                                                         // v15.6D: 18→15 (−3) shift sx — avatar più a sinistra nel medallion housing
+    ? 15                                                         // v15.13: invariato (anchor-preserving math su panel scale-up)
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 14                                                         // v15.6F: 17→14 (−3) ulteriore shift up — solo avTop, X invariato
+    ? 14                                                         // v15.13: invariato (anchor-preserving math su panel scale-up)
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
