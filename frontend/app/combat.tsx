@@ -70,11 +70,22 @@ export default function CombatScreen() {
   const [ultInfo, setUltInfo] = useState({ char: '', skill: '', element: 'neutral' });
   const [error, setError] = useState('');
   const [logLines, setLogLines] = useState<any[]>([]);
+  // v16.4 — PERFORMANCE: durante battle, addLog veniva chiamato per ogni
+  // azione (attack/ultimate/heal/dot/dodge/skip) e a x3 speed = ~3 setState/s
+  // → re-render dell'intero CombatScreen (HUD buttons, sprite props,
+  // chat trigger badge…) → JS-thread pressure → touch ritardati.
+  // FIX: il log "live" vive in un ref, lo state pubblico (logLines) si
+  // aggiorna SOLO quando il drawer è aperto, così la cascata di re-render
+  // sparisce a drawer chiuso. Quando l'utente apre il drawer facciamo un
+  // sync immediato dal ref → l'utente vede comunque il log completo.
+  const logLinesRef = useRef<any[]>([]);
   // v16.1 — Battle Log overlay: il log non è più una fascia fissa che eat-up
   // 110pt di battle viewport. È un overlay on-demand ispirato al pattern
   // chat (panels/tabs). Default tab = 'log', tab 'chat' è placeholder per
   // futura integrazione plaza-chat in-battle (no scope creep ora).
   const [showLog, setShowLog] = useState(false);
+  const showLogRef = useRef(false);
+  useEffect(() => { showLogRef.current = showLog; }, [showLog]);
   const [logTab, setLogTab] = useState<'log' | 'chat'>('log');
   const [spriteStates, setSpriteStates] = useState<Record<string, SpriteData>>({});
   // Background della battaglia: scelto UNA SOLA volta all'inizio di ogni fight
@@ -255,7 +266,7 @@ export default function CombatScreen() {
   };
 
   const startBattle = async () => {
-    setPhase('loading'); setError(''); setLogLines([]);
+    setPhase('loading'); setError(''); setLogLines([]); logLinesRef.current = [];
     affinityGrantedRef.current = false;
     try {
       const r = await apiCall('/api/battle/simulate', { method: 'POST' });
@@ -402,8 +413,16 @@ export default function CombatScreen() {
   const delay = () => (SPEED_BASE[speedRef.current] ?? 1500);
 
   const addLog = (entry: any) => {
-    setLogLines(prev => [...prev.slice(-8), entry]);
-    safeTimeout(() => logRef.current?.scrollToEnd({ animated: true }), 50);
+    // v16.4 — Push to ref always, ma trigger React re-render SOLO se
+    // drawer aperto. A drawer chiuso: zero re-render della CombatScreen
+    // durante battle → badge silenziato, HUD non invalidato, touch
+    // responsivi anche a x3.
+    const nextArr = [...logLinesRef.current.slice(-8), entry];
+    logLinesRef.current = nextArr;
+    if (showLogRef.current) {
+      setLogLines(nextArr);
+      safeTimeout(() => logRef.current?.scrollToEnd({ animated: true }), 50);
+    }
   };
 
   const playLog = useCallback((res: any, ti: number, ai: number) => {
@@ -756,6 +775,26 @@ export default function CombatScreen() {
     );
   };
 
+  // v16.4 — HUD HANDLER MEMOIZATION
+  // Stabilizza l'identity delle callback dei bottoni HUD (pause/x1-x3/skip/
+  // chat-trigger). Senza memo, ad ogni re-render della CombatScreen le
+  // TouchableOpacity ricevono onPress con identity diversa → React invalida
+  // le sub-tree → sotto carico x3 i tap possono sentirsi gommosi. Combinato
+  // con la riduzione di re-render dal addLog ref-based, l'input arriva pulito.
+  const togglePause = useCallback(() => setIsPaused(p => !p), []);
+  const setSpeed1 = useCallback(() => setSpeed(1), []);
+  const setSpeed2 = useCallback(() => setSpeed(2), []);
+  const setSpeed3 = useCallback(() => setSpeed(3), []);
+  const openChat = useCallback(() => {
+    // Sync immediato del ref → state all'apertura del drawer, così l'utente
+    // vede l'intera coda di eventi accumulati a drawer chiuso.
+    setLogLines(logLinesRef.current);
+    setShowLog(true);
+  }, []);
+  const closeChat = useCallback(() => setShowLog(false), []);
+  // hitSlop costante per espandere l'area di tocco senza alterare il layout.
+  const HUD_HIT_SLOP = { top: 8, bottom: 8, left: 6, right: 6 };
+
   return (
     <BattleWrapper>
       <Animated.View style={[{ flex: 1 }, shakeStyle]}>
@@ -773,18 +812,38 @@ export default function CombatScreen() {
             <View style={st.spds}>
               <TouchableOpacity
                 style={[st.pauseBtn, isPaused && st.pauseBtnActive]}
-                onPress={() => setIsPaused(p => !p)}
+                onPress={togglePause}
                 activeOpacity={0.7}
+                hitSlop={HUD_HIT_SLOP}
               >
                 <Text style={st.pauseTxt}>{isPaused ? '\u25B6' : '\u23F8'}</Text>
               </TouchableOpacity>
-              {[1, 2, 3].map(s => (
-                <TouchableOpacity key={s} style={[st.spdBtn, speed === s && st.spdA]} onPress={() => setSpeed(s)}>
-                  <Text style={[st.spdTxt, speed === s && { color: COLORS.accent }]}>{s}x</Text>
-                </TouchableOpacity>
-              ))}
+              <TouchableOpacity
+                style={[st.spdBtn, speed === 1 && st.spdA]}
+                onPress={setSpeed1}
+                activeOpacity={0.7}
+                hitSlop={HUD_HIT_SLOP}
+              >
+                <Text style={[st.spdTxt, speed === 1 && { color: COLORS.accent }]}>1x</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[st.spdBtn, speed === 2 && st.spdA]}
+                onPress={setSpeed2}
+                activeOpacity={0.7}
+                hitSlop={HUD_HIT_SLOP}
+              >
+                <Text style={[st.spdTxt, speed === 2 && { color: COLORS.accent }]}>2x</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[st.spdBtn, speed === 3 && st.spdA]}
+                onPress={setSpeed3}
+                activeOpacity={0.7}
+                hitSlop={HUD_HIT_SLOP}
+              >
+                <Text style={[st.spdTxt, speed === 3 && { color: COLORS.accent }]}>3x</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={skip} activeOpacity={0.7} style={st.skipBtn}>
+            <TouchableOpacity onPress={skip} activeOpacity={0.7} style={st.skipBtn} hitSlop={HUD_HIT_SLOP}>
               <Text style={st.skipTxt}>{'\u23E9'} SALTA</Text>
             </TouchableOpacity>
             {/* v16.2 — RIMOSSO bottone LOG top-right (apriva Modal che crashava
@@ -973,18 +1032,17 @@ export default function CombatScreen() {
             sopra al battlefield ma sotto a Ultimate cut-in (zIndex 90). */}
         {!showLog ? (
           <TouchableOpacity
-            onPress={() => setShowLog(true)}
+            onPress={openChat}
             activeOpacity={0.8}
             style={st.chatTrigger}
+            hitSlop={HUD_HIT_SLOP}
           >
             <Text style={st.chatTriggerIcon}>{'\uD83D\uDCAC'}</Text>
-            {logLines.length > 0 ? (
-              <View style={st.chatTriggerBadge}>
-                <Text style={st.chatTriggerBadgeTxt}>
-                  {logLines.length > 99 ? '99+' : logLines.length}
-                </Text>
-              </View>
-            ) : null}
+            {/* v16.4 — RIMOSSO badge contatore live: la sua dipendenza da
+                logLines.length forzava re-render del trigger ogni addLog
+                (≈ ogni azione). Niente badge → niente spam → trigger stabile.
+                Il drawer, una volta aperto, sincronizza il ref completo
+                (vedi openChat) e mostra tutti gli eventi accumulati. */}
           </TouchableOpacity>
         ) : (
           <View style={st.chatDrawer} pointerEvents="box-none">
@@ -993,7 +1051,7 @@ export default function CombatScreen() {
             <TouchableOpacity
               style={st.chatBackdrop}
               activeOpacity={1}
-              onPress={() => setShowLog(false)}
+              onPress={closeChat}
             />
             <View style={st.chatPanel}>
               <View style={st.chatHeader}>
@@ -1014,17 +1072,12 @@ export default function CombatScreen() {
                   <Text style={[st.chatTabTxt, logTab === 'log' && st.chatTabTxtActive]}>
                     {'\uD83D\uDCDC'} Battle Log
                   </Text>
-                  {logLines.length > 0 ? (
-                    <View style={st.chatTabBadge}>
-                      <Text style={st.chatTabBadgeTxt}>
-                        {logLines.length > 99 ? '99+' : logLines.length}
-                      </Text>
-                    </View>
-                  ) : null}
+                  {/* v16.4 — RIMOSSO badge live anche dalla tab. La tab
+                      mostra il log on-demand, non c'è più contatore live. */}
                 </TouchableOpacity>
                 <View style={{ flex: 1 }} />
                 <TouchableOpacity
-                  onPress={() => setShowLog(false)}
+                  onPress={closeChat}
                   style={st.chatClose}
                   activeOpacity={0.7}
                 >
