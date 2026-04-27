@@ -775,24 +775,16 @@ export default function CombatScreen() {
     );
   };
 
-  // v16.4 — HUD HANDLER MEMOIZATION
-  // Stabilizza l'identity delle callback dei bottoni HUD (pause/x1-x3/skip/
-  // chat-trigger). Senza memo, ad ogni re-render della CombatScreen le
-  // TouchableOpacity ricevono onPress con identity diversa → React invalida
-  // le sub-tree → sotto carico x3 i tap possono sentirsi gommosi. Combinato
-  // con la riduzione di re-render dal addLog ref-based, l'input arriva pulito.
-  const togglePause = useCallback(() => setIsPaused(p => !p), []);
-  const setSpeed1 = useCallback(() => setSpeed(1), []);
-  const setSpeed2 = useCallback(() => setSpeed(2), []);
-  const setSpeed3 = useCallback(() => setSpeed(3), []);
-  const openChat = useCallback(() => {
-    // Sync immediato del ref → state all'apertura del drawer, così l'utente
-    // vede l'intera coda di eventi accumulati a drawer chiuso.
-    setLogLines(logLinesRef.current);
-    setShowLog(true);
-  }, []);
-  const closeChat = useCallback(() => setShowLog(false), []);
-  // hitSlop costante per espandere l'area di tocco senza alterare il layout.
+  // v16.4.1 — HOOKS ORDER FIX
+  // Le useCallback di v16.4 erano state inserite QUI, ma siamo dopo gli
+  // early-return per phase 'loading'/'preparing'/'result' (righe ~580/592/611)
+  // → quando il phase transitava da loading a fighting il numero di hook
+  // chiamati cambiava → React: "Rendered more hooks than during the
+  // previous render". Rimosse: la perf di v16.4 viene dalla addLog ref-based
+  // + badge rimosso, NON dalla memoization degli handler. Ripristiniamo
+  // gli onPress inline (function-identity instabile, accettabile) per
+  // tornare a un render valido. hitSlop e openChat-sync li preserviamo
+  // come costanti / inline (non sono hook).
   const HUD_HIT_SLOP = { top: 8, bottom: 8, left: 6, right: 6 };
 
   return (
@@ -812,36 +804,23 @@ export default function CombatScreen() {
             <View style={st.spds}>
               <TouchableOpacity
                 style={[st.pauseBtn, isPaused && st.pauseBtnActive]}
-                onPress={togglePause}
+                onPress={() => setIsPaused(p => !p)}
                 activeOpacity={0.7}
                 hitSlop={HUD_HIT_SLOP}
               >
                 <Text style={st.pauseTxt}>{isPaused ? '\u25B6' : '\u23F8'}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[st.spdBtn, speed === 1 && st.spdA]}
-                onPress={setSpeed1}
-                activeOpacity={0.7}
-                hitSlop={HUD_HIT_SLOP}
-              >
-                <Text style={[st.spdTxt, speed === 1 && { color: COLORS.accent }]}>1x</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[st.spdBtn, speed === 2 && st.spdA]}
-                onPress={setSpeed2}
-                activeOpacity={0.7}
-                hitSlop={HUD_HIT_SLOP}
-              >
-                <Text style={[st.spdTxt, speed === 2 && { color: COLORS.accent }]}>2x</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[st.spdBtn, speed === 3 && st.spdA]}
-                onPress={setSpeed3}
-                activeOpacity={0.7}
-                hitSlop={HUD_HIT_SLOP}
-              >
-                <Text style={[st.spdTxt, speed === 3 && { color: COLORS.accent }]}>3x</Text>
-              </TouchableOpacity>
+              {[1, 2, 3].map(s => (
+                <TouchableOpacity
+                  key={s}
+                  style={[st.spdBtn, speed === s && st.spdA]}
+                  onPress={() => setSpeed(s)}
+                  activeOpacity={0.7}
+                  hitSlop={HUD_HIT_SLOP}
+                >
+                  <Text style={[st.spdTxt, speed === s && { color: COLORS.accent }]}>{s}x</Text>
+                </TouchableOpacity>
+              ))}
             </View>
             <TouchableOpacity onPress={skip} activeOpacity={0.7} style={st.skipBtn} hitSlop={HUD_HIT_SLOP}>
               <Text style={st.skipTxt}>{'\u23E9'} SALTA</Text>
@@ -1032,7 +1011,12 @@ export default function CombatScreen() {
             sopra al battlefield ma sotto a Ultimate cut-in (zIndex 90). */}
         {!showLog ? (
           <TouchableOpacity
-            onPress={openChat}
+            onPress={() => {
+              // v16.4.1 — Sync inline del ref→state all'apertura del drawer
+              // (sostituisce openChat useCallback rimosso per fix hooks-order).
+              setLogLines(logLinesRef.current);
+              setShowLog(true);
+            }}
             activeOpacity={0.8}
             style={st.chatTrigger}
             hitSlop={HUD_HIT_SLOP}
@@ -1051,7 +1035,7 @@ export default function CombatScreen() {
             <TouchableOpacity
               style={st.chatBackdrop}
               activeOpacity={1}
-              onPress={closeChat}
+              onPress={() => setShowLog(false)}
             />
             <View style={st.chatPanel}>
               <View style={st.chatHeader}>
@@ -1077,7 +1061,7 @@ export default function CombatScreen() {
                 </TouchableOpacity>
                 <View style={{ flex: 1 }} />
                 <TouchableOpacity
-                  onPress={closeChat}
+                  onPress={() => setShowLog(false)}
                   style={st.chatClose}
                   activeOpacity={0.7}
                 >
