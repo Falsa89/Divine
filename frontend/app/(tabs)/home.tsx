@@ -147,17 +147,17 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const padB = isPhone ? 10 : isTablet ? 15 : 18;
   // v15.13: PHONE AVATAR REFIT — housing più grande (panelH 144) richiede avatar più
   // grande per riempire l'apertura visibile in modo "embedded".
-  // v15.14: MICRO-CALIBRATION (real mobile feedback) — avatar leggermente troppo
-  // grande e biased verso top-left rispetto al centro visibile housing.
-  // v15.15: FINAL MICRO-CAL — slightly smaller (−2) + shift down (+3) — H stable.
-  const avSize   = isPhone ? 50 : isTablet ? 60 : 72;     // v15.15: phone 52→50 (−2)
-  const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;     // v15.15: phone 78→76 (−2)
-  const avInit   = isPhone ? 23 : isTablet ? 22 : 26;     // v15.15: phone 24→23 (−1)
+  // v15.14: MICRO-CAL — smaller (−2) + shift right/down (+1).
+  // v15.15: MICRO-CAL — smaller (−2) + H stable + shift down (+2 net).
+  // v15.16: FINAL MICRO-CAL — smaller (−2) + H stable + shift down (+2 net).
+  const avSize   = isPhone ? 48 : isTablet ? 60 : 72;     // v15.16: phone 50→48 (−2)
+  const avFrameW = isPhone ? 74 : isTablet ? 82 : 98;     // v15.16: phone 76→74 (−2)
+  const avInit   = isPhone ? 22 : isTablet ? 22 : 26;     // v15.16: phone 23→22 (−1)
   const avLeft   = isPhone
-    ? 17                                                         // v15.15: 16→17 (+1) — center horizontally stable (frame −2 + left +1 = center +0)
+    ? 18                                                         // v15.16: 17→18 (+1) — center horizontally stable (frame −2 + left +1 = center +0)
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 18                                                         // v15.15: 15→18 (+3) — net visual group shift ≈ +2px down (frame −2 + top +3 = center +2)
+    ? 21                                                         // v15.16: 18→21 (+3) — net visual group shift ≈ +2px down (frame −2 + top +3 = center +2)
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
