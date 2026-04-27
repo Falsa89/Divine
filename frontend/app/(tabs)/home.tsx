@@ -132,10 +132,10 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   //       Row 1: Name + Subtitle (Apprendista) + exp counter
   //       Row 2: Exp bar full width
   //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
-  // v15.7: PHONE height-driven, panelH 120→124 (+4) per scale frame più premium
+  // v15.8: PHONE height-driven, panelH 124→128 (+4) altro micro scale-up frame premium
   const panelRatio = isPhone ? 3.3153 : isTablet ? 2.9 : 3;
-  const panelH     = isPhone ? 124 : (isTablet ? 300 / 2.9 : 340 / 3);   // +4pt vs v15.3
-  const panelW     = isPhone ? Math.round(124 * 3.3153) : isTablet ? 300 : 340;   // = 411
+  const panelH     = isPhone ? 128 : (isTablet ? 300 / 2.9 : 340 / 3);   // +4pt vs v15.7
+  const panelW     = isPhone ? Math.round(128 * 3.3153) : isTablet ? 300 : 340;   // = 424
   const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
