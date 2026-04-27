@@ -85,7 +85,7 @@ const SHOW_PHASE_BADGE = false;
  * disattivato prima della release.
  */
 const SHOW_DEV_METRICS = false;
-const SHOW_MEDALLION_DEBUG = true;   // v15.6A: temp overlay calibration avatar/medallion phone (true ON solo per questa pass)
+const SHOW_MEDALLION_DEBUG = false;   // v15.6B: overlay calibrazione disattivata (verifica clean)
 
 /* ═══════════════════════════════════════════════════════════════════
  *  computeHomeMetrics — pure function, source-of-truth per TUTTI i
@@ -144,10 +144,10 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const avFrameW = isPhone ? 68 : isTablet ? 82 : 98;     // v15.4: phone 72→68 (−4) → ring esterno tighter, breathing 12pt fra avSize e avFrameW
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? 25                                                         // v15.5: 22→25 (+3) — shift destra per integrare avatar nel medaglione decorativo visibile
+    ? 23                                                         // v15.6B: 25→23 (−2) correzione controllata sx (overlay delta ΔX=−3.4, applicato −2 per evitare revert completo a v15.4)
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 32                                                         // v15.5: 29→32 (+3) — shift basso per breathing gold ornament uniforme attorno
+    ? 30                                                         // v15.6B: 32→30 (−2) correzione controllata su (overlay delta ΔY=−2.8, applicato −2)
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
