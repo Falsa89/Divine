@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform, useWindowDimensions, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -751,16 +751,8 @@ export default function CombatScreen() {
             <TouchableOpacity onPress={skip} activeOpacity={0.7} style={st.skipBtn}>
               <Text style={st.skipTxt}>{'\u23E9'} SALTA</Text>
             </TouchableOpacity>
-            {/* v16.1 — Toggle Battle Log overlay (chat-style). NON impatta
-                turn/skip/pause logic, è solo un trigger visual. */}
-            <TouchableOpacity onPress={() => setShowLog(true)} activeOpacity={0.7} style={st.logBtn}>
-              <Text style={st.logBtnTxt}>{'\uD83D\uDCDC'} LOG</Text>
-              {logLines.length > 0 ? (
-                <View style={st.logBtnBadge}>
-                  <Text style={st.logBtnBadgeTxt}>{logLines.length > 99 ? '99+' : logLines.length}</Text>
-                </View>
-              ) : null}
-            </TouchableOpacity>
+            {/* v16.2 — RIMOSSO bottone LOG top-right (apriva Modal che crashava
+                su web/RN). Sostituito da chat drawer bottom-left in-tree. */}
           </View>
           {/* Hero portrait cards */}
           <View style={st.cardRow}>
@@ -938,62 +930,81 @@ export default function CombatScreen() {
             comprimeva il battle viewport). Sostituito dall'overlay Modal
             qui sotto, accessibile via il bottone "📜 LOG" nel turnRow. */}
 
-        {/* v16.1 — BATTLE LOG OVERLAY (chat-style, tabs-ready) ============
-            Pannello modale on-demand. Default tab "log" mostra le stesse
-            linee del vecchio log inline. Tab "chat" è placeholder per
-            futura integrazione plaza-chat in-battle. transparent + animationType="fade" → nessun lag perceived
-            durante battle, niente push/pop di stack che impatti la
-            performance del playLog scheduler. */}
-        <Modal
-          visible={showLog}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setShowLog(false)}
-        >
-          <View style={st.logOvBackdrop} pointerEvents="box-none">
+        {/* v16.2 — BATTLE CHAT DRAWER (in-tree, no Modal) ==================
+            Trigger floating bottom-left + drawer slide-up con tabs.
+            In-tree: nessun Modal portal, nessuna sync issue con safeTimeout
+            del playLog scheduler → niente crash. zIndex alto per stare
+            sopra al battlefield ma sotto a Ultimate cut-in (zIndex 90). */}
+        {!showLog ? (
+          <TouchableOpacity
+            onPress={() => setShowLog(true)}
+            activeOpacity={0.8}
+            style={st.chatTrigger}
+          >
+            <Text style={st.chatTriggerIcon}>{'\uD83D\uDCAC'}</Text>
+            {logLines.length > 0 ? (
+              <View style={st.chatTriggerBadge}>
+                <Text style={st.chatTriggerBadgeTxt}>
+                  {logLines.length > 99 ? '99+' : logLines.length}
+                </Text>
+              </View>
+            ) : null}
+          </TouchableOpacity>
+        ) : (
+          <View style={st.chatDrawer} pointerEvents="box-none">
+            {/* Tap-out backdrop SOLO sopra l'area NON occupata dal drawer.
+                Chiude il drawer senza interferire con la battle. */}
             <TouchableOpacity
-              style={StyleSheet.absoluteFillObject}
+              style={st.chatBackdrop}
               activeOpacity={1}
               onPress={() => setShowLog(false)}
             />
-            <View style={st.logOvPanel}>
-              {/* Header: tabs + close */}
-              <View style={st.logOvHeader}>
-                <TouchableOpacity
-                  onPress={() => setLogTab('log')}
-                  style={[st.logOvTab, logTab === 'log' && st.logOvTabActive]}
-                  activeOpacity={0.7}
-                >
-                  <Text style={[st.logOvTabTxt, logTab === 'log' && st.logOvTabTxtActive]}>
-                    {'\uD83D\uDCDC'} Battle Log
-                  </Text>
-                </TouchableOpacity>
+            <View style={st.chatPanel}>
+              <View style={st.chatHeader}>
                 <TouchableOpacity
                   onPress={() => setLogTab('chat')}
-                  style={[st.logOvTab, logTab === 'chat' && st.logOvTabActive]}
+                  style={[st.chatTab, logTab === 'chat' && st.chatTabActive]}
                   activeOpacity={0.7}
                 >
-                  <Text style={[st.logOvTabTxt, logTab === 'chat' && st.logOvTabTxtActive]}>
+                  <Text style={[st.chatTabTxt, logTab === 'chat' && st.chatTabTxtActive]}>
                     {'\uD83D\uDCAC'} Chat
                   </Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setLogTab('log')}
+                  style={[st.chatTab, logTab === 'log' && st.chatTabActive]}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[st.chatTabTxt, logTab === 'log' && st.chatTabTxtActive]}>
+                    {'\uD83D\uDCDC'} Battle Log
+                  </Text>
+                  {logLines.length > 0 ? (
+                    <View style={st.chatTabBadge}>
+                      <Text style={st.chatTabBadgeTxt}>
+                        {logLines.length > 99 ? '99+' : logLines.length}
+                      </Text>
+                    </View>
+                  ) : null}
+                </TouchableOpacity>
                 <View style={{ flex: 1 }} />
-                <TouchableOpacity onPress={() => setShowLog(false)} style={st.logOvClose} activeOpacity={0.7}>
-                  <Text style={st.logOvCloseTxt}>{'\u2715'}</Text>
+                <TouchableOpacity
+                  onPress={() => setShowLog(false)}
+                  style={st.chatClose}
+                  activeOpacity={0.7}
+                >
+                  <Text style={st.chatCloseTxt}>{'\u2715'}</Text>
                 </TouchableOpacity>
               </View>
-
-              {/* Body */}
               {logTab === 'log' ? (
                 <ScrollView
                   ref={logRef}
                   horizontal={false}
                   showsVerticalScrollIndicator
                   contentContainerStyle={st.logContent}
-                  style={st.logOvScroll}
+                  style={st.chatBody}
                 >
                   {logLines.length === 0 ? (
-                    <Text style={st.logOvEmpty}>Nessun evento registrato.</Text>
+                    <Text style={st.chatEmpty}>Nessun evento registrato.</Text>
                   ) : (
                     logLines.map((entry, i) => (
                       <View key={i} style={st.logLine}>
@@ -1035,13 +1046,15 @@ export default function CombatScreen() {
                   )}
                 </ScrollView>
               ) : (
-                <View style={st.logOvScroll}>
-                  <Text style={st.logOvEmpty}>Chat in arrivo. Per ora la chat globale è disponibile nella Plaza.</Text>
+                <View style={st.chatBody}>
+                  <Text style={st.chatEmpty}>
+                    Chat in arrivo. La chat globale è disponibile nella Plaza.
+                  </Text>
                 </View>
               )}
             </View>
           </View>
-        </Modal>
+        )}
 
         {/* Ultimate Cut-in Overlay */}
         {showUlt && (
@@ -1269,120 +1282,158 @@ const st = StyleSheet.create({
     fontWeight: '900',
   },
   // Log Panel
-  // v16.1 — Battle log RIMOSSO dalla scena fissa, ora è un overlay modale
-  // tabs-ready (vedi logOv*). I sub-style logContent/logLine/logText sono
-  // ancora referenziati dal Modal → mantenuti.
-  logBtn: {
-    flexDirection: 'row',
+  // v16.2 — Battle log RIMOSSO dalla scena fissa, ora è un drawer in-tree
+  // bottom-left (chat-style). I sub-style logContent/logLine/logText sono
+  // ancora referenziati dal drawer → mantenuti.
+  // ======= CHAT TRIGGER (bottom-left, floating) =======
+  chatTrigger: {
+    position: 'absolute',
+    left: 12,
+    bottom: 12,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(10,10,28,0.88)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,107,53,0.55)',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    backgroundColor: 'rgba(255,107,53,0.10)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,107,53,0.32)',
-    gap: 4,
-    marginLeft: 6,
+    justifyContent: 'center',
+    zIndex: 60,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
-  logBtnTxt: {
-    color: COLORS.accent,
-    fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 0.5,
+  chatTriggerIcon: {
+    fontSize: 20,
   },
-  logBtnBadge: {
-    minWidth: 18,
-    height: 16,
-    borderRadius: 8,
-    paddingHorizontal: 4,
+  chatTriggerBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 20,
+    height: 18,
+    borderRadius: 9,
+    paddingHorizontal: 5,
     backgroundColor: COLORS.accent,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 2,
+    borderWidth: 1.5,
+    borderColor: '#0A0A1C',
   },
-  logBtnBadgeTxt: {
+  chatTriggerBadgeTxt: {
     color: '#fff',
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: '900',
   },
-  // Overlay modale (chat-style)
-  logOvBackdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
+  // ======= DRAWER (full-screen overlay container, in-tree) =======
+  chatDrawer: {
+    position: 'absolute',
+    left: 0, right: 0, top: 0, bottom: 0,
+    zIndex: 70,
   },
-  logOvPanel: {
-    width: '92%',
-    maxWidth: 720,
+  chatBackdrop: {
+    position: 'absolute',
+    left: 0, right: 0, top: 0, bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.42)',
+  },
+  chatPanel: {
+    position: 'absolute',
+    left: 12,
+    bottom: 12,
+    width: 360,
+    maxWidth: '70%',
     height: '78%',
+    maxHeight: 320,
     backgroundColor: 'rgba(10,10,28,0.97)',
-    borderRadius: 14,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: 'rgba(255,107,53,0.45)',
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOpacity: 0.6,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 8,
   },
-  logOvHeader: {
+  chatHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     paddingVertical: 6,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.08)',
     gap: 4,
   },
-  logOvTab: {
-    paddingHorizontal: 12,
+  chatTab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
     backgroundColor: 'rgba(255,255,255,0.04)',
+    gap: 4,
   },
-  logOvTabActive: {
+  chatTabActive: {
     backgroundColor: 'rgba(255,107,53,0.18)',
     borderWidth: 1,
     borderColor: 'rgba(255,107,53,0.5)',
   },
-  logOvTabTxt: {
+  chatTabTxt: {
     color: 'rgba(255,255,255,0.55)',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 0.4,
+    letterSpacing: 0.3,
   },
-  logOvTabTxtActive: {
+  chatTabTxtActive: {
     color: '#fff',
   },
-  logOvClose: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+  chatTabBadge: {
+    minWidth: 18,
+    height: 14,
+    borderRadius: 7,
+    paddingHorizontal: 4,
+    backgroundColor: COLORS.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chatTabBadgeTxt: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '900',
+  },
+  chatClose: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: 'rgba(255,255,255,0.06)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logOvCloseTxt: {
+  chatCloseTxt: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '900',
   },
-  logOvScroll: {
+  chatBody: {
     flex: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
-  logOvEmpty: {
+  chatEmpty: {
     color: 'rgba(255,255,255,0.45)',
-    fontSize: 12,
+    fontSize: 11,
     fontStyle: 'italic',
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: 12,
   },
-  logContent: { gap: 5, paddingBottom: 6 },
-  logLine: { paddingVertical: 2 },
+  logContent: { gap: 4, paddingBottom: 6 },
+  logLine: { paddingVertical: 1 },
   logText: {
     color: '#F0F0F6',
-    fontSize: 14,
-    lineHeight: 19,
+    fontSize: 12,
+    lineHeight: 16,
     fontWeight: '500',
     textShadowColor: 'rgba(0,0,0,0.85)',
     textShadowRadius: 2,
