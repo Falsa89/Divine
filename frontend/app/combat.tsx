@@ -169,10 +169,25 @@ export default function CombatScreen() {
   const vsScale = useSharedValue(0);
   const vsOp = useSharedValue(0);
 
+  // v16.3 — NOTIFICATION NOISE REDUCTION
+  //   Master gate per le notifiche on-screen invasive (Ultimate Cut-in).
+  //   Quando false, i dati vengono comunque registrati via addLog() e
+  //   restano disponibili nel Battle Log drawer; solo l'overlay visivo
+  //   full-screen viene soppresso. Il timing (safeTimeout) resta invariato
+  //   → la battle pacing non cambia.
+  const INTRUSIVE_NOTIFICATIONS = false;
+  // Banner "BATTLE START" one-shot, mostrato solo all'inizio del fight.
+  const startBannerOp = useSharedValue(0);
+  const startBannerScale = useSharedValue(0.85);
+
   const flashStyle = useAnimatedStyle(() => ({ opacity: flash.value }));
   const shakeStyle = useAnimatedStyle(() => ({ transform: [{ translateX: shakeX.value }] }));
   const ultStyle = useAnimatedStyle(() => ({ transform: [{ scale: ultScale.value }], opacity: ultOp.value }));
   const vsStyle = useAnimatedStyle(() => ({ transform: [{ scale: vsScale.value }], opacity: vsOp.value }));
+  const startBannerStyle = useAnimatedStyle(() => ({
+    opacity: startBannerOp.value,
+    transform: [{ scale: startBannerScale.value }],
+  }));
 
   // Layout battle calcolato dal RECT REALE del battlefield (misurato onLayout).
   // Fallback ai winW/winH solo finché il rect non è pronto — le home positions
@@ -320,7 +335,22 @@ export default function CombatScreen() {
       vsScale.value = 0; vsOp.value = 0;
       vsScale.value = withSequence(withTiming(1.3, { duration: 300 }), withTiming(1, { duration: 200 }));
       vsOp.value = withSequence(withTiming(1, { duration: 200 }), withDelay(600, withTiming(0, { duration: 200 })));
-      safeTimeout(() => { setPhase('fighting'); if (r.battle_log?.length) playLog(r, 0, 0); }, 1400);
+      safeTimeout(() => {
+        setPhase('fighting');
+        if (r.battle_log?.length) playLog(r, 0, 0);
+        // v16.3 — One-shot lightweight battle-start banner. Fade-in 200ms,
+        // hold 1700ms, fade-out 400ms. Single notification per fight.
+        startBannerOp.value = 0;
+        startBannerScale.value = 0.85;
+        startBannerOp.value = withSequence(
+          withTiming(1, { duration: 200 }),
+          withDelay(1700, withTiming(0, { duration: 400 })),
+        );
+        startBannerScale.value = withSequence(
+          withTiming(1, { duration: 220 }),
+          withDelay(1900, withTiming(0.92, { duration: 360 })),
+        );
+      }, 1400);
     } catch (e: any) { setError(e.message || 'Errore'); setPhase('result'); }
   };
 
@@ -399,17 +429,23 @@ export default function CombatScreen() {
     if (a.skill_type === 'sp') {
       // ULTIMATE
       setSpriteState(a.actor_id, { state: 'ultimate', damage: null, isCrit: false, actionInstanceId: nextActionId() });
-      setShowUlt(true);
-      setUltInfo({ char: a.actor || '', skill: a.skill?.name || '', element: a.element || 'neutral' });
-      ultScale.value = 0; ultOp.value = 0;
-      ultScale.value = withSequence(withTiming(1.2, { duration: 200 }), withTiming(1, { duration: 150 }));
-      ultOp.value = withSequence(withTiming(1, { duration: 100 }), withDelay(700, withTiming(0, { duration: 200 })));
-      flash.value = withSequence(withTiming(0.5, { duration: 60 }), withTiming(0, { duration: 250 }));
+      // v16.3 — Cut-in overlay gated dietro INTRUSIVE_NOTIFICATIONS. Quando
+      // false, salta solo l'overlay visivo full-screen; il timing della
+      // azione (safeTimeout + delay()*1.2) e l'addLog ULTIMATE restano
+      // identici → battle pacing invariato, drawer log invariato.
+      if (INTRUSIVE_NOTIFICATIONS) {
+        setShowUlt(true);
+        setUltInfo({ char: a.actor || '', skill: a.skill?.name || '', element: a.element || 'neutral' });
+        ultScale.value = 0; ultOp.value = 0;
+        ultScale.value = withSequence(withTiming(1.2, { duration: 200 }), withTiming(1, { duration: 150 }));
+        ultOp.value = withSequence(withTiming(1, { duration: 100 }), withDelay(700, withTiming(0, { duration: 200 })));
+        flash.value = withSequence(withTiming(0.5, { duration: 60 }), withTiming(0, { duration: 250 }));
+      }
       addLog({ type: 'ultimate', actor: a.actor, skill: a.skill?.name, team: a.team, element: a.element });
 
       // Apply damage after a beat
       timerRef.current = safeTimeout(() => {
-        setShowUlt(false);
+        if (INTRUSIVE_NOTIFICATIONS) setShowUlt(false);
         updateHP(a);
         if (a.targets) {
           a.targets.forEach((tgt: any) => {
@@ -1056,6 +1092,20 @@ export default function CombatScreen() {
           </View>
         )}
 
+        {/* v16.3 — BATTLE START BANNER (one-shot, lightweight, non-intrusive)
+            Sostituisce le notifiche per-action invasive con UNA sola
+            notifica leggera all'inizio del fight. Renderizzato sempre nel
+            tree ma con opacity gestita via Reanimated → niente toggle JS,
+            niente re-mount. */}
+        <Animated.View
+          style={[st.startBanner, startBannerStyle]}
+          pointerEvents="none"
+        >
+          <View style={st.startBannerInner}>
+            <Text style={st.startBannerText}>BATTAGLIA INIZIA</Text>
+          </View>
+        </Animated.View>
+
         {/* Ultimate Cut-in Overlay */}
         {showUlt && (
           <View style={st.ultOv}>
@@ -1442,6 +1492,36 @@ const st = StyleSheet.create({
   flashOv: { ...StyleSheet.absoluteFillObject, backgroundColor: '#fff', zIndex: 100 },
   // Ultimate
   ultOv: { ...StyleSheet.absoluteFillObject, zIndex: 90 },
+  // v16.3 — Battle Start Banner (single, non-intrusive)
+  startBanner: {
+    position: 'absolute',
+    top: '38%',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 85,
+  },
+  startBannerInner: {
+    paddingHorizontal: 26,
+    paddingVertical: 10,
+    borderRadius: 22,
+    backgroundColor: 'rgba(10,10,28,0.78)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,107,53,0.55)',
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  startBannerText: {
+    color: COLORS.accent,
+    fontSize: 15,
+    fontWeight: '900',
+    letterSpacing: 4,
+    textShadowColor: 'rgba(0,0,0,0.85)',
+    textShadowRadius: 4,
+  },
   ultBg: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   ultContent: { alignItems: 'center', gap: 6 },
   ultDecorLine: { width: 180, height: 2, borderRadius: 1 },
