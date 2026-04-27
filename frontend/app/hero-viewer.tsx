@@ -39,8 +39,11 @@ export default function HeroViewerScreen() {
         id: GREEK_HOPLITE_ID,
         name: GREEK_HOPLITE_NAME,
         hero_name: GREEK_HOPLITE_NAME,
-        stars: 5,
-        hero_rarity: 5,
+        // FIX: Hoplite è ufficialmente un eroe 3★, non 5★. Override hardcoded
+        // forzava 5★ nel viewer locale (short-circuit no-API), generando
+        // mismatch con il resto della UI (collection, detail, combat).
+        stars: 3,
+        hero_rarity: 3,
         element: 'earth',
         hero_element: 'earth',
       });
