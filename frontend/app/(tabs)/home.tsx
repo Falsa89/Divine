@@ -144,10 +144,10 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const avFrameW = isPhone ? 68 : isTablet ? 82 : 98;     // v15.4: phone 72→68 (−4) → ring esterno tighter, breathing 12pt fra avSize e avFrameW
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? 18                                                         // v15.6C: 23→18 (−5) correzione forte sx per integrare avatar nel medallion housing
+    ? 15                                                         // v15.6D: 18→15 (−3) shift sx — avatar più a sinistra nel medallion housing
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 25                                                         // v15.6C: 30→25 (−5) correzione forte su per seated nel medallion
+    ? 21                                                         // v15.6D: 25→21 (−4) shift su — avatar più alto nel medallion housing
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
