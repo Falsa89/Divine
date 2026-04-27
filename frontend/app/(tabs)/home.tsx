@@ -131,24 +131,22 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   //       Row 1: Name + Subtitle (Apprendista) + exp counter
   //       Row 2: Exp bar full width
   //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
-  // v15.2: PHONE è ora HEIGHT-DRIVEN per scaling visivo premium del frame.
-  // Strategy: panelH=118 (target), panelW = panelH × ratio = 118 × 3.3153 ≈ 391.
-  // Tablet/Desktop restano width-driven come prima.
-  const panelRatio = isPhone ? 3.3153 : isTablet ? 2.9 : 3;   // phone: ratio cropped asset
-  const panelH     = isPhone ? 118 : (isTablet ? 300 / 2.9 : 340 / 3);   // phone height-driven
-  const panelW     = isPhone ? Math.round(118 * 3.3153) : isTablet ? 300 : 340;   // phone derived = 391
+  // v15.3: PHONE height-driven, scale finale 118→120 (+2pt più "settled")
+  const panelRatio = isPhone ? 3.3153 : isTablet ? 2.9 : 3;
+  const panelH     = isPhone ? 120 : (isTablet ? 300 / 2.9 : 340 / 3);   // phone +2pt vs v15.2
+  const panelW     = isPhone ? Math.round(120 * 3.3153) : isTablet ? 300 : 340;   // = 398
   const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
   const padB = isPhone ? 10 : isTablet ? 15 : 18;
-  const avSize   = isPhone ? 54 : isTablet ? 60 : 72;
-  const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;
+  const avSize   = isPhone ? 50 : isTablet ? 60 : 72;     // v15.3: phone 54→50 (−4) → avatar fits inside medallion decorative ring (less "pasted")
+  const avFrameW = isPhone ? 72 : isTablet ? 82 : 98;     // v15.3: phone 76→72 (−4) → match smaller avatar
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? 17                                                         // v15.2: 15→17 (medaglione PNG cropped center scaled in nuovo panel 391×118 = (55, 62))
+    ? 20                                                         // v15.3: 17→20 (+3) — center on medaglione PNG cropped (291/2082 × 398 = 55.6) − avFrameW(72)/2 = 19.6 → 20
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 24                                                         // v15.2: 19→24 (medaglione vertical center in panelH=118)
+    ? 27                                                         // v15.3: 24→27 (+3) — center on medaglione PNG cropped (331/628 × 120 = 63.2) − avFrameW(72)/2 = 27.2 → 27
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
