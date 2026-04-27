@@ -44,10 +44,14 @@ import Constants from 'expo-constants';
 
 type SpriteState = 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
 
-// Frame mapping: 4 frames horizontally → 0=idle, 1=attack, 2=hit, 3=skill
+// Frame mapping: sprite sheet horizontal layout → 0=idle, 1=attack, 2=hit, 3=skill
 const STATE_TO_FRAME: Record<SpriteState, number> = {
   idle: 0, attack: 1, hit: 2, skill: 3, ultimate: 3, dead: 2, heal: 0, dodge: 0,
 };
+// Numero di frame attesi nell'atlas orizzontale. Derivato da STATE_TO_FRAME
+// (max indice + 1) invece che hardcoded → evita drift se in futuro la mappa
+// venisse estesa con stati addizionali.
+const SPRITE_SHEET_FRAMES = Math.max(...Object.values(STATE_TO_FRAME)) + 1;
 
 // =============================================================================
 // MOUNT TRACKING — diagnostica remount involontari
@@ -422,18 +426,32 @@ export default function BattleSprite({
             }}
           >
             {hasSpriteSheet ? (
-              // Sprite sheet mode: atlas 4 frame orizzontali, ogni frame size×frameH.
-              <View style={{ width: frameW, height: frameH, overflow: 'hidden' }}>
-                <Image
-                  source={{ uri: spriteUrl }}
-                  style={{
-                    width: frameW * 4,
-                    height: frameH,
-                    marginLeft: -currentFrame * frameW,
-                  }}
-                  resizeMode="cover"
-                />
-              </View>
+              // Sprite sheet mode: atlas N frame orizzontali, ogni frame size×frameH.
+              // FIX render stabilization:
+              //  - resizeMode "cover"→"stretch": cover su atlas con aspect-ratio
+              //    mismatch (frame quadrati nativi vs portrait container) scalava
+              //    per il fattore MAX, sfasando ogni frame e clippando il sprite.
+              //    stretch mappa esattamente l'atlas dentro frameW*N × frameH,
+              //    rendendo il marginLeft offset allineato al pixel.
+              //  - frame count derivato da SPRITE_SHEET_FRAMES (no hardcode `4`).
+              //  - bound-check su currentFrame per prevenire OOB se lo state
+              //    mappa a un indice >= SPRITE_SHEET_FRAMES.
+              (() => {
+                const safeFrame = Math.max(0, Math.min(currentFrame, SPRITE_SHEET_FRAMES - 1));
+                return (
+                  <View style={{ width: frameW, height: frameH, overflow: 'hidden' }}>
+                    <Image
+                      source={{ uri: spriteUrl }}
+                      style={{
+                        width: frameW * SPRITE_SHEET_FRAMES,
+                        height: frameH,
+                        marginLeft: -safeFrame * frameW,
+                      }}
+                      resizeMode="stretch"
+                    />
+                  </View>
+                );
+              })()
             ) : isHoplite ? (
               // HOPLITE — rig a layer (HeroHopliteRig). Invece di renderizzare
               // la combat_base.png intera, montiamo i 7 layer PNG separati

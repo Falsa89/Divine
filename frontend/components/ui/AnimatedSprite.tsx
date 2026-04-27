@@ -25,6 +25,12 @@ interface AnimatedSpriteProps {
  *
  * Uses overflow:hidden + translateX to show one frame at a time.
  * Lightweight: no external libraries, just setInterval + Image.
+ *
+ * Render stabilization:
+ *  - Safe fallbacks for invalid metadata (frames/frameWidth/frameHeight ≤ 0)
+ *    with console.warn logging instead of silent NaN/blank renders.
+ *  - Integer-snapped displayW + exact `displayW * frames` image width
+ *    prevents sub-pixel rounding bleed-through of neighboring frames.
  */
 export default function AnimatedSprite({
   source,
@@ -40,10 +46,28 @@ export default function AnimatedSprite({
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const frameRef = useRef(0);
 
-  const displayH = size || frameHeight;
-  const displayW = size ? (size * frameWidth / frameHeight) : frameWidth;
-  const scale = displayH / frameHeight;
-  const sheetWidth = frameWidth * frames;
+  // SAFE METADATA — fall back to safe values + warn so a broken atlas/frameset
+  // never produces NaN scale, divide-by-zero, or infinite-frame setInterval.
+  const safeFrames = frames > 0 ? frames : 1;
+  const safeFW = frameWidth > 0 ? frameWidth : 1;
+  const safeFH = frameHeight > 0 ? frameHeight : 1;
+  if (typeof __DEV__ !== 'undefined' && __DEV__) {
+    if (frames <= 0 || frameWidth <= 0 || frameHeight <= 0) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[AnimatedSprite] invalid metadata',
+        { frames, frameWidth, frameHeight },
+        '→ using safe fallbacks',
+      );
+    }
+  }
+
+  // Geometry — integer-snapped to prevent sub-pixel bleed.
+  const displayH = Math.round(size || safeFH);
+  const displayW = Math.round(size ? (size * safeFW / safeFH) : safeFW);
+  // Image total width is EXACTLY displayW * safeFrames (not derived via scale)
+  // → each frame is pixel-perfect aligned; no rounding mismatch with offset.
+  const imageWidth = displayW * safeFrames;
 
   const stop = useCallback(() => {
     if (intervalRef.current) {
@@ -57,10 +81,10 @@ export default function AnimatedSprite({
     setCurrentFrame(0);
     stop();
 
-    const ms = Math.round(1000 / fps);
+    const ms = Math.round(1000 / Math.max(1, fps));
     intervalRef.current = setInterval(() => {
       const next = frameRef.current + 1;
-      if (next >= frames) {
+      if (next >= safeFrames) {
         if (loop) {
           frameRef.current = 0;
           setCurrentFrame(0);
@@ -75,7 +99,7 @@ export default function AnimatedSprite({
     }, ms);
 
     return stop;
-  }, [source, frames, fps, loop]);
+  }, [source, safeFrames, fps, loop]);
 
   const offsetX = -(currentFrame * displayW);
 
@@ -84,7 +108,7 @@ export default function AnimatedSprite({
       <Image
         source={source}
         style={{
-          width: sheetWidth * scale,
+          width: imageWidth,
           height: displayH,
           transform: [{ translateX: offsetX }],
         }}
