@@ -651,7 +651,13 @@ function HomeProfilePanel({ user, router }: any) {
         source={HOME_PROFILE_PANEL.frame}
         decorSource={HOME_PROFILE_PANEL.decor}
         capInsets={HOME_PROFILE_PANEL.capInsets}
-        resizeMode="cover"
+        // v15.11: FIX FRAME CROPPING — passato da "cover" a "contain".
+        // Container 424×128 (ratio 3.3125) vs asset 2082×628 (ratio 3.3153):
+        // - cover scalava image a 424.36×128 → crop ~0.18px/lato visibili sul
+        //   device fisico (decorazioni gold lungo i bordi).
+        // - contain scala image a 424×127.95 → letterbox vert 0.05px (invisibile).
+        // Ratio preservato → medaglione sferico ✓ ; nessun crop laterale ✓.
+        resizeMode="contain"
         fallbackColors={['rgba(11,23,60,0.95)', 'rgba(8,15,40,0.85)']}
         style={[
           s.profilePanel,
