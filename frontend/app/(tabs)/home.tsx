@@ -149,15 +149,15 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   // grande per riempire l'apertura visibile in modo "embedded".
   // v15.14: MICRO-CALIBRATION (real mobile feedback) — avatar leggermente troppo
   // grande e biased verso top-left rispetto al centro visibile housing.
-  // Direction: smaller (−2), shift right (+1), shift down (+1).
-  const avSize   = isPhone ? 52 : isTablet ? 60 : 72;     // v15.14: phone 54→52 (−2) — fit più calibrato dentro housing
-  const avFrameW = isPhone ? 78 : isTablet ? 82 : 98;     // v15.14: phone 80→78 (−2) — ring proporzionato
-  const avInit   = isPhone ? 24 : isTablet ? 22 : 26;     // v15.14: phone 25→24 (−1) — proporzionale a avSize
+  // v15.15: FINAL MICRO-CAL — slightly smaller (−2) + shift down (+3) — H stable.
+  const avSize   = isPhone ? 50 : isTablet ? 60 : 72;     // v15.15: phone 52→50 (−2)
+  const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;     // v15.15: phone 78→76 (−2)
+  const avInit   = isPhone ? 23 : isTablet ? 22 : 26;     // v15.15: phone 24→23 (−1)
   const avLeft   = isPhone
-    ? 16                                                         // v15.14: 15→16 (+1) — micro-shift a destra per re-centrare nel housing
+    ? 17                                                         // v15.15: 16→17 (+1) — center horizontally stable (frame −2 + left +1 = center +0)
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 15                                                         // v15.14: 14→15 (+1) — micro-shift in basso per re-centrare nel housing
+    ? 18                                                         // v15.15: 15→18 (+3) — net visual group shift ≈ +2px down (frame −2 + top +3 = center +2)
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
