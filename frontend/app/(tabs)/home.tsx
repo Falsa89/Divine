@@ -836,7 +836,8 @@ function HomeProfilePanel({ user, router }: any) {
               <View
                 style={[
                   s.expBarBg,
-                  { flex: 1, height: expH, borderRadius: expH / 2, marginRight: 6 },
+                  // v14.5: bar da flex:1 → flex:0+width:88 → "0/1000" non si appiccica più al bordo destro slot, sta dentro la safe rail
+                  { flex: 0, width: 88, height: expH, borderRadius: expH / 2, marginRight: 6 },
                 ]}
               >
                 {HOME_PROFILE_PANEL.expBarBg ? (
@@ -870,7 +871,7 @@ function HomeProfilePanel({ user, router }: any) {
             >
               <Text style={[s.powerIcon, { fontSize: pwrFS + 1, marginRight: 4 }]}>{'\u26A1'}</Text>
               <Text style={[s.powerLbl, { fontSize: pwrLblFS, marginRight: 6 }]}>POWER</Text>
-              <Text style={[s.powerVal, { fontSize: pwrFS }]} numberOfLines={1}>
+              <Text style={[s.powerVal, { fontSize: pwrFS, marginLeft: 4 }]} numberOfLines={1}>
                 {Number(power).toLocaleString()}
               </Text>
             </TouchableOpacity>
