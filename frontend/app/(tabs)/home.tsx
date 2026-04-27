@@ -131,9 +131,12 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   //       Row 1: Name + Subtitle (Apprendista) + exp counter
   //       Row 2: Exp bar full width
   //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
-  const panelW     = isPhone ? 340 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 3.32 : isTablet ? 2.9 : 3;   // v15.1: phone matched al ratio del CROPPED asset (2082x628 → 3.3153) per zero stretch X/Y
-  const panelH     = panelW / panelRatio;                   // 102.4 phone (= asset visible ratio)
+  // v15.2: PHONE è ora HEIGHT-DRIVEN per scaling visivo premium del frame.
+  // Strategy: panelH=118 (target), panelW = panelH × ratio = 118 × 3.3153 ≈ 391.
+  // Tablet/Desktop restano width-driven come prima.
+  const panelRatio = isPhone ? 3.3153 : isTablet ? 2.9 : 3;   // phone: ratio cropped asset
+  const panelH     = isPhone ? 118 : (isTablet ? 300 / 2.9 : 340 / 3);   // phone height-driven
+  const panelW     = isPhone ? Math.round(118 * 3.3153) : isTablet ? 300 : 340;   // phone derived = 391
   const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
@@ -142,10 +145,10 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? 15                                                         // v15.0: rail-anchored — avatar center=53 = medaglione PNG center scaled
+    ? 17                                                         // v15.2: 15→17 (medaglione PNG cropped center scaled in nuovo panel 391×118 = (55, 62))
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 19                                                         // v15.0: rail-anchored — avatar center=57 = medaglione PNG center scaled (panelH=113.3)
+    ? 24                                                         // v15.2: 19→24 (medaglione vertical center in panelH=118)
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
