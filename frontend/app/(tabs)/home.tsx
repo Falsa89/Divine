@@ -143,10 +143,10 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const avFrameW = isPhone ? 68 : isTablet ? 82 : 98;     // v15.4: phone 72→68 (−4) → ring esterno tighter, breathing 12pt fra avSize e avFrameW
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? 22                                                         // v15.4: 20→22 — center on medaglione PNG cropped (291/2082 × 398 = 55.6) − avFrameW(68)/2 = 21.6 → 22
+    ? 25                                                         // v15.5: 22→25 (+3) — shift destra per integrare avatar nel medaglione decorativo visibile
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 29                                                         // v15.4: 27→29 — center on medaglione PNG cropped (331/628 × 120 = 63.2) − avFrameW(68)/2 = 29.2 → 29
+    ? 32                                                         // v15.5: 29→32 (+3) — shift basso per breathing gold ornament uniforme attorno
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
