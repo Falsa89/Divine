@@ -150,9 +150,10 @@ export type ProfilePanelAssets = {
 };
 export const HOME_PROFILE_PANEL: ProfilePanelAssets = {
   // Pack A v2 (RGBA, verified). Asset depositati in assets/home_panels/profile/.
-  // Tutti e 5 verificati via PIL: mode='RGBA', corners alpha=0, transparent% >= 49.
-  // Frame aspect ratio 3:1 (landscape) → container profileWrap adattato di conseguenza.
-  frame:      require('../assets/home_panels/profile/home_profile_panel_frame.png'),
+  // v15.1: usato frame CROPPED (rimosso transparent padding asimmetrico top=35/bot=61/L=47/R=43)
+  // → ratio nativo VISIBILE 3.3153 invece di 3.0000 del canvas pieno.
+  // Allineato `panelRatio` (phone) a 3.32 in computeHomeMetrics → no stretch X/Y indipendente.
+  frame:      require('../assets/home_panels/profile/home_profile_panel_frame_cropped.png'),
   avatarRing: require('../assets/home_panels/profile/home_profile_avatar_ring.png'),
   expBarBg:   require('../assets/home_panels/profile/home_profile_exp_bar_bg.png'),
   expBarFill: require('../assets/home_panels/profile/home_profile_exp_bar_fill.png'),

@@ -132,8 +132,8 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   //       Row 2: Exp bar full width
   //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
   const panelW     = isPhone ? 340 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 3.0 : isTablet ? 2.9 : 3;   // v15.0: ripristinato ratio nativo PNG (era 2.8 in v14, causava stretch verticale +7.1%)
-  const panelH     = panelW / panelRatio;                   // 113.3 phone (native, undistorted)
+  const panelRatio = isPhone ? 3.32 : isTablet ? 2.9 : 3;   // v15.1: phone matched al ratio del CROPPED asset (2082x628 → 3.3153) per zero stretch X/Y
+  const panelH     = panelW / panelRatio;                   // 102.4 phone (= asset visible ratio)
   const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
@@ -795,10 +795,10 @@ function HomeProfilePanel({ user, router }: any) {
           //   statusSlot: left=100 top=82  232×24   border ROSSO (VIP+SP)
           // ─────────────────────────────────────────────────────────────
           <>
-            {/* NAME SLOT — verde — v15.0: anchored to UPPER zone (above upper rail at y=31) */}
+            {/* NAME SLOT — verde (v15.1 revert: top 6→10 baseline v14.4) */}
             <View
               style={[
-                { position: 'absolute', top: 6, left: 100, width: 90, height: 20,
+                { position: 'absolute', top: 10, left: 100, width: 90, height: 20,
                   justifyContent: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#00FF00' } : null,
               ]}
@@ -809,10 +809,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* TITLE SLOT — lime — v15.0: rail-anchored, width 70→100, right boundary x=282 (right safe del frame) */}
+            {/* TITLE SLOT — lime (v15.1 revert: baseline v14.4 left=180, top=12, width=70) */}
             <View
               style={[
-                { position: 'absolute', top: 8, left: 195, width: 87, height: 18,
+                { position: 'absolute', top: 12, left: 180, width: 70, height: 18,
                   justifyContent: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#B0FF00' } : null,
               ]}
@@ -824,10 +824,10 @@ function HomeProfilePanel({ user, router }: any) {
             </View>
 
             {/* EXP SLOT — blu (barra + valore numerico, stesso blocco visivo)
-                v15.0: middle zone (between upper rail y=31 and lower rail y=85), width=184 → right=282 */}
+                v15.1 revert: baseline v14.4 (top=36, left=98, width=150, h=20) */}
             <View
               style={[
-                { position: 'absolute', top: 36, left: 98, width: 184, height: 18,
+                { position: 'absolute', top: 36, left: 98, width: 150, height: 20,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#1E90FF' } : null,
               ]}
@@ -836,7 +836,6 @@ function HomeProfilePanel({ user, router }: any) {
               <View
                 style={[
                   s.expBarBg,
-                  // v15.0: REVERT v14.5 (flex:0 width:88) → ripristino flex:1 (bar fills slot, native behavior)
                   { flex: 1, height: expH, borderRadius: expH / 2, marginRight: 6 },
                 ]}
               >
@@ -859,11 +858,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* POWER SLOT — arancio
-                v15.0: lower-rail anchored (rail center y=85, slot top=64 sits in lower-middle zone), width=184 → right=282 */}
+            {/* POWER SLOT — arancio (v15.1 revert: baseline v14.4 top=60, width=148) */}
             <TouchableOpacity
               style={[
-                { position: 'absolute', top: 64, left: 98, width: 184, height: 18,
+                { position: 'absolute', top: 60, left: 98, width: 148, height: 20,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF8800' } : null,
               ]}
@@ -872,17 +870,16 @@ function HomeProfilePanel({ user, router }: any) {
             >
               <Text style={[s.powerIcon, { fontSize: pwrFS + 1, marginRight: 4 }]}>{'\u26A1'}</Text>
               <Text style={[s.powerLbl, { fontSize: pwrLblFS, marginRight: 6 }]}>POWER</Text>
-              {/* v15.0: REVERT v14.5 (rimosso marginLeft:4 inline override) → torna a global s.powerVal con marginLeft:'auto' (value at right edge slot) */}
               <Text style={[s.powerVal, { fontSize: pwrFS }]} numberOfLines={1}>
                 {Number(power).toLocaleString()}
               </Text>
             </TouchableOpacity>
 
             {/* STATUS SLOT — rosso (VIP + SP badges)
-                v15.0: lower zone (below lower rail at y=85), width=184 → right=282 */}
+                v15.1 revert: baseline v14.4 (top=82, left=98, width=148, h=24) */}
             <View
               style={[
-                { position: 'absolute', top: 88, left: 98, width: 184, height: 22,
+                { position: 'absolute', top: 82, left: 98, width: 148, height: 24,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF0000' } : null,
               ]}
