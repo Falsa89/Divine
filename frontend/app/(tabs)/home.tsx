@@ -147,7 +147,7 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
     ? 15                                                         // v15.6D: 18→15 (−3) shift sx — avatar più a sinistra nel medallion housing
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 17                                                         // v15.6E: 21→17 (−4) shift verticale up — solo avTop, X invariato
+    ? 14                                                         // v15.6F: 17→14 (−3) ulteriore shift up — solo avTop, X invariato
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
