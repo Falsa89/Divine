@@ -132,8 +132,8 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   //       Row 2: Exp bar full width
   //       Row 3: POWER · VIP · SP (inline, no wrap, no Apprendista)
   const panelW     = isPhone ? 340 : isTablet ? 300 : 340;
-  const panelRatio = isPhone ? 2.8 : isTablet ? 2.9 : 3;   // v14: phone 3.0→2.8 (fix schiacciamento frame; panelH 113→121)
-  const panelH     = panelW / panelRatio;                   // 121.4 phone
+  const panelRatio = isPhone ? 3.0 : isTablet ? 2.9 : 3;   // v15.0: ripristinato ratio nativo PNG (era 2.8 in v14, causava stretch verticale +7.1%)
+  const panelH     = panelW / panelRatio;                   // 113.3 phone (native, undistorted)
   const padL = isPhone ? Math.round(panelW * 0.30) : isTablet ? 92 : 104;   // 102
   const padR = isPhone ? 24 : isTablet ? 32 : 42;
   const padT = isPhone ? 12 : isTablet ? 16 : 20;
@@ -142,10 +142,10 @@ function computeHomeMetrics(vw: number, vh: number): HomeMetrics {
   const avFrameW = isPhone ? 76 : isTablet ? 82 : 98;
   const avInit   = isPhone ? 21 : isTablet ? 22 : 26;
   const avLeft   = isPhone
-    ? 19                                                         // v14.3: 21→19 (avvicina al centro geometrico sede PNG x=53)
+    ? 15                                                         // v15.0: rail-anchored — avatar center=53 = medaglione PNG center scaled
     : isTablet ? Math.round(panelW * 0.15 - avFrameW / 2) : 6;
   const avTop    = isPhone
-    ? 30                                                         // v14.3: 33→30 (avvicina al centro geometrico sede PNG y=61)
+    ? 19                                                         // v15.0: rail-anchored — avatar center=57 = medaglione PNG center scaled (panelH=113.3)
     : isTablet
       ? Math.round(panelH * 0.50 - avFrameW / 2)
       : undefined;
@@ -795,10 +795,10 @@ function HomeProfilePanel({ user, router }: any) {
           //   statusSlot: left=100 top=82  232×24   border ROSSO (VIP+SP)
           // ─────────────────────────────────────────────────────────────
           <>
-            {/* NAME SLOT — verde */}
+            {/* NAME SLOT — verde — v15.0: anchored to UPPER zone (above upper rail at y=31) */}
             <View
               style={[
-                { position: 'absolute', top: 10, left: 100, width: 90, height: 20,
+                { position: 'absolute', top: 6, left: 100, width: 90, height: 20,
                   justifyContent: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#00FF00' } : null,
               ]}
@@ -809,10 +809,10 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* TITLE SLOT — lime (v14.4: left 195→180, width 72→70 → right 267→250, contenuto più interno) */}
+            {/* TITLE SLOT — lime — v15.0: rail-anchored, width 70→100, right boundary x=282 (right safe del frame) */}
             <View
               style={[
-                { position: 'absolute', top: 12, left: 180, width: 70, height: 18,
+                { position: 'absolute', top: 8, left: 195, width: 87, height: 18,
                   justifyContent: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#B0FF00' } : null,
               ]}
@@ -824,10 +824,10 @@ function HomeProfilePanel({ user, router }: any) {
             </View>
 
             {/* EXP SLOT — blu (barra + valore numerico, stesso blocco visivo)
-                v14.4: left 100→98, width 155→150 → right 255→248, cluster più interno */}
+                v15.0: middle zone (between upper rail y=31 and lower rail y=85), width=184 → right=282 */}
             <View
               style={[
-                { position: 'absolute', top: 36, left: 98, width: 150, height: 20,
+                { position: 'absolute', top: 36, left: 98, width: 184, height: 18,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#1E90FF' } : null,
               ]}
@@ -836,8 +836,8 @@ function HomeProfilePanel({ user, router }: any) {
               <View
                 style={[
                   s.expBarBg,
-                  // v14.5: bar da flex:1 → flex:0+width:88 → "0/1000" non si appiccica più al bordo destro slot, sta dentro la safe rail
-                  { flex: 0, width: 88, height: expH, borderRadius: expH / 2, marginRight: 6 },
+                  // v15.0: REVERT v14.5 (flex:0 width:88) → ripristino flex:1 (bar fills slot, native behavior)
+                  { flex: 1, height: expH, borderRadius: expH / 2, marginRight: 6 },
                 ]}
               >
                 {HOME_PROFILE_PANEL.expBarBg ? (
@@ -859,10 +859,11 @@ function HomeProfilePanel({ user, router }: any) {
               </Text>
             </View>
 
-            {/* POWER SLOT — arancio (v14.4: left 100→98, width 150→148 → right 250→246) */}
+            {/* POWER SLOT — arancio
+                v15.0: lower-rail anchored (rail center y=85, slot top=64 sits in lower-middle zone), width=184 → right=282 */}
             <TouchableOpacity
               style={[
-                { position: 'absolute', top: 60, left: 98, width: 148, height: 20,
+                { position: 'absolute', top: 64, left: 98, width: 184, height: 18,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF8800' } : null,
               ]}
@@ -871,16 +872,17 @@ function HomeProfilePanel({ user, router }: any) {
             >
               <Text style={[s.powerIcon, { fontSize: pwrFS + 1, marginRight: 4 }]}>{'\u26A1'}</Text>
               <Text style={[s.powerLbl, { fontSize: pwrLblFS, marginRight: 6 }]}>POWER</Text>
-              <Text style={[s.powerVal, { fontSize: pwrFS, marginLeft: 4 }]} numberOfLines={1}>
+              {/* v15.0: REVERT v14.5 (rimosso marginLeft:4 inline override) → torna a global s.powerVal con marginLeft:'auto' (value at right edge slot) */}
+              <Text style={[s.powerVal, { fontSize: pwrFS }]} numberOfLines={1}>
                 {Number(power).toLocaleString()}
               </Text>
             </TouchableOpacity>
 
             {/* STATUS SLOT — rosso (VIP + SP badges)
-                v14.4: left 100→98, width 150→148 → right 250→246 */}
+                v15.0: lower zone (below lower rail at y=85), width=184 → right=282 */}
             <View
               style={[
-                { position: 'absolute', top: 82, left: 98, width: 148, height: 24,
+                { position: 'absolute', top: 88, left: 98, width: 184, height: 22,
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF0000' } : null,
               ]}
