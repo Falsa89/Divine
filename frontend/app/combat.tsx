@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ImageSourcePropType, Platform, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
@@ -263,6 +263,34 @@ export default function CombatScreen() {
     });
   };
 
+  // v16.7 — RERENDER PRESSURE FIX (next bottleneck after v16.6 HP batching)
+  // setSpriteState veniva chiamato N volte dentro forEach(targets) →
+  // N re-render della CombatScreen per action. setSpriteStateBatch applica
+  // tutti gli update in un singolo setSpriteStates → 1 re-render anche con
+  // ULT multi-target. Mantiene la stessa anti-no-op guard per ogni id.
+  const setSpriteStateBatch = (updates: { id: string; data: Partial<SpriteData> }[]) => {
+    if (updates.length === 0) return;
+    if (updates.length === 1) {
+      setSpriteState(updates[0].id, updates[0].data);
+      return;
+    }
+    setSpriteStates(prev => {
+      let next = prev;
+      let anyChanged = false;
+      for (const { id, data } of updates) {
+        const cur = (next[id] || prev[id]) || initSpriteState(id);
+        let localChanged = false;
+        for (const k of Object.keys(data)) {
+          if ((cur as any)[k] !== (data as any)[k]) { localChanged = true; break; }
+        }
+        if (!localChanged) continue;
+        if (!anyChanged) { next = { ...prev }; anyChanged = true; }
+        next[id] = { ...cur, ...data };
+      }
+      return anyChanged ? next : prev;
+    });
+  };
+
   const resetSpriteStates = () => {
     dbg('resetSpriteStates (end of turn)');
     setSpriteStates(prev => {
@@ -494,9 +522,13 @@ export default function CombatScreen() {
         if (INTRUSIVE_NOTIFICATIONS) setShowUlt(false);
         updateHP(a);
         if (a.targets) {
-          a.targets.forEach((tgt: any) => {
-            setSpriteState(tgt.id, { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit, actionInstanceId: nextActionId() });
-          });
+          // v16.7 — batch: 1 re-render per tutti i target invece di N
+          setSpriteStateBatch(
+            a.targets.map((tgt: any) => ({
+              id: tgt.id,
+              data: { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit, actionInstanceId: nextActionId() } as Partial<SpriteData>,
+            })),
+          );
         }
         addLog({ type: 'attack', actor: a.actor, skill: a.skill?.name, damage: a.total_damage, crit: a.crit, team: a.team, targets: a.targets?.map((t: any) => t.name).join(', ') });
         timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.6);
@@ -543,9 +575,13 @@ export default function CombatScreen() {
       timerRef.current = safeTimeout(() => {
         updateHP(a);
         if (a.targets) {
-          a.targets.forEach((tgt: any) => {
-            setSpriteState(tgt.id, { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit, actionInstanceId: nextActionId() });
-          });
+          // v16.7 — batch: 1 re-render per tutti i target invece di N
+          setSpriteStateBatch(
+            a.targets.map((tgt: any) => ({
+              id: tgt.id,
+              data: { state: tgt.killed ? 'dead' : 'hit', damage: a.total_damage || 0, isCrit: !!a.crit, actionInstanceId: nextActionId() } as Partial<SpriteData>,
+            })),
+          );
         }
         addLog({ type: 'attack', actor: a.actor, skill: a.skill?.name, damage: a.total_damage, crit: a.crit, team: a.team, targets: a.targets?.map((t: any) => t.name).join(', ') });
         timerRef.current = safeTimeout(() => playLog(res, ti, ai + 1), delay() * 0.5);
@@ -651,6 +687,152 @@ export default function CombatScreen() {
 
   const getHpPct = (c: any) => c.max_hp_battle > 0 ? (c.current_hp / c.max_hp_battle) * 100 : 0;
   const getSpriteState = (id: string) => spriteStates[id] || initSpriteState(id);
+  // v16.7 — HIT SLOP costante condivisa, dichiarata qui per essere accessibile
+  // sia dal chatDrawerNode useMemo (sotto) sia dai bottoni HUD (più in basso).
+  const HUD_HIT_SLOP = { top: 8, bottom: 8, left: 6, right: 6 };
+
+  // v16.7 — DRAWER MEMOIZATION
+  // Il chat trigger + drawer JSX viene ricalcolato ad ogni re-render della
+  // CombatScreen. Durante battle, anche con v16.6+v16.7 setSpriteState batch,
+  // ogni action ne triggera 2 (actor + targets-batch). Senza memo, il drawer
+  // (header+ScrollView+composer) viene ricostruito ogni volta → "reset feeling"
+  // perché ScrollView + TextInput interno possono percepire props churn.
+  // useMemo con deps mirate → JSX reference stabile a parità di state visibile
+  // → React bail-out della reconciliation per il drawer subtree, animazioni
+  // interne preservate.
+  // hooks-order safe: useMemo vive PRIMA dell'early-return phase==='loading'.
+  const chatDrawerNode = useMemo(() => {
+    if (!showLog) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setLogLines(logLinesRef.current);
+            setShowLog(true);
+          }}
+          activeOpacity={0.8}
+          style={st.chatTrigger}
+          hitSlop={HUD_HIT_SLOP}
+        >
+          <Text style={st.chatTriggerIcon}>{'\uD83D\uDCAC'}</Text>
+        </TouchableOpacity>
+      );
+    }
+    return (
+      <View style={st.chatDrawer} pointerEvents="box-none">
+        <TouchableOpacity
+          style={st.chatBackdrop}
+          activeOpacity={1}
+          onPress={() => setShowLog(false)}
+        />
+        <View style={st.chatPanel}>
+          <View style={st.chatHeader}>
+            <TouchableOpacity
+              onPress={() => setLogTab('chat')}
+              style={[st.chatTab, logTab === 'chat' && st.chatTabActive]}
+              activeOpacity={0.7}
+            >
+              <Text style={[st.chatTabTxt, logTab === 'chat' && st.chatTabTxtActive]}>
+                {'\uD83D\uDCAC'} Chat
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setLogTab('log')}
+              style={[st.chatTab, logTab === 'log' && st.chatTabActive]}
+              activeOpacity={0.7}
+            >
+              <Text style={[st.chatTabTxt, logTab === 'log' && st.chatTabTxtActive]}>
+                {'\uD83D\uDCDC'} Battle Log
+              </Text>
+            </TouchableOpacity>
+            <View style={{ flex: 1 }} />
+            <TouchableOpacity onPress={() => setShowLog(false)} style={st.chatClose} activeOpacity={0.7}>
+              <Text style={st.chatCloseTxt}>{'\u2715'}</Text>
+            </TouchableOpacity>
+          </View>
+          {logTab === 'log' ? (
+            <ScrollView
+              ref={logRef}
+              horizontal={false}
+              showsVerticalScrollIndicator
+              contentContainerStyle={st.logContent}
+              style={st.chatBody}
+            >
+              {logLines.length === 0 ? (
+                <Text style={st.chatEmpty}>Nessun evento registrato.</Text>
+              ) : (
+                logLines.map((entry: any, i: number) => (
+                  <View key={i} style={st.logLine}>
+                    {entry.type === 'attack' && (
+                      <Text style={st.logText}>
+                        <Text style={{ color: entry.team === 'team_a' ? '#44AAFF' : '#FF4444' }}>{entry.actor}</Text>
+                        {' '}{entry.skill || 'Attacco'} {'\u2192'} {entry.targets}
+                        {' '}<Text style={{ color: entry.crit ? '#FFD700' : '#FF8844' }}>-{entry.damage?.toLocaleString()}</Text>
+                        {entry.crit && <Text style={{ color: '#FFD700' }}> CRIT!</Text>}
+                      </Text>
+                    )}
+                    {entry.type === 'ultimate' && (
+                      <Text style={st.logText}>
+                        <Text style={{ color: '#FFD700' }}>{'\u2B50'} {entry.actor} usa {entry.skill}!</Text>
+                      </Text>
+                    )}
+                    {entry.type === 'heal' && (
+                      <Text style={st.logText}>
+                        <Text style={{ color: '#44DD88' }}>{'\u2764\uFE0F'} {entry.actor} +{entry.amount?.toLocaleString()} HP</Text>
+                      </Text>
+                    )}
+                    {entry.type === 'dot' && (
+                      <Text style={st.logText}>
+                        <Text style={{ color: '#FF8844' }}>{'\uD83D\uDD25'} {entry.target} -{entry.damage?.toLocaleString()} ({entry.effect})</Text>
+                      </Text>
+                    )}
+                    {entry.type === 'dodge' && (
+                      <Text style={st.logText}>
+                        <Text style={{ color: '#44DD99' }}>{'\uD83D\uDCA8'} {entry.target} schiva!</Text>
+                      </Text>
+                    )}
+                    {entry.type === 'skip' && (
+                      <Text style={st.logText}>
+                        <Text style={{ color: '#666' }}>{entry.actor} bloccato</Text>
+                      </Text>
+                    )}
+                  </View>
+                ))
+              )}
+            </ScrollView>
+          ) : (
+            <View style={st.chatBody}>
+              <ScrollView
+                ref={chatScrollRef}
+                showsVerticalScrollIndicator
+                contentContainerStyle={{ paddingBottom: 6, gap: 4 }}
+                style={{ flex: 1 }}
+              >
+                {chatMessages.length === 0 ? (
+                  <Text style={st.chatEmpty}>
+                    Nessun messaggio. Scrivi qualcosa qui sotto.
+                  </Text>
+                ) : (
+                  chatMessages.map((m: any) => (
+                    <View key={m.id || m._id} style={st.chatMsgRow}>
+                      <Text style={st.chatMsgUser}>{m.username || 'utente'}:</Text>
+                      <Text style={st.chatMsgTxt}>{m.message}</Text>
+                    </View>
+                  ))
+                )}
+              </ScrollView>
+              <ChatComposer
+                onSend={sendBattleChat}
+                placeholder={'Scrivi durante la battle\u2026'}
+                compact
+                maxLength={160}
+              />
+            </View>
+          )}
+        </View>
+      </View>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showLog, logTab, logLines, chatMessages]);
 
   // LOADING — preload reale con progress bar
   if (phase === 'loading') {
@@ -862,7 +1044,8 @@ export default function CombatScreen() {
   // gli onPress inline (function-identity instabile, accettabile) per
   // tornare a un render valido. hitSlop e openChat-sync li preserviamo
   // come costanti / inline (non sono hook).
-  const HUD_HIT_SLOP = { top: 8, bottom: 8, left: 6, right: 6 };
+  // v16.7 — HUD_HIT_SLOP è ora dichiarato prima del chatDrawerNode useMemo
+  // (sopra l'early-return phase==='loading'). Questa duplicazione è rimossa.
 
   return (
     <BattleWrapper>
@@ -1081,153 +1264,13 @@ export default function CombatScreen() {
             comprimeva il battle viewport). Sostituito dall'overlay Modal
             qui sotto, accessibile via il bottone "📜 LOG" nel turnRow. */}
 
-        {/* v16.2 — BATTLE CHAT DRAWER (in-tree, no Modal) ==================
-            Trigger floating bottom-left + drawer slide-up con tabs.
-            In-tree: nessun Modal portal, nessuna sync issue con safeTimeout
-            del playLog scheduler → niente crash. zIndex alto per stare
-            sopra al battlefield ma sotto a Ultimate cut-in (zIndex 90). */}
-        {!showLog ? (
-          <TouchableOpacity
-            onPress={() => {
-              // v16.4.1 — Sync inline del ref→state all'apertura del drawer
-              // (sostituisce openChat useCallback rimosso per fix hooks-order).
-              setLogLines(logLinesRef.current);
-              setShowLog(true);
-            }}
-            activeOpacity={0.8}
-            style={st.chatTrigger}
-            hitSlop={HUD_HIT_SLOP}
-          >
-            <Text style={st.chatTriggerIcon}>{'\uD83D\uDCAC'}</Text>
-            {/* v16.4 — RIMOSSO badge contatore live: la sua dipendenza da
-                logLines.length forzava re-render del trigger ogni addLog
-                (≈ ogni azione). Niente badge → niente spam → trigger stabile.
-                Il drawer, una volta aperto, sincronizza il ref completo
-                (vedi openChat) e mostra tutti gli eventi accumulati. */}
-          </TouchableOpacity>
-        ) : (
-          <View style={st.chatDrawer} pointerEvents="box-none">
-            {/* Tap-out backdrop SOLO sopra l'area NON occupata dal drawer.
-                Chiude il drawer senza interferire con la battle. */}
-            <TouchableOpacity
-              style={st.chatBackdrop}
-              activeOpacity={1}
-              onPress={() => setShowLog(false)}
-            />
-            <View style={st.chatPanel}>
-              <View style={st.chatHeader}>
-                <TouchableOpacity
-                  onPress={() => setLogTab('chat')}
-                  style={[st.chatTab, logTab === 'chat' && st.chatTabActive]}
-                  activeOpacity={0.7}
-                >
-                  <Text style={[st.chatTabTxt, logTab === 'chat' && st.chatTabTxtActive]}>
-                    {'\uD83D\uDCAC'} Chat
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setLogTab('log')}
-                  style={[st.chatTab, logTab === 'log' && st.chatTabActive]}
-                  activeOpacity={0.7}
-                >
-                  <Text style={[st.chatTabTxt, logTab === 'log' && st.chatTabTxtActive]}>
-                    {'\uD83D\uDCDC'} Battle Log
-                  </Text>
-                  {/* v16.4 — RIMOSSO badge live anche dalla tab. La tab
-                      mostra il log on-demand, non c'è più contatore live. */}
-                </TouchableOpacity>
-                <View style={{ flex: 1 }} />
-                <TouchableOpacity
-                  onPress={() => setShowLog(false)}
-                  style={st.chatClose}
-                  activeOpacity={0.7}
-                >
-                  <Text style={st.chatCloseTxt}>{'\u2715'}</Text>
-                </TouchableOpacity>
-              </View>
-              {logTab === 'log' ? (
-                <ScrollView
-                  ref={logRef}
-                  horizontal={false}
-                  showsVerticalScrollIndicator
-                  contentContainerStyle={st.logContent}
-                  style={st.chatBody}
-                >
-                  {logLines.length === 0 ? (
-                    <Text style={st.chatEmpty}>Nessun evento registrato.</Text>
-                  ) : (
-                    logLines.map((entry, i) => (
-                      <View key={i} style={st.logLine}>
-                        {entry.type === 'attack' && (
-                          <Text style={st.logText}>
-                            <Text style={{ color: entry.team === 'team_a' ? '#44AAFF' : '#FF4444' }}>{entry.actor}</Text>
-                            {' '}{entry.skill || 'Attacco'} {'\u2192'} {entry.targets}
-                            {' '}<Text style={{ color: entry.crit ? '#FFD700' : '#FF8844' }}>-{entry.damage?.toLocaleString()}</Text>
-                            {entry.crit && <Text style={{ color: '#FFD700' }}> CRIT!</Text>}
-                          </Text>
-                        )}
-                        {entry.type === 'ultimate' && (
-                          <Text style={st.logText}>
-                            <Text style={{ color: '#FFD700' }}>{'\u2B50'} {entry.actor} usa {entry.skill}!</Text>
-                          </Text>
-                        )}
-                        {entry.type === 'heal' && (
-                          <Text style={st.logText}>
-                            <Text style={{ color: '#44DD88' }}>{'\u2764\uFE0F'} {entry.actor} +{entry.amount?.toLocaleString()} HP</Text>
-                          </Text>
-                        )}
-                        {entry.type === 'dot' && (
-                          <Text style={st.logText}>
-                            <Text style={{ color: '#FF8844' }}>{'\uD83D\uDD25'} {entry.target} -{entry.damage?.toLocaleString()} ({entry.effect})</Text>
-                          </Text>
-                        )}
-                        {entry.type === 'dodge' && (
-                          <Text style={st.logText}>
-                            <Text style={{ color: '#44DD99' }}>{'\uD83D\uDCA8'} {entry.target} schiva!</Text>
-                          </Text>
-                        )}
-                        {entry.type === 'skip' && (
-                          <Text style={st.logText}>
-                            <Text style={{ color: '#666' }}>{entry.actor} bloccato</Text>
-                          </Text>
-                        )}
-                      </View>
-                    ))
-                  )}
-                </ScrollView>
-              ) : (
-                <View style={st.chatBody}>
-                  {/* v16.5 — CHAT TAB */}
-                  <ScrollView
-                    ref={chatScrollRef}
-                    showsVerticalScrollIndicator
-                    contentContainerStyle={{ paddingBottom: 6, gap: 4 }}
-                    style={{ flex: 1 }}
-                  >
-                    {chatMessages.length === 0 ? (
-                      <Text style={st.chatEmpty}>
-                        Nessun messaggio. Scrivi qualcosa qui sotto.
-                      </Text>
-                    ) : (
-                      chatMessages.map((m: any) => (
-                        <View key={m.id || m._id} style={st.chatMsgRow}>
-                          <Text style={st.chatMsgUser}>{m.username || 'utente'}:</Text>
-                          <Text style={st.chatMsgTxt}>{m.message}</Text>
-                        </View>
-                      ))
-                    )}
-                  </ScrollView>
-                  <ChatComposer
-                    onSend={sendBattleChat}
-                    placeholder={'Scrivi durante la battle\u2026'}
-                    compact
-                    maxLength={160}
-                  />
-                </View>
-              )}
-            </View>
-          </View>
-        )}
+        {/* v16.7 — Drawer JSX memoizzato in chatDrawerNode (vedi useMemo
+            sopra). Inserito come singolo node statico → React reuses
+            same JSX object reference quando deps non cambiano →
+            no reconciliation del subtree del drawer durante battle. */}
+        {chatDrawerNode}
+
+        {/* v16.3 — BATTLE START BANNER       )}
 
         {/* v16.3 — BATTLE START BANNER (one-shot, lightweight, non-intrusive)
             Sostituisce le notifiche per-action invasive con UNA sola
