@@ -570,18 +570,68 @@ export default function CombatScreen() {
     }
   }, [speed]);
 
-  const updateHP = (a: any) => {
-    if (a.type === 'attack' && a.targets) {
-      a.targets.forEach((t: any) => {
-        const upd = (prev: any[]) => prev.map(c => c.id === t.id ? { ...c, current_hp: Math.max(0, t.hp_remaining), is_alive: !t.killed } : c);
-        setTeamA(upd); setTeamB(upd);
+  // v16.6 — RERENDER PRESSURE FIX
+  // Vecchia updateHP eseguiva forEach(target → setTeamA + setTeamB) →
+  // 2×N setState per attack con N target, e prev.map() ritornava sempre
+  // un nuovo array reference anche se nessun item cambiava → ogni
+  // setState triggerava root re-render della CombatScreen anche per
+  // il team che non conteneva il target. A x3 = molti re-render/sec →
+  // sprite props "freschi" → flicker visivo / reset percepito.
+  //
+  // FIX: una sola passata per team, applica TUTTI i target in un setState,
+  // e SKIP totale del setState se il team non contiene nessun target
+  // (return prev → React no-op, zero re-render).
+  const applyDamageBatch = (targets: { id: string; hp_remaining: number; killed?: boolean }[]) => {
+    const ids = new Set(targets.map(t => t.id));
+    const idMap = new Map(targets.map(t => [t.id, t]));
+    const updater = (prev: any[]) => {
+      let touched = false;
+      const next = prev.map(c => {
+        if (!ids.has(c.id)) return c;
+        const t = idMap.get(c.id)!;
+        touched = true;
+        return { ...c, current_hp: Math.max(0, t.hp_remaining), is_alive: !t.killed };
       });
+      return touched ? next : prev;  // ← KEY: ref invariato se nessun match → no re-render
+    };
+    setTeamA(updater);
+    setTeamB(updater);
+  };
+  const applyDotBatch = (target_id: string, damage: number) => {
+    const updater = (prev: any[]) => {
+      let touched = false;
+      const next = prev.map(c => {
+        if (c.id !== target_id) return c;
+        touched = true;
+        const newHp = Math.max(0, c.current_hp - damage);
+        return { ...c, current_hp: newHp, is_alive: newHp > 0 };
+      });
+      return touched ? next : prev;
+    };
+    setTeamA(updater);
+    setTeamB(updater);
+  };
+  const applyHealBatch = (actor_id: string, amount: number) => {
+    const updater = (prev: any[]) => {
+      let touched = false;
+      const next = prev.map(c => {
+        if (c.id !== actor_id) return c;
+        touched = true;
+        return { ...c, current_hp: Math.min(c.max_hp_battle, c.current_hp + amount) };
+      });
+      return touched ? next : prev;
+    };
+    setTeamA(updater);
+    setTeamB(updater);
+  };
+
+  const updateHP = (a: any) => {
+    if (a.type === 'attack' && a.targets && a.targets.length > 0) {
+      applyDamageBatch(a.targets);
     } else if (a.type === 'dot' && a.target_id) {
-      const upd = (prev: any[]) => prev.map(c => c.id === a.target_id ? { ...c, current_hp: Math.max(0, c.current_hp - (a.damage || 0)), is_alive: c.current_hp - (a.damage || 0) > 0 } : c);
-      setTeamA(upd); setTeamB(upd);
+      applyDotBatch(a.target_id, a.damage || 0);
     } else if (a.type === 'heal' && a.actor_id) {
-      const upd = (prev: any[]) => prev.map(c => c.id === a.actor_id ? { ...c, current_hp: Math.min(c.max_hp_battle, c.current_hp + (a.amount || 0)) } : c);
-      setTeamA(upd); setTeamB(upd);
+      applyHealBatch(a.actor_id, a.amount || 0);
     }
   };
 
