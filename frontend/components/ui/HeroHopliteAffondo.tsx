@@ -187,8 +187,10 @@ export default function HeroHopliteAffondo({ size, active = true, playKey = 0, o
         width: renderedW,
         height: renderedH,
       }}>
+        {/* v16.12 — RIMOSSA `key` per-frame: causava unmount/mount della
+            <Image> ad ogni transizione di frame Affondo, generando il
+            flicker percepito. Vedi commento esteso in HeroHopliteIdleLoop. */}
         <Image
-          key={`hoplite-affondo-${index}`}
           source={FRAMES[index]}
           style={{ width: renderedW, height: renderedH }}
           resizeMode="contain"

@@ -150,8 +150,18 @@ export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
         width: renderedW,
         height: renderedH,
       }}>
+        {/* v16.12 — RIMOSSA `key` dinamica per-frame.
+            Era: key={`hoplite-idle-${idx}`} → cambiava ad OGNI frame del global
+            ticker (~ogni 100-160ms). React, vedendo una nuova key in stessa
+            posizione albero, UNMOUNTAVA la <Image> precedente e MONTAVA una
+            nuova istanza → su device reale (iOS/Android) ogni unmount/mount
+            comporta release + re-allocazione della native texture/view via
+            bridge → nel singolo frame di reconciliation lo schermo mostrava
+            un attimo "vuoto" → percezione di FLICKER/appear-disappear breve.
+            Soluzione: lasciare l'<Image> stabile e cambiare SOLO il source.
+            React Native swappa la texture in-place senza distruggere il view
+            → transizione di frame atomica, zero flash. */}
         <Image
-          key={`hoplite-idle-${idx}`}
           source={FRAMES[idx]}
           style={{ width: renderedW, height: renderedH }}
           resizeMode="contain"

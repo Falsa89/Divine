@@ -134,8 +134,10 @@ export default function HeroHopliteGuardiaFerrea({ size, active = true, playKey 
         width: renderedW,
         height: renderedH,
       }}>
+        {/* v16.12 — RIMOSSA `key` per-frame: causava unmount/mount della
+            <Image> ad ogni transizione di frame Guardia, generando il
+            flicker percepito. Vedi commento esteso in HeroHopliteIdleLoop. */}
         <Image
-          key={`hoplite-guardia-${index}`}
           source={FRAMES[index]}
           style={{ width: renderedW, height: renderedH }}
           resizeMode="contain"
