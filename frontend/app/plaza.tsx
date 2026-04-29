@@ -5,30 +5,37 @@ import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import ChatComposer from '../components/chat/ChatComposer';
+import ChannelSelector from '../components/chat/ChannelSelector';
+import { useChatChannel } from '../hooks/useChatChannel';
 
 const AURA_COLORS: Record<string,string> = { flame:'#ff4444', ice:'#44aaff', thunder:'#ffd700', shadow:'#9944ff', divine:'#ffd700', celestial:'#ffffff' };
 const FRAME_COLORS: Record<string,string> = { bronze:'#cd7f32', silver:'#c0c0c0', gold:'#ffd700', diamond:'#44ddff', legendary:'#ff4444', divine:'#ffd700' };
 
 export default function PlazaScreen() {
   const router = useRouter();
-  // v16.14 — RIMOSSO `useAuth()` non utilizzato (era importato ma `user`
-  // non veniva mai letto). In edge-case di navigazione rapida verso /plaza
-  // mentre l'AuthContext non è ancora pronto, l'hook può throw e provocare
-  // un crash navtive su Hermes. Safe removal: zero impatto funzionale.
+  // v16.14: rimosso useAuth() non utilizzato.
+  // v16.18 Phase 1: chat ora multi-canale via useChatChannel hook condiviso.
   const [players, setPlayers] = useState<any[]>([]);
-  const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const chatRef = useRef<ScrollView>(null);
 
-  useEffect(() => { load(); const iv = setInterval(loadChat, 8000); return () => clearInterval(iv); }, []);
+  const ch = useChatChannel({ pollingMs: 8000 });
 
-  const load = async () => { try { const [p, c] = await Promise.all([apiCall('/api/plaza'), apiCall('/api/plaza/chat')]); setPlayers(p.players||[]); setMessages(c||[]); } catch(e){} finally { setLoading(false); } };
-  const loadChat = async () => { try { const c = await apiCall('/api/plaza/chat'); setMessages(c||[]); } catch(e){} };
+  useEffect(() => {
+    (async () => {
+      try {
+        const p = await apiCall('/api/plaza');
+        setPlayers(p.players || []);
+      } catch {}
+      finally { setLoading(false); }
+    })();
+  }, []);
 
-  const sendMsg = async (msg: string) => {
-    await apiCall('/api/plaza/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
-    await loadChat();
-  };
+  // Auto-scroll quando arrivano nuovi messaggi sul canale attivo.
+  useEffect(() => {
+    const t = setTimeout(() => chatRef.current?.scrollToEnd({ animated: true }), 80);
+    return () => clearTimeout(t);
+  }, [ch.messages.length, ch.active]);
 
   if (loading) return <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B']} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}><ActivityIndicator size="large" color="#ff6b35" /></LinearGradient>;
 
@@ -57,30 +64,42 @@ export default function PlazaScreen() {
             );
           })}
         </View>
-        {/* Chat */}
+        {/* Chat (v16.18 — multi-channel: selector + active channel messages) */}
         <View style={s.chat}>
-          <Text style={s.chatTitle}>Chat</Text>
+          <ChannelSelector
+            channels={ch.channels}
+            active={ch.active}
+            onChange={ch.setActive}
+            compact
+          />
           <ScrollView style={s.chatScroll} ref={chatRef} onContentSizeChange={() => chatRef.current?.scrollToEnd()}>
-            {messages.map((m:any) => (
+            {ch.messages.map((m:any) => (
               <View key={m.id || m._id} style={s.msg}>
                 <Text style={s.msgUser}>{m.username}:</Text>
                 <Text style={s.msgText}>{m.message}</Text>
               </View>
             ))}
-            {messages.length === 0 && <Text style={s.emptyChat}>Nessun messaggio ancora</Text>}
+            {ch.messages.length === 0 && (
+              <Text style={s.emptyChat}>
+                {!ch.isAvailable
+                  ? `\uD83D\uDD12 ${ch.activeMeta?.lockedReason || 'Canale non disponibile'}`
+                  : ch.isReadonly
+                    ? 'Nessuna notifica di sistema.'
+                    : 'Nessun messaggio ancora'}
+              </Text>
+            )}
           </ScrollView>
           <View style={s.chatInput}>
-            {/* v16.16 — PLAZA COMPOSER USABILITY FIX
-                Rimosso `compact`: la modalità compact (input 30h / font 12 /
-                emoji 30 / send 30h) è pensata per il drawer battle ristretto
-                e per il pannello home in basso, dove lo spazio verticale è
-                forzato. In Plaza c'è una sidebar dedicata: usiamo il preset
-                NON-compact (input 36h / font 13 / emoji 36 / send 36h+)
-                molto più comodo da tappare e leggere su mobile reale. */}
+            {/* v16.18 — composer disabilitato su canali read-only o lock. */}
             <ChatComposer
-              onSend={sendMsg}
-              placeholder={'Scrivi alla piazza\u2026'}
+              onSend={ch.send}
+              placeholder={
+                !ch.isAvailable ? 'Canale bloccato' :
+                ch.isReadonly   ? 'Sola lettura'    :
+                                  'Scrivi alla piazza\u2026'
+              }
               maxLength={200}
+              disabled={!ch.isAvailable || ch.isReadonly}
             />
           </View>
         </View>

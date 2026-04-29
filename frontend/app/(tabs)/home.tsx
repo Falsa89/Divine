@@ -41,6 +41,8 @@ import { apiCall } from '../../utils/api';
 import { registerForPushNotifications } from '../../utils/pushNotifications';
 import HomeHeroSplash from '../../components/home/HomeHeroSplash';
 import ChatComposer from '../../components/chat/ChatComposer';
+import ChannelSelector from '../../components/chat/ChannelSelector';
+import { useChatChannel } from '../../hooks/useChatChannel';
 import { COLORS } from '../../constants/theme';
 import {
   HOME_BACKGROUNDS, HOME_PANELS, HOME_BUTTONS, HOME_NAV_ICONS,
@@ -1454,59 +1456,22 @@ function HomeMainBanner({ onPress, homeHero }: any) {
  *  Pannello chat + notifiche, espandibile
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeChatNotifPanel({ open, onToggle }: any) {
-  // v16.13 — REAL CHAT (shared source: /api/plaza/chat)
+  // v16.18 Phase 1 — MULTI-CHANNEL via useChatChannel hook
   // ─────────────────────────────────────────────────────────────────
-  // Prima questo pannello mostrava un array hardcoded di messaggi mock
-  // (Aether/Nyx/sistema fittizi). Ora legge la stessa sorgente reale di
-  // Plaza e Battle drawer (db.plaza_chat backend) → consistenza chat
-  // cross-surface garantita.
-  //
-  // Policy refresh:
-  //  - load on mount (anche collapsed) → preview riflette ultimo messaggio reale
-  //  - re-fetch ogni volta che il pannello viene aperto → user vede stato fresco
-  //  - polling leggero ogni 12s mentre il pannello è APERTO → sensazione live
-  //  - nessun polling quando collapsed (zero impatto perf in idle home)
-  const [messages, setMessages] = useState<any[]>([]);
+  // Prima: load/send locali su /api/plaza/chat (single global channel).
+  // Ora: hook condiviso useChatChannel gestisce 4 canali (global/system/
+  // faction/guild). La preview collapsed mostra l'ultimo messaggio del
+  // canale ATTIVO (default 'global'). Polling soft 12s solo quando aperto.
+  const ch = useChatChannel({ enabled: true, pollingMs: open ? 12000 : 0 });
   const scrollRef = useRef<ScrollView>(null);
 
-  const load = useCallback(async () => {
-    try {
-      const c = await apiCall('/api/plaza/chat');
-      if (Array.isArray(c)) setMessages(c);
-    } catch {
-      // network ko: lasciamo lo state com'è (eventualmente vuoto)
-    }
-  }, []);
-
-  // Load iniziale (anche collapsed: serve a popolare la preview).
-  useEffect(() => { load(); }, [load]);
-
-  // Refresh on open + polling soft mentre aperto.
-  useEffect(() => {
-    if (!open) return;
-    load();
-    const t = setInterval(load, 12000);
-    return () => clearInterval(t);
-  }, [open, load]);
-
-  // Auto-scroll on new content quando aperto.
   useEffect(() => {
     if (!open) return;
     const t = setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 80);
     return () => clearTimeout(t);
-  }, [messages.length, open]);
+  }, [ch.messages.length, open]);
 
-  const send = useCallback(async (msg: string) => {
-    try {
-      await apiCall('/api/plaza/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
-      await load();
-    } catch {
-      // network ko: il composer si re-abilita comunque
-    }
-  }, [load]);
-
-  // Preview: ultimo messaggio reale; se vuoto, hint statico.
-  const previewMsg = messages.length > 0 ? messages[messages.length - 1] : null;
+  const previewMsg = ch.messages.length > 0 ? ch.messages[ch.messages.length - 1] : null;
 
   return (
     <View style={[s.chatPanel, open && s.chatPanelOpen]}>
@@ -1553,17 +1518,28 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
         )}
         {open ? (
           <>
+            {/* v16.18 — Channel selector compact in cima al pannello aperto */}
+            <ChannelSelector
+              channels={ch.channels}
+              active={ch.active}
+              onChange={ch.setActive}
+              compact
+            />
             <ScrollView
               ref={scrollRef}
               style={s.chatBody}
               showsVerticalScrollIndicator={false}
             >
-              {messages.length === 0 ? (
+              {ch.messages.length === 0 ? (
                 <Text style={[s.chatMsgTxt, { opacity: 0.5, fontStyle: 'italic' }]}>
-                  Nessun messaggio. Sii il primo!
+                  {!ch.isAvailable
+                    ? `\uD83D\uDD12 ${ch.activeMeta?.lockedReason || 'Canale non disponibile'}`
+                    : ch.isReadonly
+                      ? 'Nessuna notifica di sistema.'
+                      : 'Nessun messaggio. Sii il primo!'}
                 </Text>
               ) : (
-                messages.map((m, i) => (
+                ch.messages.map((m, i) => (
                   <View key={m.id || m._id || i} style={s.chatMsg}>
                     <Text style={s.chatFrom}>{m.username || 'utente'}:</Text>
                     <Text style={s.chatMsgTxt}>{m.message}</Text>
@@ -1571,7 +1547,16 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
                 ))
               )}
             </ScrollView>
-            <ChatComposer onSend={send} compact placeholder="Scrivi nella piazza…" />
+            <ChatComposer
+              onSend={ch.send}
+              compact
+              placeholder={
+                !ch.isAvailable ? 'Canale bloccato' :
+                ch.isReadonly   ? 'Sola lettura'    :
+                                  'Scrivi nella chat\u2026'
+              }
+              disabled={!ch.isAvailable || ch.isReadonly}
+            />
           </>
         ) : (
           <View style={s.chatPreview}>

@@ -38,25 +38,92 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
             })
         return {"players": players}
 
+    # ==================== PLAZA CHAT — MULTI-CHANNEL (v16.18 Phase 1) ====================
+    # Channels supported: global | system | faction | guild
+    # Storage: same `db.plaza_chat` collection, distinguished by `channel` field.
+    # Backward compat: pre-v16.18 messages without `channel` field are treated as 'global'.
+    # System channel is READ-ONLY (POST forbidden) — riservato a notifiche di gioco future.
+    # Faction/Guild require user to have respective context, otherwise read returns []
+    # and POST raises 403.
+    VALID_CHANNELS = {"global", "system", "faction", "guild"}
+
     class PlazaChatRequest(BaseModel):
         message: str
+        channel: str = "global"
 
     @router.post("/plaza/chat")
     async def plaza_chat(req: PlazaChatRequest, current_user: dict = Depends(get_current_user)):
+        ch = req.channel if req.channel in VALID_CHANNELS else "global"
+        if ch == "system":
+            raise HTTPException(403, "Il canale Sistema è di sola lettura.")
         if len(req.message) > 200:
             raise HTTPException(400, "Messaggio troppo lungo!")
         msg = {
-            "id": str(uuid.uuid4()), "user_id": current_user["id"],
-            "username": current_user.get("username", "???"), "message": req.message,
+            "id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "username": current_user.get("username", "???"),
+            "message": req.message,
             "timestamp": datetime.utcnow(),
+            "channel": ch,
         }
+        if ch == "faction":
+            f = current_user.get("faction")
+            if not f:
+                raise HTTPException(403, "Non appartieni a nessuna fazione.")
+            msg["faction"] = f
+        if ch == "guild":
+            g = current_user.get("guild_id")
+            if not g:
+                raise HTTPException(403, "Non appartieni a nessuna gilda.")
+            msg["guild_id"] = g
         await db.plaza_chat.insert_one(msg)
         return {"success": True, "message": serialize_doc(msg)}
 
     @router.get("/plaza/chat")
-    async def get_plaza_chat(current_user: dict = Depends(get_current_user)):
-        messages = await db.plaza_chat.find({}).sort("timestamp", -1).limit(30).to_list(30)
+    async def get_plaza_chat(channel: str = "global", current_user: dict = Depends(get_current_user)):
+        ch = channel if channel in VALID_CHANNELS else "global"
+        if ch == "global":
+            # backward compat: include legacy messages senza il campo channel
+            query: dict = {"$or": [{"channel": "global"}, {"channel": {"$exists": False}}]}
+        elif ch == "system":
+            query = {"channel": "system"}
+        elif ch == "faction":
+            f = current_user.get("faction")
+            if not f:
+                return []
+            query = {"channel": "faction", "faction": f}
+        elif ch == "guild":
+            g = current_user.get("guild_id")
+            if not g:
+                return []
+            query = {"channel": "guild", "guild_id": g}
+        else:
+            query = {"channel": "global"}
+        messages = await db.plaza_chat.find(query).sort("timestamp", -1).limit(30).to_list(30)
         return [serialize_doc(m) for m in reversed(messages)]
+
+    @router.get("/plaza/channels")
+    async def get_chat_channels(current_user: dict = Depends(get_current_user)):
+        """Phase 1: enumera lo stato dei canali disponibili per l'utente.
+        Il frontend usa questa info per: mostrare/disabilitare i tab,
+        rendere read-only il composer su 'system', e mostrare locked state
+        su faction/guild quando il contesto manca."""
+        return {
+            "global":  {"available": True,  "readonly": False, "label": "Globale", "context": None},
+            "system":  {"available": True,  "readonly": True,  "label": "Sistema", "context": None},
+            "faction": {
+                "available": bool(current_user.get("faction")),
+                "readonly": False,
+                "label": "Fazione",
+                "context": current_user.get("faction"),
+            },
+            "guild": {
+                "available": bool(current_user.get("guild_id")),
+                "readonly": False,
+                "label": "Gilda",
+                "context": current_user.get("guild_id"),
+            },
+        }
 
     # ==================== FRIENDS SYSTEM ====================
     @router.get("/friends")

@@ -13,6 +13,8 @@ import { buildBattleLayout, getHomePosition } from '../components/battle/motionS
 import BattleDebugOverlay, { DebugUnitInfo } from '../components/battle/BattleDebugOverlay';
 import BattleLoadingScreen from '../components/battle/BattleLoadingScreen';
 import ChatComposer from '../components/chat/ChatComposer';
+import ChannelSelector from '../components/chat/ChannelSelector';
+import { useChatChannel } from '../hooks/useChatChannel';
 
 /**
  * BATTLE_DEBUG — flag per attivare overlay di debug nativo + log console
@@ -88,16 +90,18 @@ export default function CombatScreen() {
   const showLogRef = useRef(false);
   useEffect(() => { showLogRef.current = showLog; }, [showLog]);
   const [logTab, setLogTab] = useState<'log' | 'chat'>('log');
-  // v16.5/v16.13 — Battle chat composer (tab 'chat' del drawer).
-  // SHARED SOURCE OF TRUTH: legge/scrive su /api/plaza/chat (stessa
-  // sorgente di Plaza e Home). Non più local-echo only.
-  // Refresh policy:
-  //  - load lazy alla prima apertura del tab 'chat' (no pull a battle start)
-  //  - re-fetch dopo ogni POST (rimpiazza l'optimistic local entry con la
-  //    serie reale del server, includendo eventuali messaggi degli altri).
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  // v16.5/v16.13/v16.18 — Battle chat composer (tab 'chat' del drawer).
+  // SHARED MULTI-CHANNEL via useChatChannel hook (Phase 1).
+  // - Solo lazy: enabled solo quando logTab === 'chat' → no fetch in battle.
+  // - Cambio canale → refetch automatico.
+  // - Send → POST + refetch automatico (gestito dal hook).
+  // v16.18 — enabled lazy: fetch solo quando il drawer è aperto E la tab
+  // chat è attiva. Cambio canale → refetch automatico via hook.
+  const battleChat = useChatChannel({
+    enabled: showLog && logTab === 'chat',
+    pollingMs: 0, // niente polling in battle: refetch solo on-demand/on-send
+  });
   const chatScrollRef = useRef<ScrollView>(null);
-  const chatLoadedRef = useRef(false);
   const [spriteStates, setSpriteStates] = useState<Record<string, SpriteData>>({});
   // Background della battaglia: scelto UNA SOLA volta all'inizio di ogni fight
   // e memorizzato qui per restare deterministicamente fisso durante la battaglia.
@@ -464,45 +468,9 @@ export default function CombatScreen() {
     }
   };
 
-  // v16.13 — BATTLE CHAT: shared source aligned to /api/plaza/chat
-  // ─────────────────────────────────────────────────────────────────
-  // loadBattleChat: GET dei messaggi reali. Optimistic-safe: se il
-  // backend restituisce un array, sovrascriviamo lo state. Errori
-  // ignorati (battle deve restare fluida). Idempotente: chatLoadedRef
-  // evita ri-fetch superflui in caso di rapidi toggle drawer.
-  const loadBattleChat = useCallback(async () => {
-    try {
-      const c = await apiCall('/api/plaza/chat');
-      if (Array.isArray(c)) setChatMessages(c);
-      chatLoadedRef.current = true;
-      safeTimeout(() => chatScrollRef.current?.scrollToEnd({ animated: false }), 80);
-    } catch {
-      // network ko: lasciamo lo state così com'è (eventualmente vuoto)
-    }
-  }, []);
-
-  // sendBattleChat: optimistic-append + POST + refetch.
-  // L'optimistic entry conserva UX immediata anche su rete lenta;
-  // il refetch successivo rimpiazza con la lista reale del server,
-  // garantendo che i messaggi appaiano IDENTICI a Plaza/Home.
-  const sendBattleChat = async (msg: string) => {
-    const localEntry = {
-      id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      username: 'Tu',
-      message: msg,
-      timestamp: new Date().toISOString(),
-      _local: true,
-    };
-    setChatMessages(prev => [...prev.slice(-29), localEntry]);
-    safeTimeout(() => chatScrollRef.current?.scrollToEnd({ animated: true }), 60);
-    try {
-      await apiCall('/api/plaza/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
-      // refetch della shared source per allineare a Plaza/Home
-      await loadBattleChat();
-    } catch {
-      // network ko — l'optimistic entry resta visibile
-    }
-  };
+  // v16.18 — battle chat ora interamente gestita dal hook useChatChannel
+  // (vedi `battleChat` sopra). Le ex `loadBattleChat`/`sendBattleChat`
+  // sono state rimosse: il hook fa load on enable + refetch on send.
 
   const playLog = useCallback((res: any, ti: number, ai: number) => {
     if (!res.battle_log || ti >= res.battle_log.length) {
@@ -788,13 +756,7 @@ export default function CombatScreen() {
         <View style={st.chatPanel}>
           <View style={st.chatHeader}>
             <TouchableOpacity
-              onPress={() => {
-                setLogTab('chat');
-                // v16.13 — lazy fetch real plaza chat (shared source)
-                // alla prima apertura del tab, e refresh ad ogni
-                // riapertura per allinearsi a Plaza/Home.
-                loadBattleChat();
-              }}
+              onPress={() => setLogTab('chat')}
               style={[st.chatTab, logTab === 'chat' && st.chatTabActive]}
               activeOpacity={0.7}
             >
@@ -868,18 +830,29 @@ export default function CombatScreen() {
             </ScrollView>
           ) : (
             <View style={st.chatBody}>
+              {/* v16.18 Phase 1 — Channel selector compact in cima */}
+              <ChannelSelector
+                channels={battleChat.channels}
+                active={battleChat.active}
+                onChange={battleChat.setActive}
+                compact
+              />
               <ScrollView
                 ref={chatScrollRef}
                 showsVerticalScrollIndicator
                 contentContainerStyle={{ paddingBottom: 6, gap: 4 }}
                 style={{ flex: 1 }}
               >
-                {chatMessages.length === 0 ? (
+                {battleChat.messages.length === 0 ? (
                   <Text style={st.chatEmpty}>
-                    Nessun messaggio. Scrivi qualcosa qui sotto.
+                    {!battleChat.isAvailable
+                      ? `\uD83D\uDD12 ${battleChat.activeMeta?.lockedReason || 'Canale non disponibile'}`
+                      : battleChat.isReadonly
+                        ? 'Nessuna notifica di sistema.'
+                        : 'Nessun messaggio. Scrivi qualcosa qui sotto.'}
                   </Text>
                 ) : (
-                  chatMessages.map((m: any) => (
+                  battleChat.messages.map((m: any) => (
                     <View key={m.id || m._id} style={st.chatMsgRow}>
                       <Text style={st.chatMsgUser}>{m.username || 'utente'}:</Text>
                       <Text style={st.chatMsgTxt}>{m.message}</Text>
@@ -888,10 +861,15 @@ export default function CombatScreen() {
                 )}
               </ScrollView>
               <ChatComposer
-                onSend={sendBattleChat}
-                placeholder={'Scrivi durante la battle\u2026'}
+                onSend={battleChat.send}
+                placeholder={
+                  !battleChat.isAvailable ? 'Canale bloccato' :
+                  battleChat.isReadonly   ? 'Sola lettura'    :
+                                            'Scrivi durante la battle\u2026'
+                }
                 compact
                 maxLength={160}
+                disabled={!battleChat.isAvailable || battleChat.isReadonly}
               />
             </View>
           )}
@@ -899,7 +877,7 @@ export default function CombatScreen() {
       </View>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showLog, logTab, logLines, chatMessages, loadBattleChat]);
+  }, [showLog, logTab, logLines, battleChat]);
 
   // LOADING — preload reale con progress bar
   if (phase === 'loading') {
