@@ -6,7 +6,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
-import { heroBattleImageSource, heroImageSource, GREEK_HOPLITE_COMBAT_BASE } from '../components/ui/hopliteAssets';
+import { heroBattleImageSource, heroPortraitSource, GREEK_HOPLITE_COMBAT_BASE } from '../components/ui/hopliteAssets';
 import { HOPLITE_BATTLE_ASSET_MANIFEST } from '../components/ui/hopliteAssetManifest';
 import { pickBattleBackground, BattleBgResult, preloadBattleAsset } from '../components/ui/battleBackgrounds';
 import { buildBattleLayout, getHomePosition } from '../components/battle/motionSystem';
@@ -969,7 +969,7 @@ export default function CombatScreen() {
       <View key={c.id} style={[st.hudCard, dead && { opacity: 0.35 }]}>
         <View style={[st.hudImg, { borderColor: rarCol }]}>
           {img ? (
-            <Image source={heroImageSource(img, c.hero_id || c.id, c.hero_name || c.name)} style={st.hudImgInner} resizeMode="cover" />
+            <Image source={heroPortraitSource(img, c.hero_id || c.id, c.hero_name || c.name)} style={st.hudImgInner} resizeMode="cover" />
           ) : (
             <View style={[st.hudImgPh, { backgroundColor: (EC[c.element] || '#888') + '25' }]}>
               <Text style={[st.hudInit, { color: EC[c.element] || '#888' }]}>{(c.name || '?')[0]}</Text>

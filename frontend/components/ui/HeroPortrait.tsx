@@ -1,24 +1,38 @@
 /**
  * HeroPortrait
  * ------------
- * Rende il portrait di un eroe.
+ * Rende il portrait di un eroe con SEMANTICA ROLE-BASED (v16.24+).
  *
- * Regole:
- * - Per Greek Hoplite → usa l'asset locale corretto in base al parametro `variant`.
- *     - variant='card' (default) → base.png (UI piccolo, homepage, collection)
- *     - variant='detail'         → splash.png (fullscreen grande, santuario, encyclopedia)
- * - Per gli altri eroi → usa l'imageUri remoto.
- * - Se `useRig=true` ed è Greek Hoplite, usa il rig animato (solo per combat / preview).
+ * Variants:
+ * - 'transparent' → cutout senza sfondo (Home overlay decorativo).
+ * - 'card'  (DEFAULT) → portrait CON SFONDO (list/team-select/post-battle/etc).
+ * - 'detail' → fullscreen detail art (sanctuary/hero-viewer).
+ *
+ * Per Hoplite il file scelto cambia in base al variant:
+ *   transparent → base.png (cutout RGBA alpha=0 ai bordi)
+ *   card        → splash.png (con background — full art)
+ *   detail      → splash.png (stesso file, fullscreen detail)
+ *
+ * Per gli altri eroi: oggi un solo URL remoto → tutti i variant
+ * tornano {uri: imageUrl}. Estendibile in futuro.
+ *
+ * Se `useRig=true` ed è Greek Hoplite, usa il rig animato (solo combat/preview).
+ *
+ * BACKWARD COMPAT: i consumer esistenti che NON passano `variant`
+ * ricevono il nuovo default 'card' (= con sfondo). Se erano nati per
+ * essere trasparenti devono opt-in esplicitamente a `variant='transparent'`.
+ * Es: HomeHeroSplash → variant='transparent'.
  */
 import React from 'react';
 import { View, Image, ImageStyle, StyleProp, ViewStyle } from 'react-native';
 import HeroHopliteIdle from './HeroHopliteIdle';
 import {
   isGreekHoplite,
-  resolveHeroImageSource,
-  resolveHeroDetailImageSource,
-  GREEK_HOPLITE_CARD,
+  resolveHeroImageByRole,
+  GREEK_HOPLITE_TRANSPARENT,
+  GREEK_HOPLITE_PORTRAIT,
   GREEK_HOPLITE_DETAIL,
+  type HeroImageRole,
 } from './hopliteAssets';
 
 type Props = {
@@ -26,8 +40,13 @@ type Props = {
   heroName?: string | null;
   imageUri?: string | number | null;
   size: number;
-  /** 'card' per UI piccola (default), 'detail' per fullscreen grande */
-  variant?: 'card' | 'detail';
+  /**
+   * Variant del portrait (mapped a HeroImageRole):
+   *  - 'transparent' → cutout senza sfondo (Home overlay)
+   *  - 'card' (DEFAULT) → portrait con sfondo (list/team-select/post-battle)
+   *  - 'detail' → fullscreen art (sanctuary/hero-viewer)
+   */
+  variant?: HeroImageRole;
   /** se true e è Greek Hoplite → usa il rig animato invece della splash (solo combat/preview) */
   useRig?: boolean;
   animated?: boolean;
@@ -35,6 +54,15 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
   fallback?: React.ReactNode;
 };
+
+function hopliteAssetForVariant(variant: HeroImageRole) {
+  switch (variant) {
+    case 'transparent': return GREEK_HOPLITE_TRANSPARENT;
+    case 'detail':      return GREEK_HOPLITE_DETAIL;
+    case 'card':
+    default:            return GREEK_HOPLITE_PORTRAIT;
+  }
+}
 
 export default function HeroPortrait({
   heroId,
@@ -59,13 +87,12 @@ export default function HeroPortrait({
     );
   }
 
-  // Greek Hoplite standard → card (UI) o detail (fullscreen)
+  // Greek Hoplite standard → asset locale per il variant richiesto
   if (isHoplite) {
-    const hopliteSource = variant === 'detail' ? GREEK_HOPLITE_DETAIL : GREEK_HOPLITE_CARD;
     return (
       <View style={[{ width: size, height: size }, containerStyle]}>
         <Image
-          source={hopliteSource}
+          source={hopliteAssetForVariant(variant)}
           style={[{ width: size, height: size }, style]}
           resizeMode="cover"
         />
@@ -73,9 +100,9 @@ export default function HeroPortrait({
     );
   }
 
-  // Altri eroi: usa imageUri remoto (resolver varia in base a variant)
-  const resolver = variant === 'detail' ? resolveHeroDetailImageSource : resolveHeroImageSource;
-  const resolved = resolver(
+  // Altri eroi: usa imageUri remoto via resolver role-based
+  const resolved = resolveHeroImageByRole(
+    variant,
     typeof imageUri === 'string' ? imageUri : null,
     heroId,
     heroName,

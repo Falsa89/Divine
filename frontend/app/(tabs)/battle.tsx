@@ -10,7 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
-import { heroImageSource } from '../../components/ui/hopliteAssets';
+import { heroPortraitSource } from '../../components/ui/hopliteAssets';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../../constants/theme';
 
 const COLUMNS = [
@@ -267,7 +267,7 @@ export default function BattleTab() {
                       <View style={s.cellFilled}>
                         {hero.hero_image ? (
                           <View style={[s.cellImg, { borderColor: rarCol }]}>
-                            <Image source={heroImageSource(hero.hero_image, hero.hero_id, hero.hero_name)} style={s.cellImgInner} />
+                            <Image source={heroPortraitSource(hero.hero_image, hero.hero_id, hero.hero_name)} style={s.cellImgInner} />
                           </View>
                         ) : (
                           <AnimatedHeroPortrait imageUrl={null} name={hero.hero_name || '?'} rarity={hero.hero_rarity || 1} element={hero.hero_element} size={36} />
@@ -404,7 +404,7 @@ export default function BattleTab() {
                     >
                       {h.hero_image ? (
                         <View style={[s.heroImg, { borderColor: rarCol }]}>
-                          <Image source={heroImageSource(h.hero_image, h.hero_id, h.hero_name)} style={s.heroImgInner} />
+                          <Image source={heroPortraitSource(h.hero_image, h.hero_id, h.hero_name)} style={s.heroImgInner} />
                         </View>
                       ) : (
                         <View style={[s.heroImgPh, { backgroundColor: elemCol + '15', borderColor: rarCol }]}>

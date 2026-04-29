@@ -23,7 +23,7 @@ import AnimatedExpBar from './AnimatedExpBar';
 import BattleReportView from './BattleReport';
 import type { PostBattleSummaryData, RewardItem, HeroExpBreakdown } from './postBattleTypes';
 import { COLORS } from '../../constants/theme';
-import { resolveHeroImageSource } from '../ui/hopliteAssets';
+import { resolveHeroPortraitSource } from '../ui/hopliteAssets';
 
 export interface PostBattleSummaryProps {
   summary: PostBattleSummaryData;
@@ -194,12 +194,11 @@ function RewardChip({ reward, important }: { reward: RewardItem; important?: boo
 }
 
 function HeroExpRow({ hero, delayMs }: { hero: HeroExpBreakdown; delayMs: number }) {
-  // Resolve avatar safely: il backend può inviare stringhe `asset:*` (es. il
-  // sentinel di Hoplite `asset:greek_hoplite:splash`) che React Native NON sa
-  // gestire come uri remoto. Il resolver locale traduce tali sentinel in
-  // require() locali; per altri eroi ritorna {uri: ...} normale; null se
-  // niente di valido — in quel caso si usa il fallback con la lettera.
-  const avatarSource = resolveHeroImageSource(hero.avatar, hero.hero_id, hero.name);
+  // Resolve avatar safely: usa il resolver PORTRAIT (con sfondo) per
+  // mostrare la splash card di Hoplite con background — coerente con il
+  // tono "scheda risultati" del post-battle, NON la versione trasparente
+  // tipica della Home overlay.
+  const avatarSource = resolveHeroPortraitSource(hero.avatar, hero.hero_id, hero.name);
   return (
     <View style={s.heroRow}>
       <View style={s.heroAvatarWrap}>

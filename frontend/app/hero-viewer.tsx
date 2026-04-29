@@ -7,10 +7,9 @@ import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
 import {
   isGreekHoplite,
-  GREEK_HOPLITE_SPLASH,
+  GREEK_HOPLITE_DETAIL,
   GREEK_HOPLITE_ID,
   GREEK_HOPLITE_NAME,
-  resolveHeroImageSource,
 } from '../components/ui/hopliteAssets';
 import { RARITY, ELEMENTS } from '../constants/theme';
 
@@ -82,9 +81,9 @@ export default function HeroViewerScreen() {
     <Pressable style={s.root} onPress={() => router.back()}>
       <View style={s.scene}>
         {isHoplite ? (
-          // Greek Hoplite: splash art verticale, massimizzata sull'altezza
+          // Greek Hoplite: splash art verticale fullscreen (con sfondo).
           <Image
-            source={GREEK_HOPLITE_SPLASH}
+            source={GREEK_HOPLITE_DETAIL}
             style={{ width: portraitWidth, height: portraitHeight }}
             resizeMode="contain"
           />

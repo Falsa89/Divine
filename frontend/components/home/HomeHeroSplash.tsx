@@ -54,12 +54,14 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
       style={{ width, height, backgroundColor: 'transparent' }}
     >
       {isHop ? (
-        // Hoplite: sempre card art locale (base.png)
+        // Hoplite Home overlay: cutout TRASPARENTE (base.png) — fonde col gradient.
+        // Tutti gli altri contesti UI (team-select/post-battle/list) usano
+        // variant='card' di default per mostrare la splash con sfondo.
         <HeroPortrait
           heroId={hero.id}
           heroName={hero.name}
           size={Math.min(width, height)}
-          variant="card"
+          variant="transparent"
           containerStyle={{ width, height }}
         />
       ) : hero.image_url ? (

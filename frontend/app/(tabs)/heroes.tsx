@@ -9,7 +9,7 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
-import { isGreekHoplite, GREEK_HOPLITE_SPLASH, resolveHeroImageSource } from '../../components/ui/hopliteAssets';
+import { isGreekHoplite, GREEK_HOPLITE_PORTRAIT } from '../../components/ui/hopliteAssets';
 import ScreenHeader from '../../components/ui/ScreenHeader';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
@@ -234,7 +234,7 @@ export default function HeroesTab() {
               {isGreekHoplite(selected.hero_id || selected.id, selected.hero_name) ? (
                 <View style={s.detImgPortraitWrap}>
                   <Image
-                    source={GREEK_HOPLITE_SPLASH}
+                    source={GREEK_HOPLITE_PORTRAIT}
                     style={s.detImgPortrait}
                     resizeMode="contain"
                   />

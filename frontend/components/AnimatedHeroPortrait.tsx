@@ -4,7 +4,7 @@ import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat,
   withTiming, withSequence, Easing, withDelay,
 } from 'react-native-reanimated';
-import { resolveHeroImageSource } from './ui/hopliteAssets';
+import { resolveHeroPortraitSource } from './ui/hopliteAssets';
 
 const RC: Record<number, string> = { 1:'#888', 2:'#44aa44', 3:'#4488ff', 4:'#aa44ff', 5:'#ff4444', 6:'#ffd700' };
 const EC: Record<string, string> = { fire:'#ff4444', water:'#4488ff', earth:'#aa8844', wind:'#44cc88', light:'#ffd700', dark:'#9944ff', neutral:'#888' };
@@ -157,7 +157,7 @@ export default function AnimatedHeroPortrait({ imageUrl, name, rarity, element, 
           borderColor: rc, borderWidth: rarity >= 5 ? 2.5 : rarity >= 3 ? 2 : 1.5,
         }]}>
           {(() => {
-            const src = resolveHeroImageSource(imageUrl, heroId, name);
+            const src = resolveHeroPortraitSource(imageUrl, heroId, name);
             if (src) {
               return (
                 <Image source={src} style={{ width: imgSize, height: imgSize, borderRadius }} resizeMode="cover" />
