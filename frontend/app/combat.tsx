@@ -691,6 +691,43 @@ export default function CombatScreen() {
   // sia dal chatDrawerNode useMemo (sotto) sia dai bottoni HUD (più in basso).
   const HUD_HIT_SLOP = { top: 8, bottom: 8, left: 6, right: 6 };
 
+  // v16.11 — BOTTOM-ANCHORED FULLSCREEN BACKGROUND
+  // ─────────────────────────────────────────────────────────────────────
+  // Problema: `resizeMode="cover"` su absoluteFillObject centra verticalmente
+  // l'immagine → con i nostri asset (cielo + skyline + pavimento), il
+  // "pavimento" finiva fuori schermo a destra/sinistra → percezione di
+  // "zoom centrato" anziché vero backdrop fullscreen.
+  // Soluzione: risolviamo le dimensioni naturali via
+  // Image.resolveAssetSource (sincrono per static require()), calcoliamo
+  // la scala COVER (max ratio) e posizioniamo con `bottom: 0`. Il pavimento
+  // resta ancorato al bordo inferiore, il crop avviene SOLO in alto (cielo).
+  // hooks-order safe: useMemo dichiarato PRIMA del primo early-return
+  // (phase==='loading' a riga ~838).
+  const hasBgSource = !!battleBg?.source;
+  const bgCoverStyle = useMemo(() => {
+    if (!hasBgSource) return null;
+    try {
+      const resolved = Image.resolveAssetSource(battleBg!.source as any);
+      const iw = resolved?.width ?? 0;
+      const ih = resolved?.height ?? 0;
+      if (!iw || !ih || !winW || !winH) {
+        return { kind: 'fill' as const };
+      }
+      const scale = Math.max(winW / iw, winH / ih);
+      const renderedW = iw * scale;
+      const renderedH = ih * scale;
+      return {
+        kind: 'anchored' as const,
+        width: renderedW,
+        height: renderedH,
+        left: (winW - renderedW) / 2,
+        bottom: 0,
+      };
+    } catch {
+      return { kind: 'fill' as const };
+    }
+  }, [hasBgSource, battleBg?.source, winW, winH]);
+
   // v16.7 — DRAWER MEMOIZATION
   // Il chat trigger + drawer JSX viene ricalcolato ad ogni re-render della
   // CombatScreen. Durante battle, anche con v16.6+v16.7 setSpriteState batch,
@@ -1013,7 +1050,8 @@ export default function CombatScreen() {
   // inline nel return JSX → struttura stabile, zero remount durante battle.
   // useMemo non serviva più: una volta che l'albero è stable, useMemo del
   // chatDrawerNode (v16.7) può finalmente fare effetto.
-  const hasBgSource = !!battleBg?.source;
+  // v16.11 — `hasBgSource` e `bgCoverStyle` sono ora dichiarati in alto
+  // (sopra l'early-return phase==='loading') per rispettare l'hooks order.
 
   // v16.4.1 — HOOKS ORDER FIX
   // Le useCallback di v16.4 erano state inserite QUI, ma siamo dopo gli
@@ -1032,12 +1070,27 @@ export default function CombatScreen() {
     <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
       {hasBgSource ? (
         <>
-          <Image
-            source={battleBg!.source}
-            style={StyleSheet.absoluteFillObject}
-            resizeMode="cover"
-            fadeDuration={200}
-          />
+          {bgCoverStyle && bgCoverStyle.kind === 'anchored' ? (
+            <Image
+              source={battleBg!.source}
+              style={{
+                position: 'absolute',
+                width: bgCoverStyle.width,
+                height: bgCoverStyle.height,
+                left: bgCoverStyle.left,
+                bottom: bgCoverStyle.bottom,
+              }}
+              resizeMode="cover"
+              fadeDuration={200}
+            />
+          ) : (
+            <Image
+              source={battleBg!.source}
+              style={StyleSheet.absoluteFillObject}
+              resizeMode="cover"
+              fadeDuration={200}
+            />
+          )}
           {/* v16.9 — Overlay vignetta MOLTO leggera (era 0.20/0.02/0.28 →
               0.10/0.0/0.14). Il bg deve essere il vero protagonista;
               il dark scrim non deve creare "fascia" o senso di mascheratura. */}

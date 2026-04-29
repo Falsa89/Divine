@@ -9,7 +9,7 @@
  * IL TIMER GIRA SEMPRE (module-level), quindi anche se il componente React
  * viene rimontato N volte, il counter globale continua ad avanzare.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { HOPLITE_IDLE_ASSETS } from './hopliteAssetManifest';
 
@@ -89,13 +89,30 @@ type Props = {
 };
 
 export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
-  const [idx, setIdx] = useState(currentFrameIdx);
+  // v16.10 — STAGGER PHASE per-istanza: ogni IdleLoop riceve un offset
+  // deterministico (counter incrementale modulo numero frame). Quando il
+  // global counter avanza, il display index locale è
+  //   (currentFrameIdx + phaseOffset) % FRAMES.length
+  // → le transizioni dei multipli Hoplite si SFASANO → addio "lampo
+  // collettivo" sincrono percepito a x1/x2. L'offset è stabilizzato in
+  // un ref per istanza, così non cambia tra render. Su unmount/remount
+  // il counter NON viene decrementato: gli offset si distribuiscono
+  // comunque in modo bilanciato e non sincrono.
+  const phaseOffsetRef = useRef<number | null>(null);
+  if (phaseOffsetRef.current === null) {
+    phaseOffsetRef.current = nextPhaseOffset % FRAMES.length;
+    nextPhaseOffset += 1;
+  }
+  const phaseOffset = phaseOffsetRef.current;
+
+  const [globalIdx, setGlobalIdx] = useState(currentFrameIdx);
+  const idx = (globalIdx + phaseOffset) % FRAMES.length;
 
   useEffect(() => {
-    const handler = (i: number) => setIdx(i);
+    const handler = (i: number) => setGlobalIdx(i);
     subscribers.add(handler);
     // sync immediately to current global idx
-    setIdx(currentFrameIdx);
+    setGlobalIdx(currentFrameIdx);
     return () => { subscribers.delete(handler); };
   }, []);
 
