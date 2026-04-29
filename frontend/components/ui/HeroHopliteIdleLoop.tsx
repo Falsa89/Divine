@@ -32,12 +32,20 @@ const FRAME_COLORS = ['#FF2929', '#29FF5A', '#2980FF', '#FFD700', '#B829FF'];
 // paused, il tick riprende. Implementa un counter di componenti paused
 // (semplice e robusto agli unmount). Single-source-of-truth: quando
 // `pausedConsumerCount > 0` → tick non avanza.
+// v16.10 — STAGGER PHASE: ogni IdleLoop instance assegna un offset
+// deterministico (counter incrementale modulo numero frame). Quando
+// il global counter avanza, i subscriber computano localmente
+// `(currentFrameIdx + offset) % FRAMES.length` invece di usare lo stesso
+// idx → le transizioni dei multipli Hoplite si SFASANO → no più
+// "lampo collettivo" sincrono percepito a x1/x2. A x3 il battle-pacing
+// nasconde idle quindi nessun side-effect.
 // ═══════════════════════════════════════════════════════════════════════
 let currentFrameIdx = 0;
 let elapsedInCurrentFrame = 0;
 let lastTickAt = Date.now();
 const subscribers = new Set<(idx: number) => void>();
 let pausedConsumerCount = 0;
+let nextPhaseOffset = 0;
 
 function tick() {
   const now = Date.now();
