@@ -231,6 +231,11 @@ export default function HeroesTab() {
               colors={['rgba(20,20,60,0.9)', 'rgba(10,10,40,0.95)']}
               style={[s.detail, { borderColor: RARITY.colors[Math.min(selected.stars || selected.hero_rarity || 1, 6)] || '#888' }]}
             >
+              <ScrollView
+                style={s.detailScroll}
+                contentContainerStyle={s.detailScrollContent}
+                showsVerticalScrollIndicator={false}
+              >
               {isGreekHoplite(selected.hero_id || selected.id, selected.hero_name) ? (
                 <View style={s.detImgPortraitWrap}>
                   <Image
@@ -298,6 +303,7 @@ export default function HeroesTab() {
                   <Text style={s.detailBtnTxt}>DETTAGLIO</Text>
                 </LinearGradient>
               </TouchableOpacity>
+              </ScrollView>
             </LinearGradient>
           </Animated.View>
         )}
@@ -390,6 +396,12 @@ const s = StyleSheet.create({
     borderWidth: 1.5,
     overflow: 'hidden',
   },
+  // ScrollView interna al detail panel: garantisce che il bottone "DETTAGLIO"
+  // resti raggiungibile anche per eroi con portrait grande (es. Hoplite con
+  // detImgPortraitWrap height:170) quando la somma dei children eccede
+  // l'altezza disponibile del body in landscape mobile.
+  detailScroll: { flex: 1 },
+  detailScrollContent: { paddingBottom: 4 },
   detImgWrap: { width: '100%', height: 90, position: 'relative' },
   detImg: { width: '100%', height: '100%' },
   // Layout portrait per splash verticali (es. Hoplite): più alto, image intera con resizeMode contain
