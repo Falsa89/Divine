@@ -16,6 +16,8 @@ import ChatComposer from '../components/chat/ChatComposer';
 import ChannelSelector from '../components/chat/ChannelSelector';
 import DMPanel from '../components/chat/DMPanel';
 import { useChatChannel } from '../hooks/useChatChannel';
+import PostBattleSummary from '../components/battle/PostBattleSummary';
+import { buildPostBattleSummary } from '../components/battle/buildPostBattleSummary';
 
 /**
  * BATTLE_DEBUG — flag per attivare overlay di debug nativo + log console
@@ -922,98 +924,33 @@ export default function CombatScreen() {
 
   // RESULT
   if (phase === 'result') {
-    const win = result?.victory;
+    // v16.22 — Post-Battle Summary Foundation
+    // Adapter converte il `result` API legacy + teamA/teamB runtime in un
+    // PostBattleSummaryData (contract definito in postBattleTypes.ts). I valori
+    // numerici di sample/mock sono ben circoscritti in buildPostBattleSummary.ts
+    // e sostituibili quando il backend esporrà damage tracking + exp pipeline.
+    if (error) {
+      return (
+        <LinearGradient colors={['#0D0D2B', '#1A0505', '#0D0D2B']} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <Text style={{ color: '#f44', fontSize: 14, marginBottom: 12 }}>{error}</Text>
+          <TouchableOpacity onPress={() => router.back()} style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: 'rgba(255,107,53,0.18)', borderRadius: 8 }}>
+            <Text style={{ color: '#fff', fontWeight: '900' }}>{'\u2190'} INDIETRO</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      );
+    }
+    const summary = buildPostBattleSummary(
+      result || { victory: false, turns: 0, rewards: {} },
+      teamA || [],
+      teamB || [],
+      0, // duration_sec — backend non lo espone ancora; sample 0 fino a future feature
+    );
     return (
-      <LinearGradient
-        colors={win ? ['#0D0D2B', '#1A1500', '#0D0D2B'] : ['#0D0D2B', '#1A0505', '#0D0D2B']}
-        style={{ flex: 1 }}
-      >
-        {/* Fixed buttons at top for guaranteed accessibility */}
-        <View style={st.resTopBar}>
-          <TouchableOpacity onPress={startBattle} activeOpacity={0.7}>
-            <LinearGradient colors={[COLORS.accent, '#FF4444']} style={st.retryBtn}>
-              <Text style={st.retryTxt}>{'\u2694\uFE0F'} RIPROVA</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <Text style={[st.resTopTitle, { color: win ? '#FFD700' : '#FF4444' }]}>
-            {win ? '\uD83C\uDFC6 VITTORIA!' : '\uD83D\uDCA5 SCONFITTA'}
-          </Text>
-          <TouchableOpacity style={st.menuBtn} onPress={() => router.back()} activeOpacity={0.7}>
-            <Text style={st.menuTxt}>{'\u2190'} INDIETRO</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Scrollable result content */}
-        <ScrollView
-          contentContainerStyle={st.resultScroll}
-          showsVerticalScrollIndicator={false}
-        >
-          {error ? <Text style={{ color: '#f44', marginTop: 8 }}>{error}</Text> : (
-            <View style={st.resultRow}>
-              {/* Left column: Stats + MVP */}
-              <View style={st.resLeftCol}>
-                <Animated.View entering={FadeInDown.delay(200)} style={st.resultStats}>
-                  <View style={st.rStatBox}><Text style={st.rStatVal}>{result?.turns}</Text><Text style={st.rStatLabel}>Turni</Text></View>
-                  <View style={st.rStatBox}><Text style={st.rStatVal}>{result?.team_a_survivors}/{teamA.length}</Text><Text style={st.rStatLabel}>Superstiti</Text></View>
-                </Animated.View>
-                {result?.mvp && (
-                  <Animated.View entering={FadeInUp.delay(300)} style={st.mvpCard}>
-                    <LinearGradient colors={['rgba(255,215,0,0.1)', 'transparent']} style={st.mvpInner}>
-                      <Text style={st.mvpLabel}>MVP</Text>
-                      <Text style={st.mvpName}>{result.mvp}</Text>
-                    </LinearGradient>
-                  </Animated.View>
-                )}
-                {result?.rewards?.account_level_up && (
-                  <Text style={st.accLevelUp}>{'\uD83C\uDF1F'} Account Lv.{result.rewards.new_account_level}!</Text>
-                )}
-              </View>
-
-              {/* Center column: Rewards */}
-              <View style={st.resCenterCol}>
-                {result?.rewards && (
-                  <Animated.View entering={FadeInUp.delay(400)} style={st.rewardsCol}>
-                    <Text style={st.rewardsSectionTitle}>RICOMPENSE</Text>
-                    <View style={st.rewardsRow}>
-                      <View style={st.rewardBadge}><Text style={st.rewardIcon}>{'\uD83D\uDCB0'}</Text><Text style={st.rewardVal}>{result.rewards.gold?.toLocaleString()}</Text></View>
-                      <View style={st.rewardBadge}><Text style={st.rewardIcon}>{'\u2728'}</Text><Text style={st.rewardVal}>{result.rewards.exp?.toLocaleString()}</Text></View>
-                      {result.rewards.hero_exp > 0 && (
-                        <View style={st.rewardBadge}><Text style={st.rewardIcon}>{'\u2694\uFE0F'}</Text><Text style={st.rewardVal}>+{result.rewards.hero_exp}</Text></View>
-                      )}
-                    </View>
-                  </Animated.View>
-                )}
-                {result?.rewards?.hero_levelups?.length > 0 && (
-                  <Animated.View entering={FadeInUp.delay(500)} style={st.levelUpsWrap}>
-                    <Text style={st.levelUpsTitle}>LEVEL UP!</Text>
-                    {result.rewards.hero_levelups.map((lu: any, i: number) => (
-                      <Text key={i} style={st.levelUpItem}>{lu.hero_name}: Lv.{lu.old_level} {'\u2192'} Lv.{lu.new_level}</Text>
-                    ))}
-                  </Animated.View>
-                )}
-              </View>
-
-              {/* Right column: Drops */}
-              {result?.rewards?.drops?.length > 0 && (
-                <View style={st.resRightCol}>
-                  <Animated.View entering={FadeInUp.delay(600)} style={st.dropsWrap}>
-                    <Text style={st.dropsTitle}>OGGETTI</Text>
-                    <View style={st.dropsRow}>
-                      {result.rewards.drops.map((d: any, i: number) => (
-                        <View key={i} style={st.dropItem}>
-                          <Text style={st.dropIcon}>{d.icon}</Text>
-                          <Text style={st.dropName}>{d.name}</Text>
-                          <Text style={st.dropQty}>x{d.quantity}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  </Animated.View>
-                </View>
-              )}
-            </View>
-          )}
-        </ScrollView>
-      </LinearGradient>
+      <PostBattleSummary
+        summary={summary}
+        onRetry={startBattle}
+        onExit={() => router.back()}
+      />
     );
   }
 
