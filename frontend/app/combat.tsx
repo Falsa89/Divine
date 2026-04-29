@@ -1038,8 +1038,11 @@ export default function CombatScreen() {
             resizeMode="cover"
             fadeDuration={200}
           />
+          {/* v16.9 — Overlay vignetta MOLTO leggera (era 0.20/0.02/0.28 →
+              0.10/0.0/0.14). Il bg deve essere il vero protagonista;
+              il dark scrim non deve creare "fascia" o senso di mascheratura. */}
           <LinearGradient
-            colors={['rgba(6,6,20,0.20)', 'rgba(10,8,24,0.02)', 'rgba(6,6,20,0.28)']}
+            colors={['rgba(6,6,20,0.10)', 'rgba(10,8,24,0.00)', 'rgba(6,6,20,0.14)']}
             style={StyleSheet.absoluteFillObject}
             pointerEvents="none"
           />
@@ -1326,15 +1329,18 @@ const st = StyleSheet.create({
   vsText: { fontSize: 28, fontWeight: '900', color: COLORS.accent, letterSpacing: 4, textShadowColor: 'rgba(255,107,53,0.6)', textShadowRadius: 15, textShadowOffset: { width: 0, height: 0 } },
   // ===== TOP HUD =====
   topHud: {
-    backgroundColor: 'rgba(6,6,20,0.95)',
+    // v16.9 — Reduced opacity 0.95 → 0.62 + linear scrim fa percepire
+    // l'HUD come overlay di un fullscreen backdrop, non come una fascia
+    // che spezza la scena. Il bg battle si vede attraverso, dando il
+    // "real fullscreen" feel richiesto. Il testo HUD resta leggibile
+    // grazie al text-shadow già presente sui sub-elementi.
+    backgroundColor: 'rgba(6,6,20,0.62)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,107,53,0.1)',
+    borderBottomColor: 'rgba(255,107,53,0.22)',
     paddingHorizontal: 10,
     paddingTop: 4,
     paddingBottom: 4,
-    // v16.8 — zIndex elevato per garantire che HUD intercetti touch sempre,
-    // anche se uno sprite con `overflow: visible` sul battlefield estende
-    // il suo Animated.View (es. damage float) sopra l'area HUD.
+    // v16.8 — zIndex elevato per garantire che HUD intercetti touch sempre.
     zIndex: 50,
     elevation: 4,
   },

@@ -27,16 +27,24 @@ const FRAME_COLORS = ['#FF2929', '#29FF5A', '#2980FF', '#FFD700', '#B829FF'];
 // GLOBAL TICKER — module-level. Avanza SEMPRE, indipendente da React.
 // Tick ogni 150ms (più fine granularità del frame più corto 220ms).
 // Mantiene `currentFrameIdx` globale. Notifica sottoscrittori su cambio.
+// v16.9 — PAUSE GATE: quando >=1 IdleLoop è montato con paused=true,
+// il tick è gated → frame counter freezato. Quando ZERO IdleLoop sono
+// paused, il tick riprende. Implementa un counter di componenti paused
+// (semplice e robusto agli unmount). Single-source-of-truth: quando
+// `pausedConsumerCount > 0` → tick non avanza.
 // ═══════════════════════════════════════════════════════════════════════
 let currentFrameIdx = 0;
 let elapsedInCurrentFrame = 0;
 let lastTickAt = Date.now();
 const subscribers = new Set<(idx: number) => void>();
+let pausedConsumerCount = 0;
 
 function tick() {
   const now = Date.now();
   const delta = now - lastTickAt;
   lastTickAt = now;
+  // v16.9 — gate globale: se almeno un consumer è in pause, NON avanzare.
+  if (pausedConsumerCount > 0) return;
   elapsedInCurrentFrame += delta;
   const holdMs = FRAME_DURATIONS_MS[currentFrameIdx];
   if (elapsedInCurrentFrame >= holdMs) {
@@ -68,10 +76,11 @@ const FRAME_BODY_H_PX = 341;            // valore REALE misurato con PIL su PNG
 
 type Props = {
   size: number;
-  animated?: boolean;  // retained for API, ignored by implementation
+  /** v16.9 — Quando false, freeze del frame counter via gate globale. */
+  animated?: boolean;
 };
 
-export default function HeroHopliteIdleLoop({ size }: Props) {
+export default function HeroHopliteIdleLoop({ size, animated = true }: Props) {
   const [idx, setIdx] = useState(currentFrameIdx);
 
   useEffect(() => {
@@ -81,6 +90,21 @@ export default function HeroHopliteIdleLoop({ size }: Props) {
     setIdx(currentFrameIdx);
     return () => { subscribers.delete(handler); };
   }, []);
+
+  // v16.9 — Pause propagation: `animated=false` (passato dal HeroHopliteRig
+  // come `showIdle && !paused`) registra questo consumer come "paused" sul
+  // global ticker → quando count > 0, il tick globale freeza il frame
+  // counter → tutti gli IdleLoop sub vedono lo stesso `currentFrameIdx`
+  // congelato → idle visualmente FERMO.
+  useEffect(() => {
+    if (!animated) {
+      pausedConsumerCount += 1;
+      return () => {
+        pausedConsumerCount = Math.max(0, pausedConsumerCount - 1);
+      };
+    }
+    return undefined;
+  }, [animated]);
 
   // Geometria
   const frameScale = (RIG_BODY_H_NORM * size) / FRAME_BODY_H_PX;
