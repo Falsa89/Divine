@@ -40,6 +40,7 @@ import { useAuth } from '../../context/AuthContext';
 import { apiCall } from '../../utils/api';
 import { registerForPushNotifications } from '../../utils/pushNotifications';
 import HomeHeroSplash from '../../components/home/HomeHeroSplash';
+import ChatComposer from '../../components/chat/ChatComposer';
 import { COLORS } from '../../constants/theme';
 import {
   HOME_BACKGROUNDS, HOME_PANELS, HOME_BUTTONS, HOME_NAV_ICONS,
@@ -1453,13 +1454,59 @@ function HomeMainBanner({ onPress, homeHero }: any) {
  *  Pannello chat + notifiche, espandibile
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeChatNotifPanel({ open, onToggle }: any) {
-  // Messaggi mock iniziali: in futuro arriveranno dal backend chat + sistema
-  const feed = [
-    { type: 'system', txt: 'Benvenuto in Divine Waifus. Tap su PLAY per iniziare.' },
-    { type: 'system', txt: 'Nuovo evento: "Prova del Fuoco" disponibile per 48h.' },
-    { type: 'chat',   from: 'Aether', txt: 'qualcuno per arena?' },
-    { type: 'chat',   from: 'Nyx',    txt: 'boss di gilda alle 21' },
-  ];
+  // v16.13 — REAL CHAT (shared source: /api/plaza/chat)
+  // ─────────────────────────────────────────────────────────────────
+  // Prima questo pannello mostrava un array hardcoded di messaggi mock
+  // (Aether/Nyx/sistema fittizi). Ora legge la stessa sorgente reale di
+  // Plaza e Battle drawer (db.plaza_chat backend) → consistenza chat
+  // cross-surface garantita.
+  //
+  // Policy refresh:
+  //  - load on mount (anche collapsed) → preview riflette ultimo messaggio reale
+  //  - re-fetch ogni volta che il pannello viene aperto → user vede stato fresco
+  //  - polling leggero ogni 12s mentre il pannello è APERTO → sensazione live
+  //  - nessun polling quando collapsed (zero impatto perf in idle home)
+  const [messages, setMessages] = useState<any[]>([]);
+  const scrollRef = useRef<ScrollView>(null);
+
+  const load = useCallback(async () => {
+    try {
+      const c = await apiCall('/api/plaza/chat');
+      if (Array.isArray(c)) setMessages(c);
+    } catch {
+      // network ko: lasciamo lo state com'è (eventualmente vuoto)
+    }
+  }, []);
+
+  // Load iniziale (anche collapsed: serve a popolare la preview).
+  useEffect(() => { load(); }, [load]);
+
+  // Refresh on open + polling soft mentre aperto.
+  useEffect(() => {
+    if (!open) return;
+    load();
+    const t = setInterval(load, 12000);
+    return () => clearInterval(t);
+  }, [open, load]);
+
+  // Auto-scroll on new content quando aperto.
+  useEffect(() => {
+    if (!open) return;
+    const t = setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 80);
+    return () => clearTimeout(t);
+  }, [messages.length, open]);
+
+  const send = useCallback(async (msg: string) => {
+    try {
+      await apiCall('/api/plaza/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
+      await load();
+    } catch {
+      // network ko: il composer si re-abilita comunque
+    }
+  }, [load]);
+
+  // Preview: ultimo messaggio reale; se vuoto, hint statico.
+  const previewMsg = messages.length > 0 ? messages[messages.length - 1] : null;
 
   return (
     <View style={[s.chatPanel, open && s.chatPanelOpen]}>
@@ -1469,33 +1516,50 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
       >
         <TouchableOpacity style={s.chatHeader} onPress={onToggle} activeOpacity={0.8}>
           <Text style={s.chatIco}>{'\uD83D\uDCAC'}</Text>
-          <Text style={s.chatTitle}>CHAT · NOTIFICHE</Text>
+          <Text style={s.chatTitle}>CHAT GLOBALE</Text>
           <Text style={s.chatToggle}>{open ? '\u25BC' : '\u25B2'}</Text>
         </TouchableOpacity>
         {open ? (
-          <ScrollView style={s.chatBody} showsVerticalScrollIndicator={false}>
-            {feed.map((m, i) => (
-              <View key={i} style={s.chatMsg}>
-                {m.type === 'system' ? (
-                  <>
-                    <Text style={s.chatSysTag}>[SISTEMA]</Text>
-                    <Text style={s.chatMsgTxt}>{m.txt}</Text>
-                  </>
-                ) : (
-                  <>
-                    <Text style={s.chatFrom}>{m.from}:</Text>
-                    <Text style={s.chatMsgTxt}>{m.txt}</Text>
-                  </>
-                )}
-              </View>
-            ))}
-          </ScrollView>
+          <>
+            <ScrollView
+              ref={scrollRef}
+              style={s.chatBody}
+              showsVerticalScrollIndicator={false}
+            >
+              {messages.length === 0 ? (
+                <Text style={[s.chatMsgTxt, { opacity: 0.5, fontStyle: 'italic' }]}>
+                  Nessun messaggio. Sii il primo!
+                </Text>
+              ) : (
+                messages.map((m, i) => (
+                  <View key={m.id || m._id || i} style={s.chatMsg}>
+                    <Text style={s.chatFrom}>{m.username || 'utente'}:</Text>
+                    <Text style={s.chatMsgTxt}>{m.message}</Text>
+                  </View>
+                ))
+              )}
+            </ScrollView>
+            <ChatComposer onSend={send} compact placeholder="Scrivi nella piazza…" />
+          </>
         ) : (
           <View style={s.chatPreview}>
-            <Text style={s.chatPreviewTag}>[SISTEMA]</Text>
-            <Text style={s.chatPreviewTxt} numberOfLines={1}>
-              {feed[0]?.txt}
-            </Text>
+            {previewMsg ? (
+              <>
+                <Text style={s.chatPreviewTag} numberOfLines={1}>
+                  {previewMsg.username || 'utente'}:
+                </Text>
+                <Text style={s.chatPreviewTxt} numberOfLines={1}>
+                  {previewMsg.message}
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text style={s.chatPreviewTag}>[CHAT]</Text>
+                <Text style={s.chatPreviewTxt} numberOfLines={1}>
+                  Tap per aprire la chat globale
+                </Text>
+              </>
+            )}
           </View>
         )}
       </LinearGradient>
@@ -2174,7 +2238,9 @@ const s = StyleSheet.create({
     zIndex: 17,
   },
   chatPanelOpen: {
-    height: 170,
+    // v16.13 — alzato da 170 a 220 per accomodare il composer reale.
+    // Il pannello collapsed resta 64px (preview ultimo messaggio).
+    height: 220,
   },
   chatInner: { flex: 1 },
   chatHeader: {

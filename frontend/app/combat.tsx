@@ -88,12 +88,16 @@ export default function CombatScreen() {
   const showLogRef = useRef(false);
   useEffect(() => { showLogRef.current = showLog; }, [showLog]);
   const [logTab, setLogTab] = useState<'log' | 'chat'>('log');
-  // v16.5 — Battle chat composer (tab 'chat' del drawer). Tenta POST a
-  // /api/plaza/chat (chat globale piazza). Se fallisce, fallback locale
-  // così l'utente vede comunque il proprio messaggio. Refresh pull non
-  // è schedulato durante battle (zero impatto su perf): solo invii.
+  // v16.5/v16.13 — Battle chat composer (tab 'chat' del drawer).
+  // SHARED SOURCE OF TRUTH: legge/scrive su /api/plaza/chat (stessa
+  // sorgente di Plaza e Home). Non più local-echo only.
+  // Refresh policy:
+  //  - load lazy alla prima apertura del tab 'chat' (no pull a battle start)
+  //  - re-fetch dopo ogni POST (rimpiazza l'optimistic local entry con la
+  //    serie reale del server, includendo eventuali messaggi degli altri).
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const chatScrollRef = useRef<ScrollView>(null);
+  const chatLoadedRef = useRef(false);
   const [spriteStates, setSpriteStates] = useState<Record<string, SpriteData>>({});
   // Background della battaglia: scelto UNA SOLA volta all'inizio di ogni fight
   // e memorizzato qui per restare deterministicamente fisso durante la battaglia.
@@ -460,23 +464,43 @@ export default function CombatScreen() {
     }
   };
 
-  // v16.5 — BATTLE CHAT SEND
-  // Tenta l'endpoint plaza globale. Se ko, fallback locale (echo) così
-  // l'utente vede comunque il proprio messaggio. Non blocca la battle.
+  // v16.13 — BATTLE CHAT: shared source aligned to /api/plaza/chat
+  // ─────────────────────────────────────────────────────────────────
+  // loadBattleChat: GET dei messaggi reali. Optimistic-safe: se il
+  // backend restituisce un array, sovrascriviamo lo state. Errori
+  // ignorati (battle deve restare fluida). Idempotente: chatLoadedRef
+  // evita ri-fetch superflui in caso di rapidi toggle drawer.
+  const loadBattleChat = useCallback(async () => {
+    try {
+      const c = await apiCall('/api/plaza/chat');
+      if (Array.isArray(c)) setChatMessages(c);
+      chatLoadedRef.current = true;
+      safeTimeout(() => chatScrollRef.current?.scrollToEnd({ animated: false }), 80);
+    } catch {
+      // network ko: lasciamo lo state così com'è (eventualmente vuoto)
+    }
+  }, []);
+
+  // sendBattleChat: optimistic-append + POST + refetch.
+  // L'optimistic entry conserva UX immediata anche su rete lenta;
+  // il refetch successivo rimpiazza con la lista reale del server,
+  // garantendo che i messaggi appaiano IDENTICI a Plaza/Home.
   const sendBattleChat = async (msg: string) => {
     const localEntry = {
       id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       username: 'Tu',
       message: msg,
-      ts: Date.now(),
+      timestamp: new Date().toISOString(),
       _local: true,
     };
     setChatMessages(prev => [...prev.slice(-29), localEntry]);
     safeTimeout(() => chatScrollRef.current?.scrollToEnd({ animated: true }), 60);
     try {
       await apiCall('/api/plaza/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
+      // refetch della shared source per allineare a Plaza/Home
+      await loadBattleChat();
     } catch {
-      // network ko — il messaggio resta come local-echo
+      // network ko — l'optimistic entry resta visibile
     }
   };
 
@@ -764,7 +788,13 @@ export default function CombatScreen() {
         <View style={st.chatPanel}>
           <View style={st.chatHeader}>
             <TouchableOpacity
-              onPress={() => setLogTab('chat')}
+              onPress={() => {
+                setLogTab('chat');
+                // v16.13 — lazy fetch real plaza chat (shared source)
+                // alla prima apertura del tab, e refresh ad ogni
+                // riapertura per allinearsi a Plaza/Home.
+                loadBattleChat();
+              }}
               style={[st.chatTab, logTab === 'chat' && st.chatTabActive]}
               activeOpacity={0.7}
             >
@@ -869,7 +899,7 @@ export default function CombatScreen() {
       </View>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showLog, logTab, logLines, chatMessages]);
+  }, [showLog, logTab, logLines, chatMessages, loadBattleChat]);
 
   // LOADING — preload reale con progress bar
   if (phase === 'loading') {
