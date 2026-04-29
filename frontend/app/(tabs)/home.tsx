@@ -1514,11 +1514,43 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
         colors={['rgba(11,23,60,0.88)', 'rgba(8,15,40,0.92)']}
         style={s.chatInner}
       >
-        <TouchableOpacity style={s.chatHeader} onPress={onToggle} activeOpacity={0.8}>
-          <Text style={s.chatIco}>{'\uD83D\uDCAC'}</Text>
-          <Text style={s.chatTitle}>CHAT GLOBALE</Text>
-          <Text style={s.chatToggle}>{open ? '\u25BC' : '\u25B2'}</Text>
-        </TouchableOpacity>
+        {/* v16.14 — HEADER CLOSE-BEHAVIOR FIX
+            Prima: l'intera barra header era un solo <TouchableOpacity>.
+            Quando il pannello era APERTO, sul device reale il tap sull'header
+            poteva essere consumato dalla TextInput dentro <ChatComposer>
+            (focus capture / keyboard show) prima che arrivasse al toggle,
+            rendendo il pannello "stuck open".
+            Soluzione: due render path distinti per evitare nidificazione di
+            TouchableOpacity (anti-pattern RN).
+              - CHIUSO: l'intera barra è un singolo <TouchableOpacity> che apre.
+              - APERTO: barra come <View> + bottone X dedicato (TouchableOpacity)
+                con hitSlop ampio. Tap su X chiude in modo deterministico,
+                senza interferenza con TextInput/keyboard del composer. */}
+        {!open ? (
+          <TouchableOpacity
+            style={s.chatHeader}
+            onPress={onToggle}
+            activeOpacity={0.8}
+            hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          >
+            <Text style={s.chatIco}>{'\uD83D\uDCAC'}</Text>
+            <Text style={s.chatTitle}>CHAT GLOBALE</Text>
+            <Text style={s.chatToggle}>{'\u25B2'}</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={s.chatHeader}>
+            <Text style={s.chatIco}>{'\uD83D\uDCAC'}</Text>
+            <Text style={s.chatTitle}>CHAT GLOBALE</Text>
+            <TouchableOpacity
+              onPress={onToggle}
+              activeOpacity={0.6}
+              hitSlop={{ top: 10, bottom: 10, left: 12, right: 12 }}
+              style={s.chatCloseBtn}
+            >
+              <Text style={s.chatCloseTxt}>{'\u2715'}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         {open ? (
           <>
             <ScrollView
@@ -2252,6 +2284,21 @@ const s = StyleSheet.create({
   chatIco: { fontSize: 12 },
   chatTitle: { color: GOLD_PALE, fontSize: 9, fontWeight: '900', letterSpacing: 0.6, flex: 1 },
   chatToggle: { color: GOLD, fontSize: 10, fontWeight: '900' },
+  // v16.14 — bottone close dedicato quando il pannello è aperto
+  chatCloseBtn: {
+    width: 26, height: 22,
+    alignItems: 'center', justifyContent: 'center',
+    backgroundColor: 'rgba(255,107,53,0.18)',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(255,107,53,0.45)',
+  },
+  chatCloseTxt: {
+    color: '#FFD7A8',
+    fontSize: 11,
+    fontWeight: '900',
+    lineHeight: 12,
+  },
   chatBody: { flex: 1, paddingHorizontal: 8, paddingVertical: 4 },
   chatMsg: { flexDirection: 'row', gap: 5, marginBottom: 3, alignItems: 'flex-start' },
   chatSysTag: { color: '#F7B85C', fontSize: 9, fontWeight: '900' },

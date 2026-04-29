@@ -4,7 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
-import { useAuth } from '../context/AuthContext';
 import ChatComposer from '../components/chat/ChatComposer';
 
 const AURA_COLORS: Record<string,string> = { flame:'#ff4444', ice:'#44aaff', thunder:'#ffd700', shadow:'#9944ff', divine:'#ffd700', celestial:'#ffffff' };
@@ -12,7 +11,10 @@ const FRAME_COLORS: Record<string,string> = { bronze:'#cd7f32', silver:'#c0c0c0'
 
 export default function PlazaScreen() {
   const router = useRouter();
-  const { user } = useAuth();
+  // v16.14 — RIMOSSO `useAuth()` non utilizzato (era importato ma `user`
+  // non veniva mai letto). In edge-case di navigazione rapida verso /plaza
+  // mentre l'AuthContext non è ancora pronto, l'hook può throw e provocare
+  // un crash navtive su Hermes. Safe removal: zero impatto funzionale.
   const [players, setPlayers] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,7 @@ export default function PlazaScreen() {
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}><KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS==='ios'?'padding':'height'}>
       <View style={s.hdr}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>\u2190</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{'\u2190'}</Text></TouchableOpacity>
         <Text style={s.title}>PIAZZA COMUNITARIA</Text>
         <Text style={s.online}>{players.length} presenti</Text>
       </View>
