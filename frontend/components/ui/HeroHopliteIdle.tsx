@@ -181,23 +181,32 @@ export default function HeroHopliteIdle({ size = 256, animated = true }: Props) 
           const pivotStyle = {
             transformOrigin: `${layer.pivot.x}px ${layer.pivot.y}px` as any,
           };
-          const content = (
-            <Image
-              source={layer.src}
-              style={styles.layerImg}
-              resizeMode="contain"
-            />
-          );
-          if (!animated || !animStyle) {
-            return (
-              <View key={layer.key} style={styles.layer}>
-                {content}
-              </View>
-            );
-          }
+          // v16.12 — FRAME ANIMATION STANDARD (Safety Audit Pass)
+          // ────────────────────────────────────────────────────────────────
+          // Prima questo branch ritornava `<View>` quando !animated o
+          // !animStyle, e `<Animated.View>` altrimenti. A parità di `key`,
+          // React vede DUE TIPI DI COMPONENTE DIVERSI → quando il flag
+          // `animated` flippa a runtime (es. HeroPortrait con animated
+          // toggle, o pause), il sottoalbero — INCLUSA la <Image> figlia —
+          // viene UNMOUNTATO/RIMONTATO. Stesso identico pattern del flicker
+          // in battle (vedi HeroHopliteIdleLoop v16.12).
+          // Soluzione safe: SEMPRE `<Animated.View>` con animStyle che cade
+          // su `undefined` quando non animato → l'<Image> resta montata,
+          // zero flash su toggle animated.
           return (
-            <Animated.View key={layer.key} style={[styles.layer, pivotStyle, animStyle]}>
-              {content}
+            <Animated.View
+              key={layer.key}
+              style={[
+                styles.layer,
+                animStyle ? pivotStyle : null,
+                animated && animStyle ? animStyle : null,
+              ]}
+            >
+              <Image
+                source={layer.src}
+                style={styles.layerImg}
+                resizeMode="contain"
+              />
             </Animated.View>
           );
         })}
