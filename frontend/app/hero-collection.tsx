@@ -23,7 +23,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
-import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
+import { isHopliteHero } from '../components/ui/HeroPortrait';
+import { GREEK_HOPLITE_PORTRAIT } from '../components/ui/hopliteAssets';
 import { apiCall } from '../utils/api';
 
 type Hero = {
@@ -70,26 +71,50 @@ export default function HeroCollection() {
   const [filterOwned, setFilterOwned] = useState<FilterOwned>('all');
 
   useEffect(() => {
-    (async () => {
-      try {
-        // `/api/heroes` è pubblica; `/api/user/heroes` richiede il token (gestito da apiCall).
-        const [all, owned] = await Promise.all([
-          apiCall('/api/heroes').catch(() => []),
-          apiCall('/api/user/heroes').catch(() => []),
-        ]);
+    let cancelled = false;
+    // Safety net: forza loading=false dopo 12s anche se i fetch hanno hang
+    const safetyTimer = setTimeout(() => {
+      if (!cancelled) setLoading(false);
+    }, 12000);
+
+    // Progressive loading: il grid è gated SOLO su /api/heroes (catalogo
+    // pubblico, ~31 eroi, payload piccolo e veloce). /api/user/heroes può
+    // contenere centinaia di entries (314 nel caso di test@test.com) ed è
+    // più lento — non blocca lo spinner: il suo risultato aggiorna i lock
+    // states retrospettivamente quando arriva.
+    apiCall('/api/heroes')
+      .then((all) => {
+        if (cancelled) return;
         setAllHeroes(Array.isArray(all) ? all : []);
+        setLoading(false);  // grid renderizza subito
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        console.warn('[HeroCollection] catalog fetch failed', e);
+        setAllHeroes([]);
+        setLoading(false);
+      });
+
+    apiCall('/api/user/heroes')
+      .then((owned) => {
+        if (cancelled) return;
         const ids = new Set<string>(
           (Array.isArray(owned) ? owned : [])
             .map((u: any) => u.hero_id || u.id)
             .filter(Boolean),
         );
         setOwnedIds(ids);
-      } catch (e) {
-        console.warn('[HeroCollection] fetch failed', e);
-      } finally {
-        setLoading(false);
-      }
-    })();
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        console.warn('[HeroCollection] user heroes fetch failed', e);
+        // ownedIds resta Set() vuoto → tutti gli eroi mostrati come locked.
+      });
+
+    return () => {
+      cancelled = true;
+      clearTimeout(safetyTimer);
+    };
   }, [token]);
 
   // Ordina per rarità desc, poi per posseduti prima
@@ -214,9 +239,15 @@ export default function HeroCollection() {
                   {/* Portrait */}
                   <View style={st.portraitBox}>
                     {isHopliteHero(h.id, h.name) ? (
-                      <View style={!owned && st.portraitLocked}>
-                        <HeroPortrait heroId={h.id} heroName={h.name} size={90} />
-                      </View>
+                      // Hoplite: usa lo splash con sfondo (PORTRAIT) renderizzato
+                      // con lo STESSO pattern degli altri eroi (RNImage che riempie
+                      // il portraitBox 1:1) → sizing identico a tutto il resto della
+                      // collection. Niente size fissa che lo renderebbe più piccolo.
+                      <RNImage
+                        source={GREEK_HOPLITE_PORTRAIT}
+                        style={[st.portrait, !owned && st.portraitLocked]}
+                        resizeMode="cover"
+                      />
                     ) : h.image_url ? (
                       <RNImage
                         source={{ uri: h.image_url }}
