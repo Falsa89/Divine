@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
@@ -212,7 +212,6 @@ const s = StyleSheet.create({
   // A 200 il TextInput finiva strozzato a ~70px, scomodissimo da tappare.
   // A 260 il TextInput respira ~140px → comodo per scrivere messaggi reali.
   chat:{width:260,backgroundColor:'rgba(255,255,255,0.03)',borderRadius:12,borderWidth:1,borderColor:'rgba(255,255,255,0.08)',padding:10},
-  chatTitle:{color:'#fff',fontSize:13,fontWeight:'800',marginBottom:6,letterSpacing:0.5},
   chatScroll:{flex:1},
   // v16.16 — bumpate font da 10 → 12 (msg) per readability mobile reale.
   msg:{flexDirection:'row',gap:5,marginBottom:5,flexWrap:'wrap'},

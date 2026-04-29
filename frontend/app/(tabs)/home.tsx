@@ -29,7 +29,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
-  Dimensions, ScrollView, Modal, ImageBackground, Pressable,
+  Dimensions, ScrollView, ImageBackground, Pressable,
   useWindowDimensions, Image as RNImage,
   Animated, InteractionManager,
 } from 'react-native';
