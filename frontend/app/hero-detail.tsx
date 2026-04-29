@@ -128,7 +128,7 @@ export default function HeroDetailScreen() {
         }
       />
 
-      <ScrollView contentContainerStyle={s.body}>
+      <ScrollView style={s.scroll} contentContainerStyle={s.body}>
         {/* Hero Header Card */}
         <Animated.View entering={FadeIn}>
           <LinearGradient
@@ -409,6 +409,7 @@ export default function HeroDetailScreen() {
 
 const s = StyleSheet.create({
   c: { flex: 1 },
+  scroll: { flex: 1 },
   err: { color: COLORS.error, textAlign: 'center', marginTop: 50, fontSize: 14 },
   powerBadge: {
     flexDirection: 'row',
