@@ -1959,45 +1959,61 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
     { key: 'spoffer',    label: 'SP Offer',         icon: '\uD83D\uDCB3', onPress: () => { onClose(); router.push('/shop' as any); } },
   ];
 
+  // v16.15 — MODAL → IN-TREE OVERLAY (CRASH FIX)
+  // ─────────────────────────────────────────────────────────────────
+  // Prima questo pannello usava <Modal visible={open}>. La stessa
+  // costruzione era già stata identificata come crash-causing su
+  // device reale in v16.5 ("Battle Log Invasivo: rimosso log bottom,
+  // spostato in un Drawer bottom-left in-tree per evitare crash causati
+  // da <Modal>"). Su Android/iOS native, react-native-screens + i nostri
+  // gradient/scrollview annidati possono triggerare native exception
+  // quando il Modal portal allocate una nuova root view.
+  // Soluzione: render condizionale come overlay assoluto in-tree, stesso
+  // pattern del battle drawer. Niente portal nativi, niente crash.
+  if (!open) return null;
   return (
-    <Modal visible={open} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={s.modalBackdrop}>
-        <LinearGradient
-          colors={['rgba(11,23,60,0.98)', 'rgba(5,9,26,0.98)']}
-          style={s.modalCard}
-        >
-          <View style={s.modalHeader}>
-            <Text style={s.modalTitle}>{'\u2630'}  MENU — FEATURE AGGIUNTIVE</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Text style={s.modalClose}>{'\u2715'}</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={s.modalSub}>
-            Contenitore temporaneo: le feature verranno riposizionate nei pulsanti
-            principali negli aggiornamenti successivi.
-          </Text>
-          <ScrollView contentContainerStyle={s.modalGrid}>
-            {items.map(it => (
-              <TouchableOpacity
-                key={it.key}
-                style={s.modalItem}
-                onPress={it.onPress}
-                activeOpacity={0.78}
+    <View style={s.overflowOverlay} pointerEvents="auto">
+      {/* Backdrop tap-to-close */}
+      <TouchableOpacity
+        style={StyleSheet.absoluteFill}
+        activeOpacity={1}
+        onPress={onClose}
+      />
+      <LinearGradient
+        colors={['rgba(11,23,60,0.98)', 'rgba(5,9,26,0.98)']}
+        style={s.modalCard}
+      >
+        <View style={s.modalHeader}>
+          <Text style={s.modalTitle}>{'\u2630'}  MENU — FEATURE AGGIUNTIVE</Text>
+          <TouchableOpacity onPress={onClose} hitSlop={{top:10,bottom:10,left:10,right:10}}>
+            <Text style={s.modalClose}>{'\u2715'}</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={s.modalSub}>
+          Contenitore temporaneo: le feature verranno riposizionate nei pulsanti
+          principali negli aggiornamenti successivi.
+        </Text>
+        <ScrollView contentContainerStyle={s.modalGrid}>
+          {items.map(it => (
+            <TouchableOpacity
+              key={it.key}
+              style={s.modalItem}
+              onPress={it.onPress}
+              activeOpacity={0.78}
+            >
+              <LinearGradient
+                colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
+                style={s.modalItemInner}
               >
-                <LinearGradient
-                  colors={['rgba(27,53,112,0.92)', 'rgba(10,24,56,0.92)']}
-                  style={s.modalItemInner}
-                >
-                  <Text style={s.modalItemIco}>{it.icon}</Text>
-                  <Text style={s.modalItemLabel}>{it.label}</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            ))}
-            <View style={{ height: 24 }} />
-          </ScrollView>
-        </LinearGradient>
-      </View>
-    </Modal>
+                <Text style={s.modalItemIco}>{it.icon}</Text>
+                <Text style={s.modalItemLabel}>{it.label}</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ))}
+          <View style={{ height: 24 }} />
+        </ScrollView>
+      </LinearGradient>
+    </View>
   );
 }
 
@@ -2273,6 +2289,22 @@ const s = StyleSheet.create({
     // v16.13 — alzato da 170 a 220 per accomodare il composer reale.
     // Il pannello collapsed resta 64px (preview ultimo messaggio).
     height: 220,
+    // v16.15 — Z-INDEX BUMP (CRITICAL CLOSE FIX)
+    // ────────────────────────────────────────────────────────────────
+    // ROOT CAUSE provato del "non si chiude": in landscape mobile
+    // (~390-410h), il pannello aperto sale fino a top ~102-122 from
+    // screen top. Il profilo (top:6, height ~113-119) ha bottom a
+    // ~119-125 → si SOVRAPPONE fisicamente con i primi pixel del
+    // chatHeader (dove sta la X di chiusura). Il profilo ha zIndex:20,
+    // il chatPanel a riposo zIndex:17 → il profilo COPRE l'header del
+    // pannello aperto e INTERCETTA il tap sull'X. Sembra "non passa
+    // nulla", ma in realtà il tap atterra sul profilo (che non ha
+    // onPress in quella regione, quindi si dissipa).
+    // Fix: quando aperto, il pannello bumpa zIndex a 22 (sopra profile
+    // 20, currency 19, sideStack 18, banner 17/18, ma sotto bottomNav
+    // 25). L'header e tutti i suoi target di tap diventano accessibili.
+    zIndex: 22,
+    elevation: 22,
   },
   chatInner: { flex: 1 },
   chatHeader: {
@@ -2384,7 +2416,15 @@ const s = StyleSheet.create({
   playText: { color: GOLD, fontSize: 21, fontWeight: '900', letterSpacing: 2, textShadowColor: '#000', textShadowRadius: 4 },
   playSubText: { color: GOLD_PALE, fontSize: 8, fontWeight: '800', letterSpacing: 1.5, marginTop: 1 },
 
-  /* BLOCCO 11 — OVERFLOW MODAL */
+  /* BLOCCO 11 — OVERFLOW PANEL (in-tree overlay, NO Modal — v16.15) */
+  overflowOverlay: {
+    position: 'absolute',
+    top: 0, bottom: 0, left: 0, right: 0,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    justifyContent: 'flex-end',
+    zIndex: 9000,
+    elevation: 9000,
+  },
   modalBackdrop: {
     flex: 1, backgroundColor: 'rgba(0,0,0,0.75)',
     justifyContent: 'flex-end',
