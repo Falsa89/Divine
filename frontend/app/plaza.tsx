@@ -70,10 +70,16 @@ export default function PlazaScreen() {
             {messages.length === 0 && <Text style={s.emptyChat}>Nessun messaggio ancora</Text>}
           </ScrollView>
           <View style={s.chatInput}>
+            {/* v16.16 — PLAZA COMPOSER USABILITY FIX
+                Rimosso `compact`: la modalità compact (input 30h / font 12 /
+                emoji 30 / send 30h) è pensata per il drawer battle ristretto
+                e per il pannello home in basso, dove lo spazio verticale è
+                forzato. In Plaza c'è una sidebar dedicata: usiamo il preset
+                NON-compact (input 36h / font 13 / emoji 36 / send 36h+)
+                molto più comodo da tappare e leggere su mobile reale. */}
             <ChatComposer
               onSend={sendMsg}
               placeholder={'Scrivi alla piazza\u2026'}
-              compact
               maxLength={200}
             />
           </View>
@@ -99,14 +105,21 @@ const s = StyleSheet.create({
   playerName:{color:'#ccc',fontSize:7,fontWeight:'600',textAlign:'center',maxWidth:60},
   playerTitle:{color:'#888',fontSize:6,textAlign:'center'},
   // Chat
-  chat:{width:200,backgroundColor:'rgba(255,255,255,0.03)',borderRadius:12,borderWidth:1,borderColor:'rgba(255,255,255,0.08)',padding:8},
-  chatTitle:{color:'#fff',fontSize:12,fontWeight:'700',marginBottom:4},
+  // v16.16 — width 200 → 260: il composer non-compact (emoji 36 + gap +
+  // input flex:1 + gap + send 60) ha bisogno di ~110px di chrome fissa.
+  // A 200 il TextInput finiva strozzato a ~70px, scomodissimo da tappare.
+  // A 260 il TextInput respira ~140px → comodo per scrivere messaggi reali.
+  chat:{width:260,backgroundColor:'rgba(255,255,255,0.03)',borderRadius:12,borderWidth:1,borderColor:'rgba(255,255,255,0.08)',padding:10},
+  chatTitle:{color:'#fff',fontSize:13,fontWeight:'800',marginBottom:6,letterSpacing:0.5},
   chatScroll:{flex:1},
-  msg:{flexDirection:'row',gap:4,marginBottom:3,flexWrap:'wrap'},
-  msgUser:{color:'#ff6b35',fontSize:10,fontWeight:'700'},
-  msgText:{color:'#ccc',fontSize:10,flex:1},
-  emptyChat:{color:'#555',fontSize:10,textAlign:'center',marginTop:20},
-  chatInput:{flexDirection:'row',gap:4,marginTop:4},
+  // v16.16 — bumpate font da 10 → 12 (msg) per readability mobile reale.
+  msg:{flexDirection:'row',gap:5,marginBottom:5,flexWrap:'wrap'},
+  msgUser:{color:'#ff6b35',fontSize:12,fontWeight:'800'},
+  msgText:{color:'#e2e2e6',fontSize:12,flex:1,lineHeight:16},
+  emptyChat:{color:'#666',fontSize:11,textAlign:'center',marginTop:24,fontStyle:'italic'},
+  // v16.16 — chatInput: aumentato gap top per separare visualmente la
+  // ScrollView dal composer, evita il "tutto attaccato" pre-fix.
+  chatInput:{marginTop:8},
   input:{flex:1,backgroundColor:'rgba(255,255,255,0.06)',borderRadius:6,padding:6,color:'#fff',fontSize:10,borderWidth:1,borderColor:'rgba(255,255,255,0.1)'},
   sendBtn:{paddingHorizontal:10,paddingVertical:6,backgroundColor:'#ff6b35',borderRadius:6,justifyContent:'center'},
   sendTxt:{color:'#fff',fontSize:9,fontWeight:'700'},
