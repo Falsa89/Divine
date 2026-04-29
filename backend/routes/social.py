@@ -210,3 +210,161 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
             "timestamp": datetime.utcnow(),
         })
         return {"success": True, "recipient": target.get("username", "?")}
+
+    # ==================== DIRECT MESSAGES (DM) — Phase 2 v16.19 ====================
+    # Modello:
+    #   db.dm_threads     — 1 doc per coppia di utenti (chiave deterministica
+    #                       lex-ordered: smaller user id va in user_a)
+    #   db.dm_messages    — 1 doc per messaggio (linked via thread_id)
+    # Properties:
+    #   - 1-to-1 only (Phase 2). Group chats deferred.
+    #   - deterministic thread identity → niente duplicati per coppia
+    #   - server-side scoping: ogni endpoint verifica che current_user sia
+    #     uno dei due partecipanti del thread
+    #   - separato totalmente da plaza_chat: nessun leak tra DM e canali pubblici
+    def _dm_pair(uid_a: str, uid_b: str) -> tuple[str, str]:
+        """Lex-ordered pair → chiave deterministica."""
+        return (uid_a, uid_b) if uid_a < uid_b else (uid_b, uid_a)
+
+    async def _dm_get_or_create_thread(uid: str, peer_uid: str) -> dict:
+        """Return existing thread between (uid, peer_uid) or create one."""
+        if uid == peer_uid:
+            raise HTTPException(400, "Non puoi inviare DM a te stesso")
+        a, b = _dm_pair(uid, peer_uid)
+        existing = await db.dm_threads.find_one({"user_a": a, "user_b": b})
+        if existing:
+            return existing
+        # Lookup usernames for cache
+        u_a = await db.users.find_one({"id": a})
+        u_b = await db.users.find_one({"id": b})
+        if not u_a or not u_b:
+            raise HTTPException(404, "Utente non trovato")
+        thread = {
+            "id": str(uuid.uuid4()),
+            "user_a": a, "user_b": b,
+            "user_a_username": u_a.get("username", "?"),
+            "user_b_username": u_b.get("username", "?"),
+            "last_message": None,
+            "last_message_at": None,
+            "last_sender_id": None,
+            "unread_for_a": 0,
+            "unread_for_b": 0,
+            "created_at": datetime.utcnow(),
+        }
+        await db.dm_threads.insert_one(thread)
+        return thread
+
+    def _dm_thread_view(t: dict, current_uid: str) -> dict:
+        """Render a thread for the current user perspective."""
+        is_a = t.get("user_a") == current_uid
+        peer_id = t.get("user_b") if is_a else t.get("user_a")
+        peer_name = t.get("user_b_username") if is_a else t.get("user_a_username")
+        unread = t.get("unread_for_a", 0) if is_a else t.get("unread_for_b", 0)
+        return {
+            "id": t.get("id"),
+            "peer_id": peer_id,
+            "peer_username": peer_name,
+            "last_message": t.get("last_message"),
+            "last_message_at": t.get("last_message_at"),
+            "last_sender_id": t.get("last_sender_id"),
+            "unread": unread,
+        }
+
+    @router.get("/dm/threads")
+    async def list_dm_threads(current_user: dict = Depends(get_current_user)):
+        uid = current_user["id"]
+        cursor = db.dm_threads.find({"$or": [{"user_a": uid}, {"user_b": uid}]}).sort("last_message_at", -1).limit(50)
+        threads = await cursor.to_list(50)
+        return [_dm_thread_view(t, uid) for t in threads]
+
+    class OpenDMRequest(BaseModel):
+        peer_user_id: str
+
+    @router.post("/dm/threads")
+    async def open_dm_thread(req: OpenDMRequest, current_user: dict = Depends(get_current_user)):
+        uid = current_user["id"]
+        # Filtra eventuali peer NPC (il prefix `npc_` non corrisponde a utenti reali)
+        if (req.peer_user_id or "").startswith("npc_"):
+            raise HTTPException(400, "Non puoi inviare DM a un NPC")
+        thread = await _dm_get_or_create_thread(uid, req.peer_user_id)
+        # Reset unread for current user (ha appena aperto la conversazione)
+        is_a = thread.get("user_a") == uid
+        await db.dm_threads.update_one(
+            {"id": thread["id"]},
+            {"$set": {"unread_for_a" if is_a else "unread_for_b": 0}},
+        )
+        thread = await db.dm_threads.find_one({"id": thread["id"]})
+        return _dm_thread_view(thread, uid)
+
+    @router.get("/dm/threads/{thread_id}/messages")
+    async def get_dm_messages(thread_id: str, current_user: dict = Depends(get_current_user)):
+        uid = current_user["id"]
+        thread = await db.dm_threads.find_one({"id": thread_id})
+        if not thread:
+            raise HTTPException(404, "Thread non trovato")
+        if uid not in (thread.get("user_a"), thread.get("user_b")):
+            raise HTTPException(403, "Accesso negato")
+        cursor = db.dm_messages.find({"thread_id": thread_id}).sort("timestamp", -1).limit(50)
+        messages = await cursor.to_list(50)
+        # Reset unread for current user (sta leggendo i messaggi)
+        is_a = thread.get("user_a") == uid
+        await db.dm_threads.update_one(
+            {"id": thread_id},
+            {"$set": {"unread_for_a" if is_a else "unread_for_b": 0}},
+        )
+        return [serialize_doc(m) for m in reversed(messages)]
+
+    class DMSendRequest(BaseModel):
+        message: str
+
+    @router.post("/dm/threads/{thread_id}/messages")
+    async def send_dm_message(thread_id: str, req: DMSendRequest, current_user: dict = Depends(get_current_user)):
+        uid = current_user["id"]
+        if len(req.message or "") > 500:
+            raise HTTPException(400, "Messaggio troppo lungo")
+        if not (req.message or "").strip():
+            raise HTTPException(400, "Messaggio vuoto")
+        thread = await db.dm_threads.find_one({"id": thread_id})
+        if not thread:
+            raise HTTPException(404, "Thread non trovato")
+        if uid not in (thread.get("user_a"), thread.get("user_b")):
+            raise HTTPException(403, "Accesso negato")
+        msg = {
+            "id": str(uuid.uuid4()),
+            "thread_id": thread_id,
+            "sender_id": uid,
+            "sender_username": current_user.get("username", "?"),
+            "message": req.message,
+            "timestamp": datetime.utcnow(),
+        }
+        await db.dm_messages.insert_one(msg)
+        # Bump thread last_message + incrementa unread per il destinatario
+        is_a = thread.get("user_a") == uid
+        peer_unread_field = "unread_for_b" if is_a else "unread_for_a"
+        await db.dm_threads.update_one(
+            {"id": thread_id},
+            {
+                "$set": {
+                    "last_message": req.message[:120],
+                    "last_message_at": msg["timestamp"],
+                    "last_sender_id": uid,
+                },
+                "$inc": {peer_unread_field: 1},
+            },
+        )
+        return {"success": True, "message": serialize_doc(msg)}
+
+    @router.post("/dm/threads/{thread_id}/read")
+    async def mark_dm_read(thread_id: str, current_user: dict = Depends(get_current_user)):
+        uid = current_user["id"]
+        thread = await db.dm_threads.find_one({"id": thread_id})
+        if not thread:
+            raise HTTPException(404, "Thread non trovato")
+        if uid not in (thread.get("user_a"), thread.get("user_b")):
+            raise HTTPException(403, "Accesso negato")
+        is_a = thread.get("user_a") == uid
+        await db.dm_threads.update_one(
+            {"id": thread_id},
+            {"$set": {"unread_for_a" if is_a else "unread_for_b": 0}},
+        )
+        return {"success": True}

@@ -1936,6 +1936,7 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
     { key: 'sanctuary',  label: 'Santuario',        icon: '\u26E9\uFE0F', onPress: () => { onClose(); router.push('/sanctuary' as any); } },
     { key: 'gvg',        label: 'Conquista',        icon: '\uD83C\uDFF0', onPress: () => { onClose(); router.push('/gvg' as any); } },
     { key: 'plaza',      label: 'Piazza',           icon: '\uD83C\uDFDB\uFE0F', onPress: () => { onClose(); router.push('/plaza' as any); } },
+    { key: 'dm',         label: 'Messaggi',         icon: '\uD83D\uDCEC',       onPress: () => { onClose(); router.push('/dm' as any); } },
     { key: 'territory',  label: 'Territorio',       icon: '\uD83D\uDDFA\uFE0F', onPress: () => { onClose(); router.push('/territory' as any); } },
     { key: 'rankings',   label: 'Classifiche',      icon: '\uD83D\uDCCA', onPress: () => { onClose(); router.push('/rankings' as any); } },
     { key: 'servers',    label: 'Server',           icon: '\uD83C\uDF10', onPress: () => { onClose(); router.push('/servers' as any); } },

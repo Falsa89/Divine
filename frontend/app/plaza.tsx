@@ -6,7 +6,9 @@ import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import ChatComposer from '../components/chat/ChatComposer';
 import ChannelSelector from '../components/chat/ChannelSelector';
+import UserActionSheet from '../components/chat/UserActionSheet';
 import { useChatChannel } from '../hooks/useChatChannel';
+import { useAuth } from '../context/AuthContext';
 
 const AURA_COLORS: Record<string,string> = { flame:'#ff4444', ice:'#44aaff', thunder:'#ffd700', shadow:'#9944ff', divine:'#ffd700', celestial:'#ffffff' };
 const FRAME_COLORS: Record<string,string> = { bronze:'#cd7f32', silver:'#c0c0c0', gold:'#ffd700', diamond:'#44ddff', legendary:'#ff4444', divine:'#ffd700' };
@@ -15,11 +17,19 @@ export default function PlazaScreen() {
   const router = useRouter();
   // v16.14: rimosso useAuth() non utilizzato.
   // v16.18 Phase 1: chat ora multi-canale via useChatChannel hook condiviso.
+  // v16.19 Phase 2: useAuth riusato per filtrare self-DM e identificare own messages.
+  const { user } = useAuth();
   const [players, setPlayers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const chatRef = useRef<ScrollView>(null);
 
   const ch = useChatChannel({ pollingMs: 8000 });
+
+  // v16.19 Phase 2 — UserActionSheet entry point per DM
+  const [actionTarget, setActionTarget] = useState<any | null>(null);
+  const openDMWithUser = (peerId: string) => {
+    router.push(`/dm?peer=${encodeURIComponent(peerId)}` as any);
+  };
 
   useEffect(() => {
     (async () => {
@@ -44,6 +54,16 @@ export default function PlazaScreen() {
       <View style={s.hdr}>
         <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{'\u2190'}</Text></TouchableOpacity>
         <Text style={s.title}>PIAZZA COMUNITARIA</Text>
+        {/* v16.19 — DM inbox quick-access */}
+        <TouchableOpacity
+          onPress={() => router.push('/dm' as any)}
+          style={s.dmBtn}
+          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+          activeOpacity={0.7}
+        >
+          <Text style={s.dmIcon}>{'\uD83D\uDCEC'}</Text>
+          <Text style={s.dmLabel}>DM</Text>
+        </TouchableOpacity>
         <Text style={s.online}>{players.length} presenti</Text>
       </View>
       <View style={s.body}>
@@ -53,14 +73,20 @@ export default function PlazaScreen() {
             const frameCol = FRAME_COLORS[p.frame] || '#888';
             const auraCol = AURA_COLORS[p.aura] || 'transparent';
             return (
-              <View key={p.id} style={[s.player, {left:p.x % 500, top: p.y % 280}]}>
+              <TouchableOpacity
+                key={p.id}
+                style={[s.player, {left:p.x % 500, top: p.y % 280}]}
+                activeOpacity={0.78}
+                disabled={!!p.is_you}
+                onPress={() => !p.is_you && setActionTarget(p)}
+              >
                 {p.aura && <View style={[s.aura, {backgroundColor:auraCol, shadowColor:auraCol}]} />}
                 <View style={[s.avatar, {borderColor:frameCol}]}>
                   <Text style={[s.avatarTxt, p.is_npc && {color:'#ffd700'}]}>{p.username?.[0]?.toUpperCase()}</Text>
                 </View>
                 <Text style={[s.playerName, p.is_you && {color:'#ff6b35'}, p.is_npc && {color:'#ffd700'}]} numberOfLines={1}>{p.username}</Text>
                 <Text style={s.playerTitle}>{p.title}</Text>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -75,7 +101,25 @@ export default function PlazaScreen() {
           <ScrollView style={s.chatScroll} ref={chatRef} onContentSizeChange={() => chatRef.current?.scrollToEnd()}>
             {ch.messages.map((m:any) => (
               <View key={m.id || m._id} style={s.msg}>
-                <Text style={s.msgUser}>{m.username}:</Text>
+                {/* v16.19 — tap su username → UserActionSheet (entry DM) */}
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!m.user_id || m.user_id === user?.id) return;
+                    setActionTarget({
+                      id: m.user_id,
+                      username: m.username || 'utente',
+                      level: undefined,
+                      title: undefined,
+                      is_npc: false,
+                      is_you: false,
+                    });
+                  }}
+                  hitSlop={{ top: 4, bottom: 4, left: 2, right: 2 }}
+                  activeOpacity={0.65}
+                  disabled={m.user_id === user?.id}
+                >
+                  <Text style={s.msgUser}>{m.username}:</Text>
+                </TouchableOpacity>
                 <Text style={s.msgText}>{m.message}</Text>
               </View>
             ))}
@@ -104,6 +148,19 @@ export default function PlazaScreen() {
           </View>
         </View>
       </View>
+      {/* v16.19 Phase 2 — User Action Sheet (entry point DM) */}
+      <UserActionSheet
+        visible={!!actionTarget}
+        username={actionTarget?.username || ''}
+        subtitle={actionTarget ? `Lv ${actionTarget.level || '?'} \u00B7 ${actionTarget.title || 'Avventuriero'}` : undefined}
+        isNpc={!!actionTarget?.is_npc}
+        onClose={() => setActionTarget(null)}
+        onPrivateChat={
+          actionTarget && !actionTarget.is_npc && !actionTarget.is_you
+            ? () => openDMWithUser(actionTarget.id)
+            : undefined
+        }
+      />
     </KeyboardAvoidingView></LinearGradient>
   );
 }
@@ -114,6 +171,10 @@ const s = StyleSheet.create({
   back:{color:'#ff6b35',fontSize:20,fontWeight:'700'},
   title:{color:'#fff',fontSize:16,fontWeight:'800',letterSpacing:2,flex:1},
   online:{color:'#44cc44',fontSize:11},
+  // v16.19 — DM quick-access button in header
+  dmBtn:{flexDirection:'row',alignItems:'center',gap:4,paddingHorizontal:8,paddingVertical:5,backgroundColor:'rgba(255,107,53,0.16)',borderRadius:6,borderWidth:1,borderColor:'rgba(255,107,53,0.45)'},
+  dmIcon:{fontSize:13},
+  dmLabel:{color:'#fff',fontSize:10,fontWeight:'900',letterSpacing:0.5},
   body:{flex:1,flexDirection:'row',padding:8,gap:8},
   // Map
   map:{flex:1,backgroundColor:'rgba(255,255,255,0.02)',borderRadius:12,borderWidth:1,borderColor:'rgba(255,107,53,0.1)',overflow:'hidden',position:'relative'},
