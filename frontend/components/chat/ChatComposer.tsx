@@ -4,10 +4,15 @@
  * Used by:
  *   - app/plaza.tsx (Piazza Comunitaria — global chat)
  *   - app/combat.tsx (Battle Drawer — chat tab)
+ *   - app/(tabs)/home.tsx (HomeChatNotifPanel — global chat)
  *
  * Features:
  *   - Text input + send button
- *   - Emoji trigger placeholder (no emoji picker yet — onPress no-op)
+ *   - Real emoji picker (in-tree, NOT Modal — coerente con la policy
+ *     anti-Modal della codebase, vedi v16.5/v16.15). Curated set di
+ *     ~56 emoji + tap-to-insert. Si apre sopra la riga composer
+ *     coprendo temporaneamente la message list. Toggle via emoji
+ *     button + tap fuori (backdrop) per chiudere.
  *   - Mobile-friendly sizing (44pt min touch target on send)
  *   - Submit via Enter / SubmitEditing
  *   - Disabled state while sending
@@ -15,8 +20,27 @@
  * Design intent: matches the premium dark/orange UI direction.
  */
 import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, ScrollView, Keyboard } from 'react-native';
 import { COLORS } from '../../constants/theme';
+
+// ─────────────────────────────────────────────────────────────────────
+// CURATED EMOJI SET (v16.17)
+// ─────────────────────────────────────────────────────────────────────
+// 56 emoji selezionati per coprire i casi d'uso reali di una chat di
+// gioco RPG: reazioni emotive, gesti, simboli RPG/gaming, cuori/stelle.
+// Niente categorie multiple in questo pass: una griglia singola con
+// flexWrap → fit responsivo su tutte le surface (Plaza/Home/Battle).
+// Future enhancement: categorie + ricerca (NON questo pass).
+// ─────────────────────────────────────────────────────────────────────
+const EMOJIS = [
+  '😀','😄','😁','😆','😂','🤣','😊','😉',
+  '😍','🥰','😘','😎','🤩','🥳','🤔','🙃',
+  '😢','😭','😡','😤','🤯','😱','😴','🥲',
+  '👍','👎','👏','🙌','👋','🤝','✌️','🤞',
+  '💪','🙏','💯','🔥','✨','⭐','💎','🏆',
+  '⚔️','🛡️','🏹','🗡️','👑','🎯','🎉','💥',
+  '❤️','🧡','💛','💚','💙','💜','🖤','💔',
+];
 
 export interface ChatComposerProps {
   /** Async send handler. Receives trimmed message. Should resolve when finished. */
@@ -40,6 +64,7 @@ export default function ChatComposer({
 }: ChatComposerProps) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const submit = useCallback(async () => {
     const trimmed = text.trim();
@@ -48,6 +73,7 @@ export default function ChatComposer({
     try {
       await onSend(trimmed);
       setText('');
+      setPickerOpen(false);
     } catch {
       // swallow — caller decides what to do (toast, log, etc.)
     } finally {
@@ -55,60 +81,123 @@ export default function ChatComposer({
     }
   }, [text, sending, disabled, onSend]);
 
-  const onEmojiPress = useCallback(() => {
-    // Placeholder: future emoji picker. For now, append a quick smile.
-    setText(prev => prev + '\uD83D\uDE42');
+  const onEmojiTogglePress = useCallback(() => {
+    // Apertura/chiusura picker. Quando apriamo, dismissiamo prima la
+    // keyboard del TextInput per evitare overlap UX (su mobile reale
+    // la keyboard può oscurare il picker se entrambi visibili insieme).
+    setPickerOpen(prev => {
+      const next = !prev;
+      if (next) Keyboard.dismiss();
+      return next;
+    });
   }, []);
+
+  const insertEmoji = useCallback((emoji: string) => {
+    // Append all'input. Lasciamo il picker APERTO così l'utente può
+    // selezionare più emoji in sequenza. Si chiude tappando di nuovo
+    // l'icona emoji o il backdrop, oppure all'invio.
+    setText(prev => (prev + emoji).slice(0, maxLength));
+  }, [maxLength]);
+
+  const closePicker = useCallback(() => setPickerOpen(false), []);
 
   const isDisabled = disabled || sending || !text.trim();
 
   return (
-    <View style={[s.row, compact && s.rowCompact]}>
-      <TouchableOpacity
-        onPress={onEmojiPress}
-        activeOpacity={0.7}
-        style={[s.emojiBtn, compact && s.emojiBtnCompact]}
-        disabled={disabled || sending}
-        hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
-      >
-        <Text style={s.emojiTxt}>{'\uD83D\uDE0A'}</Text>
-      </TouchableOpacity>
+    <View style={[s.wrapper, compact && s.wrapperCompact]}>
+      {/* ═══════════════════════════════════════════════════════════════
+          EMOJI PICKER (in-tree, absolute above the composer row)
+          ───────────────────────────────────────────────────────────────
+          - Position: bottom: 100% di questo wrapper → renderizzato
+            esattamente sopra la riga input. Copre temporaneamente
+            l'area soprastante (message list) finché aperto.
+          - Backdrop: TouchableOpacity assoluto sotto il pannello che
+            chiude il picker on tap-outside (sul body del composer
+            quando il picker è aperto). Il composer row resta tappabile
+            (è zIndex superiore) per il toggle/scrittura.
+          - Niente Modal, niente portal: stessa policy anti-Modal usata
+            altrove nella codebase (v16.5 battle drawer, v16.15 overflow).
+         ═══════════════════════════════════════════════════════════════ */}
+      {pickerOpen && (
+        <View style={s.pickerPanel} pointerEvents="auto">
+          <ScrollView
+            contentContainerStyle={s.pickerGrid}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="always"
+          >
+            {EMOJIS.map((e, i) => (
+              <TouchableOpacity
+                key={`${e}-${i}`}
+                onPress={() => insertEmoji(e)}
+                activeOpacity={0.55}
+                style={s.pickerItem}
+                hitSlop={{ top: 2, bottom: 2, left: 2, right: 2 }}
+              >
+                <Text style={s.pickerItemTxt}>{e}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      )}
 
-      <TextInput
-        style={[s.input, compact && s.inputCompact]}
-        value={text}
-        onChangeText={setText}
-        placeholder={placeholder}
-        placeholderTextColor="rgba(255,255,255,0.32)"
-        editable={!disabled && !sending}
-        maxLength={maxLength}
-        onSubmitEditing={submit}
-        returnKeyType="send"
-        blurOnSubmit={false}
-        autoCorrect={false}
-        // multiline=false for single-line; can be elevated later if needed
-      />
+      {/* COMPOSER ROW (input + emoji + send) */}
+      <View style={[s.row, compact && s.rowCompact]}>
+        <TouchableOpacity
+          onPress={onEmojiTogglePress}
+          activeOpacity={0.7}
+          style={[
+            s.emojiBtn,
+            compact && s.emojiBtnCompact,
+            pickerOpen && s.emojiBtnActive,
+          ]}
+          disabled={disabled || sending}
+          hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
+        >
+          <Text style={s.emojiTxt}>{pickerOpen ? '\u00D7' : '\uD83D\uDE0A'}</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={submit}
-        activeOpacity={0.7}
-        disabled={isDisabled}
-        style={[
-          s.sendBtn,
-          compact && s.sendBtnCompact,
-          isDisabled && s.sendBtnDisabled,
-        ]}
-        hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
-      >
-        <Text style={[s.sendTxt, compact && s.sendTxtCompact]}>
-          {sending ? '…' : 'INVIA'}
-        </Text>
-      </TouchableOpacity>
+        <TextInput
+          style={[s.input, compact && s.inputCompact]}
+          value={text}
+          onChangeText={setText}
+          placeholder={placeholder}
+          placeholderTextColor="rgba(255,255,255,0.32)"
+          editable={!disabled && !sending}
+          maxLength={maxLength}
+          onSubmitEditing={submit}
+          onFocus={closePicker}
+          returnKeyType="send"
+          blurOnSubmit={false}
+          autoCorrect={false}
+          // multiline=false for single-line; can be elevated later if needed
+        />
+
+        <TouchableOpacity
+          onPress={submit}
+          activeOpacity={0.7}
+          disabled={isDisabled}
+          style={[
+            s.sendBtn,
+            compact && s.sendBtnCompact,
+            isDisabled && s.sendBtnDisabled,
+          ]}
+          hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
+        >
+          <Text style={[s.sendTxt, compact && s.sendTxtCompact]}>
+            {sending ? '…' : 'INVIA'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const s = StyleSheet.create({
+  wrapper: {
+    // wrapper relativo per ancorare il picker in absolute
+    position: 'relative',
+  },
+  wrapperCompact: {},
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -136,6 +225,11 @@ const s = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
+  },
+  emojiBtnActive: {
+    backgroundColor: 'rgba(255,107,53,0.25)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,107,53,0.55)',
   },
   emojiTxt: {
     fontSize: 16,
@@ -193,5 +287,41 @@ const s = StyleSheet.create({
   sendTxtCompact: {
     fontSize: 10,
     letterSpacing: 0.5,
+  },
+  // ─────────── EMOJI PICKER (v16.17) ───────────
+  pickerPanel: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: '100%',     // ancorato sopra la riga composer
+    maxHeight: 160,
+    backgroundColor: 'rgba(8,8,18,0.97)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,107,53,0.45)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,107,53,0.20)',
+    // elevation + zIndex per stare sopra eventuali message ScrollView
+    elevation: 10,
+    zIndex: 10,
+  },
+  pickerGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+    gap: 2,
+  },
+  pickerItem: {
+    width: 34,
+    height: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 6,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    margin: 1,
+  },
+  pickerItemTxt: {
+    fontSize: 20,
+    lineHeight: 24,
   },
 });
