@@ -86,12 +86,17 @@ interface Props {
    * dal sistema battle. I frame player partono UNA sola volta per id.
    */
   actionInstanceId?: number;
+  /** v16.8 — Pause propagation. Quando true, freeze visible animations
+   *  (idle loop, sequenze attive). Implementato cancellando le shared
+   *  value Reanimated correnti e disabilitando il frame-tick degli
+   *  IdleLoop/Affondo/Guardia di HeroHopliteRig. */
+  paused?: boolean;
 }
 
 export default function BattleSprite({
   character, state, isEnemy = false, hpPercent,
   showDamage, showHeal, isCrit, size = 80, debug = false,
-  actionInstanceId,
+  actionInstanceId, paused = false,
 }: Props) {
   const elemColor = ELEMENTS.colors[character?.element || character?.hero_element] || '#888';
   const rarColor = RARITY.colors[Math.min(character?.rarity || character?.hero_rarity || 1, 6)] || '#888';
@@ -236,6 +241,37 @@ export default function BattleSprite({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  // v16.8 — PAUSE PROPAGATION
+  // Quando paused → cancella tutte le animazioni in corso freezando ogni
+  // shared value al valore corrente (Reanimated cancelAnimation lascia
+  // .value invariato, semplicemente smette di interpolare). Quando
+  // unpaused, se lo state è 'idle' rilancia idle loop tramite il profilo.
+  // Questo si combina con `paused` propagato a HeroHopliteRig sotto, che
+  // ferma il frame-tick degli IdleLoop frame-based.
+  useEffect(() => {
+    if (paused) {
+      cancelAnimation(transX);
+      cancelAnimation(transY);
+      cancelAnimation(bodyRot);
+      cancelAnimation(spriteScale);
+      cancelAnimation(spriteOp);
+      cancelAnimation(auraOp);
+      cancelAnimation(auraSc);
+      cancelAnimation(hitFlash);
+      cancelAnimation(idleY);
+      cancelAnimation(dmgY);
+      cancelAnimation(dmgOp);
+      cancelAnimation(dmgScale);
+      cancelAnimation(healFloatY);
+      cancelAnimation(healFloatOp);
+    } else if (state === 'idle') {
+      const dir = isEnemy ? -1 : 1;
+      const handles = { transX, transY, bodyRot, spriteScale, spriteOp, auraOp, auraSc, hitFlash, idleY };
+      animProfile.idleReset(handles, { size, isEnemy, dir });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused]);
 
   // --- Damage / Heal float triggers ------------------------------------------
   useEffect(() => {
@@ -463,7 +499,7 @@ export default function BattleSprite({
               // Il rig usa BASE 1024 × 1024 quadrato, lo ancoriamo al bottom
               // del frame portrait (size × size*1.25) via justifyContent.
               <View style={{ width: frameW, height: frameH, alignItems: 'center', justifyContent: 'flex-end' }}>
-                <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} facingScaleX={facingScaleX} />
+                <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} facingScaleX={facingScaleX} paused={paused} />
               </View>
             ) : heroImage ? (
               // Combat pose (es. Hoplite combat_base.png). contain preserva aspect

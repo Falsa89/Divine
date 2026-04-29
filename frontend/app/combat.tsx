@@ -998,41 +998,22 @@ export default function CombatScreen() {
     );
   };
 
-  // Wrapper dinamico: se è stato scelto uno sfondo fazione renderizza l'Image
-  // come absolute-fill ANCORATO AL PARENT (top/left/right/bottom = 0). Pattern
-  // cross-platform che risolve sia il bug RN-Web (Image senza dimensioni
-  // userebbe la size nativa del PNG) sia il bug mobile reale: usare
-  // `width: winW, height: winH` da useWindowDimensions può divergere dalle
-  // dimensioni effettive del parent flex:1 in landscape edge-to-edge / notch /
-  // cutout, lasciando fasce del backgroundColor scuro ai bordi.
-  // resizeMode="cover" gestisce il crop su tutte le piattaforme.
-  // Overlay scuro MOLTO leggero: il bg resta dominante e nitido.
-  const BattleWrapper = ({ children }: { children: React.ReactNode }) => {
-    if (battleBg?.source) {
-      return (
-        <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
-          <Image
-            source={battleBg.source}
-            style={StyleSheet.absoluteFillObject}
-            resizeMode="cover"
-            fadeDuration={200}
-          />
-          {/* Overlay scuro molto leggero — il bg DEVE restare dominante */}
-          <LinearGradient
-            colors={['rgba(6,6,20,0.20)', 'rgba(10,8,24,0.02)', 'rgba(6,6,20,0.28)']}
-            style={StyleSheet.absoluteFillObject}
-            pointerEvents="none"
-          />
-          {children}
-        </View>
-      );
-    }
-    return (
-      <LinearGradient colors={['#060614', '#0A0A24', '#0D0820']} style={{ flex: 1 }}>
-        {children}
-      </LinearGradient>
-    );
-  };
+  // v16.8 — CRITICAL FIX: BattleWrapper era definito QUI dentro CombatScreen
+  // come `const BattleWrapper = (...) => ...`. Ad ogni re-render della
+  // CombatScreen veniva creata una NUOVA function identity → React vedeva
+  // un nuovo component type → UNMOUNT + REMOUNT dell'intero subtree
+  // sotto BattleWrapper ad ogni action di battle (setSpriteState, updateHP).
+  // Conseguenze:
+  //   - HUD buttons unmount mid-tap → "intermittent presses"
+  //   - BattleSprite/HeroHopliteRig animation timers restart da zero
+  //     → idle continua "ticking" anche durante pause (animazione
+  //     ricreata fresh ogni volta, non interrotta)
+  //   - TextInput/ScrollView del drawer perdono focus/scroll → "reset feeling"
+  // FIX: dissolto BattleWrapper. La logica del background image è ora
+  // inline nel return JSX → struttura stabile, zero remount durante battle.
+  // useMemo non serviva più: una volta che l'albero è stable, useMemo del
+  // chatDrawerNode (v16.7) può finalmente fare effetto.
+  const hasBgSource = !!battleBg?.source;
 
   // v16.4.1 — HOOKS ORDER FIX
   // Le useCallback di v16.4 erano state inserite QUI, ma siamo dopo gli
@@ -1048,7 +1029,28 @@ export default function CombatScreen() {
   // (sopra l'early-return phase==='loading'). Questa duplicazione è rimossa.
 
   return (
-    <BattleWrapper>
+    <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
+      {hasBgSource ? (
+        <>
+          <Image
+            source={battleBg!.source}
+            style={StyleSheet.absoluteFillObject}
+            resizeMode="cover"
+            fadeDuration={200}
+          />
+          <LinearGradient
+            colors={['rgba(6,6,20,0.20)', 'rgba(10,8,24,0.02)', 'rgba(6,6,20,0.28)']}
+            style={StyleSheet.absoluteFillObject}
+            pointerEvents="none"
+          />
+        </>
+      ) : (
+        <LinearGradient
+          colors={['#060614', '#0A0A24', '#0D0820']}
+          style={StyleSheet.absoluteFillObject}
+          pointerEvents="none"
+        />
+      )}
       <Animated.View style={[{ flex: 1 }, shakeStyle]}>
         {/* Flash overlay */}
         <Animated.View style={[st.flashOv, flashStyle]} pointerEvents="none" />
@@ -1199,6 +1201,7 @@ export default function CombatScreen() {
                         size={size}
                         debug={BATTLE_DEBUG}
                         actionInstanceId={ss.actionInstanceId}
+                        paused={isPaused}
                       />
                     </Animated.View>
                   );
@@ -1240,6 +1243,7 @@ export default function CombatScreen() {
                         size={size}
                         debug={BATTLE_DEBUG}
                         actionInstanceId={ss.actionInstanceId}
+                        paused={isPaused}
                       />
                     </Animated.View>
                   );
@@ -1306,7 +1310,7 @@ export default function CombatScreen() {
           </View>
         )}
       </Animated.View>
-    </BattleWrapper>
+    </View>
   );
 }
 
@@ -1328,6 +1332,11 @@ const st = StyleSheet.create({
     paddingHorizontal: 10,
     paddingTop: 4,
     paddingBottom: 4,
+    // v16.8 — zIndex elevato per garantire che HUD intercetti touch sempre,
+    // anche se uno sprite con `overflow: visible` sul battlefield estende
+    // il suo Animated.View (es. damage float) sopra l'area HUD.
+    zIndex: 50,
+    elevation: 4,
   },
   turnRow: {
     flexDirection: 'row',

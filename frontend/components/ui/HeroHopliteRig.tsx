@@ -64,6 +64,9 @@ type Props = {
   actionInstanceId?: number;
   /** Facing scaleX: 1 = no flip (native right-facing), -1 = flip to left */
   facingScaleX?: number;
+  /** v16.8 — Pause toggle. Quando true, IdleLoop e i player attack/skill
+   *  smettono di avanzare i frame (frozen on current frame). */
+  paused?: boolean;
   /** LEGACY: non più usato. */
   animated?: boolean;
   /** LEGACY: non più usato. */
@@ -75,6 +78,7 @@ export default function HeroHopliteRig({
   state = 'idle',
   actionInstanceId = 0,
   facingScaleX = 1,
+  paused = false,
 }: Props) {
   // ───────────────────────────────────────────────────────────────────────
   // VISIBILITY MAP
@@ -132,7 +136,7 @@ export default function HeroHopliteRig({
           { opacity: showIdle ? 1 : 0, transform: [{ scaleX: -1 }] },
         ]}
       >
-        <HeroHopliteIdleLoop size={size} animated={showIdle} />
+        <HeroHopliteIdleLoop size={size} animated={showIdle && !paused} />
       </View>
 
       {/* ═══════════════════════════════════════════════════════════════════
@@ -146,7 +150,7 @@ export default function HeroHopliteRig({
           { opacity: attackActive ? 1 : 0 },
         ]}
       >
-        <HeroHopliteAffondo size={size} active={attackActive} playKey={attackPlayKey} />
+        <HeroHopliteAffondo size={size} active={attackActive && !paused} playKey={attackPlayKey} />
       </View>
 
       {/* ═══════════════════════════════════════════════════════════════════
@@ -160,7 +164,7 @@ export default function HeroHopliteRig({
           { opacity: skillActive ? 1 : 0 },
         ]}
       >
-        <HeroHopliteGuardiaFerrea size={size} active={skillActive} playKey={skillPlayKey} />
+        <HeroHopliteGuardiaFerrea size={size} active={skillActive && !paused} playKey={skillPlayKey} />
       </View>
     </View>
   );
