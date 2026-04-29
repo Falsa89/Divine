@@ -26,7 +26,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
-export type ChannelKey = 'global' | 'system' | 'faction' | 'guild';
+export type ChannelKey = 'global' | 'system' | 'faction' | 'guild' | 'dm';
 
 export interface ChannelMeta {
   key: ChannelKey;
@@ -67,6 +67,7 @@ export interface UseChatChannelResult {
 function buildChannelsFromUser(user: any): ChannelMeta[] {
   const hasFaction = !!user?.faction;
   const hasGuild = !!user?.guild_id;
+  const isLogged = !!user?.id;
   return [
     { key: 'global',  label: 'Globale', available: true },
     { key: 'system',  label: 'Sistema', available: true, readonly: true },
@@ -83,6 +84,17 @@ function buildChannelsFromUser(user: any): ChannelMeta[] {
       available: hasGuild,
       context: user?.guild_id || null,
       lockedReason: hasGuild ? undefined : 'Nessuna gilda',
+    },
+    // v16.20 — DM canale "speciale": non è uno stream broadcast, ma un
+    // entry point integrato al sistema selector. Quando attivo, la surface
+    // host renderizza <DMPanel> invece di una message list standard.
+    // useChatChannel rileva questo caso e non esegue fetch API per messages
+    // (load() short-circuit su 'dm').
+    {
+      key: 'dm',
+      label: 'Privati',
+      available: isLogged,
+      lockedReason: isLogged ? undefined : 'Effettua il login',
     },
   ];
 }
@@ -101,6 +113,14 @@ export function useChatChannel(opts?: UseChatChannelOptions): UseChatChannelResu
   const reqIdRef = useRef(0);
 
   const load = useCallback(async (ch: ChannelKey) => {
+    // v16.20 — DM è un canale speciale gestito da DMPanel/useDM, non
+    // dallo stream broadcast. Short-circuit: nessuna chiamata GET, nessun
+    // setMessages → l'host surface saprà renderizzare <DMPanel/> al posto
+    // della message list standard.
+    if (ch === 'dm') {
+      setMessages([]);
+      return;
+    }
     const myReq = ++reqIdRef.current;
     try {
       const c = await apiCall(`/api/plaza/chat?channel=${ch}`);

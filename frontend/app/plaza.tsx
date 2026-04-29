@@ -7,6 +7,7 @@ import { apiCall } from '../utils/api';
 import ChatComposer from '../components/chat/ChatComposer';
 import ChannelSelector from '../components/chat/ChannelSelector';
 import UserActionSheet from '../components/chat/UserActionSheet';
+import DMPanel from '../components/chat/DMPanel';
 import { useChatChannel } from '../hooks/useChatChannel';
 import { useAuth } from '../context/AuthContext';
 
@@ -27,8 +28,13 @@ export default function PlazaScreen() {
 
   // v16.19 Phase 2 — UserActionSheet entry point per DM
   const [actionTarget, setActionTarget] = useState<any | null>(null);
+  // v16.20 — DM ora integrato nel selector. "Parla in privato" cambia
+  // canale a 'dm' e passa initialPeerId al DMPanel per aprire/creare il
+  // thread direttamente nella sidebar chat (no più navigation a /dm).
+  const [dmInitialPeer, setDmInitialPeer] = useState<string | null>(null);
   const openDMWithUser = (peerId: string) => {
-    router.push(`/dm?peer=${encodeURIComponent(peerId)}` as any);
+    setDmInitialPeer(peerId);
+    ch.setActive('dm');
   };
 
   useEffect(() => {
@@ -54,9 +60,10 @@ export default function PlazaScreen() {
       <View style={s.hdr}>
         <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{'\u2190'}</Text></TouchableOpacity>
         <Text style={s.title}>PIAZZA COMUNITARIA</Text>
-        {/* v16.19 — DM inbox quick-access */}
+        {/* v16.19 — DM inbox quick-access. v16.20 → switch al canale 'dm'
+            integrato nel selector (no router.push). */}
         <TouchableOpacity
-          onPress={() => router.push('/dm' as any)}
+          onPress={() => { setDmInitialPeer(null); ch.setActive('dm'); }}
           style={s.dmBtn}
           hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
           activeOpacity={0.7}
@@ -90,62 +97,77 @@ export default function PlazaScreen() {
             );
           })}
         </View>
-        {/* Chat (v16.18 — multi-channel: selector + active channel messages) */}
+        {/* Chat (v16.18 — multi-channel: selector + active channel messages)
+            (v16.20 — DM integrato: quando active='dm' renderizziamo DMPanel
+            invece dello stream broadcast standard) */}
         <View style={s.chat}>
           <ChannelSelector
             channels={ch.channels}
             active={ch.active}
-            onChange={ch.setActive}
+            onChange={(k) => {
+              // Reset shortcut peer quando l'utente cambia manualmente canale
+              if (k !== 'dm') setDmInitialPeer(null);
+              ch.setActive(k);
+            }}
             compact
           />
-          <ScrollView style={s.chatScroll} ref={chatRef} onContentSizeChange={() => chatRef.current?.scrollToEnd()}>
-            {ch.messages.map((m:any) => (
-              <View key={m.id || m._id} style={s.msg}>
-                {/* v16.19 — tap su username → UserActionSheet (entry DM) */}
-                <TouchableOpacity
-                  onPress={() => {
-                    if (!m.user_id || m.user_id === user?.id) return;
-                    setActionTarget({
-                      id: m.user_id,
-                      username: m.username || 'utente',
-                      level: undefined,
-                      title: undefined,
-                      is_npc: false,
-                      is_you: false,
-                    });
-                  }}
-                  hitSlop={{ top: 4, bottom: 4, left: 2, right: 2 }}
-                  activeOpacity={0.65}
-                  disabled={m.user_id === user?.id}
-                >
-                  <Text style={s.msgUser}>{m.username}:</Text>
-                </TouchableOpacity>
-                <Text style={s.msgText}>{m.message}</Text>
-              </View>
-            ))}
-            {ch.messages.length === 0 && (
-              <Text style={s.emptyChat}>
-                {!ch.isAvailable
-                  ? `\uD83D\uDD12 ${ch.activeMeta?.lockedReason || 'Canale non disponibile'}`
-                  : ch.isReadonly
-                    ? 'Nessuna notifica di sistema.'
-                    : 'Nessun messaggio ancora'}
-              </Text>
-            )}
-          </ScrollView>
-          <View style={s.chatInput}>
-            {/* v16.18 — composer disabilitato su canali read-only o lock. */}
-            <ChatComposer
-              onSend={ch.send}
-              placeholder={
-                !ch.isAvailable ? 'Canale bloccato' :
-                ch.isReadonly   ? 'Sola lettura'    :
-                                  'Scrivi alla piazza\u2026'
-              }
-              maxLength={200}
-              disabled={!ch.isAvailable || ch.isReadonly}
+          {ch.active === 'dm' ? (
+            <DMPanel
+              key={dmInitialPeer || 'dm-inbox'}
+              initialPeerId={dmInitialPeer || undefined}
             />
-          </View>
+          ) : (
+            <>
+              <ScrollView style={s.chatScroll} ref={chatRef} onContentSizeChange={() => chatRef.current?.scrollToEnd()}>
+                {ch.messages.map((m:any) => (
+                  <View key={m.id || m._id} style={s.msg}>
+                    {/* v16.19 — tap su username → UserActionSheet (entry DM) */}
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (!m.user_id || m.user_id === user?.id) return;
+                        setActionTarget({
+                          id: m.user_id,
+                          username: m.username || 'utente',
+                          level: undefined,
+                          title: undefined,
+                          is_npc: false,
+                          is_you: false,
+                        });
+                      }}
+                      hitSlop={{ top: 4, bottom: 4, left: 2, right: 2 }}
+                      activeOpacity={0.65}
+                      disabled={m.user_id === user?.id}
+                    >
+                      <Text style={s.msgUser}>{m.username}:</Text>
+                    </TouchableOpacity>
+                    <Text style={s.msgText}>{m.message}</Text>
+                  </View>
+                ))}
+                {ch.messages.length === 0 && (
+                  <Text style={s.emptyChat}>
+                    {!ch.isAvailable
+                      ? `\uD83D\uDD12 ${ch.activeMeta?.lockedReason || 'Canale non disponibile'}`
+                      : ch.isReadonly
+                        ? 'Nessuna notifica di sistema.'
+                        : 'Nessun messaggio ancora'}
+                  </Text>
+                )}
+              </ScrollView>
+              <View style={s.chatInput}>
+                {/* v16.18 — composer disabilitato su canali read-only o lock. */}
+                <ChatComposer
+                  onSend={ch.send}
+                  placeholder={
+                    !ch.isAvailable ? 'Canale bloccato' :
+                    ch.isReadonly   ? 'Sola lettura'    :
+                                      'Scrivi alla piazza\u2026'
+                  }
+                  maxLength={200}
+                  disabled={!ch.isAvailable || ch.isReadonly}
+                />
+              </View>
+            </>
+          )}
         </View>
       </View>
       {/* v16.19 Phase 2 — User Action Sheet (entry point DM) */}

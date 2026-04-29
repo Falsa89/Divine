@@ -14,6 +14,7 @@ import BattleDebugOverlay, { DebugUnitInfo } from '../components/battle/BattleDe
 import BattleLoadingScreen from '../components/battle/BattleLoadingScreen';
 import ChatComposer from '../components/chat/ChatComposer';
 import ChannelSelector from '../components/chat/ChannelSelector';
+import DMPanel from '../components/chat/DMPanel';
 import { useChatChannel } from '../hooks/useChatChannel';
 
 /**
@@ -837,40 +838,48 @@ export default function CombatScreen() {
                 onChange={battleChat.setActive}
                 compact
               />
-              <ScrollView
-                ref={chatScrollRef}
-                showsVerticalScrollIndicator
-                contentContainerStyle={{ paddingBottom: 6, gap: 4 }}
-                style={{ flex: 1 }}
-              >
-                {battleChat.messages.length === 0 ? (
-                  <Text style={st.chatEmpty}>
-                    {!battleChat.isAvailable
-                      ? `\uD83D\uDD12 ${battleChat.activeMeta?.lockedReason || 'Canale non disponibile'}`
-                      : battleChat.isReadonly
-                        ? 'Nessuna notifica di sistema.'
-                        : 'Nessun messaggio. Scrivi qualcosa qui sotto.'}
-                  </Text>
-                ) : (
-                  battleChat.messages.map((m: any) => (
-                    <View key={m.id || m._id} style={st.chatMsgRow}>
-                      <Text style={st.chatMsgUser}>{m.username || 'utente'}:</Text>
-                      <Text style={st.chatMsgTxt}>{m.message}</Text>
-                    </View>
-                  ))
-                )}
-              </ScrollView>
-              <ChatComposer
-                onSend={battleChat.send}
-                placeholder={
-                  !battleChat.isAvailable ? 'Canale bloccato' :
-                  battleChat.isReadonly   ? 'Sola lettura'    :
-                                            'Scrivi durante la battle\u2026'
-                }
-                compact
-                maxLength={160}
-                disabled={!battleChat.isAvailable || battleChat.isReadonly}
-              />
+              {/* v16.20 — DM integrato: quando active='dm' → DMPanel compact
+                  invece dello stream broadcast standard. */}
+              {battleChat.active === 'dm' ? (
+                <DMPanel compact />
+              ) : (
+                <>
+                  <ScrollView
+                    ref={chatScrollRef}
+                    showsVerticalScrollIndicator
+                    contentContainerStyle={{ paddingBottom: 6, gap: 4 }}
+                    style={{ flex: 1 }}
+                  >
+                    {battleChat.messages.length === 0 ? (
+                      <Text style={st.chatEmpty}>
+                        {!battleChat.isAvailable
+                          ? `\uD83D\uDD12 ${battleChat.activeMeta?.lockedReason || 'Canale non disponibile'}`
+                          : battleChat.isReadonly
+                            ? 'Nessuna notifica di sistema.'
+                            : 'Nessun messaggio. Scrivi qualcosa qui sotto.'}
+                      </Text>
+                    ) : (
+                      battleChat.messages.map((m: any) => (
+                        <View key={m.id || m._id} style={st.chatMsgRow}>
+                          <Text style={st.chatMsgUser}>{m.username || 'utente'}:</Text>
+                          <Text style={st.chatMsgTxt}>{m.message}</Text>
+                        </View>
+                      ))
+                    )}
+                  </ScrollView>
+                  <ChatComposer
+                    onSend={battleChat.send}
+                    placeholder={
+                      !battleChat.isAvailable ? 'Canale bloccato' :
+                      battleChat.isReadonly   ? 'Sola lettura'    :
+                                                'Scrivi durante la battle\u2026'
+                    }
+                    compact
+                    maxLength={160}
+                    disabled={!battleChat.isAvailable || battleChat.isReadonly}
+                  />
+                </>
+              )}
             </View>
           )}
         </View>

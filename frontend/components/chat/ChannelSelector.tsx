@@ -25,18 +25,21 @@ const LABEL_FULL: Record<ChannelKey, string> = {
   system:  'SISTEMA',
   faction: 'FAZIONE',
   guild:   'GILDA',
+  dm:      'PRIVATI',
 };
 const LABEL_SHORT: Record<ChannelKey, string> = {
   global:  'GLOB',
   system:  'SYS',
   faction: 'FAZ',
   guild:   'GILD',
+  dm:      'DM',
 };
 const ICON: Record<ChannelKey, string> = {
-  global:  '\uD83C\uDF10',     // \ud83c\udf10 = 🌐
-  system:  '\u2699\uFE0F',      // ⚙
+  global:  '\uD83C\uDF10',     // 🌐
+  system:  '\u2699\uFE0F',     // ⚙
   faction: '\uD83D\uDEE1\uFE0F', // 🛡
-  guild:   '\uD83C\uDFF0',      // 🏰
+  guild:   '\uD83C\uDFF0',     // 🏰
+  dm:      '\uD83D\uDCEC',     // 📬
 };
 
 export default function ChannelSelector({ channels, active, onChange, compact = false }: Props) {

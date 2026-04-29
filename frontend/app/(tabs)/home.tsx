@@ -42,6 +42,7 @@ import { registerForPushNotifications } from '../../utils/pushNotifications';
 import HomeHeroSplash from '../../components/home/HomeHeroSplash';
 import ChatComposer from '../../components/chat/ChatComposer';
 import ChannelSelector from '../../components/chat/ChannelSelector';
+import DMPanel from '../../components/chat/DMPanel';
 import { useChatChannel } from '../../hooks/useChatChannel';
 import { COLORS } from '../../constants/theme';
 import {
@@ -1525,38 +1526,46 @@ function HomeChatNotifPanel({ open, onToggle }: any) {
               onChange={ch.setActive}
               compact
             />
-            <ScrollView
-              ref={scrollRef}
-              style={s.chatBody}
-              showsVerticalScrollIndicator={false}
-            >
-              {ch.messages.length === 0 ? (
-                <Text style={[s.chatMsgTxt, { opacity: 0.5, fontStyle: 'italic' }]}>
-                  {!ch.isAvailable
-                    ? `\uD83D\uDD12 ${ch.activeMeta?.lockedReason || 'Canale non disponibile'}`
-                    : ch.isReadonly
-                      ? 'Nessuna notifica di sistema.'
-                      : 'Nessun messaggio. Sii il primo!'}
-                </Text>
-              ) : (
-                ch.messages.map((m, i) => (
-                  <View key={m.id || m._id || i} style={s.chatMsg}>
-                    <Text style={s.chatFrom}>{m.username || 'utente'}:</Text>
-                    <Text style={s.chatMsgTxt}>{m.message}</Text>
-                  </View>
-                ))
-              )}
-            </ScrollView>
-            <ChatComposer
-              onSend={ch.send}
-              compact
-              placeholder={
-                !ch.isAvailable ? 'Canale bloccato' :
-                ch.isReadonly   ? 'Sola lettura'    :
-                                  'Scrivi nella chat\u2026'
-              }
-              disabled={!ch.isAvailable || ch.isReadonly}
-            />
+            {/* v16.20 — DM integrato: quando active='dm' renderizziamo DMPanel
+                compact al posto della message stream + composer. */}
+            {ch.active === 'dm' ? (
+              <DMPanel compact />
+            ) : (
+              <>
+                <ScrollView
+                  ref={scrollRef}
+                  style={s.chatBody}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {ch.messages.length === 0 ? (
+                    <Text style={[s.chatMsgTxt, { opacity: 0.5, fontStyle: 'italic' }]}>
+                      {!ch.isAvailable
+                        ? `\uD83D\uDD12 ${ch.activeMeta?.lockedReason || 'Canale non disponibile'}`
+                        : ch.isReadonly
+                          ? 'Nessuna notifica di sistema.'
+                          : 'Nessun messaggio. Sii il primo!'}
+                    </Text>
+                  ) : (
+                    ch.messages.map((m, i) => (
+                      <View key={m.id || m._id || i} style={s.chatMsg}>
+                        <Text style={s.chatFrom}>{m.username || 'utente'}:</Text>
+                        <Text style={s.chatMsgTxt}>{m.message}</Text>
+                      </View>
+                    ))
+                  )}
+                </ScrollView>
+                <ChatComposer
+                  onSend={ch.send}
+                  compact
+                  placeholder={
+                    !ch.isAvailable ? 'Canale bloccato' :
+                    ch.isReadonly   ? 'Sola lettura'    :
+                                      'Scrivi nella chat\u2026'
+                  }
+                  disabled={!ch.isAvailable || ch.isReadonly}
+                />
+              </>
+            )}
           </>
         ) : (
           <View style={s.chatPreview}>
