@@ -99,13 +99,19 @@ const BERSERKER_NAME_ALIASES = ['berserker', 'norse berserker'];
 /** Sentinel pattern: `asset:norse_berserker:*`. */
 export const NORSE_BERSERKER_IMAGE_SENTINEL = 'asset:norse_berserker:splash';
 
-/** SPLASH/PORTRAIT/DETAIL — full art con sfondo. */
-export const NORSE_BERSERKER_PORTRAIT: ImageSourcePropType = require('../../assets/heroes/norse_berserker.jpg');
+/** SPLASH/PORTRAIT/DETAIL — full art con sfondo (RM1.17-C: aggiornato a 512×768 portrait dal ZIP ufficiale). */
+export const NORSE_BERSERKER_PORTRAIT: ImageSourcePropType = require('../../assets/heroes/norse_berserker/splash.jpg');
 export const NORSE_BERSERKER_DETAIL: ImageSourcePropType = NORSE_BERSERKER_PORTRAIT;
-/** Berserker non ha cutout transparent dedicato → fallback al portrait con sfondo. */
-export const NORSE_BERSERKER_TRANSPARENT: ImageSourcePropType = NORSE_BERSERKER_PORTRAIT;
-/** Combat base — pose idle laterale dal sprite sheet folder. */
-export const NORSE_BERSERKER_COMBAT_BASE: ImageSourcePropType = require('../../assets/heroes/berserker_sprites/idle.png');
+/** TRANSPARENT — cutout RGBA 408×612 dal ZIP ufficiale (RM1.17-C). */
+export const NORSE_BERSERKER_TRANSPARENT: ImageSourcePropType = require('../../assets/heroes/norse_berserker/transparent.png');
+/** Combat base — pose ufficiale 1536×1024 (RM1.17-C). */
+export const NORSE_BERSERKER_COMBAT_BASE: ImageSourcePropType = require('../../assets/heroes/norse_berserker/combat_base.png');
+/** Battle anim sprites (RM1.17-C). Esposti per future expansion del sistema sprite. */
+export const NORSE_BERSERKER_IDLE: ImageSourcePropType = require('../../assets/heroes/norse_berserker/idle.png');
+export const NORSE_BERSERKER_ATTACK: ImageSourcePropType = require('../../assets/heroes/norse_berserker/attack.png');
+export const NORSE_BERSERKER_SKILL: ImageSourcePropType = require('../../assets/heroes/norse_berserker/skill.png');
+export const NORSE_BERSERKER_HIT: ImageSourcePropType = require('../../assets/heroes/norse_berserker/hit.png');
+export const NORSE_BERSERKER_DEATH: ImageSourcePropType = require('../../assets/heroes/norse_berserker/death.png');
 
 // ──────────────────────────────────────────────────────────────────────
 // HERO IDENTITY HELPERS
@@ -169,6 +175,12 @@ type HeroAssetMap = {
   card: ImageSourcePropType;
   detail: ImageSourcePropType;
   combat_base: ImageSourcePropType;
+  // Optional battle-anim variants (RM1.17-C)
+  idle?: ImageSourcePropType;
+  attack?: ImageSourcePropType;
+  skill?: ImageSourcePropType;
+  hit?: ImageSourcePropType;
+  death?: ImageSourcePropType;
 };
 
 /**
@@ -188,6 +200,11 @@ const HERO_ASSET_REGISTRY: Record<string, HeroAssetMap> = {
     card: NORSE_BERSERKER_PORTRAIT,
     detail: NORSE_BERSERKER_DETAIL,
     combat_base: NORSE_BERSERKER_COMBAT_BASE,
+    idle: NORSE_BERSERKER_IDLE,
+    attack: NORSE_BERSERKER_ATTACK,
+    skill: NORSE_BERSERKER_SKILL,
+    hit: NORSE_BERSERKER_HIT,
+    death: NORSE_BERSERKER_DEATH,
   },
 };
 
