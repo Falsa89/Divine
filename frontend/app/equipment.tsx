@@ -40,9 +40,27 @@ export default function EquipmentScreen() {
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}>
       <View style={s.hdr}>
         <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>←</Text></TouchableOpacity>
-        <Text style={s.title}>EQUIPAGGIAMENTO</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={s.title}>FUCINA DI EFESTO</Text>
+          <Text style={s.subtitle}>Equipaggiamento {'\u2022'} Fusione {'\u2022'} Potenziamento</Text>
+        </View>
         <Text style={s.cnt}>{equips.length} oggetti</Text>
       </View>
+
+      {/* TASK 4.5-E — Read-only note: il backend Forge supporta upgrade+fuse;
+          la UI dedicata arriverà in un task successivo. Niente acquisto/vendita
+          qui: l'equipment in eccesso si fonde, non si scarta. */}
+      <View style={s.forgeNote}>
+        <Text style={s.forgeNoteIco}>{'\u2692\uFE0F'}</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={s.forgeNoteTitle}>Fucina attiva</Text>
+          <Text style={s.forgeNoteTxt}>
+            Gli oggetti in eccesso si fondono per aumentare la rarità (non si vendono).
+            UI dedicata di Upgrade & Fusione in arrivo.
+          </Text>
+        </View>
+      </View>
+
       <View style={s.body}>
         <ScrollView style={s.eqList} contentContainerStyle={s.eqListC}>
           {equips.length === 0 && <Text style={s.empty}>Nessun equipaggiamento! Gioca Storia o Torre per ottenerne.</Text>}
@@ -90,10 +108,15 @@ export default function EquipmentScreen() {
 
 const s = StyleSheet.create({
   c:{flex:1,backgroundColor:'transparent'},
-  hdr:{flexDirection:'row',alignItems:'center',gap:12,paddingHorizontal:16,paddingVertical:8,borderBottomWidth:1,borderBottomColor:'rgba(68,204,136,0.3)'},
-  back:{color:'#44cc88',fontSize:20,fontWeight:'700'},
-  title:{color:'#44cc88',fontSize:16,fontWeight:'800',letterSpacing:2,flex:1},
+  hdr:{flexDirection:'row',alignItems:'center',gap:12,paddingHorizontal:16,paddingVertical:8,borderBottomWidth:1,borderBottomColor:'rgba(255,170,68,0.3)'},
+  back:{color:'#FFAA44',fontSize:20,fontWeight:'700'},
+  title:{color:'#FFAA44',fontSize:16,fontWeight:'900',letterSpacing:2},
+  subtitle:{color:'#888',fontSize:9,fontWeight:'700',letterSpacing:1.5,marginTop:2},
   cnt:{color:'#888',fontSize:12},
+  forgeNote:{flexDirection:'row',alignItems:'center',gap:10,padding:10,marginHorizontal:10,marginTop:8,borderRadius:10,borderWidth:1,borderColor:'rgba(255,170,68,0.35)',backgroundColor:'rgba(255,170,68,0.08)'},
+  forgeNoteIco:{fontSize:22},
+  forgeNoteTitle:{color:'#FFAA44',fontSize:11,fontWeight:'900',letterSpacing:1.5},
+  forgeNoteTxt:{color:'#B8B8D0',fontSize:10,marginTop:2,lineHeight:13},
   body:{flex:1,flexDirection:'row',padding:10,gap:10},
   eqList:{flex:1},
   eqListC:{gap:6},

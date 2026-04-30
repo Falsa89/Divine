@@ -41,12 +41,12 @@ export const PROTOTYPE_FLAGS: Record<string, PrototypeFeatureFlag> = {
   hephaestus_forge: {
     id: 'hephaestus_forge',
     name: 'Fucina di Efesto',
-    isPrototypeEnabled: true,           // backend forge route esiste
-    isVisibleInUI: true,                // frontend forge.tsx esiste
-    isPlaceholder: false,
+    isPrototypeEnabled: true,           // backend forge route esiste (upgrade+fuse, runes)
+    isVisibleInUI: true,                // frontend equipment.tsx esiste e mostra header 'Fucina di Efesto' (TASK 4.5-E)
+    isPlaceholder: true,                // UI dedicata Upgrade/Fuse + Rune ancora mancante
     requiresDevMode: false,
     releasePhase: 'prototype',
-    notes: 'Backend /api/forge upgrade/fuse + frontend equipment/forge screens già attivi. Data foundation aggiunta in 4.5-A.',
+    notes: 'Backend /api/forge/upgrade + /api/forge/fuse + /api/runes già attivi. Frontend equipment.tsx ora brandizzato come Fucina di Efesto (TASK 4.5-E label alignment) ma le UI dedicate di Upgrade, Fusione e Rune mancano ancora. Equipment selling/salvage NON presente — fusion-first (allineato a direzione Game Director).',
   },
   artifacts: {
     id: 'artifacts',

@@ -14,7 +14,7 @@ const CATEGORIES = [
       { label: 'Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
       { label: 'Torre', icon: '\uD83C\uDFEF', route: '/tower', gradient: ['#8844FF', '#5522CC'] as const },
       { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pvp', gradient: ['#FF4444', '#CC2222'] as const },
-      { label: 'Equipaggiamento', icon: '\uD83D\uDDE1\uFE0F', route: '/equipment', gradient: ['#44CC88', '#229966'] as const },
+      { label: 'Fucina di Efesto', icon: '\u2692\uFE0F', route: '/equipment', gradient: ['#FFAA44', '#CC6622'] as const },
       { label: 'Oggetti Esclusivi', icon: '\uD83D\uDC51', route: '/exclusive', gradient: ['#FFD700', '#CC9900'] as const },
     ],
   },
