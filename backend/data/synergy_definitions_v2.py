@@ -520,31 +520,42 @@ PLAYER_FACTION_DEFINITIONS_V2: List[Dict[str, Any]] = [
         "is_enabled": False,
         "notes": "Player faction.",
     },
+    # Faction ESCLUSE dall'onboarding (internal/hero/group faction only):
+    # RM1.15 — creature_beast e primordial spostate qui per direttiva
+    # Game Director: troppo astratte / gruppo hero, non player identity
+    # iniziali. Restano valide come hero faction nel Bible.
     {
         "id": "creature_beast",
         "display_name": "Bestie Mitiche",
         "description": "Idre, Fenici, e le creature delle profondità.",
         "identity_theme": "mythic_beasts",
-        "allowed_at_onboarding": True,
-        "change_token_id": PLAYER_FACTION_CHANGE_TOKEN_ID,
-        "buff_preview": {"hp": 0.06, "crit_chance": 0.04},
-        "future_event_hooks": ["faction_daily_boss", "primal_hunt"],
+        "allowed_at_onboarding": False,
+        "change_token_id": None,
+        "buff_preview": None,
+        "future_event_hooks": [],
         "is_enabled": False,
-        "notes": "Player faction.",
+        "notes": (
+            "Internal/hero faction only (RM1.15). Trattata come gruppo "
+            "hero/category, NON player identity al lancio. "
+            "Future expansion potrà valutarla come player faction."
+        ),
     },
     {
         "id": "primordial",
         "display_name": "Primordiali",
         "description": "Gaia, Nyx, Tiamat — le forze antiche del cosmo.",
         "identity_theme": "primordial_chaos",
-        "allowed_at_onboarding": True,
-        "change_token_id": PLAYER_FACTION_CHANGE_TOKEN_ID,
-        "buff_preview": {"hp": 0.05, "magic_damage": 0.05},
-        "future_event_hooks": ["faction_daily_boss", "void_eclipse"],
+        "allowed_at_onboarding": False,
+        "change_token_id": None,
+        "buff_preview": None,
+        "future_event_hooks": [],
         "is_enabled": False,
-        "notes": "Player faction. Bible heroes: greek_gaia, primordial_nyx, mesopotamian_tiamat.",
+        "notes": (
+            "Internal/hero faction only (RM1.15). Troppo astratta / "
+            "alto-livello per player identity al lancio. Bible heroes: "
+            "greek_gaia, primordial_nyx, mesopotamian_tiamat."
+        ),
     },
-    # Faction ESCLUSE dall'onboarding (internal/hero faction only):
     {
         "id": "arcane",
         "display_name": "Arcani",
