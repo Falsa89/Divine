@@ -12,9 +12,9 @@ import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
 import { COLORS } from '../constants/theme';
 
-type Tab = 'wallet' | 'soul_forge' | 'shops';
+// NOTE: 'wallet' tab removed in TASK 4.5-B2 — replaced by /treasury (Tesoreria)
+type Tab = 'soul_forge' | 'shops';
 const TABS = [
-  { key: 'wallet', label: 'Wallet', icon: '\uD83D\uDCB0' },
   { key: 'soul_forge', label: 'Anime', icon: '\uD83D\uDD25' },
   { key: 'shops', label: 'Negozi', icon: '\uD83D\uDED2' },
 ];
@@ -22,7 +22,7 @@ const TABS = [
 export default function EconomyScreen() {
   const router = useRouter();
   const { refreshUser } = useAuth();
-  const [tab, setTab] = useState<Tab>('wallet');
+  const [tab, setTab] = useState<Tab>('soul_forge');
   const [wallet, setWallet] = useState<any>(null);
   const [shops, setShops] = useState<any>(null);
   const [soulForge, setSoulForge] = useState<any>(null);
@@ -85,27 +85,31 @@ export default function EconomyScreen() {
       <TabSelector tabs={TABS} active={tab} onChange={(t) => setTab(t as Tab)} accentColor={COLORS.gold} />
 
       <ScrollView contentContainerStyle={st.body}>
-        {tab === 'wallet' && (
-          <Animated.View entering={FadeIn}>
-            <Text style={st.sec}>Le Tue Valute</Text>
-            {Object.entries(currencies).map(([id, c]: [string, any], i) => (
-              <Animated.View key={id} entering={FadeInDown.delay(i * 35)}>
-                <LinearGradient
-                  colors={[(c.color || '#888') + '10', 'transparent']}
-                  style={[st.currCard, { borderColor: (c.color || '#888') + '30' }]}
-                >
-                  <View style={[st.currIconWrap, { backgroundColor: (c.color || '#888') + '15' }]}>
-                    <Text style={st.currIcon}>{c.icon}</Text>
-                  </View>
-                  <View style={st.currInfo}>
-                    <Text style={[st.currName, { color: c.color }]}>{c.name}</Text>
-                  </View>
-                  <Text style={st.currAmt}>{(c.amount || 0).toLocaleString()}</Text>
-                </LinearGradient>
-              </Animated.View>
-            ))}
-          </Animated.View>
-        )}
+        {/* Treasury CTA banner — replaces obsolete Wallet tab */}
+        <Animated.View entering={FadeIn} style={st.treasuryCtaOuter}>
+          <TouchableOpacity
+            onPress={() => router.push('/treasury')}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={['rgba(255, 215, 0, 0.14)', 'rgba(68, 153, 255, 0.08)']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.treasuryCta}
+            >
+              <View style={st.treasuryCtaIconWrap}>
+                <Text style={st.treasuryCtaIcon}>{'\uD83C\uDFE6'}</Text>
+              </View>
+              <View style={st.treasuryCtaInfo}>
+                <Text style={st.treasuryCtaTitle}>Tesoreria</Text>
+                <Text style={st.treasuryCtaDesc}>
+                  Catalogo completo delle valute del regno
+                </Text>
+              </View>
+              <Text style={st.treasuryCtaArrow}>{'\u203A'}</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </Animated.View>
 
         {tab === 'soul_forge' && (
           <Animated.View entering={FadeIn}>
@@ -228,6 +232,49 @@ const st = StyleSheet.create({
   body: { padding: 10, gap: 6, paddingBottom: 70 },
   sec: { color: '#fff', fontSize: 15, fontWeight: '900', marginBottom: 8 },
   sub: { color: COLORS.textSecondary, fontSize: 12, fontWeight: '700', marginTop: 10, marginBottom: 6 },
+  // Treasury CTA banner (TASK 4.5-B2 — replaces obsolete Wallet tab)
+  treasuryCtaOuter: {
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 6,
+  },
+  treasuryCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.35)',
+    gap: 12,
+  },
+  treasuryCtaIconWrap: {
+    width: 42,
+    height: 42,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.4)',
+  },
+  treasuryCtaIcon: { fontSize: 22 },
+  treasuryCtaInfo: { flex: 1 },
+  treasuryCtaTitle: {
+    color: COLORS.gold,
+    fontSize: 14,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
+  treasuryCtaDesc: {
+    color: COLORS.textSecondary,
+    fontSize: 10,
+    marginTop: 2,
+  },
+  treasuryCtaArrow: {
+    color: COLORS.gold,
+    fontSize: 22,
+    fontWeight: '700',
+  },
   // Wallet
   currCard: {
     flexDirection: 'row',
