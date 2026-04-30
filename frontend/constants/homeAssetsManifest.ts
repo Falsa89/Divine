@@ -396,7 +396,7 @@ export const HOME_ROUTES: Partial<Record<ButtonKey | NavKey | 'heroTap' | 'mainB
   bag:      '/equipment',
   artifact: '/artifacts',
   skill:    '',            // overflow
-  team:     '/(tabs)/heroes',
+  team:     '/(tabs)/battle',  // v16.30 — TEAM porta al formation editor (battle prep / 9-grid). La collezione eroi resta su /(tabs)/heroes raggiungibile dal tab bar nativo.
   guild:    '/guild',
   shop:     '/shop',
   forge:    '/soul-forge',
