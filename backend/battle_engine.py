@@ -202,6 +202,179 @@ DEV_TEST_HEAL_HEROES = {
 }
 
 
+# ═════════════════════════════════════════════════════════════════════
+# TARGETING RULES — v16.32 (TASK 4.4-F official targeting)
+# ─────────────────────────────────────────────────────────────────────
+# Default single-target rule for any skill/attack WITHOUT an explicit
+# target spec:
+#   1) first valid living enemy Tank
+#   2) fallback: closest valid living enemy (Manhattan distance on the
+#      9-grid grid_x/grid_y; ties broken by index)
+#
+# Taunt override (single-target only):
+#   if any living enemy Tank has an active taunt status_effect AND the
+#   skill is NOT multi-target AND the skill does not ignore_taunt
+#   → redirect single target to that Tank.
+#
+# AoE / multi-target skills are NEVER intercepted by Taunt:
+#   - legacy: `skill_type == 'sp'` is treated as AoE-all-enemies
+#   - flagged: skill.get('target_type') in MULTI_TARGET_TYPES
+#              OR skill.get('multi_target') is True
+#              OR skill.get('aoe') is True
+#
+# Explicit target rules (kept available for future skills, NOT applied
+# yet by default attacks/cycle): support / dps / lowest_hp / highest_atk
+# / row / column / area / all_enemies / multiple. The dispatcher
+# `select_explicit_target()` returns None if no explicit rule is set,
+# letting the caller fall through to the Tank-first default.
+# ═════════════════════════════════════════════════════════════════════
+
+MULTI_TARGET_TYPES = {
+    'all', 'all_enemies', 'aoe', 'row', 'column', 'line', 'area',
+    'multiple', 'multi',
+}
+
+# hero_class values are 'Tank'/'Support'/'DPS' in DB — match case-insensitive.
+def is_alive(unit) -> bool:
+    return bool(unit) and bool(unit.get('is_alive'))
+
+
+def is_tank(unit) -> bool:
+    if not unit:
+        return False
+    hc = str(unit.get('hero_class', '')).strip().lower()
+    return hc == 'tank'
+
+
+def has_active_taunt(unit) -> bool:
+    """True if unit has a non-expired taunt status_effect.
+    Supports a few naming variants for forward-compat without locking-in
+    a single canonical key (engine doesn't apply Taunt today; if/when a
+    future skill applies it, any of these shapes will be detected)."""
+    if not unit:
+        return False
+    if unit.get('is_taunting'):
+        return True
+    for eff in unit.get('status_effects', []) or []:
+        t = str(eff.get('type', '')).lower()
+        n = str(eff.get('name', '')).lower()
+        if t == 'taunt' or n == 'taunt' or eff.get('taunt') is True:
+            duration = eff.get('duration', 1)
+            if duration is None or duration > 0:
+                return True
+    return False
+
+
+def is_multi_target_skill(skill, skill_type: str = None) -> bool:
+    """A skill counts as multi-target if:
+      - it is the legacy ultimate (`skill_type == 'sp'`), OR
+      - skill metadata flags it explicitly.
+    Used to bypass Taunt override for AoE/row/area/multi attacks."""
+    if skill_type == 'sp':
+        return True
+    if not isinstance(skill, dict):
+        return False
+    if skill.get('multi_target') is True or skill.get('aoe') is True:
+        return True
+    tt = str(skill.get('target_type', '')).strip().lower()
+    if tt and tt in MULTI_TARGET_TYPES:
+        return True
+    # Explicit count > 1 also counts as multi
+    try:
+        if int(skill.get('target_count', 1)) > 1:
+            return True
+    except (TypeError, ValueError):
+        pass
+    return False
+
+
+def skill_ignores_taunt(skill) -> bool:
+    return isinstance(skill, dict) and skill.get('ignore_taunt') is True
+
+
+def _grid_distance(a, b) -> int:
+    """Manhattan distance on the 9-grid using grid_x/grid_y when available."""
+    try:
+        dx = abs(int(a.get('grid_x', 4)) - int(b.get('grid_x', 4)))
+        dy = abs(int(a.get('grid_y', 4)) - int(b.get('grid_y', 4)))
+        return dx + dy
+    except (TypeError, ValueError):
+        return 0
+
+
+def select_default_single_target(attacker, enemies):
+    """Tank-first default targeting:
+      1) first living enemy Tank (input order),
+      2) fallback closest living enemy by Manhattan grid distance,
+      3) safety net: first living enemy.
+    Returns None if no living enemy."""
+    living = [e for e in (enemies or []) if is_alive(e)]
+    if not living:
+        return None
+    tanks = [e for e in living if is_tank(e)]
+    if tanks:
+        return tanks[0]
+    if attacker is not None:
+        return min(living, key=lambda e: _grid_distance(attacker, e))
+    return living[0]
+
+
+def select_explicit_target(skill, attacker, enemies):
+    """If skill metadata declares an explicit single-target rule, return it.
+    Returns None when no explicit rule is set (caller falls through to
+    default Tank-first). DOES NOT handle multi-target skills (caller checks
+    `is_multi_target_skill` first)."""
+    if not isinstance(skill, dict):
+        return None
+    living = [e for e in (enemies or []) if is_alive(e)]
+    if not living:
+        return None
+    rule = str(skill.get('target_type', '') or skill.get('target_role', '')).strip().lower()
+    if not rule:
+        return None
+    # Role-based rules
+    if rule in ('tank', 'frontline'):
+        cands = [e for e in living if is_tank(e)]
+        return cands[0] if cands else None
+    if rule in ('support', 'backline', 'cleric', 'healer'):
+        cands = [e for e in living if str(e.get('hero_class', '')).lower() == 'support']
+        return cands[0] if cands else None
+    if rule == 'dps':
+        cands = [e for e in living if str(e.get('hero_class', '')).lower() == 'dps']
+        return cands[0] if cands else None
+    # Stat-based rules
+    if rule in ('lowest_hp', 'execute'):
+        return min(living, key=lambda e: e.get('current_hp', 0))
+    if rule == 'highest_hp':
+        return max(living, key=lambda e: e.get('current_hp', 0))
+    if rule in ('highest_attack', 'highest_atk'):
+        return max(living, key=lambda e: e.get('attack', 0) or e.get('physical_damage', 0))
+    if rule == 'closest':
+        return select_default_single_target(attacker, enemies)
+    return None
+
+
+def apply_taunt_override(original_target, enemies, skill, skill_type=None):
+    """If a single-target attack should be intercepted by a taunting Tank,
+    return that Tank; otherwise return the original_target unchanged.
+    Multi-target / ignore_taunt skills are passed through unchanged."""
+    if original_target is None:
+        return None
+    if is_multi_target_skill(skill, skill_type):
+        return original_target
+    if skill_ignores_taunt(skill):
+        return original_target
+    living_taunting_tanks = [
+        e for e in (enemies or [])
+        if is_alive(e) and is_tank(e) and has_active_taunt(e)
+    ]
+    if not living_taunting_tanks:
+        return original_target
+    # Choose the first taunting tank by input order (stable behavior).
+    return living_taunting_tanks[0]
+# ═════════════════════════════════════════════════════════════════════
+
+
 def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
     """
     Simulate a full battle between two teams.
@@ -290,12 +463,17 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
                 })
                 continue
             
-            # Pick target
+            # Pick target — v16.32 official targeting rules:
+            #   Default = Tank-first → fallback closest living enemy.
+            #   Old behavior (lowest HP execute) is preserved as the
+            #   `lowest_hp` explicit rule, NOT default.
             enemies = [c for c in (team_b if team_id == 'team_a' else team_a) if c['is_alive']]
             if not enemies:
                 break
-            
-            target = min(enemies, key=lambda e: e['current_hp'])  # Target lowest HP
+
+            target = select_default_single_target(char, enemies)
+            if target is None:
+                break
             
             # ═════════════════════════════════════════════════════════════
             # ACTION SELECTION — cycle deterministico + rage (Msg 498).
@@ -440,8 +618,27 @@ def execute_skill(attacker: dict, target: dict, all_enemies: list, skill: dict, 
     overflow_multiplier: applicato SOLO all'effetto principale della
     ultimate (damage se offensiva, heal se cura, shield se difensiva).
     Default 1.0 per attacchi non-ultimate.
+
+    v16.32 — Targeting redirect:
+      - For SINGLE-TARGET skills, an explicit target rule on the skill
+        (target_type/target_role: tank/dps/support/lowest_hp/...) takes
+        precedence over the caller-provided `target`. If no explicit rule
+        is set, `target` is used as-is (caller already applied Tank-first
+        default via `select_default_single_target`).
+      - Then Taunt override redirects single-target attacks to a living
+        taunting Tank if any (skipped for AoE/multi-target/ignore_taunt).
+      - Multi-target skills (ultimate `sp`, or skill metadata flagged)
+        are NOT redirected; they keep hitting their intended target set
+        (`all_enemies` for `sp`, etc.).
     """
-    
+    if not is_multi_target_skill(skill, skill_type):
+        # Explicit target rule overrides the caller's default pick.
+        explicit = select_explicit_target(skill, attacker, all_enemies)
+        if explicit is not None:
+            target = explicit
+        # Taunt override (single-target only).
+        target = apply_taunt_override(target, all_enemies, skill, skill_type) or target
+
     atk = attacker.get('attack', 1000)
     dfn = target.get('defense', 500)
     
