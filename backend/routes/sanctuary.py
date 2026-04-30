@@ -153,35 +153,199 @@ def _constellation_stage_is_boss(stage: int) -> bool:
     return stage > 0 and stage % CONSTELLATION_BOSS_EVERY == 0
 
 
-# ===================== BOREA (Tutorial Hero) =====================
-BOREA_HERO_ID = "borea"
+# ===================== BOREA (Tutorial Hero — Extra Premium) =====================
+# RM1.16 — Allineato al Character Bible:
+#   id slug Bible: greek_borea
+#   release_group: launch_extra_premium (fuori dai 100 launch_base)
+#   native_rarity 6 / max_stars 15 / element wind / role mage_aoe / faction greek
+#   origin_group anemoi / category deity
+#
+# COMPATIBILITÀ RUNTIME (deferred):
+#   Il record DB attuale ha id="borea" (legacy) e 2 user_heroes lo possiedono.
+#   Per non orfanare ownership, la ID migration "borea -> greek_borea" è
+#   DEFERRED a una task futura. In questo task aggiorniamo i metadata Bible
+#   sul record esistente, conservando id="borea" come anchor runtime e
+#   aggiungendo canonical_id="greek_borea" come future-ready.
+#
+#   hero_class resta "DPS" runtime (battle_engine ramifica DPS/Tank/Support);
+#   canonical_role="mage_aoe" è metadata Bible-compatible per il futuro
+#   evaluator V2 (RM1.14).
+BOREA_HERO_ID = "borea"  # legacy DB id (preservato per ownership integrity)
+BOREA_CANONICAL_ID = "greek_borea"  # Character Bible slug (future migration)
 BOREA_SEED = {
     "id": BOREA_HERO_ID,
+    "canonical_id": BOREA_CANONICAL_ID,
     "name": "Borea",
-    "rarity": 5,
+    "rarity": 6,
+    "max_stars": 15,
     "element": "wind",
-    "hero_class": "DPS",
+    "hero_class": "DPS",            # runtime-compat (DPS/Tank/Support)
+    "canonical_role": "mage_aoe",   # Bible-compat
     "faction": "greek",
+    "origin_group": "anemoi",
+    "category": "deity",
+    "release_group": "launch_extra_premium",
+    "is_official": True,
+    "is_premium": True,
+    "is_extra_premium": True,
     "image_url": None,  # fallback: gradient stylized (in UI)
-    "description": "Il Vento del Nord, guida dei Novizi. Eroe iconico del tutorial.",
+    "image": "asset:greek_borea:splash",  # sentinel for future asset resolver
+    "description": "Il Vento del Nord, guida dei Novizi. Eroe iconico del tutorial e Anemoi extra premium.",
     "base_stats": {
-        "hp": 10200, "speed": 155, "physical_damage": 2800, "magic_damage": 2400,
-        "physical_defense": 520, "magic_defense": 480, "healing": 0,
-        "healing_received": 1.0, "damage_rate": 1.2, "penetration": 0.10,
-        "dodge": 0.08, "crit_chance": 0.25, "crit_damage": 1.8,
-        "hit_rate": 1.0, "combo_rate": 0.15, "block_rate": 0.05,
+        "hp": 10200, "speed": 155, "physical_damage": 2400, "magic_damage": 3200,
+        "physical_defense": 480, "magic_defense": 540, "healing": 0,
+        "healing_received": 1.0, "damage_rate": 1.2, "penetration": 0.12,
+        "dodge": 0.08, "crit_chance": 0.20, "crit_damage": 1.8,
+        "hit_rate": 1.0, "combo_rate": 0.10, "block_rate": 0.05,
     },
 }
 
 
 async def _ensure_borea_exists(db):
-    """Seed idempotente: crea Borea nel catalogo se non esiste."""
+    """Seed/patch idempotente: se Borea non esiste lo crea, altrimenti
+    sincronizza i campi Bible-canonical sul record esistente senza
+    sovrascrivere campi runtime non gestiti dal Bible (es. base_stats già
+    bilanciate, sprite_sheet_base64 generati).
+
+    RM1.16: idempotente. Sicuro a rieseguire più volte.
+    """
     existing = await db.heroes.find_one({"id": BOREA_HERO_ID})
     if not existing:
         doc = {**BOREA_SEED, "created_at": datetime.utcnow()}
         await db.heroes.insert_one(doc)
         return True
+    # Sincronizza solo i campi canonical Bible-mandated. NON tocchiamo
+    # base_stats/sprite_sheet_base64/image_base64 se già presenti — solo
+    # metadata.
+    canonical_patch = {
+        "canonical_id": BOREA_CANONICAL_ID,
+        "rarity": 6,
+        "max_stars": 15,
+        "element": "wind",
+        "canonical_role": "mage_aoe",
+        "faction": "greek",
+        "origin_group": "anemoi",
+        "category": "deity",
+        "release_group": "launch_extra_premium",
+        "is_official": True,
+        "is_premium": True,
+        "is_extra_premium": True,
+    }
+    # Patch only fields that differ to keep this update minimal and safe.
+    diff = {k: v for k, v in canonical_patch.items() if existing.get(k) != v}
+    if diff:
+        await db.heroes.update_one({"id": BOREA_HERO_ID}, {"$set": diff})
     return False
+
+
+# ===================== BERSERKER (Launch Base — Norse 3*) =====================
+# RM1.16 — Nuovo seed ufficiale: Berserker non era in DB nonostante gli
+# asset esistano (/app/frontend/assets/heroes/berserker_sprites/* +
+# norse_berserker.jpg). Aggiunto come launch_base ufficiale Bible-compat.
+BERSERKER_HERO_ID = "norse_berserker"  # Character Bible canonical slug
+BERSERKER_SEED = {
+    "id": BERSERKER_HERO_ID,
+    "canonical_id": BERSERKER_HERO_ID,
+    "name": "Berserker",
+    "rarity": 3,
+    "max_stars": 8,
+    "element": "fire",
+    "hero_class": "DPS",            # runtime-compat
+    "canonical_role": "dps_melee",  # Bible-compat
+    "faction": "norse",
+    "origin_group": "berserkers",
+    "category": "mythic_archetype",
+    "release_group": "launch_base",
+    "is_official": True,
+    "is_premium": False,
+    "is_extra_premium": False,
+    "image_url": None,
+    "image": "asset:norse_berserker:splash",  # sentinel for future resolver
+    "description": (
+        "Furia del nord. Guerriero norreno in stato di trance battagliera, "
+        "infligge danno crescente quanto è ferito."
+    ),
+    "base_stats": {
+        # Profilo 3* fire dps_melee: HP medio, attack alto melee, velocità
+        # decente, defense bassa-media, crit rate competitivo per 3*.
+        "hp": 8200, "speed": 110, "physical_damage": 1800, "magic_damage": 600,
+        "physical_defense": 700, "magic_defense": 450, "healing": 0,
+        "healing_received": 1.0, "damage_rate": 1.15, "penetration": 0.08,
+        "dodge": 0.05, "crit_chance": 0.18, "crit_damage": 1.7,
+        "hit_rate": 1.0, "combo_rate": 0.10, "block_rate": 0.04,
+    },
+}
+
+
+async def _ensure_berserker_exists(db):
+    """Seed/patch idempotente per Berserker. RM1.16."""
+    existing = await db.heroes.find_one({"id": BERSERKER_HERO_ID})
+    if not existing:
+        doc = {**BERSERKER_SEED, "created_at": datetime.utcnow()}
+        await db.heroes.insert_one(doc)
+        return True
+    canonical_patch = {
+        "canonical_id": BERSERKER_HERO_ID,
+        "rarity": 3,
+        "max_stars": 8,
+        "element": "fire",
+        "canonical_role": "dps_melee",
+        "faction": "norse",
+        "origin_group": "berserkers",
+        "category": "mythic_archetype",
+        "release_group": "launch_base",
+        "is_official": True,
+        "is_premium": False,
+        "is_extra_premium": False,
+    }
+    diff = {k: v for k, v in canonical_patch.items() if existing.get(k) != v}
+    if diff:
+        await db.heroes.update_one({"id": BERSERKER_HERO_ID}, {"$set": diff})
+    return False
+
+
+# ===================== HOPLITE (Launch Base — Greek 3*) =====================
+# RM1.16 — Hoplite è già perfettamente Bible-compat su id/element/rarity/
+# faction. Aggiungiamo solo i metadata Bible (max_stars, canonical_role,
+# origin_group, category, release_group, is_official, canonical_id) come
+# patch idempotente non distruttiva.
+HOPLITE_HERO_ID = "greek_hoplite"
+
+
+async def _ensure_hoplite_canonical(db):
+    """Patch idempotente metadata canonici Hoplite. RM1.16.
+    Non tocca element/rarity/hero_class/base_stats/asset esistenti."""
+    existing = await db.heroes.find_one({"id": HOPLITE_HERO_ID})
+    if not existing:
+        # Hoplite assente è uno scenario anomalo (è il record-pilota); in
+        # tal caso NON facciamo seed automatico: lasciamo segnale al log e
+        # ritorniamo. La ricreazione spetta al seed_database originale.
+        return None
+    canonical_patch = {
+        "canonical_id": HOPLITE_HERO_ID,
+        "max_stars": 8,
+        "canonical_role": "tank",
+        "origin_group": "phalanx",
+        "category": "mythic_archetype",
+        "release_group": "launch_base",
+        "is_official": True,
+        "is_premium": False,
+        "is_extra_premium": False,
+    }
+    diff = {k: v for k, v in canonical_patch.items() if existing.get(k) != v}
+    if diff:
+        await db.heroes.update_one({"id": HOPLITE_HERO_ID}, {"$set": diff})
+    return False
+
+
+async def _ensure_canonical_roster_metadata(db):
+    """RM1.16 — Esegue tutti i seed/patch canonici idempotenti
+    (Borea, Berserker, Hoplite) in un solo punto.
+    Sicuro a chiamare ad ogni request (le find_one + update mirate sono
+    O(1) con index su id)."""
+    await _ensure_borea_exists(db)
+    await _ensure_berserker_exists(db)
+    await _ensure_hoplite_canonical(db)
 
 
 # ===================== ROUTE REGISTRATION =====================
@@ -199,8 +363,11 @@ def register_sanctuary_routes(router, db, get_current_user, serialize_doc):
          2. Altrimenti → user.home_hero_id se presente
          3. Fallback → primo eroe 6★ posseduto, poi qualsiasi primo posseduto
         """
-        # Ensure Borea exists in catalog (idempotent)
-        await _ensure_borea_exists(db)
+        # RM1.16 — Ensure canonical roster metadata (Borea + Berserker +
+        # Hoplite) idempotently. Replaces the legacy _ensure_borea_exists
+        # call with the wrapper that also handles Berserker seed + Hoplite
+        # canonical patch.
+        await _ensure_canonical_roster_metadata(db)
 
         # Tutorial mode?
         in_tutorial = current_user.get("in_tutorial", True)
