@@ -499,7 +499,11 @@ export default function HomeTab() {
             <HomeBottomNav
               goTo={goTo}
               onChat={() => setChatOpen(true)}
-              onMenu={() => setOverflowOpen(true)}
+              // TASK 4.5-D — Unified Menu: il bottone MENU della Home ora apre il
+              // canonical menu (/(tabs)/menu). L'Overflow legacy resta nel codice
+              // come safety-net per eventuali HUD slot con route vuota (research/skill),
+              // ma NON è più raggiungibile dal pulsante MENU.
+              onMenu={() => router.push('/(tabs)/menu' as any)}
             />
 
             {/* BLOCCO 11 — OVERFLOW (feature residue) */}

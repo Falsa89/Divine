@@ -11,6 +11,9 @@ const CATEGORIES = [
   {
     title: 'Combattimento',
     items: [
+      { label: 'Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
+      { label: 'Torre', icon: '\uD83C\uDFEF', route: '/tower', gradient: ['#8844FF', '#5522CC'] as const },
+      { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pvp', gradient: ['#FF4444', '#CC2222'] as const },
       { label: 'Equipaggiamento', icon: '\uD83D\uDDE1\uFE0F', route: '/equipment', gradient: ['#44CC88', '#229966'] as const },
       { label: 'Oggetti Esclusivi', icon: '\uD83D\uDC51', route: '/exclusive', gradient: ['#FFD700', '#CC9900'] as const },
     ],
@@ -19,6 +22,7 @@ const CATEGORIES = [
     title: 'Progressione',
     items: [
       { label: 'Addestramento Eroico', icon: '\u2694\uFE0F', route: '/hero-training', gradient: ['#FFD700', '#BB55FF'] as const },
+      { label: 'Santuario', icon: '\u26E9\uFE0F', route: '/sanctuary', gradient: ['#FF77CC', '#CC5599'] as const },
       { label: 'Artefatti & Costellazioni', icon: '\uD83D\uDC8E', route: '/artifacts', gradient: ['#BB55FF', '#8833CC'] as const },
       { label: 'Soul Forge', icon: '\uD83D\uDC80', route: '/soul-forge', gradient: ['#9944FF', '#6622CC'] as const },
       { label: 'Aure & Cosmetici', icon: '\u2728', route: '/cosmetics', gradient: ['#FFD700', '#DD9900'] as const },
@@ -46,6 +50,7 @@ const CATEGORIES = [
       { label: 'Raid Cooperativi', icon: '\uD83D\uDC32', route: '/raid', gradient: ['#FF5544', '#CC3322'] as const },
       { label: 'Conquista Territori', icon: '\uD83C\uDFAF', route: '/territory', gradient: ['#CC4488', '#992266'] as const },
       { label: 'Piazza Comunitaria', icon: '\uD83C\uDFAA', route: '/plaza', gradient: ['#44AAFF', '#2288CC'] as const },
+      { label: 'Messaggi', icon: '\uD83D\uDCEC', route: '/dm', gradient: ['#44AAFF', '#2288CC'] as const },
     ],
   },
   {
