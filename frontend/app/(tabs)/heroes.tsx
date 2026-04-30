@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ScrollView,
   ActivityIndicator, Image, Dimensions, TextInput,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
@@ -19,6 +19,7 @@ const { width } = Dimensions.get('window');
 
 export default function HeroesTab() {
   const router = useRouter();
+  const { userHeroesVersion } = useAuth();
   const [heroes, setHeroes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<any>(null);
@@ -28,13 +29,20 @@ export default function HeroesTab() {
   const [minStars, setMinStars] = useState(1);
   const [classFilter, setClassFilter] = useState('all');
 
-  useEffect(() => { load(); }, []);
   const load = async () => {
     try {
       const d = await apiCall('/api/user/heroes');
       setHeroes(d || []);
     } catch(e){} finally { setLoading(false); }
   };
+
+  // RM1.16-B: refresh on focus + on userHeroesVersion bump (post-summon).
+  // Sostituisce il vecchio useEffect(load, []) che caricava una sola volta.
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [userHeroesVersion]),
+  );
 
   const elements = ['all', 'fire', 'water', 'earth', 'wind', 'thunder', 'light', 'shadow'];
   const classOptions = ['all', 'DPS', 'Tank', 'Support'];

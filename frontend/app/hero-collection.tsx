@@ -63,7 +63,7 @@ type FilterOwned = 'all' | 'owned' | 'locked';
 
 export default function HeroCollection() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, userHeroesVersion } = useAuth();
   const [loading, setLoading] = useState(true);
   const [allHeroes, setAllHeroes] = useState<Hero[]>([]);
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set());
@@ -115,7 +115,8 @@ export default function HeroCollection() {
       cancelled = true;
       clearTimeout(safetyTimer);
     };
-  }, [token]);
+    // RM1.16-B: re-fetch quando userHeroesVersion bumpa (post-summon).
+  }, [token, userHeroesVersion]);
 
   // Ordina per rarità desc, poi per posseduti prima
   const filtered = useMemo(() => {

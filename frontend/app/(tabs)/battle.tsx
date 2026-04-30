@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ScrollView,
   ActivityIndicator, Alert, Image, Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
@@ -35,7 +35,7 @@ type SortKey = 'rarity' | 'level' | 'power' | 'name';
 
 export default function BattleTab() {
   const router = useRouter();
-  const { refreshUser } = useAuth();
+  const { refreshUser, userHeroesVersion } = useAuth();
   const [heroes, setHeroes] = useState<any[]>([]);
   // grid[col][row] = hero | null  (col: 0=Support, 1=DPS, 2=Tank; row: 0,1,2)
   const [grid, setGrid] = useState<(any | null)[][]>([[null, null, null], [null, null, null], [null, null, null]]);
@@ -50,7 +50,15 @@ export default function BattleTab() {
   const [showConstellations, setShowConstellations] = useState(false);
   const [synergies, setSynergies] = useState<any[]>([]);
 
-  useEffect(() => { loadData(); }, []);
+  // RM1.16-B: refresh on focus + on userHeroesVersion bump (post-summon),
+  // così la formation picker mostra subito i nuovi eroi pullati senza
+  // richiedere restart dell'app. La grid già piazzata viene preservata se
+  // tutti i suoi user_hero_id risolvono ancora nel nuovo `uh`.
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [userHeroesVersion]),
+  );
 
   // Load synergies whenever grid changes
   useEffect(() => {

@@ -49,7 +49,7 @@ const BANNERS = [
 ];
 
 export default function GachaTab() {
-  const { user, refreshUser } = useAuth();
+  const { user, refreshUser, bumpUserHeroesVersion } = useAuth();
   const [pulling, setPulling] = useState(false);
   const [results, setResults] = useState<any[]>([]);
   const [show, setShow] = useState(false);
@@ -94,6 +94,14 @@ export default function GachaTab() {
         }
       }
       setShow(true); await refreshUser();
+      // RM1.16-B: invalida la cache del roster utente sulle schermate
+      // Heroes / Hero Collection / Battle formation, così i nuovi eroi
+      // (es. Borea pullata) appaiono senza richiedere restart dell'app.
+      // I banner artifact/constellation non aggiungono eroi, ma il bump è
+      // innocuo (stesso costo di un setState int).
+      if (banner !== 'artifact' && banner !== 'constellation') {
+        bumpUserHeroesVersion();
+      }
     } catch (e: any) { setResults([{ error: e.message }]); setShow(true); }
     finally { setPulling(false); }
   };

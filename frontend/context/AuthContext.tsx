@@ -20,6 +20,14 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
+  /**
+   * Versione monotona del roster utente. Bumpata dopo eventi che alterano
+   * /api/user/heroes (gacha pull, ascension, fusion, ecc.).
+   * Le schermate consumer la usano come dependency in useFocusEffect /
+   * useEffect per invalidare la cache stale (TASK RM1.16-B).
+   */
+  userHeroesVersion: number;
+  bumpUserHeroesVersion: () => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, username: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -30,6 +38,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   token: null,
   loading: true,
+  userHeroesVersion: 0,
+  bumpUserHeroesVersion: () => {},
   login: async () => {},
   register: async () => {},
   logout: async () => {},
@@ -40,6 +50,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  // RM1.16-B: cache invalidation counter per il roster utente.
+  const [userHeroesVersion, setUserHeroesVersion] = useState(0);
+
+  const bumpUserHeroesVersion = () => setUserHeroesVersion((v) => v + 1);
 
   useEffect(() => {
     loadStoredAuth();
@@ -94,7 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, token, loading, userHeroesVersion, bumpUserHeroesVersion, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
