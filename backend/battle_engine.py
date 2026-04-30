@@ -215,6 +215,15 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
         char['status_effects'] = []
         char['is_alive'] = True
         char['total_damage_dealt'] = 0
+        # v16.29 — Battle Report counters: damage subito + heal effettuato.
+        # Usati solo per stats post-battle (NON influenzano combat balance).
+        # damage_received: incrementato dove total_damage_received per target
+        # quando damage viene applicato a HP (skill, AoE, DoT). Usa l'actual
+        # HP delta (capped a 0..max_hp) per evitare di contare overkill.
+        # healing_done:    incrementato per il caster di un'azione di heal
+        # con l'actual HP restored (capped a max_hp_battle) per evitare overheal.
+        char['total_damage_received'] = 0
+        char['total_healing_done'] = 0
         # has_ultimate: rarità ≤ 3 NON ha ultimate (per volontà utente)
         char['has_ultimate'] = int(char.get('rarity', 1)) > 3
     
@@ -345,7 +354,12 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
             for passive in char.get('passives', []):
                 if 'heal_per_turn' in passive.get('effect', {}):
                     heal_amount = int(char['max_hp_battle'] * passive['effect']['heal_per_turn'])
+                    # v16.29: actual_heal = HP delta reale (capped a max_hp_battle)
+                    # per evitare di contare overheal nel total_healing_done.
+                    old_hp = char['current_hp']
                     char['current_hp'] = min(char['max_hp_battle'], char['current_hp'] + heal_amount)
+                    actual_heal = char['current_hp'] - old_hp
+                    char['total_healing_done'] = char.get('total_healing_done', 0) + actual_heal
                     turn_log['actions'].append({
                         "type": "heal", "actor": char['name'], "actor_id": char['id'],
                         "team": team_id, "amount": heal_amount, "animation": "heal_green",
@@ -381,8 +395,8 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
         "battle_log": battle_log,
         "team_a_survivors": team_a_alive_count,
         "team_b_survivors": team_b_alive_count,
-        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 150), "rage_threshold": c.get('rage_threshold', 100), "has_ultimate": c.get('has_ultimate', False), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_a],
-        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 150), "rage_threshold": c.get('rage_threshold', 100), "has_ultimate": c.get('has_ultimate', False), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
+        "team_a_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 150), "rage_threshold": c.get('rage_threshold', 100), "has_ultimate": c.get('has_ultimate', False), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "damage_received": c.get('total_damage_received', 0), "healing_done": c.get('total_healing_done', 0), "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_a],
+        "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 150), "rage_threshold": c.get('rage_threshold', 100), "has_ultimate": c.get('has_ultimate', False), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "damage_received": c.get('total_damage_received', 0), "healing_done": c.get('total_healing_done', 0), "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
         "mvp": max(team_a, key=lambda c: c['total_damage_dealt'])['name'] if victory else None,
     }
     
@@ -449,17 +463,26 @@ def execute_skill(attacker: dict, target: dict, all_enemies: list, skill: dict, 
         for enemy in all_enemies:
             if enemy['is_alive']:
                 dmg = int(total_damage * random.uniform(0.85, 1.0))
+                # v16.29: actual_dmg cattura il HP delta reale (capped a remaining_hp)
+                # per evitare di contare overkill nel total_damage_received.
+                old_hp = enemy['current_hp']
                 enemy['current_hp'] = max(0, enemy['current_hp'] - dmg)
+                actual_dmg = old_hp - enemy['current_hp']
                 if enemy['current_hp'] <= 0:
                     enemy['is_alive'] = False
                 attacker['total_damage_dealt'] += dmg
+                enemy['total_damage_received'] = enemy.get('total_damage_received', 0) + actual_dmg
                 targets_hit.append({"name": enemy['name'], "id": enemy['id'], "damage": dmg, "killed": not enemy['is_alive'], "hp_remaining": enemy['current_hp']})
     else:
         # Single target
+        # v16.29: actual_dmg HP delta reale (capped) per total_damage_received.
+        old_hp = target['current_hp']
         target['current_hp'] = max(0, target['current_hp'] - total_damage)
+        actual_dmg = old_hp - target['current_hp']
         if target['current_hp'] <= 0:
             target['is_alive'] = False
         attacker['total_damage_dealt'] += total_damage
+        target['total_damage_received'] = target.get('total_damage_received', 0) + actual_dmg
         targets_hit.append({"name": target['name'], "id": target['id'], "damage": total_damage, "killed": not target['is_alive'], "hp_remaining": target['current_hp']})
     
     # Apply status effect
@@ -523,7 +546,14 @@ def process_status_effects(char: dict) -> list:
     for effect in char.get('status_effects', []):
         if effect['type'] in ('burn', 'poison', 'bleed'):
             dot_damage = int(char['max_hp_battle'] * effect.get('damage_per_turn', 0.05))
+            # v16.29: actual_dmg HP delta reale (capped) per total_damage_received.
+            # NOTE: il DoT non aggiunge a total_damage_dealt del source perché il
+            # legacy code non lo faceva (il DoT è "danno residuo" non attribuito
+            # al caster come hit diretto). Solo damage_received del target.
+            old_hp = char['current_hp']
             char['current_hp'] = max(0, char['current_hp'] - dot_damage)
+            actual_dmg = old_hp - char['current_hp']
+            char['total_damage_received'] = char.get('total_damage_received', 0) + actual_dmg
             if char['current_hp'] <= 0:
                 char['is_alive'] = False
             

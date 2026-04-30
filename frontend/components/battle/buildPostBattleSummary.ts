@@ -1,34 +1,34 @@
 /**
- * Post-Battle Summary — adapter/builder (v16.22 Foundation, v16.28 wired)
+ * Post-Battle Summary — adapter/builder (v16.22 Foundation, v16.28+v16.29 wired)
  * ─────────────────────────────────────────────────────────────────────
  * Converte il `result` object dell'API combat (formato esistente)
  * + lo state runtime di battaglia in un PostBattleSummaryData che la UI
  * sa come renderizzare.
  *
- * STATO DATI (v16.28 wiring):
- *  - REAL  → damage_dealt: viene da `team_a_final[i].damage_dealt` /
- *            `team_b_final[i].damage_dealt` (backend battle_engine.py
- *            traccia `total_damage_dealt` per char, increment a ogni hit
- *            in 455+462; esposto a riga 384-385). Combat.tsx popola
- *            teamA/teamB dai final → il valore arriva intatto qui.
- *  - REAL  → mvp ally:    backend `result.mvp` è il NAME dell'eroe top
- *            damage_dealt del team_a (battle_engine.py:386). Solo
- *            valorizzato in caso di victory; altrimenti null/None.
- *  - REAL  → mvp enemy:   backend non lo espone direttamente, ma
- *            calcolarlo dal `damage_dealt` reale degli enemy ora è
- *            altrettanto reale (top-damage del team_b).
- *  - MOCK  → damage_received: backend NON traccia ancora un counter
- *            `total_damage_received`. Placeholder deterministico finché
- *            non arriva.
- *  - MOCK  → healing_done: backend NON traccia ancora un counter
- *            `total_healing_done`. Placeholder deterministico finché
- *            non arriva.
- *  - MOCK  → exp_to_next per user_hero (curve formali). Backend
- *            persiste level/exp ma non espone exp/exp_to_next al
- *            payload di battle. Placeholder formula `level * 100`.
+ * STATO DATI (v16.29 wiring):
+ *  - REAL  → damage_dealt:    da `team_*_final[i].damage_dealt`
+ *            (battle_engine.py 217 init total_damage_dealt, 455+462 increment).
+ *  - REAL  → damage_received: da `team_*_final[i].damage_received`
+ *            (v16.29 — battle_engine.py 218-225 init total_damage_received,
+ *            increment per HP-actual delta nei punti damage application:
+ *            AoE skill, single target, DoT). Capped a HP rimanenti per
+ *            evitare overkill.
+ *  - REAL  → healing_done:    da `team_*_final[i].healing_done`
+ *            (v16.29 — battle_engine.py increment per HP-actual delta nei
+ *            punti heal application: passive heal_per_turn). Capped a
+ *            max_hp_battle per evitare overheal.
+ *  - REAL  → mvp ally:        backend `result.mvp` = name dell'eroe top
+ *            damage_dealt del team_a (battle_engine.py:386), valorizzato
+ *            solo in caso di victory.
+ *  - REAL  → mvp enemy:       calcolato sul damage_dealt reale del team_b
+ *            (top-damage). Backend non lo espone direttamente.
+ *  - MOCK  → exp_to_next:     curve formali per user_hero. Backend
+ *            persiste level/exp ma non espone exp/exp_to_next nel battle
+ *            payload. Placeholder formula `level * 100`.
  *
- * TODO (TASK 4.4-C): Replace when backend exposes damage_received and
- * healing_done counters. Update this file ONLY then.
+ * FALLBACK fields (kept solo per legacy payloads / variant senza counter):
+ *  damage_dealt_fallback, damage_received_mock, healing_done_mock —
+ *  usati esclusivamente quando il payload non contiene il campo numerico.
  */
 import type {
   PostBattleSummaryData, RewardItem, HeroExpBreakdown, BattleStat, BattleReport,
@@ -138,45 +138,47 @@ function buildHeroExp(result: any, teamA: any[]): HeroExpBreakdown[] {
 // ─────────────────────────────────────────────────────────────────────
 
 /**
- * Mock fallback ONLY for fields the backend does not yet track.
+ * Mock fallback ONLY for legacy payloads where backend counters are missing.
  * Deterministic by rarity/level/idx so unit più forti mostrino numeri
  * più alti coerenti tra runs della stessa battaglia.
  *
- * TODO: Replace when backend exposes damage_received and healing_done counters.
- * (See battle_engine.py — `total_damage_dealt` already exists per char on
- * line 217/455/462; equivalent counters per damage_received/healing_done
- * are NOT implemented yet.)
+ * v16.29: backend ora traccia total_damage_dealt + total_damage_received
+ * + total_healing_done per char (battle_engine.py). I campi sotto sono
+ * usati SOLO se il payload non contiene il valore numerico atteso (es.
+ * vecchi payload pre-v16.29 in cache, o flussi che non passano
+ * team_*_final).
  */
 function getMockBattleStatsFallback(c: any, idx: number): {
   damage_dealt_fallback: number;
-  damage_received_mock: number;
-  healing_done_mock: number;
+  damage_received_fallback: number;
+  healing_done_fallback: number;
 } {
   const rar = Math.max(1, Math.min(6, c.rarity || 3));
   const lvl = Math.max(1, c.level || 1);
   const base = rar * 1500 + lvl * 60 + (idx * 73);
   return {
-    // Fallback only: used solo se il payload non ha damage_dealt numerico
-    // (caso storico / backend che non passa team_*_final).
-    damage_dealt_fallback: Math.round(base * (0.85 + (idx % 3) * 0.07)),
-    // MOCK: backend non traccia damage_received per unit ancora.
-    damage_received_mock:  Math.round(base * (0.55 + (idx % 4) * 0.06)),
-    // MOCK: backend non traccia healing_done per unit ancora.
-    healing_done_mock:    (c.role === 'support' || c.element === 'divine')
-                            ? Math.round(base * 0.42)
-                            : Math.round(base * 0.05),
+    // Fallback only for legacy payloads where backend counters are missing.
+    damage_dealt_fallback:    Math.round(base * (0.85 + (idx % 3) * 0.07)),
+    damage_received_fallback: Math.round(base * (0.55 + (idx % 4) * 0.06)),
+    healing_done_fallback:   (c.role === 'support' || c.element === 'divine')
+                              ? Math.round(base * 0.42)
+                              : Math.round(base * 0.05),
   };
 }
 
 /**
  * Builds BattleStat[] from teams.
  *
- * v16.28 wiring:
- *  - REAL damage_dealt da `c.damage_dealt` (popolato da team_*_final).
- *  - MOCK damage_received / healing_done finché backend non espone counter.
+ * v16.29 wiring:
+ *  - REAL damage_dealt    da `c.damage_dealt`    (team_*_final).
+ *  - REAL damage_received da `c.damage_received` (team_*_final).
+ *  - REAL healing_done    da `c.healing_done`    (team_*_final).
  *  - MVP: prima prova match per `mvpName` (string nome) dal backend
  *    (esiste solo per ally team, e solo se victory). Fallback: top-damage
  *    della squadra — ora è un fallback REALE perché damage_dealt è reale.
+ *
+ * Type-safe checks (typeof === 'number') per gestire correttamente il
+ * caso 0 (real value valido per unit che non ha mai colpito/subito/curato).
  */
 function buildBattleStats(team: any[], side: 'ally' | 'enemy', mvpName?: string): {
   stats: BattleStat[];
@@ -184,14 +186,19 @@ function buildBattleStats(team: any[], side: 'ally' | 'enemy', mvpName?: string)
 } {
   const stats: BattleStat[] = team.map((c, idx) => {
     const fallback = getMockBattleStatsFallback(c, idx);
-    // REAL: consuma damage_dealt dal payload server (team_a_final/team_b_final).
-    // 0 è un valore REALE valido (unit che non ha mai colpito) → check di tipo,
-    // NON falsy check. Solo se il campo è proprio assente/non numerico,
-    // si ricade sul deterministico fallback.
+    // REAL values — type-safe consumption (0 is valid).
     const damage_dealt: number =
       typeof c.damage_dealt === 'number'
         ? c.damage_dealt
         : fallback.damage_dealt_fallback;
+    const damage_received: number =
+      typeof c.damage_received === 'number'
+        ? c.damage_received
+        : fallback.damage_received_fallback;
+    const healing_done: number =
+      typeof c.healing_done === 'number'
+        ? c.healing_done
+        : fallback.healing_done_fallback;
 
     return {
       unit_id: c.user_hero_id || c.id || `${side}-${idx}`,
@@ -201,9 +208,8 @@ function buildBattleStats(team: any[], side: 'ally' | 'enemy', mvpName?: string)
       element: c.element,
       team: side,
       damage_dealt,
-      // MOCK fields (placeholder until backend tracking lands):
-      damage_received: fallback.damage_received_mock,
-      healing_done:    fallback.healing_done_mock,
+      damage_received,
+      healing_done,
       survived: c.is_alive !== false,
     };
   });
