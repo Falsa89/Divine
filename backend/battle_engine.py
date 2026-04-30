@@ -170,6 +170,37 @@ PASSIVE_SKILLS = {
     6: [{"name": "Divino", "effect": {"all_stats": 0.15}, "icon": "👑"}, {"name": "Invincibilità Temporanea", "effect": {"invincible_turns_start": 1}, "icon": "🌟"}, {"name": "Super Armatura", "effect": {"damage_reduction": 0.20, "status_immunity": 0.80}, "icon": "⚜️"}],
 }
 
+# ─────────────────────────────────────────────────────────────────────
+# DEV TEST ONLY — temporary heal source for validating Battle Report
+# `healing_done` counter end-to-end.
+#
+# This dict adds extra passives to specific heroes by NAME (stable across
+# UUIDs/restarts). The merge happens in init_combat_char at the same site
+# where rarity_passives are assigned to char['passives'].
+#
+# Reuses the EXISTING `heal_per_turn` branch in process_turn() — no new
+# engine mechanic is introduced. Only data.
+#
+# NOT FINAL HERO DESIGN. Move/remove when the formal kit/skill system is
+# wired up. Match by `name` so the same dev passive applies regardless of
+# the user_hero instance used.
+# ─────────────────────────────────────────────────────────────────────
+DEV_TEST_HEAL_HEROES = {
+    'Hera': [
+        # Hera è una Support rarity 4 (greek/light) — semantica naturale per
+        # un test di healing_done. heal_per_turn=0.05 (5% max_hp/turn) è
+        # sufficientemente alto per essere chiaramente osservabile in UI senza
+        # influenzare il balance complessivo della battle (passive scatta solo
+        # se Hera è viva e ha subito damage; capped a max_hp).
+        {
+            "name": "Cura di Hera (DEV TEST)",
+            "effect": {"heal_per_turn": 0.05},
+            "icon": "💚",
+            "note": "DEV_TEST_ONLY: temporary heal for healing_done validation. Not final design.",
+        },
+    ],
+}
+
 
 def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
     """
@@ -630,9 +661,12 @@ def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, posit
     else:
         char['skills'] = {}
     
-    # Get passives based on rarity
+    # Get passives based on rarity (+ DEV_TEST_HEAL_HEROES extras by name)
     rarity_passives = PASSIVE_SKILLS.get(min(rarity, 6), PASSIVE_SKILLS.get(1, []))
-    char['passives'] = rarity_passives
+    # DEV TEST ONLY — append per-hero extra passives keyed by name.
+    # Does NOT replace rarity_passives; only adds entries (e.g. Hera +heal_per_turn).
+    extra_passives = DEV_TEST_HEAL_HEROES.get(char.get('name'), [])
+    char['passives'] = list(rarity_passives) + list(extra_passives)
     
     # Apply passive stat bonuses
     for passive in char['passives']:
