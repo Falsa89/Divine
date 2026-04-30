@@ -28,6 +28,7 @@ const CATEGORIES = [
   {
     title: 'Economia',
     items: [
+      { label: 'Tesoreria', icon: '\uD83C\uDFE6', route: '/treasury', gradient: ['#FFD700', '#4499FF'] as const },
       { label: 'Economia & Negozi', icon: '\uD83D\uDCB0', route: '/economy', gradient: ['#FFD700', '#CC9900'] as const },
       { label: 'Inventario', icon: '\uD83C\uDF92', route: '/inventory', gradient: ['#FF8844', '#CC6622'] as const },
       { label: 'Negozio Oggetti', icon: '\uD83D\uDED2', route: '/item-shop', gradient: ['#44DD88', '#22AA66'] as const },
