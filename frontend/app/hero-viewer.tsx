@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, Image, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, Image, Platform, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import { apiCall } from '../utils/api';
 import {
   isGreekHoplite,
@@ -9,8 +10,6 @@ import {
   GREEK_HOPLITE_NAME,
   heroFullscreenSource,
   getHeroContract,
-  getHeroUiFraming,
-  hasHeroUiContract,
 } from '../components/ui/hopliteAssets';
 import { RARITY, ELEMENTS } from '../constants/theme';
 
@@ -23,35 +22,42 @@ export default function HeroViewerScreen() {
   const [hero, setHero] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // RM1.17-R — Fullscreen portrait verticale con height-priority.
-  // L'app resta landscape globalmente; qui usiamo height come dimensione
-  // guida (portraitHeight = height*0.92) e width ricavato dall'aspect 2:3
-  // della sorgente. Se UI contract ha verticalPriority=true applichiamo
-  // il fit height-priority. Niente caption/nome sotto.
-  const fullscreenFraming =
-    hasHeroUiContract(heroId, hero?.name || heroNameParam)
-      ? getHeroUiFraming(heroId, hero?.name || heroNameParam, 'fullscreen')
-      : null;
+  // RM1.17-S — Orientation lock: il viewer è l'unica rotta in PORTRAIT_UP.
+  // All'unmount si ripristina il lock globale LANDSCAPE (vedi _layout.tsx).
+  // Su web il lock fallisce silenziosamente → useWindowDimensions riflette
+  // comunque le dimensioni correnti del container.
+  useEffect(() => {
+    const lockPortrait = async () => {
+      if (Platform.OS === 'web') return;
+      try {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      } catch (e) {
+        console.warn('[HeroViewer] portrait lock failed', e);
+      }
+    };
+    lockPortrait();
+    return () => {
+      (async () => {
+        if (Platform.OS === 'web') return;
+        try {
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+        } catch (e) {
+          console.warn('[HeroViewer] restore landscape failed', e);
+        }
+      })();
+    };
+  }, []);
+
+  // Target box true portrait: height-priority su tutto lo schermo verticale,
+  // width clampata alla larghezza device. Con device effettivamente ruotato
+  // in portrait, height > width → portrait naturale a tutto schermo.
   const contract = getHeroContract(heroId, hero?.name || heroNameParam);
-  const useHeightPriority = fullscreenFraming?.verticalPriority === true;
-  // Aspect della sorgente (portrait 2/3, square 1, landscape 3/2)
   const srcAspect =
     contract.crop.sourceAspect === 'portrait' ? 2 / 3
     : contract.crop.sourceAspect === 'landscape' ? 3 / 2
     : 1;
-  // Target box: se height-priority → scala su altezza massimale (92%) e
-  // larghezza derivata dall'aspect (clampata a 90% dello schermo per
-  // sicurezza). Altrimenti comportamento legacy (square box Hoplite-like).
-  let portraitHeight: number;
-  let portraitWidth: number;
-  if (useHeightPriority) {
-    portraitHeight = Math.round(height * 0.92);
-    portraitWidth = Math.min(Math.round(portraitHeight * srcAspect), Math.round(width * 0.9));
-  } else {
-    const fullscreenBox = Math.min(width * 0.78, height * 0.95);
-    portraitWidth = fullscreenBox;
-    portraitHeight = fullscreenBox;
-  }
+  const portraitHeight = Math.round(height * 0.94);
+  const portraitWidth = Math.min(Math.round(portraitHeight * srcAspect), Math.round(width * 0.96));
 
   // Short-circuit: se è Greek Hoplite usa splash locale, nessuna API necessaria
   const isHoplite =

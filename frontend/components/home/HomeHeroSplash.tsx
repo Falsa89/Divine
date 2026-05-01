@@ -57,9 +57,10 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
   // semantica storica Home = overlay.
   const imageSentinel = hero.image && isHeroAssetSentinel(hero.image) ? hero.image : null;
   const remoteUrl = hero.image_url && !isHeroAssetSentinel(hero.image_url) ? hero.image_url : null;
-  // RM1.17-R — eroi con UI contract dedicato (Berserker e futuri) vanno
-  // sempre via HeroFramedImage con slot='home' → contract-driven framing.
-  const useUiContract = !isHop && hasHeroUiContract(hero.id, hero.name);
+  // RM1.17-S — UI contract path FIRST (Hoplite + Berserker + futuri eroi
+  // con ui.home configurato). Questo risolve il top-cut su Hoplite perché
+  // Hoplite ora ha ui.home = contain transparent.
+  const useUiContract = hasHeroUiContract(hero.id, hero.name);
 
   return (
     <TouchableOpacity
@@ -67,21 +68,9 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
       onPress={onPress}
       style={{ width, height, backgroundColor: 'transparent' }}
     >
-      {isHop ? (
-        // Hoplite Home overlay: cutout TRASPARENTE (base.png) — fonde col gradient.
-        // Tutti gli altri contesti UI (team-select/post-battle/list) usano
-        // variant='card' di default per mostrare la splash con sfondo.
-        <HeroPortrait
-          heroId={hero.id}
-          heroName={hero.name}
-          size={Math.min(width, height)}
-          variant="transparent"
-          containerStyle={{ width, height }}
-        />
-      ) : useUiContract ? (
-        // RM1.17-R — Eroi con UI contract (Berserker, future heroes):
-        // framing home contract-driven (contain, no crop testa). Niente
-        // più cutout con cover + focusY che tagliava la fronte.
+      {useUiContract ? (
+        // RM1.17-S — Eroi con UI contract (Hoplite, Berserker, future):
+        // framing home contract-driven (contain, no crop testa).
         <HeroFramedImage
           heroId={hero.id}
           heroName={hero.name}
@@ -90,9 +79,18 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
           boxW={width}
           boxH={height}
         />
+      ) : isHop ? (
+        // Fallback legacy: non dovrebbe più attivarsi (Hoplite ha ui contract),
+        // ma preservato per safety.
+        <HeroPortrait
+          heroId={hero.id}
+          heroName={hero.name}
+          size={Math.min(width, height)}
+          variant="transparent"
+          containerStyle={{ width, height }}
+        />
       ) : imageSentinel ? (
-        // RM1.17-E — Eroi con sentinel ma senza UI contract: delega a
-        // HeroPortrait con variant='transparent' (fallback legacy).
+        // RM1.17-E — Eroi con sentinel ma senza UI contract (fallback legacy).
         <HeroPortrait
           heroId={hero.id}
           heroName={hero.name}

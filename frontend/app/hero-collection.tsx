@@ -24,7 +24,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { isHopliteHero } from '../components/ui/HeroPortrait';
-import { GREEK_HOPLITE_PORTRAIT, heroPortraitSource } from '../components/ui/hopliteAssets';
+import { GREEK_HOPLITE_PORTRAIT, heroPortraitSource, hasHeroUiContract } from '../components/ui/hopliteAssets';
+import HeroFramedImage from '../components/ui/HeroFramedImage';
 import { apiCall } from '../utils/api';
 
 type Hero = {
@@ -239,11 +240,26 @@ export default function HeroCollection() {
                 >
                   {/* Portrait */}
                   <View style={st.portraitBox}>
-                    {isHopliteHero(h.id, h.name) ? (
-                      // Hoplite: usa lo splash con sfondo (PORTRAIT) renderizzato
-                      // con lo STESSO pattern degli altri eroi (RNImage che riempie
-                      // il portraitBox 1:1) → sizing identico a tutto il resto della
-                      // collection. Niente size fissa che lo renderebbe più piccolo.
+                    {hasHeroUiContract(h.id, h.name) ? (
+                      // RM1.17-S — eroi con UI contract (Hoplite, Berserker,
+                      // futuri): framing card contract-driven → volto mai
+                      // tagliato. Per Hoplite card=cover center (match legacy);
+                      // per Berserker card=contain (no crop).
+                      <View style={[{ width: '100%', height: '100%' }, !owned && st.portraitLocked]}>
+                        <HeroFramedImage
+                          heroId={h.id}
+                          heroName={h.name}
+                          imageUrl={h.image_url}
+                          slot="card"
+                          boxW={100}
+                          boxH={100}
+                          containerStyle={{ width: '100%', height: '100%' } as any}
+                          imageStyle={{ width: '100%', height: '100%' } as any}
+                        />
+                      </View>
+                    ) : isHopliteHero(h.id, h.name) ? (
+                      // Fallback legacy (Hoplite senza ui — non dovrebbe più
+                      // attivarsi, preservato per safety).
                       <RNImage
                         source={GREEK_HOPLITE_PORTRAIT}
                         style={[st.portrait, !owned && st.portraitLocked]}

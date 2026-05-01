@@ -642,6 +642,23 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
       removeDefaultGlow: false,        // legacy aura skill preservata
       useLegacyDefaultMotion: true,    // legacy motion preservato
     },
+    // RM1.17-S — UI contract per Hoplite. Fix Home top-cut usando contain.
+    // Gli slot NON-home preservano la semantica legacy (cover center / default)
+    // così gli altri contesti (card grid, hero-detail header via isHoplite
+    // short-circuit, selectedPreview via isGreekHoplite branch, fullscreen
+    // via isHoplite short-circuit in hero-viewer) non hanno regressioni.
+    ui: {
+      // Home: transparent cutout con contain → full hero visibile, no top cut.
+      home:            { variant: 'transparent', resizeMode: 'contain', focusY: 0.5, scale: 1.0 },
+      // Card/detailIcon: cover center preserva il look legacy per i consumer
+      // che passano attraverso HeroFramedImage (AnimatedHeroPortrait grid).
+      // Per Hoplite sourceAspect='square' → transform è noop, stesso risultato
+      // del RNImage plain cover legacy.
+      card:            { variant: 'card',        resizeMode: 'cover',   focusY: 0.5, scale: 1.0 },
+      detailIcon:      { variant: 'detail',      resizeMode: 'cover',   focusY: 0.5, scale: 1.0 },
+      selectedPreview: { variant: 'portrait',    resizeMode: 'contain', focusY: 0.5, scale: 1.0 },
+      fullscreen:      { variant: 'fullscreen',  resizeMode: 'contain', focusY: 0.5, scale: 1.0, verticalPriority: true },
+    },
   },
   // BERSERKER — primo esempio completo della pipeline future-proof.
   [NORSE_BERSERKER_ID]: {
@@ -686,22 +703,23 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
     // RM1.17-R — UI portrait framing per Berserker.
     // Sorgente splash.jpg 512×768 (2:3 portrait). Volto al ~25-30% dal top.
     // Cutout transparent.png 408×612 (2:3 portrait) stesso anchor.
-    // Tutti i valori sono tarati per NON tagliare fronte/testa in nessuno slot.
+    // RM1.17-S — card e detailIcon passati a 'contain' dopo verifica device:
+    // i valori di cover+focusY anche al clamp massimo tagliavano ancora la
+    // testa in certi edge cases. 'contain' garantisce che il VOLTO non sia
+    // MAI tagliato (letterbox sicuro sui lati per aspetti quadrati), a costo
+    // di un leggero sacrificio di presenza visiva — scelta consapevole:
+    // "faccia sempre visibile" > "ingrandimento aggressivo".
     ui: {
       // Home: cutout trasparente su gradient. No crop → full-body visibile.
-      // Scale 1.02 per leggera presenza, contain per letterbox safe.
       home:            { variant: 'transparent', resizeMode: 'contain', focusY: 0.5,  scale: 1.02 },
-      // Card 48×48: crop quadrato. FocusY alto (0.22) porta il volto al
-      // centro della cella; scale 1.08 zoom-in per enfatizzare testa+busto.
-      card:            { variant: 'card',        resizeMode: 'cover',   focusY: 0.22, scale: 1.08 },
-      // DetailIcon 80×80: stesso approccio della card, un filo meno zoom
-      // perché il box è più grande e serve un po' di busto.
-      detailIcon:      { variant: 'detail',      resizeMode: 'cover',   focusY: 0.24, scale: 1.05 },
-      // SelectedPreview (pannello destro Collezione): contain full portrait,
-      // presenza visiva comparabile a Hoplite (height-priority nel layout).
-      selectedPreview: { variant: 'portrait',    resizeMode: 'contain', focusY: 0.5,  scale: 1.0 },
+      // Card 48×48: RM1.17-S → contain + scale per massimizzare presenza
+      // senza mai tagliare la testa. Letterbox verticale neutro.
+      card:            { variant: 'card',        resizeMode: 'contain', focusY: 0.5,  scale: 1.0  },
+      // DetailIcon 80×80: RM1.17-S → contain, stesso rationale della card.
+      detailIcon:      { variant: 'detail',      resizeMode: 'contain', focusY: 0.5,  scale: 1.0  },
+      // SelectedPreview (pannello destro Collezione): contain full portrait.
+      selectedPreview: { variant: 'portrait',    resizeMode: 'contain', focusY: 0.5,  scale: 1.0  },
       // Fullscreen viewer: portrait verticale grande, height-priority.
-      // Nessun crop distruttivo, no landscape forzato.
       fullscreen:      { variant: 'fullscreen',  resizeMode: 'contain', focusY: 0.5,  scale: 1.0, verticalPriority: true },
     },
     runtimeSheets: {
