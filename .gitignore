@@ -286,3 +286,7 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# RM1.17-J — DB backups must never be committed (GH 100MB limit)
+backend/backups/
+*.zip
