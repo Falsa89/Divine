@@ -194,10 +194,16 @@ export default function HeroEncyclopediaScreen() {
                 {isHop ? (
                   <HeroPortrait heroId={data.hero_id} heroName={data.name} size={96} />
                 ) : data.image ? (
-                  <RNImage
-                    source={heroPortraitSource(data.image, data.hero_id, data.name)}
-                    style={{ width: 96, height: 96 }}
-                    resizeMode="cover"
+                  // RM1.17-K — usa HeroPortrait variant='detail' (splash +
+                  // focusY crop) invece di raw RNImage cover 96×96 che
+                  // tagliava il volto. aspect=1 (square box).
+                  <HeroPortrait
+                    heroId={data.hero_id}
+                    heroName={data.name}
+                    imageUri={data.image}
+                    size={96}
+                    aspect={1}
+                    variant="detail"
                   />
                 ) : (
                   <View style={st.portraitFallback}>

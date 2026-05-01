@@ -23,22 +23,16 @@ export default function HeroViewerScreen() {
   const [hero, setHero] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // RM1.17-G — Fullscreen orientation dal contract per-eroe. Per
-  // Berserker e futuri eroi portrait 2:3 usiamo bounding portrait:
-  // height = 0.95*screenH, width = height * 2/3. Per Hoplite (square)
-  // teniamo il legacy portraitHeight square.
+  // RM1.17-K — Fullscreen sizing Hoplite-like: la box è GRANDE e portrait-safe,
+  // identica a Hoplite (square box sized to min(width*0.78, height*0.95)).
+  // Il resizeMode='contain' letterboxa l'immagine mantenendo la sua aspect
+  // ratio naturale senza ridurla a uno strip stretto. Per Berserker
+  // (source 2:3 portrait) l'immagine riempie la larghezza, lascia strisce
+  // sopra/sotto (o viceversa) secondo orientation del device.
   const contract = getHeroContract(heroId, hero?.name || heroNameParam);
-  const wantPortrait = contract.viewer.fullscreenOrientation === 'portrait';
-  const portraitSourceAspect =
-    contract.crop.sourceAspect === 'portrait' ? (2/3)
-    : contract.crop.sourceAspect === 'landscape' ? (3/2)
-    : 1;
-  const portraitHeight = Math.round(height * 0.95);
-  // Se wantPortrait e la sorgente è 2:3, larghezza = height * 2/3 per
-  // rispettare aspect naturale senza destructive crop.
-  const portraitWidth = wantPortrait
-    ? Math.round(portraitHeight * portraitSourceAspect)
-    : portraitHeight;
+  const fullscreenBox = Math.min(width * 0.78, height * 0.95);
+  const portraitWidth = fullscreenBox;
+  const portraitHeight = fullscreenBox;
 
   // Short-circuit: se è Greek Hoplite usa splash locale, nessuna API necessaria
   const isHoplite =

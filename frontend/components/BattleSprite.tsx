@@ -351,6 +351,27 @@ export default function BattleSprite({
     character?.hero_name || character?.name,
   );
   const suppressGlow = battleContract.battle.removeDefaultGlow;
+  // RM1.17-K — Contract state-sprites hanno PRIORITÀ sopra hasSpriteSheet.
+  // Senza questo, un eroe ufficiale con sprite_url popolato (bot/legacy)
+  // rimarrebbe bloccato in sprite-sheet mode e non vedrebbe mai le sue
+  // animazioni PNG per-state. Hoplite resta in cima (branch separato).
+  const forceContractStateSprites = battleContract.battle.useStateSprites === true;
+
+  // Dev debug (OFF in production) — traccia la branch attiva per Berserker.
+  const BERSERKER_ASSET_DEBUG = false;
+  if (BERSERKER_ASSET_DEBUG && (character?.hero_id === 'norse_berserker' || character?.id === 'norse_berserker')) {
+    // eslint-disable-next-line no-console
+    console.log('[Berserker][BattleSprite]', {
+      id: character?.id,
+      hero_id: character?.hero_id,
+      hasSpriteSheet,
+      spriteUrl,
+      useStateSprites: battleContract.battle.useStateSprites,
+      forceContractStateSprites,
+      state,
+      heroImage,
+    });
+  }
 
   return (
     // ========================================================================
@@ -471,17 +492,57 @@ export default function BattleSprite({
               justifyContent: 'flex-end',
             }}
           >
-            {hasSpriteSheet ? (
-              // Sprite sheet mode: atlas N frame orizzontali, ogni frame size×frameH.
-              // FIX render stabilization:
-              //  - resizeMode "cover"→"stretch": cover su atlas con aspect-ratio
-              //    mismatch (frame quadrati nativi vs portrait container) scalava
-              //    per il fattore MAX, sfasando ogni frame e clippando il sprite.
-              //    stretch mappa esattamente l'atlas dentro frameW*N × frameH,
-              //    rendendo il marginLeft offset allineato al pixel.
-              //  - frame count derivato da SPRITE_SHEET_FRAMES (no hardcode `4`).
-              //  - bound-check su currentFrame per prevenire OOB se lo state
-              //    mappa a un indice >= SPRITE_SHEET_FRAMES.
+            {isHoplite ? (
+              // HOPLITE — rig a layer (HeroHopliteRig). Invece di renderizzare
+              // la combat_base.png intera, montiamo i 7 layer PNG separati
+              // (hair/legs/skirt/torso/shield_arm/spear_arm/head_helmet) e
+              // animiamo le parti del corpo secondo lo state corrente
+              // (idle → respiro; attack → Affondo di Falange con wind-up +
+              // thrust + impatto + ritorno in guardia). Le gambe restano
+              // sempre fisse → silhouette stabile, disciplina tank.
+              // Il rig usa BASE 1024 × 1024 quadrato, lo ancoriamo al bottom
+              // del frame portrait (size × size*1.25) via justifyContent.
+              <View style={{ width: frameW, height: frameH, alignItems: 'center', justifyContent: 'flex-end' }}>
+                <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} facingScaleX={facingScaleX} paused={paused} />
+              </View>
+            ) : forceContractStateSprites ? (
+              // RM1.17-K — PRIORITÀ contract: se l'eroe ha useStateSprites=true
+              // (es. Berserker), lo swap PNG per-state prevale su sprite_url
+              // legacy. Garantisce che Berserker non venga catturato nel
+              // branch sprite-sheet anche se in futuro il payload portasse
+              // un sprite_url non-null.
+              (() => {
+                let stateKey: 'idle' | 'attack' | 'skill' | 'hit' | 'death' | 'combat_base' = 'idle';
+                switch (state) {
+                  case 'attack': stateKey = 'attack'; break;
+                  case 'skill':
+                  case 'ultimate': stateKey = 'skill'; break;
+                  case 'hit': stateKey = 'hit'; break;
+                  case 'dead': stateKey = 'death'; break;
+                  case 'idle':
+                  case 'heal':
+                  case 'dodge':
+                  default: stateKey = 'idle'; break;
+                }
+                const src = heroBattleStateSource(
+                  character?.hero_id || character?.id,
+                  character?.hero_name || character?.name,
+                  stateKey,
+                  heroImage,
+                );
+                if (!src) return null;
+                return (
+                  <Image
+                    source={src}
+                    style={{ width: frameW, height: frameH }}
+                    resizeMode="contain"
+                  />
+                );
+              })()
+            ) : hasSpriteSheet ? (
+              // Sprite sheet mode (bot legacy / heroes without contract):
+              // atlas N frame orizzontali, ogni frame size×frameH.
+              // Vedi fix storici per resizeMode='stretch' + safeFrame bound-check.
               (() => {
                 const safeFrame = Math.max(0, Math.min(currentFrame, SPRITE_SHEET_FRAMES - 1));
                 return (
@@ -498,58 +559,11 @@ export default function BattleSprite({
                   </View>
                 );
               })()
-            ) : isHoplite ? (
-              // HOPLITE — rig a layer (HeroHopliteRig). Invece di renderizzare
-              // la combat_base.png intera, montiamo i 7 layer PNG separati
-              // (hair/legs/skirt/torso/shield_arm/spear_arm/head_helmet) e
-              // animiamo le parti del corpo secondo lo state corrente
-              // (idle → respiro; attack → Affondo di Falange con wind-up +
-              // thrust + impatto + ritorno in guardia). Le gambe restano
-              // sempre fisse → silhouette stabile, disciplina tank.
-              // Il rig usa BASE 1024 × 1024 quadrato, lo ancoriamo al bottom
-              // del frame portrait (size × size*1.25) via justifyContent.
-              <View style={{ width: frameW, height: frameH, alignItems: 'center', justifyContent: 'flex-end' }}>
-                <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} facingScaleX={facingScaleX} paused={paused} />
-              </View>
             ) : heroImage ? (
-              // RM1.17-I — Heroes con contract.battle.useStateSprites = true
-              // (es. Berserker) ricevono swap dinamico PNG per-state:
-              // idle/attack/skill/hit/death. Gli altri eroi (default
-              // contract) restano sul rendering combat_base statico
-              // pre-esistente → ZERO REGRESSION per Hoplite e eroi legacy.
+              // Fallback: combat_base statico via resolver (legacy/placeholder
+              // heroes con DEFAULT_HERO_CONTRACT).
               (() => {
-                const contract = getHeroContract(
-                  character?.hero_id || character?.id,
-                  character?.hero_name || character?.name,
-                );
-                const useStateSprites = contract.battle.useStateSprites;
-                let stateKey: 'idle' | 'attack' | 'skill' | 'hit' | 'death' | 'combat_base' = 'combat_base';
-                if (useStateSprites) {
-                  switch (state) {
-                    case 'attack':
-                      stateKey = 'attack'; break;
-                    case 'skill':
-                    case 'ultimate':
-                      stateKey = 'skill'; break;
-                    case 'hit':
-                      stateKey = 'hit'; break;
-                    case 'dead':
-                      stateKey = 'death'; break;
-                    case 'idle':
-                    case 'heal':
-                    case 'dodge':
-                    default:
-                      stateKey = 'idle'; break;
-                  }
-                }
-                const src = useStateSprites
-                  ? (heroBattleStateSource(
-                      character?.hero_id || character?.id,
-                      character?.hero_name || character?.name,
-                      stateKey,
-                      heroImage,
-                    ) || heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name))
-                  : heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name);
+                const src = heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name);
                 return (
                   <Image
                     source={src}
