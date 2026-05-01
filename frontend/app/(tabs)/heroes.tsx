@@ -9,7 +9,7 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
-import { isGreekHoplite, GREEK_HOPLITE_PORTRAIT } from '../../components/ui/hopliteAssets';
+import { isGreekHoplite, GREEK_HOPLITE_PORTRAIT, heroPortraitSource } from '../../components/ui/hopliteAssets';
 import ScreenHeader from '../../components/ui/ScreenHeader';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
@@ -258,7 +258,11 @@ export default function HeroesTab() {
                 </View>
               ) : selected.hero_image ? (
                 <View style={s.detImgWrap}>
-                  <Image source={{ uri: selected.hero_image }} style={s.detImg} resizeMode="cover" />
+                  <Image
+                    source={heroPortraitSource(selected.hero_image, selected.hero_id || selected.id, selected.hero_name)}
+                    style={s.detImg}
+                    resizeMode="cover"
+                  />
                   <LinearGradient
                     colors={['transparent', 'rgba(10,10,40,0.8)']}
                     style={s.detImgOverlay}

@@ -10,6 +10,7 @@ import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
+import { heroPortraitSource } from '../components/ui/hopliteAssets';
 import { COLORS, RARITY, ELEMENTS } from '../constants/theme';
 
 const ESSENCE_VALUES: Record<number, number> = { 1: 5, 2: 10, 3: 25, 4: 100, 5: 300 };
@@ -143,7 +144,7 @@ export default function SoulForgeScreen() {
                       {isSel && <View style={s.selBadge}><Text style={s.selCheck}>{'\u2713'}</Text></View>}
                       {h.hero_image ? (
                         <View style={[s.heroImg, { borderColor: rarCol }]}>
-                          <Image source={{ uri: h.hero_image }} style={s.heroImgInner} />
+                          <Image source={heroPortraitSource(h.hero_image, h.hero_id, h.hero_name)} style={s.heroImgInner} />
                         </View>
                       ) : (
                         <View style={[s.heroImgPh, { borderColor: rarCol, backgroundColor: rarCol + '15' }]}>

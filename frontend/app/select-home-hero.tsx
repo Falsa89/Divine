@@ -23,6 +23,7 @@ import { useRouter } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
+import { heroPortraitSource } from '../components/ui/hopliteAssets';
 
 const RARITY_COLOR: Record<number, string> = {
   1: '#9AA5B1', 2: '#4ECDC4', 3: '#46A3FF',
@@ -163,7 +164,7 @@ export default function SelectHomeHeroScreen() {
                       <HeroPortrait heroId={h.hero_id} heroName={h.hero_name} size={64} variant="card" />
                     ) : h.hero_image ? (
                       <RNImage
-                        source={{ uri: h.hero_image }}
+                        source={heroPortraitSource(h.hero_image, h.hero_id, h.hero_name)}
                         style={{ width: 64, height: 64 }}
                         resizeMode="cover"
                       />

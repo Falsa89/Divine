@@ -24,7 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { isHopliteHero } from '../components/ui/HeroPortrait';
-import { GREEK_HOPLITE_PORTRAIT } from '../components/ui/hopliteAssets';
+import { GREEK_HOPLITE_PORTRAIT, heroPortraitSource } from '../components/ui/hopliteAssets';
 import { apiCall } from '../utils/api';
 
 type Hero = {
@@ -251,7 +251,7 @@ export default function HeroCollection() {
                       />
                     ) : h.image_url ? (
                       <RNImage
-                        source={{ uri: h.image_url }}
+                        source={heroPortraitSource(h.image_url, h.id, h.name)}
                         style={[st.portrait, !owned && st.portraitLocked]}
                         resizeMode="cover"
                       />

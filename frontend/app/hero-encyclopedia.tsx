@@ -25,6 +25,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
+import { heroPortraitSource } from '../components/ui/hopliteAssets';
 import { apiCall } from '../utils/api';
 
 const STAT_LABELS: Record<string, string> = {
@@ -194,7 +195,7 @@ export default function HeroEncyclopediaScreen() {
                   <HeroPortrait heroId={data.hero_id} heroName={data.name} size={96} />
                 ) : data.image ? (
                   <RNImage
-                    source={{ uri: data.image }}
+                    source={heroPortraitSource(data.image, data.hero_id, data.name)}
                     style={{ width: 96, height: 96 }}
                     resizeMode="cover"
                   />

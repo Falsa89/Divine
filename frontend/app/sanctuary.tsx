@@ -18,6 +18,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
+import { heroPortraitSource } from '../components/ui/hopliteAssets';
 
 const RARITY_COLOR: Record<number, string> = {
   1: '#9AA5B1', 2: '#4ECDC4', 3: '#46A3FF',
@@ -177,7 +178,11 @@ export default function SanctuaryScreen() {
               {isHop ? (
                 <HeroPortrait heroId={hero.id} heroName={hero.name} size={280} variant="detail" />
               ) : hero.image_url ? (
-                <RNImage source={{ uri: hero.image_url }} style={st.splashImg} resizeMode="cover" />
+                <RNImage
+                  source={heroPortraitSource(hero.image_url, hero.id, hero.name)}
+                  style={st.splashImg}
+                  resizeMode="cover"
+                />
               ) : (
                 <LinearGradient
                   colors={isBorea ? ['#4A7BFF', '#1B2A4E', '#0A1020'] : [rarCol + '80', rarCol + '20', '#0A0612']}
