@@ -623,7 +623,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.idle.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
-        visualScale: 1.30,   // RM1.17-O — body visivo matcha Hoplite battlefield
+        visualScale: 1.0,   // RM1.17-P — body già scalato nel packing runtime
       },
       attack: {
         source: BERSERKER_RUNTIME_ATTACK_SHEET,
@@ -634,7 +634,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.attack.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
-        visualScale: 1.30,
+        visualScale: 1.0,   // RM1.17-P — body già scalato nel packing runtime
       },
       skill: {
         source: BERSERKER_RUNTIME_SKILL_SHEET,
@@ -645,7 +645,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.skill.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
-        visualScale: 1.30,
+        visualScale: 1.0,   // RM1.17-P — body già scalato nel packing runtime
       },
       hit: {
         source: BERSERKER_RUNTIME_HIT_SHEET,
@@ -656,7 +656,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.hit.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
-        visualScale: 1.30,
+        visualScale: 1.0,   // RM1.17-P — body già scalato nel packing runtime
       },
       death: {
         source: BERSERKER_RUNTIME_DEATH_SHEET,
@@ -667,7 +667,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.death.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
-        visualScale: 1.30,
+        visualScale: 1.0,   // RM1.17-P — body già scalato nel packing runtime
       },
     },
   },
