@@ -121,6 +121,36 @@ export const NORSE_BERSERKER_HIT: ImageSourcePropType = require('../../assets/he
 export const NORSE_BERSERKER_DEATH: ImageSourcePropType = require('../../assets/heroes/norse_berserker/death.png');
 
 // ──────────────────────────────────────────────────────────────────────
+// RUNTIME SPRITE SHEETS — RM1.17-N
+// Sheet normalizzati (detection ibrida controllata + repack uniforme 640×768).
+// Ogni sheet è a celle uniformi, feet-anchored al bottom, scala consistente.
+// Metadata canonici in runtime/battle_animations.json (SHA256 tracciato).
+// ──────────────────────────────────────────────────────────────────────
+type BerserkerAnimMetaState = {
+  sheet: string;
+  frames: number;
+  columns: number;
+  rows: number;
+  fps: number;
+  loop: boolean;
+  sha256: string;
+};
+type BerserkerAnimMeta = {
+  heroId: string;
+  version: number;
+  frameWidth: number;
+  frameHeight: number;
+  animations: Record<'idle' | 'attack' | 'skill' | 'hit' | 'death', BerserkerAnimMetaState>;
+};
+
+const BERSERKER_RUNTIME_IDLE_SHEET: ImageSourcePropType = require('../../assets/heroes/norse_berserker/runtime/idle_sheet.png');
+const BERSERKER_RUNTIME_ATTACK_SHEET: ImageSourcePropType = require('../../assets/heroes/norse_berserker/runtime/attack_sheet.png');
+const BERSERKER_RUNTIME_SKILL_SHEET: ImageSourcePropType = require('../../assets/heroes/norse_berserker/runtime/skill_sheet.png');
+const BERSERKER_RUNTIME_HIT_SHEET: ImageSourcePropType = require('../../assets/heroes/norse_berserker/runtime/hit_sheet.png');
+const BERSERKER_RUNTIME_DEATH_SHEET: ImageSourcePropType = require('../../assets/heroes/norse_berserker/runtime/death_sheet.png');
+const BERSERKER_BATTLE_ANIM_META = require('../../assets/heroes/norse_berserker/runtime/battle_animations.json') as BerserkerAnimMeta;
+
+// ──────────────────────────────────────────────────────────────────────
 // HERO IDENTITY HELPERS
 // ──────────────────────────────────────────────────────────────────────
 export function isGreekHoplite(heroId?: string | null, heroName?: string | null): boolean {
@@ -444,6 +474,9 @@ export type HeroBattleConfig = {
   defaultState: 'idle' | 'combat_base';
   /** Se true, BattleSprite userà state sprites (idle/attack/skill/hit/death). */
   useStateSprites: boolean;
+  /** Se true, BattleSprite userà runtime sprite-sheet animati (RM1.17-N).
+   *  Priorità MAX: supera useStateSprites + sprite_url legacy. */
+  useRuntimeSheets?: boolean;
   /** Se true, BattleSprite sopprime l'aura glow elementale di default. */
   removeDefaultGlow: boolean;
   /** Se true, usa DEFAULT_PROFILE generico di transform; se false, il
@@ -451,12 +484,30 @@ export type HeroBattleConfig = {
   useLegacyDefaultMotion: boolean;
 };
 
+/** Metadati runtime sheet per animazione a frame. */
+export type RuntimeSheetInfo = {
+  source: ImageSourcePropType;
+  frames: number;
+  columns: number;
+  rows: number;
+  fps: number;
+  loop: boolean;
+  /** Cell-size nativa del source (es. 640×768 per Berserker). */
+  frameWidth: number;
+  frameHeight: number;
+};
+
+export type RuntimeSheetState = 'idle' | 'attack' | 'skill' | 'hit' | 'death';
+
 export interface HeroAssetContract {
   id: string;
   variants: Partial<Record<HeroVariantKey, ImageSourcePropType>>;
   crop: HeroCropConfig;
   viewer: HeroViewerConfig;
   battle: HeroBattleConfig;
+  /** RM1.17-N: runtime sprite-sheet per-state. Popolato solo se
+   *  battle.useRuntimeSheets === true. */
+  runtimeSheets?: Partial<Record<RuntimeSheetState, RuntimeSheetInfo>>;
 }
 
 // --- Default / fallback contract (usato per eroi non registrati) -------
@@ -554,8 +605,61 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
     battle: {
       defaultState: 'idle',
       useStateSprites: true,
+      useRuntimeSheets: true,        // RM1.17-N — animazioni a frame
       removeDefaultGlow: true,
       useLegacyDefaultMotion: false,
+    },
+    runtimeSheets: {
+      idle: {
+        source: BERSERKER_RUNTIME_IDLE_SHEET,
+        frames: BERSERKER_BATTLE_ANIM_META.animations.idle.frames,
+        columns: BERSERKER_BATTLE_ANIM_META.animations.idle.columns,
+        rows: BERSERKER_BATTLE_ANIM_META.animations.idle.rows,
+        fps: BERSERKER_BATTLE_ANIM_META.animations.idle.fps,
+        loop: BERSERKER_BATTLE_ANIM_META.animations.idle.loop,
+        frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
+        frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+      },
+      attack: {
+        source: BERSERKER_RUNTIME_ATTACK_SHEET,
+        frames: BERSERKER_BATTLE_ANIM_META.animations.attack.frames,
+        columns: BERSERKER_BATTLE_ANIM_META.animations.attack.columns,
+        rows: BERSERKER_BATTLE_ANIM_META.animations.attack.rows,
+        fps: BERSERKER_BATTLE_ANIM_META.animations.attack.fps,
+        loop: BERSERKER_BATTLE_ANIM_META.animations.attack.loop,
+        frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
+        frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+      },
+      skill: {
+        source: BERSERKER_RUNTIME_SKILL_SHEET,
+        frames: BERSERKER_BATTLE_ANIM_META.animations.skill.frames,
+        columns: BERSERKER_BATTLE_ANIM_META.animations.skill.columns,
+        rows: BERSERKER_BATTLE_ANIM_META.animations.skill.rows,
+        fps: BERSERKER_BATTLE_ANIM_META.animations.skill.fps,
+        loop: BERSERKER_BATTLE_ANIM_META.animations.skill.loop,
+        frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
+        frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+      },
+      hit: {
+        source: BERSERKER_RUNTIME_HIT_SHEET,
+        frames: BERSERKER_BATTLE_ANIM_META.animations.hit.frames,
+        columns: BERSERKER_BATTLE_ANIM_META.animations.hit.columns,
+        rows: BERSERKER_BATTLE_ANIM_META.animations.hit.rows,
+        fps: BERSERKER_BATTLE_ANIM_META.animations.hit.fps,
+        loop: BERSERKER_BATTLE_ANIM_META.animations.hit.loop,
+        frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
+        frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+      },
+      death: {
+        source: BERSERKER_RUNTIME_DEATH_SHEET,
+        frames: BERSERKER_BATTLE_ANIM_META.animations.death.frames,
+        columns: BERSERKER_BATTLE_ANIM_META.animations.death.columns,
+        rows: BERSERKER_BATTLE_ANIM_META.animations.death.rows,
+        fps: BERSERKER_BATTLE_ANIM_META.animations.death.fps,
+        loop: BERSERKER_BATTLE_ANIM_META.animations.death.loop,
+        frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
+        frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+      },
     },
   },
 };
@@ -660,4 +764,40 @@ export function heroBattleStateSource(
     if (v) return v;
   }
   return null;
+}
+
+/**
+ * RM1.17-N — Runtime sprite-sheet resolver.
+ * Ritorna il RuntimeSheetInfo per l'eroe+state se il contract ha
+ * `useRuntimeSheets: true` e lo state è definito. Altrimenti null.
+ *
+ * Fallback chain per state:
+ *   attack/skill/hit/death → se mancanti, fallback a 'idle'
+ *   idle mancante → null (no sheet disponibile)
+ *
+ * Consumer-side: BattleSprite controlla PRIMA questa funzione. Se !null,
+ * monta il RuntimeSheetSprite component. Altrimenti cade su
+ * heroBattleStateSource (PNG statico) o combat_base.
+ */
+export function heroRuntimeSheet(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+  state: RuntimeSheetState,
+): RuntimeSheetInfo | null {
+  const contract = getHeroContract(heroId, heroName);
+  if (!contract.battle.useRuntimeSheets) return null;
+  if (!contract.runtimeSheets) return null;
+  const info = contract.runtimeSheets[state];
+  if (info) return info;
+  // fallback a idle per state non definiti (plausibile per eroi con solo idle)
+  return contract.runtimeSheets.idle || null;
+}
+
+/** True se l'eroe ha runtime sheets disponibili (almeno idle). */
+export function hasHeroRuntimeSheets(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+): boolean {
+  const contract = getHeroContract(heroId, heroName);
+  return !!(contract.battle.useRuntimeSheets && contract.runtimeSheets?.idle);
 }

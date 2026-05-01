@@ -37,9 +37,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ELEMENTS, RARITY } from '../constants/theme';
-import { heroBattleImageSource, heroBattleStateSource, getHeroContract, isGreekHoplite } from './ui/hopliteAssets';
+import { heroBattleImageSource, heroBattleStateSource, getHeroContract, isGreekHoplite, hasHeroRuntimeSheets } from './ui/hopliteAssets';
 import { getAnimationProfile } from './battle/heroBattleAnimations';
 import HeroHopliteRig from './ui/HeroHopliteRig';
+import RuntimeSheetSprite from './RuntimeSheetSprite';
 import Constants from 'expo-constants';
 
 type SpriteState = 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
@@ -357,6 +358,13 @@ export default function BattleSprite({
   // animazioni PNG per-state. Hoplite resta in cima (branch separato).
   const forceContractStateSprites = battleContract.battle.useStateSprites === true;
 
+  // RM1.17-N — Runtime sprite-sheet ha PRIORITÀ MASSIMA (dopo Hoplite rig).
+  // Se l'eroe ha runtimeSheets definiti, li usiamo animati a frame, saltando
+  // completamente il branch state-sprite statico.
+  const useRuntimeSheets =
+    battleContract.battle.useRuntimeSheets === true &&
+    hasHeroRuntimeSheets(character?.hero_id || character?.id, character?.hero_name || character?.name);
+
   // Dev debug (OFF in production) — traccia la branch attiva per Berserker.
   const BERSERKER_ASSET_DEBUG = false;
   if (BERSERKER_ASSET_DEBUG && (character?.hero_id === 'norse_berserker' || character?.id === 'norse_berserker')) {
@@ -505,6 +513,36 @@ export default function BattleSprite({
               <View style={{ width: frameW, height: frameH, alignItems: 'center', justifyContent: 'flex-end' }}>
                 <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} facingScaleX={facingScaleX} paused={paused} />
               </View>
+            ) : useRuntimeSheets ? (
+              // RM1.17-N — Runtime sprite-sheet animati (Berserker+). Priorità
+              // MAX: supera sprite_url legacy e state-sprite statici. Leggiamo
+              // i metadati (frames/fps/loop/grid) dal contract e animiamo
+              // via setState frame counter.
+              (() => {
+                let rtState: 'idle' | 'attack' | 'skill' | 'hit' | 'death' = 'idle';
+                switch (state) {
+                  case 'attack': rtState = 'attack'; break;
+                  case 'skill':
+                  case 'ultimate': rtState = 'skill'; break;
+                  case 'hit': rtState = 'hit'; break;
+                  case 'dead': rtState = 'death'; break;
+                  case 'idle':
+                  case 'heal':
+                  case 'dodge':
+                  default: rtState = 'idle'; break;
+                }
+                return (
+                  <RuntimeSheetSprite
+                    heroId={character?.hero_id || character?.id}
+                    heroName={character?.hero_name || character?.name}
+                    state={rtState}
+                    size={frameW}
+                    facingScaleX={facingScaleX}
+                    paused={paused}
+                    actionInstanceId={actionInstanceId}
+                  />
+                );
+              })()
             ) : forceContractStateSprites ? (
               // RM1.17-K — PRIORITÀ contract: se l'eroe ha useStateSprites=true
               // (es. Berserker), lo swap PNG per-state prevale su sprite_url
