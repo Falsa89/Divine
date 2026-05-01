@@ -4,7 +4,8 @@ import Animated, {
   useSharedValue, useAnimatedStyle, withRepeat,
   withTiming, withSequence, Easing, withDelay,
 } from 'react-native-reanimated';
-import { resolveHeroPortraitSource } from './ui/hopliteAssets';
+import { resolveHeroPortraitSource, hasHeroUiContract } from './ui/hopliteAssets';
+import HeroFramedImage from './ui/HeroFramedImage';
 
 const RC: Record<number, string> = { 1:'#888', 2:'#44aa44', 3:'#4488ff', 4:'#aa44ff', 5:'#ff4444', 6:'#ffd700' };
 const EC: Record<string, string> = { fire:'#ff4444', water:'#4488ff', earth:'#aa8844', wind:'#44cc88', light:'#ffd700', dark:'#9944ff', neutral:'#888' };
@@ -157,6 +158,27 @@ export default function AnimatedHeroPortrait({ imageUrl, name, rarity, element, 
           borderColor: rc, borderWidth: rarity >= 5 ? 2.5 : rarity >= 3 ? 2 : 1.5,
         }]}>
           {(() => {
+            // RM1.17-R — eroi con UI contract dedicato usano il framing
+            // slot='card' (focusY + scale per zoom-in sul volto).
+            if (hasHeroUiContract(heroId, name)) {
+              return (
+                <HeroFramedImage
+                  heroId={heroId}
+                  heroName={name}
+                  imageUrl={imageUrl}
+                  slot="card"
+                  boxW={imgSize}
+                  boxH={imgSize}
+                  imageStyle={{ borderRadius }}
+                  containerStyle={{ borderRadius }}
+                  fallback={
+                    <View style={[s.placeholder, { width: imgSize, height: imgSize, borderRadius, backgroundColor: ec + '25' }]}>
+                      <Text style={[s.initial, { color: ec, fontSize: imgSize * 0.4 }]}>{name?.[0] || '?'}</Text>
+                    </View>
+                  }
+                />
+              );
+            }
             const src = resolveHeroPortraitSource(imageUrl, heroId, name);
             if (src) {
               return (

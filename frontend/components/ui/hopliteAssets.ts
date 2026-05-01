@@ -469,6 +469,53 @@ export type HeroViewerConfig = {
   allowDestructiveCrop: boolean;
 };
 
+// ────────────────────────────────────────────────────────────────────
+// RM1.17-R — UI PORTRAIT FRAMING CONTRACT (per-hero, per-slot)
+// ────────────────────────────────────────────────────────────────────
+/**
+ * Slot UI riconosciuti dall'app. Ogni slot ha un framing dedicato che
+ * controlla variant sorgente, resizeMode, focusY/X e scale. Fonte di
+ * verità unica per evitare fix "a occhio" sparsi nei componenti.
+ *
+ *  - 'home'            → HomeHeroSplash (overlay eroe sulla scena home)
+ *  - 'card'            → Card griglia Collezione / AnimatedHeroPortrait
+ *  - 'detailIcon'      → Icona 80×80 nell'header di HeroDetail
+ *  - 'selectedPreview' → Pannello destro della Collezione (preview eroe)
+ *  - 'fullscreen'      → hero-viewer fullscreen (portrait verticale grande)
+ */
+export type HeroUiSlot =
+  | 'home'
+  | 'card'
+  | 'detailIcon'
+  | 'selectedPreview'
+  | 'fullscreen';
+
+/**
+ * Framing per-slot. Valori numerici (no magic constants sparsi).
+ *  - variant     → quale variant del contract usare (splash/transparent/…)
+ *  - resizeMode  → 'contain' = niente crop, 'cover' = crop con focus
+ *  - focusY      → 0..1 dal top (solo per 'cover'; 0.28 = volto alto)
+ *  - focusX      → 0..1 da sinistra (default 0.5); riservato per asset
+ *                  non-centrali (es. eroi con busto fuori asse).
+ *  - scale       → zoom extra applicato al body dopo il fit. >1 = zoom-in
+ *                  (utile per card strette dove vogliamo più faccia).
+ *                  <1 = zoom-out (aria intorno al body). Default 1.
+ *  - verticalPriority → se true e resizeMode='contain', il box usa la
+ *                  height come dimensione guida (fit-to-height). Usato
+ *                  in fullscreen per evitare che il portrait diventi
+ *                  un rettangolo landscape in device landscape.
+ */
+export type HeroUiFraming = {
+  variant: HeroVariantKey;
+  resizeMode: 'contain' | 'cover';
+  focusY: number;
+  focusX?: number;
+  scale?: number;
+  verticalPriority?: boolean;
+};
+
+export type HeroUiContract = Record<HeroUiSlot, HeroUiFraming>;
+
 export type HeroBattleConfig = {
   /** State di default quando non c'è action attiva. */
   defaultState: 'idle' | 'combat_base';
@@ -514,10 +561,27 @@ export interface HeroAssetContract {
   crop: HeroCropConfig;
   viewer: HeroViewerConfig;
   battle: HeroBattleConfig;
+  /** RM1.17-R — UI portrait framing per-slot. Opzionale: se assente
+   *  viene usato DEFAULT_UI_CONTRACT. Definire esplicitamente per
+   *  ogni eroe i cui asset hanno proporzioni/anchor differenti dal
+   *  default (es. Berserker con volto più in alto). */
+  ui?: HeroUiContract;
   /** RM1.17-N: runtime sprite-sheet per-state. Popolato solo se
    *  battle.useRuntimeSheets === true. */
   runtimeSheets?: Partial<Record<RuntimeSheetState, RuntimeSheetInfo>>;
 }
+
+// --- Default UI contract (usato se il contract non specifica `ui`) -----
+// Valori neutri/sicuri: splash in tutti gli slot, contain per evitare
+// crop indesiderati, focusY 0.35 per un focus leggermente alto sul
+// busto. NIENTE crop aggressivo di default.
+export const DEFAULT_UI_CONTRACT: HeroUiContract = {
+  home:            { variant: 'transparent', resizeMode: 'contain', focusY: 0.35, scale: 1.0 },
+  card:            { variant: 'card',        resizeMode: 'cover',   focusY: 0.28, scale: 1.0 },
+  detailIcon:      { variant: 'detail',      resizeMode: 'cover',   focusY: 0.30, scale: 1.0 },
+  selectedPreview: { variant: 'portrait',    resizeMode: 'contain', focusY: 0.35, scale: 1.0 },
+  fullscreen:      { variant: 'fullscreen',  resizeMode: 'contain', focusY: 0.5,  scale: 1.0, verticalPriority: true },
+};
 
 // --- Default / fallback contract (usato per eroi non registrati) -------
 export const DEFAULT_HERO_CONTRACT: HeroAssetContract = {
@@ -618,6 +682,27 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
       removeDefaultGlow: true,
       useLegacyDefaultMotion: false,
       runtimeRenderScale: 1.30,      // RM1.17-FINAL — match visivo vs Hoplite
+    },
+    // RM1.17-R — UI portrait framing per Berserker.
+    // Sorgente splash.jpg 512×768 (2:3 portrait). Volto al ~25-30% dal top.
+    // Cutout transparent.png 408×612 (2:3 portrait) stesso anchor.
+    // Tutti i valori sono tarati per NON tagliare fronte/testa in nessuno slot.
+    ui: {
+      // Home: cutout trasparente su gradient. No crop → full-body visibile.
+      // Scale 1.02 per leggera presenza, contain per letterbox safe.
+      home:            { variant: 'transparent', resizeMode: 'contain', focusY: 0.5,  scale: 1.02 },
+      // Card 48×48: crop quadrato. FocusY alto (0.22) porta il volto al
+      // centro della cella; scale 1.08 zoom-in per enfatizzare testa+busto.
+      card:            { variant: 'card',        resizeMode: 'cover',   focusY: 0.22, scale: 1.08 },
+      // DetailIcon 80×80: stesso approccio della card, un filo meno zoom
+      // perché il box è più grande e serve un po' di busto.
+      detailIcon:      { variant: 'detail',      resizeMode: 'cover',   focusY: 0.24, scale: 1.05 },
+      // SelectedPreview (pannello destro Collezione): contain full portrait,
+      // presenza visiva comparabile a Hoplite (height-priority nel layout).
+      selectedPreview: { variant: 'portrait',    resizeMode: 'contain', focusY: 0.5,  scale: 1.0 },
+      // Fullscreen viewer: portrait verticale grande, height-priority.
+      // Nessun crop distruttivo, no landscape forzato.
+      fullscreen:      { variant: 'fullscreen',  resizeMode: 'contain', focusY: 0.5,  scale: 1.0, verticalPriority: true },
     },
     runtimeSheets: {
       idle: {
@@ -850,4 +935,133 @@ export function getHeroBattlePreloadAssets(
     seen.add(key);
     return true;
   });
+}
+
+
+// ════════════════════════════════════════════════════════════════════════
+// RM1.17-R — UI PORTRAIT FRAMING RESOLVERS
+// ════════════════════════════════════════════════════════════════════════
+
+/**
+ * Ritorna il framing configurato per un dato slot UI. Se il contract non
+ * definisce `ui` usa DEFAULT_UI_CONTRACT. Questa è la FONTE UNICA per
+ * qualsiasi decisione di rendering portrait nei componenti UI.
+ */
+export function getHeroUiFraming(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+  slot: HeroUiSlot,
+): HeroUiFraming {
+  const contract = getHeroContract(heroId, heroName);
+  const ui = contract.ui || DEFAULT_UI_CONTRACT;
+  return ui[slot] || DEFAULT_UI_CONTRACT[slot];
+}
+
+/**
+ * Ritorna il source Image per un dato slot UI, usando la variant indicata
+ * nel framing (via VARIANT_FALLBACK_CHAIN). Per eroi remoti (non
+ * registrati) ritorna {uri: imageUrl} se presente, altrimenti null.
+ */
+export function heroUiSource(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+  slot: HeroUiSlot,
+  imageUrl?: string | null,
+): ImageSourcePropType | null {
+  const framing = getHeroUiFraming(heroId, heroName, slot);
+  // 1) variant dal contract
+  const variantSrc = getHeroVariant(heroId, heroName, framing.variant);
+  if (variantSrc) return variantSrc;
+  // 2) sentinel parsing
+  const parsed = parseHeroAssetSentinel(imageUrl);
+  if (parsed) {
+    const v = getHeroVariant(parsed.heroId, null, framing.variant);
+    if (v) return v;
+    return null;
+  }
+  // 3) URL remoto
+  if (imageUrl) return { uri: imageUrl };
+  return null;
+}
+
+/**
+ * Calcola il transform (translateX/Y + scale) da applicare a un Image con
+ * resizeMode='cover' per ancorare il focusY (e opzionalmente focusX) della
+ * sorgente al centro della box.
+ *
+ *  boxW,  boxH      → dimensioni della box in pixel
+ *  framing          → HeroUiFraming (usa focusY, focusX, scale)
+ *  sourceAspect     → 'portrait' | 'square' | 'landscape' (dal contract)
+ *
+ * Math:
+ *  - Normalizziamo la sorgente ad altezza 1, width = sourceAspectRatio.
+ *  - scale_cover = max(boxW/srcW, boxH/srcH) garantisce che la sorgente
+ *    coprà interamente la box.
+ *  - scaledH = srcH * scale_cover, scaledW = srcW * scale_cover.
+ *  - overflowY = scaledH - boxH, overflowX = scaledW - boxW.
+ *  - Per portare un focus Y della sorgente al centro della box:
+ *      ty = (0.5 - focusY) * scaledH  (clampato a ±overflowY/2)
+ *    Questo è DIVERSO dalla formula vecchia che usava overflowY al posto
+ *    di scaledH: quella sottostima lo shift quando scaledH >> boxH.
+ *  - Stesso approccio per focusX.
+ *  - Infine applichiamo lo scale extra (zoom) come moltiplicatore.
+ */
+export function computeUiCoverTransform(
+  boxW: number,
+  boxH: number,
+  framing: HeroUiFraming,
+  sourceAspect: 'portrait' | 'square' | 'landscape',
+): { transform: any[] } {
+  const srcAspectRatio =
+    sourceAspect === 'portrait' ? 2 / 3
+    : sourceAspect === 'landscape' ? 3 / 2
+    : 1;
+  const srcW = srcAspectRatio;
+  const srcH = 1;
+  const scaleCover = Math.max(boxW / srcW, boxH / srcH);
+  const scaledW = srcW * scaleCover;
+  const scaledH = srcH * scaleCover;
+  const overflowY = Math.max(0, scaledH - boxH);
+  const overflowX = Math.max(0, scaledW - boxW);
+
+  const focusY = framing.focusY;
+  const focusX = framing.focusX ?? 0.5;
+
+  let ty = (0.5 - focusY) * scaledH;
+  let tx = (0.5 - focusX) * scaledW;
+  // Clamp ai bordi: non scopriamo mai spazio vuoto.
+  const maxTy = overflowY / 2;
+  const maxTx = overflowX / 2;
+  if (ty > maxTy) ty = maxTy;
+  if (ty < -maxTy) ty = -maxTy;
+  if (tx > maxTx) tx = maxTx;
+  if (tx < -maxTx) tx = -maxTx;
+
+  const extraScale = framing.scale ?? 1;
+  const transform: any[] = [];
+  if (Math.abs(tx) > 0.5) transform.push({ translateX: Math.round(tx) });
+  if (Math.abs(ty) > 0.5) transform.push({ translateY: Math.round(ty) });
+  if (extraScale !== 1) transform.push({ scale: extraScale });
+  return { transform };
+}
+
+/**
+ * Ritorna il sourceAspect dichiarato nel contract crop (con fallback
+ * 'portrait' per non-registrati).
+ */
+export function getHeroSourceAspect(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+): 'portrait' | 'square' | 'landscape' {
+  const contract = getHeroContract(heroId, heroName);
+  return contract.crop.sourceAspect;
+}
+
+/** True se l'eroe ha un UI contract esplicito (non default). */
+export function hasHeroUiContract(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+): boolean {
+  const contract = getHeroContract(heroId, heroName);
+  return !!contract.ui;
 }

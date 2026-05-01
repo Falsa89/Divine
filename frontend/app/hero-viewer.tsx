@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, Image, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
-import StarDisplay from '../components/ui/StarDisplay';
-import TranscendenceStars from '../components/ui/TranscendenceStars';
 import {
   isGreekHoplite,
   GREEK_HOPLITE_DETAIL,
@@ -11,6 +9,8 @@ import {
   GREEK_HOPLITE_NAME,
   heroFullscreenSource,
   getHeroContract,
+  getHeroUiFraming,
+  hasHeroUiContract,
 } from '../components/ui/hopliteAssets';
 import { RARITY, ELEMENTS } from '../constants/theme';
 
@@ -23,16 +23,35 @@ export default function HeroViewerScreen() {
   const [hero, setHero] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // RM1.17-K — Fullscreen sizing Hoplite-like: la box è GRANDE e portrait-safe,
-  // identica a Hoplite (square box sized to min(width*0.78, height*0.95)).
-  // Il resizeMode='contain' letterboxa l'immagine mantenendo la sua aspect
-  // ratio naturale senza ridurla a uno strip stretto. Per Berserker
-  // (source 2:3 portrait) l'immagine riempie la larghezza, lascia strisce
-  // sopra/sotto (o viceversa) secondo orientation del device.
+  // RM1.17-R — Fullscreen portrait verticale con height-priority.
+  // L'app resta landscape globalmente; qui usiamo height come dimensione
+  // guida (portraitHeight = height*0.92) e width ricavato dall'aspect 2:3
+  // della sorgente. Se UI contract ha verticalPriority=true applichiamo
+  // il fit height-priority. Niente caption/nome sotto.
+  const fullscreenFraming =
+    hasHeroUiContract(heroId, hero?.name || heroNameParam)
+      ? getHeroUiFraming(heroId, hero?.name || heroNameParam, 'fullscreen')
+      : null;
   const contract = getHeroContract(heroId, hero?.name || heroNameParam);
-  const fullscreenBox = Math.min(width * 0.78, height * 0.95);
-  const portraitWidth = fullscreenBox;
-  const portraitHeight = fullscreenBox;
+  const useHeightPriority = fullscreenFraming?.verticalPriority === true;
+  // Aspect della sorgente (portrait 2/3, square 1, landscape 3/2)
+  const srcAspect =
+    contract.crop.sourceAspect === 'portrait' ? 2 / 3
+    : contract.crop.sourceAspect === 'landscape' ? 3 / 2
+    : 1;
+  // Target box: se height-priority → scala su altezza massimale (92%) e
+  // larghezza derivata dall'aspect (clampata a 90% dello schermo per
+  // sicurezza). Altrimenti comportamento legacy (square box Hoplite-like).
+  let portraitHeight: number;
+  let portraitWidth: number;
+  if (useHeightPriority) {
+    portraitHeight = Math.round(height * 0.92);
+    portraitWidth = Math.min(Math.round(portraitHeight * srcAspect), Math.round(width * 0.9));
+  } else {
+    const fullscreenBox = Math.min(width * 0.78, height * 0.95);
+    portraitWidth = fullscreenBox;
+    portraitHeight = fullscreenBox;
+  }
 
   // Short-circuit: se è Greek Hoplite usa splash locale, nessuna API necessaria
   const isHoplite =
@@ -82,8 +101,7 @@ export default function HeroViewerScreen() {
     </Pressable>
   );
 
-  const stars = hero.stars || hero.hero_rarity || 1;
-  const rarCol = RARITY.colors[Math.min(stars, 6)] || '#888';
+  const rarCol = RARITY.colors[Math.min(hero.stars || hero.hero_rarity || 1, 6)] || '#888';
   const elemCol = ELEMENTS.colors[hero.element] || ELEMENTS.colors[hero.hero_element] || '#FFD700';
   const imgUri = hero.image || hero.hero_image;
 
@@ -98,9 +116,9 @@ export default function HeroViewerScreen() {
             resizeMode="contain"
           />
         ) : (() => {
-          // RM1.17-G — Fullscreen via contract: usa splash portrait intera
-          // con resizeMode='contain' → nessun crop distruttivo, volto
-          // sempre visibile, orientation portrait anche se device landscape.
+          // RM1.17-R — Fullscreen via UI contract: portrait verticale grande
+          // (height-priority se verticalPriority=true) con contain puro.
+          // Nessun crop distruttivo, volto sempre visibile, no caption.
           const fullscreenSrc = heroFullscreenSource(imgUri, heroId, hero.name || hero.hero_name);
           if (fullscreenSrc) {
             return (
@@ -120,16 +138,6 @@ export default function HeroViewerScreen() {
             </View>
           );
         })()}
-
-        {/* Info overlay al bottom */}
-        <View style={s.info}>
-          <Text style={[s.name, { color: rarCol }]}>{hero.name || hero.hero_name}</Text>
-          <View style={s.starsRow}>
-            {stars <= 12
-              ? <StarDisplay stars={stars} size={16} />
-              : <TranscendenceStars stars={stars} size={16} />}
-          </View>
-        </View>
       </View>
 
       <Text style={s.hint}>Tocca per chiudere</Text>
@@ -150,11 +158,6 @@ const s = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   phTxt: { fontWeight: '900' },
-  info: {
-    alignItems: 'center', marginTop: 12, gap: 6,
-  },
-  name: { fontSize: 20, fontWeight: '900', letterSpacing: 1 },
-  starsRow: { height: 22, justifyContent: 'center', alignItems: 'center' },
   hint: { color: 'rgba(255,255,255,0.15)', fontSize: 9, position: 'absolute', bottom: 16 },
   err: { color: 'rgba(255,255,255,0.4)', fontSize: 12 },
 });

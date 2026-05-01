@@ -11,6 +11,8 @@ import GradientButton from '../components/ui/GradientButton';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
+import HeroFramedImage from '../components/ui/HeroFramedImage';
+import { hasHeroUiContract } from '../components/ui/hopliteAssets';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../constants/theme';
 
 const STAT_LABELS: Record<string, string> = {
@@ -139,6 +141,20 @@ export default function HeroDetailScreen() {
                 {isHopliteHero(data.hero_id || data.id, data.name) ? (
                   <View style={{ width: 80, height: 80, borderRadius: 10, overflow: 'hidden', borderWidth: 2, borderColor: col + '80', backgroundColor: col + '15' }}>
                     <HeroPortrait heroId={data.hero_id || data.id} heroName={data.name} size={80} />
+                  </View>
+                ) : hasHeroUiContract(data.hero_id || data.id, data.name) ? (
+                  // RM1.17-R — eroi con UI contract (Berserker): framing
+                  // slot='detailIcon' (focusY alto + scale zoom-in) → fronte
+                  // mai tagliata nell'icona 80×80 dell'header.
+                  <View style={{ width: 80, height: 80, borderRadius: 10, overflow: 'hidden', borderWidth: 2, borderColor: col + '80', backgroundColor: col + '15' }}>
+                    <HeroFramedImage
+                      heroId={data.hero_id || data.id}
+                      heroName={data.name}
+                      imageUrl={data.image}
+                      slot="detailIcon"
+                      boxW={80}
+                      boxH={80}
+                    />
                   </View>
                 ) : data.image ? (
                   // RM1.17-F — usa HeroPortrait variant='detail' (splash con

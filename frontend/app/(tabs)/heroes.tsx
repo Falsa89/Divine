@@ -9,7 +9,8 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
-import { isGreekHoplite, GREEK_HOPLITE_PORTRAIT, heroPortraitSource } from '../../components/ui/hopliteAssets';
+import { isGreekHoplite, GREEK_HOPLITE_PORTRAIT, heroPortraitSource, hasHeroUiContract } from '../../components/ui/hopliteAssets';
+import HeroFramedImage from '../../components/ui/HeroFramedImage';
 import ScreenHeader from '../../components/ui/ScreenHeader';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
@@ -256,6 +257,24 @@ export default function HeroesTab() {
                     style={s.detImgOverlay}
                   />
                 </View>
+              ) : hasHeroUiContract(selected.hero_id || selected.id, selected.hero_name) ? (
+                // RM1.17-R — eroi con UI contract (Berserker): framing
+                // slot='selectedPreview' contain height-priority → presenza
+                // visiva comparabile a Hoplite, volto MAI tagliato.
+                <View style={s.detImgPortraitWrap}>
+                  <HeroFramedImage
+                    heroId={selected.hero_id || selected.id}
+                    heroName={selected.hero_name}
+                    imageUrl={selected.hero_image}
+                    slot="selectedPreview"
+                    boxW={180}
+                    boxH={170}
+                  />
+                  <LinearGradient
+                    colors={['transparent', 'rgba(10,10,40,0.9)']}
+                    style={s.detImgOverlay}
+                  />
+                </View>
               ) : selected.hero_image ? (
                 <View style={s.detImgWrap}>
                   <Image
@@ -300,7 +319,12 @@ export default function HeroesTab() {
               <View style={s.detLvlBadge}>
                 <Text style={s.detLvl}>Livello {selected.level || 1}</Text>
               </View>
+              </ScrollView>
 
+              {/* RM1.17-R — DETTAGLIO FUORI dalla ScrollView: sticky bottom,
+                  SEMPRE cliccabile e visibile. Risolve il bug in cui lo
+                  scroll "snappava" indietro e rendeva il bottone irraggiungibile
+                  per Berserker (portrait preview grande). */}
               <TouchableOpacity
                 style={s.detailBtn}
                 onPress={() => router.push({ pathname: '/hero-detail', params: { id: selected.id } })}
@@ -315,7 +339,6 @@ export default function HeroesTab() {
                   <Text style={s.detailBtnTxt}>DETTAGLIO</Text>
                 </LinearGradient>
               </TouchableOpacity>
-              </ScrollView>
             </LinearGradient>
           </Animated.View>
         )}
@@ -371,9 +394,12 @@ const s = StyleSheet.create({
   sortTxt: { color: COLORS.textDim, fontSize: 10 },
   sortTxtA: { color: COLORS.gold },
   // Body
-  body: { flex: 1, flexDirection: 'row', padding: 4, gap: 6 },
+  // Body: padding inferiore riservato alla tab bar assoluta in fondo (58
+  // + safe area ≈ 62). Garantisce che il bottone DETTAGLIO sticky del
+  // pannello destro resti sopra la tab bar, sempre cliccabile.
+  body: { flex: 1, flexDirection: 'row', padding: 4, paddingBottom: 62, gap: 6 },
   grid: { flex: 1 },
-  gridC: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, paddingBottom: 60 },
+  gridC: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, paddingBottom: 8 },
   card: {
     width: 70,
     padding: 4,

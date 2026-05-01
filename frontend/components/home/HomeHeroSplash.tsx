@@ -21,7 +21,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image as RNImage } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import HeroPortrait, { isHopliteHero } from '../ui/HeroPortrait';
-import { heroImageSource, isHeroAssetSentinel } from '../ui/hopliteAssets';
+import HeroFramedImage from '../ui/HeroFramedImage';
+import { isHeroAssetSentinel, hasHeroUiContract } from '../ui/hopliteAssets';
 
 type Props = {
   hero: {
@@ -56,6 +57,9 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
   // semantica storica Home = overlay.
   const imageSentinel = hero.image && isHeroAssetSentinel(hero.image) ? hero.image : null;
   const remoteUrl = hero.image_url && !isHeroAssetSentinel(hero.image_url) ? hero.image_url : null;
+  // RM1.17-R — eroi con UI contract dedicato (Berserker e futuri) vanno
+  // sempre via HeroFramedImage con slot='home' → contract-driven framing.
+  const useUiContract = !isHop && hasHeroUiContract(hero.id, hero.name);
 
   return (
     <TouchableOpacity
@@ -74,11 +78,21 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
           variant="transparent"
           containerStyle={{ width, height }}
         />
+      ) : useUiContract ? (
+        // RM1.17-R — Eroi con UI contract (Berserker, future heroes):
+        // framing home contract-driven (contain, no crop testa). Niente
+        // più cutout con cover + focusY che tagliava la fronte.
+        <HeroFramedImage
+          heroId={hero.id}
+          heroName={hero.name}
+          imageUrl={imageSentinel || remoteUrl || undefined}
+          slot="home"
+          boxW={width}
+          boxH={height}
+        />
       ) : imageSentinel ? (
-        // RM1.17-E — Eroi con sentinel (Berserker, future heroes): delega a
-        // HeroPortrait con variant='transparent' per coerenza semantica Home
-        // overlay (cutout se disponibile, altrimenti card). NON cambia il
-        // layout/positioning del wrapper.
+        // RM1.17-E — Eroi con sentinel ma senza UI contract: delega a
+        // HeroPortrait con variant='transparent' (fallback legacy).
         <HeroPortrait
           heroId={hero.id}
           heroName={hero.name}
