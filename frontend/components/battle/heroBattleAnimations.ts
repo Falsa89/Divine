@@ -32,7 +32,7 @@ import {
   withTiming, withSequence, withDelay,
   cancelAnimation, Easing, SharedValue,
 } from 'react-native-reanimated';
-import { isGreekHoplite } from '../ui/hopliteAssets';
+import { isGreekHoplite, isNorseBerserker } from '../ui/hopliteAssets';
 
 // ---- Types ------------------------------------------------------------------
 
@@ -289,12 +289,110 @@ export const HOPLITE_PROFILE: HeroAnimProfile = {
 };
 
 // ==========================================================================
+// BERSERKER PROFILE — STATE-SPRITE SWAP + NO GLOW
+// --------------------------------------------------------------------------
+// RM1.17-I — Berserker usa lo state swap (idle/attack/skill/hit/death) via
+// BattleSprite + heroBattleStateSource. Il profilo qui sotto sopprime
+// esplicitamente l'aura glow (auraOp=0 sempre) e usa micro-motion minimale
+// per enfatizzare il cambio frame invece del transform.
+//
+// PRINCIPI:
+//  - auraOp resta 0 in TUTTI gli stati (removeDefaultGlow=true).
+//  - bodyRot resta 0 (no rotazioni parassite).
+//  - spriteOp resta 1 in combat (nessun fade), scende solo in death.
+//  - hit: solo flash overlay breve (hitFlash value→0.4 momentaneo).
+//  - Nessun dash/lunge: lo swap PNG è il movimento visivo.
+// ==========================================================================
+const BERSERKER_NEUTRAL: (h: AnimHandles) => void = (h) => {
+  cancelAnimation(h.transX);
+  cancelAnimation(h.transY);
+  cancelAnimation(h.bodyRot);
+  cancelAnimation(h.spriteScale);
+  cancelAnimation(h.spriteOp);
+  cancelAnimation(h.auraSc);
+  cancelAnimation(h.auraOp);
+  cancelAnimation(h.hitFlash);
+  cancelAnimation(h.idleY);
+  h.transX.value = 0;
+  h.transY.value = 0;
+  h.bodyRot.value = 0;
+  h.spriteScale.value = 1;
+  h.spriteOp.value = 1;
+  h.auraSc.value = 1;
+  h.auraOp.value = 0;  // NO GLOW
+  h.hitFlash.value = 0;
+  h.idleY.value = 0;
+};
+
+export const BERSERKER_PROFILE: HeroAnimProfile = {
+  name: 'berserker',
+
+  // idleReset: torna al neutro, nessun glow.
+  idleReset: BERSERKER_NEUTRAL,
+
+  // attack: lo swap a attack.png + micro-dash di 40ms (sottile).
+  attack: (h, c) => {
+    cancelAnimation(h.auraOp);
+    h.auraOp.value = 0;
+    const dash = Math.round(c.size * 0.04);
+    h.transX.value = withSequence(
+      withTiming(c.dir * dash, { duration: 120 }),
+      withTiming(0, { duration: 220 }),
+    );
+  },
+
+  // skill: swap a skill.png, micro-scale, NO AURA.
+  skill: (h, c) => {
+    cancelAnimation(h.auraOp);
+    h.auraOp.value = 0;
+    h.spriteScale.value = withSequence(
+      withTiming(1.04, { duration: 150 }),
+      withTiming(1, { duration: 280 }),
+    );
+  },
+
+  ultimate: (h, c) => BERSERKER_PROFILE.skill(h, c),
+
+  // hit: swap a hit.png + flash rosso overlay breve.
+  hit: (h, c) => {
+    cancelAnimation(h.auraOp);
+    h.auraOp.value = 0;
+    h.hitFlash.value = withSequence(
+      withTiming(0.4, { duration: 60 }),
+      withTiming(0, { duration: 180 }),
+    );
+  },
+
+  // death: swap a death.png, fade graduale. NO rotation/collapse.
+  death: (h, c) => {
+    cancelAnimation(h.idleY);
+    cancelAnimation(h.auraOp);
+    h.idleY.value = 0;
+    h.auraOp.value = 0;
+    h.spriteOp.value = withTiming(0.3, { duration: 800 });
+  },
+
+  // heal: swap non supportato nativo (no heal.png), NO aura.
+  heal: (h, c) => {
+    h.auraOp.value = 0;
+    h.transY.value = withSequence(
+      withTiming(-3, { duration: 250 }),
+      withTiming(0, { duration: 250 }),
+    );
+  },
+
+  // dodge: universal (backward shift).
+  dodge: (h, c) => DEFAULT_PROFILE.dodge(h, c),
+};
+
+// ==========================================================================
 // RESOLVER — sceglie il profilo in base al character
 // ==========================================================================
 export function getAnimationProfile(character: any): HeroAnimProfile {
   const id = character?.hero_id || character?.id;
   const name = character?.hero_name || character?.name;
   if (isGreekHoplite(id, name)) return HOPLITE_PROFILE;
+  if (isNorseBerserker(id, name)) return BERSERKER_PROFILE;
   // Tutti gli altri eroi mantengono il comportamento pre-esistente.
   return DEFAULT_PROFILE;
 }

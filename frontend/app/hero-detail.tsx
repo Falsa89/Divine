@@ -142,13 +142,22 @@ export default function HeroDetailScreen() {
                     <HeroPortrait heroId={data.hero_id || data.id} heroName={data.name} size={80} />
                   </View>
                 ) : data.image ? (
-                  <HeroIdleAnimation imageUri={data.image} stars={stars} size={80} color={col} borderRadius={10} />
+                  // RM1.17-F — usa HeroPortrait variant='detail' (splash con
+                  // focusY crop) invece di HeroIdleAnimation+transparent.
+                  // Niente glow elementale per card detail (solo viewer).
+                  <View style={{ width: 80, height: 80, borderRadius: 10, overflow: 'hidden', borderWidth: 2, borderColor: col + '80', backgroundColor: col + '15' }}>
+                    <HeroPortrait
+                      heroId={data.hero_id || data.id}
+                      heroName={data.name}
+                      imageUri={data.image}
+                      size={80}
+                      variant="detail"
+                    />
+                  </View>
                 ) : (
-                  <HeroIdleAnimation stars={stars} size={80} color={col}>
-                    <View style={[s.heroImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
-                      <Text style={[s.heroImgInit, { color: col }]}>{data.name?.[0]}</Text>
-                    </View>
-                  </HeroIdleAnimation>
+                  <View style={[s.heroImgPh, { backgroundColor: col + '15', borderColor: rarCol }]}>
+                    <Text style={[s.heroImgInit, { color: col }]}>{data.name?.[0]}</Text>
+                  </View>
                 )}
               </TouchableOpacity>
               <View style={s.heroInfo}>

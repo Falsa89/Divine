@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, Image, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
-import HeroIdleAnimation from '../components/ui/HeroIdleAnimation';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
 import {
@@ -10,6 +9,8 @@ import {
   GREEK_HOPLITE_DETAIL,
   GREEK_HOPLITE_ID,
   GREEK_HOPLITE_NAME,
+  heroFullscreenSource,
+  getHeroContract,
 } from '../components/ui/hopliteAssets';
 import { RARITY, ELEMENTS } from '../constants/theme';
 
@@ -22,10 +23,22 @@ export default function HeroViewerScreen() {
   const [hero, setHero] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // Per splash art portrait, usiamo altezza-bound: image occupa quasi tutta l'altezza,
-  // larghezza proporzionale (splash è 1024x1024 -> square, ma vogliamo evitare crop)
+  // RM1.17-G — Fullscreen orientation dal contract per-eroe. Per
+  // Berserker e futuri eroi portrait 2:3 usiamo bounding portrait:
+  // height = 0.95*screenH, width = height * 2/3. Per Hoplite (square)
+  // teniamo il legacy portraitHeight square.
+  const contract = getHeroContract(heroId, hero?.name || heroNameParam);
+  const wantPortrait = contract.viewer.fullscreenOrientation === 'portrait';
+  const portraitSourceAspect =
+    contract.crop.sourceAspect === 'portrait' ? (2/3)
+    : contract.crop.sourceAspect === 'landscape' ? (3/2)
+    : 1;
   const portraitHeight = Math.round(height * 0.95);
-  const portraitWidth = portraitHeight;  // splash è quadrata; fallback se altre splash fossero portrait
+  // Se wantPortrait e la sorgente è 2:3, larghezza = height * 2/3 per
+  // rispettare aspect naturale senza destructive crop.
+  const portraitWidth = wantPortrait
+    ? Math.round(portraitHeight * portraitSourceAspect)
+    : portraitHeight;
 
   // Short-circuit: se è Greek Hoplite usa splash locale, nessuna API necessaria
   const isHoplite =
@@ -90,23 +103,29 @@ export default function HeroViewerScreen() {
             style={{ width: portraitWidth, height: portraitHeight }}
             resizeMode="contain"
           />
-        ) : (
-          <HeroIdleAnimation
-            imageUri={imgUri || undefined}
-            stars={stars}
-            size={portraitHeight}
-            color={elemCol}
-            borderRadius={0}
-          >
-            {!imgUri && (
-              <View style={[s.ph, { width: portraitHeight, height: portraitHeight, borderColor: rarCol }]}>
-                <Text style={[s.phTxt, { color: elemCol, fontSize: portraitHeight * 0.35 }]}>
-                  {(hero.name || hero.hero_name || '?')[0]}
-                </Text>
-              </View>
-            )}
-          </HeroIdleAnimation>
-        )}
+        ) : (() => {
+          // RM1.17-G — Fullscreen via contract: usa splash portrait intera
+          // con resizeMode='contain' → nessun crop distruttivo, volto
+          // sempre visibile, orientation portrait anche se device landscape.
+          const fullscreenSrc = heroFullscreenSource(imgUri, heroId, hero.name || hero.hero_name);
+          if (fullscreenSrc) {
+            return (
+              <Image
+                source={fullscreenSrc}
+                style={{ width: portraitWidth, height: portraitHeight }}
+                resizeMode={contract.viewer.useContain ? 'contain' : 'cover'}
+              />
+            );
+          }
+          // Fallback placeholder se nessun asset disponibile
+          return (
+            <View style={[s.ph, { width: portraitHeight, height: portraitHeight, borderColor: rarCol }]}>
+              <Text style={[s.phTxt, { color: elemCol, fontSize: portraitHeight * 0.35 }]}>
+                {(hero.name || hero.hero_name || '?')[0]}
+              </Text>
+            </View>
+          );
+        })()}
 
         {/* Info overlay al bottom */}
         <View style={s.info}>

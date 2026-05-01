@@ -37,7 +37,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ELEMENTS, RARITY } from '../constants/theme';
-import { heroBattleImageSource, isGreekHoplite } from './ui/hopliteAssets';
+import { heroBattleImageSource, heroBattleStateSource, getHeroContract, isGreekHoplite } from './ui/hopliteAssets';
 import { getAnimationProfile } from './battle/heroBattleAnimations';
 import HeroHopliteRig from './ui/HeroHopliteRig';
 import Constants from 'expo-constants';
@@ -345,6 +345,13 @@ export default function BattleSprite({
   const elemBadgeSize = Math.max(14, Math.min(22, Math.round(size * 0.13)));
   const elemBadgeFont = Math.round(elemBadgeSize * 0.55);
 
+  // RM1.17-I — contract per-eroe: sopprime aura glow se removeDefaultGlow=true.
+  const battleContract = getHeroContract(
+    character?.hero_id || character?.id,
+    character?.hero_name || character?.name,
+  );
+  const suppressGlow = battleContract.battle.removeDefaultGlow;
+
   return (
     // ========================================================================
     //  ROOT: box CONOSCIUTO size × frameH. Riempie esattamente il wrapper
@@ -355,21 +362,24 @@ export default function BattleSprite({
       {/* -- LAYER BG-1: Aura glow ---------------------------------------- */}
       {/* Absolute centrato orizzontalmente, ancorato vicino ai piedi       */}
       {/* (bottom:0 = suolo). Mai inchiodato a 0,0.                         */}
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          {
-            position: 'absolute',
-            left: auraInset,
-            bottom: 0,
-            width: auraSize,
-            height: auraSize,
-            borderRadius: auraSize / 2,
-            backgroundColor: elemColor,
-          },
-          auraStyle,
-        ]}
-      />
+      {/* RM1.17-I — Se suppressGlow=true (contract), il layer non è montato. */}
+      {!suppressGlow && (
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            {
+              position: 'absolute',
+              left: auraInset,
+              bottom: 0,
+              width: auraSize,
+              height: auraSize,
+              borderRadius: auraSize / 2,
+              backgroundColor: elemColor,
+            },
+            auraStyle,
+          ]}
+        />
+      )}
 
       {/* -- LAYER BG-2: Shadow ellittica al suolo ----------------------- */}
       {/* NON segue il motion del character → resta al suolo quando attacca. */}
@@ -502,13 +512,52 @@ export default function BattleSprite({
                 <HeroHopliteRig size={frameW} state={state as any} actionInstanceId={actionInstanceId} facingScaleX={facingScaleX} paused={paused} />
               </View>
             ) : heroImage ? (
-              // Combat pose (es. Hoplite combat_base.png). contain preserva aspect
-              // ratio, justifyContent:'flex-end' del parent ancora ai piedi.
-              <Image
-                source={heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name)}
-                style={{ width: frameW, height: frameH }}
-                resizeMode="contain"
-              />
+              // RM1.17-I — Heroes con contract.battle.useStateSprites = true
+              // (es. Berserker) ricevono swap dinamico PNG per-state:
+              // idle/attack/skill/hit/death. Gli altri eroi (default
+              // contract) restano sul rendering combat_base statico
+              // pre-esistente → ZERO REGRESSION per Hoplite e eroi legacy.
+              (() => {
+                const contract = getHeroContract(
+                  character?.hero_id || character?.id,
+                  character?.hero_name || character?.name,
+                );
+                const useStateSprites = contract.battle.useStateSprites;
+                let stateKey: 'idle' | 'attack' | 'skill' | 'hit' | 'death' | 'combat_base' = 'combat_base';
+                if (useStateSprites) {
+                  switch (state) {
+                    case 'attack':
+                      stateKey = 'attack'; break;
+                    case 'skill':
+                    case 'ultimate':
+                      stateKey = 'skill'; break;
+                    case 'hit':
+                      stateKey = 'hit'; break;
+                    case 'dead':
+                      stateKey = 'death'; break;
+                    case 'idle':
+                    case 'heal':
+                    case 'dodge':
+                    default:
+                      stateKey = 'idle'; break;
+                  }
+                }
+                const src = useStateSprites
+                  ? (heroBattleStateSource(
+                      character?.hero_id || character?.id,
+                      character?.hero_name || character?.name,
+                      stateKey,
+                      heroImage,
+                    ) || heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name))
+                  : heroBattleImageSource(heroImage, character?.hero_id || character?.id, character?.hero_name || character?.name);
+                return (
+                  <Image
+                    source={src}
+                    style={{ width: frameW, height: frameH }}
+                    resizeMode="contain"
+                  />
+                );
+              })()
             ) : (
               // Placeholder (bot senza asset): stessa geometria size × frameH.
               <LinearGradient

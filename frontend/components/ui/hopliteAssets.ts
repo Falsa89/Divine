@@ -389,3 +389,263 @@ export function heroBattleImageSource(
   if (imageUrl) return { uri: imageUrl };
   return { uri: '' };
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// HERO ASSET CONTRACT (RM1.17-F/G/I — pipeline standard future-proof)
+// ════════════════════════════════════════════════════════════════════════
+/**
+ * Contratto asset per-eroe. Ogni nuovo eroe ufficiale dovrà registrarne
+ * uno qui per avere:
+ *  - variant mapping esplicito per contesto UI (card/detail/fullscreen/battle)
+ *  - crop metadata per portrait/card/detail (focus sul volto)
+ *  - viewer policy (orientation + contain vs cover)
+ *  - battle policy (state-sprite swap, glow soppressione, legacy motion)
+ *
+ * FALLBACK RULES (implementate sotto in getHeroVariant):
+ *  - variant richiesta mancante → portrait → splash → card → transparent → null
+ *  - fullscreen mancante → splash → detail → portrait
+ *  - idle mancante → combat_base
+ *  - attack/skill/hit/death mancanti → idle → combat_base
+ *  - Sentinel sconosciuto → safe fallback null (no crash)
+ *  - Eroi non-Hoplite → MAI asset Hoplite come fallback visibile
+ */
+export type HeroVariantKey =
+  | 'splash' | 'portrait' | 'detail' | 'fullscreen' | 'transparent'
+  | 'combat_base' | 'idle' | 'attack' | 'skill' | 'hit' | 'death';
+
+export type HeroCropConfig = {
+  /** Focus Y (0..1) per portrait circolare/quadrato. 0.28 = volto in alto. */
+  portraitFocusY: number;
+  /** Focus Y per card rettangolare. */
+  cardFocusY: number;
+  /** Focus Y per detail panel. */
+  detailFocusY: number;
+  /** Aspect intrinseco della splash: 'portrait' | 'square' | 'landscape'. */
+  sourceAspect: 'portrait' | 'square' | 'landscape';
+};
+
+export type HeroViewerConfig = {
+  fullscreenVariant: HeroVariantKey;
+  fullscreenOrientation: 'portrait' | 'landscape';
+  useContain: boolean;
+  /** Se false, il fullscreen NON applicherà crop cover aggressivo. */
+  allowDestructiveCrop: boolean;
+};
+
+export type HeroBattleConfig = {
+  /** State di default quando non c'è action attiva. */
+  defaultState: 'idle' | 'combat_base';
+  /** Se true, BattleSprite userà state sprites (idle/attack/skill/hit/death). */
+  useStateSprites: boolean;
+  /** Se true, BattleSprite sopprime l'aura glow elementale di default. */
+  removeDefaultGlow: boolean;
+  /** Se true, usa DEFAULT_PROFILE generico di transform; se false, il
+   *  profilo animazioni è minimale (state swap + micro-motion). */
+  useLegacyDefaultMotion: boolean;
+};
+
+export interface HeroAssetContract {
+  id: string;
+  variants: Partial<Record<HeroVariantKey, ImageSourcePropType>>;
+  crop: HeroCropConfig;
+  viewer: HeroViewerConfig;
+  battle: HeroBattleConfig;
+}
+
+// --- Default / fallback contract (usato per eroi non registrati) -------
+export const DEFAULT_HERO_CONTRACT: HeroAssetContract = {
+  id: 'default',
+  variants: {},
+  crop: {
+    portraitFocusY: 0.35,
+    cardFocusY: 0.35,
+    detailFocusY: 0.40,
+    sourceAspect: 'portrait',
+  },
+  viewer: {
+    fullscreenVariant: 'splash',
+    fullscreenOrientation: 'portrait',
+    useContain: true,
+    allowDestructiveCrop: false,
+  },
+  battle: {
+    defaultState: 'combat_base',
+    useStateSprites: false,
+    removeDefaultGlow: false,
+    useLegacyDefaultMotion: true,
+  },
+};
+
+// --- Registry contratti per-eroe ---------------------------------------
+export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
+  // HOPLITE — preserva comportamento legacy 100%: il rig custom
+  // (HeroHopliteRig) è separato dai state sprites; lascia legacy motion e
+  // non usa state swap. `removeDefaultGlow` false per mantenere l'aura
+  // skill esistente identica a prima.
+  [GREEK_HOPLITE_ID]: {
+    id: GREEK_HOPLITE_ID,
+    variants: {
+      splash: GREEK_HOPLITE_PORTRAIT,
+      portrait: GREEK_HOPLITE_PORTRAIT,
+      detail: GREEK_HOPLITE_DETAIL,
+      fullscreen: GREEK_HOPLITE_PORTRAIT,
+      transparent: GREEK_HOPLITE_TRANSPARENT,
+      combat_base: GREEK_HOPLITE_COMBAT_BASE,
+    },
+    crop: {
+      portraitFocusY: 0.32,
+      cardFocusY: 0.30,
+      detailFocusY: 0.35,
+      sourceAspect: 'square',
+    },
+    viewer: {
+      fullscreenVariant: 'splash',
+      fullscreenOrientation: 'portrait',
+      useContain: true,
+      allowDestructiveCrop: false,
+    },
+    battle: {
+      defaultState: 'combat_base',
+      useStateSprites: false,          // rig custom HeroHopliteRig
+      removeDefaultGlow: false,        // legacy aura skill preservata
+      useLegacyDefaultMotion: true,    // legacy motion preservato
+    },
+  },
+  // BERSERKER — primo esempio completo della pipeline future-proof.
+  [NORSE_BERSERKER_ID]: {
+    id: NORSE_BERSERKER_ID,
+    variants: {
+      splash: NORSE_BERSERKER_PORTRAIT,
+      portrait: NORSE_BERSERKER_PORTRAIT,
+      detail: NORSE_BERSERKER_DETAIL,
+      fullscreen: NORSE_BERSERKER_PORTRAIT,
+      transparent: NORSE_BERSERKER_TRANSPARENT,
+      combat_base: NORSE_BERSERKER_COMBAT_BASE,
+      idle: NORSE_BERSERKER_IDLE,
+      attack: NORSE_BERSERKER_ATTACK,
+      skill: NORSE_BERSERKER_SKILL,
+      hit: NORSE_BERSERKER_HIT,
+      death: NORSE_BERSERKER_DEATH,
+    },
+    crop: {
+      // Volto Berserker ~25-30% dall'alto (analisi AI vision + misure PIL).
+      portraitFocusY: 0.28,
+      cardFocusY: 0.25,
+      detailFocusY: 0.30,
+      sourceAspect: 'portrait',
+    },
+    viewer: {
+      fullscreenVariant: 'splash',
+      fullscreenOrientation: 'portrait',
+      useContain: true,
+      allowDestructiveCrop: false,
+    },
+    battle: {
+      defaultState: 'idle',
+      useStateSprites: true,
+      removeDefaultGlow: true,
+      useLegacyDefaultMotion: false,
+    },
+  },
+};
+
+/** Ritorna il contratto per l'eroe, o DEFAULT_HERO_CONTRACT. */
+export function getHeroContract(
+  heroId?: string | null,
+  heroName?: string | null,
+): HeroAssetContract {
+  const localId = resolveLocalHeroId(heroId, heroName);
+  if (localId && HERO_CONTRACTS[localId]) return HERO_CONTRACTS[localId];
+  return DEFAULT_HERO_CONTRACT;
+}
+
+/** Priority order per resolve variant con fallback chain. */
+const VARIANT_FALLBACK_CHAIN: Record<HeroVariantKey, HeroVariantKey[]> = {
+  splash:      ['splash', 'portrait', 'detail'],
+  portrait:    ['portrait', 'splash', 'detail'],
+  detail:      ['detail', 'splash', 'portrait'],
+  fullscreen:  ['fullscreen', 'splash', 'detail', 'portrait'],
+  transparent: ['transparent'],
+  combat_base: ['combat_base', 'idle'],
+  idle:        ['idle', 'combat_base'],
+  attack:      ['attack', 'idle', 'combat_base'],
+  skill:       ['skill', 'idle', 'combat_base'],
+  hit:         ['hit', 'idle', 'combat_base'],
+  death:       ['death', 'idle', 'combat_base'],
+};
+
+/**
+ * Risolve un asset per variant con fallback chain.
+ * Se il contract non contiene la variant richiesta, prova la chain di
+ * fallback. Se nulla è disponibile ritorna null.
+ */
+export function getHeroVariant(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+  variant: HeroVariantKey,
+): ImageSourcePropType | null {
+  const contract = getHeroContract(heroId, heroName);
+  const chain = VARIANT_FALLBACK_CHAIN[variant] || [variant];
+  for (const v of chain) {
+    const src = contract.variants[v];
+    if (src) return src;
+  }
+  return null;
+}
+
+/**
+ * Fullscreen viewer source (RM1.17-G). Ritorna sempre la splash portrait
+ * dell'eroe — MAI transparent/combat_base. Fallback safe su sentinel
+ * sconosciuti → null (non crash).
+ */
+export function heroFullscreenSource(
+  imageUrl?: string | null,
+  heroId?: string | null,
+  heroName?: string | null,
+): ImageSourcePropType | null {
+  // 1) contratto per-eroe
+  const contract = getHeroContract(heroId, heroName);
+  if (contract.id !== 'default') {
+    const variant = contract.viewer.fullscreenVariant;
+    const src = getHeroVariant(heroId, heroName, variant);
+    if (src) return src;
+  }
+  // 2) sentinel-based lookup
+  const parsed = parseHeroAssetSentinel(imageUrl);
+  if (parsed) {
+    const src = getHeroVariant(parsed.heroId, null, 'fullscreen');
+    if (src) return src;
+    return null;  // sentinel sconosciuto — safe null
+  }
+  // 3) URL remoto valido
+  if (imageUrl) return { uri: imageUrl };
+  return null;
+}
+
+/**
+ * Battle state source (RM1.17-I). Ritorna l'asset per lo state corrente
+ * (idle/attack/skill/hit/death). Rispetta fallback chain: state → idle →
+ * combat_base. Se il contratto non ha useStateSprites, ritorna combat_base.
+ */
+export function heroBattleStateSource(
+  heroId: string | null | undefined,
+  heroName: string | null | undefined,
+  state: 'idle' | 'attack' | 'skill' | 'hit' | 'death' | 'combat_base',
+  imageUrl?: string | null,
+): ImageSourcePropType | null {
+  const contract = getHeroContract(heroId, heroName);
+  if (!contract.battle.useStateSprites) {
+    // Legacy: solo combat_base statico
+    return getHeroVariant(heroId, heroName, 'combat_base') ||
+           heroBattleImageSource(imageUrl, heroId, heroName);
+  }
+  const src = getHeroVariant(heroId, heroName, state);
+  if (src) return src;
+  // Fallback sentinel-based
+  const parsed = parseHeroAssetSentinel(imageUrl);
+  if (parsed) {
+    const v = getHeroVariant(parsed.heroId, null, state);
+    if (v) return v;
+  }
+  return null;
+}

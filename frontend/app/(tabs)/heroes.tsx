@@ -261,7 +261,7 @@ export default function HeroesTab() {
                   <Image
                     source={heroPortraitSource(selected.hero_image, selected.hero_id || selected.id, selected.hero_name)}
                     style={s.detImg}
-                    resizeMode="cover"
+                    resizeMode="contain"
                   />
                   <LinearGradient
                     colors={['transparent', 'rgba(10,10,40,0.8)']}
