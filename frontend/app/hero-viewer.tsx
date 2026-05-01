@@ -55,7 +55,10 @@ export default function HeroViewerScreen() {
     }
     (async () => {
       try {
-        const d = await apiCall(`/api/hero/detail/${heroId}`);
+        // RM1.17-E: l'endpoint /api/hero/detail/{id} non esiste; usiamo
+        // il catalog endpoint /api/heroes/{hero_id} che restituisce il
+        // doc canonico con campi image_url e image (sentinel).
+        const d = await apiCall(`/api/heroes/${heroId}`);
         setHero(d);
       } catch {}
       finally { setLoading(false); }

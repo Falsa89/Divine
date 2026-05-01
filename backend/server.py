@@ -149,8 +149,10 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
 async def get_all_heroes():
     heroes = await db.heroes.find({}, {"image_base64": 0}).to_list(100)
     for h in heroes:
+        # RM1.17-E: expose sentinel asset:<id>:<variant> via image_url
+        # Resolver frontend gestisce il sentinel; URL remoto resta invariato.
         if not h.get("image_url"):
-            h["image_url"] = None
+            h["image_url"] = h.get("image") or None
     return [serialize_doc(h) for h in heroes]
 
 @app.get("/api/heroes/{hero_id}")
@@ -158,6 +160,9 @@ async def get_hero(hero_id: str):
     hero = await db.heroes.find_one({"id": hero_id})
     if not hero:
         raise HTTPException(status_code=404, detail="Eroe non trovato")
+    # RM1.17-E: expose sentinel in image_url per retrocompatibilità frontend.
+    if not hero.get("image_url") and hero.get("image"):
+        hero["image_url"] = hero["image"]
     return serialize_doc(hero)
 
 @app.get("/api/user/heroes")

@@ -21,6 +21,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image as RNImage } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import HeroPortrait, { isHopliteHero } from '../ui/HeroPortrait';
+import { heroImageSource, isHeroAssetSentinel } from '../ui/hopliteAssets';
 
 type Props = {
   hero: {
@@ -30,6 +31,9 @@ type Props = {
     element?: string;
     hero_class?: string;
     image_url?: string | null;
+    /** RM1.17-E: sentinel asset:<id>:<variant> quando image_url è remoto-null.
+     *  Il resolver in hopliteAssets lo mappa all'asset locale corretto. */
+    image?: string | null;
   } | null;
   source?: string;
   inTutorial?: boolean;
@@ -46,6 +50,12 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
 
   const isHop = isHopliteHero(hero.id, hero.name);
   const isBorea = hero.id === 'borea';
+  // RM1.17-E: preferenza ordine — sentinel locale (asset:*) batte image_url
+  // remoto null. Se presente, usiamo il resolver che ritorna il cutout
+  // trasparente locale (variant transparent/card/detail) mantenendo la
+  // semantica storica Home = overlay.
+  const imageSentinel = hero.image && isHeroAssetSentinel(hero.image) ? hero.image : null;
+  const remoteUrl = hero.image_url && !isHeroAssetSentinel(hero.image_url) ? hero.image_url : null;
 
   return (
     <TouchableOpacity
@@ -64,10 +74,23 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
           variant="transparent"
           containerStyle={{ width, height }}
         />
-      ) : hero.image_url ? (
-        // Altri eroi con image_url remoto
+      ) : imageSentinel ? (
+        // RM1.17-E — Eroi con sentinel (Berserker, future heroes): delega a
+        // HeroPortrait con variant='transparent' per coerenza semantica Home
+        // overlay (cutout se disponibile, altrimenti card). NON cambia il
+        // layout/positioning del wrapper.
+        <HeroPortrait
+          heroId={hero.id}
+          heroName={hero.name}
+          imageUri={imageSentinel}
+          size={Math.min(width, height)}
+          variant="transparent"
+          containerStyle={{ width, height }}
+        />
+      ) : remoteUrl ? (
+        // Altri eroi con image_url remoto (URL HTTP/HTTPS).
         <RNImage
-          source={{ uri: hero.image_url }}
+          source={{ uri: remoteUrl }}
           style={{ width, height }}
           resizeMode="contain"
         />

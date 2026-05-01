@@ -535,7 +535,7 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
             "is_reincarnated": is_reinc,
             "reincarnation_count": uh.get("reincarnation_count", 0),
             "can_reincarnate": can_reincarnate,
-            "image": hero.get("image_url"),
+            "image": hero.get("image_url") or hero.get("image_base64") or hero.get("image"),
             "base_stats": base_stats,
             "effective_stats": effective_stats,
             "skills": skills,
@@ -603,7 +603,7 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
             "hero_class": hero_class,
             "rarity": base_rarity,
             "faction": hero.get("faction"),
-            "image": hero.get("image_url"),
+            "image": hero.get("image_url") or hero.get("image_base64") or hero.get("image"),
             "base": {
                 "level": base_level,
                 "level_cap": base_level_cap,

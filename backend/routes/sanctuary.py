@@ -541,6 +541,11 @@ def register_sanctuary_routes(router, db, get_current_user, serialize_doc):
         # Is this the currently-selected home hero?
         is_home = (current_user.get("home_hero_id") == hero_id)
 
+        # RM1.17-E: se image_url è None e image (sentinel asset:*) presente,
+        # espone il sentinel in image_url per retrocompatibilità frontend.
+        if not hero.get("image_url") and hero.get("image"):
+            hero["image_url"] = hero["image"]
+
         return {
             "hero": serialize_doc(hero),
             "is_owned": is_owned,

@@ -21,6 +21,7 @@ const CATEGORIES = [
   {
     title: 'Progressione',
     items: [
+      { label: 'Collezione Eroi', icon: '\uD83D\uDCDA', route: '/hero-collection', gradient: ['#FFD700', '#CC9900'] as const },
       { label: 'Addestramento Eroico', icon: '\u2694\uFE0F', route: '/hero-training', gradient: ['#FFD700', '#BB55FF'] as const },
       { label: 'Santuario', icon: '\u26E9\uFE0F', route: '/sanctuary', gradient: ['#FF77CC', '#CC5599'] as const },
       { label: 'Artefatti & Costellazioni', icon: '\uD83D\uDC8E', route: '/artifacts', gradient: ['#BB55FF', '#8833CC'] as const },
