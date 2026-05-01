@@ -27,11 +27,13 @@ os.makedirs(RUN, exist_ok=True)
 
 # Config layout ufficiale
 STATES = {
-    "idle":   {"file": "idle_source.png",   "frames": 6, "cols": 6, "rows": 1, "layout": "row",    "fps": 8,  "loop": True},
-    "attack": {"file": "attack_source.png", "frames": 5, "cols": 5, "rows": 1, "layout": "row",    "fps": 12, "loop": False},
-    "skill":  {"file": "skill_source.png",  "frames": 9, "cols": 5, "rows": 2, "layout": "5plus4", "fps": 12, "loop": False},
-    "hit":    {"file": "hit_source.png",    "frames": 5, "cols": 5, "rows": 1, "layout": "row",    "fps": 10, "loop": False},
-    "death":  {"file": "death_source.png",  "frames": 6, "cols": 6, "rows": 1, "layout": "row",    "fps": 8,  "loop": False},
+    "idle":   {"file": "idle_source.png",   "frames": 6, "cols": 6, "rows": 1, "layout": "row",       "fps": 8,  "loop": True},
+    "attack": {"file": "attack_source.png", "frames": 5, "cols": 5, "rows": 1, "layout": "row",       "fps": 12, "loop": False},
+    # v4: 5×2 grid uniforme (NON 5+4). Prime 9 celle sono frame visibili, 10ª
+    # (r1c4) è padding trasparente non animato — "frames must remain 9".
+    "skill":  {"file": "skill_source.png",  "frames": 9, "cols": 5, "rows": 2, "layout": "5x2_take9", "fps": 12, "loop": False},
+    "hit":    {"file": "hit_source.png",    "frames": 5, "cols": 5, "rows": 1, "layout": "row",       "fps": 10, "loop": False},
+    "death":  {"file": "death_source.png",  "frames": 6, "cols": 6, "rows": 1, "layout": "row",       "fps": 8,  "loop": False},
 }
 
 # Target runtime cell size (uniform per tutti gli stati)
@@ -56,6 +58,9 @@ def source_cell_size(img_size, cfg):
         return W / cfg["frames"], H
     elif cfg["layout"] == "5plus4":
         return W / 5, H / 2
+    elif cfg["layout"] == "5x2_take9":
+        # Grid 5×2 uniforme; prendiamo 9 celle (la 10ª è padding vuoto).
+        return W / 5, H / 2
     raise ValueError(cfg["layout"])
 
 
@@ -78,7 +83,21 @@ def extract_cells_raw(img, cfg):
         for i in range(5):
             x0 = int(round(i * cw)); x1 = int(round((i + 1) * cw))
             out.append(img.crop((x0, 0, x1, int(round(ch)))))
-        # bot 4
+        # bot 4 (cell = W/4)
+        cw_bot = W / 4
+        for i in range(4):
+            x0 = int(round(i * cw_bot)); x1 = int(round((i + 1) * cw_bot))
+            out.append(img.crop((x0, int(round(ch)), x1, H)))
+    elif cfg["layout"] == "5x2_take9":
+        # 5×2 grid uniforme; prendiamo r0c0..r0c4 + r1c0..r1c3 (9 frame).
+        # La cella r1c4 è padding trasparente non animato.
+        cw = W / 5
+        ch = H / 2
+        # top 5
+        for i in range(5):
+            x0 = int(round(i * cw)); x1 = int(round((i + 1) * cw))
+            out.append(img.crop((x0, 0, x1, int(round(ch)))))
+        # bot 4 (SOLO i primi 4 della 5×2 grid)
         for i in range(4):
             x0 = int(round(i * cw)); x1 = int(round((i + 1) * cw))
             out.append(img.crop((x0, int(round(ch)), x1, H)))
@@ -184,10 +203,10 @@ def main():
         first = sheet.crop((0, 0, TARGET_W, TARGET_H))
         first_frames.append((state, first, n, cfg["fps"], cfg["loop"]))
 
-    # 4) battle_animations.json v3
+    # 4) battle_animations.json v6
     anim = {
         "heroId": "norse_berserker",
-        "version": 3,
+        "version": 6,
         "frameWidth": TARGET_W,
         "frameHeight": TARGET_H,
         "animations": {
@@ -205,7 +224,7 @@ def main():
     anim_path = os.path.join(RUN, "battle_animations.json")
     with open(anim_path, "w") as f:
         json.dump(anim, f, indent=2)
-    print(f"\n[4] battle_animations.json v3 scritto: {anim_path}")
+    print(f"\n[4] battle_animations.json v6 scritto: {anim_path}")
 
     # 5) Preview composito (tutti i runtime sheet concatenati con label)
     print("\n[5] DEBUG PREVIEW (runtime sheets concatenati con label)")
