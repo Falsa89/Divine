@@ -520,13 +520,17 @@ export default function BattleSprite({
           motionStyle,
         ]}
       >
-        {/* Character frame — stessa geometria per tutti i render path. */}
+        {/* Character frame — stessa geometria per tutti i render path.
+            RM1.17-FINAL: overflow 'visible' per permettere runtimeRenderScale>1
+            (Berserker) di espandersi oltre il frame box senza essere clippato.
+            Hoplite (rig square fitted) non è affected perché il contenuto
+            rig sta dentro size×size box → non overflow. */}
         <View
           style={{
             width: frameW,
             height: frameH,
             borderRadius: 8,
-            overflow: 'hidden',
+            overflow: 'visible',
             alignItems: 'center',
             justifyContent: 'flex-end',      // il contenuto si ancora al bottom
             backgroundColor: 'transparent',
@@ -561,6 +565,14 @@ export default function BattleSprite({
               // MAX: supera sprite_url legacy e state-sprite statici. Leggiamo
               // i metadati (frames/fps/loop/grid) dal contract e animiamo
               // via setState frame counter.
+              //
+              // RM1.17-FINAL — runtimeRenderScale applicato al wrapper qui:
+              // Berserker body fills solo 39% del frame width (vs Hoplite 97%)
+              // a causa di come l'artista ha impaginato le source cells con
+              // VFX-space laterale. Non possiamo fixarlo via sheet regen senza
+              // clip. Invece applichiamo scale al wrapper finale con
+              // translateY compensation per mantenere feet ancorati al bottom
+              // del frame box → scale origin visualmente spostato al bottom.
               (() => {
                 let rtState: 'idle' | 'attack' | 'skill' | 'hit' | 'death' = 'idle';
                 switch (state) {
@@ -574,16 +586,37 @@ export default function BattleSprite({
                   case 'dodge':
                   default: rtState = 'idle'; break;
                 }
+                const rScale = battleContract.battle.runtimeRenderScale ?? 1;
+                // translateY UP of (frameH*(scale-1))/2 per mantenere
+                // feet al bottom del layout box (scale origin = center RN).
+                const scaleTransform = rScale !== 1
+                  ? [
+                      { translateY: -(frameH * (rScale - 1)) / 2 },
+                      { scale: rScale },
+                    ]
+                  : [];
                 return (
-                  <RuntimeSheetSprite
-                    heroId={character?.hero_id || character?.id}
-                    heroName={character?.hero_name || character?.name}
-                    state={rtState}
-                    size={frameW}
-                    facingScaleX={facingScaleX}
-                    paused={paused}
-                    actionInstanceId={actionInstanceId}
-                  />
+                  <View
+                    pointerEvents="none"
+                    style={{
+                      width: frameW,
+                      height: frameH,
+                      overflow: 'visible',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      transform: scaleTransform,
+                    }}
+                  >
+                    <RuntimeSheetSprite
+                      heroId={character?.hero_id || character?.id}
+                      heroName={character?.hero_name || character?.name}
+                      state={rtState}
+                      size={frameW}
+                      facingScaleX={facingScaleX}
+                      paused={paused}
+                      actionInstanceId={actionInstanceId}
+                    />
+                  </View>
                 );
               })()
             ) : forceContractStateSprites ? (

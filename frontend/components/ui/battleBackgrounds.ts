@@ -196,7 +196,34 @@ export function pickBattleBackground(ctx: BattleBgContext): BattleBgResult {
     };
   }
 
-  // Fallback — gradient neutro (source = null)
+  // RM1.17-FINAL — TIE FALLBACK deterministico.
+  // Se dominantBoth + dominantA hanno tie, evitiamo di ricadere su gradient
+  // (che mostra sfondo blu/nero scuro = "background scomparso"). Usiamo la
+  // prima fazione riconosciuta di Team A; poi Team B; poi qualsiasi.
+  const firstFactionOf = (heroes: any[] | null | undefined): FactionKey | null => {
+    if (!heroes) return null;
+    for (const h of heroes) {
+      const f = extractFaction(h);
+      if (f && BG_REGISTRY[f]) return f;
+    }
+    return null;
+  };
+  const tieFallback =
+    firstFactionOf(ctx.teamA as any[] | null | undefined) ||
+    firstFactionOf(ctx.teamB as any[] | null | undefined) ||
+    firstFactionOf(allHeroes);
+  if (tieFallback && BG_REGISTRY[tieFallback]) {
+    const arr = BG_REGISTRY[tieFallback];
+    return {
+      source: arr[variantIndex % arr.length],
+      faction: tieFallback,
+      reason: 'dominant_player',   // teniamo etichetta compatibile con tipo
+      variantIndex,
+    };
+  }
+
+  // Fallback — gradient neutro (source = null) - ultimo-resort se nessun
+  // eroe ha una fazione riconosciuta.
   return {
     source: null,
     faction: null,

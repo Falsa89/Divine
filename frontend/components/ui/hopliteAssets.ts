@@ -482,6 +482,11 @@ export type HeroBattleConfig = {
   /** Se true, usa DEFAULT_PROFILE generico di transform; se false, il
    *  profilo animazioni è minimale (state swap + micro-motion). */
   useLegacyDefaultMotion: boolean;
+  /** RM1.17-FINAL — Scala applicata al wrapper di rendering in battle SOLO
+   *  per eroi runtime-sheet. Compensa la differenza di proporzioni body/frame
+   *  (es. Berserker body fills 39% cell width vs Hoplite 97%). Bottom-anchor
+   *  compensation applicata. Default: 1.0 (no-op). */
+  runtimeRenderScale?: number;
 };
 
 /** Metadati runtime sheet per animazione a frame. */
@@ -612,6 +617,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
       useRuntimeSheets: true,        // RM1.17-N — animazioni a frame
       removeDefaultGlow: true,
       useLegacyDefaultMotion: false,
+      runtimeRenderScale: 1.30,      // RM1.17-FINAL — match visivo vs Hoplite
     },
     runtimeSheets: {
       idle: {
