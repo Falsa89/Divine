@@ -1083,3 +1083,259 @@ export function hasHeroUiContract(
   const contract = getHeroContract(heroId, heroName);
   return !!contract.ui;
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// RM1.18 — NEW HERO IMPORT STANDARD: TEMPLATE + VALIDATOR
+// ════════════════════════════════════════════════════════════════════════
+//
+// Documentazione completa: /app/docs/NEW_HERO_IMPORT_CHECKLIST.md
+//
+// Questo blocco implementa lo STANDARD operativo per importare un nuovo
+// eroe locale senza ri-introdurre i bug storici (face crop, preload
+// mancante, motion duplicata, scale non coerente, background tie null,
+// scroll DETTAGLIO irraggiungibile).
+//
+// Fornisce:
+//   1) `NEW_HERO_CONTRACT_TEMPLATE`: template `HeroAssetContract` con
+//      valori sicuri di default (contain everywhere, no glow, preload OK).
+//      Copiare + rinominare + compilare gli asset.
+//   2) `validateHeroContract(heroId)`: ritorna lista di warning sulla
+//      completezza del contract (UI slots, variants, runtime sheets,
+//      scale, preload). Array vuoto = OK.
+//   3) `validateAllHeroContracts()`: helper dev-only che cicla tutti gli
+//      eroi registrati e raccoglie i warning in un dizionario.
+//
+// IMPORTANTE: questo file NON impone check a runtime (nessun throw),
+// NON modifica comportamenti esistenti. È una guardrail read-only per
+// developer. L'uso è opt-in via console/dev-tools.
+// ════════════════════════════════════════════════════════════════════════
+
+/**
+ * Template di HeroAssetContract con valori di default sicuri per
+ * un nuovo eroe portrait 2:3. Copiare e compilare per ogni nuovo hero.
+ *
+ *  - Tutte le UI slot usano `contain` → volto mai tagliato.
+ *  - `verticalPriority: true` sulla fullscreen → portrait viewer ruota
+ *    in PORTRAIT_UP e fit-to-height.
+ *  - Runtime sheets disabilitate di default: se l'eroe ha solo
+ *    `combat_base.png` come battle asset, tenere `useRuntimeSheets: false`
+ *    + `useStateSprites: false` + `defaultState: 'combat_base'`.
+ *  - Se l'eroe usa runtime sheets, impostare:
+ *      useRuntimeSheets: true
+ *      useStateSprites:  false
+ *      useLegacyDefaultMotion: false
+ *      removeDefaultGlow: true
+ *      runtimeRenderScale: <tarato vs Hoplite/Berserker reference>
+ *      runtimeSheets: { idle, attack, skill, hit, death }
+ *
+ * Il template è annotato inline con i placeholder `<...>`. NON è un
+ * contract valido as-is: è solo una base da compilare.
+ */
+export const NEW_HERO_CONTRACT_TEMPLATE = {
+  id: '<canonical_hero_id>',
+  variants: {
+    // splash: require('../../assets/heroes/<hero_id>/splash.jpg'),
+    // portrait: require('../../assets/heroes/<hero_id>/splash.jpg'),
+    // card: require('../../assets/heroes/<hero_id>/splash.jpg'),
+    // detail: require('../../assets/heroes/<hero_id>/splash.jpg'),
+    // fullscreen: require('../../assets/heroes/<hero_id>/splash.jpg'),
+    // transparent: require('../../assets/heroes/<hero_id>/transparent.png'),
+    // combat_base: require('../../assets/heroes/<hero_id>/combat_base.png'),
+  },
+  crop: {
+    portraitFocusY: 0.32,
+    cardFocusY: 0.28,
+    detailFocusY: 0.30,
+    sourceAspect: 'portrait' as const, // 'portrait' | 'square' | 'landscape'
+  },
+  viewer: {
+    fullscreenVariant: 'splash' as const,
+    fullscreenOrientation: 'portrait' as const,
+    useContain: true,
+    allowDestructiveCrop: false,
+  },
+  battle: {
+    defaultState: 'idle' as const,
+    useStateSprites: false,          // true SOLO se niente runtime sheets
+    useRuntimeSheets: false,         // true se runtime/*_sheet.png esistono
+    removeDefaultGlow: true,
+    useLegacyDefaultMotion: false,
+    // runtimeRenderScale: 1.0,      // tarare vs Hoplite/Berserker se runtime
+  },
+  // runtimeSheets: {
+  //   idle:   { source: require('../../assets/heroes/<hero_id>/runtime/idle_sheet.png'),   ... },
+  //   attack: { source: require('../../assets/heroes/<hero_id>/runtime/attack_sheet.png'), ... },
+  //   skill:  { source: require('../../assets/heroes/<hero_id>/runtime/skill_sheet.png'),  ... },
+  //   hit:    { source: require('../../assets/heroes/<hero_id>/runtime/hit_sheet.png'),    ... },
+  //   death:  { source: require('../../assets/heroes/<hero_id>/runtime/death_sheet.png'),  ... },
+  // },
+  ui: {
+    // Home: cutout trasparente su gradient. Contain → full body, no crop.
+    home:            { variant: 'transparent' as const, resizeMode: 'contain' as const, focusY: 0.5, scale: 1.0 },
+    // Card: grid collezione 48×48. Contain + scale custom se serve presenza.
+    card:            { variant: 'card' as const,        resizeMode: 'contain' as const, focusY: 0.5, scale: 1.0 },
+    // DetailIcon: header 80×80. Contain default, safe per portrait 2:3.
+    detailIcon:      { variant: 'detail' as const,      resizeMode: 'contain' as const, focusY: 0.5, scale: 1.0 },
+    // SelectedPreview: pannello destro Collezione ~180×170. Contain per
+    // preservare full body portrait e presenza comparabile a Hoplite.
+    selectedPreview: { variant: 'portrait' as const,    resizeMode: 'contain' as const, focusY: 0.5, scale: 1.0 },
+    // Fullscreen: portrait verticale grande, height-priority lock device.
+    fullscreen:      { variant: 'fullscreen' as const,  resizeMode: 'contain' as const, focusY: 0.5, scale: 1.0, verticalPriority: true },
+  },
+};
+
+/** Slot UI obbligatori per ogni HeroUiContract. */
+const REQUIRED_UI_SLOTS: readonly HeroUiSlot[] = ['home', 'card', 'detailIcon', 'selectedPreview', 'fullscreen'];
+
+/** Variant minime per un eroe "completo" (portrait/fullscreen/card/detail). */
+const REQUIRED_VARIANTS: readonly HeroVariantKey[] = ['splash', 'portrait', 'card', 'detail', 'fullscreen'];
+
+/** Stati runtime sheet richiesti se `useRuntimeSheets: true`. */
+const REQUIRED_RUNTIME_STATES: readonly RuntimeSheetState[] = ['idle', 'attack', 'skill', 'hit', 'death'];
+
+/**
+ * Validatore read-only per un singolo HeroAssetContract.
+ *
+ * Controlla:
+ *  - tutti i variants obbligatori sono popolati
+ *  - tutti gli UI slot sono popolati (con i campi minimi)
+ *  - ui.fullscreen ha `verticalPriority: true`
+ *  - se battle.useRuntimeSheets=true: runtimeSheets ha tutti e 5 gli stati
+ *  - se battle.useRuntimeSheets=true: useStateSprites DEVE essere false
+ *  - se battle.useRuntimeSheets=true: useLegacyDefaultMotion DEVE essere false
+ *  - sourceAspect è uno dei valori supportati
+ *  - combat_base esiste per eroi con rig di battaglia
+ *
+ * Non esegue I/O su filesystem (i `require(...)` sono già risolti in build).
+ * Ritorna array di stringhe: vuoto = contract OK.
+ */
+export function validateHeroContract(
+  heroId: string | null | undefined,
+  heroName?: string | null,
+): string[] {
+  const warnings: string[] = [];
+  if (!heroId) {
+    warnings.push('[validateHeroContract] heroId mancante');
+    return warnings;
+  }
+  // NB: getHeroContract ripiega su DEFAULT_HERO_CONTRACT se l'id è ignoto.
+  // Per validare solo gli eroi REGISTRATI nel system verifichiamo
+  // esplicitamente la presenza nel dictionary.
+  const registered = HERO_CONTRACTS[heroId];
+  if (!registered) {
+    warnings.push(`[${heroId}] nessuna entry in HERO_CONTRACTS — eroe non registrato`);
+    return warnings;
+  }
+  const c = registered;
+
+  // 1. Variants
+  for (const v of REQUIRED_VARIANTS) {
+    if (!c.variants[v]) {
+      warnings.push(`[${heroId}] variant mancante: ${v}`);
+    }
+  }
+  if (!c.variants.combat_base) {
+    warnings.push(`[${heroId}] variant combat_base mancante (richiesto per rig di battaglia)`);
+  }
+
+  // 2. UI contract
+  if (!c.ui) {
+    warnings.push(`[${heroId}] ui contract assente — fallback su DEFAULT_UI_CONTRACT`);
+  } else {
+    for (const slot of REQUIRED_UI_SLOTS) {
+      const f = c.ui[slot];
+      if (!f) {
+        warnings.push(`[${heroId}] ui slot mancante: ${slot}`);
+        continue;
+      }
+      if (!f.variant) warnings.push(`[${heroId}] ui.${slot}.variant mancante`);
+      if (!f.resizeMode) warnings.push(`[${heroId}] ui.${slot}.resizeMode mancante`);
+      if (typeof f.focusY !== 'number') warnings.push(`[${heroId}] ui.${slot}.focusY non numerico`);
+    }
+    // Fullscreen deve avere verticalPriority true per true-portrait viewer.
+    if (c.ui.fullscreen && c.ui.fullscreen.verticalPriority !== true) {
+      warnings.push(`[${heroId}] ui.fullscreen.verticalPriority DEVE essere true per portrait viewer device-lock`);
+    }
+  }
+
+  // 3. SourceAspect
+  if (!['portrait', 'square', 'landscape'].includes(c.crop.sourceAspect)) {
+    warnings.push(`[${heroId}] crop.sourceAspect invalido: ${c.crop.sourceAspect}`);
+  }
+
+  // 4. Runtime sheets consistency
+  if (c.battle.useRuntimeSheets) {
+    if (c.battle.useStateSprites) {
+      warnings.push(`[${heroId}] useRuntimeSheets=true INCOMPATIBILE con useStateSprites=true`);
+    }
+    if (c.battle.useLegacyDefaultMotion) {
+      warnings.push(`[${heroId}] useRuntimeSheets=true richiede useLegacyDefaultMotion=false (runtime owns motion)`);
+    }
+    if (!c.runtimeSheets) {
+      warnings.push(`[${heroId}] useRuntimeSheets=true ma runtimeSheets assente`);
+    } else {
+      for (const st of REQUIRED_RUNTIME_STATES) {
+        if (!c.runtimeSheets[st]) {
+          warnings.push(`[${heroId}] runtimeSheets.${st} mancante`);
+        }
+      }
+    }
+    if (c.battle.removeDefaultGlow !== true) {
+      // Non è un errore hard (Hoplite glow intenzionale), ma warn per nuovi eroi.
+      warnings.push(`[${heroId}] NOTE: runtime sheets + removeDefaultGlow=false — intenzionale?`);
+    }
+    if (typeof c.battle.runtimeRenderScale !== 'number') {
+      warnings.push(`[${heroId}] runtimeRenderScale non impostato — verifica scale vs Hoplite/Berserker`);
+    }
+  }
+
+  // 5. State sprites consistency (mutually exclusive con runtime sheets)
+  if (c.battle.useStateSprites && !c.battle.useRuntimeSheets) {
+    const stateVariants: HeroVariantKey[] = ['idle', 'attack', 'skill', 'hit', 'death'];
+    for (const sv of stateVariants) {
+      if (!c.variants[sv]) {
+        warnings.push(`[${heroId}] useStateSprites=true ma variant ${sv} mancante`);
+      }
+    }
+  }
+
+  return warnings;
+}
+
+/**
+ * Valida TUTTI gli eroi registrati in HERO_CONTRACTS. Utile per invocazione
+ * manuale da console dev-tools o da un test unitario opt-in.
+ * Ritorna un oggetto { [heroId]: warnings[] } solo per eroi con warning.
+ */
+export function validateAllHeroContracts(): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const heroId of Object.keys(HERO_CONTRACTS)) {
+    const w = validateHeroContract(heroId);
+    if (w.length > 0) out[heroId] = w;
+  }
+  return out;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// NEW_HERO_IMPORT_CHECKLIST — riferimento rapido
+// ════════════════════════════════════════════════════════════════════════
+// Per il processo completo vedi /app/docs/NEW_HERO_IMPORT_CHECKLIST.md
+//
+// Quick checklist:
+//   [A] Asset folder: frontend/assets/heroes/<hero_id>/
+//        ├── splash.jpg, transparent.png (se Home), combat_base.png
+//        ├── source_sheets/*.png (5 stati, se runtime)
+//        └── runtime/*_sheet.png + battle_animations.json (se runtime)
+//   [B] HERO_CONTRACTS entry con: id, variants, crop.sourceAspect, viewer,
+//        battle, ui (5 slot), runtimeSheets (se applicabile)
+//   [C] UI framing: contain everywhere di default; cover SOLO se verificato
+//        che non taglia il volto; scale in contract, non in CSS components.
+//   [D] Battle runtime: se useRuntimeSheets=true → BattleSprite branch
+//        runtime, no external motion, runtimeRenderScale tarato.
+//   [E] Battle preload: getHeroBattlePreloadAssets(...) copre tutti gli
+//        asset locali del nuovo eroe, battle phase attende il caricamento.
+//   [F] Background fallback deterministico (no tie randomness).
+//   [G] Safety: Hoplite/Berserker invariati; tsc clean; Metro clean.
+//   [H] Validator: validateHeroContract('<id>') ritorna [] dopo import.
+// ════════════════════════════════════════════════════════════════════════
+
