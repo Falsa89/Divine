@@ -98,13 +98,39 @@ export default function RuntimeSheetSprite({
 
   if (!info) return null;
 
-  // Calcola colonna/riga per il frame corrente
-  const col = frameIdx % info.columns;
-  const row = Math.floor(frameIdx / info.columns);
+  // RM1.17-O — SAFETY GUARD: clamp frameIdx in range [0, frames-1]. Previene
+  // di mostrare la cella padding trasparente (es. skill 10ª cella) se per
+  // una race il counter dovesse avanzare oltre info.frames-1.
+  const safeFrameIdx = Math.max(0, Math.min(frameIdx, info.frames - 1));
+
+  // Calcola colonna/riga per il frame corrente con safeFrameIdx
+  const col = safeFrameIdx % info.columns;
+  const row = Math.floor(safeFrameIdx / info.columns);
 
   // Dimensioni totali della Image (grid completo in coordinate display)
   const totalW = info.columns * frameW;
   const totalH = info.rows * frameH;
+
+  // RM1.17-O — VISUAL SCALE a bottom-anchor
+  // Alcuni eroi (Berserker) hanno il body nel source più piccolo di Hoplite
+  // battlefield. Applichiamo una scala visiva UNIFORME per tutti gli stati
+  // (letta dal contract) con compensazione translateY per mantenere feet
+  // ancorati al bottom del wrapper layout box. Default 1.0 → no-op.
+  //
+  // Math: scale (origin = center) espande il contenuto ±(H*(S-1))/2 da center.
+  // Per mantenere visual bottom = layout bottom, trasliamo UP di
+  // (H*(S-1))/2. Il facingScaleX rimane nel wrapper esterno; combinando
+  // scale uniforme interno + scaleX esterno, il flip orizzontale funziona
+  // (scale uniforme è commutativo rispetto a scaleX=-1).
+  const visualScale = typeof info.visualScale === 'number' && info.visualScale > 0
+    ? info.visualScale
+    : 1;
+  const scaleTransform = visualScale !== 1
+    ? [
+        { translateY: -(frameH * (visualScale - 1)) / 2 },
+        { scale: visualScale },
+      ]
+    : [];
 
   return (
     <View
@@ -112,10 +138,10 @@ export default function RuntimeSheetSprite({
       style={{
         width: frameW,
         height: frameH,
-        overflow: 'hidden',
+        overflow: visualScale > 1 ? 'visible' : 'hidden',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        transform: [{ scaleX: facingScaleX }],
+        transform: [{ scaleX: facingScaleX }, ...scaleTransform],
       }}
     >
       <Image

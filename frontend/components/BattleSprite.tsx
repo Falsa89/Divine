@@ -201,6 +201,31 @@ export default function BattleSprite({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state !== 'dead']);
 
+  // ═══════════════════════════════════════════════════════════════════════
+  // RM1.17-O — CONTRATTO eroe + flag ALTO in function body
+  // Questi devono essere disponibili DENTRO lo state animation useEffect (qui
+  // sotto). Prima erano dichiarati vicino al render branch → useEffect non
+  // poteva vedere `useRuntimeSheets` e quindi non poteva disabilitare
+  // animProfile per gli eroi con runtime sheet → drift su attack/skill.
+  // Duplicati rimossi sotto.
+  // ═══════════════════════════════════════════════════════════════════════
+  const isHoplite = isGreekHoplite(
+    character?.hero_id || character?.id,
+    character?.hero_name || character?.name,
+  );
+  const battleContract = getHeroContract(
+    character?.hero_id || character?.id,
+    character?.hero_name || character?.name,
+  );
+  const suppressGlow = battleContract.battle.removeDefaultGlow;
+  const forceContractStateSprites = battleContract.battle.useStateSprites === true;
+  const useRuntimeSheets =
+    battleContract.battle.useRuntimeSheets === true &&
+    hasHeroRuntimeSheets(
+      character?.hero_id || character?.id,
+      character?.hero_name || character?.name,
+    );
+
   // --- State animations -------------------------------------------------------
   // Delega al profilo dell'eroe. Il profilo conosce la fantasia (spear thrust,
   // Terremoto, kneel death, ecc.) e applica withSequence sui shared values.
@@ -225,6 +250,41 @@ export default function BattleSprite({
     cancelAnimation(transY);
     cancelAnimation(bodyRot);
     cancelAnimation(spriteScale);
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // RM1.17-O — GUARD runtime-sheet heroes
+    // Per gli eroi che usano RuntimeSheetSprite (Berserker+), lo sheet stesso
+    // OWN la motion visiva (frame-based). Applicare anche animProfile esterno
+    // (transX dash, spriteScale pulse, bodyRot, ecc.) causa:
+    //   - drift orizzontale su attack
+    //   - flicker di size su skill
+    //   - aura inconsistente con sheet
+    // Reset dei shared values a rest state + early return. Hoplite NON è
+    // toccato (usa HeroHopliteRig + animProfile normalmente).
+    // ═══════════════════════════════════════════════════════════════════════
+    if (useRuntimeSheets) {
+      cancelAnimation(transX);
+      cancelAnimation(transY);
+      cancelAnimation(bodyRot);
+      cancelAnimation(spriteScale);
+      cancelAnimation(spriteOp);
+      cancelAnimation(auraOp);
+      cancelAnimation(auraSc);
+      cancelAnimation(hitFlash);
+      cancelAnimation(idleY);
+
+      transX.value = 0;
+      transY.value = 0;
+      bodyRot.value = 0;
+      spriteScale.value = 1;
+      spriteOp.value = 1;
+      auraOp.value = 0;
+      auraSc.value = 1;
+      idleY.value = 0;
+      // RuntimeSheetSprite owns visual motion — no animProfile per runtime-sheet heroes.
+      return;
+    }
+
     const handles = {
       transX, transY, bodyRot, spriteScale, spriteOp,
       auraOp, auraSc, hitFlash, idleY,
@@ -241,7 +301,7 @@ export default function BattleSprite({
       case 'dead':     animProfile.death(handles, ctx); break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, [state, useRuntimeSheets]);
 
   // v16.8 — PAUSE PROPAGATION
   // Quando paused → cancella tutte le animazioni in corso freezando ogni
@@ -302,10 +362,8 @@ export default function BattleSprite({
   //    (flip) → character renderizzato LEFT → guarda Team A enemy ✓
   // Il flip è applicato su un wrapper View STATIC e NON-ANIMATO (non dentro
   // Animated.View) → niente nested-scaleX composition bugs iOS/Android.
-  const isHoplite = isGreekHoplite(
-    character?.hero_id || character?.id,
-    character?.hero_name || character?.name,
-  );
+  // NOTE RM1.17-O: isHoplite già dichiarato SOPRA (vicino all'animation
+  // effect). Non ridichiarare per rispettare TS no-redeclare.
   const nativeFacing: 'left' | 'right' = isHoplite ? 'right' : 'right';
   const targetFacing: 'left' | 'right' = isEnemy ? 'left' : 'right';
   const facingScaleX = nativeFacing !== targetFacing ? -1 : 1;
@@ -346,24 +404,9 @@ export default function BattleSprite({
   const elemBadgeSize = Math.max(14, Math.min(22, Math.round(size * 0.13)));
   const elemBadgeFont = Math.round(elemBadgeSize * 0.55);
 
-  // RM1.17-I — contract per-eroe: sopprime aura glow se removeDefaultGlow=true.
-  const battleContract = getHeroContract(
-    character?.hero_id || character?.id,
-    character?.hero_name || character?.name,
-  );
-  const suppressGlow = battleContract.battle.removeDefaultGlow;
-  // RM1.17-K — Contract state-sprites hanno PRIORITÀ sopra hasSpriteSheet.
-  // Senza questo, un eroe ufficiale con sprite_url popolato (bot/legacy)
-  // rimarrebbe bloccato in sprite-sheet mode e non vedrebbe mai le sue
-  // animazioni PNG per-state. Hoplite resta in cima (branch separato).
-  const forceContractStateSprites = battleContract.battle.useStateSprites === true;
-
-  // RM1.17-N — Runtime sprite-sheet ha PRIORITÀ MASSIMA (dopo Hoplite rig).
-  // Se l'eroe ha runtimeSheets definiti, li usiamo animati a frame, saltando
-  // completamente il branch state-sprite statico.
-  const useRuntimeSheets =
-    battleContract.battle.useRuntimeSheets === true &&
-    hasHeroRuntimeSheets(character?.hero_id || character?.id, character?.hero_name || character?.name);
+  // RM1.17-I — contract per-eroe: suppressGlow/forceContractStateSprites/
+  // useRuntimeSheets già dichiarati SOPRA (vicino all'animation effect) in
+  // RM1.17-O. Non ridichiarare.
 
   // Dev debug (OFF in production) — traccia la branch attiva per Berserker.
   const BERSERKER_ASSET_DEBUG = false;

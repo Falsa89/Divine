@@ -495,6 +495,10 @@ export type RuntimeSheetInfo = {
   /** Cell-size nativa del source (es. 640×768 per Berserker). */
   frameWidth: number;
   frameHeight: number;
+  /** RM1.17-O — scala visiva applicata al rendering in battle SOLO.
+   *  Applicata da RuntimeSheetSprite con bottom-anchor compensation.
+   *  NON modifica layout/grid/posizione battlefield. Default: 1.0 (nessuna scala). */
+  visualScale?: number;
 };
 
 export type RuntimeSheetState = 'idle' | 'attack' | 'skill' | 'hit' | 'death';
@@ -619,6 +623,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.idle.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+        visualScale: 1.30,   // RM1.17-O — body visivo matcha Hoplite battlefield
       },
       attack: {
         source: BERSERKER_RUNTIME_ATTACK_SHEET,
@@ -629,6 +634,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.attack.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+        visualScale: 1.30,
       },
       skill: {
         source: BERSERKER_RUNTIME_SKILL_SHEET,
@@ -639,6 +645,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.skill.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+        visualScale: 1.30,
       },
       hit: {
         source: BERSERKER_RUNTIME_HIT_SHEET,
@@ -649,6 +656,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.hit.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+        visualScale: 1.30,
       },
       death: {
         source: BERSERKER_RUNTIME_DEATH_SHEET,
@@ -659,6 +667,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
         loop: BERSERKER_BATTLE_ANIM_META.animations.death.loop,
         frameWidth: BERSERKER_BATTLE_ANIM_META.frameWidth,
         frameHeight: BERSERKER_BATTLE_ANIM_META.frameHeight,
+        visualScale: 1.30,
       },
     },
   },
@@ -800,4 +809,39 @@ export function hasHeroRuntimeSheets(
 ): boolean {
   const contract = getHeroContract(heroId, heroName);
   return !!(contract.battle.useRuntimeSheets && contract.runtimeSheets?.idle);
+}
+
+/**
+ * RM1.17-O — Preload battle assets helper.
+ * Ritorna la lista di tutti gli asset Image locali che battle deve avere
+ * decodati PRIMA di passare alla fase `preparing`. Include:
+ *   - runtime sprite-sheets (idle/attack/skill/hit/death) se l'eroe ha
+ *     `useRuntimeSheets: true`
+ *   - combat_base statico (fallback + eventuale aura layer)
+ * Dedup automatico via set. Usato da combat.tsx nel preload block.
+ */
+export function getHeroBattlePreloadAssets(
+  heroId?: string | null,
+  heroName?: string | null,
+  image?: string | null,
+): ImageSourcePropType[] {
+  const contract = getHeroContract(heroId, heroName);
+  const assets: ImageSourcePropType[] = [];
+
+  if (contract.runtimeSheets) {
+    Object.values(contract.runtimeSheets).forEach((info) => {
+      if (info?.source) assets.push(info.source);
+    });
+  }
+
+  const combat = heroBattleImageSource(image || undefined, heroId, heroName);
+  if (combat) assets.push(combat);
+
+  const seen = new Set<string>();
+  return assets.filter((asset: any) => {
+    const key = typeof asset === 'number' ? `num:${asset}` : JSON.stringify(asset);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }

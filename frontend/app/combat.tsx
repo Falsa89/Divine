@@ -6,7 +6,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
 import BattleSprite from '../components/BattleSprite';
-import { heroBattleImageSource, heroPortraitSource, GREEK_HOPLITE_COMBAT_BASE } from '../components/ui/hopliteAssets';
+import { heroBattleImageSource, heroPortraitSource, GREEK_HOPLITE_COMBAT_BASE, getHeroBattlePreloadAssets } from '../components/ui/hopliteAssets';
 import { HOPLITE_BATTLE_ASSET_MANIFEST } from '../components/ui/hopliteAssetManifest';
 import { pickBattleBackground, BattleBgResult, preloadBattleAsset } from '../components/ui/battleBackgrounds';
 import { buildBattleLayout, getHomePosition } from '../components/battle/motionSystem';
@@ -362,6 +362,20 @@ export default function CombatScreen() {
       HOPLITE_BATTLE_ASSET_MANIFEST.forEach((src, idx) => {
         preloadAssets.push({ src, label: `hoplite · asset #${idx + 1}` });
       });
+      // RM1.17-O — Preload runtime sprite-sheets per TUTTI gli eroi in campo.
+      // Senza questo, un eroe con runtimeSheets (es. Berserker) partiva la
+      // battle con sheet ancora non decoded → idle blank per i primi ms.
+      [...tA, ...tB].forEach((c) => {
+        const heroId = c.hero_id || c.id;
+        const heroName = c.hero_name || c.name;
+        const img = c.hero_image || c.image;
+        getHeroBattlePreloadAssets(heroId, heroName, img).forEach((src, idx) => {
+          preloadAssets.push({
+            src,
+            label: `${heroName || heroId || 'hero'} · battle asset #${idx + 1}`,
+          });
+        });
+      });
       setPreloadTotal(preloadAssets.length);
       setPreloadLoaded(0);
       setPreloadLabel('Inizializzazione…');
@@ -380,8 +394,15 @@ export default function CombatScreen() {
         }
       };
 
-      const preloadAll = Promise.all(preloadAssets.map(loadOne)).then(() => undefined);
-      const preloadTimeout = new Promise<void>(res => setTimeout(res, 3500));
+      // RM1.17-O — Promise.allSettled (non race con timeout corto) per
+      // garantire che TUTTI gli asset locali require() abbiano un chance
+      // di decode. Timeout di sicurezza esteso a 7000ms con log di warning.
+      const preloadAll = Promise.allSettled(preloadAssets.map(loadOne)).then(() => undefined);
+      const preloadTimeout = new Promise<void>(res => setTimeout(() => {
+        // eslint-disable-next-line no-console
+        console.warn('[combat] preload timeout 7000ms raggiunto, parto comunque');
+        res();
+      }, 7000));
       await Promise.race([preloadAll, preloadTimeout]);
       // Init all sprite states
       const states: Record<string, SpriteData> = {};
