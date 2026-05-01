@@ -1,444 +1,52 @@
 {
+  "task": "RM1.17-N-RETRY",
+  "anti_drift_policy": "no per-frame bbox recenter; global uniform scale; center horizontal + bottom anchor",
+  "global_scale": 0.768,
+  "target_cell": {
+    "width": 640,
+    "height": 768
+  },
   "source_audit": {
     "idle": {
       "file": "idle_source.png",
-      "size": "2000x1000",
-      "sha256": "31abf23c3eca7722c08f6d46fa800af350b17c0960f9563be1f8ea8fbe4fb63d"
+      "size": "2048x853",
+      "mode": "RGBA",
+      "cell_source": "341.33x853.00",
+      "cell_scaled": "262.1x655.1",
+      "sha256": "bb152bc9a86c00811e2f093ff2d8dd49cbf2a9436a89729ba03ab2dc8793a87c"
     },
     "attack": {
       "file": "attack_source.png",
-      "size": "2500x700",
-      "sha256": "7a89a69266debe2555758484e5f0a0502b4d823859d5c9670d7346159f78d899"
+      "size": "2048x573",
+      "mode": "RGBA",
+      "cell_source": "409.60x573.00",
+      "cell_scaled": "314.6x440.1",
+      "sha256": "1a35d2ff630b9907ad534de32448bc90ee79221dcfbd3296c25c4328a27948fc"
     },
     "skill": {
       "file": "skill_source.png",
       "size": "2000x1000",
+      "mode": "RGBA",
+      "cell_source": "400.00x500.00",
+      "cell_scaled": "307.2x384.0",
       "sha256": "717e4819171a1220ea7c3cb143c3151dc49da3ab1b48c3cf94b18d1882bf68cd"
     },
     "hit": {
       "file": "hit_source.png",
       "size": "2000x1000",
+      "mode": "RGBA",
+      "cell_source": "400.00x1000.00",
+      "cell_scaled": "307.2x768.0",
       "sha256": "8c40cef366d3ba44c6517ec90b9b3423606fa2a94d84a4bcf597396e6e2c9c8d"
     },
     "death": {
       "file": "death_source.png",
       "size": "2000x1000",
+      "mode": "RGBA",
+      "cell_source": "333.33x1000.00",
+      "cell_scaled": "256.0x768.0",
       "sha256": "09b9b415f9cad4ec43058f614e0962c2682ae235a95f9f48dd3e5876f39a70e1"
     }
-  },
-  "detection_report": {
-    "idle": {
-      "target": 6,
-      "detected": 6,
-      "verdict": "PASS",
-      "frames": [
-        {
-          "index": 0,
-          "bbox": [
-            13,
-            279,
-            279,
-            743
-          ],
-          "w": 266,
-          "h": 464,
-          "area_px": 54265
-        },
-        {
-          "index": 1,
-          "bbox": [
-            308,
-            279,
-            576,
-            743
-          ],
-          "w": 268,
-          "h": 464,
-          "area_px": 54867
-        },
-        {
-          "index": 2,
-          "bbox": [
-            599,
-            258,
-            862,
-            743
-          ],
-          "w": 263,
-          "h": 485,
-          "area_px": 55652
-        },
-        {
-          "index": 3,
-          "bbox": [
-            894,
-            270,
-            1136,
-            743
-          ],
-          "w": 242,
-          "h": 473,
-          "area_px": 55426
-        },
-        {
-          "index": 4,
-          "bbox": [
-            1156,
-            279,
-            1408,
-            743
-          ],
-          "w": 252,
-          "h": 464,
-          "area_px": 54881
-        },
-        {
-          "index": 5,
-          "bbox": [
-            1445,
-            279,
-            1703,
-            743
-          ],
-          "w": 258,
-          "h": 464,
-          "area_px": 54989
-        }
-      ]
-    },
-    "attack": {
-      "target": 5,
-      "detected": 5,
-      "verdict": "PASS",
-      "frames": [
-        {
-          "index": 0,
-          "bbox": [
-            3,
-            230,
-            420,
-            559
-          ],
-          "w": 417,
-          "h": 329,
-          "area_px": 40807
-        },
-        {
-          "index": 1,
-          "bbox": [
-            443,
-            168,
-            981,
-            559
-          ],
-          "w": 538,
-          "h": 391,
-          "area_px": 48838
-        },
-        {
-          "index": 2,
-          "bbox": [
-            999,
-            130,
-            1498,
-            558
-          ],
-          "w": 499,
-          "h": 428,
-          "area_px": 63231
-        },
-        {
-          "index": 3,
-          "bbox": [
-            1498,
-            197,
-            1876,
-            557
-          ],
-          "w": 378,
-          "h": 360,
-          "area_px": 37774
-        },
-        {
-          "index": 4,
-          "bbox": [
-            1927,
-            192,
-            2271,
-            561
-          ],
-          "w": 344,
-          "h": 369,
-          "area_px": 37184
-        }
-      ]
-    },
-    "skill": {
-      "target": 9,
-      "detected": 9,
-      "verdict": "PASS",
-      "frames": [
-        {
-          "index": 0,
-          "bbox": [
-            46,
-            168,
-            252,
-            485
-          ],
-          "w": 206,
-          "h": 317,
-          "area_px": 27610
-        },
-        {
-          "index": 1,
-          "bbox": [
-            295,
-            195,
-            503,
-            485
-          ],
-          "w": 208,
-          "h": 290,
-          "area_px": 25964
-        },
-        {
-          "index": 2,
-          "bbox": [
-            542,
-            211,
-            793,
-            485
-          ],
-          "w": 251,
-          "h": 274,
-          "area_px": 29101
-        },
-        {
-          "index": 3,
-          "bbox": [
-            806,
-            32,
-            1037,
-            486
-          ],
-          "w": 231,
-          "h": 454,
-          "area_px": 31765
-        },
-        {
-          "index": 4,
-          "bbox": [
-            1110,
-            92,
-            1377,
-            486
-          ],
-          "w": 267,
-          "h": 394,
-          "area_px": 28689
-        },
-        {
-          "index": 5,
-          "bbox": [
-            80,
-            618,
-            355,
-            944
-          ],
-          "w": 275,
-          "h": 326,
-          "area_px": 24121
-        },
-        {
-          "index": 6,
-          "bbox": [
-            424,
-            590,
-            754,
-            948
-          ],
-          "w": 330,
-          "h": 358,
-          "area_px": 39532
-        },
-        {
-          "index": 7,
-          "bbox": [
-            840,
-            609,
-            1212,
-            961
-          ],
-          "w": 372,
-          "h": 352,
-          "area_px": 43932
-        },
-        {
-          "index": 8,
-          "bbox": [
-            1254,
-            618,
-            1435,
-            943
-          ],
-          "w": 181,
-          "h": 325,
-          "area_px": 27836
-        }
-      ]
-    },
-    "hit": {
-      "target": 5,
-      "detected": 5,
-      "verdict": "PASS",
-      "frames": [
-        {
-          "index": 0,
-          "bbox": [
-            11,
-            240,
-            291,
-            743
-          ],
-          "w": 280,
-          "h": 503,
-          "area_px": 61982
-        },
-        {
-          "index": 1,
-          "bbox": [
-            336,
-            215,
-            701,
-            742
-          ],
-          "w": 365,
-          "h": 527,
-          "area_px": 74243
-        },
-        {
-          "index": 2,
-          "bbox": [
-            737,
-            379,
-            1037,
-            742
-          ],
-          "w": 300,
-          "h": 363,
-          "area_px": 44136
-        },
-        {
-          "index": 3,
-          "bbox": [
-            1069,
-            363,
-            1343,
-            740
-          ],
-          "w": 274,
-          "h": 377,
-          "area_px": 45146
-        },
-        {
-          "index": 4,
-          "bbox": [
-            1407,
-            253,
-            1655,
-            743
-          ],
-          "w": 248,
-          "h": 490,
-          "area_px": 57887
-        }
-      ]
-    },
-    "death": {
-      "target": 6,
-      "detected": 6,
-      "verdict": "PASS",
-      "frames": [
-        {
-          "index": 0,
-          "bbox": [
-            12,
-            241,
-            290,
-            742
-          ],
-          "w": 278,
-          "h": 501,
-          "area_px": 61508
-        },
-        {
-          "index": 1,
-          "bbox": [
-            309,
-            257,
-            529,
-            741
-          ],
-          "w": 220,
-          "h": 484,
-          "area_px": 46368
-        },
-        {
-          "index": 2,
-          "bbox": [
-            564,
-            372,
-            815,
-            741
-          ],
-          "w": 251,
-          "h": 369,
-          "area_px": 41392
-        },
-        {
-          "index": 3,
-          "bbox": [
-            871,
-            518,
-            1149,
-            745
-          ],
-          "w": 278,
-          "h": 227,
-          "area_px": 33040
-        },
-        {
-          "index": 4,
-          "bbox": [
-            1172,
-            586,
-            1433,
-            742
-          ],
-          "w": 261,
-          "h": 156,
-          "area_px": 24736
-        },
-        {
-          "index": 5,
-          "bbox": [
-            1485,
-            666,
-            1790,
-            747
-          ],
-          "w": 305,
-          "h": 81,
-          "area_px": 14421
-        }
-      ]
-    }
-  },
-  "cell_size": {
-    "width": 640,
-    "height": 768,
-    "global_max_content": "538x527"
   },
   "runtime_files": {
     "idle": {
@@ -453,7 +61,7 @@
       "rows": 1,
       "fps": 8,
       "loop": true,
-      "sha256": "0c3f6eb324dd89e8ea3542e82c74a8964cf96aae4264822834a4aab6d8e19deb"
+      "sha256": "21dc3803783658e80175e7abca57a3a729a60f841ad0a5f67efa025903a0179e"
     },
     "attack": {
       "path": "/app/frontend/assets/heroes/norse_berserker/runtime/attack_sheet.png",
@@ -467,7 +75,7 @@
       "rows": 1,
       "fps": 12,
       "loop": false,
-      "sha256": "8432475163c2addb91153ce97fd8462b9935faa6064e8b859cb837eb71b25e3d"
+      "sha256": "785162c496c085f50de7e93769d5dd8161abb15ab8c6144cd5de4a1a5bdaf638"
     },
     "skill": {
       "path": "/app/frontend/assets/heroes/norse_berserker/runtime/skill_sheet.png",
@@ -481,7 +89,7 @@
       "rows": 2,
       "fps": 12,
       "loop": false,
-      "sha256": "c80a7cda2e89ec81766c323f6607af6e0df6504034dad89e46095ab4a9448835"
+      "sha256": "0e8c63001b83f19c0834747fc33eeb7cfe5448728ec9cb0cf3585bbcb84c8df7"
     },
     "hit": {
       "path": "/app/frontend/assets/heroes/norse_berserker/runtime/hit_sheet.png",
@@ -495,7 +103,7 @@
       "rows": 1,
       "fps": 10,
       "loop": false,
-      "sha256": "31d7fc167646fc1dfebd5e6f20e3b6b8979e183a930a2c8711be885f101741a4"
+      "sha256": "adfb2c015215faa1e6955fa23d815388e498a05ec224b983be689c88e1e89854"
     },
     "death": {
       "path": "/app/frontend/assets/heroes/norse_berserker/runtime/death_sheet.png",
@@ -509,13 +117,13 @@
       "rows": 1,
       "fps": 8,
       "loop": false,
-      "sha256": "c41818abc0b11ac1650e431d91ed609bee7f583fa608446cd7575ef785fb0048"
+      "sha256": "976dd820cd2c82ea2807af00974782eb586f0a794dfa87ef2941524888258689"
     }
   },
   "preview": {
     "path": "/app/frontend/assets/heroes/norse_berserker/runtime/_debug_berserker_runtime_preview.png",
-    "dimensions": "3840x4764",
-    "sha256": "62e8452d1bde31bf039ea7a204d4c3a030f211f8ed22f1fe04d167de256300c6"
+    "sha256": "86eddc6d58a7ec522ed5c1cbaad30a97ddaba9e9e27907da53a0582d5a7e2c85",
+    "dimensions": "3840x4774"
   },
-  "battle_animations_json_path": "/app/frontend/assets/heroes/norse_berserker/runtime/battle_animations.json"
+  "battle_animations_json": "/app/frontend/assets/heroes/norse_berserker/runtime/battle_animations.json"
 }
