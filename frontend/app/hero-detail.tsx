@@ -10,7 +10,6 @@ import TabSelector from '../components/ui/TabSelector';
 import GradientButton from '../components/ui/GradientButton';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
-import HeroIdleAnimation from '../components/ui/HeroIdleAnimation';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../constants/theme';
 

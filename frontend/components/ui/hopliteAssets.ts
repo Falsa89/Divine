@@ -27,13 +27,20 @@
  * │  - combat_base.png  → 1024×1024 RGBA, sprite battle (rig)         │
  * └───────────────────────────────────────────────────────────────────┘
  * ┌───────────────────────────────────────────────────────────────────┐
- * │ ASSET REALI BERSERKER (RM1.17):                                   │
- * │  - norse_berserker.jpg     → splash/portrait con sfondo full art  │
- * │  - berserker_sprites/idle.png → combat_base / pose laterale       │
- * │  - berserker_sprites/{attack,skill,hit,death}.png → battle anims  │
- * │  Note: nessuna variante 'transparent' dedicata → fallback a       │
- * │  splash (per Home overlay sembra accettabile, ma il record DB     │
- * │  Berserker NON è promosso ad hero della Home).                    │
+ * │ ASSET REALI BERSERKER (RM1.17-J — canonical contract pack):       │
+ * │  Percorso canonico: assets/heroes/norse_berserker/                │
+ * │  - splash.jpg         512×768  RGB   → card/portrait/detail/full  │
+ * │  - transparent.png    408×612  RGBA  → Home overlay cutout        │
+ * │  - combat_base.png    1024×1536 RGBA → fallback combat statico    │
+ * │  - idle.png           1536×1024 RGBA → battle state idle          │
+ * │  - attack.png         1536×1024 RGBA → battle state attack        │
+ * │  - skill.png          1024×1536 RGBA → battle state skill         │
+ * │  - hit.png            1024×1536 RGBA → battle state hit           │
+ * │  - death.png          1024×1536 RGBA → battle state death         │
+ * │  Forbidden paths (NON runtime Berserker):                         │
+ * │    berserker_sprites/* (legacy sprite sheets, solo dev tool)      │
+ * │    _legacy_wrong_pack/* (backup RM1.17-C)                         │
+ * │    norse_berserker.jpg root (legacy)                              │
  * └───────────────────────────────────────────────────────────────────┘
  *
  * RUOLI (HeroImageRole) — usare questi al posto dei nomi di file:
@@ -410,7 +417,7 @@ export function heroBattleImageSource(
  *  - Eroi non-Hoplite → MAI asset Hoplite come fallback visibile
  */
 export type HeroVariantKey =
-  | 'splash' | 'portrait' | 'detail' | 'fullscreen' | 'transparent'
+  | 'splash' | 'portrait' | 'card' | 'detail' | 'fullscreen' | 'transparent'
   | 'combat_base' | 'idle' | 'attack' | 'skill' | 'hit' | 'death';
 
 export type HeroCropConfig = {
@@ -487,6 +494,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
     variants: {
       splash: GREEK_HOPLITE_PORTRAIT,
       portrait: GREEK_HOPLITE_PORTRAIT,
+      card: GREEK_HOPLITE_PORTRAIT,
       detail: GREEK_HOPLITE_DETAIL,
       fullscreen: GREEK_HOPLITE_PORTRAIT,
       transparent: GREEK_HOPLITE_TRANSPARENT,
@@ -517,6 +525,7 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
     variants: {
       splash: NORSE_BERSERKER_PORTRAIT,
       portrait: NORSE_BERSERKER_PORTRAIT,
+      card: NORSE_BERSERKER_PORTRAIT,
       detail: NORSE_BERSERKER_DETAIL,
       fullscreen: NORSE_BERSERKER_PORTRAIT,
       transparent: NORSE_BERSERKER_TRANSPARENT,
@@ -535,7 +544,9 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
       sourceAspect: 'portrait',
     },
     viewer: {
-      fullscreenVariant: 'splash',
+      // RM1.17-J — fullscreenVariant='fullscreen' semantico;
+      // la fallback chain lo risolve a splash.jpg canonico.
+      fullscreenVariant: 'fullscreen',
       fullscreenOrientation: 'portrait',
       useContain: true,
       allowDestructiveCrop: false,
@@ -561,10 +572,11 @@ export function getHeroContract(
 
 /** Priority order per resolve variant con fallback chain. */
 const VARIANT_FALLBACK_CHAIN: Record<HeroVariantKey, HeroVariantKey[]> = {
-  splash:      ['splash', 'portrait', 'detail'],
-  portrait:    ['portrait', 'splash', 'detail'],
-  detail:      ['detail', 'splash', 'portrait'],
-  fullscreen:  ['fullscreen', 'splash', 'detail', 'portrait'],
+  splash:      ['splash', 'portrait', 'card', 'detail'],
+  portrait:    ['portrait', 'splash', 'card', 'detail'],
+  card:        ['card', 'portrait', 'splash', 'detail'],
+  detail:      ['detail', 'splash', 'portrait', 'card'],
+  fullscreen:  ['fullscreen', 'splash', 'detail', 'portrait', 'card'],
   transparent: ['transparent'],
   combat_base: ['combat_base', 'idle'],
   idle:        ['idle', 'combat_base'],
