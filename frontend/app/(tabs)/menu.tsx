@@ -62,6 +62,10 @@ const CATEGORIES = [
       { label: 'Amici', icon: '\uD83D\uDC65', route: '/friends', gradient: ['#4499FF', '#2277CC'] as const },
       { label: 'Seleziona Server', icon: '\uD83C\uDF10', route: '/servers', gradient: ['#44CC88', '#229966'] as const },
       { label: 'Eventi Giornalieri', icon: '\uD83C\uDF89', route: '/events', gradient: ['#44AAFF', '#2288CC'] as const },
+      // RM1.19 — Combat QA Lab: dev-only screen per validare animazioni,
+      // skill, effetti ed enemy behavior di ogni eroe (presente/futuro).
+      // Non è un'esperienza di gameplay; etichettato chiaramente come DEV.
+      { label: 'Combat QA Lab (DEV)', icon: '\uD83E\uDDEA', route: '/dev-combat-qa-lab', gradient: ['#FF4444', '#992222'] as const },
     ],
   },
 ];

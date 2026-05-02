@@ -1265,9 +1265,11 @@ export function validateHeroContract(
 
   // 4. Runtime sheets consistency
   if (c.battle.useRuntimeSheets) {
-    if (c.battle.useStateSprites) {
-      warnings.push(`[${heroId}] useRuntimeSheets=true INCOMPATIBILE con useStateSprites=true`);
-    }
+    // NB: useStateSprites=true + useRuntimeSheets=true è LEGAL in produzione.
+    // BattleSprite branch order: runtime sheets FIRST → state sprites
+    // FALLBACK. Il flag stateSprites su un eroe con runtime sheets serve
+    // come safety net se in futuro le runtime non si caricassero. Quindi
+    // NIENTE warning hard su questa combinazione.
     if (c.battle.useLegacyDefaultMotion) {
       warnings.push(`[${heroId}] useRuntimeSheets=true richiede useLegacyDefaultMotion=false (runtime owns motion)`);
     }
