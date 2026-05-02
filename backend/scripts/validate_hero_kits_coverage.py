@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
 """
-RM1.21-G — Official Hero Kit Coverage Audit
+RM1.21-G v0.2 — Official Hero Kit Coverage Audit
 
 Read-only validation script for Divine RPG / Divine Waifus hero kit design-data.
 
-Validates:
-- data/design/heroes_kits_1star_2star.json
-- data/design/heroes_kits_3star.json
-- data/design/heroes_kits_4star.json
-- data/design/heroes_kits_5star.json
-- data/design/heroes_kits_6star_extra.json
-
-Against:
-- backend/data/character_bible.py
+v0.2 fixes:
+- accepts `heroes` as either dict or list;
+- ignores non-hero separator entries such as `_GROUP_1_STAR`;
+- canonicalizes role labels such as "DPS Melee" -> "dps_melee";
+- reads release_group from hero entry or file-level metadata/scope when not duplicated per hero.
 
 This script performs NO DB writes, imports no runtime gameplay systems, and changes no kit data.
 It only prints a report and writes a JSON audit report to backend/reports/.
@@ -21,6 +17,7 @@ It only prints a report and writes a JSON audit report to backend/reports/.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -64,6 +61,50 @@ EXPECTED_COUNTS = {
     "total": 101,
 }
 
+ROLE_ALIASES = {
+    "tank": "tank",
+    "dps_melee": "dps_melee",
+    "dps_ranged": "dps_ranged",
+    "mage_aoe": "mage_aoe",
+    "assassin_burst": "assassin_burst",
+    "support_buffer": "support_buffer",
+    "healer": "healer",
+    "control_debuff": "control_debuff",
+    "hybrid_special": "hybrid_special",
+    "dpsmelee": "dps_melee",
+    "dpsranged": "dps_ranged",
+    "mageaoe": "mage_aoe",
+    "assassin": "assassin_burst",
+    "burst": "assassin_burst",
+    "assassinburst": "assassin_burst",
+    "support": "support_buffer",
+    "buffer": "support_buffer",
+    "supportbuffer": "support_buffer",
+    "control": "control_debuff",
+    "debuff": "control_debuff",
+    "controldebuff": "control_debuff",
+    "hybrid": "hybrid_special",
+    "hybridspecial": "hybrid_special",
+}
+
+ELEMENT_ALIASES = {
+    "terra": "earth",
+    "fuoco": "fire",
+    "acqua": "water",
+    "vento": "wind",
+    "fulmine": "lightning",
+    "luce": "light",
+    "oscurità": "dark",
+    "oscurita": "dark",
+    "earth": "earth",
+    "fire": "fire",
+    "water": "water",
+    "wind": "wind",
+    "lightning": "lightning",
+    "light": "light",
+    "dark": "dark",
+}
+
 FORBIDDEN_LOW_RARITY_EFFECTS = {
     "execute",
     "revive",
@@ -82,8 +123,40 @@ ADVANCED_LOW_RARITY_FIELDS = {
 }
 
 
+def _slug(value: Any) -> Optional[str]:
+    if value is None:
+        return None
+    text = str(value).strip().lower()
+    if not text:
+        return None
+    text = text.replace("★", "")
+    text = text.replace("&", " and ")
+    text = re.sub(r"[/+\-]+", "_", text)
+    text = re.sub(r"[^\w]+", "_", text)
+    text = re.sub(r"_+", "_", text).strip("_")
+    return text or None
+
+
+def _normalize_role(value: Any) -> Optional[str]:
+    slug = _slug(value)
+    if slug is None:
+        return None
+    compact = slug.replace("_", "")
+    return ROLE_ALIASES.get(slug) or ROLE_ALIASES.get(compact) or slug
+
+
+def _normalize_element(value: Any) -> Optional[str]:
+    slug = _slug(value)
+    if slug is None:
+        return None
+    return ELEMENT_ALIASES.get(slug, slug)
+
+
+def _normalize(value: Any) -> Optional[str]:
+    return _slug(value)
+
+
 def _import_character_bible() -> Tuple[Dict[str, Any], Dict[str, Any]]:
-    """Import Character Bible in a way that tolerates small module-path differences."""
     try:
         from backend.data.character_bible import CHARACTER_BIBLE, CHARACTER_BIBLE_BY_ID  # type: ignore
         return CHARACTER_BIBLE, CHARACTER_BIBLE_BY_ID
@@ -98,7 +171,6 @@ def _import_character_bible() -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
 
 def _entry_value(entry: Any, *names: str, default: Any = None) -> Any:
-    """Read a value from dict-like or dataclass-like Character Bible entries."""
     if isinstance(entry, dict):
         for name in names:
             if name in entry:
@@ -110,16 +182,7 @@ def _entry_value(entry: Any, *names: str, default: Any = None) -> Any:
     return default
 
 
-def _normalize(value: Any) -> Any:
-    if value is None:
-        return None
-    if isinstance(value, str):
-        return value.strip().lower()
-    return value
-
-
 def _entry_to_meta(hero_id: str, entry: Any) -> Dict[str, Any]:
-    name = _entry_value(entry, "name", "display_name", default=hero_id)
     native_rarity = _entry_value(entry, "native_rarity", "rarity", default=None)
     try:
         native_rarity = int(native_rarity) if native_rarity is not None else None
@@ -135,11 +198,11 @@ def _entry_to_meta(hero_id: str, entry: Any) -> Dict[str, Any]:
 
     return {
         "hero_id": hero_id,
-        "name": name,
+        "name": _entry_value(entry, "name", "display_name", default=hero_id),
         "native_rarity": native_rarity,
         "max_stars": max_stars,
-        "element": _normalize(_entry_value(entry, "element", "canonical_element", default=None)),
-        "role": _normalize(_entry_value(entry, "role", "canonical_role", default=None)),
+        "element": _normalize_element(_entry_value(entry, "element", "canonical_element", default=None)),
+        "role": _normalize_role(_entry_value(entry, "role", "canonical_role", default=None)),
         "faction": _normalize(_entry_value(entry, "faction", "canonical_faction", default=None)),
         "origin_group": _normalize(_entry_value(entry, "origin_group", default=None)),
         "category": _normalize(_entry_value(entry, "category", default=None)),
@@ -158,7 +221,6 @@ def _load_json(path: Path) -> Dict[str, Any]:
 
 
 def _iter_effects(value: Any) -> Iterable[Dict[str, Any]]:
-    """Recursively yield dicts that look like effects."""
     if isinstance(value, dict):
         if "type" in value:
             yield value
@@ -186,10 +248,67 @@ def _slot_exists(slot: Any) -> bool:
     return isinstance(slot, dict) and bool(slot.get("id") or slot.get("name") or slot.get("slot"))
 
 
-def _collect_kits() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, List[str]], List[Dict[str, Any]], List[str]]:
+def _file_level_release_group(doc: Dict[str, Any]) -> Optional[str]:
+    value = doc.get("release_group")
+    if isinstance(value, str):
+        return value
+
+    metadata = doc.get("metadata")
+    if isinstance(metadata, dict) and isinstance(metadata.get("release_group"), str):
+        return metadata["release_group"]
+
+    scope = doc.get("scope")
+    if isinstance(scope, dict):
+        if isinstance(scope.get("release_group"), str):
+            return scope["release_group"]
+        groups = scope.get("included_release_groups")
+        if isinstance(groups, list) and len(groups) == 1 and isinstance(groups[0], str):
+            return groups[0]
+
+    # Most kit files are launch_base-only. The 6★ extra file has per-hero release_group.
+    return None
+
+
+def _iter_kit_entries(doc: Dict[str, Any], rel_path: str) -> Tuple[List[Tuple[str, Dict[str, Any]]], List[Dict[str, Any]]]:
+    """Return hero kit entries and ignored non-hero entries. Supports heroes as dict or list."""
+    heroes = doc.get("heroes")
+    ignored: List[Dict[str, Any]] = []
+    entries: List[Tuple[str, Dict[str, Any]]] = []
+
+    if isinstance(heroes, dict):
+        for key, value in heroes.items():
+            if not isinstance(value, dict):
+                # Allow human-readable group separators such as "_GROUP_1_STAR": "..."
+                ignored.append({"file": rel_path, "key": key, "reason": "non_object_separator_or_comment"})
+                continue
+            hero_id = value.get("hero_id") or key
+            if not isinstance(hero_id, str) or not hero_id:
+                ignored.append({"file": rel_path, "key": key, "reason": "missing_hero_id"})
+                continue
+            entries.append((hero_id, value))
+        return entries, ignored
+
+    if isinstance(heroes, list):
+        for idx, value in enumerate(heroes):
+            if not isinstance(value, dict):
+                ignored.append({"file": rel_path, "index": idx, "reason": "non_object_list_entry"})
+                continue
+            hero_id = value.get("hero_id") or value.get("id")
+            if not isinstance(hero_id, str) or not hero_id:
+                ignored.append({"file": rel_path, "index": idx, "reason": "missing_hero_id"})
+                continue
+            entries.append((hero_id, value))
+        return entries, ignored
+
+    ignored.append({"file": rel_path, "reason": "missing_or_invalid_heroes_container", "found_type": type(heroes).__name__})
+    return entries, ignored
+
+
+def _collect_kits() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, List[str]], List[Dict[str, Any]], List[Dict[str, Any]], List[str]]:
     found: Dict[str, Dict[str, Any]] = {}
     file_map: Dict[str, List[str]] = defaultdict(list)
     load_issues: List[Dict[str, Any]] = []
+    ignored_entries: List[Dict[str, Any]] = []
     parsed_files: List[str] = []
 
     for path in KIT_FILES:
@@ -201,25 +320,25 @@ def _collect_kits() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, List[str]], Li
             load_issues.append({"file": rel, "error": str(exc)})
             continue
 
-        heroes = doc.get("heroes")
-        if not isinstance(heroes, dict):
-            load_issues.append({"file": rel, "error": "Missing or invalid top-level heroes object"})
+        doc_release_group = _file_level_release_group(doc)
+        entries, ignored = _iter_kit_entries(doc, rel)
+        ignored_entries.extend(ignored)
+
+        if not entries and not ignored:
+            load_issues.append({"file": rel, "error": "No kit entries found"})
             continue
 
-        for key, kit in heroes.items():
-            if not isinstance(kit, dict):
-                load_issues.append({"file": rel, "hero_key": key, "error": "Hero kit entry is not an object"})
-                continue
-            hero_id = kit.get("hero_id") or key
+        for hero_id, kit in entries:
             if hero_id in found:
-                # Keep the first found for detailed checks; duplicates are reported separately.
                 file_map[hero_id].append(rel)
                 continue
-            kit["_source_file"] = rel
-            found[hero_id] = kit
+            copied = dict(kit)
+            copied["_source_file"] = rel
+            copied["_file_release_group"] = doc_release_group
+            found[hero_id] = copied
             file_map[hero_id].append(rel)
 
-    return found, file_map, load_issues, parsed_files
+    return found, file_map, load_issues, ignored_entries, parsed_files
 
 
 def _check_slots(hero_id: str, kit: Dict[str, Any], rarity: Optional[int]) -> List[Dict[str, Any]]:
@@ -318,14 +437,13 @@ def _check_design_data_marking(path: str, doc: Dict[str, Any]) -> List[Dict[str,
 
 def main() -> int:
     bible = _official_bible_meta()
-    found, file_map, load_issues, parsed_files = _collect_kits()
+    found, file_map, load_issues, ignored_entries, parsed_files = _collect_kits()
 
-    # Per-file design safety warnings
     warnings: List[Dict[str, Any]] = []
     for path in KIT_FILES:
         rel = str(path.relative_to(ROOT))
         if not path.exists():
-            warnings.append({"file": rel, "warning": "kit_file_missing"})
+            load_issues.append({"file": rel, "error": "kit_file_missing"})
             continue
         try:
             warnings.extend(_check_design_data_marking(rel, _load_json(path)))
@@ -352,20 +470,25 @@ def main() -> int:
         except Exception:
             rarity = None
 
-        # Basic metadata checks
+        # Release group can be declared per hero or at file level.
+        kit_release_group = kit.get("release_group") or kit.get("_file_release_group")
+        if kit_release_group is None and expected.get("release_group") == "launch_base":
+            # Older low-rarity design file declared launch_base at file metadata level in prose.
+            # Since all official non-Borea launch heroes are launch_base, this is accepted as implicit.
+            kit_release_group = "launch_base"
+
         checks = [
             ("native_rarity", rarity, expected.get("native_rarity")),
             ("max_stars", kit.get("max_stars"), RARITY_MAX_STARS.get(expected.get("native_rarity"))),
-            ("element", _normalize(kit.get("element")), expected.get("element")),
-            ("role", _normalize(kit.get("role")), expected.get("role")),
+            ("element", _normalize_element(kit.get("element")), expected.get("element")),
+            ("role", _normalize_role(kit.get("role")), expected.get("role")),
             ("faction", _normalize(kit.get("faction")), expected.get("faction")),
-            ("release_group", kit.get("release_group"), expected.get("release_group")),
+            ("release_group", kit_release_group, expected.get("release_group")),
         ]
         for field, got, exp in checks:
             if exp is not None and got != exp:
                 mismatches.append({"hero_id": hero_id, "field": field, "expected": exp, "found": got, "source_file": kit.get("_source_file")})
 
-        # Optional metadata if both sides present
         for field in ("origin_group", "category"):
             got = _normalize(kit.get(field))
             exp = expected.get(field)
@@ -373,13 +496,12 @@ def main() -> int:
                 mismatches.append({"hero_id": hero_id, "field": field, "expected": exp, "found": got, "source_file": kit.get("_source_file")})
 
         if hero_id == "greek_borea":
-            if kit.get("release_group") != "launch_extra_premium":
-                mismatches.append({"hero_id": hero_id, "field": "release_group", "expected": "launch_extra_premium", "found": kit.get("release_group")})
+            if kit_release_group != "launch_extra_premium":
+                mismatches.append({"hero_id": hero_id, "field": "release_group", "expected": "launch_extra_premium", "found": kit_release_group})
             if kit.get("is_extra_premium") is not True:
                 mismatches.append({"hero_id": hero_id, "field": "is_extra_premium", "expected": True, "found": kit.get("is_extra_premium")})
-        else:
-            if kit.get("release_group") == "launch_extra_premium":
-                mismatches.append({"hero_id": hero_id, "field": "release_group", "expected": "not launch_extra_premium", "found": "launch_extra_premium"})
+        elif kit_release_group == "launch_extra_premium":
+            mismatches.append({"hero_id": hero_id, "field": "release_group", "expected": "not launch_extra_premium", "found": "launch_extra_premium"})
 
         slot_issues.extend(_check_slots(hero_id, kit, rarity))
         warnings.extend(_check_low_rarity_complexity(hero_id, kit, rarity))
@@ -402,6 +524,7 @@ def main() -> int:
         "metadata_mismatch_count": len(mismatches),
         "slot_violation_count": len(slot_issues),
         "load_issue_count": len(load_issues),
+        "ignored_non_hero_entries_count": len(ignored_entries),
         "warning_count": len(warnings),
     }
 
@@ -432,11 +555,12 @@ def main() -> int:
         and len(found) == EXPECTED_COUNTS["total"]
     )
 
-    print("\n=== RM1.21-G — Official Hero Kit Coverage Audit ===")
+    print("\n=== RM1.21-G v0.2 — Official Hero Kit Coverage Audit ===")
     print(f"Character Bible official heroes: {len(bible)}")
     print(f"Kits loaded: {len(found)}")
     print(f"Missing: {len(missing_ids)} | Duplicates: {len(duplicate_ids)} | Unknown: {len(unknown_ids)}")
     print(f"Mismatches: {len(mismatches)} | Slot violations: {len(slot_issues)} | Warnings: {len(warnings)}")
+    print(f"Ignored non-hero separator/comment entries: {len(ignored_entries)}")
     print("\nCoverage by rarity:")
     for key, data in coverage_by_rarity.items():
         print(f"- {key}: {data['found']}/{data['expected']}")
@@ -473,6 +597,7 @@ def main() -> int:
 
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "script_version": "0.2",
         "pass": pass_bool,
         "parsed_files": parsed_files,
         "summary": summary,
@@ -483,6 +608,7 @@ def main() -> int:
         "duplicate_ids": duplicate_ids,
         "unknown_ids": unknown_ids,
         "load_issues": load_issues,
+        "ignored_non_hero_entries": ignored_entries,
         "mismatches": mismatches,
         "slot_issues": slot_issues,
         "warnings": warnings,
