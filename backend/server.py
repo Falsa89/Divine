@@ -124,11 +124,14 @@ async def register(req: RegisterRequest):
     # RM1.20-C: filter by show_in_summon/obtainable to avoid granting hidden
     # or pending official heroes as starters. Default behavior preserved
     # for heroes without flags (helpers default to visible/obtainable).
+    # RM1.20-C2: SAFE — never fallback to all_heroes (would grant hidden
+    # legacy after soft-deactivation). If no eligible starter exists, the
+    # account is created with zero starters; user can later acquire heroes
+    # via gacha. Registration still succeeds.
     all_heroes = await db.heroes.find({"rarity": {"$lte": 2}}).to_list(100)
     eligible_starters = [h for h in all_heroes if should_show_in_summon(h)]
-    pool = eligible_starters if eligible_starters else all_heroes  # safe fallback
-    if pool:
-        starters = random.sample(pool, min(3, len(pool)))
+    if eligible_starters:
+        starters = random.sample(eligible_starters, min(3, len(eligible_starters)))
         for hero in starters:
             user_hero = {
                 "id": str(uuid.uuid4()),
