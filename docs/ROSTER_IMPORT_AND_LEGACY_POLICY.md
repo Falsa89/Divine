@@ -77,14 +77,21 @@ I valori `"owned_only"` sono interpretati dagli helper in `backend/utils/hero_vi
 
 ## 4. Procedura di import ufficiale (sequenza approvata)
 
-### Fase 0 — Preparazione (RM1.20-A, **questa task**)
+### Fase 0 — Preparazione (RM1.20-A, **completata**)
 - ✅ Audit read-only: `python backend/scripts/audit_roster_against_character_bible.py`.
-- ✅ Piano dry-run: `python backend/scripts/plan_legacy_soft_deactivation.py`.
+- ✅ Piano dry-run legacy soft-deactivation: `python backend/scripts/plan_legacy_soft_deactivation.py`.
 - ✅ Documento policy (questo file).
 - ✅ Helper `hero_visibility.py` import-safe, NON cablato in endpoint.
 - ❌ **`--apply` NON eseguito.** Nessuna scrittura DB.
 
-### Fase 1 — Soft-deactivation legacy (task futura)
+### Fase 0.5 — Official roster import staging (RM1.20-B, **questa task**)
+- ✅ Piano dry-run import ufficiali: `python backend/scripts/plan_official_roster_import.py`.
+- ✅ INSERT plan per gli ufficiali mancanti (`pending_assets` / `pending_contract`, tutti i `show_in_*=False`).
+- ✅ UPDATE plan per gli ufficiali già nel DB (Hoplite, Berserker): canonicalizzazione safe, **image/base_stats/skills preservati**.
+- ✅ Borea inclusa nel piano se mancante (resta `launch_extra_premium`, fuori dai 100).
+- ❌ **`--apply` NON eseguito.** Path di scrittura disabilitato by-design in RM1.20-B.
+
+### Fase 1 — Soft-deactivation legacy (task futura — RM1.20-C/D)
 1. Re-run audit per snapshot pre-migration.
 2. Run `plan_legacy_soft_deactivation.py --apply` (richiede `ROSTER_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_WRITE_DB`).
 3. Update di `db.heroes` con i flag della §3.2 sui legacy. **Nessun DELETE.**
@@ -124,12 +131,75 @@ I valori `"owned_only"` sono interpretati dagli helper in `backend/utils/hero_vi
 
 ---
 
+## 5.b. Official roster import staging (RM1.20-B)
+
+> Stato: **DRY-RUN PRONTO. `--apply` NON eseguito.**
+
+### Cosa fa il piano import ufficiale
+Lo script `backend/scripts/plan_official_roster_import.py` produce in
+modalità dry-run due piani indipendenti:
+
+1. **INSERT plan — ufficiali mancanti** (99 eroi al momento di RM1.20-B).
+   Ogni payload è marcato:
+   - `is_official=True`, `is_legacy_placeholder=False`
+   - `release_group=launch_base` o `launch_extra_premium` (Borea)
+   - `import_status="planned_missing_official"`
+   - `asset_status="pending_assets"`, `contract_status="pending_contract"`
+   - `combat_asset_status="pending_assets"`, `ui_contract_status="pending_contract"`
+   - `image=null`, `image_url=null`, `hero_image=null` (**nessun sentinel fittizio, nessun fallback su asset di un altro eroe**)
+   - `obtainable=False`, `show_in_catalog=False`, `show_in_summon=False`, `show_in_hero_collection=False`, `show_in_battle_picker=False`
+   - `do_not_expose_until_assets_ready=True`
+   - `do_not_delete=True`
+
+2. **UPDATE plan — ufficiali già presenti** (es. Hoplite, Berserker).
+   Solo `$set` di campi safe / metadati canonici. **Lista preservata**:
+   `id`, `_id`, `image`, `image_url`, `image_base64`, `hero_image`,
+   `base_stats`, `stats`, `skills`, `passive`, `description`, `hero_class`,
+   `lore`, `battle_contract`, `ui_contract`, `asset_variants`, `created_at`.
+   Per i flag di visibilità (`obtainable`, `show_in_*`) si usa
+   `keep_or_default` → se nel DB esiste già un valore esplicito viene
+   preservato, altrimenti default `True` (questi heroes sono già live).
+
+### Borea
+- Se assente nel DB → entra nell'INSERT plan come `launch_extra_premium`,
+  resta fuori dai 100 launch_base.
+- Se presente nel DB → entra nell'UPDATE plan come canonicalize-only.
+
+### Regole di esposizione (must obey, sempre)
+1. Nessun eroe deve apparire in produzione senza:
+   asset contract pronti, UI contract pronto, battle rig completa,
+   validazione **Combat QA Lab**, entry in `HERO_CONTRACTS`.
+2. `pending_assets`/`pending_contract` ≡ **non esponibile**, qualunque sia
+   il valore degli altri flag, finché lo status non è `ready`.
+3. Niente `image: "asset:<altro_eroe>:..."`. Niente lettera-placeholder
+   come comportamento di produzione: solo asset reali approvati.
+
+### Perché in RM1.20-B il `--apply` è disabilitato by-design
+Gli endpoint runtime (`/api/heroes`, gacha, hero collection, battle picker)
+attualmente **non onorano** i flag `show_in_catalog/show_in_summon/
+show_in_hero_collection/show_in_battle_picker/obtainable`. Inserire ora
+99 eroi con `pending_assets` li renderebbe potenzialmente visibili e
+giocabili senza asset. Soluzione: prima RM1.20-C (filtri runtime), poi
+import vero.
+
+### Comando di apply (NON eseguire in RM1.20-B)
+```bash
+ROSTER_IMPORT_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_INSERT_OFFICIAL_HEROES \
+  python backend/scripts/plan_official_roster_import.py --apply
+```
+Anche con la env var corretta, RM1.20-B aborta intenzionalmente prima di
+qualsiasi scrittura: lo sblocco è previsto in RM1.20-C, dopo i filtri di
+visibilità runtime.
+
+---
+
 ## 6. Garanzie sui report
 
 I report JSON vengono scritti in `backend/reports/` (escluso da git):
 
 - `roster_audit_<timestamp>.json` — output di `audit_roster_against_character_bible.py`.
 - `legacy_soft_deactivation_plan_<timestamp>.json` — output di `plan_legacy_soft_deactivation.py`.
+- `official_roster_import_plan_<timestamp>.json` — output di `plan_official_roster_import.py`.
 
 Ogni report contiene:
 - Sezione `safety`: tutti i flag a `False` (nessuna scrittura).
@@ -160,14 +230,21 @@ Quando si aggiunge un nuovo eroe ufficiale al roster, l'eroe deve passare **tutt
 # Audit read-only (sempre safe)
 cd /app && python backend/scripts/audit_roster_against_character_bible.py
 
-# Piano dry-run (sempre safe, NON tocca il DB)
+# Piano legacy soft-deactivation (DRY-RUN, sempre safe)
 cd /app && python backend/scripts/plan_legacy_soft_deactivation.py
+
+# Piano import roster ufficiale (DRY-RUN, sempre safe)
+cd /app && python backend/scripts/plan_official_roster_import.py
 
 # Validazione strutturale Character Bible
 cd /app && python backend/scripts/validate_character_bible.py
 ```
 
-> Il flag `--apply` di `plan_legacy_soft_deactivation.py` **non va eseguito in RM1.20-A**. È predisposto per la task successiva e richiede inoltre la variabile d'ambiente `ROSTER_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_WRITE_DB`.
+> I flag `--apply` di entrambi i `plan_*.py` **non vanno eseguiti in
+> RM1.20-A né in RM1.20-B**. Sono predisposti per le task successive e
+> richiedono inoltre le rispettive env var di conferma:
+> - `ROSTER_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_WRITE_DB`
+> - `ROSTER_IMPORT_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_INSERT_OFFICIAL_HEROES`
 
 ---
 
