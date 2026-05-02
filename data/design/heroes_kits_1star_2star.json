@@ -1,0 +1,783 @@
+{
+  "version": "0.1",
+  "status": "design_data_only",
+  "task_origin": "RM1.21-B",
+  "scope": "Official kits for the 8 launch_base 1-star + 12 launch_base 2-star heroes (20 heroes total). Pure schema-data: NOT wired into runtime, NOT imported into DB.",
+  "non_normative_for_runtime": true,
+  "follows_schema": "data/design/hero_skill_schema.json v0.2 (RM1.21-A)",
+  "follows_stats": "data/design/hero_stats_schema.json v0.2 (RM1.21-A)",
+  "source_of_truth_roster": "backend/data/character_bible.py",
+
+  "design_rules": {
+    "1_star": {
+      "philosophy": "Common-unit feeling. Read-at-a-glance: 1 attacco base + 1 passive semplice. Niente ultimate. Niente skill. Niente condizioni avanzate. Niente effect_accuracy/penetration speciali.",
+      "active_skills_filled": ["basic_attack"],
+      "passive_filled": true,
+      "skill_locked": true,
+      "ultimate_locked": true,
+      "max_effects_per_skill": 1,
+      "basic_attack_multiplier_range": [0.90, 1.05],
+      "passive_buff_percent_max": 0.10,
+      "kit_text_target_lines": 2
+    },
+    "2_star": {
+      "philosophy": "Mythic_archetype semplice ma con identity di ruolo già leggibile: 1 attacco base + 1 skill role-defining + 1 passive coerente. Niente ultimate. Niente sinergie complesse.",
+      "active_skills_filled": ["basic_attack", "skill"],
+      "passive_filled": true,
+      "ultimate_locked": true,
+      "max_effects_per_skill": 1,
+      "basic_attack_multiplier_range": [0.95, 1.10],
+      "skill_multiplier_range_single": [1.40, 1.80],
+      "skill_multiplier_range_aoe": [0.90, 1.20],
+      "passive_buff_percent_max": 0.12,
+      "kit_text_target_lines": 3
+    },
+    "shared": {
+      "preserve_from_character_bible": ["element", "role", "faction", "origin_group"],
+      "use_runtime_supported_effects_only": true,
+      "allowed_effect_types": [
+        "damage", "heal", "hot", "dot",
+        "buff", "debuff", "taunt", "control",
+        "damage_reduction", "cleanse"
+      ],
+      "forbidden_effect_types_at_low_rarity": [
+        "execute", "revive", "summon_or_proxy", "mark", "shield"
+      ],
+      "default_targeting": "tank_first_then_nearest",
+      "ultimate_slot_value_for_locked_rarities": {
+        "slot_locked": true,
+        "unlock_at_native_rarity": 3,
+        "reason": "RM1.21-A rarity_complexity[1..2].ultimate_allowed = false"
+      }
+    }
+  },
+
+  "stat_profile_legend": {
+    "_explanation": "Profili descrittivi non-numerici, allineati a hero_stats_schema role_stat_bias. Numeri esatti in RM1.21-G (balance pass).",
+    "scale": ["very_low", "low", "low_mid", "mid", "mid_high", "high", "very_high"]
+  },
+
+  "heroes": {
+
+    "_GROUP_1_STAR": "═══════════════════════════════════════════════════════",
+
+    "greek_phalanx_recruit": {
+      "hero_id": "greek_phalanx_recruit",
+      "name": "Recluta di Falange",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "earth", "role": "Tank", "faction": "greek",
+      "stat_profile": { "hp": "high", "defense": "mid_high", "attack": "low", "speed": "low_mid", "effect_resistance": "mid" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "phalanx_jab", "name": "Stoccata di Falange",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 0.95,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 0.95 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "shield_brace", "name": "Posizione Difensiva",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "damage_reduction", "target": "self", "delta_percent": 0.05, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[1] (Resistenza Base)"
+      },
+      "tags": ["common", "frontline", "shield"],
+      "runtime_compatibility_notes": "Mapping pulito su ELEMENT_SKILLS.earth.nad e PASSIVE_SKILLS[1].",
+      "combat_qa_notes": "Idle/attack already covered by neutral baseline; assets pending."
+    },
+
+    "demonic_infernal_handmaiden": {
+      "hero_id": "demonic_infernal_handmaiden",
+      "name": "Ancella Infernale",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "fire", "role": "DPS Melee", "faction": "demonic",
+      "stat_profile": { "hp": "low_mid", "attack": "mid_high", "defense": "low_mid", "speed": "mid", "crit_rate": "low_mid" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "infernal_slash", "name": "Sferza Infernale",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "ember_grip", "name": "Stretta di Brace",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "attack", "delta": 0.06, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[2] (Forza Bruta)"
+      },
+      "tags": ["common", "fire", "single"],
+      "runtime_compatibility_notes": "Compatibile con ELEMENT_SKILLS.fire.nad.",
+      "combat_qa_notes": "Idle/attack baseline; verificare sprite hit/death pending."
+    },
+
+    "egyptian_nile_guard": {
+      "hero_id": "egyptian_nile_guard",
+      "name": "Guardia del Nilo",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "water", "role": "DPS Melee", "faction": "egyptian",
+      "stat_profile": { "hp": "mid", "attack": "mid_high", "defense": "mid", "speed": "mid", "crit_rate": "low_mid" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "nile_strike", "name": "Colpo del Nilo",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "river_steady", "name": "Calma del Fiume",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "speed", "delta": 0.05, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[2] (Agilità)"
+      },
+      "tags": ["common", "water", "single"],
+      "runtime_compatibility_notes": "Compatibile con ELEMENT_SKILLS.water.nad.",
+      "combat_qa_notes": "Asset hit/death pending."
+    },
+
+    "celtic_forest_archer": {
+      "hero_id": "celtic_forest_archer",
+      "name": "Arciera di Bosco",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "wind", "role": "DPS Ranged", "faction": "celtic",
+      "stat_profile": { "hp": "low_mid", "attack": "mid_high", "defense": "low", "speed": "mid_high", "crit_rate": "mid" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "forest_arrow", "name": "Freccia del Bosco",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 0.95,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 0.95 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "keen_eye", "name": "Occhio Acuto",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "crit_rate", "delta": 0.05, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[3] (Occhio Critico) ridotto"
+      },
+      "tags": ["common", "wind", "ranged"],
+      "runtime_compatibility_notes": "Compatibile con ELEMENT_SKILLS.wind.nad.",
+      "combat_qa_notes": "Asset ranged + idle pending."
+    },
+
+    "norse_rune_initiate": {
+      "hero_id": "norse_rune_initiate",
+      "name": "Iniziata Runica",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "lightning", "role": "Mage AoE", "faction": "norse",
+      "stat_profile": { "hp": "low_mid", "attack": "mid_high", "defense": "low_mid", "speed": "mid", "effect_accuracy": "low_mid" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "spark_bolt", "name": "Scintilla Runica",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad (alias 'thunder')"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "rune_focus", "name": "Concentrazione Runica",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "attack", "delta": 0.05, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[2] (Forza Bruta) lite"
+      },
+      "tags": ["common", "lightning", "mage"],
+      "runtime_compatibility_notes": "Compatibile con ELEMENT_SKILLS.thunder/lightning.nad.",
+      "combat_qa_notes": "Asset mage idle/skill pending."
+    },
+
+    "angelic_sanctuary_acolyte": {
+      "hero_id": "angelic_sanctuary_acolyte",
+      "name": "Accolita del Santuario",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "light", "role": "Support / Buffer", "faction": "angelic",
+      "stat_profile": { "hp": "mid", "attack": "low_mid", "defense": "mid", "speed": "mid", "effect_resistance": "low_mid" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "blessed_touch", "name": "Tocco Benedetto",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.90,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.90 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "soft_aura", "name": "Aura Tenue",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "effect_resistance", "delta": 0.05, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx soft mitigation passive"
+      },
+      "tags": ["common", "light", "support"],
+      "runtime_compatibility_notes": "Compatibile con ELEMENT_SKILLS.light.nad.",
+      "combat_qa_notes": "Asset cast pending."
+    },
+
+    "angelic_sacred_novice": {
+      "hero_id": "angelic_sacred_novice",
+      "name": "Novizia Sacra",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "light", "role": "Healer", "faction": "angelic",
+      "stat_profile": { "hp": "mid", "attack": "low", "defense": "mid", "speed": "mid", "healing_power": "mid" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "tiny_heal", "name": "Mano Risanatrice",
+        "type": "basic_attack", "target_type": "ally_lowest_hp",
+        "damage_type": "none", "scaling_stat": "healing_power", "multiplier": 0.80,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "heal", "target": "ally_lowest_hp", "scaling_stat": "healing_power", "multiplier": 0.80 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "approx ELEMENT_SKILLS.light.nad redirect to ally heal — schema only"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "soothing_warmth", "name": "Calore Lenitivo",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "hot", "target": "self", "heal_per_turn_percent_self_max_hp": 0.02, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "PASSIVE_SKILLS[3] (Rigenerazione) ridotto"
+      },
+      "tags": ["common", "light", "healer"],
+      "runtime_compatibility_notes": "Heal-on-attack target_type='ally_lowest_hp' è schema-only finché runtime non implementa explicit healer behavior.",
+      "combat_qa_notes": "Healer animation reuse from baseline support."
+    },
+
+    "yokai_veiled_spirit": {
+      "hero_id": "yokai_veiled_spirit",
+      "name": "Spirito Velato",
+      "native_rarity": 1, "max_stars": 4,
+      "element": "dark", "role": "Control / Debuff", "faction": "japanese_yokai",
+      "stat_profile": { "hp": "low_mid", "attack": "mid", "defense": "low_mid", "speed": "mid_high", "effect_accuracy": "mid_high" },
+      "kit_complexity": 1,
+      "basic_attack": {
+        "id": "veil_touch", "name": "Tocco Velato",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad (alias 'shadow')"
+      },
+      "skill": null,
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "wisp_evasion", "name": "Evasione Spettrale",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "dodge", "delta": 0.05, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[5] (Schivata) ridotto"
+      },
+      "tags": ["common", "dark", "evasive"],
+      "runtime_compatibility_notes": "Compatibile con ELEMENT_SKILLS.dark/shadow.nad.",
+      "combat_qa_notes": "Asset spirit fade idle pending."
+    },
+
+    "_GROUP_2_STAR": "═══════════════════════════════════════════════════════",
+
+    "egyptian_temple_guardian": {
+      "hero_id": "egyptian_temple_guardian",
+      "name": "Guardiana del Tempio",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "earth", "role": "Tank", "faction": "egyptian",
+      "stat_profile": { "hp": "very_high", "defense": "high", "attack": "low_mid", "speed": "low_mid", "effect_resistance": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "temple_smash", "name": "Maglio del Tempio",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+      },
+      "skill": {
+        "id": "temple_call", "name": "Richiamo del Tempio",
+        "type": "skill", "target_type": "single_enemy",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.40,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "taunt", "target": "single_enemy", "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "schema-side taunt; runtime: status_effects[type=taunt]"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "stone_skin", "name": "Pelle di Pietra",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "damage_reduction", "target": "self", "delta_percent": 0.07, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[4] (Poise) ridotto"
+      },
+      "tags": ["taunt", "frontline"],
+      "runtime_compatibility_notes": "Taunt single-target supportato dal runtime targeting.",
+      "combat_qa_notes": "Asset shield/taunt pending."
+    },
+
+    "norse_valhalla_warden": {
+      "hero_id": "norse_valhalla_warden",
+      "name": "Custode del Valhalla",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "wind", "role": "Tank", "faction": "norse",
+      "stat_profile": { "hp": "very_high", "defense": "high", "attack": "low_mid", "speed": "low_mid", "effect_resistance": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "warden_swing", "name": "Fendente del Custode",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+      },
+      "skill": {
+        "id": "warden_bulwark", "name": "Baluardo del Valhalla",
+        "type": "skill", "target_type": "self",
+        "damage_type": "none", "scaling_stat": "none", "multiplier": 0.0,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "damage_reduction", "target": "self", "delta_percent": 0.20, "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "schema-side temporary damage_reduction buff"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "northern_grit", "name": "Tempra del Nord",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "hp", "delta": 0.06, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[1] (Resistenza Base) ampliato"
+      },
+      "tags": ["self_protect", "frontline"],
+      "runtime_compatibility_notes": "Buff temporaneo damage_reduction supportato.",
+      "combat_qa_notes": "Asset shield-up pending."
+    },
+
+    "egyptian_desert_blade": {
+      "hero_id": "egyptian_desert_blade",
+      "name": "Lama del Deserto",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "fire", "role": "DPS Melee", "faction": "egyptian",
+      "stat_profile": { "hp": "mid", "attack": "high", "defense": "mid", "speed": "mid_high", "crit_rate": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "desert_slash", "name": "Sferza del Deserto",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.05,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.05 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+      },
+      "skill": {
+        "id": "scorching_cleave", "name": "Fendente Cocente",
+        "type": "skill", "target_type": "single_enemy",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.70,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "dot", "dot_subtype": "burn", "damage_type": "physical", "damage_per_turn_percent_target_max_hp": 0.04, "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad ridotto (durata 2)"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "desert_focus", "name": "Concentrazione del Deserto",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "crit_rate", "delta": 0.06, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[3] (Occhio Critico) lite"
+      },
+      "tags": ["fire", "single", "burn"],
+      "runtime_compatibility_notes": "Burn dot già supportato dal runtime.",
+      "combat_qa_notes": "Asset attack/skill pending."
+    },
+
+    "celtic_menhir_warrior": {
+      "hero_id": "celtic_menhir_warrior",
+      "name": "Guerriera dei Menhir",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "earth", "role": "DPS Melee", "faction": "celtic",
+      "stat_profile": { "hp": "mid_high", "attack": "high", "defense": "mid", "speed": "mid", "crit_rate": "mid" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "menhir_strike", "name": "Colpo dei Menhir",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.05,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.05 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+      },
+      "skill": {
+        "id": "stone_quake", "name": "Scossa di Pietra",
+        "type": "skill", "target_type": "single_enemy",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.60,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "control", "control_subtype": "stun", "target": "single_enemy", "duration_turns": 1 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad (effect=stun) durata 1"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "menhir_grit", "name": "Tempra dei Menhir",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "attack", "delta": 0.06, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[2] (Forza Bruta)"
+      },
+      "tags": ["earth", "single", "stun"],
+      "runtime_compatibility_notes": "Stun control già supportato.",
+      "combat_qa_notes": "Asset slam pending."
+    },
+
+    "egyptian_oasis_markswoman": {
+      "hero_id": "egyptian_oasis_markswoman",
+      "name": "Tiratrice dell'Oasi",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "water", "role": "DPS Ranged", "faction": "egyptian",
+      "stat_profile": { "hp": "low_mid", "attack": "high", "defense": "low", "speed": "mid_high", "crit_rate": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "oasis_arrow", "name": "Freccia dell'Oasi",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+      },
+      "skill": {
+        "id": "soaking_volley", "name": "Frecciata Inzuppante",
+        "type": "skill", "target_type": "single_enemy",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.55,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "debuff", "stat_key": "speed", "delta": -0.20, "is_percent": true, "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad (effect=slow) ridotto"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "steady_aim", "name": "Mira Stabile",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "crit_rate", "delta": 0.06, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[3] (Occhio Critico) lite"
+      },
+      "tags": ["water", "ranged", "slow"],
+      "runtime_compatibility_notes": "Slow debuff già supportato (speed_reduction).",
+      "combat_qa_notes": "Asset bow draw pending."
+    },
+
+    "yokai_huntress": {
+      "hero_id": "yokai_huntress",
+      "name": "Cacciatrice Yokai",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "wind", "role": "DPS Ranged", "faction": "japanese_yokai",
+      "stat_profile": { "hp": "low_mid", "attack": "high", "defense": "low", "speed": "high", "crit_rate": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "wind_arrow", "name": "Freccia Eolica",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+      },
+      "skill": {
+        "id": "wind_pierce", "name": "Trafittura del Vento",
+        "type": "skill", "target_type": "enemy_lowest_hp",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.65,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "dot", "dot_subtype": "bleed", "damage_type": "physical", "damage_per_turn_percent_target_max_hp": 0.03, "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad (effect=bleed) ridotto"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "swift_shot", "name": "Tiro Veloce",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "speed", "delta": 0.06, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[2] (Agilità)"
+      },
+      "tags": ["wind", "ranged", "bleed"],
+      "runtime_compatibility_notes": "Bleed dot già supportato.",
+      "combat_qa_notes": "Asset shot follow-through pending."
+    },
+
+    "yokai_thunder_novice": {
+      "hero_id": "yokai_thunder_novice",
+      "name": "Novizia del Tuono",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "lightning", "role": "Mage AoE", "faction": "japanese_yokai",
+      "stat_profile": { "hp": "low_mid", "attack": "high", "defense": "low_mid", "speed": "mid", "effect_accuracy": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "static_jolt", "name": "Scossa Statica",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.thunder/lightning.nad"
+      },
+      "skill": {
+        "id": "small_storm", "name": "Tempesta Minuta",
+        "type": "skill", "target_type": "all_enemies",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.10,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.10 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.thunder.sad ridotto a single-effect AoE"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "spark_focus", "name": "Concentrazione Statica",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "effect_accuracy", "delta": 0.06, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx new effect_accuracy buff"
+      },
+      "tags": ["lightning", "mage", "aoe_small"],
+      "runtime_compatibility_notes": "AoE damage runtime: pulisce taunt non viene applicato (taunt_immune AoE).",
+      "combat_qa_notes": "Asset cast pending."
+    },
+
+    "yokai_shinobi_shadow": {
+      "hero_id": "yokai_shinobi_shadow",
+      "name": "Ombra Shinobi",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "dark", "role": "Assassin / Burst", "faction": "japanese_yokai",
+      "stat_profile": { "hp": "low_mid", "attack": "high", "defense": "low", "speed": "high", "crit_rate": "high", "dodge": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "shadow_jab", "name": "Affondo d'Ombra",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+      },
+      "skill": {
+        "id": "shuriken_burst", "name": "Raffica Shuriken",
+        "type": "skill", "target_type": "enemy_highest_atk",
+        "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.75,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.75 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "schema-side high-atk targeting"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "shadow_step", "name": "Passo d'Ombra",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "dodge", "delta": 0.06, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[5] (Schivata) ridotto"
+      },
+      "tags": ["dark", "assassin", "burst"],
+      "runtime_compatibility_notes": "target_type=enemy_highest_atk: schema-only finché runtime non implementa explicit targeting.",
+      "combat_qa_notes": "Asset dash + shuriken pending."
+    },
+
+    "angelic_cantor": {
+      "hero_id": "angelic_cantor",
+      "name": "Cantora Angelica",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "light", "role": "Support / Buffer", "faction": "angelic",
+      "stat_profile": { "hp": "mid", "attack": "low_mid", "defense": "mid", "speed": "mid_high", "effect_resistance": "mid" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "soft_chord", "name": "Accordo Sacro",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+      },
+      "skill": {
+        "id": "uplifting_hymn", "name": "Inno di Esaltazione",
+        "type": "skill", "target_type": "all_allies",
+        "damage_type": "none", "scaling_stat": "none", "multiplier": 0.0,
+        "cooldown_turns": 4, "energy_cost": 0,
+        "effects": [{ "type": "buff", "target": "all_allies", "stat_key": "attack", "delta": 0.10, "is_percent": true, "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "schema-side team buff (target=all_allies)"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "harmony_ward", "name": "Velo Armonioso",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "effect_resistance", "delta": 0.07, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx light support passive"
+      },
+      "tags": ["light", "support", "team_buff"],
+      "runtime_compatibility_notes": "Team buff: schema-only finché runtime non aggiunge ally-buff broadcasting esplicito.",
+      "combat_qa_notes": "Asset sing pose pending."
+    },
+
+    "egyptian_nile_healer": {
+      "hero_id": "egyptian_nile_healer",
+      "name": "Curatrice del Nilo",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "water", "role": "Healer", "faction": "egyptian",
+      "stat_profile": { "hp": "mid", "attack": "low_mid", "defense": "mid", "speed": "mid", "healing_power": "mid_high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "river_drop", "name": "Goccia del Nilo",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.85,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.85 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad ridotto"
+      },
+      "skill": {
+        "id": "river_bless", "name": "Benedizione del Nilo",
+        "type": "skill", "target_type": "ally_lowest_hp",
+        "damage_type": "none", "scaling_stat": "healing_power", "multiplier": 1.40,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "heal", "target": "ally_lowest_hp", "scaling_stat": "healing_power", "multiplier": 1.40 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "schema-side single-target heal"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "fluid_grace", "name": "Grazia Fluida",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "healing_power", "delta": 0.08, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx new healing_power scaling buff"
+      },
+      "tags": ["water", "healer", "single_heal"],
+      "runtime_compatibility_notes": "Heal targeted: schema-only finché runtime non integra healer behavior. Compatibile con `healing` runtime stat.",
+      "combat_qa_notes": "Asset cast heal pending."
+    },
+
+    "cursed_bone_sibyl": {
+      "hero_id": "cursed_bone_sibyl",
+      "name": "Sibilla d'Ossa",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "dark", "role": "Control / Debuff", "faction": "cursed",
+      "stat_profile": { "hp": "mid", "attack": "mid", "defense": "mid", "speed": "mid_high", "effect_accuracy": "high" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "bone_curse", "name": "Maledizione d'Ossa",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 0.95 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+      },
+      "skill": {
+        "id": "weakening_omen", "name": "Presagio Indebolente",
+        "type": "skill", "target_type": "single_enemy",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.40,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "debuff", "stat_key": "attack", "delta": -0.15, "is_percent": true, "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad-style weaken debuff applicato a target dark"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "ill_omen", "name": "Cattivo Presagio",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "effect_accuracy", "delta": 0.08, "is_percent": false, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx new effect_accuracy buff"
+      },
+      "tags": ["dark", "control", "weaken"],
+      "runtime_compatibility_notes": "Weaken (attack debuff) già supportato (legacy 'weaken').",
+      "combat_qa_notes": "Asset spell-throw pending."
+    },
+
+    "demonic_infernal_adept": {
+      "hero_id": "demonic_infernal_adept",
+      "name": "Adepta Infernale",
+      "native_rarity": 2, "max_stars": 6,
+      "element": "fire", "role": "Hybrid Special", "faction": "demonic",
+      "stat_profile": { "hp": "mid", "attack": "mid_high", "defense": "mid", "speed": "mid", "effect_accuracy": "mid" },
+      "kit_complexity": 2,
+      "basic_attack": {
+        "id": "infernal_lash", "name": "Sferza Infernale",
+        "type": "basic_attack", "target_type": "tank_first_then_nearest",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.00,
+        "cooldown_turns": 0, "energy_cost": 0,
+        "effects": [{ "type": "damage", "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.00 }],
+        "animation_state": "attack",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+      },
+      "skill": {
+        "id": "ember_pact", "name": "Patto di Brace",
+        "type": "skill", "target_type": "single_enemy",
+        "damage_type": "magic", "scaling_stat": "attack", "multiplier": 1.50,
+        "cooldown_turns": 3, "energy_cost": 0,
+        "effects": [{ "type": "dot", "dot_subtype": "burn", "damage_type": "magic", "damage_per_turn_percent_target_max_hp": 0.04, "duration_turns": 2 }],
+        "animation_state": "skill",
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad ridotto (durata 2)"
+      },
+      "ultimate_or_special": null,
+      "passive": {
+        "id": "infernal_pact", "name": "Patto Infernale",
+        "type": "passive", "target_type": "self",
+        "effects": [{ "type": "buff", "target": "self", "stat_key": "attack", "delta": 0.06, "is_percent": true, "duration_turns": -1 }],
+        "animation_state": null,
+        "runtime_legacy_mapping": "approx PASSIVE_SKILLS[2] (Forza Bruta)"
+      },
+      "tags": ["fire", "hybrid", "burn"],
+      "runtime_compatibility_notes": "Hybrid Special semplice: una skill DoT magica + buff atk. Niente meccanica unica avanzata (riservata a 5★/6★).",
+      "combat_qa_notes": "Asset infernal cast pending."
+    }
+  },
+
+  "validation_notes": {
+    "total_heroes_expected": 20,
+    "1_star_heroes_expected_ids": [
+      "greek_phalanx_recruit", "demonic_infernal_handmaiden", "egyptian_nile_guard",
+      "celtic_forest_archer", "norse_rune_initiate", "angelic_sanctuary_acolyte",
+      "angelic_sacred_novice", "yokai_veiled_spirit"
+    ],
+    "2_star_heroes_expected_ids": [
+      "egyptian_temple_guardian", "norse_valhalla_warden", "egyptian_desert_blade",
+      "celtic_menhir_warrior", "egyptian_oasis_markswoman", "yokai_huntress",
+      "yokai_thunder_novice", "yokai_shinobi_shadow", "angelic_cantor",
+      "egyptian_nile_healer", "cursed_bone_sibyl", "demonic_infernal_adept"
+    ],
+    "no_3star_or_above": true,
+    "all_ids_must_exist_in_character_bible": true,
+    "no_runtime_changes": true,
+    "no_db_writes": true
+  },
+
+  "next_phase_recommendation": "RM1.21-C → kits ufficiali per i 24 eroi 3★ (incluso greek_hoplite e norse_berserker già esemplificati in RM1.21-A). Sblocco slot ultimate_or_special e 1 passive role-defining. Schema-data only."
+}
