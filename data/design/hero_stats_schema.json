@@ -1,94 +1,310 @@
 {
-  "version": "0.1",
-  "status": "draft",
-  "purpose": "Base stat schema for future RM1.21 tasks; not yet final balance.",
-  "base_stats": [
-    "hp",
-    "atk",
-    "def",
-    "speed",
-    "crit_rate",
-    "crit_damage",
-    "effect_accuracy",
-    "effect_resistance",
-    "healing_power"
+  "version": "0.2",
+  "status": "design_foundation",
+  "task_origin": "RM1.21-A",
+  "purpose": "Official combat stats schema for the 100 launch heroes + Borea. Design-data only: NOT yet final balance numbers, NOT wired into runtime. Stats listed here describe the canonical combat stat model that future kits will reference.",
+  "non_normative_for_runtime": true,
+  "runtime_compatibility_notes": [
+    "Runtime engine in backend/battle_engine.py currently uses an extended split-damage model (physical_damage/magic_damage, physical_defense/magic_defense) plus legacy aggregates (attack/defense). Both naming conventions are listed under each split stat as 'runtime_keys' for forward-compat.",
+    "RM1.21-A does NOT modify backend/battle_engine.py.",
+    "Future kits MAY scale on either physical or magic damage; this schema declares both lanes."
   ],
-  "rarity_budget_guidelines": {
-    "1": "common/simple; low stat budget; one clear function",
-    "2": "slightly better common; simple role kit",
-    "3": "baseline usable; clean role identity",
-    "4": "mid/high useful; more distinct stat profile",
-    "5": "premium strong; role-specialized stat budget",
-    "6": "headline; highest budget but balanced by role and kit constraints"
+
+  "stats": [
+    {
+      "key": "hp",
+      "display_name": "HP",
+      "description": "Punti vita massimi. Sotto 0 → KO.",
+      "type": "int",
+      "default": 8000,
+      "min": 1,
+      "tier": "core",
+      "scaling_with_level": true,
+      "role_relevance": {
+        "Tank": "very_high", "DPS Melee": "mid", "DPS Ranged": "low_mid",
+        "Mage AoE": "low_mid", "Assassin / Burst": "low_mid",
+        "Support / Buffer": "mid", "Healer": "mid",
+        "Control / Debuff": "mid", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["hp"]
+    },
+    {
+      "key": "attack",
+      "display_name": "ATK",
+      "description": "Potenza offensiva aggregata. Nelle pipeline runtime è split in physical_damage e magic_damage (vedi runtime_keys).",
+      "type": "int",
+      "default": 1000,
+      "min": 0,
+      "tier": "core",
+      "scaling_with_level": true,
+      "role_relevance": {
+        "Tank": "low_mid", "DPS Melee": "high", "DPS Ranged": "high",
+        "Mage AoE": "high", "Assassin / Burst": "very_high",
+        "Support / Buffer": "mid", "Healer": "low_mid",
+        "Control / Debuff": "mid", "Hybrid Special": "mid_high"
+      },
+      "runtime_keys": ["attack", "physical_damage", "magic_damage"]
+    },
+    {
+      "key": "defense",
+      "display_name": "DEF",
+      "description": "Difesa aggregata. Runtime split in physical_defense / magic_defense.",
+      "type": "int",
+      "default": 400,
+      "min": 0,
+      "tier": "core",
+      "scaling_with_level": true,
+      "role_relevance": {
+        "Tank": "high", "DPS Melee": "mid", "DPS Ranged": "low",
+        "Mage AoE": "low_mid", "Assassin / Burst": "low",
+        "Support / Buffer": "mid", "Healer": "mid",
+        "Control / Debuff": "mid", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["defense", "physical_defense", "magic_defense"]
+    },
+    {
+      "key": "speed",
+      "display_name": "Velocità",
+      "description": "Determina l'ordine di azione (alto agisce prima).",
+      "type": "int",
+      "default": 100,
+      "min": 1,
+      "tier": "core",
+      "scaling_with_level": true,
+      "role_relevance": {
+        "Tank": "low_mid", "DPS Melee": "mid_high", "DPS Ranged": "mid_high",
+        "Mage AoE": "mid", "Assassin / Burst": "high",
+        "Support / Buffer": "mid_high", "Healer": "mid",
+        "Control / Debuff": "mid_high", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["speed"]
+    },
+    {
+      "key": "crit_rate",
+      "display_name": "Tasso Critico",
+      "description": "Probabilità di colpo critico (0.0–1.0).",
+      "type": "float",
+      "default": 0.10,
+      "min": 0.0, "max": 1.0,
+      "tier": "core",
+      "scaling_with_level": false,
+      "role_relevance": {
+        "Tank": "low", "DPS Melee": "mid_high", "DPS Ranged": "high",
+        "Mage AoE": "mid", "Assassin / Burst": "high",
+        "Support / Buffer": "low", "Healer": "low",
+        "Control / Debuff": "low_mid", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["crit_chance", "crit_rate"]
+    },
+    {
+      "key": "crit_damage",
+      "display_name": "Danno Critico",
+      "description": "Moltiplicatore del danno in caso di critico (1.5 = +50%).",
+      "type": "float",
+      "default": 1.5,
+      "min": 1.0,
+      "tier": "core",
+      "scaling_with_level": false,
+      "role_relevance": {
+        "Tank": "low", "DPS Melee": "mid_high", "DPS Ranged": "high",
+        "Mage AoE": "mid", "Assassin / Burst": "high",
+        "Support / Buffer": "low", "Healer": "low",
+        "Control / Debuff": "low", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["crit_damage"]
+    },
+    {
+      "key": "effect_accuracy",
+      "display_name": "Precisione Effetti",
+      "description": "Aumenta la probabilità che debuff/control/DoT applicati dall'eroe vadano a segno.",
+      "type": "float",
+      "default": 0.0,
+      "min": 0.0, "max": 1.0,
+      "tier": "advanced",
+      "scaling_with_level": false,
+      "role_relevance": {
+        "Tank": "low", "DPS Melee": "low_mid", "DPS Ranged": "mid",
+        "Mage AoE": "mid_high", "Assassin / Burst": "mid",
+        "Support / Buffer": "mid", "Healer": "low",
+        "Control / Debuff": "high", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["hit_rate", "effect_accuracy"]
+    },
+    {
+      "key": "effect_resistance",
+      "display_name": "Resistenza Effetti",
+      "description": "Riduce la probabilità di subire debuff/control/DoT nemici.",
+      "type": "float",
+      "default": 0.0,
+      "min": 0.0, "max": 1.0,
+      "tier": "advanced",
+      "scaling_with_level": false,
+      "role_relevance": {
+        "Tank": "mid_high", "DPS Melee": "mid", "DPS Ranged": "low_mid",
+        "Mage AoE": "low_mid", "Assassin / Burst": "low_mid",
+        "Support / Buffer": "mid", "Healer": "mid",
+        "Control / Debuff": "mid", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["effect_resistance"]
+    },
+    {
+      "key": "healing_power",
+      "display_name": "Potere di Cura",
+      "description": "Aumenta l'ammontare di heal/HoT/regen erogato dall'eroe.",
+      "type": "float",
+      "default": 0.0,
+      "min": 0.0,
+      "tier": "advanced",
+      "scaling_with_level": true,
+      "role_relevance": {
+        "Tank": "low", "DPS Melee": "low", "DPS Ranged": "low",
+        "Mage AoE": "low", "Assassin / Burst": "low",
+        "Support / Buffer": "mid", "Healer": "very_high",
+        "Control / Debuff": "low", "Hybrid Special": "low_mid"
+      },
+      "runtime_keys": ["healing"]
+    },
+    {
+      "key": "shield_power",
+      "display_name": "Potenza Scudo",
+      "description": "Aumenta i punti di scudo generati dalle skill di tipo shield.",
+      "type": "float",
+      "default": 0.0,
+      "min": 0.0,
+      "tier": "advanced",
+      "scaling_with_level": true,
+      "role_relevance": {
+        "Tank": "high", "DPS Melee": "low", "DPS Ranged": "low",
+        "Mage AoE": "low", "Assassin / Burst": "low",
+        "Support / Buffer": "mid_high", "Healer": "mid",
+        "Control / Debuff": "low", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["shield_power"]
+    },
+    {
+      "key": "damage_reduction",
+      "display_name": "Riduzione Danni",
+      "description": "Riduce la quantità di danno effettivamente subita dopo i calcoli di DEF/penetration.",
+      "type": "float",
+      "default": 0.0,
+      "min": 0.0, "max": 0.9,
+      "tier": "advanced",
+      "scaling_with_level": false,
+      "role_relevance": {
+        "Tank": "high", "DPS Melee": "low_mid", "DPS Ranged": "low",
+        "Mage AoE": "low", "Assassin / Burst": "low",
+        "Support / Buffer": "mid", "Healer": "mid",
+        "Control / Debuff": "low", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["damage_reduction"]
+    },
+    {
+      "key": "penetration",
+      "display_name": "Penetrazione",
+      "description": "Ignora una porzione di DEF avversaria.",
+      "type": "float",
+      "default": 0.05,
+      "min": 0.0, "max": 1.0,
+      "tier": "advanced",
+      "scaling_with_level": false,
+      "role_relevance": {
+        "Tank": "low", "DPS Melee": "mid", "DPS Ranged": "mid",
+        "Mage AoE": "mid", "Assassin / Burst": "high",
+        "Support / Buffer": "low", "Healer": "low",
+        "Control / Debuff": "low_mid", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["penetration"]
+    },
+    {
+      "key": "dodge",
+      "display_name": "Schivata",
+      "description": "Probabilità di evitare un attacco.",
+      "type": "float",
+      "default": 0.05,
+      "min": 0.0, "max": 0.6,
+      "tier": "advanced",
+      "scaling_with_level": false,
+      "role_relevance": {
+        "Tank": "low", "DPS Melee": "mid", "DPS Ranged": "mid",
+        "Mage AoE": "low_mid", "Assassin / Burst": "high",
+        "Support / Buffer": "low", "Healer": "low",
+        "Control / Debuff": "mid", "Hybrid Special": "mid"
+      },
+      "runtime_keys": ["dodge", "dodge_rate"]
+    }
+  ],
+
+  "rarity_budget_multipliers": {
+    "_explanation": "Moltiplicatore relativo applicato al budget statistiche totale per ogni native_rarity. NON è il moltiplicatore HP. È un budget astratto: un 6★ ha ~3.0× del budget di un 1★, distribuito secondo role_stat_bias. Numeri esatti finalizzati in RM1.21-B/C.",
+    "1": { "stat_budget_x": 1.00, "max_stars": 4 },
+    "2": { "stat_budget_x": 1.30, "max_stars": 6 },
+    "3": { "stat_budget_x": 1.65, "max_stars": 8 },
+    "4": { "stat_budget_x": 2.05, "max_stars": 10 },
+    "5": { "stat_budget_x": 2.50, "max_stars": 12 },
+    "6": { "stat_budget_x": 3.00, "max_stars": 15 }
   },
+
+  "rarity_kit_complexity_short": {
+    "1": "Kit minimale: basic_attack + 0/1 passive semplice.",
+    "2": "Basic + 1 skill semplice + (opzionale) passive semplice.",
+    "3": "Basic + 1 skill role-defining + 1 passive ruolo.",
+    "4": "Basic + 1 skill + 1 ultimate o passive avanzato (2 mecchaniche correlate).",
+    "5": "Kit completo: basic + skill + ultimate + passive con sinergia interna.",
+    "6": "Kit iconico: meccanica unica/firma, condizioni avanzate, strong identity."
+  },
+
   "role_stat_bias": {
     "Tank": {
-      "hp": "very_high",
-      "def": "high",
-      "atk": "low_mid",
-      "speed": "low_mid",
-      "effect_resistance": "mid_high"
+      "hp": "very_high", "defense": "high", "attack": "low_mid",
+      "speed": "low_mid", "effect_resistance": "mid_high",
+      "shield_power": "high", "damage_reduction": "high"
     },
     "DPS Melee": {
-      "hp": "mid",
-      "atk": "high",
-      "def": "mid",
-      "speed": "mid_high",
-      "crit_rate": "mid_high"
+      "hp": "mid", "attack": "high", "defense": "mid",
+      "speed": "mid_high", "crit_rate": "mid_high", "crit_damage": "mid_high",
+      "penetration": "mid"
     },
     "DPS Ranged": {
-      "hp": "low_mid",
-      "atk": "high",
-      "def": "low",
-      "speed": "mid_high",
-      "crit_rate": "high"
+      "hp": "low_mid", "attack": "high", "defense": "low",
+      "speed": "mid_high", "crit_rate": "high", "crit_damage": "high",
+      "penetration": "mid"
     },
     "Mage AoE": {
-      "hp": "low_mid",
-      "atk": "high",
-      "def": "low_mid",
-      "speed": "mid",
-      "effect_accuracy": "mid_high"
+      "hp": "low_mid", "attack": "high", "defense": "low_mid",
+      "speed": "mid", "effect_accuracy": "mid_high"
     },
     "Assassin / Burst": {
-      "hp": "low_mid",
-      "atk": "very_high",
-      "def": "low",
-      "speed": "high",
-      "crit_rate": "high",
-      "crit_damage": "high"
+      "hp": "low_mid", "attack": "very_high", "defense": "low",
+      "speed": "high", "crit_rate": "high", "crit_damage": "high",
+      "penetration": "high", "dodge": "mid_high"
     },
     "Support / Buffer": {
-      "hp": "mid",
-      "atk": "mid",
-      "def": "mid",
-      "speed": "mid_high",
-      "effect_resistance": "mid"
+      "hp": "mid", "attack": "mid", "defense": "mid",
+      "speed": "mid_high", "effect_resistance": "mid",
+      "shield_power": "mid_high"
     },
     "Healer": {
-      "hp": "mid",
-      "atk": "low_mid",
-      "def": "mid",
-      "speed": "mid",
-      "healing_power": "high"
+      "hp": "mid", "attack": "low_mid", "defense": "mid",
+      "speed": "mid", "healing_power": "very_high"
     },
     "Control / Debuff": {
-      "hp": "mid",
-      "atk": "mid",
-      "def": "mid",
-      "speed": "mid_high",
-      "effect_accuracy": "high"
+      "hp": "mid", "attack": "mid", "defense": "mid",
+      "speed": "mid_high", "effect_accuracy": "high"
     },
     "Hybrid Special": {
-      "hp": "mid",
-      "atk": "mid_high",
-      "def": "mid",
-      "speed": "mid",
-      "effect_accuracy": "mid"
+      "hp": "mid", "attack": "mid_high", "defense": "mid",
+      "speed": "mid", "effect_accuracy": "mid"
     }
   },
+
+  "tier_label_scale": [
+    "very_low", "low", "low_mid", "mid", "mid_high", "high", "very_high"
+  ],
+
   "notes": [
-    "Do not assign final numbers until RM1.21-A/B approval.",
-    "Stats must align with role and rarity; team building remains more important than raw account level."
+    "Do not assign final numbers until RM1.21-B/C approval.",
+    "Stats must align with role and rarity; team building remains more important than raw account level.",
+    "Runtime split-damage (physical/magic) is preserved; questo schema dichiara la lane senza forzarla.",
+    "RM1.21-A does not change runtime. RM1.21-B/C will assign per-hero numeric stats."
   ]
 }

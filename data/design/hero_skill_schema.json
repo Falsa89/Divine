@@ -1,86 +1,551 @@
 {
-  "version": "0.1",
-  "status": "draft",
-  "purpose": "Skill kit data schema and templates for future hero kit design.",
+  "version": "0.2",
+  "status": "design_foundation",
+  "task_origin": "RM1.21-A",
+  "purpose": "Official skill kit schema for the 100 launch heroes + Borea. Design-data only: NOT yet wired into backend/battle_engine.py. The current runtime exposes 3 element-keyed slots (nad/sad/sp); future kits MAY use the official 4-slot model declared here, OR keep mapping to the legacy slots while sharing the same effect_types vocabulary.",
+  "non_normative_for_runtime": true,
+
   "skill_slots": [
-    "basic_attack",
-    "skill",
-    "ultimate_or_special",
-    "passive"
+    {
+      "id": "basic_attack",
+      "display_name": "Attacco Base",
+      "description": "Attacco singolo a costo zero, eseguito automaticamente quando la skill non è disponibile o non è scelta.",
+      "default_target_type": "single_enemy",
+      "cooldown_turns": 0,
+      "energy_cost": 0,
+      "rarity_required": 1,
+      "runtime_legacy_slot": "nad",
+      "expected_animation_state": "attack"
+    },
+    {
+      "id": "skill",
+      "display_name": "Skill",
+      "description": "Skill principale role-defining. Può infliggere danno potenziato e/o applicare un effetto.",
+      "default_target_type": "single_enemy",
+      "cooldown_turns": 2,
+      "energy_cost": 0,
+      "rarity_required": 2,
+      "runtime_legacy_slot": "sad",
+      "expected_animation_state": "skill"
+    },
+    {
+      "id": "ultimate_or_special",
+      "display_name": "Ultimate",
+      "description": "Skill firma di alto impatto. Tipicamente AoE o burst, gated da rage/cooldown.",
+      "default_target_type": "all_enemies",
+      "cooldown_turns": 4,
+      "energy_cost": 100,
+      "rarity_required": 3,
+      "runtime_legacy_slot": "sp",
+      "expected_animation_state": "skill"
+    },
+    {
+      "id": "passive",
+      "display_name": "Passive",
+      "description": "Effetto sempre attivo o triggered. Non consuma turno.",
+      "default_target_type": "self",
+      "cooldown_turns": 0,
+      "energy_cost": 0,
+      "rarity_required": 1,
+      "runtime_legacy_slot": "passive",
+      "expected_animation_state": null
+    }
   ],
-  "targeting_rules": {
-    "default": "If a skill has no explicit special target, target tank first; if no valid tank, target nearest enemy.",
-    "taunt": "Taunt has maximum priority for single-target skills unless a future skill explicitly ignores taunt.",
-    "aoe": "Taunt does not intercept AoE, line, column, all-enemy, or multi-target declared effects."
+
+  "skill_field_schema": {
+    "id": "string — slug univoco intra-eroe (es. 'phalanx_guard').",
+    "name": "string — nome localizzabile (default IT).",
+    "description": "string — descrizione player-facing.",
+    "type": "enum: basic_attack | skill | ultimate_or_special | passive",
+    "target_type": "enum (vedi target_types).",
+    "damage_type": "enum: physical | magic | true | none",
+    "scaling_stat": "enum: attack | physical_damage | magic_damage | hp_max | healing_power | shield_power | none",
+    "multiplier": "float — moltiplicatore applicato a scaling_stat.",
+    "cooldown_turns": "int >= 0",
+    "energy_cost": "int >= 0",
+    "effects": "array di Effect (vedi effect_types)",
+    "animation_state": "enum: attack | skill | hit | death | idle",
+    "tags": "array<string> liberi (es. 'cleave', 'execute_under_30hp')",
+    "unlock_condition": "object opzionale (es. {min_stars: 8})",
+    "ignores_taunt": "bool (default false)",
+    "ignores_dodge": "bool (default false)"
   },
-  "effect_types": [
-    "damage",
-    "heal",
-    "shield",
-    "taunt",
-    "dot",
-    "hot",
-    "buff",
-    "debuff",
-    "control",
-    "cleanse",
-    "revive",
-    "mark",
-    "summon_or_proxy"
+
+  "target_types": [
+    "self",
+    "ally_lowest_hp",
+    "ally_highest_atk",
+    "all_allies",
+    "ally_row",
+    "ally_column",
+    "single_enemy",
+    "enemy_lowest_hp",
+    "enemy_highest_atk",
+    "enemy_back_row",
+    "all_enemies",
+    "enemy_row",
+    "enemy_column",
+    "enemy_area_3x3",
+    "random_enemies_n",
+    "tank_first_then_nearest"
   ],
-  "role_templates": {
-    "Tank": [
-      "basic single-target damage",
-      "taunt or guard skill",
-      "shield/damage reduction/passive protection"
-    ],
-    "DPS Melee": [
-      "basic damage",
-      "burst or execute skill",
-      "self-buff or follow-up passive"
-    ],
-    "DPS Ranged": [
-      "basic ranged damage",
-      "focused damage or multi-shot",
-      "crit/speed/passive targeting"
-    ],
-    "Mage AoE": [
-      "basic magic damage",
-      "AoE skill",
-      "elemental DoT/debuff/passive scaling"
-    ],
-    "Assassin / Burst": [
-      "basic quick strike",
-      "high burst single-target",
-      "stealth/reset/execute passive"
-    ],
-    "Support / Buffer": [
-      "basic damage/support",
-      "team buff/cleanse/utility",
-      "aura/passive"
-    ],
-    "Healer": [
-      "basic light damage/heal",
-      "single/AoE heal",
-      "cleanse/barrier/revive passive for high rarity"
-    ],
-    "Control / Debuff": [
-      "basic damage with minor debuff",
-      "control/debuff skill",
-      "resistance/accuracy/passive disruption"
-    ],
-    "Hybrid Special": [
-      "unique rule-breaking kit",
-      "conditional effect",
-      "identity-defining passive"
+
+  "targeting_rules": {
+    "default_single_target": "Se la skill non dichiara target_type esplicito, segue la regola Tank-first → nemico vivo più vicino (Manhattan distance, ties via index). Vedi backend/battle_engine.py:select_default_single_target.",
+    "taunt_priority": "Taunt ha priorità massima sulle skill SINGOLO bersaglio, salvo skill con ignores_taunt=true.",
+    "aoe_taunt_immune": "Taunt NON intercetta target_type AoE/row/column/all_enemies/multiple/area.",
+    "multi_target_runtime_set": [
+      "all", "all_enemies", "aoe", "row", "column", "line", "area",
+      "multiple", "multi"
     ]
   },
+
+  "effect_types": [
+    {
+      "id": "damage",
+      "label": "Danno",
+      "params": ["damage_type", "scaling_stat", "multiplier"],
+      "runtime_supported": true
+    },
+    {
+      "id": "heal",
+      "label": "Cura",
+      "params": ["scaling_stat", "multiplier", "is_hot:false"],
+      "runtime_supported": true,
+      "runtime_keys_compat": ["heal_per_turn"]
+    },
+    {
+      "id": "shield",
+      "label": "Scudo",
+      "params": ["scaling_stat:shield_power|hp_max", "multiplier", "duration_turns"],
+      "runtime_supported": false,
+      "runtime_compat_note": "Da introdurre in fase futura; non rompe runtime corrente."
+    },
+    {
+      "id": "taunt",
+      "label": "Provocazione",
+      "params": ["duration_turns"],
+      "runtime_supported": true,
+      "runtime_keys_compat": ["status_effects[type=taunt]"]
+    },
+    {
+      "id": "dot",
+      "label": "DoT (Damage over Time)",
+      "params": ["damage_type", "damage_per_turn", "duration_turns", "dot_subtype"],
+      "dot_subtypes": ["burn", "bleed", "poison"],
+      "runtime_supported": true
+    },
+    {
+      "id": "hot",
+      "label": "HoT (Heal over Time)",
+      "params": ["heal_per_turn", "duration_turns"],
+      "runtime_supported": true,
+      "runtime_keys_compat": ["heal_per_turn"]
+    },
+    {
+      "id": "buff",
+      "label": "Buff",
+      "params": ["stat_key", "delta", "is_percent:bool", "duration_turns"],
+      "runtime_supported": true
+    },
+    {
+      "id": "debuff",
+      "label": "Debuff",
+      "params": ["stat_key", "delta", "is_percent:bool", "duration_turns"],
+      "runtime_supported": true,
+      "runtime_subtypes_legacy": ["weaken", "defense_break", "slow"]
+    },
+    {
+      "id": "control",
+      "label": "Controllo (stun/freeze/silence)",
+      "params": ["control_subtype", "duration_turns"],
+      "control_subtypes": ["stun", "freeze", "silence", "root"],
+      "runtime_supported": true,
+      "runtime_subtypes_legacy": ["stun", "freeze"]
+    },
+    {
+      "id": "cleanse",
+      "label": "Purifica",
+      "params": ["target_filter", "removes:debuff|dot|control|all"],
+      "runtime_supported": true,
+      "runtime_keys_compat": ["purify"]
+    },
+    {
+      "id": "revive",
+      "label": "Resurrezione",
+      "params": ["hp_percent_after_revive", "max_uses_per_battle"],
+      "runtime_supported": false,
+      "rarity_min": 5
+    },
+    {
+      "id": "damage_reduction",
+      "label": "Riduzione Danni",
+      "params": ["delta_percent", "duration_turns", "target"],
+      "runtime_supported": true
+    },
+    {
+      "id": "mark",
+      "label": "Marchio",
+      "params": ["mark_type", "duration_turns", "trigger_effect"],
+      "runtime_supported": false
+    },
+    {
+      "id": "execute",
+      "label": "Esecuzione (instant kill threshold)",
+      "params": ["hp_threshold_percent", "chance"],
+      "runtime_supported": true,
+      "runtime_keys_compat": ["death_mark.instant_kill_chance"],
+      "rarity_min": 5
+    },
+    {
+      "id": "summon_or_proxy",
+      "label": "Evocazione/Proxy",
+      "params": ["proxy_id", "duration_turns"],
+      "runtime_supported": false,
+      "rarity_min": 5
+    }
+  ],
+
+  "role_kit_templates": {
+    "Tank": {
+      "identity": "Soak damage, redirect threats, protect backline.",
+      "stat_priorities": ["hp", "defense", "damage_reduction", "shield_power", "effect_resistance"],
+      "common_skills": ["basic_attack single-target", "taunt skill", "shield/damage_reduction passive"],
+      "weakness": "Bassa offensiva; vulnerabile a debuff/control prolungati.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "damage single_enemy", "scaling_stat": "attack", "multiplier_range": [0.9, 1.1] },
+        { "slot": "skill", "effect": "taunt|shield", "duration_turns_range": [1, 3] },
+        { "slot": "passive", "effect": "damage_reduction|effect_resistance" }
+      ]
+    },
+    "DPS Melee": {
+      "identity": "Front-line single-target burst e sostained damage.",
+      "stat_priorities": ["attack", "speed", "crit_rate", "crit_damage", "penetration"],
+      "common_skills": ["basic_attack single-target", "skill burst/bleed", "self-buff or rage passive"],
+      "weakness": "Bassa difesa; puniti da AoE control.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "damage single_enemy", "scaling_stat": "attack", "multiplier_range": [1.0, 1.2] },
+        { "slot": "skill", "effect": "damage|dot bleed", "multiplier_range": [1.8, 2.4] },
+        { "slot": "passive", "effect": "buff attack on_low_hp|on_kill" }
+      ]
+    },
+    "DPS Ranged": {
+      "identity": "Backline marksman: high crit, target prioritization (back row, high atk).",
+      "stat_priorities": ["attack", "crit_rate", "crit_damage", "speed", "penetration"],
+      "common_skills": ["basic_attack ranged single", "skill multi-shot or focused", "passive crit/mark"],
+      "weakness": "HP/DEF basse; vulnerabile a assassin/dive.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "damage single_enemy|enemy_back_row", "multiplier_range": [0.95, 1.15] },
+        { "slot": "skill", "effect": "damage random_enemies_n|enemy_lowest_hp", "multiplier_range": [1.6, 2.2] },
+        { "slot": "passive", "effect": "buff crit_rate|mark on_crit" }
+      ]
+    },
+    "Mage AoE": {
+      "identity": "Caster ad area: AoE damage + DoT/debuff elementale.",
+      "stat_priorities": ["attack", "effect_accuracy", "speed", "crit_rate"],
+      "common_skills": ["basic_attack magic single", "skill AoE damage", "ultimate AoE+DoT/debuff"],
+      "weakness": "Lenta cast vs assassin; depends on sticking debuff.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "damage single_enemy", "damage_type": "magic" },
+        { "slot": "skill", "effect": "damage all_enemies", "multiplier_range": [1.4, 1.8] },
+        { "slot": "ultimate_or_special", "effect": "damage+dot all_enemies", "multiplier_range": [3.0, 4.5] }
+      ]
+    },
+    "Assassin / Burst": {
+      "identity": "Single-target nuker: alto crit, esecuzione, evasione.",
+      "stat_priorities": ["attack", "crit_rate", "crit_damage", "penetration", "speed", "dodge"],
+      "common_skills": ["basic_attack quick strike", "skill high burst", "passive execute|stealth|reset"],
+      "weakness": "HP basse, perde valore se non finalizza il target.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "damage single_enemy", "multiplier_range": [1.0, 1.2] },
+        { "slot": "skill", "effect": "damage enemy_lowest_hp|enemy_highest_atk", "multiplier_range": [2.2, 3.0] },
+        { "slot": "passive", "effect": "execute hp_threshold_percent<25|crit_damage buff" }
+      ]
+    },
+    "Support / Buffer": {
+      "identity": "Team enabler: buff offensive/difensivi, energia, velocità.",
+      "stat_priorities": ["speed", "shield_power", "effect_resistance", "hp"],
+      "common_skills": ["basic_attack support light", "skill team buff/cleanse", "passive aura"],
+      "weakness": "Bassa offensiva diretta; effect_resistance dipendente.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "damage single_enemy", "multiplier_range": [0.7, 0.9] },
+        { "slot": "skill", "effect": "buff all_allies (attack|speed|shield)" },
+        { "slot": "passive", "effect": "buff aura (small permanent stat)" }
+      ]
+    },
+    "Healer": {
+      "identity": "Pure healing + cleanse + barrier; alta priorità di sopravvivenza.",
+      "stat_priorities": ["healing_power", "speed", "hp", "effect_resistance"],
+      "common_skills": ["basic_attack light damage|heal", "skill heal single/AoE", "ultimate cleanse|revive (5★+)"],
+      "weakness": "Bassa offensiva, depende da team building.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "heal ally_lowest_hp", "multiplier_range": [0.8, 1.0] },
+        { "slot": "skill", "effect": "heal all_allies|hot all_allies" },
+        { "slot": "ultimate_or_special", "effect": "cleanse all_allies|revive ally (5★+)" }
+      ]
+    },
+    "Control / Debuff": {
+      "identity": "Disruptor: stun, slow, silence, debuff continuativi.",
+      "stat_priorities": ["effect_accuracy", "speed", "hp"],
+      "common_skills": ["basic_attack with minor debuff", "skill control (stun/freeze)", "passive disruption"],
+      "weakness": "Senza effect_accuracy abbastanza alta i debuff falliscono.",
+      "patterns": [
+        { "slot": "basic_attack", "effect": "damage+debuff small" },
+        { "slot": "skill", "effect": "control single|row (stun|freeze)" },
+        { "slot": "passive", "effect": "debuff effect_resistance enemies" }
+      ]
+    },
+    "Hybrid Special": {
+      "identity": "Kit unico/iconico, rule-breaking. Riservato a 5★/6★.",
+      "stat_priorities": ["depends_on_kit"],
+      "common_skills": ["unique mechanic", "conditional effect", "identity-defining passive"],
+      "weakness": "Alto skill-floor; richiede team adatto.",
+      "patterns": [
+        { "slot": "skill", "effect": "any (custom)" },
+        { "slot": "passive", "effect": "iconic mechanic" }
+      ]
+    }
+  },
+
   "rarity_complexity": {
-    "1": "1 simple mechanic, no complex conditions",
-    "2": "1–2 simple mechanics",
-    "3": "clear basic kit, one role-defining effect",
-    "4": "two related mechanics, moderate condition",
-    "5": "premium mechanic and synergy hooks",
-    "6": "iconic kit, unique mechanic, strong visual identity, balanced by cooldown/conditions"
-  }
+    "1": {
+      "max_active_skills": 1,
+      "max_passives": 1,
+      "max_effects_per_skill": 1,
+      "ultimate_allowed": false,
+      "advanced_conditions_allowed": false,
+      "kit_text_max_lines": 2,
+      "summary": "Basic attack + (opzionale) 1 passive semplice."
+    },
+    "2": {
+      "max_active_skills": 1,
+      "max_passives": 1,
+      "max_effects_per_skill": 1,
+      "ultimate_allowed": false,
+      "advanced_conditions_allowed": false,
+      "kit_text_max_lines": 3,
+      "summary": "Basic + 1 skill + 1 passive semplice."
+    },
+    "3": {
+      "max_active_skills": 1,
+      "max_passives": 1,
+      "max_effects_per_skill": 2,
+      "ultimate_allowed": true,
+      "advanced_conditions_allowed": false,
+      "kit_text_max_lines": 4,
+      "summary": "Basic + skill + ultimate + 1 passive role-defining."
+    },
+    "4": {
+      "max_active_skills": 2,
+      "max_passives": 1,
+      "max_effects_per_skill": 2,
+      "ultimate_allowed": true,
+      "advanced_conditions_allowed": true,
+      "kit_text_max_lines": 5,
+      "summary": "Kit più definito: 2 mecchaniche correlate, condizioni semplici."
+    },
+    "5": {
+      "max_active_skills": 2,
+      "max_passives": 2,
+      "max_effects_per_skill": 3,
+      "ultimate_allowed": true,
+      "advanced_conditions_allowed": true,
+      "kit_text_max_lines": 6,
+      "summary": "Kit completo, identity strong, sinergia interna, hooks team-build."
+    },
+    "6": {
+      "max_active_skills": 2,
+      "max_passives": 2,
+      "max_effects_per_skill": 3,
+      "ultimate_allowed": true,
+      "advanced_conditions_allowed": true,
+      "iconic_mechanic_required": true,
+      "kit_text_max_lines": 8,
+      "summary": "Kit iconico/firma, meccanica unica bilanciata da cooldown/condizioni."
+    }
+  },
+
+  "example_kits": {
+    "_purpose": "Esempi schema-validation. NON sovrascrivono il runtime: gli eroi sono già live in DB e il battle_engine usa ELEMENT_SKILLS. Servono come test di rappresentabilità del nuovo schema con due heroes già funzionanti in Combat QA Lab.",
+    "greek_hoplite": {
+      "hero_id": "greek_hoplite",
+      "display_name": "Hoplite",
+      "role": "Tank",
+      "element": "earth",
+      "rarity": 3,
+      "max_stars": 8,
+      "design_intent": "Tank base difensivo: assorbe colpi, protegge il backline con taunt, riduzione danni passiva.",
+      "asset_status_note": "hit/death assets pending. UI/Battle contract OK.",
+      "kit": [
+        {
+          "id": "phalanx_strike",
+          "slot": "basic_attack",
+          "name": "Lancia Falangita",
+          "description": "Colpo singolo con la lancia. Nessun effetto aggiuntivo.",
+          "type": "basic_attack",
+          "target_type": "single_enemy",
+          "damage_type": "physical",
+          "scaling_stat": "attack",
+          "multiplier": 1.0,
+          "cooldown_turns": 0,
+          "energy_cost": 0,
+          "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.0 }],
+          "animation_state": "attack",
+          "tags": ["spear", "single"],
+          "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+        },
+        {
+          "id": "phalanx_guard",
+          "slot": "skill",
+          "name": "Guardia di Falange",
+          "description": "L'Hoplite alza lo scudo: provoca 1 nemico (taunt) e ottiene riduzione danni 25% per 2 turni.",
+          "type": "skill",
+          "target_type": "single_enemy",
+          "damage_type": "none",
+          "scaling_stat": "none",
+          "multiplier": 0.0,
+          "cooldown_turns": 3,
+          "energy_cost": 0,
+          "effects": [
+            { "type": "taunt", "target": "single_enemy", "duration_turns": 2 },
+            { "type": "damage_reduction", "target": "self", "delta_percent": 0.25, "duration_turns": 2 }
+          ],
+          "animation_state": "skill",
+          "tags": ["taunt", "self_protect"],
+          "runtime_legacy_mapping": "approx ELEMENT_SKILLS.earth.sad (effect=stun) — schema-side la skill è taunt+DR; runtime mapping in fase futura"
+        },
+        {
+          "id": "tectonic_collapse",
+          "slot": "ultimate_or_special",
+          "name": "Collasso Tettonico",
+          "description": "Attacco AoE che riduce la DEF nemica del 40% per 3 turni.",
+          "type": "ultimate_or_special",
+          "target_type": "all_enemies",
+          "damage_type": "physical",
+          "scaling_stat": "attack",
+          "multiplier": 4.0,
+          "cooldown_turns": 5,
+          "energy_cost": 100,
+          "effects": [
+            { "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 4.0 },
+            { "type": "debuff", "stat_key": "defense", "delta": -0.40, "is_percent": true, "duration_turns": 3 }
+          ],
+          "animation_state": "skill",
+          "tags": ["aoe", "armor_break"],
+          "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp (effect=defense_break)"
+        },
+        {
+          "id": "stoic_resilience",
+          "slot": "passive",
+          "name": "Resistenza Stoica",
+          "description": "Hoplite ottiene +10% damage_reduction permanente e +mid effect_resistance.",
+          "type": "passive",
+          "target_type": "self",
+          "damage_type": "none",
+          "scaling_stat": "none",
+          "multiplier": 0.0,
+          "cooldown_turns": 0,
+          "energy_cost": 0,
+          "effects": [
+            { "type": "damage_reduction", "target": "self", "delta_percent": 0.10, "duration_turns": -1 },
+            { "type": "buff", "target": "self", "stat_key": "effect_resistance", "delta": 0.15, "is_percent": false, "duration_turns": -1 }
+          ],
+          "animation_state": null,
+          "tags": ["always_on"],
+          "runtime_legacy_mapping": "PASSIVE_SKILLS.3 + 4 (poise/damage_reduction)"
+        }
+      ]
+    },
+    "norse_berserker": {
+      "hero_id": "norse_berserker",
+      "display_name": "Berserker",
+      "role": "DPS Melee",
+      "element": "fire",
+      "rarity": 3,
+      "max_stars": 8,
+      "design_intent": "DPS Melee fury/rage: scala col proprio HP basso, brucia nel tempo, cresce in offensiva quando ferito.",
+      "asset_status_note": "Battle runtime complete. Death visually verified in Combat QA Lab.",
+      "kit": [
+        {
+          "id": "axe_swing",
+          "slot": "basic_attack",
+          "name": "Colpo d'Ascia",
+          "description": "Singolo colpo d'ascia infiammata.",
+          "type": "basic_attack",
+          "target_type": "single_enemy",
+          "damage_type": "physical",
+          "scaling_stat": "attack",
+          "multiplier": 1.1,
+          "cooldown_turns": 0,
+          "energy_cost": 0,
+          "effects": [{ "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 1.1 }],
+          "animation_state": "attack",
+          "tags": ["melee", "single"],
+          "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+        },
+        {
+          "id": "blazing_cleave",
+          "slot": "skill",
+          "name": "Fendente Infuocato",
+          "description": "Fendente che infligge danno potenziato e applica Ustione (DoT 5%/turno per 3 turni).",
+          "type": "skill",
+          "target_type": "single_enemy",
+          "damage_type": "physical",
+          "scaling_stat": "attack",
+          "multiplier": 2.5,
+          "cooldown_turns": 3,
+          "energy_cost": 0,
+          "effects": [
+            { "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 2.5 },
+            { "type": "dot", "dot_subtype": "burn", "damage_type": "physical", "damage_per_turn_percent_target_max_hp": 0.05, "duration_turns": 3 }
+          ],
+          "animation_state": "skill",
+          "tags": ["dot_burn"],
+          "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad (effect=burn)"
+        },
+        {
+          "id": "infernal_storm",
+          "slot": "ultimate_or_special",
+          "name": "Tempesta Infernale",
+          "description": "AoE devastante: danno fuoco a tutti i nemici e applica Ustione 8%/turno per 3 turni.",
+          "type": "ultimate_or_special",
+          "target_type": "all_enemies",
+          "damage_type": "physical",
+          "scaling_stat": "attack",
+          "multiplier": 5.0,
+          "cooldown_turns": 5,
+          "energy_cost": 100,
+          "effects": [
+            { "type": "damage", "damage_type": "physical", "scaling_stat": "attack", "multiplier": 5.0 },
+            { "type": "dot", "dot_subtype": "burn", "damage_type": "physical", "damage_per_turn_percent_target_max_hp": 0.08, "duration_turns": 3 }
+          ],
+          "animation_state": "skill",
+          "tags": ["aoe", "dot_burn", "rage_burst"],
+          "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+        },
+        {
+          "id": "berserker_fury",
+          "slot": "passive",
+          "name": "Furia del Berserker",
+          "description": "Quando l'HP del Berserker scende sotto il 50%, ottiene +25% attack e +10% crit_rate fino a fine battaglia.",
+          "type": "passive",
+          "target_type": "self",
+          "damage_type": "none",
+          "scaling_stat": "none",
+          "multiplier": 0.0,
+          "cooldown_turns": 0,
+          "energy_cost": 0,
+          "effects": [
+            { "type": "buff", "target": "self", "stat_key": "attack", "delta": 0.25, "is_percent": true, "duration_turns": -1, "trigger": "self_hp_below_percent", "trigger_value": 0.5 },
+            { "type": "buff", "target": "self", "stat_key": "crit_rate", "delta": 0.10, "is_percent": false, "duration_turns": -1, "trigger": "self_hp_below_percent", "trigger_value": 0.5 }
+          ],
+          "animation_state": null,
+          "tags": ["rage", "low_hp_scaling"],
+          "runtime_legacy_mapping": "approx PASSIVE_SKILLS.4 (Frenesia)"
+        }
+      ]
+    }
+  },
+
+  "next_phase_recommendation": "RM1.21-B: assegnare kit ufficiali per la batch dei 12 eroi 6★ (incl. Borea), partendo da role_kit_templates + rarity_complexity[6]. Solo schema-data, nessun import DB. Successivamente RM1.21-C per i 5★."
 }
