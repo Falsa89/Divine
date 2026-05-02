@@ -114,7 +114,7 @@ def _redact_mongo(url: str) -> str:
 # Main
 # ════════════════════════════════════════════════════════════════════════
 
-async def run(apply_changes: bool) -> int:
+async def run(apply_changes: bool, legacy_only: bool = True) -> int:
     mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017")
     db_name = os.getenv("DB_NAME", "divine_waifus")
     client = AsyncIOMotorClient(mongo_url)
@@ -259,10 +259,7 @@ async def run(apply_changes: bool) -> int:
 
     # ── Esecuzione: solo se --apply ───────────────────────────────────
     if apply_changes:
-        print(" --apply ricevuto: esecuzione live in corso...")
-        # NB: in RM1.20-A questo blocco NON va eseguito. Lasciato in piedi
-        # per la task successiva. Per sicurezza l'eseguibile lancia un
-        # secondo prompt di conferma.
+        print(" --apply ricevuto: validazione confirm env var...")
         confirm = os.getenv("ROSTER_APPLY_CONFIRM", "")
         if confirm != "I_UNDERSTAND_THIS_WILL_WRITE_DB":
             print(
@@ -270,20 +267,87 @@ async def run(apply_changes: bool) -> int:
                 "impostata al valore esatto richiesto."
             )
             print(
-                "   Per eseguire davvero in futuro:"
+                "   Per eseguire davvero:"
                 "\n     ROSTER_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_WRITE_DB \\"
-                "\n     python backend/scripts/plan_legacy_soft_deactivation.py --apply"
+                "\n     python backend/scripts/plan_legacy_soft_deactivation.py --apply --legacy-only"
             )
             client.close()
             return 2
-        # NOTA: blocco di scrittura intenzionalmente non eseguito qui in
-        # RM1.20-A. Sarà integrato nella task di import ufficiale del roster.
-        print(
-            "   ❌ Aborto: in RM1.20-A il path di scrittura è disabilitato "
-            "by-design. Nessuna operazione DB eseguita."
-        )
+
+        # RM1.20-D: il path di scrittura è abilitato SOLO per legacy-only.
+        # L'apply su eroi ufficiali (canonicalizzazione) è rinviato a
+        # RM1.20-E e bloccato qui by-design per ridurre la superficie di
+        # rischio. Per ora applichiamo soltanto la soft-deactivation dei
+        # 31 placeholder legacy.
+        if not legacy_only:
+            print(
+                "   ❌ Aborto: in RM1.20-D è abilitato SOLO `--legacy-only`. "
+                "L'apply per gli eroi ufficiali è rinviato a RM1.20-E."
+            )
+            print(
+                "   Comando corretto:"
+                "\n     ROSTER_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_WRITE_DB \\"
+                "\n     python backend/scripts/plan_legacy_soft_deactivation.py --apply --legacy-only"
+            )
+            client.close()
+            return 3
+
+        print(f"   ✓ Confirm valida. Applico {len(plan_legacy)} soft-deactivation legacy...")
+        applied_at = datetime.utcnow().isoformat() + "Z"
+        applied_count = 0
+        applied_ids: List[str] = []
+        for item in plan_legacy:
+            payload = item["update_payload"]["$set"].copy()
+            # Sostituisci `deactivated_at_planned` con timestamp effettivo
+            payload.pop("deactivated_at_planned", None)
+            payload["deactivated_at"] = applied_at
+            res = await db.heroes.update_one(
+                {"id": item["hero_id"], "is_legacy_placeholder": {"$ne": True}},
+                {"$set": payload},
+            )
+            if res.modified_count == 1:
+                applied_count += 1
+                applied_ids.append(item["hero_id"])
+            else:
+                # Already legacy o filter non match — log ma non rompe.
+                print(
+                    f"   ⚠ skip {item['hero_id']}: matched={res.matched_count} "
+                    f"modified={res.modified_count}"
+                )
+
+        # Aggiorna safety + apply manifest
+        plan["safety"]["db_writes_performed"] = True
+        plan["apply_flag_executed"] = True
+        plan["dry_run"] = False
+        plan["apply_manifest"] = {
+            "applied_at": applied_at,
+            "applied_count": applied_count,
+            "applied_hero_ids": applied_ids,
+            "apply_mode": "legacy_only",
+            "officials_modified": 0,
+            "user_heroes_modified": 0,
+            "teams_modified": 0,
+            "users_modified": 0,
+            "heroes_deleted": 0,
+        }
+
+        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        out_path = REPORTS_DIR / f"legacy_soft_deactivation_APPLIED_{ts}.json"
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(plan, f, indent=2, default=str, ensure_ascii=False)
+
+        print()
+        print(" =====================================================")
+        print(f"   APPLY COMPLETATO: {applied_count}/{len(plan_legacy)} legacy soft-deactivati")
+        print(f"   Manifest JSON:   {out_path}")
+        print(f"   Mode:            legacy_only")
+        print(f"   Heroes deleted:  0")
+        print(f"   user_heroes:     UNTOUCHED")
+        print(f"   teams:           UNTOUCHED")
+        print(f"   users:           UNTOUCHED")
+        print(" =====================================================")
         client.close()
-        return 3
+        return 0
 
     # ── Dry-run output JSON ───────────────────────────────────────────
     ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
@@ -319,13 +383,22 @@ def main() -> int:
         "--apply",
         action="store_true",
         help=(
-            "FUTURO: applica il piano sul DB (richiede anche "
+            "Applica il piano sul DB (richiede anche "
             "ROSTER_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_WRITE_DB). "
-            "NON eseguire in RM1.20-A."
+            "In RM1.20-D è abilitato SOLO con --legacy-only."
+        ),
+    )
+    ap.add_argument(
+        "--legacy-only",
+        action="store_true",
+        help=(
+            "RM1.20-D: applica la soft-deactivation SOLO ai legacy "
+            "placeholder. Niente touch su eroi ufficiali (canonicalize "
+            "rinviato a RM1.20-E)."
         ),
     )
     args = ap.parse_args()
-    return asyncio.run(run(apply_changes=args.apply))
+    return asyncio.run(run(apply_changes=args.apply, legacy_only=args.legacy_only))
 
 
 if __name__ == "__main__":
