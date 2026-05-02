@@ -1,0 +1,4234 @@
+{
+  "version": "0.1",
+  "status": "design_data_only",
+  "task_origin": "RM1.21-D_prepared_by_chatgpt_install_pack",
+  "scope": {
+    "native_rarity": 4,
+    "max_stars": 10,
+    "expected_hero_count": 24,
+    "release_group": "launch_base"
+  },
+  "design_rules": {
+    "rarity_rule": "4★ heroes have basic_attack + skill + ultimate_or_special + passive; identity is defined but not yet premium/unique 5★+ level.",
+    "complexity": "moderate; up to two correlated mechanics; no revive/execute/summon_or_proxy.",
+    "runtime": "schema-data only; not imported into DB; not authoritative for live battle runtime.",
+    "validation": "all IDs/elements/roles/factions should match Character Bible."
+  },
+  "expected_ids": [
+    "angelic_seraph",
+    "greek_amazon_of_ares",
+    "egyptian_priestess_of_sekhmet",
+    "norse_shieldbreaker_valkyrie",
+    "yokai_storm_onmyoji",
+    "greek_labyrinth_guardian",
+    "egyptian_duat_sentinel",
+    "norse_valhalla_shield",
+    "cursed_threshold_keeper",
+    "creature_phoenix_daughter",
+    "celtic_thunder_huntress",
+    "yokai_red_moon_blade",
+    "celtic_mist_predator",
+    "greek_oracle_of_delphi",
+    "norse_ancient_rune_cantor",
+    "angelic_sacred_sun_healer",
+    "celtic_menhir_shamaness",
+    "cursed_twilight_witch",
+    "yokai_chain_miko",
+    "creature_lesser_hydra",
+    "egyptian_tide_lady",
+    "demonic_sacred_brazier_pyromancer",
+    "creature_depths_warrior",
+    "creature_cyclone_daughter"
+  ],
+  "heroes": [
+    {
+      "hero_id": "angelic_seraph",
+      "name": "Serafino",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "light",
+      "role": "Support / Buffer",
+      "faction": "angelic",
+      "origin_group": "seraphim",
+      "category": "angel",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "speed",
+          "effect_resistance",
+          "shield_power"
+        ],
+        "secondary": [
+          "hp",
+          "healing_power"
+        ],
+        "notes": "team enablement and tempo control"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "angelic_seraph_basic_attack",
+        "name": "Nota Serafica",
+        "description": "Invia un raggio sacro sul nemico prioritario.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.0,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "light",
+          "support_buffer",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+      },
+      "skill": {
+        "id": "angelic_seraph_skill",
+        "name": "Inno delle Sei Ali",
+        "description": "Aumenta attack e effect_resistance degli alleati per 2 turni.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 4,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "buff",
+            "stat": "attack",
+            "value": 0.18,
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "buff",
+            "stat": "effect_resistance",
+            "value": 0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_buff",
+          "light"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+      },
+      "ultimate_or_special": {
+        "id": "angelic_seraph_ultimate_or_special",
+        "name": "Coro Celestiale",
+        "description": "Cura tutti gli alleati e applica una breve riduzione danni.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "heal",
+            "scaling_stat": "healing_power",
+            "multiplier": 1.2
+          },
+          {
+            "effect_type": "damage_reduction",
+            "target": "all_allies",
+            "value": 0.12,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_heal",
+          "damage_reduction"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+      },
+      "passive": {
+        "id": "angelic_seraph_passive",
+        "name": "Armonia Superiore",
+        "description": "Gli alleati ricevono un piccolo bonus permanente a effect_resistance.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "all_allies",
+            "stat": "effect_resistance",
+            "value": 0.08,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "aura",
+          "support"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.light.nad",
+        "skill_mapping": "ELEMENT_SKILLS.light.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.light.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "greek_amazon_of_ares",
+      "name": "Amazzone di Ares",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "fire",
+      "role": "DPS Melee",
+      "faction": "greek",
+      "origin_group": "ares_warriors",
+      "category": "legendary_hero",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "speed",
+          "crit_rate"
+        ],
+        "secondary": [
+          "crit_damage",
+          "penetration",
+          "hp"
+        ],
+        "notes": "frontline pressure and tempo"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "greek_amazon_of_ares_basic_attack",
+        "name": "Taglio di Ares",
+        "description": "Colpisce il nemico prioritario con un fendente aggressivo.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.08,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "fire",
+          "dps_melee",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+      },
+      "skill": {
+        "id": "greek_amazon_of_ares_skill",
+        "name": "Carica della Lancia Rossa",
+        "description": "Infligge danni e riduce la difesa del bersaglio.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 2.0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "defense",
+            "value": -0.2,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "defense_break",
+          "melee"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+      },
+      "ultimate_or_special": {
+        "id": "greek_amazon_of_ares_ultimate_or_special",
+        "name": "Furia delle Amazzoni",
+        "description": "Danneggia una fila di nemici e aumenta temporaneamente il proprio attack.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "enemy_row",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 2.4,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "attack",
+            "value": 0.18,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "row_damage",
+          "self_buff"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+      },
+      "passive": {
+        "id": "greek_amazon_of_ares_passive",
+        "name": "Figlia della Guerra",
+        "description": "Aumenta crit_rate quando entra in battaglia.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "crit_rate",
+            "value": 0.08,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "always_on",
+          "dps"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.fire.nad",
+        "skill_mapping": "ELEMENT_SKILLS.fire.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.fire.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "egyptian_priestess_of_sekhmet",
+      "name": "Sacerdotessa di Sekhmet",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "fire",
+      "role": "Mage AoE",
+      "faction": "egyptian",
+      "origin_group": "sekhmet_cult",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "effect_accuracy",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "effect_resistance"
+        ],
+        "notes": "area pressure with elemental status"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "egyptian_priestess_of_sekhmet_basic_attack",
+        "name": "Fiamma Leonina",
+        "description": "Scaglia una fiamma sacra sul bersaglio prioritario.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.0,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "fire",
+          "mage_aoe",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+      },
+      "skill": {
+        "id": "egyptian_priestess_of_sekhmet_skill",
+        "name": "Rito dell’Ira Solare",
+        "description": "Danneggia tutti i nemici e applica burn leggero.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.15,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "dot",
+            "subtype": "burn",
+            "value_percent_target_max_hp": 0.04,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "burn"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+      },
+      "ultimate_or_special": {
+        "id": "egyptian_priestess_of_sekhmet_ultimate_or_special",
+        "name": "Sole di Sekhmet",
+        "description": "Danneggia tutti i nemici e indebolisce il loro attack.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.75,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "attack",
+            "value": -0.18,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "weaken"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+      },
+      "passive": {
+        "id": "egyptian_priestess_of_sekhmet_passive",
+        "name": "Sangue Ardente",
+        "description": "Aumenta effect_accuracy e attack.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_accuracy",
+            "value": 0.08,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "attack",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "mage",
+          "burn"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.fire.nad",
+        "skill_mapping": "ELEMENT_SKILLS.fire.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.fire.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "norse_shieldbreaker_valkyrie",
+      "name": "Valchiria Spezzascudi",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "wind",
+      "role": "DPS Melee",
+      "faction": "norse",
+      "origin_group": "valkyries",
+      "category": "legendary_hero",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "speed",
+          "crit_rate"
+        ],
+        "secondary": [
+          "crit_damage",
+          "penetration",
+          "hp"
+        ],
+        "notes": "frontline pressure and tempo"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "norse_shieldbreaker_valkyrie_basic_attack",
+        "name": "Stoccata dell’Alba Fredda",
+        "description": "Colpisce con una lancia rapida spinta dal vento.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.08,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "wind",
+          "dps_melee",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+      },
+      "skill": {
+        "id": "norse_shieldbreaker_valkyrie_skill",
+        "name": "Spezzascudi",
+        "description": "Infligge danni e riduce damage_reduction del bersaglio.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 2.05,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "damage_reduction",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "anti_tank",
+          "melee"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+      },
+      "ultimate_or_special": {
+        "id": "norse_shieldbreaker_valkyrie_ultimate_or_special",
+        "name": "Discesa della Valchiria",
+        "description": "Colpisce tutti i nemici frontali e aumenta speed personale.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "enemy_front_row",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 2.3,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "speed",
+            "value": 0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "front_row",
+          "self_speed"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+      },
+      "passive": {
+        "id": "norse_shieldbreaker_valkyrie_passive",
+        "name": "Ali da Battaglia",
+        "description": "Aumenta speed e penetration.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "speed",
+            "value": 0.07,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "penetration",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "valkyrie",
+          "dps"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.wind.nad",
+        "skill_mapping": "ELEMENT_SKILLS.wind.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.wind.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "yokai_storm_onmyoji",
+      "name": "Onmyoji delle Tempeste",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "lightning",
+      "role": "Mage AoE",
+      "faction": "japanese_yokai",
+      "origin_group": "onmyoji",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "effect_accuracy",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "effect_resistance"
+        ],
+        "notes": "area pressure with elemental status"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "yokai_storm_onmyoji_basic_attack",
+        "name": "Ofuda Folgorante",
+        "description": "Lancia un talismano carico di fulmine.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.0,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "lightning",
+          "mage_aoe",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+      },
+      "skill": {
+        "id": "yokai_storm_onmyoji_skill",
+        "name": "Sigillo di Tempesta",
+        "description": "Danneggia tutti i nemici e può rallentarli.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.1,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "speed",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "slow"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+      },
+      "ultimate_or_special": {
+        "id": "yokai_storm_onmyoji_ultimate_or_special",
+        "name": "Cerchio del Tuono",
+        "description": "Colpisce tutti i nemici e applica stun breve al bersaglio principale.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.65,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "control",
+            "subtype": "stun",
+            "target": "primary_target",
+            "chance": 0.35,
+            "duration_turns": 1
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "stun"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+      },
+      "passive": {
+        "id": "yokai_storm_onmyoji_passive",
+        "name": "Talento Onmyoji",
+        "description": "Aumenta effect_accuracy.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_accuracy",
+            "value": 0.12,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "control",
+          "lightning"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.lightning.nad",
+        "skill_mapping": "ELEMENT_SKILLS.lightning.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.lightning.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "greek_labyrinth_guardian",
+      "name": "Guardiana del Labirinto",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "earth",
+      "role": "Tank",
+      "faction": "greek",
+      "origin_group": "labyrinth",
+      "category": "mythic_creature",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "hp",
+          "defense",
+          "damage_reduction"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "notes": "durable frontline/protection"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "greek_labyrinth_guardian_basic_attack",
+        "name": "Urto del Labirinto",
+        "description": "Colpisce il nemico prioritario con forza massiccia.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 0.98,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "earth",
+          "tank",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+      },
+      "skill": {
+        "id": "greek_labyrinth_guardian_skill",
+        "name": "Muro del Dedalo",
+        "description": "Provoca il bersaglio e ottiene riduzione danni.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "taunt",
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "damage_reduction",
+            "target": "self",
+            "value": 0.25,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "taunt",
+          "damage_reduction"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad"
+      },
+      "ultimate_or_special": {
+        "id": "greek_labyrinth_guardian_ultimate_or_special",
+        "name": "Crollo del Labirinto",
+        "description": "Danneggia tutti i nemici e riduce la loro speed.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.6,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "speed",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "slow"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp"
+      },
+      "passive": {
+        "id": "greek_labyrinth_guardian_passive",
+        "name": "Pelle di Pietra",
+        "description": "Aumenta hp e defense.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "hp",
+            "value": 0.1,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "defense",
+            "value": 0.08,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "tank",
+          "earth"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.earth.nad",
+        "skill_mapping": "ELEMENT_SKILLS.earth.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.earth.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "egyptian_duat_sentinel",
+      "name": "Sentinella del Duat",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "dark",
+      "role": "Tank",
+      "faction": "egyptian",
+      "origin_group": "duat",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "hp",
+          "defense",
+          "damage_reduction"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "notes": "durable frontline/protection"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "egyptian_duat_sentinel_basic_attack",
+        "name": "Lama del Duat",
+        "description": "Colpisce con energia funeraria.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 0.98,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "dark",
+          "tank",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+      },
+      "skill": {
+        "id": "egyptian_duat_sentinel_skill",
+        "name": "Soglia dei Morti",
+        "description": "Provoca e indebolisce l’attack del bersaglio.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "taunt",
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "attack",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "taunt",
+          "weaken"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+      },
+      "ultimate_or_special": {
+        "id": "egyptian_duat_sentinel_ultimate_or_special",
+        "name": "Giudizio del Duat",
+        "description": "Danneggia tutti i nemici e applica weaken.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.5,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "attack",
+            "value": -0.18,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "dark"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+      },
+      "passive": {
+        "id": "egyptian_duat_sentinel_passive",
+        "name": "Guardia Funeraria",
+        "description": "Aumenta effect_resistance e damage_reduction.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_resistance",
+            "value": 0.1,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "damage_reduction",
+            "target": "self",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "tank",
+          "dark"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.dark.nad",
+        "skill_mapping": "ELEMENT_SKILLS.dark.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.dark.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "norse_valhalla_shield",
+      "name": "Scudo del Valhalla",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "earth",
+      "role": "Tank",
+      "faction": "norse",
+      "origin_group": "valhalla",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "hp",
+          "defense",
+          "damage_reduction"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "notes": "durable frontline/protection"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "norse_valhalla_shield_basic_attack",
+        "name": "Colpo di Scudo",
+        "description": "Colpisce e mantiene la linea.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 0.95,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "earth",
+          "tank",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+      },
+      "skill": {
+        "id": "norse_valhalla_shield_skill",
+        "name": "Scudo degli Einherjar",
+        "description": "Ottiene shield e riduzione danni.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "self",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "shield",
+            "scaling_stat": "shield_power",
+            "multiplier": 1.2,
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "damage_reduction",
+            "target": "self",
+            "value": 0.2,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "shield",
+          "tank"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad"
+      },
+      "ultimate_or_special": {
+        "id": "norse_valhalla_shield_ultimate_or_special",
+        "name": "Muro del Valhalla",
+        "description": "Protegge tutti gli alleati con shield leggero.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "shield",
+            "target": "all_allies",
+            "scaling_stat": "shield_power",
+            "multiplier": 0.8,
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "buff",
+            "target": "all_allies",
+            "stat": "defense",
+            "value": 0.12,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_shield",
+          "defense_buff"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp"
+      },
+      "passive": {
+        "id": "norse_valhalla_shield_passive",
+        "name": "Giuramento dello Scudo",
+        "description": "Aumenta shield_power.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "shield_power",
+            "value": 0.12,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "shield",
+          "tank"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.earth.nad",
+        "skill_mapping": "ELEMENT_SKILLS.earth.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.earth.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "cursed_threshold_keeper",
+      "name": "Custode della Soglia",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "dark",
+      "role": "Tank",
+      "faction": "cursed",
+      "origin_group": "threshold",
+      "category": "cursed_entity",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "hp",
+          "defense",
+          "damage_reduction"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "notes": "durable frontline/protection"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "cursed_threshold_keeper_basic_attack",
+        "name": "Chiave Oscura",
+        "description": "Colpisce il bersaglio con energia maledetta.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.96,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "dark",
+          "tank",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+      },
+      "skill": {
+        "id": "cursed_threshold_keeper_skill",
+        "name": "Catene della Soglia",
+        "description": "Provoca e applica slow al bersaglio.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "taunt",
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "speed",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "taunt",
+          "slow"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+      },
+      "ultimate_or_special": {
+        "id": "cursed_threshold_keeper_ultimate_or_special",
+        "name": "Porta Senza Ritorno",
+        "description": "Danneggia tutti i nemici e riduce effect_accuracy.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.45,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "effect_accuracy",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "debuff"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+      },
+      "passive": {
+        "id": "cursed_threshold_keeper_passive",
+        "name": "Soglia Maledetta",
+        "description": "Aumenta hp e effect_resistance.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "hp",
+            "value": 0.1,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_resistance",
+            "value": 0.08,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "cursed",
+          "tank"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.dark.nad",
+        "skill_mapping": "ELEMENT_SKILLS.dark.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.dark.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "creature_phoenix_daughter",
+      "name": "Figlia della Fenice",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "fire",
+      "role": "DPS Ranged",
+      "faction": "creature_beast",
+      "origin_group": "phoenix",
+      "category": "mythic_creature",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "crit_rate",
+          "crit_damage"
+        ],
+        "secondary": [
+          "speed",
+          "penetration"
+        ],
+        "notes": "backline damage and focused fire"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "creature_phoenix_daughter_basic_attack",
+        "name": "Piuma Ardente",
+        "description": "Scaglia una piuma infuocata sul bersaglio.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.05,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "fire",
+          "dps_ranged",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+      },
+      "skill": {
+        "id": "creature_phoenix_daughter_skill",
+        "name": "Freccia Cremisi",
+        "description": "Infligge danni e burn.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.85,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "dot",
+            "subtype": "burn",
+            "value_percent_target_max_hp": 0.04,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "burn",
+          "ranged"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+      },
+      "ultimate_or_special": {
+        "id": "creature_phoenix_daughter_ultimate_or_special",
+        "name": "Pioggia di Piume Rosse",
+        "description": "Danneggia tutti i nemici.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.75,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "fire"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+      },
+      "passive": {
+        "id": "creature_phoenix_daughter_passive",
+        "name": "Scintilla di Rinascita",
+        "description": "Aumenta crit_rate e fire damage tags.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "crit_rate",
+            "value": 0.08,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "phoenix",
+          "crit"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.fire.nad",
+        "skill_mapping": "ELEMENT_SKILLS.fire.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.fire.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "celtic_thunder_huntress",
+      "name": "Cacciatrice del Tuono",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "lightning",
+      "role": "DPS Ranged",
+      "faction": "celtic",
+      "origin_group": "storm_hunters",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "crit_rate",
+          "crit_damage"
+        ],
+        "secondary": [
+          "speed",
+          "penetration"
+        ],
+        "notes": "backline damage and focused fire"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "celtic_thunder_huntress_basic_attack",
+        "name": "Dardo del Tuono",
+        "description": "Colpisce con un dardo elettrico.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.05,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "lightning",
+          "dps_ranged",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+      },
+      "skill": {
+        "id": "celtic_thunder_huntress_skill",
+        "name": "Giavellotto Tonante",
+        "description": "Colpisce un nemico e può stordire brevemente.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.8,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "control",
+            "subtype": "stun",
+            "chance": 0.25,
+            "duration_turns": 1
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "stun",
+          "ranged"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+      },
+      "ultimate_or_special": {
+        "id": "celtic_thunder_huntress_ultimate_or_special",
+        "name": "Caccia della Tempesta",
+        "description": "Colpisce tre nemici casuali.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "random_enemies_n",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.15,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage",
+            "hits": 3
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "multi_hit",
+          "lightning"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+      },
+      "passive": {
+        "id": "celtic_thunder_huntress_passive",
+        "name": "Occhio del Fulmine",
+        "description": "Aumenta crit_rate.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "crit_rate",
+            "value": 0.1,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "crit",
+          "hunter"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.lightning.nad",
+        "skill_mapping": "ELEMENT_SKILLS.lightning.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.lightning.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "yokai_red_moon_blade",
+      "name": "Lama della Luna Rossa",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "dark",
+      "role": "Assassin / Burst",
+      "faction": "japanese_yokai",
+      "origin_group": "moon_blades",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "crit_damage",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "penetration",
+          "dodge"
+        ],
+        "notes": "single-target burst and evasive pressure"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "yokai_red_moon_blade_basic_attack",
+        "name": "Taglio Lunare",
+        "description": "Colpisce rapidamente il bersaglio prioritario.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.08,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "dark",
+          "assassin_burst",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+      },
+      "skill": {
+        "id": "yokai_red_moon_blade_skill",
+        "name": "Passo della Luna Rossa",
+        "description": "Infligge danni elevati e aumenta dodge personale.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 2.05,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "dodge",
+            "value": 0.12,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "burst",
+          "dodge"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+      },
+      "ultimate_or_special": {
+        "id": "yokai_red_moon_blade_ultimate_or_special",
+        "name": "Eclissi di Lama",
+        "description": "Colpisce il nemico con HP più basso.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "enemy_lowest_hp",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 2.8,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "finisher",
+          "dark"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+      },
+      "passive": {
+        "id": "yokai_red_moon_blade_passive",
+        "name": "Passo Silenzioso",
+        "description": "Aumenta speed e crit_damage.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "speed",
+            "value": 0.07,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "crit_damage",
+            "value": 0.12,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "assassin",
+          "burst"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.dark.nad",
+        "skill_mapping": "ELEMENT_SKILLS.dark.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.dark.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "celtic_mist_predator",
+      "name": "Predatrice delle Nebbie",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "wind",
+      "role": "Assassin / Burst",
+      "faction": "celtic",
+      "origin_group": "mist_spirits",
+      "category": "folklore_spirit",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "crit_damage",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "penetration",
+          "dodge"
+        ],
+        "notes": "single-target burst and evasive pressure"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "celtic_mist_predator_basic_attack",
+        "name": "Artiglio di Nebbia",
+        "description": "Colpisce dal velo delle nebbie.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.08,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "wind",
+          "assassin_burst",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+      },
+      "skill": {
+        "id": "celtic_mist_predator_skill",
+        "name": "Predazione Silenziosa",
+        "description": "Danneggia e applica bleed.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.9,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "dot",
+            "subtype": "bleed",
+            "value_percent_target_max_hp": 0.04,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "bleed",
+          "assassin"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+      },
+      "ultimate_or_special": {
+        "id": "celtic_mist_predator_ultimate_or_special",
+        "name": "Caccia nella Bruma",
+        "description": "Colpisce due nemici casuali e aumenta dodge.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "random_enemies_n",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.55,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage",
+            "hits": 2
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "dodge",
+            "value": 0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "multi_hit",
+          "dodge"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+      },
+      "passive": {
+        "id": "celtic_mist_predator_passive",
+        "name": "Nata nella Nebbia",
+        "description": "Aumenta dodge e penetration.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "dodge",
+            "value": 0.1,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "penetration",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "mist",
+          "assassin"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.wind.nad",
+        "skill_mapping": "ELEMENT_SKILLS.wind.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.wind.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "greek_oracle_of_delphi",
+      "name": "Oracolo di Delfi",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "light",
+      "role": "Support / Buffer",
+      "faction": "greek",
+      "origin_group": "delphi",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "speed",
+          "effect_resistance",
+          "shield_power"
+        ],
+        "secondary": [
+          "hp",
+          "healing_power"
+        ],
+        "notes": "team enablement and tempo control"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "greek_oracle_of_delphi_basic_attack",
+        "name": "Luce Profetica",
+        "description": "Colpisce con una piccola onda sacra.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.95,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "light",
+          "support_buffer",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+      },
+      "skill": {
+        "id": "greek_oracle_of_delphi_skill",
+        "name": "Visione di Delfi",
+        "description": "Aumenta crit_rate e effect_accuracy degli alleati.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 4,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "buff",
+            "stat": "crit_rate",
+            "value": 0.12,
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "buff",
+            "stat": "effect_accuracy",
+            "value": 0.12,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_buff",
+          "prophecy"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+      },
+      "ultimate_or_special": {
+        "id": "greek_oracle_of_delphi_ultimate_or_special",
+        "name": "Oracolo della Vittoria",
+        "description": "Aumenta attack e cura leggermente il team.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "buff",
+            "stat": "attack",
+            "value": 0.16,
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "heal",
+            "scaling_stat": "healing_power",
+            "multiplier": 0.8
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_buff",
+          "heal"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+      },
+      "passive": {
+        "id": "greek_oracle_of_delphi_passive",
+        "name": "Filo della Profezia",
+        "description": "Aumenta speed degli alleati leggermente.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "all_allies",
+            "stat": "speed",
+            "value": 0.05,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "aura",
+          "support"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.light.nad",
+        "skill_mapping": "ELEMENT_SKILLS.light.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.light.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "norse_ancient_rune_cantor",
+      "name": "Cantora delle Rune Antiche",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "lightning",
+      "role": "Support / Buffer",
+      "faction": "norse",
+      "origin_group": "rune_magic",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "speed",
+          "effect_resistance",
+          "shield_power"
+        ],
+        "secondary": [
+          "hp",
+          "healing_power"
+        ],
+        "notes": "team enablement and tempo control"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "norse_ancient_rune_cantor_basic_attack",
+        "name": "Canto Runico",
+        "description": "Colpisce con una nota elettrica.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.98,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "lightning",
+          "support_buffer",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+      },
+      "skill": {
+        "id": "norse_ancient_rune_cantor_skill",
+        "name": "Runa del Vigore",
+        "description": "Aumenta attack e speed degli alleati.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 4,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "buff",
+            "stat": "attack",
+            "value": 0.14,
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "buff",
+            "stat": "speed",
+            "value": 0.1,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_buff",
+          "rune"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+      },
+      "ultimate_or_special": {
+        "id": "norse_ancient_rune_cantor_ultimate_or_special",
+        "name": "Coro del Fulmine Antico",
+        "description": "Danneggia tutti i nemici e ricarica il ritmo del team.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.25,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "buff",
+            "target": "all_allies",
+            "stat": "effect_accuracy",
+            "value": 0.12,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "team_buff"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+      },
+      "passive": {
+        "id": "norse_ancient_rune_cantor_passive",
+        "name": "Memoria delle Rune",
+        "description": "Aumenta effect_resistance del team.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "all_allies",
+            "stat": "effect_resistance",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "support",
+          "rune"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.lightning.nad",
+        "skill_mapping": "ELEMENT_SKILLS.lightning.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.lightning.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "angelic_sacred_sun_healer",
+      "name": "Guaritrice del Sole Sacro",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "light",
+      "role": "Healer",
+      "faction": "angelic",
+      "origin_group": "sacred_sun",
+      "category": "angel",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "healing_power",
+          "speed",
+          "hp"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "notes": "sustain and cleansing support"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "angelic_sacred_sun_healer_basic_attack",
+        "name": "Scintilla Solare",
+        "description": "Colpisce con luce calda.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.85,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "light",
+          "healer",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+      },
+      "skill": {
+        "id": "angelic_sacred_sun_healer_skill",
+        "name": "Raggio del Sole Sacro",
+        "description": "Cura l’alleato con meno HP e applica HoT.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "ally_lowest_hp",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "heal",
+            "scaling_stat": "healing_power",
+            "multiplier": 1.5
+          },
+          {
+            "effect_type": "hot",
+            "value_percent_max_hp": 0.04,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "single_heal",
+          "hot"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+      },
+      "ultimate_or_special": {
+        "id": "angelic_sacred_sun_healer_ultimate_or_special",
+        "name": "Alba Purificatrice",
+        "description": "Cura tutti gli alleati e rimuove un debuff.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "heal",
+            "scaling_stat": "healing_power",
+            "multiplier": 1.0
+          },
+          {
+            "effect_type": "cleanse",
+            "count": 1
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_heal",
+          "cleanse"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+      },
+      "passive": {
+        "id": "angelic_sacred_sun_healer_passive",
+        "name": "Calore Benedetto",
+        "description": "Aumenta healing_power.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "healing_power",
+            "value": 0.12,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "healer",
+          "light"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.light.nad",
+        "skill_mapping": "ELEMENT_SKILLS.light.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.light.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "celtic_menhir_shamaness",
+      "name": "Sciamana dei Menhir",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "earth",
+      "role": "Healer",
+      "faction": "celtic",
+      "origin_group": "menhir_clans",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "healing_power",
+          "speed",
+          "hp"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "notes": "sustain and cleansing support"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "celtic_menhir_shamaness_basic_attack",
+        "name": "Seme di Pietra",
+        "description": "Colpisce con energia terrestre.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.85,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "earth",
+          "healer",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+      },
+      "skill": {
+        "id": "celtic_menhir_shamaness_skill",
+        "name": "Cerchio dei Menhir",
+        "description": "Cura un alleato e aumenta defense.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "ally_lowest_hp",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "heal",
+            "scaling_stat": "healing_power",
+            "multiplier": 1.35
+          },
+          {
+            "effect_type": "buff",
+            "stat": "defense",
+            "value": 0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "heal",
+          "defense_buff"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad"
+      },
+      "ultimate_or_special": {
+        "id": "celtic_menhir_shamaness_ultimate_or_special",
+        "name": "Radici Ancestrali",
+        "description": "Cura il team e applica damage_reduction leggera.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_allies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "heal",
+            "scaling_stat": "healing_power",
+            "multiplier": 0.9
+          },
+          {
+            "effect_type": "damage_reduction",
+            "target": "all_allies",
+            "value": 0.1,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "team_heal",
+          "protection"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp"
+      },
+      "passive": {
+        "id": "celtic_menhir_shamaness_passive",
+        "name": "Pietra Guaritrice",
+        "description": "Aumenta healing_power e hp.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "healing_power",
+            "value": 0.1,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "hp",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "healer",
+          "earth"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.earth.nad",
+        "skill_mapping": "ELEMENT_SKILLS.earth.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.earth.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "cursed_twilight_witch",
+      "name": "Strega del Vespro",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "dark",
+      "role": "Control / Debuff",
+      "faction": "cursed",
+      "origin_group": "twilight_curses",
+      "category": "cursed_entity",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "effect_accuracy",
+          "speed",
+          "hp"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "defense"
+        ],
+        "notes": "disruption and debuff reliability"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "cursed_twilight_witch_basic_attack",
+        "name": "Sussurro del Vespro",
+        "description": "Colpisce con una maledizione minore.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.9,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "dark",
+          "control_debuff",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+      },
+      "skill": {
+        "id": "cursed_twilight_witch_skill",
+        "name": "Maledizione Crepuscolare",
+        "description": "Indebolisce attack e speed di tutti i nemici.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_enemies",
+        "damage_type": "none",
+        "scaling_stat": null,
+        "multiplier": 0,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "debuff",
+            "stat": "attack",
+            "value": -0.12,
+            "duration_turns": 2
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "speed",
+            "value": -0.1,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe_debuff",
+          "control"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+      },
+      "ultimate_or_special": {
+        "id": "cursed_twilight_witch_ultimate_or_special",
+        "name": "Notte sul Vespro",
+        "description": "Danneggia tutti i nemici e può applicare silence breve.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.35,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "control",
+            "subtype": "silence",
+            "chance": 0.3,
+            "duration_turns": 1
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "silence"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+      },
+      "passive": {
+        "id": "cursed_twilight_witch_passive",
+        "name": "Presagio Viola",
+        "description": "Aumenta effect_accuracy.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_accuracy",
+            "value": 0.12,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "debuff",
+          "dark"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.dark.nad",
+        "skill_mapping": "ELEMENT_SKILLS.dark.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.dark.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "yokai_chain_miko",
+      "name": "Miko delle Catene",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "lightning",
+      "role": "Control / Debuff",
+      "faction": "japanese_yokai",
+      "origin_group": "binding_rituals",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "effect_accuracy",
+          "speed",
+          "hp"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "defense"
+        ],
+        "notes": "disruption and debuff reliability"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "yokai_chain_miko_basic_attack",
+        "name": "Sigillo Vincolante",
+        "description": "Colpisce con un ofuda elettrico.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.9,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "lightning",
+          "control_debuff",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+      },
+      "skill": {
+        "id": "yokai_chain_miko_skill",
+        "name": "Catene di Raijin",
+        "description": "Danneggia e rallenta tutti i nemici.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.05,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "speed",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "slow"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+      },
+      "ultimate_or_special": {
+        "id": "yokai_chain_miko_ultimate_or_special",
+        "name": "Prigione di Fulmini",
+        "description": "Danneggia tutti i nemici e può stordire il bersaglio principale.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.45,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "control",
+            "subtype": "stun",
+            "target": "primary_target",
+            "chance": 0.35,
+            "duration_turns": 1
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "stun"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+      },
+      "passive": {
+        "id": "yokai_chain_miko_passive",
+        "name": "Nodo Sacro",
+        "description": "Aumenta effect_accuracy e effect_resistance.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_accuracy",
+            "value": 0.1,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_resistance",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "control",
+          "miko"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.lightning.nad",
+        "skill_mapping": "ELEMENT_SKILLS.lightning.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.lightning.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "creature_lesser_hydra",
+      "name": "Idra Minore",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "water",
+      "role": "Hybrid Special",
+      "faction": "creature_beast",
+      "origin_group": "hydra",
+      "category": "mythic_creature",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "hp",
+          "effect_accuracy"
+        ],
+        "secondary": [
+          "speed",
+          "healing_power",
+          "shield_power"
+        ],
+        "notes": "mixed identity with one controlled special mechanic"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "creature_lesser_hydra_basic_attack",
+        "name": "Morso Minore",
+        "description": "Colpisce con una testa d’idra.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.0,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "water",
+          "hybrid_special",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+      },
+      "skill": {
+        "id": "creature_lesser_hydra_skill",
+        "name": "Doppio Morso",
+        "description": "Colpisce due nemici casuali e applica poison leggero.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "random_enemies_n",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.05,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage",
+            "hits": 2
+          },
+          {
+            "effect_type": "dot",
+            "subtype": "poison",
+            "value_percent_target_max_hp": 0.035,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "multi_hit",
+          "poison"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+      },
+      "ultimate_or_special": {
+        "id": "creature_lesser_hydra_ultimate_or_special",
+        "name": "Rigenerazione della Stirpe",
+        "description": "Cura sé stessa e colpisce tutti i nemici.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.25,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "heal",
+            "target": "self",
+            "scaling_stat": "healing_power",
+            "multiplier": 0.9
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "hybrid",
+          "self_heal"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+      },
+      "passive": {
+        "id": "creature_lesser_hydra_passive",
+        "name": "Sangue Rigenerante",
+        "description": "Recupera una piccola quantità di HP ogni turno.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "hot",
+            "target": "self",
+            "value_percent_max_hp": 0.03,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "hydra",
+          "regen"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.water.nad",
+        "skill_mapping": "ELEMENT_SKILLS.water.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.water.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "egyptian_tide_lady",
+      "name": "Dama delle Maree",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "water",
+      "role": "Mage AoE",
+      "faction": "egyptian",
+      "origin_group": "tides",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "effect_accuracy",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "effect_resistance"
+        ],
+        "notes": "area pressure with elemental status"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "egyptian_tide_lady_basic_attack",
+        "name": "Goccia Regale",
+        "description": "Colpisce con acqua cerimoniale.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 0.98,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "water",
+          "mage_aoe",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+      },
+      "skill": {
+        "id": "egyptian_tide_lady_skill",
+        "name": "Onda della Dama",
+        "description": "Danneggia tutti i nemici e riduce crit_rate.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.05,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "crit_rate",
+            "value": -0.1,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "debuff"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+      },
+      "ultimate_or_special": {
+        "id": "egyptian_tide_lady_ultimate_or_special",
+        "name": "Marea del Palazzo",
+        "description": "Danneggia tutti i nemici e cura leggermente gli alleati.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.55,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "heal",
+            "target": "all_allies",
+            "scaling_stat": "healing_power",
+            "multiplier": 0.6
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "hybrid_heal"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+      },
+      "passive": {
+        "id": "egyptian_tide_lady_passive",
+        "name": "Grazia delle Maree",
+        "description": "Aumenta effect_accuracy e healing_power.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_accuracy",
+            "value": 0.08,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "healing_power",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "mage",
+          "water"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.water.nad",
+        "skill_mapping": "ELEMENT_SKILLS.water.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.water.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "demonic_sacred_brazier_pyromancer",
+      "name": "Piromante del Braciere Sacro",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "fire",
+      "role": "Mage AoE",
+      "faction": "demonic",
+      "origin_group": "infernal_fire",
+      "category": "demon",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "effect_accuracy",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "effect_resistance"
+        ],
+        "notes": "area pressure with elemental status"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "demonic_sacred_brazier_pyromancer_basic_attack",
+        "name": "Brace Rituale",
+        "description": "Colpisce con una fiamma dal braciere.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.0,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "fire",
+          "mage_aoe",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+      },
+      "skill": {
+        "id": "demonic_sacred_brazier_pyromancer_skill",
+        "name": "Braciere Sacro-Infernale",
+        "description": "Danneggia tutti i nemici e applica burn.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.1,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "dot",
+            "subtype": "burn",
+            "value_percent_target_max_hp": 0.04,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "burn"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+      },
+      "ultimate_or_special": {
+        "id": "demonic_sacred_brazier_pyromancer_ultimate_or_special",
+        "name": "Offerta della Geenna",
+        "description": "Danneggia tutti i nemici e aumenta attack personale.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "magic",
+        "scaling_stat": "attack",
+        "multiplier": 1.65,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "attack",
+            "value": 0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "self_buff"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+      },
+      "passive": {
+        "id": "demonic_sacred_brazier_pyromancer_passive",
+        "name": "Fuoco Custodito",
+        "description": "Aumenta attack e effect_accuracy.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "attack",
+            "value": 0.08,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "effect_accuracy",
+            "value": 0.06,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "mage",
+          "fire"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.fire.nad",
+        "skill_mapping": "ELEMENT_SKILLS.fire.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.fire.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "creature_depths_warrior",
+      "name": "Guerriera delle Profondità",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "water",
+      "role": "DPS Melee",
+      "faction": "creature_beast",
+      "origin_group": "depths",
+      "category": "mythic_archetype",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "speed",
+          "crit_rate"
+        ],
+        "secondary": [
+          "crit_damage",
+          "penetration",
+          "hp"
+        ],
+        "notes": "frontline pressure and tempo"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "creature_depths_warrior_basic_attack",
+        "name": "Lama Abissale",
+        "description": "Colpisce con una lama delle profondità.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.05,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "water",
+          "dps_melee",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+      },
+      "skill": {
+        "id": "creature_depths_warrior_skill",
+        "name": "Pressione degli Abissi",
+        "description": "Infligge danni e riduce speed.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.9,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "debuff",
+            "stat": "speed",
+            "value": -0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "melee",
+          "slow"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+      },
+      "ultimate_or_special": {
+        "id": "creature_depths_warrior_ultimate_or_special",
+        "name": "Marea Schiacciante",
+        "description": "Colpisce la fila frontale e aumenta defense personale.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "enemy_front_row",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 2.2,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "defense",
+            "value": 0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "front_row",
+          "self_defense"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+      },
+      "passive": {
+        "id": "creature_depths_warrior_passive",
+        "name": "Respiro degli Abissi",
+        "description": "Aumenta hp e attack.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "hp",
+            "value": 0.06,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "attack",
+            "value": 0.07,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "water",
+          "melee"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.water.nad",
+        "skill_mapping": "ELEMENT_SKILLS.water.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.water.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    },
+    {
+      "hero_id": "creature_cyclone_daughter",
+      "name": "Figlia del Ciclone",
+      "native_rarity": 4,
+      "max_stars": 10,
+      "element": "wind",
+      "role": "DPS Melee",
+      "faction": "creature_beast",
+      "origin_group": "storm_beasts",
+      "category": "mythic_creature",
+      "stat_profile": {
+        "budget": "native_4star_stat_budget_x_2.05",
+        "primary": [
+          "attack",
+          "speed",
+          "crit_rate"
+        ],
+        "secondary": [
+          "crit_damage",
+          "penetration",
+          "hp"
+        ],
+        "notes": "frontline pressure and tempo"
+      },
+      "kit_complexity": {
+        "tier": "4star_defined_identity",
+        "slots": [
+          "basic_attack",
+          "skill",
+          "ultimate_or_special",
+          "passive"
+        ],
+        "ultimate_or_special": "available_moderate",
+        "passive": "one defined passive with up to two simple always-on effects",
+        "max_effects_per_active_skill": 3,
+        "forbidden_effects": [
+          "revive",
+          "execute",
+          "summon_or_proxy"
+        ],
+        "runtime_authoritative": false
+      },
+      "basic_attack": {
+        "id": "creature_cyclone_daughter_basic_attack",
+        "name": "Fendente del Ciclone",
+        "description": "Colpisce con un taglio veloce.",
+        "slot": "basic_attack",
+        "type": "basic",
+        "target_type": "enemy_single_default",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.08,
+        "cooldown_turns": 0,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage"
+          }
+        ],
+        "animation_state": "attack",
+        "tags": [
+          "wind",
+          "dps_melee",
+          "basic"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+      },
+      "skill": {
+        "id": "creature_cyclone_daughter_skill",
+        "name": "Danza Circolare",
+        "description": "Colpisce due nemici casuali.",
+        "slot": "skill",
+        "type": "active_skill",
+        "target_type": "random_enemies_n",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.15,
+        "cooldown_turns": 3,
+        "energy_cost": 0,
+        "effects": [
+          {
+            "effect_type": "damage",
+            "hits": 2
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "speed",
+            "value": 0.1,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "multi_hit",
+          "speed"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+      },
+      "ultimate_or_special": {
+        "id": "creature_cyclone_daughter_ultimate_or_special",
+        "name": "Occhio del Ciclone",
+        "description": "Danneggia tutti i nemici e aumenta dodge personale.",
+        "slot": "ultimate_or_special",
+        "type": "ultimate",
+        "target_type": "all_enemies",
+        "damage_type": "physical",
+        "scaling_stat": "attack",
+        "multiplier": 1.65,
+        "cooldown_turns": 5,
+        "energy_cost": 100,
+        "effects": [
+          {
+            "effect_type": "damage"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "dodge",
+            "value": 0.15,
+            "duration_turns": 2
+          }
+        ],
+        "animation_state": "skill",
+        "tags": [
+          "aoe",
+          "dodge"
+        ],
+        "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+      },
+      "passive": {
+        "id": "creature_cyclone_daughter_passive",
+        "name": "Moto Perpetuo",
+        "description": "Aumenta speed e dodge.",
+        "slot": "passive",
+        "type": "passive",
+        "target_type": "self",
+        "effects": [
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "speed",
+            "value": 0.08,
+            "duration_turns": "always"
+          },
+          {
+            "effect_type": "buff",
+            "target": "self",
+            "stat": "dodge",
+            "value": 0.08,
+            "duration_turns": "always"
+          }
+        ],
+        "animation_state": null,
+        "tags": [
+          "wind",
+          "melee"
+        ],
+        "runtime_legacy_mapping": "schema_side_passive_not_currently_bound"
+      },
+      "runtime_compatibility_notes": {
+        "status": "schema_data_only_not_imported",
+        "basic_attack_mapping": "ELEMENT_SKILLS.wind.nad",
+        "skill_mapping": "ELEMENT_SKILLS.wind.sad",
+        "ultimate_mapping": "ELEMENT_SKILLS.wind.sp",
+        "passive_mapping": "future per-hero passive; schema-side only until imported",
+        "runtime_authoritative": false
+      },
+      "combat_qa_notes": {
+        "must_test_in_combat_qa_lab": [
+          "idle",
+          "attack",
+          "skill",
+          "hit",
+          "death"
+        ],
+        "expected_scale_reference": "Hoplite/Berserker",
+        "notes": "Design data only. No DB/runtime binding yet."
+      }
+    }
+  ],
+  "validation_notes": {
+    "expected_count": 24,
+    "all_native_rarity": 4,
+    "all_max_stars": 10,
+    "no_runtime_changes": true,
+    "no_db_writes": true,
+    "character_bible_not_modified": true
+  }
+}
