@@ -24,6 +24,17 @@ from game_systems import create_game_routes
 from routes.sprites import register_sprite_routes
 from routes.items import register_items_routes, BATTLE_DROPS
 
+# RM1.20-C — Hero visibility helpers (PURE / NO-OP for heroes without flags).
+# Default behavior preserves backward compatibility: heroes lacking
+# show_in_*/obtainable flags remain visible/obtainable. Filters become active
+# only after roster import/soft-deactivation flips the flags.
+from utils.hero_visibility import (
+    should_show_in_catalog,
+    should_show_in_summon,
+    should_show_in_collection,
+    should_show_in_battle_picker,  # noqa: F401  (reserved for future battle picker endpoint)
+)
+
 # ===================== CONFIG =====================
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.getenv("DB_NAME", "divine_waifus")
@@ -110,9 +121,14 @@ async def register(req: RegisterRequest):
     await db.users.insert_one(user)
     
     # Give starter heroes (3 random 1-2 star heroes)
+    # RM1.20-C: filter by show_in_summon/obtainable to avoid granting hidden
+    # or pending official heroes as starters. Default behavior preserved
+    # for heroes without flags (helpers default to visible/obtainable).
     all_heroes = await db.heroes.find({"rarity": {"$lte": 2}}).to_list(100)
-    if all_heroes:
-        starters = random.sample(all_heroes, min(3, len(all_heroes)))
+    eligible_starters = [h for h in all_heroes if should_show_in_summon(h)]
+    pool = eligible_starters if eligible_starters else all_heroes  # safe fallback
+    if pool:
+        starters = random.sample(pool, min(3, len(pool)))
         for hero in starters:
             user_hero = {
                 "id": str(uuid.uuid4()),
@@ -148,15 +164,28 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
 @app.get("/api/heroes")
 async def get_all_heroes():
     heroes = await db.heroes.find({}, {"image_base64": 0}).to_list(100)
+    # RM1.20-C: filter the public catalog. Heroes without flags remain
+    # visible (helper default = True). Future legacy/pending heroes with
+    # show_in_catalog=False or "owned_only" will be hidden from the
+    # anonymous public catalog (owned=False).
+    visible: list = []
     for h in heroes:
+        if not should_show_in_catalog(h, owned=False):
+            continue
         # RM1.17-E: expose sentinel asset:<id>:<variant> via image_url
         # Resolver frontend gestisce il sentinel; URL remoto resta invariato.
         if not h.get("image_url"):
             h["image_url"] = h.get("image") or None
-    return [serialize_doc(h) for h in heroes]
+        visible.append(h)
+    return [serialize_doc(h) for h in visible]
 
 @app.get("/api/heroes/{hero_id}")
 async def get_hero(hero_id: str):
+    # RM1.20-C: direct hero detail endpoint is intentionally NOT filtered.
+    # It is still consumed by hero-detail screens (incl. owned legacy detail)
+    # and by encyclopedia entry points. Filtering here would break legitimate
+    # owner access. Catalog/list/gacha are filtered upstream; direct detail
+    # filtering is deferred until an owned-aware detail endpoint exists.
     hero = await db.heroes.find_one({"id": hero_id})
     if not hero:
         raise HTTPException(status_code=404, detail="Eroe non trovato")
@@ -172,6 +201,11 @@ async def get_user_heroes(current_user: dict = Depends(get_current_user)):
     for uh in user_heroes:
         hero = await db.heroes.find_one({"id": uh["hero_id"]})
         if hero:
+            # RM1.20-C: owned collection filter. Legacy posseduti restano
+            # visibili come "owned_only". Heroes senza flags restano visibili.
+            # Mai orfanizzare user_heroes: lo skip è solo VISUALE, non DB.
+            if not should_show_in_collection(hero, owned=True):
+                continue
             merged = {
                 **serialize_doc(uh),
                 "hero_name": hero.get("name"),
@@ -232,11 +266,26 @@ async def _do_gacha_pull(user_id: str, banner_id: str):
         if random.random() < 0.6:
             query["element"] = focus
     heroes = await db.heroes.find(query).to_list(100)
-    if not heroes:
+    # RM1.20-C: filter candidates by show_in_summon + obtainable. Heroes
+    # without flags remain eligible (default True). Hidden/non-obtainable
+    # heroes (legacy soft-deactivated, pending official imports) are
+    # excluded. Rates/costs/guarantee logic UNCHANGED.
+    eligible = [h for h in heroes if should_show_in_summon(h)]
+    if not eligible:
+        # Fallback 1: same rarity, no element focus
         heroes = await db.heroes.find({"rarity": rarity}).to_list(100)
-    if not heroes:
-        heroes = await db.heroes.find({}).to_list(100)
-    hero = random.choice(heroes)
+        eligible = [h for h in heroes if should_show_in_summon(h)]
+    if not eligible:
+        # Fallback 2: any rarity, eligible only
+        heroes = await db.heroes.find({}).to_list(200)
+        eligible = [h for h in heroes if should_show_in_summon(h)]
+    if not eligible:
+        # Pool vuoto: errore esplicito invece di pescare un eroe nascosto.
+        raise HTTPException(
+            status_code=503,
+            detail="Pool gacha temporaneamente non disponibile (nessun eroe ottenibile).",
+        )
+    hero = random.choice(eligible)
     user_hero = {
         "id": str(uuid.uuid4()), "user_id": user_id, "hero_id": hero["id"],
         "level": 1, "experience": 0, "stars": hero["rarity"], "obtained_at": datetime.utcnow(),
@@ -278,9 +327,17 @@ async def gacha_pull_10(req: GachaPullRequest = GachaPullRequest(), current_user
             rarity = random.choices(list(range(g, 7)), weights=[0.65, 0.25, 0.10] if g == 4 else [0.70, 0.30])[0]
             query: dict = {"rarity": rarity}
             heroes = await db.heroes.find(query).to_list(100)
-            if not heroes:
-                heroes = await db.heroes.find({}).to_list(100)
-            hero = random.choice(heroes)
+            # RM1.20-C: same visibility filter on the guaranteed pull.
+            eligible = [h for h in heroes if should_show_in_summon(h)]
+            if not eligible:
+                heroes = await db.heroes.find({}).to_list(200)
+                eligible = [h for h in heroes if should_show_in_summon(h)]
+            if not eligible:
+                raise HTTPException(
+                    status_code=503,
+                    detail="Pool gacha temporaneamente non disponibile (nessun eroe ottenibile).",
+                )
+            hero = random.choice(eligible)
             uh = {"id": str(uuid.uuid4()), "user_id": user_id, "hero_id": hero["id"], "level": 1, "experience": 0, "stars": hero["rarity"], "obtained_at": datetime.utcnow()}
             await db.user_heroes.insert_one(uh)
             results.append({"hero": serialize_doc(hero), "user_hero_id": uh["id"], "rarity": hero["rarity"]})
