@@ -290,6 +290,10 @@ credentials.json
 # RM1.17-J — DB backups must never be committed (GH 100MB limit)
 backend/backups/
 *.zip
+
+# RM1.20-A — Roster audit & soft-deactivation plan reports (mai committare)
+backend/reports/
+!backend/reports/.gitkeep
 -e 
 # Environment and credential files
 .env
