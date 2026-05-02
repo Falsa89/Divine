@@ -1,0 +1,86 @@
+{
+  "version": "0.1",
+  "status": "draft",
+  "purpose": "Skill kit data schema and templates for future hero kit design.",
+  "skill_slots": [
+    "basic_attack",
+    "skill",
+    "ultimate_or_special",
+    "passive"
+  ],
+  "targeting_rules": {
+    "default": "If a skill has no explicit special target, target tank first; if no valid tank, target nearest enemy.",
+    "taunt": "Taunt has maximum priority for single-target skills unless a future skill explicitly ignores taunt.",
+    "aoe": "Taunt does not intercept AoE, line, column, all-enemy, or multi-target declared effects."
+  },
+  "effect_types": [
+    "damage",
+    "heal",
+    "shield",
+    "taunt",
+    "dot",
+    "hot",
+    "buff",
+    "debuff",
+    "control",
+    "cleanse",
+    "revive",
+    "mark",
+    "summon_or_proxy"
+  ],
+  "role_templates": {
+    "Tank": [
+      "basic single-target damage",
+      "taunt or guard skill",
+      "shield/damage reduction/passive protection"
+    ],
+    "DPS Melee": [
+      "basic damage",
+      "burst or execute skill",
+      "self-buff or follow-up passive"
+    ],
+    "DPS Ranged": [
+      "basic ranged damage",
+      "focused damage or multi-shot",
+      "crit/speed/passive targeting"
+    ],
+    "Mage AoE": [
+      "basic magic damage",
+      "AoE skill",
+      "elemental DoT/debuff/passive scaling"
+    ],
+    "Assassin / Burst": [
+      "basic quick strike",
+      "high burst single-target",
+      "stealth/reset/execute passive"
+    ],
+    "Support / Buffer": [
+      "basic damage/support",
+      "team buff/cleanse/utility",
+      "aura/passive"
+    ],
+    "Healer": [
+      "basic light damage/heal",
+      "single/AoE heal",
+      "cleanse/barrier/revive passive for high rarity"
+    ],
+    "Control / Debuff": [
+      "basic damage with minor debuff",
+      "control/debuff skill",
+      "resistance/accuracy/passive disruption"
+    ],
+    "Hybrid Special": [
+      "unique rule-breaking kit",
+      "conditional effect",
+      "identity-defining passive"
+    ]
+  },
+  "rarity_complexity": {
+    "1": "1 simple mechanic, no complex conditions",
+    "2": "1–2 simple mechanics",
+    "3": "clear basic kit, one role-defining effect",
+    "4": "two related mechanics, moderate condition",
+    "5": "premium mechanic and synergy hooks",
+    "6": "iconic kit, unique mechanic, strong visual identity, balanced by cooldown/conditions"
+  }
+}

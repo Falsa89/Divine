@@ -1,0 +1,55 @@
+{
+  "version": "0.1",
+  "name": "NEW_HERO_IMPORT_CHECKLIST",
+  "sections": {
+    "asset_checks": [
+      "canonical folder exists",
+      "portrait assets exist",
+      "combat_base exists",
+      "runtime sheets exist if required",
+      "no legacy folder used",
+      "no other hero fallback"
+    ],
+    "contract_checks": [
+      "HERO_CONTRACTS entry exists",
+      "variants complete",
+      "UI slots complete",
+      "battle config complete",
+      "runtimeSheets metadata complete if used",
+      "runtimeRenderScale tuned if needed"
+    ],
+    "ui_checks": [
+      "home if eligible",
+      "grid card face visible",
+      "selected preview scale correct",
+      "hero detail header face visible",
+      "fullscreen portrait lock/fill",
+      "no placeholder letter"
+    ],
+    "battle_checks": [
+      "preload includes assets",
+      "idle visible at start",
+      "attack/skill/hit/death animate",
+      "no external motion drift",
+      "no size flicker",
+      "no wrong glow",
+      "scale comparable to Hoplite/Berserker",
+      "background visible"
+    ],
+    "qa_lab": [
+      "Idle",
+      "Attack",
+      "Skill",
+      "Hit",
+      "Death",
+      "Normal enemy",
+      "Lethal enemy",
+      "Immortal enemy",
+      "6-enemy AoE",
+      "Taunt",
+      "DoT",
+      "Shield/Heal if relevant",
+      "contract warnings = 0"
+    ]
+  }
+}

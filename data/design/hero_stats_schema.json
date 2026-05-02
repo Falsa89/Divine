@@ -1,0 +1,94 @@
+{
+  "version": "0.1",
+  "status": "draft",
+  "purpose": "Base stat schema for future RM1.21 tasks; not yet final balance.",
+  "base_stats": [
+    "hp",
+    "atk",
+    "def",
+    "speed",
+    "crit_rate",
+    "crit_damage",
+    "effect_accuracy",
+    "effect_resistance",
+    "healing_power"
+  ],
+  "rarity_budget_guidelines": {
+    "1": "common/simple; low stat budget; one clear function",
+    "2": "slightly better common; simple role kit",
+    "3": "baseline usable; clean role identity",
+    "4": "mid/high useful; more distinct stat profile",
+    "5": "premium strong; role-specialized stat budget",
+    "6": "headline; highest budget but balanced by role and kit constraints"
+  },
+  "role_stat_bias": {
+    "Tank": {
+      "hp": "very_high",
+      "def": "high",
+      "atk": "low_mid",
+      "speed": "low_mid",
+      "effect_resistance": "mid_high"
+    },
+    "DPS Melee": {
+      "hp": "mid",
+      "atk": "high",
+      "def": "mid",
+      "speed": "mid_high",
+      "crit_rate": "mid_high"
+    },
+    "DPS Ranged": {
+      "hp": "low_mid",
+      "atk": "high",
+      "def": "low",
+      "speed": "mid_high",
+      "crit_rate": "high"
+    },
+    "Mage AoE": {
+      "hp": "low_mid",
+      "atk": "high",
+      "def": "low_mid",
+      "speed": "mid",
+      "effect_accuracy": "mid_high"
+    },
+    "Assassin / Burst": {
+      "hp": "low_mid",
+      "atk": "very_high",
+      "def": "low",
+      "speed": "high",
+      "crit_rate": "high",
+      "crit_damage": "high"
+    },
+    "Support / Buffer": {
+      "hp": "mid",
+      "atk": "mid",
+      "def": "mid",
+      "speed": "mid_high",
+      "effect_resistance": "mid"
+    },
+    "Healer": {
+      "hp": "mid",
+      "atk": "low_mid",
+      "def": "mid",
+      "speed": "mid",
+      "healing_power": "high"
+    },
+    "Control / Debuff": {
+      "hp": "mid",
+      "atk": "mid",
+      "def": "mid",
+      "speed": "mid_high",
+      "effect_accuracy": "high"
+    },
+    "Hybrid Special": {
+      "hp": "mid",
+      "atk": "mid_high",
+      "def": "mid",
+      "speed": "mid",
+      "effect_accuracy": "mid"
+    }
+  },
+  "notes": [
+    "Do not assign final numbers until RM1.21-A/B approval.",
+    "Stats must align with role and rarity; team building remains more important than raw account level."
+  ]
+}

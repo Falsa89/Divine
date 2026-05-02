@@ -1,0 +1,51 @@
+{
+  "version": "0.1",
+  "status": "approved_standard_draft",
+  "folder_template": "frontend/assets/heroes/<hero_id>/",
+  "required_assets": {
+    "portrait_ui": [
+      "splash.jpg|png",
+      "transparent.png if home/overlay eligible",
+      "card optional",
+      "detail optional",
+      "fullscreen optional"
+    ],
+    "battle_static": [
+      "combat_base.png"
+    ],
+    "runtime_sheets_optional": [
+      "source_sheets/idle_source.png",
+      "source_sheets/attack_source.png",
+      "source_sheets/skill_source.png",
+      "source_sheets/hit_source.png",
+      "source_sheets/death_source.png",
+      "runtime/idle_sheet.png",
+      "runtime/attack_sheet.png",
+      "runtime/skill_sheet.png",
+      "runtime/hit_sheet.png",
+      "runtime/death_sheet.png",
+      "runtime/battle_animations.json"
+    ]
+  },
+  "ui_contract_slots": [
+    "home",
+    "card",
+    "detailIcon",
+    "selectedPreview",
+    "fullscreen"
+  ],
+  "battle_contract_requirements": [
+    "useRuntimeSheets",
+    "runtimeSheets if applicable",
+    "runtimeRenderScale if needed",
+    "removeDefaultGlow",
+    "useLegacyDefaultMotion",
+    "defaultState"
+  ],
+  "forbidden": [
+    "legacy folder fallback",
+    "other hero asset fallback",
+    "raw RNImage cover crop for contract heroes",
+    "combat_base as attack/skill/hit/death"
+  ]
+}
