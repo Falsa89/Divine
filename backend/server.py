@@ -166,7 +166,12 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
 # ===================== HEROES =====================
 @app.get("/api/heroes")
 async def get_all_heroes():
-    heroes = await db.heroes.find({}, {"image_base64": 0}).to_list(100)
+    # RM1.22-F: rimosso limit `to_list(100)` (pre-existing) — ora il roster
+    # totale è 132 (31 legacy + 101 ufficiali) e il limit clipping silenzioso
+    # nascondeva 6 eroi visibili dopo l'attivazione 1★/2★. `to_list(None)`
+    # carica tutto. Il filtro `should_show_in_catalog` resta invariato e
+    # rimuove legacy/pending dal catalogo pubblico.
+    heroes = await db.heroes.find({}, {"image_base64": 0}).to_list(None)
     # RM1.20-C: filter the public catalog. Heroes without flags remain
     # visible (helper default = True). Future legacy/pending heroes with
     # show_in_catalog=False or "owned_only" will be hidden from the
