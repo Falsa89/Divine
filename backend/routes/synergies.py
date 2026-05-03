@@ -135,3 +135,169 @@ def register_synergy_routes(router, db, get_current_user, serialize_doc, calcula
             ],
             "count": len(enabled),
         }
+
+    # ── RM1.23-C: Synergy Codex enrichment (READ-ONLY) ───────────────────
+    @router.get("/synergies/codex")
+    async def get_synergy_codex(current_user: dict = Depends(get_current_user)):
+        """Codex view: 10 V2 synergies enriched with player ownership/team status.
+
+        Statuses per synergy:
+          - active           → tutti required heroes nel team attivo
+          - available_not_in_team → tutti required posseduti, non tutti in team
+          - near_complete    → almeno 1/required posseduti, completion >= 0.5
+          - not_owned        → 0 required posseduti
+        """
+        uid = current_user["id"]
+        # Posseduti (set canonical IDs)
+        owned_uh = await db.user_heroes.find(
+            {"user_id": uid}, {"hero_id": 1, "stars": 1, "level": 1, "_id": 0}
+        ).to_list(None)
+        owned_hero_ids = list({uh.get("hero_id") for uh in owned_uh if uh.get("hero_id")})
+        owned_heroes = await db.heroes.find(
+            {"id": {"$in": owned_hero_ids}}, {"image_base64": 0}
+        ).to_list(None)
+        # Map ownership → canonical id (only canonical-resolvable, skip legacy)
+        owned_canonical: dict = {}  # canonical_id → list of {stars, level, ...}
+        for h in owned_heroes:
+            if h.get("is_legacy_placeholder") is True:
+                continue
+            canonical = h.get("canonical_id")
+            if not canonical and h.get("id") in _BIBLE_BY_ID:
+                canonical = h["id"]
+            if not canonical or canonical not in _BIBLE_BY_ID:
+                continue
+            for uh in owned_uh:
+                if uh.get("hero_id") == h["id"]:
+                    owned_canonical.setdefault(canonical, []).append({
+                        "stars": int(uh.get("stars") or 1),
+                        "level": int(uh.get("level") or 1),
+                    })
+
+        # Team attivo (set canonical IDs in formation)
+        team = await db.teams.find_one({"user_id": uid, "is_active": True})
+        in_team_canonical: set = set()
+        if team and team.get("formation"):
+            slot_uhids = [p.get("user_hero_id") for p in team["formation"] if p.get("user_hero_id")]
+            team_uhs = await db.user_heroes.find(
+                {"id": {"$in": slot_uhids}, "user_id": uid}
+            ).to_list(None)
+            team_h_ids = list({uh.get("hero_id") for uh in team_uhs if uh.get("hero_id")})
+            team_h_docs = await db.heroes.find(
+                {"id": {"$in": team_h_ids}}, {"image_base64": 0}
+            ).to_list(None)
+            for h in team_h_docs:
+                if h.get("is_legacy_placeholder") is True:
+                    continue
+                cc = h.get("canonical_id")
+                if not cc and h.get("id") in _BIBLE_BY_ID:
+                    cc = h["id"]
+                if cc and cc in _BIBLE_BY_ID:
+                    in_team_canonical.add(cc)
+
+        owned_canonical_ids = set(owned_canonical.keys())
+        enabled = get_enabled_team_synergies_v2()
+
+        out = []
+        for syn in enabled:
+            req = list(syn.get("required_hero_ids") or [])
+            req_set = set(req)
+            min_req = int(syn.get("min_required") or len(req_set) or 1)
+
+            owned_match = req_set & owned_canonical_ids
+            in_team_match = req_set & in_team_canonical
+            completion_owned = len(owned_match) / max(1, len(req_set))
+            completion_team = len(in_team_match) / max(1, len(req_set))
+
+            if len(in_team_match) >= min_req:
+                status = "active"
+            elif len(owned_match) >= min_req:
+                status = "available_not_in_team"
+            elif completion_owned >= 0.5 and len(owned_match) >= 1:
+                status = "near_complete"
+            else:
+                status = "not_owned"
+
+            # Avg stars among owned matches (for star-scaling preview)
+            star_samples = []
+            for cid in owned_match:
+                copies = owned_canonical.get(cid, [])
+                if copies:
+                    # Use the highest-star copy
+                    star_samples.append(max(c["stars"] for c in copies))
+            avg_stars = round(sum(star_samples) / len(star_samples), 2) if star_samples else 0.0
+
+            # Members detail
+            members = []
+            for cid in req:
+                copies = owned_canonical.get(cid, [])
+                best_stars = max((c["stars"] for c in copies), default=0)
+                bible_entry = _BIBLE_BY_ID.get(cid) or {}
+                members.append({
+                    "canonical_id": cid,
+                    "display_name": (bible_entry.get("display_name")
+                                     or bible_entry.get("name") or cid),
+                    "owned": cid in owned_canonical_ids,
+                    "in_team": cid in in_team_canonical,
+                    "best_stars": best_stars,
+                    "max_stars": int(bible_entry.get("max_stars") or 5),
+                })
+
+            out.append({
+                "id": syn["id"],
+                "display_name": syn.get("display_name") or syn["id"],
+                "description": syn.get("description"),
+                "lore_group": syn.get("lore_group"),
+                "icon": syn.get("icon"),
+                "rarity_tier": syn.get("rarity_tier"),
+                "release_group": syn.get("release_group"),
+                "required_hero_ids": req,
+                "min_required": min_req,
+                "max_members": int(syn.get("max_members") or len(req_set)),
+                "effects": syn.get("effects", []),
+                "target_filter": syn.get("target_filter"),
+                "status": status,
+                "owned_count": len(owned_match),
+                "in_team_count": len(in_team_match),
+                "required_count": len(req_set),
+                "completion_owned": round(completion_owned, 3),
+                "completion_team": round(completion_team, 3),
+                "avg_owned_stars": avg_stars,
+                "members": members,
+            })
+
+        # Counts per status
+        status_counts: dict = {}
+        for s in out:
+            status_counts[s["status"]] = status_counts.get(s["status"], 0) + 1
+
+        return {
+            "version": 2,
+            "team_synergies": out,
+            "count": len(out),
+            "status_counts": status_counts,
+            "team_id": team.get("id") if team else None,
+        }
+
+    @router.get("/synergies/by_hero/{hero_id}")
+    async def get_synergies_for_hero(
+        hero_id: str,
+        current_user: dict = Depends(get_current_user),
+    ):
+        """Hero Detail palette: tabbed in_team / active / inactive view."""
+        codex = await get_synergy_codex(current_user=current_user)  # reuse
+        per_hero = [s for s in codex["team_synergies"] if hero_id in s["required_hero_ids"]]
+        # "active" tab = synergy attualmente attiva (status=active)
+        active = [s for s in per_hero if s["status"] == "active"]
+        # "inactive" = quelle non attive (può includere available/near/not_owned)
+        inactive = [s for s in per_hero if s["status"] != "active"]
+        # "in_team" = quelle dove l'eroe target è in active team
+        in_team_only = [s for s in per_hero if hero_id in {m["canonical_id"] for m in s["members"] if m["in_team"]}]
+        return {
+            "hero_id": hero_id,
+            "involved_in_total": len(per_hero),
+            "tabs": {
+                "in_team": in_team_only,
+                "active": active,
+                "inactive": inactive,
+            },
+        }

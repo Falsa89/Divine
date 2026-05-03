@@ -162,6 +162,14 @@ export default function HeroCollection() {
               {totalOwned} / {totalHeroes} posseduti {'\u2022'} {completionPct}%
             </Text>
           </View>
+          {/* RM1.23-C: Codex Sinergie shortcut (read-only) */}
+          <TouchableOpacity
+            onPress={() => router.push('/synergy-codex')}
+            style={st.codexBtn}
+            accessibilityLabel="Apri Codex Sinergie"
+          >
+            <Text style={st.codexBtnText}>{'\u2734 Sinergie'}</Text>
+          </TouchableOpacity>
         </View>
         {/* Progress bar */}
         <View style={st.progressTrack}>
@@ -318,6 +326,8 @@ const st = StyleSheet.create({
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   backBtn: { padding: 8, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 8 },
   backTxt: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  codexBtn: { paddingVertical: 6, paddingHorizontal: 10, backgroundColor: 'rgba(255,179,71,0.15)', borderWidth: 1, borderColor: '#FFB347', borderRadius: 8 },
+  codexBtnText: { color: '#FFB347', fontSize: 11, fontWeight: '800' },
   title: { color: '#FFD700', fontSize: 20, fontWeight: '900', letterSpacing: 0.4 },
   subtitle: { color: '#BBB', fontSize: 12, marginTop: 2 },
   progressTrack: { height: 6, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 3, marginTop: 10, overflow: 'hidden' },

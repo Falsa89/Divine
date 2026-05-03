@@ -1,0 +1,172 @@
+{
+  "version": "0.1",
+  "task": "RM1.23-C",
+  "title": "Synergy Codex + Hero Detail Synergy Palette",
+  "scope": {
+    "primary": [
+      "Dedicated Synergy Codex page",
+      "Hero Detail synergy palette",
+      "Read-only UI/API enrichment"
+    ],
+    "out_of_scope": [
+      "No DB writes",
+      "No gacha pulls",
+      "No battle flag activation",
+      "No Borea activation"
+    ]
+  },
+  "navigation": {
+    "preferred_entry_points": [
+      {
+        "source": "Hero Collection",
+        "label": "Sinergie",
+        "priority": 1
+      },
+      {
+        "source": "Menu",
+        "label": "Codex Sinergie",
+        "priority": 2
+      },
+      {
+        "source": "Hero Detail",
+        "label": "Sinergie Eroe",
+        "priority": 3
+      }
+    ]
+  },
+  "codex_screen": {
+    "route_name_suggestion": "synergy-codex",
+    "italian_title": "Codex Sinergie",
+    "sections": [
+      {
+        "id": "team_synergies_v2",
+        "label": "Sinergie Team",
+        "enabled_now": true,
+        "data_source": "GET /api/synergies/v2/all + GET /api/synergies/team_v2"
+      },
+      {
+        "id": "formation_synergies",
+        "label": "Formazione",
+        "enabled_now": "read_or_placeholder",
+        "data_source": "GET /api/synergies/guide or V2 foundation"
+      },
+      {
+        "id": "element_synergies",
+        "label": "Elementi",
+        "enabled_now": "read_or_placeholder",
+        "data_source": "GET /api/synergies/guide"
+      },
+      {
+        "id": "collection_synergies",
+        "label": "Collezione",
+        "enabled_now": "placeholder_only",
+        "data_source": "future collection synergies"
+      }
+    ],
+    "filters": [
+      "Tutte",
+      "Attive",
+      "Disponibili",
+      "Quasi attive",
+      "Non possedute",
+      "Team",
+      "Formazione",
+      "Elementi",
+      "Collezione",
+      "Fazione",
+      "Rarità",
+      "Ruolo"
+    ],
+    "statuses": {
+      "active": {
+        "label": "Attiva",
+        "meaning": "Required heroes are in the active team."
+      },
+      "available_not_in_team": {
+        "label": "Disponibile",
+        "meaning": "Required heroes are owned but not all in the active team."
+      },
+      "near_complete": {
+        "label": "Quasi attiva",
+        "meaning": "User is close to activating it."
+      },
+      "not_owned": {
+        "label": "Non posseduta",
+        "meaning": "One or more required heroes are missing."
+      },
+      "future": {
+        "label": "Futura",
+        "meaning": "Definition/category not live yet."
+      }
+    }
+  },
+  "hero_detail_palette": {
+    "location": "Hero detail opened from Hero Collection",
+    "section_label": "Sinergie",
+    "tabs": [
+      {
+        "id": "in_team",
+        "label": "In team"
+      },
+      {
+        "id": "active",
+        "label": "Attive"
+      },
+      {
+        "id": "inactive",
+        "label": "Non attive"
+      }
+    ],
+    "card_behavior": [
+      "Show required heroes with owned/not-owned/in-team badges.",
+      "Show current star scaling when owned.",
+      "Show next-star preview if easy and read-only.",
+      "Do not create any upgrade button that writes DB.",
+      "Label synergy growth as automatic from hero stars."
+    ]
+  },
+  "upgrade_philosophy": {
+    "approved_now": "automatic_scaling_only",
+    "description": "Le sinergie crescono automaticamente quando gli eroi coinvolti aumentano le stelle.",
+    "not_now": [
+      "No synergy currency",
+      "No DB mutation",
+      "No upgrade button that writes"
+    ]
+  },
+  "backend": {
+    "preferred_strategy": "use_existing_endpoints_first",
+    "existing_endpoints": [
+      "GET /api/synergies/team_v2",
+      "GET /api/synergies/v2/all",
+      "GET /api/synergies/team",
+      "GET /api/synergies/guide",
+      "GET /api/heroes",
+      "GET /api/user/heroes"
+    ],
+    "optional_readonly_endpoints_if_needed": [
+      {
+        "path": "GET /api/synergies/codex",
+        "purpose": "all synergies enriched with owned/in_team/active/missing status"
+      },
+      {
+        "path": "GET /api/heroes/{hero_id}/synergies",
+        "purpose": "synergies involving one hero grouped as in_team/active/inactive"
+      }
+    ]
+  },
+  "borea_policy": {
+    "greek_borea": "hidden/pending extra premium; current first wave excludes it",
+    "legacy_borea": "must never appear as official/obtainable/summonable"
+  },
+  "acceptance_criteria": [
+    "Synergy Codex renders without crash.",
+    "Team V2 list shows 10 definitions.",
+    "Status active/available/near/not-owned is coherent.",
+    "Hero detail has Sinergie palette with In team/Attive/Non attive.",
+    "Borea remains hidden.",
+    "No DB writes.",
+    "No battle flag activation.",
+    "No TypeScript errors in modified files."
+  ]
+}

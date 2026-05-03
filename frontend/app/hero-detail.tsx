@@ -27,6 +27,15 @@ const TABS = [
   { key: 'skills', label: 'Skill', icon: '\u2728' },
   { key: 'fusion', label: 'Fusione', icon: '\uD83D\uDD2E' },
   { key: 'equip', label: 'Equip', icon: '\uD83D\uDDE1\uFE0F' },
+  { key: 'synergies', label: 'Sinergie', icon: '\u2734' },
+];
+
+// RM1.23-C: Hero Detail synergies palette types (read-only)
+type SynergySubTab = 'in_team' | 'active' | 'inactive';
+const SYNERGY_SUB_TABS: { key: SynergySubTab; label: string }[] = [
+  { key: 'in_team', label: 'In team' },
+  { key: 'active', label: 'Attive' },
+  { key: 'inactive', label: 'Non attive' },
 ];
 
 export default function HeroDetailScreen() {
@@ -40,9 +49,36 @@ export default function HeroDetailScreen() {
   const [tab, setTab] = useState('stats');
   const [acting, setActing] = useState(false);
 
+  // ── RM1.23-C: Synergies palette state (read-only) ─────────────────
+  const [synergyData, setSynergyData] = useState<any>(null);
+  const [synergyLoading, setSynergyLoading] = useState(false);
+  const [synergySubTab, setSynergySubTab] = useState<SynergySubTab>('in_team');
+
   const heroId = params.id as string;
 
   useEffect(() => { if (heroId) load(); }, [heroId]);
+
+  // RM1.23-C: lazy-load synergy palette (only when tab opened)
+  useEffect(() => {
+    const loadSyn = async () => {
+      if (tab !== 'synergies' || synergyData) return;
+      const canonical = data?.canonical_id || data?.hero_id;
+      if (!canonical) return;
+      try {
+        setSynergyLoading(true);
+        const res = await apiCall(`/api/synergies/by_hero/${canonical}`);
+        setSynergyData(res);
+      } catch (e) {
+        setSynergyData({
+          hero_id: canonical, involved_in_total: 0,
+          tabs: { in_team: [], active: [], inactive: [] },
+        });
+      } finally {
+        setSynergyLoading(false);
+      }
+    };
+    loadSyn();
+  }, [tab, data]);
 
   const load = async () => {
     try {
@@ -426,6 +462,105 @@ export default function HeroDetailScreen() {
             )}
           </Animated.View>
         )}
+
+        {/* RM1.23-C: SYNERGIES TAB (read-only palette) */}
+        {tab === 'synergies' && (
+          <Animated.View entering={FadeIn} style={s.synWrap}>
+            {/* Sub-tabs */}
+            <View style={s.synSubTabRow}>
+              {SYNERGY_SUB_TABS.map((sub) => {
+                const list = synergyData?.tabs?.[sub.key] || [];
+                const active = synergySubTab === sub.key;
+                return (
+                  <TouchableOpacity
+                    key={sub.key}
+                    onPress={() => setSynergySubTab(sub.key)}
+                    style={[s.synSubTab, active && s.synSubTabActive]}
+                  >
+                    <Text style={[s.synSubTabText, active && s.synSubTabTextActive]}>
+                      {sub.label} ({list.length})
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
+            {synergyLoading ? (
+              <View style={s.synLoaderWrap}>
+                <ActivityIndicator color={COLORS.gold} />
+                <Text style={s.synLoaderText}>Caricamento sinergie...</Text>
+              </View>
+            ) : (synergyData?.tabs?.[synergySubTab] || []).length === 0 ? (
+              <Text style={s.synEmpty}>
+                {synergySubTab === 'in_team' && 'Questo eroe non è in un team con sinergie disponibili.'}
+                {synergySubTab === 'active' && 'Nessuna sinergia di questo eroe attualmente attiva.'}
+                {synergySubTab === 'inactive' && 'Tutte le sinergie di questo eroe sono attive.'}
+              </Text>
+            ) : (
+              (synergyData.tabs[synergySubTab] || []).map((syn: any) => {
+                const tierColor =
+                  syn.rarity_tier === 'mythic' ? '#FF44CC'
+                  : syn.rarity_tier === 'legendary' ? '#FFB347'
+                  : syn.rarity_tier === 'epic' ? '#9966FF'
+                  : syn.rarity_tier === 'rare' ? '#44AAFF'
+                  : '#88CC88';
+                const statusColor = syn.status === 'active' ? '#44DD88'
+                  : syn.status === 'available_not_in_team' ? '#44AAFF'
+                  : syn.status === 'near_complete' ? '#FFB347'
+                  : '#666';
+                return (
+                  <View key={syn.id} style={[s.synSynCard, { borderColor: tierColor + '60' }]}>
+                    <View style={s.synSynHeader}>
+                      <Text style={s.synSynIcon}>{syn.icon || '\u2734'}</Text>
+                      <View style={{ flex: 1 }}>
+                        <Text style={[s.synSynName, { color: tierColor }]}>{syn.display_name}</Text>
+                        {!!syn.description && <Text style={s.synSynDesc} numberOfLines={2}>{syn.description}</Text>}
+                      </View>
+                      <View style={[s.synStatusBadge, { backgroundColor: statusColor + '20', borderColor: statusColor }]}>
+                        <Text style={[s.synStatusText, { color: statusColor }]}>
+                          {syn.in_team_count}/{syn.required_count}
+                        </Text>
+                      </View>
+                    </View>
+                    {syn.members && (
+                      <View style={s.synMembersRow}>
+                        {syn.members.map((m: any) => {
+                          const mc = m.in_team ? '#44DD88' : m.owned ? '#44AAFF' : '#666';
+                          return (
+                            <View key={m.canonical_id} style={[s.synMemberPill, { borderColor: mc }]}>
+                              <Text style={[s.synMemberName, { color: mc }]} numberOfLines={1}>
+                                {m.display_name}
+                              </Text>
+                              <Text style={s.synMemberStars}>
+                                {m.owned ? `${m.best_stars}/${m.max_stars}\u2B50` : '\u2014'}
+                              </Text>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    )}
+                    {syn.effects && syn.effects.length > 0 && (
+                      <View style={s.synEffectsRow}>
+                        {syn.effects.map((e: any, i: number) => (
+                          <View key={i} style={s.synEffectPill}>
+                            <Text style={s.synEffectText}>
+                              {e.stat}{e.mode === 'percent' ? ` +${Math.round(e.value * 100)}%` : ` +${e.value}`}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                );
+              })
+            )}
+            <View style={s.synAutoNote}>
+              <Text style={s.synAutoNoteText}>
+                {'\u2734'} La forza delle sinergie cresce automaticamente con le stelle degli eroi.
+              </Text>
+            </View>
+          </Animated.View>
+        )}
       </ScrollView>
     </LinearGradient>
   );
@@ -564,4 +699,50 @@ const s = StyleSheet.create({
   },
   totalTitle: { color: COLORS.success, fontSize: 11, fontWeight: '800', marginBottom: 4 },
   totalStat: { color: COLORS.success, fontSize: 9, fontWeight: '600' },
+
+  // ── RM1.23-C Synergies palette ─────────────────────────────────────
+  synWrap: { gap: 6 },
+  synSubTabRow: { flexDirection: 'row', gap: 4, marginBottom: 6 },
+  synSubTab: {
+    flex: 1, alignItems: 'center', paddingVertical: 6, paddingHorizontal: 4,
+    borderRadius: 6, backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)',
+  },
+  synSubTabActive: { backgroundColor: 'rgba(255,179,71,0.15)', borderColor: '#FFB347' },
+  synSubTabText: { color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: '700' },
+  synSubTabTextActive: { color: '#FFB347' },
+  synLoaderWrap: { padding: 16, alignItems: 'center' },
+  synLoaderText: { color: 'rgba(255,255,255,0.5)', fontSize: 10, marginTop: 6 },
+  synEmpty: {
+    color: 'rgba(255,255,255,0.4)', fontStyle: 'italic', fontSize: 11,
+    textAlign: 'center', padding: 14,
+  },
+  synSynCard: {
+    backgroundColor: 'rgba(255,255,255,0.03)', borderWidth: 1, borderRadius: 8,
+    padding: 8, marginBottom: 6,
+  },
+  synSynHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 6 },
+  synSynIcon: { fontSize: 18 },
+  synSynName: { fontSize: 12, fontWeight: '900' },
+  synSynDesc: { color: 'rgba(255,255,255,0.5)', fontSize: 9, marginTop: 2 },
+  synStatusBadge: { paddingHorizontal: 7, paddingVertical: 2, borderWidth: 1, borderRadius: 6 },
+  synStatusText: { fontSize: 9, fontWeight: '900' },
+  synMembersRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 6 },
+  synMemberPill: {
+    paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderRadius: 4,
+    flexDirection: 'row', alignItems: 'center', gap: 3, maxWidth: 180,
+  },
+  synMemberName: { fontSize: 9, fontWeight: '700' },
+  synMemberStars: { fontSize: 8, color: COLORS.gold },
+  synEffectsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 3, marginTop: 5 },
+  synEffectPill: {
+    backgroundColor: 'rgba(255,179,71,0.10)', borderWidth: 1, borderColor: 'rgba(255,179,71,0.3)',
+    borderRadius: 4, paddingHorizontal: 5, paddingVertical: 2,
+  },
+  synEffectText: { color: '#FFB347', fontSize: 8, fontWeight: '700' },
+  synAutoNote: {
+    backgroundColor: 'rgba(255,179,71,0.05)', borderColor: 'rgba(255,179,71,0.2)',
+    borderWidth: 1, borderRadius: 6, padding: 7, marginTop: 4,
+  },
+  synAutoNoteText: { color: 'rgba(255,255,255,0.5)', fontSize: 9, fontStyle: 'italic' },
 });
