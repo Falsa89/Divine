@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """
-RM1.22-A — Validate Placeholder Asset & Contract Readiness Pipeline
+RM1.22-A v0.2 — Validate Placeholder Asset & Contract Readiness Pipeline
 
 Read-only validator for:
 - data/design/placeholder_asset_profiles.json
 - data/design/official_hero_asset_readiness_manifest.json
 - data/design/heroes_master.json
+
+v0.2 fixes:
+- canonicalizes display role labels with slash separators:
+  "Support / Buffer" -> "support_buffer"
+  "Control / Debuff" -> "control_debuff"
+  "Assassin / Burst" -> "assassin_burst"
+- removes unused sys import from v0.1.
 
 No DB access.
 No runtime changes.
@@ -15,7 +22,7 @@ No file writes except optional console output.
 from __future__ import annotations
 
 import json
-import sys
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, List
@@ -29,6 +36,18 @@ HEROES_MASTER_PATH = ROOT / "data/design/heroes_master.json"
 
 EXPECTED_TOTAL = 101
 
+ROLE_ALIASES = {
+    "tank": "tank",
+    "dps_melee": "dps_melee",
+    "dps_ranged": "dps_ranged",
+    "mage_aoe": "mage_aoe",
+    "assassin_burst": "assassin_burst",
+    "support_buffer": "support_buffer",
+    "healer": "healer",
+    "control_debuff": "control_debuff",
+    "hybrid_special": "hybrid_special",
+}
+
 
 def load_json(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
@@ -36,7 +55,12 @@ def load_json(path: Path) -> Dict[str, Any]:
 
 
 def normalize_role(role: str) -> str:
-    return role.lower().replace("/", " ").replace("-", " ").replace("  ", " ").strip().replace(" ", "_")
+    """Normalize display labels and canonical role keys to snake_case."""
+    text = str(role).strip().lower()
+    text = re.sub(r"\s*/\s*", "_", text)
+    text = re.sub(r"[-\s]+", "_", text)
+    text = re.sub(r"_+", "_", text).strip("_")
+    return ROLE_ALIASES.get(text, text)
 
 
 def main() -> int:
@@ -70,7 +94,11 @@ def main() -> int:
 
     missing = sorted(set(master_by_id) - set(manifest_by_id))
     unknown = sorted(set(manifest_by_id) - set(master_by_id))
-    duplicates = [item for item, count in Counter([h.get("hero_id") for h in manifest if isinstance(h, dict)]).items() if item and count > 1]
+    duplicates = [
+        item
+        for item, count in Counter([h.get("hero_id") for h in manifest if isinstance(h, dict)]).items()
+        if item and count > 1
+    ]
 
     if missing:
         issues.append(f"missing manifest entries: {missing}")
@@ -83,6 +111,7 @@ def main() -> int:
         master = master_by_id.get(hero_id)
         if not master:
             continue
+
         role = normalize_role(str(master.get("role", "")))
         if entry.get("role") != role:
             issues.append(f"{hero_id}: role mismatch manifest={entry.get('role')} master={role}")
@@ -103,6 +132,7 @@ def main() -> int:
         for key in required_path_keys:
             if key not in paths:
                 issues.append(f"{hero_id}: missing canonical_paths.{key}")
+
         runtime_sheets = paths.get("runtime_sheets", {})
         if isinstance(runtime_sheets, dict):
             for state in ["idle", "attack", "skill", "hit", "death"]:
@@ -132,7 +162,7 @@ def main() -> int:
     if coverage.get("entries") != EXPECTED_TOTAL:
         issues.append(f"manifest coverage.entries expected {EXPECTED_TOTAL}, found {coverage.get('entries')}")
 
-    print("=== RM1.22-A Placeholder Asset Pipeline Validation ===")
+    print("=== RM1.22-A v0.2 Placeholder Asset Pipeline Validation ===")
     print(f"Profiles: {len(profiles)}")
     print(f"Heroes master: {len(master_by_id)}")
     print(f"Manifest entries: {len(manifest_by_id)}")
