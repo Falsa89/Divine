@@ -208,15 +208,43 @@ async def _ensure_borea_exists(db):
     bilanciate, sprite_sheet_base64 generati).
 
     RM1.16: idempotente. Sicuro a rieseguire più volte.
+
+    ─────────────────────────────────────────────────────────────────────
+    RM1.22-O HARDENING (Borea legacy regression fix)
+    ─────────────────────────────────────────────────────────────────────
+    • `id="borea"` è il record LEGACY/DEPRECATED (Bible slug obsoleto).
+    • La canonical official Borea è `id="greek_borea"` (Character Bible),
+      gestita dallo script `plan_official_roster_import.py` e dal piano
+      RM1.20-E. La canonicalizzazione di greek_borea NON passa di qui.
+    • Sanctuary NON deve mai ri-officializzare il legacy `borea`:
+      è marcato `is_legacy_placeholder=True` + `legacy_status=
+      "deprecated_placeholder"` da RM1.20-A e deve restare hidden/pending
+      extra premium fino alla ID migration definitiva (task futuro).
+    • Pre-RM1.22-O ogni call a /api/sanctuary/home-hero triggherava
+      `canonical_patch["is_official"]=True` sul legacy record, regredendo
+      il fix RM1.22-F3/K2. Il guard difensivo qui sotto blocca questa
+      regressione: se il record esistente è legacy, NON applichiamo
+      alcun canonical_patch (no-op), preservando i flag esistenti.
     """
     existing = await db.heroes.find_one({"id": BOREA_HERO_ID})
     if not existing:
         doc = {**BOREA_SEED, "created_at": datetime.utcnow()}
         await db.heroes.insert_one(doc)
         return True
+
+    # ── RM1.22-O HARD-GUARD ────────────────────────────────────────────
+    # Se il record `id="borea"` è legacy/deprecated, NON applichiamo il
+    # canonical_patch. La canonicalizzazione spetta solo al record
+    # `id="greek_borea"` (gestito da plan_official_roster_import.py).
+    # Questo previene la regressione `is_official: false → true` causata
+    # dalle chiamate ripetute a /api/sanctuary/home-hero.
+    if existing.get("is_legacy_placeholder") is True:
+        return False
+
     # Sincronizza solo i campi canonical Bible-mandated. NON tocchiamo
     # base_stats/sprite_sheet_base64/image_base64 se già presenti — solo
-    # metadata.
+    # metadata. Questo path resta come safety-net per il caso (oggi
+    # impossibile) in cui il record `id="borea"` non sia legacy.
     canonical_patch = {
         "canonical_id": BOREA_CANONICAL_ID,
         "rarity": 6,
