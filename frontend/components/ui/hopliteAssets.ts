@@ -67,6 +67,15 @@ import {
   PLACEHOLDER_HERO_CONTRACTS_1STAR_2STAR,
 } from './placeholderHeroContracts1star2star';
 
+// RM1.22-G-BULK — Wiring placeholder per gli eroi ufficiali rimanenti
+// (22 3★ + 24 4★ + 20 5★ + 13 6★ inclusa Borea = 79 heroes). Stessa
+// policy dei 1★/2★: placeholder_dev, spread DOPO Hoplite/Berserker e
+// DOPO i 1★/2★. Vedi docs/divine/13_REMAINING_PLACEHOLDER_PIPELINE_PACK.md.
+import {
+  PLACEHOLDER_HERO_ASSET_REGISTRY_REMAINING,
+  PLACEHOLDER_HERO_CONTRACTS_REMAINING,
+} from './placeholderHeroContractsRemaining';
+
 // ════════════════════════════════════════════════════════════════════
 // HOPLITE — record canonico Bible (preservato 100%)
 // ════════════════════════════════════════════════════════════════════
@@ -257,6 +266,10 @@ const HERO_ASSET_REGISTRY: Record<string, HeroAssetMap> = {
   // Hoplite/Berserker: gli ID canonici sono distinti, quindi non c'è
   // mai sovrascrittura. Vedi placeholderHeroContracts1star2star.ts.
   ...PLACEHOLDER_HERO_ASSET_REGISTRY_1STAR_2STAR,
+  // RM1.22-G-BULK — Spread placeholder 3★/4★/5★/6★+Borea (79 heroes).
+  // Posto DOPO 1★/2★: ID distinti, nessuna sovrascrittura.
+  // Vedi placeholderHeroContractsRemaining.ts.
+  ...PLACEHOLDER_HERO_ASSET_REGISTRY_REMAINING,
 };
 
 /** Lookup hero ID dalla coppia (id, name). Risolve alias name. */
@@ -798,6 +811,10 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
   // DOPO i contratti canonici Hoplite/Berserker: ID distinti → nessuna
   // sovrascrittura possibile. NON marcare questi asset come final.
   ...PLACEHOLDER_HERO_CONTRACTS_1STAR_2STAR,
+  // RM1.22-G-BULK — Spread contratti placeholder 3★/4★/5★/6★+Borea (79).
+  // Posto DOPO 1★/2★: ID distinti, nessuna sovrascrittura.
+  // NON marcare questi asset come final; pending_assets in DB.
+  ...PLACEHOLDER_HERO_CONTRACTS_REMAINING,
 };
 
 /** Ritorna il contratto per l'eroe, o DEFAULT_HERO_CONTRACT. */

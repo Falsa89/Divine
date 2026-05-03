@@ -1,0 +1,53 @@
+{
+  "profileId": "dps_melee_standard_v1",
+  "version": 1,
+  "frameWidth": 640,
+  "frameHeight": 768,
+  "placeholder": true,
+  "animations": {
+    "idle": {
+      "sheet": "runtime/idle_sheet.png",
+      "frames": 6,
+      "columns": 6,
+      "rows": 1,
+      "fps": 8,
+      "loop": true
+    },
+    "attack": {
+      "sheet": "runtime/attack_sheet.png",
+      "frames": 5,
+      "columns": 5,
+      "rows": 1,
+      "fps": 12,
+      "loop": false
+    },
+    "skill": {
+      "sheet": "runtime/skill_sheet.png",
+      "frames": 6,
+      "columns": 6,
+      "rows": 1,
+      "fps": 12,
+      "loop": false
+    },
+    "hit": {
+      "sheet": "runtime/hit_sheet.png",
+      "frames": 5,
+      "columns": 5,
+      "rows": 1,
+      "fps": 10,
+      "loop": false
+    },
+    "death": {
+      "sheet": "runtime/death_sheet.png",
+      "frames": 6,
+      "columns": 6,
+      "rows": 1,
+      "fps": 8,
+      "loop": false
+    }
+  },
+  "heroId": "creature_depths_warrior",
+  "placeholderProfile": "dps_melee_standard_v1",
+  "assetStatus": "placeholder_dev",
+  "source": "RM1.22-G-BULK placeholder assignment"
+}

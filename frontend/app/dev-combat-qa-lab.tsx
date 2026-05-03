@@ -34,6 +34,8 @@ import BattleSprite from '../components/BattleSprite';
 import { validateHeroContract } from '../components/ui/hopliteAssets';
 // RM1.22-D — Lab options placeholder 1★/2★ (placeholder_dev).
 import { PLACEHOLDER_LAB_HERO_OPTIONS_1STAR_2STAR } from '../components/ui/placeholderHeroContracts1star2star';
+// RM1.22-G-BULK — Lab options placeholder 3★/4★/5★/6★+Borea (placeholder_dev).
+import { PLACEHOLDER_LAB_HERO_OPTIONS_REMAINING } from '../components/ui/placeholderHeroContractsRemaining';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Tipi locali
@@ -98,6 +100,10 @@ const LAB_HERO_OPTIONS: LabHero[] = [
   // Aggiunti DOPO Hoplite/Berserker per non alterare gli indici fissi
   // (LAB_HERO_OPTIONS[0]=Hoplite, [1]=Berserker) usati altrove nel file.
   ...PLACEHOLDER_LAB_HERO_OPTIONS_1STAR_2STAR,
+  // RM1.22-G-BULK — Placeholder 3★/4★/5★/6★+Borea (79 heroes):
+  // lab-only metadata. Aggiunti DOPO 1★/2★. Indici [0]/[1] restano
+  // Hoplite/Berserker.
+  ...PLACEHOLDER_LAB_HERO_OPTIONS_REMAINING,
 ];
 
 const ALL_ROLES: (HeroRole | 'All')[] = [
