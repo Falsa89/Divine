@@ -7,6 +7,7 @@ Active/Passive skills, positional buffs, cinematic ultimate triggers
 """
 import random
 import math
+import os
 import uuid
 from datetime import datetime
 from typing import List, Dict, Optional, Any
@@ -1046,6 +1047,57 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
             synergy_result = {"active_synergies": [], "total_buffs": {}}
             synergy_buffs = {}
 
+        # ── RM1.23-B: TEAM SYNERGIES V2 (gated, additive, no-op default) ──
+        # Feature flag: SYNERGY_V2_BATTLE_ENABLED (env-var, default false).
+        # When false the V2 calculator is NOT invoked at all and the result
+        # block is empty. When true V2 buffs are applied additively AFTER V1
+        # without replacing or removing any V1 logic.
+        v2_synergy_block = {
+            "enabled": False,
+            "active_team_synergies_v2": [],
+            "near_complete": [],
+            "aggregated_buffs": {},
+            "members_resolved": 0,
+            "members_skipped_legacy_or_orphan": 0,
+        }
+        if os.getenv("SYNERGY_V2_BATTLE_ENABLED", "false").lower() == "true":
+            try:
+                from data.synergy_definitions_v2 import get_enabled_team_synergies_v2
+                from data.character_bible import CHARACTER_BIBLE_BY_ID as _BIBLE
+                from utils.team_synergy_v2_calculator import compute_team_synergies_v2
+                # Resolve active team for V2 calc
+                _v2_team = await db.teams.find_one({"user_id": user_id, "is_active": True})
+                if _v2_team and _v2_team.get("formation"):
+                    _v2_uhids = [p.get("user_hero_id") for p in _v2_team.get("formation", []) if p.get("user_hero_id")]
+                    _v2_uhs = await db.user_heroes.find({"id": {"$in": _v2_uhids}, "user_id": user_id}).to_list(None)
+                    _v2_uh_map = {u["id"]: u for u in _v2_uhs}
+                    _v2_hids = list({u.get("hero_id") for u in _v2_uhs if u.get("hero_id")})
+                    _v2_h_list = await db.heroes.find({"id": {"$in": _v2_hids}}, {"image_base64": 0}).to_list(None)
+                    _v2_h_map = {h["id"]: h for h in _v2_h_list}
+                    _v2_res = compute_team_synergies_v2(
+                        team_doc=_v2_team,
+                        user_heroes_by_id=_v2_uh_map,
+                        heroes_by_id=_v2_h_map,
+                        enabled_synergies=get_enabled_team_synergies_v2(),
+                        bible_ids=set(_BIBLE.keys()),
+                    )
+                    v2_synergy_block.update(_v2_res)
+                    v2_synergy_block["enabled"] = True
+                    # Apply V2 aggregated_buffs additively on player_team
+                    for char in player_team:
+                        for stat, val in v2_synergy_block["aggregated_buffs"].items():
+                            if stat.endswith("__flat"):
+                                continue  # flat buffs: future battle-handler
+                            if stat in char:
+                                if isinstance(char[stat], int):
+                                    char[stat] = int(char[stat] * (1 + val))
+                                elif isinstance(char[stat], float):
+                                    char[stat] = round(char[stat] * (1 + val), 4)
+            except Exception as _e_v2:
+                v2_synergy_block["enabled"] = True
+                v2_synergy_block["error"] = str(_e_v2)[:200]
+        # ── end RM1.23-B V2 block ──────────────────────────────────────────
+
         # Generate enemy team — dimensione INDIPENDENTE dalla squadra player.
         # Il team nemico è SEMPRE pieno (6 unità) così l'utente può testare
         # battaglie asimmetriche (es. 3 vs 6, 4 vs 6) per osservare
@@ -1060,6 +1112,8 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
         result['adjacency_pairs'] = adj_result['adjacent_pairs']
         result['active_synergies'] = synergy_result.get('active_synergies', [])
         result['synergy_buffs'] = synergy_buffs
+        # RM1.23-B: telemetry V2 (always present; empty if flag off)
+        result['team_synergies_v2'] = v2_synergy_block
         
         # Awards on victory
         if result['victory']:

@@ -1,0 +1,439 @@
+{
+  "version": "0.1",
+  "task": "RM1.23-B",
+  "status": "proposal_approved_for_implementation",
+  "scope": "team_synergies_v2_initial_wave",
+  "notes": [
+    "Use canonical Character Bible hero IDs only.",
+    "Do not include greek_borea in this initial wave.",
+    "Do not modify DB/user_heroes/teams.",
+    "Battle application must be behind feature flag SYNERGY_V2_BATTLE_ENABLED=false by default.",
+    "This JSON is design-data source for implementation; adapt to existing backend/data/synergy_definitions_v2.py schema after inspection."
+  ],
+  "synergies": [
+    {
+      "id": "olympian_command",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Comando Olimpico",
+      "description": "Atena e Artemide guidano la guerra divina con disciplina e precisione.",
+      "lore_group": "greek_olympian",
+      "icon": "⚔️",
+      "rarity_tier": "legendary",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "greek_athena",
+        "greek_artemis"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 2,
+      "max_members": 2,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "attack",
+          "mode": "percent",
+          "value": 0.05,
+          "target": "synergy_members"
+        },
+        {
+          "stat": "crit_rate",
+          "mode": "percent",
+          "value": 0.03,
+          "target": "synergy_members"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.005,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Low-risk 6-star duo synergy. Placeholder balance v0.1."
+    },
+    {
+      "id": "greek_pantheon_trinity",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Trinità Olimpica",
+      "description": "Atena, Artemide e Gaia uniscono comando, caccia e potere primordiale.",
+      "lore_group": "greek_olympian",
+      "icon": "🏛️",
+      "rarity_tier": "mythic",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "greek_athena",
+        "greek_artemis",
+        "greek_gaia"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 3,
+      "max_members": 3,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "attack",
+          "mode": "percent",
+          "value": 0.08,
+          "target": "all_allies"
+        },
+        {
+          "stat": "hp",
+          "mode": "percent",
+          "value": 0.06,
+          "target": "all_allies"
+        },
+        {
+          "stat": "magic_damage",
+          "mode": "percent",
+          "value": 0.06,
+          "target": "all_allies"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.004,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Higher-risk 3x 6-star synergy; keep modest and capped."
+    },
+    {
+      "id": "thunder_kami_pair",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Coppia dei Kami del Tuono",
+      "description": "Raijin e Susanoo scatenano tempesta, fulmine e furia divina.",
+      "lore_group": "japanese_storm_kami",
+      "icon": "⚡",
+      "rarity_tier": "legendary",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "japanese_raijin",
+        "japanese_susanoo"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 2,
+      "max_members": 2,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "speed",
+          "mode": "percent",
+          "value": 0.1,
+          "target": "synergy_members"
+        },
+        {
+          "stat": "crit_damage",
+          "mode": "percent",
+          "value": 0.12,
+          "target": "synergy_members"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.004,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Fast aggressive 2x 6-star synergy; monitor speed cap."
+    },
+    {
+      "id": "solar_kin",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Stirpe Solare",
+      "description": "Amaterasu, Raijin e Susanoo riuniscono il lignaggio divino del Giappone mitico.",
+      "lore_group": "japanese_divine_lineage",
+      "icon": "☀️",
+      "rarity_tier": "mythic",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "japanese_amaterasu",
+        "japanese_raijin",
+        "japanese_susanoo"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 3,
+      "max_members": 3,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "attack",
+          "mode": "percent",
+          "value": 0.1,
+          "target": "faction_match"
+        },
+        {
+          "stat": "healing_power",
+          "mode": "percent",
+          "value": 0.08,
+          "target": "faction_match"
+        }
+      ],
+      "target_filter": {
+        "faction": "japanese_yokai"
+      },
+      "star_scaling": {
+        "per_avg_star": 0.004,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Faction-targeted trio synergy."
+    },
+    {
+      "id": "nile_blessing",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Benedizione del Nilo",
+      "description": "Iside e Sekhmet fondono vita, guarigione e furia solare.",
+      "lore_group": "egyptian_divine_healing",
+      "icon": "🌊",
+      "rarity_tier": "legendary",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "egyptian_isis",
+        "egyptian_sekhmet"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 2,
+      "max_members": 2,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "healing_power",
+          "mode": "percent",
+          "value": 0.1,
+          "target": "synergy_members"
+        },
+        {
+          "stat": "magic_damage",
+          "mode": "percent",
+          "value": 0.08,
+          "target": "synergy_members"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.004,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Healer/support pair requirement fulfilled."
+    },
+    {
+      "id": "four_horsemen_partial",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Cavalieri dell'Apocalisse — Eco Parziale",
+      "description": "Pestilenza e l'Aralda della Carestia aprono la via alla rovina.",
+      "lore_group": "cursed_horsemen",
+      "icon": "☠️",
+      "rarity_tier": "epic",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "cursed_pestilence_horseman",
+        "cursed_famine_herald_minor"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 2,
+      "max_members": 2,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "penetration",
+          "mode": "percent",
+          "value": 0.12,
+          "target": "synergy_members"
+        },
+        {
+          "stat": "lifesteal",
+          "mode": "percent",
+          "value": 0.06,
+          "target": "synergy_members"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.003,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Dark/cursed control synergy requirement fulfilled."
+    },
+    {
+      "id": "valkyrie_dawn_ragnarok",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Crepuscolo del Ragnarok",
+      "description": "La Valchiria dell'Alba e la Lupa del Ragnarok marciano tra inizio e fine.",
+      "lore_group": "norse_ragnarok",
+      "icon": "🐺",
+      "rarity_tier": "epic",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "norse_dawn_valkyrie",
+        "norse_ragnarok_she_wolf"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 2,
+      "max_members": 2,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "attack",
+          "mode": "percent",
+          "value": 0.06,
+          "target": "synergy_members"
+        },
+        {
+          "stat": "ultimate_charge",
+          "mode": "percent",
+          "value": 0.1,
+          "target": "synergy_members"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.003,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Norse two-hero lore pair."
+    },
+    {
+      "id": "celtic_archers_pair",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Sorelle dell'Arco Celtico",
+      "description": "Due arciere celtiche colpiscono dai boschi e dalle alture.",
+      "lore_group": "celtic_hunt",
+      "icon": "🏹",
+      "rarity_tier": "rare",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "celtic_archer",
+        "celtic_forest_archer"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 2,
+      "max_members": 2,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "crit_rate",
+          "mode": "percent",
+          "value": 0.08,
+          "target": "synergy_members"
+        },
+        {
+          "stat": "dodge",
+          "mode": "percent",
+          "value": 0.05,
+          "target": "synergy_members"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.003,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Low-rarity accessible synergy."
+    },
+    {
+      "id": "cherubic_choir",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Coro Cherubico",
+      "description": "Cantora, Custode e Sacerdotessa intonano una difesa celeste.",
+      "lore_group": "angelic_choir",
+      "icon": "🎵",
+      "rarity_tier": "epic",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "angelic_cantor",
+        "angelic_cherubic_warden",
+        "angelic_priestess"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 3,
+      "max_members": 3,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "healing_power",
+          "mode": "percent",
+          "value": 0.12,
+          "target": "faction_match"
+        },
+        {
+          "stat": "magic_defense",
+          "mode": "percent",
+          "value": 0.1,
+          "target": "faction_match"
+        }
+      ],
+      "target_filter": {
+        "faction": "angelic"
+      },
+      "star_scaling": {
+        "per_avg_star": 0.003,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": true
+      },
+      "is_enabled": true,
+      "design_notes": "Angelic support trio."
+    },
+    {
+      "id": "iconic_six_star_tiamat",
+      "version": 2,
+      "type": "team_synergy",
+      "display_name": "Trionfo Solitario di Tiamat",
+      "description": "Tiamat porta con sé il peso di un pantheon primordiale ancora incompleto.",
+      "lore_group": "mesopotamian_primordial",
+      "icon": "🐉",
+      "rarity_tier": "legendary",
+      "release_group": "launch_base",
+      "required_hero_ids": [
+        "mesopotamian_tiamat"
+      ],
+      "optional_hero_ids": [],
+      "min_required": 1,
+      "max_members": 1,
+      "activation_scope": "active_team_only",
+      "duplicate_policy": "unique_canonical_id",
+      "effects": [
+        {
+          "stat": "hp",
+          "mode": "percent",
+          "value": 0.05,
+          "target": "synergy_members"
+        },
+        {
+          "stat": "magic_damage",
+          "mode": "percent",
+          "value": 0.05,
+          "target": "synergy_members"
+        }
+      ],
+      "star_scaling": {
+        "per_avg_star": 0.002,
+        "min_avg_stars_to_activate": 1,
+        "scales_with_completion": false
+      },
+      "is_enabled": true,
+      "design_notes": "Solo 6-star iconic placeholder synergy until Mesopotamian roster expands."
+    }
+  ]
+}

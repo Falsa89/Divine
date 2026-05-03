@@ -284,6 +284,308 @@ TEAM_SYNERGY_DEFINITIONS_V2: List[Dict[str, Any]] = [
         "is_enabled": False,
         "notes": "Schema example only. Fire creature_beast × fire creature_beast.",
     },
+    # ════════════════════════════════════════════════════════════════════
+    # RM1.23-B — INITIAL APPROVED WAVE (10 launch_base team synergies)
+    # ────────────────────────────────────────────────────────────────────
+    # Source of truth: data/design/team_synergies_v2_initial_10.json
+    # Tutte queste entry sono is_enabled=True (Game Director approved).
+    # Schema arricchito (RM1.23-B):
+    #   - effects: list[{stat, mode, value, target}]
+    #   - target_filter: opzionale per faction/role/element scoping
+    #   - duplicate_policy: handling doppioni canonical_id
+    #   - activation_scope: "active_team_only"
+    #   - lore_group / icon / rarity_tier / release_group: UI metadata
+    # Compat:
+    #   - tier_by_member_count derivato da effects per backward-compat
+    #     con il calc V1-foundation; il calc V2 userà preferibilmente
+    #     `effects` quando disponibili.
+    #   - `notes` (legacy) sinonimo di `design_notes`.
+    # Battle application è gated da SYNERGY_V2_BATTLE_ENABLED env (default
+    # False); il calculator e l'endpoint sono read-only safe.
+    # ════════════════════════════════════════════════════════════════════
+    {
+        "id": "olympian_command",
+        "type": "team",
+        "version": 2,
+        "display_name": "Comando Olimpico",
+        "description": "Atena e Artemide guidano la guerra divina con disciplina e precisione.",
+        "lore_group": "greek_olympian",
+        "icon": "\u2694\uFE0F",
+        "rarity_tier": "legendary",
+        "release_group": "launch_base",
+        "required_hero_ids": ["greek_athena", "greek_artemis"],
+        "optional_hero_ids": [],
+        "min_required": 2,
+        "max_members": 2,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "attack", "mode": "percent", "value": 0.05, "target": "synergy_members"},
+            {"stat": "crit_rate", "mode": "percent", "value": 0.03, "target": "synergy_members"},
+        ],
+        "tier_by_member_count": {
+            2: {"attack": 0.05, "crit_rate": 0.03},
+        },
+        "star_scaling": {"per_avg_star": 0.005, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Low-risk 6-star duo. Placeholder balance v0.1.",
+    },
+    {
+        "id": "greek_pantheon_trinity",
+        "type": "team",
+        "version": 2,
+        "display_name": "Trinit\u00e0 Olimpica",
+        "description": "Atena, Artemide e Gaia uniscono comando, caccia e potere primordiale.",
+        "lore_group": "greek_olympian",
+        "icon": "\U0001F3DB\uFE0F",
+        "rarity_tier": "mythic",
+        "release_group": "launch_base",
+        "required_hero_ids": ["greek_athena", "greek_artemis", "greek_gaia"],
+        "optional_hero_ids": [],
+        "min_required": 3,
+        "max_members": 3,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "attack", "mode": "percent", "value": 0.08, "target": "all_allies"},
+            {"stat": "hp", "mode": "percent", "value": 0.06, "target": "all_allies"},
+            {"stat": "magic_damage", "mode": "percent", "value": 0.06, "target": "all_allies"},
+        ],
+        "tier_by_member_count": {
+            3: {"attack": 0.08, "hp": 0.06, "magic_damage": 0.06},
+        },
+        "star_scaling": {"per_avg_star": 0.004, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — 3x 6-star synergy; modesta e capped.",
+    },
+    {
+        "id": "thunder_kami_pair",
+        "type": "team",
+        "version": 2,
+        "display_name": "Coppia dei Kami del Tuono",
+        "description": "Raijin e Susanoo scatenano tempesta, fulmine e furia divina.",
+        "lore_group": "japanese_storm_kami",
+        "icon": "\u26A1",
+        "rarity_tier": "legendary",
+        "release_group": "launch_base",
+        "required_hero_ids": ["japanese_raijin", "japanese_susanoo"],
+        "optional_hero_ids": [],
+        "min_required": 2,
+        "max_members": 2,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "speed", "mode": "percent", "value": 0.10, "target": "synergy_members"},
+            {"stat": "crit_damage", "mode": "percent", "value": 0.12, "target": "synergy_members"},
+        ],
+        "tier_by_member_count": {
+            2: {"speed": 0.10, "crit_damage": 0.12},
+        },
+        "star_scaling": {"per_avg_star": 0.004, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Fast 2x 6-star synergy; monitor speed cap.",
+    },
+    {
+        "id": "solar_kin",
+        "type": "team",
+        "version": 2,
+        "display_name": "Stirpe Solare",
+        "description": "Amaterasu, Raijin e Susanoo riuniscono il lignaggio divino del Giappone mitico.",
+        "lore_group": "japanese_divine_lineage",
+        "icon": "\u2600\uFE0F",
+        "rarity_tier": "mythic",
+        "release_group": "launch_base",
+        "required_hero_ids": ["japanese_amaterasu", "japanese_raijin", "japanese_susanoo"],
+        "optional_hero_ids": [],
+        "min_required": 3,
+        "max_members": 3,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "attack", "mode": "percent", "value": 0.10, "target": "faction_match"},
+            {"stat": "healing_power", "mode": "percent", "value": 0.08, "target": "faction_match"},
+        ],
+        "target_filter": {"faction": "japanese_yokai"},
+        "tier_by_member_count": {
+            3: {"attack": 0.10, "healing_power": 0.08},
+        },
+        "star_scaling": {"per_avg_star": 0.004, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Faction-targeted trio synergy.",
+    },
+    {
+        "id": "nile_blessing",
+        "type": "team",
+        "version": 2,
+        "display_name": "Benedizione del Nilo",
+        "description": "Iside e Sekhmet fondono vita, guarigione e furia solare.",
+        "lore_group": "egyptian_divine_healing",
+        "icon": "\U0001F30A",
+        "rarity_tier": "legendary",
+        "release_group": "launch_base",
+        "required_hero_ids": ["egyptian_isis", "egyptian_sekhmet"],
+        "optional_hero_ids": [],
+        "min_required": 2,
+        "max_members": 2,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "healing_power", "mode": "percent", "value": 0.10, "target": "synergy_members"},
+            {"stat": "magic_damage", "mode": "percent", "value": 0.08, "target": "synergy_members"},
+        ],
+        "tier_by_member_count": {
+            2: {"healing_power": 0.10, "magic_damage": 0.08},
+        },
+        "star_scaling": {"per_avg_star": 0.004, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Healer/support pair.",
+    },
+    {
+        "id": "four_horsemen_partial",
+        "type": "team",
+        "version": 2,
+        "display_name": "Cavalieri dell'Apocalisse \u2014 Eco Parziale",
+        "description": "Pestilenza e l'Aralda della Carestia aprono la via alla rovina.",
+        "lore_group": "cursed_horsemen",
+        "icon": "\u2620\uFE0F",
+        "rarity_tier": "epic",
+        "release_group": "launch_base",
+        "required_hero_ids": ["cursed_pestilence_horseman", "cursed_famine_herald_minor"],
+        "optional_hero_ids": [],
+        "min_required": 2,
+        "max_members": 2,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "penetration", "mode": "percent", "value": 0.12, "target": "synergy_members"},
+            {"stat": "lifesteal", "mode": "percent", "value": 0.06, "target": "synergy_members"},
+        ],
+        "tier_by_member_count": {
+            2: {"penetration": 0.12, "lifesteal": 0.06},
+        },
+        "star_scaling": {"per_avg_star": 0.003, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Dark/cursed control synergy.",
+    },
+    {
+        "id": "valkyrie_dawn_ragnarok",
+        "type": "team",
+        "version": 2,
+        "display_name": "Crepuscolo del Ragnarok",
+        "description": "La Valchiria dell'Alba e la Lupa del Ragnarok marciano tra inizio e fine.",
+        "lore_group": "norse_ragnarok",
+        "icon": "\U0001F43A",
+        "rarity_tier": "epic",
+        "release_group": "launch_base",
+        "required_hero_ids": ["norse_dawn_valkyrie", "norse_ragnarok_she_wolf"],
+        "optional_hero_ids": [],
+        "min_required": 2,
+        "max_members": 2,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "attack", "mode": "percent", "value": 0.06, "target": "synergy_members"},
+            {"stat": "ultimate_charge", "mode": "percent", "value": 0.10, "target": "synergy_members"},
+        ],
+        "tier_by_member_count": {
+            2: {"attack": 0.06, "ultimate_charge": 0.10},
+        },
+        "star_scaling": {"per_avg_star": 0.003, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Norse two-hero lore pair.",
+    },
+    {
+        "id": "celtic_archers_pair",
+        "type": "team",
+        "version": 2,
+        "display_name": "Sorelle dell'Arco Celtico",
+        "description": "Due arciere celtiche colpiscono dai boschi e dalle alture.",
+        "lore_group": "celtic_hunt",
+        "icon": "\U0001F3F9",
+        "rarity_tier": "rare",
+        "release_group": "launch_base",
+        "required_hero_ids": ["celtic_archer", "celtic_forest_archer"],
+        "optional_hero_ids": [],
+        "min_required": 2,
+        "max_members": 2,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "crit_rate", "mode": "percent", "value": 0.08, "target": "synergy_members"},
+            {"stat": "dodge", "mode": "percent", "value": 0.05, "target": "synergy_members"},
+        ],
+        "tier_by_member_count": {
+            2: {"crit_rate": 0.08, "dodge": 0.05},
+        },
+        "star_scaling": {"per_avg_star": 0.003, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Low-rarity accessible synergy.",
+    },
+    {
+        "id": "cherubic_choir",
+        "type": "team",
+        "version": 2,
+        "display_name": "Coro Cherubico",
+        "description": "Cantora, Custode e Sacerdotessa intonano una difesa celeste.",
+        "lore_group": "angelic_choir",
+        "icon": "\U0001F3B5",
+        "rarity_tier": "epic",
+        "release_group": "launch_base",
+        "required_hero_ids": ["angelic_cantor", "angelic_cherubic_warden", "angelic_priestess"],
+        "optional_hero_ids": [],
+        "min_required": 3,
+        "max_members": 3,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "healing_power", "mode": "percent", "value": 0.12, "target": "faction_match"},
+            {"stat": "magic_defense", "mode": "percent", "value": 0.10, "target": "faction_match"},
+        ],
+        "target_filter": {"faction": "angelic"},
+        "tier_by_member_count": {
+            3: {"healing_power": 0.12, "magic_defense": 0.10},
+        },
+        "star_scaling": {"per_avg_star": 0.003, "min_avg_stars_to_activate": 1, "scales_with_completion": True},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Angelic support trio.",
+    },
+    {
+        "id": "iconic_six_star_tiamat",
+        "type": "team",
+        "version": 2,
+        "display_name": "Trionfo Solitario di Tiamat",
+        "description": "Tiamat porta con s\u00e9 il peso di un pantheon primordiale ancora incompleto.",
+        "lore_group": "mesopotamian_primordial",
+        "icon": "\U0001F409",
+        "rarity_tier": "legendary",
+        "release_group": "launch_base",
+        "required_hero_ids": ["mesopotamian_tiamat"],
+        "optional_hero_ids": [],
+        "min_required": 1,
+        "max_members": 1,
+        "activation_scope": "active_team_only",
+        "duplicate_policy": "unique_canonical_id",
+        "effects": [
+            {"stat": "hp", "mode": "percent", "value": 0.05, "target": "synergy_members"},
+            {"stat": "magic_damage", "mode": "percent", "value": 0.05, "target": "synergy_members"},
+        ],
+        "tier_by_member_count": {
+            1: {"hp": 0.05, "magic_damage": 0.05},
+        },
+        "star_scaling": {"per_avg_star": 0.002, "min_avg_stars_to_activate": 1, "scales_with_completion": False},
+        "buffs_by_tier": None,
+        "is_enabled": True,
+        "notes": "RM1.23-B initial wave — Solo 6-star foundation; pantheon mesopotamico incompleto fino a future expansion.",
+    },
 ]
 
 
@@ -665,12 +967,42 @@ def _validate_team_synergy(s: Dict[str, Any], errors: List[str]) -> None:
     # If member count >= 2, that satisfies 'standard' team synergy criteria;
     # entries with only 1 member must be marked as foundation/incomplete-set.
     if mm is not None and mm < 2:
-        if "foundation" not in (s.get("notes") or "").lower() \
-                and "incompleto" not in (s.get("notes") or "").lower():
+        notes_blob = (s.get("notes") or "").lower()
+        # RM1.23-B accept "foundation" / "incompleto" / "incomplete" markers
+        if not any(t in notes_blob for t in ("foundation", "incompleto", "incomplete")):
             errors.append(
                 f"team synergy {sid}: max_members<2 must be flagged as "
                 f"foundation/incomplete in notes"
             )
+    # ── RM1.23-B SCHEMA EXTENSIONS (optional fields) ──────────────────
+    # `effects[]` may be present alongside `tier_by_member_count`.
+    effects = s.get("effects")
+    if effects is not None:
+        if not isinstance(effects, list) or not effects:
+            errors.append(f"team synergy {sid}: effects must be non-empty list when present")
+        else:
+            for eidx, eff in enumerate(effects):
+                if not isinstance(eff, dict):
+                    errors.append(f"team synergy {sid}: effect[{eidx}] not a dict")
+                    continue
+                for field in ("stat", "mode", "value", "target"):
+                    if field not in eff:
+                        errors.append(f"team synergy {sid}: effect[{eidx}] missing '{field}'")
+                if eff.get("mode") not in {"percent", "flat"}:
+                    errors.append(f"team synergy {sid}: effect[{eidx}].mode must be 'percent'|'flat'")
+                if eff.get("target") not in {
+                    "synergy_members", "all_allies",
+                    "faction_match", "role_match", "element_match",
+                }:
+                    errors.append(f"team synergy {sid}: effect[{eidx}].target invalid")
+    # `target_filter` only meaningful when at least one effect uses *_match
+    tf = s.get("target_filter")
+    if tf is not None and not isinstance(tf, dict):
+        errors.append(f"team synergy {sid}: target_filter must be a dict")
+    # `version` (optional, default 1) must be int
+    v = s.get("version")
+    if v is not None and not (isinstance(v, int) and v >= 1):
+        errors.append(f"team synergy {sid}: version must be positive int")
 
 
 def _validate_collection_synergy(c: Dict[str, Any], errors: List[str]) -> None:
@@ -739,17 +1071,37 @@ def validate_synergy_v2() -> Dict[str, Any]:
         seen_pf.add(f["id"])
         _validate_player_faction(f, errors)
 
-    # Foundation invariant: no entry should be is_enabled=True yet
+    # Foundation invariant (RM1.14): in origine NESSUNA entry doveva avere
+    # is_enabled=True. RM1.23-B promuove le 10 Team Synergies V2 approvate
+    # alla GO-LIVE (version=2, release_group="launch_base"). Il vincolo
+    # "all_disabled" resta per FORMATION, COLLECTION, PLAYER_FACTION, ma
+    # per TEAM accettiamo is_enabled=True solo se la entry è marcata V2.
     enabled_violations: List[str] = []
-    for collection_name, items in (
-        ("FORMATION", FORMATION_SYNERGY_RULES_V2),
-        ("TEAM", TEAM_SYNERGY_DEFINITIONS_V2),
-        ("COLLECTION", COLLECTION_SYNERGY_DEFINITIONS_V2),
-        ("PLAYER_FACTION", PLAYER_FACTION_DEFINITIONS_V2),
+    for collection_name, items, allow_v2_enabled in (
+        ("FORMATION", FORMATION_SYNERGY_RULES_V2, False),
+        ("TEAM", TEAM_SYNERGY_DEFINITIONS_V2, True),
+        ("COLLECTION", COLLECTION_SYNERGY_DEFINITIONS_V2, False),
+        ("PLAYER_FACTION", PLAYER_FACTION_DEFINITIONS_V2, False),
     ):
         for it in items:
             if it.get("is_enabled") is True:
-                enabled_violations.append(f"{collection_name}.{it['id']} is_enabled=True (foundation must be False)")
+                if allow_v2_enabled:
+                    # Accetta solo entry marcate V2 launch_base
+                    if it.get("version") != 2:
+                        enabled_violations.append(
+                            f"{collection_name}.{it['id']} is_enabled=True "
+                            f"but version != 2 (RM1.23-B requires version=2)"
+                        )
+                    if it.get("release_group") != "launch_base":
+                        enabled_violations.append(
+                            f"{collection_name}.{it['id']} is_enabled=True "
+                            f"but release_group != 'launch_base'"
+                        )
+                else:
+                    enabled_violations.append(
+                        f"{collection_name}.{it['id']} is_enabled=True "
+                        f"(this collection must remain foundation-disabled)"
+                    )
     if enabled_violations:
         errors.extend(enabled_violations)
 
@@ -791,4 +1143,15 @@ __all__ = [
     "PLAYER_FACTION_CHANGE_TOKEN_ID",
     "VALID_FORMATION_CONDITION_TYPES",
     "validate_synergy_v2",
+    "get_enabled_team_synergies_v2",
 ]
+
+
+def get_enabled_team_synergies_v2() -> List[Dict[str, Any]]:
+    """Return only the active (Game Director-approved) Team Synergies V2.
+    Read-only helper used by the calculator + endpoint. Excludes foundation
+    schema-example entries (is_enabled=False)."""
+    return [
+        s for s in TEAM_SYNERGY_DEFINITIONS_V2
+        if s.get("is_enabled") is True and s.get("version") == 2
+    ]
