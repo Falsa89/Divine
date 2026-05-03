@@ -1,0 +1,138 @@
+{
+  "version": "0.1",
+  "status": "approved_process_draft",
+  "task_origin": "RM1.22-A",
+  "purpose": "Defines standard placeholder asset archetypes for integrating heroes before final art is ready.",
+  "non_normative_for_runtime": true,
+  "global_policy": {
+    "placeholder_assets_are_allowed": true,
+    "placeholder_assets_must_be_tracked": true,
+    "placeholder_assets_must_use_canonical_filenames_inside_each_hero_folder": true,
+    "placeholder_assets_must_not_be_marked_approved_final": true,
+    "final_asset_swap_must_be_1_to_1_filename_replacement": true,
+    "no_other_hero_final_asset_as_placeholder": true,
+    "no_unknown_asset_fallbacks_in_production": true
+  },
+  "canonical_hero_asset_paths": {
+    "hero_root": "frontend/assets/heroes/{hero_id}/",
+    "ui": {
+      "splash": "frontend/assets/heroes/{hero_id}/splash.jpg",
+      "transparent": "frontend/assets/heroes/{hero_id}/transparent.png",
+      "card": "frontend/assets/heroes/{hero_id}/card.png",
+      "detail": "frontend/assets/heroes/{hero_id}/detail.png",
+      "fullscreen": "frontend/assets/heroes/{hero_id}/fullscreen.png"
+    },
+    "battle": {
+      "combat_base": "frontend/assets/heroes/{hero_id}/combat_base.png",
+      "runtime_idle": "frontend/assets/heroes/{hero_id}/runtime/idle_sheet.png",
+      "runtime_attack": "frontend/assets/heroes/{hero_id}/runtime/attack_sheet.png",
+      "runtime_skill": "frontend/assets/heroes/{hero_id}/runtime/skill_sheet.png",
+      "runtime_hit": "frontend/assets/heroes/{hero_id}/runtime/hit_sheet.png",
+      "runtime_death": "frontend/assets/heroes/{hero_id}/runtime/death_sheet.png",
+      "runtime_metadata": "frontend/assets/heroes/{hero_id}/runtime/battle_animations.json"
+    },
+    "optional_sources": {
+      "source_idle": "frontend/assets/heroes/{hero_id}/source_sheets/idle_source.png",
+      "source_attack": "frontend/assets/heroes/{hero_id}/source_sheets/attack_source.png",
+      "source_skill": "frontend/assets/heroes/{hero_id}/source_sheets/skill_source.png",
+      "source_hit": "frontend/assets/heroes/{hero_id}/source_sheets/hit_source.png",
+      "source_death": "frontend/assets/heroes/{hero_id}/source_sheets/death_source.png"
+    }
+  },
+  "shared_placeholder_library": {
+    "root": "frontend/assets/placeholders/heroes/",
+    "note": "Actual placeholder images/sheets will be produced in a later asset pack. This file defines the profiles and required filenames only."
+  },
+  "profiles": {
+    "tank_standard_v1": {
+      "role": "tank",
+      "visual_intent": "frontline durable silhouette, shield/guard pose, stable readable motion",
+      "battle_scale_bias": 1.0,
+      "qa_focus": [
+        "feet anchor",
+        "damage reaction",
+        "taunt readability"
+      ]
+    },
+    "dps_melee_standard_v1": {
+      "role": "dps_melee",
+      "visual_intent": "close-range attacker silhouette, weapon swing, aggressive forward motion",
+      "battle_scale_bias": 1.0,
+      "qa_focus": [
+        "attack no drift",
+        "skill forward lunge",
+        "hit/death readable"
+      ]
+    },
+    "dps_ranged_standard_v1": {
+      "role": "dps_ranged",
+      "visual_intent": "backline ranged silhouette, bow/throw/projectile pose, readable aim line",
+      "battle_scale_bias": 0.98,
+      "qa_focus": [
+        "projectile timing",
+        "targeting line",
+        "no crop in card"
+      ]
+    },
+    "mage_aoe_standard_v1": {
+      "role": "mage_aoe",
+      "visual_intent": "caster silhouette, staff/rune gesture, area magic anticipation",
+      "battle_scale_bias": 1.0,
+      "qa_focus": [
+        "AoE state",
+        "VFX safe margins",
+        "skill scale stability"
+      ]
+    },
+    "assassin_burst_standard_v1": {
+      "role": "assassin_burst",
+      "visual_intent": "fast low-profile burst silhouette, slash/vanish attack shape",
+      "battle_scale_bias": 0.96,
+      "qa_focus": [
+        "fast attack replay",
+        "hit timing",
+        "death no flicker"
+      ]
+    },
+    "support_buffer_standard_v1": {
+      "role": "support_buffer",
+      "visual_intent": "supportive ritual silhouette, team-buff casting, calm posture",
+      "battle_scale_bias": 1.0,
+      "qa_focus": [
+        "buff/heal indicators",
+        "UI portrait clarity",
+        "no premium mismatch"
+      ]
+    },
+    "healer_standard_v1": {
+      "role": "healer",
+      "visual_intent": "healing/support silhouette, soft cast motion, visible restorative effect",
+      "battle_scale_bias": 1.0,
+      "qa_focus": [
+        "heal animation",
+        "HoT/shield test",
+        "QA Lab healing counters"
+      ]
+    },
+    "control_debuff_standard_v1": {
+      "role": "control_debuff",
+      "visual_intent": "control caster silhouette, debuff/status gesture, readable restraint effect",
+      "battle_scale_bias": 1.0,
+      "qa_focus": [
+        "stun/slow/silence states",
+        "targeting rules",
+        "effect accuracy"
+      ]
+    },
+    "hybrid_special_standard_v1": {
+      "role": "hybrid_special",
+      "visual_intent": "special hybrid silhouette, slightly broader VFX allowance without final premium identity",
+      "battle_scale_bias": 1.02,
+      "qa_focus": [
+        "mixed effects",
+        "scale consistency",
+        "no final-art assumption"
+      ]
+    }
+  }
+}
