@@ -167,13 +167,19 @@ async def main() -> int:
 
     # 3. Apply
     now_iso = datetime.utcnow().isoformat() + "Z"
-    update_doc = {
-        "$set": {
-            "is_official": False,
-            "official_conflict_resolved_at": now_iso,
-            "official_conflict_resolution": RESOLUTION_TAG,
-        },
+    # Usa $set per idempotenza. Se official_conflict_resolution è già presente
+    # (precedente run di F3), aggiorna solo i campi effettivi e traccia un
+    # timestamp di re-fix separato (official_conflict_refixed_at).
+    already_tagged = bool((pre.get("legacy") or {}).get("official_conflict_resolution"))
+    set_doc = {
+        "is_official": False,
+        "official_conflict_resolution": RESOLUTION_TAG,
     }
+    if already_tagged:
+        set_doc["official_conflict_refixed_at"] = now_iso
+    else:
+        set_doc["official_conflict_resolved_at"] = now_iso
+    update_doc = {"$set": set_doc}
     print("\n" + "=" * 78)
     print(" APPLY")
     print("=" * 78)

@@ -262,6 +262,52 @@ async def run(apply_changes: bool, official_only: bool = True) -> int:
     official_missing_ids = sorted(bible_ids - db_ids)
     legacy_ids = sorted(db_ids - bible_ids)
 
+    # ── RM1.22-K2 HARDENING ────────────────────────────────────────────
+    # Defense-in-depth: match esistenti solo per `id` esatto (NON
+    # canonical_id) e SKIP esplicito di qualunque record che sia
+    # is_legacy_placeholder=True. Report inoltre eventuali collisioni di
+    # canonical_id che puntano a Bible ids ma il doc DB è legacy.
+    #
+    # Root-cause contesto (RM1.22-K regression): il record legacy
+    # `id="borea"` ha `canonical_id="greek_borea"`. Anche se la logica
+    # attuale usa già `id ∈ bible_ids` (e `borea` NON è in CB), un futuro
+    # edit accidentale del builder potrebbe cambiare la join policy. Queste
+    # guardie HARD abortono qualunque update su legacy borea-like ids.
+    legacy_canonical_id_collisions: List[Dict[str, Any]] = []
+    hardening_blocked_updates: List[str] = []
+    for h in db_heroes:
+        if h.get("is_legacy_placeholder") is True:
+            cid = h.get("canonical_id")
+            if cid and cid in bible_ids and cid != h.get("id"):
+                legacy_canonical_id_collisions.append({
+                    "legacy_id": h.get("id"),
+                    "canonical_id": cid,
+                    "is_official": h.get("is_official"),
+                    "legacy_status": h.get("legacy_status"),
+                })
+
+    # Esplicito: filtra off qualunque legacy che per sbaglio finisse nel
+    # set `official_present_ids` (non dovrebbe mai accadere con la join
+    # attuale, ma è ridondanza di sicurezza).
+    safe_official_present_ids: List[str] = []
+    for hid in official_present_ids:
+        rec = db_by_id.get(hid) or {}
+        if rec.get("is_legacy_placeholder") is True:
+            hardening_blocked_updates.append(hid)
+            continue
+        safe_official_present_ids.append(hid)
+    # Override: da qui in poi usiamo solo i safe_* per il piano UPDATE.
+    official_present_ids = safe_official_present_ids
+
+    # HARD-GUARD: se `borea` (id esatto) comparisse nel set update, ABORT.
+    # Questa è una protezione specifica contro regressioni RM1.22-K.
+    if "borea" in official_present_ids:
+        raise RuntimeError(
+            "RM1.22-K2 HARD-GUARD: legacy 'borea' detected in "
+            "official_present_ids. Refuse to produce update plan — "
+            "questo script non deve mai canonicalizzare il legacy borea."
+        )
+
     # ── A. INSERT plan per ufficiali mancanti ──────────────────────────
     insert_plan: List[Dict[str, Any]] = []
     for hid in official_missing_ids:
@@ -378,6 +424,18 @@ async def run(apply_changes: bool, official_only: bool = True) -> int:
         "plan_insert_missing_official": insert_plan,
         "plan_canonicalize_existing_official": update_plan,
         "legacy_summary": legacy_summary,
+        "hardening_rm122k2": {
+            "legacy_canonical_id_collisions": legacy_canonical_id_collisions,
+            "legacy_canonical_id_collisions_count": len(legacy_canonical_id_collisions),
+            "hardening_blocked_updates": hardening_blocked_updates,
+            "hardening_blocked_updates_count": len(hardening_blocked_updates),
+            "hard_guard_borea_exclusion": "borea" not in official_present_ids,
+            "policy": (
+                "Match by exact id (NOT canonical_id). Skip any record with "
+                "is_legacy_placeholder=True. Hard-abort if 'borea' appears in "
+                "update plan. Report canonical_id collisions for visibility."
+            ),
+        },
         "safety": {
             "db_writes_performed": False,
             "user_heroes_modified": False,
@@ -502,6 +560,14 @@ async def run(apply_changes: bool, official_only: bool = True) -> int:
         # 2) UPDATE canonicalize existing officials (NON legacy, NON missing)
         for item in update_plan:
             hid = item["hero_id"]
+            # RM1.22-K2 HARD-GUARD: mai canonicalizzare legacy borea.
+            # Il builder già esclude legacy (via is_legacy_placeholder={$ne:True}
+            # nel match filter), ma qui abbiamo una seconda guardia esplicita.
+            if hid == "borea":
+                print(f"   ⚠ RM1.22-K2 hard-guard: skip id='borea' (legacy, "
+                      f"non canonicalizzabile).")
+                skipped_updates.append(hid)
+                continue
             payload = dict(item["update_payload"]["$set"])
             # SAFETY: filtriamo via i legacy. Se per qualunque ragione
             # un hero esistente è stato marcato legacy nel frattempo,
