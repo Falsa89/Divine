@@ -235,34 +235,65 @@ def register_player_faction_v2_routes(router, db, get_current_user):
         before = {
             "player_faction_v2": user.get("player_faction_v2"),
             "change_tokens": int(user.get("player_faction_v2_change_tokens", 1)),
+            "selected_at": user.get("player_faction_v2_selected_at"),
+            "changed_at": user.get("player_faction_v2_changed_at"),
         }
 
         now = _now_iso()
+
+        # ── RM1.24-B: Same-faction reselect → no-op safe ───────────────
+        # Se l'utente seleziona di nuovo la fazione che già possiede, NON
+        # consumare token e NON aggiornare timestamps. Ritorna success
+        # esplicito con action='no_change'. Nessuna mutation DB.
+        if (
+            before["player_faction_v2"] is not None
+            and before["player_faction_v2"] == req.faction_id
+        ):
+            return {
+                "success": True,
+                "action": "no_change",
+                "before": before,
+                "after": before,
+                "selected_card": _faction_card(definition),
+                "battle_bonus_active": False,
+                "notes": (
+                    "Stessa fazione già selezionata. Nessuna mutation, "
+                    "token cambio invariato."
+                ),
+                "audit": {
+                    "fields_written": [],
+                    "collections_touched": [],
+                },
+            }
+
         update_set: Dict[str, Any] = {
             "player_faction_v2": req.faction_id,
         }
 
         if before["player_faction_v2"] is None:
-            # Initial select
+            # Initial select — RM1.24-B: GRATUITO, NON consuma token.
             update_set["player_faction_v2_selected_at"] = now
-            # Garantisce 1 token di cambio gratuito presente, idempotente
-            if "player_faction_v2_change_tokens" not in user:
+            # Garantisce 1 token cambio gratuito presente, idempotente
+            # (previene drift se field mancante o anomalmente <1).
+            current_tokens = before["change_tokens"]
+            if (
+                "player_faction_v2_change_tokens" not in user
+                or current_tokens < 1
+            ):
                 update_set["player_faction_v2_change_tokens"] = 1
             action = "initial_select"
             tokens_after = update_set.get(
                 "player_faction_v2_change_tokens",
-                before["change_tokens"],
+                current_tokens,
             )
         else:
-            # Change → richiede token
+            # Change → consuma 1 token (devono essere >=1)
             if before["change_tokens"] < 1:
                 raise HTTPException(
                     402,
                     "Nessun token di cambio fazione disponibile. "
                     "Token futuri richiederanno evento/premium (non disponibile).",
                 )
-            if before["player_faction_v2"] == req.faction_id:
-                raise HTTPException(400, "Hai già questa fazione selezionata.")
             update_set["player_faction_v2_changed_at"] = now
             update_set["player_faction_v2_change_tokens"] = max(
                 0, before["change_tokens"] - 1,

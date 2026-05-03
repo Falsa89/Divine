@@ -1,0 +1,121 @@
+{
+  "version": "0.1",
+  "task": "RM1.24-B",
+  "title": "Player Faction V2 Selection Safe-Write QA",
+  "status": "handoff_spec_for_validation",
+  "decision": {
+    "initial_selection_consumes_token": false,
+    "free_change_rule": "First faction selection is free and does not consume the free change token. The next faction change consumes 1 token.",
+    "post_change_tokens_expected": 0,
+    "no_paid_change_now": true
+  },
+  "scope": {
+    "primary": [
+      "Audit and validate POST /api/user/faction-v2/select behavior",
+      "Patch endpoint only if it violates approved token semantics",
+      "Confirm V1 users.faction remains untouched",
+      "Confirm only users.player_faction_v2* fields are written"
+    ],
+    "out_of_scope": [
+      "No battle bonuses",
+      "No gacha changes",
+      "No Team Synergy V2 changes",
+      "No Character Bible changes",
+      "No kit JSON changes",
+      "No asset changes",
+      "No Borea activation",
+      "No live registration",
+      "No currency spend"
+    ]
+  },
+  "approved_semantics": {
+    "state_not_selected": {
+      "before": {
+        "users.player_faction_v2": null,
+        "users.player_faction_v2_change_tokens": "missing or 1"
+      },
+      "action": "POST select valid onboarding faction",
+      "after": {
+        "users.player_faction_v2": "selected faction id",
+        "users.player_faction_v2_selected_at": "set",
+        "users.player_faction_v2_change_tokens": 1,
+        "users.faction": "unchanged"
+      },
+      "notes": "Initial selection does not consume token."
+    },
+    "state_selected_with_one_token": {
+      "before": {
+        "users.player_faction_v2": "existing faction id",
+        "users.player_faction_v2_change_tokens": 1
+      },
+      "action": "POST select a different valid onboarding faction",
+      "after": {
+        "users.player_faction_v2": "new faction id",
+        "users.player_faction_v2_changed_at": "set",
+        "users.player_faction_v2_change_tokens": 0,
+        "users.faction": "unchanged"
+      },
+      "notes": "The one free change is consumed only when changing from an existing V2 faction to a different one."
+    },
+    "state_selected_with_zero_tokens": {
+      "action": "POST select a different faction",
+      "expected": "reject with clear 4xx; no mutation"
+    },
+    "same_faction_reselect": {
+      "action": "POST select current faction again",
+      "expected": "no-op success or safe 200/409, but must not consume token"
+    },
+    "locked_future_faction": {
+      "action": "POST select locked/internal faction",
+      "expected": "reject with clear 4xx; no mutation"
+    },
+    "invalid_faction": {
+      "action": "POST select unknown faction id",
+      "expected": "reject with clear 4xx; no mutation"
+    }
+  },
+  "test_user_policy": {
+    "preferred": "Use a disposable or cloned test user if available.",
+    "if_using_test_at_test_com": "Take pre-snapshot, perform at most one safe POST path only if user confirms, and provide exact rollback instructions.",
+    "do_not": [
+      "Do not spend currency.",
+      "Do not alter heroes/user_heroes/teams.",
+      "Do not run registration.",
+      "Do not trigger gacha."
+    ]
+  },
+  "required_checks": [
+    "GET /api/player-factions/v2/all returns 8 onboarding + 5 locked",
+    "GET /api/user/faction-v2/status returns coherent ui_state",
+    "POST without body remains guarded",
+    "Invalid faction id rejected",
+    "Locked faction rejected",
+    "Initial select token semantics audited/patched",
+    "Change token semantics audited/patched",
+    "users.faction legacy remains unchanged",
+    "only allowed users.player_faction_v2* fields are changed",
+    "/api/heroes remains 100",
+    "summon eligible remains 100",
+    "starter eligible remains 20",
+    "Borea remains hidden",
+    "SYNERGY_V2_BATTLE_ENABLED remains false/default"
+  ],
+  "allowed_user_fields": [
+    "player_faction_v2",
+    "player_faction_v2_selected_at",
+    "player_faction_v2_changed_at",
+    "player_faction_v2_change_tokens"
+  ],
+  "acceptance_criteria": [
+    "Endpoint semantics match approved rules.",
+    "No write occurs for invalid/locked faction.",
+    "Initial selection does not consume token.",
+    "First change consumes exactly 1 token.",
+    "Same-faction reselect does not consume token.",
+    "V1 users.faction remains unchanged.",
+    "No heroes/user_heroes/teams writes.",
+    "No gacha/battle/Borea changes.",
+    "Frontend page still renders.",
+    "Modified files have 0 new TypeScript/ruff errors."
+  ]
+}
