@@ -49,6 +49,43 @@ export default function BattleTab() {
   const [selectedConstellation, setSelectedConstellation] = useState<string | null>(null);
   const [showConstellations, setShowConstellations] = useState(false);
   const [synergies, setSynergies] = useState<any[]>([]);
+  // ── RM1.23-C: Team Synergies V2 ID-based UI (read-only fetch) ─────
+  // Mostra sinergie V2 attive + near-complete senza modificare V1.
+  // Battle apply V2 resta gated da SYNERGY_V2_BATTLE_ENABLED (default false).
+  type V2Effect = { stat: string; mode: string; value: number; target: string };
+  type V2Synergy = {
+    id: string;
+    display_name: string;
+    description?: string;
+    icon?: string;
+    rarity_tier?: string;
+    matched_hero_ids: string[];
+    matched_count: number;
+    required_count: number;
+    completion: number;
+    buffs: Record<string, number>;
+    avg_member_stars: number;
+  };
+  type V2NearComplete = {
+    id: string;
+    display_name: string;
+    matched_count: number;
+    required_count: number;
+    missing_hero_ids: string[];
+    completion: number;
+  };
+  type TeamSynergyV2Payload = {
+    active_team_synergies_v2?: V2Synergy[];
+    near_complete?: V2NearComplete[];
+    aggregated_buffs?: Record<string, number>;
+    members_resolved?: number;
+    members_skipped_legacy_or_orphan?: number;
+    enabled_synergy_count?: number;
+    team_id?: string | null;
+  };
+  const [synergiesV2, setSynergiesV2] = useState<V2Synergy[]>([]);
+  const [synergiesV2Near, setSynergiesV2Near] = useState<V2NearComplete[]>([]);
+  const [synergiesV2EnabledCount, setSynergiesV2EnabledCount] = useState<number>(0);
 
   // RM1.16-B: refresh on focus + on userHeroesVersion bump (post-summon),
   // così la formation picker mostra subito i nuovi eroi pullati senza
@@ -70,8 +107,27 @@ export default function BattleTab() {
         setSynergies([]);
       }
     };
-    if (filledCount > 0) loadSynergies();
-    else setSynergies([]);
+    // RM1.23-C: V2 fetch in parallel; failure-tolerant (no UI block).
+    const loadSynergiesV2 = async () => {
+      try {
+        const v2: TeamSynergyV2Payload = await apiCall('/api/synergies/team_v2');
+        setSynergiesV2(Array.isArray(v2?.active_team_synergies_v2) ? v2.active_team_synergies_v2 : []);
+        setSynergiesV2Near(Array.isArray(v2?.near_complete) ? v2.near_complete : []);
+        setSynergiesV2EnabledCount(typeof v2?.enabled_synergy_count === 'number' ? v2.enabled_synergy_count : 0);
+      } catch (e) {
+        // Silent fallback — non blocca la UI battaglia.
+        setSynergiesV2([]);
+        setSynergiesV2Near([]);
+      }
+    };
+    if (filledCount > 0) {
+      loadSynergies();
+      loadSynergiesV2();
+    } else {
+      setSynergies([]);
+      setSynergiesV2([]);
+      setSynergiesV2Near([]);
+    }
   }, [grid]);
 
   const loadData = async () => {
@@ -360,6 +416,77 @@ export default function BattleTab() {
               </ScrollView>
             </View>
           )}
+
+          {/* RM1.23-C: V2 Team Synergies (ID-based) — read-only display */}
+          {filledCount > 0 && (
+            <View style={s.synergiesV2Bar}>
+              <Text style={s.synergiesV2Title}>
+                {'\u2734'} SINERGIE SQUADRA V2 {synergiesV2.length > 0
+                  ? `(${synergiesV2.length})`
+                  : synergiesV2EnabledCount > 0
+                    ? `(0/${synergiesV2EnabledCount})`
+                    : ''}
+              </Text>
+              {synergiesV2.length > 0 ? (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.synergiesList}>
+                  {synergiesV2.map((syn) => {
+                    const tierColor =
+                      syn.rarity_tier === 'mythic' ? '#FF44CC'
+                      : syn.rarity_tier === 'legendary' ? '#FFB347'
+                      : syn.rarity_tier === 'epic' ? '#9966FF'
+                      : syn.rarity_tier === 'rare' ? '#44AAFF'
+                      : '#88CC88';
+                    const buffPairs = Object.entries(syn.buffs || {})
+                      .filter(([k]) => !k.endsWith('__flat'))
+                      .map(([k, v]) => `${k}+${Math.round((v as number) * 100)}%`)
+                      .join(' · ');
+                    return (
+                      <View
+                        key={syn.id}
+                        style={[s.synergyV2Chip, { borderColor: tierColor + '70', backgroundColor: tierColor + '10' }]}
+                      >
+                        <Text style={s.synergyV2Icon}>{syn.icon || '\u2734'}</Text>
+                        <View style={{ flexShrink: 1 }}>
+                          <Text style={[s.synergyV2Name, { color: tierColor }]} numberOfLines={1}>
+                            {syn.display_name}
+                          </Text>
+                          <Text style={s.synergyV2Meta} numberOfLines={1}>
+                            {syn.matched_count}/{syn.required_count}
+                            {syn.avg_member_stars ? ` · ${syn.avg_member_stars.toFixed(1)}\u2605` : ''}
+                          </Text>
+                          <Text style={s.synergyV2Buffs} numberOfLines={1}>
+                            {buffPairs || '—'}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </ScrollView>
+              ) : (
+                <Text style={s.synergyV2Empty}>
+                  Nessuna sinergia squadra V2 attiva
+                </Text>
+              )}
+
+              {synergiesV2Near.length > 0 && (
+                <View style={s.synergyV2NearWrap}>
+                  <Text style={s.synergyV2NearTitle}>Quasi attive</Text>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.synergiesList}>
+                    {synergiesV2Near.map((nc) => (
+                      <View key={nc.id} style={s.synergyV2NearChip}>
+                        <Text style={s.synergyV2NearName} numberOfLines={1}>
+                          {nc.display_name}
+                        </Text>
+                        <Text style={s.synergyV2NearMeta} numberOfLines={1}>
+                          {nc.matched_count}/{nc.required_count}
+                        </Text>
+                      </View>
+                    ))}
+                  </ScrollView>
+                </View>
+              )}
+            </View>
+          )}
         </View>
 
         {/* RIGHT: Hero Roster */}
@@ -537,6 +664,68 @@ const s = StyleSheet.create({
   synergyIcon: { fontSize: 12 },
   synergyName: { fontSize: 7, fontWeight: '800' },
   synergyBuffs: { fontSize: 6, color: COLORS.textMuted },
+
+  // ── RM1.23-C: V2 Team Synergies UI (compact, premium) ───────────────
+  synergiesV2Bar: {
+    backgroundColor: '#1A0F2E',
+    borderTopWidth: 1,
+    borderTopColor: '#FFB34730',
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+  },
+  synergiesV2Title: {
+    color: '#FFB347',
+    fontSize: 7,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+    marginBottom: 3,
+  },
+  synergyV2Chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 6,
+    borderWidth: 1,
+    gap: 4,
+    marginRight: 4,
+    minWidth: 110,
+    maxWidth: 180,
+  },
+  synergyV2Icon: { fontSize: 12 },
+  synergyV2Name: { fontSize: 8, fontWeight: '800' },
+  synergyV2Meta: { fontSize: 6, color: COLORS.textMuted, opacity: 0.85 },
+  synergyV2Buffs: { fontSize: 6, color: COLORS.gold, fontWeight: '700' },
+  synergyV2Empty: {
+    fontSize: 6,
+    color: COLORS.textMuted,
+    fontStyle: 'italic',
+    paddingVertical: 2,
+  },
+  synergyV2NearWrap: {
+    marginTop: 4,
+    borderTopWidth: 1,
+    borderTopColor: '#44444430',
+    paddingTop: 3,
+  },
+  synergyV2NearTitle: {
+    color: '#88AABB',
+    fontSize: 6,
+    fontWeight: '800',
+    marginBottom: 2,
+    letterSpacing: 0.5,
+  },
+  synergyV2NearChip: {
+    backgroundColor: '#222',
+    borderWidth: 1,
+    borderColor: '#444',
+    borderRadius: 4,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    marginRight: 3,
+  },
+  synergyV2NearName: { fontSize: 7, color: '#AAB4BB', fontWeight: '700' },
+  synergyV2NearMeta: { fontSize: 6, color: COLORS.textMuted },
   // Roster Panel
   rosterPanel: { flex: 1, gap: 3 },
   classIndicator: {
