@@ -26,6 +26,7 @@ from routes import (
 )
 from routes.synergies import register_synergy_routes
 from routes.server_time import register_server_time_routes
+from routes.player_faction_v2 import register_player_faction_v2_routes
 
 
 def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):
@@ -49,6 +50,8 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     register_achievement_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
     register_push_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
     register_synergy_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+    # RM1.24-A — Player Faction V2 (foundation, separate from V1 users.faction)
+    register_player_faction_v2_routes(router, db, get_current_user)
     # Sanctuary (home hero + affinity + constellation) — note: signature differs (no calculate_hero_power)
     register_sanctuary_routes(router, db, get_current_user, serialize_doc)
 

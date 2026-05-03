@@ -1,0 +1,143 @@
+{
+  "version": "0.1",
+  "task": "RM1.24-A",
+  "title": "Player Faction V2 Selection UI Foundation",
+  "status": "handoff_spec_for_implementation",
+  "context": {
+    "previous_decision": "Balanced battle testing for Team Synergies V2 is deferred to pre-release/balance QA.",
+    "reason": "Current enemies are placeholders and too weak; meaningful balance requires real early/mid/endgame curves, credible enemy teams, PvP comparable teams, and all major buff systems available.",
+    "current_branch": "Move to player identity/account foundation: Player Faction V2."
+  },
+  "scope": {
+    "primary": [
+      "Dedicated Player Faction selection/read screen",
+      "Use existing PLAYER_FACTION_DEFINITIONS_V2 as source of truth if present",
+      "Show faction identity, description, visual identity, and future benefits",
+      "Add safe entry point from profile/menu/account area",
+      "Prepare free 1x faction change token concept"
+    ],
+    "optional_if_low_risk": [
+      "Add read-only endpoint GET /api/player-factions/v2/all",
+      "Add authenticated endpoint GET /api/user/faction-v2/status",
+      "Add gated POST /api/user/faction-v2/select only if implementation is safe and backed up"
+    ],
+    "out_of_scope": [
+      "No battle bonuses from faction selection",
+      "No guild war/live event integration",
+      "No synergy buffs from faction selection",
+      "No monetization/change-token spending yet",
+      "No PvP/ranking changes",
+      "No Borea changes",
+      "No gacha changes"
+    ]
+  },
+  "source_of_truth": {
+    "preferred": "backend/data/synergy_definitions_v2.py -> PLAYER_FACTION_DEFINITIONS_V2",
+    "fallback": "If the existing schema differs, inspect and adapt. Do not invent final faction list blindly.",
+    "expected_existing_note": "RM1.23-A audit found PLAYER_FACTION_DEFINITIONS_V2 with 13 entries: 8 onboarding + 5 internal, all disabled/foundation at that time."
+  },
+  "ui": {
+    "route_suggestion": "player-faction",
+    "title": "Fazione del Giocatore",
+    "subtitle": "Scegli l'identità mitologica del tuo account.",
+    "entry_points": [
+      {
+        "source": "Menu",
+        "label": "Fazione"
+      },
+      {
+        "source": "Profile panel/account",
+        "label": "Fazione"
+      },
+      {
+        "source": "Future onboarding",
+        "label": "Scegli Fazione",
+        "note": "Only prepare route; do not force registration flow unless safe."
+      }
+    ],
+    "states": {
+      "not_selected": {
+        "description": "User has no selected faction yet.",
+        "primary_action": "Scegli fazione",
+        "warning": "La scelta iniziale è importante, ma sarà disponibile 1 cambio gratuito."
+      },
+      "selected": {
+        "description": "User already has a faction.",
+        "primary_action": "Visualizza dettagli",
+        "secondary_action": "Cambia fazione",
+        "change_rule": "1 free faction change token concept, not monetized in this task."
+      },
+      "locked_or_future": {
+        "description": "Faction option is internal/future, displayed locked or hidden depending schema."
+      }
+    },
+    "card_fields": [
+      "faction_id",
+      "display_name",
+      "short_description",
+      "lore_identity",
+      "visual_theme",
+      "recommended_playstyle",
+      "future_benefits_preview",
+      "status: selected/available/locked",
+      "icon/crest placeholder"
+    ],
+    "visual_direction": [
+      "premium mobile gacha",
+      "gold + deep blue base",
+      "faction crest/card style",
+      "readable on mobile landscape",
+      "no fake text baked into images"
+    ]
+  },
+  "selection_rules": {
+    "initial_selection": "Allowed when user has no selected faction.",
+    "free_change_token": "User should conceptually have 1 free change. Implement storage only if low-risk and explicit.",
+    "after_free_change": "Future paid/event/rare token, not implemented now.",
+    "not_pay_to_win": "Faction choice should be identity/community first; no immediate combat power in this task.",
+    "pre_release_note": "Future faction bonuses/events can be added after core systems stabilize."
+  },
+  "backend": {
+    "preferred_strategy": "start with read-only endpoints and UI. Add selection POST only if clearly safe.",
+    "readonly_endpoints": [
+      "GET /api/player-factions/v2/all",
+      "GET /api/user/faction-v2/status"
+    ],
+    "optional_write_endpoint": {
+      "path": "POST /api/user/faction-v2/select",
+      "requirements": [
+        "auth required",
+        "backup/audit if writing user document",
+        "only update users collection",
+        "initial select if empty",
+        "one free change token if present/implicit",
+        "never touch heroes/user_heroes/teams",
+        "return clear status"
+      ]
+    },
+    "storage_suggestion": {
+      "users.player_faction_v2": "selected faction id",
+      "users.player_faction_selected_at": "ISO datetime",
+      "users.player_faction_changed_at": "ISO datetime when changed",
+      "users.faction_change_tokens": "integer, default 1 if missing if write endpoint implemented"
+    }
+  },
+  "borea_policy": {
+    "do_not_touch": true,
+    "notes": "Player faction task must not affect Borea hidden/pending status or legacy Borea."
+  },
+  "acceptance_criteria": [
+    "Faction page opens without crash.",
+    "Faction list is loaded from existing PLAYER_FACTION_DEFINITIONS_V2 or safely adapted endpoint.",
+    "Selected/unselected UI state renders correctly.",
+    "Menu/profile entry point exists.",
+    "No battle/gacha/synergy power is applied.",
+    "If selection write endpoint is implemented, it only touches current user document and is guarded.",
+    "No DB writes if the task is implemented as read-only foundation.",
+    "Borea remains hidden and non-summonable.",
+    "/api/heroes remains 100.",
+    "summon eligible remains 100.",
+    "starter eligible remains 20.",
+    "No TypeScript errors in modified files."
+  ]
+}

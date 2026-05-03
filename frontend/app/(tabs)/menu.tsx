@@ -47,6 +47,7 @@ const CATEGORIES = [
     title: 'Sociale',
     items: [
       { label: 'Gilda & Fazioni', icon: '\uD83C\uDFDB\uFE0F', route: '/guild', gradient: ['#6644FF', '#4422CC'] as const },
+      { label: 'Fazione del Giocatore', icon: '\u2694\uFE0F', route: '/player-faction', gradient: ['#FFD700', '#3D5AFE'] as const },
       { label: 'Guerra tra Gilde', icon: '\u2694\uFE0F', route: '/gvg', gradient: ['#FF4444', '#CC2222'] as const },
       { label: 'Raid Cooperativi', icon: '\uD83D\uDC32', route: '/raid', gradient: ['#FF5544', '#CC3322'] as const },
       { label: 'Conquista Territori', icon: '\uD83C\uDFAF', route: '/territory', gradient: ['#CC4488', '#992266'] as const },
