@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """
-RM1.20-D — Mandatory pre-apply backup of roster collections.
+RM1.20-D / RM1.20-E — Mandatory pre-apply backup of roster collections.
 Read-only export of heroes/user_heroes/teams/users to a JSON file in
 backend/backups/. Computes SHA256 of the file. Does NOT touch DB.
 
 Usage:
-    cd /app && python backend/scripts/backup_roster_collections.py
+    cd /app && python backend/scripts/backup_roster_collections.py [--label LABEL]
+
+Default label: "pre_apply".
 """
 from __future__ import annotations
+import argparse
 import asyncio
 import hashlib
 import json
@@ -44,6 +47,14 @@ def _scrub(d):
 
 
 async def main() -> int:
+    ap = argparse.ArgumentParser(description="RM1.20-D/E — Roster collections backup")
+    ap.add_argument(
+        "--label",
+        default="pre_apply",
+        help="Label for the backup filename (e.g. rm120d_pre_legacy_soft_deactivation, rm120e_pre_official_roster_import).",
+    )
+    args = ap.parse_args()
+
     mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017")
     db_name = os.getenv("DB_NAME", "divine_waifus")
     client = AsyncIOMotorClient(mongo_url)
@@ -71,7 +82,7 @@ async def main() -> int:
     payload["counts"] = counts
 
     ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-    out_path = BACKUPS_DIR / f"rm120d_pre_legacy_soft_deactivation_{ts}.json"
+    out_path = BACKUPS_DIR / f"{args.label}_{ts}.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, default=str, ensure_ascii=False)
 

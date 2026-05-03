@@ -243,7 +243,7 @@ def _redact_mongo(url: str) -> str:
 # Main
 # ════════════════════════════════════════════════════════════════════════
 
-async def run(apply_changes: bool) -> int:
+async def run(apply_changes: bool, official_only: bool = True) -> int:
     mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017")
     db_name = os.getenv("DB_NAME", "divine_waifus")
     client = AsyncIOMotorClient(mongo_url)
@@ -452,22 +452,110 @@ async def run(apply_changes: bool) -> int:
             print(
                 f"   ❌ Aborto: ROSTER_IMPORT_APPLY_CONFIRM non valida.\n"
                 f"   Atteso: {expected}\n"
-                f"   Per eseguire davvero (in fase futura, NON in RM1.20-B):\n"
-                f"     {report['future_apply_command']}"
+                f"   Per eseguire davvero:\n"
+                f"     {report['future_apply_command']} --official-only"
             )
             client.close()
             return 2
-        # In RM1.20-B il path di scrittura è disabilitato by-design.
-        print(
-            "   ❌ Aborto: in RM1.20-B il path di scrittura è disabilitato "
-            "by-design. NESSUNA INSERT/UPDATE eseguita su heroes."
-        )
-        print(
-            "   Sblocco previsto in RM1.20-C dopo i filtri di visibilità "
-            "runtime."
-        )
+
+        # RM1.20-E: in questa task accettiamo SOLO --official-only.
+        # Il path "non-official-only" è riservato a future revisioni.
+        if not official_only:
+            print(
+                "   ❌ Aborto: in RM1.20-E è abilitato SOLO `--official-only`.\n"
+                "   Comando corretto:\n"
+                "     ROSTER_IMPORT_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_INSERT_OFFICIAL_HEROES \\\n"
+                "     python backend/scripts/plan_official_roster_import.py --apply --official-only"
+            )
+            client.close()
+            return 3
+
+        # ── Apply LIVE: INSERT missing + canonicalize existing officials ──
+        # Garanzia: legacy NON vengono toccati. Match filter usa `id` su
+        # heroes che NON sono is_legacy_placeholder=true per le UPDATE,
+        # e usa upsert via insertOne (NOT update_one) per gli INSERT —
+        # SE l'eroe esiste già con quell'id l'INSERT andrà in conflitto e
+        # quel item viene saltato (safe-by-default, mai overwrite).
+        applied_at = datetime.utcnow().isoformat() + "Z"
+        inserted_count = 0
+        canonicalized_count = 0
+        skipped_inserts: List[str] = []
+        skipped_updates: List[str] = []
+
+        # 1) INSERT missing officials (pending_assets, hidden)
+        for item in insert_plan:
+            payload = dict(item["insert_payload"])
+            payload["import_status"] = "imported_pending_assets"
+            payload["imported_at"] = applied_at
+            # Pre-check: non sovrascrivere heroes esistenti con stesso id.
+            existing = await db.heroes.find_one({"id": payload["id"]}, {"_id": 1})
+            if existing is not None:
+                skipped_inserts.append(payload["id"])
+                continue
+            try:
+                await db.heroes.insert_one(payload)
+                inserted_count += 1
+            except Exception as exc:  # noqa: BLE001
+                print(f"   ⚠ insert error {payload['id']}: {exc}")
+                skipped_inserts.append(payload["id"])
+
+        # 2) UPDATE canonicalize existing officials (NON legacy, NON missing)
+        for item in update_plan:
+            hid = item["hero_id"]
+            payload = dict(item["update_payload"]["$set"])
+            # SAFETY: filtriamo via i legacy. Se per qualunque ragione
+            # un hero esistente è stato marcato legacy nel frattempo,
+            # NON lo tocchiamo.
+            res = await db.heroes.update_one(
+                {"id": hid, "is_legacy_placeholder": {"$ne": True}},
+                {"$set": payload},
+            )
+            if res.matched_count == 1:
+                canonicalized_count += 1
+            else:
+                skipped_updates.append(hid)
+                print(
+                    f"   ⚠ skip canonicalize {hid}: matched={res.matched_count} "
+                    f"modified={res.modified_count}"
+                )
+
+        # Aggiorna safety + apply manifest
+        report["safety"]["db_writes_performed"] = True
+        report["apply_flag_executed"] = True
+        report["dry_run"] = False
+        report["apply_manifest"] = {
+            "applied_at": applied_at,
+            "apply_mode": "official_only",
+            "inserted_count": inserted_count,
+            "canonicalized_count": canonicalized_count,
+            "skipped_inserts": skipped_inserts,
+            "skipped_updates": skipped_updates,
+            "legacy_modified": 0,
+            "user_heroes_modified": 0,
+            "teams_modified": 0,
+            "users_modified": 0,
+            "heroes_deleted": 0,
+        }
+
+        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        out_path = REPORTS_DIR / f"official_roster_import_APPLIED_{ts}.json"
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(report, f, indent=2, default=str, ensure_ascii=False)
+
+        print()
+        print(" =====================================================")
+        print(f"   APPLY COMPLETATO (official_only mode)")
+        print(f"   INSERT (missing officials):     {inserted_count}/{len(insert_plan)}")
+        print(f"   UPDATE (canonicalize existing): {canonicalized_count}/{len(update_plan)}")
+        print(f"   skipped inserts (already exist): {len(skipped_inserts)}")
+        print(f"   skipped updates (legacy/match):  {len(skipped_updates)}")
+        print(f"   legacy modified:                 0")
+        print(f"   heroes deleted:                  0")
+        print(f"   user_heroes / teams / users:     UNTOUCHED")
+        print(f"   Manifest JSON: {out_path}")
+        print(" =====================================================")
         client.close()
-        return 3
+        return 0
 
     # ── Scrittura JSON (DRY-RUN) ──────────────────────────────────────
     ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
@@ -502,14 +590,21 @@ def main() -> int:
         "--apply",
         action="store_true",
         help=(
-            "FUTURO: applica il piano sul DB (richiede anche env var "
+            "Applica il piano sul DB (richiede anche env var "
             "ROSTER_IMPORT_APPLY_CONFIRM=I_UNDERSTAND_THIS_WILL_INSERT_OFFICIAL_HEROES). "
-            "NON eseguire in RM1.20-B: il path di scrittura è disabilitato "
-            "by-design in questo task."
+            "In RM1.20-E è abilitato SOLO con --official-only."
+        ),
+    )
+    ap.add_argument(
+        "--official-only",
+        action="store_true",
+        help=(
+            "RM1.20-E: applica SOLO INSERT degli ufficiali mancanti + "
+            "UPDATE canonicalize dei 2 ufficiali già presenti. Mai legacy."
         ),
     )
     args = ap.parse_args()
-    return asyncio.run(run(apply_changes=args.apply))
+    return asyncio.run(run(apply_changes=args.apply, official_only=args.official_only))
 
 
 if __name__ == "__main__":
