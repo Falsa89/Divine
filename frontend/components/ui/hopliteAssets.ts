@@ -57,6 +57,16 @@
  */
 import { ImageSourcePropType } from 'react-native';
 
+// RM1.22-D — Wiring placeholder per gli eroi ufficiali 1★/2★ (placeholder_dev).
+// I contratti seguenti sono di tipo placeholder_dev e NON devono essere
+// considerati final: vanno spreaddati DOPO Hoplite/Berserker per non
+// sovrascrivere mai i contratti canonici. Vedi
+// docs/divine/12_PLACEHOLDER_CONTRACT_WIRING_1STAR_2STAR.md.
+import {
+  PLACEHOLDER_HERO_ASSET_REGISTRY_1STAR_2STAR,
+  PLACEHOLDER_HERO_CONTRACTS_1STAR_2STAR,
+} from './placeholderHeroContracts1star2star';
+
 // ════════════════════════════════════════════════════════════════════
 // HOPLITE — record canonico Bible (preservato 100%)
 // ════════════════════════════════════════════════════════════════════
@@ -243,6 +253,10 @@ const HERO_ASSET_REGISTRY: Record<string, HeroAssetMap> = {
     hit: NORSE_BERSERKER_HIT,
     death: NORSE_BERSERKER_DEATH,
   },
+  // RM1.22-D — Spread placeholder 1★/2★ (placeholder_dev). Posto DOPO
+  // Hoplite/Berserker: gli ID canonici sono distinti, quindi non c'è
+  // mai sovrascrittura. Vedi placeholderHeroContracts1star2star.ts.
+  ...PLACEHOLDER_HERO_ASSET_REGISTRY_1STAR_2STAR,
 };
 
 /** Lookup hero ID dalla coppia (id, name). Risolve alias name. */
@@ -780,6 +794,10 @@ export const HERO_CONTRACTS: Record<string, HeroAssetContract> = {
       },
     },
   },
+  // RM1.22-D — Spread contratti placeholder 1★/2★ (placeholder_dev). Posto
+  // DOPO i contratti canonici Hoplite/Berserker: ID distinti → nessuna
+  // sovrascrittura possibile. NON marcare questi asset come final.
+  ...PLACEHOLDER_HERO_CONTRACTS_1STAR_2STAR,
 };
 
 /** Ritorna il contratto per l'eroe, o DEFAULT_HERO_CONTRACT. */

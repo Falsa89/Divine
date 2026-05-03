@@ -32,6 +32,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BattleSprite from '../components/BattleSprite';
 import { validateHeroContract } from '../components/ui/hopliteAssets';
+// RM1.22-D — Lab options placeholder 1★/2★ (placeholder_dev).
+import { PLACEHOLDER_LAB_HERO_OPTIONS_1STAR_2STAR } from '../components/ui/placeholderHeroContracts1star2star';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Tipi locali
@@ -92,6 +94,10 @@ type LabHero = {
 const LAB_HERO_OPTIONS: LabHero[] = [
   { id: 'greek_hoplite',   name: 'Hoplite',   element: 'earth', faction: 'greek', rarity: 3, role: 'Tank' },
   { id: 'norse_berserker', name: 'Berserker', element: 'fire',  faction: 'norse', rarity: 3, role: 'DPS Melee' },
+  // RM1.22-D — Placeholder 1★/2★ (placeholder_dev): lab-only metadata.
+  // Aggiunti DOPO Hoplite/Berserker per non alterare gli indici fissi
+  // (LAB_HERO_OPTIONS[0]=Hoplite, [1]=Berserker) usati altrove nel file.
+  ...PLACEHOLDER_LAB_HERO_OPTIONS_1STAR_2STAR,
 ];
 
 const ALL_ROLES: (HeroRole | 'All')[] = [
