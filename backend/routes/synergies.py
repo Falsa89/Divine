@@ -197,6 +197,31 @@ def register_synergy_routes(router, db, get_current_user, serialize_doc, calcula
         owned_canonical_ids = set(owned_canonical.keys())
         enabled = get_enabled_team_synergies_v2()
 
+        # ── RM1.23-C2: micro-enrichment read-only per Hero Mini-Cards ─────
+        # Raccogliamo TUTTI i canonical_ids richiesti dalle 10 sinergie attive
+        # e mappiamo in un'unica query → image_url + hero doc id.
+        all_required_canonicals: set = set()
+        for syn in enabled:
+            for cid in (syn.get("required_hero_ids") or []):
+                all_required_canonicals.add(cid)
+        # Match per canonical_id O per id (fallback legacy es. 'borea')
+        canonical_list = list(all_required_canonicals)
+        hero_docs_for_required = await db.heroes.find(
+            {"$or": [
+                {"canonical_id": {"$in": canonical_list}},
+                {"id": {"$in": canonical_list}},
+            ]},
+            {"image_base64": 0, "sprite_sheet_base64": 0},
+        ).to_list(None)
+        # canonical_id → hero doc (preferiamo doc canonical, escludiamo legacy)
+        canonical_to_hero_doc: dict = {}
+        for hd in hero_docs_for_required:
+            if hd.get("is_legacy_placeholder") is True:
+                continue
+            cc = hd.get("canonical_id") or (hd.get("id") if hd.get("id") in _BIBLE_BY_ID else None)
+            if cc and cc in all_required_canonicals and cc not in canonical_to_hero_doc:
+                canonical_to_hero_doc[cc] = hd
+
         out = []
         for syn in enabled:
             req = list(syn.get("required_hero_ids") or [])
@@ -232,6 +257,9 @@ def register_synergy_routes(router, db, get_current_user, serialize_doc, calcula
                 copies = owned_canonical.get(cid, [])
                 best_stars = max((c["stars"] for c in copies), default=0)
                 bible_entry = _BIBLE_BY_ID.get(cid) or {}
+                hero_doc = canonical_to_hero_doc.get(cid) or {}
+                # RM1.23-C2: enrich with hero_id + image_url + rarity + element + faction
+                # for graphical Hero Mini-Cards (read-only).
                 members.append({
                     "canonical_id": cid,
                     "display_name": (bible_entry.get("display_name")
@@ -240,6 +268,13 @@ def register_synergy_routes(router, db, get_current_user, serialize_doc, calcula
                     "in_team": cid in in_team_canonical,
                     "best_stars": best_stars,
                     "max_stars": int(bible_entry.get("max_stars") or 5),
+                    # Mini-card visual fields:
+                    "hero_id": hero_doc.get("id") or cid,
+                    "image_url": hero_doc.get("image_url"),
+                    "rarity": int(hero_doc.get("rarity") or bible_entry.get("native_rarity") or 1),
+                    "element": hero_doc.get("element") or bible_entry.get("element"),
+                    "faction": hero_doc.get("faction") or bible_entry.get("faction"),
+                    "asset_status": hero_doc.get("asset_status"),
                 })
 
             out.append({

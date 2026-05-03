@@ -22,6 +22,7 @@ import {
 import { Stack, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { apiCall } from '../utils/api';
+import SynergyHeroMiniCard, { SynergyHeroMember } from '../components/ui/SynergyHeroMiniCard';
 
 const COLORS = {
   bg: '#0E0917',
@@ -38,14 +39,7 @@ const COLORS = {
 };
 
 type V2Effect = { stat: string; mode: string; value: number; target: string };
-type Member = {
-  canonical_id: string;
-  display_name: string;
-  owned: boolean;
-  in_team: boolean;
-  best_stars: number;
-  max_stars: number;
-};
+type Member = SynergyHeroMember;
 type CodexSynergy = {
   id: string;
   display_name: string;
@@ -128,6 +122,8 @@ export default function SynergyCodexScreen() {
             members: (s.required_hero_ids || []).map((cid: string) => ({
               canonical_id: cid, display_name: cid, owned: false, in_team: false,
               best_stars: 0, max_stars: 5,
+              hero_id: cid, image_url: null, rarity: 1,
+              element: null, faction: null,
             })),
           }));
           setSynergies(fallback);
@@ -360,21 +356,9 @@ function SynergyCard({ syn }: { syn: CodexSynergy }) {
       </View>
 
       <View style={s.membersRow}>
-        {syn.members.map((m) => {
-          const c = m.in_team ? '#44DD88' : m.owned ? '#44AAFF' : '#666';
-          return (
-            <View key={m.canonical_id} style={[s.memberPill, { borderColor: c }]}>
-              <Text style={[s.memberName, { color: c }]} numberOfLines={1}>
-                {m.display_name}
-              </Text>
-              {m.owned ? (
-                <Text style={s.memberStars}>{m.best_stars}/{m.max_stars}⭐</Text>
-              ) : (
-                <Text style={s.memberStars}>—</Text>
-              )}
-            </View>
-          );
-        })}
+        {syn.members.map((m) => (
+          <SynergyHeroMiniCard key={m.canonical_id} member={m} variant="tile" />
+        ))}
       </View>
 
       {syn.effects && syn.effects.length > 0 && (
@@ -449,7 +433,7 @@ const s = StyleSheet.create({
   statusBadgeText: { fontSize: 9, fontWeight: '900', letterSpacing: 0.4 },
   synCardMeta: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginTop: 8 },
   metaItem: { color: COLORS.muted, fontSize: 10 },
-  membersRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginTop: 8 },
+  membersRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 10 },
   memberPill: {
     paddingHorizontal: 8, paddingVertical: 4, borderWidth: 1, borderRadius: 6,
     flexDirection: 'row', alignItems: 'center', gap: 4, maxWidth: 220,

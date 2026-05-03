@@ -13,6 +13,7 @@ import TranscendenceStars from '../components/ui/TranscendenceStars';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
 import HeroFramedImage from '../components/ui/HeroFramedImage';
 import { hasHeroUiContract } from '../components/ui/hopliteAssets';
+import SynergyHeroMiniCard from '../components/ui/SynergyHeroMiniCard';
 import { COLORS, RARITY, ELEMENTS, CLASSES } from '../constants/theme';
 
 const STAT_LABELS: Record<string, string> = {
@@ -524,19 +525,13 @@ export default function HeroDetailScreen() {
                     </View>
                     {syn.members && (
                       <View style={s.synMembersRow}>
-                        {syn.members.map((m: any) => {
-                          const mc = m.in_team ? '#44DD88' : m.owned ? '#44AAFF' : '#666';
-                          return (
-                            <View key={m.canonical_id} style={[s.synMemberPill, { borderColor: mc }]}>
-                              <Text style={[s.synMemberName, { color: mc }]} numberOfLines={1}>
-                                {m.display_name}
-                              </Text>
-                              <Text style={s.synMemberStars}>
-                                {m.owned ? `${m.best_stars}/${m.max_stars}\u2B50` : '\u2014'}
-                              </Text>
-                            </View>
-                          );
-                        })}
+                        {syn.members.map((m: any) => (
+                          <SynergyHeroMiniCard
+                            key={m.canonical_id}
+                            member={m}
+                            variant="compact"
+                          />
+                        ))}
                       </View>
                     )}
                     {syn.effects && syn.effects.length > 0 && (
@@ -727,7 +722,7 @@ const s = StyleSheet.create({
   synSynDesc: { color: 'rgba(255,255,255,0.5)', fontSize: 9, marginTop: 2 },
   synStatusBadge: { paddingHorizontal: 7, paddingVertical: 2, borderWidth: 1, borderRadius: 6 },
   synStatusText: { fontSize: 9, fontWeight: '900' },
-  synMembersRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 6 },
+  synMembersRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8 },
   synMemberPill: {
     paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderRadius: 4,
     flexDirection: 'row', alignItems: 'center', gap: 3, maxWidth: 180,
