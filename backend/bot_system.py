@@ -16,6 +16,14 @@ load_dotenv()
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
+# RM1.22-F3 — bot auto-pull deve rispettare il filtro di visibilità runtime
+# usato dal gacha utente. Garantisce che i bot NON ottengano:
+#   • legacy placeholder (soft-deactivated, is_legacy_placeholder=True)
+#   • official pending (asset_status="pending_assets", show_in_summon=False)
+#   • Borea legacy (is_official=False post RM1.22-F3 fix) e canonical pending
+# Helper read-only, zero side-effect.
+from utils.hero_visibility import should_show_in_summon  # noqa: E402
+
 # emergentintegrations is optional - if the private package isn't reachable we
 # gracefully degrade to the built-in fallback chat lines instead of crashing.
 try:
@@ -218,20 +226,32 @@ async def create_bot_profile(db, tier: str, server_id: str = "default") -> dict:
     await db.users.insert_one(bot_user)
     
     # Give heroes based on tier
-    all_heroes = await db.heroes.find({}).to_list(100)
+    # RM1.22-F3 — Filtro visibilità: i bot ottengono solo eroi che il
+    # gacha utente esporrebbe (should_show_in_summon True). Esclude
+    # legacy placeholder, official pending, hidden/non-obtainable.
+    # Removed limit `to_list(100)` (clipping silenzioso con roster > 100).
+    all_heroes = await db.heroes.find({}, {"image_base64": 0}).to_list(None)
+    summon_eligible_pool = [h for h in all_heroes if should_show_in_summon(h)]
     max_rarity = config["max_rarity"]
-    eligible = [h for h in all_heroes if h["rarity"] <= max_rarity]
-    
+    eligible = [h for h in summon_eligible_pool if h["rarity"] <= max_rarity]
+
     num_heroes = random.randint(5, 12) if tier == "low" else random.randint(10, 20) if tier == "medium" else random.randint(15, 25) if tier == "medium_high" else random.randint(20, 30)
-    
-    selected = random.sample(eligible, min(num_heroes, len(eligible)))
-    # High tier gets guaranteed 6-stars
+
+    if not eligible:
+        # Pool vuoto: bot creato senza eroi iniziali. Skip graceful (non-fatal).
+        print(f"[bot_system] Pool eligible vuoto per tier={tier}, max_rarity={max_rarity}: bot {bot_id} senza heroes iniziali.")
+        selected = []
+    else:
+        selected = random.sample(eligible, min(num_heroes, len(eligible)))
+    # High tier gets guaranteed 6-stars (only if eligible 6★ exists)
     if tier == "high":
-        divine_heroes = [h for h in all_heroes if h["rarity"] == 6]
-        selected.extend(random.sample(divine_heroes, min(3, len(divine_heroes))))
+        divine_heroes = [h for h in summon_eligible_pool if h["rarity"] == 6]
+        if divine_heroes:
+            selected.extend(random.sample(divine_heroes, min(3, len(divine_heroes))))
     if tier in ["medium_high", "high"]:
-        mythic_heroes = [h for h in all_heroes if h["rarity"] == 5]
-        selected.extend(random.sample(mythic_heroes, min(4, len(mythic_heroes))))
+        mythic_heroes = [h for h in summon_eligible_pool if h["rarity"] == 5]
+        if mythic_heroes:
+            selected.extend(random.sample(mythic_heroes, min(4, len(mythic_heroes))))
     
     bot_heroes = []
     for hero in selected:
@@ -328,23 +348,30 @@ async def bot_action_cycle(db, bot_user: dict):
     
     elif action_roll < 0.60:
         # Gacha pull (if has gems)
+        # RM1.22-F3 — Filtro visibilità: stesso pool del gacha utente.
+        # Bot non possono ottenere legacy/pending/hidden heroes.
         user = await db.users.find_one({"id": bot_id})
         banner = config["gacha_banner"]
         cost = 100 if banner == "standard" else 120 if banner == "elemental" else 200
         if user and user.get("gems", 0) >= cost:
-            all_heroes = await db.heroes.find({}).to_list(100)
+            all_heroes = await db.heroes.find({}, {"image_base64": 0}).to_list(None)
+            summon_eligible_pool = [h for h in all_heroes if should_show_in_summon(h)]
             max_r = config["max_rarity"]
             rarity = random.choices([1,2,3,4,5,6], weights=[0.3,0.3,0.2,0.12,0.06,0.02])[0]
             rarity = min(rarity, max_r)
-            eligible = [h for h in all_heroes if h["rarity"] == rarity]
+            eligible = [h for h in summon_eligible_pool if h["rarity"] == rarity]
             if not eligible:
-                eligible = [h for h in all_heroes if h["rarity"] <= max_r]
+                # Fallback 1: stesso max_r, qualsiasi rarity ≤ max_r
+                eligible = [h for h in summon_eligible_pool if h["rarity"] <= max_r]
             if eligible:
                 hero = random.choice(eligible)
                 uh = {"id": str(uuid.uuid4()), "user_id": bot_id, "hero_id": hero["id"], "level": 1, "experience": 0, "stars": hero["rarity"], "obtained_at": datetime.utcnow()}
                 await db.user_heroes.insert_one(uh)
                 await db.users.update_one({"id": bot_id}, {"$inc": {"gems": -cost}})
                 actions_done.append(f"Gacha: {hero['name']} ({hero['rarity']}★)")
+            else:
+                # Pool vuoto a tutti i livelli: skip graceful, niente write.
+                actions_done.append("Gacha skip: pool eligible vuoto")
     
     elif action_roll < 0.75:
         # Territory attack
