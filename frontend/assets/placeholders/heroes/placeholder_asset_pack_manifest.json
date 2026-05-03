@@ -1,0 +1,458 @@
+{
+  "version": "0.1",
+  "status": "placeholder_dev_assets",
+  "task_origin": "RM1.22-B",
+  "purpose": "Shared role-based placeholder asset pack for development/testing before final hero art.",
+  "non_normative_for_final_art": true,
+  "policy": {
+    "shared_assets_only": true,
+    "do_not_mark_as_final": true,
+    "do_not_activate_pending_heroes_from_this_pack": true,
+    "copy_to_hero_folders_only_in_later_assignment_task": true,
+    "sprite_sheets_have_transparent_background": true,
+    "sprite_sheets_have_no_text": true
+  },
+  "profiles": {
+    "tank_standard_v1": {
+      "role": "tank",
+      "root": "frontend/assets/placeholders/heroes/tank_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "dps_melee_standard_v1": {
+      "role": "dps_melee",
+      "root": "frontend/assets/placeholders/heroes/dps_melee_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "dps_ranged_standard_v1": {
+      "role": "dps_ranged",
+      "root": "frontend/assets/placeholders/heroes/dps_ranged_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "mage_aoe_standard_v1": {
+      "role": "mage_aoe",
+      "root": "frontend/assets/placeholders/heroes/mage_aoe_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "assassin_burst_standard_v1": {
+      "role": "assassin_burst",
+      "root": "frontend/assets/placeholders/heroes/assassin_burst_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "support_buffer_standard_v1": {
+      "role": "support_buffer",
+      "root": "frontend/assets/placeholders/heroes/support_buffer_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "healer_standard_v1": {
+      "role": "healer",
+      "root": "frontend/assets/placeholders/heroes/healer_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "control_debuff_standard_v1": {
+      "role": "control_debuff",
+      "root": "frontend/assets/placeholders/heroes/control_debuff_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    },
+    "hybrid_special_standard_v1": {
+      "role": "hybrid_special",
+      "root": "frontend/assets/placeholders/heroes/hybrid_special_standard_v1/",
+      "files": [
+        "README_PLACEHOLDER.md",
+        "card.png",
+        "combat_base.png",
+        "detail.png",
+        "fullscreen.png",
+        "runtime/attack_sheet.png",
+        "runtime/battle_animations.json",
+        "runtime/death_sheet.png",
+        "runtime/hit_sheet.png",
+        "runtime/idle_sheet.png",
+        "runtime/skill_sheet.png",
+        "splash.jpg",
+        "splash.png",
+        "transparent.png"
+      ],
+      "runtime_frame_width": 640,
+      "runtime_frame_height": 768,
+      "animations": {
+        "idle": {
+          "frames": 6,
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": 5,
+          "fps": 12,
+          "loop": false
+        },
+        "skill": {
+          "frames": 6,
+          "fps": 12,
+          "loop": false
+        },
+        "hit": {
+          "frames": 5,
+          "fps": 10,
+          "loop": false
+        },
+        "death": {
+          "frames": 6,
+          "fps": 8,
+          "loop": false
+        }
+      }
+    }
+  }
+}
