@@ -24,7 +24,7 @@
  */
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, Image, ImageSourcePropType } from 'react-native';
-import { heroPortraitSource } from './hopliteAssets';
+import { getHeroVariant, heroPortraitSource } from './hopliteAssets';
 
 export type SynergyHeroMember = {
   canonical_id: string;
@@ -35,6 +35,9 @@ export type SynergyHeroMember = {
   max_stars: number;
   hero_id?: string | null;
   image_url?: string | null;
+  /** RM1.23-C3: opzionale per future API che mandano l'image inline */
+  image?: string | null;
+  hero_image?: string | null;
   rarity?: number | null;
   element?: string | null;
   faction?: string | null;
@@ -95,9 +98,64 @@ function initials(name: string): string {
 }
 
 /**
- * Avatar con immagine resolver + fallback iniziali. Mantiene preserva-volto
- * via resizeMode='cover' (focus center). HeroPortrait NON usato qui per
- * mantenere il componente leggero (no useRig/animation overhead in lista).
+ * RM1.23-C3 — Risolutore immagine prioritizzato per mini-card.
+ * Priority order:
+ *   1) getHeroVariant(canonical_id, name, 'portrait') — restituisce splash.jpg
+ *      (vera arte hero) tramite HERO_CONTRACTS placeholder/canonical.
+ *      Fallback chain interna: portrait → splash → card → detail.
+ *   2) getHeroVariant(canonical_id, name, 'splash') — esplicito su splash
+ *      se il contratto non ha portrait registrata.
+ *   3) heroPortraitSource(image_url, id, name) — sentinel/URL remoto +
+ *      fallback HERO_ASSET_REGISTRY ('card' role, ultima spiaggia).
+ *   4) {uri: image | image_url | hero_image} — campo backend remoto.
+ *   5) null → fallback iniziali.
+ *
+ * Usa display_name come alias-recovery (Hoplite/Berserker name aliases).
+ */
+function resolveMiniCardImage(
+  member: SynergyHeroMember,
+): ImageSourcePropType | null {
+  const resolvedId =
+    (member.hero_id && String(member.hero_id)) ||
+    (member.canonical_id && String(member.canonical_id)) ||
+    null;
+  const name = member.display_name || null;
+
+  // 1) portrait variant via contract (splash.jpg per placeholder, art canonica per Hoplite/Berserker)
+  const portraitSrc = getHeroVariant(resolvedId, name, 'portrait');
+  if (portraitSrc) return portraitSrc;
+
+  // 2) esplicito splash variant (alcune contratti potrebbero avere solo splash)
+  const splashSrc = getHeroVariant(resolvedId, name, 'splash');
+  if (splashSrc) return splashSrc;
+
+  // 3) sentinel-based / legacy registry resolver
+  const legacy = heroPortraitSource(
+    member.image_url || member.image || member.hero_image,
+    resolvedId,
+    name,
+  );
+  if (legacy && (typeof legacy === 'number' ||
+      (typeof legacy === 'object' && (legacy as any).uri && (legacy as any).uri !== ''))) {
+    return legacy;
+  }
+
+  // 4) URL remoto raw (image / image_url / hero_image)
+  const remote = member.image || member.image_url || member.hero_image;
+  if (remote && typeof remote === 'string' && remote.length > 0 && !remote.startsWith('asset:')) {
+    return { uri: remote };
+  }
+
+  return null;
+}
+
+/**
+ * Avatar con immagine resolver + fallback iniziali.
+ *
+ * Image rendering: resizeMode='cover' con focusY ~0.30 implicito tramite
+ * objectPosition simulato via translateY (volto leggibile per portrait
+ * 2:3 splash). RN non supporta nativo objectPosition: usiamo crop overflow
+ * con immagine extra-tall per preservare il volto centrato sopra il busto.
  */
 function MiniAvatar({
   member,
@@ -109,18 +167,32 @@ function MiniAvatar({
   borderColor: string;
 }) {
   const [errored, setErrored] = useState(false);
-  const src: ImageSourcePropType = useMemo(
-    () => heroPortraitSource(member.image_url, member.hero_id, member.display_name),
-    [member.image_url, member.hero_id, member.display_name],
+  const src: ImageSourcePropType | null = useMemo(
+    () => resolveMiniCardImage(member),
+    [member.image_url, member.image, member.hero_image, member.hero_id, member.canonical_id, member.display_name],
   );
   const elemTint = (member.element && ELEMENT_TINT[String(member.element).toLowerCase()]) || '#3A2A5C44';
 
-  // Determina se il source è "valido" (ha uri non-vuoto o è require numerico).
+  // Determina se il source è valido (require number o uri non-vuoto).
   const hasValidSource =
     !errored && src != null &&
     (typeof src === 'number' || (typeof src === 'object' && (src as any).uri && (src as any).uri !== ''));
 
   const radius = size / 2;
+  // Per preservare il volto in portrait 2:3 (splash.jpg) dentro un cerchio:
+  // - srcAspect ≈ 0.667 (W/H), quindi se renderizziamo come square cover lo
+  //   scaledHeight = size, scaledWidth = size * 0.667 ⇒ overflow orizzontale
+  //   negativo (no, height domina). Il volto è tipicamente nel quadrante
+  //   superiore (y ≈ 0.25-0.35 della splash). resizeMode='cover' su un
+  //   container quadrato croppa il body inferiore (mostra busto/spalle
+  //   senza volto). Soluzione: rendiamo l'immagine PIÙ ALTA del container e
+  //   la spostiamo in alto con translateY negativo per portare il volto
+  //   al centro del cerchio.
+  const overheight = Math.round(size * 0.45); // 45% extra height
+  const imgH = size + overheight;
+  const imgW = size; // forza width = container per evitare crop laterale
+  const imgTranslateY = -Math.round(overheight * 0.55); // sposta in su per centrare faccia (focusY ~0.30)
+
   return (
     <View
       style={[
@@ -136,8 +208,12 @@ function MiniAvatar({
     >
       {hasValidSource ? (
         <Image
-          source={src}
-          style={{ width: size - 2, height: size - 2, borderRadius: radius - 1 }}
+          source={src as ImageSourcePropType}
+          style={{
+            width: imgW,
+            height: imgH,
+            transform: [{ translateY: imgTranslateY }],
+          }}
           resizeMode="cover"
           onError={() => setErrored(true)}
         />
