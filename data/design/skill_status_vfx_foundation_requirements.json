@@ -1,0 +1,254 @@
+{
+  "task_id": "RM1.25-A",
+  "title": "Skill / Status / Icon / VFX Foundation Contracts",
+  "project": "Divine RPG / Divine Waifus",
+  "version": "1.0",
+  "status": "approved_requirements_package",
+  "scope": {
+    "goal": "Create a safe data-only foundation for future skill packages, status runtime definitions, status icon metadata, and modular VFX metadata.",
+    "implementation_type": "foundation_only",
+    "runtime_activation": false,
+    "battle_balance_changes": false,
+    "battle_engine_changes_allowed": false,
+    "ui_runtime_changes_allowed": false,
+    "asset_generation_allowed": false
+  },
+  "canonical_sources": [
+    "Skill Data Schema v1.1 / Skill, Animazioni e VFX Modulari",
+    "Status Effect Runtime Schema v1",
+    "Status Icon Bible v1",
+    "VFX Modular Bible v1",
+    "Skill Design Completo 6★ Launch Base + Borea",
+    "Roster Canonico Launch, Skill Premium, Status Effect Bible e Armi Divine"
+  ],
+  "official_elements": [
+    "water",
+    "fire",
+    "earth",
+    "wind",
+    "lightning",
+    "light",
+    "dark"
+  ],
+  "forbidden_primary_elements": [
+    "ice",
+    "nature",
+    "holy",
+    "shadow",
+    "thunder"
+  ],
+  "rarity_skill_slots": {
+    "1": ["basic"],
+    "2": ["basic", "passive_base"],
+    "3": ["basic", "passive_base", "skill_1"],
+    "4": ["basic", "passive_base", "skill_1", "passive_advanced"],
+    "5": ["basic", "passive_base", "skill_1", "passive_advanced", "skill_2"],
+    "6": ["basic", "passive_base", "skill_1", "passive_advanced", "skill_2", "ultimate"]
+  },
+  "allowed_skill_slots": [
+    "basic",
+    "passive_base",
+    "skill_1",
+    "passive_advanced",
+    "skill_2",
+    "ultimate",
+    "domain",
+    "divine_weapon_passive"
+  ],
+  "allowed_skill_types": [
+    "basic_attack",
+    "passive",
+    "active",
+    "ultimate",
+    "domain",
+    "counter",
+    "triggered",
+    "divine_weapon"
+  ],
+  "allowed_damage_types": [
+    "physical",
+    "magical",
+    "true",
+    "hybrid",
+    "none"
+  ],
+  "allowed_scaling_stats": [
+    "atk",
+    "def",
+    "hp",
+    "speed",
+    "mixed",
+    "none"
+  ],
+  "allowed_targeting": {
+    "side": ["enemy", "ally", "self", "all"],
+    "target_type": [
+      "single",
+      "multi",
+      "all",
+      "priority",
+      "random",
+      "frontline",
+      "backline",
+      "line",
+      "column",
+      "lowest_hp",
+      "highest_atk",
+      "highest_speed",
+      "most_debuffed",
+      "most_injured",
+      "fallen_ally"
+    ],
+    "area_shape": [
+      "single",
+      "line",
+      "column",
+      "frontline",
+      "backline",
+      "aoe_small",
+      "aoe_full",
+      "team",
+      "self"
+    ]
+  },
+  "taunt_rule": {
+    "intercepts": ["single", "priority"],
+    "does_not_intercept": ["aoe_small", "aoe_full", "line", "column", "multi", "all"],
+    "required_skill_field": "can_be_taunted"
+  },
+  "status_categories": [
+    "control",
+    "damage_over_time",
+    "buff",
+    "debuff",
+    "protection",
+    "healing",
+    "special",
+    "stacking_unique",
+    "field_domain"
+  ],
+  "core_statuses": {
+    "control": ["stun", "freeze", "silence", "blind", "taunt"],
+    "speed_rhythm": ["slow", "speed_down", "speed_up"],
+    "damage_over_time": ["burn", "bleed", "poison", "curse", "frostbite", "shock"],
+    "offensive_buffs_debuffs": ["atk_up", "def_up", "crit_up", "crit_damage_up", "vulnerability", "def_down", "effect_accuracy_up", "magic_damage_up"],
+    "protection": ["physical_shield", "magical_shield", "hybrid_shield", "damage_reduction", "guard", "immunity"],
+    "healing_sustain": ["healing_up", "healing_reduction", "healing_block", "regeneration", "cleanse", "revive", "revive_pending", "death_protection"],
+    "unique_special": ["mark", "marchio_boreale", "berserk", "domain_effect"]
+  },
+  "status_icon_priorities": {
+    "critical": ["freeze", "stun", "revive_pending", "death_protection", "immunity"],
+    "high": ["marchio_boreale", "healing_block", "silence", "taunt", "guard", "revive", "hybrid_shield"],
+    "medium": ["burn", "poison", "bleed", "shock", "frostbite", "vulnerability", "mark", "def_down", "speed_down"],
+    "low": ["atk_up", "def_up", "speed_up", "crit_up", "healing_up", "effect_accuracy_up"]
+  },
+  "status_icon_asset_rules": {
+    "master_size_px": 128,
+    "exports_px": [64, 48, 32, 24],
+    "format": "PNG",
+    "background": "transparent",
+    "forbidden_baked_content": ["text", "numbers", "letters", "watermark", "stack_count", "duration"],
+    "runtime_overlays": ["stack_count", "duration"]
+  },
+  "vfx_types": [
+    "apply_vfx",
+    "projectile_vfx",
+    "travel_vfx",
+    "impact_vfx",
+    "persistent_status_vfx",
+    "stack_gain_vfx",
+    "stack_decay_vfx",
+    "expire_vfx",
+    "cleanse_vfx",
+    "field_domain_vfx",
+    "screen_edge_vfx",
+    "fullscreen_vfx"
+  ],
+  "vfx_intensity_levels": ["low", "medium", "high", "premium", "ultimate", "domain"],
+  "vfx_layering_order": [
+    "background_battle",
+    "field_domain_background_layer",
+    "ground_area_vfx",
+    "character_sprites",
+    "character_attached_persistent_vfx",
+    "projectile_vfx",
+    "impact_vfx",
+    "hp_bar",
+    "status_icons",
+    "screen_edge_vfx",
+    "ui_overlay"
+  ],
+  "presentation_flow_blocks": [
+    "source_actor_motion",
+    "projectile_vfx",
+    "target_impact_vfx",
+    "return_motion",
+    "persistent_status_vfx",
+    "screen_or_field_vfx"
+  ],
+  "allowed_motion_types": [
+    "stationary_cast",
+    "minimal_step_forward",
+    "melee_lunge",
+    "heavy_melee_lunge",
+    "assassin_blink_front",
+    "assassin_blink_behind",
+    "ranged_projectile",
+    "ranged_projectile_with_target_burst",
+    "aoe_cast_target_area",
+    "team_buff_cast",
+    "field_domain_cast",
+    "revive_cast",
+    "counter_attack"
+  ],
+  "unique_status_rules": {
+    "marchio_boreale": {
+      "source_locked": true,
+      "owner_hero_id": "greek_borea",
+      "cleanseable": true,
+      "visual_identity": "north wind frost rune, ice blue / white / wind cyan, not generic freeze, not water magic",
+      "stack_rules_required": true
+    }
+  },
+  "boss_runtime_policy": {
+    "hard_control_not_allowed_to_perma_lock_bosses": true,
+    "stun": "reduced_duration_or_converted_effect",
+    "freeze": "converted_to_speed_down_or_vulnerability_on_boss",
+    "silence": "reduced_duration_or_reduced_effect_on_boss",
+    "dots": "allowed_with_caps_or_reduced_effect_on_world_boss",
+    "marchio_boreale": "allowed_on_boss_but_related_freeze_must_be_reduced_or_converted"
+  },
+  "expected_foundation_files_if_implemented": [
+    "backend/data/status_effects_v1.py or backend/data/status_effects_v1.json",
+    "backend/data/status_icon_metadata_v1.py or backend/data/status_icon_metadata_v1.json",
+    "backend/data/vfx_metadata_v1.py or backend/data/vfx_metadata_v1.json",
+    "backend/data/skill_schema_v1.py or backend/data/skill_schema_v1.json",
+    "backend/scripts/validate_skill_status_vfx_foundation.py",
+    "docs/divine/18_SKILL_STATUS_VFX_FOUNDATION_PLAN.md"
+  ],
+  "acceptance_criteria": [
+    "Requirements validator passes before any implementation work.",
+    "No battle_engine.py behavior changes.",
+    "No battle balance numbers are finalized.",
+    "No skill is activated in live battle runtime.",
+    "No status runtime is activated in live battle runtime.",
+    "No UI status icon rendering is activated unless explicitly requested in a later task.",
+    "All official elements are restricted to water/fire/earth/wind/lightning/light/dark.",
+    "No primary element named ice/nature/holy/shadow/thunder is introduced.",
+    "Rarity skill slot map is represented exactly as approved.",
+    "Marchio Boreale is source-locked to greek_borea.",
+    "HP bar/icon stack and duration are metadata/runtime overlays, not baked into icon assets.",
+    "VFX metadata separates projectile/travel, impact, persistent, stack gain, stack decay, expire, cleanse, field/domain, screen-edge.",
+    "VFX layering keeps HP bar and status icons above most VFX.",
+    "Borea canonical greek_borea remains hidden/pending and legacy borea remains non-official/hidden unless explicitly requested otherwise."
+  ],
+  "safety_guards": {
+    "no_db_writes": true,
+    "no_migrations": true,
+    "no_apply_scripts": true,
+    "no_gacha_changes": true,
+    "no_battle_engine_activation": true,
+    "no_roster_activation": true,
+    "borea_safety_required": true
+  }
+}
