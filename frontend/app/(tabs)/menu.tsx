@@ -70,6 +70,9 @@ const CATEGORIES = [
       // RM1.25-D — Catalogo Skill & Status (read-only, dev catalog browser).
       // Non collegato al runtime battaglia / HP bar. UI di sola consultazione.
       { label: 'Catalogo Skill & Status', icon: '\uD83D\uDCDA', route: '/skill-status-vfx-catalogs', gradient: ['#AB47BC', '#6A1B9A'] as const },
+      // RM1.26-D — Kit Skill Eroi (read-only, hero skill kit catalog browser).
+      // Cataloghi 5★/6★ inert, non collegati a battle/HP bar runtime.
+      { label: 'Kit Skill Eroi', icon: '\uD83D\uDCD6', route: '/hero-skill-kits-catalog', gradient: ['#FFD700', '#3D5AFE'] as const },
     ],
   },
 ];

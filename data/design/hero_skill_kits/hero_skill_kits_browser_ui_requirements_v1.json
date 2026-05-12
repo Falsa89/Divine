@@ -1,0 +1,157 @@
+{
+  "task_id": "RM1.26-D",
+  "title": "Hero Skill Kit Browser UI Extension",
+  "status": "requirements",
+  "generated_at": "2026-05-12",
+  "purpose": "Create a mobile-first read-only UI to browse inert hero skill kit catalogs exposed by RM1.26-C, without connecting catalogs to battle runtime, HP bar runtime, UI combat runtime, or balance runtime.",
+  "source_endpoints": [
+    "GET /api/hero-skill-kits/catalogs/summary",
+    "GET /api/hero-skill-kits/catalogs/schema",
+    "GET /api/hero-skill-kits/catalogs/5star",
+    "GET /api/hero-skill-kits/catalogs/6star",
+    "GET /api/hero-skill-kits/catalogs/by-hero/{hero_id}"
+  ],
+  "allowed_files_to_create": [
+    "/app/frontend/app/hero-skill-kits-catalog.tsx"
+  ],
+  "allowed_files_to_modify": [
+    "/app/frontend/app/(tabs)/menu.tsx"
+  ],
+  "forbidden_files_or_areas": [
+    "/app/backend/battle_engine.py",
+    "/app/frontend/app/combat.tsx",
+    "HP bar runtime components",
+    "status runtime components",
+    "gacha files",
+    "roster activation files",
+    "Character Bible",
+    "assets",
+    "runtime kit JSON",
+    "source design JSON catalogs"
+  ],
+  "ui_route": "/hero-skill-kits-catalog",
+  "menu_entry": {
+    "label": "Kit Skill Eroi",
+    "section": "Altro",
+    "icon": "📖",
+    "note": "Read-only internal catalog browser"
+  },
+  "ui_sections": [
+    {
+      "id": "summary",
+      "label": "Summary",
+      "requirements": [
+        "Display 5★ count, 6★ launch_base count, 6★ extra premium count, total entries.",
+        "Display runtime flags: runtime_attached=false, battle_runtime_attached=false, hp_bar_runtime_attached=false, ui_runtime_attached=false, balance_values_finalized=false, do_not_treat_as_live_kit=true.",
+        "Display a persistent read-only warning banner."
+      ]
+    },
+    {
+      "id": "five_star",
+      "label": "5★",
+      "requirements": [
+        "Display all 20 5★ catalog entries.",
+        "Support local search by hero_id, display_name/name, role, element, faction if present.",
+        "Show slot chips for basic, passive_base, skill_1, passive_advanced, skill_2.",
+        "Clearly mark passive_advanced entries that are missing_from_approved_source / TODO_SOURCE_REQUIRED.",
+        "Clearly mark skill_2 entries converted from legacy ultimate as is_true_ultimate=false."
+      ]
+    },
+    {
+      "id": "six_star",
+      "label": "6★",
+      "requirements": [
+        "Display all 13 6★ catalog entries.",
+        "Separate launch_base (12) and launch_extra_premium (Borea) visually.",
+        "Show divine_weapon_id for each 6★.",
+        "Show slot chips basic, passive_base, skill_1, passive_advanced, skill_2, ultimate.",
+        "Borea must be shown as catalog design only; add explicit note that roster/gacha/battle availability is NOT affected."
+      ]
+    },
+    {
+      "id": "by_hero",
+      "label": "Cerca Eroe",
+      "requirements": [
+        "Provide a local text input for hero_id lookup.",
+        "May call GET /api/hero-skill-kits/catalogs/by-hero/{hero_id} only when user submits or after debounce; no network spam.",
+        "Test smoke for greek_atalanta, greek_athena, greek_borea, unknown_hero_xyz.",
+        "Show 404/empty state without errors or mutations."
+      ]
+    },
+    {
+      "id": "schema",
+      "label": "Schema",
+      "requirements": [
+        "Display schema metadata and slot progression summary.",
+        "Display explanation that final_numbers are null and balance is not finalized.",
+        "Display no-live-runtime flags."
+      ]
+    }
+  ],
+  "read_only_rules": [
+    "No activation buttons",
+    "No upgrade buttons",
+    "No edit buttons",
+    "No write actions",
+    "Only GET requests to hero skill kit catalog endpoints",
+    "No POST/PUT/PATCH/DELETE from the new screen",
+    "No direct JSON imports in frontend; consume API only"
+  ],
+  "absolute_rules": [
+    "No DB writes",
+    "No migrations",
+    "No --apply",
+    "No battle_engine.py changes",
+    "No battle balance changes",
+    "No live skill activation",
+    "No live status activation",
+    "No live VFX activation",
+    "No status icon HP bar activation",
+    "No frontend HP bar changes",
+    "No gacha changes",
+    "No roster activation",
+    "Do not activate Borea",
+    "Do not modify legacy borea",
+    "Do not modify Character Bible",
+    "Do not modify source heroes_kits_5star.json",
+    "Do not modify inert hero skill kit JSON catalogs",
+    "Do not modify runtime kit JSON files",
+    "Do not modify asset files",
+    "Do not connect catalogs to battle runtime",
+    "Do not connect catalogs to HP bar runtime"
+  ],
+  "acceptance_criteria": [
+    "Requirements validator PASS",
+    "New screen renders on mobile without React error overlay",
+    "Menu entry navigates to new screen",
+    "All required sections/tabs are accessible",
+    "Summary shows counts 20/12/1/33 and runtime flags false",
+    "5★ section shows 20 entries",
+    "5★ section clearly marks 20 passive_advanced missing/TODO entries if present from catalog",
+    "5★ section clearly marks legacy ultimate converted to skill_2 with is_true_ultimate=false if present",
+    "6★ section shows 13 entries",
+    "6★ section shows Borea as extra premium catalog-only",
+    "By-hero smoke works for greek_atalanta, greek_athena, greek_borea and unknown 404",
+    "Search/filter is local or debounced and produces no network spam",
+    "No POST/PUT/PATCH/DELETE from new screen to catalog endpoints",
+    "No changes to battle_engine.py, combat.tsx, HP bar, gacha, roster, Character Bible, source design JSON",
+    "GET /api/heroes remains 100",
+    "Borea remains hidden/pending",
+    "TS: zero new errors in modified files"
+  ],
+  "expected_counts": {
+    "five_star_entries_count": 20,
+    "six_star_launch_base_entries_count": 12,
+    "six_star_extra_premium_entries_count": 1,
+    "six_star_total_entries_count": 13,
+    "total_catalog_entries_count": 33
+  },
+  "runtime_flags_expected": {
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "ui_runtime_attached": false,
+    "hp_bar_runtime_attached": false,
+    "balance_values_finalized": false,
+    "do_not_treat_as_live_kit": true
+  }
+}
