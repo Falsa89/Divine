@@ -1,0 +1,104 @@
+{
+  "task_id": "RM1.26-A",
+  "title": "Hero Skill Kit Catalog Foundation",
+  "version": 1,
+  "status": "requirements_and_inert_catalog_install",
+  "created_by": "ChatGPT",
+  "purpose": "Install inert/read-only design catalogs for official hero skill kits, starting with 5★ manifest and 6★ + Borea approved kit summaries, without connecting to battle runtime.",
+  "absolute_rules": [
+    "No DB writes",
+    "No migrations",
+    "No --apply",
+    "No battle_engine.py changes",
+    "No battle balance changes",
+    "No live skill activation",
+    "No live status activation",
+    "No live VFX activation",
+    "No frontend HP bar changes",
+    "No gacha changes",
+    "No roster activation",
+    "Do not activate Borea",
+    "Do not modify legacy borea",
+    "Do not modify Character Bible",
+    "Do not modify existing kit runtime JSON unless explicitly requested",
+    "Do not import these catalogs into battle runtime or frontend combat runtime",
+    "All installed catalogs must remain inert design data"
+  ],
+  "source_foundations": [
+    "Skill Data Schema v1.1",
+    "Status Effect Runtime Schema v1",
+    "Status Icon Bible v1",
+    "VFX Modular Bible v1",
+    "Skill Design Completo 6★ Launch Base + Borea",
+    "Skill Design Completo 5★ Launch Base source, if present in project docs/sources"
+  ],
+  "installed_files_expected": [
+    "data/design/hero_skill_kits/hero_skill_kit_catalog_requirements_v1.json",
+    "data/design/hero_skill_kits/hero_skill_kit_schema_v1.json",
+    "data/design/hero_skill_kits/hero_skill_kits_5star_manifest_v1.json",
+    "data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+    "docs/divine/22_HERO_SKILL_KIT_CATALOG_FOUNDATION_PLAN.md",
+    "backend/scripts/validate_hero_skill_kit_catalog_foundation.py"
+  ],
+  "expected_counts": {
+    "official_5star_launch_base": 20,
+    "official_6star_launch_base": 12,
+    "extra_premium_6star": 1,
+    "total_6star_catalog_entries": 13
+  },
+  "runtime_flags_required": {
+    "battle_runtime_attached": false,
+    "ui_runtime_attached": false,
+    "vfx_runtime_attached": false,
+    "balance_values_finalized": false
+  },
+  "skill_slot_progression_required": {
+    "1": [
+      "basic"
+    ],
+    "2": [
+      "basic",
+      "passive_base"
+    ],
+    "3": [
+      "basic",
+      "passive_base",
+      "skill_1"
+    ],
+    "4": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced"
+    ],
+    "5": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced",
+      "skill_2"
+    ],
+    "6": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced",
+      "skill_2",
+      "ultimate"
+    ]
+  },
+  "acceptance_criteria": [
+    "Validator PASS",
+    "All installed paths exist",
+    "5★ manifest has exactly 20 unique official entries",
+    "6★ + Borea catalog has exactly 13 unique entries",
+    "All 6★ entries include divine_weapon_id",
+    "All 6★ launch_base entries include ultimate slot",
+    "Borea entry is release_group launch_extra_premium and remains inactive/pending",
+    "No final numeric balance values are required or invented",
+    "No battle runtime imports",
+    "/api/heroes remains 100",
+    "Borea remains hidden/pending",
+    "Report safety checks"
+  ]
+}
