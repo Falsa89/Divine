@@ -1,0 +1,141 @@
+{
+  "task_id": "RM1.25-C",
+  "title": "Skill / Status / Icon / VFX Read-Only Catalog API",
+  "version": 1,
+  "status": "requirements_only",
+  "source_catalogs": {
+    "base_dir": "/app/data/design/skill_status_vfx_catalogs",
+    "files": [
+      "skill_slot_progression_v1.json",
+      "status_effect_catalog_v1.json",
+      "status_icon_registry_v1.json",
+      "vfx_modular_catalog_v1.json",
+      "skill_schema_examples_v1.json"
+    ]
+  },
+  "implementation_scope": {
+    "allowed": [
+      "create a pure read-only catalog loader utility",
+      "create read-only backend API endpoints for catalog inspection",
+      "register the read-only route module",
+      "add smoke tests or validator script if useful",
+      "add docs/test_result entry"
+    ],
+    "forbidden": [
+      "DB writes",
+      "migrations",
+      "--apply scripts",
+      "battle_engine.py changes",
+      "battle balance changes",
+      "live skill activation",
+      "live status activation",
+      "live VFX activation",
+      "status icon UI activation",
+      "frontend HP bar changes",
+      "gacha changes",
+      "roster activation",
+      "Borea activation",
+      "legacy borea modification",
+      "editing Character Bible",
+      "editing kit JSON",
+      "editing asset files"
+    ]
+  },
+  "recommended_files_to_create_or_modify": {
+    "new_backend_utils": [
+      "/app/backend/utils/skill_status_vfx_catalog_loader.py"
+    ],
+    "new_backend_routes": [
+      "/app/backend/routes/skill_status_vfx_catalogs.py"
+    ],
+    "existing_backend_registration": [
+      "/app/backend/game_systems.py"
+    ],
+    "no_frontend_files": true
+  },
+  "api_endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/skill-status-vfx/catalogs/summary",
+      "auth_required": false,
+      "description": "Returns counts, catalog versions, available files, official elements, core status count, icon count, VFX type count, VFX entry count, and skill example count."
+    },
+    {
+      "method": "GET",
+      "path": "/api/skill-status-vfx/catalogs/skill-progression",
+      "auth_required": false,
+      "description": "Returns the rarity-to-skill-slot progression map."
+    },
+    {
+      "method": "GET",
+      "path": "/api/skill-status-vfx/catalogs/status-effects",
+      "auth_required": false,
+      "description": "Returns the status effect catalog, with optional query filters by category, polarity, priority, or status_id if easy and safe."
+    },
+    {
+      "method": "GET",
+      "path": "/api/skill-status-vfx/catalogs/status-icons",
+      "auth_required": false,
+      "description": "Returns the status icon registry, including icon keys, priority, color family, stack/duration display metadata."
+    },
+    {
+      "method": "GET",
+      "path": "/api/skill-status-vfx/catalogs/vfx",
+      "auth_required": false,
+      "description": "Returns the VFX modular catalog, with optional query filters by vfx_type, status_id, hero_id, or intensity if easy and safe."
+    },
+    {
+      "method": "GET",
+      "path": "/api/skill-status-vfx/catalogs/skill-examples",
+      "auth_required": false,
+      "description": "Returns inert skill schema examples."
+    }
+  ],
+  "loader_requirements": {
+    "read_only": true,
+    "cache_allowed": true,
+    "cache_scope": "in_process_memory",
+    "must_not_mutate_catalog_json": true,
+    "must_handle_missing_files_gracefully": true,
+    "must_return_clear_500_if_catalog_corrupt": true,
+    "must_not_import_battle_engine": true,
+    "must_not_import_gacha_or_roster_runtime": true
+  },
+  "expected_catalog_counts_from_rm125b": {
+    "official_elements": 7,
+    "core_statuses": 40,
+    "status_icons": 40,
+    "vfx_types": 12,
+    "vfx_entries": 163,
+    "skill_examples_min": 4
+  },
+  "acceptance_criteria": [
+    "Requirements validator PASS",
+    "Read-only loader created",
+    "Read-only route module created and registered",
+    "All proposed endpoints return HTTP 200",
+    "Summary endpoint reports 7 official elements",
+    "Summary endpoint reports 40 core statuses",
+    "Summary endpoint reports 40 status icons",
+    "Summary endpoint reports 12 VFX types",
+    "Summary endpoint reports at least 163 VFX entries",
+    "Summary endpoint reports at least 4 skill examples",
+    "No DB writes",
+    "No battle_engine.py changes",
+    "No battle behavior changes",
+    "No frontend HP bar/status icon UI changes",
+    "No skill/status/VFX live activation",
+    "GET /api/heroes remains 100",
+    "Borea remains hidden/pending",
+    "Legacy borea remains hidden/non-official"
+  ],
+  "report_required_sections": [
+    "Files installed from ZIP",
+    "Files created/modified by implementation",
+    "Requirements validator output",
+    "Endpoint smoke results",
+    "Runtime smoke",
+    "Safety checks",
+    "Explicit confirmation that catalogs are read-only and not connected to battle runtime"
+  ]
+}
