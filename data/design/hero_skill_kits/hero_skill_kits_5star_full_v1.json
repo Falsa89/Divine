@@ -1,0 +1,5196 @@
+{
+  "catalog_id": "hero_skill_kits_5star_full_v1",
+  "version": "1.0.0",
+  "task": "RM1.26-B2",
+  "generated_at_utc": "2026-05-12T21:14:06.608890+00:00",
+  "runtime_attached": false,
+  "balance_values_finalized": false,
+  "do_not_treat_as_live_kit": true,
+  "scope": {
+    "native_rarity": 5,
+    "release_groups": [
+      "launch_base"
+    ],
+    "expected_hero_count": 20,
+    "actual_hero_count": 20
+  },
+  "source_file": "/app/data/design/heroes_kits_5star.json",
+  "source_schema": "legacy_5star_4_slot",
+  "conversion_schema": "skill_data_schema_v1.1_5star",
+  "id_policy": "character_bible_confirmed_old_ids",
+  "slot_remap": {
+    "basic_attack": "basic",
+    "skill": "skill_1",
+    "passive": "passive_base",
+    "ultimate_or_special": "skill_2"
+  },
+  "design_rules": {
+    "no_ultimate_for_5star": true,
+    "passive_advanced_not_invented": true,
+    "final_numbers_not_finalized": true,
+    "no_divine_weapon_for_5star": true,
+    "no_true_domain_for_5star": true
+  },
+  "stats": {
+    "legacy_ultimate_to_skill_2_conversions": 20,
+    "passive_advanced_missing_count": 20
+  },
+  "entries": [
+    {
+      "hero_id": "angelic_bastion_angel",
+      "display_name": "Angelo dei Bastioni",
+      "native_rarity": 5,
+      "element": "light",
+      "role": "tank",
+      "faction": "angelic",
+      "origin_group": "bastions",
+      "category": "angel",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "hp",
+          "defense",
+          "damage_reduction"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "angelic_bastion_angel_basic",
+          "display_name": "Impulso Sacro",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "light"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "angelic_bastion_angel_basic",
+            "name": "Impulso Sacro",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 0.95,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "angelic_bastion_angel_passive",
+          "display_name": "Custodia Celeste",
+          "design_summary": "Aumenta shield_power e defense.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "tank",
+            "light"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "angelic_bastion_angel_passive",
+            "name": "Custodia Celeste",
+            "description": "Aumenta shield_power e defense.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "shield_power",
+                "value": 0.15
+              },
+              {
+                "type": "buff",
+                "stat": "defense",
+                "value": 0.1
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "tank",
+              "light"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "angelic_bastion_angel_skill",
+          "display_name": "Bastione di Luce",
+          "design_summary": "Protegge il team con shield leggero e taunt.",
+          "targeting_summary": "self_or_single_enemy",
+          "status_tags": [
+            "shield",
+            "taunt"
+          ],
+          "vfx_tags": [
+            "skill",
+            "tank",
+            "light"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "angelic_bastion_angel_skill",
+            "name": "Bastione di Luce",
+            "description": "Protegge il team con shield leggero e taunt.",
+            "type": "active",
+            "target_type": "self_or_single_enemy",
+            "damage_type": "physical",
+            "scaling_stat": "healing_power",
+            "multiplier": 0.0,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "shield",
+                "value": "1.60x_shield_power",
+                "duration_turns": 2
+              },
+              {
+                "type": "taunt",
+                "duration_turns": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "tank",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "angelic_bastion_angel_ultimate",
+          "display_name": "Mura del Paradiso",
+          "design_summary": "Dà shield a tutti gli alleati e riduce i danni subiti.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "shield",
+            "damage_reduction"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "tank",
+            "light"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "angelic_bastion_angel_ultimate",
+            "name": "Mura del Paradiso",
+            "description": "Dà shield a tutti gli alleati e riduce i danni subiti.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "physical",
+            "scaling_stat": "healing_power",
+            "multiplier": 1.2,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "shield",
+                "value": "1.20x_shield_power",
+                "target": "all_allies",
+                "duration_turns": 2
+              },
+              {
+                "type": "damage_reduction",
+                "value": 0.18,
+                "target": "all_allies",
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "tank",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "display_name": "Banshee delle Nebbie",
+      "native_rarity": 5,
+      "element": "wind",
+      "role": "control_debuff",
+      "faction": "celtic",
+      "origin_group": "banshees",
+      "category": "folklore_spirit",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "effect_accuracy",
+          "speed"
+        ],
+        "secondary": [
+          "hp",
+          "defense"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "celtic_mist_banshee_basic",
+          "display_name": "Fendente del Vento",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "wind"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "celtic_mist_banshee_basic",
+            "name": "Fendente del Vento",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "celtic_mist_banshee_passive",
+          "display_name": "Presagio nelle Brume",
+          "design_summary": "Aumenta effect_accuracy e riduce speed nemica.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff",
+            "aura_debuff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "control_debuff",
+            "wind"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "celtic_mist_banshee_passive",
+            "name": "Presagio nelle Brume",
+            "description": "Aumenta effect_accuracy e riduce speed nemica.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "effect_accuracy",
+                "value": 0.12
+              },
+              {
+                "type": "aura_debuff",
+                "stat": "speed",
+                "target": "all_enemies",
+                "value": -0.05
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "control_debuff",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "celtic_mist_banshee_skill",
+          "display_name": "Lamento nella Nebbia",
+          "design_summary": "Danno vento e weaken.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "control_debuff",
+            "wind"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "celtic_mist_banshee_skill",
+            "name": "Lamento nella Nebbia",
+            "description": "Danno vento e weaken.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "subtype": "weaken",
+                "value": -0.18,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "control_debuff",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "celtic_mist_banshee_ultimate",
+          "display_name": "Urlo Funesto",
+          "design_summary": "AoE con silence chance.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "control"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "control_debuff",
+            "wind"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "celtic_mist_banshee_ultimate",
+            "name": "Urlo Funesto",
+            "description": "AoE con silence chance.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.5,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "control",
+                "subtype": "silence",
+                "chance": 0.35,
+                "duration_turns": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "control_debuff",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "display_name": "Fenice Cremisi",
+      "native_rarity": 5,
+      "element": "fire",
+      "role": "hybrid_special",
+      "faction": "creature_beast",
+      "origin_group": "phoenix",
+      "category": "mythic_creature",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "hp",
+          "effect_accuracy"
+        ],
+        "secondary": [
+          "speed",
+          "defense"
+        ],
+        "low": []
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "creature_crimson_phoenix_basic",
+          "display_name": "Assalto Ardente",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "fire"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "creature_crimson_phoenix_basic",
+            "name": "Assalto Ardente",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "creature_crimson_phoenix_passive",
+          "display_name": "Scintilla Immortale",
+          "design_summary": "Prima volta che scende sotto 30% HP, ottiene HoT e damage_reduction.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "trigger",
+            "hot",
+            "damage_reduction"
+          ],
+          "vfx_tags": [
+            "passive",
+            "hybrid_special",
+            "fire"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "creature_crimson_phoenix_passive",
+            "name": "Scintilla Immortale",
+            "description": "Prima volta che scende sotto 30% HP, ottiene HoT e damage_reduction.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "trigger",
+                "condition": "self_hp_below_30_once"
+              },
+              {
+                "type": "hot",
+                "value": "0.50x_healing_power",
+                "duration_turns": 2
+              },
+              {
+                "type": "damage_reduction",
+                "value": 0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "hybrid_special",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "creature_crimson_phoenix_skill",
+          "display_name": "Piuma Ardente",
+          "design_summary": "Danno fuoco e HoT su sé stessa.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "hot"
+          ],
+          "vfx_tags": [
+            "skill",
+            "hybrid_special",
+            "fire"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "creature_crimson_phoenix_skill",
+            "name": "Piuma Ardente",
+            "description": "Danno fuoco e HoT su sé stessa.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.35,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "hot",
+                "target": "self",
+                "value": "0.30x_healing_power",
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "hybrid_special",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "creature_crimson_phoenix_ultimate",
+          "display_name": "Rinascita Cremisi",
+          "design_summary": "AoE fuoco e cura parziale gli alleati.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "heal"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "hybrid_special",
+            "fire"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "creature_crimson_phoenix_ultimate",
+            "name": "Rinascita Cremisi",
+            "description": "AoE fuoco e cura parziale gli alleati.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "healing_power",
+            "multiplier": 2.0,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "heal",
+                "target": "all_allies",
+                "value": "0.70x_healing_power"
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "hybrid_special",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "display_name": "Idra di Lerna",
+      "native_rarity": 5,
+      "element": "water",
+      "role": "hybrid_special",
+      "faction": "creature_beast",
+      "origin_group": "hydra",
+      "category": "mythic_creature",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "hp",
+          "effect_accuracy"
+        ],
+        "secondary": [
+          "speed",
+          "defense"
+        ],
+        "low": []
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "creature_lernaean_hydra_basic",
+          "display_name": "Taglio delle Maree",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "water"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "creature_lernaean_hydra_basic",
+            "name": "Taglio delle Maree",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "creature_lernaean_hydra_passive",
+          "display_name": "Rigenerazione Mostruosa",
+          "design_summary": "Aumenta healing_received e DoT damage.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "hybrid_special",
+            "water"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "creature_lernaean_hydra_passive",
+            "name": "Rigenerazione Mostruosa",
+            "description": "Aumenta healing_received e DoT damage.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "healing_received",
+                "value": 0.18
+              },
+              {
+                "type": "buff",
+                "stat": "dot_damage",
+                "value": 0.12
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "hybrid_special",
+              "water"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "creature_lernaean_hydra_skill",
+          "display_name": "Morso Multiplo",
+          "design_summary": "Danno acqua e poison.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "dot"
+          ],
+          "vfx_tags": [
+            "skill",
+            "hybrid_special",
+            "water"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "creature_lernaean_hydra_skill",
+            "name": "Morso Multiplo",
+            "description": "Danno acqua e poison.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.35,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "dot",
+                "subtype": "poison",
+                "value": "4%_target_max_hp",
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "hybrid_special",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "creature_lernaean_hydra_ultimate",
+          "display_name": "Teste Rigeneranti",
+          "design_summary": "Colpisce 3 nemici e ottiene HoT.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "hot"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "hybrid_special",
+            "water"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "creature_lernaean_hydra_ultimate",
+            "name": "Teste Rigeneranti",
+            "description": "Colpisce 3 nemici e ottiene HoT.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 2.0,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage",
+                "hits": 3
+              },
+              {
+                "type": "hot",
+                "target": "self",
+                "value": "0.45x_healing_power",
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "hybrid_special",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "display_name": "Aralda della Pestilenza",
+      "native_rarity": 5,
+      "element": "dark",
+      "role": "hybrid_special",
+      "faction": "cursed",
+      "origin_group": "pestilence_omens",
+      "category": "cursed_entity",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "hp",
+          "effect_accuracy"
+        ],
+        "secondary": [
+          "speed",
+          "defense"
+        ],
+        "low": []
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "cursed_pestilence_herald_basic",
+          "display_name": "Tocco d’Ombra",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "dark"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "cursed_pestilence_herald_basic",
+            "name": "Tocco d’Ombra",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "cursed_pestilence_herald_passive",
+          "display_name": "Presagio della Malattia",
+          "design_summary": "Nemici con DoT ricevono meno cure.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "debuff_aura"
+          ],
+          "vfx_tags": [
+            "passive",
+            "hybrid_special",
+            "dark"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "cursed_pestilence_herald_passive",
+            "name": "Presagio della Malattia",
+            "description": "Nemici con DoT ricevono meno cure.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "debuff_aura",
+                "stat": "healing_received",
+                "condition": "enemy_has_dot",
+                "value": -0.2
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "hybrid_special",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "cursed_pestilence_herald_skill",
+          "display_name": "Alito Pestilenziale",
+          "design_summary": "Danno oscuro e poison.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "dot"
+          ],
+          "vfx_tags": [
+            "skill",
+            "hybrid_special",
+            "dark"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "cursed_pestilence_herald_skill",
+            "name": "Alito Pestilenziale",
+            "description": "Danno oscuro e poison.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.35,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "dot",
+                "subtype": "poison",
+                "value": "5%_target_max_hp",
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "hybrid_special",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "cursed_pestilence_herald_ultimate",
+          "display_name": "Miasma Annunciato",
+          "design_summary": "AoE oscurità e weaken.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "hybrid_special",
+            "dark"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "cursed_pestilence_herald_ultimate",
+            "name": "Miasma Annunciato",
+            "description": "AoE oscurità e weaken.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 2.0,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "subtype": "weaken",
+                "target": "all_enemies",
+                "value": -0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "hybrid_special",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "display_name": "Strega della Geenna",
+      "native_rarity": 5,
+      "element": "fire",
+      "role": "mage_aoe",
+      "faction": "demonic",
+      "origin_group": "gehenna",
+      "category": "demon",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "effect_accuracy"
+        ],
+        "secondary": [
+          "speed",
+          "crit_rate"
+        ],
+        "low": [
+          "defense"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "demonic_gehenna_witch_basic",
+          "display_name": "Assalto Ardente",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "enemy_frontline",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "fire"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "demonic_gehenna_witch_basic",
+            "name": "Assalto Ardente",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "enemy_frontline",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "demonic_gehenna_witch_passive",
+          "display_name": "Fiamma Condannata",
+          "design_summary": "Aumenta danno DoT applicato.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "mage_aoe",
+            "fire"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "demonic_gehenna_witch_passive",
+            "name": "Fiamma Condannata",
+            "description": "Aumenta danno DoT applicato.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "dot_damage",
+                "value": 0.2
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "mage_aoe",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "demonic_gehenna_witch_skill",
+          "display_name": "Tizzone della Geenna",
+          "design_summary": "Danno magico e burn.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "dot"
+          ],
+          "vfx_tags": [
+            "skill",
+            "mage_aoe",
+            "fire"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "demonic_gehenna_witch_skill",
+            "name": "Tizzone della Geenna",
+            "description": "Danno magico e burn.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.25,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "dot",
+                "subtype": "burn",
+                "value": "5%_target_max_hp",
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "mage_aoe",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "demonic_gehenna_witch_ultimate",
+          "display_name": "Cerchio Infernale",
+          "design_summary": "AoE fuoco e defense break.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "mage_aoe",
+            "fire"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "demonic_gehenna_witch_ultimate",
+            "name": "Cerchio Infernale",
+            "description": "AoE fuoco e defense break.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 2.0,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "subtype": "defense_break",
+                "value": -0.25,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "mage_aoe",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "display_name": "Bastet",
+      "native_rarity": 5,
+      "element": "lightning",
+      "role": "assassin_burst",
+      "faction": "egyptian",
+      "origin_group": "feline_deities",
+      "category": "deity",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "crit_damage",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "penetration",
+          "dodge"
+        ],
+        "low": [
+          "hp"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "egyptian_bastet_basic",
+          "display_name": "Scarica Runica",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "lightning"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "egyptian_bastet_basic",
+            "name": "Scarica Runica",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "egyptian_bastet_passive",
+          "display_name": "Passo della Dea Gatta",
+          "design_summary": "Aumenta dodge e crit_damage.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "assassin_burst",
+            "lightning"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "egyptian_bastet_passive",
+            "name": "Passo della Dea Gatta",
+            "description": "Aumenta dodge e crit_damage.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "dodge",
+                "value": 0.12
+              },
+              {
+                "type": "buff",
+                "stat": "crit_damage",
+                "value": 0.2
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "assassin_burst",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "egyptian_bastet_skill",
+          "display_name": "Graffio Fulmineo",
+          "design_summary": "Danno critico e mark.",
+          "targeting_summary": "enemy_lowest_hp",
+          "status_tags": [
+            "damage",
+            "mark"
+          ],
+          "vfx_tags": [
+            "skill",
+            "assassin_burst",
+            "lightning"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "egyptian_bastet_skill",
+            "name": "Graffio Fulmineo",
+            "description": "Danno critico e mark.",
+            "type": "active",
+            "target_type": "enemy_lowest_hp",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 2.4,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "mark",
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "assassin_burst",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "egyptian_bastet_ultimate",
+          "display_name": "Balzo Felino",
+          "design_summary": "Danno elevato a enemy_lowest_hp, bonus se marked.",
+          "targeting_summary": "enemy_lowest_hp",
+          "status_tags": [
+            "damage",
+            "conditional_bonus"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "assassin_burst",
+            "lightning"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "egyptian_bastet_ultimate",
+            "name": "Balzo Felino",
+            "description": "Danno elevato a enemy_lowest_hp, bonus se marked.",
+            "type": "ultimate",
+            "target_type": "enemy_lowest_hp",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 3.2,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "conditional_bonus",
+                "condition": "target_marked",
+                "value": 0.35
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "assassin_burst",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "display_name": "Artiglio di Sekhmet",
+      "native_rarity": 5,
+      "element": "fire",
+      "role": "dps_melee",
+      "faction": "egyptian",
+      "origin_group": "sekhmet_cult",
+      "category": "mythic_archetype",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "crit_rate",
+          "penetration"
+        ],
+        "secondary": [
+          "speed",
+          "crit_damage"
+        ],
+        "low": [
+          "healing_power"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "egyptian_claw_of_sekhmet_basic",
+          "display_name": "Assalto Ardente",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "fire"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "egyptian_claw_of_sekhmet_basic",
+            "name": "Assalto Ardente",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "egyptian_claw_of_sekhmet_passive",
+          "display_name": "Sangue di Sekhmet",
+          "design_summary": "Più danno contro nemici bruciati.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "dps_melee",
+            "fire"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "egyptian_claw_of_sekhmet_passive",
+            "name": "Sangue di Sekhmet",
+            "description": "Più danno contro nemici bruciati.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "damage_vs_burned",
+                "value": 0.2
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "dps_melee",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "egyptian_claw_of_sekhmet_skill",
+          "display_name": "Artiglio Solare",
+          "design_summary": "Danno forte e burn al bersaglio.",
+          "targeting_summary": "single_enemy",
+          "status_tags": [
+            "damage",
+            "dot"
+          ],
+          "vfx_tags": [
+            "skill",
+            "dps_melee",
+            "fire"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "egyptian_claw_of_sekhmet_skill",
+            "name": "Artiglio Solare",
+            "description": "Danno forte e burn al bersaglio.",
+            "type": "active",
+            "target_type": "single_enemy",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 2.0,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "dot",
+                "subtype": "burn",
+                "value": "5%_target_max_hp",
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "dps_melee",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "egyptian_claw_of_sekhmet_ultimate",
+          "display_name": "Furia della Leonessa",
+          "design_summary": "Colpisce nemici in area e aumenta crit_rate.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "buff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "dps_melee",
+            "fire"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "egyptian_claw_of_sekhmet_ultimate",
+            "name": "Furia della Leonessa",
+            "description": "Colpisce nemici in area e aumenta crit_rate.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 2.8,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "buff",
+                "stat": "crit_rate",
+                "target": "self",
+                "value": 0.12,
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "dps_melee",
+              "fire"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "display_name": "Atalanta",
+      "native_rarity": 5,
+      "element": "wind",
+      "role": "dps_ranged",
+      "faction": "greek",
+      "origin_group": "heroic_hunters",
+      "category": "legendary_hero",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "crit_rate",
+          "crit_damage"
+        ],
+        "secondary": [
+          "speed",
+          "penetration"
+        ],
+        "low": [
+          "defense"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "greek_atalanta_basic",
+          "display_name": "Fendente del Vento",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "wind"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "greek_atalanta_basic",
+            "name": "Fendente del Vento",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "greek_atalanta_passive",
+          "display_name": "Passo Irrequieto",
+          "design_summary": "Aumenta crit_rate e dodge.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "dps_ranged",
+            "wind"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "greek_atalanta_passive",
+            "name": "Passo Irrequieto",
+            "description": "Aumenta crit_rate e dodge.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "crit_rate",
+                "value": 0.1
+              },
+              {
+                "type": "buff",
+                "stat": "dodge",
+                "value": 0.08
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "dps_ranged",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "greek_atalanta_skill",
+          "display_name": "Freccia Implacabile",
+          "design_summary": "Danno ranged e applica mark leggero.",
+          "targeting_summary": "random_enemies_n",
+          "status_tags": [
+            "damage",
+            "mark"
+          ],
+          "vfx_tags": [
+            "skill",
+            "dps_ranged",
+            "wind"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "greek_atalanta_skill",
+            "name": "Freccia Implacabile",
+            "description": "Danno ranged e applica mark leggero.",
+            "type": "active",
+            "target_type": "random_enemies_n",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.2,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "mark",
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "dps_ranged",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "greek_atalanta_ultimate",
+          "display_name": "Corsa della Cacciatrice",
+          "design_summary": "Colpisce tre nemici casuali e aumenta speed.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "buff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "dps_ranged",
+            "wind"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "greek_atalanta_ultimate",
+            "name": "Corsa della Cacciatrice",
+            "description": "Colpisce tre nemici casuali e aumenta speed.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 2.2,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage",
+                "hits": 3
+              },
+              {
+                "type": "buff",
+                "stat": "speed",
+                "target": "self",
+                "value": 0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "dps_ranged",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "greek_circe",
+      "display_name": "Circe",
+      "native_rarity": 5,
+      "element": "dark",
+      "role": "mage_aoe",
+      "faction": "greek",
+      "origin_group": "sorceresses",
+      "category": "legendary_hero",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "effect_accuracy"
+        ],
+        "secondary": [
+          "speed",
+          "crit_rate"
+        ],
+        "low": [
+          "defense"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "greek_circe_basic",
+          "display_name": "Tocco d’Ombra",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "enemy_frontline",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "dark"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "greek_circe_basic",
+            "name": "Tocco d’Ombra",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "enemy_frontline",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "greek_circe_passive",
+          "display_name": "Isola degli Incanti",
+          "design_summary": "Aumenta effect_accuracy e danno contro debuffati.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "mage_aoe",
+            "dark"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "greek_circe_passive",
+            "name": "Isola degli Incanti",
+            "description": "Aumenta effect_accuracy e danno contro debuffati.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "effect_accuracy",
+                "value": 0.15
+              },
+              {
+                "type": "buff",
+                "stat": "damage_vs_debuffed",
+                "value": 0.15
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "mage_aoe",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "greek_circe_skill",
+          "display_name": "Velo Incantato",
+          "design_summary": "Danno magico e weaken.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "mage_aoe",
+            "dark"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "greek_circe_skill",
+            "name": "Velo Incantato",
+            "description": "Danno magico e weaken.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.25,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "subtype": "weaken",
+                "value": -0.18,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "mage_aoe",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "greek_circe_ultimate",
+          "display_name": "Metamorfosi della Strega",
+          "design_summary": "AoE oscurità con chance di silence.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "control"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "mage_aoe",
+            "dark"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "greek_circe_ultimate",
+            "name": "Metamorfosi della Strega",
+            "description": "AoE oscurità con chance di silence.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 2.0,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "control",
+                "subtype": "silence",
+                "chance": 0.35,
+                "duration_turns": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "mage_aoe",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "greek_medusa",
+      "display_name": "Medusa",
+      "native_rarity": 5,
+      "element": "earth",
+      "role": "control_debuff",
+      "faction": "greek",
+      "origin_group": "gorgons",
+      "category": "mythic_creature",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "effect_accuracy",
+          "speed"
+        ],
+        "secondary": [
+          "hp",
+          "defense"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "greek_medusa_basic",
+          "display_name": "Colpo Tellurico",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "earth"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "greek_medusa_basic",
+            "name": "Colpo Tellurico",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "greek_medusa_passive",
+          "display_name": "Occhi della Gorgone",
+          "design_summary": "Aumenta effect_accuracy e danno contro controllati.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "control_debuff",
+            "earth"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "greek_medusa_passive",
+            "name": "Occhi della Gorgone",
+            "description": "Aumenta effect_accuracy e danno contro controllati.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "effect_accuracy",
+                "value": 0.15
+              },
+              {
+                "type": "buff",
+                "stat": "damage_vs_controlled",
+                "value": 0.18
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "control_debuff",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "greek_medusa_skill",
+          "display_name": "Sguardo Serpentino",
+          "design_summary": "Danno terra e slow.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "control_debuff",
+            "earth"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "greek_medusa_skill",
+            "name": "Sguardo Serpentino",
+            "description": "Danno terra e slow.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "subtype": "slow",
+                "value": -0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "control_debuff",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "greek_medusa_ultimate",
+          "display_name": "Pietrificazione",
+          "design_summary": "AoE con chance di stun.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "control"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "control_debuff",
+            "earth"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "greek_medusa_ultimate",
+            "name": "Pietrificazione",
+            "description": "AoE con chance di stun.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.5,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "control",
+                "subtype": "stun",
+                "chance": 0.35,
+                "duration_turns": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "control_debuff",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "display_name": "Leonessa Nemea",
+      "native_rarity": 5,
+      "element": "earth",
+      "role": "tank",
+      "faction": "greek",
+      "origin_group": "nemean_lion",
+      "category": "mythic_creature",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "hp",
+          "defense",
+          "damage_reduction"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "greek_nemean_lioness_basic",
+          "display_name": "Colpo Tellurico",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "earth"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "greek_nemean_lioness_basic",
+            "name": "Colpo Tellurico",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 0.95,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "greek_nemean_lioness_passive",
+          "display_name": "Mantello del Leone",
+          "design_summary": "Aumenta HP e riduzione danni quando è sopra metà vita.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff",
+            "damage_reduction"
+          ],
+          "vfx_tags": [
+            "passive",
+            "tank",
+            "earth"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "greek_nemean_lioness_passive",
+            "name": "Mantello del Leone",
+            "description": "Aumenta HP e riduzione danni quando è sopra metà vita.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "hp",
+                "value": 0.15
+              },
+              {
+                "type": "damage_reduction",
+                "value": 0.1
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "tank",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "greek_nemean_lioness_skill",
+          "display_name": "Pelle Invulnerabile",
+          "design_summary": "Taunta il nemico principale e riduce i danni subiti.",
+          "targeting_summary": "self_or_single_enemy",
+          "status_tags": [
+            "taunt",
+            "damage_reduction"
+          ],
+          "vfx_tags": [
+            "skill",
+            "tank",
+            "earth"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "greek_nemean_lioness_skill",
+            "name": "Pelle Invulnerabile",
+            "description": "Taunta il nemico principale e riduce i danni subiti.",
+            "type": "active",
+            "target_type": "self_or_single_enemy",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 0.0,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "taunt",
+                "duration_turns": 2
+              },
+              {
+                "type": "damage_reduction",
+                "value": 0.3,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "tank",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "greek_nemean_lioness_ultimate",
+          "display_name": "Ruggito Nemeo",
+          "design_summary": "Danneggia tutti i nemici e riduce il loro attacco.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "tank",
+            "earth"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "greek_nemean_lioness_ultimate",
+            "name": "Ruggito Nemeo",
+            "description": "Danneggia tutti i nemici e riduce il loro attacco.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.2,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "stat": "attack",
+                "value": -0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "tank",
+              "earth"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "greek_nike",
+      "display_name": "Nike",
+      "native_rarity": 5,
+      "element": "light",
+      "role": "support_buffer",
+      "faction": "greek",
+      "origin_group": "victory",
+      "category": "deity",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "speed",
+          "effect_resistance",
+          "shield_power"
+        ],
+        "secondary": [
+          "hp",
+          "defense"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "greek_nike_basic",
+          "display_name": "Impulso Sacro",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "light"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "greek_nike_basic",
+            "name": "Impulso Sacro",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 0.95,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "greek_nike_passive",
+          "display_name": "Auspicio Vittorioso",
+          "design_summary": "Aumenta energia/tempo di azione del team in modo leggero.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "support_buffer",
+            "light"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "greek_nike_passive",
+            "name": "Auspicio Vittorioso",
+            "description": "Aumenta energia/tempo di azione del team in modo leggero.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "team_momentum",
+                "value": 0.1
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "support_buffer",
+              "light"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "greek_nike_skill",
+          "display_name": "Luce della Vittoria",
+          "design_summary": "Danno leggero e buff attack a un alleato.",
+          "targeting_summary": "all_allies",
+          "status_tags": [
+            "damage",
+            "buff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "support_buffer",
+            "light"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "greek_nike_skill",
+            "name": "Luce della Vittoria",
+            "description": "Danno leggero e buff attack a un alleato.",
+            "type": "active",
+            "target_type": "all_allies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": null,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "buff",
+                "stat": "attack",
+                "target": "ally_highest_atk",
+                "value": 0.15,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "support_buffer",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "greek_nike_ultimate",
+          "display_name": "Ali del Trionfo",
+          "design_summary": "Buff team attack e speed.",
+          "targeting_summary": "all_allies",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "support_buffer",
+            "light"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "greek_nike_ultimate",
+            "name": "Ali del Trionfo",
+            "description": "Buff team attack e speed.",
+            "type": "ultimate",
+            "target_type": "all_allies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": null,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "attack",
+                "target": "all_allies",
+                "value": 0.18,
+                "duration_turns": 2
+              },
+              {
+                "type": "buff",
+                "stat": "speed",
+                "target": "all_allies",
+                "value": 0.12,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "support_buffer",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "display_name": "Miko di Raijin",
+      "native_rarity": 5,
+      "element": "lightning",
+      "role": "mage_aoe",
+      "faction": "japanese_yokai",
+      "origin_group": "raijin_shrine",
+      "category": "mythic_archetype",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "effect_accuracy"
+        ],
+        "secondary": [
+          "speed",
+          "crit_rate"
+        ],
+        "low": [
+          "defense"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "japanese_miko_of_raijin_basic",
+          "display_name": "Scarica Runica",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "enemy_frontline",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "lightning"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "japanese_miko_of_raijin_basic",
+            "name": "Scarica Runica",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "enemy_frontline",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "japanese_miko_of_raijin_passive",
+          "display_name": "Rito della Tempesta",
+          "design_summary": "Aumenta effect_accuracy e speed.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "mage_aoe",
+            "lightning"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "japanese_miko_of_raijin_passive",
+            "name": "Rito della Tempesta",
+            "description": "Aumenta effect_accuracy e speed.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "effect_accuracy",
+                "value": 0.12
+              },
+              {
+                "type": "buff",
+                "stat": "speed",
+                "value": 0.08
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "mage_aoe",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "japanese_miko_of_raijin_skill",
+          "display_name": "Ofuda Tonante",
+          "design_summary": "Danno fulmine e slow.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "mage_aoe",
+            "lightning"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "japanese_miko_of_raijin_skill",
+            "name": "Ofuda Tonante",
+            "description": "Danno fulmine e slow.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.25,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "subtype": "slow",
+                "value": -0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "mage_aoe",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "japanese_miko_of_raijin_ultimate",
+          "display_name": "Tamburi di Raijin",
+          "design_summary": "AoE fulmine con chain-lightning su un bersaglio extra.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "mage_aoe",
+            "lightning"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "japanese_miko_of_raijin_ultimate",
+            "name": "Tamburi di Raijin",
+            "description": "AoE fulmine con chain-lightning su un bersaglio extra.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 2.0,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "damage",
+                "subtype": "chain_lightning",
+                "extra_targets": 1,
+                "multiplier": 0.6
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "mage_aoe",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "display_name": "Valchiria dell’Alba",
+      "native_rarity": 5,
+      "element": "wind",
+      "role": "dps_melee",
+      "faction": "norse",
+      "origin_group": "valkyries",
+      "category": "legendary_hero",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "crit_rate",
+          "penetration"
+        ],
+        "secondary": [
+          "speed",
+          "crit_damage"
+        ],
+        "low": [
+          "healing_power"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "norse_dawn_valkyrie_basic",
+          "display_name": "Fendente del Vento",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "wind"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "norse_dawn_valkyrie_basic",
+            "name": "Fendente del Vento",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "norse_dawn_valkyrie_passive",
+          "display_name": "Prima Luce del Valhalla",
+          "design_summary": "Aumenta attacco all’inizio del combattimento.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "dps_melee",
+            "wind"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "norse_dawn_valkyrie_passive",
+            "name": "Prima Luce del Valhalla",
+            "description": "Aumenta attacco all’inizio del combattimento.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "attack",
+                "value": 0.15,
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "dps_melee",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "norse_dawn_valkyrie_skill",
+          "display_name": "Lancia dell’Alba",
+          "design_summary": "Danno single target con bonus se il bersaglio è debuffato.",
+          "targeting_summary": "single_enemy",
+          "status_tags": [
+            "damage",
+            "conditional_bonus"
+          ],
+          "vfx_tags": [
+            "skill",
+            "dps_melee",
+            "wind"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "norse_dawn_valkyrie_skill",
+            "name": "Lancia dell’Alba",
+            "description": "Danno single target con bonus se il bersaglio è debuffato.",
+            "type": "active",
+            "target_type": "single_enemy",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 2.0,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "conditional_bonus",
+                "condition": "target_has_debuff",
+                "value": 0.25
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "dps_melee",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "norse_dawn_valkyrie_ultimate",
+          "display_name": "Carica delle Prescelte",
+          "design_summary": "Danneggia una linea e aumenta la speed alleata.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "buff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "dps_melee",
+            "wind"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "norse_dawn_valkyrie_ultimate",
+            "name": "Carica delle Prescelte",
+            "description": "Danneggia una linea e aumenta la speed alleata.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 2.8,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "buff",
+                "stat": "speed",
+                "target": "all_allies",
+                "value": 0.15,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "dps_melee",
+              "wind"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "norse_eir",
+      "display_name": "Eir",
+      "native_rarity": 5,
+      "element": "light",
+      "role": "healer",
+      "faction": "norse",
+      "origin_group": "healing_deities",
+      "category": "deity",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "healing_power",
+          "speed",
+          "hp"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "defense"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "norse_eir_basic",
+          "display_name": "Impulso Sacro",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "light"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "norse_eir_basic",
+            "name": "Impulso Sacro",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 0.95,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "norse_eir_passive",
+          "display_name": "Mano della Guaritrice",
+          "design_summary": "Aumenta healing_power e healing_received alleati.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "healer",
+            "light"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "norse_eir_passive",
+            "name": "Mano della Guaritrice",
+            "description": "Aumenta healing_power e healing_received alleati.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "healing_power",
+                "value": 0.15
+              },
+              {
+                "type": "buff",
+                "stat": "healing_received",
+                "target": "all_allies",
+                "value": 0.08
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "healer",
+              "light"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "norse_eir_skill",
+          "display_name": "Tocco Guaritore",
+          "design_summary": "Cura l’alleato con HP più basso.",
+          "targeting_summary": "ally_lowest_hp",
+          "status_tags": [
+            "heal"
+          ],
+          "vfx_tags": [
+            "skill",
+            "healer",
+            "light"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "norse_eir_skill",
+            "name": "Tocco Guaritore",
+            "description": "Cura l’alleato con HP più basso.",
+            "type": "active",
+            "target_type": "ally_lowest_hp",
+            "damage_type": "magic",
+            "scaling_stat": "healing_power",
+            "multiplier": null,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "heal",
+                "value": "1.60x_healing_power"
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "healer",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "norse_eir_ultimate",
+          "display_name": "Benedizione di Eir",
+          "design_summary": "Cura il team e purifica un debuff.",
+          "targeting_summary": "all_allies",
+          "status_tags": [
+            "heal",
+            "cleanse"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "healer",
+            "light"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "norse_eir_ultimate",
+            "name": "Benedizione di Eir",
+            "description": "Cura il team e purifica un debuff.",
+            "type": "ultimate",
+            "target_type": "all_allies",
+            "damage_type": "magic",
+            "scaling_stat": "healing_power",
+            "multiplier": null,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "heal",
+                "target": "all_allies",
+                "value": "1.10x_healing_power"
+              },
+              {
+                "type": "cleanse",
+                "target": "all_allies",
+                "count": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "healer",
+              "light"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "display_name": "Jotunn delle Brine",
+      "native_rarity": 5,
+      "element": "water",
+      "role": "tank",
+      "faction": "norse",
+      "origin_group": "jotunn",
+      "category": "titan",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "hp",
+          "defense",
+          "damage_reduction"
+        ],
+        "secondary": [
+          "effect_resistance",
+          "shield_power"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "norse_rime_jotunn_basic",
+          "display_name": "Taglio delle Maree",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "water"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "norse_rime_jotunn_basic",
+            "name": "Taglio delle Maree",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 0.95,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "norse_rime_jotunn_passive",
+          "display_name": "Sangue dei Giganti",
+          "design_summary": "Aumenta HP e resistenza effetti.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "tank",
+            "water"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "norse_rime_jotunn_passive",
+            "name": "Sangue dei Giganti",
+            "description": "Aumenta HP e resistenza effetti.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "hp",
+                "value": 0.18
+              },
+              {
+                "type": "buff",
+                "stat": "effect_resistance",
+                "value": 0.15
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "tank",
+              "water"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "norse_rime_jotunn_skill",
+          "display_name": "Muro di Brina",
+          "design_summary": "Ottiene riduzione danni e applica slow al bersaglio.",
+          "targeting_summary": "self_or_single_enemy",
+          "status_tags": [
+            "damage_reduction",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "tank",
+            "water"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "norse_rime_jotunn_skill",
+            "name": "Muro di Brina",
+            "description": "Ottiene riduzione danni e applica slow al bersaglio.",
+            "type": "active",
+            "target_type": "self_or_single_enemy",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 0.0,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage_reduction",
+                "value": 0.25,
+                "duration_turns": 2
+              },
+              {
+                "type": "debuff",
+                "subtype": "slow",
+                "value": -0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "tank",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "norse_rime_jotunn_ultimate",
+          "display_name": "Crollo del Ghiaccio Antico",
+          "design_summary": "Colpisce tutti i nemici con acqua gelida e possibilità di freeze.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "control"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "tank",
+            "water"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "norse_rime_jotunn_ultimate",
+            "name": "Crollo del Ghiaccio Antico",
+            "description": "Colpisce tutti i nemici con acqua gelida e possibilità di freeze.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.2,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "control",
+                "subtype": "freeze",
+                "chance": 0.35,
+                "duration_turns": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "tank",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "display_name": "Völva del Fato",
+      "native_rarity": 5,
+      "element": "lightning",
+      "role": "support_buffer",
+      "faction": "norse",
+      "origin_group": "fate_seers",
+      "category": "mythic_archetype",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "speed",
+          "effect_resistance",
+          "shield_power"
+        ],
+        "secondary": [
+          "hp",
+          "defense"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "norse_volva_of_fate_basic",
+          "display_name": "Scarica Runica",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "lightning"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "norse_volva_of_fate_basic",
+            "name": "Scarica Runica",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 0.95,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "norse_volva_of_fate_passive",
+          "display_name": "Veggenza Runica",
+          "design_summary": "Aumenta effect_accuracy del team.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "support_buffer",
+            "lightning"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "norse_volva_of_fate_passive",
+            "name": "Veggenza Runica",
+            "description": "Aumenta effect_accuracy del team.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "effect_accuracy",
+                "target": "all_allies",
+                "value": 0.1
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "support_buffer",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "norse_volva_of_fate_skill",
+          "display_name": "Rune del Destino",
+          "design_summary": "Danno fulmine e debuff effect_resistance.",
+          "targeting_summary": "all_allies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "support_buffer",
+            "lightning"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "norse_volva_of_fate_skill",
+            "name": "Rune del Destino",
+            "description": "Danno fulmine e debuff effect_resistance.",
+            "type": "active",
+            "target_type": "all_allies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": null,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "stat": "effect_resistance",
+                "value": -0.2,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "support_buffer",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "norse_volva_of_fate_ultimate",
+          "display_name": "Profezia Spezzata",
+          "design_summary": "Buff team crit_rate e applica slow ai nemici.",
+          "targeting_summary": "all_allies",
+          "status_tags": [
+            "buff",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "support_buffer",
+            "lightning"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "norse_volva_of_fate_ultimate",
+            "name": "Profezia Spezzata",
+            "description": "Buff team crit_rate e applica slow ai nemici.",
+            "type": "ultimate",
+            "target_type": "all_allies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": null,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "crit_rate",
+                "target": "all_allies",
+                "value": 0.12,
+                "duration_turns": 2
+              },
+              {
+                "type": "debuff",
+                "subtype": "slow",
+                "target": "all_enemies",
+                "value": -0.12,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "support_buffer",
+              "lightning"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "display_name": "Kunoichi Oni",
+      "native_rarity": 5,
+      "element": "dark",
+      "role": "assassin_burst",
+      "faction": "japanese_yokai",
+      "origin_group": "oni",
+      "category": "folklore_spirit",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "attack",
+          "crit_damage",
+          "speed"
+        ],
+        "secondary": [
+          "crit_rate",
+          "penetration",
+          "dodge"
+        ],
+        "low": [
+          "hp"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "yokai_oni_kunoichi_basic",
+          "display_name": "Tocco d’Ombra",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "dark"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "yokai_oni_kunoichi_basic",
+            "name": "Tocco d’Ombra",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "yokai_oni_kunoichi_passive",
+          "display_name": "Kage no Oni",
+          "design_summary": "Aumenta attack quando colpisce nemici con DoT.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "assassin_burst",
+            "dark"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "yokai_oni_kunoichi_passive",
+            "name": "Kage no Oni",
+            "description": "Aumenta attack quando colpisce nemici con DoT.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "attack_vs_dot",
+                "value": 0.18
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "assassin_burst",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "yokai_oni_kunoichi_skill",
+          "display_name": "Taglio Oni",
+          "design_summary": "Danno oscuro e bleed.",
+          "targeting_summary": "enemy_lowest_hp",
+          "status_tags": [
+            "damage",
+            "dot"
+          ],
+          "vfx_tags": [
+            "skill",
+            "assassin_burst",
+            "dark"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "yokai_oni_kunoichi_skill",
+            "name": "Taglio Oni",
+            "description": "Danno oscuro e bleed.",
+            "type": "active",
+            "target_type": "enemy_lowest_hp",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 2.4,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "dot",
+                "subtype": "bleed",
+                "value": "4%_target_max_hp",
+                "duration_turns": 3
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "assassin_burst",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "yokai_oni_kunoichi_ultimate",
+          "display_name": "Ombra con Corna",
+          "design_summary": "Danno burst e silence al bersaglio.",
+          "targeting_summary": "enemy_lowest_hp",
+          "status_tags": [
+            "damage",
+            "control"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "assassin_burst",
+            "dark"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "yokai_oni_kunoichi_ultimate",
+            "name": "Ombra con Corna",
+            "description": "Danno burst e silence al bersaglio.",
+            "type": "ultimate",
+            "target_type": "enemy_lowest_hp",
+            "damage_type": "physical",
+            "scaling_stat": "attack",
+            "multiplier": 3.2,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "control",
+                "subtype": "silence",
+                "chance": 0.45,
+                "duration_turns": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "assassin_burst",
+              "dark"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "display_name": "Yuki-Onna",
+      "native_rarity": 5,
+      "element": "water",
+      "role": "control_debuff",
+      "faction": "japanese_yokai",
+      "origin_group": "snow_spirits",
+      "category": "folklore_spirit",
+      "release_group": "launch_base",
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "stat_profile_source": {
+        "budget_tier": "5_star",
+        "stat_budget_x": 2.5,
+        "primary": [
+          "effect_accuracy",
+          "speed"
+        ],
+        "secondary": [
+          "hp",
+          "defense"
+        ],
+        "low": [
+          "crit_damage"
+        ]
+      },
+      "kit_complexity_source": {
+        "rarity_rule": "5★ complete identity kit with basic + skill + ultimate_or_special + passive",
+        "max_effects_per_skill": 3,
+        "ultimate_allowed": true,
+        "advanced_conditions_allowed": true,
+        "identity_strength": "strong"
+      },
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "skill_id": "yokai_yuki_onna_basic",
+          "display_name": "Taglio delle Maree",
+          "design_summary": "Attacco base coerente con elemento e ruolo.",
+          "targeting_summary": "tank_first_then_nearest",
+          "status_tags": [
+            "damage"
+          ],
+          "vfx_tags": [
+            "basic",
+            "water"
+          ],
+          "animation_intent": "attack",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "basic_attack",
+            "id": "yokai_yuki_onna_basic",
+            "name": "Taglio delle Maree",
+            "description": "Attacco base coerente con elemento e ruolo.",
+            "type": "damage",
+            "target_type": "tank_first_then_nearest",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              }
+            ],
+            "animation_state": "attack",
+            "tags": [
+              "basic",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+          }
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "skill_id": "yokai_yuki_onna_passive",
+          "display_name": "Cuore d’Inverno",
+          "design_summary": "Aumenta resistenza e danno contro slowed/frozen.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "buff"
+          ],
+          "vfx_tags": [
+            "passive",
+            "control_debuff",
+            "water"
+          ],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "passive",
+            "id": "yokai_yuki_onna_passive",
+            "name": "Cuore d’Inverno",
+            "description": "Aumenta resistenza e danno contro slowed/frozen.",
+            "type": "passive",
+            "target_type": "self",
+            "damage_type": "none",
+            "scaling_stat": null,
+            "multiplier": null,
+            "cooldown_turns": 0,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "buff",
+                "stat": "effect_resistance",
+                "value": 0.12
+              },
+              {
+                "type": "buff",
+                "stat": "damage_vs_slowed_or_frozen",
+                "value": 0.15
+              }
+            ],
+            "animation_state": null,
+            "tags": [
+              "passive",
+              "control_debuff",
+              "water"
+            ],
+            "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          }
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "skill_id": "yokai_yuki_onna_skill",
+          "display_name": "Soffio Gelido",
+          "design_summary": "Danno acqua e slow.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "debuff"
+          ],
+          "vfx_tags": [
+            "skill",
+            "control_debuff",
+            "water"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source": {
+            "slot": "skill",
+            "id": "yokai_yuki_onna_skill",
+            "name": "Soffio Gelido",
+            "description": "Danno acqua e slow.",
+            "type": "active",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.1,
+            "cooldown_turns": 3,
+            "energy_cost": 0,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "debuff",
+                "subtype": "slow",
+                "value": -0.22,
+                "duration_turns": 2
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "skill",
+              "control_debuff",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+          }
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "skill_id": null,
+          "display_name": null,
+          "design_summary": null,
+          "targeting_summary": null,
+          "status_tags": [],
+          "vfx_tags": [],
+          "animation_intent": null,
+          "final_numbers": null,
+          "design_status": "missing_from_approved_source",
+          "source_status": "TODO_SOURCE_REQUIRED",
+          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
+          "legacy_source": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "skill_id": "yokai_yuki_onna_ultimate",
+          "display_name": "Velo di Neve",
+          "design_summary": "AoE acqua con chance di freeze.",
+          "targeting_summary": "all_enemies",
+          "status_tags": [
+            "damage",
+            "control"
+          ],
+          "vfx_tags": [
+            "ultimate",
+            "control_debuff",
+            "water"
+          ],
+          "animation_intent": "skill",
+          "final_numbers": null,
+          "design_status": "converted_from_approved_source",
+          "source_status": "ok",
+          "legacy_source_slot": "ultimate_or_special",
+          "is_true_ultimate": false,
+          "converted_to_slot": "skill_2",
+          "legacy_source": {
+            "slot": "ultimate_or_special",
+            "id": "yokai_yuki_onna_ultimate",
+            "name": "Velo di Neve",
+            "description": "AoE acqua con chance di freeze.",
+            "type": "ultimate",
+            "target_type": "all_enemies",
+            "damage_type": "magic",
+            "scaling_stat": "attack",
+            "multiplier": 1.5,
+            "cooldown_turns": 5,
+            "energy_cost": 100,
+            "effects": [
+              {
+                "type": "damage"
+              },
+              {
+                "type": "control",
+                "subtype": "freeze",
+                "chance": 0.3,
+                "duration_turns": 1
+              }
+            ],
+            "animation_state": "skill",
+            "tags": [
+              "ultimate",
+              "control_debuff",
+              "water"
+            ],
+            "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+          }
+        }
+      },
+      "missing_fields_audit": []
+    }
+  ],
+  "notes": "Inert design catalog. Read-only. NOT connected to combat runtime. Generated by /app/backend/scripts/build_hero_skill_kits_5star_full.py from the approved consolidated 5★ source. No skill invention. passive_advanced slot present but marked missing_from_approved_source. Legacy ultimate_or_special remapped to skill_2 with is_true_ultimate=false."
+}

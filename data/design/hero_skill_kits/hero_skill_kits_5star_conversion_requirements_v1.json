@@ -48,10 +48,11 @@
       "role": "tank"
     },
     {
-      "hero_id": "norse_frost_jotunn",
+      "hero_id": "norse_rime_jotunn",
       "display_name": "Jotunn delle Brine",
       "element": "water",
-      "role": "tank"
+      "role": "tank",
+      "_id_correction_note": "Corrected from non-canonical 'norse_frost_jotunn' to Character-Bible canonical ID."
     },
     {
       "hero_id": "angelic_bastion_angel",
@@ -84,16 +85,18 @@
       "role": "mage_aoe"
     },
     {
-      "hero_id": "japanese_raijin_miko",
+      "hero_id": "japanese_miko_of_raijin",
       "display_name": "Miko di Raijin",
       "element": "lightning",
-      "role": "mage_aoe"
+      "role": "mage_aoe",
+      "_id_correction_note": "Corrected from non-canonical 'japanese_raijin_miko' to Character-Bible canonical ID."
     },
     {
-      "hero_id": "infernal_gehenna_witch",
+      "hero_id": "demonic_gehenna_witch",
       "display_name": "Strega della Geenna",
       "element": "fire",
-      "role": "mage_aoe"
+      "role": "mage_aoe",
+      "_id_correction_note": "Corrected from non-canonical 'infernal_gehenna_witch' to Character-Bible canonical ID."
     },
     {
       "hero_id": "egyptian_bastet",
@@ -102,10 +105,11 @@
       "role": "assassin"
     },
     {
-      "hero_id": "japanese_oni_kunoichi",
+      "hero_id": "yokai_oni_kunoichi",
       "display_name": "Kunoichi Oni",
       "element": "dark",
-      "role": "assassin"
+      "role": "assassin",
+      "_id_correction_note": "Corrected from non-canonical 'japanese_oni_kunoichi' to Character-Bible canonical ID."
     },
     {
       "hero_id": "greek_nike",
@@ -114,10 +118,11 @@
       "role": "support"
     },
     {
-      "hero_id": "norse_fate_volva",
+      "hero_id": "norse_volva_of_fate",
       "display_name": "Völva del Fato",
       "element": "lightning",
-      "role": "support"
+      "role": "support",
+      "_id_correction_note": "Corrected from non-canonical 'norse_fate_volva' to Character-Bible canonical ID."
     },
     {
       "hero_id": "norse_eir",
@@ -138,22 +143,25 @@
       "role": "control_debuff"
     },
     {
-      "hero_id": "japanese_yuki_onna",
+      "hero_id": "yokai_yuki_onna",
       "display_name": "Yuki-Onna",
       "element": "water",
-      "role": "control_debuff"
+      "role": "control_debuff",
+      "_id_correction_note": "Corrected from non-canonical 'japanese_yuki_onna' to Character-Bible canonical ID."
     },
     {
-      "hero_id": "crimson_phoenix",
+      "hero_id": "creature_crimson_phoenix",
       "display_name": "Fenice Cremisi",
       "element": "fire",
-      "role": "hybrid_special"
+      "role": "hybrid_special",
+      "_id_correction_note": "Corrected from non-canonical 'crimson_phoenix' to Character-Bible canonical ID."
     },
     {
-      "hero_id": "greek_lernaean_hydra",
+      "hero_id": "creature_lernaean_hydra",
       "display_name": "Idra di Lerna",
       "element": "water",
-      "role": "hybrid_special"
+      "role": "hybrid_special",
+      "_id_correction_note": "Corrected from non-canonical 'greek_lernaean_hydra' to Character-Bible canonical ID."
     },
     {
       "hero_id": "cursed_pestilence_herald",
@@ -219,5 +227,8 @@
     "No battle/gacha/roster/Borea/frontend HP bar changes",
     "/api/heroes remains 100",
     "Borea remains hidden/pending"
-  ]
+  ],
+  "_rm126b2_id_correction_applied": true,
+  "_rm126b2_id_correction_note": "RM1.26-B2: 8 hero_ids corretti per allineamento Character Bible. Gli ID precedenti (frost_jotunn/raijin_miko/infernal_gehenna_witch/oni_kunoichi/fate_volva/yuki_onna/crimson_phoenix/lernaean_hydra) NON erano canonical.",
+  "id_policy": "character_bible_confirmed_old_ids"
 }
