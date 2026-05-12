@@ -1,0 +1,182 @@
+{
+  "requirements_id": "divine_weapon_requirements_v1",
+  "task_origin": "RM1.27-A",
+  "version": "v1",
+  "description": "Acceptance criteria & safety contract mirror for the Divine Weapon Catalog Foundation. Read-only, catalog-only, inert.",
+  "absolute_safety_rules": {
+    "do_not_modify": [
+      "backend/battle_engine.py",
+      "frontend/app/combat.tsx",
+      "frontend/components/HPBar.tsx",
+      "gacha logic",
+      "summon logic",
+      "roster activation",
+      "Character Bible",
+      "hero DB records",
+      "user_heroes",
+      "assets",
+      "status runtime",
+      "VFX runtime",
+      "HP bar runtime",
+      "battle runtime",
+      "Borea activation",
+      "any production economy/currency system",
+      "existing 6★ hero skill kit catalog (hero_skill_kits_6star_borea_v1.json)"
+    ],
+    "do_not_perform": [
+      "DB writes",
+      "migrations",
+      "seed changes",
+      "runtime hooks",
+      "battle hooks",
+      "gacha hooks",
+      "roster visibility changes",
+      "Borea visibility changes",
+      "final balance numbers"
+    ]
+  },
+  "expected_files": [
+    "/app/data/design/divine_weapons/divine_weapon_schema_v1.json",
+    "/app/data/design/divine_weapons/divine_weapons_catalog_v1.json",
+    "/app/data/design/divine_weapons/divine_weapon_requirements_v1.json",
+    "/app/docs/divine/27_DIVINE_WEAPON_SYSTEM_BIBLE_V1.md",
+    "/app/backend/scripts/validate_divine_weapon_catalog.py"
+  ],
+  "counts": {
+    "total_divine_weapons": 13,
+    "launch_base": 12,
+    "launch_extra_premium": 1
+  },
+  "canonical_hero_ids": {
+    "launch_base": [
+      "greek_athena",
+      "greek_artemis",
+      "greek_gaia",
+      "primordial_nyx",
+      "japanese_raijin",
+      "japanese_susanoo",
+      "japanese_amaterasu",
+      "egyptian_sekhmet",
+      "mesopotamian_tiamat",
+      "egyptian_isis",
+      "celtic_morrigan",
+      "cursed_pestilence_horseman"
+    ],
+    "launch_extra_premium": [
+      "greek_borea"
+    ]
+  },
+  "canonical_divine_weapon_id_map": {
+    "greek_athena": "aegis_of_athena",
+    "greek_artemis": "artemis_lunar_bow",
+    "greek_gaia": "gaia_primordial_root",
+    "primordial_nyx": "nyx_primordial_night_veil",
+    "japanese_raijin": "raijin_thunder_drums",
+    "japanese_susanoo": "susanoo_ame_no_habakiri",
+    "japanese_amaterasu": "amaterasu_yata_no_kagami",
+    "egyptian_sekhmet": "sekhmet_burning_eye_of_ra",
+    "mesopotamian_tiamat": "tiamat_primordial_abyss",
+    "egyptian_isis": "isis_sacred_tyet_knot",
+    "celtic_morrigan": "morrigan_raven_mantle",
+    "cursed_pestilence_horseman": "pestilence_seal",
+    "greek_borea": "borea_wings_of_the_north_wind"
+  },
+  "divine_weapon_id_overrides_vs_prompt": {
+    "reason": "Preserve IDs already referenced by hero_skill_kits_6star_borea_v1.json. Do not silently rename canonical data.",
+    "overrides": [
+      {
+        "hero_id": "greek_athena",
+        "prompt_suggested": "athena_aegis",
+        "preserved_id_from_6star_skill_kit_catalog": "aegis_of_athena"
+      },
+      {
+        "hero_id": "egyptian_isis",
+        "prompt_suggested": "isis_sacred_tyet",
+        "preserved_id_from_6star_skill_kit_catalog": "isis_sacred_tyet_knot"
+      }
+    ]
+  },
+  "borea_safety": {
+    "hero_id": "greek_borea",
+    "legacy_borea_allowed": false,
+    "divine_weapon_id": "borea_wings_of_the_north_wind",
+    "release_group": "launch_extra_premium",
+    "borea_activation_allowed": false,
+    "must_remain_hidden_or_pending_assets_in_roster": true,
+    "marchio_boreale_source_locked": true,
+    "marchio_boreale_personal": true
+  },
+  "progression_state_contract": [
+    {"state_key": "sealed",    "order": 0, "has_gameplay_bonus": false, "has_battle_presence_layer": false},
+    {"state_key": "dormant",   "order": 1, "has_gameplay_bonus": true,  "has_battle_presence_layer": true},
+    {"state_key": "awakened",  "order": 2, "has_gameplay_bonus": true,  "has_battle_presence_layer": true},
+    {"state_key": "empowered", "order": 3, "has_gameplay_bonus": true,  "has_battle_presence_layer": true},
+    {"state_key": "blessed",   "order": 4, "has_gameplay_bonus": true,  "has_battle_presence_layer": true},
+    {"state_key": "ascendant", "order": 5, "has_gameplay_bonus": true,  "has_battle_presence_layer": true},
+    {"state_key": "divine",    "order": 6, "has_gameplay_bonus": true,  "has_battle_presence_layer": true}
+  ],
+  "unlock_requirements_contract": {
+    "initial_state": "sealed",
+    "break_seal_required": true,
+    "required_hero_star_level": 10,
+    "requires_dedicated_materials": true,
+    "requires_gold": true,
+    "requires_duplicate_materials": true
+  },
+  "divine_presence_layer_contract": {
+    "enabled": true,
+    "enabled_from_state": "dormant",
+    "disabled_in_state": "sealed",
+    "layer_type": "persistent_lightweight_battle_vfx",
+    "is_physical_weapon_animation": false,
+    "requires_new_sprite_sheet": false,
+    "runtime_attached": false,
+    "sprite_sheet_count_required": 0
+  },
+  "hero_accent_type_map": {
+    "greek_athena": "aegis_geometric_glow",
+    "greek_artemis": "lunar_wind_crescent",
+    "greek_gaia": "primordial_roots_glow",
+    "primordial_nyx": "starry_night_shadow",
+    "japanese_raijin": "thunder_drum_sparks",
+    "japanese_susanoo": "storm_blade_wind",
+    "japanese_amaterasu": "solar_mirror_radiance",
+    "egyptian_sekhmet": "solar_lioness_heat",
+    "mesopotamian_tiamat": "abyssal_primordial_water",
+    "egyptian_isis": "sacred_tyet_light",
+    "celtic_morrigan": "raven_omen_shadow",
+    "cursed_pestilence_horseman": "controlled_plague_miasma",
+    "greek_borea": "north_wind_frost_aura"
+  },
+  "acceptance_criteria": [
+    "13/13 Divine Weapon records exist",
+    "12 launch_base + 1 greek_borea launch_extra_premium",
+    "Borea remains catalog-only and not activated",
+    "No legacy `borea` is used",
+    "All records native_rarity_required = 6",
+    "All records exclusive_to_hero = true",
+    "Sealed state has no gameplay bonus and no Divine Presence Layer",
+    "Dormant+ states have gameplay/design hook metadata and Divine Presence Layer metadata",
+    "10★ seal-break requirement exists",
+    "Material requirements support controlled copies",
+    "final_numbers = null everywhere relevant",
+    "runtime_attached = false everywhere",
+    "battle_runtime_attached = false everywhere",
+    "vfx_runtime_attached = false everywhere",
+    "No DB writes",
+    "No runtime files touched",
+    "Validator passes"
+  ],
+  "safety_flags": {
+    "catalog_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "hp_bar_runtime_attached": false,
+    "vfx_runtime_attached": false,
+    "gacha_attached": false,
+    "roster_activation_attached": false,
+    "borea_activation_allowed": false,
+    "balance_values_finalized": false,
+    "do_not_treat_as_live_power": true
+  }
+}

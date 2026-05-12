@@ -1,0 +1,218 @@
+{
+  "schema_id": "divine_weapon_schema_v1",
+  "version": "v1",
+  "task_origin": "RM1.27-A",
+  "description": "Design-only, read-only, inert schema for the Divine Weapon catalog foundation. Defines structure for 6★ hero exclusive Divine Weapons. NOT connected to battle runtime, HP bar runtime, VFX runtime, gacha, roster, or DB.",
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "hp_bar_runtime_attached": false,
+  "vfx_runtime_attached": false,
+  "do_not_treat_as_live_power": true,
+  "record_required_fields": [
+    "divine_weapon_id",
+    "hero_id",
+    "display_name",
+    "native_rarity_required",
+    "exclusive_to_hero",
+    "weapon_type",
+    "lore_origin",
+    "release_group",
+    "catalog_status",
+    "runtime_attached",
+    "battle_runtime_attached",
+    "balance_values_finalized",
+    "unlock_requirements",
+    "progression_states",
+    "material_requirements",
+    "effect_tracks",
+    "skill_hooks",
+    "status_hooks",
+    "vfx_hooks",
+    "divine_presence_layer",
+    "divine_presence_identity",
+    "ui_presentation",
+    "safety_flags"
+  ],
+  "allowed_values": {
+    "native_rarity_required": [6],
+    "weapon_type": ["divine_relic"],
+    "release_group": ["launch_base", "launch_extra_premium"],
+    "catalog_status": ["catalog_only"]
+  },
+  "progression_state_definition": {
+    "required_state_keys_in_order": [
+      "sealed",
+      "dormant",
+      "awakened",
+      "empowered",
+      "blessed",
+      "ascendant",
+      "divine"
+    ],
+    "state_fields_required": [
+      "state_key",
+      "display_label_it",
+      "order",
+      "has_gameplay_bonus",
+      "has_battle_presence_layer",
+      "design_intent_summary"
+    ],
+    "hard_rules": {
+      "sealed.has_gameplay_bonus": false,
+      "sealed.has_battle_presence_layer": false,
+      "dormant_plus.has_gameplay_bonus": true,
+      "dormant_plus.has_battle_presence_layer": true
+    }
+  },
+  "unlock_requirements_definition": {
+    "required_fields": [
+      "initial_state",
+      "break_seal_required",
+      "required_hero_star_level",
+      "requires_dedicated_materials",
+      "requires_gold",
+      "requires_duplicate_materials",
+      "notes"
+    ],
+    "hard_rules": {
+      "initial_state": "sealed",
+      "break_seal_required": true,
+      "required_hero_star_level": 10,
+      "requires_dedicated_materials": true,
+      "requires_gold": true,
+      "requires_duplicate_materials": true
+    }
+  },
+  "material_requirements_definition": {
+    "required_fields": [
+      "material_id",
+      "material_type",
+      "quantity",
+      "min_native_rarity",
+      "description",
+      "final_numbers"
+    ],
+    "supported_material_types": [
+      "same_element_copy",
+      "specific_hero_copy",
+      "event_limited_substitute",
+      "dedicated_currency",
+      "gold"
+    ],
+    "hard_rules": {
+      "quantity": null,
+      "min_native_rarity": null,
+      "final_numbers": null,
+      "copies_mandatory_in_controlled_measure": true
+    }
+  },
+  "hooks_definition": {
+    "effect_track_fields_required": [
+      "track_id",
+      "state_required",
+      "effect_kind",
+      "description",
+      "final_numbers",
+      "runtime_attached"
+    ],
+    "skill_hook_fields_required": [
+      "hook_id",
+      "hook_type",
+      "state_required",
+      "description",
+      "runtime_attached"
+    ],
+    "status_hook_fields_required": [
+      "hook_id",
+      "hook_type",
+      "state_required",
+      "description",
+      "source_locked",
+      "runtime_attached"
+    ],
+    "vfx_hook_fields_required": [
+      "hook_id",
+      "hook_type",
+      "state_required",
+      "description",
+      "runtime_attached"
+    ],
+    "hard_rules": {
+      "final_numbers": null,
+      "runtime_attached": false,
+      "ultimate_signature_upgrade_state_required_in": ["ascendant", "divine"],
+      "domain_interaction_state_required_in": ["ascendant", "divine"]
+    }
+  },
+  "divine_presence_layer_definition": {
+    "required_fields": [
+      "enabled",
+      "enabled_from_state",
+      "disabled_in_state",
+      "layer_type",
+      "is_physical_weapon_animation",
+      "requires_new_sprite_sheet",
+      "visual_structure",
+      "intensity_by_state",
+      "readability_rules",
+      "runtime_attached"
+    ],
+    "hard_rules": {
+      "enabled": true,
+      "enabled_from_state": "dormant",
+      "disabled_in_state": "sealed",
+      "layer_type": "persistent_lightweight_battle_vfx",
+      "is_physical_weapon_animation": false,
+      "requires_new_sprite_sheet": false,
+      "runtime_attached": false
+    }
+  },
+  "divine_presence_identity_definition": {
+    "required_fields": [
+      "hero_accent_type",
+      "element_color_family",
+      "uses_shared_system_base"
+    ]
+  },
+  "ui_presentation_definition": {
+    "required_fields": [
+      "show_in_hero_detail",
+      "show_as_separate_tab",
+      "tab_label",
+      "show_lore",
+      "show_unlock_requirement",
+      "show_active_effects",
+      "show_locked_effect_preview",
+      "show_divine_presence_preview",
+      "sealed_state_message",
+      "sealed_presence_message",
+      "locked_until_message"
+    ]
+  },
+  "safety_flags_definition": {
+    "required_fields": [
+      "catalog_only",
+      "runtime_attached",
+      "battle_runtime_attached",
+      "hp_bar_runtime_attached",
+      "vfx_runtime_attached",
+      "gacha_attached",
+      "roster_activation_attached",
+      "borea_activation_allowed",
+      "balance_values_finalized",
+      "do_not_treat_as_live_power"
+    ],
+    "hard_rules": {
+      "catalog_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "hp_bar_runtime_attached": false,
+      "vfx_runtime_attached": false,
+      "gacha_attached": false,
+      "roster_activation_attached": false,
+      "borea_activation_allowed": false,
+      "balance_values_finalized": false,
+      "do_not_treat_as_live_power": true
+    }
+  }
+}
