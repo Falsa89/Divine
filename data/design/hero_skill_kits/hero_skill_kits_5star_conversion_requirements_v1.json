@@ -1,0 +1,223 @@
+{
+  "task_id": "RM1.26-B",
+  "title": "Convert Approved 5-Star Skill Design Source into Inert Hero Skill Kit Catalog",
+  "version": 1,
+  "status": "requirements_only",
+  "core_correction": {
+    "do_not_reauthor_5star_kits": true,
+    "approved_5star_skill_design_already_exists": true,
+    "tank_block_rewritten_in_chat_is_non_canonical": true,
+    "source_of_truth_required": true
+  },
+  "goal": "Find the consolidated approved 5-star Skill Design source already present in the repo or provided by the user, then convert it into a machine-readable inert/read-only catalog. If the source is not available, stop and report source_missing. Do not invent or reconstruct any kit.",
+  "source_policy": {
+    "allowed_sources": [
+      "repo docs under /app/docs/divine/",
+      "repo data/design files under /app/data/design/",
+      "explicit user-provided source file imported in the task"
+    ],
+    "required_source_type": "single consolidated approved 5-star skill design source, or clearly identifiable approved source set",
+    "if_source_missing": "STOP. Do not create the full 5-star catalog. Report exactly which paths were searched and ask the user to provide/import the approved source.",
+    "if_multiple_conflicting_sources": "STOP. Do not merge creatively. Report conflict and ask for canonical source selection.",
+    "forbidden": [
+      "inventing missing skill names",
+      "rewriting/rebalancing 5-star kits",
+      "using memory to fill missing details",
+      "using the non-canonical rewritten Tank block from chat",
+      "creating final balance numbers",
+      "changing battle runtime"
+    ]
+  },
+  "input_existing_files": {
+    "foundation_manifest": "/app/data/design/hero_skill_kits/hero_skill_kits_5star_manifest_v1.json",
+    "schema": "/app/data/design/hero_skill_kits/hero_skill_kit_schema_v1.json"
+  },
+  "output_if_source_found": {
+    "path": "/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json",
+    "mode": "inert/read-only design catalog",
+    "runtime_attached": false,
+    "balance_values_finalized": false,
+    "do_not_treat_as_live_kit": true,
+    "final_numbers": null
+  },
+  "required_5star_heroes": [
+    {
+      "hero_id": "greek_nemean_lioness",
+      "display_name": "Leonessa Nemea",
+      "element": "earth",
+      "role": "tank"
+    },
+    {
+      "hero_id": "norse_frost_jotunn",
+      "display_name": "Jotunn delle Brine",
+      "element": "water",
+      "role": "tank"
+    },
+    {
+      "hero_id": "angelic_bastion_angel",
+      "display_name": "Angelo dei Bastioni",
+      "element": "light",
+      "role": "tank"
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "display_name": "Valchiria dell’Alba",
+      "element": "wind",
+      "role": "dps_melee"
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "display_name": "Artiglio di Sekhmet",
+      "element": "fire",
+      "role": "dps_melee"
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "display_name": "Atalanta",
+      "element": "wind",
+      "role": "dps_ranged"
+    },
+    {
+      "hero_id": "greek_circe",
+      "display_name": "Circe",
+      "element": "dark",
+      "role": "mage_aoe"
+    },
+    {
+      "hero_id": "japanese_raijin_miko",
+      "display_name": "Miko di Raijin",
+      "element": "lightning",
+      "role": "mage_aoe"
+    },
+    {
+      "hero_id": "infernal_gehenna_witch",
+      "display_name": "Strega della Geenna",
+      "element": "fire",
+      "role": "mage_aoe"
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "display_name": "Bastet",
+      "element": "lightning",
+      "role": "assassin"
+    },
+    {
+      "hero_id": "japanese_oni_kunoichi",
+      "display_name": "Kunoichi Oni",
+      "element": "dark",
+      "role": "assassin"
+    },
+    {
+      "hero_id": "greek_nike",
+      "display_name": "Nike",
+      "element": "light",
+      "role": "support"
+    },
+    {
+      "hero_id": "norse_fate_volva",
+      "display_name": "Völva del Fato",
+      "element": "lightning",
+      "role": "support"
+    },
+    {
+      "hero_id": "norse_eir",
+      "display_name": "Eir",
+      "element": "light",
+      "role": "healer"
+    },
+    {
+      "hero_id": "greek_medusa",
+      "display_name": "Medusa",
+      "element": "earth",
+      "role": "control_debuff"
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "display_name": "Banshee delle Nebbie",
+      "element": "wind",
+      "role": "control_debuff"
+    },
+    {
+      "hero_id": "japanese_yuki_onna",
+      "display_name": "Yuki-Onna",
+      "element": "water",
+      "role": "control_debuff"
+    },
+    {
+      "hero_id": "crimson_phoenix",
+      "display_name": "Fenice Cremisi",
+      "element": "fire",
+      "role": "hybrid_special"
+    },
+    {
+      "hero_id": "greek_lernaean_hydra",
+      "display_name": "Idra di Lerna",
+      "element": "water",
+      "role": "hybrid_special"
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "display_name": "Aralda della Pestilenza",
+      "element": "dark",
+      "role": "hybrid_special"
+    }
+  ],
+  "required_slots_for_5star": [
+    "basic",
+    "passive_base",
+    "skill_1",
+    "passive_advanced",
+    "skill_2"
+  ],
+  "per_skill_required_fields": [
+    "skill_id",
+    "slot",
+    "display_name",
+    "design_summary",
+    "targeting_summary",
+    "status_tags",
+    "vfx_tags",
+    "animation_intent",
+    "final_numbers"
+  ],
+  "per_skill_forbidden_fields": {
+    "ultimate": "5-star heroes must not have ultimate slot",
+    "divine_weapon_hooks": "5-star heroes must not have native 6-star Divine Weapon hooks",
+    "domain_hooks": "5-star heroes must not have true 6-star Domain hooks"
+  },
+  "absolute_rules": [
+    "No DB writes",
+    "No migrations",
+    "No --apply",
+    "No battle_engine.py changes",
+    "No battle balance changes",
+    "No live skill activation",
+    "No live status activation",
+    "No live VFX activation",
+    "No status icon HP bar activation",
+    "No frontend HP bar changes",
+    "No gacha changes",
+    "No roster activation",
+    "Do not activate Borea",
+    "Do not modify legacy borea",
+    "Do not modify Character Bible",
+    "Do not modify existing runtime kit JSON",
+    "Do not modify assets",
+    "Do not import the catalog into combat runtime",
+    "Do not add endpoints",
+    "Do not create UI",
+    "Do not invent/rewrite approved 5-star skill design content"
+  ],
+  "acceptance_criteria": [
+    "Requirements validator PASS",
+    "If approved source is found: full inert 5-star catalog created at expected path",
+    "If approved source is missing: no full catalog created; task stops with source_missing report",
+    "If full catalog created: exactly 20 unique 5-star entries",
+    "If full catalog created: every entry has expected 5-star slots only",
+    "If full catalog created: all final_numbers are null",
+    "If full catalog created: runtime_attached=false and balance_values_finalized=false",
+    "No battle/gacha/roster/Borea/frontend HP bar changes",
+    "/api/heroes remains 100",
+    "Borea remains hidden/pending"
+  ]
+}
