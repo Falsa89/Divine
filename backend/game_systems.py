@@ -29,6 +29,7 @@ from routes.server_time import register_server_time_routes
 from routes.player_faction_v2 import register_player_faction_v2_routes
 from routes.skill_status_vfx_catalogs import register_skill_status_vfx_catalog_routes
 from routes.hero_skill_kits_catalogs import register_hero_skill_kits_catalog_routes
+from routes.divine_weapons import register_divine_weapons_catalog_routes
 
 
 def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):
@@ -61,6 +62,11 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # NOT connected to battle/HP-bar/VFX runtime. Borea entry exposed
     # in design catalog ONLY (no roster activation).
     register_hero_skill_kits_catalog_routes(router)
+    # RM1.27-B — Divine Weapon read-only catalog API (13 records inert).
+    # NOT connected to battle/HP-bar/VFX/status/gacha/roster runtime.
+    # Borea entry exposed as catalog-only design data; legacy `borea`
+    # alias is explicitly rejected with 404.
+    register_divine_weapons_catalog_routes(router)
     # Sanctuary (home hero + affinity + constellation) — note: signature differs (no calculate_hero_power)
     register_sanctuary_routes(router, db, get_current_user, serialize_doc)
 
