@@ -1,0 +1,1896 @@
+{
+  "schema_version": "1.0.0",
+  "source": "Status Effect Runtime Schema v1",
+  "official_elements": [
+    "dark",
+    "earth",
+    "fire",
+    "light",
+    "lightning",
+    "water",
+    "wind"
+  ],
+  "status_count": 40,
+  "statuses": [
+    {
+      "status_id": "stun",
+      "display_name": "Stun",
+      "category": "control",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_or_converted",
+        "elite_behavior": "reduced_duration",
+        "world_boss_behavior": "converted_effect",
+        "cannot_fully_disable_boss": true
+      },
+      "icon_key": "status_stun",
+      "vfx_refs": {
+        "apply_vfx": "apply_stun",
+        "persistent_status_vfx": "persistent_stun",
+        "expire_vfx": "expire_stun",
+        "cleanse_vfx": "cleanse_stun",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "freeze",
+      "display_name": "Freeze",
+      "category": "control",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "converted_effect",
+        "elite_behavior": "reduced_duration",
+        "world_boss_behavior": "converted_effect",
+        "cannot_fully_disable_boss": true
+      },
+      "icon_key": "status_freeze",
+      "vfx_refs": {
+        "apply_vfx": "apply_freeze",
+        "persistent_status_vfx": "persistent_freeze",
+        "expire_vfx": "expire_freeze",
+        "cleanse_vfx": "cleanse_freeze",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "silence",
+      "display_name": "Silence",
+      "category": "control",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_duration",
+        "elite_behavior": "reduced_duration",
+        "world_boss_behavior": "reduced_duration",
+        "cannot_fully_disable_boss": true
+      },
+      "icon_key": "status_silence",
+      "vfx_refs": {
+        "apply_vfx": "apply_silence",
+        "persistent_status_vfx": "persistent_silence",
+        "expire_vfx": "expire_silence",
+        "cleanse_vfx": "cleanse_silence",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "blind",
+      "display_name": "Blind",
+      "category": "control",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_duration",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": true
+      },
+      "icon_key": "status_blind",
+      "vfx_refs": {
+        "apply_vfx": "apply_blind",
+        "persistent_status_vfx": "persistent_blind",
+        "expire_vfx": "expire_blind",
+        "cleanse_vfx": "cleanse_blind",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "taunt",
+      "display_name": "Taunt",
+      "category": "control",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "reduced_duration",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": true
+      },
+      "icon_key": "status_taunt",
+      "vfx_refs": {
+        "apply_vfx": "apply_taunt",
+        "persistent_status_vfx": "persistent_taunt",
+        "expire_vfx": "expire_taunt",
+        "cleanse_vfx": "cleanse_taunt",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "slow",
+      "display_name": "Slow",
+      "category": "debuff",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_effect",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_slow",
+      "vfx_refs": {
+        "apply_vfx": "apply_slow",
+        "persistent_status_vfx": "persistent_slow",
+        "expire_vfx": "expire_slow",
+        "cleanse_vfx": "cleanse_slow",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "speed_down",
+      "display_name": "Speed Down",
+      "category": "debuff",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_effect",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_speed_down",
+      "vfx_refs": {
+        "apply_vfx": "apply_speed_down",
+        "persistent_status_vfx": "persistent_speed_down",
+        "expire_vfx": "expire_speed_down",
+        "cleanse_vfx": "cleanse_speed_down",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "speed_up",
+      "display_name": "Speed Up",
+      "category": "buff",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_speed_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_speed_up",
+        "persistent_status_vfx": "persistent_speed_up",
+        "expire_vfx": "expire_speed_up",
+        "cleanse_vfx": "cleanse_speed_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "burn",
+      "display_name": "Burn",
+      "category": "damage_over_time",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "turn_start",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal_with_cap",
+        "elite_behavior": "normal_with_cap",
+        "world_boss_behavior": "normal_with_cap",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_burn",
+      "vfx_refs": {
+        "apply_vfx": "apply_burn",
+        "persistent_status_vfx": "persistent_burn",
+        "expire_vfx": "expire_burn",
+        "cleanse_vfx": "cleanse_burn",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "bleed",
+      "display_name": "Bleed",
+      "category": "damage_over_time",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "turn_start",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal_with_cap",
+        "elite_behavior": "normal_with_cap",
+        "world_boss_behavior": "normal_with_cap",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_bleed",
+      "vfx_refs": {
+        "apply_vfx": "apply_bleed",
+        "persistent_status_vfx": "persistent_bleed",
+        "expire_vfx": "expire_bleed",
+        "cleanse_vfx": "cleanse_bleed",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "poison",
+      "display_name": "Poison",
+      "category": "damage_over_time",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "turn_start",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal_with_cap",
+        "elite_behavior": "normal_with_cap",
+        "world_boss_behavior": "normal_with_cap",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_poison",
+      "vfx_refs": {
+        "apply_vfx": "apply_poison",
+        "persistent_status_vfx": "persistent_poison",
+        "expire_vfx": "expire_poison",
+        "cleanse_vfx": "cleanse_poison",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "curse",
+      "display_name": "Curse",
+      "category": "damage_over_time",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "turn_start",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_effect",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_curse",
+      "vfx_refs": {
+        "apply_vfx": "apply_curse",
+        "persistent_status_vfx": "persistent_curse",
+        "expire_vfx": "expire_curse",
+        "cleanse_vfx": "cleanse_curse",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "frostbite",
+      "display_name": "Frostbite",
+      "category": "damage_over_time",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "turn_start",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal_with_cap",
+        "elite_behavior": "normal_with_cap",
+        "world_boss_behavior": "normal_with_cap",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_frostbite",
+      "vfx_refs": {
+        "apply_vfx": "apply_frostbite",
+        "persistent_status_vfx": "persistent_frostbite",
+        "expire_vfx": "expire_frostbite",
+        "cleanse_vfx": "cleanse_frostbite",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "shock",
+      "display_name": "Shock",
+      "category": "damage_over_time",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "turn_start",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal_with_cap",
+        "elite_behavior": "normal_with_cap",
+        "world_boss_behavior": "normal_with_cap",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_shock",
+      "vfx_refs": {
+        "apply_vfx": "apply_shock",
+        "persistent_status_vfx": "persistent_shock",
+        "expire_vfx": "expire_shock",
+        "cleanse_vfx": "cleanse_shock",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "atk_up",
+      "display_name": "ATK Up",
+      "category": "buff",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_atk_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_atk_up",
+        "persistent_status_vfx": "persistent_atk_up",
+        "expire_vfx": "expire_atk_up",
+        "cleanse_vfx": "cleanse_atk_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "def_up",
+      "display_name": "DEF Up",
+      "category": "buff",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_def_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_def_up",
+        "persistent_status_vfx": "persistent_def_up",
+        "expire_vfx": "expire_def_up",
+        "cleanse_vfx": "cleanse_def_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "crit_up",
+      "display_name": "Crit Up",
+      "category": "buff",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_crit_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_crit_up",
+        "persistent_status_vfx": "persistent_crit_up",
+        "expire_vfx": "expire_crit_up",
+        "cleanse_vfx": "cleanse_crit_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "crit_damage_up",
+      "display_name": "Crit Damage Up",
+      "category": "buff",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_crit_damage_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_crit_damage_up",
+        "persistent_status_vfx": "persistent_crit_damage_up",
+        "expire_vfx": "expire_crit_damage_up",
+        "cleanse_vfx": "cleanse_crit_damage_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "vulnerability",
+      "display_name": "Vulnerability",
+      "category": "debuff",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_effect",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_vulnerability",
+      "vfx_refs": {
+        "apply_vfx": "apply_vulnerability",
+        "persistent_status_vfx": "persistent_vulnerability",
+        "expire_vfx": "expire_vulnerability",
+        "cleanse_vfx": "cleanse_vulnerability",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "def_down",
+      "display_name": "DEF Down",
+      "category": "debuff",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_effect",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_def_down",
+      "vfx_refs": {
+        "apply_vfx": "apply_def_down",
+        "persistent_status_vfx": "persistent_def_down",
+        "expire_vfx": "expire_def_down",
+        "cleanse_vfx": "cleanse_def_down",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "effect_accuracy_up",
+      "display_name": "Effect Accuracy Up",
+      "category": "buff",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_effect_accuracy_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_effect_accuracy_up",
+        "persistent_status_vfx": "persistent_effect_accuracy_up",
+        "expire_vfx": "expire_effect_accuracy_up",
+        "cleanse_vfx": "cleanse_effect_accuracy_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "magic_damage_up",
+      "display_name": "Magic Damage Up",
+      "category": "buff",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_magic_damage_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_magic_damage_up",
+        "persistent_status_vfx": "persistent_magic_damage_up",
+        "expire_vfx": "expire_magic_damage_up",
+        "cleanse_vfx": "cleanse_magic_damage_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "physical_shield",
+      "display_name": "Physical Shield",
+      "category": "protection",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_physical_shield",
+      "vfx_refs": {
+        "apply_vfx": "apply_physical_shield",
+        "persistent_status_vfx": "persistent_physical_shield",
+        "expire_vfx": "expire_physical_shield",
+        "cleanse_vfx": "cleanse_physical_shield",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "magical_shield",
+      "display_name": "Magical Shield",
+      "category": "protection",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_magical_shield",
+      "vfx_refs": {
+        "apply_vfx": "apply_magical_shield",
+        "persistent_status_vfx": "persistent_magical_shield",
+        "expire_vfx": "expire_magical_shield",
+        "cleanse_vfx": "cleanse_magical_shield",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "hybrid_shield",
+      "display_name": "Hybrid Shield",
+      "category": "protection",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_hybrid_shield",
+      "vfx_refs": {
+        "apply_vfx": "apply_hybrid_shield",
+        "persistent_status_vfx": "persistent_hybrid_shield",
+        "expire_vfx": "expire_hybrid_shield",
+        "cleanse_vfx": "cleanse_hybrid_shield",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "damage_reduction",
+      "display_name": "Damage Reduction",
+      "category": "protection",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_damage_reduction",
+      "vfx_refs": {
+        "apply_vfx": "apply_damage_reduction",
+        "persistent_status_vfx": "persistent_damage_reduction",
+        "expire_vfx": "expire_damage_reduction",
+        "cleanse_vfx": "cleanse_damage_reduction",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "guard",
+      "display_name": "Guard",
+      "category": "protection",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_guard",
+      "vfx_refs": {
+        "apply_vfx": "apply_guard",
+        "persistent_status_vfx": "persistent_guard",
+        "expire_vfx": "expire_guard",
+        "cleanse_vfx": "cleanse_guard",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "immunity",
+      "display_name": "Immunity",
+      "category": "protection",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_immunity",
+      "vfx_refs": {
+        "apply_vfx": "apply_immunity",
+        "persistent_status_vfx": "persistent_immunity",
+        "expire_vfx": "expire_immunity",
+        "cleanse_vfx": "cleanse_immunity",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "healing_up",
+      "display_name": "Healing Up",
+      "category": "healing",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_healing_up",
+      "vfx_refs": {
+        "apply_vfx": "apply_healing_up",
+        "persistent_status_vfx": "persistent_healing_up",
+        "expire_vfx": "expire_healing_up",
+        "cleanse_vfx": "cleanse_healing_up",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "healing_reduction",
+      "display_name": "Healing Reduction",
+      "category": "debuff",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_effect",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_healing_reduction",
+      "vfx_refs": {
+        "apply_vfx": "apply_healing_reduction",
+        "persistent_status_vfx": "persistent_healing_reduction",
+        "expire_vfx": "expire_healing_reduction",
+        "cleanse_vfx": "cleanse_healing_reduction",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "healing_block",
+      "display_name": "Healing Block",
+      "category": "debuff",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "reduced_effect",
+        "elite_behavior": "reduced_effect",
+        "world_boss_behavior": "reduced_effect",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_healing_block",
+      "vfx_refs": {
+        "apply_vfx": "apply_healing_block",
+        "persistent_status_vfx": "persistent_healing_block",
+        "expire_vfx": "expire_healing_block",
+        "cleanse_vfx": "cleanse_healing_block",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "regeneration",
+      "display_name": "Regeneration",
+      "category": "healing",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_regeneration",
+      "vfx_refs": {
+        "apply_vfx": "apply_regeneration",
+        "persistent_status_vfx": "persistent_regeneration",
+        "expire_vfx": "expire_regeneration",
+        "cleanse_vfx": "cleanse_regeneration",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "cleanse",
+      "display_name": "Cleanse",
+      "category": "healing",
+      "polarity": "special",
+      "runtime": {
+        "duration_type": "instant",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "instant",
+        "elite_behavior": "instant",
+        "world_boss_behavior": "instant",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_cleanse",
+      "vfx_refs": {
+        "apply_vfx": "apply_cleanse",
+        "persistent_status_vfx": "persistent_cleanse",
+        "expire_vfx": "expire_cleanse",
+        "cleanse_vfx": "cleanse_cleanse",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "revive",
+      "display_name": "Revive",
+      "category": "healing",
+      "polarity": "special",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "limited",
+        "elite_behavior": "limited",
+        "world_boss_behavior": "limited",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_revive",
+      "vfx_refs": {
+        "apply_vfx": "apply_revive",
+        "persistent_status_vfx": "persistent_revive",
+        "expire_vfx": "expire_revive",
+        "cleanse_vfx": "cleanse_revive",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "revive_pending",
+      "display_name": "Revive Pending",
+      "category": "healing",
+      "polarity": "special",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "limited",
+        "elite_behavior": "limited",
+        "world_boss_behavior": "limited",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_revive_pending",
+      "vfx_refs": {
+        "apply_vfx": "apply_revive_pending",
+        "persistent_status_vfx": "persistent_revive_pending",
+        "expire_vfx": "expire_revive_pending",
+        "cleanse_vfx": "cleanse_revive_pending",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "death_protection",
+      "display_name": "Death Protection",
+      "category": "protection",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "limited",
+        "elite_behavior": "limited",
+        "world_boss_behavior": "limited",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_death_protection",
+      "vfx_refs": {
+        "apply_vfx": "apply_death_protection",
+        "persistent_status_vfx": "persistent_death_protection",
+        "expire_vfx": "expire_death_protection",
+        "cleanse_vfx": "cleanse_death_protection",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "mark",
+      "display_name": "Mark",
+      "category": "special",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_status"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_mark",
+      "vfx_refs": {
+        "apply_vfx": "apply_mark",
+        "persistent_status_vfx": "persistent_mark",
+        "expire_vfx": "expire_mark",
+        "cleanse_vfx": "cleanse_mark",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "marchio_boreale",
+      "display_name": "Marchio Boreale",
+      "category": "stacking_unique",
+      "polarity": "debuff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": true,
+        "persists_after_source_death": false
+      },
+      "stacking": {
+        "is_stackable": true,
+        "max_stacks_default": 3,
+        "max_stacks_pvp": 3,
+        "max_stacks_pve": 5,
+        "stack_decay": {
+          "enabled": true,
+          "condition": "if_not_hit_by_source"
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": true,
+        "cleanse_behavior": "remove_one_stack_or_multiple_stacks"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": true,
+        "already_applied_behavior": "prevents_stack_gain_only"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_marchio_boreale",
+      "vfx_refs": {
+        "apply_vfx": "apply_marchio_boreale",
+        "persistent_status_vfx": "persistent_marchio_boreale",
+        "expire_vfx": "expire_marchio_boreale",
+        "cleanse_vfx": "cleanse_marchio_boreale",
+        "stack_gain_vfx": "stack_gain_marchio_boreale",
+        "stack_decay_vfx": "stack_decay_marchio_boreale"
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "berserk",
+      "display_name": "Berserk",
+      "category": "special",
+      "polarity": "buff",
+      "runtime": {
+        "duration_type": "turns",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": true,
+        "max_stacks_default": 5,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "normal",
+        "elite_behavior": "normal",
+        "world_boss_behavior": "normal",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_berserk",
+      "vfx_refs": {
+        "apply_vfx": "apply_berserk",
+        "persistent_status_vfx": "persistent_berserk",
+        "expire_vfx": "expire_berserk",
+        "cleanse_vfx": "cleanse_berserk",
+        "stack_gain_vfx": "stack_gain_berserk",
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    },
+    {
+      "status_id": "domain_effect",
+      "display_name": "Domain Effect",
+      "category": "field_domain",
+      "polarity": "field",
+      "runtime": {
+        "duration_type": "field_duration",
+        "duration_turns": null,
+        "tick_timing": "none",
+        "source_locked": false,
+        "persists_after_source_death": null
+      },
+      "stacking": {
+        "is_stackable": false,
+        "max_stacks_default": null,
+        "max_stacks_pvp": null,
+        "max_stacks_pve": null,
+        "stack_decay": {
+          "enabled": false,
+          "condition": null
+        }
+      },
+      "cleanse_rules": {
+        "can_be_cleansed": false,
+        "cleanse_behavior": "cannot_cleanse"
+      },
+      "immunity_rules": {
+        "can_be_blocked_by_immunity": false,
+        "already_applied_behavior": "does_not_remove_existing"
+      },
+      "boss_rules": {
+        "boss_behavior": "limited_duration",
+        "elite_behavior": "limited_duration",
+        "world_boss_behavior": "limited_duration",
+        "cannot_fully_disable_boss": false
+      },
+      "icon_key": "status_domain_effect",
+      "vfx_refs": {
+        "apply_vfx": "apply_domain_effect",
+        "persistent_status_vfx": "persistent_domain_effect",
+        "expire_vfx": "expire_domain_effect",
+        "cleanse_vfx": "cleanse_domain_effect",
+        "stack_gain_vfx": null,
+        "stack_decay_vfx": null
+      },
+      "balance_notes": "Numbers/chance/duration/scaling are intentionally null for pre-release balance QA."
+    }
+  ]
+}

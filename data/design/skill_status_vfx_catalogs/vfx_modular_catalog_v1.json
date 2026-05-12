@@ -1,0 +1,4270 @@
+{
+  "schema_version": "1.0.0",
+  "source": "VFX Modular Bible v1",
+  "vfx_types": [
+    "apply_vfx",
+    "projectile_vfx",
+    "travel_vfx",
+    "impact_vfx",
+    "persistent_status_vfx",
+    "stack_gain_vfx",
+    "stack_decay_vfx",
+    "expire_vfx",
+    "cleanse_vfx",
+    "field_domain_vfx",
+    "screen_edge_vfx",
+    "fullscreen_vfx"
+  ],
+  "layering_order": [
+    "background_battle",
+    "field_domain_background",
+    "ground_area_vfx",
+    "character_sprites",
+    "character_attached_persistent_vfx",
+    "projectile_vfx",
+    "impact_vfx",
+    "hp_bar",
+    "status_icons",
+    "screen_edge_vfx",
+    "ui_overlay"
+  ],
+  "intensity_levels": [
+    "low",
+    "medium",
+    "high",
+    "premium",
+    "ultimate",
+    "domain"
+  ],
+  "global_mobile_readability_rules": [
+    "do not cover HP bar",
+    "do not cover status icons",
+    "do not obscure full sprite",
+    "avoid full white flashes",
+    "avoid unreadable tiny particles"
+  ],
+  "vfx_entries": [
+    {
+      "vfx_id": "apply_stun",
+      "type": "apply_vfx",
+      "status_id": "stun",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_electric"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief stun application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_stun",
+      "type": "persistent_status_vfx",
+      "status_id": "stun",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_electric"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent stun effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_stun",
+      "type": "expire_vfx",
+      "status_id": "stun",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_electric"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural stun expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_stun",
+      "type": "cleanse_vfx",
+      "status_id": "stun",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_electric"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for stun, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_freeze",
+      "type": "apply_vfx",
+      "status_id": "freeze",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief freeze application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_freeze",
+      "type": "persistent_status_vfx",
+      "status_id": "freeze",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent freeze effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_freeze",
+      "type": "expire_vfx",
+      "status_id": "freeze",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural freeze expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_freeze",
+      "type": "cleanse_vfx",
+      "status_id": "freeze",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for freeze, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_silence",
+      "type": "apply_vfx",
+      "status_id": "silence",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief silence application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_silence",
+      "type": "persistent_status_vfx",
+      "status_id": "silence",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent silence effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_silence",
+      "type": "expire_vfx",
+      "status_id": "silence",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural silence expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_silence",
+      "type": "cleanse_vfx",
+      "status_id": "silence",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for silence, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_blind",
+      "type": "apply_vfx",
+      "status_id": "blind",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "black_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief blind application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_blind",
+      "type": "persistent_status_vfx",
+      "status_id": "blind",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "black_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent blind effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_blind",
+      "type": "expire_vfx",
+      "status_id": "blind",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "black_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural blind expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_blind",
+      "type": "cleanse_vfx",
+      "status_id": "blind",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "black_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for blind, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_taunt",
+      "type": "apply_vfx",
+      "status_id": "taunt",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief taunt application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_taunt",
+      "type": "persistent_status_vfx",
+      "status_id": "taunt",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent taunt effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_taunt",
+      "type": "expire_vfx",
+      "status_id": "taunt",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural taunt expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_taunt",
+      "type": "cleanse_vfx",
+      "status_id": "taunt",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for taunt, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_slow",
+      "type": "apply_vfx",
+      "status_id": "slow",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "cold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief slow application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_slow",
+      "type": "persistent_status_vfx",
+      "status_id": "slow",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "cold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent slow effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_slow",
+      "type": "expire_vfx",
+      "status_id": "slow",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "cold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural slow expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_slow",
+      "type": "cleanse_vfx",
+      "status_id": "slow",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "cold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for slow, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_speed_down",
+      "type": "apply_vfx",
+      "status_id": "speed_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "muted_wind"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief speed_down application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_speed_down",
+      "type": "persistent_status_vfx",
+      "status_id": "speed_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "muted_wind"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent speed_down effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_speed_down",
+      "type": "expire_vfx",
+      "status_id": "speed_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "muted_wind"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural speed_down expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_speed_down",
+      "type": "cleanse_vfx",
+      "status_id": "speed_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "muted_wind"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for speed_down, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_speed_up",
+      "type": "apply_vfx",
+      "status_id": "speed_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "wind_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief speed_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_speed_up",
+      "type": "persistent_status_vfx",
+      "status_id": "speed_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "wind_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent speed_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_speed_up",
+      "type": "expire_vfx",
+      "status_id": "speed_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "wind_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural speed_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_speed_up",
+      "type": "cleanse_vfx",
+      "status_id": "speed_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "wind_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for speed_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_burn",
+      "type": "apply_vfx",
+      "status_id": "burn",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_orange_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief burn application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_burn",
+      "type": "persistent_status_vfx",
+      "status_id": "burn",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_orange_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent burn effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_burn",
+      "type": "expire_vfx",
+      "status_id": "burn",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_orange_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural burn expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_burn",
+      "type": "cleanse_vfx",
+      "status_id": "burn",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_orange_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for burn, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_bleed",
+      "type": "apply_vfx",
+      "status_id": "bleed",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "crimson"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief bleed application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_bleed",
+      "type": "persistent_status_vfx",
+      "status_id": "bleed",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "crimson"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent bleed effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_bleed",
+      "type": "expire_vfx",
+      "status_id": "bleed",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "crimson"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural bleed expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_bleed",
+      "type": "cleanse_vfx",
+      "status_id": "bleed",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "crimson"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for bleed, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_poison",
+      "type": "apply_vfx",
+      "status_id": "poison",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "toxic_green_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief poison application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_poison",
+      "type": "persistent_status_vfx",
+      "status_id": "poison",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "toxic_green_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent poison effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_poison",
+      "type": "expire_vfx",
+      "status_id": "poison",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "toxic_green_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural poison expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_poison",
+      "type": "cleanse_vfx",
+      "status_id": "poison",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "toxic_green_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for poison, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_curse",
+      "type": "apply_vfx",
+      "status_id": "curse",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_purple_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief curse application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_curse",
+      "type": "persistent_status_vfx",
+      "status_id": "curse",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_purple_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent curse effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_curse",
+      "type": "expire_vfx",
+      "status_id": "curse",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_purple_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural curse expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_curse",
+      "type": "cleanse_vfx",
+      "status_id": "curse",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_purple_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for curse, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_frostbite",
+      "type": "apply_vfx",
+      "status_id": "frostbite",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "pale_ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief frostbite application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_frostbite",
+      "type": "persistent_status_vfx",
+      "status_id": "frostbite",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "pale_ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent frostbite effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_frostbite",
+      "type": "expire_vfx",
+      "status_id": "frostbite",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "pale_ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural frostbite expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_frostbite",
+      "type": "cleanse_vfx",
+      "status_id": "frostbite",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "pale_ice_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for frostbite, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_shock",
+      "type": "apply_vfx",
+      "status_id": "shock",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief shock application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_shock",
+      "type": "persistent_status_vfx",
+      "status_id": "shock",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent shock effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_shock",
+      "type": "expire_vfx",
+      "status_id": "shock",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural shock expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_shock",
+      "type": "cleanse_vfx",
+      "status_id": "shock",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "yellow_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for shock, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_atk_up",
+      "type": "apply_vfx",
+      "status_id": "atk_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief atk_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_atk_up",
+      "type": "persistent_status_vfx",
+      "status_id": "atk_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent atk_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_atk_up",
+      "type": "expire_vfx",
+      "status_id": "atk_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural atk_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_atk_up",
+      "type": "cleanse_vfx",
+      "status_id": "atk_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for atk_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_def_up",
+      "type": "apply_vfx",
+      "status_id": "def_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "steel_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief def_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_def_up",
+      "type": "persistent_status_vfx",
+      "status_id": "def_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "steel_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent def_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_def_up",
+      "type": "expire_vfx",
+      "status_id": "def_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "steel_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural def_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_def_up",
+      "type": "cleanse_vfx",
+      "status_id": "def_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "steel_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for def_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_crit_up",
+      "type": "apply_vfx",
+      "status_id": "crit_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief crit_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_crit_up",
+      "type": "persistent_status_vfx",
+      "status_id": "crit_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent crit_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_crit_up",
+      "type": "expire_vfx",
+      "status_id": "crit_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural crit_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_crit_up",
+      "type": "cleanse_vfx",
+      "status_id": "crit_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for crit_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_crit_damage_up",
+      "type": "apply_vfx",
+      "status_id": "crit_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief crit_damage_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_crit_damage_up",
+      "type": "persistent_status_vfx",
+      "status_id": "crit_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent crit_damage_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_crit_damage_up",
+      "type": "expire_vfx",
+      "status_id": "crit_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural crit_damage_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_crit_damage_up",
+      "type": "cleanse_vfx",
+      "status_id": "crit_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for crit_damage_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_vulnerability",
+      "type": "apply_vfx",
+      "status_id": "vulnerability",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief vulnerability application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_vulnerability",
+      "type": "persistent_status_vfx",
+      "status_id": "vulnerability",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent vulnerability effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_vulnerability",
+      "type": "expire_vfx",
+      "status_id": "vulnerability",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural vulnerability expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_vulnerability",
+      "type": "cleanse_vfx",
+      "status_id": "vulnerability",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for vulnerability, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_def_down",
+      "type": "apply_vfx",
+      "status_id": "def_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gray_blue_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief def_down application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_def_down",
+      "type": "persistent_status_vfx",
+      "status_id": "def_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "gray_blue_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent def_down effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_def_down",
+      "type": "expire_vfx",
+      "status_id": "def_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gray_blue_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural def_down expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_def_down",
+      "type": "cleanse_vfx",
+      "status_id": "def_down",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gray_blue_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for def_down, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_effect_accuracy_up",
+      "type": "apply_vfx",
+      "status_id": "effect_accuracy_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "cyan_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief effect_accuracy_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_effect_accuracy_up",
+      "type": "persistent_status_vfx",
+      "status_id": "effect_accuracy_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "cyan_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent effect_accuracy_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_effect_accuracy_up",
+      "type": "expire_vfx",
+      "status_id": "effect_accuracy_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "cyan_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural effect_accuracy_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_effect_accuracy_up",
+      "type": "cleanse_vfx",
+      "status_id": "effect_accuracy_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "cyan_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for effect_accuracy_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_magic_damage_up",
+      "type": "apply_vfx",
+      "status_id": "magic_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief magic_damage_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_magic_damage_up",
+      "type": "persistent_status_vfx",
+      "status_id": "magic_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent magic_damage_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_magic_damage_up",
+      "type": "expire_vfx",
+      "status_id": "magic_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural magic_damage_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_magic_damage_up",
+      "type": "cleanse_vfx",
+      "status_id": "magic_damage_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for magic_damage_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_physical_shield",
+      "type": "apply_vfx",
+      "status_id": "physical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief physical_shield application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_physical_shield",
+      "type": "persistent_status_vfx",
+      "status_id": "physical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent physical_shield effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_physical_shield",
+      "type": "expire_vfx",
+      "status_id": "physical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural physical_shield expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_physical_shield",
+      "type": "cleanse_vfx",
+      "status_id": "physical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for physical_shield, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_magical_shield",
+      "type": "apply_vfx",
+      "status_id": "magical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief magical_shield application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_magical_shield",
+      "type": "persistent_status_vfx",
+      "status_id": "magical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent magical_shield effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_magical_shield",
+      "type": "expire_vfx",
+      "status_id": "magical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural magical_shield expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_magical_shield",
+      "type": "cleanse_vfx",
+      "status_id": "magical_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "blue_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for magical_shield, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_hybrid_shield",
+      "type": "apply_vfx",
+      "status_id": "hybrid_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief hybrid_shield application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_hybrid_shield",
+      "type": "persistent_status_vfx",
+      "status_id": "hybrid_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent hybrid_shield effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_hybrid_shield",
+      "type": "expire_vfx",
+      "status_id": "hybrid_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural hybrid_shield expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_hybrid_shield",
+      "type": "cleanse_vfx",
+      "status_id": "hybrid_shield",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for hybrid_shield, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_damage_reduction",
+      "type": "apply_vfx",
+      "status_id": "damage_reduction",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief damage_reduction application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_damage_reduction",
+      "type": "persistent_status_vfx",
+      "status_id": "damage_reduction",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent damage_reduction effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_damage_reduction",
+      "type": "expire_vfx",
+      "status_id": "damage_reduction",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural damage_reduction expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_damage_reduction",
+      "type": "cleanse_vfx",
+      "status_id": "damage_reduction",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "silver_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for damage_reduction, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_guard",
+      "type": "apply_vfx",
+      "status_id": "guard",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "tactical_gold_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief guard application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_guard",
+      "type": "persistent_status_vfx",
+      "status_id": "guard",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "tactical_gold_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent guard effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_guard",
+      "type": "expire_vfx",
+      "status_id": "guard",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "tactical_gold_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural guard expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_guard",
+      "type": "cleanse_vfx",
+      "status_id": "guard",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "tactical_gold_steel"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for guard, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_immunity",
+      "type": "apply_vfx",
+      "status_id": "immunity",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_gold_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief immunity application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_immunity",
+      "type": "persistent_status_vfx",
+      "status_id": "immunity",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_gold_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent immunity effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_immunity",
+      "type": "expire_vfx",
+      "status_id": "immunity",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_gold_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural immunity expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_immunity",
+      "type": "cleanse_vfx",
+      "status_id": "immunity",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_gold_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for immunity, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_healing_up",
+      "type": "apply_vfx",
+      "status_id": "healing_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief healing_up application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_healing_up",
+      "type": "persistent_status_vfx",
+      "status_id": "healing_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent healing_up effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_healing_up",
+      "type": "expire_vfx",
+      "status_id": "healing_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural healing_up expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_healing_up",
+      "type": "cleanse_vfx",
+      "status_id": "healing_up",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for healing_up, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_healing_reduction",
+      "type": "apply_vfx",
+      "status_id": "healing_reduction",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief healing_reduction application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_healing_reduction",
+      "type": "persistent_status_vfx",
+      "status_id": "healing_reduction",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent healing_reduction effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_healing_reduction",
+      "type": "expire_vfx",
+      "status_id": "healing_reduction",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural healing_reduction expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_healing_reduction",
+      "type": "cleanse_vfx",
+      "status_id": "healing_reduction",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for healing_reduction, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_healing_block",
+      "type": "apply_vfx",
+      "status_id": "healing_block",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_black_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief healing_block application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_healing_block",
+      "type": "persistent_status_vfx",
+      "status_id": "healing_block",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_black_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent healing_block effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_healing_block",
+      "type": "expire_vfx",
+      "status_id": "healing_block",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_black_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural healing_block expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_healing_block",
+      "type": "cleanse_vfx",
+      "status_id": "healing_block",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dull_green_black_red"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for healing_block, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_regeneration",
+      "type": "apply_vfx",
+      "status_id": "regeneration",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "life_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief regeneration application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_regeneration",
+      "type": "persistent_status_vfx",
+      "status_id": "regeneration",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "life_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent regeneration effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_regeneration",
+      "type": "expire_vfx",
+      "status_id": "regeneration",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "life_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural regeneration expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_regeneration",
+      "type": "cleanse_vfx",
+      "status_id": "regeneration",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "life_green"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for regeneration, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_cleanse",
+      "type": "apply_vfx",
+      "status_id": "cleanse",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief cleanse application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_cleanse",
+      "type": "persistent_status_vfx",
+      "status_id": "cleanse",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent cleanse effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_cleanse",
+      "type": "expire_vfx",
+      "status_id": "cleanse",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural cleanse expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_cleanse",
+      "type": "cleanse_vfx",
+      "status_id": "cleanse",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "white_cyan"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for cleanse, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_revive",
+      "type": "apply_vfx",
+      "status_id": "revive",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief revive application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_revive",
+      "type": "persistent_status_vfx",
+      "status_id": "revive",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent revive effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_revive",
+      "type": "expire_vfx",
+      "status_id": "revive",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural revive expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_revive",
+      "type": "cleanse_vfx",
+      "status_id": "revive",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_green_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for revive, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_revive_pending",
+      "type": "apply_vfx",
+      "status_id": "revive_pending",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief revive_pending application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_revive_pending",
+      "type": "persistent_status_vfx",
+      "status_id": "revive_pending",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent revive_pending effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_revive_pending",
+      "type": "expire_vfx",
+      "status_id": "revive_pending",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural revive_pending expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_revive_pending",
+      "type": "cleanse_vfx",
+      "status_id": "revive_pending",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "gold_white"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for revive_pending, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_death_protection",
+      "type": "apply_vfx",
+      "status_id": "death_protection",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_gold_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief death_protection application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_death_protection",
+      "type": "persistent_status_vfx",
+      "status_id": "death_protection",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_gold_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent death_protection effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_death_protection",
+      "type": "expire_vfx",
+      "status_id": "death_protection",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_gold_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural death_protection expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_death_protection",
+      "type": "cleanse_vfx",
+      "status_id": "death_protection",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "dark_gold_violet"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for death_protection, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_mark",
+      "type": "apply_vfx",
+      "status_id": "mark",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief mark application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_mark",
+      "type": "persistent_status_vfx",
+      "status_id": "mark",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent mark effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_mark",
+      "type": "expire_vfx",
+      "status_id": "mark",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural mark expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_mark",
+      "type": "cleanse_vfx",
+      "status_id": "mark",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for mark, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "apply_marchio_boreale",
+      "type": "apply_vfx",
+      "status_id": "marchio_boreale",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue_white_wind_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief marchio_boreale application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_marchio_boreale",
+      "type": "persistent_status_vfx",
+      "status_id": "marchio_boreale",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue_white_wind_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent marchio_boreale effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_marchio_boreale",
+      "type": "expire_vfx",
+      "status_id": "marchio_boreale",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue_white_wind_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural marchio_boreale expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_marchio_boreale",
+      "type": "cleanse_vfx",
+      "status_id": "marchio_boreale",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue_white_wind_blue"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for marchio_boreale, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "stack_gain_marchio_boreale",
+      "type": "stack_gain_vfx",
+      "status_id": "marchio_boreale",
+      "owner_scope": "target_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue_white_wind_blue"
+      ],
+      "description": "Pulse when marchio_boreale gains a stack.",
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      }
+    },
+    {
+      "vfx_id": "stack_decay_marchio_boreale",
+      "type": "stack_decay_vfx",
+      "status_id": "marchio_boreale",
+      "owner_scope": "target",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "ice_blue",
+        "white",
+        "wind_cyan"
+      ],
+      "description": "A small ice fragment detaches and dissolves into the north wind when one stack decays.",
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      }
+    },
+    {
+      "vfx_id": "apply_berserk",
+      "type": "apply_vfx",
+      "status_id": "berserk",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief berserk application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_berserk",
+      "type": "persistent_status_vfx",
+      "status_id": "berserk",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent berserk effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_berserk",
+      "type": "expire_vfx",
+      "status_id": "berserk",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural berserk expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_berserk",
+      "type": "cleanse_vfx",
+      "status_id": "berserk",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold_black"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for berserk, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "stack_gain_berserk",
+      "type": "stack_gain_vfx",
+      "status_id": "berserk",
+      "owner_scope": "target_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "red_gold_black"
+      ],
+      "description": "Pulse when berserk gains a stack.",
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      }
+    },
+    {
+      "vfx_id": "apply_domain_effect",
+      "type": "apply_vfx",
+      "status_id": "domain_effect",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "variable"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Brief domain_effect application effect on target.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "persistent_domain_effect",
+      "type": "persistent_status_vfx",
+      "status_id": "domain_effect",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "while_status_active",
+      "intensity": "low_to_medium",
+      "loop": true,
+      "opacity": "controlled",
+      "color_palette": [
+        "variable"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Controlled persistent domain_effect effect while status is active.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "expire_domain_effect",
+      "type": "expire_vfx",
+      "status_id": "domain_effect",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "variable"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Natural domain_effect expiration effect.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    },
+    {
+      "vfx_id": "cleanse_domain_effect",
+      "type": "cleanse_vfx",
+      "status_id": "domain_effect",
+      "owner_scope": "ally_or_self",
+      "attach_to": "character_or_hp_bar",
+      "duration_rule": "brief",
+      "intensity": "low_to_medium",
+      "loop": false,
+      "opacity": "controlled",
+      "color_palette": [
+        "variable"
+      ],
+      "mobile_readability": {
+        "must_not_obscure_hp_bar": true,
+        "must_not_obscure_status_icons": true,
+        "max_screen_coverage": "low"
+      },
+      "description": "Clean white/cyan removal effect for domain_effect, distinct from natural expire.",
+      "hard_rules": [
+        "no text",
+        "no numbers",
+        "no watermark",
+        "must remain readable on mobile"
+      ]
+    }
+  ]
+}

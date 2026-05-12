@@ -1,0 +1,226 @@
+{
+  "schema_version": "1.0.0",
+  "source": "Skill Data Schema v1.1 examples",
+  "examples": [
+    {
+      "example_id": "greek_artemis_projectile_skill",
+      "hero_id": "greek_artemis",
+      "slot": "skill_1",
+      "display_name": "Preda della Luna",
+      "element": "wind",
+      "targeting": {
+        "side": "enemy",
+        "target_type": "priority",
+        "priority_rule": "backline_or_highest_atk",
+        "area_shape": "single",
+        "can_be_taunted": true
+      },
+      "effects": [
+        {
+          "effect_type": "damage",
+          "target": "selected_enemy"
+        },
+        {
+          "effect_type": "apply_status",
+          "status_id": "mark",
+          "target": "selected_enemy"
+        }
+      ],
+      "presentation_flow": {
+        "source_actor_motion": {
+          "motion_type": "ranged_projectile_with_target_burst",
+          "animation_key": "skill_1",
+          "movement": "minimal_step_forward",
+          "start_anchor": "own_grid_slot",
+          "end_anchor": "own_grid_slot",
+          "faces_target": true
+        },
+        "projectile_vfx": {
+          "enabled": true,
+          "origin": "caster_weapon",
+          "origin_socket": "bow_string",
+          "travel_path": "caster_to_target",
+          "projectile_key": "projectile_artemis_lunar_arrow",
+          "sync_start": "release_frame"
+        },
+        "target_impact_vfx": {
+          "enabled": true,
+          "spawn_location": "target_position",
+          "impact_key": "impact_artemis_lunar_mark_burst",
+          "sync_rule": "on_projectile_contact"
+        },
+        "return_motion": {
+          "enabled": true,
+          "return_to_grid": true,
+          "return_style": "no_return_needed"
+        },
+        "persistent_status_vfx": [
+          "persistent_mark"
+        ],
+        "screen_or_field_vfx": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "example_id": "assassin_blink_behind_skill",
+      "slot": "skill_1",
+      "targeting": {
+        "side": "enemy",
+        "target_type": "priority",
+        "priority_rule": "lowest_hp_or_backline",
+        "area_shape": "single",
+        "can_be_taunted": true
+      },
+      "presentation_flow": {
+        "source_actor_motion": {
+          "motion_type": "assassin_blink_behind",
+          "animation_key": "skill_1",
+          "movement": "blink_behind_target",
+          "start_anchor": "own_grid_slot",
+          "end_anchor": "target_back_edge",
+          "faces_target": true,
+          "can_cross_grid": true,
+          "special_positioning": "behind_target"
+        },
+        "projectile_vfx": {
+          "enabled": false
+        },
+        "target_impact_vfx": {
+          "enabled": true,
+          "spawn_location": "behind_target",
+          "impact_key": "impact_shadow_backslash",
+          "sync_rule": "on_contact_frame"
+        },
+        "return_motion": {
+          "enabled": true,
+          "return_to_grid": true,
+          "return_style": "fade_back"
+        },
+        "persistent_status_vfx": [],
+        "screen_or_field_vfx": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "example_id": "gaia_revive_cast",
+      "hero_id": "greek_gaia",
+      "slot": "ultimate",
+      "display_name": "Madre del Mondo",
+      "element": "earth",
+      "targeting": {
+        "side": "ally",
+        "target_type": "fallen_ally",
+        "area_shape": "single",
+        "can_be_taunted": false
+      },
+      "effects": [
+        {
+          "effect_type": "revive",
+          "target": "fallen_ally"
+        },
+        {
+          "effect_type": "apply_status",
+          "status_id": "hybrid_shield",
+          "target": "revived_ally"
+        }
+      ],
+      "presentation_flow": {
+        "source_actor_motion": {
+          "motion_type": "revive_cast",
+          "animation_key": "ultimate",
+          "movement": "stationary_cast",
+          "start_anchor": "own_grid_slot",
+          "end_anchor": "own_grid_slot",
+          "faces_target": false
+        },
+        "projectile_vfx": {
+          "enabled": false
+        },
+        "target_impact_vfx": {
+          "enabled": true,
+          "spawn_location": "fallen_ally_position",
+          "impact_key": "impact_gaia_primordial_seed_revive",
+          "sync_rule": "on_cast_peak_frame"
+        },
+        "return_motion": {
+          "enabled": false,
+          "return_to_grid": true
+        },
+        "persistent_status_vfx": [
+          "persistent_hybrid_shield"
+        ],
+        "screen_or_field_vfx": {
+          "enabled": true,
+          "field_vfx_key": "field_gaia_roots_team_field",
+          "duration": "short"
+        }
+      }
+    },
+    {
+      "example_id": "borea_ultimate_domain",
+      "hero_id": "greek_borea",
+      "slot": "ultimate",
+      "display_name": "Bora del Vento del Nord",
+      "element": "wind",
+      "targeting": {
+        "side": "enemy",
+        "target_type": "all",
+        "area_shape": "aoe_full",
+        "can_be_taunted": false,
+        "ignores_taunt": true
+      },
+      "effects": [
+        {
+          "effect_type": "apply_status",
+          "status_id": "slow",
+          "target": "all_enemies"
+        },
+        {
+          "effect_type": "apply_status",
+          "status_id": "marchio_boreale",
+          "target": "all_enemies"
+        },
+        {
+          "effect_type": "conditional_status",
+          "status_id": "freeze",
+          "condition": "target_has_frostbite_and_marchio_boreale"
+        }
+      ],
+      "presentation_flow": {
+        "source_actor_motion": {
+          "motion_type": "field_domain_cast",
+          "animation_key": "ultimate",
+          "movement": "stationary_cast",
+          "start_anchor": "own_grid_slot",
+          "end_anchor": "own_grid_slot",
+          "faces_target": true
+        },
+        "projectile_vfx": {
+          "enabled": false
+        },
+        "target_impact_vfx": {
+          "enabled": true,
+          "spawn_location": "enemy_team_area",
+          "impact_key": "impact_borea_bora_aoe_frost_wind",
+          "sync_rule": "on_ultimate_peak_frame"
+        },
+        "return_motion": {
+          "enabled": false,
+          "return_to_grid": true
+        },
+        "persistent_status_vfx": [
+          "persistent_slow",
+          "persistent_marchio_boreale"
+        ],
+        "screen_or_field_vfx": {
+          "enabled": true,
+          "field_vfx_key": "field_borea_dominio_bora_boreale",
+          "screen_edge_vfx": "screen_borea_frost_edges",
+          "mobile_readability": "must_not_obscure_units"
+        }
+      }
+    }
+  ]
+}

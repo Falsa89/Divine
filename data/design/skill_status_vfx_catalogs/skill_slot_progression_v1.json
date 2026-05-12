@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "source": "Skill Data Schema v1.1",
+  "official_skill_slots_by_native_rarity": {
+    "1": [
+      "basic"
+    ],
+    "2": [
+      "basic",
+      "passive_base"
+    ],
+    "3": [
+      "basic",
+      "passive_base",
+      "skill_1"
+    ],
+    "4": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced"
+    ],
+    "5": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced",
+      "skill_2"
+    ],
+    "6": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced",
+      "skill_2",
+      "ultimate"
+    ]
+  },
+  "slot_definitions": {
+    "basic": {
+      "type": "basic_attack",
+      "description": "Basic attack available to every hero."
+    },
+    "passive_base": {
+      "type": "passive",
+      "description": "Simple base passive, unlocked at 2★+ native structure."
+    },
+    "skill_1": {
+      "type": "active",
+      "description": "First active skill, present from 3★+ native structure."
+    },
+    "passive_advanced": {
+      "type": "passive",
+      "description": "Advanced/second passive, present from 4★+ native structure."
+    },
+    "skill_2": {
+      "type": "active",
+      "description": "Second active skill, present from 5★+ native structure."
+    },
+    "ultimate": {
+      "type": "ultimate",
+      "description": "Ultimate/divine skill, present on native 6★."
+    }
+  },
+  "validator_rules": [
+    "1★ must only contain basic.",
+    "2★ must not contain skill_1.",
+    "3★ must contain skill_1.",
+    "4★ must contain passive_advanced.",
+    "5★ must contain skill_2.",
+    "6★ must contain ultimate.",
+    "6★ should declare divine weapon metadata in future skill packages."
+  ]
+}
