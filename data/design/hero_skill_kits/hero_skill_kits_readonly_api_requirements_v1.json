@@ -1,0 +1,127 @@
+{
+  "task_id": "RM1.26-C",
+  "title": "Hero Skill Kit Read-Only Catalog API",
+  "status": "requirements_only",
+  "version": "1.0",
+  "purpose": "Expose inert/read-only hero skill kit catalogs through backend GET endpoints without connecting them to battle runtime, UI HP bar, skill activation, status activation, or balance systems.",
+  "source_catalogs": {
+    "schema": "/app/data/design/hero_skill_kits/hero_skill_kit_schema_v1.json",
+    "five_star_full": "/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json",
+    "six_star_borea": "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+    "five_star_manifest": "/app/data/design/hero_skill_kits/hero_skill_kits_5star_manifest_v1.json"
+  },
+  "expected_counts": {
+    "five_star_entries": 20,
+    "six_star_launch_base_entries": 12,
+    "six_star_extra_premium_entries": 1,
+    "six_star_total_entries": 13,
+    "total_catalog_entries": 33
+  },
+  "expected_slots": {
+    "five_star": ["basic", "passive_base", "skill_1", "passive_advanced", "skill_2"],
+    "six_star": ["basic", "passive_base", "skill_1", "passive_advanced", "skill_2", "ultimate"]
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/hero-skill-kits/catalogs/summary",
+      "description": "Read-only summary with counts, runtime flags, source paths, validation-friendly statistics."
+    },
+    {
+      "method": "GET",
+      "path": "/api/hero-skill-kits/catalogs/schema",
+      "description": "Read-only hero skill kit schema metadata."
+    },
+    {
+      "method": "GET",
+      "path": "/api/hero-skill-kits/catalogs/5star",
+      "description": "Read-only 5★ full skill kit catalog converted from approved source."
+    },
+    {
+      "method": "GET",
+      "path": "/api/hero-skill-kits/catalogs/6star",
+      "description": "Read-only 6★ launch_base + Borea extra premium skill kit catalog."
+    },
+    {
+      "method": "GET",
+      "path": "/api/hero-skill-kits/catalogs/by-hero/{hero_id}",
+      "description": "Read-only lookup by canonical hero_id across 5★ and 6★ catalogs."
+    }
+  ],
+  "required_payload_flags": {
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "ui_runtime_attached": false,
+    "hp_bar_runtime_attached": false,
+    "balance_values_finalized": false,
+    "do_not_treat_as_live_kit": true
+  },
+  "loader_rules": [
+    "Create a backend loader that reads JSON files from /app/data/design/hero_skill_kits/ only.",
+    "Loader must be read-only and lazy/cache-based.",
+    "Loader must not write files, modify DB, mutate catalogs, or normalize data in-place.",
+    "By-hero lookup must use canonical hero_id only and must not query MongoDB for ownership or activation.",
+    "Summary endpoint must expose explicit runtime flags proving catalogs are inert."
+  ],
+  "absolute_rules": [
+    "No DB writes",
+    "No migrations",
+    "No --apply",
+    "No battle_engine.py changes",
+    "No battle balance changes",
+    "No live skill activation",
+    "No live status activation",
+    "No live VFX activation",
+    "No status icon HP bar activation",
+    "No frontend HP bar changes",
+    "No gacha changes",
+    "No roster activation",
+    "Do not activate Borea",
+    "Do not modify legacy borea",
+    "Do not modify Character Bible",
+    "Do not modify source heroes_kits_5star.json",
+    "Do not modify runtime kit JSON files",
+    "Do not modify asset files",
+    "Do not import these catalogs into battle runtime",
+    "Do not connect these catalogs to frontend combat runtime",
+    "Do not create a UI in this task",
+    "Only GET endpoints are allowed",
+    "No POST/PUT/PATCH/DELETE endpoints"
+  ],
+  "acceptance_criteria": [
+    "Requirements validator PASS",
+    "Read-only loader created",
+    "Read-only route module created and registered",
+    "All proposed GET endpoints return HTTP 200",
+    "Summary endpoint reports 5★ entries = 20",
+    "Summary endpoint reports 6★ launch_base entries = 12",
+    "Summary endpoint reports 6★ extra premium entries = 1",
+    "Summary endpoint reports total catalog entries = 33",
+    "Summary endpoint reports runtime_attached=false",
+    "Summary endpoint reports battle_runtime_attached=false",
+    "Summary endpoint reports ui_runtime_attached=false",
+    "Summary endpoint reports hp_bar_runtime_attached=false",
+    "Summary endpoint reports balance_values_finalized=false",
+    "5★ endpoint returns exactly 20 entries",
+    "6★ endpoint returns exactly 13 entries",
+    "By-hero endpoint works for a 5★ canonical hero, e.g. greek_atalanta",
+    "By-hero endpoint works for a 6★ canonical hero, e.g. greek_athena",
+    "By-hero endpoint works for Borea greek_borea but does not activate her",
+    "By-hero endpoint returns 404 for unknown hero_id",
+    "/api/heroes remains 100",
+    "Borea remains hidden/pending",
+    "No battle/gacha/roster/frontend HP bar changes",
+    "No runtime import from battle_engine.py or frontend combat files"
+  ],
+  "report_required": [
+    "Files installed from ZIP",
+    "Files created/modified by implementation",
+    "Requirements validator output",
+    "Endpoint smoke results",
+    "Summary payload key counts and flags",
+    "By-hero smoke results",
+    "Runtime smoke",
+    "Safety checks",
+    "Explicit confirmation that hero skill kit catalogs are read-only and NOT connected to battle runtime or HP bar runtime"
+  ]
+}
