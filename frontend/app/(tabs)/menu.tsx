@@ -67,6 +67,9 @@ const CATEGORIES = [
       // skill, effetti ed enemy behavior di ogni eroe (presente/futuro).
       // Non è un'esperienza di gameplay; etichettato chiaramente come DEV.
       { label: 'Combat QA Lab (DEV)', icon: '\uD83E\uDDEA', route: '/dev-combat-qa-lab', gradient: ['#FF4444', '#992222'] as const },
+      // RM1.25-D — Catalogo Skill & Status (read-only, dev catalog browser).
+      // Non collegato al runtime battaglia / HP bar. UI di sola consultazione.
+      { label: 'Catalogo Skill & Status', icon: '\uD83D\uDCDA', route: '/skill-status-vfx-catalogs', gradient: ['#AB47BC', '#6A1B9A'] as const },
     ],
   },
 ];

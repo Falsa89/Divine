@@ -1,0 +1,165 @@
+{
+  "task_id": "RM1.25-D",
+  "title": "Skill / Status / Icon / VFX Internal Catalog Browser UI",
+  "version": 1,
+  "mode": "read_only_ui",
+  "purpose": "Create a read-only internal/mobile catalog browser screen that consumes the RM1.25-C catalog API endpoints and displays skill progression, status effects, status icon metadata, VFX modular catalog, and skill schema examples without attaching anything to battle runtime or HP bar UI.",
+  "source_api_endpoints": [
+    "/api/skill-status-vfx/catalogs/summary",
+    "/api/skill-status-vfx/catalogs/skill-progression",
+    "/api/skill-status-vfx/catalogs/status-effects",
+    "/api/skill-status-vfx/catalogs/status-icons",
+    "/api/skill-status-vfx/catalogs/vfx",
+    "/api/skill-status-vfx/catalogs/skill-examples"
+  ],
+  "frontend_target": {
+    "new_screen": "/app/frontend/app/skill-status-vfx-catalogs.tsx",
+    "entry_point": "/app/frontend/app/(tabs)/menu.tsx",
+    "route": "/skill-status-vfx-catalogs",
+    "menu_section_preference": "Utility / Dev / Sistemi",
+    "menu_label": "Catalogo Skill & Status",
+    "menu_icon": "📚",
+    "menu_note": "Read-only"
+  },
+  "screen_sections": [
+    {
+      "id": "summary",
+      "label": "Summary",
+      "source_endpoint": "/api/skill-status-vfx/catalogs/summary",
+      "must_show": [
+        "official_elements_count",
+        "core_statuses_count",
+        "status_icons_count",
+        "vfx_types_count",
+        "vfx_entries_count",
+        "skill_examples_count",
+        "battle_runtime_attached",
+        "ui_runtime_attached",
+        "vfx_runtime_attached"
+      ]
+    },
+    {
+      "id": "skill_progression",
+      "label": "Progressione Skill",
+      "source_endpoint": "/api/skill-status-vfx/catalogs/skill-progression",
+      "must_show": [
+        "rarity -> slots",
+        "1★ basic only",
+        "6★ ultimate + possible hooks"
+      ]
+    },
+    {
+      "id": "status_effects",
+      "label": "Status Effect",
+      "source_endpoint": "/api/skill-status-vfx/catalogs/status-effects",
+      "must_show": [
+        "status_id",
+        "display_name",
+        "category",
+        "polarity",
+        "icon priority if available",
+        "cleanse/immunity/boss flags if available"
+      ]
+    },
+    {
+      "id": "status_icons",
+      "label": "Icone Status",
+      "source_endpoint": "/api/skill-status-vfx/catalogs/status-icons",
+      "must_show": [
+        "status_id",
+        "icon_key",
+        "priority",
+        "category",
+        "color_family",
+        "show_stack_count",
+        "show_duration"
+      ]
+    },
+    {
+      "id": "vfx",
+      "label": "VFX Modulari",
+      "source_endpoint": "/api/skill-status-vfx/catalogs/vfx",
+      "must_show": [
+        "vfx types",
+        "vfx entries grouped by type/status when possible",
+        "mobile readability flags if present"
+      ]
+    },
+    {
+      "id": "skill_examples",
+      "label": "Esempi Skill",
+      "source_endpoint": "/api/skill-status-vfx/catalogs/skill-examples",
+      "must_show": [
+        "skill_id",
+        "hero_id",
+        "slot",
+        "presentation_flow summary",
+        "targeting summary"
+      ]
+    }
+  ],
+  "ui_requirements": {
+    "read_only_banner": "Mostrare chiaramente che i cataloghi sono read-only e non collegati al runtime battaglia.",
+    "tabs": [
+      "Summary",
+      "Progressione",
+      "Status",
+      "Icone",
+      "VFX",
+      "Esempi"
+    ],
+    "search": "Aggiungere search/filter locale almeno per status, icone e VFX.",
+    "category_filters": "Aggiungere filtri per category/type quando semplice senza overengineering.",
+    "mobile_first": true,
+    "landscape_safe": true,
+    "empty_states": true,
+    "loading_states": true,
+    "error_states": true,
+    "no_post_put_delete": true,
+    "no_runtime_json_import_frontend": "Il frontend deve consumare gli endpoint API RM1.25-C, non importare direttamente i JSON da data/design."
+  },
+  "absolute_rules": [
+    "No DB writes",
+    "No migrations",
+    "No --apply",
+    "No battle_engine.py changes",
+    "No battle balance changes",
+    "No live skill activation",
+    "No live status activation",
+    "No live VFX activation",
+    "No status icon HP bar activation",
+    "No frontend HP bar changes",
+    "No gacha changes",
+    "No roster activation",
+    "Do not activate Borea",
+    "Do not modify legacy borea",
+    "Do not modify Character Bible",
+    "Do not modify kit JSON",
+    "Do not modify asset files",
+    "Do not connect catalogs to combat runtime",
+    "Frontend may only call GET catalog endpoints for this UI"
+  ],
+  "acceptance_criteria": [
+    "Requirements validator PASS",
+    "New UI screen renders on mobile without React error overlay",
+    "Menu entry navigates to the screen",
+    "All 6 catalog tabs/sections accessible",
+    "Summary displays runtime flags false",
+    "Status section shows 40 statuses or the same count returned by API",
+    "Status icon section shows 40 icon metadata entries or same count returned by API",
+    "VFX section shows 12 vfx types and at least 163 entries or same count returned by API",
+    "Skill examples section shows at least 4 examples or same count returned by API",
+    "Search/filter works without network spam",
+    "No POST/PUT/PATCH/DELETE calls from the screen",
+    "No frontend HP bar changes",
+    "No battle_engine.py/server.py catalog runtime attachment",
+    "/api/heroes remains 100",
+    "Borea remains hidden/pending",
+    "TS no new errors in modified files"
+  ],
+  "expected_safety_flags": {
+    "battle_runtime_attached": false,
+    "ui_runtime_attached": false,
+    "vfx_runtime_attached": false
+  }
+}
