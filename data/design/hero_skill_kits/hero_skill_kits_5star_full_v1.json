@@ -33,7 +33,8 @@
   },
   "stats": {
     "legacy_ultimate_to_skill_2_conversions": 20,
-    "passive_advanced_missing_count": 20
+    "passive_advanced_missing_count": 20,
+    "passive_advanced_filled_by_rm128a": 20
   },
   "entries": [
     {
@@ -225,18 +226,42 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "angelic_bastion_angel_passive_advanced",
+          "display_name": "Egida del Bastione",
+          "design_summary": "Quando un alleato scende sotto soglia HP, applica physical_shield e def_up brevi; riduzione danno cumulativa al Bastione.",
+          "targeting_summary": "allies_low_hp_and_self",
+          "status_tags": [
+            "physical_shield",
+            "def_up",
+            "damage_reduction"
+          ],
+          "vfx_tags": [
+            "passive",
+            "tank",
+            "light"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Quando un alleato scende sotto soglia HP, applica physical_shield e def_up brevi; riduzione danno cumulativa al Bastione.",
+          "trigger": "on_ally_low_hp_threshold",
+          "effect_summary": "Quando un alleato scende sotto soglia HP, applica physical_shield e def_up brevi; riduzione danno cumulativa al Bastione.",
+          "status_interactions": [
+            "physical_shield",
+            "def_up",
+            "damage_reduction"
+          ],
+          "skill_interactions": [
+            "skill_1"
+          ],
+          "vfx_notes": "Aura dorata radiale leggera, leggibile in mobile, non oscura HP bar.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -488,18 +513,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "celtic_mist_banshee_passive_advanced",
+          "display_name": "Lamento della Nebbia",
+          "design_summary": "A inizio turno avvolge l'avversario con magic_damage più alto: silence breve e speed_down; in difesa applica blind quando subisce magic.",
+          "targeting_summary": "enemy_highest_magic_damage_then_attacker",
+          "status_tags": [
+            "silence",
+            "speed_down",
+            "blind"
+          ],
+          "vfx_tags": [
+            "passive",
+            "control",
+            "wind"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "A inizio turno avvolge l'avversario con magic_damage più alto: silence breve e speed_down; in difesa applica blind quando subisce magic.",
+          "trigger": "on_turn_start_and_on_hit_received",
+          "effect_summary": "A inizio turno avvolge l'avversario con magic_damage più alto: silence breve e speed_down; in difesa applica blind quando subisce magic.",
+          "status_interactions": [
+            "silence",
+            "speed_down",
+            "blind"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Nebbia verde-cenere progressiva; nessun fullscreen overlay.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -751,18 +801,42 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "creature_crimson_phoenix_passive_advanced",
+          "display_name": "Lascito delle Ceneri",
+          "design_summary": "Quando un alleato scende sotto soglia HP, applica cleanse e regeneration; il team riceve healing_up se la Fenice è in campo. Nessun revive attivo in v1.",
+          "targeting_summary": "allies_low_hp_then_team",
+          "status_tags": [
+            "cleanse",
+            "regeneration",
+            "healing_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "support",
+            "fire"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Quando un alleato scende sotto soglia HP, applica cleanse e regeneration; il team riceve healing_up se la Fenice è in campo. Nessun revive attivo in v1.",
+          "trigger": "on_ally_low_hp_threshold",
+          "effect_summary": "Quando un alleato scende sotto soglia HP, applica cleanse e regeneration; il team riceve healing_up se la Fenice è in campo. Nessun revive attivo in v1.",
+          "status_interactions": [
+            "cleanse",
+            "regeneration",
+            "healing_up"
+          ],
+          "skill_interactions": [
+            "skill_1"
+          ],
+          "vfx_notes": "Brace dorata pulsante; nessun lampeggio a fullscreen.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -1007,18 +1081,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "creature_lernaean_hydra_passive_advanced",
+          "display_name": "Rigenerazione Idralica",
+          "design_summary": "Quando subisce danno, applica poison e vulnerability all'attaccante; sull'Idra attiva regeneration breve.",
+          "targeting_summary": "attacker_and_self",
+          "status_tags": [
+            "poison",
+            "vulnerability",
+            "regeneration"
+          ],
+          "vfx_tags": [
+            "passive",
+            "hybrid_special",
+            "water"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Quando subisce danno, applica poison e vulnerability all'attaccante; sull'Idra attiva regeneration breve.",
+          "trigger": "on_hit_received",
+          "effect_summary": "Quando subisce danno, applica poison e vulnerability all'attaccante; sull'Idra attiva regeneration breve.",
+          "status_interactions": [
+            "poison",
+            "vulnerability",
+            "regeneration"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Spore verde-blu reattive; nessuna animazione che oscura sprite.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -1261,18 +1360,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "cursed_pestilence_herald_passive_advanced",
+          "display_name": "Araldo del Flagello",
+          "design_summary": "Skill che colpiscono applicano curse e healing_reduction; il poison applicato dall'Araldo persiste contro cleanse di base.",
+          "targeting_summary": "enemies_hit_by_skills",
+          "status_tags": [
+            "curse",
+            "healing_reduction",
+            "poison"
+          ],
+          "vfx_tags": [
+            "passive",
+            "hybrid_special",
+            "dark"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Skill che colpiscono applicano curse e healing_reduction; il poison applicato dall'Araldo persiste contro cleanse di base.",
+          "trigger": "on_skill_hit_landed",
+          "effect_summary": "Skill che colpiscono applicano curse e healing_reduction; il poison applicato dall'Araldo persiste contro cleanse di base.",
+          "status_interactions": [
+            "curse",
+            "healing_reduction",
+            "poison"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Miasma viola controllato; intensità lieve. NON imitare Pestilence 6★.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -1515,18 +1639,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "demonic_gehenna_witch_passive_advanced",
+          "display_name": "Maledizione Geennica",
+          "design_summary": "Ogni attacco AoE applica curse al bersaglio con HP più alto e estende la durata di burn; aumenta magic_damage_up a sé.",
+          "targeting_summary": "aoe_highest_hp_enemy_and_self",
+          "status_tags": [
+            "curse",
+            "burn",
+            "magic_damage_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "mage_aoe",
+            "fire"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Ogni attacco AoE applica curse al bersaglio con HP più alto e estende la durata di burn; aumenta magic_damage_up a sé.",
+          "trigger": "on_aoe_attack",
+          "effect_summary": "Ogni attacco AoE applica curse al bersaglio con HP più alto e estende la durata di burn; aumenta magic_damage_up a sé.",
+          "status_interactions": [
+            "curse",
+            "burn",
+            "magic_damage_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Fiamme demoniache rosso-nere a corona; readable in mobile.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -1773,18 +1922,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "egyptian_bastet_passive_advanced",
+          "display_name": "Agguato Felino",
+          "design_summary": "A inizio battaglia: speed_up e crit_up; quando colpisce un nemico marcato, attiva un secondo attacco condizionale.",
+          "targeting_summary": "self_then_marked_enemy",
+          "status_tags": [
+            "speed_up",
+            "crit_up",
+            "mark"
+          ],
+          "vfx_tags": [
+            "passive",
+            "assassin_burst",
+            "lightning"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "A inizio battaglia: speed_up e crit_up; quando colpisce un nemico marcato, attiva un secondo attacco condizionale.",
+          "trigger": "on_battle_start_and_on_mark_hit",
+          "effect_summary": "A inizio battaglia: speed_up e crit_up; quando colpisce un nemico marcato, attiva un secondo attacco condizionale.",
+          "status_interactions": [
+            "speed_up",
+            "crit_up",
+            "mark"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Scintille gialle felini sottili; nessuna scia full-screen.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -2026,18 +2200,42 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "egyptian_claw_of_sekhmet_passive_advanced",
+          "display_name": "Furia degli Artigli Roventi",
+          "design_summary": "Ogni colpo critico applica bleed e accumula atk_up cumulativo a sé; estende durata di burn esistenti.",
+          "targeting_summary": "self_and_target",
+          "status_tags": [
+            "bleed",
+            "atk_up",
+            "burn"
+          ],
+          "vfx_tags": [
+            "passive",
+            "dps_melee",
+            "fire"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Ogni colpo critico applica bleed e accumula atk_up cumulativo a sé; estende durata di burn esistenti.",
+          "trigger": "on_critical_hit",
+          "effect_summary": "Ogni colpo critico applica bleed e accumula atk_up cumulativo a sé; estende durata di burn esistenti.",
+          "status_interactions": [
+            "bleed",
+            "atk_up",
+            "burn"
+          ],
+          "skill_interactions": [
+            "skill_1"
+          ],
+          "vfx_notes": "Bagliori rosso-oro sui colpi critici; nessuna animazione persistente pesante. NON imitare Sekhmet 6★.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -2284,18 +2482,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "greek_atalanta_passive_advanced",
+          "display_name": "Caccia Inesorabile",
+          "design_summary": "Marca il backline nemico; attacchi successivi su bersaglio marcato hanno crit_up e crit_damage_up.",
+          "targeting_summary": "enemy_backline_then_marked",
+          "status_tags": [
+            "mark",
+            "crit_up",
+            "crit_damage_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "dps_ranged",
+            "wind"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Marca il backline nemico; attacchi successivi su bersaglio marcato hanno crit_up e crit_damage_up.",
+          "trigger": "on_target_acquire_backline",
+          "effect_summary": "Marca il backline nemico; attacchi successivi su bersaglio marcato hanno crit_up e crit_damage_up.",
+          "status_interactions": [
+            "mark",
+            "crit_up",
+            "crit_damage_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Mirino di vento color cielo; sottile, readable in mobile. NON imitare Artemis 6★.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -2544,18 +2767,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "greek_circe_passive_advanced",
+          "display_name": "Metamorfosi Sortilega",
+          "design_summary": "Quando l'avversario lancia magic skill: applica silence o blind; il team riceve magic_damage_up breve.",
+          "targeting_summary": "enemy_caster_then_team",
+          "status_tags": [
+            "silence",
+            "blind",
+            "magic_damage_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "mage_aoe",
+            "dark"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Quando l'avversario lancia magic skill: applica silence o blind; il team riceve magic_damage_up breve.",
+          "trigger": "on_enemy_magic_skill_cast",
+          "effect_summary": "Quando l'avversario lancia magic skill: applica silence o blind; il team riceve magic_damage_up breve.",
+          "status_interactions": [
+            "silence",
+            "blind",
+            "magic_damage_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Spirali viola controllate; NON imitare Nyx primordial night.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -2802,18 +3050,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "greek_medusa_passive_advanced",
+          "display_name": "Sguardo che Pietrifica",
+          "design_summary": "Nemici sotto soglia HP ricevono slow e vulnerability; sotto soglia bassissima può attivare stun condizionato.",
+          "targeting_summary": "enemies_low_hp",
+          "status_tags": [
+            "slow",
+            "vulnerability",
+            "stun"
+          ],
+          "vfx_tags": [
+            "passive",
+            "control",
+            "earth"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Nemici sotto soglia HP ricevono slow e vulnerability; sotto soglia bassissima può attivare stun condizionato.",
+          "trigger": "on_enemy_low_hp_threshold",
+          "effect_summary": "Nemici sotto soglia HP ricevono slow e vulnerability; sotto soglia bassissima può attivare stun condizionato.",
+          "status_interactions": [
+            "slow",
+            "vulnerability",
+            "stun"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Pietra grigio-verde frattura leggera; nessuna animazione fullscreen.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -3061,18 +3334,42 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "greek_nemean_lioness_passive_advanced",
+          "display_name": "Pelle Inviolabile",
+          "design_summary": "Mantiene physical_shield e damage_reduction permanenti a livello design; counter-attack quando guard è attivo.",
+          "targeting_summary": "self",
+          "status_tags": [
+            "physical_shield",
+            "damage_reduction",
+            "guard"
+          ],
+          "vfx_tags": [
+            "passive",
+            "tank",
+            "earth"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Mantiene physical_shield e damage_reduction permanenti a livello design; counter-attack quando guard è attivo.",
+          "trigger": "on_battle_persistent_and_on_guard_hit",
+          "effect_summary": "Mantiene physical_shield e damage_reduction permanenti a livello design; counter-attack quando guard è attivo.",
+          "status_interactions": [
+            "physical_shield",
+            "damage_reduction",
+            "guard"
+          ],
+          "skill_interactions": [
+            "skill_1"
+          ],
+          "vfx_notes": "Pelo dorato che riflette il danno; aura discreta.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -3316,18 +3613,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "greek_nike_passive_advanced",
+          "display_name": "Slancio della Vittoria",
+          "design_summary": "Dopo ogni kill alleato, applica atk_up e speed_up al team; crit_up condizionale sull'alleato che ha colpito.",
+          "targeting_summary": "team_on_ally_kill",
+          "status_tags": [
+            "atk_up",
+            "speed_up",
+            "crit_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "support_buff",
+            "light"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Dopo ogni kill alleato, applica atk_up e speed_up al team; crit_up condizionale sull'alleato che ha colpito.",
+          "trigger": "on_ally_kill",
+          "effect_summary": "Dopo ogni kill alleato, applica atk_up e speed_up al team; crit_up condizionale sull'alleato che ha colpito.",
+          "status_interactions": [
+            "atk_up",
+            "speed_up",
+            "crit_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Aura bianco-oro vittoria pulse breve. NON imitare Amaterasu 6★ solar divinity.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -3578,18 +3900,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "japanese_miko_of_raijin_passive_advanced",
+          "display_name": "Sigilli del Tuono",
+          "design_summary": "Ogni applicazione di shock ne estende la durata e applica magic_damage_up; effect_accuracy_up a sé.",
+          "targeting_summary": "enemy_shocked_then_self",
+          "status_tags": [
+            "shock",
+            "magic_damage_up",
+            "effect_accuracy_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "mage_aoe",
+            "lightning"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Ogni applicazione di shock ne estende la durata e applica magic_damage_up; effect_accuracy_up a sé.",
+          "trigger": "on_shock_apply",
+          "effect_summary": "Ogni applicazione di shock ne estende la durata e applica magic_damage_up; effect_accuracy_up a sé.",
+          "status_interactions": [
+            "shock",
+            "magic_damage_up",
+            "effect_accuracy_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Ofuda gialle che lampeggiano sottilmente. NON imitare Raijin 6★ thunder_drums.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -3831,18 +4178,42 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "norse_dawn_valkyrie_passive_advanced",
+          "display_name": "Carica dell'Aurora",
+          "design_summary": "Prima carica del turno: speed_up, crit_up e atk_up brevi; applica mark sul nemico colpito.",
+          "targeting_summary": "self_then_target",
+          "status_tags": [
+            "speed_up",
+            "crit_up",
+            "mark"
+          ],
+          "vfx_tags": [
+            "passive",
+            "dps_melee",
+            "wind"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Prima carica del turno: speed_up, crit_up e atk_up brevi; applica mark sul nemico colpito.",
+          "trigger": "on_first_charge_per_turn",
+          "effect_summary": "Prima carica del turno: speed_up, crit_up e atk_up brevi; applica mark sul nemico colpito.",
+          "status_interactions": [
+            "speed_up",
+            "crit_up",
+            "mark"
+          ],
+          "skill_interactions": [
+            "skill_1"
+          ],
+          "vfx_notes": "Bagliore dorato-rosa dell'aurora sulle lame; sottile.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -4086,18 +4457,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "norse_eir_passive_advanced",
+          "display_name": "Mano di Eir",
+          "design_summary": "Ogni turno l'alleato con HP più bassi riceve regeneration; cleanse leggera su alleato debuffato.",
+          "targeting_summary": "allies_lowest_hp_and_debuffed",
+          "status_tags": [
+            "regeneration",
+            "cleanse",
+            "healing_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "healer",
+            "light"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Ogni turno l'alleato con HP più bassi riceve regeneration; cleanse leggera su alleato debuffato.",
+          "trigger": "on_turn_start",
+          "effect_summary": "Ogni turno l'alleato con HP più bassi riceve regeneration; cleanse leggera su alleato debuffato.",
+          "status_interactions": [
+            "regeneration",
+            "cleanse",
+            "healing_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Luce bianca verdognola tenue; NON imitare Iside/Gaia revive authority.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -4348,18 +4744,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "norse_rime_jotunn_passive_advanced",
+          "display_name": "Gelo Inflessibile",
+          "design_summary": "Ogni colpo subito applica frostbite all'attaccante; def_up cumulativo a sé e damage_reduction breve.",
+          "targeting_summary": "attacker_and_self",
+          "status_tags": [
+            "frostbite",
+            "def_up",
+            "damage_reduction"
+          ],
+          "vfx_tags": [
+            "passive",
+            "tank",
+            "water"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Ogni colpo subito applica frostbite all'attaccante; def_up cumulativo a sé e damage_reduction breve.",
+          "trigger": "on_hit_received",
+          "effect_summary": "Ogni colpo subito applica frostbite all'attaccante; def_up cumulativo a sé e damage_reduction breve.",
+          "status_interactions": [
+            "frostbite",
+            "def_up",
+            "damage_reduction"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Cristalli di ghiaccio blu-bianco discreti. NON imitare Borea (wind frost) né Yuki-Onna (snow).",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -4603,18 +5024,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "norse_volva_of_fate_passive_advanced",
+          "display_name": "Trama del Fato",
+          "design_summary": "Lancia rune passive rotanti che applicano effect_accuracy_up, crit_up e speed_up a un alleato diverso ogni turno.",
+          "targeting_summary": "rotating_ally",
+          "status_tags": [
+            "effect_accuracy_up",
+            "crit_up",
+            "speed_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "support_buff",
+            "lightning"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Lancia rune passive rotanti che applicano effect_accuracy_up, crit_up e speed_up a un alleato diverso ogni turno.",
+          "trigger": "on_turn_start",
+          "effect_summary": "Lancia rune passive rotanti che applicano effect_accuracy_up, crit_up e speed_up a un alleato diverso ogni turno.",
+          "status_interactions": [
+            "effect_accuracy_up",
+            "crit_up",
+            "speed_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Rune dorate fluttuanti, basse, readable.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -4863,18 +5309,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "yokai_oni_kunoichi_passive_advanced",
+          "display_name": "Agguato dell'Oni",
+          "design_summary": "Primo colpo della battaglia applica bleed e curse; speed_up breve quando elimina un nemico.",
+          "targeting_summary": "target_and_self",
+          "status_tags": [
+            "bleed",
+            "curse",
+            "speed_up"
+          ],
+          "vfx_tags": [
+            "passive",
+            "assassin_burst",
+            "dark"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Primo colpo della battaglia applica bleed e curse; speed_up breve quando elimina un nemico.",
+          "trigger": "on_first_strike_and_on_kill",
+          "effect_summary": "Primo colpo della battaglia applica bleed e curse; speed_up breve quando elimina un nemico.",
+          "status_interactions": [
+            "bleed",
+            "curse",
+            "speed_up"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Aura viola scuro che si dissolve velocemente. NON imitare Morrigan/Susanoo 6★.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -5121,18 +5592,43 @@
         },
         "passive_advanced": {
           "slot": "passive_advanced",
-          "skill_id": null,
-          "display_name": null,
-          "design_summary": null,
-          "targeting_summary": null,
-          "status_tags": [],
-          "vfx_tags": [],
-          "animation_intent": null,
+          "skill_id": "yokai_yuki_onna_passive_advanced",
+          "display_name": "Nevicata Crescente",
+          "design_summary": "Ogni turno accumula frostbite progressivo sui nemici; sopra soglia applica slow e freeze condizionato.",
+          "targeting_summary": "enemies_progressive",
+          "status_tags": [
+            "frostbite",
+            "slow",
+            "freeze"
+          ],
+          "vfx_tags": [
+            "passive",
+            "control",
+            "water"
+          ],
+          "animation_intent": "passive",
           "final_numbers": null,
-          "design_status": "missing_from_approved_source",
-          "source_status": "TODO_SOURCE_REQUIRED",
-          "notes": "Passive advanced required by v1.1 slot progression but not present as separate field in legacy approved 5★ source.",
-          "legacy_source": null
+          "design_status": "approved_source_completed",
+          "source_status": "approved_rm128a",
+          "notes": "Approved design source for the new 5★ slot passive_advanced (RM1.28-A). Numbers/chance/duration/scaling are intentionally null and deferred to balance pass.",
+          "legacy_source": null,
+          "description_long": "Ogni turno accumula frostbite progressivo sui nemici; sopra soglia applica slow e freeze condizionato.",
+          "trigger": "on_turn_start_progressive",
+          "effect_summary": "Ogni turno accumula frostbite progressivo sui nemici; sopra soglia applica slow e freeze condizionato.",
+          "status_interactions": [
+            "frostbite",
+            "slow",
+            "freeze"
+          ],
+          "skill_interactions": [
+            "skill_1",
+            "skill_2"
+          ],
+          "vfx_notes": "Fiocchi bianco-blu sottili; NON imitare Borea frost-wind. Identità snow/freeze separata.",
+          "balance_notes": "Numbers/chance/duration/scaling are intentionally null and deferred to balance pass. Stronger than passive_base and supports skill_1/skill_2 identity, but remains below 6★ complexity. No true Ultimate, no Domain, no Divine Weapon hook.",
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "do_not_treat_as_live_kit": true
         },
         "skill_2": {
           "slot": "skill_2",
@@ -5192,5 +5688,5 @@
       "missing_fields_audit": []
     }
   ],
-  "notes": "Inert design catalog. Read-only. NOT connected to combat runtime. Generated by /app/backend/scripts/build_hero_skill_kits_5star_full.py from the approved consolidated 5★ source. No skill invention. passive_advanced slot present but marked missing_from_approved_source. Legacy ultimate_or_special remapped to skill_2 with is_true_ultimate=false."
+  "notes": "Inert design catalog. Read-only. NOT connected to combat runtime. Generated by /app/backend/scripts/build_hero_skill_kits_5star_full.py from the approved consolidated 5★ source. No skill invention. passive_advanced slot present but marked missing_from_approved_source. Legacy ultimate_or_special remapped to skill_2 with is_true_ultimate=false. RM1.28-A: passive_advanced approved source completed (20/20)."
 }
