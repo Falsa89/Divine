@@ -1,0 +1,68 @@
+{
+  "task_origin": "RM1.33-B",
+  "report_id": "hero_skill_kit_runtime_adapter_wiretest_report_v1",
+  "generated_at_utc": "2026-05-15T21:52:00.900411Z",
+  "total_slots_expected": 178,
+  "total_slots_tested": 178,
+  "slots_normalized_ok": 178,
+  "runtime_candidates_disabled": 178,
+  "per_rarity": {
+    "5star": 100,
+    "6star": 78
+  },
+  "6star_ultimate_is_true_ultimate_preserved": 13,
+  "5star_ultimate_safely_rejected_count": 20,
+  "feature_flag_default": "off",
+  "feature_flag_non_allowlisted_truthy_tested": [
+    "true",
+    "1",
+    "yes",
+    "on",
+    "TRUE",
+    "True",
+    "YES",
+    "on_strict"
+  ],
+  "feature_flag_non_allowlisted_truthy_all_false": true,
+  "forbidden_aliases_tested": [
+    "borea",
+    "primordial_gaia",
+    "greek_boreas",
+    "olympian_borea"
+  ],
+  "forbidden_aliases_rejected": true,
+  "adapter_imported_by_battle_runtime": false,
+  "cap_policy_preview_inert": true,
+  "cap_policy_contexts_tested": [
+    "pvp",
+    "boss",
+    "pve"
+  ],
+  "cap_policy_sample_pairs": [
+    {
+      "hero_id": "greek_atalanta",
+      "slot": "skill_2"
+    },
+    {
+      "hero_id": "greek_athena",
+      "slot": "ultimate"
+    },
+    {
+      "hero_id": "greek_borea",
+      "slot": "ultimate"
+    },
+    {
+      "hero_id": "norse_eir",
+      "slot": "skill_2"
+    }
+  ],
+  "borea_catalog_only": true,
+  "marchio_boreale_borea_only": true,
+  "no_runtime_activation": true,
+  "no_db_write": true,
+  "no_catalog_change": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132b_v4",
+  "overall_result": "PASS",
+  "failure_count": 0,
+  "first_failures": []
+}
