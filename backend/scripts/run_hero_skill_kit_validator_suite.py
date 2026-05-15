@@ -48,6 +48,7 @@ OPTIONAL = [
     ('RM1.33-C', 'audit_skill_kit_runtime_debug_endpoint_safety.py'),
     ('RM1.33-D', 'validate_runtime_debug_snapshot_contract.py'),
     ('RM1.33-E', 'audit_skill_kit_runtime_debug_coverage_safety.py'),
+    ('RM1.33-F', 'validate_runtime_debug_6star_ultimate_snapshots.py'),
     ('RM1.34', 'validate_boss_family_resistance_table.py'),
     ('RM1.34-B', 'validate_boss_element_faction_matrix.py'),
     ('RM1.34-C', 'validate_boss_enrage_phase_policy_table.py'),

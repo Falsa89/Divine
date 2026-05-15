@@ -1,0 +1,2388 @@
+{
+  "result_id": "hero_skill_kit_runtime_debug_6star_ultimate_snapshot_result_v2",
+  "task_origin": "RM1.33-F",
+  "fixture_id": "hero_skill_kit_runtime_debug_6star_ultimate_snapshot_fixtures_v2",
+  "generated_at_utc": "2026-05-15T23:06:55.533869Z",
+  "audit_result": "PASS",
+  "total_cases": 13,
+  "cases_pass": 13,
+  "cases_fail": 0,
+  "marchio_leak_count_non_borea": 0,
+  "coverage_snapshot": {
+    "runtime_enabled": false,
+    "6star_ultimate_is_true_ultimate_preserved": 13,
+    "borea_catalog_only": true,
+    "marchio_boreale_borea_only": true
+  },
+  "case_results": [
+    {
+      "case_id": "6star_ultimate_greek_athena_boss",
+      "hero_id": "greek_athena",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_mesopotamian_tiamat_boss",
+      "hero_id": "mesopotamian_tiamat",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_egyptian_sekhmet_boss",
+      "hero_id": "egyptian_sekhmet",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_greek_artemis_pve",
+      "hero_id": "greek_artemis",
+      "slot": "ultimate",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_japanese_raijin_pvp",
+      "hero_id": "japanese_raijin",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_japanese_susanoo_boss",
+      "hero_id": "japanese_susanoo",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_celtic_morrigan_pvp",
+      "hero_id": "celtic_morrigan",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_greek_gaia_boss",
+      "hero_id": "greek_gaia",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_japanese_amaterasu_pve",
+      "hero_id": "japanese_amaterasu",
+      "slot": "ultimate",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_egyptian_isis_boss",
+      "hero_id": "egyptian_isis",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_cursed_pestilence_horseman_boss",
+      "hero_id": "cursed_pestilence_horseman",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_primordial_nyx_boss",
+      "hero_id": "primordial_nyx",
+      "slot": "ultimate",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 28,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": false,
+          "want": false,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case_id": "6star_ultimate_greek_borea_pvp",
+      "hero_id": "greek_borea",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 34,
+      "fail_count": 0,
+      "details": [
+        {
+          "check": "http_status",
+          "got": 200,
+          "want": 200,
+          "ok": true
+        },
+        {
+          "check": "rarity",
+          "got": "6star",
+          "want": "6star",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.slot",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.skill_type",
+          "got": "ultimate",
+          "want": "ultimate",
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "normalized_skill_slot.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.reason",
+          "got": "feature_flag_off",
+          "want": "feature_flag_off",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag",
+          "got": "SKILL_KIT_RUNTIME_ENABLED",
+          "want": "SKILL_KIT_RUNTIME_ENABLED",
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.feature_flag_value",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.payload",
+          "got": null,
+          "want": null,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.is_disabled_runtime_result",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "runtime_candidate.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.battle_runtime_attached",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "cap_policy_preview.preview_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.debug_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.read_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.runtime_enabled",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.applied_to_combat",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.db_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.catalog_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.roster_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.gacha_write",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "safety_envelope.ui_runtime_control",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "borea_preview.no_activation",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "borea_preview.not_visible_in_heroes",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "borea_preview.marchio_boreale_owner_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "borea_preview.borea_activation_allowed",
+          "got": false,
+          "want": false,
+          "ok": true
+        },
+        {
+          "check": "borea_preview.catalog_only",
+          "got": true,
+          "want": true,
+          "ok": true
+        },
+        {
+          "check": "borea_preview.release_group",
+          "got": "launch_extra_premium",
+          "want": "launch_extra_premium",
+          "ok": true
+        },
+        {
+          "check": "marchio_boreale_in_core_status_ids",
+          "got": true,
+          "want": true,
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "warnings": [],
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132b_v4",
+  "no_runtime_activation": true,
+  "no_db_write": true,
+  "no_catalog_mutation": true
+}

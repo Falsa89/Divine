@@ -1,0 +1,265 @@
+{
+  "fixture_id": "hero_skill_kit_runtime_debug_6star_ultimate_snapshot_fixtures_v2",
+  "task_origin": "RM1.33-F",
+  "based_on": "RM1.33-D/E debug snapshot contract",
+  "generated_for": "/api/hero-skill-kits/runtime/debug/preview",
+  "endpoint": "GET /api/hero-skill-kits/runtime/debug/preview",
+  "safety_flags": {
+    "runtime_attached": false,
+    "design_only": true,
+    "no_borea_activation": true,
+    "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132b_v4",
+    "fixture_purpose": "verify 13/13 6star ultimate preview previews stay inert, normalized as ultimate, and that Marchio Boreale remains Borea-exclusive."
+  },
+  "volatile_fields_to_ignore": [
+    "generated_at_utc",
+    "timestamps",
+    "request_id",
+    "exact warning text",
+    "wiretest_report_generated_at_utc",
+    "report_source"
+  ],
+  "cases": [
+    {
+      "case_id": "6star_ultimate_greek_athena_boss",
+      "hero_id": "greek_athena",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {
+          "slot": "ultimate",
+          "skill_type": "ultimate",
+          "runtime_attached": false,
+          "battle_runtime_attached": false
+        },
+        "runtime_candidate": {
+          "enabled": false,
+          "reason": "feature_flag_off",
+          "feature_flag": "SKILL_KIT_RUNTIME_ENABLED",
+          "feature_flag_value": false,
+          "payload": null,
+          "is_disabled_runtime_result": true,
+          "runtime_attached": false,
+          "battle_runtime_attached": false
+        },
+        "cap_policy_preview": {
+          "applied_to_combat": false,
+          "runtime_attached": false,
+          "battle_runtime_attached": false,
+          "preview_only": true
+        },
+        "safety_envelope": {
+          "debug_only": true,
+          "read_only": true,
+          "runtime_enabled": false,
+          "applied_to_combat": false,
+          "db_write": false,
+          "catalog_write": false,
+          "roster_write": false,
+          "gacha_write": false,
+          "ui_runtime_control": false
+        },
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_mesopotamian_tiamat_boss",
+      "hero_id": "mesopotamian_tiamat",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_egyptian_sekhmet_boss",
+      "hero_id": "egyptian_sekhmet",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_greek_artemis_pve",
+      "hero_id": "greek_artemis",
+      "slot": "ultimate",
+      "context": "pve",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_japanese_raijin_pvp",
+      "hero_id": "japanese_raijin",
+      "slot": "ultimate",
+      "context": "pvp",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_japanese_susanoo_boss",
+      "hero_id": "japanese_susanoo",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_celtic_morrigan_pvp",
+      "hero_id": "celtic_morrigan",
+      "slot": "ultimate",
+      "context": "pvp",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_greek_gaia_boss",
+      "hero_id": "greek_gaia",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_japanese_amaterasu_pve",
+      "hero_id": "japanese_amaterasu",
+      "slot": "ultimate",
+      "context": "pve",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_egyptian_isis_boss",
+      "hero_id": "egyptian_isis",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_cursed_pestilence_horseman_boss",
+      "hero_id": "cursed_pestilence_horseman",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_primordial_nyx_boss",
+      "hero_id": "primordial_nyx",
+      "slot": "ultimate",
+      "context": "boss",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "marchio_boreale_in_core_status_ids": false
+      }
+    },
+    {
+      "case_id": "6star_ultimate_greek_borea_pvp",
+      "hero_id": "greek_borea",
+      "slot": "ultimate",
+      "context": "pvp",
+      "expected": {
+        "http_status": 200,
+        "rarity": "6star",
+        "normalized_skill_slot": {"slot": "ultimate", "skill_type": "ultimate", "runtime_attached": false, "battle_runtime_attached": false},
+        "runtime_candidate": {"enabled": false, "reason": "feature_flag_off", "feature_flag": "SKILL_KIT_RUNTIME_ENABLED", "feature_flag_value": false, "payload": null, "is_disabled_runtime_result": true, "runtime_attached": false, "battle_runtime_attached": false},
+        "cap_policy_preview": {"applied_to_combat": false, "runtime_attached": false, "battle_runtime_attached": false, "preview_only": true},
+        "safety_envelope": {"debug_only": true, "read_only": true, "runtime_enabled": false, "applied_to_combat": false, "db_write": false, "catalog_write": false, "roster_write": false, "gacha_write": false, "ui_runtime_control": false},
+        "borea_preview": {
+          "no_activation": true,
+          "not_visible_in_heroes": true,
+          "marchio_boreale_owner_only": true,
+          "borea_activation_allowed": false,
+          "catalog_only": true,
+          "release_group": "launch_extra_premium"
+        },
+        "marchio_boreale_in_core_status_ids": true
+      }
+    }
+  ],
+  "global_invariants": {
+    "expected_total_cases": 13,
+    "expected_6star_ultimate_is_true_ultimate_count": 13,
+    "expected_marchio_borea_only_leak": 0,
+    "expected_borea_visible_in_heroes": false,
+    "expected_legacy_borea_404": true,
+    "expected_legacy_primordial_gaia_404": true,
+    "expected_heroes_count": 100
+  }
+}
