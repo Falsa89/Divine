@@ -1,0 +1,560 @@
+{
+  "plan_id": "hero_skill_kits_6star_effect_tags_taxonomy_plan_v1",
+  "task_origin": "RM1.30-B",
+  "generated_at_utc": "2026-05-15T17:20:28.343758Z",
+  "scope": "One-shot audit + classification of all tag-list fields in the 6★ Hero Skill Kit catalog. Decision gate: patch only if status_tags/status_interactions contain non-status taxonomy.",
+  "inspected_files": [
+    "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+    "/app/data/design/hero_skill_kits/hero_skill_kit_schema_v1.json",
+    "/app/data/design/divine_weapons/divine_weapons_catalog_v1.json",
+    "/app/backend/scripts/audit_6star_skill_kits_crosslinks.py",
+    "/app/backend/scripts/validate_6star_catalog_safety_metadata.py",
+    "/app/backend/scripts/validate_divine_weapon_catalog.py",
+    "/app/backend/scripts/audit_divine_weapon_crosslinks.py",
+    "/app/backend/data/hero_skill_kits_loader.py",
+    "/app/backend/routes/hero_skill_kits_catalogs.py",
+    "/app/frontend/app/hero-skill-kits-catalog.tsx"
+  ],
+  "expected_hero_ids": {
+    "launch_base": [
+      "celtic_morrigan",
+      "cursed_pestilence_horseman",
+      "egyptian_isis",
+      "egyptian_sekhmet",
+      "greek_artemis",
+      "greek_athena",
+      "greek_gaia",
+      "japanese_amaterasu",
+      "japanese_raijin",
+      "japanese_susanoo",
+      "mesopotamian_tiamat",
+      "primordial_nyx"
+    ],
+    "launch_extra_premium": [
+      "greek_borea"
+    ],
+    "forbidden_aliases": [
+      "borea",
+      "greek_boreas",
+      "olympian_borea",
+      "primordial_gaia"
+    ]
+  },
+  "audit_stats": {
+    "total_entries": 13,
+    "total_slots": 78,
+    "total_tag_entries": 400,
+    "status_field_entries": 197,
+    "taxonomy_field_entries": 203
+  },
+  "per_tag_frequency_top50": {
+    "vulnerability": 13,
+    "hybrid_shield": 13,
+    "damage": 12,
+    "aoe": 11,
+    "cleanse": 7,
+    "crit_up": 7,
+    "slow": 7,
+    "shield": 7,
+    "atk_up": 6,
+    "marchio_boreale": 6,
+    "mark": 5,
+    "speed_up": 5,
+    "damage_reduction": 4,
+    "curse": 4,
+    "shock": 4,
+    "revive": 3,
+    "burn": 3,
+    "poison": 3,
+    "team_buff": 3,
+    "multi_target": 3,
+    "stacking_unique": 3,
+    "def_up": 2,
+    "speed_down": 2,
+    "def_down": 2,
+    "healing_up": 2,
+    "blind": 2,
+    "stun": 2,
+    "immunity": 2,
+    "bleed": 2,
+    "berserk": 2,
+    "healing_block": 2,
+    "frostbite": 2,
+    "priority_target": 2,
+    "on_kill_buff": 2,
+    "marked_targets": 2,
+    "ultimate": 2,
+    "hp_up": 2,
+    "domain": 2,
+    "shock_synergy": 2,
+    "execute_pressure": 2,
+    "aoe_heal": 2,
+    "anti_heal": 2,
+    "conditional_stack": 2,
+    "conditional_freeze": 2,
+    "guard": 1,
+    "silence": 1,
+    "revive_pending": 1,
+    "freeze": 1,
+    "team_damage_amp": 1,
+    "mark_synergy": 1
+  },
+  "per_field_frequency": {
+    "status_tags": {},
+    "status_interactions": {},
+    "core_status_ids": {
+      "vulnerability": 28,
+      "hybrid_shield": 13,
+      "mark": 12,
+      "shock": 11,
+      "damage_reduction": 10,
+      "curse": 10,
+      "cleanse": 9,
+      "slow": 9,
+      "crit_up": 7,
+      "healing_up": 7,
+      "atk_up": 6,
+      "speed_down": 6,
+      "def_down": 6,
+      "blind": 6,
+      "burn": 6,
+      "marchio_boreale": 6,
+      "speed_up": 5,
+      "poison": 5,
+      "healing_block": 5,
+      "revive": 4,
+      "silence": 4,
+      "bleed": 4,
+      "frostbite": 4,
+      "stun": 3,
+      "freeze": 3,
+      "def_up": 2,
+      "immunity": 2,
+      "berserk": 2,
+      "guard": 1,
+      "revive_pending": 1
+    },
+    "effect_tags": {},
+    "core_effect_tags": {
+      "vulnerability": 13,
+      "damage": 12,
+      "aoe": 11,
+      "shield": 7,
+      "cleanse": 7,
+      "slow": 7,
+      "mark": 5,
+      "damage_reduction": 4,
+      "curse": 4,
+      "shock": 4,
+      "team_buff": 3,
+      "multi_target": 3,
+      "revive": 3,
+      "burn": 3,
+      "poison": 3,
+      "stacking_unique": 3,
+      "priority_target": 2,
+      "on_kill_buff": 2,
+      "marked_targets": 2,
+      "ultimate": 2,
+      "def_down": 2,
+      "hp_up": 2,
+      "healing_up": 2,
+      "blind": 2,
+      "domain": 2,
+      "shock_synergy": 2,
+      "stun": 2,
+      "execute_pressure": 2,
+      "immunity": 2,
+      "bleed": 2,
+      "berserk": 2,
+      "aoe_heal": 2,
+      "speed_down": 2,
+      "anti_heal": 2,
+      "healing_block": 2,
+      "conditional_stack": 2,
+      "frostbite": 2,
+      "conditional_freeze": 2,
+      "team_damage_amp": 1,
+      "mark_synergy": 1,
+      "anti_burst": 1,
+      "protection": 1,
+      "role_based_buff": 1,
+      "team_guard": 1,
+      "ranged": 1,
+      "damage_amp": 1,
+      "marked_prey": 1,
+      "projectile": 1,
+      "backline_pressure": 1,
+      "marked_execute_pressure": 1,
+      "team_damage_reduction": 1,
+      "death_protection": 1,
+      "team_protection": 1,
+      "enemy_slow": 1,
+      "adaptive_revive": 1,
+      "team_shield": 1,
+      "debuff_damage_reduction": 1,
+      "control": 1,
+      "silence": 1,
+      "start_battle_debuff": 1,
+      "aoe_control": 1,
+      "shock_damage_amp": 1,
+      "line_damage": 1,
+      "chain": 1,
+      "storm_charge": 1,
+      "stun_chance": 1,
+      "boss_elite_damage": 1,
+      "debuff_synergy": 1,
+      "single_target_burst": 1,
+      "speed_crit": 1,
+      "multi_slash": 1,
+      "single_target_ultimate": 1,
+      "secondary_wave": 1,
+      "minor_cleanse_or_vulnerability": 1,
+      "debuff_resistance": 1,
+      "anti_dark": 1,
+      "buff": 1,
+      "reactive_cleanse": 1,
+      "damage_vs_wounded": 1,
+      "single_target_damage": 1,
+      "burn_synergy": 1,
+      "fury": 1,
+      "atk_crit": 1,
+      "wounded_damage": 1,
+      "damage_reduction_vs_debuffed": 1,
+      "chaos_charges": 1,
+      "shield_scaling": 1,
+      "self_shield": 1,
+      "enemy_def_down": 1,
+      "summon_visual_only": 1,
+      "micro_damage_or_heal": 1,
+      "healing_amp": 1,
+      "low_hp_survival": 1,
+      "heal": 1,
+      "revive_pending": 1,
+      "team_damage_vs_marked": 1,
+      "omen_charges": 1,
+      "on_low_hp_or_death": 1,
+      "mark_spread": 1,
+      "dot_pressure": 1,
+      "spread_status": 1,
+      "plague_loop_capped": 1,
+      "damage_amp_vs_marked": 1,
+      "anti_speed": 1,
+      "freeze": 1
+    },
+    "theme_tags": {},
+    "vfx_tags": {},
+    "design_taxonomy_tags": {},
+    "rule_tags": {},
+    "trigger_tags": {}
+  },
+  "per_bucket_summary": {
+    "A_approved_status_core": {
+      "unique": 30,
+      "total": 268,
+      "top10": {
+        "vulnerability": 41,
+        "mark": 17,
+        "cleanse": 16,
+        "slow": 16,
+        "shock": 15,
+        "damage_reduction": 14,
+        "curse": 14,
+        "hybrid_shield": 13,
+        "healing_up": 9,
+        "burn": 9
+      }
+    },
+    "B_unique_personal_status": {
+      "unique": 1,
+      "total": 6,
+      "top10": {
+        "marchio_boreale": 6
+      }
+    },
+    "C_design_taxonomy_tag": {
+      "unique": 73,
+      "total": 115,
+      "top10": {
+        "damage": 12,
+        "aoe": 11,
+        "shield": 7,
+        "team_buff": 3,
+        "multi_target": 3,
+        "stacking_unique": 3,
+        "priority_target": 2,
+        "marked_targets": 2,
+        "ultimate": 2,
+        "hp_up": 2
+      }
+    },
+    "D_rule_or_trigger_tag": {
+      "unique": 5,
+      "total": 8,
+      "top10": {
+        "on_kill_buff": 2,
+        "conditional_stack": 2,
+        "conditional_freeze": 2,
+        "reactive_cleanse": 1,
+        "on_low_hp_or_death": 1
+      }
+    },
+    "E_vfx_or_presentation_tag": {
+      "unique": 3,
+      "total": 3,
+      "top10": {
+        "secondary_wave": 1,
+        "summon_visual_only": 1,
+        "omen_charges": 1
+      }
+    },
+    "F_forbidden_or_invalid": {
+      "unique": 0,
+      "total": 0,
+      "top10": {}
+    },
+    "G_unknown_needs_manual_review": {
+      "unique": 0,
+      "total": 0,
+      "top10": {}
+    }
+  },
+  "per_hero_summary": {
+    "greek_athena": {
+      "slots": 6,
+      "tags_total": 32,
+      "status_tag_count": 16,
+      "taxonomy_tag_count": 16,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 23,
+        "C_design_taxonomy_tag": 9
+      },
+      "per_field": {
+        "core_status_ids": 16,
+        "core_effect_tags": 16
+      }
+    },
+    "greek_artemis": {
+      "slots": 6,
+      "tags_total": 25,
+      "status_tag_count": 12,
+      "taxonomy_tag_count": 13,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 13,
+        "C_design_taxonomy_tag": 11,
+        "D_rule_or_trigger_tag": 1
+      },
+      "per_field": {
+        "core_status_ids": 12,
+        "core_effect_tags": 13
+      }
+    },
+    "greek_gaia": {
+      "slots": 6,
+      "tags_total": 31,
+      "status_tag_count": 17,
+      "taxonomy_tag_count": 14,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 23,
+        "C_design_taxonomy_tag": 8
+      },
+      "per_field": {
+        "core_status_ids": 17,
+        "core_effect_tags": 14
+      }
+    },
+    "primordial_nyx": {
+      "slots": 6,
+      "tags_total": 26,
+      "status_tag_count": 14,
+      "taxonomy_tag_count": 12,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 19,
+        "C_design_taxonomy_tag": 7
+      },
+      "per_field": {
+        "core_status_ids": 14,
+        "core_effect_tags": 12
+      }
+    },
+    "japanese_raijin": {
+      "slots": 6,
+      "tags_total": 24,
+      "status_tag_count": 9,
+      "taxonomy_tag_count": 15,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 14,
+        "C_design_taxonomy_tag": 10
+      },
+      "per_field": {
+        "core_status_ids": 9,
+        "core_effect_tags": 15
+      }
+    },
+    "japanese_susanoo": {
+      "slots": 6,
+      "tags_total": 26,
+      "status_tag_count": 12,
+      "taxonomy_tag_count": 14,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 15,
+        "C_design_taxonomy_tag": 9,
+        "D_rule_or_trigger_tag": 1,
+        "E_vfx_or_presentation_tag": 1
+      },
+      "per_field": {
+        "core_status_ids": 12,
+        "core_effect_tags": 14
+      }
+    },
+    "japanese_amaterasu": {
+      "slots": 6,
+      "tags_total": 33,
+      "status_tag_count": 19,
+      "taxonomy_tag_count": 14,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 24,
+        "C_design_taxonomy_tag": 8,
+        "D_rule_or_trigger_tag": 1
+      },
+      "per_field": {
+        "core_status_ids": 19,
+        "core_effect_tags": 14
+      }
+    },
+    "egyptian_sekhmet": {
+      "slots": 6,
+      "tags_total": 33,
+      "status_tag_count": 16,
+      "taxonomy_tag_count": 17,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 24,
+        "C_design_taxonomy_tag": 9
+      },
+      "per_field": {
+        "core_status_ids": 16,
+        "core_effect_tags": 17
+      }
+    },
+    "mesopotamian_tiamat": {
+      "slots": 6,
+      "tags_total": 31,
+      "status_tag_count": 14,
+      "taxonomy_tag_count": 17,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 20,
+        "C_design_taxonomy_tag": 10,
+        "E_vfx_or_presentation_tag": 1
+      },
+      "per_field": {
+        "core_status_ids": 14,
+        "core_effect_tags": 17
+      }
+    },
+    "egyptian_isis": {
+      "slots": 6,
+      "tags_total": 34,
+      "status_tag_count": 16,
+      "taxonomy_tag_count": 18,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 25,
+        "C_design_taxonomy_tag": 9
+      },
+      "per_field": {
+        "core_status_ids": 16,
+        "core_effect_tags": 18
+      }
+    },
+    "celtic_morrigan": {
+      "slots": 6,
+      "tags_total": 30,
+      "status_tag_count": 16,
+      "taxonomy_tag_count": 14,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 21,
+        "C_design_taxonomy_tag": 7,
+        "E_vfx_or_presentation_tag": 1,
+        "D_rule_or_trigger_tag": 1
+      },
+      "per_field": {
+        "core_status_ids": 16,
+        "core_effect_tags": 14
+      }
+    },
+    "cursed_pestilence_horseman": {
+      "slots": 6,
+      "tags_total": 35,
+      "status_tag_count": 17,
+      "taxonomy_tag_count": 18,
+      "marchio_boreale_count": 0,
+      "per_bucket": {
+        "A_approved_status_core": 27,
+        "C_design_taxonomy_tag": 8
+      },
+      "per_field": {
+        "core_status_ids": 17,
+        "core_effect_tags": 18
+      }
+    },
+    "greek_borea": {
+      "slots": 6,
+      "tags_total": 40,
+      "status_tag_count": 19,
+      "taxonomy_tag_count": 21,
+      "marchio_boreale_count": 6,
+      "per_bucket": {
+        "A_approved_status_core": 20,
+        "B_unique_personal_status": 6,
+        "C_design_taxonomy_tag": 10,
+        "D_rule_or_trigger_tag": 4
+      },
+      "per_field": {
+        "core_status_ids": 19,
+        "core_effect_tags": 21
+      }
+    }
+  },
+  "per_slot_summary": {
+    "basic": 13,
+    "passive_base": 13,
+    "skill_1": 13,
+    "passive_advanced": 13,
+    "skill_2": 13,
+    "ultimate": 13
+  },
+  "forbidden_findings": [],
+  "unknown_findings": [],
+  "marchio_boreale_leak_in_non_borea": [],
+  "patch_decision": {
+    "patch_needed": false,
+    "decision_type": "no_patch_needed",
+    "reason": "status_tags and status_interactions are absent from every 6★ slot. All tags live in core_effect_tags (taxonomy field) and core_status_ids (approved status field, plus marchio_boreale exclusively on greek_borea). 0 forbidden, 0 unknown, 0 Marchio Boreale leak. The catalog is already taxonomy-separated; no controlled patch is necessary or safe.",
+    "allowed_patch_scope": "none",
+    "controlled_patch_applied": false,
+    "patch_scope": "none",
+    "auto_fix_applied": false,
+    "manual_review_count": 0
+  },
+  "recommended_next_task": "NONE_STRICTLY_REQUIRED. Possible opt-in follow-up RM1.30-C/D: schema rules note documenting the catalog-top-level safety-flag convention, OR Hero Skill Kit authoring tools / runtime adapter (already in handoff backlog). NOT a blocker for the inert catalog stage.",
+  "safety_flags": {
+    "design_audit_only": true,
+    "catalog_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "db_write": false,
+    "borea_activation": false,
+    "do_not_treat_as_live_kit": true,
+    "final_numbers_finalized": false
+  }
+}
