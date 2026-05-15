@@ -338,10 +338,21 @@ def main():
             'is executed (RM1.28-D).'
         ),
     }
-    PLAN_OUT.parent.mkdir(parents=True, exist_ok=True)
-    PLAN_OUT.write_text(json.dumps(plan, ensure_ascii=False, indent=2), encoding='utf-8')
-    print()
-    print(f'  WROTE plan file: {PLAN_OUT}')
+    # Plan file write policy:
+    #   - RM1.28-C originally wrote the plan once for archival.
+    #   - After RM1.28-D normalization, the legacy state is gone; re-running
+    #     this audit MUST NOT silently overwrite the historical plan.
+    #   - To regenerate, pass --write-plan explicitly.
+    write_plan = '--write-plan' in sys.argv
+    if write_plan:
+        PLAN_OUT.parent.mkdir(parents=True, exist_ok=True)
+        PLAN_OUT.write_text(json.dumps(plan, ensure_ascii=False, indent=2), encoding='utf-8')
+        print()
+        print(f'  WROTE plan file: {PLAN_OUT}')
+    else:
+        print()
+        print(f'  Plan file NOT rewritten (historical snapshot preserved).')
+        print(f'  Re-run with --write-plan to refresh: {PLAN_OUT}')
     return 0
 
 

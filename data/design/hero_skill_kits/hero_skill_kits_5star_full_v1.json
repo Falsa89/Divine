@@ -34,7 +34,17 @@
   "stats": {
     "legacy_ultimate_to_skill_2_conversions": 20,
     "passive_advanced_missing_count": 20,
-    "passive_advanced_filled_by_rm128a": 20
+    "passive_advanced_filled_by_rm128a": 20,
+    "legacy_status_tags_normalized_by_rm128d": true,
+    "rm128d_stats": {
+      "slots_modified": 79,
+      "bucket_A_moved": 96,
+      "bucket_B_mapped": 7,
+      "bucket_B_review": 3,
+      "bucket_C_moved": 3,
+      "bucket_D_review": 2,
+      "bucket_unknown": 0
+    }
   },
   "entries": [
     {
@@ -86,9 +96,7 @@
           "display_name": "Impulso Sacro",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "light"
@@ -120,6 +128,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079410+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079424+00:00"
           }
         },
         "passive_base": {
@@ -128,9 +145,7 @@
           "display_name": "Custodia Celeste",
           "design_summary": "Aumenta shield_power e defense.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "tank",
@@ -171,6 +186,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079435+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079437+00:00"
           }
         },
         "skill_1": {
@@ -180,7 +204,7 @@
           "design_summary": "Protegge il team con shield leggero e taunt.",
           "targeting_summary": "self_or_single_enemy",
           "status_tags": [
-            "shield",
+            "physical_shield",
             "taunt"
           ],
           "vfx_tags": [
@@ -222,6 +246,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+          },
+          "normalization_notes": [
+            "legacy_tag \"shield\" → mapped to \"physical_shield\" per RM1.28-D (obvious identity match)"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079446+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079447+00:00"
           }
         },
         "passive_advanced": {
@@ -270,7 +303,7 @@
           "design_summary": "Dà shield a tutti gli alleati e riduce i danni subiti.",
           "targeting_summary": "all_enemies",
           "status_tags": [
-            "shield",
+            "physical_shield",
             "damage_reduction"
           ],
           "vfx_tags": [
@@ -318,6 +351,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+          },
+          "normalization_notes": [
+            "legacy_tag \"shield\" → mapped to \"physical_shield\" per RM1.28-D (obvious identity match)"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079453+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079454+00:00"
           }
         }
       },
@@ -371,9 +413,7 @@
           "display_name": "Fendente del Vento",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "wind"
@@ -405,6 +445,15 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079458+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079459+00:00"
           }
         },
         "passive_base": {
@@ -413,10 +462,7 @@
           "display_name": "Presagio nelle Brume",
           "design_summary": "Aumenta effect_accuracy e riduce speed nemica.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff",
-            "aura_debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "control_debuff",
@@ -458,6 +504,18 @@
               "wind"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"aura_debuff\" removed from status_tags · manual_review_required (Bucket D ambiguous aura/debuff)"
+          ],
+          "manual_review_required": true,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079464+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079465+00:00"
           }
         },
         "skill_1": {
@@ -466,10 +524,7 @@
           "display_name": "Lamento nella Nebbia",
           "design_summary": "Danno vento e weaken.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "control_debuff",
@@ -509,6 +564,16 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079473+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079474+00:00"
           }
         },
         "passive_advanced": {
@@ -557,10 +622,7 @@
           "display_name": "Urlo Funesto",
           "design_summary": "AoE con silence chance.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "control"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "control_debuff",
@@ -603,6 +665,16 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "control"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079478+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079479+00:00"
           }
         }
       },
@@ -655,9 +727,7 @@
           "display_name": "Assalto Ardente",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "fire"
@@ -689,6 +759,15 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079482+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079484+00:00"
           }
         },
         "passive_base": {
@@ -698,8 +777,7 @@
           "design_summary": "Prima volta che scende sotto 30% HP, ottiene HoT e damage_reduction.",
           "targeting_summary": "self",
           "status_tags": [
-            "trigger",
-            "hot",
+            "regeneration",
             "damage_reduction"
           ],
           "vfx_tags": [
@@ -746,6 +824,19 @@
               "fire"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "trigger_tags": [
+            "trigger"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"trigger\" moved to trigger_tags per RM1.28-D",
+            "legacy_tag \"hot\" → mapped to \"regeneration\" per RM1.28-D (obvious identity match)"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079489+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079490+00:00"
           }
         },
         "skill_1": {
@@ -754,10 +845,7 @@
           "display_name": "Piuma Ardente",
           "design_summary": "Danno fuoco e HoT su sé stessa.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "hot"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "hybrid_special",
@@ -797,6 +885,19 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "hot"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"hot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)"
+          ],
+          "manual_review_required": true,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079494+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079496+00:00"
           }
         },
         "passive_advanced": {
@@ -844,10 +945,7 @@
           "display_name": "Rinascita Cremisi",
           "design_summary": "AoE fuoco e cura parziale gli alleati.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "heal"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "hybrid_special",
@@ -889,6 +987,16 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "heal"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079501+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079502+00:00"
           }
         }
       },
@@ -941,9 +1049,7 @@
           "display_name": "Taglio delle Maree",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "water"
@@ -975,6 +1081,15 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079505+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079507+00:00"
           }
         },
         "passive_base": {
@@ -983,9 +1098,7 @@
           "display_name": "Rigenerazione Mostruosa",
           "design_summary": "Aumenta healing_received e DoT damage.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "hybrid_special",
@@ -1026,6 +1139,15 @@
               "water"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079510+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079512+00:00"
           }
         },
         "skill_1": {
@@ -1035,8 +1157,7 @@
           "design_summary": "Danno acqua e poison.",
           "targeting_summary": "all_enemies",
           "status_tags": [
-            "damage",
-            "dot"
+            "poison"
           ],
           "vfx_tags": [
             "skill",
@@ -1077,6 +1198,18 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"dot\" → mapped to \"poison\" per RM1.28-D (obvious identity match)"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079515+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079517+00:00"
           }
         },
         "passive_advanced": {
@@ -1125,10 +1258,7 @@
           "display_name": "Teste Rigeneranti",
           "design_summary": "Colpisce 3 nemici e ottiene HoT.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "hot"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "hybrid_special",
@@ -1172,6 +1302,19 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "hot"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"hot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)"
+          ],
+          "manual_review_required": true,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079520+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079522+00:00"
           }
         }
       },
@@ -1224,9 +1367,7 @@
           "display_name": "Tocco d’Ombra",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "dark"
@@ -1258,6 +1399,15 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079526+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079527+00:00"
           }
         },
         "passive_base": {
@@ -1266,9 +1416,7 @@
           "display_name": "Presagio della Malattia",
           "design_summary": "Nemici con DoT ricevono meno cure.",
           "targeting_summary": "self",
-          "status_tags": [
-            "debuff_aura"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "hybrid_special",
@@ -1305,6 +1453,15 @@
               "dark"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "normalization_notes": [
+            "legacy_tag \"debuff_aura\" removed from status_tags · manual_review_required (Bucket D ambiguous aura/debuff)"
+          ],
+          "manual_review_required": true,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079530+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079532+00:00"
           }
         },
         "skill_1": {
@@ -1314,8 +1471,7 @@
           "design_summary": "Danno oscuro e poison.",
           "targeting_summary": "all_enemies",
           "status_tags": [
-            "damage",
-            "dot"
+            "poison"
           ],
           "vfx_tags": [
             "skill",
@@ -1356,6 +1512,18 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"dot\" → mapped to \"poison\" per RM1.28-D (obvious identity match)"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079536+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079537+00:00"
           }
         },
         "passive_advanced": {
@@ -1404,10 +1572,7 @@
           "display_name": "Miasma Annunciato",
           "design_summary": "AoE oscurità e weaken.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "hybrid_special",
@@ -1451,6 +1616,16 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079540+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079542+00:00"
           }
         }
       },
@@ -1504,9 +1679,7 @@
           "display_name": "Assalto Ardente",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "enemy_frontline",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "fire"
@@ -1538,6 +1711,15 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079545+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079546+00:00"
           }
         },
         "passive_base": {
@@ -1546,9 +1728,7 @@
           "display_name": "Fiamma Condannata",
           "design_summary": "Aumenta danno DoT applicato.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "mage_aoe",
@@ -1584,6 +1764,15 @@
               "fire"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079549+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079550+00:00"
           }
         },
         "skill_1": {
@@ -1593,8 +1782,7 @@
           "design_summary": "Danno magico e burn.",
           "targeting_summary": "all_enemies",
           "status_tags": [
-            "damage",
-            "dot"
+            "burn"
           ],
           "vfx_tags": [
             "skill",
@@ -1635,6 +1823,18 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"dot\" → mapped to \"burn\" per RM1.28-D (obvious identity match)"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079553+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079555+00:00"
           }
         },
         "passive_advanced": {
@@ -1683,10 +1883,7 @@
           "display_name": "Cerchio Infernale",
           "design_summary": "AoE fuoco e defense break.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "mage_aoe",
@@ -1729,6 +1926,16 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079558+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079560+00:00"
           }
         }
       },
@@ -1784,9 +1991,7 @@
           "display_name": "Scarica Runica",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "lightning"
@@ -1818,6 +2023,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079563+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079564+00:00"
           }
         },
         "passive_base": {
@@ -1826,9 +2040,7 @@
           "display_name": "Passo della Dea Gatta",
           "design_summary": "Aumenta dodge e crit_damage.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "assassin_burst",
@@ -1869,6 +2081,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079567+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079568+00:00"
           }
         },
         "skill_1": {
@@ -1878,7 +2099,6 @@
           "design_summary": "Danno critico e mark.",
           "targeting_summary": "enemy_lowest_hp",
           "status_tags": [
-            "damage",
             "mark"
           ],
           "vfx_tags": [
@@ -1918,6 +2138,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079571+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079572+00:00"
           }
         },
         "passive_advanced": {
@@ -1966,10 +2195,7 @@
           "display_name": "Balzo Felino",
           "design_summary": "Danno elevato a enemy_lowest_hp, bonus se marked.",
           "targeting_summary": "enemy_lowest_hp",
-          "status_tags": [
-            "damage",
-            "conditional_bonus"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "assassin_burst",
@@ -2011,6 +2237,21 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "rule_tags": [
+            "conditional_bonus"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"conditional_bonus\" moved to rule_tags per RM1.28-D"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079576+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079577+00:00"
           }
         }
       },
@@ -2065,9 +2306,7 @@
           "display_name": "Assalto Ardente",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "fire"
@@ -2099,6 +2338,15 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079581+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079582+00:00"
           }
         },
         "passive_base": {
@@ -2107,9 +2355,7 @@
           "display_name": "Sangue di Sekhmet",
           "design_summary": "Più danno contro nemici bruciati.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "dps_melee",
@@ -2145,6 +2391,15 @@
               "fire"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079585+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079586+00:00"
           }
         },
         "skill_1": {
@@ -2153,10 +2408,7 @@
           "display_name": "Artiglio Solare",
           "design_summary": "Danno forte e burn al bersaglio.",
           "targeting_summary": "single_enemy",
-          "status_tags": [
-            "damage",
-            "dot"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "dps_melee",
@@ -2196,6 +2448,19 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "dot"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"dot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)"
+          ],
+          "manual_review_required": true,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079589+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079591+00:00"
           }
         },
         "passive_advanced": {
@@ -2243,10 +2508,7 @@
           "display_name": "Furia della Leonessa",
           "design_summary": "Colpisce nemici in area e aumenta crit_rate.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "dps_melee",
@@ -2290,6 +2552,16 @@
               "fire"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079594+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079595+00:00"
           }
         }
       },
@@ -2344,9 +2616,7 @@
           "display_name": "Fendente del Vento",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "wind"
@@ -2378,6 +2648,15 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079598+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079599+00:00"
           }
         },
         "passive_base": {
@@ -2386,9 +2665,7 @@
           "display_name": "Passo Irrequieto",
           "design_summary": "Aumenta crit_rate e dodge.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "dps_ranged",
@@ -2429,6 +2706,15 @@
               "wind"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079602+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079603+00:00"
           }
         },
         "skill_1": {
@@ -2438,7 +2724,6 @@
           "design_summary": "Danno ranged e applica mark leggero.",
           "targeting_summary": "random_enemies_n",
           "status_tags": [
-            "damage",
             "mark"
           ],
           "vfx_tags": [
@@ -2478,6 +2763,15 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079607+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079608+00:00"
           }
         },
         "passive_advanced": {
@@ -2526,10 +2820,7 @@
           "display_name": "Corsa della Cacciatrice",
           "design_summary": "Colpisce tre nemici casuali e aumenta speed.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "dps_ranged",
@@ -2574,6 +2865,16 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079611+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079613+00:00"
           }
         }
       },
@@ -2627,9 +2928,7 @@
           "display_name": "Tocco d’Ombra",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "enemy_frontline",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "dark"
@@ -2661,6 +2960,15 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079615+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079617+00:00"
           }
         },
         "passive_base": {
@@ -2669,9 +2977,7 @@
           "display_name": "Isola degli Incanti",
           "design_summary": "Aumenta effect_accuracy e danno contro debuffati.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "mage_aoe",
@@ -2712,6 +3018,15 @@
               "dark"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079620+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079621+00:00"
           }
         },
         "skill_1": {
@@ -2720,10 +3035,7 @@
           "display_name": "Velo Incantato",
           "design_summary": "Danno magico e weaken.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "mage_aoe",
@@ -2763,6 +3075,16 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079624+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079626+00:00"
           }
         },
         "passive_advanced": {
@@ -2811,10 +3133,7 @@
           "display_name": "Metamorfosi della Strega",
           "design_summary": "AoE oscurità con chance di silence.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "control"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "mage_aoe",
@@ -2857,6 +3176,16 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "control"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079629+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079630+00:00"
           }
         }
       },
@@ -2910,9 +3239,7 @@
           "display_name": "Colpo Tellurico",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "earth"
@@ -2944,6 +3271,15 @@
               "earth"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079633+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079634+00:00"
           }
         },
         "passive_base": {
@@ -2952,9 +3288,7 @@
           "display_name": "Occhi della Gorgone",
           "design_summary": "Aumenta effect_accuracy e danno contro controllati.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "control_debuff",
@@ -2995,6 +3329,15 @@
               "earth"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079637+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079638+00:00"
           }
         },
         "skill_1": {
@@ -3003,10 +3346,7 @@
           "display_name": "Sguardo Serpentino",
           "design_summary": "Danno terra e slow.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "control_debuff",
@@ -3046,6 +3386,16 @@
               "earth"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079641+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079642+00:00"
           }
         },
         "passive_advanced": {
@@ -3094,10 +3444,7 @@
           "display_name": "Pietrificazione",
           "design_summary": "AoE con chance di stun.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "control"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "control_debuff",
@@ -3140,6 +3487,16 @@
               "earth"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "control"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079645+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079646+00:00"
           }
         }
       },
@@ -3194,9 +3551,7 @@
           "display_name": "Colpo Tellurico",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "earth"
@@ -3228,6 +3583,15 @@
               "earth"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079650+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079651+00:00"
           }
         },
         "passive_base": {
@@ -3237,7 +3601,6 @@
           "design_summary": "Aumenta HP e riduzione danni quando è sopra metà vita.",
           "targeting_summary": "self",
           "status_tags": [
-            "buff",
             "damage_reduction"
           ],
           "vfx_tags": [
@@ -3279,6 +3642,15 @@
               "earth"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079654+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079655+00:00"
           }
         },
         "skill_1": {
@@ -3330,7 +3702,11 @@
               "earth"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sad"
-          }
+          },
+          "design_taxonomy_tags": [],
+          "rule_tags": [],
+          "trigger_tags": [],
+          "normalization_notes": []
         },
         "passive_advanced": {
           "slot": "passive_advanced",
@@ -3377,10 +3753,7 @@
           "display_name": "Ruggito Nemeo",
           "design_summary": "Danneggia tutti i nemici e riduce il loro attacco.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "tank",
@@ -3423,6 +3796,16 @@
               "earth"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.earth.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079659+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079661+00:00"
           }
         }
       },
@@ -3477,9 +3860,7 @@
           "display_name": "Impulso Sacro",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "light"
@@ -3511,6 +3892,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079663+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079665+00:00"
           }
         },
         "passive_base": {
@@ -3519,9 +3909,7 @@
           "display_name": "Auspicio Vittorioso",
           "design_summary": "Aumenta energia/tempo di azione del team in modo leggero.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "support_buffer",
@@ -3557,6 +3945,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079667+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079668+00:00"
           }
         },
         "skill_1": {
@@ -3565,10 +3962,7 @@
           "display_name": "Luce della Vittoria",
           "design_summary": "Danno leggero e buff attack a un alleato.",
           "targeting_summary": "all_allies",
-          "status_tags": [
-            "damage",
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "support_buffer",
@@ -3609,6 +4003,16 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079672+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079673+00:00"
           }
         },
         "passive_advanced": {
@@ -3657,9 +4061,7 @@
           "display_name": "Ali del Trionfo",
           "design_summary": "Buff team attack e speed.",
           "targeting_summary": "all_allies",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "support_buffer",
@@ -3707,6 +4109,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079676+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079677+00:00"
           }
         }
       },
@@ -3760,9 +4171,7 @@
           "display_name": "Scarica Runica",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "enemy_frontline",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "lightning"
@@ -3794,6 +4203,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079680+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079681+00:00"
           }
         },
         "passive_base": {
@@ -3802,9 +4220,7 @@
           "display_name": "Rito della Tempesta",
           "design_summary": "Aumenta effect_accuracy e speed.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "mage_aoe",
@@ -3845,6 +4261,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079685+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079686+00:00"
           }
         },
         "skill_1": {
@@ -3853,10 +4278,7 @@
           "display_name": "Ofuda Tonante",
           "design_summary": "Danno fulmine e slow.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "mage_aoe",
@@ -3896,6 +4318,16 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079689+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079690+00:00"
           }
         },
         "passive_advanced": {
@@ -3944,9 +4376,7 @@
           "display_name": "Tamburi di Raijin",
           "design_summary": "AoE fulmine con chain-lightning su un bersaglio extra.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "mage_aoe",
@@ -3989,6 +4419,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079693+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079694+00:00"
           }
         }
       },
@@ -4043,9 +4482,7 @@
           "display_name": "Fendente del Vento",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "wind"
@@ -4077,6 +4514,15 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079698+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079699+00:00"
           }
         },
         "passive_base": {
@@ -4085,9 +4531,7 @@
           "display_name": "Prima Luce del Valhalla",
           "design_summary": "Aumenta attacco all’inizio del combattimento.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "dps_melee",
@@ -4124,6 +4568,15 @@
               "wind"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079702+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079703+00:00"
           }
         },
         "skill_1": {
@@ -4132,10 +4585,7 @@
           "display_name": "Lancia dell’Alba",
           "design_summary": "Danno single target con bonus se il bersaglio è debuffato.",
           "targeting_summary": "single_enemy",
-          "status_tags": [
-            "damage",
-            "conditional_bonus"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "dps_melee",
@@ -4174,6 +4624,21 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "rule_tags": [
+            "conditional_bonus"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"conditional_bonus\" moved to rule_tags per RM1.28-D"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079706+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079707+00:00"
           }
         },
         "passive_advanced": {
@@ -4221,10 +4686,7 @@
           "display_name": "Carica delle Prescelte",
           "design_summary": "Danneggia una linea e aumenta la speed alleata.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "dps_melee",
@@ -4268,6 +4730,16 @@
               "wind"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.wind.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079711+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079712+00:00"
           }
         }
       },
@@ -4322,9 +4794,7 @@
           "display_name": "Impulso Sacro",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "light"
@@ -4356,6 +4826,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079715+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079716+00:00"
           }
         },
         "passive_base": {
@@ -4364,9 +4843,7 @@
           "display_name": "Mano della Guaritrice",
           "design_summary": "Aumenta healing_power e healing_received alleati.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "healer",
@@ -4408,6 +4885,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079719+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079720+00:00"
           }
         },
         "skill_1": {
@@ -4416,9 +4902,7 @@
           "display_name": "Tocco Guaritore",
           "design_summary": "Cura l’alleato con HP più basso.",
           "targeting_summary": "ally_lowest_hp",
-          "status_tags": [
-            "heal"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "healer",
@@ -4453,6 +4937,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sad"
+          },
+          "design_taxonomy_tags": [
+            "heal"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079723+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079724+00:00"
           }
         },
         "passive_advanced": {
@@ -4502,7 +4995,6 @@
           "design_summary": "Cura il team e purifica un debuff.",
           "targeting_summary": "all_allies",
           "status_tags": [
-            "heal",
             "cleanse"
           ],
           "vfx_tags": [
@@ -4548,6 +5040,15 @@
               "light"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.light.sp"
+          },
+          "design_taxonomy_tags": [
+            "heal"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079727+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079728+00:00"
           }
         }
       },
@@ -4602,9 +5103,7 @@
           "display_name": "Taglio delle Maree",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "water"
@@ -4636,6 +5135,15 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079731+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079732+00:00"
           }
         },
         "passive_base": {
@@ -4644,9 +5152,7 @@
           "display_name": "Sangue dei Giganti",
           "design_summary": "Aumenta HP e resistenza effetti.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "tank",
@@ -4687,6 +5193,15 @@
               "water"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079735+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079737+00:00"
           }
         },
         "skill_1": {
@@ -4696,8 +5211,7 @@
           "design_summary": "Ottiene riduzione danni e applica slow al bersaglio.",
           "targeting_summary": "self_or_single_enemy",
           "status_tags": [
-            "damage_reduction",
-            "debuff"
+            "damage_reduction"
           ],
           "vfx_tags": [
             "skill",
@@ -4740,6 +5254,15 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+          },
+          "design_taxonomy_tags": [
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079739+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079741+00:00"
           }
         },
         "passive_advanced": {
@@ -4788,10 +5311,7 @@
           "display_name": "Crollo del Ghiaccio Antico",
           "design_summary": "Colpisce tutti i nemici con acqua gelida e possibilità di freeze.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "control"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "tank",
@@ -4834,6 +5354,16 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "control"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079744+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079745+00:00"
           }
         }
       },
@@ -4888,9 +5418,7 @@
           "display_name": "Scarica Runica",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "lightning"
@@ -4922,6 +5450,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079748+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079750+00:00"
           }
         },
         "passive_base": {
@@ -4930,9 +5467,7 @@
           "display_name": "Veggenza Runica",
           "design_summary": "Aumenta effect_accuracy del team.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "support_buffer",
@@ -4969,6 +5504,15 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079752+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079754+00:00"
           }
         },
         "skill_1": {
@@ -4977,10 +5521,7 @@
           "display_name": "Rune del Destino",
           "design_summary": "Danno fulmine e debuff effect_resistance.",
           "targeting_summary": "all_allies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "support_buffer",
@@ -5020,6 +5561,16 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079757+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079758+00:00"
           }
         },
         "passive_advanced": {
@@ -5068,10 +5619,7 @@
           "display_name": "Profezia Spezzata",
           "design_summary": "Buff team crit_rate e applica slow ai nemici.",
           "targeting_summary": "all_allies",
-          "status_tags": [
-            "buff",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "support_buffer",
@@ -5119,6 +5667,16 @@
               "lightning"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.lightning.sp"
+          },
+          "design_taxonomy_tags": [
+            "buff",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079761+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079762+00:00"
           }
         }
       },
@@ -5174,9 +5732,7 @@
           "display_name": "Tocco d’Ombra",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "dark"
@@ -5208,6 +5764,15 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079765+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079766+00:00"
           }
         },
         "passive_base": {
@@ -5216,9 +5781,7 @@
           "display_name": "Kage no Oni",
           "design_summary": "Aumenta attack quando colpisce nemici con DoT.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "assassin_burst",
@@ -5254,6 +5817,15 @@
               "dark"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079769+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079770+00:00"
           }
         },
         "skill_1": {
@@ -5263,8 +5835,7 @@
           "design_summary": "Danno oscuro e bleed.",
           "targeting_summary": "enemy_lowest_hp",
           "status_tags": [
-            "damage",
-            "dot"
+            "bleed"
           ],
           "vfx_tags": [
             "skill",
@@ -5305,6 +5876,18 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "normalization_notes": [
+            "legacy_tag \"dot\" → mapped to \"bleed\" per RM1.28-D (obvious identity match)"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079774+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079775+00:00"
           }
         },
         "passive_advanced": {
@@ -5353,10 +5936,7 @@
           "display_name": "Ombra con Corna",
           "design_summary": "Danno burst e silence al bersaglio.",
           "targeting_summary": "enemy_lowest_hp",
-          "status_tags": [
-            "damage",
-            "control"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "assassin_burst",
@@ -5399,6 +5979,16 @@
               "dark"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.dark.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "control"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079778+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079779+00:00"
           }
         }
       },
@@ -5452,9 +6042,7 @@
           "display_name": "Taglio delle Maree",
           "design_summary": "Attacco base coerente con elemento e ruolo.",
           "targeting_summary": "tank_first_then_nearest",
-          "status_tags": [
-            "damage"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "basic",
             "water"
@@ -5486,6 +6074,15 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.nad"
+          },
+          "design_taxonomy_tags": [
+            "damage"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079782+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079783+00:00"
           }
         },
         "passive_base": {
@@ -5494,9 +6091,7 @@
           "display_name": "Cuore d’Inverno",
           "design_summary": "Aumenta resistenza e danno contro slowed/frozen.",
           "targeting_summary": "self",
-          "status_tags": [
-            "buff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "passive",
             "control_debuff",
@@ -5537,6 +6132,15 @@
               "water"
             ],
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
+          },
+          "design_taxonomy_tags": [
+            "buff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079787+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079789+00:00"
           }
         },
         "skill_1": {
@@ -5545,10 +6149,7 @@
           "display_name": "Soffio Gelido",
           "design_summary": "Danno acqua e slow.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "debuff"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "skill",
             "control_debuff",
@@ -5588,6 +6189,16 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sad"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "debuff"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079792+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079793+00:00"
           }
         },
         "passive_advanced": {
@@ -5636,10 +6247,7 @@
           "display_name": "Velo di Neve",
           "design_summary": "AoE acqua con chance di freeze.",
           "targeting_summary": "all_enemies",
-          "status_tags": [
-            "damage",
-            "control"
-          ],
+          "status_tags": [],
           "vfx_tags": [
             "ultimate",
             "control_debuff",
@@ -5682,11 +6290,21 @@
               "water"
             ],
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
+          },
+          "design_taxonomy_tags": [
+            "damage",
+            "control"
+          ],
+          "manual_review_required": false,
+          "normalization_metadata": {
+            "task_origin": "RM1.28-D",
+            "first_normalized_at_utc": "2026-05-15T15:57:03.079796+00:00",
+            "last_normalized_at_utc": "2026-05-15T15:57:03.079797+00:00"
           }
         }
       },
       "missing_fields_audit": []
     }
   ],
-  "notes": "Inert design catalog. Read-only. NOT connected to combat runtime. Generated by /app/backend/scripts/build_hero_skill_kits_5star_full.py from the approved consolidated 5★ source. No skill invention. passive_advanced slot present but marked missing_from_approved_source. Legacy ultimate_or_special remapped to skill_2 with is_true_ultimate=false. RM1.28-A: passive_advanced approved source completed (20/20)."
+  "notes": "Inert design catalog. Read-only. NOT connected to combat runtime. Generated by /app/backend/scripts/build_hero_skill_kits_5star_full.py from the approved consolidated 5★ source. No skill invention. passive_advanced slot present but marked missing_from_approved_source. Legacy ultimate_or_special remapped to skill_2 with is_true_ultimate=false. RM1.28-A: passive_advanced approved source completed (20/20). RM1.28-D: 5★ legacy status_tags normalized into design_taxonomy_tags/rule_tags/trigger_tags/normalization_notes per RM1.28-C plan. passive_advanced preserved."
 }
