@@ -1,0 +1,150 @@
+{
+  "report_id": "boss_policy_cross_table_consistency_report_v1",
+  "task_origin": "RM1.34-D",
+  "generated_at_utc": "2026-05-15T22:58:03.007373Z",
+  "source_tables": [
+    "boss_family_resistance_table_v1",
+    "boss_family_element_faction_matrix_v1",
+    "boss_enrage_phase_policy_table_v1"
+  ],
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132b_v4",
+  "design_only": true,
+  "runtime_attached": false,
+  "no_runtime_activation": true,
+  "no_db_write": true,
+  "no_catalog_mutation": true,
+  "audit_result": "PASS",
+  "family_count": 9,
+  "family_ids": [
+    "story_boss",
+    "normal_boss",
+    "elite_boss",
+    "raid_boss",
+    "world_boss",
+    "event_boss",
+    "guild_boss",
+    "training_dummy",
+    "pvp_dummy"
+  ],
+  "checks_summary": {
+    "families_match": true,
+    "marchio_consistent": true,
+    "domain_consistent": true,
+    "divine_weapon_consistent": true,
+    "training_dummy_consistent": true,
+    "pvp_dummy_consistent": true,
+    "raid_world_guild_consistent": true,
+    "baseline_v4_consistent": true,
+    "runtime_isolation_confirmed": true,
+    "source_tables_unmodified": true
+  },
+  "checks": [
+    {
+      "name": "metadata.design_only_inert[RM1.34]",
+      "status": "PASS",
+      "details": "design_only=true, runtime_attached=false, battle_runtime_attached=false, used_by_battle_engine=false"
+    },
+    {
+      "name": "metadata.no_borea_activation[RM1.34]",
+      "status": "PASS",
+      "details": "no_borea_activation=true"
+    },
+    {
+      "name": "metadata.design_only_inert[RM1.34-B]",
+      "status": "PASS",
+      "details": "design_only=true, runtime_attached=false, battle_runtime_attached=false, used_by_battle_engine=false"
+    },
+    {
+      "name": "metadata.no_borea_activation[RM1.34-B]",
+      "status": "PASS",
+      "details": "no_borea_activation=true"
+    },
+    {
+      "name": "metadata.design_only_inert[RM1.34-C]",
+      "status": "PASS",
+      "details": "design_only=true, runtime_attached=false, battle_runtime_attached=false, used_by_battle_engine=false"
+    },
+    {
+      "name": "metadata.no_borea_activation[RM1.34-C]",
+      "status": "PASS",
+      "details": "no_borea_activation=true"
+    },
+    {
+      "name": "families_match.9x3",
+      "status": "PASS",
+      "details": "families: RM1.34=9, RM1.34-B=9, RM1.34-C=9, set-equal-to-required=True"
+    },
+    {
+      "name": "marchio.owner_greek_borea",
+      "status": "PASS",
+      "details": "all marchio owner_hero_id=greek_borea"
+    },
+    {
+      "name": "marchio.team_wide_amp_disallowed",
+      "status": "PASS",
+      "details": "team_wide_amp_allowed=false everywhere"
+    },
+    {
+      "name": "marchio.phase_no_activation",
+      "status": "PASS",
+      "details": "phase policy no_activation=true everywhere"
+    },
+    {
+      "name": "marchio.cap_heavy_le_4",
+      "status": "PASS",
+      "details": "raid/world/guild marchio cap <= 4"
+    },
+    {
+      "name": "marchio.cap_pvp_le_3",
+      "status": "PASS",
+      "details": "pvp_dummy marchio cap <= 3"
+    },
+    {
+      "name": "domain.consistent",
+      "status": "PASS",
+      "details": "domain rules consistent across 3 tables (one_active_per_side, strongest_wins, no_same_turn_refresh, max_duration<=3)"
+    },
+    {
+      "name": "divine_weapon.consistent",
+      "status": "PASS",
+      "details": "DW synergy: design_only=true, live_numeric=false, per_owner_only=true, caps <=10/5%"
+    },
+    {
+      "name": "training_dummy.consistent",
+      "status": "PASS",
+      "details": "training_dummy neutral matrix + enrage disabled + phase=1 + no hard immunities"
+    },
+    {
+      "name": "pvp_dummy.consistent",
+      "status": "PASS",
+      "details": "pvp_dummy PvP-safe neutral matrix + enrage disabled-or-pvp_test_only + hard_control_chain<=2"
+    },
+    {
+      "name": "raid_world_guild.consistent",
+      "status": "PASS",
+      "details": "raid/world/guild caps consistent (world ≤ raid/guild on anti-loop, no hard counter outside [0.70,1.30])"
+    },
+    {
+      "name": "baseline_v4.consistent",
+      "status": "PASS",
+      "details": "all tables anchored at baseline_v4 and baseline file present"
+    },
+    {
+      "name": "runtime_isolation.confirmed",
+      "status": "PASS",
+      "details": "no runtime file references any boss policy table"
+    },
+    {
+      "name": "source_tables.unmodified_inert",
+      "status": "PASS",
+      "details": "3 source tables retain design_only=true, runtime_attached=false, correct task_origin"
+    }
+  ],
+  "warnings": [],
+  "failures": [],
+  "next_recommendations": [
+    "Hold all 3 boss policy tables design-only until runtime adapter activation.",
+    "Re-run this audit any time any of the 3 source tables changes.",
+    "When boss runtime is unlocked, require the audit to PASS as a gating step."
+  ]
+}
