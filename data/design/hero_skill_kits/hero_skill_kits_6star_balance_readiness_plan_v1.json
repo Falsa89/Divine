@@ -1,0 +1,198 @@
+{
+  "plan_id": "hero_skill_kits_6star_balance_readiness_plan_v1",
+  "task_origin": "RM1.32-A-POST",
+  "scope": "6star_balance_readiness",
+  "patch_needed": false,
+  "future_task": "RM1.32-B",
+  "generated_at_utc": "2026-05-15T20:47:43.440104Z",
+  "purpose": "Read-only, descriptive plan that prepares the design context for the future 6★ Balance Pass Foundation (RM1.32-B). This document does NOT patch the 6★ catalog and does NOT activate Borea. It records the structural shape, slot counts, expected invariants, risk areas, and recommended numeric range principles that the future 6★ foundation_draft must respect.",
+  "safety_flags": {
+    "design_audit_only": true,
+    "no_patch": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "db_write": false,
+    "borea_activation": false,
+    "balance_values_finalized": false,
+    "runtime_ready": false
+  },
+  "catalog_structure_snapshot": {
+    "source_catalog": "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+    "entries_total": 13,
+    "entries_launch_base": 12,
+    "entries_launch_extra_premium": 1,
+    "slots_per_entry": 6,
+    "slot_names": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced",
+      "skill_2",
+      "ultimate"
+    ],
+    "expected_slot_count": 78,
+    "final_numbers_currently_null_slots": 78,
+    "divine_weapon_records": 13,
+    "divine_weapon_crosslinks_required": 13
+  },
+  "include_borea_as_catalog_only": true,
+  "borea_handling": {
+    "hero_id": "greek_borea",
+    "release_group": "launch_extra_premium",
+    "catalog_only": true,
+    "visibility_in_api_heroes": false,
+    "visibility_in_gacha": false,
+    "borea_activation": false,
+    "include_in_future_balance_foundation": true,
+    "include_kind": "catalog_only_design_data",
+    "notes": "greek_borea should receive foundation_draft final_numbers as catalog-only design data in RM1.32-B, but MUST remain hidden in /api/heroes, gacha, and roster. The Marchio Boreale stack mechanic remains Borea-exclusive and must not leak into other 6★ entries. Legacy hero_id 'borea' MUST stay hidden under all circumstances."
+  },
+  "current_state_assertions": [
+    "13 6★ entries present (12 launch_base + 1 launch_extra_premium=greek_borea)",
+    "78 expected slots total (13 entries × 6 slots each)",
+    "78/78 6★ slot final_numbers currently null",
+    "13/13 6★ entries carry divine_weapon_id and cross-link 1:1 with Divine Weapon catalog",
+    "Marchio Boreale appears only on greek_borea (verified by baseline invariants)",
+    "All 6★ entries have ultimate slot present",
+    "5★ has no ultimate slot (architectural)",
+    "core_status_ids resolve against status_effect_catalog_v1.json",
+    "core_effect_tags are taxonomy-only descriptors (no runtime hookup)",
+    "Borea remains catalog-only; runtime not attached"
+  ],
+  "future_balance_pass_directives": {
+    "task": "RM1.32-B",
+    "target_slots_to_draft": 78,
+    "slot_breakdown_per_entry": {
+      "basic": 1,
+      "passive_base": 1,
+      "skill_1": 1,
+      "passive_advanced": 1,
+      "skill_2": 1,
+      "ultimate": 1
+    },
+    "final_numbers_status_required": "foundation_draft",
+    "final_numbers_runtime_ready": false,
+    "final_numbers_balance_values_finalized": false,
+    "final_numbers_balance_pass_id": "RM1.32-B",
+    "forbidden_changes_in_future_pass": [
+      "runtime_attached transitions to true",
+      "battle_runtime_attached transitions to true",
+      "DB writes",
+      "gacha/roster changes",
+      "Borea activation / making greek_borea visible in /api/heroes",
+      "legacy 'borea' un-hide",
+      "primordial_gaia un-hide",
+      "divine_weapon_id reassignment",
+      "release_group changes",
+      "core_status_ids changes",
+      "Marchio Boreale leak to non-Borea entries"
+    ],
+    "allowed_changes_in_future_pass": [
+      "per-slot final_numbers payload with status='foundation_draft' and runtime_ready=false",
+      "per-slot authoring_notes (descriptive only)",
+      "top-level balance_pass_id / balance_pass_status metadata"
+    ]
+  },
+  "recommended_numeric_range_principles": {
+    "warning": "Indicative, descriptive guidance only. No numbers are applied to the catalog by this plan. Final numbers will be drafted in RM1.32-B by the authoring CLI under the safe-write pipeline.",
+    "slot_archetypes": {
+      "basic": {
+        "role": "reliable single-target attack baseline",
+        "power_envelope": "slightly above 5★ basic anchor, no scaling crit, no resource generation beyond ultimate gauge",
+        "status_application": "none or minor light status (e.g., minor mark)",
+        "cooldown_band": "0 (always available)"
+      },
+      "passive_base": {
+        "role": "identity passive — always-on baseline buff or trigger",
+        "power_envelope": "meaningful but bounded; e.g. +5–10% stat or conditional trigger",
+        "stack_cap": "low (1–3) where applicable"
+      },
+      "skill_1": {
+        "role": "signature active — cooldown-gated mid-power tool",
+        "power_envelope": "~1.3–1.6× basic damage equivalent or strong utility",
+        "cooldown_band": "2–4 turns"
+      },
+      "passive_advanced": {
+        "role": "high-impact conditional passive unlocked at 6★",
+        "power_envelope": "stronger than passive_base; gated by trigger condition (HP threshold, status, stack count)",
+        "interaction_focus": "divine weapon synergy and faction/element resonance, descriptive only"
+      },
+      "skill_2": {
+        "role": "second active — typically AoE or strong utility",
+        "power_envelope": "comparable to skill_1 with different shape (AoE, debuff, sustained DoT, etc.)",
+        "cooldown_band": "3–5 turns"
+      },
+      "ultimate": {
+        "role": "6★ exclusive finisher with strong narrative VFX hook",
+        "power_envelope": "single highest-impact action; long cooldown / gauge-gated",
+        "cooldown_band": "5–7 turns or full gauge",
+        "divine_weapon_synergy": "placeholder — descriptive cross-link only, no runtime effect",
+        "note": "ultimate values are highest-risk slot; must be reviewed manually before any runtime hookup"
+      }
+    },
+    "global_principles": [
+      "All values inert: status='foundation_draft', runtime_ready=false",
+      "No multiplicative stacking with 5★ foundation values (independent design space)",
+      "All numbers reviewable and reversible via authoring CLI + baseline diff",
+      "Marchio Boreale stack values stay confined to greek_borea entry",
+      "Divine Weapon synergy fields remain descriptive placeholders — no live damage modifiers"
+    ]
+  },
+  "risk_areas": [
+    {
+      "area": "ultimate values",
+      "risk": "highest narrative + numeric impact; easy to over/under-tune",
+      "mitigation": "draft conservatively; document rationale per entry in authoring_notes"
+    },
+    {
+      "area": "divine weapon synergy placeholders",
+      "risk": "accidental runtime hookup or implicit damage modifier",
+      "mitigation": "keep as taxonomy / descriptive string only; no numeric modifier in 6★ slot final_numbers"
+    },
+    {
+      "area": "Marchio Boreale stack values",
+      "risk": "leak into non-Borea entries; over-tuned stack cap",
+      "mitigation": "baseline diff validator already enforces no leak; future draft must confirm stack cap range"
+    },
+    {
+      "area": "domain / effect tags",
+      "risk": "taxonomy drift if new tags introduced silently",
+      "mitigation": "reuse existing taxonomy from RM1.30-B; any new tag must go through audit_6star_effect_tags_taxonomy"
+    },
+    {
+      "area": "runtime attachment",
+      "risk": "future task accidentally flips runtime_attached / battle_runtime_attached to true",
+      "mitigation": "baseline diff + invariant checks fail on flip; runtime hookup gated by SKILL_KIT_RUNTIME_ENABLED feature flag (RM1.33-A)"
+    },
+    {
+      "area": "greek_borea visibility",
+      "risk": "future task could unhide greek_borea in /api/heroes or gacha",
+      "mitigation": "API smoke + roster invariants enforce hidden status; baseline invariants record expected hidden state"
+    }
+  ],
+  "acceptance_invariants_for_rm132b": [
+    "5★ catalog must remain unchanged (foundation_draft already in place)",
+    "6★ catalog gets foundation_draft final_numbers on 78/78 slots",
+    "Divine Weapon catalog untouched",
+    "All runtime flags remain false (entry-level and slot-level)",
+    "balance_values_finalized remains false",
+    "greek_borea remains hidden in /api/heroes",
+    "legacy borea remains hidden",
+    "primordial_gaia remains hidden",
+    "Marchio Boreale stays Borea-exclusive",
+    "divine_weapon_id assignments unchanged",
+    "release_group values unchanged",
+    "core_status_ids unchanged",
+    "After RM1.32-B is approved, a new baseline v4 must be created to absorb the legitimate 6★ SHA change"
+  ],
+  "recommended_next_baseline": "hero_skill_kit_catalog_baseline_rm132b_v4 (created post-RM1.32-B)",
+  "out_of_scope": [
+    "runtime hookup",
+    "battle engine integration",
+    "DB writes",
+    "gacha/roster/Character Bible changes",
+    "Borea activation",
+    "asset pipeline changes",
+    "final balance values finalization (a later separate task)"
+  ]
+}
