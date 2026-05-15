@@ -32,6 +32,29 @@ import sys
 from pathlib import Path
 
 BASELINE_PATH = Path('/app/data/design/hero_skill_kits/hero_skill_kit_catalog_baseline_rm132pre_v1.json')
+BASELINE_DIR = Path('/app/data/design/hero_skill_kits')
+BASELINE_GLOB = 'hero_skill_kit_catalog_baseline_*.json'
+
+
+def find_latest_baseline() -> Path | None:
+    """Return the most-recent baseline by ISO timestamp / version preference.
+
+    Picks the file with the highest "generated_at_utc" inside the JSON.
+    Falls back to the lexically-greatest filename, then None.
+    """
+    candidates = sorted(BASELINE_DIR.glob(BASELINE_GLOB))
+    if not candidates:
+        return None
+    best: tuple[str, Path] | None = None
+    for p in candidates:
+        try:
+            d = json.loads(p.read_text(encoding='utf-8'))
+            ts = d.get('generated_at_utc') or p.name
+        except Exception:
+            ts = p.name
+        if best is None or ts > best[0]:
+            best = (ts, p)
+    return best[1] if best else None
 
 HSK_5STAR = Path('/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json')
 HSK_6STAR = Path('/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json')
@@ -129,11 +152,19 @@ def main(argv=None) -> int:
                     help='File path allowed to differ from baseline (repeatable)')
     ap.add_argument('--summary-only', action='store_true',
                     help='Print current checksums without failing on diff')
-    ap.add_argument('--baseline', default=str(BASELINE_PATH),
-                    help='Path to the baseline snapshot JSON (default: %(default)s)')
+    ap.add_argument('--baseline', default=None,
+                    help='Path to the baseline snapshot JSON (default: auto-detect latest baseline file)')
     args = ap.parse_args(argv)
 
-    baseline_path = Path(args.baseline)
+    if args.baseline:
+        baseline_path = Path(args.baseline)
+    else:
+        latest = find_latest_baseline()
+        if latest is None:
+            fail('baseline', f'no baseline files found in {BASELINE_DIR} matching {BASELINE_GLOB!r}')
+            return emit()
+        baseline_path = latest
+        info(f'auto-detected latest baseline: {baseline_path.name}')
     if not baseline_path.exists():
         fail('baseline', f'baseline file missing: {baseline_path}')
         return emit()
