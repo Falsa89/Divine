@@ -1,0 +1,226 @@
+{
+  "plan_id": "hero_skill_kit_authoring_readiness_plan_v1",
+  "task_origin": "RM1.30-C",
+  "generated_at_utc": "2026-05-15T17:29:03.864411Z",
+  "readiness_summary": "5★ and 6★ Hero Skill Kit catalogs are complete, taxonomy-separated, cross-linked with the Divine Weapon catalog, runtime-inert and regression-protected by 11 validators. The system is READY for the next safe phase (authoring tools), but NOT yet for runtime/battle activation. Borea remains catalog-only / launch_extra_premium / hidden from /api/heroes.",
+  "current_catalog_state": {
+    "5star": {
+      "file": "/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json",
+      "entries": 20,
+      "slot_set": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2"
+      ],
+      "no_ultimate_slot": true,
+      "no_divine_weapon_id": true,
+      "no_domain_marker": true,
+      "no_marchio_boreale": true,
+      "passive_advanced_completion": "20/20 approved_source_completed (RM1.28-A)",
+      "skill_2_is_true_ultimate": "false 20/20",
+      "legacy_status_tags_remaining": 0,
+      "manual_review_residuals": 0,
+      "final_numbers": "null everywhere",
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    "6star": {
+      "file": "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+      "entries": 13,
+      "launch_base": 12,
+      "launch_extra_premium": 1,
+      "extra_premium_id": "greek_borea",
+      "slot_set": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "all_have_ultimate": true,
+      "all_have_divine_weapon_id": true,
+      "divine_weapon_crosslink_pass": true,
+      "core_status_ids_whitelist_compliance": "30 approved + marchio_boreale only on greek_borea",
+      "core_effect_tags_count_unique": 105,
+      "core_effect_tags_classification": {
+        "design_taxonomy": 73,
+        "rule_or_trigger": 5,
+        "vfx_or_presentation": 3
+      },
+      "final_numbers": "null everywhere",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "top_level_safety_flags": {
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_kit": true
+      }
+    },
+    "divine_weapons": {
+      "file": "/app/data/design/divine_weapons/divine_weapons_catalog_v1.json",
+      "records": 13,
+      "launch_base": 12,
+      "launch_extra_premium": 1,
+      "crosslink_with_6star": "13/13",
+      "preserved_id_overrides": {
+        "greek_athena": "aegis_of_athena",
+        "egyptian_isis": "isis_sacred_tyet_knot",
+        "greek_borea": "borea_wings_of_the_north_wind"
+      },
+      "borea_activation_allowed": false,
+      "runtime_attached": false
+    },
+    "regression_validators_count": 11,
+    "api_routes_state": "GET-only / 0 mutation endpoints",
+    "ui_state": "read-only / 0 runtime-verb Pressables / descriptive copy only",
+    "api_heroes_count": 100,
+    "borea_visibility_in_api_heroes": false
+  },
+  "safe_invariants": [
+    "5★ catalog: 20 entries, no ultimate, no DW, no Domain.",
+    "6★ catalog: 13 entries (12 launch_base + 1 greek_borea launch_extra_premium).",
+    "6★ ultimate slot present on 13/13.",
+    "6★ divine_weapon_id present + resolves on 13/13.",
+    "final_numbers=null across 100% of slots (5★ 100 + 6★ 78 = 178/178).",
+    "runtime_attached=false / battle_runtime_attached=false everywhere.",
+    "Marchio Boreale appears only on greek_borea (0 leaks).",
+    "Legacy borea hero_id absent across catalogs and /api/heroes.",
+    "primordial_gaia alias absent across catalogs and /api/heroes.",
+    "All loader/route files perform no DB writes and expose only GET endpoints.",
+    "UI files contain no non-GET fetch and no runtime-verb Pressables.",
+    "/api/heroes count remains 100 (untouched by catalog work)."
+  ],
+  "authoring_tool_recommendations": [
+    {
+      "id": "AT-1",
+      "name": "CLI script `author_hero_skill_kit.py` (catalog-only)",
+      "purpose": "Add or edit a catalog-only kit entry without ever opening the JSON manually.",
+      "must_have": [
+        "Schema validation against hero_skill_kit_schema_v1.json BEFORE writing.",
+        "ID canonicality check against approved 5★/6★ lists.",
+        "Slot progression check by rarity (5★ → 5 slots; 6★ → 6 slots).",
+        "Status whitelist check (approved_status_core) per slot.",
+        "Marchio Boreale restriction (Borea only).",
+        "final_numbers MUST be null until balance pass.",
+        "runtime_attached / battle_runtime_attached MUST be false until runtime task.",
+        "6★ divine_weapon_id cross-link verification against divine_weapons_catalog_v1.json.",
+        "Backup the catalog file before writing (.bak in /app/backups/hero_skill_kits/).",
+        "Emit a machine-readable diff/report.",
+        "Reject if catalog count would deviate from expected (5★=20, 6★=13).",
+        "NO DB writes.",
+        "NO runtime hook.",
+        "NO Character Bible mutation.",
+        "NO Borea visibility flip."
+      ]
+    },
+    {
+      "id": "AT-2",
+      "name": "Validator-suite runner `run_skill_kit_validators.py`",
+      "purpose": "Single command to run all 11 catalog validators + audits and emit an aggregated PASS/FAIL report.",
+      "must_have": [
+        "Run all current validators sequentially.",
+        "Collect PASS/FAIL per validator.",
+        "Exit 1 if any validator fails.",
+        "No mutation."
+      ]
+    },
+    {
+      "id": "AT-3",
+      "name": "Read-only diff report `diff_skill_kit_catalog.py`",
+      "purpose": "Compare current 5★/6★ catalog state vs a saved snapshot (e.g. last-approved JSON).",
+      "must_have": [
+        "Highlight schema-level diffs (entries added/removed/changed).",
+        "Highlight slot-level diffs (display_name, design_status, core_effect_tags, core_status_ids).",
+        "NO writes."
+      ]
+    }
+  ],
+  "required_future_validators": [
+    "validate_skill_kit_authoring_safety.py — schema/ID/slot/status whitelist + DW crosslink in one pass before any write.",
+    "validate_skill_kit_snapshot_integrity.py — snapshot vs current catalog drift detector.",
+    "validate_status_to_skill_resolver_contract.py — verify all core_status_ids referenced by kits exist in RM1.25-B status catalog (READ-ONLY contract check)."
+  ],
+  "future_runtime_adapter_prerequisites": [
+    "Final balance numbers attached (currently null) per slot.",
+    "Cooldown / chance / duration finalized per skill_type.",
+    "Status runtime resolver (currently RM1.25-B catalog is design-only).",
+    "HP bar status icon renderer + asset bindings (currently inert).",
+    "VFX runtime mapping (currently descriptive tags only).",
+    "battle_engine adapter to read kits from the catalog without bypassing balance gate.",
+    "API/runtime contract document (which fields are runtime-required vs design-only).",
+    "Mobile QA pass on iPhone 12/13/14 (390x844) and Galaxy S21 (360x800).",
+    "Feature flag SKILL_KIT_RUNTIME_ENABLED with default false + rollback switch.",
+    "Borea activation MUST remain a separate isolated task (not unlocked by this layer)."
+  ],
+  "risks_and_stop_conditions": [
+    {
+      "risk": "Accidental runtime hook in adapter phase",
+      "stop_condition": "If any battle_engine.py change or final_numbers becomes non-null without explicit balance task approval, STOP."
+    },
+    {
+      "risk": "Borea visibility flip",
+      "stop_condition": "If greek_borea or legacy borea ever surfaces in /api/heroes, STOP and rollback."
+    },
+    {
+      "risk": "Schema drift",
+      "stop_condition": "If hero_skill_kit_schema_v1.json is modified without versioning to v2, STOP."
+    },
+    {
+      "risk": "Status whitelist drift",
+      "stop_condition": "If any non-whitelisted status_id appears in core_status_ids outside marchio_boreale on Borea, STOP."
+    },
+    {
+      "risk": "DW preserved IDs renamed",
+      "stop_condition": "If aegis_of_athena / isis_sacred_tyet_knot / borea_wings_of_the_north_wind change, STOP."
+    }
+  ],
+  "suggested_next_tasks": [
+    {
+      "id": "RM1.31-A",
+      "name": "Authoring CLI Foundation (catalog-only, READ + DRY-RUN first)",
+      "scope": "Implement AT-1 in read+dry-run-only mode. Real write requires a separate follow-up.",
+      "safety": "HIGHEST — no writes in first iteration."
+    },
+    {
+      "id": "RM1.31-B",
+      "name": "Validator Suite Runner (AT-2)",
+      "scope": "Single-command runner to aggregate all 11 validators.",
+      "safety": "HIGHEST — no writes."
+    },
+    {
+      "id": "RM1.31-C",
+      "name": "Status Resolver Contract Validator",
+      "scope": "Cross-check 5★/6★ core_status_ids against RM1.25-B status catalog.",
+      "safety": "HIGHEST — read-only contract check."
+    },
+    {
+      "id": "RM1.32-A",
+      "name": "Balance Pass Foundation (5★ first)",
+      "scope": "Author final_numbers per slot, BEHIND a feature flag, NOT runtime-hooked.",
+      "safety": "MEDIUM — design-data writes only, no runtime."
+    },
+    {
+      "id": "RM1.33-A",
+      "name": "Runtime Adapter Skeleton (feature-flagged off)",
+      "scope": "Battle engine adapter scaffold reading from catalog WITH feature flag SKILL_KIT_RUNTIME_ENABLED=false.",
+      "safety": "LOW — needs full QA before flipping flag."
+    }
+  ],
+  "safety_flags": {
+    "design_audit_only": true,
+    "catalog_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "db_write": false,
+    "borea_activation": false,
+    "do_not_treat_as_live_kit": true,
+    "final_numbers_finalized": false,
+    "gacha_attached": false,
+    "roster_attached": false,
+    "character_bible_attached": false
+  }
+}
