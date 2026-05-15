@@ -2,9 +2,19 @@
   "catalog_id": "hero_skill_kits_6star_borea_v1",
   "version": 1,
   "runtime_attached": false,
+  "battle_runtime_attached": false,
   "balance_values_finalized": false,
   "scope": "12 official launch_base 6★ heroes + greek_borea extra premium, approved direction summaries only",
   "do_not_treat_as_live_kit": true,
+  "safety_metadata_harmonization": {
+    "task": "RM1.30-A",
+    "applied_change": "Added top-level battle_runtime_attached=false to make the catalog-level safety flag explicit. No skill content, slot, status, effect tag, or divine_weapon_id was modified.",
+    "no_skill_content_change": true,
+    "no_slot_change": true,
+    "no_status_or_effect_tag_change": true,
+    "no_divine_weapon_id_change": true,
+    "no_borea_visibility_change": true
+  },
   "entries": [
     {
       "hero_id": "greek_athena",
