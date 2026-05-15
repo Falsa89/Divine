@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""
+RM1.31-B — Hero Skill Kit Validator Suite Runner
+─────────────────────────────────────────────────────────────────────────
+Single command to run all Hero Skill Kit / Divine Weapon / Status-resolver
+validators sequentially. Read-only orchestrator. NO catalog/DB/runtime
+writes.
+
+Exit 0 only if every REQUIRED validator passes; exit 1 if any fails.
+Optional validators that are missing are reported and do not fail the
+suite unless they are listed as required.
+
+Usage:
+    python3 run_hero_skill_kit_validator_suite.py
+    python3 run_hero_skill_kit_validator_suite.py --json-out /tmp/suite.json
+"""
+from __future__ import annotations
+import argparse
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+SCRIPTS_DIR = Path('/app/backend/scripts')
+SAFE_REPORT_DIRS = (Path('/app/backend/reports'), Path('/tmp'))
+
+REQUIRED = [
+    ('RM1.28-A', 'validate_5star_passive_advanced_source.py'),
+    ('RM1.28-B', 'audit_5star_skill_kits_crosslinks.py'),
+    ('RM1.28-C', 'audit_5star_legacy_status_tags.py'),
+    ('RM1.28-D', 'validate_5star_legacy_status_tags_normalized.py'),
+    ('RM1.28-E', 'validate_5star_manual_review_residuals_resolved.py'),
+    ('RM1.29',   'audit_6star_skill_kits_crosslinks.py'),
+    ('RM1.30-A', 'validate_6star_catalog_safety_metadata.py'),
+    ('RM1.30-B', 'audit_6star_effect_tags_taxonomy.py'),
+    ('RM1.30-C', 'audit_hero_skill_kit_catalog_consolidation.py'),
+    ('RM1.27-A', 'validate_divine_weapon_catalog.py'),
+    ('RM1.27-D', 'audit_divine_weapon_crosslinks.py'),
+]
+OPTIONAL = [
+    ('RM1.31-C', 'validate_status_resolver_contract.py'),
+]
+
+
+def run_one(script: Path) -> dict:
+    if not script.exists():
+        return {'present': False, 'exit_code': None, 'duration_s': 0.0, 'tail': '<missing>'}
+    t0 = datetime.now(timezone.utc)
+    try:
+        proc = subprocess.run(
+            ['python3', str(script)],
+            capture_output=True, text=True, timeout=60,
+        )
+        tail = (proc.stdout or proc.stderr or '').strip().splitlines()
+        tail = tail[-3:] if tail else ['<no output>']
+        return {
+            'present': True,
+            'exit_code': proc.returncode,
+            'duration_s': (datetime.now(timezone.utc) - t0).total_seconds(),
+            'tail': '\n        '.join(tail),
+        }
+    except subprocess.TimeoutExpired:
+        return {'present': True, 'exit_code': 124, 'duration_s': 60.0, 'tail': '<TIMEOUT>'}
+    except Exception as e:
+        return {'present': True, 'exit_code': -1, 'duration_s': 0.0, 'tail': f'<ERROR: {e}>'}
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(prog='run_hero_skill_kit_validator_suite')
+    ap.add_argument('--json-out', help='Path under /app/backend/reports or /tmp to write the full report JSON')
+    args = ap.parse_args(argv)
+
+    results: list[dict] = []
+    any_required_fail = False
+
+    print('RM1.31-B — Hero Skill Kit Validator Suite Runner')
+    print('=' * 70)
+    print(f'{"TASK":10s} {"SCRIPT":54s} {"EXIT":>5s}')
+    print('-' * 70)
+    for task, name in REQUIRED:
+        r = run_one(SCRIPTS_DIR / name)
+        status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
+        if status != 'PASS':
+            any_required_fail = True
+        print(f'{task:10s} {name:54s} {r["exit_code"]!s:>5s}  [{status}]')
+        results.append({'task': task, 'script': name, 'required': True, 'status': status, **r})
+
+    print('-- optional --')
+    for task, name in OPTIONAL:
+        r = run_one(SCRIPTS_DIR / name)
+        status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
+        # Optional: don't fail suite if MISS, but fail if explicit FAIL
+        if r['present'] and r['exit_code'] not in (0, None):
+            any_required_fail = True
+        print(f'{task:10s} {name:54s} {r["exit_code"]!s:>5s}  [{status}]')
+        results.append({'task': task, 'script': name, 'required': False, 'status': status, **r})
+    print('=' * 70)
+
+    overall = 'PASS' if not any_required_fail else 'FAIL'
+    n_pass = sum(1 for r in results if r['status'] == 'PASS')
+    n_fail = sum(1 for r in results if r['status'] == 'FAIL')
+    n_miss = sum(1 for r in results if r['status'] == 'MISS')
+    print(f'Overall: {overall}  (pass={n_pass}, fail={n_fail}, miss={n_miss})')
+
+    if args.json_out:
+        out = Path(args.json_out).resolve()
+        if not any(str(out).startswith(str(s.resolve())) for s in SAFE_REPORT_DIRS):
+            print(f'REJECTED --json-out: "{out}" outside allowed dirs {[str(s) for s in SAFE_REPORT_DIRS]}')
+            return 2
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps({
+            'suite': 'RM1.31-B',
+            'generated_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+            'overall': overall,
+            'counts': {'pass': n_pass, 'fail': n_fail, 'miss': n_miss},
+            'results': results,
+        }, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+        print(f'JSON report written: {out}')
+
+    return 0 if overall == 'PASS' else 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())
