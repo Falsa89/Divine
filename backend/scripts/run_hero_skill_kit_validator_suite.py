@@ -42,6 +42,8 @@ REQUIRED = [
 ]
 OPTIONAL = [
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
+    ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
+    ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
