@@ -30,6 +30,7 @@ from routes.player_faction_v2 import register_player_faction_v2_routes
 from routes.skill_status_vfx_catalogs import register_skill_status_vfx_catalog_routes
 from routes.hero_skill_kits_catalogs import register_hero_skill_kits_catalog_routes
 from routes.divine_weapons import register_divine_weapons_catalog_routes
+from routes.skill_kit_runtime_debug import register_skill_kit_runtime_debug_routes
 
 
 def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):
@@ -67,6 +68,10 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # Borea entry exposed as catalog-only design data; legacy `borea`
     # alias is explicitly rejected with 404.
     register_divine_weapons_catalog_routes(router)
+    # RM1.33-C — Debug-only GET read-through endpoint for the Skill Kit
+    # Runtime Adapter preview. Feature flag SKILL_KIT_RUNTIME_ENABLED stays
+    # OFF; runtime_candidate is always disabled. NOT used by battle runtime.
+    register_skill_kit_runtime_debug_routes(router)
     # Sanctuary (home hero + affinity + constellation) — note: signature differs (no calculate_hero_power)
     register_sanctuary_routes(router, db, get_current_user, serialize_doc)
 

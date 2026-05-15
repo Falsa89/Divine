@@ -23,9 +23,16 @@ import json
 from pathlib import Path
 from typing import Any
 
-from backend.data.skill_kit_runtime_adapter import (  # noqa: F401
-    is_skill_kit_runtime_enabled,
-)  # imported for cross-reference / sanity
+try:
+    # When imported from /app (e.g. wire-test, audit), 'backend' is a package
+    from backend.data.skill_kit_runtime_adapter import (  # noqa: F401
+        is_skill_kit_runtime_enabled,
+    )
+except ImportError:
+    # When imported from /app/backend (FastAPI server cwd), 'data' is the package
+    from data.skill_kit_runtime_adapter import (  # noqa: F401
+        is_skill_kit_runtime_enabled,
+    )
 
 _DELTA_PLAN_PATH = Path('/app/data/design/hero_skill_kits/hero_skill_kits_balance_cap_delta_plan_v1.json')
 _VALID_CONTEXTS = {'pvp', 'boss', 'pve'}
