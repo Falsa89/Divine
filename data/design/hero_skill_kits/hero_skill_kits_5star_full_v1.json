@@ -4,8 +4,18 @@
   "task": "RM1.26-B2",
   "generated_at_utc": "2026-05-12T21:14:06.608890+00:00",
   "runtime_attached": false,
+  "battle_runtime_attached": false,
   "balance_values_finalized": false,
   "do_not_treat_as_live_kit": true,
+  "safety_metadata_harmonization": {
+    "task": "RM1.31-D/RM1.32-PRE",
+    "applied_change": "Added top-level battle_runtime_attached=false to mirror RM1.30-A 6★ convention. NO 5★ skill content / slot / status / effect tag / divine_weapon_id / Borea visibility changed.",
+    "no_skill_content_change": true,
+    "no_slot_change": true,
+    "no_status_or_effect_tag_change": true,
+    "no_divine_weapon_id_change": true,
+    "no_borea_visibility_change": true
+  },
   "scope": {
     "native_rarity": 5,
     "release_groups": [

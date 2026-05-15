@@ -41,6 +41,7 @@ REQUIRED = [
 OPTIONAL = [
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
 ]
+BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
 
 def run_one(script: Path) -> dict:
@@ -69,6 +70,8 @@ def run_one(script: Path) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog='run_hero_skill_kit_validator_suite')
     ap.add_argument('--json-out', help='Path under /app/backend/reports or /tmp to write the full report JSON')
+    ap.add_argument('--include-baseline-diff', action='store_true',
+                    help='Also run RM1.32-PRE baseline diff validator (off by default — baselines intentionally change in approved tasks)')
     args = ap.parse_args(argv)
 
     results: list[dict] = []
@@ -95,6 +98,15 @@ def main(argv=None) -> int:
             any_required_fail = True
         print(f'{task:10s} {name:54s} {r["exit_code"]!s:>5s}  [{status}]')
         results.append({'task': task, 'script': name, 'required': False, 'status': status, **r})
+    if args.include_baseline_diff:
+        print('-- baseline diff (RM1.32-PRE) --')
+        task, name = BASELINE_DIFF
+        r = run_one(SCRIPTS_DIR / name)
+        status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
+        if r['present'] and r['exit_code'] not in (0, None):
+            any_required_fail = True
+        print(f'{task:10s} {name:54s} {r["exit_code"]!s:>5s}  [{status}]')
+        results.append({'task': task, 'script': name, 'required': True, 'status': status, **r})
     print('=' * 70)
 
     overall = 'PASS' if not any_required_fail else 'FAIL'
