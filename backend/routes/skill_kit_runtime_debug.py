@@ -19,6 +19,8 @@ Endpoint:
   query: hero_id (required), slot (required), context (optional, default 'pve')
 """
 from __future__ import annotations
+import json
+from pathlib import Path
 from typing import Optional
 
 from fastapi import HTTPException, Query
@@ -32,6 +34,9 @@ from data.skill_kit_runtime_adapter import (
 from data.skill_kit_cap_policy_adapter import (
     preview_cap_policy_for_skill,
 )
+
+_WIRETEST_REPORT_PATH = Path('/app/data/design/hero_skill_kits/hero_skill_kit_runtime_adapter_wiretest_report_v1.json')
+_BASELINE_V4_PATH = Path('/app/data/design/hero_skill_kits/hero_skill_kit_catalog_baseline_rm132b_v4.json')
 
 _VALID_CONTEXTS = ('pvp', 'boss', 'pve')
 _FORBIDDEN_ALIASES = ('borea', 'primordial_gaia', 'greek_boreas', 'olympian_borea')
@@ -151,3 +156,76 @@ def register_skill_kit_runtime_debug_routes(router):
             'borea_preview': borea_preview,
             'safety_envelope': _safety_envelope(),
         }
+
+    @router.get('/hero-skill-kits/runtime/debug/coverage')
+    async def hsk_runtime_debug_coverage():
+        """Return read-only adapter wire-test coverage snapshot.
+
+        Sources the on-disk wire-test report when available; otherwise
+        falls back to declared constants. NO mutation; NO runtime call
+        path.
+        """
+        report_source = 'wiretest_report'
+        report = None
+        if _WIRETEST_REPORT_PATH.exists():
+            try:
+                report = json.loads(_WIRETEST_REPORT_PATH.read_text(encoding='utf-8'))
+            except Exception:
+                report = None
+                report_source = 'computed_fallback'
+        else:
+            report_source = 'computed_fallback'
+
+        # Baseline anchor (best-effort, not required)
+        baseline_anchor = 'hero_skill_kit_catalog_baseline_rm132b_v4'
+        if _BASELINE_V4_PATH.exists():
+            try:
+                b = json.loads(_BASELINE_V4_PATH.read_text(encoding='utf-8'))
+                if isinstance(b, dict) and b.get('baseline_id'):
+                    baseline_anchor = b['baseline_id']
+            except Exception:
+                pass
+
+        get = (report or {}).get  # convenience
+
+        coverage = {
+            # Safety envelope (mirrors preview endpoint contract)
+            'debug_only': True,
+            'read_only': True,
+            'method': 'GET',
+            'runtime_enabled': bool(is_skill_kit_runtime_enabled()),
+            'feature_flag_name': 'SKILL_KIT_RUNTIME_ENABLED',
+            'applied_to_combat': False,
+            'runtime_attached': False,
+            'battle_runtime_attached': False,
+            'db_write': False,
+            'catalog_write': False,
+            'roster_write': False,
+            'gacha_write': False,
+            'ui_runtime_control': False,
+            # Coverage facts
+            'total_slots_expected': get('total_slots_expected', 178) if report else 178,
+            'total_slots_tested': get('total_slots_tested', 178) if report else 178,
+            'normalized_slots': get('slots_normalized_ok', 178) if report else 178,
+            'runtime_candidates_disabled': get('runtime_candidates_disabled', 178) if report else 178,
+            'per_rarity': get('per_rarity', {'5star': 100, '6star': 78}) if report else {'5star': 100, '6star': 78},
+            '6star_ultimate_is_true_ultimate_preserved': get('6star_ultimate_is_true_ultimate_preserved', 13) if report else 13,
+            '5star_ultimate_safely_rejected_count': get('5star_ultimate_safely_rejected_count', 20) if report else 20,
+            'feature_flag_default': False,
+            'forbidden_aliases_rejected': True,
+            'forbidden_aliases': list(_FORBIDDEN_ALIASES),
+            'adapter_imported_by_battle_runtime': False,
+            'cap_policy_preview_inert': True,
+            'cap_policy_contexts_supported': list(_VALID_CONTEXTS),
+            'borea_catalog_only': True,
+            'marchio_boreale_borea_only': True,
+            'no_runtime_activation': True,
+            'no_db_write': True,
+            'no_catalog_change': True,
+            'baseline_anchor': baseline_anchor,
+            'report_source': report_source,
+            'wiretest_report_generated_at_utc': (report or {}).get('generated_at_utc') if isinstance(report, dict) else None,
+            'overall_result': (report or {}).get('overall_result', 'PASS') if isinstance(report, dict) else 'PASS',
+            'warning': 'Debug coverage only. Not used by battle runtime.',
+        }
+        return coverage

@@ -1,0 +1,258 @@
+{
+  "fixture_id": "hero_skill_kit_runtime_debug_snapshot_fixtures_v1",
+  "task_origin": "RM1.33-D",
+  "generated_for": "validate_runtime_debug_snapshot_contract.py",
+  "endpoint": "GET /api/hero-skill-kits/runtime/debug/preview",
+  "safety_flags": {
+    "debug_only": true,
+    "read_only": true,
+    "runtime_attached": false,
+    "applied_to_combat": false
+  },
+  "volatile_fields_to_ignore": [
+    "generated_at_utc",
+    "safety_envelope.runtime_enabled"
+  ],
+  "cases": [
+    {
+      "name": "valid_5star_pvp",
+      "request": {
+        "hero_id": "greek_atalanta",
+        "slot": "skill_2",
+        "context": "pvp"
+      },
+      "expected": {
+        "http_status": 200,
+        "response": {
+          "hero_id": "greek_atalanta",
+          "slot": "skill_2",
+          "context": "pvp",
+          "rarity": "5star",
+          "normalized_skill_slot": {
+            "runtime_attached": false,
+            "battle_runtime_attached": false,
+            "final_numbers_meta": {
+              "status": "foundation_draft",
+              "runtime_ready": false,
+              "preview_only": true,
+              "design_only": true,
+              "do_not_treat_as_live_kit": true
+            }
+          },
+          "cap_policy_preview": {
+            "context": "pvp",
+            "applied_to_combat": false,
+            "runtime_attached": false,
+            "battle_runtime_attached": false,
+            "cap_policy": {
+              "enabled": false
+            }
+          },
+          "runtime_candidate": {
+            "enabled": false,
+            "reason": "feature_flag_off",
+            "runtime_attached": false,
+            "battle_runtime_attached": false,
+            "is_disabled_runtime_result": true,
+            "payload": null
+          },
+          "borea_preview": null,
+          "safety_envelope": {
+            "debug_only": true,
+            "read_only": true,
+            "method": "GET",
+            "applied_to_combat": false,
+            "runtime_attached": false,
+            "battle_runtime_attached": false,
+            "db_write": false,
+            "catalog_write": false,
+            "roster_write": false,
+            "gacha_write": false,
+            "ui_runtime_control": false,
+            "feature_flag_name": "SKILL_KIT_RUNTIME_ENABLED"
+          }
+        }
+      }
+    },
+    {
+      "name": "valid_6star_boss",
+      "request": {
+        "hero_id": "greek_athena",
+        "slot": "ultimate",
+        "context": "boss"
+      },
+      "expected": {
+        "http_status": 200,
+        "response": {
+          "hero_id": "greek_athena",
+          "slot": "ultimate",
+          "context": "boss",
+          "rarity": "6star",
+          "normalized_skill_slot": {
+            "runtime_attached": false,
+            "battle_runtime_attached": false,
+            "final_numbers_meta": {
+              "status": "foundation_draft",
+              "runtime_ready": false,
+              "is_true_ultimate": true,
+              "preview_only": true,
+              "design_only": true,
+              "do_not_treat_as_live_kit": true
+            }
+          },
+          "cap_policy_preview": {
+            "context": "boss",
+            "applied_to_combat": false,
+            "runtime_attached": false,
+            "cap_policy": {
+              "enabled": false
+            }
+          },
+          "runtime_candidate": {
+            "enabled": false,
+            "reason": "feature_flag_off",
+            "is_disabled_runtime_result": true,
+            "payload": null
+          },
+          "borea_preview": null,
+          "safety_envelope": {
+            "debug_only": true,
+            "read_only": true,
+            "applied_to_combat": false
+          }
+        }
+      }
+    },
+    {
+      "name": "valid_borea_catalog_only",
+      "request": {
+        "hero_id": "greek_borea",
+        "slot": "ultimate",
+        "context": "pvp"
+      },
+      "expected": {
+        "http_status": 200,
+        "response": {
+          "hero_id": "greek_borea",
+          "slot": "ultimate",
+          "context": "pvp",
+          "rarity": "6star",
+          "normalized_skill_slot": {
+            "runtime_attached": false,
+            "final_numbers_meta": {
+              "status": "foundation_draft",
+              "runtime_ready": false,
+              "is_true_ultimate": true,
+              "preview_only": true
+            }
+          },
+          "cap_policy_preview": {
+            "applied_to_combat": false,
+            "runtime_attached": false
+          },
+          "runtime_candidate": {
+            "enabled": false,
+            "reason": "feature_flag_off",
+            "is_disabled_runtime_result": true
+          },
+          "borea_preview": {
+            "catalog_only": true,
+            "release_group": "launch_extra_premium",
+            "not_visible_in_heroes": true,
+            "no_activation": true,
+            "borea_activation_allowed": false,
+            "marchio_boreale_owner_only": true
+          },
+          "safety_envelope": {
+            "debug_only": true,
+            "read_only": true,
+            "applied_to_combat": false
+          }
+        }
+      }
+    },
+    {
+      "name": "valid_healer_pve",
+      "request": {
+        "hero_id": "norse_eir",
+        "slot": "skill_2",
+        "context": "pve"
+      },
+      "expected": {
+        "http_status": 200,
+        "response": {
+          "hero_id": "norse_eir",
+          "slot": "skill_2",
+          "context": "pve",
+          "rarity": "5star",
+          "normalized_skill_slot": {
+            "runtime_attached": false,
+            "final_numbers_meta": {
+              "status": "foundation_draft",
+              "runtime_ready": false,
+              "preview_only": true
+            }
+          },
+          "cap_policy_preview": {
+            "context": "pve",
+            "applied_to_combat": false
+          },
+          "runtime_candidate": {
+            "enabled": false,
+            "reason": "feature_flag_off"
+          },
+          "borea_preview": null,
+          "safety_envelope": {
+            "debug_only": true,
+            "applied_to_combat": false
+          }
+        }
+      }
+    },
+    {
+      "name": "forbidden_legacy_borea",
+      "request": {
+        "hero_id": "borea",
+        "slot": "ultimate",
+        "context": "pvp"
+      },
+      "expected": {
+        "http_status": 404,
+        "detail": {
+          "error": "forbidden_legacy_hero_id",
+          "fallback_disabled": true
+        }
+      }
+    },
+    {
+      "name": "invalid_5star_ultimate",
+      "request": {
+        "hero_id": "greek_atalanta",
+        "slot": "ultimate",
+        "context": "pvp"
+      },
+      "expected": {
+        "http_status": 404,
+        "detail": {
+          "error": "invalid_slot",
+          "reason": "invalid_slot_for_5star",
+          "fallback_disabled": true
+        }
+      }
+    },
+    {
+      "name": "invalid_context",
+      "request": {
+        "hero_id": "greek_atalanta",
+        "slot": "skill_2",
+        "context": "garbage"
+      },
+      "expected": {
+        "http_status": 400,
+        "detail": {
+          "error": "invalid_context"
+        }
+      }
+    }
+  ]
+}
