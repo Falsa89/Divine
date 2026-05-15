@@ -37,6 +37,7 @@ REQUIRED = [
     ('RM1.30-C', 'audit_hero_skill_kit_catalog_consolidation.py'),
     ('RM1.27-A', 'validate_divine_weapon_catalog.py'),
     ('RM1.27-D', 'audit_divine_weapon_crosslinks.py'),
+    ('RM1.32-A', 'validate_5star_balance_foundation.py'),
 ]
 OPTIONAL = [
     ('RM1.31-C', 'validate_status_resolver_contract.py'),

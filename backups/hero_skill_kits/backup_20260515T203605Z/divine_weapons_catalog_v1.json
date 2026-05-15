@@ -1,0 +1,4048 @@
+{
+  "catalog_id": "divine_weapons_catalog_v1",
+  "task_origin": "RM1.27-A",
+  "version": "v1",
+  "name": "Divine Weapons Catalog v1 (RM1.27-A Foundation)",
+  "description": "Design-only, read-only, inert catalog of 13 Divine Weapons (12 launch_base + 1 launch_extra_premium). NOT attached to battle runtime, HP bar runtime, VFX runtime, gacha, roster, or DB.",
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "hp_bar_runtime_attached": false,
+  "vfx_runtime_attached": false,
+  "gacha_attached": false,
+  "roster_activation_attached": false,
+  "borea_activation_allowed": false,
+  "balance_values_finalized": false,
+  "do_not_treat_as_live_power": true,
+  "schema_ref": "divine_weapon_schema_v1.json",
+  "requirements_ref": "divine_weapon_requirements_v1.json",
+  "counts": {
+    "total_divine_weapons": 13,
+    "launch_base": 12,
+    "launch_extra_premium": 1
+  },
+  "borea_visibility_note": "Borea (greek_borea) is included as catalog-only / launch_extra_premium. Roster activation / gacha / battle availability is NOT affected.",
+  "id_override_notes": [
+    "greek_athena: divine_weapon_id preserved as `aegis_of_athena` (from hero_skill_kits_6star_borea_v1.json). RM1.27-A prompt suggested `athena_aegis` — discrepancy documented in divine_weapon_requirements_v1.json.",
+    "egyptian_isis: divine_weapon_id preserved as `isis_sacred_tyet_knot` (from hero_skill_kits_6star_borea_v1.json). RM1.27-A prompt suggested `isis_sacred_tyet` — discrepancy documented in divine_weapon_requirements_v1.json."
+  ],
+  "records": [
+    {
+      "divine_weapon_id": "aegis_of_athena",
+      "hero_id": "greek_athena",
+      "display_name": "Egida di Atena",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "light",
+      "lore_origin": "Egida divina forgiata dal cielo olimpico; scudo sacro di Atena, simbolo di guardia strategica e protezione.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "greek_athena__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (light) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_athena__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (light) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_athena__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di greek_athena per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_athena__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_athena__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_athena__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "greek_athena__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_athena__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_athena__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_athena__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_athena__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_athena__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "greek_athena__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_athena__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_athena__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_athena__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "greek_athena__aegis_geometric_barrier",
+          "status_id": "aegis_geometric_barrier",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Aegide geometrica sacra di Atena (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "greek_athena__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_athena__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_athena__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "aegis_geometric_glow",
+        "element_color_family": "sacred_white_gold",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "artemis_lunar_bow",
+      "hero_id": "greek_artemis",
+      "display_name": "Arco Lunare di Artemide",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "wind",
+      "lore_origin": "Arco intessuto di vento e luce lunare; reliquia della Cacciatrice Divina di Olimpo.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "greek_artemis__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (wind) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_artemis__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (wind) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_artemis__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di greek_artemis per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_artemis__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_artemis__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_artemis__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "greek_artemis__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_artemis__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_artemis__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_artemis__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_artemis__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_artemis__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "greek_artemis__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_artemis__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_artemis__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_artemis__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "greek_artemis__lunar_mark_artemis",
+          "status_id": "lunar_mark_artemis",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Marchio Lunare di Artemide (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "greek_artemis__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_artemis__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_artemis__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "lunar_wind_crescent",
+        "element_color_family": "lunar_wind",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "gaia_primordial_root",
+      "hero_id": "greek_gaia",
+      "display_name": "Radice Primordiale di Gaia",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "earth",
+      "lore_origin": "Radice del primo Albero della Terra; nucleo vivente che lega tutte le cose alla Madre Primordiale.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "greek_gaia__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (earth) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_gaia__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (earth) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_gaia__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di greek_gaia per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_gaia__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_gaia__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_gaia__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "greek_gaia__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_gaia__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_gaia__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_gaia__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_gaia__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_gaia__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "greek_gaia__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_gaia__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_gaia__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_gaia__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "greek_gaia__primordial_root_grasp",
+          "status_id": "primordial_root_grasp",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Presa di radici primordiali di Gaia (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "greek_gaia__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_gaia__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_gaia__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "primordial_roots_glow",
+        "element_color_family": "earth_green_gold",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "nyx_primordial_night_veil",
+      "hero_id": "primordial_nyx",
+      "display_name": "Velo della Notte Primordiale",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "dark",
+      "lore_origin": "Velo intessuto dalla Notte stessa, prima della separazione fra giorno e tenebra; reliquia primordiale di Nyx.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "primordial_nyx__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (dark) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "primordial_nyx__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (dark) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "primordial_nyx__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di primordial_nyx per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "primordial_nyx__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "primordial_nyx__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "primordial_nyx__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "primordial_nyx__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "primordial_nyx__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "primordial_nyx__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "primordial_nyx__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "primordial_nyx__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "primordial_nyx__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "primordial_nyx__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "primordial_nyx__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "primordial_nyx__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "primordial_nyx__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "primordial_nyx__starry_veil_concealment",
+          "status_id": "starry_veil_concealment",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Velo stellato di occultamento di Nyx (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "primordial_nyx__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "primordial_nyx__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "primordial_nyx__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "starry_night_shadow",
+        "element_color_family": "night_shadow",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "raijin_thunder_drums",
+      "hero_id": "japanese_raijin",
+      "display_name": "Tamburi del Tuono di Raijin",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "lightning",
+      "lore_origin": "Tamburi forgiati dalla tempesta divina; quando rullano, le nubi rispondono e il cielo tuona.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "japanese_raijin__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (lightning) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_raijin__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (lightning) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_raijin__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di japanese_raijin per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_raijin__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_raijin__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_raijin__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "japanese_raijin__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_raijin__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_raijin__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_raijin__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_raijin__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_raijin__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "japanese_raijin__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_raijin__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_raijin__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_raijin__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "japanese_raijin__thunder_drum_resonance",
+          "status_id": "thunder_drum_resonance",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Risonanza dei Tamburi del Tuono (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "japanese_raijin__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_raijin__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_raijin__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "thunder_drum_sparks",
+        "element_color_family": "lightning_yellow_blue",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "susanoo_ame_no_habakiri",
+      "hero_id": "japanese_susanoo",
+      "display_name": "Ame-no-Habakiri",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "lightning",
+      "lore_origin": "Lama del Cielo che taglia le Serpi; spada mitica di Susanoo, taglio di tempesta divina.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "japanese_susanoo__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (lightning) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_susanoo__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (lightning) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_susanoo__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di japanese_susanoo per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_susanoo__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_susanoo__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_susanoo__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "japanese_susanoo__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_susanoo__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_susanoo__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_susanoo__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_susanoo__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_susanoo__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "japanese_susanoo__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_susanoo__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_susanoo__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_susanoo__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "japanese_susanoo__storm_blade_resonance",
+          "status_id": "storm_blade_resonance",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Risonanza della Lama di Tempesta (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "japanese_susanoo__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_susanoo__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_susanoo__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "storm_blade_wind",
+        "element_color_family": "lightning_yellow_blue",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "amaterasu_yata_no_kagami",
+      "hero_id": "japanese_amaterasu",
+      "display_name": "Yata no Kagami",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "light",
+      "lore_origin": "Specchio sacro che riflette il sole stesso; reliquia di Amaterasu, fonte di luce e verità divina.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "japanese_amaterasu__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (light) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_amaterasu__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (light) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_amaterasu__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di japanese_amaterasu per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_amaterasu__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_amaterasu__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "japanese_amaterasu__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "japanese_amaterasu__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_amaterasu__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_amaterasu__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_amaterasu__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_amaterasu__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "japanese_amaterasu__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "japanese_amaterasu__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_amaterasu__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_amaterasu__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_amaterasu__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "japanese_amaterasu__solar_mirror_blessing",
+          "status_id": "solar_mirror_blessing",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Benedizione dello Specchio Solare (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "japanese_amaterasu__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_amaterasu__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "japanese_amaterasu__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "solar_mirror_radiance",
+        "element_color_family": "solar_gold",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "sekhmet_burning_eye_of_ra",
+      "hero_id": "egyptian_sekhmet",
+      "display_name": "Occhio Ardente di Ra",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "fire",
+      "lore_origin": "Occhio infuocato di Ra incarnato in Sekhmet; sguardo che brucia la falsità e purga col fuoco solare.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "egyptian_sekhmet__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (fire) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_sekhmet__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (fire) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_sekhmet__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di egyptian_sekhmet per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_sekhmet__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_sekhmet__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_sekhmet__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "egyptian_sekhmet__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_sekhmet__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_sekhmet__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_sekhmet__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_sekhmet__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_sekhmet__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "egyptian_sekhmet__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_sekhmet__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_sekhmet__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_sekhmet__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "egyptian_sekhmet__burning_eye_brand",
+          "status_id": "burning_eye_brand",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Marchio dell'Occhio Ardente (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "egyptian_sekhmet__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_sekhmet__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_sekhmet__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "solar_lioness_heat",
+        "element_color_family": "solar_heat",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "tiamat_primordial_abyss",
+      "hero_id": "mesopotamian_tiamat",
+      "display_name": "Abisso Primordiale di Tiamat",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "water",
+      "lore_origin": "Acqua primordiale da cui nacquero tutti gli dei; cuore liquido dell'Abisso, manifestazione di Tiamat.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "mesopotamian_tiamat__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (water) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "mesopotamian_tiamat__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (water) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "mesopotamian_tiamat__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di mesopotamian_tiamat per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "mesopotamian_tiamat__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "mesopotamian_tiamat__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "mesopotamian_tiamat__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "mesopotamian_tiamat__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "mesopotamian_tiamat__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "mesopotamian_tiamat__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "mesopotamian_tiamat__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "mesopotamian_tiamat__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "mesopotamian_tiamat__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "mesopotamian_tiamat__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "mesopotamian_tiamat__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "mesopotamian_tiamat__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "mesopotamian_tiamat__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "mesopotamian_tiamat__abyssal_tide_mark",
+          "status_id": "abyssal_tide_mark",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Marchio della Marea Abissale (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "mesopotamian_tiamat__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "mesopotamian_tiamat__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "mesopotamian_tiamat__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "abyssal_primordial_water",
+        "element_color_family": "abyssal_blue",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "isis_sacred_tyet_knot",
+      "hero_id": "egyptian_isis",
+      "display_name": "Nodo di Iside / Tyet Sacro",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "light",
+      "lore_origin": "Nodo magico di Iside che lega vita, morte e rinascita; reliquia di guarigione e protezione sacra.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "egyptian_isis__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (light) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_isis__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (light) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_isis__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di egyptian_isis per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_isis__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_isis__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "egyptian_isis__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "egyptian_isis__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_isis__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_isis__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_isis__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_isis__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "egyptian_isis__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "egyptian_isis__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_isis__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_isis__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_isis__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "egyptian_isis__sacred_tyet_blessing",
+          "status_id": "sacred_tyet_blessing",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Benedizione del Tyet Sacro (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "egyptian_isis__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_isis__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "egyptian_isis__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "sacred_tyet_light",
+        "element_color_family": "light_gold",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "morrigan_raven_mantle",
+      "hero_id": "celtic_morrigan",
+      "display_name": "Manto dei Corvi della Morrigan",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "dark",
+      "lore_origin": "Manto di piume di corvo; oscuro presagio della Morrigan, voce dei campi di battaglia celtici.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "celtic_morrigan__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (dark) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "celtic_morrigan__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (dark) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "celtic_morrigan__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di celtic_morrigan per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "celtic_morrigan__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "celtic_morrigan__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "celtic_morrigan__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "celtic_morrigan__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "celtic_morrigan__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "celtic_morrigan__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "celtic_morrigan__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "celtic_morrigan__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "celtic_morrigan__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "celtic_morrigan__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "celtic_morrigan__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "celtic_morrigan__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "celtic_morrigan__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "celtic_morrigan__raven_omen_mark",
+          "status_id": "raven_omen_mark",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Presagio dei Corvi (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "celtic_morrigan__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "celtic_morrigan__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "celtic_morrigan__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "raven_omen_shadow",
+        "element_color_family": "dark_violet",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "pestilence_seal",
+      "hero_id": "cursed_pestilence_horseman",
+      "display_name": "Sigillo della Pestilenza",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "dark",
+      "lore_origin": "Sigillo maledetto del Cavaliere della Pestilenza; corrompe e contiene il flagello in misura controllata.",
+      "release_group": "launch_base",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "cursed_pestilence_horseman__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (dark) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "cursed_pestilence_horseman__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (dark) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "cursed_pestilence_horseman__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di cursed_pestilence_horseman per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "cursed_pestilence_horseman__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "cursed_pestilence_horseman__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "cursed_pestilence_horseman__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "cursed_pestilence_horseman__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "cursed_pestilence_horseman__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "cursed_pestilence_horseman__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "cursed_pestilence_horseman__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "cursed_pestilence_horseman__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "cursed_pestilence_horseman__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "cursed_pestilence_horseman__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "cursed_pestilence_horseman__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "cursed_pestilence_horseman__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "cursed_pestilence_horseman__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "cursed_pestilence_horseman__controlled_plague_brand",
+          "status_id": "controlled_plague_brand",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Marchio di Pestilenza Controllata (design-only, source_locked).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "cursed_pestilence_horseman__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "cursed_pestilence_horseman__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "cursed_pestilence_horseman__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "controlled_plague_miasma",
+        "element_color_family": "dark_violet",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    },
+    {
+      "divine_weapon_id": "borea_wings_of_the_north_wind",
+      "hero_id": "greek_borea",
+      "display_name": "Ali del Vento del Nord",
+      "native_rarity_required": 6,
+      "exclusive_to_hero": true,
+      "weapon_type": "divine_relic",
+      "element": "wind",
+      "lore_origin": "Ali primordiali del Vento del Nord; reliquia di Borea, signore delle tempeste boreali e dei marchi di gelo.",
+      "release_group": "launch_extra_premium",
+      "catalog_status": "catalog_only",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "unlock_requirements": {
+        "initial_state": "sealed",
+        "break_seal_required": true,
+        "required_hero_star_level": 10,
+        "requires_dedicated_materials": true,
+        "requires_gold": true,
+        "requires_duplicate_materials": true,
+        "notes": "The Divine Weapon is visible at hero acquisition but grants no gameplay bonus and no battle presence while sealed."
+      },
+      "progression_states": [
+        {
+          "state_key": "sealed",
+          "display_label_it": "Sigillata",
+          "order": 0,
+          "has_gameplay_bonus": false,
+          "has_battle_presence_layer": false,
+          "design_intent_summary": "Arma sigillata: visibile ma inerte. Nessun bonus, nessuna Presenza Divina."
+        },
+        {
+          "state_key": "dormant",
+          "display_label_it": "Dormiente",
+          "order": 1,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Sigillo rotto: l'arma si risveglia ai minimi. Hook design attivi, Presenza Divina minima."
+        },
+        {
+          "state_key": "awakened",
+          "display_label_it": "Risvegliata",
+          "order": 2,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Arma desta: hook di base attivi a livello design. Presenza Divina bassa."
+        },
+        {
+          "state_key": "empowered",
+          "display_label_it": "Rafforzata",
+          "order": 3,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook rinforzati a livello design. Presenza Divina medio-bassa."
+        },
+        {
+          "state_key": "blessed",
+          "display_label_it": "Benedetta",
+          "order": 4,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook benedetti a livello design. Presenza Divina media."
+        },
+        {
+          "state_key": "ascendant",
+          "display_label_it": "Ascendente",
+          "order": 5,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Hook di firma: ultimate_signature_upgrade e domain_interaction disponibili (design). Presenza Divina medio-alta controllata."
+        },
+        {
+          "state_key": "divine",
+          "display_label_it": "Divina",
+          "order": 6,
+          "has_gameplay_bonus": true,
+          "has_battle_presence_layer": true,
+          "design_intent_summary": "Stato massimo di design: firma completa, identità divina piena. Presenza Divina premium controllata."
+        }
+      ],
+      "material_requirements": [
+        {
+          "material_id": "greek_borea__same_element_copy_low",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (wind) per gli step bassi/medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_borea__same_element_copy_mid",
+          "material_type": "same_element_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia di eroe stesso elemento (wind) per gli step medi di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_borea__specific_hero_copy_high",
+          "material_type": "specific_hero_copy",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Copia specifica di greek_borea per gli step alti di progressione.",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_borea__event_substitute",
+          "material_type": "event_limited_substitute",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Sostituto a tempo limitato ottenibile da eventi (design-only).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_borea__dedicated_currency",
+          "material_type": "dedicated_currency",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Valuta dedicata Arma Divina (design-only, non collegata a economia live).",
+          "final_numbers": null
+        },
+        {
+          "material_id": "greek_borea__gold",
+          "material_type": "gold",
+          "quantity": null,
+          "min_native_rarity": null,
+          "description": "Oro (design-only, non collegato a economia live).",
+          "final_numbers": null
+        }
+      ],
+      "effect_tracks": [
+        {
+          "track_id": "greek_borea__stat_track_basic",
+          "state_required": "dormant",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici minimi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_borea__stat_track_growth",
+          "state_required": "awakened",
+          "effect_kind": "stat_bonus",
+          "description": "Bonus statistici progressivi (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_borea__kit_synergy",
+          "state_required": "empowered",
+          "effect_kind": "kit_synergy_enhancement",
+          "description": "Sinergia con kit eroe a livello design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_borea__blessing_layer",
+          "state_required": "blessed",
+          "effect_kind": "blessing_layer",
+          "description": "Strato di benedizione di design (design-only).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_borea__ultimate_signature",
+          "state_required": "ascendant",
+          "effect_kind": "ultimate_signature_upgrade",
+          "description": "Upgrade di firma dell'ultimate (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        },
+        {
+          "track_id": "greek_borea__domain_interaction",
+          "state_required": "divine",
+          "effect_kind": "domain_interaction",
+          "description": "Interazione con domini divini (solo ascendant/divine).",
+          "final_numbers": null,
+          "runtime_attached": false
+        }
+      ],
+      "skill_hooks": [
+        {
+          "hook_id": "greek_borea__basic_skill_design_hook",
+          "hook_type": "basic_skill_design_hook",
+          "state_required": "dormant",
+          "description": "Hook design su skill base (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_borea__skill_1_design_hook",
+          "hook_type": "skill_1_design_hook",
+          "state_required": "awakened",
+          "description": "Hook design su skill_1 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_borea__skill_2_design_hook",
+          "hook_type": "skill_2_design_hook",
+          "state_required": "empowered",
+          "description": "Hook design su skill_2 (design-only, non collegato al runtime).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_borea__ultimate_signature_upgrade",
+          "hook_type": "ultimate_signature_upgrade",
+          "state_required": "ascendant",
+          "description": "Hook design firma ultimate (solo ascendant/divine).",
+          "runtime_attached": false
+        }
+      ],
+      "status_hooks": [
+        {
+          "hook_id": "greek_borea__marchio_boreale",
+          "status_id": "marchio_boreale",
+          "hook_type": "personal_status_enhancement",
+          "state_required": "dormant",
+          "description": "Marchio Boreale di Borea (design-only, source_locked, personale).",
+          "source_locked": true,
+          "personal": true,
+          "runtime_attached": false,
+          "notes": "Borea Marchio Boreale: source_locked=True, personal=True, state_required=dormant, runtime_attached=False. Non utilizzabile da altri eroi."
+        }
+      ],
+      "vfx_hooks": [
+        {
+          "hook_id": "greek_borea__presence_layer_minimal",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "dormant",
+          "description": "Intensità minima della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_borea__presence_layer_medium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "blessed",
+          "description": "Intensità media della Presenza Divina (design-only).",
+          "runtime_attached": false
+        },
+        {
+          "hook_id": "greek_borea__presence_layer_premium",
+          "hook_type": "divine_presence_layer_intensity",
+          "state_required": "divine",
+          "description": "Intensità premium controllata (design-only).",
+          "runtime_attached": false
+        }
+      ],
+      "divine_presence_layer": {
+        "enabled": true,
+        "enabled_from_state": "dormant",
+        "disabled_in_state": "sealed",
+        "layer_type": "persistent_lightweight_battle_vfx",
+        "is_physical_weapon_animation": false,
+        "requires_new_sprite_sheet": false,
+        "visual_structure": {
+          "uses_shared_system_base": true,
+          "uses_element_color": true,
+          "uses_hero_identity_accent": true
+        },
+        "intensity_by_state": {
+          "sealed": "none",
+          "dormant": "minimal",
+          "awakened": "low",
+          "empowered": "low_medium",
+          "blessed": "medium",
+          "ascendant": "medium_high_controlled",
+          "divine": "premium_controlled"
+        },
+        "readability_rules": {
+          "must_not_obscure_hp_bar": true,
+          "must_not_obscure_status_icons": true,
+          "must_not_obscure_character_sprite": true,
+          "must_not_look_like_status_or_buff": true,
+          "must_not_look_like_domain": true,
+          "must_not_look_like_skill_cast": true,
+          "must_remain_mobile_readable": true
+        },
+        "runtime_attached": false
+      },
+      "divine_presence_identity": {
+        "hero_accent_type": "north_wind_frost_aura",
+        "element_color_family": "frost_wind",
+        "uses_shared_system_base": true
+      },
+      "ui_presentation": {
+        "show_in_hero_detail": true,
+        "show_as_separate_tab": true,
+        "tab_label": "Arma Divina",
+        "show_lore": true,
+        "show_unlock_requirement": true,
+        "show_active_effects": true,
+        "show_locked_effect_preview": true,
+        "show_divine_presence_preview": true,
+        "sealed_state_message": "Effetti attivi: nessuno.",
+        "sealed_presence_message": "Presenza Divina in battaglia: non attiva.",
+        "locked_until_message": "Richiede eroe a 10★ e materiali dedicati per rompere il sigillo."
+      },
+      "safety_flags": {
+        "catalog_only": true,
+        "runtime_attached": false,
+        "battle_runtime_attached": false,
+        "hp_bar_runtime_attached": false,
+        "vfx_runtime_attached": false,
+        "gacha_attached": false,
+        "roster_activation_attached": false,
+        "borea_activation_allowed": false,
+        "balance_values_finalized": false,
+        "do_not_treat_as_live_power": true
+      }
+    }
+  ]
+}

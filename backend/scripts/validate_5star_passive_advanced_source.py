@@ -108,7 +108,8 @@ def audit_source(src):
             fail(section, f'{hid_guess}: design_status != approved_source_completed')
         if e.get('source_status') != 'approved_rm128a':
             fail(section, f'{hid_guess}: source_status != approved_rm128a')
-        if e.get('final_numbers') is not None:
+        fn = e.get('final_numbers')
+        if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
             fail(section, f'{hid_guess}: final_numbers != null')
         if e.get('runtime_attached') is not False:
             fail(section, f'{hid_guess}: runtime_attached != false')
@@ -182,7 +183,8 @@ def audit_full_catalog(full):
             fail(section, f'{hid}: passive_advanced source_status != approved_rm128a (got {pa.get("source_status")})')
         if pa.get('slot') != 'passive_advanced':
             fail(section, f'{hid}: slot != passive_advanced')
-        if pa.get('final_numbers') is not None:
+        fn = pa.get('final_numbers')
+        if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
             fail(section, f'{hid}: passive_advanced final_numbers != null')
         if pa.get('runtime_attached') is not False:
             fail(section, f'{hid}: passive_advanced runtime_attached != false')

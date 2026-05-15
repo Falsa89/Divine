@@ -1,0 +1,193 @@
+{
+  "contract_id": "hero_skill_kits_5star_balance_contract_v1",
+  "task_origin": "RM1.32-A",
+  "generated_at_utc": "2026-05-15T20:36:05.183773Z",
+  "scope": "5★ catalog (20 heroes × 5 slots). Foundation balance pass — design data only.",
+  "allowed_fields_per_slot": {
+    "basic": [
+      "status",
+      "runtime_ready",
+      "damage_multiplier_pct",
+      "healing_multiplier_pct",
+      "shield_multiplier_pct",
+      "status_chance_pct",
+      "status_duration_turns",
+      "cooldown_turns",
+      "target_count",
+      "scaling_stat",
+      "effect_strength_tier",
+      "draft_balance_notes",
+      "review_required",
+      "notes"
+    ],
+    "passive_base": [
+      "status",
+      "runtime_ready",
+      "trigger",
+      "stat_modifier_pct",
+      "status_chance_pct",
+      "status_duration_turns",
+      "internal_cooldown_turns",
+      "scaling_stat",
+      "effect_strength_tier",
+      "draft_balance_notes",
+      "review_required",
+      "notes"
+    ],
+    "passive_advanced": [
+      "status",
+      "runtime_ready",
+      "trigger",
+      "stat_modifier_pct",
+      "status_chance_pct",
+      "status_duration_turns",
+      "internal_cooldown_turns",
+      "scaling_stat",
+      "effect_strength_tier",
+      "draft_balance_notes",
+      "review_required",
+      "notes"
+    ],
+    "skill_1": [
+      "status",
+      "runtime_ready",
+      "damage_multiplier_pct",
+      "healing_multiplier_pct",
+      "shield_multiplier_pct",
+      "status_chance_pct",
+      "status_duration_turns",
+      "cooldown_turns",
+      "target_count",
+      "scaling_stat",
+      "effect_strength_tier",
+      "draft_balance_notes",
+      "review_required",
+      "notes"
+    ],
+    "skill_2": [
+      "status",
+      "runtime_ready",
+      "is_true_ultimate",
+      "damage_multiplier_pct",
+      "healing_multiplier_pct",
+      "shield_multiplier_pct",
+      "status_chance_pct",
+      "status_duration_turns",
+      "cooldown_turns",
+      "target_count",
+      "scaling_stat",
+      "effect_strength_tier",
+      "draft_balance_notes",
+      "review_required",
+      "notes"
+    ]
+  },
+  "numeric_ranges": {
+    "basic.damage_multiplier_pct": [
+      70,
+      130
+    ],
+    "basic.status_chance_pct": [
+      0,
+      50
+    ],
+    "basic.status_duration_turns": [
+      0,
+      3
+    ],
+    "basic.cooldown_turns": [
+      0,
+      0
+    ],
+    "basic.target_count": [
+      1,
+      1
+    ],
+    "skill_1.damage_multiplier_pct": [
+      80,
+      260
+    ],
+    "skill_1.healing_multiplier_pct": [
+      80,
+      220
+    ],
+    "skill_1.shield_multiplier_pct": [
+      80,
+      220
+    ],
+    "skill_1.status_chance_pct": [
+      30,
+      90
+    ],
+    "skill_1.status_duration_turns": [
+      0,
+      3
+    ],
+    "skill_1.cooldown_turns": [
+      2,
+      3
+    ],
+    "skill_1.target_count": [
+      1,
+      5
+    ],
+    "skill_2.damage_multiplier_pct": [
+      120,
+      400
+    ],
+    "skill_2.healing_multiplier_pct": [
+      120,
+      280
+    ],
+    "skill_2.shield_multiplier_pct": [
+      120,
+      280
+    ],
+    "skill_2.status_chance_pct": [
+      40,
+      95
+    ],
+    "skill_2.status_duration_turns": [
+      0,
+      3
+    ],
+    "skill_2.cooldown_turns": [
+      4,
+      5
+    ],
+    "skill_2.target_count": [
+      1,
+      5
+    ],
+    "passive.stat_modifier_pct": [
+      5,
+      25
+    ],
+    "passive.internal_cooldown_turns": [
+      0,
+      6
+    ]
+  },
+  "forbidden_fields_per_slot": [
+    "final_runtime_attached",
+    "battle_runtime_id",
+    "live_hooks",
+    "db_resolver",
+    "runtime_target",
+    "vfx_runtime"
+  ],
+  "safety_rules": {
+    "runtime_ready_must_be_false_for_all": true,
+    "balance_values_finalized_must_stay_false": true,
+    "runtime_attached_must_stay_false": true,
+    "battle_runtime_attached_must_stay_false": true,
+    "do_not_treat_as_live_kit_must_stay_true": true,
+    "skill_2_is_true_ultimate_must_be_false_for_all_20": true,
+    "no_ultimate_slot_in_5star": true,
+    "no_divine_weapon_in_5star": true,
+    "no_domain_in_5star": true,
+    "no_marchio_boreale_in_5star": true,
+    "no_legacy_borea_hero_id": true
+  },
+  "is_foundation_pass": true
+}

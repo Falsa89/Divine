@@ -122,7 +122,8 @@ def main():
                     fail('7.no_legacy', f'{hid}.{slot_name}: legacy "{t}" in status_tags')
                 elif t not in APPROVED_STATUS_WHITELIST:
                     fail('7.whitelist', f'{hid}.{slot_name}: "{t}" not in whitelist')
-            if slot.get('final_numbers') is not None:
+            fn = slot.get('final_numbers')
+            if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
                 fail('8.final_numbers', f'{hid}.{slot_name}: final_numbers != null')
 
     # 9. Catalog-wide manual_review_required count
@@ -144,7 +145,8 @@ def main():
         pa = (e.get('skill_package') or {}).get('passive_advanced') or {}
         if pa.get('design_status') == 'approved_source_completed' and pa.get('source_status') == 'approved_rm128a':
             approved += 1
-        if pa.get('final_numbers') is not None:
+        fn = pa.get('final_numbers')
+        if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
             fail('10.pa_final_numbers', f'{e.get("hero_id")}.passive_advanced final_numbers != null')
         if pa.get('runtime_attached') is not False:
             fail('10.pa_runtime', f'{e.get("hero_id")}.passive_advanced runtime_attached != false')

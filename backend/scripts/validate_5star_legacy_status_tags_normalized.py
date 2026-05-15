@@ -125,7 +125,8 @@ def main():
             fail('3.passive_advanced', f'{hid}: source_status != approved_rm128a')
         if pa.get('runtime_attached') is not False:
             fail('3.passive_advanced', f'{hid}: runtime_attached != false')
-        if pa.get('final_numbers') is not None:
+        fn = pa.get('final_numbers')
+        if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
             fail('3.passive_advanced', f'{hid}: final_numbers != null')
         for t in (pa.get('status_tags') or []):
             if t not in APPROVED_STATUS_WHITELIST:
@@ -146,7 +147,8 @@ def main():
             slot = sp.get(slot_name)
             if not isinstance(slot, dict):
                 continue
-            if slot.get('final_numbers') is not None:
+            fn = slot.get('final_numbers')
+            if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
                 fail('6.final_numbers', f'{hid}.{slot_name}: final_numbers != null')
             tags = slot.get('status_tags') or []
             for t in tags:

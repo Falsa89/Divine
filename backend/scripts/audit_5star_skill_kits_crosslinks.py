@@ -232,7 +232,8 @@ def audit_runtime_inertness(full, source):
         for slot_name, slot in sp.items():
             if not isinstance(slot, dict):
                 continue
-            if slot.get('final_numbers') is not None:
+            fn = slot.get('final_numbers')
+            if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
                 fail(section, f'{hid}.{slot_name}: final_numbers != null')
             # For passive_advanced (RM1.28-A enriched), check the explicit flags
             if slot_name == 'passive_advanced':

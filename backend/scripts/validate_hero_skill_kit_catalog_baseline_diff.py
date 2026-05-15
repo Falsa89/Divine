@@ -123,8 +123,16 @@ def check_invariants() -> None:
             for sn, slot in (e.get('skill_package') or {}).items():
                 if not isinstance(slot, dict):
                     continue
-                if slot.get('final_numbers') is not None:
-                    fail(section, f'{label} {hid}.{sn}: final_numbers != null')
+                fn = slot.get('final_numbers')
+                if fn is not None:
+                    # Allow 5★ foundation_draft (RM1.32-A)
+                    is_foundation_draft = (
+                        label == '5★' and isinstance(fn, dict)
+                        and fn.get('status') == 'foundation_draft'
+                        and fn.get('runtime_ready') is False
+                    )
+                    if not is_foundation_draft:
+                        fail(section, f'{label} {hid}.{sn}: final_numbers != null')
                 if slot.get('runtime_attached') is True:
                     fail(section, f'{label} {hid}.{sn}: runtime_attached==true')
                 if slot.get('battle_runtime_attached') is True:

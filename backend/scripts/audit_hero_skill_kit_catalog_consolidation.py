@@ -179,7 +179,8 @@ def audit_5star(cat: dict) -> None:
         for slot_name, slot in sp.items():
             if not isinstance(slot, dict):
                 continue
-            if slot.get('final_numbers') is not None:
+            fn = slot.get('final_numbers')
+            if fn is not None and not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
                 fail(section, f'5★ {hid}.{slot_name}: final_numbers != null')
             if slot.get('runtime_attached') is True:
                 fail(section, f'5★ {hid}.{slot_name}: runtime_attached == true')
