@@ -1,0 +1,1734 @@
+{
+  "matrix_id": "boss_family_element_faction_matrix_v1",
+  "task_origin": "RM1.34-B",
+  "source_tables": [
+    "boss_family_resistance_table_v1",
+    "hero_skill_kits_balance_cap_delta_plan_v1"
+  ],
+  "generated_at_utc": "2026-05-15T22:38:20.539132Z",
+  "metadata": {
+    "design_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "used_by_battle_engine": false,
+    "db_write": false,
+    "patch_applied_to_catalogs": false,
+    "applied_to_combat": false,
+    "feature_flag_dependency": "SKILL_KIT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "baseline_anchor_at_creation": "hero_skill_kit_catalog_baseline_rm132b_v4",
+    "no_borea_activation": true,
+    "no_borea_visibility_change": true,
+    "no_catalog_mutation": true,
+    "warning": "Design contract only. Reserved for future runtime resolver. NEVER used by battle engine."
+  },
+  "elements_included": [
+    "fire",
+    "water",
+    "earth",
+    "wind",
+    "lightning",
+    "light",
+    "darkness"
+  ],
+  "faction_groups_included": [
+    "greek",
+    "norse",
+    "egyptian",
+    "japanese_yokai",
+    "celtic",
+    "angelic",
+    "demonic",
+    "cursed",
+    "creature_beast",
+    "primordial",
+    "arcane",
+    "tides",
+    "mesopotamian"
+  ],
+  "safe_design_ranges": {
+    "damage_taken_multiplier": [
+      0.7,
+      1.3
+    ],
+    "status_chance_multiplier": [
+      0.5,
+      1.2
+    ],
+    "dot_tick_multiplier": [
+      0.4,
+      1.1
+    ],
+    "min_total_damage_taken_multiplier_floor": 0.5,
+    "max_total_damage_taken_multiplier_ceiling": 1.5
+  },
+  "global_invariants": {
+    "training_dummy_neutral_band_pct": 5,
+    "pvp_dummy_neutral_band_pct": 5,
+    "marchio_owner_hero_id": "greek_borea",
+    "marchio_team_wide_amp_allowed": false,
+    "dw_synergy_design_only": true,
+    "dw_synergy_live_numeric_modifier_applied": false,
+    "domain_one_active_per_side": true
+  },
+  "boss_families": [
+    {
+      "family_id": "story_boss",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.85,
+          "notes": "design-only element flavor for story_boss/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.85,
+          "notes": "design-only element flavor for story_boss/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.85,
+          "notes": "design-only element flavor for story_boss/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.85,
+          "notes": "design-only element flavor for story_boss/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.85,
+          "notes": "design-only element flavor for story_boss/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.85,
+          "notes": "design-only element flavor for story_boss/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.85,
+          "notes": "design-only element flavor for story_boss/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [
+            "cursed_thematic_anchor"
+          ],
+          "notes": "design-only faction flavor for story_boss/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for story_boss/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for story_boss; not used by battle runtime."
+    },
+    {
+      "family_id": "normal_boss",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.75,
+          "notes": "design-only element flavor for normal_boss/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.75,
+          "notes": "design-only element flavor for normal_boss/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.75,
+          "notes": "design-only element flavor for normal_boss/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.75,
+          "notes": "design-only element flavor for normal_boss/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.75,
+          "notes": "design-only element flavor for normal_boss/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.75,
+          "notes": "design-only element flavor for normal_boss/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.75,
+          "notes": "design-only element flavor for normal_boss/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [
+            "cursed_thematic_anchor"
+          ],
+          "notes": "design-only faction flavor for normal_boss/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for normal_boss/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for normal_boss; not used by battle runtime."
+    },
+    {
+      "family_id": "elite_boss",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 0.95,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for elite_boss/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 0.95,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for elite_boss/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 0.95,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for elite_boss/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 0.95,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for elite_boss/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 0.95,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for elite_boss/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 0.95,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for elite_boss/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 0.95,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for elite_boss/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [
+            "angelic_flavor_only"
+          ],
+          "notes": "design-only faction flavor for elite_boss/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for elite_boss/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for elite_boss; not used by battle runtime."
+    },
+    {
+      "family_id": "raid_boss",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 0.87,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for raid_boss/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 0.87,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for raid_boss/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 0.87,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for raid_boss/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 0.87,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for raid_boss/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 0.87,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for raid_boss/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 0.87,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for raid_boss/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 0.87,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for raid_boss/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [
+            "angelic_flavor_only"
+          ],
+          "notes": "design-only faction flavor for raid_boss/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for raid_boss/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for raid_boss; not used by battle runtime."
+    },
+    {
+      "family_id": "world_boss",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 0.81,
+          "status_chance_multiplier": 0.85,
+          "dot_tick_multiplier": 0.55,
+          "notes": "design-only element flavor for world_boss/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 0.81,
+          "status_chance_multiplier": 0.85,
+          "dot_tick_multiplier": 0.55,
+          "notes": "design-only element flavor for world_boss/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 0.81,
+          "status_chance_multiplier": 0.85,
+          "dot_tick_multiplier": 0.55,
+          "notes": "design-only element flavor for world_boss/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 0.81,
+          "status_chance_multiplier": 0.85,
+          "dot_tick_multiplier": 0.55,
+          "notes": "design-only element flavor for world_boss/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 0.81,
+          "status_chance_multiplier": 0.85,
+          "dot_tick_multiplier": 0.55,
+          "notes": "design-only element flavor for world_boss/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 0.81,
+          "status_chance_multiplier": 0.85,
+          "dot_tick_multiplier": 0.55,
+          "notes": "design-only element flavor for world_boss/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 0.81,
+          "status_chance_multiplier": 0.85,
+          "dot_tick_multiplier": 0.55,
+          "notes": "design-only element flavor for world_boss/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [
+            "angelic_flavor_only"
+          ],
+          "notes": "design-only faction flavor for world_boss/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [
+            "primordial_world_boss_neutral_band"
+          ],
+          "notes": "design-only faction flavor for world_boss/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 0.82,
+          "status_chance_multiplier": 0.85,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for world_boss/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": {
+          "design_only": true,
+          "runtime_ready": false,
+          "no_extreme_counter_multiplier": true,
+          "broad_resistance_band": true,
+          "min_damage_taken_multiplier_floor": 0.7,
+          "notes": "World/primordial bosses keep narrow spread to avoid hard counters."
+        }
+      },
+      "notes": "Design-only modifier layer for world_boss; not used by battle runtime."
+    },
+    {
+      "family_id": "event_boss",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for event_boss/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for event_boss/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for event_boss/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for event_boss/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for event_boss/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for event_boss/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 0.95,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 0.65,
+          "notes": "design-only element flavor for event_boss/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 0.94,
+          "status_chance_multiplier": 0.95,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for event_boss/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for event_boss; not used by battle runtime."
+    },
+    {
+      "family_id": "guild_boss",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for guild_boss/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for guild_boss/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for guild_boss/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for guild_boss/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for guild_boss/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for guild_boss/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "dot_tick_multiplier": 0.6,
+          "notes": "design-only element flavor for guild_boss/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 0.88,
+          "status_chance_multiplier": 0.9,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for guild_boss/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for guild_boss; not used by battle runtime."
+    },
+    {
+      "family_id": "training_dummy",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for training_dummy/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for training_dummy/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for training_dummy/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for training_dummy/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for training_dummy/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for training_dummy/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for training_dummy/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for training_dummy/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": false,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": true,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 4,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for training_dummy; not used by battle runtime."
+    },
+    {
+      "family_id": "pvp_dummy",
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "design_only": true,
+      "element_resistance_modifiers": {
+        "fire": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for pvp_dummy/fire; no live formula"
+        },
+        "water": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for pvp_dummy/water; no live formula"
+        },
+        "earth": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for pvp_dummy/earth; no live formula"
+        },
+        "wind": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for pvp_dummy/wind; no live formula"
+        },
+        "lightning": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for pvp_dummy/lightning; no live formula"
+        },
+        "light": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for pvp_dummy/light; no live formula"
+        },
+        "darkness": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "dot_tick_multiplier": 1.0,
+          "notes": "design-only element flavor for pvp_dummy/darkness; no live formula"
+        }
+      },
+      "faction_resistance_modifiers": {
+        "greek": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/greek; no live formula"
+        },
+        "norse": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/norse; no live formula"
+        },
+        "egyptian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/egyptian; no live formula"
+        },
+        "japanese_yokai": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/japanese_yokai; no live formula"
+        },
+        "celtic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/celtic; no live formula"
+        },
+        "angelic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/angelic; no live formula"
+        },
+        "demonic": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/demonic; no live formula"
+        },
+        "cursed": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/cursed; no live formula"
+        },
+        "creature_beast": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/creature_beast; no live formula"
+        },
+        "primordial": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/primordial; no live formula"
+        },
+        "arcane": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/arcane; no live formula"
+        },
+        "tides": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/tides; no live formula"
+        },
+        "mesopotamian": {
+          "damage_taken_multiplier": 1.0,
+          "status_chance_multiplier": 1.0,
+          "special_rule_tags": [],
+          "notes": "design-only faction flavor for pvp_dummy/mesopotamian; no live formula"
+        }
+      },
+      "combination_policy": {
+        "element_and_faction_stack_mode": "multiplicative",
+        "min_total_damage_taken_multiplier": 0.55,
+        "max_total_damage_taken_multiplier": 1.45,
+        "pvp_dummy_override": true,
+        "boss_family_priority": {
+          "order": [
+            "family_base",
+            "element_modifier",
+            "faction_modifier"
+          ],
+          "notes": "family base policy from RM1.34 evaluated first; element and faction modifiers compose multiplicatively under min/max clamp"
+        },
+        "training_dummy_neutral": false,
+        "notes": "Modifier layer only; hard immunities live in boss_family_resistance_table_v1."
+      },
+      "special_cases": {
+        "marchio_boreale": {
+          "design_only": true,
+          "runtime_ready": false,
+          "owner_hero_id": "greek_borea",
+          "team_wide_amp_allowed": false,
+          "applies_only_to_owner_target": true,
+          "max_effective_stacks_in_this_family": 3,
+          "freeze_bonus_multiplier_on_boss": 0.5,
+          "damage_bonus_multiplier_on_boss": 0.75,
+          "notes": "Marchio Boreale remains Borea-only; matrix does not amplify it."
+        },
+        "divine_weapon_synergy": {
+          "design_only": true,
+          "runtime_ready": false,
+          "live_numeric_modifier_applied": false,
+          "per_owner_only": true,
+          "no_teamwide_global_amp": true,
+          "numeric_modifier_cap_future_pct": 10,
+          "pvp_modifier_cap_future_pct": 5,
+          "notes": "DW synergy stays descriptive at this stage."
+        },
+        "domain_effect": {
+          "design_only": true,
+          "runtime_ready": false,
+          "one_domain_active_per_side": true,
+          "override_policy": "strongest_wins",
+          "max_duration_turns": 3,
+          "refresh_same_turn_allowed": false,
+          "cleansable": true,
+          "notes": "Domain policy mirrors RM1.34 baseline."
+        },
+        "primordial_or_world_boss_exception": null
+      },
+      "notes": "Design-only modifier layer for pvp_dummy; not used by battle runtime."
+    }
+  ],
+  "out_of_scope": [
+    "runtime hookup",
+    "DB writes",
+    "catalog numeric edits",
+    "gacha/roster/Character Bible changes",
+    "Borea activation",
+    "API endpoint creation",
+    "UI button creation",
+    "modifying boss_family_resistance_table_v1"
+  ]
+}
