@@ -1,0 +1,993 @@
+{
+  "result_id": "hero_skill_kit_runtime_debug_5star_snapshot_result_v2",
+  "task_origin": "RM1.33-G",
+  "fixture_id": "hero_skill_kit_runtime_debug_5star_snapshot_fixtures_v2",
+  "generated_at_utc": "2026-05-15T23:28:31.541846Z",
+  "audit_result": "PASS",
+  "totals": {
+    "heroes_covered": 20,
+    "valid_slot_cases_total": 100,
+    "valid_slot_cases_passing": 100,
+    "invalid_ultimate_cases_total": 20,
+    "invalid_ultimate_cases_passing": 20,
+    "skill_2_cases_total": 20,
+    "skill_2_cases_passing_not_true_ultimate": 20,
+    "marchio_borea_dw_domain_leaks_in_5star": 0
+  },
+  "coverage_snapshot": {
+    "runtime_enabled": false,
+    "5star_ultimate_safely_rejected_count": 20,
+    "marchio_boreale_borea_only": true,
+    "borea_catalog_only": true
+  },
+  "valid_results": [
+    {
+      "hero_id": "angelic_bastion_angel",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "angelic_bastion_angel",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "angelic_bastion_angel",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "angelic_bastion_angel",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "angelic_bastion_angel",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_circe",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_circe",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_circe",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_circe",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_circe",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_medusa",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_medusa",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_medusa",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_medusa",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_medusa",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nike",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nike",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nike",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nike",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nike",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_eir",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_eir",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_eir",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_eir",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_eir",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "slot": "basic",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "slot": "passive_base",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "slot": "skill_1",
+      "context": "pve",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "slot": "passive_advanced",
+      "context": "boss",
+      "http_status": 200,
+      "pass_count": 24,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "slot": "skill_2",
+      "context": "pvp",
+      "http_status": 200,
+      "pass_count": 26,
+      "fail_count": 0
+    }
+  ],
+  "invalid_results": [
+    {
+      "hero_id": "angelic_bastion_angel",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "celtic_mist_banshee",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_circe",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_medusa",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "greek_nike",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_eir",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "slot": "ultimate",
+      "context": "pvp",
+      "http_status": 404,
+      "pass_count": 16,
+      "fail_count": 0
+    }
+  ],
+  "failures": [],
+  "warnings": [],
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132b_v4",
+  "no_runtime_activation": true,
+  "no_db_write": true,
+  "no_catalog_mutation": true
+}

@@ -1,0 +1,143 @@
+{
+  "fixture_id": "hero_skill_kit_runtime_debug_5star_snapshot_fixtures_v2",
+  "task_origin": "RM1.33-G",
+  "based_on": "RM1.33-D/E debug snapshot contract + RM1.33-F 6star ultimate fixture model",
+  "generated_for": "/api/hero-skill-kits/runtime/debug/preview",
+  "endpoint": "GET /api/hero-skill-kits/runtime/debug/preview",
+  "safety_flags": {
+    "runtime_attached": false,
+    "design_only": true,
+    "no_borea_activation": true,
+    "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132b_v4",
+    "fixture_purpose": "verify 20/20 5star heroes preview 100 valid slots inert/disabled and reject 20 ultimate requests with invalid_slot_for_5star; ensure zero Borea/Marchio/DW/Domain leakage in 5star."
+  },
+  "volatile_fields_to_ignore": [
+    "generated_at_utc",
+    "timestamps",
+    "request_id",
+    "exact warning text"
+  ],
+  "valid_slots": [
+    "basic",
+    "passive_base",
+    "skill_1",
+    "passive_advanced",
+    "skill_2"
+  ],
+  "invalid_slots": ["ultimate"],
+  "context_routing": {
+    "basic": "pvp",
+    "passive_base": "boss",
+    "skill_1": "pve",
+    "passive_advanced": "boss",
+    "skill_2": "pvp",
+    "ultimate": "pvp"
+  },
+  "expected_valid_slot_contract": {
+    "http_status": 200,
+    "rarity": "5star",
+    "normalized_skill_slot": {
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    "runtime_candidate": {
+      "enabled": false,
+      "reason": "feature_flag_off",
+      "feature_flag": "SKILL_KIT_RUNTIME_ENABLED",
+      "feature_flag_value": false,
+      "payload": null,
+      "is_disabled_runtime_result": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    "cap_policy_preview": {
+      "applied_to_combat": false,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "preview_only": true
+    },
+    "safety_envelope": {
+      "debug_only": true,
+      "read_only": true,
+      "runtime_enabled": false,
+      "applied_to_combat": false,
+      "db_write": false,
+      "catalog_write": false,
+      "roster_write": false,
+      "gacha_write": false,
+      "ui_runtime_control": false
+    }
+  },
+  "expected_skill_2_contract": {
+    "is_true_ultimate_expected_false": true,
+    "skill_type_must_not_equal_ultimate": true,
+    "no_ultimate_signature_upgrade": true,
+    "no_marchio_boreale": true,
+    "no_divine_weapon_runtime_field": true,
+    "no_domain_runtime_field": true
+  },
+  "expected_invalid_ultimate_contract": {
+    "http_status": 404,
+    "detail": {
+      "error": "invalid_slot",
+      "rarity": "5star",
+      "reason": "invalid_slot_for_5star",
+      "fallback_disabled": true,
+      "safety_envelope": {
+        "debug_only": true,
+        "read_only": true,
+        "runtime_enabled": false,
+        "applied_to_combat": false,
+        "db_write": false,
+        "catalog_write": false,
+        "roster_write": false,
+        "gacha_write": false
+      }
+    },
+    "no_runtime_candidate_payload": true,
+    "no_fallback_to_6star_ultimate": true
+  },
+  "forbidden_in_5star_payloads": [
+    "marchio_boreale",
+    "divine_weapon_runtime_layer",
+    "domain_runtime_layer",
+    "borea_activation",
+    "is_true_ultimate=true",
+    "ultimate_signature_upgrade"
+  ],
+  "hero_ids": [
+    "angelic_bastion_angel",
+    "celtic_mist_banshee",
+    "creature_crimson_phoenix",
+    "creature_lernaean_hydra",
+    "cursed_pestilence_herald",
+    "demonic_gehenna_witch",
+    "egyptian_bastet",
+    "egyptian_claw_of_sekhmet",
+    "greek_atalanta",
+    "greek_circe",
+    "greek_medusa",
+    "greek_nemean_lioness",
+    "greek_nike",
+    "japanese_miko_of_raijin",
+    "norse_dawn_valkyrie",
+    "norse_eir",
+    "norse_rime_jotunn",
+    "norse_volva_of_fate",
+    "yokai_oni_kunoichi",
+    "yokai_yuki_onna"
+  ],
+  "global_invariants": {
+    "expected_hero_count": 20,
+    "expected_valid_slot_count_per_hero": 5,
+    "expected_invalid_slot_count_per_hero": 1,
+    "expected_total_valid_cases": 100,
+    "expected_total_invalid_cases": 20,
+    "expected_marchio_leak_in_5star": 0,
+    "expected_borea_hero_or_status_ref_in_5star": 0,
+    "expected_dw_domain_live_fields_in_5star": 0,
+    "expected_heroes_count": 100,
+    "expected_legacy_borea_404": true,
+    "expected_legacy_primordial_gaia_404": true
+  }
+}
