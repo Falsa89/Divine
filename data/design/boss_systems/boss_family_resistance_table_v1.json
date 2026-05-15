@@ -1,0 +1,692 @@
+{
+  "table_id": "boss_family_resistance_table_v1",
+  "task_origin": "RM1.34",
+  "source_design_contract": "/app/data/design/hero_skill_kits/hero_skill_kits_balance_cap_delta_plan_v1.json",
+  "source_delta_plan_id": "hero_skill_kits_balance_cap_delta_plan_v1",
+  "generated_at_utc": "2026-05-15T22:30:00.000000Z",
+  "scope": "design_only_boss_family_resistance_and_immunity_policies",
+  "metadata": {
+    "design_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "db_write": false,
+    "balance_values_finalized": false,
+    "used_by_battle_engine": false,
+    "feature_flag_dependency": "SKILL_KIT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "no_borea_activation": true,
+    "no_borea_visibility_change": true,
+    "no_catalog_mutation": true,
+    "patch_applied_to_catalogs": false,
+    "applied_to_combat": false,
+    "warning": "Design contract only. Reserved for future runtime adapter resolver. NEVER used by battle_engine.py, combat.tsx, or battle_core.py at this stage."
+  },
+  "global_policies": {
+    "marchio_boreale": {
+      "owner_hero_id": "greek_borea",
+      "team_wide_amp_allowed": false,
+      "personal_status_only": true,
+      "transfer_to_other_heroes_allowed": false,
+      "boss_default_max_effective_stacks": 4,
+      "pvp_default_max_effective_stacks": 3,
+      "freeze_bonus_per_stack_pct_default": 4,
+      "freeze_bonus_boss_factor": 0.5,
+      "damage_bonus_per_stack_pct_default": 7,
+      "damage_bonus_boss_factor": 0.85,
+      "decay_rule": "1 stack decays at end of marked unit turn unless re-applied; resets fully on cleanse",
+      "cleanse_rule": "standard cleanse removes all stacks at once; cannot be partially cleansed",
+      "immunity_rule": "status_immunity prevents new stacks; existing stacks decay normally",
+      "boss_resistance_notes": "bosses cap effective stacks; freeze chance contribution from Marchio halved; damage bonus contribution reduced",
+      "runtime_ready": false,
+      "design_only": true
+    },
+    "domain": {
+      "one_domain_active_per_side": true,
+      "max_active_per_battle": 2,
+      "override_policy": "strongest_wins",
+      "tie_break": "FIFO",
+      "max_duration_turns": 3,
+      "refresh_same_turn_allowed": false,
+      "cleansable": true,
+      "runtime_ready": false,
+      "design_only": true
+    },
+    "divine_weapon_synergy": {
+      "design_only": true,
+      "runtime_ready": false,
+      "numeric_modifier_cap_future_pct": 10,
+      "pvp_modifier_cap_future_pct": 5,
+      "per_owner_only": true,
+      "no_teamwide_global_amp": true,
+      "additive_only_at_first_runtime_pass": true,
+      "live_numeric_modifier_applied": false
+    },
+    "hard_control_universal": {
+      "hard_control_status_ids": ["freeze", "stun", "silence", "taunt"],
+      "diminishing_returns_window_turns": 2,
+      "default_immunity_threshold_applications": 3,
+      "second_application_duration_factor": 0.5,
+      "third_application_immune": true
+    },
+    "dot_universal": {
+      "dot_status_ids": ["burn", "poison", "bleed", "frostbite", "shock", "curse"],
+      "boss_can_crit_on_dot": false,
+      "default_tick_multiplier_cap": 0.5
+    }
+  },
+  "boss_families": [
+    {
+      "family_id": "story_boss",
+      "display_name": "Story Boss",
+      "intended_use": "Narrative campaign bosses (PvE story mode). Forgiving difficulty for clear progression.",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "stun":    {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "silence": {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "taunt":   {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3}
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 3, "chance_multiplier": 1.0},
+        "speed_down":      {"duration_turns_cap": 3, "chance_multiplier": 1.0, "stat_floor_pct": 50},
+        "def_down":        {"duration_turns_cap": 3, "chance_multiplier": 1.0, "stat_floor_pct": 60},
+        "vulnerability":   {"duration_turns_cap": 3, "chance_multiplier": 1.0, "max_stacks": 3},
+        "effect_accuracy": {"global_multiplier": 1.0}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 3},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 3},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 3},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "max_distinct_dots": 3,
+        "tick_multiplier_cap": 0.75,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -50,
+        "minimum_healing_floor_pct": 25
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 100,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 460,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 0.5,
+        "damage_bonus_multiplier": 0.85,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea",
+        "decay_notes": "global decay rule applies",
+        "cleanse_notes": "global cleanse rule applies",
+        "immunity_notes": "global immunity rule applies"
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Forgiving profile. Allow clear narrative progression; bosses still resist infinite CC chains through diminishing returns."
+    },
+    {
+      "family_id": "normal_boss",
+      "display_name": "Normal Boss",
+      "intended_use": "Mid-tier PvE bosses (regular dungeon clears).",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 2, "chance_multiplier": 0.85, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "stun":    {"duration_turns_cap": 2, "chance_multiplier": 0.85, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "silence": {"duration_turns_cap": 2, "chance_multiplier": 0.85, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "taunt":   {"duration_turns_cap": 2, "chance_multiplier": 0.80, "diminishing_returns_threshold": 3, "immune_after_applications": 3}
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 3, "chance_multiplier": 0.90},
+        "speed_down":      {"duration_turns_cap": 3, "chance_multiplier": 0.90, "stat_floor_pct": 60},
+        "def_down":        {"duration_turns_cap": 3, "chance_multiplier": 0.90, "stat_floor_pct": 70},
+        "vulnerability":   {"duration_turns_cap": 3, "chance_multiplier": 0.90, "max_stacks": 3},
+        "effect_accuracy": {"global_multiplier": 0.95}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 3},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 3},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 3},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "max_distinct_dots": 3,
+        "tick_multiplier_cap": 0.6,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -50,
+        "minimum_healing_floor_pct": 25
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 90,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 460,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 0.5,
+        "damage_bonus_multiplier": 0.80,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea"
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Standard profile for daily dungeons."
+    },
+    {
+      "family_id": "elite_boss",
+      "display_name": "Elite Boss",
+      "intended_use": "High-difficulty PvE bosses (hard mode, special chambers).",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 2, "chance_multiplier": 0.70, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "stun":    {"duration_turns_cap": 2, "chance_multiplier": 0.70, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "silence": {"duration_turns_cap": 1, "chance_multiplier": 0.70, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "taunt":   {"duration_turns_cap": 1, "chance_multiplier": 0.60, "diminishing_returns_threshold": 2, "immune_after_applications": 2}
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 2, "chance_multiplier": 0.80},
+        "speed_down":      {"duration_turns_cap": 2, "chance_multiplier": 0.80, "stat_floor_pct": 65},
+        "def_down":        {"duration_turns_cap": 2, "chance_multiplier": 0.80, "stat_floor_pct": 75},
+        "vulnerability":   {"duration_turns_cap": 2, "chance_multiplier": 0.80, "max_stacks": 3},
+        "effect_accuracy": {"global_multiplier": 0.90}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 3},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 3},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 3},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "max_distinct_dots": 3,
+        "tick_multiplier_cap": 0.5,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -60,
+        "minimum_healing_floor_pct": 20
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 80,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 460,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 0.5,
+        "damage_bonus_multiplier": 0.75,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea"
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Elite profile: less forgiving, tighter immunity windows."
+    },
+    {
+      "family_id": "raid_boss",
+      "display_name": "Raid Boss",
+      "intended_use": "Multi-team raid encounters (PvE high-end).",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 1, "chance_multiplier": 0.55, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "stun":    {"duration_turns_cap": 1, "chance_multiplier": 0.55, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "silence": {"duration_turns_cap": 1, "chance_multiplier": 0.55, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "taunt":   {"duration_turns_cap": 1, "chance_multiplier": 0.40, "diminishing_returns_threshold": 2, "immune_after_applications": 2}
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 2, "chance_multiplier": 0.65},
+        "speed_down":      {"duration_turns_cap": 2, "chance_multiplier": 0.65, "stat_floor_pct": 75},
+        "def_down":        {"duration_turns_cap": 2, "chance_multiplier": 0.65, "stat_floor_pct": 80},
+        "vulnerability":   {"duration_turns_cap": 2, "chance_multiplier": 0.65, "max_stacks": 2},
+        "effect_accuracy": {"global_multiplier": 0.85}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 2},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 2},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 2},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "max_distinct_dots": 3,
+        "tick_multiplier_cap": 0.5,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -60,
+        "minimum_healing_floor_pct": 20
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 50,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 420,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 0.5,
+        "damage_bonus_multiplier": 0.70,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea"
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Raid profile: heavy resistance, healing effectiveness halved, Marchio capped at 4."
+    },
+    {
+      "family_id": "world_boss",
+      "display_name": "World Boss",
+      "intended_use": "Server-shared persistent boss encounters.",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 1, "chance_multiplier": 0.40, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "stun":    {"duration_turns_cap": 1, "chance_multiplier": 0.40, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "silence": {"duration_turns_cap": 1, "chance_multiplier": 0.40, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "taunt":   {"duration_turns_cap": 1, "chance_multiplier": 0.30, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "full_freeze_lock_allowed": false
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 2, "chance_multiplier": 0.55},
+        "speed_down":      {"duration_turns_cap": 2, "chance_multiplier": 0.55, "stat_floor_pct": 80},
+        "def_down":        {"duration_turns_cap": 2, "chance_multiplier": 0.55, "stat_floor_pct": 85},
+        "vulnerability":   {"duration_turns_cap": 2, "chance_multiplier": 0.55, "max_stacks": 2},
+        "effect_accuracy": {"global_multiplier": 0.80}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 2},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 2},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 2},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "max_distinct_dots": 2,
+        "tick_multiplier_cap": 0.4,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -60,
+        "minimum_healing_floor_pct": 20
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 50,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 400,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 0.5,
+        "damage_bonus_multiplier": 0.65,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea",
+        "notes": "World bosses must never be fully freeze-locked; freeze contribution from Marchio halved."
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Strongest resistance profile; long-duration world events."
+    },
+    {
+      "family_id": "event_boss",
+      "display_name": "Event Boss",
+      "intended_use": "Limited-time event encounters. Profile is configurable; defaults inherit elite/raid mix.",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 2, "chance_multiplier": 0.65, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "stun":    {"duration_turns_cap": 2, "chance_multiplier": 0.65, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "silence": {"duration_turns_cap": 1, "chance_multiplier": 0.65, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "taunt":   {"duration_turns_cap": 1, "chance_multiplier": 0.55, "diminishing_returns_threshold": 2, "immune_after_applications": 2}
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 2, "chance_multiplier": 0.75},
+        "speed_down":      {"duration_turns_cap": 2, "chance_multiplier": 0.75, "stat_floor_pct": 70},
+        "def_down":        {"duration_turns_cap": 2, "chance_multiplier": 0.75, "stat_floor_pct": 75},
+        "vulnerability":   {"duration_turns_cap": 2, "chance_multiplier": 0.75, "max_stacks": 3},
+        "effect_accuracy": {"global_multiplier": 0.85}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 3},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 3},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 3},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 3},
+        "max_distinct_dots": 3,
+        "tick_multiplier_cap": 0.5,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -60,
+        "minimum_healing_floor_pct": 20
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 75,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 460,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 0.5,
+        "damage_bonus_multiplier": 0.75,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea"
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Event bosses use elite/raid-like defaults. May be overridden per event in future design tables."
+    },
+    {
+      "family_id": "guild_boss",
+      "display_name": "Guild Boss",
+      "intended_use": "Guild-cooperative encounters; raid-like profile.",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 1, "chance_multiplier": 0.55, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "stun":    {"duration_turns_cap": 1, "chance_multiplier": 0.55, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "silence": {"duration_turns_cap": 1, "chance_multiplier": 0.55, "diminishing_returns_threshold": 2, "immune_after_applications": 2},
+        "taunt":   {"duration_turns_cap": 1, "chance_multiplier": 0.40, "diminishing_returns_threshold": 2, "immune_after_applications": 2}
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 2, "chance_multiplier": 0.65},
+        "speed_down":      {"duration_turns_cap": 2, "chance_multiplier": 0.65, "stat_floor_pct": 75},
+        "def_down":        {"duration_turns_cap": 2, "chance_multiplier": 0.65, "stat_floor_pct": 80},
+        "vulnerability":   {"duration_turns_cap": 2, "chance_multiplier": 0.65, "max_stacks": 2},
+        "effect_accuracy": {"global_multiplier": 0.85}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 2},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 2},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 2},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "max_distinct_dots": 3,
+        "tick_multiplier_cap": 0.5,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -60,
+        "minimum_healing_floor_pct": 20
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 60,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 420,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 0.5,
+        "damage_bonus_multiplier": 0.70,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea"
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Guild bosses mirror raid resistance pattern."
+    },
+    {
+      "family_id": "training_dummy",
+      "display_name": "Training Dummy",
+      "intended_use": "QA / training rooms. Minimal resistance for damage testing.",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 3, "chance_multiplier": 1.0, "diminishing_returns_threshold": 99, "immune_after_applications": 99},
+        "stun":    {"duration_turns_cap": 3, "chance_multiplier": 1.0, "diminishing_returns_threshold": 99, "immune_after_applications": 99},
+        "silence": {"duration_turns_cap": 3, "chance_multiplier": 1.0, "diminishing_returns_threshold": 99, "immune_after_applications": 99},
+        "taunt":   {"duration_turns_cap": 3, "chance_multiplier": 1.0, "diminishing_returns_threshold": 99, "immune_after_applications": 99}
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 3, "chance_multiplier": 1.0},
+        "speed_down":      {"duration_turns_cap": 3, "chance_multiplier": 1.0, "stat_floor_pct": 40},
+        "def_down":        {"duration_turns_cap": 3, "chance_multiplier": 1.0, "stat_floor_pct": 40},
+        "vulnerability":   {"duration_turns_cap": 3, "chance_multiplier": 1.0, "max_stacks": 5},
+        "effect_accuracy": {"global_multiplier": 1.0}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 5, "stack_cap": 5},
+        "poison":    {"duration_turns_cap": 5, "stack_cap": 5},
+        "bleed":     {"duration_turns_cap": 5, "stack_cap": 5},
+        "frostbite": {"duration_turns_cap": 5, "stack_cap": 5},
+        "shock":     {"duration_turns_cap": 5, "stack_cap": 5},
+        "curse":     {"duration_turns_cap": 5, "stack_cap": 5},
+        "max_distinct_dots": 5,
+        "tick_multiplier_cap": 1.0,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 0,
+        "healing_reduction_cap_pct": 0,
+        "minimum_healing_floor_pct": 100
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 100,
+        "shield_concurrent_cap_per_ally": 5,
+        "shield_effective_cap_pct": 999,
+        "revive_per_ally_per_battle_max": 99,
+        "death_protection_max_window_turns": 3
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 4,
+        "freeze_bonus_multiplier": 1.0,
+        "damage_bonus_multiplier": 1.0,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea",
+        "notes": "Even in training, Marchio remains capped at 4 effective stacks and Borea-only."
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 10,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Dummies are not real bosses but treated under the boss-family schema for runtime resolver consistency. boss DoT crit still disabled to avoid spurious QA crit chains."
+    },
+    {
+      "family_id": "pvp_dummy",
+      "display_name": "PvP Dummy",
+      "intended_use": "PvP test mannequins (rehearsal arena). Mirrors PvP caps from RM1.32-C.",
+      "runtime_attached": false,
+      "design_only": true,
+      "hard_control_policy": {
+        "freeze":  {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "stun":    {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "silence": {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "taunt":   {"duration_turns_cap": 2, "chance_multiplier": 1.0, "diminishing_returns_threshold": 3, "immune_after_applications": 3},
+        "status_chance_pct_cap": 85
+      },
+      "soft_control_policy": {
+        "slow":            {"duration_turns_cap": 2, "chance_multiplier": 1.0},
+        "speed_down":      {"duration_turns_cap": 2, "chance_multiplier": 1.0, "stat_floor_pct": 60},
+        "def_down":        {"duration_turns_cap": 2, "chance_multiplier": 1.0, "stat_floor_pct": 70},
+        "vulnerability":   {"duration_turns_cap": 2, "chance_multiplier": 1.0, "max_stacks": 3},
+        "effect_accuracy": {"global_multiplier": 1.0}
+      },
+      "dot_policy": {
+        "burn":      {"duration_turns_cap": 3, "stack_cap": 2},
+        "poison":    {"duration_turns_cap": 3, "stack_cap": 2},
+        "bleed":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "frostbite": {"duration_turns_cap": 3, "stack_cap": 2},
+        "shock":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "curse":     {"duration_turns_cap": 3, "stack_cap": 2},
+        "max_distinct_dots": 2,
+        "tick_multiplier_cap": 1.0,
+        "can_crit": false
+      },
+      "anti_heal_policy": {
+        "healing_block_max_duration_turns": 2,
+        "healing_reduction_cap_pct": -60,
+        "minimum_healing_floor_pct": 20
+      },
+      "shield_heal_revive_policy": {
+        "player_heal_effectiveness_pct": 75,
+        "shield_concurrent_cap_per_ally": 2,
+        "shield_effective_cap_pct": 460,
+        "revive_per_ally_per_battle_max": 1,
+        "death_protection_max_window_turns": 1
+      },
+      "marchio_boreale_policy": {
+        "allowed": true,
+        "max_effective_stacks": 3,
+        "freeze_bonus_multiplier": 1.0,
+        "damage_bonus_multiplier": 1.0,
+        "team_wide_amp_allowed": false,
+        "owner_hero_id": "greek_borea",
+        "notes": "PvP-dummy uses PvP stack cap (3); reflects RM1.32-C PvP cap policy."
+      },
+      "domain_policy": {
+        "one_domain_active_per_side": true,
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "refresh_same_turn_allowed": false
+      },
+      "divine_weapon_synergy_policy": {
+        "design_only": true,
+        "numeric_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 5,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "live_numeric_modifier_applied": false
+      },
+      "notes": "Mirrors PvP cap profile; Marchio capped at PvP=3."
+    }
+  ],
+  "out_of_scope": [
+    "runtime hookup",
+    "battle engine integration",
+    "DB writes",
+    "catalog numeric edits",
+    "gacha/roster/Character Bible changes",
+    "Borea activation",
+    "asset pipeline changes",
+    "API endpoint for boss table"
+  ],
+  "baseline_anchor_at_creation": "hero_skill_kit_catalog_baseline_rm132b_v4"
+}
