@@ -1,0 +1,172 @@
+{
+  "plan_id": "hero_skill_kits_balance_cap_delta_plan_v1",
+  "task_origin": "RM1.32-C",
+  "generated_at_utc": "2026-05-15T21:18:00.000000Z",
+  "scope": "5star_and_6star_foundation_balance",
+  "purpose": "Design-only, read-only delta plan for future PvP caps, boss resistances, control duration policy, heal/shield/revive anti-loop rules, Marchio Boreale boundaries, Domain stacking policy, and Divine Weapon synergy constraints. No patch is applied. No runtime hook. Intended as input to a future v5 baseline if any of these recommendations get drafted into the catalogs.",
+  "patch_applied": false,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "balance_values_finalized": false,
+  "safety_flags": {
+    "no_patch": true,
+    "no_runtime": true,
+    "no_db": true,
+    "no_borea_activation": true,
+    "no_borea_visibility_change": true,
+    "no_marchio_leak": true,
+    "no_catalog_data_change": true,
+    "design_only": true
+  },
+  "current_state_assertions": [
+    "5★ catalog: 20 entries, 100/100 final_numbers foundation_draft, runtime_ready=false",
+    "6★ catalog: 13 entries, 78/78 final_numbers foundation_draft, runtime_ready=false",
+    "13/13 6★ ultimate is_true_ultimate=true",
+    "baseline v4 is current default anchor (RM1.32-B)",
+    "greek_borea catalog-only, hidden in /api/heroes, Marchio Boreale Borea-only",
+    "78/78 DW synergy placeholders design_only/runtime_ready=false/numeric_modifier_pct=null"
+  ],
+  "audit_summary": {
+    "audit_script": "/app/backend/scripts/audit_balance_foundation_boss_pvp_caps.py",
+    "result": "PASS (WARNs informational)",
+    "warn_count_total": 86,
+    "warn_count_by_section": {
+      "burst": 13,
+      "control_status": 57,
+      "heal_shield_revive": 9,
+      "marchio_boreale": 4,
+      "domain": 2,
+      "dw_synergy": 1
+    }
+  },
+  "pvp_cap_recommendations": {
+    "principles": [
+      "PvP-specific caps must NEVER mutate the foundation_draft numbers; they must be enforced at runtime adapter (RM1.33-A) via a PvP mode flag.",
+      "All caps are design-only proposals; no runtime hook is taken in RM1.32-C."
+    ],
+    "damage_cap": {
+      "single_target_ultimate_or_skill_2": "cap effective damage_multiplier_pct at 600 in PvP (still draft); one-shot prevention rule: target must survive with ≥10% max_hp from any single non-true-damage hit",
+      "aoe_ultimate_per_target": "cap at 380 per target in PvP",
+      "true_damage": "not introduced at foundation pass; reserved for future review"
+    },
+    "shield_cap": {
+      "principle": "PvP shield stacking cap at 2 concurrent shields per ally; total shield_multiplier_pct effective cap at 460 in PvP",
+      "decay_rule": "design-only: oldest shield decays first when cap is exceeded"
+    },
+    "heal_cap": {
+      "principle": "PvP healing effectiveness scaled to ~75% of PvE (−25%); raid bosses cap heal effectiveness at ~50% to prevent attrition stalemates",
+      "healing_block_interaction": "healing_block status must reduce heal multiplier to 0 while active, both PvE and PvP"
+    },
+    "hard_control_duration_cap": {
+      "freeze_stun_silence": "cap at 1–2 turns in PvP regardless of foundation duration; 3-turn duration permitted in PvE only",
+      "taunt": "cap at 2 turns in PvP"
+    },
+    "status_chance_cap": {
+      "principle": "PvP status_chance_pct effective cap at 85% even when foundation_draft is ≥90%; PvE keeps full chance",
+      "applies_to": ["freeze", "stun", "silence", "taunt", "burn", "poison", "frostbite", "shock", "curse"]
+    },
+    "candidates_flagged_by_audit": [
+      "6★ single-target ultimates with damage_multiplier_pct ≥ 600 → PvP cap candidates",
+      "6★ AoE ultimates with damage_multiplier_pct ≥ 380 per target → PvP AoE cap candidates",
+      "status_chance_pct ≥ 90 → PvP cap candidates",
+      "hard control duration ≥ 3 → PvP cap candidates"
+    ]
+  },
+  "boss_resistance_recommendations": {
+    "principles": [
+      "Boss resistance is design-only; future runtime layer (post-RM1.33-A) will translate these into numeric resist tables.",
+      "Hard control on bosses MUST have diminishing-returns rules to avoid infinite lock loops."
+    ],
+    "hard_control_resistance": {
+      "freeze_stun_silence_taunt": "1st application: full duration; 2nd within N turns: 50% duration; 3rd within N turns: immune (immunity window 2 turns)",
+      "boss_unique_immunities": "design-only: each boss family declares its hard-control immunity profile in a future RM1.34 boss table"
+    },
+    "mark_and_marchio_rules": {
+      "mark": "stack cap 5 in PvE, 3 in PvP (matches Marchio Boreale stack policy)",
+      "marchio_boreale": "Borea-only; bosses cap effective stacks at max_stacks_pve − 1 (i.e. 4)"
+    },
+    "dot_scaling_rules": {
+      "burn_poison_bleed_frostbite_shock": "boss DoT multiplier capped at 0.5× of standard damage tick; cannot critically tick on boss",
+      "stacking": "max 3 distinct DoT instances per boss target (PvE); 2 (PvP)"
+    },
+    "healing_reduction_block_rules": {
+      "healing_block": "reduces heal to 0 while active; max duration 2 turns even from any source",
+      "healing_reduction": "applied multiplicatively; cap at −60% effective heal per stack and never below 20% baseline heal"
+    }
+  },
+  "domain_recommendations": {
+    "principles": [
+      "No domain_effect tags are currently present in 5★/6★ catalogs (audit confirms 0 domain-like tags).",
+      "Reserve the policy for future tasks that introduce domain skills."
+    ],
+    "stacking_policy": "one_domain_active_per_battle_side (max 1 ally + 1 enemy domain active simultaneously)",
+    "override_policy": "strongest_wins; ties broken by application order (FIFO); cleansable like a status",
+    "duration_policy": "max 3 turns; cannot be refreshed in the same turn"
+  },
+  "marchio_boreale_recommendations": {
+    "owner_hero_id": "greek_borea",
+    "max_stacks_pvp": 3,
+    "max_stacks_pve": 5,
+    "team_wide_amp_forbidden": true,
+    "scope": "per-target personal status; cannot transfer to other heroes; cannot grant team-wide damage amp",
+    "cleanse_rules": "standard cleanse removes all stacks at once; cannot be partially cleansed",
+    "immunity_rules": "status immunity prevents new stacks; existing stacks decay normally",
+    "decay_rule": "1 stack decays at end of marked unit turn unless re-applied; resets fully on cleanse",
+    "boss_resistance": "bosses cap effective stacks at max_stacks_pve - 1 = 4; freeze chance bonus contribution from Marchio is halved on bosses",
+    "borea_activation": false,
+    "runtime_ready": false
+  },
+  "divine_weapon_synergy_recommendations": {
+    "current_state": "78/78 6★ placeholders design_only=true, runtime_ready=false, numeric_modifier_pct=null",
+    "future_runtime_caps": {
+      "max_numeric_modifier_pct": 10,
+      "no_multiplicative_with_other_buffs": "DW synergy is additive only at first runtime pass",
+      "no_team_wide_amp": "DW synergy is per-owner-hero only; never benefits teammates",
+      "no_pvp_amplification": "DW synergy yields ≤ +5% in PvP only"
+    },
+    "until_runtime_adapter": "no live hooks; gated by SKILL_KIT_RUNTIME_ENABLED feature flag (RM1.33-A)"
+  },
+  "heal_shield_revive_recommendations": {
+    "revive_anti_loop_rule": "max 1 revive per ally per battle (PvE) and per match (PvP)",
+    "revive_cooldown_intern": "per-skill internal_cooldown ≥ 5 turns mandatory at runtime layer",
+    "death_protection_window": "1 turn max; cannot stack with revive_pending in the same turn",
+    "shield_overstack_rule": "max 2 concurrent shields per ally; total shield_multiplier_pct effective cap 460 in PvP"
+  },
+  "candidate_followup_patches": {
+    "RM1.32-C2_optional": {
+      "description": "If user requests, draft minimal numeric tweaks (foundation_draft only) addressing the highest WARNs: PvP status chance ≥90 → trim to ≤85 in foundation_draft (would produce baseline v5).",
+      "patch_needed": false,
+      "risk": "low; baseline-tracked; reversible"
+    },
+    "RM1.33-A_runtime_adapter_prerequisites": {
+      "description": "Implement Runtime Adapter Skeleton with feature flag SKILL_KIT_RUNTIME_ENABLED=false. Adapter must read foundation_draft values, apply PvP/Boss caps from this plan, and never mutate the catalogs.",
+      "must_provide": [
+        "PvP cap layer (damage / shield / heal / status chance / control duration)",
+        "Boss resistance layer (hard control diminishing returns, DoT cap, heal reduction)",
+        "Marchio Boreale boss cap (max_stacks_pve - 1) at runtime",
+        "Revive anti-loop counter per battle / match",
+        "Domain stacking policy enforcement (when domain skills are introduced)",
+        "DW synergy numeric modifier cap (≤ +10% global / ≤ +5% PvP)"
+      ],
+      "feature_flag_default": false,
+      "no_db_write": true
+    },
+    "RM1.34_boss_table_design": {
+      "description": "Author boss family resistance/immunity table referencing this plan as the design contract.",
+      "patch_needed": false
+    }
+  },
+  "out_of_scope": [
+    "runtime hookup",
+    "DB writes",
+    "gacha / roster / Character Bible / assets changes",
+    "Borea activation",
+    "final balance values finalization",
+    "catalog numeric edits"
+  ],
+  "recommended_next_baseline": "hero_skill_kit_catalog_baseline_rm132c2_v5 (only if RM1.32-C2 optional patch is approved); otherwise no new baseline needed for this plan",
+  "baseline_chain_state": {
+    "current_default": "hero_skill_kit_catalog_baseline_rm132b_v4",
+    "this_task_creates_new_baseline": false
+  }
+}
