@@ -1,0 +1,1323 @@
+{
+  "plan_id": "hero_skill_kits_5star_legacy_status_tags_normalization_plan_v1",
+  "task_origin": "RM1.28-C",
+  "version": "v1",
+  "generated_at_utc": "2026-05-15T15:17:54.146287+00:00",
+  "scope": "5star_launch_base",
+  "inspected_slots": [
+    "basic",
+    "passive_base",
+    "skill_1",
+    "skill_2"
+  ],
+  "excluded_slots": [
+    "passive_advanced"
+  ],
+  "approved_status_core_whitelist": [
+    "atk_up",
+    "berserk",
+    "bleed",
+    "blind",
+    "burn",
+    "cleanse",
+    "crit_damage_up",
+    "crit_up",
+    "curse",
+    "damage_reduction",
+    "death_protection",
+    "def_down",
+    "def_up",
+    "domain_effect",
+    "effect_accuracy_up",
+    "freeze",
+    "frostbite",
+    "guard",
+    "healing_block",
+    "healing_reduction",
+    "healing_up",
+    "hybrid_shield",
+    "immunity",
+    "magic_damage_up",
+    "magical_shield",
+    "mark",
+    "physical_shield",
+    "poison",
+    "regeneration",
+    "revive",
+    "revive_pending",
+    "shock",
+    "silence",
+    "slow",
+    "speed_down",
+    "speed_up",
+    "stun",
+    "taunt",
+    "vulnerability"
+  ],
+  "canonical_5star_hero_ids": [
+    "angelic_bastion_angel",
+    "celtic_mist_banshee",
+    "creature_crimson_phoenix",
+    "creature_lernaean_hydra",
+    "cursed_pestilence_herald",
+    "demonic_gehenna_witch",
+    "egyptian_bastet",
+    "egyptian_claw_of_sekhmet",
+    "greek_atalanta",
+    "greek_circe",
+    "greek_medusa",
+    "greek_nemean_lioness",
+    "greek_nike",
+    "japanese_miko_of_raijin",
+    "norse_dawn_valkyrie",
+    "norse_eir",
+    "norse_rime_jotunn",
+    "norse_volva_of_fate",
+    "yokai_oni_kunoichi",
+    "yokai_yuki_onna"
+  ],
+  "forbidden_non_canonical_ids": [
+    "crimson_phoenix",
+    "greek_lernaean_hydra",
+    "infernal_gehenna_witch",
+    "japanese_oni_kunoichi",
+    "japanese_raijin_miko",
+    "japanese_yuki_onna",
+    "norse_fate_volva",
+    "norse_frost_jotunn"
+  ],
+  "forbidden_token_tags": [
+    "arma_divina",
+    "divine_weapon",
+    "domain_effect_apply",
+    "marchio_boreale",
+    "true_ultimate",
+    "ultimate_signature_upgrade"
+  ],
+  "audit_stats": {
+    "total_5star_entries": 20,
+    "inspected_slots_count": 80,
+    "total_status_tags_scanned": 121,
+    "whitelist_tag_count": 10,
+    "legacy_tag_count": 111,
+    "distinct_legacy_tags": 12,
+    "passive_advanced_clean_count": 20,
+    "borea_leak_detected": false,
+    "marchio_boreale_in_5star_detected": false,
+    "forbidden_id_present": false
+  },
+  "classification_buckets": {
+    "A.category_tag_keep_as_design_metadata": "Generic taxonomy tags (damage/buff/debuff/control/heal). Demote to a non-status design taxonomy field. They are not status effects.",
+    "B.likely_status_mapping_needed": "Concrete but ambiguous tags (dot/hot/shield) that imply a real status effect but need hero/skill context.",
+    "C.trigger_or_rule_tag_not_status": "Tags that are triggers/rules (trigger/conditional_bonus) and should not be inside status_tags.",
+    "D.ambiguous_needs_manual_review": "Tags whose runtime meaning is unclear and must be reviewed per hero.",
+    "E.forbidden_or_invalid": "Tags implying 6★/Borea/Divine Weapon/Domain/true Ultimate or non-approved special status. Hard fail."
+  },
+  "per_tag_plan": [
+    {
+      "legacy_tag": "damage",
+      "frequency": 52,
+      "affected_heroes": [
+        "angelic_bastion_angel",
+        "celtic_mist_banshee",
+        "creature_crimson_phoenix",
+        "creature_lernaean_hydra",
+        "cursed_pestilence_herald",
+        "demonic_gehenna_witch",
+        "egyptian_bastet",
+        "egyptian_claw_of_sekhmet",
+        "greek_atalanta",
+        "greek_circe",
+        "greek_medusa",
+        "greek_nemean_lioness",
+        "greek_nike",
+        "japanese_miko_of_raijin",
+        "norse_dawn_valkyrie",
+        "norse_eir",
+        "norse_rime_jotunn",
+        "norse_volva_of_fate",
+        "yokai_oni_kunoichi",
+        "yokai_yuki_onna"
+      ],
+      "affected_slots": [
+        "basic",
+        "skill_1",
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "angelic_bastion_angel",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "celtic_mist_banshee",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "celtic_mist_banshee",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "celtic_mist_banshee",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "creature_crimson_phoenix",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "creature_crimson_phoenix",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "creature_crimson_phoenix",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "creature_lernaean_hydra",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "creature_lernaean_hydra",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "creature_lernaean_hydra",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "cursed_pestilence_herald",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "cursed_pestilence_herald",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "cursed_pestilence_herald",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "demonic_gehenna_witch",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "demonic_gehenna_witch",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "demonic_gehenna_witch",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "egyptian_bastet",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "egyptian_bastet",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "egyptian_bastet",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "egyptian_claw_of_sekhmet",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "egyptian_claw_of_sekhmet",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "egyptian_claw_of_sekhmet",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_atalanta",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "greek_atalanta",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "greek_atalanta",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_circe",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "greek_circe",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "greek_circe",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_medusa",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "greek_medusa",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "greek_medusa",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_nemean_lioness",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "greek_nemean_lioness",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_nike",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "greek_nike",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "japanese_miko_of_raijin",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "japanese_miko_of_raijin",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "japanese_miko_of_raijin",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "norse_dawn_valkyrie",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "norse_dawn_valkyrie",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "norse_dawn_valkyrie",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "norse_eir",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "norse_rime_jotunn",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "norse_rime_jotunn",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "norse_volva_of_fate",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "norse_volva_of_fate",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "yokai_oni_kunoichi",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "yokai_oni_kunoichi",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "yokai_oni_kunoichi",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "yokai_yuki_onna",
+          "slot": "basic"
+        },
+        {
+          "hero_id": "yokai_yuki_onna",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "yokai_yuki_onna",
+          "slot": "skill_2"
+        }
+      ],
+      "classification": "A.category_tag_keep_as_design_metadata",
+      "recommended_action": "demote_to_design_taxonomy_field",
+      "safe_auto_fix": false,
+      "candidate_mappings": [],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "buff",
+      "frequency": 24,
+      "affected_heroes": [
+        "angelic_bastion_angel",
+        "celtic_mist_banshee",
+        "creature_lernaean_hydra",
+        "demonic_gehenna_witch",
+        "egyptian_bastet",
+        "egyptian_claw_of_sekhmet",
+        "greek_atalanta",
+        "greek_circe",
+        "greek_medusa",
+        "greek_nemean_lioness",
+        "greek_nike",
+        "japanese_miko_of_raijin",
+        "norse_dawn_valkyrie",
+        "norse_eir",
+        "norse_rime_jotunn",
+        "norse_volva_of_fate",
+        "yokai_oni_kunoichi",
+        "yokai_yuki_onna"
+      ],
+      "affected_slots": [
+        "passive_base",
+        "skill_1",
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "angelic_bastion_angel",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "celtic_mist_banshee",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "creature_lernaean_hydra",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "demonic_gehenna_witch",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "egyptian_bastet",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "egyptian_claw_of_sekhmet",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "egyptian_claw_of_sekhmet",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_atalanta",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "greek_atalanta",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_circe",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "greek_medusa",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "greek_nemean_lioness",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "greek_nike",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "greek_nike",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "greek_nike",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "japanese_miko_of_raijin",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "norse_dawn_valkyrie",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "norse_dawn_valkyrie",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "norse_eir",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "norse_rime_jotunn",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "norse_volva_of_fate",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "norse_volva_of_fate",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "yokai_oni_kunoichi",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "yokai_yuki_onna",
+          "slot": "passive_base"
+        }
+      ],
+      "classification": "A.category_tag_keep_as_design_metadata",
+      "recommended_action": "demote_to_design_taxonomy_field",
+      "safe_auto_fix": false,
+      "candidate_mappings": [],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "debuff",
+      "frequency": 11,
+      "affected_heroes": [
+        "celtic_mist_banshee",
+        "cursed_pestilence_herald",
+        "demonic_gehenna_witch",
+        "greek_circe",
+        "greek_medusa",
+        "greek_nemean_lioness",
+        "japanese_miko_of_raijin",
+        "norse_rime_jotunn",
+        "norse_volva_of_fate",
+        "yokai_yuki_onna"
+      ],
+      "affected_slots": [
+        "skill_1",
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "celtic_mist_banshee",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "cursed_pestilence_herald",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "demonic_gehenna_witch",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_circe",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "greek_medusa",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "greek_nemean_lioness",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "japanese_miko_of_raijin",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "norse_rime_jotunn",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "norse_volva_of_fate",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "norse_volva_of_fate",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "yokai_yuki_onna",
+          "slot": "skill_1"
+        }
+      ],
+      "classification": "A.category_tag_keep_as_design_metadata",
+      "recommended_action": "demote_to_design_taxonomy_field",
+      "safe_auto_fix": false,
+      "candidate_mappings": [],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "control",
+      "frequency": 6,
+      "affected_heroes": [
+        "celtic_mist_banshee",
+        "greek_circe",
+        "greek_medusa",
+        "norse_rime_jotunn",
+        "yokai_oni_kunoichi",
+        "yokai_yuki_onna"
+      ],
+      "affected_slots": [
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "celtic_mist_banshee",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_circe",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "greek_medusa",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "norse_rime_jotunn",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "yokai_oni_kunoichi",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "yokai_yuki_onna",
+          "slot": "skill_2"
+        }
+      ],
+      "classification": "A.category_tag_keep_as_design_metadata",
+      "recommended_action": "demote_to_design_taxonomy_field",
+      "safe_auto_fix": false,
+      "candidate_mappings": [],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "dot",
+      "frequency": 5,
+      "affected_heroes": [
+        "creature_lernaean_hydra",
+        "cursed_pestilence_herald",
+        "demonic_gehenna_witch",
+        "egyptian_claw_of_sekhmet",
+        "yokai_oni_kunoichi"
+      ],
+      "affected_slots": [
+        "skill_1"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "creature_lernaean_hydra",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "cursed_pestilence_herald",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "demonic_gehenna_witch",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "egyptian_claw_of_sekhmet",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "yokai_oni_kunoichi",
+          "slot": "skill_1"
+        }
+      ],
+      "classification": "B.likely_status_mapping_needed",
+      "recommended_action": "manual_context_mapping",
+      "safe_auto_fix": false,
+      "candidate_mappings": [
+        "burn",
+        "bleed",
+        "poison",
+        "curse",
+        "frostbite",
+        "shock"
+      ],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "heal",
+      "frequency": 3,
+      "affected_heroes": [
+        "creature_crimson_phoenix",
+        "norse_eir"
+      ],
+      "affected_slots": [
+        "skill_1",
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "creature_crimson_phoenix",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "norse_eir",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "norse_eir",
+          "slot": "skill_2"
+        }
+      ],
+      "classification": "A.category_tag_keep_as_design_metadata",
+      "recommended_action": "manual_context_mapping",
+      "safe_auto_fix": false,
+      "candidate_mappings": [
+        "healing_up",
+        "regeneration",
+        "effect_kind:direct_heal"
+      ],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "hot",
+      "frequency": 3,
+      "affected_heroes": [
+        "creature_crimson_phoenix",
+        "creature_lernaean_hydra"
+      ],
+      "affected_slots": [
+        "passive_base",
+        "skill_1",
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "creature_crimson_phoenix",
+          "slot": "passive_base"
+        },
+        {
+          "hero_id": "creature_crimson_phoenix",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "creature_lernaean_hydra",
+          "slot": "skill_2"
+        }
+      ],
+      "classification": "B.likely_status_mapping_needed",
+      "recommended_action": "manual_context_mapping",
+      "safe_auto_fix": false,
+      "candidate_mappings": [
+        "regeneration",
+        "healing_up"
+      ],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "conditional_bonus",
+      "frequency": 2,
+      "affected_heroes": [
+        "egyptian_bastet",
+        "norse_dawn_valkyrie"
+      ],
+      "affected_slots": [
+        "skill_1",
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "egyptian_bastet",
+          "slot": "skill_2"
+        },
+        {
+          "hero_id": "norse_dawn_valkyrie",
+          "slot": "skill_1"
+        }
+      ],
+      "classification": "C.trigger_or_rule_tag_not_status",
+      "recommended_action": "move_to_trigger_or_rule_field",
+      "safe_auto_fix": false,
+      "candidate_mappings": [],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "shield",
+      "frequency": 2,
+      "affected_heroes": [
+        "angelic_bastion_angel"
+      ],
+      "affected_slots": [
+        "skill_1",
+        "skill_2"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "angelic_bastion_angel",
+          "slot": "skill_1"
+        },
+        {
+          "hero_id": "angelic_bastion_angel",
+          "slot": "skill_2"
+        }
+      ],
+      "classification": "B.likely_status_mapping_needed",
+      "recommended_action": "manual_context_mapping",
+      "safe_auto_fix": false,
+      "candidate_mappings": [
+        "physical_shield",
+        "magical_shield",
+        "hybrid_shield"
+      ],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "aura_debuff",
+      "frequency": 1,
+      "affected_heroes": [
+        "celtic_mist_banshee"
+      ],
+      "affected_slots": [
+        "passive_base"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "celtic_mist_banshee",
+          "slot": "passive_base"
+        }
+      ],
+      "classification": "D.ambiguous_needs_manual_review",
+      "recommended_action": "manual_review_required",
+      "safe_auto_fix": false,
+      "candidate_mappings": [
+        "vulnerability",
+        "def_down",
+        "speed_down",
+        "effect_accuracy_up"
+      ],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "debuff_aura",
+      "frequency": 1,
+      "affected_heroes": [
+        "cursed_pestilence_herald"
+      ],
+      "affected_slots": [
+        "passive_base"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "cursed_pestilence_herald",
+          "slot": "passive_base"
+        }
+      ],
+      "classification": "D.ambiguous_needs_manual_review",
+      "recommended_action": "manual_review_required",
+      "safe_auto_fix": false,
+      "candidate_mappings": [
+        "vulnerability",
+        "def_down",
+        "speed_down",
+        "effect_accuracy_up"
+      ],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    },
+    {
+      "legacy_tag": "trigger",
+      "frequency": 1,
+      "affected_heroes": [
+        "creature_crimson_phoenix"
+      ],
+      "affected_slots": [
+        "passive_base"
+      ],
+      "affected_hero_slot_pairs": [
+        {
+          "hero_id": "creature_crimson_phoenix",
+          "slot": "passive_base"
+        }
+      ],
+      "classification": "C.trigger_or_rule_tag_not_status",
+      "recommended_action": "move_to_trigger_or_rule_field",
+      "safe_auto_fix": false,
+      "candidate_mappings": [],
+      "notes": "Inspect hero kit identity and existing skill description before mapping. Do NOT auto-fix unless mapping is trivial and absolutely safe. Numbers/chance/duration unaffected. final_numbers stays null."
+    }
+  ],
+  "per_hero_summary": [
+    {
+      "hero_id": "celtic_mist_banshee",
+      "element": "wind",
+      "role": "control_debuff",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff",
+          "aura_debuff"
+        ],
+        "skill_1": [
+          "damage",
+          "debuff"
+        ],
+        "skill_2": [
+          "damage",
+          "control"
+        ]
+      },
+      "total_legacy_tags": 7
+    },
+    {
+      "hero_id": "creature_crimson_phoenix",
+      "element": "fire",
+      "role": "hybrid_special",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "trigger",
+          "hot"
+        ],
+        "skill_1": [
+          "damage",
+          "hot"
+        ],
+        "skill_2": [
+          "damage",
+          "heal"
+        ]
+      },
+      "total_legacy_tags": 7
+    },
+    {
+      "hero_id": "creature_lernaean_hydra",
+      "element": "water",
+      "role": "hybrid_special",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "dot"
+        ],
+        "skill_2": [
+          "damage",
+          "hot"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "cursed_pestilence_herald",
+      "element": "dark",
+      "role": "hybrid_special",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "debuff_aura"
+        ],
+        "skill_1": [
+          "damage",
+          "dot"
+        ],
+        "skill_2": [
+          "damage",
+          "debuff"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "demonic_gehenna_witch",
+      "element": "fire",
+      "role": "mage_aoe",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "dot"
+        ],
+        "skill_2": [
+          "damage",
+          "debuff"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "egyptian_claw_of_sekhmet",
+      "element": "fire",
+      "role": "dps_melee",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "dot"
+        ],
+        "skill_2": [
+          "damage",
+          "buff"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "greek_circe",
+      "element": "dark",
+      "role": "mage_aoe",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "debuff"
+        ],
+        "skill_2": [
+          "damage",
+          "control"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "greek_medusa",
+      "element": "earth",
+      "role": "control_debuff",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "debuff"
+        ],
+        "skill_2": [
+          "damage",
+          "control"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "norse_dawn_valkyrie",
+      "element": "wind",
+      "role": "dps_melee",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "conditional_bonus"
+        ],
+        "skill_2": [
+          "damage",
+          "buff"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "norse_volva_of_fate",
+      "element": "lightning",
+      "role": "support_buffer",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "debuff"
+        ],
+        "skill_2": [
+          "buff",
+          "debuff"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "yokai_oni_kunoichi",
+      "element": "dark",
+      "role": "assassin_burst",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "dot"
+        ],
+        "skill_2": [
+          "damage",
+          "control"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "yokai_yuki_onna",
+      "element": "water",
+      "role": "control_debuff",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "debuff"
+        ],
+        "skill_2": [
+          "damage",
+          "control"
+        ]
+      },
+      "total_legacy_tags": 6
+    },
+    {
+      "hero_id": "egyptian_bastet",
+      "element": "lightning",
+      "role": "assassin_burst",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage"
+        ],
+        "skill_2": [
+          "damage",
+          "conditional_bonus"
+        ]
+      },
+      "total_legacy_tags": 5
+    },
+    {
+      "hero_id": "greek_atalanta",
+      "element": "wind",
+      "role": "dps_ranged",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage"
+        ],
+        "skill_2": [
+          "damage",
+          "buff"
+        ]
+      },
+      "total_legacy_tags": 5
+    },
+    {
+      "hero_id": "greek_nike",
+      "element": "light",
+      "role": "support_buffer",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "buff"
+        ],
+        "skill_2": [
+          "buff"
+        ]
+      },
+      "total_legacy_tags": 5
+    },
+    {
+      "hero_id": "japanese_miko_of_raijin",
+      "element": "lightning",
+      "role": "mage_aoe",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "damage",
+          "debuff"
+        ],
+        "skill_2": [
+          "damage"
+        ]
+      },
+      "total_legacy_tags": 5
+    },
+    {
+      "hero_id": "norse_rime_jotunn",
+      "element": "water",
+      "role": "tank",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "debuff"
+        ],
+        "skill_2": [
+          "damage",
+          "control"
+        ]
+      },
+      "total_legacy_tags": 5
+    },
+    {
+      "hero_id": "angelic_bastion_angel",
+      "element": "light",
+      "role": "tank",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "shield"
+        ],
+        "skill_2": [
+          "shield"
+        ]
+      },
+      "total_legacy_tags": 4
+    },
+    {
+      "hero_id": "greek_nemean_lioness",
+      "element": "earth",
+      "role": "tank",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_2": [
+          "damage",
+          "debuff"
+        ]
+      },
+      "total_legacy_tags": 4
+    },
+    {
+      "hero_id": "norse_eir",
+      "element": "light",
+      "role": "healer",
+      "legacy_tags_by_slot": {
+        "basic": [
+          "damage"
+        ],
+        "passive_base": [
+          "buff"
+        ],
+        "skill_1": [
+          "heal"
+        ],
+        "skill_2": [
+          "heal"
+        ]
+      },
+      "total_legacy_tags": 4
+    }
+  ],
+  "classification_counts": {
+    "A.category_tag_keep_as_design_metadata": 5,
+    "B.likely_status_mapping_needed": 3,
+    "C.trigger_or_rule_tag_not_status": 2,
+    "D.ambiguous_needs_manual_review": 2
+  },
+  "recommended_next_task": {
+    "id": "RM1.28-D",
+    "title": "5★ Legacy Status Tags Controlled Normalization Patch",
+    "requires": [
+      "explicit approval after reviewing this RM1.28-C plan",
+      "manual hero/skill context mapping (no broad auto-fix)",
+      "preserve passive_advanced approved_source_completed entries unchanged",
+      "preserve final_numbers=null and runtime_attached=false everywhere",
+      "do not introduce true Ultimate / Divine Weapon / Domain into 5★",
+      "do not introduce marchio_boreale into 5★"
+    ],
+    "preferred_strategy": "Per-hero, per-slot manual mapping using the candidate_mappings in this plan, with PR-style diff and validator regression. For bucket A (category taxonomy), move legacy tag from status_tags into a new design-only field (e.g. design_taxonomy_tags) rather than rewriting it as a status.",
+    "approval_required_before_executing": true
+  },
+  "safety_flags": {
+    "catalog_only": true,
+    "design_audit_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "db_write_allowed": false,
+    "auto_fix_applied": false,
+    "borea_activation_allowed": false,
+    "do_not_treat_as_live_kit": true
+  },
+  "notes": "This is a read-only normalization plan generated by RM1.28-C. It does NOT modify hero_skill_kits_5star_full_v1.json. It does NOT modify API or UI. It does NOT activate runtime. It must be explicitly approved before any normalization patch is executed (RM1.28-D)."
+}
