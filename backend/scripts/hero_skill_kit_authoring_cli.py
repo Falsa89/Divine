@@ -19,6 +19,8 @@ Commands:
 from __future__ import annotations
 import argparse
 import json
+import os
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,6 +43,19 @@ RARITY_SLOTS = {
 
 LEGACY_FORBIDDEN_HERO_IDS = {'borea', 'primordial_gaia', 'greek_boreas', 'olympian_borea'}
 FROZEN_FIELDS = {'final_numbers', 'runtime_attached', 'battle_runtime_attached'}
+DANGEROUS_FIELDS = {
+    'final_numbers', 'runtime_attached', 'battle_runtime_attached',
+    'release_group', 'divine_weapon_id', 'hero_id', 'skill_id', 'slot',
+    'status_tags', 'core_status_ids', 'core_effect_tags',
+}
+SAFE_AUTHORING_FIELDS = {
+    'notes', 'design_notes', 'authoring_notes', 'todo', 'todo_metadata',
+    'comment', 'design_comment',
+}
+COMMIT_ENV_VAR = 'DIVINE_ALLOW_SKILL_KIT_AUTHORING_WRITE'
+COMMIT_ENV_VALUE = 'YES_I_UNDERSTAND'
+BACKUP_HELPER = Path('/app/backend/scripts/backup_hero_skill_kit_catalogs.py')
+SUITE_RUNNER = Path('/app/backend/scripts/run_hero_skill_kit_validator_suite.py')
 
 MODULE_WARNING = (
     'RM1.31-A authoring CLI is READ/DRY-RUN-only and must not mutate catalog data.'
@@ -237,8 +252,16 @@ def cmd_propose_add_slot(args):
 
 
 def cmd_propose_update_field(args):
-    if not args.dry_run:
-        print('REJECTED: propose-update-field requires --dry-run.')
+    """RM1.31-A dry-run + RM1.32-A-PRE guarded write foundation.
+
+    --dry-run (default): describes what would be checked, no write.
+    --commit: requires env DIVINE_ALLOW_SKILL_KIT_AUTHORING_WRITE=YES_I_UNDERSTAND,
+              auto-backup first, would run validator suite + auto-rollback on fail.
+              In RM1.32-A-PRE the actual write step is INTENTIONALLY a no-op:
+              the commit path exists ONLY as a guarded skeleton.
+    """
+    if not args.dry_run and not args.commit:
+        print('REJECTED: propose-update-field requires either --dry-run or --commit.')
         return 5
     hid = args.hero_id
     slot = args.slot
@@ -255,13 +278,63 @@ def cmd_propose_update_field(args):
     if slot not in sp:
         print(f'  REJECTED: slot "{slot}" not present on {hid}.')
         return 6
+    # Frozen / dangerous fields always rejected at this foundation stage
     if field in FROZEN_FIELDS:
         print(f'  REJECTED: field "{field}" is FROZEN in the catalog-only stage.')
         print('  These fields will only be touched by a future runtime/balance task.')
         return 7
-    print(f'[DRY-RUN] propose-update-field hero={hid} slot={slot} field={field} value={value!r}')
-    print(f'  WOULD CHECK: schema compliance for field "{field}" against hero_skill_kit_schema_v1.')
-    print('  NOTE: no write performed. CLI is dry-run-only.')
+    if field in DANGEROUS_FIELDS:
+        print(f'  REJECTED: field "{field}" is DANGEROUS in the authoring-foundation stage.')
+        print('  Dangerous fields require a dedicated future task with explicit approval.')
+        return 9
+
+    # ── DRY-RUN PATH ────────────────────────────────────────────────
+    if args.dry_run:
+        print(f'[DRY-RUN] propose-update-field hero={hid} slot={slot} field={field} value={value!r}')
+        if field not in SAFE_AUTHORING_FIELDS:
+            print(f'  NOTE: field "{field}" is not in the SAFE_AUTHORING_FIELDS allowlist '
+                  f'({sorted(SAFE_AUTHORING_FIELDS)}). It would be rejected on --commit.')
+            print('  NOTE: no write performed. CLI is dry-run-only.')
+            return 0
+        print(f'  WOULD CHECK: schema compliance for field "{field}" against hero_skill_kit_schema_v1.')
+        print('  NOTE: no write performed. CLI is dry-run-only.')
+        return 0
+
+    # ── COMMIT PATH (guarded skeleton — RM1.32-A-PRE) ───────────────
+    print(f'[COMMIT] propose-update-field hero={hid} slot={slot} field={field} value={value!r}')
+    print('  ⚠  WARNING: commit path is a GUARDED SKELETON in RM1.32-A-PRE.')
+    print('  ⚠  No actual catalog mutation will occur in this task even with the env var set.')
+    env_val = os.environ.get(COMMIT_ENV_VAR)
+    if env_val != COMMIT_ENV_VALUE:
+        print(f'  REJECTED: --commit requires env var {COMMIT_ENV_VAR}={COMMIT_ENV_VALUE} (got {env_val!r}).')
+        return 10
+    if field not in SAFE_AUTHORING_FIELDS:
+        print(f'  REJECTED: field "{field}" is not in the SAFE_AUTHORING_FIELDS allowlist '
+              f'({sorted(SAFE_AUTHORING_FIELDS)}).')
+        return 11
+    # Auto-backup first (would be needed before real write). Allowed unconditionally.
+    print('  STEP 1/4: running auto-backup helper (reason=cli_commit_RM1.32-A-PRE)...')
+    proc = subprocess.run(
+        ['python3', str(BACKUP_HELPER), '--reason', 'cli_commit_RM1.32-A-PRE'],
+        capture_output=True, text=True, timeout=60,
+    )
+    print(proc.stdout)
+    if proc.returncode != 0:
+        print('  FAIL: auto-backup failed; aborting commit.')
+        return 12
+    backup_manifest_line = next(
+        (l for l in proc.stdout.splitlines() if l.startswith('BACKUP_MANIFEST_PATH=')),
+        None,
+    )
+    if backup_manifest_line is None:
+        print('  FAIL: backup manifest path not found in output.')
+        return 12
+    print(f'  STEP 1/4 OK: {backup_manifest_line}')
+    print('  STEP 2/4: WOULD WRITE the field update to the catalog file.')
+    print('  STEP 2/4 SKIPPED IN RM1.32-A-PRE: this task does not perform real catalog writes.')
+    print('  STEP 3/4: WOULD RUN validator suite (--include-baseline-diff).')
+    print('  STEP 4/4: WOULD AUTO-ROLLBACK to the pre-write backup if any validator fails.')
+    print('  OUTCOME: commit path traversed end-to-end without mutating catalog data.')
     return 0
 
 
@@ -316,6 +389,10 @@ def build_parser() -> argparse.ArgumentParser:
     pu.add_argument('--field', required=True)
     pu.add_argument('--value', required=True)
     pu.add_argument('--dry-run', action='store_true')
+    pu.add_argument('--commit', action='store_true',
+                    help=f'GUARDED SKELETON. Requires env {COMMIT_ENV_VAR}={COMMIT_ENV_VALUE}. '
+                         'Auto-backup before write; auto-rollback on validator failure. '
+                         'In RM1.32-A-PRE the actual write step is intentionally a no-op.')
     pe = sub.add_parser('export-report')
     pe.add_argument('--out', required=True)
     return p

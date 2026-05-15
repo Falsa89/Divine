@@ -1,0 +1,120 @@
+{
+  "schema_id": "hero_skill_kit_schema_v1",
+  "version": 1,
+  "runtime_attached": false,
+  "description": "Inert design schema for hero skill kit catalogs. This is not combat runtime.",
+  "skill_slot_progression": {
+    "1": [
+      "basic"
+    ],
+    "2": [
+      "basic",
+      "passive_base"
+    ],
+    "3": [
+      "basic",
+      "passive_base",
+      "skill_1"
+    ],
+    "4": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced"
+    ],
+    "5": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced",
+      "skill_2"
+    ],
+    "6": [
+      "basic",
+      "passive_base",
+      "skill_1",
+      "passive_advanced",
+      "skill_2",
+      "ultimate"
+    ]
+  },
+  "hero_kit_required_fields": [
+    "hero_id",
+    "display_name",
+    "native_rarity",
+    "element",
+    "role",
+    "release_group",
+    "runtime_attached",
+    "balance_values_finalized",
+    "skill_package"
+  ],
+  "skill_required_fields": [
+    "slot",
+    "display_name",
+    "skill_type",
+    "element",
+    "design_status",
+    "core_effect_tags",
+    "core_status_ids",
+    "targeting_intent",
+    "presentation_summary"
+  ],
+  "allowed_elements": [
+    "water",
+    "fire",
+    "earth",
+    "wind",
+    "lightning",
+    "light",
+    "dark"
+  ],
+  "allowed_slots": [
+    "basic",
+    "passive_base",
+    "skill_1",
+    "passive_advanced",
+    "skill_2",
+    "ultimate"
+  ],
+  "allowed_skill_types": [
+    "basic_attack",
+    "passive",
+    "active",
+    "ultimate",
+    "triggered"
+  ],
+  "allowed_design_status": [
+    "approved_direction",
+    "pending_machine_conversion",
+    "placeholder_shell",
+    "requires_source_review"
+  ],
+  "rules": [
+    "No final percentages/chances/cooldowns/durations in this foundation unless explicitly approved in balance QA.",
+    "Numbers may be null or omitted.",
+    "Status references should use status IDs from RM1.25-B status_effect_catalog_v1.",
+    "VFX references should be descriptive keys/tags only; no live asset binding in this task.",
+    "6★ entries must declare divine_weapon_id and may declare domain_id.",
+    "Borea must remain extra premium and not part of launch_base 12."
+  ],
+  "example_skill": {
+    "slot": "skill_1",
+    "display_name": "Taglio Boreale",
+    "skill_type": "active",
+    "element": "wind",
+    "design_status": "approved_direction",
+    "core_effect_tags": [
+      "damage",
+      "speed_control",
+      "stacking_unique"
+    ],
+    "core_status_ids": [
+      "speed_down",
+      "marchio_boreale"
+    ],
+    "targeting_intent": "priority enemy, highest speed/backline fragile",
+    "presentation_summary": "Borea opens a wing and sends a diagonal north-wind slash; impact and mark appear on target."
+  },
+  "balance_values_finalized": false
+}
