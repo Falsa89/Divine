@@ -1,0 +1,1838 @@
+{
+  "catalog_id": "hero_skill_kits_6star_borea_v1",
+  "version": 1,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "balance_values_finalized": false,
+  "scope": "12 official launch_base 6★ heroes + greek_borea extra premium, approved direction summaries only",
+  "do_not_treat_as_live_kit": true,
+  "safety_metadata_harmonization": {
+    "task": "RM1.30-A",
+    "applied_change": "Added top-level battle_runtime_attached=false to make the catalog-level safety flag explicit. No skill content, slot, status, effect tag, or divine_weapon_id was modified.",
+    "no_skill_content_change": true,
+    "no_slot_change": true,
+    "no_status_or_effect_tag_change": true,
+    "no_divine_weapon_id_change": true,
+    "no_borea_visibility_change": true
+  },
+  "entries": [
+    {
+      "hero_id": "greek_athena",
+      "display_name": "Atena",
+      "element": "light",
+      "role": "strategic_guardian_support_buffer",
+      "faction": "greek",
+      "release_group": "launch_base",
+      "divine_weapon_id": "aegis_of_athena",
+      "divine_weapon_name": "Egida di Atena",
+      "domain_id": "athena_olympian_aegis_field",
+      "identity_summary": "Strategia, guerra ordinata, Egida, falange, protezione tattica.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Lancia della Stratega",
+          "skill_type": "basic_attack",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "mark",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "mark",
+            "vulnerability"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Affondo dorato preciso con lancia.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Sapienza della Guerra",
+          "skill_type": "passive",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "team_damage_amp",
+            "mark_synergy"
+          ],
+          "core_status_ids": [
+            "mark",
+            "vulnerability"
+          ],
+          "targeting_intent": "aura vs marked/vulnerable enemies",
+          "presentation_summary": "Atena guida il focus del team contro bersagli designati.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Egida Radiosa",
+          "skill_type": "active",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "shield",
+            "damage_reduction",
+            "cleanse"
+          ],
+          "core_status_ids": [
+            "hybrid_shield",
+            "damage_reduction",
+            "cleanse"
+          ],
+          "targeting_intent": "lowest HP ally/frontline ally",
+          "presentation_summary": "Atena solleva l’Egida e crea protezione geometrica dorata.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Disciplina Olimpica",
+          "skill_type": "triggered",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "anti_burst",
+            "protection"
+          ],
+          "core_status_ids": [
+            "hybrid_shield",
+            "damage_reduction"
+          ],
+          "targeting_intent": "ally hit by crit or low HP",
+          "presentation_summary": "Scudo tattico dorato appare davanti all’alleato.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Ordine della Falange Divina",
+          "skill_type": "active",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "team_buff",
+            "role_based_buff"
+          ],
+          "core_status_ids": [
+            "atk_up",
+            "def_up",
+            "crit_up"
+          ],
+          "targeting_intent": "ally team",
+          "presentation_summary": "Linee di formazione dorate e simboli lancia/scudo.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Strategia della Dea Guerriera",
+          "skill_type": "ultimate",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "team_guard",
+            "mark",
+            "vulnerability",
+            "damage_reduction"
+          ],
+          "core_status_ids": [
+            "guard",
+            "damage_reduction",
+            "mark",
+            "vulnerability"
+          ],
+          "targeting_intent": "ally team + priority enemies",
+          "presentation_summary": "Campo tattico dorato con Egida centrale e nemici designati.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "greek_artemis",
+      "display_name": "Artemide",
+      "element": "wind",
+      "role": "divine_hunter_dps_ranged",
+      "faction": "greek",
+      "release_group": "launch_base",
+      "divine_weapon_id": "artemis_lunar_bow",
+      "divine_weapon_name": "Arco Lunare di Artemide",
+      "domain_id": "artemis_lunar_grove",
+      "identity_summary": "Caccia divina, luna, frecce sacre, focus backline e preda scelta.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Freccia della Dea Cacciatrice",
+          "skill_type": "basic_attack",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "ranged"
+          ],
+          "core_status_ids": [
+            "mark"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Freccia sottile con luce lunare e scia di vento.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Istinto della Caccia Divina",
+          "skill_type": "passive",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage_amp",
+            "marked_prey"
+          ],
+          "core_status_ids": [
+            "mark",
+            "speed_down"
+          ],
+          "targeting_intent": "targets with Mark/Speed Down/low HP",
+          "presentation_summary": "Predatrice divina che punisce prede tracciate.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Preda della Luna",
+          "skill_type": "active",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "priority_target",
+            "mark",
+            "projectile"
+          ],
+          "core_status_ids": [
+            "mark",
+            "vulnerability"
+          ],
+          "targeting_intent": "backline/highest ATK enemy",
+          "presentation_summary": "Freccia lunare parte dall’arco e marchia il bersaglio all’impatto.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Signora della Luna Selvaggia",
+          "skill_type": "triggered",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "on_kill_buff",
+            "backline_pressure"
+          ],
+          "core_status_ids": [
+            "crit_up",
+            "speed_up"
+          ],
+          "targeting_intent": "self after kill/backline hit",
+          "presentation_summary": "Mezzaluna dietro Artemide e vento notturno.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Caccia delle Ninfe Silenti",
+          "skill_type": "active",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "multi_target",
+            "marked_targets"
+          ],
+          "core_status_ids": [
+            "speed_down",
+            "vulnerability"
+          ],
+          "targeting_intent": "2-3 marked/backline enemies",
+          "presentation_summary": "Freccia che si divide in scie lunari guidate.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Notte della Caccia Sacra",
+          "skill_type": "ultimate",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "ultimate",
+            "marked_execute_pressure"
+          ],
+          "core_status_ids": [
+            "mark",
+            "vulnerability",
+            "speed_down"
+          ],
+          "targeting_intent": "marked enemies or priority enemy",
+          "presentation_summary": "Campo scuro, luna alta, freccia sacra sulla preda.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "greek_gaia",
+      "display_name": "Gaia",
+      "element": "earth",
+      "role": "primordial_tank_support_revive",
+      "faction": "greek_primordial",
+      "release_group": "launch_base",
+      "divine_weapon_id": "gaia_primordial_root",
+      "divine_weapon_name": "Radice Primordiale di Gaia",
+      "domain_id": "gaia_primordial_garden",
+      "identity_summary": "Terra primordiale, protezione materna, radici, sustain e revive dalla Terra.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Frattura della Terra Madre",
+          "skill_type": "basic_attack",
+          "element": "earth",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "slow",
+            "def_down"
+          ],
+          "core_status_ids": [
+            "slow",
+            "def_down"
+          ],
+          "targeting_intent": "single/frontline enemy",
+          "presentation_summary": "Crepa nel terreno con radici/pietra.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Cuore della Terra",
+          "skill_type": "passive",
+          "element": "earth",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "hp_up",
+            "team_damage_reduction"
+          ],
+          "core_status_ids": [
+            "damage_reduction"
+          ],
+          "targeting_intent": "self/team aura",
+          "presentation_summary": "Presenza primordiale stabilizzante.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Abbraccio della Terra",
+          "skill_type": "active",
+          "element": "earth",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "shield",
+            "healing_up"
+          ],
+          "core_status_ids": [
+            "hybrid_shield",
+            "healing_up"
+          ],
+          "targeting_intent": "2-3 injured allies",
+          "presentation_summary": "Gaia posa la mano a terra, radici protettive avvolgono gli alleati.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Seme della Vita Primordiale",
+          "skill_type": "triggered",
+          "element": "earth",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "revive",
+            "death_protection"
+          ],
+          "core_status_ids": [
+            "revive",
+            "hybrid_shield",
+            "damage_reduction"
+          ],
+          "targeting_intent": "first fallen ally per battle",
+          "presentation_summary": "Radici verde/oro avvolgono il corpo caduto e lo fanno rinascere.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Montagne Viventi",
+          "skill_type": "active",
+          "element": "earth",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "team_protection",
+            "enemy_slow"
+          ],
+          "core_status_ids": [
+            "damage_reduction",
+            "def_up",
+            "slow",
+            "def_down"
+          ],
+          "targeting_intent": "ally frontline + enemy frontline",
+          "presentation_summary": "Piccole montagne/rocce sacre emergono in difesa.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Madre del Mondo",
+          "skill_type": "ultimate",
+          "element": "earth",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "adaptive_revive",
+            "team_shield",
+            "cleanse"
+          ],
+          "core_status_ids": [
+            "revive",
+            "hybrid_shield",
+            "damage_reduction",
+            "cleanse",
+            "healing_up"
+          ],
+          "targeting_intent": "fallen ally if any, else ally team",
+          "presentation_summary": "Radici immense e luce verde/oro ricostruiscono o proteggono il team.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "primordial_nyx",
+      "display_name": "Nyx",
+      "element": "dark",
+      "role": "primordial_control_mage_aoe",
+      "faction": "primordial",
+      "release_group": "launch_base",
+      "divine_weapon_id": "nyx_primordial_night_veil",
+      "divine_weapon_name": "Velo della Notte Primordiale",
+      "domain_id": "nyx_primordial_night_domain",
+      "identity_summary": "Notte primordiale, stelle, velo cosmico, Blind/Silence/Curse.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Stella Spenta",
+          "skill_type": "basic_attack",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "blind"
+          ],
+          "core_status_ids": [
+            "blind"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Piccola stella nera/viola che collassa sul target.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Figlia del Caos",
+          "skill_type": "passive",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "debuff_damage_reduction"
+          ],
+          "core_status_ids": [
+            "blind",
+            "curse",
+            "silence"
+          ],
+          "targeting_intent": "enemy debuffed targets",
+          "presentation_summary": "I nemici debuffati infliggono meno danno.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Velo dell’Oscurità",
+          "skill_type": "active",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "control",
+            "blind",
+            "silence"
+          ],
+          "core_status_ids": [
+            "blind",
+            "silence"
+          ],
+          "targeting_intent": "2-3 enemy DPS/casters",
+          "presentation_summary": "Velo nero stellato scende sui nemici.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Notte Inevitabile",
+          "skill_type": "triggered",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "start_battle_debuff"
+          ],
+          "core_status_ids": [
+            "blind",
+            "curse"
+          ],
+          "targeting_intent": "priority enemy at battle start/X turns",
+          "presentation_summary": "Velo oscuro passa sopra il bersaglio.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Sussurro della Notte Antica",
+          "skill_type": "active",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "curse",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "curse",
+            "vulnerability"
+          ],
+          "targeting_intent": "all enemies or largest group",
+          "presentation_summary": "Campo si spegne per un istante, stelle oscure mordono i nemici.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Notte Prima del Mondo",
+          "skill_type": "ultimate",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe_control",
+            "domain"
+          ],
+          "core_status_ids": [
+            "blind",
+            "silence",
+            "curse",
+            "vulnerability"
+          ],
+          "targeting_intent": "enemy field",
+          "presentation_summary": "Campo oscurato con cielo stellato primordiale e Velo della Notte.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "japanese_raijin",
+      "display_name": "Raijin",
+      "element": "lightning",
+      "role": "divine_storm_caster_mage_aoe",
+      "faction": "japanese_yokai",
+      "release_group": "launch_base",
+      "divine_weapon_id": "raijin_thunder_drums",
+      "divine_weapon_name": "Tamburi del Tuono di Raijin",
+      "domain_id": "raijin_thundering_drums_domain",
+      "identity_summary": "Dio del tuono, tamburi sacri, Shock, Stun condizionato e chain lightning.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Colpo del Tamburo Celeste",
+          "skill_type": "basic_attack",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "shock"
+          ],
+          "core_status_ids": [
+            "shock"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Colpo di tamburo e fulmine verticale compatto.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Eco del Tuono",
+          "skill_type": "passive",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "shock_damage_amp"
+          ],
+          "core_status_ids": [
+            "shock"
+          ],
+          "targeting_intent": "shocked enemies",
+          "presentation_summary": "Nemici Shocked subiscono più danno da Raijin.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Ruggito del Fulmine",
+          "skill_type": "active",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "line_damage",
+            "shock",
+            "chain"
+          ],
+          "core_status_ids": [
+            "shock"
+          ],
+          "targeting_intent": "line/2-3 enemies",
+          "presentation_summary": "Raijin colpisce un tamburo, fulmine a catena attraversa i bersagli.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Tamburi della Tempesta",
+          "skill_type": "triggered",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "storm_charge",
+            "stun_chance"
+          ],
+          "core_status_ids": [
+            "shock",
+            "stun"
+          ],
+          "targeting_intent": "when Shock applied to multiple enemies",
+          "presentation_summary": "Tamburi dietro Raijin si accendono uno alla volta.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Catena della Tempesta Divina",
+          "skill_type": "active",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "shock_synergy",
+            "stun"
+          ],
+          "core_status_ids": [
+            "shock",
+            "stun"
+          ],
+          "targeting_intent": "shocked enemies or largest group",
+          "presentation_summary": "Tamburi multipli e scariche sincronizzate.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Ira dei Tamburi Celesti",
+          "skill_type": "ultimate",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "shock",
+            "stun",
+            "ultimate"
+          ],
+          "core_status_ids": [
+            "shock",
+            "stun"
+          ],
+          "targeting_intent": "enemy team",
+          "presentation_summary": "Tamburi divini enormi in cerchio, fulmini verticali sincronizzati.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "japanese_susanoo",
+      "display_name": "Susanoo",
+      "element": "lightning",
+      "role": "assassin_burst_storm_swordsman",
+      "faction": "japanese_yokai",
+      "release_group": "launch_base",
+      "divine_weapon_id": "susanoo_ame_no_habakiri",
+      "divine_weapon_name": "Ame-no-Habakiri",
+      "domain_id": "susanoo_storm_domain",
+      "identity_summary": "Spadaccino della tempesta, burst single-target, anti-priority, lama divina.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Taglio della Tempesta",
+          "skill_type": "basic_attack",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "vulnerability",
+            "shock"
+          ],
+          "core_status_ids": [
+            "vulnerability",
+            "shock"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Slash diagonale con scintille e vento.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Uccisore di Orochi",
+          "skill_type": "passive",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "boss_elite_damage",
+            "debuff_synergy"
+          ],
+          "core_status_ids": [
+            "shock",
+            "vulnerability"
+          ],
+          "targeting_intent": "boss/elite or debuffed target",
+          "presentation_summary": "Danno aumentato contro target preparati o elite.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Lama Spezza-Tempesta",
+          "skill_type": "active",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "single_target_burst",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "vulnerability",
+            "shock"
+          ],
+          "targeting_intent": "highest ATK/DPS/vulnerable target",
+          "presentation_summary": "Passo rapido e taglio singolo pulito con vento e fulmine.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Furia della Tempesta",
+          "skill_type": "triggered",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "on_kill_buff",
+            "speed_crit"
+          ],
+          "core_status_ids": [
+            "speed_up",
+            "crit_up"
+          ],
+          "targeting_intent": "after kill/priority hit",
+          "presentation_summary": "Vento e fulmini ruotano attorno alla lama.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Tempesta su Yamata",
+          "skill_type": "active",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "multi_slash",
+            "shock_synergy"
+          ],
+          "core_status_ids": [
+            "shock",
+            "vulnerability"
+          ],
+          "targeting_intent": "target + nearby or 2-3 enemies",
+          "presentation_summary": "Serie di fendenti rapidi con sagoma di tempesta/serpente.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Taglio dell’Orochi Celeste",
+          "skill_type": "ultimate",
+          "element": "lightning",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "single_target_ultimate",
+            "secondary_wave",
+            "execute_pressure"
+          ],
+          "core_status_ids": [
+            "vulnerability",
+            "shock"
+          ],
+          "targeting_intent": "priority target + nearby wave",
+          "presentation_summary": "Cielo in tempesta, Ame-no-Habakiri taglia il campo in diagonale.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "japanese_amaterasu",
+      "display_name": "Amaterasu",
+      "element": "light",
+      "role": "solar_divine_support_buffer",
+      "faction": "japanese_yokai",
+      "release_group": "launch_base",
+      "divine_weapon_id": "amaterasu_yata_no_kagami",
+      "divine_weapon_name": "Yata no Kagami",
+      "domain_id": "amaterasu_rising_sun_realm",
+      "identity_summary": "Dea del sole, specchio sacro, cleanse, immunity, anti-dark e buff solari.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Raggio del Sole Nascente",
+          "skill_type": "basic_attack",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "minor_cleanse_or_vulnerability"
+          ],
+          "core_status_ids": [
+            "vulnerability",
+            "cleanse"
+          ],
+          "targeting_intent": "single enemy or ally utility",
+          "presentation_summary": "Raggio dorato sottile e pulito.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Luce che Dissolve le Ombre",
+          "skill_type": "passive",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "debuff_resistance",
+            "anti_dark"
+          ],
+          "core_status_ids": [
+            "blind",
+            "curse",
+            "silence"
+          ],
+          "targeting_intent": "ally aura",
+          "presentation_summary": "Alleati resistono meglio a Blind/Curse/Silence.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Benedizione dello Specchio Sacro",
+          "skill_type": "active",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "cleanse",
+            "buff",
+            "shield"
+          ],
+          "core_status_ids": [
+            "cleanse",
+            "atk_up",
+            "healing_up",
+            "hybrid_shield"
+          ],
+          "targeting_intent": "2-3 debuffed/important allies",
+          "presentation_summary": "Yata no Kagami riflette luce dorata sugli alleati.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Specchio della Dea Solare",
+          "skill_type": "triggered",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "reactive_cleanse",
+            "immunity"
+          ],
+          "core_status_ids": [
+            "cleanse",
+            "immunity"
+          ],
+          "targeting_intent": "ally receives important debuff",
+          "presentation_summary": "Riflesso dello specchio sacro sopra l’alleato.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Alba Imperiale",
+          "skill_type": "active",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "team_buff"
+          ],
+          "core_status_ids": [
+            "atk_up",
+            "speed_up",
+            "crit_up"
+          ],
+          "targeting_intent": "ally team",
+          "presentation_summary": "Sole che sorge dietro il team, raggi orizzontali caldi.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Sole che Riapre il Mondo",
+          "skill_type": "ultimate",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "cleanse",
+            "immunity",
+            "damage_reduction",
+            "team_buff"
+          ],
+          "core_status_ids": [
+            "cleanse",
+            "immunity",
+            "damage_reduction",
+            "atk_up",
+            "vulnerability"
+          ],
+          "targeting_intent": "ally team + enemies",
+          "presentation_summary": "Campo illuminato da sole enorme e specchio che dissolve le ombre.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "egyptian_sekhmet",
+      "display_name": "Sekhmet",
+      "element": "fire",
+      "role": "divine_war_berserker_dps_melee",
+      "faction": "egyptian",
+      "release_group": "launch_base",
+      "divine_weapon_id": "sekhmet_burning_eye_of_ra",
+      "divine_weapon_name": "Occhio Ardente di Ra",
+      "domain_id": "sekhmet_burning_eye_field",
+      "identity_summary": "Dea leonessa della guerra, furia solare, Burn, Bleed, Berserk controllato.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Artiglio della Dea Leonessa",
+          "skill_type": "basic_attack",
+          "element": "fire",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "burn",
+            "bleed"
+          ],
+          "core_status_ids": [
+            "burn",
+            "bleed"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Slash rosso/oro da artiglio solare.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Sete della Guerra Solare",
+          "skill_type": "passive",
+          "element": "fire",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage_vs_wounded"
+          ],
+          "core_status_ids": [
+            "burn",
+            "bleed"
+          ],
+          "targeting_intent": "burning/bleeding/low HP enemies",
+          "presentation_summary": "Pressione da guerra contro bersagli feriti.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Lacerazione della Leonessa Solare",
+          "skill_type": "active",
+          "element": "fire",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "single_target_damage",
+            "bleed",
+            "burn_synergy"
+          ],
+          "core_status_ids": [
+            "bleed",
+            "burn"
+          ],
+          "targeting_intent": "front/debuffed target",
+          "presentation_summary": "Sekhmet avanza con artiglio/lama e scia solare.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Furia dell’Occhio di Ra",
+          "skill_type": "triggered",
+          "element": "fire",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "fury",
+            "berserk",
+            "atk_crit"
+          ],
+          "core_status_ids": [
+            "berserk",
+            "atk_up",
+            "crit_up",
+            "burn"
+          ],
+          "targeting_intent": "on damage taken or Burn/Bleed applied",
+          "presentation_summary": "Occhio di Ra si accende dietro Sekhmet, aura solare rossa.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Febbre del Deserto Rosso",
+          "skill_type": "active",
+          "element": "fire",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "burn",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "burn",
+            "vulnerability"
+          ],
+          "targeting_intent": "2-3 enemies/frontline",
+          "presentation_summary": "Ondata di calore rosso/oro brucia la linea nemica.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Ira dell’Occhio di Ra",
+          "skill_type": "ultimate",
+          "element": "fire",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "burn",
+            "berserk",
+            "wounded_damage"
+          ],
+          "core_status_ids": [
+            "burn",
+            "bleed",
+            "berserk",
+            "atk_up"
+          ],
+          "targeting_intent": "enemy team or wounded enemies",
+          "presentation_summary": "Occhio di Ra sopra il campo, ruggito della dea leonessa.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "mesopotamian_tiamat",
+      "display_name": "Tiamat",
+      "element": "water",
+      "role": "primordial_tank_dragon_mother_aoe_pressure",
+      "faction": "mesopotamian",
+      "release_group": "launch_base",
+      "divine_weapon_id": "tiamat_primordial_abyss",
+      "divine_weapon_name": "Abisso Primordiale di Tiamat",
+      "domain_id": "tiamat_apsu_abyss_domain",
+      "identity_summary": "Mare primordiale, madre dei mostri, caos antico, Slow, shield e pressione abissale.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Morso dell’Abisso",
+          "skill_type": "basic_attack",
+          "element": "water",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "slow",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "slow",
+            "vulnerability"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Morso/onda scura salmastra con sagoma draconica.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Madre dei Mostri",
+          "skill_type": "passive",
+          "element": "water",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "hp_up",
+            "damage_reduction_vs_debuffed"
+          ],
+          "core_status_ids": [
+            "damage_reduction"
+          ],
+          "targeting_intent": "self when enemies debuffed",
+          "presentation_summary": "Ombre-serpente/creature acquatiche intorno a Tiamat.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Onda delle Acque Originarie",
+          "skill_type": "active",
+          "element": "water",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "slow",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "slow",
+            "vulnerability"
+          ],
+          "targeting_intent": "frontline/largest group",
+          "presentation_summary": "Massa salmastra primordiale avanza pesante.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Marea del Caos Primordiale",
+          "skill_type": "triggered",
+          "element": "water",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "chaos_charges",
+            "shield_scaling"
+          ],
+          "core_status_ids": [
+            "hybrid_shield",
+            "slow",
+            "vulnerability"
+          ],
+          "targeting_intent": "when damaged or multi-debuffing",
+          "presentation_summary": "Onde scure crescono alla base.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Nidiata dell’Abisso",
+          "skill_type": "active",
+          "element": "water",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "self_shield",
+            "enemy_def_down",
+            "summon_visual_only"
+          ],
+          "core_status_ids": [
+            "hybrid_shield",
+            "def_down"
+          ],
+          "targeting_intent": "self + nearby/frontline enemies",
+          "presentation_summary": "Creature-serpente/draghi d’acqua formano protezione.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Mare che Generò i Mostri",
+          "skill_type": "ultimate",
+          "element": "water",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "slow",
+            "vulnerability",
+            "shield"
+          ],
+          "core_status_ids": [
+            "slow",
+            "vulnerability",
+            "def_down",
+            "hybrid_shield"
+          ],
+          "targeting_intent": "enemy field + self",
+          "presentation_summary": "Oceano primordiale scuro sommerge lato nemico con creature antiche.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "egyptian_isis",
+      "display_name": "Iside",
+      "element": "light",
+      "role": "divine_healer_revive_protection",
+      "faction": "egyptian",
+      "release_group": "launch_base",
+      "divine_weapon_id": "isis_sacred_tyet_knot",
+      "divine_weapon_name": "Nodo di Iside / Tyet Sacro",
+      "domain_id": "isis_sanctuary",
+      "identity_summary": "Magia sacra egizia, maternità divina, guarigione, cleanse e resurrezione rituale.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Luce del Tyet",
+          "skill_type": "basic_attack",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "micro_damage_or_heal",
+            "healing_up",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "healing_up",
+            "vulnerability"
+          ],
+          "targeting_intent": "single enemy or injured ally",
+          "presentation_summary": "Piccolo simbolo Tyet/Ankh luminoso.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Magia della Madre Divina",
+          "skill_type": "passive",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "healing_amp",
+            "low_hp_survival"
+          ],
+          "core_status_ids": [
+            "healing_up"
+          ],
+          "targeting_intent": "allies under HP threshold",
+          "presentation_summary": "Aumenta cure e sopravvivenza sotto soglia.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Benedizione di Iside",
+          "skill_type": "active",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "heal",
+            "cleanse",
+            "shield"
+          ],
+          "core_status_ids": [
+            "healing_up",
+            "cleanse",
+            "hybrid_shield"
+          ],
+          "targeting_intent": "lowest HP ally/2 injured allies",
+          "presentation_summary": "Iside apre ali/braccia, Tyet si illumina e purifica.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Rito di Ricomposizione",
+          "skill_type": "triggered",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "revive_pending",
+            "revive",
+            "shield"
+          ],
+          "core_status_ids": [
+            "revive",
+            "revive_pending",
+            "hybrid_shield"
+          ],
+          "targeting_intent": "first fallen ally if Iside alive",
+          "presentation_summary": "Frammenti di luce dorata si raccolgono attorno all’alleato caduto.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Ali del Trono Sacro",
+          "skill_type": "active",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe_heal",
+            "damage_reduction",
+            "cleanse"
+          ],
+          "core_status_ids": [
+            "damage_reduction",
+            "hybrid_shield",
+            "cleanse"
+          ],
+          "targeting_intent": "ally team",
+          "presentation_summary": "Ali dorate coprono la squadra con simboli egizi.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Rito di Resurrezione di Iside",
+          "skill_type": "ultimate",
+          "element": "light",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "revive",
+            "aoe_heal",
+            "cleanse",
+            "shield"
+          ],
+          "core_status_ids": [
+            "revive",
+            "healing_up",
+            "cleanse",
+            "hybrid_shield"
+          ],
+          "targeting_intent": "fallen ally + team, or team if none dead",
+          "presentation_summary": "Grande sigillo egizio, Tyet luminoso e ali ricompongono l’alleato.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "celtic_morrigan",
+      "display_name": "Morrigan",
+      "element": "wind",
+      "role": "war_fate_assassin_control_battle_omen",
+      "faction": "celtic",
+      "release_group": "launch_base",
+      "divine_weapon_id": "morrigan_raven_mantle",
+      "divine_weapon_name": "Manto dei Corvi della Morrigan",
+      "domain_id": "morrigan_raven_field",
+      "identity_summary": "Guerra, destino, sovranità, corvi, Mark/Vulnerability e pressione execute.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Becco del Presagio",
+          "skill_type": "basic_attack",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "mark"
+          ],
+          "core_status_ids": [
+            "mark"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Corvo nero attraversa il target, piume scure.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Presagio di Guerra",
+          "skill_type": "passive",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "team_damage_vs_marked"
+          ],
+          "core_status_ids": [
+            "mark",
+            "vulnerability"
+          ],
+          "targeting_intent": "marked/vulnerable enemies",
+          "presentation_summary": "Morrigan decide chi diventa preda del campo.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Marchio della Morrigan",
+          "skill_type": "active",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "mark",
+            "vulnerability",
+            "speed_down"
+          ],
+          "core_status_ids": [
+            "mark",
+            "vulnerability",
+            "speed_down"
+          ],
+          "targeting_intent": "highest ATK or low HP enemy",
+          "presentation_summary": "Corvo si posa sopra il bersaglio con marchio nero-verde celtico.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Corvi sul Campo di Battaglia",
+          "skill_type": "triggered",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "omen_charges",
+            "on_low_hp_or_death"
+          ],
+          "core_status_ids": [
+            "crit_up",
+            "speed_up",
+            "mark"
+          ],
+          "targeting_intent": "enemy low HP or someone dies",
+          "presentation_summary": "Corvi ruotano sul campo e piume scure cadono.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Stormo della Guerra",
+          "skill_type": "active",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "multi_target",
+            "marked_targets",
+            "def_down"
+          ],
+          "core_status_ids": [
+            "def_down",
+            "vulnerability"
+          ],
+          "targeting_intent": "2-3 marked/backline enemies",
+          "presentation_summary": "Morrigan si dissolve in corvi, stormo colpisce i bersagli.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Regina dei Corvi sul Campo dei Morti",
+          "skill_type": "ultimate",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "multi_target",
+            "execute_pressure",
+            "mark_spread"
+          ],
+          "core_status_ids": [
+            "mark",
+            "vulnerability",
+            "def_down",
+            "speed_up",
+            "crit_up"
+          ],
+          "targeting_intent": "marked enemies + field",
+          "presentation_summary": "Cielo scuro e stormo enorme di corvi sommerge i target segnati.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "cursed_pestilence_horseman",
+      "display_name": "Pestilenza",
+      "element": "dark",
+      "role": "apocalypse_rider_plague_control_anti_heal",
+      "faction": "cursed",
+      "release_group": "launch_base",
+      "divine_weapon_id": "pestilence_seal",
+      "divine_weapon_name": "Sigillo della Pestilenza",
+      "domain_id": "pestilence_first_plague_domain",
+      "identity_summary": "Cavaliere apocalittico della piaga, miasma, anti-heal, Poison/Curse/Healing Block.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Tocco della Piaga",
+          "skill_type": "basic_attack",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "poison",
+            "curse"
+          ],
+          "core_status_ids": [
+            "poison",
+            "curse"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Tocco/miasma nero-verde con sigillo breve.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Portatore del Primo Morbo",
+          "skill_type": "passive",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "anti_heal",
+            "dot_pressure"
+          ],
+          "core_status_ids": [
+            "poison",
+            "curse",
+            "healing_block"
+          ],
+          "targeting_intent": "enemies with plague debuffs",
+          "presentation_summary": "Nemici con piaghe ricevono meno cure e più pressione DoT.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Sigillo del Morbo",
+          "skill_type": "active",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "poison",
+            "curse",
+            "anti_heal"
+          ],
+          "core_status_ids": [
+            "poison",
+            "curse",
+            "healing_block"
+          ],
+          "targeting_intent": "2-3 enemies or healer/support",
+          "presentation_summary": "Sigillo cursed sotto il target, miasma sale.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Contagio Inevitabile",
+          "skill_type": "triggered",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "spread_status",
+            "plague_loop_capped"
+          ],
+          "core_status_ids": [
+            "poison",
+            "curse",
+            "healing_block"
+          ],
+          "targeting_intent": "when poisoned/cursed enemy healed/hit/dies",
+          "presentation_summary": "Miasma passa da un target all’altro come filo oscuro.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Miasma del Cavaliere",
+          "skill_type": "active",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "healing_block",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "healing_block",
+            "vulnerability"
+          ],
+          "targeting_intent": "enemy line/team",
+          "presentation_summary": "Miasma basso con silhouette cavaliere/cavallo e sigilli neri.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Cavalcata della Pestilenza",
+          "skill_type": "ultimate",
+          "element": "dark",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "poison",
+            "curse",
+            "healing_block",
+            "vulnerability"
+          ],
+          "core_status_ids": [
+            "poison",
+            "curse",
+            "healing_block",
+            "vulnerability"
+          ],
+          "targeting_intent": "enemy field",
+          "presentation_summary": "Sigillo apocalittico e silhouette del Cavaliere attraversano il lato nemico.",
+          "final_numbers": null
+        }
+      }
+    },
+    {
+      "hero_id": "greek_borea",
+      "display_name": "Borea",
+      "element": "wind",
+      "role": "divine_frost_wind_control_mage",
+      "faction": "greek",
+      "release_group": "launch_extra_premium",
+      "divine_weapon_id": "borea_wings_of_the_north_wind",
+      "divine_weapon_name": "Ali del Vento del Nord",
+      "domain_id": "borea_boreal_gale_domain",
+      "identity_summary": "Dio del Vento del Nord, control premium, Marchio Boreale, Slow/Frostbite/Freeze condizionato.",
+      "premium_notes": "Extra premium; desirable and slightly above average, not mandatory or broken. Marchio Boreale is source-locked and mostly increases Borea's own skill damage.",
+      "native_rarity": 6,
+      "runtime_attached": false,
+      "balance_values_finalized": false,
+      "expected_slots": [
+        "basic",
+        "passive_base",
+        "skill_1",
+        "passive_advanced",
+        "skill_2",
+        "ultimate"
+      ],
+      "skill_package": {
+        "basic": {
+          "slot": "basic",
+          "display_name": "Raffica del Nord",
+          "skill_type": "basic_attack",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage",
+            "slow",
+            "conditional_stack"
+          ],
+          "core_status_ids": [
+            "slow",
+            "marchio_boreale"
+          ],
+          "targeting_intent": "single enemy",
+          "presentation_summary": "Taglio di vento azzurro/bianco con schegge di ghiaccio.",
+          "final_numbers": null
+        },
+        "passive_base": {
+          "slot": "passive_base",
+          "display_name": "Sovrano del Vento del Nord",
+          "skill_type": "passive",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "damage_amp_vs_marked",
+            "stacking_unique"
+          ],
+          "core_status_ids": [
+            "marchio_boreale"
+          ],
+          "targeting_intent": "enemies with Marchio Boreale",
+          "presentation_summary": "Borea infligge più danno ai bersagli marchiati.",
+          "final_numbers": null
+        },
+        "skill_1": {
+          "slot": "skill_1",
+          "display_name": "Taglio Boreale",
+          "skill_type": "active",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "priority_target",
+            "speed_down",
+            "stacking_unique"
+          ],
+          "core_status_ids": [
+            "speed_down",
+            "marchio_boreale",
+            "frostbite"
+          ],
+          "targeting_intent": "highest Speed/backline/fragile enemy",
+          "presentation_summary": "Borea apre un’ala, raffica diagonale colpisce il bersaglio.",
+          "final_numbers": null
+        },
+        "passive_advanced": {
+          "slot": "passive_advanced",
+          "display_name": "Inverno Portato dal Vento",
+          "skill_type": "triggered",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "anti_speed",
+            "frostbite",
+            "conditional_freeze"
+          ],
+          "core_status_ids": [
+            "speed_down",
+            "frostbite",
+            "marchio_boreale",
+            "freeze"
+          ],
+          "targeting_intent": "fastest enemy at battle start/X turns",
+          "presentation_summary": "Raffica attraversa il bersaglio più veloce e lascia brina.",
+          "final_numbers": null
+        },
+        "skill_2": {
+          "slot": "skill_2",
+          "display_name": "Bora Improvvisa",
+          "skill_type": "active",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "slow",
+            "conditional_stack",
+            "conditional_freeze"
+          ],
+          "core_status_ids": [
+            "slow",
+            "marchio_boreale",
+            "frostbite",
+            "freeze"
+          ],
+          "targeting_intent": "2-4 enemies/line",
+          "presentation_summary": "Borea apre entrambe le ali, Bora investe la linea nemica.",
+          "final_numbers": null
+        },
+        "ultimate": {
+          "slot": "ultimate",
+          "display_name": "Bora del Vento del Nord",
+          "skill_type": "ultimate",
+          "element": "wind",
+          "design_status": "approved_direction",
+          "core_effect_tags": [
+            "aoe",
+            "slow",
+            "frostbite",
+            "freeze",
+            "stacking_unique",
+            "domain"
+          ],
+          "core_status_ids": [
+            "slow",
+            "frostbite",
+            "freeze",
+            "vulnerability",
+            "marchio_boreale"
+          ],
+          "targeting_intent": "enemy team/field",
+          "presentation_summary": "Gigantesca raffica boreale, screen-freeze controllato e Marchio Boreale diffuso.",
+          "final_numbers": null
+        }
+      }
+    }
+  ]
+}

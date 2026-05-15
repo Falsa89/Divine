@@ -56,6 +56,7 @@ COMMIT_ENV_VAR = 'DIVINE_ALLOW_SKILL_KIT_AUTHORING_WRITE'
 COMMIT_ENV_VALUE = 'YES_I_UNDERSTAND'
 BACKUP_HELPER = Path('/app/backend/scripts/backup_hero_skill_kit_catalogs.py')
 SUITE_RUNNER = Path('/app/backend/scripts/run_hero_skill_kit_validator_suite.py')
+BASELINE_DIFF = Path('/app/backend/scripts/validate_hero_skill_kit_catalog_baseline_diff.py')
 
 MODULE_WARNING = (
     'RM1.31-A authoring CLI is READ/DRY-RUN-only and must not mutate catalog data.'
@@ -300,10 +301,8 @@ def cmd_propose_update_field(args):
         print('  NOTE: no write performed. CLI is dry-run-only.')
         return 0
 
-    # ── COMMIT PATH (guarded skeleton — RM1.32-A-PRE) ───────────────
+    # ── COMMIT PATH (real safe-write — RM1.31-F) ────────────────────
     print(f'[COMMIT] propose-update-field hero={hid} slot={slot} field={field} value={value!r}')
-    print('  ⚠  WARNING: commit path is a GUARDED SKELETON in RM1.32-A-PRE.')
-    print('  ⚠  No actual catalog mutation will occur in this task even with the env var set.')
     env_val = os.environ.get(COMMIT_ENV_VAR)
     if env_val != COMMIT_ENV_VALUE:
         print(f'  REJECTED: --commit requires env var {COMMIT_ENV_VAR}={COMMIT_ENV_VALUE} (got {env_val!r}).')
@@ -312,13 +311,15 @@ def cmd_propose_update_field(args):
         print(f'  REJECTED: field "{field}" is not in the SAFE_AUTHORING_FIELDS allowlist '
               f'({sorted(SAFE_AUTHORING_FIELDS)}).')
         return 11
-    # Auto-backup first (would be needed before real write). Allowed unconditionally.
-    print('  STEP 1/4: running auto-backup helper (reason=cli_commit_RM1.32-A-PRE)...')
+    # Determine which catalog file owns this hero
+    catalog_path = HSK_5STAR if where == '5star' else HSK_6STAR
+    # STEP 1/4 — pre-write backup
+    print('  STEP 1/4: running auto-backup helper (reason=cli_commit_RM1.31-F)...')
     proc = subprocess.run(
-        ['python3', str(BACKUP_HELPER), '--reason', 'cli_commit_RM1.32-A-PRE'],
+        ['python3', str(BACKUP_HELPER), '--reason', 'cli_commit_RM1.31-F'],
         capture_output=True, text=True, timeout=60,
     )
-    print(proc.stdout)
+    print(proc.stdout, end='')
     if proc.returncode != 0:
         print('  FAIL: auto-backup failed; aborting commit.')
         return 12
@@ -329,13 +330,98 @@ def cmd_propose_update_field(args):
     if backup_manifest_line is None:
         print('  FAIL: backup manifest path not found in output.')
         return 12
-    print(f'  STEP 1/4 OK: {backup_manifest_line}')
-    print('  STEP 2/4: WOULD WRITE the field update to the catalog file.')
-    print('  STEP 2/4 SKIPPED IN RM1.32-A-PRE: this task does not perform real catalog writes.')
-    print('  STEP 3/4: WOULD RUN validator suite (--include-baseline-diff).')
-    print('  STEP 4/4: WOULD AUTO-ROLLBACK to the pre-write backup if any validator fails.')
-    print('  OUTCOME: commit path traversed end-to-end without mutating catalog data.')
-    return 0
+    pre_write_manifest = Path(backup_manifest_line.split('=', 1)[1].strip())
+    print(f'  STEP 1/4 OK: pre-write manifest={pre_write_manifest}')
+
+    # STEP 2/4 — actual safe write (RM1.31-F)
+    print('  STEP 2/4: writing field to catalog (real write)...')
+    try:
+        cat = json.loads(catalog_path.read_text(encoding='utf-8'))
+        target_entry = None
+        for e in cat.get('entries') or []:
+            if e.get('hero_id') == hid:
+                target_entry = e
+                break
+        if target_entry is None:
+            print(f'  FAIL: hero "{hid}" disappeared from catalog between read and write.')
+            return 13
+        sp = target_entry.get('skill_package') or {}
+        if slot not in sp:
+            print(f'  FAIL: slot "{slot}" no longer present on {hid}.')
+            return 13
+        # Parse value: allow string (default) or JSON literal if it parses as such
+        parsed_value = value
+        try:
+            parsed_value = json.loads(value)
+        except Exception:
+            parsed_value = value
+        before = sp[slot].get(field, '<missing>')
+        sp[slot][field] = parsed_value
+        # Annotate top-level provenance for traceability (safe-additive metadata)
+        cat.setdefault('last_safe_write', {})
+        cat['last_safe_write'] = {
+            'task_origin': 'RM1.31-F',
+            'hero_id': hid,
+            'slot': slot,
+            'field': field,
+            'value_kind': type(parsed_value).__name__,
+            'cli_warning': 'Authoring CLI safe write (SAFE_AUTHORING_FIELDS only).',
+        }
+        catalog_path.write_text(json.dumps(cat, indent=2, ensure_ascii=False) + '\n',
+                                encoding='utf-8')
+        print(f'  STEP 2/4 OK: wrote {hid}.{slot}.{field} (before={before!r} → after={parsed_value!r})')
+    except Exception as e:
+        print(f'  STEP 2/4 FAIL: {e}')
+        # Best-effort rollback
+        _rollback_from(pre_write_manifest)
+        return 14
+
+    # STEP 3/4 — validator suite + baseline diff with --allow-changed
+    print('  STEP 3/4: running validator suite (--include-baseline-diff via component check)...')
+    suite_ok = subprocess.run(
+        ['python3', str(SUITE_RUNNER)],
+        capture_output=True, text=True, timeout=120,
+    )
+    print(suite_ok.stdout, end='')
+    suite_pass = (suite_ok.returncode == 0)
+    print('  STEP 3/4a: running baseline diff with --allow-changed for the touched catalog...')
+    diff_proc = subprocess.run(
+        ['python3', str(BASELINE_DIFF), '--allow-changed', str(catalog_path)],
+        capture_output=True, text=True, timeout=60,
+    )
+    print(diff_proc.stdout, end='')
+    diff_pass = (diff_proc.returncode == 0)
+    if suite_pass and diff_pass:
+        print('  STEP 3/4 OK: all validators PASS.')
+        print('  STEP 4/4: no rollback needed (validators green).')
+        print(f'  OUTCOME: real safe write committed and verified.')
+        print(f'  PRE_WRITE_BACKUP_MANIFEST={pre_write_manifest}')
+        return 0
+
+    # STEP 4/4 — auto-rollback
+    print('  STEP 3/4 FAIL — engaging auto-rollback.')
+    if _rollback_from(pre_write_manifest):
+        print('  STEP 4/4 OK: catalog restored from pre-write backup.')
+    else:
+        print('  STEP 4/4 FATAL: rollback failed; manual intervention required.')
+        return 15
+    return 16
+
+
+def _rollback_from(manifest_path: Path) -> bool:
+    try:
+        m = json.loads(manifest_path.read_text(encoding='utf-8'))
+    except Exception as e:
+        print(f'    rollback: cannot read pre-write manifest: {e}')
+        return False
+    import shutil
+    for entry in m.get('files') or []:
+        try:
+            shutil.copy2(entry['backup_path'], entry['source_path'])
+        except Exception as e:
+            print(f'    rollback: failed to restore {entry["backup_path"]} -> {entry["source_path"]}: {e}')
+            return False
+    return True
 
 
 def cmd_export_report(args):
