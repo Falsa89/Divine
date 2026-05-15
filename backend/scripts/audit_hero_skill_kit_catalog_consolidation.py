@@ -256,7 +256,9 @@ def audit_6star(cat: dict, dw_records_by_id: dict) -> None:
             if not isinstance(slot, dict):
                 continue
             if slot.get('final_numbers') is not None:
-                fail(section, f'6★ {hid}.{slot_name}: final_numbers != null')
+                fn = slot.get('final_numbers')
+                if not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
+                    fail(section, f'6★ {hid}.{slot_name}: final_numbers not foundation_draft/runtime_ready=false (post-RM1.32-B allowance)')
             if slot.get('runtime_attached') is True:
                 fail(section, f'6★ {hid}.{slot_name}: runtime_attached == true')
             if slot.get('battle_runtime_attached') is True:

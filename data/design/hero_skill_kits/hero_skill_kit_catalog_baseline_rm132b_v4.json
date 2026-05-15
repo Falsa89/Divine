@@ -1,0 +1,121 @@
+{
+  "baseline_id": "hero_skill_kit_catalog_baseline_rm132b_v4",
+  "task_origin": "RM1.32-B",
+  "based_on": "6star_balance_foundation_approved",
+  "previous_baseline": "hero_skill_kit_catalog_baseline_rm132apost_v3",
+  "supersedes": "hero_skill_kit_catalog_baseline_rm132apost_v3",
+  "generated_at_utc": "2026-05-15T21:03:24.663650Z",
+  "purpose": "Refreshed read-only baseline anchored to the approved post-RM1.32-B state. 6★ catalog now contains foundation_draft final_numbers on all 78 slots (status='foundation_draft', runtime_ready=false), 13/13 ultimate is_true_ultimate=true, Marchio Boreale draft values only on greek_borea, design-only Divine Weapon synergy placeholders. 5★ and Divine Weapon catalogs untouched. v1/v2/v3 preserved as historical anchors.",
+  "warning": "Baseline is diff safety, not runtime. Future approved tasks that mutate catalogs must produce a NEW baseline (e.g. _v5). NOT runtime. NOT balance finalized.",
+  "approved_changes_since_v3": [
+    {
+      "task": "RM1.32-B",
+      "file": "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+      "change_kind": "balance_foundation_draft",
+      "balance_pass_id": "RM1.32-B",
+      "scope": "6★ foundation_draft final_numbers on 78 slots (13 entries × 6 slots: basic, passive_base, skill_1, passive_advanced, skill_2, ultimate); greek_borea included as catalog-only design data; Marchio Boreale draft values added only on Borea slots; design-only Divine Weapon synergy placeholders on all 78 slots.",
+      "runtime_ready": false,
+      "balance_values_finalized": false,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "db_write": false,
+      "borea_activation": false,
+      "borea_visibility_change": false,
+      "notes": "Draft numeric anchors only. Authoring/balance metadata. No runtime hookup. No gameplay effect. 5★ and DW catalogs untouched."
+    }
+  ],
+  "source_files": [
+    "/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json",
+    "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+    "/app/data/design/divine_weapons/divine_weapons_catalog_v1.json",
+    "/app/data/design/hero_skill_kits/hero_skill_kit_schema_v1.json",
+    "/app/data/design/skill_status_vfx_catalogs/status_effect_catalog_v1.json"
+  ],
+  "tracked_files": {
+    "/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json": {
+      "sha256": "330b337e629e03abec7403ce99afb436293f36870879f87936d6e0dbb1c784d9",
+      "size_bytes": 273597,
+      "label": "hero_skill_kits_5star_full_v1"
+    },
+    "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json": {
+      "sha256": "abf9b2a2f02b59127984a9eeb32993e4fb9c86aeeb89b1074d3ec81312a2d68b",
+      "size_bytes": 159095,
+      "label": "hero_skill_kits_6star_borea_v1"
+    },
+    "/app/data/design/divine_weapons/divine_weapons_catalog_v1.json": {
+      "sha256": "e3ed42f54e85bf48bc3358eee1214542f8b8ff7aac9c114a04a735926ec58b21",
+      "size_bytes": 159805,
+      "label": "divine_weapons_catalog_v1"
+    },
+    "/app/data/design/hero_skill_kits/hero_skill_kit_schema_v1.json": {
+      "sha256": "f5b30b6d6d323c50f7ca016181c8882d07fe74b251e2a4a43e0051d25281465c",
+      "size_bytes": 2755,
+      "label": "hero_skill_kit_schema_v1"
+    },
+    "/app/data/design/skill_status_vfx_catalogs/status_effect_catalog_v1.json": {
+      "sha256": "1644107627003fe41aef45df9cbeb580f9289ed741cadba2df576ab76e5d4d2a",
+      "size_bytes": 59045,
+      "label": "status_effect_catalog_v1"
+    }
+  },
+  "counts": {
+    "5star_entries": 20,
+    "6star_entries": 13,
+    "divine_weapon_records": 13,
+    "5star_final_numbers_objects": 100,
+    "6star_final_numbers_objects": 78
+  },
+  "critical_invariants": {
+    "api_heroes_expected_count": 100,
+    "greek_borea_visible_in_api_heroes": false,
+    "legacy_borea_visible_in_api_heroes": false,
+    "primordial_gaia_visible_anywhere": false,
+    "5star_has_no_ultimate_slot": true,
+    "6star_has_ultimate_slot_on_all": true,
+    "6star_all_have_divine_weapon_id": true,
+    "5star_final_numbers_state": "foundation_draft",
+    "5star_final_numbers_runtime_ready": false,
+    "6star_final_numbers_state": "foundation_draft",
+    "6star_final_numbers_runtime_ready": false,
+    "6star_ultimate_is_true_ultimate_count": 13,
+    "runtime_attached_false_everywhere": true,
+    "battle_runtime_attached_false_everywhere": true,
+    "marchio_boreale_borea_only": true,
+    "divine_weapon_synergy_placeholders_design_only": true
+  },
+  "top_level_catalog_flags": {
+    "5star": {
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "do_not_treat_as_live_kit": true,
+      "balance_pass_id": "RM1.32-A",
+      "balance_pass_status": "foundation_draft"
+    },
+    "6star": {
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "balance_values_finalized": false,
+      "do_not_treat_as_live_kit": true,
+      "balance_pass_id": "RM1.32-B",
+      "balance_pass_status": "foundation_draft"
+    }
+  },
+  "safety_flags": {
+    "design_audit_only": true,
+    "catalog_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "db_write": false,
+    "borea_activation": false,
+    "do_not_treat_as_live_kit": true,
+    "final_numbers_finalized": false,
+    "balance_values_finalized": false
+  },
+  "baseline_chain": [
+    "hero_skill_kit_catalog_baseline_rm132pre_v1",
+    "hero_skill_kit_catalog_baseline_rm132preb2_v2",
+    "hero_skill_kit_catalog_baseline_rm132apost_v3",
+    "hero_skill_kit_catalog_baseline_rm132b_v4"
+  ]
+}

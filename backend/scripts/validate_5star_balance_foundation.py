@@ -145,13 +145,21 @@ def main() -> int:
     if total_slots != 100:
         fail('count', f'expected 100 final_numbers objects, got {total_slots}')
 
-    # 6★ must remain final_numbers=null
+    # 6★ may now contain foundation_draft final_numbers post-RM1.32-B
     if HSK_6STAR.exists():
         c6 = json.loads(HSK_6STAR.read_text(encoding='utf-8'))
         for e in c6.get('entries') or []:
             for sn, slot in (e.get('skill_package') or {}).items():
-                if isinstance(slot, dict) and slot.get('final_numbers') is not None:
-                    fail('6star_invariant', f'{e.get("hero_id")}.{sn}: 6★ final_numbers no longer null')
+                if not isinstance(slot, dict):
+                    continue
+                fn = slot.get('final_numbers')
+                if fn is None:
+                    continue
+                if not (isinstance(fn, dict)
+                        and fn.get('status') == 'foundation_draft'
+                        and fn.get('runtime_ready') is False):
+                    fail('6star_invariant',
+                         f'{e.get("hero_id")}.{sn}: 6★ final_numbers not foundation_draft/runtime_ready=false')
 
     # Status resolver: all status references in 5★ resolve
     if STATUS_CAT.exists():
@@ -181,7 +189,7 @@ def emit(total_slots: int = 0, n_entries: int = 0) -> int:
     print(f'  runtime_ready=false on all slots')
     print(f'  top-level safety flags: runtime/battle_runtime/balance_finalized=false; do_not_treat_as_live_kit=true')
     print(f'  skill_2.is_true_ultimate=false on all 20')
-    print(f'  6★ final_numbers remain null')
+    print(f'  6★ final_numbers post-RM1.32-B: foundation_draft (or pre-pass null)')
     print(f'  no 5★ ultimate / no DW / no Domain / no Borea leak')
     print(f'  numeric values within conservative ranges')
     print(f'  status references all resolve in RM1.25-B catalog')

@@ -127,7 +127,10 @@ def main() -> int:
             if slot.get('final_numbers') is None:
                 null_final_numbers += 1
             else:
-                fail('final_numbers', f'{hid}.{sn}: final_numbers expected null in 6★ pre-RM1.32-B (got non-null)')
+                # Post-RM1.32-B allowance: foundation_draft + runtime_ready=false is acceptable
+                fn = slot.get('final_numbers')
+                if not (isinstance(fn, dict) and fn.get('status') == 'foundation_draft' and fn.get('runtime_ready') is False):
+                    fail('final_numbers', f'{hid}.{sn}: final_numbers must be null OR foundation_draft/runtime_ready=false (got {fn!r})')
             if slot.get('runtime_attached') is True:
                 runtime_flags_violations += 1
                 fail('runtime', f'{hid}.{sn}: runtime_attached==true')
@@ -140,11 +143,30 @@ def main() -> int:
     else:
         info(f'total 6★ slots: {total_slots} ✓')
 
-    # Check 5: 78/78 null
-    if null_final_numbers != EXPECTED_SLOT_COUNT:
-        fail('final_numbers', f'expected {EXPECTED_SLOT_COUNT}/{EXPECTED_SLOT_COUNT} null final_numbers, got {null_final_numbers}')
-    else:
-        info(f'final_numbers null: {null_final_numbers}/{EXPECTED_SLOT_COUNT} ✓')
+    # Check 5: final_numbers state (forward-compatible)
+    # Pre-RM1.32-B: 78/78 null. Post-RM1.32-B: 78/78 foundation_draft with runtime_ready=false.
+    pre_pass = (null_final_numbers == EXPECTED_SLOT_COUNT)
+    post_pass = True
+    if not pre_pass:
+        # Verify every non-null final_numbers is a valid foundation_draft object
+        post_pass = True
+        for e in entries:
+            hid = e.get('hero_id', '?')
+            for sn, slot in (e.get('skill_package') or {}).items():
+                if not isinstance(slot, dict):
+                    continue
+                fn = slot.get('final_numbers')
+                if fn is None:
+                    continue
+                if not (isinstance(fn, dict)
+                        and fn.get('status') == 'foundation_draft'
+                        and fn.get('runtime_ready') is False):
+                    fail('final_numbers', f'{hid}.{sn}: final_numbers not foundation_draft/runtime_ready=false')
+                    post_pass = False
+    if pre_pass:
+        info(f'final_numbers null: {null_final_numbers}/{EXPECTED_SLOT_COUNT} (pre-RM1.32-B state) ✓')
+    elif post_pass:
+        info(f'final_numbers foundation_draft: 78/78 with runtime_ready=false (post-RM1.32-B state) ✓')
 
     # Check 6: divine_weapon_id cross-link
     dw_records = dw.get('records') or []
@@ -303,7 +325,7 @@ def emit() -> int:
     print('Summary:')
     print(f'  expected entries        : {EXPECTED_ENTRIES} (12 launch_base + 1 launch_extra_premium=greek_borea)')
     print(f'  expected slot count     : {EXPECTED_SLOT_COUNT}')
-    print(f'  final_numbers state     : 78/78 null (untouched, ready for RM1.32-B)')
+    print(f'  final_numbers state     : 78/78 null OR foundation_draft (forward-compatible audit)')
     print(f'  borea_activation        : false (catalog-only)')
     print(f'  runtime flags           : false (entry + slot)')
     print(f'  patch_needed            : false (read-only audit)')

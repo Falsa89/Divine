@@ -125,9 +125,10 @@ def check_invariants() -> None:
                     continue
                 fn = slot.get('final_numbers')
                 if fn is not None:
-                    # Allow 5★ foundation_draft (RM1.32-A)
+                    # Allow 5★ foundation_draft (RM1.32-A) AND 6★ foundation_draft (RM1.32-B)
                     is_foundation_draft = (
-                        label == '5★' and isinstance(fn, dict)
+                        label in ('5★', '6★')
+                        and isinstance(fn, dict)
                         and fn.get('status') == 'foundation_draft'
                         and fn.get('runtime_ready') is False
                     )

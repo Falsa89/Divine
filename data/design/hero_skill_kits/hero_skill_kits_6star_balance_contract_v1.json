@@ -1,0 +1,284 @@
+{
+  "contract_id": "hero_skill_kits_6star_balance_contract_v1",
+  "task_origin": "RM1.32-B",
+  "generated_at_utc": "2026-05-15T20:59:57.357142Z",
+  "scope": "6★ catalog (13 heroes × 6 slots = 78 slots). Foundation balance pass — design data only.",
+  "allowed_fields_per_slot": {
+    "basic": [
+      "status",
+      "runtime_ready",
+      "scaling_stat",
+      "effect_strength_tier",
+      "cooldown_turns",
+      "target_count",
+      "status_chance_pct",
+      "status_duration_turns",
+      "damage_multiplier_pct",
+      "healing_multiplier_pct",
+      "shield_multiplier_pct",
+      "stat_modifier_pct",
+      "runtime_notes",
+      "review_required",
+      "draft_balance_notes",
+      "notes",
+      "divine_weapon_synergy_placeholder"
+    ],
+    "passive_base": [
+      "status",
+      "runtime_ready",
+      "trigger",
+      "stat_modifier_pct",
+      "status_chance_pct",
+      "status_duration_turns",
+      "internal_cooldown_turns",
+      "scaling_stat",
+      "effect_strength_tier",
+      "runtime_notes",
+      "review_required",
+      "draft_balance_notes",
+      "notes",
+      "divine_weapon_synergy_placeholder"
+    ],
+    "skill_1": [
+      "status",
+      "runtime_ready",
+      "scaling_stat",
+      "effect_strength_tier",
+      "cooldown_turns",
+      "target_count",
+      "status_chance_pct",
+      "status_duration_turns",
+      "damage_multiplier_pct",
+      "healing_multiplier_pct",
+      "shield_multiplier_pct",
+      "stat_modifier_pct",
+      "runtime_notes",
+      "review_required",
+      "draft_balance_notes",
+      "notes",
+      "divine_weapon_synergy_placeholder"
+    ],
+    "passive_advanced": [
+      "status",
+      "runtime_ready",
+      "trigger",
+      "stat_modifier_pct",
+      "status_chance_pct",
+      "status_duration_turns",
+      "internal_cooldown_turns",
+      "scaling_stat",
+      "effect_strength_tier",
+      "runtime_notes",
+      "review_required",
+      "draft_balance_notes",
+      "notes",
+      "divine_weapon_synergy_placeholder"
+    ],
+    "skill_2": [
+      "status",
+      "runtime_ready",
+      "scaling_stat",
+      "effect_strength_tier",
+      "cooldown_turns",
+      "target_count",
+      "status_chance_pct",
+      "status_duration_turns",
+      "damage_multiplier_pct",
+      "healing_multiplier_pct",
+      "shield_multiplier_pct",
+      "stat_modifier_pct",
+      "runtime_notes",
+      "review_required",
+      "draft_balance_notes",
+      "notes",
+      "divine_weapon_synergy_placeholder"
+    ],
+    "ultimate": [
+      "status",
+      "runtime_ready",
+      "scaling_stat",
+      "effect_strength_tier",
+      "cooldown_turns",
+      "target_count",
+      "status_chance_pct",
+      "status_duration_turns",
+      "damage_multiplier_pct",
+      "healing_multiplier_pct",
+      "shield_multiplier_pct",
+      "stat_modifier_pct",
+      "runtime_notes",
+      "review_required",
+      "draft_balance_notes",
+      "notes",
+      "divine_weapon_synergy_placeholder",
+      "is_true_ultimate"
+    ]
+  },
+  "borea_only_additional_fields": [
+    "marchio_boreale_stack_values",
+    "unique_mechanic_placeholder"
+  ],
+  "numeric_ranges": {
+    "basic.damage_multiplier_pct": [
+      85,
+      130
+    ],
+    "basic.status_chance_pct": [
+      0,
+      50
+    ],
+    "basic.status_duration_turns": [
+      0,
+      3
+    ],
+    "basic.cooldown_turns": [
+      0,
+      0
+    ],
+    "basic.target_count": [
+      1,
+      1
+    ],
+    "skill_1.damage_multiplier_pct": [
+      140,
+      340
+    ],
+    "skill_1.healing_multiplier_pct": [
+      170,
+      240
+    ],
+    "skill_1.shield_multiplier_pct": [
+      170,
+      240
+    ],
+    "skill_1.status_chance_pct": [
+      65,
+      90
+    ],
+    "skill_1.status_duration_turns": [
+      0,
+      3
+    ],
+    "skill_1.cooldown_turns": [
+      3,
+      3
+    ],
+    "skill_1.target_count": [
+      1,
+      5
+    ],
+    "skill_2.damage_multiplier_pct": [
+      220,
+      520
+    ],
+    "skill_2.healing_multiplier_pct": [
+      260,
+      360
+    ],
+    "skill_2.shield_multiplier_pct": [
+      260,
+      360
+    ],
+    "skill_2.status_chance_pct": [
+      70,
+      95
+    ],
+    "skill_2.status_duration_turns": [
+      0,
+      3
+    ],
+    "skill_2.cooldown_turns": [
+      4,
+      5
+    ],
+    "skill_2.target_count": [
+      1,
+      5
+    ],
+    "ultimate.damage_multiplier_pct": [
+      260,
+      720
+    ],
+    "ultimate.healing_multiplier_pct": [
+      380,
+      520
+    ],
+    "ultimate.shield_multiplier_pct": [
+      380,
+      520
+    ],
+    "ultimate.status_chance_pct": [
+      85,
+      100
+    ],
+    "ultimate.status_duration_turns": [
+      0,
+      3
+    ],
+    "ultimate.cooldown_turns": [
+      6,
+      7
+    ],
+    "ultimate.target_count": [
+      1,
+      5
+    ],
+    "passive.stat_modifier_pct": [
+      12,
+      28
+    ],
+    "passive.internal_cooldown_turns": [
+      0,
+      6
+    ]
+  },
+  "borea_marchio_boreale_draft_ranges": {
+    "max_stacks_pvp": [
+      1,
+      3
+    ],
+    "max_stacks_pve": [
+      1,
+      5
+    ],
+    "damage_bonus_per_stack_pct": [
+      3,
+      10
+    ],
+    "freeze_chance_bonus_per_stack_pct": [
+      2,
+      6
+    ]
+  },
+  "divine_weapon_synergy_rules": {
+    "design_only": true,
+    "no_runtime_modifier": true,
+    "linked_weapon_id_from_entry": true,
+    "must_not_apply_numeric_modifier_at_foundation": true
+  },
+  "forbidden_fields_per_slot": [
+    "battle_runtime_id",
+    "db_resolver",
+    "final_runtime_attached",
+    "live_hooks",
+    "runtime_target",
+    "vfx_runtime"
+  ],
+  "safety_rules": {
+    "runtime_ready_must_be_false_for_all": true,
+    "balance_values_finalized_must_stay_false": true,
+    "runtime_attached_must_stay_false": true,
+    "battle_runtime_attached_must_stay_false": true,
+    "do_not_treat_as_live_kit_must_stay_true": true,
+    "ultimate_is_true_ultimate_must_be_true_for_all_13": true,
+    "non_ultimate_must_not_be_true_ultimate": true,
+    "marchio_boreale_only_on_greek_borea": true,
+    "borea_must_remain_hidden_in_api_heroes": true,
+    "borea_activation_allowed_must_stay_false": true,
+    "no_legacy_borea_hero_id": true,
+    "no_primordial_gaia_hero_id_visible": true,
+    "no_change_to_descriptions_names_tags_ids": true
+  },
+  "is_foundation_pass": true,
+  "design_only_field_allowance_note": "divine_weapon_synergy_placeholder and unique_mechanic_placeholder are descriptive design-only sub-objects with runtime_ready=false; they MUST NOT carry numeric runtime modifiers."
+}

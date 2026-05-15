@@ -38,6 +38,7 @@ REQUIRED = [
     ('RM1.27-A', 'validate_divine_weapon_catalog.py'),
     ('RM1.27-D', 'audit_divine_weapon_crosslinks.py'),
     ('RM1.32-A', 'validate_5star_balance_foundation.py'),
+    ('RM1.32-B', 'validate_6star_balance_foundation.py'),
 ]
 OPTIONAL = [
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
@@ -45,13 +46,13 @@ OPTIONAL = [
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
 
-def run_one(script: Path) -> dict:
+def run_one(script: Path, extra_args: list[str] | None = None) -> dict:
     if not script.exists():
         return {'present': False, 'exit_code': None, 'duration_s': 0.0, 'tail': '<missing>'}
     t0 = datetime.now(timezone.utc)
     try:
         proc = subprocess.run(
-            ['python3', str(script)],
+            ['python3', str(script)] + (extra_args or []),
             capture_output=True, text=True, timeout=60,
         )
         tail = (proc.stdout or proc.stderr or '').strip().splitlines()
@@ -73,6 +74,8 @@ def main(argv=None) -> int:
     ap.add_argument('--json-out', help='Path under /app/backend/reports or /tmp to write the full report JSON')
     ap.add_argument('--include-baseline-diff', action='store_true',
                     help='Also run RM1.32-PRE baseline diff validator (off by default — baselines intentionally change in approved tasks)')
+    ap.add_argument('--allow-changed', action='append', default=[],
+                    help='Forwarded to baseline diff validator (only used with --include-baseline-diff). Repeatable.')
     args = ap.parse_args(argv)
 
     results: list[dict] = []
@@ -102,7 +105,10 @@ def main(argv=None) -> int:
     if args.include_baseline_diff:
         print('-- baseline diff (RM1.32-PRE) --')
         task, name = BASELINE_DIFF
-        r = run_one(SCRIPTS_DIR / name)
+        extra: list[str] = []
+        for p in (args.allow_changed or []):
+            extra.extend(['--allow-changed', p])
+        r = run_one(SCRIPTS_DIR / name, extra_args=extra)
         status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
         if r['present'] and r['exit_code'] not in (0, None):
             any_required_fail = True
