@@ -44,6 +44,11 @@
       "bucket_C_moved": 3,
       "bucket_D_review": 2,
       "bucket_unknown": 0
+    },
+    "rm128e_residuals_resolved": true,
+    "rm128e_stats": {
+      "resolved_now": 0,
+      "already_resolved": 5
     }
   },
   "entries": [
@@ -462,7 +467,10 @@
           "display_name": "Presagio nelle Brume",
           "design_summary": "Aumenta effect_accuracy e riduce speed nemica.",
           "targeting_summary": "self",
-          "status_tags": [],
+          "status_tags": [
+            "effect_accuracy_up",
+            "speed_down"
+          ],
           "vfx_tags": [
             "passive",
             "control_debuff",
@@ -509,13 +517,26 @@
             "buff"
           ],
           "normalization_notes": [
-            "legacy_tag \"aura_debuff\" removed from status_tags · manual_review_required (Bucket D ambiguous aura/debuff)"
+            "legacy_tag \"aura_debuff\" removed from status_tags · manual_review_required (Bucket D ambiguous aura/debuff)",
+            "RM1.28-E: design_summary explicitly states \"Aumenta effect_accuracy e riduce speed nemica\" — RM1.28-E maps legacy \"aura_debuff\" to effect_accuracy_up (self) + speed_down (enemies)."
           ],
-          "manual_review_required": true,
+          "manual_review_required": false,
           "normalization_metadata": {
             "task_origin": "RM1.28-D",
             "first_normalized_at_utc": "2026-05-15T15:57:03.079464+00:00",
-            "last_normalized_at_utc": "2026-05-15T15:57:03.079465+00:00"
+            "last_normalized_at_utc": "2026-05-15T16:45:31.356816+00:00",
+            "rm128e_resolution_history": [
+              {
+                "resolved_at_utc": "2026-05-15T16:45:31.356798+00:00",
+                "resolved_by": "RM1.28-E",
+                "added_status_tags": [
+                  "effect_accuracy_up",
+                  "speed_down"
+                ],
+                "removed_from_taxonomy": [],
+                "decision_note": "design_summary explicitly states \"Aumenta effect_accuracy e riduce speed nemica\" — RM1.28-E maps legacy \"aura_debuff\" to effect_accuracy_up (self) + speed_down (enemies)."
+              }
+            ]
           }
         },
         "skill_1": {
@@ -845,7 +866,9 @@
           "display_name": "Piuma Ardente",
           "design_summary": "Danno fuoco e HoT su sé stessa.",
           "targeting_summary": "all_enemies",
-          "status_tags": [],
+          "status_tags": [
+            "regeneration"
+          ],
           "vfx_tags": [
             "skill",
             "hybrid_special",
@@ -887,17 +910,31 @@
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
           },
           "design_taxonomy_tags": [
-            "damage",
-            "hot"
+            "damage"
           ],
           "normalization_notes": [
-            "legacy_tag \"hot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)"
+            "legacy_tag \"hot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)",
+            "RM1.28-E: design_summary explicitly states \"Danno fuoco e HoT su sé stessa\" — RM1.28-E maps legacy \"hot\" to regeneration on self (HoT semantics).",
+            "RM1.28-E: removed legacy taxonomy entries ['hot'] after resolution to concrete status_tags=['regeneration']."
           ],
-          "manual_review_required": true,
+          "manual_review_required": false,
           "normalization_metadata": {
             "task_origin": "RM1.28-D",
             "first_normalized_at_utc": "2026-05-15T15:57:03.079494+00:00",
-            "last_normalized_at_utc": "2026-05-15T15:57:03.079496+00:00"
+            "last_normalized_at_utc": "2026-05-15T16:45:31.356836+00:00",
+            "rm128e_resolution_history": [
+              {
+                "resolved_at_utc": "2026-05-15T16:45:31.356834+00:00",
+                "resolved_by": "RM1.28-E",
+                "added_status_tags": [
+                  "regeneration"
+                ],
+                "removed_from_taxonomy": [
+                  "hot"
+                ],
+                "decision_note": "design_summary explicitly states \"Danno fuoco e HoT su sé stessa\" — RM1.28-E maps legacy \"hot\" to regeneration on self (HoT semantics)."
+              }
+            ]
           }
         },
         "passive_advanced": {
@@ -1258,7 +1295,9 @@
           "display_name": "Teste Rigeneranti",
           "design_summary": "Colpisce 3 nemici e ottiene HoT.",
           "targeting_summary": "all_enemies",
-          "status_tags": [],
+          "status_tags": [
+            "regeneration"
+          ],
           "vfx_tags": [
             "ultimate",
             "hybrid_special",
@@ -1304,17 +1343,31 @@
             "runtime_legacy_mapping": "ELEMENT_SKILLS.water.sp"
           },
           "design_taxonomy_tags": [
-            "damage",
-            "hot"
+            "damage"
           ],
           "normalization_notes": [
-            "legacy_tag \"hot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)"
+            "legacy_tag \"hot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)",
+            "RM1.28-E: design_summary explicitly states \"Colpisce 3 nemici e ottiene HoT\" — RM1.28-E maps legacy \"hot\" to regeneration on self after damage.",
+            "RM1.28-E: removed legacy taxonomy entries ['hot'] after resolution to concrete status_tags=['regeneration']."
           ],
-          "manual_review_required": true,
+          "manual_review_required": false,
           "normalization_metadata": {
             "task_origin": "RM1.28-D",
             "first_normalized_at_utc": "2026-05-15T15:57:03.079520+00:00",
-            "last_normalized_at_utc": "2026-05-15T15:57:03.079522+00:00"
+            "last_normalized_at_utc": "2026-05-15T16:45:31.356846+00:00",
+            "rm128e_resolution_history": [
+              {
+                "resolved_at_utc": "2026-05-15T16:45:31.356844+00:00",
+                "resolved_by": "RM1.28-E",
+                "added_status_tags": [
+                  "regeneration"
+                ],
+                "removed_from_taxonomy": [
+                  "hot"
+                ],
+                "decision_note": "design_summary explicitly states \"Colpisce 3 nemici e ottiene HoT\" — RM1.28-E maps legacy \"hot\" to regeneration on self after damage."
+              }
+            ]
           }
         }
       },
@@ -1416,7 +1469,9 @@
           "display_name": "Presagio della Malattia",
           "design_summary": "Nemici con DoT ricevono meno cure.",
           "targeting_summary": "self",
-          "status_tags": [],
+          "status_tags": [
+            "healing_reduction"
+          ],
           "vfx_tags": [
             "passive",
             "hybrid_special",
@@ -1455,13 +1510,25 @@
             "runtime_legacy_mapping": "PASSIVE_SKILLS[5]"
           },
           "normalization_notes": [
-            "legacy_tag \"debuff_aura\" removed from status_tags · manual_review_required (Bucket D ambiguous aura/debuff)"
+            "legacy_tag \"debuff_aura\" removed from status_tags · manual_review_required (Bucket D ambiguous aura/debuff)",
+            "RM1.28-E: design_summary explicitly states \"Nemici con DoT ricevono meno cure\" — RM1.28-E maps legacy \"debuff_aura\" to healing_reduction targeting enemies with DoT."
           ],
-          "manual_review_required": true,
+          "manual_review_required": false,
           "normalization_metadata": {
             "task_origin": "RM1.28-D",
             "first_normalized_at_utc": "2026-05-15T15:57:03.079530+00:00",
-            "last_normalized_at_utc": "2026-05-15T15:57:03.079532+00:00"
+            "last_normalized_at_utc": "2026-05-15T16:45:31.356825+00:00",
+            "rm128e_resolution_history": [
+              {
+                "resolved_at_utc": "2026-05-15T16:45:31.356822+00:00",
+                "resolved_by": "RM1.28-E",
+                "added_status_tags": [
+                  "healing_reduction"
+                ],
+                "removed_from_taxonomy": [],
+                "decision_note": "design_summary explicitly states \"Nemici con DoT ricevono meno cure\" — RM1.28-E maps legacy \"debuff_aura\" to healing_reduction targeting enemies with DoT."
+              }
+            ]
           }
         },
         "skill_1": {
@@ -2408,7 +2475,9 @@
           "display_name": "Artiglio Solare",
           "design_summary": "Danno forte e burn al bersaglio.",
           "targeting_summary": "single_enemy",
-          "status_tags": [],
+          "status_tags": [
+            "burn"
+          ],
           "vfx_tags": [
             "skill",
             "dps_melee",
@@ -2450,17 +2519,31 @@
             "runtime_legacy_mapping": "ELEMENT_SKILLS.fire.sad"
           },
           "design_taxonomy_tags": [
-            "damage",
-            "dot"
+            "damage"
           ],
           "normalization_notes": [
-            "legacy_tag \"dot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)"
+            "legacy_tag \"dot\" preserved as design_taxonomy_tag · manual_review_required (Bucket B ambiguous)",
+            "RM1.28-E: design_summary explicitly states \"Danno forte e burn al bersaglio\" — RM1.28-E maps legacy \"dot\" to burn (legacy alias for the explicit burn already present in summary).",
+            "RM1.28-E: removed legacy taxonomy entries ['dot'] after resolution to concrete status_tags=['burn']."
           ],
-          "manual_review_required": true,
+          "manual_review_required": false,
           "normalization_metadata": {
             "task_origin": "RM1.28-D",
             "first_normalized_at_utc": "2026-05-15T15:57:03.079589+00:00",
-            "last_normalized_at_utc": "2026-05-15T15:57:03.079591+00:00"
+            "last_normalized_at_utc": "2026-05-15T16:45:31.356855+00:00",
+            "rm128e_resolution_history": [
+              {
+                "resolved_at_utc": "2026-05-15T16:45:31.356853+00:00",
+                "resolved_by": "RM1.28-E",
+                "added_status_tags": [
+                  "burn"
+                ],
+                "removed_from_taxonomy": [
+                  "dot"
+                ],
+                "decision_note": "design_summary explicitly states \"Danno forte e burn al bersaglio\" — RM1.28-E maps legacy \"dot\" to burn (legacy alias for the explicit burn already present in summary)."
+              }
+            ]
           }
         },
         "passive_advanced": {
@@ -6306,5 +6389,5 @@
       "missing_fields_audit": []
     }
   ],
-  "notes": "Inert design catalog. Read-only. NOT connected to combat runtime. Generated by /app/backend/scripts/build_hero_skill_kits_5star_full.py from the approved consolidated 5★ source. No skill invention. passive_advanced slot present but marked missing_from_approved_source. Legacy ultimate_or_special remapped to skill_2 with is_true_ultimate=false. RM1.28-A: passive_advanced approved source completed (20/20). RM1.28-D: 5★ legacy status_tags normalized into design_taxonomy_tags/rule_tags/trigger_tags/normalization_notes per RM1.28-C plan. passive_advanced preserved."
+  "notes": "Inert design catalog. Read-only. NOT connected to combat runtime. Generated by /app/backend/scripts/build_hero_skill_kits_5star_full.py from the approved consolidated 5★ source. No skill invention. passive_advanced slot present but marked missing_from_approved_source. Legacy ultimate_or_special remapped to skill_2 with is_true_ultimate=false. RM1.28-A: passive_advanced approved source completed (20/20). RM1.28-D: 5★ legacy status_tags normalized into design_taxonomy_tags/rule_tags/trigger_tags/normalization_notes per RM1.28-C plan. passive_advanced preserved. RM1.28-E: resolved 5 manual_review residual slots (banshee.passive_base, pestilence_herald.passive_base, crimson_phoenix.skill_1, lernaean_hydra.skill_2, claw_of_sekhmet.skill_1)."
 }
