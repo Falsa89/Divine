@@ -31,6 +31,7 @@ from routes.skill_status_vfx_catalogs import register_skill_status_vfx_catalog_r
 from routes.hero_skill_kits_catalogs import register_hero_skill_kits_catalog_routes
 from routes.divine_weapons import register_divine_weapons_catalog_routes
 from routes.skill_kit_runtime_debug import register_skill_kit_runtime_debug_routes
+from routes.affinity_gifts import register_affinity_gifts_readonly_routes
 
 
 def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):
@@ -72,6 +73,11 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # Runtime Adapter preview. Feature flag SKILL_KIT_RUNTIME_ENABLED stays
     # OFF; runtime_candidate is always disabled. NOT used by battle runtime.
     register_skill_kit_runtime_debug_routes(router)
+    # AF2-E — Affinity gifts read-only design preview API (3 GET endpoints).
+    # Strictly GET-only, no DB, no inventory, no spend, no user state.
+    # Borea greek_borea entries remain catalog-only / locked; legacy
+    # `borea` / `primordial_gaia` aliases rejected with 404.
+    register_affinity_gifts_readonly_routes(router)
     # Sanctuary (home hero + affinity + constellation) — note: signature differs (no calculate_hero_power)
     register_sanctuary_routes(router, db, get_current_user, serialize_doc)
 

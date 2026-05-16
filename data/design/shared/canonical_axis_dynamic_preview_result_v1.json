@@ -1,0 +1,173 @@
+{
+  "task_origin": "AXIS-C",
+  "generated_at_utc": "2026-05-16T23:14:33.519384Z",
+  "design_only": true,
+  "runtime_attached": false,
+  "mutates_source_tables": false,
+  "live_axis_sets": {
+    "enabled": false,
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "preview_only": true,
+    "source": "api",
+    "roster_count": 100,
+    "skipped_forbidden_aliases": 0,
+    "live_factions_sorted": [
+      "angelic",
+      "arcane",
+      "celtic",
+      "creature_beast",
+      "cursed",
+      "demonic",
+      "egyptian",
+      "greek",
+      "japanese_yokai",
+      "mesopotamian",
+      "norse",
+      "primordial"
+    ],
+    "live_elements_sorted": [
+      "dark",
+      "earth",
+      "fire",
+      "light",
+      "lightning",
+      "water",
+      "wind"
+    ],
+    "live_factions_count": 12,
+    "live_elements_count": 7
+  },
+  "drift_report": {
+    "enabled": false,
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "preview_only": true,
+    "live": {
+      "factions": [
+        "angelic",
+        "arcane",
+        "celtic",
+        "creature_beast",
+        "cursed",
+        "demonic",
+        "egyptian",
+        "greek",
+        "japanese_yokai",
+        "mesopotamian",
+        "norse",
+        "primordial"
+      ],
+      "elements": [
+        "dark",
+        "earth",
+        "fire",
+        "light",
+        "lightning",
+        "water",
+        "wind"
+      ],
+      "source": "api"
+    },
+    "matrix_rm134b": {
+      "factions": [
+        "angelic",
+        "arcane",
+        "celtic",
+        "creature_beast",
+        "cursed",
+        "demonic",
+        "egyptian",
+        "greek",
+        "japanese_yokai",
+        "mesopotamian",
+        "norse",
+        "primordial",
+        "tides"
+      ],
+      "elements": [
+        "darkness",
+        "earth",
+        "fire",
+        "light",
+        "lightning",
+        "water",
+        "wind"
+      ]
+    },
+    "gift_draft_af2a": {
+      "factions": [
+        "angelic",
+        "arcane",
+        "celtic",
+        "creature_beast",
+        "cursed",
+        "demonic",
+        "egyptian",
+        "greek",
+        "japanese_yokai",
+        "mesopotamian",
+        "norse",
+        "primordial"
+      ],
+      "elements": [
+        "dark",
+        "earth",
+        "fire",
+        "light",
+        "lightning",
+        "water",
+        "wind"
+      ]
+    },
+    "axis_plan_alias_map": {
+      "elements": {
+        "darkness": "dark",
+        "dark": "dark",
+        "oscurita": "dark",
+        "shadow": "dark"
+      },
+      "factions": {
+        "yokai": "japanese_yokai",
+        "creatures": "creature_beast",
+        "beasts": "creature_beast",
+        "celtics": "celtic"
+      }
+    },
+    "drift": {
+      "factions_in_matrix_not_in_live": [
+        "tides"
+      ],
+      "elements_in_matrix_not_in_live": [
+        "darkness"
+      ],
+      "factions_in_live_not_in_matrix": [],
+      "elements_in_live_not_in_matrix": [
+        "dark"
+      ]
+    },
+    "tides_status": "design_pending",
+    "darkness_to_dark_alias_present": true,
+    "mutates_source_tables": false,
+    "patches_rm134b": false,
+    "patches_af2a": false
+  },
+  "alias_coverage": {
+    "enabled": false,
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "preview_only": true,
+    "fully_covered": true,
+    "uncovered_elements": [],
+    "uncovered_factions": [],
+    "design_pending_factions": [
+      "tides"
+    ],
+    "live_elements_count": 7,
+    "live_factions_count": 12,
+    "mutates_source_tables": false
+  }
+}

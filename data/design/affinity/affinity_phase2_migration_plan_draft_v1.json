@@ -1,0 +1,170 @@
+{
+  "plan_id": "affinity_phase2_migration_plan_draft_v1",
+  "task_origin": "AF2-D",
+  "design_only": true,
+  "migration_applied": false,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Inert migration plan draft for the three future collections defined in AF2-C (user_gift_inventory, gift_transaction_ledger, hero_affinity_state). NO migration file is created. NO DB write executed. The plan enumerates collection names, fields, indexes, rollback procedure, backfill procedure, privacy/safety constraints, and the migration gates that MUST PASS before any real migration is ratified.",
+
+  "source_references": {
+    "schema_draft": "/app/data/design/affinity/affinity_gift_inventory_schema_draft_v1.json",
+    "anti_exploit_policy": "/app/data/design/affinity/affinity_gift_anti_exploit_policy_v1.json",
+    "economy_policy": "/app/data/design/affinity/affinity_phase2_economy_cap_policy_draft_v1.json",
+    "gift_catalog_draft": "/app/data/design/affinity/affinity_gift_catalog_faction_element_draft_v1.json",
+    "stack_safety_report": "/app/data/design/system_safety/cross_system_progression_stack_safety_report_v1.json"
+  },
+
+  "target_future_collections": [
+    {
+      "name": "user_gift_inventory",
+      "create_in_migration": false,
+      "is_design_only_today": true,
+      "fields": {
+        "_id": "ObjectId (server-generated)",
+        "user_id": "string (FK users._id)",
+        "gift_id": "string (FK gift catalog draft entries[].gift_id)",
+        "quantity": "int (>=0)",
+        "source": "string (enum source bucket)",
+        "source_bucket": "string",
+        "acquired_at": "ISO8601",
+        "expires_at": "ISO8601 | null",
+        "locked_until_condition": "string | null",
+        "anti_duplication_hash_future": "string | null"
+      },
+      "indexes_future": [
+        {"name": "idx_user_gift_source_bucket", "fields": ["user_id", "gift_id", "source_bucket"], "unique": true},
+        {"name": "idx_user_expires_at", "fields": ["user_id", "expires_at"], "unique": false},
+        {"name": "idx_anti_dup_hash", "fields": ["anti_duplication_hash_future"], "unique": true, "sparse": true}
+      ]
+    },
+    {
+      "name": "gift_transaction_ledger",
+      "create_in_migration": false,
+      "is_design_only_today": true,
+      "fields": {
+        "_id": "ObjectId",
+        "user_id": "string",
+        "gift_id": "string",
+        "tx_type": "string (grant|spend|refund|rollback)",
+        "quantity_delta": "int (signed)",
+        "balance_after": "int",
+        "source_event_id": "string (idempotency for grants)",
+        "idempotency_key": "string (unique-indexed for spends)",
+        "occurred_at": "ISO8601",
+        "spent_on_hero_id": "string | null",
+        "spent_on_hero_canonical_id": "string | null",
+        "result_affinity_points_delta": "int | null",
+        "result_tier_after": "string | null"
+      },
+      "indexes_future": [
+        {"name": "idx_user_occurred_at", "fields": ["user_id", "occurred_at"], "unique": false},
+        {"name": "idx_idempotency_key", "fields": ["idempotency_key"], "unique": true},
+        {"name": "idx_source_event_tx_type", "fields": ["source_event_id", "tx_type"], "unique": true, "sparse": true}
+      ]
+    },
+    {
+      "name": "hero_affinity_state",
+      "create_in_migration": false,
+      "is_design_only_today": true,
+      "fields": {
+        "_id": "ObjectId",
+        "user_id": "string",
+        "hero_id": "string (canonical roster id)",
+        "hero_canonical_id": "string",
+        "affinity_points": "int (>=0)",
+        "current_tier_id": "string (tier_0..tier_4)",
+        "last_gift_spent_at": "ISO8601 | null",
+        "borea_locked": "bool",
+        "stat_buff_live": false,
+        "last_recomputed_at": "ISO8601"
+      },
+      "indexes_future": [
+        {"name": "idx_user_hero", "fields": ["user_id", "hero_id"], "unique": true},
+        {"name": "idx_user_tier", "fields": ["user_id", "current_tier_id"], "unique": false}
+      ]
+    }
+  ],
+
+  "rollback_plan": {
+    "strategy": "drop_new_collections_only",
+    "supports_clean_rollback": true,
+    "steps_future": [
+      "Set AFFINITY_GIFT_RUNTIME_ENABLED env var back to OFF (default).",
+      "Disable any /api/affinity/gift-spend or grant routes via feature flag.",
+      "Drop user_gift_inventory / gift_transaction_ledger / hero_affinity_state collections after a 7-day audit window.",
+      "Confirm no orphan field added to users / heroes collections (no cross-collection mutation was performed)."
+    ],
+    "rollback_tested_required": true,
+    "rollback_tested_today": false
+  },
+
+  "backfill_plan": {
+    "strategy": "no_backfill_initial",
+    "rationale": "Affinity is a brand-new subsystem; there is no legacy data to migrate. All three collections start empty.",
+    "first_run_state": "all three collections empty; user_gift_inventory documents created lazily on first grant; hero_affinity_state lazily on first spend."
+  },
+
+  "privacy_safety": {
+    "pii_stored": "user_id only (already PII-handled by existing users collection); no plain emails / payment data in gift collections.",
+    "no_user_owned_borea_records_created": true,
+    "no_logging_of_full_inventory_payload_in_plaintext": true,
+    "audit_ledger_retention_days_future": 365,
+    "right_to_erasure_supported": true,
+    "right_to_erasure_strategy": "user deletion cascades through gift_transaction_ledger and user_gift_inventory via user_id index; hero_affinity_state same."
+  },
+
+  "anti_exploit_references_af2c": {
+    "policy_id": "affinity_gift_anti_exploit_policy_v1",
+    "vectors_inherited": [
+      "double_spend_replay", "double_grant_via_event_rerun",
+      "client_trusted_grant", "borea_leak", "stat_buff_runaway",
+      "negative_quantity_underflow", "rate_limit_circumvention_via_multi_account",
+      "tides_orphan_gift"
+    ]
+  },
+
+  "migration_gates": [
+    {"id": "auth_model_approved", "currently_satisfied": false,
+     "description": "Auth-gated POST /api/affinity/gift-spend route designed and code-reviewed."},
+    {"id": "endpoint_design_approved", "currently_satisfied": false,
+     "description": "POST endpoint signature + idempotency + replay + rate-limit ratified."},
+    {"id": "rollback_tested", "currently_satisfied": false,
+     "description": "End-to-end rollback rehearsal on staging passed."},
+    {"id": "rate_limits_configured", "currently_satisfied": false,
+     "description": "Per-user + per-IP rate limits in place at the load balancer / FastAPI middleware."},
+    {"id": "borea_visibility_gate_tested", "currently_satisfied": false,
+     "description": "Server-side hero visibility check unit-tested for greek_borea and legacy aliases."},
+    {"id": "economy_finalized", "currently_satisfied": false,
+     "description": "AF2-B economy + cap policy ratified beyond placeholder point values."},
+    {"id": "stack_b_global_cap_resolver_audited", "currently_satisfied": false,
+     "description": "STACK-B resolver leaves inert state and audited under stress test."}
+  ],
+
+  "no_migration_file_created_in_this_task": true,
+  "no_db_write_route_added_in_this_task": true,
+  "no_endpoint_added_in_this_task": true,
+
+  "safety_flags": {
+    "design_only": true,
+    "migration_applied": false,
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "stat_buff_live": false,
+    "feature_flag_dependency": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "AF2-F (hypothetical): rollback rehearsal script (inert dry-run).",
+    "AF2-G (hypothetical): inert auth-gated POST endpoint skeleton with feature flag OFF.",
+    "AF2-H (hypothetical): rate-limit middleware contract design."
+  ]
+}

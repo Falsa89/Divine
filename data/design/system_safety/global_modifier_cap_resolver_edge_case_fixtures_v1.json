@@ -1,0 +1,185 @@
+{
+  "fixture_id": "global_modifier_cap_resolver_edge_case_fixtures_v1",
+  "task_origin": "STACK-C",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Edge case fixtures for global_modifier_cap_resolver.preview_combined_cap() (STACK-B). All cases assert the resolver stays OFF/inert: every output MUST be a disabled envelope with runtime_attached=false / applied_to_combat=false / db_write=false. The clamped_pct_preview is documentation-grade only; the validator confirms it respects the 12% combined PvP cap and any documented edge behavior.",
+
+  "global_pvp_combined_target_cap_pct": 12,
+
+  "cases": [
+    {
+      "id": "case_01_empty_sources",
+      "description": "Empty sources list. Resolver must not raise.",
+      "context": "pvp",
+      "mock_sources": [],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "clamped_pct_preview_le_target": true,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_02_collection_only_under_cap",
+      "description": "Single collection source at 4% (under 15% total cap).",
+      "context": "pvp",
+      "mock_sources": [{"id": "collection_a", "pct": 4}],
+      "expected": {
+        "additive_sum_pct_preview": 4,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 4,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_03_collection_over_15",
+      "description": "Single collection source emitting 18% (exceeds collection total 15%, AND exceeds combined PvP 12%).",
+      "context": "pvp",
+      "mock_sources": [{"id": "collection_runaway", "pct": 18}],
+      "expected": {
+        "additive_sum_pct_preview": 18,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 12,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_04_affinity_over_6_pvp",
+      "description": "Single affinity source emitting 9% (exceeds AF2-B PvP total cap 6%, but combined PvP cap remains 12%).",
+      "context": "pvp",
+      "mock_sources": [{"id": "affinity_runaway", "pct": 9}],
+      "expected": {
+        "additive_sum_pct_preview": 9,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 9,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_05_dw_over_5_pvp",
+      "description": "Single Divine Weapon source emitting 8% (exceeds DW PvP cap 5%, but combined remains under 12%).",
+      "context": "pvp",
+      "mock_sources": [{"id": "dw_runaway", "pct": 8}],
+      "expected": {
+        "additive_sum_pct_preview": 8,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 8,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_06_combined_over_12_pvp",
+      "description": "Collection 5 + Affinity 6 + DW 5 = 16% > combined PvP cap 12%; clamped to 12.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "collection", "pct": 5},
+        {"id": "affinity", "pct": 6},
+        {"id": "dw", "pct": 5}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 16,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 12,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_07_pve_permissive",
+      "description": "PvE context has no combined target cap; sum echoed as-is.",
+      "context": "pve",
+      "mock_sources": [
+        {"id": "collection", "pct": 5},
+        {"id": "affinity", "pct": 6},
+        {"id": "dw", "pct": 5}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 16,
+        "target_cap_pct_preview_is_none": true,
+        "clamped_pct_preview_equals": 16,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_08_negative_modifier",
+      "description": "Negative modifier (-3) is currently echoed as additive (debuff). Future activation must validate explicitly; for preview, behavior is preserved.",
+      "context": "pvp",
+      "mock_sources": [{"id": "debuff_test", "pct": -3}],
+      "expected": {
+        "additive_sum_pct_preview": -3,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": -3,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_09_unknown_source_safe",
+      "description": "Source with missing 'pct' field must be silently dropped (not raise).",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "good", "pct": 4},
+        {"id": "no_pct_field"},
+        "not_a_dict_string"
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 4,
+        "clamped_pct_preview_equals": 4,
+        "is_disabled_envelope": true,
+        "no_exception": true
+      }
+    },
+    {
+      "id": "case_10_borea_locked_source_ignored",
+      "description": "A source labeled as Borea-locked must not raise; the resolver treats numeric pct uniformly today but the future runtime MUST filter Borea-locked contributions.",
+      "context": "pvp",
+      "mock_sources": [{"id": "borea_locked_future", "pct": 3, "borea_locked": true}],
+      "expected": {
+        "additive_sum_pct_preview": 3,
+        "clamped_pct_preview_le_target": true,
+        "is_disabled_envelope": true,
+        "future_runtime_must_filter_borea_locked": true
+      }
+    },
+    {
+      "id": "case_11_multiplicative_source_documented",
+      "description": "A source claiming multiplicative semantics MUST be rejected by the future runtime. For the inert preview today, behavior is documented but the resolver does not parse semantics.",
+      "context": "pvp",
+      "mock_sources": [{"id": "mult_test", "pct": 5, "stacking": "multiplicative"}],
+      "expected": {
+        "additive_sum_pct_preview": 5,
+        "clamped_pct_preview_le_target": true,
+        "is_disabled_envelope": true,
+        "future_runtime_must_reject_multiplicative": true
+      }
+    },
+    {
+      "id": "case_12_huge_value_clamp",
+      "description": "Pathological huge value (9999%) must clamp to combined PvP target without raising.",
+      "context": "pvp",
+      "mock_sources": [{"id": "huge", "pct": 9999}],
+      "expected": {
+        "additive_sum_pct_preview": 9999,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 12,
+        "is_disabled_envelope": true
+      }
+    }
+  ],
+
+  "global_invariants": {
+    "all_cases_disabled_envelope": true,
+    "no_exception_allowed": true,
+    "pvp_clamped_pct_le_combined_target": true,
+    "feature_flag_currently_enabled": false
+  },
+
+  "recommended_next_tasks": [
+    "STACK-D (hypothetical): formalize multiplicative-source rejection in future runtime path.",
+    "STACK-E (hypothetical): formalize Borea-locked filtering in future runtime path.",
+    "STACK-F (hypothetical): clamp negative values too once debuff semantics ratified."
+  ]
+}
