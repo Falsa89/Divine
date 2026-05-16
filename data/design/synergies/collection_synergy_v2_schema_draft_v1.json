@@ -1,0 +1,49 @@
+{
+  "schema_id": "collection_synergy_v2_schema_draft_v1",
+  "task_origin": "CS2-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "db_write": false,
+  "loaded_by_runtime": false,
+  "schema_version": "draft-1",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "description": "Draft schema for future Collection Synergy V2 records. NEVER imported by runtime; design reference only.",
+  "record_shape": {
+    "id": "<unique collection_synergy_id, snake_case>",
+    "category": "faction_collection|element_collection|rarity_collection|origin_group_collection|mythic_set_collection|divine_weapon_collection_link_future",
+    "axis_value": "<faction id | element id | rarity tier | origin_group id | set id>",
+    "thresholds": {
+      "owned_count": "int (>=1)",
+      "star_minimum": "int|null (5 or 6)",
+      "requires_unique_heroes": true
+    },
+    "bonus": {
+      "category": "design_only_string",
+      "flat_pct_optional": "number|null (capped <=5 per category, <=15 total)",
+      "description": "localized text key"
+    },
+    "stacking_rule": "additive_capped",
+    "applies_to": ["non_pvp_initial"],
+    "borea_safety": {
+      "includes_greek_borea": false,
+      "hidden_aliases_blocked": ["borea", "primordial_gaia"],
+      "future_activation_flag": "COLLECTION_SYNERGY_BOREA_REVEAL_ENABLED"
+    },
+    "runtime": {
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "feature_flag_dependency": "COLLECTION_SYNERGY_BATTLE_ENABLED",
+      "feature_flag_currently_enabled": false
+    },
+    "design_only": true,
+    "do_not_treat_as_live_kit": true
+  },
+  "validation_invariants": {
+    "max_total_bonus_pct": 15,
+    "max_per_category_bonus_pct": 5,
+    "allowed_categories_count": 6,
+    "runtime_attached_must_be_false_in_all_records": true,
+    "applied_to_combat_must_be_false": true
+  }
+}

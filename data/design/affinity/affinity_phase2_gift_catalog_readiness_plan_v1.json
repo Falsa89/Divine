@@ -1,0 +1,71 @@
+{
+  "plan_id": "affinity_phase2_gift_catalog_readiness_plan_v1",
+  "task_origin": "AF2-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "current_affinity_state": {
+    "live_affinity_system": "out_of_scope_for_this_task",
+    "existing_gift_spend_endpoint": "none discovered via grep",
+    "existing_affinity_db_write": "none introduced by this task",
+    "existing_affection_points_logic": "none introduced by this task",
+    "existing_hero_stat_affinity_buffs": "none active; this task does not add any",
+    "existing_ui_gift_claim_spend_buttons": "none introduced by this task",
+    "borea_affinity_status": "locked until Borea visibility unlock (consistent with global Borea policy)"
+  },
+
+  "proposed_gift_catalog_scope": {
+    "axes": ["faction", "element"],
+    "factions_canonical_source": "live roster /api/heroes (12 factions: greek, norse, egyptian, japanese_yokai, celtic, angelic, demonic, cursed, creature_beast, primordial, arcane, mesopotamian)",
+    "elements_canonical_source": "live roster /api/heroes (7 elements: water, fire, earth, wind, lightning, light, dark)",
+    "elements_alias_note": "Roster uses 'dark'; boss policy tables (RM1.34-B) used 'darkness'. Draft catalog adopts the live roster spelling 'dark'.",
+    "missing_faction_note": "'tides' present in boss policy tables (RM1.34-B) but NOT in live roster — not minted in gift catalog draft; flagged needs_roster_source_confirmation for future.",
+    "gift_categories": [
+      {"id": "faction_favored_gift", "description": "Per-faction favored gift (12 entries)"},
+      {"id": "element_favored_gift", "description": "Per-element favored gift (7 entries)"},
+      {"id": "universal_small_gift", "description": "Universal low-tier gift, all heroes accept"},
+      {"id": "event_limited_future", "description": "Reserved for future event-limited drops, design-only"}
+    ]
+  },
+
+  "proposed_faction_element_matrix": {
+    "matrix_shape": "12 factions × 7 elements neutral-name gift IDs",
+    "naming_convention": "<faction>_<element>_token  (e.g. greek_fire_token)",
+    "include_no_adult_or_explicit_naming": true,
+    "matrix_draft_file": "/app/data/design/affinity/affinity_gift_catalog_faction_element_draft_v1.json"
+  },
+
+  "future_activation_prerequisites": [
+    "Approved affinity economy model: gift → affection_points → tier breakpoints (cap policy ratified).",
+    "DB schema with non-destructive migration; no implicit hero stat mutation.",
+    "Inventory subsystem with anti-dup, anti-spend exploits, server-side validation.",
+    "UI gift_claim/spend gated behind AFFINITY_GIFT_RUNTIME_ENABLED feature flag (default OFF).",
+    "No competitive combat advantage initially: affinity bonuses non-PvP OR strictly capped (≤2% per gift, ≤6% total).",
+    "Borea gift records locked until Borea visibility unlocks. Legacy borea / primordial_gaia excluded permanently.",
+    "Adult/explicit naming forbidden (CO/PG-13 review).",
+    "Cross-system audit with Collection Synergy V2 to prevent double-stack abuse."
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "gacha_attached": false,
+    "roster_activation_attached": false,
+    "inventory_mutation": false,
+    "borea_activation_allowed": false,
+    "adult_explicit_naming": false,
+    "feature_flag_dependency": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "AF2-B (hypothetical): Affinity economy + cap policy draft (design-only).",
+    "AF2-C (hypothetical): Gift inventory schema draft + anti-exploit invariants.",
+    "AF2-D (hypothetical): Cross-system stack audit Collection Synergy V2 × Affinity Phase 2."
+  ]
+}

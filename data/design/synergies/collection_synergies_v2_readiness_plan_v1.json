@@ -1,0 +1,125 @@
+{
+  "plan_id": "collection_synergies_v2_readiness_plan_v1",
+  "task_origin": "CS2-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "no_runtime_feature_flag_on": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "definitions": {
+    "team_synergy": "Active synergy computed from CURRENT team composition (5 heroes in a battle squad). Resolved at squad-formation time, optionally applied to battle runtime via gated feature flag.",
+    "collection_synergy": "Passive / account-wide bonus computed from OWNED roster milestones (e.g. owns N heroes of faction X). Independent of which 5 heroes are deployed. Strictly out-of-scope for this task; readiness-only."
+  },
+
+  "current_team_synergy_v2_state": {
+    "source_file": "/app/data/design/team_synergies_v2_initial_10.json",
+    "definitions_count": 10,
+    "first_id_sample": "olympian_command",
+    "runtime_definitions_module": "/app/backend/data/synergy_definitions_v2.py",
+    "routes_module": "/app/backend/routes/synergies.py",
+    "public_route_open": "/api/synergies/v2/all (200)",
+    "auth_gated_routes": ["/api/synergies/team_v2 (401)", "/api/synergies/codex (401)", "/api/synergies/by_hero/<hero_id> (401)"],
+    "battle_integration_flag": "OFF (gated; no buffs applied to combat)",
+    "borea_visibility_in_codex": "hidden / catalog-only consistent with global Borea policy"
+  },
+
+  "current_codex_ui_state": {
+    "file": "/app/frontend/app/synergy-codex.tsx",
+    "hero_detail_file": "/app/frontend/app/hero-detail.tsx",
+    "posts_or_mutations": "none (audited via grep, read-only)",
+    "activate_claim_spend_equip_buttons": "none"
+  },
+
+  "proposed_collection_synergy_categories": [
+    {
+      "id": "faction_collection",
+      "description": "Bonus per X owned heroes of faction Y",
+      "axis": "faction",
+      "design_only": true,
+      "future_runtime_feature_flag": "COLLECTION_SYNERGY_FACTION_ENABLED"
+    },
+    {
+      "id": "element_collection",
+      "description": "Bonus per X owned heroes of element Z",
+      "axis": "element",
+      "design_only": true,
+      "future_runtime_feature_flag": "COLLECTION_SYNERGY_ELEMENT_ENABLED"
+    },
+    {
+      "id": "rarity_collection",
+      "description": "Bonus per X owned heroes of rarity 5★ / 6★",
+      "axis": "rarity",
+      "design_only": true,
+      "future_runtime_feature_flag": "COLLECTION_SYNERGY_RARITY_ENABLED"
+    },
+    {
+      "id": "origin_group_collection",
+      "description": "Bonus per owning a thematic origin group (e.g. Olympian Pantheon)",
+      "axis": "origin_group",
+      "design_only": true,
+      "future_runtime_feature_flag": "COLLECTION_SYNERGY_ORIGIN_ENABLED"
+    },
+    {
+      "id": "mythic_set_collection",
+      "description": "Bonus per completing a specific mythic set (3-piece, 5-piece)",
+      "axis": "mythic_set",
+      "design_only": true,
+      "future_runtime_feature_flag": "COLLECTION_SYNERGY_MYTHIC_SET_ENABLED"
+    },
+    {
+      "id": "divine_weapon_collection_link_future",
+      "description": "Bonus per owning N Divine Weapons (catalog count, not equip)",
+      "axis": "divine_weapon_catalog_count",
+      "design_only": true,
+      "future_runtime_feature_flag": "COLLECTION_SYNERGY_DW_LINK_ENABLED"
+    }
+  ],
+
+  "proposed_milestone_model": {
+    "trigger_axis": "owned_count",
+    "owned_count_thresholds_tiered": [3, 5, 10],
+    "star_threshold_future_optional": [5, 6],
+    "active_roster_exclusion_optional": true,
+    "no_combat_runtime_until_future_flag": true,
+    "max_total_collection_bonus_pct": 15,
+    "max_per_category_bonus_pct": 5,
+    "stacking_rule": "additive_capped",
+    "reset_on_hero_removal": false,
+    "applies_to": ["non_pvp_initial", "opt_in_pvp_future_only"]
+  },
+
+  "future_activation_prerequisites": [
+    "Collection resolver in /app/backend/data/ as READ-ONLY first (mirrors RM1.33-A skill_kit_runtime_adapter pattern).",
+    "Account-owned hero source validation (no client-trust; server reads roster).",
+    "UI read-only preview screen reusing synergy-codex.tsx primitives (no buttons).",
+    "Reward/buff cap policy ratified (max 15% total, max 5% per category, see anti-whale caps).",
+    "Anti-whale runaway caps: no diminishing-returns exploit, no negative HP/atk multipliers.",
+    "Borea safety gate: greek_borea contributions to collection synergies must be hidden until Borea visibility unlocks. Legacy borea / primordial_gaia excluded always.",
+    "Battle engine integration only behind explicit COLLECTION_SYNERGY_BATTLE_ENABLED feature flag (default OFF).",
+    "DB write only after migration plan approved.",
+    "PvP impact frozen until separate balance review."
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "used_by_battle_engine": false,
+    "db_write": false,
+    "applied_to_combat": false,
+    "borea_activation_allowed": false,
+    "gacha_attached": false,
+    "roster_activation_attached": false,
+    "feature_flag_dependency": "COLLECTION_SYNERGY_BATTLE_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "CS2-B (hypothetical): Collection synergy READ-ONLY resolver skeleton (inert, mirrors RM1.33-A pattern).",
+    "CS2-C (hypothetical): UI read-only preview screen for collection synergy milestones.",
+    "CS2-D (hypothetical): Cap policy fixture + cross-table consistency with Team Synergy V2 to avoid stack abuse."
+  ]
+}
