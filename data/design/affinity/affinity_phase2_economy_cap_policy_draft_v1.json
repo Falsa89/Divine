@@ -1,0 +1,179 @@
+{
+  "policy_id": "affinity_phase2_economy_cap_policy_draft_v1",
+  "task_origin": "AF2-B",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "no_runtime_feature_flag_on": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "source_catalog": "affinity_gift_catalog_faction_element_draft_v1",
+  "source_catalog_path": "/app/data/design/affinity/affinity_gift_catalog_faction_element_draft_v1.json",
+
+  "summary": "Design-only economy and cap policy draft for converting Affinity gifts (AF2-A catalog) into Affinity points and tier progression. NO live stat buffs, NO DB writes, NO endpoints, NO UI buttons. Borea gifts are locked. Adult/explicit naming is forbidden. Paid-only mandatory progression is forbidden. All values labeled 'placeholder' or 'future' MUST be re-ratified before any runtime activation.",
+
+  "gift_value_tiers": [
+    {
+      "id": "universal_small",
+      "description": "Universal low-tier gift accepted by all heroes; lowest affection-point yield.",
+      "placeholder_points_min": 1,
+      "placeholder_points_max": 3,
+      "drop_source_future": ["daily_login_future", "small_quest_reward_future"],
+      "borea_locked": true,
+      "adult_explicit_naming_forbidden": true
+    },
+    {
+      "id": "faction_favored",
+      "description": "Faction-favored gift (matches hero faction only); medium-low yield.",
+      "placeholder_points_min": 3,
+      "placeholder_points_max": 7,
+      "drop_source_future": ["event_faction_drop_future", "faction_quest_future"],
+      "borea_locked": true,
+      "adult_explicit_naming_forbidden": true
+    },
+    {
+      "id": "element_favored",
+      "description": "Element-favored gift (matches hero element only); medium-low yield.",
+      "placeholder_points_min": 3,
+      "placeholder_points_max": 7,
+      "drop_source_future": ["element_quest_future", "weekly_objective_future"],
+      "borea_locked": true,
+      "adult_explicit_naming_forbidden": true
+    },
+    {
+      "id": "faction_element_favored",
+      "description": "Dual-axis favored gift (matches BOTH hero faction AND hero element); medium-high yield. Generated via 12x7 matrix in AF2-A draft.",
+      "placeholder_points_min": 8,
+      "placeholder_points_max": 14,
+      "drop_source_future": ["chapter_milestone_future", "guild_objective_future"],
+      "borea_locked": true,
+      "adult_explicit_naming_forbidden": true
+    },
+    {
+      "id": "event_limited_future",
+      "description": "Reserved for future event-limited cosmetic/aesthetic gifts. MUST NOT confer competitive advantage; cosmetics only or capped same as faction_element_favored.",
+      "placeholder_points_min": 0,
+      "placeholder_points_max": 14,
+      "drop_source_future": ["seasonal_event_future"],
+      "borea_locked": true,
+      "adult_explicit_naming_forbidden": true,
+      "paid_only_mandatory_progression": false
+    }
+  ],
+
+  "affinity_tiers": [
+    {
+      "id": "tier_0",
+      "label": "acquaintance",
+      "order": 0,
+      "placeholder_points_required_to_enter": 0,
+      "stat_buff_live": false,
+      "cosmetic_only_initial": true,
+      "borea_locked": true
+    },
+    {
+      "id": "tier_1",
+      "label": "trusted",
+      "order": 1,
+      "placeholder_points_required_to_enter": 80,
+      "stat_buff_live": false,
+      "cosmetic_only_initial": true,
+      "borea_locked": true
+    },
+    {
+      "id": "tier_2",
+      "label": "bonded",
+      "order": 2,
+      "placeholder_points_required_to_enter": 240,
+      "stat_buff_live": false,
+      "cosmetic_only_initial": true,
+      "borea_locked": true
+    },
+    {
+      "id": "tier_3",
+      "label": "devoted",
+      "order": 3,
+      "placeholder_points_required_to_enter": 560,
+      "stat_buff_live": false,
+      "cosmetic_only_initial": true,
+      "borea_locked": true
+    },
+    {
+      "id": "tier_4",
+      "label": "oathbound_future",
+      "order": 4,
+      "placeholder_points_required_to_enter": 1200,
+      "stat_buff_live": false,
+      "cosmetic_only_initial": true,
+      "borea_locked": true,
+      "future_only": true
+    }
+  ],
+
+  "cap_policy": {
+    "no_combat_stat_buff_initially": true,
+    "pvp_cap_per_source_pct": 2,
+    "pvp_cap_total_pct": 6,
+    "daily_gift_cap_future_placeholder": 20,
+    "weekly_gift_cap_future_placeholder": 100,
+    "anti_whale_diminishing_returns_future": {
+      "enabled_future": true,
+      "curve_type": "logarithmic_placeholder",
+      "max_effective_points_per_day_future": 80
+    },
+    "borea_gifts_locked_until_visible_active": true,
+    "no_adult_or_explicit_gifts": true,
+    "no_paid_only_mandatory_progression": true,
+    "cosmetic_only_initial_unlocks": true,
+    "stat_buff_unlock_requires_separate_balance_review": true,
+    "stacking_rule": "additive_capped_global_modifier_resolver_required_before_activation"
+  },
+
+  "future_activation_prerequisites": [
+    "DB schema design + non-destructive migration for affinity_points and hero_affinity tier records.",
+    "Inventory source schema + anti-dup / anti-spend exploit validation.",
+    "Auth-gated gift spend endpoint (POST /api/affinity/gift-spend) with idempotency keys + server-side validation; not created in AF2-B.",
+    "Anti-abuse validation: daily/weekly caps, diminishing returns curve ratified.",
+    "UI gift confirm flow with explicit user consent; no auto-spend.",
+    "Cap policy ratification: PvP caps <=2 per source / <=6 total, non-multiplicative initial.",
+    "Borea unlock gate respected: greek_borea gift records remain hidden / catalog-only until Borea visibility unlocks. Legacy borea / primordial_gaia excluded permanently.",
+    "Cross-system audit with Collection Synergy V2 + Divine Weapons to prevent stack abuse (see STACK-A).",
+    "Rollback plan: ability to disable AFFINITY_GIFT_RUNTIME_ENABLED and revert tier progression without data loss.",
+    "Economy balancing test pass on staging before runtime ON."
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "gacha_attached": false,
+    "roster_activation_attached": false,
+    "inventory_mutation": false,
+    "borea_activation_allowed": false,
+    "adult_explicit_naming": false,
+    "paid_only_mandatory_progression": false,
+    "stat_buff_live": false,
+    "feature_flag_dependency": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "constraints_assertions": {
+    "all_gift_value_tiers_borea_locked": true,
+    "all_affinity_tiers_borea_locked": true,
+    "pvp_cap_per_source_pct_max": 2,
+    "pvp_cap_total_pct_max": 6,
+    "all_tiers_stat_buff_live_false": true,
+    "no_endpoint_created_in_this_task": true,
+    "no_ui_button_created_in_this_task": true
+  },
+
+  "recommended_next_tasks": [
+    "AF2-C (hypothetical): Gift inventory schema draft + anti-exploit invariants.",
+    "AF2-D (hypothetical): Cross-system stack audit Collection Synergy V2 x Affinity Phase 2 x DW.",
+    "AF2-E (hypothetical): UI read-only preview screen for affinity tiers (no spend button)."
+  ]
+}

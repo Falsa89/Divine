@@ -60,6 +60,12 @@ OPTIONAL = [
     ('CS2-A', 'audit_collection_synergies_v2_readiness.py'),
     ('AF2-A', 'audit_affinity_phase2_gift_catalog_readiness.py'),
     ('CS2/AF2-COMBO', 'validate_collection_affinity_readiness_combo.py'),
+    ('CS2-B', 'audit_collection_synergy_preview_resolver_safety.py'),
+    ('AF2-B', 'validate_affinity_phase2_economy_cap_policy.py'),
+    ('AXIS-A', 'audit_canonical_faction_element_axes.py'),
+    ('UI-PREVIEW-A', 'audit_collection_affinity_ui_preview_safety.py'),
+    ('STACK-A', 'audit_cross_system_progression_stack_safety.py'),
+    ('MEGA-COMBO', 'validate_collection_affinity_axis_stack_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

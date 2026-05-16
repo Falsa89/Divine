@@ -1,0 +1,162 @@
+{
+  "plan_id": "collection_affinity_preview_ui_readiness_plan_v1",
+  "task_origin": "UI-PREVIEW-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "no_runtime_feature_flag_on": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Design-only readiness plan for future read-only UI preview surfaces that will surface (a) Collection Synergy V2 milestones and (b) Affinity Phase 2 gift catalog. NO UI is implemented in this task. NO buttons. NO writes. NO runtime activation. The plan strictly enumerates future-only candidate screens, mandatory empty-states, accessibility constraints, Borea hidden handling, and the prerequisites that must be satisfied before any screen is implemented.",
+
+  "ui_implementation_in_this_task": false,
+  "ui_files_modified_in_this_task": [],
+  "ui_files_created_in_this_task": [],
+
+  "future_readonly_screen_candidates": [
+    {
+      "id": "collection_synergy_milestone_preview_future",
+      "purpose": "Read-only preview of collection synergy categories + milestone thresholds + caps from CS2-A readiness plan and CS2-B preview resolver.",
+      "data_source_future": "/api/synergies/collection/preview (READ-ONLY, future, behind COLLECTION_SYNERGY_PREVIEW_ENABLED feature flag, default OFF).",
+      "data_source_fallback_design_only": "static read of /app/data/design/synergies/collection_synergies_v2_readiness_plan_v1.json",
+      "must_reuse_components": ["SynergyCodexCard (read-only)", "MilestoneTierBadge (read-only)"],
+      "must_NOT_contain": ["claim button", "activate button", "enable runtime button", "spend button", "equip button"],
+      "borea_handling": "any greek_borea row must be hidden until Borea visibility unlocks; legacy borea / primordial_gaia permanently excluded.",
+      "empty_state_required": true,
+      "loading_state_required": true,
+      "error_state_required": true,
+      "accessibility": {
+        "min_touch_target_dp": 44,
+        "color_contrast_min_wcag": "AA",
+        "supports_dynamic_text_scaling": true,
+        "screen_reader_labels_required": true
+      }
+    },
+    {
+      "id": "affinity_gift_catalog_preview_future",
+      "purpose": "Read-only preview of the AF2-A 85-entry gift catalog + AF2-B economy/cap policy summary.",
+      "data_source_future": "/api/affinity/gifts (READ-ONLY, future, behind AFFINITY_PREVIEW_ENABLED feature flag, default OFF). NO spend endpoint.",
+      "data_source_fallback_design_only": "static read of /app/data/design/affinity/affinity_gift_catalog_faction_element_draft_v1.json and affinity_phase2_economy_cap_policy_draft_v1.json",
+      "must_reuse_components": ["GiftRowCard (read-only)", "AffinityTierBadge (read-only)"],
+      "must_NOT_contain": ["gift spend button", "give gift button", "claim reward button", "purchase button", "enable runtime button"],
+      "borea_handling": "any greek_borea gift row must be hidden until Borea visibility unlocks.",
+      "empty_state_required": true,
+      "loading_state_required": true,
+      "error_state_required": true,
+      "accessibility": {
+        "min_touch_target_dp": 44,
+        "color_contrast_min_wcag": "AA",
+        "supports_dynamic_text_scaling": true,
+        "screen_reader_labels_required": true
+      }
+    },
+    {
+      "id": "hero_detail_readonly_affinity_tab_future",
+      "purpose": "A new read-only tab on hero-detail.tsx that surfaces the hero's current affinity tier (always tier_0/acquaintance in this phase) + favored gift categories. NO spend. NO activation.",
+      "data_source_future": "/api/affinity/hero/<hero_id>/preview (READ-ONLY, future, behind AFFINITY_PREVIEW_ENABLED flag, default OFF).",
+      "data_source_fallback_design_only": "static read of AF2-A draft + AF2-B policy",
+      "must_NOT_contain": ["gift spend button", "claim button", "set affinity button", "purchase button"],
+      "borea_handling": "tab MUST be hidden when hero_id === 'greek_borea' until visibility unlocks; tab MUST 404 for legacy 'borea' / 'primordial_gaia'.",
+      "empty_state_required": true,
+      "accessibility": {
+        "min_touch_target_dp": 44,
+        "color_contrast_min_wcag": "AA"
+      }
+    }
+  ],
+
+  "strict_no_buttons_global_policy": {
+    "claim_button": false,
+    "gift_spend_button": false,
+    "activate_button": false,
+    "equip_button": false,
+    "enable_runtime_button": false,
+    "purchase_button": false,
+    "give_button": false,
+    "rationale": "Any active button creates a write path that bypasses the runtime / feature-flag gate. Read-only screens MUST stay read-only until DB schema, anti-abuse validation, balance review, and feature flag activation are ALL ratified."
+  },
+
+  "ui_data_sources_future": {
+    "primary_source_phase1_designonly": "static read of /app/data/design/* JSON drafts",
+    "primary_source_phase2_apionly": "auth-gated read-only endpoints behind preview feature flags",
+    "primary_source_phase3_player_data": "auth-gated player_data endpoints — only after DB schema + migration approved + AFFINITY_GIFT_RUNTIME_ENABLED / COLLECTION_SYNERGY_BATTLE_ENABLED ratified.",
+    "no_client_trust_principle": "Client MUST NEVER POST owned-hero counts or affinity points to compute synergies / tiers. Server is source of truth.",
+    "no_local_async_storage_for_progression": "Progression state must NOT be persisted in AsyncStorage / SecureStore — server-side only."
+  },
+
+  "accessibility_and_mobile_constraints": {
+    "min_touch_target_dp": 44,
+    "min_touch_target_dp_android": 48,
+    "supports_safe_area_insets": true,
+    "supports_keyboard_avoiding_view_when_text_inputs_present": true,
+    "supports_dark_mode": true,
+    "color_contrast_min_wcag": "AA",
+    "screen_reader_labels_required": true,
+    "haptics_optional_only": true,
+    "no_blocking_modal_without_dismiss": true,
+    "flash_list_required_for_long_lists": true,
+    "test_breakpoints_required": ["iPhone 12/13/14 390x844", "Samsung Galaxy S21 360x800"]
+  },
+
+  "borea_hidden_handling": {
+    "rule": "Every collection synergy preview row, affinity gift row, and hero detail affinity tab MUST consult the central Borea visibility resolver before rendering. If the hero id resolves to a hidden Borea variant, the row/tab MUST NOT render at all (silent hide, not 'locked' label).",
+    "legacy_aliases_blocked": ["borea", "primordial_gaia"],
+    "greek_borea_status": "catalog_only_hidden_until_global_unlock"
+  },
+
+  "fallback_empty_states": [
+    {
+      "state": "empty_collection_synergy_categories",
+      "user_message_key": "ui.collection.empty.title",
+      "user_message_fallback": "Collection synergies coming soon."
+    },
+    {
+      "state": "empty_affinity_gifts",
+      "user_message_key": "ui.affinity.empty.title",
+      "user_message_fallback": "Affinity gifts coming soon."
+    },
+    {
+      "state": "loading_state",
+      "user_message_fallback": "Loading preview..."
+    },
+    {
+      "state": "error_state",
+      "user_message_fallback": "Preview temporarily unavailable. Please try again later."
+    }
+  ],
+
+  "future_activation_prerequisites": [
+    "CS2-C / AF2-C readiness ratified.",
+    "Inert read-only preview endpoints implemented behind preview feature flags (default OFF).",
+    "Cap policy ratified (CS2: <=15 total / <=5 per category; AF2: <=6 PvP total / <=2 per source).",
+    "Cross-system stack audit (STACK-A) PASS with no live source.",
+    "Accessibility audit pass on iPhone 12/13/14 and Samsung Galaxy S21.",
+    "Borea hidden invariant unit-tested at the UI layer.",
+    "Rollback plan: toggling preview feature flag OFF must hide the screen without crashes."
+  ],
+
+  "audit_grep_targets": [
+    "/app/frontend/app/synergy-codex.tsx",
+    "/app/frontend/app/hero-detail.tsx",
+    "/app/frontend/app/hero-skill-kits-catalog.tsx",
+    "/app/frontend/app/divine-weapons-catalog.tsx"
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "ui_implementation_in_this_task": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "UI-PREVIEW-B (hypothetical): implement inert read-only collection synergy preview screen (no buttons).",
+    "UI-PREVIEW-C (hypothetical): implement inert read-only affinity gift catalog preview screen (no buttons).",
+    "UI-PREVIEW-D (hypothetical): accessibility / a11y test pass on both screens."
+  ]
+}

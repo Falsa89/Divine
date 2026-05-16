@@ -1,0 +1,133 @@
+{
+  "report_id": "cross_system_progression_stack_safety_report_v1",
+  "task_origin": "STACK-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "scope": [
+    "Collection Synergies V2 (CS2-A readiness + CS2-B preview resolver)",
+    "Affinity Phase 2 (AF2-A gift catalog + AF2-B economy/cap policy)",
+    "Divine Weapons catalog + preview fixture (RM1.27 / RM1.33-H)",
+    "Skill Kit foundation values (5*/6* drafts RM1.32-A/B + RM1.32-C2 trim)",
+    "Boss policies (RM1.34/B/C/D matrices and audits)",
+    "Runtime adapter (RM1.33-A) — currently OFF"
+  ],
+
+  "current_inertness_assertions": {
+    "no_live_stat_source_from_collection": true,
+    "no_live_stat_source_from_affinity": true,
+    "divine_weapons_catalog_runtime_attached": false,
+    "skill_kit_runtime_enabled_default": false,
+    "boss_policies_design_only": true,
+    "runtime_adapter_off": true,
+    "battle_engine_imports_runtime_adapter": false,
+    "combat_tsx_imports_runtime_adapter": false,
+    "borea_hidden_invariant_holds": true,
+    "api_heroes_count_invariant_100": true
+  },
+
+  "cap_recommendations_future_only": {
+    "collection_total_cap_pct": 15,
+    "collection_per_category_cap_pct": 5,
+    "affinity_pvp_per_source_cap_pct": 2,
+    "affinity_pvp_total_cap_pct": 6,
+    "divine_weapon_global_cap_pct_future": 10,
+    "divine_weapon_pvp_cap_pct_future": 5,
+    "combined_future_pvp_total_cap_pct_max_recommended": 12,
+    "rationale_combined_cap": "Sum of independent additive sources (affinity 6 + DW 5 + small collection contribution if any non-PvP exception) MUST stay below an authoritative combined PvP cap, enforced by a future global modifier cap resolver before any runtime activation."
+  },
+
+  "current_application_to_battle_engine": {
+    "collection_synergy_v2": "none (CS2-B resolver inert, not imported by battle_engine)",
+    "affinity_phase_2": "none (AF2-A catalog inert, AF2-B economy/cap policy design-only)",
+    "divine_weapons": "none (catalog-only browser, no runtime application)",
+    "skill_kit": "none (runtime adapter SKILL_KIT_RUNTIME_ENABLED=false default)",
+    "boss_policies": "none (matrices/policies design-only, not consumed by live battle_engine)"
+  },
+
+  "borea_locked_across_systems": {
+    "collection_synergy_v2": true,
+    "affinity_phase_2": true,
+    "divine_weapons": true,
+    "skill_kit": true,
+    "boss_policies": true,
+    "legacy_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "stacking_risks_if_all_activated_later": [
+    {
+      "id": "additive_summed_buffs",
+      "description": "If all four systems (Collection, Affinity, DW, Skill Kit modifiers) emit additive PvP buffs simultaneously, naive sum could exceed the 12% combined PvP cap.",
+      "severity": "high",
+      "mitigation": "Implement a global_modifier_cap_resolver BEFORE any runtime activation. PvP cap MUST be authoritative; non-PvP can keep system caps."
+    },
+    {
+      "id": "multiplicative_stacking",
+      "description": "If any system applies multiplicatively rather than additively, effective buff can compound far beyond intended caps.",
+      "severity": "critical",
+      "mitigation": "Forbid multiplicative stacking in the initial activation; explicit balance review required before allowing any multiplicative source."
+    },
+    {
+      "id": "axis_mismatch_runtime_drift",
+      "description": "If the Faction x Element axis mismatch (dark vs darkness, missing tides) is not resolved, a runtime resolver may silently miss matrix rows and emit zero-resistance defaults, swinging PvP balance.",
+      "severity": "blocking_for_runtime_on",
+      "mitigation": "AXIS-A activation gate must pass before any Faction/Element runtime ON."
+    },
+    {
+      "id": "double_counting_cross_system",
+      "description": "A hero who contributes to a Collection Synergy AND has Affinity tier 4 AND equips a Divine Weapon could double/triple count if the same stat is buffed by all three.",
+      "severity": "high",
+      "mitigation": "Same-stat sources MUST be unioned and clamped by the global cap resolver. No double-counting."
+    },
+    {
+      "id": "borea_hidden_leak",
+      "description": "If any future runtime activation forgets the Borea hidden invariant, hidden hero data could leak through synergy/affinity/DW previews.",
+      "severity": "critical",
+      "mitigation": "Central Borea visibility resolver consulted by every runtime activation; unit tests required."
+    }
+  ],
+
+  "global_modifier_cap_resolver_requirement": {
+    "name": "global_modifier_cap_resolver_future",
+    "required_before_any_runtime_on": true,
+    "responsibilities": [
+      "Aggregate additive PvP modifiers across Collection, Affinity, Divine Weapons, Skill Kit, Boss interactions",
+      "Clamp combined PvP buff to <= combined_future_pvp_total_cap_pct_max_recommended (12)",
+      "Forbid multiplicative stacking initially",
+      "Reject orphan faction/element tokens not present in live roster (or covered by alias map)",
+      "Honor Borea hidden invariant; never include hidden hero contributions"
+    ],
+    "currently_implemented": false
+  },
+
+  "activation_gates_summary": [
+    "Faction/Element axis activation gate (AXIS-A)",
+    "Cap policy ratification (CS2 / AF2 / DW combined)",
+    "Global modifier cap resolver implemented and audited",
+    "Inert preview screens shipped and a11y-tested (UI-PREVIEW-A)",
+    "Runtime adapter feature flags individually ratified",
+    "Borea visibility invariant unit-tested at runtime layer",
+    "Rollback plan in place for each flag"
+  ],
+
+  "current_overall_status": "PASS — every in-scope system is inert; future risks documented; activation gates enumerated. No current PvP risk because nothing is applied to battle_engine.",
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "STACK-B (hypothetical): implement global_modifier_cap_resolver skeleton (inert).",
+    "STACK-C (hypothetical): unit tests for cap clamping + Borea hidden invariant.",
+    "AXIS-B (hypothetical): implement alias_map read-through helper (inert)."
+  ]
+}

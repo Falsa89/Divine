@@ -1,0 +1,151 @@
+{
+  "plan_id": "canonical_faction_element_axis_resolution_plan_v1",
+  "task_origin": "AXIS-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "no_db_write": true,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Design-only resolution plan for the discrepancies between the canonical Faction and Element axes used across (a) the live roster /api/heroes, (b) the Boss Family x Element/Faction Resistance Matrix (RM1.34-B), (c) the Affinity Phase 2 gift catalog draft (AF2-A), and (d) the Collection Synergies V2 readiness draft (CS2-A). Resolution preserves the live roster as the runtime-facing source of truth, introduces an alias map for in-flight catalog reads, and freezes any Faction/Element-axis runtime ON until validator-asserted axis equality or alias coverage is confirmed.",
+
+  "observed_state_snapshot": {
+    "roster_factions_from_api_heroes": [
+      "angelic", "arcane", "celtic", "creature_beast", "cursed",
+      "demonic", "egyptian", "greek", "japanese_yokai",
+      "mesopotamian", "norse", "primordial"
+    ],
+    "roster_elements_from_api_heroes": [
+      "dark", "earth", "fire", "light", "lightning", "water", "wind"
+    ],
+    "boss_matrix_elements_rm134b": [
+      "fire", "water", "earth", "wind", "lightning", "light", "darkness"
+    ],
+    "boss_matrix_faction_groups_rm134b": [
+      "greek", "norse", "egyptian", "japanese_yokai", "celtic",
+      "angelic", "demonic", "cursed", "creature_beast", "primordial",
+      "arcane", "tides", "mesopotamian"
+    ],
+    "affinity_gift_draft_factions_af2a": [
+      "greek", "norse", "egyptian", "japanese_yokai", "celtic",
+      "angelic", "demonic", "cursed", "creature_beast", "primordial",
+      "arcane", "mesopotamian"
+    ],
+    "affinity_gift_draft_elements_af2a": [
+      "water", "fire", "earth", "wind", "lightning", "light", "dark"
+    ],
+    "collection_readiness_cs2a_categories": [
+      "faction_collection", "element_collection", "rarity_collection",
+      "origin_group_collection", "mythic_set_collection",
+      "divine_weapon_collection_link_future"
+    ]
+  },
+
+  "discrepancies": [
+    {
+      "id": "element_dark_vs_darkness",
+      "axis": "element",
+      "live_roster_token": "dark",
+      "boss_matrix_token": "darkness",
+      "affinity_gift_draft_token": "dark",
+      "impact": "Direct lookups by element key (e.g. boss matrix row) will fail when keyed against roster heroes (`dark`).",
+      "severity": "blocking_for_runtime_activation",
+      "design_only_today": true
+    },
+    {
+      "id": "faction_tides_in_matrix_only",
+      "axis": "faction",
+      "live_roster_present": false,
+      "boss_matrix_present": true,
+      "affinity_gift_draft_present": false,
+      "impact": "`tides` exists as a boss matrix faction group but has zero live heroes; minting affinity gifts or collection synergies for `tides` would create orphan records.",
+      "severity": "blocking_for_runtime_activation",
+      "design_only_today": true
+    }
+  ],
+
+  "canonical_element_recommendation": {
+    "runtime_facing_source": "live_roster /api/heroes",
+    "canonical_token": "dark",
+    "treatment_of_legacy_token_darkness": "alias to dark for catalog read-throughs; do not mutate RM1.34-B source in this task; flag for a future controlled patch task (RM1.34-B-PATCH).",
+    "ui_localization_preserved": "Oscurita / Darkness (display only) maps to canonical_token=dark"
+  },
+
+  "canonical_faction_recommendation": {
+    "runtime_facing_source": "live_roster /api/heroes",
+    "authoritative_factions": [
+      "angelic", "arcane", "celtic", "creature_beast", "cursed",
+      "demonic", "egyptian", "greek", "japanese_yokai",
+      "mesopotamian", "norse", "primordial"
+    ],
+    "tides_status": "design_pending; not live until live roster source confirms at least one tides hero or tides is officially struck from RM1.34-B; affinity / collection synergy must NOT mint records for tides today.",
+    "do_not_mint_gift_entries_for_tides": true,
+    "do_not_mint_collection_synergy_entries_for_tides": true
+  },
+
+  "alias_map": {
+    "elements": {
+      "darkness": "dark",
+      "dark": "dark",
+      "oscurita": "dark",
+      "shadow": "dark"
+    },
+    "factions": {
+      "yokai": "japanese_yokai",
+      "creatures": "creature_beast",
+      "beasts": "creature_beast",
+      "celtics": "celtic"
+    },
+    "policy": "alias map is consumed only by inert read-through resolvers; battle_engine.py and combat.tsx MUST NOT import it directly until activation gate passes."
+  },
+
+  "activation_gate": {
+    "name": "faction_element_axis_activation_gate",
+    "required_before_any_runtime_on": [
+      "validator MUST assert that, for every faction/element used by an activating runtime, either (a) the token equals a live roster token exactly, OR (b) the token is in alias_map and the alias target is a live roster token.",
+      "validator MUST assert that no orphan faction (e.g. `tides`) has runtime records emitted.",
+      "validator MUST assert RM1.34-B downstream consumers (collection synergies, affinity gifts, divine weapons, boss policies) read through the alias map and not via direct token equality.",
+      "Borea hidden-state invariant MUST hold (`greek_borea` catalog-only, `borea` / `primordial_gaia` 404)."
+    ],
+    "currently_satisfied": false,
+    "currently_blocking_runtime_on": true
+  },
+
+  "risk_notes": [
+    "If runtime were activated today without alias coverage, boss element-resistance lookups against live heroes with element=`dark` would silently miss the `darkness` matrix row, producing zero-resistance defaults that could swing PvP balance.",
+    "If affinity / collection synergy were to mint records for `tides` based on RM1.34-B, players would see orphan entries that can never progress, eroding trust.",
+    "Mutating RM1.34-B source in this task (changing `darkness` -> `dark` or dropping `tides`) would invalidate the boss balance review and is FORBIDDEN by safety rules; we resolve via alias map + design plan, not by source patch."
+  ],
+
+  "recommended_next_patches_future_only": [
+    {
+      "id": "RM1.34-B-PATCH-A",
+      "scope": "Migrate RM1.34-B element token `darkness` -> `dark` in a controlled patch task with re-baseline.",
+      "blocked_until": "boss balance review re-ratifies the matrix under canonical token `dark`."
+    },
+    {
+      "id": "RM1.34-B-PATCH-B",
+      "scope": "Resolve `tides` faction: either officially add at least one live `tides` hero (roster patch) or strike `tides` from the matrix.",
+      "blocked_until": "live roster decision."
+    },
+    {
+      "id": "AF2-A-PATCH",
+      "scope": "Confirm AF2-A gift draft canonical adoption of `dark` (already adopted) and explicit non-mint of `tides_*` entries (already non-minted).",
+      "status": "already aligned; verification only."
+    }
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "gacha_attached": false,
+    "roster_activation_attached": false,
+    "borea_activation_allowed": false,
+    "patches_rm134b_in_this_task": false,
+    "patches_af2a_in_this_task": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}
