@@ -55,6 +55,8 @@ OPTIONAL = [
     ('RM1.34-B', 'validate_boss_element_faction_matrix.py'),
     ('RM1.34-C', 'validate_boss_enrage_phase_policy_table.py'),
     ('RM1.34-D', 'audit_boss_policy_cross_table_consistency.py'),
+    ('RM1.34-E', 'validate_boss_policy_scenario_fixture_seed.py'),
+    ('RM1.33-H', 'validate_divine_weapon_preview_catalog_only_fixture.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

@@ -1,0 +1,35 @@
+{
+  "result_id": "boss_policy_scenario_fixture_seed_result_v1",
+  "task_origin": "RM1.34-E",
+  "fixture_id": "boss_policy_scenario_fixture_seed_v1",
+  "generated_at_utc": "2026-05-16T21:58:38.369856Z",
+  "audit_result": "PASS",
+  "scenarios_total": 12,
+  "families_covered": [
+    "elite_boss",
+    "event_boss",
+    "guild_boss",
+    "normal_boss",
+    "pvp_dummy",
+    "raid_boss",
+    "story_boss",
+    "training_dummy",
+    "world_boss"
+  ],
+  "major_families_extra_coverage": {
+    "raid_boss": 2,
+    "world_boss": 2,
+    "guild_boss": 2
+  },
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "source_table_sha256_prefixes": {
+    "boss_family_resistance_table_v1.json": "989489a4741645ee",
+    "boss_family_element_faction_matrix_v1.json": "972922023e78058d",
+    "boss_enrage_phase_policy_table_v1.json": "609deec68d03db82"
+  },
+  "no_runtime_activation": true,
+  "no_db_write": true,
+  "no_catalog_mutation": true,
+  "failures": [],
+  "warnings": []
+}

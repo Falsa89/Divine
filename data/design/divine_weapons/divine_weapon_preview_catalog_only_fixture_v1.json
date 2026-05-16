@@ -1,0 +1,49 @@
+{
+  "fixture_id": "divine_weapon_preview_catalog_only_fixture_v1",
+  "task_origin": "RM1.33-H",
+  "design_only": true,
+  "runtime_attached": false,
+  "no_runtime_activation": true,
+  "no_db_write": true,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "fixture_purpose": "Verify all 13 Divine Weapon records remain catalog-only / design-only / runtime-off and that no equip/activate endpoint or UI Pressable exists for the live battle runtime.",
+  "expected_total": 13,
+  "expected_release_group_split": {
+    "launch_base": 12,
+    "launch_extra_premium": 1
+  },
+  "forbidden_runtime_route_tokens": [
+    "equip_divine_weapon", "activate_divine_weapon", "break_seal", "spend_divine_weapon",
+    "summon_divine_weapon", "battle_test_divine_weapon", "enable_dw_runtime", "/dw/equip",
+    "/dw/activate", "/divine-weapons/equip", "/divine-weapons/activate"
+  ],
+  "forbidden_ui_pressable_tokens": [
+    "Equip", "Activate", "Break Seal", "Spend", "Summon", "Battle Test", "Enable Runtime",
+    "onPress={equip", "onPress={activate", "onPress={spend"
+  ],
+  "records": [
+    {"divine_weapon_id": "aegis_of_athena", "owner_hero_id": "greek_athena", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "artemis_lunar_bow", "owner_hero_id": "greek_artemis", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "gaia_primordial_root", "owner_hero_id": "greek_gaia", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "nyx_primordial_night_veil", "owner_hero_id": "primordial_nyx", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "raijin_thunder_drums", "owner_hero_id": "japanese_raijin", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "susanoo_ame_no_habakiri", "owner_hero_id": "japanese_susanoo", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "amaterasu_yata_no_kagami", "owner_hero_id": "japanese_amaterasu", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "sekhmet_burning_eye_of_ra", "owner_hero_id": "egyptian_sekhmet", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "tiamat_primordial_abyss", "owner_hero_id": "mesopotamian_tiamat", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "isis_sacred_tyet_knot", "owner_hero_id": "egyptian_isis", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "morrigan_raven_mantle", "owner_hero_id": "celtic_morrigan", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "pestilence_seal", "owner_hero_id": "cursed_pestilence_horseman", "release_group": "launch_base", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true},
+    {"divine_weapon_id": "borea_wings_of_the_north_wind", "owner_hero_id": "greek_borea", "release_group": "launch_extra_premium", "expected_catalog_only": true, "expected_runtime_ready": false, "expected_live_numeric_modifier_applied": false, "expected_design_only": true, "expected_no_equip_endpoint": true, "expected_no_activation_endpoint": true, "borea_activation_allowed": false, "marchio_owner_must_remain": "greek_borea", "legacy_borea_forbidden": true}
+  ],
+  "global_invariants": {
+    "expected_heroes_count": 100,
+    "expected_borea_visible_in_heroes": false,
+    "expected_legacy_borea_404": true,
+    "expected_primordial_gaia_404": true,
+    "expected_runtime_attached_global": false,
+    "expected_battle_runtime_attached_global": false,
+    "expected_borea_activation_allowed_global": false
+  }
+}
