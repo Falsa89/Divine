@@ -1,0 +1,326 @@
+{
+  "result_id": "hero_skill_kit_numeric_trim_rm132c2_result_v1",
+  "task_origin": "RM1.32-C2",
+  "generated_at_utc": "2026-05-16T21:34:25.909435Z",
+  "backup_manifest_path": "/app/backups/hero_skill_kits/backup_20260516T213239Z/MANIFEST.json",
+  "files_scanned": [
+    {
+      "file": "hero_skill_kits_5star_full_v1.json",
+      "label": "5star",
+      "values_scanned": 100,
+      "values_trimmed": 0
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "label": "6star",
+      "values_scanned": 78,
+      "values_trimmed": 19
+    }
+  ],
+  "values_scanned": 178,
+  "values_trimmed": 19,
+  "trim_records_total": 26,
+  "by_category": {
+    "status_chance_pct": 19,
+    "damage_multiplier_pct_aoe_ultimate": 3,
+    "damage_multiplier_pct_st_burst": 4,
+    "marchio_boreale_stack_values": 0
+  },
+  "trims": [
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "greek_athena",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785222Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "greek_artemis",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785240Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "greek_artemis",
+      "slot": "ultimate",
+      "field_path": "damage_multiplier_pct",
+      "before": 680,
+      "after": 600,
+      "reason": "pvp_cap_single_target_burst: ST ultimate 680 > 600 (tgt=1) → cap 600",
+      "source": "RM1.32-C delta plan (pvp_cap_single_target_burst WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785244Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "greek_gaia",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785252Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "primordial_nyx",
+      "slot": "skill_2",
+      "field_path": "status_chance_pct",
+      "before": 90,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 90 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785257Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "primordial_nyx",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785261Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "japanese_raijin",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785271Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "japanese_raijin",
+      "slot": "ultimate",
+      "field_path": "damage_multiplier_pct",
+      "before": 440,
+      "after": 380,
+      "reason": "pvp_cap_aoe_ultimate: AoE ultimate per-target 440 > 380 (tgt=5) → cap 380",
+      "source": "RM1.32-C delta plan (pvp_cap_aoe_ultimate WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785275Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "japanese_susanoo",
+      "slot": "skill_2",
+      "field_path": "status_chance_pct",
+      "before": 90,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 90 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785281Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "japanese_susanoo",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785286Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "japanese_susanoo",
+      "slot": "ultimate",
+      "field_path": "damage_multiplier_pct",
+      "before": 720,
+      "after": 600,
+      "reason": "pvp_cap_single_target_burst: ST ultimate 720 > 600 (tgt=1) → cap 600",
+      "source": "RM1.32-C delta plan (pvp_cap_single_target_burst WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785289Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "japanese_amaterasu",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785294Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "egyptian_sekhmet",
+      "slot": "skill_2",
+      "field_path": "status_chance_pct",
+      "before": 90,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 90 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785300Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "egyptian_sekhmet",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785305Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "egyptian_sekhmet",
+      "slot": "ultimate",
+      "field_path": "damage_multiplier_pct",
+      "before": 700,
+      "after": 600,
+      "reason": "pvp_cap_single_target_burst: ST ultimate 700 > 600 (tgt=1) → cap 600",
+      "source": "RM1.32-C delta plan (pvp_cap_single_target_burst WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785307Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "mesopotamian_tiamat",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785314Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "mesopotamian_tiamat",
+      "slot": "ultimate",
+      "field_path": "damage_multiplier_pct",
+      "before": 400,
+      "after": 380,
+      "reason": "pvp_cap_aoe_ultimate: AoE ultimate per-target 400 > 380 (tgt=5) → cap 380",
+      "source": "RM1.32-C delta plan (pvp_cap_aoe_ultimate WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785316Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "egyptian_isis",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785323Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "celtic_morrigan",
+      "slot": "skill_2",
+      "field_path": "status_chance_pct",
+      "before": 90,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 90 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785328Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "celtic_morrigan",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785332Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "celtic_morrigan",
+      "slot": "ultimate",
+      "field_path": "damage_multiplier_pct",
+      "before": 700,
+      "after": 600,
+      "reason": "pvp_cap_single_target_burst: ST ultimate 700 > 600 (tgt=1) → cap 600",
+      "source": "RM1.32-C delta plan (pvp_cap_single_target_burst WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785334Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "cursed_pestilence_horseman",
+      "slot": "skill_2",
+      "field_path": "status_chance_pct",
+      "before": 90,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 90 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785340Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "cursed_pestilence_horseman",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785344Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "greek_borea",
+      "slot": "skill_2",
+      "field_path": "status_chance_pct",
+      "before": 90,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 90 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785352Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "greek_borea",
+      "slot": "ultimate",
+      "field_path": "status_chance_pct",
+      "before": 95,
+      "after": 85,
+      "reason": "pvp_status_chance_cap: 95 >= 90 → cap 85",
+      "source": "RM1.32-C delta plan (pvp_status_chance_cap WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785356Z"
+    },
+    {
+      "file": "hero_skill_kits_6star_borea_v1.json",
+      "hero_id": "greek_borea",
+      "slot": "ultimate",
+      "field_path": "damage_multiplier_pct",
+      "before": 400,
+      "after": 380,
+      "reason": "pvp_cap_aoe_ultimate: AoE ultimate per-target 400 > 380 (tgt=5) → cap 380",
+      "source": "RM1.32-C delta plan (pvp_cap_aoe_ultimate WARN)",
+      "applied_at_utc": "2026-05-16T21:33:37.785359Z"
+    }
+  ],
+  "no_runtime_activation": true,
+  "no_db_write": true,
+  "no_catalog_structural_change": true,
+  "borea_activation": false,
+  "baseline_before": "hero_skill_kit_catalog_baseline_rm132b_v4",
+  "baseline_after": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "files_touched": [
+    "hero_skill_kits_6star_borea_v1.json"
+  ]
+}

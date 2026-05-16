@@ -1,0 +1,47 @@
+{
+  "manifest_id": "hero_skill_kit_backup_manifest",
+  "backup_id": "backup_20260516T213239Z",
+  "task_origin": "RM1.32-A-PRE",
+  "created_at_utc": "2026-05-16T21:32:39.469406Z",
+  "reason": "RM1.32-C2_pre_numeric_trim",
+  "dry_run": false,
+  "out_dir": "/app/backups/hero_skill_kits/backup_20260516T213239Z",
+  "files": [
+    {
+      "source_path": "/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json",
+      "backup_path": "/app/backups/hero_skill_kits/backup_20260516T213239Z/hero_skill_kits_5star_full_v1.json",
+      "sha256": "330b337e629e03abec7403ce99afb436293f36870879f87936d6e0dbb1c784d9",
+      "size_bytes": 273597
+    },
+    {
+      "source_path": "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json",
+      "backup_path": "/app/backups/hero_skill_kits/backup_20260516T213239Z/hero_skill_kits_6star_borea_v1.json",
+      "sha256": "abf9b2a2f02b59127984a9eeb32993e4fb9c86aeeb89b1074d3ec81312a2d68b",
+      "size_bytes": 159095
+    },
+    {
+      "source_path": "/app/data/design/divine_weapons/divine_weapons_catalog_v1.json",
+      "backup_path": "/app/backups/hero_skill_kits/backup_20260516T213239Z/divine_weapons_catalog_v1.json",
+      "sha256": "e3ed42f54e85bf48bc3358eee1214542f8b8ff7aac9c114a04a735926ec58b21",
+      "size_bytes": 159805
+    },
+    {
+      "source_path": "/app/data/design/hero_skill_kits/hero_skill_kit_schema_v1.json",
+      "backup_path": "/app/backups/hero_skill_kits/backup_20260516T213239Z/hero_skill_kit_schema_v1.json",
+      "sha256": "f5b30b6d6d323c50f7ca016181c8882d07fe74b251e2a4a43e0051d25281465c",
+      "size_bytes": 2755
+    },
+    {
+      "source_path": "/app/data/design/hero_skill_kits/hero_skill_kit_catalog_baseline_rm132pre_v1.json",
+      "backup_path": "/app/backups/hero_skill_kits/backup_20260516T213239Z/hero_skill_kit_catalog_baseline_rm132pre_v1.json",
+      "sha256": "f75d20aab42e023a047ce5aa3f1230798c64f5b6cb58d570b7a2eb9245dd8b23",
+      "size_bytes": 3382
+    }
+  ],
+  "safety_flags": {
+    "catalog_only": true,
+    "no_db_write": true,
+    "no_runtime": true,
+    "borea_visibility_unchanged": true
+  }
+}

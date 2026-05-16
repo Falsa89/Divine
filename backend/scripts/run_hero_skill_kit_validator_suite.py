@@ -39,6 +39,7 @@ REQUIRED = [
     ('RM1.27-D', 'audit_divine_weapon_crosslinks.py'),
     ('RM1.32-A', 'validate_5star_balance_foundation.py'),
     ('RM1.32-B', 'validate_6star_balance_foundation.py'),
+    ('RM1.32-C2', 'validate_foundation_numeric_trim_rm132c2.py'),
 ]
 OPTIONAL = [
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
