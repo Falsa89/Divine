@@ -1,0 +1,110 @@
+{
+  "contract_id": "collection_synergy_preview_screen_contract_v1",
+  "task_origin": "CS2-C",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "no_runtime_feature_flag_on": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Design contract for the future read-only Collection Synergy preview screen. Specifies layout, data sources, forbidden actions, accessibility constraints, and Borea hidden handling. NO UI is implemented in CS2-C. NO endpoint is created. NO DB dependency. The contract is the single source of truth for a subsequent implementation task (CS2-D / UI-PREVIEW-B).",
+
+  "ui_implementation_in_this_task": false,
+  "ui_files_modified_in_this_task": [],
+  "ui_files_created_in_this_task": [],
+  "preferred_strategy": "plan_only",
+  "preferred_strategy_rationale": "Implementing a UI stub today would either (a) require a player-data fetch path that does not yet exist, or (b) duplicate primitives from synergy-codex.tsx. Both increase risk relative to value at this stage. The contract enumerates everything a future safe stub will need, so CS2-D can be implemented straight from this file.",
+
+  "data_sources": [
+    {
+      "id": "cs2a_readiness_plan",
+      "path": "/app/data/design/synergies/collection_synergies_v2_readiness_plan_v1.json",
+      "purpose": "category list + milestone model + cap policy"
+    },
+    {
+      "id": "cs2a_schema_draft",
+      "path": "/app/data/design/synergies/collection_synergy_v2_schema_draft_v1.json",
+      "purpose": "record shape + validation invariants"
+    },
+    {
+      "id": "cs2b_resolver_preview_output",
+      "path": "/app/backend/data/collection_synergy_preview_resolver.py",
+      "purpose": "preview_collection_synergy_categories / preview_collection_milestone_policy (always inert)"
+    }
+  ],
+
+  "screen_goals": [
+    {"id": "show_collection_categories", "description": "Render the 6 proposed categories from CS2-A as read-only cards with axis + future_runtime_feature_flag visible."},
+    {"id": "show_milestone_model", "description": "Render owned_count thresholds (3/5/10) + star_threshold optional (5/6) + stacking_rule + caps as a non-interactive panel."},
+    {"id": "show_cap_policy", "description": "Render max_total <=15 / max_per_category <=5 / applies_to list as a banner."},
+    {"id": "show_locked_future_badges", "description": "Every category MUST display a 'Coming Soon' / 'Locked - Future' badge until COLLECTION_SYNERGY_BATTLE_ENABLED is ratified."},
+    {"id": "show_borea_locked_state", "description": "Any greek_borea reference is hidden silently; legacy borea / primordial_gaia entries excluded."},
+    {"id": "show_readonly_disclaimer", "description": "Top-of-screen disclaimer: 'Preview only. No bonuses are currently active.'"}
+  ],
+
+  "forbidden_ui_actions": [
+    "claim", "activate", "spend", "equip", "enable_runtime",
+    "apply_buff", "refresh_from_db_mutation", "POST", "PUT", "PATCH", "DELETE",
+    "purchase", "give", "summon", "break_seal", "battle_test"
+  ],
+
+  "allowed_ui_interactions": [
+    "back_navigation",
+    "expand_collapse_category_card",
+    "scroll",
+    "pull_to_refresh_design_json_static_read_only"
+  ],
+
+  "mobile_constraints": {
+    "compact_cards": true,
+    "no_admin_density": true,
+    "read_only_disclaimer_required": true,
+    "min_touch_target_dp": 44,
+    "min_touch_target_dp_android": 48,
+    "supports_safe_area_insets": true,
+    "supports_dark_mode": true,
+    "color_contrast_min_wcag": "AA",
+    "screen_reader_labels_required": true,
+    "flash_list_required_if_categories_gt_10": true,
+    "test_breakpoints_required": ["iPhone 12/13/14 390x844", "Samsung Galaxy S21 360x800"]
+  },
+
+  "borea_hidden_handling": {
+    "rule": "greek_borea contributions to any collection synergy must be silently hidden until Borea visibility unlocks. Legacy borea / primordial_gaia permanently excluded.",
+    "legacy_aliases_blocked": ["borea", "primordial_gaia"],
+    "greek_borea_status": "catalog_only_hidden_until_global_unlock"
+  },
+
+  "future_implementation_route_when_safe": {
+    "candidate_path": "/app/frontend/app/collection-synergies-preview.tsx",
+    "must_be_strictly_read_only": true,
+    "must_use_design_json_static_only_phase1": true,
+    "must_NOT_fetch_player_owned_data_until_phase2": true,
+    "must_NOT_register_in_main_navigation_until_phase3": true,
+    "must_consume_resolver_via": "backend inert read-only endpoint or direct design JSON; NEVER battle_engine"
+  },
+
+  "audit_grep_targets": [
+    "/app/frontend/app/synergy-codex.tsx",
+    "/app/frontend/app/hero-detail.tsx",
+    "/app/frontend/app/collection-synergies-preview.tsx"
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "ui_implementation_in_this_task": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "CS2-D (hypothetical): implement read-only collection-synergies-preview.tsx using design JSON only.",
+    "CS2-E (hypothetical): inert read-only API route /api/synergies/collection/preview gated by COLLECTION_SYNERGY_PREVIEW_ENABLED.",
+    "CS2-F (hypothetical): accessibility / a11y pass on iPhone 12/13/14 + Galaxy S21."
+  ]
+}

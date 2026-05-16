@@ -1,0 +1,142 @@
+{
+  "schema_id": "affinity_gift_inventory_schema_draft_v1",
+  "task_origin": "AF2-C",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Design-only schema draft for the future affinity gift inventory subsystem. Enumerates proposed MongoDB collections, document shapes, indexes, constraints, and integrity invariants. NO migration is created. NO collection is mutated. NO endpoint is registered. NO live read or write path is wired.",
+
+  "source_catalog_reference": "/app/data/design/affinity/affinity_gift_catalog_faction_element_draft_v1.json",
+  "source_economy_policy_reference": "/app/data/design/affinity/affinity_phase2_economy_cap_policy_draft_v1.json",
+
+  "proposed_collections": [
+    {
+      "name": "user_gift_inventory_future",
+      "description": "Per-user owned gift stock. One document per (user_id, gift_id, source_bucket).",
+      "is_design_only": true,
+      "is_migration_created": false,
+      "is_indexed_in_runtime": false,
+      "document_shape": {
+        "_id": "ObjectId (server-generated)",
+        "user_id": "string (FK to users._id; server authoritative)",
+        "gift_id": "string (FK to affinity_gift_catalog_faction_element_draft_v1.entries[].id)",
+        "quantity": "int (>=0)",
+        "source": "string (enum: daily_login_future, event_drop_future, quest_reward_future, chapter_milestone_future, guild_objective_future, seasonal_event_future)",
+        "source_bucket": "string (groups stacks by source for separate caps)",
+        "acquired_at": "ISO8601 string (server time)",
+        "expires_at": "ISO8601 string | null",
+        "locked_until_condition": "string | null (e.g. 'borea_visibility_unlocked')",
+        "anti_duplication_hash_future": "string | null (sha256(user_id|gift_id|source_event_id|nonce))"
+      },
+      "proposed_indexes_future": [
+        {"fields": ["user_id", "gift_id", "source_bucket"], "unique": true},
+        {"fields": ["user_id", "expires_at"], "unique": false},
+        {"fields": ["anti_duplication_hash_future"], "unique": true, "sparse": true}
+      ]
+    },
+    {
+      "name": "gift_transaction_ledger_future",
+      "description": "Append-only ledger of every gift grant / spend / refund. Required for AF2-B economy + anti-exploit replay protection.",
+      "is_design_only": true,
+      "is_migration_created": false,
+      "is_indexed_in_runtime": false,
+      "document_shape": {
+        "_id": "ObjectId",
+        "user_id": "string",
+        "gift_id": "string",
+        "tx_type": "string (enum: grant, spend, refund, rollback)",
+        "quantity_delta": "int (signed; -N for spend, +N for grant/refund)",
+        "balance_after": "int (server-computed snapshot for fast audit)",
+        "source_event_id": "string (idempotency key for grant flows)",
+        "idempotency_key": "string (required for spend; ensures replay safety)",
+        "occurred_at": "ISO8601 string (server time)",
+        "spent_on_hero_id": "string | null (for spend tx_type)",
+        "spent_on_hero_canonical_id": "string | null (mirror)",
+        "result_affinity_points_delta": "int | null (server-computed from AF2-B tier table)",
+        "result_tier_after": "string | null (tier_0..tier_4)",
+        "anti_replay_seen_keys_window_hours": 24
+      },
+      "proposed_indexes_future": [
+        {"fields": ["user_id", "occurred_at"], "unique": false},
+        {"fields": ["idempotency_key"], "unique": true},
+        {"fields": ["source_event_id", "tx_type"], "unique": true, "sparse": true}
+      ]
+    },
+    {
+      "name": "hero_affinity_state_future",
+      "description": "Per-(user, hero) affinity points snapshot + current tier. Derivable from gift_transaction_ledger but cached for fast UI read.",
+      "is_design_only": true,
+      "is_migration_created": false,
+      "is_indexed_in_runtime": false,
+      "document_shape": {
+        "_id": "ObjectId",
+        "user_id": "string",
+        "hero_id": "string (canonical roster id)",
+        "hero_canonical_id": "string",
+        "affinity_points": "int (>=0)",
+        "current_tier_id": "string (tier_0..tier_4)",
+        "last_gift_spent_at": "ISO8601 string | null",
+        "borea_locked": "bool (server-enforced based on hero visibility)",
+        "stat_buff_live": false,
+        "last_recomputed_at": "ISO8601 string"
+      },
+      "proposed_indexes_future": [
+        {"fields": ["user_id", "hero_id"], "unique": true},
+        {"fields": ["user_id", "current_tier_id"], "unique": false}
+      ]
+    }
+  ],
+
+  "integrity_constraints": {
+    "no_negative_quantity": true,
+    "ledger_required_for_every_spend": true,
+    "idempotency_key_required_for_spend": true,
+    "server_authoritative": true,
+    "no_client_trusted_gift_grant": true,
+    "borea_gifts_locked_until_visibility_unlock": true,
+    "gift_id_must_exist_in_catalog_draft": true,
+    "tides_gift_ids_must_not_be_minted": true,
+    "stat_buff_live_must_be_false": true,
+    "hero_canonical_id_required_for_writes": true
+  },
+
+  "validation_invariants": {
+    "user_gift_inventory_unique_per_user_gift_source_bucket": true,
+    "ledger_append_only": true,
+    "ledger_idempotency_key_unique_for_spend": true,
+    "affinity_state_derivable_from_ledger": true,
+    "no_double_spend_within_idempotency_window": true,
+    "no_stale_borea_records": true
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "migration_created": false,
+    "endpoint_created": false,
+    "ui_button_created": false,
+    "borea_activation_allowed": false,
+    "feature_flag_dependency": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  },
+
+  "future_activation_prerequisites": [
+    "Cap policy AF2-B ratified (already drafted).",
+    "Anti-exploit policy AF2-C ratified (this task).",
+    "DB migration plan + rollback plan approved.",
+    "Auth-gated POST /api/affinity/gift-spend endpoint added with idempotency + rate limit + replay protection.",
+    "Borea visibility gate respected at write path.",
+    "Cross-system stack audit (STACK-B global cap resolver) inert today, future PASS required."
+  ],
+
+  "recommended_next_tasks": [
+    "AF2-D (hypothetical): migration plan draft for the three collections (still inert, plan-only).",
+    "AF2-E (hypothetical): inert read-only API route /api/affinity/gifts gated by AFFINITY_PREVIEW_ENABLED."
+  ]
+}

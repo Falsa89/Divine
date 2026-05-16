@@ -66,6 +66,11 @@ OPTIONAL = [
     ('UI-PREVIEW-A', 'audit_collection_affinity_ui_preview_safety.py'),
     ('STACK-A', 'audit_cross_system_progression_stack_safety.py'),
     ('MEGA-COMBO', 'validate_collection_affinity_axis_stack_combo.py'),
+    ('CS2-C', 'audit_collection_synergy_ui_preview_contract.py'),
+    ('AF2-C', 'validate_affinity_gift_inventory_schema.py'),
+    ('STACK-B', 'audit_global_modifier_cap_resolver_safety.py'),
+    ('AXIS-B', 'audit_canonical_axis_alias_helper_safety.py'),
+    ('MEGA-COMBO-2', 'validate_cs2c_af2c_stackb_axisb_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
