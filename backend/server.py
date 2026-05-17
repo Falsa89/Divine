@@ -49,6 +49,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+async def ops_c_wiring_startup_check():
+    """OPS-C-WIRING — Non-invasive boot hook for the Expo wrapper.
+
+    Spawns /app/ops/startup_check.sh in background (best-effort, no wait,
+    no exception propagation). The hook is itself idempotent and only
+    restores `/usr/local/bin/start-expo.sh` if missing/drifted. NO DB
+    writes. NO app logic mutation. Disabled if the env var
+    `DISABLE_OPS_C_WIRING=1` is set.
+    """
+    if os.environ.get("DISABLE_OPS_C_WIRING") == "1":
+        print("[OPS-C-WIRING] disabled via DISABLE_OPS_C_WIRING=1")
+        return
+    script = "/app/ops/startup_check.sh"
+    if not os.path.exists(script) or not os.access(script, os.X_OK):
+        print(f"[OPS-C-WIRING] hook missing/not-executable: {script}; skip")
+        return
+    try:
+        import subprocess
+        subprocess.Popen(
+            ["bash", script],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+        print("[OPS-C-WIRING] startup_check.sh spawned (background, idempotent)")
+    except Exception as exc:
+        # Never fail backend boot due to wiring hook
+        print(f"[OPS-C-WIRING] spawn error (non-fatal): {exc!r}")
+
+
 # ===================== DATABASE =====================
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]

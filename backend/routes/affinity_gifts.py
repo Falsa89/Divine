@@ -235,3 +235,120 @@ def register_affinity_gifts_readonly_routes(router):
             'entries': entries,
             'safety_envelope': _safety_envelope(),
         }
+
+    # ────────────────────────────────────────────────────────────────────
+    # AXIS-G — Combined read-only routes (element + faction)
+    # Strictly GET. Read-only. No DB write. No spend. Mutation -> 405.
+    # ────────────────────────────────────────────────────────────────────
+    _NON_ELEMENT_TOKENS = frozenset({
+        'tides', 'greek', 'norse', 'egyptian', 'japanese_yokai',
+        'celtic', 'angelic', 'demonic', 'cursed', 'creature_beast',
+        'primordial', 'arcane', 'mesopotamian',
+    })
+
+    def _resolve_combined(element_id: str, faction_id: str) -> dict[str, Any]:
+        """Resolve the combined (element, faction) view.
+
+        Returns a 200 payload dict. Raises HTTPException for:
+          - borea / greek_borea / primordial_gaia      -> 404 forbidden
+          - tides faction                              -> 404 deferred_not_live
+          - faction token in element slot              -> 404 axis_type_mismatch
+          - non-canonical element                      -> 404 element not in axis
+          - element/faction not in catalog draft       -> 404 not in catalog
+        """
+        eid_raw = (element_id or '').strip().lower()
+        fid = (faction_id or '').strip().lower()
+        if not eid_raw:
+            raise HTTPException(400, 'element_id required')
+        if not fid:
+            raise HTTPException(400, 'faction_id required')
+
+        # Borea aliases on either axis -> forbidden 404
+        if eid_raw in _FORBIDDEN_ALIASES or fid in _FORBIDDEN_ALIASES:
+            raise HTTPException(404, 'forbidden alias')
+
+        # Faction deferred (tides) -> deferred_not_live 404
+        if fid in _DEFERRED_FACTIONS:
+            raise HTTPException(
+                404,
+                f'faction "{fid}" deferred_not_live (RM1.34-B-PATCH-B); '
+                'restore_condition: Character Bible / live roster confirms '
+                'canonical faction'
+            )
+
+        # darkness alias -> dark
+        alias_applied = False
+        eid_canonical = eid_raw
+        if eid_raw in _ELEMENT_ALIASES:
+            eid_canonical = _ELEMENT_ALIASES[eid_raw]
+            alias_applied = True
+
+        # token in element slot is actually a faction -> axis_type_mismatch
+        if eid_canonical in _NON_ELEMENT_TOKENS:
+            raise HTTPException(
+                404,
+                f'element "{eid_raw}" axis_type_mismatch: token is a faction, '
+                'not a canonical element'
+            )
+
+        # not in canonical element axis at all
+        if eid_canonical not in _CANONICAL_ELEMENTS:
+            raise HTTPException(
+                404,
+                f'element "{eid_raw}" not in canonical element set '
+                f'{sorted(_CANONICAL_ELEMENTS)}'
+            )
+
+        cat = _load_catalog()
+        elements_used = cat.get('elements_used') or []
+        factions_used = cat.get('factions_used') or []
+        if eid_canonical not in elements_used:
+            raise HTTPException(
+                404,
+                f'element "{eid_canonical}" not in catalog draft elements_used'
+            )
+        if fid not in factions_used:
+            raise HTTPException(404, f'faction "{fid}" not in catalog draft')
+
+        entries = [
+            e for e in (cat.get('entries') or [])
+            if isinstance(e, dict)
+            and e.get('element_token') == eid_canonical
+            and e.get('faction_token') == fid
+        ]
+        return {
+            'task_origin': 'AXIS-G',
+            'element_id': eid_raw,
+            'canonical_element': eid_canonical,
+            'alias_applied': alias_applied,
+            'faction_id': fid,
+            'design_only': True,
+            'runtime_attached': False,
+            'db_write': False,
+            'count': len(entries),
+            'entries': entries,
+            'safety_envelope': _safety_envelope(),
+        }
+
+    @router.get("/affinity/gifts/by-element/{element_id}/by-faction/{faction_id}")
+    async def affinity_gifts_by_element_by_faction(element_id: str, faction_id: str):
+        """AXIS-G — Combined read-only route (element first, faction second).
+
+        Behaviour:
+          - valid combo (e.g. dark + greek)         -> 200
+          - darkness alias                           -> 200 with alias_applied=true
+          - tides faction                            -> 404 deferred_not_live
+          - borea / greek_borea / primordial_gaia    -> 404 forbidden
+          - faction in element slot                  -> 404 axis_type_mismatch
+          - no DB write. mutation methods -> 405.
+        """
+        return _resolve_combined(element_id, faction_id)
+
+    @router.get("/affinity/gifts/by-faction/{faction_id}/by-element/{element_id}")
+    async def affinity_gifts_by_faction_by_element(faction_id: str, element_id: str):
+        """AXIS-G — Combined read-only route (faction first, element second).
+
+        Same semantics as the element-first variant; mirror for callers that
+        prefer faction-then-element ordering. Read-only. No DB write.
+        """
+        return _resolve_combined(element_id, faction_id)

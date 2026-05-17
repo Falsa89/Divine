@@ -117,6 +117,15 @@ OPTIONAL = [
     ('OPS-C', 'audit_ops_start_expo_autorestore.py'),
     ('SAFETY-ROLLUP-C', 'validate_collection_affinity_runtime_activation_rollup_v3.py'),
     ('ULTRA-COMBO-V8', 'validate_af2k_af2l_af2m_opsc_safetyc_combo.py'),
+    # ULTRA-COMBO V9 (AF2-K-COMMIT + AF2-L-FULL + AF2-M-SIGN-PRE
+    #                 + AXIS-G + OPS-C-WIRING + SAFETY-ROLLUP-D)
+    ('AF2-K-COMMIT', 'validate_affinity_gift_transaction_ledger_commit_result.py'),
+    ('AF2-L-FULL', 'run_affinity_gift_spend_full_disabled_load_probe.py'),
+    ('AF2-M-SIGN-PRE', 'validate_affinity_gift_runtime_operator_signoff_v2.py'),
+    ('AXIS-G', 'audit_affinity_gifts_combined_axis_routes.py'),
+    ('OPS-C-WIRING', 'audit_ops_start_expo_boot_wiring.py'),
+    ('SAFETY-ROLLUP-D', 'validate_collection_affinity_runtime_activation_rollup_v4.py'),
+    ('ULTRA-COMBO-V9', 'validate_af2k_commit_af2l_full_af2m_signpre_axisg_opsc_wiring_safety_rollup_d_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

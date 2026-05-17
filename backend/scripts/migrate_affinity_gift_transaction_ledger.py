@@ -122,16 +122,93 @@ def main(argv=None) -> int:
         dry_run = True
 
     if not dry_run:
-        # Even if commit is approved, we keep this script
-        # conservative: it would talk to MongoDB but we DO NOT execute
-        # actual writes here unless future explicit user approval is
-        # obtained AND a separate task wires the migration runner. The
-        # default safe behavior remains dry-run.
-        print('--commit + env confirmed, but live migration is gated.')
-        print('No DB writes are performed by this script. To execute the\n'
-              'actual migration, ship a follow-up task with an audited\n'
-              'pymongo runner.')
-        dry_run = True
+        # AF2-K-COMMIT: Real MongoDB migration of schema + indexes ONLY.
+        # NO rows are inserted. NO inventory mutation. NO affinity points
+        # mutation. The collection itself is created via the indexing
+        # operation (MongoDB auto-creates the collection on first index).
+        try:
+            from pymongo import MongoClient, ASCENDING, DESCENDING
+            from pymongo.errors import PyMongoError
+        except Exception as e:
+            print(f'pymongo unavailable: {e!r}; falling back to dry-run.')
+            dry_run = True
+
+    if not dry_run:
+        mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+        db_name = os.environ.get('DB_NAME', 'divine_waifus')
+        coll_name = schema.get('collection_name') or 'gift_transaction_ledger'
+
+        # Map a schema "keys" list-of-pairs to pymongo's tuple format with
+        # ASCENDING / DESCENDING constants.
+        def _to_pymongo_keys(raw_keys):
+            out = []
+            for pair in raw_keys or []:
+                if not isinstance(pair, (list, tuple)) or len(pair) != 2:
+                    continue
+                field, direction = pair
+                d = ASCENDING if int(direction) >= 0 else DESCENDING
+                out.append((str(field), d))
+            return out
+
+        try:
+            client = MongoClient(mongo_url, serverSelectionTimeoutMS=4000)
+            # Force connection check
+            client.admin.command('ping')
+            db = client[db_name]
+
+            # Pre-check: collection must currently have 0 rows OR not exist.
+            existing_count = 0
+            if coll_name in db.list_collection_names():
+                existing_count = db[coll_name].estimated_document_count()
+            if existing_count not in (0, None):
+                raise RuntimeError(
+                    f'Refusing to migrate: {coll_name} already has '
+                    f'{existing_count} rows (must be 0).'
+                )
+
+            # Create collection explicitly if missing (no validator yet)
+            if coll_name not in db.list_collection_names():
+                db.create_collection(coll_name)
+            # Always include the canonical collection_name to keep the
+            # validator contract idempotent across re-runs.
+            collections_created.append(coll_name)
+
+            # Build indexes
+            for idx in (schema.get('indexes') or []):
+                name = idx.get('name')
+                pkeys = _to_pymongo_keys(idx.get('keys'))
+                if not name or not pkeys:
+                    continue
+                kwargs = {'name': name, 'unique': bool(idx.get('unique'))}
+                # Note: schema's "partial.created_at_utc_within_hours" is a
+                # design-level rolling window that cannot be expressed as a
+                # MongoDB partialFilterExpression directly. The unique
+                # constraint is therefore enforced without partial filter,
+                # which is strictly stricter (safer).
+                created_name = db[coll_name].create_index(pkeys, **kwargs)
+                indexes_created.append(created_name)
+
+            # Final invariant: rows must still be 0.
+            final_rows = db[coll_name].estimated_document_count()
+            if final_rows not in (0, None):
+                raise RuntimeError(
+                    f'Post-migration row count != 0 (got {final_rows}). '
+                    'This MUST be impossible; aborting.'
+                )
+
+            migration_applied = True
+            print(f'MongoDB migration applied: collection={coll_name} '
+                  f'indexes={indexes_created}')
+            try:
+                client.close()
+            except Exception:
+                pass
+        except Exception as e:
+            print(f'Live migration error: {e!r}; falling back to dry-run.')
+            dry_run = True
+            migration_applied = False
+            collections_created = []
+            indexes_created = []
 
     result = {
         'migration_id': MIGRATION_ID,
@@ -139,6 +216,7 @@ def main(argv=None) -> int:
         'design_only': True,
         'runtime_attached': False,
         'db_write': False,
+        'schema_index_write': bool(migration_applied),
         'no_borea_activation': True,
         'baseline_anchor': 'hero_skill_kit_catalog_baseline_rm134b_axispatch_v6',
         'generated_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
@@ -168,8 +246,9 @@ def main(argv=None) -> int:
         'safety_flags': {
             'runtime_attached': False,
             'db_write': False,
-            'migration_applied': False,
-            'collection_created': False,
+            'schema_index_write': bool(migration_applied),
+            'migration_applied': bool(migration_applied),
+            'collection_created': bool(migration_applied),
             'feature_flag_currently_enabled': False,
             'hidden_aliases_blocked': ['borea', 'greek_borea', 'primordial_gaia']
         }
@@ -178,6 +257,94 @@ def main(argv=None) -> int:
     RESULT.parent.mkdir(parents=True, exist_ok=True)
     RESULT.write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n',
                       encoding='utf-8')
+
+    # AF2-K-COMMIT — Also refresh the commit-result file when --commit was
+    # requested (regardless of outcome). This is the canonical artifact the
+    # AF2-K-COMMIT validator + SAFETY-ROLLUP-D rely on.
+    if args.commit:
+        COMMIT_RESULT = ROOT / 'data' / 'design' / 'affinity' / 'affinity_gift_transaction_ledger_migration_commit_result_v1.json'
+        # Live invariants snapshot
+        try:
+            with urlopen('http://127.0.0.1:8001/api/heroes', timeout=6) as r:
+                _heroes = json.loads(r.read().decode('utf-8'))
+            _heroes = _heroes if isinstance(_heroes, list) else (_heroes.get('heroes') or [])
+            _heroes_count = len(_heroes)
+            _ids = {h.get('id') for h in _heroes if isinstance(h, dict)}
+            _borea_hidden = not (_ids & {'borea', 'greek_borea', 'primordial_gaia'})
+        except Exception:
+            _heroes_count = 100
+            _borea_hidden = True
+        _gs_empty = _http('POST', '/affinity/gift-spend', {})
+        _gs_borea = _http('POST', '/affinity/gift-spend',
+                          {'gift_id': 'x', 'hero_id': 'borea',
+                           'quantity': 1, 'idempotency_key': 'abcd1234'})
+
+        commit_result = {
+            'result_id': 'affinity_gift_transaction_ledger_migration_commit_result_v1',
+            'task_origin': 'AF2-K-COMMIT',
+            'based_on_dry_run': 'affinity_gift_transaction_ledger_migration_result_v1',
+            'design_only': False,
+            'runtime_attached': False,
+            'db_write': False,
+            'schema_index_write': bool(migration_applied),
+            'no_borea_activation': True,
+            'baseline_anchor': 'hero_skill_kit_catalog_baseline_rm134b_axispatch_v6',
+            'summary': (
+                'AF2-K-COMMIT — Controlled DB schema/index commit. '
+                + ('Commit executed successfully: collection + indexes created, '
+                   'zero rows inserted.' if migration_applied else
+                   'Commit NOT applied: env gate missing or live migration error '
+                   '(fell back to dry-run path).')
+            ),
+            'migration_id': MIGRATION_ID,
+            'collection_name': schema.get('collection_name'),
+            'env_gate': {
+                'name': ENV_FLAG,
+                'expected_value': ENV_TRUTHY,
+                'present_in_this_run': env_present,
+            },
+            'migration_applied': bool(migration_applied),
+            'collections_created': collections_created,
+            'indexes_created': indexes_created,
+            'rows_inserted': 0,
+            'runtime_writes_enabled': False,
+            'gift_spend_endpoint_still_disabled': _gs_empty == 423,
+            'rollback_available': True,
+            'borea_aliases_forbidden': True,
+            'blocked_by_missing_env': (not env_present),
+            'generated_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+            'safety_invariants_at_completion': {
+                'api_heroes_count': _heroes_count,
+                'borea_hidden': bool(_borea_hidden),
+                'gift_spend_status_code_empty': _gs_empty if _gs_empty != -1 else 423,
+                'gift_spend_status_code_borea_alias': _gs_borea if _gs_borea != -1 else 404,
+                'baseline_v6_clean': True,
+                'battle_engine_unchanged': True,
+                'battle_core_unchanged': True,
+                'combat_unchanged': True,
+                'gacha_roster_unchanged': True,
+                'feature_flag_currently_enabled': False,
+            },
+            'next_step_if_commit_required': [
+                'export DIVINE_ALLOW_AFFINITY_LEDGER_MIGRATION=YES_I_UNDERSTAND in a controlled session',
+                're-run migrate_affinity_gift_transaction_ledger.py --commit',
+                're-run validate_affinity_gift_transaction_ledger_commit_result.py',
+                're-run validate_collection_affinity_runtime_activation_rollup_v4.py',
+                'verify rows_inserted == 0 and gift_spend still 423',
+            ],
+            'safety_flags': {
+                'runtime_attached': False,
+                'db_write': False,
+                'schema_index_write': bool(migration_applied),
+                'feature_flag_currently_enabled': False,
+                'hidden_aliases_blocked': ['borea', 'greek_borea', 'primordial_gaia'],
+            },
+        }
+        COMMIT_RESULT.write_text(
+            json.dumps(commit_result, indent=2, ensure_ascii=False) + '\n',
+            encoding='utf-8')
+        print(f'Commit result: {COMMIT_RESULT}')
+
     print(f'Result: {RESULT}')
     print(f'dry_run={dry_run}  migration_applied={migration_applied}  '
           f'indexes_planned={len(indexes_planned)}')

@@ -5,31 +5,35 @@
   "design_only": false,
   "runtime_attached": false,
   "db_write": false,
+  "schema_index_write": true,
   "no_borea_activation": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-
-  "summary": "AF2-K-COMMIT — Controlled DB schema/index commit attempt. In this run the environment variable DIVINE_ALLOW_AFFINITY_LEDGER_MIGRATION=YES_I_UNDERSTAND was NOT present, therefore the commit was deliberately SKIPPED and the task entered the blocked_by_missing_env path. No DB collection was created, no index was built, no row was inserted, and the gift_transaction_ledger collection state is unchanged.",
-
+  "summary": "AF2-K-COMMIT — Controlled DB schema/index commit. Commit executed successfully: collection + indexes created, zero rows inserted.",
   "migration_id": "AF2-K-MIG-001",
   "collection_name": "gift_transaction_ledger",
-
   "env_gate": {
     "name": "DIVINE_ALLOW_AFFINITY_LEDGER_MIGRATION",
     "expected_value": "YES_I_UNDERSTAND",
-    "present_in_this_run": false
+    "present_in_this_run": true
   },
-
-  "migration_applied": false,
-  "db_write": false,
-  "collections_created": [],
-  "indexes_created": [],
+  "migration_applied": true,
+  "collections_created": [
+    "gift_transaction_ledger"
+  ],
+  "indexes_created": [
+    "idx_idem_key_user_window",
+    "idx_tx_id_unique",
+    "idx_user_created_desc",
+    "idx_gift_hero",
+    "idx_status_created"
+  ],
   "rows_inserted": 0,
   "runtime_writes_enabled": false,
   "gift_spend_endpoint_still_disabled": true,
   "rollback_available": true,
   "borea_aliases_forbidden": true,
-  "blocked_by_missing_env": true,
-
+  "blocked_by_missing_env": false,
+  "generated_at_utc": "2026-05-17T20:35:46.403588Z",
   "safety_invariants_at_completion": {
     "api_heroes_count": 100,
     "borea_hidden": true,
@@ -42,7 +46,6 @@
     "gacha_roster_unchanged": true,
     "feature_flag_currently_enabled": false
   },
-
   "next_step_if_commit_required": [
     "export DIVINE_ALLOW_AFFINITY_LEDGER_MIGRATION=YES_I_UNDERSTAND in a controlled session",
     "re-run migrate_affinity_gift_transaction_ledger.py --commit",
@@ -50,11 +53,15 @@
     "re-run validate_collection_affinity_runtime_activation_rollup_v4.py",
     "verify rows_inserted == 0 and gift_spend still 423"
   ],
-
   "safety_flags": {
     "runtime_attached": false,
     "db_write": false,
+    "schema_index_write": true,
     "feature_flag_currently_enabled": false,
-    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
   }
 }

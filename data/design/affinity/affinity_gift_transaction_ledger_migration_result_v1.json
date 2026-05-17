@@ -4,16 +4,19 @@
   "design_only": true,
   "runtime_attached": false,
   "db_write": false,
+  "schema_index_write": true,
   "no_borea_activation": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-17T20:08:25.634550Z",
-  "migration_applied": false,
-  "dry_run": true,
+  "generated_at_utc": "2026-05-17T20:35:46.302479Z",
+  "migration_applied": true,
+  "dry_run": false,
   "env_flag_required": "DIVINE_ALLOW_AFFINITY_LEDGER_MIGRATION",
   "env_flag_required_value": "YES_I_UNDERSTAND",
-  "env_flag_present": false,
+  "env_flag_present": true,
   "collection_name": "gift_transaction_ledger",
-  "collections_created": [],
+  "collections_created": [
+    "gift_transaction_ledger"
+  ],
   "indexes_planned": [
     {
       "name": "idx_idem_key_user_window",
@@ -93,7 +96,13 @@
       "partial": null
     }
   ],
-  "indexes_created": [],
+  "indexes_created": [
+    "idx_idem_key_user_window",
+    "idx_tx_id_unique",
+    "idx_user_created_desc",
+    "idx_gift_hero",
+    "idx_status_created"
+  ],
   "no_runtime_writes": true,
   "no_ledger_rows_inserted": true,
   "no_inventory_mutation": true,
@@ -115,8 +124,9 @@
   "safety_flags": {
     "runtime_attached": false,
     "db_write": false,
-    "migration_applied": false,
-    "collection_created": false,
+    "schema_index_write": true,
+    "migration_applied": true,
+    "collection_created": true,
     "feature_flag_currently_enabled": false,
     "hidden_aliases_blocked": [
       "borea",
