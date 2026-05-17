@@ -101,6 +101,15 @@ OPTIONAL = [
     ('AXIS-V6', 'audit_axis_post_patch_alignment_v6.py'),
     ('BASELINE-V6', 'validate_rm134b_axis_patch_baseline_v6.py'),
     ('ULTRA-COMBO-V6', 'validate_af2i_rm134b_axispatch_v6_combo.py'),
+    # ULTRA-COMBO V7 (AF2-J + AF2-K-PRE + AXIS-F + OPS-B + SAFETY-ROLLUP-B
+    #                 + AF2-L-PRE)
+    ('AF2-J', 'audit_affinity_gift_spend_auth_ratelimit_middleware_contract.py'),
+    ('AF2-K-PRE', 'validate_affinity_gift_spend_idempotency_ledger_contract.py'),
+    ('AXIS-F', 'audit_affinity_gifts_axis_readonly_routes.py'),
+    ('OPS-B', 'audit_ops_start_expo_persistence.py'),
+    ('SAFETY-ROLLUP-B', 'validate_collection_affinity_runtime_activation_rollup_v2.py'),
+    ('AF2-L-PRE', 'validate_affinity_gift_spend_load_test_and_rollback_rehearsal_plan.py'),
+    ('ULTRA-COMBO-V7', 'validate_af2j_af2kpre_axisf_opsb_rollupb_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

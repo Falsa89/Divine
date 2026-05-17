@@ -1,0 +1,139 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v2",
+  "task_origin": "SAFETY-ROLLUP-B",
+  "supersedes": "runtime_activation_readiness_rollup_v1",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "Refresh rollup AFTER ULTRA-COMBO V6 (PATCH-A darkness->dark + PATCH-B tides deferred + baseline v6) AND ULTRA-COMBO V7 (AF2-J auth/rate-limit contract + AF2-K-PRE idempotency ledger + AXIS-F read-only routes + OPS-B wrapper persistence). The axis layer is now activation-ready: canonical element and faction tokens align across roster/matrix/gift draft, the alias helper resolves darkness->dark, and tides is formally deferred_not_live. The OVERALL runtime activation gate stays NO_GO due to DB / auth / idempotency / load-test gates that are still unsatisfied.",
+
+  "axis_layer_activation_ready": true,
+  "overall_runtime_activation_ready": false,
+  "design_preview_ready": true,
+
+  "go_no_go_decision": "NO_GO_RUNTIME",
+  "axis_layer_decision": "GO_AXIS",
+
+  "subsystems": {
+    "axis_layer": {
+      "status": "GO",
+      "evidence": [
+        "matrix.elements_included includes 'dark' and excludes 'darkness' (RM1.34-B-PATCH-A)",
+        "matrix.faction_groups_included excludes 'tides' (RM1.34-B-PATCH-B deferred_not_live)",
+        "alias helper resolve_element('darkness').canonical == 'dark'",
+        "read-through helper resolve_faction('tides').status in {design_pending, deferred_not_live}",
+        "gift draft uses 'dark' and has no canonical 'tides' faction",
+        "/api/affinity/gifts/by-element/dark -> 200; /by-element/darkness -> 200 alias_applied=true",
+        "/api/affinity/gifts/by-faction/tides -> 404 deferred_not_live",
+        "baseline v6 latest and clean"
+      ]
+    },
+    "auth_layer": {
+      "status": "NO_GO",
+      "evidence": [
+        "AF2-J contract present (design-only); auth_enforcement_status == 'deferred_until_runtime_flag'",
+        "no Depends(get_current_user) wired today (would leak signal about inert system)"
+      ]
+    },
+    "idempotency_layer": {
+      "status": "NO_GO",
+      "evidence": [
+        "AF2-K-PRE contract present (design-only)",
+        "gift_transaction_ledger collection NOT created, migration AF2-K-MIG-001 NOT shipped",
+        "no DB writes possible: feature_flag_currently_enabled=false"
+      ]
+    },
+    "rate_limit_layer": {
+      "status": "NO_GO",
+      "evidence": [
+        "policy ref affinity_gift_anti_exploit_policy_v1 documented in AF2-J",
+        "no rate-limit middleware actually attached today"
+      ]
+    },
+    "db_layer": {
+      "status": "NO_GO",
+      "evidence": [
+        "no DB migration created or applied",
+        "no inventory mutation approval",
+        "no real DB rollback rehearsal performed"
+      ]
+    },
+    "battle_runtime_layer": {
+      "status": "NO_GO",
+      "evidence": [
+        "global_modifier_cap_resolver still inert (is_*_enabled() == False)",
+        "PvP cap not runtime-tested",
+        "battle_engine.py / battle_core.py / combat.tsx contain NO import of any new artifact"
+      ]
+    },
+    "borea_layer": {
+      "status": "GO",
+      "evidence": [
+        "/api/heroes count == 100 with no borea / greek_borea / primordial_gaia",
+        "POST /api/affinity/gift-spend rejects every Borea alias with 404",
+        "greek_borea catalog-only / hidden across all live endpoints"
+      ]
+    },
+    "ops_layer": {
+      "status": "GO",
+      "evidence": [
+        "/app/ops/start-expo.sh persistent copy present",
+        "/app/ops/restore_start_expo_wrapper.sh restore helper present",
+        "/usr/local/bin/start-expo.sh recovered and aligned (no CI=1; HMR preserved)",
+        "supervisor [program:expo] RUNNING"
+      ]
+    }
+  },
+
+  "runtime_no_go_reasons": [
+    "DB migration not applied (AF2-K not shipped)",
+    "Real auth not fully live-tested (AF2-J contract-only)",
+    "Real rate-limit middleware not attached (AF2-J contract-only)",
+    "Idempotency ledger not persisted (AF2-K-PRE design-only)",
+    "Gift spend feature flag OFF (AFFINITY_GIFT_RUNTIME_ENABLED)",
+    "No inventory mutation approval (operator pending)",
+    "No real DB rollback rehearsal (AF2-L not run)",
+    "Borea hidden/locked (intentional)",
+    "Global modifier cap resolver not connected to battle (STACK layer inert)",
+    "PvP cap not runtime-tested"
+  ],
+
+  "blocking_count": 7,
+  "warning_count": 0,
+
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "Borea / greek_borea / primordial_gaia hidden from live API",
+    "POST /api/affinity/gift-spend returns HTTP 423 with disabled envelope",
+    "Baseline v6 auto-detected as latest and PASS",
+    "battle_engine.py / battle_core.py / combat.tsx unchanged",
+    "feature_flag_currently_enabled == false on every envelope",
+    "no DB writes possible from any new artifact",
+    "AF2-J contract present and design-only",
+    "AF2-K-PRE contract present and design-only",
+    "AXIS-F read-only routes return GET-only payloads",
+    "OPS-B wrapper persistence verified",
+    "All Marchio Boreale leaks in non-Borea 6\u2605 == 0"
+  ],
+
+  "recommended_unblock_sequence": [
+    "AF2-K: ship gift_transaction_ledger migration AF2-K-MIG-001 behind a separate flag.",
+    "AF2-L: run end-to-end load test + rollback rehearsal.",
+    "AF2-M: operator sign-off pre flag flip.",
+    "STACK-G: connect global_modifier_cap_resolver to battle (gated, no-write).",
+    "AF2-N: flip AFFINITY_GIFT_RUNTIME_ENABLED to true_explicit_affinity_gift_runtime_on under controlled rollout."
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  }
+}

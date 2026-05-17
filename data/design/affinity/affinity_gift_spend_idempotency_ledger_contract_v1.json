@@ -1,0 +1,116 @@
+{
+  "contract_id": "affinity_gift_spend_idempotency_ledger_contract_v1",
+  "task_origin": "AF2-K-PRE",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "migration_created": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "AF2-K-PRE — Design-only contract for the future gift_transaction_ledger that will provide idempotency / replay-protection / audit-trail for POST /api/affinity/gift-spend. NO collection is created in this task; NO migration is shipped; NO DB index is built. The contract is the canonical reference a future AF2-K (runtime) task will implement BEFORE flipping AFFINITY_GIFT_RUNTIME_ENABLED.",
+
+  "future_collection_name": "gift_transaction_ledger",
+  "future_database": "divine_rpg (existing)",
+  "future_migration_id": "AF2-K-MIG-001",
+
+  "idempotency_scope": [
+    "user_id",
+    "gift_id",
+    "hero_id",
+    "idempotency_key"
+  ],
+  "idempotency_key_min_length": 8,
+  "idempotency_key_max_length": 128,
+  "idempotency_window_hours": 24,
+  "idempotency_window_anchor": "created_at_utc",
+
+  "ledger_record_schema_draft": {
+    "_id": "ObjectId — assigned by MongoDB",
+    "transaction_id": "uuid4 string",
+    "user_id": "string (auth-bound)",
+    "hero_id": "string canonical hero_id",
+    "gift_id": "string canonical gift_id (from affinity_gift_catalog_faction_element_draft_v1)",
+    "quantity": "int [1, 999]",
+    "idempotency_key": "string [8, 128]",
+    "status": "enum(pending, committed, rolled_back, duplicate_replay, rejected_borea_alias, rejected_validation, rejected_rate_limit, rejected_auth)",
+    "created_at_utc": "datetime UTC",
+    "committed_at_utc": "datetime UTC (nullable)",
+    "rollback_reason": "string (nullable)",
+    "server_request_id": "string",
+    "client_ip_hash": "string sha256 truncated",
+    "replay_of_transaction_id": "uuid4 string (nullable, when duplicate_replay)"
+  },
+
+  "ledger_index_draft": [
+    {"name": "idx_idem_key_user_window", "keys": [["user_id", 1], ["idempotency_key", 1], ["created_at_utc", -1]], "unique": true, "partial": "created_at_utc within 24h"},
+    {"name": "idx_tx_id_unique", "keys": [["transaction_id", 1]], "unique": true},
+    {"name": "idx_user_created_desc", "keys": [["user_id", 1], ["created_at_utc", -1]], "unique": false},
+    {"name": "idx_status_created", "keys": [["status", 1], ["created_at_utc", -1]], "unique": false}
+  ],
+
+  "status_transitions": [
+    {"from": "pending", "to": "committed", "trigger": "transactional spend success"},
+    {"from": "pending", "to": "rolled_back", "trigger": "transactional failure"},
+    {"from": "pending", "to": "duplicate_replay", "trigger": "idempotency_key collision within 24h window"},
+    {"from": "pending", "to": "rejected_borea_alias", "trigger": "hero_id in {borea, greek_borea, primordial_gaia}"},
+    {"from": "pending", "to": "rejected_validation", "trigger": "pydantic ValidationError"},
+    {"from": "pending", "to": "rejected_rate_limit", "trigger": "AF2-J middleware throttle"},
+    {"from": "pending", "to": "rejected_auth", "trigger": "AF2-J Depends(get_current_user) failure"}
+  ],
+
+  "duplicate_replay_behavior": {
+    "http_status": 409,
+    "return_payload": "original committed payload (no state mutation)",
+    "audit_trail": "ledger entry status=duplicate_replay; replay_of_transaction_id set"
+  },
+
+  "borea_safety": {
+    "borea_aliases_forbidden_in_ledger": true,
+    "borea_alias_status_value": "rejected_borea_alias",
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  },
+
+  "no_write_until": [
+    "AFFINITY_GIFT_RUNTIME_ENABLED set to true_explicit_affinity_gift_runtime_on",
+    "AF2-K migration AF2-K-MIG-001 approved by operator",
+    "AF2-L load test + rollback rehearsal PASS",
+    "SAFETY-ROLLUP says overall_runtime_activation_ready==true"
+  ],
+
+  "rollback_plan": [
+    "1. Flip AFFINITY_GIFT_RUNTIME_ENABLED to a non-allowlisted value (instant disable; endpoint returns 423).",
+    "2. Stop write traffic via load-balancer feature flag if exposed.",
+    "3. Run scripts/affinity_phase2_migration_rollback_rehearsal.py with --confirm (audited).",
+    "4. Drop the partial index idx_idem_key_user_window (NOT the collection) to allow re-migration.",
+    "5. Restore tracked DB snapshot if data corruption is suspected (out of band)."
+  ],
+
+  "abuse_cases": [
+    {"id": "replay_within_window", "description": "same idempotency_key within 24h", "expected": "409 duplicate_replay; no state mutation"},
+    {"id": "replay_after_window", "description": "same idempotency_key after 24h", "expected": "new committed entry; rate-limit still applies"},
+    {"id": "key_brute_force", "description": "rapid distinct idempotency keys", "expected": "AF2-J rate limit kicks in: 429"},
+    {"id": "borea_alias_attempt", "description": "hero_id == greek_borea", "expected": "404 forbidden alias; ledger entry status=rejected_borea_alias"},
+    {"id": "negative_quantity", "description": "quantity <= 0", "expected": "422 validation error; ledger status=rejected_validation"},
+    {"id": "oversized_quantity", "description": "quantity > 999", "expected": "422 validation error; ledger status=rejected_validation"},
+    {"id": "missing_auth", "description": "no auth token", "expected": "401 unauthorized; ledger status=rejected_auth"}
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "migration_created": false,
+    "collection_created": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "AF2-K (runtime) — implement gift_transaction_ledger collection and migration AF2-K-MIG-001 behind a separate feature flag.",
+    "AF2-L (runtime) — load test + rollback rehearsal.",
+    "AF2-M (operator review) — sign-off pre flag flip."
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "plan_id": "affinity_gift_spend_load_test_and_rollback_rehearsal_plan_v1",
+  "task_origin": "AF2-L-PRE",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "AF2-L-PRE — Design-only plan that describes the end-to-end load test, idempotency-replay stress, rollback rehearsal, and operator sign-off that MUST PASS before the affinity gift spend feature flag is flipped. No load test is executed in this task; no DB / runtime changes occur.",
+
+  "load_test_targets": {
+    "endpoint": "POST /api/affinity/gift-spend",
+    "concurrent_virtual_users": 200,
+    "duration_minutes": 15,
+    "rps_target": 60,
+    "rps_ceiling": 80,
+    "auth_distribution": "1:1 (50% authenticated users, 50% anonymous to verify 401)",
+    "borea_alias_injection_rate_percent": 5,
+    "idempotency_replay_rate_percent": 10,
+    "rate_limit_violation_rate_percent": 10
+  },
+
+  "acceptance_thresholds": {
+    "p50_latency_ms_max": 80,
+    "p95_latency_ms_max": 250,
+    "p99_latency_ms_max": 600,
+    "error_rate_5xx_max_percent": 0.1,
+    "auth_401_correctness_percent_min": 100,
+    "rate_limit_429_correctness_percent_min": 99,
+    "idempotency_409_correctness_percent_min": 99.5,
+    "borea_404_correctness_percent_min": 100,
+    "duplicate_charge_rate_percent_max": 0
+  },
+
+  "rollback_rehearsal": {
+    "rehearsal_id": "AF2-L-REHEARSAL-001",
+    "flag_flip_to_off_in_seconds_max": 5,
+    "rollback_steps": [
+      "1. Flip AFFINITY_GIFT_RUNTIME_ENABLED to a non-allowlisted value (instant disable; endpoint returns 423).",
+      "2. Verify POST /api/affinity/gift-spend returns 423 within 30s on every region.",
+      "3. Take a DB snapshot before any data correction.",
+      "4. Drop the partial unique index idx_idem_key_user_window if re-migration is required.",
+      "5. Run scripts/affinity_phase2_migration_rollback_rehearsal.py --confirm (audited).",
+      "6. Restore DB snapshot if data corruption is suspected (out-of-band)."
+    ],
+    "operator_sign_off_required": true
+  },
+
+  "pre_conditions": [
+    "AF2-J auth/rate-limit contract PASS",
+    "AF2-K-PRE idempotency ledger contract PASS",
+    "AF2-K migration AF2-K-MIG-001 applied (separate task)",
+    "/api/heroes == 100, Borea hidden",
+    "Baseline v6 latest and clean",
+    "SAFETY-ROLLUP-B axis layer GO, overall runtime NO_GO until this plan passes"
+  ],
+
+  "post_conditions": [
+    "All acceptance thresholds met",
+    "Rollback rehearsal flag flip ≤ 5s",
+    "Operator sign-off recorded",
+    "Subsequent task AF2-N may flip AFFINITY_GIFT_RUNTIME_ENABLED to true_explicit_affinity_gift_runtime_on"
+  ],
+
+  "tooling": {
+    "load_test_runner": "k6 / Locust (TBD; not shipped in this task)",
+    "metric_sink": "Prometheus + Grafana (existing)",
+    "log_sink": "Loki (existing)",
+    "report_artifact": "/app/data/design/affinity/load_test_reports/AF2-L-REHEARSAL-001/*.json (future)"
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "load_test_executed_in_this_task": false,
+    "rollback_rehearsal_executed_in_this_task": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  },
+
+  "recommended_next_tasks": [
+    "AF2-K — runtime: ship migration AF2-K-MIG-001 behind a separate flag.",
+    "AF2-L — runtime: execute load test + rollback rehearsal under this plan.",
+    "AF2-M — operator sign-off pre flag flip.",
+    "AF2-N — flip AFFINITY_GIFT_RUNTIME_ENABLED under controlled rollout."
+  ]
+}

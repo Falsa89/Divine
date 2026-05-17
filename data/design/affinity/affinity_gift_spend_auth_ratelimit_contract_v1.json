@@ -1,0 +1,81 @@
+{
+  "contract_id": "affinity_gift_spend_auth_ratelimit_contract_v1",
+  "task_origin": "AF2-J",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "AF2-J — Concrete auth / rate-limit / idempotency middleware contract bound to the disabled POST /api/affinity/gift-spend skeleton. Endpoint remains HTTP 423 / no-write while AFFINITY_GIFT_RUNTIME_ENABLED is OFF. Enforcement is deferred until the runtime flag flips under a separate controlled task (AF2-K + AF2-L).",
+
+  "endpoint": "POST /api/affinity/gift-spend",
+  "feature_flag_env_var": "AFFINITY_GIFT_RUNTIME_ENABLED",
+  "feature_flag_truthy_allowlist": ["true_explicit_affinity_gift_runtime_on"],
+  "feature_flag_currently_enabled": false,
+
+  "disabled_response_no_write": true,
+  "disabled_http_status": 423,
+
+  "auth_required": true,
+  "auth_enforcement_status": "deferred_until_runtime_flag",
+  "auth_strategy_future": "FastAPI Depends(get_current_user)",
+  "auth_failure_http_status": 401,
+
+  "rate_limit_required": true,
+  "rate_limit_policy_ref": "affinity_gift_anti_exploit_policy_v1",
+  "per_user_per_minute": 30,
+  "per_user_per_hour": 240,
+  "per_ip_per_minute": 60,
+  "burst_window_seconds": 60,
+  "burst_max": 6,
+  "rate_limit_failure_http_status": 429,
+
+  "idempotency_required": true,
+  "idempotency_key_header": "Idempotency-Key",
+  "idempotency_key_min_length": 8,
+  "idempotency_key_max_length": 128,
+  "idempotency_window_hours": 24,
+  "replay_protection_required": true,
+  "duplicate_http_status": 409,
+
+  "borea_safety": {
+    "borea_aliases_rejected_before_spend_logic": true,
+    "borea_alias_http_status": 404,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  },
+
+  "middleware_wiring_plan": [
+    "1. Add Depends(get_current_user) to the route signature only AFTER an integration test proves disabled/no-write behavior is preserved.",
+    "2. Add a request-scoped rate-limit middleware referencing affinity_gift_anti_exploit_policy_v1.",
+    "3. Persist Idempotency-Key in gift_transaction_ledger with unique index (see AF2-K-PRE contract).",
+    "4. Add transaction wrapper across user_gift_inventory + gift_transaction_ledger + hero_affinity_state (AF2-K runtime).",
+    "5. Run AF2-L load test and rollback rehearsal before flipping AFFINITY_GIFT_RUNTIME_ENABLED."
+  ],
+
+  "current_endpoint_assertions": [
+    "safety_envelope.af2i_concrete_contract present (set by AF2-I)",
+    "safety_envelope.db_write == false",
+    "safety_envelope.gift_spend_executed == false",
+    "safety_envelope.feature_flag_currently_enabled == false",
+    "Borea aliases (borea / greek_borea / primordial_gaia) -> 404 BEFORE shape validation",
+    "Empty / valid / missing-idempotency payload all return 423 inert envelope"
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+    "middleware_actually_attached_today": false,
+    "middleware_wiring_deferred_to_runtime_flip_task": true
+  },
+
+  "recommended_next_tasks": [
+    "AF2-K — wire idempotency-key persistence with unique index on gift_transaction_ledger (runtime).",
+    "AF2-L — end-to-end load test + rollback rehearsal pre-flag-flip."
+  ]
+}
