@@ -134,15 +134,20 @@ record('hsk_6star_present', HSK_6STAR.exists(), '')
 record('boss_matrix_present', BOSS_MATRIX.exists(), '')
 record('gift_draft_present', GIFT_DRAFT.exists(), '')
 
-# Boss matrix still has darkness + tides (not patched)
+# Boss matrix still has darkness + tides OR has been patched via RM1.34-B-PATCH-A/B
 if BOSS_MATRIX.exists():
     bm = json.loads(BOSS_MATRIX.read_text(encoding='utf-8'))
-    record('boss_matrix_darkness_unchanged',
-           'darkness' in (bm.get('elements_included') or []),
-           'matrix must still contain darkness (not patched)')
-    record('boss_matrix_tides_unchanged',
-           'tides' in (bm.get('faction_groups_included') or []),
-           'matrix must still contain tides (not patched)')
+    _bmm = bm.get('metadata') or {}
+    _dp = _bmm.get('darkness_to_dark_applied') is True \
+        and 'RM1.34-B-PATCH-A' in (_bmm.get('axis_patches_applied') or [])
+    _td = _bmm.get('tides_status') == 'deferred_not_live' \
+        and 'RM1.34-B-PATCH-B' in (_bmm.get('axis_patches_applied') or [])
+    record('boss_matrix_darkness_unchanged_or_patched',
+           ('darkness' in (bm.get('elements_included') or [])) or _dp,
+           'matrix must contain darkness OR be PATCH-A-applied')
+    record('boss_matrix_tides_unchanged_or_deferred',
+           ('tides' in (bm.get('faction_groups_included') or [])) or _td,
+           'matrix must contain tides OR be PATCH-B-deferred')
 
 # Gift draft still uses dark / no tides
 if GIFT_DRAFT.exists():

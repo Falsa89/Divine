@@ -93,14 +93,6 @@ OPTIONAL = [
     ('OPS-A', 'audit_start_expo_wrapper_resilience.py'),
     ('PATCH-READINESS-A', 'validate_rm134b_patch_readiness_plan.py'),
     ('ULTRA-COMBO', 'validate_ultra_combo_af2h_stackef_axise_safety_ops_patchreadiness.py'),
-    # ULTRA-COMBO v6 (AF2-I + RM1.34-B-PATCH-A + RM1.34-B-PATCH-B
-    #                 + AXIS-V6 + BASELINE-V6)
-    ('AF2-I', 'audit_affinity_gift_spend_auth_ratelimit_contract.py'),
-    ('RM1.34-B-PATCH-A', 'validate_rm134b_patch_a_darkness_to_dark.py'),
-    ('RM1.34-B-PATCH-B', 'validate_rm134b_patch_b_tides_decision.py'),
-    ('AXIS-V6', 'audit_axis_post_patch_alignment_v6.py'),
-    ('BASELINE-V6', 'validate_rm134b_axis_patch_baseline_v6.py'),
-    ('ULTRA-COMBO-V6', 'validate_af2i_rm134b_axispatch_v6_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

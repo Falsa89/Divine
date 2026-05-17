@@ -1,0 +1,1038 @@
+{
+  "table_id": "boss_enrage_phase_policy_table_v1",
+  "task_origin": "RM1.34-C",
+  "source_tables": [
+    "boss_family_resistance_table_v1",
+    "boss_family_element_faction_matrix_v1",
+    "hero_skill_kits_balance_cap_delta_plan_v1"
+  ],
+  "generated_at_utc": "2026-05-15T22:47:26.463973Z",
+  "metadata": {
+    "design_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "used_by_battle_engine": false,
+    "db_write": false,
+    "patch_applied_to_catalogs": false,
+    "applied_to_combat": false,
+    "feature_flag_dependency": "SKILL_KIT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false,
+    "baseline_anchor_at_creation": "hero_skill_kit_catalog_baseline_rm132b_v4",
+    "no_borea_activation": true,
+    "no_borea_visibility_change": true,
+    "no_catalog_mutation": true,
+    "warning": "Design contract only. Reserved for future boss runtime resolver. NEVER used by battle engine."
+  },
+  "safe_caps": {
+    "phase_count_min": 1,
+    "phase_count_max": 4,
+    "damage_multiplier_caps_by_family": {
+      "story_boss": 1.2,
+      "normal_boss": 1.2,
+      "elite_boss": 1.3,
+      "event_boss": 1.3,
+      "raid_boss": 1.4,
+      "guild_boss": 1.4,
+      "world_boss": 1.5,
+      "training_dummy": 1.0,
+      "pvp_dummy": 1.05
+    },
+    "speed_multiplier_global_cap": 1.25,
+    "speed_multiplier_world_cap": 1.3,
+    "status_chance_multiplier_global_cap": 1.15,
+    "status_chance_multiplier_pvp_dummy_cap": 1.0
+  },
+  "global_invariants": {
+    "marchio_owner_hero_id": "greek_borea",
+    "marchio_team_wide_amp_allowed": false,
+    "domain_one_active_per_side": true,
+    "domain_no_same_turn_refresh": true,
+    "dw_phase_policy_design_only": true,
+    "dw_live_numeric_modifier_applied": false
+  },
+  "boss_families": [
+    {
+      "family_id": "story_boss",
+      "display_name": "Story Boss",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 2,
+        "hp_thresholds_pct": [
+          60
+        ],
+        "phase_labels": [
+          "phase_1_intro",
+          "phase_2_pressure"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": true,
+        "trigger_types": [
+          "hp_threshold"
+        ],
+        "trigger_values": {
+          "hp_threshold_pct": 20
+        },
+        "stackable": false,
+        "max_stacks": 1,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.15,
+        "speed_multiplier_cap": 1.1,
+        "status_chance_multiplier_cap": 1.05,
+        "damage_cap_explicit_family_ceiling": 1.2,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Mild HP-only enrage; never one-shot."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 2,
+        "shield_refresh_limit": 3,
+        "healing_effectiveness_floor": 0.5,
+        "healing_effectiveness_cap": 1.0,
+        "hard_control_chain_limit": 3,
+        "dot_stack_limit": 5,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3,
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for story_boss; never read by battle runtime."
+    },
+    {
+      "family_id": "normal_boss",
+      "display_name": "Normal Boss",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 2,
+        "hp_thresholds_pct": [
+          60
+        ],
+        "phase_labels": [
+          "phase_1_open",
+          "phase_2_push"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": true,
+        "trigger_types": [
+          "hp_threshold",
+          "turn_count"
+        ],
+        "trigger_values": {
+          "hp_threshold_pct": 30,
+          "turn_count": 8
+        },
+        "stackable": false,
+        "max_stacks": 1,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.18,
+        "speed_multiplier_cap": 1.15,
+        "status_chance_multiplier_cap": 1.05,
+        "damage_cap_explicit_family_ceiling": 1.2,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "HP@30 or turn 8 trigger; capped, no chain enrage."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 2,
+        "shield_refresh_limit": 3,
+        "healing_effectiveness_floor": 0.5,
+        "healing_effectiveness_cap": 1.0,
+        "hard_control_chain_limit": 3,
+        "dot_stack_limit": 5,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3,
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for normal_boss; never read by battle runtime."
+    },
+    {
+      "family_id": "elite_boss",
+      "display_name": "Elite Boss",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 3,
+        "hp_thresholds_pct": [
+          70,
+          35
+        ],
+        "phase_labels": [
+          "phase_1_open",
+          "phase_2_pressure",
+          "phase_3_break"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": true,
+        "trigger_types": [
+          "hp_threshold",
+          "turn_count"
+        ],
+        "trigger_values": {
+          "hp_threshold_pct": 35,
+          "turn_count": 8
+        },
+        "stackable": false,
+        "max_stacks": 1,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.25,
+        "speed_multiplier_cap": 1.2,
+        "status_chance_multiplier_cap": 1.1,
+        "damage_cap_explicit_family_ceiling": 1.3,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Moderate enrage; cap respected per cap audit."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 2,
+        "shield_refresh_limit": 3,
+        "healing_effectiveness_floor": 0.45,
+        "healing_effectiveness_cap": 0.95,
+        "hard_control_chain_limit": 3,
+        "dot_stack_limit": 5,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3,
+          3,
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for elite_boss; never read by battle runtime."
+    },
+    {
+      "family_id": "raid_boss",
+      "display_name": "Raid Boss",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 3,
+        "hp_thresholds_pct": [
+          66,
+          33
+        ],
+        "phase_labels": [
+          "phase_1_engage",
+          "phase_2_break",
+          "phase_3_finale"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": true,
+        "trigger_types": [
+          "hp_threshold",
+          "soft_timer"
+        ],
+        "trigger_values": {
+          "hp_threshold_pct": 25,
+          "soft_timer_turns": 12
+        },
+        "stackable": true,
+        "max_stacks": 2,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.35,
+        "speed_multiplier_cap": 1.2,
+        "status_chance_multiplier_cap": 1.1,
+        "damage_cap_explicit_family_ceiling": 1.4,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "HP@25 or soft 12-turn timer; capped < 1.40."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 1,
+        "shield_refresh_limit": 2,
+        "healing_effectiveness_floor": 0.4,
+        "healing_effectiveness_cap": 0.9,
+        "hard_control_chain_limit": 2,
+        "dot_stack_limit": 4,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3,
+          3,
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for raid_boss; never read by battle runtime."
+    },
+    {
+      "family_id": "world_boss",
+      "display_name": "World Boss",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 4,
+        "hp_thresholds_pct": [
+          80,
+          50,
+          20
+        ],
+        "phase_labels": [
+          "phase_1_open",
+          "phase_2_press",
+          "phase_3_break",
+          "phase_4_finale"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": true,
+        "trigger_types": [
+          "hp_threshold",
+          "soft_timer"
+        ],
+        "trigger_values": {
+          "hp_threshold_pct": 20,
+          "soft_timer_turns": 15
+        },
+        "stackable": true,
+        "max_stacks": 3,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.45,
+        "speed_multiplier_cap": 1.25,
+        "status_chance_multiplier_cap": 1.15,
+        "damage_cap_explicit_family_ceiling": 1.5,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Escalating but strictly < 1.50; no one-shot."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 1,
+        "shield_refresh_limit": 2,
+        "healing_effectiveness_floor": 0.4,
+        "healing_effectiveness_cap": 0.85,
+        "hard_control_chain_limit": 2,
+        "dot_stack_limit": 4,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3,
+          3,
+          4,
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "moderate_to_high_capped",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for world_boss; never read by battle runtime."
+    },
+    {
+      "family_id": "event_boss",
+      "display_name": "Event Boss",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 3,
+        "hp_thresholds_pct": [
+          65,
+          30
+        ],
+        "phase_labels": [
+          "phase_1_event_intro",
+          "phase_2_event_press",
+          "phase_3_event_finale"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": true,
+        "trigger_types": [
+          "hp_threshold",
+          "turn_count"
+        ],
+        "trigger_values": {
+          "hp_threshold_pct": 30,
+          "turn_count": 10
+        },
+        "stackable": false,
+        "max_stacks": 1,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.25,
+        "speed_multiplier_cap": 1.15,
+        "status_chance_multiplier_cap": 1.1,
+        "damage_cap_explicit_family_ceiling": 1.3,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Configurable event profile inheritance; design-only."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 2,
+        "shield_refresh_limit": 3,
+        "healing_effectiveness_floor": 0.45,
+        "healing_effectiveness_cap": 0.95,
+        "hard_control_chain_limit": 3,
+        "dot_stack_limit": 5,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3,
+          3,
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for event_boss; never read by battle runtime."
+    },
+    {
+      "family_id": "guild_boss",
+      "display_name": "Guild Boss",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 3,
+        "hp_thresholds_pct": [
+          70,
+          40
+        ],
+        "phase_labels": [
+          "phase_1_open",
+          "phase_2_pressure",
+          "phase_3_finale"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": true,
+        "trigger_types": [
+          "hp_threshold",
+          "soft_timer"
+        ],
+        "trigger_values": {
+          "hp_threshold_pct": 20,
+          "soft_timer_turns": 14
+        },
+        "stackable": true,
+        "max_stacks": 2,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.35,
+        "speed_multiplier_cap": 1.2,
+        "status_chance_multiplier_cap": 1.1,
+        "damage_cap_explicit_family_ceiling": 1.4,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Guild-scaled raid-like enrage; capped < 1.40."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 1,
+        "shield_refresh_limit": 2,
+        "healing_effectiveness_floor": 0.4,
+        "healing_effectiveness_cap": 0.9,
+        "hard_control_chain_limit": 2,
+        "dot_stack_limit": 4,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3,
+          3,
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for guild_boss; never read by battle runtime."
+    },
+    {
+      "family_id": "training_dummy",
+      "display_name": "Training Dummy",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 1,
+        "hp_thresholds_pct": [],
+        "phase_labels": [
+          "phase_1_static"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": false,
+        "trigger_types": [
+          "none"
+        ],
+        "trigger_values": {},
+        "stackable": false,
+        "max_stacks": 0,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.0,
+        "speed_multiplier_cap": 1.0,
+        "status_chance_multiplier_cap": 1.0,
+        "damage_cap_explicit_family_ceiling": 1.0,
+        "pvp_test_only": false,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Training dummy: no enrage, neutral simulation."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 99,
+        "revive_per_team_cap": 99,
+        "shield_refresh_limit": 99,
+        "healing_effectiveness_floor": 1.0,
+        "healing_effectiveness_cap": 1.0,
+        "hard_control_chain_limit": 99,
+        "dot_stack_limit": 99,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          4
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for training_dummy; never read by battle runtime."
+    },
+    {
+      "family_id": "pvp_dummy",
+      "display_name": "PvP Dummy",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false,
+      "phase_model": {
+        "phase_count": 1,
+        "hp_thresholds_pct": [],
+        "phase_labels": [
+          "phase_1_pvp_static"
+        ],
+        "phase_transition_policy": "on_hp_threshold_crossed",
+        "transition_cleanses_negative_statuses": false,
+        "transition_cleanses_negative_statuses_notes": "No automatic cleanse; only specific design-tagged statuses may clear in future runtime.",
+        "transition_interrupts_turn": false,
+        "transition_interrupts_turn_notes": "Transitions are queued at end-of-action; never interrupt active turns.",
+        "design_only": true,
+        "runtime_attached": false
+      },
+      "enrage_policy": {
+        "enabled": false,
+        "trigger_types": [
+          "none"
+        ],
+        "trigger_values": {},
+        "stackable": false,
+        "max_stacks": 0,
+        "dispellable": false,
+        "damage_multiplier_cap": 1.0,
+        "speed_multiplier_cap": 1.0,
+        "status_chance_multiplier_cap": 1.0,
+        "damage_cap_explicit_family_ceiling": 1.05,
+        "pvp_test_only": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "PvP dummy: no boss enrage; PvP caps apply elsewhere."
+      },
+      "anti_loop_policy": {
+        "revive_per_unit_cap": 1,
+        "revive_per_team_cap": 1,
+        "shield_refresh_limit": 2,
+        "healing_effectiveness_floor": 0.5,
+        "healing_effectiveness_cap": 1.0,
+        "hard_control_chain_limit": 2,
+        "dot_stack_limit": 4,
+        "design_only": true,
+        "runtime_attached": false,
+        "notes": "Anti-loop caps prevent infinite revive/heal/shield/control chains. Hard immunities remain in RM1.34 table."
+      },
+      "marchio_boreale_phase_policy": {
+        "owner_hero_id": "greek_borea",
+        "team_wide_amp_allowed": false,
+        "max_stacks_by_phase": [
+          3
+        ],
+        "phase_transition_behavior": "preserve",
+        "phase_transition_behavior_options": [
+          "preserve",
+          "decay",
+          "cleanse",
+          "cap"
+        ],
+        "boss_enrage_interaction": "capped_no_amp",
+        "boss_enrage_interaction_notes": "Marchio Boreale stacks remain owner-scoped; boss enrage cannot amplify Marchio team-wide.",
+        "no_activation": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "domain_phase_policy": {
+        "one_domain_active_per_side": true,
+        "phase_transition_domain_behavior": "persist_with_clamp",
+        "phase_transition_domain_behavior_notes": "Domain persists across phase transitions; duration clamp respected.",
+        "strongest_wins": true,
+        "max_duration_turns": 3,
+        "no_same_turn_refresh": true,
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false
+      },
+      "divine_weapon_phase_policy": {
+        "design_only": true,
+        "runtime_attached": false,
+        "runtime_ready": false,
+        "live_numeric_modifier_applied": false,
+        "per_owner_only": true,
+        "no_teamwide_global_amp": true,
+        "enrage_modifier_cap_future_pct": 5,
+        "pvp_modifier_cap_future_pct": 3,
+        "notes": "DW interactions with boss enrage stay descriptive. No live numeric modifier applied."
+      },
+      "vfx_presentation_notes": {
+        "allowed_future_vfx_intensity": "low_to_moderate",
+        "no_runtime_now": true,
+        "design_only": true,
+        "notes": "VFX is presentation-only; not used by runtime in this task."
+      },
+      "notes": "Design-only enrage/phase policy for pvp_dummy; never read by battle runtime."
+    }
+  ],
+  "out_of_scope": [
+    "runtime hookup",
+    "DB writes",
+    "catalog numeric edits",
+    "gacha/roster/Character Bible changes",
+    "Borea activation",
+    "API endpoint creation",
+    "UI button creation",
+    "modifying boss_family_resistance_table_v1",
+    "modifying boss_family_element_faction_matrix_v1"
+  ]
+}

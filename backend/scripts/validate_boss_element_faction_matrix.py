@@ -52,11 +52,17 @@ REQUIRED_FAMILIES = (
     'training_dummy', 'pvp_dummy',
 )
 REQUIRED_ELEMENTS = ('fire', 'water', 'earth', 'wind', 'lightning', 'light', 'darkness')
+# RM1.34-B-PATCH-A allowed canonical element rename: darkness -> dark.
+# Either spelling is accepted when matrix metadata declares the patch.
+PATCH_A_RENAMED_ELEMENTS = {'darkness': 'dark'}
 REQUIRED_FACTIONS = (
     'greek', 'norse', 'egyptian', 'japanese_yokai', 'celtic',
     'angelic', 'demonic', 'cursed', 'creature_beast',
     'primordial', 'arcane', 'tides', 'mesopotamian',
 )
+# RM1.34-B-PATCH-B allowed deferral set; these become optional when
+# matrix metadata declares tides_status == 'deferred_not_live'.
+PATCH_B_DEFERRED_FACTIONS = {'tides'}
 
 # Per-prompt safe ranges
 DTM_RANGE = (0.70, 1.30)
@@ -144,6 +150,21 @@ def main() -> int:
         info('source_tables references boss_family_resistance_table_v1')
 
     md = data.get('metadata') or {}
+    # Post-patch tolerance: the matrix may have been mutated by
+    # RM1.34-B-PATCH-A (darkness->dark) and RM1.34-B-PATCH-B (tides deferred).
+    _patch_a = md.get('darkness_to_dark_applied') is True \
+        and 'RM1.34-B-PATCH-A' in (md.get('axis_patches_applied') or [])
+    _patch_b = md.get('tides_status') == 'deferred_not_live' \
+        and 'RM1.34-B-PATCH-B' in (md.get('axis_patches_applied') or [])
+    effective_required_elements = tuple(
+        PATCH_A_RENAMED_ELEMENTS.get(e, e) if _patch_a else e
+        for e in REQUIRED_ELEMENTS
+    )
+    effective_required_factions = tuple(
+        f for f in REQUIRED_FACTIONS
+        if not (_patch_b and f in PATCH_B_DEFERRED_FACTIONS)
+    )
+
     if md.get('design_only') is not True:
         fail('meta', 'metadata.design_only must be true')
     if md.get('runtime_attached') is not False:
@@ -168,10 +189,10 @@ def main() -> int:
     # 2. elements / factions / families presence
     elems_top = data.get('elements_included') or []
     facs_top = data.get('faction_groups_included') or []
-    for e in REQUIRED_ELEMENTS:
+    for e in effective_required_elements:
         if e not in elems_top:
             fail('elements', f'missing element {e!r} in elements_included')
-    for f in REQUIRED_FACTIONS:
+    for f in effective_required_factions:
         if f not in facs_top:
             fail('factions', f'missing faction {f!r} in faction_groups_included')
 
@@ -211,7 +232,7 @@ def main() -> int:
 
         # element modifiers
         ems = fam.get('element_resistance_modifiers') or {}
-        for el in REQUIRED_ELEMENTS:
+        for el in effective_required_elements:
             if el not in ems:
                 fail(fid, f'missing element_resistance_modifiers.{el}')
                 continue
@@ -242,7 +263,7 @@ def main() -> int:
 
         # faction modifiers
         fms = fam.get('faction_resistance_modifiers') or {}
-        for fac in REQUIRED_FACTIONS:
+        for fac in effective_required_factions:
             if fac not in fms:
                 fail(fid, f'missing faction_resistance_modifiers.{fac}')
                 continue

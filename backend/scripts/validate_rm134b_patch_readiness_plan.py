@@ -29,12 +29,32 @@ record('plan_present', PLAN.exists(), str(PLAN))
 p = json.loads(PLAN.read_text(encoding='utf-8'))
 record('plan_id', p.get('plan_id') == 'rm134b_patch_readiness_plan_v1', '')
 record('task_origin', p.get('task_origin') == 'PATCH-READINESS-A', '')
-for k, v in [('design_only', True), ('patches_executed', False),
-             ('baseline_v6_created', false := False), ('db_write', False),
-             ('no_borea_activation', True),
-             ('no_source_patch_in_this_task', True),
-             ('no_baseline_v6_in_this_task', True)]:
-    record(f'flag_{k}', p.get(k) == v, f'expected {v}, got {p.get(k)!r}')
+
+# Plan supports two states: PRE-execution (patches_executed=False) and
+# POST-execution (patches_executed=True via the ULTRA-COMBO-V6 task).
+post_exec = (p.get('post_execution_status') or {}).get('patch_a_applied') is True \
+    and (p.get('post_execution_status') or {}).get('patch_b_applied') is True
+
+if post_exec:
+    record('flag_design_only', p.get('design_only') is True, '')
+    record('flag_patches_executed_true', p.get('patches_executed') is True, '')
+    record('flag_baseline_v6_created_true',
+           p.get('baseline_v6_created') is True, '')
+    record('flag_post_execution_recorded',
+           bool(p.get('post_execution_status')), '')
+    record('flag_no_borea_activation', p.get('no_borea_activation') is True, '')
+    pes = p.get('post_execution_status') or {}
+    record('post_exec_design_only', pes.get('design_only') is True, '')
+    record('post_exec_runtime_attached_false',
+           pes.get('runtime_attached') is False, '')
+    record('post_exec_db_write_false', pes.get('db_write') is False, '')
+else:
+    for k, v in [('design_only', True), ('patches_executed', False),
+                 ('baseline_v6_created', False), ('db_write', False),
+                 ('no_borea_activation', True),
+                 ('no_source_patch_in_this_task', True),
+                 ('no_baseline_v6_in_this_task', True)]:
+        record(f'flag_{k}', p.get(k) == v, f'expected {v}, got {p.get(k)!r}')
 
 patches = p.get('patches') or []
 ids = {x.get('id') for x in patches if isinstance(x, dict)}
@@ -64,20 +84,37 @@ if pb:
     for req in ['PATCH-B-BRANCH-MINT', 'PATCH-B-BRANCH-STRIKE']:
         record(f'patch_b_branch:{req}', req in bids, '')
 
-# Source NOT mutated (RM1.34-B still contains darkness + tides)
+# Source matrix: pre-execution requires darkness+tides present, post-
+# execution requires darkness->dark applied and tides deferred.
 if MATRIX.exists():
     m = json.loads(MATRIX.read_text(encoding='utf-8'))
-    record('matrix_darkness_unchanged',
-           'darkness' in (m.get('elements_included') or []),
-           'matrix MUST still contain darkness in this task')
-    record('matrix_tides_unchanged',
-           'tides' in (m.get('faction_groups_included') or []),
-           'matrix MUST still contain tides in this task')
+    _mm = m.get('metadata') or {}
+    _dp = _mm.get('darkness_to_dark_applied') is True \
+        and 'RM1.34-B-PATCH-A' in (_mm.get('axis_patches_applied') or [])
+    _td = _mm.get('tides_status') == 'deferred_not_live' \
+        and 'RM1.34-B-PATCH-B' in (_mm.get('axis_patches_applied') or [])
+    if post_exec:
+        record('matrix_darkness_patched', _dp,
+               f'expected PATCH-A applied (got darkness_patched={_dp})')
+        record('matrix_tides_deferred', _td,
+               f'expected PATCH-B applied (got tides_deferred={_td})')
+    else:
+        record('matrix_darkness_unchanged',
+               'darkness' in (m.get('elements_included') or []),
+               'matrix MUST still contain darkness in this task')
+        record('matrix_tides_unchanged',
+               'tides' in (m.get('faction_groups_included') or []),
+               'matrix MUST still contain tides in this task')
 
-# Baseline v5 anchor present, NO v6 file created
+# Baseline v5 anchor present; v6 expected only post-execution
 record('baseline_v5_present', BASELINE_V5.exists(), '')
-record('no_baseline_v6_file', not BASELINE_V6_CANDIDATES,
-       f'unexpected v6 baseline files: {BASELINE_V6_CANDIDATES}')
+if post_exec:
+    record('baseline_v6_present_post_exec',
+           len(BASELINE_V6_CANDIDATES) >= 1,
+           f'expected v6 baseline file, got {BASELINE_V6_CANDIDATES}')
+else:
+    record('no_baseline_v6_file', not BASELINE_V6_CANDIDATES,
+           f'unexpected v6 baseline files: {BASELINE_V6_CANDIDATES}')
 
 blocked = p.get('baseline_v6_creation_blocked_until') or []
 record('baseline_v6_blocked_until_min_3', len(blocked) >= 3,

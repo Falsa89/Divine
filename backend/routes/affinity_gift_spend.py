@@ -61,6 +61,55 @@ TRANSACTION_STRATEGY_FUTURE: str = (
 BOREA_VISIBILITY_GATE_REQUIRED_FUTURE: bool = True
 
 
+def _af2i_concrete_contract() -> dict[str, Any]:
+    """AF2-I — concrete auth / rate-limit / idempotency CONTRACT for
+    the gift-spend endpoint.
+
+    Unlike `_hardening_metadata()` (AF2-H, which describes only the
+    FUTURE state), this block formalizes the **current contract** that
+    the endpoint binds to, even while it stays disabled / no-write.
+
+    Today the contract is NOT enforced in code (we deliberately keep
+    the inert skeleton no-write to avoid leaking auth-required signals
+    on an inert system), but every flag below is a precondition that a
+    future runtime-flip task MUST honor. The contract is the
+    canonical reference for auditors.
+    """
+    return {
+        "contract_id": "affinity_gift_spend_disabled_contract_v2",
+        "task_origin": "AF2-I",
+        "auth_required": True,
+        "auth_enforced_when_runtime_enabled": True,
+        "rate_limit_policy_ref": "affinity_gift_anti_exploit_policy_v1",
+        "rate_limits": {
+            "per_user_per_minute": RATE_LIMIT_PER_USER_PER_MINUTE_FUTURE,
+            "per_user_per_hour": RATE_LIMIT_PER_USER_PER_HOUR_FUTURE,
+            "per_ip_per_minute": RATE_LIMIT_PER_IP_PER_MINUTE_FUTURE,
+            "burst_window_seconds": RATE_LIMIT_BURST_WINDOW_SECONDS_FUTURE,
+            "burst_max": RATE_LIMIT_BURST_MAX_FUTURE,
+        },
+        "idempotency_key_required": True,
+        "idempotency_key_header": IDEMPOTENCY_KEY_HEADER_FUTURE,
+        "idempotency_window_hours": IDEMPOTENCY_WINDOW_HOURS_FUTURE,
+        "idempotency_key_min_len": IDEMPOTENCY_KEY_MIN_LEN,
+        "idempotency_key_max_len": IDEMPOTENCY_KEY_MAX_LEN,
+        "replay_protection_required": True,
+        "replay_protection_strategy_ref": (
+            "store idempotency_key in gift_transaction_ledger with unique "
+            "index; duplicates return HTTP 409 with the original payload"
+        ),
+        "no_write_current_task": True,
+        "borea_visibility_gate_required": True,
+        "hidden_aliases_blocked": sorted(_FORBIDDEN_HERO_IDS | _HIDDEN_HERO_IDS),
+        "currently_enforced_today": False,
+        "currently_enforced_today_rationale": (
+            "Endpoint is hard-disabled (HTTP 423); enforcement would only "
+            "leak signal about inert state. Contract becomes ENFORCED the "
+            "moment AFFINITY_GIFT_RUNTIME_ENABLED is flipped."
+        ),
+    }
+
+
 def _hardening_metadata() -> dict[str, Any]:
     """Return the AF2-H hardening metadata for the disabled envelope.
 
@@ -120,6 +169,10 @@ def _disabled_envelope(reason: str) -> dict[str, Any]:
         # AF2-H — future-runtime hardening metadata (documentation only,
         # never enforced today; the endpoint is hard-disabled).
         "future_runtime_hardening": _hardening_metadata(),
+        # AF2-I — concrete contract bound to this endpoint. Not enforced
+        # while feature_flag_currently_enabled=False, but it IS the
+        # canonical contract that the future runtime task must honor.
+        "af2i_concrete_contract": _af2i_concrete_contract(),
     }
 
 
@@ -180,7 +233,7 @@ def register_affinity_gift_spend_skeleton_routes(router):
         # 3. Feature flag check. Always disabled in this task.
         if not is_affinity_gift_runtime_enabled():
             return {
-                "task_origin": "AF2-G",
+                "task_origin": "AF2-I",
                 "http_status": 423,
                 "shape_validation_preview": validation,
                 "safety_envelope": _disabled_envelope("feature_flag_off"),
@@ -190,7 +243,7 @@ def register_affinity_gift_spend_skeleton_routes(router):
         # not wired to any DB. Return a documentation-grade payload
         # without writing.
         return {
-            "task_origin": "AF2-G",
+            "task_origin": "AF2-I",
             "http_status": 423,
             "shape_validation_preview": validation,
             "safety_envelope": _disabled_envelope("skeleton_no_write_path_implemented"),

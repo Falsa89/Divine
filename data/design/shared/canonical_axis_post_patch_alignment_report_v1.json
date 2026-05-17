@@ -1,0 +1,63 @@
+{
+  "report_id": "canonical_axis_post_patch_alignment_report_v1",
+  "task_origin": "RM1.34-B-AXIS-ALIGN-POST-PATCH",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor_before_v6": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "baseline_anchor_after_v6": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "Post-patch alignment report for the canonical axis layer after RM1.34-B-PATCH-A (darkness->dark) and RM1.34-B-PATCH-B (tides deferred). The element axis now uses 'dark' canonically across matrix, gift draft, alias helper and read-through helper. The faction axis no longer carries 'tides' as a canonical faction_group; tides remains a lore-grade origin_group on the live roster (untouched). The axis layer is now design-preview-aligned, but overall runtime activation remains NO-GO until DB/auth/runtime gates are satisfied.",
+
+  "expected_state": {
+    "element_axis": {
+      "canonical_tokens": ["fire", "water", "earth", "wind", "lightning", "light", "dark"],
+      "alias_in_play": {"darkness": "dark"},
+      "aliases_via_helper": true,
+      "matrix_uses_dark": true,
+      "gift_draft_uses_dark": true
+    },
+    "faction_axis": {
+      "canonical_factions_in_matrix": [
+        "greek", "norse", "egyptian", "japanese_yokai", "celtic",
+        "angelic", "demonic", "cursed", "creature_beast",
+        "primordial", "arcane", "mesopotamian"
+      ],
+      "tides_status": "deferred_not_live",
+      "tides_origin_group_lore_preserved": true,
+      "tides_appears_in_live_faction": false,
+      "tides_appears_in_live_faction_group": false,
+      "tides_appears_in_origin_group_only": true
+    },
+    "axis_activation_axis_layer_ready": true,
+    "overall_runtime_activation_ready": false,
+    "still_blocking_gates": [
+      "auth/rate-limit/idempotency not enforced (AF2-I contract only)",
+      "DB transactional wiring missing for gift_transaction_ledger",
+      "Borea visibility gate not yet validated end-to-end",
+      "operator sign-off pending for runtime flip"
+    ]
+  },
+
+  "alignment_targets_to_assert": [
+    {"id": "live_matrix_gift_align_on_dark", "description": "boss matrix elements_included, gift draft elements_used and alias helper all return 'dark' for canonical."},
+    {"id": "darkness_alias_maps_to_dark", "description": "alias helpers map 'darkness' -> 'dark' with status aliased_to_live."},
+    {"id": "tides_not_in_canonical_matrix_factions", "description": "tides absent from matrix.faction_groups_included AND per-family faction_resistance_modifiers."},
+    {"id": "tides_returns_deferred_not_live", "description": "read-through helper resolve_faction('tides') returns status='deferred_not_live' OR design_pending (both acceptable post-patch)."},
+    {"id": "axis_layer_activation_ready_true", "description": "axis activation validation table currently_blocking_any_axis_runtime_on flips to false post-patch."},
+    {"id": "overall_runtime_activation_ready_false", "description": "overall runtime gate stays false (DB/auth/runtime blockers remain)."},
+    {"id": "no_runtime_attached", "description": "battle_engine.py, battle_core.py, combat.tsx do not import any of the patched assets."},
+    {"id": "borea_safety_unchanged", "description": "/api/heroes still 100, Borea hidden, no greek_borea / borea / primordial_gaia in roster list."}
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  }
+}

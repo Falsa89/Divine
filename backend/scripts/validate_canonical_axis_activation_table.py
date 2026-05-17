@@ -145,13 +145,31 @@ patches = t.get('do_not_patch_in_this_task') or {}
 for k in ['rm134b_matrix', 'af2a_gift_draft', 'axis_a_plan', 'baseline_v5']:
     record(f'do_not_patch_{k}', patches.get(k) is True, '')
 
-# Source tables actually unchanged (cross-check with files)
+# Source tables actually unchanged OR explicitly patched via a known
+# axis patch (RM1.34-B-PATCH-A / PATCH-B). When the boss matrix is
+# patched in a controlled way, the canonical token mutation is
+# acknowledged through metadata.darkness_to_dark_applied=True /
+# tides_status='deferred_not_live'. The AXIS-D snapshot still asserts
+# that no UNAUTHORIZED mutation occurred.
 if BOSS_MATRIX.exists():
     bm = json.loads(BOSS_MATRIX.read_text(encoding='utf-8'))
-    record('boss_matrix_darkness_unchanged',
-           'darkness' in (bm.get('elements_included') or []), '')
-    record('boss_matrix_tides_unchanged',
-           'tides' in (bm.get('faction_groups_included') or []), '')
+    bm_meta = bm.get('metadata') or {}
+    darkness_in_elements = 'darkness' in (bm.get('elements_included') or [])
+    darkness_patched = bm_meta.get('darkness_to_dark_applied') is True \
+        and 'RM1.34-B-PATCH-A' in (bm_meta.get('axis_patches_applied') or [])
+    record('boss_matrix_darkness_unchanged_or_patched',
+           darkness_in_elements or darkness_patched,
+           f'darkness_in_elements={darkness_in_elements}, '
+           f'darkness_patched={darkness_patched}')
+
+    tides_in_factions = 'tides' in (bm.get('faction_groups_included') or [])
+    tides_deferred = bm_meta.get('tides_status') == 'deferred_not_live' \
+        and bm_meta.get('tides_removed_from_canonical_matrix') is True \
+        and 'RM1.34-B-PATCH-B' in (bm_meta.get('axis_patches_applied') or [])
+    record('boss_matrix_tides_unchanged_or_deferred',
+           tides_in_factions or tides_deferred,
+           f'tides_in_factions={tides_in_factions}, '
+           f'tides_deferred={tides_deferred}')
 if GIFT_DRAFT.exists():
     gd = json.loads(GIFT_DRAFT.read_text(encoding='utf-8'))
     record('gift_draft_dark_unchanged',

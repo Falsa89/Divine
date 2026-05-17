@@ -112,10 +112,15 @@ record('gift_draft_present', GIFT_DRAFT.exists(), '')
 
 if BOSS_MATRIX.exists():
     bm = json.loads(BOSS_MATRIX.read_text(encoding='utf-8'))
-    record('boss_matrix_darkness_unchanged',
-           'darkness' in (bm.get('elements_included') or []), '')
-    record('boss_matrix_tides_unchanged',
-           'tides' in (bm.get('faction_groups_included') or []), '')
+    _bmm = bm.get('metadata') or {}
+    _dp = _bmm.get('darkness_to_dark_applied') is True \
+        and 'RM1.34-B-PATCH-A' in (_bmm.get('axis_patches_applied') or [])
+    _td = _bmm.get('tides_status') == 'deferred_not_live' \
+        and 'RM1.34-B-PATCH-B' in (_bmm.get('axis_patches_applied') or [])
+    record('boss_matrix_darkness_unchanged_or_patched',
+           ('darkness' in (bm.get('elements_included') or [])) or _dp, '')
+    record('boss_matrix_tides_unchanged_or_deferred',
+           ('tides' in (bm.get('faction_groups_included') or [])) or _td, '')
 
 # 8. Live runtime files do NOT import any new helper / resolver / route file
 for f in [BATTLE_ENGINE, BATTLE_CORE, COMBAT_TSX]:

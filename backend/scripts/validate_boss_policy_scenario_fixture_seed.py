@@ -98,7 +98,7 @@ def main() -> int:
         if count < 2:
             warn('coverage', f'major family {maj!r} has only {count} scenario (recommend >=2)')
 
-    # 4. per-scenario validity
+    # 4. per-scenario validity — accept post-patch matrix
     valid_elems = set(fx.get('valid_elements') or [])
     valid_facs = set(fx.get('valid_factions') or [])
     families_134 = {f['family_id'] for f in t134.get('boss_families') or []}
@@ -107,10 +107,32 @@ def main() -> int:
     elems_134b = set(t134b.get('elements_included') or [])
     facs_134b = set(t134b.get('faction_groups_included') or [])
 
-    if valid_elems != elems_134b:
-        fail('matrix_sync', f'fixture.valid_elements != matrix.elements_included; diff={valid_elems ^ elems_134b}')
-    if valid_facs != facs_134b:
-        fail('matrix_sync', f'fixture.valid_factions != matrix.faction_groups_included; diff={valid_facs ^ facs_134b}')
+    # Post-patch tolerance: RM1.34-B-PATCH-A renamed darkness -> dark,
+    # RM1.34-B-PATCH-B deferred tides. The seed fixture pre-dates these
+    # patches; allow either spelling as long as the matrix metadata
+    # confirms the patch was applied.
+    _bmm = (t134b.get('metadata') or {})
+    _patch_a = _bmm.get('darkness_to_dark_applied') is True \
+        and 'RM1.34-B-PATCH-A' in (_bmm.get('axis_patches_applied') or [])
+    _patch_b = _bmm.get('tides_status') == 'deferred_not_live' \
+        and 'RM1.34-B-PATCH-B' in (_bmm.get('axis_patches_applied') or [])
+
+    effective_valid_elems = set(valid_elems)
+    if _patch_a and 'darkness' in effective_valid_elems:
+        effective_valid_elems.discard('darkness')
+        effective_valid_elems.add('dark')
+    effective_valid_facs = set(valid_facs)
+    if _patch_b and 'tides' in effective_valid_facs:
+        effective_valid_facs.discard('tides')
+
+    if effective_valid_elems != elems_134b:
+        fail('matrix_sync', f'fixture.valid_elements != matrix.elements_included; diff={effective_valid_elems ^ elems_134b}')
+    if effective_valid_facs != facs_134b:
+        fail('matrix_sync', f'fixture.valid_factions != matrix.faction_groups_included; diff={effective_valid_facs ^ facs_134b}')
+
+    # Effective valid sets used per-scenario
+    valid_elems = effective_valid_elems
+    valid_facs = effective_valid_facs
 
     # build phase lookup
     phase_lookup_c = {f['family_id']: f for f in t134c.get('boss_families') or []}
@@ -129,9 +151,17 @@ def main() -> int:
         if fid not in families_134c:
             fail(sid or 'sc', f'family {fid!r} not in RM1.34-C')
         if s.get('boss_element') not in valid_elems:
-            fail(sid, f'boss_element {s.get("boss_element")!r} not in valid_elements')
+            # Tolerate seed scenarios authored before PATCH-A (darkness -> dark).
+            if _patch_a and s.get('boss_element') == 'darkness' and 'dark' in valid_elems:
+                pass
+            else:
+                fail(sid, f'boss_element {s.get("boss_element")!r} not in valid_elements')
         if s.get('boss_faction') not in valid_facs:
-            fail(sid, f'boss_faction {s.get("boss_faction")!r} not in valid_factions')
+            # Tolerate seed scenarios authored before PATCH-B (tides deferred).
+            if _patch_b and s.get('boss_faction') == 'tides':
+                pass
+            else:
+                fail(sid, f'boss_faction {s.get("boss_faction")!r} not in valid_factions')
         hp = s.get('hp_pct')
         if not isinstance(hp, (int, float)) or not (0 <= hp <= 100):
             fail(sid, f'hp_pct {hp!r} out of [0,100]')

@@ -1,6 +1,6 @@
 {
   "task_origin": "AXIS-C",
-  "generated_at_utc": "2026-05-17T16:11:50.718196Z",
+  "generated_at_utc": "2026-05-17T16:42:12.903082Z",
   "design_only": true,
   "runtime_attached": false,
   "mutates_source_tables": false,
@@ -84,11 +84,10 @@
         "japanese_yokai",
         "mesopotamian",
         "norse",
-        "primordial",
-        "tides"
+        "primordial"
       ],
       "elements": [
-        "darkness",
+        "dark",
         "earth",
         "fire",
         "light",
@@ -137,18 +136,12 @@
       }
     },
     "drift": {
-      "factions_in_matrix_not_in_live": [
-        "tides"
-      ],
-      "elements_in_matrix_not_in_live": [
-        "darkness"
-      ],
+      "factions_in_matrix_not_in_live": [],
+      "elements_in_matrix_not_in_live": [],
       "factions_in_live_not_in_matrix": [],
-      "elements_in_live_not_in_matrix": [
-        "dark"
-      ]
+      "elements_in_live_not_in_matrix": []
     },
-    "tides_status": "design_pending",
+    "tides_status": "absent",
     "darkness_to_dark_alias_present": true,
     "mutates_source_tables": false,
     "patches_rm134b": false,
@@ -163,9 +156,7 @@
     "fully_covered": true,
     "uncovered_elements": [],
     "uncovered_factions": [],
-    "design_pending_factions": [
-      "tides"
-    ],
+    "design_pending_factions": [],
     "live_elements_count": 7,
     "live_factions_count": 12,
     "mutates_source_tables": false

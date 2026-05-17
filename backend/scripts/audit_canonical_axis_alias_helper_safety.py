@@ -128,16 +128,20 @@ for f in LIVE_FILES:
         record(f'no_runtime_import:{f.name}:{tok}', ok,
                f'token found' if not ok else '')
 
-# 7. Source tables unmodified
-# RM1.34-B still contains darkness + tides
+# 7. Source tables unmodified OR explicitly patched via RM1.34-B-PATCH-A/B
 if BOSS_MATRIX.exists():
     m = json.loads(BOSS_MATRIX.read_text(encoding='utf-8'))
-    record('boss_matrix_still_contains_darkness',
-           'darkness' in (m.get('elements_included') or []),
-           'matrix MUST still contain darkness until controlled patch')
-    record('boss_matrix_still_contains_tides',
-           'tides' in (m.get('faction_groups_included') or []),
-           'matrix MUST still contain tides until controlled patch')
+    _bm_meta = m.get('metadata') or {}
+    _darkness_patched = _bm_meta.get('darkness_to_dark_applied') is True \
+        and 'RM1.34-B-PATCH-A' in (_bm_meta.get('axis_patches_applied') or [])
+    _tides_deferred = _bm_meta.get('tides_status') == 'deferred_not_live' \
+        and 'RM1.34-B-PATCH-B' in (_bm_meta.get('axis_patches_applied') or [])
+    record('boss_matrix_darkness_unchanged_or_patched',
+           ('darkness' in (m.get('elements_included') or [])) or _darkness_patched,
+           'matrix must contain darkness OR be PATCH-A-applied')
+    record('boss_matrix_tides_unchanged_or_deferred',
+           ('tides' in (m.get('faction_groups_included') or [])) or _tides_deferred,
+           'matrix must contain tides OR be PATCH-B-deferred')
 
 # AF2-A gift draft still uses roster spelling dark, no tides_*
 if GIFT_DRAFT.exists():

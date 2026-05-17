@@ -1,0 +1,112 @@
+{
+  "contract_id": "affinity_gift_spend_disabled_contract_v2",
+  "task_origin": "AF2-I",
+  "supersedes": "affinity_gift_spend_disabled_contract_v1_implicit_af2g_af2h",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "AF2-I formalizes the concrete auth / rate-limit / idempotency / replay-protection / no-write contract that POST /api/affinity/gift-spend binds to even while it remains hard-disabled (HTTP 423). This contract is the canonical reference a future runtime-flip task MUST honor BEFORE flipping AFFINITY_GIFT_RUNTIME_ENABLED.",
+
+  "endpoint": "POST /api/affinity/gift-spend",
+  "endpoint_http_status_today": 423,
+  "feature_flag_env_var": "AFFINITY_GIFT_RUNTIME_ENABLED",
+  "feature_flag_truthy_allowlist": ["true_explicit_affinity_gift_runtime_on"],
+  "feature_flag_currently_enabled": false,
+
+  "auth": {
+    "auth_required": true,
+    "auth_enforced_when_runtime_enabled": true,
+    "auth_strategy_future": "Depends(get_current_user)",
+    "auth_failure_http_status": 401,
+    "no_auth_leakage_today_rationale": "Endpoint is hard-disabled; requiring auth on an inert path would leak signal about an unreleased system."
+  },
+
+  "rate_limits": {
+    "policy_ref": "affinity_gift_anti_exploit_policy_v1",
+    "per_user_per_minute": 30,
+    "per_user_per_hour": 240,
+    "per_ip_per_minute": 60,
+    "burst_window_seconds": 10,
+    "burst_max": 6,
+    "rate_limit_failure_http_status": 429
+  },
+
+  "idempotency": {
+    "idempotency_key_required": true,
+    "idempotency_key_header": "Idempotency-Key",
+    "idempotency_window_hours": 24,
+    "idempotency_key_min_len": 8,
+    "idempotency_key_max_len": 128,
+    "replay_protection_required": true,
+    "replay_protection_strategy_ref": "store idempotency_key in gift_transaction_ledger with unique index; duplicates return HTTP 409 with the original payload",
+    "duplicate_http_status": 409
+  },
+
+  "borea_safety": {
+    "borea_visibility_gate_required": true,
+    "borea_alias_http_status": 404,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  },
+
+  "no_write_current_task": true,
+  "no_db_imports_in_handler": true,
+  "no_inventory_mutation": true,
+  "no_affinity_points_mutation": true,
+  "no_ledger_write": true,
+  "no_hero_state_write": true,
+  "no_external_call": true,
+
+  "future_runtime_preconditions": [
+    "Add Depends(get_current_user) before payload parsing.",
+    "Wire a request-scoped rate-limit middleware referencing affinity_gift_anti_exploit_policy_v1.",
+    "Wire idempotency-key persistence in gift_transaction_ledger with unique index.",
+    "Add transaction wrapper across user_gift_inventory + gift_transaction_ledger + hero_affinity_state.",
+    "Run end-to-end load test and rollback rehearsal (AF2-F) before flipping the flag."
+  ],
+
+  "audit_targets": [
+    {"id": "envelope_contains_af2i_block", "description": "safety_envelope.af2i_concrete_contract present in 423 body"},
+    {"id": "contract_task_origin", "description": "af2i_concrete_contract.task_origin == 'AF2-I'"},
+    {"id": "auth_required_true", "description": "af2i_concrete_contract.auth_required is true"},
+    {"id": "auth_enforced_future_true", "description": "af2i_concrete_contract.auth_enforced_when_runtime_enabled is true"},
+    {"id": "rate_limit_policy_ref_v1", "description": "rate_limit_policy_ref == 'affinity_gift_anti_exploit_policy_v1'"},
+    {"id": "rate_limit_user_minute_le_30", "description": "rate_limits.per_user_per_minute <= 30"},
+    {"id": "rate_limit_user_hour_le_240", "description": "rate_limits.per_user_per_hour <= 240"},
+    {"id": "idempotency_required_true", "description": "idempotency_key_required is true"},
+    {"id": "idempotency_window_24h", "description": "idempotency_window_hours == 24"},
+    {"id": "replay_protection_required_true", "description": "replay_protection_required is true"},
+    {"id": "no_write_current_task_true", "description": "no_write_current_task is true"},
+    {"id": "envelope_db_write_false", "description": "safety_envelope.db_write is false"},
+    {"id": "feature_flag_currently_enabled_false", "description": "feature_flag_currently_enabled is false"},
+    {"id": "borea_alias_404_borea", "description": "POST with hero_id=borea returns 404"},
+    {"id": "borea_alias_404_greek_borea", "description": "POST with hero_id=greek_borea returns 404"},
+    {"id": "borea_alias_404_primordial_gaia", "description": "POST with hero_id=primordial_gaia returns 404"},
+    {"id": "empty_body_423", "description": "POST with empty body returns 423"},
+    {"id": "valid_body_423", "description": "POST with valid shape returns 423 (still disabled, no write)"},
+    {"id": "no_idempotency_returns_423_inert", "description": "POST missing idempotency_key returns 423 (validation reported, no write)"},
+    {"id": "regression_gifts_get_200", "description": "GET /api/affinity/gifts still 200"}
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+    "no_ui_spend_button_in_this_task": true,
+    "no_inventory_mutation": true,
+    "no_ledger_write": true,
+    "no_hero_state_write": true
+  },
+
+  "recommended_next_tasks": [
+    "AF2-J (or RM1.35-AUTH-A) — implement Depends(get_current_user) + rate-limit middleware behind a separate feature flag.",
+    "AF2-K — wire idempotency-key persistence with unique index on gift_transaction_ledger.",
+    "AF2-L — run full end-to-end load test + rollback rehearsal before flipping AFFINITY_GIFT_RUNTIME_ENABLED."
+  ]
+}

@@ -87,17 +87,29 @@ record('drift_mutates_source_tables_false',
 record('drift_patches_rm134b_false', drift.get('patches_rm134b') is False, '')
 record('drift_patches_af2a_false', drift.get('patches_af2a') is False, '')
 
-# Matrix vs live drift expected
+# Matrix vs live drift expected — accepts both pre-patch and post-patch
+import json as _json
+try:
+    _bm = _json.loads(open('/app/data/design/boss_systems/boss_family_element_faction_matrix_v1.json').read())
+    _bm_meta = _bm.get('metadata') or {}
+except Exception:
+    _bm_meta = {}
+_darkness_patched = _bm_meta.get('darkness_to_dark_applied') is True \
+    and 'RM1.34-B-PATCH-A' in (_bm_meta.get('axis_patches_applied') or [])
+_tides_deferred = _bm_meta.get('tides_status') == 'deferred_not_live' \
+    and 'RM1.34-B-PATCH-B' in (_bm_meta.get('axis_patches_applied') or [])
+
 elements_in_matrix_not_in_live = drift.get('drift', {}).get('elements_in_matrix_not_in_live') or []
 factions_in_matrix_not_in_live = drift.get('drift', {}).get('factions_in_matrix_not_in_live') or []
-record('drift_elements_includes_darkness',
-       'darkness' in elements_in_matrix_not_in_live, '')
-record('drift_factions_includes_tides',
-       'tides' in factions_in_matrix_not_in_live, '')
+record('drift_elements_includes_darkness_or_patched',
+       ('darkness' in elements_in_matrix_not_in_live) or _darkness_patched, '')
+record('drift_factions_includes_tides_or_deferred',
+       ('tides' in factions_in_matrix_not_in_live) or _tides_deferred, '')
 record('drift_darkness_to_dark_alias_present',
        drift.get('darkness_to_dark_alias_present') is True, '')
-record('drift_tides_status_design_pending',
-       drift.get('tides_status') == 'design_pending', '')
+record('drift_tides_status_design_pending_or_deferred',
+       drift.get('tides_status') in ('design_pending', 'deferred_not_live')
+       or _tides_deferred, '')
 
 # 4. validate_alias_coverage
 cov = cdp.validate_alias_coverage()
@@ -106,17 +118,19 @@ record('cov_runtime_attached_false',
 record('cov_fully_covered_true', cov.get('fully_covered') is True,
        f'uncov_elem={cov.get("uncovered_elements")}, '
        f'uncov_fac={cov.get("uncovered_factions")}')
-record('cov_tides_in_design_pending',
-       'tides' in (cov.get('design_pending_factions') or []), '')
+record('cov_tides_in_design_pending_or_deferred',
+       'tides' in (cov.get('design_pending_factions') or [])
+       or _tides_deferred, '')
 
-# 5. Source tables not mutated (existence-based heuristic; baseline diff
-# validator does the cryptographic check)
+# 5. Source tables not mutated OR patched via RM1.34-B-PATCH-A/B
 if BOSS_MATRIX.exists():
     bm = json.loads(BOSS_MATRIX.read_text(encoding='utf-8'))
-    record('boss_matrix_still_darkness',
-           'darkness' in (bm.get('elements_included') or []), '')
-    record('boss_matrix_still_tides',
-           'tides' in (bm.get('faction_groups_included') or []), '')
+    record('boss_matrix_darkness_unchanged_or_patched',
+           ('darkness' in (bm.get('elements_included') or []))
+           or _darkness_patched, '')
+    record('boss_matrix_tides_unchanged_or_deferred',
+           ('tides' in (bm.get('faction_groups_included') or []))
+           or _tides_deferred, '')
 if GIFT_DRAFT.exists():
     gd = json.loads(GIFT_DRAFT.read_text(encoding='utf-8'))
     record('gift_draft_still_dark', 'dark' in (gd.get('elements_used') or []), '')

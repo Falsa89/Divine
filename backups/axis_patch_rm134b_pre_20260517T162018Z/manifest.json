@@ -1,0 +1,100 @@
+{
+  "backup_id": "axis_patch_rm134b_pre_20260517T162018Z",
+  "generated_at_utc": "20260517T162018Z",
+  "task_origin": "RM1.34-B-PATCH-PRE",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "reason": "Pre-patch backup for RM1.34-B-PATCH-A (darkness->dark) and RM1.34-B-PATCH-B (tides deferral). Read-only copy of source-of-truth design files plus baseline v5.",
+  "rollback_instructions": "To rollback the patch, copy each file under the `files` list back to its `source` path. Do NOT touch DB, runtime, or unmentioned files.",
+  "files": [
+    {
+      "source": "/app/data/design/boss_systems/boss_family_element_faction_matrix_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/boss_systems/boss_family_element_faction_matrix_v1.json",
+      "sha256": "972922023e78058da92a02c4664a50bcde9065353343a87f927a13f024fd9d47",
+      "size_bytes": 67591
+    },
+    {
+      "source": "/app/data/design/boss_systems/boss_family_resistance_table_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/boss_systems/boss_family_resistance_table_v1.json",
+      "sha256": "989489a4741645ee2593a5a2d6612cef3c19ed120bd4e7bcec9675bbf1397d16",
+      "size_bytes": 31850
+    },
+    {
+      "source": "/app/data/design/boss_systems/boss_enrage_phase_policy_table_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/boss_systems/boss_enrage_phase_policy_table_v1.json",
+      "sha256": "609deec68d03db823fe83a57a571a6483d7991b86808f10ca34524cf0874cacf",
+      "size_bytes": 37925
+    },
+    {
+      "source": "/app/data/design/boss_systems/boss_policy_scenario_fixture_seed_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/boss_systems/boss_policy_scenario_fixture_seed_v1.json",
+      "sha256": "ec5bb2d2917db53eab404e87b9978e5345a3f9357bd7ec7f1b84fb10b3e4d4c1",
+      "size_bytes": 8157
+    },
+    {
+      "source": "/app/data/design/hero_skill_kits/hero_skill_kit_catalog_baseline_rm132c2_v5.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/hero_skill_kits/hero_skill_kit_catalog_baseline_rm132c2_v5.json",
+      "sha256": "6bcb81ddcc78040cfb04d20baad3c012e8e3bd5a727e71973235f742147a8c8b",
+      "size_bytes": 3125
+    },
+    {
+      "source": "/app/data/design/shared/canonical_axis_activation_validation_table_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/shared/canonical_axis_activation_validation_table_v1.json",
+      "sha256": "04fe1e325375ec809eb60e1e541780da80052c368c65e3741d181c51127de7cf",
+      "size_bytes": 6772
+    },
+    {
+      "source": "/app/data/design/shared/canonical_faction_element_axis_resolution_plan_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/shared/canonical_faction_element_axis_resolution_plan_v1.json",
+      "sha256": "587266a0eb79ea94e7b0e0bd624160a0d5ce469382ffbb438329bd982a6677c0",
+      "size_bytes": 7272
+    },
+    {
+      "source": "/app/data/design/shared/rm134b_patch_readiness_plan_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/shared/rm134b_patch_readiness_plan_v1.json",
+      "sha256": "aba3c52ce5eee8bf6ef0431250cc298a93bf5210f22e6c560e1abdb385e6d363",
+      "size_bytes": 5153
+    },
+    {
+      "source": "/app/data/design/affinity/affinity_gift_catalog_faction_element_draft_v1.json",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/data/design/affinity/affinity_gift_catalog_faction_element_draft_v1.json",
+      "sha256": "ebcf7d2510c4b7135c1c321e420e1e0d4bfd26b3395fb15156353652f5484a89",
+      "size_bytes": 54236
+    },
+    {
+      "source": "/app/backend/data/canonical_axis_alias_helper.py",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/backend/data/canonical_axis_alias_helper.py",
+      "sha256": "bc24f400d796c6426cc10343ef40b542ace34e70fbd85f7d80c273e3c5abbdd8",
+      "size_bytes": 7895
+    },
+    {
+      "source": "/app/backend/data/canonical_axis_read_through_helper.py",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/backend/data/canonical_axis_read_through_helper.py",
+      "sha256": "0ed198d518069d354728e2257f5c556435a150a53bf14f1802c1b3f98bd335b7",
+      "size_bytes": 5084
+    },
+    {
+      "source": "/app/backend/scripts/run_hero_skill_kit_validator_suite.py",
+      "present_at_backup": true,
+      "backup_path": "/app/backups/axis_patch_rm134b_pre_20260517T162018Z/backend/scripts/run_hero_skill_kit_validator_suite.py",
+      "sha256": "7997a325a766a82358631e601cce7ebc8eee5596d7217f10443da81fdf170c09",
+      "size_bytes": 10124
+    }
+  ],
+  "missing_count": 0,
+  "missing": []
+}

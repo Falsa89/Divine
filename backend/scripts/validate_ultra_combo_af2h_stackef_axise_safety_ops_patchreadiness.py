@@ -153,17 +153,26 @@ if ARTIFACTS['safety_rollup_report'].exists():
            int(rep.get('blocking_count') or 0) >= 3,
            f'got {rep.get("blocking_count")}')
 
-# 6) PATCH-READINESS-A — patches NOT executed, baseline v6 NOT created
+# 6) PATCH-READINESS-A — pre-execution OR post-execution (via ULTRA-COMBO-V6)
 if ARTIFACTS['patch_readiness_plan'].exists():
     pp = json.loads(ARTIFACTS['patch_readiness_plan'].read_text(encoding='utf-8'))
-    record('patch_readiness_not_executed',
-           pp.get('patches_executed') is False, '')
-    record('patch_readiness_baseline_v6_not_created',
-           pp.get('baseline_v6_created') is False, '')
-    record('patch_readiness_no_source_patch',
-           pp.get('no_source_patch_in_this_task') is True, '')
-    record('patch_readiness_no_runtime',
-           pp.get('no_runtime_activation_in_this_task') is True, '')
+    post_exec = bool(pp.get('post_execution_status'))
+    if post_exec:
+        record('patch_readiness_executed_post_v6',
+               pp.get('patches_executed') is True, '')
+        record('patch_readiness_baseline_v6_created_post',
+               pp.get('baseline_v6_created') is True, '')
+        record('patch_readiness_post_execution_recorded',
+               isinstance(pp.get('post_execution_status'), dict), '')
+    else:
+        record('patch_readiness_not_executed',
+               pp.get('patches_executed') is False, '')
+        record('patch_readiness_baseline_v6_not_created',
+               pp.get('baseline_v6_created') is False, '')
+        record('patch_readiness_no_source_patch',
+               pp.get('no_source_patch_in_this_task') is True, '')
+        record('patch_readiness_no_runtime',
+               pp.get('no_runtime_activation_in_this_task') is True, '')
 
 # 7) OPS-A plan declares 8 recurrences and runtime_attached false
 if ARTIFACTS['ops_a_plan'].exists():

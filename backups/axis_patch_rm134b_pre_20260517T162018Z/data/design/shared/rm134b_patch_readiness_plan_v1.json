@@ -2,13 +2,15 @@
   "plan_id": "rm134b_patch_readiness_plan_v1",
   "task_origin": "PATCH-READINESS-A",
   "design_only": true,
-  "patches_executed": true,
-  "baseline_v6_created": true,
+  "patches_executed": false,
+  "baseline_v6_created": false,
   "runtime_attached": false,
   "db_write": false,
   "no_borea_activation": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
   "summary": "Plan-only readiness for RM1.34-B-PATCH-A (canonical element token migration darkness->dark) and RM1.34-B-PATCH-B (tides faction decision). NO source mutation is performed in this task. NO baseline v6 is generated. The plan enumerates the surgical edits, audit re-runs, balance review steps, rollback procedure, and the explicit dependency on operator sign-off before any future task may execute the patches.",
+
   "patches": [
     {
       "id": "RM1.34-B-PATCH-A",
@@ -51,20 +53,12 @@
         {
           "branch_id": "PATCH-B-BRANCH-MINT",
           "description": "Mint at least one live tides hero (id tides_*) in /api/heroes and character_bible. Hero must be 5-star or below, no Borea-style hidden flag.",
-          "prerequisites": [
-            "new hero design ratified",
-            "sprite asset approved",
-            "localization keys added",
-            "gacha tuning impact reviewed"
-          ]
+          "prerequisites": ["new hero design ratified", "sprite asset approved", "localization keys added", "gacha tuning impact reviewed"]
         },
         {
           "branch_id": "PATCH-B-BRANCH-STRIKE",
           "description": "Strike 'tides' from boss_family_element_faction_matrix_v1.json (remove from faction_groups_included and all boss_families[].faction_resistances).",
-          "prerequisites": [
-            "confirm no future seasonal content depends on tides as a separate faction",
-            "design re-ratification"
-          ]
+          "prerequisites": ["confirm no future seasonal content depends on tides as a separate faction", "design re-ratification"]
         }
       ],
       "validators_to_rerun": [
@@ -89,14 +83,17 @@
       "do_not_execute_in_this_task": true
     }
   ],
+
   "baseline_v6_creation_blocked_until": [
     "both RM1.34-B-PATCH-A and RM1.34-B-PATCH-B executed and validated",
     "AXIS-D activation_ready=true after re-audit",
     "SAFETY-ROLLUP-A go_no_go_decision moves from NO_GO to candidate-GO"
   ],
-  "no_source_patch_in_this_task": false,
-  "no_baseline_v6_in_this_task": false,
+
+  "no_source_patch_in_this_task": true,
+  "no_baseline_v6_in_this_task": true,
   "no_runtime_activation_in_this_task": true,
+
   "safety_flags": {
     "runtime_attached": false,
     "applied_to_combat": false,
@@ -105,21 +102,6 @@
     "patches_executed": false,
     "baseline_v6_created": false,
     "feature_flag_currently_enabled": false,
-    "hidden_aliases_blocked": [
-      "borea",
-      "primordial_gaia"
-    ]
-  },
-  "post_execution_status": {
-    "executed_in_task": "ULTRA-COMBO-V6 (AF2-I + RM1.34-B-PATCH-A + RM1.34-B-PATCH-B + BASELINE-V6)",
-    "executed_at_utc": "2026-05-17T16:37:55.729644Z",
-    "patch_a_applied": true,
-    "patch_b_applied": true,
-    "patch_b_branch_taken": "PATCH-B-BRANCH-STRIKE (tides deferred_not_live; origin_group lore preserved on live roster)",
-    "baseline_v6_file": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6.json",
-    "design_only": true,
-    "runtime_attached": false,
-    "db_write": false,
-    "no_borea_activation": true
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
   }
 }

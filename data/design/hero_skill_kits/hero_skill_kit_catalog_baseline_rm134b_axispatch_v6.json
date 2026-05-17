@@ -1,0 +1,93 @@
+{
+  "baseline_id": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "task_origin": "RM1.34-B-AXIS-PATCH-V6",
+  "based_on": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "baseline_chain": [
+    "hero_skill_kit_catalog_baseline_rm132pre_v1",
+    "hero_skill_kit_catalog_baseline_rm132preb2_v2",
+    "hero_skill_kit_catalog_baseline_rm132apost_v3",
+    "hero_skill_kit_catalog_baseline_rm132b_v4",
+    "hero_skill_kit_catalog_baseline_rm132b_v4",
+    "hero_skill_kit_catalog_baseline_rm132c2_v5"
+  ],
+  "generated_at_utc": "2026-05-17T16:32:47.137176Z",
+  "supersedes": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+  "approved_changes_since_v4": [
+    "RM1.32-C2: conservative design-only numeric trim on 6★ foundation_draft final_numbers (19 slots, 26 trim records).",
+    "status_chance_pct: 19 slots trimmed from 90/95 to 85 (pvp status chance cap).",
+    "damage_multiplier_pct: 4 ST ultimate/skill_2 trimmed to 600, 3 AoE ultimate trimmed to 380.",
+    "No skill identity, name, description, slot, status, effect tag, hero_id, divine_weapon_id, or release_group changed.",
+    "5★ catalog unchanged (no values were out-of-cap)."
+  ],
+  "tracked_files": {
+    "/app/data/design/hero_skill_kits/hero_skill_kits_5star_full_v1.json": {
+      "sha256": "330b337e629e03abec7403ce99afb436293f36870879f87936d6e0dbb1c784d9",
+      "size_bytes": 273597,
+      "label": "hero_skill_kits_5star_full_v1"
+    },
+    "/app/data/design/hero_skill_kits/hero_skill_kits_6star_borea_v1.json": {
+      "sha256": "9cb1fc49ca19aaeac9e4deb03e75a01b520336a80f3f70b4f26769ce795a000b",
+      "size_bytes": 173322,
+      "label": "hero_skill_kits_6star_borea_v1"
+    },
+    "/app/data/design/divine_weapons/divine_weapons_catalog_v1.json": {
+      "sha256": "e3ed42f54e85bf48bc3358eee1214542f8b8ff7aac9c114a04a735926ec58b21",
+      "size_bytes": 159805,
+      "label": "divine_weapons_catalog_v1"
+    },
+    "/app/data/design/hero_skill_kits/hero_skill_kit_schema_v1.json": {
+      "sha256": "f5b30b6d6d323c50f7ca016181c8882d07fe74b251e2a4a43e0051d25281465c",
+      "size_bytes": 2755,
+      "label": "hero_skill_kit_schema_v1"
+    },
+    "/app/data/design/hero_skill_kits/hero_skill_kit_catalog_baseline_rm132pre_v1.json": {
+      "sha256": "f75d20aab42e023a047ce5aa3f1230798c64f5b6cb58d570b7a2eb9245dd8b23",
+      "size_bytes": 3382,
+      "label": "hero_skill_kit_catalog_baseline_rm132pre_v1"
+    }
+  },
+  "invariants": {
+    "api_heroes_count": 100,
+    "borea_visible_in_heroes": false,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "used_by_battle_engine": false,
+    "skill_kit_runtime_enabled": false,
+    "5star_entries": 20,
+    "6star_entries": 13,
+    "5star_foundation_draft_count": 100,
+    "6star_foundation_draft_count": 78,
+    "marchio_boreale_borea_only": true,
+    "6star_ultimate_is_true_ultimate_count": 13,
+    "borea_catalog_only": true,
+    "forbidden_hero_ids_visible": 0,
+    "boss_policy_tables_unchanged": true,
+    "baseline_v4_preserved": true,
+    "axis_layer_activation_ready_post_patch": true,
+    "overall_runtime_activation_ready": false
+  },
+  "baseline_v4_supersession_note": "v5 supersedes v4. v4 file preserved on disk as historical anchor.",
+  "do_not_treat_as_live_kit": true,
+  "design_only": true,
+  "balance_values_finalized": false,
+  "approved_changes_since_v5": [
+    "RM1.34-B-PATCH-A: canonical element token darkness -> dark in boss_family_element_faction_matrix_v1.json (design-only).",
+    "RM1.34-B-PATCH-B: tides removed from canonical faction_groups_included; per-family modifier history preserved under tides_deferred_modifiers_history; origin_group lore on live roster untouched.",
+    "AF2-I: concrete auth/rate-limit/idempotency contract bound to disabled POST /api/affinity/gift-spend (envelope-only, still HTTP 423, no-write).",
+    "Axis post-patch alignment report v1 created.",
+    "No skill kit / DW catalog / status catalog / Character Bible / final_numbers / roster / DB / runtime change."
+  ],
+  "axis_patch_tracking": {
+    "matrix_path": "/app/data/design/boss_systems/boss_family_element_faction_matrix_v1.json",
+    "matrix_sha256": "59c374254eef31c63a21fecda3d62bf830db8e5b27d0f8fa60e749b4bae0675f",
+    "matrix_size_bytes": 69235,
+    "patches_applied": [
+      "RM1.34-B-PATCH-A",
+      "RM1.34-B-PATCH-B"
+    ],
+    "darkness_to_dark_applied": true,
+    "tides_status": "deferred_not_live",
+    "design_only": true,
+    "runtime_attached": false
+  }
+}

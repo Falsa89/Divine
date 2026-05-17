@@ -141,14 +141,29 @@ if not api_ok:
 # 6. Confirm documented discrepancies match observed reality
 record('element_dark_in_roster', 'dark' in roster_elements,
        'roster must contain "dark"')
-record('element_darkness_in_boss_matrix', 'darkness' in boss_elements,
-       'boss matrix must contain "darkness"')
+# Post-patch tolerance: darkness may be canonical only OR patched to dark
+_bm_meta = {}
+try:
+    import json as _json
+    _bm = _json.loads(open('/app/data/design/boss_systems/boss_family_element_faction_matrix_v1.json').read())
+    _bm_meta = _bm.get('metadata') or {}
+except Exception:
+    pass
+_darkness_patched = _bm_meta.get('darkness_to_dark_applied') is True \
+    and 'RM1.34-B-PATCH-A' in (_bm_meta.get('axis_patches_applied') or [])
+_tides_deferred = _bm_meta.get('tides_status') == 'deferred_not_live' \
+    and 'RM1.34-B-PATCH-B' in (_bm_meta.get('axis_patches_applied') or [])
+
+record('element_darkness_in_boss_matrix_or_patched',
+       ('darkness' in boss_elements) or _darkness_patched,
+       'boss matrix must contain "darkness" OR be PATCH-A-applied')
 record('element_darkness_NOT_in_roster',
        'darkness' not in roster_elements,
        'roster must NOT contain "darkness"')
 
-record('faction_tides_in_boss_matrix', 'tides' in boss_factions,
-       'boss matrix must contain "tides"')
+record('faction_tides_in_boss_matrix_or_deferred',
+       ('tides' in boss_factions) or _tides_deferred,
+       'boss matrix must contain "tides" OR be PATCH-B-deferred')
 record('faction_tides_NOT_in_roster',
        'tides' not in roster_factions,
        'roster must NOT contain "tides"')
