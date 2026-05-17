@@ -1,0 +1,127 @@
+{
+  "report_id": "runtime_activation_readiness_rollup_v1",
+  "task_origin": "SAFETY-ROLLUP-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "activation_ready": false,
+  "design_preview_ready": true,
+  "summary": "Single rollup of runtime activation readiness for the Collection Synergy V2 and Affinity Phase 2 sub-systems. Aggregates the status of every preceding readiness artifact (CS2-A..E, AF2-A..H, STACK-A..F, AXIS-A..E, UI-PREVIEW-A). The rollup is the source of truth for the GO/NO-GO decision before any runtime feature flag is flipped. Current status: NO-GO.",
+
+  "go_no_go_decision": "NO_GO",
+  "blocking_count": 5,
+  "warning_count": 0,
+
+  "subsystems": {
+    "collection_synergy_v2": {
+      "feature_flag": "COLLECTION_SYNERGY_BATTLE_ENABLED",
+      "feature_flag_currently_enabled": false,
+      "readiness_tasks_completed": ["CS2-A", "CS2-B", "CS2-C", "CS2-D", "CS2-E"],
+      "readiness_tasks_pending_before_runtime": ["CS2-F (a11y pass on stub)", "CS2-G (live data path via inert preview endpoint)"],
+      "runtime_attached": false,
+      "applied_to_combat": false,
+      "ui_implemented": true,
+      "ui_strictly_read_only": true
+    },
+    "affinity_phase_2": {
+      "feature_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
+      "feature_flag_currently_enabled": false,
+      "readiness_tasks_completed": ["AF2-A", "AF2-B", "AF2-C", "AF2-D", "AF2-E", "AF2-F", "AF2-G", "AF2-H"],
+      "readiness_tasks_pending_before_runtime": ["AF2-I (auth + rate-limit middleware wired)", "AF2-J (production migration plan ratified)"],
+      "endpoint_post_gift_spend_status": "hard_disabled_423",
+      "endpoint_get_gifts_status": "public_read_only_200"
+    },
+    "global_cap_resolver": {
+      "feature_flag": "GLOBAL_MODIFIER_CAP_RESOLVER_ENABLED",
+      "feature_flag_currently_enabled": false,
+      "readiness_tasks_completed": ["STACK-A", "STACK-B", "STACK-C", "STACK-D", "STACK-E", "STACK-F"],
+      "semantics_documented": ["additive_capped", "multiplicative_rejected", "borea_locked_filtered", "debuff_tracked_separately_clamped"],
+      "runtime_attached": false
+    },
+    "axis": {
+      "readiness_tasks_completed": ["AXIS-A", "AXIS-B", "AXIS-C", "AXIS-D", "AXIS-E"],
+      "activation_ready": false,
+      "blockers": ["darkness_vs_dark_unpatched", "tides_orphan_unresolved"],
+      "helpers_inert": true
+    },
+    "skill_kit_runtime_adapter": {
+      "feature_flag": "SKILL_KIT_RUNTIME_ENABLED",
+      "feature_flag_currently_enabled": false,
+      "adapter_off": true
+    }
+  },
+
+  "blocking_gates_unsatisfied": [
+    {
+      "id": "axis_d_activation_ready_false",
+      "severity": "blocking_runtime_on",
+      "description": "AXIS-D activation table reports activation_ready=false (darkness+tides unresolved).",
+      "resolution_path": "PATCH-READINESS-A → RM1.34-B-PATCH-A/B + rebaseline v6"
+    },
+    {
+      "id": "af2_i_auth_ratelimit_wiring_missing",
+      "severity": "blocking_runtime_on",
+      "description": "AF2-H exposes future-runtime hardening metadata but Depends(get_current_user) + rate-limit middleware are not wired (AF2-I).",
+      "resolution_path": "AF2-I task"
+    },
+    {
+      "id": "af2_d_migration_not_executed",
+      "severity": "blocking_runtime_on",
+      "description": "AF2-D migration plan ratified but never executed; collections do not exist in DB.",
+      "resolution_path": "AF2-J production migration after AF2-F rollback rehearsal"
+    },
+    {
+      "id": "global_cap_resolver_not_wired",
+      "severity": "blocking_runtime_on",
+      "description": "STACK-B/C/D/E/F resolver is preview-only and not consumed by battle_engine; consumer task pending.",
+      "resolution_path": "STACK-G (hypothetical) inert consumer skeleton then STACK-H runtime wiring"
+    },
+    {
+      "id": "baseline_v6_not_created",
+      "severity": "blocking_runtime_on",
+      "description": "baseline still v5; PATCH-READINESS-A and AXIS-D require a v6 rebaseline post matrix patch.",
+      "resolution_path": "post RM1.34-B-PATCH-A/B → baseline v6"
+    }
+  ],
+
+  "invariants_currently_holding": {
+    "api_heroes_count_100": true,
+    "borea_hidden": true,
+    "feature_flags_all_off": true,
+    "runtime_adapter_off": true,
+    "battle_engine_unchanged": true,
+    "combat_tsx_unchanged": true,
+    "battle_core_unchanged": true,
+    "baseline_v5_clean": true,
+    "rm134b_unchanged": true,
+    "af2a_unchanged": true,
+    "gacha_unchanged": true,
+    "roster_unchanged": true
+  },
+
+  "recommended_unblock_sequence": [
+    "1. PATCH-READINESS-A ratifies RM1.34-B-PATCH-A/B (this task: plan only).",
+    "2. RM1.34-B-PATCH-A controlled migration darkness->dark + rebaseline candidate.",
+    "3. RM1.34-B-PATCH-B decision on tides + matrix rebuild.",
+    "4. Re-run all AXIS audits, expect activation_ready=true.",
+    "5. Baseline v6 anchor.",
+    "6. AF2-I: wire Depends(get_current_user) + slowapi (or equivalent) rate-limit middleware on POST /gift-spend; flag still OFF.",
+    "7. AF2-J: execute migration on staging, run rollback rehearsal live, then prod.",
+    "8. STACK-G: inert consumer skeleton for resolver, never imported by combat.",
+    "9. Final GO/NO-GO review with explicit operator sign-off.",
+    "10. Flip ONE feature flag at a time, monitor, then proceed."
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}

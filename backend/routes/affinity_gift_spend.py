@@ -31,6 +31,70 @@ _FORBIDDEN_HERO_IDS = frozenset({"borea", "primordial_gaia"})
 # greek_borea is catalog-only / hidden; reject at endpoint level too.
 _HIDDEN_HERO_IDS = frozenset({"greek_borea"})
 
+# AF2-H — future-runtime hardening metadata. These constants ONLY
+# document the auth / rate-limit / idempotency contract that a future
+# task (post AFFINITY_GIFT_RUNTIME_ENABLED flip) MUST satisfy. Today
+# they are not enforced (the endpoint is hard-disabled) and they MUST
+# NOT trigger any side effect / DB write / external call.
+AUTH_REQUIRED_FUTURE: bool = True
+AUTH_STRATEGY_FUTURE: str = "Depends(get_current_user)"
+RATE_LIMIT_REQUIRED_FUTURE: bool = True
+RATE_LIMIT_PER_USER_PER_MINUTE_FUTURE: int = 30
+RATE_LIMIT_PER_USER_PER_HOUR_FUTURE: int = 240
+RATE_LIMIT_PER_IP_PER_MINUTE_FUTURE: int = 60
+RATE_LIMIT_BURST_WINDOW_SECONDS_FUTURE: int = 10
+RATE_LIMIT_BURST_MAX_FUTURE: int = 6
+IDEMPOTENCY_REQUIRED_FUTURE: bool = True
+IDEMPOTENCY_KEY_HEADER_FUTURE: str = "Idempotency-Key"
+IDEMPOTENCY_WINDOW_HOURS_FUTURE: int = 24
+IDEMPOTENCY_KEY_MIN_LEN: int = 8
+IDEMPOTENCY_KEY_MAX_LEN: int = 128
+REPLAY_PROTECTION_STRATEGY_FUTURE: str = (
+    "store idempotency_key in gift_transaction_ledger with unique index; "
+    "duplicates return HTTP 409 with same response payload"
+)
+TRANSACTION_INTEGRITY_REQUIRED_FUTURE: bool = True
+TRANSACTION_STRATEGY_FUTURE: str = (
+    "MongoDB multi-document transaction across user_gift_inventory + "
+    "gift_transaction_ledger + hero_affinity_state"
+)
+BOREA_VISIBILITY_GATE_REQUIRED_FUTURE: bool = True
+
+
+def _hardening_metadata() -> dict[str, Any]:
+    """Return the AF2-H hardening metadata for the disabled envelope.
+
+    All values describe FUTURE requirements only. The endpoint stays
+    disabled / no-write today and MUST NOT enforce these checks until
+    AFFINITY_GIFT_RUNTIME_ENABLED is flipped under a controlled task.
+    """
+    return {
+        "auth_required_future": AUTH_REQUIRED_FUTURE,
+        "auth_strategy_future": AUTH_STRATEGY_FUTURE,
+        "rate_limit_required_future": RATE_LIMIT_REQUIRED_FUTURE,
+        "rate_limit_per_user_per_minute_future": RATE_LIMIT_PER_USER_PER_MINUTE_FUTURE,
+        "rate_limit_per_user_per_hour_future": RATE_LIMIT_PER_USER_PER_HOUR_FUTURE,
+        "rate_limit_per_ip_per_minute_future": RATE_LIMIT_PER_IP_PER_MINUTE_FUTURE,
+        "rate_limit_burst_window_seconds_future": RATE_LIMIT_BURST_WINDOW_SECONDS_FUTURE,
+        "rate_limit_burst_max_future": RATE_LIMIT_BURST_MAX_FUTURE,
+        "idempotency_required_future": IDEMPOTENCY_REQUIRED_FUTURE,
+        "idempotency_key_header_future": IDEMPOTENCY_KEY_HEADER_FUTURE,
+        "idempotency_window_hours_future": IDEMPOTENCY_WINDOW_HOURS_FUTURE,
+        "idempotency_key_min_len": IDEMPOTENCY_KEY_MIN_LEN,
+        "idempotency_key_max_len": IDEMPOTENCY_KEY_MAX_LEN,
+        "replay_protection_strategy_future": REPLAY_PROTECTION_STRATEGY_FUTURE,
+        "transaction_integrity_required_future": TRANSACTION_INTEGRITY_REQUIRED_FUTURE,
+        "transaction_strategy_future": TRANSACTION_STRATEGY_FUTURE,
+        "borea_visibility_gate_required_future": BOREA_VISIBILITY_GATE_REQUIRED_FUTURE,
+        "currently_enforced": False,
+        "rationale_for_not_enforcing_today": (
+            "Endpoint is hard-disabled (HTTP 423) and writes are physically "
+            "impossible; auth / rate-limit / idempotency checks would leak "
+            "information about an inert system. Enforcement will be added "
+            "by AF2-I BEFORE flipping AFFINITY_GIFT_RUNTIME_ENABLED."
+        ),
+    }
+
 
 def is_affinity_gift_runtime_enabled() -> bool:
     """Return True only if env var EXACTLY equals the allowlisted token."""
@@ -53,6 +117,9 @@ def _disabled_envelope(reason: str) -> dict[str, Any]:
         "feature_flag_currently_enabled": bool(is_affinity_gift_runtime_enabled()),
         "reason": reason,
         "hidden_aliases_blocked": sorted(_FORBIDDEN_HERO_IDS | _HIDDEN_HERO_IDS),
+        # AF2-H — future-runtime hardening metadata (documentation only,
+        # never enforced today; the endpoint is hard-disabled).
+        "future_runtime_hardening": _hardening_metadata(),
     }
 
 

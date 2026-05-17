@@ -1,0 +1,151 @@
+{
+  "fixture_id": "global_modifier_cap_resolver_debuff_semantics_v1",
+  "task_origin": "STACK-F",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "STACK-F fixtures formalize debuff (negative pct) semantics in global_modifier_cap_resolver.preview_combined_cap. Negative-pct sources are tracked in a separate `mock_sources_debuffs` bucket, clamped to a documentation-grade floor of -50%, NEVER converted into buffs, and excluded from `additive_sum_pct_preview`. Resolver remains OFF/inert.",
+
+  "debuff_floor_pct": -50,
+  "debuff_policy": "tracked_separately_clamped_never_converted_to_buff",
+
+  "cases": [
+    {
+      "id": "case_db_01_simple_debuff",
+      "description": "Single -3% debuff tracked, additive sum stays 0.",
+      "context": "pvp",
+      "mock_sources": [{"id": "boss_debuff", "pct": -3}],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "debuff_count": 1,
+        "debuff_sum_pct_preview": -3,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true,
+        "first_debuff_clamped_pct": -3
+      }
+    },
+    {
+      "id": "case_db_02_huge_negative_clamped",
+      "description": "Pathological huge negative (-9999) clamped to floor (-50).",
+      "context": "pvp",
+      "mock_sources": [{"id": "huge_debuff", "pct": -9999}],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "debuff_count": 1,
+        "debuff_sum_pct_preview": -50,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true,
+        "first_debuff_clamped_pct": -50
+      }
+    },
+    {
+      "id": "case_db_03_mixed_buff_and_debuff",
+      "description": "Buff (+5) plus debuff (-2): additive sum=5 (debuff bucket separate).",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "buff_a", "pct": 5},
+        {"id": "debuff_a", "pct": -2}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 5,
+        "debuff_count": 1,
+        "debuff_sum_pct_preview": -2,
+        "clamped_pct_preview_equals": 5,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_db_04_multiple_debuffs",
+      "description": "Multiple debuffs (-3, -4, -2) tracked separately, summed in debuff bucket.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "d1", "pct": -3},
+        {"id": "d2", "pct": -4},
+        {"id": "d3", "pct": -2}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "debuff_count": 3,
+        "debuff_sum_pct_preview": -9,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_db_05_debuff_borea_locked_filtered_first",
+      "description": "Borea-locked source with negative pct is filtered by STACK-E BEFORE debuff classification. Result: borea_locked_filtered=1, debuff_count=0.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "borea_debuff", "pct": -5, "borea_locked": true}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "debuff_count": 0,
+        "borea_locked_filtered_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_db_06_debuff_multiplicative_rejected_first",
+      "description": "Multiplicative debuff is rejected by STACK-D BEFORE debuff classification. Result: multiplicative_rejected=1, debuff_count=0.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "mult_debuff", "pct": -4, "stacking_mode": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 1,
+        "debuff_count": 0,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_db_07_zero_is_neutral",
+      "description": "pct=0 is neutral (additive bucket), not debuff.",
+      "context": "pvp",
+      "mock_sources": [{"id": "zero_src", "pct": 0}],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "debuff_count": 0,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_db_08_debuff_never_converted_to_buff",
+      "description": "Even with huge positive ceiling cap, negative debuff stays negative — never converted to a buff. abs(debuff)=5, additive sum unaffected.",
+      "context": "pvp",
+      "mock_sources": [{"id": "stealth_debuff", "pct": -5}],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "debuff_count": 1,
+        "debuff_sum_pct_preview": -5,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true,
+        "debuff_never_converted_to_buff": true
+      }
+    }
+  ],
+
+  "global_invariants": {
+    "all_cases_disabled_envelope": true,
+    "debuffs_excluded_from_additive_sum": true,
+    "debuffs_clamped_at_floor": true,
+    "debuffs_never_converted_to_buff": true,
+    "feature_flag_currently_enabled": false
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}

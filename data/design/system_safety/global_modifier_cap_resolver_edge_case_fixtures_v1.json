@@ -106,13 +106,13 @@
     },
     {
       "id": "case_08_negative_modifier",
-      "description": "Negative modifier (-3) is currently echoed as additive (debuff). Future activation must validate explicitly; for preview, behavior is preserved.",
+      "description": "Negative modifier (-3) is now tracked as a debuff (STACK-F): excluded from additive sum, never converted to buff.",
       "context": "pvp",
       "mock_sources": [{"id": "debuff_test", "pct": -3}],
       "expected": {
-        "additive_sum_pct_preview": -3,
+        "additive_sum_pct_preview": 0,
         "clamped_pct_preview_le_target": true,
-        "clamped_pct_preview_equals": -3,
+        "clamped_pct_preview_equals": 0,
         "is_disabled_envelope": true
       }
     },
@@ -134,12 +134,13 @@
     },
     {
       "id": "case_10_borea_locked_source_ignored",
-      "description": "A source labeled as Borea-locked must not raise; the resolver treats numeric pct uniformly today but the future runtime MUST filter Borea-locked contributions.",
+      "description": "Borea-locked source is now actively filtered by STACK-E (preview filter): excluded from additive sum, reported under mock_sources_filtered_borea_locked.",
       "context": "pvp",
       "mock_sources": [{"id": "borea_locked_future", "pct": 3, "borea_locked": true}],
       "expected": {
-        "additive_sum_pct_preview": 3,
+        "additive_sum_pct_preview": 0,
         "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 0,
         "is_disabled_envelope": true,
         "future_runtime_must_filter_borea_locked": true
       }

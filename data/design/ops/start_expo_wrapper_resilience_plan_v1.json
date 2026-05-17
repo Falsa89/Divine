@@ -1,0 +1,66 @@
+{
+  "doc_id": "start_expo_wrapper_resilience_plan_v1",
+  "task_origin": "OPS-A",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Operational hardening plan for /usr/local/bin/start-expo.sh, the wrapper consumed by supervisor to start Metro/Expo on port 3000. The script has historically disappeared across container resets, causing 'Expo offline' incidents. This plan documents the current implementation, recovery steps, audit checks, and future mitigations.",
+
+  "recurring_issue_id": "start-expo-wrapper-disappears",
+  "recurrence_count_observed": 8,
+  "impact": "Expo preview returns 502 / connection refused; in-flight Metro hot-reload stops; frontend QR code unusable. Backend unaffected.",
+
+  "current_implementation_path": "/usr/local/bin/start-expo.sh",
+  "current_implementation_excerpt": [
+    "#!/bin/bash",
+    "set -e",
+    "cd /app/frontend",
+    "fuser -k 3000/tcp 2>/dev/null || true",
+    "pkill -9 -f 'expo start' 2>/dev/null || true",
+    "pkill -9 -f 'metro' 2>/dev/null || true",
+    "sleep 1",
+    "export NODE_OPTIONS=\"--max-old-space-size=4096\"",
+    "export EXPO_NO_TELEMETRY=1",
+    "exec npx expo start --port 3000"
+  ],
+
+  "supervisor_program_block_reference": "[program:expo] command=/usr/local/bin/start-expo.sh",
+
+  "recovery_steps_when_missing": [
+    "1. Verify with `ls -la /usr/local/bin/start-expo.sh`. If absent, expo will stop.",
+    "2. Recreate the file with the exact 11 lines above (idempotent).",
+    "3. `chmod +x /usr/local/bin/start-expo.sh`.",
+    "4. `sudo supervisorctl reread && sudo supervisorctl update`.",
+    "5. `sudo supervisorctl start expo` (or restart if running).",
+    "6. Wait 4-5 seconds and `curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:3000` (200/304 OK)."
+  ],
+
+  "audit_checks": [
+    {"id": "script_exists", "description": "File /usr/local/bin/start-expo.sh present"},
+    {"id": "script_executable", "description": "Permission bit chmod +x present"},
+    {"id": "script_has_fuser_cleanup", "description": "Contains `fuser -k 3000/tcp` to clear orphans"},
+    {"id": "script_has_pkill_cleanup", "description": "Contains pkill expo start and pkill metro"},
+    {"id": "script_uses_exec", "description": "Uses `exec npx expo start` for proper PID semantics"},
+    {"id": "script_port_3000", "description": "Uses --port 3000 explicitly"},
+    {"id": "supervisor_block_references_wrapper", "description": "[program:expo] in supervisor config points to wrapper"},
+    {"id": "expo_running", "description": "`supervisorctl status expo` shows RUNNING (best-effort)"}
+  ],
+
+  "future_mitigations": [
+    "Persist a copy of the wrapper under /app/ops/start-expo.sh and make supervisor block reference it directly (after operator approval).",
+    "Add a healthcheck endpoint /api/_ops/expo-health that returns 503 if Metro is unreachable; alarm on this.",
+    "Document the wrapper recovery in /app/docs/ops/EXPO_WRAPPER_RECOVERY.md (created here).",
+    "Optional: switch [program:expo] to use a Python supervisor child that re-creates the wrapper file on start if absent."
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}

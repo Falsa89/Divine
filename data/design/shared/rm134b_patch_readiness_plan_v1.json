@@ -1,0 +1,107 @@
+{
+  "plan_id": "rm134b_patch_readiness_plan_v1",
+  "task_origin": "PATCH-READINESS-A",
+  "design_only": true,
+  "patches_executed": false,
+  "baseline_v6_created": false,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "Plan-only readiness for RM1.34-B-PATCH-A (canonical element token migration darkness->dark) and RM1.34-B-PATCH-B (tides faction decision). NO source mutation is performed in this task. NO baseline v6 is generated. The plan enumerates the surgical edits, audit re-runs, balance review steps, rollback procedure, and the explicit dependency on operator sign-off before any future task may execute the patches.",
+
+  "patches": [
+    {
+      "id": "RM1.34-B-PATCH-A",
+      "title": "Canonical element token migration: darkness -> dark",
+      "scope": "Single-file controlled rewrite of boss_family_element_faction_matrix_v1.json replacing every standalone 'darkness' element token with 'dark' across `elements_included` and `boss_families[].element_resistances`. NO faction touched.",
+      "target_file": "/app/data/design/boss_systems/boss_family_element_faction_matrix_v1.json",
+      "surgical_edits": [
+        "elements_included: replace 'darkness' with 'dark' (single occurrence).",
+        "For every boss_families[].element_resistances key 'darkness', rename to 'dark' preserving the numeric value.",
+        "Update metadata `task_origin` to 'RM1.34-B-PATCH-A' and append a `patch_history` array entry."
+      ],
+      "validators_to_rerun": [
+        "audit_canonical_faction_element_axes.py",
+        "audit_canonical_axis_alias_helper_safety.py",
+        "audit_canonical_axis_dynamic_preview.py",
+        "validate_canonical_axis_activation_table.py (AXIS-D)",
+        "validate_runtime_activation_readiness_rollup.py (SAFETY-ROLLUP-A)",
+        "all boss_systems validators (matrix structure, enrage policy, cross-table audit)"
+      ],
+      "balance_review_required": true,
+      "balance_review_owner": "design+combat-balance",
+      "rollback_procedure": [
+        "git revert of the single JSON file",
+        "re-run validator suite",
+        "re-anchor baseline to v5"
+      ],
+      "baseline_after_patch": "v6_candidate (NOT created in this task)",
+      "prerequisites": [
+        "AXIS-D activation table reviewed",
+        "AXIS-E read-through helper PASS",
+        "explicit operator sign-off"
+      ],
+      "do_not_execute_in_this_task": true
+    },
+    {
+      "id": "RM1.34-B-PATCH-B",
+      "title": "Tides faction decision (mint OR strike)",
+      "scope": "Decide whether 'tides' becomes a live faction (mint at least one tides hero in roster + bible) OR is struck from boss_family_element_faction_matrix_v1.json. EITHER branch resolves the orphan.",
+      "branches": [
+        {
+          "branch_id": "PATCH-B-BRANCH-MINT",
+          "description": "Mint at least one live tides hero (id tides_*) in /api/heroes and character_bible. Hero must be 5-star or below, no Borea-style hidden flag.",
+          "prerequisites": ["new hero design ratified", "sprite asset approved", "localization keys added", "gacha tuning impact reviewed"]
+        },
+        {
+          "branch_id": "PATCH-B-BRANCH-STRIKE",
+          "description": "Strike 'tides' from boss_family_element_faction_matrix_v1.json (remove from faction_groups_included and all boss_families[].faction_resistances).",
+          "prerequisites": ["confirm no future seasonal content depends on tides as a separate faction", "design re-ratification"]
+        }
+      ],
+      "validators_to_rerun": [
+        "audit_canonical_faction_element_axes.py",
+        "audit_canonical_axis_alias_helper_safety.py",
+        "audit_canonical_axis_dynamic_preview.py",
+        "validate_canonical_axis_activation_table.py",
+        "validate_runtime_activation_readiness_rollup.py",
+        "validate_affinity_gift_inventory_schema.py (gift_id integrity)"
+      ],
+      "balance_review_required": true,
+      "rollback_procedure": [
+        "git revert of touched files (hero/character_bible OR matrix)",
+        "re-run validator suite",
+        "re-anchor baseline to v5 or prior"
+      ],
+      "baseline_after_patch": "v6_candidate (NOT created in this task)",
+      "prerequisites": [
+        "operator decision on branch (MINT vs STRIKE)",
+        "explicit operator sign-off"
+      ],
+      "do_not_execute_in_this_task": true
+    }
+  ],
+
+  "baseline_v6_creation_blocked_until": [
+    "both RM1.34-B-PATCH-A and RM1.34-B-PATCH-B executed and validated",
+    "AXIS-D activation_ready=true after re-audit",
+    "SAFETY-ROLLUP-A go_no_go_decision moves from NO_GO to candidate-GO"
+  ],
+
+  "no_source_patch_in_this_task": true,
+  "no_baseline_v6_in_this_task": true,
+  "no_runtime_activation_in_this_task": true,
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "patches_executed": false,
+    "baseline_v6_created": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}

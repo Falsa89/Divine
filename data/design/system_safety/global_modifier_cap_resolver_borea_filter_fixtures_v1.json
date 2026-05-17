@@ -1,0 +1,146 @@
+{
+  "fixture_id": "global_modifier_cap_resolver_borea_filter_fixtures_v1",
+  "task_origin": "STACK-E",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "STACK-E fixtures formalize the preview-layer filtering of Borea-locked sources in global_modifier_cap_resolver.preview_combined_cap. Sources with `borea_locked: true` OR whose `id`/`source` field contains a Borea token (`borea`, `primordial_gaia`, `greek_borea`) are excluded from `additive_sum_pct_preview` and reported in `mock_sources_filtered_borea_locked`. Resolver remains OFF/inert.",
+
+  "borea_tokens_recognized": ["borea", "primordial_gaia", "greek_borea"],
+
+  "cases": [
+    {
+      "id": "case_be_01_explicit_borea_locked_flag",
+      "description": "Source with borea_locked=true is filtered.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "any_source", "pct": 5, "borea_locked": true}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "borea_locked_filtered_count": 1,
+        "multiplicative_rejected_count": 0,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_be_02_id_contains_borea",
+      "description": "Source id containing token 'borea' is filtered even without explicit flag.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "greek_borea_synergy", "pct": 4}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "borea_locked_filtered_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_be_03_id_contains_primordial_gaia",
+      "description": "Legacy alias primordial_gaia in id is filtered.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "primordial_gaia_buff_legacy", "pct": 7}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "borea_locked_filtered_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_be_04_source_field_contains_borea",
+      "description": "If `source` field contains a Borea token, filtered.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "synergy_x", "pct": 3, "source": "greek_borea_collection"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "borea_locked_filtered_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_be_05_mixed_borea_and_clean",
+      "description": "Mixed: clean additive (5%) plus Borea-locked (8%) → clean sum=5.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "clean_source", "pct": 5},
+        {"id": "borea_locked_source", "pct": 8, "borea_locked": true}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 5,
+        "borea_locked_filtered_count": 1,
+        "clamped_pct_preview_equals": 5,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_be_06_borea_locked_huge_filtered",
+      "description": "Borea-locked source with huge pct (9999) is still filtered; sum stays 0.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "borea_huge", "pct": 9999, "borea_locked": true}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "borea_locked_filtered_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_be_07_clean_source_unaffected",
+      "description": "Clean additive source unaffected; borea_locked_filtered_count=0.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "clean_only", "pct": 4}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 4,
+        "borea_locked_filtered_count": 0,
+        "clamped_pct_preview_equals": 4,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_be_08_case_insensitive_token_match",
+      "description": "Token match is case-insensitive: id 'Greek_Borea_X' filtered.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "Greek_Borea_X", "pct": 2}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "borea_locked_filtered_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    }
+  ],
+
+  "global_invariants": {
+    "all_cases_disabled_envelope": true,
+    "borea_locked_excluded_from_additive_sum": true,
+    "borea_locked_reported_under_filtered_field": true,
+    "feature_flag_currently_enabled": false
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}
