@@ -1,0 +1,89 @@
+{
+  "package_id": "affinity_gift_runtime_operator_signoff_package_v1",
+  "task_origin": "AF2-M",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "AF2-M — Operator sign-off package required BEFORE any future AF2-N runtime flag flip. All sign-off fields default to false; AF2-N MUST remain blocked until every signoff is true AND user explicitly approves. Feature flag AFFINITY_GIFT_RUNTIME_ENABLED remains OFF.",
+
+  "future_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
+  "future_flag_truthy_allowlist": ["true_explicit_affinity_gift_runtime_on"],
+  "feature_flag_currently_enabled": false,
+  "af2n_allowed": false,
+  "af2n_blocked_reasons_min": 1,
+
+  "preconditions": [
+    {"id": "baseline_v6_clean", "required": true, "status_today": "PASS"},
+    {"id": "api_heroes_count_100", "required": true, "status_today": "PASS"},
+    {"id": "borea_hidden", "required": true, "status_today": "PASS"},
+    {"id": "gift_spend_disabled_contract_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2j_auth_ratelimit_contract_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2k_pre_idempotency_contract_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2k_migration_foundation_pass", "required": true, "status_today": "PASS_DRY_RUN"},
+    {"id": "af2l_disabled_load_probe_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2l_rollback_rehearsal_pass", "required": true, "status_today": "PASS_DRY_RUN"},
+    {"id": "ui_no_spend_button", "required": true, "status_today": "PASS"},
+    {"id": "monitoring_plan_signoff", "required": true, "status_today": "PENDING"},
+    {"id": "rollback_owner_assigned", "required": true, "status_today": "PENDING"}
+  ],
+
+  "signoffs": {
+    "product_signoff": false,
+    "engineering_signoff": false,
+    "qa_signoff": false,
+    "economy_balance_signoff": false,
+    "rollback_owner_signoff": false
+  },
+
+  "signoff_metadata": {
+    "product_signoff_owner": null,
+    "engineering_signoff_owner": null,
+    "qa_signoff_owner": null,
+    "economy_balance_signoff_owner": null,
+    "rollback_owner_signoff_owner": null,
+    "signed_at_utc": null
+  },
+
+  "rollout_stages": [
+    {"id": "stage0_internal_disabled", "description": "Endpoint hard-disabled in production; internal smoke only via test envs.", "allowed_today": true},
+    {"id": "stage1_1pct_allowlist",   "description": "Flip flag for 1% allowlist of internal users.",                          "allowed_today": false},
+    {"id": "stage2_10pct",            "description": "Expand to 10% of accounts.",                                            "allowed_today": false},
+    {"id": "stage3_50pct",            "description": "Expand to 50% of accounts.",                                            "allowed_today": false},
+    {"id": "stage4_100pct",           "description": "Full rollout 100%.",                                                    "allowed_today": false}
+  ],
+
+  "immediate_rollback_triggers": [
+    {"id": "err_5xx_rate",         "threshold_percent_max": 1.0,  "description": "5xx rate > 1% sustained 5 min"},
+    {"id": "duplicate_spend_count","threshold_max": 0,            "description": "any duplicate spend within 24h window"},
+    {"id": "borea_leak_count",     "threshold_max": 0,            "description": "any successful spend on borea/greek_borea/primordial_gaia"},
+    {"id": "inventory_mismatch",   "threshold_max": 0,            "description": "any user inventory mismatch with ledger"},
+    {"id": "p95_latency_ms",       "threshold_max": 800,          "description": "p95 > 800ms sustained 5 min"},
+    {"id": "unauthorized_writes",  "threshold_max": 0,            "description": "any write outside Depends(get_current_user)"}
+  ],
+
+  "observability": {
+    "metrics": ["gift_spend_requests_total", "gift_spend_5xx_total", "gift_spend_409_duplicate_total", "gift_spend_404_borea_total", "gift_spend_429_total", "gift_spend_latency_ms_p95"],
+    "alerts_required": ["5xx>1%", "borea_leak>0", "duplicate_spend>0", "inventory_mismatch>0", "p95>800ms"],
+    "dashboards_required": ["affinity_gift_spend_overview", "affinity_gift_ledger_health"]
+  },
+
+  "go_decision_gate": {
+    "all_signoffs_true": false,
+    "user_explicit_approval_required": true,
+    "baseline_diff_pass_required": true,
+    "axis_layer_ready_required": true,
+    "migration_layer_ready_required": true
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+    "af2n_allowed_today": false
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "rehearsal_id": "AF2-L-REHEARSAL-001",
+  "task_origin": "AF2-L",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "destructive_actions_performed": false,
+  "dry_run": true,
+  "env_flag_required": "DIVINE_ALLOW_AFFINITY_LEDGER_ROLLBACK",
+  "env_flag_required_value": "YES_I_UNDERSTAND",
+  "env_flag_present": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T20:10:06.496637Z",
+  "rollback_steps_count": 8,
+  "rollback_steps": [
+    "1. Verify AFFINITY_GIFT_RUNTIME_ENABLED is OFF or set to non-allowlisted value.",
+    "2. Confirm POST /api/affinity/gift-spend returns 423 on every region.",
+    "3. Take DB snapshot before any correction.",
+    "4. Drop partial unique index idx_idem_key_user_window if re-migration is required.",
+    "5. Drop secondary indexes (idx_tx_id_unique, idx_user_created_desc, idx_gift_hero, idx_status_created) if needed.",
+    "6. Drop the gift_transaction_ledger collection ONLY if explicitly approved by operator.",
+    "7. Restore DB snapshot if data corruption is suspected (out-of-band).",
+    "8. Smoke-test the runtime API: /api/heroes count == 100, Borea hidden, gift-spend disabled."
+  ],
+  "timings_expected_seconds": {
+    "flag_flip_to_off_seconds_max": 5,
+    "gift_spend_423_propagation_seconds_max": 30,
+    "db_snapshot_minutes_max": 10,
+    "index_drop_seconds_max": 60,
+    "collection_drop_seconds_max": 30,
+    "full_smoke_after_rollback_minutes_max": 5
+  },
+  "operator_sign_off_required": true,
+  "migration_result_referenced": "/app/data/design/affinity/affinity_gift_transaction_ledger_migration_result_v1.json",
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

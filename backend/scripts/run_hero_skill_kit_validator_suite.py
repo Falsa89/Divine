@@ -110,6 +110,13 @@ OPTIONAL = [
     ('SAFETY-ROLLUP-B', 'validate_collection_affinity_runtime_activation_rollup_v2.py'),
     ('AF2-L-PRE', 'validate_affinity_gift_spend_load_test_and_rollback_rehearsal_plan.py'),
     ('ULTRA-COMBO-V7', 'validate_af2j_af2kpre_axisf_opsb_rollupb_combo.py'),
+    # ULTRA-COMBO V8 (AF2-K + AF2-L + AF2-M + OPS-C + SAFETY-ROLLUP-C)
+    ('AF2-K', 'validate_affinity_gift_transaction_ledger_migration.py'),
+    ('AF2-L', 'validate_affinity_gift_spend_load_and_rollback_results.py'),
+    ('AF2-M', 'validate_affinity_gift_runtime_operator_signoff.py'),
+    ('OPS-C', 'audit_ops_start_expo_autorestore.py'),
+    ('SAFETY-ROLLUP-C', 'validate_collection_affinity_runtime_activation_rollup_v3.py'),
+    ('ULTRA-COMBO-V8', 'validate_af2k_af2l_af2m_opsc_safetyc_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

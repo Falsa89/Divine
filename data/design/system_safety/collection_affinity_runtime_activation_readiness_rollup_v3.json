@@ -1,0 +1,85 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v3",
+  "task_origin": "SAFETY-ROLLUP-C",
+  "supersedes": "collection_affinity_runtime_activation_readiness_rollup_v2",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "SAFETY-ROLLUP-C — Final pre-AF2-N readiness rollup. Axis + ops + auth-contract + idempotency-contract + load-probe + rollback-rehearsal + migration-foundation are all GREEN (design-only / dry-run). Operator sign-off package created with every field FALSE. Overall runtime activation remains NO_GO and AF2-N is explicitly NOT allowed until every signoff is true AND the user explicitly approves the flag flip.",
+
+  "axis_layer_activation_ready": true,
+  "ops_layer_ready": true,
+  "auth_contract_ready": true,
+  "idempotency_contract_ready": true,
+  "load_probe_ready": true,
+  "rollback_rehearsal_ready": true,
+  "migration_layer_ready": true,
+  "migration_applied": false,
+  "operator_signoff_ready": false,
+  "overall_runtime_activation_ready": false,
+  "AF2N_allowed": false,
+  "go_no_go_decision": "NO_GO_RUNTIME",
+  "axis_layer_decision": "GO_AXIS",
+
+  "subsystems": {
+    "axis_layer":        {"status": "GO",    "source": "RM1.34-B-PATCH-A/B + AXIS-F"},
+    "ops_layer":         {"status": "GO",    "source": "OPS-B persistent wrapper + OPS-C auto-restore"},
+    "auth_contract":     {"status": "READY", "source": "AF2-J contract (design-only)"},
+    "idempotency_contract": {"status": "READY", "source": "AF2-K-PRE contract (design-only)"},
+    "migration_foundation": {"status": "READY_DRY_RUN", "source": "AF2-K migration script + result (dry-run)"},
+    "load_probe":        {"status": "PASS",  "source": "AF2-L probe AF2-L-PROBE-001"},
+    "rollback_rehearsal":{"status": "PASS_DRY_RUN", "source": "AF2-L rehearsal AF2-L-REHEARSAL-001"},
+    "operator_signoff":  {"status": "PENDING_ALL_FALSE", "source": "AF2-M package"},
+    "db_layer":          {"status": "NO_GO", "source": "migration_applied=false, no DB write"},
+    "battle_runtime":    {"status": "NO_GO", "source": "global_modifier_cap_resolver still inert"},
+    "borea_layer":       {"status": "GO",    "source": "Borea / greek_borea / primordial_gaia hidden"}
+  },
+
+  "runtime_no_go_reasons": [
+    "all 5 operator signoffs are false",
+    "AFFINITY_GIFT_RUNTIME_ENABLED runtime flag is OFF",
+    "controlled rollout (stage1..stage4) not executed",
+    "live spend never enabled",
+    "DB migration kept in dry-run",
+    "production monitoring not verified end-to-end",
+    "battle runtime cap resolver still inert",
+    "user has NOT explicitly approved AF2-N flip"
+  ],
+
+  "AF2N_blockers": [
+    "operator_signoff_ready=false (5 signoffs still false)",
+    "overall_runtime_activation_ready=false",
+    "migration_applied=false (dry-run only)",
+    "user_explicit_approval_required=true"
+  ],
+
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "borea / greek_borea / primordial_gaia hidden from live API",
+    "POST /api/affinity/gift-spend returns 423 with disabled envelope",
+    "AF2-L probe: 0 5xx, 0 unexpected, p95 ≪ 500ms",
+    "AF2-K migration result: dry_run=true, migration_applied=false",
+    "AF2-M signoff package: all signoffs false, AF2-N not allowed",
+    "OPS-C check script idempotent and non-destructive",
+    "battle_engine.py / battle_core.py / combat.tsx unchanged",
+    "baseline v6 auto-detected as latest and PASS",
+    "no DB writes possible from any new artifact",
+    "feature_flag_currently_enabled == false everywhere",
+    "AXIS-F read-only routes behave correctly (greek 200, tides 404 deferred, dark 200, darkness alias)"
+  ],
+
+  "safe_next_step": "AF2-N only after: (a) explicit user approval AND (b) all 5 operator signoffs flipped to true AND (c) controlled stage1 rollout plan executed AND (d) monitoring alerts wired.",
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+    "AF2N_allowed_today": false
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "probe_id": "AF2-L-PROBE-001",
+  "task_origin": "AF2-L",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_live_spend": true,
+  "no_inventory_mutation": true,
+  "no_affinity_points_mutation": true,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T20:10:06.433434Z",
+  "total_requests": 98,
+  "elapsed_seconds": 0.074,
+  "p50_latency_ms": 0.64,
+  "p95_latency_ms": 0.87,
+  "p99_latency_ms": 2.06,
+  "total_5xx": 0,
+  "unexpected_total": 0,
+  "by_label": {
+    "empty": {
+      "count": 14,
+      "expected_status": 423,
+      "p50_latency_ms": 0.74,
+      "p95_latency_ms": 0.92,
+      "unexpected_codes": {}
+    },
+    "valid": {
+      "count": 14,
+      "expected_status": 423,
+      "p50_latency_ms": 0.67,
+      "p95_latency_ms": 0.7,
+      "unexpected_codes": {}
+    },
+    "dup_idem": {
+      "count": 14,
+      "expected_status": 423,
+      "p50_latency_ms": 0.64,
+      "p95_latency_ms": 0.75,
+      "unexpected_codes": {}
+    },
+    "missing_idem": {
+      "count": 14,
+      "expected_status": 423,
+      "p50_latency_ms": 0.68,
+      "p95_latency_ms": 0.87,
+      "unexpected_codes": {}
+    },
+    "borea": {
+      "count": 14,
+      "expected_status": 404,
+      "p50_latency_ms": 0.53,
+      "p95_latency_ms": 0.55,
+      "unexpected_codes": {}
+    },
+    "greek_borea": {
+      "count": 14,
+      "expected_status": 404,
+      "p50_latency_ms": 0.53,
+      "p95_latency_ms": 0.91,
+      "unexpected_codes": {}
+    },
+    "primordial_gaia": {
+      "count": 14,
+      "expected_status": 404,
+      "p50_latency_ms": 0.51,
+      "p95_latency_ms": 0.56,
+      "unexpected_codes": {}
+    }
+  },
+  "regression_gets": {
+    "/affinity/gifts": {
+      "code": 200,
+      "latency_ms": 3.3194589996128343
+    },
+    "/affinity/gifts/summary": {
+      "code": 200,
+      "latency_ms": 1.2439630008884706
+    },
+    "/affinity/gifts/by-faction/greek": {
+      "code": 200,
+      "latency_ms": 1.464107001083903
+    },
+    "/affinity/gifts/by-element/dark": {
+      "code": 200,
+      "latency_ms": 1.7032670002663508
+    }
+  },
+  "borea_aliases_blocked": [
+    "borea",
+    "greek_borea",
+    "primordial_gaia"
+  ],
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}
