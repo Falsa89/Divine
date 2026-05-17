@@ -83,6 +83,16 @@ OPTIONAL = [
     ('STACK-D', 'validate_global_modifier_cap_resolver_multiplicative_rejection.py'),
     ('AXIS-D', 'validate_canonical_axis_activation_table.py'),
     ('MEGA-COMBO-4', 'validate_cs2e_af2f_af2g_stackd_axisd_combo.py'),
+    # ULTRA-COMBO (AF2-H + STACK-E + STACK-F + AXIS-E + SAFETY-ROLLUP-A
+    #              + OPS-A + PATCH-READINESS-A)
+    ('AF2-H', 'audit_affinity_gift_spend_auth_ratelimit_safety.py'),
+    ('STACK-E', 'validate_global_modifier_cap_resolver_borea_filtering.py'),
+    ('STACK-F', 'validate_global_modifier_cap_resolver_debuff_semantics.py'),
+    ('AXIS-E', 'audit_canonical_axis_read_through_helper.py'),
+    ('SAFETY-ROLLUP-A', 'validate_runtime_activation_readiness_rollup.py'),
+    ('OPS-A', 'audit_start_expo_wrapper_resilience.py'),
+    ('PATCH-READINESS-A', 'validate_rm134b_patch_readiness_plan.py'),
+    ('ULTRA-COMBO', 'validate_ultra_combo_af2h_stackef_axise_safety_ops_patchreadiness.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
