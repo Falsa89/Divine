@@ -77,6 +77,12 @@ OPTIONAL = [
     ('STACK-C', 'validate_global_modifier_cap_resolver_edge_cases.py'),
     ('AXIS-C', 'audit_canonical_axis_dynamic_preview.py'),
     ('MEGA-COMBO-3', 'validate_cs2d_af2d_af2e_stackc_axisc_combo.py'),
+    ('CS2-E', 'audit_collection_synergy_preview_navigation.py'),
+    ('AF2-F', 'validate_affinity_phase2_rollback_rehearsal.py'),
+    ('AF2-G', 'audit_affinity_gift_spend_skeleton_safety.py'),
+    ('STACK-D', 'validate_global_modifier_cap_resolver_multiplicative_rejection.py'),
+    ('AXIS-D', 'validate_canonical_axis_activation_table.py'),
+    ('MEGA-COMBO-4', 'validate_cs2e_af2f_af2g_stackd_axisd_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

@@ -1,0 +1,147 @@
+{
+  "table_id": "canonical_axis_activation_validation_table_v1",
+  "task_origin": "AXIS-D",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "activation_ready": false,
+  "design_preview_ready": true,
+  "currently_blocking_any_axis_runtime_on": true,
+
+  "summary": "Activation validation table for the canonical Faction/Element axes. Aggregates the live roster (via /api/heroes), the boss matrix RM1.34-B, the AF2-A gift draft, and the AXIS-A plan into a single pass/fail report. The table declares `activation_ready=false` until BOTH (a) `darkness_vs_dark_unpatched` is resolved via RM1.34-B-PATCH-A and (b) `tides_orphan_unresolved` is resolved via RM1.34-B-PATCH-B. No source table is patched in this task.",
+
+  "axes_observed": {
+    "live_roster_factions": [
+      "angelic", "arcane", "celtic", "creature_beast", "cursed",
+      "demonic", "egyptian", "greek", "japanese_yokai",
+      "mesopotamian", "norse", "primordial"
+    ],
+    "live_roster_elements": [
+      "dark", "earth", "fire", "light", "lightning", "water", "wind"
+    ],
+    "boss_matrix_rm134b_factions": [
+      "greek", "norse", "egyptian", "japanese_yokai", "celtic",
+      "angelic", "demonic", "cursed", "creature_beast", "primordial",
+      "arcane", "tides", "mesopotamian"
+    ],
+    "boss_matrix_rm134b_elements": [
+      "fire", "water", "earth", "wind", "lightning", "light", "darkness"
+    ],
+    "gift_draft_af2a_factions": [
+      "greek", "norse", "egyptian", "japanese_yokai", "celtic",
+      "angelic", "demonic", "cursed", "creature_beast", "primordial",
+      "arcane", "mesopotamian"
+    ],
+    "gift_draft_af2a_elements": [
+      "dark", "earth", "fire", "light", "lightning", "water", "wind"
+    ]
+  },
+
+  "validation_rows": [
+    {
+      "axis": "element",
+      "rule": "live roster element tokens MUST equal boss matrix element tokens (or alias-covered)",
+      "status": "fail",
+      "details": "live uses 'dark'; matrix uses 'darkness'. Alias 'darkness->dark' is documented in AXIS-A plan and consumed only by inert resolvers. Source RM1.34-B is NOT patched.",
+      "blocker_id": "darkness_vs_dark_unpatched",
+      "resolution_required_for_runtime": true,
+      "resolution_path": "RM1.34-B-PATCH-A (controlled migration darkness->dark + rebaseline)"
+    },
+    {
+      "axis": "element",
+      "rule": "AF2-A gift draft element tokens MUST equal live roster",
+      "status": "pass",
+      "details": "gift draft uses 'dark' aligned with live roster",
+      "blocker_id": null,
+      "resolution_required_for_runtime": false
+    },
+    {
+      "axis": "faction",
+      "rule": "live roster faction tokens MUST equal boss matrix faction tokens (or alias-covered / design_pending)",
+      "status": "fail",
+      "details": "matrix contains 'tides' faction; live roster has zero 'tides' heroes. 'tides' is flagged design_pending in AXIS-A plan but no live hero exists.",
+      "blocker_id": "tides_orphan_unresolved",
+      "resolution_required_for_runtime": true,
+      "resolution_path": "RM1.34-B-PATCH-B (either add at least one tides hero to live roster OR strike tides from matrix)"
+    },
+    {
+      "axis": "faction",
+      "rule": "AF2-A gift draft faction tokens MUST equal live roster",
+      "status": "pass",
+      "details": "gift draft factions match live roster (12 factions, no tides minted)",
+      "blocker_id": null,
+      "resolution_required_for_runtime": false
+    },
+    {
+      "axis": "borea_visibility",
+      "rule": "greek_borea MUST remain catalog-only / hidden from /api/heroes; legacy borea / primordial_gaia MUST 404",
+      "status": "pass",
+      "details": "verified live: /api/heroes count=100, no greek_borea/borea/primordial_gaia in roster ids",
+      "blocker_id": null,
+      "resolution_required_for_runtime": false
+    },
+    {
+      "axis": "alias_coverage",
+      "rule": "alias_map covers every mismatched token via AXIS-A inert read-through",
+      "status": "pass",
+      "details": "AXIS-A plan has darkness->dark + dark->dark + shadow/oscurita alias for elements; faction aliases yokai/beasts/celtics. tides is reported design_pending, not aliased.",
+      "blocker_id": null,
+      "resolution_required_for_runtime": false
+    }
+  ],
+
+  "blockers": [
+    {
+      "id": "darkness_vs_dark_unpatched",
+      "severity": "blocking_runtime_on",
+      "documented_in": "axis_a_plan.discrepancies[element_dark_vs_darkness]",
+      "resolution_task": "RM1.34-B-PATCH-A",
+      "resolution_blocked_until": "boss balance review re-ratifies the matrix under canonical token `dark`"
+    },
+    {
+      "id": "tides_orphan_unresolved",
+      "severity": "blocking_runtime_on",
+      "documented_in": "axis_a_plan.discrepancies[faction_tides_in_matrix_only]",
+      "resolution_task": "RM1.34-B-PATCH-B",
+      "resolution_blocked_until": "live roster decision: mint at least one tides hero OR strike tides from matrix"
+    }
+  ],
+
+  "required_before_activation": [
+    {"id": "alias_coverage_pass", "currently_satisfied": true, "source_task": "AXIS-B + AXIS-C"},
+    {"id": "roster_source_confirmed", "currently_satisfied": true, "source_task": "AXIS-C dynamic helper read of /api/heroes"},
+    {"id": "gift_axis_equals_roster_or_alias_covered", "currently_satisfied": true, "source_task": "AF2-A draft"},
+    {"id": "boss_matrix_axis_equals_roster_or_alias_covered", "currently_satisfied": false, "source_task": "RM1.34-B-PATCH-A"},
+    {"id": "tides_decision_made", "currently_satisfied": false, "source_task": "RM1.34-B-PATCH-B"},
+    {"id": "borea_hidden_check_pass", "currently_satisfied": true, "source_task": "live /api/heroes invariant"},
+    {"id": "rebaseline_after_patch", "currently_satisfied": false, "source_task": "post RM1.34-B-PATCH-A/B baseline v6"}
+  ],
+
+  "recommended_patch_order": [
+    "1. RM1.34-B-PATCH-A: migrate matrix element token 'darkness'->'dark', re-run all boss matrix validators, rebaseline.",
+    "2. RM1.34-B-PATCH-B: tides decision (mint hero OR strike from matrix), re-run faction validators.",
+    "3. Re-run AXIS-A audit, AXIS-B helper audit, AXIS-C dynamic preview audit, AXIS-D table validator.",
+    "4. Rebaseline v6 with updated matrix.",
+    "5. Only then consider any Collection/Affinity/DW runtime ON behind feature flags."
+  ],
+
+  "do_not_patch_in_this_task": {
+    "rm134b_matrix": true,
+    "af2a_gift_draft": true,
+    "axis_a_plan": true,
+    "baseline_v5": true
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}

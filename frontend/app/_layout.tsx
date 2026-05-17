@@ -60,6 +60,8 @@ export default function RootLayout() {
           <Stack.Screen name="hero-viewer" options={{ headerShown: false, animation: 'fade' }} />
           <Stack.Screen name="sprite-test" options={{ headerShown: false, animation: 'slide_from_right' }} />
           <Stack.Screen name="soul-forge" options={{ animation: 'slide_from_bottom' }} />
+          {/* CS2-E — Read-only preview screen (design-only, no buttons mutativi). */}
+          <Stack.Screen name="collection-synergies-preview" options={{ animation: 'slide_from_right' }} />
         </Stack>
         </NotificationProvider>
       </AuthProvider>

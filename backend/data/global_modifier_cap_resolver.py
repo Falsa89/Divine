@@ -185,15 +185,35 @@ def preview_combined_cap(
       context: "pvp" or "pve" (documentation hint only).
     """
     sources = list(mock_sources or [])
-    # Sanitize: every entry must be a dict with numeric pct
+    # Sanitize: every entry must be a dict with numeric pct.
+    # STACK-D: classify by stacking_mode. Multiplicative sources are
+    # NOT included in the additive sum; they are reported as
+    # "rejected_multiplicative" preview warnings. The resolver remains
+    # OFF/inert and never applies any value to combat.
     cleaned = []
+    rejected_multiplicative: list[dict[str, Any]] = []
     for s in sources:
         if not isinstance(s, dict):
             continue
         pct = s.get('pct')
         if not isinstance(pct, (int, float)):
             continue
-        cleaned.append({'id': s.get('id'), 'pct': float(pct)})
+        # Multiplicative source detection (STACK-D)
+        mode = s.get('stacking_mode') or s.get('stacking')
+        if isinstance(mode, str) and mode.strip().lower() == 'multiplicative':
+            rejected_multiplicative.append({
+                'id': s.get('id'),
+                'pct': float(pct),
+                'stacking_mode': mode,
+                'reason': 'multiplicative_rejected_preview_only',
+                'forbidden_in_initial_runtime': True,
+            })
+            continue
+        cleaned.append({
+            'id': s.get('id'),
+            'pct': float(pct),
+            'stacking_mode': 'additive',
+        })
 
     additive_sum = sum(s['pct'] for s in cleaned)
     if context == 'pvp':
@@ -211,12 +231,17 @@ def preview_combined_cap(
         'design_only': True,
         'context': context,
         'mock_sources_input': cleaned,
+        'mock_sources_rejected_multiplicative': rejected_multiplicative,
+        'multiplicative_rejected_count': len(rejected_multiplicative),
+        'multiplicative_policy': 'rejected_preview_only',
+        'multiplicative_forbidden_in_initial_runtime': True,
         'additive_sum_pct_preview': additive_sum,
         'target_cap_pct_preview': target_cap,
         'clamped_pct_preview': clamped_pct_preview,
         'note': (
             'preview_only: the resolver is OFF; this echo is documentation-grade only '
-            'and is NEVER applied to combat.'
+            'and is NEVER applied to combat. Multiplicative-stacking sources are '
+            'reported separately and excluded from the additive sum.'
         ),
     })
     return base

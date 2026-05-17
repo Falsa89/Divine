@@ -203,10 +203,14 @@ record('no_affinity_migration_created', not migration_hits,
        f'unexpected migrations: {migration_hits}')
 
 # 10. No endpoint created
+# Exclude affinity_gift_spend.py (AF2-G disabled skeleton; future-ready endpoint
+# that returns 423 and never writes).
 endpoint_hits: list[str] = []
 if BACKEND_ROUTES.exists():
     for py in BACKEND_ROUTES.rglob('*.py'):
         if not py.is_file():
+            continue
+        if py.name == 'affinity_gift_spend.py':
             continue
         t = py.read_text(encoding='utf-8', errors='ignore')
         for pat in ENDPOINT_PATTERNS:

@@ -146,12 +146,13 @@
     },
     {
       "id": "case_11_multiplicative_source_documented",
-      "description": "A source claiming multiplicative semantics MUST be rejected by the future runtime. For the inert preview today, behavior is documented but the resolver does not parse semantics.",
+      "description": "A source claiming multiplicative semantics is rejected by STACK-D preview layer (excluded from additive sum, reported under mock_sources_rejected_multiplicative).",
       "context": "pvp",
       "mock_sources": [{"id": "mult_test", "pct": 5, "stacking": "multiplicative"}],
       "expected": {
-        "additive_sum_pct_preview": 5,
+        "additive_sum_pct_preview": 0,
         "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 0,
         "is_disabled_envelope": true,
         "future_runtime_must_reject_multiplicative": true
       }

@@ -1,0 +1,82 @@
+{
+  "plan_id": "affinity_phase2_migration_plan_draft_v1",
+  "plan_task_origin": "AF2-D",
+  "rehearsed_at_utc": "2026-05-17T00:15:04.162452Z",
+  "dry_run": true,
+  "commit": false,
+  "commit_supported": false,
+  "commit_rejected_message": "--commit is intentionally rejected in this rehearsal",
+  "db_write": false,
+  "migration_applied": false,
+  "rollback_executed": false,
+  "collections_touched": [],
+  "collections_documented_in_plan": [
+    "user_gift_inventory",
+    "gift_transaction_ledger",
+    "hero_affinity_state"
+  ],
+  "documented_steps_count": 4,
+  "simulated_steps_count": 4,
+  "simulated_trace": [
+    {
+      "step_index": 1,
+      "description": "Set AFFINITY_GIFT_RUNTIME_ENABLED env var back to OFF (default).",
+      "dry_run_action": "simulated_only",
+      "collections_touched_in_this_step": [],
+      "db_write": false,
+      "borea_revealed": false,
+      "feature_flag_changed": false,
+      "side_effect": "none"
+    },
+    {
+      "step_index": 2,
+      "description": "Disable any /api/affinity/gift-spend or grant routes via feature flag.",
+      "dry_run_action": "simulated_only",
+      "collections_touched_in_this_step": [],
+      "db_write": false,
+      "borea_revealed": false,
+      "feature_flag_changed": false,
+      "side_effect": "none"
+    },
+    {
+      "step_index": 3,
+      "description": "Drop user_gift_inventory / gift_transaction_ledger / hero_affinity_state collections after a 7-day audit window.",
+      "dry_run_action": "simulated_only",
+      "collections_touched_in_this_step": [],
+      "db_write": false,
+      "borea_revealed": false,
+      "feature_flag_changed": false,
+      "side_effect": "none"
+    },
+    {
+      "step_index": 4,
+      "description": "Confirm no orphan field added to users / heroes collections (no cross-collection mutation was performed).",
+      "dry_run_action": "simulated_only",
+      "collections_touched_in_this_step": [],
+      "db_write": false,
+      "borea_revealed": false,
+      "feature_flag_changed": false,
+      "side_effect": "none"
+    }
+  ],
+  "ledger_ordering_documented": true,
+  "idempotent_rerun": true,
+  "borea_rollback_safe": true,
+  "borea_activation_allowed": false,
+  "no_motor_pymongo_import_in_this_script": true,
+  "hidden_aliases_blocked": [
+    "borea",
+    "primordial_gaia"
+  ],
+  "safety_envelope": {
+    "design_only": true,
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "inventory_write": false,
+    "ledger_write": false,
+    "affinity_points_write": false,
+    "feature_flag_dependency": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": false
+  }
+}

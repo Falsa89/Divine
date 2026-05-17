@@ -77,6 +77,11 @@ const CATEGORIES = [
       // 13 Armi Divine 6★ inert (12 launch_base + 1 Borea extra premium).
       // Non collegate a battle/HP bar/VFX runtime, gacha, roster o Borea activation.
       { label: 'Armi Divine', icon: '\u2694\uFE0F', route: '/divine-weapons-catalog', gradient: ['#FF44CC', '#6A1B9A'] as const },
+      // CS2-E — Sinergie Collezione (read-only preview, design-only).
+      // Schermata strictly read-only che mostra le 6 categorie di Collection
+      // Synergy V2 con badge "Locked / Future". Nessun bonus applicato al
+      // combattimento. Nessun click di claim/activate/spend/equip/runtime.
+      { label: 'Sinergie Collezione', icon: '\uD83D\uDD17', route: '/collection-synergies-preview', gradient: ['#88CCFF', '#3366AA'] as const },
     ],
   },
 ];

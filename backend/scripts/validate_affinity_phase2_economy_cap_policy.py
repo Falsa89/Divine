@@ -163,9 +163,13 @@ for t in ats:
            t.get('borea_locked') is True, '')
 
 # 7. No endpoint created (grep backend/routes)
+# Exclude affinity_gift_spend.py (AF2-G disabled skeleton; explicitly
+# authorized future-ready endpoint that returns 423 and never writes).
 endpoint_hits: list[str] = []
 if BACKEND_ROUTES_DIR.exists():
     for py in BACKEND_ROUTES_DIR.rglob('*.py'):
+        if py.name == 'affinity_gift_spend.py':
+            continue
         txt = py.read_text(encoding='utf-8', errors='ignore')
         for pat in ENDPOINT_PATTERNS:
             if re.search(pat, txt):

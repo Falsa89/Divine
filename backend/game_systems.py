@@ -32,6 +32,7 @@ from routes.hero_skill_kits_catalogs import register_hero_skill_kits_catalog_rou
 from routes.divine_weapons import register_divine_weapons_catalog_routes
 from routes.skill_kit_runtime_debug import register_skill_kit_runtime_debug_routes
 from routes.affinity_gifts import register_affinity_gifts_readonly_routes
+from routes.affinity_gift_spend import register_affinity_gift_spend_skeleton_routes
 
 
 def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):
@@ -78,6 +79,9 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # Borea greek_borea entries remain catalog-only / locked; legacy
     # `borea` / `primordial_gaia` aliases rejected with 404.
     register_affinity_gifts_readonly_routes(router)
+    # AF2-G — Disabled POST gift-spend skeleton. Always returns 423; no DB write
+    # opens. Feature flag AFFINITY_GIFT_RUNTIME_ENABLED default OFF.
+    register_affinity_gift_spend_skeleton_routes(router)
     # Sanctuary (home hero + affinity + constellation) — note: signature differs (no calculate_hero_power)
     register_sanctuary_routes(router, db, get_current_user, serialize_doc)
 

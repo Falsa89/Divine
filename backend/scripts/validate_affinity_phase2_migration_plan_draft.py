@@ -136,6 +136,9 @@ if BACKEND_ROUTES.exists():
         # Skip pre-existing independent sanctuary affinity surface
         if py.name == 'sanctuary.py':
             continue
+        # Skip AF2-G disabled gift-spend skeleton (explicitly authorized; always 423, no write).
+        if py.name == 'affinity_gift_spend.py':
+            continue
         t = py.read_text(encoding='utf-8', errors='ignore')
         # Mutation endpoints on the AF2 gift/inventory/spend paths
         if re.search(

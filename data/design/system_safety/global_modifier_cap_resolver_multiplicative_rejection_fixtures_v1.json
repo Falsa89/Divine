@@ -1,0 +1,187 @@
+{
+  "fixture_id": "global_modifier_cap_resolver_multiplicative_rejection_fixtures_v1",
+  "task_origin": "STACK-D",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied_to_combat": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm132c2_v5",
+
+  "summary": "STACK-D fixtures formalize the rejection / preview-only normalization of multiplicative-stacking sources inside global_modifier_cap_resolver.preview_combined_cap. Every case must keep the resolver OFF/inert: runtime_attached=false, applied_to_combat=false, db_write=false. Multiplicative sources are EXCLUDED from the additive sum and reported under `mock_sources_rejected_multiplicative` with reason=multiplicative_rejected_preview_only.",
+
+  "global_pvp_combined_target_cap_pct": 12,
+  "multiplicative_policy": "rejected_preview_only",
+
+  "cases": [
+    {
+      "id": "case_md_01_collection_multiplicative",
+      "description": "Collection multiplicative source (5%) MUST be rejected; additive sum stays 0.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "collection_mult", "pct": 5, "stacking_mode": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 1,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_02_affinity_multiplicative",
+      "description": "Affinity multiplicative source (6%) rejected.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "affinity_mult", "pct": 6, "stacking_mode": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 1,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_03_dw_multiplicative",
+      "description": "Divine Weapon multiplicative source (5%) rejected.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "dw_mult", "pct": 5, "stacking_mode": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_04_mixed_additive_and_multiplicative",
+      "description": "Two additive (3+4=7) plus two multiplicative (5+6, rejected). Sum=7, clamp=7.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "additive_a", "pct": 3, "stacking_mode": "additive"},
+        {"id": "additive_b", "pct": 4},
+        {"id": "mult_a", "pct": 5, "stacking_mode": "multiplicative"},
+        {"id": "mult_b", "pct": 6, "stacking": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 7,
+        "multiplicative_rejected_count": 2,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 7,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_05_huge_multiplicative_rejected",
+      "description": "Pathological huge multiplicative (9999%) MUST be rejected; sum stays 0.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "huge_mult", "pct": 9999, "stacking_mode": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 1,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_06_borea_multiplicative_rejected",
+      "description": "A Borea-labeled multiplicative source is rejected on multiplicative grounds AND must be filtered by future runtime on Borea grounds. Preview layer only checks stacking; borea filtering belongs to runtime gate.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "borea_mult", "pct": 4, "stacking_mode": "multiplicative", "borea_locked": true}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 1,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true,
+        "future_runtime_must_filter_borea_locked": true
+      }
+    },
+    {
+      "id": "case_md_07_unknown_stacking_mode_treated_additive",
+      "description": "A source with an UNKNOWN stacking_mode value (e.g. 'percent', 'flat', 'foo') is treated as additive (default). Only the exact token 'multiplicative' triggers rejection.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "weird_mode", "pct": 5, "stacking_mode": "percent_special"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 5,
+        "multiplicative_rejected_count": 0,
+        "clamped_pct_preview_le_target": true,
+        "clamped_pct_preview_equals": 5,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_08_case_insensitive_multiplicative",
+      "description": "Multiplicative detection is case-insensitive: 'Multiplicative', 'MULTIPLICATIVE', 'multiplicative'.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "mc1", "pct": 1, "stacking_mode": "Multiplicative"},
+        {"id": "mc2", "pct": 2, "stacking_mode": "MULTIPLICATIVE"},
+        {"id": "mc3", "pct": 3, "stacking_mode": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 3,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_09_pve_multiplicative_rejected",
+      "description": "PvE context still rejects multiplicative sources; PvE target cap is None.",
+      "context": "pve",
+      "mock_sources": [
+        {"id": "mult_pve", "pct": 8, "stacking_mode": "multiplicative"}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 0,
+        "multiplicative_rejected_count": 1,
+        "target_cap_pct_preview_is_none": true,
+        "clamped_pct_preview_equals": 0,
+        "is_disabled_envelope": true
+      }
+    },
+    {
+      "id": "case_md_10_no_stacking_field_treated_additive",
+      "description": "Backward compatibility: a source without any stacking_mode field defaults to additive.",
+      "context": "pvp",
+      "mock_sources": [
+        {"id": "legacy_no_field", "pct": 4}
+      ],
+      "expected": {
+        "additive_sum_pct_preview": 4,
+        "multiplicative_rejected_count": 0,
+        "clamped_pct_preview_equals": 4,
+        "is_disabled_envelope": true
+      }
+    }
+  ],
+
+  "global_invariants": {
+    "all_cases_disabled_envelope": true,
+    "multiplicative_excluded_from_additive_sum": true,
+    "multiplicative_reported_under_rejected_field": true,
+    "feature_flag_currently_enabled": false,
+    "no_battle_engine_import": true
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "applied_to_combat": false,
+    "db_write": false,
+    "borea_activation_allowed": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "primordial_gaia"]
+  }
+}
