@@ -1,0 +1,429 @@
+TASK ULTRA-COMBO V12 — AF2-N CONTROLLED RUNTIME FLIP CANARY + LIVE MONITORING + ROLLBACK STANDBY + SAFETY-ROLLUP-G
+First Controlled Runtime Enablement for Affinity Gift Spend
+MAXIMUM SAFE ACCELERATION WITH RUNTIME FLAG FLIP
+
+Project: Divine RPG / Divine Waifus
+
+USER APPROVAL:
+The user has now given the separate final runtime approval after V11:
+"perfetto procediamo e ricorda massima accelerazione possibile"
+Treat this as FINAL-USER-RUNTIME-APPROVAL for AF2-N, but only under controlled canary, monitoring live, and rollback standby.
+
+CURRENT STATE:
+- V11 complete.
+- all 5 operator signoffs true.
+- final_user_runtime_approval_present was false before this task.
+- AF2-N not yet executed.
+- gift_transaction_ledger collection + 5 indexes exist.
+- ledger rows = 0 before AF2-N.
+- gift-spend endpoint currently 423 no-write.
+- /api/heroes=100.
+- Borea/greek_borea/primordial_gaia hidden and 404.
+- baseline v6 clean.
+- Suite 105/105 PASS.
+- battle_engine.py, battle_core.py, combat.tsx unchanged.
+- AFFINITY_GIFT_RUNTIME_ENABLED currently OFF/empty.
+
+============================================================
+TASKS INCLUDED
+============================================================
+
+AF2-N:
+Controlled runtime flip for affinity gift-spend, canary/allowlist only.
+No broad rollout.
+
+AF2-N-MONITOR:
+Live smoke + monitoring bundle immediately after flip.
+
+AF2-N-ROLLBACK:
+Rollback script and immediate rollback gate.
+If any critical invariant fails, rollback immediately.
+
+AF2-N-REPORT:
+Runtime activation result JSON and final checkpoint.
+
+SAFETY-ROLLUP-G:
+Runtime activation rollup after canary attempt.
+
+OPTIONAL ONLY IF SAFE:
+AF2-N-READINESS-DASH:
+Create read-only monitoring endpoint/report, no UI button, no battle connection.
+
+DO NOT include:
+- STACK-G full battle wiring
+- battle_engine changes
+- combat changes
+- Borea activation
+- roster/gacha mutations
+
+============================================================
+ABSOLUTE SAFETY RULES
+============================================================
+
+DO NOT:
+- expose Borea
+- allow gift spend for Borea/greek_borea/primordial_gaia
+- mutate battle_engine.py, battle_core.py, combat.tsx
+- mutate roster/gacha/Character Bible/assets
+- enable broad rollout
+- enable battle buffs
+- connect global cap resolver to battle
+- create spend UI button unless explicitly scoped and safe (prefer no UI)
+- bypass allowlist/canary
+- leave runtime ON if any critical gate fails
+- ignore rollback triggers
+
+Allowed:
+- set AFFINITY_GIFT_RUNTIME_ENABLED only via controlled env/config if canary gates pass.
+- enable gift-spend only for canary allowlist/test user if route supports it; otherwise implement server-side canary guard before accepting spends.
+- write ledger row(s) only from controlled canary test if endpoint is live.
+- mutate gift inventory/affinity only if already in endpoint contract and canary test user is safe; if inventory mutation not fully implemented, endpoint may become "runtime_enabled_but_no_user_spend_executed" and must report blocker.
+- create monitoring/result JSON.
+- add route guards/validators.
+- update signoff package to final_user_runtime_approval_present=true.
+- update rollup.
+
+============================================================
+CRITICAL STOP GATES BEFORE FLIP
+============================================================
+
+STOP and DO NOT enable runtime if:
+1. /api/heroes != 100
+2. Borea visible or alias behavior wrong
+3. baseline v6 diff not clean
+4. suite not PASS
+5. all 5 signoffs not true
+6. final user runtime approval cannot be recorded
+7. gift_transaction_ledger missing or indexes missing
+8. rollback script unavailable
+9. monitoring script unavailable
+10. canary allowlist cannot be enforced
+11. gift-spend route lacks safe validation for user/gift/hero/idempotency
+12. current endpoint status is not known
+13. DB unstable
+14. any battle/gacha/roster/catalog mutation detected
+
+If stopped:
+- do not flip runtime
+- create blocked report
+- keep NO_GO_RUNTIME
+- return exact blocker.
+
+============================================================
+PART A — PREFLIGHT + FINAL APPROVAL RECORD
+============================================================
+
+Run:
+- GET /api/health
+- GET /api/heroes count=100
+- Borea/greek_borea/primordial_gaia hidden
+- POST /api/affinity/gift-spend valid currently 423
+- POST Borea aliases 404
+- ledger count 0
+- verify collection/indexes exist
+- baseline v6 diff PASS
+- suite PASS
+- verify all 5 signoffs true
+- verify battle files unchanged
+- verify rollback scripts exist
+
+Create/update:
+- /app/data/design/affinity/affinity_gift_runtime_operator_signoff_package_v5.json
+- /app/data/design/affinity/af2n_final_user_runtime_approval_record_v1.json
+- /app/backend/scripts/validate_af2n_final_user_runtime_approval_record.py
+
+Signoff v5:
+- all 5 signoffs true
+- final_user_runtime_approval_present=true
+- final_user_runtime_approval_source="user_explicit_separate_chat_message"
+- approval_scope="AF2-N controlled canary only"
+- broad_rollout_approval=false
+- battle_wiring_approval=false
+- borea_activation_approval=false
+
+============================================================
+PART B — AF2-N CONTROLLED RUNTIME FLIP
+============================================================
+
+Implement controlled runtime guard:
+- Feature flag should use strict token:
+  AFFINITY_GIFT_RUNTIME_ENABLED=true_explicit_affinity_gift_runtime_on
+- Canary/allowlist gate required:
+  AFFINITY_GIFT_CANARY_ENABLED=true
+  or equivalent server-side config.
+- Default broad access DENY.
+- Only allow safe test user(s), preferably existing test account, e.g. test@test.com if project uses it.
+- If no auth/user context exists, do NOT allow actual spends. Instead runtime flag may be set but route must reject with safe status requiring auth/user; report "runtime_flag_on_but_spend_blocked_by_auth_canary".
+- Keep Borea aliases 404 before runtime logic.
+- Validate idempotency key required.
+- Validate positive quantity.
+- Validate gift exists.
+- Validate hero exists and visible/allowed.
+- Validate gift spend cap/rate policy if implemented.
+- Ledger write must be idempotent.
+- Duplicate idempotency must not double-spend.
+
+Create:
+- /app/backend/scripts/apply_af2n_controlled_runtime_flip.py
+- /app/backend/scripts/rollback_af2n_runtime_flip.py
+- /app/data/design/affinity/af2n_runtime_flip_result_v1.json
+- /app/backend/scripts/validate_af2n_runtime_flip_result.py
+
+If route cannot safely accept real spend:
+- Do NOT force real spend.
+- Keep/flip flag only if route responds safely with auth/canary blocked and no write.
+- Report blocker.
+- Runtime state can be "enabled_but_no_spend_allowed" only if no unsafe write.
+
+============================================================
+PART C — LIVE CANARY TEST / SMOKE
+============================================================
+
+After flip attempt:
+Run live canary smoke:
+- GET /api/health
+- GET /api/heroes
+- GET gifts
+- POST gift-spend no auth / missing user => expected 401/403/423/controlled rejection, not 500
+- POST valid canary if auth/test context available
+- POST duplicate idempotency if canary spend executed
+- POST Borea aliases => 404
+- Check ledger count:
+  - If canary spend executed, expected row count may be 1 or controlled small number.
+  - If no spend allowed, expected row count remains 0.
+- Check no gacha/roster/catalog mutation.
+- Check UI has no spend button.
+
+Create:
+- /app/data/design/affinity/af2n_canary_smoke_result_v1.json
+- /app/backend/scripts/run_af2n_canary_smoke.py
+- /app/backend/scripts/validate_af2n_canary_smoke_result.py
+
+Critical fail triggers:
+- any 5xx
+- Borea status not 404
+- duplicate double spend
+- ledger unexpected row count
+- inventory mismatch
+- unauthorized successful spend
+- /api/heroes count !=100
+- Borea visible
+- battle file mutation
+If fail:
+- run rollback immediately.
+
+============================================================
+PART D — LIVE MONITORING BUNDLE
+============================================================
+
+Create:
+- /app/data/design/affinity/af2n_live_monitoring_snapshot_v1.json
+- /app/backend/scripts/collect_af2n_live_monitoring_snapshot.py
+- /app/backend/scripts/validate_af2n_live_monitoring_snapshot.py
+
+Monitoring includes:
+- runtime flag status
+- canary status
+- ledger row count
+- last ledger rows sanitized
+- error counts if available
+- gift-spend response status sample
+- Borea alias sample
+- /api/heroes count
+- UI safety grep
+- battle file import grep
+- rollback readiness
+
+Optional read-only endpoint only if safe:
+- GET /api/affinity/runtime/status
+Read-only, no UI, no secrets.
+Do not create if route addition risks scope.
+
+============================================================
+PART E — ROLLBACK VALIDATION
+============================================================
+
+Rollback script:
+- disables AFFINITY_GIFT_RUNTIME_ENABLED / reverts env/config to OFF
+- canary disabled
+- does not delete ledger rows unless separate env gate
+- keeps collection/indexes
+- verifies gift-spend returns 423 again
+- verifies Borea aliases 404
+- writes rollback result if executed
+
+Create:
+- /app/data/design/affinity/af2n_rollback_readiness_result_v1.json
+- /app/backend/scripts/validate_af2n_rollback_readiness.py
+
+If any critical fail:
+- execute rollback and create:
+  /app/data/design/affinity/af2n_runtime_rollback_executed_result_v1.json
+- final report must say ROLLED_BACK.
+
+============================================================
+PART F — SAFETY-ROLLUP-G
+============================================================
+
+Create:
+- /app/data/design/system_safety/collection_affinity_runtime_activation_readiness_rollup_v7.json
+- /app/backend/scripts/validate_collection_affinity_runtime_activation_rollup_v7.py
+
+Rollup states:
+- final_user_runtime_approval_present=true
+- all_operator_signoffs_true=true
+- runtime_flip_attempted=true/false
+- runtime_enabled_current=true/false
+- canary_enabled=true/false
+- broad_rollout=false
+- Borea hidden=true
+- gift_spend_live_state:
+  "canary_live" OR "runtime_blocked_by_auth_canary" OR "rolled_back" OR "blocked_preflight"
+- next decision:
+  if canary_live stable -> continue monitoring / no broad rollout
+  if blocked -> fix blocker
+  if rolled_back -> investigate
+- STACK_G still not connected
+- battle_runtime_activation=false
+
+============================================================
+PART G — COMBO VALIDATOR
+============================================================
+
+Create:
+- /app/backend/scripts/validate_ultra_combo_v12_af2n_runtime_flip_canary.py
+
+Checks:
+- final approval recorded
+- preflight pass
+- AF2-N result valid
+- canary smoke valid or safe blocked result valid
+- monitoring snapshot valid
+- rollback readiness valid
+- rollup v7 valid
+- /api/heroes=100
+- Borea hidden/404
+- no battle/gacha/roster/catalog mutation
+- UI safety
+- suite PASS
+- baseline clean
+
+Update suite runner:
+- optional validators for V12 components and combo.
+- do not weaken existing checks.
+
+============================================================
+PART H — VALIDATORS TO RUN
+============================================================
+
+Run:
+python3 /app/backend/scripts/validate_af2n_final_user_runtime_approval_record.py
+python3 /app/backend/scripts/validate_af2n_runtime_flip_result.py
+python3 /app/backend/scripts/validate_af2n_canary_smoke_result.py
+python3 /app/backend/scripts/validate_af2n_live_monitoring_snapshot.py
+python3 /app/backend/scripts/validate_af2n_rollback_readiness.py
+python3 /app/backend/scripts/validate_collection_affinity_runtime_activation_rollup_v7.py
+python3 /app/backend/scripts/validate_ultra_combo_v12_af2n_runtime_flip_canary.py
+python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py
+python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py --include-baseline-diff
+python3 /app/backend/scripts/validate_hero_skill_kit_catalog_baseline_diff.py
+
+Also rerun V11 combo validator if available.
+
+============================================================
+PART I — API SMOKE
+============================================================
+
+Run:
+GET /api/health
+GET /api/heroes
+GET /api/affinity/gifts
+GET /api/affinity/gifts/by-element/dark/by-faction/greek
+POST /api/affinity/gift-spend empty
+POST /api/affinity/gift-spend valid canary/no-auth as applicable
+POST /api/affinity/gift-spend duplicate idempotency if canary spend executed
+POST /api/affinity/gift-spend hero_id=borea
+POST /api/affinity/gift-spend hero_id=greek_borea
+GET /api/hero-skill-kits/runtime/debug/coverage
+
+Expected depends on implementation:
+- If canary spend enabled: controlled success only for allowlisted/authenticated canary. No broad access.
+- If no auth context: controlled rejection, no write.
+- Borea always 404.
+- No 5xx.
+
+============================================================
+PART J — UI SAFETY
+============================================================
+
+Audit frontend:
+- no gift spend button unless explicitly allowed by task (not allowed here)
+- no claim/spend/activate/equip/upgrade/summon/battle test/enable runtime button in affinity/gift context
+- no Borea reveal
+- no AF2-N toggle exposed
+
+============================================================
+PART K — FINAL DOC
+============================================================
+
+Create:
+- /app/docs/divine/72_ULTRA_COMBO_V12_AF2N_CONTROLLED_RUNTIME_CANARY.md
+
+Sections:
+1. Purpose and approval
+2. Preflight
+3. Runtime flip result
+4. Canary smoke
+5. Monitoring snapshot
+6. Rollback readiness / rollback executed if any
+7. Safety rollup G
+8. Borea safety
+9. Validator results
+10. Suite/baseline results
+11. API smoke
+12. UI safety
+13. Runtime/DB/gacha/roster/catalog safety
+14. Warning/discrepancies
+15. Final recommendation
+16. Suggested next tasks
+
+============================================================
+ACCEPTANCE
+============================================================
+
+Accept if:
+1. Final user runtime approval recorded.
+2. AF2-N attempted only under canary/allowlist.
+3. No broad rollout.
+4. No Borea exposure.
+5. Borea aliases 404.
+6. /api/heroes=100.
+7. No battle_engine/combat/battle_core mutation.
+8. No gacha/roster/catalog mutation.
+9. UI safety pass.
+10. Ledger rows controlled: 0 if blocked/no-auth, or small expected count if canary success.
+11. No 5xx.
+12. Rollback readiness pass.
+13. Rollback executed if critical fail.
+14. Suite pass.
+15. Baseline diff pass.
+16. Report complete.
+
+FINAL REPORT IN ITALIAN:
+1. File creati
+2. File modificati
+3. Approval/preflight
+4. AF2-N runtime flip summary
+5. Canary smoke summary
+6. Monitoring summary
+7. Rollback summary
+8. Safety rollup G summary
+9. Borea safety
+10. Validator results
+11. Suite/baseline results
+12. API smoke
+13. UI safety
+14. Runtime/DB/gacha/roster/catalog safety
+15. Warning/discrepanze
+16. Final recommendation
+17. Suggested next tasks

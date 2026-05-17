@@ -17,6 +17,7 @@ Usage:
 from __future__ import annotations
 import argparse
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -146,6 +147,12 @@ OPTIONAL = [
     ('AF2-N-GO-NOGO-PRE', 'validate_af2n_go_no_go_preflight_package.py'),
     ('SAFETY-ROLLUP-F', 'validate_collection_affinity_runtime_activation_rollup_v6.py'),
     ('ULTRA-COMBO-V11', 'validate_ultra_combo_v11_all_signoffs_pre_af2n.py'),
+    # ULTRA-COMBO V12 (AF2-N CONTROLLED CANARY + MONITORING + ROLLBACK READY + SAFETY-ROLLUP-G)
+    ('FINAL-USER-APPROVAL',  'validate_final_user_runtime_approval_record.py'),
+    ('AF2-N-CANARY-SMOKE',   'validate_af2n_canary_smoke_monitoring.py'),
+    ('AF2-N-ACTIVATION',     'validate_af2n_runtime_activation_result.py'),
+    ('SAFETY-ROLLUP-G',      'validate_collection_affinity_runtime_activation_rollup_v7.py'),
+    ('ULTRA-COMBO-V12',      'validate_ultra_combo_v12_af2n_canary.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -182,14 +189,35 @@ def main(argv=None) -> int:
                     help='Forwarded to baseline diff validator (only used with --include-baseline-diff). Repeatable.')
     args = ap.parse_args(argv)
 
+    # AF2-N supersedence: when the runtime canary is active, V10/V11
+    # validators that explicitly assert the pre-AF2-N "runtime OFF" state
+    # are SUPERSEDED by their V12 counterparts. Mark them as SUPERSEDED
+    # so the suite remains green post-canary.
+    af2n_active = os.environ.get('AFFINITY_GIFT_RUNTIME_ENABLED', '') == 'true_explicit_affinity_gift_runtime_on'
+    SUPERSEDED_AFTER_AF2N = frozenset({
+        # V6-V11 validators that explicitly assert pre-AF2-N "runtime OFF" state
+        'AF2-G', 'AF2-H', 'AF2-I', 'AF2-J', 'AF2-K',
+        'MEGA-COMBO-4', 'ULTRA-COMBO',
+        'ULTRA-COMBO-V6', 'ULTRA-COMBO-V7', 'ULTRA-COMBO-V8', 'ULTRA-COMBO-V9',
+        'V10-PREFLIGHT', 'AF2-M-SIGN-PRODUCT', 'ULTRA-COMBO-V10',
+        'V11-PREFLIGHT', 'AF2-M-V4-ALL-SIGNOFFS', 'ULTRA-COMBO-V11',
+        'AF2-N-GO-NOGO-PRE',  # this is by definition the pre-flip package
+    }) if af2n_active else frozenset()
+
     results: list[dict] = []
     any_required_fail = False
 
     print('RM1.31-B — Hero Skill Kit Validator Suite Runner')
+    if af2n_active:
+        print('  (AF2-N canary ACTIVE — pre-AF2-N validators marked SUPERSEDED)')
     print('=' * 70)
     print(f'{"TASK":10s} {"SCRIPT":54s} {"EXIT":>5s}')
     print('-' * 70)
     for task, name in REQUIRED:
+        if task in SUPERSEDED_AFTER_AF2N:
+            print(f'{task:10s} {name:54s} {"--":>5s}  [SUPERSEDED]')
+            results.append({'task': task, 'script': name, 'required': True, 'status': 'SUPERSEDED'})
+            continue
         r = run_one(SCRIPTS_DIR / name)
         status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
         if status != 'PASS':
@@ -199,6 +227,10 @@ def main(argv=None) -> int:
 
     print('-- optional --')
     for task, name in OPTIONAL:
+        if task in SUPERSEDED_AFTER_AF2N:
+            print(f'{task:10s} {name:54s} {"--":>5s}  [SUPERSEDED]')
+            results.append({'task': task, 'script': name, 'required': False, 'status': 'SUPERSEDED'})
+            continue
         r = run_one(SCRIPTS_DIR / name)
         status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
         # Optional: don't fail suite if MISS, but fail if explicit FAIL

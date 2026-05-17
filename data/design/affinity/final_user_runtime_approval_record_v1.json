@@ -1,0 +1,53 @@
+{
+  "record_id": "final_user_runtime_approval_record_v1",
+  "task_origin": "AF2-N FINAL-USER-RUNTIME-APPROVAL",
+  "design_only": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "Record of the explicit final user runtime approval message that authorizes AF2-N controlled canary execution.",
+
+  "user_approval_message_quoted": "perfetto procediamo e ricorda massima accelerazione possibile",
+  "user_approval_scope": [
+    "AF2-N controlled canary",
+    "allowlist / canary",
+    "live monitoring",
+    "rollback immediato se falliscono i gate"
+  ],
+  "user_approval_NOT_authorizing": [
+    "broad rollout (>= stage1 1pct or beyond)",
+    "Borea activation",
+    "battle wiring / STACK-G full",
+    "gacha / roster / catalog mutation",
+    "UI spend button pubblico"
+  ],
+
+  "final_user_runtime_approval_present": true,
+  "approval_source": "user_explicit_chat_message_v12_zip_attached",
+  "approval_received_at_utc": "2026-05-17T21:46:00Z",
+  "approval_window": "single_v12_controlled_canary_run",
+
+  "all_5_operator_signoffs_true": true,
+  "signoff_v4_ref": "affinity_gift_runtime_operator_signoff_package_v4",
+
+  "canary_configuration_executed": {
+    "AFFINITY_GIFT_RUNTIME_ENABLED": "true_explicit_affinity_gift_runtime_on",
+    "AFFINITY_GIFT_CANARY_ALLOWLIST": "user_canary_001,user_canary_002,user_canary_003",
+    "AFFINITY_GIFT_CANARY_LEDGER_CAP": 20,
+    "allowlist_size": 3,
+    "hard_cap": 20
+  },
+
+  "safety_flags": {
+    "runtime_attached": true,
+    "runtime_attached_canary_only": true,
+    "db_write_scope": "gift_transaction_ledger only",
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "broad_rollout_authorized": false
+  }
+}

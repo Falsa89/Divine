@@ -27,6 +27,14 @@ from pydantic import BaseModel, Field
 _ENV_VAR = "AFFINITY_GIFT_RUNTIME_ENABLED"
 _TRUTHY_ALLOWLIST = frozenset({"true_explicit_affinity_gift_runtime_on"})
 
+# AF2-N canary: only user_ids listed here may spend even when the
+# runtime flag is on. Empty / unset = nobody can spend (still 423).
+_CANARY_ALLOWLIST_ENV = "AFFINITY_GIFT_CANARY_ALLOWLIST"
+# AF2-N safety cap: max rows the runtime will ever allow during canary.
+# Beyond this, even allowlist users are short-circuited to 423.
+_CANARY_LEDGER_CAP_ENV = "AFFINITY_GIFT_CANARY_LEDGER_CAP"
+_CANARY_LEDGER_CAP_DEFAULT = 50
+
 _FORBIDDEN_HERO_IDS = frozenset({"borea", "primordial_gaia"})
 # greek_borea is catalog-only / hidden; reject at endpoint level too.
 _HIDDEN_HERO_IDS = frozenset({"greek_borea"})
@@ -183,45 +191,67 @@ class AffinityGiftSpendRequest(BaseModel):
     idempotency_key: str = Field(..., min_length=8, max_length=128)
 
 
-def register_affinity_gift_spend_skeleton_routes(router):
-    """Register the disabled POST skeleton under the existing /api prefix.
+def _canary_allowlist() -> frozenset[str]:
+    """AF2-N canary allowlist (user_ids), parsed from env var.
 
-    The endpoint is auth-future-ready (it does NOT require auth today
-    because no writes ever occur; this avoids leaking auth-required
-    information about an inert system). When `AFFINITY_GIFT_RUNTIME_ENABLED`
-    is finally ratified, the future task MUST add `Depends(get_current_user)`
-    and rate-limit middleware BEFORE flipping the flag.
+    Returns an empty frozenset when unset or empty -> no user is in the
+    canary, meaning even with the runtime flag on, requests get 423.
+    """
+    raw = os.environ.get(_CANARY_ALLOWLIST_ENV, "")
+    return frozenset(s.strip() for s in raw.split(",") if s.strip())
+
+
+def _canary_ledger_cap() -> int:
+    """AF2-N hard cap on the total rows the canary can ever insert."""
+    try:
+        v = int(os.environ.get(_CANARY_LEDGER_CAP_ENV, ""))
+    except Exception:
+        v = _CANARY_LEDGER_CAP_DEFAULT
+    if v <= 0:
+        v = _CANARY_LEDGER_CAP_DEFAULT
+    return min(v, 1000)
+
+
+def register_affinity_gift_spend_skeleton_routes(router):
+    """Register the gift-spend POST endpoint under the existing /api prefix.
+
+    Three states:
+
+    1. Runtime DISABLED (default) -> always returns HTTP 423 with a
+       canonical disabled envelope. No DB connection opened. No
+       inventory mutation. No affinity points mutation.
+    2. Runtime ENABLED but caller `user_id` NOT in the canary allowlist
+       -> returns HTTP 423 with `disabled_reason=not_in_canary_allowlist`.
+    3. Runtime ENABLED AND caller `user_id` IS in the canary allowlist
+       AND ledger row count < hard cap -> performs a controlled ledger
+       insert (idempotency-checked) and returns HTTP 200. NO inventory
+       mutation. NO affinity points mutation. NO buff activation. NO
+       battle wiring. Borea aliases ALWAYS return 404 BEFORE any state
+       transition.
     """
 
-    @router.post("/affinity/gift-spend", status_code=423)
+    @router.post("/affinity/gift-spend")
     async def affinity_gift_spend_disabled(payload: Optional[dict] = None):
-        """Disabled POST skeleton. Always returns HTTP 423 with a
-        canonical disabled envelope. Never writes anything.
+        """Affinity gift-spend endpoint, AF2-N canary aware."""
+        from fastapi.responses import JSONResponse
 
-        Borea legacy aliases are rejected with 404 BEFORE the disabled
-        envelope is returned, mirroring the existing hero-level
-        forbidden behavior.
-        """
         # 1. Borea / legacy alias guard (BEFORE flag check).
-        # We inspect the raw payload defensively; we never parse it
-        # for write purposes.
         if isinstance(payload, dict):
             hid = (payload.get("hero_id") or "").strip().lower()
             if hid in _FORBIDDEN_HERO_IDS or hid in _HIDDEN_HERO_IDS:
                 raise HTTPException(404, "forbidden hero alias")
 
-        # 2. Shape validation (best-effort, NO write either way).
+        # 2. Shape validation (best-effort).
         validation: dict[str, Any] = {
-            "shape_ok": False,
-            "missing_fields": [],
-            "extra_info": None,
+            "shape_ok": False, "missing_fields": [], "extra_info": None,
         }
+        validated = None
         if isinstance(payload, dict):
             required = {"gift_id", "hero_id", "quantity", "idempotency_key"}
             missing = sorted(required - set(payload.keys()))
             validation["missing_fields"] = missing
             try:
-                AffinityGiftSpendRequest(**payload)
+                validated = AffinityGiftSpendRequest(**payload)
                 validation["shape_ok"] = True
             except Exception as e:
                 validation["extra_info"] = f"pydantic: {type(e).__name__}"
@@ -230,21 +260,194 @@ def register_affinity_gift_spend_skeleton_routes(router):
                 "gift_id", "hero_id", "quantity", "idempotency_key",
             ]
 
-        # 3. Feature flag check. Always disabled in this task.
+        # 3. Feature flag gate.
         if not is_affinity_gift_runtime_enabled():
-            return {
-                "task_origin": "AF2-I",
-                "http_status": 423,
-                "shape_validation_preview": validation,
-                "safety_envelope": _disabled_envelope("feature_flag_off"),
-            }
+            return JSONResponse(
+                status_code=423,
+                content={
+                    "task_origin": "AF2-I",
+                    "http_status": 423,
+                    "shape_validation_preview": validation,
+                    "safety_envelope": _disabled_envelope("feature_flag_off"),
+                },
+            )
 
-        # 4. Defensive: even if the flag were on, this skeleton is
-        # not wired to any DB. Return a documentation-grade payload
-        # without writing.
+        # 4. AF2-N canary: allowlist + ledger cap gate.
+        allowlist = _canary_allowlist()
+        user_id = ""
+        if isinstance(payload, dict):
+            user_id = str(payload.get("user_id") or "").strip()
+
+        if not allowlist or user_id not in allowlist:
+            return JSONResponse(
+                status_code=423,
+                content={
+                    "task_origin": "AF2-N",
+                    "http_status": 423,
+                    "shape_validation_preview": validation,
+                    "disabled_reason": "not_in_canary_allowlist",
+                    "safety_envelope": _disabled_envelope("not_in_canary_allowlist"),
+                },
+            )
+
+        if not validation.get("shape_ok") or validated is None:
+            raise HTTPException(400, "invalid payload shape")
+
+        # 5. AF2-N canary execution: idempotency-check + controlled
+        # ledger insert. NO inventory mutation. NO affinity points
+        # mutation. NO buff. NO battle wiring.
+        try:
+            from motor.motor_asyncio import AsyncIOMotorClient
+            mongo_url = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+            db_name = os.environ.get("DB_NAME", "divine_waifus")
+            client = AsyncIOMotorClient(mongo_url)
+            db = client[db_name]
+            coll = db["gift_transaction_ledger"]
+
+            # Idempotency check (replay protection)
+            existing = await coll.find_one({
+                "user_id": user_id,
+                "idempotency_key": validated.idempotency_key,
+            })
+            if existing:
+                return JSONResponse(
+                    status_code=200,
+                    content={
+                        "task_origin": "AF2-N",
+                        "http_status": 200,
+                        "result": "idempotent_replay",
+                        "tx_id": existing.get("tx_id"),
+                        "ledger_row_inserted": False,
+                        "safety_envelope": _canary_envelope(),
+                    },
+                )
+
+            # Hard cap check
+            current_rows = await coll.count_documents({})
+            cap = _canary_ledger_cap()
+            if current_rows >= cap:
+                return JSONResponse(
+                    status_code=423,
+                    content={
+                        "task_origin": "AF2-N",
+                        "http_status": 423,
+                        "disabled_reason": "canary_ledger_cap_reached",
+                        "canary_ledger_cap": cap,
+                        "canary_ledger_rows": current_rows,
+                        "safety_envelope": _disabled_envelope("canary_ledger_cap_reached"),
+                    },
+                )
+
+            from datetime import datetime, timezone
+            import uuid
+            tx_id = f"tx_canary_{uuid.uuid4().hex[:16]}"
+            doc = {
+                "tx_id": tx_id,
+                "transaction_id": tx_id,  # matches schema's idx_tx_id_unique
+                "user_id": user_id,
+                "gift_id": validated.gift_id,
+                "hero_id": validated.hero_id.strip().lower(),
+                "quantity": validated.quantity,
+                "idempotency_key": validated.idempotency_key,
+                "status": "applied_canary",
+                "created_at_utc": datetime.now(timezone.utc),
+                "canary": True,
+                "task_origin": "AF2-N",
+                "inventory_mutated": False,
+                "affinity_points_mutated": False,
+                "buffs_activated": False,
+                "battle_wiring_attached": False,
+            }
+            await coll.insert_one(doc)
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "task_origin": "AF2-N",
+                    "http_status": 200,
+                    "result": "applied_canary",
+                    "tx_id": tx_id,
+                    "ledger_row_inserted": True,
+                    "ledger_rows_after_insert": current_rows + 1,
+                    "canary_ledger_cap": cap,
+                    "safety_envelope": _canary_envelope(),
+                },
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            # On any unexpected error, fail closed (423) and NEVER expose
+            # internal state. NO partial writes survive because the only
+            # write op is insert_one which is atomic.
+            return JSONResponse(
+                status_code=423,
+                content={
+                    "task_origin": "AF2-N",
+                    "http_status": 423,
+                    "disabled_reason": f"canary_fail_closed: {type(e).__name__}",
+                    "safety_envelope": _disabled_envelope("canary_fail_closed"),
+                },
+            )
+
+    # AF2-N-READINESS-DASH (read-only status endpoint).
+    @router.get("/affinity/gift-spend/canary-status")
+    async def affinity_gift_spend_canary_status():
+        """Read-only canary status snapshot. No DB write."""
+        try:
+            from motor.motor_asyncio import AsyncIOMotorClient
+            mongo_url = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+            db_name = os.environ.get("DB_NAME", "divine_waifus")
+            client = AsyncIOMotorClient(mongo_url)
+            coll = client[db_name]["gift_transaction_ledger"]
+            total_rows = await coll.count_documents({})
+            canary_rows = await coll.count_documents({"canary": True})
+            last_doc = await coll.find_one(
+                {"canary": True}, sort=[("created_at_utc", -1)],
+                projection={"_id": 0, "tx_id": 1, "user_id": 1,
+                            "gift_id": 1, "hero_id": 1, "quantity": 1,
+                            "status": 1, "created_at_utc": 1}
+            )
+            if last_doc and 'created_at_utc' in last_doc:
+                last_doc['created_at_utc'] = str(last_doc['created_at_utc'])
+        except Exception as e:
+            total_rows = -1; canary_rows = -1; last_doc = None
+        runtime_on = is_affinity_gift_runtime_enabled()
+        allowlist = _canary_allowlist()
         return {
-            "task_origin": "AF2-I",
-            "http_status": 423,
-            "shape_validation_preview": validation,
-            "safety_envelope": _disabled_envelope("skeleton_no_write_path_implemented"),
+            "task_origin": "AF2-N-READINESS-DASH",
+            "design_only": False,
+            "runtime_attached": runtime_on,
+            "db_write": False,  # this endpoint is read-only
+            "feature_flag": _ENV_VAR,
+            "feature_flag_currently_enabled": runtime_on,
+            "canary_allowlist_size": len(allowlist),
+            "canary_ledger_cap": _canary_ledger_cap(),
+            "ledger_total_rows": total_rows,
+            "ledger_canary_rows": canary_rows,
+            "last_canary_tx": last_doc,
+            "borea_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+            "applied_to_combat": False,
+            "battle_runtime_attached": False,
+            "inventory_mutation_enabled": False,
+            "affinity_points_mutation_enabled": False,
+            "buffs_enabled": False,
         }
+
+
+def _canary_envelope() -> dict[str, Any]:
+    """AF2-N canary safety envelope (sanitized; no PII)."""
+    return {
+        "mode": "canary",
+        "runtime_attached": True,
+        "battle_runtime_attached": False,
+        "applied_to_combat": False,
+        "db_write": True,
+        "db_write_scope": "gift_transaction_ledger only (no inventory, no affinity_points)",
+        "inventory_mutated": False,
+        "affinity_points_mutated": False,
+        "buffs_activated": False,
+        "borea_activation": False,
+        "feature_flag_dependency": _ENV_VAR,
+        "feature_flag_currently_enabled": True,
+        "canary_allowlist_active": True,
+        "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+    }
