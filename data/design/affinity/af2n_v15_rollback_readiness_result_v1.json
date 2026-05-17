@@ -1,0 +1,59 @@
+{
+  "result_id": "af2n_v15_rollback_readiness_result_v1",
+  "task_origin": "V15-ROLLBACK-READINESS",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T23:46:16.854783Z",
+  "rollback_targets": {
+    "stage1_specific": {
+      "script_path": "/app/backend/scripts/rollback_af2n_stage1_1pct_allowlist.py",
+      "restores_to": "V12 canary (3 users, cap 20)",
+      "dry_run": {
+        "exit_code": 0,
+        "stdout": "Backup to restore: /app/backups/backend.conf.pre-stage1.20260517T231412Z.bak\ndry-run: has_allowlist_env=True has_cap_env=True",
+        "stderr": ""
+      },
+      "dry_run_pass": true
+    },
+    "inventory_wiring": {
+      "script_path": "/app/backend/scripts/rollback_affinity_inventory_wiring_stage1.py",
+      "effect": "strips AFFINITY_GIFT_INVENTORY_WRITES_ENABLED from backend.conf if set; Stage1 stays active",
+      "dry_run": {
+        "exit_code": 0,
+        "stdout": "dry-run: flag_present=False, conf_writable=True",
+        "stderr": ""
+      },
+      "dry_run_pass": true,
+      "preserves_stage1": true
+    },
+    "full_canary_fallback": {
+      "script_path": "/app/ops/rollback_af2n_canary.sh",
+      "available": true,
+      "restores_to": "pre-AF2-N (runtime OFF)"
+    }
+  },
+  "pre_stage1_backups_present": true,
+  "inventory_rollback_script_present": true,
+  "can_disable_inventory_flag_without_disabling_stage1": true,
+  "overall_status": "PASS",
+  "rollback_executed": false,
+  "safety_flags": {
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_wiring_live": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

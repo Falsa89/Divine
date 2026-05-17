@@ -1,0 +1,84 @@
+{
+  "audit_id": "af2n_k6_live_install_readiness_v1",
+  "task_origin": "AF2-L-K6-LIVE-INSTALL-PREP",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T23:43:39.906356Z",
+  "binaries": {
+    "k6": {
+      "present": false,
+      "path": null
+    },
+    "locust": {
+      "present": false,
+      "path": null
+    },
+    "pip3": {
+      "present": true,
+      "path": "/usr/local/bin/pip3"
+    },
+    "pip": {
+      "present": true,
+      "path": "/usr/local/bin/pip"
+    },
+    "apt_get": {
+      "present": true,
+      "path": "/usr/bin/apt-get"
+    },
+    "dpkg": {
+      "present": true,
+      "path": "/usr/bin/dpkg"
+    },
+    "curl": {
+      "present": true,
+      "path": "/usr/bin/curl"
+    },
+    "go": {
+      "present": false,
+      "path": null
+    }
+  },
+  "install_commands_documented_not_executed": {
+    "k6_via_apt_official_repo": [
+      "sudo gpg -k",
+      "sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69",
+      "echo \"deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main\" | sudo tee /etc/apt/sources.list.d/k6.list",
+      "sudo apt-get update",
+      "sudo apt-get install -y k6"
+    ],
+    "locust_via_pip": [
+      "pip3 install locust==2.31.5",
+      "locust --version"
+    ]
+  },
+  "install_safety_notes": [
+    "Do NOT run install commands automatically; container is shared and network access may be restricted.",
+    "Operator must approve install in a separate ops task.",
+    "After install, verify version with `k6 version` and `locust --version`.",
+    "Run V15 fallback Python probe in the meantime to keep coverage."
+  ],
+  "k6_test_script_path": "/app/loadtests/af2n_stage1_allowlist.k6.js",
+  "locust_test_script_path": "/app/loadtests/af2n_stage1_allowlist_locust.py",
+  "k6_test_script_present": true,
+  "locust_test_script_present": true,
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "broad_rollout_authorized": false,
+    "inventory_wiring_live": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  },
+  "overall_status": "READY_NOT_INSTALLED"
+}

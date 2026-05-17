@@ -1,0 +1,79 @@
+{
+  "result_id": "af2n_stage1_extended_monitoring_v15_result",
+  "task_origin": "AF2-N-STAGE1-EXTENDED-MONITORING-V15",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T23:43:37.986374Z",
+  "samples": 90,
+  "interval_ms": 100,
+  "elapsed_seconds": 15.614,
+  "codes": {
+    "health": {
+      "200": 90
+    },
+    "heroes": {
+      "200": 90
+    },
+    "status": {
+      "200": 90
+    },
+    "borea": {
+      "404": 90
+    },
+    "nonal": {
+      "423": 90
+    },
+    "replay": {
+      "200": 90
+    }
+  },
+  "p50_latency_ms": {
+    "health": 2.07,
+    "heroes": 59.56,
+    "status": 5.36,
+    "borea": 0.84,
+    "nonal": 0.72,
+    "replay": 3.11
+  },
+  "p95_latency_ms": {
+    "health": 2.29,
+    "heroes": 65.69,
+    "status": 6.99,
+    "borea": 0.92,
+    "nonal": 0.8,
+    "replay": 3.37
+  },
+  "p99_latency_ms": {
+    "health": 2.36,
+    "heroes": 70.59,
+    "status": 7.31,
+    "borea": 1.04,
+    "nonal": 0.88,
+    "replay": 4.68
+  },
+  "any_5xx_total": 0,
+  "ledger_row_count_before": 11,
+  "ledger_row_count_after": 11,
+  "ledger_row_count_unchanged_or_small_delta": true,
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "contract_id": "affinity_gift_inventory_live_contract_v1",
+  "task_origin": "AF2-N-INVENTORY-WIRING-ACTIVATE (Stage1 only) — V15 contract",
+  "design_only": true,
+  "runtime_attached": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "Live contract for promoting the inventory wiring shadow adapter to a live writer. Activation is GATED by a dedicated env flag and a verified user-side inventory source collection. This document is the ACCEPTANCE CRITERIA the future apply MUST honor.",
+
+  "dedicated_flag": {
+    "name": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED",
+    "required_value_when_on": "true_explicit_affinity_inventory_on",
+    "separate_from": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "current_value": "unset (OFF)",
+    "currently_enabled": false
+  },
+
+  "scope": {
+    "users": "Stage1 allowlist only (size 50)",
+    "heroes": "all canonical heroes; Borea aliases NEVER allowed",
+    "writes": "gift_transaction_ledger row + user_gift_inventory decrement + user_affinity_state increment in a single atomic transaction",
+    "reads": "user_gift_inventory and user_affinity_state are read first; if either source missing for the user, return 412 precondition_failed (NO partial write)"
+  },
+
+  "request_flow_order": [
+    "1. Reject Borea hero_id (404) BEFORE any other check",
+    "2. Reject if runtime flag AFFINITY_GIFT_RUNTIME_ENABLED is not on (423)",
+    "3. Reject if user_id not in Stage1 allowlist (423)",
+    "4. Pull idempotency_key; on duplicate, return existing ledger row WITHOUT decrementing inventory or incrementing affinity",
+    "5. Validate gift_id exists in catalog (404 if not)",
+    "6. Read user_gift_inventory[user_id][gift_id]; reject if < quantity (412)",
+    "7. BEGIN multi-document transaction",
+    "8. Insert ledger row {tx_id, idempotency_key, user_id, gift_id, hero_id, quantity, canary:true, inventory_mutated:true, affinity_points_mutated:true, created_at_utc}",
+    "9. Decrement user_gift_inventory[user_id][gift_id] by quantity (must end >= 0)",
+    "10. Increment user_affinity_state[user_id][hero_id] by gift.affinity_points_value * quantity",
+    "11. COMMIT (single atomic transaction)",
+    "12. Return 200 {status, tx_id, ledger_row_inserted:true, inventory_after, affinity_points_after}"
+  ],
+
+  "idempotency_contract": [
+    "Same (user_id, idempotency_key) MUST return the same tx_id",
+    "Replay MUST NOT decrement inventory a second time",
+    "Replay MUST NOT increment affinity_points a second time",
+    "Replay MUST NOT insert a duplicate ledger row",
+    "Replay response payload MUST flag result=idempotent_replay"
+  ],
+
+  "economy_cap_contract": [
+    "affinity_points capped per affinity_phase2_economy_cap_policy_draft_v1",
+    "per-user daily gift quantity cap honored",
+    "per-hero affinity points cap honored"
+  ],
+
+  "rollback_compensation_contract": [
+    "If COMMIT fails, transaction MUST abort entirely (no partial writes)",
+    "If a partial state is detected later (ledger row with no inventory decrement, or inventory decrement with no ledger row), emit a compensation ledger row {compensation_required:true, references_tx_id}",
+    "Reverse procedure: lookup ledger row by tx_id -> +qty to inventory, -delta to affinity, mark row reversed=true",
+    "All compensation flow MUST be idempotent"
+  ],
+
+  "required_preconditions_BEFORE_activation": [
+    {"id": "stage1_apply_pass", "required": true},
+    {"id": "stage1_extended_monitoring_pass", "required": true},
+    {"id": "user_gift_inventory_collection_present", "required": true},
+    {"id": "user_affinity_state_collection_present", "required": true},
+    {"id": "shadow_adapter_pass", "required": true},
+    {"id": "explicit_user_inventory_activation_approval", "required": true},
+    {"id": "rollback_readiness_pass", "required": true},
+    {"id": "baseline_v6_clean", "required": true}
+  ],
+
+  "abort_triggers_post_activation": [
+    "/api/heroes != 100",
+    "Borea response != 404 on any path",
+    "non-allowlisted user gets 200",
+    "duplicate idempotency creates duplicate inventory/affinity mutation",
+    "negative inventory quantity observed",
+    "ledger row without matching inventory event",
+    "inventory event without ledger row",
+    "affinity points exceed cap",
+    "buffs activated true on any row",
+    "battle_engine.py / battle_core.py / combat.tsx git diff non-empty",
+    "gacha/roster/catalog/final_numbers diff non-empty",
+    "rollback script unavailable",
+    "any 5xx in inventory live monitoring"
+  ],
+
+  "feature_flag_safety_rules": [
+    "flag MUST be off if any required precondition fails",
+    "flag MUST be turned off immediately by rollback script if any abort trigger fires",
+    "flag MUST be set via supervisor backend.conf env (audited and versioned), NOT runtime API"
+  ],
+
+  "non_activation_safe_block_path": {
+    "trigger": "user_gift_inventory or user_affinity_state collection missing",
+    "action": "do_not_activate; produce READY_NOT_ACTIVATED result with blocked_by_missing_inventory_source=true and clear remediation steps",
+    "remediation_steps": [
+      "create user_gift_inventory collection with schema {user_id, gift_id, quantity, updated_at_utc}",
+      "seed Stage1 QA users with realistic balances (e.g. quantity=10 of gift_test_001)",
+      "create user_affinity_state collection with schema {user_id, hero_id, affinity_points, updated_at_utc}",
+      "verify atomic multi-document transaction support on MongoDB instance",
+      "re-run V15 preflight",
+      "only then attempt activation"
+    ]
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_wiring_live": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"]
+  }
+}

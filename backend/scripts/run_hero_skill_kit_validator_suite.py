@@ -174,6 +174,17 @@ OPTIONAL = [
     ('AF2-N-STAGE1-ROLLBACK-READY',   'validate_af2n_stage1_rollback_readiness.py'),
     ('SAFETY-ROLLUP-I',               'validate_collection_affinity_runtime_activation_rollup_v9.py'),
     ('ULTRA-COMBO-V14',               'validate_ultra_combo_v14_stage1_inventoryshadow.py'),
+    # ULTRA-COMBO V15 (STAGE1 EXTENDED MONITORING + INVENTORY-WIRING ACTIVATE
+    #                  STAGE1-ONLY [safe block today] + INVENTORY LIVE MONITORING
+    #                  + K6 LIVE INSTALL PREP + SAFETY-ROLLUP-J)
+    ('V15-PREFLIGHT',                          'validate_af2n_v15_preflight.py'),
+    ('AF2-N-STAGE1-EXTENDED-MONITORING-V15',   'validate_af2n_stage1_extended_monitoring_v15.py'),
+    ('AF2-N-INVENTORY-WIRING-APPLY',           'validate_affinity_inventory_wiring_stage1_apply_result.py'),
+    ('AF2-N-INVENTORY-LIVE-MONITORING',        'validate_affinity_inventory_live_monitoring_stage1.py'),
+    ('AF2-L-K6-V15-FALLBACK',                  'validate_af2n_v15_k6_fallback_probe.py'),
+    ('V15-ROLLBACK-READINESS',                 'validate_af2n_v15_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-J',                        'validate_collection_affinity_runtime_activation_rollup_v10.py'),
+    ('ULTRA-COMBO-V15',                        'validate_ultra_combo_v15_inventory_activate_stage1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
