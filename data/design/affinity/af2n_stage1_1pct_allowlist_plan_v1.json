@@ -1,0 +1,84 @@
+{
+  "plan_id": "af2n_stage1_1pct_allowlist_plan_v1",
+  "task_origin": "AF2-N-STAGE1-PREP (plan only, NOT applied)",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "AF2-N stage1 expansion plan: extend the canary allowlist from 3 internal users to roughly 1% of production users. This document is PREP ONLY. Stage1 is NOT applied. Requires separate explicit user approval before any allowlist change.",
+  "do_not_apply_in_this_task": true,
+  "current_state": {
+    "canary_active": true,
+    "allowlist_size_today": 3,
+    "allowlist_today": ["user_canary_001", "user_canary_002", "user_canary_003"],
+    "canary_ledger_cap_today": 20,
+    "ledger_total_rows_today": 11
+  },
+  "stage1_target_state": {
+    "allowlist_size_target_approx_1pct": "50-100 user_ids",
+    "allowlist_size_hard_cap": 100,
+    "canary_ledger_cap_proposed": 500,
+    "selection_criteria": [
+      "internal QA users (priority)",
+      "opt-in beta testers (if backend has a beta flag, otherwise skip)",
+      "NO real player user_ids without explicit consent",
+      "NO Borea / hidden hero affiliations"
+    ]
+  },
+  "prerequisites_required_BEFORE_stage1_apply": [
+    {"id": "monitoring_window_pass", "required": true, "status_today": "PASS"},
+    {"id": "all_5_operator_signoffs_true", "required": true, "status_today": "PASS"},
+    {"id": "final_user_runtime_approval_present", "required": true, "status_today": "PASS (V12)"},
+    {"id": "explicit_user_stage1_approval", "required": true, "status_today": "FAIL (not provided)"},
+    {"id": "ledger_no_violations", "required": true, "status_today": "PASS"},
+    {"id": "no_5xx_observed_in_monitoring", "required": true, "status_today": "PASS"},
+    {"id": "borea_404_invariant", "required": true, "status_today": "PASS"},
+    {"id": "battle_files_unchanged", "required": true, "status_today": "PASS"}
+  ],
+  "abort_triggers_stage1": [
+    "5xx rate > 0.5% sustained 60s",
+    "duplicate spend count > 0",
+    "Borea leak count > 0",
+    "inventory mismatch > 0 (placeholder; inventory wiring not live yet)",
+    "p95 latency > 800ms sustained 60s",
+    "unauthorized spend count > 0",
+    "ledger growth rate > expected (e.g. > 100 rows/min)"
+  ],
+  "stage1_apply_procedure_DO_NOT_EXECUTE": [
+    "1. Backup /etc/supervisor/conf.d/backend.conf to /app/backups/backend.conf.pre-stage1.<TIMESTAMP>.bak",
+    "2. Update AFFINITY_GIFT_CANARY_ALLOWLIST in backend.conf with the new 50-100 user_id list (comma-separated)",
+    "3. Update AFFINITY_GIFT_CANARY_LEDGER_CAP to 500 (or value approved by user)",
+    "4. sudo supervisorctl reread && sudo supervisorctl update && sudo supervisorctl restart backend",
+    "5. Wait 10s",
+    "6. Run /app/backend/scripts/run_af2n_monitoring_window.py --samples 60 --interval-ms 100",
+    "7. Verify validator reports overall_status=PASS",
+    "8. If any abort trigger fires, immediately run /app/ops/rollback_af2n_canary.sh (will reset to pre-canary OR keep canary 3-user state if a stage1-specific rollback script is added separately)"
+  ],
+  "stage1_rollback_procedure": [
+    "option_A: stage1-specific rollback (recommended) \u2014 restore allowlist to the 3 V12 users via supervisor.conf swap",
+    "option_B: full rollback to pre-AF2-N \u2014 run /app/ops/rollback_af2n_canary.sh",
+    "both options preserve canary ledger rows as audit evidence; manual cleanup is a separate optional step"
+  ],
+  "safety_constraints": [
+    "stage1 still BANS broad rollout",
+    "stage1 must NOT enable inventory mutation, affinity_points mutation, buffs activation, or battle wiring",
+    "Borea aliases MUST remain 404",
+    "/api/heroes count MUST remain 100",
+    "battle_engine.py / battle_core.py / combat.tsx MUST remain unchanged",
+    "gacha / roster / catalog MUST remain unchanged",
+    "runbook dry-run REQUIRED before live apply"
+  ],
+  "safety_flags": {
+    "runtime_attached": true,
+    "runtime_attached_canary_only": true,
+    "stage1_applied": false,
+    "broad_rollout_authorized": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"]
+  }
+}
