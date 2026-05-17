@@ -1,0 +1,81 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v4",
+  "task_origin": "SAFETY-ROLLUP-D",
+  "supersedes": "collection_affinity_runtime_activation_readiness_rollup_v3",
+  "design_only": true, "runtime_attached": false, "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "SAFETY-ROLLUP-D — Final pre-AF2-N rollup. All design/ops/audit layers are GO/READY. AF2-K-COMMIT entered the blocked_by_missing_env path (no DB write). AF2-L-FULL passed (0 5xx, 0 unexpected). Operator signoff package v2 has every signoff FALSE. Overall runtime activation remains NO_GO and AF2-N is NOT allowed.",
+
+  "axis_layer_activation_ready": true,
+  "ops_layer_ready": true,
+  "auth_contract_ready": true,
+  "idempotency_contract_ready": true,
+  "load_probe_full_ready": true,
+  "rollback_rehearsal_ready": true,
+  "migration_layer_ready": true,
+  "migration_applied": false,
+  "af2k_commit_blocked_by_missing_env": true,
+  "operator_signoff_ready": false,
+  "AF2N_allowed": false,
+  "overall_runtime_activation_ready": false,
+  "go_no_go_decision": "NO_GO_RUNTIME",
+  "axis_layer_decision": "GO_AXIS",
+
+  "subsystems": {
+    "axis_layer":              {"status": "GO",              "source": "AXIS-F + AXIS-G"},
+    "ops_layer":               {"status": "GO",              "source": "OPS-B + OPS-C + OPS-C-WIRING"},
+    "auth_contract":           {"status": "READY",           "source": "AF2-J"},
+    "idempotency_contract":    {"status": "READY",           "source": "AF2-K-PRE"},
+    "migration_foundation":    {"status": "READY_DRY_RUN",   "source": "AF2-K dry-run"},
+    "migration_commit":        {"status": "BLOCKED_BY_MISSING_ENV", "source": "AF2-K-COMMIT"},
+    "load_probe_full":         {"status": "PASS",            "source": "AF2-L-FULL probe"},
+    "rollback_rehearsal_full": {"status": "PASS_DRY_RUN",    "source": "AF2-L-FULL rehearsal"},
+    "operator_signoff_v2":     {"status": "PENDING_ALL_FALSE", "source": "AF2-M-SIGN-PRE"},
+    "db_layer":                {"status": "NO_GO",           "source": "migration_applied=false"},
+    "battle_runtime":          {"status": "NO_GO",           "source": "global_modifier_cap_resolver inert"},
+    "borea_layer":             {"status": "GO",              "source": "borea/greek_borea/primordial_gaia hidden"}
+  },
+
+  "runtime_no_go_reasons": [
+    "all 5 operator signoffs are false",
+    "AFFINITY_GIFT_RUNTIME_ENABLED runtime flag is OFF",
+    "controlled rollout (stage1..stage4) not executed",
+    "live spend never enabled",
+    "DB migration not applied (env gate absent)",
+    "production monitoring not verified end-to-end",
+    "battle runtime cap resolver still inert",
+    "user has NOT explicitly approved AF2-N flip"
+  ],
+
+  "AF2N_blockers": [
+    "operator_signoff_ready=false",
+    "overall_runtime_activation_ready=false",
+    "migration_applied=false (commit blocked_by_missing_env)",
+    "user_explicit_approval_required=true"
+  ],
+
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "Borea aliases hidden from /api/heroes",
+    "POST /api/affinity/gift-spend returns 423 with disabled envelope",
+    "AF2-L-FULL probe: 0 5xx, 0 unexpected, p95 well within target",
+    "AF2-K commit result: dry_run / blocked_by_missing_env, db_write=false",
+    "AF2-M v2: all signoffs false, AF2-N not allowed",
+    "AXIS-G combined routes return 200/404 with correct semantics",
+    "OPS-C wiring audit PASS, startup_check.sh idempotent",
+    "battle_engine.py / battle_core.py / combat.tsx unchanged",
+    "baseline v6 auto-detected as latest and PASS",
+    "feature_flag_currently_enabled == false everywhere",
+    "no DB writes possible from any new artifact"
+  ],
+
+  "next_step_recommendation": "Stay at NO_GO. Either (a) export DIVINE_ALLOW_AFFINITY_LEDGER_MIGRATION=YES_I_UNDERSTAND in a controlled session and re-run AF2-K-COMMIT, or (b) proceed to AF2-M-SIGN-PRODUCT only after user explicit approval. AF2-N is blocked.",
+
+  "safety_flags": {
+    "runtime_attached": false, "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false
+  }
+}

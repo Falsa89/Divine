@@ -1,0 +1,90 @@
+{
+  "package_id": "affinity_gift_runtime_operator_signoff_package_v2",
+  "task_origin": "AF2-M-SIGN-PRE",
+  "supersedes": "affinity_gift_runtime_operator_signoff_package_v1",
+  "design_only": true, "runtime_attached": false, "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "AF2-M-SIGN-PRE — Refresh of operator sign-off package after AF2-K-COMMIT preparation and AF2-L-FULL load probe. All sign-offs remain FALSE; AF2-N remains blocked.",
+
+  "future_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
+  "future_flag_truthy_allowlist": ["true_explicit_affinity_gift_runtime_on"],
+  "feature_flag_currently_enabled": false,
+  "af2n_allowed": false,
+  "explicit_user_approval_required": true,
+
+  "upstream_results": {
+    "af2k_commit_result_ref": "affinity_gift_transaction_ledger_migration_commit_result_v1",
+    "af2k_migration_applied": false,
+    "af2k_blocked_by_missing_env": true,
+    "af2k_rows_inserted": 0,
+    "af2l_full_probe_ref": "affinity_gift_spend_full_disabled_load_result_v1",
+    "af2l_full_probe_pass": true,
+    "af2l_full_rehearsal_ref": "affinity_gift_transaction_ledger_rollback_rehearsal_full_result_v1",
+    "af2l_full_rehearsal_pass": true
+  },
+
+  "preconditions": [
+    {"id": "baseline_v6_clean", "required": true, "status_today": "PASS"},
+    {"id": "api_heroes_count_100", "required": true, "status_today": "PASS"},
+    {"id": "borea_hidden", "required": true, "status_today": "PASS"},
+    {"id": "gift_spend_disabled_no_write", "required": true, "status_today": "PASS"},
+    {"id": "af2j_auth_ratelimit_contract_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2k_pre_idempotency_contract_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2k_commit_safe", "required": true, "status_today": "BLOCKED_BY_MISSING_ENV"},
+    {"id": "af2l_full_load_probe_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2l_full_rollback_rehearsal_pass", "required": true, "status_today": "PASS_DRY_RUN"},
+    {"id": "axis_f_routes_pass", "required": true, "status_today": "PASS"},
+    {"id": "axis_g_routes_pass", "required": true, "status_today": "PASS"},
+    {"id": "ops_b_persistence_pass", "required": true, "status_today": "PASS"},
+    {"id": "ops_c_audit_pass", "required": true, "status_today": "PASS"},
+    {"id": "ops_c_wiring_pass", "required": true, "status_today": "PASS"},
+    {"id": "ui_no_spend_button", "required": true, "status_today": "PASS"},
+    {"id": "monitoring_plan_signoff", "required": true, "status_today": "PENDING"},
+    {"id": "rollback_owner_assigned", "required": true, "status_today": "PENDING"}
+  ],
+
+  "signoffs": {
+    "product_signoff": false, "engineering_signoff": false, "qa_signoff": false,
+    "economy_balance_signoff": false, "rollback_owner_signoff": false
+  },
+  "signoff_metadata": {
+    "product_signoff_owner": null, "engineering_signoff_owner": null,
+    "qa_signoff_owner": null, "economy_balance_signoff_owner": null,
+    "rollback_owner_signoff_owner": null, "signed_at_utc": null
+  },
+
+  "rollout_stages": [
+    {"id": "stage0_internal_disabled", "allowed_today": true,  "description": "Endpoint hard-disabled in production; internal smoke only."},
+    {"id": "stage1_1pct_allowlist",   "allowed_today": false, "description": "Flip flag for 1% allowlist."},
+    {"id": "stage2_10pct",            "allowed_today": false, "description": "Expand to 10%."},
+    {"id": "stage3_50pct",            "allowed_today": false, "description": "Expand to 50%."},
+    {"id": "stage4_100pct",           "allowed_today": false, "description": "Full rollout 100%."}
+  ],
+
+  "immediate_rollback_triggers": [
+    {"id": "err_5xx_rate", "threshold_percent_max": 1.0},
+    {"id": "duplicate_spend_count", "threshold_max": 0},
+    {"id": "borea_leak_count", "threshold_max": 0},
+    {"id": "inventory_mismatch", "threshold_max": 0},
+    {"id": "p95_latency_ms", "threshold_max": 800},
+    {"id": "unauthorized_writes", "threshold_max": 0}
+  ],
+
+  "go_decision_gate": {
+    "all_signoffs_true": false,
+    "user_explicit_approval_required": true,
+    "baseline_diff_pass_required": true,
+    "axis_layer_ready_required": true,
+    "migration_layer_ready_required": true,
+    "af2k_commit_applied_required": true,
+    "af2l_full_load_pass_required": true
+  },
+
+  "safety_flags": {
+    "runtime_attached": false, "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "af2n_allowed_today": false
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_id": "affinity_gift_transaction_ledger_schema_v1",
+  "task_origin": "AF2-K",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "based_on": "affinity_gift_spend_idempotency_ledger_contract_v1",
+
+  "collection_name": "gift_transaction_ledger",
+  "migration_id": "AF2-K-MIG-001",
+
+  "fields": [
+    {"name": "_id",                       "type": "ObjectId",  "required": true},
+    {"name": "transaction_id",            "type": "string",    "required": true,  "description": "uuid4"},
+    {"name": "user_id",                   "type": "string",    "required": true,  "description": "auth-bound"},
+    {"name": "hero_id",                   "type": "string",    "required": true,  "description": "canonical hero_id"},
+    {"name": "gift_id",                   "type": "string",    "required": true,  "description": "canonical gift_id"},
+    {"name": "quantity",                  "type": "int",       "required": true,  "min": 1, "max": 999},
+    {"name": "idempotency_key",           "type": "string",    "required": true,  "min_length": 8, "max_length": 128},
+    {"name": "status",                    "type": "enum",      "required": true,  "values": ["pending", "committed", "rolled_back", "duplicate_replay", "rejected_borea_alias", "rejected_validation", "rejected_rate_limit", "rejected_auth"]},
+    {"name": "created_at_utc",            "type": "datetime",  "required": true},
+    {"name": "committed_at_utc",          "type": "datetime",  "required": false},
+    {"name": "rollback_reason",           "type": "string",    "required": false},
+    {"name": "server_request_id",         "type": "string",    "required": true},
+    {"name": "client_ip_hash",            "type": "string",    "required": true,  "description": "sha256 truncated"},
+    {"name": "replay_of_transaction_id",  "type": "string",    "required": false}
+  ],
+
+  "indexes": [
+    {"name": "idx_idem_key_user_window",  "keys": [["user_id", 1], ["idempotency_key", 1], ["created_at_utc", -1]], "unique": true,  "partial": {"created_at_utc_within_hours": 24}},
+    {"name": "idx_tx_id_unique",          "keys": [["transaction_id", 1]], "unique": true},
+    {"name": "idx_user_created_desc",     "keys": [["user_id", 1], ["created_at_utc", -1]], "unique": false},
+    {"name": "idx_gift_hero",             "keys": [["gift_id", 1], ["hero_id", 1]], "unique": false},
+    {"name": "idx_status_created",        "keys": [["status", 1], ["created_at_utc", -1]], "unique": false}
+  ],
+
+  "borea_safety": {
+    "borea_aliases_forbidden": ["borea", "greek_borea", "primordial_gaia"],
+    "borea_alias_status_value": "rejected_borea_alias"
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "migration_id": "AF2-K-MIG-001",
+  "task_origin": "AF2-K",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T20:08:25.634550Z",
+  "migration_applied": false,
+  "dry_run": true,
+  "env_flag_required": "DIVINE_ALLOW_AFFINITY_LEDGER_MIGRATION",
+  "env_flag_required_value": "YES_I_UNDERSTAND",
+  "env_flag_present": false,
+  "collection_name": "gift_transaction_ledger",
+  "collections_created": [],
+  "indexes_planned": [
+    {
+      "name": "idx_idem_key_user_window",
+      "keys": [
+        [
+          "user_id",
+          1
+        ],
+        [
+          "idempotency_key",
+          1
+        ],
+        [
+          "created_at_utc",
+          -1
+        ]
+      ],
+      "unique": true,
+      "partial": {
+        "created_at_utc_within_hours": 24
+      }
+    },
+    {
+      "name": "idx_tx_id_unique",
+      "keys": [
+        [
+          "transaction_id",
+          1
+        ]
+      ],
+      "unique": true,
+      "partial": null
+    },
+    {
+      "name": "idx_user_created_desc",
+      "keys": [
+        [
+          "user_id",
+          1
+        ],
+        [
+          "created_at_utc",
+          -1
+        ]
+      ],
+      "unique": false,
+      "partial": null
+    },
+    {
+      "name": "idx_gift_hero",
+      "keys": [
+        [
+          "gift_id",
+          1
+        ],
+        [
+          "hero_id",
+          1
+        ]
+      ],
+      "unique": false,
+      "partial": null
+    },
+    {
+      "name": "idx_status_created",
+      "keys": [
+        [
+          "status",
+          1
+        ],
+        [
+          "created_at_utc",
+          -1
+        ]
+      ],
+      "unique": false,
+      "partial": null
+    }
+  ],
+  "indexes_created": [],
+  "no_runtime_writes": true,
+  "no_ledger_rows_inserted": true,
+  "no_inventory_mutation": true,
+  "no_affinity_points_mutation": true,
+  "borea_aliases_forbidden": true,
+  "borea_aliases_blocked": [
+    "borea",
+    "greek_borea",
+    "primordial_gaia"
+  ],
+  "rollback_steps": [
+    "1. Flip AFFINITY_GIFT_RUNTIME_ENABLED to non-allowlisted value.",
+    "2. POST /api/affinity/gift-spend must return 423 within 30s.",
+    "3. Take DB snapshot before any correction.",
+    "4. Drop partial unique index idx_idem_key_user_window if re-migration is required.",
+    "5. Run rollback_affinity_gift_transaction_ledger_migration.py --dry-run first.",
+    "6. Restore DB snapshot if data corruption is suspected (out-of-band)."
+  ],
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "migration_applied": false,
+    "collection_created": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}
