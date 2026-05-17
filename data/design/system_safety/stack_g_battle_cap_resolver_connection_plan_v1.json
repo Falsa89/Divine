@@ -1,0 +1,67 @@
+{
+  "plan_id": "stack_g_battle_cap_resolver_connection_plan_v1",
+  "task_origin": "STACK-G-PRE",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "STACK-G-PRE \u2014 Pre-connection plan that documents how the future global_modifier_cap_resolver should be wired to the battle runtime. Inert preview adapter is created in /app/backend/data/ (NOT imported by battle_engine.py / battle_core.py / combat.tsx). Adapter currently returns disabled/inert payloads. Real connection deferred to STACK-G (post AF2-N).",
+
+  "resolver_source_module": "backend/data/global_modifier_cap_resolver.py (existing, inert)",
+  "preview_adapter_module": "backend/data/global_modifier_cap_battle_preview_adapter.py",
+  "future_target_modules": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "frontend/app/combat.tsx"
+  ],
+  "current_target_module_state": "MUST NOT import the cap resolver / adapter",
+
+  "connection_contract": {
+    "version": "v1-preview",
+    "entry_point_name": "resolve_battle_cap_preview",
+    "inputs": [
+      {"name": "hero_id", "type": "string", "required": true},
+      {"name": "element_token", "type": "string", "required": true},
+      {"name": "faction_token", "type": "string", "required": true},
+      {"name": "buff_sources", "type": "list", "required": false, "description": "list of (source_id, magnitude_pct) pairs"},
+      {"name": "context", "type": "object", "required": false, "description": "pvp/pve flag + role hints"}
+    ],
+    "outputs": [
+      {"name": "runtime_attached", "type": "bool", "always": false},
+      {"name": "applied_cap_pct", "type": "number", "description": "computed but NOT applied to battle"},
+      {"name": "clipped_sources", "type": "list"},
+      {"name": "borea_filtered", "type": "bool"},
+      {"name": "safety_envelope", "type": "object"}
+    ],
+    "side_effects": "none",
+    "db_writes": "none",
+    "inventory_mutation": "none",
+    "feature_flag_dependency": "STACK_G_BATTLE_RUNTIME_ENABLED (currently OFF)"
+  },
+
+  "acceptance_criteria_for_stack_g_full": [
+    "AF2-N approved and AFFINITY_GIFT_RUNTIME_ENABLED safely flipped",
+    "STACK_G_BATTLE_RUNTIME_ENABLED flag introduced and gated by all five operator signoffs true",
+    "battle_engine.py imports a thin wrapper that calls resolve_battle_cap_preview ONLY when both flags are true",
+    "unit tests cover: pvp cap, pve cap, debuff semantics, Borea filtering, multiplicative rejection",
+    "Borea aliases NEVER cause cap activation",
+    "baseline v6 still clean"
+  ],
+
+  "safety_constraints": [
+    "this task creates ONLY the preview adapter and the plan; no live battle wiring",
+    "battle_engine.py / battle_core.py / combat.tsx MUST remain unchanged after this task",
+    "adapter returns runtime_attached=false on every call until STACK-G full task",
+    "adapter MUST NOT import any UI/runtime module from app/frontend or battle_engine",
+    "feature flag remains OFF; no flip in this task"
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false,
+    "stack_g_battle_runtime_enabled": false
+  }
+}

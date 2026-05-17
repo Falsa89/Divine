@@ -1,0 +1,10 @@
+- AF2-N not executed
+- only product_signoff true
+- all other signoffs false
+- gift-spend disabled/no-write
+- ledger rows 0
+- /api/heroes=100
+- Borea hidden
+- no battle_engine/combat changes
+- no gacha/roster/catalog mutation
+- baseline v6 clean

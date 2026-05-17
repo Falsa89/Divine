@@ -1,0 +1,70 @@
+{
+  "plan_id": "affinity_gift_spend_k6_locust_test_plan_v1",
+  "task_origin": "AF2-L-K6-PREP",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "AF2-L-K6-PREP \u2014 Test plan for real load-testing of the disabled gift-spend endpoint using k6 or Locust. SAFE: no live spend, no DB write, asserts disabled-state (423) and Borea-alias-state (404) under sustained load.",
+
+  "endpoint_under_test": "POST /api/affinity/gift-spend",
+  "endpoint_expected_status_disabled": 423,
+  "endpoint_expected_status_borea_alias": 404,
+  "endpoint_expected_status_runtime_on": "N/A_until_AF2N_approved",
+
+  "assets": {
+    "k6_script": "/app/loadtests/affinity_gift_spend_disabled.k6.js",
+    "locust_script": "/app/loadtests/affinity_gift_spend_disabled_locust.py",
+    "python_substitute": "/app/backend/scripts/run_affinity_gift_spend_full_disabled_load_probe.py"
+  },
+
+  "profiles": [
+    {"name": "smoke", "vus": 10, "duration_seconds": 15, "target_p95_ms": 500, "target_5xx_rate": 0.0},
+    {"name": "baseline", "vus": 50, "duration_seconds": 30, "target_p95_ms": 500, "target_5xx_rate": 0.0},
+    {"name": "stress", "vus": 200, "duration_seconds": 60, "target_p95_ms": 800, "target_5xx_rate": 0.0}
+  ],
+  "thresholds": {
+    "http_req_failed_rate_max": 0.01,
+    "checks_kind_disabled_rate_min": 1.0,
+    "checks_kind_borea_rate_min": 1.0,
+    "http_req_duration_p95_ms_max": 500
+  },
+
+  "safety_constraints": [
+    "endpoint MUST be disabled (HTTP 423) for the entire run",
+    "any HTTP 200 from /api/affinity/gift-spend FAILS the test immediately",
+    "NO real gift_spend executed; NO DB write reachable",
+    "Borea aliases (borea/greek_borea/primordial_gaia) MUST return 404",
+    "AFFINITY_GIFT_RUNTIME_ENABLED MUST remain OFF before, during, and after the run",
+    "do NOT run against a production environment without explicit user approval",
+    "if any 5xx burst exceeds 1%, abort the run and create an incident artifact"
+  ],
+
+  "required_invariants_before_run": [
+    "/api/heroes count == 100",
+    "Borea aliases hidden from /api/heroes",
+    "POST /api/affinity/gift-spend returns 423 (single-request preflight)",
+    "baseline v6 clean",
+    "AF2-K commit applied, ledger rows == 0",
+    "AF2-M product_signoff == true (other signoffs may remain false)"
+  ],
+  "required_invariants_after_run": [
+    "ledger rows == 0",
+    "feature_flag_currently_enabled == false",
+    "gift-spend still returns 423"
+  ],
+
+  "observability": {
+    "metrics_to_collect": ["http_req_duration_p50", "http_req_duration_p95", "http_req_duration_p99",
+                          "http_req_failed_rate", "checks_disabled_rate", "checks_borea_rate"],
+    "export_to": ["/app/data/design/affinity/affinity_gift_spend_k6_run_result_v1.json (future)"]
+  },
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false
+  }
+}

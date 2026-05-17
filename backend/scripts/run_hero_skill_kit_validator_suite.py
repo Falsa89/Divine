@@ -126,6 +126,16 @@ OPTIONAL = [
     ('OPS-C-WIRING', 'audit_ops_start_expo_boot_wiring.py'),
     ('SAFETY-ROLLUP-D', 'validate_collection_affinity_runtime_activation_rollup_v4.py'),
     ('ULTRA-COMBO-V9', 'validate_af2k_commit_af2l_full_af2m_signpre_axisg_opsc_wiring_safety_rollup_d_combo.py'),
+    # ULTRA-COMBO V10 (AF2-M-SIGN-PRODUCT + AF2-L-K6-PREP/FULL-SAFE
+    #                  + OPS-C-SUPERVISOR-WIRING + STACK-G-PRE + SAFETY-ROLLUP-E)
+    ('V10-PREFLIGHT', 'validate_ultra_combo_v10_preflight.py'),
+    ('AF2-M-SIGN-PRODUCT', 'validate_affinity_gift_product_signoff_v3.py'),
+    ('AF2-L-K6-PLAN', 'validate_affinity_gift_spend_k6_locust_test_plan.py'),
+    ('AF2-L-K6-PREP', 'validate_affinity_gift_spend_k6_prep_probe.py'),
+    ('OPS-C-SUP-WIRING', 'audit_ops_supervisor_startup_wiring.py'),
+    ('STACK-G-PRE', 'audit_stack_g_battle_cap_resolver_preconnection.py'),
+    ('SAFETY-ROLLUP-E', 'validate_collection_affinity_runtime_activation_rollup_v5.py'),
+    ('ULTRA-COMBO-V10', 'validate_ultra_combo_v10_productsign_k6_ops_stackg_rollupe.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

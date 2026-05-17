@@ -1,0 +1,106 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v5",
+  "task_origin": "SAFETY-ROLLUP-E",
+  "supersedes": "collection_affinity_runtime_activation_readiness_rollup_v4",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "SAFETY-ROLLUP-E \u2014 Post-product-signoff rollup. The product_signoff is now TRUE (under explicit user authorization). All other four operator signoffs remain FALSE. AF2-N is still BLOCKED and overall runtime activation is still NO_GO. STACK-G-PRE is now ready (preview adapter built, not wired). K6/Locust assets ready (plan_only_tool_unavailable + safe_disabled_probe_executed).",
+
+  "axis_layer_activation_ready": true,
+  "ops_layer_ready": true,
+  "auth_contract_ready": true,
+  "idempotency_contract_ready": true,
+  "load_probe_full_ready": true,
+  "rollback_rehearsal_ready": true,
+  "migration_layer_ready": true,
+  "migration_applied": true,
+  "af2k_commit_blocked_by_missing_env": false,
+  "ledger_schema_ready": true,
+  "ledger_row_count_zero": true,
+  "axis_layer_ready": true,
+  "k6_locust_test_plan_ready": true,
+  "k6_prep_probe_pass": true,
+  "supervisor_wiring_ready": true,
+  "supervisor_wiring_applied": false,
+  "supervisor_wiring_state": "READY_NOT_APPLIED",
+  "stack_g_preconnection_ready": true,
+  "product_signoff": true,
+  "engineering_signoff": false,
+  "qa_signoff": false,
+  "economy_balance_signoff": false,
+  "rollback_owner_signoff": false,
+  "operator_signoff_ready": false,
+  "AF2N_allowed": false,
+  "overall_runtime_activation_ready": false,
+  "go_no_go_decision": "NO_GO_RUNTIME",
+  "axis_layer_decision": "GO_AXIS",
+
+  "subsystems": {
+    "axis_layer":               {"status": "GO",                 "source": "AXIS-F + AXIS-G"},
+    "ops_layer":                {"status": "GO",                 "source": "OPS-B + OPS-C + OPS-C-WIRING + OPS-C-SUPERVISOR-WIRING ready_not_applied"},
+    "auth_contract":            {"status": "READY",              "source": "AF2-J"},
+    "idempotency_contract":     {"status": "READY",              "source": "AF2-K-PRE"},
+    "migration_foundation":     {"status": "APPLIED",            "source": "AF2-K-COMMIT (V9)"},
+    "migration_commit":         {"status": "APPLIED_ZERO_ROWS",  "source": "gift_transaction_ledger collection + indexes, 0 rows"},
+    "load_probe_full":          {"status": "PASS",               "source": "AF2-L-FULL probe"},
+    "rollback_rehearsal_full":  {"status": "PASS_DRY_RUN",       "source": "AF2-L-FULL rehearsal"},
+    "k6_locust_prep":           {"status": "READY_PLAN_ONLY",    "source": "AF2-L-K6-PREP/FULL-SAFE"},
+    "operator_signoff_v3":      {"status": "PARTIAL_PRODUCT_ONLY", "source": "AF2-M-SIGN-PRODUCT (product_signoff=true)"},
+    "stack_g_preconnection":    {"status": "READY_NOT_WIRED",    "source": "STACK-G-PRE preview adapter"},
+    "db_layer":                 {"status": "SCHEMA_ONLY_NO_GO",  "source": "collection + indexes present, 0 rows, runtime OFF"},
+    "battle_runtime":           {"status": "NO_GO",              "source": "global_modifier_cap_resolver still NOT imported by battle"},
+    "borea_layer":              {"status": "GO",                 "source": "borea/greek_borea/primordial_gaia hidden"}
+  },
+
+  "runtime_no_go_reasons": [
+    "4 of 5 operator signoffs still false (engineering, qa, economy_balance, rollback_owner)",
+    "AFFINITY_GIFT_RUNTIME_ENABLED runtime flag is OFF",
+    "controlled rollout (stage1..stage4) not executed",
+    "live spend never enabled",
+    "battle runtime cap resolver still NOT imported by battle (STACK-G-PRE only)",
+    "production monitoring not verified end-to-end",
+    "user has NOT explicitly approved AF2-N flip",
+    "real K6/Locust load test deferred (binary not installed)"
+  ],
+
+  "AF2N_blockers": [
+    "4 of 5 operator signoffs still false (only product is true)",
+    "operator_signoff_ready=false",
+    "overall_runtime_activation_ready=false",
+    "user_explicit_approval_required=true",
+    "engineering / qa / economy_balance / rollback_owner signoffs not provided"
+  ],
+
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "Borea aliases hidden from /api/heroes",
+    "POST /api/affinity/gift-spend returns 423 with disabled envelope",
+    "POST /api/affinity/gift-spend with Borea alias returns 404",
+    "AF2-L-FULL probe: 0 5xx, 0 unexpected, p95 well within target",
+    "AF2-K commit applied: 0 ledger rows, 5 indexes created, db_write semantically false",
+    "AF2-M v3: ONLY product_signoff true; engineering/qa/economy/rollback false; AF2-N still BLOCKED",
+    "AXIS-G combined routes return 200/404/405 with correct semantics",
+    "OPS-C wiring audit PASS, FastAPI startup hook active, supervisor wiring READY_NOT_APPLIED",
+    "STACK-G-PRE preview adapter loaded and returns runtime_attached=false; battle_engine/combat/battle_core still do NOT import it",
+    "battle_engine.py / battle_core.py / combat.tsx UNCHANGED",
+    "baseline v6 auto-detected as latest and PASS",
+    "feature_flag_currently_enabled == false everywhere",
+    "no DB writes possible from any new artifact"
+  ],
+
+  "next_step_recommendation": "Stay at NO_GO. To progress towards AF2-N, collect the remaining four operator signoffs (engineering, qa, economy_balance, rollback_owner) and run a real K6 load test under explicit user approval. STACK-G full wiring is gated by both AF2-N approval and a separate STACK-G task.",
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false,
+    "stack_g_battle_runtime_enabled": false,
+    "supervisor_wiring_state": "READY_NOT_APPLIED"
+  }
+}

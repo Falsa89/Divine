@@ -1,0 +1,199 @@
+TASK ULTRA-COMBO V10 — AF2-M-SIGN-PRODUCT + AF2-L-K6-PREP/FULL-SAFE + OPS-C-SUPERVISOR-WIRING + STACK-G-PRE + SAFETY-ROLLUP-E
+
+Project: Divine RPG / Divine Waifus
+
+USER APPROVAL:
+The user explicitly authorized the FIRST PRODUCT SIGNOFF ONLY.
+Do NOT infer approval for engineering, QA, economy_balance, rollback_owner, or AF2-N.
+Do NOT execute AF2-N.
+Do NOT enable AFFINITY_GIFT_RUNTIME_ENABLED.
+
+CURRENT STATE:
+- ULTRA-COMBO V9 complete.
+- gift_transaction_ledger collection + 5 indexes created.
+- ledger rows count = 0.
+- gift-spend endpoint remains 423 no-write.
+- AF2-M signoff package v2 has all five signoffs false.
+- AF2-N blocked.
+- AXIS-G combined routes live/read-only.
+- OPS-C FastAPI startup hook active; supervisor wiring left manual.
+- Suite 90/90 PASS under baseline v6.
+- /api/heroes=100, Borea hidden, Borea aliases 404.
+- Runtime flags OFF.
+
+TASKS:
+1. AF2-M-SIGN-PRODUCT — apply ONLY product_signoff=true in signoff package v3.
+2. AF2-L-K6-PREP/FULL-SAFE — create K6/Locust test assets and optionally run safe disabled endpoint probe.
+3. OPS-C-SUPERVISOR-WIRING — prepare or safely apply non-invasive supervisor/startup wiring.
+4. STACK-G-PRE — prepare battle cap resolver pre-connection contract without touching battle runtime.
+5. SAFETY-ROLLUP-E — refresh rollup with product signoff true but runtime overall NO_GO.
+
+ABSOLUTE SAFETY:
+DO NOT execute AF2-N.
+DO NOT enable AFFINITY_GIFT_RUNTIME_ENABLED.
+DO NOT execute real gift spend.
+DO NOT insert ledger rows.
+DO NOT mutate inventory or affinity points.
+DO NOT activate runtime buffs.
+DO NOT modify battle_engine.py, combat.tsx, battle_core.py.
+DO NOT import global cap resolver into battle runtime.
+DO NOT mutate gacha/roster/Character Bible/assets/catalogs/final_numbers.
+DO NOT expose Borea.
+DO NOT create spend/claim UI buttons.
+DO NOT set non-product signoffs true.
+DO NOT turn overall_runtime_activation_ready true.
+
+STOP GATES:
+Stop before product signoff if signoff v2 missing/corrupted, /api/heroes != 100, Borea visibility wrong, gift-spend not disabled/no-write, ledger row count not 0, or baseline v6 not clean.
+Stop before supervisor wiring if config path ambiguous, wiring could break startup, or rollback impossible.
+Stop before load run if services unstable, load tool requires network install, or endpoint no longer disabled.
+
+PART A — PREFLIGHT:
+Run health/heroes/gift-spend/Borea/baseline/suite checks.
+Create:
+- /app/data/design/system_safety/ultra_combo_v10_preflight_result_v1.json
+- /app/backend/scripts/validate_ultra_combo_v10_preflight.py
+
+PART B — AF2-M-SIGN-PRODUCT:
+Create:
+- /app/data/design/affinity/affinity_gift_runtime_operator_signoff_package_v3.json
+- /app/backend/scripts/apply_affinity_gift_product_signoff_v3.py
+- /app/backend/scripts/validate_affinity_gift_product_signoff_v3.py
+Rules:
+- product_signoff=true
+- product_signoff_source="user_explicit_approval_in_chat"
+- product_signoff_scope="AF2 product readiness only; not runtime flag approval"
+- engineering_signoff=false
+- qa_signoff=false
+- economy_balance_signoff=false
+- rollback_owner_signoff=false
+- af2n_allowed=false
+- feature_flag_currently_enabled=false
+- signoff history includes v2 all-false state
+Validator: exactly one signoff true, product true, all others false, AF2-N false, runtime flag false, ledger rows 0, /api/heroes 100, Borea hidden.
+
+PART C — AF2-L-K6-PREP/FULL-SAFE:
+Create:
+- /app/loadtests/affinity_gift_spend_disabled.k6.js
+- /app/loadtests/affinity_gift_spend_disabled_locust.py
+- /app/data/design/affinity/affinity_gift_spend_k6_locust_test_plan_v1.json
+- /app/backend/scripts/validate_affinity_gift_spend_k6_locust_test_plan.py
+Optional safe run:
+- if k6/locust unavailable or risky, run existing Python disabled probe substitute.
+- no heavy destructive load.
+Create:
+- /app/data/design/affinity/affinity_gift_spend_k6_prep_probe_result_v1.json
+- /app/backend/scripts/validate_affinity_gift_spend_k6_prep_probe.py
+Accept mode plan_only_tool_unavailable OR safe_disabled_probe_executed.
+
+PART D — OPS-C-SUPERVISOR-WIRING:
+Create:
+- /app/ops/supervisor_startup_check_snippet.conf
+- /app/ops/apply_supervisor_startup_check_wiring.sh
+- /app/ops/rollback_supervisor_startup_check_wiring.sh
+- /app/backend/scripts/audit_ops_supervisor_startup_wiring.py
+- /app/docs/divine/68_OPS_SUPERVISOR_STARTUP_WIRING.md
+If safe to apply, apply minimal non-invasive wiring with backup and rollback. If unsafe/ambiguous, do NOT apply; create ready_not_applied artifacts and reason. Supervisor must not be broken.
+
+PART E — STACK-G-PRE:
+Create:
+- /app/data/design/system_safety/stack_g_battle_cap_resolver_connection_plan_v1.json
+- /app/backend/data/global_modifier_cap_battle_preview_adapter.py
+- /app/backend/scripts/audit_stack_g_battle_cap_resolver_preconnection.py
+Rules:
+- preview adapter may import global_modifier_cap_resolver.
+- battle_engine.py/combat.tsx/battle_core.py must NOT import it.
+- feature flag remains OFF.
+- preview returns disabled/inert.
+- no DB write, no Borea leak, no battle file mutation.
+
+PART F — SAFETY-ROLLUP-E:
+Create:
+- /app/data/design/system_safety/collection_affinity_runtime_activation_readiness_rollup_v5.json
+- /app/backend/scripts/validate_collection_affinity_runtime_activation_rollup_v5.py
+Required:
+- product_signoff=true
+- engineering_signoff=false
+- qa_signoff=false
+- economy_balance_signoff=false
+- rollback_owner_signoff=false
+- operator_signoff_ready=false
+- AF2N_allowed=false
+- overall_runtime_activation_ready=false
+- ledger_schema_ready=true
+- ledger_row_count_zero=true
+- axis_layer_ready=true
+- ops_layer_ready=true
+- stack_g_preconnection_ready=true if STACK-G-PRE passes
+
+PART G — COMBO VALIDATOR:
+Create:
+- /app/backend/scripts/validate_ultra_combo_v10_productsign_k6_ops_stackg_rollupe.py
+Update suite runner with optional validators only; do not weaken checks.
+
+VALIDATORS TO RUN:
+python3 /app/backend/scripts/validate_ultra_combo_v10_preflight.py
+python3 /app/backend/scripts/validate_affinity_gift_product_signoff_v3.py
+python3 /app/backend/scripts/validate_affinity_gift_spend_k6_locust_test_plan.py
+python3 /app/backend/scripts/validate_affinity_gift_spend_k6_prep_probe.py
+python3 /app/backend/scripts/audit_ops_supervisor_startup_wiring.py
+python3 /app/backend/scripts/audit_stack_g_battle_cap_resolver_preconnection.py
+python3 /app/backend/scripts/validate_collection_affinity_runtime_activation_rollup_v5.py
+python3 /app/backend/scripts/validate_ultra_combo_v10_productsign_k6_ops_stackg_rollupe.py
+python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py
+python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py --include-baseline-diff
+python3 /app/backend/scripts/validate_hero_skill_kit_catalog_baseline_diff.py
+
+API SMOKE:
+GET /api/health
+GET /api/heroes
+GET /api/affinity/gifts
+GET /api/affinity/gifts/by-element/dark/by-faction/greek
+POST /api/affinity/gift-spend empty
+POST /api/affinity/gift-spend valid
+POST /api/affinity/gift-spend hero_id=borea
+POST /api/affinity/gift-spend hero_id=greek_borea
+GET /api/hero-skill-kits/runtime/debug/coverage
+
+UI SAFETY:
+No gift spend button, no claim/spend/activate/equip/upgrade/summon/battle test/enable runtime button in affinity/gift context, no mutation fetch for affinity gifts, no Borea reveal, no AF2-N toggle.
+
+FINAL DOC:
+Create /app/docs/divine/70_ULTRA_COMBO_V10_PRODUCT_SIGNOFF_K6_OPS_STACKG_ROLLUPE.md
+
+ACCEPTANCE:
+1. AF2-N not executed.
+2. Product signoff true and only product signoff true.
+3. All other signoffs false.
+4. Gift-spend remains disabled/no-write.
+5. Ledger row count remains 0.
+6. K6/Locust prep valid or safe disabled probe executed.
+7. OPS wiring safe/applied OR ready_not_applied with reason.
+8. STACK-G-PRE does not touch battle runtime.
+9. Rollup v5 runtime overall NO_GO.
+10. /api/heroes=100.
+11. Borea hidden.
+12. Baseline v6 clean.
+13. Suite pass.
+14. No battle_engine/combat/battle_core mutation.
+15. No gacha/roster/catalog mutation.
+16. UI safety pass.
+
+FINAL REPORT IN ITALIAN:
+1. File creati
+2. File modificati
+3. Preflight
+4. AF2-M-SIGN-PRODUCT summary
+5. AF2-L-K6-PREP/FULL-SAFE summary
+6. OPS-C-SUPERVISOR-WIRING summary
+7. STACK-G-PRE summary
+8. SAFETY-ROLLUP-E summary
+9. Borea safety
+10. Validator results
+11. Suite/baseline results
+12. API smoke
+13. UI safety
+14. Runtime/DB/gacha/roster/catalog safety
+15. Warning/discrepanze
+16. Final recommendation
+17. Suggested next tasks

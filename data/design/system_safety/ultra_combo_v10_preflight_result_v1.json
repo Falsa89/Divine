@@ -1,0 +1,28 @@
+{
+  "result_id": "ultra_combo_v10_preflight_result_v1",
+  "task_origin": "ULTRA-COMBO-V10-PREFLIGHT",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "Preflight gate-check before ULTRA-COMBO V10 execution. All required invariants verified live before any V10 artifact is created or applied.",
+  "gates": [
+    {"id": "api_heroes_count_100", "expected": 100, "observed": 100, "status": "PASS"},
+    {"id": "borea_hidden_in_heroes", "expected": true, "observed": true, "status": "PASS"},
+    {"id": "gift_spend_endpoint_disabled", "expected": 423, "observed": 423, "status": "PASS"},
+    {"id": "axis_g_combined_route_200", "expected": 200, "observed": 200, "status": "PASS"},
+    {"id": "ledger_row_count_zero", "expected": 0, "observed": 0, "status": "PASS"},
+    {"id": "signoff_v2_present", "expected": true, "observed": true, "status": "PASS"},
+    {"id": "baseline_v6_present", "expected": true, "observed": true, "status": "PASS"},
+    {"id": "af2n_blocked", "expected": false, "observed": false, "status": "PASS"}
+  ],
+  "blockers": [],
+  "ready_to_proceed": true,
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+    "AF2N_allowed_today": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "result_id": "affinity_gift_spend_k6_prep_probe_result_v1",
+  "task_origin": "AF2-L-K6-PREP/FULL-SAFE",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "AF2-L-K6-PREP/FULL-SAFE \u2014 K6 and Locust binaries are NOT installed in the runtime container; live K6 run is therefore NOT executed. As a safe substitute, the existing Python disabled-endpoint probe was re-run and PASSED with 0 5xx and 0 unexpected status codes. Mode = plan_only_tool_unavailable + safe_disabled_probe_executed.",
+
+  "mode": "plan_only_tool_unavailable_AND_safe_disabled_probe_executed",
+  "k6_installed": false,
+  "locust_installed": false,
+  "reason_no_live_k6_run": "k6 binary and python-locust module are NOT available on the runtime container; installing them would require network/package install which is outside the scope of a SAFE V10 task. A live K6 run is reserved for a future task once the user explicitly authorizes the install.",
+  "python_substitute_executed": true,
+  "python_substitute_script": "/app/backend/scripts/run_affinity_gift_spend_full_disabled_load_probe.py",
+  "python_substitute_result": "/app/data/design/affinity/affinity_gift_spend_full_disabled_load_result_v1.json",
+
+  "observed_metrics_from_python_substitute": {
+    "total_requests": 198,
+    "http_5xx_count": 0,
+    "unexpected_status_count": 0,
+    "p95_latency_ms": 0.92,
+    "endpoint_status_for_empty_post": 423,
+    "endpoint_status_for_borea_alias": 404
+  },
+
+  "acceptance": {
+    "plan_only_tool_unavailable": true,
+    "safe_disabled_probe_executed": true,
+    "no_real_spend": true,
+    "no_db_write": true,
+    "endpoint_remained_disabled": true,
+    "borea_remained_404": true
+  },
+
+  "next_step_recommendation": "When the user authorizes a real K6 run, install k6 via apt/snap or download a static binary, then run: k6 run --vus 50 --duration 30s /app/loadtests/affinity_gift_spend_disabled.k6.js. The script will assert disabled=423 and borea_alias=404 under load and abort on any 200.",
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false
+  }
+}

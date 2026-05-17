@@ -9,12 +9,12 @@
   "no_affinity_points_mutation": true,
   "no_borea_activation": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-17T20:40:08.680574Z",
+  "generated_at_utc": "2026-05-17T21:12:14.660454Z",
   "total_requests": 297,
-  "elapsed_seconds": 0.272,
-  "p50_latency_ms": 0.89,
-  "p95_latency_ms": 1.15,
-  "p99_latency_ms": 1.49,
+  "elapsed_seconds": 0.203,
+  "p50_latency_ms": 0.66,
+  "p95_latency_ms": 0.78,
+  "p99_latency_ms": 1.08,
   "p95_target_ms": 500,
   "total_5xx": 0,
   "unexpected_total": 0,
@@ -22,101 +22,101 @@
     "empty": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.88,
-      "p95_latency_ms": 1.1,
+      "p50_latency_ms": 0.73,
+      "p95_latency_ms": 1.13,
       "unexpected_codes": {}
     },
     "valid": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 1.0,
-      "p95_latency_ms": 1.13,
+      "p50_latency_ms": 0.67,
+      "p95_latency_ms": 0.79,
       "unexpected_codes": {}
     },
     "no_idem": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.96,
-      "p95_latency_ms": 1.12,
+      "p50_latency_ms": 0.66,
+      "p95_latency_ms": 0.73,
       "unexpected_codes": {}
     },
     "dup_idem": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.92,
-      "p95_latency_ms": 1.15,
+      "p50_latency_ms": 0.66,
+      "p95_latency_ms": 0.78,
       "unexpected_codes": {}
     },
     "malformed_idem": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 1.06,
-      "p95_latency_ms": 1.49,
+      "p50_latency_ms": 0.67,
+      "p95_latency_ms": 0.76,
       "unexpected_codes": {}
     },
     "negative_qty": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.89,
-      "p95_latency_ms": 1.19,
+      "p50_latency_ms": 0.67,
+      "p95_latency_ms": 1.08,
       "unexpected_codes": {}
     },
     "huge_qty": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.93,
-      "p95_latency_ms": 1.29,
+      "p50_latency_ms": 0.67,
+      "p95_latency_ms": 0.8,
       "unexpected_codes": {}
     },
     "stale_gift": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.81,
-      "p95_latency_ms": 1.03,
+      "p50_latency_ms": 0.66,
+      "p95_latency_ms": 0.8,
       "unexpected_codes": {}
     },
     "borea": {
       "count": 27,
       "expected_status": 404,
-      "p50_latency_ms": 0.59,
-      "p95_latency_ms": 0.7,
+      "p50_latency_ms": 0.5,
+      "p95_latency_ms": 0.52,
       "unexpected_codes": {}
     },
     "greek_borea": {
       "count": 27,
       "expected_status": 404,
-      "p50_latency_ms": 0.58,
-      "p95_latency_ms": 0.94,
+      "p50_latency_ms": 0.51,
+      "p95_latency_ms": 0.54,
       "unexpected_codes": {}
     },
     "primordial_gaia": {
       "count": 27,
       "expected_status": 404,
-      "p50_latency_ms": 0.65,
-      "p95_latency_ms": 0.88,
+      "p50_latency_ms": 0.51,
+      "p95_latency_ms": 0.62,
       "unexpected_codes": {}
     }
   },
   "regression_gets": {
     "/affinity/gifts": {
       "code": 200,
-      "latency_ms": 3.051417996175587
+      "latency_ms": 3.0736819971934892
     },
     "/affinity/gifts/summary": {
       "code": 200,
-      "latency_ms": 1.050931001373101
+      "latency_ms": 0.9291889946325682
     },
     "/affinity/gifts/by-faction/greek": {
       "code": 200,
-      "latency_ms": 1.1215560007258318
+      "latency_ms": 0.986186001682654
     },
     "/affinity/gifts/by-element/dark": {
       "code": 200,
-      "latency_ms": 1.1644509941106662
+      "latency_ms": 1.0864619980566204
     },
     "/affinity/gifts/by-element/darkness": {
       "code": 200,
-      "latency_ms": 1.2134439966757782
+      "latency_ms": 1.062226998328697
     }
   },
   "borea_aliases_blocked": [
