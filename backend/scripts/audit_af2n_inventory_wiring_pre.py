@@ -28,16 +28,17 @@ asrc = ADAPTER.read_text()
 rec('adapter_has_entry_point', 'def preview_inventory_apply' in asrc, '')
 rec('adapter_no_motor_import', not re.search(r'(?m)^\s*(from\s+motor\b|import\s+motor\b)', asrc), '')
 rec('adapter_no_pymongo_import', not re.search(r'(?m)^\s*(from\s+pymongo\b|import\s+pymongo\b)', asrc), '')
-rec('adapter_no_insert_one', 'insert_one' not in asrc, '')
-rec('adapter_no_update_one', 'update_one' not in asrc, '')
-rec('adapter_no_delete_one', 'delete_one' not in asrc, '')
+rec('adapter_no_insert_one', not re.search(r'\.\s*insert_one\s*\(', asrc), '')
+rec('adapter_no_update_one', not re.search(r'\.\s*update_one\s*\(', asrc), '')
+rec('adapter_no_delete_one', not re.search(r'\.\s*delete_one\s*\(', asrc), '')
 rec('adapter_no_battle_engine_import',
     'from backend.battle_engine' not in asrc and 'import battle_engine' not in asrc, '')
 rec('adapter_no_battle_core_import',
     'from backend.battle_core' not in asrc and 'import battle_core' not in asrc, '')
 rec('adapter_no_frontend_import',
     not re.search(r'(?m)^\s*(from\s+\S*frontend\S*|import\s+\S*frontend\S*)', asrc), '')
-rec('adapter_runtime_attached_false', "'runtime_attached': False" in asrc, '')
+rec('adapter_runtime_attached_false',
+    re.search(r'["\']runtime_attached["\']\s*:\s*False', asrc) is not None, '')
 rec('adapter_borea_block', 'borea' in asrc and 'greek_borea' in asrc and 'primordial_gaia' in asrc, '')
 rec('adapter_feature_flag_name', 'AFFINITY_GIFT_INVENTORY_WIRING_ENABLED' in asrc, '')
 

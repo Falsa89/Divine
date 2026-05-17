@@ -153,6 +153,15 @@ OPTIONAL = [
     ('AF2-N-ACTIVATION',     'validate_af2n_runtime_activation_result.py'),
     ('SAFETY-ROLLUP-G',      'validate_collection_affinity_runtime_activation_rollup_v7.py'),
     ('ULTRA-COMBO-V12',      'validate_ultra_combo_v12_af2n_canary.py'),
+    # ULTRA-COMBO V13 (AF2-N-MONITORING-WINDOW + AF2-N-STAGE1-PREP
+    #                  + AF2-N-INVENTORY-WIRING-PRE + AF2-L-K6-LIVE-PREP2
+    #                  + SAFETY-ROLLUP-H)
+    ('AF2-N-MONITORING-WINDOW',     'validate_af2n_monitoring_window_result.py'),
+    ('AF2-N-STAGE1-PREP',           'validate_af2n_stage1_1pct_allowlist_plan.py'),
+    ('AF2-N-INVENTORY-WIRING-PRE',  'audit_af2n_inventory_wiring_pre.py'),
+    ('AF2-L-K6-LIVE-PREP2',         'validate_affinity_gift_spend_k6_live_prep2_result.py'),
+    ('SAFETY-ROLLUP-H',             'validate_collection_affinity_runtime_activation_rollup_v8.py'),
+    ('ULTRA-COMBO-V13',             'validate_ultra_combo_v13_monitoring_stage1_prep.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
