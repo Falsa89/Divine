@@ -1,0 +1,666 @@
+{
+  "result_id": "affinity_gift_inventory_shadow_wiring_result_v1",
+  "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T23:19:31.671530Z",
+  "elapsed_seconds": 0.0005,
+  "ledger_row_count_before": 11,
+  "ledger_row_count_after": 11,
+  "scenarios": [
+    {
+      "name": "normal_ok",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "greek_zeus",
+        1,
+        5,
+        100,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "greek_zeus",
+        "gift_id": "gift_x",
+        "quantity": 1,
+        "affinity_points_delta": 5,
+        "current_inventory_balance": 100,
+        "current_affinity_points": 50,
+        "pre_check_pass": true,
+        "pre_check_reason": "ok",
+        "runtime_attached": false,
+        "would_decrement_inventory": 1,
+        "would_increment_affinity": 5,
+        "would_write_affinity_state": false,
+        "projected_inventory_after": 99,
+        "projected_affinity_points_after": 55,
+        "would_have_status": "applied_shadow_only",
+        "borea_filtered": false,
+        "atomicity_contract": "single-document transaction in future live wiring; pre-check inventory >= qty BEFORE any mutation",
+        "caps_contract": "affinity_points capped per affinity_phase2_economy_cap_policy_draft_v1",
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "shadow_only_no_state_mutated",
+          "steps_that_would_be_performed_in_future_live": [
+            "BEGIN single-doc tx",
+            "inventory[gift_x] -= 1",
+            "affinity_points[greek_zeus] += 5",
+            "append ledger row {tx_id, idempotency_key, inventory_mutated=true, affinity_points_mutated=true}",
+            "COMMIT"
+          ],
+          "steps_to_reverse_in_rollback": [
+            "lookup ledger row by tx_id",
+            "inventory[gift_x] += 1",
+            "affinity_points[greek_zeus] -= 5",
+            "mark ledger row reversed=true"
+          ],
+          "compensation_path_when_rollback_unavailable": [
+            "emit ledger row with compensation_required=true",
+            "block downstream battle/UI consumption until reconciled"
+          ]
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "normal_zero_qty",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "greek_zeus",
+        0,
+        0,
+        100,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "greek_zeus",
+        "gift_id": "gift_x",
+        "quantity": 0,
+        "affinity_points_delta": 0,
+        "current_inventory_balance": 100,
+        "current_affinity_points": 50,
+        "pre_check_pass": true,
+        "pre_check_reason": "ok",
+        "runtime_attached": false,
+        "would_decrement_inventory": 0,
+        "would_increment_affinity": 0,
+        "would_write_affinity_state": false,
+        "projected_inventory_after": 100,
+        "projected_affinity_points_after": 50,
+        "would_have_status": "applied_shadow_only",
+        "borea_filtered": false,
+        "atomicity_contract": "single-document transaction in future live wiring; pre-check inventory >= qty BEFORE any mutation",
+        "caps_contract": "affinity_points capped per affinity_phase2_economy_cap_policy_draft_v1",
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "shadow_only_no_state_mutated",
+          "steps_that_would_be_performed_in_future_live": [
+            "BEGIN single-doc tx",
+            "inventory[gift_x] -= 0",
+            "affinity_points[greek_zeus] += 0",
+            "append ledger row {tx_id, idempotency_key, inventory_mutated=true, affinity_points_mutated=true}",
+            "COMMIT"
+          ],
+          "steps_to_reverse_in_rollback": [
+            "lookup ledger row by tx_id",
+            "inventory[gift_x] += 0",
+            "affinity_points[greek_zeus] -= 0",
+            "mark ledger row reversed=true"
+          ],
+          "compensation_path_when_rollback_unavailable": [
+            "emit ledger row with compensation_required=true",
+            "block downstream battle/UI consumption until reconciled"
+          ]
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "insufficient_inv",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "greek_zeus",
+        5,
+        5,
+        2,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "greek_zeus",
+        "gift_id": "gift_x",
+        "quantity": 5,
+        "affinity_points_delta": 5,
+        "current_inventory_balance": 2,
+        "current_affinity_points": 50,
+        "pre_check_pass": false,
+        "pre_check_reason": "inventory_insufficient",
+        "runtime_attached": false,
+        "would_decrement_inventory": 0,
+        "would_increment_affinity": 0,
+        "would_write_affinity_state": false,
+        "projected_inventory_after": 2,
+        "projected_affinity_points_after": 50,
+        "would_have_status": "rejected_shadow_only",
+        "borea_filtered": false,
+        "atomicity_contract": "single-document transaction in future live wiring; pre-check inventory >= qty BEFORE any mutation",
+        "caps_contract": "affinity_points capped per affinity_phase2_economy_cap_policy_draft_v1",
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "shadow_only_no_state_mutated",
+          "steps_that_would_be_performed_in_future_live": [
+            "BEGIN single-doc tx",
+            "inventory[gift_x] -= 0",
+            "affinity_points[greek_zeus] += 0",
+            "append ledger row {tx_id, idempotency_key, inventory_mutated=true, affinity_points_mutated=true}",
+            "COMMIT"
+          ],
+          "steps_to_reverse_in_rollback": [
+            "lookup ledger row by tx_id",
+            "inventory[gift_x] += 0",
+            "affinity_points[greek_zeus] -= 0",
+            "mark ledger row reversed=true"
+          ],
+          "compensation_path_when_rollback_unavailable": [
+            "emit ledger row with compensation_required=true",
+            "block downstream battle/UI consumption until reconciled"
+          ]
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "huge_qty",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "greek_zeus",
+        9999,
+        500,
+        1000,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "greek_zeus",
+        "gift_id": "gift_x",
+        "quantity": 9999,
+        "affinity_points_delta": 500,
+        "current_inventory_balance": 1000,
+        "current_affinity_points": 50,
+        "pre_check_pass": false,
+        "pre_check_reason": "inventory_insufficient",
+        "runtime_attached": false,
+        "would_decrement_inventory": 0,
+        "would_increment_affinity": 0,
+        "would_write_affinity_state": false,
+        "projected_inventory_after": 1000,
+        "projected_affinity_points_after": 50,
+        "would_have_status": "rejected_shadow_only",
+        "borea_filtered": false,
+        "atomicity_contract": "single-document transaction in future live wiring; pre-check inventory >= qty BEFORE any mutation",
+        "caps_contract": "affinity_points capped per affinity_phase2_economy_cap_policy_draft_v1",
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "shadow_only_no_state_mutated",
+          "steps_that_would_be_performed_in_future_live": [
+            "BEGIN single-doc tx",
+            "inventory[gift_x] -= 0",
+            "affinity_points[greek_zeus] += 0",
+            "append ledger row {tx_id, idempotency_key, inventory_mutated=true, affinity_points_mutated=true}",
+            "COMMIT"
+          ],
+          "steps_to_reverse_in_rollback": [
+            "lookup ledger row by tx_id",
+            "inventory[gift_x] += 0",
+            "affinity_points[greek_zeus] -= 0",
+            "mark ledger row reversed=true"
+          ],
+          "compensation_path_when_rollback_unavailable": [
+            "emit ledger row with compensation_required=true",
+            "block downstream battle/UI consumption until reconciled"
+          ]
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "negative_qty",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "greek_zeus",
+        -3,
+        0,
+        100,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "greek_zeus",
+        "gift_id": "gift_x",
+        "quantity": 0,
+        "affinity_points_delta": 0,
+        "current_inventory_balance": 100,
+        "current_affinity_points": 50,
+        "pre_check_pass": true,
+        "pre_check_reason": "ok",
+        "runtime_attached": false,
+        "would_decrement_inventory": 0,
+        "would_increment_affinity": 0,
+        "would_write_affinity_state": false,
+        "projected_inventory_after": 100,
+        "projected_affinity_points_after": 50,
+        "would_have_status": "applied_shadow_only",
+        "borea_filtered": false,
+        "atomicity_contract": "single-document transaction in future live wiring; pre-check inventory >= qty BEFORE any mutation",
+        "caps_contract": "affinity_points capped per affinity_phase2_economy_cap_policy_draft_v1",
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "shadow_only_no_state_mutated",
+          "steps_that_would_be_performed_in_future_live": [
+            "BEGIN single-doc tx",
+            "inventory[gift_x] -= 0",
+            "affinity_points[greek_zeus] += 0",
+            "append ledger row {tx_id, idempotency_key, inventory_mutated=true, affinity_points_mutated=true}",
+            "COMMIT"
+          ],
+          "steps_to_reverse_in_rollback": [
+            "lookup ledger row by tx_id",
+            "inventory[gift_x] += 0",
+            "affinity_points[greek_zeus] -= 0",
+            "mark ledger row reversed=true"
+          ],
+          "compensation_path_when_rollback_unavailable": [
+            "emit ledger row with compensation_required=true",
+            "block downstream battle/UI consumption until reconciled"
+          ]
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "borea",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "borea",
+        1,
+        5,
+        100,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "borea",
+        "gift_id": "gift_x",
+        "runtime_attached": false,
+        "would_decrement_inventory": 0,
+        "would_increment_affinity": 0,
+        "would_write_affinity_state": false,
+        "would_have_status": "borea_filtered",
+        "borea_filtered": true,
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "short_circuited_by_borea_filter",
+          "steps_that_would_be_performed_in_future_live": [],
+          "steps_to_reverse_in_rollback": []
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "greek_borea",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "greek_borea",
+        1,
+        5,
+        100,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "greek_borea",
+        "gift_id": "gift_x",
+        "runtime_attached": false,
+        "would_decrement_inventory": 0,
+        "would_increment_affinity": 0,
+        "would_write_affinity_state": false,
+        "would_have_status": "borea_filtered",
+        "borea_filtered": true,
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "short_circuited_by_borea_filter",
+          "steps_that_would_be_performed_in_future_live": [],
+          "steps_to_reverse_in_rollback": []
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "primordial_gaia",
+      "args": [
+        "user_canary_001",
+        "gift_x",
+        "primordial_gaia",
+        1,
+        5,
+        100,
+        50
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "user_canary_001",
+        "hero_id": "primordial_gaia",
+        "gift_id": "gift_x",
+        "runtime_attached": false,
+        "would_decrement_inventory": 0,
+        "would_increment_affinity": 0,
+        "would_write_affinity_state": false,
+        "would_have_status": "borea_filtered",
+        "borea_filtered": true,
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "short_circuited_by_borea_filter",
+          "steps_that_would_be_performed_in_future_live": [],
+          "steps_to_reverse_in_rollback": []
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    },
+    {
+      "name": "stage1_qa_user",
+      "args": [
+        "stage1_qa_007",
+        "gift_x",
+        "greek_zeus",
+        2,
+        3,
+        10,
+        20
+      ],
+      "output": {
+        "task_origin": "AF2-N-INVENTORY-WIRING-SHADOW",
+        "preview_version": "v1",
+        "shadow_only": true,
+        "user_id": "stage1_qa_007",
+        "hero_id": "greek_zeus",
+        "gift_id": "gift_x",
+        "quantity": 2,
+        "affinity_points_delta": 3,
+        "current_inventory_balance": 10,
+        "current_affinity_points": 20,
+        "pre_check_pass": true,
+        "pre_check_reason": "ok",
+        "runtime_attached": false,
+        "would_decrement_inventory": 2,
+        "would_increment_affinity": 3,
+        "would_write_affinity_state": false,
+        "projected_inventory_after": 8,
+        "projected_affinity_points_after": 23,
+        "would_have_status": "applied_shadow_only",
+        "borea_filtered": false,
+        "atomicity_contract": "single-document transaction in future live wiring; pre-check inventory >= qty BEFORE any mutation",
+        "caps_contract": "affinity_points capped per affinity_phase2_economy_cap_policy_draft_v1",
+        "rollback_required": false,
+        "compensation_required": false,
+        "rollback_contract": {
+          "reason": "shadow_only_no_state_mutated",
+          "steps_that_would_be_performed_in_future_live": [
+            "BEGIN single-doc tx",
+            "inventory[gift_x] -= 2",
+            "affinity_points[greek_zeus] += 3",
+            "append ledger row {tx_id, idempotency_key, inventory_mutated=true, affinity_points_mutated=true}",
+            "COMMIT"
+          ],
+          "steps_to_reverse_in_rollback": [
+            "lookup ledger row by tx_id",
+            "inventory[gift_x] += 2",
+            "affinity_points[greek_zeus] -= 3",
+            "mark ledger row reversed=true"
+          ],
+          "compensation_path_when_rollback_unavailable": [
+            "emit ledger row with compensation_required=true",
+            "block downstream battle/UI consumption until reconciled"
+          ]
+        },
+        "safety_envelope": {
+          "shadow_only": true,
+          "preview_only": true,
+          "design_only": true,
+          "runtime_attached": false,
+          "db_write": false,
+          "inventory_mutation_attempted": false,
+          "inventory_mutation_committed": false,
+          "affinity_points_mutation_attempted": false,
+          "affinity_points_mutation_committed": false,
+          "feature_flag_dependency": "AFFINITY_GIFT_INVENTORY_WIRING_ENABLED",
+          "feature_flag_currently_enabled": false,
+          "affinity_points_flag_dependency": "AFFINITY_POINTS_MUTATION_ENABLED",
+          "affinity_points_flag_currently_enabled": false,
+          "hidden_aliases_blocked": [
+            "borea",
+            "greek_borea",
+            "primordial_gaia"
+          ]
+        }
+      }
+    }
+  ],
+  "invariants": {
+    "ledger_unchanged": true,
+    "all_runtime_attached_false": true,
+    "all_shadow_only_true": true,
+    "all_db_write_false": true,
+    "borea_filtered_correctly": true,
+    "rollback_contract_present_all": true,
+    "insufficient_inv_rejected": true,
+    "normal_ok_applied_shadow": true
+  },
+  "overall_status": "PASS",
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

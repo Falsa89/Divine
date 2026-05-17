@@ -1,0 +1,82 @@
+{
+  "result_id": "af2n_stage1_monitoring_window_result_v1",
+  "task_origin": "AF2-N-STAGE1-MONITORING-WINDOW",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T23:19:31.021055Z",
+  "samples": 60,
+  "elapsed_seconds": 10.825,
+  "codes": {
+    "health": {
+      "200": 60
+    },
+    "heroes": {
+      "200": 60
+    },
+    "status": {
+      "200": 60
+    },
+    "spend_empty": {
+      "423": 60
+    },
+    "spend_borea": {
+      "404": 60
+    },
+    "spend_nonal": {
+      "423": 60
+    },
+    "spend_replay": {
+      "200": 60
+    }
+  },
+  "p50_latency_ms": {
+    "health": 2.23,
+    "heroes": 60.46,
+    "status": 5.73,
+    "spend_empty": 0.92,
+    "spend_borea": 0.68,
+    "spend_nonal": 0.66,
+    "spend_replay": 3.24
+  },
+  "p95_latency_ms": {
+    "health": 2.43,
+    "heroes": 71.98,
+    "status": 8.88,
+    "spend_empty": 1.06,
+    "spend_borea": 0.86,
+    "spend_nonal": 0.92,
+    "spend_replay": 3.77
+  },
+  "any_5xx_total": 0,
+  "initial_allowlist_size": 50,
+  "observed_allowlist_size_must_be_50": true,
+  "initial_ledger_total": 11,
+  "ledger_total_rows": 11,
+  "ledger_canary_rows": 11,
+  "ledger_inventory_mutation_count": 0,
+  "ledger_affinity_points_mutation_count": 0,
+  "ledger_buffs_activation_count": 0,
+  "ledger_battle_wiring_count": 0,
+  "ledger_borea_hero_count": 0,
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

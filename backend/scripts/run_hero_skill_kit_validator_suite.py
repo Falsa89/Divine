@@ -162,6 +162,18 @@ OPTIONAL = [
     ('AF2-L-K6-LIVE-PREP2',         'validate_affinity_gift_spend_k6_live_prep2_result.py'),
     ('SAFETY-ROLLUP-H',             'validate_collection_affinity_runtime_activation_rollup_v8.py'),
     ('ULTRA-COMBO-V13',             'validate_ultra_combo_v13_monitoring_stage1_prep.py'),
+    # ULTRA-COMBO V14 (AF2-N-STAGE1-APPLY + STAGE1-MONITORING
+    #                  + INVENTORY-WIRING-SHADOW + K6-PREP3
+    #                  + STAGE1-ROLLBACK-READINESS + SAFETY-ROLLUP-I)
+    ('V14-PREFLIGHT',                 'validate_af2n_v14_preflight.py'),
+    ('AF2-N-STAGE1-APPLY',            'validate_af2n_stage1_1pct_apply_result.py'),
+    ('AF2-N-STAGE1-MONITORING',       'validate_af2n_stage1_monitoring_window.py'),
+    ('AF2-N-INVENTORY-WIRING-SHADOW', 'validate_affinity_gift_inventory_shadow_wiring.py'),
+    ('AF2-L-K6-PREP3-PLAN',           'validate_af2n_stage1_k6_live_test_plan.py'),
+    ('AF2-L-K6-PREP3-PROBE',          'validate_af2n_stage1_k6_prep_probe.py'),
+    ('AF2-N-STAGE1-ROLLBACK-READY',   'validate_af2n_stage1_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-I',               'validate_collection_affinity_runtime_activation_rollup_v9.py'),
+    ('ULTRA-COMBO-V14',               'validate_ultra_combo_v14_stage1_inventoryshadow.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

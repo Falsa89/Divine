@@ -1,0 +1,58 @@
+{
+  "plan_id": "af2n_stage1_k6_live_test_plan_v1",
+  "task_origin": "AF2-L-K6-PREP3",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "k6_script_path": "/app/loadtests/af2n_stage1_allowlist.k6.js",
+  "locust_script_path": "/app/loadtests/af2n_stage1_allowlist_locust.py",
+  "k6_installed_today": false,
+  "locust_installed_today": false,
+  "mode": "plan_only_python_fallback_used_for_actual_probe",
+  "profile": {
+    "vus": 10,
+    "duration_seconds": 30,
+    "endpoints_probed": [
+      "/api/health",
+      "/api/heroes",
+      "/api/affinity/gift-spend/canary-status",
+      "POST /api/affinity/gift-spend empty",
+      "POST /api/affinity/gift-spend borea",
+      "POST /api/affinity/gift-spend non-allowlist",
+      "POST /api/affinity/gift-spend idempotent_replay"
+    ],
+    "thresholds": {
+      "http_req_failed_rate_lt": 0.01,
+      "p95_latency_ms_lt": 500
+    },
+    "abort_triggers": [
+      "any 5xx rate > 0.5% sustained",
+      "borea response != 404",
+      "non-allowlist response == 200",
+      "idempotent replay creates new ledger row",
+      "p95 latency > 800ms sustained 60s"
+    ]
+  },
+  "safety_constraints": [
+    "no new ledger rows from this load profile",
+    "no Borea exposure",
+    "no inventory mutation",
+    "no affinity_points mutation",
+    "no buffs activation",
+    "no battle wiring",
+    "broad rollout BANNED"
+  ],
+  "safety_flags": {
+    "runtime_attached": false,
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"]
+  }
+}

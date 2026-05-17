@@ -1,0 +1,48 @@
+{
+  "result_id": "af2n_stage1_1pct_apply_result_v1",
+  "task_origin": "AF2-N-STAGE1-1PCT-ALLOWLIST APPLY",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-17T23:15:13.335345Z",
+  "preflight_status": "PASS",
+  "stage1_applied": true,
+  "stage1_allowlist_size": 50,
+  "stage1_allowlist_sample_first_5": [
+    "user_canary_001",
+    "user_canary_002",
+    "user_canary_003",
+    "stage1_qa_001",
+    "stage1_qa_002"
+  ],
+  "stage1_ledger_cap": 500,
+  "previous_allowlist_size": 3,
+  "previous_ledger_cap": 20,
+  "backup_path": "/app/backups/backend.conf.pre-stage1.20260517T231412Z.bak",
+  "observed_allowlist_size": 50,
+  "observed_ledger_cap": 500,
+  "observed_ledger_total_rows": 11,
+  "observed_ledger_canary_rows": 11,
+  "post_apply_heroes_count_100": true,
+  "post_apply_borea_404": true,
+  "post_apply_non_allowlist_423": true,
+  "overall_state": "stage1_allowlist_active_no_broad_rollout",
+  "restart_note": "supervisorctl restart timed out at the script subprocess level (startsecs=20, pip install on boot) but supervisor completed the restart correctly; backend is RUNNING and serving requests with the new env",
+  "safety_flags": {
+    "runtime_attached": true,
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+[program:backend]
+command=bash -c "pip install -q -r /app/backend/requirements.txt 2>&1 || true; exec python3 -m uvicorn server:app --host 0.0.0.0 --port 8001 --reload"
+directory=/app/backend
+autostart=true
+autorestart=true
+startsecs=20
+startretries=5
+stderr_logfile=/var/log/supervisor/backend.err.log
+stdout_logfile=/var/log/supervisor/backend.out.log
+environment=PYTHONUNBUFFERED="1",AFFINITY_GIFT_RUNTIME_ENABLED="true_explicit_affinity_gift_runtime_on",AFFINITY_GIFT_CANARY_ALLOWLIST="user_canary_001,user_canary_002,user_canary_003",AFFINITY_GIFT_CANARY_LEDGER_CAP="20"

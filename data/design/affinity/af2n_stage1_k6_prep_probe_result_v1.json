@@ -1,0 +1,186 @@
+{
+  "result_id": "af2n_stage1_k6_prep_probe_result_v1",
+  "task_origin": "AF2-L-K6-PREP3",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "mode": "python_fallback_stage1_active",
+  "k6_installed": false,
+  "locust_installed": false,
+  "generated_at_utc": "2026-05-17T23:20:21.533227Z",
+  "rounds_per_label": 60,
+  "total_requests": 600,
+  "elapsed_seconds": 0.695,
+  "p95_target_ms": 500,
+  "total_5xx": 0,
+  "unexpected_total": 0,
+  "duplicate_inserted_total": 0,
+  "ledger_row_count_before": 11,
+  "ledger_row_count_after": 11,
+  "ledger_row_count_unchanged": true,
+  "by_label": {
+    "empty": {
+      "count": 60,
+      "expected_status": 423,
+      "codes": {
+        "423": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.6,
+      "p95_latency_ms": 0.95
+    },
+    "no_idem": {
+      "count": 60,
+      "expected_status": 423,
+      "codes": {
+        "423": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.59,
+      "p95_latency_ms": 0.73
+    },
+    "malformed_idem": {
+      "count": 60,
+      "expected_status": 423,
+      "codes": {
+        "423": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.57,
+      "p95_latency_ms": 0.62
+    },
+    "negative_qty": {
+      "count": 60,
+      "expected_status": 423,
+      "codes": {
+        "423": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.57,
+      "p95_latency_ms": 0.68
+    },
+    "huge_qty": {
+      "count": 60,
+      "expected_status": 423,
+      "codes": {
+        "423": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.6,
+      "p95_latency_ms": 1.06
+    },
+    "borea": {
+      "count": 60,
+      "expected_status": 404,
+      "codes": {
+        "404": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.53,
+      "p95_latency_ms": 0.65
+    },
+    "greek_borea": {
+      "count": 60,
+      "expected_status": 404,
+      "codes": {
+        "404": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.53,
+      "p95_latency_ms": 0.61
+    },
+    "primordial_gaia": {
+      "count": 60,
+      "expected_status": 404,
+      "codes": {
+        "404": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.52,
+      "p95_latency_ms": 0.6
+    },
+    "idempotent_replay": {
+      "count": 60,
+      "expected_status": 200,
+      "codes": {
+        "200": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 3.13,
+      "p95_latency_ms": 3.66
+    },
+    "stage1_qa_user_blocked_path": {
+      "count": 60,
+      "expected_status": 423,
+      "codes": {
+        "423": 60
+      },
+      "unexpected_codes": {},
+      "p50_latency_ms": 0.6,
+      "p95_latency_ms": 0.76
+    }
+  },
+  "regression_gets": {
+    "/affinity/gifts": {
+      "code": 200,
+      "latency_ms": 3.546416999597568,
+      "expected": 200,
+      "ok": true
+    },
+    "/affinity/gifts/summary": {
+      "code": 200,
+      "latency_ms": 1.2989880051463842,
+      "expected": 200,
+      "ok": true
+    },
+    "/affinity/gift-spend/canary-status": {
+      "code": 200,
+      "latency_ms": 5.289185995934531,
+      "expected": 200,
+      "ok": true
+    },
+    "/heroes": {
+      "code": 200,
+      "latency_ms": 108.61524900246877,
+      "expected": 200,
+      "ok": true
+    },
+    "/affinity/gifts/by-element/dark/by-faction/greek": {
+      "code": 200,
+      "latency_ms": 6.170784996356815,
+      "expected": 200,
+      "ok": true
+    },
+    "/affinity/gifts/by-element/dark/by-faction/borea": {
+      "code": 404,
+      "latency_ms": 0.902952000615187,
+      "expected": 404,
+      "ok": true
+    },
+    "/affinity/gifts/by-element/tides/by-faction/greek": {
+      "code": 404,
+      "latency_ms": 0.6637359983869828,
+      "expected": 404,
+      "ok": true
+    }
+  },
+  "safety_flags": {
+    "runtime_attached": true,
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ],
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false
+  }
+}
