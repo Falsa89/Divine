@@ -1,0 +1,113 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v6",
+  "task_origin": "SAFETY-ROLLUP-F",
+  "supersedes": "collection_affinity_runtime_activation_readiness_rollup_v5",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+
+  "summary": "SAFETY-ROLLUP-F \u2014 All five operator signoffs are TRUE (product+engineering+qa+economy+rollback_owner). K6-live-prep PASS. OPS supervisor wiring READY_NOT_APPLIED with auto-rollback evidence. STACK-G-PRE ready. AF2-N STILL BLOCKED because final_user_runtime_approval is FALSE. Overall runtime stays NO_GO until the user provides an explicit separate final runtime approval message.",
+
+  "axis_layer_activation_ready": true,
+  "axis_layer_ready": true,
+  "ops_layer_ready": true,
+  "auth_contract_ready": true,
+  "idempotency_contract_ready": true,
+  "load_probe_full_ready": true,
+  "rollback_rehearsal_ready": true,
+  "migration_layer_ready": true,
+  "migration_applied": true,
+  "ledger_schema_ready": true,
+  "ledger_row_count_zero": true,
+  "k6_locust_test_plan_ready": true,
+  "k6_live_prep_pass": true,
+  "supervisor_wiring_ready": true,
+  "supervisor_wiring_applied": false,
+  "supervisor_wiring_state": "READY_NOT_APPLIED",
+  "stack_g_preconnection_ready": true,
+
+  "product_signoff": true,
+  "engineering_signoff": true,
+  "qa_signoff": true,
+  "economy_balance_signoff": true,
+  "rollback_owner_signoff": true,
+  "all_operator_signoffs_true": true,
+  "operator_signoff_ready": true,
+
+  "final_user_runtime_approval_required": true,
+  "final_user_runtime_approval_present": false,
+  "AF2N_allowed": false,
+  "overall_runtime_activation_ready": false,
+  "overall_runtime_activation_state": "ready_pending_final_user_runtime_approval",
+  "gift_spend_currently_disabled": true,
+  "go_no_go_decision": "NO_GO_RUNTIME",
+  "axis_layer_decision": "GO_AXIS",
+
+  "subsystems": {
+    "axis_layer":               {"status": "GO",                 "source": "AXIS-F + AXIS-G"},
+    "ops_layer":                {"status": "GO",                 "source": "OPS-B + OPS-C + OPS-C-WIRING (FastAPI hook) + OPS-C-SUPERVISOR-APPLY (auto-rollback)"},
+    "auth_contract":            {"status": "READY",              "source": "AF2-J"},
+    "idempotency_contract":     {"status": "READY",              "source": "AF2-K-PRE"},
+    "migration_foundation":     {"status": "APPLIED",            "source": "AF2-K-COMMIT V9"},
+    "migration_commit":         {"status": "APPLIED_ZERO_ROWS",  "source": "5 indexes + 0 rows"},
+    "load_probe_full":          {"status": "PASS",               "source": "AF2-L-FULL probe"},
+    "rollback_rehearsal_full":  {"status": "PASS_DRY_RUN",       "source": "AF2-L-FULL rehearsal"},
+    "k6_live_prep":             {"status": "PASS",               "source": "AF2-L-K6-LIVE-PREP (792 reqs / 0 5xx / 0 unexpected)"},
+    "operator_signoff_v4":      {"status": "ALL_TRUE",           "source": "AF2-M v4 (product+engineering+qa+economy+rollback_owner)"},
+    "stack_g_preconnection":    {"status": "READY_NOT_WIRED",    "source": "STACK-G-PRE preview adapter, battle runtime untouched"},
+    "af2n_go_nogo_package":     {"status": "READY_NO_GO",        "source": "af2n_go_no_go_preflight_package_v1 (NOT executed)"},
+    "db_layer":                 {"status": "SCHEMA_ONLY_NO_GO",  "source": "collection + indexes present, 0 rows, runtime OFF"},
+    "battle_runtime":           {"status": "NO_GO",              "source": "global_modifier_cap_resolver still NOT imported by battle"},
+    "borea_layer":              {"status": "GO",                 "source": "borea/greek_borea/primordial_gaia hidden"}
+  },
+
+  "runtime_no_go_reasons": [
+    "final_user_runtime_approval_present = false (the user did NOT yet provide a separate explicit runtime activation message)",
+    "AFFINITY_GIFT_RUNTIME_ENABLED runtime flag is OFF",
+    "AF2-N has NOT been executed",
+    "controlled rollout (stage1..stage4) not yet executed",
+    "live spend never enabled",
+    "battle runtime cap resolver still NOT imported by battle (STACK-G-PRE only)",
+    "production monitoring not yet exercised under live runtime conditions"
+  ],
+
+  "AF2N_blockers": [
+    "final_user_runtime_approval_present=false",
+    "overall_runtime_activation_ready=false",
+    "AF2N_allowed=false",
+    "NO_GO_RUNTIME decision in this rollup"
+  ],
+
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "Borea aliases hidden from /api/heroes",
+    "POST /api/affinity/gift-spend returns 423 with disabled envelope",
+    "POST /api/affinity/gift-spend with Borea alias returns 404",
+    "AF2-L-FULL probe: 0 5xx, 0 unexpected, p95 well within target",
+    "AF2-L-K6-LIVE-PREP: 792 reqs, 0 5xx, 0 unexpected, 0 regression unexpected, ledger rows = 0 after run",
+    "AF2-K commit applied: 0 ledger rows, 5 indexes created, db_write semantically false",
+    "AF2-M v4: ALL five signoffs true; AF2-N still BLOCKED",
+    "AXIS-G combined routes return 200/404/405 with correct semantics",
+    "OPS-C FastAPI startup hook active; supervisor apply attempt auto-rolled back, services unaffected",
+    "STACK-G-PRE preview adapter loaded and returns runtime_attached=false; battle_engine/battle_core/combat.tsx UNCHANGED",
+    "battle_engine.py / battle_core.py / combat.tsx UNCHANGED (git diff verified)",
+    "baseline v6 auto-detected as latest and PASS",
+    "feature_flag_currently_enabled == false everywhere",
+    "no DB writes possible from any new artifact"
+  ],
+
+  "next_step_recommendation": "Stay at NO_GO. To proceed to AF2-N, the user must send an explicit separate final runtime approval message (final_user_runtime_approval_present=true). After that approval, AF2-N can be executed in a dedicated task with canary rollout, live monitoring, and rollback owner standby. Until then, the system stays inert.",
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false,
+    "all_operator_signoffs_true": true,
+    "final_user_runtime_approval_present": false,
+    "supervisor_wiring_state": "READY_NOT_APPLIED"
+  }
+}

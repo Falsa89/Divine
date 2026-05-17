@@ -1,0 +1,439 @@
+TASK ULTRA-COMBO V11 — AF2-M-SIGN-ENGINEERING + SIGN-QA + SIGN-ECONOMY + SIGN-ROLLBACK-OWNER + AF2-L-K6-LIVE-PREP/SAFE + OPS-C-SUPERVISOR-APPLY-PREP/SAFE + SAFETY-ROLLUP-F
+All Remaining Signoffs + Final Test/Ops Readiness Before AF2-N
+MAXIMUM SAFE ACCELERATION — DO NOT FLIP AF2-N IN THIS TASK
+
+Project: Divine RPG / Divine Waifus
+
+USER APPROVAL:
+The user has now authorized acceleration and the remaining signoff work.
+Interpretation allowed for this task:
+- product_signoff already true from V10.
+- set engineering_signoff=true, qa_signoff=true, economy_balance_signoff=true, rollback_owner_signoff=true ONLY IF all safety gates pass.
+- This is approval for signoffs, NOT approval to execute AF2-N.
+Do NOT enable AFFINITY_GIFT_RUNTIME_ENABLED in this task.
+Do NOT run live gift-spend runtime.
+
+CURRENT STATE:
+- ULTRA-COMBO V10 complete.
+- product_signoff=true.
+- engineering/qa/economy/rollback signoffs false.
+- AF2-N blocked.
+- gift_transaction_ledger schema/indexes exist.
+- ledger rows count = 0.
+- gift-spend endpoint remains 423 no-write.
+- K6/Locust scripts exist, but tools were not installed in previous container; Python safe probe passed.
+- OPS-C supervisor wiring artifacts exist but READY_NOT_APPLIED.
+- STACK-G-PRE exists and is not wired to battle.
+- Suite 98/98 PASS under baseline v6.
+- /api/heroes=100, Borea hidden, Borea aliases 404.
+- Runtime flags OFF.
+
+============================================================
+TASKS INCLUDED
+============================================================
+
+1. AF2-M-SIGN-ENGINEERING
+2. AF2-M-SIGN-QA
+3. AF2-M-SIGN-ECONOMY
+4. AF2-M-SIGN-ROLLBACK-OWNER
+5. AF2-M-SIGNOFF-FINAL-PRE-AF2N package
+6. AF2-L-K6-LIVE-PREP/FULL-SAFE
+7. OPS-C-SUPERVISOR-APPLY-PREP/FULL-SAFE
+8. SAFETY-ROLLUP-F
+9. AF2-N-GO-NOGO-PACKAGE, but NO flag flip
+
+============================================================
+ABSOLUTE SAFETY RULES
+============================================================
+
+DO NOT:
+- execute AF2-N
+- enable AFFINITY_GIFT_RUNTIME_ENABLED
+- execute real gift spend
+- insert ledger rows
+- mutate inventory
+- mutate affinity points
+- activate runtime buffs
+- modify battle_engine.py, combat.tsx, battle_core.py
+- import global cap resolver into battle runtime
+- mutate gacha/roster/Character Bible/assets/catalogs/final_numbers
+- expose Borea
+- create spend/claim UI buttons
+- turn overall_runtime_activation_ready true unless all gates are genuinely satisfied; even then AF2-N_allowed must require final separate user approval
+- skip validators because of speed
+
+Allowed:
+- update signoff package v4 with all five signoffs true IF safety gates pass
+- create evidence bundles for each signoff
+- run safe disabled endpoint tests
+- install/use k6/locust ONLY if already available or install is safe/offline-approved; do not spend time on fragile package installation if it risks failure
+- apply OPS supervisor wiring ONLY if existing apply script is safe, backup+rollback present, and services remain running
+- otherwise mark OPS supervisor as READY_NOT_APPLIED with reason
+- create AF2-N preflight package, but do not flip flag
+
+============================================================
+STOP GATES FOR SIGNOFFS
+============================================================
+
+Do NOT set remaining signoffs true if:
+- /api/heroes != 100
+- Borea visible or alias behavior wrong
+- gift-spend not 423 no-write
+- ledger rows != 0
+- baseline v6 not clean
+- suite not passing
+- rollback rehearsal missing/failing
+- signoff evidence package incomplete
+- UI exposes spend/claim button
+- any battle runtime file changed unexpectedly
+- K6/live-load requirement is considered mandatory but tool unavailable; in that case set QA_SIGNOFF_PENDING_K6 instead of true unless Python disabled probe is accepted by the task as sufficient
+
+Because the user wants maximum acceleration, if K6/Locust is unavailable, run a larger safe Python disabled probe and document QA signoff basis. Do not block unless serious.
+
+============================================================
+PART A — PREFLIGHT V11
+============================================================
+
+Run:
+- GET /api/health
+- GET /api/heroes count=100
+- Borea/greek_borea/primordial_gaia hidden
+- POST /api/affinity/gift-spend valid -> 423
+- POST Borea aliases -> 404
+- ledger row count -> 0
+- baseline v6 diff PASS
+- suite current PASS
+- UI no spend button
+- battle files unchanged
+
+Create:
+- /app/data/design/system_safety/ultra_combo_v11_preflight_result_v1.json
+- /app/backend/scripts/validate_ultra_combo_v11_preflight.py
+
+============================================================
+PART B — AF2-M ALL REMAINING SIGNOFFS
+============================================================
+
+Create:
+- /app/data/design/affinity/affinity_gift_runtime_operator_signoff_package_v4.json
+- /app/backend/scripts/apply_affinity_gift_remaining_signoffs_v4.py
+- /app/backend/scripts/validate_affinity_gift_operator_signoff_v4.py
+
+If gates pass, set:
+- product_signoff=true (preserved from v3)
+- engineering_signoff=true
+- qa_signoff=true
+- economy_balance_signoff=true
+- rollback_owner_signoff=true
+
+But:
+- AF2N_allowed=false unless final_separate_user_af2n_approval=true, which must remain false in this task.
+- feature_flag_currently_enabled=false
+- overall_runtime_activation_ready can be "pre_ready_pending_final_user_af2n_approval", not active.
+
+Each signoff must have evidence:
+Engineering:
+- suite pass
+- baseline clean
+- no runtime file mutation
+- ledger schema/index exists
+- gift-spend disabled
+QA:
+- disabled load probe pass
+- API smoke pass
+- UI safety pass
+- Borea hidden tests pass
+Economy:
+- economy cap policy exists
+- PvP caps documented
+- gift spend live still disabled
+- ledger rows zero
+Rollback owner:
+- rollback rehearsal pass
+- rollback script exists
+- OPS restore exists
+- AF2-N rollback triggers documented
+
+Signoff source:
+- user_explicit_acceleration_authorization_in_chat
+- not_runtime_flag_approval
+
+Validator:
+- all five signoffs true if evidence complete
+- AF2-N still false
+- runtime flag false
+- gift-spend 423
+- ledger rows 0
+- /api/heroes 100
+- Borea hidden
+
+If any evidence missing:
+- do not set that signoff true
+- set signoff_blocked_reason
+- report blocker.
+
+============================================================
+PART C — AF2-L-K6-LIVE-PREP/FULL-SAFE
+============================================================
+
+Goal:
+Maximum load-test readiness without unsafe environment changes.
+
+Do:
+- Detect whether k6 is installed.
+- Detect whether locust is installed.
+- If installed, run safe low-intensity disabled endpoint test using existing scripts.
+- If not installed, do NOT attempt risky system install unless already supported in environment.
+- Run a larger Python disabled endpoint probe as fallback:
+  recommended 500-1000 requests if safe, otherwise 300.
+- Include mixed scenarios:
+  valid disabled
+  missing idem
+  duplicate idem
+  malformed idem
+  Borea aliases
+  by-axis GET routes
+- Expected:
+  0 5xx
+  0 unexpected
+  p95 captured
+  gift-spend normal = 423
+  Borea aliases = 404
+  ledger rows remain 0
+
+Create:
+- /app/data/design/affinity/affinity_gift_spend_k6_live_prep_result_v2.json
+- /app/backend/scripts/run_affinity_gift_spend_k6_live_safe_probe.py
+- /app/backend/scripts/validate_affinity_gift_spend_k6_live_prep_result_v2.py
+
+============================================================
+PART D — OPS-C-SUPERVISOR-APPLY-PREP/FULL-SAFE
+============================================================
+
+Goal:
+Apply supervisor startup_check wiring only if safe, otherwise leave ready_not_applied.
+
+Do:
+- Inspect existing OPS-C apply/rollback scripts.
+- Verify backup path.
+- Verify no destructive commands.
+- Verify supervisor config location.
+- If all safe, apply.
+- Run supervisor reread/update if needed.
+- Verify backend/mongodb/expo remain RUNNING.
+- Verify frontend :3000 200.
+- If not safe, do not apply and report ready_not_applied.
+
+Create:
+- /app/data/design/ops/ops_c_supervisor_apply_result_v1.json
+- /app/backend/scripts/validate_ops_c_supervisor_apply_result.py
+
+Acceptable results:
+- applied=true, services running, rollback available
+OR
+- applied=false, ready_not_applied=true, reason non-invasive safety
+
+============================================================
+PART E — AF2-N GO/NO-GO PACKAGE BUT NO FLAG FLIP
+============================================================
+
+Create:
+- /app/data/design/affinity/af2n_go_no_go_preflight_package_v1.json
+- /app/backend/scripts/validate_af2n_go_no_go_preflight_package.py
+
+Package:
+- all_signoffs_true=true if v4 all true
+- final_user_runtime_approval_required=true
+- final_user_runtime_approval_present=false
+- AF2N_allowed=false
+- AFFINITY_GIFT_RUNTIME_ENABLED_current=false
+- runtime_flip_command_template documented but not executed
+- rollback command template documented
+- monitoring checklist documented
+- staged rollout plan documented
+- do_not_execute_in_this_task=true
+
+Validator:
+- AF2-N false
+- final approval false
+- runtime flag false
+- gift-spend still 423
+
+============================================================
+PART F — SAFETY-ROLLUP-F
+============================================================
+
+Create:
+- /app/data/design/system_safety/collection_affinity_runtime_activation_readiness_rollup_v6.json
+- /app/backend/scripts/validate_collection_affinity_runtime_activation_rollup_v6.py
+
+Rollup:
+- product_signoff=true
+- engineering_signoff=true if signed
+- qa_signoff=true if signed
+- economy_balance_signoff=true if signed
+- rollback_owner_signoff=true if signed
+- all_operator_signoffs_true reflects actual
+- final_user_runtime_approval=false
+- AF2N_allowed=false
+- overall_runtime_activation_ready=false OR "ready_pending_final_user_runtime_approval"
+- NO_GO_RUNTIME until explicit AF2-N approval
+- ledger_schema_ready=true
+- ledger_row_count_zero=true
+- axis_layer_ready=true
+- ops_layer_ready reflects actual apply/ready
+- stack_g_preconnection_ready=true
+- gift_spend_currently_disabled=true
+
+============================================================
+PART G — COMBO VALIDATOR
+============================================================
+
+Create:
+- /app/backend/scripts/validate_ultra_combo_v11_all_signoffs_pre_af2n.py
+
+Checks:
+- preflight pass
+- signoff package v4 valid
+- no AF2-N
+- K6/live prep pass
+- OPS apply result valid
+- AF2-N GO/NO-GO package blocks flag flip
+- rollup v6 pass
+- ledger rows 0
+- gift-spend 423
+- Borea hidden
+- /api/heroes 100
+- baseline v6 clean
+- no battle_engine/combat/battle_core mutation
+- no gacha/roster/catalog mutation
+- UI safety pass
+
+Update suite runner:
+- optional validators for V11 components and combo
+- do not weaken checks
+
+============================================================
+PART H — VALIDATORS TO RUN
+============================================================
+
+Run:
+python3 /app/backend/scripts/validate_ultra_combo_v11_preflight.py
+python3 /app/backend/scripts/validate_affinity_gift_operator_signoff_v4.py
+python3 /app/backend/scripts/validate_affinity_gift_spend_k6_live_prep_result_v2.py
+python3 /app/backend/scripts/validate_ops_c_supervisor_apply_result.py
+python3 /app/backend/scripts/validate_af2n_go_no_go_preflight_package.py
+python3 /app/backend/scripts/validate_collection_affinity_runtime_activation_rollup_v6.py
+python3 /app/backend/scripts/validate_ultra_combo_v11_all_signoffs_pre_af2n.py
+python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py
+python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py --include-baseline-diff
+python3 /app/backend/scripts/validate_hero_skill_kit_catalog_baseline_diff.py
+
+Also rerun:
+- V10 validators
+- AF2-K commit validator
+- AF2-L full validator
+- AXIS-G audit
+- OPS-C audit
+- STACK-G-PRE audit
+
+============================================================
+PART I — API SMOKE
+============================================================
+
+Run:
+GET /api/health
+GET /api/heroes
+GET /api/affinity/gifts
+GET /api/affinity/gifts/by-element/dark/by-faction/greek
+POST /api/affinity/gift-spend empty
+POST /api/affinity/gift-spend valid
+POST /api/affinity/gift-spend duplicate idempotency
+POST /api/affinity/gift-spend hero_id=borea
+POST /api/affinity/gift-spend hero_id=greek_borea
+GET /api/hero-skill-kits/runtime/debug/coverage
+
+Expected:
+- /api/heroes 100
+- Borea hidden
+- gift-spend 423/no-write
+- Borea aliases 404
+- ledger rows 0
+- runtime debug inert
+
+============================================================
+PART J — UI SAFETY
+============================================================
+
+Audit frontend:
+- no gift spend button
+- no claim/spend/activate/equip/upgrade/summon/battle test/enable runtime button in affinity/gift context
+- no mutation fetch for affinity gifts
+- no Borea reveal
+- no AF2-N toggle
+
+============================================================
+PART K — FINAL DOC
+============================================================
+
+Create:
+- /app/docs/divine/71_ULTRA_COMBO_V11_ALL_SIGNOFFS_PRE_AF2N.md
+
+Sections:
+1. Purpose
+2. Preflight
+3. All remaining signoffs
+4. K6/live prep
+5. OPS supervisor apply result
+6. AF2-N GO/NO-GO package
+7. SAFETY-ROLLUP-F
+8. Borea safety
+9. Validator results
+10. Suite/baseline
+11. API smoke
+12. UI safety
+13. Runtime/DB/gacha/roster/catalog safety
+14. Warnings
+15. Final recommendation
+16. Suggested next tasks
+
+============================================================
+ACCEPTANCE
+============================================================
+
+Accept if:
+1. AF2-N not executed.
+2. AFFINITY_GIFT_RUNTIME_ENABLED remains OFF.
+3. Remaining signoffs set true only if evidence complete.
+4. If all signoffs true, AF2-N still false pending final user runtime approval.
+5. Gift-spend remains 423/no-write.
+6. Ledger rows remain 0.
+7. K6/live prep or safe Python probe pass.
+8. OPS apply safe or ready_not_applied with reason.
+9. Rollup v6 does not enable runtime.
+10. /api/heroes=100.
+11. Borea hidden.
+12. Baseline v6 clean.
+13. Suite pass.
+14. No battle_engine/combat/battle_core mutation.
+15. No gacha/roster/catalog mutation.
+16. UI safety pass.
+
+FINAL REPORT IN ITALIAN:
+1. File creati
+2. File modificati
+3. Preflight
+4. Signoff summary
+5. K6/live prep summary
+6. OPS supervisor apply summary
+7. AF2-N GO/NO-GO summary
+8. SAFETY-ROLLUP-F summary
+9. Borea safety
+10. Validator results
+11. Suite/baseline results
+12. API smoke
+13. UI safety
+14. Runtime/DB/gacha/roster/catalog safety
+15. Warning/discrepanze
+16. Final recommendation
+17. Suggested next tasks

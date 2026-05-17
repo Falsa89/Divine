@@ -1,0 +1,55 @@
+{
+  "result_id": "ops_c_supervisor_apply_result_v1",
+  "task_origin": "OPS-C-SUPERVISOR-APPLY-PREP/FULL-SAFE",
+  "design_only": false,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "OPS-C-SUPERVISOR-APPLY \u2014 The apply script was executed against /etc/supervisor/conf.d/. Backup was taken successfully and the snippet was copied, then the apply script's strict post-verification (`supervisorctl status startup_check` must return RUNNING) failed because the oneshot program exits immediately after running (autorestart=false, startsecs=0 by design). The script's built-in auto-rollback triggered, removed the conf, reloaded supervisor, and verified backend+expo are still RUNNING. End-state: identical to pre-apply (READY_NOT_APPLIED) with full evidence trail.",
+
+  "applied": false,
+  "ready_not_applied": true,
+  "reason": "strict_oneshot_verification_post_apply_failed_auto_rollback_triggered_services_unaffected",
+  "detail": "The apply script enforces `supervisorctl status startup_check` to return a RUNNING/STARTING line after update. For an oneshot (autorestart=false, startsecs=0), the process exits quickly and supervisorctl reports a non-RUNNING state. The script treats this as a verification failure and automatically rolls back. This is the SAFE conservative path: services were never at risk and the supervisor configuration is identical to pre-apply.",
+
+  "steps_executed": [
+    {"step": "backup_conf_d", "status": "OK", "path": "/app/backups/supervisor/conf.d.<timestamp>"},
+    {"step": "copy_snippet", "status": "OK", "src": "/app/ops/supervisor_startup_check_snippet.conf", "dst": "/etc/supervisor/conf.d/startup_check.conf"},
+    {"step": "supervisorctl_reread", "status": "OK"},
+    {"step": "supervisorctl_update", "status": "OK", "note": "startup_check added process group"},
+    {"step": "strict_oneshot_verification", "status": "FAIL_AUTO_ROLLBACK", "reason": "oneshot exits immediately; supervisorctl status reports non-RUNNING"},
+    {"step": "auto_rollback_invoked", "status": "OK"},
+    {"step": "rollback_remove_conf", "status": "OK"},
+    {"step": "rollback_supervisor_reload", "status": "OK"},
+    {"step": "post_rollback_backend_running", "status": "OK"},
+    {"step": "post_rollback_expo_running", "status": "OK"}
+  ],
+
+  "backup_path": "/app/backups/supervisor/conf.d.<timestamp>",
+  "snippet_source_path": "/app/ops/supervisor_startup_check_snippet.conf",
+  "apply_script_path": "/app/ops/apply_supervisor_startup_check_wiring.sh",
+  "rollback_script_path": "/app/ops/rollback_supervisor_startup_check_wiring.sh",
+  "audit_script_path": "/app/backend/scripts/audit_ops_supervisor_startup_wiring.py",
+  "doc_path": "/app/docs/divine/68_OPS_SUPERVISOR_STARTUP_WIRING.md",
+
+  "post_state": {
+    "backend_running": true,
+    "expo_running": true,
+    "mongodb_running": true,
+    "supervisor_conf_d_contains_startup_check": false,
+    "fastapi_startup_hook_active": true,
+    "note": "FastAPI startup hook OPS-C-WIRING (V9) is already active and provides the same practical effect non-invasively."
+  },
+
+  "future_apply_recommendation": "To apply successfully, either (a) relax the apply-script verification to accept EXITED state for oneshot programs, or (b) change the snippet to a long-running watchdog instead of oneshot. Both options require a fresh task with explicit user approval.",
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false,
+    "supervisor_wiring_state": "READY_NOT_APPLIED",
+    "auto_rollback_successful": true
+  }
+}

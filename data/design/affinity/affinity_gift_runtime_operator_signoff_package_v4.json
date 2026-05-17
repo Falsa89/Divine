@@ -1,0 +1,198 @@
+{
+  "package_id": "affinity_gift_runtime_operator_signoff_package_v4",
+  "task_origin": "AF2-M-SIGN-ENGINEERING+QA+ECONOMY+ROLLBACK_OWNER",
+  "supersedes": "affinity_gift_runtime_operator_signoff_package_v3",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "no_borea_activation": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "AF2-M (v4) — All five operator signoffs are TRUE after explicit user acceleration approval. Evidence bundles attached for each role. AF2-N remains BLOCKED until a separate explicit final_user_runtime_approval is provided. AFFINITY_GIFT_RUNTIME_ENABLED remains OFF.",
+  "future_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
+  "future_flag_truthy_allowlist": [
+    "true_explicit_affinity_gift_runtime_on"
+  ],
+  "feature_flag_currently_enabled": false,
+  "af2n_allowed": false,
+  "final_user_runtime_approval_required": true,
+  "final_user_runtime_approval_present": false,
+  "explicit_user_approval_required": true,
+  "overall_runtime_activation_state": "pre_ready_pending_final_user_af2n_approval",
+  "signoffs": {
+    "product_signoff": true,
+    "engineering_signoff": true,
+    "qa_signoff": true,
+    "economy_balance_signoff": true,
+    "rollback_owner_signoff": true
+  },
+  "signoff_metadata": {
+    "product_signoff_source": "user_explicit_approval_in_chat (V10)",
+    "engineering_signoff_source": "user_explicit_acceleration_authorization_in_chat (V11)",
+    "qa_signoff_source": "user_explicit_acceleration_authorization_in_chat (V11)",
+    "economy_balance_signoff_source": "user_explicit_acceleration_authorization_in_chat (V11)",
+    "rollback_owner_signoff_source": "user_explicit_acceleration_authorization_in_chat (V11)",
+    "product_signoff_scope": "AF2 product readiness only; not runtime flag approval",
+    "engineering_signoff_scope": "design+migration+code readiness only; not runtime flag approval",
+    "qa_signoff_scope": "validator suite + API smoke + load probe + UI safety only; not runtime flag approval",
+    "economy_balance_signoff_scope": "AF2 economy policy + caps documentation only; not runtime flag approval",
+    "rollback_owner_signoff_scope": "rollback scripts + rehearsal + monitoring documented only; not runtime flag approval",
+    "signed_at_utc": "2026-05-17T21:31:18.558331Z",
+    "acceleration_basis": "explicit_user_message_authorizing_acceleration_and_remaining_signoffs"
+  },
+  "signoff_evidence": {
+    "engineering": {
+      "suite_pass": true,
+      "baseline_v6_clean": true,
+      "no_runtime_file_mutation": true,
+      "runtime_files_verified_unchanged": [
+        "backend/battle_engine.py",
+        "backend/battle_core.py",
+        "backend/game_systems.py",
+        "backend/synergy_system.py",
+        "frontend/app/combat.tsx"
+      ],
+      "ledger_schema_present": true,
+      "ledger_indexes_count": 5,
+      "ledger_rows_count": 0,
+      "gift_spend_disabled": true,
+      "axis_g_routes_live": true,
+      "stack_g_preconnection_ready": true,
+      "refs": [
+        "validate_affinity_gift_transaction_ledger_commit_result",
+        "audit_affinity_gifts_combined_axis_routes",
+        "audit_stack_g_battle_cap_resolver_preconnection",
+        "validate_hero_skill_kit_catalog_baseline_diff"
+      ]
+    },
+    "qa": {
+      "disabled_load_probe_pass": true,
+      "disabled_load_probe_5xx": 0,
+      "disabled_load_probe_unexpected": 0,
+      "k6_live_prep_pass": true,
+      "api_smoke_pass": true,
+      "ui_safety_pass": true,
+      "borea_hidden_tests_pass": true,
+      "axis_g_audit_pass": true,
+      "k6_signoff_basis": "k6 binary not installed in container; QA signoff accepted on Python disabled probe (sustained 500+ reqs, 0 5xx, 0 unexpected, p95 within target). Live k6 deferred to a future AF2-L-K6-LIVE task post AF2-N.",
+      "refs": [
+        "validate_affinity_gift_spend_k6_locust_test_plan",
+        "validate_affinity_gift_spend_k6_live_prep_result_v2",
+        "run_affinity_gift_spend_full_disabled_load_probe"
+      ]
+    },
+    "economy_balance": {
+      "economy_cap_policy_present": true,
+      "economy_cap_policy_id": "affinity_phase2_economy_cap_policy_draft_v1",
+      "pvp_caps_documented": true,
+      "pve_caps_documented": true,
+      "gift_spend_still_disabled": true,
+      "ledger_rows_zero": true,
+      "global_modifier_cap_resolver_inert": true,
+      "refs": [
+        "validate_affinity_phase2_economy_cap_policy",
+        "audit_global_modifier_cap_resolver_safety",
+        "audit_balance_foundation_boss_pvp_caps"
+      ]
+    },
+    "rollback_owner": {
+      "rollback_rehearsal_pass": true,
+      "rollback_rehearsal_steps_simulated": 4,
+      "rollback_script_present": true,
+      "rollback_script_paths": [
+        "backend/scripts/affinity_phase2_migration_rollback_rehearsal.py",
+        "ops/restore_start_expo_wrapper.sh",
+        "ops/rollback_supervisor_startup_check_wiring.sh"
+      ],
+      "ops_restore_exists": true,
+      "af2n_rollback_triggers_documented": true,
+      "af2n_rollback_triggers": [
+        "err_5xx_rate > 1%",
+        "duplicate_spend_count > 0",
+        "borea_leak_count > 0",
+        "inventory_mismatch > 0",
+        "p95_latency_ms > 800",
+        "unauthorized_writes > 0"
+      ],
+      "refs": [
+        "validate_affinity_phase2_rollback_rehearsal",
+        "audit_ops_start_expo_persistence",
+        "audit_ops_start_expo_autorestore"
+      ]
+    }
+  },
+  "signoff_blocked_reasons": {},
+  "signoff_history": [
+    {
+      "version": "v1",
+      "task_origin": "AF2-M",
+      "signoffs": {
+        "product_signoff": false,
+        "engineering_signoff": false,
+        "qa_signoff": false,
+        "economy_balance_signoff": false,
+        "rollback_owner_signoff": false
+      },
+      "af2n_allowed": false
+    },
+    {
+      "version": "v2",
+      "task_origin": "AF2-M-SIGN-PRE",
+      "signoffs": {
+        "product_signoff": false,
+        "engineering_signoff": false,
+        "qa_signoff": false,
+        "economy_balance_signoff": false,
+        "rollback_owner_signoff": false
+      },
+      "af2n_allowed": false
+    },
+    {
+      "version": "v3",
+      "task_origin": "AF2-M-SIGN-PRODUCT",
+      "signoffs": {
+        "product_signoff": true,
+        "engineering_signoff": false,
+        "qa_signoff": false,
+        "economy_balance_signoff": false,
+        "rollback_owner_signoff": false
+      },
+      "af2n_allowed": false
+    },
+    {
+      "version": "v4",
+      "task_origin": "AF2-M-SIGN-ENGINEERING+QA+ECONOMY+ROLLBACK_OWNER",
+      "signoffs": {
+        "product_signoff": true,
+        "engineering_signoff": true,
+        "qa_signoff": true,
+        "economy_balance_signoff": true,
+        "rollback_owner_signoff": true
+      },
+      "af2n_allowed": false
+    }
+  ],
+  "go_decision_gate": {
+    "all_signoffs_true": true,
+    "user_explicit_approval_required": true,
+    "final_user_runtime_approval_present": false,
+    "baseline_diff_pass_required": true,
+    "axis_layer_ready_required": true,
+    "migration_layer_ready_required": true,
+    "af2k_commit_applied_required": true,
+    "af2l_full_load_pass_required": true,
+    "af2n_allowed": false
+  },
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ],
+    "af2n_allowed_today": false,
+    "all_signoffs_true": true,
+    "final_user_runtime_approval_present": false
+  }
+}

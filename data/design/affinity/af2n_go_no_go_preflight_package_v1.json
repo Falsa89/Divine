@@ -1,0 +1,97 @@
+{
+  "package_id": "af2n_go_no_go_preflight_package_v1",
+  "task_origin": "AF2-N-GO-NOGO-PACKAGE (preflight only, NOT executed)",
+  "design_only": true,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "AF2-N GO/NO-GO preflight package. Documents the gate, command template, monitoring checklist and rollout plan for the future runtime flip. AF2-N IS NOT EXECUTED IN THIS TASK. AFFINITY_GIFT_RUNTIME_ENABLED remains OFF. Requires a separate explicit user runtime approval (final_user_runtime_approval_present must become true).",
+
+  "do_not_execute_in_this_task": true,
+
+  "current_state": {
+    "all_signoffs_true": true,
+    "product_signoff": true,
+    "engineering_signoff": true,
+    "qa_signoff": true,
+    "economy_balance_signoff": true,
+    "rollback_owner_signoff": true,
+    "final_user_runtime_approval_required": true,
+    "final_user_runtime_approval_present": false,
+    "AF2N_allowed": false,
+    "AFFINITY_GIFT_RUNTIME_ENABLED_current": false,
+    "ledger_rows": 0,
+    "gift_spend_disabled": true,
+    "borea_hidden": true,
+    "axis_g_live": true,
+    "baseline_v6_clean": true,
+    "stack_g_preconnection_ready": true,
+    "k6_live_prep_pass": true,
+    "supervisor_wiring_state": "READY_NOT_APPLIED"
+  },
+
+  "go_no_go_decision_today": "NO_GO_PENDING_FINAL_USER_APPROVAL",
+
+  "go_gate_required": [
+    {"id": "all_operator_signoffs_true", "required": true, "status_today": "PASS"},
+    {"id": "final_user_runtime_approval_present", "required": true, "status_today": "FAIL"},
+    {"id": "af2k_commit_applied", "required": true, "status_today": "PASS"},
+    {"id": "af2l_full_load_pass", "required": true, "status_today": "PASS"},
+    {"id": "af2l_k6_live_prep_pass", "required": true, "status_today": "PASS"},
+    {"id": "axis_g_live", "required": true, "status_today": "PASS"},
+    {"id": "ops_layer_ready", "required": true, "status_today": "PASS"},
+    {"id": "stack_g_preconnection_ready", "required": true, "status_today": "PASS"},
+    {"id": "baseline_v6_clean", "required": true, "status_today": "PASS"},
+    {"id": "ledger_rows_zero", "required": true, "status_today": "PASS"},
+    {"id": "gift_spend_disabled", "required": true, "status_today": "PASS"},
+    {"id": "borea_hidden", "required": true, "status_today": "PASS"},
+    {"id": "monitoring_endpoint_in_place", "required": true, "status_today": "PASS"},
+    {"id": "rollback_runbook_documented", "required": true, "status_today": "PASS"},
+    {"id": "runbook_dry_run_executed", "required": true, "status_today": "PASS"}
+  ],
+
+  "runtime_flip_command_template_DO_NOT_EXECUTE": {
+    "step1_set_env_only_after_user_explicit_runtime_approval": "export AFFINITY_GIFT_RUNTIME_ENABLED=true_explicit_affinity_gift_runtime_on",
+    "step2_restart_backend": "sudo supervisorctl restart backend",
+    "step3_verify_endpoint_now_returns_200_or_401_not_423": "curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://127.0.0.1:8001/api/affinity/gift-spend -H 'Content-Type: application/json' -d '{...valid payload...}'",
+    "step4_immediately_canary_1pct_allowlist": "requires server-side allowlist configuration (NOT in scope of V11)",
+    "explicit_warning": "NEVER set AFFINITY_GIFT_RUNTIME_ENABLED without final user runtime approval AND a controlled canary plan AND monitoring in place AND rollback owner standby."
+  },
+
+  "runtime_rollback_command_template": {
+    "step1_unset_env": "unset AFFINITY_GIFT_RUNTIME_ENABLED  # or set to a non-allowlisted token",
+    "step2_restart_backend": "sudo supervisorctl restart backend",
+    "step3_verify_disabled": "curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://127.0.0.1:8001/api/affinity/gift-spend -H 'Content-Type: application/json' -d '{}'  # expect 423",
+    "step4_snapshot_ledger_count": "db.gift_transaction_ledger.count_documents({})  # record",
+    "step5_run_python_validators": "python3 /app/backend/scripts/validate_ultra_combo_v11_all_signoffs_pre_af2n.py",
+    "sla_seconds": 30
+  },
+
+  "monitoring_checklist": [
+    "err_5xx_rate threshold 1% (immediate rollback above)",
+    "duplicate_spend_count must remain 0",
+    "borea_leak_count must remain 0",
+    "inventory_mismatch must remain 0",
+    "p95_latency_ms threshold 800",
+    "unauthorized_writes must remain 0",
+    "unique-index conflict rate on gift_transaction_ledger.idx_idem_key_user_window",
+    "alert if ledger_rows grows beyond planned canary cap"
+  ],
+
+  "staged_rollout_plan": [
+    {"stage": 0, "id": "internal_smoke", "vu_or_pct": "internal smoke only", "abort_if": "any 5xx or duplicate spend"},
+    {"stage": 1, "id": "canary_1pct_allowlist", "vu_or_pct": "1% of users (allowlist)", "abort_if": "err>1% or any borea leak"},
+    {"stage": 2, "id": "10pct", "vu_or_pct": "10%", "abort_if": "err>1% or duplicate spend > 0"},
+    {"stage": 3, "id": "50pct", "vu_or_pct": "50%", "abort_if": "err>1% or p95>800ms"},
+    {"stage": 4, "id": "100pct", "vu_or_pct": "100%", "abort_if": "err>0.5% or any inventory mismatch"}
+  ],
+
+  "safety_flags": {
+    "runtime_attached": false,
+    "db_write": false,
+    "feature_flag_currently_enabled": false,
+    "hidden_aliases_blocked": ["borea","greek_borea","primordial_gaia"],
+    "AF2N_allowed_today": false,
+    "af2n_executed_in_this_task": false
+  }
+}

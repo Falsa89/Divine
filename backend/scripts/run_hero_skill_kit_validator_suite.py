@@ -136,6 +136,16 @@ OPTIONAL = [
     ('STACK-G-PRE', 'audit_stack_g_battle_cap_resolver_preconnection.py'),
     ('SAFETY-ROLLUP-E', 'validate_collection_affinity_runtime_activation_rollup_v5.py'),
     ('ULTRA-COMBO-V10', 'validate_ultra_combo_v10_productsign_k6_ops_stackg_rollupe.py'),
+    # ULTRA-COMBO V11 (AF2-M-SIGN-ENGINEERING+QA+ECONOMY+ROLLBACK_OWNER
+    #                  + AF2-L-K6-LIVE-PREP + OPS-C-SUPERVISOR-APPLY
+    #                  + AF2-N-GO-NOGO-PACKAGE + SAFETY-ROLLUP-F)
+    ('V11-PREFLIGHT', 'validate_ultra_combo_v11_preflight.py'),
+    ('AF2-M-V4-ALL-SIGNOFFS', 'validate_affinity_gift_operator_signoff_v4.py'),
+    ('AF2-L-K6-LIVE-PREP', 'validate_affinity_gift_spend_k6_live_prep_result_v2.py'),
+    ('OPS-C-SUP-APPLY', 'validate_ops_c_supervisor_apply_result.py'),
+    ('AF2-N-GO-NOGO-PRE', 'validate_af2n_go_no_go_preflight_package.py'),
+    ('SAFETY-ROLLUP-F', 'validate_collection_affinity_runtime_activation_rollup_v6.py'),
+    ('ULTRA-COMBO-V11', 'validate_ultra_combo_v11_all_signoffs_pre_af2n.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
