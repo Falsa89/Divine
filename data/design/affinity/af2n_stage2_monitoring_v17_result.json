@@ -1,0 +1,53 @@
+{
+  "result_id": "af2n_stage2_monitoring_v17_result",
+  "task_origin": "AF2-N-STAGE2-MONITORING-V17",
+  "generated_at_utc": "2026-05-18T00:23:50.378185Z",
+  "design_only": false,
+  "runtime_attached": true,
+  "broad_rollout_authorized": false,
+  "samples_target": 80,
+  "counters": {
+    "samples_total": 77,
+    "health_ok": 30,
+    "heroes_100": 10,
+    "borea_404": 15,
+    "borea_bad": 0,
+    "non_allowlist_423": 15,
+    "non_allowlist_bad": 0,
+    "stage2_fresh_ok": 6,
+    "stage2_fresh_fail": 0,
+    "http_5xx": 0
+  },
+  "pre": {
+    "ledger": 19,
+    "negative_inventory": 0,
+    "inv_mut": 8,
+    "aff_mut": 8,
+    "buffs": 0,
+    "battle_wiring": 0
+  },
+  "post": {
+    "negative_inventory": 0,
+    "inv_mut": 14,
+    "aff_mut": 14,
+    "inv_mut_delta": 6,
+    "aff_mut_delta": 6,
+    "buffs": 0,
+    "battle_wiring": 0
+  },
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "buffs_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

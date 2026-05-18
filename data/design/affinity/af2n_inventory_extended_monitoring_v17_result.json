@@ -1,0 +1,65 @@
+{
+  "result_id": "af2n_inventory_extended_monitoring_v17_result",
+  "task_origin": "AF2-N-INVENTORY-EXTENDED-MONITORING-V17",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "db_write": true,
+  "db_write_scope": "gift_transaction_ledger + user_gift_inventory + user_affinity_state (Stage1 allowlist only, max 5 fresh spends)",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-18T00:23:10.460292Z",
+  "samples_total": 120,
+  "samples_target": 120,
+  "max_fresh_spends_allowed": 5,
+  "counters": {
+    "samples_total": 120,
+    "health_ok": 50,
+    "heroes_count_100": 20,
+    "borea_404": 15,
+    "borea_not_404": 0,
+    "non_allowlist_423": 15,
+    "non_allowlist_other": 0,
+    "idempotent_replay_ok": 15,
+    "idempotent_replay_bad": 0,
+    "fresh_spend_ok": 5,
+    "fresh_spend_fail": 0,
+    "http_5xx": 0
+  },
+  "pre": {
+    "ledger": 14,
+    "inv_collection": 50,
+    "negative_inventory": 0,
+    "inventory_mutated": 3,
+    "affinity_points_mutated": 3,
+    "buffs": 0,
+    "battle_wiring": 0
+  },
+  "post": {
+    "ledger": 19,
+    "negative_inventory": 0,
+    "inventory_mutated": 8,
+    "affinity_points_mutated": 8,
+    "buffs": 0,
+    "battle_wiring": 0,
+    "ledger_delta": 5,
+    "inv_mut_delta": 5,
+    "aff_mut_delta": 5
+  },
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_wiring_live": true,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

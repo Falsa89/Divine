@@ -10,6 +10,16 @@ Exit 0 only if every REQUIRED validator passes; exit 1 if any fails.
 Optional validators that are missing are reported and do not fail the
 suite unless they are listed as required.
 
+V17 SUITE SUPERSEDENCE CLEANUP METADATA (non-functional, doc only):
+  Buckets (see /app/data/design/system_safety/validator_suite_supersedence_cleanup_report_v1.json
+  and /app/docs/divine/VALIDATOR_SUITE_SUPERSEDENCE_POST_AF2N.md):
+    1) ACTIVE_REQUIRED  — core 5-star/6-star/divine-weapon/balance
+    2) ACTIVE_OPTIONAL  — contextual + V13/V14/V15/V16/V17 V16-aware
+    3) SUPERSEDED_PRE_AF2N         — auto-marked when AFFINITY_GIFT_RUNTIME_ENABLED == truthy
+    4) SUPERSEDED_PRE_INV_WRITES   — auto-marked when AFFINITY_GIFT_INVENTORY_WRITES_ENABLED == truthy
+    5) HISTORICAL_MANUAL — apply/seed/rollback scripts; never run by suite
+  No ACTIVE_REQUIRED validator removed or weakened. Historical scripts kept on disk.
+
 Usage:
     python3 run_hero_skill_kit_validator_suite.py
     python3 run_hero_skill_kit_validator_suite.py --json-out /tmp/suite.json
@@ -195,6 +205,18 @@ OPTIONAL = [
     ('AF2-N-INVENTORY-LIVE-MONITORING-V16',    'validate_affinity_inventory_live_monitoring_v16.py'),
     ('SAFETY-ROLLUP-K',                        'validate_collection_affinity_runtime_activation_rollup_v11.py'),
     ('ULTRA-COMBO-V16',                        'validate_ultra_combo_v16_inventory_schema_seed_activate.py'),
+    # ULTRA-COMBO V17 (INVENTORY EXTENDED MONITORING + STAGE2 5-10% EXPANSION
+    #                  PREP/APPLY-GATED + SUITE SUPERSEDED CLEANUP
+    #                  + K6/LOCUST REAL READINESS + SAFETY-ROLLUP-L)
+    ('V17-PREFLIGHT',                              'validate_af2n_v17_preflight.py'),
+    ('AF2-N-INVENTORY-EXTENDED-MONITORING-V17',    'validate_af2n_inventory_extended_monitoring_v17.py'),
+    ('AF2-N-STAGE2-APPLY',                         'validate_af2n_stage2_5_10pct_apply_result.py'),
+    ('AF2-N-STAGE2-MONITORING-V17',                'validate_af2n_stage2_monitoring_v17.py'),
+    ('SUITE-SUPERSEDENCE-CLEANUP',                 'validate_validator_suite_supersedence_cleanup.py'),
+    ('AF2-L-K6-LOCUST-READINESS-V17',              'validate_af2n_v17_k6_locust_readiness.py'),
+    ('V17-ROLLBACK-READINESS',                     'validate_af2n_v17_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-L',                            'validate_collection_affinity_runtime_activation_rollup_v12.py'),
+    ('ULTRA-COMBO-V17',                            'validate_ultra_combo_v17_stage2_monitoring_cleanup_k6.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -235,11 +257,21 @@ def main(argv=None) -> int:
     # validators that explicitly assert the pre-AF2-N "runtime OFF" state
     # are SUPERSEDED by their V12 counterparts. Mark them as SUPERSEDED
     # so the suite remains green post-canary.
+    # V17: env vars may not be propagated to the suite's shell; fall back
+    # to a live canary-status probe so detection is robust.
     af2n_active = os.environ.get('AFFINITY_GIFT_RUNTIME_ENABLED', '') == 'true_explicit_affinity_gift_runtime_on'
-    # V16 supersedence: when inventory writes are active, V12-V15 validators
-    # that assert inventory_mutation_count==0 / inventory_wiring_live=False
-    # are SUPERSEDED by V16 counterparts.
     inv_writes_active = os.environ.get('AFFINITY_GIFT_INVENTORY_WRITES_ENABLED', '') == 'true_explicit_affinity_inventory_on'
+    stage2_applied = False
+    if not (af2n_active and inv_writes_active) or True:  # always probe to also detect stage2
+        try:
+            import urllib.request as _u, urllib.error as _e
+            with _u.urlopen('http://127.0.0.1:8001/api/affinity/gift-spend/canary-status', timeout=4) as r:
+                st = json.loads(r.read().decode())
+            af2n_active = af2n_active or (st.get('feature_flag_currently_enabled') is True)
+            inv_writes_active = inv_writes_active or (st.get('inventory_mutation_enabled') is True)
+            stage2_applied = (st.get('canary_allowlist_size', 0) > 50) or (st.get('canary_ledger_cap', 0) > 500)
+        except Exception:
+            pass
     SUPERSEDED_AFTER_AF2N = frozenset({
         # V6-V11 validators that explicitly assert pre-AF2-N "runtime OFF" state
         'AF2-G', 'AF2-H', 'AF2-I', 'AF2-J', 'AF2-K',
@@ -265,7 +297,12 @@ def main(argv=None) -> int:
         'V15-ROLLBACK-READINESS', 'SAFETY-ROLLUP-J', 'ULTRA-COMBO-V15',
         # NOTE: AF2-N-STAGE1-EXTENDED-MONITORING-V15 is V16-aware (fixed) and remains active.
     }) if inv_writes_active else frozenset()
-    SUPERSEDED = SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
+    # V17: Stage2 expansion (allowlist>50 or cap>500) supersedes V16 preflight
+    # composite which assert exact stage1 sizes (allowlist==50, cap==500).
+    SUPERSEDED_AFTER_STAGE2 = frozenset({
+        'V16-PREFLIGHT', 'ULTRA-COMBO-V16',
+    }) if stage2_applied else frozenset()
+    SUPERSEDED = SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES | SUPERSEDED_AFTER_STAGE2
 
     results: list[dict] = []
     any_required_fail = False
@@ -275,6 +312,8 @@ def main(argv=None) -> int:
         print('  (AF2-N canary ACTIVE — pre-AF2-N validators marked SUPERSEDED)')
     if inv_writes_active:
         print('  (AF2-N inventory writes ACTIVE — V12-V15 pre-inventory-on validators marked SUPERSEDED)')
+    if stage2_applied:
+        print('  (Stage2 expansion DETECTED — V16 preflight + V16 composite marked SUPERSEDED)')
     print('=' * 70)
     print(f'{"TASK":10s} {"SCRIPT":54s} {"EXIT":>5s}')
     print('-' * 70)

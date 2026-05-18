@@ -1,0 +1,87 @@
+{
+  "plan_id": "af2n_stage2_5_10pct_plan_v1",
+  "task_origin": "AF2-N-STAGE2-EXPANSION-PREP",
+  "design_only": false,
+  "runtime_attached_stage1_allowlist_only": true,
+  "broad_rollout_authorized": false,
+  "target_percentage_range": [5, 10],
+  "target_user_class": "synthetic_qa_internal_only",
+  "scope_constraint": "allowlist_only_no_broad_rollout",
+  "current_stage1_allowlist_size": 50,
+  "current_stage1_ledger_cap": 500,
+  "target_stage2_allowlist_added": 50,
+  "target_stage2_total_allowlist_size_after_apply": 100,
+  "target_stage2_ledger_cap_after_apply": 1000,
+  "new_stage2_user_id_pattern": "stage2_qa_NNN",
+  "new_stage2_user_id_range": ["stage2_qa_001", "stage2_qa_050"],
+  "new_stage2_user_count": 50,
+  "seed_strategy": {
+    "gift_id": "gift_test_001",
+    "quantity_per_user": 10,
+    "metadata": {
+      "seed_task": "V17_STAGE2",
+      "is_qa_user": true,
+      "synthetic": true
+    },
+    "order": [
+      "seed_inventory_for_new_users_BEFORE_supervisor_flip",
+      "backup_supervisor_conf",
+      "update_supervisor_allowlist_and_cap",
+      "restart_backend",
+      "smoke_verify",
+      "run_stage2_monitoring"
+    ]
+  },
+  "gates_required_to_apply": [
+    "v17_preflight_PASS",
+    "af2n_inventory_extended_monitoring_v17_PASS",
+    "api_heroes_count_100",
+    "borea_aliases_404",
+    "battle_files_unchanged",
+    "battle_runtime_attached_false",
+    "buffs_enabled_false",
+    "applied_to_combat_false",
+    "v16_composite_PASS",
+    "rollback_scripts_present",
+    "supervisor_conf_writable_and_backup_creatable",
+    "stage2_seed_completes_before_supervisor_flip",
+    "stage2_user_count_le_50",
+    "target_total_allowlist_le_200"
+  ],
+  "rollback_plan": {
+    "order": [
+      "restore_supervisor_conf_backup_v17",
+      "restart_backend",
+      "remove_stage2_seed_docs_via_rollback_script"
+    ],
+    "rollback_script": "/app/backend/scripts/rollback_af2n_stage2_5_10pct_allowlist.py",
+    "rollback_target_state": "stage1_50_users_ledger_cap_500_no_stage2_seed"
+  },
+  "safety_invariants": [
+    "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED stays scoped to allowlist only",
+    "no_broad_rollout",
+    "no_borea_reveal",
+    "no_battle_wiring",
+    "no_public_spend_button",
+    "no_buff_activation",
+    "no_gacha_roster_catalog_mutation",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged"
+  ],
+  "monitoring_after_apply": {
+    "samples_target": 80,
+    "min_stage2_fresh_spend_ok": 5,
+    "validator": "validate_af2n_stage2_monitoring_v17.py"
+  },
+  "abort_triggers": [
+    "5xx_rate_gt_0",
+    "non_allowlist_spend_success",
+    "borea_not_404",
+    "negative_inventory",
+    "idempotency_double_mutation",
+    "inv_aff_count_mismatch",
+    "battle_file_mutation",
+    "gacha_roster_catalog_mutation",
+    "allowlist_size_exceeded_target",
+    "cap_exceeded_target"
+  ]
+}

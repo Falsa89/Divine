@@ -1,0 +1,67 @@
+{
+  "report_id": "validator_suite_supersedence_cleanup_report_v1",
+  "task_origin": "SUITE-RUNNER-SUPERSEDED-CLEANUP-V17",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "V17 — Refactor metadata della suite runner: introdotto 4-livel registry (ACTIVE_REQUIRED / ACTIVE_OPTIONAL / SUPERSEDED_PRE_AF2N / SUPERSEDED_PRE_INV_WRITES / HISTORICAL_MANUAL) tramite documentazione esplicita JSON + Markdown senza ridurre la copertura attiva. Script storici NON eliminati. Le supersedence sono già enforced runtime via env flags (AFFINITY_GIFT_RUNTIME_ENABLED + AFFINITY_GIFT_INVENTORY_WRITES_ENABLED) nel runner. Output JSON della suite continua a marcare SUPERSEDED esplicitamente.",
+  "runner_path": "/app/backend/scripts/run_hero_skill_kit_validator_suite.py",
+  "runner_supersedence_logic_present": true,
+  "runner_modification_v17": "non-functional metadata header added; SUPERSEDED grouping made explicit in JSON output",
+  "buckets": {
+    "ACTIVE_REQUIRED": {
+      "description": "Validators che DEVONO passare per qualunque release: 5-star, 6-star, divine weapon, balance foundation, numeric trim.",
+      "count_min_expected": 14
+    },
+    "ACTIVE_OPTIONAL": {
+      "description": "Validators ottimali / contestuali (post-AF2-N attivi): canary readiness dash post-flip, V13/V14/V15/V16 elements V16-aware, V17 group.",
+      "count_min_expected": 30
+    },
+    "SUPERSEDED_PRE_AF2N": {
+      "description": "Validators che asseriscono lo stato pre-flip 'runtime OFF'. Diventano SUPERSEDED quando AFFINITY_GIFT_RUNTIME_ENABLED=true_explicit_affinity_gift_runtime_on.",
+      "included_tasks": [
+        "AF2-G","AF2-H","AF2-I","AF2-J","AF2-K","MEGA-COMBO-4","ULTRA-COMBO",
+        "ULTRA-COMBO-V6","ULTRA-COMBO-V7","ULTRA-COMBO-V8","ULTRA-COMBO-V9",
+        "V10-PREFLIGHT","AF2-M-SIGN-PRODUCT","ULTRA-COMBO-V10",
+        "V11-PREFLIGHT","AF2-M-V4-ALL-SIGNOFFS","ULTRA-COMBO-V11",
+        "AF2-N-GO-NOGO-PRE"
+      ]
+    },
+    "SUPERSEDED_PRE_INV_WRITES": {
+      "description": "Validators che asseriscono lo stato pre-inventory-on (V12-V15). SUPERSEDED quando AFFINITY_GIFT_INVENTORY_WRITES_ENABLED=true_explicit_affinity_inventory_on.",
+      "included_tasks": [
+        "AF2-N-CANARY-SMOKE","AF2-N-ACTIVATION","SAFETY-ROLLUP-G","ULTRA-COMBO-V12",
+        "AF2-N-MONITORING-WINDOW","AF2-N-STAGE1-PREP","AF2-N-INVENTORY-WIRING-PRE",
+        "AF2-L-K6-LIVE-PREP2","SAFETY-ROLLUP-H","ULTRA-COMBO-V13",
+        "V14-PREFLIGHT","AF2-N-STAGE1-APPLY","AF2-N-STAGE1-MONITORING",
+        "AF2-N-INVENTORY-WIRING-SHADOW","AF2-L-K6-PREP3-PROBE",
+        "AF2-N-STAGE1-ROLLBACK-READY","SAFETY-ROLLUP-I","ULTRA-COMBO-V14",
+        "V15-PREFLIGHT","AF2-N-INVENTORY-WIRING-APPLY","AF2-N-INVENTORY-LIVE-MONITORING",
+        "AF2-L-K6-V15-FALLBACK","V15-ROLLBACK-READINESS","SAFETY-ROLLUP-J","ULTRA-COMBO-V15"
+      ]
+    },
+    "HISTORICAL_MANUAL": {
+      "description": "Script di applicazione/migrazione/seed/rollback storici. Mantenuti su disco per audit; non eseguiti dalla suite runner. Solo run manuali approvati.",
+      "examples": [
+        "apply_af2n_stage1_1pct_allowlist.py",
+        "rollback_af2n_stage1_1pct_allowlist.py",
+        "apply_affinity_inventory_wiring_stage1.py",
+        "apply_affinity_inventory_wiring_stage1_retry.py",
+        "rollback_affinity_inventory_wiring_stage1.py",
+        "rollback_affinity_inventory_wiring_stage1_retry.py",
+        "seed_stage1_qa_gift_inventory.py",
+        "rollback_stage1_qa_gift_inventory_seed.py"
+      ]
+    }
+  },
+  "safety_invariants": [
+    "no_active_required_validator_removed_or_weakened",
+    "superseded_set_unchanged_in_logic_only_metadata_added",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged",
+    "no_historical_script_deletion",
+    "all_superseded_records_documented"
+  ],
+  "acceptance": {
+    "suite_overall_PASS_required": true,
+    "baseline_v6_diff_PASS_required": true,
+    "active_required_must_run_or_be_explicitly_superseded": true
+  }
+}

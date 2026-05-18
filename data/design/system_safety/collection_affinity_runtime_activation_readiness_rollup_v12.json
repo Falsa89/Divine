@@ -1,0 +1,99 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v12",
+  "task_origin": "SAFETY-ROLLUP-L",
+  "supersedes": "collection_affinity_runtime_activation_readiness_rollup_v11",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": false,
+  "runtime_attached_stage2_applied": true,
+  "db_write": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-18T00:29:10.174500Z",
+  "summary": "SAFETY-ROLLUP-L — V17 monitoring esteso inventory live + Stage2 5-10% prep/apply gated + suite supersedence cleanup metadata + K6/Locust readiness + rollback readiness. Stage2 state: APPLIED. Invarianti hard tenuti: /api/heroes=100, Borea hidden/404, battle_engine.py/combat.tsx/battle_core.py/synergy_system.py/game_systems.py NOT modified, buffs OFF, battle wiring OFF, broad rollout NOT authorized.",
+  "inputs_present": {
+    "v17_preflight": true,
+    "v17_extended_monitoring": true,
+    "stage2_apply": true,
+    "stage2_apply_result": true,
+    "stage2_monitoring": true,
+    "suite_cleanup": true,
+    "k6_readiness": true,
+    "rollback_readiness": true,
+    "v16_composite": true
+  },
+  "inventory_live_stage1_or_stage2": "stage2",
+  "stage2_state": "APPLIED",
+  "stage2_apply_reason_if_not_applied": null,
+  "broad_rollout_authorized": false,
+  "battle_wiring_live": false,
+  "Borea_hidden": true,
+  "ledger_count": 26,
+  "ledger_cap": 1000,
+  "canary_allowlist_size": 100,
+  "feature_flag_currently_enabled": true,
+  "inventory_mutation_enabled": true,
+  "affinity_points_mutation_enabled": true,
+  "inventory_mutation_health": {
+    "extended_monitoring_pass": true,
+    "fresh_spend_ok_count": 5,
+    "fresh_spend_fail_count": 0,
+    "idempotency_replay_bad": 0,
+    "http_5xx_count": 0,
+    "inv_aff_delta_equal": true
+  },
+  "affinity_state_health": {
+    "samples_total": 120,
+    "negative_inventory_post": 0
+  },
+  "suite_cleanup_state": {
+    "report_present": true,
+    "buckets_count": 5
+  },
+  "k6_readiness_state": {
+    "overall": "PASS",
+    "k6_binary_present": false,
+    "locust_binary_present": false,
+    "python_fallback_probe_pass": true,
+    "fb_requests_total": 2000
+  },
+  "rollback_readiness_state": {
+    "overall": "PASS",
+    "all_scripts_present": true,
+    "backup_dir_writable": true
+  },
+  "v16_composite_overall": "FAIL",
+  "v17_preflight_overall": "PASS",
+  "v17_extended_monitoring_overall": "PASS",
+  "stage2_monitoring_overall": "PASS",
+  "next_decision": "continue_stage2_monitoring",
+  "next_step_recommendation": "Stage2 5-10% expansion APPLIED e monitoring PASS: continuare monitoring esteso 24-72h; AF2-L-K6-LIVE real install possibile come prossimo passo gated.",
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "Borea aliases hidden in /api/heroes",
+    "POST /api/affinity/gift-spend Borea returns 404",
+    "POST /api/affinity/gift-spend non-allowlist returns 423",
+    "POST /api/affinity/gift-spend Stage1 QA user with sufficient inventory returns 200",
+    "Idempotent replay returns 200 with NO double-mutation",
+    "no buffs activation, no battle wiring, no broad rollout",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged"
+  ],
+  "safety_flags": {
+    "runtime_attached": true,
+    "runtime_attached_stage1_allowlist_only": false,
+    "runtime_attached_stage2_applied": true,
+    "broad_rollout_authorized": false,
+    "inventory_wiring_live": true,
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ],
+    "stage2_state": "APPLIED"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "result_id": "af2n_v17_k6_locust_readiness_result_v1",
+  "task_origin": "AF2-L-K6-LOCUST-READINESS-V17",
+  "generated_at_utc": "2026-05-18T00:23:54.860567Z",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "k6_binary_present": false,
+  "k6_binary_path": null,
+  "locust_binary_present": false,
+  "locust_binary_path": null,
+  "apt_get_present": true,
+  "pip_present": true,
+  "install_instructions": {
+    "k6": [
+      "curl -fsSL https://github.com/grafana/k6/releases/latest/download/k6-linux-amd64.tar.gz | tar -xzf - -C /tmp",
+      "sudo install /tmp/k6-*-linux-amd64/k6 /usr/local/bin/k6",
+      "k6 version"
+    ],
+    "locust_via_pip": [
+      "pip3 install --user locust",
+      "locust --version"
+    ],
+    "safety_note": "Run only with --vus 5 --duration 30s targeting non-allowlist 423 and Borea 404 paths to avoid any state change."
+  },
+  "real_k6_run": null,
+  "python_fallback_probe": {
+    "requests_total": 2000,
+    "http_5xx": 0,
+    "borea_404": 500,
+    "borea_bad": 0,
+    "non_allowlist_423": 500,
+    "non_allowlist_bad": 0,
+    "health_200": 800,
+    "canary_status_200": 200,
+    "heroes_100_ok": 0,
+    "duration_s": 2.29,
+    "rps": 873.4
+  },
+  "python_fallback_probe_pass": true,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "no_fresh_spend_attempted_in_fallback": true,
+    "broad_rollout_authorized": false,
+    "battle_runtime_attached": false,
+    "buffs_enabled": false,
+    "applied_to_combat": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  },
+  "recommendation": "k6/locust install possible via instructions above. Python fallback is sufficient for current canary scope. Real k6 LIVE plan deferred to future authorized task (AF2-L-K6-LIVE)."
+}
