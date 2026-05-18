@@ -185,6 +185,16 @@ OPTIONAL = [
     ('V15-ROLLBACK-READINESS',                 'validate_af2n_v15_rollback_readiness.py'),
     ('SAFETY-ROLLUP-J',                        'validate_collection_affinity_runtime_activation_rollup_v10.py'),
     ('ULTRA-COMBO-V15',                        'validate_ultra_combo_v15_inventory_activate_stage1.py'),
+    # ULTRA-COMBO V16 (SCHEMA-MIGRATION-USER-INVENTORY + SEED STAGE1 QA
+    #                  + INVENTORY-WIRING ACTIVATE RETRY + LIVE MONITORING
+    #                  + SAFETY-ROLLUP-K)
+    ('V16-PREFLIGHT',                          'validate_af2n_v16_preflight.py'),
+    ('AF2-N-INVENTORY-SCHEMA-MIGRATION',       'validate_user_inventory_affinity_state_schema.py'),
+    ('AF2-N-STAGE1-QA-SEED',                   'validate_stage1_qa_gift_inventory_seed.py'),
+    ('AF2-N-INVENTORY-RETRY-APPLY',            'validate_affinity_inventory_wiring_stage1_retry_apply_result.py'),
+    ('AF2-N-INVENTORY-LIVE-MONITORING-V16',    'validate_affinity_inventory_live_monitoring_v16.py'),
+    ('SAFETY-ROLLUP-K',                        'validate_collection_affinity_runtime_activation_rollup_v11.py'),
+    ('ULTRA-COMBO-V16',                        'validate_ultra_combo_v16_inventory_schema_seed_activate.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -226,6 +236,10 @@ def main(argv=None) -> int:
     # are SUPERSEDED by their V12 counterparts. Mark them as SUPERSEDED
     # so the suite remains green post-canary.
     af2n_active = os.environ.get('AFFINITY_GIFT_RUNTIME_ENABLED', '') == 'true_explicit_affinity_gift_runtime_on'
+    # V16 supersedence: when inventory writes are active, V12-V15 validators
+    # that assert inventory_mutation_count==0 / inventory_wiring_live=False
+    # are SUPERSEDED by V16 counterparts.
+    inv_writes_active = os.environ.get('AFFINITY_GIFT_INVENTORY_WRITES_ENABLED', '') == 'true_explicit_affinity_inventory_on'
     SUPERSEDED_AFTER_AF2N = frozenset({
         # V6-V11 validators that explicitly assert pre-AF2-N "runtime OFF" state
         'AF2-G', 'AF2-H', 'AF2-I', 'AF2-J', 'AF2-K',
@@ -235,6 +249,23 @@ def main(argv=None) -> int:
         'V11-PREFLIGHT', 'AF2-M-V4-ALL-SIGNOFFS', 'ULTRA-COMBO-V11',
         'AF2-N-GO-NOGO-PRE',  # this is by definition the pre-flip package
     }) if af2n_active else frozenset()
+    SUPERSEDED_AFTER_INV_WRITES = frozenset({
+        # Validators that assert ledger has 0 inventory_mutated / 0 affinity_points_mutated rows
+        # or that canary-status has inventory_mutation_enabled=False
+        'AF2-N-CANARY-SMOKE', 'AF2-N-ACTIVATION', 'SAFETY-ROLLUP-G', 'ULTRA-COMBO-V12',
+        'AF2-N-MONITORING-WINDOW', 'AF2-N-STAGE1-PREP', 'AF2-N-INVENTORY-WIRING-PRE',
+        'AF2-L-K6-LIVE-PREP2', 'SAFETY-ROLLUP-H', 'ULTRA-COMBO-V13',
+        'V14-PREFLIGHT', 'AF2-N-STAGE1-APPLY', 'AF2-N-STAGE1-MONITORING',
+        'AF2-N-INVENTORY-WIRING-SHADOW',
+        'AF2-L-K6-PREP3-PROBE', 'AF2-N-STAGE1-ROLLBACK-READY',
+        'SAFETY-ROLLUP-I', 'ULTRA-COMBO-V14',
+        'V15-PREFLIGHT', 'AF2-N-INVENTORY-WIRING-APPLY',
+        'AF2-N-INVENTORY-LIVE-MONITORING',
+        'AF2-L-K6-V15-FALLBACK',
+        'V15-ROLLBACK-READINESS', 'SAFETY-ROLLUP-J', 'ULTRA-COMBO-V15',
+        # NOTE: AF2-N-STAGE1-EXTENDED-MONITORING-V15 is V16-aware (fixed) and remains active.
+    }) if inv_writes_active else frozenset()
+    SUPERSEDED = SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
 
     results: list[dict] = []
     any_required_fail = False
@@ -242,11 +273,13 @@ def main(argv=None) -> int:
     print('RM1.31-B — Hero Skill Kit Validator Suite Runner')
     if af2n_active:
         print('  (AF2-N canary ACTIVE — pre-AF2-N validators marked SUPERSEDED)')
+    if inv_writes_active:
+        print('  (AF2-N inventory writes ACTIVE — V12-V15 pre-inventory-on validators marked SUPERSEDED)')
     print('=' * 70)
     print(f'{"TASK":10s} {"SCRIPT":54s} {"EXIT":>5s}')
     print('-' * 70)
     for task, name in REQUIRED:
-        if task in SUPERSEDED_AFTER_AF2N:
+        if task in SUPERSEDED:
             print(f'{task:10s} {name:54s} {"--":>5s}  [SUPERSEDED]')
             results.append({'task': task, 'script': name, 'required': True, 'status': 'SUPERSEDED'})
             continue
@@ -259,7 +292,7 @@ def main(argv=None) -> int:
 
     print('-- optional --')
     for task, name in OPTIONAL:
-        if task in SUPERSEDED_AFTER_AF2N:
+        if task in SUPERSEDED:
             print(f'{task:10s} {name:54s} {"--":>5s}  [SUPERSEDED]')
             results.append({'task': task, 'script': name, 'required': False, 'status': 'SUPERSEDED'})
             continue

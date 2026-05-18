@@ -1,0 +1,60 @@
+{
+  "schema_id": "user_inventory_affinity_state_schema_v1",
+  "task_origin": "V16 SCHEMA-MIGRATION-USER-INVENTORY",
+  "design_only": true,
+  "runtime_attached": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "db_name": "divine_waifus",
+  "collections": [
+    {
+      "name": "user_gift_inventory",
+      "description": "Per-user gift inventory balances. Decremented atomically on inventory-live spend.",
+      "fields": {
+        "user_id": {"type": "string", "required": true},
+        "gift_id": {"type": "string", "required": true},
+        "quantity": {"type": "int", "required": true, "min": 0},
+        "reserved_quantity": {"type": "int", "default": 0, "min": 0},
+        "source": {"type": "string", "default": "seed"},
+        "created_at": {"type": "datetime", "required": true},
+        "updated_at": {"type": "datetime", "required": true},
+        "last_tx_id": {"type": "string", "default": null},
+        "metadata": {"type": "object", "default": {}}
+      },
+      "indexes": [
+        {"name": "idx_user_gift_unique", "keys": [["user_id", 1], ["gift_id", 1]], "unique": true},
+        {"name": "idx_user_id",          "keys": [["user_id", 1]]},
+        {"name": "idx_gift_id",          "keys": [["gift_id", 1]]},
+        {"name": "idx_updated_at",       "keys": [["updated_at", -1]]}
+      ]
+    },
+    {
+      "name": "user_affinity_state",
+      "description": "Per-user per-hero affinity points and tier accumulated from gift spends.",
+      "fields": {
+        "user_id": {"type": "string", "required": true},
+        "hero_id": {"type": "string", "required": true},
+        "affinity_points": {"type": "int", "default": 0, "min": 0},
+        "affinity_tier": {"type": "int", "default": 0, "min": 0},
+        "total_gifts_given": {"type": "int", "default": 0, "min": 0},
+        "last_gift_id": {"type": "string", "default": null},
+        "last_tx_id": {"type": "string", "default": null},
+        "created_at": {"type": "datetime", "required": true},
+        "updated_at": {"type": "datetime", "required": true},
+        "metadata": {"type": "object", "default": {}}
+      },
+      "indexes": [
+        {"name": "idx_user_hero_unique", "keys": [["user_id", 1], ["hero_id", 1]], "unique": true},
+        {"name": "idx_user_id_aff",     "keys": [["user_id", 1]]},
+        {"name": "idx_hero_id_aff",     "keys": [["hero_id", 1]]},
+        {"name": "idx_affinity_tier",   "keys": [["affinity_tier", -1]]}
+      ]
+    }
+  ],
+  "safety": {
+    "borea_hero_ids_forbidden": ["borea", "greek_borea", "primordial_gaia"],
+    "writes_restricted_to": "Stage1 allowlist users only",
+    "no_non_qa_data_mutation": true,
+    "migration_env_gate": "DIVINE_ALLOW_USER_INVENTORY_SCHEMA_MIGRATION=YES_I_UNDERSTAND",
+    "seed_env_gate": "DIVINE_ALLOW_STAGE1_QA_INVENTORY_SEED=YES_I_UNDERSTAND"
+  }
+}

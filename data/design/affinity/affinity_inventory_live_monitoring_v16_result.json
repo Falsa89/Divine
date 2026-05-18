@@ -1,0 +1,101 @@
+{
+  "result_id": "affinity_inventory_live_monitoring_v16_result",
+  "task_origin": "AF2-N-INVENTORY-LIVE-MONITORING-V16",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "db_write": true,
+  "db_write_scope_v16": "gift_transaction_ledger + user_gift_inventory + user_affinity_state (Stage1 only)",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-18T00:01:39.690786Z",
+  "inventory_activation_state": "ACTIVATED",
+  "controlled_spends_already_executed_by_apply": true,
+  "replay_idempotency": {
+    "replay_code": 200,
+    "replay_result": "idempotent_replay",
+    "inventory_pre": {
+      "quantity": 8
+    },
+    "inventory_post": {
+      "quantity": 8
+    },
+    "inventory_unchanged": true,
+    "affinity_pre": {
+      "affinity_points": 2
+    },
+    "affinity_post": {
+      "affinity_points": 2
+    },
+    "affinity_unchanged": true
+  },
+  "borea_block": {
+    "code": 404,
+    "expected": 404,
+    "pre_borea_rows": 0,
+    "post_borea_rows": 0
+  },
+  "non_allowlist_block": {
+    "code": 423,
+    "expected": 423
+  },
+  "insufficient_block": {
+    "code": 412,
+    "expected": 412,
+    "inv_pre": {
+      "quantity": 10
+    },
+    "inv_post": {
+      "quantity": 10
+    },
+    "inv_unchanged": true
+  },
+  "observed": {
+    "ledger_inventory_mutated_rows": 3,
+    "ledger_affinity_points_mutated_rows": 3,
+    "ledger_buffs_activated_rows": 0,
+    "ledger_battle_wiring_rows": 0,
+    "ledger_negative_inventory_count": 0,
+    "inv_mut_sample_first_20": [
+      {
+        "tx_id": "tx_canary_4a6e07e67a404679",
+        "user_id": "stage1_qa_001",
+        "gift_id": "gift_test_001",
+        "hero_id": "greek_zeus",
+        "quantity": 2
+      },
+      {
+        "tx_id": "tx_canary_e88765a8643a45ea",
+        "user_id": "stage1_qa_002",
+        "gift_id": "gift_test_001",
+        "hero_id": "greek_athena",
+        "quantity": 3
+      },
+      {
+        "tx_id": "tx_canary_440d9147517f484a",
+        "user_id": "stage1_qa_003",
+        "gift_id": "gift_test_001",
+        "hero_id": "greek_ares",
+        "quantity": 1
+      }
+    ]
+  },
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS_ACTIVATED",
+  "safety_flags": {
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_wiring_live": true,
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

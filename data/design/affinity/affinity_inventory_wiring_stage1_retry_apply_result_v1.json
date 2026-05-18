@@ -1,0 +1,44 @@
+{
+  "result_id": "affinity_inventory_wiring_stage1_retry_apply_result_v1",
+  "task_origin": "AF2-N-INVENTORY-WIRING-STAGE1-RETRY APPLY",
+  "design_only": false,
+  "runtime_attached": true,
+  "runtime_attached_stage1_allowlist_only": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-18T00:01:11.765844Z",
+  "activation_state": "ACTIVATED",
+  "activation_applied": true,
+  "flag_name": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED",
+  "flag_value": "true_explicit_affinity_inventory_on",
+  "flag_currently_on": true,
+  "schema_ready": true,
+  "seed_count_stage1_v16": 50,
+  "backup_path_pre_flag": "/app/backups/backend.conf.pre-inv-flag.20260517T235811Z.bak",
+  "canary_status_post_activation": {
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "canary_allowlist_size": 50,
+    "ledger_total_rows": 14
+  },
+  "observed_ledger_inventory_mut_rows": 3,
+  "observed_ledger_affinity_mut_rows": 3,
+  "safety_flags": {
+    "runtime_attached_stage1_allowlist_only": true,
+    "broad_rollout_authorized": false,
+    "inventory_wiring_live": true,
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

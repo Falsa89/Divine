@@ -35,6 +35,15 @@ _CANARY_ALLOWLIST_ENV = "AFFINITY_GIFT_CANARY_ALLOWLIST"
 _CANARY_LEDGER_CAP_ENV = "AFFINITY_GIFT_CANARY_LEDGER_CAP"
 _CANARY_LEDGER_CAP_DEFAULT = 50
 
+# AF2-N V16 \u2014 dedicated flag for inventory live writes (Stage1 only).
+_INVENTORY_WRITES_ENV = "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED"
+_INVENTORY_WRITES_ON_VALUE = "true_explicit_affinity_inventory_on"
+
+
+def _inventory_writes_enabled() -> bool:
+    """V16: true only when the dedicated env flag is set to the explicit value."""
+    return os.environ.get(_INVENTORY_WRITES_ENV, "") == _INVENTORY_WRITES_ON_VALUE
+
 _FORBIDDEN_HERO_IDS = frozenset({"borea", "primordial_gaia"})
 # greek_borea is catalog-only / hidden; reject at endpoint level too.
 _HIDDEN_HERO_IDS = frozenset({"greek_borea"})
@@ -341,34 +350,116 @@ def register_affinity_gift_spend_skeleton_routes(router):
             from datetime import datetime, timezone
             import uuid
             tx_id = f"tx_canary_{uuid.uuid4().hex[:16]}"
+
+            # V16: inventory-live path. Active only when dedicated flag is on
+            # AND user is in allowlist AND hero is not Borea (already filtered
+            # above). Pre-check inventory BEFORE any write to keep atomicity.
+            hid = validated.hero_id.strip().lower()
+            inventory_writes_on = _inventory_writes_enabled()
+            inv_live_for_this_request = (inventory_writes_on
+                                          and user_id in (allowlist or set())
+                                          and hid not in _FORBIDDEN_HERO_IDS
+                                          and hid not in _HIDDEN_HERO_IDS)
+            inv_doc = None
+            if inv_live_for_this_request:
+                ugi = db["user_gift_inventory"]
+                inv_doc = await ugi.find_one({"user_id": user_id, "gift_id": validated.gift_id})
+                if (not inv_doc) or inv_doc.get("quantity", 0) < validated.quantity:
+                    return JSONResponse(
+                        status_code=412,
+                        content={
+                            "task_origin": "AF2-N-INV-LIVE",
+                            "http_status": 412,
+                            "result": "inventory_insufficient",
+                            "available": (inv_doc or {}).get("quantity", 0),
+                            "requested": validated.quantity,
+                            "safety_envelope": _disabled_envelope("inventory_insufficient"),
+                        },
+                    )
+
             doc = {
                 "tx_id": tx_id,
                 "transaction_id": tx_id,  # matches schema's idx_tx_id_unique
                 "user_id": user_id,
                 "gift_id": validated.gift_id,
-                "hero_id": validated.hero_id.strip().lower(),
+                "hero_id": hid,
                 "quantity": validated.quantity,
                 "idempotency_key": validated.idempotency_key,
-                "status": "applied_canary",
+                "status": "applied_inventory_live" if inv_live_for_this_request else "applied_canary",
                 "created_at_utc": datetime.now(timezone.utc),
                 "canary": True,
-                "task_origin": "AF2-N",
-                "inventory_mutated": False,
-                "affinity_points_mutated": False,
+                "task_origin": "AF2-N-INV-LIVE" if inv_live_for_this_request else "AF2-N",
+                "inventory_mutated": bool(inv_live_for_this_request),
+                "affinity_points_mutated": bool(inv_live_for_this_request),
                 "buffs_activated": False,
                 "battle_wiring_attached": False,
             }
             await coll.insert_one(doc)
+
+            # V16: execute inventory + affinity_state mutations (sequentially
+            # but with strict guards). If inventory decrement fails (race),
+            # the ledger row is reversed by delete_one to keep state consistent.
+            inventory_after = None
+            affinity_points_after = None
+            if inv_live_for_this_request:
+                ugi = db["user_gift_inventory"]
+                uas = db["user_affinity_state"]
+                now = datetime.now(timezone.utc)
+                dec_res = await ugi.update_one(
+                    {"user_id": user_id, "gift_id": validated.gift_id,
+                     "quantity": {"$gte": validated.quantity}},
+                    {"$inc": {"quantity": -validated.quantity},
+                     "$set": {"updated_at": now, "last_tx_id": tx_id}},
+                )
+                if dec_res.matched_count != 1:
+                    # Race lost. Reverse ledger row.
+                    await coll.delete_one({"tx_id": tx_id})
+                    return JSONResponse(
+                        status_code=412,
+                        content={
+                            "task_origin": "AF2-N-INV-LIVE",
+                            "http_status": 412,
+                            "result": "inventory_race_lost_rolled_back",
+                            "safety_envelope": _disabled_envelope("inventory_race_lost"),
+                        },
+                    )
+                pts_delta = 1 * validated.quantity  # 1 affinity point / unit (V16 default)
+                await uas.update_one(
+                    {"user_id": user_id, "hero_id": hid},
+                    {"$inc": {"affinity_points": pts_delta,
+                              "total_gifts_given": validated.quantity},
+                     "$set": {"updated_at": now,
+                              "last_gift_id": validated.gift_id,
+                              "last_tx_id": tx_id},
+                     "$setOnInsert": {"created_at": now,
+                                       "affinity_tier": 0,
+                                       "metadata": {"seed_task": "V16_live_write",
+                                                    "is_qa_user": True}}},
+                    upsert=True,
+                )
+                inv_after_doc = await ugi.find_one(
+                    {"user_id": user_id, "gift_id": validated.gift_id},
+                    projection={"_id": 0, "quantity": 1})
+                inventory_after = (inv_after_doc or {}).get("quantity")
+                uas_doc = await uas.find_one(
+                    {"user_id": user_id, "hero_id": hid},
+                    projection={"_id": 0, "affinity_points": 1})
+                affinity_points_after = (uas_doc or {}).get("affinity_points")
+
             return JSONResponse(
                 status_code=200,
                 content={
-                    "task_origin": "AF2-N",
+                    "task_origin": "AF2-N-INV-LIVE" if inv_live_for_this_request else "AF2-N",
                     "http_status": 200,
-                    "result": "applied_canary",
+                    "result": "applied_inventory_live" if inv_live_for_this_request else "applied_canary",
                     "tx_id": tx_id,
                     "ledger_row_inserted": True,
                     "ledger_rows_after_insert": current_rows + 1,
                     "canary_ledger_cap": cap,
+                    "inventory_mutated": bool(inv_live_for_this_request),
+                    "affinity_points_mutated": bool(inv_live_for_this_request),
+                    "inventory_after": inventory_after,
+                    "affinity_points_after": affinity_points_after,
                     "safety_envelope": _canary_envelope(),
                 },
             )
@@ -427,27 +518,35 @@ def register_affinity_gift_spend_skeleton_routes(router):
             "borea_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
             "applied_to_combat": False,
             "battle_runtime_attached": False,
-            "inventory_mutation_enabled": False,
-            "affinity_points_mutation_enabled": False,
+            "inventory_mutation_enabled": _inventory_writes_enabled(),
+            "affinity_points_mutation_enabled": _inventory_writes_enabled(),
             "buffs_enabled": False,
+            "inventory_writes_flag_dependency": _INVENTORY_WRITES_ENV,
         }
 
 
 def _canary_envelope() -> dict[str, Any]:
     """AF2-N canary safety envelope (sanitized; no PII)."""
+    inv_on = _inventory_writes_enabled()
     return {
-        "mode": "canary",
+        "mode": "inventory_live_stage1" if inv_on else "canary",
         "runtime_attached": True,
         "battle_runtime_attached": False,
         "applied_to_combat": False,
         "db_write": True,
-        "db_write_scope": "gift_transaction_ledger only (no inventory, no affinity_points)",
-        "inventory_mutated": False,
-        "affinity_points_mutated": False,
+        "db_write_scope": (
+            "gift_transaction_ledger + user_gift_inventory + user_affinity_state (Stage1 allowlist only)"
+            if inv_on else
+            "gift_transaction_ledger only (no inventory, no affinity_points)"
+        ),
+        "inventory_mutated": inv_on,
+        "affinity_points_mutated": inv_on,
         "buffs_activated": False,
         "borea_activation": False,
         "feature_flag_dependency": _ENV_VAR,
         "feature_flag_currently_enabled": True,
         "canary_allowlist_active": True,
         "hidden_aliases_blocked": ["borea", "greek_borea", "primordial_gaia"],
+        "inventory_writes_flag_dependency": _INVENTORY_WRITES_ENV,
+        "inventory_writes_flag_currently_enabled": inv_on,
     }

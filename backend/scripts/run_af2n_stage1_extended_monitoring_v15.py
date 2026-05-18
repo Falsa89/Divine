@@ -87,9 +87,19 @@ def main(argv=None):
             if label == 'status' and code == 200:
                 try:
                     sd = json.loads(body.decode())
-                    for k in ('applied_to_combat','battle_runtime_attached','inventory_mutation_enabled','affinity_points_mutation_enabled','buffs_enabled'):
+                    # V16: inventory_mutation_enabled and
+                    # affinity_points_mutation_enabled MAY be True when the
+                    # dedicated AFFINITY_GIFT_INVENTORY_WRITES_ENABLED flag is
+                    # active. The presence of 'inventory_writes_flag_dependency'
+                    # indicates V16+ mode. Other flags must still be False.
+                    is_v16_mode = 'inventory_writes_flag_dependency' in sd
+                    for k in ('applied_to_combat','battle_runtime_attached','buffs_enabled'):
                         if sd.get(k) is not False:
                             triggers.append((i, 'safety_flag_violation', f'{k}={sd.get(k)}'))
+                    if not is_v16_mode:
+                        for k in ('inventory_mutation_enabled','affinity_points_mutation_enabled'):
+                            if sd.get(k) is not False:
+                                triggers.append((i, 'safety_flag_violation', f'{k}={sd.get(k)}'))
                     if sd.get('ledger_total_rows', 0) > sd.get('canary_ledger_cap', 0):
                         triggers.append((i, 'ledger_exceeds_cap', f"rows={sd.get('ledger_total_rows')} cap={sd.get('canary_ledger_cap')}"))
                 except Exception as e:
