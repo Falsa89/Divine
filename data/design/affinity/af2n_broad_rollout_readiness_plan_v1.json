@@ -1,0 +1,99 @@
+{
+  "plan_id": "af2n_broad_rollout_readiness_plan_v1",
+  "task_origin": "AF2-N-BROAD-ROLLOUT-READINESS-PLAN-V19",
+  "design_only": true,
+  "runtime_attached": false,
+  "applied": false,
+  "broad_rollout_authorized": false,
+  "public_spend_enabled": false,
+  "battle_wiring": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "V19 — PLAN-ONLY readiness per un eventuale broad rollout futuro. Nessun apply, nessun cambio di stato. Definisce gates obbligatori, fasi di rollout staged, thresholds di rollback, safety invariants. Esplicitamente NON autorizzato e NON applicabile dalla suite runner.",
+  "explicit_status": "READY_NOT_APPLIED_DESIGN_ONLY",
+  "required_gates_before_any_authorization": [
+    "stage3_extended_monitoring_24_72h_clean",
+    "locust_low_impact_v19_clean",
+    "public_ui_preview_readonly_implemented_and_audited",
+    "rollback_drills_executed_dry_run",
+    "rate_limit_verification_done",
+    "abuse_monitoring_dashboard_in_place",
+    "borea_safety_periodic_verification",
+    "economy_caps_simulated_and_signed_off",
+    "customer_support_plan_documented",
+    "product_signoff_v5_recorded",
+    "engineering_signoff_v5_recorded",
+    "qa_signoff_v5_recorded",
+    "economy_balance_signoff_v5_recorded",
+    "rollback_owner_signoff_v5_recorded",
+    "explicit_user_authorization_v5_recorded"
+  ],
+  "staged_rollout_plan": [
+    {
+      "stage": "stage4_internal_beta",
+      "target_users": "internal_only_existing_QA + 500 synthetic internal users",
+      "allowlist_size_estimate": 700,
+      "ledger_cap_estimate": 5000,
+      "duration_min_h": 24,
+      "abort_thresholds": {"http_5xx_rate_gt_0_pct": 0, "non_allow_success_gt": 0, "borea_not_404_gt": 0, "negative_inventory_gt": 0}
+    },
+    {
+      "stage": "public_beta_1pct",
+      "target_users": "~1% of authenticated users (no anonymous)",
+      "allowlist_strategy": "deterministic hash bucket on user_id, opt-in flag required",
+      "ledger_cap_estimate": 25000,
+      "duration_min_h": 72,
+      "abort_thresholds": {"http_5xx_rate_gt_pct": 0.1, "non_allow_success_gt": 0, "borea_not_404_gt": 0, "negative_inventory_gt": 0, "complaint_rate_gt_per_1k_dau": 5}
+    },
+    {
+      "stage": "public_beta_5pct",
+      "target_users": "~5% authenticated users",
+      "ledger_cap_estimate": 100000,
+      "duration_min_h": 96,
+      "abort_thresholds": {"http_5xx_rate_gt_pct": 0.1, "non_allow_success_gt": 0, "borea_not_404_gt": 0, "negative_inventory_gt": 0, "complaint_rate_gt_per_1k_dau": 5}
+    },
+    {
+      "stage": "public_beta_10pct",
+      "target_users": "~10% authenticated users",
+      "ledger_cap_estimate": 200000,
+      "duration_min_h": 120,
+      "abort_thresholds": {"http_5xx_rate_gt_pct": 0.1, "non_allow_success_gt": 0, "borea_not_404_gt": 0, "negative_inventory_gt": 0, "complaint_rate_gt_per_1k_dau": 5}
+    }
+  ],
+  "rollback_thresholds": {
+    "any_5xx_critical": "immediate_rollback_to_prev_stage",
+    "non_allow_success_gt_0": "immediate_rollback_AND_disable_inventory_flag",
+    "borea_not_404_gt_0": "immediate_full_AF2-N_rollback",
+    "negative_inventory_gt_0": "immediate_inventory_flag_rollback",
+    "inv_aff_count_mismatch_gt_0": "immediate_inventory_flag_rollback",
+    "battle_file_mutation_detected": "immediate_full_rollback",
+    "public_spend_button_detected_in_frontend": "immediate_UI_revert"
+  },
+  "safety_invariants": [
+    "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED scoped to allowlist only at every stage",
+    "no broad rollout without explicit user authorization v5",
+    "no public spend button at any stage prior to stage5+ with explicit authorization",
+    "no Borea reveal at any stage",
+    "no battle wiring at any stage",
+    "no gacha/roster/catalog mutation at any stage",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged at every stage",
+    "rate limits per_user_per_minute=30, per_user_per_hour=240, per_ip_per_minute=60 enforced before any public stage",
+    "public preview screen stays read-only at every stage until separate authorization"
+  ],
+  "support_plan": {
+    "abuse_monitoring": "dashboards on idempotency_double_tx, non_allow_spend_attempts, http_5xx, ledger_growth_rate",
+    "escalation_runbook": "on first abort trigger → page on-call → rollback to prev stage → root-cause within 24h",
+    "customer_communication": "public preview screen labelled 'Design only' until each stage announced"
+  },
+  "acceptance_for_authorization": {
+    "all_required_gates_pass": true,
+    "all_5_operator_signoffs_v5": true,
+    "explicit_user_authorization_v5_present": true,
+    "rollback_drills_executed_for_each_stage_dry_run": true
+  },
+  "abort_triggers": [
+    "any required gate fails",
+    "any operator signoff missing",
+    "any rollback drill fails",
+    "any monitoring window shows abort threshold breach"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "result_id": "affinity_gifts_public_preview_implementation_result_v1",
+  "task_origin": "AF2-N-PUBLIC-UI-PREVIEW-READONLY-V19",
+  "design_only": false,
+  "runtime_attached": false,
+  "db_write": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "phase": "READ_ONLY_UI_IMPLEMENTED_V19",
+  "summary": "V19 — Implementata pagina pubblica READ-ONLY /affinity-gifts-preview che legge esclusivamente GET /api/affinity/gift-spend/canary-status (sanitizzato: niente allowlist count, niente user_id, niente ledger counts). Nessun bottone spend/claim/give. Nessuna Pressable mutante. Nessun POST/PUT/PATCH/DELETE. Nessuna rivelazione Borea. Etichetta esplicita 'Design only — Spend disabled'.",
+  "route_path": "/affinity-gifts-preview",
+  "file": "/app/frontend/app/affinity-gifts-preview.tsx",
+  "backend_endpoints_used": [
+    "GET /api/affinity/gift-spend/canary-status"
+  ],
+  "backend_endpoints_NOT_used": [
+    "POST /api/affinity/gift-spend",
+    "any /api/affinity/* mutation"
+  ],
+  "safety_invariants": [
+    "no_POST_PUT_PATCH_DELETE_in_file",
+    "no_Pressable_invoking_gift-spend",
+    "no_spend_button_text",
+    "no_claim_button_text",
+    "no_give_button_text",
+    "no_Borea_alias_displayed",
+    "no_runtime_toggle",
+    "no_inventory_or_affinity_mutation",
+    "sanitized_no_allowlist_size_no_ledger_count_no_user_id"
+  ],
+  "audit_acceptance": {
+    "no_mutating_http_methods": true,
+    "no_gift_spend_call": true,
+    "no_borea_visible": true,
+    "no_public_spend_ui": true,
+    "labelled_design_only": true
+  },
+  "rollback_strategy": "delete /app/frontend/app/affinity-gifts-preview.tsx and rebuild",
+  "navigation_integration": "route auto-registered by expo-router file-based routing; no menu/Tabs link added in V19 (avoid public discoverability)",
+  "future_phase_gates": [
+    "Stage4 internal beta + explicit authorization required before adding any menu link or public discovery",
+    "Any UI element with mutation REQUIRES separate plan + apply + rollback scripts"
+  ]
+}

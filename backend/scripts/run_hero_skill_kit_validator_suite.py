@@ -229,6 +229,17 @@ OPTIONAL = [
     ('V18-ROLLBACK-READINESS',                     'validate_af2n_v18_rollback_readiness.py'),
     ('SAFETY-ROLLUP-M',                            'validate_collection_affinity_runtime_activation_rollup_v13.py'),
     ('ULTRA-COMBO-V18',                            'validate_ultra_combo_v18_stage2_stage3_publicpreview.py'),
+    # ULTRA-COMBO V19 (STAGE3 EXTENDED MONITORING + LOCUST REAL LOW-IMPACT
+    #                  + PUBLIC UI PREVIEW READ-ONLY + BROAD-ROLLOUT PLAN
+    #                  + SAFETY-ROLLUP-N)
+    ('V19-PREFLIGHT',                              'validate_af2n_v19_preflight.py'),
+    ('AF2-N-STAGE3-EXTENDED-MONITORING-V19',       'validate_af2n_stage3_extended_monitoring_v19.py'),
+    ('AF2-L-LOCUST-LOW-IMPACT-V19',                'validate_af2n_stage3_locust_low_impact_result.py'),
+    ('AF2-N-PUBLIC-UI-PREVIEW-IMPLEMENTATION',     'audit_affinity_gifts_public_preview_implementation.py'),
+    ('AF2-N-BROAD-ROLLOUT-READINESS-PLAN',         'validate_af2n_broad_rollout_readiness_plan.py'),
+    ('V19-ROLLBACK-READINESS',                     'validate_af2n_v19_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-N',                            'validate_collection_affinity_runtime_activation_rollup_v14.py'),
+    ('ULTRA-COMBO-V19',                            'validate_ultra_combo_v19_stage3_locust_ui_broadprep.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -323,8 +334,14 @@ def main(argv=None) -> int:
         'AF2-N-INVENTORY-EXTENDED-MONITORING-V17', 'AF2-N-STAGE2-MONITORING-V17',
         'AF2-L-K6-LOCUST-READINESS-V17', 'V17-ROLLBACK-READINESS', 'SAFETY-ROLLUP-L',
     }) if stage3_applied else frozenset()
+    # V19: Public UI preview implementation (file presence) supersedes V18 audit
+    # and V18 composite which assert the entire frontend/ tree is unchanged.
+    SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW = frozenset({
+        'AF2-N-PUBLIC-UI-PREVIEW-SAFETY', 'ULTRA-COMBO-V18',
+    }) if Path('/app/frontend/app/affinity-gifts-preview.tsx').exists() else frozenset()
     SUPERSEDED = (SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
-                  | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3)
+                  | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3
+                  | SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW)
 
     results: list[dict] = []
     any_required_fail = False

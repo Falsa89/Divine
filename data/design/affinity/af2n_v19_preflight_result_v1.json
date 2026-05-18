@@ -1,10 +1,10 @@
 {
-  "result_id": "af2n_v18_preflight_result_v1",
-  "task_origin": "V18-PREFLIGHT",
+  "result_id": "af2n_v19_preflight_result_v1",
+  "task_origin": "V19-PREFLIGHT",
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-18T15:11:33.319063Z",
+  "generated_at_utc": "2026-05-18T15:13:44.052782Z",
   "overall_status": "PASS",
   "gates": {
     "api_health_200": true,
@@ -13,8 +13,8 @@
     "canary_status_200": true,
     "canary_flag_on": true,
     "inv_writes_flag_on": true,
-    "stage2_allowlist_ge_100": true,
-    "cap_ge_1000": true,
+    "stage3_allowlist_ge_200": true,
+    "cap_ge_2500": true,
     "ledger_within_cap": true,
     "battle_runtime_attached_false": true,
     "applied_to_combat_false": true,
@@ -29,13 +29,12 @@
     "no_buffs_rows": true,
     "no_battle_wiring_rows": true,
     "no_borea_hero_rows": true,
-    "v16_seed_50_present": true,
-    "v17_stage2_seed_50_present": true,
+    "v18_stage3_seed_100_present": true,
     "rollback_scripts_present": true,
-    "suite_v17_pass": true,
+    "suite_v18_pass": true,
     "baseline_v6_diff_pass": true,
-    "ui_safety_no_spend_token": true,
-    "no_shadow_adapter_live_leak": true
+    "locust_binary_present": true,
+    "ui_safety_no_spend_in_combat": true
   },
   "canary_status_snapshot": {
     "task_origin": "AF2-N-READINESS-DASH",
@@ -46,16 +45,16 @@
     "feature_flag_currently_enabled": true,
     "canary_allowlist_size": 200,
     "canary_ledger_cap": 2500,
-    "ledger_total_rows": 63,
-    "ledger_canary_rows": 63,
+    "ledger_total_rows": 64,
+    "ledger_canary_rows": 64,
     "last_canary_tx": {
-      "tx_id": "tx_canary_e1401fe030a94a89",
-      "user_id": "stage3_qa_019",
+      "tx_id": "tx_canary_e7ea7486190d4531",
+      "user_id": "stage3_qa_080",
       "gift_id": "gift_test_001",
-      "hero_id": "greek_hera",
+      "hero_id": "greek_ares",
       "quantity": 1,
       "status": "applied_inventory_live",
-      "created_at_utc": "2026-05-18 15:09:43.920000"
+      "created_at_utc": "2026-05-18 15:11:48.631000"
     },
     "borea_aliases_blocked": [
       "borea",
@@ -69,10 +68,6 @@
     "buffs_enabled": false,
     "inventory_writes_flag_dependency": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED"
   },
-  "collection_counts": {
-    "user_gift_inventory": 200,
-    "user_affinity_state": 41
-  },
   "safety_flags": {
     "broad_rollout_authorized": false,
     "public_spend_ui": false,
@@ -80,7 +75,6 @@
     "applied_to_combat": false,
     "buffs_enabled": false,
     "feature_flag_currently_enabled": true,
-    "inventory_writes_flag_currently_enabled": true,
     "hidden_aliases_blocked": [
       "borea",
       "greek_borea",

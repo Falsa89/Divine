@@ -1,0 +1,107 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v14",
+  "task_origin": "SAFETY-ROLLUP-N",
+  "supersedes": "collection_affinity_runtime_activation_readiness_rollup_v13",
+  "design_only": false,
+  "runtime_attached": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-18T15:13:44.847503Z",
+  "summary": "SAFETY-ROLLUP-N — V19 Stage3 extended monitoring + Locust low-impact load test reale + Public UI preview READ-ONLY implementata + Broad-rollout readiness PLAN-ONLY (NOT applied) + rollback readiness completa. Invarianti hard tenuti: /api/heroes=100, Borea hidden/404, battle/synergy/combat files NOT modified, no buffs, no battle wiring, no public spend UI, no broad rollout.",
+  "inputs_present": {
+    "v19_preflight": true,
+    "stage3_extended_monitoring_v19": true,
+    "locust_low_impact_v19": true,
+    "public_ui_preview_impl": true,
+    "broad_rollout_plan": true,
+    "rollback_readiness_v19": true,
+    "v18_composite": true,
+    "rollup_v13": true
+  },
+  "runtime_state": "stage3_qa_active_no_broad_rollout",
+  "stage3_state": "APPLIED",
+  "public_ui_preview_state": "READONLY_IMPLEMENTED",
+  "broad_rollout_plan_state": "READY_NOT_APPLIED_DESIGN_ONLY",
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring_live": false,
+  "buffs_enabled": false,
+  "Borea_hidden": true,
+  "inventory_live_scope": "stage3_allowlist_only",
+  "rollback_ready": true,
+  "ledger_count": 64,
+  "ledger_cap": 2500,
+  "canary_allowlist_size": 200,
+  "feature_flag_currently_enabled": true,
+  "inventory_mutation_enabled": true,
+  "affinity_points_mutation_enabled": true,
+  "stage3_extended_monitoring": {
+    "overall_status": "PASS",
+    "samples_total": 310,
+    "fresh_spend_ok": 10,
+    "http_5xx": 0,
+    "triggers_total": 0
+  },
+  "locust_low_impact_status": {
+    "overall": "PASS",
+    "locust_binary_present": true,
+    "locust_exit_code": 0,
+    "delta_ledger": 0,
+    "delta_borea_hero": 0,
+    "fb_requests_total": 1150,
+    "fb_rps": 180.0
+  },
+  "public_ui_preview_readonly": {
+    "phase": "READ_ONLY_UI_IMPLEMENTED_V19",
+    "route_path": "/affinity-gifts-preview",
+    "no_mutating_http_methods": true,
+    "no_public_spend_ui": true
+  },
+  "broad_rollout_readiness_plan": {
+    "explicit_status": "READY_NOT_APPLIED_DESIGN_ONLY",
+    "design_only": true,
+    "applied": false,
+    "staged_rollout_stages_count": 4
+  },
+  "rollback_readiness_state": {
+    "overall": "PASS",
+    "all_scripts_present": true,
+    "backup_dir_writable": true,
+    "ui_preview_rollback_strategy": "delete /app/frontend/app/affinity-gifts-preview.tsx + rebuild"
+  },
+  "v18_composite_overall": "FAIL",
+  "v19_preflight_overall": "PASS",
+  "next_decision": "stage4_internal_beta_prep",
+  "next_step_recommendation": "Stage3 extended monitoring PASS + Locust low-impact PASS + UI preview read-only attivo. Prossimo passo prudente: AF2-N-STAGE4-INTERNAL-BETA-PREP (PLAN-ONLY), drills rollback, signoffs v5.",
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "Borea aliases hidden in /api/heroes",
+    "POST /api/affinity/gift-spend Borea returns 404",
+    "POST /api/affinity/gift-spend non-allowlist returns 423",
+    "Stage3 allowlist users with sufficient inventory: 200 applied_inventory_live with exact delta",
+    "Idempotent replay returns 200 idempotent_replay with NO double-mutation",
+    "no buffs, no battle wiring, no broad rollout, no public spend UI",
+    "public UI preview /affinity-gifts-preview is READ-ONLY (sanitized canary-status only)",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged"
+  ],
+  "safety_flags": {
+    "runtime_attached": true,
+    "runtime_state": "stage3_qa_active_no_broad_rollout",
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "public_ui_preview_implemented_readonly": true,
+    "inventory_wiring_live": true,
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ],
+    "stage3_state": "APPLIED",
+    "locust_binary_installed": true
+  }
+}

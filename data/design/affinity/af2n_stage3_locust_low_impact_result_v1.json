@@ -1,0 +1,101 @@
+{
+  "result_id": "af2n_stage3_locust_low_impact_result_v1",
+  "task_origin": "AF2-L-LOCUST-LOW-IMPACT-V19",
+  "generated_at_utc": "2026-05-18T15:09:44.484265Z",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "pre_snapshot": {
+    "ledger_total": 63,
+    "inventory_mutated": 52,
+    "affinity_points_mutated": 52,
+    "buffs": 0,
+    "battle_wiring": 0,
+    "borea_hero": 0,
+    "negative_inventory": 0
+  },
+  "locust_binary_present": true,
+  "locust_binary_path": "/usr/local/bin/locust",
+  "locust_run": {
+    "exit_code": 0,
+    "duration_s": 20.21,
+    "tail": [
+      "[2026-05-18 15:10:04,654] agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c/INFO/locust.main: Shutting down (exit code 0)",
+      "Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s",
+      "--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------",
+      "GET      /api/affinity/gift-spend/canary-status                                           177     0(0.00%) |      7       4      29      6 |    8.93        0.00",
+      "GET      /api/affinity/gifts                                                              120     0(0.00%) |      4       3      11      4 |    6.05        0.00",
+      "GET      /api/health                                                                      455     0(0.00%) |      2       1      14      2 |   22.95        0.00",
+      "GET      /api/heroes                                                                      111     0(0.00%) |     67      53      94     65 |    5.60        0.00",
+      "POST     POST gift-spend [Borea expect 404]                                                89     0(0.00%) |      1       0      10      1 |    4.49        0.00",
+      "POST     POST gift-spend [idempotent replay expect 200]                                    17     0(0.00%) |      6       3      16      5 |    0.86        0.00",
+      "POST     POST gift-spend [non-allowlist expect 423]                                       161     0(0.00%) |      1       0      10      1 |    8.12        0.00",
+      "--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------",
+      "         Aggregated                                                                      1130     0(0.00%) |      9       0      94      3 |   56.99        0.00",
+      "",
+      "Response time percentiles (approximated)",
+      "Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs",
+      "--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------",
+      "GET      /api/affinity/gift-spend/canary-status                                                  6      7      8      9     11     16     22     24     30     30     30    177",
+      "GET      /api/affinity/gifts                                                                     4      4      4      4      5      6      9      9     12     12     12    120",
+      "GET      /api/health                                                                             2      2      3      3      4      7     11     13     15     15     15    455",
+      "GET      /api/heroes                                                                            65     70     73     75     83     89     92     93     94     94     94    111",
+      "POST     POST gift-spend [Borea expect 404]                                                      1      1      2      2      2      2      7     11     11     11     11     89",
+      "POST     POST gift-spend [idempotent replay expect 200]                                          5      6      7      7     13     17     17     17     17     17     17     17",
+      "POST     POST gift-spend [non-allowlist expect 423]                                              1      2      2      2      2      3      4      5     11     11     11    161",
+      "--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------",
+      "         Aggregated                                                                              3      4      6      6     24     64     75     83     93     94     94   1130"
+    ],
+    "cmd": "locust -f /app/loadtests/af2n_stage3_locustfile.py --headless -u 8 -r 4 -t 20s --host http://127.0.0.1:8001"
+  },
+  "python_fallback": {
+    "mode": "python_fallback_concurrent",
+    "duration_s": 6.39,
+    "rps": 180.0,
+    "counters": {
+      "reqs": 1150,
+      "http_5xx": 0,
+      "health_200": 400,
+      "status_200": 150,
+      "heroes_200": 100,
+      "gifts_200": 100,
+      "na_423": 200,
+      "na_bad": 0,
+      "borea_404": 150,
+      "borea_bad": 0,
+      "replay_ok": 50,
+      "replay_bad": 0
+    }
+  },
+  "post_snapshot": {
+    "ledger_total": 63,
+    "inventory_mutated": 52,
+    "affinity_points_mutated": 52,
+    "buffs": 0,
+    "battle_wiring": 0,
+    "borea_hero": 0,
+    "negative_inventory": 0
+  },
+  "delta": {
+    "ledger_total": 0,
+    "inventory_mutated": 0,
+    "affinity_points_mutated": 0,
+    "buffs": 0,
+    "battle_wiring": 0,
+    "borea_hero": 0,
+    "negative_inventory": 0
+  },
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "no_fresh_spend_attempted_in_locust": true,
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_runtime_attached": false,
+    "buffs_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

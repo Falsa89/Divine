@@ -1,0 +1,59 @@
+{
+  "result_id": "af2n_stage3_extended_monitoring_v19_result",
+  "task_origin": "AF2-N-STAGE3-EXTENDED-MONITORING-V19",
+  "design_only": false,
+  "runtime_attached": true,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "generated_at_utc": "2026-05-18T15:09:43.924976Z",
+  "samples_target": 300,
+  "max_fresh_spends": 10,
+  "counters": {
+    "samples_total": 310,
+    "health_ok": 130,
+    "heroes_100": 30,
+    "canary_status_200": 50,
+    "borea_404": 30,
+    "borea_bad": 0,
+    "non_allowlist_423": 30,
+    "non_allowlist_bad": 0,
+    "replay_ok": 30,
+    "replay_bad": 0,
+    "fresh_spend_ok": 10,
+    "fresh_spend_fail": 0,
+    "http_5xx": 0
+  },
+  "pre": {
+    "ledger": 53,
+    "negative_inventory": 0,
+    "inv_mut": 42,
+    "aff_mut": 42,
+    "buffs": 0,
+    "battle_wiring": 0
+  },
+  "post": {
+    "negative_inventory": 0,
+    "inv_mut": 52,
+    "aff_mut": 52,
+    "inv_mut_delta": 10,
+    "aff_mut_delta": 10,
+    "buffs": 0,
+    "battle_wiring": 0
+  },
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "buffs_enabled": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}
