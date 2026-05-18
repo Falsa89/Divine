@@ -1,0 +1,93 @@
+{
+  "plan_id": "affinity_rate_limit_redis_migration_plan_v1",
+  "task_origin": "V22-REDIS-RATE-LIMIT-MIGRATION-PREP",
+  "design_only": true,
+  "live_switch_allowed_this_task": false,
+  "reason": "Redis not available in current environment; PREP only.",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "current_state": {
+    "backend": "in_memory_sliding_window_per_process",
+    "resets_on_restart": true,
+    "shared_across_workers": false,
+    "limitations": [
+      "resets on every backend restart",
+      "not shared across multiple gunicorn/uvicorn workers (true single-worker today)",
+      "no persistence across blue/green or canary swap",
+      "cannot enforce limits across multiple regions / pods"
+    ]
+  },
+  "target_state": {
+    "backend": "redis",
+    "shared_across_workers": true,
+    "persistent_across_restart": true,
+    "feature_flag": "AFFINITY_RATE_LIMIT_BACKEND",
+    "allowed_values": ["memory", "redis"],
+    "default_value": "memory",
+    "redis_url_env": "REDIS_URL"
+  },
+  "key_design": {
+    "prefix": "af2:ratelimit:",
+    "keys": {
+      "per_user_burst_zset": "af2:ratelimit:burst:{user_id}",
+      "per_user_minute_zset": "af2:ratelimit:user:{user_id}",
+      "per_ip_minute_zset": "af2:ratelimit:ip:{ip}"
+    },
+    "strategy": "sliding window via Redis sorted set; ZADD timestamp_ms, ZREMRANGEBYSCORE older than window, ZCARD count",
+    "ttls": {
+      "burst_zset_seconds": 15,
+      "per_minute_zset_seconds": 65,
+      "per_hour_zset_seconds": 3605
+    },
+    "atomicity": "single Redis pipeline per probe (zadd+zremrangebyscore+zcard+expire). Sufficient for low-impact canary.",
+    "fairness": "sliding window is closer to fair than fixed bucket; acceptable for canary."
+  },
+  "limits": {
+    "per_user_per_minute": 30,
+    "per_user_per_hour": 240,
+    "per_ip_per_minute": 60,
+    "burst_window_seconds": 10,
+    "burst_max": 6
+  },
+  "fallback_behavior": {
+    "on_redis_unreachable_at_request_time": "FAIL_OPEN_TO_MEMORY (canary safety; ensures availability)",
+    "on_redis_init_error": "fall back to memory backend permanently for the process lifetime",
+    "rationale": "During internal beta the cost of a denial-of-service from a Redis outage is greater than the cost of a momentary in-memory window",
+    "future_change_for_broad_rollout": "switch to FAIL_CLOSED with retry budget and 503 envelope once Stage5 is approved"
+  },
+  "rollout_strategy": {
+    "phase_1_PREP": "This task. Adapter skeleton, plan, probe scripts. No live switch.",
+    "phase_2_DRY_RUN_LOCAL": "Install Redis locally, run probe with AFFINITY_RATE_LIMIT_BACKEND=redis in a sidecar test, validate equivalence with memory backend.",
+    "phase_3_GATED_LIVE": "Switch supervisor env to redis after: (a) probe PASS, (b) Stage4 24-72h clean, (c) signoff package V6 approval, (d) Redis HA decision.",
+    "phase_4_BROAD_ROLLOUT_PREREQ": "Required before any broad rollout consideration."
+  },
+  "rollback_plan": {
+    "runtime_toggle": "set AFFINITY_RATE_LIMIT_BACKEND=memory in supervisor.conf, supervisorctl restart backend",
+    "data_cleanup_redis": "DEL keys matching af2:ratelimit:* (optional; safe to leave for TTL expiry)",
+    "recovery_time_objective_seconds": 30,
+    "backup_supervisor_conf": "/app/backups/af2n_stage4/backend.conf.v22_pre_redis_switch_<STAMP>.bak (created at switch time)"
+  },
+  "metrics_plan": {
+    "counters": [
+      "af2_ratelimit_429_total",
+      "af2_ratelimit_redis_fail_open_total",
+      "af2_ratelimit_request_total"
+    ],
+    "distributions": [
+      "af2_ratelimit_redis_pipeline_latency_ms"
+    ],
+    "alerts": [
+      {"alert": "af2_ratelimit_redis_fail_open_total per_min > 5", "action": "page_oncall_and_consider_redis_outage"},
+      {"alert": "af2_ratelimit_429_total per_min > 100", "action": "abuse_review"}
+    ]
+  },
+  "safety_invariants": [
+    "never bypasses Borea 404",
+    "never weakens rate-limit on Stage4",
+    "never enables broad rollout",
+    "never modifies battle_engine.py / combat.tsx",
+    "never enables public spend UI",
+    "never modifies gacha/roster/catalog"
+  ],
+  "broad_rollout_prerequisite": true,
+  "explicit_status": "PREP_REDIS_NOT_AVAILABLE_READY_NOT_APPLIED"
+}

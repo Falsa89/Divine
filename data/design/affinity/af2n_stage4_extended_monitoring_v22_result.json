@@ -1,0 +1,309 @@
+{
+  "result_id": "af2n_stage4_extended_monitoring_v22_result",
+  "task_origin": "V22-AF2N-STAGE4-EXTENDED-MONITORING",
+  "started_at_utc": "2026-05-18T22:51:46.192897Z",
+  "finished_at_utc": "2026-05-18T22:51:46.648754Z",
+  "sample_total": 366,
+  "status_counts": {
+    "200": 84,
+    "404": 30,
+    "423": 50,
+    "429": 202
+  },
+  "fresh_spends_succeeded": 0,
+  "inv_aff_delta_checks_sample": [
+    {
+      "user_id": "stage4_qa_274",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_314",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_113",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_429",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_268",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_060",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_453",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_415",
+      "inv_before": 9,
+      "inv_after": 9,
+      "aff_before": 1,
+      "aff_after": 1,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_062",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    },
+    {
+      "user_id": "stage4_qa_036",
+      "inv_before": 10,
+      "inv_after": 10,
+      "aff_before": 0,
+      "aff_after": 0,
+      "fresh_code": 429,
+      "replay_code": 429,
+      "inv_delta": 0,
+      "aff_delta": 0,
+      "inv_delta_eq_aff_delta": true
+    }
+  ],
+  "inv_neg_count": 0,
+  "borea_rows_in_ledger": 0,
+  "duplicate_idempotency_groups": 0,
+  "post_canary_status": {
+    "task_origin": "AF2-N-READINESS-DASH",
+    "design_only": false,
+    "runtime_attached": true,
+    "db_write": false,
+    "feature_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": true,
+    "canary_allowlist_size": 700,
+    "canary_ledger_cap": 5000,
+    "ledger_total_rows": 122,
+    "ledger_canary_rows": 122,
+    "last_canary_tx": {
+      "tx_id": "tx_canary_ccb697a56d3149df",
+      "user_id": "stage4_qa_200",
+      "gift_id": "gift_test_001",
+      "hero_id": "greek_ares",
+      "quantity": 1,
+      "status": "applied_inventory_live",
+      "created_at_utc": "2026-05-18 19:15:29.768000"
+    },
+    "borea_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ],
+    "applied_to_combat": false,
+    "battle_runtime_attached": false,
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "inventory_writes_flag_dependency": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED",
+    "rate_limit_enabled": true,
+    "rate_limit_per_user_per_minute": 30,
+    "rate_limit_per_user_per_hour": 240,
+    "rate_limit_per_ip_per_minute": 60,
+    "rate_limit_burst_window_seconds": 10,
+    "rate_limit_burst_max": 6,
+    "rate_limit_flag_dependency": "AFFINITY_GIFT_RATE_LIMIT_ENABLED"
+  },
+  "observations_first_30": [
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "canary_status",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "canary_status",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    },
+    {
+      "kind": "health",
+      "code": 200
+    }
+  ],
+  "fails": [],
+  "overall_status": "PASS",
+  "safety_invariants": [
+    "no broad rollout",
+    "no public spend UI",
+    "no battle wiring",
+    "no Borea reveal",
+    "no gacha/roster/catalog mutation"
+  ]
+}

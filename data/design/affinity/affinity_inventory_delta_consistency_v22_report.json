@@ -1,0 +1,187 @@
+{
+  "report_id": "affinity_inventory_delta_consistency_v22_report",
+  "task_origin": "V22-AF2N-DELTA-AUDIT",
+  "generated_at_utc": "2026-05-18T22:52:26.783841Z",
+  "checks": {
+    "negative_inventory_count": 0,
+    "borea_in_ledger": 0,
+    "borea_in_affinity_state": 0,
+    "duplicate_tx_ids": 0,
+    "duplicate_idempotency_groups": 0,
+    "delta_mismatch_users": 0,
+    "delta_audit_sample_size": 60,
+    "inconsistent_canary_markers": 0,
+    "non_allowlist_success_count": 0,
+    "stage4_seed_inv_rows": 500,
+    "idempotency_distinct_tx_ids": 0
+  },
+  "per_user_check_sample": [
+    {
+      "user_id": "stage4_qa_364",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_404",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_394",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_015",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_465",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_001",
+      "hero_id": "greek_athena",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_011",
+      "hero_id": "greek_hera",
+      "qty_mut": 2,
+      "affinity_points": 2,
+      "total_gifts_given": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_284",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_320",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_008",
+      "hero_id": "greek_athena",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_101",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_150",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_043",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_277",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_074",
+      "hero_id": "greek_ares",
+      "qty_mut": 2,
+      "affinity_points": 2,
+      "total_gifts_given": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_001",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_148",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_259",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_281",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_415",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "affinity_points": 1,
+      "total_gifts_given": 1,
+      "ok": true
+    }
+  ],
+  "fails": [],
+  "overall_status": "PASS",
+  "safety_invariants": [
+    "read-only audit",
+    "no DB mutation",
+    "never exposes Borea data"
+  ]
+}

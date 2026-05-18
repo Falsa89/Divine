@@ -1,0 +1,41 @@
+{
+  "rollup_id": "collection_affinity_runtime_activation_readiness_rollup_v17",
+  "task_origin": "V22-SAFETY-ROLLUP-Q",
+  "design_only": false,
+  "runtime_attached": true,
+  "generated_at_utc": "2026-05-18T22:54:13.797545Z",
+  "stage4_state": "stage4_internal_beta_active_no_broad_rollout",
+  "redis_rate_limit_state": "redis_ready_not_applied",
+  "allowlist_size": 700,
+  "ledger_cap": 5000,
+  "ledger_total_rows": 123,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring_live": false,
+  "buffs_enabled": false,
+  "borea_hidden": true,
+  "inventory_live_scope": "stage4_internal_beta_only",
+  "rate_limit_active": true,
+  "locust_extended_status": "PASS",
+  "extended_monitoring_status": "PASS",
+  "delta_audit_status": "PASS",
+  "blocker_matrix_status": "NO_GO",
+  "blocker_matrix_total_open_critical": 6,
+  "rollback_ready": true,
+  "next_decision_options": [
+    "continue_stage4_observation_24_72h",
+    "provision_redis_and_run_v23_redis_switch_gated",
+    "execute_live_stage4_rollback_drill_in_staging",
+    "broad_rollout_blocked_until_blockers_resolved",
+    "stack_g_battle_wiring_remain_deferred"
+  ],
+  "recommended_next_decision": "provision_redis_and_continue_stage4_observation",
+  "safety_invariants": [
+    "no broad rollout",
+    "no public spend UI",
+    "no battle wiring",
+    "no Borea reveal",
+    "no gacha/roster/catalog mutation",
+    "battle_engine.py / battle_core.py / combat.tsx unchanged"
+  ]
+}

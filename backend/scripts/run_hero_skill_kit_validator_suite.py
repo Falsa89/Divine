@@ -266,6 +266,20 @@ OPTIONAL = [
     ('V21-ROLLBACK-READINESS',                     'validate_af2n_v21_rollback_readiness.py'),
     ('SAFETY-ROLLUP-P',                            'validate_collection_affinity_runtime_activation_rollup_v16.py'),
     ('ULTRA-COMBO-V21',                            'validate_ultra_combo_v21_stage4_apply_gated.py'),
+    # ULTRA-COMBO V22 (STAGE4 EXTENDED MONITORING + REDIS RATE-LIMIT MIGRATION PREP
+    #                  + INVENTORY/AFFINITY DELTA AUDIT + LOCUST STAGE4 EXTENDED
+    #                  + BROAD-ROLLOUT BLOCKER MATRIX + SAFETY-ROLLUP-Q)
+    ('V22-PREFLIGHT',                              'validate_af2n_v22_preflight.py'),
+    ('AF2-N-V22-STAGE4-EXTENDED-MONITORING',       'validate_af2n_stage4_extended_monitoring_v22.py'),
+    ('AF2-N-V22-REDIS-MIGRATION-PLAN-AUDIT',       'audit_affinity_rate_limit_redis_migration_plan.py'),
+    ('AF2-N-V22-REDIS-PROBE',                      'validate_affinity_rate_limit_redis_probe.py'),
+    ('AF2-N-V22-DELTA-AUDIT',                      'validate_affinity_inventory_delta_consistency_v22.py'),
+    ('AF2-L-LOCUST-STAGE4-V22',                    'validate_af2n_v22_locust_stage4_extended_result.py'),
+    ('AF2-N-V22-BROAD-ROLLOUT-BLOCKER-MATRIX',     'validate_af2n_broad_rollout_blocker_matrix.py'),
+    ('AF2-N-PUBLIC-UI-V22-SAFETY',                 'audit_affinity_gifts_public_preview_v22_safety.py'),
+    ('V22-ROLLBACK-READINESS',                     'validate_af2n_v22_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-Q',                            'validate_collection_affinity_runtime_activation_rollup_v17.py'),
+    ('ULTRA-COMBO-V22',                            'validate_ultra_combo_v22_stage4_monitoring_redisprep.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
