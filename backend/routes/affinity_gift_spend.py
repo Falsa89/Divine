@@ -48,6 +48,81 @@ _FORBIDDEN_HERO_IDS = frozenset({"borea", "primordial_gaia"})
 # greek_borea is catalog-only / hidden; reject at endpoint level too.
 _HIDDEN_HERO_IDS = frozenset({"greek_borea"})
 
+# V21 — Rate-limit guard (in-memory sliding window). Minimal, fail-open on
+# any internal error to never break existing safe behavior. Borea check
+# ALWAYS runs first, so 404 wins over 429. Non-allowlist still gets 423
+# unless velocity threshold exceeded — then 429 (does NOT write DB).
+_RATE_LIMIT_ENV = "AFFINITY_GIFT_RATE_LIMIT_ENABLED"
+_RATE_LIMIT_ON_VALUE = "true_explicit_affinity_rate_limit_on"
+_RL_PER_USER_PER_MIN = 30
+_RL_PER_USER_PER_HOUR = 240
+_RL_PER_IP_PER_MIN = 60
+_RL_BURST_WINDOW_S = 10
+_RL_BURST_MAX = 6
+# event log: {(scope, key): [epoch_seconds, ...]}
+_RL_EVENTS: dict = {}
+
+
+def _rate_limit_enabled() -> bool:
+    return os.environ.get(_RATE_LIMIT_ENV, "") == _RATE_LIMIT_ON_VALUE
+
+
+def _rl_record(scope: str, key: str) -> None:
+    import time
+    now = time.time()
+    ev = _RL_EVENTS.setdefault((scope, key), [])
+    ev.append(now)
+    if len(ev) > 1000:
+        cutoff = now - 3600
+        _RL_EVENTS[(scope, key)] = [t for t in ev if t >= cutoff]
+
+
+def _rl_count(scope: str, key: str, window_s: float) -> int:
+    import time
+    now = time.time()
+    cutoff = now - window_s
+    ev = _RL_EVENTS.get((scope, key), [])
+    return sum(1 for t in ev if t >= cutoff)
+
+
+def _rate_limit_check(user_id: str, client_ip: str):
+    """Return (allowed, reason, snapshot). Allowed=False means breach.
+
+    Records the request only if allowed (a 429 should NOT count toward the
+    quota since no actual work is done).
+    """
+    if not _rate_limit_enabled():
+        return True, None, {"rate_limit_enabled": False}
+    uid = (user_id or "<anon>").strip() or "<anon>"
+    ip = (client_ip or "<noip>").strip() or "<noip>"
+    user_burst = _rl_count("user", uid, _RL_BURST_WINDOW_S)
+    user_min = _rl_count("user", uid, 60)
+    user_hour = _rl_count("user", uid, 3600)
+    ip_min = _rl_count("ip", ip, 60)
+    snapshot = {
+        "rate_limit_enabled": True,
+        "user_burst": user_burst, "burst_max": _RL_BURST_MAX,
+        "user_min": user_min, "user_min_max": _RL_PER_USER_PER_MIN,
+        "user_hour": user_hour, "user_hour_max": _RL_PER_USER_PER_HOUR,
+        "ip_min": ip_min, "ip_min_max": _RL_PER_IP_PER_MIN,
+    }
+    if user_burst >= _RL_BURST_MAX:
+        return False, "user_burst_exceeded", snapshot
+    if user_min >= _RL_PER_USER_PER_MIN:
+        return False, "user_per_minute_exceeded", snapshot
+    if user_hour >= _RL_PER_USER_PER_HOUR:
+        return False, "user_per_hour_exceeded", snapshot
+    if ip_min >= _RL_PER_IP_PER_MIN:
+        return False, "ip_per_minute_exceeded", snapshot
+    _rl_record("user", uid)
+    _rl_record("ip", ip)
+    snapshot["user_burst"] = user_burst + 1
+    snapshot["user_min"] = user_min + 1
+    snapshot["user_hour"] = user_hour + 1
+    snapshot["ip_min"] = ip_min + 1
+    return True, None, snapshot
+
+
 # AF2-H — future-runtime hardening metadata. These constants ONLY
 # document the auth / rate-limit / idempotency contract that a future
 # task (post AFFINITY_GIFT_RUNTIME_ENABLED flip) MUST satisfy. Today
@@ -244,16 +319,47 @@ def register_affinity_gift_spend_skeleton_routes(router):
        transition.
     """
 
+    from fastapi import Request as _FastApiRequest
+
     @router.post("/affinity/gift-spend")
-    async def affinity_gift_spend_disabled(payload: Optional[dict] = None):
-        """Affinity gift-spend endpoint, AF2-N canary aware."""
+    async def affinity_gift_spend_disabled(payload: Optional[dict] = None, request: _FastApiRequest = None):
+        """Affinity gift-spend endpoint, AF2-N canary aware + V21 rate-limit."""
         from fastapi.responses import JSONResponse
 
-        # 1. Borea / legacy alias guard (BEFORE flag check).
+        # 1. Borea / legacy alias guard (BEFORE flag/rate-limit check).
         if isinstance(payload, dict):
             hid = (payload.get("hero_id") or "").strip().lower()
             if hid in _FORBIDDEN_HERO_IDS or hid in _HIDDEN_HERO_IDS:
                 raise HTTPException(404, "forbidden hero alias")
+
+        # 1.5 V21 rate-limit guard. Borea 404 already won. Non-DB-touching.
+        try:
+            user_id_for_rl = ""
+            if isinstance(payload, dict):
+                user_id_for_rl = str(payload.get("user_id") or "").strip()
+            client_ip = ""
+            if request is not None:
+                try:
+                    client_ip = (request.client.host if request.client else "") or ""
+                except Exception:
+                    client_ip = ""
+            rl_ok, rl_reason, rl_snap = _rate_limit_check(user_id_for_rl, client_ip)
+            if not rl_ok:
+                return JSONResponse(
+                    status_code=429,
+                    content={
+                        "task_origin": "AF2-N-V21-RATE-LIMIT",
+                        "http_status": 429,
+                        "disabled_reason": rl_reason,
+                        "rate_limit_snapshot": rl_snap,
+                        "db_write": False,
+                        "safety_envelope": _disabled_envelope(f"rate_limited:{rl_reason}"),
+                    },
+                )
+        except Exception:
+            # fail-open on rate-limit internal errors (never block runtime path)
+            pass
+
 
         # 2. Shape validation (best-effort).
         validation: dict[str, Any] = {
@@ -527,6 +633,13 @@ def register_affinity_gift_spend_skeleton_routes(router):
             "affinity_points_mutation_enabled": _inventory_writes_enabled(),
             "buffs_enabled": False,
             "inventory_writes_flag_dependency": _INVENTORY_WRITES_ENV,
+            "rate_limit_enabled": _rate_limit_enabled(),
+            "rate_limit_per_user_per_minute": _RL_PER_USER_PER_MIN,
+            "rate_limit_per_user_per_hour": _RL_PER_USER_PER_HOUR,
+            "rate_limit_per_ip_per_minute": _RL_PER_IP_PER_MIN,
+            "rate_limit_burst_window_seconds": _RL_BURST_WINDOW_S,
+            "rate_limit_burst_max": _RL_BURST_MAX,
+            "rate_limit_flag_dependency": _RATE_LIMIT_ENV,
         }
 
 

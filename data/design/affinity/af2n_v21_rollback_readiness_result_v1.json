@@ -1,0 +1,28 @@
+{
+  "result_id": "af2n_v21_rollback_readiness_result_v1",
+  "task_origin": "V21-ROLLBACK-READINESS",
+  "generated_at_utc": "2026-05-18T19:17:44.570571Z",
+  "checks": {
+    "script_present:rollback_af2n_stage4_internal_beta.py": true,
+    "script_present:rollback_af2n_stage3_qa_expansion.py": true,
+    "script_present:rollback_af2n_stage2_5_10pct_allowlist.py": true,
+    "script_present:rollback_af2n_stage1_1pct_allowlist.py": true,
+    "script_present:rollback_affinity_inventory_wiring_stage1.py": true,
+    "result_present:af2n_v20_rollback_drill_result_v1.json": true,
+    "result_present:af2n_stage4_db_backup_drill_result_v1.json": true,
+    "stage4_pre_apply_backup_present": true,
+    "syntax_ok:rollback_af2n_stage4_internal_beta.py": true,
+    "syntax_ok:rollback_af2n_stage3_qa_expansion.py": true,
+    "syntax_ok:rollback_af2n_stage2_5_10pct_allowlist.py": true,
+    "syntax_ok:rollback_af2n_stage1_1pct_allowlist.py": true,
+    "syntax_ok:rollback_affinity_inventory_wiring_stage1.py": true
+  },
+  "overall_status": "PASS",
+  "rollback_plan": {
+    "stage4_rollback_path": "/app/backend/scripts/rollback_af2n_stage4_internal_beta.py",
+    "stage4_rollback_dry_run_env": "STAGE4_ROLLBACK_DRY_RUN=true (default)",
+    "rate_limit_disable_path": "unset AFFINITY_GIFT_RATE_LIMIT_ENABLED in supervisor.conf + restart",
+    "inventory_flag_disable_path": "unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED in supervisor.conf + restart",
+    "full_af2n_rollback": "unset AFFINITY_GIFT_RUNTIME_ENABLED + restart"
+  }
+}

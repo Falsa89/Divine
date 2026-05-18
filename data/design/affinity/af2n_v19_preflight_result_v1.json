@@ -4,7 +4,7 @@
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-18T18:38:50.662800Z",
+  "generated_at_utc": "2026-05-18T19:17:39.345201Z",
   "overall_status": "PASS",
   "gates": {
     "api_health_200": true,
@@ -43,18 +43,18 @@
     "db_write": false,
     "feature_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
     "feature_flag_currently_enabled": true,
-    "canary_allowlist_size": 200,
-    "canary_ledger_cap": 2500,
-    "ledger_total_rows": 64,
-    "ledger_canary_rows": 64,
+    "canary_allowlist_size": 700,
+    "canary_ledger_cap": 5000,
+    "ledger_total_rows": 122,
+    "ledger_canary_rows": 122,
     "last_canary_tx": {
-      "tx_id": "tx_canary_e7ea7486190d4531",
-      "user_id": "stage3_qa_080",
+      "tx_id": "tx_canary_ccb697a56d3149df",
+      "user_id": "stage4_qa_200",
       "gift_id": "gift_test_001",
       "hero_id": "greek_ares",
       "quantity": 1,
       "status": "applied_inventory_live",
-      "created_at_utc": "2026-05-18 15:11:48.631000"
+      "created_at_utc": "2026-05-18 19:15:29.768000"
     },
     "borea_aliases_blocked": [
       "borea",
@@ -66,7 +66,14 @@
     "inventory_mutation_enabled": true,
     "affinity_points_mutation_enabled": true,
     "buffs_enabled": false,
-    "inventory_writes_flag_dependency": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED"
+    "inventory_writes_flag_dependency": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED",
+    "rate_limit_enabled": true,
+    "rate_limit_per_user_per_minute": 30,
+    "rate_limit_per_user_per_hour": 240,
+    "rate_limit_per_ip_per_minute": 60,
+    "rate_limit_burst_window_seconds": 10,
+    "rate_limit_burst_max": 6,
+    "rate_limit_flag_dependency": "AFFINITY_GIFT_RATE_LIMIT_ENABLED"
   },
   "safety_flags": {
     "broad_rollout_authorized": false,

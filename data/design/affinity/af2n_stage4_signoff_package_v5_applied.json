@@ -1,0 +1,214 @@
+{
+  "package_id": "af2n_stage4_signoff_package_v5_applied",
+  "task_origin": "V21-AF2N-STAGE4-SIGNOFFS-V5-APPLY",
+  "design_only": false,
+  "runtime_attached": true,
+  "stage4_apply_allowed": true,
+  "final_user_stage4_apply_approval": true,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "plan_ref": "af2n_stage4_internal_beta_plan_v1",
+  "source_signoff_package_v5_ref": "af2n_stage4_signoff_package_v5",
+  "generated_at_utc": "2026-05-18T19:04:26.647884Z",
+  "final_user_authorization_source": "USER_MESSAGE_V21_ZIP_OPZIONE_1_2026_05_18",
+  "summary": "Signoff V5 APPLIED. 7 operator signoffs + final user marked PASSED if evidence present.",
+  "signoffs": {
+    "product_v5": {
+      "status": "PASSED",
+      "owner_role": "Product Owner",
+      "approver_signature": "apply_af2n_stage4_signoffs_v5.py@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "af2n_stage4_internal_beta_plan_v1",
+        "77_ULTRA_COMBO_V17_STAGE2_MONITORING_CLEANUP_K6.md",
+        "78_ULTRA_COMBO_V18_STAGE2_STAGE3_PUBLIC_PREVIEW.md",
+        "79_ULTRA_COMBO_V19_STAGE3_LOCUST_UI_BROADPREP.md"
+      ],
+      "blockers": [],
+      "evidence_actually_present": [
+        "/app/data/design/affinity/af2n_stage4_internal_beta_plan_v1.json",
+        "/app/docs/divine/79_ULTRA_COMBO_V19_STAGE3_LOCUST_UI_BROADPREP.md",
+        "/app/docs/divine/80_ULTRA_COMBO_V20_STAGE4_PLAN_DRILLS_SIGNOFFS_LOCUST_A11Y.md"
+      ],
+      "evidence_missing": []
+    },
+    "engineering_v5": {
+      "status": "PASSED",
+      "owner_role": "Engineering Lead",
+      "approver_signature": "apply_af2n_stage4_signoffs_v5.py@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "suite_v19.json",
+        "ultra_combo_v19_validator_summary_v1.json",
+        "af2n_v20_rollback_drill_result_v1.json"
+      ],
+      "blockers": [],
+      "evidence_actually_present": [
+        "/app/backend/scripts/apply_af2n_stage4_internal_beta.py",
+        "/app/backend/scripts/rollback_af2n_stage4_internal_beta.py",
+        "/app/data/design/affinity/af2n_v20_rollback_drill_result_v1.json"
+      ],
+      "evidence_missing": []
+    },
+    "qa_v5": {
+      "status": "PASSED",
+      "owner_role": "QA Lead",
+      "approver_signature": "apply_af2n_stage4_signoffs_v5.py@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "af2n_stage3_extended_monitoring_v19_result.json",
+        "af2n_v20_locust_extended_result_v1.json",
+        "affinity_gifts_public_preview_qa_a11y_audit_v1.json"
+      ],
+      "blockers": [],
+      "evidence_actually_present": [
+        "/app/data/design/affinity/af2n_v20_locust_extended_result_v1.json",
+        "/app/data/design/affinity/af2n_v20_preflight_result_v1.json"
+      ],
+      "evidence_missing": []
+    },
+    "economy_balance_v5": {
+      "status": "PASSED",
+      "owner_role": "Economy/Balance Lead",
+      "approver_signature": "apply_af2n_stage4_signoffs_v5.py@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "af2n_stage4_internal_beta_plan_v1 (economy_caps_plan)"
+      ],
+      "blockers": [],
+      "evidence_actually_present": [
+        "/app/data/design/affinity/af2n_stage4_internal_beta_plan_v1.json"
+      ],
+      "evidence_missing": []
+    },
+    "rollback_owner_v5": {
+      "status": "PASSED",
+      "owner_role": "Rollback Owner",
+      "approver_signature": "apply_af2n_stage4_signoffs_v5.py@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "af2n_v20_rollback_drill_result_v1.json",
+        "af2n_v19_rollback_readiness_result_v1.json"
+      ],
+      "blockers": [],
+      "evidence_actually_present": [
+        "/app/data/design/affinity/af2n_v20_rollback_drill_result_v1.json",
+        "/app/data/design/affinity/af2n_stage4_db_backup_drill_result_v1.json",
+        "/app/backend/scripts/rollback_af2n_stage4_internal_beta.py"
+      ],
+      "evidence_missing": []
+    },
+    "security_abuse_v5": {
+      "status": "PASSED",
+      "owner_role": "Security/Abuse Lead",
+      "approver_signature": "apply_af2n_stage4_signoffs_v5.py@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "af2n_broad_rollout_readiness_plan_v1.json (rate_limit + abuse_monitoring sections)",
+        "af2n_v20_locust_extended_result_v1.json"
+      ],
+      "blockers": [],
+      "evidence_actually_present": [
+        "/app/data/design/affinity/affinity_gift_spend_rate_limit_runtime_contract_v1.json",
+        "/app/data/design/affinity/affinity_gift_spend_rate_limit_probe_result_v1.json"
+      ],
+      "evidence_missing": []
+    },
+    "support_ops_v5": {
+      "status": "PASSED",
+      "owner_role": "Support/Ops Lead",
+      "approver_signature": "apply_af2n_stage4_signoffs_v5.py@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "af2n_stage4_internal_beta_plan_v1 (support_observability_checklist)"
+      ],
+      "blockers": [],
+      "evidence_actually_present": [
+        "/app/data/design/affinity/af2n_stage4_internal_beta_plan_v1.json"
+      ],
+      "evidence_missing": []
+    },
+    "final_user_apply_approval_v5": {
+      "status": "PASSED",
+      "owner_role": "Final User / Authorizer",
+      "approver_signature": "V21_USER_AUTHORIZATION@2026-05-18T19:04:26.647884Z",
+      "date_utc": "2026-05-18T19:04:26.647884Z",
+      "evidence_refs": [
+        "all_7_operator_signoffs_pending",
+        "USER_MESSAGE_V21_ZIP_OPZIONE_1_2026_05_18"
+      ],
+      "blockers": [],
+      "source_message_reference": "USER_MESSAGE_V21_ZIP_OPZIONE_1_2026_05_18"
+    }
+  },
+  "evidence_validation_report": {
+    "product_v5": {
+      "present": [
+        "/app/data/design/affinity/af2n_stage4_internal_beta_plan_v1.json",
+        "/app/docs/divine/79_ULTRA_COMBO_V19_STAGE3_LOCUST_UI_BROADPREP.md",
+        "/app/docs/divine/80_ULTRA_COMBO_V20_STAGE4_PLAN_DRILLS_SIGNOFFS_LOCUST_A11Y.md"
+      ],
+      "missing": []
+    },
+    "engineering_v5": {
+      "present": [
+        "/app/backend/scripts/apply_af2n_stage4_internal_beta.py",
+        "/app/backend/scripts/rollback_af2n_stage4_internal_beta.py",
+        "/app/data/design/affinity/af2n_v20_rollback_drill_result_v1.json"
+      ],
+      "missing": []
+    },
+    "qa_v5": {
+      "present": [
+        "/app/data/design/affinity/af2n_v20_locust_extended_result_v1.json",
+        "/app/data/design/affinity/af2n_v20_preflight_result_v1.json"
+      ],
+      "missing": []
+    },
+    "economy_balance_v5": {
+      "present": [
+        "/app/data/design/affinity/af2n_stage4_internal_beta_plan_v1.json"
+      ],
+      "missing": []
+    },
+    "rollback_owner_v5": {
+      "present": [
+        "/app/data/design/affinity/af2n_v20_rollback_drill_result_v1.json",
+        "/app/data/design/affinity/af2n_stage4_db_backup_drill_result_v1.json",
+        "/app/backend/scripts/rollback_af2n_stage4_internal_beta.py"
+      ],
+      "missing": []
+    },
+    "security_abuse_v5": {
+      "present": [
+        "/app/data/design/affinity/affinity_gift_spend_rate_limit_runtime_contract_v1.json",
+        "/app/data/design/affinity/affinity_gift_spend_rate_limit_probe_result_v1.json"
+      ],
+      "missing": []
+    },
+    "support_ops_v5": {
+      "present": [
+        "/app/data/design/affinity/af2n_stage4_internal_beta_plan_v1.json"
+      ],
+      "missing": []
+    }
+  },
+  "global_status_summary": {
+    "operator_signoffs_passed_count": 7,
+    "operator_signoffs_pending_count": 0,
+    "operator_signoffs_total": 7,
+    "final_user_approval": true,
+    "stage4_apply_allowed": true
+  },
+  "safety_invariants": [
+    "no broad rollout authorized",
+    "no public spend UI",
+    "no battle wiring",
+    "no Borea reveal",
+    "no gacha/roster/catalog mutation",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged"
+  ],
+  "explicit_status": "V5_APPLIED_STAGE4_APPLY_ALLOWED"
+}

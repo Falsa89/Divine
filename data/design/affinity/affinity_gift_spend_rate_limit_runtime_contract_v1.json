@@ -1,0 +1,46 @@
+{
+  "contract_id": "affinity_gift_spend_rate_limit_runtime_contract_v1",
+  "task_origin": "V21-AF2N-RATE-LIMIT",
+  "design_only": false,
+  "runtime_attached": true,
+  "endpoint": "POST /api/affinity/gift-spend",
+  "flag": "AFFINITY_GIFT_RATE_LIMIT_ENABLED",
+  "flag_on_value": "true_explicit_affinity_rate_limit_on",
+  "limits": {
+    "per_user_per_minute": 30,
+    "per_user_per_hour": 240,
+    "per_ip_per_minute": 60,
+    "burst_window_seconds": 10,
+    "burst_max": 6
+  },
+  "order_of_checks": [
+    "borea_alias_404",
+    "rate_limit_429_if_breach",
+    "shape_validation",
+    "feature_flag_423_if_off",
+    "allowlist_423_if_not_in",
+    "idempotency_replay_then_insert"
+  ],
+  "properties": {
+    "rejects_with_http": 429,
+    "writes_db_on_reject": false,
+    "borea_404_still_wins": true,
+    "non_allowlist_still_returns_423_unless_breach": true,
+    "idempotent_replay_counted": true,
+    "fail_open_on_internal_error": true,
+    "storage": "in_memory_sliding_window_process_local",
+    "resets_on_backend_restart": true
+  },
+  "observability": {
+    "snapshot_in_response": true,
+    "canary_status_exposes_config": true
+  },
+  "safety_invariants": [
+    "never bypasses Borea 404",
+    "never permits DB write on 429",
+    "never modifies battle_engine.py / combat.tsx",
+    "never enables broad rollout",
+    "never enables public spend UI"
+  ],
+  "explicit_status": "RATE_LIMIT_RUNTIME_CONTRACT_ACTIVE"
+}

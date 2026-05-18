@@ -1,0 +1,37 @@
+{
+  "rollup_id": "collection_affinity_runtime_activation_readiness_rollup_v16",
+  "task_origin": "V21-SAFETY-ROLLUP-P",
+  "design_only": false,
+  "runtime_attached": true,
+  "generated_at_utc": "2026-05-18T19:12:25.397581Z",
+  "stage4_state": "stage4_internal_beta_active_no_broad_rollout",
+  "stage4_applied": true,
+  "allowlist_size": 700,
+  "ledger_cap": 5000,
+  "ledger_total_rows": 121,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring_live": false,
+  "buffs_enabled": false,
+  "borea_hidden": true,
+  "rate_limit_active": true,
+  "db_backup_drill_pass": true,
+  "signoffs_v5_status": "V5_APPLIED_STAGE4_APPLY_ALLOWED",
+  "rollback_ready": true,
+  "next_decision_options": [
+    "stage4_observation_window_24_72h",
+    "public_beta_prep_later",
+    "fix_blocker_if_any",
+    "rollback_if_required",
+    "stack_g_deferred"
+  ],
+  "recommended_next_decision": "stage4_observation_window_24_72h",
+  "safety_invariants": [
+    "no broad rollout",
+    "no public spend UI",
+    "no battle wiring",
+    "no Borea reveal",
+    "no gacha/roster/catalog mutation",
+    "battle_engine.py / battle_core.py / combat.tsx unchanged"
+  ]
+}

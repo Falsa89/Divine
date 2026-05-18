@@ -1,10 +1,10 @@
 {
-  "result_id": "af2n_v18_preflight_result_v1",
-  "task_origin": "V18-PREFLIGHT",
+  "result_id": "af2n_v21_preflight_result_v1",
+  "task_origin": "V21-PREFLIGHT",
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-18T19:17:38.256281Z",
+  "generated_at_utc": "2026-05-18T19:17:44.065458Z",
   "overall_status": "PASS",
   "gates": {
     "api_health_200": true,
@@ -13,30 +13,40 @@
     "canary_status_200": true,
     "canary_flag_on": true,
     "inv_writes_flag_on": true,
-    "stage2_allowlist_ge_100": true,
-    "cap_ge_1000": true,
+    "stage3_allowlist_ge_200": true,
+    "cap_ge_2500": true,
     "ledger_within_cap": true,
-    "battle_runtime_attached_false": true,
-    "applied_to_combat_false": true,
-    "buffs_enabled_false": true,
+    "battle_off": true,
+    "combat_off": true,
+    "buffs_off": true,
     "borea_404": true,
+    "greek_borea_404": true,
+    "primordial_gaia_404": true,
     "non_allowlist_423": true,
     "battle_files_unchanged": true,
-    "ugi_present": true,
-    "uas_present": true,
+    "db_connectivity": true,
     "ugi_no_negative": true,
     "inv_aff_mut_equal": true,
     "no_buffs_rows": true,
     "no_battle_wiring_rows": true,
     "no_borea_hero_rows": true,
-    "v16_seed_50_present": true,
-    "v17_stage2_seed_50_present": true,
-    "rollback_scripts_present": true,
-    "suite_v17_pass": true,
+    "rollback_present:rollback_af2n_stage3_qa_expansion.py": true,
+    "rollback_present:rollback_af2n_stage2_5_10pct_allowlist.py": true,
+    "rollback_present:rollback_af2n_stage1_1pct_allowlist.py": true,
+    "rollback_present:rollback_affinity_inventory_wiring_stage1.py": true,
     "baseline_v6_diff_pass": true,
-    "ui_safety_no_spend_token": true,
-    "no_shadow_adapter_live_leak": true
+    "suite_pass": true,
+    "ui_preview_present": true,
+    "ui_preview_no_spend_post": true,
+    "ui_preview_no_borea": true,
+    "locust_binary_present": true,
+    "locust_version_known": true,
+    "db_backup_dest_writable": true,
+    "v20_stage4_plan_present": true,
+    "v20_signoff_package_v5_present": true
   },
+  "locust_path": "/usr/local/bin/locust",
+  "locust_version": "locust 2.44.0 from /usr/local/lib/python3.11/site-packages/locust (Python 3.11.15)",
   "canary_status_snapshot": {
     "task_origin": "AF2-N-READINESS-DASH",
     "design_only": false,
@@ -76,22 +86,14 @@
     "rate_limit_burst_max": 6,
     "rate_limit_flag_dependency": "AFFINITY_GIFT_RATE_LIMIT_ENABLED"
   },
-  "collection_counts": {
-    "user_gift_inventory": 700,
-    "user_affinity_state": 95
-  },
   "safety_flags": {
     "broad_rollout_authorized": false,
     "public_spend_ui": false,
+    "stage4_applied": false,
     "battle_runtime_attached": false,
     "applied_to_combat": false,
     "buffs_enabled": false,
     "feature_flag_currently_enabled": true,
-    "inventory_writes_flag_currently_enabled": true,
-    "hidden_aliases_blocked": [
-      "borea",
-      "greek_borea",
-      "primordial_gaia"
-    ]
+    "inventory_mutation_enabled": true
   }
 }

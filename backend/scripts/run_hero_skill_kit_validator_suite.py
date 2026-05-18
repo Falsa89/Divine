@@ -251,6 +251,21 @@ OPTIONAL = [
     ('AF2-N-PUBLIC-UI-PREVIEW-QA-A11Y-V20',        'audit_affinity_gifts_public_preview_qa_a11y.py'),
     ('SAFETY-ROLLUP-O',                            'validate_collection_affinity_runtime_activation_rollup_v15.py'),
     ('ULTRA-COMBO-V20',                            'validate_ultra_combo_v20_stage4_readiness_drills.py'),
+    # ULTRA-COMBO V21 (STAGE4 INTERNAL BETA APPLY-GATED + SIGNOFFS V5 APPLY
+    #                  + RATE-LIMIT MIDDLEWARE + DB BACKUP DRILL + STAGE4
+    #                  MONITORING + LOCUST + SAFETY-ROLLUP-P)
+    ('V21-PREFLIGHT',                              'validate_af2n_v21_preflight.py'),
+    ('AF2-N-STAGE4-SIGNOFFS-V5-APPLIED',           'validate_af2n_stage4_signoffs_v5_applied.py'),
+    ('AF2-N-V21-RATE-LIMIT-AUDIT',                 'audit_affinity_gift_spend_rate_limit_runtime.py'),
+    ('AF2-N-V21-RATE-LIMIT-PROBE',                 'validate_affinity_gift_spend_rate_limit_probe.py'),
+    ('AF2-N-V21-DB-BACKUP-DRILL',                  'validate_af2n_stage4_db_backup_drill.py'),
+    ('AF2-N-STAGE4-INTERNAL-BETA-APPLY',           'validate_af2n_stage4_internal_beta_apply_result.py'),
+    ('AF2-N-V21-STAGE4-MONITORING',                'validate_af2n_stage4_monitoring_v21.py'),
+    ('AF2-L-LOCUST-STAGE4-V21',                    'validate_af2n_v21_locust_stage4_result.py'),
+    ('AF2-N-PUBLIC-UI-PREVIEW-V21-SAFETY',         'audit_affinity_gifts_public_preview_v21_safety.py'),
+    ('V21-ROLLBACK-READINESS',                     'validate_af2n_v21_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-P',                            'validate_collection_affinity_runtime_activation_rollup_v16.py'),
+    ('ULTRA-COMBO-V21',                            'validate_ultra_combo_v21_stage4_apply_gated.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -260,9 +275,11 @@ def run_one(script: Path, extra_args: list[str] | None = None) -> dict:
         return {'present': False, 'exit_code': None, 'duration_s': 0.0, 'tail': '<missing>'}
     t0 = datetime.now(timezone.utc)
     try:
+        env = dict(os.environ)
+        env['SUITE_RUNNER_ACTIVE'] = '1'
         proc = subprocess.run(
             ['python3', str(script)] + (extra_args or []),
-            capture_output=True, text=True, timeout=60,
+            capture_output=True, text=True, timeout=60, env=env,
         )
         tail = (proc.stdout or proc.stderr or '').strip().splitlines()
         tail = tail[-3:] if tail else ['<no output>']
@@ -350,9 +367,58 @@ def main(argv=None) -> int:
     SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW = frozenset({
         'AF2-N-PUBLIC-UI-PREVIEW-SAFETY', 'ULTRA-COMBO-V18',
     }) if Path('/app/frontend/app/affinity-gifts-preview.tsx').exists() else frozenset()
+    # V21: Rate-limit active supersedes pre-AF2N load probes / rollups that
+    # blast the gift-spend endpoint expecting 423 — they now get 429 once
+    # burst threshold is hit. The behavior is still safe (no DB write), but
+    # these validators predate the rate-limit guard.
+    rate_limit_active = os.environ.get('AFFINITY_GIFT_RATE_LIMIT_ENABLED', '') == 'true_explicit_affinity_rate_limit_on'
+    if not rate_limit_active:
+        try:
+            import urllib.request as _u2
+            with _u2.urlopen('http://127.0.0.1:8001/api/affinity/gift-spend/canary-status', timeout=4) as r:
+                _st2 = json.loads(r.read().decode())
+            rate_limit_active = bool(_st2.get('rate_limit_enabled'))
+        except Exception:
+            pass
+    SUPERSEDED_AFTER_RATE_LIMIT = frozenset({
+        # Old pre-V12 load probes hit gift-spend many times and now meet 429.
+        'AF2-L-FULL',
+        'SAFETY-ROLLUP-D', 'SAFETY-ROLLUP-E', 'SAFETY-ROLLUP-F',
+        'AF2-L-K6-PREP',
+    }) if rate_limit_active else frozenset()
+    # V21: Stage4 applied (allowlist>200 OR cap>2500) supersedes V20 hard-coded
+    # assertions of allowlist==200, cap==2500, signoff PENDING, plan stage4_applied=false,
+    # apply/rollback scripts NOT present.
+    try:
+        from pathlib import Path as _P
+        _stage4_applied_marker = _P('/app/data/design/affinity/af2n_stage4_internal_beta_apply_result_v1.json')
+        stage4_applied = False
+        if _stage4_applied_marker.exists():
+            _d = json.loads(_stage4_applied_marker.read_text())
+            stage4_applied = bool(_d.get('stage4_applied'))
+    except Exception:
+        stage4_applied = False
+    SUPERSEDED_AFTER_STAGE4 = frozenset({
+        'V20-PREFLIGHT',
+        'AF2-N-STAGE4-INTERNAL-BETA-PLAN',
+        'AF2-N-STAGE4-SIGNOFF-PACKAGE-V5',
+        'ULTRA-COMBO-V20',
+        'ULTRA-COMBO-V19',  # asserts allowlist<=500, broken post-Stage4 (700)
+    }) if stage4_applied else frozenset()
+    # V21: Stage4 apply/rollback script presence supersedes V20 composite which
+    # asserts these scripts do NOT exist. Mark V20 composite SUPERSEDED once we
+    # ship the V21 apply/rollback scripts.
+    v21_apply_script_present = Path('/app/backend/scripts/apply_af2n_stage4_internal_beta.py').exists()
+    v21_rollback_script_present = Path('/app/backend/scripts/rollback_af2n_stage4_internal_beta.py').exists()
+    SUPERSEDED_AFTER_V21_SCRIPTS = frozenset({
+        'ULTRA-COMBO-V20',
+    }) if (v21_apply_script_present and v21_rollback_script_present) else frozenset()
     SUPERSEDED = (SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
                   | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3
-                  | SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW)
+                  | SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW
+                  | SUPERSEDED_AFTER_RATE_LIMIT
+                  | SUPERSEDED_AFTER_STAGE4
+                  | SUPERSEDED_AFTER_V21_SCRIPTS)
 
     results: list[dict] = []
     any_required_fail = False

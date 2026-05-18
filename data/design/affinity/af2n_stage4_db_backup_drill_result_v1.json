@@ -1,0 +1,56 @@
+{
+  "manifest_id": "af2n_stage4_db_backup_drill_v1",
+  "task_origin": "V21-AF2N-DB-BACKUP-DRILL-REAL",
+  "design_only": false,
+  "destructive": false,
+  "restore_executed": false,
+  "restore_dry_run_only": true,
+  "started_at_utc": "2026-05-18T18:56:36.926064Z",
+  "backup_dir": "/app/backups/af2n_stage4/backup_20260518T185636Z",
+  "collections": {
+    "gift_transaction_ledger": {
+      "live_count": 64,
+      "dump_file": "/app/backups/af2n_stage4/backup_20260518T185636Z/gift_transaction_ledger.json",
+      "dump_size_bytes": 33895,
+      "sha256": "1df66c755a5dd36298c480af5dbdc0b5d608665db84e9da7f39a70503dc7da13",
+      "dry_run_read_count": 64,
+      "counts_match_live": true
+    },
+    "user_gift_inventory": {
+      "live_count": 200,
+      "dump_file": "/app/backups/af2n_stage4/backup_20260518T185636Z/user_gift_inventory.json",
+      "dump_size_bytes": 65152,
+      "sha256": "446e1e74db78060eea4a72ff6c9d25987d3d90209f220f5a4fa92f1727148301",
+      "dry_run_read_count": 200,
+      "counts_match_live": true
+    },
+    "user_affinity_state": {
+      "live_count": 42,
+      "dump_file": "/app/backups/af2n_stage4/backup_20260518T185636Z/user_affinity_state.json",
+      "dump_size_bytes": 17412,
+      "sha256": "eb7a859c2d07c48eeba360dad5bd186ad74b0071c14d393e8008feb3168996f4",
+      "dry_run_read_count": 42,
+      "counts_match_live": true
+    }
+  },
+  "finished_at_utc": "2026-05-18T18:56:36.946808Z",
+  "all_collections_ok": true,
+  "overall_status": "PASS",
+  "restore_plan": {
+    "order": [
+      "1. Stop backend (supervisorctl stop backend)",
+      "2. For each collection: db.<name>.drop()",
+      "3. mongoimport --uri ... --collection <name> --file <dump>.json",
+      "4. Verify counts match manifest live_count",
+      "5. Restart backend (supervisorctl restart backend)",
+      "6. Run V21 preflight to confirm canary status"
+    ],
+    "rollback_owner_ref": "rollback_owner_v5"
+  },
+  "safety_invariants": [
+    "no destructive restore",
+    "no delete / drop / update on live db",
+    "backup files immutable (no rewrite)",
+    "never modifies battle_engine.py / combat.tsx"
+  ]
+}

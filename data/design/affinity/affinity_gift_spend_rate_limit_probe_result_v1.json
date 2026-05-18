@@ -1,0 +1,85 @@
+{
+  "result_id": "affinity_gift_spend_rate_limit_probe_result_v1",
+  "task_origin": "V21-AF2N-RATE-LIMIT-PROBE",
+  "started_at_utc": "2026-05-18T18:56:25.735826Z",
+  "finished_at_utc": "2026-05-18T18:56:36.749017Z",
+  "rolling_user": "v21_rl_probe_1779130585",
+  "burst_results": [
+    {
+      "i": 0,
+      "code": 423,
+      "preview": "{\"task_origin\":\"AF2-N\",\"http_status\":423,\"shape_validation_preview\":{\"shape_ok\":true,\"missing_fields\":[],\"extra_info\":nu"
+    },
+    {
+      "i": 1,
+      "code": 423,
+      "preview": "{\"task_origin\":\"AF2-N\",\"http_status\":423,\"shape_validation_preview\":{\"shape_ok\":true,\"missing_fields\":[],\"extra_info\":nu"
+    },
+    {
+      "i": 2,
+      "code": 423,
+      "preview": "{\"task_origin\":\"AF2-N\",\"http_status\":423,\"shape_validation_preview\":{\"shape_ok\":true,\"missing_fields\":[],\"extra_info\":nu"
+    },
+    {
+      "i": 3,
+      "code": 423,
+      "preview": "{\"task_origin\":\"AF2-N\",\"http_status\":423,\"shape_validation_preview\":{\"shape_ok\":true,\"missing_fields\":[],\"extra_info\":nu"
+    },
+    {
+      "i": 4,
+      "code": 423,
+      "preview": "{\"task_origin\":\"AF2-N\",\"http_status\":423,\"shape_validation_preview\":{\"shape_ok\":true,\"missing_fields\":[],\"extra_info\":nu"
+    },
+    {
+      "i": 5,
+      "code": 423,
+      "preview": "{\"task_origin\":\"AF2-N\",\"http_status\":423,\"shape_validation_preview\":{\"shape_ok\":true,\"missing_fields\":[],\"extra_info\":nu"
+    },
+    {
+      "i": 6,
+      "code": 429,
+      "preview": "{\"task_origin\":\"AF2-N-V21-RATE-LIMIT\",\"http_status\":429,\"disabled_reason\":\"user_burst_exceeded\",\"rate_limit_snapshot\":{\""
+    },
+    {
+      "i": 7,
+      "code": 429,
+      "preview": "{\"task_origin\":\"AF2-N-V21-RATE-LIMIT\",\"http_status\":429,\"disabled_reason\":\"user_burst_exceeded\",\"rate_limit_snapshot\":{\""
+    },
+    {
+      "i": 8,
+      "code": 429,
+      "preview": "{\"task_origin\":\"AF2-N-V21-RATE-LIMIT\",\"http_status\":429,\"disabled_reason\":\"user_burst_exceeded\",\"rate_limit_snapshot\":{\""
+    },
+    {
+      "i": 9,
+      "code": 429,
+      "preview": "{\"task_origin\":\"AF2-N-V21-RATE-LIMIT\",\"http_status\":429,\"disabled_reason\":\"user_burst_exceeded\",\"rate_limit_snapshot\":{\""
+    },
+    {
+      "i": 10,
+      "code": 429,
+      "preview": "{\"task_origin\":\"AF2-N-V21-RATE-LIMIT\",\"http_status\":429,\"disabled_reason\":\"user_burst_exceeded\",\"rate_limit_snapshot\":{\""
+    },
+    {
+      "i": 11,
+      "code": 429,
+      "preview": "{\"task_origin\":\"AF2-N-V21-RATE-LIMIT\",\"http_status\":429,\"disabled_reason\":\"user_burst_exceeded\",\"rate_limit_snapshot\":{\""
+    }
+  ],
+  "burst_status_counts": {
+    "423": 6,
+    "429": 6
+  },
+  "saw_429_at_least_once": true,
+  "only_safe_status_codes": true,
+  "no_200_for_unauth": true,
+  "no_500_anywhere": true,
+  "recovery_code_after_window": 423,
+  "recovery_is_423_or_429": true,
+  "overall_status": "PASS",
+  "safety": {
+    "borea_skipped": true,
+    "db_write_on_reject_expected": false,
+    "non_allowlist_used_for_probe": true
+  }
+}
