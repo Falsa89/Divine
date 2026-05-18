@@ -1,0 +1,97 @@
+{
+  "result_id": "af2n_v20_locust_extended_result_v1",
+  "task_origin": "AF2-L-LOCUST-EXTENDED-LOW-IMPACT-V20",
+  "generated_at_utc": "2026-05-18T18:37:39.772188Z",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "pre_snapshot": {
+    "ledger_total": 64,
+    "inv_mut": 53,
+    "aff_mut": 53,
+    "buffs": 0,
+    "battle_wiring": 0,
+    "borea_hero": 0,
+    "negative_inventory": 0
+  },
+  "locust_binary_present": true,
+  "locust_binary_path": "/usr/local/bin/locust",
+  "locust_run": {
+    "exit_code": 0,
+    "duration_s": 40.27,
+    "cmd": "locust -f /app/loadtests/af2n_v20_stage3_extended_locustfile.py --headless -u 15 -r 5 -t 40s",
+    "stdout_tail": [
+      "[2026-05-18 18:37:40,124] agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c/INFO/locust.main: Starting Locust 2.44.0",
+      "[2026-05-18 18:37:40,125] agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c/INFO/locust.main: Run time limit set to 40 seconds",
+      "[2026-05-18 18:37:40,125] agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c/INFO/locust.runners: Ramping to 15 users at a rate of 5.00 per second",
+      "[2026-05-18 18:37:42,129] agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c/INFO/locust.runners: All users spawned: {\"LowImpactExtendedUser\": 15} (15 total users)",
+      "[2026-05-18 18:38:19,950] agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c/INFO/locust.main: --run-time limit reached, shutting down",
+      "[2026-05-18 18:38:19,974] agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c/INFO/locust.main: Shutting down (exit code 0)",
+      "Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s",
+      "--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------",
+      "GET      /api/affinity/gift-spend/canary-status                                           548     0(0.00%) |     16       5     117     10 |   13.75        0.00",
+      "GET      /api/affinity/gifts                                                              290     0(0.00%) |      5       3      40      5 |    7.28        0.00",
+      "GET      /api/health                                                                     1288     0(0.00%) |      5       1      71      3 |   32.32        0.00",
+      "GET      /api/heroes                                                                      371     0(0.00%) |    117      60     361     96 |    9.31        0.00",
+      "POST     POST gift-spend [Borea expect 404]                                               308     0(0.00%) |      3       1      29      2 |    7.73        0.00",
+      "POST     POST gift-spend [idempotent replay expect 200]                                    81     0(0.00%) |     13       4      70      8 |    2.03        0.00",
+      "POST     POST gift-spend [non-allow expect 423]                                           556     0(0.00%) |      3       0      42      2 |   13.95        0.00",
+      "--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------",
+      "         Aggregated                                                                      3442     0(0.00%) |     19       0     361      5 |   86.38        0.00",
+      "",
+      "Response time percentiles (approximated)",
+      "Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs",
+      "--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------",
+      "GET      /api/affinity/gift-spend/canary-status                                                 10     14     18     21     35     55     85     96    120    120    120    548",
+      "GET      /api/affinity/gifts                                                                     5      5      6      6     10     13     23     25     41     41     41    290",
+      "GET      /api/health                                                                             3      5      6      7     12     18     29     36     55     71     71   1288",
+      "GET      /api/heroes                                                                            96    110    130    150    200    260    290    340    360    360    360    371",
+      "POST     POST gift-spend [Borea expect 404]                                                      2      2      3      4      7     10     13     15     30     30     30    308",
+      "POST     POST gift-spend [idempotent replay expect 200]                                          8     12     15     18     27     38     62     70     70     70     70     81",
+      "POST     POST gift-spend [non-allow expect 423]                                                  2      3      3      4      6     10     15     24     42     42     42    556",
+      "--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------",
+      "         Aggregated                                                                              5      8     11     15     72    100    150    210    340    360    360   3442"
+    ],
+    "parsed_aggregated_requests": 5,
+    "parsed_aggregated_failures": 8,
+    "parsed_p95_ms": null,
+    "parsed_p99_ms": null
+  },
+  "csv_summary": {
+    "csv_rows": 8,
+    "csv_path": "/tmp/v20_locust_csv_stats.csv",
+    "csv_size_bytes": 1477
+  },
+  "post_snapshot": {
+    "ledger_total": 64,
+    "inv_mut": 53,
+    "aff_mut": 53,
+    "buffs": 0,
+    "battle_wiring": 0,
+    "borea_hero": 0,
+    "negative_inventory": 0
+  },
+  "delta": {
+    "ledger_total": 0,
+    "inv_mut": 0,
+    "aff_mut": 0,
+    "buffs": 0,
+    "battle_wiring": 0,
+    "borea_hero": 0,
+    "negative_inventory": 0
+  },
+  "triggers_fired": [],
+  "triggers_total": 0,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "no_fresh_spend_in_locust": true,
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "stage4_applied": false,
+    "battle_runtime_attached": false,
+    "buffs_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

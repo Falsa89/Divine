@@ -1,0 +1,138 @@
+{
+  "plan_id": "af2n_stage4_internal_beta_plan_v1",
+  "task_origin": "AF2-N-STAGE4-INTERNAL-BETA-PREP-V20",
+  "design_only": true,
+  "runtime_attached": false,
+  "plan_only": true,
+  "stage4_applied": false,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "PLAN-ONLY per Stage4 Internal Beta. Definisce target users, seed plan, ledger cap, rate-limit, abuse monitoring, rollback, support/observability. NESSUN apply. Apply richiede esplicita autorizzazione utente V5 + tutti i 5 signoff operatori + drills PASS.",
+  "target_user_class": "internal_QA_engineering_economy_only",
+  "target_user_id_patterns": [
+    "stage4_qa_NNN (synthetic QA)",
+    "internal_eng_NNN (internal engineering accounts)",
+    "internal_econ_NNN (internal economy accounts)",
+    "internal_support_NNN (internal support accounts)"
+  ],
+  "recommended_new_users_count": 500,
+  "hard_cap_new_users_count": 1000,
+  "current_stage3_allowlist_size": 200,
+  "target_stage4_total_allowlist_size": 700,
+  "hard_cap_total_allowlist_size": 1500,
+  "recommended_ledger_cap": 5000,
+  "hard_cap_ledger_cap": 10000,
+  "seed_strategy": {
+    "gift_id": "gift_test_001",
+    "quantity_per_user": 10,
+    "metadata": {"seed_task": "V20_STAGE4_PLAN_REFERENCE", "is_internal_user": true, "synthetic": true},
+    "order": [
+      "seed_inventory_for_new_users_BEFORE_supervisor_flip",
+      "backup_supervisor_conf",
+      "update_supervisor_allowlist_and_cap",
+      "restart_backend",
+      "smoke_verify",
+      "run_stage4_monitoring"
+    ]
+  },
+  "rate_limit_plan": {
+    "per_user_per_minute_gift_spend": 30,
+    "per_user_per_hour_gift_spend": 240,
+    "per_ip_per_minute_gift_spend": 60,
+    "global_per_second_gift_spend": 200,
+    "enforcement_layer": "backend route middleware (proposed) + canary status checks",
+    "enforcement_status": "NOT_IMPLEMENTED_YET"
+  },
+  "abuse_monitoring_plan": {
+    "metrics": [
+      "idempotency_double_tx_count",
+      "non_allowlist_spend_attempts",
+      "borea_attempts",
+      "http_5xx_count",
+      "ledger_growth_rate_per_min",
+      "inv_aff_delta_mismatch",
+      "negative_inventory_count",
+      "per_user_velocity",
+      "per_ip_velocity"
+    ],
+    "alerting_thresholds": {
+      "http_5xx_per_min_gt": 5,
+      "non_allowlist_success_gt_0": "page_oncall",
+      "borea_not_404_gt_0": "page_oncall_and_full_rollback",
+      "negative_inventory_gt_0": "page_oncall_and_inventory_flag_rollback",
+      "ledger_growth_rate_per_min_gt": 100
+    },
+    "dashboards": ["affinity_canary_health","affinity_idempotency","affinity_economy_delta"]
+  },
+  "borea_safety_gates": [
+    "borea_alias_404_continuous_check",
+    "borea_in_heroes_id_set_is_false",
+    "borea_in_ledger_hero_id_count_is_zero"
+  ],
+  "economy_caps_plan": {
+    "max_gift_quantity_per_tx": 100,
+    "max_affinity_increment_per_tx": 100,
+    "max_inventory_balance_per_user_per_gift": 1000,
+    "weekly_aggregate_cap_per_user": 2000
+  },
+  "rollback_plan": {
+    "order": [
+      "restore_supervisor_conf_backup_v20_pre_stage4",
+      "restart_backend",
+      "remove_stage4_seed_docs_via_rollback_script",
+      "verify_canary_status_back_to_stage3"
+    ],
+    "required_rollback_script": "/app/backend/scripts/rollback_af2n_stage4_internal_beta.py (NOT created in V20)",
+    "required_apply_script": "/app/backend/scripts/apply_af2n_stage4_internal_beta.py (NOT created in V20)",
+    "rollback_target_state": "stage3_200_users_ledger_cap_2500"
+  },
+  "support_observability_checklist": [
+    "customer_support_runbook_drafted",
+    "oncall_rotation_confirmed",
+    "observability_dashboards_in_place",
+    "abuse_alert_routing_to_oncall",
+    "rollback_runbook_validated_via_drills",
+    "escalation_owner_per_severity"
+  ],
+  "required_signoffs_v5": [
+    "product_v5","engineering_v5","qa_v5","economy_balance_v5",
+    "rollback_owner_v5","security_abuse_v5","support_ops_v5","final_user_apply_approval_v5"
+  ],
+  "required_gates_before_apply": [
+    "stage3_extended_monitoring_clean_24_72h",
+    "locust_extended_low_impact_clean",
+    "rollback_drills_executed_dry_run_PASS",
+    "signoff_package_v5_all_operators_PASS",
+    "explicit_final_user_apply_approval_v5_true",
+    "apply_script_created_and_audited",
+    "rollback_script_created_and_audited",
+    "supervisor_backup_v20_pre_stage4_created",
+    "hard_cap_checks_in_apply_script"
+  ],
+  "safety_invariants": [
+    "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED stays scoped to allowlist only",
+    "no broad rollout",
+    "no public spend button",
+    "no Borea reveal",
+    "no battle wiring",
+    "no gacha/roster/Character Bible/asset/skill catalog/final_numbers mutation",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged",
+    "public UI preview stays read-only"
+  ],
+  "abort_triggers": [
+    "http_5xx_critical",
+    "non_allowlist_spend_success",
+    "borea_not_404",
+    "negative_inventory",
+    "idempotency_double_mutation",
+    "inv_aff_count_mismatch",
+    "battle_file_mutation",
+    "gacha_roster_catalog_mutation",
+    "allowlist_size_exceeded_hard_cap",
+    "ledger_cap_exceeded_hard_cap",
+    "public_spend_button_detected_in_frontend"
+  ],
+  "explicit_status": "PLAN_ONLY_NOT_APPLIED_REQUIRES_FULL_SIGNOFF_AND_USER_AUTHORIZATION"
+}

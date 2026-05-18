@@ -240,6 +240,17 @@ OPTIONAL = [
     ('V19-ROLLBACK-READINESS',                     'validate_af2n_v19_rollback_readiness.py'),
     ('SAFETY-ROLLUP-N',                            'validate_collection_affinity_runtime_activation_rollup_v14.py'),
     ('ULTRA-COMBO-V19',                            'validate_ultra_combo_v19_stage3_locust_ui_broadprep.py'),
+    # ULTRA-COMBO V20 (STAGE4 INTERNAL BETA PREP PLAN-ONLY + ROLLBACK DRILLS
+    #                  + SIGNOFFS V5 + LOCUST EXTENDED LOW-IMPACT
+    #                  + PUBLIC UI PREVIEW QA/A11Y AUDIT + SAFETY-ROLLUP-O)
+    ('V20-PREFLIGHT',                              'validate_af2n_v20_preflight.py'),
+    ('AF2-N-STAGE4-INTERNAL-BETA-PLAN',            'validate_af2n_stage4_internal_beta_plan.py'),
+    ('AF2-N-V20-ROLLBACK-DRILLS',                  'validate_af2n_v20_rollback_drill_result.py'),
+    ('AF2-N-STAGE4-SIGNOFF-PACKAGE-V5',            'validate_af2n_stage4_signoff_package_v5.py'),
+    ('AF2-L-LOCUST-EXTENDED-LOW-IMPACT-V20',       'validate_af2n_v20_locust_extended_result.py'),
+    ('AF2-N-PUBLIC-UI-PREVIEW-QA-A11Y-V20',        'audit_affinity_gifts_public_preview_qa_a11y.py'),
+    ('SAFETY-ROLLUP-O',                            'validate_collection_affinity_runtime_activation_rollup_v15.py'),
+    ('ULTRA-COMBO-V20',                            'validate_ultra_combo_v20_stage4_readiness_drills.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

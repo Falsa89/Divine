@@ -1,0 +1,50 @@
+{
+  "package_id": "af2n_stage4_signoff_package_v5",
+  "task_origin": "AF2-N-STAGE4-SIGNOFF-V5-V20",
+  "design_only": true,
+  "runtime_attached": false,
+  "stage4_apply_allowed": false,
+  "final_user_stage4_apply_approval": false,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "plan_ref": "af2n_stage4_internal_beta_plan_v1",
+  "summary": "Signoff package V5 per Stage4 internal beta. Tutti i signoff sono in stato PENDING. Nessuna autorizzazione di apply concessa. Apply richiede final_user_stage4_apply_approval=true esplicito, oltre a tutti i 7 signoff operatori PASSED e tutti i blockers risolti.",
+  "signoffs": {
+    "product_v5": {"status": "PENDING", "owner_role": "Product Owner", "approver_signature": null, "date_utc": null, "evidence_refs": ["af2n_stage4_internal_beta_plan_v1","77_ULTRA_COMBO_V17_STAGE2_MONITORING_CLEANUP_K6.md","78_ULTRA_COMBO_V18_STAGE2_STAGE3_PUBLIC_PREVIEW.md","79_ULTRA_COMBO_V19_STAGE3_LOCUST_UI_BROADPREP.md"], "blockers": []},
+    "engineering_v5": {"status": "PENDING", "owner_role": "Engineering Lead", "approver_signature": null, "date_utc": null, "evidence_refs": ["suite_v19.json","ultra_combo_v19_validator_summary_v1.json","af2n_v20_rollback_drill_result_v1.json"], "blockers": ["apply_script_for_stage4_NOT_yet_created","rollback_script_for_stage4_NOT_yet_created"]},
+    "qa_v5": {"status": "PENDING", "owner_role": "QA Lead", "approver_signature": null, "date_utc": null, "evidence_refs": ["af2n_stage3_extended_monitoring_v19_result.json","af2n_v20_locust_extended_result_v1.json","affinity_gifts_public_preview_qa_a11y_audit_v1.json"], "blockers": ["24_72h_observation_window_pending"]},
+    "economy_balance_v5": {"status": "PENDING", "owner_role": "Economy/Balance Lead", "approver_signature": null, "date_utc": null, "evidence_refs": ["af2n_stage4_internal_beta_plan_v1 (economy_caps_plan)"], "blockers": ["economy_caps_simulation_required"]},
+    "rollback_owner_v5": {"status": "PENDING", "owner_role": "Rollback Owner", "approver_signature": null, "date_utc": null, "evidence_refs": ["af2n_v20_rollback_drill_result_v1.json","af2n_v19_rollback_readiness_result_v1.json"], "blockers": ["stage4_rollback_script_pending","db_backup_drill_with_real_mongodump_pending"]},
+    "security_abuse_v5": {"status": "PENDING", "owner_role": "Security/Abuse Lead", "approver_signature": null, "date_utc": null, "evidence_refs": ["af2n_broad_rollout_readiness_plan_v1.json (rate_limit + abuse_monitoring sections)","af2n_v20_locust_extended_result_v1.json"], "blockers": ["rate_limit_middleware_NOT_implemented","abuse_dashboards_NOT_in_place"]},
+    "support_ops_v5": {"status": "PENDING", "owner_role": "Support/Ops Lead", "approver_signature": null, "date_utc": null, "evidence_refs": ["af2n_stage4_internal_beta_plan_v1 (support_observability_checklist)"], "blockers": ["customer_support_runbook_drafted_pending","oncall_rotation_confirmed_pending"]},
+    "final_user_apply_approval_v5": {"status": "NOT_GRANTED", "owner_role": "Final User / Authorizer", "approver_signature": null, "date_utc": null, "evidence_refs": ["all_7_operator_signoffs_pending"], "blockers": ["7_of_7_operator_signoffs_pending","explicit_user_apply_authorization_pending"]}
+  },
+  "required_for_apply": [
+    "all_7_operator_signoffs_status_PASSED",
+    "final_user_apply_approval_v5_true",
+    "all_blockers_resolved",
+    "apply_script_for_stage4_created_and_audited",
+    "rollback_script_for_stage4_created_and_audited",
+    "db_backup_drill_executed_real_mongodump",
+    "rate_limit_middleware_implemented_or_explicit_acceptance",
+    "24_72h_observation_window_completed"
+  ],
+  "global_status_summary": {
+    "operator_signoffs_passed_count": 0,
+    "operator_signoffs_pending_count": 7,
+    "operator_signoffs_total": 7,
+    "final_user_approval": false,
+    "stage4_apply_allowed": false
+  },
+  "safety_invariants": [
+    "no broad rollout authorized without explicit user approval v5",
+    "no public spend UI at this stage",
+    "no battle wiring",
+    "no Borea reveal",
+    "no gacha/roster/catalog mutation",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged at every stage"
+  ],
+  "explicit_status": "PACKAGE_DRAFTED_ALL_SIGNOFFS_PENDING_APPLY_DENIED"
+}

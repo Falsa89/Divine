@@ -1,0 +1,83 @@
+{
+  "result_id": "af2n_v20_rollback_drill_result_v1",
+  "task_origin": "AF2-N-V20-ROLLBACK-DRILLS",
+  "generated_at_utc": "2026-05-18T18:35:08.098656Z",
+  "mode": "dry_run_only",
+  "no_actual_state_change": true,
+  "drills": {
+    "stage3_rollback_dry_run": {
+      "script": "/app/backend/scripts/rollback_af2n_stage3_qa_expansion.py",
+      "present": true,
+      "exit_code": 0,
+      "cmd": "python3 /app/backend/scripts/rollback_af2n_stage3_qa_expansion.py",
+      "tail": [
+        "Stage3 rollback dry-run OK."
+      ]
+    },
+    "stage2_rollback_dry_run": {
+      "script": "/app/backend/scripts/rollback_af2n_stage2_5_10pct_allowlist.py",
+      "present": true,
+      "exit_code": 0,
+      "cmd": "python3 /app/backend/scripts/rollback_af2n_stage2_5_10pct_allowlist.py",
+      "tail": [
+        "Stage2 rollback dry-run OK."
+      ]
+    },
+    "inventory_flag_rollback_plan": {
+      "script": "/app/ops/rollback_af2n_canary.sh",
+      "present": true,
+      "plan_steps": [
+        "set AFFINITY_GIFT_INVENTORY_WRITES_ENABLED=\"\" in /etc/supervisor/conf.d/backend.conf",
+        "supervisorctl reread; supervisorctl update; supervisorctl restart backend",
+        "verify canary-status inventory_mutation_enabled==False"
+      ],
+      "dry_run_only": true
+    },
+    "full_af2n_canary_rollback_plan": {
+      "script": "/app/ops/rollback_af2n_canary.sh",
+      "present": true,
+      "plan_steps": [
+        "set AFFINITY_GIFT_RUNTIME_ENABLED=\"\" + AFFINITY_GIFT_INVENTORY_WRITES_ENABLED=\"\" in supervisor.conf",
+        "set AFFINITY_GIFT_CANARY_ALLOWLIST=\"\" and CANARY_LEDGER_CAP=\"0\"",
+        "supervisorctl reread; supervisorctl update; supervisorctl restart backend",
+        "verify canary-status feature_flag_currently_enabled==False"
+      ],
+      "dry_run_only": true
+    },
+    "ui_preview_rollback_plan": {
+      "preview_present": true,
+      "rollback_command": "rm /app/frontend/app/affinity-gifts-preview.tsx && cd /app/frontend && yarn build (or expo rebuild)",
+      "dry_run_only": true
+    },
+    "locust_stop_abort_plan": {
+      "locust_path": null,
+      "stop_command": "pkill -f \"locust -f /app/loadtests\" || true",
+      "verify_command": "pgrep -f locust && echo still-running || echo stopped",
+      "no_lingering_processes_check": "pgrep -f locust returns empty",
+      "dry_run_only": true
+    },
+    "db_backup_restore_plan": {
+      "backup_command_inventory": "mongodump --uri mongodb://localhost:27017 --db divine_waifus --collection user_gift_inventory --out /app/ops/backups/dbdump_$(date -u +%Y%m%dT%H%M%SZ)",
+      "backup_command_affinity_state": "mongodump --uri mongodb://localhost:27017 --db divine_waifus --collection user_affinity_state --out /app/ops/backups/dbdump_$(date -u +%Y%m%dT%H%M%SZ)",
+      "backup_command_ledger": "mongodump --uri mongodb://localhost:27017 --db divine_waifus --collection gift_transaction_ledger --out /app/ops/backups/dbdump_$(date -u +%Y%m%dT%H%M%SZ)",
+      "restore_command_pattern": "mongorestore --uri mongodb://localhost:27017 --db divine_waifus <dump-path>",
+      "mongodump_present": true,
+      "mongorestore_present": true,
+      "dry_run_only": true
+    }
+  },
+  "safety_flags": {
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "stage4_applied": false,
+    "battle_runtime_attached": false,
+    "buffs_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  },
+  "failures": [],
+  "overall_status": "PASS"
+}

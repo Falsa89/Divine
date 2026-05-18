@@ -90,23 +90,24 @@ export default function AffinityGiftsPreview() {
       <Stack.Screen options={{ title: 'Affinity Gifts — Preview' }} />
       <ScrollView
         contentContainerStyle={styles.scroll}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} accessibilityLabel="Refresh affinity gifts preview status" />}
+        accessibilityRole="scrollbar"
       >
-        <View style={styles.headerBox}>
-          <Text style={styles.h1}>Affinity Gifts — Preview</Text>
-          <Text style={styles.badge}>Design only — Spend disabled</Text>
+        <View style={styles.headerBox} accessibilityRole="header" accessibilityLabel="Affinity Gifts public preview header">
+          <Text style={styles.h1} accessibilityRole="header">Affinity Gifts — Preview</Text>
+          <Text style={styles.badge} accessibilityLabel="Design only. Spend disabled badge">Design only — Spend disabled</Text>
           <Text style={styles.subtitle}>Read-only public preview. No spend, claim or give actions are available here.</Text>
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" style={{ marginTop: 24 }} />
+          <ActivityIndicator size="large" style={{ marginTop: 24 }} accessibilityLabel="Loading affinity gifts status" />
         ) : error ? (
-          <View style={styles.errorBox} accessibilityLabel="Status fetch error">
+          <View style={styles.errorBox} accessibilityRole="alert" accessibilityLabel="Status temporarily unavailable">
             <Text style={styles.errorText}>Status temporarily unavailable</Text>
             <Text style={styles.errorDetail}>{error}</Text>
           </View>
         ) : status ? (
-          <View style={styles.card}>
+          <View style={styles.card} accessibilityRole="summary" accessibilityLabel="Affinity gifts safety status summary">
             <Row label="Feature flag" value={status.feature_flag_currently_enabled ? 'enabled' : 'disabled'} />
             <Row label="Combat application" value={status.applied_to_combat ? 'on' : 'off (safe)'} good={!status.applied_to_combat} />
             <Row label="Battle runtime" value={status.battle_runtime_attached ? 'attached' : 'detached (safe)'} good={!status.battle_runtime_attached} />
@@ -117,8 +118,8 @@ export default function AffinityGiftsPreview() {
           </View>
         ) : null}
 
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>About this preview</Text>
+        <View style={styles.infoBox} accessibilityRole="none" accessibilityLabel="About this preview">
+          <Text style={styles.infoTitle} accessibilityRole="header">About this preview</Text>
           <Text style={styles.infoText}>
             This is a public read-only preview of the Affinity Gifts safety state. No interaction here mutates inventory, affinity, ledger or battle state.
             Spend, claim and give actions remain restricted to controlled allowlist QA flows.
@@ -135,9 +136,11 @@ export default function AffinityGiftsPreview() {
 
 function Row({ label, value, good }: { label: string; value: string; good?: boolean }) {
   return (
-    <View style={styles.row}>
+    <View style={styles.row} accessibilityRole="text" accessibilityLabel={`${label}: ${value}`}>
       <Text style={styles.rowLabel}>{label}</Text>
-      <Text style={[styles.rowValue, good ? styles.rowGood : null]}>{value}</Text>
+      <Text style={[styles.rowValue, good ? styles.rowGood : null]}>
+        {good ? '✓ ' : ''}{value}
+      </Text>
     </View>
   );
 }
