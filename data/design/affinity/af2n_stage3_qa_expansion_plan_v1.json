@@ -1,0 +1,87 @@
+{
+  "plan_id": "af2n_stage3_qa_expansion_plan_v1",
+  "task_origin": "AF2-N-STAGE3-QA-EXPANSION-PREP",
+  "design_only": false,
+  "broad_rollout_authorized": false,
+  "runtime_attached_allowlist_only": true,
+  "target_user_class": "synthetic_qa_internal_only",
+  "current_stage2_allowlist_size": 100,
+  "current_stage2_ledger_cap": 1000,
+  "target_stage3_allowlist_added": 100,
+  "target_stage3_total_allowlist_size_after_apply": 200,
+  "target_stage3_ledger_cap_after_apply": 2500,
+  "new_stage3_user_id_pattern": "stage3_qa_NNN",
+  "new_stage3_user_id_range": ["stage3_qa_001", "stage3_qa_100"],
+  "new_stage3_user_count": 100,
+  "seed_strategy": {
+    "gift_id": "gift_test_001",
+    "quantity_per_user": 10,
+    "metadata": {"seed_task": "V18_STAGE3", "is_qa_user": true, "synthetic": true},
+    "order": [
+      "seed_inventory_for_new_users_BEFORE_supervisor_flip",
+      "backup_supervisor_conf",
+      "update_supervisor_allowlist_and_cap",
+      "restart_backend",
+      "smoke_verify",
+      "run_stage3_monitoring"
+    ]
+  },
+  "hard_caps": {
+    "max_total_allowlist": 500,
+    "max_ledger_cap": 5000,
+    "max_stage3_new_user_count": 200
+  },
+  "gates_required_to_apply": [
+    "v18_preflight_PASS",
+    "stage2_extended_monitoring_v18_PASS",
+    "api_heroes_count_100",
+    "borea_aliases_404",
+    "battle_files_unchanged",
+    "battle_runtime_attached_false",
+    "buffs_enabled_false",
+    "applied_to_combat_false",
+    "v17_composite_PASS",
+    "rollback_scripts_present",
+    "supervisor_conf_writable_and_backup_creatable",
+    "stage3_seed_completes_before_supervisor_flip",
+    "stage3_user_count_le_200",
+    "target_total_allowlist_le_500",
+    "target_ledger_cap_le_5000"
+  ],
+  "rollback_plan": {
+    "order": [
+      "restore_supervisor_conf_backup_v18",
+      "restart_backend",
+      "remove_stage3_seed_docs_via_rollback_script"
+    ],
+    "rollback_script": "/app/backend/scripts/rollback_af2n_stage3_qa_expansion.py",
+    "rollback_target_state": "stage2_100_users_ledger_cap_1000_no_stage3_seed"
+  },
+  "safety_invariants": [
+    "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED stays scoped to allowlist only",
+    "no_broad_rollout",
+    "no_public_spend_button",
+    "no_borea_reveal",
+    "no_battle_wiring",
+    "no_buff_activation",
+    "no_gacha_roster_catalog_mutation",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged"
+  ],
+  "monitoring_after_apply": {
+    "samples_target": 100,
+    "min_stage3_fresh_spend_ok": 6,
+    "validator": "validate_af2n_stage3_monitoring_v18.py"
+  },
+  "abort_triggers": [
+    "5xx_rate_gt_0",
+    "non_allowlist_spend_success",
+    "borea_not_404",
+    "negative_inventory",
+    "idempotency_double_mutation",
+    "inv_aff_count_mismatch",
+    "battle_file_mutation",
+    "gacha_roster_catalog_mutation",
+    "allowlist_size_exceeded_hard_cap",
+    "ledger_cap_exceeded_hard_cap"
+  ]
+}

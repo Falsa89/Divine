@@ -217,6 +217,18 @@ OPTIONAL = [
     ('V17-ROLLBACK-READINESS',                     'validate_af2n_v17_rollback_readiness.py'),
     ('SAFETY-ROLLUP-L',                            'validate_collection_affinity_runtime_activation_rollup_v12.py'),
     ('ULTRA-COMBO-V17',                            'validate_ultra_combo_v17_stage2_monitoring_cleanup_k6.py'),
+    # ULTRA-COMBO V18 (STAGE2 EXTENDED MONITORING + STAGE3 QA EXPANSION
+    #                  PREP/APPLY-GATED + PUBLIC UI PREVIEW READINESS
+    #                  + K6/LOCUST REAL ATTEMPT SAFE + SAFETY-ROLLUP-M)
+    ('V18-PREFLIGHT',                              'validate_af2n_v18_preflight.py'),
+    ('AF2-N-STAGE2-EXTENDED-MONITORING-V18',       'validate_af2n_stage2_extended_monitoring_v18.py'),
+    ('AF2-N-STAGE3-QA-EXPANSION-APPLY',            'validate_af2n_stage3_qa_expansion_apply_result.py'),
+    ('AF2-N-STAGE3-MONITORING-V18',                'validate_af2n_stage3_monitoring_v18.py'),
+    ('AF2-N-PUBLIC-UI-PREVIEW-SAFETY',             'audit_affinity_gifts_public_preview_safety.py'),
+    ('AF2-L-K6-LOCUST-V18',                        'validate_af2n_v18_k6_locust_result.py'),
+    ('V18-ROLLBACK-READINESS',                     'validate_af2n_v18_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-M',                            'validate_collection_affinity_runtime_activation_rollup_v13.py'),
+    ('ULTRA-COMBO-V18',                            'validate_ultra_combo_v18_stage2_stage3_publicpreview.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -262,7 +274,8 @@ def main(argv=None) -> int:
     af2n_active = os.environ.get('AFFINITY_GIFT_RUNTIME_ENABLED', '') == 'true_explicit_affinity_gift_runtime_on'
     inv_writes_active = os.environ.get('AFFINITY_GIFT_INVENTORY_WRITES_ENABLED', '') == 'true_explicit_affinity_inventory_on'
     stage2_applied = False
-    if not (af2n_active and inv_writes_active) or True:  # always probe to also detect stage2
+    stage3_applied = False
+    if not (af2n_active and inv_writes_active) or True:  # always probe to also detect stage2/stage3
         try:
             import urllib.request as _u, urllib.error as _e
             with _u.urlopen('http://127.0.0.1:8001/api/affinity/gift-spend/canary-status', timeout=4) as r:
@@ -270,6 +283,7 @@ def main(argv=None) -> int:
             af2n_active = af2n_active or (st.get('feature_flag_currently_enabled') is True)
             inv_writes_active = inv_writes_active or (st.get('inventory_mutation_enabled') is True)
             stage2_applied = (st.get('canary_allowlist_size', 0) > 50) or (st.get('canary_ledger_cap', 0) > 500)
+            stage3_applied = (st.get('canary_allowlist_size', 0) > 100) or (st.get('canary_ledger_cap', 0) > 1000)
         except Exception:
             pass
     SUPERSEDED_AFTER_AF2N = frozenset({
@@ -302,7 +316,15 @@ def main(argv=None) -> int:
     SUPERSEDED_AFTER_STAGE2 = frozenset({
         'V16-PREFLIGHT', 'ULTRA-COMBO-V16',
     }) if stage2_applied else frozenset()
-    SUPERSEDED = SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES | SUPERSEDED_AFTER_STAGE2
+    # V18: Stage3 expansion (allowlist>100 or cap>1000) supersedes V17 preflight
+    # and V17 composite which assert stage2 sizes (allowlist==100, cap==1000).
+    SUPERSEDED_AFTER_STAGE3 = frozenset({
+        'V17-PREFLIGHT', 'ULTRA-COMBO-V17',
+        'AF2-N-INVENTORY-EXTENDED-MONITORING-V17', 'AF2-N-STAGE2-MONITORING-V17',
+        'AF2-L-K6-LOCUST-READINESS-V17', 'V17-ROLLBACK-READINESS', 'SAFETY-ROLLUP-L',
+    }) if stage3_applied else frozenset()
+    SUPERSEDED = (SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
+                  | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3)
 
     results: list[dict] = []
     any_required_fail = False
@@ -314,6 +336,8 @@ def main(argv=None) -> int:
         print('  (AF2-N inventory writes ACTIVE — V12-V15 pre-inventory-on validators marked SUPERSEDED)')
     if stage2_applied:
         print('  (Stage2 expansion DETECTED — V16 preflight + V16 composite marked SUPERSEDED)')
+    if stage3_applied:
+        print('  (Stage3 expansion DETECTED — V17 preflight + V17 composite + V17 sub-validators marked SUPERSEDED)')
     print('=' * 70)
     print(f'{"TASK":10s} {"SCRIPT":54s} {"EXIT":>5s}')
     print('-' * 70)

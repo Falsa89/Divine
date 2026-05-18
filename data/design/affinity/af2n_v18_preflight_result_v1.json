@@ -1,0 +1,90 @@
+{
+  "result_id": "af2n_v18_preflight_result_v1",
+  "task_origin": "V18-PREFLIGHT",
+  "design_only": false,
+  "runtime_attached": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-18T00:56:18.843175Z",
+  "overall_status": "PASS",
+  "gates": {
+    "api_health_200": true,
+    "heroes_100": true,
+    "heroes_no_borea": true,
+    "canary_status_200": true,
+    "canary_flag_on": true,
+    "inv_writes_flag_on": true,
+    "stage2_allowlist_ge_100": true,
+    "cap_ge_1000": true,
+    "ledger_within_cap": true,
+    "battle_runtime_attached_false": true,
+    "applied_to_combat_false": true,
+    "buffs_enabled_false": true,
+    "borea_404": true,
+    "non_allowlist_423": true,
+    "battle_files_unchanged": true,
+    "ugi_present": true,
+    "uas_present": true,
+    "ugi_no_negative": true,
+    "inv_aff_mut_equal": true,
+    "no_buffs_rows": true,
+    "no_battle_wiring_rows": true,
+    "no_borea_hero_rows": true,
+    "v16_seed_50_present": true,
+    "v17_stage2_seed_50_present": true,
+    "rollback_scripts_present": true,
+    "suite_v17_pass": true,
+    "baseline_v6_diff_pass": true,
+    "ui_safety_no_spend_token": true,
+    "no_shadow_adapter_live_leak": true
+  },
+  "canary_status_snapshot": {
+    "task_origin": "AF2-N-READINESS-DASH",
+    "design_only": false,
+    "runtime_attached": true,
+    "db_write": false,
+    "feature_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
+    "feature_flag_currently_enabled": true,
+    "canary_allowlist_size": 200,
+    "canary_ledger_cap": 2500,
+    "ledger_total_rows": 43,
+    "ledger_canary_rows": 43,
+    "last_canary_tx": {
+      "tx_id": "tx_canary_62aaf1c4f07b4e87",
+      "user_id": "stage3_qa_050",
+      "gift_id": "gift_test_001",
+      "hero_id": "greek_apollo",
+      "quantity": 1,
+      "status": "applied_inventory_live",
+      "created_at_utc": "2026-05-18 00:54:32.120000"
+    },
+    "borea_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ],
+    "applied_to_combat": false,
+    "battle_runtime_attached": false,
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "inventory_writes_flag_dependency": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED"
+  },
+  "collection_counts": {
+    "user_gift_inventory": 200,
+    "user_affinity_state": 31
+  },
+  "safety_flags": {
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "buffs_enabled": false,
+    "feature_flag_currently_enabled": true,
+    "inventory_writes_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  }
+}

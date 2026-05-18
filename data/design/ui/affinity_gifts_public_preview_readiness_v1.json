@@ -1,0 +1,77 @@
+{
+  "readiness_id": "affinity_gifts_public_preview_readiness_v1",
+  "task_origin": "AF2-N-PUBLIC-UI-PREVIEW-READINESS",
+  "design_only": true,
+  "runtime_attached": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "Readiness PLAN-ONLY per una futura preview UI pubblica read-only del sistema Affinity Gifts. Nessuna modifica di codice frontend in V18. Nessun pulsante spend, nessun bottone claim, nessuna mutazione inventory. Solo blueprint UI/UX e regole di safety.",
+  "phase": "DESIGN_PLAN_ONLY_NO_UI_MUTATION_IN_V18",
+  "scope": {
+    "include": [
+      "public_read_only_preview_screen_plan",
+      "locked_state_visual_design",
+      "public_inventory_catalog_view_plan",
+      "affinity_tier_preview_text_only",
+      "info_only_education_copy"
+    ],
+    "exclude": [
+      "public_spend_button",
+      "claim_button",
+      "public_inventory_mutation",
+      "public_affinity_state_mutation",
+      "runtime_toggle_in_UI",
+      "broad_rollout_UI",
+      "battle_wiring_UI",
+      "Borea_reveal",
+      "any_Pressable_or_button_invoking_/api/affinity/gift-spend"
+    ]
+  },
+  "required_safety_constraints": [
+    "frontend MUST NOT call POST /api/affinity/gift-spend",
+    "frontend MUST NOT import or expose battle_engine / battle_core / synergy_system / game_systems",
+    "any new public preview screen MUST be read-only, behind feature flag UI_AFFINITY_PUBLIC_PREVIEW_ENABLED (default false)",
+    "no UI element MAY enable inventory_mutation or affinity_points_mutation",
+    "no UI element MAY reference Borea / greek_borea / primordial_gaia by id",
+    "placeholders MUST be hardcoded strings or design-only fixtures; no live ledger data leaked to anonymous users"
+  ],
+  "data_contract_for_public_preview": {
+    "endpoint_to_use_in_future": "GET /api/affinity/gift-spend/canary-status (read-only, sanitized)",
+    "endpoints_to_NOT_use": [
+      "POST /api/affinity/gift-spend",
+      "any future POST /api/affinity/* mutation"
+    ],
+    "fields_shown": [
+      "feature_flag_currently_enabled (bool)",
+      "hidden_aliases_blocked (list)",
+      "applied_to_combat (must be false)",
+      "battle_runtime_attached (must be false)",
+      "buffs_enabled (must be false)"
+    ],
+    "fields_NOT_shown": [
+      "canary_allowlist details",
+      "individual user_id",
+      "ledger row counts",
+      "inventory documents",
+      "affinity_state documents"
+    ]
+  },
+  "current_ui_state_audit": {
+    "combat_tsx_present": true,
+    "combat_tsx_modified_in_v18": false,
+    "any_pressable_spend": false,
+    "any_route_referencing_gift_spend": false,
+    "any_borea_alias_in_frontend": false
+  },
+  "future_phase_gates": [
+    "Stage3 monitoring PASS",
+    "explicit user authorization for public preview",
+    "separate plan + apply + rollback scripts for any UI route addition",
+    "frontend_lint + screenshot validation in PR"
+  ],
+  "abort_conditions": [
+    "any Pressable/button invoking gift-spend in any branch",
+    "any UI element referencing Borea aliases",
+    "any frontend file importing battle_engine / battle_core / synergy_system",
+    "any public route exposing canary allowlist details"
+  ]
+}

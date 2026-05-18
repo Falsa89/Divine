@@ -1,0 +1,10 @@
+[program:backend]
+command=bash -c "pip install -q -r /app/backend/requirements.txt 2>&1 || true; exec python3 -m uvicorn server:app --host 0.0.0.0 --port 8001 --reload"
+directory=/app/backend
+autostart=true
+autorestart=true
+startsecs=20
+startretries=5
+stderr_logfile=/var/log/supervisor/backend.err.log
+stdout_logfile=/var/log/supervisor/backend.out.log
+environment=PYTHONUNBUFFERED="1",AFFINITY_GIFT_RUNTIME_ENABLED="true_explicit_affinity_gift_runtime_on",AFFINITY_GIFT_CANARY_ALLOWLIST="user_canary_001,user_canary_002,user_canary_003,stage1_qa_001,stage1_qa_002,stage1_qa_003,stage1_qa_004,stage1_qa_005,stage1_qa_006,stage1_qa_007,stage1_qa_008,stage1_qa_009,stage1_qa_010,stage1_qa_011,stage1_qa_012,stage1_qa_013,stage1_qa_014,stage1_qa_015,stage1_qa_016,stage1_qa_017,stage1_qa_018,stage1_qa_019,stage1_qa_020,stage1_qa_021,stage1_qa_022,stage1_qa_023,stage1_qa_024,stage1_qa_025,stage1_qa_026,stage1_qa_027,stage1_qa_028,stage1_qa_029,stage1_qa_030,stage1_qa_031,stage1_qa_032,stage1_qa_033,stage1_qa_034,stage1_qa_035,stage1_qa_036,stage1_qa_037,stage1_qa_038,stage1_qa_039,stage1_qa_040,stage1_qa_041,stage1_qa_042,stage1_qa_043,stage1_qa_044,stage1_qa_045,stage1_qa_046,stage1_qa_047,stage2_qa_001,stage2_qa_002,stage2_qa_003,stage2_qa_004,stage2_qa_005,stage2_qa_006,stage2_qa_007,stage2_qa_008,stage2_qa_009,stage2_qa_010,stage2_qa_011,stage2_qa_012,stage2_qa_013,stage2_qa_014,stage2_qa_015,stage2_qa_016,stage2_qa_017,stage2_qa_018,stage2_qa_019,stage2_qa_020,stage2_qa_021,stage2_qa_022,stage2_qa_023,stage2_qa_024,stage2_qa_025,stage2_qa_026,stage2_qa_027,stage2_qa_028,stage2_qa_029,stage2_qa_030,stage2_qa_031,stage2_qa_032,stage2_qa_033,stage2_qa_034,stage2_qa_035,stage2_qa_036,stage2_qa_037,stage2_qa_038,stage2_qa_039,stage2_qa_040,stage2_qa_041,stage2_qa_042,stage2_qa_043,stage2_qa_044,stage2_qa_045,stage2_qa_046,stage2_qa_047,stage2_qa_048,stage2_qa_049,stage2_qa_050",AFFINITY_GIFT_CANARY_LEDGER_CAP="1000",AFFINITY_GIFT_INVENTORY_WRITES_ENABLED="true_explicit_affinity_inventory_on"

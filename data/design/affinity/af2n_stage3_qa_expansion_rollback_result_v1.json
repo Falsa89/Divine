@@ -1,0 +1,19 @@
+{
+  "result_id": "af2n_stage3_qa_expansion_rollback_result_v1",
+  "task_origin": "AF2-N-STAGE3-ROLLBACK",
+  "generated_at_utc": "2026-05-18T00:52:17.551428Z",
+  "mode": "dry_run",
+  "backups_available": [
+    "backend.conf.v18_pre_stage3.20260518T004931Z.bak",
+    "backend.conf.v18_pre_stage3.20260518T005146Z.bak"
+  ],
+  "selected_backup": "backend.conf.v18_pre_stage3.20260518T005146Z.bak",
+  "dry_run_steps": [
+    "restore_supervisor_conf_from_backup",
+    "supervisorctl_update_and_restart_backend",
+    "wait_api_health_200",
+    "delete_user_gift_inventory_where_metadata_seed_task_eq_V18_STAGE3",
+    "verify_canary_status_back_to_stage2"
+  ],
+  "overall_status": "DRY_RUN_OK"
+}

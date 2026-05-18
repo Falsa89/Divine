@@ -211,14 +211,19 @@ def _canary_allowlist() -> frozenset[str]:
 
 
 def _canary_ledger_cap() -> int:
-    """AF2-N hard cap on the total rows the canary can ever insert."""
+    """AF2-N hard cap on the total rows the canary can ever insert.
+
+    V18: hard upper bound raised to 5000 to accommodate Stage3 QA expansion
+    (env-configured cap, e.g. 2500). The 5000 ceiling is a non-negotiable
+    safety cap; values above are clamped down.
+    """
     try:
         v = int(os.environ.get(_CANARY_LEDGER_CAP_ENV, ""))
     except Exception:
         v = _CANARY_LEDGER_CAP_DEFAULT
     if v <= 0:
         v = _CANARY_LEDGER_CAP_DEFAULT
-    return min(v, 1000)
+    return min(v, 5000)
 
 
 def register_affinity_gift_spend_skeleton_routes(router):

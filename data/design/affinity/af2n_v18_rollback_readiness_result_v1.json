@@ -1,0 +1,62 @@
+{
+  "result_id": "af2n_v18_rollback_readiness_result_v1",
+  "task_origin": "AF2-N-V18-ROLLBACK-READINESS",
+  "generated_at_utc": "2026-05-18T00:52:17.502119Z",
+  "scripts": [
+    {
+      "path": "/app/backend/scripts/rollback_af2n_stage1_1pct_allowlist.py",
+      "present": true,
+      "size_bytes": 2694
+    },
+    {
+      "path": "/app/backend/scripts/rollback_affinity_inventory_wiring_stage1.py",
+      "present": true,
+      "size_bytes": 2871
+    },
+    {
+      "path": "/app/backend/scripts/rollback_affinity_inventory_wiring_stage1_retry.py",
+      "present": true,
+      "size_bytes": 311
+    },
+    {
+      "path": "/app/backend/scripts/rollback_stage1_qa_gift_inventory_seed.py",
+      "present": true,
+      "size_bytes": 1112
+    },
+    {
+      "path": "/app/backend/scripts/rollback_af2n_stage2_5_10pct_allowlist.py",
+      "present": true,
+      "size_bytes": 3839
+    },
+    {
+      "path": "/app/backend/scripts/rollback_af2n_stage3_qa_expansion.py",
+      "present": true,
+      "size_bytes": 3624
+    },
+    {
+      "path": "/app/ops/rollback_af2n_canary.sh",
+      "present": true,
+      "size_bytes": 1902
+    }
+  ],
+  "safety_flags": {
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "buffs_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  },
+  "stage3_rollback_dry_run_exit": 0,
+  "stage3_rollback_dry_run_tail": [
+    "Stage3 rollback dry-run OK."
+  ],
+  "stage2_rollback_dry_run_exit": 0,
+  "supervisor_backup_dir_writable": true,
+  "all_scripts_present": true,
+  "overall_status": "PASS"
+}

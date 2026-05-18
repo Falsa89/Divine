@@ -1,0 +1,107 @@
+{
+  "report_id": "collection_affinity_runtime_activation_readiness_rollup_v13",
+  "task_origin": "SAFETY-ROLLUP-M",
+  "supersedes": "collection_affinity_runtime_activation_readiness_rollup_v12",
+  "design_only": false,
+  "runtime_attached": true,
+  "db_write": true,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "generated_at_utc": "2026-05-18T00:56:20.150958Z",
+  "summary": "SAFETY-ROLLUP-M — V18 Stage2 extended monitoring + Stage3 QA expansion (APPLIED) + Public UI preview readiness (plan-only, no UI mutation) + K6/Locust readiness + rollback readiness. Invarianti hard tenuti: /api/heroes=100, Borea hidden/404, battle/combat files NOT modified, no buffs, no battle wiring, no public spend UI, no broad rollout.",
+  "inputs_present": {
+    "v18_preflight": true,
+    "stage2_extended_monitoring": true,
+    "stage3_plan": true,
+    "stage3_apply_result": true,
+    "stage3_monitoring": true,
+    "public_ui_readiness": true,
+    "k6_locust_v18": true,
+    "rollback_readiness_v18": true,
+    "v17_composite": true,
+    "rollup_v12": true
+  },
+  "runtime_state": "stage3_qa_active_no_broad_rollout",
+  "stage2_state": "APPLIED",
+  "stage3_state": "APPLIED",
+  "stage3_apply_reason_if_not_applied": null,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring_live": false,
+  "buffs_enabled": false,
+  "Borea_hidden": true,
+  "inventory_live_scope": "allowlist_only",
+  "ledger_count": 43,
+  "ledger_cap": 2500,
+  "canary_allowlist_size": 200,
+  "feature_flag_currently_enabled": true,
+  "inventory_mutation_enabled": true,
+  "affinity_points_mutation_enabled": true,
+  "stage2_extended_monitoring": {
+    "overall_status": "PASS",
+    "samples_total": 160,
+    "fresh_spend_ok": 8,
+    "fresh_spend_fail": 0,
+    "http_5xx": 0
+  },
+  "stage3_monitoring": {
+    "overall_status": "PASS",
+    "samples_total": 101,
+    "fresh_spend_ok": 8,
+    "fresh_spend_fail": 0,
+    "http_5xx": 0
+  },
+  "public_ui_preview_readiness": {
+    "phase": "DESIGN_PLAN_ONLY_NO_UI_MUTATION_IN_V18",
+    "design_only": true,
+    "spend_button_planned": false
+  },
+  "k6_locust_v18_state": {
+    "overall": "PASS",
+    "k6_binary_present": false,
+    "locust_binary_present_after_attempt": true,
+    "real_locust_smoke_exit": 0,
+    "python_fallback_probe_pass": true,
+    "fb_requests_total": 3500,
+    "fb_rps": 185.1
+  },
+  "rollback_readiness_state": {
+    "overall": "PASS",
+    "all_scripts_present": true,
+    "backup_dir_writable": true
+  },
+  "rollback_ready": true,
+  "v17_composite_overall": "PASS",
+  "v18_preflight_overall": "PASS",
+  "next_decision": "extended_monitoring",
+  "next_step_recommendation": "Stage3 QA expansion APPLIED + monitoring PASS: continuare con extended monitoring 24-72h, k6_real install gated, public_ui_preview plan-only.",
+  "invariants_currently_holding": [
+    "/api/heroes count == 100",
+    "Borea aliases hidden in /api/heroes",
+    "POST /api/affinity/gift-spend Borea returns 404",
+    "POST /api/affinity/gift-spend non-allowlist returns 423",
+    "Stage2 + Stage3 allowlist users with sufficient inventory returns 200 applied_inventory_live",
+    "Idempotent replay returns 200 with NO double-mutation",
+    "no buffs activation, no battle wiring, no broad rollout, no public spend UI",
+    "battle_engine.py / battle_core.py / combat.tsx / synergy_system.py / game_systems.py unchanged"
+  ],
+  "safety_flags": {
+    "runtime_attached": true,
+    "runtime_state": "stage3_qa_active_no_broad_rollout",
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "inventory_wiring_live": true,
+    "inventory_mutation_enabled": true,
+    "affinity_points_mutation_enabled": true,
+    "buffs_enabled": false,
+    "battle_runtime_attached": false,
+    "applied_to_combat": false,
+    "feature_flag_currently_enabled": true,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ],
+    "stage2_state": "APPLIED",
+    "stage3_state": "APPLIED"
+  }
+}

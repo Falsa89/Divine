@@ -1,0 +1,69 @@
+{
+  "result_id": "af2n_v18_k6_locust_result_v1",
+  "task_origin": "AF2-L-K6-LOCUST-V18",
+  "generated_at_utc": "2026-05-18T00:53:22.695008Z",
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "k6_binary_present": false,
+  "k6_binary_path": null,
+  "locust_binary_present": false,
+  "locust_binary_path": null,
+  "locust_binary_present_after_attempt": true,
+  "locust_binary_path_after_attempt": "/usr/local/bin/locust",
+  "install_attempts": {
+    "locust": {
+      "attempted": true,
+      "exit_code": 0,
+      "success": true,
+      "tail": [
+        "",
+        "[notice] A new release of pip is available: 24.0 -> 26.1.1",
+        "[notice] To update, run: pip install --upgrade pip"
+      ]
+    }
+  },
+  "real_locust_run": {
+    "exit_code": 0,
+    "duration_s": 5.27,
+    "tail": [
+      "--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------",
+      "GET      /api/affinity/gift-spend/canary-status                                                 46     46     46     46     47     47     49     49     62     62     62    110",
+      "GET      /api/health                                                                            43     43     43     43     44     44     46     57     58     58     58    109",
+      "--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------",
+      "         Aggregated                                                                             43     44     46     46     47     47     49     57     62     62     62    219"
+    ]
+  },
+  "k6_install_instructions": [
+    "curl -fsSL https://github.com/grafana/k6/releases/latest/download/k6-linux-amd64.tar.gz -o /tmp/k6.tgz",
+    "tar -xzf /tmp/k6.tgz -C /tmp",
+    "sudo install /tmp/k6-*-linux-amd64/k6 /usr/local/bin/k6",
+    "k6 version"
+  ],
+  "python_fallback_probe": {
+    "requests_total": 3500,
+    "http_5xx": 0,
+    "borea_404": 800,
+    "borea_bad": 0,
+    "non_allowlist_423": 700,
+    "non_allowlist_bad": 0,
+    "health_200": 1400,
+    "canary_status_200": 400,
+    "heroes_100_ok": 200,
+    "duration_s": 18.91,
+    "rps": 185.1
+  },
+  "python_fallback_probe_pass": true,
+  "overall_status": "PASS",
+  "safety_flags": {
+    "no_fresh_spend_attempted": true,
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_runtime_attached": false,
+    "buffs_enabled": false,
+    "hidden_aliases_blocked": [
+      "borea",
+      "greek_borea",
+      "primordial_gaia"
+    ]
+  },
+  "recommendation": "Locust installato=True; smoke OK=True. Python fallback robusto (3500+ req read-only). k6 install richiede sudo: rinviato a task gated separato."
+}
