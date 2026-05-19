@@ -88,11 +88,21 @@ def _rl_count(scope: str, key: str, window_s: float) -> int:
 def _rate_limit_check(user_id: str, client_ip: str):
     """Return (allowed, reason, snapshot). Allowed=False means breach.
 
-    Records the request only if allowed (a 429 should NOT count toward the
-    quota since no actual work is done).
+    V23: Delegates to `data.affinity_rate_limit_store.rate_limit_check` when
+    AFFINITY_RATE_LIMIT_BACKEND=redis is set AND Redis is reachable. Falls
+    back to the in-process sliding window otherwise. Borea/non-allowlist
+    behavior preserved exactly.
     """
+    backend = os.environ.get("AFFINITY_RATE_LIMIT_BACKEND", "memory").lower().strip() or "memory"
+    if backend == "redis":
+        try:
+            from data.affinity_rate_limit_store import rate_limit_check as _store_check
+            return _store_check(user_id, client_ip)
+        except Exception:
+            # fail-open: fall through to in-process memory path
+            pass
     if not _rate_limit_enabled():
-        return True, None, {"rate_limit_enabled": False}
+        return True, None, {"rate_limit_enabled": False, "backend": backend}
     uid = (user_id or "<anon>").strip() or "<anon>"
     ip = (client_ip or "<noip>").strip() or "<noip>"
     user_burst = _rl_count("user", uid, _RL_BURST_WINDOW_S)
@@ -330,6 +340,12 @@ def register_affinity_gift_spend_skeleton_routes(router):
         if isinstance(payload, dict):
             hid = (payload.get("hero_id") or "").strip().lower()
             if hid in _FORBIDDEN_HERO_IDS or hid in _HIDDEN_HERO_IDS:
+                try:
+                    from data.affinity_metrics import inc
+                    inc("af2_gift_spend_borea_404_total", {"hero_alias": hid})
+                    inc("af2_gift_spend_total", {"http_status": "404", "borea": "1"})
+                except Exception:
+                    pass
                 raise HTTPException(404, "forbidden hero alias")
 
         # 1.5 V21 rate-limit guard. Borea 404 already won. Non-DB-touching.
@@ -345,6 +361,15 @@ def register_affinity_gift_spend_skeleton_routes(router):
                     client_ip = ""
             rl_ok, rl_reason, rl_snap = _rate_limit_check(user_id_for_rl, client_ip)
             if not rl_ok:
+                try:
+                    from data.affinity_metrics import inc
+                    inc("af2_ratelimit_429_total", {"reason": rl_reason or "unknown",
+                                                     "backend": rl_snap.get("backend","-") if isinstance(rl_snap, dict) else "-"})
+                    inc("af2_gift_spend_total", {"http_status": "429"})
+                    if isinstance(rl_snap, dict) and rl_snap.get("backend") == "memory_fallback":
+                        inc("af2_ratelimit_redis_fail_open_total")
+                except Exception:
+                    pass
                 return JSONResponse(
                     status_code=429,
                     content={
@@ -640,7 +665,23 @@ def register_affinity_gift_spend_skeleton_routes(router):
             "rate_limit_burst_window_seconds": _RL_BURST_WINDOW_S,
             "rate_limit_burst_max": _RL_BURST_MAX,
             "rate_limit_flag_dependency": _RATE_LIMIT_ENV,
+            "rate_limit_backend": os.environ.get("AFFINITY_RATE_LIMIT_BACKEND", "memory").lower().strip() or "memory",
+            "rate_limit_redis_url_set": bool(os.environ.get("REDIS_URL", "").strip()),
         }
+
+    @router.get("/affinity/gift-spend/_admin/metrics-snapshot")
+    async def affinity_gift_spend_metrics_snapshot():
+        """V24 — Read-only abuse-metrics snapshot.
+
+        Gated behind AFFINITY_METRICS_ENABLED=true_explicit_affinity_metrics_on.
+        Returns {'enabled': False, ...} when flag is OFF. Never exposes Borea
+        data nor user PII. Internal Stage4 use only — NOT exposed publicly.
+        """
+        try:
+            from data.affinity_metrics import snapshot
+            return snapshot()
+        except Exception as e:
+            return {"enabled": False, "error": "metrics_module_unavailable", "detail": str(e)[:200]}
 
 
 def _canary_envelope() -> dict[str, Any]:

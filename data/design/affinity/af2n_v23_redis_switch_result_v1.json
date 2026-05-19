@@ -1,0 +1,67 @@
+{
+  "result_id": "af2n_v23_redis_switch_result_v1",
+  "task_origin": "V23-REDIS-SWITCH-VALIDATION",
+  "generated_at_utc": "2026-05-19T16:07:17.161930Z",
+  "canary_status_backend_advertised": "redis",
+  "canary_status_url_set": true,
+  "burst_results": [
+    {
+      "i": 0,
+      "code": 423,
+      "snapshot_backend": null
+    },
+    {
+      "i": 1,
+      "code": 423,
+      "snapshot_backend": null
+    },
+    {
+      "i": 2,
+      "code": 423,
+      "snapshot_backend": null
+    },
+    {
+      "i": 3,
+      "code": 423,
+      "snapshot_backend": null
+    },
+    {
+      "i": 4,
+      "code": 423,
+      "snapshot_backend": null
+    },
+    {
+      "i": 5,
+      "code": 423,
+      "snapshot_backend": null
+    },
+    {
+      "i": 6,
+      "code": 429,
+      "snapshot_backend": "redis"
+    },
+    {
+      "i": 7,
+      "code": 429,
+      "snapshot_backend": "redis"
+    },
+    {
+      "i": 8,
+      "code": 429,
+      "snapshot_backend": "redis"
+    },
+    {
+      "i": 9,
+      "code": 429,
+      "snapshot_backend": "redis"
+    }
+  ],
+  "saw_429_at_least_once": true,
+  "snapshot_backends_observed": [
+    "redis"
+  ],
+  "redis_keys_count": 31,
+  "redis_keys_present_after_burst": true,
+  "overall_status": "PASS",
+  "mode": "redis_live_switch_applied_safely"
+}

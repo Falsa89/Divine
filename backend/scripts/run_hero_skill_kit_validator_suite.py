@@ -280,6 +280,34 @@ OPTIONAL = [
     ('V22-ROLLBACK-READINESS',                     'validate_af2n_v22_rollback_readiness.py'),
     ('SAFETY-ROLLUP-Q',                            'validate_collection_affinity_runtime_activation_rollup_v17.py'),
     ('ULTRA-COMBO-V22',                            'validate_ultra_combo_v22_stage4_monitoring_redisprep.py'),
+    # ULTRA-COMBO V23 (REDIS RATE-LIMIT PROVISION/SWITCH-GATED + STAGE4 OBS
+    #                  WINDOW + ABUSE MONITORING PREP + DELTA AUDIT V23
+    #                  + LOCUST STAGE4 RATE-LIMIT + SAFETY-ROLLUP-R)
+    ('V23-PREFLIGHT',                              'validate_af2n_v23_preflight.py'),
+    ('AF2-N-V23-REDIS-LIVE-PROBE',                 'validate_af2n_v23_redis_live_probe.py'),
+    ('AF2-N-V23-REDIS-SWITCH',                     'validate_af2n_v23_redis_switch.py'),
+    ('AF2-N-V23-STAGE4-OBSERVATION-WINDOW',        'validate_af2n_stage4_observation_window_v23.py'),
+    ('AF2-N-V23-ABUSE-MONITORING-PREP',            'validate_af2n_v23_abuse_monitoring_prep.py'),
+    ('AF2-N-V23-DELTA-AUDIT',                      'validate_affinity_inventory_delta_consistency_v23.py'),
+    ('AF2-L-LOCUST-STAGE4-V23',                    'validate_af2n_v23_locust_stage4_ratelimit.py'),
+    ('AF2-N-V23-BLOCKER-MATRIX-V2',                'validate_af2n_broad_rollout_blocker_matrix_v2.py'),
+    ('AF2-N-PUBLIC-UI-V23-SAFETY',                 'audit_affinity_gifts_public_preview_v23_safety.py'),
+    ('V23-ROLLBACK-READINESS',                     'validate_af2n_v23_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-R',                            'validate_collection_affinity_runtime_activation_rollup_v18.py'),
+    ('ULTRA-COMBO-V23',                            'validate_ultra_combo_v23_redis_switch_observation.py'),
+    # ULTRA-COMBO V24 (REAL OBSERVATION WINDOW + ABUSE METRICS INSTRUMENTATION
+    #                  + STAGING ROLLBACK DRILL + REDIS HA PLAN + SAFETY-ROLLUP-S)
+    ('V24-PREFLIGHT',                              'validate_af2n_v24_preflight.py'),
+    ('AF2-N-V24-OBSERVATION-WINDOW-REAL',          'validate_af2n_v24_observation_window_real.py'),
+    ('AF2-N-V24-ABUSE-METRICS-INSTRUMENTATION',    'validate_af2n_v24_abuse_metrics_instrumentation.py'),
+    ('AF2-N-V24-STAGING-ROLLBACK-DRILL',           'validate_af2n_v24_staging_rollback_drill.py'),
+    ('AF2-N-V24-REDIS-HA-DECISION-PLAN',           'validate_af2n_v24_redis_ha_decision_plan.py'),
+    ('AF2-N-V24-SUPPORT-ECONOMY-PREP',             'validate_af2n_v24_support_economy_prep.py'),
+    ('AF2-N-V24-BLOCKER-MATRIX-V3',                'validate_af2n_broad_rollout_blocker_matrix_v3.py'),
+    ('AF2-N-PUBLIC-UI-V24-SAFETY',                 'audit_affinity_gifts_public_preview_v24_safety.py'),
+    ('V24-ROLLBACK-READINESS',                     'validate_af2n_v24_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-S',                            'validate_collection_affinity_runtime_activation_rollup_v19.py'),
+    ('ULTRA-COMBO-V24',                            'validate_ultra_combo_v24_observation_abuse_rollback_redisHA.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

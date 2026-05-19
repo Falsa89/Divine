@@ -39,15 +39,18 @@ def current_backend() -> str:
 
 
 def _get_redis():
-    """Lazy init. Returns client or None."""
-    global _REDIS_CLIENT, _REDIS_INIT_FAILED
+    """Lazy init. Returns client or None. NO permanent fail caching (V23):
+    each call retries init so a transient at-startup absence does not
+    permanently disable the redis path."""
+    global _REDIS_CLIENT
     if _REDIS_CLIENT is not None:
-        return _REDIS_CLIENT
-    if _REDIS_INIT_FAILED:
-        return None
+        try:
+            _REDIS_CLIENT.ping()
+            return _REDIS_CLIENT
+        except Exception:
+            _REDIS_CLIENT = None
     url = os.environ.get(_REDIS_URL_ENV, '').strip()
     if not url:
-        _REDIS_INIT_FAILED = True
         return None
     try:
         import redis  # type: ignore
@@ -56,7 +59,6 @@ def _get_redis():
         _REDIS_CLIENT = c
         return c
     except Exception:
-        _REDIS_INIT_FAILED = True
         return None
 
 

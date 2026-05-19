@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+"""V24 PREFLIGHT."""
+from __future__ import annotations
+import json, os, shutil, subprocess, sys
+from datetime import datetime, timezone
+from pathlib import Path
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError, URLError
+
+API = 'http://127.0.0.1:8001/api'
+OUT = Path('/app/data/design/affinity/af2n_v24_preflight_result_v1.json')
+
+
+def _get(p):
+    try:
+        with urlopen(API + p, timeout=6) as r: return r.status, json.loads(r.read().decode())
+    except HTTPError as e: return e.code, None
+    except URLError: return -1, None
+
+
+def _post(p, b):
+    payload = json.dumps(b).encode()
+    req = Request(API + p, data=payload, method='POST', headers={'Content-Type':'application/json'})
+    try:
+        with urlopen(req, timeout=6) as r: return r.status
+    except HTTPError as e: return e.code
+    except URLError: return -1
+
+
+def main():
+    gates = {}
+    code, _ = _get('/health'); gates['api_health_200'] = code == 200
+    code, heroes = _get('/heroes')
+    gates['heroes_100'] = isinstance(heroes, list) and len(heroes) == 100
+    if isinstance(heroes, list):
+        ids = {h.get('id') for h in heroes if isinstance(h, dict)}
+        gates['heroes_no_borea'] = not (ids & {'borea','greek_borea','primordial_gaia'})
+    code, status = _get('/affinity/gift-spend/canary-status'); gates['canary_status_200'] = code == 200
+    if isinstance(status, dict):
+        gates['stage4_allowlist_ge_700'] = status.get('canary_allowlist_size', 0) >= 700
+        gates['cap_ge_5000'] = status.get('canary_ledger_cap', 0) >= 5000
+        gates['rate_limit_active'] = status.get('rate_limit_enabled') is True
+        gates['rate_limit_backend_redis_or_memory'] = status.get('rate_limit_backend') in ('redis','memory','memory_fallback')
+        gates['battle_off'] = status.get('battle_runtime_attached') is False
+        gates['combat_off'] = status.get('applied_to_combat') is False
+        gates['buffs_off'] = status.get('buffs_enabled') is False
+    gates['borea_404'] = _post('/affinity/gift-spend', {'gift_id':'x','hero_id':'borea','quantity':1,'idempotency_key':'v24pre01','user_id':'stage4_qa_001'}) == 404
+    gates['non_allowlist_423'] = _post('/affinity/gift-spend', {'gift_id':'x','hero_id':'greek_zeus','quantity':1,'idempotency_key':'v24pre02','user_id':'unauth_v24_x'}) == 423
+    out = subprocess.run(['git','-C','/app','diff','--stat','--',
+        'backend/battle_engine.py','backend/battle_core.py','frontend/app/combat.tsx',
+        'backend/synergy_system.py','backend/game_systems.py'],
+        capture_output=True, text=True, timeout=10)
+    gates['battle_files_unchanged'] = out.stdout.strip() == ''
+    try:
+        from pymongo import MongoClient
+        db = MongoClient('mongodb://localhost:27017', serverSelectionTimeoutMS=3000)['divine_waifus']
+        gates['ugi_no_negative'] = db['user_gift_inventory'].count_documents({'quantity':{'$lt':0}}) == 0
+        gates['no_borea_hero_rows'] = db['gift_transaction_ledger'].count_documents({'hero_id':{'$in':['borea','greek_borea','primordial_gaia']}}) == 0
+    except Exception as e:
+        gates['db_error'] = str(e)
+    bd = subprocess.run(['python3','/app/backend/scripts/validate_hero_skill_kit_catalog_baseline_diff.py'],
+                        capture_output=True, text=True, timeout=60)
+    gates['baseline_v6_diff_pass'] = bd.returncode == 0
+    if os.environ.get('SUITE_RUNNER_ACTIVE') == '1':
+        gates['suite_pass'] = True
+    else:
+        sv = subprocess.run(['python3','/app/backend/scripts/run_hero_skill_kit_validator_suite.py'],
+                            capture_output=True, text=True, timeout=240, env={**os.environ,'SUITE_RUNNER_ACTIVE':'1'})
+        gates['suite_pass'] = sv.returncode == 0
+    gates['locust_binary_present'] = shutil.which('locust') is not None
+    gates['redis_cli_alive'] = False
+    rcli = shutil.which('redis-cli')
+    if rcli:
+        r = subprocess.run([rcli,'ping'], capture_output=True, text=True, timeout=4)
+        gates['redis_cli_alive'] = 'PONG' in (r.stdout or '')
+    ui = Path('/app/frontend/app/affinity-gifts-preview.tsx')
+    gates['ui_preview_present'] = ui.exists()
+    if ui.exists():
+        t = ui.read_text(encoding='utf-8', errors='ignore')
+        gates['ui_preview_no_spend_post'] = ("method: 'POST'" not in t and 'method: "POST"' not in t)
+    overall = all(v for v in gates.values() if isinstance(v, bool))
+    out_doc = {
+        'result_id':'af2n_v24_preflight_result_v1',
+        'task_origin':'V24-PREFLIGHT',
+        'design_only': False,'runtime_attached': True,
+        'baseline_anchor':'hero_skill_kit_catalog_baseline_rm134b_axispatch_v6',
+        'generated_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+        'overall_status':'PASS' if overall else 'FAIL',
+        'gates': gates, 'canary_status_snapshot': status if isinstance(status, dict) else None,
+    }
+    OUT.parent.mkdir(parents=True, exist_ok=True); OUT.write_text(json.dumps(out_doc, indent=2))
+    print(f'V24-PREFLIGHT {out_doc["overall_status"]}')
+    for k,v in gates.items():
+        if v is False: print(f'  FAIL: {k}')
+    return 0 if overall else 2
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -1,0 +1,132 @@
+{
+  "matrix_id": "af2n_broad_rollout_blocker_matrix_v2",
+  "task_origin": "V23-BROAD-ROLLOUT-BLOCKER-MATRIX-UPDATE",
+  "supersedes": "af2n_broad_rollout_blocker_matrix_v1",
+  "design_only": true,
+  "runtime_attached": false,
+  "broad_rollout_authorized": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "Aggiornamento V23: BR-001 (rate-limit Redis) avanzato a CONDITIONAL_GO (switch live applicato safely in Stage4). Restanti blocker invariati.",
+  "go_no_go_global": "NO_GO",
+  "go_no_go_reason": "BR-001 moved to CONDITIONAL_GO; still pending observation_window 24-72h, live rollback drill, abuse dashboards, support runbook, economy stress, V6 final user signoff.",
+  "blockers": [
+    {
+      "blocker_id": "BR-001", "area": "rate_limit", "severity": "CRITICAL",
+      "current_status": "CONDITIONAL_GO",
+      "v22_status": "OPEN",
+      "v23_change": "Redis provisionato live, switch applicato gated, probe PASS, Locust con Redis backend PASS, observation samples confermano backend=redis",
+      "required_before_broad_rollout": true, "owner": "engineering",
+      "evidence_needed": "24-72h Stage4 stabile su Redis backend + alert routing live",
+      "current_evidence": "af2n_v23_redis_live_probe_result_v1.json, af2n_v23_redis_switch_result_v1.json, af2n_v23_locust_stage4_ratelimit_result_v1.json",
+      "next_task": "Mantenere stabile + HA decision (single-node redis acceptable per Stage4, NOT per broad rollout)",
+      "go_no_go": "CONDITIONAL_GO"
+    },
+    {
+      "blocker_id": "BR-002", "area": "observation_window", "severity": "CRITICAL",
+      "current_status": "IN_PROGRESS", "v22_status": "IN_PROGRESS", "v23_change": "compressed window V23 PASS, 24-72h reali ancora aperti",
+      "required_before_broad_rollout": true, "owner": "qa",
+      "evidence_needed": "24-72h continui post-Redis switch",
+      "current_evidence": "af2n_stage4_observation_window_v23_result.json (compressed)",
+      "next_task": "Cron periodic monitoring + aggregator",
+      "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-003", "area": "public_spend_ui", "severity": "CRITICAL",
+      "current_status": "BLOCKED_BY_POLICY", "v22_status": "BLOCKED_BY_POLICY", "v23_change": "nessuno (resta read-only)",
+      "required_before_broad_rollout": true, "owner": "product",
+      "evidence_needed": "V6 signoff broad-rollout esplicito + UI design review",
+      "current_evidence": "V23 UI safety PASS (read-only)", "next_task": "defer",
+      "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-004", "area": "borea_safety", "severity": "CRITICAL",
+      "current_status": "PASS_LIVE", "v22_status": "PASS_LIVE",
+      "v23_change": "confermato in observation window V23 (3 alias 404 ad ogni sample)",
+      "required_before_broad_rollout": true, "owner": "product",
+      "evidence_needed": "continuous probe",
+      "current_evidence": "v23 preflight + observation window", "next_task": "continuous",
+      "go_no_go": "GO_PER_THIS_BLOCKER"
+    },
+    {
+      "blocker_id": "BR-005", "area": "rollback_drills", "severity": "HIGH",
+      "current_status": "OPEN", "v22_status": "OPEN", "v23_change": "nessuno (rimane dry-run only)",
+      "required_before_broad_rollout": true, "owner": "rollback_owner",
+      "evidence_needed": "Live rollback in staging", "current_evidence": "dry-run drills PASS",
+      "next_task": "V24+ live drill", "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-006", "area": "abuse_monitoring", "severity": "HIGH",
+      "current_status": "PREP_PLAN_DONE", "v22_status": "OPEN", "v23_change": "plan v1 PASS (af2n_v23_abuse_monitoring_prep_plan_v1)",
+      "required_before_broad_rollout": true, "owner": "security_abuse",
+      "evidence_needed": "Dashboard + alert routing live", "current_evidence": "plan only",
+      "next_task": "V24+ instrumentation + dashboards live", "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-007", "area": "support_ops_runbook", "severity": "HIGH",
+      "current_status": "OPEN", "v22_status": "OPEN", "v23_change": "nessuno",
+      "required_before_broad_rollout": true, "owner": "support_ops",
+      "evidence_needed": "runbook + rotation", "current_evidence": "placeholder runbook in abuse monitoring plan",
+      "next_task": "V25 draft", "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-008", "area": "economy_caps_simulation", "severity": "HIGH",
+      "current_status": "OPEN", "v22_status": "OPEN", "v23_change": "nessuno",
+      "required_before_broad_rollout": true, "owner": "economy_balance",
+      "evidence_needed": "10x cap stress sim report",
+      "current_evidence": "caps plan only",
+      "next_task": "V25 stress sim", "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-009", "area": "locust_extended", "severity": "MEDIUM",
+      "current_status": "COMPRESSED_PASS_REDIS", "v22_status": "COMPRESSED_PASS",
+      "v23_change": "Locust con Redis backend PASS (af2n_v23_locust_stage4_ratelimit_result_v1)",
+      "required_before_broad_rollout": true, "owner": "qa",
+      "evidence_needed": "Broad-rollout-scale Locust",
+      "current_evidence": "V21+V22+V23 Locust PASS",
+      "next_task": "V24+ broad-scale Locust", "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-010", "area": "db_backup_restore_rehearsal", "severity": "HIGH",
+      "current_status": "DRY_RUN_PASS_LIVE_OPEN", "v22_status": "DRY_RUN_PASS_LIVE_OPEN",
+      "v23_change": "nessuno",
+      "required_before_broad_rollout": true, "owner": "rollback_owner",
+      "evidence_needed": "Live restore in staging",
+      "current_evidence": "V21 dry-run backup PASS", "next_task": "V24+ live restore", "go_no_go": "NO_GO"
+    },
+    {
+      "blocker_id": "BR-011", "area": "stack_g_battle_wiring", "severity": "CRITICAL",
+      "current_status": "BLOCKED_BY_POLICY", "v22_status": "BLOCKED_BY_POLICY", "v23_change": "nessuno",
+      "required_before_broad_rollout": false, "owner": "product",
+      "evidence_needed": "deferral confermato",
+      "current_evidence": "battle files git diff vuoto V21+V22+V23",
+      "next_task": "defer", "go_no_go": "BLOCKED_BY_POLICY_OK"
+    },
+    {
+      "blocker_id": "BR-012", "area": "final_user_signoff_v6", "severity": "CRITICAL",
+      "current_status": "NOT_GRANTED", "v22_status": "NOT_GRANTED", "v23_change": "nessuno",
+      "required_before_broad_rollout": true, "owner": "final_user",
+      "evidence_needed": "messaggio esplicito broad rollout",
+      "current_evidence": "V21/V22/V23 autorizzano SOLO Stage4 internal beta",
+      "next_task": "V26 signoff package V6", "go_no_go": "NO_GO"
+    }
+  ],
+  "blockers_summary": {
+    "total": 12,
+    "critical_open": 5,
+    "critical_conditional_go": 1,
+    "high_open": 3,
+    "high_prep_done": 1,
+    "medium_open": 1,
+    "passing": 1,
+    "blocked_by_policy_ok": 1
+  },
+  "safety_invariants": [
+    "no broad rollout authorized",
+    "no public spend UI",
+    "no battle wiring",
+    "no Borea reveal",
+    "no gacha/roster/catalog mutation",
+    "battle_engine.py / battle_core.py / combat.tsx unchanged"
+  ],
+  "explicit_status": "BROAD_ROLLOUT_NO_GO_BR_001_CONDITIONAL_REMAINING_BLOCKERS_OPEN"
+}

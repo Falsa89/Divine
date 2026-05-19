@@ -1,0 +1,184 @@
+{
+  "report_id": "affinity_inventory_delta_consistency_v23_report",
+  "task_origin": "V23-AF2N-DELTA-AUDIT-POST-REDIS-SWITCH",
+  "generated_at_utc": "2026-05-19T14:33:51.269764Z",
+  "checks": {
+    "negative_inventory_count": 0,
+    "borea_in_ledger": 0,
+    "borea_in_affinity_state": 0,
+    "duplicate_tx_ids": 0,
+    "duplicate_idempotency_groups": 0,
+    "delta_mismatch_users": 0,
+    "delta_audit_sample_size": 74,
+    "non_allowlist_success_count": 0
+  },
+  "per_user_check_sample": [
+    {
+      "user_id": "stage4_qa_277",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_008",
+      "hero_id": "greek_athena",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_112",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_010",
+      "hero_id": "greek_hera",
+      "qty_mut": 2,
+      "aff": 2,
+      "total": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_012",
+      "hero_id": "greek_hera",
+      "qty_mut": 2,
+      "aff": 2,
+      "total": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_015",
+      "hero_id": "greek_hera",
+      "qty_mut": 2,
+      "aff": 2,
+      "total": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_013",
+      "hero_id": "greek_hera",
+      "qty_mut": 2,
+      "aff": 2,
+      "total": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_350",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_250",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_001",
+      "hero_id": "greek_ares",
+      "qty_mut": 2,
+      "aff": 2,
+      "total": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_018",
+      "hero_id": "greek_hera",
+      "qty_mut": 2,
+      "aff": 2,
+      "total": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_320",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_160",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_391",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_415",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage3_qa_080",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_002",
+      "hero_id": "greek_ares",
+      "qty_mut": 2,
+      "aff": 2,
+      "total": 2,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_200",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_182",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    },
+    {
+      "user_id": "stage4_qa_128",
+      "hero_id": "greek_ares",
+      "qty_mut": 1,
+      "aff": 1,
+      "total": 1,
+      "ok": true
+    }
+  ],
+  "fails": [],
+  "overall_status": "PASS",
+  "safety_invariants": [
+    "read-only audit",
+    "no DB mutation",
+    "no Borea data leak"
+  ]
+}

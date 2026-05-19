@@ -1,0 +1,147 @@
+{
+  "result_id": "af2n_v24_observation_window_real_result",
+  "task_origin": "V24-AF2N-OBSERVATION-WINDOW-REAL",
+  "started_at_utc": "2026-05-19T16:05:19.859275Z",
+  "finished_at_utc": "2026-05-19T16:05:54.075378Z",
+  "samples_count": 12,
+  "interval_seconds": 3.0,
+  "window_seconds_approx": 36.0,
+  "rate_limit_backends_observed": [
+    "redis"
+  ],
+  "backend_stable": true,
+  "ledger_growth_during_window": 0,
+  "samples_first_2": [
+    {
+      "i": 0,
+      "t_utc": "2026-05-19T16:05:19.859279Z",
+      "health": 200,
+      "heroes_count": 100,
+      "borea_results": {
+        "borea": 404,
+        "greek_borea": 404,
+        "primordial_gaia": 404
+      },
+      "all_borea_404": true,
+      "non_allowlist": 423,
+      "burst_codes": [
+        423,
+        423,
+        423,
+        423,
+        423,
+        423,
+        429,
+        429
+      ],
+      "burst_saw_429": true,
+      "allowlist_size": 700,
+      "ledger_total": 128,
+      "ledger_cap": 5000,
+      "rate_limit_backend": "redis"
+    },
+    {
+      "i": 1,
+      "t_utc": "2026-05-19T16:05:22.960642Z",
+      "health": 200,
+      "heroes_count": 100,
+      "borea_results": {
+        "borea": 404,
+        "greek_borea": 404,
+        "primordial_gaia": 404
+      },
+      "all_borea_404": true,
+      "non_allowlist": 423,
+      "burst_codes": [
+        423,
+        423,
+        423,
+        423,
+        423,
+        423,
+        429,
+        429
+      ],
+      "burst_saw_429": true,
+      "allowlist_size": 700,
+      "ledger_total": 128,
+      "ledger_cap": 5000,
+      "rate_limit_backend": "redis"
+    }
+  ],
+  "samples_last_2": [
+    {
+      "i": 10,
+      "t_utc": "2026-05-19T16:05:50.871506Z",
+      "health": 200,
+      "heroes_count": 100,
+      "borea_results": {
+        "borea": 404,
+        "greek_borea": 404,
+        "primordial_gaia": 404
+      },
+      "all_borea_404": true,
+      "non_allowlist": 429,
+      "burst_codes": [
+        429,
+        429,
+        429,
+        429,
+        429,
+        429,
+        429,
+        429
+      ],
+      "burst_saw_429": true,
+      "allowlist_size": 700,
+      "ledger_total": 128,
+      "ledger_cap": 5000,
+      "rate_limit_backend": "redis"
+    },
+    {
+      "i": 11,
+      "t_utc": "2026-05-19T16:05:53.970744Z",
+      "health": 200,
+      "heroes_count": 100,
+      "borea_results": {
+        "borea": 404,
+        "greek_borea": 404,
+        "primordial_gaia": 404
+      },
+      "all_borea_404": true,
+      "non_allowlist": 429,
+      "burst_codes": [
+        429,
+        429,
+        429,
+        429,
+        429,
+        429,
+        429,
+        429
+      ],
+      "burst_saw_429": true,
+      "allowlist_size": 700,
+      "ledger_total": 128,
+      "ledger_cap": 5000,
+      "rate_limit_backend": "redis"
+    }
+  ],
+  "aggregated": {
+    "bad_borea": 0,
+    "bad_non_allow": 0,
+    "no_burst_429": 0,
+    "bad_health": 0,
+    "bad_heroes": 0,
+    "cap_exceeded": 0
+  },
+  "fails": [],
+  "overall_status": "PASS",
+  "safety_invariants": [
+    "no broad rollout",
+    "no public spend UI",
+    "no battle wiring",
+    "no Borea reveal",
+    "no gacha/roster/catalog mutation"
+  ]
+}

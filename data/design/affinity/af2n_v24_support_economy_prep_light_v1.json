@@ -1,0 +1,105 @@
+{
+  "plan_id": "af2n_v24_support_economy_prep_light_v1",
+  "task_origin": "V24-SUPPORT-ECONOMY-PREP-LIGHT",
+  "design_only": true,
+  "support_runbook": {
+    "status": "DRAFT_LIGHT",
+    "sections": [
+      {
+        "id": "runbook_5xx_surge",
+        "title": "5xx surge on /api/affinity/gift-spend",
+        "detection": "AF2-A-001 alert fires (af2_gift_spend_5xx_total rate > 0 for 1m)",
+        "first_response": [
+          "check supervisorctl status backend redis mongo",
+          "check backend stderr log: /var/log/supervisor/backend.err.log",
+          "verify /api/health responds 200"
+        ],
+        "escalation": ["flip AFFINITY_GIFT_RUNTIME_ENABLED off if persistent", "page on-call eng"],
+        "rollback_lever": "unset AFFINITY_GIFT_RUNTIME_ENABLED + supervisorctl restart backend"
+      },
+      {
+        "id": "runbook_unauthorized_success",
+        "title": "Unauthorized success on gift-spend (BR-004 CRITICAL)",
+        "detection": "AF2-A-002 alert OR delta_audit reports non_allowlist_success > 0",
+        "first_response": [
+          "freeze rollout: do nothing else; collect logs",
+          "run rollback_af2n_stage4_internal_beta.py with STAGE4_ROLLBACK_DRY_RUN=false (with explicit signoff)"
+        ],
+        "escalation": ["page CTO"],
+        "rollback_lever": "Stage4 full rollback"
+      },
+      {
+        "id": "runbook_negative_inventory",
+        "title": "Negative inventory detected",
+        "detection": "AF2-A-003",
+        "first_response": [
+          "unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart",
+          "run V22 delta audit"
+        ],
+        "rollback_lever": "inventory_flag_disable"
+      },
+      {
+        "id": "runbook_borea_leak",
+        "title": "Borea alias appearing in response or DB",
+        "detection": "AF2-A-005 OR delta_audit reports borea_in_ledger>0",
+        "first_response": ["unset AFFINITY_GIFT_RUNTIME_ENABLED", "page CTO"],
+        "rollback_lever": "full_af2n_rollback"
+      },
+      {
+        "id": "runbook_redis_outage",
+        "title": "Redis unreachable",
+        "detection": "AF2-A-007 fires OR redis-cli ping fails",
+        "first_response": [
+          "adapter auto-fails-open to memory backend; rate-limit functional but per-process",
+          "check supervisorctl status redis",
+          "restart redis: supervisorctl restart redis"
+        ],
+        "rollback_lever": "set AFFINITY_RATE_LIMIT_BACKEND=memory + restart"
+      }
+    ],
+    "on_call_rotation": {"primary":"<TBD>","secondary":"<TBD>","escalation_minutes":15}
+  },
+  "economy_stress_prep": {
+    "status": "PREP_PLAN_LIGHT",
+    "current_caps": {
+      "canary_ledger_cap": 5000,
+      "per_user_per_minute": 30,
+      "per_user_per_hour": 240,
+      "per_ip_per_minute": 60
+    },
+    "target_scenarios": [
+      {
+        "scenario": "baseline_internal_beta",
+        "traffic": "700 users * 1 gift / day average",
+        "expected_ledger_per_day": 700,
+        "capacity_margin": "~7x cap (cap=5000)"
+      },
+      {
+        "scenario": "abuse_one_user",
+        "traffic": "1 user spamming 100 req/s",
+        "expected_outcome": "6 in 10s window then 429 — ledger growth <=6",
+        "verified_in": "V21+V22+V23+V24 burst probe"
+      },
+      {
+        "scenario": "abuse_many_users",
+        "traffic": "700 stage4 users + 1000 attackers / 5min",
+        "expected_outcome": "throughput throttled by per-IP rate-limit; ledger growth bounded by per_user_per_hour",
+        "to_be_simulated_in": "V25 Locust stress"
+      },
+      {
+        "scenario": "10x_cap_stress",
+        "traffic": "~50000 transactions across 700 users in a month",
+        "expected_outcome": "cap reached; further attempts return 423 'cap_exceeded'",
+        "to_be_simulated_in": "V25 economy stress sim"
+      }
+    ],
+    "prerequisites_for_broad_rollout": [
+      "10x cap stress sim PASS",
+      "abuse_many_users sim PASS",
+      "per-user-per-day soft cap defined",
+      "ledger growth alarm thresholds in dashboards"
+    ]
+  },
+  "safety_invariants":["no broad rollout","no public spend UI","no battle wiring","no Borea reveal"],
+  "explicit_status":"PREP_LIGHT_SUPPORT_ECONOMY_DRAFTED"
+}

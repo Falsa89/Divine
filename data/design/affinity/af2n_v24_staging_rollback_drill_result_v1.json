@@ -1,0 +1,61 @@
+{
+  "result_id": "af2n_v24_staging_rollback_drill_result_v1",
+  "task_origin": "V24-STAGING-CLONE-ROLLBACK-DRILL",
+  "generated_at_utc": "2026-05-19T16:06:57.099462Z",
+  "non_destructive": true,
+  "production_state_modified": false,
+  "actions": {
+    "steps": [
+      "pre_stage4_backup_located",
+      "supervisor_diff_computed_read_only",
+      "mongo_backup_present",
+      "rollback_dry_run_executed"
+    ],
+    "pre_stage4_backup": "/app/backups/af2n_stage4/backend.conf.v21_pre_stage4_apply_20260518T190642Z.bak",
+    "supervisor_conf_diff_summary": {
+      "allowlist_size_old": 200,
+      "allowlist_size_current": 700,
+      "stage4_users_to_be_removed_on_rollback": 500,
+      "cap_old": "2500",
+      "cap_current": "5000",
+      "diff_is_only_stage4_delta": true
+    },
+    "mongo_backup_dir": "/app/backups/af2n_stage4/backup_20260518T185636Z",
+    "mongo_backup_files": [
+      "gift_transaction_ledger.json",
+      "user_affinity_state.json",
+      "user_gift_inventory.json"
+    ],
+    "mongo_backup_sha256_recompute": {
+      "gift_transaction_ledger.json": "1df66c755a5dd36298c480af5dbdc0b5d608665db84e9da7f39a70503dc7da13",
+      "user_affinity_state.json": "eb7a859c2d07c48eeba360dad5bd186ad74b0071c14d393e8008feb3168996f4",
+      "user_gift_inventory.json": "446e1e74db78060eea4a72ff6c9d25987d3d90209f220f5a4fa92f1727148301"
+    },
+    "rollback_dry_run_exit_code": 0,
+    "rollback_dry_run_stdout_tail": "STAGE4-ROLLBACK DRY-RUN PASS\n",
+    "rollback_dry_run_doc": {
+      "dry_run": true,
+      "overall_status": "PASS",
+      "steps_planned": [
+        "DRY_RUN_only: would_restore_conf",
+        "DRY_RUN_only: would_delete_stage4_seed_docs",
+        "DRY_RUN_only: would_restart_backend"
+      ]
+    },
+    "post_drill_canary_status": {
+      "allowlist_size": 700,
+      "ledger_cap": 5000,
+      "rate_limit_backend": "redis"
+    }
+  },
+  "fails": [],
+  "overall_status": "PASS",
+  "safety_invariants": [
+    "no production rollback executed",
+    "no DB drop",
+    "no supervisor.conf rewrite",
+    "no inventory mutation",
+    "no ledger mutation",
+    "no Borea exposure"
+  ]
+}

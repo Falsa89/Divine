@@ -1,0 +1,37 @@
+{
+  "matrix_id": "af2n_broad_rollout_blocker_matrix_v3",
+  "task_origin": "V24-BROAD-ROLLOUT-BLOCKER-MATRIX-UPDATE-V3",
+  "supersedes": "af2n_broad_rollout_blocker_matrix_v2",
+  "design_only": true,
+  "broad_rollout_authorized": false,
+  "go_no_go_global": "NO_GO",
+  "go_no_go_reason": "BR-005 rollback drill from OPEN to STAGING_REHEARSAL_PASS; BR-006 abuse_monitoring from PREP_PLAN_DONE to PARTIAL_INSTRUMENTATION_PASS; remaining open blockers gate broad rollout.",
+  "blockers": [
+    {"blocker_id":"BR-001","area":"rate_limit","severity":"CRITICAL","current_status":"CONDITIONAL_GO_HA_PENDING","v23_status":"CONDITIONAL_GO","v24_change":"Redis HA decision plan v1 documentato (cluster preferred)","required_before_broad_rollout":true,"owner":"engineering","go_no_go":"CONDITIONAL_GO_HA_PENDING","current_evidence":"affinity_rate_limit_redis_ha_decision_plan_v1.json (PREP)","next_task":"Phase 2 staging Redis cluster"},
+    {"blocker_id":"BR-002","area":"observation_window","severity":"CRITICAL","current_status":"PRACTICAL_PASS_NEED_24_72H","v23_status":"IN_PROGRESS","v24_change":"Real observation window 20 sample/4s = 80s PASS","required_before_broad_rollout":true,"owner":"qa","go_no_go":"NO_GO","current_evidence":"af2n_v24_observation_window_real_result.json","next_task":"24-72h continuous cron monitoring"},
+    {"blocker_id":"BR-003","area":"public_spend_ui","severity":"CRITICAL","current_status":"BLOCKED_BY_POLICY","v23_status":"BLOCKED_BY_POLICY","v24_change":"none","required_before_broad_rollout":true,"owner":"product","go_no_go":"NO_GO","current_evidence":"V24 UI safety PASS read-only","next_task":"defer"},
+    {"blocker_id":"BR-004","area":"borea_safety","severity":"CRITICAL","current_status":"PASS_LIVE","v23_status":"PASS_LIVE","v24_change":"observation window confirmed all 3 alias 404 across 20 samples","required_before_broad_rollout":true,"owner":"product","go_no_go":"GO_PER_THIS_BLOCKER","current_evidence":"v24 observation","next_task":"continuous"},
+    {"blocker_id":"BR-005","area":"rollback_drills","severity":"HIGH","current_status":"STAGING_REHEARSAL_PASS","v23_status":"OPEN","v24_change":"Staging/clone rollback drill PASS (non-destructive, supervisor diff verified, mongo backup re-checksum, rollback DRY-RUN script PASS, live state unchanged)","required_before_broad_rollout":true,"owner":"rollback_owner","go_no_go":"CONDITIONAL_GO","current_evidence":"af2n_v24_staging_rollback_drill_result_v1.json","next_task":"V25+ true staging-clone DB restore"},
+    {"blocker_id":"BR-006","area":"abuse_monitoring","severity":"HIGH","current_status":"PARTIAL_INSTRUMENTATION_PASS","v23_status":"PREP_PLAN_DONE","v24_change":"In-memory metrics collector integrato + endpoint _admin/metrics-snapshot gated","required_before_broad_rollout":true,"owner":"security_abuse","go_no_go":"NO_GO","current_evidence":"data/affinity_metrics.py + V24 instrumentation validator PASS","next_task":"V25 dashboards + alerts live"},
+    {"blocker_id":"BR-007","area":"support_ops_runbook","severity":"HIGH","current_status":"DRAFT_LIGHT","v23_status":"OPEN","v24_change":"5 runbook sections drafted + on-call placeholder","required_before_broad_rollout":true,"owner":"support_ops","go_no_go":"NO_GO","current_evidence":"af2n_v24_support_economy_prep_light_v1.json (DRAFT_LIGHT)","next_task":"V25 full runbook + rotation roster"},
+    {"blocker_id":"BR-008","area":"economy_caps_simulation","severity":"HIGH","current_status":"PREP_LIGHT","v23_status":"OPEN","v24_change":"4 target scenarios drafted (baseline_internal_beta, abuse_one_user verified, abuse_many_users TBS, 10x_cap_stress TBS)","required_before_broad_rollout":true,"owner":"economy_balance","go_no_go":"NO_GO","current_evidence":"af2n_v24_support_economy_prep_light_v1.json","next_task":"V25 stress sim"},
+    {"blocker_id":"BR-009","area":"locust_extended","severity":"MEDIUM","current_status":"COMPRESSED_PASS_REDIS","v23_status":"COMPRESSED_PASS_REDIS","v24_change":"none (carry-over)","required_before_broad_rollout":true,"owner":"qa","go_no_go":"NO_GO","current_evidence":"V21+V22+V23 Locust PASS","next_task":"V25 broad-scale Locust"},
+    {"blocker_id":"BR-010","area":"db_backup_restore_rehearsal","severity":"HIGH","current_status":"STAGING_RECHECKSUM_PASS_LIVE_RESTORE_OPEN","v23_status":"DRY_RUN_PASS_LIVE_OPEN","v24_change":"V24 staging drill re-verifies sha256 of mongo backup files","required_before_broad_rollout":true,"owner":"rollback_owner","go_no_go":"NO_GO","current_evidence":"af2n_v24_staging_rollback_drill_result_v1.json + V21 sha256","next_task":"V25+ live restore in staging clone"},
+    {"blocker_id":"BR-011","area":"stack_g_battle_wiring","severity":"CRITICAL","current_status":"BLOCKED_BY_POLICY","v23_status":"BLOCKED_BY_POLICY","v24_change":"none","required_before_broad_rollout":false,"owner":"product","go_no_go":"BLOCKED_BY_POLICY_OK","current_evidence":"battle files git diff empty V21-V24","next_task":"defer"},
+    {"blocker_id":"BR-012","area":"final_user_signoff_v6","severity":"CRITICAL","current_status":"NOT_GRANTED","v23_status":"NOT_GRANTED","v24_change":"none","required_before_broad_rollout":true,"owner":"final_user","go_no_go":"NO_GO","current_evidence":"V21-V24 authorize Stage4 only","next_task":"V26 signoff package V6"}
+  ],
+  "blockers_summary": {
+    "total": 12,
+    "critical_open": 4,
+    "critical_conditional_go": 1,
+    "critical_practical_pass": 1,
+    "high_open": 2,
+    "high_partial": 2,
+    "high_staging_pass": 1,
+    "medium_open": 1,
+    "passing": 1,
+    "blocked_by_policy_ok": 1
+  },
+  "safety_invariants":["no broad rollout authorized","no public spend UI","no battle wiring","no Borea reveal","no gacha/roster/catalog mutation","battle_engine.py / battle_core.py / combat.tsx unchanged"],
+  "explicit_status": "BROAD_ROLLOUT_NO_GO_V24_PROGRESS_BR_005_006_007_008_010_ADVANCED"
+}

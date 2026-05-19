@@ -1,0 +1,31 @@
+{
+  "result_id": "af2n_v23_rollback_readiness_result_v1",
+  "task_origin": "V23-ROLLBACK-READINESS",
+  "generated_at_utc": "2026-05-19T16:07:17.634398Z",
+  "checks": {
+    "script:rollback_af2n_stage4_internal_beta.py": true,
+    "syntax_ok:rollback_af2n_stage4_internal_beta.py": true,
+    "script:rollback_af2n_stage3_qa_expansion.py": true,
+    "syntax_ok:rollback_af2n_stage3_qa_expansion.py": true,
+    "script:rollback_af2n_stage2_5_10pct_allowlist.py": true,
+    "syntax_ok:rollback_af2n_stage2_5_10pct_allowlist.py": true,
+    "script:rollback_af2n_stage1_1pct_allowlist.py": true,
+    "syntax_ok:rollback_af2n_stage1_1pct_allowlist.py": true,
+    "script:rollback_affinity_inventory_wiring_stage1.py": true,
+    "syntax_ok:rollback_affinity_inventory_wiring_stage1.py": true,
+    "doc:af2n_v22_rollback_readiness_result_v1.json": true,
+    "doc:af2n_v21_rollback_readiness_result_v1.json": true,
+    "doc:af2n_stage4_db_backup_drill_result_v1.json": true,
+    "pre_redis_switch_backup_present": true,
+    "stage4_pre_apply_backup_present": true
+  },
+  "rollback_options": {
+    "stage4_rollback": "rollback_af2n_stage4_internal_beta.py (DRY_RUN=true default; STAGE4_ROLLBACK_DRY_RUN=false to apply)",
+    "redis_switch_rollback": "restore supervisor.conf from backend.conf.v23_pre_redis_switch_*.bak (removes REDIS_URL + sets AFFINITY_RATE_LIMIT_BACKEND=memory) + restart",
+    "rate_limit_disable": "unset AFFINITY_GIFT_RATE_LIMIT_ENABLED + restart",
+    "inventory_flag_disable": "unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart",
+    "full_af2n_rollback": "unset AFFINITY_GIFT_RUNTIME_ENABLED + restart",
+    "db_backup_restore": "/app/backups/af2n_stage4/backup_<STAMP>/ files"
+  },
+  "overall_status": "PASS"
+}

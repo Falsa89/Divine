@@ -4,7 +4,7 @@
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-18T22:57:16.823654Z",
+  "generated_at_utc": "2026-05-19T16:07:11.945547Z",
   "overall_status": "PASS",
   "gates": {
     "api_health_200": true,
@@ -56,16 +56,16 @@
     "feature_flag_currently_enabled": true,
     "canary_allowlist_size": 700,
     "canary_ledger_cap": 5000,
-    "ledger_total_rows": 124,
-    "ledger_canary_rows": 124,
+    "ledger_total_rows": 128,
+    "ledger_canary_rows": 128,
     "last_canary_tx": {
-      "tx_id": "tx_canary_322600e9b0ce42e3",
-      "user_id": "stage4_qa_350",
+      "tx_id": "tx_canary_2f1b99df864a4e82",
+      "user_id": "stage4_qa_450",
       "gift_id": "gift_test_001",
       "hero_id": "greek_ares",
       "quantity": 1,
       "status": "applied_inventory_live",
-      "created_at_utc": "2026-05-18 22:55:12.662000"
+      "created_at_utc": "2026-05-19 14:40:53.933000"
     },
     "borea_aliases_blocked": [
       "borea",
@@ -84,7 +84,9 @@
     "rate_limit_per_ip_per_minute": 60,
     "rate_limit_burst_window_seconds": 10,
     "rate_limit_burst_max": 6,
-    "rate_limit_flag_dependency": "AFFINITY_GIFT_RATE_LIMIT_ENABLED"
+    "rate_limit_flag_dependency": "AFFINITY_GIFT_RATE_LIMIT_ENABLED",
+    "rate_limit_backend": "redis",
+    "rate_limit_redis_url_set": true
   },
   "safety_flags": {
     "broad_rollout_authorized": false,

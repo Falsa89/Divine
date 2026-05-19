@@ -1,0 +1,104 @@
+{
+  "plan_id": "affinity_rate_limit_redis_ha_decision_plan_v1",
+  "task_origin": "V24-REDIS-HA-DECISION-PLAN",
+  "design_only": true,
+  "live_switch_allowed_this_task": false,
+  "current_state": {
+    "topology": "single_node",
+    "host": "127.0.0.1",
+    "port": 6379,
+    "persistence": "none (RDB and AOF disabled)",
+    "managed_by": "supervisor (/etc/supervisor/conf.d/redis.conf)",
+    "resets_on": ["supervisor restart of redis", "container restart"],
+    "limitations": [
+      "single point of failure",
+      "data lost on process restart",
+      "no replication for read scaling",
+      "no failover for write availability",
+      "no automatic discovery via DNS/Sentinel",
+      "not acceptable for broad rollout"
+    ],
+    "current_acceptance": "OK for Stage4 internal beta (rate-limit windows are short-lived; fail-open-to-memory adapter mitigates outage impact)"
+  },
+  "options_considered": [
+    {
+      "option": "single_node_no_ha",
+      "description": "Current. Single redis-server on local host, no replication.",
+      "pros": ["zero ops cost", "simplest topology"],
+      "cons": ["SPOF", "unacceptable for broad rollout SLOs"],
+      "acceptable_for": ["stage4 internal beta only"],
+      "selected": false
+    },
+    {
+      "option": "redis_sentinel",
+      "description": "Single primary + N replicas + 3 sentinel nodes for automatic failover.",
+      "pros": ["automatic failover (~30s)", "replicas absorb reads", "well-known pattern"],
+      "cons": ["complex setup (3+5 nodes minimum)", "sentinel quorum tuning", "split-brain edge cases"],
+      "acceptable_for": ["broad rollout up to ~50k req/s"],
+      "selected": false,
+      "selection_note": "viable; deferred"
+    },
+    {
+      "option": "redis_cluster",
+      "description": "6+ node cluster with hash-slot sharding and master-replica pairs.",
+      "pros": ["horizontal scaling", "automatic resharding", "built-in failover"],
+      "cons": ["client must support cluster protocol", "more nodes to manage", "cross-slot scripts are limited"],
+      "acceptable_for": ["broad rollout > 50k req/s", "multi-region future"],
+      "selected": true,
+      "selection_note": "PRELIMINARY choice for broad-rollout target topology, pending production volume forecast"
+    },
+    {
+      "option": "managed_redis_service",
+      "description": "Cloud-managed (e.g., AWS ElastiCache, GCP Memorystore, Azure Cache for Redis).",
+      "pros": ["no ops", "automatic patching", "built-in HA"],
+      "cons": ["vendor lock-in", "egress costs", "private networking constraints"],
+      "acceptable_for": ["all broad-rollout scenarios when budget allows"],
+      "selected": false,
+      "selection_note": "alternative; choose if ops capacity is limited"
+    }
+  ],
+  "recommended_target": {
+    "primary": "redis_cluster",
+    "fallback": "managed_redis_service",
+    "min_nodes": 6,
+    "replication_factor": 1,
+    "persistence": "AOF everysec + RDB hourly",
+    "backup": "daily AOF snapshot + cross-region replica",
+    "client_library": "redis-py-cluster or native cluster support in redis>=5",
+    "key_distribution_strategy": "hash tag prefix 'af2:ratelimit:' to keep related keys on same node when possible"
+  },
+  "migration_phases": {
+    "phase_1_PREP_THIS_TASK": "decision documented; no live cluster",
+    "phase_2_STAGING": "provision 3-node cluster in staging; run V23 probe + V23 switch validation",
+    "phase_3_DUAL_WRITE": "adapter writes to both single-node and cluster simultaneously for 24-72h, compare",
+    "phase_4_CUTOVER": "flip AFFINITY_RATE_LIMIT_BACKEND endpoint to cluster URL, keep fail-open to memory",
+    "phase_5_OBSERVATION": "24-72h on cluster, replay V24 observation window",
+    "phase_6_DEPRECATE_SINGLE_NODE": "shut down single-node redis after observation clean",
+    "phase_7_BROAD_ROLLOUT_PREREQ": "required before any broad rollout consideration"
+  },
+  "rollback_plan": {
+    "phase_4_rollback": "set AFFINITY_RATE_LIMIT_BACKEND back to single-node REDIS_URL + restart",
+    "data_lost_on_rollback": "rate-limit window counters only (acceptable; sliding window self-heals in <1h)",
+    "recovery_time_objective_seconds": 60
+  },
+  "slo_targets": {
+    "availability_target": "99.95% monthly for rate-limit subsystem",
+    "latency_p99_ms": 10,
+    "max_keys_per_node": 1000000,
+    "max_memory_per_node_gb": 4,
+    "alerts": [
+      "node down > 60s",
+      "replication lag > 1s",
+      "memory > 80%",
+      "client connection errors > 1/s"
+    ]
+  },
+  "hard_invariants": [
+    "no broad rollout without HA in place",
+    "adapter must keep fail-open to memory on any cluster outage",
+    "no Borea data in Redis keys (only af2:ratelimit:* prefix)",
+    "no PII in Redis values",
+    "battle_engine.py / combat.tsx unchanged"
+  ],
+  "explicit_status": "REDIS_HA_PLAN_DOCUMENTED_DECISION_PRELIMINARY_NO_LIVE_PROVISION"
+}

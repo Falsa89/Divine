@@ -1,0 +1,16 @@
+{
+  "result_id": "affinity_gifts_public_preview_v23_safety_result",
+  "task_origin": "V23-AF2N-PUBLIC-UI-SAFETY-RECHECK",
+  "generated_at_utc": "2026-05-19T16:07:17.485388Z",
+  "ui_path": "/app/frontend/app/affinity-gifts-preview.tsx",
+  "checks": {
+    "no_post_method": true,
+    "no_put_patch_delete": true,
+    "no_borea_in_code": true,
+    "fetch_only_canary_status": true,
+    "no_runtime_toggle_word": true,
+    "no_broad_rollout_terms": true,
+    "has_accessibility": true
+  },
+  "overall_status": "PASS"
+}

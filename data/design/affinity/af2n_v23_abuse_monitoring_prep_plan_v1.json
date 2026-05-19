@@ -1,0 +1,193 @@
+{
+  "plan_id": "af2n_v23_abuse_monitoring_prep_plan_v1",
+  "task_origin": "V23-ABUSE-MONITORING-PREP",
+  "design_only": true,
+  "dashboards_live": false,
+  "alerts_live": false,
+  "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
+  "summary": "Specifica metriche, dashboard, soglie e alert per abuse monitoring di /api/affinity/gift-spend in Stage4 internal beta. Tutto in PREP (nessun pipeline live attivo, nessuna pager rotation in questo task).",
+  "metrics": [
+    {
+      "metric": "af2_gift_spend_total",
+      "type": "counter",
+      "labels": ["http_status", "hero_id", "is_allowlist"],
+      "description": "Total POST /api/affinity/gift-spend per status, hero, allowlist membership"
+    },
+    {
+      "metric": "af2_gift_spend_5xx_total",
+      "type": "counter",
+      "labels": ["http_status"],
+      "description": "5xx errors on gift-spend"
+    },
+    {
+      "metric": "af2_gift_spend_borea_404_total",
+      "type": "counter",
+      "labels": ["hero_alias"],
+      "description": "Borea alias probe counter (should be CONSTANT, any drop = alert)"
+    },
+    {
+      "metric": "af2_gift_spend_unauthorized_success_total",
+      "type": "counter",
+      "labels": ["user_id_prefix"],
+      "description": "Any 200 on non-allowlist user (MUST stay 0)"
+    },
+    {
+      "metric": "af2_ratelimit_429_total",
+      "type": "counter",
+      "labels": ["reason", "backend"],
+      "description": "Rate-limit rejections"
+    },
+    {
+      "metric": "af2_ratelimit_redis_fail_open_total",
+      "type": "counter",
+      "labels": [],
+      "description": "Times redis store failed and fell open to memory"
+    },
+    {
+      "metric": "af2_ledger_total_rows",
+      "type": "gauge",
+      "description": "Current ledger row count"
+    },
+    {
+      "metric": "af2_ledger_cap_headroom",
+      "type": "gauge",
+      "description": "ledger_cap - ledger_total_rows; alert when < 10% of cap"
+    },
+    {
+      "metric": "af2_inventory_negative_count",
+      "type": "gauge",
+      "description": "Documents in user_gift_inventory with quantity < 0 (MUST stay 0)"
+    },
+    {
+      "metric": "af2_inventory_affinity_delta_mismatch_total",
+      "type": "counter",
+      "description": "Per-user count of inv/aff delta inequalities"
+    },
+    {
+      "metric": "af2_gift_spend_latency_ms",
+      "type": "histogram",
+      "labels": ["path", "status"],
+      "buckets": [5, 10, 25, 50, 100, 250, 500, 1000, 2000],
+      "description": "Per-request latency"
+    }
+  ],
+  "dashboards": [
+    {
+      "dashboard_id": "af2n_stage4_overview",
+      "title": "AF2-N Stage4 Overview",
+      "panels": [
+        "gift_spend_requests_per_min by status (200/404/423/429/5xx)",
+        "borea_probe_404_per_min (sanity)",
+        "unauthorized_success_per_min (must=0)",
+        "ledger_total vs ledger_cap (with cap line)",
+        "inv_aff_delta_mismatch_total",
+        "latency p50/p95/p99",
+        "ratelimit_429 per minute by backend (redis|memory_fallback)",
+        "ratelimit_redis_fail_open_per_min"
+      ]
+    },
+    {
+      "dashboard_id": "af2n_redis_health",
+      "title": "AF2-N Rate-Limit Redis Health",
+      "panels": [
+        "redis_ping_latency_p95",
+        "redis_keys_count_af2_ratelimit",
+        "redis_pipeline_latency_p95",
+        "ratelimit_redis_fail_open_total"
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "AF2-A-001",
+      "name": "5xx surge on gift-spend",
+      "expr": "sum(rate(af2_gift_spend_5xx_total[5m])) > 0",
+      "severity": "PAGE",
+      "action": "Page oncall; flip AFFINITY_GIFT_RUNTIME_ENABLED off if persistent >1m"
+    },
+    {
+      "alert_id": "AF2-A-002",
+      "name": "Unauthorized success",
+      "expr": "sum(rate(af2_gift_spend_unauthorized_success_total[5m])) > 0",
+      "severity": "CRITICAL_PAGE",
+      "action": "Immediate rollback Stage4 via rollback_af2n_stage4_internal_beta.py"
+    },
+    {
+      "alert_id": "AF2-A-003",
+      "name": "Negative inventory detected",
+      "expr": "af2_inventory_negative_count > 0",
+      "severity": "CRITICAL_PAGE",
+      "action": "Stop inventory writes (unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED), investigate"
+    },
+    {
+      "alert_id": "AF2-A-004",
+      "name": "Inv/Aff delta mismatch",
+      "expr": "increase(af2_inventory_affinity_delta_mismatch_total[15m]) > 0",
+      "severity": "CRITICAL_PAGE",
+      "action": "Stop runtime, run V22 delta audit, investigate"
+    },
+    {
+      "alert_id": "AF2-A-005",
+      "name": "Borea alias 404 dropping",
+      "expr": "sum(rate(af2_gift_spend_borea_404_total[5m])) == 0 AND sum(rate(af2_gift_spend_total{hero_id=~'borea|greek_borea|primordial_gaia'}[5m])) > 0",
+      "severity": "PAGE",
+      "action": "Suspect Borea leak; lock down endpoint"
+    },
+    {
+      "alert_id": "AF2-A-006",
+      "name": "Ledger headroom low",
+      "expr": "af2_ledger_cap_headroom / af2_ledger_cap_total < 0.1",
+      "severity": "PAGE",
+      "action": "Cap increase plan or rollback consideration"
+    },
+    {
+      "alert_id": "AF2-A-007",
+      "name": "Rate-limit Redis fail-open burst",
+      "expr": "increase(af2_ratelimit_redis_fail_open_total[5m]) > 5",
+      "severity": "PAGE",
+      "action": "Investigate Redis outage; revert to memory backend if persistent"
+    },
+    {
+      "alert_id": "AF2-A-008",
+      "name": "Rate-limit 429 surge (abuse)",
+      "expr": "sum(rate(af2_ratelimit_429_total[5m])) by(reason) > 50",
+      "severity": "WARN",
+      "action": "Investigate per-user/IP velocity; consider tightening limits"
+    }
+  ],
+  "thresholds_to_block_broad_rollout": [
+    "any AF2-A-001 fire in last 24h",
+    "any AF2-A-002 fire EVER post-Stage4",
+    "any AF2-A-003 fire EVER post-Stage4",
+    "any AF2-A-004 fire in last 7d",
+    "any AF2-A-005 fire EVER",
+    "AF2-A-007 fire > 10x in last 24h"
+  ],
+  "runbook_links_planned": [
+    "/runbook/af2n_5xx_surge.md",
+    "/runbook/af2n_unauthorized_success.md",
+    "/runbook/af2n_negative_inventory.md",
+    "/runbook/af2n_borea_leak.md",
+    "/runbook/af2n_redis_outage.md"
+  ],
+  "on_call_rotation": {
+    "primary": "<TBD>",
+    "secondary": "<TBD>",
+    "escalation_minutes": 15
+  },
+  "implementation_phases": {
+    "phase_1_PREP_THIS_TASK": "Specify metrics/dashboards/alerts. No live pipeline.",
+    "phase_2_INSTRUMENTATION": "Add prometheus_client counters/gauges/histograms in route + adapter. Gated, no expose endpoint until phase_3.",
+    "phase_3_EXPOSE_SCRAPE": "Add /metrics endpoint (internal only, basic auth) and prometheus scrape config.",
+    "phase_4_DASHBOARDS": "Build dashboards in observability tool.",
+    "phase_5_ALERTS": "Wire alert rules + pager rotation.",
+    "phase_6_BROAD_ROLLOUT_PREREQ": "Required before any broad rollout consideration."
+  },
+  "safety_invariants": [
+    "no broad rollout", "no public spend UI", "no battle wiring",
+    "no Borea reveal", "no gacha/roster/catalog mutation",
+    "no DB writes from instrumentation"
+  ],
+  "broad_rollout_prerequisite": true,
+  "explicit_status": "PREP_ABUSE_MONITORING_PLAN_NO_LIVE_PIPELINE"
+}
