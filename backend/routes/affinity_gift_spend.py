@@ -343,7 +343,7 @@ def register_affinity_gift_spend_skeleton_routes(router):
                 try:
                     from data.affinity_metrics import inc
                     inc("af2_gift_spend_borea_404_total", {"hero_alias": hid})
-                    inc("af2_gift_spend_total", {"http_status": "404", "borea": "1"})
+                    inc("af2_gift_spend_total", {"http_status": "404", "hidden_alias_flag": "1"})
                 except Exception:
                     pass
                 raise HTTPException(404, "forbidden hero alias")
