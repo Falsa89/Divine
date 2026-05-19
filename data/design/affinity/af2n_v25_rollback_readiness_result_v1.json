@@ -1,0 +1,26 @@
+{
+  "task_origin": "AF2-N-V25-ROLLBACK-READINESS",
+  "timestamp_utc": "2026-05-19T22:22:26.387124+00:00",
+  "mode": "DRY_RUN_CHECK",
+  "production_db_touched": false,
+  "checks": {
+    "stage4_runtime_flag_present": true,
+    "rate_limit_backend_switchable": true,
+    "redis_recovery_script_present": true,
+    "inventory_writes_flag_switchable": true,
+    "supervisor_conf_present": true,
+    "db_backups_readable": true,
+    "db_backup_files_count": 19,
+    "clone_drill_pass": true,
+    "clone_drill_verdict_pass": true
+  },
+  "rollback_paths_available": [
+    "stage4_runtime_disable: unset AFFINITY_GIFT_RUNTIME_ENABLED in backend.conf + restart",
+    "redis_switch_rollback: set AFFINITY_RATE_LIMIT_BACKEND=memory + restart",
+    "redis_restart_recovery: bash /app/ops/ensure_redis_rate_limit.sh",
+    "inventory_writes_rollback: unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart",
+    "full_af2n_rollback: unset all AF2-N env vars + restart",
+    "clone_data_rollback: python3 /app/backend/scripts/run_af2n_v24_clone_rollback_drill.py (non-destructive)"
+  ],
+  "verdict": "PASS"
+}

@@ -1,0 +1,59 @@
+{
+  "task_origin": "AF2-N-V25-REDIS-RESTART-DRILL",
+  "mode": "SAFE_LIVE_RESTART",
+  "timestamp_utc": "2026-05-19T22:21:54.649003+00:00",
+  "steps": [
+    {
+      "step": "1_pre_state",
+      "redis_status": "redis                            RUNNING   pid 756, uptime 0:23:43",
+      "redis_ping": "PONG",
+      "canary_http": 200,
+      "canary_backend": "redis"
+    },
+    {
+      "step": "2_supervisor_restart",
+      "cmd_rc": 0,
+      "stdout": "redis: stopped\nredis: started"
+    },
+    {
+      "step": "3_post_restart_pong",
+      "attempts": [
+        "PONG"
+      ],
+      "recovered": true
+    },
+    {
+      "step": "4_backend_canary_post",
+      "http": 200,
+      "rate_limit_backend": "redis",
+      "still_redis": true
+    },
+    {
+      "step": "5_burst_post_restart",
+      "sequence": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        429,
+        429,
+        429,
+        429
+      ],
+      "at_least_one_429": true,
+      "no_5xx": true
+    },
+    {
+      "step": "6_borea_post_restart",
+      "codes": {
+        "borea": 404,
+        "greek_borea": 404,
+        "primordial_gaia": 404
+      },
+      "all_404": true
+    }
+  ],
+  "verdict": "PASS"
+}

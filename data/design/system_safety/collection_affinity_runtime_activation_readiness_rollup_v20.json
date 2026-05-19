@@ -1,0 +1,32 @@
+{
+  "task_origin": "AF2-N-V25-SAFETY-ROLLUP-T",
+  "version": "v20",
+  "timestamp_utc": "2026-05-19T22:25:11.174823+00:00",
+  "state": "stage4_internal_beta_active_no_broad_rollout",
+  "redis_ops_recovery_status": "CLOSED",
+  "redis_restart_drill_status": "CLOSED",
+  "fail_open_alerting_status": "CLOSED",
+  "support_runbook_status": "CLOSED",
+  "economy_stress_status": "CLOSED",
+  "blocker_matrix_v4_status": "CLOSED",
+  "observation_v25_status": "CLOSED",
+  "rollback_readiness_status": "CLOSED",
+  "ui_safety_status": "CLOSED",
+  "api_heroes_count_100": true,
+  "heroes_count_observed": 100,
+  "borea_hidden": true,
+  "borea_leak_aliases": [],
+  "rate_limit_backend": "redis",
+  "runtime_attached": true,
+  "broad_rollout_authorized": false,
+  "public_spend_ui": false,
+  "battle_wiring_live": false,
+  "battle_runtime_attached": false,
+  "guardrails_clean": {
+    "backend/battle_engine.py": true,
+    "backend/battle_core.py": true,
+    "frontend/app/combat.tsx": true
+  },
+  "all_v25_parts_closed": true,
+  "verdict": "PASS"
+}

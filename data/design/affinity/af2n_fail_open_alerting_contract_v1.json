@@ -1,0 +1,118 @@
+{
+  "task_origin": "AF2-N-V25-FAIL-OPEN-ALERTING-CONTRACT",
+  "version": "v1",
+  "timestamp_utc": "2026-05-19T22:21:57.041197+00:00",
+  "stage": "stage4_internal_beta_active_no_broad_rollout",
+  "rules": [
+    {
+      "id": "redis_fail_open",
+      "metric": "af2_ratelimit_redis_fail_open_total",
+      "op": ">",
+      "threshold": 100,
+      "window_minutes": 60,
+      "severity": "P1",
+      "action": "page_oncall",
+      "description": "Rate-limit fell back to in-memory: Redis likely unreachable."
+    },
+    {
+      "id": "redis_unavailable",
+      "metric": "redis_ping_pong",
+      "op": "!=",
+      "threshold": "PONG",
+      "window_minutes": 1,
+      "severity": "P0",
+      "action": "page_oncall_immediate",
+      "description": "Redis healthcheck failed."
+    },
+    {
+      "id": "rate_limit_backend_not_redis",
+      "metric": "canary_status.rate_limit_backend",
+      "op": "!=",
+      "threshold": "redis",
+      "window_minutes": 5,
+      "severity": "P1",
+      "action": "page_oncall",
+      "description": "Backend silently switched off Redis rate-limit."
+    },
+    {
+      "id": "rate_limit_429_drop_under_burst",
+      "metric": "af2_ratelimit_429_total_rate",
+      "op": "==",
+      "threshold": 0,
+      "window_minutes": 5,
+      "severity": "P2",
+      "action": "investigate",
+      "description": "Burst-induced 429 not firing: rate-limit potentially bypassed."
+    },
+    {
+      "id": "unauthorized_success",
+      "metric": "af2_unauthorized_gift_spend_success_total",
+      "op": ">",
+      "threshold": 0,
+      "window_minutes": 1,
+      "severity": "P0",
+      "action": "page_oncall_immediate",
+      "description": "Spend from non-allowlist user succeeded."
+    },
+    {
+      "id": "borea_success",
+      "metric": "af2_borea_gift_spend_success_total",
+      "op": ">",
+      "threshold": 0,
+      "window_minutes": 1,
+      "severity": "P0",
+      "action": "page_oncall_immediate",
+      "description": "CRITICAL: Borea / hidden alias accepted by gift-spend."
+    },
+    {
+      "id": "negative_inventory",
+      "metric": "af2_inventory_negative_balance_total",
+      "op": ">",
+      "threshold": 0,
+      "window_minutes": 5,
+      "severity": "P0",
+      "action": "page_oncall_immediate",
+      "description": "Inventory delta produced negative balance."
+    },
+    {
+      "id": "delta_mismatch",
+      "metric": "af2_inventory_delta_mismatch_total",
+      "op": ">",
+      "threshold": 0,
+      "window_minutes": 10,
+      "severity": "P1",
+      "action": "page_oncall",
+      "description": "Inventory delta vs ledger mismatch detected."
+    },
+    {
+      "id": "5xx_threshold",
+      "metric": "af2_gift_spend_5xx_total_rate",
+      "op": ">",
+      "threshold": 1,
+      "window_minutes": 5,
+      "severity": "P0",
+      "action": "page_oncall_immediate",
+      "description": "5xx rate above safety threshold (Stage 4 must be 0)."
+    }
+  ],
+  "rule_count": 9,
+  "safety": {
+    "no_pii": true,
+    "no_secrets": true,
+    "no_mutation": true,
+    "read_only": true,
+    "observation_only": true
+  },
+  "integration_targets": [
+    "supervisor logs",
+    "redis-cli",
+    "gift-spend metrics-snapshot",
+    "canary-status"
+  ],
+  "severities_present": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "verdict": "PASS"
+}

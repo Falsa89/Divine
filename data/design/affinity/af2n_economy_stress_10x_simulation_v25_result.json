@@ -1,0 +1,117 @@
+{
+  "task_origin": "AF2-N-V25-ECONOMY-STRESS-10X-SIMULATION",
+  "mode": "READ_ONLY_SIMULATION",
+  "timestamp_utc": "2026-05-19T22:22:25.247859+00:00",
+  "live_mutations": 0,
+  "current_state": {
+    "allowlist_size": 700,
+    "cap": 5000,
+    "ledger_now": 144,
+    "rl_user_per_min": 30,
+    "rl_user_per_hour": 240,
+    "rl_ip_per_min": 60,
+    "rl_burst_window_s": 10,
+    "rl_burst_max": 6
+  },
+  "scenarios": {
+    "1x": {
+      "scale_factor": 1,
+      "users_modeled": 700,
+      "ledger_cap": 5000,
+      "avg_spend_per_user": 5,
+      "spend_per_user_sigma": 2.5,
+      "expected_total_spend_events": 3500,
+      "cap_pressure_ratio": 0.7,
+      "cap_exhaustion_predicted": false,
+      "heavy_burst_users": 35,
+      "expected_429_events": 1540,
+      "expected_idempotency_replays": 70,
+      "expected_replay_rate_pct": 2.0,
+      "inventory_depleted_users": 105,
+      "affinity_points_total_inflation": 280000,
+      "redis_ops_per_sec_peak_estimate": 1.22,
+      "redis_capacity_headroom_ok": true
+    },
+    "2x": {
+      "scale_factor": 2,
+      "users_modeled": 1400,
+      "ledger_cap": 10000,
+      "avg_spend_per_user": 5,
+      "spend_per_user_sigma": 2.5,
+      "expected_total_spend_events": 7000,
+      "cap_pressure_ratio": 0.7,
+      "cap_exhaustion_predicted": false,
+      "heavy_burst_users": 70,
+      "expected_429_events": 3080,
+      "expected_idempotency_replays": 140,
+      "expected_replay_rate_pct": 2.0,
+      "inventory_depleted_users": 210,
+      "affinity_points_total_inflation": 560000,
+      "redis_ops_per_sec_peak_estimate": 2.43,
+      "redis_capacity_headroom_ok": true
+    },
+    "5x": {
+      "scale_factor": 5,
+      "users_modeled": 3500,
+      "ledger_cap": 25000,
+      "avg_spend_per_user": 5,
+      "spend_per_user_sigma": 2.5,
+      "expected_total_spend_events": 17500,
+      "cap_pressure_ratio": 0.7,
+      "cap_exhaustion_predicted": false,
+      "heavy_burst_users": 175,
+      "expected_429_events": 7700,
+      "expected_idempotency_replays": 350,
+      "expected_replay_rate_pct": 2.0,
+      "inventory_depleted_users": 525,
+      "affinity_points_total_inflation": 1400000,
+      "redis_ops_per_sec_peak_estimate": 6.08,
+      "redis_capacity_headroom_ok": true
+    },
+    "10x": {
+      "scale_factor": 10,
+      "users_modeled": 7000,
+      "ledger_cap": 50000,
+      "avg_spend_per_user": 5,
+      "spend_per_user_sigma": 2.5,
+      "expected_total_spend_events": 35000,
+      "cap_pressure_ratio": 0.7,
+      "cap_exhaustion_predicted": false,
+      "heavy_burst_users": 350,
+      "expected_429_events": 15400,
+      "expected_idempotency_replays": 700,
+      "expected_replay_rate_pct": 2.0,
+      "inventory_depleted_users": 1050,
+      "affinity_points_total_inflation": 2800000,
+      "redis_ops_per_sec_peak_estimate": 12.15,
+      "redis_capacity_headroom_ok": true
+    }
+  },
+  "recommendations": [
+    {
+      "severity": "P2",
+      "msg": "Expected idempotency replays at 10x = 700. Ensure idempotency_key index is unique + sparse on ledger."
+    },
+    {
+      "severity": "P2",
+      "msg": "Expected 429 events at 10x = 15,400. Customer-facing message should be friendly and informative."
+    },
+    {
+      "severity": "P3",
+      "msg": "Inventory depletion at 10x: 1,050 users. Plan refill or replenishment mechanic before broad rollout."
+    },
+    {
+      "severity": "P1",
+      "msg": "Before broad rollout: provision Managed Redis (V26 gate), align ledger cap to 10x projected events, and verify idempotency index uniqueness in CI."
+    }
+  ],
+  "recommendations_count": 4,
+  "safety": {
+    "no_db_mutation": true,
+    "no_http_calls": true,
+    "no_broad_rollout": true,
+    "no_borea_data": true,
+    "no_pii": true
+  },
+  "verdict": "PASS"
+}

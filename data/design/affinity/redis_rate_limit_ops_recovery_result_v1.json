@@ -1,0 +1,38 @@
+{
+  "task_origin": "AF2-N-V25-REDIS-OPS-RECOVERY-AUDIT",
+  "timestamp_utc": "2026-05-19T22:21:54.320811+00:00",
+  "files": {
+    "/app/ops/ensure_redis_rate_limit.sh": {
+      "exists": true,
+      "executable_or_md": true,
+      "size_bytes": 2870,
+      "missing_tokens": []
+    },
+    "/app/ops/restore_redis_supervisor_service.sh": {
+      "exists": true,
+      "executable_or_md": true,
+      "size_bytes": 815,
+      "missing_tokens": []
+    },
+    "/app/ops/README_REDIS_RATE_LIMIT_RECOVERY.md": {
+      "exists": true,
+      "executable_or_md": true,
+      "size_bytes": 2385,
+      "missing_tokens": []
+    }
+  },
+  "live_recovery_test": {
+    "returncode": 0,
+    "stdout_tail": [
+      "[ensure-redis-rl] redis-server already present: /usr/bin/redis-server",
+      "[ensure-redis-rl] current supervisor redis status: RUNNING",
+      "[ensure-redis-rl] PONG attempt=1",
+      "[ensure-redis-rl] backend rate_limit_backend=redis",
+      "[ensure-redis-rl] OK \u2014 Redis rate-limit operational"
+    ],
+    "stderr_tail": [],
+    "idempotent_ok": true
+  },
+  "fails": [],
+  "verdict": "PASS"
+}

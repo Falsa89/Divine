@@ -308,6 +308,22 @@ OPTIONAL = [
     ('V24-ROLLBACK-READINESS',                     'validate_af2n_v24_rollback_readiness.py'),
     ('SAFETY-ROLLUP-S',                            'validate_collection_affinity_runtime_activation_rollup_v19.py'),
     ('ULTRA-COMBO-V24',                            'validate_ultra_combo_v24_observation_abuse_rollback_redisHA.py'),
+    # ULTRA-COMBO V25 (REDIS OPS HARDENING + FAIL-OPEN ALERTING + SUPPORT
+    #                  RUNBOOK + ECONOMY STRESS 10X + BLOCKER MATRIX V4
+    #                  + SAFETY-ROLLUP-T)
+    ('V25-PREFLIGHT',                              'validate_af2n_v25_preflight.py'),
+    ('AF2-N-V25-REDIS-OPS-RECOVERY',               'validate_redis_rate_limit_ops_recovery.py'),
+    ('AF2-N-V25-REDIS-RESTART-DRILL',              'validate_redis_rate_limit_restart_drill_v25.py'),
+    ('AF2-N-V25-FAIL-OPEN-ALERTING-CONTRACT',      'validate_af2n_fail_open_alerting_contract.py'),
+    ('AF2-N-V25-ALERTING-READONLY-STATUS',         'audit_af2n_alerting_readonly_status.py'),
+    ('AF2-N-V25-SUPPORT-RUNBOOK',                  'validate_af2n_stage4_support_runbook_v25.py'),
+    ('AF2-N-V25-ECONOMY-STRESS-10X',               'validate_af2n_economy_stress_10x_simulation_v25.py'),
+    ('AF2-N-V25-BLOCKER-MATRIX-V4',                'validate_af2n_broad_rollout_blocker_matrix_v4.py'),
+    ('AF2-N-V25-OBSERVATION-WINDOW',               'validate_af2n_stage4_observation_window_v25.py'),
+    ('AF2-N-PUBLIC-UI-V25-SAFETY',                 'audit_affinity_gifts_public_preview_v25_safety.py'),
+    ('V25-ROLLBACK-READINESS',                     'validate_af2n_v25_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-T',                            'validate_collection_affinity_runtime_activation_rollup_v20.py'),
+    ('ULTRA-COMBO-V25',                            'validate_ultra_combo_v25_redis_ops_support_economy.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
