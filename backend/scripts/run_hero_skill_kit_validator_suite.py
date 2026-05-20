@@ -324,6 +324,23 @@ OPTIONAL = [
     ('V25-ROLLBACK-READINESS',                     'validate_af2n_v25_rollback_readiness.py'),
     ('SAFETY-ROLLUP-T',                            'validate_collection_affinity_runtime_activation_rollup_v20.py'),
     ('ULTRA-COMBO-V25',                            'validate_ultra_combo_v25_redis_ops_support_economy.py'),
+    # ULTRA-COMBO V26 (MANAGED REDIS READINESS + CAP RAISE PLAN + INVENTORY
+    #                  SCOPE EXPANSION + BROAD ROLLOUT SIGNOFF V6 PLAN-ONLY
+    #                  + ALERTING INTEGRATION PREP + FRONTEND SMOKE + STRESS 2X
+    #                  + SAFETY-ROLLUP-U)
+    ('V26-PREFLIGHT',                              'validate_af2n_v26_preflight.py'),
+    ('AF2-N-V26-MANAGED-REDIS-READINESS',          'validate_affinity_managed_redis_readiness.py'),
+    ('AF2-N-V26-CAP-RAISE-PLAN',                   'validate_af2n_cap_raise_plan.py'),
+    ('AF2-N-V26-INVENTORY-SCOPE-PLAN',             'validate_af2n_inventory_scope_expansion_plan.py'),
+    ('AF2-N-V26-BROAD-ROLLOUT-SIGNOFF-V6',         'validate_af2n_broad_rollout_signoff_package_v6.py'),
+    ('AF2-N-V26-ALERTING-INTEGRATION-PREP',        'audit_af2n_alerting_integration_prep.py'),
+    ('AF2-N-V26-FRONTEND-SMOKE',                   'audit_affinity_gifts_frontend_smoke_v26.py'),
+    ('AF2-N-V26-STRESS-2X',                        'validate_af2n_stress_2x_v26.py'),
+    ('AF2-N-V26-BLOCKER-MATRIX-V5',                'validate_af2n_broad_rollout_blocker_matrix_v5.py'),
+    ('AF2-N-V26-OBSERVATION-WINDOW',               'validate_af2n_stage4_observation_window_v26.py'),
+    ('V26-ROLLBACK-READINESS',                     'validate_af2n_v26_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-U',                            'validate_collection_affinity_runtime_activation_rollup_v21.py'),
+    ('ULTRA-COMBO-V26',                            'validate_ultra_combo_v26_broad_readiness_plan.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

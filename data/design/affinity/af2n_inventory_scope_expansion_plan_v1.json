@@ -1,0 +1,111 @@
+{
+  "task_origin": "AF2-N-V26-INVENTORY-SCOPE-EXPANSION-PLAN",
+  "version": "v1",
+  "status": "PLAN_ONLY",
+  "live_expansion_in_v26": false,
+  "current_scope": "Stage1 subset (~150 users)",
+  "target_scope": "broad rollout all eligible",
+  "stages": [
+    {
+      "stage": "S0_current",
+      "users_with_inventory_writes": "~150 (Stage1 subset)",
+      "description": "AFFINITY_GIFT_INVENTORY_WRITES_ENABLED true for Stage1 allowlist subset.",
+      "risk_level": "LOW"
+    },
+    {
+      "stage": "S1_full_stage4",
+      "users_with_inventory_writes": 700,
+      "description": "Expand to all Stage 4 allowlist (700 QA users).",
+      "prereq": [
+        "cap raise plan S1 approved",
+        "support runbook V25",
+        "all V25 P0 closed"
+      ],
+      "risk_level": "LOW",
+      "seed_strategy": "opt-in per user; never blanket; idempotent INSERT-IF-MISSING",
+      "reconciliation": "V22 inventory delta audit must PASS daily",
+      "rollback": "unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart"
+    },
+    {
+      "stage": "S2_internal_beta_2k",
+      "users_with_inventory_writes": 2500,
+      "description": "Internal Beta expansion. Allowlist still required.",
+      "prereq": [
+        "Managed Redis ready",
+        "cap S1 \u2192 S2",
+        "alerting integration live",
+        "observation 72h post-S1"
+      ],
+      "risk_level": "MEDIUM",
+      "seed_strategy": "opt-in + cohort batch (\u2264500 users/day)",
+      "rollback": "freeze writes flag; ledger remains read-only"
+    },
+    {
+      "stage": "S3_internal_beta_full",
+      "users_with_inventory_writes": 7000,
+      "prereq": [
+        "Multi-AZ Redis",
+        "broad rollout signoff V6 approved",
+        "support staffing 24/7"
+      ],
+      "risk_level": "MEDIUM-HIGH",
+      "seed_strategy": "opt-in only; daily reconciliation",
+      "rollback": "unset flag + clone rollback drill ready"
+    },
+    {
+      "stage": "S4_broad_rollout",
+      "users_with_inventory_writes": "all eligible",
+      "prereq": [
+        "ALL of S3 + STACK-G decision separate"
+      ],
+      "risk_level": "HIGH",
+      "gate": "Explicit final user approval per signoff V6"
+    }
+  ],
+  "constraints": {
+    "anti_negative_inventory": {
+      "rule": "inventory updates use $inc with explicit lower-bound check",
+      "enforcement": "application + index integrity; never go below 0",
+      "alert": "V25 alert rule negative_inventory P0"
+    },
+    "reconciliation_strategy": {
+      "frequency": "daily",
+      "script": "/app/backend/scripts/validate_affinity_inventory_delta_consistency_v23.py",
+      "tolerance": "zero mismatches"
+    },
+    "borea_hidden_invariant": {
+      "enforcement": "gift-spend route rejects Borea/greek_borea/primordial_gaia BEFORE any inventory mutation",
+      "verified_in": [
+        "V21 audit",
+        "V22 audit",
+        "V23 audit",
+        "V24 audit",
+        "V25 audit",
+        "V26 preflight"
+      ],
+      "must_remain": true
+    },
+    "support_ops": {
+      "runbook": "/app/docs/divine/85_AF2N_STAGE4_SUPPORT_RUNBOOK_V25.md",
+      "escalation_matrix": "V25 \u00a79",
+      "inventory_issue_section": "V25 \u00a74"
+    }
+  },
+  "rollback_steps": [
+    "1. unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED in backend.conf",
+    "2. restart backend",
+    "3. verify canary-status inventory_mutation_enabled=false",
+    "4. ledger remains intact, reads still allowed",
+    "RTO target: <90s"
+  ],
+  "safety": {
+    "no_live_expansion_v26": true,
+    "borea_hidden_preserved": true,
+    "anti_negative_inventory_enforced": true,
+    "rollback_per_stage_documented": true,
+    "no_unauthorized_spend": true
+  },
+  "broad_rollout_authorized": false,
+  "verdict": "PASS",
+  "timestamp_utc": "2026-05-20T15:46:06.325566+00:00"
+}

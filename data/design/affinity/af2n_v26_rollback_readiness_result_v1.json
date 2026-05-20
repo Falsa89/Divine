@@ -1,0 +1,29 @@
+{
+  "task_origin": "AF2-N-V26-ROLLBACK-READINESS",
+  "timestamp_utc": "2026-05-20T15:46:07.467350+00:00",
+  "mode": "DRY_RUN_CHECK",
+  "production_db_touched": false,
+  "checks": {
+    "stage4_runtime_flag_switchable": true,
+    "redis_local_fallback_switchable": true,
+    "managed_redis_rollback_plan_present": true,
+    "inventory_writes_flag_switchable": true,
+    "broad_rollout_not_active": true,
+    "supervisor_conf_present": true,
+    "redis_recovery_script_present_and_exec": true,
+    "db_backups_present": true,
+    "clone_drill_verdict_pass": true,
+    "v25_rollback_readiness_pass": true
+  },
+  "rollback_paths": [
+    "stage4_runtime_disable: unset AFFINITY_GIFT_RUNTIME_ENABLED + restart",
+    "redis_backend_local: AFFINITY_RATE_LIMIT_BACKEND=redis (current default)",
+    "redis_backend_memory_fallback: unset REDIS_URL or set AFFINITY_RATE_LIMIT_BACKEND=memory",
+    "managed_redis_rollback: set AFFINITY_RATE_LIMIT_BACKEND=redis + remove REDIS_MANAGED_URL",
+    "inventory_writes_rollback: unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart",
+    "cap_rollback_per_stage: set AFFINITY_GIFT_CANARY_LEDGER_CAP back to previous stage",
+    "broad_rollout_not_active: stays gated by definition until explicit approval",
+    "clone_data_rollback: V24 non-destructive drill script"
+  ],
+  "verdict": "PASS"
+}

@@ -1,0 +1,108 @@
+{
+  "task_origin": "AF2-N-V26-ALERTING-INTEGRATION-PLAN",
+  "version": "v1",
+  "status": "PLAN_ONLY",
+  "live_integration_in_v26": false,
+  "sinks_evaluated": [
+    {
+      "sink": "prometheus",
+      "protocol": "HTTP scrape",
+      "endpoint_planned": "/api/affinity/gift-spend/_admin/metrics-prometheus",
+      "status": "PLAN_ONLY",
+      "env_vars": [],
+      "secret_required": false,
+      "pros": [
+        "standard",
+        "self-hosted",
+        "grafana ecosystem"
+      ],
+      "cons": [
+        "cardinality if labels grow"
+      ]
+    },
+    {
+      "sink": "pagerduty",
+      "protocol": "Events API v2",
+      "endpoint": "https://events.pagerduty.com/v2/enqueue",
+      "env_vars": [
+        "PAGERDUTY_ROUTING_KEY"
+      ],
+      "secret_required": true,
+      "status": "PLAN_ONLY",
+      "pros": [
+        "real on-call paging",
+        "severity routing"
+      ],
+      "cons": [
+        "cost",
+        "requires secret management"
+      ]
+    },
+    {
+      "sink": "slack",
+      "protocol": "Incoming Webhook",
+      "endpoint": "https://hooks.slack.com/services/<workspace>/<channel>/<token>",
+      "env_vars": [
+        "SLACK_WEBHOOK_URL"
+      ],
+      "secret_required": true,
+      "status": "PLAN_ONLY",
+      "pros": [
+        "cheap",
+        "fast iteration"
+      ],
+      "cons": [
+        "not for true on-call alerts"
+      ]
+    },
+    {
+      "sink": "generic_webhook",
+      "protocol": "HTTP POST",
+      "endpoint": "<configurable>",
+      "env_vars": [
+        "ALERT_WEBHOOK_URL",
+        "ALERT_WEBHOOK_AUTH_HEADER"
+      ],
+      "secret_required": true,
+      "status": "PLAN_ONLY",
+      "pros": [
+        "provider-agnostic"
+      ],
+      "cons": [
+        "custom auth handling"
+      ]
+    },
+    {
+      "sink": "local_mock_sink",
+      "protocol": "file appender",
+      "endpoint": "/app/data/design/affinity/af2n_alerting_local_mock_sink.log",
+      "env_vars": [],
+      "secret_required": false,
+      "status": "AVAILABLE_NOW",
+      "pros": [
+        "no secrets",
+        "safe for dev/test"
+      ],
+      "cons": [
+        "not for production"
+      ]
+    }
+  ],
+  "sink_count": 5,
+  "secrets_in_repo": false,
+  "v25_contract_present": true,
+  "v25_contract_rules_count": 9,
+  "recommended_phase_0": "local_mock_sink (file appender) for dev/test",
+  "recommended_phase_1": "prometheus scrape + slack webhook for warnings",
+  "recommended_phase_2": "prometheus + pagerduty for P0/P1 incidents",
+  "safety": {
+    "no_secrets_committed": true,
+    "no_live_external_calls_v26": true,
+    "no_pii_in_alert_payloads": true,
+    "no_borea_data_in_alerts": true,
+    "read_only_metrics_source": true
+  },
+  "broad_rollout_blocker_remains": true,
+  "verdict": "PASS",
+  "timestamp_utc": "2026-05-20T15:46:06.383273+00:00"
+}

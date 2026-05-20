@@ -1,0 +1,24 @@
+{
+  "task_origin": "AF2-N-V26-FRONTEND-SMOKE",
+  "timestamp_utc": "2026-05-20T15:51:22.376811+00:00",
+  "mode": "READ_ONLY",
+  "file_present": true,
+  "http_checks": {
+    "frontend_preview_route": 200,
+    "backend_canary_status": 200,
+    "frontend_reachable": true,
+    "backend_canary_ok": true
+  },
+  "static_checks": {
+    "critical_findings": [],
+    "critical_count": 0,
+    "fetch_method_get_only": true,
+    "mentions_borea_id": false,
+    "file_size_bytes": 8349
+  },
+  "a11y_check": {
+    "a11y_hits": 16,
+    "a11y_present": true
+  },
+  "verdict": "PASS"
+}

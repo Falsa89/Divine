@@ -1,0 +1,87 @@
+{
+  "task_origin": "AF2-N-V26-STRESS-2X",
+  "mode": "SIMULATION_PLUS_SAFE_LIVE_PROBE",
+  "started_at_utc": "2026-05-20T15:46:06.526468+00:00",
+  "ended_at_utc": "2026-05-20T15:46:06.998094+00:00",
+  "simulation_2x": {
+    "mode": "READ_ONLY",
+    "users_2x": 1400,
+    "cap_2x": 10000,
+    "avg_spend_per_user": 5,
+    "expected_total_events": 7000,
+    "cap_pressure_2x": 0.7,
+    "expected_429_2x": 3080,
+    "expected_redis_ops_per_sec_peak_2x": 2.43
+  },
+  "live_probe": {
+    "borea_probes": {
+      "attempted": 30,
+      "codes_404": 30,
+      "stats": {
+        "p50_ms": 0.54,
+        "p95_ms": 0.65,
+        "max_ms": 1.02,
+        "avg_ms": 0.57,
+        "count": 30
+      }
+    },
+    "controlled_spend": {
+      "attempted": 5,
+      "codes_ok": 5,
+      "stats": {
+        "p50_ms": 8.52,
+        "p95_ms": 9.17,
+        "max_ms": 29.92,
+        "avg_ms": 12.76,
+        "count": 5
+      }
+    },
+    "burst_probe": {
+      "attempted": 30,
+      "codes_429": 24,
+      "codes_5xx": 0,
+      "stats": {
+        "p50_ms": 0.83,
+        "p95_ms": 6.92,
+        "max_ms": 25.1,
+        "avg_ms": 2.6,
+        "count": 30
+      }
+    },
+    "non_allowlist": {
+      "attempted": 30,
+      "codes_blocked": 30,
+      "stats": {
+        "p50_ms": 0.85,
+        "p95_ms": 1.21,
+        "max_ms": 1.72,
+        "avg_ms": 0.93,
+        "count": 30
+      }
+    }
+  },
+  "ledger": {
+    "pre": 161,
+    "post": 172,
+    "delta": 11
+  },
+  "redis_dbsize": {
+    "pre": -1,
+    "post": -1
+  },
+  "totals": {
+    "borea_404_rate": "30/30",
+    "controlled_spend_ok_rate": "5/5",
+    "non_allowlist_blocked_rate": "30/30",
+    "burst_429_count": 24,
+    "total_5xx": 0,
+    "unauthorized_success": 0
+  },
+  "safety": {
+    "no_unauthorized_spend": true,
+    "no_5xx": true,
+    "borea_invariant_held": true,
+    "ledger_delta_le_cap_step": false
+  },
+  "verdict": "PASS"
+}
