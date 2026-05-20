@@ -1,0 +1,89 @@
+{
+  "task_origin": "AF2-N-V29-SCOPE-S1-EXTENDED-MONITORING",
+  "mode": "PHASED_HIGH_VOLUME_SAFE",
+  "started_at_utc": "2026-05-20T21:34:38.091098+00:00",
+  "ended_at_utc": "2026-05-20T21:34:45.801569+00:00",
+  "total_samples": 1775,
+  "fresh_spend_count": 15,
+  "fresh_spend_cap_observed": 15,
+  "phases": {
+    "status_burst": {
+      "attempted": 800,
+      "ok_codes": 800,
+      "stats": {
+        "p50_ms": 6.21,
+        "p95_ms": 8.34,
+        "p99_ms": 10.48,
+        "max_ms": 29.34
+      }
+    },
+    "borea_aliases": {
+      "attempted": 200,
+      "404_count": 200,
+      "stats": {
+        "p50_ms": 0.6,
+        "p95_ms": 0.9,
+        "p99_ms": 1.15,
+        "max_ms": 4.67
+      }
+    },
+    "non_allowlist": {
+      "attempted": 400,
+      "blocked_count": 400,
+      "stats": {
+        "p50_ms": 0.91,
+        "p95_ms": 1.68,
+        "p99_ms": 2.42,
+        "max_ms": 24.74
+      }
+    },
+    "burst": {
+      "attempted": 300,
+      "429_count": 294,
+      "5xx_count": 0,
+      "stats": {
+        "p50_ms": 0.89,
+        "p95_ms": 1.21,
+        "p99_ms": 8.25,
+        "max_ms": 9.45
+      }
+    },
+    "fresh_controlled": {
+      "attempted": 15,
+      "ok_count": 15,
+      "stats": {
+        "p50_ms": 9.47,
+        "p95_ms": 9.97,
+        "p99_ms": 9.97,
+        "max_ms": 10.23
+      }
+    },
+    "idempotent_replay": {
+      "attempted": 30,
+      "replay_ok": 30,
+      "stats": {
+        "p50_ms": 5.34,
+        "p95_ms": 7.05,
+        "p99_ms": 8.59,
+        "max_ms": 319.87
+      }
+    }
+  },
+  "canary_status_final": {
+    "rate_limit_backend": "redis",
+    "ledger_total_rows": 379,
+    "canary_ledger_cap": 25000,
+    "canary_allowlist_size": 2500
+  },
+  "totals": {
+    "total_5xx": 0,
+    "unauthorized_success_count": 0
+  },
+  "safety": {
+    "no_unauthorized_spend": true,
+    "no_5xx": true,
+    "borea_invariant_held": true,
+    "fresh_spend_within_cap": true
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,85 @@
+{
+  "task_origin": "AF2-N-V29-STRESS-8X",
+  "mode": "SIMULATION_PLUS_SAFE_LIVE_PROBE",
+  "started_at_utc": "2026-05-20T21:34:01.739730+00:00",
+  "ended_at_utc": "2026-05-20T21:34:02.535517+00:00",
+  "simulation_8x": {
+    "mode": "SIMULATION",
+    "users_8x": 5600,
+    "avg_spend_per_user": 5,
+    "expected_total_events": 28000,
+    "cap_pressure_against_25k": 1.12,
+    "redis_ops_per_sec_peak_est": 11.67
+  },
+  "live_probe": {
+    "borea": {
+      "attempted": 80,
+      "404_count": 80,
+      "stats": {
+        "p50_ms": 0.57,
+        "p95_ms": 0.74,
+        "p99_ms": 1.01,
+        "max_ms": 3.06
+      }
+    },
+    "fresh_controlled": {
+      "attempted": 10,
+      "ok_count": 10,
+      "stats": {
+        "p50_ms": 8.86,
+        "p95_ms": 9.32,
+        "p99_ms": 9.32,
+        "max_ms": 9.38
+      }
+    },
+    "non_allowlist": {
+      "attempted": 100,
+      "blocked_count": 100,
+      "stats": {
+        "p50_ms": 1.38,
+        "p95_ms": 1.62,
+        "p99_ms": 1.91,
+        "max_ms": 2.42
+      }
+    },
+    "burst": {
+      "attempted": 80,
+      "429_count": 74,
+      "5xx_count": 0,
+      "stats": {
+        "p50_ms": 0.88,
+        "p95_ms": 1.38,
+        "p99_ms": 1.48,
+        "max_ms": 2.06
+      }
+    },
+    "idempotency_replay": {
+      "attempted": 8,
+      "replay_ok": 8,
+      "stats": {
+        "p50_ms": 5.2,
+        "p95_ms": 5.48,
+        "p99_ms": 5.48,
+        "max_ms": 5.83
+      }
+    }
+  },
+  "redis_pressure": {
+    "keys_before": 0,
+    "keys_after": 19,
+    "delta": 19
+  },
+  "totals": {
+    "total_5xx": 0,
+    "unauthorized_success": 0,
+    "borea_404_rate": "80/80"
+  },
+  "safety": {
+    "no_unauthorized_spend": true,
+    "no_5xx": true,
+    "borea_invariant_held": true,
+    "fresh_spend_within_cap": true,
+    "idempotency_dedup_works": true
+  },
+  "verdict": "PASS"
+}

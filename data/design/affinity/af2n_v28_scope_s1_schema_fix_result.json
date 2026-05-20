@@ -1,20 +1,20 @@
 {
   "task_origin": "AF2-N-V28-SCOPE-S1-SCHEMA-FIX",
-  "timestamp_utc": "2026-05-20T20:43:04.720332+00:00",
+  "timestamp_utc": "2026-05-20T21:33:24.979959+00:00",
   "mode": "MIGRATE_NESTED_TO_FLAT",
   "production_db_touched": true,
   "production_db_writes_scope": "V28_SCOPE_S1 marker only",
   "pre_counts": {
     "marker_total": 1800,
-    "marker_nested": 1800,
-    "marker_flat": 0
+    "marker_nested": 0,
+    "marker_flat": 1800
   },
   "post_counts": {
     "marker_total": 1800,
     "marker_nested": 0,
     "marker_flat": 1800
   },
-  "migrated_users": 1800,
+  "migrated_users": 0,
   "skipped": 0,
   "errors_count": 0,
   "errors_sample": [],
@@ -22,7 +22,7 @@
     "user": "stage5_qa_0001",
     "gift_id": "gift_test_001",
     "found_with_quantity": true,
-    "quantity_observed": 50
+    "quantity_observed": 48
   },
   "safety": {
     "cap_unchanged": true,

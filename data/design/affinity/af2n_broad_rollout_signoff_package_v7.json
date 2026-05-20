@@ -1,0 +1,112 @@
+{
+  "task_origin": "AF2-N-V29-BROAD-ROLLOUT-SIGNOFF-V7",
+  "version": "v7",
+  "mode": "PLAN_ONLY",
+  "timestamp_utc": "2026-05-20T21:34:46.664799+00:00",
+  "broad_rollout_allowed": false,
+  "public_spend_ui_allowed": false,
+  "stack_g_allowed": false,
+  "signoffs": {
+    "engineering_signoff": false,
+    "qa_signoff": false,
+    "product_signoff": false,
+    "legal_signoff": false,
+    "sre_signoff": false,
+    "security_signoff": false,
+    "final_user_approval": false
+  },
+  "required_evidence": [
+    {
+      "id": "EV-V28-SCHEMA-FIX-REG",
+      "desc": "V28 schema-fix regression PASS @scale",
+      "status": "PROVIDED"
+    },
+    {
+      "id": "EV-V29-EXT-MONITORING",
+      "desc": "Extended monitoring (1500+ samples)",
+      "status": "PROVIDED"
+    },
+    {
+      "id": "EV-V29-STRESS-8X",
+      "desc": "Stress 8x sim + safe live probe PASS",
+      "status": "PROVIDED"
+    },
+    {
+      "id": "EV-V29-DELTA-AUDIT",
+      "desc": "Full delta audit V29 PASS",
+      "status": "PROVIDED"
+    },
+    {
+      "id": "EV-V29-MANAGED-REDIS-PROBE",
+      "desc": "Managed Redis env-aware probe",
+      "status": "PROVIDED",
+      "detail": "READY_NOT_APPLIED_ENV_MISSING"
+    },
+    {
+      "id": "EV-V29-ALERTING-PROBE",
+      "desc": "Alerting env-aware probe",
+      "status": "PROVIDED",
+      "detail": "LOCAL_MOCK_ENV_MISSING"
+    },
+    {
+      "id": "EV-V28-CAP25K-STABLE",
+      "desc": "Cap 25k stable since V27",
+      "status": "PROVIDED"
+    },
+    {
+      "id": "EV-V28-ALLOWLIST-2500-STABLE",
+      "desc": "Allowlist 2500 stable since V28",
+      "status": "PROVIDED"
+    },
+    {
+      "id": "EV-INFRA-MANAGED-REDIS-LIVE",
+      "desc": "Managed Redis LIVE traffic switched and stable for >=14d",
+      "status": "PENDING"
+    },
+    {
+      "id": "EV-INFRA-ALERTING-LIVE",
+      "desc": "Alerting LIVE webhook/pushgw verified with real incidents",
+      "status": "PENDING"
+    },
+    {
+      "id": "EV-OBSERVABILITY-DASHBOARDS",
+      "desc": "Grafana/dashboard for af2n metrics",
+      "status": "PENDING"
+    },
+    {
+      "id": "EV-LEGAL-PRODUCT-SIGNOFF",
+      "desc": "Product + legal explicit signoff",
+      "status": "PENDING"
+    },
+    {
+      "id": "EV-USER-FINAL-APPROVAL",
+      "desc": "Explicit user approval of broad rollout",
+      "status": "PENDING"
+    }
+  ],
+  "blockers_from_matrix_v8": [
+    {
+      "id": "BLK-G-02",
+      "severity": "P0",
+      "status": "NO_GO_V29"
+    }
+  ],
+  "pending_signoff_count": 7,
+  "pending_evidence_count": 5,
+  "next_steps_if_approved_in_future": [
+    "Switch Managed Redis live (V30+) with rollback ready",
+    "Activate alerting live sink with incident validation",
+    "Run 14d soak on Stage4 scope S1",
+    "Run broad rollout dry-run on staging clone",
+    "Obtain product + legal explicit signoff",
+    "Obtain explicit user final approval",
+    "Broad rollout in waves with continuous monitoring"
+  ],
+  "safety": {
+    "plan_only": true,
+    "no_runtime_change": true,
+    "no_db_write": true,
+    "no_secret_logged": true
+  },
+  "verdict": "PASS"
+}

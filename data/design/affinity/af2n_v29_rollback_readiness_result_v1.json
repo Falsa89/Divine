@@ -1,0 +1,32 @@
+{
+  "task_origin": "AF2-N-V29-ROLLBACK-READINESS",
+  "timestamp_utc": "2026-05-20T21:34:47.642380+00:00",
+  "mode": "DRY_RUN_CHECK",
+  "production_db_touched": false,
+  "checks": {
+    "scope_s1_rollback_script_present": true,
+    "allowlist_backup_v28_present": true,
+    "cap_s1_rollback_script_present": true,
+    "redis_recovery_script_present_and_exec": true,
+    "managed_redis_rollback_script_present": true,
+    "schema_fix_rerun_idempotent": true,
+    "supervisor_conf_present": true,
+    "db_backups_present": true,
+    "v25_rollback_pass": true,
+    "v26_rollback_pass": true,
+    "v27_rollback_pass": true,
+    "v28_rollback_pass": true,
+    "v24_drill_pass": true
+  },
+  "rollback_paths": [
+    "scope_s1: python3 /app/backend/scripts/rollback_af2n_inventory_scope_s1_v28.py",
+    "cap_s1: python3 /app/backend/scripts/rollback_af2n_cap_raise_s1_v27.py",
+    "redis_local: bash /app/ops/ensure_redis_rate_limit.sh",
+    "managed_redis: python3 /app/backend/scripts/rollback_managed_redis_switch_v27.py",
+    "alerting_live: unset ALERT_WEBHOOK_URL/PROMETHEUS_PUSHGATEWAY + restart (returns to LOCAL_MOCK)",
+    "stage4_runtime_disable: unset AFFINITY_GIFT_RUNTIME_ENABLED + restart",
+    "inventory_writes_rollback: unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart",
+    "full_af2n_rollback: unset all AF2-N env vars + restart"
+  ],
+  "verdict": "PASS"
+}

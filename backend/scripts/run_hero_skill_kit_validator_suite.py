@@ -371,6 +371,21 @@ OPTIONAL = [
     ('V28-ROLLBACK-READINESS',                     'validate_af2n_v28_rollback_readiness.py'),
     ('SAFETY-ROLLUP-W',                            'validate_collection_affinity_runtime_activation_rollup_v23.py'),
     ('ULTRA-COMBO-V28',                            'validate_ultra_combo_v28_inventory_scope_stress5x.py'),
+    # ULTRA-COMBO V29 (ENV-AWARE MANAGED REDIS/ALERTING + V28 SCHEMA-FIX REGRESSION
+    #                  + SCOPE S1 EXTENDED MONITORING + STRESS 8X + SIGNOFF V7 + ROLLUP X)
+    ('V29-PREFLIGHT',                              'validate_af2n_v29_preflight.py'),
+    ('AF2-N-V29-V28-SCHEMA-FIX-REGRESSION',        'validate_af2n_v28_schema_fix_regression_v29.py'),
+    ('AF2-N-V29-MANAGED-REDIS-PROBE',              'validate_managed_redis_envaware_v29.py'),
+    ('AF2-N-V29-ALERTING-PROBE',                   'validate_alerting_envaware_v29.py'),
+    ('AF2-N-V29-SCOPE-S1-EXTENDED-MONITORING',     'validate_af2n_scope_s1_extended_monitoring_v29.py'),
+    ('AF2-N-V29-STRESS-8X',                        'validate_af2n_stress_8x_v29.py'),
+    ('AF2-N-V29-INVENTORY-DELTA-AUDIT',            'validate_affinity_inventory_delta_consistency_v29.py'),
+    ('AF2-N-V29-BROAD-ROLLOUT-SIGNOFF-V7',         'validate_af2n_broad_rollout_signoff_package_v7.py'),
+    ('AF2-N-V29-BLOCKER-MATRIX-V8',                'validate_af2n_broad_rollout_blocker_matrix_v8.py'),
+    ('AF2-N-V29-UI-SAFETY',                        'audit_affinity_gifts_public_preview_v29_safety.py'),
+    ('V29-ROLLBACK-READINESS',                     'validate_af2n_v29_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-X',                            'validate_collection_affinity_runtime_activation_rollup_v24.py'),
+    ('ULTRA-COMBO-V29',                            'validate_ultra_combo_v29_envaware_readiness_postfix.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

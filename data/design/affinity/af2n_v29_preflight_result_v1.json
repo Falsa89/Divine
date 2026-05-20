@@ -1,0 +1,44 @@
+{
+  "task_origin": "AF2-N-V29-PREFLIGHT",
+  "timestamp_utc": "2026-05-20T21:33:48.136927+00:00",
+  "services": {
+    "backend": "RUNNING",
+    "expo": "RUNNING",
+    "mongodb": "RUNNING",
+    "redis": "RUNNING"
+  },
+  "canary_status": {
+    "rate_limit_backend": "redis",
+    "canary_ledger_cap": 25000,
+    "canary_allowlist_size": 2500,
+    "ledger_total_rows": 266
+  },
+  "heroes_count": 100,
+  "borea_aliases_blocked": [
+    {
+      "alias": "borea",
+      "code": 404
+    },
+    {
+      "alias": "greek_borea",
+      "code": 404
+    },
+    {
+      "alias": "primordial_gaia",
+      "code": 404
+    }
+  ],
+  "borea_in_public_heroes": [],
+  "v28_schema_fix_report_pass": true,
+  "inventory_schema_v28": {
+    "marker_total": 1800,
+    "marker_flat": 1800,
+    "marker_nested": 0
+  },
+  "guardrails_clean": {
+    "backend/battle_engine.py": true,
+    "backend/battle_core.py": true,
+    "frontend/app/combat.tsx": true
+  },
+  "verdict": "PASS"
+}

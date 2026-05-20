@@ -1,0 +1,87 @@
+{
+  "task_origin": "AF2-N-V29-V28-SCHEMA-FIX-REGRESSION",
+  "timestamp_utc": "2026-05-20T21:33:24.823332+00:00",
+  "pre": {
+    "nested": 0,
+    "flat": 1800
+  },
+  "idempotent_rerun_no_op": {
+    "returncode": 0,
+    "tail": [
+      "verdict=PASS migrated=0 flat_now=1800 nested_now=0 probe_ok=True"
+    ],
+    "nested_after": 0,
+    "flat_after": 1800,
+    "no_op": true
+  },
+  "controlled_spend_10_fresh": {
+    "attempted": 10,
+    "ok_count": 10,
+    "sample": [
+      {
+        "uid": "stage5_qa_0400",
+        "code": 200,
+        "result": null
+      },
+      {
+        "uid": "stage5_qa_0401",
+        "code": 200,
+        "result": null
+      },
+      {
+        "uid": "stage5_qa_0402",
+        "code": 200,
+        "result": null
+      }
+    ]
+  },
+  "idempotent_replays": {
+    "attempted": 10,
+    "ok_count": 10,
+    "sample": [
+      {
+        "uid": "stage5_qa_0400",
+        "replay_code": 200,
+        "replay_result": null
+      },
+      {
+        "uid": "stage5_qa_0401",
+        "replay_code": 200,
+        "replay_result": null
+      },
+      {
+        "uid": "stage5_qa_0402",
+        "replay_code": 200,
+        "replay_result": null
+      }
+    ]
+  },
+  "consistency_post_spend_samples": [
+    {
+      "uid": "stage5_qa_0400",
+      "quantity_after": 49
+    },
+    {
+      "uid": "stage5_qa_0401",
+      "quantity_after": 49
+    },
+    {
+      "uid": "stage5_qa_0402",
+      "quantity_after": 49
+    },
+    {
+      "uid": "stage5_qa_0403",
+      "quantity_after": 49
+    },
+    {
+      "uid": "stage5_qa_0404",
+      "quantity_after": 49
+    }
+  ],
+  "safety": {
+    "no_unauthorized_spend": true,
+    "no_5xx": true,
+    "no_borea_records_added": true
+  },
+  "verdict": "PASS"
+}
