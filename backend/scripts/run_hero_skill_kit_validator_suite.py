@@ -356,6 +356,21 @@ OPTIONAL = [
     ('V27-ROLLBACK-READINESS',                     'validate_af2n_v27_rollback_readiness.py'),
     ('SAFETY-ROLLUP-V',                            'validate_collection_affinity_runtime_activation_rollup_v22.py'),
     ('ULTRA-COMBO-V27',                            'validate_ultra_combo_v27_managed_redis_cap_s1.py'),
+    # ULTRA-COMBO V28 (INVENTORY SCOPE S1 EXPANSION 700->2500 + STRESS 5X
+    #                  + MANAGED REDIS PROBE (gated) + ALERTING LIVE PROBE
+    #                  + BLOCKER MATRIX V7 + SAFETY-ROLLUP-W)
+    ('V28-PREFLIGHT',                              'validate_af2n_v28_preflight.py'),
+    ('AF2-N-V28-INVENTORY-SCOPE-S1',               'validate_af2n_inventory_scope_s1_v28.py'),
+    ('AF2-N-V28-SCOPE-S1-OBSERVATION',             'validate_af2n_scope_s1_observation_v28.py'),
+    ('AF2-N-V28-STRESS-5X',                        'validate_af2n_stress_5x_v28.py'),
+    ('AF2-N-V28-INVENTORY-DELTA-AUDIT',            'validate_affinity_inventory_delta_consistency_v28.py'),
+    ('AF2-N-V28-MANAGED-REDIS-PROBE',              'validate_managed_redis_v28_probe.py'),
+    ('AF2-N-V28-ALERTING-LIVE-PROBE',              'validate_alerting_live_v28_probe.py'),
+    ('AF2-N-V28-BLOCKER-MATRIX-V7',                'validate_af2n_broad_rollout_blocker_matrix_v7.py'),
+    ('AF2-N-V28-UI-SAFETY',                        'audit_affinity_gifts_public_preview_v28_safety.py'),
+    ('V28-ROLLBACK-READINESS',                     'validate_af2n_v28_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-W',                            'validate_collection_affinity_runtime_activation_rollup_v23.py'),
+    ('ULTRA-COMBO-V28',                            'validate_ultra_combo_v28_inventory_scope_stress5x.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

@@ -4,7 +4,7 @@
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-20T17:46:25.809586Z",
+  "generated_at_utc": "2026-05-20T20:45:17.536346Z",
   "overall_status": "PASS",
   "gates": {
     "api_health_200": true,
@@ -37,18 +37,18 @@
     "db_write": false,
     "feature_flag": "AFFINITY_GIFT_RUNTIME_ENABLED",
     "feature_flag_currently_enabled": true,
-    "canary_allowlist_size": 700,
+    "canary_allowlist_size": 2500,
     "canary_ledger_cap": 25000,
-    "ledger_total_rows": 213,
-    "ledger_canary_rows": 213,
+    "ledger_total_rows": 256,
+    "ledger_canary_rows": 256,
     "last_canary_tx": {
-      "tx_id": "tx_canary_b7d166437fff4bf3",
-      "user_id": "stage4_qa_088",
+      "tx_id": "tx_canary_2bf88741458449ac",
+      "user_id": "stage5_qa_0304",
       "gift_id": "gift_test_001",
       "hero_id": "greek_ares",
       "quantity": 1,
       "status": "applied_inventory_live",
-      "created_at_utc": "2026-05-20 17:43:54.314000"
+      "created_at_utc": "2026-05-20 20:43:18.188000"
     },
     "borea_aliases_blocked": [
       "borea",

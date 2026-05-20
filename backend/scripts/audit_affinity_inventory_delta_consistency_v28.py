@@ -49,9 +49,12 @@ async def main_async():
                 non_allowlist_success.append({'tx_id': row.get('tx_id'), 'user_id': uid, 'status': status})
             idem = row.get('idempotency_key')
             if idem:
-                if idem in seen_idems and 'applied' in status and 'applied' in seen_idems[idem]:
-                    idempotency_dup_mut.append({'idempotency_key': idem})
-                seen_idems[idem] = status
+                # Route enforces (user_id, idempotency_key) uniqueness, not
+                # global idempotency_key. Use composite key to match real semantics.
+                comp_key = (uid, idem)
+                if comp_key in seen_idems and 'applied' in status and 'applied' in seen_idems[comp_key]:
+                    idempotency_dup_mut.append({'idempotency_key': idem, 'user_id': uid})
+                seen_idems[comp_key] = status
 
         # New scope V28 marker counts
         marker_inv = await db.user_gift_inventory.count_documents({'meta.v28_scope_s1': True})

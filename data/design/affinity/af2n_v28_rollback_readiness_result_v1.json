@@ -1,0 +1,31 @@
+{
+  "task_origin": "AF2-N-V28-ROLLBACK-READINESS",
+  "timestamp_utc": "2026-05-20T20:44:03.978533+00:00",
+  "mode": "DRY_RUN_CHECK",
+  "production_db_touched": false,
+  "checks": {
+    "scope_s1_rollback_script_present": true,
+    "allowlist_backup_v28_present": true,
+    "cap_s1_rollback_script_present": true,
+    "redis_recovery_script_present_and_exec": true,
+    "managed_redis_rollback_script_present": true,
+    "inventory_writes_flag_switchable": true,
+    "stage4_runtime_flag_switchable": true,
+    "supervisor_conf_present": true,
+    "db_backups_present": true,
+    "clone_drill_pass_v24": true,
+    "v25_rollback_readiness_pass": true,
+    "v26_rollback_readiness_pass": true,
+    "v27_rollback_readiness_pass": true
+  },
+  "rollback_paths": [
+    "scope_s1_rollback: python3 /app/backend/scripts/rollback_af2n_inventory_scope_s1_v28.py (deletes marker docs + restores conf)",
+    "cap_s1_rollback: python3 /app/backend/scripts/rollback_af2n_cap_raise_s1_v27.py",
+    "redis_local_recovery: bash /app/ops/ensure_redis_rate_limit.sh",
+    "managed_redis_rollback: python3 /app/backend/scripts/rollback_managed_redis_switch_v27.py",
+    "stage4_runtime_disable: unset AFFINITY_GIFT_RUNTIME_ENABLED + restart",
+    "inventory_writes_rollback: unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart",
+    "full_af2n_rollback: unset all AF2-N env vars + restart"
+  ],
+  "verdict": "PASS"
+}
