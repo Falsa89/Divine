@@ -1,0 +1,42 @@
+{
+  "task_origin": "AF2-N-V27-CAP-RAISE-S1",
+  "timestamp_utc": "2026-05-20T17:42:00Z",
+  "status": "APPLIED",
+  "gates": {
+    "rate_limit_backend_redis": true,
+    "runtime_attached": true,
+    "pre_cap_known": true,
+    "pre_cap_was": 5000,
+    "ledger_under_70pct": true,
+    "v27_preflight_pass": true,
+    "p0_all_closed": true,
+    "rollback_script_present": true
+  },
+  "pre_cap": 5000,
+  "pre_ledger": 184,
+  "new_cap_target": 25000,
+  "post_cap_observed": 25000,
+  "code_safety_ceiling_change": {
+    "file": "backend/routes/affinity_gift_spend.py",
+    "function": "_canary_ledger_cap",
+    "before": "return min(v, 5000)",
+    "after": "return min(v, 25000)",
+    "rationale": "V27 cap raise stage S1 (5k -> 25k) per AF2-N-V26-CAP-RAISE-PLAN. The 25000 ceiling is now the safety upper bound for Stage 4 Internal Beta.",
+    "backup_path": "/app/backend/backups/v27_cap_s1/affinity_gift_spend.py.bak"
+  },
+  "backup_path": "/app/backend/backups/v27_cap_s1/backend.conf.20260520T173914Z.bak",
+  "applied": true,
+  "safety": {
+    "production_db_touched": false,
+    "borea_invariant_preserved": true,
+    "broad_rollout_authorized": false,
+    "battle_engine_modified": false,
+    "battle_core_modified": false,
+    "combat_tsx_modified": false,
+    "gacha_modified": false,
+    "roster_modified": false,
+    "ceiling_below_broad_rollout_target": true
+  },
+  "rollback_command": "python3 /app/backend/scripts/rollback_af2n_cap_raise_s1_v27.py",
+  "verdict": "PASS"
+}

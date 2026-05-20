@@ -1,0 +1,25 @@
+{
+  "task_origin": "AF2-N-V27-ALERTING-SINK",
+  "timestamp_utc": "2026-05-20T17:39:14.326155+00:00",
+  "sink_mode": "LOCAL_MOCK",
+  "webhook_set": false,
+  "pushgateway_set": false,
+  "live_status": null,
+  "mock_log_path": "/app/data/design/affinity/af2n_alerting_local_mock_sink.log",
+  "mock_log_size_bytes": 204,
+  "rules_required": [
+    "redis_fail_open",
+    "rate_limit_backend_not_redis",
+    "unauthorized_success",
+    "borea_success",
+    "negative_inventory",
+    "5xx_threshold"
+  ],
+  "rules_count": 6,
+  "safety": {
+    "no_secrets_logged": true,
+    "no_pii_in_payload": true,
+    "no_borea_data": true
+  },
+  "verdict": "PASS"
+}

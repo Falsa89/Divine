@@ -1,0 +1,30 @@
+{
+  "task_origin": "AF2-N-V27-ROLLBACK-READINESS",
+  "timestamp_utc": "2026-05-20T17:42:32.157994+00:00",
+  "mode": "DRY_RUN_CHECK",
+  "production_db_touched": false,
+  "checks": {
+    "managed_redis_rollback_script_present": true,
+    "cap_s1_rollback_script_present": true,
+    "stage4_runtime_flag_switchable": true,
+    "local_redis_fallback_switchable": true,
+    "inventory_writes_flag_switchable": true,
+    "full_af2n_rollback_documented": true,
+    "db_backups_readable": true,
+    "clone_drill_pass": true,
+    "v25_rollback_readiness_pass": true,
+    "v26_rollback_readiness_pass": true,
+    "redis_recovery_script_present_and_exec": true,
+    "supervisor_conf_present": true
+  },
+  "rollback_paths": [
+    "managed_redis_rollback: python3 /app/backend/scripts/rollback_managed_redis_switch_v27.py",
+    "cap_s1_rollback: python3 /app/backend/scripts/rollback_af2n_cap_raise_s1_v27.py",
+    "stage4_runtime_disable: unset AFFINITY_GIFT_RUNTIME_ENABLED + restart",
+    "local_redis_fallback: bash /app/ops/ensure_redis_rate_limit.sh",
+    "inventory_writes_rollback: unset AFFINITY_GIFT_INVENTORY_WRITES_ENABLED + restart",
+    "full_af2n_rollback: unset all AF2-N env vars + restart",
+    "clone_data_rollback: V24 non-destructive drill (DB never touched)"
+  ],
+  "verdict": "PASS"
+}

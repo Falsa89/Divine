@@ -1,0 +1,13 @@
+{
+  "task_origin": "AF2-N-V27-MANAGED-REDIS-PROBE",
+  "timestamp_utc": "2026-05-20T17:39:14.241013+00:00",
+  "status": "READY_NOT_APPLIED",
+  "reason": "REDIS_MANAGED_URL env var not provided",
+  "blocker": "No Managed Redis endpoint configured. Provisioning + secret management required before switch.",
+  "probe_attempted": false,
+  "safety": {
+    "no_secrets_logged": true,
+    "no_local_redis_touched": true
+  },
+  "verdict": "PASS"
+}

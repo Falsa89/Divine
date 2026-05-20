@@ -1,0 +1,73 @@
+{
+  "task_origin": "AF2-N-V27-STRESS-3X",
+  "mode": "SIMULATION_PLUS_SAFE_LIVE_PROBE",
+  "started_at_utc": "2026-05-20T17:42:30.195998+00:00",
+  "ended_at_utc": "2026-05-20T17:42:30.616468+00:00",
+  "simulation_3x": {
+    "mode": "READ_ONLY",
+    "users_3x": 2100,
+    "cap_3x": 75000,
+    "avg_spend_per_user": 5,
+    "expected_total_events": 10500,
+    "expected_429": 4620,
+    "expected_redis_ops_per_sec_peak": 3.65
+  },
+  "live_probe": {
+    "borea": {
+      "attempted": 45,
+      "404_count": 45,
+      "stats": {
+        "p50_ms": 0.62,
+        "p95_ms": 0.84,
+        "p99_ms": 0.94,
+        "max_ms": 2.6,
+        "count": 45
+      }
+    },
+    "controlled_spend": {
+      "attempted": 5,
+      "ok_count": 5,
+      "stats": {
+        "p50_ms": 6.61,
+        "p95_ms": 7.33,
+        "p99_ms": 7.33,
+        "max_ms": 7.97,
+        "count": 5
+      }
+    },
+    "non_allowlist": {
+      "attempted": 45,
+      "blocked_count": 45,
+      "stats": {
+        "p50_ms": 1.17,
+        "p95_ms": 1.39,
+        "p99_ms": 1.44,
+        "max_ms": 1.79,
+        "count": 45
+      }
+    },
+    "burst": {
+      "attempted": 45,
+      "429_count": 39,
+      "5xx_count": 0,
+      "stats": {
+        "p50_ms": 0.87,
+        "p95_ms": 6.48,
+        "p99_ms": 6.76,
+        "max_ms": 7.33,
+        "count": 45
+      }
+    }
+  },
+  "totals": {
+    "unauthorized_success": 0,
+    "total_5xx": 0,
+    "borea_404_rate": "45/45"
+  },
+  "safety": {
+    "no_unauthorized_spend": true,
+    "no_5xx": true,
+    "borea_invariant_held": true
+  },
+  "verdict": "PASS"
+}

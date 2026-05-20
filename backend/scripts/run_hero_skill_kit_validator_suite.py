@@ -341,6 +341,21 @@ OPTIONAL = [
     ('V26-ROLLBACK-READINESS',                     'validate_af2n_v26_rollback_readiness.py'),
     ('SAFETY-ROLLUP-U',                            'validate_collection_affinity_runtime_activation_rollup_v21.py'),
     ('ULTRA-COMBO-V26',                            'validate_ultra_combo_v26_broad_readiness_plan.py'),
+    # ULTRA-COMBO V27 (MANAGED REDIS GATED + ALERTING LIVE/MOCK + CAP RAISE
+    #                  S1 5K->25K GATED + OBSERVATION + STRESS 3X
+    #                  + SAFETY-ROLLUP-V)
+    ('V27-PREFLIGHT',                              'validate_af2n_v27_preflight.py'),
+    ('AF2-N-V27-MANAGED-REDIS-SWITCH',             'validate_managed_redis_switch_v27.py'),
+    ('AF2-N-V27-ALERTING-SINK',                    'validate_af2n_alerting_sink_v27.py'),
+    ('AF2-N-V27-CAP-RAISE-S1',                     'validate_af2n_cap_raise_s1_v27.py'),
+    ('AF2-N-V27-STAGE4-OBSERVATION',               'validate_af2n_stage4_observation_v27.py'),
+    ('AF2-N-V27-STRESS-3X',                        'validate_af2n_stress_3x_v27.py'),
+    ('AF2-N-V27-INVENTORY-DELTA-AUDIT',            'validate_affinity_inventory_delta_consistency_v27.py'),
+    ('AF2-N-V27-BLOCKER-MATRIX-V6',                'validate_af2n_broad_rollout_blocker_matrix_v6.py'),
+    ('AF2-N-V27-UI-SAFETY',                        'audit_affinity_gifts_public_preview_v27_safety.py'),
+    ('V27-ROLLBACK-READINESS',                     'validate_af2n_v27_rollback_readiness.py'),
+    ('SAFETY-ROLLUP-V',                            'validate_collection_affinity_runtime_activation_rollup_v22.py'),
+    ('ULTRA-COMBO-V27',                            'validate_ultra_combo_v27_managed_redis_cap_s1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

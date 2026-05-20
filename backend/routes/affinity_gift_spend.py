@@ -301,6 +301,11 @@ def _canary_ledger_cap() -> int:
     V18: hard upper bound raised to 5000 to accommodate Stage3 QA expansion
     (env-configured cap, e.g. 2500). The 5000 ceiling is a non-negotiable
     safety cap; values above are clamped down.
+
+    V27: ceiling raised from 5000 to 25000 to support cap-raise plan stage S1
+    (5k -> 25k) per AF2-N-V26-CAP-RAISE-PLAN. The 25000 ceiling remains a
+    safety upper bound; env-configured cap can be any value up to this ceiling.
+    Broad-rollout cap (>25k) is still gated behind explicit user approval.
     """
     try:
         v = int(os.environ.get(_CANARY_LEDGER_CAP_ENV, ""))
@@ -308,7 +313,7 @@ def _canary_ledger_cap() -> int:
         v = _CANARY_LEDGER_CAP_DEFAULT
     if v <= 0:
         v = _CANARY_LEDGER_CAP_DEFAULT
-    return min(v, 5000)
+    return min(v, 25000)
 
 
 def register_affinity_gift_spend_skeleton_routes(router):

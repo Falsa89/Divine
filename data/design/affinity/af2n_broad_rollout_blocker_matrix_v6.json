@@ -1,0 +1,181 @@
+{
+  "task_origin": "AF2-N-V27-BLOCKER-MATRIX-V6",
+  "version": "v6",
+  "timestamp_utc": "2026-05-20T17:42:31.322573+00:00",
+  "stage": "stage4_internal_beta_active_no_broad_rollout",
+  "broad_rollout_authorized": false,
+  "public_spend_ui_authorized": false,
+  "matrix": [
+    {
+      "id": "BLK-A-01",
+      "severity": "P0",
+      "title": "battle_engine/combat untouched",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-02",
+      "severity": "P0",
+      "title": "Borea aliases 404",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-03",
+      "severity": "P0",
+      "title": "/api/heroes=100",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-04",
+      "severity": "P0",
+      "title": "No 5xx observation",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-05",
+      "severity": "P0",
+      "title": "No unauthorized spend",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-B-01",
+      "severity": "P1",
+      "title": "Ephemeral container Redis init/restore",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-B-02",
+      "severity": "P1",
+      "title": "Redis non-persistent",
+      "status": "ACCEPTED"
+    },
+    {
+      "id": "BLK-B-03",
+      "severity": "P1",
+      "title": "Redis SPOF (single-node)",
+      "status": "READY_NOT_APPLIED_V27",
+      "closed_by": "READY_NOT_APPLIED"
+    },
+    {
+      "id": "BLK-B-04",
+      "severity": "P1",
+      "title": "Rollback drill on clone",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-B-05",
+      "severity": "P1",
+      "title": "Abuse metrics instrumented",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-B-06",
+      "severity": "P1",
+      "title": "Cap raise 5k\u219225k S1",
+      "status": "LIVE_CLOSED_V27",
+      "closed_by": "APPLIED"
+    },
+    {
+      "id": "BLK-B-07",
+      "severity": "P1",
+      "title": "Inventory writes scope expansion",
+      "status": "PLAN_READY_V26"
+    },
+    {
+      "id": "BLK-C-01",
+      "severity": "P2",
+      "title": "Public Spend UI off",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-C-02",
+      "severity": "P2",
+      "title": "STACK-G wiring deferred",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-C-03",
+      "severity": "P2",
+      "title": "Frontend smoke",
+      "status": "CLOSED_V26"
+    },
+    {
+      "id": "BLK-D-01",
+      "severity": "P3",
+      "title": "Runbook restart Redis",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-D-02",
+      "severity": "P3",
+      "title": "Alerting contract",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-D-02-LIVE",
+      "severity": "P3",
+      "title": "Alerting live sink",
+      "status": "MOCK_CLOSED_V27",
+      "closed_by": "LOCAL_MOCK"
+    },
+    {
+      "id": "BLK-D-03",
+      "severity": "P3",
+      "title": "Support playbook",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-E-01",
+      "severity": "P1",
+      "title": "Economy stress 10x sim",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-F-01",
+      "severity": "P1",
+      "title": "Stress 2x",
+      "status": "CLOSED_V26"
+    },
+    {
+      "id": "BLK-F-02",
+      "severity": "P1",
+      "title": "Stress 3x",
+      "status": "CLOSED_V27"
+    },
+    {
+      "id": "BLK-G-01",
+      "severity": "P0",
+      "title": "Broad rollout signoff V6 final approval",
+      "status": "PLAN_READY_NOT_APPROVED"
+    }
+  ],
+  "summary_by_severity": {
+    "P0": {
+      "open": 0,
+      "addressed": 6,
+      "total": 6
+    },
+    "P1": {
+      "open": 0,
+      "addressed": 10,
+      "total": 10
+    },
+    "P2": {
+      "open": 0,
+      "addressed": 3,
+      "total": 3
+    },
+    "P3": {
+      "open": 0,
+      "addressed": 4,
+      "total": 4
+    }
+  },
+  "v27_transitions": {
+    "BLK-B-03": "READY_NOT_APPLIED",
+    "BLK-B-06": "APPLIED",
+    "BLK-D-02-LIVE": "LOCAL_MOCK",
+    "BLK-F-02": "CLOSED_V27"
+  },
+  "broad_rollout_blocker_explicit": "BLK-G-01 (final user approval not granted)",
+  "verdict": "PASS"
+}
