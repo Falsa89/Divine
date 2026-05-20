@@ -1,0 +1,30 @@
+{
+  "task_origin": "AF2-N-V28-PREFLIGHT",
+  "timestamp_utc": "2026-05-20T20:13:58.222437+00:00",
+  "checks": {
+    "health_status": "ok",
+    "heroes_count": 100,
+    "borea_leak_in_list": [],
+    "gift_spend_borea_404": true,
+    "canary_rate_limit_backend": "redis",
+    "canary_ledger_cap": 25000,
+    "canary_ledger_total_rows": 213,
+    "canary_allowlist_size": 700,
+    "guardrail_diffs_clean": {
+      "backend/battle_engine.py": true,
+      "backend/battle_core.py": true,
+      "frontend/app/combat.tsx": true
+    },
+    "battle_runtime_attached": false,
+    "db_collections_healthy": true,
+    "db_counts": {
+      "user_gift_inventory_count": 700,
+      "user_affinity_state_count": 114,
+      "gift_transaction_ledger_count": 213
+    },
+    "redis_managed_url_set": false,
+    "alert_webhook_url_set": false,
+    "rollback_scripts_present": true
+  },
+  "verdict": "PASS"
+}

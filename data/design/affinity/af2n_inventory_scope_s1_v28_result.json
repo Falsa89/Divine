@@ -1,0 +1,52 @@
+{
+  "task_origin": "AF2-N-V28-INVENTORY-SCOPE-S1",
+  "timestamp_utc": "2026-05-20T20:13:58.925656+00:00",
+  "status": "APPLIED",
+  "gates": {
+    "v28_preflight_pass": true,
+    "canary_cap_25000": true,
+    "canary_allowlist_700": true,
+    "canary_rate_limit_redis": true,
+    "ledger_under_70pct": true,
+    "p0_all_closed": true,
+    "rollback_script_present": true
+  },
+  "allowlist_pre": 700,
+  "allowlist_target": 2500,
+  "allowlist_post_observed": 2500,
+  "new_user_prefix": "stage5_qa",
+  "new_users_appended": 1800,
+  "sample_new_users": [
+    "stage5_qa_0001",
+    "stage5_qa_0002",
+    "stage5_qa_0003",
+    "...",
+    "stage5_qa_1798",
+    "stage5_qa_1799",
+    "stage5_qa_1800"
+  ],
+  "db": {
+    "pre_inv_count": 700,
+    "post_inv_count": 2500,
+    "pre_aff_count": 114,
+    "post_aff_count": 1914,
+    "seeded_inv_new_run": 1800,
+    "seeded_aff_new_run": 1800,
+    "skipped_existing_run": 0,
+    "marker_inv_total": 1800,
+    "marker_aff_total": 1800
+  },
+  "marker": "V28_SCOPE_S1",
+  "borea_in_seeded_aff": 0,
+  "backend_conf_backup": "/app/backend/backups/v28_scope_s1/backend.conf.20260520T201358Z.bak",
+  "safety": {
+    "cap_unchanged_25000": true,
+    "production_db_touched": true,
+    "production_db_writes_scope": "seed new internal beta users only; marker V28_SCOPE_S1",
+    "no_borea_records_added": true,
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_engine_modified": false
+  },
+  "verdict": "PASS"
+}
