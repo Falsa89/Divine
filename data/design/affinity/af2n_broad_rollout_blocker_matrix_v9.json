@@ -1,0 +1,242 @@
+{
+  "task_origin": "AF2-N-V30-BLOCKER-MATRIX-V9",
+  "version": "v9",
+  "timestamp_utc": "2026-05-21T16:48:19.624695+00:00",
+  "stage": "stage4_internal_beta_active_scope_s1_2500_cap_s2_evaluated_no_broad_rollout",
+  "broad_rollout_authorized": false,
+  "public_spend_ui_authorized": false,
+  "stack_g_authorized": false,
+  "matrix": [
+    {
+      "id": "BLK-A-01",
+      "severity": "P0",
+      "title": "battle untouched",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-02",
+      "severity": "P0",
+      "title": "Borea aliases 404",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-03",
+      "severity": "P0",
+      "title": "/api/heroes=100",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-04",
+      "severity": "P0",
+      "title": "No 5xx",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-A-05",
+      "severity": "P0",
+      "title": "No unauthorized spend",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-B-01",
+      "severity": "P1",
+      "title": "Container Redis init/restore",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-B-02",
+      "severity": "P1",
+      "title": "Redis non-persistent",
+      "status": "ACCEPTED"
+    },
+    {
+      "id": "BLK-B-03",
+      "severity": "P1",
+      "title": "Redis SPOF (Managed Redis switch)",
+      "status": "READY_NOT_APPLIED_ENV_MISSING_V30",
+      "closed_by": "READY_NOT_APPLIED_ENV_MISSING"
+    },
+    {
+      "id": "BLK-B-04",
+      "severity": "P1",
+      "title": "Rollback drill clone",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-B-05",
+      "severity": "P1",
+      "title": "Abuse metrics",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-B-06",
+      "severity": "P1",
+      "title": "Cap raise S1 5k->25k",
+      "status": "LIVE_CLOSED_V27"
+    },
+    {
+      "id": "BLK-B-07",
+      "severity": "P1",
+      "title": "Inventory scope S1 expansion",
+      "status": "LIVE_CLOSED_V28"
+    },
+    {
+      "id": "BLK-B-08",
+      "severity": "P0",
+      "title": "V28 schema-fix regression",
+      "status": "CLOSED_V29"
+    },
+    {
+      "id": "BLK-B-09",
+      "severity": "P1",
+      "title": "Cap raise S2 25k->50k",
+      "status": "LIVE_CLOSED_V30"
+    },
+    {
+      "id": "BLK-C-01",
+      "severity": "P2",
+      "title": "Public Spend UI off",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-C-02",
+      "severity": "P2",
+      "title": "STACK-G wiring deferred",
+      "status": "CLOSED"
+    },
+    {
+      "id": "BLK-C-03",
+      "severity": "P2",
+      "title": "Frontend smoke",
+      "status": "CLOSED_V26"
+    },
+    {
+      "id": "BLK-D-01",
+      "severity": "P3",
+      "title": "Redis runbook",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-D-02",
+      "severity": "P3",
+      "title": "Alerting contract",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-D-02-LIVE",
+      "severity": "P3",
+      "title": "Alerting live sink",
+      "status": "MOCK_ENV_MISSING_V30",
+      "closed_by": "LOCAL_MOCK_ENV_MISSING"
+    },
+    {
+      "id": "BLK-D-03",
+      "severity": "P3",
+      "title": "Support playbook",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-D-04",
+      "severity": "P2",
+      "title": "Observability dashboard spec",
+      "status": "CLOSED_V30"
+    },
+    {
+      "id": "BLK-E-01",
+      "severity": "P1",
+      "title": "Economy stress 10x sim",
+      "status": "CLOSED_V25"
+    },
+    {
+      "id": "BLK-F-01",
+      "severity": "P1",
+      "title": "Stress 2x",
+      "status": "CLOSED_V26"
+    },
+    {
+      "id": "BLK-F-02",
+      "severity": "P1",
+      "title": "Stress 3x",
+      "status": "CLOSED_V27"
+    },
+    {
+      "id": "BLK-F-03",
+      "severity": "P1",
+      "title": "Stress 5x",
+      "status": "CLOSED_V28"
+    },
+    {
+      "id": "BLK-F-04",
+      "severity": "P1",
+      "title": "Stress 8x",
+      "status": "CLOSED_V29"
+    },
+    {
+      "id": "BLK-F-05",
+      "severity": "P1",
+      "title": "Stress 10x",
+      "status": "CLOSED_V30"
+    },
+    {
+      "id": "BLK-H-01",
+      "severity": "P1",
+      "title": "Extended monitoring scope S1",
+      "status": "CLOSED_V29"
+    },
+    {
+      "id": "BLK-H-02",
+      "severity": "P1",
+      "title": "Full delta audit V29",
+      "status": "CLOSED_V29"
+    },
+    {
+      "id": "BLK-H-03",
+      "severity": "P1",
+      "title": "Stage4 soak V30 + delta V30",
+      "status": "CLOSED_V30"
+    },
+    {
+      "id": "BLK-G-01",
+      "severity": "P0",
+      "title": "Broad rollout signoff V8 final approval",
+      "status": "PLAN_READY_NOT_APPROVED_V30"
+    },
+    {
+      "id": "BLK-G-02",
+      "severity": "P0",
+      "title": "Broad rollout NO_GO",
+      "status": "NO_GO_V30"
+    }
+  ],
+  "summary_by_severity": {
+    "P0": {
+      "open": 0,
+      "addressed": 8,
+      "total": 8
+    },
+    "P1": {
+      "open": 0,
+      "addressed": 17,
+      "total": 17
+    },
+    "P2": {
+      "open": 0,
+      "addressed": 4,
+      "total": 4
+    },
+    "P3": {
+      "open": 0,
+      "addressed": 4,
+      "total": 4
+    }
+  },
+  "v30_transitions": {
+    "BLK-B-09": "APPLIED",
+    "BLK-F-05": "CLOSED_V30",
+    "BLK-H-03": "CLOSED_V30",
+    "BLK-D-04": "CLOSED_V30",
+    "BLK-B-03": "READY_NOT_APPLIED_ENV_MISSING",
+    "BLK-D-02-LIVE": "LOCAL_MOCK_ENV_MISSING"
+  },
+  "verdict": "PASS"
+}

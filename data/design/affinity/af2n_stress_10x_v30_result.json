@@ -1,0 +1,88 @@
+{
+  "task_origin": "AF2-N-V30-STRESS-10X",
+  "mode": "SIMULATION_PLUS_SAFE_LIVE_PROBE",
+  "started_at_utc": "2026-05-21T16:48:18.411533+00:00",
+  "ended_at_utc": "2026-05-21T16:48:19.558116+00:00",
+  "simulation_10x": {
+    "mode": "SIMULATION_10X",
+    "users_10x": 7000,
+    "avg_spend_per_user": 5,
+    "expected_total_events": 35000,
+    "cap_pressure_against_current": 0.7,
+    "cap_observed_for_pressure": 50000,
+    "redis_ops_per_sec_peak_est": 18.23
+  },
+  "live_probe": {
+    "borea": {
+      "attempted": 100,
+      "404_count": 100,
+      "stats": {
+        "p50_ms": 0.56,
+        "p95_ms": 0.82,
+        "p99_ms": 1.43,
+        "max_ms": 4.62
+      }
+    },
+    "fresh_controlled": {
+      "attempted": 15,
+      "ok_count": 15,
+      "stats": {
+        "p50_ms": 8.73,
+        "p95_ms": 11.53,
+        "p99_ms": 11.53,
+        "max_ms": 43.17
+      }
+    },
+    "non_allowlist": {
+      "attempted": 120,
+      "blocked_count": 120,
+      "stats": {
+        "p50_ms": 1.31,
+        "p95_ms": 1.64,
+        "p99_ms": 1.83,
+        "max_ms": 2.36
+      }
+    },
+    "burst": {
+      "attempted": 100,
+      "429_count": 94,
+      "5xx_count": 0,
+      "stats": {
+        "p50_ms": 0.9,
+        "p95_ms": 1.35,
+        "p99_ms": 1.51,
+        "max_ms": 2.09
+      }
+    },
+    "idempotency_replay": {
+      "attempted": 10,
+      "replay_ok": 10,
+      "stats": {
+        "p50_ms": 4.68,
+        "p95_ms": 4.73,
+        "p99_ms": 4.73,
+        "max_ms": 5.1
+      }
+    }
+  },
+  "redis_pressure": {
+    "keys_before": 0,
+    "keys_after": 5,
+    "delta": 5
+  },
+  "cap_post": 50000,
+  "ledger_total_rows_post": 502,
+  "totals": {
+    "total_5xx": 0,
+    "unauthorized_success": 0,
+    "borea_404_rate": "100/100"
+  },
+  "safety": {
+    "no_unauthorized_spend": true,
+    "no_5xx": true,
+    "borea_invariant_held": true,
+    "fresh_spend_within_cap": true,
+    "idempotency_dedup_works": true
+  },
+  "verdict": "PASS"
+}

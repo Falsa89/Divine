@@ -1,0 +1,119 @@
+{
+  "task_origin": "AF2-N-V30-BROAD-ROLLOUT-SIGNOFF-V8",
+  "version": "v8",
+  "mode": "PLAN_ONLY",
+  "timestamp_utc": "2026-05-21T16:47:02.205042+00:00",
+  "broad_rollout_allowed": false,
+  "public_spend_ui_allowed": false,
+  "stack_g_allowed": false,
+  "signoffs": {
+    "engineering": false,
+    "qa": false,
+    "product": false,
+    "legal": false,
+    "sre": false,
+    "security": false,
+    "final_user_approval": false
+  },
+  "required_evidence": [
+    {
+      "id": "EV-V30-SOAK",
+      "status": "PROVIDED",
+      "desc": "Stage4 soak V30 PASS"
+    },
+    {
+      "id": "EV-V30-STRESS-10X",
+      "status": "MISSING",
+      "desc": "Stress 10x PASS"
+    },
+    {
+      "id": "EV-V30-CAP-S2",
+      "status": "PROVIDED",
+      "desc": "Cap S2 status",
+      "detail": "APPLIED"
+    },
+    {
+      "id": "EV-V30-DELTA-AUDIT",
+      "status": "PROVIDED",
+      "desc": "Delta audit V30 PASS"
+    },
+    {
+      "id": "EV-V30-MANAGED-REDIS",
+      "status": "PROVIDED",
+      "desc": "Managed Redis probe",
+      "detail": "READY_NOT_APPLIED_ENV_MISSING"
+    },
+    {
+      "id": "EV-V30-ALERTING",
+      "status": "PROVIDED",
+      "desc": "Alerting probe",
+      "detail": "LOCAL_MOCK_ENV_MISSING"
+    },
+    {
+      "id": "EV-V30-OBSERVABILITY-SPEC",
+      "status": "PROVIDED",
+      "desc": "Observability dashboard spec"
+    },
+    {
+      "id": "EV-V28-CAP25K-STABLE",
+      "status": "PROVIDED",
+      "desc": "Cap 25k stable since V27 (now possibly S2)"
+    },
+    {
+      "id": "EV-V28-ALLOWLIST-2500-STABLE",
+      "status": "PROVIDED",
+      "desc": "Allowlist 2500 stable since V28"
+    },
+    {
+      "id": "EV-INFRA-MANAGED-REDIS-LIVE",
+      "status": "PENDING",
+      "desc": "Managed Redis LIVE traffic switched >=14d soak"
+    },
+    {
+      "id": "EV-INFRA-ALERTING-LIVE",
+      "status": "PENDING",
+      "desc": "Alerting LIVE webhook/pushgw verified with real incidents"
+    },
+    {
+      "id": "EV-OBSERVABILITY-DEPLOYED",
+      "status": "PENDING",
+      "desc": "Grafana/Prometheus deployed with V30 panels"
+    },
+    {
+      "id": "EV-LEGAL-PRODUCT-SIGNOFF",
+      "status": "PENDING",
+      "desc": "Product + legal explicit signoff"
+    },
+    {
+      "id": "EV-USER-FINAL-APPROVAL",
+      "status": "PENDING",
+      "desc": "Explicit user approval of broad rollout"
+    }
+  ],
+  "blockers_from_matrix_v9": [
+    {
+      "id": "BLK-F-05",
+      "severity": "P1",
+      "status": "OPEN"
+    }
+  ],
+  "pending_signoff_count": 7,
+  "pending_evidence_count": 6,
+  "next_steps_if_approved_in_future": [
+    "Switch Managed Redis live with rollback ready",
+    "Activate alerting live sink with incident validation",
+    "Deploy observability dashboards (Grafana/Prometheus)",
+    "Run 14d soak on Stage4 scope S1 at cap S2",
+    "Run broad rollout dry-run on staging clone",
+    "Obtain product + legal explicit signoff",
+    "Obtain explicit user final approval",
+    "Broad rollout in waves with continuous monitoring"
+  ],
+  "safety": {
+    "plan_only": true,
+    "no_runtime_change": true,
+    "no_db_write": true,
+    "no_secret_logged": true
+  },
+  "verdict": "PASS"
+}

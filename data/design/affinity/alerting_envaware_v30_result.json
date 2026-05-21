@@ -1,0 +1,25 @@
+{
+  "task_origin": "AF2-N-V30-ALERTING-PROBE",
+  "timestamp_utc": "2026-05-21T16:47:01.032061+00:00",
+  "sink_mode": "LOCAL_MOCK_ENV_MISSING",
+  "webhook_set": false,
+  "pushgateway_set": false,
+  "formats_validated": [
+    "rate_limit_fail_open",
+    "backend_not_redis",
+    "borea_success_alert",
+    "unauthorized_spend_alert",
+    "negative_inventory",
+    "cap_pressure_high"
+  ],
+  "live_results": [],
+  "mock_log_path": "/app/data/design/affinity/af2n_alerting_envaware_v30_local_mock_sink.log",
+  "mock_log_size_bytes": 1103,
+  "safety": {
+    "no_secrets_logged": true,
+    "no_pii_in_payload": true,
+    "no_borea_data_leaked": true,
+    "env_only_actuation": true
+  },
+  "verdict": "PASS"
+}

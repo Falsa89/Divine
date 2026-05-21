@@ -1,0 +1,37 @@
+{
+  "task_origin": "AF2-N-V30-CAP-RAISE-S2",
+  "timestamp_utc": "2026-05-21T16:46:17.444212+00:00",
+  "status": "APPLIED",
+  "gates": {
+    "v30_preflight_pass": true,
+    "v29_stress_8x_pass": true,
+    "v30_soak_pass": true,
+    "matrix_v8_p0_closed": true,
+    "canary_allowlist_2500": true,
+    "current_cap_25000_or_50000": true,
+    "rate_limit_redis": true,
+    "rollback_script_present": true,
+    "backend_running": true,
+    "redis_running": true
+  },
+  "pre_cap": 25000,
+  "post_cap": 50000,
+  "post_allowlist": 2500,
+  "post_rate_limit_backend": "redis",
+  "post_heroes_count": 100,
+  "post_borea_leak": [],
+  "conf_backup": "/app/backend/backups/v30_cap_s2/backend.conf.20260521T164617Z.bak",
+  "route_backup": "/app/backend/backups/v30_cap_s2/affinity_gift_spend.py.20260521T164617Z.bak",
+  "route_change_summary": "min(v, 25000) \u2192 min(v, 50000) at _canary_ledger_cap()",
+  "safety": {
+    "allowlist_unchanged_2500": true,
+    "no_borea_exposure": true,
+    "heroes_count_100": true,
+    "rate_limit_still_redis": true,
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_wiring_live": false,
+    "production_db_touched": false
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,145 @@
+{
+  "task_origin": "AF2-N-V30-OBSERVABILITY-DASHBOARD-SPEC",
+  "version": "v1",
+  "mode": "PLAN_ONLY",
+  "timestamp_utc": "2026-05-21T16:47:01.137737+00:00",
+  "panels": [
+    {
+      "id": "success_rate",
+      "title": "Gift-spend success rate (5m)",
+      "type": "graph",
+      "metric": "af2n_gift_spend_success_count",
+      "severity": "INFO"
+    },
+    {
+      "id": "http_423",
+      "title": "HTTP 423 (disabled/non-allowlist)",
+      "type": "graph",
+      "metric": "af2n_gift_spend_http_423",
+      "severity": "INFO"
+    },
+    {
+      "id": "http_429",
+      "title": "HTTP 429 (rate limit)",
+      "type": "graph",
+      "metric": "af2n_gift_spend_http_429",
+      "severity": "WARN"
+    },
+    {
+      "id": "borea_attempts",
+      "title": "Borea alias attempts (must be 0 success)",
+      "type": "stat",
+      "metric": "af2n_borea_attempt_total",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "redis_fail_open",
+      "title": "Rate-limit Redis fail-open",
+      "type": "stat",
+      "metric": "af2n_rate_limit_fail_open_total",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "backend_not_redis",
+      "title": "Backend != redis",
+      "type": "singlestat",
+      "metric": "af2n_rate_limit_backend",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "negative_inventory",
+      "title": "Negative inventory rows",
+      "type": "singlestat",
+      "metric": "af2n_negative_inventory_rows",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "delta_mismatch",
+      "title": "Delta audit mismatches",
+      "type": "stat",
+      "metric": "af2n_delta_mismatch_total",
+      "severity": "HIGH"
+    },
+    {
+      "id": "cap_pressure",
+      "title": "Ledger cap pressure (rows / cap)",
+      "type": "gauge",
+      "metric": "af2n_ledger_cap_pressure",
+      "severity": "WARN"
+    },
+    {
+      "id": "p95_p99_latency",
+      "title": "Spend p95/p99 latency",
+      "type": "graph",
+      "metric": "af2n_gift_spend_latency_ms",
+      "severity": "INFO"
+    },
+    {
+      "id": "http_5xx",
+      "title": "HTTP 5xx",
+      "type": "graph",
+      "metric": "af2n_gift_spend_http_5xx",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "idempotent_replay",
+      "title": "Idempotent replay hits",
+      "type": "graph",
+      "metric": "af2n_idempotent_replay_total",
+      "severity": "INFO"
+    }
+  ],
+  "alerts": [
+    {
+      "rule_id": "borea_success_alert",
+      "condition": "borea_attempts.success > 0",
+      "severity": "CRITICAL",
+      "action": "rollback_runtime"
+    },
+    {
+      "rule_id": "unauthorized_spend_alert",
+      "condition": "non_allowlist.applied > 0",
+      "severity": "CRITICAL",
+      "action": "rollback_runtime"
+    },
+    {
+      "rule_id": "backend_not_redis",
+      "condition": "backend != \"redis\"",
+      "severity": "HIGH",
+      "action": "restore_local_redis"
+    },
+    {
+      "rule_id": "rate_limit_fail_open",
+      "condition": "fail_open_count > 0",
+      "severity": "HIGH",
+      "action": "restore_local_redis"
+    },
+    {
+      "rule_id": "negative_inventory",
+      "condition": "negative_inventory_rows > 0",
+      "severity": "CRITICAL",
+      "action": "pause_writes"
+    },
+    {
+      "rule_id": "cap_pressure_high",
+      "condition": "ledger_rows / cap > 0.8",
+      "severity": "MEDIUM",
+      "action": "consider_cap_raise_plan"
+    },
+    {
+      "rule_id": "http_5xx_critical",
+      "condition": "5xx_per_5m > 10",
+      "severity": "CRITICAL",
+      "action": "page_oncall"
+    }
+  ],
+  "panel_count": 12,
+  "alert_count": 7,
+  "datasource_recommendation": "Prometheus + Loki + Grafana; pushgateway optional for off-cluster bursts.",
+  "safety": {
+    "plan_only": true,
+    "no_runtime_change": true,
+    "no_secret_in_panels": true
+  },
+  "verdict": "PASS"
+}

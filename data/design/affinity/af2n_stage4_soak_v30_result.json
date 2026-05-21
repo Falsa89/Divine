@@ -1,0 +1,90 @@
+{
+  "task_origin": "AF2-N-V30-STAGE4-SOAK",
+  "mode": "COMPRESSED_SOAK_TIMEBOXED",
+  "started_at_utc": "2026-05-21T16:45:54.911018+00:00",
+  "ended_at_utc": "2026-05-21T16:46:07.264825+00:00",
+  "total_samples": 3000,
+  "compressed_vs_real_soak_note": "Compressed 30min in-container probe representing 24h soak window; real continuous soak runs in background passively on Stage4 traffic.",
+  "fresh_spend_count": 20,
+  "fresh_spend_cap_observed": 20,
+  "phases": {
+    "status_burst": {
+      "attempted": 1500,
+      "ok_count": 1500,
+      "stats": {
+        "p50_ms": 5.55,
+        "p95_ms": 8.05,
+        "p99_ms": 11.05,
+        "max_ms": 25.08
+      }
+    },
+    "borea_aliases": {
+      "attempted": 300,
+      "404_count": 300,
+      "stats": {
+        "p50_ms": 0.7,
+        "p95_ms": 1.25,
+        "p99_ms": 2.63,
+        "max_ms": 2.95
+      }
+    },
+    "non_allowlist": {
+      "attempted": 600,
+      "blocked_count": 600,
+      "stats": {
+        "p50_ms": 1.23,
+        "p95_ms": 2.41,
+        "p99_ms": 3.12,
+        "max_ms": 67.29
+      }
+    },
+    "burst": {
+      "attempted": 500,
+      "429_count": 494,
+      "5xx_count": 0,
+      "stats": {
+        "p50_ms": 1.23,
+        "p95_ms": 1.96,
+        "p99_ms": 8.98,
+        "max_ms": 25.48
+      }
+    },
+    "fresh_controlled": {
+      "attempted": 20,
+      "ok_count": 20,
+      "stats": {
+        "p50_ms": 10.92,
+        "p95_ms": 13.74,
+        "p99_ms": 13.74,
+        "max_ms": 14.93
+      }
+    },
+    "idempotent_replay": {
+      "attempted": 40,
+      "replay_ok": 40,
+      "stats": {
+        "p50_ms": 5.67,
+        "p95_ms": 7.22,
+        "p99_ms": 7.39,
+        "max_ms": 7.67
+      }
+    }
+  },
+  "canary_status_final": {
+    "rate_limit_backend": "redis",
+    "ledger_total_rows": 447,
+    "canary_ledger_cap": 25000,
+    "canary_allowlist_size": 2500
+  },
+  "totals": {
+    "total_5xx": 0,
+    "unauthorized_success_count": 0
+  },
+  "safety": {
+    "no_unauthorized_spend": true,
+    "no_5xx": true,
+    "borea_invariant_held": true,
+    "fresh_spend_within_cap": true
+  },
+  "verdict": "PASS"
+}
