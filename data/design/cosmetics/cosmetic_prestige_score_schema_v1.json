@@ -1,0 +1,37 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_prestige_score_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "contribution_by_rarity": {
+    "common":    1,
+    "rare":      3,
+    "epic":      8,
+    "legendary":16,
+    "mythic":   32,
+    "divine":   64
+  },
+  "contribution_by_kind": {
+    "skin":  1.0,
+    "title": 1.2
+  },
+  "server_first_bonus_multiplier": 1.5,
+  "caps": {
+    "max_collection_bonus_pct_pve": 5.0,
+    "max_collection_bonus_pct_pvp": 2.0,
+    "max_collection_bonus_per_category": 1.0
+  },
+  "score_to_bonus_curve": {
+    "breakpoints": [
+      {"score": 100,   "pct_pve": 0.5, "pct_pvp": 0.2},
+      {"score": 300,   "pct_pve": 1.0, "pct_pvp": 0.5},
+      {"score": 800,   "pct_pve": 2.0, "pct_pvp": 1.0},
+      {"score": 2000,  "pct_pve": 3.5, "pct_pvp": 1.5},
+      {"score": 5000,  "pct_pve": 5.0, "pct_pvp": 2.0}
+    ],
+    "above_max_clamped_to_cap": true
+  }
+}

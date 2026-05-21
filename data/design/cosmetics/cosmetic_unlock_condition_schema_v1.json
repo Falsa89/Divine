@@ -1,0 +1,45 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_unlock_condition_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "condition_types": [
+    "topup_amount_event",
+    "paid_crystal_purchase",
+    "pvp_rank_reached",
+    "tower_floor_reached",
+    "weekly_castle_clears",
+    "zodiac_house_commander_hours",
+    "hero_affinity_level",
+    "titan_kill_count",
+    "guild_war_kill_streak",
+    "guild_war_kills_cumulative",
+    "event_wins_count",
+    "battle_power_reached",
+    "hero_star_reached",
+    "server_first_achievement",
+    "seasonal_event_completion"
+  ],
+  "required_fields": ["condition_id","type","threshold","window","design_only","runtime_attached"],
+  "field_specs": {
+    "condition_id":     {"type": "string", "pattern": "^cond_[a-z0-9_]+$", "unique": true},
+    "type":             {"type": "enum", "values_ref": "condition_types"},
+    "threshold":        {"type": "object", "description": "Numeric or compound threshold spec; e.g. {\"value\": 100} or {\"value\": 50000, \"currency\": \"crystal\"}"},
+    "window":           {"type": "enum", "values": ["event","weekly","seasonal","permanent","daily","monthly"]},
+    "design_only":      {"type": "const", "const": true},
+    "runtime_attached": {"type": "const", "const": false}
+  },
+  "compound_logic": {
+    "allow_AND_groups": true,
+    "allow_OR_groups": true,
+    "max_nested_depth": 2
+  },
+  "server_first_constraint": {
+    "only_top_1_player_per_server": true,
+    "server_bound_always": true,
+    "no_rerun": true
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_account_server_scope_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "scope_rules": {
+    "account_wide": {
+      "description": "Cosmetic ownership replicated across servers tied to the same account. Bonus active ONLY on the server where the cosmetic is equipped and valid.",
+      "applies_to": ["premium_skin", "paid_title", "top_up_milestone_skin", "top_up_milestone_title"],
+      "transferable_visual": true,
+      "transferable_bonus": false,
+      "requires_equip_on_each_server": true
+    },
+    "server_bound": {
+      "description": "Cosmetic exists only on the server of origin. Cannot be copied to other servers under any condition.",
+      "applies_to": ["server_first_title", "server_event_skin", "server_first_achievement_title", "guild_war_kill_streak_title", "tower_achievement_skin"],
+      "transferable_visual": false,
+      "transferable_bonus": false
+    }
+  },
+  "mixed_origin_handling": {
+    "hybrid_skin_paid_plus_event": "Treat as account_wide for ownership but bonus active only when equipped on the originating server.",
+    "prestige_score": "Per-server; account-wide collection aggregation is design-only for future task."
+  },
+  "compliance": {
+    "audit_log_required": false,
+    "audit_log_runtime_required": false,
+    "audit_log_design_only_marker": true
+  },
+  "safety": {
+    "design_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "no_borea_exposure": true,
+    "no_db_write": true
+  }
+}

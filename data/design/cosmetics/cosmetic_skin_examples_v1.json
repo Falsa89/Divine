@@ -1,0 +1,164 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_skin_examples_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "examples": [
+    {
+      "skin_id": "skin_premium_athena_aurora_gala",
+      "hero_id": "greek_athena",
+      "display_name": "Atena \u2014 Aurora di Gala",
+      "rarity": "mythic",
+      "source_type": "premium_paid",
+      "scope_type": "account_wide",
+      "is_limited": true,
+      "rerun_policy": {"rerun_eligible": true, "rerun_window_days_min": 60},
+      "unlock_condition_ids": ["cond_paid_crystal_50k"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "hero_atk_pct", "value": 2.5, "applies_in": "pve"},
+        {"type": "hero_def_pct", "value": 1.5, "applies_in": "pve"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    {
+      "skin_id": "skin_topup_ares_warforged",
+      "hero_id": "greek_ares",
+      "display_name": "Ares \u2014 Warforged",
+      "rarity": "epic",
+      "source_type": "top_up_milestone",
+      "scope_type": "account_wide",
+      "is_limited": false,
+      "rerun_policy": {"rerun_eligible": true, "rerun_window_days_min": 90},
+      "unlock_condition_ids": ["cond_topup_milestone_t3"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "hero_atk_pct", "value": 1.5, "applies_in": "pve"},
+        {"type": "boss_damage_pct", "value": 1.0, "applies_in": "boss"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    {
+      "skin_id": "skin_pvp_arena_champion_apollo",
+      "hero_id": "greek_apollo",
+      "display_name": "Apollo \u2014 Campione dell'Arena",
+      "rarity": "legendary",
+      "source_type": "pvp_achievement",
+      "scope_type": "server_bound",
+      "is_limited": true,
+      "rerun_policy": {"rerun_eligible": false, "rerun_window_days_min": null},
+      "unlock_condition_ids": ["cond_pvp_rank_top100"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "pvp_damage_pct", "value": 1.5, "applies_in": "pvp"},
+        {"type": "damage_reduction_pct", "value": 1.0, "applies_in": "pvp"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    {
+      "skin_id": "skin_tower_climber_hera_celestial",
+      "hero_id": "greek_hera",
+      "display_name": "Era \u2014 Vesti Celesti della Torre",
+      "rarity": "epic",
+      "source_type": "tower_achievement",
+      "scope_type": "server_bound",
+      "is_limited": false,
+      "rerun_policy": {"rerun_eligible": false, "rerun_window_days_min": null},
+      "unlock_condition_ids": ["cond_tower_floor_120"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "hero_hp_pct", "value": 1.5, "applies_in": "pve"},
+        {"type": "healing_done_pct", "value": 1.0, "applies_in": "pve"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    {
+      "skin_id": "skin_affinity_max_aphrodite_amaryllis",
+      "hero_id": "greek_aphrodite",
+      "display_name": "Afrodite \u2014 Amaryllis Devota",
+      "rarity": "legendary",
+      "source_type": "affinity_max_milestone",
+      "scope_type": "account_wide",
+      "is_limited": false,
+      "rerun_policy": {"rerun_eligible": true, "rerun_window_days_min": 120},
+      "unlock_condition_ids": ["cond_affinity_lvl_max_aphrodite"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "hero_atk_pct", "value": 1.5, "applies_in": "pve"},
+        {"type": "affinity_gain_pct", "value": 2.0, "applies_in": "pve"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    {
+      "skin_id": "skin_titan_hunter_artemis_storm",
+      "hero_id": "greek_artemis",
+      "display_name": "Artemide \u2014 Cacciatrice di Titani",
+      "rarity": "mythic",
+      "source_type": "titan_hunt",
+      "scope_type": "account_wide",
+      "is_limited": true,
+      "rerun_policy": {"rerun_eligible": true, "rerun_window_days_min": 180},
+      "unlock_condition_ids": ["cond_titan_kill_50"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "boss_damage_pct", "value": 2.0, "applies_in": "boss"},
+        {"type": "hero_atk_pct", "value": 1.5, "applies_in": "pve"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    {
+      "skin_id": "skin_guild_war_hephaestus_forge",
+      "hero_id": "greek_hephaestus",
+      "display_name": "Efesto \u2014 Forgia di Guerra",
+      "rarity": "legendary",
+      "source_type": "guild_war",
+      "scope_type": "server_bound",
+      "is_limited": true,
+      "rerun_policy": {"rerun_eligible": false, "rerun_window_days_min": null},
+      "unlock_condition_ids": ["cond_guild_war_kills_500"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "guild_war_damage_pct", "value": 1.5, "applies_in": "guild_war"},
+        {"type": "hero_def_pct", "value": 1.0, "applies_in": "guild_war"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    },
+    {
+      "skin_id": "skin_hero_star_zeus_imperator",
+      "hero_id": "greek_zeus",
+      "display_name": "Zeus \u2014 Imperator Stellare",
+      "rarity": "divine",
+      "source_type": "hero_star_achievement",
+      "scope_type": "account_wide",
+      "is_limited": false,
+      "rerun_policy": {"rerun_eligible": false, "rerun_window_days_min": null},
+      "unlock_condition_ids": ["cond_hero_star_6_zeus"],
+      "bonus_profile": {"target": "hero", "bonuses": [
+        {"type": "hero_atk_pct", "value": 3.0, "applies_in": "pve"},
+        {"type": "hero_hp_pct",  "value": 2.0, "applies_in": "pve"},
+        {"type": "hero_def_pct", "value": 2.0, "applies_in": "pve"}
+      ]},
+      "asset_status": "DESIGN_ONLY_NO_ASSET",
+      "design_only": true,
+      "runtime_attached": false,
+      "battle_runtime_attached": false
+    }
+  ]
+}

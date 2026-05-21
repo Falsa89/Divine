@@ -1,0 +1,207 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_title_examples_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "examples": [
+    {
+      "title_id": "title_spezzatitani",
+      "display_name": "Spezzatitani",
+      "rarity": "epic",
+      "source_type": "titan_hunt",
+      "scope_type": "account_wide",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "boss_damage_pct", "value": 1.0, "applies_in": "boss"},
+        {"type": "team_atk_flat", "value": 80, "applies_in": "pve"}
+      ]},
+      "unlock_condition_ids": ["cond_titan_kill_100"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_dominatore_arena",
+      "display_name": "Dominatore dell'Arena",
+      "rarity": "legendary",
+      "source_type": "pvp_achievement",
+      "scope_type": "server_bound",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "team_atk_pct", "value": 1.5, "applies_in": "pvp"},
+        {"type": "pvp_damage_pct", "value": 1.0, "applies_in": "pvp"},
+        {"type": "initial_rage_flat", "value": 6, "applies_in": "pvp"}
+      ]},
+      "unlock_condition_ids": ["cond_pvp_rank_top10"],
+      "seasonality": "seasonal",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_primo_sovrano_server",
+      "display_name": "Primo Sovrano del Server",
+      "rarity": "divine",
+      "source_type": "server_first",
+      "scope_type": "server_bound",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "team_hp_flat", "value": 2000, "applies_in": "all"},
+        {"type": "team_atk_flat", "value": 200, "applies_in": "all"},
+        {"type": "team_def_flat", "value": 200, "applies_in": "all"}
+      ]},
+      "unlock_condition_ids": ["cond_server_first_battle_power"],
+      "seasonality": "server_first_locked",
+      "server_first_allowed": true,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_oracolo_gemelli",
+      "display_name": "Oracolo dei Gemelli",
+      "rarity": "legendary",
+      "source_type": "seasonal_event",
+      "scope_type": "account_wide",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "initial_rage_flat", "value": 8, "applies_in": "pve"},
+        {"type": "team_atk_pct", "value": 1.0, "applies_in": "pve"}
+      ]},
+      "unlock_condition_ids": ["cond_seasonal_gemini_2026"],
+      "seasonality": "seasonal",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_cacciatore_colosso",
+      "display_name": "Cacciatore del Colosso",
+      "rarity": "epic",
+      "source_type": "titan_hunt",
+      "scope_type": "account_wide",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "pve_damage_pct", "value": 1.0, "applies_in": "pve"},
+        {"type": "team_atk_pct", "value": 0.5, "applies_in": "pve"}
+      ]},
+      "unlock_condition_ids": ["cond_titan_kill_25"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_lama_gilda",
+      "display_name": "Lama della Gilda",
+      "rarity": "legendary",
+      "source_type": "guild_war",
+      "scope_type": "server_bound",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "guild_war_damage_pct", "value": 1.5, "applies_in": "guild_war"},
+        {"type": "team_def_pct", "value": 1.0, "applies_in": "guild_war"}
+      ]},
+      "unlock_condition_ids": ["cond_guild_war_kills_1000"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_scalatore_infinito",
+      "display_name": "Scalatore dell'Infinito",
+      "rarity": "epic",
+      "source_type": "tower_achievement",
+      "scope_type": "server_bound",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "team_hp_flat", "value": 1000, "applies_in": "pve"},
+        {"type": "team_def_pct", "value": 1.0, "applies_in": "pve"}
+      ]},
+      "unlock_condition_ids": ["cond_tower_floor_150"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_devoto_atena",
+      "display_name": "Devoto di Atena",
+      "rarity": "rare",
+      "source_type": "affinity_max_milestone",
+      "scope_type": "account_wide",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "team_def_pct", "value": 0.5, "applies_in": "pve"},
+        {"type": "faction_bonus_pct", "value": 0.5, "applies_in": "pve", "faction_filter": "greek_olympian"}
+      ]},
+      "unlock_condition_ids": ["cond_affinity_lvl_max_athena"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_patrono_divino",
+      "display_name": "Patrono Divino",
+      "rarity": "mythic",
+      "source_type": "top_up_milestone",
+      "scope_type": "account_wide",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "player", "bonuses": [
+        {"type": "gold_gain_pct", "value": 4.0, "applies_in": "pve"},
+        {"type": "account_exp_gain_pct", "value": 4.0, "applies_in": "pve"},
+        {"type": "prestige_score_flat", "value": 32, "applies_in": "all"}
+      ]},
+      "unlock_condition_ids": ["cond_topup_milestone_t5"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_maestro_ascensione",
+      "display_name": "Maestro dell'Ascensione",
+      "rarity": "legendary",
+      "source_type": "hero_star_achievement",
+      "scope_type": "account_wide",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "team_atk_pct", "value": 1.0, "applies_in": "pve"},
+        {"type": "team_hp_pct", "value": 1.0, "applies_in": "pve"}
+      ]},
+      "unlock_condition_ids": ["cond_hero_star_6_count_5"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_custode_rocca",
+      "display_name": "Custode della Rocca",
+      "rarity": "rare",
+      "source_type": "event_wins_milestone",
+      "scope_type": "server_bound",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "team", "bonuses": [
+        {"type": "team_hp_flat", "value": 500, "applies_in": "pve"},
+        {"type": "healing_done_pct", "value": 0.5, "applies_in": "pve"}
+      ]},
+      "unlock_condition_ids": ["cond_weekly_castle_clears_8"],
+      "seasonality": "permanent",
+      "server_first_allowed": false,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    },
+    {
+      "title_id": "title_comandante_zodiacale",
+      "display_name": "Comandante Zodiacale",
+      "rarity": "mythic",
+      "source_type": "zodiac_house_commander",
+      "scope_type": "server_bound",
+      "equip_limit_group": "active_title",
+      "bonus_profile": {"target": "account_server", "bonuses": [
+        {"type": "team_atk_pct", "value": 1.5, "applies_in": "pve"},
+        {"type": "speed_flat", "value": 4, "applies_in": "pve"},
+        {"type": "prestige_score_flat", "value": 24, "applies_in": "all"}
+      ]},
+      "unlock_condition_ids": ["cond_zodiac_house_commander_hours_72"],
+      "seasonality": "seasonal",
+      "server_first_allowed": true,
+      "design_only": true, "runtime_attached": false, "battle_runtime_attached": false
+    }
+  ]
+}

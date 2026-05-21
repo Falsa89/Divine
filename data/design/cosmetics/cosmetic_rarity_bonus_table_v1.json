@@ -1,0 +1,41 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_rarity_bonus_table_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "notes": "Bonus ranges are design caps. Resolver in a future task will clamp values per scope/cap policy. PvP values are normalized/capped at resolution time, not at catalog time.",
+  "rarities": {
+    "common":   {"order": 1, "label": "Common",   "color_hint": "#9ca3af"},
+    "rare":     {"order": 2, "label": "Rare",     "color_hint": "#3b82f6"},
+    "epic":     {"order": 3, "label": "Epic",     "color_hint": "#a855f7"},
+    "legendary":{"order": 4, "label": "Legendary","color_hint": "#f59e0b"},
+    "mythic":   {"order": 5, "label": "Mythic",   "color_hint": "#ef4444"},
+    "divine":   {"order": 6, "label": "Divine",   "color_hint": "#ffd700"}
+  },
+  "title_bonus_ranges_design_caps": {
+    "common":    {"flat_team_hp_max": 200,  "flat_team_atk_max": 20,  "flat_team_def_max": 20,  "pct_max": 0.5, "initial_rage_max": 0, "speed_max": 0, "utility_pct_max": 0.5},
+    "rare":      {"flat_team_hp_max": 500,  "flat_team_atk_max": 50,  "flat_team_def_max": 50,  "pct_max": 0.5, "initial_rage_max": 2, "speed_max": 0, "utility_pct_max": 1.0},
+    "epic":      {"flat_team_hp_max": 1000, "flat_team_atk_max": 100, "flat_team_def_max": 100, "pct_max": 1.0, "initial_rage_max": 5, "speed_max": 2, "utility_pct_max": 2.0},
+    "legendary": {"flat_team_hp_max": 1500, "flat_team_atk_max": 150, "flat_team_def_max": 150, "pct_max": 1.5, "initial_rage_max": 8, "speed_max": 3, "utility_pct_max": 3.0},
+    "mythic":    {"flat_team_hp_max": 2000, "flat_team_atk_max": 200, "flat_team_def_max": 200, "pct_max": 2.0, "initial_rage_max": 10,"speed_max": 5, "utility_pct_max": 4.0},
+    "divine":    {"flat_team_hp_max": 2500, "flat_team_atk_max": 250, "flat_team_def_max": 250, "pct_max": 3.0, "initial_rage_pve_max": 15, "initial_rage_pvp_cap": 10, "speed_pve_max": 8, "speed_pvp_cap": 5, "utility_pct_max": 5.0}
+  },
+  "skin_bonus_ranges_design_caps": {
+    "common":    {"hero_stat_pct_max": 0.5},
+    "rare":      {"hero_stat_pct_max": 1.0},
+    "epic":      {"hero_stat_pct_max": 2.0},
+    "legendary": {"hero_stat_pct_max": 3.0},
+    "mythic":    {"hero_stat_pct_max": 4.0},
+    "divine":    {"hero_stat_pct_max": 5.0}
+  },
+  "pvp_normalization_note": "At resolution time, all skin/title pct bonuses are clamped to PvP power cap policy in /app/data/design/cosmetics/cosmetic_power_cap_policy_v1.json. Catalog values represent the upper design cap for PvE.",
+  "safety": {
+    "design_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "no_borea_exposure": true
+  }
+}

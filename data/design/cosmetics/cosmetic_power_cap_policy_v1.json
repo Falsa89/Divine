@@ -1,0 +1,61 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_power_cap_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "global_caps_by_mode": {
+    "pve":      {"total_cosmetic_power_pct_max": 15.0, "notes": "Sum of all cosmetic pct bonuses clamped to 15% in PvE."},
+    "pvp":      {"total_cosmetic_power_pct_max": 8.0,  "notes": "Stricter cap for fairness in competitive arenas."},
+    "guild_war":{"total_cosmetic_power_pct_max": 8.0,  "notes": "Aligned with PvP fairness rules."},
+    "boss":     {"total_cosmetic_power_pct_max": 10.0, "notes": "Includes boss_damage_pct and pve_damage_pct contributions."}
+  },
+  "flat_stat_caps": {
+    "initial_rage_flat": {"pve_max": 20, "pvp_max": 10, "notes": "Sum across all cosmetics; divine titles can grant up to 15 in PvE but are clamped to 10 in PvP."},
+    "speed_flat":        {"pve_max": 10, "pvp_max": 5,  "notes": "Sum across all cosmetics."},
+    "team_hp_flat":      {"pve_max": 5000, "pvp_max": 2500, "notes": "Soft cap; resolver clamps stacked flat HP."},
+    "team_atk_flat":     {"pve_max": 500,  "pvp_max": 250},
+    "team_def_flat":     {"pve_max": 500,  "pvp_max": 250}
+  },
+  "category_subcaps": {
+    "boss_damage_pct":      {"max_pct": 6.0,  "applies_in": ["boss", "pve"]},
+    "pve_damage_pct":       {"max_pct": 5.0,  "applies_in": ["pve", "boss"]},
+    "pvp_damage_pct":       {"max_pct": 3.0,  "applies_in": ["pvp"]},
+    "guild_war_damage_pct": {"max_pct": 3.0,  "applies_in": ["guild_war"]},
+    "damage_reduction_pct": {"max_pct": 4.0,  "applies_in": ["pve", "pvp", "boss", "guild_war"]},
+    "healing_done_pct":     {"max_pct": 4.0,  "applies_in": ["pve", "pvp", "boss", "guild_war"]},
+    "shield_strength_pct":  {"max_pct": 4.0,  "applies_in": ["pve", "pvp", "boss", "guild_war"]},
+    "role_bonus_pct":       {"max_pct": 2.0,  "applies_in": ["pve", "pvp", "boss", "guild_war"]},
+    "faction_bonus_pct":    {"max_pct": 2.0,  "applies_in": ["pve", "pvp", "boss", "guild_war"]},
+    "element_bonus_pct":    {"max_pct": 2.0,  "applies_in": ["pve", "pvp", "boss", "guild_war"]}
+  },
+  "utility_caps": {
+    "gold_gain_pct":        {"max_pct": 10.0, "applies_in": ["pve"]},
+    "account_exp_gain_pct": {"max_pct": 10.0, "applies_in": ["pve"]},
+    "affinity_gain_pct":    {"max_pct": 5.0,  "applies_in": ["pve"]},
+    "gift_value_pct":       {"max_pct": 5.0,  "applies_in": ["pve"]},
+    "material_drop_pct":    {"max_pct": 5.0,  "applies_in": ["pve"]}
+  },
+  "pvp_stricter_than_pve_invariant": true,
+  "resolution_priority_order": [
+    "apply_skin_bonus_to_hero",
+    "apply_title_bonus_to_team_player",
+    "apply_prestige_collection_bonus_capped",
+    "clamp_per_category_subcaps",
+    "clamp_per_global_mode_cap",
+    "clamp_flat_stat_caps_initial_rage_and_speed"
+  ],
+  "future_resolver_contract": {
+    "resolver_id": "cosmetic_power_cap_resolver_v1",
+    "runtime_attached": false,
+    "battle_attached": false
+  },
+  "safety": {
+    "design_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "no_borea_exposure": true
+  }
+}

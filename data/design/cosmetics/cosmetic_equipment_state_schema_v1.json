@@ -1,0 +1,24 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_equipment_state_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "player_state_schema": {
+    "player_id": {"type": "string"},
+    "server_id": {"type": "string"},
+    "active_title_id": {"type": "string|null", "max_active": 1},
+    "equipped_skins": {"type": "array", "item": {"hero_id": "string", "skin_id": "string"}, "unique_by": "hero_id", "max_one_skin_per_hero": true},
+    "owned_titles": {"type": "array", "item": "title_id"},
+    "owned_skins": {"type": "array", "item": "skin_id"},
+    "prestige_score": {"type": "integer", "min": 0}
+  },
+  "invariants": {
+    "only_one_active_title": true,
+    "one_skin_per_hero": true,
+    "server_bound_cosmetics_only_visible_on_origin_server": true
+  },
+  "future_storage_note": "Storage and DB layout are deferred to a future runtime task. This schema is design-only and is not persisted in V31 / V30 state."
+}

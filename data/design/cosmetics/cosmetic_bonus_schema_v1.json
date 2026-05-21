@@ -1,0 +1,44 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_bonus_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "bonus_types": [
+    "team_hp_flat","team_atk_flat","team_def_flat",
+    "team_hp_pct","team_atk_pct","team_def_pct",
+    "hero_hp_pct","hero_atk_pct","hero_def_pct",
+    "role_bonus_pct","faction_bonus_pct","element_bonus_pct",
+    "initial_rage_flat","speed_flat",
+    "boss_damage_pct","pve_damage_pct","pvp_damage_pct","guild_war_damage_pct",
+    "damage_reduction_pct","healing_done_pct","shield_strength_pct",
+    "gold_gain_pct","account_exp_gain_pct","affinity_gain_pct","gift_value_pct","material_drop_pct",
+    "prestige_score_flat"
+  ],
+  "bonus_entry_schema": {
+    "required_fields": ["type","value","applies_in"],
+    "optional_fields": ["role_filter","faction_filter","element_filter","hero_filter","note"],
+    "applies_in_enum": ["pve","pvp","boss","guild_war","all"]
+  },
+  "normalization_rules": {
+    "pvp_uses_stricter_cap_than_pve": true,
+    "pvp_initial_rage_capped_at_10": true,
+    "pvp_speed_capped_at_5": true,
+    "global_cap_pve_pct": 15.0,
+    "global_cap_pvp_pct": 8.0,
+    "global_cap_guild_war_pct": 8.0,
+    "global_cap_boss_pct": 10.0
+  },
+  "resolver_contract": {
+    "resolver_id": "cosmetic_power_cap_resolver_v1",
+    "runtime_attached": false,
+    "battle_attached": false,
+    "order": [
+      "skin_bonus","title_bonus","prestige_bonus",
+      "category_subcap_clamp","global_mode_cap_clamp",
+      "flat_initial_rage_cap","flat_speed_cap"
+    ]
+  }
+}

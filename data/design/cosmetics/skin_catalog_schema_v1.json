@@ -1,0 +1,33 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "skin_catalog_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "required_fields": [
+    "skin_id", "hero_id", "display_name", "rarity", "source_type", "scope_type",
+    "is_limited", "rerun_policy", "unlock_condition_ids", "bonus_profile",
+    "asset_status", "design_only", "runtime_attached", "battle_runtime_attached"
+  ],
+  "field_specs": {
+    "skin_id":            {"type": "string", "pattern": "^skin_[a-z0-9_]+$", "unique": true},
+    "hero_id":            {"type": "string", "description": "Must reference an existing hero (resolver-side validation deferred)."},
+    "display_name":       {"type": "string", "min_len": 1, "max_len": 64},
+    "rarity":             {"type": "enum", "values": ["common","rare","epic","legendary","mythic","divine"]},
+    "source_type":        {"type": "enum", "values": ["premium_paid","top_up_milestone","pvp_achievement","tower_achievement","affinity_max_milestone","titan_hunt","guild_war","hero_star_achievement","server_first","seasonal_event","zodiac_house_commander","battle_power_milestone","event_wins_milestone"]},
+    "scope_type":         {"type": "enum", "values": ["account_wide","server_bound"]},
+    "is_limited":         {"type": "bool"},
+    "rerun_policy":       {"type": "object", "required": ["rerun_eligible"], "optional": ["rerun_window_days_min"]},
+    "unlock_condition_ids": {"type": "array", "item_type": "string", "min_len": 1},
+    "bonus_profile":      {"type": "object", "required": ["target","bonuses"], "target_values": ["hero"], "bonuses_max_count": 4},
+    "asset_status":       {"type": "enum", "values": ["PLACEHOLDER","CONCEPT","WIP","FINAL","DESIGN_ONLY_NO_ASSET"]},
+    "design_only":        {"type": "const", "const": true},
+    "runtime_attached":   {"type": "const", "const": false},
+    "battle_runtime_attached": {"type": "const", "const": false}
+  },
+  "forbidden_fields": ["db_id", "mongo_oid", "applied_to_combat", "buffs_active", "battle_wiring"],
+  "forbidden_hero_ids": ["borea", "greek_borea", "primordial_gaia"],
+  "notes": "Catalog rows must NEVER include Borea hero_ids. Resolver-side validation will additionally enforce this invariant."
+}

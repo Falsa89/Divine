@@ -401,6 +401,12 @@ OPTIONAL = [
     ('V30-ROLLBACK-READINESS',                     'validate_af2n_v30_rollback_readiness.py'),
     ('SAFETY-ROLLUP-Y',                            'validate_collection_affinity_runtime_activation_rollup_v25.py'),
     ('ULTRA-COMBO-V30',                            'validate_ultra_combo_v30_capS2_soak_observability.py'),
+    # COSMETIC-SKIN-TITLE-SYSTEM-A (DESIGN-ONLY foundation; no runtime/battle attachment)
+    ('COSMETIC-SYSTEM-POLICY-A',                   'validate_cosmetic_system_policy_v1.py'),
+    ('COSMETIC-SCHEMAS-A',                         'validate_cosmetic_schemas_v1.py'),
+    ('COSMETIC-EXAMPLES-A',                        'validate_cosmetic_examples_v1.py'),
+    ('COSMETIC-RUNTIME-SAFETY-A',                  'audit_cosmetic_runtime_safety_v1.py'),
+    ('COSMETIC-SKIN-TITLE-COMBO-A',                'validate_cosmetic_skin_title_system_a_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

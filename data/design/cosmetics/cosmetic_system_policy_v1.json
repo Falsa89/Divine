@@ -1,0 +1,66 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_system_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "affinity_gift_spend_touched": false,
+  "af2n_stage4_touched": false,
+  "db_write": false,
+  "borea_exposed": false,
+  "global_rules": {
+    "skins_are_cosmetic_plus_small_bonus": true,
+    "titles_are_cosmetic_plus_small_bonus": true,
+    "bonus_strength_scales_with_rarity": true,
+    "equipped_title_limit": 1,
+    "skin_bonus_scope": "hero_bound",
+    "title_bonus_scope": "team_player_account_server",
+    "prestige_bonus_capped": true,
+    "server_first_cosmetics_are_server_bound": true,
+    "paid_cosmetics_can_be_account_wide_but_bonus_only_when_equipped_and_valid": true,
+    "no_runtime_application_in_this_task": true,
+    "no_battle_wiring_in_this_task": true
+  },
+  "scope_definitions": {
+    "account_wide": "Unlocked across all servers; ownership replicated; bonus applies only on the server where equipped/valid.",
+    "server_bound": "Unlocked and visible only on the originating server; cannot be carried over.",
+    "hero_bound": "Equippable on a specific hero only; bonus applies to that hero in eligible game modes.",
+    "team_bound": "Bonus applies to the whole team in eligible game modes.",
+    "player_bound": "Bonus applies to the player avatar regardless of team."
+  },
+  "equip_constraints": {
+    "active_title_max": 1,
+    "skin_per_hero_max": 1,
+    "display_only_titles_allowed": true,
+    "title_bonus_active_only_when_equipped": true,
+    "skin_bonus_active_only_when_equipped": true
+  },
+  "prestige_score": {
+    "enabled": true,
+    "contributes_to": "collection_bonus",
+    "collection_bonus_capped": true,
+    "max_collection_bonus_pct_pve": 5.0,
+    "max_collection_bonus_pct_pvp": 2.0
+  },
+  "future_runtime_resolver_contract": {
+    "resolver_id": "cosmetic_power_cap_resolver_v1",
+    "status": "DESIGN_ONLY_NOT_IMPLEMENTED",
+    "will_be_runtime_attached": false,
+    "will_be_battle_attached": false,
+    "activation_requires": [
+      "explicit_user_approval",
+      "separate_task_runtime_gated",
+      "observability_dashboards_live",
+      "managed_redis_live"
+    ]
+  },
+  "safety": {
+    "no_runtime_change": true,
+    "no_db_write": true,
+    "no_borea_exposure": true,
+    "no_existing_catalog_touched": true,
+    "no_af2n_stage4_state_change": true
+  }
+}

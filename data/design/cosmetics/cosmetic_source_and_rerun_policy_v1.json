@@ -1,0 +1,37 @@
+{
+  "task_origin": "COSMETIC-SKIN-TITLE-SYSTEM-A",
+  "document": "cosmetic_source_and_rerun_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "source_types": {
+    "premium_paid":            {"label": "Premium Paid",            "rerun_eligible": true,  "server_bound_default": false, "rerun_window_days_min": 60},
+    "top_up_milestone":        {"label": "Top-up Milestone",       "rerun_eligible": true,  "server_bound_default": false, "rerun_window_days_min": 90},
+    "pvp_achievement":         {"label": "PvP Achievement",         "rerun_eligible": false, "server_bound_default": true,  "rerun_window_days_min": null},
+    "tower_achievement":       {"label": "Tower Achievement",       "rerun_eligible": false, "server_bound_default": true,  "rerun_window_days_min": null},
+    "affinity_max_milestone":  {"label": "Affinity Max Milestone",  "rerun_eligible": true,  "server_bound_default": false, "rerun_window_days_min": 120},
+    "titan_hunt":              {"label": "Titan Hunt",              "rerun_eligible": true,  "server_bound_default": false, "rerun_window_days_min": 180},
+    "guild_war":               {"label": "Guild War",               "rerun_eligible": false, "server_bound_default": true,  "rerun_window_days_min": null},
+    "hero_star_achievement":   {"label": "Hero Star Achievement",   "rerun_eligible": false, "server_bound_default": false, "rerun_window_days_min": null},
+    "server_first":            {"label": "Server First",            "rerun_eligible": false, "server_bound_default": true,  "rerun_window_days_min": null},
+    "seasonal_event":          {"label": "Seasonal Event",          "rerun_eligible": true,  "server_bound_default": false, "rerun_window_days_min": 365},
+    "zodiac_house_commander":  {"label": "Zodiac House Commander",  "rerun_eligible": false, "server_bound_default": true,  "rerun_window_days_min": null},
+    "battle_power_milestone":  {"label": "Battle Power Milestone",  "rerun_eligible": true,  "server_bound_default": false, "rerun_window_days_min": 180},
+    "event_wins_milestone":    {"label": "Event Wins Milestone",    "rerun_eligible": true,  "server_bound_default": true,  "rerun_window_days_min": 180}
+  },
+  "rerun_constraints": {
+    "server_first_never_reruns": true,
+    "competitive_achievements_never_rerun": true,
+    "paid_skins_can_rerun_after_min_window": true,
+    "rerun_must_preserve_original_marker": true
+  },
+  "safety": {
+    "design_only": true,
+    "runtime_attached": false,
+    "battle_runtime_attached": false,
+    "no_db_write": true,
+    "no_borea_exposure": true
+  }
+}
