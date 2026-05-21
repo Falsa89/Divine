@@ -1,0 +1,31 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "global_real_world_event_override_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "override_events": {
+    "christmas":      {"window_utc": "Dec 18-Dec 31", "priority": "P1", "global": true, "can_delay_must_catch_up": true,  "can_delete_must_catch_up": false},
+    "new_year":       {"window_utc": "Dec 28-Jan 03", "priority": "P1", "global": true, "can_delay_must_catch_up": true,  "can_delete_must_catch_up": false},
+    "halloween":      {"window_utc": "Oct 24-Nov 02", "priority": "P1", "global": true, "can_delay_must_catch_up": true,  "can_delete_must_catch_up": false},
+    "valentine":      {"window_utc": "Feb 10-Feb 17", "priority": "P1", "global": true, "can_delay_must_catch_up": true,  "can_delete_must_catch_up": false},
+    "summer":         {"window_utc": "Jul 15-Aug 15", "priority": "P1", "global": true, "can_delay_must_catch_up": true,  "can_delete_must_catch_up": false},
+    "anniversary_v1": {"window_utc": "variable",      "priority": "P1", "global": true, "can_delay_must_catch_up": false, "can_delete_must_catch_up": false},
+    "collab_block":   {"window_utc": "variable",      "priority": "P1", "global": true, "can_delay_must_catch_up": true,  "can_delete_must_catch_up": false}
+  },
+  "precedence_order": [
+    {"priority": "P0", "category": "safety_or_maintenance", "description": "Maintenance/security holds override everything."},
+    {"priority": "P1", "category": "real_world_seasonal",   "description": "Globally synchronized real-world events."},
+    {"priority": "P2", "category": "merge_recovery",        "description": "Merge Recovery Season events / Catch-Up Pool."},
+    {"priority": "P3", "category": "server_age_critical",   "description": "Server-age must_catch_up events."},
+    {"priority": "P4", "category": "weekly_filler",         "description": "Compressible/skippable filler events."}
+  ],
+  "rules": {
+    "real_world_can_delay_must_catch_up_but_not_delete": true,
+    "merge_recovery_can_pause_for_real_world_seasonal": true,
+    "merge_recovery_resumes_after_real_world_window": true,
+    "borea_must_never_appear_in_any_real_world_event": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "merged_mature_calendar_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "entry_criteria": {
+    "merge_recovery_window_completed": true,
+    "baseline_progress_index_reached_on_target": true,
+    "lifecycle_stage_set_to_merged_mature": true
+  },
+  "calendar_recurrence": {
+    "stable_reruns_window_days": 30,
+    "pvp_season_length_days": 28,
+    "guild_wars_window_days": 7,
+    "tower_reset_days": 30,
+    "titan_hunts_window_days": 14,
+    "skin_title_events_window_days": 30
+  },
+  "seasonal_overrides": {
+    "real_world_seasonal_priority": "P1",
+    "anniversary_priority": "P1",
+    "collab_priority": "P1"
+  },
+  "reseed_rules": {
+    "ranking_reseed_after_merge": true,
+    "ranking_reseed_window_days": 14,
+    "guild_recruitment_boost_days": 21,
+    "merge_carnival_window_days": 7,
+    "new_server_rush_not_replayed": true
+  },
+  "safety": {
+    "borea_never_exposed_in_calendar": true,
+    "no_db_write": true,
+    "no_runtime_change": true
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "server_merge_eligibility_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "eligibility_inputs": {
+    "server_age_threshold_days_min": 90,
+    "active_real_users_threshold_below": 60,
+    "guild_activity_minimum_active_guilds": 3,
+    "arena_activity_minimum_active_players_per_day": 10,
+    "queue_matchmaking_health_max_wait_minutes": 5,
+    "revenue_activity_trend_window_days": 30,
+    "calendar_gap_analysis_required": true,
+    "no_active_critical_event_unless_scheduled_maintenance": true
+  },
+  "decision_criteria": {
+    "require_all_inputs_below_threshold": false,
+    "require_minimum_signals_below_threshold": 4,
+    "forced_merge_for_safety_allowed": true
+  },
+  "protected_states": [
+    "active_pvp_season",
+    "active_guild_war",
+    "active_anniversary_event",
+    "active_collab",
+    "active_seasonal_real_world"
+  ],
+  "merge_blockers_unless_overridden": {
+    "protected_state_active": true,
+    "recent_traumatic_event": true,
+    "open_critical_bug": true
+  },
+  "approval_chain": ["product", "liveops", "sre", "final_user_approval"],
+  "output_artifacts_required": [
+    "merge_plan_json",
+    "calendar_gap_analysis_json",
+    "catch_up_pool_design_json",
+    "player_communication_plan"
+  ]
+}

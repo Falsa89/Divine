@@ -1,0 +1,60 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "account_server_data_scope_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "global_principles": {
+    "same_account_can_enter_multiple_servers": true,
+    "progression_is_server_bound": true,
+    "new_server_entry_creates_fresh_server_profile": true,
+    "paid_currency_can_be_account_wide": true,
+    "free_currency_must_be_server_bound": true,
+    "borea_hidden_invariant_preserved": true
+  },
+  "account_wide": {
+    "identity": ["account_id","auth_email","auth_provider","display_name_global","account_security_state","ban_state","region_preference","language_preference"],
+    "economy": ["paid_currency_balance","paid_currency_ledger","purchase_history","refund_history","tax_invoice_state"],
+    "vip": ["vip_level","vip_lifetime_purchase_amount","vip_perk_eligibility"],
+    "paid_cosmetics_ownership": ["premium_skin_ownership","premium_title_ownership","top_up_milestone_ownership"],
+    "notes": "Account-wide ownership replicated. Activation/usage is always server-scoped."
+  },
+  "server_bound": {
+    "profile": ["server_profile_id","player_name_on_server","level_on_server","created_at_on_server","last_login_on_server","tutorial_state","progression_state"],
+    "economy": ["free_currency_gold","free_currency_diamonds_free","event_currency","shard_balances","resource_balances"],
+    "roster": ["hero_ownership","hero_star","hero_level","hero_equip","hero_artifacts","hero_skin_equipped","hero_affinity_state","hero_skill_state"],
+    "inventory": ["materials_inventory","gift_inventory","equipment_inventory","shard_inventory","consumable_inventory"],
+    "teams": ["team_compositions","team_presets","team_tags"],
+    "progress": ["story_progress","tower_floor","castle_floor","weekly_clears","daily_clears","event_progress","achievement_progress"],
+    "social": ["guild_id","guild_role","guild_contribution","friends_on_server"],
+    "competitive": ["arena_rank","arena_history","pvp_season_state","guild_war_state","ranking_history"],
+    "affinity_and_gifts": ["affinity_points","affinity_levels","gift_transaction_ledger_local","gift_inventory_local"],
+    "cosmetics_server_bound": ["achievement_skin_ownership","achievement_title_ownership","server_first_title_ownership","prestige_score_local","active_title_equipped"],
+    "event_state": ["current_event_progress","event_clears","event_rewards_claimed","event_shop_balance"],
+    "notes": "All listed entities follow strict server isolation; no cross-server read/write is allowed."
+  },
+  "mixed": {
+    "vip_account_wide_but_claims_server_bound": {
+      "vip_level": "account_wide",
+      "vip_claim_state": "server_bound",
+      "vip_reward_inventory": "server_bound"
+    },
+    "paid_cosmetics_account_wide_but_use_requires_hero_on_server": {
+      "ownership": "account_wide",
+      "equip_requires": "hero_on_target_server",
+      "bonus_activation": "server_bound"
+    },
+    "paid_currency_account_wide_but_spend_audit_per_server": {
+      "balance": "account_wide",
+      "spend_ledger_split_view": "per_server"
+    }
+  },
+  "safety": {
+    "no_db_write": true,
+    "no_runtime_change": true,
+    "no_borea_exposure": true,
+    "no_af2n_stage4_change": true
+  }
+}

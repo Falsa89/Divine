@@ -1,0 +1,65 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "event_banner_recovery_classification_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "key_invariant": "Recover missed critical milestones, not skipped weeks.",
+  "classes": {
+    "must_catch_up": {
+      "description": "Banners/events that are meta/counter/progression-critical. Cannot be skipped post-merge.",
+      "examples": [
+        "meta hero summon banners",
+        "counter hero summon banners",
+        "progression-critical event banners",
+        "critical divine weapon access events",
+        "system unlock events (boss intro, tower intro, titan intro, castle intro, guild war intro, pvp season intro)",
+        "rare non-substitutable materials events",
+        "mechanics-introducing tutorials"
+      ],
+      "recovery_requirement": "Banner pool must include or rerun-equivalent."
+    },
+    "optional_catch_up": {
+      "description": "Useful reruns, non-core heroes, valuable but farmable resources, medium prestige cosmetics.",
+      "examples": [
+        "non-core hero reruns",
+        "affinity events",
+        "zodiac house events with non-critical rewards",
+        "medium prestige cosmetic events",
+        "top-up support of medium impact"
+      ],
+      "recovery_requirement": "Bundle into compressed shop or shorter rerun window if budget allows."
+    },
+    "compress": {
+      "description": "Material weeks, minor shops, generic resource events, normal top-up support.",
+      "examples": [
+        "material weeks",
+        "minor shops",
+        "generic resource events",
+        "standard top-up support",
+        "daily/weekly filler with non-unique rewards"
+      ],
+      "recovery_requirement": "Compressed into Merge Shop and Catch-Up Bundle. No banner pool entry."
+    },
+    "skip": {
+      "description": "Generic lucky wheels, minor gold weeks, login filler, low-impact top-up, non-exclusive cosmetics if rerun elsewhere.",
+      "examples": [
+        "generic lucky wheel",
+        "minor gold week",
+        "login filler",
+        "low-impact top-up",
+        "non-exclusive cosmetic with rerun elsewhere"
+      ],
+      "recovery_requirement": "Omitted from recovery."
+    }
+  },
+  "classification_rules": {
+    "recover_missed_critical_milestones_not_skipped_weeks": true,
+    "meta_or_counter_hero_banner_is_must_catch_up": true,
+    "system_unlock_events_are_must_catch_up": true,
+    "generic_filler_is_skip": true,
+    "borea_must_never_be_in_any_recovery_class": true
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "server_age_calendar_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "event_types": [
+    "new_server_rush","login","summon_banner","material_week","top_up_week","lucky_wheel",
+    "server_boss","phase_battle","guild_event","pvp_season","tower_trial",
+    "castle_floor_event","titan_hunt","zodiac_house_event","affinity_event",
+    "skin_title_event","merge_recovery_event","real_world_seasonal"
+  ],
+  "recovery_classes": ["must_catch_up","optional_catch_up","compress","skip"],
+  "required_entry_fields": [
+    "entry_id","server_day_start","server_day_end","event_id","event_type",
+    "recovery_class","meta_relevance","progression_relevance",
+    "has_unique_hero","has_counter_impact","can_be_compressed","can_be_skipped",
+    "global_override_allowed","rerun_policy","min_server_age","max_server_age",
+    "design_only","runtime_attached","battle_runtime_attached"
+  ],
+  "field_specs": {
+    "entry_id":             {"type": "string", "pattern": "^cal_[a-z0-9_]+$", "unique": true},
+    "server_day_start":     {"type": "integer", "min": 1, "max": 4000},
+    "server_day_end":       {"type": "integer", "min": 1, "max": 4000},
+    "event_id":             {"type": "string"},
+    "event_type":           {"type": "enum", "values_ref": "event_types"},
+    "banner_id":            {"type": "string|null"},
+    "reward_profile_id":    {"type": "string|null"},
+    "recovery_class":       {"type": "enum", "values_ref": "recovery_classes"},
+    "meta_relevance":       {"type": "enum", "values": ["none","low","medium","high","critical"]},
+    "progression_relevance":{"type": "enum", "values": ["none","low","medium","high","critical"]},
+    "has_unique_hero":      {"type": "bool"},
+    "has_counter_impact":   {"type": "bool"},
+    "can_be_compressed":    {"type": "bool"},
+    "can_be_skipped":       {"type": "bool"},
+    "global_override_allowed":{"type": "bool"},
+    "rerun_policy":         {"type": "object", "shape": {"rerun_eligible": "bool", "window_days_min": "integer|null"}},
+    "min_server_age":       {"type": "integer", "min": 0},
+    "max_server_age":       {"type": "integer|null"},
+    "design_only":          {"type": "const", "const": true},
+    "runtime_attached":     {"type": "const", "const": false},
+    "battle_runtime_attached": {"type": "const", "const": false}
+  },
+  "invariants": {
+    "must_catch_up_implies_recoverable": true,
+    "skip_implies_not_recoverable": true,
+    "day_range_valid": "server_day_end >= server_day_start",
+    "borea_must_never_appear_in_banner_id": true
+  },
+  "forbidden_hero_ids_in_banner": ["borea","greek_borea","primordial_gaia"]
+}

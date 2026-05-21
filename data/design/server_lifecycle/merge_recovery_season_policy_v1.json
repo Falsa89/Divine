@@ -1,0 +1,46 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "merge_recovery_season_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "default_duration_days": 14,
+  "configurable_duration_days_range": [14, 21],
+  "key_invariant": "Recover missed critical milestones, not skipped weeks.",
+  "phases": [
+    {"name": "calendar_gap_analysis",       "description": "Compute baseline_progress_index from surviving server and list missing milestones from each source server."},
+    {"name": "catch_up_pool_build",         "description": "Aggregate must_catch_up entries into a single Catch-Up Pool. Bundle optional_catch_up into compressed banners. Compress compress-class into Merge Shop. Skip skip-class entirely."},
+    {"name": "recovery_window_execution",   "description": "Run banner pool with max_parallel_banners. Open Merge Shop with compressed_rewards. Run Merge Carnival socials."},
+    {"name": "route_to_mature_calendar",    "description": "After window end, switch lifecycle_stage to merged_mature and apply Merged Mature Calendar."}
+  ],
+  "behavior_rules": {
+    "do_not_inherit_oldest_calendar_blindly": true,
+    "do_not_replay_weeks": true,
+    "missed_critical_milestones_must_be_in_pool": true,
+    "real_world_overrides_can_delay_pool_but_not_delete": true,
+    "works_for_10_plus_server_merges_via_milestone_pool_not_week_replay": true,
+    "merge_shop_must_replace_compressed_events": true,
+    "borea_must_never_appear_in_pool_or_shop": true
+  },
+  "banner_pool_rules": {
+    "max_parallel_banners_default": 3,
+    "max_parallel_banners_high_volume_merge": 5,
+    "pity_policy": "inherit_per_account_pity_from_surviving_server; merged accounts retain best pity progress observed",
+    "purchase_limit_policy": "shared_across_pool; daily caps; weekly caps; account-wide spend ledger view",
+    "cosmetic_distribution_fairness": "compress cosmetic-only events if non-exclusive; preserve exclusive cosmetics in optional_catch_up"
+  },
+  "player_communication": {
+    "required_announcements_days_before": 7,
+    "required_in_game_banner": true,
+    "required_support_macros_ready": true,
+    "refund_or_compensation_policy_doc_required": true
+  },
+  "safety": {
+    "no_db_write": true,
+    "no_runtime_change": true,
+    "no_merge_execution": true,
+    "no_borea_exposure": true
+  }
+}

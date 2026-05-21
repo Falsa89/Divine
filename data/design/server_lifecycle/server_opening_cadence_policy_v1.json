@@ -1,0 +1,51 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "server_opening_cadence_policy_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "initial_cadence": {
+    "weekly": true,
+    "weekday_default": "Tuesday",
+    "open_time_utc_default": "10:00",
+    "first_servers_plan": [
+      {"server_id": "s1", "week_index": 1},
+      {"server_id": "s2", "week_index": 2},
+      {"server_id": "s3", "week_index": 3},
+      {"server_id": "s4", "week_index": 4},
+      {"server_id": "s5", "week_index": 5},
+      {"server_id": "s6", "week_index": 6}
+    ],
+    "max_concurrent_opening_per_week": 1,
+    "acceleration_allowed_if_demand_high": true,
+    "acceleration_requires_capacity_health_check": true
+  },
+  "server_selection_rules": {
+    "default_for_new_account": "newest_open_server",
+    "allow_manual_selection_if_open": true,
+    "allow_manual_selection_if_crowded": false,
+    "allow_manual_selection_if_closed": false,
+    "allow_join_friend_on_open_or_crowded": false,
+    "server_profile_created_on_first_entry": true,
+    "same_account_can_have_multiple_server_profiles": true
+  },
+  "capacity_rules": {
+    "target_real_active_users": 200,
+    "configurable": true,
+    "crowded_threshold_pct_of_max": 80,
+    "closed_to_new_threshold_pct_of_max": 100,
+    "reopen_when_below_pct_of_max": 60,
+    "capacity_decision_window_minutes": 60
+  },
+  "regional_variants": {
+    "allow_region_specific_cadence": true,
+    "allow_region_specific_open_time": true,
+    "document_in_calendar_profile": true
+  },
+  "safety": {
+    "no_db_write": true,
+    "no_runtime_change": true
+  }
+}

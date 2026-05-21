@@ -407,6 +407,13 @@ OPTIONAL = [
     ('COSMETIC-EXAMPLES-A',                        'validate_cosmetic_examples_v1.py'),
     ('COSMETIC-RUNTIME-SAFETY-A',                  'audit_cosmetic_runtime_safety_v1.py'),
     ('COSMETIC-SKIN-TITLE-COMBO-A',                'validate_cosmetic_skin_title_system_a_combo.py'),
+    # SERVER-LIFECYCLE-CALENDAR-A (DESIGN-ONLY / AUDIT-ONLY)
+    ('SERVER-SHARD-ISOLATION-AUDIT-A',             'audit_server_shard_isolation_v1.py'),
+    ('SERVER-LIFECYCLE-POLICIES-A',                'validate_server_lifecycle_policies_v1.py'),
+    ('SERVER-AGE-CALENDAR-A',                      'validate_server_age_calendar_schema_v1.py'),
+    ('SERVER-MERGE-RECOVERY-A',                    'validate_server_merge_recovery_policy_v1.py'),
+    ('SERVER-SHARD-ISOLATION-SAFETY-A',            'audit_server_shard_isolation_safety_v1.py'),
+    ('SERVER-LIFECYCLE-COMBO-A',                   'validate_server_lifecycle_calendar_a_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

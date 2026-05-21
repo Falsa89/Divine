@@ -1,0 +1,27 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "server_entity_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "required_fields": [
+    "server_id","server_name","opened_at","region","status","target_capacity",
+    "max_capacity","calendar_profile_id","lifecycle_stage","merge_group_id","merged_into_server_id"
+  ],
+  "field_specs": {
+    "server_id":              {"type": "string", "pattern": "^s[0-9]+$", "unique": true},
+    "server_name":            {"type": "string", "min_len": 1, "max_len": 64},
+    "opened_at":              {"type": "datetime_iso8601_utc"},
+    "region":                 {"type": "enum", "values": ["global","eu","na","latam","apac","jp","kr","sea","mena"]},
+    "status":                 {"type": "enum", "values": ["opening_planned","open","crowded","closed_to_new","merging","merged_into_other","retired"]},
+    "target_capacity":        {"type": "integer", "min": 50, "max": 100000, "recommended_default": 200},
+    "max_capacity":           {"type": "integer", "min": 50, "max": 200000, "recommended_default": 300},
+    "calendar_profile_id":    {"type": "string", "description": "References a calendar profile id; default initial profile is server_age_calendar_v1."},
+    "lifecycle_stage":        {"type": "enum", "values": ["new_rush","early_growth","established","mature","declining","merge_recovery","merged_mature","retired"]},
+    "merge_group_id":         {"type": "string|null", "description": "Set during/after merge operations."},
+    "merged_into_server_id":  {"type": "string|null", "description": "Pointer to the surviving server post-merge."}
+  },
+  "notes": "This schema is design-only. No DB migration is performed in this task."
+}

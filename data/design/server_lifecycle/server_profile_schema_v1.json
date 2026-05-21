@@ -1,0 +1,33 @@
+{
+  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
+  "document": "server_profile_schema_v1",
+  "version": "v1",
+  "mode": "DESIGN_ONLY",
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "required_fields": [
+    "account_id","server_id","player_name","created_at_on_server","last_login_on_server",
+    "level_on_server","server_bound_currencies","guild_id","ranking_state",
+    "tutorial_state","progression_state"
+  ],
+  "field_specs": {
+    "account_id":              {"type": "string", "description": "Global account id. Shared across servers."},
+    "server_id":               {"type": "string", "pattern": "^s[0-9]+$"},
+    "player_name":             {"type": "string", "min_len": 1, "max_len": 32, "note": "Unique within (server_id, namespace)."},
+    "created_at_on_server":    {"type": "datetime_iso8601_utc"},
+    "last_login_on_server":    {"type": "datetime_iso8601_utc"},
+    "level_on_server":         {"type": "integer", "min": 1, "max": 999, "initial": 1, "note": "Always starts at 1 on a new server profile."},
+    "server_bound_currencies": {"type": "object", "shape": {"gold": "integer", "diamonds_free": "integer", "event_currency": "object"}},
+    "guild_id":                {"type": "string|null"},
+    "ranking_state":           {"type": "object", "shape": {"arena_rank": "integer", "pvp_season_id": "string|null"}},
+    "tutorial_state":          {"type": "object", "shape": {"completed": "boolean", "current_step": "string|null"}},
+    "progression_state":       {"type": "object", "shape": {"story_chapter": "integer", "tower_floor": "integer", "castle_floor": "integer"}}
+  },
+  "invariants": {
+    "unique_account_per_server": true,
+    "reset_to_zero_on_new_server_profile": true,
+    "no_cross_server_data_transfer": true
+  },
+  "notes": "Server profile is the canonical row for per-server progression state. Account-wide entities are kept elsewhere (see account_server_data_scope_policy_v1)."
+}
