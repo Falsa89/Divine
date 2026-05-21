@@ -1,0 +1,164 @@
+{
+  "design_only": true,
+  "execution_ready": false,
+  "mode": "DRY_RUN_NO_DB_WRITE",
+  "notes": [
+    "This is a READ-ONLY dry-run. No MongoDB writes were performed.",
+    "execution_ready stays false until a real, approved migration is committed.",
+    "second_server_opening_allowed stays false until phase-12 acceptance is reached."
+  ],
+  "safety": {
+    "no_af2n_change": true,
+    "no_borea_exposure": true,
+    "no_collection_creation": true,
+    "no_db_write": true,
+    "no_index_creation": true,
+    "no_runtime_change": true
+  },
+  "second_server_opening_allowed": false,
+  "simulation": {
+    "db_name": "divine_waifus",
+    "default_server_id": "s1",
+    "mongo_reachable": true,
+    "projected_documents_to_tag_with_server_id": {
+      "arena_rankings": 0,
+      "event_progress": 0,
+      "gacha_history": 0,
+      "gift_transaction_ledger": 502,
+      "guilds": 2,
+      "inventory": 10,
+      "story_progress": 1,
+      "teams": 21,
+      "user_affinity_state": 1914,
+      "user_gift_inventory": 2500,
+      "user_heroes": 1938
+    },
+    "projected_server_profiles_to_create": 25,
+    "sample_mappings": [
+      {
+        "legacy_user_id": "test@test.com",
+        "planned_account_id": "test@test.com",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "test2@test.com",
+        "planned_account_id": "test2@test.com",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "test_1775998374@test.com",
+        "planned_account_id": "test_1775998374@test.com",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "test_1776000147@test.com",
+        "planned_account_id": "test_1776000147@test.com",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "test3@test.com",
+        "planned_account_id": "test3@test.com",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_526fb2cf@divine.bot",
+        "planned_account_id": "bot_526fb2cf@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_3e4f8458@divine.bot",
+        "planned_account_id": "bot_3e4f8458@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_dcaa4011@divine.bot",
+        "planned_account_id": "bot_dcaa4011@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_2d610113@divine.bot",
+        "planned_account_id": "bot_2d610113@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_73d621a9@divine.bot",
+        "planned_account_id": "bot_73d621a9@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_1ca58edc@divine.bot",
+        "planned_account_id": "bot_1ca58edc@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_ecee0a39@divine.bot",
+        "planned_account_id": "bot_ecee0a39@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_727b0d7e@divine.bot",
+        "planned_account_id": "bot_727b0d7e@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_32776dc2@divine.bot",
+        "planned_account_id": "bot_32776dc2@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_5615e8d6@divine.bot",
+        "planned_account_id": "bot_5615e8d6@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_08110bcb@divine.bot",
+        "planned_account_id": "bot_08110bcb@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_176c0be8@divine.bot",
+        "planned_account_id": "bot_176c0be8@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_5ec6adec@divine.bot",
+        "planned_account_id": "bot_5ec6adec@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_1c9e9209@divine.bot",
+        "planned_account_id": "bot_1c9e9209@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      },
+      {
+        "legacy_user_id": "bot_99055849@divine.bot",
+        "planned_account_id": "bot_99055849@divine.bot",
+        "planned_server_id": "s1",
+        "would_create_server_profile": true
+      }
+    ],
+    "users_count": 25
+  },
+  "task_origin": "SLC-C-MIGRATION-DRYRUN-SIMULATION",
+  "utc": "2026-05-21T22:57:27.506138+00:00",
+  "version": "v1"
+}

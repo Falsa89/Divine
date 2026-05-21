@@ -414,6 +414,22 @@ OPTIONAL = [
     ('SERVER-MERGE-RECOVERY-A',                    'validate_server_merge_recovery_policy_v1.py'),
     ('SERVER-SHARD-ISOLATION-SAFETY-A',            'audit_server_shard_isolation_safety_v1.py'),
     ('SERVER-LIFECYCLE-COMBO-A',                   'validate_server_lifecycle_calendar_a_combo.py'),
+    # SLC-C SINGLE-SHARD → MULTI-SHARD MIGRATION PLAN (DESIGN-ONLY / DRY-RUN)
+    ('SLC-C-ACCOUNT-ENTITY',                       'validate_slc_c_account_entity_schema_v1.py'),
+    ('SLC-C-ACCOUNT-WIDE-DOC',                     'validate_slc_c_account_wide_document_contract_v1.py'),
+    ('SLC-C-SERVER-BOUND-DOC',                     'validate_slc_c_server_bound_document_contract_v1.py'),
+    ('SLC-C-COLLECTION-SCOPE-MATRIX',              'validate_slc_c_collection_scope_migration_matrix_v1.py'),
+    ('SLC-C-MULTISHARD-INDEX-PLAN',                'validate_slc_c_multishard_index_plan_v1.py'),
+    ('SLC-C-PAID-FREE-SPLIT',                      'validate_slc_c_paid_free_currency_split_plan_v1.py'),
+    ('SLC-C-ROUTE-PATCH-CONTRACT',                 'validate_slc_c_server_aware_route_patch_contract_v1.py'),
+    ('SLC-C-PROFILE-CREATION-CONTRACT',            'validate_slc_c_server_profile_creation_contract_v1.py'),
+    ('SLC-C-MIGRATION-PHASE-PLAN',                 'validate_slc_c_single_to_multishard_migration_phase_plan_v1.py'),
+    ('SLC-C-ROLLBACK-PLAN',                        'validate_slc_c_multishard_rollback_plan_v1.py'),
+    ('SLC-C-REPO-PREFLIGHT',                       'audit_slc_c_repo_multishard_preflight.py'),
+    ('SLC-C-CRITICAL-FILES-NO-DIFF',               'audit_slc_c_critical_files_no_diff.py'),
+    ('SLC-C-MIGRATION-DRYRUN',                     'simulate_slc_c_migration_dryrun.py'),
+    ('SLC-C-API-SMOKE-READONLY',                   'audit_slc_c_api_smoke_readonly.py'),
+    ('SLC-C-COMBO',                                'validate_slc_c_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

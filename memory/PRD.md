@@ -29,3 +29,22 @@ Characters are gods, heroes, and mythological beasts reimagined as anime girls.
 - Element system: fire, water, earth, wind, light, dark
 - Status effects: burn, freeze, stun, poison, bleed, slow
 - Ultimate moves with cinematic cut-in animation
+
+---
+
+## SLC-C — Single-Shard → Multi-Shard Migration Plan (2026-05-21) ✅ PASS (DESIGN-ONLY)
+
+Design-only / read-only / dry-run plan to evolve from `user_id`-keyed
+single-shard model to `(account_id, server_id)` multi-shard.
+
+**No DB writes. No runtime/route changes. No Borea exposure. No AF2-N drift.**
+
+- 11 JSON design contracts in `/app/data/design/server_lifecycle/`
+- 14 Python validators/audits/simulators in `/app/backend/scripts/`
+- Final doc: `/app/docs/divine/93_SLC_C_MULTISHARD_MIGRATION_PLAN.md`
+- Suite globale: pass=258, fail=0, miss=0
+- `execution_ready=false`, `second_server_opening_allowed=false`
+- AF2-N intact: cap=50000, allowlist=2500
+- `/api/heroes`=100; `primordial_gaia`=404; borea/greek_borea
+  catalog-only stato pre-esistente documentato come baseline (non
+  introdotto da SLC-C)
