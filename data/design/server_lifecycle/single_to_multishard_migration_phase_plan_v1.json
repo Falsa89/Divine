@@ -1,0 +1,20 @@
+{
+  "task_origin":"SLC-C-MIGRATION-PHASE-PLAN","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "phases":[
+    {"phase":0,"name":"freeze_and_backup","reversible":true,"actions":["freeze second-server opening","freeze broad rollout (already off)","snapshot mongo collections to /app/backend/backups/slc_c/<timestamp>","run dry-run read-only audit"],"acceptance":"snapshot present + dry-run JSON written"},
+    {"phase":1,"name":"create_servers_collection_and_default_s1","reversible":true,"actions":["create collection servers","insert single doc server_id=s1, status=open, opened_at=now"],"acceptance":"servers.count==1, s1 present"},
+    {"phase":2,"name":"create_server_profiles_for_existing_users","reversible":true,"actions":["for each user in users: insert server_profiles{account_id=user_id, server_id=s1, level_on_server=user.level or 1, ...}"],"acceptance":"server_profiles.count==users.count for s1"},
+    {"phase":3,"name":"tag_server_bound_docs_with_server_id_s1","reversible":true,"actions":["add server_id=s1 to user_heroes, teams, inventory, story_progress, gacha_history, user_affinity_state, gift_transaction_ledger, user_gift_inventory, guilds, arena_rankings, event_progress"],"acceptance":"missing_server_id_counts==0 for all listed collections"},
+    {"phase":4,"name":"split_paid_currency_to_account_wallet","reversible":true,"actions":["create accounts_wallet_paid{account_id, paid_gems_balance}","create accounts_wallet_paid_ledger","copy users.paid_gems_balance into account wallet","keep purchase_history pointers"],"acceptance":"accounts_wallet_paid.count==users.count_with_paid_gems"},
+    {"phase":5,"name":"move_free_currencies_to_server_wallet","reversible":true,"actions":["create server_wallets_free{account_id, server_id=s1, gold, diamonds_free, event_currency}","copy users.gold + users.gems_free fields"],"acceptance":"server_wallets_free.count==server_profiles.count"},
+    {"phase":6,"name":"update_query_contracts_require_server_id","reversible":true,"actions":["update read/write code (not in this task) to filter by account_id+server_id"],"acceptance":"route patch contract validated (design-only)"},
+    {"phase":7,"name":"add_indexes_per_index_plan","reversible":true,"actions":["create indexes per multishard_index_plan_v1.json"],"acceptance":"all required indexes present"},
+    {"phase":8,"name":"dual_read_compatibility_window","reversible":true,"actions":["reads accept either {user_id} legacy or {account_id, server_id}","writes always include server_id"],"acceptance":"no 5xx, no data loss in canary"},
+    {"phase":9,"name":"flip_server_aware_reads_behind_flag","reversible":true,"actions":["toggle SERVER_AWARE_READS_ENABLED=true under feature flag"],"acceptance":"reads work with explicit server_id"},
+    {"phase":10,"name":"flip_server_aware_writes_behind_flag","reversible":true,"actions":["toggle SERVER_AWARE_WRITES_ENABLED=true under feature flag"],"acceptance":"writes work with explicit server_id"},
+    {"phase":11,"name":"remove_unsafe_fallbacks","reversible":false,"requires_explicit_user_approval":true,"actions":["remove legacy user_id-only read/write paths"],"acceptance":"no legacy fallback in code"},
+    {"phase":12,"name":"post_migration_validators_and_smoke","reversible":true,"actions":["run shard-isolation safety validators","run AF2-N smoke unchanged","verify second-server opening unblock criteria"],"acceptance":"all PASS + second_server_opening_allowed=true gated by explicit approval"}
+  ],
+  "safety":{"no_db_write":true,"no_migration_executed":true,"no_runtime_change":true,"borea_safe":true}
+}

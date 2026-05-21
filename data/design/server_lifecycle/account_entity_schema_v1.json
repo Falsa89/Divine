@@ -1,0 +1,10 @@
+{
+  "task_origin":"SLC-C-ACCOUNT-ENTITY-SCHEMA","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "required_fields":["account_id","email","auth_provider","created_at","display_name_global","region_preference","language_preference","ban_state","vip_level","design_only"],
+  "identity_fields":["account_id","email","auth_provider","display_name_global","region_preference","language_preference"],
+  "account_wide_fields":["vip_level","vip_lifetime_purchase_amount","paid_currency_balance","paid_currency_ledger_ref","paid_cosmetics_owned"],
+  "forbidden_account_wide_fields":["gold","diamonds_free","event_currency","team_active","equipped_skin","affinity_points","story_chapter","tower_floor","guild_id","arena_rank"],
+  "forbidden_reason":"Those fields are SERVER-BOUND and must live on server_profiles or server-bound collections.",
+  "safety":{"no_db_write":true,"no_borea_exposure":true,"no_af2n_change":true}
+}

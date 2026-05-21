@@ -1,0 +1,19 @@
+{
+  "task_origin":"SLC-C-MULTISHARD-ROLLBACK-PLAN","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "backup_requirements":{"snapshot_path_template":"/app/backend/backups/slc_c/<UTC_TIMESTAMP>/<collection>.bson.gz","required_collections":["users","user_heroes","teams","inventory","gacha_history","story_progress","guilds","arena_rankings","user_affinity_state","gift_transaction_ledger","user_gift_inventory","event_progress"],"checksum_required":true},
+  "reversible_phases":[0,1,2,3,4,5,6,7,8,9,10,12],
+  "irreversible_phases_forbidden_without_approval":[11],
+  "rollback_strategies":{
+    "dual_read_rollback":"toggle SERVER_AWARE_READS_ENABLED=false; legacy user_id-only reads resume; no data change",
+    "server_aware_flag_rollback":"unset SERVER_AWARE_READS_ENABLED and SERVER_AWARE_WRITES_ENABLED; restart backend",
+    "index_rollback":"drop indexes added in phase 7 (idempotent)",
+    "server_profile_rollback":"drop server_profiles collection (only if no live use); restore users.level fields from snapshot",
+    "paid_wallet_rollback":"drop accounts_wallet_paid and ledger; restore users.paid_gems_balance + purchase_history from snapshot",
+    "free_wallet_rollback":"drop server_wallets_free; restore users.gold + users.gems_free from snapshot",
+    "server_id_tag_rollback":"$unset server_id from server-bound collections (idempotent)"
+  },
+  "restore_validation":{"checks":["users.count_after == users.count_before","AF2-N gift_transaction_ledger rows preserved (V28 markers)","no Borea documents introduced","AF2-N canary-status unchanged (cap=50000, allowlist=2500)","heroes count 100 unchanged"]},
+  "no_live_rollback_executed":true,
+  "safety":{"no_db_write":true,"no_borea_exposure":true}
+}

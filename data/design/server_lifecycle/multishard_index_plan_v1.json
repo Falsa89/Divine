@@ -1,0 +1,31 @@
+{
+  "task_origin":"SLC-C-MULTISHARD-INDEX-PLAN","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "indexes":[
+    {"collection":"servers","name":"unique_server_id","keys":{"server_id":1},"unique":true,"sparse":false},
+    {"collection":"servers","name":"region_status_opened","keys":{"region":1,"status":1,"opened_at":1},"unique":false},
+    {"collection":"server_profiles","name":"unique_account_server","keys":{"account_id":1,"server_id":1},"unique":true},
+    {"collection":"server_profiles","name":"server_last_login","keys":{"server_id":1,"last_login_on_server":-1},"unique":false},
+    {"collection":"user_heroes","name":"unique_account_server_hero","keys":{"account_id":1,"server_id":1,"hero_id":1},"unique":true},
+    {"collection":"user_heroes","name":"server_hero","keys":{"server_id":1,"hero_id":1},"unique":false},
+    {"collection":"teams","name":"unique_account_server_slot","keys":{"account_id":1,"server_id":1,"team_slot":1},"unique":true},
+    {"collection":"teams","name":"active_team","keys":{"account_id":1,"server_id":1,"is_active":1},"unique":false},
+    {"collection":"inventory","name":"unique_account_server_item","keys":{"account_id":1,"server_id":1,"item_id":1},"unique":true},
+    {"collection":"server_wallets_free","name":"unique_account_server","keys":{"account_id":1,"server_id":1},"unique":true},
+    {"collection":"accounts_wallet_paid","name":"unique_account","keys":{"account_id":1},"unique":true},
+    {"collection":"accounts_wallet_paid_ledger","name":"unique_account_tx","keys":{"account_id":1,"tx_id":1},"unique":true},
+    {"collection":"accounts_wallet_paid_ledger","name":"account_visible_server","keys":{"account_id":1,"visible_on_server_id":1},"unique":false},
+    {"collection":"gift_transaction_ledger","name":"unique_account_server_idem","keys":{"account_id":1,"server_id":1,"idempotency_key":1},"unique":true},
+    {"collection":"user_gift_inventory","name":"unique_account_server_gift","keys":{"account_id":1,"server_id":1,"gift_id":1},"unique":true},
+    {"collection":"user_affinity_state","name":"unique_account_server_hero","keys":{"account_id":1,"server_id":1,"hero_id":1},"unique":true},
+    {"collection":"event_progress","name":"unique_account_server_event","keys":{"account_id":1,"server_id":1,"event_id":1},"unique":true},
+    {"collection":"arena_rankings","name":"unique_server_season_account","keys":{"server_id":1,"season_id":1,"account_id":1},"unique":true},
+    {"collection":"arena_rankings","name":"server_season_rank","keys":{"server_id":1,"season_id":1,"rank":1},"unique":false},
+    {"collection":"guilds","name":"unique_server_guild","keys":{"server_id":1,"guild_id":1},"unique":true},
+    {"collection":"guilds","name":"unique_server_name","keys":{"server_id":1,"name":1},"unique":true},
+    {"collection":"server_events_state","name":"unique_server_event","keys":{"server_id":1,"event_id":1},"unique":true},
+    {"collection":"gacha_history","name":"unique_account_server_pull","keys":{"account_id":1,"server_id":1,"pull_id":1},"unique":true},
+    {"collection":"gacha_history","name":"account_server_banner_pity","keys":{"account_id":1,"server_id":1,"banner_id":1},"unique":false}
+  ],
+  "safety":{"no_db_write":true,"design_only":true}
+}

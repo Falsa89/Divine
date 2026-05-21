@@ -1,0 +1,18 @@
+{
+  "task_origin":"SLC-C-ACCOUNT-WIDE-DOC-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "contract":{
+    "required_fields_every_doc":["account_id"],
+    "unique_key_template":"(account_id [, sub_key])",
+    "query_template":"{ account_id, ... }",
+    "forbidden_query_shapes":["{ user_id only when account_id available }","{ server_id required when document is account-wide }"],
+    "applies_to_collections":["users","accounts_wallet_paid","accounts_wallet_paid_ledger","account_cosmetics","vip_level"]
+  },
+  "mixed_handling":{
+    "paid_currency_balance_account_wide_with_per_server_view":true,
+    "paid_currency_ledger_account_wide_visible_on_server_id_field_optional":true,
+    "vip_level_account_wide_with_server_bound_claims":true,
+    "paid_cosmetic_ownership_account_wide_with_server_bound_equip":true
+  },
+  "borea_invariant":{"borea_must_never_appear":["borea","greek_borea","primordial_gaia"]}
+}

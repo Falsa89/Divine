@@ -1,0 +1,18 @@
+{
+  "task_origin":"SLC-C-SERVER-PROFILE-CREATION-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "trigger":"first_user_entry_on_a_server",
+  "contract":{
+    "endpoint_future":"POST /api/server/enter (NOT IMPLEMENTED YET)",
+    "inputs_required":["account_id","target_server_id"],
+    "creates":{"collection":"server_profiles","unique_key":["account_id","server_id"],
+      "initial_state":{"player_name_on_server":"derived_or_chosen","created_at_on_server":"now","last_login_on_server":"now","level_on_server":1,"tutorial_state":{"completed":false,"current_step":"intro"},"progression_state":{"story_chapter":1,"tower_floor":0,"castle_floor":0},"ranking_state":{"arena_rank":null,"pvp_season_id":null},"guild_id":null}},
+    "side_effects":{
+      "server_wallets_free":{"insert_if_missing":true,"initial":{"gold":0,"diamonds_free":0,"event_currency":{}}},
+      "server_id_tagged_documents":["user_heroes","teams","inventory","story_progress","event_progress"]
+    },
+    "idempotency":{"key":"(account_id, server_id)","replay_returns_existing_profile":true}
+  },
+  "invariants":{"no_cross_server_data_transfer":true,"borea_never_exposed":true,"paid_currency_balance_not_cloned_to_server_profile":true},
+  "implementation_status":"NOT_IMPLEMENTED_IN_RUNTIME"
+}

@@ -1,0 +1,30 @@
+{
+  "task_origin":"SLC-C-PAID-FREE-CURRENCY-SPLIT-PLAN","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "rules":{
+    "paid_divine_crystals_account_wide":true,
+    "paid_currency_ledger_account_wide":true,
+    "free_crystals_server_bound":true,
+    "gold_server_bound":true,
+    "event_currencies_server_bound":true,
+    "paid_spend_visibility_per_server_is_view_not_balance_clone":true,
+    "no_free_currency_cross_server_transfer":true,
+    "vip_level_account_wide":true,
+    "vip_claims_and_rewards_server_bound":true
+  },
+  "data_mapping":{
+    "users.paid_gems_balance":"accounts_wallet_paid.paid_gems_balance (account-wide)",
+    "users.gold":"server_wallets_free.gold (server_bound, default s1)",
+    "users.gems_free":"server_wallets_free.diamonds_free (server_bound, default s1)",
+    "users.event_currency_*":"server_wallets_free.event_currency (server_bound)",
+    "users.purchase_history":"accounts_wallet_paid_ledger (account-wide, with optional visible_on_server_id field)"
+  },
+  "runtime_invariants":{"no_live_economy_change_in_this_task":true,"paid_balance_never_cloned_per_server":true,"free_balance_never_global":true},
+  "borea_safety":{"borea_never_referenced_in_currency_documents":true},
+  "acceptance_for_future_implementation":[
+    "split is feature-flag gated",
+    "dry-run mapping verified against snapshot",
+    "rollback restores users.gold/gems/paid_gems_balance from snapshot",
+    "AF2-N gift-spend ledger unaffected (already server-aware-ready in design)"
+  ]
+}

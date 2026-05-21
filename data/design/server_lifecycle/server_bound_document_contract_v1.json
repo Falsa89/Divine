@@ -1,0 +1,17 @@
+{
+  "task_origin":"SLC-C-SERVER-BOUND-DOC-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "contract":{
+    "required_fields_every_doc":["account_id","server_id"],
+    "unique_key_template":"(account_id, server_id, <domain_key>)",
+    "query_template":"{ account_id, server_id, ... }",
+    "update_template":"{ account_id, server_id, ... }",
+    "forbidden_query_shapes":["{ user_id only }","{ account_id only }","{ server_id only without account_id when document is per-account-server }"],
+    "applies_to_collections":["user_heroes","teams","inventory","server_wallets_free","story_progress","event_progress","user_affinity_state","gift_transaction_ledger","user_gift_inventory","server_cosmetics","equipped_cosmetics","gacha_history"]
+  },
+  "transition_rules":{
+    "during_dual_read_window":{"reads_accept_legacy_user_id_only":true,"writes_must_already_include_server_id":true,"writes_use_server_id_default_s1":true},
+    "after_dual_read_window":{"reads_must_require_server_id":true,"legacy_fallback_removed":true}
+  },
+  "borea_invariant":{"borea_hero_ids_must_never_appear":["borea","greek_borea","primordial_gaia"]}
+}

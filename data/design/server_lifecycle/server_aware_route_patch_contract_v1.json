@@ -1,0 +1,31 @@
+{
+  "task_origin":"SLC-C-SERVER-AWARE-ROUTE-PATCH-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "required_patterns":{
+    "server_bound_endpoints_require_active_server_id":true,
+    "active_server_id_resolution":["X-Server-ID header","resolved server_profile from token","explicit query param server_id"],
+    "new_dependency_get_current_server_profile":true,
+    "get_current_user_remains_account_level":true,
+    "account_wide_endpoints_must_opt_out_of_server_id":true,
+    "gacha_writes_to_server_bound_roster_and_server_bound_free_currency_unless_explicit_paid_path":true,
+    "user_heroes_filter_by_account_id_and_server_id":true,
+    "team_filter_by_account_id_and_server_id":true,
+    "inventory_filter_by_account_id_and_server_id":true,
+    "guild_filter_by_server_id_and_account_membership":true,
+    "arena_filter_by_server_id_and_account_id":true,
+    "affinity_filter_by_account_id_and_server_id":true,
+    "event_progress_filter_by_account_id_and_server_id":true
+  },
+  "endpoint_categorization":{
+    "account_wide_endpoints":["/api/auth/register","/api/auth/login","/api/account/profile","/api/account/vip","/api/wallet/paid/balance","/api/wallet/paid/purchase"],
+    "server_bound_endpoints":["/api/user/heroes","/api/team","/api/inventory","/api/gacha/pull","/api/story/progress","/api/guild/*","/api/arena/*","/api/affinity/*","/api/affinity/gift-spend (already server-aware-ready)"],
+    "mixed_endpoints":["/api/wallet/paid/spend"]
+  },
+  "transition_dependency_examples":[
+    "get_current_account_profile -> returns AccountIdentity",
+    "get_current_server_profile -> returns ServerProfile or raises 423 'no_active_server'",
+    "require_server_profile() dependency for server-bound routes"
+  ],
+  "do_not_implement_routes_now":true,
+  "safety":{"no_runtime_change":true,"no_db_write":true,"borea_safe":true}
+}
