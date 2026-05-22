@@ -1,0 +1,85 @@
+{
+  "mode": "DESIGN_ONLY",
+  "results": {
+    "active_server_resolution_contract": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_e_active_server_resolution_contract_v1] PASS errors=0"
+      ]
+    },
+    "dry_run_scenarios": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_be_dry_run_scenarios_v1] PASS errors=0"
+      ]
+    },
+    "new_player_server_routing_policy": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_e_new_player_server_routing_policy_v1] PASS errors=0"
+      ]
+    },
+    "preflight": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_be_preflight_v1] PASS errors=0"
+      ]
+    },
+    "readiness_rollup": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_be_readiness_rollup_v1] PASS errors=0"
+      ]
+    },
+    "runtime_safety_audit": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_selection_runtime_safety_audit_v1] PASS errors=0"
+      ]
+    },
+    "server_profile_creation_contract": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_b_server_profile_creation_contract_v1] PASS errors=0"
+      ]
+    },
+    "server_profile_default_values": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_b_server_profile_default_values_v1] PASS errors=0"
+      ]
+    },
+    "server_selection_endpoint_contract": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_e_server_selection_endpoint_contract_v1] PASS errors=0"
+      ]
+    },
+    "server_status_transition_policy": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_e_server_status_transition_policy_v1] PASS errors=0"
+      ]
+    }
+  },
+  "safety": {
+    "no_borea_exposure": true,
+    "no_db_write": true,
+    "no_runtime_change": true,
+    "second_server_opening_allowed": false
+  },
+  "status": "PASS",
+  "task_origin": "SLC-BE-COMBO",
+  "utc": "2026-05-22T17:26:37.276049+00:00",
+  "version": "v1"
+}

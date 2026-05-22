@@ -1,0 +1,33 @@
+{
+  "task_origin":"SLC-E-NEW-PLAYER-SERVER-ROUTING-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "rules":{
+    "default_for_new_account":"newest_open_server",
+    "if_newest_is_crowded":"choose_newest_open_not_crowded",
+    "manual_selection_allowed_if_status_permits":true,
+    "existing_player_default":"return_to_last_active_server",
+    "no_auto_migration_old_to_new":true,
+    "no_cross_server_resource_copy":true,
+    "legacy_player_default_in_future_migration":"s1"
+  },
+  "selection_priority":[
+    "existing_active_server_profile",
+    "manual_explicit_selection_if_status_permits",
+    "newest_open_server",
+    "newest_open_not_crowded_server",
+    "fallback_to_legacy_s1_only_during_compatibility_window"
+  ],
+  "forbidden":{
+    "never_copy_inventory_across_servers":true,
+    "never_copy_roster_across_servers":true,
+    "never_copy_free_currency_across_servers":true,
+    "never_auto_route_existing_players_to_new_server":true,
+    "never_expose_borea_in_starter_routing":true
+  },
+  "compatibility_window":{
+    "single_shard_runtime":true,
+    "second_server_opening_allowed":false,
+    "after_migration_default_s1_for_all_legacy_accounts":true
+  },
+  "safety":{"no_db_write":true,"no_runtime_change":true,"borea_safe":true}
+}

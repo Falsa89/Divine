@@ -430,6 +430,18 @@ OPTIONAL = [
     ('SLC-C-MIGRATION-DRYRUN',                     'simulate_slc_c_migration_dryrun.py'),
     ('SLC-C-API-SMOKE-READONLY',                   'audit_slc_c_api_smoke_readonly.py'),
     ('SLC-C-COMBO',                                'validate_slc_c_combo_v1.py'),
+    # SLC-BE SERVER PROFILE CREATION + SELECTION CONTRACT (DESIGN-ONLY / CONTRACT-ONLY)
+    ('SLC-BE-PREFLIGHT',                           'validate_slc_be_preflight_v1.py'),
+    ('SLC-B-SERVER-PROFILE-CONTRACT',              'validate_server_profile_creation_contract_v1.py'),
+    ('SLC-B-SERVER-PROFILE-DEFAULTS',              'validate_server_profile_default_values_v1.py'),
+    ('SLC-E-SERVER-SELECTION-CONTRACT',            'validate_server_selection_endpoint_contract_v1.py'),
+    ('SLC-E-SERVER-STATUS-POLICY',                 'validate_server_status_transition_policy_v1.py'),
+    ('SLC-E-NEW-PLAYER-ROUTING',                   'validate_new_player_server_routing_policy_v1.py'),
+    ('SLC-E-ACTIVE-SERVER-RESOLUTION',             'validate_active_server_resolution_contract_v1.py'),
+    ('SLC-BE-DRY-RUN-SCENARIOS',                   'validate_server_profile_creation_dry_run_scenarios_v1.py'),
+    ('SLC-BE-RUNTIME-SAFETY-AUDIT',                'audit_server_selection_runtime_safety_v1.py'),
+    ('SLC-BE-ROLLUP',                              'validate_server_lifecycle_profile_selection_readiness_rollup_v1.py'),
+    ('SLC-BE-COMBO',                               'validate_slc_be_server_profile_selection_combo.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

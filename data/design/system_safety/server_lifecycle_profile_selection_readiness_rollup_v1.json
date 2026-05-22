@@ -1,0 +1,44 @@
+{
+  "task_origin":"SLC-BE-ROLLUP","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "state":{
+    "server_profile_contract_ready":true,
+    "server_selection_contract_ready":true,
+    "active_server_resolution_contract_ready":true,
+    "new_player_routing_policy_ready":true,
+    "server_status_transition_policy_ready":true,
+    "dry_run_scenarios_ready":true,
+    "runtime_safety_audit_ready":true,
+    "runtime_enabled":false,
+    "db_write":false,
+    "migration_applied":false,
+    "second_server_opening_allowed":false,
+    "route_patch_required":true,
+    "default_s1_migration_required":true,
+    "borea_safe":true,
+    "af2n_invariant_intact":true
+  },
+  "blockers_to_runtime_enable":[
+    "SLC-C migration not committed: phase 0 freeze+snapshot not approved by user",
+    "server_profiles collection does not exist in runtime DB",
+    "server_wallets_free / accounts_wallet_paid collections do not exist in runtime DB",
+    "server-aware route patch (SLC-F) is design-only; runtime routes still single-shard user_id-keyed",
+    "default S1 backfill (SLC-G) not committed",
+    "get_current_server_profile dependency does not exist in runtime",
+    "unsafe fallback removal (phase 11) requires explicit user approval"
+  ],
+  "future_feature_flags":[
+    {"name":"SERVER_PROFILES_RUNTIME_ENABLED","current_value":false,"required_for":"runtime activation of server_profiles"},
+    {"name":"SERVER_AWARE_READS_ENABLED","current_value":false,"required_for":"reads filtering by (account_id, server_id)"},
+    {"name":"SERVER_AWARE_WRITES_ENABLED","current_value":false,"required_for":"writes including server_id"},
+    {"name":"SECOND_SERVER_OPENING_ENABLED","current_value":false,"required_for":"opening any server beyond default s1"}
+  ],
+  "references":{
+    "slc_a":"server_shard_isolation_audit_v1.json",
+    "slc_c_combo":"_slc_c_combo_v1_result.json",
+    "slc_c_preflight":"slc_c_multishard_preflight_result_v1.json",
+    "slc_c_route_patch":"server_aware_route_patch_contract_v1.json",
+    "slc_c_phase_plan":"single_to_multishard_migration_phase_plan_v1.json"
+  },
+  "safety":{"no_db_write":true,"no_runtime_change":true}
+}

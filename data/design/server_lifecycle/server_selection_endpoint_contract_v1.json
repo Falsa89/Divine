@@ -1,0 +1,56 @@
+{
+  "task_origin":"SLC-E-SERVER-SELECTION-ENDPOINT-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"endpoint_contract_only":true,
+  "db_write":false,"no_route_created":true,"no_auth_change":true,
+  "future_endpoints":[
+    {
+      "method":"GET","path":"/api/servers","purpose":"list visible servers (status open|crowded|closed_to_new for existing players)",
+      "auth_required":true,"server_id_required":false,
+      "response_shape":{"servers":[{"server_id":"string","region":"string","status":"open|crowded|closed_to_new|merge_pending|merged|archived|planned","opened_at":"iso8601","display_name":"string","is_recommended_for_new_account":"bool"}]},
+      "forbidden":["never_expose_borea","never_expose_internal_capacity_secrets","never_leak_account_emails"]
+    },
+    {
+      "method":"GET","path":"/api/account/server-profiles","purpose":"list this account's server_profiles across servers",
+      "auth_required":true,"server_id_required":false,
+      "response_shape":{"profiles":[{"server_id":"string","created_at_on_server":"iso8601","last_login_on_server":"iso8601","level_on_server":"int","is_active":"bool"}]},
+      "forbidden":["never_clone_progression","never_clone_free_currency"]
+    },
+    {
+      "method":"POST","path":"/api/account/server-profiles/select","purpose":"select an active server for the session",
+      "auth_required":true,"server_id_required":false,
+      "request_shape":{"target_server_id":"string"},
+      "response_shape":{"active_server_id":"string","server_profile_created":"bool","is_legacy_default_s1":"bool"},
+      "rejection_rules":[
+        "target_server_id is unknown -> 404",
+        "target_server_id status=planned -> 409 not_selectable_planned",
+        "target_server_id status=archived -> 409 not_selectable_archived",
+        "target_server_id status=merge_pending and no existing profile -> 409 merge_pending_no_new_profile",
+        "target_server_id status=merged -> 308 redirect_to_merge_target_server_id",
+        "target_server_id status=closed_to_new and no existing profile -> 409 closed_to_new",
+        "second_server_opening_disabled and target != current_active_server -> 423 second_server_locked"
+      ],
+      "forbidden":["never_clone_server_bound_progress","never_copy_free_currency_across_servers","never_create_profile_for_archived_or_planned"]
+    },
+    {
+      "method":"GET","path":"/api/account/active-server","purpose":"return the currently active server for this session/account",
+      "auth_required":true,"server_id_required":false,
+      "response_shape":{"active_server_id":"string|null","is_legacy_default_s1":"bool"}
+    }
+  ],
+  "global_rejections":[
+    "closed_to_new without existing profile -> 409",
+    "merge_pending without existing profile -> 409",
+    "archived -> 409",
+    "planned -> 409",
+    "invalid server_id -> 404"
+  ],
+  "safety":{
+    "no_runtime_change":true,
+    "no_db_write":true,
+    "no_clone_of_server_bound_progress":true,
+    "second_server_opening_allowed":false,
+    "borea_safe":true
+  },
+  "do_not_implement_routes_now":true,
+  "implementation_status":"NOT_IMPLEMENTED_IN_RUNTIME"
+}

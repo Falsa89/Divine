@@ -1,0 +1,37 @@
+{
+  "task_origin":"SLC-B-SERVER-PROFILE-DEFAULT-VALUES","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "defaults":{
+    "player_name_on_server":"derived_or_chosen_at_first_entry",
+    "level_on_server":1,
+    "server_age_on_join":"current_server_age_days",
+    "tutorial_state":{"completed":false,"current_step":"intro","forced_home_hero":"borea_tutorial_only_no_runtime_exposure"},
+    "progression_state":{"story_chapter":1,"tower_floor":0,"castle_floor":0,"world_map_node":"world_1_node_1"},
+    "ranking_state":{"arena_rank":null,"pvp_season_id":null,"guild_id":null},
+    "server_bound_free_currencies":{"gold":0,"diamonds_free":0,"event_currency":{}},
+    "team_slots":{"max_active_teams":3,"default_active_team":1,"team_compositions":[]},
+    "inventory_policy_ref":"server_bound_per_account_id_server_id_item_id",
+    "starter_roster_policy_ref":"server_bound_per_account_id_server_id_hero_id",
+    "active_title_id":null,
+    "equipped_cosmetics":{}
+  },
+  "forbidden_inheritance":{
+    "no_inherited_roster":true,
+    "no_inherited_inventory":true,
+    "no_inherited_free_currency":true,
+    "no_inherited_progression":true,
+    "no_inherited_guild":true,
+    "no_inherited_arena_rank":true
+  },
+  "account_wide_views_visible_per_server":{
+    "paid_currency_balance_view":"read_only_view_account_wide_balance",
+    "vip_level_view":"read_only_view_account_wide_vip_level",
+    "paid_cosmetics_owned_view":"read_only_view_account_wide_paid_cosmetics_ownership"
+  },
+  "borea_safety":{
+    "borea_never_exposed_as_starter_hero":true,
+    "borea_never_appears_in_starter_roster_results":true,
+    "tutorial_borea_handling_is_inert_design_only":true
+  },
+  "safety":{"no_db_write":true,"no_runtime_change":true}
+}

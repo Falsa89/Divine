@@ -48,3 +48,26 @@ single-shard model to `(account_id, server_id)` multi-shard.
 - `/api/heroes`=100; `primordial_gaia`=404; borea/greek_borea
   catalog-only stato pre-esistente documentato come baseline (non
   introdotto da SLC-C)
+
+---
+
+## SLC-BE — Server Profile Creation + Selection Contract (2026-05-22) ✅ PASS (DESIGN-ONLY / CONTRACT-ONLY)
+
+Foundation contracts for future multi-server runtime: server profile
+creation, server selection endpoints, active server resolution, new-player
+routing, server status policy, dry-run scenarios, runtime safety audit,
+readiness rollup.
+
+**No DB writes. No runtime route creation. No auth changes. No UI.**
+
+- 8 JSON design contracts (server_lifecycle/ + system_safety/)
+- 11 Python validators/audits in `/app/backend/scripts/`
+- Final doc: `/app/docs/divine/94_SLC_BE_SERVER_PROFILE_SELECTION_CONTRACT.md`
+- Suite globale: pass=269, fail=0, miss=0 (11 nuovi OPTIONAL aggiunti)
+- SLC-C combo regression: ancora 14/14 PASS
+- `runtime_enabled=false`, `db_write=false`, `migration_applied=false`,
+  `second_server_opening_allowed=false`, `borea_safe=true`,
+  `af2n_invariant_intact=true`
+- AF2-N invariato: cap=50000, allowlist=2500
+- 7 blockers documentati prima di runtime enable
+- 4 future feature flags tutti `false`

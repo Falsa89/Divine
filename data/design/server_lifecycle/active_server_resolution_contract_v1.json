@@ -1,0 +1,38 @@
+{
+  "task_origin":"SLC-E-ACTIVE-SERVER-RESOLUTION-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "future_dependencies":{
+    "get_current_user":{"scope":"account_identity_only","returns":"AccountIdentity{account_id,email,vip_level,...}","server_aware":false},
+    "get_current_server_profile":{"scope":"account_id_plus_active_server_id","returns":"ServerProfile{account_id,server_id,level_on_server,...}","raises":"HTTP 423 no_active_server when unresolvable"}
+  },
+  "endpoint_requirements":{
+    "server_bound_endpoints_require_resolved_profile":true,
+    "account_wide_endpoints_must_explicitly_opt_out_of_server_id":true,
+    "mixed_endpoints_resolve_account_then_optionally_server":true
+  },
+  "active_server_resolution_sources":[
+    {"priority":1,"source":"X-Server-ID header","validation":"must match an existing server_profile for this account_id; reject otherwise with 403 forbidden_server"},
+    {"priority":2,"source":"stored_active_server_id on account session","validation":"must be in {open,crowded,closed_to_new,merge_pending} and profile exists"},
+    {"priority":3,"source":"server_id query parameter","validation":"only when explicitly enabled by route; subject to same checks"},
+    {"priority":4,"source":"default_legacy_server_id=s1","validation":"ONLY during compatibility window with SERVER_AWARE_READS_ENABLED=false OR SERVER_PROFILES_RUNTIME_ENABLED=false"}
+  ],
+  "unsafe_fallback_removal":{
+    "requirement":"the default_legacy_server_id=s1 fallback MUST be removed before second_server_opening_allowed becomes true",
+    "phase":"reference SLC-C migration_phase_plan phase 11 (remove_unsafe_fallbacks)",
+    "requires_explicit_user_approval":true
+  },
+  "failure_modes":{
+    "no_active_server_resolved":"HTTP 423 no_active_server",
+    "server_id_header_does_not_match_owned_profile":"HTTP 403 forbidden_server",
+    "resolved_server_is_archived":"HTTP 410 server_archived",
+    "resolved_server_is_merged":"HTTP 308 redirect_to_merge_target_server_id"
+  },
+  "safety":{
+    "no_runtime_change":true,
+    "no_db_write":true,
+    "borea_safe":true,
+    "second_server_opening_allowed":false,
+    "future_feature_flag":"SERVER_PROFILES_RUNTIME_ENABLED"
+  },
+  "implementation_status":"NOT_IMPLEMENTED_IN_RUNTIME"
+}

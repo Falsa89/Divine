@@ -1,6 +1,29 @@
 {
   "task_origin":"SLC-C-SERVER-PROFILE-CREATION-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
   "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "db_write":false,
+  "migration_required_before_runtime":true,
+  "second_server_opening_allowed":false,
+  "future_feature_flag":"SERVER_PROFILES_RUNTIME_ENABLED",
+  "default_server_id_for_legacy":"s1",
+  "future_flow":[
+    "login_global_account",
+    "choose_or_select_server",
+    "if_profile_exists_load",
+    "if_missing_and_server_open_or_crowded_create_profile_on_first_entry",
+    "new_profile_starts_from_zero_server_bound_progression"
+  ],
+  "scope_rules":{
+    "starter_heroes_and_rewards_scope":"server_bound",
+    "free_currency_scope":"server_bound",
+    "paid_currency_scope":"account_wide",
+    "vip_level_scope":"account_wide",
+    "vip_claims_and_rewards_scope":"server_bound",
+    "paid_cosmetics_ownership_scope":"account_wide",
+    "paid_cosmetics_equip_and_use_scope":"server_bound",
+    "active_title_scope":"server_bound",
+    "equipped_cosmetics_scope":"server_bound"
+  },
   "trigger":"first_user_entry_on_a_server",
   "contract":{
     "endpoint_future":"POST /api/server/enter (NOT IMPLEMENTED YET)",
@@ -13,6 +36,6 @@
     },
     "idempotency":{"key":"(account_id, server_id)","replay_returns_existing_profile":true}
   },
-  "invariants":{"no_cross_server_data_transfer":true,"borea_never_exposed":true,"paid_currency_balance_not_cloned_to_server_profile":true},
+  "invariants":{"no_cross_server_data_transfer":true,"borea_never_exposed":true,"paid_currency_balance_not_cloned_to_server_profile":true,"no_inherited_roster_from_other_servers":true,"no_inherited_free_currency_from_other_servers":true},
   "implementation_status":"NOT_IMPLEMENTED_IN_RUNTIME"
 }

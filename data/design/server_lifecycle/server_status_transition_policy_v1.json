@@ -1,0 +1,19 @@
+{
+  "task_origin":"SLC-E-SERVER-STATUS-TRANSITION-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "statuses":[
+    {"status":"planned","selectable":false,"new_profile_allowed":false,"existing_profile_allowed":false,"transitions_to":["open"]},
+    {"status":"open","selectable":true,"new_profile_allowed":true,"existing_profile_allowed":true,"transitions_to":["crowded","closed_to_new","merge_pending","archived"]},
+    {"status":"crowded","selectable":true,"new_profile_allowed":"only_below_hard_cap","existing_profile_allowed":true,"transitions_to":["open","closed_to_new","merge_pending","archived"]},
+    {"status":"closed_to_new","selectable":"existing_profiles_only","new_profile_allowed":false,"existing_profile_allowed":true,"transitions_to":["merge_pending","archived","open"]},
+    {"status":"merge_pending","selectable":"existing_profiles_only","new_profile_allowed":false,"existing_profile_allowed":true,"transitions_to":["merged","closed_to_new"]},
+    {"status":"merged","selectable":false,"new_profile_allowed":false,"existing_profile_allowed":"redirect_to_target","transitions_to":["archived"]},
+    {"status":"archived","selectable":false,"new_profile_allowed":false,"existing_profile_allowed":false,"transitions_to":[]}
+  ],
+  "hard_caps":{
+    "server_crowded_threshold_active_profiles":"design_param_TBD_NOT_RUNTIME",
+    "server_hard_cap_active_profiles":"design_param_TBD_NOT_RUNTIME"
+  },
+  "approval_required_transitions":["open->merge_pending","crowded->merge_pending","merge_pending->merged","closed_to_new->archived","merged->archived"],
+  "safety":{"no_db_write":true,"no_runtime_change":true,"second_server_opening_allowed":false,"borea_safe":true}
+}
