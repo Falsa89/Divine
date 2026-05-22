@@ -1,0 +1,43 @@
+{
+  "task_origin": "SLC-G-COMBO",
+  "version": "v1",
+  "timestamp_utc": "2026-05-22T23:24:00.160622+00:00",
+  "mode": "PRE_COMMIT_GATED_DRY_RUN_FIRST",
+  "db_write": false,
+  "migration_applied": false,
+  "combo_status": "PASS",
+  "final_status": "READY_TO_COMMIT_NOT_APPLIED",
+  "explicit_user_write_approval_present": false,
+  "results": [
+    {
+      "name": "preflight",
+      "script": "validate_slc_g_preflight_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "backfill_dryrun",
+      "script": "simulate_slc_g_default_s1_backfill_dryrun.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "write_gate_contract",
+      "script": "validate_slc_g_write_gate_contract_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "rollback_plan",
+      "script": "validate_slc_g_rollback_plan_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "idempotency_contract",
+      "script": "validate_slc_g_idempotency_contract_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    }
+  ]
+}

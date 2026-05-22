@@ -1,0 +1,133 @@
+{
+  "task_origin": "SLC-G-BACKFILL-DRYRUN",
+  "timestamp_utc": "2026-05-22T23:23:59.559955+00:00",
+  "mode": "READ_ONLY_DRY_RUN",
+  "db_write": false,
+  "migration_applied": false,
+  "totals": {
+    "docs_missing_server_id_total": 6916,
+    "docs_missing_account_id_total": 6916,
+    "unsafe_unknown_total": 2,
+    "collections_present_count": 8,
+    "collections_absent_count": 8
+  },
+  "per_collection": {
+    "servers": {
+      "present": false
+    },
+    "server_profiles": {
+      "present": false
+    },
+    "user_heroes": {
+      "present": true,
+      "total": 1961,
+      "missing_server_id": 1966,
+      "missing_account_id": 1966,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 1966,
+      "would_set_account_id_eq_user_id": 1966
+    },
+    "teams": {
+      "present": true,
+      "total": 21,
+      "missing_server_id": 21,
+      "missing_account_id": 21,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 21,
+      "would_set_account_id_eq_user_id": 21
+    },
+    "inventory": {
+      "present": true,
+      "total": 10,
+      "missing_server_id": 10,
+      "missing_account_id": 10,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 10,
+      "would_set_account_id_eq_user_id": 10
+    },
+    "server_wallets_free": {
+      "present": false
+    },
+    "gacha_history": {
+      "present": false
+    },
+    "story_progress": {
+      "present": true,
+      "total": 1,
+      "missing_server_id": 1,
+      "missing_account_id": 1,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 1,
+      "would_set_account_id_eq_user_id": 1
+    },
+    "guilds": {
+      "present": true,
+      "total": 2,
+      "missing_server_id": 2,
+      "missing_account_id": 2,
+      "unsafe_unknown": 2,
+      "would_set_server_id_default_s1": 2,
+      "would_set_account_id_eq_user_id": 0
+    },
+    "arena_rankings": {
+      "present": false
+    },
+    "user_affinity_state": {
+      "present": true,
+      "total": 1914,
+      "missing_server_id": 1914,
+      "missing_account_id": 1914,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 1914,
+      "would_set_account_id_eq_user_id": 1914
+    },
+    "gift_transaction_ledger": {
+      "present": true,
+      "total": 502,
+      "missing_server_id": 502,
+      "missing_account_id": 502,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 502,
+      "would_set_account_id_eq_user_id": 502
+    },
+    "user_gift_inventory": {
+      "present": true,
+      "total": 2500,
+      "missing_server_id": 2500,
+      "missing_account_id": 2500,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 2500,
+      "would_set_account_id_eq_user_id": 2500
+    },
+    "server_cosmetics": {
+      "present": false
+    },
+    "equipped_cosmetics": {
+      "present": false
+    },
+    "event_progress": {
+      "present": false
+    }
+  },
+  "account_wide_excluded": {
+    "accounts_wallet_paid": {
+      "present": false,
+      "excluded_from_server_id_backfill": true
+    },
+    "accounts_wallet_paid_ledger": {
+      "present": false,
+      "excluded_from_server_id_backfill": true
+    },
+    "account_cosmetics": {
+      "present": false,
+      "excluded_from_server_id_backfill": true
+    }
+  },
+  "mixed_special": {
+    "users": {
+      "present": true,
+      "never_writes_server_id": true
+    }
+  },
+  "verdict": "PASS"
+}

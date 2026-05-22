@@ -494,6 +494,13 @@ OPTIONAL = [
     ('SLC-D-RUNTIME-SAFETY-AUDIT',                 'audit_slc_d_runtime_safety_v1.py'),
     ('SLC-D-READINESS-ROLLUP',                     'validate_slc_d_merge_tooling_offline_readiness_rollup_v1.py'),
     ('SLC-D-COMBO',                                'validate_slc_d_merge_tooling_combo_v1.py'),
+    # SLC-G DEFAULT S1 MIGRATION COMMIT GATED PREP (PRE_COMMIT_GATED_DRY_RUN_FIRST)
+    ('SLC-G-PREFLIGHT',                            'validate_slc_g_preflight_v1.py'),
+    ('SLC-G-BACKFILL-DRYRUN',                      'simulate_slc_g_default_s1_backfill_dryrun.py'),
+    ('SLC-G-WRITE-GATE-CONTRACT',                  'validate_slc_g_write_gate_contract_v1.py'),
+    ('SLC-G-ROLLBACK-PLAN',                        'validate_slc_g_rollback_plan_v1.py'),
+    ('SLC-G-IDEMPOTENCY-CONTRACT',                 'validate_slc_g_idempotency_contract_v1.py'),
+    ('SLC-G-COMBO',                                'validate_slc_g_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

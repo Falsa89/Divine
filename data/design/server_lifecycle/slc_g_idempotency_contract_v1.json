@@ -1,0 +1,28 @@
+{
+  "task_origin":"SLC-G-IDEMPOTENCY-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "migration_applied":false,"db_write":false,
+  "idempotency_rules":[
+    "backfill_uses_set_only_if_missing_for_server_id_and_account_id",
+    "marker_field_slc_g_default_s1_set_only_added_when_field_was_missing",
+    "rerun_must_produce_zero_additional_writes_when_state_already_consistent",
+    "rerun_must_be_safe_against_partial_failures",
+    "rerun_must_log_no_op_count_per_collection",
+    "no_duplicate_documents_inserted_ever",
+    "no_pre_existing_server_id_overwritten",
+    "no_pre_existing_account_id_overwritten"
+  ],
+  "idempotency_verification":{
+    "after_first_run":"docs_missing_server_id == 0 in server-bound scope",
+    "after_second_run":"writes_executed == 0 AND state_unchanged == true",
+    "hash_check":"per_collection_count_and_index_list_stable_between_runs"
+  },
+  "failure_modes_handled":[
+    "partial_collection_failure",
+    "mongo_disconnect_mid_run",
+    "validator_disagreement_post_run",
+    "af2n_count_drift_detected",
+    "protected_file_diff_detected"
+  ],
+  "on_failure_action":"return_FAILED_SAFE_AND_TRIGGER_ROLLBACK_PLAN"
+}

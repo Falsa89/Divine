@@ -1,0 +1,33 @@
+{
+  "task_origin":"SLC-G-READINESS-ROLLUP","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "migration_applied":false,"db_write":false,
+  "required_artifacts":[
+    "slc_g_default_s1_migration_preflight_v1.json",
+    "slc_g_default_s1_backfill_plan_v1.json",
+    "slc_g_write_gate_contract_v1.json",
+    "slc_g_backup_manifest_contract_v1.json",
+    "slc_g_rollback_plan_v1.json",
+    "slc_g_idempotency_contract_v1.json"
+  ],
+  "required_validators":[
+    "validate_slc_g_preflight_v1.py",
+    "simulate_slc_g_default_s1_backfill_dryrun.py",
+    "validate_slc_g_write_gate_contract_v1.py",
+    "validate_slc_g_rollback_plan_v1.py",
+    "validate_slc_g_idempotency_contract_v1.py",
+    "validate_slc_g_combo_v1.py"
+  ],
+  "readiness_criteria":[
+    "all_required_artifacts_present",
+    "all_required_validators_present_and_PASS",
+    "prior_slc_combo_pass",
+    "api_smoke_invariants_intact",
+    "af2n_invariants_intact",
+    "protected_file_no_diff",
+    "write_gate_status_clearly_reported",
+    "explicit_user_write_approval_status_clearly_reported"
+  ],
+  "expected_default_status":"READY_TO_COMMIT_NOT_APPLIED",
+  "flip_to_applied_requires":"explicit user approval marker AND every gate PASS AND apply script invoked with explicit flag"
+}

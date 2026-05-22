@@ -1,0 +1,41 @@
+{
+  "task_origin":"SLC-G-WRITE-GATE-CONTRACT","version":"v1","mode":"PRE_COMMIT_GATED",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "migration_applied":false,"db_write":false,
+  "explicit_user_write_approval_required":true,
+  "approval_marker_required_in_prompt":"SLC_G_WRITE_GATE_EXPLICIT_APPROVAL=true",
+  "gates_all_must_pass":[
+    {"id":"G1_PRIOR_SLC_PASS","requires":"SLC-A/C/BE/F/D combo all PASS in last suite run"},
+    {"id":"G2_API_SMOKE_INVARIANTS","requires":"heroes_count=100 AND primordial_gaia=404 AND borea=200 AND greek_borea=200"},
+    {"id":"G3_AF2N_INVARIANTS","requires":"cap=50000 AND allowlist=2500 AND ledger_count_preserved AND inventory_count_preserved"},
+    {"id":"G4_RUNTIME_FLAGS_UNSET","requires":"SERVER_PROFILES_RUNTIME_ENABLED unset AND SECOND_SERVER_OPENING_ENABLED unset"},
+    {"id":"G5_PROTECTED_FILE_NO_DIFF","requires":"battle_engine.py, battle_core.py, combat.tsx, affinity_gift_spend.py, hero/skill/Divine Weapon catalogs unchanged since baseline"},
+    {"id":"G6_DRY_RUN_REPORT_PRESENT","requires":"simulate_slc_g_default_s1_backfill_dryrun.py executed and produced report"},
+    {"id":"G7_BACKUP_MANIFEST_PRESENT","requires":"backup manifest file present and validated"},
+    {"id":"G8_ROLLBACK_PLAN_PRESENT","requires":"rollback plan file present and validated"},
+    {"id":"G9_IDEMPOTENCY_CONTRACT_PRESENT","requires":"idempotency contract file present and validated"},
+    {"id":"G10_ZERO_UNSAFE_UNKNOWN","requires":"dry-run unsafe_unknown_count == 0 across all server-bound collections"},
+    {"id":"G11_EXPLICIT_USER_APPROVAL_PRESENT","requires":"approval marker SLC_G_WRITE_GATE_EXPLICIT_APPROVAL=true literally present in current prompt"},
+    {"id":"G12_BASELINE_DIFF_PASS_OR_AUTHORIZED","requires":"RM1.32-PRE baseline diff PASS or explicitly allow-changed paths"}
+  ],
+  "if_any_gate_fails":{
+    "action":"return_FAILED_SAFE_READY_NOT_APPLIED",
+    "db_write":false,
+    "migration_applied":false,
+    "report_required":true
+  },
+  "if_all_gates_pass":{
+    "action":"return_READY_TO_COMMIT",
+    "db_write_only_if_explicit_apply_flag":true,
+    "default_status_when_explicit_approval_absent":"READY_TO_COMMIT_NOT_APPLIED"
+  },
+  "signoffs_required":[
+    "product_owner",
+    "data_engineering",
+    "sre_oncall",
+    "affinity_runtime_owner",
+    "battle_runtime_owner_acknowledgement_only"
+  ],
+  "write_apply_script":"NOT_CREATED_IN_THIS_TASK",
+  "write_apply_script_creation_is_separate_gated_step":true
+}

@@ -1,0 +1,29 @@
+{
+  "task_origin":"SLC-G-ROLLBACK-PLAN","version":"v1","mode":"GATED_DRY_RUN_FIRST",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "migration_applied":false,"db_write":false,
+  "rollback_strategy":{
+    "approach_primary":"unset_server_id_only_where_we_set_it_via_marker_field",
+    "approach_fallback":"restore_from_backup_manifest_per_collection",
+    "marker_field":"_slc_g_default_s1_set",
+    "marker_field_default_value":true,
+    "unset_query":{"_slc_g_default_s1_set":true}
+  },
+  "rollback_steps":[
+    "freeze_writes_design_only_check",
+    "verify_marker_field_present_count",
+    "unset_server_id_where_marker_true",
+    "unset_account_id_where_marker_true_and_was_default",
+    "verify_post_rollback_counts_match_pre_migration_counts",
+    "verify_af2n_state_unchanged",
+    "verify_api_smoke_unchanged",
+    "emit_rollback_report"
+  ],
+  "rollback_must_be_idempotent":true,
+  "rollback_must_be_rehearsed_dry_run_before_real_run":true,
+  "never_drops_indexes_without_explicit_approval":true,
+  "never_drops_collections":true,
+  "recovery_objective_minutes_target":30,
+  "recovery_objective_minutes_max":120,
+  "if_rollback_fails":"escalate_to_full_backup_restore_per_manifest"
+}
