@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-22T21:13:57.544802+00:00",
+  "timestamp_utc": "2026-05-22T22:09:33.277950+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 626,
+  "backend_python_files_scanned": 641,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 357,
+      "files_with_hits": 362,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -261,7 +261,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 226,
+      "files_with_hits": 227,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -357,7 +357,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 19,
+      "files_with_hits": 21,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_slc_c_server_profile_creation_contract_v1.py",
@@ -461,7 +461,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 13,
+      "files_with_hits": 15,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_cosmetic_schemas_v1.py",
@@ -801,7 +801,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 33,
+      "files_with_hits": 36,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -989,7 +989,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 424,
+      "files_with_hits": 427,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1201,7 +1201,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 25,
+      "files_with_hits": 26,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1305,7 +1305,7 @@
     },
     "event_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 4,
+      "files_with_hits": 6,
       "hits_sample": [
         {
           "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
@@ -1332,6 +1332,18 @@
           ]
         },
         {
+          "file": "backend/scripts/simulate_slc_d_merge_tooling_offline_v1.py",
+          "keyword": "event_state",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 27,
+              "snippet": "if name == 'blocked_protected_event_state':"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
           "keyword": "event_progress",
           "has_server_id_anywhere": false,
@@ -1352,6 +1364,22 @@
             {
               "line": 14,
               "snippet": "'event_progress',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_server_merge_dryrun_scenarios_v1.py",
+          "keyword": "event_state",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 8,
+              "snippet": "'ten_plus_low_population_servers','blocked_protected_event_state',"
+            },
+            {
+              "line": 25,
+              "snippet": "blocked = next((s for s in scs if s.get('name') == 'blocked_protected_event_state'), None)"
             }
           ]
         }

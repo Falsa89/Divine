@@ -2,6 +2,17 @@
   "task_origin":"SLC-D-MERGE-ELIGIBILITY-POLICY","version":"v1","mode":"DESIGN_ONLY",
   "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
   "merge_execution_allowed":false,"db_write":false,
+  "eligibility_inputs":{
+    "server_age_threshold_days_min":90,
+    "active_real_users_threshold_below":60,
+    "guild_activity_minimum_active_guilds":3,
+    "arena_activity_minimum_active_players_per_day":10,
+    "queue_matchmaking_health_max_wait_minutes":5,
+    "revenue_activity_trend_window_days":30,
+    "calendar_gap_analysis_required":true,
+    "no_active_critical_event_unless_scheduled_maintenance":true,
+    "_note":"Pre-SLC-D contract preserved verbatim for backward compatibility with SLC-A-POLICIES validators. SLC-D adds eligibility_criteria below as additive design-only extension."
+  },
   "eligibility_criteria":{
     "min_server_age_days":60,
     "max_active_users_per_server":"design_param_TBD_NOT_RUNTIME",

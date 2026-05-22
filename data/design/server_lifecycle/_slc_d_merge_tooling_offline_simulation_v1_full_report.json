@@ -1,0 +1,128 @@
+{
+  "db_write": false,
+  "design_only": true,
+  "live_api_smoke": {
+    "heroes_count": 100,
+    "primordial_gaia_status": 404
+  },
+  "merge_execution_allowed": false,
+  "mode": "OFFLINE_SIMULATION_NO_DB_WRITE",
+  "route_patch_applied": false,
+  "second_server_opening_allowed": false,
+  "simulated_results": [
+    {
+      "actual": {
+        "merge_allowed": true,
+        "target_server_id": "s_beta"
+      },
+      "expected": {
+        "db_write": false,
+        "merge_allowed": true,
+        "merge_execution_allowed": false,
+        "recovery_classes_used": [
+          "optional_catch_up",
+          "skip"
+        ],
+        "recovery_duration_days": 14,
+        "target_server_id": "s_beta"
+      },
+      "id": 1,
+      "name": "three_similar_age_servers"
+    },
+    {
+      "actual": {
+        "baseline_progress_index_required": true,
+        "merge_allowed": true,
+        "target_server_id": "s_old1"
+      },
+      "expected": {
+        "baseline_progress_index_required": true,
+        "db_write": false,
+        "merge_allowed": true,
+        "recovery_classes_used": [
+          "must_catch_up",
+          "compress",
+          "optional_catch_up"
+        ],
+        "recovery_duration_days": 21,
+        "target_server_id": "s_old1"
+      },
+      "id": 2,
+      "name": "three_staggered_age_servers"
+    },
+    {
+      "actual": {
+        "merge_allowed": true,
+        "split_into_subgroups": true,
+        "subgroups_planned": [
+          {
+            "size": 6
+          },
+          {
+            "size": 6
+          }
+        ]
+      },
+      "expected": {
+        "db_write": false,
+        "merge_allowed": true,
+        "recovery_classes_used": [
+          "must_catch_up",
+          "compress",
+          "optional_catch_up",
+          "skip"
+        ],
+        "recovery_duration_days": 21,
+        "split_into_subgroups": true,
+        "subgroups": [
+          {
+            "size": 6
+          },
+          {
+            "size": 6
+          }
+        ]
+      },
+      "id": 3,
+      "name": "ten_plus_low_population_servers"
+    },
+    {
+      "actual": {
+        "merge_allowed": false,
+        "reason": "live_mode_lock"
+      },
+      "expected": {
+        "action": "wait_until_event_window_settled_plus_120_minutes",
+        "db_write": false,
+        "merge_allowed": false,
+        "reason": "live_mode_lock"
+      },
+      "id": 4,
+      "name": "blocked_protected_event_state"
+    },
+    {
+      "actual": {
+        "conflict_resolution_applied": [
+          "duplicate_player_name",
+          "duplicate_guild_name",
+          "duplicate_guild_tag"
+        ],
+        "merge_allowed": true
+      },
+      "expected": {
+        "borea_safe": true,
+        "conflict_resolution_applied": [
+          "append_numeric_suffix_to_younger",
+          "keep_oldest_guild_name_suffix_younger",
+          "free_rename_grace_30_days"
+        ],
+        "db_write": false,
+        "merge_allowed": true
+      },
+      "id": 5,
+      "name": "duplicate_names_and_guild_tags"
+    }
+  ],
+  "task": "slc_d_merge_tooling_offline_simulation_v1",
+  "utc": "2026-05-22T22:09:48.487970+00:00"
+}

@@ -478,6 +478,22 @@ OPTIONAL = [
     ('SLC-F-RUNTIME-SAFETY-AUDIT',                 'audit_slc_f_runtime_safety_v1.py'),
     ('SLC-F-READINESS-ROLLUP',                     'validate_slc_f_readiness_rollup_v1.py'),
     ('SLC-F-COMBO',                                'validate_slc_f_route_patch_dryrun_combo_v1.py'),
+    # SLC-D MERGE TOOLING OFFLINE SIMULATION (DESIGN-ONLY / DRY-RUN)
+    ('SLC-D-PREFLIGHT',                            'validate_slc_d_preflight_v1.py'),
+    ('SLC-D-TOOLING-OFFLINE-PLAN',                 'validate_server_merge_tooling_offline_plan_v1.py'),
+    ('SLC-D-ELIGIBILITY-POLICY',                   'validate_server_merge_eligibility_policy_v1.py'),
+    ('SLC-D-GROUP-PLANNING-CONTRACT',              'validate_server_merge_group_planning_contract_v1.py'),
+    ('SLC-D-CONFLICT-RESOLUTION-CONTRACT',         'validate_server_merge_conflict_resolution_contract_v1.py'),
+    ('SLC-D-RECOVERY-SEASON-CONTRACT',             'validate_server_merge_recovery_season_contract_v1.py'),
+    ('SLC-D-RECOVERY-POLICY',                      'validate_server_merge_recovery_policy_v1.py'),
+    ('SLC-D-CALENDAR-HARMONIZATION-POLICY',        'validate_server_merge_calendar_harmonization_policy_v1.py'),
+    ('SLC-D-DRYRUN-SCENARIOS',                     'validate_server_merge_dryrun_scenarios_v1.py'),
+    ('SLC-D-OFFLINE-SIMULATION',                   'simulate_slc_d_merge_tooling_offline_v1.py'),
+    ('SLC-D-RISK-MATRIX',                          'validate_server_merge_risk_matrix_v1.py'),
+    ('SLC-D-ABORT-ROLLBACK-POLICY',                'validate_server_merge_abort_rollback_policy_v1.py'),
+    ('SLC-D-RUNTIME-SAFETY-AUDIT',                 'audit_slc_d_runtime_safety_v1.py'),
+    ('SLC-D-READINESS-ROLLUP',                     'validate_slc_d_merge_tooling_offline_readiness_rollup_v1.py'),
+    ('SLC-D-COMBO',                                'validate_slc_d_merge_tooling_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

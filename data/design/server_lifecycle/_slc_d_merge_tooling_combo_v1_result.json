@@ -1,0 +1,106 @@
+{
+  "mode": "DESIGN_ONLY",
+  "results": {
+    "abort_rollback_policy": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_abort_rollback_policy_v1] PASS errors=0"
+      ]
+    },
+    "calendar_harmonization_policy": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_calendar_harmonization_policy_v1] PASS errors=0"
+      ]
+    },
+    "conflict_resolution_contract": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_conflict_resolution_contract_v1] PASS errors=0"
+      ]
+    },
+    "dryrun_scenarios": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_dryrun_scenarios_v1] PASS errors=0"
+      ]
+    },
+    "eligibility_policy": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_eligibility_policy_v1] PASS errors=0"
+      ]
+    },
+    "group_planning_contract": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_group_planning_contract_v1] PASS errors=0"
+      ]
+    },
+    "offline_simulation": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_d_merge_tooling_offline_simulation_v1] PASS errors=0"
+      ]
+    },
+    "preflight": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_d_preflight_v1] PASS errors=0"
+      ]
+    },
+    "readiness_rollup": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_d_merge_tooling_offline_readiness_rollup_v1] PASS errors=0"
+      ]
+    },
+    "recovery_season_contract": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_recovery_season_contract_v1] PASS errors=0"
+      ]
+    },
+    "risk_matrix": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_risk_matrix_v1] PASS errors=0"
+      ]
+    },
+    "runtime_safety_audit": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_d_runtime_safety_audit_v1] PASS errors=0"
+      ]
+    },
+    "tooling_offline_plan": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[server_merge_tooling_offline_plan_v1] PASS errors=0"
+      ]
+    }
+  },
+  "safety": {
+    "borea_safe": true,
+    "merge_execution_allowed": false,
+    "no_db_write": true,
+    "no_runtime_change": true,
+    "second_server_opening_allowed": false
+  },
+  "status": "PASS",
+  "task": "slc_d_merge_tooling_combo_v1",
+  "utc": "2026-05-22T22:09:49.275270+00:00"
+}
