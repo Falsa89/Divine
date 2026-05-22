@@ -1,0 +1,61 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "version": "v1",
+  "latest_completed": "SLC-BE",
+  "slc_be_summary": {
+    "suite": "269 PASS / 0 FAIL / 0 MISS",
+    "runtime_enabled": false,
+    "db_write": false,
+    "migration_applied": false,
+    "second_server_opening_allowed": false,
+    "route_patch_required": true,
+    "default_s1_migration_required": true,
+    "future_flags": {
+      "SERVER_PROFILES_RUNTIME_ENABLED": false,
+      "SECOND_SERVER_OPENING_ENABLED": false
+    },
+    "api_baseline": {
+      "/api/heroes": 100,
+      "/api/heroes/primordial_gaia": 404,
+      "/api/heroes/borea": "200 catalog-only inert baseline; do not change in this task",
+      "/api/heroes/greek_borea": "200 catalog-only inert baseline; do not change in this task"
+    },
+    "af2n": {
+      "cap": 50000,
+      "allowlist": 2500
+    }
+  },
+  "recommended_next_sequence": [
+    {
+      "step": "SLC-F",
+      "description": "server-aware route patch dry-run",
+      "execute_now": false
+    },
+    {
+      "step": "SLC-G",
+      "description": "default S1 migration commit gated",
+      "execute_now": false
+    },
+    {
+      "step": "SLC-D",
+      "description": "merge tooling simulation offline",
+      "execute_now": false
+    },
+    {
+      "step": "SLC-H",
+      "description": "server selection endpoint implementation gated",
+      "execute_now": false
+    }
+  ],
+  "blockers": [
+    "migration_required_before_runtime",
+    "route_patch_required",
+    "default_s1_migration_required",
+    "server_id isolation debt in existing routes",
+    "second server opening locked",
+    "runtime feature flags unset",
+    "user approval required for each runtime/DB phase"
+  ]
+}

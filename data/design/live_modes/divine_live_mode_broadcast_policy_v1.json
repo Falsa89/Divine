@@ -1,0 +1,24 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "version": "v1",
+  "max_visible_announcements": 3,
+  "queue": "priority_queue",
+  "significant_events_only": [
+    "boss_kill",
+    "top_3_final_rank",
+    "important_streak",
+    "zone_conquest",
+    "line_completion",
+    "guardian_destroyed",
+    "outer_gate_destroyed",
+    "inner_gate_destroyed",
+    "milestone_clear"
+  ],
+  "spam_prevention": [
+    "collapse_repeated_events",
+    "cooldown_per_event_type",
+    "no_minor_damage_ticks"
+  ]
+}

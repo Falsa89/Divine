@@ -1,0 +1,70 @@
+{
+  "mode": "DESIGN_ONLY",
+  "results": {
+    "benchmark_risk_policy": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[live_mode_benchmark_risk_policy_v1] PASS errors=0"
+      ]
+    },
+    "broadcast_policy": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[live_mode_broadcast_policy_v1] PASS errors=0"
+      ]
+    },
+    "calendar": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[live_mode_calendar_v1] PASS errors=0"
+      ]
+    },
+    "reconciliation": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[live_mode_benchmark_reconciliation_v1] PASS errors=0"
+      ]
+    },
+    "reward_framework": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[live_mode_reward_framework_v1] PASS errors=0"
+      ]
+    },
+    "runtime_safety_audit": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[live_mode_reconciliation_runtime_safety_v1] PASS errors=0"
+      ]
+    },
+    "sanctuary_housing_note": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[sanctuary_housing_dimora_divina_note_v1] PASS errors=0"
+      ]
+    },
+    "slc_next_plan": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_next_after_be_plan_v1] PASS errors=0"
+      ]
+    }
+  },
+  "safety": {
+    "no_borea_exposure_introduced": true,
+    "no_db_write": true,
+    "no_runtime_change": true,
+    "second_server_opening_allowed": false
+  },
+  "status": "PASS",
+  "task": "live_modes_slc_next_combo_v1",
+  "utc": "2026-05-22T20:31:32.738914+00:00"
+}

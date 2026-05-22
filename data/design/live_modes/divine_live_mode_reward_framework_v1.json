@@ -1,0 +1,27 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "version": "v1",
+  "reward_categories": [
+    "participation_reward",
+    "personal_performance_reward",
+    "guild_result_reward",
+    "server_or_faction_collective_reward",
+    "leaderboard_reward",
+    "consolation_reward",
+    "milestone_reward",
+    "shop_currency",
+    "first_clear_reward",
+    "recurring_reward"
+  ],
+  "rule": "each mode must explicitly choose applicable reward categories; do not force all categories on all modes",
+  "anti_p2w": [
+    "paid cooldown clear forbidden in competitive ranking modes",
+    "paid morale boost forbidden or capped out of ranking",
+    "VIP skip forbidden in competitive ranking modes",
+    "paid revive cannot decide leaderboard",
+    "uncapped extra entries forbidden",
+    "final blow cannot be a major reward source"
+  ]
+}

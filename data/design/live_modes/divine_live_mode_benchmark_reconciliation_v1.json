@@ -1,0 +1,413 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "version": "v1",
+  "source_of_truth": "user_corrected_mapping_after_zip_review",
+  "generated_at_utc": "2026-05-22T20:23:57Z",
+  "previous_wrong_mappings_to_correct": [
+    {
+      "mode": "Troni dell’Eclissi",
+      "wrong_mapping": "Bleach Online Seireitei Soul Palace",
+      "correct_mapping": "NOT present in Bleach Online; use Divine ZIP mechanics and compare against seasonal boss/modifier/ranking systems"
+    },
+    {
+      "mode": "Giudizio di Asgard",
+      "wrong_mapping": "uncertain Bleach trial",
+      "correct_mapping": "NOT present in Bleach Online"
+    },
+    {
+      "mode": "Titanomachia",
+      "wrong_mapping": "generic titan boss",
+      "correct_mapping": "Bleach Online Protect Seireitei"
+    }
+  ],
+  "modes": [
+    {
+      "id": 1,
+      "name": "Giudizio di Asgard",
+      "bleach_mapping": "not_present",
+      "benchmark_mapping": [
+        "other_benchmarks_or_divine_redesign"
+      ],
+      "type": "survival_competitive_gauntlet",
+      "mechanics": [
+        "10 user rosters of similar level/power, possibly cross-server later",
+        "HP/rage/team state does not fully reset between fights",
+        "small controlled buffs between fights",
+        "milestone rewards at 33/66/100"
+      ],
+      "suggested_benchmarks": [
+        "Epic Seven Dagger Sicar",
+        "Future Fight World Event",
+        "Raid challenge missions"
+      ],
+      "risks_to_avoid": [
+        "hard paid attempts",
+        "cross-server mismatch before SLC maturity",
+        "extreme roster pressure"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Cammino dell’Ade",
+      "bleach_mapping": "Hueco Mundo Attack",
+      "type": "branching_survival_run",
+      "mechanics": [
+        "branching path choices",
+        "enemy teams, shops, healing/resurrection shrines",
+        "mode currency",
+        "choose 1 of 3 random run-only buffs",
+        "persistent HP/rage/team state",
+        "fallen heroes recover only through run systems"
+      ],
+      "import_from_benchmark": [
+        "daily reset structure",
+        "coin exchange shop",
+        "progressive enemy sequence",
+        "controlled revive/reset"
+      ],
+      "risks_to_avoid": [
+        "paid revives deciding ranking",
+        "excessive reset purchases"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Scala dell’Olimpo",
+      "bleach_mapping": "not_present",
+      "type": "wave_endurance_progression",
+      "mechanics": [
+        "consecutive waves",
+        "classic plus elemental variants",
+        "HP/rage persist",
+        "intermediate buffs",
+        "leaderboards",
+        "next day starts slightly below previous max progress"
+      ],
+      "suggested_benchmarks": [
+        "Summoners War Trial of Ascension",
+        "Idle Angels Sky-tower",
+        "AFK Arena towers"
+      ],
+      "risks_to_avoid": [
+        "daily tower fatigue",
+        "overlap with Torre degli Inferi",
+        "early impossible elemental requirements"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Sigilli degli Dei",
+      "bleach_mapping": "not_present",
+      "type": "special_rule_tactical_sequences",
+      "mechanics": [
+        "small battle sequences",
+        "rules restrict elements/roles/factions/team composition",
+        "periodic rewards"
+      ],
+      "suggested_benchmarks": [
+        "BLEACH Brave Souls Senkaimon special rules",
+        "Raid Faction Wars",
+        "Omniheroes Celestial Trials",
+        "Genshin Imaginarium Theater"
+      ],
+      "risks_to_avoid": [
+        "requiring exact premium units",
+        "too many restrictions at once"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Torre degli Inferi",
+      "bleach_mapping": "not_bleach_online_but_Bleach_Brave_Souls_Senkaimon",
+      "benchmark_mapping": [
+        "Sword Art Online Memory Defrag Floor Clearing Castle",
+        "BLEACH Brave Souls Senkaimon"
+      ],
+      "type": "seasonal_floor_tower_with_roster_lock",
+      "mechanics": [
+        "seasonal floor climb",
+        "boss floors",
+        "some bosses lock used heroes",
+        "locked heroes unlocked by rechallenging boss with different team",
+        "rollout 25 -> 50 -> 75 -> 100 floors"
+      ],
+      "import_from_benchmark": [
+        "floor clearing identity",
+        "sector/floor release pacing",
+        "limited hero usage",
+        "special floor rules",
+        "medal exchange",
+        "clear time tracking"
+      ],
+      "risks_to_avoid": [
+        "excessive lock frustration",
+        "missable critical rewards",
+        "too narrow floor requirements"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Troni dell’Eclissi",
+      "bleach_mapping": "not_present",
+      "type": "seasonal_multi_boss_modifier_ranking",
+      "mechanics": [
+        "multiple rotating bosses",
+        "boss-specific leaderboards",
+        "overall season ranking",
+        "seasonal modifiers especially elemental",
+        "progression plus ranking rewards"
+      ],
+      "suggested_benchmarks": [
+        "Nikke Solo Raid/Union Raid",
+        "Mythic Heroes Pantheon boss modifiers",
+        "Raid Hydra-style multi-boss",
+        "Epic Seven Advent boss"
+      ],
+      "risks_to_avoid": [
+        "whale-only ranking rewards",
+        "too many mechanics at once",
+        "element modifiers invalidating most rosters"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Prove del Pantheon",
+      "bleach_mapping": "not_present",
+      "type": "objective_completion_tactical_challenge",
+      "mechanics": [
+        "battles with objectives",
+        "win within X turns",
+        "no fallen hero",
+        "required compositions",
+        "clear reward plus objective bonus"
+      ],
+      "suggested_benchmarks": [
+        "Epic Seven Dagger Sicar",
+        "Genshin challenge objectives",
+        "Raid progression challenges",
+        "BLEACH Brave Souls Challenge Orders"
+      ],
+      "risks_to_avoid": [
+        "exact premium hero requirements",
+        "too many simultaneous objectives",
+        "permanent power behind extreme objectives"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Abisso del Colosso",
+      "bleach_mapping": "not_present",
+      "type": "individual_boss_survival_ladder",
+      "mechanics": [
+        "consecutive boss or mini-boss sequence",
+        "HP/rage/team state does not fully reset",
+        "focus on damage, endurance, personal progression"
+      ],
+      "suggested_benchmarks": [
+        "Raid Doom Tower boss progression",
+        "Mythic Heroes Hades’ Hell",
+        "Summoners War boss/dungeon progression",
+        "Future Fight World Boss"
+      ],
+      "risks_to_avoid": [
+        "confusing with server-wide titan modes",
+        "too much early roster pressure",
+        "ranking-only core rewards"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Crepuscolo dei Titani",
+      "bleach_mapping": "Void Region",
+      "type": "server_wide_titan_boss_event",
+      "schedule": "Monday/Wednesday/Friday 20:30-21:30",
+      "mechanics": [
+        "all eligible players fight a huge central boss",
+        "participation/damage/kill rewards",
+        "60 second respawn"
+      ],
+      "suggested_benchmarks": [
+        "Summoners War World Boss",
+        "Raid Clan Boss",
+        "Nikke boss phase readability"
+      ],
+      "risks_to_avoid": [
+        "timezone exclusion",
+        "final blow abuse",
+        "whale instant kills"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Giudizio delle Stirpi",
+      "bleach_mapping": "Evil Spirit",
+      "type": "faction_flavored_live_boss_event",
+      "schedule": "Daily 09:00-10:00 and 14:00-15:00; one rewarded participation per day",
+      "mechanics": [
+        "each faction faces boss derived from strongest team of one of its players",
+        "team is cloned and empowered",
+        "after own faction boss dies, can join other faction bosses",
+        "participation/damage/kill rewards",
+        "autoplay supported"
+      ],
+      "risks_to_avoid": [
+        "strongest-player clone impossible",
+        "faction imbalance",
+        "multi-boss reward abuse"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Fronti del Valhalla",
+      "bleach_mapping": "Guild War",
+      "type": "guild_lane_front_war",
+      "schedule": "Daily 17:00-18:00",
+      "mechanics": [
+        "battle lines/fronts",
+        "progressive advance",
+        "instant battles",
+        "viewable reports",
+        "points from kills, streaks, line completion",
+        "guild placement and internal ranking rewards",
+        "autoplay useful"
+      ],
+      "import_from_benchmark": [
+        "registration",
+        "lane/path selection",
+        "auto-resolved clashes",
+        "win streak scoring",
+        "personal plus guild ranking"
+      ],
+      "risks_to_avoid": [
+        "paid cooldown clear",
+        "paid morale advantage",
+        "VIP skip"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Guerra dei Tre Troni",
+      "benchmark_mapping": [
+        "Marvel Future Fight Alliance Conquest"
+      ],
+      "bleach_mapping": "not_bleach",
+      "type": "three_guild_territory_conquest",
+      "schedule": "Battle Tue/Thu/Sat 22:00-23:00; prep Mon/Wed/Fri",
+      "mechanics": [
+        "3 guilds on zone map",
+        "spawn north/south-east/south-west",
+        "only adjacent zones can be conquered",
+        "controlled zones generate points over time",
+        "3 special zones give important but non-dominant buffs",
+        "prep map preview, special zone preview, defensive roster preview, leader notes, priority zone marking, preset defensive teams"
+      ],
+      "risks_to_avoid": [
+        "2v1 collusion",
+        "timezone pressure",
+        "winner-takes-all rewards",
+        "small guild crushing"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Fame del Behemoth",
+      "bleach_mapping": "not_present",
+      "type": "infinite_guild_boss",
+      "mechanics": [
+        "boss with progressive HP bars",
+        "each bar harder than previous",
+        "rewards from bars destroyed and damage",
+        "daily",
+        "first battle manual required",
+        "possible automatic repeats for VIP",
+        "extra entries with gems"
+      ],
+      "suggested_benchmarks": [
+        "Raid Clan Boss",
+        "Nikke Union Raid",
+        "Mythic Guild Daemons",
+        "Summoners War World Boss"
+      ],
+      "risks_to_avoid": [
+        "VIP auto-repeat competitive advantage",
+        "gem entries deciding ranking",
+        "unreadable infinite scaling"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Furie del Pantheon",
+      "bleach_mapping": "not_present",
+      "type": "guild_elemental_raid",
+      "mechanics": [
+        "opened by Guild Master or authorized roles",
+        "costs guild activity points",
+        "element-themed raid",
+        "initial waves plus final boss",
+        "participation/damage/kill/utility rewards",
+        "can open often when guild has enough points",
+        "autoplay similar to Fame del Behemoth"
+      ],
+      "suggested_benchmarks": [
+        "Nikke Union Raid",
+        "Mythic Heroes Wardragons",
+        "Omniheroes guild realm",
+        "Summoners War Rift Raid"
+      ],
+      "risks_to_avoid": [
+        "bad open timing",
+        "element exclusion",
+        "punitive guild activity economy"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Titanomachia",
+      "bleach_mapping": "Protect Seireitei",
+      "type": "major_guild_fortress_siege",
+      "schedule": "Daily 15:30-16:30",
+      "mechanics": [
+        "one guild defends fortress",
+        "other guilds attack",
+        "attack order guardian -> outer gate -> inner gate",
+        "HP persists",
+        "60 second respawn",
+        "guild victory and individual leaderboard rewards",
+        "autoplay useful"
+      ],
+      "risks_to_avoid": [
+        "occupation bonus too powerful",
+        "paid revive/skip",
+        "defender snowball",
+        "daily fortress fatigue"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Assalto del Ragnarök",
+      "bleach_mapping": "Ryoka Attack",
+      "type": "live_wave_attack_event",
+      "schedule": "Daily 11:00-12:00 and 19:00-20:00; one rewarded participation per day",
+      "mechanics": [
+        "waves of enemies cross battlefield",
+        "rewards for kills and non-lethal damage",
+        "final rewards from wave reached plus leaderboard",
+        "autoplay useful"
+      ],
+      "import_from_benchmark": [
+        "wave pacing",
+        "damage ranking",
+        "participation rewards",
+        "threshold buffs if useful",
+        "revive timer"
+      ],
+      "risks_to_avoid": [
+        "final blow reward too high",
+        "VIP auto/skip advantage",
+        "paid revive/speedup"
+      ]
+    }
+  ]
+}

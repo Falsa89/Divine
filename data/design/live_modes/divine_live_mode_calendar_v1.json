@@ -1,0 +1,53 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "version": "v1",
+  "calendar": [
+    {
+      "time": "09:00-10:00",
+      "mode": "Giudizio delle Stirpi",
+      "frequency": "daily",
+      "reward_rule": "one_rewarded_participation_per_day_across_windows"
+    },
+    {
+      "time": "11:00-12:00",
+      "mode": "Assalto del Ragnarök",
+      "frequency": "daily",
+      "reward_rule": "one_rewarded_participation_per_day_across_windows"
+    },
+    {
+      "time": "14:00-15:00",
+      "mode": "Giudizio delle Stirpi",
+      "frequency": "daily",
+      "reward_rule": "alternative_window"
+    },
+    {
+      "time": "15:30-16:30",
+      "mode": "Titanomachia",
+      "frequency": "daily"
+    },
+    {
+      "time": "17:00-18:00",
+      "mode": "Fronti del Valhalla",
+      "frequency": "daily"
+    },
+    {
+      "time": "19:00-20:00",
+      "mode": "Assalto del Ragnarök",
+      "frequency": "daily",
+      "reward_rule": "alternative_window"
+    },
+    {
+      "time": "20:30-21:30",
+      "mode": "Crepuscolo dei Titani",
+      "frequency": "mon_wed_fri"
+    },
+    {
+      "time": "22:00-23:00",
+      "mode": "Guerra dei Tre Troni",
+      "frequency": "tue_thu_sat",
+      "prep_days": "mon_wed_fri"
+    }
+  ]
+}

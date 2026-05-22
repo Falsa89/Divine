@@ -1,0 +1,16 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "blockers": [
+    "migration_required_before_runtime",
+    "route_patch_required",
+    "default_s1_migration_required",
+    "server_id isolation debt in existing routes",
+    "second server opening locked",
+    "runtime feature flags unset",
+    "user approval required for each runtime/DB phase"
+  ],
+  "second_server_opening_allowed": false,
+  "recommended": "do_not_execute_runtime_or_db_steps_in_this_task"
+}

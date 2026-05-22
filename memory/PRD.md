@@ -71,3 +71,21 @@ readiness rollup.
 - AF2-N invariato: cap=50000, allowlist=2500
 - 7 blockers documentati prima di runtime enable
 - 4 future feature flags tutti `false`
+
+---
+
+## LIVE-MODES-RECONCILIATION-A + SLC-NEXT-PREP-A (2026-05-22) ✅ PASS (DESIGN-ONLY)
+
+Riconciliazione definitiva delle 16 modalità live/special di Divine Waifus con benchmark corretti + piano SLC-Next design-only post SLC-BE.
+
+**No DB writes. No runtime route creation. No UI. No battle/gacha/roster changes. No AF2-N drift.**
+
+- 11 JSON design (7 live_modes/ + 3 server_lifecycle/ + 1 system_safety/)
+- 10 script Python (8 validator + 1 audit + 1 combo) in `/app/backend/scripts/`
+- Final doc: `/app/docs/divine/95_LIVE_MODES_RECONCILIATION_AND_SLC_NEXT_A.md`
+- Suite globale: pass=278, fail=0, miss=0 (9 nuovi OPTIONAL)
+- Mapping corretti: Troni dell'Eclissi (not_present), Giudizio di Asgard (not_present), Titanomachia (Protect Seireitei)
+- Sanctuary Housing solo design note
+- SLC-F/G/D/H tutti execute_now=false
+- AF2-N intatto: cap=50000, allowlist=2500
+- 7 blocker documentati a `slc_next_runtime_allowed=false`

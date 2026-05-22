@@ -1,0 +1,29 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "version": "v1",
+  "usage_surfaces": [
+    "leaderboards",
+    "event_tickers",
+    "attacker_defender_display",
+    "guild_war_reports",
+    "boss_proxy_display",
+    "faction_boss_display",
+    "contribution_screens"
+  ],
+  "fields": [
+    "player_portrait",
+    "crest",
+    "player_name",
+    "guild_name",
+    "faction",
+    "rank_badge",
+    "vip_badge_if_supported",
+    "title",
+    "frame",
+    "cosmetic_markers",
+    "event_role"
+  ],
+  "rule": "display only; no combat mutation"
+}

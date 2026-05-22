@@ -442,6 +442,16 @@ OPTIONAL = [
     ('SLC-BE-RUNTIME-SAFETY-AUDIT',                'audit_server_selection_runtime_safety_v1.py'),
     ('SLC-BE-ROLLUP',                              'validate_server_lifecycle_profile_selection_readiness_rollup_v1.py'),
     ('SLC-BE-COMBO',                               'validate_slc_be_server_profile_selection_combo.py'),
+    # LIVE-MODES-RECONCILIATION-A + SLC-NEXT-PREP-A (DESIGN-ONLY / AUDIT-ONLY)
+    ('LIVE-MODES-RECONCILIATION-A',                'validate_live_mode_benchmark_reconciliation_v1.py'),
+    ('LIVE-MODES-CALENDAR-A',                      'validate_live_mode_calendar_v1.py'),
+    ('LIVE-MODES-REWARD-FRAMEWORK-A',              'validate_live_mode_reward_framework_v1.py'),
+    ('LIVE-MODES-BROADCAST-POLICY-A',              'validate_live_mode_broadcast_policy_v1.py'),
+    ('LIVE-MODES-RISK-POLICY-A',                   'validate_live_mode_benchmark_risk_policy_v1.py'),
+    ('SANCTUARY-HOUSING-DESIGN-NOTE-A',            'validate_sanctuary_housing_dimora_divina_note_v1.py'),
+    ('LIVE-MODES-RUNTIME-SAFETY-AUDIT-A',          'audit_live_mode_reconciliation_runtime_safety_v1.py'),
+    ('SLC-NEXT-PREP-A',                            'validate_slc_next_after_be_plan_v1.py'),
+    ('LIVE-MODES-SLC-NEXT-COMBO-A',                'validate_live_modes_slc_next_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
