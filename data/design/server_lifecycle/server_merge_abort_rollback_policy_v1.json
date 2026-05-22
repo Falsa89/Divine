@@ -1,0 +1,36 @@
+{
+  "task_origin":"SLC-D-MERGE-ABORT-ROLLBACK-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "abort_triggers":[
+    "af2n_canary_burst_detected",
+    "redis_rate_limit_unavailable",
+    "protected_event_window_starts",
+    "banner_pity_critical_window_starts",
+    "target_server_status_changes_unexpectedly",
+    "borea_exposure_drift_detected",
+    "primordial_gaia_404_drift_detected",
+    "unresolved_leaderboard_settlement"
+  ],
+  "abort_actions":{
+    "halt_merge_freeze":true,
+    "restore_source_calendars":true,
+    "keep_source_servers_in_closed_to_new_state":true,
+    "never_proceed_to_merged_state":true,
+    "log_to_offline_audit_only":true,
+    "db_write":false
+  },
+  "rollback_classes":[
+    {"class":"pre_freeze_abort","reversibility":"fully_reversible","db_write":false},
+    {"class":"during_freeze_abort","reversibility":"reversible_with_manual_audit","db_write":false},
+    {"class":"post_merge_audit_failure","reversibility":"not_reversible_requires_user_approval_for_corrective_actions","db_write":false}
+  ],
+  "approval_gates":{
+    "merge_execution_requires_explicit_user_approval":true,
+    "merged_state_transition_requires_explicit_user_approval":true,
+    "archived_state_transition_requires_explicit_user_approval":true,
+    "phase_11_unsafe_fallback_removal_requires_explicit_user_approval":true
+  },
+  "af2n_safety":{"cap_preserved":true,"allowlist_preserved":true,"canary_unaffected":true},
+  "borea_safety":{"borea_baseline_preserved":true,"primordial_gaia_404_preserved":true}
+}

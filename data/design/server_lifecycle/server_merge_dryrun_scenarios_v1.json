@@ -1,0 +1,23 @@
+{
+  "task_origin":"SLC-D-MERGE-DRYRUN-SCENARIOS","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "scenarios":[
+    {"id":1,"name":"three_similar_age_servers",
+      "input":{"sources":[{"server_id":"s_alpha","age_days":180,"active_users":420},{"server_id":"s_beta","age_days":190,"active_users":390},{"server_id":"s_gamma","age_days":175,"active_users":410}],"calendar_state":"clear"},
+      "expected":{"merge_allowed":true,"target_server_id":"s_beta","recovery_classes_used":["optional_catch_up","skip"],"recovery_duration_days":14,"db_write":false,"merge_execution_allowed":false}},
+    {"id":2,"name":"three_staggered_age_servers",
+      "input":{"sources":[{"server_id":"s_old1","age_days":420,"active_users":120},{"server_id":"s_mid1","age_days":260,"active_users":250},{"server_id":"s_new1","age_days":120,"active_users":340}],"calendar_state":"clear"},
+      "expected":{"merge_allowed":true,"target_server_id":"s_old1","recovery_classes_used":["must_catch_up","compress","optional_catch_up"],"recovery_duration_days":21,"baseline_progress_index_required":true,"db_write":false}},
+    {"id":3,"name":"ten_plus_low_population_servers",
+      "input":{"sources_count":12,"avg_active_users":80,"calendar_state":"clear"},
+      "expected":{"merge_allowed":true,"split_into_subgroups":true,"subgroups":[{"size":6},{"size":6}],"recovery_classes_used":["must_catch_up","compress","optional_catch_up","skip"],"recovery_duration_days":21,"db_write":false}},
+    {"id":4,"name":"blocked_protected_event_state",
+      "input":{"sources":[{"server_id":"s_evt1"},{"server_id":"s_evt2"}],"calendar_state":"crepuscolo_dei_titani_active"},
+      "expected":{"merge_allowed":false,"reason":"live_mode_lock","action":"wait_until_event_window_settled_plus_120_minutes","db_write":false}},
+    {"id":5,"name":"duplicate_names_and_guild_tags",
+      "input":{"sources":[{"server_id":"s_dup1"},{"server_id":"s_dup2"}],"calendar_state":"clear","conflicts":["duplicate_player_name","duplicate_guild_name","duplicate_guild_tag"]},
+      "expected":{"merge_allowed":true,"conflict_resolution_applied":["append_numeric_suffix_to_younger","keep_oldest_guild_name_suffix_younger","free_rename_grace_30_days"],"db_write":false,"borea_safe":true}}
+  ],
+  "safety":{"no_db_write":true,"no_runtime_change":true,"second_server_opening_allowed":false,"merge_execution_allowed":false}
+}

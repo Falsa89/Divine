@@ -1,0 +1,40 @@
+{
+  "task_origin":"SLC-D-MERGE-TOOLING-OFFLINE-PLAN","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,"second_server_opening_allowed":false,"route_patch_applied":false,
+  "canonical_index_ref":"/app/data/design/benchmark_canonical/benchmark_canonical_index_v1.json",
+  "goal":"Design the OFFLINE tooling required to simulate, audit and prepare server merges without performing any production action.",
+  "tooling_components":[
+    {"name":"merge_eligibility_evaluator","runtime":false,"reads_only":true,"output":"server_merge_eligibility_report.json"},
+    {"name":"merge_group_planner","runtime":false,"reads_only":true,"output":"server_merge_group_plan.json"},
+    {"name":"conflict_resolution_resolver","runtime":false,"reads_only":true,"output":"server_merge_conflict_resolution_report.json"},
+    {"name":"recovery_season_planner","runtime":false,"reads_only":true,"output":"server_merge_recovery_season_report.json"},
+    {"name":"calendar_harmonizer","runtime":false,"reads_only":true,"output":"server_merge_calendar_harmonization_report.json"},
+    {"name":"offline_simulator","runtime":false,"reads_only":true,"output":"server_merge_dryrun_simulation_report.json"},
+    {"name":"risk_classifier","runtime":false,"reads_only":true,"output":"server_merge_risk_report.json"},
+    {"name":"abort_rollback_planner","runtime":false,"reads_only":true,"output":"server_merge_abort_rollback_report.json"}
+  ],
+  "inputs":{
+    "slc_a":"/app/data/design/server_lifecycle/server_shard_isolation_audit_v1.json",
+    "slc_c_phase_plan":"/app/data/design/server_lifecycle/single_to_multishard_migration_phase_plan_v1.json",
+    "slc_c_rollback_plan":"/app/data/design/server_lifecycle/slc_c_multishard_rollback_plan_v1.json",
+    "slc_be_status_policy":"/app/data/design/server_lifecycle/server_status_transition_policy_v1.json",
+    "slc_f_endpoint_contract":"/app/data/design/server_lifecycle/slc_f_endpoint_patch_contract_v1.json",
+    "benchmark_canonical":"/app/data/design/benchmark_canonical/benchmark_canonical_index_v1.json"
+  },
+  "hard_guardrails":{
+    "db_writes":false,"migrations":false,"collection_creation":false,"index_creation":false,
+    "runtime_route_patch":false,"auth_runtime_change":false,"server_selection_runtime":false,
+    "second_server_opening":false,"merge_execution":false,"live_server_redirect":false,
+    "ui_implementation":false,"battle_engine_changes":false,"battle_core_changes":false,"combat_tsx_changes":false,
+    "affinity_gift_spend_changes":false,"af2n_stage4_changes":false,"redis_runtime_changes":false,
+    "gacha_changes":false,"roster_changes":false,"character_bible_changes":false,"catalog_changes":false,
+    "set_server_profiles_runtime_enabled":false,"set_second_server_opening_enabled":false
+  },
+  "required_phases":[
+    "design_freeze","eligibility_evaluation","group_planning","conflict_resolution_plan",
+    "recovery_season_plan","calendar_harmonization","dry_run_simulation",
+    "approval_gate_user_explicit","controlled_execution_outside_slc_d","post_merge_audit"
+  ],
+  "implementation_status":"NOT_IMPLEMENTED_IN_RUNTIME"
+}

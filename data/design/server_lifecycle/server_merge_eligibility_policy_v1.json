@@ -1,43 +1,56 @@
 {
-  "task_origin": "SERVER-LIFECYCLE-CALENDAR-A",
-  "document": "server_merge_eligibility_policy_v1",
-  "version": "v1",
-  "mode": "DESIGN_ONLY",
-  "design_only": true,
-  "runtime_attached": false,
-  "battle_runtime_attached": false,
-  "eligibility_inputs": {
-    "server_age_threshold_days_min": 90,
-    "active_real_users_threshold_below": 60,
-    "guild_activity_minimum_active_guilds": 3,
-    "arena_activity_minimum_active_players_per_day": 10,
-    "queue_matchmaking_health_max_wait_minutes": 5,
-    "revenue_activity_trend_window_days": 30,
-    "calendar_gap_analysis_required": true,
-    "no_active_critical_event_unless_scheduled_maintenance": true
+  "task_origin":"SLC-D-MERGE-ELIGIBILITY-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "eligibility_criteria":{
+    "min_server_age_days":60,
+    "max_active_users_per_server":"design_param_TBD_NOT_RUNTIME",
+    "population_decay_threshold":{
+      "dau_drop_pct_30d":40,
+      "login_rate_drop_pct_30d":35,
+      "new_account_creation_rate_drop_pct_30d":50
+    },
+    "protected_states":["planned","open","crowded"],
+    "eligible_states":["closed_to_new","merge_pending"],
+    "forbidden_states_for_merge_source":["merged","archived"],
+    "forbidden_states_for_merge_target":["merged","archived","planned"]
   },
-  "decision_criteria": {
-    "require_all_inputs_below_threshold": false,
-    "require_minimum_signals_below_threshold": 4,
-    "forced_merge_for_safety_allowed": true
+  "event_window_locks":{
+    "crepuscolo_dei_titani":"mon_wed_fri 20:30-21:30 lock",
+    "giudizio_delle_stirpi":"daily 09:00-10:00 and 14:00-15:00 lock",
+    "titanomachia":"daily 15:30-16:30 lock",
+    "fronti_del_valhalla":"daily 17:00-18:00 lock",
+    "assalto_del_ragnarok":"daily 11:00-12:00 and 19:00-20:00 lock",
+    "guerra_dei_tre_troni":"tue_thu_sat 22:00-23:00 lock; prep mon_wed_fri lock"
   },
-  "protected_states": [
-    "active_pvp_season",
-    "active_guild_war",
-    "active_anniversary_event",
-    "active_collab",
-    "active_seasonal_real_world"
-  ],
-  "merge_blockers_unless_overridden": {
-    "protected_state_active": true,
-    "recent_traumatic_event": true,
-    "open_critical_bug": true
+  "live_mode_lock_rules":{
+    "forbid_merge_during_any_live_window":true,
+    "forbid_merge_within_minutes_before_window":120,
+    "forbid_merge_within_minutes_after_window":120
   },
-  "approval_chain": ["product", "liveops", "sre", "final_user_approval"],
-  "output_artifacts_required": [
-    "merge_plan_json",
-    "calendar_gap_analysis_json",
-    "catch_up_pool_design_json",
-    "player_communication_plan"
-  ]
+  "guild_war_lock":{
+    "forbid_merge_during_active_guild_war":true,
+    "forbid_merge_until_recent_war_results_settled":true
+  },
+  "tournament_lock":{
+    "forbid_merge_during_active_tournament":true,
+    "forbid_merge_until_rewards_distributed":true
+  },
+  "economy_risk_blockers":{
+    "forbid_merge_during_paid_event":true,
+    "forbid_merge_during_pity_critical_banner_end_window":true,
+    "forbid_merge_if_af2n_canary_active":true,
+    "forbid_merge_if_redis_rate_limit_unavailable":true
+  },
+  "calendar_state_required_for_merge":["closed_to_new for at least 14 days","no live mode in next 2 hours","no pity critical banner close in next 24 hours"],
+  "borea_safety":{
+    "merge_must_not_change_borea_visibility":true,
+    "primordial_gaia_must_remain_404":true
+  },
+  "af2n_safety":{
+    "cap_must_stay_50000":true,
+    "allowlist_must_stay_2500":true,
+    "ledger_rows_preserved":true,
+    "inventory_rows_preserved":true
+  }
 }

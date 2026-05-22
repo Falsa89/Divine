@@ -1,0 +1,45 @@
+{
+  "task_origin":"SLC-D-MERGE-TOOLING-OFFLINE-READINESS-ROLLUP","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "state":{
+    "merge_tooling_offline_plan_ready":true,
+    "eligibility_policy_ready":true,
+    "group_planning_contract_ready":true,
+    "conflict_resolution_contract_ready":true,
+    "recovery_season_contract_ready":true,
+    "calendar_harmonization_policy_ready":true,
+    "dryrun_scenarios_ready":true,
+    "risk_matrix_ready":true,
+    "abort_rollback_policy_ready":true,
+    "merge_execution_allowed":false,
+    "db_write":false,
+    "migration_applied":false,
+    "second_server_opening_allowed":false,
+    "server_profiles_runtime_enabled":false,
+    "borea_safe":true,
+    "af2n_invariant_intact":true,
+    "route_patch_applied":false
+  },
+  "blockers_to_runtime_merge":[
+    "explicit user approval required for any actual merge execution",
+    "all source-server leaderboards/events/banners must be settled before merge",
+    "protected files must remain SHA-256 identical",
+    "AF2-N cap=50000 and allowlist=2500 must be preserved",
+    "feature flags SERVER_PROFILES_RUNTIME_ENABLED / SECOND_SERVER_OPENING_ENABLED must remain unset",
+    "second_server_opening_allowed must remain false",
+    "phase 11 unsafe fallback removal requires explicit user approval",
+    "merge cannot occur during protected live windows or within 2h before/after"
+  ],
+  "baseline":{
+    "previous_completed_task":"SLC-F",
+    "previous_suite_global":"302 PASS / 0 FAIL / 0 MISS",
+    "api_heroes_count":100,
+    "primordial_gaia_status":404,
+    "borea_catalog_only_baseline":200,
+    "greek_borea_catalog_only_baseline":200,
+    "af2n_cap":50000,
+    "af2n_allowlist":2500
+  },
+  "canonical_index_ref":"/app/data/design/benchmark_canonical/benchmark_canonical_index_v1.json"
+}

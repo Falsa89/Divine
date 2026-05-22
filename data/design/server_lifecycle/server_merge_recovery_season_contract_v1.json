@@ -1,0 +1,33 @@
+{
+  "task_origin":"SLC-D-MERGE-RECOVERY-SEASON-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "default_duration_days":14,
+  "configurable_range_days":[14,21],
+  "recovery_classes":[
+    {"class":"must_catch_up","applies_to":"core progression rewards under-progressed accounts missed","distribution":"guaranteed via mailbox/recovery pool","capped":true},
+    {"class":"optional_catch_up","applies_to":"event-tier rewards or cosmetic-tier rewards that under-progressed accounts could earn during catch-up","distribution":"earnable via specific catch-up missions","capped":true},
+    {"class":"compress","applies_to":"large content blocks released across source-target age gap (e.g., several story arcs)","distribution":"compressed pacing during recovery window with bonus drops","capped":true},
+    {"class":"skip","applies_to":"deprecated or removed events that no longer apply post-merge","distribution":"none; explicitly skipped to avoid confusion"}
+  ],
+  "banner_policy":{
+    "max_parallel_banners_during_recovery":2,
+    "shared_purchase_limits":true,
+    "pity_policy_inheritance":"best_per_account_server_safe",
+    "never_clone_pity_across_servers":true,
+    "never_clone_purchase_limits_across_servers":true
+  },
+  "economy_safeguards":{
+    "paid_currency_account_wide_invariant":true,
+    "free_currency_server_bound_invariant":true,
+    "recovery_pool_capped_per_account":true,
+    "no_inflation_during_recovery":true
+  },
+  "af2n_safety":{"cap_50000_preserved":true,"allowlist_2500_preserved":true,"canary_state_unaffected":true},
+  "borea_safety":{"borea_never_exposed_in_recovery_rewards":true,"primordial_gaia_never_unlocked":true},
+  "calendar_integration":{
+    "during_recovery_only_target_calendar_runs":true,
+    "source_calendars_paused_then_archived":true,
+    "live_modes_use_target_calendar_only":true
+  }
+}

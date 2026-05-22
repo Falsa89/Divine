@@ -1,0 +1,41 @@
+{
+  "task_origin":"SLC-D-MERGE-GROUP-PLANNING-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "group_composition_rules":{
+    "min_servers_per_merge_group":2,
+    "max_servers_per_merge_group":12,
+    "recommended_per_merge_group":"3 to 6",
+    "min_target_population_after_merge":"design_param_TBD",
+    "max_age_delta_days_within_group":120
+  },
+  "target_server_selection":{
+    "prefer":"oldest_eligible_server_in_group",
+    "fallback":"highest_active_population_in_group",
+    "must_be_eligible_target":true,
+    "target_must_inherit_status_open_or_crowded_after_merge":true
+  },
+  "baseline_progress_index":{
+    "definition":"weighted median of per-server progression metrics (story chapter, tower floor, castle floor, average team power)",
+    "used_for":"determining must_catch_up / optional_catch_up / compress / skip for content released between source max age and target age",
+    "computed_offline":true,
+    "db_write":false
+  },
+  "recovery_pool":{
+    "populated_from":"materials missed by under-progressed accounts during merged catch-up window",
+    "distribution":"per (account_id, server_id) post-migration",
+    "caps_per_account":"design_param_TBD",
+    "af2n_unaffected":true
+  },
+  "server_age_harmonization":{
+    "strategy":"target retains its age; source server ages do not propagate live",
+    "display_only_label_for_legacy_players":true,
+    "prevent_unfair_event_acceleration":true
+  },
+  "post_merge_calendar":{
+    "reuse_target_server_calendar":true,
+    "do_not_double_run_live_modes":true,
+    "settle_active_events_per_source_before_merge":true
+  },
+  "borea_safety":{"merge_group_planning_must_not_reference_borea_as_starter":true}
+}

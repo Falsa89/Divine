@@ -1,0 +1,31 @@
+{
+  "task_origin":"SLC-D-MERGE-CONFLICT-RESOLUTION-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "conflicts":[
+    {"id":"duplicate_player_name","strategy":"append numeric suffix on lower-tenure or lower-level account; grace window 14 days to free re-pick; never duplicate paid items","reversible":true,"db_write":false},
+    {"id":"duplicate_guild_name","strategy":"keep oldest guild name; suffix the younger; offer free rename via support flow during 30-day grace","reversible":true,"db_write":false},
+    {"id":"duplicate_guild_tag","strategy":"same policy as guild name; tag uniqueness within target_server_id only","reversible":true,"db_write":false},
+    {"id":"active_title_collision","strategy":"title equipped state server-bound; collisions do not occur cross-server; ownership remains as is","reversible":true,"db_write":false},
+    {"id":"equipped_cosmetics_collision","strategy":"equipped state server-bound; on merge keep per-server equipped state; if target has same account already, prefer last_login server equip","reversible":true,"db_write":false},
+    {"id":"paid_currency_account_wide_preservation","strategy":"paid Divine Crystals balance and ledger are account-wide; merge must not duplicate or clone paid balance; account_wide invariants preserved","reversible":false,"db_write":false,"af2n_safe":true},
+    {"id":"free_currency_server_bound","strategy":"gold/diamonds_free/event_currency remain server-bound; source-server free balances are settled into recovery pool credits or expire per recovery_season_contract","reversible":true,"db_write":false},
+    {"id":"materials_server_bound","strategy":"server_bound; consolidated per account on target server; never duplicated; capped by recovery_season_contract","reversible":true,"db_write":false},
+    {"id":"guild_membership_collision","strategy":"on merge an account_id can belong to at most one guild per target server; conflicts resolved by guild leader preference, account preference, then last_login recency","reversible":true,"db_write":false},
+    {"id":"guild_leadership_collision","strategy":"two leaders cannot exist on target server; older guild keeps leadership; younger guild becomes officer slot; manual handover supported during 30-day grace","reversible":true,"db_write":false},
+    {"id":"offline_leadership_handover","strategy":"if leader inactive >30 days at merge time, automatic handover to oldest officer; logged offline; no DB writes here, plan only","reversible":true,"db_write":false},
+    {"id":"leaderboards_reset_settlement","strategy":"each source-server leaderboard settled and rewards distributed BEFORE merge plan execution; post-merge leaderboards start fresh on target server; rewards never duplicated","reversible":false,"db_write":false},
+    {"id":"active_events_banners_shops","strategy":"settle all active events/banners/shops on source servers before merge; if a banner has pity critical window, merge is blocked by eligibility policy; banners do not roll over","reversible":false,"db_write":false},
+    {"id":"af2n_ledgers_inventory_preservation","strategy":"gift_transaction_ledger and user_gift_inventory rows preserved; idempotency_key collisions impossible because keys remain unique per (account_id, server_id, key); cap=50000 and allowlist=2500 preserved","reversible":true,"db_write":false,"af2n_safe":true},
+    {"id":"borea_visibility_unchanged","strategy":"merge must not change borea/greek_borea catalog-only baseline; primordial_gaia remains 404","reversible":false,"db_write":false,"borea_safe":true}
+  ],
+  "global_invariants":{
+    "paid_balance_never_cloned":true,
+    "af2n_cap":50000,
+    "af2n_allowlist":2500,
+    "primordial_gaia_404":true,
+    "borea_baseline_unchanged":true,
+    "db_write":false,
+    "merge_execution_allowed":false
+  }
+}

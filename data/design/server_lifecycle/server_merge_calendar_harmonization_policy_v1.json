@@ -1,0 +1,34 @@
+{
+  "task_origin":"SLC-D-MERGE-CALENDAR-HARMONIZATION-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "rules":{
+    "target_calendar_wins":true,
+    "source_calendars_paused_at_merge_freeze":true,
+    "source_calendars_archived_after_merge":true,
+    "no_duplicate_live_windows":true,
+    "prep_days_recomputed_from_target_only":true,
+    "timezone_alignment":"target_timezone"
+  },
+  "protected_windows":[
+    "09:00-10:00 Giudizio delle Stirpi",
+    "11:00-12:00 Assalto del Ragnar\u00f6k",
+    "14:00-15:00 Giudizio delle Stirpi",
+    "15:30-16:30 Titanomachia",
+    "17:00-18:00 Fronti del Valhalla",
+    "19:00-20:00 Assalto del Ragnar\u00f6k",
+    "Mon/Wed/Fri 20:30-21:30 Crepuscolo dei Titani",
+    "Tue/Thu/Sat 22:00-23:00 Guerra dei Tre Troni"
+  ],
+  "merge_freeze_window":{
+    "freeze_duration_minutes":60,
+    "max_freeze_per_24h":1,
+    "forbidden_during_protected_windows":true,
+    "forbidden_within_2_hours_of_protected_windows":true
+  },
+  "af2n_canary_window_check":{
+    "forbid_freeze_during_af2n_canary_burst":true,
+    "verify_redis_rate_limit_operational":true
+  },
+  "borea_safety":{"calendar_harmonization_must_not_expose_borea":true}
+}

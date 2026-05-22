@@ -1,0 +1,27 @@
+{
+  "task_origin":"SLC-D-MERGE-RISK-MATRIX","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "merge_execution_allowed":false,"db_write":false,
+  "risk_levels":["P0","P1","P2"],
+  "risks":[
+    {"id":"R-P0-1","level":"P0","area":"paid currency clone","description":"merge must not clone paid currency balance per server; account-wide invariant","mitigation":"conflict_resolution_contract paid_currency_account_wide_preservation reversible=false; collection scope matrix accounts_wallet_paid = account_id_only"},
+    {"id":"R-P0-2","level":"P0","area":"AF2-N preservation","description":"gift_transaction_ledger and user_gift_inventory rows must be preserved with cap=50000 and allowlist=2500 invariants","mitigation":"conflict_resolution_contract af2n_ledgers_inventory_preservation; eligibility blocker forbid_merge_if_af2n_canary_active"},
+    {"id":"R-P0-3","level":"P0","area":"borea exposure","description":"merge cannot alter borea/greek_borea catalog-only baseline; primordial_gaia must remain 404","mitigation":"borea_safety blocks in eligibility/conflict/recovery; runtime safety audit re-validates"},
+    {"id":"R-P0-4","level":"P0","area":"battle runtime untouched","description":"battle_engine.py / battle_core.py / combat.tsx / affinity_gift_spend.py must remain SHA-256 identical during SLC-D","mitigation":"protected file no-diff audit"},
+    {"id":"R-P0-5","level":"P0","area":"second server opening","description":"second_server_opening_allowed must stay false; feature flags unset","mitigation":"runtime safety audit checks env vars and route hits"},
+
+    {"id":"R-P1-1","level":"P1","area":"leaderboard double-reward","description":"merging while leaderboards/event rewards unsettled could double-pay","mitigation":"eligibility policy requires settlement before merge; conflict_resolution leaderboards_reset_settlement reversible=false"},
+    {"id":"R-P1-2","level":"P1","area":"pity leak across servers","description":"banner pity must never be cloned cross-server","mitigation":"recovery_season_contract pity_policy_inheritance = best_per_account_server_safe and never_clone_pity_across_servers"},
+    {"id":"R-P1-3","level":"P1","area":"guild leadership chaos","description":"duplicate guild leaders / inactive leaders could brick guild operations on target server","mitigation":"guild_leadership_collision and offline_leadership_handover strategies; 30-day grace"},
+    {"id":"R-P1-4","level":"P1","area":"calendar collision","description":"running source live windows after merge would duplicate live events","mitigation":"calendar_harmonization_policy target_calendar_wins and source_calendars_paused_then_archived"},
+    {"id":"R-P1-5","level":"P1","area":"recovery pool inflation","description":"uncapped recovery pool could create economy inflation","mitigation":"recovery_season_contract recovery_pool_capped_per_account and no_inflation_during_recovery"},
+
+    {"id":"R-P2-1","level":"P2","area":"display age mislead","description":"showing source age to merged players could mislead in PvP matchmaking","mitigation":"server_age_harmonization strategy display_only_label_for_legacy_players"},
+    {"id":"R-P2-2","level":"P2","area":"telemetry tagging","description":"telemetry events may need merge-context tagging without runtime AF2-N mutation","mitigation":"design-only telemetry plan; AF2-N runtime untouched"}
+  ],
+  "global_invariants_enforced":{
+    "af2n_cap":50000,"af2n_allowlist":2500,"api_heroes_count":100,"primordial_gaia_status":404,
+    "borea_baseline_unchanged":true,"second_server_opening_enabled":false,"server_profiles_runtime_enabled":false,
+    "merge_execution_allowed":false,"db_write":false
+  }
+}
