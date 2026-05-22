@@ -1,0 +1,52 @@
+{
+  "task_origin":"SLC-F-ROUTE-SCOPE-INVENTORY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "execute_runtime":false,"db_write":false,
+  "canonical_index_ref":"/app/data/design/benchmark_canonical/benchmark_canonical_index_v1.json",
+  "description":"Per-route-family scope classification. Populated/refreshed at runtime by audit_slc_f_route_scope_inventory_v1.py",
+  "scope_classes":["account_wide","server_bound","mixed_account_owned_server_equipped","global_catalog_readonly","unsafe_unknown"],
+  "route_family_classification":[
+    {"family":"heroes","file":"/app/backend/routes/heroes.py","scope":"global_catalog_readonly","server_id_required_future":false,"borea_guard":true,"notes":"public hero list/details; static catalog; borea/greek_borea/primordial_gaia guarded"},
+    {"family":"hero_skill_kits_catalogs","file":"/app/backend/routes/hero_skill_kits_catalogs.py","scope":"global_catalog_readonly","server_id_required_future":false,"borea_guard":true,"notes":"design catalogs only"},
+    {"family":"skill_status_vfx_catalogs","file":"/app/backend/routes/skill_status_vfx_catalogs.py","scope":"global_catalog_readonly","server_id_required_future":false,"notes":"static catalog"},
+    {"family":"divine_weapons","file":"/app/backend/routes/divine_weapons.py","scope":"global_catalog_readonly","server_id_required_future":false,"borea_guard":true,"notes":"DW catalog"},
+    {"family":"sprites","file":"/app/backend/routes/sprites.py","scope":"global_catalog_readonly","server_id_required_future":false},
+    {"family":"server_time","file":"/app/backend/routes/server_time.py","scope":"global_catalog_readonly","server_id_required_future":false},
+    {"family":"skill_kit_runtime_debug","file":"/app/backend/routes/skill_kit_runtime_debug.py","scope":"global_catalog_readonly","server_id_required_future":false,"notes":"dev/debug only"},
+
+    {"family":"auth_user","file":"/app/backend/server.py","scope":"account_wide","server_id_required_future":false,"notes":"login/register/profile must remain account-wide (paid wallet, vip)"},
+    {"family":"economy_paid_wallet","file":"/app/backend/routes/economy.py","scope":"account_wide","server_id_required_future":false,"notes":"paid Divine Crystals ledger account-wide; free currency split must be server_bound (separate route)"},
+    {"family":"cosmetics_ownership","file":"/app/backend/routes/cosmetics.py","scope":"mixed_account_owned_server_equipped","server_id_required_future":true,"notes":"paid ownership account-wide; equipped state server-bound"},
+    {"family":"push_notifications","file":"/app/backend/routes/push_notifications.py","scope":"account_wide","server_id_required_future":false},
+
+    {"family":"hero_progression","file":"/app/backend/routes/hero_progression.py","scope":"server_bound","server_id_required_future":true,"notes":"user_heroes per server"},
+    {"family":"items_inventory","file":"/app/backend/routes/items.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"equipment","file":"/app/backend/routes/equipment.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"forge","file":"/app/backend/routes/forge.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"soul_forge","file":"/app/backend/routes/soul_forge.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"artifacts","file":"/app/backend/routes/artifacts.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"combat","file":"/app/backend/routes/combat.py","scope":"server_bound","server_id_required_future":true,"protected":true,"notes":"battle_engine.py / combat.tsx invariati in SLC-F"},
+    {"family":"raids","file":"/app/backend/routes/raids.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"gvg","file":"/app/backend/routes/gvg.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"guild","file":"/app/backend/routes/guild.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"social","file":"/app/backend/routes/social.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"sanctuary","file":"/app/backend/routes/sanctuary.py","scope":"server_bound","server_id_required_future":true,"borea_guard":true,"notes":"tutorial Borea seed inert; future housing server_bound"},
+    {"family":"affinity_gifts","file":"/app/backend/routes/affinity_gifts.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"affinity_gift_spend","file":"/app/backend/routes/affinity_gift_spend.py","scope":"server_bound","server_id_required_future":true,"protected":true,"notes":"AF2-N: ledger and inventory server_bound; cap S2=50000 and allowlist=2500 invariant"},
+    {"family":"achievements","file":"/app/backend/routes/achievements.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"rankings","file":"/app/backend/routes/rankings.py","scope":"server_bound","server_id_required_future":true,"notes":"per-server leaderboards"},
+    {"family":"level_sharing","file":"/app/backend/routes/level_sharing.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"player_faction_v2","file":"/app/backend/routes/player_faction_v2.py","scope":"server_bound","server_id_required_future":true},
+    {"family":"game_data","file":"/app/backend/routes/game_data.py","scope":"mixed_account_owned_server_equipped","server_id_required_future":true,"notes":"likely contains both account and server-bound reads; needs split during runtime patch"}
+  ],
+  "unsafe_unknown_routes":[],
+  "protected_route_files_no_diff_required":[
+    "/app/backend/routes/affinity_gift_spend.py",
+    "/app/backend/routes/heroes.py",
+    "/app/backend/battle_engine.py",
+    "/app/backend/battle_core.py",
+    "/app/frontend/app/combat.tsx"
+  ],
+  "populated_by":"audit_slc_f_route_scope_inventory_v1.py (regenerates statistics, does not change classification)",
+  "safety":{"no_db_write":true,"no_runtime_change":true,"second_server_opening_allowed":false,"server_profiles_runtime_enabled":false}
+}

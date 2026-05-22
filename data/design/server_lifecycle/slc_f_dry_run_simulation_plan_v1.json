@@ -1,0 +1,19 @@
+{
+  "task_origin":"SLC-F-DRY-RUN-SIMULATION-PLAN","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "execute_runtime":false,"db_write":false,
+  "scenarios":[
+    {"id":1,"name":"legacy_user_resolves_to_s1","input":{"user_id":"acc_legacy_001","x_server_id_header":null,"stored_active_server_id":null},"expected":{"resolved_account_id":"acc_legacy_001","resolved_server_id":"s1","resolution_source":"default_legacy_server_id_s1","creates_profile":false}},
+    {"id":2,"name":"header_x_server_id_takes_priority_when_owned","input":{"user_id":"acc_002","x_server_id_header":"s1","stored_active_server_id":"s1"},"expected":{"resolved_server_id":"s1","resolution_source":"x_server_id_header"}},
+    {"id":3,"name":"x_server_id_mismatch_returns_403","input":{"user_id":"acc_003","x_server_id_header":"s99_not_owned","stored_active_server_id":"s1"},"expected":{"http_status":403,"reason":"forbidden_server","resolved":false}},
+    {"id":4,"name":"no_active_server_returns_423_after_phase11","input":{"user_id":"acc_004","x_server_id_header":null,"stored_active_server_id":null,"compatibility_window":false},"expected":{"http_status":423,"reason":"no_active_server"}},
+    {"id":5,"name":"merged_server_redirects_308","input":{"user_id":"acc_005","stored_active_server_id":"s_merge_src","server_status":"merged","merge_target_server_id":"s_merge_dst"},"expected":{"http_status":308,"redirect_to":"s_merge_dst"}},
+    {"id":6,"name":"archived_server_returns_410","input":{"user_id":"acc_006","stored_active_server_id":"s_arch","server_status":"archived"},"expected":{"http_status":410,"reason":"server_archived"}},
+    {"id":7,"name":"global_catalog_route_unchanged","input":{"endpoint":"/api/heroes","user_id":"any"},"expected":{"http_status":200,"heroes_count":100,"borea_in_list":false}},
+    {"id":8,"name":"borea_catalog_only_baseline_unchanged","input":{"endpoint":"/api/heroes/borea"},"expected":{"http_status":200,"baseline":"catalog_only_inert"}},
+    {"id":9,"name":"primordial_gaia_404_invariant","input":{"endpoint":"/api/heroes/primordial_gaia"},"expected":{"http_status":404}},
+    {"id":10,"name":"af2n_cap_50000_invariant_after_patch","input":{"endpoint":"POST /api/affinity/gift-spend","cap_observed":50000,"allowlist_observed":2500},"expected":{"cap_preserved":true,"allowlist_preserved":true}}
+  ],
+  "safety":{"no_db_write":true,"no_runtime_change":true},
+  "execution":{"dry_run_only":true,"executed_by":"simulate_slc_f_route_patch_dryrun_v1.py"}
+}

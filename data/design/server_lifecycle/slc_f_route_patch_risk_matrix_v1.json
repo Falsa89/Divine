@@ -1,0 +1,30 @@
+{
+  "task_origin":"SLC-F-ROUTE-PATCH-RISK-MATRIX","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "execute_runtime":false,"db_write":false,
+  "risk_levels":["P0","P1","P2"],
+  "risks":[
+    {"id":"R-P0-1","level":"P0","area":"AF2-N gift_spend","description":"affinity_gift_spend.py is protected; cap=50000 and allowlist=2500 must not regress when patched server-aware","mitigation":"protected file no-diff audit + dedicated AF2-N invariant validators"},
+    {"id":"R-P0-2","level":"P0","area":"battle runtime","description":"battle_engine.py / battle_core.py / combat.tsx must remain untouched during SLC-F","mitigation":"SHA-256 baseline match enforced by audit_slc_f_runtime_safety_v1"},
+    {"id":"R-P0-3","level":"P0","area":"borea exposure","description":"borea/greek_borea/primordial_gaia hidden from /api/heroes list; primordial_gaia must remain 404","mitigation":"API smoke + benchmark risk policy invariants"},
+    {"id":"R-P0-4","level":"P0","area":"second_server_opening","description":"second_server_opening_allowed must remain false until explicit user approval and phase 11 cleared","mitigation":"env vars unset audit + readiness rollup blocker"},
+    {"id":"R-P0-5","level":"P0","area":"paid currency clone","description":"paid balance must never be cloned per server; account-wide only","mitigation":"endpoint patch contract scope=account_wide for paid wallet; collection scope matrix forbids server-bound key"},
+
+    {"id":"R-P1-1","level":"P1","area":"dual read window","description":"during compatibility window, routes that read both legacy and (account_id,server_id) may drift","mitigation":"dual-read window plan documented in legacy_s1_compatibility_plan + phase 3 explicit gating"},
+    {"id":"R-P1-2","level":"P1","area":"mixed endpoints split","description":"endpoints serving both account-wide and server-bound reads (game_data.py, cosmetics.py) require careful split during patch","mitigation":"endpoint_patch_contract enumerates mixed endpoints with explicit split rule"},
+    {"id":"R-P1-3","level":"P1","area":"unsafe fallback removal","description":"default_legacy_server_id=s1 fallback removal (phase 11) is irreversible","mitigation":"phase 11 reversible=false and requires_explicit_user_approval=true"},
+    {"id":"R-P1-4","level":"P1","area":"pity scope migration","description":"gacha pity scope must move from (user_id, banner_id) to (account_id, server_id, banner_id) without leaking pity across banners or servers","mitigation":"benchmark canonical summon_pity_fragment + endpoint_patch_contract gacha entry"},
+
+    {"id":"R-P2-1","level":"P2","area":"telemetry naming","description":"telemetry events may need server_id label addition without altering AF2-N runtime","mitigation":"design-only telemetry plan; AF2-N runtime untouched"},
+    {"id":"R-P2-2","level":"P2","area":"ranking visibility","description":"leaderboards must clearly distinguish per-server vs cross-server in UI; SLC-F is design only","mitigation":"rankings endpoint scope=server_bound documented; UI design later"}
+  ],
+  "global_invariants_enforced":{
+    "af2n_cap":50000,
+    "af2n_allowlist":2500,
+    "api_heroes_count":100,
+    "primordial_gaia_status":404,
+    "borea_baseline_status_unchanged":true,
+    "server_profiles_runtime_enabled":false,
+    "second_server_opening_enabled":false
+  }
+}

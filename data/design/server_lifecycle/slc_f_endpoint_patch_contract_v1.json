@@ -1,0 +1,34 @@
+{
+  "task_origin":"SLC-F-ENDPOINT-PATCH-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "execute_runtime":false,"db_write":false,"do_not_implement_routes_now":true,
+  "canonical_index_ref":"/app/data/design/benchmark_canonical/benchmark_canonical_index_v1.json",
+  "required_patterns":{
+    "server_bound_endpoints_require_resolved_profile":true,
+    "account_wide_endpoints_explicitly_opt_out_of_server_id":true,
+    "mixed_endpoints_split_into_account_wide_and_server_bound_reads":true,
+    "global_catalog_endpoints_remain_unchanged":true
+  },
+  "new_dependencies_future":[
+    {"name":"get_current_user","scope":"account_identity_only","server_aware":false},
+    {"name":"get_current_server_profile","scope":"account_id_plus_active_server_id","raises":"HTTP 423 no_active_server"}
+  ],
+  "endpoint_pseudo_diffs":[
+    {"endpoint":"GET /api/user/heroes","current":"filter by user_id","future":"filter by account_id AND server_id from get_current_server_profile","scope":"server_bound","http_failure_modes":["423 no_active_server","403 forbidden_server"]},
+    {"endpoint":"POST /api/team","current":"upsert by user_id,team_id","future":"upsert by account_id,server_id,team_id","scope":"server_bound"},
+    {"endpoint":"GET /api/inventory","current":"filter by user_id","future":"filter by account_id+server_id","scope":"server_bound"},
+    {"endpoint":"POST /api/gacha/pull","current":"writes by user_id","future":"writes by account_id+server_id+pull_id","scope":"server_bound","pity_scope_future":"(account_id, server_id, banner_id)"},
+    {"endpoint":"GET /api/account/profile","current":"by user_id","future":"by account_id only (account_wide)","scope":"account_wide"},
+    {"endpoint":"GET /api/account/wallet/paid","current":"by user_id","future":"by account_id only","scope":"account_wide"},
+    {"endpoint":"GET /api/server/wallet/free","current":"by user_id (single-shard implied s1)","future":"by account_id+server_id","scope":"server_bound"},
+    {"endpoint":"POST /api/affinity/gift-spend","current":"by user_id with idempotency_key; cap=50000; allowlist=2500","future":"by account_id+server_id with idempotency_key; cap=50000 PRESERVED; allowlist=2500 PRESERVED","scope":"server_bound","protected":true,"af2n_invariant":"cap=50000 and allowlist=2500 must not change"},
+    {"endpoint":"GET /api/heroes (list)","current":"returns exactly 100 official heroes; borea/greek_borea/primordial_gaia hidden","future":"unchanged; remains global catalog read-only","scope":"global_catalog_readonly","protected":true},
+    {"endpoint":"GET /api/heroes/{id}","current":"primordial_gaia=404; borea/greek_borea=200 catalog-only inert","future":"unchanged baseline; SLC-F must not modify this behavior","scope":"global_catalog_readonly","protected":true},
+    {"endpoint":"GET /api/cosmetics/owned","current":"by user_id","future":"by account_id (ownership account-wide)","scope":"account_wide"},
+    {"endpoint":"POST /api/cosmetics/equip","current":"by user_id,cosmetic_id","future":"by account_id+server_id+cosmetic_id (equip state server-bound)","scope":"mixed_account_owned_server_equipped"},
+    {"endpoint":"GET /api/rankings","current":"by user_id","future":"by server_id (leaderboard per server)","scope":"server_bound"},
+    {"endpoint":"GET /api/guild","current":"by user_id->guild_id","future":"by account_id+server_id->guild_id","scope":"server_bound"}
+  ],
+  "safety":{"no_runtime_change":true,"no_route_creation":true,"no_auth_change":true,"second_server_opening_allowed":false},
+  "implementation_status":"NOT_IMPLEMENTED_IN_RUNTIME"
+}

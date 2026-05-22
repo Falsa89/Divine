@@ -1,0 +1,33 @@
+{
+  "task_origin":"SLC-F-LEGACY-S1-COMPATIBILITY-PLAN","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "execute_runtime":false,"db_write":false,"backfill_executed":false,
+  "default_legacy_server_id":"s1",
+  "compatibility_window":{
+    "single_shard_runtime":true,
+    "second_server_opening_allowed":false,
+    "after_migration_default_s1_for_all_legacy_accounts":true
+  },
+  "phases":[
+    {"phase":0,"name":"design_and_freeze","action":"freeze migration scope; produce snapshot plan only","db_write":false},
+    {"phase":1,"name":"add_servers_collection_seed_s1","action":"design-only seed plan for {server_id:'s1',status:'open'}; NOT executed","db_write":false},
+    {"phase":2,"name":"add_server_profiles_for_legacy","action":"design-only plan to create server_profile per existing user_id at default s1","db_write":false},
+    {"phase":3,"name":"dual_read_window","action":"routes read both legacy user_id docs and new (account_id, server_id) docs; never writes here","db_write":false},
+    {"phase":4,"name":"server_id_tagging_writes","action":"writes start including server_id=s1 alongside user_id (NOT in SLC-F)","db_write":false},
+    {"phase":5,"name":"backfill_existing_docs","action":"plan only; execution gated","db_write":false},
+    {"phase":11,"name":"remove_legacy_fallback","action":"remove default_legacy_server_id=s1 fallback; irreversible","reversible":false,"requires_explicit_user_approval":true,"db_write":false}
+  ],
+  "resolver_fallback_rules":{
+    "x_server_id_header":"highest priority; must match owned profile",
+    "stored_active_server_id":"second priority",
+    "server_id_query_param":"opt-in per route",
+    "default_legacy_server_id_s1":"only during compatibility window; removed in phase 11"
+  },
+  "af2n_preservation_during_compatibility":{
+    "cap":50000,
+    "allowlist":2500,
+    "ledger_rows_preserved":true,
+    "inventory_rows_preserved":true
+  },
+  "safety":{"no_db_write":true,"no_migration_executed":true}
+}

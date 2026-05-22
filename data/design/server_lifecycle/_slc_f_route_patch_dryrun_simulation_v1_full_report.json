@@ -1,0 +1,145 @@
+{
+  "db_write": false,
+  "design_only": true,
+  "mode": "DRY_RUN_NO_DB_WRITE",
+  "route_patch_applied": false,
+  "safety": {
+    "borea_safe": true,
+    "no_db_write": true,
+    "no_runtime_change": true
+  },
+  "second_server_opening_allowed": false,
+  "simulated_results": [
+    {
+      "actual": {
+        "creates_profile": false,
+        "resolution_source": "default_legacy_server_id_s1",
+        "resolved_account_id": "acc_legacy_001",
+        "resolved_server_id": "s1"
+      },
+      "expected": {
+        "creates_profile": false,
+        "resolution_source": "default_legacy_server_id_s1",
+        "resolved_account_id": "acc_legacy_001",
+        "resolved_server_id": "s1"
+      },
+      "id": 1,
+      "name": "legacy_user_resolves_to_s1"
+    },
+    {
+      "actual": {
+        "resolution_source": "x_server_id_header",
+        "resolved_server_id": "s1"
+      },
+      "expected": {
+        "resolution_source": "x_server_id_header",
+        "resolved_server_id": "s1"
+      },
+      "id": 2,
+      "name": "header_x_server_id_takes_priority_when_owned"
+    },
+    {
+      "actual": {
+        "http_status": 403,
+        "reason": "forbidden_server",
+        "resolution_source": "x_server_id_header"
+      },
+      "expected": {
+        "http_status": 403,
+        "reason": "forbidden_server",
+        "resolved": false
+      },
+      "id": 3,
+      "name": "x_server_id_mismatch_returns_403"
+    },
+    {
+      "actual": {
+        "http_status": 423,
+        "reason": "no_active_server"
+      },
+      "expected": {
+        "http_status": 423,
+        "reason": "no_active_server"
+      },
+      "id": 4,
+      "name": "no_active_server_returns_423_after_phase11"
+    },
+    {
+      "actual": {
+        "http_status": 308,
+        "redirect_to": "s_merge_dst",
+        "resolution_source": "merged_redirect"
+      },
+      "expected": {
+        "http_status": 308,
+        "redirect_to": "s_merge_dst"
+      },
+      "id": 5,
+      "name": "merged_server_redirects_308"
+    },
+    {
+      "actual": {
+        "http_status": 410,
+        "reason": "server_archived",
+        "resolution_source": "archived_reject"
+      },
+      "expected": {
+        "http_status": 410,
+        "reason": "server_archived"
+      },
+      "id": 6,
+      "name": "archived_server_returns_410"
+    },
+    {
+      "actual": {
+        "borea_in_list": false,
+        "heroes_count": 100,
+        "http_status": 200
+      },
+      "expected": {
+        "borea_in_list": false,
+        "heroes_count": 100,
+        "http_status": 200
+      },
+      "id": 7,
+      "name": "global_catalog_route_unchanged"
+    },
+    {
+      "actual": {
+        "baseline": "catalog_only_inert",
+        "http_status": 200
+      },
+      "expected": {
+        "baseline": "catalog_only_inert",
+        "http_status": 200
+      },
+      "id": 8,
+      "name": "borea_catalog_only_baseline_unchanged"
+    },
+    {
+      "actual": {
+        "http_status": 404
+      },
+      "expected": {
+        "http_status": 404
+      },
+      "id": 9,
+      "name": "primordial_gaia_404_invariant"
+    },
+    {
+      "actual": {
+        "allowlist_preserved": true,
+        "cap_preserved": true
+      },
+      "expected": {
+        "allowlist_preserved": true,
+        "cap_preserved": true
+      },
+      "id": 10,
+      "name": "af2n_cap_50000_invariant_after_patch"
+    }
+  ],
+  "task_origin": "SLC-F-DRY-RUN-SIMULATION",
+  "utc": "2026-05-22T21:14:09.626449+00:00",
+  "version": "v1"
+}

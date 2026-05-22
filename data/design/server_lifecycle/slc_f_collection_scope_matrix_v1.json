@@ -1,0 +1,29 @@
+{
+  "task_origin":"SLC-F-COLLECTION-SCOPE-MATRIX","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "execute_runtime":false,"db_write":false,
+  "canonical_index_ref":"/app/data/design/benchmark_canonical/benchmark_canonical_index_v1.json",
+  "key_strategies":["account_id_only","account_id_plus_server_id","account_id_plus_server_id_plus_entity_id","global_static_catalog"],
+  "matrix":[
+    {"collection":"users","current_key":"user_id","future_key_strategy":"account_id_only","scope":"account_wide","unique_index_future":["account_id"]},
+    {"collection":"accounts_wallet_paid","current_key":"user_id","future_key_strategy":"account_id_only","scope":"account_wide","unique_index_future":["account_id"]},
+    {"collection":"accounts_wallet_paid_ledger","current_key":"user_id,tx_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"account_wide","unique_index_future":["account_id","tx_id"]},
+    {"collection":"server_profiles","current_key":"NONE","future_key_strategy":"account_id_plus_server_id","scope":"server_bound","unique_index_future":["account_id","server_id"]},
+    {"collection":"servers","current_key":"NONE","future_key_strategy":"global_static_catalog","scope":"server_bound","unique_index_future":["server_id"]},
+    {"collection":"server_wallets_free","current_key":"user_id","future_key_strategy":"account_id_plus_server_id","scope":"server_bound","unique_index_future":["account_id","server_id"]},
+    {"collection":"user_heroes","current_key":"user_id,hero_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["account_id","server_id","hero_id"]},
+    {"collection":"teams","current_key":"user_id,team_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["account_id","server_id","team_id"]},
+    {"collection":"inventory","current_key":"user_id,item_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["account_id","server_id","item_id"]},
+    {"collection":"gacha_history","current_key":"user_id","future_key_strategy":"account_id_plus_server_id","scope":"server_bound","unique_index_future":["account_id","server_id","pull_id"]},
+    {"collection":"story_progress","current_key":"user_id","future_key_strategy":"account_id_plus_server_id","scope":"server_bound","unique_index_future":["account_id","server_id"]},
+    {"collection":"guilds","current_key":"guild_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["server_id","guild_id"]},
+    {"collection":"arena_rankings","current_key":"user_id","future_key_strategy":"account_id_plus_server_id","scope":"server_bound","unique_index_future":["account_id","server_id"]},
+    {"collection":"user_affinity_state","current_key":"user_id,hero_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["account_id","server_id","hero_id"]},
+    {"collection":"gift_transaction_ledger","current_key":"user_id,idempotency_key","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["account_id","server_id","idempotency_key"],"af2n_preservation_required":true},
+    {"collection":"user_gift_inventory","current_key":"user_id,gift_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["account_id","server_id","gift_id"],"af2n_preservation_required":true},
+    {"collection":"event_progress","current_key":"user_id,event_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"server_bound","unique_index_future":["account_id","server_id","event_id"]},
+    {"collection":"account_cosmetics","current_key":"user_id,cosmetic_id","future_key_strategy":"account_id_plus_server_id_plus_entity_id","scope":"account_wide","unique_index_future":["account_id","cosmetic_id"],"notes":"ownership account-wide; equip state separate server_bound collection"},
+    {"collection":"heroes_catalog","current_key":"hero_id","future_key_strategy":"global_static_catalog","scope":"global_catalog_readonly","unique_index_future":["hero_id"]}
+  ],
+  "safety":{"no_db_write":true,"no_index_creation":true,"no_migration":true}
+}

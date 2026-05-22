@@ -467,6 +467,17 @@ OPTIONAL = [
     ('BENCHMARK-SLC-F-NEXT-CHECKPOINT-A',          'validate_slc_f_next_checkpoint_canonical_v1.py'),
     ('BENCHMARK-CANONICAL-RUNTIME-SAFETY-AUDIT-A', 'audit_benchmark_canonical_runtime_safety_v1.py'),
     ('BENCHMARK-CANONICAL-COMBO-A',                'validate_benchmark_canonical_combo_v1.py'),
+    # SLC-F ROUTE PATCH DRY-RUN (DESIGN-ONLY / DRY-RUN)
+    ('SLC-F-PREFLIGHT',                            'validate_slc_f_preflight_v1.py'),
+    ('SLC-F-ROUTE-SCOPE-INVENTORY',                'audit_slc_f_route_scope_inventory_v1.py'),
+    ('SLC-F-COLLECTION-SCOPE-MATRIX',              'validate_slc_f_collection_scope_matrix_v1.py'),
+    ('SLC-F-ENDPOINT-PATCH-CONTRACT',              'validate_slc_f_endpoint_patch_contract_v1.py'),
+    ('SLC-F-LEGACY-S1-COMPATIBILITY-PLAN',         'validate_slc_f_legacy_s1_compatibility_plan_v1.py'),
+    ('SLC-F-DRY-RUN-SIMULATION',                   'simulate_slc_f_route_patch_dryrun_v1.py'),
+    ('SLC-F-ROUTE-PATCH-RISK-MATRIX',              'validate_slc_f_route_patch_risk_matrix_v1.py'),
+    ('SLC-F-RUNTIME-SAFETY-AUDIT',                 'audit_slc_f_runtime_safety_v1.py'),
+    ('SLC-F-READINESS-ROLLUP',                     'validate_slc_f_readiness_rollup_v1.py'),
+    ('SLC-F-COMBO',                                'validate_slc_f_route_patch_dryrun_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

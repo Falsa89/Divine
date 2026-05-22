@@ -1,0 +1,78 @@
+{
+  "mode": "DESIGN_ONLY",
+  "results": {
+    "collection_scope_matrix": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_collection_scope_matrix_v1] PASS errors=0"
+      ]
+    },
+    "dry_run_simulation": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_route_patch_dryrun_simulation_v1] PASS errors=0"
+      ]
+    },
+    "endpoint_patch_contract": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_endpoint_patch_contract_v1] PASS errors=0"
+      ]
+    },
+    "legacy_s1_compatibility": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_legacy_s1_compatibility_plan_v1] PASS errors=0"
+      ]
+    },
+    "preflight": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_preflight_v1] PASS errors=0"
+      ]
+    },
+    "readiness_rollup": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_readiness_rollup_v1] PASS errors=0"
+      ]
+    },
+    "route_patch_risk_matrix": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_route_patch_risk_matrix_v1] PASS errors=0"
+      ]
+    },
+    "route_scope_inventory": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_route_scope_inventory_v1] PASS errors=0"
+      ]
+    },
+    "runtime_safety_audit": {
+      "exit_code": 0,
+      "status": "PASS",
+      "stdout_tail": [
+        "[slc_f_runtime_safety_audit_v1] PASS errors=0"
+      ]
+    }
+  },
+  "safety": {
+    "borea_safe": true,
+    "no_db_write": true,
+    "no_runtime_change": true,
+    "route_patch_applied": false,
+    "second_server_opening_allowed": false
+  },
+  "status": "PASS",
+  "task": "slc_f_route_patch_dryrun_combo_v1",
+  "utc": "2026-05-22T21:14:10.361119+00:00"
+}

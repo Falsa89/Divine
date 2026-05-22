@@ -105,3 +105,28 @@ Fonte canonica interna al progetto per tutte le decisioni benchmark-derived (non
 - Copertura: 16 live modes · server lifecycle/calendar/merge · event hub/daily guide · summon/pity/fragments/wishlist · cosmetics/skins/titles/furniture · Sanctuary Housing · guild/social/co-op · tower/castle/roguelike · equipment/relic/forge · battle stats/reporting · monetized events guardrails · benchmark risk policy
 - SLC-F come prossimo checkpoint design-only (execute_now=false)
 - Hard invariants confermati: AF2-N cap=50000, allowlist=2500, primordial_gaia=404, borea hidden from /api/heroes, second_server_opening_allowed=false
+
+---
+
+## SLC-F — Server-Aware Route Patch Dry-Run Canonical (2026-05-22) ✅ PASS (DESIGN-ONLY)
+
+Inventario, risk matrix, patch contract, dry-run simulation, validators e
+audit per preparare la futura migrazione server-aware delle route, senza
+toccare il runtime.
+
+**No DB writes. No runtime route implementation. No UI. No battle/gacha/roster changes. No AF2-N drift.**
+
+- 9 JSON design (8 server_lifecycle/ + 1 system_safety/)
+- 11 script Python (9 validator/audit + 1 simulator + 1 combo) in `/app/backend/scripts/`
+- Doc: `/app/docs/divine/97_SLC_F_ROUTE_PATCH_DRYRUN_CANONICAL.md`
+- Suite globale: pass=302, fail=0, miss=0 (10 nuovi OPTIONAL)
+- Combo SLC-F: 9/9 PASS
+- Route inventory: 30 family classificate (0 unsafe_unknown), 343 user_id refs totali
+- Collection matrix: 19 collections con future key strategy
+- Endpoint patch contract: 14 endpoint (NOT implemented; AF2-N + heroes catalog protected)
+- Legacy S1 compat: default_legacy_server_id=s1, backfill_executed=false
+- Risk matrix: 11 rischi (5 P0, 4 P1, 2 P2) tutti con mitigation
+- Runtime safety: protected files SHA-256 match, 0 leak future routes, 0 multishard cols in DB
+- 7 blockers documentati a runtime_patch_applied=false
+- AF2-N intatto: cap=50000, allowlist=2500
+- API smoke: /api/heroes=100, primordial_gaia=404, borea/greek_borea baseline immutato

@@ -1,0 +1,37 @@
+{
+  "task_origin":"SLC-F-READINESS-ROLLUP","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "execute_runtime":false,"db_write":false,
+  "state":{
+    "route_scope_inventory_ready":true,
+    "collection_scope_matrix_ready":true,
+    "endpoint_patch_contract_ready":true,
+    "legacy_s1_compatibility_plan_ready":true,
+    "dry_run_simulation_plan_ready":true,
+    "route_patch_risk_matrix_ready":true,
+    "runtime_guardrail_policy_ready":true,
+    "runtime_patch_applied":false,
+    "db_write":false,
+    "migration_applied":false,
+    "second_server_opening_allowed":false,
+    "server_profiles_runtime_enabled":false,
+    "borea_safe":true,
+    "af2n_invariant_intact":true
+  },
+  "blockers_to_runtime_patch":[
+    "explicit user approval required before phase 1+ writes",
+    "server_profiles collection must be designed before backfill",
+    "protected files must remain SHA-256 identical",
+    "feature flags SERVER_PROFILES_RUNTIME_ENABLED / SECOND_SERVER_OPENING_ENABLED must remain unset",
+    "AF2-N cap=50000 and allowlist=2500 must be preserved",
+    "borea/greek_borea catalog-only baseline must be preserved",
+    "phase 11 legacy fallback removal requires irreversible user approval"
+  ],
+  "future_feature_flags":[
+    {"name":"SERVER_PROFILES_RUNTIME_ENABLED","value":false},
+    {"name":"SERVER_AWARE_READS_ENABLED","value":false},
+    {"name":"SERVER_AWARE_WRITES_ENABLED","value":false},
+    {"name":"SECOND_SERVER_OPENING_ENABLED","value":false}
+  ],
+  "canonical_index_ref":"/app/data/design/benchmark_canonical/benchmark_canonical_index_v1.json"
+}
