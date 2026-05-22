@@ -1,0 +1,25 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "how_works_in_divine":[
+    "Post-battle stats: damage dealt/taken, healing, ultimates used, status applied, kills, deaths",
+    "Per-hero contribution chart",
+    "Battle replays for guild war modes (Valhalla, Tre Troni, Titanomachia)",
+    "Leaderboards: damage, kills, streaks per mode",
+    "Telemetry hooks: only design-only; no AF2-N runtime mutation",
+    "Reports do not leak opponent secrets prematurely"
+  ],
+  "import_from_benchmark":[
+    "Nikke detailed battle log",
+    "Epic Seven RTA replay",
+    "Raid battle stats panel",
+    "Future Fight battle log"
+  ],
+  "do_not_import":[
+    "leak of opponent set bonuses pre-battle",
+    "data that breaks fairness",
+    "replays that expose anti-cheat heuristics"
+  ],
+  "runtime_status":"not_implemented"
+}

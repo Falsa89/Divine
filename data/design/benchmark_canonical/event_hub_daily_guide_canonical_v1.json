@@ -1,0 +1,26 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "event_hub":{
+    "how_works_in_divine":[
+      "Single Event Hub aggregates active live modes, special events, login rewards, growth missions",
+      "Daily Guide highlights up to N actionable tasks per player session",
+      "Broadcast policy: max 3 visible announcements, priority queue",
+      "Reward framework: participation, personal, guild, leaderboard, milestone, consolation, shop currency, first clear, recurring"
+    ],
+    "import_from_benchmark":["BLEACH Brave Souls event hub","Epic Seven event calendar","Genshin daily commission UX","Nikke daily missions readability"],
+    "do_not_import":["opaque event end times","forced FOMO countdowns on competitive modes","reward duplication across events causing P2W"],
+    "runtime_status":"not_implemented"
+  },
+  "daily_guide":{
+    "how_works_in_divine":[
+      "Personalized daily tasks with hard cap on count",
+      "Server-aware after SLC-F/G",
+      "Borea NOT shown as starter hero in onboarding flows"
+    ],
+    "import_from_benchmark":["AFK Arena daily quests structure","Nikke daily missions","Mythic Heroes growth path"],
+    "do_not_import":["30+ task overload","hidden completion conditions","paid-only completion paths"],
+    "runtime_status":"not_implemented"
+  }
+}

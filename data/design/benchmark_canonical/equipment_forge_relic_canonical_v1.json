@@ -1,0 +1,26 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "how_works_in_divine":[
+    "Equipment per hero with rarity + substats; locked by Divine Weapon catalog when applicable",
+    "Relics designed in separate locked catalog",
+    "Forge: upgrade, enchant, salvage; capped by cosmetic/global cap resolver where stat-impacting",
+    "Substat re-roll exists with anti-gambling cap",
+    "QoL: batch upgrade, preset loadouts per hero, auto-equip best by score",
+    "All equipment state server-bound after SLC migration"
+  ],
+  "import_from_benchmark":[
+    "Epic Seven substat readability",
+    "Raid affinity/relic salvage",
+    "Future Fight forge batch ops",
+    "Summoners War runes UI patterns"
+  ],
+  "do_not_import":[
+    "gambling enchant with no pity",
+    "hard P2W gear sources",
+    "forge that invalidates PvE progress",
+    "cross-server gear transfer"
+  ],
+  "runtime_status":"not_implemented"
+}

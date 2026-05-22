@@ -1,0 +1,52 @@
+{
+  "design_only": true,
+  "runtime_attached": false,
+  "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false,
+  "version": "v1",
+  "covers": [
+    "16_live_special_modes",
+    "server_lifecycle_calendar_merge",
+    "event_hub_daily_guide",
+    "summon_pity_fragments_wishlist",
+    "cosmetics_skins_titles_furniture",
+    "sanctuary_housing_dimora_divina",
+    "guild_social_coop",
+    "tower_castle_roguelike",
+    "equipment_relic_forge",
+    "battle_stats_reporting",
+    "monetized_events_guardrails",
+    "slc_f_next_checkpoint"
+  ],
+  "canonical_documents": {
+    "live_special_modes":          "/app/data/design/benchmark_canonical/live_special_modes_canonical_v1.json",
+    "benchmark_system_library":    "/app/data/design/benchmark_canonical/benchmark_system_library_v1.json",
+    "benchmark_risk_policy":       "/app/data/design/benchmark_canonical/benchmark_risk_policy_expanded_v1.json",
+    "sanctuary_housing":           "/app/data/design/benchmark_canonical/sanctuary_housing_dimora_divina_canonical_v1.json",
+    "summon_pity_fragment":        "/app/data/design/benchmark_canonical/summon_pity_fragment_canonical_v1.json",
+    "server_lifecycle_calendar_merge": "/app/data/design/benchmark_canonical/server_lifecycle_calendar_merge_canonical_v1.json",
+    "event_hub_daily_guide":       "/app/data/design/benchmark_canonical/event_hub_daily_guide_canonical_v1.json",
+    "guild_social_coop":           "/app/data/design/benchmark_canonical/guild_social_coop_canonical_v1.json",
+    "equipment_forge_relic":       "/app/data/design/benchmark_canonical/equipment_forge_relic_canonical_v1.json",
+    "battle_stats_reporting":      "/app/data/design/benchmark_canonical/battle_stats_reporting_canonical_v1.json",
+    "slc_f_next_checkpoint":       "/app/data/design/benchmark_canonical/slc_f_next_checkpoint_canonical_v1.json",
+    "readiness_rollup":            "/app/data/design/benchmark_canonical/benchmark_canonical_readiness_rollup_v1.json"
+  },
+  "markdown_sources": [
+    "/app/docs/divine/96_LIVE_SPECIAL_MODES_CANONICAL.md",
+    "/app/docs/divine/96_BENCHMARK_SYSTEM_LIBRARY.md",
+    "/app/docs/divine/96_SLC_F_ROUTE_PATCH_DRYRUN_NEXT_CHECKPOINT.md",
+    "/app/docs/divine/96_BENCHMARK_CANONICAL_SOURCE_OF_TRUTH.md"
+  ],
+  "hard_guardrails": {
+    "db_writes": false,
+    "migrations": false,
+    "runtime_routes": false,
+    "frontend_runtime_ui": false,
+    "battle_runtime_changes": false,
+    "gacha_roster_catalog_changes": false,
+    "affinity_af2n_stage4_changes": false,
+    "second_server_opening": false
+  }
+}

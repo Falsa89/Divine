@@ -1,0 +1,56 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "checkpoint":"SLC-F route patch dry-run",
+  "mode":"DESIGN_ONLY_AUDIT_ONLY_READ_ONLY_DRY_RUN",
+  "purpose":[
+    "Identify every route/collection/system that must become server-aware",
+    "Create patch contracts and dry-run simulation only",
+    "Do not apply runtime route changes"
+  ],
+  "baseline":{
+    "slc_c_complete": true,
+    "slc_be_complete": true,
+    "live_modes_reconciliation_a_complete": true,
+    "previous_suite": "278 PASS / 0 FAIL / 0 MISS",
+    "second_server_opening_enabled": false,
+    "server_profiles_runtime_enabled": false,
+    "second_server_opening_allowed": false
+  },
+  "required_outputs":[
+    "server-aware route patch matrix",
+    "per-route risk classification",
+    "server-bound/account-wide collection mapping",
+    "pseudo-diff / patch contract only",
+    "dry-run resolver simulation for account_id + server_id",
+    "protected-file no-diff audit",
+    "DB no-write audit",
+    "future phase recommendations"
+  ],
+  "hard_guardrails":{
+    "runtime_patch": false,
+    "db_writes": false,
+    "migrations": false,
+    "route_creation": false,
+    "auth_runtime_change": false,
+    "ui": false,
+    "second_server_opening": false,
+    "battle_engine_changes": false,
+    "battle_core_changes": false,
+    "combat_tsx_changes": false,
+    "affinity_gift_spend_changes": false,
+    "af2n_stage4_changes": false
+  },
+  "acceptance":{
+    "route_patch_applied": false,
+    "db_write": false,
+    "migration_applied": false,
+    "second_server_opening_allowed": false,
+    "future_feature_flags_remain_false": true,
+    "slc_f_docs_and_validators_pass": true,
+    "suite_pass": true,
+    "api_smoke_pass": true
+  },
+  "execute_now": false
+}

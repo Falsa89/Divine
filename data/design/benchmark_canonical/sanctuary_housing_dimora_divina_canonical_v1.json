@@ -1,0 +1,33 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "name": "Santuario \u2014 Dimora Divina",
+  "how_works_in_divine":[
+    "Housing inside Sanctuary",
+    "Rooms/altars/decorative furniture",
+    "Equipped furniture grants small comfort/prestige score",
+    "Display favorite heroes",
+    "Light global team bonuses, all gated by cosmetic/global cap resolver",
+    "Light resource production",
+    "Future social visits",
+    "Equipped state and bonuses server-bound",
+    "Paid furniture ownership may be account-wide",
+    "PvP caps stricter than PvE"
+  ],
+  "import_from_benchmark":[
+    "Figure Fantasy Otaku Zone display",
+    "Nikke Outpost loop",
+    "Genshin Serenitea Pot bonus cap",
+    "AFK Arena Oak Inn comfort",
+    "League of Angels Homestead/Garden visit loop",
+    "Omniheroes Valkyrie Manor cosmetic identity"
+  ],
+  "do_not_import":[
+    "uncapped stacking bonuses",
+    "PvP-mandatory furniture",
+    "infinite paid grow loops without resolver cap",
+    "runtime implementation before resolver review"
+  ],
+  "runtime_status":"not_implemented"
+}

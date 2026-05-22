@@ -1,0 +1,33 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "forbidden_or_capped_patterns": [
+    "paid cooldown clear in competitive modes",
+    "paid morale boost that affects ranking",
+    "VIP skip in competitive modes",
+    "paid revive that decides leaderboard",
+    "uncapped extra entries",
+    "final blow as major reward",
+    "occupation bonuses too high",
+    "guild donation power scaling too high",
+    "ranking-only meta-critical rewards",
+    "server transfer paid-only",
+    "public spend UI without final approval",
+    "STACK-G battle wiring without resolver approval",
+    "hidden odds in monetized events",
+    "FOMO mechanics on competitive ranking modes",
+    "alt-account exploits in co-op (Scrigni dell\u2019Elisio)",
+    "cross-server data clone before SLC maturity",
+    "borea exposure in public list /api/heroes",
+    "second server opening without explicit approval"
+  ],
+  "hard_invariants": {
+    "af2n_cap": 50000,
+    "af2n_allowlist": 2500,
+    "second_server_opening_allowed": false,
+    "server_profiles_runtime_enabled": false,
+    "borea_hidden_from_api_heroes_list": true,
+    "primordial_gaia_404": true
+  }
+}

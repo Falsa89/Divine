@@ -1,0 +1,32 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "how_works_in_divine":[
+    "Summon system with rate-up banners and per-banner pity",
+    "Hero fragments (frammenti) granted via shops, events, milestones; convertible to dupes",
+    "Wishlist optional for permanent banner only",
+    "Soft pity ramps within banner cycle, hard pity guarantees rate-up",
+    "Pity scope is per (account_id, server_id, banner_id) post multi-shard migration; currently per (user_id, banner_id) single-shard",
+    "No cross-banner pity leak",
+    "Free + paid summon currencies separated (paid account-wide, free server-bound)"
+  ],
+  "import_from_benchmark":[
+    "Genshin / Star Rail soft+hard pity readability",
+    "Epic Seven Moonlight pity transparency",
+    "BLEACH Brave Souls character drop with pity",
+    "AFK Arena Wishlist concept"
+  ],
+  "do_not_import":[
+    "hidden odds",
+    "pity that resets on banner end without rollover note",
+    "paid-only pity acceleration",
+    "alt-account fragment farming",
+    "cross-banner shared pity that creates whale snowball"
+  ],
+  "runtime_status":"design_only_runtime_pending",
+  "baseline_today":{
+    "current_pity_scope":"(user_id, banner_id) single-shard",
+    "future_pity_scope":"(account_id, server_id, banner_id) after SLC-C/SLC-F/SLC-G"
+  }
+}

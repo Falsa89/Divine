@@ -89,3 +89,19 @@ Riconciliazione definitiva delle 16 modalità live/special di Divine Waifus con 
 - SLC-F/G/D/H tutti execute_now=false
 - AF2-N intatto: cap=50000, allowlist=2500
 - 7 blocker documentati a `slc_next_runtime_allowed=false`
+
+---
+
+## BENCHMARK-CANONICAL-SOURCE-OF-TRUTH-A (2026-05-22) ✅ PASS (DESIGN-ONLY)
+
+Fonte canonica interna al progetto per tutte le decisioni benchmark-derived (non solo 16 modalità).
+
+**No DB writes. No runtime route creation. No UI. No battle/gacha/roster/catalog changes. No AF2-N drift.**
+
+- 13 JSON design canonical in `/app/data/design/benchmark_canonical/`
+- 14 script Python (13 validator + 1 audit + 1 combo) in `/app/backend/scripts/`
+- 4 doc MD in `/app/docs/divine/` (96_BENCHMARK_CANONICAL_SOURCE_OF_TRUTH.md + 3 sources verbatim dal pack)
+- Suite globale: pass=292, fail=0, miss=0 (14 nuovi OPTIONAL)
+- Copertura: 16 live modes · server lifecycle/calendar/merge · event hub/daily guide · summon/pity/fragments/wishlist · cosmetics/skins/titles/furniture · Sanctuary Housing · guild/social/co-op · tower/castle/roguelike · equipment/relic/forge · battle stats/reporting · monetized events guardrails · benchmark risk policy
+- SLC-F come prossimo checkpoint design-only (execute_now=false)
+- Hard invariants confermati: AF2-N cap=50000, allowlist=2500, primordial_gaia=404, borea hidden from /api/heroes, second_server_opening_allowed=false

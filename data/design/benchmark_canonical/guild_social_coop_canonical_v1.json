@@ -1,0 +1,26 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "how_works_in_divine":[
+    "Guilds are server-bound; one guild membership per (account_id, server_id)",
+    "Roles: leader, officers, members",
+    "Activity points fund opens of Furie del Pantheon, Fame del Behemoth, etc.",
+    "Co-op (Scrigni dell\u2019Elisio) is always available; first 3 daily runs rewarded",
+    "Social: friend list, gifts (server-bound), profile visits, war reports",
+    "Chat moderation: per-server channels, anti-spam rate limit"
+  ],
+  "import_from_benchmark":[
+    "BLEACH Brave Souls co-op pacing",
+    "Future Fight alliance structure",
+    "Raid clan/donation hierarchy",
+    "Nikke social bond loop"
+  ],
+  "do_not_import":[
+    "alt-farming via co-op help bonuses",
+    "unlimited paid donation that crushes small guilds",
+    "leader-only rewards that snowball",
+    "chat without rate limiting / moderation"
+  ],
+  "runtime_status":"not_implemented"
+}

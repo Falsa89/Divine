@@ -1,0 +1,42 @@
+{
+  "design_only": true, "runtime_attached": false, "battle_runtime_attached": false,
+  "source_pack": "DIVINE_BENCHMARK_CANONICAL_SOURCE_PACK",
+  "implementation_allowed_now": false, "version": "v1",
+  "server_lifecycle":{
+    "statuses":["planned","open","crowded","closed_to_new","merge_pending","merged","archived"],
+    "how_works_in_divine":[
+      "New player default: newest open server; if crowded fall back to newest open not crowded",
+      "Existing player default: return to last active server",
+      "Legacy single-shard maps to s1 by future SLC-G migration",
+      "Second server opening locked until SLC-F/G complete and user approves"
+    ],
+    "import_from_benchmark":["Lineage M shard lifecycle pacing","Marvel Future Fight server merge model","BLEACH Brave Souls server seasons"],
+    "do_not_import":["forced cross-server merges without consolation","opaque shard health","paid-only transfers"],
+    "runtime_status":"not_implemented"
+  },
+  "server_calendar":{
+    "daily_windows":[
+      "09:00-10:00 Giudizio delle Stirpi",
+      "11:00-12:00 Assalto del Ragnar\u00f6k",
+      "14:00-15:00 Giudizio delle Stirpi",
+      "15:30-16:30 Titanomachia",
+      "17:00-18:00 Fronti del Valhalla",
+      "19:00-20:00 Assalto del Ragnar\u00f6k"
+    ],
+    "weekly_windows":[
+      "Mon/Wed/Fri 20:30-21:30 Crepuscolo dei Titani",
+      "Tue/Thu/Sat 22:00-23:00 Guerra dei Tre Troni (prep Mon/Wed/Fri)"
+    ]
+  },
+  "merge_recovery":{
+    "how_works_in_divine":[
+      "Server merge produces merged state with redirect of existing profiles to target server",
+      "No cross-server cloning of progress",
+      "Catch-up pool defined in SLC-A merge_catch_up_pool_schema_v1.json",
+      "Approval-required transitions: merge_pending -> merged, merged -> archived"
+    ],
+    "import_from_benchmark":["FFXIV / MMO server merge naming conflicts","Future Fight merge bonuses","Lineage M consolidation"],
+    "do_not_import":["hidden merge plans","forced rename without grace","loss of paid items in merge"],
+    "runtime_status":"not_implemented"
+  }
+}

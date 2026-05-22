@@ -452,6 +452,21 @@ OPTIONAL = [
     ('LIVE-MODES-RUNTIME-SAFETY-AUDIT-A',          'audit_live_mode_reconciliation_runtime_safety_v1.py'),
     ('SLC-NEXT-PREP-A',                            'validate_slc_next_after_be_plan_v1.py'),
     ('LIVE-MODES-SLC-NEXT-COMBO-A',                'validate_live_modes_slc_next_combo_v1.py'),
+    # DIVINE BENCHMARK CANONICAL SOURCE PACK (DESIGN-ONLY / SOURCE-OF-TRUTH)
+    ('BENCHMARK-CANONICAL-INDEX-A',                'validate_benchmark_canonical_index_v1.py'),
+    ('BENCHMARK-LIVE-SPECIAL-MODES-CANONICAL-A',   'validate_live_special_modes_canonical_v1.py'),
+    ('BENCHMARK-SYSTEM-LIBRARY-A',                 'validate_benchmark_system_library_v1.py'),
+    ('BENCHMARK-RISK-POLICY-EXPANDED-A',           'validate_benchmark_risk_policy_expanded_v1.py'),
+    ('BENCHMARK-SANCTUARY-HOUSING-CANONICAL-A',    'validate_sanctuary_housing_dimora_divina_canonical_v1.py'),
+    ('BENCHMARK-SUMMON-PITY-FRAGMENT-CANONICAL-A', 'validate_summon_pity_fragment_canonical_v1.py'),
+    ('BENCHMARK-SERVER-LIFECYCLE-CAL-MERGE-A',     'validate_server_lifecycle_calendar_merge_canonical_v1.py'),
+    ('BENCHMARK-EVENT-HUB-DAILY-GUIDE-A',          'validate_event_hub_daily_guide_canonical_v1.py'),
+    ('BENCHMARK-GUILD-SOCIAL-COOP-A',              'validate_guild_social_coop_canonical_v1.py'),
+    ('BENCHMARK-EQUIPMENT-FORGE-RELIC-A',          'validate_equipment_forge_relic_canonical_v1.py'),
+    ('BENCHMARK-BATTLE-STATS-REPORTING-A',         'validate_battle_stats_reporting_canonical_v1.py'),
+    ('BENCHMARK-SLC-F-NEXT-CHECKPOINT-A',          'validate_slc_f_next_checkpoint_canonical_v1.py'),
+    ('BENCHMARK-CANONICAL-RUNTIME-SAFETY-AUDIT-A', 'audit_benchmark_canonical_runtime_safety_v1.py'),
+    ('BENCHMARK-CANONICAL-COMBO-A',                'validate_benchmark_canonical_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
