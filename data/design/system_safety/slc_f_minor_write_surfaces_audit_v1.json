@@ -1,0 +1,134 @@
+{
+  "task_origin": "SLC-F-MINOR-WRITE-SURFACES-AUDIT",
+  "version": "v1",
+  "audit_id": "slc_f_minor_audit_20260523T190000Z_audit_only",
+  "audit_executed_at_utc": "2026-05-23T19:00:00.000000+00:00",
+  "scope": "AUDIT_ONLY",
+  "authorization_markers_present": {
+    "SLC_F_MINOR_SURFACES_AUDIT_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "AUDIT_ONLY"
+  },
+  "runtime_files_modified": false,
+  "db_writes_performed": false,
+  "migrations_performed": false,
+  "suite_baseline_before": "345 PASS / 0 FAIL / 0 MISS",
+  "files_scanned": [
+    "backend/routes/achievements.py", "backend/routes/artifacts.py", "backend/routes/combat.py",
+    "backend/routes/cosmetics.py", "backend/routes/economy.py", "backend/routes/equipment.py",
+    "backend/routes/forge.py", "backend/routes/guild.py", "backend/routes/gvg.py",
+    "backend/routes/hero_progression.py", "backend/routes/heroes.py", "backend/routes/items.py",
+    "backend/routes/level_sharing.py", "backend/routes/player_faction_v2.py",
+    "backend/routes/push_notifications.py", "backend/routes/raids.py",
+    "backend/routes/sanctuary.py", "backend/routes/social.py", "backend/routes/soul_forge.py",
+    "backend/routes/unique_items.py"
+  ],
+  "total_write_surfaces_detected": 201,
+  "total_files_with_writes": 20,
+  "classification_table": [
+    {"file": "backend/routes/hero_progression.py", "helper_import": true, "helper_calls": 3, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-0/1", "notes": "Patched in Batch-0/1; helper actively used."},
+    {"file": "backend/routes/items.py", "helper_import": true, "helper_calls": 0, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-0/1", "notes": "Helper imported (Batch-0/1). Only update_one with upsert=True on users/inventory; users is account-wide skipped collection, inventory mutations don't need new server_id stamping at this layer."},
+    {"file": "backend/routes/forge.py", "helper_import": true, "helper_calls": 2, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-1B", "notes": "rune insert/upsert patched; user_equipment update_one correctly skipped (UPDATE_ONLY)."},
+    {"file": "backend/routes/achievements.py", "helper_import": true, "helper_calls": 1, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-1B", "notes": "achievement_claims insert patched."},
+    {"file": "backend/routes/level_sharing.py", "helper_import": true, "helper_calls": 2, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-1B", "notes": "level_sharing inserts patched."},
+    {"file": "backend/routes/social.py", "helper_import": true, "helper_calls": 2, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-1B", "notes": "plaza_chat/friends inserts patched."},
+    {"file": "backend/routes/soul_forge.py", "helper_import": true, "helper_calls": 3, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-1B", "notes": "wallets/retirement_history/shop_purchases_special patched."},
+    {"file": "backend/routes/artifacts.py", "helper_import": true, "helper_calls": 4, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-1B", "notes": "user_materials/user_fragments/user_artifacts/user_constellations inserts patched."},
+    {"file": "backend/routes/guild.py", "helper_import": true, "helper_calls": 1, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-1B", "notes": "teams/guilds inserts patched."},
+    {"file": "backend/routes/raids.py", "helper_import": true, "helper_calls": 1, "classification": "ALREADY_PATCHED_SAFE", "batch": "Raids-equipment micro-batch", "notes": "Character-Exclusive Items user_equipment.insert_one patched."},
+    {"file": "backend/routes/equipment.py", "helper_import": false, "helper_calls": 0, "classification": "UPDATE_ONLY_NO_NEW_DOC", "batch": "Equipment-scope safe no-op", "notes": "Only update_one on existing user_equipment docs (no insert/upsert). Correctly classified as SAFE NO-OP. No further patch required."},
+    {"file": "backend/routes/gvg.py", "helper_import": false, "helper_calls": 0, "classification": "SAFE_MICRO_BATCH_CANDIDATE", "batch": "NEXT (recommended)", "target_surfaces": [
+      {"line": 190, "op": "db.gvg_wars.insert_one", "semantics": "creates new server_bound gvg_war doc", "decision": "PATCH_CANDIDATE"},
+      {"line": 353, "op": "db.user_mail.insert_one", "semantics": "mail to opponent (mail collection is mixed origin)", "decision": "DEFER_AMBIGUOUS"}
+    ], "notes": "gvg_wars insert is a clear server_bound new-doc surface (war scoped to server context). user_mail is mixed origin (account vs server) and should be deferred."},
+    {"file": "backend/routes/unique_items.py", "helper_import": false, "helper_calls": 0, "classification": "SAFE_MICRO_BATCH_CANDIDATE", "batch": "NEXT (recommended)", "target_surfaces": [
+      {"line": 277, "op": "db.unique_items_crafted.insert_one", "semantics": "creates new server_bound unique-item-crafted doc per user_id+hero_name", "decision": "PATCH_CANDIDATE"},
+      {"line": 303, "op": "db.unique_items_equipped.update_one(upsert=True)", "semantics": "upsert equipped state per user_id+hero_name; Batch-1B-style $setOnInsert candidate", "decision": "PATCH_CANDIDATE"}
+    ], "notes": "Both surfaces match Batch-1B patterns. Cost/rarity logic must NOT be touched; only stamp server_id/account_id on new docs."},
+    {"file": "backend/routes/heroes.py", "helper_import": false, "helper_calls": 0, "classification": "GACHA_SUMMON_DEFER", "target_surfaces": [
+      {"line": 106, "op": "db.user_heroes.insert_one", "semantics": "gacha/summon claim creates user_heroes record"},
+      {"line": 146, "op": "db.user_heroes.insert_one", "semantics": "gacha/summon claim creates user_heroes record"}
+    ], "notes": "user_heroes inserts originate from gacha/summon claim flows. Touching these would risk altering banner/rates/pity/obtainable visibility (forbidden). DEFER to dedicated gacha/summon scope task with explicit canonical classification."},
+    {"file": "backend/routes/combat.py", "helper_import": false, "helper_calls": 0, "classification": "BATCH_4_COMBAT_BATTLE_DEFER", "target_surfaces": [
+      {"line": 20, "op": "db.story_progress.insert_one"},
+      {"line": 87, "op": "db.user_equipment.insert_one"},
+      {"line": 97, "op": "db.tower_progress.insert_one"},
+      {"line": 106, "op": "db.tower_progress.insert_one"},
+      {"line": 140, "op": "db.user_equipment.insert_one"},
+      {"line": 150, "op": "db.pvp_data.insert_one"},
+      {"line": 165, "op": "db.pvp_data.insert_one"},
+      {"line": 232, "op": "db.user_equipment.insert_one"},
+      {"line": 238, "op": "db.event_completions.insert_one"}
+    ], "notes": "combat.py is BATCH-4 combat/battle scope. All insert_one surfaces deferred to dedicated Batch-4 apply."},
+    {"file": "backend/routes/sanctuary.py", "helper_import": false, "helper_calls": 0, "classification": "FORBIDDEN_SCOPE", "target_surfaces": [
+      {"line": 232, "op": "db.heroes.insert_one", "forbidden_reason": "Character Bible write"},
+      {"line": 265, "op": "db.heroes.update_one (BOREA diff)", "forbidden_reason": "Character Bible mutation"},
+      {"line": 313, "op": "db.heroes.insert_one", "forbidden_reason": "Character Bible write"},
+      {"line": 331, "op": "db.heroes.update_one (BERSERKER diff)", "forbidden_reason": "Character Bible mutation"},
+      {"line": 365, "op": "db.heroes.update_one (HOPLITE diff)", "forbidden_reason": "Character Bible mutation"},
+      {"line": 636, "op": "db.user_affinity.insert_one", "deferred_to": "BATCH_3_AF2N"},
+      {"line": 663, "op": "db.user_affinity.update_one(upsert=True)", "deferred_to": "BATCH_3_AF2N"},
+      {"line": 714, "op": "db.user_constellation.insert_one", "deferred_to": "BATCH_3_AF2N or AF2N-adjacent micro-batch"},
+      {"line": 732, "op": "db.user_constellation_daily.update_one(upsert=True)", "deferred_to": "BATCH_3_AF2N or AF2N-adjacent micro-batch"}
+    ], "notes": "sanctuary.py writes db.heroes (Character Bible) and user_affinity / user_constellation (AF2-N adjacent). NEVER patch sanctuary.py outside a dedicated Character Bible / Batch-3 task with explicit canonical classification."},
+    {"file": "backend/routes/cosmetics.py", "helper_import": false, "helper_calls": 0, "classification": "MIXED_REQUIRES_REFACTOR", "notes": "user_cosmetics schema conflates account-wide ownership (owned_*) and server-bound equipped state (active_*). Requires structural split before any helper application."},
+    {"file": "backend/routes/economy.py", "helper_import": false, "helper_calls": 0, "classification": "MIXED_REQUIRES_REFACTOR", "notes": "5 subsystems mixed: shop_purchases / daily_claims / battle_pass / user_mail / vip_data; contains legacy /server/select endpoint (forbidden runtime). Requires dedicated refactor task per Batch-2 audit."},
+    {"file": "backend/routes/push_notifications.py", "helper_import": false, "helper_calls": 0, "classification": "ACCOUNT_WIDE_NO_CHANGE", "notes": "push_tokens + notifications classified account_wide per SLC-F canonical inventory. No patch required."},
+    {"file": "backend/routes/player_faction_v2.py", "helper_import": false, "helper_calls": 0, "classification": "ACCOUNT_WIDE_NO_CHANGE", "target_surfaces": [
+      {"line": 306, "op": "db.users.update_one ($set update_set)", "notes": "users collection is account-wide and explicitly skipped"}
+    ], "notes": "Only one write surface: update_one on db.users (skipped collection). No new doc created. No patch required."}
+  ],
+  "summary_counts": {
+    "ALREADY_PATCHED_SAFE": 10,
+    "SAFE_MICRO_BATCH_CANDIDATE": 2,
+    "UPDATE_ONLY_NO_NEW_DOC": 1,
+    "ACCOUNT_WIDE_NO_CHANGE": 2,
+    "MIXED_REQUIRES_REFACTOR": 2,
+    "GACHA_SUMMON_DEFER": 1,
+    "BATCH_4_COMBAT_BATTLE_DEFER": 1,
+    "FORBIDDEN_SCOPE": 1
+  },
+  "recommended_next_micro_batches": [
+    {
+      "name": "SLC-F GVG WAR INSERT SCOPE",
+      "target_file": "backend/routes/gvg.py",
+      "target_lines": [190],
+      "target_collections": ["gvg_wars"],
+      "pattern": "ensure_server_scope(war, uid)",
+      "risk": "low",
+      "requires_markers": ["SLC_F_GVG_WAR_SCOPE_APPLY_APPROVAL=true", "SLC_F_APPLY_BATCH_SCOPE=GVG_WAR_ONLY"],
+      "expected_diff": "+2 lines (import + call), pattern identical to raids.py micro-batch"
+    },
+    {
+      "name": "SLC-F UNIQUE-ITEMS SCOPE",
+      "target_file": "backend/routes/unique_items.py",
+      "target_lines": [277, 303],
+      "target_collections": ["unique_items_crafted", "unique_items_equipped"],
+      "pattern": "ensure_server_scope on insert + on upsert dict (with $setOnInsert)",
+      "risk": "low",
+      "requires_markers": ["SLC_F_UNIQUE_ITEMS_SCOPE_APPLY_APPROVAL=true", "SLC_F_APPLY_BATCH_SCOPE=UNIQUE_ITEMS_ONLY"],
+      "expected_diff": "+3 lines (1 import + 2 calls), pattern Batch-1B-style"
+    }
+  ],
+  "deferred_buckets": {
+    "BATCH_3_AF2N_DEFER": ["sanctuary.py user_affinity / user_constellation surfaces"],
+    "BATCH_4_COMBAT_BATTLE_DEFER": ["combat.py story_progress / user_equipment / tower_progress / pvp_data / event_completions inserts"],
+    "GACHA_SUMMON_DEFER": ["heroes.py user_heroes.insert_one (gacha claim)"],
+    "FORBIDDEN_SCOPE": ["sanctuary.py db.heroes inserts/updates (Character Bible)"],
+    "MIXED_REQUIRES_REFACTOR": ["cosmetics.py user_cosmetics schema split", "economy.py paid/free + VIP + legacy /server/select cleanup"],
+    "ACCOUNT_WIDE_NO_CHANGE": ["push_notifications.py", "player_faction_v2.py users.update_one"],
+    "AMBIGUOUS_DEFER": ["gvg.py user_mail.insert_one"]
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_batch_0_1_apply_id_preserved": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "slc_f_batch_1b_apply_id_preserved": "slc_f_batch_1b_20260523T175058Z_2cf0584c",
+  "slc_f_batch_2_apply_id_preserved": "slc_f_batch_2_20260523T181752Z_b838601e",
+  "slc_f_equipment_scope_apply_id_preserved": "slc_f_equipment_scope_20260523T182939Z_d2afcc8a",
+  "slc_f_raids_equipment_scope_apply_id_preserved": "slc_f_raids_equipment_scope_20260523T184512Z_a46a6034",
+  "known_drift_docs_status": {
+    "count": 7,
+    "source_family": "gacha/summon",
+    "fix_applied_in_this_audit": false,
+    "deferred_reason": "Per task guardrail: drift docs cleanup not authorized in AUDIT_ONLY task."
+  },
+  "verdict_target": "SLC_F_MINOR_SURFACES_AUDIT_READY"
+}
