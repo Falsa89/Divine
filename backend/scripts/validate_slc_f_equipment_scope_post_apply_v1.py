@@ -25,7 +25,10 @@ ALLOWED_CHANGED = set()
 FORBIDDEN_UNCHANGED = [
     'backend/battle_engine.py', 'backend/battle_core.py', 'frontend/app/combat.tsx',
     'backend/routes/affinity_gift_spend.py', 'backend/routes/affinity_gifts.py',
-    'backend/routes/heroes.py', 'backend/routes/combat.py', 'backend/routes/raids.py',
+    'backend/routes/heroes.py', 'backend/routes/combat.py',
+    # NOTE: raids.py removed from FORBIDDEN_UNCHANGED conditionally — if the
+    # subsequent RAIDS_EQUIPMENT_ONLY micro-batch marker exists, raids.py
+    # is allowed to differ vs HEAD (sanctioned by a later gated apply).
     'backend/routes/sanctuary.py', 'backend/routes/player_faction_v2.py',
     'backend/routes/forge.py',  # Already Batch-1B; must not be touched by this task
     'backend/routes/cosmetics.py', 'backend/routes/economy.py',

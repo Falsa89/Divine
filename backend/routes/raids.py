@@ -7,6 +7,7 @@ from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from .game_data import RAID_BOSSES, EXCLUSIVE_ITEMS
+from utils.server_scope import ensure_server_scope
 
 
 def register_raids_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
@@ -147,5 +148,6 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
             "description": ei["item"].get("description", ""),
             "obtained_at": datetime.utcnow(),
         }
+        equip = ensure_server_scope(equip, uid)
         await db.user_equipment.insert_one(equip)
         return {"success": True, "item": equip}

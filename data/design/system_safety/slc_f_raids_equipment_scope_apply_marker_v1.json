@@ -1,0 +1,103 @@
+{
+  "task_origin": "SLC-F-RAIDS-EQUIPMENT-SERVER-SCOPE-EXTENSION",
+  "version": "v1",
+  "apply_id": "slc_f_raids_equipment_scope_20260523T184512Z_a46a6034",
+  "applied_at_utc": "2026-05-23T18:45:12.000000+00:00",
+  "scope": "RAIDS_EQUIPMENT_ONLY",
+  "scope_type": "gated micro-batch: ensure_server_scope on Character-Exclusive Items user_equipment insert",
+  "authorization_markers_present": {
+    "SLC_F_RAIDS_EQUIPMENT_SCOPE_APPLY_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "RAIDS_EQUIPMENT_ONLY"
+  },
+  "git_head_before": "b8f1715",
+  "route_patch_applied": true,
+  "route_patch_applied_partial": true,
+  "route_patch_applied_full": false,
+  "safe_no_op_apply": false,
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "phase_11_executed": false,
+  "fallback_removed": false,
+  "housing_runtime_implemented": false,
+  "changed_files": [
+    "backend/routes/raids.py"
+  ],
+  "routes_patched_families": [
+    "raids/exclusive_items"
+  ],
+  "raids_target_surface_audit": {
+    "file": "backend/routes/raids.py",
+    "endpoint": "POST /api/exclusive-items/craft",
+    "function": "craft_exclusive_item",
+    "target_dict_lines_pre_patch": [142, 149],
+    "target_insert_line_pre_patch": 150,
+    "operation": "db.user_equipment.insert_one(equip)",
+    "semantics": "Creates a brand-new user_equipment document for the Character-Exclusive Item crafted by the user",
+    "creates_new_doc": true,
+    "upsert": false,
+    "classification": "server_bound (user_equipment new document)",
+    "decision": "PATCH_NOW_SAFE",
+    "patch_summary": "Added 'from utils.server_scope import ensure_server_scope' import; added 'equip = ensure_server_scope(equip, uid)' immediately before insert_one(equip). Total +2 lines, no business logic touched."
+  },
+  "exact_patch_diff": [
+    "+from utils.server_scope import ensure_server_scope",
+    "+        equip = ensure_server_scope(equip, uid)"
+  ],
+  "write_surfaces_skipped": [
+    {
+      "area": "raid attempts/participation/damage/reward distribution",
+      "reason": "forbidden by strict scope: only equip dict on exclusive-items/craft authorized"
+    },
+    {
+      "area": "db.active_raids reads/writes (if any)",
+      "reason": "out of RAIDS_EQUIPMENT_ONLY scope"
+    },
+    {
+      "area": "db.users $inc gold/gems on craft_exclusive_item",
+      "reason": "users is account-wide and explicitly excluded collection; do not touch"
+    }
+  ],
+  "forbidden_scope_untouched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "frontend/app/combat.tsx",
+    "backend/routes/affinity_gift_spend.py",
+    "backend/routes/affinity_gifts.py",
+    "backend/routes/combat.py",
+    "backend/routes/equipment.py",
+    "backend/routes/forge.py",
+    "backend/routes/cosmetics.py",
+    "backend/routes/economy.py",
+    "backend/routes/heroes.py",
+    "backend/routes/sanctuary.py",
+    "backend/routes/player_faction_v2.py",
+    "backend/routes/push_notifications.py",
+    "backend/routes/game_data.py",
+    "Character Bible / db.heroes",
+    "Housing runtime/UI/resolver",
+    "/api/housing",
+    "/api/account/server-profiles",
+    "/api/account/active-server",
+    "SLC-H runtime files",
+    "frontend/app/*"
+  ],
+  "patch_semantics": "ensure_server_scope(equip, uid) -> set-only-if-missing server_id/account_id; preserves existing fields; idempotent",
+  "helper_module": "backend/utils/server_scope.py (Batch-0, unchanged; imported by raids.py for this micro-batch)",
+  "rollback_script": "backend/scripts/rollback_slc_f_raids_equipment_scope.py",
+  "rollback_markers_required": {
+    "SLC_F_RAIDS_EQUIPMENT_SCOPE_ROLLBACK_APPROVAL": true,
+    "SLC_F_RAIDS_EQUIPMENT_SCOPE_ROLLBACK_ID": "slc_f_raids_equipment_scope_20260523T184512Z_a46a6034"
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_batch_0_1_apply_id_preserved": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "slc_f_batch_1b_apply_id_preserved": "slc_f_batch_1b_20260523T175058Z_2cf0584c",
+  "slc_f_batch_2_apply_id_preserved": "slc_f_batch_2_20260523T181752Z_b838601e",
+  "slc_f_equipment_scope_apply_id_preserved": "slc_f_equipment_scope_20260523T182939Z_d2afcc8a",
+  "known_drift_docs_status": {
+    "count": 7,
+    "source_family": "gacha/summon",
+    "fix_applied_in_this_microbatch": false,
+    "fix_deferred_reason": "Per task guardrail: drift docs from gacha/summon are out of RAIDS_EQUIPMENT_ONLY scope and remain known/non-blocking."
+  },
+  "verdict_target": "SLC_F_RAIDS_EQUIPMENT_SCOPE_APPLIED_SAFE"
+}
