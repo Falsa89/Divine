@@ -1,49 +1,66 @@
 {
   "task_origin": "SLC-G-COMMIT-A-POST-APPLY",
-  "timestamp_utc": "2026-05-23T14:50:10.550643+00:00",
+  "timestamp_utc": "2026-05-23T15:46:30.325613+00:00",
   "verdict": "PASS",
   "errors": [],
   "migration_id": "slc_g_commit_a_20260523T143803Z_4600ac04",
   "per_coll_status": {
     "user_heroes": {
-      "missing_server_id": 0,
+      "missing_server_id": 4,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
+      "missing_aid_with_uid": 4,
+      "post_commit_drift_no_marker": 4,
+      "missing_server_id_with_marker": 0
     },
     "teams": {
       "missing_server_id": 0,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
+      "missing_aid_with_uid": 0,
+      "post_commit_drift_no_marker": 0,
+      "missing_server_id_with_marker": 0
     },
     "inventory": {
       "missing_server_id": 0,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
+      "missing_aid_with_uid": 0,
+      "post_commit_drift_no_marker": 0,
+      "missing_server_id_with_marker": 0
     },
     "story_progress": {
       "missing_server_id": 0,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
+      "missing_aid_with_uid": 0,
+      "post_commit_drift_no_marker": 0,
+      "missing_server_id_with_marker": 0
     },
     "guilds": {
       "missing_server_id": 0,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
+      "missing_aid_with_uid": 0,
+      "post_commit_drift_no_marker": 0,
+      "missing_server_id_with_marker": 0
     },
     "user_affinity_state": {
       "missing_server_id": 0,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
+      "missing_aid_with_uid": 0,
+      "post_commit_drift_no_marker": 0,
+      "missing_server_id_with_marker": 0
     },
     "gift_transaction_ledger": {
       "missing_server_id": 0,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
+      "missing_aid_with_uid": 0,
+      "post_commit_drift_no_marker": 0,
+      "missing_server_id_with_marker": 0
     },
     "user_gift_inventory": {
       "missing_server_id": 0,
       "unsafe_unknown": 0,
-      "missing_aid_with_uid": 0
-    }
+      "missing_aid_with_uid": 0,
+      "post_commit_drift_no_marker": 0,
+      "missing_server_id_with_marker": 0
+    },
+    "_post_commit_drift_total_no_marker": 4
   }
 }

@@ -1,0 +1,67 @@
+{
+  "task_origin":"HOUSING-DIMORA-DIVINA-CANONICAL","version":"v2",
+  "mode":"DESIGN_ONLY_SOURCE_OF_TRUTH",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "db_write":false,"runtime_implemented":false,"ui_implemented":false,
+  "supersedes":"sanctuary_housing_dimora_divina_canonical_v1.json (kept untouched, this v2 is additive canonical update)",
+  "approval_basis":"User-approved Housing decisions as of 2026-05-23",
+  "high_level_concept":"Castello/Santuario modulare con stanze tematiche, sblocco per livello + obiettivi + valuta di gioco, separazione decor/power, cap multi-livello, residenti, set di mobilio, produzione risorse.",
+  "modular_rooms":[
+    {"room_id":"sala_del_trono","name_it":"Sala del Trono","mode_focus":["boss","titans","behemoth"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large"},
+    {"room_id":"armeria","name_it":"Armeria","mode_focus":["pvp","guild_war","territory"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large"},
+    {"room_id":"reliquiario","name_it":"Reliquiario","mode_focus":["tower","castle","scalata"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large"},
+    {"room_id":"biblioteca_arcana","name_it":"Biblioteca Arcana","mode_focus":["trials","tactical_restrictions"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large"},
+    {"room_id":"giardino_sacro","name_it":"Giardino Sacro","mode_focus":["healing","sustain","affinity"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large"},
+    {"room_id":"fucina","name_it":"Fucina","mode_focus":["forge","equipment","materials"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large"},
+    {"room_id":"sala_degli_eroi","name_it":"Sala degli Eroi","mode_focus":["residents","roster","affinity","prestige"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large"},
+    {"room_id":"tesoreria_stanza_del_tesoro","name_it":"Tesoreria / Stanza del Tesoro","mode_focus":["production","monthly_subscription_utility"],"is_mode_specific":true,"min_furniture_slots":30,"size_tier":"large","is_subscription_room":true,"subscription_period":"monthly"}
+  ],
+  "vip_vault_rooms":{
+    "enabled":true,
+    "underground_vault_optional":true,
+    "vip_extra_rooms":true,
+    "may_repeat_existing_families":true,
+    "may_cover_two_bonus_families_per_room":true,
+    "secondary_lower_cap_required":true,
+    "contributes_to_master_cap":true
+  },
+  "unlock_model":{
+    "step_1":"account/server level threshold reached",
+    "step_2":"objective/achievement completed",
+    "step_3":"in-game currency purchase to instantiate the room",
+    "premium_path_only_for_subscription_rooms":true
+  },
+  "bonus_layering_per_room":[
+    {"layer":"global_small","description":"small generic global bonus contribution"},
+    {"layer":"mode_specific_main","description":"main bonus tied to the room's mode focus"},
+    {"layer":"comfort_prestige_utility","description":"non-combat or QoL contributions (visual, comfort, prestige)"}
+  ],
+  "residents":{
+    "each_hero_lives_in_only_one_room":true,
+    "each_hero_has_unique_resident_bonus":true,
+    "bonus_basis":["identity","role","rarity"]
+  },
+  "furniture_sets_approved":true,
+  "resource_production_approved":true,
+  "claim_model":{
+    "manual_claim_per_room":true,
+    "centralized_claim_all_required":true,
+    "no_forced_room_by_room_claim":true
+  },
+  "ui_handoff":{
+    "must_show_active_bonuses":true,
+    "must_show_capped_bonuses":true,
+    "must_show_room_vs_master_cap":true,
+    "copy_language":"it_IT",
+    "ui_implemented_now":false
+  },
+  "runtime_safety":{
+    "battle_runtime_attached":false,
+    "active_bonus_resolver_implemented":false,
+    "db_write":false,
+    "af2n_unchanged":true,
+    "borea_visibility_unchanged":true,
+    "primordial_gaia_unchanged_404":true,
+    "heroes_count_unchanged":100
+  }
+}

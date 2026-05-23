@@ -1,0 +1,31 @@
+{
+  "task_origin":"SLC-F-APPLY-READINESS-GATES","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"db_write":false,"route_patch_applied":false,
+  "expected_default_verdict":"SLC_F_APPLY_READY_NOT_APPLIED",
+  "gates_required_before_runtime_apply":[
+    {"id":"SF-AG-1","requires":"SLC-G migration_applied=true verified via marker file"},
+    {"id":"SF-AG-2","requires":"all server-bound documents have server_id and account_id populated; unsafe_unknown=0"},
+    {"id":"SF-AG-3","requires":"BATCH-0 resolver contract reviewed and frozen"},
+    {"id":"SF-AG-4","requires":"BATCH-1 per-route dry-run diff produced and approved"},
+    {"id":"SF-AG-5","requires":"BATCH-2 per-route dry-run diff produced and approved"},
+    {"id":"SF-AG-6","requires":"BATCH-3 PLAN-ONLY status confirmed; AF2-N freeze acknowledgement obtained"},
+    {"id":"SF-AG-7","requires":"BATCH-4 PLAN-ONLY status confirmed; battle-engine freeze acknowledgement obtained"},
+    {"id":"SF-AG-8","requires":"explicit apply marker SLC_F_ROUTE_PATCH_APPLY_APPROVAL=true literally present in current prompt"},
+    {"id":"SF-AG-9","requires":"AF2-N invariants intact (cap=50000, allowlist=2500, row counts preserved)"},
+    {"id":"SF-AG-10","requires":"API smoke invariants intact (/api/heroes=100, primordial_gaia=404, borea/greek_borea=200 inert)"},
+    {"id":"SF-AG-11","requires":"baseline diff RM1.32-PRE PASS"},
+    {"id":"SF-AG-12","requires":"per-batch rollback script created and rehearsed (NOT created in this task)"},
+    {"id":"SF-AG-13","requires":"SECOND_SERVER_OPENING_ENABLED MUST remain unset (route patch must work in single-server mode)"}
+  ],
+  "on_any_gate_fail":"return FAILED_SAFE READY_NOT_APPLIED with motivation",
+  "on_all_gates_pass_and_marker_present":"flip to READY_TO_APPLY_PER_BATCH; apply still requires per-batch invocation",
+  "on_all_gates_pass_and_marker_absent":"return SLC_F_APPLY_READY_NOT_APPLIED",
+  "signoffs_required":[
+    "product_owner",
+    "backend_owner",
+    "sre_oncall",
+    "af2n_runtime_owner",
+    "battle_engine_owner",
+    "qa_lead"
+  ]
+}

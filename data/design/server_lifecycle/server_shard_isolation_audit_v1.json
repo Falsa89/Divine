@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-23T14:49:51.896363+00:00",
+  "timestamp_utc": "2026-05-23T15:46:11.368427+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 663,
+  "backend_python_files_scanned": 668,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -257,7 +257,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 232,
+      "files_with_hits": 233,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -349,7 +349,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 23,
+      "files_with_hits": 24,
       "hits_sample": [
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
@@ -453,7 +453,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 17,
+      "files_with_hits": 18,
       "hits_sample": [
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
@@ -825,7 +825,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 48,
+      "files_with_hits": 49,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1021,7 +1021,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 432,
+      "files_with_hits": 433,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",

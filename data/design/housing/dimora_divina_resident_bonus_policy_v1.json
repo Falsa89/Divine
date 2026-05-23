@@ -1,0 +1,32 @@
+{
+  "task_origin":"DIMORA-DIVINA-RESIDENT-BONUS-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "rules":[
+    "each hero (resident) lives in exactly one room at a time",
+    "a hero can be reassigned to a different room (cosmetic, design-only)",
+    "each hero contributes a UNIQUE resident bonus when assigned",
+    "resident bonus shape depends on identity (hero_id) + role + rarity",
+    "resident bonus is design-only; no battle runtime attached",
+    "resident bonus does not change Borea visibility, does not unlock primordial_gaia, does not affect AF2-N",
+    "resident bonus respects mode-cap, category-cap, master-cap"
+  ],
+  "resident_bonus_categories":[
+    "global_small",
+    "mode_specific_alignment_to_room",
+    "comfort_or_prestige",
+    "production_or_qol"
+  ],
+  "identity_basis":{
+    "hero_id_unique":true,
+    "role_modifier":true,
+    "rarity_scaling":true,
+    "is_official_required_for_resident_assignment":true,
+    "is_legacy_placeholder_or_pending_assets_blocked_from_assignment":true
+  },
+  "runtime_safety":{
+    "resolver_implemented":false,
+    "db_write":false,
+    "battle_runtime_attached":false,
+    "heroes_count_unchanged":100
+  }
+}

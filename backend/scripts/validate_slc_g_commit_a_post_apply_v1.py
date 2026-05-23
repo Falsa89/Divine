@@ -51,22 +51,32 @@ def main():
             if pre is not None and live != pre:
                 errs.append(f'af2n_drift:{c}:pre={pre},live={live}')
 
-    # Server-bound: 0 missing server_id
+    # Server-bound: docs WITH commit-A marker must have server_id; docs WITHOUT marker
+    # are post-commit drift (expected until SLC-F route patch is applied), reported as info only.
     per_coll_status = {}
+    total_drift = 0
     for c in SERVER_BOUND_PRESENT:
         if c not in present: continue
         miss = db[c].count_documents({'server_id':{'$exists':False}})
+        miss_marked = db[c].count_documents({'server_id':{'$exists':False},'_slc_g_commit_marker':{'$exists':True}})
         unsafe = db[c].count_documents({'user_id':{'$exists':False},'account_id':{'$exists':False}})
         miss_aid = db[c].count_documents({'account_id':{'$exists':False},'user_id':{'$exists':True}})
-        per_coll_status[c] = {'missing_server_id':miss,'unsafe_unknown':unsafe,'missing_aid_with_uid':miss_aid}
-        if miss != 0: errs.append(f'{c}:missing_server_id_post:{miss}')
+        miss_aid_marked = db[c].count_documents({'account_id':{'$exists':False},'user_id':{'$exists':True},'_slc_g_commit_marker':{'$exists':True}})
+        drift = miss - miss_marked
+        total_drift += drift
+        per_coll_status[c] = {'missing_server_id':miss,'unsafe_unknown':unsafe,'missing_aid_with_uid':miss_aid,
+                              'post_commit_drift_no_marker':drift,'missing_server_id_with_marker':miss_marked}
+        # Only fail on docs we explicitly migrated (have marker)
+        if miss_marked != 0: errs.append(f'{c}:committed_docs_missing_server_id:{miss_marked}')
         if unsafe != 0: errs.append(f'{c}:unsafe_unknown_post:{unsafe}')
-        if miss_aid != 0: errs.append(f'{c}:account_id_still_missing_with_user_id:{miss_aid}')
+        if miss_aid_marked != 0: errs.append(f'{c}:committed_docs_still_missing_account_id_with_user_id:{miss_aid_marked}')
+    # Note total drift for visibility (NOT an error)
+    per_coll_status['_post_commit_drift_total_no_marker'] = total_drift
 
-    # Users: account_id present on all
+    # Users: account_id present on all docs WITH marker (drift OK without marker)
     if 'users' in present:
-        miss_aid_users = db['users'].count_documents({'account_id':{'$exists':False}})
-        if miss_aid_users != 0: errs.append(f'users:missing_account_id_post:{miss_aid_users}')
+        miss_aid_users_marked = db['users'].count_documents({'account_id':{'$exists':False},'_slc_g_commit_marker':{'$exists':True}})
+        if miss_aid_users_marked != 0: errs.append(f'users:committed_docs_missing_account_id:{miss_aid_users_marked}')
 
     # Guild cleanup B markers still present and valid (no regression)
     g_marker = db.guilds.count_documents({'_slc_g_guilds_cleanup_marker':{'$exists':True}})

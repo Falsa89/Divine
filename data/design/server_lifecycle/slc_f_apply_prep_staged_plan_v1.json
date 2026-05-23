@@ -1,0 +1,84 @@
+{
+  "task_origin":"SLC-F-APPLY-PREP-A","version":"v1","mode":"RUNTIME_PATCH_PREP_STAGED_PLAN_NO_APPLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "db_write":false,"route_patch_applied":false,
+  "explicit_apply_marker_required":"SLC_F_ROUTE_PATCH_APPLY_APPROVAL=true",
+  "apply_marker_present_default":false,
+  "expected_default_verdict":"SLC_F_APPLY_READY_NOT_APPLIED",
+  "prior_artifacts_required":[
+    "/app/data/design/server_lifecycle/slc_f_collection_scope_matrix_v1.json",
+    "/app/data/design/server_lifecycle/slc_f_endpoint_patch_contract_v1.json",
+    "/app/data/design/server_lifecycle/slc_f_route_patch_risk_matrix_v1.json",
+    "/app/data/design/server_lifecycle/slc_f_legacy_s1_compatibility_plan_v1.json",
+    "/app/data/design/system_safety/slc_g_default_s1_migration_apply_result_v1.json",
+    "/app/data/design/server_lifecycle/slc_h_endpoint_contract_v1.json"
+  ],
+  "batches":[
+    {
+      "id":"BATCH-0",
+      "label":"shared_resolver_dependencies_only_design_contract",
+      "applies_to":"shared helpers + resolver design (no actual route mutation)",
+      "writes_to_routes":false,
+      "risk":"none",
+      "description":"Codify resolver contract for account_id+server_id extraction; design-only inclusion stub; never touched at runtime",
+      "per_route_apply_count":0,
+      "gate_specific":"BATCH-0 ALWAYS design-only; serves as compile-time contract"
+    },
+    {
+      "id":"BATCH-1",
+      "label":"low_risk_server_bound_read_write_routes",
+      "applies_to":"non-AF2-N, non-battle server-bound: teams, inventory, story_progress, user_heroes, guilds, gacha_history (when present)",
+      "writes_to_routes":true,
+      "risk":"low",
+      "description":"Add (account_id, server_id) filter; legacy fallback to s1 active",
+      "requires_marker":"SLC_F_ROUTE_PATCH_APPLY_APPROVAL=true",
+      "per_route_apply_count_estimate_max":120,
+      "rollback_strategy":"git revert + redeploy (no DB mutation in this batch)"
+    },
+    {
+      "id":"BATCH-2",
+      "label":"mixed_and_account_wide_routes",
+      "applies_to":"users (mixed), accounts_wallet_paid* (account-wide future)",
+      "writes_to_routes":true,
+      "risk":"medium",
+      "description":"Reads use account_id only; mixed users endpoints continue using user_id with implicit account_id=user_id (already migrated in SLC-G)",
+      "requires_marker":"SLC_F_ROUTE_PATCH_APPLY_APPROVAL=true",
+      "per_route_apply_count_estimate_max":35,
+      "rollback_strategy":"git revert + redeploy"
+    },
+    {
+      "id":"BATCH-3",
+      "label":"protected_AF2N_routes_plan_only_NO_apply",
+      "applies_to":"affinity_gift_spend.py and AF2-N adjacent routes",
+      "writes_to_routes":false,
+      "risk":"high",
+      "description":"AF2-N runtime is intentionally untouched. server_id is taken from already-migrated server_bound docs without route signature changes. Plan-only.",
+      "requires_marker":"SLC_F_ROUTE_PATCH_APPLY_APPROVAL=true AND separate AF2-N freeze acknowledgement",
+      "per_route_apply_count":0,
+      "af2n_freeze_required":true
+    },
+    {
+      "id":"BATCH-4",
+      "label":"combat_battle_protected_surfaces_plan_only_NO_apply",
+      "applies_to":"battle_engine.py, battle_core.py, combat.tsx",
+      "writes_to_routes":false,
+      "risk":"highest",
+      "description":"Combat surfaces remain strictly untouched. server_id is inherited from request context resolver. Plan-only.",
+      "requires_marker":"SLC_F_ROUTE_PATCH_APPLY_APPROVAL=true AND separate battle-engine freeze acknowledgement",
+      "per_route_apply_count":0,
+      "battle_freeze_required":true
+    }
+  ],
+  "safety_constraints":[
+    "no batch may run if `SLC_F_ROUTE_PATCH_APPLY_APPROVAL` not literally true",
+    "BATCH-3 and BATCH-4 are PLAN-ONLY: marked 'apply_in_separate_future_task'",
+    "BATCH-1 and BATCH-2 require independent per-route review gate before runtime apply",
+    "each batch must produce a per-route diff dry-run before any merge",
+    "each batch must produce a rollback strategy and tested rollback script",
+    "AF2-N invariants MUST remain cap=50000, allowlist=2500, row counts preserved",
+    "API smoke invariants MUST remain unchanged for all batches"
+  ],
+  "writes_to_protected_files_in_this_task":false,
+  "writes_to_runtime_routes_in_this_task":false,
+  "apply_script_status":"NOT_CREATED_IN_THIS_TASK"
+}

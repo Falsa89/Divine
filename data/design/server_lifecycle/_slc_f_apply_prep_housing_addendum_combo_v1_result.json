@@ -1,0 +1,36 @@
+{
+  "task_origin": "SLC-F-APPLY-PREP-HOUSING-ADDENDUM-COMBO",
+  "version": "v1",
+  "timestamp_utc": "2026-05-23T15:46:31.416433+00:00",
+  "combo_status": "PASS",
+  "final_status": "SLC_F_APPLY_READY_NOT_APPLIED_WITH_HOUSING_ADDENDUM_READY",
+  "slc_f_apply_marker_present": false,
+  "route_patch_applied": false,
+  "housing_runtime_implemented": false,
+  "results": [
+    {
+      "name": "slc_f_apply_prep_staged_plan",
+      "script": "validate_slc_f_apply_prep_staged_plan_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "slc_f_apply_readiness_gates",
+      "script": "validate_slc_f_apply_readiness_gates_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "housing_dimora_divina_v2",
+      "script": "validate_sanctuary_housing_dimora_divina_v2.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "housing_runtime_safety_audit",
+      "script": "audit_dimora_divina_runtime_safety_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    }
+  ]
+}

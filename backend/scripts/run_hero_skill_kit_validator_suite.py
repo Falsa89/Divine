@@ -515,6 +515,12 @@ OPTIONAL = [
     ('SLC-H-SERVER-STATUS-CONTRACT',               'validate_slc_h_server_status_contract_v1.py'),
     ('SLC-H-READINESS-GATES',                      'validate_slc_h_readiness_gates_v1.py'),
     ('SLC-H-COMBO',                                'validate_slc_h_combo_v1.py'),
+    # SLC-F APPLY PREP + HOUSING ADDENDUM (DESIGN-ONLY / NO RUNTIME APPLY)
+    ('SLC-F-APPLY-PREP-STAGED-PLAN',               'validate_slc_f_apply_prep_staged_plan_v1.py'),
+    ('SLC-F-APPLY-READINESS-GATES',                'validate_slc_f_apply_readiness_gates_v1.py'),
+    ('HOUSING-DIMORA-DIVINA-V2',                   'validate_sanctuary_housing_dimora_divina_v2.py'),
+    ('DIMORA-DIVINA-RUNTIME-SAFETY-AUDIT',         'audit_dimora_divina_runtime_safety_v1.py'),
+    ('SLC-F-APPLY-PREP-HOUSING-ADDENDUM-COMBO',    'validate_slc_f_apply_prep_housing_addendum_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

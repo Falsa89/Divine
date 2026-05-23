@@ -1,0 +1,47 @@
+{
+  "task_origin":"DIMORA-DIVINA-ROOM-CAP-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "cap_dimensions":[
+    "per_room",
+    "per_furniture_category",
+    "per_specific_item_or_template",
+    "per_bonus_type",
+    "per_mode_or_family",
+    "master_cap_global"
+  ],
+  "separation":{
+    "decorative_capacity_separate_from_power_capacity":true,
+    "comfort_or_visual_does_not_contribute_to_power_cap":true
+  },
+  "directional_cap_ranges_percent":{
+    "global_combat":{"min":5,"max":10,"strictness":"baseline"},
+    "pve_general":{"min":15,"max":20,"strictness":"baseline"},
+    "boss_titan_behemoth":{"min":25,"max":35,"strictness":"baseline"},
+    "tower_castle_run":{"min":25,"max":35,"strictness":"baseline"},
+    "pvp":{"min":6,"max":10,"midpoint_target":8,"strictness":"strict"},
+    "guild_war_territory":{"min":10,"max":12,"strictness":"strict"},
+    "resource_production":{"min":35,"max":40,"strictness":"generous_pve_only"},
+    "affinity_housing_materials_forge_qol":{"min":25,"max":40,"strictness":"generous_qol"}
+  },
+  "strict_relations":[
+    "pvp.max_strict_less_than pve_general.max",
+    "guild_war_territory.max_strict_less_than tower_castle_run.max",
+    "global_combat.max_strict_less_than pve_general.max"
+  ],
+  "vip_vault_caps":{
+    "each_vip_vault_room_has_own_secondary_cap":true,
+    "vip_vault_secondary_cap_must_be_lower_than_primary_family_cap":true,
+    "contributes_to_master_cap":true,
+    "master_cap_must_not_be_exceeded_even_with_vip_vault":true
+  },
+  "master_cap_global":{
+    "enforced":true,
+    "prevents_power_creep":true,
+    "applies_above_room_and_category_caps":true
+  },
+  "runtime_safety":{
+    "active_bonus_resolver_implemented":false,
+    "battle_runtime_attached":false,
+    "af2n_unchanged":true
+  }
+}

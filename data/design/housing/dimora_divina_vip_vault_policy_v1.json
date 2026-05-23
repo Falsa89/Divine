@@ -1,0 +1,32 @@
+{
+  "task_origin":"DIMORA-DIVINA-VIP-VAULT-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "vip_rooms":{
+    "enabled":true,
+    "may_repeat_existing_room_families":true,
+    "may_cover_two_bonus_families_per_room":true,
+    "secondary_cap_required":true,
+    "secondary_cap_lower_than_primary_family_cap":true,
+    "contributes_to_master_cap":true
+  },
+  "underground_vault":{
+    "optional":true,
+    "extra_rooms_possibly_vip_linked":true,
+    "clear_ui_explanation_required":true,
+    "never_circumvents_master_cap":true
+  },
+  "subscription_room":{
+    "id":"tesoreria_stanza_del_tesoro",
+    "period":"monthly",
+    "focus":["production","utility","prestige"],
+    "not_heavy_pvp":true,
+    "sub_caps_apply":true,
+    "cannot_unlock_master_cap_bypass":true
+  },
+  "runtime_safety":{
+    "resolver_implemented":false,
+    "db_write":false,
+    "af2n_unchanged":true,
+    "battle_runtime_attached":false
+  }
+}

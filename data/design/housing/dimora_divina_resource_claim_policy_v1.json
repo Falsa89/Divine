@@ -1,0 +1,31 @@
+{
+  "task_origin":"DIMORA-DIVINA-RESOURCE-CLAIM-POLICY","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "production_model":{
+    "per_room_resource_buckets":true,
+    "accrual_rate_per_room_tier":"design_placeholder_TBD",
+    "max_overflow_per_room":"design_placeholder_TBD",
+    "production_capped_at_room_cap":true
+  },
+  "claim_model":{
+    "manual_per_room_supported":true,
+    "claim_all_centralized_required":true,
+    "no_forced_room_by_room_claim":true,
+    "claim_all_must_handle_partial_failures_safely":true,
+    "claim_all_must_be_idempotent":true
+  },
+  "resources_produced_examples":[
+    "oro","materiali_fucina","materiali_armi_divine_(non_runtime)",
+    "affinity_materials_(design_only,no_AF2N_change)",
+    "materiali_housing_set"
+  ],
+  "never_produces":[
+    "paid_gem","paid_currency","gacha_summon_paid_credits",
+    "AF2-N_affinity_gift_credits"
+  ],
+  "runtime_safety":{
+    "producer_or_resolver_implemented":false,
+    "db_write":false,
+    "af2n_unchanged":true
+  }
+}
