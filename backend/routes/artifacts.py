@@ -9,6 +9,9 @@ from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 # ===================== ARTIFACT DEFINITIONS =====================
 ARTIFACTS = [
     {"id": "holy_grail", "name": "Santo Graal", "rarity": 6, "buff": {"hp": 0.15, "defense": 0.10}, "icon": "\U0001F3C6", "description": "Il calice sacro che dona vitalita eterna ai guerrieri.", "set": "divino"},
@@ -260,10 +263,12 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
                 {"$inc": {"duplicates": 1}}
             )
         else:
-            await db.user_artifacts.insert_one({
+            _art_doc = {
                 "user_id": uid, "artifact_id": art["id"],
                 "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow(),
-            })
+            }
+            ensure_server_scope(_art_doc, uid)
+            await db.user_artifacts.insert_one(_art_doc)
         updated_user = await db.users.find_one({"id": uid})
         return {
             "artifact": art, "is_duplicate": is_duplicate,
@@ -300,7 +305,9 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
             if existing:
                 await db.user_artifacts.update_one({"user_id": uid, "artifact_id": art["id"]}, {"$inc": {"duplicates": 1}})
             else:
-                await db.user_artifacts.insert_one({"user_id": uid, "artifact_id": art["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()})
+                _art_doc2 = {"user_id": uid, "artifact_id": art["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()}
+                ensure_server_scope(_art_doc2, uid)
+                await db.user_artifacts.insert_one(_art_doc2)
             results.append({"artifact": art, "is_duplicate": is_dup})
         updated_user = await db.users.find_one({"id": uid})
         return {"results": results, "remaining_gems": updated_user.get("gems", 0)}
@@ -357,7 +364,7 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
             raise HTTPException(404, "Costellazione non posseduta!")
         await db.teams.update_one(
             {"user_id": uid, "is_active": True},
-            {"$set": {"constellation_id": req.constellation_id}},
+            {"$set": {"constellation_id": req.constellation_id}, "$setOnInsert": {"server_id": "s1", "account_id": uid}},
             upsert=True
         )
         c = next((x for x in CONSTELLATIONS if x["id"] == req.constellation_id), None)
@@ -410,7 +417,9 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
         if existing:
             await db.user_constellations.update_one({"user_id": uid, "constellation_id": const["id"]}, {"$inc": {"duplicates": 1}})
         else:
-            await db.user_constellations.insert_one({"user_id": uid, "constellation_id": const["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()})
+            _const_doc = {"user_id": uid, "constellation_id": const["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()}
+            ensure_server_scope(_const_doc, uid)
+            await db.user_constellations.insert_one(_const_doc)
         updated_user = await db.users.find_one({"id": uid})
         return {"constellation": const, "is_duplicate": is_dup, "remaining_gems": updated_user.get("gems", 0)}
 
@@ -444,7 +453,9 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
             if existing:
                 await db.user_constellations.update_one({"user_id": uid, "constellation_id": const["id"]}, {"$inc": {"duplicates": 1}})
             else:
-                await db.user_constellations.insert_one({"user_id": uid, "constellation_id": const["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()})
+                _const_doc2 = {"user_id": uid, "constellation_id": const["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()}
+                ensure_server_scope(_const_doc2, uid)
+                await db.user_constellations.insert_one(_const_doc2)
             results.append({"constellation": const, "is_duplicate": is_dup})
         updated_user = await db.users.find_one({"id": uid})
         return {"results": results, "remaining_gems": updated_user.get("gems", 0)}

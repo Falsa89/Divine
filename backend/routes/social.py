@@ -7,6 +7,9 @@ from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 
 def register_social_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -76,6 +79,7 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
             if not g:
                 raise HTTPException(403, "Non appartieni a nessuna gilda.")
             msg["guild_id"] = g
+        ensure_server_scope(msg, current_user["id"])
         await db.plaza_chat.insert_one(msg)
         return {"success": True, "message": serialize_doc(msg)}
 
@@ -132,6 +136,7 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
         friend_data = await db.friends.find_one({"user_id": uid})
         if not friend_data:
             friend_data = {"user_id": uid, "friends": [], "requests_in": [], "requests_out": []}
+            ensure_server_scope(friend_data, uid)
             await db.friends.insert_one(friend_data)
         friends = []
         for fid in friend_data.get("friends", []):
@@ -167,8 +172,8 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
             raise HTTPException(400, "Gia amici!")
         if my_data and target["id"] in my_data.get("requests_out", []):
             raise HTTPException(400, "Richiesta gia inviata!")
-        await db.friends.update_one({"user_id": uid}, {"$push": {"requests_out": target["id"]}}, upsert=True)
-        await db.friends.update_one({"user_id": target["id"]}, {"$push": {"requests_in": uid}}, upsert=True)
+        await db.friends.update_one({"user_id": uid}, {"$push": {"requests_out": target["id"]}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
+        await db.friends.update_one({"user_id": target["id"]}, {"$push": {"requests_in": uid}, "$setOnInsert": {"server_id": "s1", "account_id": target["id"]}}, upsert=True)
         return {"success": True, "target": req.target_username}
 
     class AcceptFriendRequest(BaseModel):

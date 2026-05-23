@@ -7,6 +7,8 @@ from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
 # Slot unlock costs
 LEVEL_SHARE_SLOTS = [
     {"slot": 1, "cost_gold": 50000, "cost_gems": 0, "description": "Primo slot condivisione livello"},
@@ -54,6 +56,7 @@ def register_level_sharing_routes(router, db, get_current_user, serialize_doc, c
         sharing_data = await db.level_sharing.find_one({"user_id": uid})
         if not sharing_data:
             sharing_data = {"user_id": uid, "unlocked_slots": 0, "assigned_heroes": {}}
+            ensure_server_scope(sharing_data, uid)
             await db.level_sharing.insert_one(sharing_data)
 
         unlocked = sharing_data.get("unlocked_slots", 0)
@@ -105,6 +108,7 @@ def register_level_sharing_routes(router, db, get_current_user, serialize_doc, c
         sharing = await db.level_sharing.find_one({"user_id": uid})
         if not sharing:
             sharing = {"user_id": uid, "unlocked_slots": 0, "assigned_heroes": {}}
+            ensure_server_scope(sharing, uid)
             await db.level_sharing.insert_one(sharing)
 
         if sharing.get("unlocked_slots", 0) >= req.slot_number:

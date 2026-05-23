@@ -7,6 +7,9 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from .game_data import FACTIONS, FACTION_CHANGE_COST
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 
 def register_guild_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -25,6 +28,7 @@ def register_guild_routes(router, db, get_current_user, serialize_doc, calculate
             "id": str(uuid.uuid4()), "name": req.name, "leader_id": uid,
             "members": [uid], "level": 1, "exp": 0, "created_at": datetime.utcnow(),
         }
+        ensure_server_scope(guild, uid)
         await db.guilds.insert_one(guild)
         await db.users.update_one({"id": uid}, {"$set": {"guild_id": guild["id"]}})
         return serialize_doc(guild)

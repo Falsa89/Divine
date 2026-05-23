@@ -19,6 +19,9 @@ from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 # ===================== CURRENCY DEFINITIONS =====================
 CURRENCIES = {
     "gold": {"name": "Oro", "icon": "\U0001F4B0", "color": "#ffd700", "description": "Valuta base. Guadagnata da battaglie, eventi e missioni."},
@@ -129,6 +132,7 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         wallet = await db.wallets.find_one({"user_id": uid})
         if not wallet:
             wallet = {"user_id": uid, "honor": 0, "guild_points": 0, "prana": 0, "soul_seals": 0, "mission_coins": 0, "dimension_frags": 0, "star_dust": 0}
+            ensure_server_scope(wallet, uid)
             await db.wallets.insert_one(wallet)
         return {
             "currencies": {
@@ -199,13 +203,15 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
             hero_name = hero.get("name", "?") if hero else "?"
             retired_names.append(f"{hero_name} ({stars}\u2B50)")
             # Log retirement
-            await db.retirement_history.insert_one({
+            _ret_doc = {
                 "user_id": uid, "hero_name": hero_name,
                 "stars": stars, "level": uh.get("level", 1),
                 "prana": prana, "soul_seals": seals, "star_dust": dust,
                 "was_reincarnated": is_reinc,
                 "retired_at": datetime.utcnow(),
-            })
+            }
+            ensure_server_scope(_ret_doc, uid)
+            await db.retirement_history.insert_one(_ret_doc)
             # Delete hero
             await db.user_heroes.delete_one({"id": uhid, "user_id": uid})
             # Also remove from equipment/runes
@@ -215,7 +221,8 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         if total_prana > 0 or total_seals > 0 or total_dust > 0:
             await db.wallets.update_one(
                 {"user_id": uid},
-                {"$inc": {"prana": total_prana, "soul_seals": total_seals, "star_dust": total_dust}},
+                {"$inc": {"prana": total_prana, "soul_seals": total_seals, "star_dust": total_dust},
+                 "$setOnInsert": {"server_id": "s1", "account_id": uid}},
                 upsert=True,
             )
         return {
@@ -301,19 +308,21 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
             if rk in ("gold", "gems", "stamina", "experience"):
                 user_inc[rk] = rv
             elif rk in ("stella_divina", "cristallo_astrale", "essenza_trascendente"):
-                await db.user_materials.update_one({"user_id": uid}, {"$inc": {rk: rv}}, upsert=True)
+                await db.user_materials.update_one({"user_id": uid}, {"$inc": {rk: rv}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
             elif rk.endswith("_fragments"):
                 frag_type = rk.replace("_fragments", "")
-                await db.user_fragments.update_one({"user_id": uid}, {"$inc": {frag_type: rv}}, upsert=True)
+                await db.user_fragments.update_one({"user_id": uid}, {"$inc": {frag_type: rv}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         if user_inc:
             await db.users.update_one({"id": uid}, {"$inc": user_inc})
         if wallet_inc:
             await db.wallets.update_one({"user_id": uid}, {"$inc": wallet_inc})
         # Record purchase
-        await db.shop_purchases_special.insert_one({
+        _purch_doc = {
             "user_id": uid, "shop_id": req.shop_id, "item_id": req.item_id,
             "date": today, "timestamp": datetime.utcnow(),
-        })
+        }
+        ensure_server_scope(_purch_doc, uid)
+        await db.shop_purchases_special.insert_one(_purch_doc)
         return {"success": True, "item": item["name"], "reward": reward, "cost": item["cost"]}
 
     # ==================== CURRENCY EARNING HOOKS ====================
@@ -322,7 +331,7 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         """Award honor from PvP (called after PvP battles)."""
         uid = current_user["id"]
         honor = random.randint(15, 40)
-        await db.wallets.update_one({"user_id": uid}, {"$inc": {"honor": honor}}, upsert=True)
+        await db.wallets.update_one({"user_id": uid}, {"$inc": {"honor": honor}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"honor_earned": honor}
 
     @router.post("/currency/earn-guild")
@@ -330,7 +339,7 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         """Award guild points from guild activities."""
         uid = current_user["id"]
         points = random.randint(10, 30)
-        await db.wallets.update_one({"user_id": uid}, {"$inc": {"guild_points": points}}, upsert=True)
+        await db.wallets.update_one({"user_id": uid}, {"$inc": {"guild_points": points}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"guild_points_earned": points}
 
     @router.post("/currency/earn-mission")
@@ -338,7 +347,7 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         """Award mission coins from daily tasks."""
         uid = current_user["id"]
         coins = random.randint(5, 15)
-        await db.wallets.update_one({"user_id": uid}, {"$inc": {"mission_coins": coins}}, upsert=True)
+        await db.wallets.update_one({"user_id": uid}, {"$inc": {"mission_coins": coins}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"mission_coins_earned": coins}
 
     @router.post("/currency/earn-dimension")
@@ -346,7 +355,7 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         """Award dimension fragments from raids."""
         uid = current_user["id"]
         frags = random.randint(5, 25)
-        await db.wallets.update_one({"user_id": uid}, {"$inc": {"dimension_frags": frags}}, upsert=True)
+        await db.wallets.update_one({"user_id": uid}, {"$inc": {"dimension_frags": frags}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"dimension_frags_earned": frags}
 
     # ==================== SOUL FORGE - ESSENCE SYSTEM ====================

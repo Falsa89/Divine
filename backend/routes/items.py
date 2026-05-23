@@ -7,6 +7,9 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 # ============ EXP ITEMS ============
 EXP_ITEMS = {
     "exp_potion_s": {"name": "Pozione EXP Piccola", "icon": "\U0001f9ea", "exp": 1000, "shop_price": 500, "currency": "gold", "rarity": 1},
@@ -116,7 +119,7 @@ def register_items_routes(router, db, get_current_user):
         await db.users.update_one({"id": user_id}, {"$inc": {currency_field: -total_cost}})
         await db.inventory.update_one(
             {"user_id": user_id, "item_id": req.item_id},
-            {"$inc": {"quantity": req.quantity}},
+            {"$inc": {"quantity": req.quantity}, "$setOnInsert": {"server_id": "s1", "account_id": user_id}},
             upsert=True
         )
         

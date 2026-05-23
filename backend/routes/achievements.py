@@ -7,6 +7,9 @@ from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 # Only using BMP-safe emoji (no surrogate pairs)
 ACHIEVEMENTS = [
     {"id": "battle_wins", "name": "Guerriero", "icon": "\u2694\uFE0F", "category": "combat",
@@ -249,5 +252,7 @@ def register_achievement_routes(router, db, get_current_user, serialize_doc, cal
             if rk in ("gold", "gems", "stamina"): user_inc[rk] = rv
         if user_inc: await db.users.update_one({"id": uid}, {"$inc": user_inc})
         if tier.get("title"): await db.users.update_one({"id": uid}, {"$addToSet": {"titles": tier["title"]}})
-        await db.achievement_claims.insert_one({"user_id": uid, "achievement_id": req.achievement_id, "tier_index": req.tier_index, "claimed_at": datetime.utcnow()})
+        _claim_doc = {"user_id": uid, "achievement_id": req.achievement_id, "tier_index": req.tier_index, "claimed_at": datetime.utcnow()}
+        ensure_server_scope(_claim_doc, uid)
+        await db.achievement_claims.insert_one(_claim_doc)
         return {"success": True, "achievement": ach["name"], "tier": req.tier_index + 1, "reward": reward, "title_earned": tier.get("title")}

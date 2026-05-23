@@ -1,0 +1,85 @@
+{
+  "task_origin": "SLC-F-APPLY-BATCH-1B",
+  "version": "v1",
+  "apply_id": "slc_f_batch_1b_20260523T175058Z_2cf0584c",
+  "applied_at_utc": "2026-05-23T18:00:29.368257+00:00",
+  "scope": "BATCH_1B_ONLY",
+  "authorization_markers_present": {
+    "SLC_F_BATCH_1B_APPLY_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "BATCH_1B_ONLY"
+  },
+  "git_head_before": "e86d821",
+  "route_patch_applied_partial": true,
+  "route_patch_applied_full": false,
+  "route_patch_applied": false,
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "phase_11_executed": false,
+  "fallback_removed": false,
+  "housing_runtime_implemented": false,
+  "changed_files": [
+    "backend/routes/items.py",
+    "backend/routes/forge.py",
+    "backend/routes/achievements.py",
+    "backend/routes/level_sharing.py",
+    "backend/routes/social.py",
+    "backend/routes/soul_forge.py",
+    "backend/routes/artifacts.py",
+    "backend/routes/guild.py"
+  ],
+  "routes_patched_families": [
+    "items",
+    "forge",
+    "achievements",
+    "level_sharing",
+    "social",
+    "soul_forge",
+    "artifacts",
+    "guild"
+  ],
+  "routes_skipped_and_why": [
+    {
+      "family": "sanctuary",
+      "reason": "writes to db.heroes (Character Bible / catalog) - forbidden scope, skipped entirely"
+    },
+    {
+      "family": "player_faction_v2",
+      "reason": "no insert_one/upsert calls found; nothing to patch"
+    }
+  ],
+  "collections_affected_on_future_inserts": [
+    "inventory",
+    "user_runes",
+    "achievement_claims",
+    "level_sharing",
+    "plaza_chat",
+    "friends",
+    "wallets",
+    "retirement_history",
+    "shop_purchases_special",
+    "user_materials",
+    "user_fragments",
+    "user_artifacts",
+    "user_constellations",
+    "teams",
+    "guilds"
+  ],
+  "collections_explicitly_skipped": [
+    "users",
+    "dm_messages",
+    "dm_threads",
+    "friend_gifts",
+    "user_mail",
+    "heroes"
+  ],
+  "patch_semantics": "set_only_if_missing (ensure_server_scope + $setOnInsert)",
+  "helper_module": "backend/utils/server_scope.py (Batch-0, reused)",
+  "rollback_script": "backend/scripts/rollback_slc_f_batch_1b.py",
+  "rollback_markers_required": {
+    "SLC_F_BATCH_1B_ROLLBACK_APPROVAL": true,
+    "SLC_F_BATCH_1B_ROLLBACK_ID": "slc_f_batch_1b_20260523T175058Z_2cf0584c"
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_batch_0_1_apply_id_preserved": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "verdict_target": "SLC_F_BATCH_1B_APPLIED_SAFE"
+}

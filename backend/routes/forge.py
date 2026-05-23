@@ -11,6 +11,9 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
 
+# SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 # ===================== EQUIPMENT TEMPLATES =====================
 WEAPON_TEMPLATES = [
     {"id": "w_divine_blade", "name": "Lama Divina", "rarity": 6, "base_stats": {"physical_damage": 500, "crit_chance": 0.08, "crit_damage": 0.25}, "icon": "\u2694\uFE0F"},
@@ -277,6 +280,7 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
         rune = _generate_rune(rarity)
         rune["user_id"] = uid
         rune["created_at"] = datetime.utcnow()
+        ensure_server_scope(rune, uid)
         await db.user_runes.insert_one(rune)
         return {"success": True, "rune": rune}
 
@@ -293,6 +297,7 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
         rune = _generate_rune(rarity)
         rune["user_id"] = uid
         rune["created_at"] = datetime.utcnow()
+        ensure_server_scope(rune, uid)
         await db.user_runes.insert_one(rune)
         return {"success": True, "rune": rune}
 
