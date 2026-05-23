@@ -1,0 +1,172 @@
+{
+  "task_origin": "SLC-F-COSMETICS-SCHEMA-SPLIT-REFACTOR",
+  "version": "v1",
+  "audit_id": "slc_f_cosmetics_refactor_20260523T200524Z_dee18b8c",
+  "audit_executed_at_utc": "2026-05-23T20:05:24.000000+00:00",
+  "scope": "COSMETICS_SCHEMA_SPLIT_ONLY",
+  "authorization_markers_present": {
+    "SLC_F_COSMETICS_REFACTOR_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "COSMETICS_SCHEMA_SPLIT_ONLY"
+  },
+  "runtime_files_modified": false,
+  "db_writes_performed": false,
+  "migrations_performed": false,
+  "decision": "READY_NOT_APPLIED",
+  "verdict": "SLC_F_COSMETICS_SCHEMA_SPLIT_REFACTOR_READY_NOT_APPLIED",
+  "rationale": "Lo schema split tra cosmetic ownership (account-wide) ed equipped/usage state (server-bound) non puo essere applicato in questo task perche richiede: (1) DB migration/backfill esplicitamente vietato; (2) cambio di destinazione di scrittura/lettura per equip endpoint = behavior change vietato; (3) decisione prodotto multi-server (default state su nuovo server, ereditarieta dei flag bronze) non risolta. Il refactor e' pronto come blueprint e attende un task gated dedicato con autorizzazione esplicita per migrazione/backfill.",
+
+  "cosmetics_route_audit_table": [
+    {
+      "surface_id": "COS-W1",
+      "endpoint": "GET /api/cosmetics",
+      "line": 18,
+      "operation": "db.user_cosmetics.insert_one (default doc per first-time user)",
+      "fields_written": ["user_id", "owned_auras", "owned_frames", "active_aura", "active_frame"],
+      "current_classification": "MIXED (account-wide owned_* + server-bound active_*)",
+      "refactor_action_required": "split into user_cosmetics (account-wide owned_*) + user_cosmetics_equipped (server-bound active_*)"
+    },
+    {
+      "surface_id": "COS-W2",
+      "endpoint": "POST /api/cosmetics/buy",
+      "line": 41,
+      "operation": "db.user_cosmetics.insert_one (idempotent init prior to $push)",
+      "fields_written": ["user_id", "owned_auras", "owned_frames"],
+      "current_classification": "ACCOUNT_WIDE",
+      "refactor_action_required": "keep on user_cosmetics; rename collection to user_cosmetics_ownership for clarity OR keep name (decision)"
+    },
+    {
+      "surface_id": "COS-W3",
+      "endpoint": "POST /api/cosmetics/buy",
+      "line": 50,
+      "operation": "db.user_cosmetics.update_one ($push owned_key, upsert=True)",
+      "fields_written": ["owned_auras OR owned_frames (push)"],
+      "current_classification": "ACCOUNT_WIDE",
+      "refactor_action_required": "keep on user_cosmetics (ownership)"
+    },
+    {
+      "surface_id": "COS-W4",
+      "endpoint": "POST /api/cosmetics/equip",
+      "line": 61,
+      "operation": "db.user_cosmetics.update_one ($set active_*, upsert=True)",
+      "fields_written": ["active_aura OR active_frame"],
+      "current_classification": "SERVER_BOUND (per canonical policy)",
+      "refactor_action_required": "MOVE write target to new collection user_cosmetics_equipped, key (user_id, server_id) -> {active_aura, active_frame}; BEHAVIOR CHANGE"
+    },
+    {
+      "surface_id": "COS-W5",
+      "endpoint": "POST /api/territory/attack",
+      "line": 104,
+      "operation": "db.territory_control.update_one ($inc defense_power on own)",
+      "fields_written": ["defense_power"],
+      "current_classification": "SERVER_BOUND (territory_control, guild-level per server)",
+      "refactor_action_required": "out of cosmetics schema scope; can be handled in a separate territory/guild micro-batch"
+    },
+    {
+      "surface_id": "COS-W6",
+      "endpoint": "POST /api/territory/attack",
+      "line": 108,
+      "operation": "db.territory_control.update_one ($set guild_id+defense_power, upsert=True)",
+      "fields_written": ["guild_id", "defense_power", "captured_at", "captured_by"],
+      "current_classification": "SERVER_BOUND (territory_control)",
+      "refactor_action_required": "out of cosmetics schema scope"
+    }
+  ],
+
+  "ownership_vs_equipped_classification": {
+    "account_wide_fields_in_current_schema": ["user_id", "owned_auras", "owned_frames"],
+    "server_bound_fields_in_current_schema": ["active_aura", "active_frame"],
+    "canonical_policy_reference": "/app/data/design/server_lifecycle/account_server_data_scope_policy_v1.json (paid_cosmetics_account_wide_but_use_requires_hero_on_server)",
+    "current_schema_violation": "single doc db.user_cosmetics conflates both layers; this is the exact violation flagged in Batch-2 audit (MIXED_REQUIRES_REFACTOR)"
+  },
+
+  "refactor_decision_table": [
+    {
+      "surface": "COS-W1 default doc init (GET /cosmetics)",
+      "safe_in_this_task": false,
+      "reason": "reads existing schema and inserts default doc with active_*; in target schema active_* lives in different collection ⇒ behavior change"
+    },
+    {
+      "surface": "COS-W2 idempotent init (POST /cosmetics/buy)",
+      "safe_in_this_task": false,
+      "reason": "same as COS-W1; depends on collection identity decision"
+    },
+    {
+      "surface": "COS-W3 $push ownership (POST /cosmetics/buy)",
+      "safe_in_this_task": false,
+      "reason": "would need explicit ownership collection name decision + canonical migration"
+    },
+    {
+      "surface": "COS-W4 active_* equip (POST /cosmetics/equip)",
+      "safe_in_this_task": false,
+      "reason": "target collection change = behavior change; legacy docs with active_* in user_cosmetics would need backfill to remain consistent on read path"
+    },
+    {
+      "surface": "COS-W5/COS-W6 territory_control",
+      "safe_in_this_task": false,
+      "reason": "already server_bound (server-implicit by current single-server); out of cosmetics schema split scope"
+    }
+  ],
+
+  "reasons_blocking_apply": [
+    "DB_MIGRATION_REQUIRED: existing user_cosmetics docs contain active_* fields that must be migrated to a new user_cosmetics_equipped collection (server_id='s1') for read consistency, otherwise GET /cosmetics would lose equipped state for existing users.",
+    "BACKFILL_REQUIRED: every existing user_cosmetics doc would need a synchronous backfill op; explicitly forbidden by task scope.",
+    "BEHAVIOR_CHANGE_REQUIRED: POST /cosmetics/equip would change write target collection; on the read path GET /cosmetics would change to dual-collection read; this changes observable runtime behavior even if outputs are equivalent.",
+    "PRODUCT_DECISION_REQUIRED_DEFAULT_FRAME: in multi-server design, on a brand-new server profile the user starts with default frame 'bronze' (current single-server constant). Is this the same on all servers, or should it inherit from s1? Open product decision.",
+    "PRODUCT_DECISION_REQUIRED_ACTIVE_INHERITANCE: when a user opens a 2nd server profile, should active_aura/active_frame transfer from s1 (default) or reset to None/'bronze'? Open product decision.",
+    "CANONICAL_COLLECTION_NAME_DECISION: rename user_cosmetics ⇒ user_cosmetics_ownership for clarity, or keep historical name and only add user_cosmetics_equipped? Open decision impacting downstream code paths."
+  ],
+
+  "proposed_apply_blueprint": {
+    "phase_A_design_only_no_runtime": {
+      "description": "Document target schema, dual-collection read path, write splits, default frame policy, inheritance rules. NO runtime change.",
+      "deliverables": [
+        "schema_cosmetics_split_target_v1.json (target collections + indexes)",
+        "migration_plan_cosmetics_split_v1.md (backfill order, idempotency, dry-run plan)",
+        "product_decision_default_frame_inheritance.md (multi-server default state policy)"
+      ]
+    },
+    "phase_B_migration_gated": {
+      "description": "Backfill ALL existing user_cosmetics docs: copy active_* fields to new user_cosmetics_equipped(user_id, server_id='s1') docs. NO field removal yet (dual-write compat).",
+      "required_markers": ["SLC_F_COSMETICS_BACKFILL_APPROVAL=true", "SLC_F_APPLY_BATCH_SCOPE=COSMETICS_BACKFILL_ONLY"],
+      "validators": ["validate_cosmetics_split_backfill_v1 (per-doc backfill verified; counts match)"]
+    },
+    "phase_C_dual_write_runtime": {
+      "description": "Patch cosmetics.py to write active_* to BOTH old field on user_cosmetics AND new user_cosmetics_equipped (dual-write); read from new collection with fallback to old.",
+      "required_markers": ["SLC_F_COSMETICS_DUAL_WRITE_APPROVAL=true"],
+      "rollback": "revert to single-write on old collection"
+    },
+    "phase_D_cutover_runtime": {
+      "description": "After dual-write stabilized, stop writing active_* on user_cosmetics; read only from new collection.",
+      "required_markers": ["SLC_F_COSMETICS_CUTOVER_APPROVAL=true"]
+    },
+    "phase_E_cleanup": {
+      "description": "Backfill removes orphan active_* fields from user_cosmetics docs.",
+      "required_markers": ["SLC_F_COSMETICS_CLEANUP_APPROVAL=true"]
+    }
+  },
+
+  "changed_files": [],
+  "routes_patched_families": [],
+
+  "forbidden_scope_untouched": [
+    "backend/routes/cosmetics.py (NO PATCH this task)",
+    "backend/routes/economy.py",
+    "backend/routes/combat.py", "backend/routes/battle_engine.py", "backend/routes/battle_core.py",
+    "backend/routes/affinity_gift_spend.py", "backend/routes/affinity_gifts.py",
+    "backend/routes/heroes.py", "backend/routes/sanctuary.py", "backend/routes/player_faction_v2.py",
+    "backend/routes/push_notifications.py", "backend/routes/game_data.py",
+    "backend/routes/equipment.py", "backend/routes/forge.py", "backend/routes/raids.py",
+    "backend/routes/gvg.py", "backend/routes/unique_items.py",
+    "Character Bible / db.heroes", "Housing runtime", "/api/housing",
+    "SLC-H runtime", "frontend/app/*"
+  ],
+
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_consolidation_audit_id_preserved": "slc_f_post_microbatch_cons_20260523T194500Z_audit_only",
+  "known_drift_docs_status": {
+    "count": 7,
+    "fix_applied_in_this_task": false,
+    "fix_deferred_reason": "out of COSMETICS_SCHEMA_SPLIT_ONLY scope"
+  },
+  "verdict_target": "SLC_F_COSMETICS_SCHEMA_SPLIT_REFACTOR_READY_NOT_APPLIED"
+}
