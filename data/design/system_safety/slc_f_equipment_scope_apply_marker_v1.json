@@ -1,0 +1,132 @@
+{
+  "task_origin": "SLC-F-EQUIPMENT-SERVER-SCOPE-EXTENSION",
+  "version": "v1",
+  "apply_id": "slc_f_equipment_scope_20260523T182939Z_d2afcc8a",
+  "applied_at_utc": "2026-05-23T18:29:39.000000+00:00",
+  "scope": "EQUIPMENT_ONLY",
+  "scope_type": "gated micro-batch: equipment.py server_bound scoping extension",
+  "authorization_markers_present": {
+    "SLC_F_EQUIPMENT_SCOPE_APPLY_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "EQUIPMENT_ONLY"
+  },
+  "git_head_before": "fa44754",
+  "route_patch_applied": false,
+  "route_patch_applied_partial": false,
+  "route_patch_applied_full": false,
+  "all_candidates_skipped": true,
+  "safe_no_op_apply": true,
+  "no_op_rationale": "equipment.py contains EXCLUSIVELY update_one calls on pre-existing documents (no insert_one, no upsert=True). The ensure_server_scope helper is designed for insert/upsert write surfaces (with $setOnInsert semantics for new documents). Applying it to update_one on existing docs would either be a no-op (if used with $setOnInsert without upsert) OR an inline DB migration (if used with $set), which is explicitly forbidden by PROMPT \u00a74: 'do not migrate existing DB docs in this task'. All user_equipment document CREATION happens in combat.py (Batch-4 future) and raids.py (out-of-scope), not in equipment.py.",
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "phase_11_executed": false,
+  "fallback_removed": false,
+  "housing_runtime_implemented": false,
+  "changed_files": [],
+  "equipment_route_audit_table": [
+    {
+      "surface_id": "EQ-W1",
+      "line": 36,
+      "endpoint": "POST /api/equipment/equip",
+      "operation": "db.user_equipment.update_one",
+      "semantics": "$unset equipped_to on existing equipment doc (clear previous equip target)",
+      "creates_new_doc": false,
+      "upsert": false,
+      "server_bound_classification": "server_bound (user_equipment)",
+      "decision": "SKIP_UPDATE_ONLY_NO_NEW_DOC",
+      "reason": "update_one on existing document; no insert/upsert; no metadata to inject. Patching would require inline DB migration (forbidden)."
+    },
+    {
+      "surface_id": "EQ-W2",
+      "line": 40,
+      "endpoint": "POST /api/equipment/equip",
+      "operation": "db.user_equipment.update_one",
+      "semantics": "$unset equipped_to on conflicting existing equipment doc (swap slot)",
+      "creates_new_doc": false,
+      "upsert": false,
+      "server_bound_classification": "server_bound (user_equipment)",
+      "decision": "SKIP_UPDATE_ONLY_NO_NEW_DOC",
+      "reason": "update_one on existing document; no insert/upsert; no metadata to inject."
+    },
+    {
+      "surface_id": "EQ-W3",
+      "line": 41,
+      "endpoint": "POST /api/equipment/equip",
+      "operation": "db.user_equipment.update_one",
+      "semantics": "$set equipped_to on existing equipment doc (apply new equip target)",
+      "creates_new_doc": false,
+      "upsert": false,
+      "server_bound_classification": "server_bound (user_equipment)",
+      "decision": "SKIP_UPDATE_ONLY_NO_NEW_DOC",
+      "reason": "update_one on existing document; no insert/upsert; no metadata to inject."
+    },
+    {
+      "surface_id": "EQ-W4",
+      "line": 46,
+      "endpoint": "POST /api/equipment/unequip/{equipment_id}",
+      "operation": "db.user_equipment.update_one",
+      "semantics": "$unset equipped_to on existing equipment doc (unequip)",
+      "creates_new_doc": false,
+      "upsert": false,
+      "server_bound_classification": "server_bound (user_equipment)",
+      "decision": "SKIP_UPDATE_ONLY_NO_NEW_DOC",
+      "reason": "update_one on existing document; no insert/upsert; no metadata to inject."
+    }
+  ],
+  "user_equipment_creation_locations_out_of_scope": [
+    {
+      "file": "backend/routes/combat.py",
+      "lines": [87, 140, 232],
+      "operation": "db.user_equipment.insert_one",
+      "out_of_scope_reason": "combat.py is BATCH-4 (combat/battle routing) — explicitly forbidden by EQUIPMENT_ONLY scope."
+    },
+    {
+      "file": "backend/routes/raids.py",
+      "lines": [150],
+      "operation": "db.user_equipment.insert_one",
+      "out_of_scope_reason": "raids.py is server_bound but NOT in EQUIPMENT_ONLY scope; deferred to a dedicated raids/gvg micro-batch if needed."
+    }
+  ],
+  "routes_patched_families": [],
+  "forbidden_scope_untouched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "frontend/app/combat.tsx",
+    "backend/routes/affinity_gift_spend.py",
+    "backend/routes/affinity_gifts.py",
+    "backend/routes/forge.py",
+    "backend/routes/cosmetics.py",
+    "backend/routes/economy.py",
+    "backend/routes/heroes.py",
+    "backend/routes/combat.py",
+    "backend/routes/raids.py",
+    "backend/routes/sanctuary.py",
+    "backend/routes/player_faction_v2.py",
+    "backend/routes/push_notifications.py",
+    "backend/routes/game_data.py",
+    "Character Bible / db.heroes",
+    "Housing runtime/UI/resolver",
+    "/api/housing",
+    "/api/account/server-profiles",
+    "/api/account/active-server",
+    "SLC-H runtime files",
+    "frontend/app/*"
+  ],
+  "patch_semantics": "NONE (no-op safe apply); all update_one surfaces correctly excluded per PROMPT \u00a74 'do not migrate existing DB docs in this task'",
+  "helper_module": "backend/utils/server_scope.py (Batch-0, unchanged; not imported in equipment.py)",
+  "rollback_script": "backend/scripts/rollback_slc_f_equipment_scope.py",
+  "rollback_markers_required": {
+    "SLC_F_EQUIPMENT_SCOPE_ROLLBACK_APPROVAL": true,
+    "SLC_F_EQUIPMENT_SCOPE_ROLLBACK_ID": "slc_f_equipment_scope_20260523T182939Z_d2afcc8a"
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_batch_0_1_apply_id_preserved": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "slc_f_batch_1b_apply_id_preserved": "slc_f_batch_1b_20260523T175058Z_2cf0584c",
+  "slc_f_batch_2_apply_id_preserved": "slc_f_batch_2_20260523T181752Z_b838601e",
+  "known_drift_docs_status": {
+    "count": 7,
+    "source_family": "gacha/summon",
+    "fix_applied_in_equipment_scope": false,
+    "fix_deferred_reason": "Per task guardrail: 'Do not fix them here. Do not patch gacha/summon. Report them as deferred.'"
+  },
+  "verdict_target": "SLC_F_EQUIPMENT_SERVER_SCOPE_EXTENSION_APPLIED_SAFE"
+}
