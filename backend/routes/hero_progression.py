@@ -12,6 +12,9 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
 
+# SLC-F Batch-0/1: server/account scope helper (set-only-if-missing on insert)
+from utils.server_scope import ensure_server_scope
+
 # ===================== LEVEL CAPS PER STAR (max 15 stars) =====================
 STAR_LEVEL_CAPS = {
     1: 30, 2: 50, 3: 70, 4: 90, 5: 110,
@@ -418,6 +421,7 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
         user_frags = await db.user_fragments.find_one({"user_id": uid})
         if not user_frags:
             user_frags = {"user_id": uid, "green": 0, "blue": 0, "purple": 0, "orange": 0, "gold": 0}
+            ensure_server_scope(user_frags, uid)
             await db.user_fragments.insert_one(user_frags)
         result = []
         for ft in FRAGMENT_TYPES:
@@ -455,6 +459,7 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
             "level": 1, "experience": 0, "stars": hero["rarity"],
             "obtained_at": datetime.utcnow(), "source": "fragments",
         }
+        ensure_server_scope(user_hero, uid)
         await db.user_heroes.insert_one(user_hero)
         return {
             "success": True,
@@ -472,7 +477,7 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
         for ft in FRAGMENT_TYPES:
             amount = random.randint(1, 5)
             adds[ft["id"]] = amount
-        await db.user_fragments.update_one({"user_id": uid}, {"$inc": adds}, upsert=True)
+        await db.user_fragments.update_one({"user_id": uid}, {"$inc": adds, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"success": True, "added": adds}
 
     # ==================== SHOP REINCARNATION ITEMS ====================
@@ -894,6 +899,7 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
         user_mats = await db.user_materials.find_one({"user_id": uid})
         if not user_mats:
             user_mats = {"user_id": uid}
+            ensure_server_scope(user_mats, uid)
             await db.user_materials.insert_one(user_mats)
         result = []
         for mat_id, mat_info in FUSION_MATERIALS.items():
@@ -921,7 +927,10 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
         await db.users.update_one({"id": uid}, {"$inc": {"gems": -total_cost}})
         await db.user_materials.update_one(
             {"user_id": uid},
-            {"$inc": {req.material_id: req.quantity}},
+            {
+                "$inc": {req.material_id: req.quantity},
+                "$setOnInsert": {"server_id": "s1", "account_id": uid},
+            },
             upsert=True
         )
         return {"success": True, "material": mat["name"], "quantity": req.quantity, "gems_spent": total_cost}

@@ -521,6 +521,7 @@ OPTIONAL = [
     ('HOUSING-DIMORA-DIVINA-V2',                   'validate_sanctuary_housing_dimora_divina_v2.py'),
     ('DIMORA-DIVINA-RUNTIME-SAFETY-AUDIT',         'audit_dimora_divina_runtime_safety_v1.py'),
     ('SLC-F-APPLY-PREP-HOUSING-ADDENDUM-COMBO',    'validate_slc_f_apply_prep_housing_addendum_combo_v1.py'),
+    ('SLC-F-BATCH-0-1-POST-APPLY',                 'validate_slc_f_batch_0_1_post_apply_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

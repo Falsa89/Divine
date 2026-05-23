@@ -1,0 +1,43 @@
+{
+  "task_origin": "SLC-F-APPLY-BATCH-0-1",
+  "version": "v1",
+  "apply_id": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "applied_at_utc": "2026-05-23T17:41:49.862792+00:00",
+  "scope": "BATCH_0_1_ONLY",
+  "authorization_markers_present": {
+    "SLC_F_ROUTE_PATCH_APPLY_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "BATCH_0_1_ONLY"
+  },
+  "git_head_before": "c382e25",
+  "route_patch_applied_partial": true,
+  "route_patch_applied_full": false,
+  "route_patch_applied": false,
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "phase_11_executed": false,
+  "fallback_removed": false,
+  "housing_runtime_implemented": false,
+  "housing_ui_implemented": false,
+  "housing_bonus_resolver_implemented": false,
+  "changed_files": [
+    "backend/utils/server_scope.py",
+    "backend/routes/hero_progression.py"
+  ],
+  "routes_patched_families": [
+    "hero_progression"
+  ],
+  "collections_affected_on_future_inserts": [
+    "user_heroes",
+    "user_fragments",
+    "user_materials"
+  ],
+  "patch_semantics": "set_only_if_missing",
+  "helper_module": "backend/utils/server_scope.py",
+  "rollback_script": "backend/scripts/rollback_slc_f_batch_0_1.py",
+  "rollback_markers_required": {
+    "SLC_F_BATCH_0_1_ROLLBACK_APPROVAL": true,
+    "SLC_F_BATCH_0_1_ROLLBACK_ID": "slc_f_batch_0_1_20260523T173754Z_27b1b737"
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "verdict_target": "SLC_F_BATCH_0_1_APPLIED_SAFE"
+}
