@@ -1,0 +1,76 @@
+{
+  "task_origin":"SLC-G-GUILDS-CLEANUP-PLAN","version":"v1",
+  "mode":"READ_ONLY_FIRST_GATED_CLEANUP_PLAN",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "db_write":false,"cleanup_applied":false,
+  "explicit_write_approval_marker_required":"SLC_G_GUILDS_UNSAFE_CLEANUP_WRITE_APPROVAL=true",
+  "approval_marker_present_default":false,
+  "target_docs_count":2,
+  "target_collection":"guilds",
+  "never_delete_any_document":true,
+  "never_drop_collection":true,
+  "never_drop_index":true,
+  "never_overwrite_existing_fields":true,
+  "set_only_if_missing":true,
+  "per_doc_proposed_action":[
+    {
+      "_id":"69db9bb2df5d3f956d0080ac",
+      "name_redacted":"Divine Warriors",
+      "classification":"legacy_guild_missing_owner_resolvable",
+      "proposed_set_only_if_missing":{
+        "user_id":"{copy_from_leader_id=651253e2-da8d-466b-98f3-82f008d158ed}",
+        "account_id":"{copy_from_leader_id=651253e2-da8d-466b-98f3-82f008d158ed}",
+        "server_id":"s1",
+        "_slc_g_guilds_cleanup_marker":true,
+        "_slc_g_guilds_cleanup_classification":"legacy_guild_missing_owner_resolvable"
+      },
+      "writes_only_if_field_absent":true,
+      "verification_after":{
+        "user_id_present_and_equal_leader_id":true,
+        "account_id_present_and_equal_leader_id":true,
+        "server_id_equals_s1":true,
+        "members_array_unchanged":true,
+        "leader_id_unchanged":true,
+        "created_at_unchanged":true
+      }
+    },
+    {
+      "_id":"69dbc64c9c908325ca0fd57f",
+      "name_redacted":"Legion_517",
+      "classification":"legacy_guild_missing_owner_resolvable_bot_owned",
+      "proposed_set_only_if_missing":{
+        "user_id":"{copy_from_leader_id=526fb2cf-02ba-410e-bb9c-8bf5de3f5e00}",
+        "account_id":"{copy_from_leader_id=526fb2cf-02ba-410e-bb9c-8bf5de3f5e00}",
+        "server_id":"s1",
+        "_slc_g_guilds_cleanup_marker":true,
+        "_slc_g_guilds_cleanup_classification":"legacy_guild_missing_owner_resolvable_bot_owned"
+      },
+      "writes_only_if_field_absent":true,
+      "verification_after":{
+        "user_id_present_and_equal_leader_id":true,
+        "account_id_present_and_equal_leader_id":true,
+        "server_id_equals_s1":true,
+        "members_array_unchanged":true,
+        "leader_id_unchanged":true,
+        "created_at_unchanged":true
+      }
+    }
+  ],
+  "safety_constraints":[
+    "only the 2 specifically targeted _id values may be touched",
+    "only fields that are absent may be set",
+    "NO update on any document not in target list",
+    "NO delete operation at any phase",
+    "NO change to existing leader_id, members, name, created_at, level, exp",
+    "NO change to AF2-N collections (user_gift_inventory, gift_transaction_ledger, user_affinity_state)",
+    "NO change to protected runtime files"
+  ],
+  "observability_required":[
+    "per-doc before/after field map",
+    "writes_count exact (==2 if first apply, ==0 on idempotent rerun)",
+    "any unexpected document write must abort run"
+  ],
+  "on_unexpected_write_attempt":"abort_and_trigger_rollback_plan",
+  "apply_script_status":"NOT_CREATED_IN_THIS_TASK",
+  "apply_script_creation_is_separate_gated_step":true
+}

@@ -1,0 +1,34 @@
+{
+  "task_origin":"SLC-G-GUILDS-CLEANUP-READINESS-ROLLUP","version":"v1",
+  "mode":"DESIGN_ONLY",
+  "design_only":true,"db_write":false,"cleanup_applied":false,
+  "required_artifacts":[
+    "/app/data/design/server_lifecycle/slc_g_guilds_unsafe_audit_v1.json",
+    "/app/data/design/server_lifecycle/slc_g_guilds_cleanup_plan_v1.json",
+    "/app/data/design/server_lifecycle/slc_g_guilds_cleanup_gate_contract_v1.json",
+    "/app/data/design/server_lifecycle/slc_g_guilds_cleanup_rollback_plan_v1.json",
+    "/app/data/design/system_safety/slc_g_guilds_cleanup_readiness_rollup_v1.json"
+  ],
+  "required_validators":[
+    "audit_slc_g_guilds_unsafe_readonly_v1.py",
+    "validate_slc_g_guilds_cleanup_plan_v1.py",
+    "validate_slc_g_guilds_cleanup_gate_contract_v1.py",
+    "validate_slc_g_guilds_cleanup_rollback_plan_v1.py",
+    "validate_slc_g_guilds_cleanup_combo_v1.py"
+  ],
+  "readiness_criteria":[
+    "all required artifacts present",
+    "all required validators present and PASS",
+    "audit reports exactly 2 unsafe docs (or motivated discrepancy)",
+    "both docs classified non-empty",
+    "no doc classified unsafe_do_not_touch (or, if any, explicit user decision recorded)",
+    "no protected runtime file changed",
+    "SLC-G migration_applied remains false",
+    "API smoke invariants intact",
+    "AF2-N invariants intact",
+    "explicit_write_approval_marker_present clearly reported"
+  ],
+  "expected_default_verdict":"READY_TO_CLEANUP_NOT_APPLIED",
+  "flip_to_applied_requires":"approval marker SLC_G_GUILDS_UNSAFE_CLEANUP_WRITE_APPROVAL=true AND every gate PASS AND apply script invoked with explicit flag (apply script NOT created in this task)",
+  "slc_g_relationship":"This task closes blocker G10 (unsafe_unknown_count==0) once cleanup is applied. SLC-G G11 (explicit user approval) is a separate gate."
+}

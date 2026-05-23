@@ -1,0 +1,31 @@
+{
+  "task_origin":"SLC-G-GUILDS-CLEANUP-ROLLBACK-PLAN","version":"v1",
+  "mode":"GATED_DRY_RUN_FIRST",
+  "design_only":true,"db_write":false,"cleanup_applied":false,
+  "rollback_strategy":{
+    "approach":"unset_added_fields_where_marker_true",
+    "marker_field":"_slc_g_guilds_cleanup_marker",
+    "marker_field_default_value":true,
+    "fields_to_unset_if_marker_true":["user_id","account_id","server_id","_slc_g_guilds_cleanup_marker","_slc_g_guilds_cleanup_classification"],
+    "fallback":"restore_from_backup_manifest_per_doc"
+  },
+  "rollback_scope_constraint":"ONLY the 2 specifically targeted _id values; nothing else",
+  "rollback_steps":[
+    "freeze_writes_design_only_check",
+    "verify_marker_field_present_only_on_2_targets",
+    "unset_added_fields_only_where_marker_true_and_id_in_target_list",
+    "verify_post_rollback_doc_keys_match_pre_cleanup_keys",
+    "verify_members_array_unchanged",
+    "verify_leader_id_unchanged",
+    "verify_af2n_state_unchanged",
+    "verify_api_smoke_unchanged",
+    "emit_rollback_report"
+  ],
+  "rollback_must_be_idempotent":true,
+  "rollback_rehearsal_dry_run_required":true,
+  "never_delete_documents":true,
+  "never_drop_collection_or_index":true,
+  "recovery_objective_minutes_target":5,
+  "recovery_objective_minutes_max":30,
+  "on_rollback_failure":"escalate_to_full_backup_restore_for_only_the_2_docs"
+}

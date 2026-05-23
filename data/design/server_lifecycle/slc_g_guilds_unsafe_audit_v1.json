@@ -1,0 +1,89 @@
+{
+  "task_origin":"SLC-G-GUILDS-UNSAFE-AUDIT","version":"v1",
+  "mode":"READ_ONLY_FIRST_GATED_CLEANUP_PLAN",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "db_write":false,"cleanup_applied":false,
+  "audit_scope":"collection=guilds; filter={user_id:absent AND account_id:absent}",
+  "baseline_invariant_reference":{
+    "slc_g_dry_run_unsafe_unknown_count":2,
+    "slc_g_dry_run_collection":"guilds"
+  },
+  "audit_methodology":"MongoDB read-only via pymongo. NO write. NO delete. Owner provability checked via leader_id -> users.id match.",
+  "unsafe_docs":[
+    {
+      "index":0,
+      "_id":"69db9bb2df5d3f956d0080ac",
+      "id":"7ff810a2-16d3-4e97-a5f3-ae63e036916e",
+      "name_redacted":"Divine Warriors",
+      "created_at":"2026-04-12T13:18:42.030Z",
+      "level":1,
+      "exp":0,
+      "member_count":1,
+      "present_fields":["_id","created_at","exp","id","leader_id","level","members","name"],
+      "missing_fields":["user_id","account_id","server_id"],
+      "leader_id_present":true,
+      "leader_id_value":"651253e2-da8d-466b-98f3-82f008d158ed",
+      "leader_user_lookup":{
+        "resolved":true,
+        "users_id_match":true,
+        "username":"TestPlayer",
+        "email_redacted_domain":"test",
+        "is_bot":false,
+        "in_tutorial_marker_present":true
+      },
+      "why_unsafe_originally":"SLC-G dry-run checked only {user_id, account_id} fields; field present is leader_id (legacy single-shard ownership convention).",
+      "safety_assessment":"OWNER PROVABLY RESOLVABLE via leader_id == users.id. No data loss risk if we set user_id := leader_id and account_id := leader_id (idempotent).",
+      "classification":"legacy_guild_missing_owner_resolvable",
+      "recommended_action":"SET_OWNER_FIELDS_FROM_LEADER_ID_AND_SERVER_ID_S1 (gated; requires explicit approval marker)",
+      "never_delete":true,
+      "never_overwrite_existing_fields":true
+    },
+    {
+      "index":1,
+      "_id":"69dbc64c9c908325ca0fd57f",
+      "id":"d3e04ae8-037e-4db1-bc10-ce01bee7cbb2",
+      "name_redacted":"Legion_517",
+      "created_at":"2026-04-12T16:20:28.128Z",
+      "level":9,
+      "exp":0,
+      "member_count":15,
+      "present_fields":["_id","created_at","exp","id","leader_id","level","members","name"],
+      "missing_fields":["user_id","account_id","server_id"],
+      "leader_id_present":true,
+      "leader_id_value":"526fb2cf-02ba-410e-bb9c-8bf5de3f5e00",
+      "leader_user_lookup":{
+        "resolved":true,
+        "users_id_match":true,
+        "username":"OnyxShadow965",
+        "email_redacted_domain":"divine.bot",
+        "is_bot":true,
+        "bot_marker_present":true
+      },
+      "why_unsafe_originally":"SLC-G dry-run checked only {user_id, account_id} fields; field present is leader_id pointing to a bot user (legacy seed-bot guild).",
+      "safety_assessment":"OWNER PROVABLY RESOLVABLE via leader_id == users.id (bot owner). No active human player risk. Can be classified as system_seed bot-guild OR legacy_guild_missing_owner_resolvable; both safe paths.",
+      "classification":"legacy_guild_missing_owner_resolvable_bot_owned",
+      "recommended_action":"SET_OWNER_FIELDS_FROM_LEADER_ID_AND_SERVER_ID_S1 (gated; requires explicit approval marker). ALTERNATIVE: mark as system_seed (also gated).",
+      "never_delete":true,
+      "never_overwrite_existing_fields":true
+    }
+  ],
+  "summary":{
+    "total_unsafe_count_at_audit_time":2,
+    "docs_resolvable_via_leader_id":2,
+    "docs_marked_unsafe_do_not_touch":0,
+    "docs_with_active_human_owner":1,
+    "docs_with_bot_owner":1,
+    "any_delete_proposed":false,
+    "any_overwrite_of_existing_fields_proposed":false
+  },
+  "reclassification_note":"Both guilds initially classified 'unsafe_unknown' in SLC-G dry-run because the simulator only checked {user_id, account_id}. Audit upgrades them to 'legacy_guild_missing_owner_resolvable'. They are NOT orphans.",
+  "af2n_impact":"NONE (guilds collection is not part of AF2-N inventory/ledger).",
+  "battle_runtime_impact":"NONE (guilds is not loaded by battle_engine/battle_core/combat).",
+  "protected_files_touched":[],
+  "sources_consulted":[
+    "/app/docs/divine/99_SLC_G_DEFAULT_S1_MIGRATION_GATED.md",
+    "/app/data/design/server_lifecycle/slc_f_collection_scope_matrix_v1.json",
+    "/app/data/design/server_lifecycle/_slc_g_default_s1_backfill_dryrun_full_report.json",
+    "/app/data/design/server_lifecycle/collection_scope_migration_matrix_v1.json"
+  ]
+}

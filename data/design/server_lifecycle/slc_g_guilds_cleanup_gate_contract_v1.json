@@ -1,0 +1,30 @@
+{
+  "task_origin":"SLC-G-GUILDS-CLEANUP-GATE-CONTRACT","version":"v1",
+  "mode":"PRE_CLEANUP_GATED",
+  "design_only":true,"db_write":false,"cleanup_applied":false,
+  "explicit_write_approval_marker_required":"SLC_G_GUILDS_UNSAFE_CLEANUP_WRITE_APPROVAL=true",
+  "gates_all_must_pass":[
+    {"id":"GUILD-G1","requires":"audit reports exactly 2 unsafe docs in guilds (or explained discrepancy logged)"},
+    {"id":"GUILD-G2","requires":"no active human guild loses data; members arrays untouched; leader_id untouched"},
+    {"id":"GUILD-G3","requires":"no delete operation proposed or executed in any phase"},
+    {"id":"GUILD-G4","requires":"backup manifest contract present and the 2 target docs are listed in pre-cleanup snapshot"},
+    {"id":"GUILD-G5","requires":"rollback plan exists, idempotent and rehearsable"},
+    {"id":"GUILD-G6","requires":"cleanup idempotent: rerun must perform zero writes"},
+    {"id":"GUILD-G7","requires":"no protected runtime file changed (battle_engine.py, battle_core.py, combat.tsx, affinity_gift_spend.py, hero/skill/DW catalogs)"},
+    {"id":"GUILD-G8","requires":"AF2-N invariants unchanged (cap=50000, allowlist=2500, inventory/ledger row counts preserved)"},
+    {"id":"GUILD-G9","requires":"if write approval marker absent, final verdict MUST be READY_TO_CLEANUP_NOT_APPLIED"},
+    {"id":"GUILD-G10","requires":"if write approval marker present, only the exactly-targeted 2 _id values may be touched and only with set_only_if_missing semantics"},
+    {"id":"GUILD-G11","requires":"API smoke invariants intact: /api/heroes=100, primordial_gaia=404, borea=200, greek_borea=200"},
+    {"id":"GUILD-G12","requires":"SLC-G migration MUST remain NOT_APPLIED; this task MUST NOT trigger SLC-G commit"},
+    {"id":"GUILD-G13","requires":"feature flags MUST remain unset: SERVER_PROFILES_RUNTIME_ENABLED, SECOND_SERVER_OPENING_ENABLED"}
+  ],
+  "on_any_gate_fail":"return FAILED_SAFE_READY_NOT_APPLIED; no DB write",
+  "on_all_gates_pass_and_approval_marker_present":"may execute apply script (NOT created in this task) restricted to the 2 target _id values; result CLEANUP_APPLIED_SAFE",
+  "on_all_gates_pass_and_approval_marker_absent":"return READY_TO_CLEANUP_NOT_APPLIED",
+  "signoffs_required":[
+    "product_owner",
+    "data_engineering",
+    "sre_oncall",
+    "guild_feature_owner_acknowledgement_only"
+  ]
+}

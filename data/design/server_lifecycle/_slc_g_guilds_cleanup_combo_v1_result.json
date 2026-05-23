@@ -1,0 +1,37 @@
+{
+  "task_origin": "SLC-G-GUILDS-CLEANUP-COMBO",
+  "version": "v1",
+  "timestamp_utc": "2026-05-23T14:00:14.630202+00:00",
+  "mode": "READ_ONLY_FIRST_GATED_CLEANUP_PLAN",
+  "db_write": false,
+  "cleanup_applied": false,
+  "combo_status": "PASS",
+  "final_status": "READY_TO_CLEANUP_NOT_APPLIED",
+  "explicit_write_approval_marker_present": false,
+  "results": [
+    {
+      "name": "live_audit",
+      "script": "audit_slc_g_guilds_unsafe_readonly_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "cleanup_plan",
+      "script": "validate_slc_g_guilds_cleanup_plan_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "gate_contract",
+      "script": "validate_slc_g_guilds_cleanup_gate_contract_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "rollback_plan",
+      "script": "validate_slc_g_guilds_cleanup_rollback_plan_v1.py",
+      "verdict": "PASS",
+      "exit_code": 0
+    }
+  ]
+}
