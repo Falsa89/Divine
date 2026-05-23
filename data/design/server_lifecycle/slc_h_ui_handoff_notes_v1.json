@@ -1,0 +1,49 @@
+{
+  "task_origin":"SLC-H-UI-HANDOFF-NOTES","version":"v1","mode":"DESIGN_ONLY_NO_UI_IMPLEMENTATION",
+  "design_only":true,"runtime_attached":false,"ui_implemented":false,
+  "target_screens":[
+    {
+      "screen":"server_selection_list",
+      "trigger":"login_with_multiple_profiles OR explicit_settings_action OR new_account_after_second_server_opens",
+      "shown_only_if":"SERVER_PROFILES_RUNTIME_ENABLED AND second_server_opening_allowed OR account has more than one profile",
+      "layout":"flatlist of server profile cards",
+      "per_card_required_fields":["server_name","server_status_label_it","is_active_session_badge","is_legacy_implicit_badge","opened_at_relative","labels[]"],
+      "badges":{"new":"NUOVO","recommended":"CONSIGLIATO","crowded":"AFFOLLATO","closed_to_new":"CHIUSO AI NUOVI","merge_pending":"FUSIONE IN CORSO","merged":"FUSO","archived":"ARCHIVIATO"}
+    },
+    {
+      "screen":"server_profile_card_detail",
+      "shown_only_if":"user taps a server card",
+      "fields":["server_name","server_status","labels","opened_at_relative","server_id","is_active_session","merged_redirect_target_if_any"],
+      "primary_cta":"seleziona_server",
+      "primary_cta_disabled_when":["status in {planned,merge_pending,merged,archived}","new_account on closed_to_new","second_server_locked","route_patch_not_applied"]
+    },
+    {
+      "screen":"new_server_warning_dialog",
+      "trigger":"first time user selects a non-default-s1 server in future scenario",
+      "copy_it":[
+        "Stai per entrare in un nuovo server.",
+        "Ogni server ha eroi, gilde e progressi separati.",
+        "La valuta a pagamento resta del tuo account, ma le risorse gratuite (oro, gemme gratis, materiali) restano su questo server.",
+        "Non c'\u00e8 trasferimento automatico tra server."
+      ],
+      "requires_explicit_confirmation":true
+    },
+    {
+      "screen":"paid_currency_display_warning",
+      "trigger":"if account has paid currency AND user is viewing server-specific wallets",
+      "copy_it":"La valuta a pagamento \u00e8 condivisa tra tutti i tuoi server. Le risorse gratuite sono specifiche di questo server."
+    }
+  ],
+  "hard_ui_no_go":[
+    "NO live screen implementation in this task",
+    "NO route registration in expo router",
+    "NO modification to existing login flow",
+    "NO modification to existing combat / gacha / roster screens"
+  ],
+  "copy_language":"it_IT",
+  "copy_must_avoid":["tecnicismi","shard","id interno","slc-g","slc-h","affinity_gift_spend"],
+  "accessibility":{
+    "min_tap_target_dp":44,
+    "label_must_be_screenreader_friendly":true
+  }
+}

@@ -509,6 +509,12 @@ OPTIONAL = [
     ('SLC-G-GUILDS-CLEANUP-COMBO',                 'validate_slc_g_guilds_cleanup_combo_v1.py'),
     ('SLC-G-GUILDS-CLEANUP-B-POST-APPLY',          'validate_slc_g_guilds_cleanup_b_post_apply_v1.py'),
     ('SLC-G-COMMIT-A-POST-APPLY',                  'validate_slc_g_commit_a_post_apply_v1.py'),
+    # SLC-H SERVER SELECTION ENDPOINT DESIGN-ONLY (CONTRACT-ONLY / READ-ONLY)
+    ('SLC-H-ENDPOINT-CONTRACT',                    'validate_slc_h_endpoint_contract_v1.py'),
+    ('SLC-H-REJECTION-MODES',                      'validate_slc_h_rejection_modes_v1.py'),
+    ('SLC-H-SERVER-STATUS-CONTRACT',               'validate_slc_h_server_status_contract_v1.py'),
+    ('SLC-H-READINESS-GATES',                      'validate_slc_h_readiness_gates_v1.py'),
+    ('SLC-H-COMBO',                                'validate_slc_h_combo_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

@@ -1,0 +1,85 @@
+{
+  "task_origin":"SLC-H-ENDPOINT-CONTRACT","version":"v1","mode":"DESIGN_ONLY_CONTRACT_ONLY",
+  "design_only":true,"runtime_attached":false,"battle_runtime_attached":false,
+  "runtime_implementation_status":"NOT_IMPLEMENTED",
+  "db_write":false,"route_patch_applied":false,
+  "second_server_opening_allowed":false,
+  "endpoints":[
+    {
+      "id":"SH-EP-001",
+      "method":"GET",
+      "path":"/api/servers",
+      "purpose":"Public server list with status flags. Used by login/select screen.",
+      "auth_required":false,
+      "idempotent":true,
+      "cacheable_seconds":60,
+      "rate_limit_class":"public_read_low",
+      "depends_on_runtime_flag":"none_for_read_only_listing",
+      "returns":"public server list array",
+      "never_exposes":["internal admin states","raw shard host","raw connection string"]
+    },
+    {
+      "id":"SH-EP-002",
+      "method":"GET",
+      "path":"/api/account/server-profiles",
+      "purpose":"Lists server profiles already created for the authenticated account.",
+      "auth_required":true,
+      "idempotent":true,
+      "depends_on_runtime_flag":"SERVER_PROFILES_RUNTIME_ENABLED",
+      "returns":"account_server_profiles array; for legacy account, returns the implicit s1 profile derived from SLC-G migration",
+      "legacy_fallback":"if SERVER_PROFILES_RUNTIME_ENABLED unset, return single implicit s1 profile reconstructed from migrated account_id+server_id, NOT a DB write"
+    },
+    {
+      "id":"SH-EP-003",
+      "method":"POST",
+      "path":"/api/account/server-profiles/select",
+      "purpose":"Make a server profile the active server for current session/account.",
+      "auth_required":true,
+      "idempotent":false,
+      "depends_on_runtime_flag":"SERVER_PROFILES_RUNTIME_ENABLED",
+      "second_server_locked_if":"SECOND_SERVER_OPENING_ENABLED unset AND requested server_id != legacy_default_s1",
+      "returns":"active_server_resolution"
+    },
+    {
+      "id":"SH-EP-004",
+      "method":"GET",
+      "path":"/api/account/active-server",
+      "purpose":"Returns the currently-active server for the authenticated account.",
+      "auth_required":true,
+      "idempotent":true,
+      "depends_on_runtime_flag":"none_for_read",
+      "legacy_default":"s1",
+      "returns":"active_server_resolution"
+    },
+    {
+      "id":"SH-EP-005",
+      "method":"POST",
+      "path":"/api/account/server-profiles/create",
+      "future_only":true,
+      "purpose":"Create a new server profile for the account on a target server. Disabled until second server opens.",
+      "auth_required":true,
+      "idempotent":false,
+      "depends_on_runtime_flag":"SERVER_PROFILES_RUNTIME_ENABLED AND SECOND_SERVER_OPENING_ENABLED",
+      "second_server_locked_if":"SECOND_SERVER_OPENING_ENABLED unset",
+      "returns":"created server_profile summary"
+    }
+  ],
+  "shared_contract_invariants":{
+    "slc_g_migration_must_be_applied":true,
+    "unsafe_unknown_must_be_zero":true,
+    "af2n_cap_must_stay":50000,
+    "af2n_allowlist_must_stay":2500,
+    "paid_currency_account_wide":true,
+    "free_resources_server_bound":true,
+    "no_automatic_resource_copy_between_servers":true,
+    "no_borea_visibility_change":true,
+    "no_primordial_gaia_change":true,
+    "heroes_count_unchanged":100
+  },
+  "runtime_implementation_blocked_until":[
+    "SERVER_PROFILES_RUNTIME_ENABLED explicitly set",
+    "SLC-F route patch runtime accepted and applied",
+    "SLC-H readiness gates all PASS",
+    "separate per-endpoint go/no-go signoff"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "task_origin":"SLC-H-FUTURE-FLOW","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "flow_rules":[
+    {"id":"FR-001","applies_to":"legacy_account","rule":"defaults to s1 via active_server_resolution.resolved_via=legacy_default_s1","based_on":"SLC-G migration"},
+    {"id":"FR-002","applies_to":"new_account","rule":"if SECOND_SERVER_OPENING_ENABLED unset, MUST be routed to s1 only","based_on":"second_server_opening_allowed=false"},
+    {"id":"FR-003","applies_to":"new_account","rule":"if SECOND_SERVER_OPENING_ENABLED set, routes to newest open server with new_account_eligible=true","based_on":"future flag"},
+    {"id":"FR-004","applies_to":"existing_account","rule":"resumes stored active_server_id; falls back to s1 if missing","based_on":"SLC-G migration default + future server_profiles"},
+    {"id":"FR-005","applies_to":"any_account","rule":"no automatic resource copy between servers","based_on":"data ownership safety"},
+    {"id":"FR-006","applies_to":"any_account","rule":"paid currency remains account-wide; not subject to server selection","based_on":"SLC-C paid_free_currency_split"},
+    {"id":"FR-007","applies_to":"any_account","rule":"free resources remain server-bound; do not appear across servers","based_on":"SLC-C server_bound_document_contract"},
+    {"id":"FR-008","applies_to":"any_endpoint","rule":"server-aware route patch must be applied before non-default server selection can succeed","based_on":"SLC-F gate"}
+  ],
+  "selection_decision_tree":[
+    "IF SERVER_PROFILES_RUNTIME_ENABLED unset: return implicit s1 only for GET endpoints; reject POST with 423 server_profiles_runtime_disabled",
+    "ELSE IF target_server.status == merged: return 308 with merged_into_server_id",
+    "ELSE IF target_server.status == archived: return 410",
+    "ELSE IF target_server.status == merge_pending: return 409",
+    "ELSE IF target_server.status == planned: return 403",
+    "ELSE IF target_server.status == closed_to_new AND requesting_account is new: return 403",
+    "ELSE IF target_server_id != s1 AND SECOND_SERVER_OPENING_ENABLED unset: return 423 second_server_locked",
+    "ELSE IF SLC-F route_patch_applied=false AND target_server_id != s1: return 423 route_patch_not_applied",
+    "ELSE: persist active_server_id and return 200 active_server_resolution"
+  ],
+  "borea_safety":{
+    "flow_MUST_NOT_change_borea_visibility":true,
+    "flow_MUST_NOT_change_primordial_gaia_404":true
+  }
+}

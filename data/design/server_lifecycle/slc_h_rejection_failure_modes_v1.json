@@ -1,0 +1,23 @@
+{
+  "task_origin":"SLC-H-REJECTION-FAILURE-MODES","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "failure_modes":[
+    {"error_code":"second_server_locked","http_status":423,"applies_to":["POST /api/account/server-profiles/select","POST /api/account/server-profiles/create"],"trigger":"SECOND_SERVER_OPENING_ENABLED unset AND requested server_id != legacy_default_s1","retryable":false},
+    {"error_code":"server_not_available_for_account","http_status":403,"applies_to":["POST /api/account/server-profiles/select"],"trigger":"target server status not in {open,crowded,closed_to_new(if existing account)}","retryable":false},
+    {"error_code":"server_archived","http_status":410,"applies_to":["GET /api/account/server-profiles","POST /api/account/server-profiles/select","GET /api/account/active-server"],"trigger":"target server status == archived","retryable":false},
+    {"error_code":"server_merged_redirect","http_status":308,"applies_to":["POST /api/account/server-profiles/select","GET /api/account/active-server"],"trigger":"target server status == merged; response MUST include merged_into_server_id","retryable":false},
+    {"error_code":"server_merge_pending","http_status":409,"applies_to":["POST /api/account/server-profiles/select"],"trigger":"target server status == merge_pending; selection blocked until merge completes","retryable":true},
+    {"error_code":"route_patch_not_applied","http_status":423,"applies_to":["POST /api/account/server-profiles/select","POST /api/account/server-profiles/create"],"trigger":"SLC-F route_patch_applied=false","retryable":false,"design_note":"server-aware route mapping required before any explicit non-default select"},
+    {"error_code":"server_profiles_runtime_disabled","http_status":423,"applies_to":["GET /api/account/server-profiles","POST /api/account/server-profiles/select","POST /api/account/server-profiles/create"],"trigger":"SERVER_PROFILES_RUNTIME_ENABLED unset; legacy implicit s1 still works via GET endpoints","retryable":false},
+    {"error_code":"auth_required","http_status":401,"applies_to":["GET /api/account/server-profiles","POST /api/account/server-profiles/select","GET /api/account/active-server","POST /api/account/server-profiles/create"],"trigger":"no valid auth token","retryable":false},
+    {"error_code":"rate_limited","http_status":429,"applies_to":["ALL"],"trigger":"client exceeded rate-limit per endpoint class","retryable":true},
+    {"error_code":"validation_error","http_status":422,"applies_to":["POST /api/account/server-profiles/select","POST /api/account/server-profiles/create"],"trigger":"invalid body or unknown server_id","retryable":false}
+  ],
+  "invariants":[
+    "failure responses MUST always include retryable flag",
+    "merged_redirect responses MUST include merged_into_server_id when applicable",
+    "no failure mode is allowed to leak internal shard host / connection string / load metrics",
+    "second_server_locked never auto-retries",
+    "route_patch_not_applied is the gating failure for any non-default-s1 selection until SLC-F apply"
+  ]
+}

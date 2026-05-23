@@ -1,0 +1,21 @@
+{
+  "task_origin":"SLC-H-READINESS-GATES","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "implementation_status":"DESIGN_READY_NOT_IMPLEMENTED",
+  "gates_required_before_any_runtime_implementation":[
+    {"id":"SH-G1","requires":"SLC-G migration_applied=true (verified via /app/data/design/system_safety/slc_g_default_s1_migration_apply_result_v1.json)"},
+    {"id":"SH-G2","requires":"SLC-F route patch plan accepted AND not yet applied OR explicitly applied with a separate gate"},
+    {"id":"SH-G3","requires":"no unsafe_unknown documents across server-bound collections"},
+    {"id":"SH-G4","requires":"default legacy s1 verified: server_id=s1 set on all server-bound docs that need it"},
+    {"id":"SH-G5","requires":"feature flags explicitly controlled: SERVER_PROFILES_RUNTIME_ENABLED and SECOND_SERVER_OPENING_ENABLED both default unset; explicit signoff required to flip"},
+    {"id":"SH-G6","requires":"endpoint contract + schemas + rejection modes + status contract + flow + UI handoff all PASS"},
+    {"id":"SH-G7","requires":"AF2-N invariants intact (cap=50000, allowlist=2500, row counts preserved)"},
+    {"id":"SH-G8","requires":"API smoke invariants intact (/api/heroes=100, primordial_gaia=404, borea/greek_borea=200 catalog-only)"},
+    {"id":"SH-G9","requires":"baseline diff RM1.32-PRE PASS"},
+    {"id":"SH-G10","requires":"no runtime route registered for the 5 future endpoints in this task"},
+    {"id":"SH-G11","requires":"no UI screen registered or rendered for server selection in this task"},
+    {"id":"SH-G12","requires":"explicit separate per-endpoint go/no-go signoff in a future task before any live wiring"}
+  ],
+  "expected_default_verdict":"SLC_H_DESIGN_READY_NOT_IMPLEMENTED",
+  "flip_to_implemented_requires":"separate gated task with explicit per-endpoint signoff AND SLC-F route_patch_applied=true AND SERVER_PROFILES_RUNTIME_ENABLED=true"
+}

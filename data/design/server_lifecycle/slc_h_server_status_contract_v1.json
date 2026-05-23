@@ -1,0 +1,30 @@
+{
+  "task_origin":"SLC-H-SERVER-STATUS-CONTRACT","version":"v1","mode":"DESIGN_ONLY",
+  "design_only":true,"runtime_attached":false,"db_write":false,
+  "statuses":[
+    {"status":"planned","new_account_eligible":false,"existing_account_eligible":false,"http_on_select":403,"label_for_ui":"in_arrivo","description":"server announced but not yet open"},
+    {"status":"open","new_account_eligible":true,"existing_account_eligible":true,"http_on_select":200,"label_for_ui":"aperto","description":"healthy and accepting new + existing accounts"},
+    {"status":"crowded","new_account_eligible":true,"existing_account_eligible":true,"http_on_select":200,"label_for_ui":"affollato","description":"high load but still accepting accounts"},
+    {"status":"closed_to_new","new_account_eligible":false,"existing_account_eligible":true,"http_on_select":200,"label_for_ui":"chiuso_ai_nuovi","description":"only existing accounts can play here"},
+    {"status":"merge_pending","new_account_eligible":false,"existing_account_eligible":false,"http_on_select":409,"label_for_ui":"fusione_in_corso","description":"merge process scheduled; selection temporarily blocked"},
+    {"status":"merged","new_account_eligible":false,"existing_account_eligible":false,"http_on_select":308,"label_for_ui":"fuso","description":"server merged into another; responses include merged_into_server_id"},
+    {"status":"archived","new_account_eligible":false,"existing_account_eligible":false,"http_on_select":410,"label_for_ui":"archiviato","description":"server permanently archived; data preserved read-only"}
+  ],
+  "transitions_allowed":[
+    ["planned","open"],["open","crowded"],["crowded","open"],
+    ["open","closed_to_new"],["crowded","closed_to_new"],
+    ["closed_to_new","merge_pending"],["merge_pending","merged"],
+    ["merged","archived"]
+  ],
+  "transitions_forbidden":[
+    ["merged","open"],["merged","closed_to_new"],["archived","open"],["archived","merge_pending"]
+  ],
+  "borea_safety":{
+    "server_status_change_MUST_NOT_affect_borea_visibility":true,
+    "primordial_gaia_MUST_remain_404":true
+  },
+  "af2n_safety":{
+    "server_status_change_MUST_NOT_change_cap":50000,
+    "server_status_change_MUST_NOT_change_allowlist":2500
+  }
+}
