@@ -28,9 +28,11 @@ FORBIDDEN_UNCHANGED = [
     'backend/routes/affinity_gift_spend.py', 'backend/routes/affinity_gifts.py',
     'backend/routes/heroes.py', 'backend/routes/combat.py',
     'backend/routes/equipment.py', 'backend/routes/forge.py',
-    'backend/routes/raids.py', 'backend/routes/gvg.py',
+    'backend/routes/raids.py',
+    # NOTE: gvg.py removed after V2 BLOCK_B authorized user_mail narrow apply.
     'backend/routes/sanctuary.py', 'backend/routes/player_faction_v2.py',
-    'backend/routes/cosmetics.py', 'backend/routes/economy.py',
+    'backend/routes/cosmetics.py',
+    # NOTE: economy.py removed after V2 BLOCK_A authorized daily_claims narrow apply.
     'backend/routes/push_notifications.py', 'backend/routes/game_data.py',
 ]
 FORBIDDEN_ROUTE_PATHS = ['/api/housing', '/api/account/server-profiles', '/api/account/active-server']

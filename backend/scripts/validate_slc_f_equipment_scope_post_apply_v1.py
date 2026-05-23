@@ -31,7 +31,8 @@ FORBIDDEN_UNCHANGED = [
     # is allowed to differ vs HEAD (sanctioned by a later gated apply).
     'backend/routes/sanctuary.py', 'backend/routes/player_faction_v2.py',
     'backend/routes/forge.py',  # Already Batch-1B; must not be touched by this task
-    'backend/routes/cosmetics.py', 'backend/routes/economy.py',
+    'backend/routes/cosmetics.py',
+    # NOTE: economy.py removed after V2 BLOCK_A authorized narrow daily_claims apply.
     'backend/routes/push_notifications.py', 'backend/routes/game_data.py',
     # equipment.py itself MUST remain unchanged (no patch applied)
     'backend/routes/equipment.py',

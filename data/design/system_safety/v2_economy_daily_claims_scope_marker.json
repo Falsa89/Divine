@@ -1,0 +1,66 @@
+{
+  "task_id": "V2_BLOCK_A_ECONOMY_DAILY_CLAIMS_SCOPE_MICRO_BATCH",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V2",
+  "verdict": "BLOCK_A_ECONOMY_DAILY_CLAIMS_SCOPE_APPLIED_SAFE",
+  "mode": "apply_safe_metadata_only",
+  "runtime_patch_applied": true,
+  "db_migration_required": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260523T213000Z",
+  "rollback_id": "v2_block_a_economy_daily_claims_20260523T213000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V2_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_A_ECONOMY_DAILY_CLAIMS_SCOPE_APPLY_APPROVAL": true,
+    "BLOCK_A_ECONOMY_DAILY_CLAIMS_SCOPE_ROLLBACK_APPROVAL": true
+  },
+  "surface_patched": {
+    "id": "ECONOMY-W02",
+    "file": "/app/backend/routes/economy.py",
+    "endpoint": "POST /api/shop/claim-daily/{item_id}",
+    "line_pre": 73,
+    "line_post": 73,
+    "collection": "daily_claims",
+    "op": "insert_one",
+    "classification_v1": "FREE_SERVER_BOUND"
+  },
+  "changes": {
+    "import_added": "from utils.server_scope import ensure_server_scope",
+    "import_line": 9,
+    "insert_wrapped": "db.daily_claims.insert_one(ensure_server_scope({...}, uid))",
+    "behavior_changed": false,
+    "reward_amount_changed": false,
+    "cooldown_changed": false,
+    "currency_logic_changed": false,
+    "vip_changed": false,
+    "paid_balance_changed": false,
+    "shop_changed": false,
+    "battle_pass_changed": false,
+    "server_select_changed": false
+  },
+  "diff_summary": {
+    "file": "/app/backend/routes/economy.py",
+    "lines_added": 2,
+    "lines_removed": 1,
+    "net_delta": 1
+  },
+  "validators": [
+    "/app/backend/scripts/validate_v2_economy_daily_claims_scope.py"
+  ],
+  "rollback_script": "/app/backend/scripts/rollback_v2_economy_daily_claims_scope.py",
+  "forbidden_in_block_a_respected": {
+    "broad_economy_refactor": false,
+    "paid_free_behavior_change": false,
+    "pricing_currency_change": false,
+    "vip_change": false,
+    "server_select_change": false,
+    "db_migration": false,
+    "change_outside_W02": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/v2_economy_daily_claims_scope_marker.json",
+    "/app/docs/divine/116A_ECONOMY_DAILY_CLAIMS_SCOPE.md",
+    "/app/backend/scripts/validate_v2_economy_daily_claims_scope.py",
+    "/app/backend/scripts/rollback_v2_economy_daily_claims_scope.py"
+  ]
+}

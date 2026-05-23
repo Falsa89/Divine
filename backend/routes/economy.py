@@ -6,6 +6,7 @@ import uuid
 from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
+from utils.server_scope import ensure_server_scope
 from .game_data import SHOP_ITEMS, DAILY_FREE, BATTLE_PASS_REWARDS, SERVERS, VIP_LEVELS
 
 
@@ -70,7 +71,7 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
         if "stamina" in item["reward"]: inc["stamina"] = item["reward"]["stamina"]
         if inc:
             await db.users.update_one({"id": uid}, {"$inc": inc})
-        await db.daily_claims.insert_one({"user_id": uid, "item_id": item_id, "date": today, "timestamp": datetime.utcnow()})
+        await db.daily_claims.insert_one(ensure_server_scope({"user_id": uid, "item_id": item_id, "date": today, "timestamp": datetime.utcnow()}, uid))
         return {"success": True, "reward": item["reward"]}
 
     # ==================== MAIL / POSTA IN-GAME ====================

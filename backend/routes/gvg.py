@@ -352,7 +352,7 @@ def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_h
                 exp = int(2000 * (0.5 + contribution))
                 await db.users.update_one({"id": uid}, {"$inc": {"gold": gold, "gems": gems, "experience": exp}})
                 # Send mail
-                await db.user_mail.insert_one({
+                await db.user_mail.insert_one(ensure_server_scope({
                     "id": str(uuid.uuid4()),
                     "user_id": uid,
                     "subject": f"Guerra GvG {'Vinta!' if is_winner else 'Persa' if winner_id else 'Pareggio'}",
@@ -360,7 +360,7 @@ def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_h
                     "rewards": {"gold": gold, "gems": gems},
                     "claimed": True,
                     "timestamp": datetime.utcnow(),
-                })
+                }, uid))
 
         winner_name = war["guild_a_name"] if winner_id == war["guild_a_id"] else war["guild_b_name"] if winner_id else "Pareggio"
         return {

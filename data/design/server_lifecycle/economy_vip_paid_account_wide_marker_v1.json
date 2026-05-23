@@ -1,0 +1,85 @@
+{
+  "task_id": "V2_BLOCK_C_ECONOMY_VIP_PAID_ACCOUNT_WIDE_CANONICAL_MARKER",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V2",
+  "verdict": "BLOCK_C_ECONOMY_VIP_PAID_MARKER_READY",
+  "mode": "audit_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T213000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V2_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_C_ECONOMY_VIP_PAID_MARKER_APPROVAL": true
+  },
+  "canonical_rule_id": "ECONOMY_VIP_PAID_ACCOUNT_WIDE_CANONICAL_V1",
+  "canonical_statement": "Le superfici VIP e tutte le scritture su collection vip_data sono ACCOUNT_WIDE_BY_DESIGN. NON devono ricevere ensure_server_scope. Lo scope server-bound è esplicitamente NON applicabile (paid currency progression).",
+  "account_wide_surfaces": [
+    {
+      "surface_id": "ECONOMY-W09",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "GET /api/vip (auto-init)",
+      "line": 214,
+      "collection": "vip_data",
+      "op": "insert_one",
+      "canonical_decision": "NO_SERVER_SCOPE_BY_DESIGN",
+      "rationale": "vip_data tracks total_spend in valuta reale (paid). Per design è account-wide; condividere il livello VIP tra server è un requisito di prodotto fondamentale."
+    },
+    {
+      "surface_id": "ECONOMY-W10",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "POST /api/vip/claim-daily",
+      "line": 262,
+      "collection": "vip_data",
+      "op": "update_one (upsert=True)",
+      "canonical_decision": "NO_SERVER_SCOPE_BY_DESIGN",
+      "rationale": "Daily claim VIP è ereditato dalla regola W09. Account-wide."
+    },
+    {
+      "surface_id": "ECONOMY-W11",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "POST /api/vip/add-spend",
+      "line": 269,
+      "collection": "vip_data",
+      "op": "update_one (upsert=True)",
+      "canonical_decision": "NO_SERVER_SCOPE_BY_DESIGN",
+      "rationale": "total_spend accumula spesa reale; ereditato da W09. Account-wide."
+    }
+  ],
+  "paid_currency_classification": {
+    "gems": {
+      "category": "PAID_ACCOUNT_WIDE",
+      "scope": "users.gems field (account level)",
+      "future_consideration": "Eventuale paid-vs-free split require product decision; oggi unico bilancio account-wide."
+    },
+    "gold": {
+      "category": "FREE_SERVER_BOUND_CANDIDATE",
+      "scope": "users.gold field (account level oggi)",
+      "future_consideration": "Più corretto per design sarebbe diventare server-bound; richiede DB migration e split del users document."
+    },
+    "stamina": {
+      "category": "FREE_SERVER_BOUND_CANDIDATE",
+      "scope": "users.stamina field (account level oggi)",
+      "future_consideration": "Tipicamente server-bound per UX (rigenera in base alla sessione corrente)."
+    }
+  },
+  "prerequisites_for_future_economy_refactor": [
+    "P0: Product decision sull'isolamento del bilancio paid (gems) vs free (gold/stamina) tra server",
+    "P0: Decisione canonical su battle_pass progress per-server vs account-wide",
+    "P1: Rimozione legacy /server/select dopo SLC-H live wiring",
+    "P1: Migration plan users.server -> users.active_server_profile_id",
+    "P2: Splittare users document in (account_profile, server_profile)"
+  ],
+  "validator_strategy": {
+    "validator_script": null,
+    "validator_action": "Marker canonical caricato dal rollup validator (Block E). Nessun nuovo script standalone richiesto per Block C.",
+    "contract": "Il rollup V2 verifica la presenza del file canonical, il verdict READY e la consistenza delle 3 superfici W09/W10/W11."
+  },
+  "forbidden_in_block_c_respected": {
+    "runtime_changes": false,
+    "pricing_vip_currency_behavior_change": false,
+    "db_writes_migration": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/economy_vip_paid_account_wide_marker_v1.json",
+    "/app/docs/divine/116C_ECONOMY_VIP_PAID_ACCOUNT_WIDE_MARKER.md"
+  ]
+}

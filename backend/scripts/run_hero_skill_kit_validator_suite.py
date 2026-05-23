@@ -544,6 +544,12 @@ OPTIONAL = [
     ('MEGA-COMBO-V1-BLOCK-A-ECONOMY-PREP',         'audit_economy_paid_free_split_prep_v1.py'),
     # MEGA-COMBO V1 BLOCK_B GACHA/SUMMON DRIFT DOCS HOUSEKEEPING (DOC/AUDIT ONLY; NO DB WRITE)
     ('MEGA-COMBO-V1-BLOCK-B-DRIFT-HOUSEKEEPING',   'audit_drift_docs_gacha_summon_count_v1.py'),
+    # MEGA-COMBO V2 BLOCK_A ECONOMY DAILY_CLAIMS SCOPE APPLY (PATCH APPLIED)
+    ('V2-BLOCK-A-ECONOMY-DAILY-CLAIMS-POST-APPLY', 'validate_v2_economy_daily_claims_scope.py'),
+    # MEGA-COMBO V2 BLOCK_B GVG USER_MAIL SCOPE APPLY (PATCH APPLIED)
+    ('V2-BLOCK-B-GVG-USER-MAIL-POST-APPLY',        'validate_v2_gvg_user_mail_scope.py'),
+    # MEGA-COMBO V2 ROLLUP (5 blocks consistency)
+    ('V2-ROLLUP',                                  'validate_mega_combo_slc_acceleration_v2_rollup.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-23T20:26:15.697717+00:00",
+  "timestamp_utc": "2026-05-23T20:41:57.907143+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 688,
+  "backend_python_files_scanned": 693,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 393,
+      "files_with_hits": 397,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -149,7 +149,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 109
+      "user_id_only_files_count": 111
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -369,7 +369,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 24,
+      "files_with_hits": 25,
       "hits_sample": [
         {
           "file": "backend/routes/soul_forge.py",
@@ -418,15 +418,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 41,
+              "line": 42,
               "snippet": "currency = item[\"price_type\"]"
             },
             {
-              "line": 42,
+              "line": 43,
               "snippet": "if user.get(currency, 0) < item[\"price\"]:"
             },
             {
-              "line": 43,
+              "line": 44,
               "snippet": "raise HTTPException(400, f\"{'Gemme' if currency == 'gems' else 'Oro'} insufficiente!\")"
             }
           ]
@@ -526,15 +526,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 20,
+              "line": 21,
               "snippet": "purchases = await db.shop_purchases.find({\"user_id\": current_user[\"id\"], \"date\": today}).to_list(50)"
             },
             {
-              "line": 21,
+              "line": 22,
               "snippet": "purchase_counts = {}"
             },
             {
-              "line": 22,
+              "line": 23,
               "snippet": "for p in purchases:"
             }
           ]
@@ -881,7 +881,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 58,
+      "files_with_hits": 59,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -989,11 +989,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 6
+      "user_id_only_files_count": 7
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 19,
+      "files_with_hits": 20,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1524,7 +1524,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 366,
+  "cross_server_leak_risk_candidates_count": 369,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",

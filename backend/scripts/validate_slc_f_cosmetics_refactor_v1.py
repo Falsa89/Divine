@@ -24,14 +24,19 @@ PRIOR_MARKERS = [
 
 FORBIDDEN_UNCHANGED = [
     # ALL backend/routes/*.py must remain unchanged in this task.
+    # NOTE: economy.py and gvg.py are intentionally removed from this list after
+    # MEGA_COMBO_SLC_ACCELERATION_V2 explicitly authorized narrow micro-batches on those
+    # files (V2 BLOCK_A daily_claims, V2 BLOCK_B user_mail). Their post-apply validators
+    # (validate_v2_economy_daily_claims_scope.py / validate_v2_gvg_user_mail_scope.py)
+    # already enforce that no cosmetics-related behavior changed.
     'backend/routes/cosmetics.py',
-    'backend/routes/economy.py', 'backend/routes/combat.py',
+    'backend/routes/combat.py',
     'backend/battle_engine.py', 'backend/battle_core.py', 'frontend/app/combat.tsx',
     'backend/routes/affinity_gift_spend.py', 'backend/routes/affinity_gifts.py',
     'backend/routes/heroes.py', 'backend/routes/sanctuary.py', 'backend/routes/player_faction_v2.py',
     'backend/routes/push_notifications.py', 'backend/routes/game_data.py',
     'backend/routes/equipment.py', 'backend/routes/forge.py', 'backend/routes/raids.py',
-    'backend/routes/gvg.py', 'backend/routes/unique_items.py',
+    'backend/routes/unique_items.py',
 ]
 FORBIDDEN_ROUTE_PATHS = ['/api/housing', '/api/account/server-profiles', '/api/account/active-server']
 

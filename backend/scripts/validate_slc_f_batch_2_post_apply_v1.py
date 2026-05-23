@@ -27,7 +27,9 @@ FORBIDDEN_UNCHANGED = [
     # Batch-2 candidates that MUST remain untouched per SKIP decision:
     'backend/routes/push_notifications.py',
     'backend/routes/cosmetics.py',
-    'backend/routes/economy.py',
+    # NOTE: economy.py removed after MEGA_COMBO_SLC_ACCELERATION_V2 BLOCK_A authorized
+    # a narrow daily_claims metadata-only patch. V2 BLOCK_A post-apply validator enforces
+    # that no Batch-2 behavior changed.
     'backend/routes/game_data.py',
 ]
 FORBIDDEN_ROUTE_PATHS = ['/api/housing', '/api/account/server-profiles', '/api/account/active-server']
@@ -127,11 +129,12 @@ def main() -> int:
         if 'from utils.server_scope import ensure_server_scope' not in text:
             errs.append(f'prior_apply_helper_import_missing_in:{f}')
 
-    # Confirm Batch-2 candidates DID NOT receive the helper import (still SKIPped)
+    # Confirm Batch-2 candidates DID NOT receive the helper import (still SKIPped).
+    # NOTE: economy.py removed after V2 BLOCK_A explicitly authorized a daily_claims
+    # narrow apply (helper import is now legitimately present in economy.py).
     BATCH2_SKIPPED_CANDIDATES = [
         'backend/routes/push_notifications.py',
         'backend/routes/cosmetics.py',
-        'backend/routes/economy.py',
         'backend/routes/game_data.py',
     ]
     for f in BATCH2_SKIPPED_CANDIDATES:

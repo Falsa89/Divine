@@ -25,7 +25,8 @@ FORBIDDEN_UNCHANGED = [
     'backend/routes/heroes.py', 'backend/routes/combat.py',
     'backend/routes/equipment.py', 'backend/routes/forge.py',
     'backend/routes/sanctuary.py', 'backend/routes/player_faction_v2.py',
-    'backend/routes/cosmetics.py', 'backend/routes/economy.py',
+    'backend/routes/cosmetics.py',
+    # NOTE: economy.py removed after V2 BLOCK_A authorized narrow daily_claims apply.
     'backend/routes/push_notifications.py', 'backend/routes/game_data.py',
 ]
 FORBIDDEN_ROUTE_PATHS = ['/api/housing', '/api/account/server-profiles', '/api/account/active-server']

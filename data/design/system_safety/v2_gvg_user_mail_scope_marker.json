@@ -1,0 +1,61 @@
+{
+  "task_id": "V2_BLOCK_B_GVG_USER_MAIL_SCOPE_MICRO_BATCH",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V2",
+  "verdict": "BLOCK_B_GVG_USER_MAIL_SCOPE_APPLIED_SAFE",
+  "mode": "apply_safe_metadata_only",
+  "runtime_patch_applied": true,
+  "db_migration_required": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260523T213000Z",
+  "rollback_id": "v2_block_b_gvg_user_mail_20260523T213000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V2_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_B_GVG_USER_MAIL_SCOPE_APPLY_APPROVAL": true,
+    "BLOCK_B_GVG_USER_MAIL_SCOPE_ROLLBACK_APPROVAL": true
+  },
+  "surface_patched": {
+    "file": "/app/backend/routes/gvg.py",
+    "endpoint_context": "resolve_gvg_war (post-war reward distribution)",
+    "line_pre": 355,
+    "collection": "user_mail",
+    "op": "insert_one",
+    "classification_v1": "SERVER_BOUND_BY_PRODUCER"
+  },
+  "changes": {
+    "import_added": null,
+    "import_already_present": "from utils.server_scope import ensure_server_scope (line 9)",
+    "insert_wrapped": "db.user_mail.insert_one(ensure_server_scope({...}, uid))",
+    "mail_content_changed": false,
+    "recipient_changed": false,
+    "inbox_behavior_changed": false,
+    "gvg_war_logic_changed": false,
+    "rewards_changed": false,
+    "ranking_changed": false,
+    "matching_changed": false,
+    "attack_defense_changed": false
+  },
+  "diff_summary": {
+    "file": "/app/backend/routes/gvg.py",
+    "lines_added": 1,
+    "lines_removed": 1,
+    "net_delta": 0
+  },
+  "validators": [
+    "/app/backend/scripts/validate_v2_gvg_user_mail_scope.py"
+  ],
+  "rollback_script": "/app/backend/scripts/rollback_v2_gvg_user_mail_scope.py",
+  "forbidden_in_block_b_respected": {
+    "gvg_wars_insert_changed": false,
+    "matching_ranking_scoring_rewards_changed": false,
+    "mail_content_recipient_changed": false,
+    "db_migration": false,
+    "route_outside_gvg_py": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/v2_gvg_user_mail_scope_marker.json",
+    "/app/docs/divine/116B_GVG_USER_MAIL_SCOPE.md",
+    "/app/backend/scripts/validate_v2_gvg_user_mail_scope.py",
+    "/app/backend/scripts/rollback_v2_gvg_user_mail_scope.py"
+  ]
+}

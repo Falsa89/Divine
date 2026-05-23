@@ -30,7 +30,8 @@ FORBIDDEN_UNCHANGED = [
     # NOTE: unique_items.py removed from FORBIDDEN_UNCHANGED — sanctioned by
     # the subsequent UNIQUE_ITEMS_ONLY micro-batch (apply_id slc_f_unique_items_scope_*).
     'backend/routes/sanctuary.py', 'backend/routes/player_faction_v2.py',
-    'backend/routes/cosmetics.py', 'backend/routes/economy.py',
+    'backend/routes/cosmetics.py',
+    # NOTE: economy.py removed after V2 BLOCK_A authorized narrow daily_claims apply.
     'backend/routes/push_notifications.py', 'backend/routes/game_data.py',
 ]
 FORBIDDEN_ROUTE_PATHS = ['/api/housing', '/api/account/server-profiles', '/api/account/active-server']
