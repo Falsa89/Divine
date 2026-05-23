@@ -1,0 +1,172 @@
+{
+  "task_origin": "SLC-F-POST-MICROBATCH-CONSOLIDATION-AUDIT",
+  "version": "v1",
+  "audit_id": "slc_f_post_microbatch_cons_20260523T194500Z_audit_only",
+  "audit_executed_at_utc": "2026-05-23T19:45:00.000000+00:00",
+  "scope": "POST_MICROBATCH_AUDIT_ONLY",
+  "authorization_markers_present": {
+    "SLC_F_POST_MICROBATCH_CONSOLIDATION_AUDIT_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "POST_MICROBATCH_AUDIT_ONLY"
+  },
+  "runtime_files_modified": false,
+  "db_writes_performed": false,
+  "migrations_performed": false,
+  "suite_baseline_before": "348 PASS / 0 FAIL / 0 MISS",
+
+  "marker_matrix": [
+    {"checkpoint": "SLC-G COMMIT-A migration",                       "apply_id": "slc_g_commit_a_20260523T143803Z_4600ac04",                        "marker_file": "slc_g_default_s1_migration_apply_result_v1.json",      "status": "PRESENT",      "verdict": "migration_applied=true"},
+    {"checkpoint": "SLC_F_BATCH_0_1_APPLIED_SAFE",                    "apply_id": "slc_f_batch_0_1_20260523T173754Z_27b1b737",                     "marker_file": "slc_f_batch_0_1_apply_marker_v1.json",                 "status": "PRESENT",      "verdict": "APPLIED_SAFE"},
+    {"checkpoint": "SLC_F_BATCH_1B_APPLIED_SAFE",                     "apply_id": "slc_f_batch_1b_20260523T175058Z_2cf0584c",                      "marker_file": "slc_f_batch_1b_apply_marker_v1.json",                  "status": "PRESENT",      "verdict": "APPLIED_SAFE"},
+    {"checkpoint": "SLC_F_BATCH_2_APPLIED_SAFE (no-op)",              "apply_id": "slc_f_batch_2_20260523T181752Z_b838601e",                       "marker_file": "slc_f_batch_2_apply_marker_v1.json",                   "status": "PRESENT",      "verdict": "APPLIED_SAFE_NOOP"},
+    {"checkpoint": "SLC_F_EQUIPMENT_SERVER_SCOPE_EXTENSION_APPLIED_SAFE (no-op)", "apply_id": "slc_f_equipment_scope_20260523T182939Z_d2afcc8a",            "marker_file": "slc_f_equipment_scope_apply_marker_v1.json",           "status": "PRESENT",      "verdict": "APPLIED_SAFE_NOOP"},
+    {"checkpoint": "SLC_F_RAIDS_EQUIPMENT_SCOPE_APPLIED_SAFE",        "apply_id": "slc_f_raids_equipment_scope_20260523T184512Z_a46a6034",         "marker_file": "slc_f_raids_equipment_scope_apply_marker_v1.json",     "status": "PRESENT",      "verdict": "APPLIED_SAFE"},
+    {"checkpoint": "SLC_F_MINOR_SURFACES_AUDIT_READY",                "apply_id": "slc_f_minor_audit_20260523T190000Z_audit_only",                 "marker_file": "slc_f_minor_write_surfaces_audit_v1.json",             "status": "PRESENT",      "verdict": "AUDIT_READY"},
+    {"checkpoint": "SLC_F_GVG_WAR_SCOPE_APPLIED_SAFE",                "apply_id": "slc_f_gvg_war_scope_20260523T192217Z_34999526",                  "marker_file": "slc_f_gvg_war_scope_apply_marker_v1.json",             "status": "PRESENT",      "verdict": "APPLIED_SAFE"},
+    {"checkpoint": "SLC_F_UNIQUE_ITEMS_SCOPE_APPLIED_SAFE",           "apply_id": "slc_f_unique_items_scope_20260523T193344Z_48aa4881",            "marker_file": "slc_f_unique_items_scope_apply_marker_v1.json",        "status": "PRESENT",      "verdict": "APPLIED_SAFE"}
+  ],
+
+  "runtime_patched_file_matrix": [
+    {"file": "backend/utils/server_scope.py",        "first_landed_in": "Batch-0",                          "helper_export": true,  "calls_in_this_file": 0, "notes": "Helper module: ensure_server_scope + LEGACY_DEFAULT_SERVER_ID='s1'"},
+    {"file": "backend/routes/hero_progression.py",   "first_landed_in": "Batch-0/1",                        "helper_import": true,  "calls": 3,  "surfaces": "insert flows for progression"},
+    {"file": "backend/routes/items.py",              "first_landed_in": "Batch-0/1",                        "helper_import": true,  "calls": 0,  "surfaces": "users/$inc + inventory upsert (account-wide skipped + degenerate)"},
+    {"file": "backend/routes/forge.py",              "first_landed_in": "Batch-1B",                         "helper_import": true,  "calls": 2,  "surfaces": "rune insert (craft + craft-premium)"},
+    {"file": "backend/routes/achievements.py",       "first_landed_in": "Batch-1B",                         "helper_import": true,  "calls": 1,  "surfaces": "achievement_claims insert"},
+    {"file": "backend/routes/level_sharing.py",      "first_landed_in": "Batch-1B",                         "helper_import": true,  "calls": 2,  "surfaces": "level_sharing inserts"},
+    {"file": "backend/routes/social.py",             "first_landed_in": "Batch-1B",                         "helper_import": true,  "calls": 2,  "surfaces": "plaza_chat + friends insert"},
+    {"file": "backend/routes/soul_forge.py",         "first_landed_in": "Batch-1B",                         "helper_import": true,  "calls": 3,  "surfaces": "wallets / retirement_history / shop_purchases_special insert"},
+    {"file": "backend/routes/artifacts.py",          "first_landed_in": "Batch-1B",                         "helper_import": true,  "calls": 4,  "surfaces": "user_materials / user_fragments / user_artifacts / user_constellations insert"},
+    {"file": "backend/routes/guild.py",              "first_landed_in": "Batch-1B",                         "helper_import": true,  "calls": 1,  "surfaces": "teams + guilds inserts"},
+    {"file": "backend/routes/raids.py",              "first_landed_in": "Raids-equipment micro-batch",      "helper_import": true,  "calls": 1,  "surfaces": "craft_exclusive_item user_equipment insert"},
+    {"file": "backend/routes/gvg.py",                "first_landed_in": "GVG-war-scope micro-batch",        "helper_import": true,  "calls": 1,  "surfaces": "gvg_matchmake gvg_wars insert"},
+    {"file": "backend/routes/unique_items.py",       "first_landed_in": "Unique-items micro-batch",         "helper_import": true,  "calls": 2,  "surfaces": "unique_items_crafted insert + unique_items_equipped upsert $setOnInsert"}
+  ],
+
+  "helper_usage_matrix": {
+    "total_files_importing_helper": 12,
+    "total_ensure_server_scope_calls": 22,
+    "insert_one_calls_patched": 20,
+    "upsert_with_setOnInsert_patched": 1,
+    "degenerate_imports_only": 1,
+    "degenerate_files": ["backend/routes/items.py"],
+    "degenerate_explanation": "items.py imports helper but all write surfaces are update_one with $inc on users (skipped) or upsert on inventory (Batch-0/1 design choice). Helper is available if future surface arise but currently unused."
+  },
+
+  "no_op_skipped_matrix": [
+    {"file": "backend/routes/equipment.py",        "surfaces": 4,  "classification": "UPDATE_ONLY_NO_NEW_DOC",        "rationale": "Tutte update_one su doc esistente con $set/$unset equipped_to; no insert; no upsert"},
+    {"file": "backend/routes/push_notifications.py", "surfaces": 3, "classification": "ACCOUNT_WIDE_NO_CHANGE",       "rationale": "Canonical: push_tokens + notifications account-wide; user_id sufficient"},
+    {"file": "backend/routes/player_faction_v2.py", "surfaces": 1, "classification": "ACCOUNT_WIDE_NO_CHANGE",       "rationale": "Single update_one on db.users (account-wide skipped)"},
+    {"file": "backend/routes/game_data.py",        "surfaces": 0,  "classification": "NO_WRITES",                     "rationale": "Pure static catalog/constants module"},
+    {"file": "backend/routes/sanctuary.py (db.heroes)", "surfaces": 5, "classification": "FORBIDDEN_SCOPE",         "rationale": "Character Bible writes (Borea/Berserker/Hoplite diff) MUST NEVER be touched outside a dedicated split task"}
+  ],
+
+  "remaining_work_matrix": [
+    {
+      "item": "gvg.py:354 user_mail.insert_one",
+      "category": "AMBIGUOUS_DEFER",
+      "risk": "low_but_unclear",
+      "recommended_branch": "dedicated AMBIGUOUS_DEFER micro-batch (post canonical mail-origin classification)"
+    },
+    {
+      "item": "sanctuary.py user_affinity + user_constellation (4 surfaces)",
+      "category": "BATCH_3_AF2N_DEFER",
+      "risk": "medium",
+      "recommended_branch": "Batch-3 AF2-N routing (post broad-rollout signoff V8)"
+    },
+    {
+      "item": "sanctuary.py db.heroes (5 surfaces)",
+      "category": "FORBIDDEN_SCOPE",
+      "risk": "high",
+      "recommended_branch": "Character Bible / sanctuary split (separate task with explicit canonical classification + RM1.27\u20131.32 validators update)"
+    },
+    {
+      "item": "combat.py (9 surfaces: story_progress, user_equipment, tower_progress, pvp_data, event_completions)",
+      "category": "BATCH_4_COMBAT_BATTLE_DEFER",
+      "risk": "high",
+      "recommended_branch": "Batch-4 combat/battle routing (dedicated)"
+    },
+    {
+      "item": "heroes.py user_heroes.insert_one (2 surfaces, gacha claim)",
+      "category": "GACHA_SUMMON_DEFER",
+      "risk": "high",
+      "recommended_branch": "Gacha/summon dedicated scope task (must not alter rates/pity/banner/obtainable)"
+    },
+    {
+      "item": "cosmetics.py user_cosmetics + territory_control",
+      "category": "MIXED_REQUIRES_REFACTOR",
+      "risk": "medium",
+      "recommended_branch": "Cosmetics schema split refactor (ownership account-wide vs equipped server-bound)"
+    },
+    {
+      "item": "economy.py shop_purchases / daily_claims / battle_pass / vip_data / mail / legacy /server/select",
+      "category": "MIXED_REQUIRES_REFACTOR",
+      "risk": "medium-high",
+      "recommended_branch": "Economy refactor (split paid/free + isolate VIP + remove legacy /server/select)"
+    },
+    {
+      "item": "7 drift docs gacha/summon (user_heroes drift)",
+      "category": "KNOWN_DRIFT_DOCS",
+      "risk": "informativa",
+      "recommended_branch": "Housekeeping documentale (metadata-only, no runtime impact)"
+    },
+    {
+      "item": "SLC-H live wiring",
+      "category": "DESIGN_ONLY",
+      "risk": "medium",
+      "recommended_branch": "Solo dopo refactor di economy.py (rimozione legacy /server/select)"
+    },
+    {
+      "item": "Phase 11 / secondo server / broad rollout",
+      "category": "BLOCKED_BY_DESIGN",
+      "risk": "alta",
+      "recommended_branch": "Backlog gated; richiede tutti i predecessori sopra"
+    }
+  ],
+
+  "risk_ranking": [
+    {"rank": 1, "area": "Character Bible (sanctuary db.heroes 5 surfaces)",          "severity": "alta",   "why": "Toccare la Bibbia romperebbe roster visibility, Borea inert baseline, RM1.27\u20131.32; richiede task dedicato."},
+    {"rank": 2, "area": "Phase 11 / secondo server",                                  "severity": "alta",   "why": "Bloccato by-design fino al broad rollout AF2-N signoff V8."},
+    {"rank": 3, "area": "gacha/summon (heroes.py user_heroes 2 inserts)",              "severity": "alta",   "why": "Banner/rates/pity/obtainable visibility regression."},
+    {"rank": 4, "area": "combat/battle (combat.py 9 surfaces, battle_engine, battle_core)", "severity": "alta",   "why": "Core combat path; richiede Batch-4 dedicato."},
+    {"rank": 5, "area": "economy.py refactor (5 subsystem + legacy /server/select)",     "severity": "medium-high", "why": "Conflict di account-wide vs server-bound; impatta SLC-H."},
+    {"rank": 6, "area": "cosmetics.py refactor (ownership vs equipped split)",         "severity": "medium", "why": "Schema mixed da splittare; necessario per UX paid cosmetics multi-server."},
+    {"rank": 7, "area": "AF2-N adjacent (sanctuary user_affinity / user_constellation)", "severity": "medium", "why": "Adiacente a Batch-3 AF2-N routing; non toccare prima del signoff."},
+    {"rank": 8, "area": "Redis rate-limit binary stability",                          "severity": "medium", "why": "Crash occasionale nel container; mitigato da bash /app/ops/ensure_redis_rate_limit.sh"},
+    {"rank": 9, "area": "gvg.py:354 user_mail.insert_one",                            "severity": "low",    "why": "AMBIGUOUS_DEFER; richiede canonical classification."},
+    {"rank": 10, "area": "7 drift docs gacha/summon",                                  "severity": "informativa", "why": "Solo documentazione; runtime non impattato."}
+  ],
+
+  "summary_counts": {
+    "checkpoints_completed": 9,
+    "micro_batches_applied_real": 3,
+    "micro_batches_applied_no_op": 2,
+    "audit_only_tasks": 2,
+    "foundational_tasks": 2,
+    "runtime_files_with_helper_active": 11,
+    "runtime_files_helper_degenerate": 1,
+    "total_ensure_server_scope_calls": 22,
+    "total_post_apply_validators_in_suite": 7,
+    "total_rollback_scripts": 6,
+    "current_suite_pass_count": 348,
+    "current_suite_fail_count": 0,
+    "current_suite_miss_count": 0
+  },
+
+  "recommended_next_gated_job": {
+    "primary_recommendation": "COSMETICS_SCHEMA_SPLIT_REFACTOR",
+    "rationale": "Tra i refactor strutturali, cosmetics.py ha il rischio più contenuto (schema mixed account-wide vs server-bound senza endpoint legacy aggressivi). Sbloccare cosmetics consente di non depender da economy.py refactor che pi\u00f9 critico.",
+    "alternative_a": "ECONOMY_REFACTOR_PAID_FREE_SPLIT (rischio medium-high; pi\u00f9 critico ma prerequisito per SLC-H live wiring)",
+    "alternative_b": "HOUSEKEEPING_DRIFT_DOCS_GACHA_SUMMON_ONLY (rischio informativo; metadata-only; sbocca un quick win)",
+    "alternative_c": "GVG_USER_MAIL_AMBIGUOUS_CLASSIFICATION_TASK (richiede canonical classification mail-origin prima di patchare)",
+    "explicitly_not_recommended": [
+      "BATCH_3_AF2N_ROUTING (richiede signoff V8 broad rollout AF2-N)",
+      "BATCH_4_COMBAT_BATTLE (rischio alto; richiede AF2-N completo)",
+      "CHARACTER_BIBLE_SANCTUARY_SPLIT (richiede aggiornamento RM1.27\u20131.32 validators in parallelo)",
+      "GACHA_SUMMON_SCOPE (richiede canonical classification banner/pity/rate; rischio rate-table mutation)",
+      "SLC_H_LIVE_WIRING (richiede economy refactor prima)",
+      "PHASE_11 / SECOND_SERVER (richiede tutti i predecessori)"
+    ]
+  },
+
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "verdict_target": "SLC_F_POST_MICROBATCH_CONSOLIDATION_READY"
+}

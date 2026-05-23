@@ -534,6 +534,8 @@ OPTIONAL = [
     ('SLC-F-GVG-WAR-SCOPE-POST-APPLY',             'validate_slc_f_gvg_war_scope_post_apply_v1.py'),
     # SLC-F UNIQUE-ITEMS SERVER_SCOPE EXTENSION POST-APPLY (PATCH APPLIED)
     ('SLC-F-UNIQUE-ITEMS-SCOPE-POST-APPLY',        'validate_slc_f_unique_items_scope_post_apply_v1.py'),
+    # SLC-F POST-MICROBATCH CONSOLIDATION AUDIT (READ-ONLY)
+    ('SLC-F-POST-MICROBATCH-CONSOLIDATION-AUDIT-V1', 'audit_slc_f_post_microbatch_consolidation_v1.py'),
     # SLC-F MINOR WRITE SURFACES AUDIT (READ-ONLY; NO RUNTIME PATCH)
     ('SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1',        'audit_slc_f_minor_write_surfaces_v1.py'),
 ]
