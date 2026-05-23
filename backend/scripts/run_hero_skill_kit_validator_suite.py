@@ -558,6 +558,10 @@ OPTIONAL = [
     ('V4-BLOCK-D-SLC-F-OBSERVABILITY-ROLLUP',      'validate_slc_f_observability_rollup_v1.py'),
     # MEGA-COMBO V4 BLOCK_E REDIS RATE-LIMIT OPS AUDIT (READ-ONLY)
     ('V4-BLOCK-E-REDIS-RATE-LIMIT-OPS-AUDIT',      'audit_redis_rate_limit_ops_v1.py'),
+    # MEGA-COMBO V5 BLOCK_B AF2-N OBSERVABILITY METRICS PIPELINE (READ-ONLY DOC AUDIT)
+    ('V5-BLOCK-B-AF2N-OBSERVABILITY-PIPELINE',     'validate_af2n_observability_pipeline_v1.py'),
+    # MEGA-COMBO V5 BLOCK_C ROSTER VISIBILITY INVARIANTS V2 (HTTP smoke; superset of v1)
+    ('V5-BLOCK-C-ROSTER-VISIBILITY-INVARIANTS-V2', 'validate_roster_visibility_invariants_v2.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

@@ -1,0 +1,130 @@
+{
+  "task_id": "V5_BLOCK_A_BATTLE_PASS_PRODUCT_DECISION_BOARD",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V5",
+  "verdict": "BLOCK_A_BP_PRODUCT_DECISION_BOARD_READY",
+  "mode": "doc_audit_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T230000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V5_APPROVAL": true,
+    "BLOCK_A_BP_PRODUCT_DECISION_BOARD_APPROVAL": true
+  },
+  "v3_v4_context_summary": {
+    "BP_D2_status": "CANONICAL_ACCOUNT_WIDE_ONCE (closed in V4 BLOCK_B via BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_CANONICAL_V1)",
+    "V4_BLOCK_A_hardening": "READY_NOT_APPLIED (deferred until BP_D1 closed; doc shape risk; live index forbidden)"
+  },
+  "open_decisions": [
+    {
+      "decision_id": "BP_D1",
+      "category": "PROGRESS_SCOPE",
+      "question": "Battle Pass progress (exp/level) account-wide o per-server?",
+      "options": [
+        {
+          "option_id": "BP_D1_OPT_A",
+          "name": "ACCOUNT_WIDE",
+          "description": "Un solo battle_pass doc per account; progress condiviso tra tutti i server.",
+          "pros": ["Migration semplice (default attuale)", "BP_D2 ACCOUNT_WIDE coerente", "UX semplice"],
+          "cons": ["Multi-server player progredisce pi\u00f9 velocemente combinando activities", "Pi\u00f9 difficile bilanciare anti-grinding multi-server"],
+          "db_migration_required": false,
+          "hardening_unlocked": true
+        },
+        {
+          "option_id": "BP_D1_OPT_B",
+          "name": "PER_SERVER",
+          "description": "Un battle_pass doc per (user_id, server_id); progress isolato.",
+          "pros": ["Engagement per-server fair", "Anti multi-server grinding"],
+          "cons": ["DB migration required (split docs)", "Premium account-wide (BP_D2) crea inconsistenza UX", "Replay di progress richiesto per ogni server"],
+          "db_migration_required": true,
+          "hardening_unlocked": false
+        }
+      ],
+      "recommendation": "BP_D1_OPT_A (ACCOUNT_WIDE)",
+      "recommendation_strength": "medium-strong",
+      "rationale": "Coerente con BP_D2 ACCOUNT_WIDE_ONCE (V4 canonical). Evita DB migration e UX inconsistency. Per-server farming si pu\u00f2 indirizzare via daily caps server-bound (gi\u00e0 FREE_SERVER_BOUND classification dei daily_claims).",
+      "blocks_hardening": "YES (V4 BLOCK_A deferred R3)"
+    },
+    {
+      "decision_id": "BP_D3",
+      "category": "CLAIM_SCOPE",
+      "question": "Claim rewards (claim_free/claim_premium) account-wide o per-server?",
+      "depends_on": "BP_D1",
+      "options": [
+        {
+          "option_id": "BP_D3_OPT_A",
+          "name": "ACCOUNT_WIDE_ONCE",
+          "description": "Una sola claim per (level, user_id) account-wide.",
+          "pros": ["Coerente se BP_D1=ACCOUNT_WIDE", "No duplicazione reward"],
+          "cons": ["Inconsistente se BP_D1=PER_SERVER"],
+          "requires": "BP_D1=ACCOUNT_WIDE"
+        },
+        {
+          "option_id": "BP_D3_OPT_B",
+          "name": "PER_SERVER",
+          "description": "Claim separato per (level, user_id, server_id).",
+          "pros": ["Coerente con BP_D1=PER_SERVER"],
+          "cons": ["Richiede BP_D1=PER_SERVER", "DB schema change"],
+          "requires": "BP_D1=PER_SERVER"
+        }
+      ],
+      "recommendation": "BP_D3_OPT_A (ACCOUNT_WIDE_ONCE) coerente con raccomandazione BP_D1",
+      "recommendation_strength": "medium-strong (gated by BP_D1)"
+    },
+    {
+      "decision_id": "BP_D4",
+      "category": "SEASON_SCOPE",
+      "question": "Season globale (tutti i server) o per-server?",
+      "options": [
+        {
+          "option_id": "BP_D4_OPT_A",
+          "name": "GLOBAL_SEASON",
+          "description": "Un solo `season` counter; tutti i server in stessa stagione.",
+          "pros": ["Operazionalmente semplice", "Coerente con event hub globale", "Default attuale"],
+          "cons": ["Server lanciato a met\u00e0 stagione non pu\u00f2 partire da S1"]
+        },
+        {
+          "option_id": "BP_D4_OPT_B",
+          "name": "PER_SERVER_SEASON",
+          "description": "Ogni server ha la propria timeline stagionale.",
+          "pros": ["Server appena lanciato parte da S1"],
+          "cons": ["Complessit\u00e0 catalog rewards +", "Cross-server BP_D2 (premium account-wide) crea ambiguit\u00e0 (quale season \u00e8 attiva per il bonus paid?)"]
+        }
+      ],
+      "recommendation": "BP_D4_OPT_A (GLOBAL_SEASON)",
+      "recommendation_strength": "medium",
+      "rationale": "Coerente con second_server_opening_enabled=false attuale. Quando il secondo server aprir\u00e0, sar\u00e0 lanciato in stagione corrente con catch-up incentive (TBD)."
+    }
+  ],
+  "implementation_consequences": {
+    "if_all_recommendations_accepted": {
+      "BP_D1": "ACCOUNT_WIDE",
+      "BP_D3": "ACCOUNT_WIDE_ONCE",
+      "BP_D4": "GLOBAL_SEASON",
+      "unlocks": [
+        "V4 BLOCK_A technical hardening (4 LOC su economy.py:158 -> $setOnInsert pattern)",
+        "battle_pass index (user_id, season) -> richiede ops pack DB-create-index dedicato",
+        "NESSUNA DB migration"
+      ],
+      "closes_blockers": ["V4 BLOCK_A R3 (BP_D1 dependency)"]
+    },
+    "if_BP_D1_PER_SERVER": {
+      "unlocks": [],
+      "introduces_blockers": [
+        "DB migration battle_pass: split per (user_id, server_id)",
+        "BP_D3 forced PER_SERVER",
+        "BP_D2 cross-server premium retention policy TBD"
+      ]
+    }
+  },
+  "forbidden_in_block_a_respected": {
+    "reward_change": false,
+    "premium_free_lane_change": false,
+    "entitlement_logic_change": false,
+    "pricing_currency_change": false,
+    "db_write_migration": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/battle_pass_product_decision_board_v1.json",
+    "/app/docs/divine/119A_BATTLE_PASS_PRODUCT_DECISION_BOARD.md"
+  ],
+  "next_recommended_action": "Board signoff dei 3 recommendation (BP_D1=ACCOUNT_WIDE, BP_D3=ACCOUNT_WIDE_ONCE, BP_D4=GLOBAL_SEASON). Una volta firmato, sbloccare V4 BLOCK_A technical hardening in un pack dedicato."
+}

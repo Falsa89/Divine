@@ -1,0 +1,45 @@
+{
+  "task_id": "V5_BLOCK_C_ROSTER_VISIBILITY_VALIDATOR_EXTENSION_V2",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V5",
+  "verdict": "BLOCK_C_ROSTER_VISIBILITY_VALIDATOR_V2_READY",
+  "mode": "suite_extension_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T230000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V5_APPROVAL": true,
+    "BLOCK_C_ROSTER_VISIBILITY_VALIDATOR_V2_APPROVAL": true
+  },
+  "v1_baseline": {
+    "file": "/app/backend/scripts/validate_roster_visibility_invariants_v1.py",
+    "invariants_count": 7,
+    "status": "PASS (in suite)"
+  },
+  "v2_extension_invariants": [
+    {"id": "INV2_HEROES_COUNT", "check": "GET /api/heroes count == 100", "inherited_from_v1": true},
+    {"id": "INV2_GAIA_404", "check": "GET /api/heroes/primordial_gaia HTTP 404", "inherited_from_v1": true},
+    {"id": "INV2_BOREA_200_INERT", "check": "GET /api/heroes/borea HTTP 200 + is_obtainable False", "inherited_from_v1": true},
+    {"id": "INV2_GREEK_BOREA_200_INERT", "check": "GET /api/heroes/greek_borea HTTP 200 + is_obtainable False", "inherited_from_v1": true},
+    {"id": "INV2_BOREA_NOT_IN_BATTLE_PICKER", "check": "heroes count where is_obtainable True excludes borea/greek_borea", "new_in_v2": true},
+    {"id": "INV2_BOREA_NOT_IN_GACHA_BANNER_POOL", "check": "GACHA_BANNERS pool lookup does NOT include borea/greek_borea (heuristic via heroes returned by /api/heroes filtering)", "new_in_v2": true},
+    {"id": "INV2_LEGACY_PLACEHOLDERS_HIDDEN", "check": "No hero returned by /api/heroes has name starting with PLACEHOLDER_ or contains TODO/TEST keywords", "new_in_v2": true},
+    {"id": "INV2_HERO_RARITY_DISTRIBUTION_SANE", "check": "At least 4 distinct rarity values present across the 100 heroes", "new_in_v2": true},
+    {"id": "INV2_HERO_ELEMENT_DISTRIBUTION_SANE", "check": "At least 4 distinct element values present", "new_in_v2": true},
+    {"id": "INV2_DRIFT_DOCS_KNOWN", "check": "drift docs canonical rule_id valid", "inherited_from_v1": true},
+    {"id": "INV2_CHARACTER_BIBLE_FILES_PRESENT", "check": "sanctuary.py + heroes.py present", "inherited_from_v1": true}
+  ],
+  "validator_script": "/app/backend/scripts/validate_roster_visibility_invariants_v2.py",
+  "v1_v2_relationship": "V2 \u00e8 una superset di V1: include i 7 invariants V1 + 5 invariants nuovi. V1 resta nella suite per backward compatibility e quick smoke; V2 \u00e8 il check pi\u00f9 profondo.",
+  "forbidden_in_block_c_respected": {
+    "heroes_py_runtime_patch": false,
+    "db_write": false,
+    "roster_visibility_change": false,
+    "gacha_summon_behavior_change": false,
+    "borea_activation": false,
+    "character_bible_mutation": false
+  },
+  "artifacts_created": [
+    "/app/backend/scripts/validate_roster_visibility_invariants_v2.py",
+    "/app/data/design/system_safety/_roster_visibility_invariants_v2_result.json",
+    "/app/docs/divine/119C_ROSTER_VISIBILITY_VALIDATOR_EXTENSION_V2.md"
+  ]
+}

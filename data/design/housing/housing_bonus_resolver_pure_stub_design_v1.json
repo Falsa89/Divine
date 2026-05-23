@@ -1,0 +1,114 @@
+{
+  "task_id": "V5_BLOCK_E_HOUSING_BONUS_RESOLVER_PURE_STUB_DESIGN",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V5",
+  "verdict": "BLOCK_E_HOUSING_BONUS_RESOLVER_STUB_DESIGN_READY",
+  "mode": "design_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T230000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V5_APPROVAL": true,
+    "BLOCK_E_HOUSING_BONUS_RESOLVER_STUB_DESIGN_APPROVAL": true
+  },
+  "prior_design_referenced": [
+    "/app/data/design/housing/housing_runtime_safety_audit_v3.json (V3 BLOCK_D)",
+    "/app/data/design/housing/dimora_divina_room_cap_policy_v1.json",
+    "/app/data/design/housing/dimora_divina_resident_bonus_policy_v1.json",
+    "/app/data/design/housing/dimora_divina_resource_claim_policy_v1.json",
+    "/app/data/design/housing/dimora_divina_vip_vault_policy_v1.json"
+  ],
+  "contract": {
+    "name": "HousingBonusResolver",
+    "type": "pure_function",
+    "purity_constraints": [
+      "no side effects (no DB write, no HTTP, no file I/O during invocation)",
+      "deterministic output for same input",
+      "output is plain data (dict), no class instances",
+      "thread-safe / coroutine-safe",
+      "version-stamped via BONUS_CATALOG_VERSION constant"
+    ],
+    "inputs": [
+      {"name": "user_id", "type": "str", "required": true},
+      {"name": "server_id", "type": "str", "required": true, "note": "Housing \u00e8 server-bound"},
+      {"name": "rooms", "type": "List[RoomState]", "required": true, "note": "Stato corrente delle stanze (read-only snapshot)"},
+      {"name": "residents", "type": "List[ResidentAssignment]", "required": true},
+      {"name": "vip_level", "type": "int", "required": true, "note": "Da users.vip_data, account-wide"},
+      {"name": "bonus_catalog_version", "type": "str", "required": true}
+    ],
+    "outputs": [
+      {"name": "bonus_set", "type": "Dict[str, float]", "description": "Map di bonus categoria -> percentuale (es. {'hp_pct': 0.05, 'atk_pct': 0.03})"},
+      {"name": "applied_caps", "type": "List[CapTrigger]", "description": "Lista dei cap che sono stati raggiunti durante il calcolo (per debug/observability)"},
+      {"name": "catalog_version", "type": "str", "description": "Echo del bonus_catalog_version usato"}
+    ]
+  },
+  "caps_canonical": {
+    "max_total_housing_bonus_percent_of_power": 0.15,
+    "max_resident_bonus_per_hero_percent": 0.05,
+    "max_residents_per_room": 1,
+    "max_room_slots_per_user_by_vip": {
+      "vip0": 4,
+      "vip1": 5,
+      "vip2": 6,
+      "vip3": 7,
+      "vip4": 8,
+      "vip5": 10
+    },
+    "stacking_with_af2n_disallowed": true,
+    "stacking_with_artifacts_disallowed": false
+  },
+  "guardrails": {
+    "no_battle_integration": true,
+    "no_db_write": true,
+    "no_stat_application": true,
+    "no_ui": true,
+    "no_api_housing_endpoint": true,
+    "no_call_in_battle_engine": true,
+    "no_call_in_battle_core": true,
+    "no_call_in_combat_tsx": true,
+    "only_called_by_future_stats_provider_with_explicit_pack_approval": true
+  },
+  "future_implementation_checklist": [
+    {
+      "priority": "P0",
+      "step": "Design board signoff su power curve + caps canonical"
+    },
+    {
+      "priority": "P0",
+      "step": "DB schema canonical (rooms, inventory, residents, claim_history) approvato"
+    },
+    {
+      "priority": "P0",
+      "step": "SLC-H live wiring (server-bound housing necessita active_server_profile_id)"
+    },
+    {
+      "priority": "P1",
+      "step": "Implementazione pure stub HousingBonusResolver in /app/backend/services/housing_bonus_resolver.py (file separato da routes; nessun import in battle_*)",
+      "contract_compliance_required": true
+    },
+    {
+      "priority": "P1",
+      "step": "Unit tests deterministici (input -> output map) con catalog_version pin"
+    },
+    {
+      "priority": "P2",
+      "step": "stats_provider integration (channel separato da AF2-N gift bonuses)"
+    },
+    {
+      "priority": "P2",
+      "step": "battle_engine integration via stats_provider (require Batch-4 prerequisite + signoff battle_engine unfreeze)"
+    }
+  ],
+  "forbidden_in_block_e_respected": {
+    "battle_integration": false,
+    "db_write": false,
+    "stat_application": false,
+    "ui": false,
+    "api_housing_endpoint": false,
+    "call_in_battle_engine": false,
+    "call_in_battle_core": false,
+    "call_in_combat_tsx": false
+  },
+  "artifacts_created": [
+    "/app/data/design/housing/housing_bonus_resolver_pure_stub_design_v1.json",
+    "/app/docs/divine/119E_HOUSING_BONUS_RESOLVER_PURE_STUB_DESIGN.md"
+  ]
+}

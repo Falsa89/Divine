@@ -1,0 +1,79 @@
+{
+  "task_id": "V5_BLOCK_D_SLC_H_LIVE_WIRING_PRECONDITIONS_AUDIT_V2",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V5",
+  "verdict": "BLOCK_D_SLC_H_PRECONDITIONS_AUDIT_V2_READY",
+  "mode": "audit_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T230000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V5_APPROVAL": true,
+    "BLOCK_D_SLC_H_PRECONDITIONS_AUDIT_V2_APPROVAL": true
+  },
+  "v1_audit_reference": {
+    "v1_audit": "/app/data/design/server_lifecycle/slc_h_live_wiring_readiness_v1.json",
+    "v1_readiness_percent": 45
+  },
+  "post_v1_to_v4_changes": [
+    {"change": "V2 BLOCK_A daily_claims server_scope APPLIED", "impact": "+1% readiness (ensure_server_scope on free server-bound surface)"},
+    {"change": "V2 BLOCK_B gvg user_mail server_scope APPLIED", "impact": "+1% readiness (server-bound notification surfaces consistent)"},
+    {"change": "V2 BLOCK_C VIP_PAID_ACCOUNT_WIDE_CANONICAL_V1", "impact": "closes ambiguity on 3 VIP surfaces (account-wide canonical)"},
+    {"change": "V3 BLOCK_A shop purchases REQUIRES_PRODUCT_DECISION_MIXED", "impact": "clarifies blocker scope; no readiness change"},
+    {"change": "V3 BLOCK_B battle pass product decision matrix", "impact": "BP_D2 closed in V4"},
+    {"change": "V4 BLOCK_B BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_CANONICAL_V1", "impact": "closes 1 surface (BP-S03)"},
+    {"change": "V5 BLOCK_A BP_D1/D3/D4 board prep", "impact": "surface decision board, no readiness uplift yet (pending signoff)"}
+  ],
+  "slc_h_endpoints_status_refresh": [
+    {"endpoint": "GET /api/servers", "status_v1": "PARTIAL (legacy economy.py:177)", "status_v2": "PARTIAL (unchanged; legacy still live)", "blockers": ["Canonical namespace migration", "Payload shape decision"]},
+    {"endpoint": "GET /api/account/server-profiles", "status_v1": "NOT_IMPLEMENTED", "status_v2": "NOT_IMPLEMENTED", "blockers": ["server_profiles collection schema (P0)", "DB migration (P0)"]},
+    {"endpoint": "POST /api/account/server-profiles/select", "status_v1": "NOT_IMPLEMENTED", "status_v2": "NOT_IMPLEMENTED", "blockers": ["Legacy /server/select removal", "server_profiles collection", "AF2-N V8 signoff"]},
+    {"endpoint": "GET /api/account/active-server", "status_v1": "NOT_IMPLEMENTED", "status_v2": "NOT_IMPLEMENTED", "blockers": ["Canonical active_server definition", "users.active_server_profile_id field"]},
+    {"endpoint": "POST /api/account/server-profiles/create", "status_v1": "NOT_IMPLEMENTED", "status_v2": "NOT_IMPLEMENTED", "blockers": ["second_server_opening_enabled=false", "server_profiles collection canonical", "Creation policy product decision"]}
+  ],
+  "readiness_matrix_v2": [
+    {"requirement": "ensure_server_scope helper attivo", "status": "DONE", "delta_vs_v1": "none"},
+    {"requirement": "server_id consistency on new docs", "status": "DONE+ (24 callsites, 13 files; daily_claims + user_mail added in V2)", "delta_vs_v1": "strengthened"},
+    {"requirement": "Legacy /server/select removal plan", "status": "PENDING", "delta_vs_v1": "none"},
+    {"requirement": "server_profiles collection canonical", "status": "NOT_DESIGNED", "delta_vs_v1": "none"},
+    {"requirement": "users.active_server_profile_id field", "status": "NOT_INTRODUCED", "delta_vs_v1": "none"},
+    {"requirement": "AF2-N broad rollout V8 signoff", "status": "NOT_ACHIEVED (35% readiness per V2 BLOCK_D)", "delta_vs_v1": "clarified"},
+    {"requirement": "second_server_opening_enabled flag", "status": "FALSE", "delta_vs_v1": "none"},
+    {"requirement": "Economy refactor paid/free split", "status": "AUDIT_DONE + V2 BLOCK_A daily_claims APPLIED + V3 BLOCK_A shop_purchases classification", "delta_vs_v1": "strengthened"},
+    {"requirement": "Cosmetics schema split", "status": "READY_NOT_APPLIED", "delta_vs_v1": "none"},
+    {"requirement": "7 drift docs gacha/summon", "status": "DOCUMENTED+VALIDATOR (V1 BLOCK_B)", "delta_vs_v1": "strengthened"},
+    {"requirement": "GVG user_mail scope", "status": "APPLIED (V2 BLOCK_B)", "delta_vs_v1": "strengthened"},
+    {"requirement": "VIP paid canonical marker", "status": "DONE (V2 BLOCK_C VIP_PAID_ACCOUNT_WIDE_CANONICAL_V1)", "delta_vs_v1": "new"},
+    {"requirement": "Battle pass premium canonical marker", "status": "DONE (V4 BLOCK_B BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_CANONICAL_V1)", "delta_vs_v1": "new"},
+    {"requirement": "Battle pass progress/claim/season decision", "status": "V5_BLOCK_A_BOARD_READY (signoff pending)", "delta_vs_v1": "new"}
+  ],
+  "readiness_score_v2": {
+    "completed": 4,
+    "strengthened": 5,
+    "audit_only_done": 4,
+    "pending_signoff": 1,
+    "not_implemented": 4,
+    "blocked_by_design": 2,
+    "readiness_percent_estimate": 55,
+    "delta_vs_v1": "+10 percentage points",
+    "interpretation": "Readiness migliorato grazie a 2 apply (V2 daily_claims + user_mail) + 2 canonical markers (VIP, BP premium) + observability rollup. Restano da chiudere: server_profiles schema canonical, DB migration users.active_server_profile_id, AF2-N V8 signoff, legacy /server/select removal."
+  },
+  "hard_blockers_for_implementation": [
+    {"priority": "P0", "item": "Approvazione canonical server_profiles collection schema"},
+    {"priority": "P0", "item": "Approvazione DB migration users.active_server_profile_id"},
+    {"priority": "P0", "item": "AF2-N V8 broad rollout signoff (canary completion + 3 FROZEN audits unfreeze)"},
+    {"priority": "P1", "item": "Legacy /server/select removal plan (economy.py:195)"},
+    {"priority": "P1", "item": "Cosmetics schema split applied (oggi READY_NOT_APPLIED)"},
+    {"priority": "P1", "item": "Battle pass BP_D1/D3/D4 board signoff (V5 BLOCK_A ready)"},
+    {"priority": "P2", "item": "second_server_opening_enabled flag + Phase 11 timeline"}
+  ],
+  "forbidden_in_block_d_respected": {
+    "slc_h_live_endpoint_implementation": false,
+    "second_server_opening": false,
+    "feature_flag_enable": false,
+    "fallback_removal": false,
+    "frontend_ui": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/slc_h_live_wiring_preconditions_v2.json",
+    "/app/docs/divine/119D_SLC_H_LIVE_WIRING_PRECONDITIONS_AUDIT_V2.md"
+  ]
+}

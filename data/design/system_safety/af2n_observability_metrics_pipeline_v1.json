@@ -1,0 +1,98 @@
+{
+  "task_id": "V5_BLOCK_B_AF2N_OBSERVABILITY_METRICS_PIPELINE",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V5",
+  "verdict": "BLOCK_B_AF2N_OBSERVABILITY_PIPELINE_READY",
+  "mode": "observability_doc_suite_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T230000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V5_APPROVAL": true,
+    "BLOCK_B_AF2N_OBSERVABILITY_PIPELINE_APPROVAL": true
+  },
+  "metrics_schema": {
+    "namespace": "af2n",
+    "metric_families": [
+      {
+        "family": "canary",
+        "metrics": [
+          {"name": "af2n_canary_active_users_total", "type": "gauge", "labels": ["cohort"]},
+          {"name": "af2n_canary_completion_ratio", "type": "gauge", "unit": "ratio"},
+          {"name": "af2n_canary_error_rate_5xx", "type": "counter", "labels": ["endpoint"]}
+        ]
+      },
+      {
+        "family": "ledger",
+        "metrics": [
+          {"name": "af2n_ledger_writes_total", "type": "counter", "labels": ["outcome"]},
+          {"name": "af2n_ledger_write_latency_seconds", "type": "histogram"},
+          {"name": "af2n_ledger_write_failures_total", "type": "counter", "labels": ["reason"]}
+        ]
+      },
+      {
+        "family": "rate_limit",
+        "metrics": [
+          {"name": "af2n_rate_limit_throttle_total", "type": "counter", "labels": ["endpoint"]},
+          {"name": "af2n_redis_crash_events_total", "type": "counter"},
+          {"name": "af2n_redis_mitigation_invocations_total", "type": "counter"}
+        ]
+      },
+      {
+        "family": "inventory_writes",
+        "metrics": [
+          {"name": "af2n_inventory_writes_attempted_total", "type": "counter"},
+          {"name": "af2n_inventory_writes_blocked_frozen_total", "type": "counter"}
+        ]
+      },
+      {
+        "family": "affinity_gain",
+        "metrics": [
+          {"name": "af2n_affinity_gain_delta_vs_control", "type": "gauge", "unit": "ratio"},
+          {"name": "af2n_gift_spend_volume_seconds", "type": "histogram", "labels": ["item"]}
+        ]
+      }
+    ]
+  },
+  "validator_mapping": {
+    "V12_V14": "design iterations -> preflight checks (metric: af2n_preflight_pass_total)",
+    "V18": "preflight -> validator script",
+    "V19": "preflight -> validator script",
+    "V21": "preflight + rollback -> validator + rollback_readiness metric",
+    "V22": "preflight + rollback -> validator + rollback_readiness metric",
+    "V23": "preflight + redis_switch + rollback -> 3 validators, metric af2n_redis_switch_pass",
+    "V24": "preflight + rollback -> 2 validators",
+    "V25_V30": "reserved for future signoff (not yet present)",
+    "V8_signoff": "NOT_ACHIEVED (target)",
+    "V4_canary_report": "consolidated into af2n_canary_metrics_report_v1.json"
+  },
+  "dashboard_spec": {
+    "target_platform": "prometheus_scrape_or_jsonl_file",
+    "collector_mode": "non_runtime (read-only export to /app/data/design/system_safety/af2n_metrics_snapshot.jsonl when requested)",
+    "refresh_cadence": "manual_for_now (no daemon)",
+    "panels_recommended": [
+      "Canary completion ratio over time",
+      "Ledger write failures by reason",
+      "Rate-limit throttle by endpoint",
+      "Redis crash events / mitigation invocations",
+      "Inventory writes blocked (FROZEN state visualization)",
+      "Affinity gain delta vs control"
+    ]
+  },
+  "non_runtime_audit_validator": {
+    "script": "/app/backend/scripts/validate_af2n_observability_pipeline_v1.py",
+    "behavior": "verify metrics schema JSON presence + correct metric_families count + presence of V4 canary report",
+    "writes": "none",
+    "db_writes": 0
+  },
+  "forbidden_in_block_b_respected": {
+    "af2n_runtime_mutation": false,
+    "gift_spend_change": false,
+    "inventory_ledger_rate_limit_change": false,
+    "public_spend_ui": false,
+    "stack_g_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/af2n_observability_metrics_pipeline_v1.json",
+    "/app/docs/divine/119B_AF2N_OBSERVABILITY_METRICS_PIPELINE.md",
+    "/app/backend/scripts/validate_af2n_observability_pipeline_v1.py"
+  ]
+}
