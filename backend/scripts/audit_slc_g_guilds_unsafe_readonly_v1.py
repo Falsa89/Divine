@@ -60,8 +60,27 @@ def main():
         })
 
     if len(unsafe) != expected_count:
-        errs.append(f'unsafe_count_mismatch:live={len(unsafe)} designed={expected_count}')
-    if live_ids != designed_ids and designed_ids:
+        # Post-cleanup tolerance: if live unsafe_count is 0 AND every designed _id is now
+        # marked with the SLC-G-GUILDS-CLEANUP-B marker, this is the post-apply healthy state.
+        if len(unsafe) == 0 and designed_ids:
+            from bson import ObjectId
+            healed = 0
+            for did in designed_ids:
+                try:
+                    d = db.guilds.find_one({'_id': ObjectId(did)})
+                except Exception:
+                    d = None
+                if d and '_slc_g_guilds_cleanup_marker' in d and d.get('server_id') == 's1' \
+                   and d.get('user_id') == d.get('leader_id') and d.get('account_id') == d.get('leader_id'):
+                    healed += 1
+            if healed == len(designed_ids):
+                # POST-CLEANUP HEALTHY STATE — no error
+                pass
+            else:
+                errs.append(f'unsafe_count_mismatch:live={len(unsafe)} designed={expected_count} healed_via_marker={healed}')
+        else:
+            errs.append(f'unsafe_count_mismatch:live={len(unsafe)} designed={expected_count}')
+    if live_ids != designed_ids and designed_ids and len(unsafe) != 0:
         errs.append(f'live_ids_diverge_from_designed:live={sorted(live_ids)} designed={sorted(designed_ids)}')
 
     unresolvable = [c for c in classification if not c['cleanup_safe']]

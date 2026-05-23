@@ -1,13 +1,13 @@
 {
   "task_origin": "SLC-G-BACKFILL-DRYRUN",
-  "timestamp_utc": "2026-05-23T14:00:12.517524+00:00",
+  "timestamp_utc": "2026-05-23T14:09:11.636534+00:00",
   "mode": "READ_ONLY_DRY_RUN",
   "db_write": false,
   "migration_applied": false,
   "totals": {
-    "docs_missing_server_id_total": 6919,
-    "docs_missing_account_id_total": 6919,
-    "unsafe_unknown_total": 2,
+    "docs_missing_server_id_total": 6917,
+    "docs_missing_account_id_total": 6917,
+    "unsafe_unknown_total": 0,
     "collections_present_count": 8,
     "collections_absent_count": 8
   },
@@ -63,10 +63,10 @@
     "guilds": {
       "present": true,
       "total": 2,
-      "missing_server_id": 2,
-      "missing_account_id": 2,
-      "unsafe_unknown": 2,
-      "would_set_server_id_default_s1": 2,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
+      "unsafe_unknown": 0,
+      "would_set_server_id_default_s1": 0,
       "would_set_account_id_eq_user_id": 0
     },
     "arena_rankings": {

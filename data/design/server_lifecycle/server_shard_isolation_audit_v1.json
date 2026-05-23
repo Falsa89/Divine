@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-23T13:59:56.647487+00:00",
+  "timestamp_utc": "2026-05-23T14:08:43.567390+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 652,
+  "backend_python_files_scanned": 655,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 371,
+      "files_with_hits": 374,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -141,7 +141,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 114
+      "user_id_only_files_count": 113
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -821,7 +821,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 42,
+      "files_with_hits": 45,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -902,8 +902,8 @@
         {
           "file": "backend/scripts/audit_slc_g_guilds_unsafe_readonly_v1.py",
           "keyword": "guild",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 2,
@@ -921,7 +921,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 9
+      "user_id_only_files_count": 8
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
@@ -1416,7 +1416,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 389,
+  "cross_server_leak_risk_candidates_count": 387,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1475,11 +1475,6 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/scripts/audit_slc_g_guilds_unsafe_readonly_v1.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
       "file": "backend/scripts/fix_af2n_v28_scope_s1_inventory_schema.py",
       "keyword": "user"
     },
@@ -1516,6 +1511,11 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/scripts/validate_affinity_gift_spend_idempotency_ledger_contract.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/scripts/run_af2n_stage3_monitoring_v18.py",
       "keyword": "user"
     }
   ],

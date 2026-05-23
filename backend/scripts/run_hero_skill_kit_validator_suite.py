@@ -507,6 +507,7 @@ OPTIONAL = [
     ('SLC-G-GUILDS-CLEANUP-GATE-CONTRACT',         'validate_slc_g_guilds_cleanup_gate_contract_v1.py'),
     ('SLC-G-GUILDS-CLEANUP-ROLLBACK-PLAN',         'validate_slc_g_guilds_cleanup_rollback_plan_v1.py'),
     ('SLC-G-GUILDS-CLEANUP-COMBO',                 'validate_slc_g_guilds_cleanup_combo_v1.py'),
+    ('SLC-G-GUILDS-CLEANUP-B-POST-APPLY',          'validate_slc_g_guilds_cleanup_b_post_apply_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
