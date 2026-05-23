@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-23T17:42:50.118370+00:00",
+  "timestamp_utc": "2026-05-23T18:07:40.848215+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 671,
+  "backend_python_files_scanned": 673,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 382,
+      "files_with_hits": 383,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -130,26 +130,26 @@
         {
           "file": "backend/routes/artifacts.py",
           "keyword": "user",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 151,
+              "line": 154,
               "snippet": "def register_artifacts_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):"
             },
             {
-              "line": 155,
+              "line": 158,
               "snippet": "async def get_artifacts(current_user: dict = Depends(get_current_user)):"
             },
             {
-              "line": 156,
+              "line": 159,
               "snippet": "uid = current_user[\"id\"]"
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 112
+      "user_id_only_files_count": 108
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -265,7 +265,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 22
+      "user_id_only_files_count": 20
     },
     "inventory": {
       "expected_scope": "server_bound",
@@ -338,12 +338,12 @@
         {
           "file": "backend/routes/soul_forge.py",
           "keyword": "materials",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 304,
-              "snippet": "await db.user_materials.update_one({\"user_id\": uid}, {\"$inc\": {rk: rv}}, upsert=True)"
+              "line": 311,
+              "snippet": "await db.user_materials.update_one({\"user_id\": uid}, {\"$inc\": {rk: rv}, \"$setOnInsert\": {\"server_id\": \"s1\", \"account_id\": uid}}, upsert=True)"
             }
           ]
         },
@@ -365,7 +365,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 70
+      "user_id_only_files_count": 68
     },
     "currencies": {
       "expected_scope": "server_bound",
@@ -374,8 +374,8 @@
         {
           "file": "backend/routes/soul_forge.py",
           "keyword": "currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 2,
@@ -386,7 +386,7 @@
               "snippet": "- Soul Seals (Sigilli dell'Anima) - Rare hero retirement currency"
             },
             {
-              "line": 22,
+              "line": 25,
               "snippet": "# ===================== CURRENCY DEFINITIONS ====================="
             }
           ]
@@ -454,19 +454,19 @@
         {
           "file": "backend/routes/items.py",
           "keyword": "currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 12,
+              "line": 15,
               "snippet": "\"exp_potion_s\": {\"name\": \"Pozione EXP Piccola\", \"icon\": \"\\U0001f9ea\", \"exp\": 1000, \"shop_price\": 500, \"currency\": \"gold\", \"rarity\": 1},"
             },
             {
-              "line": 13,
+              "line": 16,
               "snippet": "\"exp_potion_m\": {\"name\": \"Pozione EXP Media\", \"icon\": \"\\U0001f9ea\", \"exp\": 5000, \"shop_price\": 2000, \"currency\": \"gold\", \"rarity\": 2},"
             },
             {
-              "line": 14,
+              "line": 17,
               "snippet": "\"exp_potion_l\": {\"name\": \"Pozione EXP Grande\", \"icon\": \"\\U0001f9ea\", \"exp\": 20000, \"shop_price\": 8000, \"currency\": \"gold\", \"rarity\": 3},"
             }
           ]
@@ -493,7 +493,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 4
+      "user_id_only_files_count": 2
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
@@ -502,19 +502,19 @@
         {
           "file": "backend/routes/soul_forge.py",
           "keyword": "purchase",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 234,
+              "line": 241,
               "snippet": "# Get daily purchase counts"
             },
             {
-              "line": 236,
+              "line": 243,
               "snippet": "purchases = await db.shop_purchases_special.find({\"user_id\": uid, \"date\": today}).to_list(200)"
             },
             {
-              "line": 237,
+              "line": 244,
               "snippet": "purchase_counts = {}"
             }
           ]
@@ -589,7 +589,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 1
+      "user_id_only_files_count": 0
     },
     "gacha_history": {
       "expected_scope": "server_bound",
@@ -789,7 +789,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 20
+      "user_id_only_files_count": 17
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -881,7 +881,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 49,
+      "files_with_hits": 51,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -954,15 +954,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 118,
+              "line": 121,
               "snippet": "{\"id\": \"guild_joined\", \"name\": \"Compagno\", \"icon\": \"\\u2605\", \"category\": \"social\","
             },
             {
-              "line": 122,
+              "line": 125,
               "snippet": "], \"track_field\": \"guild_joined\"},"
             },
             {
-              "line": 183,
+              "line": 186,
               "snippet": "progress[\"gvg_wins\"] = await db.gvg_wars.count_documents({\"winner_guild_id\": user.get(\"guild_id\", \"none\")}) if user and user.get(\"guild_id\") else 0"
             }
           ]
@@ -970,26 +970,26 @@
         {
           "file": "backend/routes/social.py",
           "keyword": "guild",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 42,
+              "line": 45,
               "snippet": "# Channels supported: global | system | faction | guild"
             },
             {
-              "line": 46,
+              "line": 49,
               "snippet": "# Faction/Guild require user to have respective context, otherwise read returns []"
             },
             {
-              "line": 48,
+              "line": 51,
               "snippet": "VALID_CHANNELS = {\"global\", \"system\", \"faction\", \"guild\"}"
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 8
+      "user_id_only_files_count": 6
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
@@ -1054,11 +1054,11 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 21,
+              "line": 24,
               "snippet": "\"description\": \"Vinci battaglie in Arena PvP\","
             },
             {
-              "line": 26,
+              "line": 29,
               "snippet": "{\"target\": 500, \"reward\": {\"gems\": 500}, \"title\": \"Campione Arena\"},"
             }
           ]
@@ -1066,15 +1066,15 @@
         {
           "file": "backend/routes/soul_forge.py",
           "keyword": "arena",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 8,
               "snippet": "- Honor (Onore) - PvP Arena rewards"
             },
             {
-              "line": 26,
+              "line": 29,
               "snippet": "\"honor\": {\"name\": \"Onore\", \"icon\": \"\\u2694\\uFE0F\", \"color\": \"#ff4444\", \"description\": \"Guadagnato in Arena PvP e GvG. Spendibile nel Negozio Onore.\"},"
             }
           ]
@@ -1093,11 +1093,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 4
+      "user_id_only_files_count": 3
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 434,
+      "files_with_hits": 435,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1378,7 +1378,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 253,
+              "line": 258,
               "snippet": "return {\"success\": True, \"achievement\": ach[\"name\"], \"tier\": req.tier_index + 1, \"reward\": reward, \"title_earned\": tier.get(\"title\")}"
             }
           ]
@@ -1386,26 +1386,26 @@
         {
           "file": "backend/routes/social.py",
           "keyword": "cosmetic",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 19,
+              "line": 22,
               "snippet": "cosmetics = await db.user_cosmetics.find_one({\"user_id\": p[\"id\"]})"
             },
             {
-              "line": 25,
+              "line": 28,
               "snippet": "\"aura\": cosmetics.get(\"active_aura\") if cosmetics else None,"
             },
             {
-              "line": 26,
+              "line": 29,
               "snippet": "\"frame\": cosmetics.get(\"active_frame\", \"bronze\") if cosmetics else \"bronze\","
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 5
+      "user_id_only_files_count": 4
     },
     "event_progress": {
       "expected_scope": "server_bound",
@@ -1524,7 +1524,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 383,
+  "cross_server_leak_risk_candidates_count": 365,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1539,11 +1539,6 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/affinity_gift_spend.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/artifacts.py",
       "keyword": "user"
     },
     {
@@ -1563,22 +1558,12 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/social.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
       "file": "backend/routes/forge.py",
       "keyword": "user"
     },
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/equipment.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/soul_forge.py",
       "keyword": "user"
     },
     {
@@ -1624,6 +1609,21 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/push_notifications.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/cosmetics.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/data/inventory_wiring_preview_adapter.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/data/affinity_gift_inventory_shadow_adapter.py",
       "keyword": "user"
     }
   ],
