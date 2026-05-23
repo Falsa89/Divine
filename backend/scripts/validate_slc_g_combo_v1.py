@@ -31,18 +31,31 @@ def main():
         if verdict == 'FAIL': overall = 'FAIL'
         results.append({'name':name,'script':script,'verdict':verdict,'exit_code':proc.returncode})
 
-    # Final status determination: dry-run-first default outcome must be READY_TO_COMMIT_NOT_APPLIED
-    # unless explicit approval marker is in current environment (NOT a runtime change, just a status indicator)
+    # Final status determination: detects whether migration commit has been applied
+    # via the SLC-G commit-A marker file. If applied, returns MIGRATION_APPLIED.
     import os
     explicit_marker = os.environ.get('SLC_G_WRITE_GATE_EXPLICIT_APPROVAL', '').lower() == 'true'
-    final_status = 'READY_TO_COMMIT' if (overall == 'PASS' and explicit_marker) else (
-        'READY_TO_COMMIT_NOT_APPLIED' if overall == 'PASS' else 'FAILED_SAFE_READY_NOT_APPLIED'
-    )
+    migration_applied = False
+    try:
+        from pathlib import Path as _P
+        _mf = _P('/app/data/design/system_safety/slc_g_default_s1_migration_apply_result_v1.json')
+        if _mf.exists():
+            import json as _j
+            _d = _j.loads(_mf.read_text())
+            migration_applied = bool(_d.get('migration_applied'))
+    except Exception:
+        migration_applied = False
+    if migration_applied and overall == 'PASS':
+        final_status = 'MIGRATION_APPLIED'
+    else:
+        final_status = 'READY_TO_COMMIT' if (overall == 'PASS' and explicit_marker) else (
+            'READY_TO_COMMIT_NOT_APPLIED' if overall == 'PASS' else 'FAILED_SAFE_READY_NOT_APPLIED'
+        )
 
     out = {
         'task_origin':'SLC-G-COMBO','version':'v1',
         'timestamp_utc':datetime.now(timezone.utc).isoformat(),
-        'mode':'PRE_COMMIT_GATED_DRY_RUN_FIRST','db_write':False,'migration_applied':False,
+        'mode':'PRE_COMMIT_GATED_DRY_RUN_FIRST','db_write':False,'migration_applied':migration_applied,
         'combo_status':overall,'final_status':final_status,
         'explicit_user_write_approval_present':explicit_marker,
         'results':results,

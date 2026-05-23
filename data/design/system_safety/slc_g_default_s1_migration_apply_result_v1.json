@@ -1,0 +1,178 @@
+{
+  "task_origin": "SLC-G-COMMIT-A",
+  "version": "v1",
+  "migration_id": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "applied_at_utc": "2026-05-23T14:38:03.708562+00:00",
+  "migration_applied": true,
+  "route_patch_applied": false,
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "legacy_fallback_removed": false,
+  "phase_11_executed": false,
+  "verdict": "SLC_G_COMMIT_APPLIED_SAFE",
+  "write_log": {
+    "user_heroes": {
+      "server_id_set_modified": 1971,
+      "account_id_set_modified": 1971
+    },
+    "teams": {
+      "server_id_set_modified": 21,
+      "account_id_set_modified": 21
+    },
+    "inventory": {
+      "server_id_set_modified": 10,
+      "account_id_set_modified": 10
+    },
+    "story_progress": {
+      "server_id_set_modified": 1,
+      "account_id_set_modified": 1
+    },
+    "guilds": {
+      "server_id_set_modified": 0,
+      "account_id_set_modified": 0
+    },
+    "user_affinity_state": {
+      "server_id_set_modified": 1914,
+      "account_id_set_modified": 1914
+    },
+    "gift_transaction_ledger": {
+      "server_id_set_modified": 502,
+      "account_id_set_modified": 502
+    },
+    "user_gift_inventory": {
+      "server_id_set_modified": 2500,
+      "account_id_set_modified": 2500
+    },
+    "users": {
+      "server_id_set_modified": 0,
+      "account_id_set_modified": 25
+    }
+  },
+  "pre_counts": {
+    "user_heroes": 1971,
+    "teams": 21,
+    "inventory": 10,
+    "story_progress": 1,
+    "guilds": 2,
+    "user_affinity_state": 1914,
+    "gift_transaction_ledger": 502,
+    "user_gift_inventory": 2500,
+    "users": 25
+  },
+  "post_counts": {
+    "user_heroes": 1971,
+    "teams": 21,
+    "inventory": 10,
+    "story_progress": 1,
+    "guilds": 2,
+    "user_affinity_state": 1914,
+    "gift_transaction_ledger": 502,
+    "user_gift_inventory": 2500,
+    "users": 25
+  },
+  "pre_missing": {
+    "user_heroes": {
+      "missing_server_id": 1971,
+      "missing_account_id_with_user_id": 1971,
+      "unsafe_unknown": 0
+    },
+    "teams": {
+      "missing_server_id": 21,
+      "missing_account_id_with_user_id": 21,
+      "unsafe_unknown": 0
+    },
+    "inventory": {
+      "missing_server_id": 10,
+      "missing_account_id_with_user_id": 10,
+      "unsafe_unknown": 0
+    },
+    "story_progress": {
+      "missing_server_id": 1,
+      "missing_account_id_with_user_id": 1,
+      "unsafe_unknown": 0
+    },
+    "guilds": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "user_affinity_state": {
+      "missing_server_id": 1914,
+      "missing_account_id_with_user_id": 1914,
+      "unsafe_unknown": 0
+    },
+    "gift_transaction_ledger": {
+      "missing_server_id": 502,
+      "missing_account_id_with_user_id": 502,
+      "unsafe_unknown": 0
+    },
+    "user_gift_inventory": {
+      "missing_server_id": 2500,
+      "missing_account_id_with_user_id": 2500,
+      "unsafe_unknown": 0
+    },
+    "users": {
+      "missing_account_id": 25,
+      "has_id_field": 25
+    }
+  },
+  "post_missing": {
+    "user_heroes": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "teams": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "inventory": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "story_progress": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "guilds": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "user_affinity_state": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "gift_transaction_ledger": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "user_gift_inventory": {
+      "missing_server_id": 0,
+      "missing_account_id_with_user_id": 0,
+      "unsafe_unknown": 0
+    },
+    "users": {
+      "missing_account_id": 0
+    }
+  },
+  "af2n_pre": {
+    "user_gift_inventory": 2500,
+    "gift_transaction_ledger": 502,
+    "user_affinity_state": 1914
+  },
+  "af2n_post": {
+    "user_gift_inventory": 2500,
+    "gift_transaction_ledger": 502,
+    "user_affinity_state": 1914
+  },
+  "backup_root": "/app/data/design/system_safety/backups/slc_g_commit_a_pre_backup_20260523T143803Z",
+  "backup_manifest_sha256": "34b4b7c2cd581384cc7771be072845ac7bd1336d2e7a4bd8c5cbfcb5b809a1f6",
+  "rollback_script": "/app/backend/scripts/rollback_slc_g_commit_a.py",
+  "errors": []
+}

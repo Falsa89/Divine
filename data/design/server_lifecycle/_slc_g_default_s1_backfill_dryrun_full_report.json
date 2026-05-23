@@ -1,12 +1,12 @@
 {
   "task_origin": "SLC-G-BACKFILL-DRYRUN",
-  "timestamp_utc": "2026-05-23T14:09:11.636534+00:00",
+  "timestamp_utc": "2026-05-23T14:40:07.730654+00:00",
   "mode": "READ_ONLY_DRY_RUN",
   "db_write": false,
   "migration_applied": false,
   "totals": {
-    "docs_missing_server_id_total": 6917,
-    "docs_missing_account_id_total": 6917,
+    "docs_missing_server_id_total": 0,
+    "docs_missing_account_id_total": 0,
     "unsafe_unknown_total": 0,
     "collections_present_count": 8,
     "collections_absent_count": 8
@@ -20,30 +20,30 @@
     },
     "user_heroes": {
       "present": true,
-      "total": 1964,
-      "missing_server_id": 1969,
-      "missing_account_id": 1969,
+      "total": 1966,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
       "unsafe_unknown": 0,
-      "would_set_server_id_default_s1": 1969,
-      "would_set_account_id_eq_user_id": 1969
+      "would_set_server_id_default_s1": 0,
+      "would_set_account_id_eq_user_id": 0
     },
     "teams": {
       "present": true,
       "total": 21,
-      "missing_server_id": 21,
-      "missing_account_id": 21,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
       "unsafe_unknown": 0,
-      "would_set_server_id_default_s1": 21,
-      "would_set_account_id_eq_user_id": 21
+      "would_set_server_id_default_s1": 0,
+      "would_set_account_id_eq_user_id": 0
     },
     "inventory": {
       "present": true,
       "total": 10,
-      "missing_server_id": 10,
-      "missing_account_id": 10,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
       "unsafe_unknown": 0,
-      "would_set_server_id_default_s1": 10,
-      "would_set_account_id_eq_user_id": 10
+      "would_set_server_id_default_s1": 0,
+      "would_set_account_id_eq_user_id": 0
     },
     "server_wallets_free": {
       "present": false
@@ -54,11 +54,11 @@
     "story_progress": {
       "present": true,
       "total": 1,
-      "missing_server_id": 1,
-      "missing_account_id": 1,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
       "unsafe_unknown": 0,
-      "would_set_server_id_default_s1": 1,
-      "would_set_account_id_eq_user_id": 1
+      "would_set_server_id_default_s1": 0,
+      "would_set_account_id_eq_user_id": 0
     },
     "guilds": {
       "present": true,
@@ -75,29 +75,29 @@
     "user_affinity_state": {
       "present": true,
       "total": 1914,
-      "missing_server_id": 1914,
-      "missing_account_id": 1914,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
       "unsafe_unknown": 0,
-      "would_set_server_id_default_s1": 1914,
-      "would_set_account_id_eq_user_id": 1914
+      "would_set_server_id_default_s1": 0,
+      "would_set_account_id_eq_user_id": 0
     },
     "gift_transaction_ledger": {
       "present": true,
       "total": 502,
-      "missing_server_id": 502,
-      "missing_account_id": 502,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
       "unsafe_unknown": 0,
-      "would_set_server_id_default_s1": 502,
-      "would_set_account_id_eq_user_id": 502
+      "would_set_server_id_default_s1": 0,
+      "would_set_account_id_eq_user_id": 0
     },
     "user_gift_inventory": {
       "present": true,
       "total": 2500,
-      "missing_server_id": 2500,
-      "missing_account_id": 2500,
+      "missing_server_id": 0,
+      "missing_account_id": 0,
       "unsafe_unknown": 0,
-      "would_set_server_id_default_s1": 2500,
-      "would_set_account_id_eq_user_id": 2500
+      "would_set_server_id_default_s1": 0,
+      "would_set_account_id_eq_user_id": 0
     },
     "server_cosmetics": {
       "present": false

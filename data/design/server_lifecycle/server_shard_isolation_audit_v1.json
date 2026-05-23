@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-23T14:08:43.567390+00:00",
+  "timestamp_utc": "2026-05-23T14:39:32.080090+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 655,
+  "backend_python_files_scanned": 658,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 374,
+      "files_with_hits": 377,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -145,7 +145,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 91,
+      "files_with_hits": 94,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -257,7 +257,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 229,
+      "files_with_hits": 232,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -537,7 +537,7 @@
     },
     "gacha_history": {
       "expected_scope": "server_bound",
-      "files_with_hits": 5,
+      "files_with_hits": 6,
       "hits_sample": [
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
@@ -548,6 +548,18 @@
             {
               "line": 21,
               "snippet": "'gacha_history':           ['gacha_history', 'gacha_log', 'gacha_pity'],"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/apply_slc_g_commit_a.py",
+          "keyword": "gacha_history",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 34,
+              "snippet": "'servers','server_profiles','server_wallets_free','gacha_history',"
             }
           ]
         },
@@ -605,7 +617,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 65,
+      "files_with_hits": 68,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -733,7 +745,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 6,
+      "files_with_hits": 9,
       "hits_sample": [
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
@@ -748,6 +760,18 @@
           ]
         },
         {
+          "file": "backend/scripts/apply_slc_g_commit_a.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 29,
+              "snippet": "'user_heroes','teams','inventory','story_progress',"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_slc_c_collection_scope_migration_matrix_v1.py",
           "keyword": "story_progress",
           "has_server_id_anywhere": true,
@@ -756,6 +780,18 @@
             {
               "line": 12,
               "snippet": "'gacha_history', 'story_progress', 'guilds', 'arena_rankings',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_slc_g_commit_a_post_apply_v1.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 18,
+              "snippet": "SERVER_BOUND_PRESENT = ['user_heroes','teams','inventory','story_progress','guilds',"
             }
           ]
         },
@@ -782,38 +818,6 @@
               "snippet": "'story_progress','guilds','arena_rankings','user_affinity_state',"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_g_default_s1_backfill_dryrun.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 21,
-              "snippet": "'server_wallets_free','gacha_history','story_progress',"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/combat.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 17,
-              "snippet": "progress = await db.story_progress.find_one({\"user_id\": current_user[\"id\"]})"
-            },
-            {
-              "line": 20,
-              "snippet": "await db.story_progress.insert_one(progress)"
-            },
-            {
-              "line": 42,
-              "snippet": "progress = await db.story_progress.find_one({\"user_id\": uid})"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -821,7 +825,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 45,
+      "files_with_hits": 48,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -925,7 +929,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 17,
+      "files_with_hits": 18,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -988,6 +992,18 @@
           ]
         },
         {
+          "file": "backend/scripts/apply_slc_g_commit_a.py",
+          "keyword": "arena",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 35,
+              "snippet": "'arena_rankings','server_cosmetics','equipped_cosmetics','event_progress',"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_server_profile_default_values_v1.py",
           "keyword": "arena",
           "has_server_id_anywhere": false,
@@ -998,18 +1014,6 @@
               "snippet": "'no_inherited_progression', 'no_inherited_guild', 'no_inherited_arena_rank'):"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_c_collection_scope_migration_matrix_v1.py",
-          "keyword": "arena",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 12,
-              "snippet": "'gacha_history', 'story_progress', 'guilds', 'arena_rankings',"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -1017,7 +1021,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 429,
+      "files_with_hits": 432,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1121,7 +1125,7 @@
     },
     "gift_transaction_ledger": {
       "expected_scope": "server_bound",
-      "files_with_hits": 89,
+      "files_with_hits": 92,
       "hits_sample": [
         {
           "file": "backend/scripts/run_affinity_gift_spend_k6_live_safe_probe.py",
@@ -1201,7 +1205,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 27,
+      "files_with_hits": 28,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1260,6 +1264,18 @@
           ]
         },
         {
+          "file": "backend/scripts/apply_slc_g_commit_a.py",
+          "keyword": "cosmetic",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 35,
+              "snippet": "'arena_rankings','server_cosmetics','equipped_cosmetics','event_progress',"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_cosmetic_system_policy_v1.py",
           "keyword": "cosmetic",
           "has_server_id_anywhere": false,
@@ -1278,26 +1294,6 @@
               "snippet": "ROOT = Path('/app/data/design/cosmetics')"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
-          "keyword": "cosmetic",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 404,
-              "snippet": "# COSMETIC-SKIN-TITLE-SYSTEM-A (DESIGN-ONLY foundation; no runtime/battle attachment)"
-            },
-            {
-              "line": 405,
-              "snippet": "('COSMETIC-SYSTEM-POLICY-A',                   'validate_cosmetic_system_policy_v1.py'),"
-            },
-            {
-              "line": 406,
-              "snippet": "('COSMETIC-SCHEMAS-A',                         'validate_cosmetic_schemas_v1.py'),"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -1305,7 +1301,7 @@
     },
     "event_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 7,
+      "files_with_hits": 8,
       "hits_sample": [
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
@@ -1316,6 +1312,18 @@
             {
               "line": 29,
               "snippet": "'event_progress':          ['event_progress', 'event_state'],"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/apply_slc_g_commit_a.py",
+          "keyword": "event_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 35,
+              "snippet": "'arena_rankings','server_cosmetics','equipped_cosmetics','event_progress',"
             }
           ]
         },
@@ -1364,18 +1372,6 @@
             {
               "line": 10,
               "snippet": "'gift_transaction_ledger','user_gift_inventory','event_progress',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_g_default_s1_backfill_dryrun.py",
-          "keyword": "event_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 24,
-              "snippet": "'server_cosmetics','equipped_cosmetics','event_progress',"
             }
           ]
         }
