@@ -530,6 +530,8 @@ OPTIONAL = [
     ('SLC-F-EQUIPMENT-SCOPE-POST-APPLY',           'validate_slc_f_equipment_scope_post_apply_v1.py'),
     # SLC-F RAIDS EQUIPMENT SERVER_SCOPE EXTENSION POST-APPLY (PATCH APPLIED)
     ('SLC-F-RAIDS-EQUIPMENT-SCOPE-POST-APPLY',     'validate_slc_f_raids_equipment_scope_post_apply_v1.py'),
+    # SLC-F GVG WAR INSERT SERVER_SCOPE EXTENSION POST-APPLY (PATCH APPLIED)
+    ('SLC-F-GVG-WAR-SCOPE-POST-APPLY',             'validate_slc_f_gvg_war_scope_post_apply_v1.py'),
     # SLC-F MINOR WRITE SURFACES AUDIT (READ-ONLY; NO RUNTIME PATCH)
     ('SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1',        'audit_slc_f_minor_write_surfaces_v1.py'),
 ]

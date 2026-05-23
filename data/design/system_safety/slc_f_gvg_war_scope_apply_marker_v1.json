@@ -1,0 +1,107 @@
+{
+  "task_origin": "SLC-F-GVG-WAR-INSERT-SERVER-SCOPE",
+  "version": "v1",
+  "apply_id": "slc_f_gvg_war_scope_20260523T192217Z_34999526",
+  "applied_at_utc": "2026-05-23T19:22:17.000000+00:00",
+  "scope": "GVG_WAR_ONLY",
+  "scope_type": "gated micro-batch: ensure_server_scope on db.gvg_wars.insert_one(war) inside gvg_matchmake",
+  "authorization_markers_present": {
+    "SLC_F_GVG_WAR_SCOPE_APPLY_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "GVG_WAR_ONLY"
+  },
+  "git_head_before": "1c991ec",
+  "route_patch_applied": true,
+  "route_patch_applied_partial": true,
+  "route_patch_applied_full": false,
+  "safe_no_op_apply": false,
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "phase_11_executed": false,
+  "fallback_removed": false,
+  "housing_runtime_implemented": false,
+  "changed_files": [
+    "backend/routes/gvg.py"
+  ],
+  "routes_patched_families": [
+    "gvg/matchmake"
+  ],
+  "gvg_target_surface_audit": {
+    "file": "backend/routes/gvg.py",
+    "endpoint": "POST /api/gvg/matchmake",
+    "function": "gvg_matchmake",
+    "target_dict_lines_pre_patch": [176, 189],
+    "target_insert_line_pre_patch": 190,
+    "operation": "db.gvg_wars.insert_one(war)",
+    "semantics": "Creates a brand-new server-bound gvg_wars document representing a GvG match between two guilds",
+    "creates_new_doc": true,
+    "upsert": false,
+    "classification": "server_bound (gvg_wars new document)",
+    "decision": "PATCH_NOW_SAFE",
+    "patch_summary": "Added 'from utils.server_scope import ensure_server_scope' import; added 'war = ensure_server_scope(war, current_user[\"id\"])' immediately before insert_one(war). Total +2 lines, no GvG business logic touched."
+  },
+  "exact_patch_diff": [
+    "+from utils.server_scope import ensure_server_scope",
+    "+        war = ensure_server_scope(war, current_user[\"id\"])"
+  ],
+  "write_surfaces_skipped": [
+    {
+      "area": "gvg.py:200 db.gvg_wars.update_one (bot initial attacks)",
+      "reason": "update_one on existing doc; no new doc created; no metadata to inject"
+    },
+    {
+      "area": "gvg.py:353 db.user_mail.insert_one (war end mail to opponent)",
+      "reason": "AMBIGUOUS_DEFER per audit v1 (mail mixed account/server origin); explicitly forbidden by GVG_WAR_ONLY scope"
+    },
+    {
+      "area": "any other db.gvg_wars updates (attack scoring, war end)",
+      "reason": "update_one on existing doc; out of scope"
+    }
+  ],
+  "forbidden_scope_untouched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "frontend/app/combat.tsx",
+    "backend/routes/affinity_gift_spend.py",
+    "backend/routes/affinity_gifts.py",
+    "backend/routes/combat.py",
+    "backend/routes/equipment.py",
+    "backend/routes/forge.py",
+    "backend/routes/raids.py",
+    "backend/routes/unique_items.py",
+    "backend/routes/cosmetics.py",
+    "backend/routes/economy.py",
+    "backend/routes/heroes.py",
+    "backend/routes/sanctuary.py",
+    "backend/routes/player_faction_v2.py",
+    "backend/routes/push_notifications.py",
+    "backend/routes/game_data.py",
+    "Character Bible / db.heroes",
+    "Housing runtime/UI/resolver",
+    "/api/housing",
+    "/api/account/server-profiles",
+    "/api/account/active-server",
+    "SLC-H runtime files",
+    "frontend/app/*"
+  ],
+  "patch_semantics": "ensure_server_scope(war, current_user['id']) -> set-only-if-missing server_id/account_id on new gvg_wars doc; preserves existing fields; idempotent",
+  "helper_module": "backend/utils/server_scope.py (Batch-0, unchanged; imported by gvg.py for this micro-batch)",
+  "rollback_script": "backend/scripts/rollback_slc_f_gvg_war_scope.py",
+  "rollback_markers_required": {
+    "SLC_F_GVG_WAR_SCOPE_ROLLBACK_APPROVAL": true,
+    "SLC_F_GVG_WAR_SCOPE_ROLLBACK_ID": "slc_f_gvg_war_scope_20260523T192217Z_34999526"
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_batch_0_1_apply_id_preserved": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "slc_f_batch_1b_apply_id_preserved": "slc_f_batch_1b_20260523T175058Z_2cf0584c",
+  "slc_f_batch_2_apply_id_preserved": "slc_f_batch_2_20260523T181752Z_b838601e",
+  "slc_f_equipment_scope_apply_id_preserved": "slc_f_equipment_scope_20260523T182939Z_d2afcc8a",
+  "slc_f_raids_equipment_scope_apply_id_preserved": "slc_f_raids_equipment_scope_20260523T184512Z_a46a6034",
+  "slc_f_minor_audit_id_preserved": "slc_f_minor_audit_20260523T190000Z_audit_only",
+  "known_drift_docs_status": {
+    "count": 7,
+    "source_family": "gacha/summon",
+    "fix_applied_in_this_microbatch": false,
+    "fix_deferred_reason": "Per task guardrail: drift docs out of GVG_WAR_ONLY scope; remain known/non-blocking"
+  },
+  "verdict_target": "SLC_F_GVG_WAR_SCOPE_APPLIED_SAFE"
+}

@@ -6,6 +6,7 @@ import uuid
 from datetime import datetime, timedelta
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
+from utils.server_scope import ensure_server_scope
 
 
 def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
@@ -187,6 +188,7 @@ def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_h
             "created_at": datetime.utcnow(),
             "winner_guild_id": None,
         }
+        war = ensure_server_scope(war, current_user["id"])
         await db.gvg_wars.insert_one(war)
 
         # If opponent is a real guild, simulate some initial attacks from bot members
