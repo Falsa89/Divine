@@ -1,0 +1,69 @@
+{
+  "task_id": "V4_BLOCK_B_BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_CANONICAL_MARKER",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V4",
+  "verdict": "BLOCK_B_BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_MARKER_READY",
+  "mode": "audit_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T223000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V4_APPROVAL": true,
+    "BLOCK_B_BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_MARKER_APPROVAL": true
+  },
+  "canonical_rule_id": "BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_CANONICAL_V1",
+  "canonical_statement": "La purchase del Battle Pass premium e l'entitlement is_premium sono ACCOUNT_WIDE_ONCE. Una sola tx per stagione per account, condivisa tra tutti i server profiles. Allineato con VIP_PAID_ACCOUNT_WIDE_CANONICAL_V1 (V2 BLOCK_C).",
+  "derived_from": {
+    "audit_source": "V3 BLOCK_B BATTLE_PASS_PRODUCT_DECISION_AUDIT",
+    "decision_id": "BP_D2",
+    "recommendation_strength": "strong",
+    "v3_rationale": "Allineato con VIP_PAID_ACCOUNT_WIDE_CANONICAL_V1 introdotta in V2 BLOCK_C. Premium = paid -> account-wide."
+  },
+  "surfaces_covered": [
+    {
+      "surface_id": "BP-S03",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "POST /api/battlepass/buy-premium",
+      "line": 158,
+      "canonical_decision": "NO_SERVER_SCOPE_BY_DESIGN",
+      "rationale": "Premium purchase è paid (gems decrement); coerente con VIP, account-wide."
+    }
+  ],
+  "surfaces_explicitly_NOT_covered_by_this_marker": [
+    {
+      "surface_id": "BP-S01",
+      "reason": "Progress doc auto-init: scope dipende da BP_D1 (ancora non deciso)"
+    },
+    {
+      "surface_id": "BP-S02",
+      "reason": "Claim free/premium reward: scope dipende da BP_D1+BP_D3"
+    },
+    {
+      "surface_id": "BP-S04",
+      "reason": "add-exp progress increment: scope dipende da BP_D1"
+    }
+  ],
+  "implementation_implications": {
+    "buy_premium_upsert_pattern": "L'upsert su battle_pass.is_premium NON deve ricevere server_id. La canonical conferma il default attuale.",
+    "future_micro_batch_required": false,
+    "why": "Confermare account-wide non richiede modifica runtime (il pattern attuale già non scope-s). Solo il marker canonical è introdotto."
+  },
+  "future_implementation_blockers": [
+    {
+      "priority": "P1",
+      "item": "BP_D1 (progress scope) ancora aperto; in caso PER_SERVER, claim_free/claim_premium su BP-S02 dovranno essere segregati ma is_premium resta unico"
+    },
+    {
+      "priority": "P2",
+      "item": "Edge-case: utente attiva premium su server A, switcha a server B; is_premium account-wide significa che può godere del premium su tutti i server -> coerente con VIP."
+    }
+  ],
+  "forbidden_in_block_b_respected": {
+    "runtime_change": false,
+    "pricing_change": false,
+    "entitlement_implementation_change": false,
+    "db_write_migration": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/battle_pass_premium_account_wide_marker_v1.json",
+    "/app/docs/divine/118B_BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_MARKER.md"
+  ]
+}

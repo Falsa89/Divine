@@ -552,6 +552,12 @@ OPTIONAL = [
     ('V2-ROLLUP',                                  'validate_mega_combo_slc_acceleration_v2_rollup.py'),
     # MEGA-COMBO V3 BLOCK_E ROSTER VISIBILITY INVARIANTS (HTTP smoke; READ-ONLY)
     ('V3-ROSTER-VISIBILITY-INVARIANTS',            'validate_roster_visibility_invariants_v1.py'),
+    # MEGA-COMBO V4 BLOCK_A BATTLE PASS TECHNICAL HARDENING (READY_NOT_APPLIED audit)
+    ('V4-BLOCK-A-BATTLE-PASS-HARDENING-AUDIT',     'validate_v4_battle_pass_technical_hardening.py'),
+    # MEGA-COMBO V4 BLOCK_D SLC-F OBSERVABILITY ROLLUP (READ-ONLY)
+    ('V4-BLOCK-D-SLC-F-OBSERVABILITY-ROLLUP',      'validate_slc_f_observability_rollup_v1.py'),
+    # MEGA-COMBO V4 BLOCK_E REDIS RATE-LIMIT OPS AUDIT (READ-ONLY)
+    ('V4-BLOCK-E-REDIS-RATE-LIMIT-OPS-AUDIT',      'audit_redis_rate_limit_ops_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

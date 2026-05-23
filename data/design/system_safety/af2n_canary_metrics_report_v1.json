@@ -1,0 +1,77 @@
+{
+  "task_id": "V4_BLOCK_C_AF2N_CANARY_METRICS_REPORT",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V4",
+  "verdict": "BLOCK_C_AF2N_CANARY_METRICS_REPORT_READY",
+  "mode": "doc_audit_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T223000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V4_APPROVAL": true,
+    "BLOCK_C_AF2N_CANARY_METRICS_REPORT_APPROVAL": true
+  },
+  "prior_artifacts_consolidated": [
+    "/app/data/design/system_safety/af2n_v8_signoff_design_review_v1.json (V2 BLOCK_D)",
+    "/app/data/design/system_safety/af2n_v8_design_board_review_prep_v1.json (V3 BLOCK_C)"
+  ],
+  "af2n_canary_status_snapshot": {
+    "canary_active": true,
+    "completion_metrics_confirmed": false,
+    "preflight_validators_present": ["V18", "V19", "V21", "V22", "V23", "V24"],
+    "rollback_readiness_validators": ["V21", "V22", "V23", "V24"],
+    "redis_switch_validator": ["V23"],
+    "runtime_components_frozen": ["gift_spend", "inventory_writes", "ledger"],
+    "public_spend_ui": "NOT_IMPLEMENTED",
+    "stack_g_integration": "NOT_ATTEMPTED"
+  },
+  "canonical_constraints": {
+    "caps": {
+      "daily_gift_spend_per_user": "see canonical AF2-N gift cap policy",
+      "weekly_gift_spend_per_user": "see canonical AF2-N gift cap policy",
+      "affinity_gain_per_action": "capped by AF2-N spend curve"
+    },
+    "allowlist": "AF2-N gift items restricted to predefined allowlist; cosmetics/runtime items vietati",
+    "ledger": "Append-only ledger requirement; no rewrite/backfill",
+    "rate_limit": "Redis-backed rate-limit gates spend operations; binary stability monitored",
+    "inventory_writes": "FROZEN until DBR_04 unfreeze in design board signoff"
+  },
+  "risk_readiness_matrix": [
+    {"area": "Preflight checks (V18-V24)", "status": "\ud83d\udfe2 PASSING", "risk": "low"},
+    {"area": "Rollback readiness", "status": "\ud83d\udfe2 ARMED", "risk": "low"},
+    {"area": "Redis rate-limit binary stability", "status": "\ud83d\udfe1 OCCASIONAL_CRASH (mitigated by /app/ops/ensure_redis_rate_limit.sh)", "risk": "medium"},
+    {"area": "Canary completion metrics confirmation", "status": "\ud83d\udfe1 PENDING", "risk": "medium"},
+    {"area": "Gift spend runtime audit", "status": "\ud83d\udd34 FROZEN", "risk": "high (blocker for Batch-3)"},
+    {"area": "Inventory writes audit", "status": "\ud83d\udd34 FROZEN", "risk": "high (blocker for V8 signoff)"},
+    {"area": "Ledger behavior audit", "status": "\ud83d\udd34 FROZEN", "risk": "high (blocker for V8 signoff)"},
+    {"area": "Public spend UI", "status": "\ud83d\udd34 NOT_IMPLEMENTED", "risk": "medium"},
+    {"area": "STACK-G integration", "status": "\ud83d\udd34 NOT_ATTEMPTED", "risk": "low (out-of-scope V4)"},
+    {"area": "V8 broad rollout signoff", "status": "\ud83d\udd34 NOT_ACHIEVED", "risk": "high (BLOCKED on canary metrics + 3 FROZEN audits)"}
+  ],
+  "validators_v12_v30_consolidation": {
+    "v12_v14": "Intermediate design iterations present as preflight",
+    "v18_v24": "All preflight + redis_switch + rollback_readiness validators in suite",
+    "v25_v30": "Not present (reserved for future signoff)",
+    "v8_signoff": "NOT_ACHIEVED (target)"
+  },
+  "recommended_metrics_to_consolidate": [
+    "% utenti canary attivi (week-over-week)",
+    "error rate baseline vs control (HTTP 5xx, ledger write failures)",
+    "affinity gain delta vs control",
+    "gift spend volume distribution (P50/P95/P99)",
+    "rate-limit throttle events count",
+    "redis crash events (mitigation invocations)",
+    "V21/V22/V23/V24 rollback test execution timestamps"
+  ],
+  "forbidden_in_block_c_respected": {
+    "gift_spend_runtime_change": false,
+    "inventory_write_change": false,
+    "ledger_change": false,
+    "canary_rollout_change": false,
+    "public_spend_ui_change": false,
+    "stack_g_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/af2n_canary_metrics_report_v1.json",
+    "/app/docs/divine/118C_AF2N_CANARY_METRICS_REPORT.md"
+  ],
+  "next_recommended_action": "Pack PACK_AF2N_CANARY_METRICS_OBSERVABILITY (osservabilità metrics) prima di V8 signoff design board."
+}

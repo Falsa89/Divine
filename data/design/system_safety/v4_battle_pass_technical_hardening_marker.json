@@ -1,0 +1,75 @@
+{
+  "task_id": "V4_BLOCK_A_BATTLE_PASS_TECHNICAL_HARDENING",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V4",
+  "verdict": "BLOCK_A_BATTLE_PASS_TECHNICAL_HARDENING_READY_NOT_APPLIED",
+  "mode": "audit_only_safe_apply_deferred",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260523T223000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V4_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_A_BATTLE_PASS_TECHNICAL_HARDENING_APPROVAL": true,
+    "BLOCK_A_BATTLE_PASS_TECHNICAL_HARDENING_ROLLBACK_APPROVAL": "not_required_no_apply"
+  },
+  "target_surface_inspected": {
+    "surface_id": "BP-S03",
+    "file": "/app/backend/routes/economy.py",
+    "endpoint": "POST /api/battlepass/buy-premium",
+    "line": 158,
+    "current_op": "db.battle_pass.update_one({'user_id': uid}, {'$set': {'is_premium': True}}, upsert=True)",
+    "upsert_create_payload_today": {"user_id": "<uid>", "is_premium": true},
+    "missing_default_fields_on_new_doc": ["exp", "level", "claimed_free", "claimed_premium", "season"]
+  },
+  "hypothetical_safer_form": {
+    "code": "db.battle_pass.update_one({'user_id': uid}, {'$setOnInsert': {'exp': 0, 'level': 1, 'claimed_free': [], 'claimed_premium': [], 'season': 1}, '$set': {'is_premium': True}}, upsert=True)",
+    "diff_lines": 1,
+    "loc_estimate": 4
+  },
+  "reasons_for_ready_not_applied": [
+    {
+      "reason_id": "R1_DOC_SHAPE_DIFFERS",
+      "detail": "L'attuale upsert può creare un doc minimale {user_id, is_premium}. La forma safer creerebbe un doc completo con i 5 default. Questo è un cambiamento di stato osservabile in DB anche se il consumo a livello di endpoint usa .get() con default. Classificable come behavior change strutturale."
+    },
+    {
+      "reason_id": "R2_PROMPT_GUARDRAIL",
+      "detail": "Il prompt V4 BLOCK_A dichiara esplicitamente 'preserve all battle pass rewards, premium/free behavior, entitlement logic, prices, cadence, and response schema'. Anche un cambio di response shape potenziale (post-buy-premium GET /api/battlepass ritorna ora un doc con default) violerebbe la promessa."
+    },
+    {
+      "reason_id": "R3_DEPENDS_ON_BP_D1",
+      "detail": "V3 BLOCK_B aveva identificato BP_D1 (battle pass progress account-wide vs per-server) come prerequisito product decision. Hardenare il doc shape prima di BP_D1 cristallizza una specifica forma che potrebbe richiedere DB migration se BP_D1 risultasse PER_SERVER."
+    },
+    {
+      "reason_id": "R4_INDEX_REQUIRES_LIVE_DB",
+      "detail": "L'aggiunta di indici (user_id, season) richiederebbe una write su DB (create_index) classificabile come 'live index creation that writes to DB' che il prompt esplicitamente vieta."
+    }
+  ],
+  "alternative_recommended_path": {
+    "name": "BATTLE_PASS_TECHNICAL_HARDENING_POST_BP_D1_DECISION",
+    "prerequisites": [
+      "Product decision board sigboff BP_D1 (account-wide vs per-server)",
+      "Esplicita autorizzazione a modificare il doc-shape sull'upsert",
+      "Approvazione runtime patch DB-create-index (richiede pack ops dedicato)"
+    ],
+    "expected_diff": "4 LOC su economy.py (linea 158)",
+    "validators_required": [
+      "validate_v4_battle_pass_technical_hardening_post_apply.py"
+    ]
+  },
+  "forbidden_in_block_a_respected": {
+    "reward_premium_free_behavior_change": false,
+    "price_currency_change": false,
+    "entitlement_rule_change": false,
+    "db_migration_backfill": false,
+    "live_index_creation": false,
+    "broad_economy_refactor": false,
+    "frontend_ui_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/v4_battle_pass_technical_hardening_marker.json",
+    "/app/docs/divine/118A_BATTLE_PASS_TECHNICAL_HARDENING.md",
+    "/app/backend/scripts/validate_v4_battle_pass_technical_hardening.py"
+  ],
+  "rollback_script": null,
+  "next_recommended_action": "Attendere chiusura BP_D1 product decision in pack futuro PRODUCT_DECISION_BOARD_REVIEW_BATTLE_PASS prima di applicare hardening."
+}

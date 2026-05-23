@@ -1,0 +1,57 @@
+{
+  "task_id": "V4_BLOCK_E_REDIS_RATE_LIMIT_HARDENING_OPS",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V4",
+  "verdict": "BLOCK_E_REDIS_RATE_LIMIT_HARDENING_OPS_READY",
+  "mode": "ops_doc_only",
+  "runtime_patch_applied": false,
+  "runtime_config_changed_permanently": false,
+  "timestamp_utc": "20260523T223000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V4_APPROVAL": true,
+    "BLOCK_E_REDIS_RATE_LIMIT_HARDENING_OPS_APPROVAL": true
+  },
+  "existing_ops_helper": {
+    "script": "/app/ops/ensure_redis_rate_limit.sh",
+    "behavior": "verify redis-server binary running; if down, restart and re-enable rate-limit",
+    "invocation": "manual or on V23/V24 preflight failure",
+    "impact_on_runtime": "restart only when crashed; idempotent"
+  },
+  "known_failure_modes": [
+    {
+      "id": "FM1",
+      "description": "Redis binary drop in container (5+ recurrences observed in previous forks)",
+      "symptom": "Suite V23/V24 fail; AF2-N rate-limit gate bypassed",
+      "mitigation": "bash /app/ops/ensure_redis_rate_limit.sh"
+    },
+    {
+      "id": "FM2",
+      "description": "Connection refused on redis://localhost:6379",
+      "symptom": "AF2-N gift spend HTTP 503",
+      "mitigation": "Restart redis-server, then re-attempt; if persistent, check container resource limits"
+    }
+  ],
+  "runbook_steps": [
+    {"step": 1, "name": "Detect", "command": "redis-cli ping (expect PONG)"},
+    {"step": 2, "name": "Suite check", "command": "python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py | tail -5"},
+    {"step": 3, "name": "Mitigate", "command": "bash /app/ops/ensure_redis_rate_limit.sh"},
+    {"step": 4, "name": "Re-verify", "command": "redis-cli ping && python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py | tail -3"}
+  ],
+  "non_invasive_health_check": {
+    "script": "/app/backend/scripts/audit_redis_rate_limit_ops_v1.py",
+    "behavior": "redis-cli ping check + check file presence of /app/ops/ensure_redis_rate_limit.sh",
+    "writes_to_runtime": false,
+    "safe_in_suite": true
+  },
+  "forbidden_in_block_e_respected": {
+    "redis_config_permanent_change": false,
+    "rate_limit_policy_change": false,
+    "production_runtime_env_change": false,
+    "rate_limits_disabled": false,
+    "af2n_behavior_change": false
+  },
+  "artifacts_created": [
+    "/app/docs/divine/118E_REDIS_RATE_LIMIT_HARDENING_OPS.md",
+    "/app/data/design/system_safety/redis_rate_limit_hardening_ops_v1.json",
+    "/app/backend/scripts/audit_redis_rate_limit_ops_v1.py"
+  ]
+}
