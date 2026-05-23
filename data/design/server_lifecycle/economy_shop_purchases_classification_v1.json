@@ -1,0 +1,115 @@
+{
+  "task_id": "V3_BLOCK_A_ECONOMY_SHOP_PURCHASES_CLASSIFICATION_AUDIT",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V3",
+  "verdict": "BLOCK_A_ECONOMY_SHOP_PURCHASES_AUDIT_READY",
+  "mode": "audit_doc_only",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260523T220000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V3_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_A_ECONOMY_SHOP_PURCHASES_AUDIT_APPROVAL": true
+  },
+  "target_surface": {
+    "id": "ECONOMY-W01",
+    "file": "/app/backend/routes/economy.py",
+    "endpoint": "POST /api/shop/buy",
+    "insert_line": 56,
+    "collection": "shop_purchases",
+    "op": "insert_one",
+    "previous_status_v1": "AMBIGUOUS_DEFER",
+    "document_shape": {
+      "user_id": "uid",
+      "item_id": "req.item_id",
+      "date": "YYYY-MM-DD (server day)",
+      "timestamp": "datetime.utcnow()"
+    }
+  },
+  "shop_items_inventory": {
+    "total_items": 10,
+    "breakdown_by_price_currency": {
+      "price_type_gold": {
+        "count": 3,
+        "item_ids": ["gems_small", "gems_medium", "gems_large"],
+        "semantics": "User SPENDS gold (free server-bound currency) and RECEIVES gems (paid account-wide)",
+        "classification": "FREE_TO_PAID_CONVERSION_PURCHASE"
+      },
+      "price_type_gems": {
+        "count": 7,
+        "item_ids": ["stamina_50", "stamina_full", "gold_pack", "gold_chest", "exp_boost", "gacha_ticket", "gacha_ticket_10"],
+        "semantics": "User SPENDS gems (paid) and RECEIVES various rewards (stamina/gold/exp/gacha)",
+        "classification": "PAID_TO_MIXED_REWARD_PURCHASE"
+      }
+    }
+  },
+  "classification_analysis": {
+    "perspective_A_account_wide": {
+      "reasoning": "shop_purchases tracks historical purchases for daily limits (purchase_counts in GET /api/shop). Since gems are account-wide, paid-purchase history should be visible across all server profiles to prevent stockpile abuse.",
+      "evidence": [
+        "GET /api/shop queries shop_purchases filtered by user_id + date only (no server_id filter)",
+        "purchase_counts is used for purchase-cap enforcement, which is account-wide for paid items"
+      ]
+    },
+    "perspective_B_server_bound": {
+      "reasoning": "Daily reset is server day-bound; gold-priced items (gems_small/medium/large) consume free server-bound currency, so their history is naturally per-server.",
+      "evidence": [
+        "date field uses server timezone implicitly via datetime.utcnow()",
+        "gold balance is currently account-wide but classified as FREE_SERVER_BOUND_CANDIDATE in V2 BLOCK_C"
+      ]
+    },
+    "perspective_C_split_by_item_type": {
+      "reasoning": "Mixed schema: gold-priced purchases (3) -> server-bound; gem-priced purchases (7) -> account-wide. Requires PER-ITEM classification.",
+      "evidence": [
+        "price_type field already discriminates the 2 buckets cleanly",
+        "Could be implemented at insert-time without DB migration if a new collection split is acceptable"
+      ]
+    }
+  },
+  "canonical_classification": {
+    "verdict": "REQUIRES_PRODUCT_DECISION_MIXED",
+    "summary": "shop_purchases is intrinsically MIXED. La decisione canonical richiede signoff prodotto perché ogni alternativa ha trade-off operativi non risolvibili a livello tecnico puro.",
+    "safe_for_metadata_only_patch": false,
+    "why_not_metadata_only": "Aggiungere `server_id` indiscriminatamente romperebbe la verifica di purchase_counts cross-server per gem items (paid). Aggiungere solo a una metà richiederebbe una nuova logica di selezione che cambia il behavior dello shop. Entrambe sono cambi product-level.",
+    "recommended_decision_buckets": [
+      {
+        "bucket_id": "DECISION_1",
+        "question": "I limiti di acquisto giornaliero (purchase_counts) devono essere account-wide o server-bound?",
+        "options": [
+          {"option": "ALL_ACCOUNT_WIDE", "impact": "Tutte le purchase rimangono senza server_id; lo shop è globale. Semplice ma riduce il vantaggio competitivo nei singoli server."},
+          {"option": "ALL_SERVER_BOUND", "impact": "Tutte le purchase ricevono server_id; un giocatore può fare la stessa daily quest in N server. Più grind ma più paid-friendly."},
+          {"option": "SPLIT_BY_PRICE_TYPE", "impact": "gold-priced -> server-bound; gems-priced -> account-wide. Più coerente economicamente ma richiede 2 query path."}
+        ]
+      },
+      {
+        "bucket_id": "DECISION_2",
+        "question": "La promo/sale rotation dello shop è globale o per-server?",
+        "options": [
+          {"option": "GLOBAL", "impact": "Tutti i server vedono gli stessi item rotation. Operazionalmente semplice."},
+          {"option": "PER_SERVER", "impact": "Ogni server può avere il proprio shop rotation. Più complesso ma più engagement."}
+        ]
+      }
+    ]
+  },
+  "safe_future_micro_batches": [
+    {
+      "name": "NONE_SAFE_UNTIL_DECISION",
+      "reasoning": "Nessun micro-batch metadata-only è sicuro senza la product decision sopra. Anche `ensure_server_scope` indiscriminato cambierebbe semantica.",
+      "only_safe_after_decision": [
+        "DECISION_1=ALL_SERVER_BOUND -> ECONOMY_SHOP_PURCHASES_SERVER_BOUND_MICRO_BATCH (2 LOC come V2 BLOCK_A)",
+        "DECISION_1=SPLIT_BY_PRICE_TYPE -> ECONOMY_SHOP_PURCHASES_CONDITIONAL_SCOPE_MICRO_BATCH (richiede if-branch, 5-8 LOC)"
+      ]
+    }
+  ],
+  "forbidden_in_block_a_respected": {
+    "shop_purchase_runtime_patch": false,
+    "currency_pricing_reward_behavior_change": false,
+    "paid_free_behavior_change": false,
+    "db_write_migration": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/economy_shop_purchases_classification_v1.json",
+    "/app/docs/divine/117A_ECONOMY_SHOP_PURCHASES_CLASSIFICATION_AUDIT.md"
+  ],
+  "next_recommended_action": "Product decision board review per DECISION_1 e DECISION_2 prima di qualsiasi micro-batch su W01."
+}

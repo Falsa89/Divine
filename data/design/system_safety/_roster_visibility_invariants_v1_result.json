@@ -1,0 +1,44 @@
+{
+  "task_id": "V3_BLOCK_E_ROSTER_VISIBILITY_INVARIANT_VALIDATOR",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V3",
+  "verdict": "BLOCK_E_ROSTER_VISIBILITY_INVARIANT_VALIDATOR_READY",
+  "mode": "suite_extension_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T220000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V3_APPROVAL": true,
+    "BLOCK_E_ROSTER_VISIBILITY_INVARIANT_VALIDATOR_APPROVAL": true
+  },
+  "invariants_enforced": [
+    {"id": "INV_HEROES_COUNT", "check": "GET /api/heroes returns exactly 100 documents", "contract": "count == 100"},
+    {"id": "INV_GAIA_404", "check": "GET /api/heroes/primordial_gaia returns HTTP 404 (catalog-only, not exposed)", "contract": "HTTP == 404"},
+    {"id": "INV_BOREA_200_INERT", "check": "GET /api/heroes/borea returns HTTP 200 and is_obtainable == False", "contract": "HTTP == 200 and inert baseline preserved"},
+    {"id": "INV_GREEK_BOREA_200_INERT", "check": "GET /api/heroes/greek_borea returns HTTP 200 and is_obtainable == False", "contract": "HTTP == 200 and inert baseline preserved"},
+    {"id": "INV_BOREA_NOT_OBTAINABLE", "check": "borea/greek_borea NOT in any obtainable pool of GACHA_BANNERS", "contract": "no leak into summon/gacha"},
+    {"id": "INV_CHARACTER_BIBLE_UNCHANGED", "check": "sanctuary.py / heroes.py have no unauthorized diff", "contract": "only authorized SLC-G / SLC-F patches applied"},
+    {"id": "INV_DRIFT_DOCS_KNOWN", "check": "drift docs count remains <= 10 (warning) / <= 14 (fail)", "contract": "KNOWN_NONBLOCKING_V1 rule respected"}
+  ],
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_roster_visibility_invariants_v1.py",
+    "behavior": "read-only HTTP smoke + JSON parse + DB read-only count for drift docs (if available)",
+    "db_writes": 0,
+    "runtime_mutations": 0,
+    "contract": "PASS if all 7 invariants hold; FAIL otherwise"
+  },
+  "suite_registration": {
+    "task_id": "V3-ROSTER-VISIBILITY-INVARIANTS",
+    "section": "OPTIONAL"
+  },
+  "forbidden_in_block_e_respected": {
+    "runtime_patch": false,
+    "roster_visibility_change": false,
+    "gacha_summon_change": false,
+    "borea_activation": false,
+    "character_bible_mutation": false
+  },
+  "artifacts_created": [
+    "/app/backend/scripts/validate_roster_visibility_invariants_v1.py",
+    "/app/data/design/system_safety/_roster_visibility_invariants_v1_result.json",
+    "/app/docs/divine/117E_ROSTER_VISIBILITY_INVARIANT_VALIDATOR.md"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "task_id": "V3_BLOCK_C_AF2N_V8_DESIGN_BOARD_REVIEW_PREP",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V3",
+  "verdict": "BLOCK_C_AF2N_V8_DESIGN_BOARD_REVIEW_PREP_READY",
+  "mode": "doc_audit_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T220000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V3_APPROVAL": true,
+    "BLOCK_C_AF2N_V8_DESIGN_BOARD_REVIEW_PREP_APPROVAL": true
+  },
+  "references_v2_block_d": {
+    "prior_artifact": "/app/data/design/system_safety/af2n_v8_signoff_design_review_v1.json",
+    "prior_verdict": "BLOCK_D_AF2N_V8_SIGNOFF_AUDIT_READY",
+    "prior_readiness_percent": 35
+  },
+  "af2n_runtime_state": {
+    "versions_preflight_present": ["V18", "V19", "V21", "V22", "V23", "V24"],
+    "rollback_readiness_present": ["V21", "V22", "V23", "V24"],
+    "redis_switch_present": ["V23"],
+    "v8_signoff_status": "NOT_ACHIEVED",
+    "canary_completion": "in_progress_unconfirmed",
+    "gift_spend_runtime": "FROZEN_BY_DESIGN",
+    "inventory_writes": "FROZEN_BY_DESIGN",
+    "ledger": "FROZEN_BY_DESIGN",
+    "public_spend_ui": "NOT_IMPLEMENTED"
+  },
+  "design_board_review_checklist": [
+    {
+      "item_id": "DBR_01",
+      "category": "GO/NO-GO",
+      "question": "V8 broad rollout signoff approval: GO or NO-GO?",
+      "prerequisites": ["Canary metrics review complete", "Inventory writes audit unfrozen", "Ledger audit unfrozen"],
+      "current_status": "BLOCKED on canary completion",
+      "decision_owner": "design_board"
+    },
+    {
+      "item_id": "DBR_02",
+      "category": "CANARY",
+      "question": "La canary rollout AF2-N è considerata completata?",
+      "evidence_required": ["% utenti canary attivi", "error rate baseline", "affinity gain delta vs control"],
+      "current_status": "in_progress_unconfirmed"
+    },
+    {
+      "item_id": "DBR_03",
+      "category": "GIFT_SPEND",
+      "question": "Quando sbloccare il gift_spend runtime audit?",
+      "prerequisites": ["DBR_01 = GO", "Inventory writes audit closed"],
+      "current_status": "FROZEN_BY_DESIGN"
+    },
+    {
+      "item_id": "DBR_04",
+      "category": "INVENTORY",
+      "question": "Inventory writes audit: closure plan?",
+      "prerequisites": ["AF2-N canary metrics ok", "STACK-G design preliminare"],
+      "current_status": "FROZEN_BY_DESIGN"
+    },
+    {
+      "item_id": "DBR_05",
+      "category": "LEDGER",
+      "question": "Ledger behavior audit: closure plan?",
+      "prerequisites": ["AF2-N canary metrics ok", "Inventory audit closed"],
+      "current_status": "FROZEN_BY_DESIGN"
+    },
+    {
+      "item_id": "DBR_06",
+      "category": "PUBLIC_UI",
+      "question": "Public spend UI implementation pack: priorità?",
+      "prerequisites": ["DBR_01 = GO", "DBR_03 + DBR_04 + DBR_05 chiusi"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    {
+      "item_id": "DBR_07",
+      "category": "STACK_G",
+      "question": "STACK-G integration: scope e priorità?",
+      "prerequisites": ["DBR_04 risolto"],
+      "current_status": "NOT_ATTEMPTED"
+    },
+    {
+      "item_id": "DBR_08",
+      "category": "BATCH_3_AF2N_ROUTING",
+      "question": "Quando approvare Batch-3 AF2-N routing (server-scope injection per AF2-N collections)?",
+      "prerequisites": ["DBR_01 = GO", "DBR_03 chiuso", "AF2-N V8 broad rollout completato"],
+      "current_status": "BLOCKED"
+    }
+  ],
+  "recommended_board_agenda": [
+    "1. Review canary metrics (DBR_02) -> determinare go/no-go DBR_01",
+    "2. Se GO: schedulare unfreezing DBR_03/DBR_04/DBR_05 in pack dedicati",
+    "3. Pianificare DBR_06 (UI) e DBR_07 (STACK-G) in roadmap",
+    "4. Definire timeline DBR_08 (Batch-3) post-V8 signoff"
+  ],
+  "deliverables_for_future_signoff_pack": [
+    "PACK_AF2N_V8_SIGNOFF_DECISION (singolo blocco, dipende dal design board)",
+    "PACK_AF2N_CANARY_METRICS_REPORT (consolidamento osservabilità)",
+    "PACK_AF2N_BATCH_3_ROUTING_PREP (audit only, post-signoff)"
+  ],
+  "forbidden_in_block_c_respected": {
+    "af2n_runtime_mutation": false,
+    "gift_spend_change": false,
+    "inventory_writes_change": false,
+    "ledger_behavior_change": false,
+    "canary_rollout_change": false,
+    "public_spend_ui_change": false,
+    "stack_g_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/af2n_v8_design_board_review_prep_v1.json",
+    "/app/docs/divine/117C_AF2N_V8_DESIGN_BOARD_REVIEW_PREP.md"
+  ]
+}

@@ -550,6 +550,8 @@ OPTIONAL = [
     ('V2-BLOCK-B-GVG-USER-MAIL-POST-APPLY',        'validate_v2_gvg_user_mail_scope.py'),
     # MEGA-COMBO V2 ROLLUP (5 blocks consistency)
     ('V2-ROLLUP',                                  'validate_mega_combo_slc_acceleration_v2_rollup.py'),
+    # MEGA-COMBO V3 BLOCK_E ROSTER VISIBILITY INVARIANTS (HTTP smoke; READ-ONLY)
+    ('V3-ROSTER-VISIBILITY-INVARIANTS',            'validate_roster_visibility_invariants_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

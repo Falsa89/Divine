@@ -1,0 +1,117 @@
+{
+  "task_id": "V3_BLOCK_D_HOUSING_RUNTIME_SAFETY_AUDIT_V3",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V3",
+  "verdict": "BLOCK_D_HOUSING_RUNTIME_SAFETY_AUDIT_V3_READY",
+  "mode": "audit_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T220000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V3_APPROVAL": true,
+    "BLOCK_D_HOUSING_RUNTIME_SAFETY_AUDIT_V3_APPROVAL": true
+  },
+  "prior_audits_referenced": [
+    "/app/data/design/housing/_dimora_divina_runtime_safety_audit_v1_result.json",
+    "/app/data/design/housing/dimora_divina_resident_bonus_policy_v1.json",
+    "/app/data/design/housing/dimora_divina_resource_claim_policy_v1.json",
+    "/app/data/design/housing/dimora_divina_room_cap_policy_v1.json",
+    "/app/data/design/housing/dimora_divina_vip_vault_policy_v1.json"
+  ],
+  "current_housing_runtime_state": {
+    "api_housing_endpoints_implemented": 0,
+    "housing_bonus_resolver": "NOT_IMPLEMENTED",
+    "housing_routes_file": "NONE",
+    "frontend_housing_screen": "NOT_IMPLEMENTED",
+    "db_collections_active": [],
+    "runtime_status": "DESIGN_ONLY_FROZEN",
+    "forbidden_route_paths_check": {
+      "/api/housing": "NOT_PRESENT_IN_CODEBASE",
+      "verified_via": "git grep over backend/routes/"
+    }
+  },
+  "safety_architecture_matrix": [
+    {
+      "component": "HousingBonusResolver",
+      "required_safe_architecture": [
+        "Resolver puro stateless: input(user_id) -> bonus_set; nessun side-effect",
+        "Caps anti-power-creep hardcoded da room_cap_policy v1",
+        "Output deterministico (testabile)",
+        "NESSUNA chiamata diretta in combat path (passare via stats_provider)",
+        "Versioning del bonus catalog"
+      ],
+      "current_status": "NOT_IMPLEMENTED",
+      "blocker": "Necessita design board signoff per power curve"
+    },
+    {
+      "component": "housing_inventory (rooms+furniture)",
+      "required_safe_architecture": [
+        "Collection separata da equipment/items",
+        "server_id obbligatorio (housing è per definizione server-bound)",
+        "Idempotent upsert pattern",
+        "Cap hardcoded per room slot"
+      ],
+      "current_status": "NOT_IMPLEMENTED",
+      "blocker": "DB schema design pending"
+    },
+    {
+      "component": "residents (hero assignment)",
+      "required_safe_architecture": [
+        "Reference a hero_id via user_heroes (non duplicazione roster)",
+        "Lock per resident slot per evitare race",
+        "server_id obbligatorio",
+        "NESSUN impatto su Character Bible heroes",
+        "Borea inert baseline preserved (no residency assignment a Borea)"
+      ],
+      "current_status": "NOT_IMPLEMENTED",
+      "blocker": "Resident bonus policy v1 da consolidare"
+    },
+    {
+      "component": "claim_all (resource collection)",
+      "required_safe_architecture": [
+        "Idempotent rate-limit per claim window",
+        "VIP vault policy (dimora_divina_vip_vault_policy_v1) gated",
+        "Reward distribution via users.update_one (non duplicare currency flow)",
+        "server_id obbligatorio",
+        "Anti-spam: max 1 claim_all per N minuti server-bound"
+      ],
+      "current_status": "NOT_IMPLEMENTED",
+      "blocker": "Anti-power-creep cap signoff"
+    },
+    {
+      "component": "battle_power integration",
+      "required_safe_architecture": [
+        "Housing bonus si applica solo via stats_provider, MAI in battle_engine.py o battle_core.py",
+        "Cap totale bonus dal housing < 15% del power totale (anti-power-creep)",
+        "Bonus non si stacka con AF2-N gift bonuses (mutually exclusive bucket)"
+      ],
+      "current_status": "DESIGN_ONLY",
+      "blocker": "battle_engine.py FROZEN; richiede Batch-4 prerequisito"
+    }
+  ],
+  "anti_power_creep_caps": {
+    "max_total_housing_bonus_percent_of_power": 15,
+    "max_resident_bonus_per_hero_percent": 5,
+    "max_room_slots_per_user": "vedi room_cap_policy v1",
+    "vip_vault_bonus_capped": true,
+    "stacking_with_af2n_disallowed": true
+  },
+  "implementation_blockers": [
+    {"priority": "P0", "item": "battle_engine.py FROZEN -> impossibile integrare stats_provider housing channel"},
+    {"priority": "P0", "item": "Design board signoff per power curve + anti-power-creep caps"},
+    {"priority": "P1", "item": "DB schema canonical (rooms, inventory, residents, claim_history)"},
+    {"priority": "P1", "item": "SLC-H live wiring (housing è server-bound -> richiede active_server_profile_id)"},
+    {"priority": "P2", "item": "Frontend Expo housing screen (esplicitamente forbidden in V3)"},
+    {"priority": "P2", "item": "VIP vault cross-server policy (gated by VIP_PAID_ACCOUNT_WIDE_CANONICAL_V1)"}
+  ],
+  "forbidden_in_block_d_respected": {
+    "api_housing_added": false,
+    "housing_bonus_resolver_added": false,
+    "frontend_ui_added": false,
+    "room_inventory_claim_runtime_added": false,
+    "battle_power_integration_added": false
+  },
+  "artifacts_created": [
+    "/app/data/design/housing/housing_runtime_safety_audit_v3.json",
+    "/app/docs/divine/117D_HOUSING_RUNTIME_SAFETY_AUDIT_V3.md"
+  ],
+  "next_recommended_action": "Design board review per power curve + anti-power-creep caps. Solo dopo si può considerare un pack HousingBonusResolver_PURE_STUB (no runtime wire) come step zero."
+}

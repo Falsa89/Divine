@@ -1,0 +1,147 @@
+{
+  "task_id": "V3_BLOCK_B_BATTLE_PASS_PRODUCT_DECISION_AUDIT",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V3",
+  "verdict": "BLOCK_B_BATTLE_PASS_PRODUCT_DECISION_AUDIT_READY",
+  "mode": "audit_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260523T220000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V3_APPROVAL": true,
+    "BLOCK_B_BATTLE_PASS_PRODUCT_DECISION_AUDIT_APPROVAL": true
+  },
+  "surfaces_inspected": [
+    {
+      "surface_id": "BP-S01",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "GET /api/battlepass",
+      "line": 106,
+      "collection": "battle_pass",
+      "op": "insert_one (auto-init)",
+      "role": "document creation on first access"
+    },
+    {
+      "surface_id": "BP-S02",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "POST /api/battlepass/claim/{level}",
+      "line": 146,
+      "collection": "battle_pass + users",
+      "op": "update_one (claim_free + claim_premium)",
+      "role": "reward distribution per level"
+    },
+    {
+      "surface_id": "BP-S03",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "POST /api/battlepass/buy-premium",
+      "line": 157,
+      "collection": "users + battle_pass",
+      "op": "update_one (gems decrement) + update_one (upsert is_premium)",
+      "role": "premium pass purchase (paid)"
+    },
+    {
+      "surface_id": "BP-S04",
+      "file": "/app/backend/routes/economy.py",
+      "endpoint": "POST /api/battlepass/add-exp",
+      "line": 166,
+      "collection": "battle_pass",
+      "op": "insert_one (auto-init) + update_one",
+      "role": "progress tracking"
+    }
+  ],
+  "constants_inspected": {
+    "BATTLE_PASS_REWARDS": {
+      "file": "/app/backend/routes/game_data.py",
+      "line": 218,
+      "structure": "List[{level, free: {...}, premium: {...}}]",
+      "note": "Tabella ricompense per livello con due lane (free, premium). Premium richiede flag is_premium=True."
+    }
+  },
+  "product_decision_matrix": [
+    {
+      "decision_id": "BP_D1",
+      "question": "Il battle pass progress (exp/level) è account-wide o per-server-profile?",
+      "options": [
+        {"option": "ACCOUNT_WIDE", "pros": ["Semplice migration", "Premium purchase ha valore inter-server"], "cons": ["Player con multi-server multiplica progress da activities di tutti i server"]},
+        {"option": "PER_SERVER", "pros": ["Engagement isolato per server", "Premium purchase deve essere ripetuto -> revenue + ma player friction +"], "cons": ["Migration di battle_pass docs richiesta", "Premium re-purchase contestabile (UX)"]}
+      ],
+      "impact": "BP-S01, BP-S04 (auto-init surfaces)",
+      "current_default": "ACCOUNT_WIDE (no server_id in battle_pass)"
+    },
+    {
+      "decision_id": "BP_D2",
+      "question": "L'acquisto premium pass è account-wide o per-server?",
+      "options": [
+        {"option": "ACCOUNT_WIDE_ONCE", "pros": ["Una sola tx per stagione", "Coerente con VIP_ACCOUNT_WIDE V2"], "cons": ["Revenue per stagione capped"]},
+        {"option": "PER_SERVER", "pros": ["Revenue +", "Friction +"], "cons": ["User confusion", "Doppia spesa con stesso wallet account-wide"]}
+      ],
+      "impact": "BP-S03 (buy-premium)",
+      "current_default": "ACCOUNT_WIDE_ONCE (battle_pass.is_premium upsert no server_id)",
+      "recommended_decision": "ACCOUNT_WIDE_ONCE",
+      "recommendation_strength": "strong",
+      "rationale": "Allineato con regola canonical VIP_PAID_ACCOUNT_WIDE_V1 introdotta in V2 BLOCK_C. Premium = paid -> account-wide."
+    },
+    {
+      "decision_id": "BP_D3",
+      "question": "Le seasonal rewards (claim_free/claim_premium) sono claim-once account-wide o claim-once per-server?",
+      "options": [
+        {"option": "PER_SERVER", "pros": ["Progress raggiunto separatamente per server (se BP_D1=PER_SERVER) -> claim separato"], "cons": ["Inconsistenza se BP_D1=ACCOUNT_WIDE"]},
+        {"option": "ACCOUNT_WIDE_ONCE", "pros": ["Coerente con BP_D1=ACCOUNT_WIDE"], "cons": ["Difficile recuperare ricompense in server diversi"]}
+      ],
+      "impact": "BP-S02 (claim/{level})",
+      "current_default": "ACCOUNT_WIDE_ONCE",
+      "depends_on": "BP_D1"
+    },
+    {
+      "decision_id": "BP_D4",
+      "question": "La season è condivisa tra server o per-server?",
+      "options": [
+        {"option": "GLOBAL_SEASON", "pros": ["Operazionalmente semplice", "Coerente con event hub globale"], "cons": ["Difficile lanciare un server con stagione disallineata"]},
+        {"option": "PER_SERVER_SEASON", "pros": ["Server lanciati in stagione 1 anche se mondo è in 5"], "cons": ["Complessità reward catalog +"]}
+      ],
+      "impact": "battle_pass.season field + BATTLE_PASS_REWARDS catalog",
+      "current_default": "GLOBAL_SEASON (season hardcoded 1 nel doc default)"
+    }
+  ],
+  "technical_vs_product_separation": {
+    "technical_only_items": [
+      "L'upsert pattern di BP-S03 (line 157) usa $set invece di $setOnInsert: tecnicamente migliorabile (V1 BLOCK_A note)",
+      "Mancanza di indici (user_id, season) su battle_pass collection",
+      "battle_pass.season hardcoded a 1 nel default doc"
+    ],
+    "product_decision_required": [
+      "BP_D1 (progress scope)",
+      "BP_D2 (premium purchase scope) [recommended: ACCOUNT_WIDE]",
+      "BP_D3 (claim scope)",
+      "BP_D4 (season scope)"
+    ]
+  },
+  "recommended_sequence_post_decision": [
+    {
+      "step": 1,
+      "name": "PRODUCT_DECISION_BOARD_REVIEW_BATTLE_PASS",
+      "deliverable": "Signoff document con risposte a BP_D1-BP_D4"
+    },
+    {
+      "step": 2,
+      "name": "BATTLE_PASS_TECHNICAL_HARDENING_PACK",
+      "deliverable": "Convertire $set -> $setOnInsert in BP-S03; aggiungere index. Non-behavioral.",
+      "risk": "low"
+    },
+    {
+      "step": 3,
+      "name": "BATTLE_PASS_SCOPE_APPLY_PACK",
+      "deliverable": "Apply scope (server_id se PER_SERVER, no-op canonical marker se ACCOUNT_WIDE)",
+      "risk": "medium (dipende dalla decision)",
+      "db_migration_required_if": "BP_D1 == PER_SERVER"
+    }
+  ],
+  "forbidden_in_block_b_respected": {
+    "battle_pass_reward_change": false,
+    "premium_free_lane_change": false,
+    "pricing_change": false,
+    "runtime_patch": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/battle_pass_product_decision_matrix_v1.json",
+    "/app/docs/divine/117B_BATTLE_PASS_PRODUCT_DECISION_AUDIT.md"
+  ]
+}
