@@ -1,0 +1,74 @@
+{
+  "task_id": "BLOCK_B_HOUSEKEEPING_DRIFT_DOCS_GACHA_SUMMON_ONLY",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V1",
+  "verdict": "BLOCK_B_DRIFT_DOCS_HOUSEKEEPING_READY",
+  "mode": "doc_audit_only",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260523T210000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V1_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_B_DRIFT_DOCS_HOUSEKEEPING_APPROVAL": true
+  },
+  "drift_docs_summary": {
+    "total_known_drift_docs": 7,
+    "collection": "user_heroes",
+    "missing_field": "server_id",
+    "impact": "informational_only",
+    "runtime_impact": "NONE (legacy s1 policy mitigates: SLC-G commit-A treats absent server_id as default s1)",
+    "non_blocking": true
+  },
+  "origin_routes": [
+    {
+      "file": "/app/backend/routes/heroes.py",
+      "endpoint": "POST /api/gacha/pull",
+      "insert_line": 106,
+      "function": "_do_gacha_pull",
+      "document_collection": "user_heroes",
+      "reason_drift": "insert_one esegue senza ensure_server_scope; doc creato senza campo server_id."
+    },
+    {
+      "file": "/app/backend/routes/heroes.py",
+      "endpoint": "POST /api/gacha/pull10",
+      "insert_line": 146,
+      "function": "gacha_pull_10 (guaranteed slot)",
+      "document_collection": "user_heroes",
+      "reason_drift": "insert_one esegue senza ensure_server_scope; doc creato senza campo server_id."
+    }
+  ],
+  "why_deferred": [
+    "Il pack MEGA-COMBO V1 vieta esplicitamente la mutazione runtime di gacha/summon (forbidden globale).",
+    "Toccare heroes.py richiederebbe un Batch dedicato post-SLC-H con canonical classification banner/rate/pity/obtainable pool.",
+    "Correzione inline dei 7 documenti drift in DB richiederebbe un backfill (DB migration vietata).",
+    "SLC-G commit-A ha già introdotto una policy s1 legacy che neutralizza l'impatto runtime: i doc senza server_id sono trattati come server s1 (single-server stage).",
+    "Il broad rollout AF2-N (V8) e il second server opening sono i veri requisiti di sblocco per Batch-3 gacha; finché non aperti, i drift restano informational."
+  ],
+  "housekeeping_canonical_rule": {
+    "rule_id": "DRIFT_DOCS_GACHA_SUMMON_KNOWN_NONBLOCKING_V1",
+    "statement": "I 7 drift docs in user_heroes provenienti da gacha/summon sono noti, classificati come non-bloccanti e NON devono essere riparati inline finché non viene approvato un Batch-3 AF2-N + gacha scope dedicato.",
+    "max_allowed_drift_count": 7,
+    "alert_threshold": 10,
+    "validator_check": "Validator audit_drift_docs_gacha_summon_count_v1.py deve verificare che il numero di drift docs in user_heroes NON cresca oltre la soglia 10 (warning) o 15 (fail)."
+  },
+  "validator_strategy": {
+    "validator_script": "/app/backend/scripts/audit_drift_docs_gacha_summon_count_v1.py",
+    "behavior": "read-only count check; NESSUNA correzione automatica; NESSUNA scrittura DB.",
+    "contract": "PASS se count <= 10; WARNING se 11-14; FAIL se >= 15.",
+    "deferred_resolution_to": "Batch-3 AF2-N routing + gacha scope (richiede AF2-N broad rollout V8 signoff)."
+  },
+  "forbidden_in_block_b_respected": {
+    "db_write": false,
+    "runtime_gacha_summon_patch": false,
+    "drift_docs_correction": false,
+    "hero_ownership_mutation": false,
+    "borea_activation": false,
+    "roster_visibility_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/gacha_summon_drift_docs_housekeeping_v1.json",
+    "/app/docs/divine/115B_GACHA_SUMMON_DRIFT_DOCS_HOUSEKEEPING.md",
+    "/app/backend/scripts/audit_drift_docs_gacha_summon_count_v1.py"
+  ],
+  "next_recommended_action": "Aggiungere validator drift-count alla suite OPTIONAL. Risoluzione effettiva differita a Batch-3 AF2-N + gacha scope dedicato."
+}

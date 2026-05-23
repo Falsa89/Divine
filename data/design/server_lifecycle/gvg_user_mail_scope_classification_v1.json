@@ -1,0 +1,92 @@
+{
+  "task_id": "BLOCK_C_GVG_USER_MAIL_AMBIGUOUS_CLASSIFICATION",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V1",
+  "verdict": "BLOCK_C_GVG_USER_MAIL_CLASSIFIED_READY",
+  "mode": "classification_only",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260523T210000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V1_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_C_GVG_USER_MAIL_CLASSIFICATION_APPROVAL": true
+  },
+  "target_surface": {
+    "file": "/app/backend/routes/gvg.py",
+    "endpoint_context": "resolve_gvg_war (post-war reward distribution)",
+    "insert_line": 355,
+    "collection": "user_mail",
+    "op": "insert_one",
+    "previous_status": "AMBIGUOUS_DEFER (rilevato in SLC_F_MINOR_WRITE_SURFACES_AUDIT v1)"
+  },
+  "document_shape_inspected": {
+    "id": "uuid4",
+    "user_id": "<uid del partecipante GvG>",
+    "subject": "Guerra GvG Vinta/Persa/Pareggio",
+    "body": "summary dei danni e punteggi guerra",
+    "rewards": {"gold": "int", "gems": "int"},
+    "claimed": true,
+    "timestamp": "datetime utcnow"
+  },
+  "classification_analysis": {
+    "context": "La mail è generata SOLO come conseguenza di una guerra GvG. Le guerre GvG sono state appena patchate (SLC-F GVG WAR SCOPE) con server_id sui doc gvg_wars (server-bound). Quindi la mail nasce da un evento server-bound.",
+    "reward_currency_mix": "Il reward contiene sia gold (server-bound free) sia gems (account-wide paid). Tuttavia il reward viene applicato via users.update_one prima dell'insert; la mail è solo notification record.",
+    "consumption_endpoint": "GET /api/mail + POST /api/mail/claim/{mail_id} in economy.py. Quest'ultimo è update_only (già classificato UPDATE_ONLY_NO_SCOPE_REQUIRED in BLOCK_A ECONOMY-W03).",
+    "server_bound_evidence": [
+      "Generata da gvg_war (ora server_bound via SLC-F GVG WAR SCOPE)",
+      "Il subject menziona esplicitamente i nomi delle gilde, entità server-bound",
+      "La rilevanza informativa è strettamente legata al server dove la guerra è stata combattuta"
+    ],
+    "account_wide_evidence": [
+      "L'inbox utente è attualmente unica (non c'è tab per-server)",
+      "Il reward gems è stato applicato account-wide, non è isolato"
+    ]
+  },
+  "canonical_classification": {
+    "verdict": "SERVER_BOUND_BY_PRODUCER",
+    "reasoning": "La mail è un side-effect notification del producer GvG che è esso stesso server-bound. La inbox UI può rimanere globale ma il record dovrebbe ereditare lo scope del producer. È quindi sicuro applicare ensure_server_scope alla insert_one in un futuro micro-batch dedicato.",
+    "safe_for_metadata_only_patch": true,
+    "recommended_pattern": "await db.user_mail.insert_one(ensure_server_scope({...}, uid))",
+    "risk_estimate": "low",
+    "db_migration_required": false,
+    "prereq_for_future_patch": [
+      "ensure_server_scope helper già importato in gvg.py (verificato durante SLC-F GVG WAR SCOPE)",
+      "approvazione esplicita dell'utente con ZIP dedicato GVG_USER_MAIL_SCOPE_MICRO_BATCH"
+    ]
+  },
+  "alternative_classifications_evaluated": [
+    {
+      "option": "ACCOUNT_WIDE_BY_INBOX",
+      "reasoning_against": "L'inbox UI globale è una UX decision indipendente dallo scope del record. La mail GvG è semanticamente per-server."
+    },
+    {
+      "option": "REQUIRES_PRODUCT_DECISION",
+      "reasoning_against": "La GvG è già stata classificata server-bound nel pack SLC-F GVG WAR SCOPE; la mail eredita coerentemente."
+    },
+    {
+      "option": "MIXED",
+      "reasoning_against": "Non c'è evidenza che la mail abbia anche un canale account-wide; la sola mail GvG è producer-driven server-bound."
+    }
+  ],
+  "recommended_next_micro_batch": {
+    "name": "SLC_F_GVG_USER_MAIL_SCOPE_MICRO_BATCH_V1",
+    "file": "/app/backend/routes/gvg.py",
+    "line": 355,
+    "diff_estimate_lines": 2,
+    "pattern": "insert_one(ensure_server_scope({...}, uid))",
+    "validators_to_add": ["validate_slc_f_gvg_user_mail_scope_post_apply_v1.py"],
+    "rollback_script_required": true,
+    "db_migration_required": false
+  },
+  "forbidden_in_block_c_respected": {
+    "runtime_gvg_patch": false,
+    "mail_inbox_behavior_change": false,
+    "ensure_server_scope_added": false,
+    "db_write": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/gvg_user_mail_scope_classification_v1.json",
+    "/app/docs/divine/115C_GVG_USER_MAIL_SCOPE_CLASSIFICATION.md"
+  ],
+  "next_recommended_action": "Attendere ZIP dedicato per SLC_F_GVG_USER_MAIL_SCOPE_MICRO_BATCH_V1 (low-risk, 2-line patch, no DB migration)."
+}

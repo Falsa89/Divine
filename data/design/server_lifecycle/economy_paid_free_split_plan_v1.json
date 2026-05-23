@@ -1,0 +1,218 @@
+{
+  "task_id": "BLOCK_A_ECONOMY_REFACTOR_PAID_FREE_SPLIT_PREP",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V1",
+  "verdict": "BLOCK_A_ECONOMY_REFACTOR_PREP_READY",
+  "mode": "audit_prep_only",
+  "runtime_patch_applied": false,
+  "db_migration_required": false,
+  "forbidden_violations": [],
+  "timestamp_utc": "20260523T210000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V1_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_A_ECONOMY_REFACTOR_PREP_APPROVAL": true
+  },
+  "target_file": "/app/backend/routes/economy.py",
+  "target_file_lines": 276,
+  "subsystems_audited": [
+    "SHOP",
+    "DAILY_FREE",
+    "MAIL",
+    "BATTLE_PASS",
+    "MULTI_SERVER_LEGACY",
+    "VIP"
+  ],
+  "write_surfaces_classified": [
+    {
+      "surface_id": "ECONOMY-W01",
+      "endpoint": "POST /api/shop/buy",
+      "line": 55,
+      "collection": "shop_purchases",
+      "op": "insert_one",
+      "classification": "AMBIGUOUS_DEFER",
+      "reason": "Acquisti shop mistano valute gems (account-wide paid) e gold (server-bound free). La collection shop_purchases attualmente non ha server_id. Splittare richiede product decision sul perimetro di paid vs free purchase history.",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W02",
+      "endpoint": "POST /api/shop/claim-daily/{item_id}",
+      "line": 73,
+      "collection": "daily_claims",
+      "op": "insert_one",
+      "classification": "FREE_SERVER_BOUND",
+      "reason": "Claim giornaliero free (gold/stamina); naturalmente server-bound. Candidato sicuro per ensure_server_scope in micro-batch futuro dedicato (Batch successivo).",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": true,
+      "safe_patch_pattern": "insert_one(ensure_server_scope({...}, uid))"
+    },
+    {
+      "surface_id": "ECONOMY-W03",
+      "endpoint": "POST /api/mail/claim/{mail_id}",
+      "line": 97,
+      "collection": "user_mail",
+      "op": "update_one",
+      "classification": "UPDATE_ONLY_NO_SCOPE_REQUIRED",
+      "reason": "Solo update di {claimed: true} su documento esistente; nessun insert. Non richiede ensure_server_scope; l'origin classification appartiene al producer della mail (gvg/system).",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W04",
+      "endpoint": "GET /api/battlepass (auto-init)",
+      "line": 106,
+      "collection": "battle_pass",
+      "op": "insert_one",
+      "classification": "VIP_ACCOUNT_OR_MIXED",
+      "reason": "Battle Pass combina progressi free (claimed_free) e premium (claimed_premium). Stagionale, naturalmente account-wide (premium purchase). Splittare progress per-server richiede product decision e DB backfill.",
+      "requires_db_migration": true,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W05",
+      "endpoint": "POST /api/battlepass/claim/{level}",
+      "line": 146,
+      "collection": "battle_pass",
+      "op": "update_one",
+      "classification": "UPDATE_ONLY_NO_SCOPE_REQUIRED",
+      "reason": "Solo update di claimed_free/claimed_premium su documento esistente; scope ereditato dal producer (W04).",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W06",
+      "endpoint": "POST /api/battlepass/buy-premium",
+      "line": 157,
+      "collection": "battle_pass",
+      "op": "update_one (upsert=True, $set)",
+      "classification": "AMBIGUOUS_DEFER",
+      "reason": "Upsert con $set non $setOnInsert: se il documento non esiste l'upsert crea un battle_pass senza i campi default (claimed_free/claimed_premium/season). Patch metadata-only richiederebbe convertire $set in pattern con $setOnInsert/{$set: {is_premium}} + ensure_server_scope; oggi non sicuro perché modificherebbe il payload di creazione. DEFERIRE a refactor strutturale.",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W07",
+      "endpoint": "POST /api/battlepass/add-exp (auto-init)",
+      "line": 166,
+      "collection": "battle_pass",
+      "op": "insert_one",
+      "classification": "VIP_ACCOUNT_OR_MIXED",
+      "reason": "Stesso doc shape di W04; classificazione ereditata. Non patch indipendente.",
+      "requires_db_migration": true,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W08",
+      "endpoint": "POST /api/server/select",
+      "line": 195,
+      "collection": "users (legacy server field)",
+      "op": "update_one ($set server)",
+      "classification": "LEGACY_SERVER_SELECT_FORBIDDEN",
+      "reason": "Legacy endpoint pre-SLC-H. Toccarlo è esplicitamente nel forbidden scope globale del pack (no second server opening, no SLC-H live wiring). Rimuoverlo richiede SLC-H live wiring + economy refactor signoff. DEFERRED.",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W09",
+      "endpoint": "GET /api/vip (auto-init)",
+      "line": 214,
+      "collection": "vip_data",
+      "op": "insert_one",
+      "classification": "PAID_ACCOUNT_WIDE",
+      "reason": "VIP è strettamente legato al total_spend in valuta reale (paid). Per design è account-wide non server-bound. NESSUN ensure_server_scope richiesto: la classificazione canonical è ACCOUNT_WIDE.",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false,
+      "canonical_decision": "NO_SERVER_SCOPE_BY_DESIGN"
+    },
+    {
+      "surface_id": "ECONOMY-W10",
+      "endpoint": "POST /api/vip/claim-daily",
+      "line": 262,
+      "collection": "vip_data",
+      "op": "update_one (upsert=True)",
+      "classification": "PAID_ACCOUNT_WIDE",
+      "reason": "Ereditato da W09. Nessuno scope richiesto.",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false
+    },
+    {
+      "surface_id": "ECONOMY-W11",
+      "endpoint": "POST /api/vip/add-spend",
+      "line": 269,
+      "collection": "vip_data",
+      "op": "update_one (upsert=True)",
+      "classification": "PAID_ACCOUNT_WIDE",
+      "reason": "Ereditato da W09. Nessuno scope richiesto.",
+      "requires_db_migration": false,
+      "safe_for_metadata_only_patch": false
+    }
+  ],
+  "split_buckets_summary": {
+    "PAID_ACCOUNT_WIDE": ["ECONOMY-W09", "ECONOMY-W10", "ECONOMY-W11"],
+    "FREE_SERVER_BOUND": ["ECONOMY-W02"],
+    "VIP_ACCOUNT_OR_MIXED": ["ECONOMY-W04", "ECONOMY-W07"],
+    "LEGACY_SERVER_SELECT_FORBIDDEN": ["ECONOMY-W08"],
+    "AMBIGUOUS_DEFER": ["ECONOMY-W01", "ECONOMY-W06"],
+    "UPDATE_ONLY_NO_SCOPE_REQUIRED": ["ECONOMY-W03", "ECONOMY-W05"],
+    "SAFE_LOCAL_REFACTOR_CANDIDATE": ["ECONOMY-W02"]
+  },
+  "recommended_micro_batch_sequence": [
+    {
+      "step": 1,
+      "name": "ECONOMY_DAILY_CLAIMS_SCOPE_MICRO_BATCH",
+      "target_surfaces": ["ECONOMY-W02"],
+      "pattern": "insert_one(ensure_server_scope({...}, uid))",
+      "risk": "low",
+      "db_migration_required": false,
+      "prerequisites": ["approvazione esplicita dell'utente in ZIP dedicato"]
+    },
+    {
+      "step": 2,
+      "name": "ECONOMY_SHOP_PURCHASES_CLASSIFICATION_TASK",
+      "target_surfaces": ["ECONOMY-W01"],
+      "output": "canonical classification JSON shop_purchases",
+      "risk": "low (audit only)",
+      "db_migration_required": false
+    },
+    {
+      "step": 3,
+      "name": "ECONOMY_BATTLE_PASS_REFACTOR_PRODUCT_DECISION",
+      "target_surfaces": ["ECONOMY-W04", "ECONOMY-W06", "ECONOMY-W07"],
+      "output": "product decision document (account-wide vs per-server progress)",
+      "risk": "medium-high",
+      "db_migration_required": true
+    },
+    {
+      "step": 4,
+      "name": "ECONOMY_VIP_PAID_ACCOUNT_WIDE_CANONICAL",
+      "target_surfaces": ["ECONOMY-W09", "ECONOMY-W10", "ECONOMY-W11"],
+      "output": "canonical marker NO_SERVER_SCOPE_BY_DESIGN in validator suite",
+      "risk": "low",
+      "db_migration_required": false
+    },
+    {
+      "step": 5,
+      "name": "ECONOMY_LEGACY_SERVER_SELECT_REMOVAL",
+      "target_surfaces": ["ECONOMY-W08"],
+      "output": "Rimozione legacy /server/select (BLOCKED finché SLC-H live wiring non attivo)",
+      "risk": "high",
+      "db_migration_required": false,
+      "blocked_by": ["SLC_H_LIVE_WIRING", "SECOND_SERVER_OPENING"]
+    }
+  ],
+  "forbidden_in_block_a_respected": {
+    "pricing_currency_change": false,
+    "paid_free_behavior_change": false,
+    "vip_behavior_change": false,
+    "server_select_runtime_wiring": false,
+    "db_migration": false,
+    "route_behavior_change": false
+  },
+  "runtime_files_modified": [],
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/economy_paid_free_split_plan_v1.json",
+    "/app/docs/divine/115A_ECONOMY_PAID_FREE_SPLIT_PREP.md",
+    "/app/backend/scripts/audit_economy_paid_free_split_prep_v1.py"
+  ],
+  "next_recommended_action": "Attendere ZIP gated dedicato per ECONOMY_DAILY_CLAIMS_SCOPE_MICRO_BATCH (unico passo low-risk e metadata-only candidato di Block A)."
+}

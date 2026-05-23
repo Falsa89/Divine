@@ -540,6 +540,10 @@ OPTIONAL = [
     ('SLC-F-COSMETICS-SCHEMA-SPLIT-REFACTOR-V1',   'validate_slc_f_cosmetics_refactor_v1.py'),
     # SLC-F MINOR WRITE SURFACES AUDIT (READ-ONLY; NO RUNTIME PATCH)
     ('SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1',        'audit_slc_f_minor_write_surfaces_v1.py'),
+    # MEGA-COMBO V1 BLOCK_A ECONOMY PAID/FREE SPLIT PREP (AUDIT/PREP ONLY; NO RUNTIME PATCH)
+    ('MEGA-COMBO-V1-BLOCK-A-ECONOMY-PREP',         'audit_economy_paid_free_split_prep_v1.py'),
+    # MEGA-COMBO V1 BLOCK_B GACHA/SUMMON DRIFT DOCS HOUSEKEEPING (DOC/AUDIT ONLY; NO DB WRITE)
+    ('MEGA-COMBO-V1-BLOCK-B-DRIFT-HOUSEKEEPING',   'audit_drift_docs_gacha_summon_count_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

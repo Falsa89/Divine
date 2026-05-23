@@ -1,0 +1,116 @@
+{
+  "task_id": "BLOCK_D_SLC_H_LIVE_WIRING_READINESS_AUDIT",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V1",
+  "verdict": "BLOCK_D_SLC_H_READINESS_AUDIT_READY",
+  "mode": "readiness_audit_only",
+  "runtime_patch_applied": false,
+  "endpoints_implemented": 0,
+  "timestamp_utc": "20260523T210000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V1_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_D_SLC_H_READINESS_AUDIT_APPROVAL": true
+  },
+  "current_state": {
+    "slc_f_progress": "~96% (post-microbatch consolidation; cosmetics READY_NOT_APPLIED)",
+    "slc_h_status": "DESIGN_ONLY (contract validators passano in suite ma endpoints non implementati)",
+    "second_server_opening_enabled": false,
+    "server_profiles_runtime_enabled": false,
+    "phase_11": false,
+    "af2n_broad_rollout_v8": false,
+    "legacy_server_select_active": true,
+    "legacy_server_select_file": "/app/backend/routes/economy.py:195"
+  },
+  "slc_h_endpoints_contract_required": [
+    {
+      "endpoint": "GET /api/servers",
+      "purpose": "Lista server disponibili per la account-page",
+      "current_status": "PARTIAL (esiste /api/servers in economy.py:177 legacy)",
+      "blockers": [
+        "Endpoint legacy in economy.py deve essere migrato sotto namespace /api/servers SLC-H (o consolidato)",
+        "Definizione canonical del payload (currently include max_players, load_percent legacy)"
+      ]
+    },
+    {
+      "endpoint": "GET /api/account/server-profiles",
+      "purpose": "Lista profili server-bound legati all'account",
+      "current_status": "NOT_IMPLEMENTED",
+      "blockers": [
+        "Necessità di una collection canonical server_profiles non ancora introdotta",
+        "Migration di users.server legacy field a una struttura per-profile (DB migration richiesta)",
+        "Economy refactor paid/free split (BLOCK_A) prerequisito"
+      ]
+    },
+    {
+      "endpoint": "POST /api/account/server-profiles/select",
+      "purpose": "Selezione profilo attivo per la sessione corrente",
+      "current_status": "NOT_IMPLEMENTED",
+      "blockers": [
+        "Conflitto con legacy /server/select in economy.py (deve essere rimosso o de-prioritizzato)",
+        "Necessita server_profiles collection + active_profile_id su users",
+        "AF2-N broad rollout V8 signoff (multi-server context non ancora abilitato)"
+      ]
+    },
+    {
+      "endpoint": "GET /api/account/active-server",
+      "purpose": "Ritorna il server attualmente attivo per il client",
+      "current_status": "NOT_IMPLEMENTED",
+      "blockers": [
+        "Definizione canonical di active_server (oggi users.server legacy)",
+        "server_profiles collection assente"
+      ]
+    },
+    {
+      "endpoint": "POST /api/account/server-profiles/create",
+      "purpose": "Creazione esplicita profilo server-bound",
+      "current_status": "NOT_IMPLEMENTED",
+      "blockers": [
+        "second_server_opening_enabled flag deve essere true",
+        "server_profiles collection + index canonical",
+        "Politica di creazione (auto vs manuale) richiede product decision"
+      ]
+    }
+  ],
+  "readiness_matrix": [
+    {"requirement": "ensure_server_scope helper attivo", "status": "DONE", "evidence": "Phase A/B/C complete; 22+ chiamate attive in 11 file runtime"},
+    {"requirement": "server_id consistency on new docs (gvg_wars, user_equipment, unique_items)", "status": "DONE", "evidence": "SLC-F Batch-1B + Raids + GVG + Unique Items applied"},
+    {"requirement": "Legacy /server/select removal", "status": "PENDING", "blocker": "BLOCK_A Economy refactor + SLC-H live wiring"},
+    {"requirement": "server_profiles collection canonical", "status": "NOT_DESIGNED", "blocker": "Product decision + DB schema design"},
+    {"requirement": "users.active_server_profile_id field", "status": "NOT_INTRODUCED", "blocker": "DB migration richiesta"},
+    {"requirement": "AF2-N broad rollout V8 signoff", "status": "NOT_ACHIEVED", "blocker": "Batch-3 AF2-N routing + signoff design board"},
+    {"requirement": "second_server_opening_enabled flag", "status": "FALSE", "blocker": "Phase 11 timeline"},
+    {"requirement": "Economy refactor paid/free split", "status": "AUDIT_DONE_BLOCK_A", "blocker": "Step-by-step micro-batches"},
+    {"requirement": "Cosmetics schema split", "status": "READY_NOT_APPLIED", "blocker": "DB migration richiesta"},
+    {"requirement": "7 drift docs gacha/summon housekeeping", "status": "DOCUMENTED_BLOCK_B", "blocker": "Non-blocking informational"},
+    {"requirement": "GVG user_mail scope classification", "status": "CLASSIFIED_BLOCK_C", "blocker": "Micro-batch dedicato (low risk)"}
+  ],
+  "readiness_score_breakdown": {
+    "completed": 2,
+    "audit_only_done": 4,
+    "pending_micro_batch": 1,
+    "pending_product_decision": 2,
+    "blocked_by_design": 2,
+    "readiness_percent_estimate": 45,
+    "interpretation": "SLC-H live wiring NON è pronto per implementazione runtime. Sono pronti i prerequisiti audit-level ma mancano product decisions critiche (server_profiles canonical, users.active_server_profile_id, removal /server/select) e signoff AF2-N V8."
+  },
+  "critical_blockers_to_close_before_slc_h_implementation": [
+    "P0: Approvazione canonical server_profiles collection schema",
+    "P0: Approvazione DB migration per users.active_server_profile_id",
+    "P0: AF2-N broad rollout V8 signoff",
+    "P1: Economy refactor BLOCK_A step 5 (legacy /server/select removal plan)",
+    "P1: Cosmetics schema split applied (oggi READY_NOT_APPLIED)",
+    "P2: second_server_opening_enabled flag + Phase 11 timeline"
+  ],
+  "forbidden_in_block_d_respected": {
+    "endpoint_implementation": false,
+    "second_server_opening": false,
+    "feature_flag_toggle": false,
+    "slc_h_live_wiring": false,
+    "frontend_ui": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/slc_h_live_wiring_readiness_v1.json",
+    "/app/docs/divine/115D_SLC_H_LIVE_WIRING_READINESS_AUDIT.md"
+  ],
+  "next_recommended_action": "Procedere con micro-batch low-risk (Block C user_mail, Block A daily_claims). NON iniziare SLC-H live wiring fino a chiusura blocchi P0."
+}
