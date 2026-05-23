@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-# SLC-F GVG WAR INSERT SCOPE POST-APPLY VALIDATOR (READ-ONLY)
+# SLC-F UNIQUE-ITEMS SERVER_SCOPE POST-APPLY VALIDATOR (READ-ONLY)
 import json, os, re, subprocess, sys
 from pathlib import Path
 from datetime import datetime, timezone
 
 ROOT = Path('/app')
 SAFETY = ROOT / 'data/design/system_safety'
-OUT = ROOT / 'data/design/server_lifecycle/_slc_f_gvg_war_scope_post_apply_v1_result.json'
-MARKER = SAFETY / 'slc_f_gvg_war_scope_apply_marker_v1.json'
+OUT = ROOT / 'data/design/server_lifecycle/_slc_f_unique_items_scope_post_apply_v1_result.json'
+MARKER = SAFETY / 'slc_f_unique_items_scope_apply_marker_v1.json'
 
-EXPECTED_APPLY_ID = 'slc_f_gvg_war_scope_20260523T192217Z_34999526'
+EXPECTED_APPLY_ID = 'slc_f_unique_items_scope_20260523T193344Z_48aa4881'
 EXPECTED_SLC_G_MIGRATION_ID = 'slc_g_commit_a_20260523T143803Z_4600ac04'
-ALLOWED_CHANGED = {'backend/routes/gvg.py'}
+ALLOWED_CHANGED = {'backend/routes/unique_items.py'}
 
 PRIOR_MARKERS = [
     'slc_f_batch_0_1_apply_marker_v1.json',
@@ -19,6 +19,7 @@ PRIOR_MARKERS = [
     'slc_f_batch_2_apply_marker_v1.json',
     'slc_f_equipment_scope_apply_marker_v1.json',
     'slc_f_raids_equipment_scope_apply_marker_v1.json',
+    'slc_f_gvg_war_scope_apply_marker_v1.json',
     'slc_g_default_s1_migration_apply_result_v1.json',
 ]
 
@@ -26,9 +27,8 @@ FORBIDDEN_UNCHANGED = [
     'backend/battle_engine.py', 'backend/battle_core.py', 'frontend/app/combat.tsx',
     'backend/routes/affinity_gift_spend.py', 'backend/routes/affinity_gifts.py',
     'backend/routes/heroes.py', 'backend/routes/combat.py',
-    'backend/routes/equipment.py', 'backend/routes/forge.py', 'backend/routes/raids.py',
-    # NOTE: unique_items.py removed from FORBIDDEN_UNCHANGED — sanctioned by
-    # the subsequent UNIQUE_ITEMS_ONLY micro-batch (apply_id slc_f_unique_items_scope_*).
+    'backend/routes/equipment.py', 'backend/routes/forge.py',
+    'backend/routes/raids.py', 'backend/routes/gvg.py',
     'backend/routes/sanctuary.py', 'backend/routes/player_faction_v2.py',
     'backend/routes/cosmetics.py', 'backend/routes/economy.py',
     'backend/routes/push_notifications.py', 'backend/routes/game_data.py',
@@ -39,6 +39,7 @@ MUST_STILL_HAVE_HELPER_IMPORT = [
     'backend/routes/items.py', 'backend/routes/forge.py', 'backend/routes/achievements.py',
     'backend/routes/level_sharing.py', 'backend/routes/social.py', 'backend/routes/soul_forge.py',
     'backend/routes/artifacts.py', 'backend/routes/guild.py', 'backend/routes/raids.py',
+    'backend/routes/gvg.py',
 ]
 
 
@@ -48,7 +49,7 @@ def main() -> int:
         errs.append('apply_marker_missing')
     else:
         m = json.loads(MARKER.read_text())
-        if m.get('scope') != 'GVG_WAR_ONLY': errs.append('scope_not_GVG_WAR_ONLY')
+        if m.get('scope') != 'UNIQUE_ITEMS_ONLY': errs.append('scope_not_UNIQUE_ITEMS_ONLY')
         if m.get('apply_id') != EXPECTED_APPLY_ID: errs.append(f'apply_id_mismatch:got={m.get("apply_id")}')
         if m.get('route_patch_applied') is not True: errs.append('route_patch_applied_must_be_true')
         if m.get('route_patch_applied_partial') is not True: errs.append('route_patch_applied_partial_must_be_true')
@@ -60,6 +61,11 @@ def main() -> int:
         if m.get('fallback_removed') is not False: errs.append('fallback_removed_must_be_false')
         cf = set(m.get('changed_files') or [])
         if cf != ALLOWED_CHANGED: errs.append(f'changed_files_mismatch:got={sorted(cf)}')
+        cat = m.get('unique_items_target_surfaces_audit') or []
+        if len(cat) != 2: errs.append(f'expected_2_target_surfaces:n={len(cat)}')
+        for r in cat:
+            if r.get('decision') != 'PATCH_NOW_SAFE':
+                errs.append(f'non_patch_decision:{r.get("surface_id")}={r.get("decision")}')
 
     for p in PRIOR_MARKERS:
         if not (SAFETY / p).exists():
@@ -99,35 +105,39 @@ def main() -> int:
         if 'from utils.server_scope import ensure_server_scope' not in text:
             errs.append(f'prior_apply_helper_import_missing_in:{f}')
 
-    # Specific patch verification on gvg.py
-    gvg_text = (ROOT / 'backend/routes/gvg.py').read_text(errors='ignore')
-    if 'from utils.server_scope import ensure_server_scope' not in gvg_text:
-        errs.append('gvg_helper_import_missing')
-    if 'war = ensure_server_scope(war, current_user["id"])' not in gvg_text:
-        errs.append('gvg_ensure_server_scope_call_missing')
-    pattern = r'war = ensure_server_scope\(war,\s*current_user\["id"\]\)\s*\n\s*await db\.gvg_wars\.insert_one\(war\)'
-    if not re.search(pattern, gvg_text):
-        errs.append('gvg_patch_not_adjacent_to_insert_one')
+    # Specific patch verification on unique_items.py
+    ui_text = (ROOT / 'backend/routes/unique_items.py').read_text(errors='ignore')
+    if 'from utils.server_scope import ensure_server_scope' not in ui_text:
+        errs.append('unique_items_helper_import_missing')
+    # Surface 1: crafted_doc + ensure_server_scope adjacent to insert_one
+    pat1 = r'crafted_doc = ensure_server_scope\(crafted_doc,\s*uid\)\s*\n\s*await db\.unique_items_crafted\.insert_one\(crafted_doc\)'
+    if not re.search(pat1, ui_text):
+        errs.append('unique_items_craft_patch_not_adjacent')
+    # Surface 2: $setOnInsert with ensure_server_scope({}, uid)
+    pat2 = r'\$setOnInsert[\"\']\s*:\s*ensure_server_scope\(\{\},\s*uid\)'
+    if not re.search(pat2, ui_text):
+        errs.append('unique_items_equip_setOnInsert_missing')
     # Business logic markers preserved
-    for snippet in ['guild_a_id', 'guild_b_id', 'guild_a_score', 'guild_b_score',
-                    'guild_a_attacks', 'guild_b_attacks', 'winner_guild_id', 'is_bot_guild']:
-        if snippet not in gvg_text:
-            errs.append(f'gvg_business_logic_marker_missing:{snippet}')
-    # Confirm we did NOT touch user_mail.insert_one
-    if gvg_text.count('user_mail.insert_one') != 1:
-        errs.append(f'gvg_user_mail_insert_count_unexpected:{gvg_text.count("user_mail.insert_one")}')
-    # And no ensure_server_scope near user_mail
-    if re.search(r'ensure_server_scope.*\n\s*await db\.user_mail\.insert_one', gvg_text):
-        errs.append('gvg_user_mail_unexpectedly_patched')
+    for snippet in ['UNIQUE_ITEMS', 'cost_gold = {1: 10000', 'cost_gems = {1: 10',
+                    'Servono', 'Gia sbloccato', 'Oggetto non ancora sbloccato',
+                    'Questo oggetto puo essere equipaggiato SOLO da', 'item["rarity"]']:
+        if snippet not in ui_text:
+            errs.append(f'unique_items_business_logic_marker_missing:{snippet}')
+    # Inline insert_one literal must be gone
+    if 'await db.unique_items_crafted.insert_one({' in ui_text:
+        errs.append('unique_items_inline_insert_literal_still_present')
+    # We did NOT touch combat.py
+    if 'from utils.server_scope import ensure_server_scope' in (ROOT / 'backend/routes/combat.py').read_text(errors='ignore'):
+        errs.append('combat_unexpectedly_patched')
 
     out = {
-        'task_origin': 'SLC-F-GVG-WAR-SCOPE-POST-APPLY',
+        'task_origin': 'SLC-F-UNIQUE-ITEMS-SCOPE-POST-APPLY',
         'timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'errors': errs,
         'verdict': 'PASS' if not errs else 'FAIL',
     }
     OUT.write_text(json.dumps(out, indent=2))
-    print(f"SLC-F-GVG-WAR-SCOPE-POST-APPLY {out['verdict']} errors={len(errs)}")
+    print(f"SLC-F-UNIQUE-ITEMS-SCOPE-POST-APPLY {out['verdict']} errors={len(errs)}")
     for e in errs:
         print(' -', e)
     return 0 if out['verdict'] == 'PASS' else 1

@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime
 from fastapi import HTTPException, Depends
 from pydantic import BaseModel
+from utils.server_scope import ensure_server_scope
 
 # ===================== UNIQUE ITEMS FOR ALL 30 HEROES =====================
 UNIQUE_ITEMS = {
@@ -274,10 +275,12 @@ def register_unique_items_routes(router, db, get_current_user, serialize_doc, ca
             raise HTTPException(400, f"Servono {cost_gold:,} oro e {cost_gems} gemme!")
         await db.users.update_one({"id": uid}, {"$inc": {"gold": -cost_gold, "gems": -cost_gems}})
         # Craft
-        await db.unique_items_crafted.insert_one({
+        crafted_doc = {
             "user_id": uid, "hero_name": req.hero_name, "item_name": item["name"],
             "crafted_at": datetime.utcnow(),
-        })
+        }
+        crafted_doc = ensure_server_scope(crafted_doc, uid)
+        await db.unique_items_crafted.insert_one(crafted_doc)
         return {"success": True, "item": item, "hero_name": req.hero_name}
 
     class EquipUniqueRequest(BaseModel):
@@ -302,7 +305,8 @@ def register_unique_items_routes(router, db, get_current_user, serialize_doc, ca
         # Equip
         await db.unique_items_equipped.update_one(
             {"user_id": uid, "hero_name": req.hero_name},
-            {"$set": {"user_hero_id": req.user_hero_id, "equipped_at": datetime.utcnow()}},
+            {"$set": {"user_hero_id": req.user_hero_id, "equipped_at": datetime.utcnow()},
+             "$setOnInsert": ensure_server_scope({}, uid)},
             upsert=True,
         )
         return {"success": True, "item": item["name"], "hero": req.hero_name}

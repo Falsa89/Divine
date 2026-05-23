@@ -1,0 +1,120 @@
+{
+  "task_origin": "SLC-F-UNIQUE-ITEMS-SERVER-SCOPE",
+  "version": "v1",
+  "apply_id": "slc_f_unique_items_scope_20260523T193344Z_48aa4881",
+  "applied_at_utc": "2026-05-23T19:33:44.000000+00:00",
+  "scope": "UNIQUE_ITEMS_ONLY",
+  "scope_type": "gated micro-batch: ensure_server_scope on unique_items_crafted.insert_one + unique_items_equipped.update_one upsert via $setOnInsert",
+  "authorization_markers_present": {
+    "SLC_F_UNIQUE_ITEMS_SCOPE_APPLY_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "UNIQUE_ITEMS_ONLY"
+  },
+  "git_head_before": "a3bc211",
+  "route_patch_applied": true,
+  "route_patch_applied_partial": true,
+  "route_patch_applied_full": false,
+  "safe_no_op_apply": false,
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "phase_11_executed": false,
+  "fallback_removed": false,
+  "housing_runtime_implemented": false,
+  "changed_files": [
+    "backend/routes/unique_items.py"
+  ],
+  "routes_patched_families": [
+    "unique_items/craft",
+    "unique_items/equip"
+  ],
+  "unique_items_target_surfaces_audit": [
+    {
+      "surface_id": "UI-W1",
+      "endpoint": "POST /api/unique-items/craft",
+      "function": "craft_unique_item",
+      "line_pre_patch": 277,
+      "operation": "db.unique_items_crafted.insert_one(...)",
+      "semantics": "Creates new server_bound unique_items_crafted doc per user_id+hero_name when a 5+ star hero unlocks their exclusive item",
+      "creates_new_doc": true,
+      "upsert": false,
+      "classification": "server_bound (unique_items_crafted)",
+      "decision": "PATCH_NOW_SAFE",
+      "patch_summary": "Extracted inline dict literal to named variable 'crafted_doc'; called ensure_server_scope(crafted_doc, uid); pass crafted_doc to insert_one. +4 lines, 0 lines removed (excluding identical line shuffle)."
+    },
+    {
+      "surface_id": "UI-W2",
+      "endpoint": "POST /api/unique-items/equip",
+      "function": "equip_unique_item",
+      "line_pre_patch": 303,
+      "operation": "db.unique_items_equipped.update_one(... , {$set: ...}, upsert=True)",
+      "semantics": "Upsert equipped state per user_id+hero_name; on insert creates new server_bound unique_items_equipped doc; on update of existing doc only equipped_to/equipped_at change",
+      "creates_new_doc": true,
+      "upsert": true,
+      "classification": "server_bound (unique_items_equipped)",
+      "decision": "PATCH_NOW_SAFE",
+      "patch_summary": "Added $setOnInsert clause with ensure_server_scope({}, uid) which yields {server_id: 's1', account_id: uid}; semantics: stamp scope ONLY on first equip insert; on subsequent re-equip updates the $setOnInsert is NOT applied. +1 line (the $setOnInsert key); existing $set block preserved verbatim. Idempotent under SLC-G LEGACY_DEFAULT_SERVER_ID='s1'."
+    }
+  ],
+  "exact_patch_diff_summary": [
+    "+from utils.server_scope import ensure_server_scope",
+    "+ crafted_doc = {...}; crafted_doc = ensure_server_scope(crafted_doc, uid); insert_one(crafted_doc) (replaces inline literal)",
+    "+ '$setOnInsert': ensure_server_scope({}, uid) added to update_one upsert"
+  ],
+  "write_surfaces_skipped": [
+    {
+      "area": "unique_items.py:275 db.users.update_one ($inc gold/gems)",
+      "reason": "db.users is account-wide skipped collection (Batch-1B exclusion)"
+    }
+  ],
+  "forbidden_scope_untouched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "frontend/app/combat.tsx",
+    "backend/routes/affinity_gift_spend.py",
+    "backend/routes/affinity_gifts.py",
+    "backend/routes/combat.py",
+    "backend/routes/equipment.py",
+    "backend/routes/forge.py",
+    "backend/routes/raids.py",
+    "backend/routes/gvg.py",
+    "backend/routes/cosmetics.py",
+    "backend/routes/economy.py",
+    "backend/routes/heroes.py",
+    "backend/routes/sanctuary.py",
+    "backend/routes/player_faction_v2.py",
+    "backend/routes/push_notifications.py",
+    "backend/routes/game_data.py",
+    "Character Bible / db.heroes",
+    "Housing runtime/UI/resolver",
+    "/api/housing",
+    "/api/account/server-profiles",
+    "/api/account/active-server",
+    "SLC-H runtime files",
+    "frontend/app/*",
+    "UNIQUE_ITEMS catalog constants",
+    "cost_gold / cost_gems formulas",
+    "rarity table",
+    "ownership checks (find_one filters)"
+  ],
+  "patch_semantics": "ensure_server_scope stamps server_id/account_id set-only-if-missing on NEW docs; $setOnInsert ensures upsert sets scope ONLY on first equip insert (no clobber of existing equipped docs)",
+  "helper_module": "backend/utils/server_scope.py (Batch-0, unchanged; imported by unique_items.py for this micro-batch)",
+  "rollback_script": "backend/scripts/rollback_slc_f_unique_items_scope.py",
+  "rollback_markers_required": {
+    "SLC_F_UNIQUE_ITEMS_SCOPE_ROLLBACK_APPROVAL": true,
+    "SLC_F_UNIQUE_ITEMS_SCOPE_ROLLBACK_ID": "slc_f_unique_items_scope_20260523T193344Z_48aa4881"
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_batch_0_1_apply_id_preserved": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "slc_f_batch_1b_apply_id_preserved": "slc_f_batch_1b_20260523T175058Z_2cf0584c",
+  "slc_f_batch_2_apply_id_preserved": "slc_f_batch_2_20260523T181752Z_b838601e",
+  "slc_f_equipment_scope_apply_id_preserved": "slc_f_equipment_scope_20260523T182939Z_d2afcc8a",
+  "slc_f_raids_equipment_scope_apply_id_preserved": "slc_f_raids_equipment_scope_20260523T184512Z_a46a6034",
+  "slc_f_minor_audit_id_preserved": "slc_f_minor_audit_20260523T190000Z_audit_only",
+  "slc_f_gvg_war_scope_apply_id_preserved": "slc_f_gvg_war_scope_20260523T192217Z_34999526",
+  "known_drift_docs_status": {
+    "count": 7,
+    "source_family": "gacha/summon",
+    "fix_applied_in_this_microbatch": false,
+    "fix_deferred_reason": "Per task guardrail: drift docs out of UNIQUE_ITEMS_ONLY scope"
+  },
+  "verdict_target": "SLC_F_UNIQUE_ITEMS_SCOPE_APPLIED_SAFE"
+}
