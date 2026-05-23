@@ -1,0 +1,125 @@
+{
+  "task_origin": "SLC-F-APPLY-BATCH-2",
+  "version": "v1",
+  "apply_id": "slc_f_batch_2_20260523T181752Z_b838601e",
+  "applied_at_utc": "2026-05-23T18:17:52.000000+00:00",
+  "scope": "BATCH_2_ONLY",
+  "scope_type": "mixed/account-wide route patch gated apply",
+  "authorization_markers_present": {
+    "SLC_F_BATCH_2_APPLY_APPROVAL": true,
+    "SLC_F_APPLY_BATCH_SCOPE": "BATCH_2_ONLY"
+  },
+  "canonical_classification_source": "/app/data/design/server_lifecycle/slc_f_route_scope_inventory_v1.json",
+  "canonical_policy_source": "/app/data/design/server_lifecycle/account_server_data_scope_policy_v1.json",
+  "git_head_before": "fa44754",
+  "route_patch_applied": false,
+  "route_patch_applied_partial": false,
+  "route_patch_applied_full": false,
+  "all_candidates_skipped": true,
+  "safe_no_op_apply": true,
+  "no_op_rationale": "All Batch-2 mixed/account-wide candidates require semantic decisions that cannot be safely encoded as metadata set-only-if-missing patches per SLC-F GUARDRAILS. Ambiguous routes are deferred per gated-apply policy: 'A skipped route is better than an unsafe route patch.'",
+  "second_server_opening_allowed": false,
+  "feature_flag_enabled": false,
+  "phase_11_executed": false,
+  "fallback_removed": false,
+  "housing_runtime_implemented": false,
+  "changed_files": [],
+  "routes_patched_families": [],
+  "candidate_audit_table": [
+    {
+      "file": "backend/routes/push_notifications.py",
+      "route_family": "push_notifications",
+      "classification": "account_wide",
+      "write_surfaces": ["push_tokens (upsert)", "notifications (insert/update)"],
+      "decision": "SKIP_ACCOUNT_WIDE_NO_CHANGE",
+      "reason": "Canonical policy classifies push_notifications as account_wide. Documents already keyed by user_id which = account ownership. No server_id required by SLC-F spec for account-wide identity/notification surfaces. Patching would CHANGE account-wide semantics."
+    },
+    {
+      "file": "backend/routes/cosmetics.py",
+      "route_family": "cosmetics_ownership",
+      "classification": "mixed_account_owned_server_equipped",
+      "write_surfaces": ["user_cosmetics (insert/update with owned_* + active_*)", "users (currency $inc)", "territory_control (upsert)"],
+      "decision": "SKIP_AMBIGUOUS",
+      "reason": "Schema conflates account-wide ownership (owned_auras, owned_frames) with server-bound equipped state (active_aura, active_frame). Canonical policy requires structural split: ownership=account_wide, bonus_activation=server_bound. Cannot be encoded as a single ensure_server_scope blanket call without changing semantics. Also writes to db.users (explicitly skipped collection) and db.territory_control (separate guild-level semantics)."
+    },
+    {
+      "file": "backend/routes/economy.py",
+      "route_family": "economy_paid_wallet + multi_server_legacy + vip_mixed + battle_pass + mail",
+      "classification": "mixed_complex",
+      "write_surfaces": ["shop_purchases", "daily_claims", "user_mail (claim)", "battle_pass", "users ($inc currency)", "vip_data", "users.server"],
+      "decision": "SKIP_AMBIGUOUS",
+      "reason": "File aggregates 5 distinct subsystems with conflicting account/server semantics: (1) paid currency (gems) is account_wide but free currency (gold) is server_bound; (2) battle_pass season is account-level but rewards distribute to server-bound currencies; (3) vip_data is mixed (vip_level=account_wide, vip_claim_state=server_bound); (4) mail can be account or server origin; (5) contains legacy /server/select endpoint at line 195-206 which is FORBIDDEN scope (server selection runtime endpoints). Patching any single write risks activating server selection runtime semantics or rewriting balance/economy logic, both explicitly forbidden."
+    },
+    {
+      "file": "backend/routes/game_data.py",
+      "route_family": "game_data",
+      "classification": "mixed_account_owned_server_equipped",
+      "write_surfaces": [],
+      "decision": "SKIP_NO_WRITES",
+      "reason": "Pure static catalog/constants module (EQUIPMENT_TEMPLATES, SHOP_ITEMS, AURAS, AVATAR_FRAMES, TERRITORIES, SERVERS, VIP_LEVELS, etc.). Zero db.*.insert/update/upsert/delete calls. Nothing to patch."
+    }
+  ],
+  "routes_explicitly_out_of_scope_for_batch_2": [
+    {
+      "family": "equipment",
+      "file": "backend/routes/equipment.py",
+      "classification": "server_bound",
+      "reason": "server_bound family; would be a Batch-1B leftover, not Batch-2 (mixed/account-wide). Defer to a follow-up Batch-1B-extension task if needed."
+    },
+    {
+      "family": "unique_items",
+      "file": "backend/routes/unique_items.py",
+      "classification": "not_in_canonical_inventory",
+      "reason": "Not classified in SLC-F canonical route_family_classification. Out of scope for Batch-2. Writes touch db.users (explicitly skipped collection) and unique_items_crafted/equipped."
+    },
+    {
+      "family": "synergies",
+      "file": "backend/routes/synergies.py",
+      "classification": "no_writes",
+      "reason": "Read-only routes; not classified; out of scope."
+    }
+  ],
+  "forbidden_scope_untouched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "frontend/app/combat.tsx",
+    "backend/routes/affinity_gift_spend.py",
+    "backend/routes/affinity_gifts.py",
+    "backend/routes/heroes.py",
+    "backend/routes/combat.py",
+    "backend/routes/sanctuary.py",
+    "Character Bible / db.heroes",
+    "Housing runtime/UI/resolver",
+    "/api/housing",
+    "/api/servers (runtime activation)",
+    "/api/account/server-profiles",
+    "/api/account/active-server",
+    "SLC-H runtime files",
+    "frontend/app/*"
+  ],
+  "account_wide_vs_server_bound_policy_proof": {
+    "policy_doc": "/app/data/design/server_lifecycle/account_server_data_scope_policy_v1.json",
+    "account_wide_identity": ["account_id", "auth_email", "display_name_global", "ban_state"],
+    "account_wide_economy": ["paid_currency_balance", "paid_currency_ledger", "purchase_history", "refund_history"],
+    "account_wide_notifications": ["push_tokens (per device, account-tied)", "notifications (account-wide log)"],
+    "server_bound_free_economy": ["free_currency_gold", "free_currency_diamonds_free", "event_currency", "shard_balances"],
+    "mixed_split_rule": "ownership=account_wide, activation/use/bonus=server_bound (paid cosmetics, VIP claim state, paid spend ledger split view)"
+  },
+  "patch_semantics": "NONE (no-op safe apply); all candidates deferred per gated policy",
+  "helper_module": "backend/utils/server_scope.py (Batch-0, unchanged)",
+  "rollback_script": "backend/scripts/rollback_slc_f_batch_2.py",
+  "rollback_markers_required": {
+    "SLC_F_BATCH_2_ROLLBACK_APPROVAL": true,
+    "SLC_F_BATCH_2_ROLLBACK_ID": "slc_f_batch_2_20260523T181752Z_b838601e"
+  },
+  "slc_g_migration_id_preserved": "slc_g_commit_a_20260523T143803Z_4600ac04",
+  "slc_f_batch_0_1_apply_id_preserved": "slc_f_batch_0_1_20260523T173754Z_27b1b737",
+  "slc_f_batch_1b_apply_id_preserved": "slc_f_batch_1b_20260523T175058Z_2cf0584c",
+  "known_drift_docs_status": {
+    "count": 7,
+    "source_family": "gacha/summon",
+    "fix_applied_in_batch_2": false,
+    "fix_deferred_reason": "Per task guardrail: gacha/summon route patching not authorized in Batch-2 unless canonical classification proves a metadata set-only-if-missing patch is safe. Canonical inventory does NOT list gacha/summon family in account_wide or mixed classification. Therefore deferred to a dedicated housekeeping task."
+  },
+  "verdict_target": "SLC_F_BATCH_2_APPLIED_SAFE"
+}

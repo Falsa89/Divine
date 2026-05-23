@@ -524,6 +524,8 @@ OPTIONAL = [
     ('SLC-F-BATCH-0-1-POST-APPLY',                 'validate_slc_f_batch_0_1_post_apply_v1.py'),
     # SLC-F APPLY BATCH-1B POST-APPLY (READ-ONLY VERIFICATION)
     ('SLC-F-BATCH-1B-POST-APPLY',                  'validate_slc_f_batch_1b_post_apply_v1.py'),
+    # SLC-F APPLY BATCH-2 POST-APPLY (READ-ONLY VERIFICATION; SAFE NO-OP APPLY)
+    ('SLC-F-BATCH-2-POST-APPLY',                   'validate_slc_f_batch_2_post_apply_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
