@@ -1,0 +1,13 @@
+{
+  "task_id": "PROJECT_O_TRACK_C",
+  "verdict": "TRACK_C_DEV_LIVE_GAMEPLAY_REGRESSION_AND_SHA_GUARD_READY",
+  "fixture": "deterministic 3v3 random.seed(42) synthetic chars c0-c2 vs c10-c12 max_turns=5",
+  "baseline_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+  "flag_off_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+  "flag_on_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+  "byte_identical_flag_off": true,
+  "byte_identical_flag_on": true,
+  "no_fake_normalization": true,
+  "explanation": "Both flag OFF and flag ON yield the same SHA256 because the Project_M seam returns identity at the live call site (dry_run=False). This is the desired property: the canary flag is a NO-OP for live gameplay; only the dry-run branch produces preview envelopes, and the dry-run branch is never reached by simulate_battle.",
+  "validator_script": "validate_project_o_dev_live_gameplay_regression_v1.py"
+}

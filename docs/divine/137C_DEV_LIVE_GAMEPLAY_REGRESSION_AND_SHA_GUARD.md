@@ -1,0 +1,6 @@
+# 137C — DEV-LIVE GAMEPLAY REGRESSION AND SHA GUARD
+
+**Pack**: `PROJECT_O` — Track C
+**Verdict**: `TRACK_C_DEV_LIVE_GAMEPLAY_REGRESSION_AND_SHA_GUARD_READY`
+
+flag OFF SHA256 == flag ON SHA256 == baseline `d951767a72…`. No fake normalization.

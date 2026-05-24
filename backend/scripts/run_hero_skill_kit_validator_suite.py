@@ -816,6 +816,22 @@ OPTIONAL = [
     ('PROJECT-N-TRACK-G-STATUS-FIRST-SLICE-DEV-LIVE-READINESS-GATE', 'validate_project_n_status_first_slice_dev_live_readiness_gate_v1.py'),
     # PROJECT_N Track H PROJECT N COMPLETION + NEXT STEP (next pack: PROJECT_O)
     ('PROJECT-N-TRACK-H-PROJECT-N-COMPLETION-AND-NEXT-STEP', 'validate_project_n_completion_and_next_step_v1.py'),
+    # PROJECT_O Track A DEV-LIVE PRECHECK (NON_PROD_LOCAL_ONLY confirmed)
+    ('PROJECT-O-TRACK-A-DEV-LIVE-PRECHECK', 'validate_project_o_dev_live_precheck_v1.py'),
+    # PROJECT_O Track B STATUS FIRST SLICE DEV-LIVE FLAG FLIP (executed + rolled back; FLAG_OFF)
+    ('PROJECT-O-TRACK-B-STATUS-FIRST-SLICE-DEV-LIVE-FLAG-FLIP', 'validate_project_o_status_first_slice_dev_live_flag_v1.py'),
+    # PROJECT_O Track C DEV-LIVE GAMEPLAY REGRESSION + SHA GUARD (flag OFF == flag ON == baseline)
+    ('PROJECT-O-TRACK-C-DEV-LIVE-GAMEPLAY-REGRESSION-SHA-GUARD', 'validate_project_o_dev_live_gameplay_regression_v1.py'),
+    # PROJECT_O Track D DEV-LIVE LIGHT LOAD + OBSERVABILITY (300/300 2xx, p99~74ms)
+    ('PROJECT-O-TRACK-D-DEV-LIVE-LIGHT-LOAD-OBSERVABILITY', 'validate_project_o_dev_live_light_load_observability_v1.py'),
+    # PROJECT_O Track E DEV-LIVE PAYLOAD/LOG/METRICS NO-LEAK
+    ('PROJECT-O-TRACK-E-DEV-LIVE-PAYLOAD-LOG-METRICS-NO-LEAK', 'validate_project_o_dev_live_payload_log_metrics_no_leak_v1.py'),
+    # PROJECT_O Track F DEV-LIVE ROLLBACK + KILL-SWITCH DRILL (6-step)
+    ('PROJECT-O-TRACK-F-DEV-LIVE-ROLLBACK-KILL-SWITCH-DRILL', 'validate_project_o_dev_live_rollback_kill_switch_drill_v1.py'),
+    # PROJECT_O Track G PROD READINESS GATE PREP (9 green-checks; no rollout)
+    ('PROJECT-O-TRACK-G-PROD-READINESS-GATE-PREP', 'validate_project_o_prod_readiness_gate_prep_v1.py'),
+    # PROJECT_O Track H PROJECT O COMPLETION + NEXT STEP (next pack: PROJECT_P)
+    ('PROJECT-O-TRACK-H-PROJECT-O-COMPLETION-AND-NEXT-STEP', 'validate_project_o_completion_and_next_step_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

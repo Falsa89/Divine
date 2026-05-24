@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_O_TRACK_A",
+  "verdict": "TRACK_A_DEV_LIVE_PRECHECK_READY",
+  "env_classification": "NON_PROD_LOCAL_ONLY",
+  "safe_for_dev_live_flag_flip": true,
+  "project_n_evidence_verified": {
+    "canary_flag_flip_executed_then_rolled_back": true,
+    "canary_battle_byte_identical_with_flag_ON": true,
+    "canary_payload_log_metrics_no_leak": true,
+    "canary_kill_switch_drill_executed": true,
+    "canary_suite_clean_at_471": true
+  },
+  "evidence_non_prod": {
+    "hostname": "agent-env-* (Emergent ephemeral container)",
+    "mongodb_url_local": true,
+    "jwt_secret_dev_default": true,
+    "db_name_dev": true,
+    "expo_packager_proxy_url_is_preview": true,
+    "no_PROD_LIVE_envvars": true,
+    "server_profiles_503": true,
+    "housing_preview_503": true,
+    "backend_healthy": true
+  },
+  "prod_like_signals_count": 0,
+  "validator_script": "validate_project_o_dev_live_precheck_v1.py"
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_O_TRACK_G",
+  "verdict": "TRACK_G_PROD_READINESS_GATE_PREP_READY",
+  "required_green_checks_for_prod": [
+    "dev-live flag ON smoke + load green (Track B/D)",
+    "dev-live gameplay regression byte-identical (Track C)",
+    "dev-live no payload/log/metrics leak (Track E)",
+    "dev-live rollback + kill-switch drill green (Track F)",
+    "19 REQUIRED suite validators green",
+    "manual mobile QA sign-off",
+    "separate prod approval phrase",
+    "prod backup/disaster recovery plan documented",
+    "prod canary subset percentage agreed (e.g. 1% → 5% → 25% → 100%)"
+  ],
+  "future_prod_rollout_approval_phrase": "PROJECT_P_STATUS_FIRST_SLICE_PROD_ROLLOUT_APPROVAL=true with PROJECT_ACCELERATION_MODE=STATUS_FIRST_SLICE_PROD_ROLLOUT and explicit prod_canary_percentage parameter",
+  "prod_rollout_executed_in_pack_o": false,
+  "validator_script": "validate_project_o_prod_readiness_gate_prep_v1.py"
+}

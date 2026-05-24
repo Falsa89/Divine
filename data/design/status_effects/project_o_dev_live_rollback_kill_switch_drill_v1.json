@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_O_TRACK_F",
+  "verdict": "TRACK_F_DEV_LIVE_ROLLBACK_AND_KILL_SWITCH_DRILL_READY",
+  "rollback_script": "/app/backend/scripts/rollback_project_o_status_first_slice_dev_live_flag.py",
+  "backup_file": "/app/backend/.env.project_o_pre_flip.bak",
+  "backup_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "kill_switch_drill_executed": true,
+  "drill_sequence": [
+    {"step": 1, "action": "capture pre-flip .env md5", "observed": "ff60bbb79efa329b71aa8ed351ea89b3"},
+    {"step": 2, "action": "flip ON (Track B)", "observed": "flag appended; restart; flag active"},
+    {"step": 3, "action": "smoke + battle + load with flag ON", "observed": "smoke 200/404/200/200/503/503; battle byte-identical; 300/300 2xx"},
+    {"step": 4, "action": "restore .env from backup", "observed": "md5 reverted to ff60bbb79efa329b71aa8ed351ea89b3"},
+    {"step": 5, "action": "restart backend", "observed": "supervisor restart rc=0; backend RUNNING"},
+    {"step": 6, "action": "verify post-rollback smoke + flag absence", "observed": "heroes=200 count=100; flag absent from .env"}
+  ],
+  "current_state_post_drill": "FLAG_OFF",
+  "validator_script": "validate_project_o_dev_live_rollback_kill_switch_drill_v1.py"
+}

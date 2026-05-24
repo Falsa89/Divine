@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_O_TRACK_B",
+  "verdict": "TRACK_B_STATUS_FIRST_SLICE_DEV_LIVE_FLAG_ENABLED_THEN_ROLLED_BACK",
+  "track_a_classification": "NON_PROD_LOCAL_ONLY",
+  "flag_name": "STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+  "flip_target_value": "true",
+  "flip_executed": true,
+  "flip_scope": "backend/.env on this dev-live-equivalent local container only",
+  "backup_file": "/app/backend/.env.project_o_pre_flip.bak",
+  "backup_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "backend_restart_after_flip": true,
+  "post_flip_smoke": {
+    "/api/heroes": "200 count=100",
+    "/api/heroes/primordial_gaia": "404",
+    "/api/heroes/borea": "200",
+    "/api/heroes/greek_borea": "200",
+    "/api/server-profiles/select": "503",
+    "/api/housing/preview": "503"
+  },
+  "battle_byte_identical_with_flag_ON": true,
+  "battle_post_flip_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+  "prod_rollout": false,
+  "broad_public_rollout": false,
+  "db_write": false,
+  "battle_code_patch_beyond_existing_seam": false,
+  "keep_on_after_dev_live_marker_present": false,
+  "rollback_applied_after_validation": true,
+  "rollback_script": "/app/backend/scripts/rollback_project_o_status_first_slice_dev_live_flag.py",
+  "final_env_state": "STATUS_RUNTIME_BUFF_SLICE_ENABLED removed; backend/.env md5 = ff60bbb79efa329b71aa8ed351ea89b3 (restored)",
+  "validator_script": "validate_project_o_status_first_slice_dev_live_flag_v1.py"
+}
