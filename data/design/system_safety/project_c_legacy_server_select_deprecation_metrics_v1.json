@@ -1,0 +1,82 @@
+{
+  "task_id": "PROJECT_C_TRACK_G_LEGACY_SERVER_SELECT_DEPRECATION_METRICS",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_G_LEGACY_SERVER_SELECT_DEPRECATION_METRICS_DESIGN_READY",
+  "mode": "metrics_design_only_no_route_mutation",
+  "runtime_patch_applied": false,
+  "route_behavior_mutated": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260524T180000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_C_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS"
+  },
+  "upstream": {
+    "v7_block_a_deprecation_notice": "/app/data/design/system_safety/v7_economy_server_select_deprecation_marker.json",
+    "target_route": "POST /api/server/select"
+  },
+  "deprecation_log_emitter": {
+    "logger_name": "divine.deprecation",
+    "event_token": "legacy_server_select_call",
+    "already_present_since_v7_block_a": true,
+    "behavior_change_in_v_c": false
+  },
+  "metrics_design": {
+    "metric_namespace": "divine_legacy_server_select",
+    "metrics": [
+      {
+        "metric_name": "divine_legacy_server_select_calls_total",
+        "type": "counter",
+        "labels": ["user_present", "http_status"],
+        "description": "Conteggio invocazioni POST /api/server/select (legacy); incrementato a ogni call",
+        "emitter": "deferred_to_metrics_block_v_d"
+      },
+      {
+        "metric_name": "divine_legacy_server_select_deprecation_log_emit_total",
+        "type": "counter",
+        "labels": ["event_token"],
+        "description": "Conteggio emissioni log divine.deprecation per legacy_server_select_call",
+        "emitter": "deferred_to_metrics_block_v_d"
+      },
+      {
+        "metric_name": "divine_legacy_server_select_unique_users_24h",
+        "type": "gauge",
+        "labels": [],
+        "description": "Approssimazione 24h sliding window di utenti unici legacy server select; uso futuro per kill-switch",
+        "emitter": "deferred_to_metrics_block_v_d"
+      }
+    ],
+    "metric_count": 3,
+    "prometheus_compatible": true,
+    "af2n_pipeline_compatible": true
+  },
+  "log_archival_design": {
+    "log_target": "file (rotating) + structured json",
+    "target_path": "/var/log/divine/deprecation_legacy_server_select.log (proposto)",
+    "max_size_mb": 64,
+    "max_archives": 4,
+    "retention_days": 30,
+    "archived_in_v_c": false,
+    "reason": "v_c emette solo design metrics; nessun rotating handler attivato in runtime"
+  },
+  "kill_switch_strategy": {
+    "phase_1_v_d": "emit metrics counter",
+    "phase_2_v_e": "alert on threshold (e.g. > 100 calls / 24h)",
+    "phase_3_v_f": "if alerts triggered and AF2-N rolled out, gate legacy route behind feature flag with default OFF",
+    "phase_4_v_g": "sunset route after 30d zero-call window"
+  },
+  "forbidden_in_track_g_respected": {
+    "server_select_behavior_change": false,
+    "users_server_backfill": false,
+    "db_migration": false,
+    "battle_mutation": false,
+    "af2n_runtime_flip": false,
+    "metric_emitter_runtime_wiring": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_c_legacy_server_select_deprecation_metrics_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-G-LEGACY-SERVER-SELECT-DEPRECATION-METRICS", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_c_legacy_server_select_deprecation_metrics_v1.json",
+    "/app/docs/divine/125G_LEGACY_SERVER_SELECT_DEPRECATION_METRICS.md"
+  ]
+}

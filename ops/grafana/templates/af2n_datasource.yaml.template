@@ -1,0 +1,18 @@
+# AF2-N Datasource provisioning template (PROJECT_C Track F)
+# Status: DESIGNED_NOT_PROVISIONED — template inert; nessun secret bakato.
+# Apply: dopo signoff e iniezione variabili di ambiente reali.
+apiVersion: 1
+datasources:
+  - name: af2n_metrics_ds
+    type: prometheus
+    access: proxy
+    url: ${AF2N_METRICS_DS_URL}
+    isDefault: false
+    editable: false
+    secureJsonData:
+      httpHeaderValue1: "Bearer ${AF2N_METRICS_DS_TOKEN}"
+    jsonData:
+      httpHeaderName1: Authorization
+      timeInterval: "15s"
+      queryTimeout: "30s"
+      httpMethod: POST

@@ -1,0 +1,58 @@
+{
+  "task_id": "PROJECT_C_TRACK_D_DRIFT_DOC_2_DEPRECATED_BANNER_ARCHIVE",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_D_DRIFT_DOC_2_ARCHIVE_READY",
+  "mode": "audit_archive_doc_only_no_db_cleanup",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "summon_behavior_mutated": false,
+  "timestamp_utc": "20260524T180000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_C_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS"
+  },
+  "upstream_plan": "/app/data/design/system_safety/project_a_gacha_summon_drift_cleanup_plan_v1.json",
+  "upstream_archive_v_b": "/app/data/design/system_safety/project_b_drift_doc_1_legacy_summon_rate_archive_v1.json",
+  "target_drift_doc": {
+    "id": "DRIFT_DOC_2",
+    "class": "deprecated_banner_legacy_pool",
+    "description": "riferimenti residui a banner pool legacy v0 in /app/backend/routes/gacha.py (se presente) e relativi snapshot pool obtainable pre-V1 BLOCK_B; nessuna ownership/roster mutation richiesta",
+    "data_mutation_required": false,
+    "behavior_mutation_required": false,
+    "impact_on_user_facing_response": "none"
+  },
+  "archive_action": {
+    "type": "DOC_AUDIT_FREEZE",
+    "description": "DRIFT_DOC_2 classificato come KNOWN_NONBLOCKING_ARCHIVED_V2 e congelato; nessun file fisico spostato in questo pack",
+    "status_after_project_c": "KNOWN_NONBLOCKING_ARCHIVED_V2",
+    "file_move_deferred_to_pack": "DRIFT_DOC_2_PHYSICAL_ARCHIVE_OPS_PACK (optional future)"
+  },
+  "cleanup_gate_for_future_physical_archive": {
+    "required_signoffs": ["engineering_signoff", "explicit_user_authorization_in_chat"],
+    "required_evidence": [
+      "pre-archive snapshot of banner pool file paths affected",
+      "gacha/summon route behavior smoke (8 invariants from V1 BLOCK_B audit)",
+      "rollback strategy: restore from git history"
+    ]
+  },
+  "residual_drift_docs_after_project_c": {
+    "total_drift_docs": 7,
+    "archived_count_after_project_b": 1,
+    "archived_count_after_project_c": 2,
+    "freeze_read_only_count": 2,
+    "dedupe_design_required_count": 2,
+    "unprocessed_count": 3
+  },
+  "forbidden_in_track_d_respected": {
+    "db_cleanup": false,
+    "gacha_summon_behavior_change": false,
+    "roster_mutation": false,
+    "borea_activation": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_c_drift_doc_2_archive_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-D-DRIFT-DOC-2-ARCHIVE", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_c_drift_doc_2_archive_v1.json",
+    "/app/docs/divine/125D_DRIFT_DOC_2_DEPRECATED_BANNER_ARCHIVE.md"
+  ]
+}

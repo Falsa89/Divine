@@ -1,0 +1,77 @@
+{
+  "task_id": "PROJECT_C_TRACK_H_ARTIFACT_BIBLE_V1_USER_APPROVAL_AND_BONUS_RESOLVER_STUB_DESIGN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_H_ARTIFACT_BIBLE_V1_USER_APPROVAL_AND_BONUS_RESOLVER_STUB_DESIGN_READY",
+  "mode": "user_approval_marker_plus_pure_resolver_stub_no_runtime",
+  "runtime_patch_applied": false,
+  "artifact_live_bonus_applied": false,
+  "artifact_summon_behavior_mutated": false,
+  "timestamp_utc": "20260524T180000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_C_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS"
+  },
+  "upstream": {
+    "v_b_track_h_schema_and_candidates": "/app/data/design/artifacts/artifact_bible_schema_v1.json",
+    "v_b_launch_candidates": "/app/data/design/artifacts/artifact_bible_launch_candidates_v1.json",
+    "system_direction": "/app/data/design/artifacts/artifact_system_direction_v1.json"
+  },
+  "user_approval_marker": {
+    "artifact_bible_v1_approved": true,
+    "approval_source": "user_chat_authorization_v_c",
+    "approval_token": "MEGA_COMBO_PROJECT_ACCELERATION_C_APPROVAL=true",
+    "scope_of_approval": [
+      "schema_freeze_acceptance",
+      "launch_candidates_set_acceptance",
+      "hard_invariants_acceptance"
+    ],
+    "NOT_in_scope_of_approval": [
+      "live_bonus_application",
+      "summon_behavior_change",
+      "db_migration",
+      "frontend_ui_rollout"
+    ]
+  },
+  "bonus_resolver_stub": {
+    "path": "/app/backend/game_logic/artifact_bonus_resolver_stub.py",
+    "is_pure": true,
+    "runtime_imported": false,
+    "safe_to_unit_test_offline": true,
+    "contract": {
+      "resolve_artifact_bonus(user_artifacts: list) -> dict": "returns {'hp_pct':0, 'atk_pct':0, 'def_pct':0, 'crit_pct':0, 'source':'resolver_stub_inert'} regardless of input in V_C",
+      "validate_caps_definition() -> bool": "returns True; caps from artifact_bible schema documented but NOT applied to live stats"
+    }
+  },
+  "integration_phases": [
+    {"phase": 1, "name": "USER_APPROVAL_MARKER", "status": "DONE_V_C"},
+    {"phase": 2, "name": "PURE_RESOLVER_STUB", "status": "DONE_V_C"},
+    {"phase": 3, "name": "NON_RUNTIME_UNIT_TEST_PACK", "status": "PLANNED"},
+    {"phase": 4, "name": "INTEGRATION_POINT_DESIGN", "status": "PLANNED",
+     "proposed_call_site": "GET /api/user/me extended with artifact_bonus key (additive, optional)",
+     "proposed_response_extension": {"artifact_bonus": {"hp_pct": 0, "atk_pct": 0, "def_pct": 0, "crit_pct": 0, "source": "resolver_stub_inert"}}},
+    {"phase": 5, "name": "FEATURE_FLAG_GATED_LIVE_IMPORT", "status": "PLANNED",
+     "feature_flag": "ARTIFACT_RESOLVER_RUNTIME_ENABLED"},
+    {"phase": 6, "name": "LIVE_BONUS_APPLICATION", "status": "FORBIDDEN_OUT_OF_SCOPE_PROJECT_C"}
+  ],
+  "hard_invariants_acknowledged": [
+    "no artifact summon behavior change",
+    "no artifact live bonus on battle/account stats",
+    "resolver stub returns zero-bonus envelope by contract in V_C",
+    "resolver stub NOT imported by /app/backend/server.py nor /app/backend/routes/*.py"
+  ],
+  "forbidden_in_track_h_respected": {
+    "artifact_live_bonus": false,
+    "artifact_summon_behavior_change": false,
+    "db_migration": false,
+    "frontend_artifact_ui_rollout": false,
+    "runtime_import_of_stub": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_c_artifact_bible_user_approval_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-H-ARTIFACT-BIBLE-USER-APPROVAL-AND-BONUS-RESOLVER-STUB", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/artifacts/project_c_artifact_bible_user_approval_and_bonus_resolver_design_v1.json",
+    "/app/backend/game_logic/artifact_bonus_resolver_stub.py",
+    "/app/backend/scripts/validate_project_c_artifact_bible_user_approval_v1.py",
+    "/app/docs/divine/125H_ARTIFACT_BIBLE_V1_USER_APPROVAL_AND_BONUS_RESOLVER_STUB.md"
+  ]
+}

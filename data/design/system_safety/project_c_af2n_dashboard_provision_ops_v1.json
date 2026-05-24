@@ -1,0 +1,67 @@
+{
+  "task_id": "PROJECT_C_TRACK_F_AF2N_DASHBOARD_PROVISION_OPS_TEMPLATES",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_F_AF2N_DASHBOARD_PROVISION_OPS_TEMPLATES_READY",
+  "mode": "local_templates_only_no_external_integration",
+  "runtime_patch_applied": false,
+  "external_service_calls": 0,
+  "af2n_runtime_flip": false,
+  "timestamp_utc": "20260524T180000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_C_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS"
+  },
+  "upstream": {
+    "v_b_design": "/app/data/design/system_safety/project_b_af2n_dashboard_provision_design_v1.json",
+    "v8_block_c_render": "/app/data/design/system_safety/af2n_observability_dashboard_render_v1.json"
+  },
+  "templates_emitted": [
+    {
+      "file": "/app/ops/grafana/templates/af2n_dashboard_provisioning.yaml.template",
+      "phase": 2,
+      "purpose": "Grafana provisioning dashboards YAML template (file:// path with placeholder)",
+      "contains_secrets": false,
+      "applied_to_grafana": false
+    },
+    {
+      "file": "/app/ops/grafana/templates/af2n_datasource.yaml.template",
+      "phase": 1,
+      "purpose": "Prometheus-compatible datasource registration template",
+      "contains_secrets": false,
+      "applied_to_grafana": false
+    },
+    {
+      "file": "/app/ops/grafana/templates/af2n_alerts.yaml.template",
+      "phase": 3,
+      "purpose": "5 alert rules (A1..A5) provisioning template with placeholder sinks",
+      "contains_secrets": false,
+      "applied_to_grafana": false
+    }
+  ],
+  "template_placeholders": [
+    "${AF2N_METRICS_DS_URL}",
+    "${AF2N_METRICS_DS_TOKEN}",
+    "${AF2N_PAGER_TOKEN}",
+    "${AF2N_SMTP_PASSWORD}",
+    "${AF2N_SLACK_WEBHOOK_URL}",
+    "${GRAFANA_PROVISIONING_PATH}"
+  ],
+  "all_templates_inert_no_secret_baked": true,
+  "production_apply_status": "DESIGNED_NOT_AUTHORIZED",
+  "forbidden_in_track_f_respected": {
+    "af2n_runtime_mutation": false,
+    "external_service_integration": false,
+    "public_spend_ui": false,
+    "stack_g_changes": false,
+    "af2n_public_rollout": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_c_af2n_dashboard_provision_ops_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-F-AF2N-DASHBOARD-PROVISION-OPS", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_c_af2n_dashboard_provision_ops_v1.json",
+    "/app/ops/grafana/templates/af2n_dashboard_provisioning.yaml.template",
+    "/app/ops/grafana/templates/af2n_datasource.yaml.template",
+    "/app/ops/grafana/templates/af2n_alerts.yaml.template",
+    "/app/docs/divine/125F_AF2N_DASHBOARD_PROVISION_OPS.md"
+  ]
+}

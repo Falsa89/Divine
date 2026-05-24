@@ -1,0 +1,14 @@
+# AF2-N Dashboard provisioning template (PROJECT_C Track F)
+# Status: DESIGNED_NOT_PROVISIONED — template inert; nessun deploy eseguito.
+apiVersion: 1
+providers:
+  - name: 'af2n_canary_health'
+    orgId: 1
+    folder: 'AF2-N'
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 60
+    allowUiUpdates: false
+    options:
+      path: ${GRAFANA_PROVISIONING_PATH}/dashboards/af2n_v8_canary_health.json
+      foldersFromFilesStructure: false

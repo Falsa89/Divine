@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-24T14:43:49.356119+00:00",
+  "timestamp_utc": "2026-05-24T15:17:46.429554+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 731,
+  "backend_python_files_scanned": 742,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 414,
+      "files_with_hits": 421,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 117
+      "user_id_only_files_count": 118
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 100,
+      "files_with_hits": 101,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1552,7 +1552,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 376,
+  "cross_server_leak_risk_candidates_count": 377,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1646,12 +1646,12 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/data/affinity_gift_inventory_shadow_adapter.py",
+      "file": "backend/routes/server_profiles.py",
       "keyword": "user"
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/data/inventory_wiring_preview_adapter.py",
+      "file": "backend/data/affinity_gift_inventory_shadow_adapter.py",
       "keyword": "user"
     }
   ],

@@ -82,11 +82,12 @@
       ]
     },
     "repo_multishard_preflight": {
-      "exit_code": 0,
+      "exit_code": 1,
       "present": true,
-      "status": "PASS",
+      "status": "FAIL",
       "stdout_tail": [
-        "[slc_c_multishard_preflight] PASS errors=0"
+        "[slc_c_multishard_preflight] FAIL errors=1",
+        "  - runtime multishard already active \u2014 violates design-only invariant"
       ]
     },
     "server_aware_route_patch": {
@@ -119,8 +120,8 @@
     "no_db_write": true,
     "no_runtime_change": true
   },
-  "status": "PASS",
+  "status": "FAIL",
   "task_origin": "SLC-C-COMBO",
-  "utc": "2026-05-24T14:43:53.564348+00:00",
+  "utc": "2026-05-24T15:17:50.858969+00:00",
   "version": "v1"
 }

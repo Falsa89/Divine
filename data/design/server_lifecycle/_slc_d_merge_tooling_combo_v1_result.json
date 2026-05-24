@@ -51,10 +51,11 @@
       ]
     },
     "preflight": {
-      "exit_code": 0,
-      "status": "PASS",
+      "exit_code": 1,
+      "status": "FAIL",
       "stdout_tail": [
-        "[slc_d_preflight_v1] PASS errors=0"
+        "[slc_d_preflight_v1] FAIL errors=1",
+        "  - _slc_c_combo_v1_result.json status != PASS"
       ]
     },
     "readiness_rollup": {
@@ -100,7 +101,7 @@
     "no_runtime_change": true,
     "second_server_opening_allowed": false
   },
-  "status": "PASS",
+  "status": "FAIL",
   "task": "slc_d_merge_tooling_combo_v1",
-  "utc": "2026-05-24T14:43:56.368607+00:00"
+  "utc": "2026-05-24T15:17:53.647649+00:00"
 }

@@ -3,12 +3,14 @@
   "borea_guard_refs_count": 44,
   "borea_safe": true,
   "design_only": true,
-  "errors": [],
+  "errors": [
+    "runtime multishard already active \u2014 violates design-only invariant"
+  ],
   "execution_ready": false,
-  "files_scanned": 765,
+  "files_scanned": 776,
   "no_db_write": true,
   "second_server_opening_allowed": false,
-  "status": "PASS",
+  "status": "FAIL",
   "task": "slc_c_multishard_preflight",
-  "utc": "2026-05-24T14:43:51.890650+00:00"
+  "utc": "2026-05-24T15:17:49.162930+00:00"
 }

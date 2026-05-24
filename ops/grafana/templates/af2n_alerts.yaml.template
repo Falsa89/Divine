@@ -1,0 +1,46 @@
+# AF2-N Alert rules provisioning template (PROJECT_C Track F)
+# Status: DESIGNED_NOT_PROVISIONED — 5 regole A1..A5 con sink placeholder.
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: af2n_canary_health
+    folder: AF2-N
+    interval: 1m
+    rules:
+      - uid: af2n_a1_canary_error_rate
+        title: A1 — Canary error rate > 1%
+        condition: B
+        for: 5m
+        annotations:
+          summary: AF2-N canary error rate elevated
+        labels:
+          severity: pager
+        sink: ${AF2N_PAGER_TOKEN}
+      - uid: af2n_a2_latency_p99
+        title: A2 — Latency p99 > 800ms
+        condition: B
+        for: 10m
+        labels:
+          severity: email
+        sink: ${AF2N_SMTP_PASSWORD}
+      - uid: af2n_a3_ratelimit_block_rate
+        title: A3 — Rate-limit block rate > 5%
+        condition: B
+        for: 10m
+        labels:
+          severity: email
+        sink: ${AF2N_SMTP_PASSWORD}
+      - uid: af2n_a4_ledger_idempotency_collision
+        title: A4 — Ledger idempotency collisions > 0
+        condition: B
+        for: 1m
+        labels:
+          severity: pager
+        sink: ${AF2N_PAGER_TOKEN}
+      - uid: af2n_a5_canary_traffic_share_drift
+        title: A5 — Canary traffic share drift > 5pp
+        condition: B
+        for: 15m
+        labels:
+          severity: slack
+        sink: ${AF2N_SLACK_WEBHOOK_URL}

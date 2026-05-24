@@ -604,6 +604,22 @@ OPTIONAL = [
     ('PROJECT-B-TRACK-G-QA-RELEASE-MOBILE-SMOKE-FLOW', 'validate_project_b_qa_release_mobile_smoke_flow_v1.py'),
     # PROJECT_B Track H ARTIFACT BIBLE V1 SCHEMA + LAUNCH CANDIDATES (hard invariants enforcement)
     ('PROJECT-B-TRACK-H-ARTIFACT-BIBLE-SCHEMA',     'validate_project_b_artifact_bible_schema_v1.py'),
+    # PROJECT_C Track A SERVER PROFILES DUAL-ROUTE BEHAVIOR LAYER (flag-gated, default 503)
+    ('PROJECT-C-TRACK-A-SERVER-PROFILES-BEHAVIOR',  'validate_project_c_server_profiles_behavior_v1.py'),
+    # PROJECT_C Track B HOUSING RESOLVER INTEGRATION DESIGN (5 phases; stub NOT imported by runtime)
+    ('PROJECT-C-TRACK-B-HOUSING-RESOLVER-INTEGRATION-DESIGN', 'validate_project_c_housing_resolver_integration_design_v1.py'),
+    # PROJECT_C Track C STATUS EFFECT CATALOG BASELINE (10 categories + 10 effects, anti-power-creep caps)
+    ('PROJECT-C-TRACK-C-STATUS-EFFECT-CATALOG-BASELINE', 'validate_project_c_status_effect_catalog_baseline_v1.py'),
+    # PROJECT_C Track D DRIFT_DOC_2 deprecated_banner_legacy_pool ARCHIVE (audit only; 2/7 archived)
+    ('PROJECT-C-TRACK-D-DRIFT-DOC-2-ARCHIVE',       'validate_project_c_drift_doc_2_archive_v1.py'),
+    # PROJECT_C Track E QA MOBILE SMOKE RUNNER CLI (GET-only, non-mutating; --help smoke)
+    ('PROJECT-C-TRACK-E-QA-MOBILE-SMOKE-RUNNER',    'validate_project_c_qa_mobile_smoke_runner_v1.py'),
+    # PROJECT_C Track F AF2-N DASHBOARD PROVISION OPS TEMPLATES (3 Grafana templates, no secret baked)
+    ('PROJECT-C-TRACK-F-AF2N-DASHBOARD-PROVISION-OPS', 'validate_project_c_af2n_dashboard_provision_ops_v1.py'),
+    # PROJECT_C Track G LEGACY /server/select DEPRECATION METRICS (design only, 3 metrics, 4-phase kill-switch)
+    ('PROJECT-C-TRACK-G-LEGACY-SERVER-SELECT-DEPRECATION-METRICS', 'validate_project_c_legacy_server_select_deprecation_metrics_v1.py'),
+    # PROJECT_C Track H ARTIFACT BIBLE V1 USER APPROVAL + BONUS RESOLVER STUB DESIGN (pure stub, NOT imported by runtime)
+    ('PROJECT-C-TRACK-H-ARTIFACT-BIBLE-USER-APPROVAL-AND-BONUS-RESOLVER-STUB', 'validate_project_c_artifact_bible_user_approval_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

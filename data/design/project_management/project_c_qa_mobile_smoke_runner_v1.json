@@ -1,0 +1,65 @@
+{
+  "task_id": "PROJECT_C_TRACK_E_QA_MOBILE_SMOKE_RUNNER",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_E_QA_MOBILE_SMOKE_RUNNER_IMPLEMENTED_NON_MUTATING",
+  "mode": "cli_runner_non_mutating_read_only_http_only",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260524T180000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_C_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS"
+  },
+  "upstream_matrix": "/app/data/design/project_management/project_b_qa_release_mobile_smoke_flow_v1.json",
+  "runner_script": "/app/backend/scripts/qa_mobile_smoke_runner.py",
+  "runner_capabilities": {
+    "reads_matrix_from_upstream_json": true,
+    "executes_only_GET_endpoints": true,
+    "skips_mutating_step_9_by_default": true,
+    "skip_flag_override": "--include-mutating (default OFF; pack C never enables)",
+    "executes_login_step": false,
+    "performs_real_summon": false,
+    "performs_real_battle": false,
+    "max_step_timeout_seconds": 8,
+    "json_report_emitted": true,
+    "report_target": "/tmp/qa_mobile_smoke_runner_report.json (caller-provided via --json-out)"
+  },
+  "steps_executed_default": [
+    {"step": 2, "name": "HEROES_CATALOG", "expected": "GET 200 + len=100"},
+    {"step": 3, "name": "BOREA_INERT", "expected": "GET 200"},
+    {"step": 4, "name": "PRIMORDIAL_GAIA_INERT", "expected": "GET 404"},
+    {"step": 10, "name": "SLC_GUARD_NEW_DUAL_ROUTE", "expected": "GET /api/server-profiles/select -> 503+disabled"},
+    {"step": 12, "name": "HOUSING_PLACEHOLDER", "expected": "GET /api/housing/rooms -> 404"}
+  ],
+  "steps_skipped_default": [1, 5, 6, 7, 9, 11, 13],
+  "skip_reasons": {
+    "1": "LOGIN richiede credenziali; non eseguito in non-mutating CLI",
+    "5": "GACHA_SUMMON_PEEK fuori scope CLI in V_C",
+    "6": "BATTLE_ENTRY_DRY differito a pack QA dedicato",
+    "7": "POST_BATTLE_SUMMARY richiede auth",
+    "9": "LEGACY server select è mutating (anche con deprecation log); CLI lo skip",
+    "11": "AF2N canary status richiede auth",
+    "13": "ARTIFACT_PLACEHOLDER fuori scope CLI default in V_C"
+  },
+  "forbidden_in_track_e_respected": {
+    "db_mutation": false,
+    "battle_execution": false,
+    "summon_real_spend": false,
+    "af2n_runtime_flip": false,
+    "pipeline_hook_to_supervisord": false,
+    "ci_integration": false
+  },
+  "future_phase_plan": [
+    "V_D: aggiungere step 1 (LOGIN) con creds test seedate da fixture",
+    "V_E: integrare runner in pipeline GitHub Actions con --report-json out",
+    "V_F: aggiungere mutating coverage gated (step 9) dietro flag QA_RUNNER_MUTATING_ENABLED"
+  ],
+  "validator_script": "/app/backend/scripts/validate_project_c_qa_mobile_smoke_runner_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-E-QA-MOBILE-SMOKE-RUNNER", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/project_management/project_c_qa_mobile_smoke_runner_v1.json",
+    "/app/backend/scripts/qa_mobile_smoke_runner.py",
+    "/app/backend/scripts/validate_project_c_qa_mobile_smoke_runner_v1.py",
+    "/app/docs/divine/125E_QA_MOBILE_SMOKE_RUNNER.md"
+  ]
+}
