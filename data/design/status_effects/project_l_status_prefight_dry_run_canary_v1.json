@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_L_TRACK_C",
+  "verdict": "TRACK_C_STATUS_PREFIGHT_DRY_RUN_CANARY_READY",
+  "seam_available": true,
+  "seam_path": "/app/backend/game_logic/status_prefight_runtime_seam.py",
+  "dry_run_executed_in_process": true,
+  "scenarios": [
+    {"id": "DR1", "flag": "unset", "dry_run": false, "expected": "identity", "observed": "identity"},
+    {"id": "DR2", "flag": "false", "dry_run": false, "expected": "identity", "observed": "identity"},
+    {"id": "DR3", "flag": "true", "dry_run": false, "expected": "identity", "observed": "identity"},
+    {"id": "DR4", "flag": "true", "dry_run": true, "input_statuses": [], "expected": "zero_envelope_preview", "observed": "zero_envelope_preview"},
+    {"id": "DR5", "flag": "true", "dry_run": true, "input_statuses": [{"category": "buff_offensive", "stat": "atk_pct", "value": 0.10}], "expected": "atk_pct=0.10 (fraction; resolver cap=0.30)", "observed": "atk_pct=0.10"}
+  ],
+  "original_payload_mutated": false,
+  "live_runtime_called": false,
+  "resolver_used": "status_first_slice_resolver_pure",
+  "validator_script": "validate_project_l_status_prefight_dry_run_canary_v1.py"
+}

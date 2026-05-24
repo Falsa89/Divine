@@ -1,0 +1,19 @@
+{
+  "task_id": "PROJECT_L_TRACK_E",
+  "verdict": "TRACK_E_STATUS_PAYLOAD_NO_LEAK_REGRESSION_READY",
+  "audited_endpoints": [
+    "/api/heroes",
+    "/api/heroes/borea",
+    "/api/heroes/greek_borea",
+    "/api/server-profiles/select",
+    "/api/housing/preview"
+  ],
+  "forbidden_payload_markers": [
+    "status_envelope_preview",
+    "__seam_version"
+  ],
+  "observed_leak_count": 0,
+  "flag_state_during_check": "STATUS_RUNTIME_BUFF_SLICE_ENABLED unset",
+  "seam_default_behavior": "no-op identity",
+  "validator_script": "validate_project_l_status_payload_no_leak_regression_v1.py"
+}

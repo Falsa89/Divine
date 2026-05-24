@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_L_TRACK_B",
+  "verdict": "TRACK_B_MINIMAL_BATTLE_RUNTIME_SEAM_CREATED_INERT",
+  "seam_created": true,
+  "seam_path": "/app/backend/game_logic/status_prefight_runtime_seam.py",
+  "seam_version": "project_l_status_prefight_runtime_seam_v1",
+  "seam_default_no_op": true,
+  "seam_imported_by_live_runtime": false,
+  "forbidden_runtime_importers": [
+    "/app/backend/battle_engine.py",
+    "/app/backend/battle_core.py",
+    "/app/backend/server.py"
+  ],
+  "battle_behavior_change": false,
+  "flag_name": "STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+  "flag_default_in_env": "unset",
+  "seam_contract": {
+    "flag_off": "identity (returns input team_payload unchanged)",
+    "flag_on_dry_run_false": "identity (live activation NOT authorized by PROJECT_L)",
+    "flag_on_dry_run_true": "shallow copy + status_envelope_preview attached; original payload NOT mutated"
+  },
+  "no_dot_or_tick_loop": true,
+  "no_damage_heal_formula_change": true,
+  "no_db_write": true,
+  "no_frontend_change": true,
+  "rollback_script": "/app/backend/scripts/rollback_project_l_minimal_battle_runtime_seam.py",
+  "runtime_changes_applied": true,
+  "runtime_changes_isolation": "new file only; no modification of pre-existing runtime files",
+  "validator_script": "validate_project_l_minimal_battle_runtime_seam_v1.py"
+}

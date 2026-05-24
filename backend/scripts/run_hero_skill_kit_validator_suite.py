@@ -768,6 +768,22 @@ OPTIONAL = [
     ('PROJECT-K-TRACK-G-STATUS-FIRST-SLICE-QA-RC-GATE', 'validate_project_k_status_first_slice_qa_rc_gate_v1.py'),
     # PROJECT_K Track H PROJECT K COMPLETION + LIVE GATE STATUS (next pack: PROJECT_L)
     ('PROJECT-K-TRACK-H-PROJECT-K-COMPLETION-AND-LIVE-GATE-STATUS', 'validate_project_k_completion_and_live_gate_status_v1.py'),
+    # PROJECT_L Track A BATTLE RUNTIME SEAM AUDIT (SEAM_SAFE_NOW_INERT)
+    ('PROJECT-L-TRACK-A-BATTLE-RUNTIME-SEAM-AUDIT', 'validate_project_l_battle_runtime_seam_audit_v1.py'),
+    # PROJECT_L Track B MINIMAL BATTLE RUNTIME SEAM (CREATED INERT; isolated module; not imported live)
+    ('PROJECT-L-TRACK-B-MINIMAL-BATTLE-RUNTIME-SEAM-INERT', 'validate_project_l_minimal_battle_runtime_seam_v1.py'),
+    # PROJECT_L Track C STATUS PREFIGHT DRY-RUN CANARY (DR1-DR5; live activation blocked)
+    ('PROJECT-L-TRACK-C-STATUS-PREFIGHT-DRY-RUN-CANARY', 'validate_project_l_status_prefight_dry_run_canary_v1.py'),
+    # PROJECT_L Track D STATUS REQUIRED VALIDATORS POST-SEAM GUARD (19 REQUIRED intact)
+    ('PROJECT-L-TRACK-D-STATUS-REQUIRED-VALIDATORS-POST-SEAM-GUARD', 'validate_project_l_status_required_validators_post_seam_guard_v1.py'),
+    # PROJECT_L Track E STATUS PAYLOAD NO-LEAK REGRESSION (0 leaks across 5 endpoints)
+    ('PROJECT-L-TRACK-E-STATUS-PAYLOAD-NO-LEAK-REGRESSION', 'validate_project_l_status_payload_no_leak_regression_v1.py'),
+    # PROJECT_L Track F STATUS CANARY ROLLBACK SCRIPT + DRILL (dry-run executed; non-destructive)
+    ('PROJECT-L-TRACK-F-STATUS-CANARY-ROLLBACK-SCRIPT-AND-DRILL', 'validate_project_l_status_canary_rollback_script_and_drill_v1.py'),
+    # PROJECT_L Track G STATUS FIRST SLICE RC GATE (13 safe checks)
+    ('PROJECT-L-TRACK-G-STATUS-FIRST-SLICE-RC-GATE', 'validate_project_l_status_first_slice_rc_gate_v1.py'),
+    # PROJECT_L Track H PROJECT L COMPLETION + NEXT STEP (next pack: PROJECT_M)
+    ('PROJECT-L-TRACK-H-PROJECT-L-COMPLETION-AND-NEXT-STEP', 'validate_project_l_completion_and_next_step_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

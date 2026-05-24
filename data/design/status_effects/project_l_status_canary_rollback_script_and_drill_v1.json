@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_L_TRACK_F",
+  "verdict": "TRACK_F_STATUS_CANARY_ROLLBACK_SCRIPT_AND_DRILL_READY",
+  "seam_was_created": true,
+  "rollback_script_path": "/app/backend/scripts/rollback_project_l_minimal_battle_runtime_seam.py",
+  "rollback_modes": ["dry-run (default)", "--apply (explicit deletion)"],
+  "dry_run_drill_executed": true,
+  "dry_run_drill_result": "OK: identifies seam file, scans forbidden runtime importers (0 found), reports size without deletion",
+  "safety_guards": [
+    "refuses to rollback automatically if any live runtime importer is detected",
+    "dry-run is the DEFAULT; --apply is required for destructive action",
+    "no file other than the seam is touched"
+  ],
+  "destructive_rollback_executed": false,
+  "forbidden_in_track_f_respected": {
+    "unsafe_rollback": false,
+    "broad_rewrite": false
+  },
+  "validator_script": "validate_project_l_status_canary_rollback_script_and_drill_v1.py"
+}

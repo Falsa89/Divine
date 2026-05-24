@@ -1,0 +1,39 @@
+{
+  "task_id": "PROJECT_L_TRACK_G",
+  "verdict": "TRACK_G_STATUS_FIRST_SLICE_RC_GATE_READY",
+  "automation_checks": [
+    "S1: GET /api/heroes -> 200 count 100",
+    "S2: GET /api/heroes/primordial_gaia -> 404",
+    "S3: GET /api/heroes/borea -> 200",
+    "S4: GET /api/heroes/greek_borea -> 200",
+    "S5: GET/POST /api/server-profiles/select -> 503",
+    "S6: GET /api/housing/preview -> 503",
+    "S7: STATUS_RUNTIME_BUFF_SLICE_ENABLED unset/false",
+    "S8: seam.is_seam_active() == False with flag unset",
+    "S9: seam not imported by battle_engine.py / battle_core.py / server.py / routes/*",
+    "S10: no status_envelope_preview leak across audited endpoints",
+    "S11: pure resolver passes 10/10 golden tests",
+    "S12: 19 REQUIRED suite validators pass",
+    "S13: rollback dry-run reports OK"
+  ],
+  "manual_checks": [
+    "M1: mobile QA on heroes browse (no status leak visible in UI)",
+    "M2: mobile QA on combat screen (no behavior change with flag OFF)",
+    "M3: smoke on canary env BEFORE any flag flip"
+  ],
+  "canary_progression": [
+    {"stage": "1", "name": "dry-run", "status": "READY (this pack)"},
+    {"stage": "2", "name": "canary env", "status": "BLOCKED until PROJECT_M approval"},
+    {"stage": "3", "name": "dev live", "status": "BLOCKED until PROJECT_M+ approval"},
+    {"stage": "4", "name": "prod", "status": "BLOCKED until separate prod approval"}
+  ],
+  "rollback_conditions": [
+    "any FAIL on the 13 automation checks during canary",
+    "any payload leak detected",
+    "any deviation in simulate_battle output between flag OFF and pre-seam baseline"
+  ],
+  "forbidden_in_track_g_respected": {
+    "live_rollout": false
+  },
+  "validator_script": "validate_project_l_status_first_slice_rc_gate_v1.py"
+}

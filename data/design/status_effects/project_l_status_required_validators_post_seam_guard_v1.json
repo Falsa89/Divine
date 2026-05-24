@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_L_TRACK_D",
+  "verdict": "TRACK_D_STATUS_REQUIRED_VALIDATORS_POST_SEAM_GUARD_READY",
+  "required_count_observed": 19,
+  "required_count_expected": 19,
+  "required_weakening": false,
+  "promoted_status_required_validators": [
+    "validate_project_j_status_first_slice_resolver_pure_deterministic_v1.py",
+    "validate_project_j_status_first_slice_no_tick_loop_touch_v1.py",
+    "validate_project_j_status_first_slice_caps_respect_v1.py",
+    "validate_project_j_status_first_slice_pvp_fairness_audit_v1.py",
+    "validate_project_j_status_first_slice_rollback_runbook_v1.py"
+  ],
+  "all_promoted_required_passing": true,
+  "new_post_seam_guards": [
+    "seam_not_imported_by_battle_engine_battle_core_server_routes",
+    "seam_flag_default_off",
+    "seam_no_dot_or_tick_loop_keywords",
+    "seam_no_damage_or_heal_formula_modification",
+    "resolver_not_imported_by_forbidden_runtime"
+  ],
+  "guard_registration_mode": "OPTIONAL",
+  "forbidden_in_track_d_respected": {
+    "required_weakening": false,
+    "fake_pass": false,
+    "hiding_failures": false
+  },
+  "validator_script": "validate_project_l_status_required_validators_post_seam_guard_v1.py"
+}

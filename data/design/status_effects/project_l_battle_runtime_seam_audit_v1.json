@@ -1,0 +1,32 @@
+{
+  "task_id": "PROJECT_L_TRACK_A",
+  "verdict": "TRACK_A_BATTLE_RUNTIME_SEAM_AUDIT_READY",
+  "seam_classification": "SEAM_SAFE_NOW_INERT",
+  "battle_runtime_layer_present": true,
+  "observed_battle_files": [
+    "/app/backend/battle_engine.py",
+    "/app/backend/battle_core.py",
+    "/app/backend/routes/combat.py"
+  ],
+  "battle_engine_facts": {
+    "path": "/app/backend/battle_engine.py",
+    "approx_lines": 1249,
+    "exports": ["simulate_battle", "execute_skill", "generate_enemy_team", "ELEMENT_SKILLS"],
+    "imported_by_runtime": ["/app/backend/server.py", "/app/backend/battle_core.py"]
+  },
+  "safe_seam_decision": {
+    "strategy": "isolated_module_outside_battle_engine",
+    "rationale": "battle_engine.py is large (1249 LOC) and already exports the live simulation contract. Patching it directly would risk a broad refactor, which is explicitly forbidden. The pack PROMPT authorizes the fallback path 'inert module under /app/backend/game_logic/status_prefight_runtime_seam.py if no battle file safe'. We use that path: the seam lives in a standalone module that is NOT imported by battle_engine.py, battle_core.py, server.py or any route. Live battle behavior is therefore guaranteed unchanged.",
+    "chosen_seam_path": "/app/backend/game_logic/status_prefight_runtime_seam.py",
+    "live_importers_currently": [],
+    "flag_gate": "STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+    "flag_default": "unset/false"
+  },
+  "runtime_changes_applied_in_track_a": false,
+  "forbidden_in_track_a_respected": {
+    "runtime_mutation": false,
+    "battle_behavior_change": false,
+    "broad_refactor": false
+  },
+  "validator_script": "validate_project_l_battle_runtime_seam_audit_v1.py"
+}
