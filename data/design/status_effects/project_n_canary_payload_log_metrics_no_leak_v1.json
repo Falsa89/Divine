@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_N_TRACK_E",
+  "verdict": "TRACK_E_CANARY_PAYLOAD_LOG_AND_METRICS_NO_LEAK_READY",
+  "audited_endpoints_with_flag_ON": [
+    "/api/heroes",
+    "/api/heroes/borea",
+    "/api/heroes/greek_borea",
+    "/api/server-profiles/select",
+    "/api/housing/preview"
+  ],
+  "forbidden_payload_markers": ["status_envelope_preview", "__seam_version"],
+  "endpoint_leaks_with_flag_ON": 0,
+  "source_emission_leaks": 0,
+  "backend_log_scan_executed": true,
+  "backend_log_scan_paths": ["/var/log/supervisor/backend.*.log", "/var/log/supervisor/backend.err.log"],
+  "backend_log_forbidden_markers_found": 0,
+  "metric_endpoints_exposed": false,
+  "explanation": "Even with the canary flag ON, the Project_M seam returns identity at the live call site (dry_run=False), so no preview envelope is ever attached to a live payload. The static source-level scan confirms no runtime code path emits the forbidden keys outside of the seam dry-run branch.",
+  "validator_script": "validate_project_n_canary_payload_log_metrics_no_leak_v1.py"
+}

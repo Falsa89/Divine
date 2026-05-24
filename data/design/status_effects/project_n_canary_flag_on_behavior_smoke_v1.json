@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_N_TRACK_C",
+  "verdict": "TRACK_C_CANARY_FLAG_ON_BEHAVIOR_SMOKE_READY",
+  "flag_on_smoke_endpoints": {
+    "/api/heroes": "200 count=100",
+    "/api/heroes/primordial_gaia": "404",
+    "/api/heroes/borea": "200",
+    "/api/heroes/greek_borea": "200",
+    "/api/server-profiles/select_GET": "503",
+    "/api/server-profiles/select_POST": "503",
+    "/api/housing/preview": "503"
+  },
+  "in_process_resolver_checks": [
+    {"id": "B1", "category": "buff_offensive", "stat": "atk_pct", "value": 0.10, "expected_envelope": {"atk_pct": 0.10, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "passed": true},
+    {"id": "B2", "category": "buff_offensive", "stat": "crit_pct", "value": 0.05, "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.05}, "passed": true},
+    {"id": "B3", "category": "buff_defensive", "stat": "def_pct", "value": 0.10, "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.10, "hp_pct": 0.0, "crit_pct": 0.0}, "passed": true},
+    {"id": "B4", "category": "buff_defensive", "stat": "hp_pct", "value": 0.15, "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.15, "crit_pct": 0.0}, "passed": true},
+    {"id": "B5_OUT_OF_SLICE", "category": "debuff", "stat": "atk_pct", "value": 0.50, "expected_envelope": "all_zero", "passed": true},
+    {"id": "B6_CAP_CLAMP", "category": "buff_offensive", "stat": "atk_pct", "value": 0.99, "expected_envelope": {"atk_pct": 0.30}, "passed": true},
+    {"id": "B7_NO_DOT", "category": "buff_offensive", "stat": "hp_pct", "value": 0.05, "check": "no dot/tick/heal keywords in seam source", "passed": true}
+  ],
+  "battle_byte_identical_with_flag_ON": true,
+  "no_dot_or_tick_loop_introduced": true,
+  "no_formula_drift": true,
+  "validator_script": "validate_project_n_canary_flag_on_behavior_smoke_v1.py"
+}

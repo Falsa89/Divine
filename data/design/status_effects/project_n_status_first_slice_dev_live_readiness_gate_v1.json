@@ -1,0 +1,17 @@
+{
+  "task_id": "PROJECT_N_TRACK_G",
+  "verdict": "TRACK_G_STATUS_FIRST_SLICE_DEV_LIVE_READINESS_GATE_READY",
+  "required_green_checks_for_dev_live": [
+    "canary env flag ON smoke green (Track C)",
+    "canary light load + stability green (Track D)",
+    "canary payload/log/metrics no leak green (Track E)",
+    "canary rollback + kill-switch green (Track F)",
+    "19 REQUIRED suite validators green",
+    "deterministic battle byte-identical with flag ON proved (Track C)",
+    "manual mobile QA: combat unaffected; no UI status preview leak"
+  ],
+  "future_dev_live_rollout_approval_phrase": "PROJECT_O_STATUS_FIRST_SLICE_DEV_LIVE_ROLLOUT_APPROVAL=true with PROJECT_ACCELERATION_MODE=STATUS_FIRST_SLICE_DEV_LIVE_ROLLOUT",
+  "dev_live_rollout_executed_in_pack_n": false,
+  "prod_rollout_executed_in_pack_n": false,
+  "validator_script": "validate_project_n_status_first_slice_dev_live_readiness_gate_v1.py"
+}

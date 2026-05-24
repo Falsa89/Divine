@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_N_TRACK_D",
+  "verdict": "TRACK_D_CANARY_LIGHT_LOAD_AND_STABILITY_READY",
+  "load_profile": {
+    "endpoints_rotated": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea"],
+    "total_requests": 150,
+    "duration_s": 2.86,
+    "requests_per_second": 52.4,
+    "client_side": "in-process urllib stdlib",
+    "destructive": false,
+    "spend": false,
+    "gacha": false,
+    "db_mutation": false
+  },
+  "response_codes": {
+    "2xx": 150,
+    "4xx": 0,
+    "5xx": 0,
+    "err": 0
+  },
+  "latency_ms": {
+    "p50": 1.98,
+    "p95": 55.14,
+    "p99": 68.87,
+    "max": 80.23
+  },
+  "flag_state_during_load": "STATUS_RUNTIME_BUFF_SLICE_ENABLED=true (Track B applied, rolled back after collection)",
+  "stability_observed": "100% 2xx; 0 5xx; latency p99 < 70ms; no observable regression vs flag OFF baseline",
+  "validator_script": "validate_project_n_canary_light_load_stability_v1.py"
+}

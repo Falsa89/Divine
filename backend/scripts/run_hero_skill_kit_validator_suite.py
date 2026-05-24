@@ -800,6 +800,22 @@ OPTIONAL = [
     ('PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE', 'validate_project_m_status_first_slice_canary_env_rc_gate_v1.py'),
     # PROJECT_M Track H PROJECT M COMPLETION + NEXT STEP (next pack: PROJECT_N)
     ('PROJECT-M-TRACK-H-PROJECT-M-COMPLETION-AND-NEXT-STEP', 'validate_project_m_completion_and_next_step_v1.py'),
+    # PROJECT_N Track A CANARY ENV PRECHECK (NON_PROD_LOCAL_ONLY confirmed)
+    ('PROJECT-N-TRACK-A-CANARY-ENV-PRECHECK', 'validate_project_n_canary_env_precheck_v1.py'),
+    # PROJECT_N Track B STATUS FIRST SLICE CANARY FLAG FLIP (executed then rolled back; final state FLAG_OFF)
+    ('PROJECT-N-TRACK-B-STATUS-FIRST-SLICE-CANARY-FLAG-FLIP', 'validate_project_n_status_first_slice_canary_flag_v1.py'),
+    # PROJECT_N Track C CANARY FLAG ON BEHAVIOR SMOKE (B1-B7 PASS; battle byte-identical with flag ON)
+    ('PROJECT-N-TRACK-C-CANARY-FLAG-ON-BEHAVIOR-SMOKE', 'validate_project_n_canary_flag_on_behavior_smoke_v1.py'),
+    # PROJECT_N Track D CANARY LIGHT LOAD + STABILITY (150 req 100% 2xx; p99 ~ 68ms)
+    ('PROJECT-N-TRACK-D-CANARY-LIGHT-LOAD-STABILITY', 'validate_project_n_canary_light_load_stability_v1.py'),
+    # PROJECT_N Track E CANARY PAYLOAD/LOG/METRICS NO-LEAK GUARD
+    ('PROJECT-N-TRACK-E-CANARY-PAYLOAD-LOG-METRICS-NO-LEAK', 'validate_project_n_canary_payload_log_metrics_no_leak_v1.py'),
+    # PROJECT_N Track F CANARY ROLLBACK + KILL-SWITCH DRILL (6-step drill)
+    ('PROJECT-N-TRACK-F-CANARY-ROLLBACK-KILL-SWITCH-DRILL', 'validate_project_n_canary_rollback_kill_switch_drill_v1.py'),
+    # PROJECT_N Track G STATUS FIRST SLICE DEV-LIVE READINESS GATE (7 green-checks listed)
+    ('PROJECT-N-TRACK-G-STATUS-FIRST-SLICE-DEV-LIVE-READINESS-GATE', 'validate_project_n_status_first_slice_dev_live_readiness_gate_v1.py'),
+    # PROJECT_N Track H PROJECT N COMPLETION + NEXT STEP (next pack: PROJECT_O)
+    ('PROJECT-N-TRACK-H-PROJECT-N-COMPLETION-AND-NEXT-STEP', 'validate_project_n_completion_and_next_step_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

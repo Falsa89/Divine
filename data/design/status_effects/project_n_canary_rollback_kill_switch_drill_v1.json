@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_N_TRACK_F",
+  "verdict": "TRACK_F_CANARY_ROLLBACK_AND_KILL_SWITCH_DRILL_READY",
+  "rollback_script": "/app/backend/scripts/rollback_project_n_status_first_slice_canary_flag.py",
+  "backup_file": "/app/backend/.env.project_n_pre_flip.bak",
+  "backup_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "dry_run_default": true,
+  "apply_mode_explicit": true,
+  "kill_switch_drill_executed": true,
+  "drill_sequence": [
+    {"step": 1, "action": "capture pre-flip .env md5", "observed": "ff60bbb79efa329b71aa8ed351ea89b3"},
+    {"step": 2, "action": "flip flag ON (Track B)", "observed": "backend/.env appended; restart; flag active"},
+    {"step": 3, "action": "verify smoke + battle behavior with flag ON", "observed": "smoke 200/404/200/200/503/503/503; battle byte-identical"},
+    {"step": 4, "action": "restore .env from backup", "observed": "shutil.copy2(backup, env); md5 reverted to ff60bbb79efa329b71aa8ed351ea89b3"},
+    {"step": 5, "action": "restart backend", "observed": "supervisor restart rc=0; backend RUNNING"},
+    {"step": 6, "action": "verify post-rollback smoke", "observed": "smoke identical to pre-flip baseline; flag absent from env"}
+  ],
+  "kill_switch_outcome": "flag flip reversible in single-command operation; backend recovers within ~3 seconds",
+  "current_state_post_drill": "FLAG_OFF (flag absent from backend/.env)",
+  "validator_script": "validate_project_n_canary_rollback_kill_switch_drill_v1.py"
+}

@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_N_TRACK_A",
+  "verdict": "TRACK_A_CANARY_ENV_PRECHECK_READY",
+  "env_classification": "NON_PROD_LOCAL_ONLY",
+  "safe_for_flag_flip": true,
+  "evidence": {
+    "hostname_pattern": "agent-env-d6ffb22d-30ee-4092-ae62-3b8b80ed798c (Emergent ephemeral agent container)",
+    "mongodb_url": "mongodb://localhost:27017 (local-only, not a managed prod cluster)",
+    "jwt_secret_is_dev_default": true,
+    "db_name": "divine_waifus (dev catalog)",
+    "expo_packager_proxy_url_contains_preview": true,
+    "prod_or_live_env_vars_present": false,
+    "supervisor_local": true,
+    "server_profiles_disabled_503": true,
+    "housing_preview_disabled_503": true,
+    "backend_health": "RUNNING"
+  },
+  "non_prod_signals_count": 9,
+  "prod_signals_count": 0,
+  "flag_flip_authorized_by_track_a": true,
+  "validator_script": "validate_project_n_canary_env_precheck_v1.py"
+}
