@@ -1,0 +1,72 @@
+{
+  "task_id": "PROJECT_W_TRACK_A",
+  "track": "SECOND_SLICE_PROD_PRECHECK_SIGNATURE_GATE_PACK",
+  "verdict": "TRACK_A_SECOND_SLICE_PROD_PRECHECK_BLOCKING_MISSING_SIGNATURES",
+  "env_classification": "NON_PROD_LOCAL_ONLY",
+  "env_audit": {
+    "mongo_url": "mongodb://localhost:27017",
+    "mongo_is_local": true,
+    "public_dns": false,
+    "emergent_kubernetes_container": true,
+    "prod_url": null,
+    "production_traffic": false,
+    "second_server_open": false
+  },
+  "project_v_resume_verified": true,
+  "project_v_resume_verdict": "PROJECT_V_STATUS_SECOND_SLICE_DEV_LIVE_ROLLOUT_COMPLETE",
+  "suite_baseline_535_pass": true,
+  "battle_engine_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+  "battle_engine_md5_matches_authorized": true,
+  "env_pre_rollout_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "flag_absent_in_env": true,
+  "seam_module_present": true,
+  "resolver_pure_module_present": true,
+  "smoke_pre_audit": {
+    "/api/heroes": 200,
+    "/api/heroes/count": 100,
+    "/api/heroes/primordial_gaia": 404,
+    "/api/heroes/borea": 200,
+    "/api/heroes/greek_borea": 200,
+    "/api/server-profiles/select": 503,
+    "/api/housing/preview": 503
+  },
+  "prod_signatures_required": [
+    "PROD_ROLLOUT_USER_APPROVAL",
+    "PROD_ROLLOUT_QA_APPROVAL",
+    "PROD_ROLLOUT_OPS_APPROVAL",
+    "PROD_ROLLOUT_OBSERVABILITY_APPROVAL",
+    "PROD_ROLLOUT_ROLLBACK_RUNBOOK_APPROVAL",
+    "PROD_ROLLOUT_SECURITY_APPROVAL",
+    "STATUS_RUNTIME_SECOND_SLICE_PROD_OK"
+  ],
+  "prod_signatures_present": [],
+  "prod_signatures_missing": [
+    "PROD_ROLLOUT_USER_APPROVAL",
+    "PROD_ROLLOUT_QA_APPROVAL",
+    "PROD_ROLLOUT_OPS_APPROVAL",
+    "PROD_ROLLOUT_OBSERVABILITY_APPROVAL",
+    "PROD_ROLLOUT_ROLLBACK_RUNBOOK_APPROVAL",
+    "PROD_ROLLOUT_SECURITY_APPROVAL",
+    "STATUS_RUNTIME_SECOND_SLICE_PROD_OK"
+  ],
+  "stage_markers_required": [
+    "STATUS_SECOND_SLICE_PROD_STAGE_1_APPROVAL",
+    "STATUS_SECOND_SLICE_PROD_STAGE_5_APPROVAL",
+    "STATUS_SECOND_SLICE_PROD_STAGE_25_APPROVAL",
+    "STATUS_SECOND_SLICE_PROD_STAGE_100_APPROVAL"
+  ],
+  "stage_markers_present": [],
+  "stage_markers_missing": [
+    "STATUS_SECOND_SLICE_PROD_STAGE_1_APPROVAL",
+    "STATUS_SECOND_SLICE_PROD_STAGE_5_APPROVAL",
+    "STATUS_SECOND_SLICE_PROD_STAGE_25_APPROVAL",
+    "STATUS_SECOND_SLICE_PROD_STAGE_100_APPROVAL"
+  ],
+  "keep_on_marker_present": false,
+  "flip_eligibility": "BLOCKED_PENDING_APPROVAL",
+  "flag_flipped": false,
+  "prod_env_touched": false,
+  "db_writes": false,
+  "battle_engine_mutated": false,
+  "validator_script": "validate_project_w_second_slice_prod_precheck_v1.py"
+}

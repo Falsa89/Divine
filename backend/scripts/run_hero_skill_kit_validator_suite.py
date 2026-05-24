@@ -902,6 +902,15 @@ OPTIONAL = [
     ('PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH', 'validate_project_v_second_slice_dev_live_rollback_kill_switch_v1.py'),
     ('PROJECT-V-TRACK-G-SECOND-SLICE-PROD-READINESS-GATE-PREP', 'validate_project_v_second_slice_prod_readiness_gate_prep_v1.py'),
     ('PROJECT-V-TRACK-H-PROJECT-V-COMPLETION-AND-NEXT-PACK', 'validate_project_v_completion_and_next_pack_v1.py'),
+    # PROJECT_W STATUS SECOND SLICE PROD ROLLOUT PACK (8 tracks; READY_NOT_APPLIED_PENDING_APPROVAL — no prod signatures present; no flag flip; no DB writes; no prod env touch; rollback paths documented per stage)
+    ('PROJECT-W-TRACK-A-SECOND-SLICE-PROD-PRECHECK-SIGNATURE-GATE', 'validate_project_w_second_slice_prod_precheck_v1.py'),
+    ('PROJECT-W-TRACK-B-SECOND-SLICE-PROD-STAGE-1', 'validate_project_w_second_slice_prod_stage_1_v1.py'),
+    ('PROJECT-W-TRACK-C-SECOND-SLICE-PROD-STAGE-5', 'validate_project_w_second_slice_prod_stage_5_v1.py'),
+    ('PROJECT-W-TRACK-D-SECOND-SLICE-PROD-STAGE-25', 'validate_project_w_second_slice_prod_stage_25_v1.py'),
+    ('PROJECT-W-TRACK-E-SECOND-SLICE-PROD-STAGE-100', 'validate_project_w_second_slice_prod_stage_100_v1.py'),
+    ('PROJECT-W-TRACK-F-SECOND-SLICE-PROD-FINAL-NO-LEAK-LOAD-ROLLBACK', 'validate_project_w_second_slice_prod_final_validation_v1.py'),
+    ('PROJECT-W-TRACK-G-SECOND-SLICE-POST-PROD-DOD', 'validate_project_w_second_slice_post_prod_dod_v1.py'),
+    ('PROJECT-W-TRACK-H-PROJECT-W-COMPLETION-AND-NEXT-SYSTEM', 'validate_project_w_completion_and_next_system_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

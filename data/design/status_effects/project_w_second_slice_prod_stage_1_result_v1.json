@@ -1,0 +1,40 @@
+{
+  "task_id": "PROJECT_W_TRACK_B",
+  "track": "SECOND_SLICE_PROD_STAGE_1_PERCENT_PACK",
+  "verdict": "TRACK_B_SECOND_SLICE_PROD_STAGE_1_READY_NOT_APPLIED_PENDING_APPROVAL",
+  "target_rollout_percent": 1,
+  "applied": false,
+  "rollout_executed": false,
+  "stage_marker_required": "STATUS_SECOND_SLICE_PROD_STAGE_1_APPROVAL",
+  "stage_marker_present": false,
+  "prod_signatures_present": false,
+  "env_classification": "NON_PROD_LOCAL_ONLY",
+  "prod_env_touched": false,
+  "flag_flipped": false,
+  "flag_name": "STATUS_RUNTIME_SECOND_SLICE_ENABLED",
+  "env_pre_rollout_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_post_rollout_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_byte_identical": true,
+  "db_writes": false,
+  "battle_engine_mutated": false,
+  "smoke_planned": [
+    "/api/heroes",
+    "/api/heroes/borea",
+    "/api/heroes/greek_borea"
+  ],
+  "no_leak_planned_keys": [
+    "status_second_slice_preview",
+    "__second_slice_seam_version",
+    "second_slice_active",
+    "second_slice_deltas"
+  ],
+  "rollback_path": "/app/backend/scripts/rollback_project_w_second_slice_prod_stage_1.py",
+  "rollback_executable": true,
+  "stop_conditions": [
+    "any_error_rate_above_baseline",
+    "any_leak_detected",
+    "any_p95_above_target",
+    "any_rollback_signal"
+  ],
+  "validator_script": "validate_project_w_second_slice_prod_stage_1_v1.py"
+}

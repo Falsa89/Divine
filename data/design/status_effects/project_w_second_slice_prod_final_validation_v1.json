@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_W_TRACK_F",
+  "track": "SECOND_SLICE_PROD_FINAL_NO_LEAK_LOAD_ROLLBACK_PACK",
+  "verdict": "TRACK_F_SECOND_SLICE_PROD_FINAL_NO_LEAK_LOAD_ROLLBACK_READY",
+  "highest_stage_reached_percent": 0,
+  "highest_stage_applied": null,
+  "applied": false,
+  "no_leak_check_planned": true,
+  "latency_error_summary_planned": true,
+  "deterministic_battle_regression_planned": true,
+  "rollback_validation_planned": true,
+  "keep_on_marker_present": false,
+  "final_state_after_validation": "FLAG_OFF",
+  "env_pre_rollout_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_post_rollout_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_byte_identical": true,
+  "db_writes": false,
+  "battle_engine_mutated": false,
+  "hidden_failures": false,
+  "validator_script": "validate_project_w_second_slice_prod_final_validation_v1.py"
+}
