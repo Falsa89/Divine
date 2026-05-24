@@ -1,0 +1,52 @@
+{
+  "task_id": "PROJECT_C_TRACK_C_STATUS_EFFECT_CATALOG_BASELINE",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_C_STATUS_EFFECT_CATALOG_BASELINE_READY",
+  "mode": "suite_data_baseline_only_no_runtime",
+  "runtime_patch_applied": false,
+  "status_effects_runtime_active": false,
+  "upstream": "/app/data/design/hero_skill_kits/project_b_hero_skill_kit_catalog_freeze_manifest_v1.json",
+  "baseline_version": "status_effect_catalog_baseline_v1",
+  "canonical_categories": [
+    {"id": "buff_offensive", "description": "atk/crit/speed buffs"},
+    {"id": "buff_defensive", "description": "def/hp/dr buffs"},
+    {"id": "buff_support", "description": "healing/cleanse/regen buffs"},
+    {"id": "debuff_offensive", "description": "atk_down/crit_down"},
+    {"id": "debuff_defensive", "description": "def_down/vulnerability"},
+    {"id": "control", "description": "stun/freeze/silence/root"},
+    {"id": "dot", "description": "bleed/burn/poison/curse"},
+    {"id": "hot", "description": "regen/healing-over-time"},
+    {"id": "shield", "description": "absorb/damage-shield"},
+    {"id": "meta", "description": "immunity/cleanse/dispel/reflect"}
+  ],
+  "canonical_effects_count": 10,
+  "hard_invariants": [
+    "effect.duration_turns >= 1",
+    "effect.duration_turns <= 10 (anti-power-creep cap)",
+    "effect.stack_max <= 5",
+    "effect.value_pct between -50 and +50 for offensive/defensive buffs/debuffs",
+    "effect.dispellable in {true, false}",
+    "effect.cleansable in {true, false}",
+    "no effect has 'always_active=true'"
+  ],
+  "effects_baseline": [
+    {"id": "atk_up_pct", "category": "buff_offensive", "value_pct": 25, "duration_turns": 2, "stack_max": 2, "dispellable": true, "cleansable": true},
+    {"id": "def_up_pct", "category": "buff_defensive", "value_pct": 25, "duration_turns": 2, "stack_max": 2, "dispellable": true, "cleansable": true},
+    {"id": "hot_pct", "category": "hot", "value_pct": 10, "duration_turns": 3, "stack_max": 1, "dispellable": true, "cleansable": true},
+    {"id": "shield_pct", "category": "shield", "value_pct": 20, "duration_turns": 2, "stack_max": 1, "dispellable": true, "cleansable": false},
+    {"id": "atk_down_pct", "category": "debuff_offensive", "value_pct": -20, "duration_turns": 2, "stack_max": 2, "dispellable": true, "cleansable": true},
+    {"id": "def_down_pct", "category": "debuff_defensive", "value_pct": -20, "duration_turns": 2, "stack_max": 2, "dispellable": true, "cleansable": true},
+    {"id": "stun", "category": "control", "value_pct": 0, "duration_turns": 1, "stack_max": 1, "dispellable": false, "cleansable": true},
+    {"id": "freeze", "category": "control", "value_pct": 0, "duration_turns": 1, "stack_max": 1, "dispellable": false, "cleansable": true},
+    {"id": "bleed_pct", "category": "dot", "value_pct": 10, "duration_turns": 3, "stack_max": 3, "dispellable": true, "cleansable": true},
+    {"id": "immunity", "category": "meta", "value_pct": 0, "duration_turns": 1, "stack_max": 1, "dispellable": false, "cleansable": false}
+  ],
+  "validator_script": "/app/backend/scripts/validate_project_c_status_effect_catalog_baseline_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-C-STATUS-EFFECT-CATALOG-BASELINE", "section": "OPTIONAL"},
+  "forbidden_in_track_c_respected": {
+    "status_effect_runtime_application": false,
+    "battle_engine_changes": false,
+    "combat_tsx_changes": false,
+    "borea_activation": false
+  }
+}

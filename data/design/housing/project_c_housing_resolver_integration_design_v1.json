@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_C_TRACK_B_HOUSING_RESOLVER_INTEGRATION_DESIGN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_B_HOUSING_RESOLVER_INTEGRATION_DESIGN_READY",
+  "mode": "design_doc_only_no_runtime_import",
+  "runtime_patch_applied": false,
+  "resolver_imported_by_runtime": false,
+  "upstream": [
+    "/app/data/design/housing/project_b_housing_mvp_resolver_stub_v1.json",
+    "/app/backend/game_logic/housing_bonus_resolver_stub.py"
+  ],
+  "integration_phases": [
+    {"phase": 1, "name": "INTEGRATION_POINT_DESIGN", "description": "identify the canonical call site in account/profile read path; document expected input/output shape contract", "status": "DONE_V_C"},
+    {"phase": 2, "name": "NON_RUNTIME_UNIT_TEST_PACK", "description": "pytest harness exercising resolve_housing_bonus and validate_caps_definition; not imported by runtime", "status": "PLANNED"},
+    {"phase": 3, "name": "INERT_RUNTIME_IMPORT_AUDIT_PACK", "description": "sha256 hash module + suite invariant: NOT imported by combat/account/server", "status": "PLANNED"},
+    {"phase": 4, "name": "FEATURE_FLAG_GATED_LIVE_IMPORT_PACK", "description": "add HOUSING_RESOLVER_RUNTIME_ENABLED flag; import only when true", "status": "PLANNED"},
+    {"phase": 5, "name": "LIVE_BONUS_APPLICATION_PACK", "description": "apply resolver output to battle/account stats", "status": "FORBIDDEN_OUT_OF_SCOPE_PROJECT_C"}
+  ],
+  "canonical_call_site_design": {
+    "target": "GET /api/user/me extended with housing_bonus key (additive, optional)",
+    "phase_2_proposed_response_extension": {"housing_bonus": {"hp_pct": 0, "atk_pct": 0, "def_pct": 0, "healing_pct": 0, "source": "resolver_stub_inert"}},
+    "non_runtime_until_phase_4": true
+  },
+  "validator_script": "/app/backend/scripts/validate_project_c_housing_resolver_integration_design_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-B-HOUSING-RESOLVER-INTEGRATION-DESIGN", "section": "OPTIONAL"}
+}

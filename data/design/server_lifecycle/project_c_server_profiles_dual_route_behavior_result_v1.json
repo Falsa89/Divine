@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_C_TRACK_A_SERVER_PROFILES_DUAL_ROUTE_BEHAVIOR",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_C",
+  "verdict": "TRACK_A_SERVER_PROFILES_DUAL_ROUTE_BEHAVIOR_APPLIED_FLAG_OFF",
+  "mode": "behavior_layer_behind_skeleton_flag_off_by_default",
+  "runtime_patch_applied": true,
+  "feature_flag": "SERVER_PROFILES_RUNTIME_ENABLED",
+  "feature_flag_state_post_apply": "unset (live env)",
+  "live_default_response": {"GET": "HTTP 503 + status=disabled", "POST": "HTTP 503 + status=disabled"},
+  "flag_on_response": {
+    "GET": "HTTP 200 + read-only envelope from server_profiles (currently empty); no DB write",
+    "POST": "HTTP 200 + read-only envelope; mutation_executed=False, active_server_switched=False, dual_write_executed=False"
+  },
+  "db_writes_executed": 0,
+  "users_server_field_mutated": false,
+  "server_profiles_data_inserted": 0,
+  "active_server_switching_executed": false,
+  "dual_write_db_behavior": false,
+  "timestamp_utc": "20260524T170000Z",
+  "behavior_helper_added": "_read_only_select_response_for_user(user_id)",
+  "behavior_helper_contract": "pure read-only; lazy server.db import; returns inert envelope on any error",
+  "smoke_verification_live": {
+    "GET_sp_select_flag_unset": {"http": 503, "status": "disabled"},
+    "POST_sp_select_flag_unset": {"http": 503, "status": "disabled"},
+    "heroes": 100,
+    "primordial_gaia": 404
+  },
+  "flag_on_unit_verification": {
+    "_runtime_enabled_returns_True_with_env": true,
+    "_read_only_select_response_for_user_returns_dict": true,
+    "helper_keys": ["fallback_target", "fallback_used", "is_archived", "phase", "reason", "server_profile_id", "success"]
+  },
+  "files_changed": ["/app/backend/routes/server_profiles.py (rewritten; +56 LOC behavior helpers; default still 503)"],
+  "rollback_script": "/app/backend/scripts/rollback_project_c_server_profiles_behavior.py",
+  "validator_script": "/app/backend/scripts/validate_project_c_server_profiles_behavior_v1.py",
+  "suite_registration": {"task_id": "PROJECT-C-TRACK-A-SERVER-PROFILES-BEHAVIOR", "section": "OPTIONAL"},
+  "forbidden_in_track_a_respected": {
+    "active_server_switching": false, "dual_write_db_behavior": false,
+    "actual_server_selection_mutation": false, "feature_flag_enable": false,
+    "users_server_backfill": false, "frontend_ui": false, "second_server": false
+  }
+}

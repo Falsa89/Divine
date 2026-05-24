@@ -1,20 +1,21 @@
 """
-PROJECT_B Track A — server_profiles dual-route INERT SKELETON.
+PROJECT_B Track A + PROJECT_C Track A — server_profiles dual-route.
 
-Questo modulo definisce 2 route skeleton flag-gated per la futura dual-route
-SLC-H:
+Skeleton flag-gated routes:
   - GET  /api/server-profiles/select  (read-only contract probe)
   - POST /api/server-profiles/select  (selection target; INERT)
 
-Il runtime e' OFF di default. Quando il feature flag
-SERVER_PROFILES_RUNTIME_ENABLED non e' impostato a "true", ogni route risponde
-con HTTP 503 Service Unavailable e payload `{"status":"disabled", ...}`. Nessuna
-logica di selezione, nessun DB write, nessuna scrittura su `server_profiles`.
+Runtime is OFF by default. When SERVER_PROFILES_RUNTIME_ENABLED != "true",
+every route responds with HTTP 503 + payload `{"status":"disabled", ...}`.
 
-Questo e' uno **skeleton di contratto**, non un'implementazione runtime. La
-rimozione del legacy `/api/server/select` (V6 BLOCK_D Phase 3) **resta deferita**.
+PROJECT_C Track A adds a **behavior layer** behind the skeleton: pure helpers
+that compute a deterministic read-only response shape from the (currently
+empty) `server_profiles` collection. These helpers are NEVER called when the
+flag is unset (the route returns 503 first). With flag ON, they emit a
+non-mutating envelope; **no DB write**, **no users.server mutation**, **no
+active server switching**, **no dual-write DB behavior**.
 
-Nessun import da combat/account runtime; nessun side effect a load.
+No import from combat/account runtime; no load-time side effects.
 """
 import os
 
@@ -48,38 +49,89 @@ def _disabled_payload(method: str) -> dict:
     }
 
 
+# ===================== PROJECT_C TRACK A — BEHAVIOR LAYER (FLAG-GATED, OFF BY DEFAULT) =====================
+# Pure helpers that compute the read-only response shape. They are NEVER called when the
+# feature flag is unset (the route returns 503 first). With flag ON, the helpers compute a
+# response from the existing `server_profiles` collection (0 docs in current state). No DB
+# write, no users.server mutation, no active server switching, no dual-write. The helpers
+# are deterministic, side-effect free, and unit-testable.
+
+
+def _read_only_select_response_for_user(user_id: "str | None") -> dict:
+    """Compute a deterministic read-only response shape from the (currently empty)
+    server_profiles collection. **No DB write**. Returns an envelope that mirrors
+    the legacy /api/server/select shape with an additive optional extension.
+    """
+    payload = {
+        "success": False,
+        "phase": "PROJECT_C_TRACK_A_BEHAVIOR_LAYER_READ_ONLY",
+        "reason": "no_active_server_profile_for_user",
+        "server_profile_id": None,
+        "is_archived": False,
+        "fallback_used": True,
+        "fallback_target": "users.server (legacy; NOT mutated here)",
+    }
+    try:
+        # Lazy import to avoid load-time side effects.
+        from server import db  # type: ignore
+        if user_id:
+            doc = db.server_profiles.find_one({"user_id": user_id, "is_archived": False})
+            if doc:
+                payload.update({
+                    "success": True,
+                    "server_profile_id": str(doc.get("_id")),
+                    "is_archived": False,
+                    "fallback_used": False,
+                    "fallback_target": None,
+                    "reason": "server_profile_active_read_only",
+                })
+    except Exception:
+        # Any error keeps the inert envelope; never raise.
+        payload["reason"] = "server_profile_lookup_error_fallback_inert"
+    return payload
+
+
 @router.get("/select")
 async def server_profiles_select_probe() -> dict:
     """Read-only contract probe.
 
-    Returns 503 when the feature flag is unset. When enabled in future, this
-    will return the active server profile metadata for the calling user.
+    Returns 503 when the feature flag is unset. With flag set, returns a
+    deterministic read-only envelope (still inert: no DB write).
     """
     if not _runtime_enabled():
         raise HTTPException(status_code=503, detail=_disabled_payload("GET"))
-    # Inert future-implementation guard: even if the flag is enabled, this
-    # skeleton refuses to expose behavior in PROJECT_B Track A. The actual
-    # logic is deferred to the dedicated implementation pack.
-    raise HTTPException(status_code=503, detail={
-        **_disabled_payload("GET"),
-        "status": "flag_on_but_implementation_deferred",
+    # PROJECT_C Track A: behavior layer activates only when flag ON.
+    # No authentication wired here (deferred); user_id stays None → fallback envelope.
+    return {
+        "status": "flag_on_behavior_layer_read_only",
         "runtime_enabled": True,
-    })
+        "method": "GET",
+        "phase": "PROJECT_C_TRACK_A_BEHAVIOR_LAYER",
+        "data": _read_only_select_response_for_user(None),
+    }
 
 
 @router.post("/select")
 async def server_profiles_select_target() -> dict:
     """Selection target route (INERT).
 
-    No DB writes; no user state change. Returns 503 always in PROJECT_B Track A.
+    No DB writes; no user state change. Returns 503 when flag unset; with flag
+    ON, returns the same read-only envelope (no mutation).
     """
     if not _runtime_enabled():
         raise HTTPException(status_code=503, detail=_disabled_payload("POST"))
-    raise HTTPException(status_code=503, detail={
-        **_disabled_payload("POST"),
-        "status": "flag_on_but_implementation_deferred",
+    # PROJECT_C Track A: POST behavior layer is also inert (read-only envelope).
+    # No DB write, no active-server switch, no dual-write.
+    return {
+        "status": "flag_on_behavior_layer_read_only",
         "runtime_enabled": True,
-    })
+        "method": "POST",
+        "phase": "PROJECT_C_TRACK_A_BEHAVIOR_LAYER",
+        "data": _read_only_select_response_for_user(None),
+        "mutation_executed": False,
+        "active_server_switched": False,
+        "dual_write_executed": False,
+    }
 
 
 __all__ = ["router", "FEATURE_FLAG"]
