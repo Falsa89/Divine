@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_F_TRACK_F",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_F_PACK",
+  "verdict": "TRACK_F_AF2N_DASHBOARD_PROVISIONING_PHASE3_DRYRUN_READY",
+  "mode": "local_offline_phase3_dryrun",
+  "runtime_changes_applied": false,
+  "steps_executed_offline": 7,
+  "external_calls_made": 0,
+  "templates_validated": 3,
+  "templates": [
+    "af2n_observability_dashboard_template_v1",
+    "af2n_dashboard_render_v1",
+    "af2n_observability_metrics_pipeline_v1"
+  ],
+  "alert_uids_verified": 5,
+  "secrets_required_at_dryrun": 0,
+  "future_env_requirements": [
+    "AF2N_GRAFANA_URL",
+    "AF2N_GRAFANA_API_TOKEN",
+    "AF2N_DASHBOARD_FOLDER_UID"
+  ],
+  "manifest_present": true,
+  "forbidden_in_track_f_respected": {
+    "external_service_calls": false,
+    "af2n_runtime_mutation": false,
+    "public_spend_ui": false,
+    "stack_g_change": false
+  },
+  "upstream": [
+    "/app/data/design/system_safety/af2n_observability_dashboard_template_v1.json",
+    "/app/data/design/system_safety/af2n_observability_dashboard_render_v1.json",
+    "/app/data/design/system_safety/af2n_observability_metrics_pipeline_v1.json"
+  ],
+  "validator_script": "validate_project_f_af2n_dashboard_phase3_dryrun_v1.py",
+  "suite_registration": "OPTIONAL"
+}

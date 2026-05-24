@@ -1,0 +1,41 @@
+{
+  "task_id": "PROJECT_F_TRACK_H",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_F_PACK",
+  "verdict": "TRACK_H_ARTIFACT_BIBLE_IMPORT_PLAN_APPROVAL_GATE_READY",
+  "mode": "import_plan_and_approval_gate_design_only",
+  "runtime_changes_applied": false,
+  "artifact_live_bonus_active": false,
+  "artifact_summon_behavior_active": false,
+  "candidates_status_required_inert": ["draft", "design_only", "frozen"],
+  "approval_gates": [
+    {"gate_id": "USER_APPROVAL", "owner": "product_lead", "required": true, "state": "PENDING"},
+    {"gate_id": "ECONOMY_APPROVAL_SUMMON_FRAGMENT_SOURCE", "owner": "economy_lead", "required": true, "state": "PENDING"},
+    {"gate_id": "BALANCE_APPROVAL_CAPS", "owner": "balance_lead", "required": true, "state": "PENDING"},
+    {"gate_id": "QA_APPROVAL_NO_LIVE_LEAK", "owner": "qa_lead", "required": true, "state": "PENDING"}
+  ],
+  "import_plan_steps": [
+    "S1: re-validate launch_candidates_v1 (5) keep inert status (design_only)",
+    "S2: cross-check freeze_invariants vs schema_v1",
+    "S3: cross-check upgrade method (shard_consumption) consistency",
+    "S4: cross-check global_roster_account_bonus caps (no live application)",
+    "S5: produce import-ready manifest WITHOUT activating bonus or summon",
+    "S6: park manifest until ALL 4 approval gates clear",
+    "S7: confirm validator forbids fake activation"
+  ],
+  "upstream": [
+    "/app/data/design/artifacts/artifact_bible_schema_v1.json",
+    "/app/data/design/artifacts/artifact_bible_launch_candidates_v1.json",
+    "/app/data/design/artifacts/project_d_artifact_bible_v1_approval_freeze_pack.json",
+    "/app/data/design/artifacts/project_e_artifact_bonus_resolver_non_runtime_ut_v1.json"
+  ],
+  "forbidden_in_track_h_respected": {
+    "artifact_live_bonus": false,
+    "artifact_summon_behavior": false,
+    "gacha_rate_pity_change": false,
+    "frontend": false,
+    "db_writes": false,
+    "equipment_semantics": false
+  },
+  "validator_script": "validate_project_f_artifact_import_plan_v1.py",
+  "suite_registration": "OPTIONAL"
+}

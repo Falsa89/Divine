@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_F_TRACK_C",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_F_PACK",
+  "verdict": "TRACK_C_STATUS_EFFECT_ADAPTER_PHASE2_TESTS_READY",
+  "mode": "non_runtime_contract_tests_phase2",
+  "runtime_changes_applied": false,
+  "unit_test_count": 8,
+  "unit_tests": [
+    "UT_PHASE2_1: build_status_mapping rejects empty status_id",
+    "UT_PHASE2_2: build_status_mapping rejects unknown category",
+    "UT_PHASE2_3: build_status_mapping rejects unknown polarity/stacking/boss_behavior",
+    "UT_PHASE2_4: build_status_mapping rejects non-bool source_lock",
+    "UT_PHASE2_5: build_status_mapping rejects unknown display_hint",
+    "UT_PHASE2_6: build_status_mapping yields runtime_active=False",
+    "UT_PHASE2_7: validate_canonical_sets() returns True",
+    "UT_PHASE2_8: adapter NOT imported by battle_engine/battle_core/combat.tsx"
+  ],
+  "forbidden_in_track_c_respected": {
+    "battle_mutation": false,
+    "runtime_status_activation": false,
+    "battle_engine_change": false,
+    "battle_core_change": false,
+    "combat_tsx_change": false
+  },
+  "upstream": [
+    "/app/backend/game_logic/status_effect_runtime_adapter_stub.py",
+    "/app/data/design/status_effects/project_c_status_effect_catalog_baseline_v1.json",
+    "/app/data/design/status_effects/project_d_status_effect_runtime_adapter_skeleton_v1.json",
+    "/app/data/design/status_effects/project_e_status_effect_non_runtime_ut_v1.json"
+  ],
+  "validator_script": "validate_project_f_status_effect_adapter_phase2_tests.py",
+  "suite_registration": "OPTIONAL"
+}

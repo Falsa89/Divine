@@ -442,6 +442,12 @@ app.include_router(items_router)
 from routes.server_profiles import router as server_profiles_router
 app.include_router(server_profiles_router)
 
+# PROJECT_F Track B — Housing read-only preview route skeleton (DISABLED-BY-DEFAULT INERT).
+# Returns 503 when HOUSING_PREVIEW_ENABLED is unset/!=true. No DB writes, no live bonus,
+# no combat/account stat mutation. Upstream design: 127B / 128B (Project F Track B).
+from routes.housing_preview import router as housing_preview_router
+app.include_router(housing_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

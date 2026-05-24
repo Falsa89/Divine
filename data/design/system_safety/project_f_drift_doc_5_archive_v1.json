@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_F_TRACK_D",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_F_PACK",
+  "verdict": "TRACK_D_DRIFT_DOC_5_ARCHIVE_READY",
+  "mode": "audit_archive_doc_only",
+  "runtime_changes_applied": false,
+  "drift_category_id": "drift_doc_5_legacy_server_select_endpoint_metrics_residue",
+  "description": "Legacy metrics residues referencing /api/server/select before the dual-route migration. Documented as KNOWN_NONBLOCKING_ARCHIVED_V1; cleanup deferred to a future ops-only pack with explicit user approval.",
+  "archive_state": "KNOWN_NONBLOCKING_ARCHIVED_V1",
+  "db_cleanup_executed": false,
+  "db_cleanup_authorized": false,
+  "future_cleanup_gate": {
+    "requires_user_approval": true,
+    "requires_metrics_freeze_window": true,
+    "requires_rollback_script": true,
+    "target_pack": "future_ops_pack_drift_cleanup_v1"
+  },
+  "archived_docs_total": "5/7",
+  "forbidden_in_track_d_respected": {
+    "db_cleanup": false,
+    "gacha_summon_behavior_change": false,
+    "roster_mutation": false,
+    "borea_activation": false
+  },
+  "upstream": [
+    "/app/data/design/system_safety/project_b_drift_doc_1_legacy_summon_rate_archive_v1.json",
+    "/app/data/design/system_safety/project_c_drift_doc_2_archive_v1.json",
+    "/app/data/design/system_safety/project_d_drift_doc_3_archive_v1.json",
+    "/app/data/design/system_safety/project_e_drift_doc_4_archive_v1.json"
+  ],
+  "validator_script": "validate_project_f_drift_doc_5_archive_v1.py",
+  "suite_registration": "OPTIONAL"
+}

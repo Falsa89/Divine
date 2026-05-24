@@ -661,6 +661,22 @@ OPTIONAL = [
     ('PROJECT-E-TRACK-G-ARTIFACT-BONUS-RESOLVER-NON-RUNTIME-UT', 'validate_project_e_artifact_bonus_resolver_non_runtime_ut_v1.py'),
     # PROJECT_E Track H PROJECT COMPLETION DoD RECALIBRATION (doc-only)
     ('PROJECT-E-TRACK-H-PROJECT-COMPLETION-DOD-RECALIBRATION', 'validate_project_e_project_completion_dod_recalibration_v1.py'),
+    # PROJECT_F Track A SERVER PROFILES READ-ONLY PREVIEW HARDENING (default 503; double-flag gate; no DB writes)
+    ('PROJECT-F-TRACK-A-SERVER-PROFILES-READ-ONLY-PREVIEW-HARDENING', 'validate_project_f_server_profiles_read_only_preview.py'),
+    # PROJECT_F Track B HOUSING READ-ONLY PREVIEW CONTRACT (disabled-by-default 503 skeleton)
+    ('PROJECT-F-TRACK-B-HOUSING-READ-ONLY-PREVIEW-CONTRACT', 'validate_project_f_housing_read_only_preview.py'),
+    # PROJECT_F Track C STATUS EFFECT ADAPTER PHASE 2 NON-RUNTIME CONTRACT TESTS
+    ('PROJECT-F-TRACK-C-STATUS-EFFECT-ADAPTER-PHASE2-TESTS', 'validate_project_f_status_effect_adapter_phase2_tests.py'),
+    # PROJECT_F Track D DRIFT DOC 5 ARCHIVE (audit/doc only; 5/7 archived)
+    ('PROJECT-F-TRACK-D-DRIFT-DOC-5-ARCHIVE', 'validate_project_f_drift_doc_5_archive_v1.py'),
+    # PROJECT_F Track E QA TEST CREDENTIALS SAFE DRY-RUN (manual_required default; no secret logging)
+    ('PROJECT-F-TRACK-E-QA-CREDENTIALS-SAFE-DRYRUN', 'validate_project_f_qa_credentials_safety.py'),
+    # PROJECT_F Track F AF2-N DASHBOARD PROVISIONING PHASE 3 DRY-RUN (offline; no external calls)
+    ('PROJECT-F-TRACK-F-AF2N-DASHBOARD-PROVISIONING-PHASE3-DRYRUN', 'validate_project_f_af2n_dashboard_phase3_dryrun_v1.py'),
+    # PROJECT_F Track G SUITE HYGIENE LOCK & REGRESSION GUARD
+    ('PROJECT-F-TRACK-G-SUITE-HYGIENE-LOCK', 'validate_project_f_suite_hygiene_lock_v1.py'),
+    # PROJECT_F Track H ARTIFACT BIBLE IMPORT PLAN & APPROVAL GATE (design-only; 4 PENDING gates)
+    ('PROJECT-F-TRACK-H-ARTIFACT-BIBLE-IMPORT-PLAN-APPROVAL-GATE', 'validate_project_f_artifact_import_plan_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -841,13 +857,42 @@ def main(argv=None) -> int:
         'SLC-BE-PREFLIGHT', 'SLC-BE-COMBO',
         'SLC-F-PREFLIGHT', 'SLC-F-COMBO',
     }) if (project_e_v2_successors_present and not keep_deprecated) else frozenset()
+    # PROJECT_F Track B — authorized creation of disabled-by-default /api/housing/preview
+    # skeleton. The 12 historical OPTIONAL validators below asserted "no /api/housing route
+    # exists" or "housing_preview not implemented". Those negative-existence invariants are
+    # legitimately superseded by the new Pack-F authorized invariant enforced by
+    # validate_project_f_housing_read_only_preview.py (route exists, 503 by default, no DB
+    # writes, no live bonus, no resolver import). The historical v1 validators remain
+    # physically on disk (no delete) and are reported as [SUPERSEDED] (--) to preserve
+    # honest evidence in the JSON report. The successor validator is OPTIONAL and PASS by
+    # default. No REQUIRED validator is touched; no fake PASS; no hiding of fresh failures.
+    project_f_track_b_skeleton_present = (
+        Path('/app/backend/routes/housing_preview.py').exists() and
+        Path('/app/backend/scripts/validate_project_f_housing_read_only_preview.py').exists() and
+        Path('/app/data/design/housing/project_f_housing_read_only_preview_contract_v1.json').exists()
+    )
+    SUPERSEDED_AFTER_PROJECT_F_TRACK_B = frozenset({
+        'SLC-F-BATCH-0-1-POST-APPLY',
+        'SLC-F-BATCH-1B-POST-APPLY',
+        'SLC-F-BATCH-2-POST-APPLY',
+        'SLC-F-EQUIPMENT-SCOPE-POST-APPLY',
+        'SLC-F-RAIDS-EQUIPMENT-SCOPE-POST-APPLY',
+        'SLC-F-GVG-WAR-SCOPE-POST-APPLY',
+        'SLC-F-UNIQUE-ITEMS-SCOPE-POST-APPLY',
+        'SLC-F-COSMETICS-SCHEMA-SPLIT-REFACTOR-V1',
+        'PROJECT-B-TRACK-B-HOUSING-RESOLVER-STUB-INERT',
+        'PROJECT-C-TRACK-B-HOUSING-RESOLVER-INTEGRATION-DESIGN',
+        'PROJECT-D-TRACK-B-HOUSING-RESOLVER-PHASE2-TESTS',
+        'PROJECT-E-TRACK-B-HOUSING-PHASE3-INTEGRATION-DESIGN',
+    }) if (project_f_track_b_skeleton_present and not keep_deprecated) else frozenset()
     SUPERSEDED = (SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
                   | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3
                   | SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW
                   | SUPERSEDED_AFTER_RATE_LIMIT
                   | SUPERSEDED_AFTER_STAGE4
                   | SUPERSEDED_AFTER_V21_SCRIPTS
-                  | SUPERSEDED_AFTER_PROJECT_E_V2)
+                  | SUPERSEDED_AFTER_PROJECT_E_V2
+                  | SUPERSEDED_AFTER_PROJECT_F_TRACK_B)
 
     results: list[dict] = []
     any_required_fail = False

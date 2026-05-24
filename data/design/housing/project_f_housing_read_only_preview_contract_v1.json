@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_F_TRACK_B",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_F_PACK",
+  "verdict": "TRACK_B_HOUSING_READ_ONLY_PREVIEW_SKELETON_APPLIED_INERT",
+  "mode": "read_only_preview_skeleton_inert",
+  "runtime_changes_applied": true,
+  "runtime_changes_scope": "disabled-by-default 503 route skeleton; no live bonus, no DB writes",
+  "flag": "HOUSING_PREVIEW_ENABLED",
+  "default_behavior": {
+    "GET /api/housing/preview": 503
+  },
+  "route_module": "/app/backend/routes/housing_preview.py",
+  "router_included_in_server": true,
+  "forbidden_in_track_b_respected": {
+    "housing_live_bonus": false,
+    "db_writes": false,
+    "battle_mutation": false,
+    "account_stat_mutation": false,
+    "frontend": false
+  },
+  "contract_version": "project_f_track_b_housing_preview_v1",
+  "upstream": [
+    "/app/backend/game_logic/housing_bonus_resolver_stub.py",
+    "/app/docs/divine/127B_HOUSING_PHASE3_INTEGRATION_DESIGN.md"
+  ],
+  "validator_script": "validate_project_f_housing_read_only_preview.py",
+  "rollback_script": "rollback_project_f_housing_read_only_preview.py",
+  "suite_registration": "OPTIONAL"
+}

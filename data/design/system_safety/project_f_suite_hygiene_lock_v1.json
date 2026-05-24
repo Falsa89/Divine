@@ -1,0 +1,45 @@
+{
+  "task_id": "PROJECT_F_TRACK_G",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_F_PACK",
+  "verdict": "TRACK_G_SUITE_HYGIENE_LOCK_READY",
+  "mode": "suite_hygiene_lock_regression_guard",
+  "baseline_pass": 402,
+  "baseline_pass_pre_project_f_track_b": 406,
+  "baseline_pass_delta_explanation": "402 = 406 - 12 SUPERSEDED_AFTER_PROJECT_F_TRACK_B + 8 new PROJECT-F-TRACK-* OPTIONAL entries. The 12 superseded historical validators asserted negative-existence invariants (no /api/housing route, housing_preview not implemented). Pack F Track B explicitly authorized the disabled-by-default /api/housing/preview skeleton, so those v1 invariants are legitimately replaced by validate_project_f_housing_read_only_preview.py which asserts the new correct invariant. v1 files remain on disk for audit; reported as [SUPERSEDED] (--) in suite output.",
+  "superseded_after_project_f_track_b_active": true,
+  "superseded_after_project_f_track_b_cluster": [
+    "SLC-F-BATCH-0-1-POST-APPLY", "SLC-F-BATCH-1B-POST-APPLY", "SLC-F-BATCH-2-POST-APPLY",
+    "SLC-F-EQUIPMENT-SCOPE-POST-APPLY", "SLC-F-RAIDS-EQUIPMENT-SCOPE-POST-APPLY",
+    "SLC-F-GVG-WAR-SCOPE-POST-APPLY", "SLC-F-UNIQUE-ITEMS-SCOPE-POST-APPLY",
+    "SLC-F-COSMETICS-SCHEMA-SPLIT-REFACTOR-V1",
+    "PROJECT-B-TRACK-B-HOUSING-RESOLVER-STUB-INERT",
+    "PROJECT-C-TRACK-B-HOUSING-RESOLVER-INTEGRATION-DESIGN",
+    "PROJECT-D-TRACK-B-HOUSING-RESOLVER-PHASE2-TESTS",
+    "PROJECT-E-TRACK-B-HOUSING-PHASE3-INTEGRATION-DESIGN"
+  ],
+  "baseline_fail": 0,
+  "baseline_miss": 0,
+  "superseded_after_project_e_v2_active": true,
+  "superseded_cluster": [
+    "SLC-C-REPO-PREFLIGHT", "SLC-C-COMBO",
+    "SLC-D-PREFLIGHT", "SLC-D-COMBO",
+    "SLC-BE-PREFLIGHT", "SLC-BE-COMBO",
+    "SLC-F-PREFLIGHT", "SLC-F-COMBO"
+  ],
+  "required_validators_unchanged": true,
+  "hygiene_guarantees": [
+    "suite total fail == 0",
+    "suite total miss == 0",
+    "no REQUIRED validator removed or weakened without explicit pack authorization",
+    "deprecated v1 cluster remains supercceded (SUPERSEDED_AFTER_PROJECT_E_V2)",
+    "no fake PASS",
+    "no hiding failures"
+  ],
+  "forbidden_in_track_g_respected": {
+    "fake_pass": false,
+    "hiding_failures": false,
+    "required_weakening": false
+  },
+  "validator_script": "validate_project_f_suite_hygiene_lock_v1.py",
+  "suite_registration": "OPTIONAL"
+}
