@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_H_TRACK_C",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_H_PACK",
+  "verdict": "TRACK_C_FINAL_STATUS_RUNTIME_GATE_READY",
+  "mode": "final_runtime_gate_and_first_slice_plan_inert",
+  "runtime_changes_applied": false,
+  "runtime_active": false,
+  "first_safe_runtime_slice": {
+    "slice_id": "PROJECT_H_FIRST_SLICE_BUFF_STAT_MODIFIERS_READ_ONLY",
+    "categories": ["buff_offensive", "buff_defensive"],
+    "mode": "read_only_resolver",
+    "description": "A pure resolver maps active buff_offensive/buff_defensive statuses on a battle entity to a stat-delta envelope. The resolver is pure, deterministic, side-effect free. It is NOT called by battle_engine in this slice. Battle runtime keeps current behavior. The first activation pack will wire the resolver behind a flag (STATUS_RUNTIME_BUFF_SLICE_ENABLED) into pre-fight stat application only, never into tick loop.",
+    "live_battle_mutation": false,
+    "tick_loop_touched": false,
+    "flag_required_for_runtime": "STATUS_RUNTIME_BUFF_SLICE_ENABLED=true"
+  },
+  "blockers_for_actual_battle_integration": [
+    "battle_engine wiring: pre-fight stat application hook needed (NOT present)",
+    "VFX pipeline: buff_icon overlay on hero portrait; needs frontend handoff",
+    "PvP fairness audit: pre-fight stat injection must be deterministic across both teams",
+    "rollback plan: a single env flag must be sufficient to revert the slice",
+    "REQUIRED suite augmentation: slice activation pack must add at least 1 REQUIRED validator"
+  ],
+  "test_matrix": [
+    {"test_id": "FS_UT_1", "description": "resolver returns zero envelope for empty status list"},
+    {"test_id": "FS_UT_2", "description": "resolver respects per-category cap (no envelope > master_cap)"},
+    {"test_id": "FS_UT_3", "description": "resolver is deterministic: same input → same output"},
+    {"test_id": "FS_UT_4", "description": "resolver is side-effect free (no DB write, no env mutation)"},
+    {"test_id": "FS_UT_5", "description": "resolver not imported by battle_engine/battle_core/combat.tsx"},
+    {"test_id": "FS_UT_6", "description": "flag STATUS_RUNTIME_BUFF_SLICE_ENABLED unset → resolver never invoked"}
+  ],
+  "readiness_matrix_upstream": "/app/data/design/status_effects/project_g_status_effect_runtime_readiness_matrix_v1.json",
+  "forbidden_in_track_c_respected": {
+    "battle_mutation": false,
+    "runtime_status_activation": false,
+    "battle_engine_change": false,
+    "battle_core_change": false,
+    "combat_tsx_change": false
+  },
+  "validator_script": "validate_project_h_final_status_runtime_gate_v1.py",
+  "suite_registration": "OPTIONAL"
+}

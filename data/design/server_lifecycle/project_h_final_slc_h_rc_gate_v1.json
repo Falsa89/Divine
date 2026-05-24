@@ -1,0 +1,44 @@
+{
+  "task_id": "PROJECT_H_TRACK_A",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_H_PACK",
+  "verdict": "TRACK_A_FINAL_SLC_H_RC_GATE_READY",
+  "mode": "final_release_candidate_gate_inert",
+  "runtime_changes_applied": false,
+  "slc_h_readiness_percent": 98,
+  "server_profiles_collection": {
+    "name": "server_profiles",
+    "present": true,
+    "doc_count": 0,
+    "writes_in_pack_h": 0
+  },
+  "dual_route_contracts_consolidated": [
+    "GET /api/server-profiles/select: 503 with flags OFF (frozen)",
+    "POST /api/server-profiles/select: 503 with flags OFF (frozen)",
+    "flag-ON envelope: PROJECT_C_TRACK_A_BEHAVIOR_LAYER_READ_ONLY (mutation flags always False)",
+    "flag-ON preview envelope: PROJECT_D_TRACK_A_FLAGGED_PREVIEW_DRY_RUN_READ_ONLY (preview=True, dry_run=True, never called by default handlers)"
+  ],
+  "future_flags_required_for_live_preview": [
+    "SERVER_PROFILES_RUNTIME_ENABLED=true",
+    "SERVER_PROFILES_PREVIEW_ENABLED=true (double-gate)"
+  ],
+  "blockers_for_real_active_server_switching": [
+    "second_server_opening: requires Phase 11 authorization (NOT in scope)",
+    "users.server mutation path: still routed through legacy fallback; no dual-write",
+    "server_profiles seeding: 0 docs; requires explicit ops pack to seed S1 (and later S2)",
+    "dual-route integration tests: REQUIRED suite must include real switch validators before activation",
+    "rollback plan: needs explicit operator-signed runbook before any live flip"
+  ],
+  "forbidden_in_track_a_respected": {
+    "live_enable": false,
+    "active_switch": false,
+    "db_writes": false,
+    "second_server": false,
+    "frontend": false
+  },
+  "upstream": [
+    "/app/data/design/server_lifecycle/project_g_server_profiles_preview_contract_v1.json",
+    "/app/backend/routes/server_profiles.py"
+  ],
+  "validator_script": "validate_project_h_final_slc_h_rc_gate_v1.py",
+  "suite_registration": "OPTIONAL"
+}

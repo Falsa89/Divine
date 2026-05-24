@@ -1,0 +1,45 @@
+{
+  "task_id": "PROJECT_H_TRACK_B",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_H_PACK",
+  "verdict": "TRACK_B_FINAL_HOUSING_MVP_RC_GATE_READY",
+  "mode": "final_release_candidate_gate_inert",
+  "runtime_changes_applied": false,
+  "housing_mvp_readiness_percent": 92,
+  "frozen_endpoint": "/api/housing/preview",
+  "frozen_default_status": 503,
+  "flag_required_for_preview": "HOUSING_PREVIEW_ENABLED=true",
+  "cap_snapshot_consolidated_from": "/app/data/design/housing/project_g_housing_preview_contract_and_cap_snapshot_v1.json",
+  "future_flags_required_for_preview_enable": [
+    "HOUSING_PREVIEW_ENABLED=true",
+    "HOUSING_PREVIEW_READ_USER_ROOMS_ENABLED=true (sub-flag for future user-bound preview)"
+  ],
+  "blockers_for_live_bonus_application": [
+    "battle_engine integration: housing bonus must enter pre-fight stat layer; NOT wired",
+    "account_stat_application: requires global_roster aggregator; NOT wired",
+    "economy approval: housing rewards must not conflict with shop/BP",
+    "caps enforcement test: master_cap + vip_vault_secondary_cap + per_room caps need integration tests",
+    "rollback plan: operator-signed runbook required before any live application"
+  ],
+  "route_invariants_at_rc": {
+    "default_status": 503,
+    "housing_bonus_resolver_stub_imported_by_route": false,
+    "db_writes_in_route_module": 0,
+    "live_bonus_applied": false,
+    "combat_mutation": false
+  },
+  "forbidden_in_track_b_respected": {
+    "housing_live_bonus": false,
+    "db_writes": false,
+    "battle_mutation": false,
+    "account_stat_mutation": false,
+    "frontend": false
+  },
+  "upstream": [
+    "/app/data/design/housing/project_g_housing_preview_contract_and_cap_snapshot_v1.json",
+    "/app/data/design/housing/project_f_housing_read_only_preview_contract_v1.json",
+    "/app/backend/routes/housing_preview.py",
+    "/app/backend/game_logic/housing_bonus_resolver_stub.py"
+  ],
+  "validator_script": "validate_project_h_final_housing_mvp_rc_gate_v1.py",
+  "suite_registration": "OPTIONAL"
+}

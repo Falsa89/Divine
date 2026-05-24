@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_H_TRACK_F",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_H_PACK",
+  "verdict": "TRACK_F_AF2N_FINAL_DASHBOARD_LIVE_READINESS_GATE_READY",
+  "mode": "final_readiness_gate_inert_no_external_calls",
+  "runtime_changes_applied": false,
+  "external_calls_made": 0,
+  "approval_gates_consolidated_from": "/app/data/design/system_safety/project_g_af2n_dashboard_provisioning_approval_gate_v1.json",
+  "approval_gates": [
+    {"gate_id": "OPS_APPROVAL", "state": "PENDING", "required_for_live": true},
+    {"gate_id": "ALERT_SINK_CONFIGURED", "state": "PENDING", "required_for_live": true},
+    {"gate_id": "DASHBOARD_DATA_SOURCE_CONFIGURED", "state": "PENDING", "required_for_live": true},
+    {"gate_id": "NO_SECRET_LEAKAGE", "state": "PENDING", "required_for_live": true},
+    {"gate_id": "ROLLBACK_NO_OP_PATH", "state": "PENDING", "required_for_live": true}
+  ],
+  "exact_approval_text_for_ops_gate": "OPS approves the AF2-N dashboard live provisioning window and confirms the rollback no-op path. Mark OPS_APPROVAL gate signed for PROJECT_H_TRACK_F.",
+  "exact_approval_text_for_alert_sink_gate": "Alert sink (slack/pagerduty/email) routing has been configured and a dry-run alert has been received successfully. Mark ALERT_SINK_CONFIGURED gate signed for PROJECT_H_TRACK_F.",
+  "exact_approval_text_for_datasource_gate": "Grafana data source UID has been confirmed and metric scrape is healthy. Mark DASHBOARD_DATA_SOURCE_CONFIGURED gate signed for PROJECT_H_TRACK_F.",
+  "exact_approval_text_for_no_secret_leakage_gate": "QA audit confirms no AF2N_GRAFANA_API_TOKEN or related secret leaks in logs or templates. Mark NO_SECRET_LEAKAGE gate signed for PROJECT_H_TRACK_F.",
+  "exact_approval_text_for_rollback_gate": "Rollback script tested locally; no-op path verified. Mark ROLLBACK_NO_OP_PATH gate signed for PROJECT_H_TRACK_F.",
+  "current_prompt_explicit_approval_detected": false,
+  "forbidden_in_track_f_respected": {
+    "external_service_calls": false,
+    "af2n_runtime_mutation": false,
+    "public_spend_ui": false,
+    "stack_g_change": false
+  },
+  "validator_script": "validate_project_h_af2n_final_dashboard_live_readiness_gate_v1.py",
+  "suite_registration": "OPTIONAL"
+}

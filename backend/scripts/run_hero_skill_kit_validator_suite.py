@@ -693,6 +693,22 @@ OPTIONAL = [
     ('PROJECT-G-TRACK-G-SUITE-HEALTH-FINALIZATION', 'validate_project_g_suite_health_finalization_v1.py'),
     # PROJECT_G Track H ARTIFACT APPROVAL GATE SIGNATURE PACK (4 PENDING gates; signature template)
     ('PROJECT-G-TRACK-H-ARTIFACT-APPROVAL-GATE-SIGNATURE', 'validate_project_g_artifact_approval_gate_signature_v1.py'),
+    # PROJECT_H Track A FINAL SLC-H RELEASE CANDIDATE GATE
+    ('PROJECT-H-TRACK-A-FINAL-SLC-H-RC-GATE', 'validate_project_h_final_slc_h_rc_gate_v1.py'),
+    # PROJECT_H Track B FINAL HOUSING MVP RELEASE CANDIDATE GATE
+    ('PROJECT-H-TRACK-B-FINAL-HOUSING-MVP-RC-GATE', 'validate_project_h_final_housing_mvp_rc_gate_v1.py'),
+    # PROJECT_H Track C FINAL STATUS RUNTIME GATE & FIRST SLICE PLAN
+    ('PROJECT-H-TRACK-C-FINAL-STATUS-RUNTIME-GATE-FIRST-SLICE', 'validate_project_h_final_status_runtime_gate_v1.py'),
+    # PROJECT_H Track D DRIFT DOC 7 FINAL ARCHIVE (7/7)
+    ('PROJECT-H-TRACK-D-DRIFT-DOC-7-FINAL-ARCHIVE', 'validate_project_h_drift_doc_7_final_archive_v1.py'),
+    # PROJECT_H Track E QA RELEASE CANDIDATE SMOKE GATE (9 safe checks)
+    ('PROJECT-H-TRACK-E-QA-RELEASE-CANDIDATE-SMOKE-GATE', 'validate_project_h_qa_release_candidate_smoke_gate_v1.py'),
+    # PROJECT_H Track F AF2-N FINAL DASHBOARD LIVE READINESS GATE
+    ('PROJECT-H-TRACK-F-AF2N-FINAL-DASHBOARD-LIVE-READINESS-GATE', 'validate_project_h_af2n_final_dashboard_live_readiness_gate_v1.py'),
+    # PROJECT_H Track G ARTIFACT FINAL APPROVAL GATE & IMPORT READINESS
+    ('PROJECT-H-TRACK-G-ARTIFACT-FINAL-APPROVAL-GATE', 'validate_project_h_artifact_final_approval_gate_v1.py'),
+    # PROJECT_H Track H PROJECT RELEASE CANDIDATE DoD FINALIZATION (9 layers; next-stage plan)
+    ('PROJECT-H-TRACK-H-PROJECT-RC-DOD-FINALIZATION', 'validate_project_h_release_candidate_dod_finalization_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

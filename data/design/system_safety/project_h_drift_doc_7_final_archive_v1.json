@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_H_TRACK_D",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_H_PACK",
+  "verdict": "TRACK_D_DRIFT_DOC_7_FINAL_ARCHIVE_READY",
+  "mode": "audit_archive_doc_only_final",
+  "runtime_changes_applied": false,
+  "drift_category_id": "drift_doc_7_legacy_combat_log_field_naming_residue",
+  "description": "Legacy field naming patterns in old combat log audit JSONs (pre-V8 schema) still referenced in superseded design docs. Marked KNOWN_NONBLOCKING_ARCHIVED_V1; current canonical log schema from V8 BLOCK observability remains authoritative. No DB cleanup, no log mutation, no field rename executed.",
+  "archive_state": "KNOWN_NONBLOCKING_ARCHIVED_V1",
+  "db_cleanup_executed": false,
+  "db_cleanup_authorized": false,
+  "final_cleanup_gate": {
+    "requires_user_approval": true,
+    "requires_log_schema_freeze_window": true,
+    "requires_rollback_script": true,
+    "target_pack": "future_ops_pack_drift_cleanup_v3_final"
+  },
+  "archived_docs_total": "7/7",
+  "all_drift_categories_now_archived": true,
+  "forbidden_in_track_d_respected": {
+    "db_cleanup": false,
+    "gacha_summon_behavior_change": false,
+    "roster_mutation": false,
+    "borea_activation": false
+  },
+  "upstream": [
+    "/app/data/design/system_safety/project_b_drift_doc_1_legacy_summon_rate_archive_v1.json",
+    "/app/data/design/system_safety/project_c_drift_doc_2_archive_v1.json",
+    "/app/data/design/system_safety/project_d_drift_doc_3_archive_v1.json",
+    "/app/data/design/system_safety/project_e_drift_doc_4_archive_v1.json",
+    "/app/data/design/system_safety/project_f_drift_doc_5_archive_v1.json",
+    "/app/data/design/system_safety/project_g_drift_doc_6_archive_v1.json"
+  ],
+  "validator_script": "validate_project_h_drift_doc_7_final_archive_v1.py",
+  "suite_registration": "OPTIONAL"
+}

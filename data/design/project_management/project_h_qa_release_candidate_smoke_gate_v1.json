@@ -1,0 +1,37 @@
+{
+  "task_id": "PROJECT_H_TRACK_E",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_H_PACK",
+  "verdict": "TRACK_E_QA_RELEASE_CANDIDATE_SMOKE_GATE_READY",
+  "mode": "qa_rc_smoke_gate_safe_automated_subset",
+  "runtime_changes_applied": false,
+  "automated_safe_subset_count": 9,
+  "safe_automated_checklist": [
+    {"id": "S1", "check": "API health", "target": "GET /api/heroes", "expected_status": 200, "automation": "safe"},
+    {"id": "S2", "check": "heroes catalog count", "target": "GET /api/heroes", "expected_count": 100, "automation": "safe"},
+    {"id": "S3", "check": "roster visibility invariants (Borea inert)", "target": "GET /api/heroes/borea", "expected_status": 200, "automation": "safe"},
+    {"id": "S4", "check": "primordial_gaia absent", "target": "GET /api/heroes/primordial_gaia", "expected_status": 404, "automation": "safe"},
+    {"id": "S5", "check": "server_profiles preview route disabled", "target": "GET+POST /api/server-profiles/select", "expected_status": 503, "automation": "safe"},
+    {"id": "S6", "check": "housing preview route disabled", "target": "GET /api/housing/preview", "expected_status": 503, "automation": "safe"},
+    {"id": "S7", "check": "AF2-N guard: no live rollout markers", "target": "static check of marker files", "expected": "all approval gates PENDING", "automation": "safe"},
+    {"id": "S8", "check": "gacha safe non-spend (no real summons performed)", "target": "validator only; zero spend", "automation": "safe"},
+    {"id": "S9", "check": "artifact/housing no live leak (env audit)", "target": "validator scans for HOUSING_LIVE_BONUS_ENABLED / ARTIFACT_LIVE_BONUS_ENABLED env", "expected": "unset or false", "automation": "safe"}
+  ],
+  "battle_smoke_mode": "manual_required",
+  "battle_smoke_reason": "Real battle execution touches stat application and randomness; in RC smoke gate we DO NOT execute real battles; operator runs them post-RC.",
+  "login_smoke_mode": "manual_required",
+  "login_smoke_reason": "Login requires credentials seeding. Wrapper run_project_f_qa_mobile_smoke_runner.py stays MANUAL_REQUIRED when env unset.",
+  "forbidden_in_track_e_respected": {
+    "account_creation": false,
+    "real_gacha_spend": false,
+    "currency_mutation": false,
+    "destructive_action": false,
+    "secret_logging": false,
+    "frontend": false
+  },
+  "upstream": [
+    "/app/data/design/project_management/project_g_qa_safe_login_env_contract_v1.json",
+    "/app/data/design/project_management/project_f_qa_test_credentials_safe_dryrun_v1.json"
+  ],
+  "validator_script": "validate_project_h_qa_release_candidate_smoke_gate_v1.py",
+  "suite_registration": "OPTIONAL"
+}

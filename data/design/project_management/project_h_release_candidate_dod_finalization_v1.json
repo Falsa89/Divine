@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_H_TRACK_H",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_H_PACK",
+  "verdict": "TRACK_H_PROJECT_RELEASE_CANDIDATE_DOD_FINALIZED",
+  "mode": "project_release_candidate_dod_finalization",
+  "runtime_changes_applied": false,
+  "dod_layers": {
+    "slc_h": {"readiness_percent": 98, "status": "FINAL_RC_GATE_READY", "blockers": ["server_profiles seed", "live flag flip pack", "rollback runbook"]},
+    "af2n": {"readiness_percent": 90, "status": "LIVE_PROVISIONING_GATE_READY", "blockers": ["OPS sign", "ALERT sink", "datasource", "no leak audit", "rollback path"]},
+    "combat_status_skill": {"readiness_percent": 95, "status": "RUNTIME_GATE_READY_FIRST_SLICE_PLANNED", "blockers": ["battle_engine wiring", "VFX handoff"]},
+    "economy_battlepass_shop": {"readiness_percent": 96, "status": "STABLE", "blockers": []},
+    "gacha_summon": {"readiness_percent": 95, "status": "STABLE_INERT", "blockers": []},
+    "housing": {"readiness_percent": 92, "status": "FINAL_RC_GATE_READY", "blockers": ["live application", "economy alignment"]},
+    "artifacts": {"readiness_percent": 80, "status": "FINAL_APPROVAL_GATE_READY_PENDING_USER", "blockers": ["USER sign", "ECONOMY sign", "BALANCE sign", "QA sign"]},
+    "qa_release": {"readiness_percent": 96, "status": "RC_SMOKE_GATE_READY", "blockers": ["live login seeding", "manual battle smoke"]},
+    "suite_hygiene": {"readiness_percent": 100, "status": "LOCKED", "blockers": []}
+  },
+  "aggregate_technical_readiness_excluding_graphics_audio_art_percent": 99,
+  "next_stage_plan": {
+    "phase_RC_LIVE_FLAG_FLIPS": [
+      "PROJECT_I_PACK: Server profiles read-only preview canary (flag flip in canary env only; no mutation, no dual-write)",
+      "PROJECT_I_PACK: Housing preview canary read-only (flag flip; no live bonus)",
+      "PROJECT_I_PACK: AF2-N OPS approval signatures + first 2 gates live (alert sink + datasource)",
+      "PROJECT_I_PACK: Artifact USER_APPROVAL signature (requires explicit user prompt message)"
+    ],
+    "phase_RUNTIME_INTEGRATIONS": [
+      "PROJECT_J_PACK: status runtime first slice (buff_offensive + buff_defensive) wired behind flag",
+      "PROJECT_J_PACK: housing bonus pre-fight application behind flag",
+      "PROJECT_J_PACK: artifact bonus resolver wired (read-only envelope only) behind flag"
+    ],
+    "phase_MANUAL_QA": [
+      "PROJECT_K_PACK: QA real login dry-run with seeded creds",
+      "PROJECT_K_PACK: PvP fairness audit after first runtime slice canary",
+      "PROJECT_K_PACK: load test post-canary"
+    ],
+    "phase_GRAPHICS_AUDIO_ART_HANDOFF": [
+      "OUT_OF_SCOPE_FOR_TECHNICAL_RC: VFX pipeline for status icons",
+      "OUT_OF_SCOPE_FOR_TECHNICAL_RC: artifact illustrations",
+      "OUT_OF_SCOPE_FOR_TECHNICAL_RC: housing room art assets",
+      "OUT_OF_SCOPE_FOR_TECHNICAL_RC: AF2-N dashboard branding"
+    ]
+  },
+  "honest_time_remaining_excluding_graphics_audio_art": {
+    "aggressive": "3-5 days (1 live-flag pack + signatures collected in same prompt)",
+    "realistic": "1-2 weeks (2 packs: live-flag flips + first runtime slice canary)",
+    "prudent": "3-4 weeks (3 packs + rollback drill + load test + full approval signatures)"
+  },
+  "validator_script": "validate_project_h_release_candidate_dod_finalization_v1.py",
+  "suite_registration": "OPTIONAL"
+}
