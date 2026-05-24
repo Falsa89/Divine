@@ -44,13 +44,21 @@ def main():
         if k not in caps: fail(f"UT_ARTIFACT_2 caps missing {k}")
         if caps[k]["min"] >= caps[k]["max"]: fail(f"UT_ARTIFACT_2 caps {k} min>=max")
 
-    # UT_ARTIFACT_3 + UT_ARTIFACT_4: candidates non-equipment + draft
+    # UT_ARTIFACT_3 + UT_ARTIFACT_4: candidates non-equipment + inert (draft|design_only|frozen)
+    # Nota: project_d ha congelato i candidate come "design_only" (inert ancora piu' forte di "draft")
+    INERT_STATUSES = {"draft", "design_only", "frozen"}
+    LIVE_FORBIDDEN = {"live", "released", "active", "production"}
     cands = json.loads(CANDIDATES.read_text())
     for c in cands.get("candidates", []):
         if c.get("slot") in ("weapon", "armor", "helmet", "boots", "gloves", "accessory"):
             fail(f"UT_ARTIFACT_3 candidate has equipment slot: {c}")
-        if c.get("status", "draft") != "draft":
-            fail(f"UT_ARTIFACT_4 candidate not draft: {c}")
+        if c.get("is_equipment") is True or c.get("occupies_gear_slot") is True or c.get("is_divine_weapon") is True:
+            fail(f"UT_ARTIFACT_3 candidate flagged as equipment: {c.get('artifact_id')}")
+        st = c.get("status", "draft")
+        if st in LIVE_FORBIDDEN:
+            fail(f"UT_ARTIFACT_4 candidate is LIVE (forbidden): {c}")
+        if st not in INERT_STATUSES:
+            fail(f"UT_ARTIFACT_4 candidate status not inert ({st}): {c.get('artifact_id')}")
 
     # UT_ARTIFACT_5: stub NOT imported
     if SERVER.exists() and NEEDLE in SERVER.read_text(): fail("UT_ARTIFACT_5 stub imported in server.py")

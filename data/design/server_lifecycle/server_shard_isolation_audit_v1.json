@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-24T15:42:54.330511+00:00",
+  "timestamp_utc": "2026-05-24T16:54:19.354437+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 753,
+  "backend_python_files_scanned": 769,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 425,
+      "files_with_hits": 429,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 119
+      "user_id_only_files_count": 120
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 102,
+      "files_with_hits": 104,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -269,7 +269,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 236,
+      "files_with_hits": 237,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -369,11 +369,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 68
+      "user_id_only_files_count": 69
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 27,
+      "files_with_hits": 28,
       "hits_sample": [
         {
           "file": "backend/routes/cosmetics.py",
@@ -501,7 +501,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 19,
+      "files_with_hits": 20,
       "hits_sample": [
         {
           "file": "backend/routes/economy.py",
@@ -572,6 +572,18 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_project_e_qa_login_dryrun_safety_v1.py",
+          "keyword": "paid_currency",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 30,
+              "snippet": "for k in (\"account_creation\", \"real_gacha_spend\", \"paid_currency_mutation\", \"destructive_action\", \"secret_logging\", \"frontend\"):"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/audit_collection_affinity_ui_preview_safety.py",
           "keyword": "purchase",
           "has_server_id_anywhere": false,
@@ -580,18 +592,6 @@
             {
               "line": 102,
               "snippet": "'equip_button', 'enable_runtime_button', 'purchase_button',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_server_profile_creation_dry_run_scenarios_v1.py",
-          "keyword": "paid_currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 18,
-              "snippet": "'paid_currency_visible_account_wide_view_per_server',"
             }
           ]
         }
@@ -1552,7 +1552,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 378,
+  "cross_server_leak_risk_candidates_count": 380,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
