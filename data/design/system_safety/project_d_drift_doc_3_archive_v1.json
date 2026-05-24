@@ -1,0 +1,67 @@
+{
+  "task_id": "PROJECT_D_TRACK_D_DRIFT_DOC_3_OBSOLETE_PITY_COUNTER_FORMAT_FREEZE",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_D",
+  "verdict": "TRACK_D_DRIFT_DOC_3_ARCHIVE_READY",
+  "mode": "audit_freeze_read_only_no_db_cleanup",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "summon_behavior_mutated": false,
+  "gacha_behavior_mutated": false,
+  "timestamp_utc": "20260524T190000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_D_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS"
+  },
+  "upstream_plan": "/app/data/design/system_safety/project_a_gacha_summon_drift_cleanup_plan_v1.json",
+  "upstream_archive_chain": [
+    "/app/data/design/system_safety/project_b_drift_doc_1_legacy_summon_rate_archive_v1.json",
+    "/app/data/design/system_safety/project_c_drift_doc_2_archive_v1.json"
+  ],
+  "target_drift_doc": {
+    "id": "DRIFT_DOC_3",
+    "class": "obsolete_pity_counter_format",
+    "action_per_v_a_plan": "freeze_read_only",
+    "description": "Riferimenti residui a formato pity counter v0 nei banner pool JSON in /app/backend/data/banner_pool_*.json; nessuna ownership/roster mutation richiesta.",
+    "data_mutation_required": false,
+    "behavior_mutation_required": false,
+    "impact_on_user_facing_response": "none"
+  },
+  "archive_action": {
+    "type": "DOC_AUDIT_FREEZE_READ_ONLY",
+    "description": "DRIFT_DOC_3 classificato KNOWN_NONBLOCKING_FROZEN_READ_ONLY_V1; nessun file fisico spostato; nessuna mutation banner/rate/pity/pool",
+    "status_after_project_d": "KNOWN_NONBLOCKING_FROZEN_READ_ONLY_V1",
+    "file_move_deferred": "deferred (freeze_read_only action implies no physical archive)"
+  },
+  "cleanup_gate_for_future_format_migration": {
+    "required_signoffs": ["engineering_signoff", "product_signoff", "explicit_user_authorization_in_chat"],
+    "required_evidence": [
+      "pre-format pity counter snapshot",
+      "banner pool file diff vs canonical v1 schema",
+      "behavior smoke su POST /api/gacha/pull (8 invariants V1 BLOCK_B)",
+      "rollback strategy: restore from git history"
+    ],
+    "future_apply_strategy": "dedicated DRIFT_DOC_3_FORMAT_MIGRATION_PACK; mai bulk"
+  },
+  "residual_drift_docs_after_project_d": {
+    "total_drift_docs": 7,
+    "archived_count_after_project_b": 1,
+    "archived_count_after_project_c": 2,
+    "archived_count_after_project_d": 3,
+    "freeze_read_only_count": 1,
+    "dedupe_design_required_count": 2,
+    "unprocessed_count": 2
+  },
+  "forbidden_in_track_d_respected": {
+    "db_cleanup": false,
+    "gacha_summon_behavior_change": false,
+    "roster_mutation": false,
+    "borea_activation": false,
+    "banner_rate_pity_pool_change": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_d_drift_doc_3_archive_v1.py",
+  "suite_registration": {"task_id": "PROJECT-D-TRACK-D-DRIFT-DOC-3-ARCHIVE", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_d_drift_doc_3_archive_v1.json",
+    "/app/docs/divine/126D_DRIFT_DOC_3_ARCHIVE.md"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_D_TRACK_E_QA_RUNNER_LOGIN_STEP_GATED",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_D",
+  "verdict": "TRACK_E_QA_RUNNER_LOGIN_STEP_GATED_READY",
+  "mode": "login_step_gated_manual_required_no_safe_creds_in_live_env",
+  "runtime_patch_applied": false,
+  "creates_users": false,
+  "mutates_account_state": false,
+  "timestamp_utc": "20260524T190000Z",
+  "upstream_runner": "/app/backend/scripts/qa_mobile_smoke_runner.py",
+  "login_step_design": {
+    "flag_env": "QA_RUNNER_LOGIN_ENABLED",
+    "flag_state_live": "unset",
+    "required_env_for_login": ["QA_RUNNER_TEST_EMAIL", "QA_RUNNER_TEST_PASSWORD"],
+    "required_env_state_live": ["unset", "unset"],
+    "endpoint": "POST /api/login",
+    "timeout_seconds": 8,
+    "on_success": "store JWT in-memory for subsequent GETs; never persisted",
+    "on_missing_creds": "emit MANUAL_REQUIRED entry in report, exit_code=0",
+    "on_4xx_5xx": "emit FAIL entry; exit_code=1",
+    "forbidden_actions_inside_login_step": [
+      "signup creation",
+      "password reset",
+      "profile mutation",
+      "gacha pull",
+      "any POST to /api/server*",
+      "any POST to /api/gacha*",
+      "any POST to /api/affinity*",
+      "any POST to /api/battle*"
+    ]
+  },
+  "live_state": "MANUAL_REQUIRED (no safe test credentials available in live env; runner emits manual checklist entry)",
+  "wrapper_script": "/app/backend/scripts/run_project_d_qa_mobile_smoke_runner.py",
+  "validator_script": "/app/backend/scripts/validate_project_d_qa_runner_login_safety.py",
+  "forbidden_in_track_e_respected": {
+    "real_gacha_spend": false,
+    "paid_currency_mutation": false,
+    "destructive_action": false,
+    "frontend": false,
+    "user_creation": false,
+    "account_state_mutation": false
+  },
+  "suite_registration": {"task_id": "PROJECT-D-TRACK-E-QA-RUNNER-LOGIN-SAFETY", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/project_management/project_d_qa_runner_login_step_v1.json",
+    "/app/backend/scripts/run_project_d_qa_mobile_smoke_runner.py",
+    "/app/backend/scripts/validate_project_d_qa_runner_login_safety.py",
+    "/app/docs/divine/126E_QA_RUNNER_LOGIN_STEP_GATED.md"
+  ]
+}

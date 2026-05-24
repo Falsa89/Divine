@@ -1,6 +1,6 @@
 {
   "task_id": "V4_BLOCK_D_SLC_F_OBSERVABILITY_ROLLUP",
-  "timestamp_utc": "20260524T151753Z",
+  "timestamp_utc": "20260524T154302Z",
   "verdict": "BLOCK_D_SLC_F_OBSERVABILITY_HARDENING_READY",
   "metrics": {
     "ensure_server_scope_callsites": 24,
@@ -36,6 +36,7 @@
       "backend/scripts/rollback_project_a_server_profiles_collection.py",
       "backend/scripts/rollback_project_b_server_profiles_dual_route.py",
       "backend/scripts/rollback_project_c_server_profiles_behavior.py",
+      "backend/scripts/rollback_project_d_server_profiles_flagged_preview.py",
       "backend/scripts/rollback_slc_f_batch_0_1.py",
       "backend/scripts/rollback_slc_f_batch_1b.py",
       "backend/scripts/rollback_slc_f_batch_2.py",
@@ -52,7 +53,7 @@
       "backend/scripts/rollback_v7_battle_pass_technical_hardening.py",
       "backend/scripts/rollback_v7_economy_server_select_deprecation.py"
     ],
-    "rollback_scripts_count": 30,
+    "rollback_scripts_count": 31,
     "post_apply_validators_present": [
       "backend/scripts/validate_slc_f_batch_0_1_post_apply_v1.py",
       "backend/scripts/validate_slc_f_batch_1b_post_apply_v1.py",

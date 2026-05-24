@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_D_TRACK_A_SERVER_PROFILES_FLAGGED_PREVIEW_BEHAVIOR",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_D",
+  "verdict": "TRACK_A_SERVER_PROFILES_FLAGGED_PREVIEW_APPLIED_INERT",
+  "mode": "double_flag_gated_preview_helper_added_default_route_unchanged",
+  "runtime_patch_applied": true,
+  "default_route_behavior_changed": false,
+  "feature_flag_primary": "SERVER_PROFILES_RUNTIME_ENABLED",
+  "feature_flag_secondary": "SERVER_PROFILES_PREVIEW_ENABLED",
+  "feature_flag_primary_state_post_apply": "unset (live env)",
+  "feature_flag_secondary_state_post_apply": "unset (live env)",
+  "live_default_response": {"GET": "HTTP 503 + status=disabled", "POST": "HTTP 503 + status=disabled"},
+  "flag_on_response": {"path": "existing PROJECT_C Track A behavior layer envelope (unchanged)"},
+  "preview_helper": {
+    "name": "_preview_dry_run_envelope(user_id)",
+    "double_flag_gated": true,
+    "called_by_default_route": false,
+    "emits_preview_true": true,
+    "emits_dry_run_true": true,
+    "never_mutates_db": true
+  },
+  "db_writes_executed": 0,
+  "users_server_field_mutated": false,
+  "server_profiles_data_inserted": 0,
+  "active_server_switching_executed": false,
+  "dual_write_db_behavior": false,
+  "second_server_opened": false,
+  "timestamp_utc": "20260524T190000Z",
+  "smoke_verification_live": {
+    "GET_sp_select_flag_unset": {"http": 503, "status": "disabled"},
+    "POST_sp_select_flag_unset": {"http": 503, "status": "disabled"},
+    "heroes": 100,
+    "primordial_gaia": 404
+  },
+  "flag_on_unit_verification": {
+    "_preview_runtime_enabled_returns_True_with_both_env": true,
+    "_preview_dry_run_envelope_returns_dict_with_preview_True_dry_run_True": true,
+    "envelope_invariants": ["mutation_executed=False", "active_server_switched=False", "dual_write_executed=False", "second_server_opened=False"]
+  },
+  "files_changed": ["/app/backend/routes/server_profiles.py (+38 LOC preview helper; default routes UNCHANGED)"],
+  "rollback_script": "/app/backend/scripts/rollback_project_d_server_profiles_flagged_preview.py",
+  "validator_script": "/app/backend/scripts/validate_project_d_server_profiles_flagged_preview.py",
+  "suite_registration": {"task_id": "PROJECT-D-TRACK-A-SERVER-PROFILES-FLAGGED-PREVIEW", "section": "OPTIONAL"},
+  "forbidden_in_track_a_respected": {
+    "active_server_switching": false, "dual_write_db_behavior": false,
+    "actual_server_selection_mutation": false, "feature_flag_enable": false,
+    "users_server_backfill": false, "frontend_ui": false, "second_server": false,
+    "db_migration": false
+  }
+}

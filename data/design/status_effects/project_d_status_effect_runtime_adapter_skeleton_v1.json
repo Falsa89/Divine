@@ -1,0 +1,46 @@
+{
+  "task_id": "PROJECT_D_TRACK_C_STATUS_EFFECT_RUNTIME_ADAPTER_SKELETON",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_D",
+  "verdict": "TRACK_C_STATUS_EFFECT_RUNTIME_ADAPTER_SKELETON_CREATED_INERT",
+  "mode": "pure_module_no_runtime_import",
+  "runtime_patch_applied": false,
+  "status_effects_runtime_active": false,
+  "adapter_imported_by_battle_or_combat": false,
+  "upstream": "/app/data/design/status_effects/project_c_status_effect_catalog_baseline_v1.json",
+  "adapter_module": "/app/backend/game_logic/status_effect_runtime_adapter_stub.py",
+  "adapter_contract_version": "status_effect_runtime_adapter_stub_v1",
+  "mapping_contract": {
+    "status_id": "str",
+    "category": "in CANONICAL_CATEGORIES (10)",
+    "polarity": "in {positive, negative, neutral}",
+    "stacking": "in {none, refresh, stack_capped}",
+    "boss_behavior": "in {normal, reduced, immune}",
+    "source_lock": "bool",
+    "display_hint": "in {buff_icon, debuff_icon, dot_icon, hot_icon, shield_icon, control_icon, meta_icon}"
+  },
+  "canonical_categories_count": 10,
+  "watched_files_no_import": [
+    "/app/backend/server.py",
+    "/app/backend/routes/*.py",
+    "/app/backend/game_logic/battle_engine.py",
+    "/app/backend/game_logic/battle_core.py",
+    "/app/frontend/app/combat.tsx"
+  ],
+  "forbidden_in_track_c_respected": {
+    "battle_engine_changes": false,
+    "battle_core_changes": false,
+    "combat_tsx_changes": false,
+    "status_live_activation": false,
+    "hp_bar_status_ui_changes": false,
+    "vfx_runtime": false,
+    "borea_activation": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_d_status_effect_adapter_stub_inert.py",
+  "suite_registration": {"task_id": "PROJECT-D-TRACK-C-STATUS-EFFECT-ADAPTER-SKELETON", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/backend/game_logic/status_effect_runtime_adapter_stub.py",
+    "/app/data/design/status_effects/project_d_status_effect_runtime_adapter_skeleton_v1.json",
+    "/app/backend/scripts/validate_project_d_status_effect_adapter_stub_inert.py",
+    "/app/docs/divine/126C_STATUS_EFFECT_RUNTIME_ADAPTER_SKELETON_PREP.md"
+  ]
+}

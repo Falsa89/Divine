@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_D_TRACK_B_HOUSING_RESOLVER_PHASE2_UNIT_TESTS",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_D",
+  "verdict": "TRACK_B_HOUSING_RESOLVER_PHASE2_TESTS_READY",
+  "mode": "unit_tests_on_pure_stub_no_runtime_import",
+  "runtime_patch_applied": false,
+  "resolver_imported_by_runtime": false,
+  "upstream": [
+    "/app/backend/game_logic/housing_bonus_resolver_stub.py",
+    "/app/data/design/housing/project_b_housing_mvp_resolver_stub_v1.json",
+    "/app/data/design/housing/project_c_housing_resolver_integration_design_v1.json"
+  ],
+  "unit_test_cases": [
+    {"id": "UT_HOUSING_1", "name": "resolve_housing_bonus_minimal_dict_returns_zero_envelope", "input": "{user_id}", "expected_keys": ["hp_bonus", "atk_bonus", "def_bonus", "healing_bonus"], "expected_zero": true},
+    {"id": "UT_HOUSING_2", "name": "resolve_housing_bonus_non_dict_raises_TypeError", "input": "None or list", "expected_raises": "TypeError"},
+    {"id": "UT_HOUSING_3", "name": "resolve_housing_bonus_stable_across_calls", "input": "varies (dict-shaped)", "expected_zero": true},
+    {"id": "UT_HOUSING_4", "name": "validate_caps_definition_returns_empty_list", "expected": "[]"},
+    {"id": "UT_HOUSING_5", "name": "caps_canonical_key_set_per_room_category_item_bonus_mode_master_cap", "expected": true},
+    {"id": "UT_HOUSING_6", "name": "every_cap_value_is_positive_int", "expected": true},
+    {"id": "UT_HOUSING_7", "name": "INERT_MARKER_and_INERT_BONUS_OUTPUT_canonical", "expected": true},
+    {"id": "UT_HOUSING_8", "name": "no_runtime_import_in_server_routes_game_systems", "expected": true}
+  ],
+  "unit_test_cases_count": 8,
+  "forbidden_in_track_b_respected": {
+    "live_housing_runtime": false,
+    "battle_account_stat_application": false,
+    "db_writes": false,
+    "frontend_ui": false,
+    "runtime_import_of_stub": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_d_housing_resolver_stub_caps_v1.py",
+  "suite_registration": {"task_id": "PROJECT-D-TRACK-B-HOUSING-RESOLVER-PHASE2-TESTS", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/housing/project_d_housing_resolver_phase2_tests_v1.json",
+    "/app/backend/scripts/validate_project_d_housing_resolver_stub_caps_v1.py",
+    "/app/docs/divine/126B_HOUSING_RESOLVER_PHASE2_UNIT_TESTS.md"
+  ]
+}

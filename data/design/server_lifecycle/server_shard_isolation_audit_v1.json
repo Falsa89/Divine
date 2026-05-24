@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-24T15:17:46.429554+00:00",
+  "timestamp_utc": "2026-05-24T15:42:54.330511+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 742,
+  "backend_python_files_scanned": 753,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 421,
+      "files_with_hits": 425,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 118
+      "user_id_only_files_count": 119
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 101,
+      "files_with_hits": 102,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -373,7 +373,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 26,
+      "files_with_hits": 27,
       "hits_sample": [
         {
           "file": "backend/routes/cosmetics.py",
@@ -501,7 +501,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 18,
+      "files_with_hits": 19,
       "hits_sample": [
         {
           "file": "backend/routes/economy.py",
@@ -601,7 +601,7 @@
     },
     "gacha_history": {
       "expected_scope": "server_bound",
-      "files_with_hits": 6,
+      "files_with_hits": 7,
       "hits_sample": [
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
@@ -664,14 +664,14 @@
           ]
         },
         {
-          "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
-          "keyword": "gacha_history",
+          "file": "backend/scripts/validate_project_d_artifact_bible_v1_approval_freeze.py",
+          "keyword": "gacha_pity",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 8,
-              "snippet": "'servers','server_wallets_free','user_heroes','teams','inventory','gacha_history',"
+              "line": 43,
+              "snippet": "for k in (\"artifact_live_bonus\", \"artifact_summon_behavior\", \"gacha_pity_rate_change\", \"frontend\", \"db_writes\", \"equipment_semantics\"):"
             }
           ]
         }
@@ -1121,7 +1121,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 445,
+      "files_with_hits": 446,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1552,7 +1552,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 377,
+  "cross_server_leak_risk_candidates_count": 378,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",

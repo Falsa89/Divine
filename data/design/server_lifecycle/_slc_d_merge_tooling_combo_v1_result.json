@@ -54,8 +54,9 @@
       "exit_code": 1,
       "status": "FAIL",
       "stdout_tail": [
-        "[slc_d_preflight_v1] FAIL errors=1",
-        "  - _slc_c_combo_v1_result.json status != PASS"
+        "  - _slc_c_combo_v1_result.json status != PASS",
+        "  - _slc_be_combo_v1_result.json status != PASS",
+        "  - _slc_f_route_patch_dryrun_combo_v1_result.json status != PASS"
       ]
     },
     "readiness_rollup": {
@@ -103,5 +104,5 @@
   },
   "status": "FAIL",
   "task": "slc_d_merge_tooling_combo_v1",
-  "utc": "2026-05-24T15:17:53.647649+00:00"
+  "utc": "2026-05-24T15:43:03.067438+00:00"
 }

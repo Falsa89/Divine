@@ -134,4 +134,49 @@ async def server_profiles_select_target() -> dict:
     }
 
 
-__all__ = ["router", "FEATURE_FLAG"]
+# ===================== PROJECT_D TRACK A — FLAGGED PREVIEW BEHAVIOR (DOUBLE-FLAG-GATED, INERT) =====================
+# Pure helper that computes a deterministic **preview/dry-run** envelope. Requires BOTH
+#   SERVER_PROFILES_RUNTIME_ENABLED=true  AND  SERVER_PROFILES_PREVIEW_ENABLED=true
+# to be considered "preview-eligible". The default routes above DO NOT call this helper.
+# Whatever the value of SERVER_PROFILES_PREVIEW_ENABLED, the default GET/POST routes
+# return 503 when SERVER_PROFILES_RUNTIME_ENABLED is unset (verified by validator).
+# **No DB write, no active server switching, no second server, no DB mutation.**
+
+PREVIEW_FEATURE_FLAG = "SERVER_PROFILES_PREVIEW_ENABLED"
+
+
+def _preview_runtime_enabled() -> bool:
+    """Return True only if BOTH the runtime flag AND the preview sub-flag are ON.
+
+    This double-gate is a safety net: even if RUNTIME_ENABLED is ever flipped, the
+    preview envelope remains inert until PREVIEW_ENABLED is also explicitly enabled.
+    """
+    if not _runtime_enabled():
+        return False
+    return os.environ.get(PREVIEW_FEATURE_FLAG, "").strip().lower() == "true"
+
+
+def _preview_dry_run_envelope(user_id: "str | None") -> dict:
+    """Compute a deterministic **preview/dry-run** envelope. Pure, no DB writes.
+
+    The envelope mirrors the read-only select shape with explicit `preview=True`
+    metadata so consumers can detect the dry-run nature. The function NEVER mutates
+    DB state, NEVER switches active server, NEVER creates a profile.
+
+    NOTE: the default route handlers above DO NOT call this helper. It exists for
+    future flag-gated wiring and is unit-testable in isolation.
+    """
+    base = _read_only_select_response_for_user(user_id)
+    base["phase"] = "PROJECT_D_TRACK_A_FLAGGED_PREVIEW_DRY_RUN_READ_ONLY"
+    base["preview"] = True
+    base["dry_run"] = True
+    base["mutation_executed"] = False
+    base["active_server_switched"] = False
+    base["dual_write_executed"] = False
+    base["second_server_opened"] = False
+    base["preview_feature_flag"] = PREVIEW_FEATURE_FLAG
+    base["preview_runtime_enabled"] = _preview_runtime_enabled()
+    return base
+
+
+__all__ = ["router", "FEATURE_FLAG", "PREVIEW_FEATURE_FLAG"]

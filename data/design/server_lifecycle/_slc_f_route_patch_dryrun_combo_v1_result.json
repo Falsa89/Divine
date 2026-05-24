@@ -30,10 +30,12 @@
       ]
     },
     "preflight": {
-      "exit_code": 0,
-      "status": "PASS",
+      "exit_code": 1,
+      "status": "FAIL",
       "stdout_tail": [
-        "[slc_f_preflight_v1] PASS errors=0"
+        "[slc_f_preflight_v1] FAIL errors=2",
+        "  - SLC-C combo status != PASS: FAIL",
+        "  - SLC-BE combo status != PASS: FAIL"
       ]
     },
     "readiness_rollup": {
@@ -72,7 +74,7 @@
     "route_patch_applied": false,
     "second_server_opening_allowed": false
   },
-  "status": "PASS",
+  "status": "FAIL",
   "task": "slc_f_route_patch_dryrun_combo_v1",
-  "utc": "2026-05-24T15:17:52.655032+00:00"
+  "utc": "2026-05-24T15:43:01.995641+00:00"
 }

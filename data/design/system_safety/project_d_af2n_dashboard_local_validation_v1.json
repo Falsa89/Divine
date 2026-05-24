@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_D_TRACK_G_AF2N_DASHBOARD_LOCAL_VALIDATION",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_D",
+  "verdict": "TRACK_G_AF2N_DASHBOARD_LOCAL_VALIDATION_READY",
+  "mode": "local_yaml_shape_validation_no_external_calls",
+  "runtime_patch_applied": false,
+  "external_service_calls": 0,
+  "af2n_runtime_flip": false,
+  "upstream": [
+    "/app/data/design/system_safety/project_c_af2n_dashboard_provision_ops_v1.json",
+    "/app/ops/grafana/templates/af2n_datasource.yaml.template",
+    "/app/ops/grafana/templates/af2n_dashboard_provisioning.yaml.template",
+    "/app/ops/grafana/templates/af2n_alerts.yaml.template"
+  ],
+  "local_shape_checks": [
+    {"file": "af2n_datasource.yaml.template", "expected_apiVersion": 1, "expected_top_level_key": "datasources", "min_entries": 1, "required_fields_each": ["name", "type", "url"]},
+    {"file": "af2n_dashboard_provisioning.yaml.template", "expected_apiVersion": 1, "expected_top_level_key": "providers", "min_entries": 1, "required_fields_each": ["name", "type", "options"]},
+    {"file": "af2n_alerts.yaml.template", "expected_apiVersion": 1, "expected_top_level_key": "groups", "min_entries": 1, "min_rules": 5, "required_rule_fields": ["uid", "title", "labels"]}
+  ],
+  "alert_rules_metric_family_coverage": {
+    "required_alert_uids": [
+      "af2n_a1_canary_error_rate",
+      "af2n_a2_latency_p99",
+      "af2n_a3_ratelimit_block_rate",
+      "af2n_a4_ledger_idempotency_collision",
+      "af2n_a5_canary_traffic_share_drift"
+    ],
+    "required_severities": ["pager", "email", "slack"]
+  },
+  "forbidden_in_track_g_respected": {
+    "external_calls": false,
+    "af2n_runtime_mutation": false,
+    "public_spend_ui": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_d_af2n_dashboard_local_templates_v1.py",
+  "suite_registration": {"task_id": "PROJECT-D-TRACK-G-AF2N-DASHBOARD-LOCAL-VALIDATION", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_d_af2n_dashboard_local_validation_v1.json",
+    "/app/backend/scripts/validate_project_d_af2n_dashboard_local_templates_v1.py",
+    "/app/docs/divine/126G_AF2N_DASHBOARD_LOCAL_VALIDATION.md"
+  ]
+}

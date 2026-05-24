@@ -1,0 +1,153 @@
+{
+  "task_id": "PROJECT_D_TRACK_F_BASELINE_FAIL_ISOLATION_AND_REBASELINE_PLAN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_D",
+  "verdict": "TRACK_F_BASELINE_FAIL_ISOLATION_READY",
+  "mode": "audit_doc_suite_metadata_only_no_validator_weakening",
+  "runtime_patch_applied": false,
+  "validator_weakening": false,
+  "required_section_changed": false,
+  "hidden_failures": false,
+  "fake_pass_marked": false,
+  "baseline_state_v_c_reported": {"pass": 387, "fail": 3, "miss": 0, "overall": "FAIL"},
+  "baseline_state_v_d_observed": {"pass": 390, "fail": 8, "miss": 0, "overall": "FAIL"},
+  "delta_explanation": "V_D ha eseguito SLC-C-COMBO v1 invalidando il file di stato cached `_slc_c_combo_v1_result.json` (status=FAIL). 5 preflight a valle che leggono questo file (SLC-D-PREFLIGHT, SLC-BE-PREFLIGHT, SLC-F-PREFLIGHT e i rispettivi combo) ora falliscono in cascata. **Tutti i 5 nuovi fail derivano dalla stessa root cause del cluster SLC-C v1 deprecated**. Nessun bug nuovo: il cluster di fail diventa pienamente visibile in V_D, esattamente come richiesto dal Track F (no hiding).",
+  "known_baseline_failures": [
+    {
+      "task_id": "SLC-C-REPO-PREFLIGHT",
+      "script": "audit_slc_c_repo_multishard_preflight.py",
+      "required": false,
+      "failure_message_tail": "runtime multishard already active — violates design-only invariant",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "audit script enforces multishard==design-only; post SLC-G commit-A multishard è attivo runtime (legacy s1 policy)",
+      "impact_runtime": "NONE",
+      "classification": "DEPRECATED_VALIDATOR",
+      "cluster_role": "ROOT",
+      "action_plan": "V_E: emettere validator v2 `audit_slc_c_repo_multishard_post_g_invariant.py` che accetta multishard runtime come baseline post SLC-G"
+    },
+    {
+      "task_id": "SLC-C-COMBO",
+      "script": "validate_slc_c_combo_v1.py",
+      "required": false,
+      "failure_message_tail": "PASS critical_files_no_diff / migration_dryrun_simulation / api_smoke_readonly (combo fail because nested preflight v1 FAILS)",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "combo dipende da SLC-C-REPO-PREFLIGHT v1 (deprecated). 3 sub-test interni passano; il fail è indotto dal preflight obsoleto. Produce file di stato `_slc_c_combo_v1_result.json` con status=FAIL.",
+      "impact_runtime": "NONE",
+      "classification": "DEPRECATED_VALIDATOR",
+      "cluster_role": "PROPAGATOR",
+      "action_plan": "V_E: rilasciare `validate_slc_c_combo_v2.py` che usa il nuovo preflight v2"
+    },
+    {
+      "task_id": "SLC-D-PREFLIGHT",
+      "script": "validate_slc_d_preflight_v1.py",
+      "required": false,
+      "failure_message_tail": "_slc_c_combo_v1_result.json status != PASS",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "legge il file di stato `_slc_c_combo_v1_result.json` prodotto da SLC-C-COMBO v1; fail puramente transitivo",
+      "impact_runtime": "NONE",
+      "classification": "TRANSITIVE_DEPRECATED_VALIDATOR",
+      "cluster_role": "DOWNSTREAM",
+      "action_plan": "V_E: rilasciare `validate_slc_d_preflight_v2.py` che legge `_slc_c_combo_v2_result.json`"
+    },
+    {
+      "task_id": "SLC-D-COMBO",
+      "script": "validate_slc_d_merge_tooling_combo_v1.py",
+      "required": false,
+      "failure_message_tail": "PASS abort_rollback_policy / runtime_safety_audit / readiness_rollup (combo fail because of upstream SLC-D-PREFLIGHT v1)",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "dipendenza transitiva da SLC-D-PREFLIGHT v1 (deprecated). 3 sub-test SLC-D interni passano",
+      "impact_runtime": "NONE",
+      "classification": "TRANSITIVE_DEPRECATED_VALIDATOR",
+      "cluster_role": "DOWNSTREAM",
+      "action_plan": "V_E: rilasciare `validate_slc_d_merge_tooling_combo_v2.py` con upstream SLC-D-PREFLIGHT v2"
+    },
+    {
+      "task_id": "SLC-BE-PREFLIGHT",
+      "script": "validate_slc_be_preflight_v1.py",
+      "required": false,
+      "failure_message_tail": "SLC-C combo status != PASS: FAIL",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "legge il file di stato `_slc_c_combo_v1_result.json`; fail puramente transitivo",
+      "impact_runtime": "NONE",
+      "classification": "TRANSITIVE_DEPRECATED_VALIDATOR",
+      "cluster_role": "DOWNSTREAM",
+      "action_plan": "V_E: rilasciare `validate_slc_be_preflight_v2.py` che legge `_slc_c_combo_v2_result.json`"
+    },
+    {
+      "task_id": "SLC-BE-COMBO",
+      "script": "validate_slc_be_server_profile_selection_combo.py",
+      "required": false,
+      "failure_message_tail": "PASS dry_run_scenarios / runtime_safety_audit / readiness_rollup (combo fail because of upstream SLC-BE-PREFLIGHT v1)",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "dipendenza transitiva da SLC-BE-PREFLIGHT v1",
+      "impact_runtime": "NONE",
+      "classification": "TRANSITIVE_DEPRECATED_VALIDATOR",
+      "cluster_role": "DOWNSTREAM",
+      "action_plan": "V_E: rilasciare `validate_slc_be_server_profile_selection_combo_v2.py`"
+    },
+    {
+      "task_id": "SLC-F-PREFLIGHT",
+      "script": "validate_slc_f_preflight_v1.py",
+      "required": false,
+      "failure_message_tail": "SLC-C combo status != PASS: FAIL",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "legge il file di stato `_slc_c_combo_v1_result.json`; fail puramente transitivo",
+      "impact_runtime": "NONE",
+      "classification": "TRANSITIVE_DEPRECATED_VALIDATOR",
+      "cluster_role": "DOWNSTREAM",
+      "action_plan": "V_E: rilasciare `validate_slc_f_preflight_v2.py` che legge `_slc_c_combo_v2_result.json`"
+    },
+    {
+      "task_id": "SLC-F-COMBO",
+      "script": "validate_slc_f_route_patch_dryrun_combo_v1.py",
+      "required": false,
+      "failure_message_tail": "PASS route_patch_risk_matrix / runtime_safety_audit / readiness_rollup (combo fail because of upstream SLC-F-PREFLIGHT v1)",
+      "introduced_before_pack": "PROJECT_C",
+      "root_cause": "dipendenza transitiva da SLC-F-PREFLIGHT v1",
+      "impact_runtime": "NONE",
+      "classification": "TRANSITIVE_DEPRECATED_VALIDATOR",
+      "cluster_role": "DOWNSTREAM",
+      "action_plan": "V_E: rilasciare `validate_slc_f_route_patch_dryrun_combo_v2.py`"
+    }
+  ],
+  "summary_classification": {
+    "SAFE_TO_REBASELINE": 0,
+    "NEEDS_FIX": 0,
+    "DEPRECATED_VALIDATOR": 2,
+    "TRANSITIVE_DEPRECATED_VALIDATOR": 6,
+    "BLOCKER": 0
+  },
+  "cluster_topology": {
+    "ROOT": ["SLC-C-REPO-PREFLIGHT"],
+    "PROPAGATOR": ["SLC-C-COMBO"],
+    "DOWNSTREAM": ["SLC-D-PREFLIGHT", "SLC-D-COMBO", "SLC-BE-PREFLIGHT", "SLC-BE-COMBO", "SLC-F-PREFLIGHT", "SLC-F-COMBO"],
+    "topology_note": "Risolvendo ROOT in V_E si chiudono automaticamente PROPAGATOR e tutti i 6 DOWNSTREAM (cluster monocausale)"
+  },
+  "rebaseline_plan": {
+    "phase_1_v_d": "isolate + classify (this pack) → cluster monocausale di 8 fail (2 DEPRECATED + 6 TRANSITIVE_DEPRECATED)",
+    "phase_2_v_e": "emit v2 successors (8 nuovi script: 1 ROOT + 1 PROPAGATOR + 6 DOWNSTREAM) + suite registration in OPTIONAL",
+    "phase_3_v_f": "deprecare v1 dietro env gate `SUITE_KEEP_DEPRECATED_AUDITS=true` (default OFF); rimuovere file di stato `_slc_c_combo_v1_result.json`",
+    "phase_4_v_g": "remove v1 entries da OPTIONAL; documentation cleanup",
+    "expected_final_state_post_v_g": "pass=N+8 fail=0 miss=0 (full green suite)"
+  },
+  "hard_invariants_track_f": [
+    "no REQUIRED validator weakening",
+    "no hiding of failures",
+    "no fake PASS",
+    "no exit-code masking",
+    "no rimozione dei v1 entries fino a V_F",
+    "suite output continues to report 8 FAIL fino a V_F"
+  ],
+  "forbidden_in_track_f_respected": {
+    "validator_weakening": false,
+    "hiding_failures": false,
+    "required_changes": false,
+    "fake_pass": false
+  },
+  "validator_script": "/app/backend/scripts/audit_project_d_baseline_fail_isolation_v1.py",
+  "suite_registration": {"task_id": "PROJECT-D-TRACK-F-BASELINE-FAIL-ISOLATION", "section": "OPTIONAL"},
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_d_baseline_fail_isolation_v1.json",
+    "/app/backend/scripts/audit_project_d_baseline_fail_isolation_v1.py",
+    "/app/docs/divine/126F_BASELINE_FAIL_ISOLATION_AND_REBASELINE_PLAN.md"
+  ]
+}

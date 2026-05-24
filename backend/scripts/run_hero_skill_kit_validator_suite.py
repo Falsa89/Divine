@@ -620,6 +620,22 @@ OPTIONAL = [
     ('PROJECT-C-TRACK-G-LEGACY-SERVER-SELECT-DEPRECATION-METRICS', 'validate_project_c_legacy_server_select_deprecation_metrics_v1.py'),
     # PROJECT_C Track H ARTIFACT BIBLE V1 USER APPROVAL + BONUS RESOLVER STUB DESIGN (pure stub, NOT imported by runtime)
     ('PROJECT-C-TRACK-H-ARTIFACT-BIBLE-USER-APPROVAL-AND-BONUS-RESOLVER-STUB', 'validate_project_c_artifact_bible_user_approval_v1.py'),
+    # PROJECT_D Track A SERVER PROFILES FLAGGED PREVIEW BEHAVIOR (double-flag-gated; default 503 unchanged)
+    ('PROJECT-D-TRACK-A-SERVER-PROFILES-FLAGGED-PREVIEW', 'validate_project_d_server_profiles_flagged_preview.py'),
+    # PROJECT_D Track B HOUSING RESOLVER PHASE 2 UNIT TESTS (8 UT pass; stub NOT imported)
+    ('PROJECT-D-TRACK-B-HOUSING-RESOLVER-PHASE2-TESTS', 'validate_project_d_housing_resolver_stub_caps_v1.py'),
+    # PROJECT_D Track C STATUS EFFECT RUNTIME ADAPTER SKELETON (pure module, NOT imported by battle/runtime)
+    ('PROJECT-D-TRACK-C-STATUS-EFFECT-ADAPTER-SKELETON', 'validate_project_d_status_effect_adapter_stub_inert.py'),
+    # PROJECT_D Track D DRIFT_DOC_3 obsolete_pity_counter_format FREEZE_READ_ONLY (3/7 archived)
+    ('PROJECT-D-TRACK-D-DRIFT-DOC-3-ARCHIVE',         'validate_project_d_drift_doc_3_archive_v1.py'),
+    # PROJECT_D Track E QA RUNNER LOGIN STEP GATED (wrapper only allows POST /api/login; live MANUAL_REQUIRED)
+    ('PROJECT-D-TRACK-E-QA-RUNNER-LOGIN-SAFETY',      'validate_project_d_qa_runner_login_safety.py'),
+    # PROJECT_D Track F BASELINE FAIL ISOLATION (3 DEPRECATED_VALIDATOR classified; not hidden; rebaseline plan)
+    ('PROJECT-D-TRACK-F-BASELINE-FAIL-ISOLATION',     'audit_project_d_baseline_fail_isolation_v1.py'),
+    # PROJECT_D Track G AF2-N DASHBOARD LOCAL VALIDATION (3 Grafana templates shape; 5 alert UIDs; no external calls)
+    ('PROJECT-D-TRACK-G-AF2N-DASHBOARD-LOCAL-VALIDATION', 'validate_project_d_af2n_dashboard_local_templates_v1.py'),
+    # PROJECT_D Track H ARTIFACT BIBLE V1 APPROVAL FREEZE (design-only; 7 freeze invariants; 5 draft candidates)
+    ('PROJECT-D-TRACK-H-ARTIFACT-BIBLE-V1-APPROVAL-FREEZE', 'validate_project_d_artifact_bible_v1_approval_freeze.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
