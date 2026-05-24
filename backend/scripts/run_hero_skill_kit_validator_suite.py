@@ -566,6 +566,14 @@ OPTIONAL = [
     ('V6-BLOCK-B-AF2N-METRICS-SNAPSHOT-EXPORT',    'validate_af2n_metrics_snapshot_export_v1.py'),
     # MEGA-COMBO V6 BLOCK_E SUITE RUNTIME HEALTH (non-blocking on H3/H4; HTTP smoke + supervisorctl)
     ('V6-BLOCK-E-SUITE-RUNTIME-HEALTH',            'validate_suite_runtime_health_v1.py'),
+    # MEGA-COMBO V7 BLOCK_A ECONOMY /server/select DEPRECATION NOTICE (apply low-risk; read-only validator)
+    ('V7-BLOCK-A-ECONOMY-SERVER-SELECT-DEPRECATION', 'validate_v7_economy_server_select_deprecation.py'),
+    # MEGA-COMBO V7 BLOCK_B BATTLE PASS TECHNICAL HARDENING POST SIGNOFF ($setOnInsert; read-only validator)
+    ('V7-BLOCK-B-BATTLE-PASS-HARDENING-POST-SIGNOFF', 'validate_v7_battle_pass_technical_hardening.py'),
+    # MEGA-COMBO V7 BLOCK_C SERVER PROFILES CANONICAL INDEXES DEFINITION (design-only; no DB write)
+    ('V7-BLOCK-C-SERVER-PROFILES-INDEXES-DEFINITION', 'validate_server_profiles_schema_indexes_definition_v1.py'),
+    # MEGA-COMBO V7 BLOCK_E BOREA INERT BASELINE INVARIANT HARDENING (HTTP smoke; 9 dedicated invariants)
+    ('V7-BLOCK-E-BOREA-INERT-BASELINE',             'validate_borea_inert_baseline_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
