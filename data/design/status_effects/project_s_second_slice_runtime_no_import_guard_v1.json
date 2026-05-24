@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_S_TRACK_E",
+  "verdict": "TRACK_E_SECOND_SLICE_RUNTIME_NO_IMPORT_GUARD_READY",
+  "design_only": true,
+  "scanned_files": [
+    "/app/backend/battle_engine.py",
+    "/app/backend/battle_core.py",
+    "/app/backend/server.py",
+    "/app/backend/routes/combat.py",
+    "/app/frontend/app/combat.tsx"
+  ],
+  "scanned_endpoints": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea", "/api/server-profiles/select", "/api/housing/preview"],
+  "forbidden_runtime_tokens": [
+    "from game_logic.status_second_slice_resolver_pure",
+    "import status_second_slice_resolver_pure",
+    "status_second_slice_resolver_pure",
+    "STATUS_RUNTIME_SECOND_SLICE_ENABLED",
+    "resolve_second_slice("
+  ],
+  "allowed_callers": [
+    "/app/backend/scripts/validate_project_s_*.py",
+    "/app/backend/scripts/rollback_project_s_status_second_slice_pure_resolver.py",
+    "/app/docs/divine/141*.md"
+  ],
+  "runtime_leak_detected": false,
+  "env_flag_present_in_live_env": false,
+  "payload_leak_detected": false,
+  "battle_engine_touched": false,
+  "db_writes": false,
+  "validator_script": "validate_project_s_second_slice_runtime_no_import_guard_v1.py"
+}

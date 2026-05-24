@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_S_TRACK_F",
+  "verdict": "TRACK_F_SECOND_SLICE_ROLLBACK_AND_DELETION_PLAN_READY",
+  "rollback_script": "/app/backend/scripts/rollback_project_s_status_second_slice_pure_resolver.py",
+  "rollback_executed_in_pack_s": false,
+  "rollback_gate_env_var": "PROJECT_S_ROLLBACK_PURE_RESOLVER_OK",
+  "rollback_gate_present_in_env": false,
+  "rollback_default_mode": "dry-run",
+  "rollback_execute_requires_explicit_env_marker": true,
+  "forbidden_to_delete": [
+    "/app/backend/game_logic/status_first_slice_resolver_pure.py",
+    "/app/backend/game_logic/status_prefight_runtime_seam.py",
+    "/app/backend/battle_engine.py",
+    "/app/backend/battle_core.py"
+  ],
+  "deletion_targets": [
+    "/app/backend/game_logic/status_second_slice_resolver_pure.py",
+    "/app/data/design/status_effects/project_s_second_slice_resolver_spec_lock_v1.json",
+    "/app/data/design/status_effects/project_s_second_slice_resolver_module_v1.json",
+    "/app/data/design/status_effects/project_s_second_slice_golden_fixture_matrix_v1.json",
+    "/app/data/design/status_effects/project_s_second_slice_caps_stacking_v1.json",
+    "/app/data/design/status_effects/project_s_second_slice_runtime_no_import_guard_v1.json",
+    "/app/data/design/status_effects/project_s_second_slice_rollback_deletion_plan_v1.json",
+    "/app/data/design/project_management/project_s_second_slice_implementation_rc_gate_v1.json",
+    "/app/data/design/project_management/project_s_completion_and_next_pack_v1.json"
+  ],
+  "db_writes": false,
+  "validator_script": "validate_project_s_second_slice_rollback_deletion_plan_v1.py"
+}

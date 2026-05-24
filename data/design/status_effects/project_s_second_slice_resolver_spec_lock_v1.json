@@ -1,0 +1,24 @@
+{
+  "task_id": "PROJECT_S_TRACK_A",
+  "verdict": "TRACK_A_SECOND_SLICE_PURE_RESOLVER_SPEC_LOCK_READY",
+  "design_only": true,
+  "module_created_in_track_a": false,
+  "in_scope_families": ["debuff_offensive", "debuff_defensive", "speed_up", "speed_down"],
+  "excluded_families": ["dot", "poison", "burn", "bleed", "freeze", "stun", "sleep", "hard_cc", "shield", "barrier", "hot", "revive", "immunity", "cleanse", "borea_marchio", "boss_special"],
+  "stat_mapping": {
+    "debuff_offensive": {"target_stat": "atk_pct", "sign": "negative", "notes": "future expansion may include magic_pct / crit_pct via schema only"},
+    "debuff_defensive": {"target_stat": "def_pct", "sign": "negative", "notes": "future expansion may include resistance_pct / mitigation_pct via schema only"},
+    "speed_up":          {"target_stat": "speed_pct", "sign": "positive", "notes": "signed; cancels with speed_down"},
+    "speed_down":        {"target_stat": "speed_pct", "sign": "negative", "notes": "signed; cancels with speed_up"}
+  },
+  "per_status_caps_pct": {"debuff_offensive": 30.0, "debuff_defensive": 30.0, "speed_up": 25.0, "speed_down": 25.0},
+  "aggregate_caps_pct": {"offensive_debuff": 40.0, "defensive_debuff": 40.0, "speed": 30.0},
+  "mode_multipliers": {"campaign": 1.0, "pvp": 0.75, "boss": 0.5},
+  "determinism_required": true,
+  "side_effect_free_required": true,
+  "no_db_imports_required": true,
+  "no_http_imports_required": true,
+  "no_battle_engine_import_required": true,
+  "runtime_activated": false,
+  "validator_script": "validate_project_s_second_slice_resolver_spec_lock_v1.py"
+}

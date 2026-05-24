@@ -1,0 +1,40 @@
+{
+  "task_id": "PROJECT_S_TRACK_B",
+  "verdict": "TRACK_B_STATUS_SECOND_SLICE_PURE_RESOLVER_MODULE_CREATED_INERT",
+  "module_path": "/app/backend/game_logic/status_second_slice_resolver_pure.py",
+  "module_created": true,
+  "module_inert": true,
+  "deterministic": true,
+  "side_effect_free": true,
+  "no_db_imports": true,
+  "no_http_imports": true,
+  "no_battle_engine_import": true,
+  "no_battle_core_import": true,
+  "no_mutable_global_state": true,
+  "forbidden_imports_scan": {
+    "requests": false,
+    "httpx": false,
+    "urllib.request": false,
+    "pymongo": false,
+    "motor": false,
+    "fastapi": false,
+    "battle_engine": false,
+    "battle_core": false,
+    "server": false
+  },
+  "public_api": [
+    "IN_SCOPE_FAMILIES",
+    "OUT_OF_SCOPE_FAMILIES",
+    "PER_STATUS_CAPS_PCT",
+    "AGGREGATE_CAPS_PCT",
+    "MODE_MULTIPLIERS",
+    "STAT_TARGET_BY_FAMILY",
+    "resolve_second_slice",
+    "validate_invariants_static"
+  ],
+  "validate_invariants_static_returns_true": true,
+  "runtime_imported_anywhere": false,
+  "battle_engine_touched": false,
+  "db_writes": false,
+  "validator_script": "validate_project_s_second_slice_resolver_module_v1.py"
+}

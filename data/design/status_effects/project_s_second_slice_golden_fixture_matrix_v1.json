@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_S_TRACK_C",
+  "verdict": "TRACK_C_SECOND_SLICE_GOLDEN_FIXTURE_MATRIX_READY",
+  "design_only": true,
+  "fixture_count": 14,
+  "fixtures": [
+    {"id": 1,  "name": "empty list",                         "mode": "campaign", "input": [],                                                                                                                                                            "expected": {"atk_pct": 0.0,    "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 2,  "name": "single debuff_offensive",            "mode": "campaign", "input": [{"family": "debuff_offensive", "value_pct": 15.0}],                                                                                                          "expected": {"atk_pct": -15.0,  "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 3,  "name": "single debuff_defensive",            "mode": "campaign", "input": [{"family": "debuff_defensive", "value_pct": 15.0}],                                                                                                          "expected": {"atk_pct": 0.0,    "def_pct": -15.0,  "speed_pct": 0.0}},
+    {"id": 4,  "name": "single speed_up",                    "mode": "campaign", "input": [{"family": "speed_up",         "value_pct": 15.0}],                                                                                                          "expected": {"atk_pct": 0.0,    "def_pct": 0.0,    "speed_pct": 15.0}},
+    {"id": 5,  "name": "single speed_down",                  "mode": "campaign", "input": [{"family": "speed_down",       "value_pct": 15.0}],                                                                                                          "expected": {"atk_pct": 0.0,    "def_pct": 0.0,    "speed_pct": -15.0}},
+    {"id": 6,  "name": "per-status cap clamps single",       "mode": "campaign", "input": [{"family": "debuff_offensive", "value_pct": 9999.0}],                                                                                                        "expected": {"atk_pct": -30.0,  "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 7,  "name": "aggregate offensive cap saturation", "mode": "campaign", "input": [{"family": "debuff_offensive", "value_pct": 30.0}, {"family": "debuff_offensive", "value_pct": 30.0}],                                                       "expected": {"atk_pct": -40.0,  "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 8,  "name": "aggregate defensive cap saturation", "mode": "campaign", "input": [{"family": "debuff_defensive", "value_pct": 30.0}, {"family": "debuff_defensive", "value_pct": 30.0}],                                                       "expected": {"atk_pct": 0.0,    "def_pct": -40.0,  "speed_pct": 0.0}},
+    {"id": 9,  "name": "speed aggregate cap saturation",     "mode": "campaign", "input": [{"family": "speed_up",         "value_pct": 25.0}, {"family": "speed_up",         "value_pct": 25.0}],                                                       "expected": {"atk_pct": 0.0,    "def_pct": 0.0,    "speed_pct": 30.0}},
+    {"id": 10, "name": "pvp multiplier 0.75x",               "mode": "pvp",      "input": [{"family": "debuff_offensive", "value_pct": 20.0}],                                                                                                          "expected": {"atk_pct": -15.0,  "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 11, "name": "boss multiplier 0.5x",               "mode": "boss",     "input": [{"family": "debuff_offensive", "value_pct": 20.0}],                                                                                                          "expected": {"atk_pct": -10.0,  "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 12, "name": "out-of-scope ignored (dot, freeze)", "mode": "campaign", "input": [{"family": "dot",              "value_pct": 100.0}, {"family": "freeze",           "value_pct": 100.0}],                                                     "expected": {"atk_pct": 0.0,    "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 13, "name": "malformed negative -> safe clamp",   "mode": "campaign", "input": [{"family": "debuff_offensive", "value_pct": -50.0}, {"family": "debuff_offensive", "value_pct": "abc"}, {"family": "debuff_offensive", "value_pct": null}], "expected": {"atk_pct": 0.0,    "def_pct": 0.0,    "speed_pct": 0.0}},
+    {"id": 14, "name": "mixed valid + invalid + opposing",   "mode": "campaign", "input": [{"family": "debuff_offensive", "value_pct": 10.0}, {"family": "dot", "value_pct": 99}, {"family": "speed_up", "value_pct": 20.0}, {"family": "speed_down", "value_pct": 5.0}], "expected": {"atk_pct": -10.0,  "def_pct": 0.0,    "speed_pct": 15.0}}
+  ],
+  "runtime_imported": false,
+  "db_writes": false,
+  "validator_script": "validate_project_s_second_slice_golden_fixture_matrix_v1.py"
+}

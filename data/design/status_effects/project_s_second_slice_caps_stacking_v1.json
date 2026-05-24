@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_S_TRACK_D",
+  "verdict": "TRACK_D_SECOND_SLICE_CAPS_AND_STACKING_VALIDATOR_READY",
+  "design_only": true,
+  "checks": {
+    "per_status_cap_enforced": true,
+    "aggregate_cap_enforced": true,
+    "speed_aggregate_cap_enforced": true,
+    "pvp_multiplier_enforced": true,
+    "boss_multiplier_enforced": true,
+    "additive_stacking_only": true,
+    "no_multiplicative_runaway": true,
+    "no_negative_stat_inversion": true,
+    "opposing_speed_pair_cancels": true
+  },
+  "adversarial_cases": [
+    {"name": "10x max debuff_offensive", "description": "10 entries each at per-status cap 30%; total clamped to aggregate 40%"},
+    {"name": "speed_up + speed_down at cap", "description": "both at 25%; net 0"},
+    {"name": "speed cap exceeded both directions", "description": "speed_up 100% saturates per-status cap 25%, speed_down 100% saturates 25%, net 0"},
+    {"name": "pvp mode reduces aggregate", "description": "40% offensive debuff -> -40 * 0.75 = -30 atk_pct"},
+    {"name": "boss mode reduces aggregate", "description": "40% offensive debuff -> -40 * 0.5 = -20 atk_pct"}
+  ],
+  "resolver_module": "/app/backend/game_logic/status_second_slice_resolver_pure.py",
+  "balance_runtime_changed": false,
+  "db_writes": false,
+  "validator_script": "validate_project_s_second_slice_caps_stacking_v1.py"
+}

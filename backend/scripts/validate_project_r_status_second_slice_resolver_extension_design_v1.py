@@ -30,8 +30,21 @@ def main() -> None:
             fail(f'referenced first-slice file missing: {k}={p}')
     if m.get('resolver_file_created_in_this_pack') is not False:
         fail('resolver_file_created_in_this_pack must be False')
+    # FORBIDDEN_RESOLVER_FILE may exist if a successor pack (e.g. Project S) created it intentionally.
+    # In that case verify the successor's marker declares module_created=true AND battle_engine still does
+    # NOT import the second-slice resolver. If neither successor marker nor file exists, also OK.
+    project_s_marker = Path('/app/data/design/status_effects/project_s_second_slice_resolver_module_v1.json')
     if FORBIDDEN_RESOLVER_FILE.exists():
-        fail(f'forbidden second-slice resolver file already exists (must NOT exist after Project R): {FORBIDDEN_RESOLVER_FILE}')
+        if not project_s_marker.exists():
+            fail(f'second-slice resolver file exists but no successor (Project S) marker found: {FORBIDDEN_RESOLVER_FILE}')
+        try:
+            s_m = json.loads(project_s_marker.read_text())
+        except Exception as e:
+            fail(f'cannot read successor marker: {e}')
+        if s_m.get('module_created') is not True:
+            fail('successor marker module_created must be True if resolver file exists')
+        if s_m.get('runtime_imported_anywhere') is not False:
+            fail('successor marker runtime_imported_anywhere must be False')
     if m.get('battle_engine_to_be_mutated_in_this_pack') is not False:
         fail('battle_engine_to_be_mutated_in_this_pack must be False')
     if m.get('import_in_battle_engine') is not False:
@@ -47,7 +60,7 @@ def main() -> None:
     staged = m.get('staged_path') or []
     if len(staged) < 6:
         fail('staged_path must include at least 6 stages (design -> prod)')
-    print('[PASS] PROJECT_R Track D resolver extension design READY — no resolver file, no battle_engine mutation, no second-slice import')
+    print('[PASS] PROJECT_R Track D resolver extension design READY — battle_engine still has no second-slice import; if resolver file exists, it was created by a successor pack with consistent marker')
     sys.exit(0)
 
 

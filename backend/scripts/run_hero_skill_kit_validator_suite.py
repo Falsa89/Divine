@@ -866,6 +866,15 @@ OPTIONAL = [
     ('PROJECT-R-TRACK-F-STATUS-SECOND-SLICE-ROLLBACK-AND-KILL-SWITCH-DESIGN', 'validate_project_r_status_second_slice_rollback_killswitch_v1.py'),
     ('PROJECT-R-TRACK-G-STATUS-SECOND-SLICE-QA-AND-RELEASE-GATE', 'validate_project_r_status_second_slice_qa_release_gate_v1.py'),
     ('PROJECT-R-TRACK-H-PROJECT-R-COMPLETION-AND-NEXT-PACK', 'validate_project_r_completion_and_next_pack_v1.py'),
+    # PROJECT_S STATUS SECOND SLICE PURE RESOLVER PACK (8 tracks: pure resolver module created INERT, no runtime import, no battle_engine mutation, no DB)
+    ('PROJECT-S-TRACK-A-SECOND-SLICE-PURE-RESOLVER-SPEC-LOCK', 'validate_project_s_second_slice_resolver_spec_lock_v1.py'),
+    ('PROJECT-S-TRACK-B-STATUS-SECOND-SLICE-PURE-RESOLVER-MODULE', 'validate_project_s_second_slice_resolver_module_v1.py'),
+    ('PROJECT-S-TRACK-C-SECOND-SLICE-GOLDEN-FIXTURE-MATRIX', 'validate_project_s_second_slice_golden_fixture_matrix_v1.py'),
+    ('PROJECT-S-TRACK-D-SECOND-SLICE-CAPS-AND-STACKING-VALIDATOR', 'validate_project_s_second_slice_caps_stacking_v1.py'),
+    ('PROJECT-S-TRACK-E-SECOND-SLICE-RUNTIME-NO-IMPORT-GUARD', 'validate_project_s_second_slice_runtime_no_import_guard_v1.py'),
+    ('PROJECT-S-TRACK-F-SECOND-SLICE-ROLLBACK-AND-DELETION-PLAN', 'validate_project_s_second_slice_rollback_deletion_plan_v1.py'),
+    ('PROJECT-S-TRACK-G-SECOND-SLICE-IMPLEMENTATION-RC-GATE', 'validate_project_s_second_slice_implementation_rc_gate_v1.py'),
+    ('PROJECT-S-TRACK-H-PROJECT-S-COMPLETION-AND-NEXT-PACK', 'validate_project_s_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

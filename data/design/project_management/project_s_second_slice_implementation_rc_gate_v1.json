@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_S_TRACK_G",
+  "verdict": "TRACK_G_SECOND_SLICE_IMPLEMENTATION_RC_GATE_READY",
+  "future_pack_id": "PROJECT_T_STATUS_SECOND_SLICE_SINGLE_POINT_WIRING_CANARY_PACK",
+  "gate_requirements": {
+    "resolver_golden_tests_pass": true,
+    "no_runtime_import_until_project_t": true,
+    "proposed_flag": "STATUS_RUNTIME_SECOND_SLICE_ENABLED",
+    "flag_default": "false",
+    "flag_off_byte_identical_guard": true,
+    "no_dot_or_hard_cc_logic": true,
+    "no_borea_marchio_logic": true,
+    "rollback_ready": true
+  },
+  "gating_signals_required_for_project_t": [
+    "PROJECT_T_SECOND_SLICE_SINGLE_POINT_WIRING_APPROVAL",
+    "resolver module SHA256 unchanged from Project S baseline",
+    "Project S validators all PASS"
+  ],
+  "prod_rollout_signatures_required_at_future_w": [
+    "PROD_ROLLOUT_USER_APPROVAL",
+    "PROD_ROLLOUT_QA_APPROVAL",
+    "PROD_ROLLOUT_OPS_APPROVAL",
+    "PROD_ROLLOUT_ROLLBACK_OWNER_APPROVAL",
+    "PROD_ROLLOUT_BALANCE_APPROVAL",
+    "STATUS_RUNTIME_SECOND_SLICE_PROD_OK"
+  ],
+  "project_t_implementation_in_this_pack": false,
+  "db_writes": false,
+  "validator_script": "validate_project_s_second_slice_implementation_rc_gate_v1.py"
+}
