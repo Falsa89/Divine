@@ -30,6 +30,22 @@ except Exception:
     def _project_m_status_seam(team_payload, active_statuses=None, *, dry_run=False):
         return team_payload
 
+# ───────────────────────────────────────────────────────────────────────────
+# PROJECT_T Track B — STATUS SECOND SLICE single-point seam import.
+# Mirror of the PROJECT_M pattern. The seam is INERT by default (returns
+# input unchanged unless STATUS_RUNTIME_SECOND_SLICE_ENABLED == 'true' AND
+# dry_run=True). With flag OFF (default), the call is strict identity, so
+# runtime behavior is unchanged. The single call site is inside
+# simulate_battle(), adjacent to the first-slice seam.
+# Rollback: scripts/rollback_project_t_status_second_slice_battle_engine_wiring.py
+# ───────────────────────────────────────────────────────────────────────────
+try:
+    from game_logic.status_second_slice_runtime_seam import apply_prefight_second_slice_preview as _project_t_second_slice_seam
+except Exception:
+    # Defensive fallback: identity function so battle_engine never crashes.
+    def _project_t_second_slice_seam(team_payload, active_statuses=None, mode='campaign', *, dry_run=False):
+        return team_payload
+
 # ===================== POSITION BUFFS ON 3x3 GRID (3 rows, 3 columns) =====================
 # Grid layout: 3 rows (top/mid/bottom) x 3 columns (left=Support, center=DPS, right=Tank)
 # Max 6 heroes can be placed in 9 slots
@@ -406,6 +422,14 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
     # remains byte-identical with the pre-patch behavior while the flag is OFF.
     team_a = _project_m_status_seam(team_a)
     team_b = _project_m_status_seam(team_b)
+
+    # PROJECT_T Track B — second-slice seam call (single point, identity when flag OFF).
+    # Mirrors the first-slice pattern above. With STATUS_RUNTIME_SECOND_SLICE_ENABLED
+    # OFF/unset (default), the call is strict identity, so team_a / team_b are
+    # unchanged. Flag ON behavior is only reachable from explicit dry_run=True
+    # callers (tests/canary), never from live runtime in this pack.
+    team_a = _project_t_second_slice_seam(team_a)
+    team_b = _project_t_second_slice_seam(team_b)
 
     battle_log = []
     turn = 0
