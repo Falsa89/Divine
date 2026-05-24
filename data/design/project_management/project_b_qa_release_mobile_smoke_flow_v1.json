@@ -1,0 +1,48 @@
+{
+  "task_id": "PROJECT_B_TRACK_G_QA_RELEASE_MOBILE_SMOKE_FLOW",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_G_QA_RELEASE_MOBILE_SMOKE_FLOW_READY",
+  "mode": "qa_doc_suite_only_no_runtime_mutation",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260524T160000Z",
+  "excludes": ["graphics_finalization", "audio_finalization", "art_assets"],
+  "smoke_flow_matrix": [
+    {"step": 1, "name": "LOGIN", "endpoint": "POST /api/login", "expected_status": 200, "non_mutating": true},
+    {"step": 2, "name": "HEROES_CATALOG", "endpoint": "GET /api/heroes", "expected_status": 200, "expected_count": 100, "non_mutating": true},
+    {"step": 3, "name": "BOREA_INERT", "endpoint": "GET /api/heroes/borea", "expected_status": 200, "non_mutating": true},
+    {"step": 4, "name": "PRIMORDIAL_GAIA_INERT", "endpoint": "GET /api/heroes/primordial_gaia", "expected_status": 404, "non_mutating": true},
+    {"step": 5, "name": "GACHA_SUMMON_PEEK", "endpoint": "GET /api/summon/rates (or equivalent)", "expected_status": 200, "non_mutating": true, "forbidden": "real summon spend"},
+    {"step": 6, "name": "BATTLE_ENTRY_DRY", "endpoint": "GET /api/battle/preview (or equivalent)", "expected_status": 200, "non_mutating": true, "forbidden": "actual battle execution"},
+    {"step": 7, "name": "POST_BATTLE_SUMMARY", "endpoint": "GET /api/user/me", "expected_status": 200, "non_mutating": true},
+    {"step": 8, "name": "MENU_NAV_HOME", "endpoint": "GET /api/heroes (sanity)", "expected_status": 200, "non_mutating": true},
+    {"step": 9, "name": "SLC_GUARD_LEGACY_SERVER_SELECT", "endpoint": "POST /api/server/select (with deprecation log)", "expected_status": "200 or 400 input-bound", "non_mutating": false, "note": "emits divine.deprecation log; behavior preserved"},
+    {"step": 10, "name": "SLC_GUARD_NEW_DUAL_ROUTE", "endpoint": "GET /api/server-profiles/select", "expected_status": 503, "expected_detail_status": "disabled", "non_mutating": true},
+    {"step": 11, "name": "AF2N_CANARY_STATUS_GUARD", "endpoint": "GET /api/affinity/gift-spend/canary-status", "expected_status": "200 or auth-bound", "non_mutating": true},
+    {"step": 12, "name": "HOUSING_PLACEHOLDER", "endpoint": "GET /api/housing/rooms (not implemented)", "expected_status": 404, "non_mutating": true, "note": "endpoint NOT implemented in V_B"},
+    {"step": 13, "name": "ARTIFACT_PLACEHOLDER", "endpoint": "GET /api/artifacts (catalog placeholder)", "expected_status": "200 or 404", "non_mutating": true, "note": "existing route"}
+  ],
+  "matrix_total_steps": 13,
+  "non_mutating_step_count": 12,
+  "mutating_step_count": 1,
+  "mutating_steps_detail": [
+    "step 9 (SLC_GUARD_LEGACY_SERVER_SELECT) is the only step that may write to users.server; mitigated by deprecation log preserving behavior, no DB schema change"
+  ],
+  "required_pre_release_pass_criteria": [
+    "all 12 non_mutating steps return expected status",
+    "step 9 logs divine.deprecation warning at least once",
+    "no 500 errors across the matrix",
+    "backend supervisor RUNNING throughout",
+    "mongodb supervisor RUNNING throughout"
+  ],
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_project_b_qa_release_mobile_smoke_flow_v1.py",
+    "behavior": "static verifica del flow matrix (struttura, step IDs, non_mutating count); NON esegue HTTP",
+    "safe_in_suite": true
+  },
+  "forbidden_in_track_g_respected": {
+    "frontend_implementation": false,
+    "runtime_behavior_changes": false,
+    "real_gacha_spend": false,
+    "battle_behavior_mutation": false
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "task_id": "PROJECT_B_TRACK_F_AF2N_DASHBOARD_PROVISION_DESIGN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_F_AF2N_DASHBOARD_PROVISION_DESIGN_READY",
+  "mode": "design_doc_export_only_no_external_integration",
+  "runtime_patch_applied": false,
+  "external_service_calls": 0,
+  "timestamp_utc": "20260524T160000Z",
+  "upstream": {
+    "v7_block_d_dashboard_template": "/app/data/design/system_safety/af2n_observability_dashboard_template_v1.json",
+    "v8_block_c_dashboard_render": "/app/data/design/system_safety/af2n_observability_dashboard_render_v1.json",
+    "v_a_track_c_runtime_routing_preflight": "/app/data/design/system_safety/project_a_af2n_runtime_routing_preflight_v1.json"
+  },
+  "provisioning_target": "Grafana (latest stable) with Prometheus-compatible datasource",
+  "provisioning_phases": [
+    {
+      "phase": 1,
+      "name": "DATASOURCE_REGISTRATION",
+      "description": "register af2n_metrics_ds (Prometheus) and suite_runs_ds (custom CSV/JSON exporter) as Grafana provisioned datasources",
+      "requires_secrets": ["AF2N_METRICS_DS_URL", "AF2N_METRICS_DS_TOKEN"],
+      "requires_external_call": false,
+      "v_b_status": "DESIGNED_NOT_PROVISIONED"
+    },
+    {
+      "phase": 2,
+      "name": "DASHBOARD_FILE_PROVISIONING",
+      "description": "convert V8 BLOCK_C render JSON into Grafana provisioning YAML; deploy via /etc/grafana/provisioning/dashboards/af2n.yaml",
+      "target_file": "/etc/grafana/provisioning/dashboards/af2n_v8_canary_health.json (future)",
+      "requires_external_call": false,
+      "v_b_status": "DESIGNED_NOT_PROVISIONED"
+    },
+    {
+      "phase": 3,
+      "name": "ALERT_RULES_PROVISIONING",
+      "description": "deploy the 5 alert rules (A1..A5) via Grafana alerting provisioning",
+      "target_file": "/etc/grafana/provisioning/alerting/af2n_alerts.yaml (future)",
+      "alert_sinks_required": [
+        {"id": "sink_pager", "type": "pager_duty_or_opsgenie", "required_for_alert_ids": ["A1", "A4"]},
+        {"id": "sink_email", "type": "smtp", "required_for_alert_ids": ["A2", "A3"]},
+        {"id": "sink_slack", "type": "slack_webhook", "required_for_alert_ids": ["A5"]}
+      ],
+      "requires_secrets": ["AF2N_PAGER_TOKEN", "AF2N_SMTP_PASSWORD", "AF2N_SLACK_WEBHOOK_URL"],
+      "requires_external_call": false,
+      "v_b_status": "DESIGNED_NOT_PROVISIONED"
+    },
+    {
+      "phase": 4,
+      "name": "PRODUCTION_TURN_ON",
+      "description": "enable provisioning in production; canary panels P1/P2/P5/P6 visible to SRE oncall",
+      "requires_external_call": true,
+      "v_b_status": "DESIGNED_NOT_AUTHORIZED"
+    }
+  ],
+  "env_vars_required_for_future_provisioning": [
+    "AF2N_METRICS_DS_URL",
+    "AF2N_METRICS_DS_TOKEN",
+    "AF2N_PAGER_TOKEN",
+    "AF2N_SMTP_PASSWORD",
+    "AF2N_SLACK_WEBHOOK_URL",
+    "GRAFANA_PROVISIONING_PATH"
+  ],
+  "forbidden_in_track_f_respected": {
+    "af2n_runtime_mutation": false,
+    "external_service_integration": false,
+    "public_spend_ui": false,
+    "stack_g_changes": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_b_af2n_dashboard_provision_design_v1.json",
+    "/app/docs/divine/124F_AF2N_DASHBOARD_PROVISION_DESIGN.md"
+  ]
+}

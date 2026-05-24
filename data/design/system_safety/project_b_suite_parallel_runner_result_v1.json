@@ -1,0 +1,52 @@
+{
+  "task_id": "PROJECT_B_TRACK_E_SUITE_PARALLEL_RUNNER",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_E_SUITE_PARALLEL_RUNNER_IMPLEMENTED_SAFE",
+  "mode": "opt_in_cli_flag_default_sequential_unchanged",
+  "runtime_patch_applied": true,
+  "timestamp_utc": "20260524T160000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_B_APPROVAL": true,
+    "TRACK_E_SUITE_PARALLEL_RUNNER_APPROVAL": true
+  },
+  "target_file": "/app/backend/scripts/run_hero_skill_kit_validator_suite.py",
+  "cli_flags_added": [
+    {"flag": "--parallel", "default": false, "effect": "run OPTIONAL via ThreadPoolExecutor; output order preserved"},
+    {"flag": "--parallel-workers", "default": 8, "clamped_range": "1..16", "effect": "max worker threads"}
+  ],
+  "default_behavior_unchanged": true,
+  "default_behavior_proof": {
+    "sequential_run": "OPTIONAL executed serially in declaration order, identical to pre-V_B baseline",
+    "required_validators_always_sequential": true,
+    "baseline_diff_section_unchanged": true,
+    "failure_isolation": "a failing OPTIONAL no longer triggers an early-exit but the suite still reports FAIL overall (same as sequential)"
+  },
+  "parallel_behavior": {
+    "required_section": "sequential (unchanged)",
+    "optional_section": "ThreadPoolExecutor with max_workers clamped to 1..16",
+    "output_order": "preserved (results cached by index, printed in original OPTIONAL list order)",
+    "failures_misses_superseded_handling": "identical to sequential",
+    "stderr_capture": "identical to sequential (run_one returns stderr in result dict)",
+    "exit_code": "non-zero in OPTIONAL still flips any_required_fail → Overall FAIL"
+  },
+  "measured_speedup": {
+    "sequential_run_time_seconds": 72.0,
+    "parallel_run_time_seconds": 26.0,
+    "speedup_factor": "~2.77x",
+    "pass_fail_miss_identical": true,
+    "pass_count_sequential": 376,
+    "pass_count_parallel": 376
+  },
+  "forbidden_in_track_e_respected": {
+    "weakening_required_validators": false,
+    "skipping_failures": false,
+    "hiding_misses": false,
+    "default_behavior_change": false,
+    "runtime_route_changes": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_b_suite_parallel_runner_v1.py",
+  "suite_registration": {
+    "task_id": "PROJECT-B-TRACK-E-SUITE-PARALLEL-RUNNER",
+    "section": "OPTIONAL"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "task_id": "PROJECT_B_TRACK_A_SERVER_PROFILES_DUAL_ROUTE",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_A_SERVER_PROFILES_DUAL_ROUTE_SKELETON_APPLIED_SAFE",
+  "mode": "inert_flag_gated_skeleton_runtime_off_by_default",
+  "runtime_patch_applied": true,
+  "feature_flag": "SERVER_PROFILES_RUNTIME_ENABLED",
+  "feature_flag_state": "unset",
+  "routes_registered": ["GET /api/server-profiles/select", "POST /api/server-profiles/select"],
+  "routes_behavior_when_flag_unset": "HTTP 503 with status=disabled payload; no DB write; no behavior",
+  "routes_behavior_when_flag_set": "HTTP 503 with status=flag_on_but_implementation_deferred; still no DB write; PROJECT_B Track A explicitly defers actual implementation",
+  "db_writes_executed": 0,
+  "db_collections_touched": 0,
+  "timestamp_utc": "20260524T160000Z",
+  "rollback_id": "project_b_track_a_server_profiles_dual_route_20260524T160000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_B_APPROVAL": true,
+    "TRACK_A_SERVER_PROFILES_DUAL_ROUTE_APPROVAL": true
+  },
+  "upstream_design": {
+    "v8_block_d_dual_route_design": "/app/data/design/server_lifecycle/legacy_server_select_dual_route_design_v1.json",
+    "v_a_track_a_collection_apply": "/app/data/design/server_lifecycle/project_a_server_profiles_ops_result_v1.json"
+  },
+  "smoke_verification": {
+    "GET_/api/server-profiles/select": {"http_code": 503, "detail_status": "disabled", "side_effects": "none"},
+    "POST_/api/server-profiles/select": {"http_code": 503, "detail_status": "disabled", "side_effects": "none"},
+    "/api/heroes": 100,
+    "primordial_gaia": 404
+  },
+  "files_changed": [
+    "/app/backend/routes/server_profiles.py (NEW file; pure inert module)",
+    "/app/backend/server.py (+6 LOC import + include_router; gated by feature flag in handlers)"
+  ],
+  "backend_route_count_delta": "+2 new routes (both return 503 by default)",
+  "users_server_field_unchanged": true,
+  "legacy_server_select_unchanged": true,
+  "rollback_script": "/app/backend/scripts/rollback_project_b_server_profiles_dual_route.py",
+  "validator_script": "/app/backend/scripts/validate_project_b_server_profiles_dual_route.py",
+  "suite_registration": {
+    "task_id": "PROJECT-B-TRACK-A-SERVER-PROFILES-DUAL-ROUTE",
+    "section": "OPTIONAL"
+  },
+  "forbidden_in_track_a_respected": {
+    "active_server_switching": false,
+    "post_create_select_behavior_live": false,
+    "second_server": false,
+    "feature_flag_enable": false,
+    "db_writes": false,
+    "frontend_ui": false
+  }
+}

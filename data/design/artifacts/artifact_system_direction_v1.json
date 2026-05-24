@@ -1,0 +1,76 @@
+{
+  "task_id": "PROJECT_B_TRACK_H_ARTIFACT_SYSTEM_DIRECTION_V1",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_H_ARTIFACT_BIBLE_V1_SCHEMA_READY",
+  "timestamp_utc": "20260524T160000Z",
+  "canonical_decision": "ARTIFACTS_ARE_NOT_GEAR_ROSTER_WIDE_COLLECTION_OBJECTS_V1",
+  "hard_rules": [
+    "Artifacts are NOT equipment.",
+    "Artifacts are NOT equipped on heroes.",
+    "Artifacts do NOT occupy hero gear slots.",
+    "Artifacts are NOT Divine Weapons.",
+    "Artifacts are NOT unique 6-star weapons.",
+    "Artifacts do NOT replace standard equipment/gear.",
+    "Artifacts are summonable/upgradeable roster-wide collection objects.",
+    "Artifact bonuses are global roster/account bonuses with strict caps.",
+    "Artifact live bonuses remain OFF until Artifact Bible v1 is approved."
+  ],
+  "distinct_from": [
+    "divine_weapons (unique 6-star weapons)",
+    "equipment / gear",
+    "housing (passive room bonuses)",
+    "skins (cosmetics)",
+    "sprites (cosmetics)",
+    "hero skill kits (innate hero kit)"
+  ],
+  "thematic_link_policy": "Artifacts are introduced alongside heroes/patch themes but do NOT necessarily buff only the associated hero.",
+  "obtainment_sources_allowed": [
+    "artifact_summon_banner (separate from hero summon banner)",
+    "event_reward",
+    "login_milestone",
+    "achievement_unlock",
+    "shop_limited_offer",
+    "crafting_from_fragments"
+  ],
+  "obtainment_sources_forbidden_v1": [
+    "hero_summon_banner (would mix with gacha)",
+    "random_battle_drop (would mix with equipment)"
+  ],
+  "upgrade_methods_allowed": [
+    "shard_consumption",
+    "dust_consumption_from_dupes",
+    "event_currency"
+  ],
+  "upgrade_methods_forbidden_v1": ["hero_xp_consumption", "gear_enhancement_stones"],
+  "bonus_scope_allowed": [
+    "global_account",
+    "roster_wide",
+    "faction_wide",
+    "pantheon_wide",
+    "element_wide",
+    "role_wide"
+  ],
+  "bonus_scope_forbidden_v1": ["single_hero_only (would behave as gear)"],
+  "anti_power_creep_caps": {
+    "per_artifact_max_bonus_pct": 5,
+    "per_category_max_stacked_bonus_pct": 10,
+    "global_master_cap_account_total_pct": 25,
+    "max_active_artifacts_at_once": 12,
+    "per_rarity_active_cap": {"1": 99, "2": 99, "3": 30, "4": 12, "5": 6, "6": 3}
+  },
+  "life_cycle_status": ["design_only", "runtime_ready_off", "runtime_ready_on_canary", "active"],
+  "v_b_lifecycle_status": "design_only",
+  "runtime_activation_requires": [
+    "Artifact Bible v1 approved by user",
+    "Artifact Bonus Resolver pure stub created and inert",
+    "Anti-power-creep cap enforcement validator live",
+    "Explicit ARTIFACT_RUNTIME_ENABLED feature flag enable"
+  ],
+  "artifacts_created": [
+    "/app/data/design/artifacts/artifact_system_direction_v1.json",
+    "/app/data/design/artifacts/artifact_bible_schema_v1.json",
+    "/app/data/design/artifacts/artifact_bible_launch_candidates_v1.json",
+    "/app/backend/scripts/validate_project_b_artifact_bible_schema_v1.py",
+    "/app/docs/divine/124H_ARTIFACT_BIBLE_V1_SCHEMA_AND_LAUNCH_LIST_PREP.md"
+  ]
+}

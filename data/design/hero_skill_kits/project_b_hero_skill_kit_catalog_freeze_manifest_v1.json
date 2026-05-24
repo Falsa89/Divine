@@ -1,0 +1,86 @@
+{
+  "task_id": "PROJECT_B_TRACK_C_HERO_SKILL_KIT_CATALOG_FREEZE",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_C_HERO_SKILL_KIT_CATALOG_FREEZE_READY",
+  "mode": "suite_data_doc_only_no_runtime",
+  "runtime_patch_applied": false,
+  "catalog_content_modified": false,
+  "timestamp_utc": "20260524T160000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_B_APPROVAL": true,
+    "TRACK_C_HERO_SKILL_KIT_CATALOG_FREEZE_APPROVAL": true
+  },
+  "baseline_canonical": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6.json",
+  "frozen_catalogs": [
+    {
+      "name": "hero_skill_kit_catalog_baseline_rm132pre_v1.json",
+      "version_tag": "rm132pre_v1",
+      "sha256": "f75d20aab42e023a047ce5aa3f1230798c64f5b6cb58d570b7a2eb9245dd8b23",
+      "bytes": 3382,
+      "freeze_status": "HISTORICAL"
+    },
+    {
+      "name": "hero_skill_kit_catalog_baseline_rm132preb2_v2.json",
+      "version_tag": "rm132preb2_v2",
+      "sha256": "26770389876c9a6e1ec44eb3c4132d056c7fa377102dca7970f2aca5aadb129c",
+      "bytes": 4003,
+      "freeze_status": "HISTORICAL"
+    },
+    {
+      "name": "hero_skill_kit_catalog_baseline_rm132apost_v3.json",
+      "version_tag": "rm132apost_v3",
+      "sha256": "76d530dac50818612e054725125c716c931fef839a0639e7b43f6b2b927c8daf",
+      "bytes": 4927,
+      "freeze_status": "HISTORICAL"
+    },
+    {
+      "name": "hero_skill_kit_catalog_baseline_rm132b_v4.json",
+      "version_tag": "rm132b_v4",
+      "sha256": "c851734004f0373c9409f1c0e8bf0cd8a9997e8f6a785c81097bf187abde3281",
+      "bytes": 5602,
+      "freeze_status": "HISTORICAL"
+    },
+    {
+      "name": "hero_skill_kit_catalog_baseline_rm132c2_v5.json",
+      "version_tag": "rm132c2_v5",
+      "sha256": "6bcb81ddcc78040cfb04d20baad3c012e8e3bd5a727e71973235f742147a8c8b",
+      "bytes": 3125,
+      "freeze_status": "HISTORICAL"
+    },
+    {
+      "name": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6.json",
+      "version_tag": "rm134b_axispatch_v6",
+      "sha256": "fa974b5913a20ce39066fc26e9ebf0fb626b18d3a119dd64266ea33813003696",
+      "bytes": 4447,
+      "freeze_status": "CANONICAL_ACTIVE_BASELINE"
+    }
+  ],
+  "invariants_to_validate": {
+    "slot_progression_rules": "1⋆—6⋆ + Borea inert; deferred to slot-progression validator (separate pack)",
+    "no_final_balance_numbers_live": true,
+    "borea_activation": false,
+    "five_star_no_true_ultimate": "design constraint; not enforced live by this freeze",
+    "six_star_has_ultimate_and_divine_weapon_id": "design constraint; not enforced live by this freeze"
+  },
+  "future_unfreeze_gate": {
+    "requires_user_authorization": true,
+    "requires_pack_marker": "HERO_SKILL_KIT_CATALOG_UNFREEZE_PACK",
+    "reasons_for_freezing": [
+      "prevent silent baseline drift before runtime attachment",
+      "provide sha256 invariant for future regression detection",
+      "document canonical active baseline (v6) explicitly"
+    ]
+  },
+  "validator_script": "/app/backend/scripts/validate_project_b_hero_skill_kit_catalog_freeze_v1.py",
+  "suite_registration": {
+    "task_id": "PROJECT-B-TRACK-C-HERO-SKILL-KIT-CATALOG-FREEZE",
+    "section": "OPTIONAL"
+  },
+  "forbidden_in_track_c_respected": {
+    "skill_runtime_activation": false,
+    "battle_engine_changes": false,
+    "catalog_content_rewrite": false,
+    "final_balance_numbers_introduction": false,
+    "borea_activation": false
+  }
+}

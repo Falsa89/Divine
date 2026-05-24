@@ -1,0 +1,41 @@
+{
+  "schema_id": "ARTIFACT_BIBLE_V1",
+  "version": "v1",
+  "canonical_direction_ref": "/app/data/design/artifacts/artifact_system_direction_v1.json",
+  "fields": {
+    "artifact_id": {"type": "string", "required": true, "pattern": "^art_[a-z0-9_]+$", "unique": true},
+    "name": {"type": "string", "required": true, "max_len": 64},
+    "rarity": {"type": "int", "required": true, "min": 1, "max": 6},
+    "linked_hero_or_theme": {"type": "string", "required": false, "note": "thematic link only; NOT exclusive bonus target"},
+    "linked_faction": {"type": "enum", "values": ["greek", "norse", "egyptian", "japanese", "celtic", "primordial", "crossfaction"], "required": true},
+    "linked_pantheon": {"type": "string", "required": false},
+    "linked_myth": {"type": "string", "required": false},
+    "collection_category": {"type": "enum", "values": ["weapon_relic", "armor_relic", "icon_relic", "glyph_relic", "vessel_relic", "banner_relic"], "required": true, "note": "naming uses '_relic' suffix to disambiguate from equipment gear"},
+    "obtainment_source": {"type": "enum", "values": ["artifact_summon_banner", "event_reward", "login_milestone", "achievement_unlock", "shop_limited_offer", "crafting_from_fragments"], "required": true},
+    "upgrade_method": {"type": "enum", "values": ["shard_consumption", "dust_consumption_from_dupes", "event_currency"], "required": true},
+    "global_roster_account_bonus": {
+      "type": "object",
+      "required": true,
+      "shape": {
+        "scope": {"type": "enum", "values": ["global_account", "roster_wide", "faction_wide", "pantheon_wide", "element_wide", "role_wide"]},
+        "stat": {"type": "enum", "values": ["hp_pct", "atk_pct", "def_pct", "healing_pct", "crit_rate_pct", "crit_damage_pct", "speed_pct"]},
+        "value_pct": {"type": "float", "min": 0.1, "max": 5.0}
+      }
+    },
+    "anti_power_creep_caps_applied": {"type": "bool", "required": true, "default": true},
+    "launch_patch": {"type": "string", "required": true, "pattern": "^v\\d+(\\.\\d+)?$", "note": "e.g., v1, v1.1"},
+    "status": {"type": "enum", "values": ["design_only", "runtime_ready_off", "runtime_ready_on_canary", "active"], "required": true, "default": "design_only"},
+    "is_equipment": {"type": "bool", "required": true, "default": false, "hard_invariant": "MUST always be false"},
+    "occupies_gear_slot": {"type": "bool", "required": true, "default": false, "hard_invariant": "MUST always be false"},
+    "is_divine_weapon": {"type": "bool", "required": true, "default": false, "hard_invariant": "MUST always be false"}
+  },
+  "hard_invariants_per_artifact": [
+    "is_equipment == false",
+    "occupies_gear_slot == false",
+    "is_divine_weapon == false",
+    "global_roster_account_bonus.value_pct <= 5.0",
+    "status in {design_only, runtime_ready_off, runtime_ready_on_canary, active}",
+    "obtainment_source != 'hero_summon_banner'"
+  ],
+  "v_b_status": "SCHEMA_READY_NO_LIVE_DATA_BIND"
+}

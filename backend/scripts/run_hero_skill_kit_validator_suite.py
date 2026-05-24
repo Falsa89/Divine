@@ -592,6 +592,18 @@ OPTIONAL = [
     ('PROJECT-A-TRACK-F-GACHA-SUMMON-DRIFT-CLEANUP-PLAN', 'validate_project_a_gacha_summon_drift_cleanup_plan_v1.py'),
     # PROJECT_A Track G QA/RELEASE DOD TRACKER (project management; 7 DoD rows)
     ('PROJECT-A-TRACK-G-QA-RELEASE-DOD-TRACKER',    'validate_project_completion_dod_tracker_v1.py'),
+    # PROJECT_B Track A SERVER PROFILES DUAL-ROUTE INERT SKELETON (flag-gated, runtime OFF)
+    ('PROJECT-B-TRACK-A-SERVER-PROFILES-DUAL-ROUTE', 'validate_project_b_server_profiles_dual_route.py'),
+    # PROJECT_B Track B HOUSING RESOLVER PURE STUB (inert, NOT imported by runtime)
+    ('PROJECT-B-TRACK-B-HOUSING-RESOLVER-STUB-INERT', 'validate_project_b_housing_resolver_stub_inert.py'),
+    # PROJECT_B Track C HERO SKILL KIT CATALOG FREEZE (sha256 invariant; 6 baselines)
+    ('PROJECT-B-TRACK-C-HERO-SKILL-KIT-CATALOG-FREEZE', 'validate_project_b_hero_skill_kit_catalog_freeze_v1.py'),
+    # PROJECT_B Track E SUITE PARALLEL RUNNER (optional --parallel; default sequential unchanged)
+    ('PROJECT-B-TRACK-E-SUITE-PARALLEL-RUNNER',     'validate_project_b_suite_parallel_runner_v1.py'),
+    # PROJECT_B Track G QA RELEASE MOBILE SMOKE FLOW (static matrix validator)
+    ('PROJECT-B-TRACK-G-QA-RELEASE-MOBILE-SMOKE-FLOW', 'validate_project_b_qa_release_mobile_smoke_flow_v1.py'),
+    # PROJECT_B Track H ARTIFACT BIBLE V1 SCHEMA + LAUNCH CANDIDATES (hard invariants enforcement)
+    ('PROJECT-B-TRACK-H-ARTIFACT-BIBLE-SCHEMA',     'validate_project_b_artifact_bible_schema_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -628,6 +640,12 @@ def main(argv=None) -> int:
                     help='Also run RM1.32-PRE baseline diff validator (off by default — baselines intentionally change in approved tasks)')
     ap.add_argument('--allow-changed', action='append', default=[],
                     help='Forwarded to baseline diff validator (only used with --include-baseline-diff). Repeatable.')
+    ap.add_argument('--parallel', action='store_true',
+                    help='PROJECT_B Track E — Run OPTIONAL validators concurrently via ThreadPoolExecutor. '
+                         'REQUIRED validators always remain sequential. Output order is preserved; failures, '
+                         'misses, exit codes, and SUPERSEDED markers are reported identically. Default: sequential (unchanged).')
+    ap.add_argument('--parallel-workers', type=int, default=8,
+                    help='Max worker threads for --parallel (default 8; clamped to 1..16).')
     args = ap.parse_args(argv)
 
     # AF2-N supersedence: when the runtime canary is active, V10/V11
@@ -774,18 +792,53 @@ def main(argv=None) -> int:
         results.append({'task': task, 'script': name, 'required': True, 'status': status, **r})
 
     print('-- optional --')
-    for task, name in OPTIONAL:
-        if task in SUPERSEDED:
-            print(f'{task:10s} {name:54s} {"--":>5s}  [SUPERSEDED]')
-            results.append({'task': task, 'script': name, 'required': False, 'status': 'SUPERSEDED'})
-            continue
-        r = run_one(SCRIPTS_DIR / name)
-        status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
-        # Optional: don't fail suite if MISS, but fail if explicit FAIL
-        if r['present'] and r['exit_code'] not in (0, None):
-            any_required_fail = True
-        print(f'{task:10s} {name:54s} {r["exit_code"]!s:>5s}  [{status}]')
-        results.append({'task': task, 'script': name, 'required': False, 'status': status, **r})
+    if args.parallel:
+        # PROJECT_B Track E — concurrent OPTIONAL execution; output order preserved.
+        from concurrent.futures import ThreadPoolExecutor
+        max_workers = max(1, min(16, int(args.parallel_workers or 8)))
+        tasks_to_run: list[tuple[int, str, str]] = []
+        cached_results: dict[int, dict] = {}
+        for idx, (task, name) in enumerate(OPTIONAL):
+            if task in SUPERSEDED:
+                cached_results[idx] = {'task': task, 'script': name, 'required': False, 'status': 'SUPERSEDED'}
+            else:
+                tasks_to_run.append((idx, task, name))
+        if tasks_to_run:
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                future_map = {executor.submit(run_one, SCRIPTS_DIR / name): (idx, task, name)
+                              for idx, task, name in tasks_to_run}
+                for future in future_map:
+                    idx, task, name = future_map[future]
+                    try:
+                        r = future.result()
+                    except Exception as exc:  # noqa: BLE001
+                        r = {'present': False, 'exit_code': 1, 'stdout': '', 'stderr': f'parallel exec error: {exc}'}
+                    status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
+                    cached_results[idx] = {'task': task, 'script': name, 'required': False, 'status': status, **r}
+        # Print in original order to preserve identical output ordering.
+        for idx, (task, name) in enumerate(OPTIONAL):
+            entry = cached_results[idx]
+            if entry.get('status') == 'SUPERSEDED':
+                print(f'{task:10s} {name:54s} {"--":>5s}  [SUPERSEDED]')
+                results.append(entry)
+                continue
+            if entry.get('present') and entry.get('exit_code') not in (0, None):
+                any_required_fail = True
+            print(f'{task:10s} {name:54s} {entry["exit_code"]!s:>5s}  [{entry["status"]}]')
+            results.append(entry)
+    else:
+        for task, name in OPTIONAL:
+            if task in SUPERSEDED:
+                print(f'{task:10s} {name:54s} {"--":>5s}  [SUPERSEDED]')
+                results.append({'task': task, 'script': name, 'required': False, 'status': 'SUPERSEDED'})
+                continue
+            r = run_one(SCRIPTS_DIR / name)
+            status = 'PASS' if r['present'] and r['exit_code'] == 0 else ('FAIL' if r['present'] else 'MISS')
+            # Optional: don't fail suite if MISS, but fail if explicit FAIL
+            if r['present'] and r['exit_code'] not in (0, None):
+                any_required_fail = True
+            print(f'{task:10s} {name:54s} {r["exit_code"]!s:>5s}  [{status}]')
+            results.append({'task': task, 'script': name, 'required': False, 'status': status, **r})
     if args.include_baseline_diff:
         print('-- baseline diff (RM1.32-PRE) --')
         task, name = BASELINE_DIFF

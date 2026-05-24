@@ -1,0 +1,57 @@
+{
+  "task_id": "PROJECT_B_TRACK_D_DRIFT_DOC_1_LEGACY_SUMMON_RATE_ARCHIVE",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_D_DRIFT_DOC_1_ARCHIVE_READY",
+  "mode": "audit_archive_doc_only_no_db_cleanup",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "summon_behavior_mutated": false,
+  "timestamp_utc": "20260524T160000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_B_APPROVAL": true,
+    "TRACK_D_DRIFT_DOC_1_ARCHIVE_APPROVAL": true
+  },
+  "upstream_plan": "/app/data/design/system_safety/project_a_gacha_summon_drift_cleanup_plan_v1.json",
+  "target_drift_doc": {
+    "id": "DRIFT_DOC_1",
+    "class": "legacy_summon_rate_v0",
+    "description": "riferimenti residui a rate table summon v0 (pre-V1 BLOCK_B audit) in /app/backend/routes/summon.py e/o backup files; nessuna ownership/roster mutation richiesta",
+    "data_mutation_required": false,
+    "behavior_mutation_required": false,
+    "impact_on_user_facing_response": "none"
+  },
+  "archive_action": {
+    "type": "DOC_AUDIT_FREEZE",
+    "description": "questo drift doc viene classificato come KNOWN_NONBLOCKING_ARCHIVED_V1 e congelato; nessun file fisico spostato in /app/_attic/ in questo pack",
+    "status_after_project_b": "KNOWN_NONBLOCKING_ARCHIVED_V1",
+    "file_move_deferred_to_pack": "DRIFT_DOC_1_PHYSICAL_ARCHIVE_OPS_PACK (optional future)"
+  },
+  "cleanup_gate_for_future_physical_archive": {
+    "required_signoffs": [
+      "engineering_signoff",
+      "explicit_user_authorization_in_chat"
+    ],
+    "required_evidence": [
+      "pre-archive snapshot of file paths affected",
+      "summon route behavior smoke (8 invariants from V1 BLOCK_B audit)",
+      "rollback strategy: restore from git history"
+    ]
+  },
+  "residual_drift_docs_after_project_b": {
+    "total_drift_docs": 7,
+    "archived_count_after_project_b": 1,
+    "freeze_read_only_count": 2,
+    "dedupe_design_required_count": 2,
+    "unprocessed_count": 4
+  },
+  "forbidden_in_track_d_respected": {
+    "db_cleanup": false,
+    "gacha_summon_behavior_change": false,
+    "roster_mutation": false,
+    "borea_activation": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_b_drift_doc_1_legacy_summon_rate_archive_v1.json",
+    "/app/docs/divine/124D_DRIFT_DOC_1_LEGACY_SUMMON_RATE_ARCHIVE.md"
+  ]
+}

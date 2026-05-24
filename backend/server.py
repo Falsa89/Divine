@@ -434,6 +434,14 @@ items_router = APIRouter(prefix="/api")
 register_items_routes(items_router, db, get_current_user)
 app.include_router(items_router)
 
+# ===================== SERVER PROFILES DUAL-ROUTE SKELETON (PROJECT_B Track A) =====================
+# Inert flag-gated routes. Runtime OFF by default via SERVER_PROFILES_RUNTIME_ENABLED.
+# When the flag is unset, both GET and POST /api/server-profiles/select return HTTP 503
+# with a status="disabled" payload. No DB writes, no behavior exposure.
+# Upstream design: 122D (V8 BLOCK_D dual-route), 123A (collection live inert).
+from routes.server_profiles import router as server_profiles_router
+app.include_router(server_profiles_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

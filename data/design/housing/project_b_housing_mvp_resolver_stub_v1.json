@@ -1,0 +1,55 @@
+{
+  "task_id": "PROJECT_B_TRACK_B_HOUSING_MVP_RESOLVER_STUB",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_B",
+  "verdict": "TRACK_B_HOUSING_MVP_RESOLVER_STUB_CREATED_INERT",
+  "mode": "pure_module_not_imported_by_runtime",
+  "runtime_patch_applied": false,
+  "module_imported_by_runtime": false,
+  "timestamp_utc": "20260524T160000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_B_APPROVAL": true,
+    "TRACK_B_HOUSING_MVP_RESOLVER_STUB_APPROVAL": true
+  },
+  "upstream": {
+    "v_a_track_e_housing_contract": "/app/data/design/housing/project_a_housing_mvp_backend_contract_v1.json",
+    "v5_block_e_resolver_pure_stub_design": "/app/docs/divine/119E_HOUSING_BONUS_RESOLVER_PURE_STUB_DESIGN.md"
+  },
+  "module_path": "/app/backend/game_logic/housing_bonus_resolver_stub.py",
+  "package_path": "/app/backend/game_logic/",
+  "package_marker_file": "/app/backend/game_logic/__init__.py",
+  "public_api": {
+    "resolve_housing_bonus": {
+      "input": "{user_id, housing_rooms[], objects[], residents[]}",
+      "output": "{hp_bonus:0, atk_bonus:0, def_bonus:0, healing_bonus:0}",
+      "side_effects": "none",
+      "output_values_forced_to_zero": true
+    },
+    "validate_caps_definition": {
+      "input": "caps dict",
+      "output": "list of error strings (empty=valid)",
+      "side_effects": "none"
+    }
+  },
+  "canonical_caps": {"per_room": 6, "category": 4, "item": 12, "bonus": 8, "mode": 2, "master_cap": 30},
+  "inert_marker": "HOUSING_BONUS_RESOLVER_STUB_INERT_PROJECT_B_TRACK_B_V1",
+  "not_imported_by": [
+    "/app/backend/server.py",
+    "/app/backend/game_systems.py",
+    "/app/backend/battle_engine.py",
+    "/app/backend/battle_core.py",
+    "/app/backend/routes/*",
+    "/app/frontend/**"
+  ],
+  "validator_script": "/app/backend/scripts/validate_project_b_housing_resolver_stub_inert.py",
+  "suite_registration": {
+    "task_id": "PROJECT-B-TRACK-B-HOUSING-RESOLVER-STUB-INERT",
+    "section": "OPTIONAL"
+  },
+  "forbidden_in_track_b_respected": {
+    "api_housing_live": false,
+    "runtime_import_of_resolver": false,
+    "battle_account_stat_application": false,
+    "db_writes": false,
+    "frontend_ui": false
+  }
+}
