@@ -1,0 +1,112 @@
+{
+  "task_id": "PROJECT_A_TRACK_D_COMBAT_SKILL_STATUS_RUNTIME_MAP",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_A",
+  "verdict": "TRACK_D_COMBAT_SKILL_STATUS_RUNTIME_MAP_READY",
+  "mode": "audit_design_no_combat_mutation",
+  "runtime_patch_applied": false,
+  "battle_files_mutated": false,
+  "timestamp_utc": "20260524T150000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_A_APPROVAL": true,
+    "TRACK_D_COMBAT_SKILL_STATUS_MAP_APPROVAL": true
+  },
+  "combat_runtime_inventory": [
+    {
+      "role": "engine",
+      "file": "/app/backend/services/battle_engine.py",
+      "forbidden_change": true,
+      "current_state": "UNCHANGED (FORBIDDEN guardrail)"
+    },
+    {
+      "role": "core",
+      "file": "/app/backend/services/battle_core.py",
+      "forbidden_change": true,
+      "current_state": "UNCHANGED (FORBIDDEN guardrail)"
+    },
+    {
+      "role": "frontend_combat_screen",
+      "file": "/app/frontend/app/combat.tsx",
+      "forbidden_change": true,
+      "current_state": "UNCHANGED (FORBIDDEN guardrail)"
+    },
+    {
+      "role": "backend_combat_routes",
+      "file": "/app/backend/routes/combat.py",
+      "forbidden_change": false,
+      "current_state": "present; route surface to be inventoried in future map_v2"
+    },
+    {
+      "role": "hero_skill_kit_adapter",
+      "file": "/app/backend/services/hero_skill_kit_runtime_adapter.py",
+      "forbidden_change": false,
+      "current_state": "adapter present; wiretest already executed (v1)"
+    },
+    {
+      "role": "skill_kit_catalog",
+      "file": "/app/backend/data/hero_skill_kit_catalog_baseline_rm134b_axispatch_v6.json",
+      "forbidden_change": false,
+      "current_state": "baseline v6 active; PASS"
+    }
+  ],
+  "mvp_runtime_slice": {
+    "name": "COMBAT_SKILL_STATUS_MVP_V1",
+    "scope": "minimal end-to-end skill activation + status apply on a single non-Borea hero (e.g., zeus) in a sandbox endpoint /api/combat/_skill_kit_wiretest (READ-ONLY adapter call already present)",
+    "in_scope": [
+      "hero_skill_kit_runtime_adapter resolve_skill_kit() call",
+      "status effect catalog read-only fetch",
+      "unit test harness via existing wiretest fixtures"
+    ],
+    "out_of_scope": [
+      "battle_engine.py modification",
+      "battle_core.py modification",
+      "combat.tsx modification",
+      "actual damage application to live combat",
+      "buff/debuff persistence to user_heroes"
+    ],
+    "loc_estimate": "~30 LOC additive in a new file (skill_kit_mvp_runner.py) NOT imported by combat."
+  },
+  "no_diff_guard": {
+    "watched_files": [
+      "/app/backend/services/battle_engine.py",
+      "/app/backend/services/battle_core.py",
+      "/app/frontend/app/combat.tsx"
+    ],
+    "current_status": "all watched files present and UNMUTATED in Track D",
+    "future_validator": "validate_combat_runtime_no_diff_v1.py (proposed; computes sha256 against baseline and FAIL if mismatch)"
+  },
+  "future_apply_gates": [
+    {
+      "gate_id": "CSK-G1",
+      "name": "MVP_SANDBOX_NO_LIVE_COMBAT",
+      "prereq": "design map + adapter wiretest + status effect catalog freeze"
+    },
+    {
+      "gate_id": "CSK-G2",
+      "name": "PARTIAL_LIVE_COMBAT_SKILL_HOOK_DESIGN",
+      "prereq": "CSK-G1 + product signoff + 1 release cycle on sandbox"
+    },
+    {
+      "gate_id": "CSK-G3",
+      "name": "FULL_LIVE_COMBAT_SKILL_HOOK_APPLY",
+      "prereq": "CSK-G2 + QA full regression + explicit user approval"
+    }
+  ],
+  "implementation_sequence_proposed": [
+    "PACK 1: HERO_SKILL_KIT_CATALOG_FREEZE_PACK (lock baseline v6; suite invariant)",
+    "PACK 2: STATUS_EFFECT_CATALOG_BASELINE_PACK (canonical schema; no runtime)",
+    "PACK 3: SKILL_KIT_MVP_SANDBOX_RUNNER_PACK (new file, NOT imported by combat)",
+    "PACK 4: SKILL_KIT_MVP_VALIDATOR_PACK (HTTP smoke on sandbox endpoint)",
+    "PACK 5: COMBAT_RUNTIME_NO_DIFF_GUARD_PACK (sha256 invariant)"
+  ],
+  "forbidden_in_track_d_respected": {
+    "battle_engine_py_changes": false,
+    "battle_core_py_changes": false,
+    "combat_tsx_changes": false,
+    "combat_behavior_mutation": false,
+    "skill_status_live_activation": false
+  },
+  "artifacts_created": [
+    "/app/data/design/combat/project_a_combat_skill_status_runtime_map_v1.json",
+    "/app/docs/divine/123D_COMBAT_SKILL_STATUS_RUNTIME_MAP.md"
+  ]
+}

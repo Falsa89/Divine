@@ -1,0 +1,82 @@
+{
+  "task_id": "PROJECT_A_TRACK_B_BATTLE_PASS_INDEX_OPS",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_A",
+  "verdict": "TRACK_B_BATTLE_PASS_INDEX_APPLIED_SAFE",
+  "mode": "ops_apply_idempotent_no_behavior_change",
+  "runtime_patch_applied": false,
+  "db_index_created": true,
+  "db_data_rows_written": 0,
+  "timestamp_utc": "20260524T150000Z",
+  "rollback_id": "project_a_track_b_battle_pass_user_season_index_20260524T150000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_A_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS",
+    "TRACK_B_BATTLE_PASS_INDEX_OPS_APPROVAL": true
+  },
+  "upstream_design": {
+    "v4_block_a_marker": "/app/data/design/system_safety/v4_battle_pass_technical_hardening_marker.json",
+    "v6_block_a_signoff": "/app/data/design/server_lifecycle/battle_pass_bp_d1_d3_d4_signoff_record_v1.json",
+    "v7_block_b_setoninsert_marker": "/app/data/design/system_safety/v7_battle_pass_technical_hardening_marker.json",
+    "v8_block_b_index_definition": "/app/data/design/server_lifecycle/battle_pass_user_season_index_definition_v1.json"
+  },
+  "closes_residual": {
+    "v4_block_a_r4": "INDEX_LIVE_DEFERRED",
+    "status_after_project_a": "INDEX_LIVE_APPLIED"
+  },
+  "preflight_checks_live": {
+    "battle_pass_total_docs": 1,
+    "battle_pass_docs_missing_season": 0,
+    "battle_pass_duplicate_user_season_groups": 0,
+    "preflight_verdict": "PASS",
+    "preflight_blocker_if_missing_season_gt_0": "data backfill required (NOT TRIGGERED)",
+    "preflight_blocker_if_duplicates_gt_0": "dedupe required (NOT TRIGGERED)"
+  },
+  "applied_index": {
+    "name": "idx_battle_pass_user_season",
+    "collection": "battle_pass",
+    "fields": [["user_id", 1], ["season", 1]],
+    "unique": true,
+    "sparse": false,
+    "action": "CREATED",
+    "idempotent": true,
+    "create_index_call_executed": "db.battle_pass.create_index([('user_id', 1), ('season', 1)], unique=True, name='idx_battle_pass_user_season')"
+  },
+  "postflight_state_live": {
+    "battle_pass_indexes": ["_id_", "idx_battle_pass_user_season"],
+    "battle_pass_total_docs_post": 1,
+    "data_mutation": "NONE"
+  },
+  "behavior_preservation": {
+    "battle_pass_endpoint_behavior_changed": false,
+    "reward_logic_changed": false,
+    "premium_free_lane_logic_changed": false,
+    "cost_changed": false,
+    "response_schema_changed": false,
+    "$setOnInsert_pattern_preserved": true
+  },
+  "smoke_post_apply": {
+    "api_heroes_count": 100,
+    "primordial_gaia": 404,
+    "borea": 200,
+    "greek_borea": 200
+  },
+  "rollback_script": "/app/backend/scripts/rollback_project_a_battle_pass_user_season_index.py",
+  "rollback_safety": "safe drop_index per nome; idempotente; gated da PROJECT_A_TRACK_B_ROLLBACK=YES",
+  "validator_script": "/app/backend/scripts/validate_project_a_battle_pass_index_ops_v1.py",
+  "suite_registration": {
+    "task_id": "PROJECT-A-TRACK-B-BATTLE-PASS-INDEX-OPS",
+    "section": "OPTIONAL"
+  },
+  "forbidden_in_track_b_respected": {
+    "battle_pass_reward_premium_price_change": false,
+    "db_migration_backfill": false,
+    "broad_economy_refactor": false,
+    "frontend_ui": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/project_a_battle_pass_index_ops_result_v1.json",
+    "/app/backend/scripts/rollback_project_a_battle_pass_user_season_index.py",
+    "/app/backend/scripts/validate_project_a_battle_pass_index_ops_v1.py",
+    "/app/docs/divine/123B_BATTLE_PASS_INDEX_OPS_PREFLIGHT_APPLY.md"
+  ]
+}

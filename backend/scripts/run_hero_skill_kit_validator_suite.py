@@ -582,6 +582,16 @@ OPTIONAL = [
     ('V8-BLOCK-C-AF2N-DASHBOARD-RENDER-JSON',       'validate_af2n_dashboard_render_json_v1.py'),
     # MEGA-COMBO V8 BLOCK_E SUITE OPTIMIZATION PARALLEL AUDIT (audit-only; no runner change, no validator weakening)
     ('V8-BLOCK-E-SUITE-OPTIMIZATION-PARALLEL-AUDIT', 'audit_suite_optimization_parallel_v1.py'),
+    # PROJECT_A Track A SERVER PROFILES OPS (live ops apply inert: collection + 3 canonical indexes; no runtime)
+    ('PROJECT-A-TRACK-A-SERVER-PROFILES-OPS',       'validate_project_a_server_profiles_ops_v1.py'),
+    # PROJECT_A Track B BATTLE PASS USER_SEASON UNIQUE INDEX (live ops apply; V4 R4 closed)
+    ('PROJECT-A-TRACK-B-BATTLE-PASS-INDEX-OPS',     'validate_project_a_battle_pass_index_ops_v1.py'),
+    # PROJECT_A Track C AF2-N RUNTIME ROUTING PREFLIGHT (no runtime mutation)
+    ('PROJECT-A-TRACK-C-AF2N-RUNTIME-ROUTING-PREFLIGHT', 'validate_project_a_af2n_runtime_routing_preflight_v1.py'),
+    # PROJECT_A Track F GACHA/SUMMON DRIFT CLEANUP PLAN (audit/plan only; 7 drift docs classified)
+    ('PROJECT-A-TRACK-F-GACHA-SUMMON-DRIFT-CLEANUP-PLAN', 'validate_project_a_gacha_summon_drift_cleanup_plan_v1.py'),
+    # PROJECT_A Track G QA/RELEASE DOD TRACKER (project management; 7 DoD rows)
+    ('PROJECT-A-TRACK-G-QA-RELEASE-DOD-TRACKER',    'validate_project_completion_dod_tracker_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

@@ -1,0 +1,74 @@
+{
+  "task_id": "PROJECT_A_TRACK_E_HOUSING_MVP_BACKEND_CONTRACT",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_A",
+  "verdict": "TRACK_E_HOUSING_MVP_BACKEND_CONTRACT_READY",
+  "mode": "design_doc_only_inert_stub_candidate",
+  "runtime_patch_applied": false,
+  "live_route_added": false,
+  "resolver_imported_by_runtime": false,
+  "timestamp_utc": "20260524T150000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_A_APPROVAL": true,
+    "TRACK_E_HOUSING_MVP_CONTRACT_APPROVAL": true
+  },
+  "upstream": {
+    "housing_canonical": "/app/data/design/housing/_dimora_divina_runtime_safety_audit_v1_result.json",
+    "housing_resolver_stub_design_v5": "/app/docs/divine/119E_HOUSING_BONUS_RESOLVER_PURE_STUB_DESIGN.md"
+  },
+  "backend_contract": {
+    "endpoints_planned": [
+      {"method": "GET", "path": "/api/housing/rooms", "description": "list rooms con cap, capienza, occupanti"},
+      {"method": "GET", "path": "/api/housing/objects", "description": "list arredamento catalog (read-only)"},
+      {"method": "GET", "path": "/api/housing/residents", "description": "list residenti con room_id, status"},
+      {"method": "POST", "path": "/api/housing/claim-all", "description": "claim all available housing bonuses idempotent"}
+    ],
+    "all_endpoints_status": "NOT_IMPLEMENTED_DESIGN_ONLY",
+    "caps": {
+      "rooms_per_user": 6,
+      "objects_per_room": 12,
+      "residents_per_room": 4,
+      "claim_cooldown_hours": 24,
+      "max_claim_per_call": 1
+    },
+    "db_collections_planned": [
+      "housing_rooms",
+      "housing_objects",
+      "housing_residents",
+      "housing_claims_log"
+    ],
+    "db_collections_existing": []
+  },
+  "pure_resolver_stub": {
+    "name": "HousingBonusResolver",
+    "contract": "pure function: (user_state) -> {bonus_set} ; deterministic; NO side effect; NOT imported by combat/account runtime",
+    "acceptance_criteria": [
+      "input shape: {user_id, housing_rooms[], objects[], residents[]}",
+      "output shape: {hp_bonus: 0, atk_bonus: 0, def_bonus: 0, healing_bonus: 0}",
+      "output values forced to 0 in stub (no application live)",
+      "unit testable via pytest with frozen fixtures",
+      "no import in battle_engine/battle_core/combat",
+      "no DB write"
+    ],
+    "stub_file_candidate": "/app/backend/services/housing_bonus_resolver_stub.py (NOT created in Track E; design only)",
+    "stub_creation_deferred_to_pack": "HOUSING_MVP_RESOLVER_STUB_CREATION_PACK"
+  },
+  "phase_plan": [
+    {"phase": 1, "name": "BACKEND_CONTRACT_DESIGN", "status": "DONE_PROJECT_A_TRACK_E"},
+    {"phase": 2, "name": "PURE_RESOLVER_STUB_CREATION", "status": "PLANNED"},
+    {"phase": 3, "name": "DB_COLLECTIONS_SCHEMA_DEFINITION", "status": "PLANNED"},
+    {"phase": 4, "name": "INERT_GET_ENDPOINTS_IMPLEMENTATION", "status": "PLANNED"},
+    {"phase": 5, "name": "CLAIM_ENDPOINT_IDEMPOTENT_IMPLEMENTATION", "status": "PLANNED"},
+    {"phase": 6, "name": "BONUS_APPLICATION_TO_BATTLE_LIVE", "status": "FORBIDDEN_OUT_OF_SCOPE_PROJECT_A"}
+  ],
+  "forbidden_in_track_e_respected": {
+    "api_housing_live": false,
+    "live_housing_bonus_resolver": false,
+    "db_write": false,
+    "battle_account_stat_application": false,
+    "frontend_ui": false
+  },
+  "artifacts_created": [
+    "/app/data/design/housing/project_a_housing_mvp_backend_contract_v1.json",
+    "/app/docs/divine/123E_HOUSING_MVP_BACKEND_CONTRACT.md"
+  ]
+}

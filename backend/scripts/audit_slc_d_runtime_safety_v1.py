@@ -71,6 +71,7 @@ def main() -> int:
         v = os.environ.get(flag)
         require(v in (None, '', '0', 'false', 'False'), f'{flag} unexpectedly set: {v}', errs)
     forbidden_cols = []
+    sp_doc_count = 0
     try:
         from dotenv import load_dotenv
         from pymongo import MongoClient
@@ -80,11 +81,23 @@ def main() -> int:
             cli = MongoClient(url, serverSelectionTimeoutMS=2000)
             db_name = os.environ.get('DB_NAME') or 'divine_waifus'
             cols = cli[db_name].list_collection_names()
+            if 'server_profiles' in cols:
+                sp_doc_count = cli[db_name].server_profiles.count_documents({})
             cli.close()
             for c in ('server_profiles','servers','server_wallets_free','accounts_wallet_paid',
                       'accounts_wallet_paid_ledger','server_merge_audit','merge_recovery_pool'):
                 if c in cols:
                     forbidden_cols.append(c)
+            # PROJECT_A Track A authorization: server_profiles allowed if APPLIED_SAFE marker + empty.
+            if 'server_profiles' in forbidden_cols and sp_doc_count == 0:
+                _marker = Path('/app/data/design/server_lifecycle/project_a_server_profiles_ops_result_v1.json')
+                if _marker.exists():
+                    try:
+                        _m = json.loads(_marker.read_text(encoding='utf-8'))
+                        if _m.get('verdict') == 'TRACK_A_SERVER_PROFILES_COLLECTION_APPLIED_SAFE':
+                            forbidden_cols = [c for c in forbidden_cols if c != 'server_profiles']
+                    except Exception:
+                        pass
     except Exception:
         pass
     require(not forbidden_cols, f'unexpected runtime collections present: {forbidden_cols}', errs)

@@ -1,0 +1,156 @@
+{
+  "task_id": "PROJECT_A_TRACK_G_QA_RELEASE_DOD_TRACKER",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_A",
+  "verdict": "TRACK_G_QA_RELEASE_DOD_TRACKER_READY",
+  "mode": "project_management_dod_tracker_no_runtime",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260524T150000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_A_APPROVAL": true,
+    "TRACK_G_QA_RELEASE_DOD_TRACKER_APPROVAL": true
+  },
+  "scope_excludes": ["graphics", "audio", "art_assets"],
+  "dod_rows": [
+    {
+      "area": "SLC/SLC-H",
+      "current_band": "73%",
+      "target_band_for_ga": "95%+",
+      "closed_items": [
+        "server_profiles canonical schema (V6 BLOCK_C)",
+        "server_profiles 3 canonical indexes definition (V7 BLOCK_C)",
+        "server_profiles collection creation plan + dry-run (V8 BLOCK_A)",
+        "server_profiles collection + 3 indexes LIVE INERT (Project_A Track A) \u2014 NEW",
+        "legacy /server/select deprecation Phase 1 APPLIED (V7 BLOCK_A)",
+        "legacy /server/select dual-route Phase 2/3/4 DESIGNED (V8 BLOCK_D)"
+      ],
+      "pending_items": [
+        "server_profiles dual-route Phase 2 endpoint implementation",
+        "server_profiles dual-write phase",
+        "legacy /server/select Phase 3 removal",
+        "users.server field drop migration (Phase 4)"
+      ],
+      "next_apply_pack_candidate": "SERVER_PROFILES_DUAL_ROUTE_IMPLEMENTATION_PACK"
+    },
+    {
+      "area": "AF2-N",
+      "current_band": "stage4_internal_beta_canary_active",
+      "target_band_for_ga": "broad_rollout_v8+",
+      "closed_items": [
+        "observability pipeline (V5 BLOCK_B)",
+        "metrics snapshot export (V6 BLOCK_B)",
+        "dashboard template (V7 BLOCK_D)",
+        "dashboard render JSON (V8 BLOCK_C)",
+        "runtime routing preflight (Project_A Track C) \u2014 NEW"
+      ],
+      "pending_items": [
+        "managed Redis live (EV-INFRA-MANAGED-REDIS-LIVE)",
+        "alerting live sink (EV-INFRA-ALERTING-LIVE)",
+        "legal+product signoff (EV-LEGAL-PRODUCT-SIGNOFF)",
+        "final user approval (EV-USER-FINAL-APPROVAL)",
+        "broad rollout signoff V8"
+      ],
+      "next_apply_pack_candidate": "AF2N_OBSERVABILITY_DASHBOARD_PROVISION_DESIGN_PACK"
+    },
+    {
+      "area": "combat/skill/status",
+      "current_band": "adapter_wiretest_only_no_live_combat",
+      "target_band_for_ga": "live_skill_status_in_combat",
+      "closed_items": [
+        "hero skill kit catalog baseline v6 PASS",
+        "runtime adapter wiretest v1",
+        "runtime map (Project_A Track D) \u2014 NEW"
+      ],
+      "pending_items": [
+        "skill kit catalog freeze pack",
+        "status effect catalog baseline pack",
+        "MVP sandbox runner pack (NOT imported by combat)",
+        "combat runtime no-diff guard pack"
+      ],
+      "next_apply_pack_candidate": "HERO_SKILL_KIT_CATALOG_FREEZE_PACK"
+    },
+    {
+      "area": "economy/battle pass/shop",
+      "current_band": "90%+",
+      "target_band_for_ga": "100% (post BP index apply)",
+      "closed_items": [
+        "BP_D1/D3/D4 signoff (V6 BLOCK_A)",
+        "battle pass $setOnInsert hardening (V7 BLOCK_B)",
+        "battle pass user_season unique index APPLIED (Project_A Track B) \u2014 NEW",
+        "V4 R4 INDEX_LIVE_APPLIED \u2014 CLOSED",
+        "economy /server/select deprecation notice (V7 BLOCK_A)"
+      ],
+      "pending_items": [
+        "shop carousel/limited offers contract audit",
+        "gem topup observability"
+      ],
+      "next_apply_pack_candidate": "SHOP_LIMITED_OFFERS_CONTRACT_AUDIT_PACK"
+    },
+    {
+      "area": "gacha/summon",
+      "current_band": "behavior_stable_drift_cleanup_pending",
+      "target_band_for_ga": "drift_cleanup_complete",
+      "closed_items": [
+        "gacha summon count audit (V1 BLOCK_B)",
+        "drift cleanup plan READY (Project_A Track F) \u2014 NEW"
+      ],
+      "pending_items": [
+        "per-drift-doc gated apply packs (7 drift docs)",
+        "obtainable pool stability invariant validator"
+      ],
+      "next_apply_pack_candidate": "DRIFT_DOC_1_LEGACY_SUMMON_RATE_ARCHIVE_PACK"
+    },
+    {
+      "area": "housing MVP",
+      "current_band": "design_only_no_runtime",
+      "target_band_for_ga": "MVP_inert_get_endpoints + claim_idempotent",
+      "closed_items": [
+        "dimora_divina_runtime_safety_audit",
+        "housing bonus resolver pure stub design (V5 BLOCK_E)",
+        "backend contract READY (Project_A Track E) \u2014 NEW"
+      ],
+      "pending_items": [
+        "pure resolver stub creation",
+        "DB collections schema definition",
+        "inert GET endpoints implementation",
+        "claim endpoint idempotent implementation"
+      ],
+      "next_apply_pack_candidate": "HOUSING_MVP_RESOLVER_STUB_CREATION_PACK"
+    },
+    {
+      "area": "QA/mobile/release",
+      "current_band": "suite_baseline_371_pass_plus_extensions",
+      "target_band_for_ga": "suite_pass + mobile_smoke + release_checklist_signed",
+      "closed_items": [
+        "suite 367 \u2192 371 \u2192 (post V_A) extended baseline",
+        "suite optimization parallel audit (V8 BLOCK_E)",
+        "DoD tracker READY (Project_A Track G) \u2014 NEW (questo)"
+      ],
+      "pending_items": [
+        "suite parallel runner implementation",
+        "mobile smoke flow standardized",
+        "release checklist GA template"
+      ],
+      "next_apply_pack_candidate": "SUITE_PARALLEL_RUNNER_IMPLEMENTATION_PACK"
+    }
+  ],
+  "global_progress_estimate": {
+    "pre_project_a": 86,
+    "post_project_a": 88,
+    "justification": "+2% giustificato da: 2 apply ops live inert (server_profiles collection+3 indexes; battle_pass unique index chiude V4 R4) + 5 design/audit/preflight track + DoD tracker formalizzato"
+  },
+  "slc_h_readiness_estimate": {
+    "pre_project_a": 73,
+    "post_project_a": 78,
+    "justification": "+5 pts: Track A apply chiude la Phase 1 collection preconditions; combination V8 BLOCK_D dual-route design + collection live abilita pack implementation Phase 2"
+  },
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_project_completion_dod_tracker_v1.py",
+    "behavior": "verifica esistenza tracker JSON + 7 DoD rows + struttura consistente",
+    "safe_in_suite": true
+  },
+  "artifacts_created": [
+    "/app/data/design/project_management/project_completion_dod_tracker_v1.json",
+    "/app/backend/scripts/validate_project_completion_dod_tracker_v1.py",
+    "/app/docs/divine/123G_PROJECT_COMPLETION_DOD_TRACKER.md"
+  ]
+}

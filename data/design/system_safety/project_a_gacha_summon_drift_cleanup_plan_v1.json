@@ -1,0 +1,68 @@
+{
+  "task_id": "PROJECT_A_TRACK_F_GACHA_SUMMON_DRIFT_CLEANUP_PLAN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_A",
+  "verdict": "TRACK_F_GACHA_SUMMON_DRIFT_CLEANUP_PLAN_READY",
+  "mode": "audit_plan_only_no_data_mutation",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "gacha_behavior_mutated": false,
+  "timestamp_utc": "20260524T150000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_A_APPROVAL": true,
+    "TRACK_F_GACHA_SUMMON_DRIFT_PLAN_APPROVAL": true
+  },
+  "upstream_audit_v1_block_b": "/app/data/design/system_safety/_audit_drift_docs_gacha_summon_count_v1_result.json",
+  "drift_docs_classification": [
+    {"id": "DRIFT_DOC_1", "class": "legacy_summon_rate_v0", "action": "archive_into_attic", "data_mutation_required": false},
+    {"id": "DRIFT_DOC_2", "class": "deprecated_banner_legacy_pool", "action": "archive_into_attic", "data_mutation_required": false},
+    {"id": "DRIFT_DOC_3", "class": "obsolete_pity_counter_format", "action": "freeze_read_only", "data_mutation_required": false},
+    {"id": "DRIFT_DOC_4", "class": "duplicate_summon_log_format", "action": "dedupe_design_required", "data_mutation_required": true},
+    {"id": "DRIFT_DOC_5", "class": "stale_obtainable_pool_snapshot", "action": "freeze_read_only", "data_mutation_required": false},
+    {"id": "DRIFT_DOC_6", "class": "orphan_summon_history_entry", "action": "dedupe_design_required", "data_mutation_required": true},
+    {"id": "DRIFT_DOC_7", "class": "unreferenced_legacy_summon_event", "action": "archive_into_attic", "data_mutation_required": false}
+  ],
+  "summary": {
+    "docs_total": 7,
+    "action_archive_into_attic": 3,
+    "action_freeze_read_only": 2,
+    "action_dedupe_design_required": 2,
+    "data_mutation_required_total": 2,
+    "data_mutation_executed_in_track_f": 0
+  },
+  "responsible_routes_files": [
+    {"file": "/app/backend/routes/summon.py", "affected_drift_docs": ["DRIFT_DOC_1", "DRIFT_DOC_4", "DRIFT_DOC_6"]},
+    {"file": "/app/backend/routes/gacha.py (if exists)", "affected_drift_docs": ["DRIFT_DOC_2", "DRIFT_DOC_5", "DRIFT_DOC_7"]},
+    {"file": "/app/backend/data/banner_pool_*.json", "affected_drift_docs": ["DRIFT_DOC_3"]}
+  ],
+  "cleanup_gate": {
+    "required_signoffs": [
+      "engineering_signoff",
+      "product_signoff",
+      "final_user_approval_per_drift_doc"
+    ],
+    "required_evidence": [
+      "pre-cleanup snapshot of all 7 drift doc states",
+      "diff against expected canonical state",
+      "impact analysis on summon route response shape",
+      "rollback script per data mutation drift doc"
+    ],
+    "future_apply_strategy": "per-drift-doc gated pack (one pack per drift doc); no broad bulk cleanup"
+  },
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_project_a_gacha_summon_drift_cleanup_plan_v1.py",
+    "behavior": "verifica integrita' del plan + che gacha/summon behavior non sia stato toccato (no diff in summon.py route definitions)",
+    "safe_in_suite": true
+  },
+  "forbidden_in_track_f_respected": {
+    "db_cleanup": false,
+    "gacha_summon_route_behavior_change": false,
+    "roster_ownership_mutation": false,
+    "borea_activation": false,
+    "banner_rate_pity_pool_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_a_gacha_summon_drift_cleanup_plan_v1.json",
+    "/app/backend/scripts/validate_project_a_gacha_summon_drift_cleanup_plan_v1.py",
+    "/app/docs/divine/123F_GACHA_SUMMON_DRIFT_CLEANUP_PLAN.md"
+  ]
+}

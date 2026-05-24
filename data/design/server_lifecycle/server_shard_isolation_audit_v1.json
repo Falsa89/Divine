@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-24T13:52:58.557849+00:00",
+  "timestamp_utc": "2026-05-24T14:18:14.296095+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 714,
+  "backend_python_files_scanned": 721,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 405,
+      "files_with_hits": 409,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 115
+      "user_id_only_files_count": 116
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 98,
+      "files_with_hits": 99,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -269,7 +269,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 235,
+      "files_with_hits": 236,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1121,7 +1121,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 444,
+      "files_with_hits": 445,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1552,7 +1552,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 374,
+  "cross_server_leak_risk_candidates_count": 375,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",

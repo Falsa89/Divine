@@ -41,9 +41,24 @@ def check_no_server_profiles_collection() -> tuple[bool, str]:
         cli = MongoClient(url, serverSelectionTimeoutMS=2000)
         db_name = os.environ.get('DB_NAME') or 'divine_waifus'
         cols = cli[db_name].list_collection_names()
-        cli.close()
         forbidden_present = [c for c in ('server_profiles', 'servers', 'server_wallets_free',
                                           'accounts_wallet_paid', 'accounts_wallet_paid_ledger') if c in cols]
+        # PROJECT_A Track A authorization: server_profiles may be present IFF the apply marker
+        # exists with verdict APPLIED_SAFE AND the collection is empty (inert state).
+        if 'server_profiles' in forbidden_present:
+            import json as _json
+            from pathlib import Path as _Path
+            marker = _Path('/app/data/design/server_lifecycle/project_a_server_profiles_ops_result_v1.json')
+            if marker.exists():
+                try:
+                    m = _json.loads(marker.read_text(encoding='utf-8'))
+                    if m.get('verdict') == 'TRACK_A_SERVER_PROFILES_COLLECTION_APPLIED_SAFE':
+                        doc_count = cli[db_name].server_profiles.count_documents({})
+                        if doc_count == 0:
+                            forbidden_present = [c for c in forbidden_present if c != 'server_profiles']
+                except Exception:
+                    pass
+        cli.close()
         if forbidden_present:
             return False, f'unexpected multishard collections present: {forbidden_present}'
         return True, f'no multishard collections (checked among {len(cols)} cols)'

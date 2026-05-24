@@ -70,11 +70,29 @@ def check_mongo_collections() -> dict:
         cli.close()
         forbidden = ('server_profiles', 'servers', 'server_wallets_free',
                      'accounts_wallet_paid', 'accounts_wallet_paid_ledger')
+        found = [c for c in forbidden if c in cols]
+        # PROJECT_A Track A authorization: server_profiles allowed if marker says APPLIED_SAFE and empty.
+        if 'server_profiles' in found:
+            import json as _json
+            from pathlib import Path as _Path
+            marker = _Path('/app/data/design/server_lifecycle/project_a_server_profiles_ops_result_v1.json')
+            if marker.exists():
+                try:
+                    m = _json.loads(marker.read_text(encoding='utf-8'))
+                    if m.get('verdict') == 'TRACK_A_SERVER_PROFILES_COLLECTION_APPLIED_SAFE':
+                        cli2 = MongoClient(url, serverSelectionTimeoutMS=2000)
+                        try:
+                            if cli2[db_name].server_profiles.count_documents({}) == 0:
+                                found = [c for c in found if c != 'server_profiles']
+                        finally:
+                            cli2.close()
+                except Exception:
+                    pass
         return {
             'mongo_reachable': True,
             'db_name': db_name,
             'total_collections': len(cols),
-            'forbidden_multishard_collections_found': [c for c in forbidden if c in cols],
+            'forbidden_multishard_collections_found': found,
         }
     except Exception as ex:
         return {'mongo_reachable': False, 'error': str(ex)}

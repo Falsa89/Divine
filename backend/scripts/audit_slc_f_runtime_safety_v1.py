@@ -83,11 +83,22 @@ def main() -> int:
             cli = MongoClient(url, serverSelectionTimeoutMS=2000)
             db_name = os.environ.get('DB_NAME') or 'divine_waifus'
             cols = cli[db_name].list_collection_names()
+            sp_doc_count = cli[db_name].server_profiles.count_documents({}) if 'server_profiles' in cols else 0
             cli.close()
             for c in ('server_profiles', 'servers', 'server_wallets_free',
                       'accounts_wallet_paid', 'accounts_wallet_paid_ledger'):
                 if c in cols:
                     forbidden_cols_found.append(c)
+            # PROJECT_A Track A authorization: server_profiles allowed if APPLIED_SAFE marker and empty.
+            if 'server_profiles' in forbidden_cols_found and sp_doc_count == 0:
+                _marker = Path('/app/data/design/server_lifecycle/project_a_server_profiles_ops_result_v1.json')
+                if _marker.exists():
+                    try:
+                        _m = json.loads(_marker.read_text(encoding='utf-8'))
+                        if _m.get('verdict') == 'TRACK_A_SERVER_PROFILES_COLLECTION_APPLIED_SAFE':
+                            forbidden_cols_found = [c for c in forbidden_cols_found if c != 'server_profiles']
+                    except Exception:
+                        pass
     except Exception:
         pass
     require(not forbidden_cols_found, f'unexpected multishard collections in DB: {forbidden_cols_found}', errs)

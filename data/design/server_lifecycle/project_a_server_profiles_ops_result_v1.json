@@ -1,0 +1,83 @@
+{
+  "task_id": "PROJECT_A_TRACK_A_SERVER_PROFILES_OPS",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_A",
+  "verdict": "TRACK_A_SERVER_PROFILES_COLLECTION_APPLIED_SAFE",
+  "mode": "ops_apply_idempotent_inert_no_runtime",
+  "runtime_patch_applied": false,
+  "runtime_route_added": false,
+  "feature_flag_enabled": false,
+  "db_collection_created": true,
+  "db_indexes_created": 3,
+  "db_data_rows_written": 0,
+  "timestamp_utc": "20260524T150000Z",
+  "rollback_id": "project_a_track_a_server_profiles_collection_20260524T150000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_A_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "MULTI_TRACK_PARTIAL_SUCCESS",
+    "TRACK_A_SERVER_PROFILES_OPS_APPROVAL": true
+  },
+  "upstream_design": {
+    "v6_block_c_schema_proposal": "/app/data/design/server_lifecycle/server_profiles_canonical_schema_proposal_v1.json",
+    "v7_block_c_indexes_definition": "/app/data/design/server_lifecycle/server_profiles_schema_indexes_definition_v1.json",
+    "v8_block_a_creation_plan": "/app/data/design/server_lifecycle/server_profiles_collection_creation_plan_v1.json"
+  },
+  "preflight_checks": {
+    "backend_health_heroes_count": 100,
+    "mongo_reachable": true,
+    "server_profiles_pre_state": "ABSENT",
+    "total_collections_pre": 40
+  },
+  "applied_ops": {
+    "collection_create": {
+      "name": "server_profiles",
+      "action": "CREATED",
+      "idempotent": true,
+      "data_rows_inserted": 0
+    },
+    "indexes": [
+      {"name": "idx_user_server", "action": "CREATED", "fields": [["user_id", 1], ["server_id", 1]], "unique": true},
+      {"name": "idx_user_active", "action": "CREATED", "fields": [["user_id", 1], ["is_archived", 1]], "unique": false},
+      {"name": "idx_server_active", "action": "CREATED", "fields": [["server_id", 1], ["is_archived", 1]], "unique": false}
+    ]
+  },
+  "postflight_state": {
+    "total_collections_post": 41,
+    "server_profiles_present": true,
+    "server_profiles_doc_count": 0,
+    "server_profiles_indexes": ["_id_", "idx_user_server", "idx_user_active", "idx_server_active"]
+  },
+  "runtime_state": {
+    "runtime_enabled": false,
+    "feature_flag_SERVER_PROFILES_RUNTIME_ENABLED": "unset",
+    "endpoint_exposed": false,
+    "backend_route_changes": 0,
+    "frontend_changes": 0
+  },
+  "smoke_post_apply": {
+    "api_heroes_count": 100,
+    "primordial_gaia": 404,
+    "borea": 200,
+    "greek_borea": 200
+  },
+  "rollback_script": "/app/backend/scripts/rollback_project_a_server_profiles_collection.py",
+  "rollback_safety": "safe-only-if-empty: collection contiene 0 doc; drop_indexes() + drop() safe; gated da PROJECT_A_TRACK_A_ROLLBACK=YES",
+  "validator_script": "/app/backend/scripts/validate_project_a_server_profiles_ops_v1.py",
+  "suite_registration": {
+    "task_id": "PROJECT-A-TRACK-A-SERVER-PROFILES-OPS",
+    "section": "OPTIONAL"
+  },
+  "forbidden_in_track_a_respected": {
+    "slc_h_endpoint_implementation": false,
+    "active_server_switching": false,
+    "second_server": false,
+    "feature_flag_enable": false,
+    "user_migration_backfill": false,
+    "frontend_ui": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/project_a_server_profiles_ops_result_v1.json",
+    "/app/backend/scripts/rollback_project_a_server_profiles_collection.py",
+    "/app/backend/scripts/validate_project_a_server_profiles_ops_v1.py",
+    "/app/docs/divine/123A_SERVER_PROFILES_COLLECTION_OPS_PREFLIGHT_APPLY.md"
+  ]
+}

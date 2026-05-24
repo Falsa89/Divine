@@ -1,0 +1,94 @@
+{
+  "task_id": "PROJECT_A_TRACK_C_AF2N_RUNTIME_ROUTING_PREFLIGHT",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_A",
+  "verdict": "TRACK_C_AF2N_RUNTIME_ROUTING_PREFLIGHT_READY",
+  "mode": "audit_preflight_no_runtime_mutation",
+  "runtime_patch_applied": false,
+  "af2n_runtime_mutated": false,
+  "timestamp_utc": "20260524T150000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_PROJECT_ACCELERATION_A_APPROVAL": true,
+    "TRACK_C_AF2N_RUNTIME_ROUTING_PREFLIGHT_APPROVAL": true
+  },
+  "upstream": {
+    "v5_block_b_pipeline": "/app/data/design/system_safety/af2n_observability_metrics_pipeline_v1.json",
+    "v6_block_b_snapshot_export": "/app/data/design/system_safety/af2n_metrics_snapshot_export_v1.json",
+    "v7_block_d_dashboard_template": "/app/data/design/system_safety/af2n_observability_dashboard_template_v1.json",
+    "v8_block_c_dashboard_render": "/app/data/design/system_safety/af2n_observability_dashboard_render_v1.json"
+  },
+  "af2n_current_runtime_state": {
+    "stage": "stage4_internal_beta_active_no_broad_rollout",
+    "canary_active": true,
+    "canary_allowlist_size": 3,
+    "ledger_cap": 20,
+    "feature_flag": "true_explicit_affinity_gift_runtime_on",
+    "broad_rollout_authorized": false,
+    "public_spend_ui": false,
+    "battle_runtime_attached": false,
+    "inventory_mutation_enabled": false,
+    "affinity_points_mutation_enabled": false,
+    "buffs_enabled": false
+  },
+  "routes_inventory_for_future_batch_3": [
+    {
+      "path": "POST /api/affinity/gift-spend",
+      "file": "/app/backend/routes/affinity.py",
+      "current_state": "canary_allowlist_active",
+      "batch_3_change_required": "NO_RUNTIME_CHANGE_TRACK_C",
+      "future_batch_3_proposed_change": "increase allowlist cap from 3 to next gated tier (e.g., 25) ONLY after monitoring window + signoff"
+    },
+    {
+      "path": "GET /api/affinity/gift-spend/canary-status",
+      "file": "/app/backend/routes/affinity.py",
+      "current_state": "read-only status endpoint",
+      "batch_3_change_required": "NO_RUNTIME_CHANGE_TRACK_C",
+      "future_batch_3_proposed_change": "add optional metric fields for new dashboard panels (P3, P7)"
+    },
+    {
+      "path": "GET /api/affinity/*-axis",
+      "file": "/app/backend/routes/affinity.py",
+      "current_state": "AXIS-G combined routes 200/404/405",
+      "batch_3_change_required": "NO_RUNTIME_CHANGE_TRACK_C",
+      "future_batch_3_proposed_change": "none; axis layer GO, already complete"
+    }
+  ],
+  "apply_gate_for_future_batch_3": {
+    "required_signoffs": [
+      "engineering_signoff",
+      "qa_signoff",
+      "product_signoff",
+      "legal_signoff",
+      "sre_signoff",
+      "security_signoff",
+      "final_user_approval"
+    ],
+    "required_evidence": [
+      "EV-V28-SCHEMA-FIX-REG (PROVIDED)",
+      "EV-V29-EXT-MONITORING (PROVIDED)",
+      "EV-V29-STRESS-8X (PROVIDED)",
+      "EV-V29-DELTA-AUDIT (PROVIDED)",
+      "EV-INFRA-MANAGED-REDIS-LIVE (PENDING)",
+      "EV-INFRA-ALERTING-LIVE (PENDING)",
+      "EV-OBSERVABILITY-DASHBOARDS (PROVIDED_RENDER_JSON_READY via V8 BLOCK_C)",
+      "EV-LEGAL-PRODUCT-SIGNOFF (PENDING)",
+      "EV-USER-FINAL-APPROVAL (PENDING)"
+    ],
+    "blocking_gates": ["BLK-G-01_BROAD_ROLLOUT_V6_APPROVAL", "BLK-G-02_NO_GO_V29"]
+  },
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_project_a_af2n_runtime_routing_preflight_v1.py",
+    "behavior": "verifica che nessuna AF2-N runtime mutation sia avvenuta: feature flag canary invariato, file affinity.py invariato, no public spend UI",
+    "safe_in_suite": true
+  },
+  "forbidden_in_track_c_respected": {
+    "af2n_runtime_mutation": false,
+    "public_spend_ui": false,
+    "gift_spend_inventory_ledger_behavior_change": false,
+    "stack_g_changes": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/project_a_af2n_runtime_routing_preflight_v1.json",
+    "/app/backend/scripts/validate_project_a_af2n_runtime_routing_preflight_v1.py",
+    "/app/docs/divine/123C_AF2N_RUNTIME_ROUTING_PREFLIGHT.md"
+  ]
+}
