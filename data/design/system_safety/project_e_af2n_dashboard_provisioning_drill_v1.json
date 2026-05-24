@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_E_TRACK_F_AF2N_DASHBOARD_PROVISIONING_DRILL",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_F_AF2N_DASHBOARD_PROVISIONING_DRILL_READY",
+  "mode": "local_offline_drill_no_external_calls",
+  "runtime_patch_applied": false,
+  "external_service_calls": 0,
+  "af2n_runtime_flip": false,
+  "upstream": [
+    "/app/data/design/system_safety/project_c_af2n_dashboard_provision_ops_v1.json",
+    "/app/data/design/system_safety/project_d_af2n_dashboard_local_validation_v1.json",
+    "/app/ops/grafana/templates/af2n_datasource.yaml.template",
+    "/app/ops/grafana/templates/af2n_dashboard_provisioning.yaml.template",
+    "/app/ops/grafana/templates/af2n_alerts.yaml.template"
+  ],
+  "drill_steps_executed_locally": [
+    {"step": 1, "name": "datasource_template_renders", "executed": true, "external_call": false},
+    {"step": 2, "name": "dashboard_provisioning_template_renders", "executed": true, "external_call": false},
+    {"step": 3, "name": "alerts_template_renders_with_5_uids", "executed": true, "external_call": false},
+    {"step": 4, "name": "env_vars_documented_but_not_required_for_drill", "executed": true, "external_call": false},
+    {"step": 5, "name": "no_grafana_api_upload", "executed": false, "external_call": false, "note": "intentionally skipped: drill is offline"}
+  ],
+  "drill_total_steps_planned": 5,
+  "drill_steps_executed_offline": 4,
+  "drill_steps_skipped_intentionally": 1,
+  "required_env_vars_for_future_apply": [
+    "AF2N_METRICS_DS_URL",
+    "AF2N_METRICS_DS_TOKEN",
+    "AF2N_PAGER_TOKEN",
+    "AF2N_SMTP_PASSWORD",
+    "AF2N_SLACK_WEBHOOK_URL",
+    "GRAFANA_PROVISIONING_PATH"
+  ],
+  "forbidden_in_track_f_respected": {
+    "external_calls": false,
+    "af2n_runtime_mutation": false,
+    "public_spend_ui": false,
+    "stack_g_changes": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_af2n_dashboard_provisioning_drill_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-F-AF2N-DASHBOARD-PROVISIONING-DRILL", "section": "OPTIONAL"}
+}

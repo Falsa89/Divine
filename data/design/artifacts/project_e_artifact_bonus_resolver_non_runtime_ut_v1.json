@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_E_TRACK_G_ARTIFACT_BONUS_RESOLVER_NON_RUNTIME_UT",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_G_ARTIFACT_BONUS_RESOLVER_UT_READY",
+  "mode": "non_runtime_unit_tests_on_artifact_bonus_resolver_stub",
+  "runtime_patch_applied": false,
+  "resolver_imported_by_runtime": false,
+  "artifact_live_bonus_active": false,
+  "artifact_summon_behavior_active": false,
+  "upstream": [
+    "/app/backend/game_logic/artifact_bonus_resolver_stub.py",
+    "/app/data/design/artifacts/project_d_artifact_bible_v1_approval_freeze_pack.json",
+    "/app/data/design/artifacts/artifact_bible_launch_candidates_v1.json"
+  ],
+  "unit_test_cases": [
+    {"id": "UT_ARTIFACT_1", "name": "resolve_returns_zero_envelope_with_canonical_keys"},
+    {"id": "UT_ARTIFACT_2", "name": "caps_define_global_per_category_per_artifact_mode_pvp_strict"},
+    {"id": "UT_ARTIFACT_3", "name": "candidates_are_NOT_equipment"},
+    {"id": "UT_ARTIFACT_4", "name": "candidates_remain_draft_design_only"},
+    {"id": "UT_ARTIFACT_5", "name": "resolver_stub_not_imported_by_routes_or_server"},
+    {"id": "UT_ARTIFACT_6", "name": "validate_caps_definition_returns_True"}
+  ],
+  "unit_test_count": 6,
+  "forbidden_in_track_g_respected": {
+    "artifact_live_bonus": false,
+    "artifact_summon": false,
+    "gacha_rate_pity_change": false,
+    "frontend": false,
+    "db_writes": false,
+    "equipment_semantics": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_artifact_bonus_resolver_non_runtime_ut_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-G-ARTIFACT-BONUS-RESOLVER-NON-RUNTIME-UT", "section": "OPTIONAL"}
+}

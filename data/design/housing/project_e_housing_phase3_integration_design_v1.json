@@ -1,0 +1,55 @@
+{
+  "task_id": "PROJECT_E_TRACK_B_HOUSING_PHASE3_INTEGRATION_DESIGN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_B_HOUSING_PHASE3_INTEGRATION_DESIGN_READY",
+  "mode": "phase3_integration_design_plus_unit_test_coverage_no_runtime",
+  "runtime_patch_applied": false,
+  "resolver_imported_by_runtime": false,
+  "upstream": [
+    "/app/data/design/housing/project_b_housing_mvp_resolver_stub_v1.json",
+    "/app/data/design/housing/project_c_housing_resolver_integration_design_v1.json",
+    "/app/data/design/housing/project_d_housing_resolver_phase2_tests_v1.json"
+  ],
+  "phase3_endpoint_design": {
+    "method": "GET",
+    "path": "/api/housing/preview",
+    "authn_required": true,
+    "runtime_status_in_v_e": "DESIGN_ONLY_NOT_IMPLEMENTED",
+    "response_shape": {
+      "user_id": "str",
+      "housing_bonus": {"hp_bonus": 0, "atk_bonus": 0, "def_bonus": 0, "healing_bonus": 0, "source": "resolver_stub_inert"},
+      "caps_applied": {"per_room": 6, "category": 4, "item": 12, "bonus": 8, "mode": 2, "master_cap": 30},
+      "mode_context": "PvE | PvP",
+      "preview": true,
+      "dry_run": true
+    },
+    "db_writes_executed_at_endpoint": 0,
+    "battle_account_stat_mutation": false
+  },
+  "resolver_input_bundle_contract": {
+    "user_id": "str",
+    "housing_rooms": "list[dict] (room_id, level)",
+    "objects": "list[dict] (object_id, room_id, category)",
+    "residents": "list[dict] (hero_id, room_id, position)",
+    "caps_override": "None | dict (Track B optional)",
+    "mode_context": "in {PvE, PvP}"
+  },
+  "unit_test_coverage_added_in_v_e": [
+    {"id": "UT_HOUSING_PHASE3_1", "name": "cap_order_respects_master_cap_ge_secondary_caps"},
+    {"id": "UT_HOUSING_PHASE3_2", "name": "empty_inventory_yields_zero_envelope"},
+    {"id": "UT_HOUSING_PHASE3_3", "name": "duplicate_residents_in_same_room_does_not_increment_bonus"},
+    {"id": "UT_HOUSING_PHASE3_4", "name": "vip_vault_secondary_cap_cannot_exceed_primary_or_master"},
+    {"id": "UT_HOUSING_PHASE3_5", "name": "no_official_hero_leak_borea_pending_assets_filtered"},
+    {"id": "UT_HOUSING_PHASE3_6", "name": "mode_context_changes_caps_but_not_resolver_stub_zero_output"}
+  ],
+  "phase3_test_count": 6,
+  "forbidden_in_track_b_respected": {
+    "live_housing_route": false,
+    "battle_account_stat_mutation": false,
+    "db_writes": false,
+    "frontend_ui": false,
+    "runtime_import_of_stub": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_housing_phase3_stub_tests_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-B-HOUSING-PHASE3-INTEGRATION-DESIGN", "section": "OPTIONAL"}
+}

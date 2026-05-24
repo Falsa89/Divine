@@ -1,0 +1,47 @@
+{
+  "task_id": "PROJECT_E_TRACK_H_PROJECT_COMPLETION_DOD_RECALIBRATION",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_H_PROJECT_COMPLETION_DOD_RECALIBRATION_READY",
+  "mode": "doc_only_recalibration_no_runtime",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "recalibration_layers": {
+    "technical_backend_runtime_excluding_graphics_audio_art": {
+      "slc_h": 92,
+      "af2n": 70,
+      "combat_status_skill": 78,
+      "economy_battle_pass_shop": 80,
+      "gacha_summon": 72,
+      "housing": 22,
+      "artifacts": 50,
+      "qa_release": 70,
+      "suite_hygiene": 60,
+      "global_aggregate": 95
+    },
+    "graphics_art_audio": {
+      "hero_assets": 35,
+      "environment_art": 20,
+      "vfx": 15,
+      "audio": 10,
+      "global_aggregate": 20
+    },
+    "live_operations_release_polishing": {
+      "observability": 70,
+      "deployment_pipeline": 60,
+      "customer_support_runbook": 50,
+      "release_gates": 65,
+      "global_aggregate": 60
+    }
+  },
+  "time_remaining_excluding_graphics_audio_art": {
+    "aggressive": "4-7 days (V_F to close housing+status live; V_G to flip server_profiles flag)",
+    "realistic": "2-3 weeks (full DRIFT 5/6/7 + status runtime + housing live + artifact runtime + Phase 11 prep)",
+    "prudent": "5-6 weeks (above + AF2-N production rollout + QA pipeline CI + supersedence cleanup V_F/V_G)"
+  },
+  "forbidden_in_track_h_respected": {
+    "runtime_changes": false,
+    "db_writes": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_project_completion_dod_recalibration_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-H-PROJECT-COMPLETION-DOD-RECALIBRATION", "section": "OPTIONAL"}
+}

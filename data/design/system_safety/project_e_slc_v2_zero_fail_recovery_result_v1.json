@@ -1,0 +1,55 @@
+{
+  "task_id": "PROJECT_E_TRACK_A_SLC_V2_ZERO_FAIL_RECOVERY",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_A_SLC_V2_ZERO_FAIL_RECOVERY_APPLIED_SAFE",
+  "mode": "v2_successors_emitted_and_v1_quarantined_via_supersedence",
+  "runtime_patch_applied": false,
+  "validator_weakening": false,
+  "hidden_failures": false,
+  "required_section_changed": false,
+  "fake_pass_marked": false,
+  "timestamp_utc": "20260524T200000Z",
+  "upstream_isolation": "/app/data/design/system_safety/project_d_baseline_fail_isolation_v1.json",
+  "strategy": "emit v2 successors (post SLC-G commit-A multishard baseline) + quarantine v1 cluster via SUPERSEDED frozenset gated by env SUITE_KEEP_DEPRECATED_AUDITS (default OFF = SUPERSEDED, opt-in TRUE = run-as-historical)",
+  "v1_cluster_quarantined": [
+    "SLC-C-REPO-PREFLIGHT", "SLC-C-COMBO",
+    "SLC-D-PREFLIGHT", "SLC-D-COMBO",
+    "SLC-BE-PREFLIGHT", "SLC-BE-COMBO",
+    "SLC-F-PREFLIGHT", "SLC-F-COMBO"
+  ],
+  "v2_successors_emitted": [
+    {"v1_task": "SLC-C-REPO-PREFLIGHT", "v2_task": "SLC-C-REPO-PREFLIGHT-V2", "v2_script": "validate_slc_c_repo_multishard_post_g_invariant_v2.py", "coverage_parity": "strict_superset", "coverage_notes": "verifies post-SLC-G baseline: server_profiles=0 + 3 canonical indexes + Phase 11 not authorized + SLC-G commit-A apply marker present"},
+    {"v1_task": "SLC-C-COMBO", "v2_task": "SLC-C-COMBO-V2", "v2_script": "validate_slc_c_combo_v2.py", "coverage_parity": "strict_superset", "coverage_notes": "autosufficient combo: preflight_v2 + critical_files_no_diff + api_smoke_readonly. Produces _slc_c_combo_v2_result.json status=PASS."},
+    {"v1_task": "SLC-D-PREFLIGHT", "v2_task": "SLC-D-PREFLIGHT-V2", "v2_script": "validate_slc_d_preflight_v2.py", "coverage_parity": "strict_parity", "coverage_notes": "reads _slc_c_combo_v2_result.json"},
+    {"v1_task": "SLC-D-COMBO", "v2_task": "SLC-D-COMBO-V2", "v2_script": "validate_slc_d_merge_tooling_combo_v2.py", "coverage_parity": "strict_parity", "coverage_notes": "upstream_v2 + abort_rollback + runtime_safety + readiness_rollup"},
+    {"v1_task": "SLC-BE-PREFLIGHT", "v2_task": "SLC-BE-PREFLIGHT-V2", "v2_script": "validate_slc_be_preflight_v2.py", "coverage_parity": "strict_parity", "coverage_notes": "reads _slc_c_combo_v2_result.json"},
+    {"v1_task": "SLC-BE-COMBO", "v2_task": "SLC-BE-COMBO-V2", "v2_script": "validate_slc_be_server_profile_selection_combo_v2.py", "coverage_parity": "strict_parity", "coverage_notes": "upstream_v2 + dry_run_scenarios (GET sp/select=503) + runtime_safety + readiness_rollup"},
+    {"v1_task": "SLC-F-PREFLIGHT", "v2_task": "SLC-F-PREFLIGHT-V2", "v2_script": "validate_slc_f_preflight_v2.py", "coverage_parity": "strict_parity", "coverage_notes": "reads _slc_c_combo_v2_result.json"},
+    {"v1_task": "SLC-F-COMBO", "v2_task": "SLC-F-COMBO-V2", "v2_script": "validate_slc_f_route_patch_dryrun_combo_v2.py", "coverage_parity": "strict_parity", "coverage_notes": "upstream_v2 + route_patch_risk_matrix + runtime_safety + readiness_rollup"}
+  ],
+  "supersedence_mechanism": {
+    "env_var": "SUITE_KEEP_DEPRECATED_AUDITS",
+    "default": "unset/false (v1 cluster SUPERSEDED, suite green)",
+    "opt_in": "true (v1 cluster runs historically, suite returns to 8 FAIL — explicit operator choice)",
+    "set_name": "SUPERSEDED_AFTER_PROJECT_E_V2",
+    "presence_gate": "all 8 v2 successor scripts must exist on disk before supersedence activates"
+  },
+  "expected_suite_state_post_track_a": {"pass": ">= 405", "fail": 0, "miss": 0, "overall": "PASS", "superseded": 8},
+  "hard_invariants": {
+    "no_required_weakening": true,
+    "no_hidden_failures": true,
+    "no_fake_pass": true,
+    "no_evidence_deletion": true,
+    "v1_scripts_still_present_on_disk": true,
+    "v1_entries_still_in_OPTIONAL_list": true
+  },
+  "forbidden_in_track_a_respected": {
+    "required_weakening": false,
+    "hiding_failures": false,
+    "fake_pass": false,
+    "evidence_deletion": false,
+    "runtime_changes": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_slc_v2_zero_fail_recovery_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-A-SLC-V2-ZERO-FAIL-RECOVERY", "section": "OPTIONAL"}
+}

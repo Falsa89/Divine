@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_E_TRACK_C_STATUS_EFFECT_NON_RUNTIME_UT",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_C_STATUS_EFFECT_NON_RUNTIME_UT_READY",
+  "mode": "non_runtime_unit_tests_on_adapter_skeleton_and_catalog_baseline",
+  "runtime_patch_applied": false,
+  "adapter_imported_by_battle_or_runtime": false,
+  "upstream": [
+    "/app/data/design/status_effects/project_c_status_effect_catalog_baseline_v1.json",
+    "/app/data/design/status_effects/project_d_status_effect_runtime_adapter_skeleton_v1.json",
+    "/app/backend/game_logic/status_effect_runtime_adapter_stub.py"
+  ],
+  "unit_test_cases": [
+    {"id": "UT_STATUS_1", "name": "adapter_maps_each_catalog_effect_to_a_canonical_category"},
+    {"id": "UT_STATUS_2", "name": "stacking_rules_parse_for_each_effect"},
+    {"id": "UT_STATUS_3", "name": "boss_behavior_exists_for_hard_control_effects"},
+    {"id": "UT_STATUS_4", "name": "source_lock_field_is_bool"},
+    {"id": "UT_STATUS_5", "name": "no_borea_only_status_leak_in_catalog"},
+    {"id": "UT_STATUS_6", "name": "adapter_module_not_imported_by_battle_runtime"}
+  ],
+  "unit_test_count": 6,
+  "forbidden_in_track_c_respected": {
+    "battle_engine_changes": false,
+    "battle_core_changes": false,
+    "combat_tsx_changes": false,
+    "status_live_activation": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_status_effect_non_runtime_ut_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-C-STATUS-EFFECT-NON-RUNTIME-UT", "section": "OPTIONAL"}
+}

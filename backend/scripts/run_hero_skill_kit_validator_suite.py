@@ -636,6 +636,31 @@ OPTIONAL = [
     ('PROJECT-D-TRACK-G-AF2N-DASHBOARD-LOCAL-VALIDATION', 'validate_project_d_af2n_dashboard_local_templates_v1.py'),
     # PROJECT_D Track H ARTIFACT BIBLE V1 APPROVAL FREEZE (design-only; 7 freeze invariants; 5 draft candidates)
     ('PROJECT-D-TRACK-H-ARTIFACT-BIBLE-V1-APPROVAL-FREEZE', 'validate_project_d_artifact_bible_v1_approval_freeze.py'),
+    # PROJECT_E Track A — SLC v2 successors (replace v1 deprecated cluster; default green when v1 SUPERSEDED)
+    ('SLC-C-REPO-PREFLIGHT-V2',                    'validate_slc_c_repo_multishard_post_g_invariant_v2.py'),
+    ('SLC-C-COMBO-V2',                             'validate_slc_c_combo_v2.py'),
+    ('SLC-D-PREFLIGHT-V2',                         'validate_slc_d_preflight_v2.py'),
+    ('SLC-D-COMBO-V2',                             'validate_slc_d_merge_tooling_combo_v2.py'),
+    ('SLC-BE-PREFLIGHT-V2',                        'validate_slc_be_preflight_v2.py'),
+    ('SLC-BE-COMBO-V2',                            'validate_slc_be_server_profile_selection_combo_v2.py'),
+    ('SLC-F-PREFLIGHT-V2',                         'validate_slc_f_preflight_v2.py'),
+    ('SLC-F-COMBO-V2',                             'validate_slc_f_route_patch_dryrun_combo_v2.py'),
+    # PROJECT_E Track A marker validator (zero-fail recovery summary)
+    ('PROJECT-E-TRACK-A-SLC-V2-ZERO-FAIL-RECOVERY','validate_project_e_slc_v2_zero_fail_recovery_v1.py'),
+    # PROJECT_E Track B HOUSING PHASE 3 INTEGRATION DESIGN (no runtime)
+    ('PROJECT-E-TRACK-B-HOUSING-PHASE3-INTEGRATION-DESIGN', 'validate_project_e_housing_phase3_stub_tests_v1.py'),
+    # PROJECT_E Track C STATUS EFFECT NON-RUNTIME UNIT TESTS
+    ('PROJECT-E-TRACK-C-STATUS-EFFECT-NON-RUNTIME-UT', 'validate_project_e_status_effect_non_runtime_ut_v1.py'),
+    # PROJECT_E Track D DRIFT_DOC_4 archive (4/7 archived)
+    ('PROJECT-E-TRACK-D-DRIFT-DOC-4-ARCHIVE',      'validate_project_e_drift_doc_4_archive_v1.py'),
+    # PROJECT_E Track E QA RUNNER TEST CREDS LOGIN DRY-RUN (manual_required live; no secrets logged)
+    ('PROJECT-E-TRACK-E-QA-LOGIN-DRYRUN-SAFETY',   'validate_project_e_qa_login_dryrun_safety_v1.py'),
+    # PROJECT_E Track F AF2-N DASHBOARD PROVISIONING DRILL (offline; no external calls)
+    ('PROJECT-E-TRACK-F-AF2N-DASHBOARD-PROVISIONING-DRILL', 'validate_project_e_af2n_dashboard_provisioning_drill_v1.py'),
+    # PROJECT_E Track G ARTIFACT BONUS RESOLVER NON-RUNTIME UNIT TESTS
+    ('PROJECT-E-TRACK-G-ARTIFACT-BONUS-RESOLVER-NON-RUNTIME-UT', 'validate_project_e_artifact_bonus_resolver_non_runtime_ut_v1.py'),
+    # PROJECT_E Track H PROJECT COMPLETION DoD RECALIBRATION (doc-only)
+    ('PROJECT-E-TRACK-H-PROJECT-COMPLETION-DOD-RECALIBRATION', 'validate_project_e_project_completion_dod_recalibration_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
@@ -789,12 +814,40 @@ def main(argv=None) -> int:
     SUPERSEDED_AFTER_V21_SCRIPTS = frozenset({
         'ULTRA-COMBO-V20',
     }) if (v21_apply_script_present and v21_rollback_script_present) else frozenset()
+    # PROJECT_E Track A — SLC v1 cluster supersedence (post SLC-G commit-A multishard baseline).
+    # The 8 v1 OPTIONAL validators of the SLC-C/D/BE/F cluster enforce the obsolete
+    # invariant `multishard==design-only` which no longer holds post SLC-G commit-A.
+    # PROJECT_E ships 8 v2 successors that validate the current post-SLC-G safety
+    # invariants without weakening coverage. The v1 cluster is SUPERSEDED unless
+    # the operator explicitly opts-in to historical execution via env var
+    # SUITE_KEEP_DEPRECATED_AUDITS=true (default OFF). When OFF, the suite reports
+    # them as [SUPERSEDED] (--), preserving honest evidence in the JSON report.
+    project_e_v2_successors_present = all(
+        Path(f'/app/backend/scripts/{s}').exists() for s in (
+            'validate_slc_c_repo_multishard_post_g_invariant_v2.py',
+            'validate_slc_c_combo_v2.py',
+            'validate_slc_d_preflight_v2.py',
+            'validate_slc_d_merge_tooling_combo_v2.py',
+            'validate_slc_be_preflight_v2.py',
+            'validate_slc_be_server_profile_selection_combo_v2.py',
+            'validate_slc_f_preflight_v2.py',
+            'validate_slc_f_route_patch_dryrun_combo_v2.py',
+        )
+    )
+    keep_deprecated = os.environ.get('SUITE_KEEP_DEPRECATED_AUDITS', '').strip().lower() == 'true'
+    SUPERSEDED_AFTER_PROJECT_E_V2 = frozenset({
+        'SLC-C-REPO-PREFLIGHT', 'SLC-C-COMBO',
+        'SLC-D-PREFLIGHT', 'SLC-D-COMBO',
+        'SLC-BE-PREFLIGHT', 'SLC-BE-COMBO',
+        'SLC-F-PREFLIGHT', 'SLC-F-COMBO',
+    }) if (project_e_v2_successors_present and not keep_deprecated) else frozenset()
     SUPERSEDED = (SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
                   | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3
                   | SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW
                   | SUPERSEDED_AFTER_RATE_LIMIT
                   | SUPERSEDED_AFTER_STAGE4
-                  | SUPERSEDED_AFTER_V21_SCRIPTS)
+                  | SUPERSEDED_AFTER_V21_SCRIPTS
+                  | SUPERSEDED_AFTER_PROJECT_E_V2)
 
     results: list[dict] = []
     any_required_fail = False

@@ -1,0 +1,37 @@
+{
+  "task_id": "PROJECT_E_TRACK_E_QA_TEST_CREDS_LOGIN_DRYRUN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_E_QA_TEST_CREDS_LOGIN_MANUAL_REQUIRED",
+  "mode": "safe_creds_not_present_in_live_env_login_manual_required",
+  "runtime_patch_applied": false,
+  "creates_users": false,
+  "mutates_account_state": false,
+  "secrets_logged": false,
+  "timestamp_utc": "20260524T200000Z",
+  "safe_test_credentials_env": {
+    "QA_RUNNER_LOGIN_ENABLED": "unset (live env)",
+    "QA_RUNNER_TEST_EMAIL": "unset (live env)",
+    "QA_RUNNER_TEST_PASSWORD": "unset (live env)"
+  },
+  "env_example_documented": true,
+  "env_example_target": "/app/.env.qa_runner.example (documentation only, NOT committed with real secrets)",
+  "login_dryrun_safety_contract": {
+    "only_post_endpoint": "/api/login",
+    "no_signup_creation": true,
+    "no_password_reset": true,
+    "no_profile_mutation": true,
+    "no_secret_print_to_stdout_or_stderr": true,
+    "jwt_in_memory_only_no_disk_persistence": true,
+    "json_report_excludes_credentials": true
+  },
+  "forbidden_in_track_e_respected": {
+    "account_creation": false,
+    "real_gacha_spend": false,
+    "paid_currency_mutation": false,
+    "destructive_action": false,
+    "secret_logging": false,
+    "frontend": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_qa_login_dryrun_safety_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-E-QA-LOGIN-DRYRUN-SAFETY", "section": "OPTIONAL"}
+}

@@ -1,0 +1,45 @@
+{
+  "task_id": "PROJECT_E_TRACK_D_DRIFT_DOC_4_DUPLICATE_SUMMON_LOG_FORMAT_DESIGN",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_E",
+  "verdict": "TRACK_D_DRIFT_DOC_4_ARCHIVE_READY",
+  "mode": "audit_design_only_no_db_cleanup_no_dedupe_execution",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "summon_behavior_mutated": false,
+  "target_drift_doc": {
+    "id": "DRIFT_DOC_4",
+    "class": "duplicate_summon_log_format",
+    "action_per_v_a_plan": "dedupe_design_required",
+    "description": "Documenti `summon_history` con formato duplicato/legacy; rilevati in V1 BLOCK_B; richiedono dedupe design ma NESSUNA esecuzione in V_E",
+    "data_mutation_required_in_dedupe": true,
+    "data_mutation_executed_in_v_e": false
+  },
+  "archive_action": {
+    "type": "DOC_AUDIT_DEDUPE_DESIGN_FREEZE",
+    "description": "DRIFT_DOC_4 classificato KNOWN_NONBLOCKING_DEDUPE_DESIGN_FROZEN_V1; design dedupe steps documentati; NESSUN apply",
+    "status_after_project_e": "KNOWN_NONBLOCKING_DEDUPE_DESIGN_FROZEN_V1"
+  },
+  "dedupe_design_steps": [
+    "snapshot summon_history collection pre-dedupe (count + sample doc shapes)",
+    "identify duplicate criterion: (user_id, summon_timestamp, banner_id)",
+    "emit dedupe candidates list (JSON design only; no DB write)",
+    "safety smoke: gacha/pull route response shape unchanged",
+    "rollback strategy: per-doc restore from $set log",
+    "future_apply_strategy: dedicated DRIFT_DOC_4_DEDUPE_OPS_PACK with engineering+product+user signoffs"
+  ],
+  "residual_drift_docs_after_project_e": {
+    "total_drift_docs": 7,
+    "archived_or_frozen_after_project_e": 4,
+    "unprocessed_count": 3
+  },
+  "forbidden_in_track_d_respected": {
+    "db_cleanup": false,
+    "gacha_summon_behavior_change": false,
+    "roster_mutation": false,
+    "borea_activation": false,
+    "banner_rate_pity_pool_change": false,
+    "dedupe_execution": false
+  },
+  "validator_script": "/app/backend/scripts/validate_project_e_drift_doc_4_archive_v1.py",
+  "suite_registration": {"task_id": "PROJECT-E-TRACK-D-DRIFT-DOC-4-ARCHIVE", "section": "OPTIONAL"}
+}
