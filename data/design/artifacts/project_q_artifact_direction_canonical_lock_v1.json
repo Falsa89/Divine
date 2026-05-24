@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_Q_TRACK_A",
+  "verdict": "TRACK_A_ARTIFACT_DIRECTION_CANONICAL_LOCK_READY",
+  "canonical_direction_v1_ref": "/app/data/design/artifacts/artifact_system_direction_v1.json",
+  "canonical_lock": {
+    "artifacts_are": "account-wide / roster-wide collectibles",
+    "artifacts_provide": "global roster/account bonus capped at 5.0%",
+    "artifacts_are_NOT": ["equipment", "hero gear slot", "divine weapon", "unique 6-star weapon"],
+    "artifacts_can": ["be summoned", "be enhanced", "be thematically linked to a hero without buffing only that hero"],
+    "introduction_policy": "must be introduced together with thematically related hero(es) / patch",
+    "example_thematic_link": "Arthur may have Excalibur as unique 6-star weapon; the linked artifact can be the Holy Grail (Sacred Cup) — a roster-wide bonus, not an equipment for Arthur."
+  },
+  "hard_invariants_locked": [
+    "is_equipment == false",
+    "occupies_gear_slot == false",
+    "is_divine_weapon == false",
+    "global_roster_account_bonus.value_pct <= 5.0",
+    "obtainment_source != 'hero_summon_banner'"
+  ],
+  "validator_script": "validate_project_q_artifact_direction_canonical_lock_v1.py"
+}

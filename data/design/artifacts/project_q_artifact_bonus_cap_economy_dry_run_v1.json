@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_Q_TRACK_D",
+  "verdict": "TRACK_D_ARTIFACT_BONUS_CAP_AND_ECONOMY_DRY_RUN_READY",
+  "global_roster_account_bonus_master_cap_pct": 5.0,
+  "per_artifact_max_value_pct": 1.5,
+  "max_simultaneous_active_artifacts_per_account": 4,
+  "per_account_theoretical_max_total_bonus_pct": 5.0,
+  "economy_dry_run": {
+    "summon_currency": "artifact_token",
+    "summon_token_cost_per_pull": 100,
+    "enhancement_currency": "artifact_dust",
+    "enhancement_dust_cost_per_level": 50,
+    "per_artifact_max_enhancement_level": 5,
+    "db_writes_in_dry_run": 0,
+    "live_economy_touched": false
+  },
+  "cap_compliance_per_candidate": [
+    {"artifact_id": "art_sacred_cup", "value_pct": 1.5, "compliant": true},
+    {"artifact_id": "art_norse_horn", "value_pct": 1.0, "compliant": true},
+    {"artifact_id": "art_greek_aegis_icon", "value_pct": 1.5, "compliant": true},
+    {"artifact_id": "art_egyptian_ankh_glyph", "value_pct": 1.0, "compliant": true},
+    {"artifact_id": "art_japanese_mirror_relic", "value_pct": 0.5, "compliant": true},
+    {"artifact_id": "art_primordial_void_vessel", "value_pct": 1.0, "compliant": true},
+    {"artifact_id": "art_norse_runestone_glyph", "value_pct": 0.5, "compliant": true},
+    {"artifact_id": "art_celtic_oak_banner", "value_pct": 0.5, "compliant": true}
+  ],
+  "all_candidates_compliant": true,
+  "validator_script": "validate_project_q_artifact_bonus_cap_economy_dry_run_v1.py"
+}

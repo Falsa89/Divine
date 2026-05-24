@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_Q_TRACK_E",
+  "verdict": "TRACK_E_ARTIFACT_IMPORT_DRY_RUN_SCRIPT_READY",
+  "dry_run_script": "/app/backend/scripts/import_project_q_artifact_bible_dry_run_v1.py",
+  "dry_run_mode_default": true,
+  "apply_mode_requires_signatures": true,
+  "dry_run_executed": true,
+  "dry_run_result": {
+    "candidates_loaded": 8,
+    "schema_validation_pass_count": 8,
+    "schema_validation_fail_count": 0,
+    "hard_invariants_pass_count": 8,
+    "hard_invariants_fail_count": 0,
+    "db_writes_attempted": 0,
+    "db_writes_executed": 0,
+    "would_write_collection": "artifacts (mongodb local divine_waifus)",
+    "would_write_count_if_applied": 8
+  },
+  "db_touch": false,
+  "validator_script": "validate_project_q_artifact_import_dry_run_script_v1.py"
+}

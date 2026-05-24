@@ -1,0 +1,12 @@
+{
+  "task_id": "PROJECT_Q_TRACK_G",
+  "verdict": "TRACK_G_ARTIFACT_RUNTIME_NO_LEAK_AND_NO_EQUIPMENT_SEMANTICS_READY",
+  "audited_endpoints": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea", "/api/server-profiles/select", "/api/housing/preview"],
+  "forbidden_payload_markers": ["artifact_equipped", "hero_artifact_gear_slot", "divine_weapon_artifact_conflation", "artifact_bonus_active"],
+  "endpoint_leaks": 0,
+  "audited_source_files": ["/app/backend/battle_engine.py", "/app/backend/battle_core.py", "/app/backend/server.py"],
+  "source_emission_leaks": 0,
+  "no_equipment_semantics_in_schema": true,
+  "no_divine_weapon_conflation_in_schema": true,
+  "validator_script": "validate_project_q_artifact_runtime_no_leak_v1.py"
+}

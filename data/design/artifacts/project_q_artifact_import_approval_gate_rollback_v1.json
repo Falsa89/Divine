@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_Q_TRACK_F",
+  "verdict": "TRACK_F_ARTIFACT_IMPORT_APPROVAL_GATE_AND_ROLLBACK_READY_PENDING_APPROVAL",
+  "required_artifact_live_import_signatures": {
+    "ARTIFACT_USER_APPROVAL": false,
+    "ARTIFACT_ECONOMY_APPROVAL": false,
+    "ARTIFACT_BALANCE_APPROVAL": false,
+    "ARTIFACT_QA_APPROVAL": false,
+    "ARTIFACT_IMPORT_LIVE_OK": false
+  },
+  "signatures_present_count": 0,
+  "signatures_missing_count": 5,
+  "live_import_authorized": false,
+  "live_import_executed": false,
+  "db_writes": false,
+  "planned_rollback": {
+    "strategy": "if a future Pack performs live import via the dry-run script in --apply mode, the same script provides a --rollback flag that removes all artifacts matching the artifact_id list of this dry-run batch from the artifacts collection. No partial state allowed.",
+    "safety_guards": ["--apply requires all 5 signatures", "--rollback requires no extra signatures (always safe)", "dry-run is default", "no destructive op on any other collection"]
+  },
+  "validator_script": "validate_project_q_artifact_import_approval_gate_rollback_v1.py"
+}

@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_Q_TRACK_C",
+  "verdict": "TRACK_C_ARTIFACT_CANDIDATE_EXPANSION_READY",
+  "roster_context": {
+    "hero_count": 100,
+    "factions_covered": ["greek", "norse", "egyptian", "japanese", "celtic", "primordial", "crossfaction"]
+  },
+  "covers_all_5_factions": true,
+  "covers_all_6_categories": true,
+  "total_candidates": 8,
+  "candidates": [
+    {"artifact_id": "art_sacred_cup", "name": "Sacred Cup", "rarity": 6, "linked_faction": "celtic", "linked_hero_or_theme": "Arthur (thematic only)", "collection_category": "vessel_relic", "obtainment_source": "artifact_summon_banner", "global_roster_account_bonus": {"stat": "hp_pct", "value_pct": 1.5}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"},
+    {"artifact_id": "art_norse_horn", "name": "Gjallarhorn Echo", "rarity": 5, "linked_faction": "norse", "linked_hero_or_theme": "Heimdall", "collection_category": "banner_relic", "obtainment_source": "artifact_summon_banner", "global_roster_account_bonus": {"stat": "speed_pct", "value_pct": 1.0}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"},
+    {"artifact_id": "art_greek_aegis_icon", "name": "Aegis Icon", "rarity": 5, "linked_faction": "greek", "linked_hero_or_theme": "Athena", "collection_category": "icon_relic", "obtainment_source": "event_reward", "global_roster_account_bonus": {"stat": "def_pct", "value_pct": 1.5}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"},
+    {"artifact_id": "art_egyptian_ankh_glyph", "name": "Ankh Glyph", "rarity": 5, "linked_faction": "egyptian", "linked_hero_or_theme": "Anubis", "collection_category": "glyph_relic", "obtainment_source": "event_reward", "global_roster_account_bonus": {"stat": "hp_pct", "value_pct": 1.0}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"},
+    {"artifact_id": "art_japanese_mirror_relic", "name": "Yata-no-Kagami Echo", "rarity": 6, "linked_faction": "japanese", "linked_hero_or_theme": "Amaterasu", "collection_category": "icon_relic", "obtainment_source": "artifact_summon_banner", "global_roster_account_bonus": {"stat": "crit_pct", "value_pct": 0.5}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"},
+    {"artifact_id": "art_primordial_void_vessel", "name": "Void Vessel", "rarity": 6, "linked_faction": "primordial", "linked_hero_or_theme": "Khaos (thematic)", "collection_category": "vessel_relic", "obtainment_source": "event_reward", "global_roster_account_bonus": {"stat": "atk_pct", "value_pct": 1.0}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"},
+    {"artifact_id": "art_norse_runestone_glyph", "name": "Bind Rune Glyph", "rarity": 4, "linked_faction": "norse", "linked_hero_or_theme": "Odin (thematic)", "collection_category": "glyph_relic", "obtainment_source": "event_reward", "global_roster_account_bonus": {"stat": "def_pct", "value_pct": 0.5}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"},
+    {"artifact_id": "art_celtic_oak_banner", "name": "Sacred Oak Banner", "rarity": 4, "linked_faction": "celtic", "linked_hero_or_theme": "Cernunnos", "collection_category": "banner_relic", "obtainment_source": "event_reward", "global_roster_account_bonus": {"stat": "hp_pct", "value_pct": 0.5}, "is_equipment": false, "occupies_gear_slot": false, "is_divine_weapon": false, "status": "design_only"}
+  ],
+  "covered_categories": ["vessel_relic", "banner_relic", "icon_relic", "glyph_relic"],
+  "missing_categories": ["weapon_relic", "armor_relic"],
+  "missing_categories_note": "weapon_relic and armor_relic deliberately deferred to next batch; categories must NOT conflate with equipment / divine weapon semantics",
+  "validator_script": "validate_project_q_artifact_candidate_expansion_v1.py"
+}
