@@ -1,15 +1,17 @@
 {
   "baseline_existed": true,
   "design_only": true,
-  "errors": [],
+  "errors": [
+    "CRITICAL FILE MUTATED: /app/backend/battle_engine.py (baseline=379a92165345\u2026 current=094187998b66\u2026)"
+  ],
   "missing_files": [
     "/app/backend/routes/gacha.py",
     "/app/backend/routes/roster.py",
     "/app/backend/data/heroes_catalog.json"
   ],
   "no_db_write": true,
-  "status": "PASS",
+  "status": "FAIL",
   "task": "slc_c_critical_files_no_diff",
   "tracked_files": 8,
-  "utc": "2026-05-24T19:33:52.447495+00:00"
+  "utc": "2026-05-24T19:45:39.184953+00:00"
 }

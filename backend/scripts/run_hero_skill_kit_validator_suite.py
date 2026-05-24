@@ -784,6 +784,22 @@ OPTIONAL = [
     ('PROJECT-L-TRACK-G-STATUS-FIRST-SLICE-RC-GATE', 'validate_project_l_status_first_slice_rc_gate_v1.py'),
     # PROJECT_L Track H PROJECT L COMPLETION + NEXT STEP (next pack: PROJECT_M)
     ('PROJECT-L-TRACK-H-PROJECT-L-COMPLETION-AND-NEXT-STEP', 'validate_project_l_completion_and_next_step_v1.py'),
+    # PROJECT_M Track A BATTLE ENGINE SINGLE POINT WIRING AUDIT (SINGLE_POINT_SAFE_NOW_FLAGGED)
+    ('PROJECT-M-TRACK-A-BATTLE-ENGINE-SINGLE-POINT-AUDIT', 'validate_project_m_battle_engine_single_point_audit_v1.py'),
+    # PROJECT_M Track B BATTLE ENGINE STATUS SEAM SINGLE POINT WIRING (flag-OFF byte-identical proven)
+    ('PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING', 'validate_project_m_battle_engine_status_seam_wiring_v1.py'),
+    # PROJECT_M Track C FLAG OFF BYTE-IDENTICAL REGRESSION GUARD (deterministic 3v3 fixture; sha256 match)
+    ('PROJECT-M-TRACK-C-FLAG-OFF-BYTE-IDENTICAL-REGRESSION-GUARD', 'validate_project_m_flag_off_byte_identical_regression_v1.py'),
+    # PROJECT_M Track D FLAG ON IN-PROCESS CANARY FIXTURE (C1-C6 buffs + cap clamp + out-of-slice)
+    ('PROJECT-M-TRACK-D-FLAG-ON-IN-PROCESS-CANARY-FIXTURE', 'validate_project_m_flag_on_in_process_canary_fixture_v1.py'),
+    # PROJECT_M Track E STATUS PAYLOAD + BATTLE LOG NO-LEAK GUARD (endpoints + source-level scan)
+    ('PROJECT-M-TRACK-E-STATUS-PAYLOAD-BATTLE-LOG-NO-LEAK-GUARD', 'validate_project_m_status_payload_battle_log_no_leak_v1.py'),
+    # PROJECT_M Track F BATTLE ENGINE STATUS SEAM ROLLBACK DRILL (dry-run + temp-copy restore byte-identical to backup)
+    ('PROJECT-M-TRACK-F-BATTLE-ENGINE-STATUS-SEAM-ROLLBACK-DRILL', 'validate_project_m_battle_engine_status_seam_rollback_drill_v1.py'),
+    # PROJECT_M Track G STATUS FIRST SLICE CANARY ENV RC GATE (13 safe checks)
+    ('PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE', 'validate_project_m_status_first_slice_canary_env_rc_gate_v1.py'),
+    # PROJECT_M Track H PROJECT M COMPLETION + NEXT STEP (next pack: PROJECT_N)
+    ('PROJECT-M-TRACK-H-PROJECT-M-COMPLETION-AND-NEXT-STEP', 'validate_project_m_completion_and_next_step_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

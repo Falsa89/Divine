@@ -14,6 +14,22 @@ from typing import List, Dict, Optional, Any
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 
+# ───────────────────────────────────────────────────────────────────────────
+# PROJECT_M Track B — STATUS FIRST SLICE single-point seam import.
+# The seam is INERT by default (returns input unchanged unless the flag
+# STATUS_RUNTIME_BUFF_SLICE_ENABLED is exactly 'true' AND dry_run=True).
+# Importing here is a no-op at module load. The single call site is inside
+# simulate_battle(), bound to the seam helper apply_prefight_status_slice_preview.
+# Rollback: scripts/rollback_project_m_battle_engine_status_seam.py
+# ───────────────────────────────────────────────────────────────────────────
+try:
+    from game_logic.status_prefight_runtime_seam import apply_prefight_status_slice_preview as _project_m_status_seam
+except Exception:
+    # Defensive fallback: if the seam module is unavailable for any reason,
+    # bind to a strict identity function so battle_engine never crashes.
+    def _project_m_status_seam(team_payload, active_statuses=None, *, dry_run=False):
+        return team_payload
+
 # ===================== POSITION BUFFS ON 3x3 GRID (3 rows, 3 columns) =====================
 # Grid layout: 3 rows (top/mid/bottom) x 3 columns (left=Support, center=DPS, right=Tank)
 # Max 6 heroes can be placed in 9 slots
@@ -382,6 +398,15 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
     Each team is a list of character dicts with stats and skills.
     Returns detailed battle log with animations.
     """
+    # PROJECT_M Track B — pre-fight status seam call (single point).
+    # With the canary flag OFF the seam is strictly identity, so team_a /
+    # team_b references are unchanged. With the flag ON + dry_run=True
+    # (NOT used in live runtime), the seam attaches a preview envelope to a
+    # shallow copy WITHOUT mutating the originals. The live path therefore
+    # remains byte-identical with the pre-patch behavior while the flag is OFF.
+    team_a = _project_m_status_seam(team_a)
+    team_b = _project_m_status_seam(team_b)
+
     battle_log = []
     turn = 0
     

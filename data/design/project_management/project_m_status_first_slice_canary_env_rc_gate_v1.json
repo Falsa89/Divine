@@ -1,0 +1,49 @@
+{
+  "task_id": "PROJECT_M_TRACK_G",
+  "verdict": "TRACK_G_STATUS_FIRST_SLICE_CANARY_ENV_RC_GATE_READY",
+  "preconditions": [
+    "flag OFF byte-identical regression GREEN (Track C)",
+    "flag ON in-process canary fixtures GREEN (Track D)",
+    "rollback validated (Track F)",
+    "no payload/log leakage (Track E)",
+    "19 REQUIRED validators GREEN"
+  ],
+  "future_canary_env_flag_flip_steps": [
+    {"step": "1", "action": "deploy backend in a non-production canary env"},
+    {"step": "2", "action": "set STATUS_RUNTIME_BUFF_SLICE_ENABLED=true ONLY in that env"},
+    {"step": "3", "action": "verify simulate_battle in production-like load preserves output structure"},
+    {"step": "4", "action": "verify rollback script reverts the seam wiring within the canary env"},
+    {"step": "5", "action": "prepare PROJECT_N flag flip pack with these results"}
+  ],
+  "automation_checks": [
+    "S1 GET /api/heroes -> 200 count 100",
+    "S2 GET /api/heroes/primordial_gaia -> 404",
+    "S3 GET /api/heroes/borea -> 200",
+    "S4 GET /api/heroes/greek_borea -> 200",
+    "S5 GET/POST /api/server-profiles/select -> 503",
+    "S6 GET /api/housing/preview -> 503",
+    "S7 STATUS_RUNTIME_BUFF_SLICE_ENABLED unset/false",
+    "S8 STATUS_FIRST_SLICE_BATTLE_ENGINE_CANARY_OK unset/false",
+    "S9 seam patch markers present in battle_engine.py",
+    "S10 battle_core.py / server.py / routes/combat.py md5 unchanged",
+    "S11 0 leak across audited endpoints",
+    "S12 19 REQUIRED suite validators pass",
+    "S13 rollback dry-run reports OK"
+  ],
+  "manual_checks": [
+    "M1 mobile QA: combat unaffected with flag OFF",
+    "M2 mobile QA: no status preview leak in UI",
+    "M3 canary env smoke before any flag flip"
+  ],
+  "canary_progression": [
+    {"stage": "1", "name": "in-process dry-run", "status": "READY (Pack L+M)"},
+    {"stage": "2", "name": "in-process canary fixture", "status": "READY (Pack M Track D)"},
+    {"stage": "3", "name": "canary env flag flip", "status": "BLOCKED until PROJECT_N approval"},
+    {"stage": "4", "name": "dev live", "status": "BLOCKED until PROJECT_N+ approval"},
+    {"stage": "5", "name": "prod", "status": "BLOCKED until separate prod approval"}
+  ],
+  "forbidden_in_track_g_respected": {
+    "live_rollout": false
+  },
+  "validator_script": "validate_project_m_status_first_slice_canary_env_rc_gate_v1.py"
+}

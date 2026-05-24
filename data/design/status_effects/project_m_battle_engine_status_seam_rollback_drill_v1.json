@@ -1,0 +1,14 @@
+{
+  "task_id": "PROJECT_M_TRACK_F",
+  "verdict": "TRACK_F_BATTLE_ENGINE_STATUS_SEAM_ROLLBACK_DRILL_READY",
+  "rollback_script": "/app/backend/scripts/rollback_project_m_battle_engine_status_seam.py",
+  "backup_file": "/app/backend/battle_engine.py.project_m_pre_patch.bak",
+  "backup_md5": "e631d9af4caa79d63e5e3d44145bce43",
+  "dry_run_mode_default": true,
+  "apply_mode_explicit": true,
+  "drill_executed_on_temp_copy": true,
+  "drill_method": "copy current battle_engine.py to a temp file; run rollback --apply against a temp environment; compare md5 of restored content vs backup_md5; ensure live battle_engine.py file is NOT touched",
+  "drill_result": "restored md5 matches backup md5 byte-identical",
+  "live_battle_engine_modified_during_drill": false,
+  "validator_script": "validate_project_m_battle_engine_status_seam_rollback_drill_v1.py"
+}

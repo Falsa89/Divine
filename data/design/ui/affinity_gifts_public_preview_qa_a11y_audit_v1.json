@@ -1,7 +1,7 @@
 {
   "audit_id": "affinity_gifts_public_preview_qa_a11y_audit_v1",
   "task_origin": "AF2-N-PUBLIC-UI-PREVIEW-QA-A11Y-AUDIT-V20",
-  "generated_at_utc": "2026-05-24T19:33:40.533801Z",
+  "generated_at_utc": "2026-05-24T19:45:02.441724Z",
   "design_only": true,
   "runtime_attached": false,
   "file": "/app/frontend/app/affinity-gifts-preview.tsx",
@@ -95,7 +95,7 @@
       "note": ""
     },
     "battle_backend_unchanged": {
-      "pass": true,
+      "pass": false,
       "note": ""
     },
     "balanced_braces": {
@@ -123,8 +123,8 @@
       "primordial_gaia"
     ]
   },
-  "overall_status": "PASS",
-  "failures_count": 0,
+  "overall_status": "FAIL",
+  "failures_count": 1,
   "a11y_label_count": 8,
   "a11y_role_count": 8
 }

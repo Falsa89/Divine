@@ -1,0 +1,17 @@
+{
+  "task_id": "PROJECT_M_TRACK_C",
+  "verdict": "TRACK_C_FLAG_OFF_BYTE_IDENTICAL_REGRESSION_GUARD_READY",
+  "normalization_used": "none_required_byte_identical_payload_proven",
+  "fixture": {
+    "description": "deterministic 3v3 battle, random.seed(42), synthetic chars c0-c2 vs c10-c12, max_turns=5",
+    "random_seed": 42,
+    "team_size": 3,
+    "max_turns": 5
+  },
+  "stable_payload_fields": ["winner", "turns", "final_hp_a", "final_hp_b"],
+  "baseline_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+  "post_patch_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+  "byte_identical": true,
+  "no_fake_normalization": true,
+  "validator_script": "validate_project_m_flag_off_byte_identical_regression_v1.py"
+}

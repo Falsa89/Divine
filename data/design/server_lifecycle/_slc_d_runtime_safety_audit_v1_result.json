@@ -1,9 +1,11 @@
 {
   "design_only": true,
-  "errors": [],
+  "errors": [
+    "CRITICAL FILE MUTATED: /app/backend/battle_engine.py"
+  ],
   "no_db_write": true,
-  "protected_files_match": true,
-  "status": "PASS",
+  "protected_files_match": false,
+  "status": "FAIL",
   "task": "slc_d_runtime_safety_audit_v1",
-  "utc": "2026-05-24T19:33:55.241233+00:00"
+  "utc": "2026-05-24T19:45:16.238127+00:00"
 }

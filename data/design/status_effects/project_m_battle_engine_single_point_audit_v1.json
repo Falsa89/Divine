@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_M_TRACK_A",
+  "verdict": "TRACK_A_BATTLE_ENGINE_SINGLE_POINT_WIRING_AUDIT_READY",
+  "insertion_point_classification": "SINGLE_POINT_SAFE_NOW_FLAGGED",
+  "battle_engine_path": "/app/backend/battle_engine.py",
+  "simulate_battle_signature": "def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict",
+  "identified_insertion_anchor": {
+    "location": "first statements inside simulate_battle(), immediately after the docstring and BEFORE battle_log = []",
+    "original_line_number_pre_patch": 385,
+    "rationale": "At this point team_a and team_b are still raw inputs; no combat state has been initialized; no random draws have happened; no battle_log entries exist. Inserting a flag-gated identity-by-default seam call here has zero side effects when the flag is OFF (the seam returns the same Python object reference unchanged)."
+  },
+  "identified_import_anchor": {
+    "location": "top of module after the standard library imports and pydantic/fastapi imports, before any global constant declaration",
+    "original_line_number_pre_patch": 15
+  },
+  "call_pattern": "team_a = _project_m_status_seam(team_a); team_b = _project_m_status_seam(team_b)",
+  "flag_off_safety_proof": "apply_prefight_status_slice_preview() returns its team_payload argument unchanged when STATUS_RUNTIME_BUFF_SLICE_ENABLED != 'true'. The Python rebinding 'team_a = _project_m_status_seam(team_a)' therefore preserves identity (same id()), and downstream code sees byte-identical state.",
+  "forbidden_in_track_a_respected": {
+    "runtime_mutation_in_track_a": false,
+    "battle_behavior_change_in_track_a": false,
+    "broad_refactor": false
+  },
+  "pre_patch_md5": {
+    "battle_engine.py": "e631d9af4caa79d63e5e3d44145bce43",
+    "battle_core.py": "80d94afba9eb2930e63b06cfed645b77",
+    "server.py": "9b3affcbdb3d4c50efc7ce8b9bc603cb",
+    "routes/combat.py": "1f531d75792b34e5ff37293e4ed61725"
+  },
+  "validator_script": "validate_project_m_battle_engine_single_point_audit_v1.py"
+}

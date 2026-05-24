@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-24T19:33:51.542918+00:00",
+  "timestamp_utc": "2026-05-24T19:45:13.033379+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 836,
+  "backend_python_files_scanned": 845,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -94,15 +94,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 187,
+              "line": 203,
               "snippet": "# the user_hero instance used."
             },
             {
-              "line": 808,
+              "line": 833,
               "snippet": "def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, position: dict = None) -> dict:"
             },
             {
-              "line": 815,
+              "line": 840,
               "snippet": "level = user_hero_data.get('level', 1) if user_hero_data else 1"
             }
           ]
@@ -214,15 +214,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 996,
+              "line": 1021,
               "snippet": "user_hero = await db.user_heroes.find_one({\"id\": pos['user_hero_id'], \"user_id\": user_id})"
             },
             {
-              "line": 1072,
+              "line": 1097,
               "snippet": "_v2_uhs = await db.user_heroes.find({\"id\": {\"$in\": _v2_uhids}, \"user_id\": user_id}).to_list(None)"
             },
             {
-              "line": 1079,
+              "line": 1104,
               "snippet": "user_heroes_by_id=_v2_uh_map,"
             }
           ]
@@ -290,7 +290,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 1170,
+              "line": 1195,
               "snippet": "await db.inventory.update_one({\"user_id\": user_id, \"item_id\": did}, {\"$inc\": {\"quantity\": qty}}, upsert=True)"
             }
           ]
@@ -681,7 +681,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 71,
+      "files_with_hits": 73,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -734,12 +734,12 @@
               "snippet": "6 characters per team, 9x9 grid positioning with buffs"
             },
             {
-              "line": 379,
-              "snippet": "def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:"
+              "line": 30,
+              "snippet": "def _project_m_status_seam(team_payload, active_statuses=None, *, dry_run=False):"
             },
             {
-              "line": 381,
-              "snippet": "Simulate a full battle between two teams."
+              "line": 31,
+              "snippet": "return team_payload"
             }
           ]
         },

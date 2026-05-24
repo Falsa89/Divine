@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_M_TRACK_E",
+  "verdict": "TRACK_E_STATUS_PAYLOAD_AND_BATTLE_LOG_NO_LEAK_READY",
+  "audited_endpoints": [
+    "/api/heroes",
+    "/api/heroes/borea",
+    "/api/heroes/greek_borea",
+    "/api/server-profiles/select",
+    "/api/housing/preview"
+  ],
+  "audited_source_files": [
+    "/app/backend/battle_engine.py",
+    "/app/backend/battle_core.py",
+    "/app/backend/server.py",
+    "/app/backend/routes/combat.py"
+  ],
+  "forbidden_payload_markers": [
+    "status_envelope_preview",
+    "__seam_version"
+  ],
+  "endpoint_leaks": 0,
+  "source_emission_leaks": 0,
+  "flag_state_during_check": "STATUS_RUNTIME_BUFF_SLICE_ENABLED unset",
+  "validator_script": "validate_project_m_status_payload_battle_log_no_leak_v1.py"
+}

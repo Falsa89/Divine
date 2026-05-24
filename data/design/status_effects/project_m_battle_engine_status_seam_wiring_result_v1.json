@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_M_TRACK_B",
+  "verdict": "TRACK_B_BATTLE_ENGINE_STATUS_SEAM_WIRED_FLAG_OFF_SAFE",
+  "wiring_applied": true,
+  "wiring_scope": "minimal_single_point",
+  "file_modified": "/app/backend/battle_engine.py",
+  "files_unchanged_md5": {
+    "/app/backend/battle_core.py": "80d94afba9eb2930e63b06cfed645b77",
+    "/app/backend/server.py": "9b3affcbdb3d4c50efc7ce8b9bc603cb",
+    "/app/backend/routes/combat.py": "1f531d75792b34e5ff37293e4ed61725"
+  },
+  "battle_engine_pre_patch_md5": "e631d9af4caa79d63e5e3d44145bce43",
+  "battle_engine_post_patch_md5": "d04feb03e1388db8557d17bd42d5b4d1",
+  "backup_file": "/app/backend/battle_engine.py.project_m_pre_patch.bak",
+  "rollback_script": "/app/backend/scripts/rollback_project_m_battle_engine_status_seam.py",
+  "insertion_sections": [
+    {"kind": "import_block", "approx_lines": 8, "guarded_by_try_except": true, "defensive_fallback": "identity"},
+    {"kind": "call_site_inside_simulate_battle", "approx_lines": 2, "calls": ["team_a = _project_m_status_seam(team_a)", "team_b = _project_m_status_seam(team_b)"]}
+  ],
+  "flag_default": "unset/false",
+  "flag_off_byte_identical_baseline": {
+    "baseline_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+    "post_patch_sha256": "d951767a72b54b339eb660f6308d72c943a9a9e318539f639ce9fc7f416d3725",
+    "byte_identical": true,
+    "fixture": "3v3 deterministic seeded battle with synthetic chars (random.seed(42), max_turns=5)"
+  },
+  "no_dot_or_tick_loop": true,
+  "no_damage_or_heal_formula_change": true,
+  "no_round_loop_change": true,
+  "no_broad_refactor": true,
+  "no_battle_core_mutation": true,
+  "no_combat_tsx_mutation": true,
+  "no_frontend_change": true,
+  "no_db_write": true,
+  "validator_script": "validate_project_m_battle_engine_status_seam_wiring_v1.py"
+}

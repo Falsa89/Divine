@@ -1,0 +1,19 @@
+{
+  "task_id": "PROJECT_M_TRACK_D",
+  "verdict": "TRACK_D_FLAG_ON_IN_PROCESS_CANARY_FIXTURE_READY",
+  "backend_env_toggled": false,
+  "flag_set_in_process_only": true,
+  "fixtures": [
+    {"id": "C1", "category": "buff_offensive", "stat": "atk_pct", "value": 0.10, "expected": "atk_pct=0.10"},
+    {"id": "C2", "category": "buff_offensive", "stat": "crit_pct", "value": 0.05, "expected": "crit_pct=0.05"},
+    {"id": "C3", "category": "buff_defensive", "stat": "def_pct", "value": 0.10, "expected": "def_pct=0.10"},
+    {"id": "C4", "category": "buff_defensive", "stat": "hp_pct", "value": 0.15, "expected": "hp_pct=0.15"},
+    {"id": "C5_OUT_OF_SLICE", "category": "debuff", "stat": "atk_pct", "value": 0.50, "expected": "zero_envelope_out_of_slice_ignored"},
+    {"id": "C6_CAP_CLAMP", "category": "buff_offensive", "stat": "atk_pct", "value": 0.99, "expected": "atk_pct=0.30_clamped_master_cap"}
+  ],
+  "all_fixtures_passed": true,
+  "flag_set_via": "os.environ in test process, restored in finally",
+  "battle_engine_called": false,
+  "payload_leakage_in_env_after_test": false,
+  "validator_script": "validate_project_m_flag_on_in_process_canary_fixture_v1.py"
+}
