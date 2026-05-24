@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_V_TRACK_C",
+  "verdict": "TRACK_C_SECOND_SLICE_DEV_LIVE_BEHAVIOR_REGRESSION_READY",
+  "regression_cases_total": 14,
+  "regression_cases_pass": 14,
+  "regression_cases_fail": 0,
+  "families_covered": ["debuff_offensive", "debuff_defensive", "speed_up", "speed_down"],
+  "caps_covered": ["per_status_max", "aggregate_offensive", "aggregate_defensive", "aggregate_speed"],
+  "modes_covered": ["campaign", "pvp", "boss"],
+  "opposing_pair_cancel_verified": true,
+  "out_of_scope_ignored_verified": true,
+  "mixed_valid_invalid_verified": true,
+  "no_dot_or_tick": true,
+  "no_hard_cc": true,
+  "no_borea_marchio_live": true,
+  "battle_engine_runtime_behavior_changed_for_unflagged_callers": false,
+  "api_endpoints_status": {"/api/heroes": 200, "/api/heroes/primordial_gaia": 404, "/api/heroes/borea": 200, "/api/heroes/greek_borea": 200, "/api/server-profiles/select": 503, "/api/housing/preview": 503},
+  "db_writes": false,
+  "validator_script": "validate_project_v_second_slice_dev_live_behavior_regression_v1.py"
+}
