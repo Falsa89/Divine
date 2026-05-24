@@ -1,0 +1,97 @@
+{
+  "task_id": "V7_BLOCK_D_AF2N_OBSERVABILITY_DASHBOARD_TEMPLATE",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V7",
+  "verdict": "BLOCK_D_AF2N_OBSERVABILITY_DASHBOARD_TEMPLATE_READY",
+  "mode": "design_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260524T134500Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V7_APPROVAL": true,
+    "BLOCK_D_AF2N_OBSERVABILITY_DASHBOARD_TEMPLATE_APPROVAL": true
+  },
+  "upstream": {
+    "v5_pipeline": "/app/data/design/system_safety/af2n_observability_metrics_pipeline_v1.json",
+    "v6_export": "/app/data/design/system_safety/af2n_metrics_snapshot_export_v1.json",
+    "v6_snapshot": "/app/data/design/system_safety/af2n_metrics_snapshot.jsonl"
+  },
+  "dashboard_template_name": "AF2N_V8_CANARY_HEALTH_DASHBOARD_V1",
+  "panels": [
+    {
+      "panel_id": "P1",
+      "title": "Canary Completion Ratio",
+      "metric": "af2n_canary_completion_ratio",
+      "viz": "single_stat + sparkline",
+      "thresholds": {"green": ">=0.95", "yellow": "0.80-0.95", "red": "<0.80"},
+      "signoff_blocker": "DBR_02 in V3 BLOCK_C agenda"
+    },
+    {
+      "panel_id": "P2",
+      "title": "Ledger Write Failures by Reason",
+      "metric": "af2n_ledger_write_failures_total",
+      "viz": "stacked bar",
+      "labels": ["reason"],
+      "alert": "failures > 5/hour"
+    },
+    {
+      "panel_id": "P3",
+      "title": "Rate-Limit Throttle by Endpoint",
+      "metric": "af2n_rate_limit_throttle_total",
+      "viz": "line chart",
+      "labels": ["endpoint"]
+    },
+    {
+      "panel_id": "P4",
+      "title": "Redis Crash Events / Mitigation Invocations",
+      "metrics": ["af2n_redis_crash_events_total", "af2n_redis_mitigation_invocations_total"],
+      "viz": "counter dual",
+      "alert": "crashes_today > 0 -> run /app/ops/ensure_redis_rate_limit.sh"
+    },
+    {
+      "panel_id": "P5",
+      "title": "Inventory Writes Blocked (FROZEN state)",
+      "metric": "af2n_inventory_writes_blocked_frozen_total",
+      "viz": "counter",
+      "baseline_expected": "should equal attempted_total while FROZEN"
+    },
+    {
+      "panel_id": "P6",
+      "title": "Affinity Gain Delta vs Control",
+      "metric": "af2n_affinity_gain_delta_vs_control",
+      "viz": "line chart",
+      "thresholds": {"green": "-0.05 - +0.10", "red": ">+0.25 or <-0.10"},
+      "signoff_blocker": "DBR_02"
+    },
+    {
+      "panel_id": "P7",
+      "title": "Gift Spend Volume Distribution (P50/P95/P99)",
+      "metric": "af2n_gift_spend_volume_seconds",
+      "viz": "histogram"
+    },
+    {
+      "panel_id": "P8",
+      "title": "V21/V22/V23/V24 Rollback Test Execution Timestamps",
+      "viz": "timeline",
+      "source": "validator suite OPTIONAL results timestamps"
+    }
+  ],
+  "alert_rules": [
+    {"id": "A1", "condition": "completion_ratio < 0.80 for 1h", "severity": "high", "action": "page on-call"},
+    {"id": "A2", "condition": "ledger_write_failures > 5/hour", "severity": "medium", "action": "investigate Redis health + ledger collection state"},
+    {"id": "A3", "condition": "redis_crash_events > 0/day", "severity": "medium", "action": "apply V4 BLOCK_E runbook"},
+    {"id": "A4", "condition": "inventory_writes_blocked != attempted", "severity": "critical", "action": "halt canary; investigate FROZEN bypass"},
+    {"id": "A5", "condition": "affinity_gain_delta > 0.25", "severity": "high", "action": "halt canary; investigate AF2-N gift catalog"}
+  ],
+  "v8_signoff_gating_panels": ["P1", "P2", "P5", "P6"],
+  "export_to_implement": "none in V7 (this is design only; future implementation pack will render the JSON/YAML for a Prometheus+Grafana stack)",
+  "forbidden_in_block_d_respected": {
+    "daemon_added": false,
+    "runtime_endpoint": false,
+    "runtime_change": false,
+    "db_write": false,
+    "af2n_mutation": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/af2n_observability_dashboard_template_v1.json",
+    "/app/docs/divine/121D_AF2N_OBSERVABILITY_DASHBOARD_TEMPLATE.md"
+  ]
+}

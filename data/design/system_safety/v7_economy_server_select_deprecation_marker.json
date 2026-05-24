@@ -1,0 +1,47 @@
+{
+  "task_id": "V7_BLOCK_A_ECONOMY_SERVER_SELECT_DEPRECATION_NOTICE",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V7",
+  "verdict": "BLOCK_A_ECONOMY_SERVER_SELECT_DEPRECATION_NOTICE_APPLIED_SAFE",
+  "mode": "apply_safe_logging_only",
+  "runtime_patch_applied": true,
+  "db_migration_required": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260524T134500Z",
+  "rollback_id": "v7_block_a_server_select_deprecation_20260524T134500Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V7_APPROVAL": true,
+    "BLOCK_A_ECONOMY_SERVER_SELECT_DEPRECATION_NOTICE_APPROVAL": true
+  },
+  "surface_patched": {
+    "file": "/app/backend/routes/economy.py",
+    "endpoint": "POST /api/server/select",
+    "line_pre": 196,
+    "function": "select_server"
+  },
+  "changes": {
+    "loc_added": 8,
+    "loc_removed": 0,
+    "behavior_changed": false,
+    "response_schema_changed": false,
+    "status_codes_unchanged": true,
+    "side_effects_unchanged": true,
+    "selection_logic_unchanged": true,
+    "only_added": "WARNING-level log line with user_id+server_id context; pointer to removal plan doc"
+  },
+  "validators": [
+    "/app/backend/scripts/validate_v7_economy_server_select_deprecation.py"
+  ],
+  "rollback_script": "/app/backend/scripts/rollback_v7_economy_server_select_deprecation.py",
+  "forbidden_in_block_a_respected": {
+    "endpoint_behavior_change": false,
+    "endpoint_removal": false,
+    "response_shape_change": false,
+    "db_write_migration": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/v7_economy_server_select_deprecation_marker.json",
+    "/app/docs/divine/121A_ECONOMY_SERVER_SELECT_DEPRECATION_NOTICE.md",
+    "/app/backend/scripts/validate_v7_economy_server_select_deprecation.py",
+    "/app/backend/scripts/rollback_v7_economy_server_select_deprecation.py"
+  ]
+}

@@ -155,7 +155,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
         if user.get("gems", 0) < cost:
             raise HTTPException(400, f"Servono {cost} gemme!")
         await db.users.update_one({"id": uid}, {"$inc": {"gems": -cost}})
-        await db.battle_pass.update_one({"user_id": uid}, {"$set": {"is_premium": True}}, upsert=True)
+        # V7 BLOCK_B post-signoff hardening: $set -> $setOnInsert default doc shape.
+        # Authorized by V6 BLOCK_A signoff record (BP_D1=ACCOUNT_WIDE, BP_D3=ACCOUNT_WIDE_ONCE, BP_D4=GLOBAL_SEASON).
+        # Behavior preserved: downstream consumers already use .get() with same defaults; doc shape now consistent on insert.
+        await db.battle_pass.update_one(
+            {"user_id": uid},
+            {
+                "$setOnInsert": {"exp": 0, "level": 1, "claimed_free": [], "claimed_premium": [], "season": 1},
+                "$set": {"is_premium": True},
+            },
+            upsert=True,
+        )
         return {"success": True}
 
     @router.post("/battlepass/add-exp")
@@ -195,6 +205,15 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
 
     @router.post("/server/select")
     async def select_server(req: SelectServerRequest, current_user: dict = Depends(get_current_user)):
+        # V7 BLOCK_A DEPRECATION NOTICE (legacy endpoint; superseded by SLC-H server-profiles when live).
+        # See: /app/docs/divine/120D_LEGACY_SERVER_SELECT_REMOVAL_PLAN.md (4-phase removal plan, phase 1).
+        # Behavior unchanged; passive warning only.
+        import logging as _logging
+        _logging.getLogger("divine.deprecation").warning(
+            "DEPRECATED /api/server/select called by user_id=%s server_id=%s; "
+            "will be removed after SLC-H live wiring per LEGACY_SERVER_SELECT_REMOVAL_PLAN v1",
+            current_user.get("id"), req.server_id,
+        )
         srv = next((s for s in SERVERS if s["id"] == req.server_id), None)
         if not srv:
             raise HTTPException(404, "Server non trovato")

@@ -1,0 +1,64 @@
+{
+  "task_id": "V7_BLOCK_B_BATTLE_PASS_TECHNICAL_HARDENING_POST_SIGNOFF",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V7",
+  "verdict": "BLOCK_B_BATTLE_PASS_TECHNICAL_HARDENING_POST_SIGNOFF_APPLIED_SAFE",
+  "mode": "apply_safe_setoninsert_only",
+  "runtime_patch_applied": true,
+  "db_migration_required": false,
+  "db_index_created": false,
+  "timestamp_utc": "20260524T134500Z",
+  "rollback_id": "v7_block_b_battle_pass_hardening_20260524T134500Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V7_APPROVAL": true,
+    "BLOCK_B_BATTLE_PASS_TECHNICAL_HARDENING_POST_SIGNOFF_APPROVAL": true
+  },
+  "signoff_authority": {
+    "source": "V6 BLOCK_A signoff record",
+    "BP_D1": "ACCOUNT_WIDE",
+    "BP_D3": "ACCOUNT_WIDE_ONCE",
+    "BP_D4": "GLOBAL_SEASON",
+    "unblocks": ["V4 BLOCK_A R3 (BP_D1 dependency now closed)"]
+  },
+  "v4_block_a_residual_reasons_addressed": {
+    "R1_doc_shape_differs": "ADDRESSED: with BP_D1=ACCOUNT_WIDE canonical, the unified doc shape with all 5 defaults is the explicit target.",
+    "R2_prompt_guardrail": "ADDRESSED: V7 prompt explicitly authorizes this patch as post-signoff. Response schema preserved: downstream consumers already use .get() with the same defaults, so no observable response change.",
+    "R3_BP_D1_dependency": "CLOSED via V6 BLOCK_A signoff",
+    "R4_index_live": "DEFERRED: index (user_id, season) NOT created in V7. Index creation requires dedicated ops pack with explicit DB-write approval."
+  },
+  "surface_patched": {
+    "file": "/app/backend/routes/economy.py",
+    "endpoint": "POST /api/battlepass/buy-premium",
+    "line_pre": 158,
+    "collection": "battle_pass"
+  },
+  "changes": {
+    "loc_added": 10,
+    "loc_removed": 1,
+    "old_pattern": "update_one({user_id: uid}, {$set: {is_premium: True}}, upsert=True)",
+    "new_pattern": "update_one({user_id: uid}, {$setOnInsert: {exp:0, level:1, claimed_free:[], claimed_premium:[], season:1}, $set: {is_premium: True}}, upsert=True)",
+    "reward_change": false,
+    "premium_lane_logic_change": false,
+    "free_lane_logic_change": false,
+    "cost_change": false,
+    "response_schema_change": false,
+    "behavior_change": false
+  },
+  "validators": [
+    "/app/backend/scripts/validate_v7_battle_pass_technical_hardening.py"
+  ],
+  "rollback_script": "/app/backend/scripts/rollback_v7_battle_pass_technical_hardening.py",
+  "forbidden_in_block_b_respected": {
+    "reward_change": false,
+    "premium_free_lane_logic_change": false,
+    "cost_change": false,
+    "response_schema_change": false,
+    "db_migration": false,
+    "db_index_creation": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/v7_battle_pass_technical_hardening_marker.json",
+    "/app/docs/divine/121B_BATTLE_PASS_TECHNICAL_HARDENING_POST_SIGNOFF.md",
+    "/app/backend/scripts/validate_v7_battle_pass_technical_hardening.py",
+    "/app/backend/scripts/rollback_v7_battle_pass_technical_hardening.py"
+  ]
+}

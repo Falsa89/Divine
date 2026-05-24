@@ -1,0 +1,66 @@
+{
+  "task_id": "V7_BLOCK_E_BOREA_INERT_BASELINE_INVARIANT_HARDENING",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V7",
+  "verdict": "BLOCK_E_BOREA_INERT_BASELINE_INVARIANT_HARDENING_READY",
+  "mode": "suite_doc_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260524T134500Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V7_APPROVAL": true,
+    "BLOCK_E_BOREA_INERT_BASELINE_INVARIANT_HARDENING_APPROVAL": true
+  },
+  "borea_inert_baseline_canonical": {
+    "slugs_inert": ["borea", "greek_borea"],
+    "http_status_expected": 200,
+    "is_obtainable_expected": false,
+    "obtainable_pool_expected": false,
+    "battle_picker_pool_expected": false,
+    "gacha_summon_visibility_expected": false,
+    "user_heroes_assignment_expected": false,
+    "primordial_gaia_http_expected": 404,
+    "primordial_gaia_obtainable": false,
+    "heroes_count_expected": 100,
+    "slc_version": "v1"
+  },
+  "v3_block_e_baseline": {
+    "script": "/app/backend/scripts/validate_roster_visibility_invariants_v1.py",
+    "invariants_count": 7
+  },
+  "v5_block_c_extension": {
+    "script": "/app/backend/scripts/validate_roster_visibility_invariants_v2.py",
+    "invariants_count": 11
+  },
+  "v7_block_e_hardening_layer": {
+    "script": "/app/backend/scripts/validate_borea_inert_baseline_v1.py",
+    "invariants_count": 9,
+    "focus": "DEDICATED Borea-only invariant validator independent from roster validator; faster smoke; clear semantic separation",
+    "invariants": [
+      "B_INV1: GET /api/heroes/borea HTTP 200",
+      "B_INV2: borea is_obtainable False",
+      "B_INV3: GET /api/heroes/greek_borea HTTP 200",
+      "B_INV4: greek_borea is_obtainable False",
+      "B_INV5: borea NOT in obtainable subset of /api/heroes",
+      "B_INV6: greek_borea NOT in obtainable subset of /api/heroes",
+      "B_INV7: GET /api/heroes/primordial_gaia HTTP 404 (catalog-only)",
+      "B_INV8: heroes total count == 100",
+      "B_INV9: borea/greek_borea slug names not mutated (legacy stability)"
+    ]
+  },
+  "suite_registration": {
+    "task_id": "V7-BLOCK-E-BOREA-INERT-BASELINE",
+    "section": "OPTIONAL"
+  },
+  "forbidden_in_block_e_respected": {
+    "runtime_change": false,
+    "borea_activation": false,
+    "borea_obtainable_flip": false,
+    "gacha_summon_change": false,
+    "character_bible_mutation": false,
+    "runtime_endpoint": false
+  },
+  "artifacts_created": [
+    "/app/backend/scripts/validate_borea_inert_baseline_v1.py",
+    "/app/data/design/system_safety/borea_inert_baseline_invariant_hardening_v1.json",
+    "/app/docs/divine/121E_BOREA_INERT_BASELINE_INVARIANT_HARDENING.md"
+  ]
+}

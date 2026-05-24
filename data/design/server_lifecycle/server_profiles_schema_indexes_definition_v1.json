@@ -1,0 +1,71 @@
+{
+  "task_id": "V7_BLOCK_C_SERVER_PROFILES_SCHEMA_INDEXES_DEFINITION",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V7",
+  "verdict": "BLOCK_C_SERVER_PROFILES_SCHEMA_INDEXES_DEFINITION_READY",
+  "mode": "design_suite_only",
+  "runtime_patch_applied": false,
+  "db_index_created": false,
+  "timestamp_utc": "20260524T134500Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V7_APPROVAL": true,
+    "BLOCK_C_SERVER_PROFILES_SCHEMA_INDEXES_DEFINITION_APPROVAL": true
+  },
+  "references_v6_block_c": "/app/data/design/server_lifecycle/server_profiles_canonical_schema_proposal_v1.json",
+  "indexes_canonical_definition": [
+    {
+      "name": "idx_user_server",
+      "collection": "server_profiles",
+      "fields": [{"field": "user_id", "order": 1}, {"field": "server_id", "order": 1}],
+      "unique": true,
+      "sparse": false,
+      "rationale": "Enforce one profile per (account, server). Primary lookup index.",
+      "create_index_call_target": "db.server_profiles.create_index([('user_id', 1), ('server_id', 1)], unique=True, name='idx_user_server')",
+      "deferred_to_pack": "SERVER_PROFILES_SCHEMA_INDEXES_APPLY_PACK"
+    },
+    {
+      "name": "idx_user_active",
+      "collection": "server_profiles",
+      "fields": [{"field": "user_id", "order": 1}, {"field": "is_archived", "order": 1}],
+      "unique": false,
+      "sparse": false,
+      "rationale": "List active profiles for an account.",
+      "create_index_call_target": "db.server_profiles.create_index([('user_id', 1), ('is_archived', 1)], name='idx_user_active')",
+      "deferred_to_pack": "SERVER_PROFILES_SCHEMA_INDEXES_APPLY_PACK"
+    },
+    {
+      "name": "idx_server_active",
+      "collection": "server_profiles",
+      "fields": [{"field": "server_id", "order": 1}, {"field": "is_archived", "order": 1}],
+      "unique": false,
+      "sparse": false,
+      "rationale": "List active profiles per server (capacity / load checks).",
+      "create_index_call_target": "db.server_profiles.create_index([('server_id', 1), ('is_archived', 1)], name='idx_server_active')",
+      "deferred_to_pack": "SERVER_PROFILES_SCHEMA_INDEXES_APPLY_PACK"
+    }
+  ],
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_server_profiles_schema_indexes_definition_v1.py",
+    "behavior": "read-only verification of the canonical indexes definition JSON; does NOT call create_index; does NOT touch DB",
+    "db_writes": 0,
+    "safe_in_suite": true,
+    "contract": "PASS if 3 indexes defined with consistent canonical naming and the unique constraint is on (user_id, server_id)"
+  },
+  "acceptance_criteria_for_indexes_apply_pack": [
+    "create_index calls executed only via dedicated ops pack with explicit DB-write approval",
+    "Index creation must be idempotent (drop+recreate or skip-if-exists)",
+    "Rollback script provided (drop_index per name)",
+    "Post-apply validator verifies index existence on server_profiles collection",
+    "server_profiles collection itself is created in the same ops pack OR pre-existing"
+  ],
+  "forbidden_in_block_c_respected": {
+    "db_index_creation": false,
+    "db_write": false,
+    "collection_creation": false,
+    "runtime_endpoint_implementation": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/server_profiles_schema_indexes_definition_v1.json",
+    "/app/docs/divine/121C_SERVER_PROFILES_SCHEMA_INDEXES_DEFINITION.md",
+    "/app/backend/scripts/validate_server_profiles_schema_indexes_definition_v1.py"
+  ]
+}
