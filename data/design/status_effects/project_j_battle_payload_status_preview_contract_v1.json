@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_J_TRACK_E",
+  "verdict": "TRACK_E_BATTLE_PAYLOAD_STATUS_PREVIEW_CONTRACT_DESIGN_ONLY",
+  "contract_version": "project_j_battle_payload_status_preview_v1",
+  "runtime_changes_applied": false,
+  "existing_combat_payload_unchanged": true,
+  "future_optional_preview_shape": {
+    "status_envelope_preview": {
+      "slice_version": "project_j_first_slice_v1",
+      "flag_active": false,
+      "envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0},
+      "applied_to_battle": false,
+      "preview_only": true,
+      "contract_version": "project_j_battle_payload_status_preview_v1"
+    },
+    "presence_rule": "This sub-object will be appended to the existing battle/preview payload by a FUTURE activation pack ONLY when STATUS_RUNTIME_BUFF_SLICE_ENABLED is true. In all other cases, the sub-object MUST NOT appear in the payload.",
+    "backward_compatible": true
+  },
+  "current_pack_payload_change": "NONE (design contract only)",
+  "forbidden_in_track_e_respected": {
+    "runtime_wiring": false,
+    "battle_engine_change": false,
+    "battle_core_change": false,
+    "combat_tsx_change": false,
+    "existing_payload_mutation": false,
+    "frontend": false
+  },
+  "validator_script": "validate_project_j_battle_payload_status_preview_contract_v1.py"
+}

@@ -1,0 +1,24 @@
+{
+  "task_id": "PROJECT_J_TRACK_D",
+  "verdict": "TRACK_D_STATUS_FIXTURE_MATRIX_AND_GOLDEN_TESTS_READY",
+  "fixture_matrix": [
+    {"id": "F1", "input": [], "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "empty list → zero envelope"},
+    {"id": "F2", "input": [{"category": "buff_offensive", "stat": "atk_pct", "value": 0.10}], "expected_envelope": {"atk_pct": 0.10, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "single buff_off atk"},
+    {"id": "F3", "input": [{"category": "buff_defensive", "stat": "def_pct", "value": 0.10}], "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.10, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "single buff_def def"},
+    {"id": "F4", "input": [{"category": "buff_offensive", "stat": "atk_pct", "value": 0.50}], "expected_envelope": {"atk_pct": 0.30, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "single over per-cat cap → clamped to 0.30"},
+    {"id": "F5", "input": [{"category": "buff_offensive", "stat": "atk_pct", "value": 0.20}, {"category": "buff_offensive", "stat": "atk_pct", "value": 0.20}], "expected_envelope": {"atk_pct": 0.30, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "two buff_off atk aggregated → 0.30 clamp"},
+    {"id": "F6", "input": [{"category": "buff_offensive", "stat": "def_pct", "value": 0.10}], "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "buff_off attempting def → ignored (def not in buff_off category caps)"},
+    {"id": "F7", "input": [{"category": "control", "stat": "atk_pct", "value": 0.10}], "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "out-of-slice category ignored"},
+    {"id": "F8", "input": [{"category": "buff_offensive", "stat": "crit_pct", "value": 0.05}, {"category": "buff_defensive", "stat": "hp_pct", "value": 0.10}], "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.10, "crit_pct": 0.05}, "description": "mixed slice categories aggregated"},
+    {"id": "F9", "input": [{"category": "buff_offensive", "stat": "atk_pct", "value": -1.0}], "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "negative value clamped to 0 (no debuff sneaking in)"},
+    {"id": "F10", "input": [{"category": "buff_offensive", "stat": "atk_pct", "value": "not_a_number"}], "expected_envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}, "description": "malformed value ignored"}
+  ],
+  "golden_tests_count": 10,
+  "determinism_verified": true,
+  "side_effect_free_verified": true,
+  "forbidden_in_track_d_respected": {
+    "runtime_activation": false,
+    "battle_mutation": false
+  },
+  "validator_script": "validate_project_j_status_fixture_matrix_and_golden_tests_v1.py"
+}

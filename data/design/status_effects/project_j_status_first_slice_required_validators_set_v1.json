@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_J_TRACK_C",
+  "verdict": "TRACK_C_STATUS_FIRST_SLICE_REQUIRED_CANDIDATE_VALIDATORS_READY",
+  "registration_mode": "OPTIONAL_REQUIRED_CANDIDATE",
+  "registration_reason": "Flag default OFF; resolver not wired into runtime. Per Pack I Track C contract, validators stay as REQUIRED-CANDIDATE (OPTIONAL but mandatory-PASS for future activation pack to promote them).",
+  "required_candidate_validators": [
+    "validate_project_j_status_first_slice_resolver_pure_deterministic_v1.py",
+    "validate_project_j_status_first_slice_no_tick_loop_touch_v1.py",
+    "validate_project_j_status_first_slice_caps_respect_v1.py",
+    "validate_project_j_status_first_slice_pvp_fairness_audit_v1.py",
+    "validate_project_j_status_first_slice_rollback_runbook_v1.py"
+  ],
+  "validators_promoted_to_REQUIRED_in_pack_j": 0,
+  "required_diff_guard_preserved": true,
+  "required_weakening": false,
+  "forbidden_in_track_c_respected": {
+    "runtime_activation": false,
+    "required_weakening": false,
+    "fake_pass": false,
+    "hiding_failures": false
+  },
+  "validator_script": "validate_project_j_status_first_slice_required_validators_set_v1.py"
+}

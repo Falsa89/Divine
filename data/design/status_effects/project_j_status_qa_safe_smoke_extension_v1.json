@@ -1,0 +1,19 @@
+{
+  "task_id": "PROJECT_J_TRACK_G",
+  "verdict": "TRACK_G_STATUS_QA_SAFE_SMOKE_EXTENSION_READY",
+  "automated_safe_subset_count": 5,
+  "safe_automated_checklist": [
+    {"id": "SS1", "check": "resolver module importable", "target": "status_first_slice_resolver_pure"},
+    {"id": "SS2", "check": "is_runtime_active() False with flag unset", "target": "resolver.is_runtime_active()"},
+    {"id": "SS3", "check": "resolver not imported by battle/runtime", "target": "static grep battle_engine/core/combat.tsx"},
+    {"id": "SS4", "check": "battle payload unchanged (no status_envelope_preview leaked)", "target": "GET /api/heroes"},
+    {"id": "SS5", "check": "existing project H Track E 9-check smoke still PASS", "target": "validate_project_h_qa_release_candidate_smoke_gate_v1"}
+  ],
+  "battle_smoke_mode": "manual_required",
+  "forbidden_in_track_g_respected": {
+    "live_battle_mutation": false,
+    "destructive_action": false,
+    "frontend": false
+  },
+  "validator_script": "validate_project_j_status_qa_safe_smoke_extension_v1.py"
+}

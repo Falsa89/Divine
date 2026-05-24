@@ -1,0 +1,17 @@
+{
+  "task_id": "PROJECT_J_TRACK_A",
+  "verdict": "TRACK_A_STATUS_FIRST_SLICE_SCOPE_LOCKED",
+  "slice_categories_locked": ["buff_offensive", "buff_defensive"],
+  "out_of_slice_excluded": ["buff_support", "debuff_offensive", "debuff_defensive", "control", "dot", "hot", "shield", "meta"],
+  "flag_name": "STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+  "flag_default_state": "OFF",
+  "flag_active_in_local_backend": false,
+  "runtime_changes_applied": false,
+  "forbidden_in_track_a_respected": {
+    "unflagged_application": false,
+    "tick_loop_changes": false,
+    "battle_engine_change": false,
+    "frontend": false
+  },
+  "validator_script": "validate_project_j_status_first_slice_scope_lock_v1.py"
+}

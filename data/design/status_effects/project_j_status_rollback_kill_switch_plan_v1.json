@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_J_TRACK_F",
+  "verdict": "TRACK_F_STATUS_ROLLBACK_KILL_SWITCH_PLAN_READY",
+  "kill_switch_flag": "STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+  "kill_switch_disarm_state": "unset|false",
+  "rollback_steps": [
+    "R1: set STATUS_RUNTIME_BUFF_SLICE_ENABLED=false (or unset) in canary env",
+    "R2: restart backend in canary (graceful)",
+    "R3: verify resolver.is_runtime_active() returns False",
+    "R4: verify battle payload no longer contains status_envelope_preview",
+    "R5: run safe smoke gate (Track G) to confirm zero leakage",
+    "R6: archive incident report with timestamps"
+  ],
+  "kill_switch_test_method": "unit test toggling os.environ and asserting is_runtime_active() flips",
+  "max_rollback_time_seconds": 60,
+  "runbook_doc": "/app/docs/divine/132F_STATUS_ROLLBACK_AND_KILL_SWITCH_PLAN.md",
+  "forbidden_in_track_f_respected": {
+    "db_writes": false,
+    "runtime_activation": false
+  },
+  "validator_script": "validate_project_j_status_rollback_kill_switch_plan_v1.py"
+}

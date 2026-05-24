@@ -725,6 +725,32 @@ OPTIONAL = [
     ('PROJECT-I-TRACK-G-DRIFT-DB-CLEANUP-FREEZE-WINDOW-PLAN', 'validate_project_i_drift_db_cleanup_freeze_window_plan_v1.py'),
     # PROJECT_I Track H PROJECT 99->100 FINAL LIVE-GATE ROADMAP
     ('PROJECT-I-TRACK-H-PROJECT-99-TO-100-FINAL-LIVE-GATE-ROADMAP', 'validate_project_i_project_99_to_100_final_live_gate_roadmap_v1.py'),
+    # PROJECT_J Track A STATUS FIRST SLICE SCOPE LOCK & FLAG CONTRACT (flag default OFF)
+    ('PROJECT-J-TRACK-A-STATUS-FIRST-SLICE-SCOPE-LOCK', 'validate_project_j_status_first_slice_scope_lock_v1.py'),
+    # PROJECT_J Track B STATUS RESOLVER PURE MODULE (inert; not imported by battle/runtime)
+    ('PROJECT-J-TRACK-B-STATUS-RESOLVER-PURE-MODULE', 'validate_project_j_status_resolver_pure_module_v1.py'),
+    # PROJECT_J Track C STATUS FIRST SLICE REQUIRED-CANDIDATE VALIDATORS SET (5 OPTIONAL)
+    ('PROJECT-J-TRACK-C-STATUS-FIRST-SLICE-REQUIRED-VALIDATORS-SET', 'validate_project_j_status_first_slice_required_validators_set_v1.py'),
+    # PROJECT_J Track D STATUS FIXTURE MATRIX + 10 GOLDEN TESTS
+    ('PROJECT-J-TRACK-D-STATUS-FIXTURE-MATRIX-AND-GOLDEN-TESTS', 'validate_project_j_status_fixture_matrix_and_golden_tests_v1.py'),
+    # PROJECT_J Track E BATTLE PAYLOAD STATUS PREVIEW CONTRACT (design only)
+    ('PROJECT-J-TRACK-E-BATTLE-PAYLOAD-STATUS-PREVIEW-CONTRACT', 'validate_project_j_battle_payload_status_preview_contract_v1.py'),
+    # PROJECT_J Track F STATUS ROLLBACK + KILL-SWITCH PLAN
+    ('PROJECT-J-TRACK-F-STATUS-ROLLBACK-KILL-SWITCH-PLAN', 'validate_project_j_status_rollback_kill_switch_plan_v1.py'),
+    # PROJECT_J Track G STATUS QA SAFE SMOKE EXTENSION (SS1-SS5)
+    ('PROJECT-J-TRACK-G-STATUS-QA-SAFE-SMOKE-EXTENSION', 'validate_project_j_status_qa_safe_smoke_extension_v1.py'),
+    # PROJECT_J Track H PROJECT J COMPLETION + NEXT PACK ROADMAP
+    ('PROJECT-J-TRACK-H-PROJECT-J-COMPLETION-AND-NEXT-PACK-ROADMAP', 'validate_project_j_completion_and_next_pack_roadmap_v1.py'),
+    # PROJECT_J REQUIRED-CANDIDATE 1: resolver pure deterministic
+    ('PROJECT-J-RC-1-RESOLVER-PURE-DETERMINISTIC', 'validate_project_j_status_first_slice_resolver_pure_deterministic_v1.py'),
+    # PROJECT_J REQUIRED-CANDIDATE 2: no tick loop touch
+    ('PROJECT-J-RC-2-NO-TICK-LOOP-TOUCH', 'validate_project_j_status_first_slice_no_tick_loop_touch_v1.py'),
+    # PROJECT_J REQUIRED-CANDIDATE 3: caps respect
+    ('PROJECT-J-RC-3-CAPS-RESPECT', 'validate_project_j_status_first_slice_caps_respect_v1.py'),
+    # PROJECT_J REQUIRED-CANDIDATE 4: PvP fairness audit
+    ('PROJECT-J-RC-4-PVP-FAIRNESS-AUDIT', 'validate_project_j_status_first_slice_pvp_fairness_audit_v1.py'),
+    # PROJECT_J REQUIRED-CANDIDATE 5: rollback runbook
+    ('PROJECT-J-RC-5-ROLLBACK-RUNBOOK', 'validate_project_j_status_first_slice_rollback_runbook_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
