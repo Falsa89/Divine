@@ -893,6 +893,15 @@ OPTIONAL = [
     ('PROJECT-U-TRACK-F-SECOND-SLICE-ROLLBACK-KILL-SWITCH-DRILL', 'validate_project_u_second_slice_rollback_kill_switch_v1.py'),
     ('PROJECT-U-TRACK-G-SECOND-SLICE-DEV-LIVE-READINESS-GATE', 'validate_project_u_second_slice_dev_live_readiness_gate_v1.py'),
     ('PROJECT-U-TRACK-H-PROJECT-U-COMPLETION-AND-NEXT-PACK', 'validate_project_u_completion_and_next_pack_v1.py'),
+    # PROJECT_V STATUS SECOND SLICE DEV-LIVE ROLLOUT PACK (8 tracks; flag flipped in dev-live then rolled back OFF; .env post-rollback byte-identical to pre-flip backup; no DB writes; no battle_engine.py mutations)
+    ('PROJECT-V-TRACK-A-SECOND-SLICE-DEV-LIVE-PRECHECK', 'validate_project_v_second_slice_dev_live_precheck_v1.py'),
+    ('PROJECT-V-TRACK-B-SECOND-SLICE-DEV-LIVE-FLAG-ROLLOUT', 'validate_project_v_second_slice_dev_live_flag_rollout_v1.py'),
+    ('PROJECT-V-TRACK-C-SECOND-SLICE-DEV-LIVE-BEHAVIOR-REGRESSION', 'validate_project_v_second_slice_dev_live_behavior_regression_v1.py'),
+    ('PROJECT-V-TRACK-D-SECOND-SLICE-DEV-LIVE-EXTENDED-LOAD', 'validate_project_v_second_slice_dev_live_extended_load_v1.py'),
+    ('PROJECT-V-TRACK-E-SECOND-SLICE-DEV-LIVE-PAYLOAD-LOG-METRICS-NO-LEAK', 'validate_project_v_second_slice_dev_live_payload_log_metrics_no_leak_v1.py'),
+    ('PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH', 'validate_project_v_second_slice_dev_live_rollback_kill_switch_v1.py'),
+    ('PROJECT-V-TRACK-G-SECOND-SLICE-PROD-READINESS-GATE-PREP', 'validate_project_v_second_slice_prod_readiness_gate_prep_v1.py'),
+    ('PROJECT-V-TRACK-H-PROJECT-V-COMPLETION-AND-NEXT-PACK', 'validate_project_v_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
