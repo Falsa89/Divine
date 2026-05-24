@@ -1,0 +1,41 @@
+{
+  "task_id": "PROJECT_I_TRACK_F",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_I_LIVE_FLAG_FLIPS_PACK",
+  "verdict": "TRACK_F_ARTIFACT_APPROVAL_SIGNATURES_PENDING",
+  "mode": "signature_gate_recording_only_when_exact_text_present",
+  "prompt_exact_approval_texts_detected": {
+    "USER_APPROVAL": false,
+    "ECONOMY_APPROVAL_SUMMON_FRAGMENT_SOURCE": false,
+    "BALANCE_APPROVAL_CAPS": false,
+    "QA_APPROVAL_NO_LIVE_LEAK": false
+  },
+  "approval_gates": [
+    {"gate_id": "USER_APPROVAL", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "ECONOMY_APPROVAL_SUMMON_FRAGMENT_SOURCE", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "BALANCE_APPROVAL_CAPS", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "QA_APPROVAL_NO_LIVE_LEAK", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null}
+  ],
+  "import_canary_plan": [
+    "I1: user signs USER_APPROVAL (exact text in 130G)",
+    "I2: economy lead signs ECONOMY_APPROVAL_SUMMON_FRAGMENT_SOURCE",
+    "I3: balance lead signs BALANCE_APPROVAL_CAPS",
+    "I4: QA lead signs QA_APPROVAL_NO_LIVE_LEAK",
+    "I5: ALL 4 gates SIGNED → produce import-ready manifest (still no live bonus, still no summon)",
+    "I6: separate import-activation pack (NOT this pack) wires the resolver behind flag for read-only envelope only",
+    "I7: separate live-bonus pack wires resolver into combat pre-fight stat layer behind flag"
+  ],
+  "artifact_live_bonus_active": false,
+  "artifact_summon_behavior_active": false,
+  "artifact_import_live_active": false,
+  "forbidden_in_track_f_respected": {
+    "artifact_live_bonus": false,
+    "artifact_summon_behavior": false,
+    "artifact_import_live_activation": false,
+    "gacha_rate_pity_change": false,
+    "frontend": false,
+    "db_writes": false,
+    "equipment_semantics": false
+  },
+  "validator_script": "validate_project_i_artifact_approval_signatures_v1.py",
+  "suite_registration": "OPTIONAL"
+}

@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_I_TRACK_E",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_I_LIVE_FLAG_FLIPS_PACK",
+  "verdict": "TRACK_E_AF2N_APPROVAL_SIGNATURES_PENDING",
+  "mode": "signature_gate_recording_only_when_exact_text_present",
+  "prompt_exact_approval_texts_detected": {
+    "OPS_APPROVAL": false,
+    "ALERT_SINK_CONFIGURED": false,
+    "DASHBOARD_DATA_SOURCE_CONFIGURED": false,
+    "NO_SECRET_LEAKAGE": false,
+    "ROLLBACK_NO_OP_PATH": false
+  },
+  "approval_gates": [
+    {"gate_id": "OPS_APPROVAL", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "ALERT_SINK_CONFIGURED", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "DASHBOARD_DATA_SOURCE_CONFIGURED", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "NO_SECRET_LEAKAGE", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "ROLLBACK_NO_OP_PATH", "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null}
+  ],
+  "canary_provisioning_plan": [
+    "P1: operator provides AF2N_GRAFANA_URL, AF2N_GRAFANA_API_TOKEN, AF2N_DASHBOARD_FOLDER_UID, AF2N_ALERT_SINK_URL via secret vault",
+    "P2: dry-run dashboard render against local templates; verify shape",
+    "P3: operator signs OPS_APPROVAL gate (exact text from 130F)",
+    "P4: dry-run alert to sink; receive ack; operator signs ALERT_SINK_CONFIGURED",
+    "P5: scrape data source UID; verify metrics healthy; operator signs DASHBOARD_DATA_SOURCE_CONFIGURED",
+    "P6: QA audit logs and templates; operator signs NO_SECRET_LEAKAGE",
+    "P7: rollback dry-run; verify no-op path; operator signs ROLLBACK_NO_OP_PATH",
+    "P8: only when all 5 gates SIGNED, schedule live provisioning window"
+  ],
+  "external_calls_made": 0,
+  "forbidden_in_track_e_respected": {
+    "external_service_calls": false,
+    "af2n_runtime_mutation": false,
+    "public_spend_ui": false
+  },
+  "validator_script": "validate_project_i_af2n_approval_signatures_v1.py",
+  "suite_registration": "OPTIONAL"
+}

@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_I_TRACK_D",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_I_LIVE_FLAG_FLIPS_PACK",
+  "verdict": "TRACK_D_QA_LIVE_LOGIN_CANARY_MANUAL_REQUIRED",
+  "mode": "safe_skip_when_creds_absent",
+  "approval_marker_detected_in_prompt": true,
+  "qa_test_live_login_ok_in_env": false,
+  "qa_test_email_in_env": false,
+  "qa_test_password_in_env": false,
+  "reason": "QA_TEST_EMAIL and QA_TEST_PASSWORD are not seeded in the running backend environment. Per safety contract (Pack G Track E), the wrapper stays MANUAL_REQUIRED and performs no network call.",
+  "wrapper_secret_logging_audit": {
+    "forbidden_patterns_checked": ["print(.*password", "print(.*token", "logging\\..*password", "logging\\..*token"],
+    "violations_found": 0
+  },
+  "forbidden_in_track_d_respected": {
+    "account_creation": false,
+    "real_gacha_spend": false,
+    "currency_mutation": false,
+    "destructive_action": false,
+    "secret_logging": false,
+    "frontend": false
+  },
+  "validator_script": "validate_project_i_qa_live_login_canary_v1.py",
+  "suite_registration": "OPTIONAL"
+}

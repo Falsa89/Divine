@@ -709,6 +709,22 @@ OPTIONAL = [
     ('PROJECT-H-TRACK-G-ARTIFACT-FINAL-APPROVAL-GATE', 'validate_project_h_artifact_final_approval_gate_v1.py'),
     # PROJECT_H Track H PROJECT RELEASE CANDIDATE DoD FINALIZATION (9 layers; next-stage plan)
     ('PROJECT-H-TRACK-H-PROJECT-RC-DOD-FINALIZATION', 'validate_project_h_release_candidate_dod_finalization_v1.py'),
+    # PROJECT_I Track A SERVER PROFILES PREVIEW CANARY FLAG FLIP (authorized; code-path verified in-process; local backend untouched)
+    ('PROJECT-I-TRACK-A-SERVER-PROFILES-PREVIEW-CANARY-FLIP', 'validate_project_i_server_profiles_preview_canary_flip_v1.py'),
+    # PROJECT_I Track B HOUSING PREVIEW CANARY FLAG FLIP (authorized; zero-bonus envelope; local backend untouched)
+    ('PROJECT-I-TRACK-B-HOUSING-PREVIEW-CANARY-FLIP', 'validate_project_i_housing_preview_canary_flip_v1.py'),
+    # PROJECT_I Track C STATUS RUNTIME REQUIRED VALIDATOR AUGMENTATION PREP (zero added; activation pack will add)
+    ('PROJECT-I-TRACK-C-STATUS-RUNTIME-REQUIRED-VALIDATOR-AUGMENTATION', 'validate_project_i_status_runtime_required_validator_augmentation_v1.py'),
+    # PROJECT_I Track D QA LIVE LOGIN CANARY (MANUAL_REQUIRED if env unset; no secret logging)
+    ('PROJECT-I-TRACK-D-QA-LIVE-LOGIN-CANARY', 'validate_project_i_qa_live_login_canary_v1.py'),
+    # PROJECT_I Track E AF2-N APPROVAL SIGNATURES & CANARY PLAN (5 PENDING; 0 external calls)
+    ('PROJECT-I-TRACK-E-AF2N-APPROVAL-SIGNATURES', 'validate_project_i_af2n_approval_signatures_v1.py'),
+    # PROJECT_I Track F ARTIFACT APPROVAL SIGNATURES & IMPORT CANARY PLAN (4 PENDING; no live bonus/summon/import)
+    ('PROJECT-I-TRACK-F-ARTIFACT-APPROVAL-SIGNATURES', 'validate_project_i_artifact_approval_signatures_v1.py'),
+    # PROJECT_I Track G DRIFT DB CLEANUP FREEZE-WINDOW PLAN (no cleanup executed)
+    ('PROJECT-I-TRACK-G-DRIFT-DB-CLEANUP-FREEZE-WINDOW-PLAN', 'validate_project_i_drift_db_cleanup_freeze_window_plan_v1.py'),
+    # PROJECT_I Track H PROJECT 99->100 FINAL LIVE-GATE ROADMAP
+    ('PROJECT-I-TRACK-H-PROJECT-99-TO-100-FINAL-LIVE-GATE-ROADMAP', 'validate_project_i_project_99_to_100_final_live_gate_roadmap_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

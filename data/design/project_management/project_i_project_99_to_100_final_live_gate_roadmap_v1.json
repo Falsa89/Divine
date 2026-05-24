@@ -1,0 +1,40 @@
+{
+  "task_id": "PROJECT_I_TRACK_H",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_I_LIVE_FLAG_FLIPS_PACK",
+  "verdict": "TRACK_H_PROJECT_99_TO_100_FINAL_LIVE_GATE_ROADMAP_READY",
+  "mode": "roadmap_only_no_runtime_change",
+  "current_global_progress_percent": 99,
+  "target_global_progress_percent": 100,
+  "remaining_one_percent_breakdown": {
+    "server_profiles_canary_full_promotion_to_dev_then_prod": 0.25,
+    "housing_preview_canary_full_promotion": 0.10,
+    "status_runtime_first_slice_activation_canary_then_dev": 0.25,
+    "artifact_approval_signatures_all_4": 0.15,
+    "af2n_dashboard_live_provisioning_all_5_signatures": 0.10,
+    "qa_live_login_canary_executed_safe": 0.05,
+    "drift_db_cleanup_executed_safe": 0.05,
+    "final_load_test_post_canary_and_rollback_drill": 0.05
+  },
+  "roadmap_packs": [
+    {"pack_id": "PROJECT_J_PACK", "name": "STATUS_RUNTIME_FIRST_SLICE_ACTIVATION_PACK", "deliverables": ["REQUIRED validators added", "resolver wired into pre-fight stat layer behind STATUS_RUNTIME_BUFF_SLICE_ENABLED", "PvP fairness audit", "rollback drill"]},
+    {"pack_id": "PROJECT_K_PACK", "name": "ARTIFACT_IMPORT_CANARY_PACK", "deliverables": ["4 artifact signatures collected", "import manifest produced", "resolver flag-gated read-only envelope; no live bonus yet"]},
+    {"pack_id": "PROJECT_L_PACK", "name": "AF2N_LIVE_PROVISIONING_PACK", "deliverables": ["5 AF2-N signatures collected", "live provisioning during approved window", "alert sink confirmed live"]},
+    {"pack_id": "PROJECT_M_PACK", "name": "QA_LIVE_LOGIN_AND_LOAD_TEST_PACK", "deliverables": ["QA live login executed with seeded creds", "PvP load test post first runtime slice", "rollback drill"]},
+    {"pack_id": "PROJECT_N_PACK", "name": "DRIFT_DB_CLEANUP_OPS_PACK", "deliverables": ["freeze window executed", "drift residue cleanup applied", "audit log preserved"]},
+    {"pack_id": "PROJECT_O_PACK", "name": "RELEASE_CANDIDATE_FINAL_GATE_PACK", "deliverables": ["all 9 DoD layers ≥ 99%", "final go/no-go", "production promotion runbook"]}
+  ],
+  "out_of_scope_for_technical_100": [
+    "VFX pipeline for status icons",
+    "Artifact illustrations",
+    "Housing room art assets",
+    "AF2-N dashboard branding",
+    "Audio cues"
+  ],
+  "honest_time_remaining_excluding_graphics_audio_art": {
+    "aggressive": "2-3 days (all signatures collected in same prompt sequence, single sprint)",
+    "realistic": "1-2 weeks (3 packs J/K/L + canary windows)",
+    "prudent": "3-4 weeks (full sequence J-O + drill + load test + ops handoff)"
+  },
+  "validator_script": "validate_project_i_project_99_to_100_final_live_gate_roadmap_v1.py",
+  "suite_registration": "OPTIONAL"
+}

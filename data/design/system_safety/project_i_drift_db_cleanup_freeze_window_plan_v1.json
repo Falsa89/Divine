@@ -1,0 +1,37 @@
+{
+  "task_id": "PROJECT_I_TRACK_G",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_I_LIVE_FLAG_FLIPS_PACK",
+  "verdict": "TRACK_G_DRIFT_DB_CLEANUP_FREEZE_WINDOW_PLAN_READY",
+  "mode": "freeze_window_plan_only_no_cleanup",
+  "db_cleanup_executed": false,
+  "db_cleanup_authorized": false,
+  "target_drift_categories": [
+    "drift_doc_5_legacy_server_select_endpoint_metrics_residue",
+    "drift_doc_6_legacy_battle_pass_pre_season_index_naming_residue",
+    "drift_doc_7_legacy_combat_log_field_naming_residue"
+  ],
+  "freeze_window_plan": {
+    "window_duration_hours": 2,
+    "required_operator_approval": true,
+    "required_rollback_script": true,
+    "required_backup_snapshot": true,
+    "required_metrics_sink_paused": true,
+    "steps": [
+      "S1: take backup snapshot of all affected collections",
+      "S2: pause metrics sink and audit-log writes",
+      "S3: dry-run cleanup query; assert zero unintended matches",
+      "S4: execute cleanup in canary collection clone",
+      "S5: validate canary clone post-cleanup",
+      "S6: schedule live cleanup behind explicit user approval (NOT in this pack)",
+      "S7: resume metrics sink; verify no drift"
+    ]
+  },
+  "forbidden_in_track_g_respected": {
+    "db_cleanup_in_pack_i": false,
+    "roster_mutation": false,
+    "gacha_summon_behavior_change": false,
+    "borea_activation": false
+  },
+  "validator_script": "validate_project_i_drift_db_cleanup_freeze_window_plan_v1.py",
+  "suite_registration": "OPTIONAL"
+}

@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_I_TRACK_C",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_I_LIVE_FLAG_FLIPS_PACK",
+  "verdict": "TRACK_C_STATUS_RUNTIME_REQUIRED_VALIDATOR_AUGMENTATION_READY",
+  "mode": "required_validator_augmentation_prep_inert",
+  "runtime_changes_applied": false,
+  "runtime_active": false,
+  "planned_required_validators_for_first_slice_activation": [
+    {"validator_name": "validate_status_first_slice_resolver_pure_deterministic.py", "asserts": "resolver is pure, deterministic, side-effect free", "required_when": "STATUS_RUNTIME_BUFF_SLICE_ENABLED=true"},
+    {"validator_name": "validate_status_first_slice_no_tick_loop_touch.py", "asserts": "first slice does NOT touch tick loop integration; only pre-fight stat layer", "required_when": "STATUS_RUNTIME_BUFF_SLICE_ENABLED=true"},
+    {"validator_name": "validate_status_first_slice_caps_respect.py", "asserts": "resolver envelope respects master cap and per-category cap", "required_when": "STATUS_RUNTIME_BUFF_SLICE_ENABLED=true"},
+    {"validator_name": "validate_status_first_slice_pvp_fairness_audit.py", "asserts": "pre-fight stat injection deterministic across both teams; no asymmetry", "required_when": "STATUS_RUNTIME_BUFF_SLICE_ENABLED=true"},
+    {"validator_name": "validate_status_first_slice_rollback_runbook.py", "asserts": "rollback path (single env flag unset) documented and tested", "required_when": "STATUS_RUNTIME_BUFF_SLICE_ENABLED=true"}
+  ],
+  "validators_actually_added_to_required_in_pack_i": 0,
+  "reason_no_required_additions_in_pack_i": "First slice runtime not yet activated; REQUIRED validators are added ONLY at the activation pack (PROJECT_J_PACK) to keep zero-coupling between prep and activation.",
+  "activation_flag": "STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+  "required_diff_guard_preserved": true,
+  "forbidden_in_track_c_respected": {
+    "battle_mutation": false,
+    "runtime_status_activation": false,
+    "battle_engine_change": false,
+    "battle_core_change": false,
+    "combat_tsx_change": false,
+    "required_weakening": false
+  },
+  "upstream": [
+    "/app/data/design/status_effects/project_h_final_status_runtime_gate_and_first_slice_v1.json",
+    "/app/data/design/status_effects/project_g_status_effect_runtime_readiness_matrix_v1.json"
+  ],
+  "validator_script": "validate_project_i_status_runtime_required_validator_augmentation_v1.py",
+  "suite_registration": "OPTIONAL"
+}

@@ -1,0 +1,28 @@
+{
+  "task_id": "PROJECT_I_TRACK_B",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_I_LIVE_FLAG_FLIPS_PACK",
+  "verdict": "TRACK_B_HOUSING_PREVIEW_CANARY_ENABLED_SAFE",
+  "mode": "canary_flag_flip_authorized_code_path_verified_local_backend_untouched",
+  "approval_markers_detected_in_prompt": {
+    "TRACK_B_HOUSING_PREVIEW_CANARY_APPROVAL": true,
+    "HOUSING_PREVIEW_CANARY_OK": true
+  },
+  "flip_scope": "canary_environment_only (NOT local dev backend, NOT production)",
+  "flip_applied_to_local_backend_runtime": false,
+  "flip_applied_to_canary_env": "PENDING_OPS_OPERATOR_NETWORK_LEVEL",
+  "flip_code_path_verified_in_process": true,
+  "flip_code_path_verification_method": "import housing_preview route module; with os.environ[HOUSING_PREVIEW_ENABLED]='true', invoke _flag_enabled()+_read_only_envelope(None); assert envelope (preview=True, dry_run=True, live_bonus_applied=False, db_writes=False, combat_mutation=False, rooms=[], envelope all zero); restore os.environ on exit",
+  "local_backend_invariants_after_pack_i": {
+    "GET /api/housing/preview": 503
+  },
+  "forbidden_in_track_b_respected": {
+    "housing_live_bonus": false,
+    "db_writes": false,
+    "battle_mutation": false,
+    "account_stat_mutation": false,
+    "frontend": false
+  },
+  "canary_rollback": "single env flag unset (HOUSING_PREVIEW_ENABLED) reverts canary to 503 default",
+  "validator_script": "validate_project_i_housing_preview_canary_flip_v1.py",
+  "suite_registration": "OPTIONAL"
+}
