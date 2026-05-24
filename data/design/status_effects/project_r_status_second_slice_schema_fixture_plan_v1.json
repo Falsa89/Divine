@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_R_TRACK_C",
+  "verdict": "TRACK_C_STATUS_SECOND_SLICE_SCHEMA_AND_FIXTURE_PLAN_READY",
+  "design_only": true,
+  "runtime_activated": false,
+  "schema_v1": {
+    "status_id": "snake_case string, prefix 'st_'",
+    "family": "enum: debuff_offensive | debuff_defensive | speed_up | speed_down",
+    "stat_target": "enum: atk_pct | def_pct | speed_pct | crit_pct",
+    "sign": "enum: positive | negative",
+    "duration_rounds": "int [1,6]",
+    "stacking_rule": "enum: strongest_wins | additive_capped",
+    "caps": "object {per_status_max_pct, aggregate_family_max_pct}",
+    "source": "enum: skill | passive | artifact_design_only | future",
+    "mode_constraints": "object {pvp_multiplier, boss_guard_multiplier}",
+    "is_runtime_active": "bool (must be false in design-only)"
+  },
+  "required_fields": ["status_id", "family", "stat_target", "sign", "duration_rounds", "stacking_rule", "caps", "source", "mode_constraints", "is_runtime_active"],
+  "canonical_fixtures": [
+    {"status_id": "st_debuff_off_minor", "family": "debuff_offensive", "stat_target": "atk_pct", "sign": "negative", "duration_rounds": 3, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 30.0, "aggregate_family_max_pct": 40.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false},
+    {"status_id": "st_debuff_off_major", "family": "debuff_offensive", "stat_target": "atk_pct", "sign": "negative", "duration_rounds": 2, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 30.0, "aggregate_family_max_pct": 40.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false},
+    {"status_id": "st_debuff_def_minor", "family": "debuff_defensive", "stat_target": "def_pct", "sign": "negative", "duration_rounds": 3, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 30.0, "aggregate_family_max_pct": 40.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false},
+    {"status_id": "st_debuff_def_major", "family": "debuff_defensive", "stat_target": "def_pct", "sign": "negative", "duration_rounds": 2, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 30.0, "aggregate_family_max_pct": 40.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false},
+    {"status_id": "st_speed_up_minor", "family": "speed_up", "stat_target": "speed_pct", "sign": "positive", "duration_rounds": 3, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 25.0, "aggregate_family_max_pct": 30.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false},
+    {"status_id": "st_speed_up_major", "family": "speed_up", "stat_target": "speed_pct", "sign": "positive", "duration_rounds": 2, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 25.0, "aggregate_family_max_pct": 30.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false},
+    {"status_id": "st_speed_down_minor", "family": "speed_down", "stat_target": "speed_pct", "sign": "negative", "duration_rounds": 3, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 25.0, "aggregate_family_max_pct": 30.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false},
+    {"status_id": "st_speed_down_major", "family": "speed_down", "stat_target": "speed_pct", "sign": "negative", "duration_rounds": 2, "stacking_rule": "strongest_wins", "caps": {"per_status_max_pct": 25.0, "aggregate_family_max_pct": 30.0}, "source": "skill", "mode_constraints": {"pvp_multiplier": 0.75, "boss_guard_multiplier": 0.50}, "is_runtime_active": false}
+  ],
+  "fixture_count": 8,
+  "resolver_implemented": false,
+  "db_writes": false,
+  "validator_script": "validate_project_r_status_second_slice_schema_fixture_plan_v1.py"
+}

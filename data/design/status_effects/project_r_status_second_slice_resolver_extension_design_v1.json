@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_R_TRACK_D",
+  "verdict": "TRACK_D_STATUS_SECOND_SLICE_RESOLVER_EXTENSION_DESIGN_READY",
+  "design_only": true,
+  "runtime_activated": false,
+  "existing_first_slice_files": {
+    "resolver_pure": "/app/backend/game_logic/status_first_slice_resolver_pure.py",
+    "prefight_seam": "/app/backend/game_logic/status_prefight_runtime_seam.py"
+  },
+  "first_slice_evidence_refs": [
+    "Project M Track B: single-point wiring (battle_engine.py prefight call) flag-gated by STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+    "Project N Track B/F: canary flag flip + rollback drill OK",
+    "Project O Track B/F: dev-live flag flip + rollback drill OK"
+  ],
+  "proposed_extension_strategy": {
+    "approach": "extend status_first_slice_resolver_pure module with second_slice_resolver_pure SISTERS function; or create separate status_second_slice_resolver_pure.py file (preferred for isolation)",
+    "preferred_layout": "separate file: /app/backend/game_logic/status_second_slice_resolver_pure.py (NOT created in this design pack)",
+    "interface_signature": "resolve_second_slice(unit_stats: dict, active_statuses: list[dict], mode: str) -> dict (stat_pct_deltas)",
+    "determinism": "pure function, no I/O, no DB, no random source",
+    "caps_enforcement": "applies per_status_caps + aggregate_caps + mode_multipliers from Track B JSON",
+    "interaction_with_first_slice": "second slice resolver runs AFTER first slice resolver in the same prefight seam; deltas are merged with cancel-opposing-pairs rule",
+    "flag_gating": "future flag STATUS_RUNTIME_SECOND_SLICE_ENABLED (Track F); OFF by default; never persisted live without explicit approval"
+  },
+  "staged_path": [
+    "design (Project R)",
+    "pure resolver implementation (Project S, separate pack)",
+    "single-point wiring behind flag (Project T)",
+    "canary env flip (Project U)",
+    "dev-live (Project V)",
+    "prod rollout (Project W, requires PROD_ROLLOUT_* signatures)"
+  ],
+  "battle_engine_to_be_mutated_in_this_pack": false,
+  "resolver_file_created_in_this_pack": false,
+  "import_in_battle_engine": false,
+  "flag_gated_in_future": true,
+  "db_writes": false,
+  "validator_script": "validate_project_r_status_second_slice_resolver_extension_design_v1.py"
+}

@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_R_TRACK_E",
+  "verdict": "TRACK_E_STATUS_SECOND_SLICE_PAYLOAD_AND_NO_LEAK_PLAN_READY",
+  "design_only": true,
+  "runtime_activated": false,
+  "current_payload_audit": {
+    "audited_endpoints": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea", "/api/server-profiles/select", "/api/housing/preview"],
+    "forbidden_second_slice_keys": ["second_slice_active", "second_slice_deltas", "debuff_offensive_runtime", "debuff_defensive_runtime", "speed_up_runtime", "speed_down_runtime"],
+    "leak_detected": false,
+    "any_field_leaked_in_first_slice_off": false
+  },
+  "future_payload_envelope_plan": {
+    "key_name": "status_second_slice_preview",
+    "emission_rule": "only when STATUS_RUNTIME_SECOND_SLICE_ENABLED=true AND request includes ?preview=second_slice AND user is in canary cohort",
+    "schema": {
+      "deltas": "list[{stat_target, family, value_pct, source}]",
+      "caps_applied": "object",
+      "mode": "campaign|pvp|boss",
+      "preview_only": true,
+      "deterministic": true
+    },
+    "never_present_when_flag_off": true,
+    "never_present_in_battle_log": true
+  },
+  "no_leak_rules": [
+    "with STATUS_RUNTIME_SECOND_SLICE_ENABLED=false (default), zero fields emitted",
+    "battle log never contains second-slice fields when flag off",
+    "frontend payload contract unchanged in this design pack",
+    "UI requirement: none in this design pack"
+  ],
+  "frontend_touched": false,
+  "db_writes": false,
+  "validator_script": "validate_project_r_status_second_slice_payload_no_leak_plan_v1.py"
+}

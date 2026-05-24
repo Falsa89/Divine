@@ -1,0 +1,39 @@
+{
+  "task_id": "PROJECT_R_TRACK_F",
+  "verdict": "TRACK_F_STATUS_SECOND_SLICE_ROLLBACK_AND_KILL_SWITCH_DESIGN_READY",
+  "design_only": true,
+  "runtime_activated": false,
+  "proposed_future_flag": {
+    "name": "STATUS_RUNTIME_SECOND_SLICE_ENABLED",
+    "default": false,
+    "persisted_in_live_env_in_this_pack": false,
+    "persistence_requires_explicit_approval": true
+  },
+  "kill_switch_strategy": {
+    "emergency_flag": "STATUS_RUNTIME_SECOND_SLICE_ENABLED=false",
+    "effect_when_disabled": "resolver returns empty deltas; prefight seam is no-op; payload envelope absent",
+    "rollback_time_target_seconds": 60,
+    "requires_db_revert": false,
+    "requires_redeploy": false,
+    "single_env_var_flip": true
+  },
+  "staged_rollout_path": [
+    "design (Project R) -- this pack",
+    "pure resolver (Project S)",
+    "single-point wiring behind flag (Project T)",
+    "canary 1% (Project U)",
+    "dev-live 100% (Project V)",
+    "prod 1% -> 5% -> 25% -> 100% (Project W, gated on PROD_ROLLOUT_* signatures)"
+  ],
+  "no_persistent_enable_without_signatures": [
+    "PROD_ROLLOUT_USER_APPROVAL",
+    "PROD_ROLLOUT_QA_APPROVAL",
+    "PROD_ROLLOUT_OPS_APPROVAL",
+    "PROD_ROLLOUT_ROLLBACK_OWNER_APPROVAL",
+    "PROD_ROLLOUT_BALANCE_APPROVAL",
+    "STATUS_RUNTIME_SECOND_SLICE_PROD_OK"
+  ],
+  "env_flag_created_in_live_env": false,
+  "db_writes": false,
+  "validator_script": "validate_project_r_status_second_slice_rollback_killswitch_v1.py"
+}

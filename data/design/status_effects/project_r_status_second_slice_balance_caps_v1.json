@@ -1,0 +1,46 @@
+{
+  "task_id": "PROJECT_R_TRACK_B",
+  "verdict": "TRACK_B_STATUS_SECOND_SLICE_BALANCE_AND_CAPS_READY",
+  "design_only": true,
+  "runtime_activated": false,
+  "per_status_caps_pct": {
+    "debuff_offensive": {"min_pct": 5.0, "max_pct": 30.0, "default_pct": 15.0},
+    "debuff_defensive": {"min_pct": 5.0, "max_pct": 30.0, "default_pct": 15.0},
+    "speed_up": {"min_pct": 5.0, "max_pct": 25.0, "default_pct": 15.0},
+    "speed_down": {"min_pct": 5.0, "max_pct": 25.0, "default_pct": 15.0}
+  },
+  "aggregate_caps_pct": {
+    "aggregate_offensive_debuff_cap_pct": 40.0,
+    "aggregate_defensive_debuff_cap_pct": 40.0,
+    "aggregate_speed_cap_pct": 30.0
+  },
+  "mode_caps": {
+    "pvp_stricter_cap_pct_multiplier": 0.75,
+    "boss_endgame_guard_cap_pct_multiplier": 0.50,
+    "campaign_default_multiplier": 1.0
+  },
+  "stacking_policy": {
+    "same_family_same_target": "strongest_wins",
+    "different_family_same_target": "additive_within_aggregate_cap",
+    "max_simultaneous_active_statuses_per_unit": 4,
+    "opposing_pairs_cancel": [["speed_up", "speed_down"], ["buff_offensive", "debuff_offensive"], ["buff_defensive", "debuff_defensive"]]
+  },
+  "decay_duration_policy": {
+    "default_duration_rounds": 3,
+    "min_duration_rounds": 1,
+    "max_duration_rounds": 6,
+    "decay_curve": "linear_per_round",
+    "decay_only_at_round_start": true
+  },
+  "hard_invariants": [
+    "per-status pct never exceeds per_status_caps_pct.max_pct",
+    "aggregate pct per family never exceeds aggregate_caps_pct",
+    "opposing pairs cancel (do not stack)",
+    "max 4 simultaneous active statuses per unit",
+    "PvP multiplier <= 0.75; boss guard <= 0.50"
+  ],
+  "battle_engine_touched": false,
+  "db_writes": false,
+  "formula_changes": false,
+  "validator_script": "validate_project_r_status_second_slice_balance_caps_v1.py"
+}

@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_R_TRACK_A",
+  "verdict": "TRACK_A_STATUS_SECOND_SLICE_SCOPE_AND_BOUNDARY_READY",
+  "design_only": true,
+  "runtime_activated": false,
+  "second_slice_in_scope": [
+    "debuff_offensive",
+    "debuff_defensive",
+    "speed_up",
+    "speed_down"
+  ],
+  "second_slice_excluded": [
+    "dot",
+    "poison",
+    "burn",
+    "bleed",
+    "freeze",
+    "stun",
+    "sleep",
+    "hard_cc",
+    "shield",
+    "barrier",
+    "hot",
+    "revive",
+    "immunity_cleanse_runtime",
+    "borea_marchio_live_logic",
+    "boss_special_status_logic"
+  ],
+  "boundary_rules": [
+    "no tick loop",
+    "no DoT/HoT",
+    "no hard CC",
+    "no shield/barrier mechanics",
+    "no revive / immunity / cleanse runtime",
+    "no Borea Marchio live logic",
+    "second slice operates on stat-multiplier deltas applied pre-fight (consistent with first-slice seam pattern)"
+  ],
+  "relation_to_first_slice": {
+    "first_slice_families": ["buff_offensive", "buff_defensive"],
+    "second_slice_families": ["debuff_offensive", "debuff_defensive", "speed_up", "speed_down"],
+    "overlap": [],
+    "orthogonality": true,
+    "first_slice_flag_unchanged": "STATUS_RUNTIME_BUFF_SLICE_ENABLED remains gated as-is"
+  },
+  "battle_engine_touched": false,
+  "battle_core_touched": false,
+  "frontend_touched": false,
+  "db_writes": false,
+  "validator_script": "validate_project_r_status_second_slice_scope_v1.py"
+}

@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_R_TRACK_G",
+  "verdict": "TRACK_G_STATUS_SECOND_SLICE_QA_AND_RELEASE_GATE_READY",
+  "design_only": true,
+  "runtime_activated": false,
+  "qa_requirements": {
+    "fixture_requirements": [
+      "all 8 canonical fixtures (Track C) covered",
+      "every family has at least one minor and one major variant",
+      "opposing pairs cancellation test case",
+      "aggregate cap saturation test case",
+      "PvP multiplier test case",
+      "boss guard multiplier test case"
+    ],
+    "deterministic_regression": [
+      "resolver pure function: same input -> identical output (no random)",
+      "flag-off byte-identical to baseline (SHA256 check on payload envelope)",
+      "battle_engine.py SHA256 must not change in design + pure resolver phases"
+    ],
+    "no_leak_checks": [
+      "with flag OFF: zero second-slice keys in API payload",
+      "with flag OFF: zero second-slice keys in battle log",
+      "battle log byte-identical to baseline when flag OFF"
+    ],
+    "mobile_qa_needs": [
+      "frontend payload contract unchanged in design + pure resolver phases",
+      "UI/VFX work scheduled only after canary success",
+      "no mobile build required for this pack"
+    ]
+  },
+  "release_gate": {
+    "rollback_owner": "required",
+    "rollback_owner_note": "named individual or rotation",
+    "balance_signoff": "required",
+    "qa_signoff": "required",
+    "ops_signoff": "required",
+    "user_signoff": "required",
+    "prod_gate_signatures": [
+      "PROD_ROLLOUT_USER_APPROVAL",
+      "PROD_ROLLOUT_QA_APPROVAL",
+      "PROD_ROLLOUT_OPS_APPROVAL",
+      "PROD_ROLLOUT_ROLLBACK_OWNER_APPROVAL",
+      "PROD_ROLLOUT_BALANCE_APPROVAL",
+      "STATUS_RUNTIME_SECOND_SLICE_PROD_OK"
+    ]
+  },
+  "live_rollout_executed": false,
+  "db_writes": false,
+  "validator_script": "validate_project_r_status_second_slice_qa_release_gate_v1.py"
+}

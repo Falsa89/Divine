@@ -857,6 +857,15 @@ OPTIONAL = [
     ('PROJECT-Q-TRACK-F-ARTIFACT-IMPORT-APPROVAL-GATE-ROLLBACK', 'validate_project_q_artifact_import_approval_gate_rollback_v1.py'),
     ('PROJECT-Q-TRACK-G-ARTIFACT-RUNTIME-NO-LEAK', 'validate_project_q_artifact_runtime_no_leak_v1.py'),
     ('PROJECT-Q-TRACK-H-PROJECT-Q-COMPLETION-AND-NEXT-SYSTEM', 'validate_project_q_completion_and_next_system_v1.py'),
+    # PROJECT_R STATUS SECOND SLICE DESIGN PACK (8 tracks, design-only: no runtime, no DB, no battle_engine mutation, no live env flag)
+    ('PROJECT-R-TRACK-A-STATUS-SECOND-SLICE-SCOPE-AND-BOUNDARY', 'validate_project_r_status_second_slice_scope_v1.py'),
+    ('PROJECT-R-TRACK-B-STATUS-SECOND-SLICE-BALANCE-AND-CAPS', 'validate_project_r_status_second_slice_balance_caps_v1.py'),
+    ('PROJECT-R-TRACK-C-STATUS-SECOND-SLICE-SCHEMA-AND-FIXTURE-PLAN', 'validate_project_r_status_second_slice_schema_fixture_plan_v1.py'),
+    ('PROJECT-R-TRACK-D-STATUS-SECOND-SLICE-RESOLVER-EXTENSION-DESIGN', 'validate_project_r_status_second_slice_resolver_extension_design_v1.py'),
+    ('PROJECT-R-TRACK-E-STATUS-SECOND-SLICE-PAYLOAD-AND-NO-LEAK-PLAN', 'validate_project_r_status_second_slice_payload_no_leak_plan_v1.py'),
+    ('PROJECT-R-TRACK-F-STATUS-SECOND-SLICE-ROLLBACK-AND-KILL-SWITCH-DESIGN', 'validate_project_r_status_second_slice_rollback_killswitch_v1.py'),
+    ('PROJECT-R-TRACK-G-STATUS-SECOND-SLICE-QA-AND-RELEASE-GATE', 'validate_project_r_status_second_slice_qa_release_gate_v1.py'),
+    ('PROJECT-R-TRACK-H-PROJECT-R-COMPLETION-AND-NEXT-PACK', 'validate_project_r_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
