@@ -574,6 +574,14 @@ OPTIONAL = [
     ('V7-BLOCK-C-SERVER-PROFILES-INDEXES-DEFINITION', 'validate_server_profiles_schema_indexes_definition_v1.py'),
     # MEGA-COMBO V7 BLOCK_E BOREA INERT BASELINE INVARIANT HARDENING (HTTP smoke; 9 dedicated invariants)
     ('V7-BLOCK-E-BOREA-INERT-BASELINE',             'validate_borea_inert_baseline_v1.py'),
+    # MEGA-COMBO V8 BLOCK_A SERVER PROFILES COLLECTION CREATION PLAN (design/script-only; dry-run gated, no DB write)
+    ('V8-BLOCK-A-SERVER-PROFILES-COLLECTION-PLAN',  'validate_server_profiles_collection_creation_plan_v1.py'),
+    # MEGA-COMBO V8 BLOCK_B BATTLE PASS USER_SEASON INDEX DEFINITION (design/dry-run-only; no live create_index)
+    ('V8-BLOCK-B-BATTLE-PASS-INDEX-USER-SEASON',    'validate_battle_pass_user_season_index_definition_v1.py'),
+    # MEGA-COMBO V8 BLOCK_C AF2N DASHBOARD RENDER JSON (design/export-only; no runtime, no daemon)
+    ('V8-BLOCK-C-AF2N-DASHBOARD-RENDER-JSON',       'validate_af2n_dashboard_render_json_v1.py'),
+    # MEGA-COMBO V8 BLOCK_E SUITE OPTIMIZATION PARALLEL AUDIT (audit-only; no runner change, no validator weakening)
+    ('V8-BLOCK-E-SUITE-OPTIMIZATION-PARALLEL-AUDIT', 'audit_suite_optimization_parallel_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

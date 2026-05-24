@@ -1,0 +1,144 @@
+{
+  "task_id": "V8_BLOCK_C_AF2N_DASHBOARD_RENDER_JSON",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V8",
+  "verdict": "BLOCK_C_AF2N_DASHBOARD_RENDER_JSON_READY",
+  "mode": "design_export_json_only",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260524T140000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V8_APPROVAL": true,
+    "BLOCK_C_AF2N_DASHBOARD_RENDER_JSON_APPROVAL": true
+  },
+  "upstream_template": "/app/data/design/system_safety/af2n_observability_dashboard_template_v1.json",
+  "target_format": "grafana_dashboard_json_schema_v1_subset",
+  "schema_version": "af2n_dashboard_render_v1",
+  "dashboard": {
+    "uid": "af2n_v8_canary_health",
+    "title": "AF2-N V8 Canary Health Dashboard",
+    "description": "Rendered from AF2N_V8_CANARY_HEALTH_DASHBOARD_V1 template (V7 BLOCK_D). Non-runtime artifact for future Grafana provisioning.",
+    "tags": ["af2n", "canary", "observability", "v8"],
+    "timezone": "utc",
+    "refresh": "30s",
+    "time": {"from": "now-24h", "to": "now"},
+    "templating": {
+      "list": [
+        {"name": "endpoint", "type": "query", "datasource": "<placeholder:af2n_metrics_ds>", "query": "label_values(af2n_rate_limit_throttle_total, endpoint)"},
+        {"name": "reason", "type": "query", "datasource": "<placeholder:af2n_metrics_ds>", "query": "label_values(af2n_ledger_write_failures_total, reason)"}
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "panel_id": "P1",
+        "title": "Canary Completion Ratio",
+        "type": "stat",
+        "datasource": "<placeholder:af2n_metrics_ds>",
+        "targets": [{"expr": "af2n_canary_completion_ratio"}],
+        "thresholds": {"green": 0.95, "yellow": 0.80, "red": 0.0},
+        "v8_signoff_gating": true,
+        "v8_signoff_id": "DBR_02"
+      },
+      {
+        "id": 2,
+        "panel_id": "P2",
+        "title": "Ledger Write Failures by Reason",
+        "type": "barchart",
+        "datasource": "<placeholder:af2n_metrics_ds>",
+        "targets": [{"expr": "sum by (reason) (rate(af2n_ledger_write_failures_total[5m]))"}],
+        "alert": {"id": "A2", "condition": "failures > 5/hour", "severity": "medium"},
+        "v8_signoff_gating": true
+      },
+      {
+        "id": 3,
+        "panel_id": "P3",
+        "title": "Rate-Limit Throttle by Endpoint",
+        "type": "timeseries",
+        "datasource": "<placeholder:af2n_metrics_ds>",
+        "targets": [{"expr": "sum by (endpoint) (rate(af2n_rate_limit_throttle_total[5m]))"}],
+        "v8_signoff_gating": false
+      },
+      {
+        "id": 4,
+        "panel_id": "P4",
+        "title": "Redis Crash Events / Mitigation Invocations",
+        "type": "stat",
+        "datasource": "<placeholder:af2n_metrics_ds>",
+        "targets": [
+          {"expr": "af2n_redis_crash_events_total", "legend": "crashes"},
+          {"expr": "af2n_redis_mitigation_invocations_total", "legend": "mitigations"}
+        ],
+        "alert": {"id": "A3", "condition": "crashes_today > 0", "severity": "medium", "action": "run /app/ops/ensure_redis_rate_limit.sh"}
+      },
+      {
+        "id": 5,
+        "panel_id": "P5",
+        "title": "Inventory Writes Blocked (FROZEN)",
+        "type": "stat",
+        "datasource": "<placeholder:af2n_metrics_ds>",
+        "targets": [{"expr": "af2n_inventory_writes_blocked_frozen_total"}],
+        "alert": {"id": "A4", "condition": "inventory_writes_blocked != attempted", "severity": "critical"},
+        "v8_signoff_gating": true
+      },
+      {
+        "id": 6,
+        "panel_id": "P6",
+        "title": "Affinity Gain Delta vs Control",
+        "type": "timeseries",
+        "datasource": "<placeholder:af2n_metrics_ds>",
+        "targets": [{"expr": "af2n_affinity_gain_delta_vs_control"}],
+        "thresholds": {"green_low": -0.05, "green_high": 0.10, "red_high": 0.25, "red_low": -0.10},
+        "alert": {"id": "A5", "condition": "delta > 0.25", "severity": "high"},
+        "v8_signoff_gating": true,
+        "v8_signoff_id": "DBR_02"
+      },
+      {
+        "id": 7,
+        "panel_id": "P7",
+        "title": "Gift Spend Volume Distribution",
+        "type": "heatmap",
+        "datasource": "<placeholder:af2n_metrics_ds>",
+        "targets": [
+          {"expr": "histogram_quantile(0.50, af2n_gift_spend_volume_seconds_bucket)", "legend": "p50"},
+          {"expr": "histogram_quantile(0.95, af2n_gift_spend_volume_seconds_bucket)", "legend": "p95"},
+          {"expr": "histogram_quantile(0.99, af2n_gift_spend_volume_seconds_bucket)", "legend": "p99"}
+        ]
+      },
+      {
+        "id": 8,
+        "panel_id": "P8",
+        "title": "V21/V22/V23/V24 Rollback Test Execution Timestamps",
+        "type": "timeline",
+        "datasource": "<placeholder:suite_runs_ds>",
+        "targets": [{"expr": "suite_optional_validator_runs{task_id=~\"af2n_v2[1-4]_rollback_readiness.*\"}"}]
+      }
+    ],
+    "alert_rules": [
+      {"id": "A1", "condition": "completion_ratio < 0.80 for 1h", "severity": "high", "action": "page on-call", "panel_ref": "P1"},
+      {"id": "A2", "condition": "ledger_write_failures > 5/hour", "severity": "medium", "action": "investigate Redis health + ledger collection state", "panel_ref": "P2"},
+      {"id": "A3", "condition": "redis_crash_events > 0/day", "severity": "medium", "action": "runbook V4 BLOCK_E", "panel_ref": "P4"},
+      {"id": "A4", "condition": "inventory_writes_blocked != attempted", "severity": "critical", "action": "halt canary; investigate FROZEN bypass", "panel_ref": "P5"},
+      {"id": "A5", "condition": "affinity_gain_delta > 0.25", "severity": "high", "action": "halt canary; investigate AF2-N gift catalog", "panel_ref": "P6"}
+    ]
+  },
+  "placeholders_required_for_runtime_provisioning": [
+    "<placeholder:af2n_metrics_ds>",
+    "<placeholder:suite_runs_ds>"
+  ],
+  "v8_signoff_gating_panels": ["P1", "P2", "P5", "P6"],
+  "external_service_connections": [],
+  "daemon_required": false,
+  "validator_script": "/app/backend/scripts/validate_af2n_dashboard_render_json_v1.py",
+  "forbidden_in_block_c_respected": {
+    "af2n_runtime_mutation": false,
+    "dashboard_daemon": false,
+    "external_service_connection": false,
+    "public_spend_ui": false,
+    "stack_g_changes": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/af2n_observability_dashboard_render_v1.json",
+    "/app/backend/scripts/validate_af2n_dashboard_render_json_v1.py",
+    "/app/docs/divine/122C_AF2N_DASHBOARD_RENDER_JSON.md"
+  ]
+}

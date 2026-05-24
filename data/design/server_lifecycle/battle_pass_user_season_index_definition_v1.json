@@ -1,0 +1,79 @@
+{
+  "task_id": "V8_BLOCK_B_BATTLE_PASS_INDEX_USER_SEASON",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V8",
+  "verdict": "BLOCK_B_BATTLE_PASS_INDEX_USER_SEASON_READY",
+  "mode": "design_dry_run_no_db_write",
+  "runtime_patch_applied": false,
+  "db_index_created": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260524T140000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V8_APPROVAL": true,
+    "BLOCK_B_BATTLE_PASS_INDEX_USER_SEASON_APPLY_APPROVAL": true
+  },
+  "closes_residual": {
+    "v4_block_a_r4": "INDEX_LIVE_DEFERRED",
+    "status_after_v8": "DEFINITION_READY_APPLY_DEFERRED_TO_OPS_PACK"
+  },
+  "target_collection": "battle_pass",
+  "index_canonical_definition": {
+    "name": "idx_battle_pass_user_season",
+    "collection": "battle_pass",
+    "fields": [
+      {"field": "user_id", "order": 1},
+      {"field": "season", "order": 1}
+    ],
+    "unique": true,
+    "sparse": false,
+    "rationale": "Garantisce one battle_pass document per (user, season). Coerente con BP_D4=GLOBAL_SEASON (V6 BLOCK_A signoff): la chiave (user_id, season) e' canonical per il single-doc-per-season pattern.",
+    "create_index_call_target": "db.battle_pass.create_index([('user_id', 1), ('season', 1)], unique=True, name='idx_battle_pass_user_season')",
+    "deferred_to_pack": "BATTLE_PASS_INDEX_USER_SEASON_APPLY_OPS_PACK"
+  },
+  "coherence_with_signoff": {
+    "BP_D1_ACCOUNT_WIDE": "compatible: doc keyed by user_id",
+    "BP_D3_ACCOUNT_WIDE_ONCE": "compatible: claim arrays inside doc are account-wide",
+    "BP_D4_GLOBAL_SEASON": "compatible: index includes season for unique constraint per season",
+    "v7_block_b_setoninsert_doc_shape": "compatible: $setOnInsert payload already contains 'season': 1 default"
+  },
+  "dry_run_script": {
+    "path": "/app/backend/scripts/prepare_battle_pass_user_season_index_dry_run_v1.py",
+    "auto_run": false,
+    "gating_env": "V8_BLOCK_B_APPLY=YES",
+    "default_behavior": "prints intended create_index call; performs pre-flight read-only check on battle_pass collection state (count of docs missing 'season' field); exits 0 with status DRY_RUN",
+    "apply_behavior_in_v8": "APPLY_REFUSED_NO_PACK_AUTHORIZATION (branch present only for reuse by a future ops pack)"
+  },
+  "pre_flight_check": {
+    "description": "prima di applicare l'unique index su (user_id, season) il futuro ops pack DEVE verificare che zero documenti existing battle_pass abbiano season missing o duplicate (user_id, season). Il dry-run effettua questo conteggio in modalita' read-only via .count_documents().",
+    "blocker_if_docs_missing_season_gt_0": "data backfill required PRIMA dell'index apply",
+    "blocker_if_duplicate_user_season_gt_0": "dedupe required PRIMA dell'index apply",
+    "read_only": true
+  },
+  "acceptance_criteria_for_apply_pack": [
+    "Esplicita user authorization in chat message",
+    "Pre-flight read-only check: 0 docs con season missing",
+    "Pre-flight read-only check: 0 duplicate (user_id, season)",
+    "Index creation idempotente (skip-if-exists by name)",
+    "Rollback script (drop_index('idx_battle_pass_user_season'))",
+    "Post-apply validator: index exists con expected canonical properties"
+  ],
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_battle_pass_user_season_index_definition_v1.py",
+    "behavior": "read-only verifica del plan JSON + dry-run script presence + gating; non chiama create_index",
+    "safe_in_suite": true,
+    "db_writes": 0
+  },
+  "forbidden_in_block_b_respected": {
+    "live_db_index_creation": false,
+    "db_migration_backfill": false,
+    "battle_pass_behavior_change": false,
+    "reward_premium_change": false,
+    "pricing_currency_change": false,
+    "runtime_route_mutation": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/battle_pass_user_season_index_definition_v1.json",
+    "/app/backend/scripts/prepare_battle_pass_user_season_index_dry_run_v1.py",
+    "/app/backend/scripts/validate_battle_pass_user_season_index_definition_v1.py",
+    "/app/docs/divine/122B_BATTLE_PASS_INDEX_USER_SEASON_APPLY_PACK.md"
+  ]
+}

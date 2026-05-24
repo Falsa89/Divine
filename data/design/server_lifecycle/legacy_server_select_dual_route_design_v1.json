@@ -1,0 +1,87 @@
+{
+  "task_id": "V8_BLOCK_D_LEGACY_SERVER_SELECT_DUAL_ROUTE_DESIGN",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V8",
+  "verdict": "BLOCK_D_LEGACY_SERVER_SELECT_DUAL_ROUTE_DESIGN_READY",
+  "mode": "design_doc_only",
+  "runtime_patch_applied": false,
+  "runtime_route_added": false,
+  "runtime_route_removed": false,
+  "timestamp_utc": "20260524T140000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V8_APPROVAL": true,
+    "BLOCK_D_LEGACY_SERVER_SELECT_DUAL_ROUTE_DESIGN_APPROVAL": true
+  },
+  "upstream": {
+    "v6_block_d_removal_plan": "/app/docs/divine/120D_LEGACY_SERVER_SELECT_REMOVAL_PLAN.md",
+    "v7_block_a_deprecation_notice": "/app/data/design/system_safety/v7_economy_server_select_deprecation_marker.json"
+  },
+  "dual_route_strategy": {
+    "phase_1_status": "APPLIED_V7",
+    "phase_1_description": "Legacy POST /api/server/select emette WARNING via logger 'divine.deprecation'. Behavior invariato.",
+    "phase_2_design": {
+      "name": "dual_route_compat_phase",
+      "new_route": "POST /api/server-profiles/select",
+      "semantics": "future SLC-H-shaped server selection on server_profiles collection (account-wide, archived flip)",
+      "legacy_route": "POST /api/server/select",
+      "response_compatibility": "both routes return identical response shape; only the underlying source-of-truth differs (users.server vs server_profiles.active)",
+      "alias_strategy": "new route is alias-with-extended-semantics, NOT a strict mirror: writes go to server_profiles AND mirror to users.server during dual-write phase",
+      "fallback_policy": "if server_profiles collection or active doc missing, fallback to legacy users.server behavior; surfaces single 'fallback_used' counter via /api/server/select deprecation logger"
+    },
+    "phase_3_design": {
+      "name": "legacy_removal_phase",
+      "preconditions": [
+        "server_profiles collection populated for all active users (V8 BLOCK_A apply pack DONE)",
+        "unique index (user_id, server_id) live and verified",
+        "divine.deprecation log shows < 0.1% legacy calls / day for 7 consecutive days",
+        "frontend migrated to /api/server-profiles/select OR proxy in place",
+        "explicit user approval message authorizing removal",
+        "rollback path: re-add legacy route via single commit (kept in attic /app/backend/_attic/legacy_server_select.py)"
+      ],
+      "removal_method": "replace the route body with a 410 GONE response, keep route definition for one release as legacy_sunset, then remove"
+    },
+    "phase_4_design": {
+      "name": "users_server_field_drop_phase",
+      "preconditions": [
+        "phase_3 completed for >= 1 release cycle",
+        "no read path on users.server field anywhere in backend",
+        "backfill from server_profiles confirmed authoritative"
+      ],
+      "action": "drop users.server field via background migration (separate authorized ops pack)"
+    }
+  },
+  "response_compat_contract": {
+    "common_response_shape": {
+      "success": "bool",
+      "server": {"id": "str", "name": "str", "status": "str"}
+    },
+    "new_route_optional_extension": {
+      "server_profile_id": "str (only on /server-profiles/select)",
+      "is_archived": "bool (only on /server-profiles/select)"
+    },
+    "breaking_changes": [],
+    "strict_back_compat": true
+  },
+  "fallback_policy_matrix": [
+    {"condition": "server_profiles missing", "action": "new route returns 503; legacy route unchanged"},
+    {"condition": "server_profiles empty for user", "action": "new route falls back to users.server via internal helper; emits 'fallback_used' log"},
+    {"condition": "both missing", "action": "new route returns 404"},
+    {"condition": "both present, conflict", "action": "server_profiles wins; emits 'conflict_resolved_via_server_profiles' log; legacy users.server NOT auto-updated in dual-write phase (manual reconcile)"}
+  ],
+  "feature_flags_referenced": [
+    {"name": "SERVER_PROFILES_RUNTIME_ENABLED", "current": "unset", "required_for_phase_2": true},
+    {"name": "SERVER_PROFILES_DUAL_WRITE_ENABLED", "current": "unset (not introduced)", "required_for_phase_2": true},
+    {"name": "LEGACY_SERVER_SELECT_SUNSET_410", "current": "unset (not introduced)", "required_for_phase_3": true}
+  ],
+  "forbidden_in_block_d_respected": {
+    "endpoint_implementation": false,
+    "route_removal": false,
+    "server_selection_behavior_change": false,
+    "second_server": false,
+    "feature_flag_enable": false,
+    "frontend_ui_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/legacy_server_select_dual_route_design_v1.json",
+    "/app/docs/divine/122D_LEGACY_SERVER_SELECT_DUAL_ROUTE_DESIGN.md"
+  ]
+}

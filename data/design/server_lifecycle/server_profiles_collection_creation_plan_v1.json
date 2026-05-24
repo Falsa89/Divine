@@ -1,0 +1,77 @@
+{
+  "task_id": "V8_BLOCK_A_SERVER_PROFILES_COLLECTION_CREATION",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V8",
+  "verdict": "BLOCK_A_SERVER_PROFILES_COLLECTION_CREATION_READY",
+  "mode": "design_script_only_no_auto_run",
+  "runtime_patch_applied": false,
+  "db_collection_created": false,
+  "db_index_created": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260524T140000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V8_APPROVAL": true,
+    "BLOCK_A_SERVER_PROFILES_COLLECTION_CREATION_APPROVAL": true
+  },
+  "upstream_references": {
+    "v6_block_c_schema_proposal": "/app/data/design/server_lifecycle/server_profiles_canonical_schema_proposal_v1.json",
+    "v7_block_c_indexes_definition": "/app/data/design/server_lifecycle/server_profiles_schema_indexes_definition_v1.json"
+  },
+  "target_collection": {
+    "name": "server_profiles",
+    "current_state": "NOT_CREATED",
+    "expected_post_apply_state": "EMPTY_COLLECTION_WITH_3_INDEXES",
+    "mongo_implicit_creation_on_insert": true,
+    "explicit_creation_recommended": true
+  },
+  "dry_run_script": {
+    "path": "/app/backend/scripts/prepare_server_profiles_collection_dry_run_v1.py",
+    "auto_run": false,
+    "gating_env": "V8_BLOCK_A_APPLY=YES",
+    "default_behavior": "prints intended DB ops; does NOT touch DB; exits 0",
+    "apply_behavior_when_gated": "creates empty server_profiles collection + 3 canonical indexes from V7 BLOCK_C definition; idempotent (skip-if-exists)"
+  },
+  "three_indexes_to_create_when_apply_authorized": [
+    {"name": "idx_user_server", "unique": true, "fields": ["user_id", "server_id"]},
+    {"name": "idx_user_active", "unique": false, "fields": ["user_id", "is_archived"]},
+    {"name": "idx_server_active", "unique": false, "fields": ["server_id", "is_archived"]}
+  ],
+  "manual_approval_requirements": [
+    "Explicit user authorization in chat message to apply DB-write",
+    "Verify backend health (heroes=100) immediately before apply",
+    "Verify mongo reachable via /api/heroes 200",
+    "Run dry-run in default mode (no env) FIRST and capture output",
+    "Capture pre-apply collection list (db.list_collection_names())",
+    "Set V8_BLOCK_A_APPLY=YES and execute",
+    "Run post-apply validator immediately after",
+    "Capture post-apply collection list + index list"
+  ],
+  "rollback_strategy": {
+    "empty_collection_drop_safe": true,
+    "command": "db.server_profiles.drop()",
+    "safe_only_if_collection_is_empty": true,
+    "index_drop_command": "db.server_profiles.drop_indexes()",
+    "automatic_rollback_in_V8": false,
+    "reason": "V8 BLOCK_A does NOT apply; rollback is N/A in this pack"
+  },
+  "validator_strategy": {
+    "script": "/app/backend/scripts/validate_server_profiles_collection_creation_plan_v1.py",
+    "behavior": "read-only verification of plan JSON, dry-run script existence and non-auto-run gating, upstream references",
+    "safe_in_suite": true,
+    "db_writes": 0
+  },
+  "forbidden_in_block_a_respected": {
+    "live_collection_creation": false,
+    "live_index_creation": false,
+    "migration_backfill": false,
+    "endpoint_implementation": false,
+    "feature_flag_enable": false,
+    "second_server": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/server_profiles_collection_creation_plan_v1.json",
+    "/app/backend/scripts/prepare_server_profiles_collection_dry_run_v1.py",
+    "/app/backend/scripts/validate_server_profiles_collection_creation_plan_v1.py",
+    "/app/docs/divine/122A_SERVER_PROFILES_COLLECTION_CREATION_PACK.md"
+  ],
+  "next_recommended_pack": "SERVER_PROFILES_COLLECTION_APPLY_OPS_PACK (explicit user authorization required; runs dry-run script with V8_BLOCK_A_APPLY=YES; expected diff: +1 empty collection, +3 indexes)"
+}
