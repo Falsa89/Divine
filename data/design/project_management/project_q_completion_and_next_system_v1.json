@@ -1,9 +1,22 @@
 {
   "task_id": "PROJECT_Q_TRACK_H",
   "verdict": "TRACK_H_PROJECT_Q_COMPLETION_AND_NEXT_SYSTEM_READY",
-  "project_q_completion_summary": "Artifact bible direction locked, schema validated, 8 launch candidates expanded covering 5 factions and 4 of 6 collection categories (weapon_relic/armor_relic deferred), bonus cap enforced (master 5%, per-artifact <=1.5%), import dry-run script executed (8/8 schema PASS, 8/8 invariants PASS, 0 DB writes), live import GATED behind 5 required signatures (0/5 present), runtime no-leak verified.",
-  "live_import_executed_in_pack_q": false,
-  "required_to_unblock_live_import": [
+  "project_q_completion_summary": {
+    "pack_id": "PROJECT_Q_ARTIFACT_BIBLE_APPROVAL_AND_IMPORT_DRY_RUN_PACK",
+    "closed_as": "READY_PENDING_APPROVAL",
+    "tracks_completed": ["A", "B", "C", "D", "E", "F", "G", "H"],
+    "tracks_count": 8,
+    "db_writes": false,
+    "live_import_executed": false,
+    "battle_engine_mutated": false,
+    "battle_core_mutated": false,
+    "frontend_mutated": false,
+    "runtime_leak_detected": false,
+    "signatures_present_count": 0,
+    "signatures_required": ["ARTIFACT_USER_APPROVAL", "ARTIFACT_ECONOMY_APPROVAL", "ARTIFACT_BALANCE_APPROVAL", "ARTIFACT_QA_APPROVAL", "ARTIFACT_IMPORT_LIVE_OK"]
+  },
+  "artifact_live_import_executed_in_pack_q": false,
+  "required_to_unblock_pack_q_live_import": [
     "ARTIFACT_USER_APPROVAL=true",
     "ARTIFACT_ECONOMY_APPROVAL=true",
     "ARTIFACT_BALANCE_APPROVAL=true",
@@ -11,17 +24,24 @@
     "ARTIFACT_IMPORT_LIVE_OK=true"
   ],
   "recommended_next_pack": {
-    "pack_id": "PROJECT_R_ARTIFACT_LIVE_IMPORT_PACK",
-    "rationale": "Resubmit with all 5 ARTIFACT_* signatures to enable live import via the dry-run script in --apply mode."
+    "pack_id": "PROJECT_R_TBD",
+    "candidates": [
+      "PROJECT_R_ARTIFACT_LIVE_IMPORT_PACK (requires all 5 ARTIFACT_* signatures from user)",
+      "PROJECT_R_STATUS_SECOND_SLICE_DESIGN_PACK (inerte; non runtime)",
+      "PROJECT_R_PROD_ROLLOUT_RESUME_PACK (requires PROD_ROLLOUT_* signatures)"
+    ],
+    "default_safe_choice": "PROJECT_R_STATUS_SECOND_SLICE_DESIGN_PACK"
   },
-  "alternative_systems_to_pick_next": [
-    "PROJECT_P_RESUBMISSION_WITH_FULL_PROD_SIGNATURES (close status first-slice prod rollout)",
-    "PROJECT_R_STATUS_SECOND_SLICE_DEBUFF_DRY_RUN (start status second slice design)"
-  ],
   "honest_time_remaining_excluding_graphics_audio_art": {
-    "aggressive": "<1 day after signatures collected",
-    "realistic": "1 day after signatures collected",
-    "prudent": "2 days after signatures collected"
+    "aggressive": "~2-3 packs (artifact live import + status second slice design)",
+    "realistic": "~3-5 packs (artifact live import + status second slice + initial integration)",
+    "prudent": "~5-7 packs (full status + artifact + housing live readiness, all gated by user approvals)"
   },
+  "prod_rollout_executed_in_pack_q": false,
+  "global_project_pct": 99.93,
+  "status_runtime_first_slice_readiness_pct": 99.95,
+  "artifact_live_import_status": "PENDING_APPROVAL",
+  "suite_baseline_pass": 487,
+  "suite_expected_pass_after_pack_q": 495,
   "validator_script": "validate_project_q_completion_and_next_system_v1.py"
 }

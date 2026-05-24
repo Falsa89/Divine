@@ -848,6 +848,15 @@ OPTIONAL = [
     ('PROJECT-P-TRACK-G-POST-PROD-STATUS-FIRST-SLICE-DOD', 'validate_project_p_post_prod_status_first_slice_dod_v1.py'),
     # PROJECT_P Track H PROJECT P COMPLETION + NEXT SYSTEM
     ('PROJECT-P-TRACK-H-PROJECT-P-COMPLETION-AND-NEXT-SYSTEM', 'validate_project_p_completion_and_next_system_v1.py'),
+    # PROJECT_Q ARTIFACT BIBLE APPROVAL + IMPORT DRY-RUN PACK (8 tracks, READY_PENDING_APPROVAL: 0/5 ARTIFACT_* signatures present, NO DB writes, NO live import)
+    ('PROJECT-Q-TRACK-A-ARTIFACT-DIRECTION-CANONICAL-LOCK', 'validate_project_q_artifact_direction_canonical_lock_v1.py'),
+    ('PROJECT-Q-TRACK-B-ARTIFACT-BIBLE-SCHEMA-VALIDATION', 'validate_project_q_artifact_bible_schema_validation_v1.py'),
+    ('PROJECT-Q-TRACK-C-ARTIFACT-CANDIDATE-EXPANSION', 'validate_project_q_artifact_candidate_expansion_v1.py'),
+    ('PROJECT-Q-TRACK-D-ARTIFACT-BONUS-CAP-ECONOMY-DRY-RUN', 'validate_project_q_artifact_bonus_cap_economy_dry_run_v1.py'),
+    ('PROJECT-Q-TRACK-E-ARTIFACT-IMPORT-DRY-RUN-SCRIPT', 'validate_project_q_artifact_import_dry_run_script_v1.py'),
+    ('PROJECT-Q-TRACK-F-ARTIFACT-IMPORT-APPROVAL-GATE-ROLLBACK', 'validate_project_q_artifact_import_approval_gate_rollback_v1.py'),
+    ('PROJECT-Q-TRACK-G-ARTIFACT-RUNTIME-NO-LEAK', 'validate_project_q_artifact_runtime_no_leak_v1.py'),
+    ('PROJECT-Q-TRACK-H-PROJECT-Q-COMPLETION-AND-NEXT-SYSTEM', 'validate_project_q_completion_and_next_system_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
