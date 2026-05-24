@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_U_TRACK_B",
+  "verdict": "TRACK_B_SECOND_SLICE_CANARY_FLAG_ENABLED_SAFE",
+  "flag_flipped": true,
+  "flag_name": "STATUS_RUNTIME_SECOND_SLICE_ENABLED",
+  "flag_value_during_canary": "true",
+  "env_backup_path": "/app/backend/.env.project_u_pre_flip_backup",
+  "env_pre_flip_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_during_flip_md5": "be4151f9b0fac13536af3a5edd977931",
+  "env_post_rollback_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_post_rollback_matches_pre_flip": true,
+  "backend_restarted_with_flag_on": true,
+  "backend_restarted_after_rollback": true,
+  "api_smoke_during_flag_on_ok": true,
+  "final_flag_state": "OFF (rolled back)",
+  "keep_on_after_canary_marker_present": false,
+  "rollback_executed": true,
+  "db_writes": false,
+  "validator_script": "validate_project_u_second_slice_canary_flag_flip_v1.py"
+}

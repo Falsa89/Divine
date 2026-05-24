@@ -884,6 +884,15 @@ OPTIONAL = [
     ('PROJECT-T-TRACK-F-SECOND-SLICE-ROLLBACK-DRILL', 'validate_project_t_second_slice_rollback_drill_v1.py'),
     ('PROJECT-T-TRACK-G-SECOND-SLICE-DEV-CANARY-RC-GATE', 'validate_project_t_second_slice_dev_canary_rc_gate_v1.py'),
     ('PROJECT-T-TRACK-H-PROJECT-T-COMPLETION-AND-NEXT-PACK', 'validate_project_t_completion_and_next_pack_v1.py'),
+    # PROJECT_U STATUS SECOND SLICE CANARY ENV FLAG FLIP PACK (8 tracks; flag flipped in-canary then rolled back OFF; .env post-rollback byte-identical to pre-flip backup)
+    ('PROJECT-U-TRACK-A-SECOND-SLICE-CANARY-ENV-PRECHECK', 'validate_project_u_second_slice_canary_env_precheck_v1.py'),
+    ('PROJECT-U-TRACK-B-SECOND-SLICE-CANARY-FLAG-FLIP', 'validate_project_u_second_slice_canary_flag_flip_v1.py'),
+    ('PROJECT-U-TRACK-C-SECOND-SLICE-FLAG-ON-BEHAVIOR-SMOKE', 'validate_project_u_second_slice_flag_on_behavior_smoke_v1.py'),
+    ('PROJECT-U-TRACK-D-SECOND-SLICE-CANARY-LIGHT-LOAD', 'validate_project_u_second_slice_canary_light_load_v1.py'),
+    ('PROJECT-U-TRACK-E-SECOND-SLICE-PAYLOAD-LOG-NO-LEAK', 'validate_project_u_second_slice_payload_log_no_leak_v1.py'),
+    ('PROJECT-U-TRACK-F-SECOND-SLICE-ROLLBACK-KILL-SWITCH-DRILL', 'validate_project_u_second_slice_rollback_kill_switch_v1.py'),
+    ('PROJECT-U-TRACK-G-SECOND-SLICE-DEV-LIVE-READINESS-GATE', 'validate_project_u_second_slice_dev_live_readiness_gate_v1.py'),
+    ('PROJECT-U-TRACK-H-PROJECT-U-COMPLETION-AND-NEXT-PACK', 'validate_project_u_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

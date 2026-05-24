@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_U_TRACK_G",
+  "verdict": "TRACK_G_SECOND_SLICE_DEV_LIVE_READINESS_GATE_READY",
+  "next_pack": "PROJECT_V_STATUS_SECOND_SLICE_DEV_LIVE_ROLLOUT_PACK",
+  "gate_status": {
+    "canary_flag_on_smoke_green": true,
+    "canary_light_load_green": true,
+    "no_leak_green": true,
+    "rollback_green": true,
+    "suite_green": true,
+    "manual_qa_status": "PENDING"
+  },
+  "dev_live_rollout_in_pack_u": false,
+  "prod_explicitly_excluded": true,
+  "required_env_for_dev_live": {
+    "PROJECT_V_STATUS_SECOND_SLICE_DEV_LIVE_ROLLOUT_APPROVAL": "true",
+    "STATUS_RUNTIME_SECOND_SLICE_ENABLED": "true (in dev env)"
+  },
+  "required_signatures_at_prod_w": ["PROD_ROLLOUT_USER_APPROVAL", "PROD_ROLLOUT_QA_APPROVAL", "PROD_ROLLOUT_OPS_APPROVAL", "PROD_ROLLOUT_ROLLBACK_OWNER_APPROVAL", "PROD_ROLLOUT_BALANCE_APPROVAL", "STATUS_RUNTIME_SECOND_SLICE_PROD_OK"],
+  "db_writes": false,
+  "validator_script": "validate_project_u_second_slice_dev_live_readiness_gate_v1.py"
+}

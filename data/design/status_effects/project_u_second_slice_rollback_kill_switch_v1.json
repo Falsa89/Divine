@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_U_TRACK_F",
+  "verdict": "TRACK_F_SECOND_SLICE_ROLLBACK_KILL_SWITCH_DRILL_READY",
+  "drill_method": "live rollback within Project U: removed STATUS_RUNTIME_SECOND_SLICE_ENABLED line from /app/backend/.env, restarted backend, verified .env md5 byte-identical to pre-flip backup, verified seam returns identity for sample payloads with flag OFF, verified API smoke unchanged",
+  "rollback_executed": true,
+  "rollback_time_seconds_estimated": 8,
+  "rollback_time_target_seconds": 60,
+  "rollback_within_target": true,
+  "env_pre_flip_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_post_rollback_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_byte_identical_post_rollback": true,
+  "api_smoke_post_rollback": {"/api/heroes": 200, "/api/heroes/primordial_gaia": 404, "/api/heroes/borea": 200, "/api/heroes/greek_borea": 200, "/api/server-profiles/select": 503, "/api/housing/preview": 503},
+  "identity_post_rollback": true,
+  "battle_engine_md5_post_rollback": "151ca35ad3bc35f0a6209cb3744ed440",
+  "battle_engine_unchanged_during_rollback": true,
+  "db_writes": false,
+  "validator_script": "validate_project_u_second_slice_rollback_kill_switch_v1.py"
+}

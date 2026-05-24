@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_U_TRACK_C",
+  "verdict": "TRACK_C_SECOND_SLICE_FLAG_ON_BEHAVIOR_SMOKE_READY",
+  "behavior_verified_via_seam_inprocess_with_flag_on": {
+    "debuff_offensive_15pct_campaign": {"expected": {"atk_pct": -15.0, "def_pct": 0.0, "speed_pct": 0.0}, "observed_ok": true},
+    "debuff_defensive_15pct_campaign": {"expected": {"atk_pct": 0.0, "def_pct": -15.0, "speed_pct": 0.0}, "observed_ok": true},
+    "speed_up_15pct_campaign":         {"expected": {"atk_pct": 0.0, "def_pct": 0.0, "speed_pct": 15.0}, "observed_ok": true},
+    "speed_down_15pct_campaign":       {"expected": {"atk_pct": 0.0, "def_pct": 0.0, "speed_pct": -15.0}, "observed_ok": true},
+    "pvp_cap_40pct_offensive":         {"expected_atk_pct": -30.0, "observed_atk_pct": -30.0},
+    "boss_cap_40pct_defensive":        {"expected_def_pct": -20.0, "observed_def_pct": -20.0},
+    "out_of_scope_ignored":            {"input": "dot + freeze 100pct", "observed": {"atk_pct": 0.0, "def_pct": 0.0, "speed_pct": 0.0}}
+  },
+  "no_dot_or_tick_loop": true,
+  "no_hard_cc": true,
+  "no_borea_marchio_live": true,
+  "battle_engine_runtime_behavior_changed_for_unflagged_callers": false,
+  "api_endpoints_status": {"/api/heroes": 200, "/api/heroes/primordial_gaia": 404, "/api/heroes/borea": 200, "/api/heroes/greek_borea": 200, "/api/server-profiles/select": 503, "/api/housing/preview": 503},
+  "db_writes": false,
+  "validator_script": "validate_project_u_second_slice_flag_on_behavior_smoke_v1.py"
+}

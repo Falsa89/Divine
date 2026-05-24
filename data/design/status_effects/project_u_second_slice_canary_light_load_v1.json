@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_U_TRACK_D",
+  "verdict": "TRACK_D_SECOND_SLICE_CANARY_LIGHT_LOAD_READY",
+  "load_method": "in-process direct seam call (since the seam is runtime-internal and not exposed via HTTP endpoint in Project T)",
+  "call_count": 300,
+  "latency_us": {"p50": 4.0, "p95": 4.4, "p99": 10.4, "max": 146.3},
+  "latency_p95_target_ms": 100,
+  "latency_p95_within_target": true,
+  "errors_count": 0,
+  "http_2xx_count": 6,
+  "http_4xx_count": 1,
+  "http_5xx_count_unexpected": 0,
+  "deltas_consistent_across_calls": true,
+  "spend": false,
+  "gacha": false,
+  "db_mutation": false,
+  "destructive_load": false,
+  "db_writes": false,
+  "validator_script": "validate_project_u_second_slice_canary_light_load_v1.py"
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "PROJECT_U_TRACK_E",
+  "verdict": "TRACK_E_SECOND_SLICE_PAYLOAD_LOG_NO_LEAK_READY",
+  "endpoints_scanned_with_flag_on": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea"],
+  "endpoints_scanned_with_flag_off": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea", "/api/server-profiles/select", "/api/housing/preview"],
+  "forbidden_payload_keys": ["status_second_slice_preview", "__second_slice_seam_version", "second_slice_active", "second_slice_deltas", "debuff_offensive_runtime", "debuff_defensive_runtime", "speed_up_runtime", "speed_down_runtime"],
+  "payload_leak_with_flag_on": false,
+  "payload_leak_with_flag_off": false,
+  "backend_log_keywords_scanned": ["second_slice_deltas", "status_second_slice_runtime_seam ERROR"],
+  "backend_log_leak": false,
+  "backend_log_errors_second_slice": 0,
+  "frontend_payload_changed": false,
+  "db_writes": false,
+  "validator_script": "validate_project_u_second_slice_payload_log_no_leak_v1.py"
+}
