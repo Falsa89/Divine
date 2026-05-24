@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_T_TRACK_B",
+  "verdict": "TRACK_B_SECOND_SLICE_BATTLE_ENGINE_WIRED_FLAG_OFF_SAFE",
+  "applied": true,
+  "seam_module_created": "/app/backend/game_logic/status_second_slice_runtime_seam.py",
+  "battle_engine_edits": [
+    {"location": "import block after PROJECT_M block", "type": "add try/except import with identity fallback"},
+    {"location": "simulate_battle() prefight, after first-slice seam calls", "type": "add 2 single-point identity calls (team_a, team_b)"}
+  ],
+  "battle_engine_pre_pack_md5": "d04feb03e1388db8557d17bd42d5b4d1",
+  "battle_engine_post_pack_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+  "battle_engine_backup_path": "/app/backend/battle_engine.py.project_t_pre_wire_backup",
+  "flag": "STATUS_RUNTIME_SECOND_SLICE_ENABLED",
+  "flag_default": "unset (treated as false)",
+  "flag_in_live_env": false,
+  "identity_fallback_present": true,
+  "first_slice_behavior_changed": false,
+  "damage_or_heal_formula_changed": false,
+  "battle_round_loop_changed": false,
+  "battle_core_mutated": false,
+  "combat_tsx_mutated": false,
+  "rollback_script": "/app/backend/scripts/rollback_project_t_status_second_slice_battle_engine_wiring.py",
+  "rollback_executed_in_pack_t": false,
+  "db_writes": false,
+  "validator_script": "validate_project_t_second_slice_battle_engine_wiring_v1.py"
+}

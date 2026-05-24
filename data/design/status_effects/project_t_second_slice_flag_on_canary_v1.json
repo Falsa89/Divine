@@ -1,0 +1,19 @@
+{
+  "task_id": "PROJECT_T_TRACK_D",
+  "verdict": "TRACK_D_SECOND_SLICE_FLAG_ON_IN_PROCESS_CANARY_READY",
+  "canary_mode": "in-process only; no .env toggle; flag set via os.environ within the validator runtime",
+  "flag_in_live_env": false,
+  "families_verified_in_process": {
+    "debuff_offensive": true,
+    "debuff_defensive": true,
+    "speed_up": true,
+    "speed_down": true
+  },
+  "caps_clamps_hold_in_process": true,
+  "out_of_scope_ignored_in_process": true,
+  "no_dot_or_hard_cc_logic_in_process": true,
+  "no_borea_marchio_logic_in_process": true,
+  "env_var_persisted_after_validator": false,
+  "db_writes": false,
+  "validator_script": "validate_project_t_second_slice_flag_on_canary_v1.py"
+}

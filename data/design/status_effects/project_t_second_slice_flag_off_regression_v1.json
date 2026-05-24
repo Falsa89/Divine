@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_T_TRACK_C",
+  "verdict": "TRACK_C_SECOND_SLICE_FLAG_OFF_BYTE_IDENTICAL_GUARD_READY",
+  "design_only": true,
+  "flag_state": "OFF (unset)",
+  "comparison_mode": "deterministic-input identity comparison on the seam call site",
+  "comparison_targets": [
+    {
+      "target": "apply_prefight_second_slice_preview(team_payload) with flag OFF",
+      "expectation": "returns the SAME OBJECT (id) as input (strict identity)",
+      "measured": "id(out) == id(team_payload) verified by validator on 6 sample payloads"
+    },
+    {
+      "target": "team_a / team_b after both seam calls in simulate_battle() with flag OFF",
+      "expectation": "team_a and team_b remain SAME OBJECT (id) as before the seam calls",
+      "measured": "validator runs the exact 2-line call pattern from battle_engine and checks identity"
+    }
+  ],
+  "normalization_used": false,
+  "gameplay_relevant_field_changed_with_flag_off": false,
+  "battle_engine_md5_pre_pack": "d04feb03e1388db8557d17bd42d5b4d1",
+  "battle_engine_md5_will_change": true,
+  "battle_engine_md5_change_reason": "single-point wiring adds an import block + 2 call lines; the file md5 necessarily changes but the runtime behavior with flag OFF remains identity-preserving (verified by per-call object-identity comparison)",
+  "runtime_byte_identical_when_flag_off": true,
+  "db_writes": false,
+  "validator_script": "validate_project_t_second_slice_flag_off_regression_v1.py"
+}

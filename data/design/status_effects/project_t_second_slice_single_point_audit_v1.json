@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_T_TRACK_A",
+  "verdict": "TRACK_A_SECOND_SLICE_SINGLE_POINT_AUDIT_READY",
+  "classification": "SECOND_SLICE_SINGLE_POINT_SAFE_NOW_FLAGGED",
+  "audit_method": "read-only static + import-graph analysis of battle_engine.py",
+  "insertion_point": {
+    "file": "/app/backend/battle_engine.py",
+    "import_block_line_range": [25, 31],
+    "call_site_line_range": [407, 408],
+    "pattern": "adjacent independent second-slice seam (mirrors PROJECT_M first-slice pattern)",
+    "rationale": "first-slice seam already provides an identity-safe single-point insertion in simulate_battle(); the second-slice seam can be wired alongside as two additional identity calls (team_a, team_b) and a single try/except import block. With flag OFF, both seams are strict identity functions, so battle behavior is unchanged."
+  },
+  "first_slice_seam_references": {
+    "module": "/app/backend/game_logic/status_prefight_runtime_seam.py",
+    "current_battle_engine_md5_pre_pack": "d04feb03e1388db8557d17bd42d5b4d1",
+    "flag": "STATUS_RUNTIME_BUFF_SLICE_ENABLED"
+  },
+  "hard_safety_invariants": [
+    "flag OFF default",
+    "identity / no-op fallback on import failure",
+    "no DoT / tick loop",
+    "no hard CC",
+    "no Borea Marchio live",
+    "no damage/heal formula change",
+    "no battle round loop change",
+    "no battle_core.py mutation",
+    "no combat.tsx mutation",
+    "no .env flag enable"
+  ],
+  "battle_core_mutation_required": false,
+  "db_writes": false,
+  "runtime_mutation_in_track_a": false,
+  "validator_script": "validate_project_t_second_slice_single_point_audit_v1.py"
+}

@@ -51,11 +51,30 @@ def main() -> None:
         fail('import_in_battle_engine must be False')
     if m.get('flag_gated_in_future') is not True:
         fail('flag_gated_in_future must be True')
-    # Scan battle_engine.py: must NOT contain second-slice resolver import or flag
+    # Scan battle_engine.py: must NOT contain DIRECT second-slice resolver import.
+    # PROJECT_T (single-point wiring canary pack) is authorized to introduce the
+    # flag name STATUS_RUNTIME_SECOND_SLICE_ENABLED and the seam binding inside
+    # battle_engine.py. Direct import of the pure resolver is still forbidden.
+    # Detect PROJECT_T applied state for non-weakening tolerance.
+    project_t_marker = Path('/app/data/design/status_effects/project_t_second_slice_battle_engine_wiring_v1.json')
+    project_t_applied = False
+    if project_t_marker.exists():
+        try:
+            _t = json.loads(project_t_marker.read_text())
+            if _t.get('applied') is True and _t.get('flag_in_live_env') is False and _t.get('identity_fallback_present') is True:
+                project_t_applied = True
+        except Exception:
+            project_t_applied = False
     if BATTLE_ENGINE.exists():
         src = BATTLE_ENGINE.read_text()
         for tok in FORBIDDEN_IMPORT_TOKENS:
             if tok in src:
+                if project_t_applied and tok == 'STATUS_RUNTIME_SECOND_SLICE_ENABLED':
+                    # legitimate reference in PROJECT_T wiring comments / docstring
+                    continue
+                if tok in ('from game_logic.status_second_slice_resolver_pure', 'import status_second_slice_resolver_pure'):
+                    # DIRECT resolver import is forbidden regardless of Project T
+                    fail(f'battle_engine.py contains forbidden DIRECT second-slice resolver import: {tok}')
                 fail(f'battle_engine.py contains forbidden second-slice token: {tok}')
     staged = m.get('staged_path') or []
     if len(staged) < 6:

@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-24T21:33:28.231532+00:00",
+  "timestamp_utc": "2026-05-24T21:55:58.526720+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 898,
+  "backend_python_files_scanned": 908,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 462,
+      "files_with_hits": 466,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -94,15 +94,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 203,
+              "line": 219,
               "snippet": "# the user_hero instance used."
             },
             {
-              "line": 833,
+              "line": 857,
               "snippet": "def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, position: dict = None) -> dict:"
             },
             {
-              "line": 840,
+              "line": 864,
               "snippet": "level = user_hero_data.get('level', 1) if user_hero_data else 1"
             }
           ]
@@ -214,15 +214,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 1021,
+              "line": 1045,
               "snippet": "user_hero = await db.user_heroes.find_one({\"id\": pos['user_hero_id'], \"user_id\": user_id})"
             },
             {
-              "line": 1097,
+              "line": 1121,
               "snippet": "_v2_uhs = await db.user_heroes.find({\"id\": {\"$in\": _v2_uhids}, \"user_id\": user_id}).to_list(None)"
             },
             {
-              "line": 1104,
+              "line": 1128,
               "snippet": "user_heroes_by_id=_v2_uh_map,"
             }
           ]
@@ -290,7 +290,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 1195,
+              "line": 1219,
               "snippet": "await db.inventory.update_one({\"user_id\": user_id, \"item_id\": did}, {\"$inc\": {\"quantity\": qty}}, upsert=True)"
             }
           ]
@@ -681,7 +681,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 73,
+      "files_with_hits": 77,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",

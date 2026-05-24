@@ -1,0 +1,16 @@
+{
+  "task_id": "PROJECT_T_TRACK_F",
+  "verdict": "TRACK_F_SECOND_SLICE_ROLLBACK_DRILL_READY",
+  "rollback_script": "/app/backend/scripts/rollback_project_t_status_second_slice_battle_engine_wiring.py",
+  "rollback_default_mode": "dry-run",
+  "rollback_execute_gate_env_var": "PROJECT_T_ROLLBACK_SECOND_SLICE_WIRING_OK",
+  "rollback_executed_live_in_pack_t": false,
+  "drill_method": "temp-copy rollback drill executed by the validator using a tmp battle_engine copy + tmp backup; verifies post-drill restored content matches the recorded pre-patch backup byte-for-byte",
+  "drill_passed": true,
+  "backup_exists": true,
+  "backup_path": "/app/backend/battle_engine.py.project_t_pre_wire_backup",
+  "backup_md5": "d04feb03e1388db8557d17bd42d5b4d1",
+  "forbidden_files_intact_after_drill": true,
+  "db_writes": false,
+  "validator_script": "validate_project_t_second_slice_rollback_drill_v1.py"
+}

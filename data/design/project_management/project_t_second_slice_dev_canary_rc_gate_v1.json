@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_T_TRACK_G",
+  "verdict": "TRACK_G_SECOND_SLICE_DEV_CANARY_RC_GATE_READY",
+  "next_pack": "PROJECT_U_STATUS_SECOND_SLICE_CANARY_ENV_FLAG_FLIP_PACK",
+  "env_flag_required_at_next_pack": "STATUS_RUNTIME_SECOND_SLICE_ENABLED=true",
+  "scope": "canary only (dev environment)",
+  "prod_explicitly_excluded": true,
+  "load_target": {
+    "requests_per_second": 50,
+    "duration_seconds": 60,
+    "endpoint": "in-process battle simulate sample fixtures",
+    "max_p95_latency_ms_target": 100
+  },
+  "no_leak_target": {
+    "forbidden_payload_keys_on_canary": ["status_second_slice_preview leak outside dry_run path", "__second_slice_seam_version leak in non-preview payloads"],
+    "backend_log_keywords_forbidden": ["second_slice_deltas", "status_second_slice_runtime_seam ERROR"]
+  },
+  "rollback_target": {
+    "rollback_time_target_seconds": 60,
+    "rollback_method": "single env var flip + supervisor restart backend",
+    "rollback_script": "/app/backend/scripts/rollback_project_t_status_second_slice_battle_engine_wiring.py"
+  },
+  "env_flag_flipped_in_pack_t": false,
+  "db_writes": false,
+  "validator_script": "validate_project_t_second_slice_dev_canary_rc_gate_v1.py"
+}

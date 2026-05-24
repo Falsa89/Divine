@@ -1,0 +1,16 @@
+{
+  "task_id": "PROJECT_T_TRACK_E",
+  "verdict": "TRACK_E_SECOND_SLICE_PAYLOAD_AND_LOG_NO_LEAK_GUARD_READY",
+  "scanned_endpoints": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea", "/api/server-profiles/select", "/api/housing/preview"],
+  "scanned_files": ["/app/backend/battle_engine.py", "/app/backend/battle_core.py", "/app/backend/server.py", "/app/backend/routes/combat.py", "/app/frontend/app/combat.tsx"],
+  "forbidden_payload_keys": ["status_second_slice_preview", "__second_slice_seam_version", "second_slice_active", "second_slice_deltas", "debuff_offensive_runtime", "debuff_defensive_runtime", "speed_up_runtime", "speed_down_runtime"],
+  "endpoint_payload_leak_detected": false,
+  "source_file_leak_outside_authorized_callers": false,
+  "authorized_seam_call_sites": [
+    "/app/backend/battle_engine.py (single-point, identity when flag OFF)",
+    "/app/backend/game_logic/status_second_slice_runtime_seam.py (seam module itself, lazy import)"
+  ],
+  "backend_log_leak_detected": false,
+  "db_writes": false,
+  "validator_script": "validate_project_t_second_slice_payload_log_no_leak_v1.py"
+}

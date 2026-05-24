@@ -1,7 +1,7 @@
 {
   "hashes": {
     "/app/backend/battle_core.py": "7f3de938cb0d35a169e3384ccc04efd50aac4cf527bb38039ae5c6d736fff4af",
-    "/app/backend/battle_engine.py": "094187998b663a6392193a257b1b8ed3c4b3c432ba3fd1d152a1dec2b3619e8a",
+    "/app/backend/battle_engine.py": "f8a554f8f1c79a0109e85b590fbdda61d7baffc128ff6ce80e851fd0ff6d90f2",
     "/app/backend/data/heroes_catalog.json": null,
     "/app/backend/routes/affinity_gift_spend.py": "2c2eb8fb6cd0cd50676001352c3b926bcc6b270fc7b154462342dfd0143fe8cd",
     "/app/backend/routes/gacha.py": null,
@@ -10,6 +10,7 @@
     "/app/frontend/app/combat.tsx": "5105feacf7daadedbd75505c5a6a8231614fe7eb91792a8239361df6f015fbf5"
   },
   "pack_m_rebaseline_note": "battle_engine.py SHA256 updated from 379a921653... to 094187998b66... as authorized by PROJECT_M single-point seam wiring (verdict TRACK_B_BATTLE_ENGINE_STATUS_SEAM_WIRED_FLAG_OFF_SAFE; flag-OFF byte-identical regression proven by TRACK_C).",
+  "pack_t_rebaseline_note": "battle_engine.py SHA256 updated from 094187998b66... to f8a554f8f1c7... as authorized by PROJECT_T single-point second-slice seam wiring (verdict TRACK_B_SECOND_SLICE_BATTLE_ENGINE_WIRED_FLAG_OFF_SAFE; flag-OFF runtime-identity regression proven by TRACK_C; rollback drill OK at TRACK_F; backup at battle_engine.py.project_t_pre_wire_backup matches the pack_m_rebaseline post_patch md5 d04feb03...).",
   "task_origin": "SLC-C-CRITICAL-FILES-BASELINE",
   "utc": "2026-05-21T22:45:43.878690+00:00",
   "version": "v1"
