@@ -51,6 +51,17 @@ REQUIRED = [
     ('RM1.32-A', 'validate_5star_balance_foundation.py'),
     ('RM1.32-B', 'validate_6star_balance_foundation.py'),
     ('RM1.32-C2', 'validate_foundation_numeric_trim_rm132c2.py'),
+    # PROJECT_K Track C — 5 RC validators PROMOTED to REQUIRED (authorized by Pack K Track C).
+    # Promotion is safe: these 5 validators assert structural invariants of
+    # status_first_slice_resolver_pure (purity, no tick-loop touch, caps respect,
+    # symmetric PvP fairness, rollback runbook). They are independent from any
+    # battle wiring and remain stable whether wiring is applied or not.
+    # required_diff_guard_status: BREACH_APPROVED_BY_PACK_K_TRACK_C_PROMPT_AUTHORIZED.
+    ('PROJECT-J-RC-1-RESOLVER-PURE-DETERMINISTIC', 'validate_project_j_status_first_slice_resolver_pure_deterministic_v1.py'),
+    ('PROJECT-J-RC-2-NO-TICK-LOOP-TOUCH', 'validate_project_j_status_first_slice_no_tick_loop_touch_v1.py'),
+    ('PROJECT-J-RC-3-CAPS-RESPECT', 'validate_project_j_status_first_slice_caps_respect_v1.py'),
+    ('PROJECT-J-RC-4-PVP-FAIRNESS-AUDIT', 'validate_project_j_status_first_slice_pvp_fairness_audit_v1.py'),
+    ('PROJECT-J-RC-5-ROLLBACK-RUNBOOK', 'validate_project_j_status_first_slice_rollback_runbook_v1.py'),
 ]
 OPTIONAL = [
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
@@ -741,16 +752,25 @@ OPTIONAL = [
     ('PROJECT-J-TRACK-G-STATUS-QA-SAFE-SMOKE-EXTENSION', 'validate_project_j_status_qa_safe_smoke_extension_v1.py'),
     # PROJECT_J Track H PROJECT J COMPLETION + NEXT PACK ROADMAP
     ('PROJECT-J-TRACK-H-PROJECT-J-COMPLETION-AND-NEXT-PACK-ROADMAP', 'validate_project_j_completion_and_next_pack_roadmap_v1.py'),
-    # PROJECT_J REQUIRED-CANDIDATE 1: resolver pure deterministic
-    ('PROJECT-J-RC-1-RESOLVER-PURE-DETERMINISTIC', 'validate_project_j_status_first_slice_resolver_pure_deterministic_v1.py'),
-    # PROJECT_J REQUIRED-CANDIDATE 2: no tick loop touch
-    ('PROJECT-J-RC-2-NO-TICK-LOOP-TOUCH', 'validate_project_j_status_first_slice_no_tick_loop_touch_v1.py'),
-    # PROJECT_J REQUIRED-CANDIDATE 3: caps respect
-    ('PROJECT-J-RC-3-CAPS-RESPECT', 'validate_project_j_status_first_slice_caps_respect_v1.py'),
-    # PROJECT_J REQUIRED-CANDIDATE 4: PvP fairness audit
-    ('PROJECT-J-RC-4-PVP-FAIRNESS-AUDIT', 'validate_project_j_status_first_slice_pvp_fairness_audit_v1.py'),
-    # PROJECT_J REQUIRED-CANDIDATE 5: rollback runbook
-    ('PROJECT-J-RC-5-ROLLBACK-RUNBOOK', 'validate_project_j_status_first_slice_rollback_runbook_v1.py'),
+    # PROJECT_K Track A STATUS PREFIGHT INSERTION POINT AUDIT (honest blocker; battle runtime layer absent)
+    ('PROJECT-K-TRACK-A-STATUS-PREFIGHT-INSERTION-POINT-AUDIT', 'validate_project_k_status_prefight_insertion_point_audit_v1.py'),
+    # PROJECT_K Track B STATUS PREFIGHT FLAGGED WIRING (NOT APPLIED — awaiting battle runtime layer)
+    ('PROJECT-K-TRACK-B-STATUS-PREFIGHT-FLAGGED-WIRING', 'validate_project_k_status_prefight_flagged_wiring_v1.py'),
+    # PROJECT_K Track C STATUS REQUIRED VALIDATORS PROMOTION (5 RC promoted to REQUIRED — see REQUIRED block above)
+    ('PROJECT-K-TRACK-C-STATUS-REQUIRED-VALIDATORS-PROMOTION', 'validate_project_k_status_required_validators_promotion_v1.py'),
+    # PROJECT_K Track D STATUS CANARY FIXTURE EXECUTION (10/10 golden tests against pure resolver)
+    ('PROJECT-K-TRACK-D-STATUS-CANARY-FIXTURE-EXECUTION', 'validate_project_k_status_canary_fixture_execution_v1.py'),
+    # PROJECT_K Track E STATUS PAYLOAD PREVIEW CANARY CONTRACT (0 leaks across 5 audited endpoints)
+    ('PROJECT-K-TRACK-E-STATUS-PAYLOAD-PREVIEW-CANARY-CONTRACT', 'validate_project_k_status_payload_preview_canary_contract_v1.py'),
+    # PROJECT_K Track F STATUS RUNTIME CANARY ROLLBACK DRILL (in-process drill executed; flag transitions honest)
+    ('PROJECT-K-TRACK-F-STATUS-RUNTIME-CANARY-ROLLBACK-DRILL', 'validate_project_k_status_runtime_canary_rollback_drill_v1.py'),
+    # PROJECT_K Track G STATUS FIRST SLICE QA RC GATE (13 safe checks)
+    ('PROJECT-K-TRACK-G-STATUS-FIRST-SLICE-QA-RC-GATE', 'validate_project_k_status_first_slice_qa_rc_gate_v1.py'),
+    # PROJECT_K Track H PROJECT K COMPLETION + LIVE GATE STATUS (next pack: PROJECT_L)
+    ('PROJECT-K-TRACK-H-PROJECT-K-COMPLETION-AND-LIVE-GATE-STATUS', 'validate_project_k_completion_and_live_gate_status_v1.py'),
+    # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
+    # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
+    # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
