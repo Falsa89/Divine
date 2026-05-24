@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_K_TRACK_G",
+  "verdict": "TRACK_G_STATUS_FIRST_SLICE_QA_RC_GATE_READY",
+  "consolidated_checks": [
+    "S1: GET /api/heroes 200 (count=100)",
+    "S2: GET /api/heroes/primordial_gaia 404",
+    "S3: GET /api/heroes/borea 200 inert",
+    "S4: GET /api/heroes/greek_borea 200 inert",
+    "S5: GET+POST /api/server-profiles/select 503",
+    "S6: GET /api/housing/preview 503",
+    "S7: AF2-N approval gates PENDING",
+    "S8: artifact approval gates PENDING",
+    "S9: forbidden live envs unset",
+    "K1: status_first_slice_resolver_pure importable + is_runtime_active False",
+    "K2: resolver NOT imported by battle/runtime (battle files absent)",
+    "K3: status_envelope_preview absent from all audited payloads",
+    "K4: rollback in-process toggle drill PASS"
+  ],
+  "all_checks_pass": true,
+  "manual_required_items": ["real battle smoke (no battle runtime layer present anyway)", "live login dry-run (env not seeded)"],
+  "runtime_changes_applied": false,
+  "validator_script": "validate_project_k_status_first_slice_qa_rc_gate_v1.py"
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_K_TRACK_E",
+  "verdict": "TRACK_E_STATUS_PAYLOAD_PREVIEW_CANARY_CONTRACT_NO_LEAKAGE",
+  "contract_version": "project_k_status_payload_preview_canary_v1",
+  "flag_off_invariant": "No 'status_envelope_preview' key may appear in any /api/* payload while STATUS_RUNTIME_BUFF_SLICE_ENABLED is unset/false.",
+  "flag_on_future_shape": {
+    "key": "status_envelope_preview",
+    "location": "battle/preview payload future endpoint",
+    "runtime_active": true,
+    "applied_to_battle": false,
+    "preview_only": true,
+    "envelope": {"atk_pct": 0.0, "def_pct": 0.0, "hp_pct": 0.0, "crit_pct": 0.0}
+  },
+  "live_endpoints_audited": ["GET /api/heroes", "GET /api/heroes/borea", "GET /api/heroes/greek_borea", "GET /api/server-profiles/select", "GET /api/housing/preview"],
+  "live_payload_leakage_count": 0,
+  "runtime_changes_applied": false,
+  "validator_script": "validate_project_k_status_payload_preview_canary_contract_v1.py"
+}

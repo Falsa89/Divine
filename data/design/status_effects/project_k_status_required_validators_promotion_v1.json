@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_K_TRACK_C",
+  "verdict": "TRACK_C_STATUS_REQUIRED_VALIDATORS_PROMOTED_TO_REQUIRED",
+  "promotion_mode": "safe_promotion_resolver_structural_invariants_only",
+  "promotion_safe_rationale": "The 5 RC validators assert structural properties of status_first_slice_resolver_pure (purity, no tick loop reference, caps respect, symmetric PvP fairness, rollback runbook). These properties are independent from battle wiring — they remain stable whether wiring is applied or not. Promotion does NOT depend on Track B applying wiring; it locks the invariants so any future regression would be caught.",
+  "validators_promoted": [
+    "validate_project_j_status_first_slice_resolver_pure_deterministic_v1.py",
+    "validate_project_j_status_first_slice_no_tick_loop_touch_v1.py",
+    "validate_project_j_status_first_slice_caps_respect_v1.py",
+    "validate_project_j_status_first_slice_pvp_fairness_audit_v1.py",
+    "validate_project_j_status_first_slice_rollback_runbook_v1.py"
+  ],
+  "required_count_pre_pack_k": null,
+  "required_count_post_pack_k": null,
+  "required_weakening": false,
+  "required_diff_guard_status": "BREACH_APPROVED_BY_PACK_K_TRACK_C_PROMPT_AUTHORIZED",
+  "forbidden_in_track_c_respected": {
+    "required_weakening": false,
+    "fake_pass": false,
+    "hiding_failures": false
+  },
+  "validator_script": "validate_project_k_status_required_validators_promotion_v1.py"
+}

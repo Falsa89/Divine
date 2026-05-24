@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_K_TRACK_A",
+  "verdict": "TRACK_A_STATUS_PREFIGHT_INSERTION_POINT_AUDIT_BLOCKER_NO_BATTLE_RUNTIME_LAYER",
+  "safe_to_wire": false,
+  "safe_to_wire_decision": "BLOCKED_NO_BATTLE_RUNTIME_LAYER_PRESENT",
+  "audit_findings": [
+    "/app/backend/game_logic/battle_engine.py: NOT PRESENT in repo",
+    "/app/backend/game_logic/battle_core.py: NOT PRESENT in repo",
+    "/app/frontend/components/combat.tsx: NOT PRESENT in repo",
+    "no pre_fight / prefight / pre-fight hook anywhere under /app/backend (grep verified)",
+    "no battle round loop module exists today; combat behavior is computed by frontend client (out of scope) plus catalog data only"
+  ],
+  "battle_runtime_layer_present": false,
+  "insertion_point_decision": "AWAIT_BATTLE_RUNTIME_LAYER_PACK",
+  "safe_alternative_insertion_points_for_future_pack": [
+    "option_1: introduce backend pure pre_fight helper module (no DB write, no tick loop), called by a future battle/preview route behind STATUS_RUNTIME_BUFF_SLICE_ENABLED",
+    "option_2: introduce a backend /api/battle/preview route returning the status envelope only when flag ON; never mutates anything"
+  ],
+  "runtime_changes_applied_in_track_a": false,
+  "forbidden_in_track_a_respected": {
+    "runtime_change": false,
+    "battle_engine_change": false,
+    "combat_tsx_change": false,
+    "frontend": false
+  },
+  "validator_script": "validate_project_k_status_prefight_insertion_point_audit_v1.py"
+}
