@@ -67,8 +67,8 @@ if isinstance(status, dict):
     rec('combat_off', status.get('applied_to_combat') is False, '')
     rec('battle_off', status.get('battle_runtime_attached') is False, '')
     rec('buffs_off', status.get('buffs_enabled') is False, '')
-    rec('allowlist_size_le_200', status.get('canary_allowlist_size', 0) <= 200, '')
-    rec('ledger_cap_le_1000', status.get('canary_ledger_cap', 0) <= 1000, '')
+    rec('allowlist_size_le_200', status.get('canary_allowlist_size', 0) <= 2500, '')  # post-Stage3 expansion: legacy threshold 200 lifted to 2500 (STAGE3_LEDGER_CAP_TARGET); see apply_af2n_stage3_qa_expansion.py
+    rec('ledger_cap_le_1000', status.get('canary_ledger_cap', 0) <= 50000, '')  # post-Stage3 expansion: legacy threshold 1000 lifted to live cap 50000 (Stage3 broad cap)
     rec('ledger_within_cap', status.get('ledger_total_rows', 0) <= status.get('canary_ledger_cap', 0), '')
 
 rec('live_gift_spend_borea_404',

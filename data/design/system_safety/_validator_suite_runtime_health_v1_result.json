@@ -1,0 +1,42 @@
+{
+  "task_id": "V6_BLOCK_E_VALIDATOR_SUITE_RUNTIME_HEALTH",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V6",
+  "verdict": "BLOCK_E_VALIDATOR_SUITE_RUNTIME_HEALTH_READY",
+  "mode": "suite_extension_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260524T130000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V6_APPROVAL": true,
+    "BLOCK_E_VALIDATOR_SUITE_RUNTIME_HEALTH_APPROVAL": true
+  },
+  "health_checks_introduced": [
+    {"check_id": "H1", "description": "backend uvicorn process responding 200 on /api/heroes", "contract": "HTTP 200"},
+    {"check_id": "H2", "description": "heroes count == 100", "contract": "count == 100"},
+    {"check_id": "H3", "description": "redis binary running (via supervisorctl status)", "contract": "status RUNNING", "fail_action": "emit hint to run /app/ops/ensure_redis_rate_limit.sh"},
+    {"check_id": "H4", "description": "MongoDB reachable (best-effort, optional)", "contract": "connect within 2s"},
+    {"check_id": "H5", "description": "observability rollup last-modified within 7 days", "contract": "file mtime fresh"}
+  ],
+  "validator_script": {
+    "path": "/app/backend/scripts/validate_suite_runtime_health_v1.py",
+    "behavior": "read-only; HTTP smoke + supervisorctl status check + file mtime check",
+    "non_invasive": true,
+    "writes": "none",
+    "db_writes": 0
+  },
+  "suite_registration": {
+    "task_id": "V6-BLOCK-E-SUITE-RUNTIME-HEALTH",
+    "section": "OPTIONAL",
+    "behavior": "non-blocking; warns but does not FAIL the suite on H3/H4 transient drops if H1/H2 still PASS"
+  },
+  "forbidden_in_block_e_respected": {
+    "runtime_route_change": false,
+    "weakening_existing_validators": false,
+    "masking_failures": false,
+    "runtime_health_endpoint_added": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/_validator_suite_runtime_health_v1_result.json",
+    "/app/docs/divine/120E_VALIDATOR_SUITE_RUNTIME_HEALTH.md",
+    "/app/backend/scripts/validate_suite_runtime_health_v1.py"
+  ]
+}

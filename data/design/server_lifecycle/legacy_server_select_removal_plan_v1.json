@@ -1,0 +1,58 @@
+{
+  "task_id": "V6_BLOCK_D_LEGACY_SERVER_SELECT_REMOVAL_PLAN",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V6",
+  "verdict": "BLOCK_D_LEGACY_SERVER_SELECT_REMOVAL_PLAN_READY",
+  "mode": "audit_plan_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260524T130000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V6_APPROVAL": true,
+    "BLOCK_D_LEGACY_SERVER_SELECT_REMOVAL_PLAN_APPROVAL": true
+  },
+  "target": {
+    "file": "/app/backend/routes/economy.py",
+    "endpoint": "POST /api/server/select",
+    "line_pre": 195,
+    "current_behavior": "Set users.server = req.server_id (legacy single-server selection)",
+    "used_by_frontend": "yes (legacy single-server selection flow)",
+    "classified_in_v1_audit": "LEGACY_SERVER_SELECT_FORBIDDEN (V1 BLOCK_A economy plan W08)"
+  },
+  "removal_strategy": {
+    "phase_0_audit_only": "V6 BLOCK_D (this pack) — plan only",
+    "phase_1_deprecation_warning": "Add deprecation header/log on call; behavior unchanged. Pack: ECONOMY_SERVER_SELECT_DEPRECATION_NOTICE_PACK (~5 LOC)",
+    "phase_2_dual_route_support": "After V6 BLOCK_C server_profiles schema implemented and SLC-H endpoints live, /api/server/select continues to set both users.server (legacy) AND users.active_server_profile_id (new). Pack: SLC_H_LIVE_WIRING_DUAL_WRITE_PACK",
+    "phase_3_removal": "After grace period (TBD by board), remove the route entirely. Pack: ECONOMY_LEGACY_SERVER_SELECT_REMOVAL_APPLY_PACK",
+    "phase_4_users_server_field_drop": "Remove users.server field from documents (DB migration). Pack: USERS_SERVER_FIELD_BACKFILL_DROP_PACK"
+  },
+  "prerequisites_for_phase_3_removal": [
+    {"priority": "P0", "item": "V6 BLOCK_C server_profiles schema proposal accepted and implemented (P0 sblocco)"},
+    {"priority": "P0", "item": "SLC-H endpoints implemented: GET /api/account/server-profiles, POST /api/account/server-profiles/select, GET /api/account/active-server, POST /api/account/server-profiles/create"},
+    {"priority": "P0", "item": "Frontend migrated to use new SLC-H endpoints instead of /api/server/select"},
+    {"priority": "P1", "item": "Grace period of at least 1 release cycle with deprecation warning enabled"},
+    {"priority": "P1", "item": "Telemetry confirms zero calls to /api/server/select from frontend"},
+    {"priority": "P2", "item": "AF2-N V8 broad rollout signoff (so no SLC-H/AF2-N interaction risk)"}
+  ],
+  "rollback_strategy_per_phase": {
+    "phase_1": "trivial: revert ~5 LOC; deprecation warning was passive",
+    "phase_2": "revert dual-write; new field active_server_profile_id remains but not authoritative",
+    "phase_3": "re-add route; behavior restored from git history",
+    "phase_4": "DB restore from backup; users.server field re-introduced"
+  },
+  "affected_consumers_inventory": [
+    {"consumer": "frontend /select-server screen", "current_dependency": "calls POST /api/server/select", "migration_required": true},
+    {"consumer": "backend ensure_server_scope helper", "current_dependency": "reads users.server", "migration_required": "depends on V6 BLOCK_C dual_read phase"},
+    {"consumer": "GET /api/servers (legacy economy.py:177)", "current_dependency": "none direct; sibling endpoint", "migration_required": "sib pack: GET /api/servers SLC-H namespace migration"}
+  ],
+  "forbidden_in_block_d_respected": {
+    "endpoint_removal_applied": false,
+    "users_field_dropped": false,
+    "deprecation_header_added": false,
+    "frontend_migration": false,
+    "db_write_migration": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/legacy_server_select_removal_plan_v1.json",
+    "/app/docs/divine/120D_LEGACY_SERVER_SELECT_REMOVAL_PLAN.md"
+  ],
+  "next_recommended_action": "NESSUNA azione runtime ora. Pack futuro Phase 1: ECONOMY_SERVER_SELECT_DEPRECATION_NOTICE_PACK (singolo blocco, ~5 LOC, low-risk)."
+}

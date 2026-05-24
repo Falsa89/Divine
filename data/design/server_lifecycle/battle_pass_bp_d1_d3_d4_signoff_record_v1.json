@@ -1,0 +1,81 @@
+{
+  "task_id": "V6_BLOCK_A_BATTLE_PASS_BP_D1_D3_D4_SIGNOFF_RECORD",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V6",
+  "verdict": "BLOCK_A_BP_D1_D3_D4_SIGNOFF_RECORD_READY",
+  "mode": "doc_signoff_record_only",
+  "runtime_patch_applied": false,
+  "db_writes_executed": 0,
+  "timestamp_utc": "20260524T130000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V6_APPROVAL": true,
+    "SLC_ACCELERATION_MODE": "MULTI_BLOCK_PARTIAL_SUCCESS",
+    "BLOCK_A_BP_D1_D3_D4_SIGNOFF_RECORD_APPROVAL": true
+  },
+  "recommendations_source": {
+    "document": "V5 BLOCK_A board prep (119A_BATTLE_PASS_PRODUCT_DECISION_BOARD.md)",
+    "json": "/app/data/design/server_lifecycle/battle_pass_product_decision_board_v1.json"
+  },
+  "decisions_signed_off": [
+    {
+      "decision_id": "BP_D1",
+      "category": "PROGRESS_SCOPE",
+      "signed_off_option": "BP_D1_OPT_A",
+      "signed_off_value": "ACCOUNT_WIDE",
+      "rationale": "Coerente con BATTLE_PASS_PREMIUM_ACCOUNT_WIDE_CANONICAL_V1 (BP_D2). Evita DB migration. Anti multi-server grinding indirizzato via daily caps server-bound gi\u00e0 attivi (FREE_SERVER_BOUND classification dei daily_claims, applicato in V2 BLOCK_A).",
+      "signed_off_by": "product_decision_board",
+      "signoff_strength": "strong",
+      "db_migration_required": false
+    },
+    {
+      "decision_id": "BP_D3",
+      "category": "CLAIM_SCOPE",
+      "signed_off_option": "BP_D3_OPT_A",
+      "signed_off_value": "ACCOUNT_WIDE_ONCE",
+      "rationale": "Coerente con BP_D1=ACCOUNT_WIDE. Una sola claim per (level, user_id) account-wide. Nessuna duplicazione reward cross-server.",
+      "signed_off_by": "product_decision_board",
+      "signoff_strength": "strong",
+      "db_migration_required": false
+    },
+    {
+      "decision_id": "BP_D4",
+      "category": "SEASON_SCOPE",
+      "signed_off_option": "BP_D4_OPT_A",
+      "signed_off_value": "GLOBAL_SEASON",
+      "rationale": "Operazionalmente semplice; coerente con event hub globale. Quando second_server_opening_enabled passa a true, il nuovo server entrer\u00e0 nella stagione corrente con catch-up incentive da definire in pack dedicato.",
+      "signed_off_by": "product_decision_board",
+      "signoff_strength": "medium",
+      "db_migration_required": false
+    }
+  ],
+  "canonical_rules_now_active": [
+    "BATTLE_PASS_PROGRESS_ACCOUNT_WIDE_CANONICAL_V1",
+    "BATTLE_PASS_CLAIM_ACCOUNT_WIDE_ONCE_CANONICAL_V1",
+    "BATTLE_PASS_GLOBAL_SEASON_CANONICAL_V1"
+  ],
+  "unlocked_packs_post_signoff": [
+    {
+      "pack_name": "BATTLE_PASS_TECHNICAL_HARDENING_POST_SIGNOFF_PACK",
+      "unlock_reason": "V4 BLOCK_A READY_NOT_APPLIED R3 (dependency su BP_D1) ora risolta. R1/R2/R4 restano da chiudere via pack dedicato.",
+      "expected_diff": "4 LOC su economy.py:158 ($set -> $setOnInsert pattern)",
+      "prerequisites_remaining": [
+        "Esplicita autorizzazione runtime patch (R2 prompt guardrail su response schema)",
+        "Ops pack DB-create-index dedicato per (user_id, season) index (R4)"
+      ]
+    }
+  ],
+  "closed_blockers_in_slc_h_readiness": [
+    "V5 BLOCK_D readiness matrix item 'Battle pass progress/claim/season decision' was V5_BLOCK_A_BOARD_READY; post-signoff diventa CLOSED"
+  ],
+  "forbidden_in_block_a_respected": {
+    "reward_change": false,
+    "premium_free_lane_change": false,
+    "entitlement_logic_change": false,
+    "pricing_currency_change": false,
+    "db_write_migration": false,
+    "runtime_change": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/battle_pass_bp_d1_d3_d4_signoff_record_v1.json",
+    "/app/docs/divine/120A_BATTLE_PASS_BP_D1_D3_D4_SIGNOFF_RECORD.md"
+  ]
+}

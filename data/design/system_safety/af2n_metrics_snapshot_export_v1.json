@@ -1,0 +1,66 @@
+{
+  "task_id": "V6_BLOCK_B_AF2N_METRICS_SNAPSHOT_EXPORT",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V6",
+  "verdict": "BLOCK_B_AF2N_METRICS_SNAPSHOT_EXPORT_READY",
+  "mode": "suite_doc_export_only",
+  "runtime_patch_applied": false,
+  "timestamp_utc": "20260524T130000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V6_APPROVAL": true,
+    "BLOCK_B_AF2N_METRICS_SNAPSHOT_EXPORT_APPROVAL": true
+  },
+  "reference_pipeline": {
+    "doc": "V5 BLOCK_B (af2n_observability_metrics_pipeline_v1.json) - 5 family / 16 metrics",
+    "families": ["canary", "ledger", "rate_limit", "inventory_writes", "affinity_gain"]
+  },
+  "export_script": {
+    "path": "/app/backend/scripts/export_af2n_metrics_snapshot_v1.py",
+    "mode": "non_runtime_on_demand",
+    "output_file": "/app/data/design/system_safety/af2n_metrics_snapshot.jsonl",
+    "daemon_mode": false,
+    "writes_to_db": false,
+    "writes_to_redis": false,
+    "hits_runtime_endpoints": "read-only (GET only, no spend)",
+    "runs_in_suite": false,
+    "runs_only_on_explicit_invocation": true
+  },
+  "validator_script": {
+    "path": "/app/backend/scripts/validate_af2n_metrics_snapshot_export_v1.py",
+    "behavior": "verifies the export script exists; verifies the output file is JSONL-parseable if present; does NOT execute the export",
+    "safe_in_suite": true,
+    "writes": "none"
+  },
+  "non_runtime_guarantees": {
+    "no_metric_emit_to_external_collector": true,
+    "no_daemon": true,
+    "no_continuous_polling": true,
+    "no_write_back_to_runtime": true,
+    "export_is_idempotent": true,
+    "only_read_only_api_calls_used": true
+  },
+  "snapshot_format": {
+    "type": "JSONL (one metric record per line)",
+    "record_shape": {
+      "timestamp_utc": "ISO8601",
+      "metric_family": "string (one of canary/ledger/rate_limit/inventory_writes/affinity_gain)",
+      "metric_name": "string (e.g. af2n_canary_active_users_total)",
+      "value": "number",
+      "labels": "dict (optional)",
+      "source": "string (e.g. /api/affinity/gift-spend/canary-status)"
+    }
+  },
+  "forbidden_in_block_b_respected": {
+    "af2n_runtime_mutation": false,
+    "gift_spend_change": false,
+    "inventory_ledger_change": false,
+    "rate_limit_change": false,
+    "public_spend_ui": false,
+    "daemon_added": false
+  },
+  "artifacts_created": [
+    "/app/data/design/system_safety/af2n_metrics_snapshot_export_v1.json",
+    "/app/docs/divine/120B_AF2N_METRICS_SNAPSHOT_EXPORT.md",
+    "/app/backend/scripts/export_af2n_metrics_snapshot_v1.py",
+    "/app/backend/scripts/validate_af2n_metrics_snapshot_export_v1.py"
+  ]
+}

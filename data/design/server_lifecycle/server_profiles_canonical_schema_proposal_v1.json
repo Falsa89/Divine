@@ -1,0 +1,81 @@
+{
+  "task_id": "V6_BLOCK_C_SERVER_PROFILES_CANONICAL_SCHEMA_PROPOSAL",
+  "pack": "MEGA_COMBO_SLC_ACCELERATION_V6",
+  "verdict": "BLOCK_C_SERVER_PROFILES_SCHEMA_PROPOSAL_READY",
+  "mode": "design_schema_proposal_only",
+  "runtime_patch_applied": false,
+  "db_migration_executed": false,
+  "timestamp_utc": "20260524T130000Z",
+  "global_markers_detected": {
+    "MEGA_COMBO_SLC_ACCELERATION_V6_APPROVAL": true,
+    "BLOCK_C_SERVER_PROFILES_SCHEMA_PROPOSAL_APPROVAL": true
+  },
+  "unblocks_p0_from_v5_block_d": [
+    "P0: server_profiles collection canonical schema",
+    "P0: users.active_server_profile_id field (parte di questa proposal)"
+  ],
+  "collection_proposal": {
+    "name": "server_profiles",
+    "server_bound": true,
+    "document_shape": {
+      "_id": "<auto ObjectId>",
+      "id": "<str uuid4> (canonical primary identifier exposed via API)",
+      "user_id": "<str> (FK to users.id; account-wide reference)",
+      "server_id": "<str> (e.g. 's1', 's2'; canonical server identifier)",
+      "profile_name": "<str> (player-set display name within the server)",
+      "created_at": "<datetime utcnow>",
+      "last_active_at": "<datetime utcnow>",
+      "is_archived": "<bool> (default False)",
+      "archive_reason": "<str|null> (null if active; populated on archive)",
+      "slc_version": "<str> ('v1')"
+    },
+    "unique_constraint": ["user_id", "server_id"],
+    "indexes": [
+      {"name": "idx_user_server", "fields": ["user_id", "server_id"], "unique": true},
+      {"name": "idx_user_active", "fields": ["user_id", "is_archived"]},
+      {"name": "idx_server_active", "fields": ["server_id", "is_archived"]}
+    ],
+    "lifecycle": {
+      "creation": "explicit via POST /api/account/server-profiles/create (SLC-H endpoint, NOT YET IMPLEMENTED)",
+      "selection": "via POST /api/account/server-profiles/select sets users.active_server_profile_id (NOT YET IMPLEMENTED)",
+      "archive": "is_archived flip; preserves history; never hard-delete"
+    }
+  },
+  "users_field_proposal": {
+    "field_name": "active_server_profile_id",
+    "type": "str | null",
+    "default": null,
+    "migration_strategy_proposal": {
+      "phase_0_design_only": "this proposal (V6 BLOCK_C, no code, no DB write)",
+      "phase_1_dual_write": "new code writes both legacy users.server and new active_server_profile_id; legacy reads continue from users.server",
+      "phase_2_dual_read": "new code reads from active_server_profile_id with fallback to users.server",
+      "phase_3_legacy_removal": "users.server field removed after grace period (covered by V6 BLOCK_D removal plan)",
+      "applies_to": "sblocco SLC-H live wiring in pack futuro",
+      "db_migration_required": "yes, in phase_1 (require explicit ops pack approval)"
+    }
+  },
+  "affected_runtime_consumers_audit_only": [
+    {"endpoint": "GET /api/account (users doc)", "impact": "must expose both legacy users.server and active_server_profile_id during dual_write/dual_read"},
+    {"endpoint": "POST /api/server/select (legacy)", "impact": "BLOCKED for removal in V6 BLOCK_D plan"},
+    {"endpoint": "All ensure_server_scope callsites (24 currently)", "impact": "already server_id-aware; no change required"}
+  ],
+  "acceptance_criteria_for_implementation_pack": [
+    "server_profiles collection created with the 3 canonical indexes",
+    "users.active_server_profile_id field introduced (default null)",
+    "Dual-write enabled for legacy users.server compatibility",
+    "server_profiles_runtime_enabled flag remains FALSE until phase_2_dual_read complete",
+    "Rollback script provided for each phase"
+  ],
+  "forbidden_in_block_c_respected": {
+    "collection_creation": false,
+    "db_write": false,
+    "db_migration": false,
+    "runtime_endpoint_implementation": false,
+    "feature_flag_enable": false,
+    "second_server_opening": false
+  },
+  "artifacts_created": [
+    "/app/data/design/server_lifecycle/server_profiles_canonical_schema_proposal_v1.json",
+    "/app/docs/divine/120C_SERVER_PROFILES_CANONICAL_SCHEMA_PROPOSAL.md"
+  ]
+}

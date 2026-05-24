@@ -562,6 +562,10 @@ OPTIONAL = [
     ('V5-BLOCK-B-AF2N-OBSERVABILITY-PIPELINE',     'validate_af2n_observability_pipeline_v1.py'),
     # MEGA-COMBO V5 BLOCK_C ROSTER VISIBILITY INVARIANTS V2 (HTTP smoke; superset of v1)
     ('V5-BLOCK-C-ROSTER-VISIBILITY-INVARIANTS-V2', 'validate_roster_visibility_invariants_v2.py'),
+    # MEGA-COMBO V6 BLOCK_B AF2-N METRICS SNAPSHOT EXPORT (READ-ONLY validator; does NOT run export)
+    ('V6-BLOCK-B-AF2N-METRICS-SNAPSHOT-EXPORT',    'validate_af2n_metrics_snapshot_export_v1.py'),
+    # MEGA-COMBO V6 BLOCK_E SUITE RUNTIME HEALTH (non-blocking on H3/H4; HTTP smoke + supervisorctl)
+    ('V6-BLOCK-E-SUITE-RUNTIME-HEALTH',            'validate_suite_runtime_health_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
