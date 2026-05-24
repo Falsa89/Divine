@@ -1,0 +1,10 @@
+# 138E — PROD ROLLOUT STAGE 100%
+
+**Pack**: `PROJECT_P` — Track E
+**Verdict**: `TRACK_E_PROD_ROLLOUT_STAGE_100_PERCENT_READY_NOT_APPLIED_PENDING_APPROVAL`
+
+Stage 100% non entrato. 0% traffic.
+
+## Stop condition
+
+Stage 25% GREEN **+** marker `PROD_ROLLOUT_STAGE_100_PERCENT_APPROVAL=true`.

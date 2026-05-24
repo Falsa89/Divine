@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_P_TRACK_B",
+  "verdict": "TRACK_B_PROD_ROLLOUT_STAGE_1_PERCENT_READY_NOT_APPLIED_PENDING_APPROVAL",
+  "stage_percent": 1,
+  "required_stage_marker": "PROD_ROLLOUT_STAGE_1_PERCENT_APPROVAL=true",
+  "required_stage_marker_present": false,
+  "prior_track_a_classification": "BLOCKING_MISSING_ALL_PROD_SIGNATURES",
+  "applied": false,
+  "prod_flag_set": false,
+  "prod_users_exposed_count": 0,
+  "prod_traffic_routed_to_flag_on_percent": 0.0,
+  "smoke": {"executed": false, "reason": "stage not entered"},
+  "leak": {"executed": false, "reason": "stage not entered"},
+  "latency_error_check": {"executed": false},
+  "rollback_checkpoint": "N/A (stage not entered)",
+  "stop_condition": "All 6 prod signatures + stage 1% marker must be present",
+  "db_write": false,
+  "backend_env_modified": false,
+  "validator_script": "validate_project_p_prod_rollout_stage_1_percent_v1.py"
+}

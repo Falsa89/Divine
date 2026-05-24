@@ -1,0 +1,24 @@
+{
+  "task_id": "PROJECT_P_TRACK_F",
+  "verdict": "TRACK_F_PROD_ROLLOUT_NO_LEAK_LOAD_AND_ROLLBACK_FINAL_READY_NOT_APPLIED_PENDING_APPROVAL",
+  "applied": false,
+  "reason": "No prod stage was entered (signatures missing).",
+  "planned_no_leak_audit": {
+    "endpoints": ["/api/heroes", "/api/heroes/borea", "/api/heroes/greek_borea", "/api/server-profiles/select", "/api/housing/preview"],
+    "forbidden_markers": ["status_envelope_preview", "__seam_version"],
+    "backend_logs_to_scan": true
+  },
+  "planned_load_profile": {
+    "max_requests_per_stage": 300,
+    "destructive": false,
+    "spend": false,
+    "gacha": false,
+    "db_mutation": false
+  },
+  "planned_rollback": {
+    "script_to_be_created": "/app/backend/scripts/rollback_project_p_prod_status_first_slice_flag.py",
+    "safety_guards": ["dry-run default", "--apply explicit", "backup verification before destructive ops", "smoke validation post-rollback"],
+    "final_state_if_keep_on_marker_absent": "FLAG_OFF (rollback obligatorio per assenza di STATUS_RUNTIME_BUFF_SLICE_KEEP_ON_AFTER_PROD_ROLLOUT)"
+  },
+  "validator_script": "validate_project_p_prod_rollout_no_leak_load_and_rollback_final_v1.py"
+}

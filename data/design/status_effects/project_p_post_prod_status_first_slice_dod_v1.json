@@ -1,0 +1,16 @@
+{
+  "task_id": "PROJECT_P_TRACK_G",
+  "verdict": "TRACK_G_POST_PROD_STATUS_FIRST_SLICE_DOD_READY_NOT_APPLIED_PENDING_APPROVAL",
+  "definition_of_done_for_status_first_slice": [
+    "All 6 prod approval signatures collected",
+    "4 stage approval markers collected (1%, 5%, 25%, 100%)",
+    "Each stage green: smoke + no-leak + light load + rollback checkpoint",
+    "Suite hygiene preserved at 100%",
+    "Battle behavior byte-identical with flag ON at every stage",
+    "Rollback drill green at end of stage 100%",
+    "Either rollback to FLAG_OFF OR explicit STATUS_RUNTIME_BUFF_SLICE_KEEP_ON_AFTER_PROD_ROLLOUT=true to keep ON"
+  ],
+  "current_dod_completion": 0,
+  "reason": "Pack P entered in BLOCKING state due to missing prod signatures.",
+  "validator_script": "validate_project_p_post_prod_status_first_slice_dod_v1.py"
+}

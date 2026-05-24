@@ -1,0 +1,14 @@
+{
+  "task_id": "PROJECT_P_TRACK_E",
+  "verdict": "TRACK_E_PROD_ROLLOUT_STAGE_100_PERCENT_READY_NOT_APPLIED_PENDING_APPROVAL",
+  "stage_percent": 100,
+  "required_prior_stage_green": "PROD_ROLLOUT_STAGE_25_PERCENT_GREEN",
+  "required_stage_marker": "PROD_ROLLOUT_STAGE_100_PERCENT_APPROVAL=true",
+  "required_stage_marker_present": false,
+  "applied": false,
+  "prod_flag_set": false,
+  "prod_traffic_routed_to_flag_on_percent": 0.0,
+  "stop_condition": "Stage 25% must be GREEN AND stage 100% marker must be present",
+  "backend_env_modified": false,
+  "validator_script": "validate_project_p_prod_rollout_stage_100_percent_v1.py"
+}

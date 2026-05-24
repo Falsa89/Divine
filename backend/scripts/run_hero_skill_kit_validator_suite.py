@@ -832,6 +832,22 @@ OPTIONAL = [
     ('PROJECT-O-TRACK-G-PROD-READINESS-GATE-PREP', 'validate_project_o_prod_readiness_gate_prep_v1.py'),
     # PROJECT_O Track H PROJECT O COMPLETION + NEXT STEP (next pack: PROJECT_P)
     ('PROJECT-O-TRACK-H-PROJECT-O-COMPLETION-AND-NEXT-STEP', 'validate_project_o_completion_and_next_step_v1.py'),
+    # PROJECT_P Track A PROD ROLLOUT PRECHECK + SIGNATURE GATE (BLOCKING_MISSING_ALL_PROD_SIGNATURES; 0/6 signatures)
+    ('PROJECT-P-TRACK-A-PROD-ROLLOUT-PRECHECK-AND-SIGNATURE-GATE', 'validate_project_p_prod_rollout_precheck_and_signature_gate_v1.py'),
+    # PROJECT_P Track B PROD ROLLOUT STAGE 1% (READY_NOT_APPLIED_PENDING_APPROVAL)
+    ('PROJECT-P-TRACK-B-PROD-ROLLOUT-STAGE-1-PERCENT', 'validate_project_p_prod_rollout_stage_1_percent_v1.py'),
+    # PROJECT_P Track C PROD ROLLOUT STAGE 5% (READY_NOT_APPLIED_PENDING_APPROVAL)
+    ('PROJECT-P-TRACK-C-PROD-ROLLOUT-STAGE-5-PERCENT', 'validate_project_p_prod_rollout_stage_5_percent_v1.py'),
+    # PROJECT_P Track D PROD ROLLOUT STAGE 25% (READY_NOT_APPLIED_PENDING_APPROVAL)
+    ('PROJECT-P-TRACK-D-PROD-ROLLOUT-STAGE-25-PERCENT', 'validate_project_p_prod_rollout_stage_25_percent_v1.py'),
+    # PROJECT_P Track E PROD ROLLOUT STAGE 100% (READY_NOT_APPLIED_PENDING_APPROVAL)
+    ('PROJECT-P-TRACK-E-PROD-ROLLOUT-STAGE-100-PERCENT', 'validate_project_p_prod_rollout_stage_100_percent_v1.py'),
+    # PROJECT_P Track F PROD ROLLOUT NO-LEAK + LOAD + ROLLBACK FINAL (READY_NOT_APPLIED_PENDING_APPROVAL)
+    ('PROJECT-P-TRACK-F-PROD-ROLLOUT-NO-LEAK-LOAD-AND-ROLLBACK-FINAL', 'validate_project_p_prod_rollout_no_leak_load_and_rollback_final_v1.py'),
+    # PROJECT_P Track G POST-PROD STATUS FIRST-SLICE DOD (READY_NOT_APPLIED_PENDING_APPROVAL)
+    ('PROJECT-P-TRACK-G-POST-PROD-STATUS-FIRST-SLICE-DOD', 'validate_project_p_post_prod_status_first_slice_dod_v1.py'),
+    # PROJECT_P Track H PROJECT P COMPLETION + NEXT SYSTEM
+    ('PROJECT-P-TRACK-H-PROJECT-P-COMPLETION-AND-NEXT-SYSTEM', 'validate_project_p_completion_and_next_system_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
