@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_G_TRACK_F",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_F_AF2N_DASHBOARD_PROVISIONING_APPROVAL_GATE_READY",
+  "mode": "approval_gate_inert_no_external_calls",
+  "runtime_changes_applied": false,
+  "external_calls_made": 0,
+  "approval_gates": [
+    {"gate_id": "OPS_APPROVAL", "owner": "ops_lead", "required": true, "state": "PENDING", "description": "OPS approves the live provisioning window and rollback plan."},
+    {"gate_id": "ALERT_SINK_CONFIGURED", "owner": "ops_lead", "required": true, "state": "PENDING", "description": "Alert sink (slack/pagerduty/email) routing configured and tested in dry-run."},
+    {"gate_id": "DASHBOARD_DATA_SOURCE_CONFIGURED", "owner": "ops_lead", "required": true, "state": "PENDING", "description": "Grafana data source UID confirmed; metrics scrape healthy."},
+    {"gate_id": "NO_SECRET_LEAKAGE", "owner": "qa_lead", "required": true, "state": "PENDING", "description": "Audit confirms no AF2N_GRAFANA_API_TOKEN or related secret leaks in logs or templates."},
+    {"gate_id": "ROLLBACK_NO_OP_PATH", "owner": "ops_lead", "required": true, "state": "PENDING", "description": "Rollback script tested locally; no-op path verified for failed provisioning."}
+  ],
+  "local_templates_present": true,
+  "local_templates_inert": true,
+  "future_env_requirements": [
+    "AF2N_GRAFANA_URL",
+    "AF2N_GRAFANA_API_TOKEN",
+    "AF2N_DASHBOARD_FOLDER_UID",
+    "AF2N_ALERT_SINK_URL"
+  ],
+  "forbidden_in_track_f_respected": {
+    "external_service_calls": false,
+    "af2n_runtime_mutation": false,
+    "public_spend_ui": false,
+    "stack_g_change": false
+  },
+  "upstream": [
+    "/app/data/design/system_safety/project_f_af2n_dashboard_provisioning_phase3_dryrun_v1.json"
+  ],
+  "validator_script": "validate_project_g_af2n_dashboard_provisioning_approval_gate_v1.py",
+  "suite_registration": "OPTIONAL"
+}

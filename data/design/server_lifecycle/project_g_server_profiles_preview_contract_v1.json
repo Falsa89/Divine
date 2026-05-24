@@ -1,0 +1,47 @@
+{
+  "task_id": "PROJECT_G_TRACK_A",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_A_SERVER_PROFILES_PREVIEW_CONTRACT_FROZEN_INERT",
+  "mode": "contract_freeze_inert",
+  "runtime_changes_applied": false,
+  "frozen_endpoint": "/api/server-profiles/select",
+  "flags_required_off": ["SERVER_PROFILES_RUNTIME_ENABLED", "SERVER_PROFILES_PREVIEW_ENABLED"],
+  "default_behavior": {
+    "GET /api/server-profiles/select": 503,
+    "POST /api/server-profiles/select": 503
+  },
+  "frozen_response_shape": {
+    "status": "disabled",
+    "feature_flag": "SERVER_PROFILES_RUNTIME_ENABLED",
+    "runtime_enabled": false,
+    "method": "GET|POST",
+    "phase": "PROJECT_B_TRACK_A_INERT_SKELETON",
+    "contract_version": "v1",
+    "upstream_design_doc": "/app/docs/divine/122D_LEGACY_SERVER_SELECT_DUAL_ROUTE_DESIGN.md"
+  },
+  "frozen_envelope_shape_with_flag_on": {
+    "phase": "PROJECT_C_TRACK_A_BEHAVIOR_LAYER_READ_ONLY",
+    "success": false,
+    "server_profile_id": null,
+    "is_archived": false,
+    "fallback_used": true,
+    "fallback_target": "users.server (legacy; NOT mutated here)",
+    "mutation_executed": false,
+    "active_server_switched": false,
+    "dual_write_executed": false
+  },
+  "db_invariants": {
+    "server_profiles_docs_count": 0,
+    "server_profiles_writes_in_pack_g": 0,
+    "users_server_writes_in_pack_g": 0
+  },
+  "forbidden_in_track_a_respected": {
+    "live_enable": false,
+    "active_switch": false,
+    "db_writes": false,
+    "second_server": false,
+    "frontend": false
+  },
+  "validator_script": "validate_project_g_server_profiles_preview_contract_v1.py",
+  "suite_registration": "OPTIONAL"
+}

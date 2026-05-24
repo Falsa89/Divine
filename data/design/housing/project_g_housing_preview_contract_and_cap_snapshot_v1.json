@@ -1,0 +1,58 @@
+{
+  "task_id": "PROJECT_G_TRACK_B",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_B_HOUSING_PREVIEW_CONTRACT_FROZEN_INERT",
+  "mode": "contract_freeze_and_cap_snapshot_inert",
+  "runtime_changes_applied": false,
+  "frozen_endpoint": "/api/housing/preview",
+  "flag_required_off": "HOUSING_PREVIEW_ENABLED",
+  "default_behavior": {
+    "GET /api/housing/preview": 503
+  },
+  "frozen_response_shape": {
+    "status": "disabled",
+    "feature_flag": "HOUSING_PREVIEW_ENABLED",
+    "runtime_enabled": false,
+    "method": "GET",
+    "phase": "PROJECT_F_TRACK_B_HOUSING_PREVIEW_INERT_SKELETON",
+    "contract_version": "project_f_track_b_housing_preview_v1",
+    "live_bonus_applied": false,
+    "db_writes": false,
+    "combat_mutation": false
+  },
+  "frozen_envelope_shape_with_flag_on": {
+    "phase": "PROJECT_F_TRACK_B_HOUSING_PREVIEW_READ_ONLY",
+    "preview": true,
+    "dry_run": true,
+    "live_bonus_applied": false,
+    "db_writes": false,
+    "combat_mutation": false,
+    "rooms": [],
+    "residents": [],
+    "envelope": {"hp_pct": 0.0, "atk_pct": 0.0, "def_pct": 0.0, "crit_pct": 0.0}
+  },
+  "housing_cap_snapshot_v1": {
+    "per_room": {"hp_pct": {"min": 0.0, "max": 1.5}, "atk_pct": {"min": 0.0, "max": 1.5}, "def_pct": {"min": 0.0, "max": 1.5}, "crit_pct": {"min": 0.0, "max": 0.5}},
+    "category": {"buff_room": {"max_aggregate_pct": 3.0}, "defense_room": {"max_aggregate_pct": 3.0}, "crit_room": {"max_aggregate_pct": 1.0}},
+    "item": {"per_item_contribution_max_pct": 0.5, "max_items_per_room": 6},
+    "bonus": {"types_allowed": ["hp_pct", "atk_pct", "def_pct", "crit_pct"], "types_forbidden": ["flat_damage", "true_damage", "crit_dmg_pct", "crit_resist_pct"]},
+    "mode": {"global_roster": true, "battle_inheritance": false, "pvp_application": false, "pve_application_gated": true},
+    "master_cap": {"hp_pct": 5.0, "atk_pct": 5.0, "def_pct": 5.0, "crit_pct": 2.0, "aggregate_pct": 10.0},
+    "vip_vault_secondary_cap": {"hp_pct": 1.0, "atk_pct": 1.0, "def_pct": 1.0, "crit_pct": 0.5, "must_be_under_master_cap": true}
+  },
+  "forbidden_in_track_b_respected": {
+    "housing_live_bonus": false,
+    "db_writes": false,
+    "battle_mutation": false,
+    "account_stat_mutation": false,
+    "frontend": false
+  },
+  "upstream": [
+    "/app/data/design/housing/project_f_housing_read_only_preview_contract_v1.json",
+    "/app/data/design/housing/dimora_divina_room_cap_policy_v1.json",
+    "/app/data/design/housing/dimora_divina_vip_vault_policy_v1.json",
+    "/app/data/design/housing/housing_bonus_resolver_pure_stub_design_v1.json"
+  ],
+  "validator_script": "validate_project_g_housing_preview_contract_v1.py",
+  "suite_registration": "OPTIONAL"
+}

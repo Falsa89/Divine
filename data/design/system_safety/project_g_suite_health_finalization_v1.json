@@ -1,0 +1,44 @@
+{
+  "task_id": "PROJECT_G_TRACK_G",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_G_SUITE_HEALTH_FINALIZATION_READY",
+  "mode": "suite_health_finalization_required_diff_guard",
+  "baseline_pass": 410,
+  "baseline_fail": 0,
+  "baseline_miss": 0,
+  "baseline_pass_pre_project_g": 402,
+  "baseline_pass_delta_explanation": "410 = 402 + 8 new PROJECT-G-TRACK-* OPTIONAL entries. No supersedence introduced in pack G. No REQUIRED change.",
+  "superseded_clusters_documented": [
+    "SUPERSEDED_AFTER_AF2N",
+    "SUPERSEDED_AFTER_INV_WRITES",
+    "SUPERSEDED_AFTER_STAGE2",
+    "SUPERSEDED_AFTER_STAGE3",
+    "SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW",
+    "SUPERSEDED_AFTER_RATE_LIMIT",
+    "SUPERSEDED_AFTER_STAGE4",
+    "SUPERSEDED_AFTER_V21_SCRIPTS",
+    "SUPERSEDED_AFTER_PROJECT_E_V2",
+    "SUPERSEDED_AFTER_PROJECT_F_TRACK_B"
+  ],
+  "required_validators_unchanged": true,
+  "required_diff_guard": {
+    "policy": "REQUIRED list is frozen post Pack G unless the next pack explicitly authorizes a delta via prompt; validator scans REQUIRED tuple length and entry-by-entry order against a snapshot.",
+    "snapshot_taken_in_track_g": true
+  },
+  "project_efg_tasks_no_duplicates": true,
+  "hygiene_guarantees": [
+    "suite total fail == 0",
+    "suite total miss == 0",
+    "no fake PASS",
+    "no hiding failures",
+    "no REQUIRED weakening",
+    "PROJECT_E + PROJECT_F + PROJECT_G OPTIONAL entries present exactly once"
+  ],
+  "forbidden_in_track_g_respected": {
+    "fake_pass": false,
+    "hiding_failures": false,
+    "required_weakening": false
+  },
+  "validator_script": "validate_project_g_suite_health_finalization_v1.py",
+  "suite_registration": "OPTIONAL"
+}

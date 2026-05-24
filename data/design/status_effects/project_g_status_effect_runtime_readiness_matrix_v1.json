@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_G_TRACK_C",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_C_STATUS_EFFECT_RUNTIME_READINESS_MATRIX_READY",
+  "mode": "non_runtime_readiness_matrix",
+  "runtime_changes_applied": false,
+  "runtime_active": false,
+  "matrix": [
+    {"category": "buff_offensive", "runtime_handler_needed": "battle_stat_modifier", "boss_behavior": "normal", "stacking": "refresh", "cleanse_immunity": "cleansable", "display_vfx_needed": "buff_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring", "vfx_pipeline"]},
+    {"category": "buff_defensive", "runtime_handler_needed": "battle_stat_modifier", "boss_behavior": "normal", "stacking": "refresh", "cleanse_immunity": "cleansable", "display_vfx_needed": "buff_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring"]},
+    {"category": "buff_support", "runtime_handler_needed": "battle_stat_modifier", "boss_behavior": "normal", "stacking": "stack_capped", "cleanse_immunity": "cleansable", "display_vfx_needed": "buff_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring"]},
+    {"category": "debuff_offensive", "runtime_handler_needed": "battle_stat_modifier", "boss_behavior": "reduced", "stacking": "refresh", "cleanse_immunity": "cleansable", "display_vfx_needed": "debuff_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring"]},
+    {"category": "debuff_defensive", "runtime_handler_needed": "battle_stat_modifier", "boss_behavior": "reduced", "stacking": "refresh", "cleanse_immunity": "cleansable", "display_vfx_needed": "debuff_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring"]},
+    {"category": "control", "runtime_handler_needed": "battle_control_handler", "boss_behavior": "immune", "stacking": "none", "cleanse_immunity": "hard_cc_immunity_rules", "display_vfx_needed": "control_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring", "boss_immunity_matrix"]},
+    {"category": "dot", "runtime_handler_needed": "battle_tick_handler", "boss_behavior": "reduced", "stacking": "stack_capped", "cleanse_immunity": "cleansable", "display_vfx_needed": "dot_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring", "tick_loop_integration"]},
+    {"category": "hot", "runtime_handler_needed": "battle_tick_handler", "boss_behavior": "normal", "stacking": "stack_capped", "cleanse_immunity": "cleansable", "display_vfx_needed": "hot_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring", "tick_loop_integration"]},
+    {"category": "shield", "runtime_handler_needed": "battle_shield_handler", "boss_behavior": "normal", "stacking": "refresh", "cleanse_immunity": "non_cleansable", "display_vfx_needed": "shield_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring"]},
+    {"category": "meta", "runtime_handler_needed": "battle_meta_handler", "boss_behavior": "immune", "stacking": "none", "cleanse_immunity": "source_locked", "display_vfx_needed": "meta_icon", "test_coverage_status": "phase2_ut_pass", "blockers": ["battle_engine_wiring", "meta_handler_design"]}
+  ],
+  "matrix_category_count": 10,
+  "first_safe_runtime_slice_recommendation": "buff_offensive + buff_defensive (lowest risk; reuses existing stat modifier helpers; no tick loop needed)",
+  "global_blockers_summary": [
+    "battle_engine_wiring (cross-category prerequisite)",
+    "vfx_pipeline (visual feedback)",
+    "tick_loop_integration (only dot/hot)",
+    "boss_immunity_matrix (only control)",
+    "meta_handler_design (only meta)"
+  ],
+  "forbidden_in_track_c_respected": {
+    "battle_mutation": false,
+    "runtime_status_activation": false,
+    "battle_engine_change": false,
+    "battle_core_change": false,
+    "combat_tsx_change": false
+  },
+  "upstream": [
+    "/app/backend/game_logic/status_effect_runtime_adapter_stub.py",
+    "/app/data/design/status_effects/project_f_status_effect_adapter_phase2_tests_v1.json"
+  ],
+  "validator_script": "validate_project_g_status_effect_runtime_readiness_matrix_v1.py",
+  "suite_registration": "OPTIONAL"
+}

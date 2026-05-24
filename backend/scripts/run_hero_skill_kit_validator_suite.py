@@ -677,6 +677,22 @@ OPTIONAL = [
     ('PROJECT-F-TRACK-G-SUITE-HYGIENE-LOCK', 'validate_project_f_suite_hygiene_lock_v1.py'),
     # PROJECT_F Track H ARTIFACT BIBLE IMPORT PLAN & APPROVAL GATE (design-only; 4 PENDING gates)
     ('PROJECT-F-TRACK-H-ARTIFACT-BIBLE-IMPORT-PLAN-APPROVAL-GATE', 'validate_project_f_artifact_import_plan_v1.py'),
+    # PROJECT_G Track A SERVER PROFILES PREVIEW CONTRACT FREEZE (default 503; double-flag gate)
+    ('PROJECT-G-TRACK-A-SERVER-PROFILES-PREVIEW-CONTRACT-FREEZE', 'validate_project_g_server_profiles_preview_contract_v1.py'),
+    # PROJECT_G Track B HOUSING PREVIEW CONTRACT FREEZE + 7-substructure CAP SNAPSHOT
+    ('PROJECT-G-TRACK-B-HOUSING-PREVIEW-CONTRACT-FREEZE', 'validate_project_g_housing_preview_contract_v1.py'),
+    # PROJECT_G Track C STATUS EFFECT RUNTIME READINESS MATRIX (10 categories; non-runtime)
+    ('PROJECT-G-TRACK-C-STATUS-EFFECT-RUNTIME-READINESS-MATRIX', 'validate_project_g_status_effect_runtime_readiness_matrix_v1.py'),
+    # PROJECT_G Track D DRIFT DOC 6 ARCHIVE (audit/doc only; 6/7 archived)
+    ('PROJECT-G-TRACK-D-DRIFT-DOC-6-ARCHIVE', 'validate_project_g_drift_doc_6_archive_v1.py'),
+    # PROJECT_G Track E QA SAFE LOGIN ENV CONTRACT (MANUAL_REQUIRED default; no secret logging)
+    ('PROJECT-G-TRACK-E-QA-SAFE-LOGIN-ENV-CONTRACT', 'validate_project_g_qa_safe_login_env_contract_v1.py'),
+    # PROJECT_G Track F AF2-N DASHBOARD PROVISIONING APPROVAL GATE (5 PENDING gates; 0 external calls)
+    ('PROJECT-G-TRACK-F-AF2N-DASHBOARD-PROVISIONING-APPROVAL-GATE', 'validate_project_g_af2n_dashboard_provisioning_approval_gate_v1.py'),
+    # PROJECT_G Track G SUITE HEALTH FINALIZATION & REQUIRED DIFF GUARD
+    ('PROJECT-G-TRACK-G-SUITE-HEALTH-FINALIZATION', 'validate_project_g_suite_health_finalization_v1.py'),
+    # PROJECT_G Track H ARTIFACT APPROVAL GATE SIGNATURE PACK (4 PENDING gates; signature template)
+    ('PROJECT-G-TRACK-H-ARTIFACT-APPROVAL-GATE-SIGNATURE', 'validate_project_g_artifact_approval_gate_signature_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

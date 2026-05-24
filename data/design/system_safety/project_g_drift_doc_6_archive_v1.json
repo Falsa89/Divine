@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_G_TRACK_D",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_D_DRIFT_DOC_6_ARCHIVE_READY",
+  "mode": "audit_archive_doc_only",
+  "runtime_changes_applied": false,
+  "drift_category_id": "drift_doc_6_legacy_battle_pass_pre_season_index_naming_residue",
+  "description": "Legacy reference names for pre-V8 battle_pass_user_season unique index left in older design docs and audit JSON. Marked KNOWN_NONBLOCKING_ARCHIVED_V1; the current canonical index name from V8 BLOCK B remains authoritative. No DB cleanup or index rename executed.",
+  "archive_state": "KNOWN_NONBLOCKING_ARCHIVED_V1",
+  "db_cleanup_executed": false,
+  "db_cleanup_authorized": false,
+  "future_cleanup_gate": {
+    "requires_user_approval": true,
+    "requires_index_audit_window": true,
+    "requires_rollback_script": true,
+    "target_pack": "future_ops_pack_drift_cleanup_v2"
+  },
+  "archived_docs_total": "6/7",
+  "forbidden_in_track_d_respected": {
+    "db_cleanup": false,
+    "gacha_summon_behavior_change": false,
+    "roster_mutation": false,
+    "borea_activation": false
+  },
+  "upstream": [
+    "/app/data/design/system_safety/project_b_drift_doc_1_legacy_summon_rate_archive_v1.json",
+    "/app/data/design/system_safety/project_c_drift_doc_2_archive_v1.json",
+    "/app/data/design/system_safety/project_d_drift_doc_3_archive_v1.json",
+    "/app/data/design/system_safety/project_e_drift_doc_4_archive_v1.json",
+    "/app/data/design/system_safety/project_f_drift_doc_5_archive_v1.json"
+  ],
+  "validator_script": "validate_project_g_drift_doc_6_archive_v1.py",
+  "suite_registration": "OPTIONAL"
+}

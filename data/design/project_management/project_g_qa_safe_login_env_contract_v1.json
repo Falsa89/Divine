@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_G_TRACK_E",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_E_QA_SAFE_LOGIN_ENV_CONTRACT_READY",
+  "mode": "safe_login_env_contract_no_secrets_committed",
+  "runner_default_state": "MANUAL_REQUIRED",
+  "required_env_vars": [
+    {"name": "QA_TEST_EMAIL", "required": true, "sensitivity": "sensitive", "committed": false, "redaction": "none_email_is_identifier"},
+    {"name": "QA_TEST_PASSWORD", "required": true, "sensitivity": "secret", "committed": false, "redaction": "sha256_prefix"},
+    {"name": "QA_TEST_LIVE_LOGIN_OK", "required": true, "sensitivity": "flag", "committed": false, "expected_value": "true"},
+    {"name": "QA_TEST_API_BASE", "required": false, "sensitivity": "public", "committed": false, "default": "http://127.0.0.1:8001"}
+  ],
+  "runner_skip_behavior": "If ANY of {QA_TEST_EMAIL, QA_TEST_PASSWORD, QA_TEST_LIVE_LOGIN_OK!=true} is missing, runner stays MANUAL_REQUIRED and prints nothing sensitive.",
+  "secret_logging_audit": {
+    "patterns_forbidden": ["print(.*password", "print(.*token", "logging\\..*password", "logging\\..*token"],
+    "wrapper_violations_found": 0
+  },
+  "runbook_doc": "/app/docs/divine/129E_QA_SAFE_LOGIN_ENV_CONTRACT.md",
+  "forbidden_in_track_e_respected": {
+    "account_creation": false,
+    "real_gacha_spend": false,
+    "currency_mutation": false,
+    "destructive_action": false,
+    "secret_logging": false,
+    "frontend": false
+  },
+  "validator_script": "validate_project_g_qa_safe_login_env_contract_v1.py",
+  "suite_registration": "OPTIONAL"
+}

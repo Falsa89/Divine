@@ -1,0 +1,44 @@
+{
+  "task_id": "PROJECT_G_TRACK_H",
+  "pack": "MEGA_COMBO_PROJECT_ACCELERATION_G_PACK",
+  "verdict": "TRACK_H_ARTIFACT_APPROVAL_GATE_SIGNATURE_READY_PENDING_USER",
+  "mode": "approval_gate_signature_template_only",
+  "runtime_changes_applied": false,
+  "artifact_live_bonus_active": false,
+  "artifact_summon_behavior_active": false,
+  "artifact_import_live_active": false,
+  "approval_gates": [
+    {"gate_id": "USER_APPROVAL", "owner": "product_lead", "required": true, "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "ECONOMY_APPROVAL_SUMMON_FRAGMENT_SOURCE", "owner": "economy_lead", "required": true, "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "BALANCE_APPROVAL_CAPS", "owner": "balance_lead", "required": true, "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null},
+    {"gate_id": "QA_APPROVAL_NO_LIVE_LEAK", "owner": "qa_lead", "required": true, "state": "PENDING", "signature": null, "signed_at_iso": null, "signed_by": null}
+  ],
+  "signature_template": {
+    "format": "PROJECT_<X>_ARTIFACT_GATE_<GATE_ID>_SIGNED_BY_<owner>_ISO_<timestamp>",
+    "signing_rule": "A gate transitions PENDING\u2192SIGNED only when the user prompt explicitly mentions the exact signing message for that gate; validator forbids transitioning without said message.",
+    "user_approval_required_message_template": "I approve the Artifact Bible v1 launch_candidates list as design_only: 5 candidates (art_aegis_of_olympus, art_amulet_of_kami, art_ankh_of_aaru, art_runestone_of_yggdrasil, art_torc_of_dagda). Mark USER_APPROVAL gate signed."
+  },
+  "five_design_only_candidates": [
+    {"artifact_id": "art_aegis_of_olympus", "linked_faction": "greek", "status": "design_only"},
+    {"artifact_id": "art_amulet_of_kami", "linked_faction": "japanese", "status": "design_only"},
+    {"artifact_id": "art_ankh_of_aaru", "linked_faction": "egyptian", "status": "design_only"},
+    {"artifact_id": "art_runestone_of_yggdrasil", "linked_faction": "norse", "status": "design_only"},
+    {"artifact_id": "art_torc_of_dagda", "linked_faction": "celtic", "status": "design_only"}
+  ],
+  "current_prompt_explicit_user_approval_message_detected": false,
+  "forbidden_in_track_h_respected": {
+    "artifact_live_bonus": false,
+    "artifact_summon_behavior": false,
+    "gacha_rate_pity_change": false,
+    "frontend": false,
+    "db_writes": false,
+    "equipment_semantics": false
+  },
+  "upstream": [
+    "/app/data/design/artifacts/artifact_bible_launch_candidates_v1.json",
+    "/app/data/design/artifacts/project_d_artifact_bible_v1_approval_freeze_pack.json",
+    "/app/data/design/artifacts/project_f_artifact_bible_import_plan_v1.json"
+  ],
+  "validator_script": "validate_project_g_artifact_approval_gate_signature_v1.py",
+  "suite_registration": "OPTIONAL"
+}
