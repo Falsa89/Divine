@@ -1,0 +1,39 @@
+{
+  "task_id": "PROJECT_Z_TRACK_G",
+  "track": "EXPO_GO_MOBILE_QA_SMOKE_PLAN_AND_RUN_PACK",
+  "verdict": "TRACK_G_MOBILE_SCREENSHOT_MANUAL_PENDING",
+  "automation_status": {
+    "playwright_available": true,
+    "expo_web_renders_consistently_in_automation": false,
+    "reason_blank_render": "App configurata in LANDSCAPE orientation lock + AuthProvider/NotificationProvider wrapper; Expo Web richiede ulteriore tempo di hydration in automazione headless.",
+    "http_route_check_passes": true,
+    "bundle_metro_compiles_clean": true,
+    "metro_bundle_modules": 2638
+  },
+  "static_smoke_run": {
+    "route_compile_check": "PASS",
+    "safefeaturecard_imported_in_all_4_routes": true,
+    "forbidden_labels_scan": "PASS (0 matches)",
+    "mutating_api_calls_scan": "PASS (0 matches)",
+    "GET_only_check": "PASS",
+    "503_handling_present": true
+  },
+  "manual_qa_checklist": [
+    "Apri Expo Go su iPhone reale (390x844) e Samsung S21 (360x800)",
+    "Scansiona QR del dev server",
+    "Naviga: Home \u2192 Menu \u2192 Sezione Altro \u2192 \"Sistemi in preparazione\"",
+    "Verifica hub si apre senza crash",
+    "Tap su \"Codex Status Effects\" \u2192 verifica scrolling + legenda",
+    "Tap back \u2192 hub",
+    "Tap su \"Anteprima Artefatti\" \u2192 verifica 4 raret\u00e0 + 4 categorie",
+    "Tap back \u2192 hub",
+    "Tap su \"Dimora Divina\" \u2192 verifica stato 503 con copy IT",
+    "Verifica nessun overflow orizzontale su entrambi i viewport",
+    "Verifica safe area corretta (notch / status bar)",
+    "Verifica min touch target 44pt sui pulsanti back",
+    "Conferma assenza di pulsanti live (Evoca/Importa/Attiva/Spendi/Cambia)"
+  ],
+  "verdict_status": "MANUAL_DEVICE_SCREENSHOT_PENDING",
+  "fake_screenshot_verification": false,
+  "validator_script": "validate_project_z_expo_go_mobile_qa_smoke_v1.py"
+}

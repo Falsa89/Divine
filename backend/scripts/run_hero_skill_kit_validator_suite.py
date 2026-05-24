@@ -929,6 +929,15 @@ OPTIONAL = [
     ('PROJECT-Y-TRACK-F-SAFE-MENU-ENTRY-OR-DEV-PANEL', 'validate_project_y_safe_menu_entry_dev_panel_v1.py'),
     ('PROJECT-Y-TRACK-G-FRONTEND-QA-SMOKE-SAFE-PREVIEW', 'validate_project_y_frontend_qa_smoke_safe_preview_v1.py'),
     ('PROJECT-Y-TRACK-H-PROJECT-Y-COMPLETION-AND-NEXT-PACK', 'validate_project_y_completion_and_next_pack_v1.py'),
+    # PROJECT_Z FRONTEND SAFE PREVIEW POLISH & MOBILE QA PACK (8 tracks; hub /safe-previews + 1 voce menu Altro + mobile polish 3 route + accessibility guard; no broad refactor; no new bottom tab; no live actions; expo-go mobile screenshot manual pending)
+    ('PROJECT-Z-TRACK-A-SAFE-MENU-WIRING-TARGET-AUDIT', 'validate_project_z_safe_menu_wiring_target_audit_v1.py'),
+    ('PROJECT-Z-TRACK-B-SAFE-MENU-OR-PREVIEW-HUB-WIRING', 'validate_project_z_safe_menu_or_preview_hub_wiring_v1.py'),
+    ('PROJECT-Z-TRACK-C-ARTIFACT-PREVIEW-MOBILE-POLISH', 'validate_project_z_artifact_preview_mobile_polish_v1.py'),
+    ('PROJECT-Z-TRACK-D-HOUSING-PREVIEW-MOBILE-POLISH', 'validate_project_z_housing_preview_mobile_polish_v1.py'),
+    ('PROJECT-Z-TRACK-E-STATUS-CODEX-MOBILE-POLISH', 'validate_project_z_status_codex_mobile_polish_v1.py'),
+    ('PROJECT-Z-TRACK-F-ACCESSIBILITY-AND-LOCKED-ACTION-GUARD', 'validate_project_z_accessibility_locked_action_guard_v1.py'),
+    ('PROJECT-Z-TRACK-G-EXPO-GO-MOBILE-QA-SMOKE', 'validate_project_z_expo_go_mobile_qa_smoke_v1.py'),
+    ('PROJECT-Z-TRACK-H-PROJECT-Z-COMPLETION-AND-NEXT-PACK', 'validate_project_z_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -48,7 +48,7 @@ export default function ArtifactsPreviewScreen() {
           <Text style={styles.bannerIcon}>💎</Text>
           <Text style={styles.bannerTitle}>Collezione Artefatti</Text>
           <Text style={styles.bannerSubtitle}>
-            Artefatti in anteprima — evocazione e bonus non ancora attivi.
+            Artefatti in anteprima — evocazione, import e bonus non ancora attivi.
           </Text>
         </View>
 

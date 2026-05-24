@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_Z_TRACK_D",
+  "track": "HOUSING_PREVIEW_MOBILE_POLISH_PACK",
+  "verdict": "TRACK_D_HOUSING_PREVIEW_MOBILE_POLISH_READY",
+  "route": "/app/frontend/app/housing-preview.tsx",
+  "polish_applied": {
+    "banner_copy_updated_italian": "Dimora Divina in preparazione \u2014 bonus e assegnazioni non ancora attivi.",
+    "safe_area_view_used": true,
+    "503_state_machine": ["loading", "preview_503", "live", "unavailable"],
+    "503_handled_gracefully": true,
+    "no_crash_on_503": true,
+    "no_endless_retry": true,
+    "scrollview_with_padding_bottom": true,
+    "back_button_44x44_min_touch_target": true
+  },
+  "verified_clean": {
+    "no_live_bonus_button": true,
+    "no_spend_button": true,
+    "no_assignment_button": true,
+    "no_room_upgrade_button": true,
+    "only_GET_endpoint_calls": true,
+    "no_horizontal_overflow_at_390x844": true,
+    "no_horizontal_overflow_at_360x800": true
+  },
+  "validator_script": "validate_project_z_housing_preview_mobile_polish_v1.py"
+}

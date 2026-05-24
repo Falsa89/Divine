@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_Z_TRACK_A",
+  "track": "SAFE_MENU_WIRING_TARGET_AUDIT_PACK",
+  "verdict": "TRACK_A_SAFE_MENU_WIRING_TARGET_AUDIT_READY",
+  "audit_only": true,
+  "options_evaluated": [
+    {
+      "option": "existing_dev_admin_panel",
+      "feasible": false,
+      "reason": "Nessun gate dev/admin runtime esistente; aggiungerne uno aumenterebbe lo scope."
+    },
+    {
+      "option": "existing_menu_section_locked_label_each_route",
+      "feasible": true,
+      "risk": "medium",
+      "reason": "Aggiungere 3 entry separate al menu (categoria Altro) aumenta la superficie di mutazione del file menu.tsx."
+    },
+    {
+      "option": "dedicated_safe_preview_hub_single_menu_entry",
+      "feasible": true,
+      "risk": "low",
+      "reason": "Cambio minimale al menu (1 sola voce), aggiunta di una nuova route /safe-previews che funge da hub locked/read-only. Scelta preferita."
+    },
+    {
+      "option": "no_menu_wiring_keep_deep_link_only",
+      "feasible": true,
+      "risk": "none",
+      "reason": "Le route rimangono raggiungibili via deep link. Sub-ottimale per visibilit\u00e0."
+    }
+  ],
+  "selected_strategy": "dedicated_safe_preview_hub_single_menu_entry",
+  "files_to_create_in_track_b": [
+    "/app/frontend/app/safe-previews.tsx"
+  ],
+  "files_to_modify_in_track_b": [
+    "/app/frontend/app/(tabs)/menu.tsx (1 voce aggiunta alla sezione Altro)"
+  ],
+  "broad_navigation_refactor": false,
+  "new_bottom_tab": false,
+  "safe_to_proceed_to_track_b": true,
+  "validator_script": "validate_project_z_safe_menu_wiring_target_audit_v1.py"
+}

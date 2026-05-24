@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_Z_TRACK_H",
+  "track": "PROJECT_Z_COMPLETION_AND_NEXT_PACK_PACK",
+  "verdict": "TRACK_H_PROJECT_Z_COMPLETION_AND_NEXT_PACK_READY",
+  "project_z_closed_as": "PROJECT_Z_FRONTEND_SAFE_PREVIEW_POLISH_AND_MOBILE_QA_COMPLETE",
+  "frontend_integration_readiness_pre": 50,
+  "frontend_integration_readiness_post": 70,
+  "global_progress_pre": 99.99,
+  "global_progress_post": 99.992,
+  "suite_pre": "559 PASS / 0 FAIL / 0 MISS",
+  "suite_post": "567 PASS / 0 FAIL / 0 MISS",
+  "new_routes_count": 1,
+  "new_routes": ["/safe-previews"],
+  "modified_frontend_files": 3,
+  "modified_frontend_files_list": [
+    "/app/frontend/app/(tabs)/menu.tsx (1 voce safe aggiunta)",
+    "/app/frontend/app/artifacts-preview.tsx (banner copy aggiornato)",
+    "/app/frontend/app/housing-preview.tsx (banner copy aggiornato)"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0,
+  "flag_flips": 0,
+  "manual_screenshot_pending": true,
+  "recommended_next_pack_primary": "PROJECT_FRONTEND_B_CORE_USER_FLOW_AUDIT_PACK",
+  "recommended_next_pack_alternatives": [
+    "PROJECT_APPROVAL_MATRIX_AND_LIVE_GATE_POLICY_PACK",
+    "PROJECT_Z2_FRONTEND_SAFE_PREVIEW_MOBILE_QA_SCREENSHOT_FIX_PACK",
+    "PROJECT_ARTIFACT_SIGNATURE_AND_IMPORT_APPROVAL_PACK (richiede 5 firme utente)"
+  ],
+  "validator_script": "validate_project_z_completion_and_next_pack_v1.py"
+}

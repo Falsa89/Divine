@@ -15,7 +15,8 @@ def main():
     assert ROUTE.exists(), 'artifacts-preview.tsx missing on disk'
     text = ROUTE.read_text()
     assert 'SafeFeatureCard' in text
-    assert 'evocazione e bonus non ancora attivi' in text
+    # accetta sia la copy v1 (Pack Y) che la copy v2 (aggiornata in Pack Z Track C)
+    assert ('evocazione e bonus non ancora attivi' in text) or ('evocazione, import e bonus non ancora attivi' in text)
     for pat in FORBIDDEN:
         assert not re.search(pat, text, flags=re.IGNORECASE), f'forbidden token present: {pat}'
     for pat in FORBIDDEN_API:

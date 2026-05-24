@@ -73,6 +73,10 @@ const CATEGORIES = [
       // RM1.26-D — Kit Skill Eroi (read-only, hero skill kit catalog browser).
       // Cataloghi 5★/6★ inert, non collegati a battle/HP bar runtime.
       { label: 'Kit Skill Eroi', icon: '\uD83D\uDCD6', route: '/hero-skill-kits-catalog', gradient: ['#FFD700', '#3D5AFE'] as const },
+      // PROJECT_Z Track B — Hub "Sistemi in preparazione" (read-only, locked).
+      // Punto d'ingresso safe alle anteprime: Codex Status, Anteprima Artefatti, Dimora Divina.
+      // Nessuna azione live esposta da queste pagine.
+      { label: 'Sistemi in preparazione', icon: '\u2728', route: '/safe-previews', gradient: ['#FF6B35', '#3D5AFE'] as const },
       // RM1.27-C — Armi Divine (read-only, divine weapon catalog browser).
       // 13 Armi Divine 6★ inert (12 launch_base + 1 Borea extra premium).
       // Non collegate a battle/HP bar/VFX runtime, gacha, roster o Borea activation.

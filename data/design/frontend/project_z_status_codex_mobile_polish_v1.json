@@ -1,0 +1,24 @@
+{
+  "task_id": "PROJECT_Z_TRACK_E",
+  "track": "STATUS_CODEX_MOBILE_POLISH_PACK",
+  "verdict": "TRACK_E_STATUS_CODEX_MOBILE_POLISH_READY",
+  "route": "/app/frontend/app/status-codex.tsx",
+  "polish_verified": {
+    "first_slice_section_readable": true,
+    "second_slice_section_readable": true,
+    "legend_with_color_dots": true,
+    "family_descriptions_in_italian": true,
+    "safe_area_view_used": true,
+    "back_button_44x44_min_touch_target": true
+  },
+  "safety_verified": {
+    "no_runtime_toggle": true,
+    "no_status_activation_button": true,
+    "no_prod_rollout_button": true,
+    "no_hidden_live_controls": true,
+    "second_slice_locked_with_clear_reason": true,
+    "copy_lock_italian": "In attesa di firme PROD_ROLLOUT_* e STATUS_SECOND_SLICE_PROD_STAGE_*_APPROVAL."
+  },
+  "viewport_targets": ["iPhone 12/13/14 (390x844)", "Samsung Galaxy S21 (360x800)"],
+  "validator_script": "validate_project_z_status_codex_mobile_polish_v1.py"
+}

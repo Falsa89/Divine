@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_Z_TRACK_F",
+  "track": "ACCESSIBILITY_AND_LOCKED_ACTION_GUARD_PACK",
+  "verdict": "TRACK_F_ACCESSIBILITY_AND_LOCKED_ACTION_GUARD_READY",
+  "component_audited": "/app/frontend/components/SafeFeatureCard.tsx",
+  "routes_audited": [
+    "/app/frontend/app/safe-previews.tsx",
+    "/app/frontend/app/artifacts-preview.tsx",
+    "/app/frontend/app/housing-preview.tsx",
+    "/app/frontend/app/status-codex.tsx"
+  ],
+  "accessibility_checks": {
+    "safefeaturecard_uses_accessibilityLabel": true,
+    "safefeaturecard_uses_accessibilityState_disabled_when_locked": true,
+    "back_buttons_have_accessibilityLabel": true,
+    "hub_entries_have_accessibilityRole_link": true,
+    "hub_entries_have_accessibilityHint": true,
+    "min_touch_target_44pt_iOS_48dp_android": true
+  },
+  "locked_action_guard": {
+    "safefeaturecard_locked_renders_View_not_TouchableOpacity": true,
+    "onPress_ignored_when_visibility_locked": true,
+    "no_enabled_handlers_on_locked_features": true,
+    "screen_readers_announce_locked_state": true
+  },
+  "forbidden_labels_enabled_check": {
+    "Evoca ora": false,
+    "Importa ora": false,
+    "Attiva bonus": false,
+    "Cambia server": false,
+    "Lancia rollout": false
+  },
+  "validator_script": "validate_project_z_accessibility_locked_action_guard_v1.py"
+}

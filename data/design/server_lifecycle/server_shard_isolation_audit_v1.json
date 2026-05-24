@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-24T23:20:13.222927+00:00",
+  "timestamp_utc": "2026-05-24T23:43:23.638091+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 952,
+  "backend_python_files_scanned": 960,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -1121,7 +1121,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 447,
+      "files_with_hits": 448,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",

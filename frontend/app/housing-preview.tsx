@@ -60,7 +60,7 @@ export default function HousingPreviewScreen() {
           <Text style={styles.bannerIcon}>🏛️</Text>
           <Text style={styles.bannerTitle}>Dimora Divina in preparazione</Text>
           <Text style={styles.bannerSubtitle}>
-            Bonus, residenti e potenziamenti non sono ancora attivi.
+            Dimora Divina in preparazione — bonus e assegnazioni non ancora attivi.
           </Text>
         </View>
 
