@@ -1,0 +1,70 @@
+{
+  "task_id": "PROJECT_X_TRACK_F",
+  "track": "LIVE_GATE_APPROVAL_MATRIX_UI_DEPENDENCIES_PACK",
+  "verdict": "TRACK_F_LIVE_GATE_APPROVAL_MATRIX_UI_DEPENDENCIES_READY",
+  "audit_only": true,
+  "approval_spoofing": false,
+  "gates": [
+    {
+      "name": "Status first-slice prod",
+      "signatures_required": ["PROD_ROLLOUT_USER_APPROVAL", "PROD_ROLLOUT_QA_APPROVAL", "PROD_ROLLOUT_OPS_APPROVAL", "PROD_ROLLOUT_OBSERVABILITY_APPROVAL", "PROD_ROLLOUT_ROLLBACK_RUNBOOK_APPROVAL", "PROD_ROLLOUT_SECURITY_APPROVAL"],
+      "current_signatures": 0,
+      "ui_visibility": "hidden_until_approved",
+      "never_show_to_player": false,
+      "dev_admin_visible": true
+    },
+    {
+      "name": "Status second-slice prod",
+      "signatures_required": ["PROD_ROLLOUT_USER_APPROVAL", "PROD_ROLLOUT_QA_APPROVAL", "PROD_ROLLOUT_OPS_APPROVAL", "PROD_ROLLOUT_OBSERVABILITY_APPROVAL", "PROD_ROLLOUT_ROLLBACK_RUNBOOK_APPROVAL", "PROD_ROLLOUT_SECURITY_APPROVAL", "STATUS_RUNTIME_SECOND_SLICE_PROD_OK", "STATUS_SECOND_SLICE_PROD_STAGE_1_APPROVAL", "STATUS_SECOND_SLICE_PROD_STAGE_5_APPROVAL", "STATUS_SECOND_SLICE_PROD_STAGE_25_APPROVAL", "STATUS_SECOND_SLICE_PROD_STAGE_100_APPROVAL"],
+      "current_signatures": 0,
+      "ui_visibility": "hidden_until_approved",
+      "never_show_to_player": false,
+      "dev_admin_visible": true
+    },
+    {
+      "name": "Artifact live import",
+      "signatures_required": ["ARTIFACT_USER_APPROVAL", "ARTIFACT_DATA_APPROVAL", "ARTIFACT_BALANCE_APPROVAL", "ARTIFACT_ECONOMY_APPROVAL", "ARTIFACT_RELEASE_APPROVAL"],
+      "current_signatures": 0,
+      "ui_visibility": "locked_card_coming_soon",
+      "never_show_to_player": false,
+      "dev_admin_visible": true
+    },
+    {
+      "name": "Housing live bonus",
+      "signatures_required": ["HOUSING_LIVE_BONUS_USER_APPROVAL", "HOUSING_LIVE_BONUS_BALANCE_APPROVAL", "HOUSING_LIVE_BONUS_ECONOMY_APPROVAL"],
+      "current_signatures": 0,
+      "ui_visibility": "locked_card_coming_soon",
+      "never_show_to_player": false,
+      "dev_admin_visible": true
+    },
+    {
+      "name": "AF2-N public rollout",
+      "signatures_required": ["AF2N_PUBLIC_ROLLOUT_USER_APPROVAL", "AF2N_PUBLIC_ROLLOUT_QA_APPROVAL", "AF2N_PUBLIC_ROLLOUT_OBSERVABILITY_APPROVAL"],
+      "current_signatures": 0,
+      "ui_visibility": "hidden_until_approved",
+      "never_show_to_player": true,
+      "dev_admin_visible": true
+    },
+    {
+      "name": "Second server / Phase 11",
+      "signatures_required": ["SECOND_SERVER_OPENING_APPROVAL", "PHASE_11_APPROVAL"],
+      "current_signatures": 0,
+      "ui_visibility": "hidden_until_approved",
+      "never_show_to_player": true,
+      "dev_admin_visible": true
+    },
+    {
+      "name": "Gacha/pricing/economy live",
+      "signatures_required": ["already_live_baseline_no_extra_signatures_needed"],
+      "current_signatures": null,
+      "ui_visibility": "player_visible_active",
+      "never_show_to_player": false,
+      "dev_admin_visible": false,
+      "note": "Gi\u00e0 live in UI; nessun gate aggiuntivo richiesto."
+    }
+  ],
+  "locked_cards_safe_to_show": ["Artifact live import", "Housing live bonus"],
+  "hidden_from_player_until_approved": ["Status first-slice prod", "Status second-slice prod", "AF2-N public rollout", "Second server / Phase 11"],
+  "dev_admin_only": ["all gates listed above (read-only viewer)"],
+  "validator_script": "validate_project_x_live_gate_approval_matrix_ui_dependencies_v1.py"
+}

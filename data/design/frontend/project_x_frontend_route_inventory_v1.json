@@ -1,0 +1,55 @@
+{
+  "task_id": "PROJECT_X_TRACK_A",
+  "track": "FRONTEND_ROUTE_AND_NAVIGATION_INVENTORY_PACK",
+  "verdict": "TRACK_A_FRONTEND_ROUTE_AND_NAVIGATION_INVENTORY_READY",
+  "audit_only": true,
+  "frontend_mutation": false,
+  "backend_mutation": false,
+  "frontend_routes_total": 49,
+  "tab_routes": {
+    "count": 5,
+    "items": [
+      {"route": "/(tabs)/home", "label": "Home", "icon": "\u2302", "tab_bar": "hidden_uses_custom_bottom_nav"},
+      {"route": "/(tabs)/heroes", "label": "Eroi", "icon": "\u2694\ufe0f", "tab_bar": "visible"},
+      {"route": "/(tabs)/battle", "label": "Battaglia", "icon": "\ud83d\udd25", "tab_bar": "visible"},
+      {"route": "/(tabs)/gacha", "label": "Evoca", "icon": "\u2b50", "tab_bar": "visible"},
+      {"route": "/(tabs)/menu", "label": "Menu", "icon": "\u2630", "tab_bar": "visible"}
+    ]
+  },
+  "menu_route_count": 34,
+  "menu_categories": ["Combattimento", "Progressione", "Economia", "Sociale", "Altro"],
+  "root_routes": [
+    "index", "combat", "hero-detail", "hero-viewer", "hero-collection", "hero-encyclopedia",
+    "hero-training", "hero-skill-kits-catalog", "divine-weapons-catalog", "skill-status-vfx-catalogs",
+    "synergy-codex", "affinity-gifts-preview", "collection-synergies-preview", "story", "tower",
+    "pvp", "raid", "gvg", "sanctuary", "equipment", "exclusive", "artifacts", "soul-forge",
+    "cosmetics", "achievements", "battlepass", "treasury", "economy", "inventory", "item-shop",
+    "shop", "vip", "guild", "player-faction", "plaza", "dm", "mail", "friends", "rankings",
+    "servers", "events", "territory", "select-home-hero", "sprite-test", "dev-combat-qa-lab"
+  ],
+  "dev_admin_only_routes": [
+    "/dev-combat-qa-lab",
+    "/sprite-test"
+  ],
+  "backend_dependent_screens_known": [
+    {"route": "/(tabs)/heroes", "endpoints": ["/api/heroes", "/api/user/heroes"]},
+    {"route": "/(tabs)/gacha", "endpoints": ["/api/gacha/banners", "/api/gacha/pull", "/api/gacha/pull10"]},
+    {"route": "/combat", "endpoints": ["/api/battle/simulate", "/api/team/update-formation"]},
+    {"route": "/story", "endpoints": ["/api/story/chapters", "/api/story/battle"]},
+    {"route": "/tower", "endpoints": ["/api/tower/status", "/api/tower/battle"]},
+    {"route": "/pvp", "endpoints": ["/api/pvp/status", "/api/pvp/battle"]},
+    {"route": "/artifacts", "endpoints": ["/api/artifacts", "/api/constellations"]},
+    {"route": "/servers", "endpoints": ["/api/servers", "/api/server/select", "/api/server-profiles/select [503]"]},
+    {"route": "/economy", "endpoints": ["/api/shop", "/api/vip", "/api/battlepass"]},
+    {"route": "/equipment", "endpoints": ["/api/equipment/templates", "/api/user/equipment"]}
+  ],
+  "hidden_screens": [],
+  "dead_unreachable_screens": [],
+  "legacy_duplicate_screens": [],
+  "screens_without_backend_dependency": [
+    "/affinity-gifts-preview",
+    "/collection-synergies-preview",
+    "/sprite-test"
+  ],
+  "validator_script": "validate_project_x_frontend_route_inventory_v1.py"
+}

@@ -911,6 +911,24 @@ OPTIONAL = [
     ('PROJECT-W-TRACK-F-SECOND-SLICE-PROD-FINAL-NO-LEAK-LOAD-ROLLBACK', 'validate_project_w_second_slice_prod_final_validation_v1.py'),
     ('PROJECT-W-TRACK-G-SECOND-SLICE-POST-PROD-DOD', 'validate_project_w_second_slice_post_prod_dod_v1.py'),
     ('PROJECT-W-TRACK-H-PROJECT-W-COMPLETION-AND-NEXT-SYSTEM', 'validate_project_w_completion_and_next_system_v1.py'),
+    # PROJECT_X FRONTEND A NAVIGATION & FEATURE VISIBILITY AUDIT PACK (8 tracks; audit-only / roadmap-only; no frontend UI implementation; no backend mutation; no DB writes; no feature flag flips)
+    ('PROJECT-X-TRACK-A-FRONTEND-ROUTE-AND-NAVIGATION-INVENTORY', 'validate_project_x_frontend_route_inventory_v1.py'),
+    ('PROJECT-X-TRACK-B-BACKEND-FEATURE-ENDPOINT-VISIBILITY-MATRIX', 'validate_project_x_backend_feature_visibility_matrix_v1.py'),
+    ('PROJECT-X-TRACK-C-PLAYER-SAFE-MENU-PLACEMENT-PLAN', 'validate_project_x_player_safe_menu_placement_plan_v1.py'),
+    ('PROJECT-X-TRACK-D-FEATURE-ACCESS-POLICY-AND-LOCK-COPY', 'validate_project_x_feature_access_policy_lock_copy_v1.py'),
+    ('PROJECT-X-TRACK-E-FRONTEND-SAFE-PREVIEW-IMPLEMENTATION-BACKLOG', 'validate_project_x_frontend_safe_preview_backlog_v1.py'),
+    ('PROJECT-X-TRACK-F-LIVE-GATE-APPROVAL-MATRIX-UI-DEPENDENCIES', 'validate_project_x_live_gate_approval_matrix_ui_dependencies_v1.py'),
+    ('PROJECT-X-TRACK-G-FRONTEND-QA-SMOKE-NAVIGATION-PLAN', 'validate_project_x_frontend_qa_smoke_navigation_plan_v1.py'),
+    ('PROJECT-X-TRACK-H-PROJECT-X-COMPLETION-AND-NEXT-PACK', 'validate_project_x_completion_and_next_pack_v1.py'),
+    # PROJECT_Y FRONTEND SAFE PREVIEW UI IMPLEMENTATION PACK (8 tracks; SafeFeatureCard + 3 nuove route preview locked/read-only; no menu mutation; no backend route mutation; no DB writes; no flag flips; 503 graceful)
+    ('PROJECT-Y-TRACK-A-FRONTEND-SAFE-PREVIEW-TARGET-SELECTION', 'validate_project_y_safe_preview_target_selection_v1.py'),
+    ('PROJECT-Y-TRACK-B-FRONTEND-LOCKED-CARD-COMPONENT', 'validate_project_y_locked_card_component_v1.py'),
+    ('PROJECT-Y-TRACK-C-ARTIFACT-COLLECTION-PREVIEW-UI', 'validate_project_y_artifact_collection_preview_ui_v1.py'),
+    ('PROJECT-Y-TRACK-D-HOUSING-PREVIEW-UI', 'validate_project_y_housing_preview_ui_v1.py'),
+    ('PROJECT-Y-TRACK-E-STATUS-CODEX-PREVIEW-UI', 'validate_project_y_status_codex_preview_ui_v1.py'),
+    ('PROJECT-Y-TRACK-F-SAFE-MENU-ENTRY-OR-DEV-PANEL', 'validate_project_y_safe_menu_entry_dev_panel_v1.py'),
+    ('PROJECT-Y-TRACK-G-FRONTEND-QA-SMOKE-SAFE-PREVIEW', 'validate_project_y_frontend_qa_smoke_safe_preview_v1.py'),
+    ('PROJECT-Y-TRACK-H-PROJECT-Y-COMPLETION-AND-NEXT-PACK', 'validate_project_y_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -1,0 +1,66 @@
+{
+  "task_id": "PROJECT_X_TRACK_G",
+  "track": "FRONTEND_QA_SMOKE_NAVIGATION_PLAN_PACK",
+  "verdict": "TRACK_G_FRONTEND_QA_SMOKE_NAVIGATION_PLAN_READY",
+  "audit_only": true,
+  "qa_runtime_automation_with_creds": false,
+  "qa_plan": {
+    "mobile_first_checks": [
+      "viewport iPhone 12/13/14 (390x844)",
+      "viewport Samsung Galaxy S21 (360x800)",
+      "safe area insets corretti su tutte le pagine",
+      "keyboard avoiding view su tutti i form",
+      "min touch target 44x44 iOS / 48x48 Android",
+      "nessun overflow orizzontale",
+      "font scaling rispettato"
+    ],
+    "expo_go_checks": [
+      "QR scan apre app senza errori",
+      "bundling Metro clean",
+      "hot reload funzionante",
+      "nessun warning hermes critico"
+    ],
+    "route_existence_checks": [
+      "tutte le 5 tab principali raggiungibili",
+      "tutte le 34 voci del menu router push valido",
+      "nessuna route dead (404 client-side)"
+    ],
+    "dead_button_checks": [
+      "nessun pulsante senza onPress handler visibile al giocatore",
+      "locked card mostra modal e non chiama endpoint live",
+      "feature gated mostra locked state coerente"
+    ],
+    "accidental_live_action_checks": [
+      "nessun bottone 'claim/summon/upgrade' su feature non approved",
+      "endpoint 503 non triggerati implicitamente",
+      "no flag flip da UI"
+    ],
+    "blocked_endpoint_crash_checks": [
+      "/api/server-profiles/select 503 gestito senza crash",
+      "/api/housing/preview 503 gestito senza crash",
+      "errori network e timeout gestiti con stato grazioso"
+    ],
+    "empty_error_states": [
+      "loading skeleton presente",
+      "empty state con copy IT",
+      "error state con retry button",
+      "network offline state"
+    ],
+    "smoke_navigation_paths": [
+      "home \u2192 heroes \u2192 hero-detail \u2192 back",
+      "home \u2192 battle \u2192 combat \u2192 back",
+      "home \u2192 gacha \u2192 banner pull \u2192 back",
+      "menu \u2192 storia \u2192 capitolo \u2192 battle",
+      "menu \u2192 catalogo skill & status \u2192 voce \u2192 back",
+      "menu \u2192 artefatti (read-only locked) \u2192 back",
+      "menu \u2192 servers \u2192 lista \u2192 back"
+    ]
+  },
+  "future_automation": {
+    "tool": "expo_frontend_testing_agent (playwright)",
+    "trigger": "solo dopo implementazione Project Y",
+    "requires_credentials": false,
+    "runs_in_dev_only": true
+  },
+  "validator_script": "validate_project_x_frontend_qa_smoke_navigation_plan_v1.py"
+}

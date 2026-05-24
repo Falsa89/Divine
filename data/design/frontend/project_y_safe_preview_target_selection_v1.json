@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_Y_TRACK_A",
+  "track": "FRONTEND_SAFE_PREVIEW_TARGET_SELECTION_PACK",
+  "verdict": "TRACK_A_FRONTEND_SAFE_PREVIEW_TARGET_SELECTION_READY",
+  "source_backlog": "/app/data/design/frontend/project_x_frontend_safe_preview_backlog_v1.json",
+  "targets_selected_for_pack_y": [
+    {"id": "BL-X-01", "name": "Artifact Collection Preview", "priority": "P1", "included": true, "file_to_create": "/app/frontend/app/artifacts-preview.tsx"},
+    {"id": "BL-X-02", "name": "Housing Preview Screen", "priority": "P2", "included": true, "file_to_create": "/app/frontend/app/housing-preview.tsx"},
+    {"id": "BL-X-03", "name": "Status Codex / Catalog", "priority": "P1", "included": true, "file_to_create": "/app/frontend/app/status-codex.tsx"}
+  ],
+  "targets_deferred_to_project_y2": [
+    {"id": "BL-X-04", "name": "Server Profile Disabled Preview", "priority": "P3", "reason": "low_priority_minimal_value_now"},
+    {"id": "BL-X-05", "name": "Dev Readiness Dashboard", "priority": "P2", "reason": "requires_dev_gate_not_yet_implemented"},
+    {"id": "BL-X-06", "name": "Feature Gates / Approval Matrix Viewer", "priority": "P3", "reason": "requires_dev_gate_not_yet_implemented"}
+  ],
+  "shared_component_to_create": {
+    "file": "/app/frontend/components/SafeFeatureCard.tsx",
+    "purpose": "reusable locked/preview card without live action handlers by default"
+  },
+  "menu_mutation_planned": false,
+  "new_bottom_tab_planned": false,
+  "backend_mutation_planned": false,
+  "db_writes_planned": false,
+  "validator_script": "validate_project_y_safe_preview_target_selection_v1.py"
+}

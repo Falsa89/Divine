@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_Y_TRACK_G",
+  "track": "FRONTEND_QA_SMOKE_SAFE_PREVIEW_PACK",
+  "verdict": "TRACK_G_FRONTEND_QA_SMOKE_SAFE_PREVIEW_READY",
+  "qa_checks": {
+    "routes_compile": true,
+    "safefeaturecard_imported_in_all_3_screens": true,
+    "no_live_action_buttons": true,
+    "no_summon_button_in_artifact_preview": true,
+    "no_upgrade_button_in_artifact_preview": true,
+    "no_bonus_button_in_housing_preview": true,
+    "no_currency_spend_button_in_housing_preview": true,
+    "no_runtime_toggle_in_status_codex": true,
+    "503_handling_present_in_housing_preview": true,
+    "no_crash_with_missing_data": true,
+    "no_forbidden_labels": {
+      "\"Evoca ora\"": false,
+      "\"Importa Artefatto\"": false,
+      "\"Attiva Bonus\"": false,
+      "\"Cambia Server\"": false,
+      "\"Spendi AF2N\"": false
+    },
+    "no_direct_mutation_endpoint_calls": true,
+    "only_GET_endpoint_calls": true,
+    "endpoint_calls_total": 1,
+    "endpoint_calls_list": ["GET /api/housing/preview (handled 503)"]
+  },
+  "credentials_required": false,
+  "runs_in_dev_only": true,
+  "validator_script": "validate_project_y_frontend_qa_smoke_safe_preview_v1.py"
+}

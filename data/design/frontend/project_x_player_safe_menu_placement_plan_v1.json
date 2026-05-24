@@ -1,0 +1,49 @@
+{
+  "task_id": "PROJECT_X_TRACK_C",
+  "track": "PLAYER_SAFE_MENU_PLACEMENT_PLAN_PACK",
+  "verdict": "TRACK_C_PLAYER_SAFE_MENU_PLACEMENT_PLAN_READY",
+  "audit_only": true,
+  "ui_implementation": false,
+  "main_menu_hub_recommendations": [
+    {"feature": "Artifact Collection Preview", "placement": "menu_progressione_locked_card", "copy": "In arrivo \u2014 Collezione Artefatti", "endpoint": "/api/artifacts (catalog read-only)", "visibility": "player_visible_locked"},
+    {"feature": "Housing Preview", "placement": "menu_altro_locked_card", "copy": "Prossimamente \u2014 Dimora", "endpoint": "/api/housing/preview (503)", "visibility": "player_visible_locked"},
+    {"feature": "Status Codex / Catalog", "placement": "menu_altro_visible_link", "copy": "Catalogo Skill & Status", "endpoint": "/api/skill-status-vfx-catalogs/*", "visibility": "player_visible_active"},
+    {"feature": "Server Profile Preview", "placement": "menu_altro_locked_card", "copy": "Prossimamente \u2014 Profili Server", "endpoint": "/api/server-profiles/select (503)", "visibility": "player_visible_locked"},
+    {"feature": "QA / Readiness Panel", "placement": "hidden_dev_admin_section", "copy": "DEV - Pannello Readiness", "endpoint": "local-only validators", "visibility": "dev_admin_only"},
+    {"feature": "Feature Gates / Approval Matrix Viewer", "placement": "hidden_dev_admin_section", "copy": "DEV - Approval Matrix", "endpoint": "static JSON viewer", "visibility": "dev_admin_only"}
+  ],
+  "home_button_visibility": {
+    "current_home_bottom_nav": "custom_BottomNav_in_home_route",
+    "add_new_player_facing_buttons": false,
+    "reason": "Pack X is audit-only; new buttons require Project Y implementation"
+  },
+  "bottom_nav_rules": {
+    "keep_existing_5_tabs": true,
+    "add_new_tab": false,
+    "new_dev_tab": false
+  },
+  "dev_admin_only_section": {
+    "existing_screens": ["/dev-combat-qa-lab", "/sprite-test"],
+    "future_screens": ["/dev-readiness-panel", "/dev-approval-matrix"],
+    "never_visible_to_players": true
+  },
+  "player_visible_locked_cards": [
+    "Artifact Collection Preview",
+    "Housing Preview",
+    "Server Profile Preview"
+  ],
+  "coming_soon_copy_rules": [
+    "copy must be in Italian",
+    "never imply imminent release date",
+    "prefix with \"In arrivo\" or \"Prossimamente\"",
+    "include short benefit phrase if useful",
+    "no countdown timers",
+    "no fake interactivity"
+  ],
+  "dead_button_policy": {
+    "locked_cards_must_be_non_actionable": true,
+    "on_press_show_locked_modal": true,
+    "never_route_to_503_endpoint_call": true
+  },
+  "validator_script": "validate_project_x_player_safe_menu_placement_plan_v1.py"
+}

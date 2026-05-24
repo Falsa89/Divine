@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_Y_TRACK_B",
+  "track": "FRONTEND_LOCKED_CARD_COMPONENT_PACK",
+  "verdict": "TRACK_B_FRONTEND_LOCKED_CARD_COMPONENT_READY",
+  "component_file": "/app/frontend/components/SafeFeatureCard.tsx",
+  "props_supported": [
+    "title", "subtitle", "statusBadge", "visibility",
+    "lockReason", "endpointStatus", "icon", "onPress", "testID"
+  ],
+  "visibility_values_supported": [
+    "player_visible_locked",
+    "player_visible_active_read_only",
+    "dev_admin_only",
+    "hidden_until_approved"
+  ],
+  "locked_default_behavior": {
+    "wraps_in_View_not_TouchableOpacity": true,
+    "onPress_ignored_when_locked": true,
+    "accessibilityState_disabled": true,
+    "shows_lock_reason": true
+  },
+  "has_live_action_handler_by_default": false,
+  "has_enabled_state_when_visibility_locked": false,
+  "endpoint_status_supported": ["live", "preview_503", "dry_run", "none"],
+  "theme_colors_used_from": "/app/frontend/constants/theme.ts",
+  "validator_script": "validate_project_y_locked_card_component_v1.py"
+}

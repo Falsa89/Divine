@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_X_TRACK_D",
+  "track": "FEATURE_ACCESS_POLICY_AND_LOCK_COPY_PACK",
+  "verdict": "TRACK_D_FEATURE_ACCESS_POLICY_AND_LOCK_COPY_READY",
+  "audit_only": true,
+  "player_facing_implementation": false,
+  "access_policy_classes": {
+    "visible_locked": {
+      "description": "Card visibile in UI ma non interagibile per il flusso live.",
+      "on_press": "open_locked_modal_with_copy",
+      "endpoint_call": "disallowed_no_503_trigger",
+      "copy_italian": "Funzionalit\u00e0 in arrivo. Resta sintonizzato!",
+      "applies_to": ["Artifact Collection Preview", "Housing Preview", "Server Profile Preview"]
+    },
+    "hidden_until_approved": {
+      "description": "Non renderizzata finch\u00e9 le firme di approvazione non sono presenti.",
+      "applies_to": ["AF2-N public rollout", "Borea activation", "Second server opening", "Phase 11", "Artifact live summon/bonus", "Housing live bonus", "Status prod rollouts"]
+    },
+    "dev_only": {
+      "description": "Visibile solo in modalit\u00e0 dev/admin (mai per giocatori). Richiede gate dev.",
+      "applies_to": ["/dev-combat-qa-lab", "/sprite-test", "future /dev-readiness-panel", "future /dev-approval-matrix"]
+    },
+    "read_only_preview": {
+      "description": "Visibile e navigabile, solo consultazione (catalogo).",
+      "endpoint_call": "GET only, no mutating actions",
+      "applies_to": ["Status Codex", "Hero Skill Kits Catalog", "Divine Weapons Catalog", "Synergy Codex", "Affinity Gifts Preview", "Collection Synergies Preview"]
+    },
+    "live_feature": {
+      "description": "Feature pienamente attiva con interattivit\u00e0.",
+      "applies_to": ["Heroes", "Combat (story/tower/pvp/raid/gvg)", "Gacha", "Battle Pass", "Shop", "VIP", "Mail", "Equipment", "Cosmetics", "Achievements", "Guild"]
+    }
+  },
+  "button_policy": {
+    "no_fake_functionality": true,
+    "no_claim_button_unless_endpoint_live_and_approved": true,
+    "no_summon_button_unless_endpoint_live_and_approved": true,
+    "no_upgrade_button_unless_endpoint_live_and_approved": true,
+    "no_purchase_button_unless_economy_endpoint_live": true
+  },
+  "lock_copy_catalog_italian": {
+    "generic_coming_soon": "In arrivo \u2014 Resta sintonizzato!",
+    "awaiting_approval": "In attesa di approvazione del team",
+    "server_profiles": "Prossimamente: Profili Server",
+    "housing": "Prossimamente: Dimora",
+    "artifact_live": "Prossimamente: Artefatti Live",
+    "af2n_public": "Prossimamente: AF2-N Public",
+    "phase_11": "Prossimamente: Fase 11"
+  },
+  "validator_script": "validate_project_x_feature_access_policy_lock_copy_v1.py"
+}

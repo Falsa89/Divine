@@ -1,0 +1,82 @@
+{
+  "task_id": "PROJECT_X_TRACK_E",
+  "track": "FRONTEND_SAFE_PREVIEW_IMPLEMENTATION_BACKLOG_PACK",
+  "verdict": "TRACK_E_FRONTEND_SAFE_PREVIEW_IMPLEMENTATION_BACKLOG_READY",
+  "audit_only": true,
+  "implementation_deferred_to": "PROJECT_Y_FRONTEND_SAFE_PREVIEW_UI_IMPLEMENTATION_PACK",
+  "backlog": [
+    {
+      "id": "BL-X-01",
+      "name": "Artifact Collection Preview",
+      "source_endpoints": ["/api/artifacts (GET catalog)", "/api/constellations (GET catalog)"],
+      "source_files": ["/app/frontend/app/artifacts.tsx (placeholder esistente da estendere)"],
+      "visibility_class": "player_visible_locked_then_preview",
+      "data_availability": "catalog_ready",
+      "ui_risk": "basso (read-only, no mutations)",
+      "implementation_priority": "P1",
+      "blockers": ["Artifact live import signatures (5 firme) per esposizione bonus/live"],
+      "acceptance_criteria": ["no live summon/bonus button", "no claim button", "empty state grazioso", "403/503 ben gestiti"]
+    },
+    {
+      "id": "BL-X-02",
+      "name": "Housing Preview Screen",
+      "source_endpoints": ["/api/housing/preview (503 oggi)"],
+      "source_files": ["nessuno schermo dedicato attualmente"],
+      "visibility_class": "player_visible_locked",
+      "data_availability": "endpoint_503_until_flag_flip",
+      "ui_risk": "basso",
+      "implementation_priority": "P2",
+      "blockers": ["Housing live bonus signatures"],
+      "acceptance_criteria": ["locked modal con copy IT", "no chiamata endpoint live", "no countdown timer"]
+    },
+    {
+      "id": "BL-X-03",
+      "name": "Status Codex / Catalog",
+      "source_endpoints": ["/api/skill-status-vfx-catalogs/*", "/api/hero-skill-kits/catalogs/*"],
+      "source_files": ["/app/frontend/app/skill-status-vfx-catalogs.tsx (gi\u00e0 esistente)"],
+      "visibility_class": "player_visible_active",
+      "data_availability": "live_read_only",
+      "ui_risk": "basso (solo lettura)",
+      "implementation_priority": "P1",
+      "blockers": [],
+      "acceptance_criteria": ["filtri per famiglia status", "nessuna modifica al runtime", "info su caps senza tradire seam version"]
+    },
+    {
+      "id": "BL-X-04",
+      "name": "Server Profile Disabled Preview",
+      "source_endpoints": ["/api/server-profiles/select (503)"],
+      "source_files": ["/app/frontend/app/servers.tsx (gi\u00e0 esistente per /api/servers)"],
+      "visibility_class": "player_visible_locked",
+      "data_availability": "endpoint_503",
+      "ui_risk": "basso",
+      "implementation_priority": "P3",
+      "blockers": ["server_profiles_enabled flag flip pending"],
+      "acceptance_criteria": ["nessun crash su 503", "locked card pulita"]
+    },
+    {
+      "id": "BL-X-05",
+      "name": "Dev Readiness Dashboard",
+      "source_endpoints": ["validator suite JSON output (local)"],
+      "source_files": ["nessuno schermo dedicato attualmente"],
+      "visibility_class": "dev_admin_only",
+      "data_availability": "validator_local_only",
+      "ui_risk": "basso (dev-gated)",
+      "implementation_priority": "P2",
+      "blockers": ["definizione gate dev (oggi inesistente in produzione)"],
+      "acceptance_criteria": ["hidden a giocatori", "nessuna chiamata produttiva", "toggle a runtime per dev only"]
+    },
+    {
+      "id": "BL-X-06",
+      "name": "Feature Gates / Approval Matrix Viewer",
+      "source_endpoints": ["static JSON dei validator e markers"],
+      "source_files": ["nessuno schermo dedicato attualmente"],
+      "visibility_class": "dev_admin_only",
+      "data_availability": "static_local_json",
+      "ui_risk": "basso (dev-gated)",
+      "implementation_priority": "P3",
+      "blockers": ["gate dev"],
+      "acceptance_criteria": ["read-only", "nessun approval write da UI"]
+    }
+  ],
+  "validator_script": "validate_project_x_frontend_safe_preview_backlog_v1.py"
+}

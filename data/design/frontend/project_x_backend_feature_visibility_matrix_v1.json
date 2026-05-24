@@ -1,0 +1,112 @@
+{
+  "task_id": "PROJECT_X_TRACK_B",
+  "track": "BACKEND_FEATURE_ENDPOINT_VISIBILITY_MATRIX_PACK",
+  "verdict": "TRACK_B_BACKEND_FEATURE_ENDPOINT_VISIBILITY_MATRIX_READY",
+  "audit_only": true,
+  "backend_mutation": false,
+  "total_backend_endpoints_audited": 220,
+  "visibility_classes": [
+    "VISIBLE_READY",
+    "READ_ONLY_PREVIEW_READY",
+    "FLAG_GATED_DISABLED_503",
+    "DRY_RUN_ONLY",
+    "ADMIN_DEV_ONLY",
+    "BLOCKED_PENDING_APPROVAL",
+    "DO_NOT_SHOW_PLAYER",
+    "LEGACY_DEPRECATED"
+  ],
+  "features": {
+    "hero_collection": {
+      "class": "VISIBLE_READY",
+      "endpoints": ["/api/heroes", "/api/heroes/{hero_id}", "/api/user/heroes", "/api/hero/encyclopedia/{hero_id}"],
+      "player_facing": true
+    },
+    "combat_battle": {
+      "class": "VISIBLE_READY",
+      "endpoints": ["/api/battle/simulate", "/api/battle/skills", "/api/story/battle", "/api/tower/battle", "/api/pvp/battle"],
+      "player_facing": true
+    },
+    "gacha_summon": {
+      "class": "VISIBLE_READY",
+      "endpoints": ["/api/gacha/banners", "/api/gacha/pull", "/api/gacha/pull10"],
+      "player_facing": true
+    },
+    "economy_battle_pass": {
+      "class": "VISIBLE_READY",
+      "endpoints": ["/api/shop", "/api/battlepass", "/api/vip", "/api/mail"],
+      "player_facing": true
+    },
+    "server_profiles_preview": {
+      "class": "FLAG_GATED_DISABLED_503",
+      "endpoints": ["/api/server-profiles/select GET", "/api/server-profiles/select POST"],
+      "current_status_code": 503,
+      "flag": "SERVER_PROFILES_ENABLED",
+      "player_facing": false,
+      "recommended_ui": "locked_card_coming_soon"
+    },
+    "housing_preview": {
+      "class": "FLAG_GATED_DISABLED_503",
+      "endpoints": ["/api/housing/preview"],
+      "current_status_code": 503,
+      "flag": "HOUSING_PREVIEW_ENABLED",
+      "player_facing": false,
+      "recommended_ui": "locked_card_coming_soon"
+    },
+    "status_first_slice": {
+      "class": "BLOCKED_PENDING_APPROVAL",
+      "endpoints": ["runtime resolver inert"],
+      "current_status": "pending_prod_signatures",
+      "recommended_ui": "dev_admin_only_readiness_panel"
+    },
+    "status_second_slice": {
+      "class": "BLOCKED_PENDING_APPROVAL",
+      "endpoints": ["resolver pure module, gated flag off"],
+      "current_status": "pending_prod_signatures_pack_w",
+      "recommended_ui": "dev_admin_only_readiness_panel"
+    },
+    "status_catalog_codex": {
+      "class": "READ_ONLY_PREVIEW_READY",
+      "endpoints": ["/api/skill-status-vfx-catalogs/*", "/api/hero-skill-kits/catalogs/*"],
+      "player_facing": true,
+      "recommended_ui": "player_visible_codex"
+    },
+    "artifact_bible_dry_run": {
+      "class": "DRY_RUN_ONLY",
+      "endpoints": ["/api/artifacts (catalog)", "/api/constellations (catalog)"],
+      "live_import": "BLOCKED_PENDING_APPROVAL",
+      "player_facing": false,
+      "recommended_ui": "locked_card_coming_soon"
+    },
+    "af2n_canary": {
+      "class": "ADMIN_DEV_ONLY",
+      "endpoints": ["/api/affinity/gift-spend", "/api/affinity/gift-spend/canary-status", "/api/affinity/gift-spend/_admin/metrics-snapshot"],
+      "public_rollout": "BLOCKED_PENDING_APPROVAL",
+      "player_facing": false,
+      "recommended_ui": "hidden_until_public_rollout"
+    },
+    "divine_weapons_catalog": {
+      "class": "READ_ONLY_PREVIEW_READY",
+      "endpoints": ["/api/divine-weapons/catalogs/*"],
+      "player_facing": true,
+      "recommended_ui": "player_visible_codex"
+    },
+    "hero_skill_kits_catalog": {
+      "class": "READ_ONLY_PREVIEW_READY",
+      "endpoints": ["/api/hero-skill-kits/catalogs/*"],
+      "player_facing": true,
+      "recommended_ui": "player_visible_codex"
+    },
+    "qa_mobile_smoke_dev_tools": {
+      "class": "ADMIN_DEV_ONLY",
+      "endpoints": ["/api/admin/bots/run-cycle", "/api/admin/bots/status"],
+      "player_facing": false,
+      "recommended_ui": "hidden_admin_only_panel"
+    },
+    "health": {
+      "class": "DO_NOT_SHOW_PLAYER",
+      "endpoints": ["/api/health"],
+      "player_facing": false
+    }
+  },
+  "validator_script": "validate_project_x_backend_feature_visibility_matrix_v1.py"
+}
