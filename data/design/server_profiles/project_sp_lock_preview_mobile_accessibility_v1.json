@@ -1,0 +1,35 @@
+{
+  "track": "E",
+  "verdict": "TRACK_E_SERVER_LOCK_PREVIEW_MOBILE_ACCESSIBILITY_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_UI_LOCK_PREVIEW",
+    "TRACK_E_SERVER_LOCK_PREVIEW_MOBILE_ACCESSIBILITY_APPROVAL": "true"
+  },
+  "audit_mode": "static_code_audit",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "checks": {
+    "safe_area_used": true,
+    "scrollview_used": true,
+    "viewport_assumptions": ["iPhone 12-14 390x844", "Galaxy S21 360x800"],
+    "back_button_touch_target_px": 40,
+    "back_button_min_target_recommended": 44,
+    "back_button_meets_recommended_target": false,
+    "back_button_meets_acceptable_target": true,
+    "accessibility_label_back_button": "Indietro",
+    "accessibility_label_banner": "Selezione Server in aggiornamento",
+    "accessibility_label_server_row": "Server {name}, selezione disabilitata",
+    "accessibility_state_disabled_on_rows": true,
+    "server_row_min_height_px": 56,
+    "italian_copy_readable": true,
+    "disabled_state_clear": true,
+    "touch_targets_do_not_imply_active_switching": true,
+    "no_touchable_for_server_selection": true,
+    "loading_indicators_present": true,
+    "no_fake_mobile_screenshot_verification": true
+  },
+  "known_recommendations": [
+    "future polish: enlarge back button to 44x44 for full iOS HIG compliance (not blocking; existing convention in housing/artifacts previews uses 40px)"
+  ]
+}

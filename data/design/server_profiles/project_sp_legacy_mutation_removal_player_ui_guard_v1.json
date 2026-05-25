@@ -1,0 +1,31 @@
+{
+  "track": "C",
+  "verdict": "TRACK_C_LEGACY_MUTATION_REMOVAL_FROM_PLAYER_UI_GUARD_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_UI_LOCK_PREVIEW",
+    "TRACK_C_LEGACY_MUTATION_REMOVAL_PLAYER_UI_GUARD_APPROVAL": "true"
+  },
+  "audit_mode": "frontend_scan_post_implementation",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "scan": {
+    "scope": "/app/frontend/app + /app/frontend/components + /app/frontend/utils",
+    "searched_patterns": [
+      "/api/server/select",
+      "server/select",
+      "selectServer",
+      "select_server",
+      "setSelecting",
+      "Server Selezionato!"
+    ],
+    "hits_in_player_ui_after_change": 0,
+    "hits_in_backend": "intentional (legacy endpoint still exists in routes/economy.py per deprecation plan; NOT removed by this pack)"
+  },
+  "guarantee": {
+    "no_player_ui_post_server_select": true,
+    "no_player_ui_active_switch_alert": true,
+    "backend_legacy_endpoint_intact": true,
+    "backend_legacy_endpoint_md5": "b3afb52609b487ab6c1ac3c3e25405fd"
+  }
+}

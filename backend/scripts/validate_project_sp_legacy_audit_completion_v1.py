@@ -19,11 +19,14 @@ def main():
     assert d['frontend_changes'] == 0
     assert d['flag_flips'] == 0
     assert d['server_changes'] == 0
-    # MD5 invariants (canonical files)
+    # MD5 invariants (canonical files frozen by this audit pack).
+    # Note: servers.tsx is intentionally evolved by the subsequent
+    # PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_PACK; therefore its hash
+    # is NOT pinned to live state here. Only the canonical backend files
+    # and frontend menu remain immutable.
     inv = {
         '151ca35ad3bc35f0a6209cb3744ed440': BE,
         'ff60bbb79efa329b71aa8ed351ea89b3': ENV,
-        '26f5c796425aafa933f46979928165f4': SRV,
         '7c12a8d1fc1e1b6a9e63cacfab5c14f4': SP_ROUTE,
         'b3afb52609b487ab6c1ac3c3e25405fd': ECON,
     }

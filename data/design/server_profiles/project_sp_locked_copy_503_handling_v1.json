@@ -1,0 +1,30 @@
+{
+  "track": "D",
+  "verdict": "TRACK_D_SERVER_PROFILE_LOCKED_COPY_AND_503_HANDLING_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_UI_LOCK_PREVIEW",
+    "TRACK_D_SERVER_PROFILE_LOCKED_COPY_503_HANDLING_APPROVAL": "true"
+  },
+  "implementation_mode": "frontend_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "copy_and_status": {
+    "banner_title": "Selezione Server in aggiornamento",
+    "banner_body": "La gestione dei profili server \u00e8 in fase di migrazione. Il cambio server sar\u00e0 riattivato quando il nuovo sistema sar\u00e0 pronto.",
+    "status_section_title": "Stato nuovo sistema",
+    "endpoint_503_card_subtitle": "Servizio profili server temporaneamente disabilitato.",
+    "endpoint_503_card_lock_reason": "Il nuovo endpoint \u00e8 gated (HTTP 503). In attesa delle firme di abilitazione runtime e preview.",
+    "endpoint_unavailable_card_lock_reason": "Errore di rete o servizio temporaneamente non disponibile.",
+    "footer_note": "Nessuna azione di selezione server disponibile in questa fase. Il tuo server attuale resta invariato finch\u00e9 il nuovo sistema Server Profiles non sar\u00e0 attivato in modo sicuro.",
+    "fake_availability_claim": false,
+    "new_profiles_live_claim": false
+  },
+  "handle_503": {
+    "probe_method": "GET /api/server-profiles/select",
+    "states_handled": ["loading", "preview_503", "unavailable", "live"],
+    "no_crash": true,
+    "no_retry_storm": true,
+    "cleanup_alive_flag": true
+  }
+}

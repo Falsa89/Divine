@@ -1,0 +1,48 @@
+{
+  "track": "F",
+  "verdict": "TRACK_F_SERVER_PROFILES_UI_LOCK_SMOKE_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_UI_LOCK_PREVIEW",
+    "TRACK_F_SERVER_PROFILES_UI_LOCK_SMOKE_APPROVAL": "true"
+  },
+  "db_writes": 0,
+  "backend_changes": 0,
+  "smoke_results": {
+    "servers_tsx_file_exists": true,
+    "servers_tsx_post_md5": "bb5fbd29db70ab942dc9f79dcfa6694c",
+    "menu_still_points_to_servers": true,
+    "menu_label": "Seleziona Server",
+    "menu_md5": "f3108ff37a15e910c8595ecd9ea56b03",
+    "safefeaturecard_imported": true,
+    "forbidden_substrings_in_servers_tsx": {
+      "'/api/server/select'": 0,
+      "select_server": 0,
+      "selectServer": 0,
+      "'Server Selezionato!'": 0,
+      "'/api/server-profiles/select'_POST_call": 0
+    },
+    "allowed_substrings_in_servers_tsx": {
+      "'/api/servers'_read_only": 1,
+      "'/api/server-profiles/select'_GET_probe": 1,
+      "SafeFeatureCard": "present",
+      "Italian_banner_title": "present"
+    },
+    "api_smoke_post": {
+      "GET /api/heroes len": 100,
+      "GET /api/heroes/primordial_gaia": 404,
+      "GET /api/heroes/borea": 200,
+      "GET /api/heroes/greek_borea": 200,
+      "GET /api/server-profiles/select": 503,
+      "POST /api/server-profiles/select": 503,
+      "GET /api/servers": 200,
+      "GET /api/health": 200
+    },
+    "frontend_compile_check": "static review pass; eslint pre-existing tsx parsing limitation does not block runtime (same as housing-preview.tsx)",
+    "expo_restarted": true
+  },
+  "db_state": {
+    "writes_executed": 0,
+    "users_server_field_writes": 0
+  }
+}

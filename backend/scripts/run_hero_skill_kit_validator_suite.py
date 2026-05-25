@@ -974,6 +974,15 @@ OPTIONAL = [
     ('PROJECT-SP-LEGACY-TRACK-F-LOCK-PREVIEW-RECOMMENDATION', 'validate_project_sp_frontend_lock_preview_recommendation_v1.py'),
     ('PROJECT-SP-LEGACY-TRACK-G-SMOKE-REGRESSION-REQUIREMENTS', 'validate_project_sp_smoke_regression_requirements_v1.py'),
     ('PROJECT-SP-LEGACY-TRACK-H-COMPLETION', 'validate_project_sp_legacy_audit_completion_v1.py'),
+    # PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_PACK (frontend-only locked preview)
+    ('PROJECT-SP-UI-LOCK-TRACK-A-TARGET-AUDIT', 'validate_project_sp_ui_lock_preview_target_audit_v1.py'),
+    ('PROJECT-SP-UI-LOCK-TRACK-B-LOCKED-PREVIEW-IMPL', 'validate_project_sp_servers_screen_locked_preview_v1.py'),
+    ('PROJECT-SP-UI-LOCK-TRACK-C-LEGACY-MUTATION-GUARD', 'validate_project_sp_legacy_mutation_removal_player_ui_guard_v1.py'),
+    ('PROJECT-SP-UI-LOCK-TRACK-D-LOCKED-COPY-503', 'validate_project_sp_locked_copy_503_handling_v1.py'),
+    ('PROJECT-SP-UI-LOCK-TRACK-E-MOBILE-A11Y', 'validate_project_sp_lock_preview_mobile_accessibility_v1.py'),
+    ('PROJECT-SP-UI-LOCK-TRACK-F-SMOKE', 'validate_project_sp_ui_lock_smoke_v1.py'),
+    ('PROJECT-SP-UI-LOCK-TRACK-G-REGISTRY-UPDATE', 'validate_mode_wiring_registry_server_profiles_update_v1.py'),
+    ('PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION', 'validate_project_sp_ui_lock_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -1,0 +1,31 @@
+{
+  "track": "A",
+  "verdict": "TRACK_A_SERVER_LOCK_PREVIEW_TARGET_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_UI_LOCK_PREVIEW",
+    "TRACK_A_SERVER_LOCK_PREVIEW_TARGET_AUDIT_APPROVAL": "true"
+  },
+  "audit_mode": "implementation_pre_audit",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "target": {
+    "route_file": "/app/frontend/app/servers.tsx",
+    "pre_pack_md5": "26f5c796425aafa933f46979928165f4",
+    "pre_pack_loc": 81,
+    "api_calls_pre": [
+      {"method": "GET", "endpoint": "/api/servers", "causes_mutation": false},
+      {"method": "POST", "endpoint": "/api/server/select", "causes_mutation": true}
+    ],
+    "mutation_call_to_remove": "POST /api/server/select via select() helper",
+    "success_alert_to_remove": "Alert.alert('Server Selezionato!', 'Benvenuto!')",
+    "safe_copy_required_title": "Selezione Server in aggiornamento",
+    "safe_copy_required_body": "La gestione dei profili server \u00e8 in fase di migrazione. Il cambio server sar\u00e0 riattivato quando il nuovo sistema sar\u00e0 pronto.",
+    "safefeaturecard_reusable": true,
+    "safefeaturecard_path": "/app/frontend/components/SafeFeatureCard.tsx",
+    "menu_entry_should_remain": true,
+    "menu_entry_label": "Seleziona Server",
+    "menu_entry_route": "/servers"
+  },
+  "forbidden_actions_in_track_a": ["no code change"]
+}

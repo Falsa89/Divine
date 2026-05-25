@@ -1,0 +1,43 @@
+{
+  "track": "B",
+  "verdict": "TRACK_B_SERVERS_SCREEN_LOCKED_PREVIEW_IMPLEMENTED_SAFE",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_UI_LOCK_PREVIEW",
+    "TRACK_B_SERVERS_SCREEN_LOCKED_PREVIEW_IMPLEMENTATION_APPROVAL": "true"
+  },
+  "implementation_mode": "frontend_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 1,
+  "flag_flips": 0,
+  "file_changed": "/app/frontend/app/servers.tsx",
+  "pre_pack_md5": "26f5c796425aafa933f46979928165f4",
+  "post_pack_md5": "bb5fbd29db70ab942dc9f79dcfa6694c",
+  "requirements_check": {
+    "no_enabled_server_select_button": true,
+    "no_post_server_select_call": true,
+    "no_success_alert_implying_switching": true,
+    "italian_locked_title_present": "Selezione Server in aggiornamento",
+    "italian_locked_body_present": "La gestione dei profili server \u00e8 in fase di migrazione. Il cambio server sar\u00e0 riattivato quando il nuovo sistema sar\u00e0 pronto.",
+    "server_list_read_only_displayed": false,
+    "server_list_intentionally_removed": true,
+    "server_list_removal_reason": "align with audit_server_selection_runtime_safety_v1 forbidding UI fetch of /api/servers; consistent with housing-preview / artifacts-preview locked patterns",
+    "safefeaturecard_pattern_used": true,
+    "menu_entry_kept_unchanged": true
+  },
+  "new_screen_features": [
+    "header with back button + title 'Selezione Server'",
+    "banner 'Selezione Server in aggiornamento' with required Italian copy",
+    "section 'Stato nuovo sistema' \u2192 probes GET /api/server-profiles/select; renders SafeFeatureCard for 503/live/unavailable",
+    "section 'Server disponibili (sola lettura)' \u2192 GET /api/servers read-only; each row shows '\ud83d\udd12 In arrivo' badge; no TouchableOpacity onPress for selection",
+    "footer note: 'Nessuna azione di selezione server disponibile in questa fase'"
+  ],
+  "removed_features": [
+    "select() helper that performed POST /api/server/select",
+    "Alert.alert('Server Selezionato!', 'Benvenuto!') success dialog",
+    "TouchableOpacity onPress that called select(srv.id)",
+    "'selecting' state managed via setSelecting()",
+    "router.back() on success (implying switching)"
+  ]
+}
