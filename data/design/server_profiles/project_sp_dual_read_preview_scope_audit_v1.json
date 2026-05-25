@@ -1,0 +1,47 @@
+{
+  "track": "A",
+  "verdict": "TRACK_A_DUAL_READ_PREVIEW_SCOPE_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_DUAL_READ_PREVIEW",
+    "TRACK_A_DUAL_READ_PREVIEW_SCOPE_AUDIT_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes_in_track": 0,
+  "flag_flips": 0,
+  "scope": {
+    "what_can_be_read_safely_today": [
+      "users.server (legacy field) via existing /api/user/profile (read-only, already player visible)",
+      "/api/servers list (read-only, but per audit_server_selection_runtime_safety_v1 the UI must NOT fetch this directly)",
+      "/api/server-profiles/select GET (returns 503 disabled envelope without leaking data)"
+    ],
+    "can_legacy_users_server_be_displayed_in_locked_preview": true,
+    "how_to_display_safely": "reuse the existing /api/user/profile endpoint that already returns server field; no new endpoint required for read-only display; the locked preview only RENDERS the string",
+    "server_profiles_count_zero_blocks_live_preview": true,
+    "server_profiles_count_zero_blocks_dual_read_preview": false,
+    "justification": "dual-read preview at this stage is design + UI copy + auth/gap matrix; no need to query server_profiles when count=0",
+    "endpoint_helper_needed_later": {
+      "name": "GET /api/account/server-profiles/preview",
+      "semantics": "returns current legacy server + future profile readiness; 503 if flags off; no mutation",
+      "introduced_in": "future PROJECT_SERVER_PROFILES_AUTH_AND_CONTRACT_HARDENING_PACK"
+    },
+    "why_mutation_remains_blocked": [
+      "no auth wired on new POST",
+      "no capacity/maintenance enforcement on new POST",
+      "no seed of server_profiles",
+      "no dual-write strategy implemented",
+      "orphan-user risk if flag flips before seed"
+    ],
+    "remaining_before_auth_contract_hardening": [
+      "draft auth/contract for new POST (this pack Track C/D)",
+      "design dual-read preview endpoint (this pack Track C)",
+      "plan seed/rollback (future pack)",
+      "plan dual-write (future pack)"
+    ],
+    "current_locked_preview_already_safe": true,
+    "smallest_safe_next_step": "design draft + UI copy polish for dual-read preview WITHOUT introducing new endpoint or fetch"
+  },
+  "forbidden_in_track_a": ["no code change"]
+}

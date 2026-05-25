@@ -1,0 +1,47 @@
+{
+  "track": "B",
+  "verdict": "TRACK_B_LEGACY_CURRENT_SERVER_READ_MODEL_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_DUAL_READ_PREVIEW",
+    "TRACK_B_LEGACY_CURRENT_SERVER_READ_MODEL_APPROVAL": "true"
+  },
+  "audit_mode": "design_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes_in_track": 0,
+  "model": {
+    "read_source_primary": "users.server (string)",
+    "read_source_available_via": [
+      "GET /api/user/profile (already exists; already returns server field if set)",
+      "(future) GET /api/account/server-profiles/preview (design-only; not yet implemented)"
+    ],
+    "semantics": "display-only; the value of users.server is rendered as text. UI must NOT interpret the value to allow selection.",
+    "active_switching": false,
+    "write_back": false,
+    "fallback_when_user_has_no_server": {
+      "display": "Anteprima dual-read in preparazione",
+      "behavior": "locked preview remains identical; no error toast; no retry"
+    },
+    "avoiding_divergence_with_server_profiles": [
+      "never compute or assume mapping users.server -> server_profile_id during read",
+      "do not cache derived server_profile_id",
+      "do not write users.server while dual-write is not enabled"
+    ],
+    "future_mapping_into_server_profiles": {
+      "strategy": "seed pack will materialize users.server into server_profiles with archive=False; mapping is created server-side, not client-side",
+      "compatibility": "during dual-write window, both fields are kept in sync; reads can prefer profile_id when present"
+    },
+    "display_format_in_locked_preview": {
+      "current_implementation": "placeholder text 'Anteprima dual-read in preparazione' (Track E polish)",
+      "future_implementation": "when auth/contract hardening lands, locked preview can show 'Server attuale: {users.server || none}'"
+    }
+  },
+  "forbidden_actions": [
+    "users write",
+    "migration",
+    "server_profiles write",
+    "auto-assignment of server",
+    "client-side mapping derivation"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "track": "F",
+  "verdict": "TRACK_F_DUAL_READ_PREVIEW_SMOKE_AND_NO_MUTATION_GUARD_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_DUAL_READ_PREVIEW",
+    "TRACK_F_DUAL_READ_PREVIEW_SMOKE_NO_MUTATION_GUARD_APPROVAL": "true"
+  },
+  "db_writes": 0,
+  "backend_changes": 0,
+  "smoke": {
+    "frontend_post_server_select_count": 0,
+    "frontend_legacy_server_select_substring_count": 0,
+    "servers_route_still_locked": true,
+    "servers_post_md5": "4e08d0186ed31785e912b8f69d30e9cb",
+    "menu_unchanged": true,
+    "menu_md5": "f3108ff37a15e910c8595ecd9ea56b03",
+    "select_button_count_in_servers_tsx": 0,
+    "api_smoke": {
+      "GET /api/heroes len": 100,
+      "GET /api/heroes/primordial_gaia": 404,
+      "GET /api/heroes/borea": 200,
+      "GET /api/heroes/greek_borea": 200,
+      "GET /api/server-profiles/select": 503,
+      "POST /api/server-profiles/select": 503,
+      "GET /api/servers": 200,
+      "GET /api/health": 200
+    },
+    "db_state": {
+      "users_server_writes_during_smoke": 0,
+      "server_profiles_writes_during_smoke": 0,
+      "server_profiles_count_assumption": 0
+    },
+    "feature_flags_state": {
+      "SERVER_PROFILES_RUNTIME_ENABLED": "unset/false (verified via 503)",
+      "SERVER_PROFILES_PREVIEW_ENABLED": "unset/false",
+      "SERVER_PROFILES_DUAL_WRITE_ENABLED": "not introduced"
+    }
+  },
+  "regression_guard_assertions": [
+    "no '/api/server/select' substring in any *.ts*/*.js* file under /app/frontend",
+    "no 'Server Selezionato' substring in /app/frontend",
+    "no 'selectServer'/'select_server' identifier in /app/frontend",
+    "/api/server-profiles/select responds 503 on GET and POST",
+    "/api/health responds 200"
+  ]
+}

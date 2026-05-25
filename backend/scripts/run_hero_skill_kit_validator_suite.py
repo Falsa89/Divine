@@ -983,6 +983,15 @@ OPTIONAL = [
     ('PROJECT-SP-UI-LOCK-TRACK-F-SMOKE', 'validate_project_sp_ui_lock_smoke_v1.py'),
     ('PROJECT-SP-UI-LOCK-TRACK-G-REGISTRY-UPDATE', 'validate_mode_wiring_registry_server_profiles_update_v1.py'),
     ('PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION', 'validate_project_sp_ui_lock_completion_v1.py'),
+    # PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_PACK (design + copy polish, no mutation)
+    ('PROJECT-SP-DUAL-READ-TRACK-A-SCOPE-AUDIT', 'validate_project_sp_dual_read_preview_scope_audit_v1.py'),
+    ('PROJECT-SP-DUAL-READ-TRACK-B-LEGACY-READ-MODEL', 'validate_project_sp_legacy_current_server_read_model_v1.py'),
+    ('PROJECT-SP-DUAL-READ-TRACK-C-PREVIEW-CONTRACT-DRAFT', 'validate_project_sp_preview_contract_draft_v1.py'),
+    ('PROJECT-SP-DUAL-READ-TRACK-D-AUTH-GAP-MATRIX', 'validate_project_sp_auth_and_gap_matrix_v1.py'),
+    ('PROJECT-SP-DUAL-READ-TRACK-E-LOCKED-PREVIEW-COPY', 'validate_project_sp_locked_preview_dual_read_copy_v1.py'),
+    ('PROJECT-SP-DUAL-READ-TRACK-F-SMOKE-NO-MUTATION', 'validate_project_sp_dual_read_preview_smoke_no_mutation_guard_v1.py'),
+    ('PROJECT-SP-DUAL-READ-TRACK-G-REGISTRY-REFRESH', 'validate_mode_wiring_registry_server_profiles_refresh_v1.py'),
+    ('PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION', 'validate_project_server_profiles_dual_read_preview_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

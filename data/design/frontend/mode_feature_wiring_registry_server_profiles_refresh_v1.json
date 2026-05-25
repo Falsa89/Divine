@@ -1,0 +1,58 @@
+{
+  "track": "G",
+  "verdict": "TRACK_G_MODE_WIRING_REGISTRY_REFRESH_SERVER_PROFILES_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_DUAL_READ_PREVIEW",
+    "TRACK_G_MODE_WIRING_REGISTRY_REFRESH_SERVER_PROFILES_APPROVAL": "true"
+  },
+  "audit_mode": "design_metadata_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_runtime_changes_in_track": 0,
+  "refreshed_mode_entry": {
+    "mode_id": "server_profiles",
+    "display_name": "Server Profiles (Selezione Server)",
+    "category": "preview",
+    "frontend_entry_points": ["/servers", "menu:Seleziona Server"],
+    "frontend_status": "LOCKED_PREVIEW",
+    "backend_endpoints_current": [
+      "/api/server-profiles/select (GET 503)",
+      "/api/server-profiles/select (POST 503)",
+      "/api/servers (legacy v1, in economy.py)",
+      "/api/server/select (legacy v1, POST in economy.py; not called from player UI)"
+    ],
+    "backend_endpoints_expected_future": [
+      "GET /api/account/server-profiles/preview (design draft only)",
+      "POST /api/server-profiles/select (auth + capacity + dual-write behind flags)"
+    ],
+    "backend_status": "FLAG_GATED_503",
+    "legacy_player_mutation_surface": "REMOVED",
+    "legacy_paths_detected": [
+      "/api/servers (legacy in routes/economy.py; backend kept for deprecation window)",
+      "POST /api/server/select (legacy in routes/economy.py; not called from frontend)"
+    ],
+    "risk_level": "MEDIUM",
+    "risk_reason": "UI locked + dual-read copy polish applied; backend legacy endpoint still mounted; new endpoint still 503; auth/seed gaps remain (see 154D gap matrix).",
+    "smoke_required": [
+      "GET /api/server-profiles/select == 503",
+      "POST /api/server-profiles/select == 503",
+      "/servers locked-preview render (no select button)",
+      "feature flags unset"
+    ],
+    "next_action": "dual_read_preview_then_auth_contract_hardening",
+    "owner_pack_recommendation": "PROJECT_SERVER_PROFILES_AUTH_AND_CONTRACT_HARDENING_PACK"
+  },
+  "delta_versus_previous_update": {
+    "previous_pack": "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_PACK (153G)",
+    "changes_in_this_refresh": [
+      "added explicit field 'legacy_player_mutation_surface': REMOVED",
+      "added 'backend_endpoints_expected_future' enumerating the design draft",
+      "updated risk_reason to mention dual-read copy polish",
+      "updated next_action to 'dual_read_preview_then_auth_contract_hardening'"
+    ]
+  },
+  "original_registry_path": "/app/data/design/frontend/mode_feature_wiring_registry_system_modes_v1.json",
+  "runtime_alteration": false,
+  "notes": "Source registry file is NOT modified by this pack (refresh recorded as a separate file). Future pack PROJECT_MODE_WIRING_REGISTRY_REBUILD_PACK can absorb consolidated delta."
+}

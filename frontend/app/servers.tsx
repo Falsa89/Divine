@@ -111,6 +111,27 @@ export default function ServerSelectScreen() {
           </Text>
         </View>
 
+        {/* Track E (dual-read copy polish): riga informativa "Server attuale".
+            Nessuna fetch aggiuntiva: la fonte di lettura (legacy users.server)
+            sarà collegata in un pack futuro auth/contract hardening. Per ora
+            mostra placeholder coerente con la modalità locked. */}
+        <Text style={styles.sectionTitle}>Server attuale</Text>
+        <View
+          style={styles.currentServerCard}
+          accessibilityRole="text"
+          accessibilityLabel="Server attuale: informazione non ancora disponibile in anteprima"
+        >
+          <Text style={styles.currentServerLabel}>Stato</Text>
+          <Text style={styles.currentServerValue}>
+            Anteprima dual-read in preparazione
+          </Text>
+          <Text style={styles.currentServerHint}>
+            Il tuo server attuale resta invariato. Il dettaglio "server attuale"
+            sarà visibile in sola lettura dopo l'attivazione sicura
+            dell'auth/contract hardening del nuovo sistema.
+          </Text>
+        </View>
+
         {/* Stato del nuovo endpoint (server-profiles) */}
         <Text style={styles.sectionTitle}>Stato nuovo sistema</Text>
         {newEndpointState === 'loading' && (
@@ -238,6 +259,34 @@ const styles = StyleSheet.create({
     borderColor: COLORS.borderLight,
   },
   loadingText: { color: COLORS.textMuted, marginTop: 8, fontSize: 13 },
+  currentServerCard: {
+    padding: 14,
+    borderRadius: 12,
+    backgroundColor: COLORS.bgGlass,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    marginBottom: 8,
+  },
+  currentServerLabel: {
+    color: COLORS.textMuted,
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  currentServerValue: {
+    color: COLORS.textPrimary,
+    fontSize: 15,
+    fontWeight: '700',
+    marginTop: 6,
+  },
+  currentServerHint: {
+    color: COLORS.textMuted,
+    fontSize: 12,
+    marginTop: 8,
+    lineHeight: 16,
+    fontStyle: 'italic',
+  },
   footerNote: {
     marginTop: 20,
     padding: 14,

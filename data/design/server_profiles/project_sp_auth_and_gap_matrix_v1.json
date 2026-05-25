@@ -1,0 +1,79 @@
+{
+  "track": "D",
+  "verdict": "TRACK_D_SERVER_PROFILES_AUTH_AND_GAP_MATRIX_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_DUAL_READ_PREVIEW",
+    "TRACK_D_SERVER_PROFILES_AUTH_AND_GAP_MATRIX_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "gap_matrix": [
+    {
+      "gap": "new POST /api/server-profiles/select auth missing",
+      "severity": "HIGH",
+      "current_state": "endpoint is 503; even when flag ON it has no get_current_user dependency wired",
+      "required_before": "any flag flip",
+      "owner_pack": "PROJECT_SERVER_PROFILES_AUTH_AND_CONTRACT_HARDENING_PACK"
+    },
+    {
+      "gap": "capacity check missing on new endpoint",
+      "severity": "MEDIUM",
+      "current_state": "endpoint is inert; capacity logic exists only on legacy POST /api/server/select",
+      "required_before": "flag flip",
+      "owner_pack": "PROJECT_SERVER_PROFILES_AUTH_AND_CONTRACT_HARDENING_PACK"
+    },
+    {
+      "gap": "maintenance check missing on new endpoint",
+      "severity": "MEDIUM",
+      "current_state": "inert",
+      "required_before": "flag flip",
+      "owner_pack": "PROJECT_SERVER_PROFILES_AUTH_AND_CONTRACT_HARDENING_PACK"
+    },
+    {
+      "gap": "seed/backfill of server_profiles missing",
+      "severity": "CRITICAL",
+      "current_state": "collection empty (0 docs)",
+      "required_before": "flag flip OR migration",
+      "owner_pack": "PROJECT_SERVER_PROFILES_SEED_AND_ROLLBACK_PLAN_PACK"
+    },
+    {
+      "gap": "dual-write strategy not implemented",
+      "severity": "HIGH",
+      "current_state": "only legacy writes users.server; new endpoint inert",
+      "required_before": "UI cutover",
+      "owner_pack": "PROJECT_SERVER_PROFILES_DUAL_WRITE_DESIGN_PACK (future)"
+    },
+    {
+      "gap": "orphan-user risk if flag flips before seed",
+      "severity": "CRITICAL",
+      "current_state": "prevented by 503 gating",
+      "required_before": "flag flip",
+      "owner_pack": "PROJECT_SERVER_PROFILES_SEED_AND_ROLLBACK_PLAN_PACK"
+    },
+    {
+      "gap": "UI 503 handling current state",
+      "severity": "LOW",
+      "current_state": "handled via SafeFeatureCard 'preview_503' state in /servers locked preview",
+      "required_before": "-",
+      "owner_pack": "already addressed in PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_PACK"
+    },
+    {
+      "gap": "rollback requirements documented but not yet rehearsed",
+      "severity": "MEDIUM",
+      "current_state": "plan exists in 152E dual-route deprecation plan",
+      "required_before": "seed pack execution",
+      "owner_pack": "PROJECT_SERVER_PROFILES_SEED_AND_ROLLBACK_PLAN_PACK"
+    }
+  ],
+  "blocker_count_for_flag_flip": 6,
+  "blocker_severity_distribution": {
+    "CRITICAL": 2,
+    "HIGH": 2,
+    "MEDIUM": 3,
+    "LOW": 1
+  },
+  "flag_flip_authorized": false,
+  "flag_flip_blocked_reason": "6 blockers across CRITICAL/HIGH/MEDIUM tiers; auth+seed must land first"
+}

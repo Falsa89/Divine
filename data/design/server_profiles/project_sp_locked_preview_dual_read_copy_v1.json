@@ -1,0 +1,34 @@
+{
+  "track": "E",
+  "verdict": "TRACK_E_SERVERS_LOCKED_PREVIEW_DUAL_READ_COPY_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_DUAL_READ_PREVIEW",
+    "TRACK_E_SERVERS_LOCKED_PREVIEW_DUAL_READ_COPY_APPROVAL": "true"
+  },
+  "implementation_mode": "frontend_copy_polish",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 1,
+  "flag_flips": 0,
+  "file_changed": "/app/frontend/app/servers.tsx",
+  "pre_pack_md5": "bb5fbd29db70ab942dc9f79dcfa6694c",
+  "post_pack_md5": "4e08d0186ed31785e912b8f69d30e9cb",
+  "polish_applied": {
+    "section_added": "Server attuale",
+    "placeholder_value": "Anteprima dual-read in preparazione",
+    "hint_text": "Il tuo server attuale resta invariato. Il dettaglio 'server attuale' sar\u00e0 visibile in sola lettura dopo l'attivazione sicura dell'auth/contract hardening del nuovo sistema.",
+    "styles_added": ["currentServerCard", "currentServerLabel", "currentServerValue", "currentServerHint"],
+    "accessibility_attached": true
+  },
+  "no_new_fetch_introduced": true,
+  "no_select_button_added": true,
+  "no_mutation_call_added": true,
+  "no_menu_change": true,
+  "reintroduction_risk_assessment": "none",
+  "copy_claim_safety": {
+    "fake_availability_claim": false,
+    "new_profiles_live_claim": false,
+    "no_implication_of_active_switching": true
+  }
+}
