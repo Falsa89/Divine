@@ -1001,6 +1001,15 @@ OPTIONAL = [
     ('PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION', 'validate_project_sp_no_mutation_regression_guard_v1.py'),
     ('PROJECT-SP-AUTH-TRACK-G-ROADMAP-APPROVAL-GATES', 'validate_project_sp_roadmap_and_approval_gates_v1.py'),
     ('PROJECT-SP-AUTH-TRACK-H-COMPLETION', 'validate_project_sp_auth_contract_completion_v1.py'),
+    # PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT_PACK (audit-first; 1 safe nav-only frontend fix)
+    ('PROJECT-PLAYER-LEGACY-TRACK-A-FINDINGS', 'validate_player_facing_legacy_surfaces_findings_v1.py'),
+    ('PROJECT-PLAYER-LEGACY-TRACK-B-SAFE-PREVIEWS-NAV-FIX', 'validate_safe_previews_navigation_only_fix_v1.py'),
+    ('PROJECT-PLAYER-LEGACY-TRACK-C-ARTIFACT-CONSTELLATION-AUDIT', 'validate_artifact_constellation_live_surface_audit_v1.py'),
+    ('PROJECT-PLAYER-LEGACY-TRACK-D-GACHA-RATE-SANITY-AUDIT', 'validate_gacha_rate_sanity_audit_v1.py'),
+    ('PROJECT-PLAYER-LEGACY-TRACK-E-SHOP-IAP-READINESS-AUDIT', 'validate_shop_iap_readiness_audit_v1.py'),
+    ('PROJECT-PLAYER-LEGACY-TRACK-F-BATTLEPASS-LEGACY-AUDIT', 'validate_battle_pass_legacy_surface_audit_v1.py'),
+    ('PROJECT-PLAYER-LEGACY-TRACK-G-HEROES-MENU-DEV-ROUTES-AUDIT', 'validate_owned_heroes_and_menu_dev_routes_audit_v1.py'),
+    ('PROJECT-PLAYER-LEGACY-TRACK-H-COMPLETION', 'validate_player_facing_legacy_surfaces_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT",
+  "track": "E",
+  "verdict": "TRACK_E_SHOP_AND_IAP_READINESS_AUDIT_READY",
+  "shop_surface": {
+    "file": "frontend/app/shop.tsx",
+    "live_endpoints": [
+      "GET /api/shop",
+      "POST /api/shop/buy",
+      "POST /api/shop/claim-daily/{itemId}"
+    ],
+    "appears_legacy": true
+  },
+  "iap_implementation_present": false,
+  "missing_systems_for_real_money": [
+    "App Store / Google Play IAP product configuration",
+    "backend receipt validation (StoreKit / Play Billing)",
+    "anti-fraud / replay protection",
+    "paid vs free currency separation in ledger",
+    "entitlement / account-wide ownership",
+    "refund / revoke handling",
+    "regional availability + compliance (GDPR, COPPA, tax)",
+    "failed purchase fallback + retry idempotency"
+  ],
+  "recommendation": "non implementare IAP in questo pack; pack dedicato richiesto. Eventualmente convertire shop a anteprima sicura mantenendo catalogo read-only.",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "recommended_next_pack": "PROJECT_SHOP_IAP_DESIGN_AND_SAFE_SHOP_LOCK_PACK"
+}

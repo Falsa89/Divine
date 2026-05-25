@@ -1,0 +1,24 @@
+{
+  "task_id": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT",
+  "track": "B",
+  "verdict": "TRACK_B_SAFE_PREVIEWS_NAVIGATION_ONLY_FIX_IMPLEMENTED_SAFE",
+  "file_changed": "frontend/app/safe-previews.tsx",
+  "safe_previews_tsx_md5_pre": "2473947c7c692ddc61c70082f82bdb65",
+  "safe_previews_tsx_md5_post": "e40dd47e489561bfcfcbee3acfc90758",
+  "safe_feature_card_tsx_md5": "8f65c7783690ae240c8f63c1c2729812",
+  "safe_feature_card_unchanged": true,
+  "root_cause": "Wrapper TouchableOpacity externe avvolgeva SafeFeatureCard (TouchableOpacity interna senza onPress); il press veniva consumato dal child impedendo la navigazione del parent.",
+  "fix_summary": "Rimosso il wrapper TouchableOpacity esterno; onPress (router.push) passato direttamente come prop a SafeFeatureCard. Aggiunti testID stabili. Nessuna nuova superficie live.",
+  "destinations": [
+    {"label": "Codex Status Effects", "route": "/status-codex", "locked_read_only": true},
+    {"label": "Anteprima Artefatti", "route": "/artifacts-preview", "locked_read_only": true},
+    {"label": "Dimora Divina", "route": "/housing-preview", "locked_read_only": true}
+  ],
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 1,
+  "new_live_buttons": 0,
+  "new_api_calls": 0,
+  "flag_flips": 0,
+  "navigation_only": true
+}

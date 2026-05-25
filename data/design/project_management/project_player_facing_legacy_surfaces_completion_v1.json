@@ -1,0 +1,54 @@
+{
+  "task_id": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT",
+  "track": "H",
+  "verdict": "TRACK_H_PLAYER_FACING_LEGACY_SURFACES_COMPLETION_READY",
+  "global_verdict": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT_READY",
+  "implementation_mode": "audit_first_with_one_safe_frontend_fix",
+  "track_verdicts": {
+    "A": "TRACK_A_MOBILE_QA_AND_REPO_FINDINGS_CONSOLIDATION_READY",
+    "B": "TRACK_B_SAFE_PREVIEWS_NAVIGATION_ONLY_FIX_IMPLEMENTED_SAFE",
+    "C": "TRACK_C_ARTIFACT_CONSTELLATION_LIVE_SURFACE_AUDIT_READY_NOT_APPLIED",
+    "D": "TRACK_D_GACHA_RATE_SANITY_AND_BANNER_GUARD_AUDIT_READY",
+    "E": "TRACK_E_SHOP_AND_IAP_READINESS_AUDIT_READY",
+    "F": "TRACK_F_BATTLE_PASS_LEGACY_SURFACE_AND_MONETIZATION_AUDIT_READY",
+    "G": "TRACK_G_OWNED_HEROES_LEGACY_VISIBILITY_AND_MENU_DEV_ROUTES_AUDIT_READY",
+    "H": "TRACK_H_PLAYER_FACING_LEGACY_SURFACES_COMPLETION_READY"
+  },
+  "files_changed": [
+    "frontend/app/safe-previews.tsx"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0,
+  "flag_flips": 0,
+  "frontend_changes": 1,
+  "new_live_buttons": 0,
+  "new_api_calls": 0,
+  "safe_previews_tsx_md5_pre": "2473947c7c692ddc61c70082f82bdb65",
+  "safe_previews_tsx_md5_post": "e40dd47e489561bfcfcbee3acfc90758",
+  "invariant_files_md5": {
+    "battle_engine_py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "recommended_next_pack_order": [
+    "PROJECT_GACHA_RATE_SANITY_FIX_OR_LOCK_PACK",
+    "PROJECT_ARTIFACT_CONSTELLATION_SURFACE_LOCK_PACK",
+    "PROJECT_SHOP_IAP_DESIGN_AND_SAFE_SHOP_LOCK_PACK",
+    "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_PACK",
+    "PROJECT_HERO_LIST_LEGACY_OWNED_VISIBILITY_FIX_PACK",
+    "PROJECT_MENU_DEV_ROUTE_HARDENING_PACK",
+    "PROJECT_FRONTEND_D_COMBAT_UI_DECOMPOSITION_AUDIT_PACK"
+  ],
+  "remaining_risks": [
+    "/artifacts live endpoints ancora esposti dal menu",
+    "gacha banner artifact/constellation visibili",
+    "premium gacha rates 30% combinato (5*+6*) appaiono dev/test",
+    "shop/battlepass espongono claim/buy live senza IAP backing",
+    "hero list non filtra legacy owned"
+  ],
+  "progress_estimate": {
+    "global_project_pre": 56.0,
+    "global_project_post": 56.4,
+    "unit": "percent",
+    "excludes": ["graphics", "audio", "art"]
+  }
+}

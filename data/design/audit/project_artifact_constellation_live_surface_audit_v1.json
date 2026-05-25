@@ -1,0 +1,51 @@
+{
+  "task_id": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT",
+  "track": "C",
+  "verdict": "TRACK_C_ARTIFACT_CONSTELLATION_LIVE_SURFACE_AUDIT_READY_NOT_APPLIED",
+  "applied": false,
+  "reason_not_applied": "Lock effettivo dei banner gacha artifact/constellation e del menu entry richiede pack dedicato (rate/banner audit + economy signoff) per evitare regressioni economiche. Questo pack è audit-only.",
+  "surfaces": {
+    "artifacts_preview_safe": {
+      "route": "/artifacts-preview",
+      "locked_read_only": true,
+      "live_endpoints": []
+    },
+    "artifacts_live": {
+      "route": "/artifacts",
+      "file": "frontend/app/artifacts.tsx",
+      "locked_read_only": false,
+      "live_endpoints": [
+        "GET /api/artifacts",
+        "POST /api/artifacts/pull",
+        "POST /api/artifacts/pull10",
+        "POST /api/artifacts/fuse",
+        "POST /api/constellations/pull",
+        "POST /api/constellations/pull10",
+        "POST /api/constellations/equip"
+      ],
+      "risk": "high",
+      "recommendation": "convertire a SafeFeatureCard / redirect a /artifacts-preview, in pack dedicato"
+    },
+    "menu_entry": {
+      "file": "frontend/app/(tabs)/menu.tsx",
+      "label": "Artefatti & Costellazioni",
+      "route": "/artifacts",
+      "recommendation": "reindirizzare a /artifacts-preview oppure rimuovere fino a signoff economy; non modificato in questo pack"
+    },
+    "gacha_banners": {
+      "file": "frontend/app/(tabs)/gacha.tsx",
+      "banners_with_artifact_or_constellation": ["artifact", "constellation"],
+      "recommendation": "nascondere/disabilitare i due banner finch\u00e9 il gate artifact live non è firmato"
+    }
+  },
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "forbidden_respected": [
+    "no artifact live import",
+    "no artifact summon/upgrade/live bonus",
+    "no backend route changes",
+    "no DB writes"
+  ]
+}

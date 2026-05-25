@@ -23,6 +23,8 @@ export interface SafeFeatureCardProps {
   icon?: string;
   onPress?: () => void; // mostrato solo se visibility === read_only o dev_admin_only
   testID?: string;
+  accessibilityRole?: 'link' | 'button' | 'none';
+  accessibilityHint?: string;
 }
 
 const VIS_LABEL: Record<SafeFeatureVisibility, string> = {
@@ -43,6 +45,8 @@ export function SafeFeatureCard(props: SafeFeatureCardProps) {
     <Wrapper
       {...interactProps}
       style={[styles.card, isLocked && styles.cardLocked]}
+      accessibilityRole={props.accessibilityRole}
+      accessibilityHint={props.accessibilityHint}
       accessibilityState={{ disabled: isLocked }}
       accessibilityLabel={`${props.title}${isLocked ? ' (bloccata)' : ''}`}
       testID={props.testID}

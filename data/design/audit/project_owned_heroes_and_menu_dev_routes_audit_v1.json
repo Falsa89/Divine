@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT",
+  "track": "G",
+  "verdict": "TRACK_G_OWNED_HEROES_LEGACY_VISIBILITY_AND_MENU_DEV_ROUTES_AUDIT_READY",
+  "owned_heroes": {
+    "endpoint": "GET /api/user/heroes",
+    "frontend_consumers": [
+      "frontend/app/(tabs)/heroes.tsx",
+      "frontend/app/hero-collection.tsx"
+    ],
+    "observation": "Lista posseduti mostra eroi legacy/old; nessun filtro legacy_visibility lato frontend rilevato.",
+    "recommendation": "introdurre piano di migrazione (no deletion) e/o filtro visibilit\u00e0 legacy; pack dedicato."
+  },
+  "menu_dev_routes": [
+    {"label": "Sprite Test", "route": "/sprite-test", "classification": "dev"},
+    {"label": "Combat QA Lab (DEV)", "route": "/dev-combat-qa-lab", "classification": "dev"},
+    {"label": "Oggetti Esclusivi", "route": "/exclusive", "classification": "legacy_review_needed"}
+  ],
+  "audit_only": true,
+  "menu_changed": false,
+  "heroes_deleted": 0,
+  "user_heroes_mutated": 0,
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "recommended_next_packs": [
+    "PROJECT_HERO_LIST_LEGACY_OWNED_VISIBILITY_FIX_PACK",
+    "PROJECT_MENU_DEV_ROUTE_HARDENING_PACK"
+  ]
+}

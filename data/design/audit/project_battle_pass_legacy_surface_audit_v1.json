@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT",
+  "track": "F",
+  "verdict": "TRACK_F_BATTLE_PASS_LEGACY_SURFACE_AND_MONETIZATION_AUDIT_READY",
+  "battle_pass_surface": {
+    "file": "frontend/app/battlepass.tsx",
+    "live_endpoints": [
+      "GET /api/battlepass",
+      "POST /api/battlepass/claim/{level}",
+      "POST /api/battlepass/buy-premium"
+    ],
+    "appears_legacy": true
+  },
+  "premium_purchase_path": {
+    "endpoint": "POST /api/battlepass/buy-premium",
+    "iap_backed": false,
+    "risk": "high",
+    "recommendation": "hide/lock premium purchase button until IAP system designed"
+  },
+  "free_claim_path": {
+    "endpoint": "POST /api/battlepass/claim/{level}",
+    "recommendation": "valuta lock fino a nuovo contratto BP account-wide; non modificato in questo pack"
+  },
+  "should_lock_until_new_contract": true,
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "recommended_next_pack": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_PACK"
+}

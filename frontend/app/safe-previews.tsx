@@ -80,22 +80,24 @@ export default function SafePreviewsScreen() {
         </View>
 
         {ENTRIES.map((e) => (
-          <TouchableOpacity
+          // PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT — Track B
+          // BUG FIX: il wrapper esterno TouchableOpacity intercettava il tap su
+          // mobile ma la SafeFeatureCard interna (non locked) era a sua volta
+          // TouchableOpacity senza onPress: il press veniva consumato dal child
+          // e l'onPress del wrapper non scattava. Soluzione safe navigation-only:
+          // passare onPress direttamente alla SafeFeatureCard. Nessuna azione live.
+          <SafeFeatureCard
             key={e.route}
+            title={e.title}
+            subtitle={e.subtitle}
+            visibility="player_visible_active_read_only"
+            statusBadge={e.badge}
+            icon={e.icon}
             onPress={() => router.push(e.route as any)}
             accessibilityRole="link"
-            accessibilityLabel={`${e.title}: apri anteprima`}
             accessibilityHint="Apre la pagina in sola lettura"
-            activeOpacity={0.85}
-          >
-            <SafeFeatureCard
-              title={e.title}
-              subtitle={e.subtitle}
-              visibility="player_visible_active_read_only"
-              statusBadge={e.badge}
-              icon={e.icon}
-            />
-          </TouchableOpacity>
+            testID={`safe-preview-card-${e.route.replace('/', '')}`}
+          />
         ))}
 
         <View style={styles.footerNote}>

@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_PLAYER_FACING_LEGACY_SURFACES_LOCK_AND_AUDIT",
+  "track": "D",
+  "verdict": "TRACK_D_GACHA_RATE_SANITY_AND_BANNER_GUARD_AUDIT_READY",
+  "observation": "x10 produsse 4 mitici (6\u2605) + 3 leggendari (5\u2605)",
+  "banner_rates_frontend": {
+    "standard": {"5*": 0.06, "6*": 0.02},
+    "elemental": {"5*": 0.10, "6*": 0.04},
+    "premium": {"5*": 0.20, "6*": 0.10},
+    "selective": {"5*": 0.13, "6*": 0.05},
+    "targeted": {"5*": 0.20, "6*": 0.10},
+    "artifact": {"5*": 0.10, "6*": 0.04},
+    "constellation": {"5*": 0.17, "6*": 0.08}
+  },
+  "banner_rates_backend": {
+    "standard": {"5*": 0.06, "6*": 0.02},
+    "premium": {"5*": 0.20, "6*": 0.10}
+  },
+  "rates_match": true,
+  "x10_plausibility": {
+    "banner_assumed": "premium_or_targeted",
+    "p_6star": 0.10,
+    "p_5star": 0.20,
+    "prob_at_least_4_of_6star_in_10": 0.0128,
+    "prob_at_least_3_of_5star_in_10": 0.3222,
+    "joint_probability_estimate": 0.0041,
+    "verdict": "raro ma non impossibile su banner premium; su standard sarebbe estremamente improbabile (\u22480.00001)"
+  },
+  "looks_dev_or_test": true,
+  "public_lock_recommended_until_signoff": true,
+  "forbidden_respected": [
+    "no rate changes",
+    "no pool changes",
+    "no pity changes",
+    "no DB writes"
+  ],
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "recommended_next_pack": "PROJECT_GACHA_RATE_SANITY_FIX_OR_LOCK_PACK"
+}

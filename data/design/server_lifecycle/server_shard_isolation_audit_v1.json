@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-25T17:19:38.708945+00:00",
+  "timestamp_utc": "2026-05-25T17:50:22.821426+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1016,
+  "backend_python_files_scanned": 1024,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 488,
+      "files_with_hits": 490,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -153,7 +153,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 113,
+      "files_with_hits": 114,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -489,7 +489,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 20,
+      "files_with_hits": 21,
       "hits_sample": [
         {
           "file": "backend/routes/economy.py",
