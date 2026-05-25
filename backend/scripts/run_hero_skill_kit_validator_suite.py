@@ -947,6 +947,15 @@ OPTIONAL = [
     ('PROJECT-FRONTEND-B-TRACK-F-NAVIGATION-RISK-MATRIX', 'validate_project_frontend_b_navigation_risk_matrix_v1.py'),
     ('PROJECT-FRONTEND-B-TRACK-G-QA-BACKLOG', 'validate_project_frontend_b_qa_backlog_v1.py'),
     ('PROJECT-FRONTEND-B-TRACK-H-PROJECT-FB-COMPLETION-AND-NEXT-PACK', 'validate_project_frontend_b_completion_and_next_pack_v1.py'),
+    # PROJECT_FRONTEND_C DAILY HUB IMPLEMENTATION PACK (8 tracks; 1 nuova route /daily-hub aggregatore link-only + 1 voce menu Altro; 0 claim button, 0 mutating API, 0 backend route, 0 DB write, 0 flag flip)
+    ('PROJECT-FRONTEND-C-TRACK-A-DAILY-HUB-TARGET-AUDIT', 'validate_project_frontend_c_daily_hub_target_data_source_audit_v1.py'),
+    ('PROJECT-FRONTEND-C-TRACK-B-DAILY-HUB-UI-ROUTE-IMPLEMENTATION', 'validate_project_frontend_c_daily_hub_ui_route_implementation_v1.py'),
+    ('PROJECT-FRONTEND-C-TRACK-C-DAILY-HUB-CARD-AND-COPY', 'validate_project_frontend_c_daily_hub_card_component_and_copy_v1.py'),
+    ('PROJECT-FRONTEND-C-TRACK-D-DAILY-HUB-MENU-WIRING', 'validate_project_frontend_c_daily_hub_menu_entry_safe_wiring_v1.py'),
+    ('PROJECT-FRONTEND-C-TRACK-E-DAILY-HUB-MUTATION-GUARD', 'validate_project_frontend_c_daily_hub_safe_endpoint_mutation_guard_v1.py'),
+    ('PROJECT-FRONTEND-C-TRACK-F-DAILY-HUB-MOBILE-A11Y-POLISH', 'validate_project_frontend_c_daily_hub_mobile_accessibility_polish_v1.py'),
+    ('PROJECT-FRONTEND-C-TRACK-G-DAILY-HUB-FRONTEND-QA-SMOKE', 'validate_project_frontend_c_daily_hub_frontend_qa_smoke_v1.py'),
+    ('PROJECT-FRONTEND-C-TRACK-H-PROJECT-FC-COMPLETION-AND-NEXT-PACK', 'validate_project_frontend_c_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

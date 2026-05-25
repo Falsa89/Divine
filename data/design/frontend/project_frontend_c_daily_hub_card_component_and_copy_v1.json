@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_FRONTEND_C_TRACK_C",
+  "track": "DAILY_HUB_CARD_COMPONENT_AND_COPY_PACK",
+  "verdict": "TRACK_C_DAILY_HUB_CARD_COMPONENT_AND_COPY_READY",
+  "card_component_strategy": "inline_card_in_daily_hub_tsx_no_separate_component",
+  "rationale": "L'aggregatore \u00e8 sufficientemente piccolo (5 entry) da non giustificare un componente separato. SafeFeatureCard \u00e8 stato considerato ma il pattern qui \u00e8 differente (sempre link_ready / mai locked).",
+  "copy_italian": {
+    "banner_title": "La tua giornata in un colpo d'occhio",
+    "banner_subtitle": "Apri le sezioni per consultare e gestire le tue attivit\u00e0 quotidiane. Nessuna ricompensa viene riscattata da qui.",
+    "footer_note": "Questa schermata \u00e8 un aggregatore. Nessun claim avviene qui: per riscattare ricompense usa direttamente la sezione dedicata (Posta, Eventi, Achievement, Battle Pass, Negozio).",
+    "entries": {
+      "mail": "Apri la posta per visualizzare e gestire i messaggi e le ricompense in arrivo.",
+      "events": "Sfide e attivit\u00e0 a tempo. Apri la sezione eventi per vedere lo stato.",
+      "achievements": "Traguardi a lungo termine. Apri la sezione per consultare il progresso.",
+      "battlepass": "Progressione stagionale. Apri il Battle Pass per i tier sbloccati.",
+      "shop": "Bundle e offerte. Le ricompense giornaliere gratuite si trovano nel negozio."
+    }
+  },
+  "no_fake_availability_claim": true,
+  "no_countdown_timer": true,
+  "copy_clear_about_redirect_to_dedicated_section": true,
+  "validator_script": "validate_project_frontend_c_daily_hub_card_component_and_copy_v1.py"
+}

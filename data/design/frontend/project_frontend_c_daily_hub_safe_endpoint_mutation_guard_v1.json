@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_FRONTEND_C_TRACK_E",
+  "track": "DAILY_HUB_SAFE_ENDPOINT_AND_MUTATION_GUARD_PACK",
+  "verdict": "TRACK_E_DAILY_HUB_SAFE_ENDPOINT_AND_MUTATION_GUARD_READY",
+  "endpoint_calls_in_daily_hub": [],
+  "mutating_api_calls": 0,
+  "GET_endpoint_calls": 0,
+  "POST_PUT_DELETE_PATCH_calls": 0,
+  "claim_buttons": 0,
+  "forbidden_endpoints_check": {
+    "/api/mail/claim-all": "not_called",
+    "/api/events/claim": "not_called",
+    "/api/achievements/claim": "not_called",
+    "/api/battlepass/claim": "not_called",
+    "/api/shop/daily/claim": "not_called",
+    "/api/gacha/pull": "not_called",
+    "/api/server-profiles/select": "not_called",
+    "/api/housing/preview": "not_called"
+  },
+  "router_push_only": true,
+  "backend_route_added": false,
+  "validator_script": "validate_project_frontend_c_daily_hub_safe_endpoint_mutation_guard_v1.py"
+}

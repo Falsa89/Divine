@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_FRONTEND_C_TRACK_G",
+  "track": "DAILY_HUB_FRONTEND_QA_SMOKE_PACK",
+  "verdict": "TRACK_G_DAILY_HUB_FRONTEND_QA_SMOKE_READY",
+  "static_smoke": {
+    "route_compile": "PASS",
+    "router_push_targets_exist": true,
+    "router_push_targets": ["/mail", "/events", "/achievements", "/battlepass", "/shop"],
+    "forbidden_labels_scan": "PASS (0 match: Riscatta tutto, Claim all, Reclama)",
+    "mutating_api_calls_scan": "PASS (0 match)",
+    "only_navigation_actions": true
+  },
+  "manual_qa_checklist": [
+    "Apri Menu \u2192 Altro \u2192 Guida Giornaliera",
+    "Verifica hub si apre senza crash",
+    "Tap Posta \u2192 verifica navigazione a /mail",
+    "Back \u2192 hub",
+    "Tap Eventi Giornalieri \u2192 verifica navigazione a /events",
+    "Tap Achievement, Battle Pass, Negozio \u2192 verifica navigazione corretta",
+    "Conferma assenza pulsanti claim/riscatta diretti nell'hub",
+    "Verifica safe area corretta su 390x844 e 360x800"
+  ],
+  "fake_screenshot_verification": false,
+  "validator_script": "validate_project_frontend_c_daily_hub_frontend_qa_smoke_v1.py"
+}

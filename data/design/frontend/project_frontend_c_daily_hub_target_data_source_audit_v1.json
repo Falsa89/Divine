@@ -1,0 +1,19 @@
+{
+  "task_id": "PROJECT_FRONTEND_C_TRACK_A",
+  "track": "DAILY_HUB_TARGET_AND_DATA_SOURCE_AUDIT_PACK",
+  "verdict": "TRACK_A_DAILY_HUB_TARGET_AND_DATA_SOURCE_AUDIT_READY",
+  "audit_only": true,
+  "targets_classified": [
+    {"id": "mail", "existing_route": "/mail", "existing_endpoint": "GET /api/mail", "class": "EXISTING_SCREEN_LINK_ONLY", "include_in_hub": true},
+    {"id": "events", "existing_route": "/events", "existing_endpoint": "GET /api/events", "class": "EXISTING_SCREEN_LINK_ONLY", "include_in_hub": true},
+    {"id": "achievements", "existing_route": "/achievements", "existing_endpoint": "GET /api/achievements", "class": "EXISTING_SCREEN_LINK_ONLY", "include_in_hub": true},
+    {"id": "battlepass", "existing_route": "/battlepass", "existing_endpoint": "GET /api/battlepass", "class": "EXISTING_SCREEN_LINK_ONLY", "include_in_hub": true},
+    {"id": "shop_daily", "existing_route": "/shop", "existing_endpoint": "GET /api/shop", "class": "EXISTING_SCREEN_LINK_ONLY", "include_in_hub": true},
+    {"id": "safe_previews_hub", "existing_route": "/safe-previews", "existing_endpoint": "none", "class": "DO_NOT_SHOW", "include_in_hub": false, "reason": "separato dal daily hub per chiarezza"},
+    {"id": "daily_login_streak", "existing_route": null, "existing_endpoint": "non-presente", "class": "DO_NOT_SHOW", "include_in_hub": false, "reason": "feature non implementata backend"}
+  ],
+  "hub_will_call_claim_endpoint": false,
+  "hub_will_call_mutating_endpoint": false,
+  "hub_only_navigation": true,
+  "validator_script": "validate_project_frontend_c_daily_hub_target_data_source_audit_v1.py"
+}

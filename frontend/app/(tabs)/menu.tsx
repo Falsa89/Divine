@@ -77,6 +77,8 @@ const CATEGORIES = [
       // Punto d'ingresso safe alle anteprime: Codex Status, Anteprima Artefatti, Dimora Divina.
       // Nessuna azione live esposta da queste pagine.
       { label: 'Sistemi in preparazione', icon: '\u2728', route: '/safe-previews', gradient: ['#FF6B35', '#3D5AFE'] as const },
+      // PROJECT_FRONTEND_C Track D — Daily Hub aggregator entry (link-only, nessun claim qui)
+      { label: 'Guida Giornaliera', icon: '\uD83D\uDCCB', route: '/daily-hub', gradient: ['#3D5AFE', '#00BCD4'] as const },
       // RM1.27-C — Armi Divine (read-only, divine weapon catalog browser).
       // 13 Armi Divine 6★ inert (12 launch_base + 1 Borea extra premium).
       // Non collegate a battle/HP bar/VFX runtime, gacha, roster o Borea activation.
