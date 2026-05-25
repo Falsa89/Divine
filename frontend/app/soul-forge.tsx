@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ScrollView,
-  ActivityIndicator, Image, Modal, TextInput,
+  ActivityIndicator, Image, Modal, TextInput, Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -121,8 +121,22 @@ export default function SoulForgeScreen() {
   const isRiskyForge = selected.size >= RISKY_BULK_THRESHOLD || selectedHighRarity.length > 0;
 
   const toggle = useCallback((id: string, stars: number) => {
-    // Guardrail one-tap: alta rarit\u00e0 richiede prima il toggle override
+    // ALIGNMENT_FIX Track B \u2014 feedback discoverability: tap su 4\u2605+ senza
+    // override mostra un alert che spiega come abilitare la selezione.
+    // Mantiene la protezione di default ma rende il flusso scopribile.
     if (stars >= HIGH_RARITY_PROTECT_MIN && !overrideHighRarity) {
+      Alert.alert(
+        '\uD83D\uDD12 Eroe protetto',
+        `Gli eroi ${HIGH_RARITY_PROTECT_MIN}\u2605+ sono protetti per evitare distruzioni accidentali.\n\nSe vuoi davvero sacrificarli, attiva prima l'opzione "Sblocca selezione eroi ${HIGH_RARITY_PROTECT_MIN}\u2605+" nel pannello a destra.`,
+        [
+          { text: 'Annulla', style: 'cancel' },
+          {
+            text: 'Sblocca ora',
+            style: 'destructive',
+            onPress: () => setOverrideHighRarity(true),
+          },
+        ],
+      );
       return;
     }
     setSelected(prev => {
@@ -210,6 +224,17 @@ export default function SoulForgeScreen() {
       <View style={s.body}>
         {/* Left: Hero Grid */}
         <View style={s.gridPanel}>
+          {/* ALIGNMENT_FIX Track B \u2014 banner di stato override (rende ovvio il flusso) */}
+          {overrideHighRarity && (
+            <View style={s.overrideStatusBannerV2}>
+              <Text style={s.overrideStatusIconV2}>{'\uD83D\uDD13'}</Text>
+              <Text style={s.overrideStatusTxtV2}>
+                Override attivo: ora gli eroi {HIGH_RARITY_PROTECT_MIN}{'\u2605'}+ NON team /
+                non bloccati / non preferiti / non nativi-evento sono selezionabili.
+                La conferma richieder{'\u00e0'} digitazione di CONFERMA.
+              </Text>
+            </View>
+          )}
           <View style={s.gridHeader}>
             <Text style={s.gridTitle}>EROI DISPONIBILI ({available.length})</Text>
             <View style={s.gridActions}>
@@ -302,7 +327,7 @@ export default function SoulForgeScreen() {
                 preferiti, nativi/evento/unique ({protectedFlagCount}) sono esclusi.
               </Text>
               <Text style={s.protectInfoTxtV2}>
-                {'\uD83D\uDD12'} Eroi {HIGH_RARITY_PROTECT_MIN}\u2605+ richiedono
+                {'\uD83D\uDD12'} Eroi {HIGH_RARITY_PROTECT_MIN}{'\u2605'}+ richiedono
                 lo sblocco esplicito qui sotto per essere selezionati.
               </Text>
               <TouchableOpacity
@@ -327,7 +352,7 @@ export default function SoulForgeScreen() {
                 activeOpacity={0.7}
               >
                 <Text style={[s.overrideToggleTxtV2, overrideHighRarity && { color: '#FFB347' }]}>
-                  {overrideHighRarity ? '\u2705' : '\u2B1C'} Sblocca selezione eroi 4\u2605+ (rischio alto)
+                  {overrideHighRarity ? '\u2705 Sacrifica anche eroi 4\u2605+ \u2014 ATTIVO' : '\u2B1C Permettimi di sacrificare anche eroi 4\u2605+ (rischio alto)'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -554,6 +579,16 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(255,165,0,0.10)', borderColor: 'rgba(255,165,0,0.55)',
   },
   overrideToggleTxtV2: { color: 'rgba(255,255,255,0.70)', fontSize: 9, fontWeight: '700' },
+  // ALIGNMENT_FIX Track B \u2014 banner di stato override (prominente)
+  overrideStatusBannerV2: {
+    flexDirection: 'row', gap: 8, alignItems: 'center',
+    paddingHorizontal: 10, paddingVertical: 8, marginBottom: 6,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,165,0,0.14)',
+    borderWidth: 1, borderColor: 'rgba(255,165,0,0.55)',
+  },
+  overrideStatusIconV2: { fontSize: 16 },
+  overrideStatusTxtV2: { flex: 1, color: '#FFD089', fontSize: 9, lineHeight: 12, fontWeight: '700' },
   modalBackdropV2: {
     flex: 1, backgroundColor: 'rgba(0,0,0,0.78)',
     alignItems: 'center', justifyContent: 'center', padding: 16,

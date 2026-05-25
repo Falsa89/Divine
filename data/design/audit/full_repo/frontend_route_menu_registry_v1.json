@@ -4,12 +4,12 @@
   "verdict": "TRACK_A_FULL_FRONTEND_ROUTE_AND_MENU_REGISTRY_READY",
   "scan_root": "frontend/app",
   "route_count": 57,
-  "menu_entry_count": 44,
+  "menu_entry_count": 42,
   "counts_by_tag": {
     "DEV_ONLY": 2,
-    "LEGACY_LIVE": 29,
+    "LEGACY_LIVE": 28,
     "LOCKED_PREVIEW": 9,
-    "PLAYER_SAFE": 17
+    "PLAYER_SAFE": 18
   },
   "routes": [
     {
@@ -112,10 +112,9 @@
       "file": "frontend/app/artifacts.tsx",
       "route": "/artifacts",
       "is_layout": false,
-      "tag": "LEGACY_LIVE",
+      "tag": "PLAYER_SAFE",
       "flags": [
-        "HAS_API_CALLS",
-        "LEGACY_LIVE_MUTATION"
+        "NAVIGATES"
       ]
     },
     {
@@ -631,7 +630,7 @@
     {
       "source": "frontend/app/(tabs)/menu.tsx",
       "label": "Artefatti & Costellazioni",
-      "route": "/artifacts"
+      "route": "/artifacts-preview"
     },
     {
       "source": "frontend/app/(tabs)/menu.tsx",
@@ -657,11 +656,6 @@
       "source": "frontend/app/(tabs)/menu.tsx",
       "label": "Collezione Eroi",
       "route": "/hero-collection"
-    },
-    {
-      "source": "frontend/app/(tabs)/menu.tsx",
-      "label": "Combat QA Lab (DEV)",
-      "route": "/dev-combat-qa-lab"
     },
     {
       "source": "frontend/app/(tabs)/menu.tsx",
@@ -772,11 +766,6 @@
       "source": "frontend/app/(tabs)/menu.tsx",
       "label": "Soul Forge",
       "route": "/soul-forge"
-    },
-    {
-      "source": "frontend/app/(tabs)/menu.tsx",
-      "label": "Sprite Test",
-      "route": "/sprite-test"
     },
     {
       "source": "frontend/app/(tabs)/menu.tsx",

@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_BACKEND_FRONTEND_ALIGNMENT_AND_DANGEROUS_SURFACES_FIX",
+  "track": "F",
+  "verdict": "TRACK_F_REGRESSION_GUARD_AND_NO_REOPEN_RULES_READY",
+  "no_reopen_guards": [
+    {"id": "GUARD-SAFE-PREVIEWS-NAV", "file_under_guard": "frontend/app/safe-previews.tsx", "check": "router.push presente, 3 testID e accessibility props", "validator": "validate_safe_previews_navigation_only_fix_v1.py"},
+    {"id": "GUARD-GACHA-HIDE-ARTIFACT-CONSTELLATION", "file_under_guard": "frontend/app/(tabs)/gacha.tsx", "check": "HIDDEN_BANNERS_V2 = {artifact, constellation}", "validator": "validate_batch1_v2_track_b_gacha_lock_v1.py"},
+    {"id": "GUARD-GACHA-LOCK-PREMIUM-TARGETED", "file_under_guard": "frontend/app/(tabs)/gacha.tsx", "check": "LOCKED_BANNERS_V2 = {premium, targeted} + IN REVISIONE", "validator": "validate_batch1_v2_track_b_gacha_lock_v1.py"},
+    {"id": "GUARD-ARTIFACTS-REDIRECT", "file_under_guard": "frontend/app/artifacts.tsx", "check": "router.replace('/artifacts-preview') presente, nessuna chiamata pull/fuse/equip", "validator": "validate_batch1_v2_track_c_artifact_redirect_v1.py"},
+    {"id": "GUARD-SHOP-LOCKED", "file_under_guard": "frontend/app/shop.tsx", "check": "SHOP_LOCKED_V2 + lockBannerV2", "validator": "validate_batch1_v2_track_e_monetization_lock_v1.py"},
+    {"id": "GUARD-ITEM-SHOP-LOCKED", "file_under_guard": "frontend/app/item-shop.tsx", "check": "ITEM_SHOP_LOCKED_V2 + lockBannerV2", "validator": "validate_batch1_v2_track_e_monetization_lock_v1.py"},
+    {"id": "GUARD-BATTLEPASS-LOCKED", "file_under_guard": "frontend/app/battlepass.tsx", "check": "BP_LOCKED_V2 + BP_PREMIUM_BUY_LOCKED_V2", "validator": "validate_batch1_v2_track_e_monetization_lock_v1.py"},
+    {"id": "GUARD-VIP-LOCKED", "file_under_guard": "frontend/app/vip.tsx", "check": "VIP_LOCKED_V2 + lockBannerV2", "validator": "validate_batch1_v2_track_e_monetization_lock_v1.py"},
+    {"id": "GUARD-MENU-DEV-HIDDEN", "file_under_guard": "frontend/app/(tabs)/menu.tsx", "check": "nessun riferimento a Sprite Test / Combat QA Lab nel menu", "validator": "validate_batch1_v2_track_f_menu_hardening_v1.py"},
+    {"id": "GUARD-SOUL-FORGE-4PLUS-RULES", "file_under_guard": "frontend/app/soul-forge.tsx", "check": "HIGH_RARITY_PROTECT_MIN=4, PROTECTED_FLAGS, multi-step modal, typed CONFERMA", "validator": "validate_alignment_fix_track_b_soul_forge_v1.py"},
+    {"id": "GUARD-BACKEND-INVARIANT-MD5", "files_under_guard": ["backend/battle_engine.py", "backend/.env"], "check": "MD5 invariati", "validator": "validate_alignment_fix_track_h_completion_v1.py"}
+  ],
+  "db_writes": 0,
+  "backend_changes": 0
+}

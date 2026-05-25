@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-25T23:12:16.130122+00:00",
+  "timestamp_utc": "2026-05-25T23:44:57.429868+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1041,
+  "backend_python_files_scanned": 1049,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 495,
+      "files_with_hits": 497,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -141,7 +141,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 120,
+      "files_with_hits": 121,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -605,7 +605,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 80,
+      "files_with_hits": 81,
       "hits_sample": [
         {
           "file": "backend/synergy_system.py",

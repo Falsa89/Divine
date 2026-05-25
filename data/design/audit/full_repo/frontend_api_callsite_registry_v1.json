@@ -2,15 +2,13 @@
   "task_id": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT",
   "track": "B",
   "verdict": "TRACK_B_FULL_FRONTEND_API_CALLSITE_AND_MUTATION_REGISTRY_READY",
-  "callsite_count": 122,
-  "mutating_callsite_count": 49,
-  "high_risk_count": 20,
+  "callsite_count": 117,
+  "mutating_callsite_count": 46,
+  "high_risk_count": 17,
   "mutating_by_feature": {
     "achievement": 1,
     "affinity": 1,
-    "artifact": 1,
     "battlepass": 2,
-    "constellation": 2,
     "equipment": 1,
     "event": 1,
     "exclusive": 1,
@@ -106,46 +104,6 @@
       "method": "POST",
       "mutating": true,
       "feature": "achievement",
-      "risk": "high"
-    },
-    {
-      "file": "frontend/app/artifacts.tsx",
-      "endpoint": "/api/artifacts",
-      "method": "GET",
-      "mutating": false,
-      "feature": "artifact",
-      "risk": "low"
-    },
-    {
-      "file": "frontend/app/artifacts.tsx",
-      "endpoint": "/api/artifacts/fuse",
-      "method": "POST",
-      "mutating": true,
-      "feature": "artifact",
-      "risk": "high"
-    },
-    {
-      "file": "frontend/app/artifacts.tsx",
-      "endpoint": "/api/constellations",
-      "method": "GET",
-      "mutating": false,
-      "feature": "constellation",
-      "risk": "low"
-    },
-    {
-      "file": "frontend/app/artifacts.tsx",
-      "endpoint": "/api/constellations/equip",
-      "method": "POST",
-      "mutating": true,
-      "feature": "constellation",
-      "risk": "high"
-    },
-    {
-      "file": "frontend/app/artifacts.tsx",
-      "endpoint": "/api/constellations/fuse",
-      "method": "POST",
-      "mutating": true,
-      "feature": "constellation",
       "risk": "high"
     },
     {

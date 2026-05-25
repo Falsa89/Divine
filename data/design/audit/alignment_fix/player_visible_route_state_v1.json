@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_BACKEND_FRONTEND_ALIGNMENT_AND_DANGEROUS_SURFACES_FIX",
+  "track": "D",
+  "verdict": "TRACK_D_PLAYER_VISIBLE_ROUTE_STATE_ENFORCEMENT_READY",
+  "approved_states": ["SAFE_LIVE", "LOCKED_PREVIEW", "READ_ONLY", "GUARDED_DESTRUCTIVE", "DEV_HIDDEN", "NEEDS_BACKEND", "NEEDS_DESIGN"],
+  "player_visible_routes": [
+    {"route": "/gacha", "state": "SAFE_LIVE", "notes": "safe banners only; risky banners locked"},
+    {"route": "/artifacts", "state": "LOCKED_PREVIEW", "notes": "redirect a /artifacts-preview"},
+    {"route": "/artifacts-preview", "state": "READ_ONLY"},
+    {"route": "/shop", "state": "LOCKED_PREVIEW"},
+    {"route": "/item-shop", "state": "LOCKED_PREVIEW"},
+    {"route": "/economy", "state": "SAFE_LIVE", "notes": "resource conversion UI safe"},
+    {"route": "/battlepass", "state": "LOCKED_PREVIEW"},
+    {"route": "/vip", "state": "LOCKED_PREVIEW"},
+    {"route": "/soul-forge", "state": "GUARDED_DESTRUCTIVE", "notes": "4\u2605+ override + typed CONFERMA"},
+    {"route": "/(tabs)/heroes", "state": "SAFE_LIVE", "notes": "legacy filter pending Batch 6"},
+    {"route": "/(tabs)/menu", "state": "SAFE_LIVE"},
+    {"route": "/daily-hub", "state": "SAFE_LIVE"},
+    {"route": "/safe-previews", "state": "READ_ONLY"},
+    {"route": "/servers", "state": "LOCKED_PREVIEW"},
+    {"route": "/exclusive", "state": "NEEDS_DESIGN", "notes": "role classification needed; non loccato in Batch 1 V2 \u2014 documentato come blocker (Batch 4)"},
+    {"route": "/equipment", "state": "SAFE_LIVE"},
+    {"route": "/forge", "state": "SAFE_LIVE"},
+    {"route": "/runes", "state": "NEEDS_DESIGN", "notes": "non presente nel codebase"},
+    {"route": "/mail", "state": "SAFE_LIVE"},
+    {"route": "/events", "state": "SAFE_LIVE"},
+    {"route": "/achievements", "state": "SAFE_LIVE"},
+    {"route": "/(tabs)/battle", "state": "SAFE_LIVE"},
+    {"route": "/sprite-test", "state": "DEV_HIDDEN"},
+    {"route": "/dev-combat-qa-lab", "state": "DEV_HIDDEN"}
+  ],
+  "blockers_not_safely_fixable_in_this_pack": [
+    {"route": "/exclusive", "reason": "role/classification \u00e8 una decisione di design (gacha-only vs event reward vs IAP-only)", "next_pack": "PROJECT_EXCLUSIVE_ITEMS_ROLE_CLASSIFICATION_PACK (Batch 4)"}
+  ],
+  "new_locks_applied_in_this_track": 0,
+  "db_writes": 0,
+  "backend_changes": 0
+}

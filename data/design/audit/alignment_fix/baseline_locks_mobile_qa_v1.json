@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_BACKEND_FRONTEND_ALIGNMENT_AND_DANGEROUS_SURFACES_FIX",
+  "track": "A",
+  "verdict": "TRACK_A_BASELINE_LOCKS_AND_MOBILE_QA_CONFIRMATION_READY",
+  "supersedes_pack": "PROJECT_SOUL_FORGE_HIGH_RARITY_OVERRIDE_FIX_PACK",
+  "baseline": {
+    "last_completed_packs": [
+      "PROJECT_FULL_REPO_CONSISTENCY_AUDIT_AND_MASTER_FIX_PLAN_READY",
+      "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2_COMPLETE"
+    ],
+    "last_suite_counts": {"pass": 647, "fail": 0, "miss": 0}
+  },
+  "locks_confirmed_by_mobile_qa": [
+    {"area": "gacha", "status": "OK", "note": "artifact/constellation nascosti; premium/targeted IN REVISIONE"},
+    {"area": "artifacts", "status": "OK", "note": "redirect a /artifacts-preview funzionante"},
+    {"area": "shop", "status": "OK", "note": "banner IN REVISIONE; bottoni disabled"},
+    {"area": "item-shop", "status": "OK", "note": "banner + tap disabled"},
+    {"area": "battlepass", "status": "OK", "note": "PREMIUM IN REVISIONE; claim disabled"},
+    {"area": "vip", "status": "OK", "note": "banner lock; claim non visibile"},
+    {"area": "menu_dev_routes", "status": "OK", "note": "Sprite Test e Combat QA Lab non visibili dal menu"}
+  ],
+  "issue_to_fix_now": {
+    "area": "soul_forge",
+    "observation": "Modal e override esistono ma il flusso 4\u2605+ \u00e8 percepito come troppo restrittivo: nessun feedback al tap senza override, override poco scopribile.",
+    "target": "discoverability + feedback chiaro, mantenendo protezione di default"
+  },
+  "db_writes": 0,
+  "backend_changes": 0,
+  "flag_flips": 0
+}

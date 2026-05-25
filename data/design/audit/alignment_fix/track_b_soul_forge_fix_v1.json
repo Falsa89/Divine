@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_BACKEND_FRONTEND_ALIGNMENT_AND_DANGEROUS_SURFACES_FIX",
+  "track": "B",
+  "verdict": "TRACK_B_SOUL_FORGE_HIGH_RARITY_OVERRIDE_FIXED_SAFE",
+  "soul_forge_mode_preserved": true,
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "soul_forge_tsx_md5_pre": "94da10c68a6b22b17a2a91967f6a1380",
+  "soul_forge_tsx_md5_post": "e5fa560cca7c1cff3233d38a49944d0c",
+  "changes": [
+    "alert_on_tap_protected_high_rarity_with_unlock_now_cta",
+    "prominent_status_banner_when_override_active",
+    "clearer_toggle_label\u2014permettimi di sacrificare anche eroi 4\u2605+",
+    "toggle_active_label_now_reads_ATTIVO"
+  ],
+  "behavior_rules_preserved": {
+    "high_rarity_protected_by_default": true,
+    "4_plus_selectable_only_with_override": true,
+    "team_locked_favorite_native_event_unique_always_blocked": true,
+    "select_all_skips_high_rarity": true,
+    "typed_CONFERMA_for_risky": true,
+    "exact_breakdown_in_modal": true
+  },
+  "backend_changes": 0,
+  "db_writes": 0,
+  "reward_formula_changes": 0,
+  "hero_deletion": 0,
+  "user_heroes_mutation": 0,
+  "economy_changes": 0
+}

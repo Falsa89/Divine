@@ -1028,6 +1028,15 @@ OPTIONAL = [
     ('PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING', 'validate_batch1_v2_track_f_menu_hardening_v1.py'),
     ('PROJECT-BATCH1-V2-TRACK-G-MOBILE-QA', 'validate_batch1_v2_track_g_mobile_qa_v1.py'),
     ('PROJECT-BATCH1-V2-TRACK-H-COMPLETION', 'validate_batch1_v2_track_h_completion_v1.py'),
+    # PROJECT_BACKEND_FRONTEND_ALIGNMENT_AND_DANGEROUS_SURFACES_FIX (Soul Forge UX + wiring matrix)
+    ('PROJECT-ALIGN-FIX-TRACK-A-BASELINE', 'validate_alignment_fix_track_a_baseline_v1.py'),
+    ('PROJECT-ALIGN-FIX-TRACK-B-SOUL-FORGE', 'validate_alignment_fix_track_b_soul_forge_v1.py'),
+    ('PROJECT-ALIGN-FIX-TRACK-C-WIRING-MATRIX', 'validate_alignment_fix_track_c_wiring_matrix_v1.py'),
+    ('PROJECT-ALIGN-FIX-TRACK-D-ROUTE-STATE', 'validate_alignment_fix_track_d_route_state_v1.py'),
+    ('PROJECT-ALIGN-FIX-TRACK-E-GAP-REFRESH', 'validate_alignment_fix_track_e_gap_refresh_v1.py'),
+    ('PROJECT-ALIGN-FIX-TRACK-F-REGRESSION-GUARDS', 'validate_alignment_fix_track_f_regression_guards_v1.py'),
+    ('PROJECT-ALIGN-FIX-TRACK-G-BATCH-PLAN', 'validate_alignment_fix_track_g_batch_plan_v1.py'),
+    ('PROJECT-ALIGN-FIX-TRACK-H-COMPLETION', 'validate_alignment_fix_track_h_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

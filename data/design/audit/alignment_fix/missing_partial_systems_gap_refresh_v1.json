@@ -1,0 +1,37 @@
+{
+  "task_id": "PROJECT_BACKEND_FRONTEND_ALIGNMENT_AND_DANGEROUS_SURFACES_FIX",
+  "track": "E",
+  "verdict": "TRACK_E_MISSING_OR_PARTIAL_SYSTEMS_MASTER_GAP_REFRESH_READY",
+  "systems": [
+    {"id": "ANNOUNCEMENTS_NEWS", "state": "MISSING", "product_area": "communication", "priority": "P2", "recommended_pack": "Batch 7"},
+    {"id": "MAINTENANCE_NOTICE", "state": "MISSING", "product_area": "ops", "priority": "P2", "recommended_pack": "Batch 7"},
+    {"id": "PATCH_NOTES", "state": "MISSING", "product_area": "communication", "priority": "P3", "recommended_pack": "Batch 7"},
+    {"id": "EVENT_NOTICES", "state": "PARTIAL", "product_area": "communication", "priority": "P3", "recommended_pack": "Batch 7"},
+    {"id": "GLOBAL_ALERT_BANNER", "state": "MISSING", "product_area": "communication", "priority": "P3", "recommended_pack": "Batch 7"},
+    {"id": "DYNAMIC_LIVE_FEED", "state": "MISSING", "product_area": "social_engagement", "priority": "P2", "recommended_pack": "Batch 7", "sub_features": [
+      "6\u2605 pull announcements",
+      "native 6\u2605 star-up announcements",
+      "player milestone announcements (lvl/cap/stage)",
+      "top 3 arena ranking changes",
+      "kill and kill streak in daily live events",
+      "global ranking changes",
+      "top 3 player online/presence"
+    ]},
+    {"id": "MAIL_INBOX_REWARDS", "state": "PRESENT_LIVE", "priority": "P3", "recommended_pack": "PROJECT_MAIL_AUDIT_PACK"},
+    {"id": "RED_DOT_NOTIFICATIONS", "state": "PARTIAL", "priority": "P3", "recommended_pack": "future pack"},
+    {"id": "PUSH_LOCAL_NOTIFICATIONS", "state": "MISSING", "priority": "P3", "recommended_pack": "future pack"},
+    {"id": "IAP", "state": "MISSING", "priority": "P1", "recommended_pack": "Batch 4"},
+    {"id": "SHOP", "state": "PRESENT_LEGACY_LOCKED", "priority": "P1", "recommended_pack": "Batch 5"},
+    {"id": "BATTLE_PASS", "state": "PRESENT_LEGACY_LOCKED", "priority": "P1", "recommended_pack": "Batch 5"},
+    {"id": "VIP", "state": "PRESENT_FRONTEND_ONLY_LOCKED", "priority": "P2", "recommended_pack": "Batch 5"},
+    {"id": "HERO_LEGACY_VISIBILITY", "state": "PARTIAL", "priority": "P1", "recommended_pack": "Batch 6"},
+    {"id": "ARTIFACT_BIBLE_CANONICAL", "state": "MISSING", "priority": "P0", "recommended_pack": "Batch 3"},
+    {"id": "SERVER_SELECTION_PRE_HOME", "state": "PRESENT_LOCKED_PREVIEW", "priority": "P1", "recommended_pack": "Batch 8"},
+    {"id": "SOUL_FORGE_BACKEND_GUARD_ALIGNMENT", "state": "PARTIAL", "priority": "P1", "recommended_pack": "Batch 6", "notes": "frontend guard adesso completo; il backend dovrebbe validare protected flags lato server"}
+  ],
+  "state_distribution": {
+    "MISSING": 7, "PARTIAL": 4, "PRESENT_LIVE": 1, "PRESENT_LEGACY_LOCKED": 2, "PRESENT_FRONTEND_ONLY_LOCKED": 1, "PRESENT_LOCKED_PREVIEW": 1
+  },
+  "db_writes": 0,
+  "backend_changes": 0
+}
