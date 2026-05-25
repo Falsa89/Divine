@@ -1,0 +1,1008 @@
+{
+  "task_id": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT",
+  "track": "B",
+  "verdict": "TRACK_B_FULL_FRONTEND_API_CALLSITE_AND_MUTATION_REGISTRY_READY",
+  "callsite_count": 122,
+  "mutating_callsite_count": 49,
+  "high_risk_count": 20,
+  "mutating_by_feature": {
+    "achievement": 1,
+    "affinity": 1,
+    "artifact": 1,
+    "battlepass": 2,
+    "constellation": 2,
+    "equipment": 1,
+    "event": 1,
+    "exclusive": 1,
+    "forge": 2,
+    "guild": 3,
+    "hero": 3,
+    "inventory": 1,
+    "mail": 1,
+    "pvp": 1,
+    "raid": 2,
+    "shop": 4,
+    "story": 1,
+    "tower": 1,
+    "unknown": 19,
+    "vip": 1
+  },
+  "callsites": [
+    {
+      "file": "frontend/app/(tabs)/battle.tsx",
+      "endpoint": "/api/constellations",
+      "method": "GET",
+      "mutating": false,
+      "feature": "constellation",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/(tabs)/battle.tsx",
+      "endpoint": "/api/synergies/team",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/(tabs)/battle.tsx",
+      "endpoint": "/api/synergies/team_v2",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/(tabs)/battle.tsx",
+      "endpoint": "/api/team",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/(tabs)/battle.tsx",
+      "endpoint": "/api/team/update-formation",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/(tabs)/battle.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/(tabs)/heroes.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/(tabs)/home.tsx",
+      "endpoint": "/api/sanctuary/home-hero",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/achievements.tsx",
+      "endpoint": "/api/achievements",
+      "method": "GET",
+      "mutating": false,
+      "feature": "achievement",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/achievements.tsx",
+      "endpoint": "/api/achievements/claim",
+      "method": "POST",
+      "mutating": true,
+      "feature": "achievement",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/artifacts.tsx",
+      "endpoint": "/api/artifacts",
+      "method": "GET",
+      "mutating": false,
+      "feature": "artifact",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/artifacts.tsx",
+      "endpoint": "/api/artifacts/fuse",
+      "method": "POST",
+      "mutating": true,
+      "feature": "artifact",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/artifacts.tsx",
+      "endpoint": "/api/constellations",
+      "method": "GET",
+      "mutating": false,
+      "feature": "constellation",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/artifacts.tsx",
+      "endpoint": "/api/constellations/equip",
+      "method": "POST",
+      "mutating": true,
+      "feature": "constellation",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/artifacts.tsx",
+      "endpoint": "/api/constellations/fuse",
+      "method": "POST",
+      "mutating": true,
+      "feature": "constellation",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/battlepass.tsx",
+      "endpoint": "/api/battlepass",
+      "method": "GET",
+      "mutating": false,
+      "feature": "battlepass",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/battlepass.tsx",
+      "endpoint": "/api/battlepass/buy-premium",
+      "method": "POST",
+      "mutating": true,
+      "feature": "battlepass",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/battlepass.tsx",
+      "endpoint": "/api/battlepass/claim/${level}",
+      "method": "POST",
+      "mutating": true,
+      "feature": "battlepass",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/collection-synergies-preview.tsx",
+      "endpoint": "/api/synergies/v2/all",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/combat.tsx",
+      "endpoint": "/api/battle/simulate",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/combat.tsx",
+      "endpoint": "/api/sanctuary/affinity/gain",
+      "method": "POST",
+      "mutating": true,
+      "feature": "affinity",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/cosmetics.tsx",
+      "endpoint": "/api/cosmetics",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/cosmetics.tsx",
+      "endpoint": "/api/cosmetics/buy",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/cosmetics.tsx",
+      "endpoint": "/api/cosmetics/equip",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/divine-weapons-catalog.tsx",
+      "endpoint": "/api/divine-weapons/catalogs/all",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/divine-weapons-catalog.tsx",
+      "endpoint": "/api/divine-weapons/catalogs/requirements",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/divine-weapons-catalog.tsx",
+      "endpoint": "/api/divine-weapons/catalogs/schema",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/divine-weapons-catalog.tsx",
+      "endpoint": "/api/divine-weapons/catalogs/summary",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "endpoint": "/api/shops",
+      "method": "GET",
+      "mutating": false,
+      "feature": "shop",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "endpoint": "/api/shops/buy",
+      "method": "POST",
+      "mutating": true,
+      "feature": "shop",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "endpoint": "/api/soul-forge",
+      "method": "GET",
+      "mutating": false,
+      "feature": "forge",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "endpoint": "/api/soul-forge/retire",
+      "method": "POST",
+      "mutating": true,
+      "feature": "forge",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "endpoint": "/api/wallet",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/equipment.tsx",
+      "endpoint": "/api/equipment/equip",
+      "method": "POST",
+      "mutating": true,
+      "feature": "equipment",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/equipment.tsx",
+      "endpoint": "/api/user/equipment",
+      "method": "GET",
+      "mutating": false,
+      "feature": "equipment",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/equipment.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/events.tsx",
+      "endpoint": "/api/events/battle",
+      "method": "POST",
+      "mutating": true,
+      "feature": "event",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/events.tsx",
+      "endpoint": "/api/events/daily",
+      "method": "GET",
+      "mutating": false,
+      "feature": "event",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/exclusive.tsx",
+      "endpoint": "/api/exclusive-items",
+      "method": "GET",
+      "mutating": false,
+      "feature": "exclusive",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/exclusive.tsx",
+      "endpoint": "/api/exclusive-items/craft",
+      "method": "POST",
+      "mutating": true,
+      "feature": "exclusive",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/friends.tsx",
+      "endpoint": "/api/friends",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/friends.tsx",
+      "endpoint": "/api/friends/accept",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/friends.tsx",
+      "endpoint": "/api/friends/gift/${id}",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/friends.tsx",
+      "endpoint": "/api/friends/remove/${id}",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/friends.tsx",
+      "endpoint": "/api/friends/request",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/guild.tsx",
+      "endpoint": "/api/faction/join",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/guild.tsx",
+      "endpoint": "/api/factions",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/guild.tsx",
+      "endpoint": "/api/guild/create",
+      "method": "POST",
+      "mutating": true,
+      "feature": "guild",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/guild.tsx",
+      "endpoint": "/api/guild/info",
+      "method": "GET",
+      "mutating": false,
+      "feature": "guild",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/guild.tsx",
+      "endpoint": "/api/guild/join/${id}",
+      "method": "POST",
+      "mutating": true,
+      "feature": "guild",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/guild.tsx",
+      "endpoint": "/api/guild/leave",
+      "method": "POST",
+      "mutating": true,
+      "feature": "guild",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/gvg.tsx",
+      "endpoint": "/api/gvg/attack",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/gvg.tsx",
+      "endpoint": "/api/gvg/end-war",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/gvg.tsx",
+      "endpoint": "/api/gvg/matchmake",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/gvg.tsx",
+      "endpoint": "/api/gvg/wars",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-collection.tsx",
+      "endpoint": "/api/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-collection.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-detail.tsx",
+      "endpoint": "/api/fusion/info/${heroId}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-detail.tsx",
+      "endpoint": "/api/fusion/star-up",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/hero-detail.tsx",
+      "endpoint": "/api/hero/equipment/${heroId}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-detail.tsx",
+      "endpoint": "/api/hero/full-detail/${heroId}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-detail.tsx",
+      "endpoint": "/api/hero/gain-exp",
+      "method": "POST",
+      "mutating": true,
+      "feature": "hero",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/hero-detail.tsx",
+      "endpoint": "/api/synergies/by_hero/${canonical}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-encyclopedia.tsx",
+      "endpoint": "/api/hero/encyclopedia/${heroId}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
+      "endpoint": "/api/hero-skill-kits/catalogs/5star",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
+      "endpoint": "/api/hero-skill-kits/catalogs/6star",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
+      "endpoint": "/api/hero-skill-kits/catalogs/by-hero/${encodeURIComponent(id)}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
+      "endpoint": "/api/hero-skill-kits/catalogs/schema",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
+      "endpoint": "/api/hero-skill-kits/catalogs/summary",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/hero-viewer.tsx",
+      "endpoint": "/api/heroes/${heroId}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/inventory.tsx",
+      "endpoint": "/api/inventory",
+      "method": "GET",
+      "mutating": false,
+      "feature": "inventory",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/inventory.tsx",
+      "endpoint": "/api/inventory/use-exp",
+      "method": "POST",
+      "mutating": true,
+      "feature": "inventory",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/inventory.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/item-shop.tsx",
+      "endpoint": "/api/item-shop",
+      "method": "GET",
+      "mutating": false,
+      "feature": "shop",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/item-shop.tsx",
+      "endpoint": "/api/item-shop/buy",
+      "method": "POST",
+      "mutating": true,
+      "feature": "shop",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/mail.tsx",
+      "endpoint": "/api/mail",
+      "method": "GET",
+      "mutating": false,
+      "feature": "mail",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/mail.tsx",
+      "endpoint": "/api/mail/claim/${mailId}",
+      "method": "POST",
+      "mutating": true,
+      "feature": "mail",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/player-faction.tsx",
+      "endpoint": "/api/player-factions/v2/all",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/player-faction.tsx",
+      "endpoint": "/api/user/faction-v2/select",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/player-faction.tsx",
+      "endpoint": "/api/user/faction-v2/status",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/plaza.tsx",
+      "endpoint": "/api/plaza",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/pvp.tsx",
+      "endpoint": "/api/pvp/battle",
+      "method": "POST",
+      "mutating": true,
+      "feature": "pvp",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/pvp.tsx",
+      "endpoint": "/api/pvp/status",
+      "method": "GET",
+      "mutating": false,
+      "feature": "pvp",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/raid.tsx",
+      "endpoint": "/api/raid/attack/${bossId}",
+      "method": "POST",
+      "mutating": true,
+      "feature": "raid",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/raid.tsx",
+      "endpoint": "/api/raid/create",
+      "method": "POST",
+      "mutating": true,
+      "feature": "raid",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/raid.tsx",
+      "endpoint": "/api/raids",
+      "method": "GET",
+      "mutating": false,
+      "feature": "raid",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/sanctuary.tsx",
+      "endpoint": "/api/sanctuary/${heroId}",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/sanctuary.tsx",
+      "endpoint": "/api/sanctuary/complete-tutorial",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/sanctuary.tsx",
+      "endpoint": "/api/sanctuary/home-hero",
+      "method": "POST",
+      "mutating": true,
+      "feature": "hero",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/select-home-hero.tsx",
+      "endpoint": "/api/sanctuary/home-hero",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/select-home-hero.tsx",
+      "endpoint": "/api/sanctuary/home-hero",
+      "method": "POST",
+      "mutating": true,
+      "feature": "hero",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/select-home-hero.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/shop.tsx",
+      "endpoint": "/api/shop",
+      "method": "GET",
+      "mutating": false,
+      "feature": "shop",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/shop.tsx",
+      "endpoint": "/api/shop/buy",
+      "method": "POST",
+      "mutating": true,
+      "feature": "shop",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/shop.tsx",
+      "endpoint": "/api/shop/claim-daily/${itemId}",
+      "method": "POST",
+      "mutating": true,
+      "feature": "shop",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/app/skill-status-vfx-catalogs.tsx",
+      "endpoint": "/api/skill-status-vfx/catalogs/skill-examples",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/skill-status-vfx-catalogs.tsx",
+      "endpoint": "/api/skill-status-vfx/catalogs/skill-progression",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/skill-status-vfx-catalogs.tsx",
+      "endpoint": "/api/skill-status-vfx/catalogs/status-effects",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/skill-status-vfx-catalogs.tsx",
+      "endpoint": "/api/skill-status-vfx/catalogs/status-icons",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/skill-status-vfx-catalogs.tsx",
+      "endpoint": "/api/skill-status-vfx/catalogs/summary",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/skill-status-vfx-catalogs.tsx",
+      "endpoint": "/api/skill-status-vfx/catalogs/vfx",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/soul-forge.tsx",
+      "endpoint": "/api/soul/forge",
+      "method": "POST",
+      "mutating": true,
+      "feature": "forge",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/soul-forge.tsx",
+      "endpoint": "/api/team",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/soul-forge.tsx",
+      "endpoint": "/api/user/heroes",
+      "method": "GET",
+      "mutating": false,
+      "feature": "hero",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/soul-forge.tsx",
+      "endpoint": "/api/user/profile",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/story.tsx",
+      "endpoint": "/api/story/battle",
+      "method": "POST",
+      "mutating": true,
+      "feature": "story",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/story.tsx",
+      "endpoint": "/api/story/chapters",
+      "method": "GET",
+      "mutating": false,
+      "feature": "story",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/synergy-codex.tsx",
+      "endpoint": "/api/synergies/codex",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/synergy-codex.tsx",
+      "endpoint": "/api/synergies/guide",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/synergy-codex.tsx",
+      "endpoint": "/api/synergies/v2/all",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/territory.tsx",
+      "endpoint": "/api/territory/attack",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/territory.tsx",
+      "endpoint": "/api/territory/map",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/tower.tsx",
+      "endpoint": "/api/tower/battle",
+      "method": "POST",
+      "mutating": true,
+      "feature": "tower",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/app/tower.tsx",
+      "endpoint": "/api/tower/status",
+      "method": "GET",
+      "mutating": false,
+      "feature": "tower",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/vip.tsx",
+      "endpoint": "/api/vip",
+      "method": "GET",
+      "mutating": false,
+      "feature": "vip",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/app/vip.tsx",
+      "endpoint": "/api/vip/claim-daily",
+      "method": "POST",
+      "mutating": true,
+      "feature": "vip",
+      "risk": "high"
+    },
+    {
+      "file": "frontend/context/AuthContext.tsx",
+      "endpoint": "/api/login",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/context/AuthContext.tsx",
+      "endpoint": "/api/register",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/context/AuthContext.tsx",
+      "endpoint": "/api/user/profile",
+      "method": "GET",
+      "mutating": false,
+      "feature": "unknown",
+      "risk": "low"
+    },
+    {
+      "file": "frontend/utils/pushNotifications.ts",
+      "endpoint": "/api/push/register",
+      "method": "POST",
+      "mutating": true,
+      "feature": "unknown",
+      "risk": "medium"
+    },
+    {
+      "file": "frontend/utils/serverTimePhase.ts",
+      "endpoint": "/api/server-time",
+      "method": "GET",
+      "mutating": false,
+      "feature": "server",
+      "risk": "low"
+    }
+  ]
+}

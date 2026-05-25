@@ -1,0 +1,76 @@
+{
+  "task_id": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT",
+  "track": "H",
+  "verdict": "TRACK_H_FULL_REPO_AUDIT_COMPLETION_AND_COVERAGE_PROOF_READY",
+  "global_verdict": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT_AND_MASTER_FIX_PLAN_READY",
+  "mode": "audit_only_no_runtime_changes",
+  "scan_coverage": {
+    "frontend_routes_scanned": 57,
+    "frontend_menu_entries_scanned": 44,
+    "frontend_api_callsites_scanned": 122,
+    "frontend_mutating_callsites": 49,
+    "backend_endpoints_scanned": 219,
+    "backend_mutating_endpoints": 100,
+    "backend_inert_503_endpoints": 7,
+    "feature_crosswalk_entries": 49,
+    "feature_gap_matrix_entries": 50,
+    "economy_risks_documented": 8,
+    "gate_findings_documented": 6,
+    "master_backlog_entries": 34
+  },
+  "scan_scope_paths": [
+    "/app/frontend/app",
+    "/app/frontend/components",
+    "/app/frontend/context",
+    "/app/frontend/utils",
+    "/app/frontend/constants",
+    "/app/backend",
+    "/app/backend/routes",
+    "/app/data/design",
+    "/app/docs/divine"
+  ],
+  "unreadable_or_skipped": [],
+  "track_verdicts": {
+    "A": "TRACK_A_FULL_FRONTEND_ROUTE_AND_MENU_REGISTRY_READY",
+    "B": "TRACK_B_FULL_FRONTEND_API_CALLSITE_AND_MUTATION_REGISTRY_READY",
+    "C": "TRACK_C_FULL_BACKEND_ENDPOINT_AND_MUTATION_REGISTRY_READY",
+    "D": "TRACK_D_FEATURE_MODE_CROSSWALK_AND_DUPLICATION_AUDIT_READY",
+    "E": "TRACK_E_ECONOMY_MONETIZATION_GACHA_ROSTER_RISK_AUDIT_READY",
+    "F": "TRACK_F_GATES_LOCKED_PREVIEW_AND_DEV_SURFACE_AUDIT_READY",
+    "G": "TRACK_G_MASTER_FIX_BACKLOG_AND_BATCHING_PLAN_READY",
+    "H": "TRACK_H_FULL_REPO_AUDIT_COMPLETION_AND_COVERAGE_PROOF_READY"
+  },
+  "invariant_files_md5": {
+    "battle_engine_py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "new_live_buttons": 0,
+  "runtime_mutations": 0,
+  "recommended_next_pack": "PROJECT_GACHA_RATE_SANITY_FIX_OR_LOCK_PACK",
+  "recommended_next_batch": "BATCH_1_LOCK_DANGEROUS",
+  "mobile_qa_checklist_for_next_fix": [
+    "verificare lock visibile su /gacha (banner premium/targeted) o banner copy aggiornato",
+    "verificare 5\u2605/6\u2605 displayed rates non modificate finch\u00e9 non firmate",
+    "verificare pulsanti Pull/Pull10 disabilitati o redirect a preview",
+    "verificare nessun cambio su /heroes, /battle, /servers",
+    "verificare nessuna nuova chiamata API mutativa introdotta"
+  ],
+  "remaining_unknowns": [
+    "esatti requisiti finali del Battle Pass nuovo contratto account-wide",
+    "scope finale di GVG/Territory",
+    "scope Runes (parte di artifacts? di equipment? separato?)",
+    "target finale dei rate gacha post-signoff economy"
+  ],
+  "progress_estimate": {
+    "global_project_pre": 56.4,
+    "global_project_post": 57.4,
+    "delta_pp": 1.0,
+    "unit": "percent",
+    "excludes": ["graphics", "audio", "art"],
+    "notes": "+1.0pp grazie a master plan deterministico (riduzione costo di pianificazione futura)"
+  }
+}

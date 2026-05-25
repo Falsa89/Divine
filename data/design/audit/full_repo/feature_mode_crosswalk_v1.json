@@ -1,0 +1,563 @@
+{
+  "task_id": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT",
+  "track": "D",
+  "verdict": "TRACK_D_FEATURE_MODE_CROSSWALK_AND_DUPLICATION_AUDIT_READY",
+  "feature_count": 49,
+  "duplicate_feature_routes": [
+    {
+      "feature": "artifact",
+      "routes": [
+        "/artifacts",
+        "/artifacts-preview"
+      ]
+    },
+    {
+      "feature": "codex",
+      "routes": [
+        "/status-codex",
+        "/synergy-codex"
+      ]
+    },
+    {
+      "feature": "collection",
+      "routes": [
+        "/collection-synergies-preview",
+        "/hero-collection"
+      ]
+    },
+    {
+      "feature": "shop",
+      "routes": [
+        "/item-shop",
+        "/shop"
+      ]
+    }
+  ],
+  "crosswalk": [
+    {
+      "feature": "achievements",
+      "frontend_routes": [
+        "/achievements"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "admin",
+      "frontend_routes": [],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 3,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "affinity",
+      "frontend_routes": [
+        "/affinity-gifts-preview"
+      ],
+      "frontend_callsites_count": 1,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 11,
+      "backend_mutating_endpoints": 3,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "arena",
+      "frontend_routes": [],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 1,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "artifact",
+      "frontend_routes": [
+        "/artifacts",
+        "/artifacts-preview"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 4,
+      "backend_mutating_endpoints": 3,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "auth",
+      "frontend_routes": [],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "battlepass",
+      "frontend_routes": [
+        "/battlepass"
+      ],
+      "frontend_callsites_count": 3,
+      "frontend_mutating_callsites": 2,
+      "backend_endpoints_count": 4,
+      "backend_mutating_endpoints": 3,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "chat",
+      "frontend_routes": [],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "codex",
+      "frontend_routes": [
+        "/status-codex",
+        "/synergy-codex"
+      ],
+      "frontend_callsites_count": 1,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 1,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "collection",
+      "frontend_routes": [
+        "/collection-synergies-preview",
+        "/hero-collection"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "constellation",
+      "frontend_routes": [],
+      "frontend_callsites_count": 4,
+      "frontend_mutating_callsites": 2,
+      "backend_endpoints_count": 7,
+      "backend_mutating_endpoints": 6,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "daily-hub",
+      "frontend_routes": [
+        "/daily-hub"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "dev",
+      "frontend_routes": [
+        "/dev-combat-qa-lab"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "divine-weapons",
+      "frontend_routes": [
+        "/divine-weapons-catalog"
+      ],
+      "frontend_callsites_count": 4,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 6,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "dm",
+      "frontend_routes": [
+        "/dm"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 8,
+      "backend_mutating_endpoints": 4,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "economy",
+      "frontend_routes": [
+        "/economy"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "encyclopedia",
+      "frontend_routes": [
+        "/hero-encyclopedia"
+      ],
+      "frontend_callsites_count": 1,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 1,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "equipment",
+      "frontend_routes": [
+        "/equipment"
+      ],
+      "frontend_callsites_count": 3,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 5,
+      "backend_mutating_endpoints": 2,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "events",
+      "frontend_routes": [
+        "/events"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "exclusive",
+      "frontend_routes": [
+        "/exclusive"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "forge",
+      "frontend_routes": [
+        "/soul-forge"
+      ],
+      "frontend_callsites_count": 3,
+      "frontend_mutating_callsites": 2,
+      "backend_endpoints_count": 6,
+      "backend_mutating_endpoints": 4,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "friends",
+      "frontend_routes": [
+        "/friends"
+      ],
+      "frontend_callsites_count": 5,
+      "frontend_mutating_callsites": 4,
+      "backend_endpoints_count": 5,
+      "backend_mutating_endpoints": 4,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "gacha",
+      "frontend_routes": [
+        "/gacha"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 6,
+      "backend_mutating_endpoints": 4,
+      "backend_inert_503": 1
+    },
+    {
+      "feature": "guild",
+      "frontend_routes": [
+        "/guild"
+      ],
+      "frontend_callsites_count": 4,
+      "frontend_mutating_callsites": 3,
+      "backend_endpoints_count": 6,
+      "backend_mutating_endpoints": 4,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "gvg",
+      "frontend_routes": [
+        "/gvg"
+      ],
+      "frontend_callsites_count": 4,
+      "frontend_mutating_callsites": 3,
+      "backend_endpoints_count": 4,
+      "backend_mutating_endpoints": 3,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "hero-skill-kits",
+      "frontend_routes": [
+        "/hero-skill-kits-catalog"
+      ],
+      "frontend_callsites_count": 5,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 7,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "heroes",
+      "frontend_routes": [
+        "/heroes"
+      ],
+      "frontend_callsites_count": 10,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 6,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 1
+    },
+    {
+      "feature": "housing",
+      "frontend_routes": [
+        "/housing-preview"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 1,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 1
+    },
+    {
+      "feature": "inventory",
+      "frontend_routes": [
+        "/inventory"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "item-shop",
+      "frontend_routes": [
+        "/item-shop"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "login",
+      "frontend_routes": [],
+      "frontend_callsites_count": 1,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 1,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "mail",
+      "frontend_routes": [
+        "/mail"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "pvp",
+      "frontend_routes": [
+        "/pvp"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 3,
+      "backend_mutating_endpoints": 2,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "qa",
+      "frontend_routes": [
+        "/dev-combat-qa-lab"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "raid",
+      "frontend_routes": [
+        "/raid"
+      ],
+      "frontend_callsites_count": 3,
+      "frontend_mutating_callsites": 2,
+      "backend_endpoints_count": 3,
+      "backend_mutating_endpoints": 2,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "safe-previews",
+      "frontend_routes": [
+        "/safe-previews"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "server-profile",
+      "frontend_routes": [],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 2
+    },
+    {
+      "feature": "servers",
+      "frontend_routes": [
+        "/servers"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 1,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "shop",
+      "frontend_routes": [
+        "/item-shop",
+        "/shop"
+      ],
+      "frontend_callsites_count": 7,
+      "frontend_mutating_callsites": 4,
+      "backend_endpoints_count": 8,
+      "backend_mutating_endpoints": 4,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "social",
+      "frontend_routes": [],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "soul-forge",
+      "frontend_routes": [
+        "/soul-forge"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "status-codex",
+      "frontend_routes": [
+        "/status-codex"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "story",
+      "frontend_routes": [
+        "/story"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "summon",
+      "frontend_routes": [],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "territory",
+      "frontend_routes": [
+        "/territory"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 2,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "tower",
+      "frontend_routes": [
+        "/tower"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 3,
+      "backend_mutating_endpoints": 1,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "training",
+      "frontend_routes": [
+        "/hero-training"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "treasury",
+      "frontend_routes": [
+        "/treasury"
+      ],
+      "frontend_callsites_count": 0,
+      "frontend_mutating_callsites": 0,
+      "backend_endpoints_count": 0,
+      "backend_mutating_endpoints": 0,
+      "backend_inert_503": 0
+    },
+    {
+      "feature": "vip",
+      "frontend_routes": [
+        "/vip"
+      ],
+      "frontend_callsites_count": 2,
+      "frontend_mutating_callsites": 1,
+      "backend_endpoints_count": 3,
+      "backend_mutating_endpoints": 2,
+      "backend_inert_503": 0
+    }
+  ]
+}

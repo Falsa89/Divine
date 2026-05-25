@@ -1,0 +1,90 @@
+{
+  "task_id": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT",
+  "track": "F",
+  "verdict": "TRACK_F_GATES_LOCKED_PREVIEW_AND_DEV_SURFACE_AUDIT_READY",
+  "locked_previews": [
+    "/affinity-gifts-preview",
+    "/artifacts-preview",
+    "/collection-synergies-preview",
+    "/divine-weapons-catalog",
+    "/hero-encyclopedia",
+    "/hero-skill-kits-catalog",
+    "/housing-preview",
+    "/safe-previews",
+    "/status-codex"
+  ],
+  "dev_screens": [
+    "/dev-combat-qa-lab",
+    "/sprite-test"
+  ],
+  "legacy_live_routes": [
+    "/achievements",
+    "/artifacts",
+    "/battle",
+    "/battlepass",
+    "/combat",
+    "/cosmetics",
+    "/economy",
+    "/equipment",
+    "/events",
+    "/exclusive",
+    "/friends",
+    "/gacha",
+    "/guild",
+    "/gvg",
+    "/hero-detail",
+    "/inventory",
+    "/item-shop",
+    "/mail",
+    "/player-faction",
+    "/pvp",
+    "/raid",
+    "/sanctuary",
+    "/select-home-hero",
+    "/shop",
+    "/soul-forge",
+    "/story",
+    "/territory",
+    "/tower",
+    "/vip"
+  ],
+  "inert_503_endpoints": [
+    "/api/api/gacha/pull10",
+    "/api/api/user/heroes",
+    "/api/housing/preview",
+    "/api/server-profiles/select",
+    "/path"
+  ],
+  "gate_findings": [
+    {
+      "id": "GATE-SERVER-PROFILES",
+      "status": "CORRECT_LOCKED_PREVIEW",
+      "observation": "/api/server-profiles/select returns 503 inert."
+    },
+    {
+      "id": "GATE-HOUSING",
+      "status": "CORRECT_LOCKED_PREVIEW",
+      "observation": "/housing-preview safe; live bonuses not active."
+    },
+    {
+      "id": "GATE-ARTIFACT-LIVE",
+      "status": "INCORRECTLY_LIVE",
+      "observation": "/artifacts live endpoints exposed without gate."
+    },
+    {
+      "id": "GATE-AF2-N",
+      "status": "CORRECT_GATED",
+      "observation": "AF2-N canary status endpoint controls runtime via feature flag."
+    },
+    {
+      "id": "GATE-STATUS-FIRST-SLICE",
+      "status": "CORRECT_LOCKED_PREVIEW",
+      "observation": "Status first-slice prod rollout blocked pending signatures."
+    },
+    {
+      "id": "DEV-EXPOSURE-MENU",
+      "status": "INCORRECTLY_EXPOSED_IN_MENU",
+      "observation": "/sprite-test, /dev-combat-qa-lab visible from player menu."
+    }
+  ]
+}

@@ -1,0 +1,347 @@
+{
+  "task_id": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT",
+  "track": "G",
+  "verdict": "TRACK_G_MASTER_FIX_BACKLOG_AND_BATCHING_PLAN_READY",
+  "linked_artifacts": [
+    "data/design/audit/full_repo/feature_completeness_gap_matrix_v1.json",
+    "data/design/audit/full_repo/frontend_route_menu_registry_v1.json",
+    "data/design/audit/full_repo/frontend_api_callsite_registry_v1.json",
+    "data/design/audit/full_repo/backend_endpoint_mutation_registry_v1.json",
+    "data/design/audit/full_repo/feature_mode_crosswalk_v1.json",
+    "data/design/audit/full_repo/economy_gacha_roster_risk_audit_v1.json",
+    "data/design/audit/full_repo/gates_locked_preview_dev_surface_audit_v1.json"
+  ],
+  "backlog": [
+    {
+      "priority": "P0",
+      "pack_id": "PROJECT_GACHA_RATE_SANITY_FIX_OR_LOCK_PACK",
+      "goal": "Lock public gacha or guard rates until economy signoff. No rate change in this pack until signoff.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "requires_db_migration": false,
+      "requires_iap_design": false,
+      "requires_mobile_qa": true,
+      "can_be_frontend_only": true,
+      "locks_first": true
+    },
+    {
+      "priority": "P0",
+      "pack_id": "PROJECT_ARTIFACT_CONSTELLATION_SURFACE_LOCK_PACK",
+      "goal": "Lock /artifacts live route + hide artifact/constellation gacha banners until canonical bible signoff.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "requires_db_migration": false,
+      "requires_iap_design": false,
+      "requires_mobile_qa": true,
+      "can_be_frontend_only": true,
+      "locks_first": true
+    },
+    {
+      "priority": "P0",
+      "pack_id": "PROJECT_SOUL_FORGE_PERMANENT_DESTRUCTION_AUDIT_PACK",
+      "goal": "Audit + lock soul forge permanent destruction flow until confirmation/reversibility design ready.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "requires_db_migration": false,
+      "requires_iap_design": false,
+      "requires_mobile_qa": true,
+      "can_be_frontend_only": true,
+      "locks_first": true
+    },
+    {
+      "priority": "P1",
+      "pack_id": "PROJECT_SHOP_IAP_DESIGN_AND_SAFE_SHOP_LOCK_PACK",
+      "goal": "Design IAP architecture and lock unsafe shop premium areas.",
+      "depends_on": ["PROJECT_IAP_DESIGN_PACK"],
+      "requires_user_approval": true,
+      "requires_db_migration": false,
+      "requires_iap_design": true,
+      "requires_mobile_qa": true,
+      "can_be_frontend_only": false,
+      "locks_first": true
+    },
+    {
+      "priority": "P1",
+      "pack_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_PACK",
+      "goal": "Lock buy-premium until IAP, then modernize battle pass UI/contract.",
+      "depends_on": ["PROJECT_IAP_DESIGN_PACK"],
+      "requires_user_approval": true,
+      "requires_db_migration": false,
+      "requires_iap_design": true,
+      "requires_mobile_qa": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P1",
+      "pack_id": "PROJECT_HERO_LIST_LEGACY_OWNED_VISIBILITY_FIX_PACK",
+      "goal": "Filter legacy owned heroes from player visibility; design (no deletion) migration plan.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "requires_db_migration": true,
+      "requires_iap_design": false,
+      "requires_mobile_qa": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P1",
+      "pack_id": "PROJECT_MENU_DEV_ROUTE_HARDENING_PACK",
+      "goal": "Hide /sprite-test, /dev-combat-qa-lab, catalog dev routes from player menu.",
+      "depends_on": [],
+      "requires_user_approval": false,
+      "requires_db_migration": false,
+      "requires_iap_design": false,
+      "requires_mobile_qa": true,
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P1",
+      "pack_id": "PROJECT_SERVER_PROFILES_PREVIEW_ENDPOINT_INERT_IMPLEMENTATION_PACK",
+      "goal": "Implement inert preview endpoint logic; prepare seed dry-run.",
+      "depends_on": [],
+      "requires_user_approval": false,
+      "requires_db_migration": false,
+      "requires_iap_design": false,
+      "requires_mobile_qa": false,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P1",
+      "pack_id": "PROJECT_IAP_DESIGN_PACK",
+      "goal": "Design StoreKit/PlayBilling architecture (no implementation): products, receipt validation, anti-fraud.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "requires_db_migration": true,
+      "requires_iap_design": true,
+      "requires_mobile_qa": false,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_VIP_DESIGN_PACK",
+      "goal": "Design VIP tier progression and IAP linkage; no implementation.",
+      "depends_on": ["PROJECT_IAP_DESIGN_PACK"],
+      "requires_user_approval": true,
+      "requires_iap_design": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_EXCLUSIVE_ITEMS_ROLE_CLASSIFICATION_PACK",
+      "goal": "Classify exclusive items: gacha-only vs event reward vs IAP-only.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_GACHA_HISTORY_AND_DISCLOSURE_PACK",
+      "goal": "Pull history ledger + regulatory disclosure (gacha rates publication).",
+      "depends_on": ["PROJECT_GACHA_RATE_SANITY_FIX_OR_LOCK_PACK"],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_HOUSING_LIVE_BONUS_DESIGN_PACK",
+      "goal": "Design housing live bonus model + build/edit UI; no live activation.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_STATUS_FIRST_SLICE_PROD_ROLLOUT_PACK",
+      "goal": "Complete first-slice status prod rollout (signatures pending).",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_AUTH_OAUTH_AND_RECOVERY_PACK",
+      "goal": "Add OAuth (Apple/Google) + password reset + device binding.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_RAID_FRONTEND_HUB_PACK",
+      "goal": "Build player-facing raid hub UI for existing backend.",
+      "depends_on": [],
+      "requires_user_approval": false,
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_CHAT_MODERATION_PACK",
+      "goal": "Moderation + report flow for chat/DM.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_ANTI_CHEAT_DETECTION_PACK",
+      "goal": "Anomaly detection + per-feature rate limiting.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_EQUIPMENT_SCHEMA_SPLIT_FINALIZE_PACK",
+      "goal": "Finalize SLC_F equipment schema split refactor.",
+      "depends_on": [],
+      "requires_user_approval": false,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_FRONTEND_D_COMBAT_UI_DECOMPOSITION_AUDIT_PACK",
+      "goal": "Decompose /combat 1848 LOC monolith (zero behavior change).",
+      "depends_on": [],
+      "requires_user_approval": false,
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_OPS_MAINTENANCE_NOTICE_FOUNDATION_PACK",
+      "goal": "Maintenance notice + global ops overlay.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P2",
+      "pack_id": "PROJECT_ANNOUNCEMENTS_AND_PATCH_NOTES_FOUNDATION_PACK",
+      "goal": "News/announcements + patch notes foundation.",
+      "depends_on": [],
+      "requires_user_approval": true,
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_RED_DOT_NOTIFICATION_SYSTEM_PACK",
+      "goal": "Unified red-dot context across menu/tabs.",
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_PUSH_NOTIFICATIONS_FOUNDATION_PACK",
+      "goal": "expo-notifications setup + device token registry.",
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_LOCAL_NOTIFICATIONS_PACK",
+      "goal": "Local scheduled reminders (stamina, daily).",
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_WEEKLY_CHECKLIST_PACK",
+      "goal": "Weekly checklist aggregation + claim.",
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_PVP_FAIRNESS_AUDIT_PACK",
+      "goal": "PvP fairness audit signoff.",
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_GLOBAL_ALERT_BANNER_FOUNDATION_PACK",
+      "goal": "Global banner state + persistence.",
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_I18N_FOUNDATION_PACK",
+      "goal": "i18n catalog (extract Italian strings + EN baseline).",
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_PITY_VISIBILITY_PACK",
+      "goal": "Player-visible pity counter UI.",
+      "can_be_frontend_only": true
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_GVG_SCOPE_FINALIZE_PACK",
+      "goal": "GVG scope finalize (deferred-by-design).",
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_EVENTS_NOTIFICATION_INTEGRATION_PACK",
+      "goal": "Push/banner integration to events.",
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_MAIL_AUDIT_PACK",
+      "goal": "Audit reward attachments + anti-duplication.",
+      "can_be_frontend_only": false
+    },
+    {
+      "priority": "P3",
+      "pack_id": "PROJECT_SERVER_PROFILES_SEED_DRY_RUN_AND_ROLLBACK_PACK",
+      "goal": "Seed dry-run + rollback runbook for server profiles.",
+      "can_be_frontend_only": false
+    }
+  ],
+  "recommended_pack_sequence": [
+    "PROJECT_GACHA_RATE_SANITY_FIX_OR_LOCK_PACK",
+    "PROJECT_ARTIFACT_CONSTELLATION_SURFACE_LOCK_PACK",
+    "PROJECT_SOUL_FORGE_PERMANENT_DESTRUCTION_AUDIT_PACK",
+    "PROJECT_MENU_DEV_ROUTE_HARDENING_PACK",
+    "PROJECT_HERO_LIST_LEGACY_OWNED_VISIBILITY_FIX_PACK",
+    "PROJECT_IAP_DESIGN_PACK",
+    "PROJECT_SHOP_IAP_DESIGN_AND_SAFE_SHOP_LOCK_PACK",
+    "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_PACK",
+    "PROJECT_VIP_DESIGN_PACK",
+    "PROJECT_EXCLUSIVE_ITEMS_ROLE_CLASSIFICATION_PACK",
+    "PROJECT_SERVER_PROFILES_PREVIEW_ENDPOINT_INERT_IMPLEMENTATION_PACK",
+    "PROJECT_FRONTEND_D_COMBAT_UI_DECOMPOSITION_AUDIT_PACK"
+  ],
+  "batching_proposal": {
+    "BATCH_1_LOCK_DANGEROUS": [
+      "PROJECT_GACHA_RATE_SANITY_FIX_OR_LOCK_PACK",
+      "PROJECT_ARTIFACT_CONSTELLATION_SURFACE_LOCK_PACK",
+      "PROJECT_SOUL_FORGE_PERMANENT_DESTRUCTION_AUDIT_PACK",
+      "PROJECT_MENU_DEV_ROUTE_HARDENING_PACK"
+    ],
+    "BATCH_2_MONETIZATION_DESIGN": [
+      "PROJECT_IAP_DESIGN_PACK",
+      "PROJECT_SHOP_IAP_DESIGN_AND_SAFE_SHOP_LOCK_PACK",
+      "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_PACK",
+      "PROJECT_VIP_DESIGN_PACK"
+    ],
+    "BATCH_3_DATA_CLEANUP": [
+      "PROJECT_HERO_LIST_LEGACY_OWNED_VISIBILITY_FIX_PACK",
+      "PROJECT_EXCLUSIVE_ITEMS_ROLE_CLASSIFICATION_PACK"
+    ],
+    "BATCH_4_PREVIEW_ROLLOUT": [
+      "PROJECT_SERVER_PROFILES_PREVIEW_ENDPOINT_INERT_IMPLEMENTATION_PACK",
+      "PROJECT_STATUS_FIRST_SLICE_PROD_ROLLOUT_PACK",
+      "PROJECT_HOUSING_LIVE_BONUS_DESIGN_PACK"
+    ],
+    "BATCH_5_REFACTOR": [
+      "PROJECT_FRONTEND_D_COMBAT_UI_DECOMPOSITION_AUDIT_PACK",
+      "PROJECT_EQUIPMENT_SCHEMA_SPLIT_FINALIZE_PACK"
+    ]
+  },
+  "priority_counts": {
+    "P0": 3,
+    "P1": 6,
+    "P2": 13,
+    "P3": 13
+  },
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0
+}

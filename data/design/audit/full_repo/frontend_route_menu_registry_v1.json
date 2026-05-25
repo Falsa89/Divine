@@ -1,0 +1,802 @@
+{
+  "task_id": "PROJECT_FULL_REPO_CONSISTENCY_AUDIT",
+  "track": "A",
+  "verdict": "TRACK_A_FULL_FRONTEND_ROUTE_AND_MENU_REGISTRY_READY",
+  "scan_root": "frontend/app",
+  "route_count": 57,
+  "menu_entry_count": 44,
+  "counts_by_tag": {
+    "DEV_ONLY": 2,
+    "LEGACY_LIVE": 29,
+    "LOCKED_PREVIEW": 9,
+    "PLAYER_SAFE": 17
+  },
+  "routes": [
+    {
+      "file": "frontend/app/(tabs)/_layout.tsx",
+      "route": "/_layout",
+      "is_layout": true,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "UNCLASSIFIED"
+      ]
+    },
+    {
+      "file": "frontend/app/(tabs)/battle.tsx",
+      "route": "/battle",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/(tabs)/gacha.tsx",
+      "route": "/gacha",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/(tabs)/heroes.tsx",
+      "route": "/heroes",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/(tabs)/home.tsx",
+      "route": "/home",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/(tabs)/menu.tsx",
+      "route": "/menu",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/_layout.tsx",
+      "route": "/_layout",
+      "is_layout": true,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "UNCLASSIFIED"
+      ]
+    },
+    {
+      "file": "frontend/app/achievements.tsx",
+      "route": "/achievements",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/affinity-gifts-preview.tsx",
+      "route": "/affinity-gifts-preview",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "HAS_API_CALLS",
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/artifacts-preview.tsx",
+      "route": "/artifacts-preview",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/artifacts.tsx",
+      "route": "/artifacts",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/battlepass.tsx",
+      "route": "/battlepass",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/collection-synergies-preview.tsx",
+      "route": "/collection-synergies-preview",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "HAS_API_CALLS",
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/combat.tsx",
+      "route": "/combat",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/cosmetics.tsx",
+      "route": "/cosmetics",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/daily-hub.tsx",
+      "route": "/daily-hub",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/dev-combat-qa-lab.tsx",
+      "route": "/dev-combat-qa-lab",
+      "is_layout": false,
+      "tag": "DEV_ONLY",
+      "flags": [
+        "DEV_ONLY"
+      ]
+    },
+    {
+      "file": "frontend/app/divine-weapons-catalog.tsx",
+      "route": "/divine-weapons-catalog",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "HAS_API_CALLS",
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/dm.tsx",
+      "route": "/dm",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "route": "/economy",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/equipment.tsx",
+      "route": "/equipment",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/events.tsx",
+      "route": "/events",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/exclusive.tsx",
+      "route": "/exclusive",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/friends.tsx",
+      "route": "/friends",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/guild.tsx",
+      "route": "/guild",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/gvg.tsx",
+      "route": "/gvg",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/hero-collection.tsx",
+      "route": "/hero-collection",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/hero-detail.tsx",
+      "route": "/hero-detail",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/hero-encyclopedia.tsx",
+      "route": "/hero-encyclopedia",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "HAS_API_CALLS",
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
+      "route": "/hero-skill-kits-catalog",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "HAS_API_CALLS",
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/hero-training.tsx",
+      "route": "/hero-training",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "UNCLASSIFIED"
+      ]
+    },
+    {
+      "file": "frontend/app/hero-viewer.tsx",
+      "route": "/hero-viewer",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS"
+      ]
+    },
+    {
+      "file": "frontend/app/housing-preview.tsx",
+      "route": "/housing-preview",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "HAS_API_CALLS",
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/index.tsx",
+      "route": "/",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/inventory.tsx",
+      "route": "/inventory",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/item-shop.tsx",
+      "route": "/item-shop",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/mail.tsx",
+      "route": "/mail",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/player-faction.tsx",
+      "route": "/player-faction",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/plaza.tsx",
+      "route": "/plaza",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/pvp.tsx",
+      "route": "/pvp",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/raid.tsx",
+      "route": "/raid",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/rankings.tsx",
+      "route": "/rankings",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS"
+      ]
+    },
+    {
+      "file": "frontend/app/safe-previews.tsx",
+      "route": "/safe-previews",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "LOCKED_PREVIEW",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/sanctuary.tsx",
+      "route": "/sanctuary",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION",
+        "NAVIGATES"
+      ]
+    },
+    {
+      "file": "frontend/app/select-home-hero.tsx",
+      "route": "/select-home-hero",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/servers.tsx",
+      "route": "/servers",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS"
+      ]
+    },
+    {
+      "file": "frontend/app/shop.tsx",
+      "route": "/shop",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/skill-status-vfx-catalogs.tsx",
+      "route": "/skill-status-vfx-catalogs",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS"
+      ]
+    },
+    {
+      "file": "frontend/app/soul-forge.tsx",
+      "route": "/soul-forge",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/sprite-test.tsx",
+      "route": "/sprite-test",
+      "is_layout": false,
+      "tag": "DEV_ONLY",
+      "flags": [
+        "DEV_ONLY"
+      ]
+    },
+    {
+      "file": "frontend/app/status-codex.tsx",
+      "route": "/status-codex",
+      "is_layout": false,
+      "tag": "LOCKED_PREVIEW",
+      "flags": [
+        "LOCKED_PREVIEW"
+      ]
+    },
+    {
+      "file": "frontend/app/story.tsx",
+      "route": "/story",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/synergy-codex.tsx",
+      "route": "/synergy-codex",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "HAS_API_CALLS"
+      ]
+    },
+    {
+      "file": "frontend/app/territory.tsx",
+      "route": "/territory",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/tower.tsx",
+      "route": "/tower",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    },
+    {
+      "file": "frontend/app/treasury.tsx",
+      "route": "/treasury",
+      "is_layout": false,
+      "tag": "PLAYER_SAFE",
+      "flags": [
+        "UNCLASSIFIED"
+      ]
+    },
+    {
+      "file": "frontend/app/vip.tsx",
+      "route": "/vip",
+      "is_layout": false,
+      "tag": "LEGACY_LIVE",
+      "flags": [
+        "HAS_API_CALLS",
+        "LEGACY_LIVE_MUTATION"
+      ]
+    }
+  ],
+  "menu_entries": [
+    {
+      "source": "frontend/app/(tabs)/_layout.tsx",
+      "label": "battle",
+      "route": "/battle",
+      "kind": "tab"
+    },
+    {
+      "source": "frontend/app/(tabs)/_layout.tsx",
+      "label": "gacha",
+      "route": "/gacha",
+      "kind": "tab"
+    },
+    {
+      "source": "frontend/app/(tabs)/_layout.tsx",
+      "label": "heroes",
+      "route": "/heroes",
+      "kind": "tab"
+    },
+    {
+      "source": "frontend/app/(tabs)/_layout.tsx",
+      "label": "home",
+      "route": "/home",
+      "kind": "tab"
+    },
+    {
+      "source": "frontend/app/(tabs)/_layout.tsx",
+      "label": "menu",
+      "route": "/menu",
+      "kind": "tab"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Achievement",
+      "route": "/achievements"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Addestramento Eroico",
+      "route": "/hero-training"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Amici",
+      "route": "/friends"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Arena PvP",
+      "route": "/pvp"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Armi Divine",
+      "route": "/divine-weapons-catalog"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Artefatti & Costellazioni",
+      "route": "/artifacts"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Aure & Cosmetici",
+      "route": "/cosmetics"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Battle Pass",
+      "route": "/battlepass"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Catalogo Skill & Status",
+      "route": "/skill-status-vfx-catalogs"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Classifiche",
+      "route": "/rankings"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Collezione Eroi",
+      "route": "/hero-collection"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Combat QA Lab (DEV)",
+      "route": "/dev-combat-qa-lab"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Conquista Territori",
+      "route": "/territory"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Economia & Negozi",
+      "route": "/economy"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Eventi Giornalieri",
+      "route": "/events"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Fazione del Giocatore",
+      "route": "/player-faction"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Fucina di Efesto",
+      "route": "/equipment"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Gilda & Fazioni",
+      "route": "/guild"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Guerra tra Gilde",
+      "route": "/gvg"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Guida Giornaliera",
+      "route": "/daily-hub"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Inventario",
+      "route": "/inventory"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Kit Skill Eroi",
+      "route": "/hero-skill-kits-catalog"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Messaggi",
+      "route": "/dm"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Negozio",
+      "route": "/shop"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Negozio Oggetti",
+      "route": "/item-shop"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Oggetti Esclusivi",
+      "route": "/exclusive"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Piazza Comunitaria",
+      "route": "/plaza"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Posta",
+      "route": "/mail"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Raid Cooperativi",
+      "route": "/raid"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Santuario",
+      "route": "/sanctuary"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Seleziona Server",
+      "route": "/servers"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Sinergie Collezione",
+      "route": "/collection-synergies-preview"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Sistemi in preparazione",
+      "route": "/safe-previews"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Soul Forge",
+      "route": "/soul-forge"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Sprite Test",
+      "route": "/sprite-test"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Storia",
+      "route": "/story"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Tesoreria",
+      "route": "/treasury"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "Torre",
+      "route": "/tower"
+    },
+    {
+      "source": "frontend/app/(tabs)/menu.tsx",
+      "label": "VIP",
+      "route": "/vip"
+    }
+  ]
+}

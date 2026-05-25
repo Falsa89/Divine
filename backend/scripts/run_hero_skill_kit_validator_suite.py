@@ -1010,6 +1010,15 @@ OPTIONAL = [
     ('PROJECT-PLAYER-LEGACY-TRACK-F-BATTLEPASS-LEGACY-AUDIT', 'validate_battle_pass_legacy_surface_audit_v1.py'),
     ('PROJECT-PLAYER-LEGACY-TRACK-G-HEROES-MENU-DEV-ROUTES-AUDIT', 'validate_owned_heroes_and_menu_dev_routes_audit_v1.py'),
     ('PROJECT-PLAYER-LEGACY-TRACK-H-COMPLETION', 'validate_player_facing_legacy_surfaces_completion_v1.py'),
+    # PROJECT_FULL_REPO_CONSISTENCY_AUDIT_AND_MASTER_FIX_PLAN_PACK (audit-only, scanner-generated registries)
+    ('PROJECT-FULL-REPO-TRACK-A-FRONTEND-ROUTE-MENU-REGISTRY', 'validate_full_repo_frontend_route_menu_registry_v1.py'),
+    ('PROJECT-FULL-REPO-TRACK-B-FRONTEND-API-CALLSITE-REGISTRY', 'validate_full_repo_frontend_api_callsite_registry_v1.py'),
+    ('PROJECT-FULL-REPO-TRACK-C-BACKEND-ENDPOINT-REGISTRY', 'validate_full_repo_backend_endpoint_registry_v1.py'),
+    ('PROJECT-FULL-REPO-TRACK-D-FEATURE-CROSSWALK', 'validate_full_repo_feature_mode_crosswalk_v1.py'),
+    ('PROJECT-FULL-REPO-TRACK-E-ECONOMY-RISK-AUDIT', 'validate_full_repo_economy_risk_audit_v1.py'),
+    ('PROJECT-FULL-REPO-TRACK-F-GATES-DEV-SURFACE-AUDIT', 'validate_full_repo_gates_dev_surface_audit_v1.py'),
+    ('PROJECT-FULL-REPO-TRACK-G-MASTER-BACKLOG-AND-GAP-MATRIX', 'validate_full_repo_master_backlog_and_gap_matrix_v1.py'),
+    ('PROJECT-FULL-REPO-TRACK-H-COMPLETION-COVERAGE-PROOF', 'validate_full_repo_completion_and_coverage_proof_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
