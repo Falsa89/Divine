@@ -938,6 +938,15 @@ OPTIONAL = [
     ('PROJECT-Z-TRACK-F-ACCESSIBILITY-AND-LOCKED-ACTION-GUARD', 'validate_project_z_accessibility_locked_action_guard_v1.py'),
     ('PROJECT-Z-TRACK-G-EXPO-GO-MOBILE-QA-SMOKE', 'validate_project_z_expo_go_mobile_qa_smoke_v1.py'),
     ('PROJECT-Z-TRACK-H-PROJECT-Z-COMPLETION-AND-NEXT-PACK', 'validate_project_z_completion_and_next_pack_v1.py'),
+    # PROJECT_FRONTEND_B CORE USER FLOW AUDIT PACK (8 tracks; audit-only / roadmap-only; no UI/route/menu/backend/DB/flag mutation; mappa flussi core e produce QA backlog 12-item P1-P3)
+    ('PROJECT-FRONTEND-B-TRACK-A-HEROES-FLOW-AUDIT', 'validate_project_frontend_b_heroes_flow_audit_v1.py'),
+    ('PROJECT-FRONTEND-B-TRACK-B-COMBAT-FLOW-AUDIT', 'validate_project_frontend_b_combat_flow_audit_v1.py'),
+    ('PROJECT-FRONTEND-B-TRACK-C-GACHA-FLOW-AUDIT', 'validate_project_frontend_b_gacha_flow_audit_v1.py'),
+    ('PROJECT-FRONTEND-B-TRACK-D-ECONOMY-FLOW-AUDIT', 'validate_project_frontend_b_economy_flow_audit_v1.py'),
+    ('PROJECT-FRONTEND-B-TRACK-E-SAFE-PREVIEW-FLOW-AUDIT', 'validate_project_frontend_b_safe_preview_flow_audit_v1.py'),
+    ('PROJECT-FRONTEND-B-TRACK-F-NAVIGATION-RISK-MATRIX', 'validate_project_frontend_b_navigation_risk_matrix_v1.py'),
+    ('PROJECT-FRONTEND-B-TRACK-G-QA-BACKLOG', 'validate_project_frontend_b_qa_backlog_v1.py'),
+    ('PROJECT-FRONTEND-B-TRACK-H-PROJECT-FB-COMPLETION-AND-NEXT-PACK', 'validate_project_frontend_b_completion_and_next_pack_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_FRONTEND_B_TRACK_E",
+  "track": "SAFE_PREVIEW_AND_LOCKED_FEATURE_FLOW_AUDIT_PACK",
+  "verdict": "TRACK_E_SAFE_PREVIEW_AND_LOCKED_FEATURE_FLOW_AUDIT_READY",
+  "audit_only": true,
+  "routes_audited": [
+    "/safe-previews (hub Pack Z)",
+    "/artifacts-preview (Pack Y)",
+    "/housing-preview (Pack Y, 503 graceful)",
+    "/status-codex (Pack Y)"
+  ],
+  "flow_steps": [
+    {"step": 1, "label": "Menu \u2192 Altro \u2192 Sistemi in preparazione", "endpoint": "client-side", "status": "live"},
+    {"step": 2, "label": "Hub \u2192 3 entry navigabili (status codex, artifact preview, housing preview)", "endpoint": "router.push", "status": "live"},
+    {"step": 3, "label": "Sub-screen: read-only display, locked card, copy IT in attesa firme", "endpoint": "GET /api/housing/preview (handled 503) o nessun call", "status": "live"},
+    {"step": 4, "label": "Back \u2192 hub \u2192 menu", "endpoint": "router.back", "status": "live"}
+  ],
+  "verified_clean": {
+    "no_live_action_in_preview_screens": true,
+    "no_mutating_api_calls": true,
+    "copy_italian_in_lock_states": true,
+    "safefeaturecard_used_consistently": true,
+    "503_handled_gracefully": true,
+    "accessibility_disabled_state_announced": true
+  },
+  "gaps_identified": [
+    {"gap": "Hub /safe-previews potrebbe avere badge dinamico che indica quante firme mancano (oggi statico)", "severity": "low_polish"},
+    {"gap": "Mancanza di link dall'hub al final report di readiness (dev-only futuro)", "severity": "low_dev_only"}
+  ],
+  "validator_script": "validate_project_frontend_b_safe_preview_flow_audit_v1.py"
+}

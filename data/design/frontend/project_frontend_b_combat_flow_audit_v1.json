@@ -1,0 +1,32 @@
+{
+  "task_id": "PROJECT_FRONTEND_B_TRACK_B",
+  "track": "COMBAT_AND_POST_BATTLE_FLOW_AUDIT_PACK",
+  "verdict": "TRACK_B_COMBAT_AND_POST_BATTLE_FLOW_AUDIT_READY",
+  "audit_only": true,
+  "routes_audited": [
+    "/(tabs)/battle (764 LOC)",
+    "/combat (1848 LOC)",
+    "/story",
+    "/tower",
+    "/pvp",
+    "/raid",
+    "/gvg"
+  ],
+  "flow_steps": [
+    {"step": 1, "label": "Tab Battaglia \u2192 hub modi (story/tower/pvp/raid/gvg)", "endpoint": "client-side", "status": "live"},
+    {"step": 2, "label": "Selezione modalit\u00e0 \u2192 lista capitoli/floor/avversari", "endpoint": "GET /api/story/chapters, /api/tower/status, /api/pvp/status", "status": "live"},
+    {"step": 3, "label": "Selezione formazione (3 eroi attivi + supporti)", "endpoint": "GET /api/user/heroes + POST /api/team/update-formation", "status": "live"},
+    {"step": 4, "label": "Lancio battaglia \u2192 combat screen", "endpoint": "POST /api/battle/simulate (o specifico per modalit\u00e0)", "status": "live"},
+    {"step": 5, "label": "Round loop: turn order, HP bars, skill cast, status", "endpoint": "client-side runtime", "status": "live"},
+    {"step": 6, "label": "Post-battle: victory/defeat, rewards, drop tabella", "endpoint": "response payload battle", "status": "live"},
+    {"step": 7, "label": "Continue/Retry/Back", "endpoint": "client-side", "status": "live"}
+  ],
+  "gaps_identified": [
+    {"gap": "combat.tsx molto grande (1848 LOC) \u2014 candidato fortemente a refactor in moduli (HP bar, skill cast, status overlay, post-battle modal)", "severity": "high_refactor"},
+    {"gap": "Post-battle rewards screen non uniforme tra story/tower/pvp/raid", "severity": "medium"},
+    {"gap": "Mancanza di indicatore \u201cstatus second-slice non attivo\u201d in modalit\u00e0 PvP per chiarire perch\u00e9 i debuff non si vedono", "severity": "low_until_prod_rollout"},
+    {"gap": "Loading skeleton tra battle hub e combat assente", "severity": "medium"}
+  ],
+  "do_not_touch": ["battle_engine.py md5 151ca35a...", "battle_core.py", "combat.tsx logic core"],
+  "validator_script": "validate_project_frontend_b_combat_flow_audit_v1.py"
+}

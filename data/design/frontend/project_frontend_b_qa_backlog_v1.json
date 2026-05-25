@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_FRONTEND_B_TRACK_G",
+  "track": "CORE_USER_FLOW_QA_BACKLOG_AND_PRIORITIZATION_PACK",
+  "verdict": "TRACK_G_CORE_USER_FLOW_QA_BACKLOG_AND_PRIORITIZATION_READY",
+  "audit_only": true,
+  "qa_backlog": [
+    {"id": "FB-01", "area": "economy_daily_hub", "description": "Daily checklist unificata (mail + events + achievement + battlepass claim)", "priority": "P1", "deferred_to": "PROJECT_FRONTEND_C_DAILY_HUB_IMPLEMENTATION_PACK"},
+    {"id": "FB-02", "area": "combat", "description": "Refactor combat.tsx in moduli (HPBar, SkillCast, StatusOverlay, PostBattleModal)", "priority": "P1", "deferred_to": "PROJECT_FRONTEND_C_COMBAT_REFACTOR_PACK", "do_not_change_battle_logic": true},
+    {"id": "FB-03", "area": "heroes", "description": "Empty/loading skeleton uniformi su hero-collection e tab heroes", "priority": "P2"},
+    {"id": "FB-04", "area": "heroes", "description": "Breadcrumb hero-detail \u2192 training/evolution/encyclopedia", "priority": "P2"},
+    {"id": "FB-05", "area": "post_battle", "description": "Uniformare schermata reward post-battle tra story/tower/pvp/raid", "priority": "P2"},
+    {"id": "FB-06", "area": "gacha", "description": "History pull permanente accessibile", "priority": "P2"},
+    {"id": "FB-07", "area": "safe_preview", "description": "Badge dinamico firme mancanti nell'hub /safe-previews", "priority": "P3"},
+    {"id": "FB-08", "area": "economy", "description": "Chiarire relazione shop/economy/item-shop con landing visuale", "priority": "P2"},
+    {"id": "FB-09", "area": "battlepass", "description": "Preview tier rewards orizzontale scorrevole", "priority": "P2"},
+    {"id": "FB-10", "area": "dev_gating", "description": "Implementare gate dev runtime per nascondere sprite-test/dev-combat-qa-lab in prod", "priority": "P2", "deferred_to": "PROJECT_DEV_GATE_RUNTIME_PACK"},
+    {"id": "FB-11", "area": "mobile_qa", "description": "Chiudere mobile screenshot reale (Pack Z2)", "priority": "P2"},
+    {"id": "FB-12", "area": "approval_matrix", "description": "Formalizzare policy approval matrix", "priority": "P2", "deferred_to": "PROJECT_APPROVAL_MATRIX_AND_LIVE_GATE_POLICY_PACK"}
+  ],
+  "priority_summary": {
+    "P1": 2,
+    "P2": 8,
+    "P3": 2
+  },
+  "validator_script": "validate_project_frontend_b_qa_backlog_v1.py"
+}

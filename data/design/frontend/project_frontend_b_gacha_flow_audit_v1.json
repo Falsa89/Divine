@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_FRONTEND_B_TRACK_C",
+  "track": "SUMMON_AND_GACHA_FLOW_AUDIT_PACK",
+  "verdict": "TRACK_C_SUMMON_AND_GACHA_FLOW_AUDIT_READY",
+  "audit_only": true,
+  "routes_audited": ["/(tabs)/gacha (457 LOC)"],
+  "flow_steps": [
+    {"step": 1, "label": "Tab Evoca \u2192 lista banner attivi", "endpoint": "GET /api/gacha/banners", "status": "live"},
+    {"step": 2, "label": "Selezione banner \u2192 pity counter, raret\u00e0 disponibili", "endpoint": "GET /api/gacha/banners + client-side", "status": "live"},
+    {"step": 3, "label": "Pull singolo / Pull 10x", "endpoint": "POST /api/gacha/pull, /api/gacha/pull10", "status": "live"},
+    {"step": 4, "label": "Animazione evocazione", "endpoint": "client-side", "status": "live"},
+    {"step": 5, "label": "Reveal raret\u00e0 + nuovo eroe", "endpoint": "response payload", "status": "live"},
+    {"step": 6, "label": "Goto hero-detail nuovo eroe", "endpoint": "router.push", "status": "live"}
+  ],
+  "gaps_identified": [
+    {"gap": "Mancanza di history pull permanente accessibile dopo chiusura sessione", "severity": "medium"},
+    {"gap": "Pity counter visibile ma senza spiegazione testuale (cosa accade al cap)", "severity": "low"},
+    {"gap": "Skip animazione evocazione: presente ma layout pu\u00f2 essere migliorato", "severity": "low"},
+    {"gap": "Banner duplicate preview tra mock e live", "severity": "low"}
+  ],
+  "do_not_touch": ["gacha mutation logic", "banner rates", "economy hooks"],
+  "validator_script": "validate_project_frontend_b_gacha_flow_audit_v1.py"
+}

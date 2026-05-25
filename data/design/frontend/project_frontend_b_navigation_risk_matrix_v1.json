@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_FRONTEND_B_TRACK_F",
+  "track": "FRONTEND_NAVIGATION_RISK_AND_MISSING_LINKS_MATRIX_PACK",
+  "verdict": "TRACK_F_FRONTEND_NAVIGATION_RISK_AND_MISSING_LINKS_MATRIX_READY",
+  "audit_only": true,
+  "navigation_risk_matrix": [
+    {"area": "Tab navigation", "risk": "low", "note": "5 tab stabili (home/heroes/battle/gacha/menu) \u2014 nessuna modifica recente"},
+    {"area": "Menu sezioni", "risk": "low", "note": "5 categorie chiare, totale 35 voci dopo Pack Z"},
+    {"area": "Combat flow", "risk": "medium", "note": "combat.tsx mono-file da 1848 LOC, refactor consigliato"},
+    {"area": "Hero training breadcrumb", "risk": "medium", "note": "manca breadcrumb da hero-detail a evolution path"},
+    {"area": "Economy hub", "risk": "medium", "note": "shop vs economy vs item-shop relazione non chiara"},
+    {"area": "Safe previews", "risk": "low", "note": "hub creato in Pack Z, deep link funzionanti"},
+    {"area": "Server selection", "risk": "medium", "note": "servers.tsx live ma /api/server-profiles/select 503; UI potrebbe confondere"},
+    {"area": "Dev/admin gating", "risk": "high_for_polish", "note": "nessun gate dev runtime; sprite-test e dev-combat-qa-lab visibili in menu"}
+  ],
+  "missing_links": [
+    {"from": "hero-detail", "to": "hero-encyclopedia", "reason": "link diretto assente, navigazione costretta via menu"},
+    {"from": "combat post-battle", "to": "hero-detail nuovi eroi droppati", "reason": "missing CTA"},
+    {"from": "gacha reveal", "to": "team formation", "reason": "upgrade flow non collegato direttamente"},
+    {"from": "battlepass", "to": "daily checklist", "reason": "nessuna daily checklist unificata oggi"},
+    {"from": "main home", "to": "/safe-previews", "reason": "raggiungibile solo via menu Altro \u2014 ok, ma una promo banner home potrebbe aiutare (futuro pack)"}
+  ],
+  "navigation_health": "good_with_known_gaps",
+  "broad_refactor_required": false,
+  "validator_script": "validate_project_frontend_b_navigation_risk_matrix_v1.py"
+}

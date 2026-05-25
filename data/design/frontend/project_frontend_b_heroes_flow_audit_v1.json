@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_FRONTEND_B_TRACK_A",
+  "track": "HEROES_COLLECTION_AND_HERO_DETAIL_FLOW_AUDIT_PACK",
+  "verdict": "TRACK_A_HEROES_COLLECTION_AND_HERO_DETAIL_FLOW_AUDIT_READY",
+  "audit_only": true,
+  "frontend_mutation": false,
+  "routes_audited": [
+    "/(tabs)/heroes (506 LOC)",
+    "/hero-collection (383 LOC)",
+    "/hero-detail (743 LOC)",
+    "/hero-viewer",
+    "/hero-encyclopedia",
+    "/hero-training",
+    "/select-home-hero"
+  ],
+  "flow_steps": [
+    {"step": 1, "label": "Tab Heroes \u2192 lista eroi posseduti", "endpoint": "GET /api/user/heroes", "status": "live"},
+    {"step": 2, "label": "Filtro / sort per elemento, raret\u00e0, livello", "endpoint": "client-side", "status": "live"},
+    {"step": 3, "label": "Tap eroe \u2192 hero-detail", "endpoint": "GET /api/heroes/{id}", "status": "live"},
+    {"step": 4, "label": "Hero-detail: stats, skill, lore, evolution path", "endpoint": "GET /api/heroes/{id}, /api/hero/encyclopedia/{id}", "status": "live"},
+    {"step": 5, "label": "Hero-training (livellamento, ascendenza)", "endpoint": "POST hero training endpoints", "status": "live"},
+    {"step": 6, "label": "Hero-viewer 3D / sprite", "endpoint": "client-side", "status": "live"},
+    {"step": 7, "label": "Select-home-hero \u2192 imposta eroe principale", "endpoint": "POST /api/user/main-hero", "status": "live"}
+  ],
+  "gaps_identified": [
+    {"gap": "Mancano stati di empty/loading skeleton uniformi tra hero-collection e heroes tab", "severity": "medium"},
+    {"gap": "hero-detail molto lungo (743 LOC) \u2014 candidato a estrazione componenti riusabili", "severity": "low_refactor"},
+    {"gap": "Mancanza di breadcrumb chiara da hero-detail in flow training/evolution", "severity": "medium"},
+    {"gap": "Hero-collection vs heroes tab: ruoli sovrapposti, da chiarire visivamente", "severity": "low"}
+  ],
+  "interactivity_critical": ["training", "ascend", "set_main_hero"],
+  "validator_script": "validate_project_frontend_b_heroes_flow_audit_v1.py"
+}

@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_FRONTEND_B_TRACK_D",
+  "track": "ECONOMY_SHOP_BATTLE_PASS_DAILY_FLOW_AUDIT_PACK",
+  "verdict": "TRACK_D_ECONOMY_SHOP_BATTLE_PASS_DAILY_FLOW_AUDIT_READY",
+  "audit_only": true,
+  "routes_audited": [
+    "/economy (368 LOC)",
+    "/shop (110 LOC)",
+    "/item-shop",
+    "/battlepass (132 LOC)",
+    "/vip",
+    "/treasury",
+    "/inventory",
+    "/mail",
+    "/events",
+    "/achievements"
+  ],
+  "flow_steps": [
+    {"step": 1, "label": "Menu Economia & Negozi \u2192 hub", "endpoint": "client-side", "status": "live"},
+    {"step": 2, "label": "Shop \u2192 lista bundle / valute", "endpoint": "GET /api/shop", "status": "live"},
+    {"step": 3, "label": "Battle Pass \u2192 tier + milestone", "endpoint": "GET /api/battlepass", "status": "live"},
+    {"step": 4, "label": "Acquisto bundle / premium pass", "endpoint": "POST /api/shop/buy, /api/battlepass/buy-premium", "status": "live"},
+    {"step": 5, "label": "Daily mail / events / rewards claim", "endpoint": "GET /api/mail, /api/events; POST claim endpoints", "status": "live"},
+    {"step": 6, "label": "VIP progression", "endpoint": "GET /api/vip", "status": "live"},
+    {"step": 7, "label": "Achievement claim", "endpoint": "GET /api/achievements + POST claim", "status": "live"}
+  ],
+  "gaps_identified": [
+    {"gap": "economy.tsx (368 LOC) + shop.tsx (110 LOC) separazione non chiarissima per utente nuovo", "severity": "medium"},
+    {"gap": "battlepass.tsx (132 LOC) compatto ma manca preview tier rewards orizzontale chiaro", "severity": "medium"},
+    {"gap": "Mancanza di \u201cdaily checklist\u201d unica che aggreghi mail/events/achievements", "severity": "high"},
+    {"gap": "VIP progress: gauge presente ma copy IT migliorabile", "severity": "low"}
+  ],
+  "do_not_touch": ["economy/pricing logic", "battle pass rewards table", "mail/events backend"],
+  "validator_script": "validate_project_frontend_b_economy_flow_audit_v1.py"
+}
