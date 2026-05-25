@@ -1,0 +1,68 @@
+{
+  "track": "C",
+  "track_id": "NEW_SERVER_PROFILES_ROUTE_CONTRACT_AUDIT_PACK",
+  "verdict": "TRACK_C_NEW_SERVER_PROFILES_ROUTE_CONTRACT_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_ONLY",
+    "TRACK_C_NEW_SERVER_PROFILES_ROUTE_CONTRACT_AUDIT_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "contract": {
+    "route_file": "/app/backend/routes/server_profiles.py",
+    "route_file_md5": "7c12a8d1fc1e1b6a9e63cacfab5c14f4",
+    "prefix": "/api/server-profiles",
+    "endpoints": [
+      {
+        "endpoint": "GET /api/server-profiles/select",
+        "handler": "server_profiles_select_probe",
+        "auth_required": false,
+        "current_behavior_flag_off": "503 with payload {status:'disabled', feature_flag:'SERVER_PROFILES_RUNTIME_ENABLED', ...}",
+        "current_behavior_flag_on": "returns deterministic read-only envelope (no DB write)",
+        "mutation_capability": false
+      },
+      {
+        "endpoint": "POST /api/server-profiles/select",
+        "handler": "server_profiles_select_target",
+        "auth_required": false,
+        "current_behavior_flag_off": "503 with payload {status:'disabled', method:'POST'}",
+        "current_behavior_flag_on": "returns same read-only envelope; mutation_executed=false, active_server_switched=false, dual_write_executed=false",
+        "mutation_capability": false,
+        "note": "POST is INERT even when flag is ON \u2014 by design (PROJECT_C Track A behavior layer)"
+      }
+    ],
+    "feature_flags": {
+      "primary": "SERVER_PROFILES_RUNTIME_ENABLED (must be 'true' to leave 503)",
+      "secondary": "SERVER_PROFILES_PREVIEW_ENABLED (double-gate for preview/dry-run envelope; defaults OFF)"
+    },
+    "flag_state_current": {
+      "SERVER_PROFILES_RUNTIME_ENABLED": "unset/false (verified via GET=503)",
+      "SERVER_PROFILES_PREVIEW_ENABLED": "unset/false (effective only if RUNTIME ON)"
+    },
+    "server_profiles_db": {
+      "collection_name": "server_profiles",
+      "current_doc_count_assumption": 0,
+      "unique_indexes_required_for_live": ["(user_id, is_archived) compound", "_id"],
+      "queried_fields": ["user_id", "is_archived"]
+    },
+    "expected_future_payload_when_live": {
+      "GET": "{ status:'ok', server_profile_id, is_archived, server_region, last_seen_at }",
+      "POST": "{ status:'switched', server_profile_id (new), prior_server_profile_id, mutation_executed:true, dual_write_executed:<bool> }"
+    },
+    "rollback_assumptions": [
+      "flag flip is reversible (just unset env var)",
+      "no DB rows are written until a separate seed/migration pack runs",
+      "current 503 response is stable contract; clients should treat as 'disabled'"
+    ],
+    "safety_versus_legacy": [
+      "never mutates users.server",
+      "never enforces capacity (delegated to future migration pack)",
+      "isolated collection (server_profiles) with archive flag for rollback",
+      "double-flag gate prevents accidental activation"
+    ]
+  },
+  "risk_level": "LOW",
+  "risk_reason": "Route is inert by design. Risk is in the absence of any UI integration \u2014 if /servers were switched to it today, it would always return 503 and break server selection entirely."
+}

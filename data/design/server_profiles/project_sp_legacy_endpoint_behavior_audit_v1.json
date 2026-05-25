@@ -1,0 +1,52 @@
+{
+  "track": "B",
+  "track_id": "LEGACY_SERVER_ENDPOINT_BEHAVIOR_AUDIT_PACK",
+  "verdict": "TRACK_B_LEGACY_SERVER_ENDPOINT_BEHAVIOR_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_ONLY",
+    "TRACK_B_LEGACY_SERVER_ENDPOINT_BEHAVIOR_AUDIT_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "endpoints": [
+    {
+      "endpoint": "GET /api/servers",
+      "handler_file": "/app/backend/routes/economy.py",
+      "handler_line": 188,
+      "handler_function": "get_servers",
+      "auth_required": false,
+      "reads": ["db.users (count_documents per server)"],
+      "writes": [],
+      "mutates_active_server_state": false,
+      "returns": "List[Server] with players_online, real_players, bots, load_percent",
+      "static_source": "SERVERS constant (in economy.py)",
+      "conflict_with_server_profiles": "none direct (different read path, but represents the OLD model of one-server-per-user via users.server field)",
+      "deprecation_note": "no explicit deprecation header, but the POST counterpart has a deprecation warning log"
+    },
+    {
+      "endpoint": "POST /api/server/select",
+      "handler_file": "/app/backend/routes/economy.py",
+      "handler_line": 206,
+      "handler_function": "select_server",
+      "auth_required": true,
+      "auth_dependency": "get_current_user",
+      "reads": ["SERVERS constant", "db.users.count_documents({server: id})"],
+      "writes": ["db.users.update_one({id:current_user.id}, {$set:{server: server_id}})"],
+      "mutates_active_server_state": true,
+      "validates": ["server existence (404)", "server status != 'maintenance' (400)", "capacity check vs max_players (400)"],
+      "returns": "{success: true, server: {...}}",
+      "deprecation_note": "explicit logging.getLogger('divine.deprecation').warning DEPRECATED /api/server/select called \u2026 will be removed after SLC-H live wiring per LEGACY_SERVER_SELECT_REMOVAL_PLAN v1",
+      "removal_plan_doc": "/app/docs/divine/120D_LEGACY_SERVER_SELECT_REMOVAL_PLAN.md (4-phase removal plan)",
+      "conflict_with_server_profiles": "yes \u2014 writes users.server while new model uses separate server_profiles collection"
+    }
+  ],
+  "db_collections_touched_by_legacy": ["users (read+write)"],
+  "users_field_mutated_by_legacy": "users.server",
+  "compatibility_layer_present": false,
+  "dual_write_present": false,
+  "current_warning_severity": "WARNING log only \u2014 no 410/405/deprecation header, no client-side notification",
+  "risk_level": "HIGH",
+  "risk_reason": "Legacy POST mutates users.server with full validation while new /api/server-profiles/select is inert. There is NO dual-write \u2014 if we ever flip the new flag and switch the UI to it, users.server will diverge from the server_profiles record unless we add a compatibility layer."
+}

@@ -1,0 +1,80 @@
+{
+  "track": "F",
+  "track_id": "SERVER_PROFILES_FRONTEND_LOCK_OR_PREVIEW_RECOMMENDATION_PACK",
+  "verdict": "TRACK_F_SERVER_PROFILES_FRONTEND_LOCK_OR_PREVIEW_RECOMMENDATION_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_ONLY",
+    "TRACK_F_SERVER_PROFILES_FRONTEND_LOCK_PREVIEW_RECOMMENDATION_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "options_considered": [
+    {
+      "option_id": "keep_visible_unchanged",
+      "name": "Keep /servers visible & unchanged",
+      "pros": ["no UI risk now", "no UX disruption"],
+      "cons": ["continues writing users.server", "makes migration window risky", "diverges from server_profiles"],
+      "player_safety": "MEDIUM",
+      "ux_impact": "LOW",
+      "recommended": false
+    },
+    {
+      "option_id": "hide_from_menu",
+      "name": "Hide /servers menu entry until SLC-H live",
+      "pros": ["freezes legacy writes via menu", "trivial to revert"],
+      "cons": ["users can't change server until cutover", "may surprise existing players"],
+      "player_safety": "HIGH",
+      "ux_impact": "MEDIUM",
+      "recommended": false,
+      "note": "Single-server context today makes server switching marginal; consider feasible but blunt."
+    },
+    {
+      "option_id": "convert_to_locked_preview",
+      "name": "Convert /servers to SafeFeatureCard locked-preview",
+      "pros": [
+        "keeps UI visible for transparency",
+        "matches /artifacts-preview, /housing-preview pattern",
+        "removes mutation surface entirely",
+        "shows informational copy 'Selezione server in arrivo'"
+      ],
+      "cons": [
+        "requires a small frontend pack (not in current scope)",
+        "need to gracefully handle existing users with users.server set"
+      ],
+      "player_safety": "HIGH",
+      "ux_impact": "LOW",
+      "recommended": true,
+      "alignment_with_existing_pattern": "strong \u2014 same approach as SLC artifacts/housing previews"
+    },
+    {
+      "option_id": "move_to_dev_admin_only",
+      "name": "Move /servers behind dev/admin gate",
+      "pros": ["keeps tooling for ops", "removes from player menu"],
+      "cons": ["requires admin auth wiring", "more invasive"],
+      "player_safety": "HIGH",
+      "ux_impact": "LOW",
+      "recommended": false
+    },
+    {
+      "option_id": "keep_with_warning_banner",
+      "name": "Keep functional but with deprecation warning banner",
+      "pros": ["transparency to player"],
+      "cons": ["warning ignored typically", "still writes users.server"],
+      "player_safety": "MEDIUM",
+      "ux_impact": "LOW",
+      "recommended": false
+    }
+  ],
+  "recommended_option": "convert_to_locked_preview",
+  "recommended_pack_name": "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_PACK",
+  "recommended_copy": {
+    "title": "Selezione Server (Anteprima)",
+    "body": "La selezione del server \u00e8 in fase di aggiornamento. Resterai sul server attuale finch\u00e9 la nuova esperienza Server Profiles non sar\u00e0 disponibile.",
+    "locked_badge": "\uD83D\uDD12 In arrivo",
+    "action_buttons": []
+  },
+  "justification": "Pattern collaudato (artifacts/housing previews), zero mutation, zero UX cliff. Mantiene la voce di menu come segnale di trasparenza senza esporre la mutation legacy.",
+  "risk_level": "LOW",
+  "risk_reason": "Cambiare la UI a preview \u00e8 cambio frontend gi\u00e0 maturo: ricalca componente SafeFeatureCard esistente."
+}

@@ -1,0 +1,120 @@
+{
+  "track": "E",
+  "track_id": "SERVER_PROFILES_DUAL_ROUTE_DEPRECATION_PLAN_PACK",
+  "verdict": "TRACK_E_SERVER_PROFILES_DUAL_ROUTE_DEPRECATION_PLAN_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_ONLY",
+    "TRACK_E_SERVER_PROFILES_DUAL_ROUTE_DEPRECATION_PLAN_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "deprecation_stages": [
+    {
+      "stage": 1,
+      "name": "AUDIT_ONLY (current pack)",
+      "actions": ["document state", "no code change", "no flag flip"],
+      "approval_required": "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_APPROVAL",
+      "status": "IN_PROGRESS"
+    },
+    {
+      "stage": 2,
+      "name": "LOCK_OR_PREVIEW_UI",
+      "actions": [
+        "replace /servers route content with SafeFeatureCard locked-preview equivalent OR",
+        "hide /servers from menu until SLC-H live",
+        "keep route file (no delete), only modify UI"
+      ],
+      "approval_required": "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_APPROVAL (new)",
+      "db_writes": 0,
+      "flag_flips": 0,
+      "status": "PENDING"
+    },
+    {
+      "stage": 3,
+      "name": "READ_ONLY_PREVIEW_SAFE",
+      "actions": [
+        "introduce server_profile_preview screen behind safe-previews hub",
+        "call GET /api/server-profiles/select (handle 503 gracefully)",
+        "NO POST"
+      ],
+      "approval_required": "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_APPROVAL (new)",
+      "db_writes": 0,
+      "flag_flips": 0,
+      "status": "PENDING"
+    },
+    {
+      "stage": 4,
+      "name": "DUAL_ROUTE_COMPATIBILITY_LAYER",
+      "actions": [
+        "add dual-write logic: legacy POST also writes server_profiles, new POST writes users.server",
+        "behind feature flag SERVER_PROFILES_DUAL_WRITE_ENABLED (default OFF)",
+        "validator ensures dual-write is idempotent + reversible"
+      ],
+      "approval_required": "PROJECT_SERVER_PROFILES_DUAL_WRITE_DESIGN_APPROVAL (new)",
+      "db_writes": "BEHIND FLAG ONLY",
+      "flag_flips": "add new flag (default OFF); do not flip",
+      "status": "PENDING"
+    },
+    {
+      "stage": 5,
+      "name": "SEED_AND_BACKFILL_SERVER_PROFILES",
+      "actions": [
+        "backfill server_profiles from users.server (idempotent)",
+        "add unique index (user_id, is_archived)",
+        "create rollback runbook with byte-identical inverse"
+      ],
+      "approval_required": "PROJECT_SERVER_PROFILES_SEED_AND_ROLLBACK_APPROVAL (new)",
+      "db_writes": "YES (seed only; behind explicit approval)",
+      "flag_flips": 0,
+      "status": "PENDING"
+    },
+    {
+      "stage": 6,
+      "name": "UI_CUTOVER_BEHIND_FLAG",
+      "actions": [
+        "switch /servers UI to call new endpoint behind SERVER_PROFILES_UI_CUTOVER flag",
+        "legacy endpoints still receive writes via dual-write",
+        "canary monitoring"
+      ],
+      "approval_required": "PROJECT_SERVER_PROFILES_UI_CUTOVER_APPROVAL (new)",
+      "db_writes": "yes via dual-write only",
+      "flag_flips": "flip SERVER_PROFILES_RUNTIME_ENABLED + SERVER_PROFILES_UI_CUTOVER",
+      "status": "PENDING"
+    },
+    {
+      "stage": 7,
+      "name": "DEPRECATE_LEGACY_HEADERS",
+      "actions": [
+        "add HTTP Sunset/Deprecation headers to GET /api/servers and POST /api/server/select",
+        "emit 410 Gone for non-allow-listed clients after grace period (TBD)",
+        "announce sunset to mobile clients"
+      ],
+      "approval_required": "PROJECT_SERVER_PROFILES_LEGACY_SUNSET_APPROVAL (new)",
+      "db_writes": 0,
+      "flag_flips": 0,
+      "status": "PENDING"
+    },
+    {
+      "stage": 8,
+      "name": "REMOVE_LEGACY_AFTER_GRACE",
+      "actions": [
+        "remove legacy endpoints code paths",
+        "remove SERVERS constant from economy.py",
+        "finalize users.server deprecation in user model",
+        "6-signature approval required"
+      ],
+      "approval_required": "PROJECT_SERVER_PROFILES_LEGACY_REMOVAL_APPROVAL (new; 6 signatures)",
+      "db_writes": "yes (model migration)",
+      "flag_flips": "retire stale flags",
+      "status": "PENDING"
+    }
+  ],
+  "existing_design_docs": [
+    "/app/docs/divine/120D_LEGACY_SERVER_SELECT_REMOVAL_PLAN.md (4-phase plan; partial overlap)",
+    "/app/docs/divine/122D_LEGACY_SERVER_SELECT_DUAL_ROUTE_DESIGN.md (referenced in server_profiles.py)"
+  ],
+  "divergence_from_existing_120D": "This pack expands 4 \u2192 8 stages to add explicit LOCK_OR_PREVIEW (stage 2) and READ_ONLY_PREVIEW_SAFE (stage 3) between audit and dual-write. Existing 120D plan begins at dual-write directly.",
+  "risk_level": "MEDIUM",
+  "risk_reason": "Plan is paper-only. Risk is in execution drift and sequencing failures across packs; each stage requires its own approval marker."
+}

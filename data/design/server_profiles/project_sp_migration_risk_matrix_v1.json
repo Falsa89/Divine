@@ -1,0 +1,92 @@
+{
+  "track": "D",
+  "track_id": "SERVER_PROFILE_MIGRATION_RISK_MATRIX_PACK",
+  "verdict": "TRACK_D_SERVER_PROFILE_MIGRATION_RISK_MATRIX_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_ONLY",
+    "TRACK_D_SERVER_PROFILE_MIGRATION_RISK_MATRIX_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "migration_state_pre_audit": {
+    "users_collection": {
+      "field_in_use": "users.server (string)",
+      "written_by": "POST /api/server/select",
+      "read_by": "GET /api/servers (via count_documents)",
+      "estimated_users_with_server_set": "unknown without query (read-only; not executed)",
+      "estimated_users_without_server_set": "unknown without query (read-only; not executed)"
+    },
+    "server_profiles_collection": {
+      "field_set": ["_id", "user_id", "is_archived"],
+      "current_doc_count_assumption": 0,
+      "unique_index_status": "unknown; PROJECT_B Track A skeleton route never assumed write",
+      "populated_by": "none yet (seed pack is future)"
+    },
+    "users_field_to_server_profile_id_map": "DOES NOT EXIST yet"
+  },
+  "risk_matrix": [
+    {
+      "risk": "Orphan users",
+      "scenario": "flip new flag ON without seeding server_profiles \u2014 all users have NO active profile",
+      "severity": "CRITICAL",
+      "likelihood_today": "only if we flip flag prematurely",
+      "mitigation": "forbid flag flip until seed/migration pack signed; current pack does NOT flip"
+    },
+    {
+      "risk": "Diverging state (users.server vs server_profile_id)",
+      "scenario": "if dual-write missing and we switch UI to new endpoint, users.server stays stale",
+      "severity": "HIGH",
+      "likelihood_today": "prevented (no dual-write currently; UI still uses legacy)",
+      "mitigation": "compatibility layer with dual-write/read-through to be designed BEFORE UI cutover"
+    },
+    {
+      "risk": "Concurrent legacy writes during migration",
+      "scenario": "player chooses server via legacy while migration seeds server_profiles \u2014 conflicting writes",
+      "severity": "HIGH",
+      "likelihood_today": "low (no migration running)",
+      "mitigation": "lock /servers UI as read-only or hide from menu DURING migration window"
+    },
+    {
+      "risk": "Capacity check bypass",
+      "scenario": "new endpoint has no capacity logic yet; future impl could allow over-capacity",
+      "severity": "MEDIUM",
+      "likelihood_today": "n/a (endpoint inert)",
+      "mitigation": "reimplement capacity/maintenance/status checks in new contract before going live"
+    },
+    {
+      "risk": "Rollback complexity",
+      "scenario": "if users.server is migrated to server_profile_id and rollback is needed, reverse map required",
+      "severity": "MEDIUM",
+      "likelihood_today": "n/a (no migration yet)",
+      "mitigation": "future seed pack must include explicit rollback runbook with byte-identical inverse"
+    },
+    {
+      "risk": "Auth scope drift",
+      "scenario": "legacy POST requires auth via get_current_user; new POST currently has no auth wired",
+      "severity": "HIGH",
+      "likelihood_today": "prevented (new is 503)",
+      "mitigation": "add auth dependency to new POST before flag flip"
+    },
+    {
+      "risk": "503 visibility for unaware clients",
+      "scenario": "if mobile client doesn't handle 503 gracefully on /api/server-profiles/select, UX breaks",
+      "severity": "LOW",
+      "likelihood_today": "n/a (frontend doesn't call new endpoint)",
+      "mitigation": "frontend wrapper must treat 503 as 'feature_disabled' branch"
+    }
+  ],
+  "dual_write_strategy_recommended": {
+    "phase_0_safe_now": "no writes; only documentation",
+    "phase_1_seed": "backfill server_profiles from users.server (1:1); idempotent; reversible",
+    "phase_2_dual_write": "new POST also writes users.server (and vice versa) behind compatibility flag",
+    "phase_3_read_through": "new GET reads server_profile_id; falls back to users.server",
+    "phase_4_cutover": "frontend switches to new endpoint; legacy kept as fallback for 1 release",
+    "phase_5_deprecate": "add HTTP 410/Sunset headers to legacy; remove after grace period"
+  },
+  "lock_recommendation_during_transition": true,
+  "lock_recommendation_reason": "prevent races and preserve users.server integrity during seed",
+  "risk_level": "HIGH",
+  "risk_reason": "Migration spans 5+ phases with player-visible consequences; cannot be performed without lock/preview UI and seed pack."
+}

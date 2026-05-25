@@ -965,6 +965,15 @@ OPTIONAL = [
     ('PROJECT-MODE-WIRING-TRACK-F-SMOKE-REQUIREMENTS', 'validate_mode_smoke_test_requirements_v1.py'),
     ('PROJECT-MODE-WIRING-TRACK-G-NEXT-FIX-PRIORITIZATION', 'validate_mode_wiring_next_fix_prioritization_v1.py'),
     ('PROJECT-MODE-WIRING-TRACK-H-COMPLETION', 'validate_project_mode_wiring_registry_completion_v1.py'),
+    # PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_PACK (audit-only)
+    ('PROJECT-SP-LEGACY-TRACK-A-UI-USAGE', 'validate_project_sp_legacy_ui_usage_audit_v1.py'),
+    ('PROJECT-SP-LEGACY-TRACK-B-ENDPOINT-BEHAVIOR', 'validate_project_sp_legacy_endpoint_behavior_audit_v1.py'),
+    ('PROJECT-SP-LEGACY-TRACK-C-NEW-ROUTE-CONTRACT', 'validate_project_sp_new_route_contract_audit_v1.py'),
+    ('PROJECT-SP-LEGACY-TRACK-D-MIGRATION-RISK-MATRIX', 'validate_project_sp_migration_risk_matrix_v1.py'),
+    ('PROJECT-SP-LEGACY-TRACK-E-DEPRECATION-PLAN', 'validate_project_sp_dual_route_deprecation_plan_v1.py'),
+    ('PROJECT-SP-LEGACY-TRACK-F-LOCK-PREVIEW-RECOMMENDATION', 'validate_project_sp_frontend_lock_preview_recommendation_v1.py'),
+    ('PROJECT-SP-LEGACY-TRACK-G-SMOKE-REGRESSION-REQUIREMENTS', 'validate_project_sp_smoke_regression_requirements_v1.py'),
+    ('PROJECT-SP-LEGACY-TRACK-H-COMPLETION', 'validate_project_sp_legacy_audit_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

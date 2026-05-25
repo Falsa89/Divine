@@ -1,0 +1,70 @@
+{
+  "track": "H",
+  "track_id": "PROJECT_SERVER_PROFILES_LEGACY_AUDIT_COMPLETION_PACK",
+  "verdict": "TRACK_H_PROJECT_SERVER_PROFILES_LEGACY_AUDIT_COMPLETION_READY",
+  "global_verdict": "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_ONLY",
+    "TRACK_H_PROJECT_SERVER_PROFILES_LEGACY_AUDIT_COMPLETION_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "server_changes": 0,
+  "battle_engine_md5_pre": "151ca35ad3bc35f0a6209cb3744ed440",
+  "battle_engine_md5_post": "151ca35ad3bc35f0a6209cb3744ed440",
+  "env_md5_pre": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "env_md5_post": "ff60bbb79efa329b71aa8ed351ea89b3",
+  "servers_tsx_md5_pre": "26f5c796425aafa933f46979928165f4",
+  "servers_tsx_md5_post": "26f5c796425aafa933f46979928165f4",
+  "server_profiles_py_md5_pre": "7c12a8d1fc1e1b6a9e63cacfab5c14f4",
+  "server_profiles_py_md5_post": "7c12a8d1fc1e1b6a9e63cacfab5c14f4",
+  "economy_py_md5_pre": "b3afb52609b487ab6c1ac3c3e25405fd",
+  "economy_py_md5_post": "b3afb52609b487ab6c1ac3c3e25405fd",
+  "suite_pre": "591 PASS / 0 FAIL",
+  "suite_post": "599 PASS / 0 FAIL",
+  "track_verdicts": {
+    "A": "TRACK_A_SERVER_UI_LEGACY_USAGE_AUDIT_READY",
+    "B": "TRACK_B_LEGACY_SERVER_ENDPOINT_BEHAVIOR_AUDIT_READY",
+    "C": "TRACK_C_NEW_SERVER_PROFILES_ROUTE_CONTRACT_AUDIT_READY",
+    "D": "TRACK_D_SERVER_PROFILE_MIGRATION_RISK_MATRIX_READY",
+    "E": "TRACK_E_SERVER_PROFILES_DUAL_ROUTE_DEPRECATION_PLAN_READY",
+    "F": "TRACK_F_SERVER_PROFILES_FRONTEND_LOCK_OR_PREVIEW_RECOMMENDATION_READY",
+    "G": "TRACK_G_SERVER_PROFILES_SMOKE_AND_REGRESSION_REQUIREMENTS_READY",
+    "H": "TRACK_H_PROJECT_SERVER_PROFILES_LEGACY_AUDIT_COMPLETION_READY"
+  },
+  "server_profile_wiring_readiness_pre": 45,
+  "server_profile_wiring_readiness_post": 62,
+  "frontend_integration_readiness_pre": 81,
+  "frontend_integration_readiness_post": 82,
+  "suite_hygiene_post": 100,
+  "recommended_next_pack_primary": "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW_PACK",
+  "recommended_next_pack_secondary": "PROJECT_SERVER_PROFILES_DUAL_READ_PREVIEW_PACK",
+  "recommended_next_pack_tertiary": "PROJECT_SERVER_PROFILES_SEED_AND_ROLLBACK_PLAN_PACK",
+  "recommended_immediate_action": "Lock /servers UI as locked-preview (SafeFeatureCard) BEFORE any seed/migration to prevent users.server writes during transition.",
+  "remaining_blocked_live_gates": [
+    "STATUS_RUNTIME_FIRST_SLICE prod rollout (6 sig)",
+    "STATUS_RUNTIME_SECOND_SLICE prod rollout (7 sig + 4 stage)",
+    "ARTIFACT live import (5 sig)",
+    "AF2-N spend public rollout",
+    "Housing live bonus",
+    "Second server opening",
+    "Phase 11",
+    "server_profiles_runtime_enabled flag",
+    "server_profiles_preview_enabled flag",
+    "server_profiles_dual_write_enabled flag (future)"
+  ],
+  "progress_estimate": {
+    "global_project_pre": 67.4,
+    "global_project_post": 67.4,
+    "note": "audit-only; progress unchanged per spec (max +0.001)"
+  },
+  "time_remaining_estimate_excl_graphics_audio_art": {
+    "aggressive": "4-6 weeks",
+    "realistic": "8-12 weeks",
+    "prudent": "16-20 weeks"
+  }
+}
