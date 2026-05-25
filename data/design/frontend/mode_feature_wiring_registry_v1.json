@@ -1,0 +1,70 @@
+{
+  "registry_version": "v1",
+  "verdict": "PROJECT_MODE_WIRING_REGISTRY_AND_LEGACY_ROUTE_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_MODE_WIRING_REGISTRY_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "MODE_WIRING_REGISTRY_AUDIT_ONLY"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "sources": {
+    "core_modes": "mode_feature_wiring_registry_core_modes_v1.json",
+    "system_modes": "mode_feature_wiring_registry_system_modes_v1.json",
+    "legacy_detection": "legacy_route_old_endpoint_detection_v1.json",
+    "crosswalk": "frontend_backend_crosswalk_matrix_v1.json",
+    "unreachable": "unreachable_implemented_mode_audit_v1.json",
+    "smoke": "mode_smoke_test_requirements_v1.json",
+    "prioritization": "mode_wiring_next_fix_prioritization_v1.json",
+    "completion": "../project_management/project_mode_wiring_registry_completion_v1.json"
+  },
+  "schema": [
+    "mode_id", "display_name", "category", "frontend_entry_points", "frontend_status",
+    "backend_endpoints_current", "backend_endpoints_expected", "backend_status",
+    "legacy_paths_detected", "risk_level", "risk_reason", "smoke_required",
+    "next_action", "owner_pack_recommendation"
+  ],
+  "summary_counts": {
+    "total_modes_registered": 29,
+    "core_modes": 13,
+    "system_modes": 16,
+    "locked_preview": 5,
+    "live_gated": 3,
+    "dev_admin": 2,
+    "high_risk_modes": 3,
+    "medium_risk_modes": 11,
+    "low_risk_modes": 15,
+    "legacy_endpoints_detected": 7,
+    "frontend_route_overlaps": 5,
+    "frontend_routes_not_in_menu": 13,
+    "backend_without_frontend": 6,
+    "frontend_without_backend": 0
+  },
+  "high_risk_wiring_issues": [
+    "/servers UI uses legacy /api/servers + POST /api/server/select while new /api/server-profiles/select is 503-gated",
+    "/artifacts (full UI) coexists with /artifacts-preview (locked); risk of exposed mutation before 5 signatures",
+    "combat.tsx 1848 LOC monolith \u2014 maintainability HIGH RISK (no engine touch allowed)"
+  ],
+  "forbidden_actions_respected": [
+    "no frontend implementation",
+    "no new routes",
+    "no menu entries added",
+    "no button changes",
+    "no navigation changes",
+    "no backend route changes",
+    "no DB writes",
+    "no feature flag flips",
+    "no prod rollout",
+    "no artifact live import",
+    "no gacha/economy/combat mutation",
+    "no combat.tsx refactor",
+    "no Borea activation",
+    "no Phase 11",
+    "no REQUIRED validator weakening",
+    "no hidden failures",
+    "no fake PASS",
+    "no fake mobile screenshot verification"
+  ]
+}

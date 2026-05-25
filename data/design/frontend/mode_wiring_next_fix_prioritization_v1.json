@@ -1,0 +1,132 @@
+{
+  "track": "G",
+  "track_id": "NEXT_FIX_PACK_PRIORITIZATION_PACK",
+  "verdict": "TRACK_G_NEXT_FIX_PACK_PRIORITIZATION_READY",
+  "global_markers": {
+    "PROJECT_MODE_WIRING_REGISTRY_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "MODE_WIRING_REGISTRY_AUDIT_ONLY",
+    "TRACK_G_NEXT_FIX_PACK_PRIORITIZATION_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "prioritization": {
+    "P0_critical_broken_links": [],
+    "P1_high_value_missing_links": [
+      {
+        "pack_name": "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_PACK",
+        "reason": "/servers UI ancora aggancia legacy /api/servers + POST /api/server/select mentre /api/server-profiles/select \u00e8 503. HIGH RISK.",
+        "effort_estimate": "S",
+        "blocking": false
+      },
+      {
+        "pack_name": "PROJECT_ARTIFACT_LIVE_IMPORT_GATE_AUDIT_PACK",
+        "reason": "Coesistono /artifacts (full UI) e /artifacts-preview (safe). /artifacts pu\u00f2 esporre mutation buttons live prima delle 5 firme.",
+        "effort_estimate": "M",
+        "blocking": false
+      },
+      {
+        "pack_name": "PROJECT_FRONTEND_D_COMBAT_UI_DECOMPOSITION_AUDIT_PACK",
+        "reason": "combat.tsx \u00e8 1848 LOC. Refactor UI necessario SENZA toccare battle_engine.",
+        "effort_estimate": "L",
+        "blocking": false
+      }
+    ],
+    "P2_cleanup_and_polish": [
+      {
+        "pack_name": "PROJECT_SYNERGY_TEAM_V1_DEPRECATION_AUDIT_PACK",
+        "reason": "/api/synergies/team (v1) coesiste con /api/synergies/team_v2. Verificare frontend usa v2.",
+        "effort_estimate": "S"
+      },
+      {
+        "pack_name": "PROJECT_FACTIONS_V1_DEPRECATION_AUDIT_PACK",
+        "reason": "/api/factions, /api/faction/join (v1) coesistono con player-factions/v2.",
+        "effort_estimate": "S"
+      },
+      {
+        "pack_name": "PROJECT_UNIQUE_EXCLUSIVE_ALIAS_AUDIT_PACK",
+        "reason": "/api/unique-items vs /api/exclusive-items: capire alias canonico.",
+        "effort_estimate": "S"
+      },
+      {
+        "pack_name": "PROJECT_HERO_DETAIL_CONSOLIDATION_AUDIT_PACK",
+        "reason": "/hero-detail vs /hero-viewer vs /hero-encyclopedia: 3 schermate sovrapposte.",
+        "effort_estimate": "M"
+      },
+      {
+        "pack_name": "PROJECT_SHOP_CONSOLIDATION_AUDIT_PACK",
+        "reason": "/shop, /item-shop, /economy: chiarire ruoli.",
+        "effort_estimate": "S"
+      },
+      {
+        "pack_name": "PROJECT_FORGE_FRONTEND_ROUTE_AUDIT_PACK",
+        "reason": "/api/forge e /api/runes esistono backend ma nessuna route /forge frontend.",
+        "effort_estimate": "M"
+      },
+      {
+        "pack_name": "PROJECT_SOUL_FORGE_ALIAS_DEPRECATION_AUDIT_PACK",
+        "reason": "/api/soul-forge vs /api/soul/forge alias.",
+        "effort_estimate": "S"
+      },
+      {
+        "pack_name": "PROJECT_AF2N_PREVIEW_VISIBILITY_AUDIT_PACK",
+        "reason": "/affinity-gifts-preview locked esiste ma non collegato a /safe-previews hub.",
+        "effort_estimate": "XS"
+      },
+      {
+        "pack_name": "PROJECT_Z2_FRONTEND_SAFE_PREVIEW_MOBILE_QA_SCREENSHOT_FIX_PACK",
+        "reason": "Mobile QA reale via Expo Go differito da Pack Z.",
+        "effort_estimate": "M"
+      }
+    ],
+    "P3_deferred": [
+      {
+        "pack_name": "PROJECT_HOME_DASHBOARD_POLISH (future)",
+        "reason": "Polish home tab",
+        "effort_estimate": "S"
+      },
+      {
+        "pack_name": "PROJECT_HEROES_FILTER_POLISH (future)",
+        "reason": "Heroes tab UX",
+        "effort_estimate": "S"
+      },
+      {
+        "pack_name": "PROJECT_HOUSING_LIVE_BONUS_GATE_AUDIT_PACK",
+        "reason": "Quando housing live bonus sar\u00e0 firmato",
+        "effort_estimate": "M"
+      }
+    ],
+    "gated_live_only": [
+      {
+        "pack_name": "PROJECT_W_STATUS_SECOND_SLICE_PROD_ROLLOUT_PACK",
+        "status": "READY_NOT_APPLIED_PENDING_APPROVAL",
+        "blockers": ["7 PROD_ROLLOUT signatures", "4 stage markers"]
+      },
+      {
+        "pack_name": "PROJECT_STATUS_FIRST_SLICE_PROD_ROLLOUT_PACK",
+        "status": "BLOCKED",
+        "blockers": ["6 PROD_ROLLOUT signatures"]
+      },
+      {
+        "pack_name": "PROJECT_ARTIFACT_LIVE_IMPORT_PACK",
+        "status": "BLOCKED",
+        "blockers": ["5 ARTIFACT_*_APPROVAL signatures"]
+      },
+      {
+        "pack_name": "PROJECT_APPROVAL_MATRIX_AND_LIVE_GATE_POLICY_PACK",
+        "status": "DEFERRED",
+        "blockers": ["plan only; no UI yet"]
+      }
+    ]
+  },
+  "explicit_comparisons": {
+    "daily_hub_continuation": "P3 \u2014 Daily Hub gi\u00e0 completato; estensione (es. claim consolidato) richiede approvazione economy.",
+    "combat_ui_decomposition": "P1 \u2014 alto valore di manutenibilit\u00e0 senza rischio engine se UI-only.",
+    "mode_wiring_fixes": "P1/P2 \u2014 dipendono dalle ambiguit\u00e0 trovate (server-profiles legacy, artifact full UI).",
+    "approval_matrix_live_gate_policy": "P3/deferred \u2014 policy piuttosto che gameplay; nessun bloccante immediato.",
+    "real_mobile_qa_screenshot_pack": "P2 \u2014 utile dopo che il pack di refactor combat \u00e8 stato fatto.",
+    "artifact_signature_import_pack": "GATED \u2014 bloccato finch\u00e9 firme non disponibili."
+  },
+  "recommended_next_pack_primary": "PROJECT_SERVER_PROFILES_LEGACY_DEPRECATION_AUDIT_PACK",
+  "recommended_next_pack_secondary": "PROJECT_ARTIFACT_LIVE_IMPORT_GATE_AUDIT_PACK",
+  "recommended_next_pack_tertiary": "PROJECT_FRONTEND_D_COMBAT_UI_DECOMPOSITION_AUDIT_PACK"
+}

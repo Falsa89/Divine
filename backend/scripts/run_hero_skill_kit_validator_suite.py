@@ -956,6 +956,15 @@ OPTIONAL = [
     ('PROJECT-FRONTEND-C-TRACK-F-DAILY-HUB-MOBILE-A11Y-POLISH', 'validate_project_frontend_c_daily_hub_mobile_accessibility_polish_v1.py'),
     ('PROJECT-FRONTEND-C-TRACK-G-DAILY-HUB-FRONTEND-QA-SMOKE', 'validate_project_frontend_c_daily_hub_frontend_qa_smoke_v1.py'),
     ('PROJECT-FRONTEND-C-TRACK-H-PROJECT-FC-COMPLETION-AND-NEXT-PACK', 'validate_project_frontend_c_completion_and_next_pack_v1.py'),
+    # PROJECT_MODE_WIRING_REGISTRY_AND_LEGACY_ROUTE_AUDIT_PACK (audit-only)
+    ('PROJECT-MODE-WIRING-TRACK-A-CORE-MODES', 'validate_mode_wiring_registry_core_modes_v1.py'),
+    ('PROJECT-MODE-WIRING-TRACK-B-SYSTEM-MODES', 'validate_mode_wiring_registry_system_modes_v1.py'),
+    ('PROJECT-MODE-WIRING-TRACK-C-LEGACY-ROUTE-DETECTION', 'validate_legacy_route_old_endpoint_detection_v1.py'),
+    ('PROJECT-MODE-WIRING-TRACK-D-FE-BE-CROSSWALK', 'validate_frontend_backend_crosswalk_matrix_v1.py'),
+    ('PROJECT-MODE-WIRING-TRACK-E-UNREACHABLE-MODES', 'validate_unreachable_implemented_mode_audit_v1.py'),
+    ('PROJECT-MODE-WIRING-TRACK-F-SMOKE-REQUIREMENTS', 'validate_mode_smoke_test_requirements_v1.py'),
+    ('PROJECT-MODE-WIRING-TRACK-G-NEXT-FIX-PRIORITIZATION', 'validate_mode_wiring_next_fix_prioritization_v1.py'),
+    ('PROJECT-MODE-WIRING-TRACK-H-COMPLETION', 'validate_project_mode_wiring_registry_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

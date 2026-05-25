@@ -1,0 +1,126 @@
+{
+  "track": "C",
+  "track_id": "LEGACY_ROUTE_AND_OLD_ENDPOINT_DETECTION_PACK",
+  "verdict": "TRACK_C_LEGACY_ROUTE_AND_OLD_ENDPOINT_DETECTION_READY",
+  "global_markers": {
+    "PROJECT_MODE_WIRING_REGISTRY_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "MODE_WIRING_REGISTRY_AUDIT_ONLY",
+    "TRACK_C_LEGACY_ROUTE_OLD_ENDPOINT_DETECTION_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "flag_flips": 0,
+  "detection": {
+    "backend_legacy_or_duplicate_endpoints": [
+      {
+        "endpoint": "GET /api/servers",
+        "source_file": "backend/routes/economy.py",
+        "reason": "v1 server listing; coexists with new /api/server-profiles/*",
+        "replacement": "/api/server-profiles/select (currently 503-gated)",
+        "action": "audit frontend /servers; mark legacy after migration confirmation"
+      },
+      {
+        "endpoint": "POST /api/server/select",
+        "source_file": "backend/routes/economy.py",
+        "reason": "v1 server selection (singular path); coexists with new /api/server-profiles/select",
+        "replacement": "POST /api/server-profiles/select (503 until SECOND_SERVER_OPENING_APPROVAL)",
+        "action": "deprecate after frontend cut-over"
+      },
+      {
+        "endpoint": "GET /api/synergies/team",
+        "source_file": "backend/routes/synergies.py",
+        "reason": "v1 team synergies; v2 endpoint /api/synergies/team_v2 exists",
+        "replacement": "/api/synergies/team_v2",
+        "action": "verify frontend uses v2; deprecate v1"
+      },
+      {
+        "endpoint": "GET /api/factions  +  POST /api/faction/join",
+        "source_file": "backend/routes/guild.py",
+        "reason": "v1 faction endpoints; v2 player-factions/v2/* exists",
+        "replacement": "/api/player-factions/v2/* family",
+        "action": "verify /player-faction UI uses v2"
+      },
+      {
+        "endpoint": "GET /api/exclusive-items  +  POST /api/exclusive-items/craft",
+        "source_file": "backend/routes/raids.py",
+        "reason": "Alias parallel to /api/unique-items family",
+        "replacement": "/api/unique-items (preferred)",
+        "action": "audit /exclusive screen to determine canonical endpoint"
+      },
+      {
+        "endpoint": "GET /api/shops  +  POST /api/shops/buy",
+        "source_file": "backend/routes/soul_forge.py",
+        "reason": "Parallel to /api/shop and /api/shop/buy in economy.py; possibly soul-forge specific shop catalog",
+        "replacement": "likely intentional separation but naming overlap",
+        "action": "document explicitly"
+      },
+      {
+        "endpoint": "POST /api/soul/forge",
+        "source_file": "backend/routes/soul_forge.py",
+        "reason": "Alias of /api/soul-forge namespace",
+        "replacement": "/api/soul-forge",
+        "action": "audit usage; deprecate alias if unused"
+      }
+    ],
+    "frontend_routes_overlap": [
+      {
+        "routes": ["/hero-detail", "/hero-viewer", "/hero-encyclopedia"],
+        "reason": "Three distinct screens for hero info; only /hero-detail referenced from collection navigation per audit",
+        "action": "consolidate or document as roles (e.g., viewer=full-screen showcase, encyclopedia=lore)"
+      },
+      {
+        "routes": ["/shop", "/item-shop", "/economy"],
+        "reason": "Multiple shop entries; /economy appears as a hub but overlaps with the two specific shops",
+        "action": "clarify which is canonical"
+      },
+      {
+        "routes": ["/artifacts", "/artifacts-preview"],
+        "reason": "Full vs preview-only artifact screens both reachable from menu and safe-previews respectively",
+        "action": "during ARTIFACT_LIVE_IMPORT gating, ensure /artifacts does not expose live mutations"
+      },
+      {
+        "routes": ["/synergy-codex", "/collection-synergies-preview"],
+        "reason": "Two synergy-related screens; potential overlap",
+        "action": "audit purpose: codex=v2 documentation vs collection-synergies-preview=locked future bonuses"
+      },
+      {
+        "routes": ["/sanctuary", "/select-home-hero"],
+        "reason": "select-home-hero appears as deep-link only sub-flow of /sanctuary",
+        "action": "document as intentional sub-flow"
+      }
+    ],
+    "frontend_routes_not_in_menu": [
+      "/affinity-gifts-preview",
+      "/collection-synergies-preview (in menu actually)",
+      "/hero-detail (deep link from heroes list)",
+      "/hero-viewer (deep link)",
+      "/hero-encyclopedia (deep link)",
+      "/select-home-hero (sub-flow)",
+      "/synergy-codex (deep link)",
+      "/combat (entered from battle modes)",
+      "/safe-previews (in menu as 'Sistemi in preparazione')",
+      "/daily-hub (in menu as 'Guida Giornaliera')",
+      "/artifacts-preview (linked from /safe-previews)",
+      "/housing-preview (linked from /safe-previews)",
+      "/status-codex (linked from /safe-previews)"
+    ],
+    "backend_endpoints_likely_without_frontend": [
+      "/api/forge, /api/forge/upgrade, /api/forge/fuse (no /forge frontend route)",
+      "/api/runes/* family (no dedicated /runes frontend route)",
+      "/api/hero-skill-kits/runtime/debug/* (dev/debug only \u2014 correctly hidden)",
+      "/api/admin/bots/* (admin only \u2014 correctly hidden)",
+      "/api/affinity/gift-spend/_admin/* (admin only \u2014 correctly hidden)",
+      "/api/hoplite-reel (legacy preview endpoint? \u2014 not referenced in any /app/frontend route)"
+    ],
+    "frontend_endpoints_likely_without_backend": [],
+    "forbidden_legacy_actions": [
+      "NO renames performed",
+      "NO deletions performed",
+      "NO redirects added",
+      "NO files removed",
+      "only documentation"
+    ]
+  }
+}

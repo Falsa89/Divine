@@ -1,0 +1,56 @@
+{
+  "track": "F",
+  "track_id": "MODE_SMOKE_TEST_REQUIREMENTS_PACK",
+  "verdict": "TRACK_F_MODE_SMOKE_TEST_REQUIREMENTS_READY",
+  "global_markers": {
+    "PROJECT_MODE_WIRING_REGISTRY_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "MODE_WIRING_REGISTRY_AUDIT_ONLY",
+    "TRACK_F_MODE_SMOKE_TEST_REQUIREMENTS_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "smoke_requirements_per_mode": [
+    {"mode_id": "home", "api_smoke": ["GET /api/user/profile 200"], "frontend_smoke": ["open tab home", "render badges"], "mobile_smoke": ["render on iPhone 390x844"], "no_live_action_guard": true, "locked_state_guard": false, "regression_validator": false, "priority": "P3"},
+    {"mode_id": "heroes", "api_smoke": ["GET /api/heroes len==100", "GET /api/heroes/borea 200", "GET /api/heroes/primordial_gaia 404"], "frontend_smoke": ["open tab heroes", "see 100 entries"], "mobile_smoke": ["list scroll smooth"], "no_live_action_guard": true, "locked_state_guard": false, "regression_validator": true, "priority": "P1"},
+    {"mode_id": "hero_detail", "api_smoke": ["GET /api/heroes/{hero_id}"], "frontend_smoke": ["open /hero-detail?hero_id=borea via deep link"], "mobile_smoke": ["render"], "no_live_action_guard": true, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "combat", "api_smoke": ["md5 battle_engine.py == 151ca35ad3bc35f0a6209cb3744ed440"], "frontend_smoke": ["open /combat from story chapter", "battle plays"], "mobile_smoke": ["animations"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": true, "priority": "P1", "note": "never mutate engine"},
+    {"mode_id": "gacha", "api_smoke": ["GET /api/gacha/banners"], "frontend_smoke": ["open tab gacha"], "mobile_smoke": ["banner visuals"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": true, "priority": "P2", "note": "Borea NOT in pool"},
+    {"mode_id": "shop", "api_smoke": ["GET /api/shop", "GET /api/item-shop"], "frontend_smoke": ["open /shop, /item-shop, /economy"], "mobile_smoke": ["tabs render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "battle_pass", "api_smoke": ["GET /api/battlepass"], "frontend_smoke": ["open /battlepass"], "mobile_smoke": ["progression bar"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "daily_hub", "api_smoke": [], "frontend_smoke": ["open /daily-hub", "verify no claim button", "all 5 cards link to existing routes"], "mobile_smoke": ["render on 360x800"], "no_live_action_guard": true, "locked_state_guard": false, "regression_validator": true, "priority": "P1"},
+    {"mode_id": "mail", "api_smoke": ["GET /api/mail"], "frontend_smoke": ["open /mail"], "mobile_smoke": ["list scroll"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "achievements", "api_smoke": ["GET /api/achievements"], "frontend_smoke": ["open /achievements"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "events", "api_smoke": ["GET /api/events/daily"], "frontend_smoke": ["open /events"], "mobile_smoke": ["render"], "no_live_action_guard": true, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "artifact", "api_smoke": ["GET /api/artifacts read-only"], "frontend_smoke": ["/artifacts-preview shows locked card"], "mobile_smoke": ["locked layout"], "no_live_action_guard": true, "locked_state_guard": true, "regression_validator": true, "priority": "P1", "note": "NEVER mutate until 5 signatures"},
+    {"mode_id": "housing", "api_smoke": ["GET /api/housing/preview == 503"], "frontend_smoke": ["/housing-preview shows SafeFeatureCard locked"], "mobile_smoke": ["render locked"], "no_live_action_guard": true, "locked_state_guard": true, "regression_validator": true, "priority": "P1"},
+    {"mode_id": "status_codex", "api_smoke": [], "frontend_smoke": ["/status-codex renders"], "mobile_smoke": ["render"], "no_live_action_guard": true, "locked_state_guard": false, "regression_validator": false, "priority": "P3"},
+    {"mode_id": "status_runtime_first_slice", "api_smoke": ["flag STATUS_RUNTIME_FIRST_SLICE_ENABLED not set"], "frontend_smoke": [], "mobile_smoke": [], "no_live_action_guard": true, "locked_state_guard": true, "regression_validator": true, "priority": "P1"},
+    {"mode_id": "status_runtime_second_slice", "api_smoke": ["flag STATUS_RUNTIME_SECOND_SLICE_ENABLED not set in prod env"], "frontend_smoke": [], "mobile_smoke": [], "no_live_action_guard": true, "locked_state_guard": true, "regression_validator": true, "priority": "P1"},
+    {"mode_id": "server_profiles", "api_smoke": ["GET /api/server-profiles/select == 503", "GET /api/servers legacy still 200"], "frontend_smoke": ["/servers opens; audit which endpoint called"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": true, "regression_validator": true, "priority": "P1", "note": "HIGH RISK legacy"},
+    {"mode_id": "af2n_affinity_gift", "api_smoke": ["GET /api/affinity/gifts", "GET /api/affinity/gift-spend/canary-status"], "frontend_smoke": ["/affinity-gifts-preview via deep link, read-only"], "mobile_smoke": ["render locked"], "no_live_action_guard": true, "locked_state_guard": true, "regression_validator": true, "priority": "P2"},
+    {"mode_id": "soul_forge", "api_smoke": ["GET /api/soul-forge"], "frontend_smoke": ["open /soul-forge"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "equipment", "api_smoke": ["GET /api/equipment/templates"], "frontend_smoke": ["open /equipment"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "forge", "api_smoke": ["GET /api/forge", "GET /api/runes"], "frontend_smoke": ["audit if /equipment exposes forge sub-tabs"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": true, "priority": "P2"},
+    {"mode_id": "unique_items", "api_smoke": ["GET /api/unique-items", "GET /api/exclusive-items"], "frontend_smoke": ["open /exclusive; check which endpoint"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": true, "priority": "P2"},
+    {"mode_id": "guild", "api_smoke": ["GET /api/guild/info"], "frontend_smoke": ["open /guild"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P2"},
+    {"mode_id": "gvg", "api_smoke": ["GET /api/gvg/wars"], "frontend_smoke": ["open /gvg"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P3"},
+    {"mode_id": "raids", "api_smoke": ["GET /api/raids"], "frontend_smoke": ["open /raid"], "mobile_smoke": ["render"], "no_live_action_guard": false, "locked_state_guard": false, "regression_validator": false, "priority": "P3"},
+    {"mode_id": "safe_previews", "api_smoke": [], "frontend_smoke": ["open /safe-previews", "3 children linked"], "mobile_smoke": ["render"], "no_live_action_guard": true, "locked_state_guard": false, "regression_validator": true, "priority": "P2"},
+    {"mode_id": "approval_matrix_live_gates", "api_smoke": [], "frontend_smoke": [], "mobile_smoke": [], "no_live_action_guard": true, "locked_state_guard": true, "regression_validator": false, "priority": "P3"}
+  ],
+  "forbidden_smoke_actions": [
+    "no destructive smoke",
+    "no live gacha pull during smoke",
+    "no economy mutation during smoke",
+    "no DB writes during smoke",
+    "no fake mobile screenshots"
+  ],
+  "summary": {
+    "total_modes_with_smoke": 27,
+    "P1_priority": 7,
+    "P2_priority": 14,
+    "P3_priority": 6,
+    "locked_state_guards": 6,
+    "regression_validators_needed": 11
+  }
+}

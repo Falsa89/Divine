@@ -1,0 +1,89 @@
+{
+  "track": "E",
+  "track_id": "UNREACHABLE_IMPLEMENTED_MODE_AUDIT_PACK",
+  "verdict": "TRACK_E_UNREACHABLE_IMPLEMENTED_MODE_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_MODE_WIRING_REGISTRY_AUDIT_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "MODE_WIRING_REGISTRY_AUDIT_ONLY",
+    "TRACK_E_UNREACHABLE_IMPLEMENTED_MODE_AUDIT_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "unreachable_or_deep_link_only": [
+    {
+      "route": "/affinity-gifts-preview",
+      "classification": "should_be_locked_preview_linked_from_safe_previews",
+      "reason": "Locked preview esiste ma non collegato n\u00e9 dal menu n\u00e9 dall'hub /safe-previews. Coerente con altri preview locked.",
+      "action": "future pack: add link in /safe-previews hub (SAFE)"
+    },
+    {
+      "route": "/hero-viewer",
+      "classification": "deep_link_only_possibly_redundant",
+      "reason": "Duplicato funzionale di /hero-detail; nessun entry da menu o hub.",
+      "action": "audit purpose; decide consolidate/document/keep-as-fullscreen"
+    },
+    {
+      "route": "/hero-encyclopedia",
+      "classification": "deep_link_only_intentional_lore",
+      "reason": "Sub-screen per lore di un eroe; raggiunta da /hero-detail tipicamente.",
+      "action": "document as intentional sub-flow"
+    },
+    {
+      "route": "/synergy-codex",
+      "classification": "deep_link_only_possibly_replaced",
+      "reason": "/collection-synergies-preview esiste in menu; /synergy-codex \u00e8 documentazione synergy v2.",
+      "action": "document distinction or consolidate"
+    },
+    {
+      "route": "/select-home-hero",
+      "classification": "intentional_sub_flow",
+      "reason": "Sub-flow di /sanctuary per scelta eroe-home.",
+      "action": "keep as sub-flow"
+    },
+    {
+      "route": "/combat",
+      "classification": "intentional_entered_from_battle_modes",
+      "reason": "Schermata di battaglia attiva, raggiunta da story/tower/pvp/events.",
+      "action": "keep; refactor UI in future pack senza toccare engine"
+    },
+    {
+      "route": "/index",
+      "classification": "gate_route",
+      "reason": "Entry-point/login redirect; non destinazione utente.",
+      "action": "keep"
+    },
+    {
+      "route": "backend /api/forge/* and /api/runes/*",
+      "classification": "backend_without_frontend_route",
+      "reason": "Endpoint live ma nessuna route frontend dedicata /forge o /runes. Menu 'Fucina di Efesto' punta a /equipment.",
+      "action": "audit: does /equipment include forge/runes sub-tabs? if not, future PROJECT_FORGE_FRONTEND_ROUTE_AUDIT_PACK"
+    },
+    {
+      "route": "backend /api/hoplite-reel",
+      "classification": "orphan_legacy_endpoint",
+      "reason": "Endpoint GET /api/hoplite-reel in server.py; non chiamato da nessuna route frontend.",
+      "action": "document; keep if testing utility; deprecate if obsolete"
+    },
+    {
+      "route": "backend /api/affinity/gift-spend (canary)",
+      "classification": "backend_dry_run_no_player_ui",
+      "reason": "Endpoint canary live in dry-run; /affinity-gifts-preview \u00e8 read-only e non chiama spend.",
+      "action": "keep as dry-run; UI claim NON da esporre prima di firme AF2-N"
+    }
+  ],
+  "classification_legend": {
+    "player_visible_now": [],
+    "locked_preview": ["/artifacts-preview", "/housing-preview", "/status-codex", "/affinity-gifts-preview", "/collection-synergies-preview"],
+    "dev_admin_only": ["/dev-combat-qa-lab", "/sprite-test"],
+    "intentional_hidden": ["/select-home-hero", "/combat", "/index"],
+    "should_be_removed_later": [],
+    "should_be_linked_by_future_pack": ["/affinity-gifts-preview"]
+  },
+  "summary": {
+    "total_unreachable_or_deep_link_only": 10,
+    "frontend_only_deep_link": 7,
+    "backend_only_without_frontend": 3,
+    "critical_issues": 0,
+    "requires_future_pack": 3
+  }
+}
