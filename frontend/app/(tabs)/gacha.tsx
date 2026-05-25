@@ -10,6 +10,14 @@ import Animated, { ZoomIn, FadeIn, FadeInDown, BounceIn } from 'react-native-rea
 
 const { width: W, height: H } = Dimensions.get('window');
 
+// BATCH_1_V2 Track B \u2014 Lock player-facing dei banner non firmati da economy.
+// I banner Artefatti e Costellazioni sono nascosti finch\u00e9 l'Artifact Bible non
+// \u00e8 approvato. I banner Premium e Mirato sono marcati LOCKED finch\u00e9 le rate
+// non sono firmate (sono attualmente dev-like al 30% combinato 5\u2605+6\u2605).
+// Nessuna modifica alle rate o ai pool: solo guardrail UI.
+const LOCKED_BANNERS_V2 = new Set(['premium', 'targeted']);
+const HIDDEN_BANNERS_V2 = new Set(['artifact', 'constellation']);
+
 const BANNERS = [
   {
     id: 'standard', name: 'Standard', desc: 'Tutte le rarita', gradient: ['#FFD700', '#CC9900'] as const,
@@ -55,9 +63,23 @@ export default function GachaTab() {
   const [show, setShow] = useState(false);
   const [banner, setBanner] = useState('standard');
 
-  const activeBanner = BANNERS.find(b => b.id === banner) || BANNERS[0];
+  // BATCH_1_V2 Track B \u2014 filtro UI dei banner. Niente cambi a rate/pool/backend.
+  const visibleBanners = BANNERS.filter(b => !HIDDEN_BANNERS_V2.has(b.id));
+  const activeBanner = visibleBanners.find(b => b.id === banner) || visibleBanners[0];
+  const isActiveBannerLocked = LOCKED_BANNERS_V2.has(activeBanner.id);
+
+  // Auto-redirect se l'utente arrivasse su un banner nascosto via state stale.
+  useEffect(() => {
+    if (HIDDEN_BANNERS_V2.has(banner)) {
+      setBanner('standard');
+    }
+  }, [banner]);
 
   const doPull = async (type: 'single' | 'multi') => {
+    // BATCH_1_V2 Track B \u2014 guardrail UI: blocca pull sui banner LOCKED.
+    if (isActiveBannerLocked) {
+      return;
+    }
     setPulling(true); setResults([]); setShow(false);
     try {
       const body = JSON.stringify({ banner });
@@ -225,8 +247,9 @@ export default function GachaTab() {
           showsVerticalScrollIndicator={false}
           nestedScrollEnabled
         >
-          {BANNERS.map((b, i) => {
+          {visibleBanners.map((b, i) => {
             const isActive = banner === b.id;
+            const isLocked = LOCKED_BANNERS_V2.has(b.id);
             return (
               <Animated.View key={b.id} entering={FadeInDown.delay(i * 80).duration(300)}>
                 <TouchableOpacity
@@ -241,7 +264,12 @@ export default function GachaTab() {
                     <View style={[s.bannerDot, { backgroundColor: b.gradient[0] }]} />
                     <Text style={[s.bannerName, { color: isActive ? b.gradient[0] : COLORS.textSecondary }]}>{b.name}</Text>
                     <Text style={s.bannerDesc}>{b.desc}</Text>
-                    {isActive && (
+                    {isLocked && (
+                      <View style={s.bannerLockedBadgeV2}>
+                        <Text style={s.bannerLockedTxtV2}>{'\uD83D\uDD12'} IN REVISIONE</Text>
+                      </View>
+                    )}
+                    {isActive && !isLocked && (
                       <View style={[s.bannerActiveBadge, { backgroundColor: b.gradient[0] + '20' }]}>
                         <Text style={[s.bannerActive, { color: b.gradient[0] }]}>ATTIVO</Text>
                       </View>
@@ -266,6 +294,15 @@ export default function GachaTab() {
           >
             <Text style={[s.bInfoTitle, { color: activeBanner.gradient[0] }]}>{activeBanner.name}</Text>
             <Text style={s.bInfoDesc}>{activeBanner.desc}</Text>
+            {isActiveBannerLocked && (
+              <View style={s.lockedNoticeV2}>
+                <Text style={s.lockedNoticeIconV2}>{'\uD83D\uDD12'}</Text>
+                <Text style={s.lockedNoticeTxtV2}>
+                  Banner in revisione \u2014 probabilit\u00e0 in attesa di signoff economy.
+                  Evocazioni temporaneamente disabilitate.
+                </Text>
+              </View>
+            )}
             <View style={s.guaranteeBadge}>
               <Text style={s.bInfoGuarantee}>Garantito x10: {activeBanner.guarantee}</Text>
             </View>
@@ -286,16 +323,16 @@ export default function GachaTab() {
             <TouchableOpacity
               style={s.pullBtnOuter}
               onPress={() => doPull('single')}
-              disabled={pulling}
+              disabled={pulling || isActiveBannerLocked}
               activeOpacity={0.7}
             >
               <LinearGradient
                 colors={['rgba(255,255,255,0.06)', 'rgba(255,255,255,0.02)']}
-                style={[s.pullBtn, { borderColor: activeBanner.gradient[0] + '50' }, pulling && { opacity: 0.5 }]}
+                style={[s.pullBtn, { borderColor: activeBanner.gradient[0] + '50' }, (pulling || isActiveBannerLocked) && { opacity: 0.4 }]}
               >
                 {pulling ? <ActivityIndicator color="#fff" /> : (
                   <>
-                    <Text style={s.pTitle}>EVOCA x1</Text>
+                    <Text style={s.pTitle}>{isActiveBannerLocked ? 'IN REVISIONE' : 'EVOCA x1'}</Text>
                     <Text style={[s.pCost, { color: activeBanner.gradient[0] }]}>{'\uD83D\uDC8E'} {activeBanner.cost1}</Text>
                   </>
                 )}
@@ -305,16 +342,16 @@ export default function GachaTab() {
             <TouchableOpacity
               style={s.pullBtnOuter}
               onPress={() => doPull('multi')}
-              disabled={pulling}
+              disabled={pulling || isActiveBannerLocked}
               activeOpacity={0.7}
             >
               <LinearGradient
                 colors={[activeBanner.gradient[0] + '30', activeBanner.gradient[1] + '15']}
-                style={[s.pullBtn, { borderColor: activeBanner.gradient[0] + '60' }, pulling && { opacity: 0.5 }]}
+                style={[s.pullBtn, { borderColor: activeBanner.gradient[0] + '60' }, (pulling || isActiveBannerLocked) && { opacity: 0.4 }]}
               >
                 {pulling ? <ActivityIndicator color="#fff" /> : (
                   <>
-                    <Text style={s.pTitle}>EVOCA x10</Text>
+                    <Text style={s.pTitle}>{isActiveBannerLocked ? 'IN REVISIONE' : 'EVOCA x10'}</Text>
                     <Text style={[s.pCost, { color: activeBanner.gradient[0] }]}>{'\uD83D\uDC8E'} {activeBanner.cost10}</Text>
                     <View style={s.pGuarantee}>
                       <Text style={s.pG}>Garantito {activeBanner.guarantee}</Text>
@@ -415,6 +452,44 @@ const s = StyleSheet.create({
     marginTop: 4,
   },
   pG: { color: COLORS.success, fontSize: 9, fontWeight: '700' },
+  // BATCH_1_V2 Track B \u2014 lock badges
+  bannerLockedBadgeV2: {
+    marginTop: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,165,0,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,165,0,0.5)',
+    alignSelf: 'flex-start',
+  },
+  bannerLockedTxtV2: {
+    color: '#FFB347',
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  lockedNoticeV2: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginTop: 8,
+    marginBottom: 4,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,165,0,0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,165,0,0.45)',
+  },
+  lockedNoticeIconV2: { fontSize: 18 },
+  lockedNoticeTxtV2: {
+    flex: 1,
+    color: '#FFD089',
+    fontSize: 11,
+    lineHeight: 16,
+    fontWeight: '600',
+  },
   // Results
   resHdr: {
     flexDirection: 'row',

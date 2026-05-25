@@ -19,6 +19,9 @@ export default function ItemShopScreen() {
   const [buying, setBuying] = useState('');
   const [filter, setFilter] = useState('all');
 
+  // BATCH_1_V2 Track E \u2014 lock acquisti item-shop. Nessun cambio prezzi/item.
+  const ITEM_SHOP_LOCKED_V2 = true;
+
   useEffect(() => { load(); }, []);
   const load = async () => {
     try { const d = await apiCall('/api/item-shop'); setData(d); }
@@ -26,6 +29,7 @@ export default function ItemShopScreen() {
   };
 
   const buy = async (itemId: string, name: string, qty: number = 1) => {
+    if (ITEM_SHOP_LOCKED_V2) return; // lock UI safe
     setBuying(itemId);
     try {
       await apiCall('/api/item-shop/buy', { method: 'POST', body: JSON.stringify({ item_id: itemId, quantity: qty }) });
@@ -36,6 +40,7 @@ export default function ItemShopScreen() {
   };
 
   const buyMulti = (item: any) => {
+    if (ITEM_SHOP_LOCKED_V2) return; // lock UI safe
     Alert.alert(`Compra ${item.name}`, 'Quanti?', [
       { text: '1', onPress: () => buy(item.item_id, item.name, 1) },
       { text: '5', onPress: () => buy(item.item_id, item.name, 5) },
@@ -78,16 +83,28 @@ export default function ItemShopScreen() {
         ))}
       </View>
 
+      {/* BATCH_1_V2 Track E \u2014 banner lock item shop */}
+      {ITEM_SHOP_LOCKED_V2 && (
+        <View style={s.lockBannerV2}>
+          <Text style={s.lockBannerIconV2}>{'\uD83D\uDD12'}</Text>
+          <Text style={s.lockBannerTxtV2}>
+            Negozio oggetti in revisione \u2014 acquisti temporaneamente disabilitati.
+            Listino visibile in anteprima informativa.
+          </Text>
+        </View>
+      )}
+
       <ScrollView contentContainerStyle={s.list}>
         {filtered.map((item: any, i: number) => {
           const col = RARITY_COL[item.rarity] || '#888';
           const isGems = item.currency === 'gems';
+          const disabledByLock = ITEM_SHOP_LOCKED_V2;
           return (
             <Animated.View key={item.item_id} entering={FadeInDown.delay(i * 25).duration(200)}>
-              <TouchableOpacity onPress={() => buyMulti(item)} activeOpacity={0.7}>
+              <TouchableOpacity onPress={() => !disabledByLock && buyMulti(item)} activeOpacity={disabledByLock ? 1 : 0.7} disabled={disabledByLock}>
                 <LinearGradient
                   colors={[col + '10', 'rgba(255,255,255,0.02)']}
-                  style={[s.card, { borderColor: col + '25' }, !item.can_afford && { opacity: 0.5 }]}
+                  style={[s.card, { borderColor: col + '25' }, (!item.can_afford || disabledByLock) && { opacity: 0.5 }]}
                 >
                   <View style={[s.cardIcon, { backgroundColor: col + '18' }]}>
                     <Text style={s.cardIconTxt}>{item.icon}</Text>
@@ -104,9 +121,9 @@ export default function ItemShopScreen() {
                       {item.shop_price.toLocaleString()}
                     </Text>
                   </View>
-                  <View style={[s.buyBadge, { backgroundColor: item.can_afford ? COLORS.success + '20' : 'rgba(255,255,255,0.04)' }]}>
-                    <Text style={[s.buyTxt, { color: item.can_afford ? COLORS.success : COLORS.textDim }]}>
-                      {buying === item.item_id ? '...' : 'COMPRA'}
+                  <View style={[s.buyBadge, { backgroundColor: disabledByLock ? 'rgba(255,165,0,0.18)' : item.can_afford ? COLORS.success + '20' : 'rgba(255,255,255,0.04)' }]}>
+                    <Text style={[s.buyTxt, { color: disabledByLock ? '#FFB347' : item.can_afford ? COLORS.success : COLORS.textDim }]}>
+                      {disabledByLock ? '\uD83D\uDD12' : buying === item.item_id ? '...' : 'COMPRA'}
                     </Text>
                   </View>
                 </LinearGradient>
@@ -151,4 +168,8 @@ const s = StyleSheet.create({
   invBtnWrap: { position: 'absolute', bottom: 70, left: 16 },
   invBtn: { paddingHorizontal: 18, paddingVertical: 10, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(255,215,0,0.2)' },
   invBtnTxt: { color: COLORS.gold, fontSize: 12, fontWeight: '900' },
+  // BATCH_1_V2 Track E
+  lockBannerV2: { flexDirection: 'row', gap: 8, alignItems: 'center', paddingHorizontal: 12, paddingVertical: 10, marginHorizontal: 8, marginTop: 8, marginBottom: 4, borderRadius: 8, backgroundColor: 'rgba(255,165,0,0.10)', borderWidth: 1, borderColor: 'rgba(255,165,0,0.45)' },
+  lockBannerIconV2: { fontSize: 18 },
+  lockBannerTxtV2: { flex: 1, color: '#FFD089', fontSize: 11, lineHeight: 16, fontWeight: '600' },
 });

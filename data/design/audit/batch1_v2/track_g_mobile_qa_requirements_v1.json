@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2",
+  "track": "G",
+  "verdict": "TRACK_G_POST_LOCK_MOBILE_QA_AND_REGRESSION_REQUIREMENTS_READY",
+  "mobile_qa_checklist": [
+    {"id": "QA-01", "area": "gacha", "steps": ["aprire /gacha", "verificare assenza banner Artefatti e Costellazioni", "selezionare banner Premium", "verificare badge IN REVISIONE", "verificare pulsanti EVOCA x1/x10 disabilitati e con label 'IN REVISIONE'"]},
+    {"id": "QA-02", "area": "artifacts", "steps": ["navigare a /artifacts via deep link", "verificare schermata loading + redirect a /artifacts-preview", "verificare nessun bottone Pull/Fuse/Equip raggiungibile"]},
+    {"id": "QA-03", "area": "shop", "steps": ["aprire /shop", "verificare banner '\ud83d\udd12 Negozio in revisione'", "tap bottone COMPRA su un item \u2192 nessuna richiesta network, nessun alert"]},
+    {"id": "QA-04", "area": "item-shop", "steps": ["aprire /item-shop", "verificare banner lock", "tap card item \u2192 modal quantit\u00e0 NON deve aprirsi"]},
+    {"id": "QA-05", "area": "battlepass", "steps": ["aprire /battlepass", "verificare banner lock", "verificare bottone PREMIUM mostra 'IN REVISIONE'", "livelli con canClaim non mostrano bottone Riscuoti attivo"]},
+    {"id": "QA-06", "area": "vip", "steps": ["aprire /vip", "verificare banner lock", "bottone Riscuoti Gemme VIP Giornaliere non visibile"]},
+    {"id": "QA-07", "area": "soul_forge", "steps": ["aprire /soul-forge", "verificare eroi team filtrati", "verificare eroi 4\u2605+ con badge \ud83d\udd12 e opacit\u00e0 ridotta", "tap Tutti \u2192 selezionati solo eroi 1-3\u2605", "attivare 'Sblocca selezione eroi 4\u2605+' \u2192 ora selezionabili", "tap FORGE SOUL \u2192 modal di conferma con breakdown", "per forge rischioso (10+ eroi o eroi 4\u2605+ selezionati) digitare CONFERMA per abilitare bottone FORGE", "verificare Annulla chiude senza chiamare API"]},
+    {"id": "QA-08", "area": "menu", "steps": ["aprire menu", "verificare assenza voci 'Sprite Test' e 'Combat QA Lab (DEV)'", "verificare voce 'Artefatti & Costellazioni' apre /artifacts-preview (non /artifacts live)"]},
+    {"id": "QA-09", "area": "regression", "steps": ["/heroes, /battle, /servers, /events, /achievements, /mail invariati", "navigation tab bar intatta", "nessuna nuova chiamata API mutativa dal nostro lock"]}
+  ],
+  "db_writes": 0,
+  "backend_changes": 0
+}

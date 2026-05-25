@@ -1,0 +1,28 @@
+{
+  "task_id": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2",
+  "track": "D",
+  "verdict": "TRACK_D_SOUL_FORGE_PERMANENT_DESTRUCTION_GUARD_IMPLEMENTED_SAFE",
+  "soul_forge_mode_preserved": true,
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "guard_layers": [
+    "team_filter",
+    "flag_filter_locked_favorite_native_event_unique",
+    "high_rarity_default_protect_min_4\u2605",
+    "override_toggle_for_high_rarity",
+    "select_all_skips_high_rarity",
+    "multi_step_confirm_modal",
+    "typed_confirmation_CONFERMA_for_risky_forge",
+    "exact_loss_and_gain_preview_in_modal"
+  ],
+  "hero_deletion": 0,
+  "user_heroes_mutation": 0,
+  "backend_changes": 0,
+  "db_writes": 0,
+  "protect_min_stars": 4,
+  "risky_bulk_threshold": 10,
+  "protected_flags": [
+    "locked", "is_locked", "favorite", "is_favorite",
+    "native", "is_native", "is_event", "is_unique", "is_exclusive"
+  ],
+  "soul_forge_tsx_md5_post": "94da10c68a6b22b17a2a91967f6a1380"
+}

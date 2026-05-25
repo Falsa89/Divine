@@ -1,0 +1,17 @@
+{
+  "task_id": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2",
+  "track": "F",
+  "verdict": "TRACK_F_MENU_DEV_LEGACY_ROUTE_HARDENING_IMPLEMENTED_SAFE",
+  "file_changed": "frontend/app/(tabs)/menu.tsx",
+  "entries_removed_from_menu": [
+    {"label": "Sprite Test", "route": "/sprite-test", "reason": "dev-only screen non destinata ai player"},
+    {"label": "Combat QA Lab (DEV)", "route": "/dev-combat-qa-lab", "reason": "dev-only screen non destinata ai player"}
+  ],
+  "entries_redirected": [
+    {"label": "Artefatti & Costellazioni", "old_route": "/artifacts", "new_route": "/artifacts-preview", "reason": "route live legacy redirige automaticamente, ma il menu ora punta direttamente all'anteprima safe"}
+  ],
+  "route_files_deleted": 0,
+  "backend_changes": 0,
+  "db_writes": 0,
+  "menu_tsx_md5_post": "9b519b013f5e31907222b7418d32aa46"
+}

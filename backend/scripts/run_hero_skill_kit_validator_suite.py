@@ -1019,6 +1019,15 @@ OPTIONAL = [
     ('PROJECT-FULL-REPO-TRACK-F-GATES-DEV-SURFACE-AUDIT', 'validate_full_repo_gates_dev_surface_audit_v1.py'),
     ('PROJECT-FULL-REPO-TRACK-G-MASTER-BACKLOG-AND-GAP-MATRIX', 'validate_full_repo_master_backlog_and_gap_matrix_v1.py'),
     ('PROJECT-FULL-REPO-TRACK-H-COMPLETION-COVERAGE-PROOF', 'validate_full_repo_completion_and_coverage_proof_v1.py'),
+    # PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2 (frontend-only lock/guard pack)
+    ('PROJECT-BATCH1-V2-TRACK-A-FINDINGS', 'validate_batch1_v2_track_a_findings_v1.py'),
+    ('PROJECT-BATCH1-V2-TRACK-B-GACHA-LOCK', 'validate_batch1_v2_track_b_gacha_lock_v1.py'),
+    ('PROJECT-BATCH1-V2-TRACK-C-ARTIFACT-REDIRECT', 'validate_batch1_v2_track_c_artifact_redirect_v1.py'),
+    ('PROJECT-BATCH1-V2-TRACK-D-SOUL-FORGE-GUARD', 'validate_batch1_v2_track_d_soul_forge_guard_v1.py'),
+    ('PROJECT-BATCH1-V2-TRACK-E-MONETIZATION-LOCK', 'validate_batch1_v2_track_e_monetization_lock_v1.py'),
+    ('PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING', 'validate_batch1_v2_track_f_menu_hardening_v1.py'),
+    ('PROJECT-BATCH1-V2-TRACK-G-MOBILE-QA', 'validate_batch1_v2_track_g_mobile_qa_v1.py'),
+    ('PROJECT-BATCH1-V2-TRACK-H-COMPLETION', 'validate_batch1_v2_track_h_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

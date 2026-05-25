@@ -12,10 +12,15 @@ export default function VIPScreen() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  // BATCH_1_V2 Track E \u2014 VIP spend-based senza IAP \u2192 lock claim. Mode preservato
+  // come anteprima informativa fino a design IAP completo.
+  const VIP_LOCKED_V2 = true;
+
   useEffect(() => { load(); }, []);
   const load = async () => { try { const d = await apiCall('/api/vip'); setData(d); } catch(e){} finally { setLoading(false); } };
 
   const claimDaily = async () => {
+    if (VIP_LOCKED_V2) return; // lock UI safe
     try {
       const r = await apiCall('/api/vip/claim-daily', { method:'POST' });
       await refreshUser(); await load();
@@ -30,6 +35,16 @@ export default function VIPScreen() {
         <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{"\u2190"}</Text></TouchableOpacity>
         <Text style={s.title}>SISTEMA VIP</Text>
       </View>
+      {/* BATCH_1_V2 Track E \u2014 banner lock VIP */}
+      {VIP_LOCKED_V2 && (
+        <View style={s.lockBannerV2}>
+          <Text style={s.lockBannerIconV2}>{'\uD83D\uDD12'}</Text>
+          <Text style={s.lockBannerTxtV2}>
+            VIP in revisione \u2014 sistema spesa reale (IAP) non ancora implementato.
+            Riscossioni VIP temporaneamente disabilitate. Anteprima informativa.
+          </Text>
+        </View>
+      )}
       <View style={s.body}>
         {/* Current VIP */}
         <View style={[s.currentVip, {borderColor:data?.vip_color||'#888'}]}>
@@ -44,7 +59,7 @@ export default function VIPScreen() {
               ))}
             </View>
           )}
-          {data?.can_claim_daily && data?.vip_level > 0 && (
+          {data?.can_claim_daily && data?.vip_level > 0 && !VIP_LOCKED_V2 && (
             <TouchableOpacity style={s.claimBtn} onPress={claimDaily}>
               <Text style={s.claimTxt}>Riscuoti Gemme VIP Giornaliere</Text>
             </TouchableOpacity>
@@ -101,4 +116,8 @@ const s = StyleSheet.create({
   lvlPerks:{width:120},
   perkSmall:{color:'#aaa',fontSize:8},
   youBadge:{color:'#ff6b35',fontSize:10,fontWeight:'900',backgroundColor:'rgba(255,107,53,0.2)',paddingHorizontal:6,paddingVertical:2,borderRadius:4},
+  // BATCH_1_V2 Track E
+  lockBannerV2:{flexDirection:'row',gap:8,alignItems:'center',paddingHorizontal:12,paddingVertical:10,marginHorizontal:12,marginTop:8,marginBottom:4,borderRadius:8,backgroundColor:'rgba(255,165,0,0.10)',borderWidth:1,borderColor:'rgba(255,165,0,0.45)'},
+  lockBannerIconV2:{fontSize:18},
+  lockBannerTxtV2:{flex:1,color:'#FFD089',fontSize:11,lineHeight:16,fontWeight:'600'},
 });

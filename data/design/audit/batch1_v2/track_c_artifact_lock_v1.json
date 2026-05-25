@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2",
+  "track": "C",
+  "verdict": "TRACK_C_ARTIFACT_CONSTELLATION_SURFACE_LOCKED_TO_PREVIEW_SAFE",
+  "file_changed": "frontend/app/artifacts.tsx",
+  "strategy": "redirect_to_safe_preview",
+  "redirect_target": "/artifacts-preview",
+  "backend_routes_removed": [],
+  "backend_routes_disabled": [],
+  "frontend_artifacts_pull_calls_reachable": 0,
+  "db_writes": 0,
+  "backend_changes": 0,
+  "product_rule_check": {
+    "artifact_remains_account_wide_collection": true,
+    "artifact_not_equipment": true,
+    "artifact_not_divine_weapon": true,
+    "future_reserved_examples": ["Santo Graal (Art\u00f9 non ancora introdotto)", "Occhio di Ra (Ra non ancora introdotto)"]
+  },
+  "artifacts_tsx_md5_post": "8849e21c44207fc1d0074cae2cdc6879"
+}

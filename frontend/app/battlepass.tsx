@@ -12,10 +12,17 @@ export default function BattlePassScreen() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  // BATCH_1_V2 Track E \u2014 lock acquisto premium e claim live.
+  // Premium senza IAP backing \u2192 hide/lock. Free claim disabilitato finch\u00e9 nuovo
+  // contratto BP account-wide non \u00e8 firmato. Nessuna mod a reward/prezzi/backend.
+  const BP_LOCKED_V2 = true;
+  const BP_PREMIUM_BUY_LOCKED_V2 = true;
+
   useEffect(() => { load(); }, []);
   const load = async () => { try { const d = await apiCall('/api/battlepass'); setData(d); } catch(e){} finally { setLoading(false); } };
 
   const claim = async (level: number) => {
+    if (BP_LOCKED_V2) return; // lock UI safe
     try {
       const r = await apiCall(`/api/battlepass/claim/${level}`, { method:'POST' });
       await refreshUser(); await load();
@@ -25,6 +32,7 @@ export default function BattlePassScreen() {
   };
 
   const buyPremium = async () => {
+    if (BP_PREMIUM_BUY_LOCKED_V2) return; // lock UI safe
     try {
       await apiCall('/api/battlepass/buy-premium', { method:'POST' });
       await refreshUser(); await load();
@@ -48,6 +56,16 @@ export default function BattlePassScreen() {
         <Text style={s.title}>BATTLE PASS</Text>
         <Text style={s.season}>Stagione {data?.season || 1}</Text>
       </View>
+      {/* BATCH_1_V2 Track E \u2014 banner lock BP */}
+      {BP_LOCKED_V2 && (
+        <View style={s.lockBannerV2}>
+          <Text style={s.lockBannerIconV2}>{'\uD83D\uDD12'}</Text>
+          <Text style={s.lockBannerTxtV2}>
+            Battle Pass in revisione \u2014 nuovo contratto account-wide + IAP in
+            preparazione. Riscossioni temporaneamente disabilitate.
+          </Text>
+        </View>
+      )}
       {/* Level & EXP bar */}
       <View style={s.levelBar}>
         <Text style={s.levelTxt}>Lv.{level}</Text>
@@ -55,10 +73,15 @@ export default function BattlePassScreen() {
           <View style={[s.expBarFill, {width:`${Math.min(100,(exp/expNext)*100)}%`}]} />
         </View>
         <Text style={s.expTxt}>{exp}/{expNext} EXP</Text>
-        {!isPremium && (
+        {!isPremium && !BP_PREMIUM_BUY_LOCKED_V2 && (
           <TouchableOpacity style={s.premiumBtn} onPress={buyPremium}>
             <Text style={s.premiumTxt}>\uD83D\uDC8E 500 - PREMIUM</Text>
           </TouchableOpacity>
+        )}
+        {BP_PREMIUM_BUY_LOCKED_V2 && !isPremium && (
+          <View style={[s.premiumBtn, { opacity: 0.45 }]}>
+            <Text style={s.premiumTxt}>{'\uD83D\uDD12 IN REVISIONE'}</Text>
+          </View>
         )}
         {isPremium && <View style={s.premBadge}><Text style={s.premBadgeTxt}>\u2B50 PREMIUM</Text></View>}
       </View>
@@ -88,10 +111,15 @@ export default function BattlePassScreen() {
                 {!isPremium && <Text style={s.lockIcon}>\uD83D\uDD12</Text>}
               </View>
               {/* Claim button */}
-              {canClaim && (
+              {canClaim && !BP_LOCKED_V2 && (
                 <TouchableOpacity style={s.claimBtn} onPress={() => claim(r.level)}>
                   <Text style={s.claimTxt}>Riscuoti</Text>
                 </TouchableOpacity>
+              )}
+              {canClaim && BP_LOCKED_V2 && (
+                <View style={[s.claimBtn, { opacity: 0.4 }]}>
+                  <Text style={s.claimTxt}>{'\uD83D\uDD12'}</Text>
+                </View>
               )}
             </View>
           );
@@ -129,4 +157,8 @@ const s = StyleSheet.create({
   lockIcon:{position:'absolute',right:4,top:4,fontSize:10},
   claimBtn:{paddingHorizontal:10,paddingVertical:6,borderRadius:6,backgroundColor:'#ff6b35'},
   claimTxt:{color:'#fff',fontSize:9,fontWeight:'800'},
+  // BATCH_1_V2 Track E
+  lockBannerV2:{flexDirection:'row',gap:8,alignItems:'center',paddingHorizontal:12,paddingVertical:10,marginHorizontal:12,marginTop:8,marginBottom:4,borderRadius:8,backgroundColor:'rgba(255,165,0,0.10)',borderWidth:1,borderColor:'rgba(255,165,0,0.45)'},
+  lockBannerIconV2:{fontSize:18},
+  lockBannerTxtV2:{flex:1,color:'#FFD089',fontSize:11,lineHeight:16,fontWeight:'600'},
 });

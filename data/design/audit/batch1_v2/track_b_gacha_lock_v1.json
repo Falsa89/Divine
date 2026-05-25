@@ -1,0 +1,15 @@
+{
+  "task_id": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2",
+  "track": "B",
+  "verdict": "TRACK_B_GACHA_PLAYER_SURFACE_LOCK_OR_GUARD_IMPLEMENTED_SAFE",
+  "file_changed": "frontend/app/(tabs)/gacha.tsx",
+  "locked_banners_v2": ["premium", "targeted"],
+  "hidden_banners_v2": ["artifact", "constellation"],
+  "rate_changes": 0,
+  "pity_changes": 0,
+  "pool_changes": 0,
+  "backend_changes": 0,
+  "db_writes": 0,
+  "summary": "Banner artifact/constellation rimossi dalla UI gacha (account-wide collection futura). Banner premium/targeted marcati IN REVISIONE e pulsanti EVOCA disabilitati con notice 'rates in attesa di signoff economy'. Nessuna mutazione a rate/pity/pool/backend.",
+  "gacha_tsx_md5_post": "401666155f7129e3d3eed9613160245e"
+}

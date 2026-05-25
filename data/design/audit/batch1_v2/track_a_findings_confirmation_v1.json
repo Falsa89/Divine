@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2",
+  "track": "A",
+  "verdict": "TRACK_A_BATCH_1_V2_FINDINGS_CONFIRMATION_AND_SCOPE_LOCK_READY",
+  "confirmed_findings": [
+    {"id": "FND-01", "area": "gacha", "observation": "banner premium/targeted rates 30% combinato dev-like; banner artifact/constellation visibili senza canonical bible", "action": "LOCK_OR_HIDE"},
+    {"id": "FND-02", "area": "artifacts", "observation": "/artifacts live espone pull/pull10/fuse/equip", "action": "REDIRECT_TO_PREVIEW"},
+    {"id": "FND-03", "area": "shop", "observation": "buy/claim live senza IAP backing", "action": "LOCK_BUTTONS_AND_BANNER"},
+    {"id": "FND-04", "area": "item-shop", "observation": "buy live senza IAP backing", "action": "LOCK_BUTTONS_AND_BANNER"},
+    {"id": "FND-05", "area": "battlepass", "observation": "claim/buy-premium live senza IAP backing", "action": "LOCK_BUTTONS_AND_BANNER"},
+    {"id": "FND-06", "area": "vip", "observation": "claim live senza IAP backing", "action": "LOCK_CLAIM_AND_BANNER"},
+    {"id": "FND-07", "area": "soul_forge", "observation": "distruzione one-tap senza protezioni rari/locked/favorite", "action": "GUARD_DESTRUCTION_FLOW"},
+    {"id": "FND-08", "area": "menu", "observation": "esposti /sprite-test e /dev-combat-qa-lab + /artifacts live", "action": "HIDE_DEV_AND_REDIRECT_ARTIFACTS"}
+  ],
+  "scope_constraints": {
+    "frontend_only": true,
+    "no_db_writes": true,
+    "no_backend_route_changes": true,
+    "no_iap_implementation": true,
+    "no_hero_deletion": true,
+    "no_flag_flips": true,
+    "no_rate_changes": true,
+    "no_price_changes": true,
+    "no_reward_changes": true,
+    "battle_engine_md5_pre": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env_md5_pre": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "db_writes": 0,
+  "backend_changes": 0
+}

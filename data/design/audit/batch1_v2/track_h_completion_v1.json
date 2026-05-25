@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2",
+  "track": "H",
+  "verdict": "TRACK_H_BATCH_1_V2_COMPLETION_AND_NEXT_PACKS_READY",
+  "global_verdict": "PROJECT_BATCH_1_LOCK_DANGEROUS_PLAYER_SURFACES_V2_COMPLETE",
+  "track_verdicts": {
+    "A": "TRACK_A_BATCH_1_V2_FINDINGS_CONFIRMATION_AND_SCOPE_LOCK_READY",
+    "B": "TRACK_B_GACHA_PLAYER_SURFACE_LOCK_OR_GUARD_IMPLEMENTED_SAFE",
+    "C": "TRACK_C_ARTIFACT_CONSTELLATION_SURFACE_LOCKED_TO_PREVIEW_SAFE",
+    "D": "TRACK_D_SOUL_FORGE_PERMANENT_DESTRUCTION_GUARD_IMPLEMENTED_SAFE",
+    "E": "TRACK_E_SHOP_BATTLEPASS_VIP_MONETIZATION_LOCK_IMPLEMENTED_SAFE",
+    "F": "TRACK_F_MENU_DEV_LEGACY_ROUTE_HARDENING_IMPLEMENTED_SAFE",
+    "G": "TRACK_G_POST_LOCK_MOBILE_QA_AND_REGRESSION_REQUIREMENTS_READY",
+    "H": "TRACK_H_BATCH_1_V2_COMPLETION_AND_NEXT_PACKS_READY"
+  },
+  "frontend_files_changed": [
+    {"file": "frontend/app/(tabs)/gacha.tsx", "md5_post": "401666155f7129e3d3eed9613160245e"},
+    {"file": "frontend/app/(tabs)/menu.tsx", "md5_post": "9b519b013f5e31907222b7418d32aa46"},
+    {"file": "frontend/app/artifacts.tsx", "md5_post": "8849e21c44207fc1d0074cae2cdc6879"},
+    {"file": "frontend/app/shop.tsx", "md5_post": "56ddfb4015a812677f81924f71171580"},
+    {"file": "frontend/app/item-shop.tsx", "md5_post": "d09d616db14f4c6f98606e9ccd625379"},
+    {"file": "frontend/app/battlepass.tsx", "md5_post": "b5135ffb484120095a4eeddf907a0121"},
+    {"file": "frontend/app/vip.tsx", "md5_post": "45fcc9890b6b128c37088bc33aa54caf"},
+    {"file": "frontend/app/soul-forge.tsx", "md5_post": "94da10c68a6b22b17a2a91967f6a1380"}
+  ],
+  "backend_files_changed": [],
+  "db_writes": 0,
+  "backend_changes": 0,
+  "flag_flips": 0,
+  "hero_deletion": 0,
+  "user_heroes_mutation": 0,
+  "iap_implementation": false,
+  "rate_changes": 0,
+  "price_changes": 0,
+  "reward_changes": 0,
+  "invariant_files_md5": {
+    "battle_engine_py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "recommended_next_pack_order": [
+    "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF_PACK",
+    "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN_PACK",
+    "PROJECT_IAP_DESIGN_PACK",
+    "PROJECT_SHOP_IAP_INTEGRATION_PACK",
+    "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_PACK",
+    "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION_PACK",
+    "PROJECT_SOUL_FORGE_BACKEND_GUARD_ALIGNMENT_PACK",
+    "PROJECT_HERO_LIST_LEGACY_OWNED_VISIBILITY_FIX_PACK"
+  ]
+}

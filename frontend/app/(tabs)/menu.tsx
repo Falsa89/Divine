@@ -24,7 +24,7 @@ const CATEGORIES = [
       { label: 'Collezione Eroi', icon: '\uD83D\uDCDA', route: '/hero-collection', gradient: ['#FFD700', '#CC9900'] as const },
       { label: 'Addestramento Eroico', icon: '\u2694\uFE0F', route: '/hero-training', gradient: ['#FFD700', '#BB55FF'] as const },
       { label: 'Santuario', icon: '\u26E9\uFE0F', route: '/sanctuary', gradient: ['#FF77CC', '#CC5599'] as const },
-      { label: 'Artefatti & Costellazioni', icon: '\uD83D\uDC8E', route: '/artifacts', gradient: ['#BB55FF', '#8833CC'] as const },
+      { label: 'Artefatti & Costellazioni', icon: '\uD83D\uDC8E', route: '/artifacts-preview', gradient: ['#BB55FF', '#8833CC'] as const },
       { label: 'Soul Forge', icon: '\uD83D\uDC80', route: '/soul-forge', gradient: ['#9944FF', '#6622CC'] as const },
       { label: 'Aure & Cosmetici', icon: '\u2728', route: '/cosmetics', gradient: ['#FFD700', '#DD9900'] as const },
       { label: 'Achievement', icon: '\uD83C\uDFC5', route: '/achievements', gradient: ['#FFD700', '#CC9900'] as const },
@@ -40,7 +40,8 @@ const CATEGORIES = [
       { label: 'Negozio Oggetti', icon: '\uD83D\uDED2', route: '/item-shop', gradient: ['#44DD88', '#22AA66'] as const },
       { label: 'Negozio', icon: '\uD83C\uDFEA', route: '/shop', gradient: ['#44AAFF', '#2288CC'] as const },
       { label: 'VIP', icon: '\uD83D\uDC51', route: '/vip', gradient: ['#FFD700', '#DD9900'] as const },
-      { label: 'Sprite Test', icon: '\uD83C\uDFAC', route: '/sprite-test', gradient: ['#FF6B35', '#CC4400'] as const },
+      // BATCH_1_V2 Track F \u2014 Sprite Test rimosso dal menu player (dev-only).
+      // File /sprite-test rimane accessibile solo via deep link per QA interno.
     ],
   },
   {
@@ -63,10 +64,8 @@ const CATEGORIES = [
       { label: 'Amici', icon: '\uD83D\uDC65', route: '/friends', gradient: ['#4499FF', '#2277CC'] as const },
       { label: 'Seleziona Server', icon: '\uD83C\uDF10', route: '/servers', gradient: ['#44CC88', '#229966'] as const },
       { label: 'Eventi Giornalieri', icon: '\uD83C\uDF89', route: '/events', gradient: ['#44AAFF', '#2288CC'] as const },
-      // RM1.19 — Combat QA Lab: dev-only screen per validare animazioni,
-      // skill, effetti ed enemy behavior di ogni eroe (presente/futuro).
-      // Non è un'esperienza di gameplay; etichettato chiaramente come DEV.
-      { label: 'Combat QA Lab (DEV)', icon: '\uD83E\uDDEA', route: '/dev-combat-qa-lab', gradient: ['#FF4444', '#992222'] as const },
+      // BATCH_1_V2 Track F \u2014 Combat QA Lab dev-only rimosso dal menu player.
+      // File /dev-combat-qa-lab mantenuto, accessibile solo via deep link interno.
       // RM1.25-D — Catalogo Skill & Status (read-only, dev catalog browser).
       // Non collegato al runtime battaglia / HP bar. UI di sola consultazione.
       { label: 'Catalogo Skill & Status', icon: '\uD83D\uDCDA', route: '/skill-status-vfx-catalogs', gradient: ['#AB47BC', '#6A1B9A'] as const },
