@@ -1,0 +1,61 @@
+{
+  "track": "A",
+  "verdict": "TRACK_A_SERVER_PROFILE_AUTH_SURFACE_AUDIT_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_AUTH_CONTRACT_HARDENING_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_AUTH_CONTRACT_HARDENING",
+    "TRACK_A_SERVER_PROFILE_AUTH_SURFACE_AUDIT_APPROVAL": "true"
+  },
+  "audit_mode": "audit_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "auth_surface": {
+    "primary_helper": "get_current_user (in /app/backend/server.py line 100)",
+    "scheme": "JWT Bearer in Authorization header",
+    "algorithm": "HS256",
+    "secret_source": "JWT_SECRET env variable",
+    "identity_lookup": "db.users.find_one({'id': payload.user_id}) -> serialize_doc(user)",
+    "error_responses": [
+      "401 'Token mancante' if no Authorization or wrong scheme",
+      "401 'Utente non trovato' if user id absent in db",
+      "401 'Token scaduto' on jwt.ExpiredSignatureError",
+      "401 'Token non valido' on jwt.InvalidTokenError"
+    ],
+    "usage_pattern": "current_user: dict = Depends(get_current_user)",
+    "propagation_to_subrouters": "server.py passes get_current_user as parameter to register_*_routes factories (economy, etc.)"
+  },
+  "why_new_post_auth_not_ready": [
+    "server_profiles router (routes/server_profiles.py) is constructed at import time without auth dependency injected",
+    "the file declares prefix '/api/server-profiles' but the select handler does NOT include Depends(get_current_user)",
+    "503 flag-gating short-circuits the request before any auth check would run",
+    "adding auth dependency before flag flip is mandatory; otherwise an unauthenticated client could be served the future preview envelope"
+  ],
+  "exact_auth_requirement_for_preview": {
+    "endpoint": "GET /api/account/server-profiles/preview (future)",
+    "dependency": "current_user: dict = Depends(get_current_user)",
+    "reason": "preview content is user-specific (legacy users.server, future profile_id); MUST NOT leak across users",
+    "identity_principal": "current_user.id",
+    "audience_isolation": "server returns only data for current_user"
+  },
+  "exact_auth_requirement_for_select": {
+    "endpoint": "POST /api/account/server-profiles/select (future)",
+    "dependency": "current_user: dict = Depends(get_current_user)",
+    "reason": "mutation must be auth-bound; orphan/spoofing prevention",
+    "required_in_request_body": ["server_profile_id"],
+    "forbidden_in_request_body": ["user_id (use current_user.id instead)"]
+  },
+  "spoofing_prevention": [
+    "never trust user_id from request body",
+    "derive identity exclusively from JWT via get_current_user",
+    "refuse mismatch between body server_profile_id ownership and current_user.id",
+    "rate limit per current_user.id",
+    "telemetry: log auth failures + suspicious mismatches"
+  ],
+  "gaps_identified": [
+    {"gap": "Depends(get_current_user) missing on new POST/GET", "severity": "HIGH", "blocker_for_flag_flip": true},
+    {"gap": "no ownership check between server_profile_id and current_user.id", "severity": "HIGH", "blocker_for_flag_flip": true},
+    {"gap": "no rate-limit per user on preview/select endpoints", "severity": "MEDIUM", "blocker_for_flag_flip": false},
+    {"gap": "no audit log on auth failures for server_profiles endpoints", "severity": "LOW", "blocker_for_flag_flip": false}
+  ],
+  "flag_flip_authorized": false
+}

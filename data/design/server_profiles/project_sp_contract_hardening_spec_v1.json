@@ -1,0 +1,98 @@
+{
+  "track": "B",
+  "verdict": "TRACK_B_SERVER_PROFILE_CONTRACT_HARDENING_SPEC_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_AUTH_CONTRACT_HARDENING_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_AUTH_CONTRACT_HARDENING",
+    "TRACK_B_SERVER_PROFILE_CONTRACT_HARDENING_SPEC_APPROVAL": "true"
+  },
+  "audit_mode": "design_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "implementation_status": "contract_draft_only_no_endpoint_added",
+  "endpoints": [
+    {
+      "endpoint": "GET /api/account/server-profiles/preview",
+      "auth": "Depends(get_current_user)",
+      "flag_gating": ["SERVER_PROFILES_RUNTIME_ENABLED", "SERVER_PROFILES_PREVIEW_ENABLED"],
+      "both_off_response": {"http": 503, "body": {"status": "disabled", "feature_flag": "SERVER_PROFILES_RUNTIME_ENABLED"}},
+      "both_on_response": {
+        "http": 200,
+        "body": {
+          "status": "preview",
+          "current_legacy_server": "<users.server or null>",
+          "profiles": [],
+          "recommended_profile_id": null,
+          "last_used_profile_id": null,
+          "server_states": {"online": [], "full": [], "maintenance": [], "new": []},
+          "mutation_executed": false,
+          "dual_write_executed": false
+        }
+      },
+      "http_methods": {"supported": ["GET"], "rejected": ["POST", "PUT", "PATCH", "DELETE"]},
+      "non_mutation_invariants": ["no users.server write", "no server_profiles write", "no active_server_profile_id write"]
+    },
+    {
+      "endpoint": "GET /api/account/server-profiles",
+      "auth": "Depends(get_current_user)",
+      "purpose": "list user's known server profiles (read-only)",
+      "flag_gating": ["SERVER_PROFILES_RUNTIME_ENABLED"],
+      "off_response": {"http": 503, "body": {"status": "disabled"}},
+      "on_response_envelope": {
+        "profiles": [{"server_profile_id": "<uuid>", "server_id": "<id>", "server_name": "<name>", "server_state": "online|full|maintenance|new", "account_level": "<int|null>", "last_played_at": "<iso8601|null>", "is_archived": false}]
+      },
+      "non_mutation_invariants": ["read-only"]
+    },
+    {
+      "endpoint": "POST /api/account/server-profiles/select",
+      "auth": "Depends(get_current_user)",
+      "body": {"server_profile_id": "<uuid>"},
+      "flag_gating": ["SERVER_PROFILES_RUNTIME_ENABLED", "SERVER_PROFILES_DUAL_WRITE_ENABLED (optional)"],
+      "off_response": {"http": 503, "body": {"status": "disabled"}},
+      "validation_steps": [
+        "current_user owns server_profile_id (ownership check)",
+        "server reachable (status != not-found) -> else 404",
+        "server not in maintenance -> else 400 'maintenance'",
+        "server not full -> else 400 'capacity'",
+        "profile not archived -> else 400 'archived'"
+      ],
+      "on_success_response": {
+        "http": 200,
+        "body": {
+          "status": "switched",
+          "server_profile_id": "<uuid>",
+          "prior_server_profile_id": "<uuid|null>",
+          "mutation_executed": true,
+          "dual_write_executed": "<bool>"
+        }
+      },
+      "non_mutation_invariants_until_flag_on": ["endpoint inert; returns 503 even with auth"]
+    }
+  ],
+  "capacity_response_design": {
+    "http": 400,
+    "body": {"status": "error", "code": "capacity", "detail": "Server pieno", "server_state": "full"}
+  },
+  "maintenance_response_design": {
+    "http": 400,
+    "body": {"status": "error", "code": "maintenance", "detail": "Server in manutenzione", "server_state": "maintenance"}
+  },
+  "not_found_response_design": {
+    "http": 404,
+    "body": {"status": "error", "code": "not_found", "detail": "Server inesistente"}
+  },
+  "auth_failure_response_design": {
+    "http": 401,
+    "body": {"status": "error", "code": "unauthorized", "detail": "Token mancante|scaduto|invalido"}
+  },
+  "rollback_error_response_design": {
+    "http": 500,
+    "body": {"status": "error", "code": "internal", "rollback_executed": true}
+  },
+  "non_mutation_guarantees_for_preview": [
+    "GET /preview is idempotent",
+    "GET /preview never writes",
+    "GET /preview never alters server_profiles or users.server",
+    "GET /preview never changes active_server_profile_id"
+  ]
+}

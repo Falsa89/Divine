@@ -992,6 +992,15 @@ OPTIONAL = [
     ('PROJECT-SP-DUAL-READ-TRACK-F-SMOKE-NO-MUTATION', 'validate_project_sp_dual_read_preview_smoke_no_mutation_guard_v1.py'),
     ('PROJECT-SP-DUAL-READ-TRACK-G-REGISTRY-REFRESH', 'validate_mode_wiring_registry_server_profiles_refresh_v1.py'),
     ('PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION', 'validate_project_server_profiles_dual_read_preview_completion_v1.py'),
+    # PROJECT_SERVER_PROFILES_AUTH_AND_CONTRACT_HARDENING_PACK (design-only)
+    ('PROJECT-SP-AUTH-TRACK-A-AUTH-SURFACE-AUDIT', 'validate_project_sp_auth_surface_audit_v1.py'),
+    ('PROJECT-SP-AUTH-TRACK-B-CONTRACT-HARDENING-SPEC', 'validate_project_sp_contract_hardening_spec_v1.py'),
+    ('PROJECT-SP-AUTH-TRACK-C-PRE-HOME-UX-REQUIREMENT', 'validate_project_sp_pre_home_server_selection_ux_requirement_v1.py'),
+    ('PROJECT-SP-AUTH-TRACK-D-DATA-MODEL-SEED-PRECONDITIONS', 'validate_project_sp_data_model_gap_and_seed_preconditions_v1.py'),
+    ('PROJECT-SP-AUTH-TRACK-E-CAPACITY-MAINTENANCE-RULES', 'validate_project_sp_capacity_maintenance_rules_spec_v1.py'),
+    ('PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION', 'validate_project_sp_no_mutation_regression_guard_v1.py'),
+    ('PROJECT-SP-AUTH-TRACK-G-ROADMAP-APPROVAL-GATES', 'validate_project_sp_roadmap_and_approval_gates_v1.py'),
+    ('PROJECT-SP-AUTH-TRACK-H-COMPLETION', 'validate_project_sp_auth_contract_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -1,0 +1,51 @@
+{
+  "track": "C",
+  "verdict": "TRACK_C_PRE_HOME_SERVER_SELECTION_UX_REQUIREMENT_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_AUTH_CONTRACT_HARDENING_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_AUTH_CONTRACT_HARDENING",
+    "TRACK_C_PRE_HOME_SERVER_SELECTION_UX_REQUIREMENT_APPROVAL": "true"
+  },
+  "audit_mode": "requirement_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "frontend_changes": 0,
+  "future_flow": ["AccountLogin", "PreHomeServerSelection", "Home"],
+  "future_route": "/login-server-select (or /(auth)/server-select)",
+  "sections_required": [
+    {"id": "last_used", "label": "Ultimo server usato", "data_source": "GET /api/account/server-profiles preview.last_used_profile_id", "fallback": "hide section if null"},
+    {"id": "recent", "label": "Server recenti", "data_source": "GET /api/account/server-profiles filter by last_played_at desc", "fallback": "hide if empty"},
+    {"id": "available", "label": "Server disponibili", "data_source": "GET /api/account/server-profiles/preview profiles[]", "required": true},
+    {"id": "new", "label": "Nuovi server", "data_source": "filter profiles where server_state=='new'", "fallback": "hide if empty"}
+  ],
+  "server_state_visual_legend": {
+    "online": "verde, selezionabile",
+    "full": "giallo, badge 'PIENO', non selezionabile finch\u00e9 si libera capacit\u00e0",
+    "maintenance": "arancio, badge 'MANUTENZIONE', non selezionabile, account profile resta visibile",
+    "new": "blu, badge 'NUOVO'",
+    "unknown": "grigio, non selezionabile, retry prompt"
+  },
+  "per_server_card_fields": [
+    "server_name", "server_region", "server_state badge", "account_level (if available)", "last_played_at relative", "capacity_indicator (online/full)"
+  ],
+  "fallbacks": {
+    "one_server_only": {"behavior": "auto-select; skip the screen if marker SERVER_SELECTION_AUTO_SKIP_FOR_SINGLE_SERVER=true", "approval_required": "SERVER_SELECTION_AUTO_SKIP_APPROVAL (future)"},
+    "no_server_profile_yet": {"behavior": "show only 'Server disponibili'; first selection creates first server_profile via POST /select", "approval_required": "already covered by RUNTIME_ENABLED flag"},
+    "all_servers_in_maintenance": {"behavior": "show full list as locked; banner 'Tutti i server in manutenzione'", "action": "retry button (read-only refresh) + footer notice"},
+    "server_profiles_call_503": {"behavior": "show fallback message; keep user able to retry; redirect to /servers internal preview if blocked", "copy": "Selezione server temporaneamente disabilitata. Verrai indirizzato al server attuale."}
+  },
+  "relationship_with_internal_preview": {
+    "internal_preview_route": "/servers (current locked preview)",
+    "role": "transparency-only debug-style screen reachable from Menu; will remain visible during transition",
+    "future_pre_home_route": "/login-server-select",
+    "separation": "the two routes do NOT share state; /servers internal preview stays read-only; pre-home gate is interactive AFTER auth+seed land",
+    "deprecation_plan": "/servers internal preview can be removed once pre-home gate is GA, deferred 1 release"
+  },
+  "forbidden_in_track_c": [
+    "no route created in this pack",
+    "no menu entry created",
+    "no fetch added",
+    "no auth wiring"
+  ],
+  "i18n_requirement": "Italian as primary user language (consistent with project)"
+}

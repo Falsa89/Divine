@@ -1,0 +1,54 @@
+{
+  "track": "E",
+  "verdict": "TRACK_E_SERVER_SELECTION_CAPACITY_MAINTENANCE_RULES_SPEC_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_AUTH_CONTRACT_HARDENING_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_AUTH_CONTRACT_HARDENING",
+    "TRACK_E_SERVER_SELECTION_CAPACITY_MAINTENANCE_RULES_SPEC_APPROVAL": "true"
+  },
+  "audit_mode": "design_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "legacy_behavior_preserved": {
+    "endpoint": "POST /api/server/select (in routes/economy.py)",
+    "validations": [
+      "404 server not found",
+      "400 status == 'maintenance'",
+      "400 capacity exceeded vs max_players",
+      "401 unauthorized (via get_current_user)"
+    ],
+    "must_remain_intact_until_new_endpoint_live": true
+  },
+  "new_server_state_taxonomy": {
+    "online": {"selectable": true, "notes": "green badge; visible everywhere"},
+    "full": {"selectable": false, "notes": "yellow badge 'PIENO'; reservation possible if approved later"},
+    "maintenance": {"selectable": false, "notes": "orange badge 'MANUTENZIONE'; account_level still visible if cached"},
+    "new": {"selectable": true, "notes": "blue badge 'NUOVO'; auto-displayed under 'Nuovi server'"},
+    "unknown": {"selectable": false, "notes": "grey badge; retry prompt"}
+  },
+  "disabled_states_response_contract": [
+    {"state": "full", "http": 400, "code": "capacity", "detail": "Server pieno"},
+    {"state": "maintenance", "http": 400, "code": "maintenance", "detail": "Server in manutenzione"},
+    {"state": "unknown", "http": 503, "code": "unavailable", "detail": "Stato server temporaneamente non disponibile"}
+  ],
+  "preview_allowed_during_maintenance": true,
+  "preview_under_maintenance_envelope": {
+    "profiles": "[unchanged user profiles incl. maintenance server]",
+    "select_blocked": true,
+    "account_profile_visible": true,
+    "notice": "Maintenance in corso; il tuo progresso \u00e8 salvo"
+  },
+  "account_profile_when_server_unavailable": {
+    "behavior": "show last known account_level + last_played_at from cached server_profiles row even if server status==maintenance",
+    "caveat": "never display stale data older than 24h without explicit timestamp"
+  },
+  "future_server_opening_gates": [
+    "PROJECT_SECOND_SERVER_OPENING_APPROVAL (existing gated)",
+    "requires capacity headroom + dual-write live + canary monitoring"
+  ],
+  "forbidden_in_track_e": [
+    "no live capacity behavior change",
+    "no maintenance behavior change",
+    "no SERVERS constant edit"
+  ]
+}

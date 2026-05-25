@@ -1,0 +1,65 @@
+{
+  "track": "D",
+  "verdict": "TRACK_D_SERVER_PROFILE_DATA_MODEL_GAP_AND_SEED_PRECONDITIONS_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_AUTH_CONTRACT_HARDENING_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_AUTH_CONTRACT_HARDENING",
+    "TRACK_D_SERVER_PROFILE_DATA_MODEL_GAP_SEED_PRECONDITIONS_APPROVAL": "true"
+  },
+  "audit_mode": "design_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "current_state": {
+    "server_profiles_collection_doc_count_assumption": 0,
+    "users_collection_field": "users.server (string|null)",
+    "mapping_users_to_server_profile_id": "DOES_NOT_EXIST",
+    "unique_index_on_server_profiles": "NOT_VERIFIED_NOT_CREATED"
+  },
+  "proposed_data_model_server_profiles": {
+    "collection": "server_profiles",
+    "document_shape": {
+      "_id": "<uuid string>",
+      "id": "<uuid string mirror>",
+      "user_id": "<users.id>",
+      "server_id": "<servers.id legacy match>",
+      "server_name_snapshot": "<string>",
+      "is_archived": "<bool default false>",
+      "account_level": "<int|null>",
+      "account_progress": {"xp": "<int|null>", "power": "<int|null>"},
+      "last_played_at": "<iso8601|null>",
+      "created_at": "<iso8601 server>",
+      "updated_at": "<iso8601 server>"
+    },
+    "indexes": [
+      {"fields": ["user_id", "server_id", "is_archived"], "unique": true, "name": "uq_user_server_archive"},
+      {"fields": ["user_id", "last_played_at"], "unique": false, "name": "ix_user_last_played"},
+      {"fields": ["user_id"], "unique": false, "name": "ix_user"}
+    ]
+  },
+  "proposed_users_collection_delta": {
+    "keep_field": "users.server (string) during dual-write window",
+    "add_field_future": "users.active_server_profile_id (string|null)",
+    "deprecate_field_after_grace": "users.server"
+  },
+  "users_server_migration_preconditions": [
+    "server_profiles collection writable (auth-bound seed pack)",
+    "unique index uq_user_server_archive present",
+    "backfill is idempotent (use upsert on (user_id, server_id, is_archived=false))",
+    "every backfilled doc is reversible (delete by (user_id, server_id, created_at))",
+    "no concurrent writes to users.server during backfill (locked UI ensures this)",
+    "server name snapshot captured at backfill time (resilient to legacy server rename)"
+  ],
+  "rollback_safe_seed_requirements": [
+    "phase 0: dry-run with PROJECT_SERVER_PROFILES_SEED_DRY_RUN_APPROVAL marker",
+    "phase 1: backfill with idempotent upsert + audit log of every write",
+    "phase 2: verify counts (users.server populated count == server_profiles is_archived=false count per user)",
+    "phase 3: store seed_id + timestamp in metadata for rollback",
+    "rollback: delete docs where metadata.seed_id == <id>; do not touch hand-created docs"
+  ],
+  "orphan_prevention": [
+    "never flip RUNTIME flag before backfill complete",
+    "if a user has users.server but seed missed -> fallback read path uses users.server until next seed",
+    "if a user has no users.server and no profile -> pre-home UI shows only Available section"
+  ],
+  "forbidden_in_track_d": ["no writes", "no index creation", "no migration"]
+}

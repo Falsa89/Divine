@@ -1,0 +1,27 @@
+{
+  "track": "G",
+  "verdict": "TRACK_G_SERVER_PROFILES_ROADMAP_AND_APPROVAL_GATES_READY",
+  "global_markers": {
+    "PROJECT_SERVER_PROFILES_AUTH_CONTRACT_HARDENING_APPROVAL": "true",
+    "PROJECT_ACCELERATION_MODE": "SERVER_PROFILES_AUTH_CONTRACT_HARDENING",
+    "TRACK_G_SERVER_PROFILES_ROADMAP_APPROVAL_GATES_APPROVAL": "true"
+  },
+  "audit_mode": "roadmap_only",
+  "db_writes": 0,
+  "backend_changes": 0,
+  "stages": [
+    {"n": 1, "name": "AUTH_AND_READ_ONLY_PREVIEW_ENDPOINT_IMPL", "actions": ["wire Depends(get_current_user) on new GET /preview and POST /select", "add inert GET /api/account/server-profiles/preview returning 503", "add inert GET /api/account/server-profiles returning 503"], "db_writes": 0, "flag_flips": 0, "approval_marker": "PROJECT_SERVER_PROFILES_PREVIEW_ENDPOINT_INERT_IMPLEMENTATION_APPROVAL", "status": "PENDING"},
+    {"n": 2, "name": "SEED_DRY_RUN_AND_ROLLBACK", "actions": ["compute backfill plan from users.server", "output dry-run report (counts, samples)", "no DB writes"], "db_writes": 0, "flag_flips": 0, "approval_marker": "PROJECT_SERVER_PROFILES_SEED_DRY_RUN_APPROVAL", "status": "PENDING"},
+    {"n": 3, "name": "SEED_APPLY_IF_APPROVED", "actions": ["create indexes", "idempotent upsert of server_profiles rows", "audit log every write"], "db_writes": "YES (seed only)", "flag_flips": 0, "approval_marker": "PROJECT_SERVER_PROFILES_SEED_APPLY_APPROVAL (5 signatures)", "status": "PENDING"},
+    {"n": 4, "name": "PRE_HOME_SERVER_SELECTION_UI_LOCKED_INERT", "actions": ["create /login-server-select route locked (no fetch, no mutation)", "use SafeFeatureCard pattern"], "db_writes": 0, "flag_flips": 0, "approval_marker": "PROJECT_SERVER_SELECTION_PRE_HOME_UI_DESIGN_APPROVAL", "status": "PENDING"},
+    {"n": 5, "name": "DUAL_READ_REAL_PREVIEW_BEHIND_FLAG", "actions": ["flip SERVER_PROFILES_RUNTIME_ENABLED + SERVER_PROFILES_PREVIEW_ENABLED in dev", "verify GET /preview returns real envelope", "canary monitoring"], "db_writes": 0, "flag_flips": 2, "approval_marker": "PROJECT_SERVER_PROFILES_DUAL_READ_REAL_PREVIEW_APPROVAL (4 signatures)", "status": "PENDING"},
+    {"n": 6, "name": "UI_CUTOVER_BEHIND_FLAG", "actions": ["frontend pre-home gate calls new endpoints behind flag", "legacy /servers locked preview remains"], "db_writes": "yes (via new select POST)", "flag_flips": 1, "approval_marker": "PROJECT_SERVER_PROFILES_UI_CUTOVER_APPROVAL (5 signatures)", "status": "PENDING"},
+    {"n": 7, "name": "DUAL_WRITE_COMPATIBILITY", "actions": ["new POST also writes users.server during grace period", "legacy POST also writes server_profiles"], "db_writes": "yes", "flag_flips": 1, "approval_marker": "PROJECT_SERVER_PROFILES_DUAL_WRITE_DESIGN_APPROVAL (5 signatures)", "status": "PENDING"},
+    {"n": 8, "name": "LEGACY_DEPRECATION_HEADERS", "actions": ["add Sunset/Deprecation HTTP headers to /api/servers + /api/server/select", "announce sunset date"], "db_writes": 0, "flag_flips": 0, "approval_marker": "PROJECT_SERVER_PROFILES_LEGACY_SUNSET_APPROVAL", "status": "PENDING"},
+    {"n": 9, "name": "REMOVE_OR_HIDE_LEGACY_AFTER_GRACE", "actions": ["remove legacy endpoint code paths", "remove SERVERS constant", "finalize users.server deprecation"], "db_writes": "yes (model migration)", "flag_flips": "retire stale flags", "approval_marker": "PROJECT_SERVER_PROFILES_LEGACY_REMOVAL_APPROVAL (6 signatures)", "status": "PENDING"}
+  ],
+  "current_stage": "between 0 and 1 (we are in audit/design between dual-read preview and inert endpoint implementation)",
+  "total_stages": 9,
+  "approval_markers_summary_count": 9,
+  "flag_flips_total_required_for_full_rollout": 4
+}
