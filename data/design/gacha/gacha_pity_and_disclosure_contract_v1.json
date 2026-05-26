@@ -1,0 +1,52 @@
+{
+  "task_id": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF",
+  "track": "F",
+  "verdict": "TRACK_F_PITY_AND_DISCLOSURE_CONTRACT_READY",
+  "implementation_status": "DESIGN_ONLY",
+  "implementation_reason": "Il backend attuale non implementa contatori di pity persistenti. Aggiungerli ora richiederebbe scrittura DB e mutazione di stato utente, esplicitamente fuori scope di questo pack. Il contratto qui definito \u00e8 il design target V1 da implementare in un pack dedicato (Project Pity Implementation) con migrazione safe.",
+  "pity_target_v1": {
+    "x10_guarantee": {
+      "standard":  "1 \u00d7 4\u2605+ (guarantee_10=4, weights normalizzate)",
+      "elemental": "1 \u00d7 4\u2605+ (guarantee_10=4, weights normalizzate)",
+      "selective": "1 \u00d7 4\u2605+ (guarantee_10=4, weights normalizzate)",
+      "premium":   "1 \u00d7 5\u2605+ (guarantee_10=5, weights normalizzate) \u2014 LOCKED in UI",
+      "targeted":  "1 \u00d7 5\u2605+ (guarantee_10=5, weights normalizzate) \u2014 LOCKED in UI"
+    },
+    "soft_pity_5_star": {
+      "trigger_after_pulls_without_5_plus": 70,
+      "ramp_per_pull": "+0.5% additive over base rate fino al hard pity",
+      "applies_to": ["standard", "elemental", "selective", "premium", "targeted"]
+    },
+    "hard_pity_5_star": {
+      "trigger_at_pull": 90,
+      "behavior": "guaranteed 5\u2605 if no 5\u2605+ in last 89 pulls"
+    },
+    "soft_pity_6_star": {
+      "trigger_after_pulls_without_6": 180,
+      "ramp_per_pull": "+0.3% additive over base rate fino al hard pity",
+      "applies_to": ["standard", "elemental", "selective", "premium", "targeted"]
+    },
+    "hard_pity_6_star": {
+      "trigger_at_pull": 220,
+      "behavior": "guaranteed 6\u2605 if no 6\u2605 in last 219 pulls"
+    },
+    "featured_50_50_or_shard_safety": "DEFERRED_TO_TARGETED_SIGNOFF_PACK",
+    "scope_constraints": [
+      "pity counters per banner family",
+      "pity counters account-bound",
+      "pity counters server-aware (future SLC integration)",
+      "pity NOT applied to artifact",
+      "pity NOT applied to constellation"
+    ]
+  },
+  "disclosure_ui_contract": {
+    "rates_visible": true,
+    "guarantee_x10_visible": true,
+    "locked_banners_explain_reason": true,
+    "pity_copy_until_implemented": "Pity / soft-pity in preparazione \u2014 verr\u00e0 attivato in patch dedicata.",
+    "no_misleading_copy_about_active_pity": true
+  },
+  "current_backend_pity_status": "NOT_IMPLEMENTED \u2014 verified via grep su /app/backend/server.py: nessuna chiave 'pity', nessuna funzione apply_pity, nessuna collection user_gacha_pity.",
+  "db_writes_added_by_this_pack": 0,
+  "next_pack_for_pity": "PROJECT_GACHA_PITY_IMPLEMENTATION_PACK (P1, postponed)"
+}

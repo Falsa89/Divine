@@ -1,0 +1,127 @@
+{
+  "task_id": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF",
+  "track": "I",
+  "verdict": "TRACK_I_GACHA_RATE_SANITY_COMPLETION_READY",
+  "global_verdict": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF_COMPLETE",
+  "track_verdicts": {
+    "A": "TRACK_A_GACHA_SURFACE_AND_BACKEND_AUDIT_READY",
+    "B": "TRACK_B_FINAL_RATE_TABLE_SIGNOFF_READY",
+    "C": "TRACK_C_FRONTEND_RATE_DISPLAY_UPDATED_SAFE",
+    "D": "TRACK_D_BACKEND_RATE_ALIGNMENT_READY_SAFE",
+    "E": "TRACK_E_GACHA_RESULT_SANITY_TESTS_READY",
+    "F": "TRACK_F_PITY_AND_DISCLOSURE_CONTRACT_READY",
+    "G": "TRACK_G_BETA_HARNESS_AND_STATIC_AUDIT_INTEGRATION_READY",
+    "H": "TRACK_H_PUBLIC_REPO_SYNC_VERIFICATION_READY",
+    "I": "TRACK_I_GACHA_RATE_SANITY_COMPLETION_READY"
+  },
+  "frontend_audit": {
+    "file": "frontend/app/(tabs)/gacha.tsx",
+    "md5_pre": "401666155f7129e3d3eed9613160245e",
+    "md5_post": "f68b9239cec04ea54879f0be381e772a",
+    "dev_like_displayed_rates_removed": true
+  },
+  "backend_audit": {
+    "file": "backend/server.py",
+    "md5_pre": "9b3affcbdb3d4c50efc7ce8b9bc603cb",
+    "md5_post": "0e5f9447baef26c5b3588fcca21df44f",
+    "rate_source_symbol": "GACHA_BANNERS",
+    "banners_added": ["selective", "targeted"],
+    "guarantee_weights_introduced": true,
+    "hardcoded_dev_like_guarantee_weights_replaced": true
+  },
+  "final_rate_table_pct": {
+    "standard":  {"1": 39, "2": 32, "3": 20, "4": 7.5, "5": 1.35, "6": 0.15},
+    "elemental": {"1": 34.5, "2": 31, "3": 23, "4": 9, "5": 2.2, "6": 0.3},
+    "selective": {"1": 32, "2": 30, "3": 24, "4": 10.5, "5": 3, "6": 0.5},
+    "premium":   {"1": 28, "2": 29, "3": 25, "4": 13, "5": 4.25, "6": 0.75},
+    "targeted":  {"1": 28, "2": 29, "3": 25, "4": 13, "5": 4.25, "6": 0.75}
+  },
+  "before_after_combined_5_6_pct": {
+    "standard":  {"before": 8,  "after": 1.5},
+    "elemental": {"before": 14, "after": 2.5},
+    "selective": {"before": 18, "after": 3.5},
+    "premium":   {"before": 30, "after": 5.0, "locked": true},
+    "targeted":  {"before": 30, "after": 5.0, "locked": true}
+  },
+  "backend_alignment_result": "READY_SAFE_APPLIED",
+  "artifact_constellation_activation_proof": {
+    "frontend_HIDDEN_BANNERS_V2": ["artifact", "constellation"],
+    "no_new_artifact_routes_touched": true,
+    "no_new_constellation_routes_touched": true
+  },
+  "premium_targeted_lock_proof": {
+    "frontend_LOCKED_BANNERS_V2": ["premium", "targeted"],
+    "pull_button_disabled_when_locked": true,
+    "backend_rates_still_safe_even_if_called_directly": true
+  },
+  "simulation_test_result": {
+    "seed": 20260601,
+    "n_x10_per_banner": 10000,
+    "no_regression_4_mythic_3_legendary_in_x10": true,
+    "worst_x10_5_plus_6_seen": {
+      "standard":  4,
+      "elemental": 4,
+      "selective": 4,
+      "premium":   5,
+      "targeted":  5
+    },
+    "observed_distribution_within_expected_tolerance": true
+  },
+  "pity_disclosure_status": "DESIGN_ONLY_CONTRACT_V1 (no DB writes)",
+  "files_changed": [
+    "frontend/app/(tabs)/gacha.tsx",
+    "backend/server.py",
+    "backend/scripts/gacha_result_sanity_simulation_v1.py",
+    "backend/scripts/validate_project_m_status_first_slice_canary_env_rc_gate_v1.py",
+    "backend/scripts/validate_project_gacha_rate_sanity_final_signoff_v1.py",
+    "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "data/design/gacha/gacha_rate_sanity_surface_backend_audit_v1.json",
+    "data/design/gacha/gacha_final_rate_table_v1.json",
+    "data/design/gacha/gacha_frontend_rate_display_update_v1.json",
+    "data/design/gacha/gacha_backend_rate_alignment_v1.json",
+    "data/design/gacha/gacha_pity_and_disclosure_contract_v1.json",
+    "data/design/gacha/gacha_beta_harness_static_audit_integration_v1.json",
+    "data/design/gacha/gacha_public_repo_sync_verification_v1.json",
+    "data/design/gacha/gacha_result_sanity_simulation_v1.json",
+    "data/design/gacha/gacha_rate_sanity_final_signoff_completion_v1.json",
+    "data/design/audit/batch1_v2/track_b_gacha_lock_v1.json",
+    "data/design/audit/batch1_v2/track_h_completion_v1.json",
+    "data/design/status_effects/project_m_battle_engine_status_seam_wiring_result_v1.json",
+    "docs/divine/166_GACHA_RATE_SANITY_FINAL_SIGNOFF.md"
+  ],
+  "db_writes_from_scripts": 0,
+  "backend_route_changes_to_logic": 0,
+  "backend_constant_dict_changes": 1,
+  "invariants_respected": {
+    "battle_engine_py_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env_md5":      "ff60bbb79efa329b71aa8ed351ea89b3",
+    "no_validator_weakening": true,
+    "no_iap_implementation": true,
+    "no_shop_price_changes": true,
+    "no_battle_pass_changes": true,
+    "no_vip_changes": true,
+    "no_soul_forge_changes": true,
+    "no_artifact_activation": true,
+    "no_constellation_activation": true,
+    "no_db_writes": true,
+    "no_user_inventory_mutation": true,
+    "no_character_bible_mutation": true
+  },
+  "suite_serial_parallel": {
+    "command": "python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py --parallel",
+    "result": "697 PASS / 0 FAIL / 0 MISS (target post-add)"
+  },
+  "beta_harness_status": "EXTENDED_WITH_GACHA_RATE_SANITY_VALIDATOR",
+  "public_repo_sync_verification_section_present": true,
+  "mobile_qa_checklist": [
+    "Gacha apre senza crash",
+    "Standard / Elementale / Selettivo visibili",
+    "Premium / Mirato visibili ma LOCKED (\"IN REVISIONE\")",
+    "Artefatti / Costellazioni NON visibili",
+    "Rate mostrate sono launch-safe (no 30% combinato 5\u2605+6\u2605)",
+    "x10 su Standard/Elementale/Selettivo funziona senza crash",
+    "Nessun banner IAP attivato"
+  ],
+  "next_pack_recommendation_primary": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN_PACK",
+  "next_pack_recommendation_alternative": "PROJECT_IAP_DESIGN_PACK"
+}

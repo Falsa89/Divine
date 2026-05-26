@@ -1094,6 +1094,7 @@ OPTIONAL = [
     ('PROJECT-BETA-TESTING-TRACK-G-REPORTING', 'validate_beta_testing_track_g_reporting_v1.py'),
     ('PROJECT-BETA-TESTING-TRACK-I-COMPLETION', 'validate_beta_testing_track_i_completion_v1.py'),
     ('PROJECT-BETA-HARNESS-PUBLIC-REPO-SYNC-AND-MINOR-UI-HYGIENE-FIX', 'validate_beta_harness_public_repo_sync_and_minor_ui_hygiene_fix_v1.py'),
+    ('PROJECT-GACHA-RATE-SANITY-FINAL-SIGNOFF', 'validate_project_gacha_rate_sanity_final_signoff_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

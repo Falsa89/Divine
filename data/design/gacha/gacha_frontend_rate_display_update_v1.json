@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF",
+  "track": "C",
+  "verdict": "TRACK_C_FRONTEND_RATE_DISPLAY_UPDATED_SAFE",
+  "file": "frontend/app/(tabs)/gacha.tsx",
+  "md5_post": "f68b9239cec04ea54879f0be381e772a",
+  "before_after_pct": {
+    "standard":  {"before_5_6": "6/2", "after_5_6": "1.35/0.15"},
+    "elemental": {"before_5_6": "10/4", "after_5_6": "2.2/0.3"},
+    "selective": {"before_5_6": "13/5", "after_5_6": "3/0.5"},
+    "premium":   {"before_5_6": "20/10", "after_5_6": "4.25/0.75", "locked": true},
+    "targeted":  {"before_5_6": "20/10", "after_5_6": "4.25/0.75", "locked": true}
+  },
+  "locked_banners_preserved": ["premium", "targeted"],
+  "hidden_banners_preserved": ["artifact", "constellation"],
+  "pull_button_disabled_on_locked": true,
+  "raw_unicode_glitches_introduced": 0,
+  "copy_changes": {
+    "premium_desc":  "Rate divine \u2014 in attesa signoff IAP",
+    "targeted_desc": "Rate UP \u2014 in attesa featured pool signoff"
+  }
+}

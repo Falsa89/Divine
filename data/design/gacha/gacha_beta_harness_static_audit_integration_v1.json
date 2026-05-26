@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF",
+  "track": "G",
+  "verdict": "TRACK_G_BETA_HARNESS_AND_STATIC_AUDIT_INTEGRATION_READY",
+  "extensions": [
+    "Added validate_project_gacha_rate_sanity_final_signoff_v1.py to backend/scripts/",
+    "Registered new validator in OPTIONAL list of run_hero_skill_kit_validator_suite.py",
+    "Added gacha_result_sanity_simulation_v1.py (Monte Carlo deterministic, seed=20260601)",
+    "Refreshed MD5 pin for gacha.tsx in batch1_v2 track_b_gacha_lock_v1.json + track_h_completion_v1.json"
+  ],
+  "playwright_smoke_status": {
+    "feasible_in_current_container": false,
+    "reason": "Playwright requires stable Expo Web preview URL. Container preview URL is dynamic and dependent on platform layer. Spec di smoke pronto in frontend/tests/e2e/ ma esecuzione live deferita a CI esterna.",
+    "specs_available": [
+      "frontend/tests/e2e/player-facing-routes.spec.ts",
+      "frontend/tests/e2e/soul-forge-smoke.spec.ts",
+      "frontend/tests/e2e/locked-surfaces-smoke.spec.ts"
+    ],
+    "documented_blocker": "Playwright live run gated by Expo Web preview URL stability \u2014 not blocking gacha signoff (static + simulation already cover regression risk)."
+  },
+  "player_route_static_audit_after_pack": {"pass": 13, "warn": 0, "fail": 0, "miss": 0},
+  "package_json_stable": true,
+  "yarn_lock_stable": true,
+  "package_json_md5_post": "7fb50b6042864f7159ae3d0bd4eb2ede",
+  "yarn_lock_md5_post": "aa0c59eaa5f8740235116032c366e85e"
+}

@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-26T21:18:31.926175+00:00",
+  "timestamp_utc": "2026-05-26T21:49:15.856577+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1091,
+  "backend_python_files_scanned": 1093,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 501,
+      "files_with_hits": 502,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -597,7 +597,7 @@
     },
     "gacha_history": {
       "expected_scope": "server_bound",
-      "files_with_hits": 7,
+      "files_with_hits": 8,
       "hits_sample": [
         {
           "file": "backend/scripts/apply_slc_g_commit_a.py",
@@ -648,6 +648,18 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_project_gacha_rate_sanity_final_signoff_v1.py",
+          "keyword": "gacha_pity",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 109,
+              "snippet": "f = load_json('data/design/gacha/gacha_pity_and_disclosure_contract_v1.json')"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
           "keyword": "gacha_history",
           "has_server_id_anywhere": true,
@@ -656,18 +668,6 @@
             {
               "line": 21,
               "snippet": "'gacha_history':           ['gacha_history', 'gacha_log', 'gacha_pity'],"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_project_d_artifact_bible_v1_approval_freeze.py",
-          "keyword": "gacha_pity",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 43,
-              "snippet": "for k in (\"artifact_live_bonus\", \"artifact_summon_behavior\", \"gacha_pity_rate_change\", \"frontend\", \"db_writes\", \"equipment_semantics\"):"
             }
           ]
         }
@@ -726,15 +726,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 394,
+              "line": 437,
               "snippet": "# ===================== TEAM ====================="
             },
             {
-              "line": 395,
+              "line": 438,
               "snippet": "@app.get(\"/api/team\")"
             },
             {
-              "line": 396,
+              "line": 439,
               "snippet": "async def get_team(current_user: dict = Depends(get_current_user)):"
             }
           ]

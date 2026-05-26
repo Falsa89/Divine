@@ -1,0 +1,41 @@
+{
+  "task_id": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF",
+  "track": "D",
+  "verdict": "TRACK_D_BACKEND_RATE_ALIGNMENT_READY_SAFE",
+  "file": "backend/server.py",
+  "md5_pre":  "9b3affcbdb3d4c50efc7ce8b9bc603cb",
+  "md5_post": "0e5f9447baef26c5b3588fcca21df44f",
+  "symbol_updated": "GACHA_BANNERS",
+  "banners_added": ["selective", "targeted"],
+  "banners_updated": ["standard", "elemental", "premium"],
+  "guarantee_weights_introduced": true,
+  "guarantee_weights_legacy_replaced": {
+    "old_hardcoded_g_eq_4": [0.65, 0.25, 0.10],
+    "old_hardcoded_g_ne_4": [0.70, 0.30],
+    "new_strategy": "guarantee_weights normalizzate dalle rate finali per ogni banner; fallback hardcoded mantenuto ma irraggiungibile dopo signoff."
+  },
+  "backend_rate_after": {
+    "standard":  {"1": 0.39,  "2": 0.32, "3": 0.20, "4": 0.075, "5": 0.0135, "6": 0.0015, "guarantee_10": 4},
+    "elemental": {"1": 0.345, "2": 0.31, "3": 0.23, "4": 0.09,  "5": 0.022,  "6": 0.003,  "guarantee_10": 4},
+    "selective": {"1": 0.32,  "2": 0.30, "3": 0.24, "4": 0.105, "5": 0.03,   "6": 0.005,  "guarantee_10": 4},
+    "premium":   {"1": 0.28,  "2": 0.29, "3": 0.25, "4": 0.13,  "5": 0.0425, "6": 0.0075, "guarantee_10": 5, "ui_locked": true},
+    "targeted":  {"1": 0.28,  "2": 0.29, "3": 0.25, "4": 0.13,  "5": 0.0425, "6": 0.0075, "guarantee_10": 5, "ui_locked": true}
+  },
+  "rate_sum_per_banner": {"standard": 1.0, "elemental": 1.0, "selective": 1.0, "premium": 1.0, "targeted": 1.0},
+  "combined_5_6_after": {
+    "standard":  0.0150,
+    "elemental": 0.0250,
+    "selective": 0.0350,
+    "premium":   0.0500,
+    "targeted":  0.0500
+  },
+  "db_writes_from_script": 0,
+  "user_mutation": false,
+  "artifact_endpoint_changes": 0,
+  "constellation_endpoint_changes": 0,
+  "battle_engine_changes": 0,
+  "iap_implementation": false,
+  "shop_price_changes": 0,
+  "premium_targeted_backend_status": "Definite ma irraggiungibili da UI locked; rate launch-safe gi\u00e0 applicate per zero-leak anche contro chiamate dirette API.",
+  "fallback_safety": "Banner ID sconosciuti continuano a fallback su 'standard' (ora launch-safe a 1.5%). Nessuna esposizione a rate dev-like."
+}

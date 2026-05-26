@@ -11,38 +11,43 @@ import Animated, { ZoomIn, FadeIn, FadeInDown, BounceIn } from 'react-native-rea
 const { width: W, height: H } = Dimensions.get('window');
 
 // BATCH_1_V2 Track B \u2014 Lock player-facing dei banner non firmati da economy.
-// I banner Artefatti e Costellazioni sono nascosti finch\u00e9 l'Artifact Bible non
-// \u00e8 approvato. I banner Premium e Mirato sono marcati LOCKED finch\u00e9 le rate
-// non sono firmate (sono attualmente dev-like al 30% combinato 5\u2605+6\u2605).
-// Nessuna modifica alle rate o ai pool: solo guardrail UI.
+// GACHA_RATE_SANITY_FINAL_SIGNOFF (P0) \u2014 Rate launch-safe applicate ai banner
+// live (Standard / Elementale / Selettivo). Premium e Mirato restano LOCKED
+// finch\u00e9 IAP/featured-pool signoff non sono approvati (display delle rate
+// finali intese ma pulsanti disabilitati). Artefatti e Costellazioni restano
+// nascosti finch\u00e9 l'Artifact Bible non \u00e8 firmato.
 const LOCKED_BANNERS_V2 = new Set(['premium', 'targeted']);
 const HIDDEN_BANNERS_V2 = new Set(['artifact', 'constellation']);
 
+// Rate finali allineate al backend per i banner live e ai valori intended per
+// quelli locked. Somma di ogni dict = 100.00%. 5\u2605+6\u2605 combinato resta
+// sotto soglia: 1.50% Standard, 2.50% Elementale, 3.50% Selettivo, 5.00%
+// Premium/Targeted.
 const BANNERS = [
   {
     id: 'standard', name: 'Standard', desc: 'Tutte le rarita', gradient: ['#FFD700', '#CC9900'] as const,
     cost1: 100, cost10: 900, guarantee: '4\u2B50+',
-    rates: { '1\u2B50': '30%', '2\u2B50': '30%', '3\u2B50': '20%', '4\u2B50': '12%', '5\u2B50': '6%', '6\u2B50': '2%' },
+    rates: { '1\u2B50': '39%', '2\u2B50': '32%', '3\u2B50': '20%', '4\u2B50': '7.5%', '5\u2B50': '1.35%', '6\u2B50': '0.15%' },
   },
   {
     id: 'elemental', name: 'Elementale', desc: 'Eroi elementali potenziati', gradient: ['#4499FF', '#2266CC'] as const,
     cost1: 120, cost10: 1000, guarantee: '4\u2B50+',
-    rates: { '1\u2B50': '15%', '2\u2B50': '25%', '3\u2B50': '28%', '4\u2B50': '18%', '5\u2B50': '10%', '6\u2B50': '4%' },
+    rates: { '1\u2B50': '34.5%', '2\u2B50': '31%', '3\u2B50': '23%', '4\u2B50': '9%', '5\u2B50': '2.2%', '6\u2B50': '0.3%' },
   },
   {
-    id: 'premium', name: 'Premium', desc: 'Rate divine aumentate!', gradient: ['#FF4466', '#CC2244'] as const,
+    id: 'premium', name: 'Premium', desc: 'Rate divine \u2014 in attesa signoff IAP', gradient: ['#FF4466', '#CC2244'] as const,
     cost1: 200, cost10: 1800, guarantee: '5\u2B50+',
-    rates: { '1\u2B50': '5%', '2\u2B50': '15%', '3\u2B50': '25%', '4\u2B50': '25%', '5\u2B50': '20%', '6\u2B50': '10%' },
+    rates: { '1\u2B50': '28%', '2\u2B50': '29%', '3\u2B50': '25%', '4\u2B50': '13%', '5\u2B50': '4.25%', '6\u2B50': '0.75%' },
   },
   {
     id: 'selective', name: 'Selettivo', desc: 'Scegli elemento o classe', gradient: ['#44DD88', '#22AA55'] as const,
     cost1: 150, cost10: 1350, guarantee: '4\u2B50+ elemento scelto',
-    rates: { '1\u2B50': '10%', '2\u2B50': '20%', '3\u2B50': '30%', '4\u2B50': '22%', '5\u2B50': '13%', '6\u2B50': '5%' },
+    rates: { '1\u2B50': '32%', '2\u2B50': '30%', '3\u2B50': '24%', '4\u2B50': '10.5%', '5\u2B50': '3%', '6\u2B50': '0.5%' },
   },
   {
-    id: 'targeted', name: 'Mirato', desc: 'Rate UP su eroe specifico', gradient: ['#FF8844', '#CC6622'] as const,
+    id: 'targeted', name: 'Mirato', desc: 'Rate UP \u2014 in attesa featured pool signoff', gradient: ['#FF8844', '#CC6622'] as const,
     cost1: 180, cost10: 1600, guarantee: '5\u2B50+ eroe featured',
-    rates: { '1\u2B50': '5%', '2\u2B50': '12%', '3\u2B50': '25%', '4\u2B50': '28%', '5\u2B50': '20%', '6\u2B50': '10%' },
+    rates: { '1\u2B50': '28%', '2\u2B50': '29%', '3\u2B50': '25%', '4\u2B50': '13%', '5\u2B50': '4.25%', '6\u2B50': '0.75%' },
   },
   {
     id: 'artifact', name: 'Artefatti', desc: 'Evoca artefatti rari', gradient: ['#AA55FF', '#7733CC'] as const,

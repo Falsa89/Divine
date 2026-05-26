@@ -258,29 +258,60 @@ async def get_user_heroes(current_user: dict = Depends(get_current_user)):
     return result
 
 # ===================== GACHA =====================
+# PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF (P0) \u2014 Rate launch-safe.
+# Tutte le rate per banner sommano a 1.0. 5\u2605+6\u2605 combinato:
+#   standard   = 0.015 (1.50%)
+#   elemental  = 0.025 (2.50%)
+#   selective  = 0.035 (3.50%)
+#   premium    = 0.050 (5.00%, surface LOCKED in UI)
+#   targeted   = 0.050 (5.00%, surface LOCKED in UI)
+# guarantee_weights: distribuzione cond. a rarity>=guarantee_10 normalizzata
+# dalle rate finali; impedisce il "4 mitici + 3 leggendari in x10" osservato
+# in QA con le vecchie weights hardcoded [0.65, 0.25, 0.10] / [0.70, 0.30].
 GACHA_BANNERS = {
     "standard": {
         "name": "Banner Standard",
         "cost_single": 100,
         "cost_multi": 900,
-        "rates": {1: 0.30, 2: 0.30, 3: 0.20, 4: 0.12, 5: 0.06, 6: 0.02},
+        "rates": {1: 0.39, 2: 0.32, 3: 0.20, 4: 0.075, 5: 0.0135, 6: 0.0015},
         "guarantee_10": 4,
+        "guarantee_weights": {4: 0.8333, 5: 0.1500, 6: 0.0167},
         "filter": None,
     },
     "elemental": {
         "name": "Banner Elementale",
         "cost_single": 120,
         "cost_multi": 1000,
-        "rates": {1: 0.15, 2: 0.25, 3: 0.28, 4: 0.18, 5: 0.10, 6: 0.04},
+        "rates": {1: 0.345, 2: 0.31, 3: 0.23, 4: 0.09, 5: 0.022, 6: 0.003},
         "guarantee_10": 4,
+        "guarantee_weights": {4: 0.7826, 5: 0.1913, 6: 0.0261},
         "filter": None,  # will pick random element focus
+    },
+    "selective": {
+        "name": "Banner Selettivo",
+        "cost_single": 150,
+        "cost_multi": 1350,
+        "rates": {1: 0.32, 2: 0.30, 3: 0.24, 4: 0.105, 5: 0.03, 6: 0.005},
+        "guarantee_10": 4,
+        "guarantee_weights": {4: 0.75, 5: 0.2143, 6: 0.0357},
+        "filter": None,
     },
     "premium": {
         "name": "Banner Premium",
         "cost_single": 200,
         "cost_multi": 1800,
-        "rates": {1: 0.05, 2: 0.15, 3: 0.25, 4: 0.25, 5: 0.20, 6: 0.10},
+        "rates": {1: 0.28, 2: 0.29, 3: 0.25, 4: 0.13, 5: 0.0425, 6: 0.0075},
         "guarantee_10": 5,
+        "guarantee_weights": {5: 0.85, 6: 0.15},
+        "filter": None,
+    },
+    "targeted": {
+        "name": "Banner Mirato",
+        "cost_single": 180,
+        "cost_multi": 1600,
+        "rates": {1: 0.28, 2: 0.29, 3: 0.25, 4: 0.13, 5: 0.0425, 6: 0.0075},
+        "guarantee_10": 5,
+        "guarantee_weights": {5: 0.85, 6: 0.15},
         "filter": None,
     },
 }
@@ -361,9 +392,21 @@ async def gacha_pull_10(req: GachaPullRequest = GachaPullRequest(), current_user
     results = []
     for i in range(10):
         if i == 9:
-            # Guaranteed minimum rarity on last pull
+            # Guaranteed minimum rarity on last pull.
+            # PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF: usa guarantee_weights
+            # dal banner dict (normalizzate dalle rate finali) invece di
+            # hardcoded dev-like weights. Previene la regressione "4 mitici
+            # + 3 leggendari in x10" osservata in QA.
             g = banner["guarantee_10"]
-            rarity = random.choices(list(range(g, 7)), weights=[0.65, 0.25, 0.10] if g == 4 else [0.70, 0.30])[0]
+            gw = banner.get("guarantee_weights")
+            if gw:
+                rarities = sorted(gw.keys())
+                weights = [gw[r] for r in rarities]
+            else:
+                # Fallback legacy (non dovrebbe mai colpire dopo signoff).
+                rarities = list(range(g, 7))
+                weights = [0.65, 0.25, 0.10] if g == 4 else [0.70, 0.30]
+            rarity = random.choices(rarities, weights=weights)[0]
             query: dict = {"rarity": rarity}
             heroes = await db.heroes.find(query).to_list(100)
             # RM1.20-C: same visibility filter on the guaranteed pull.

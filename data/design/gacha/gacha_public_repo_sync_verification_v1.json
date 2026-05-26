@@ -1,0 +1,32 @@
+{
+  "task_id": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF",
+  "track": "H",
+  "verdict": "TRACK_H_PUBLIC_REPO_SYNC_VERIFICATION_READY",
+  "local_branch": "master",
+  "local_head_will_be_updated_by_platform_auto_commit": true,
+  "expected_public_branch": "master",
+  "files_changed": [
+    {"path": "frontend/app/(tabs)/gacha.tsx",                                                "md5": "f68b9239cec04ea54879f0be381e772a", "versioned": true},
+    {"path": "backend/server.py",                                                            "md5": "0e5f9447baef26c5b3588fcca21df44f", "versioned": true},
+    {"path": "backend/scripts/gacha_result_sanity_simulation_v1.py",                         "md5": null, "versioned": true, "note": "MD5 calcolato all'esecuzione"},
+    {"path": "backend/scripts/validate_project_m_status_first_slice_canary_env_rc_gate_v1.py","md5": null, "versioned": true, "note": "pin MD5 server.py aggiornato"},
+    {"path": "backend/scripts/validate_project_gacha_rate_sanity_final_signoff_v1.py",       "md5": null, "versioned": true, "note": "nuovo validator"},
+    {"path": "backend/scripts/run_hero_skill_kit_validator_suite.py",                        "md5": null, "versioned": true, "note": "+1 validator OPTIONAL"},
+    {"path": "data/design/gacha/gacha_rate_sanity_surface_backend_audit_v1.json",            "md5": null, "versioned": true},
+    {"path": "data/design/gacha/gacha_final_rate_table_v1.json",                             "md5": null, "versioned": true},
+    {"path": "data/design/gacha/gacha_frontend_rate_display_update_v1.json",                 "md5": null, "versioned": true},
+    {"path": "data/design/gacha/gacha_backend_rate_alignment_v1.json",                       "md5": null, "versioned": true},
+    {"path": "data/design/gacha/gacha_pity_and_disclosure_contract_v1.json",                 "md5": null, "versioned": true},
+    {"path": "data/design/gacha/gacha_result_sanity_simulation_v1.json",                     "md5": null, "versioned": true, "note": "generato dallo script di simulazione"},
+    {"path": "data/design/gacha/gacha_beta_harness_static_audit_integration_v1.json",        "md5": null, "versioned": true},
+    {"path": "data/design/gacha/gacha_rate_sanity_final_signoff_completion_v1.json",         "md5": null, "versioned": true},
+    {"path": "data/design/audit/batch1_v2/track_b_gacha_lock_v1.json",                       "md5": null, "versioned": true, "note": "gacha_tsx_md5_post refresh"},
+    {"path": "data/design/audit/batch1_v2/track_h_completion_v1.json",                       "md5": null, "versioned": true, "note": "frontend gacha.tsx md5_post refresh"},
+    {"path": "data/design/status_effects/project_m_battle_engine_status_seam_wiring_result_v1.json", "md5": null, "versioned": true, "note": "pin server.py refresh"},
+    {"path": "docs/divine/166_GACHA_RATE_SANITY_FINAL_SIGNOFF.md",                           "md5": null, "versioned": true}
+  ],
+  "package_json_status": "stable (md5 7fb50b6042864f7159ae3d0bd4eb2ede, unchanged)",
+  "yarn_lock_status":   "stable (md5 aa0c59eaa5f8740235116032c366e85e, unchanged)",
+  "runtime_generated_artifacts_note": "gacha_result_sanity_simulation_v1.json viene rigenerato deterministicamente da gacha_result_sanity_simulation_v1.py (seed=20260601). Il JSON \u00e8 versionato.",
+  "complete_only_when_public_sync_present": true
+}

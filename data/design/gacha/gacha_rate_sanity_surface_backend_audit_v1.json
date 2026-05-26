@@ -1,0 +1,53 @@
+{
+  "task_id": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF",
+  "track": "A",
+  "verdict": "TRACK_A_GACHA_SURFACE_AND_BACKEND_AUDIT_READY",
+  "audit_scope": "Snapshot pre-signoff dello stato reale gacha frontend + backend per identificare la sorgente del rischio '4 mitici + 3 leggendari in x10'.",
+  "frontend_surface": {
+    "file": "frontend/app/(tabs)/gacha.tsx",
+    "md5_pre_signoff": "401666155f7129e3d3eed9613160245e",
+    "displayed_rates_pre_signoff": {
+      "standard":      {"1": 30, "2": 30, "3": 20, "4": 12, "5": 6,  "6": 2,  "combined_5_6": 8},
+      "elemental":     {"1": 15, "2": 25, "3": 28, "4": 18, "5": 10, "6": 4,  "combined_5_6": 14},
+      "premium":       {"1": 5,  "2": 15, "3": 25, "4": 25, "5": 20, "6": 10, "combined_5_6": 30, "locked": true},
+      "selective":     {"1": 10, "2": 20, "3": 30, "4": 22, "5": 13, "6": 5,  "combined_5_6": 18},
+      "targeted":      {"1": 5,  "2": 12, "3": 25, "4": 28, "5": 20, "6": 10, "combined_5_6": 30, "locked": true},
+      "artifact":      {"1": 20, "2": 25, "3": 25, "4": 16, "5": 10, "6": 4,  "combined_5_6": 14, "hidden": true},
+      "constellation": {"1": 8,  "2": 15, "3": 27, "4": 25, "5": 17, "6": 8,  "combined_5_6": 25, "hidden": true}
+    },
+    "lock_state_pre_signoff": {
+      "LOCKED_BANNERS_V2": ["premium", "targeted"],
+      "HIDDEN_BANNERS_V2": ["artifact", "constellation"]
+    }
+  },
+  "backend_surface": {
+    "file": "backend/server.py",
+    "md5_pre_signoff": "9b3affcbdb3d4c50efc7ce8b9bc603cb",
+    "rate_source_symbol": "GACHA_BANNERS (top-level constant dict)",
+    "pull_endpoints": ["POST /api/gacha/pull", "POST /api/gacha/pull10", "GET /api/gacha/banners"],
+    "backend_rates_pre_signoff": {
+      "standard":  {"1": 0.30, "2": 0.30, "3": 0.20, "4": 0.12, "5": 0.06, "6": 0.02},
+      "elemental": {"1": 0.15, "2": 0.25, "3": 0.28, "4": 0.18, "5": 0.10, "6": 0.04},
+      "premium":   {"1": 0.05, "2": 0.15, "3": 0.25, "4": 0.25, "5": 0.20, "6": 0.10}
+    },
+    "backend_missing_banners": ["selective", "targeted"],
+    "fallback_behavior": "GACHA_BANNERS.get(banner_id, GACHA_BANNERS['standard']) \u2192 quando il frontend invia banner='selective' (live) o banner='targeted' (locked), il backend pesca dalle rate 'standard' (8% combinato).",
+    "guarantee_10_legacy_weights_dev_like": {
+      "g_eq_4": [0.65, 0.25, 0.10],
+      "g_ne_4": [0.70, 0.30],
+      "risk": "Con guarantee=5 e weights [0.70, 0.30] l'ultima pull garantita d\u00e0 70% di 5\u2605 + 30% di 6\u2605. Combinato con 9 pull a rate dev-like, in QA \u00e8 stato osservato '4 mitici + 3 leggendari in x10'."
+    },
+    "artifact_constellation_endpoints": {"/api/artifacts/pull": "separate", "/api/constellations/pull": "separate"}
+  },
+  "mismatch_table": [
+    {"banner": "standard",   "frontend_combined_5_6": 8,  "backend_combined_5_6": 8,   "status": "BOTH_DEV_LIKE_TOO_HIGH"},
+    {"banner": "elemental",  "frontend_combined_5_6": 14, "backend_combined_5_6": 14,  "status": "BOTH_DEV_LIKE_TOO_HIGH"},
+    {"banner": "selective",  "frontend_combined_5_6": 18, "backend_combined_5_6": null, "status": "BACKEND_FALLBACK_TO_STANDARD_8 \u2014 frontend mente del 18%, backend serve effettivamente 8%."},
+    {"banner": "premium",    "frontend_combined_5_6": 30, "backend_combined_5_6": 30,  "status": "DEV_LIKE_BUT_UI_LOCKED"},
+    {"banner": "targeted",   "frontend_combined_5_6": 30, "backend_combined_5_6": null, "status": "BACKEND_FALLBACK_TO_STANDARD \u2014 UI locked, fallback inerte."}
+  ],
+  "x10_anomaly_root_cause": "La combinazione di rate dev-like (8\u201330% combinato 5\u2605+6\u2605) + guarantee weights hardcoded [0.65/0.25/0.10] o [0.70/0.30] sull'ultima pull pu\u00f2 generare distribuzioni con 4+ mitici/leggendari in singolo x10. La signoff applica rate finali (\u22641.5% standard, \u22642.5% elemental, \u22643.5% selective) + guarantee_weights normalizzate dalle nuove rate finali.",
+  "live_banners_pre_signoff": ["standard", "elemental", "selective"],
+  "locked_banners_pre_signoff": ["premium", "targeted"],
+  "hidden_banners_pre_signoff": ["artifact", "constellation"]
+}
