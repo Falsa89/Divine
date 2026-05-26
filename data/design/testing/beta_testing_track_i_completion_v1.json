@@ -2,7 +2,8 @@
   "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
   "track": "I",
   "verdict": "TRACK_I_BETA_TESTING_AUTOMATION_REDIS_STABILIZATION_COMPLETION_READY",
-  "global_verdict": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION_COMPLETE",
+  "global_verdict": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION_COMPLETE_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "global_verdict_rationale": "All deliverables exist in the in-container working tree and most are committed in HEAD on branch master. However frontend/yarn.lock has uncommitted changes (the @playwright/test devDependency lockfile update has not been auto-committed by the platform yet). Until yarn.lock is auto-committed AND the public GitHub branch (master OR main) reflects HEAD, the public-repo verification is PENDING. The pack itself is technically COMPLETE inside the container; only the public sync is pending.",
   "track_verdicts": {
     "A": "TRACK_A_BASELINE_AND_BRANCH_POLICY_LOCKED",
     "B": "TRACK_B_PLAYER_ROUTE_STATIC_AUDIT_SCRIPT_READY",
@@ -13,6 +14,131 @@
     "G": "TRACK_G_BETA_REPORTING_AND_SCREENSHOT_ARTIFACTS_STANDARDIZED",
     "H": "TRACK_H_SUITE_REGISTRY_AND_VALIDATORS_READY",
     "I": "TRACK_I_BETA_TESTING_AUTOMATION_REDIS_STABILIZATION_COMPLETION_READY"
+  },
+  "public_repo_sync_verification": {
+    "local_branch": "master",
+    "local_head_commit": "f9fd0a22c18284338ed175e9729814d671ee748f",
+    "local_remote_v": "",
+    "local_remote_v_note": "git remote -v output is EMPTY inside the container. The Emergent platform handles the auto-sync to public GitHub externally; the agent cannot git push directly.",
+    "public_branch_to_check": "master (NOT main) \u2014 the container's HEAD is on master; if the public repo also exposes a 'main' it MAY be a downstream fork or platform sync target. The branch to verify is whichever one is mapped to the Emergent auto-sync.",
+    "files": [
+      {
+        "path": "frontend/playwright.config.ts",
+        "md5": "49c74cf254d3ab4465a66f79b04c3b1f",
+        "versioned": true,
+        "in_HEAD": true,
+        "must_appear_on_public_repo": true,
+        "user_observed_on_public": true,
+        "status": "OK"
+      },
+      {
+        "path": "frontend/tests/e2e/player-facing-routes.spec.ts",
+        "md5": "d28e4c27b0fb0d2578f171c3e8338ae9",
+        "versioned": true,
+        "in_HEAD": true,
+        "must_appear_on_public_repo": true,
+        "user_observed_on_public": true,
+        "status": "OK"
+      },
+      {
+        "path": "frontend/tests/e2e/soul-forge-smoke.spec.ts",
+        "md5": "209be6123f57c2f0cebb4675f3a7de75",
+        "versioned": true,
+        "in_HEAD": true,
+        "must_appear_on_public_repo": true,
+        "user_observed_on_public": true,
+        "status": "OK"
+      },
+      {
+        "path": "frontend/tests/e2e/locked-surfaces-smoke.spec.ts",
+        "md5": "854eb68d40b6584067a675ba8b5c3c97",
+        "versioned": true,
+        "in_HEAD": true,
+        "must_appear_on_public_repo": true,
+        "user_observed_on_public": true,
+        "status": "OK"
+      },
+      {
+        "path": "backend/scripts/run_player_route_static_audit.py",
+        "md5": "7095e6fe8fc4a99a36a2b181bb5a7077",
+        "versioned": true,
+        "in_HEAD": true,
+        "must_appear_on_public_repo": true,
+        "user_observed_on_public": true,
+        "status": "OK"
+      },
+      {
+        "path": "frontend/package.json",
+        "md5": "4f7b2f2889162c6c25c7e124fba8b089",
+        "versioned": true,
+        "in_HEAD": true,
+        "in_HEAD_contains_new_scripts_and_devDep": true,
+        "must_appear_on_public_repo": true,
+        "status": "OK_IN_HEAD",
+        "in_HEAD_proof": {
+          "scripts.test:e2e": "playwright test",
+          "scripts.test:beta-smoke": "playwright test",
+          "scripts.test:beta-smoke:headed": "playwright test --headed",
+          "devDependencies.@playwright/test": "^1.60.0"
+        },
+        "discrepancy_note": "If the user is unable to see test:e2e / test:beta-smoke / @playwright/test on public GitHub, the in-container HEAD already contains them. The issue is either (a) the platform auto-sync to public hasn't pushed the latest HEAD yet, (b) GitHub raw cache lag, or (c) the user is reading a stale branch (e.g. main while we are on master)."
+      },
+      {
+        "path": "frontend/yarn.lock",
+        "md5": "aa0c59eaa5f8740235116032c366e85e",
+        "versioned": true,
+        "in_HEAD": true,
+        "working_tree_dirty": true,
+        "in_HEAD_contains_playwright_entries": false,
+        "working_tree_contains_playwright_entries": true,
+        "must_appear_on_public_repo": true,
+        "status": "PENDING_AUTO_COMMIT",
+        "discrepancy_note": "frontend/yarn.lock was UPDATED in the working tree by `yarn add -D @playwright/test` but the Emergent auto-commit layer has not yet snapshotted this change into HEAD. When the next auto-commit fires, yarn.lock will gain the playwright entries (resolution: 1.60.0, integrity hashes, etc.). Until then, the public repo yarn.lock and the in-container yarn.lock will diverge."
+      },
+      {
+        "path": "backend/reports/player_route_static_audit_latest.json",
+        "md5": "e8e0a28120d43914f4d5ecd06b564c6a",
+        "versioned": false,
+        "in_HEAD": false,
+        "must_appear_on_public_repo": false,
+        "status": "RUNTIME_GENERATED_GITIGNORED_BY_DESIGN",
+        "gitignore_rule": "backend/reports/ (RM1.20-A: 'Roster audit & soft-deactivation plan reports (mai committare)')",
+        "alternative_versioned_snapshot": "data/design/testing/beta_testing_track_b_route_audit_snapshot_v1.json",
+        "note": "By design the runtime report is NEVER committed. To preserve a verifiable trace of the audit result (13/0/0/0) we have created a versioned snapshot under /app/data/design/testing/ which IS sync-able to the public repo."
+      },
+      {
+        "path": "data/design/testing/beta_testing_track_b_route_audit_snapshot_v1.json",
+        "versioned": true,
+        "in_HEAD": false,
+        "in_working_tree": true,
+        "must_appear_on_public_repo": true,
+        "status": "PENDING_AUTO_COMMIT",
+        "note": "Newly created in this hotfix cycle; will be auto-committed by the platform shortly."
+      }
+    ],
+    "package_json_verification": {
+      "modified_by_pack": true,
+      "in_HEAD_contains_test_e2e": true,
+      "in_HEAD_contains_test_beta_smoke": true,
+      "in_HEAD_contains_test_beta_smoke_headed": true,
+      "in_HEAD_contains_playwright_test_devDep": true,
+      "playwright_installed_only_in_container_not_in_manifest": false,
+      "verdict": "package.json is COMPLETE in HEAD. Auto-sync to public GitHub should reflect this. If user still cannot see entries on public master/main, the discrepancy is in the platform sync layer, not in our work."
+    },
+    "audit_report_artifact_status": {
+      "runtime_path": "backend/reports/player_route_static_audit_latest.json",
+      "must_be_committed": false,
+      "reason_not_committed": "Explicit .gitignore rule: 'backend/reports/' (RM1.20-A)",
+      "versioned_alternative_path": "data/design/testing/beta_testing_track_b_route_audit_snapshot_v1.json",
+      "versioned_alternative_preserves_result": "13 PASS / 0 WARN / 0 FAIL / 0 MISS",
+      "regeneratable_at_any_time_by": "python3 /app/backend/scripts/run_player_route_static_audit.py"
+    },
+    "open_action_items_for_public_sync": [
+      "Wait for platform auto-commit to capture frontend/yarn.lock changes (currently dirty in working tree).",
+      "Wait for platform auto-commit to capture data/design/testing/beta_testing_track_b_route_audit_snapshot_v1.json (newly created).",
+      "Wait for platform auto-sync from container master to public GitHub.",
+      "If after platform auto-sync the discrepancy persists, the user should query support_agent for a forced sync trigger or compare a fresh `git clone` of the public repo with the container HEAD."
+    ]
   },
   "files_added": [
     "frontend/playwright.config.ts",
@@ -27,10 +153,12 @@
     "backend/scripts/validate_beta_testing_track_e_playwright_v1.py",
     "backend/scripts/validate_beta_testing_track_f_redis_v1.py",
     "backend/scripts/validate_beta_testing_track_g_reporting_v1.py",
-    "backend/scripts/validate_beta_testing_track_i_completion_v1.py"
+    "backend/scripts/validate_beta_testing_track_i_completion_v1.py",
+    "data/design/testing/beta_testing_track_b_route_audit_snapshot_v1.json"
   ],
   "files_modified": [
-    "frontend/package.json (added test:e2e / test:beta-smoke scripts; added @playwright/test devDep)",
+    "frontend/package.json (added test:e2e / test:beta-smoke / test:beta-smoke:headed scripts; added @playwright/test devDep)",
+    "frontend/yarn.lock (added @playwright/test resolution \u2014 NOT YET AUTO-COMMITTED)",
     "backend/scripts/run_hero_skill_kit_validator_suite.py (added 8 OPTIONAL validators)"
   ],
   "files_kept_unchanged": [
@@ -58,6 +186,8 @@
   "redis_failing_count_before": 5,
   "redis_failing_count_after": 0,
   "player_route_audit_results": {"pass": 13, "warn": 0, "fail": 0, "miss": 0},
-  "remaining_blockers": [],
+  "remaining_blockers": [
+    "frontend/yarn.lock auto-commit pending (only blocker; resolves automatically on next platform snapshot)"
+  ],
   "next_pack_recommendation": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF_PACK (P0 dal Master Batch Plan precedente)"
 }

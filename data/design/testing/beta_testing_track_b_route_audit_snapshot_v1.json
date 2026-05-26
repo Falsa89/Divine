@@ -1,0 +1,41 @@
+{
+  "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
+  "track": "B+G",
+  "kind": "design_audit_snapshot_versioned",
+  "verdict": "PLAYER_ROUTE_STATIC_AUDIT_SNAPSHOT_RECORDED_VERSIONED",
+  "reason_versioned": "backend/reports/ is explicitly gitignored by repo rule RM1.20-A (\"Roster audit & soft-deactivation plan reports (mai committare)\"). The runtime audit report at backend/reports/player_route_static_audit_latest.json is therefore NEVER pushed to public GitHub by design. To keep an immutable trace of the audit result that IS sync-able, we record the deterministic summary here under /app/data/design/testing/ (which is NOT gitignored).",
+  "runtime_artifact_path": "backend/reports/player_route_static_audit_latest.json",
+  "runtime_artifact_status": "RUNTIME_GENERATED_GITIGNORED_BY_DESIGN",
+  "runtime_artifact_md5_at_capture": "e8e0a28120d43914f4d5ecd06b564c6a",
+  "captured_at_utc": "2026-05-26T19:55:00Z",
+  "captured_from_commit": "f9fd0a22c18284338ed175e9729814d671ee748f",
+  "captured_from_branch": "master",
+  "summary": {
+    "routes_audited": 13,
+    "pass": 13,
+    "warn": 0,
+    "fail": 0,
+    "miss": 0
+  },
+  "results": [
+    {"route": "soul-forge.tsx",        "path": "soul-forge.tsx",         "verdict": "PASS", "md5": "b7659de11ac36f341e7a2f54fd29e6ed"},
+    {"route": "treasury.tsx",          "path": "treasury.tsx",           "verdict": "PASS"},
+    {"route": "economy.tsx",           "path": "economy.tsx",            "verdict": "PASS", "md5": "495fe455acb30ea16914e04afb2238eb"},
+    {"route": "exclusive.tsx",         "path": "exclusive.tsx",          "verdict": "PASS", "md5": "c691181a7ec0dd28ed308a8130914b3c"},
+    {"route": "gacha.tsx",             "path": "(tabs)/gacha.tsx",       "verdict": "PASS"},
+    {"route": "shop.tsx",              "path": "shop.tsx",               "verdict": "PASS", "notes": "lock-gated via SHOP_LOCKED_V2"},
+    {"route": "item-shop.tsx",         "path": "item-shop.tsx",          "verdict": "PASS", "notes": "lock-gated via ITEM_SHOP_LOCKED_V2"},
+    {"route": "battlepass.tsx",        "path": "battlepass.tsx",         "verdict": "PASS"},
+    {"route": "vip.tsx",               "path": "vip.tsx",                "verdict": "PASS"},
+    {"route": "servers.tsx",           "path": "servers.tsx",            "verdict": "PASS"},
+    {"route": "safe-previews.tsx",     "path": "safe-previews.tsx",      "verdict": "PASS"},
+    {"route": "daily-hub.tsx",         "path": "daily-hub.tsx",          "verdict": "PASS"},
+    {"route": "artifacts-preview.tsx", "path": "artifacts-preview.tsx",  "verdict": "PASS"}
+  ],
+  "reproducibility": {
+    "command": "python3 /app/backend/scripts/run_player_route_static_audit.py",
+    "expected_stdout_contains": "[player_route_static_audit] pass=13 warn=0 fail=0 miss=0",
+    "deterministic": true,
+    "read_only": true
+  }
+}
