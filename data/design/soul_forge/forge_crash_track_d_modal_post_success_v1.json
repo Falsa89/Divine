@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "D",
+  "verdict": "TRACK_D_MOBILE_CONFIRM_MODAL_AND_POST_SUCCESS_STATE_SAFE",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "modal_and_post_success_changes": [
+    "double_submit_guard_in_requestForge_and_confirmForge",
+    "modal_confirm_button_disabled_while_forging",
+    "modal_confirm_button_label_swaps_to_loading_label_while_forging",
+    "KeyboardAvoidingView_preserved_from_emergency_restore",
+    "inner_modal_ScrollView_preserved_from_emergency_restore",
+    "refreshUser_failure_after_forge_success_is_soft_warning_NOT_crash",
+    "secondary_fetches_wallet_and_soul_forge_swallow_errors_via_allSettled_and_catch",
+    "result_panel_uses_safe_number_fallback_rendering",
+    "forge_error_banner_visible_after_failed_forge_with_clear_dismiss"
+  ],
+  "selected_heroes_preserved_on_failure": true,
+  "never_crash_app": true,
+  "backend_changes": 0,
+  "db_writes": 0
+}

@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "B",
+  "verdict": "TRACK_B_FRONTEND_FORGE_CRASH_PROOFING_FIXED_SAFE",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "soul_forge_tsx_md5_pre": "ba8f802d10cc774e65e8c552a1482099",
+  "soul_forge_tsx_md5_post": "88a39590454ecc1c5f16e34e09d90b63",
+  "crash_proofing_changes": [
+    "added_normalizeForgeResponse_helper_accepting_aliases_gained_essence_gained_essence_gained_soul_essence_gained",
+    "added_normalizeForgeResponse_helper_accepting_aliases_new_balance_balance_soul_essence_new_soul_essence",
+    "normalizeForgeResponse_never_throws_and_returns_ok_false_when_response_invalid_or_missing_gained",
+    "confirmForge_snapshots_hero_ids_BEFORE_any_setState_so_heroes_stay_intact_on_failure",
+    "confirmForge_only_removes_heroes_after_response_normalized_and_validated",
+    "confirmForge_double_submit_guard_via_if_forging_return",
+    "requestForge_double_submit_guard_via_if_forging_return",
+    "introduced_visible_forgeError_state_red_banner_with_dismiss_button",
+    "introduced_postSuccessWarn_state_amber_banner_for_refresh_failure_post_success",
+    "balance_render_wrapped_in_NumberIsFinite_check",
+    "result_render_uses_Number_or_0_fallback_for_both_gained_and_newBalance",
+    "modal_estimated_balance_render_wrapped_in_NumberIsFinite_check",
+    "modal_FORGE_button_disabled_and_dimmed_when_forging",
+    "modal_FORGE_button_label_swaps_to_in_corso_during_forging",
+    "secondary_apiCall_wallet_and_soul_forge_wrapped_in_catch_swallow",
+    "refreshUser_wrapped_in_try_catch_so_failure_becomes_soft_warning_not_crash"
+  ],
+  "never_changed": [
+    "reward_formula",
+    "endpoint_path",
+    "request_body_shape",
+    "high_rarity_protection",
+    "typed_CONFERMA_rule",
+    "protected_flags_set"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0
+}

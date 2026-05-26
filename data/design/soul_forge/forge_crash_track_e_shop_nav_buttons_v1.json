@@ -1,0 +1,32 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "E",
+  "verdict": "TRACK_E_SOUL_SHOP_NAVIGATION_BUTTONS_READY_SAFE",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "navigation_buttons_added": [
+    {
+      "location": "Negozio Anime preview card",
+      "buttons": [
+        {"label": "Apri Tesoreria", "target": "/treasury", "target_kind": "existing_route", "renders_mutations": false},
+        {"label": "Vai al Negozio", "target": "/shop", "target_kind": "existing_locked_readonly_route", "renders_mutations": false, "lock_badge": true}
+      ]
+    },
+    {
+      "location": "Negozio Polvere Stellare preview card",
+      "buttons": [
+        {"label": "Apri Negozio Oggetti", "target": "/item-shop", "target_kind": "existing_locked_readonly_route", "renders_mutations": false, "lock_badge": true},
+        {"label": "Negozio Polvere", "target": null, "target_kind": "in_preparation_disabled", "renders_mutations": false, "disabled_visual": true}
+      ]
+    }
+  ],
+  "target_route_locks_audited": {
+    "/shop": {"file": "frontend/app/shop.tsx", "flag": "SHOP_LOCKED_V2 = true", "buy_button_blocked": true},
+    "/item-shop": {"file": "frontend/app/item-shop.tsx", "flag": "ITEM_SHOP_LOCKED_V2 = true", "buy_button_blocked": true},
+    "/treasury": {"file": "frontend/app/treasury.tsx", "kind": "read_only_currency_overview"}
+  },
+  "no_live_buy_enabled": true,
+  "no_routing_to_legacy_economy_buy": true,
+  "in_preparation_button_uses_disabled_visual_not_fake_navigation": true,
+  "backend_changes": 0,
+  "db_writes": 0
+}

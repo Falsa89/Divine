@@ -1057,6 +1057,18 @@ OPTIONAL = [
     ('PROJECT-EMERGENCY-RESTORE-TRACK-F-PANELS', 'validate_emergency_restore_track_f_panels_v1.py'),
     ('PROJECT-EMERGENCY-RESTORE-TRACK-G-BYPASS-GUARDS', 'validate_emergency_restore_track_g_bypass_guards_v1.py'),
     ('PROJECT-EMERGENCY-RESTORE-TRACK-H-COMPLETION', 'validate_emergency_restore_track_h_completion_v1.py'),
+    # PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX_PACK (8 validators)
+    # Crash-proofs the forge action (FORGE SOUL crash on mobile), normalizes response,
+    # verifies backend contract (no backend changes), adds safe shop nav buttons,
+    # rechecks economy/exclusive locks, enforces credentials hygiene + honest Redis status.
+    ('PROJECT-FORGE-CRASH-TRACK-A-ROOT-CAUSE', 'validate_forge_crash_track_a_root_cause_v1.py'),
+    ('PROJECT-FORGE-CRASH-TRACK-B-RESPONSE-NORMALIZATION', 'validate_forge_crash_track_b_response_normalization_v1.py'),
+    ('PROJECT-FORGE-CRASH-TRACK-C-BACKEND-CONTRACT', 'validate_forge_crash_track_c_backend_contract_v1.py'),
+    ('PROJECT-FORGE-CRASH-TRACK-D-MODAL-POST-SUCCESS', 'validate_forge_crash_track_d_modal_post_success_v1.py'),
+    ('PROJECT-FORGE-CRASH-TRACK-E-SHOP-NAV', 'validate_forge_crash_track_e_shop_nav_v1.py'),
+    ('PROJECT-FORGE-CRASH-TRACK-F-ECONOMY-EXCLUSIVE-RECHECK', 'validate_forge_crash_track_f_economy_exclusive_recheck_v1.py'),
+    ('PROJECT-FORGE-CRASH-TRACK-G-HYGIENE', 'validate_forge_crash_track_g_hygiene_v1.py'),
+    ('PROJECT-FORGE-CRASH-TRACK-H-COMPLETION', 'validate_forge_crash_track_h_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

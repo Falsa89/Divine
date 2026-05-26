@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "F",
+  "verdict": "TRACK_F_ECONOMY_EXCLUSIVE_NAVIGATION_RECHECK_READY",
+  "recheck": [
+    {
+      "file": "frontend/app/economy.tsx",
+      "md5": "495fe455acb30ea16914e04afb2238eb",
+      "behavior": "redirect_to_soul_forge_only",
+      "mutations_present": false,
+      "buy_buttons_present": false,
+      "retire_buttons_present": false
+    },
+    {
+      "file": "frontend/app/exclusive.tsx",
+      "md5": "c691181a7ec0dd28ed308a8130914b3c",
+      "behavior": "legacy_lock_notice_only",
+      "mutations_present": false,
+      "craft_buttons_present": false
+    }
+  ],
+  "home_overflow_panel_safe": true,
+  "menu_links_safe": true,
+  "backend_changes": 0,
+  "db_writes": 0
+}

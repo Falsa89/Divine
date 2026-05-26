@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "G",
+  "verdict": "TRACK_G_REDIS_SUITE_NOISE_AND_TEST_CREDENTIALS_HYGIENE_READY",
+  "hygiene_test_credentials": {
+    "file": "memory/test_credentials.md",
+    "md5_post": "d2c867673c75f703f6580174a2cef091",
+    "action": "removed_plaintext_password_replaced_with_placeholder_and_ephemeral_helper_script",
+    "plaintext_password_committed_post_fix": false,
+    "qa_account_still_creatable_on_demand": true,
+    "approach": "Documented standard placeholder email/username, but password is empty placeholder. Helper bash snippet shows how to mint an ephemeral password via /api/register without committing it."
+  },
+  "redis_suite_noise": {
+    "known_failing_validators_environmental": [
+      "validate_af2n_v23_preflight.py",
+      "validate_af2n_v23_redis_switch.py",
+      "validate_ultra_combo_v23_redis_switch_observation.py",
+      "validate_af2n_v24_preflight.py",
+      "validate_ultra_combo_v24_observation_abuse_rollback_redisHA.py"
+    ],
+    "reason": "Redis daemon binary is not bound in this container (redis-cli missing, supervisor entry FATAL). All 5 failures are pre-existing environmental, not gameplay or contract-related. Documented as known infra-pack scope.",
+    "action_taken": "NO FAKE PASS. NO VALIDATOR WEAKENING. Documented honestly in this JSON and in completion docs. Marked for future infra pack.",
+    "fake_pass_used": false,
+    "validator_weakening_used": false,
+    "required_validators_intact": true
+  },
+  "backend_changes": 0,
+  "db_writes": 0
+}

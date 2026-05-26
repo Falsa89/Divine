@@ -101,6 +101,11 @@ export default function SoulForgeScreen() {
   const [soulForgeMeta, setSoulForgeMeta] = useState<any>(null);
   const [shopsPreview, setShopsPreview] = useState<any>(null);
 
+  // FORGE_CRASH Track B \u2014 errore forge visibile (mai crash silenzioso)
+  const [forgeError, setForgeError] = useState<string | null>(null);
+  // FORGE_CRASH Track D \u2014 warning soft per refresh post-success fallito
+  const [postSuccessWarn, setPostSuccessWarn] = useState<string | null>(null);
+
   useEffect(() => { load(); }, []);
 
   const load = async () => {
@@ -243,37 +248,107 @@ export default function SoulForgeScreen() {
 
   const requestForge = () => {
     if (selected.size === 0) return;
+    if (forging) return; // double-submit guard
     setTypedConfirm('');
+    setForgeError(null);
+    setPostSuccessWarn(null);
     setConfirmOpen(true);
   };
 
+  // =====================================================================
+  // FORGE_CRASH Track B \u2014 Response normalization.
+  // Accetta multiple varianti di field name per resilienza al contratto.
+  // Restituisce { ok, gained, newBalance, errorMessage }.
+  // Mai lancia eccezioni.
+  // =====================================================================
+  const normalizeForgeResponse = (r: any): {
+    ok: boolean;
+    gained: number;
+    newBalance: number;
+    errorMessage: string | null;
+  } => {
+    if (r == null || typeof r !== 'object') {
+      return { ok: false, gained: 0, newBalance: balance, errorMessage: 'Risposta server vuota o non valida.' };
+    }
+    // Accept multiple aliases for "gained" amount
+    const rawGained =
+      r.gained_essence ?? r.gained ?? r.essence_gained ?? r.soul_essence_gained;
+    const gainedNum = Number(rawGained);
+    // Accept multiple aliases for "new balance"
+    const rawBalance =
+      r.new_balance ?? r.balance ?? r.soul_essence ?? r.new_soul_essence;
+    const balanceNum = Number(rawBalance);
+    const gainedOk = Number.isFinite(gainedNum) && gainedNum >= 0;
+    // If balance is missing/NaN, fall back to optimistic computation
+    const balanceOk = Number.isFinite(balanceNum) && balanceNum >= 0;
+    if (!gainedOk) {
+      return {
+        ok: false,
+        gained: 0,
+        newBalance: balanceOk ? balanceNum : balance,
+        errorMessage: 'Risposta forge non valida (manca essenza guadagnata).',
+      };
+    }
+    return {
+      ok: true,
+      gained: gainedNum,
+      newBalance: balanceOk ? balanceNum : balance + gainedNum,
+      errorMessage: null,
+    };
+  };
+
   const confirmForge = async () => {
+    if (forging) return; // hard double-submit guard
     if (isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA') {
       return;
     }
+    // Snapshot selection BEFORE any state mutation to keep heroes alive on failure
+    const heroIdsSnapshot = Array.from(selected);
+    if (heroIdsSnapshot.length === 0) return;
     setConfirmOpen(false);
+    setForgeError(null);
+    setPostSuccessWarn(null);
     setForging(true);
     try {
       const r = await apiCall('/api/soul/forge', {
         method: 'POST',
-        body: JSON.stringify({ hero_ids: Array.from(selected) }),
+        body: JSON.stringify({ hero_ids: heroIdsSnapshot }),
       });
-      setResult({ gained: r.gained_essence, newBalance: r.new_balance });
-      setBalance(r.new_balance);
+      const norm = normalizeForgeResponse(r);
+      if (!norm.ok) {
+        // Server accepted but response malformed: DO NOT remove heroes from UI.
+        setForgeError(norm.errorMessage || 'Risposta forge non valida.');
+        return;
+      }
+      // Success path: commit state mutations safely with normalized values.
+      setResult({ gained: norm.gained, newBalance: norm.newBalance });
+      setBalance(norm.newBalance);
       setSelected(new Set());
       setOverrideHighRarity(false);
-      setHeroes(prev => prev.filter(h => !selected.has(h.id)));
-      await refreshUser();
-      // refresh secondary read-only data without blocking
+      // Remove ONLY the heroes we actually requested forge for (snapshot).
+      const snapshotSet = new Set(heroIdsSnapshot);
+      setHeroes(prev => prev.filter(h => !snapshotSet.has(h.id)));
+      // Best-effort refresh: soft warning if it fails, never crash.
+      try {
+        await refreshUser();
+      } catch (re: any) {
+        setPostSuccessWarn('Forge riuscita. Aggiornamento profilo fallito \u2014 riapri la schermata per sincronizzare.');
+      }
       Promise.allSettled([
         apiCall('/api/wallet'),
         apiCall('/api/soul-forge'),
-      ]).then(([w, sf]) => {
-        if (w.status === 'fulfilled') setWallet(w.value);
-        if (sf.status === 'fulfilled') setSoulForgeMeta(sf.value);
-      });
+      ]).then((res) => {
+        const [w, sf] = res;
+        if (w && w.status === 'fulfilled') setWallet(w.value);
+        if (sf && sf.status === 'fulfilled') setSoulForgeMeta(sf.value);
+      }).catch(() => { /* swallow secondary errors safely */ });
     } catch (e: any) {
-      setResult({ gained: 0, newBalance: balance });
+      // Network or API failure: visible error, heroes stay selected.
+      const msg = (e && typeof e.message === 'string' && e.message)
+        ? e.message
+        : 'Errore di rete durante la forge.';
+      setForgeError(msg);
+      // Do NOT setResult here \u2014 result panel implies success.
     } finally {
       setForging(false);
       setTypedConfirm('');
@@ -336,7 +411,7 @@ export default function SoulForgeScreen() {
         </View>
         <View style={s.balanceBadge}>
           <Text style={s.balanceIcon}>{'\uD83D\uDC80'}</Text>
-          <Text style={s.balanceVal}>{balance.toLocaleString()}</Text>
+          <Text style={s.balanceVal}>{(Number.isFinite(balance) ? balance : 0).toLocaleString()}</Text>
         </View>
       </View>
 
@@ -552,9 +627,41 @@ export default function SoulForgeScreen() {
             {/* Result */}
             {result && result.gained > 0 && (
               <Animated.View entering={FadeInUp.duration(300)} style={s.resultBox}>
-                <Text style={s.resultGained}>+{result.gained.toLocaleString()} Soul Essence</Text>
-                <Text style={s.resultBalance}>Bilancio: {result.newBalance.toLocaleString()}</Text>
+                <Text style={s.resultGained}>+{(Number(result.gained) || 0).toLocaleString()} Soul Essence</Text>
+                <Text style={s.resultBalance}>Bilancio: {(Number(result.newBalance) || 0).toLocaleString()}</Text>
               </Animated.View>
+            )}
+
+            {/* FORGE_CRASH Track B \u2014 errore forge visibile (mai crash silenzioso) */}
+            {forgeError && (
+              <Animated.View entering={FadeInUp.duration(200)} style={s.forgeErrorBox}>
+                <Text style={s.forgeErrorIcon}>{'\u26A0\uFE0F'}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={s.forgeErrorTitle}>Forge non riuscita</Text>
+                  <Text style={s.forgeErrorMsg}>{forgeError}</Text>
+                  <Text style={s.forgeErrorHint}>
+                    I tuoi eroi selezionati sono ancora intatti. Puoi riprovare o annullare.
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={s.forgeErrorDismiss}
+                  onPress={() => setForgeError(null)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.forgeErrorDismissTxt}>{'\u2715'}</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            )}
+
+            {/* FORGE_CRASH Track D \u2014 warning soft per refresh post-success */}
+            {postSuccessWarn && (
+              <View style={s.postWarnBox}>
+                <Text style={s.postWarnIcon}>{'\u2139\uFE0F'}</Text>
+                <Text style={s.postWarnTxt}>{postSuccessWarn}</Text>
+                <TouchableOpacity onPress={() => setPostSuccessWarn(null)} activeOpacity={0.7}>
+                  <Text style={s.postWarnDismiss}>{'\u2715'}</Text>
+                </TouchableOpacity>
+              </View>
             )}
           </LinearGradient>
         </View>
@@ -647,6 +754,28 @@ export default function SoulForgeScreen() {
               <Text style={s.merge_hint}>
                 Anteprima informativa. Gli acquisti sono disabilitati fino al signoff economy.
               </Text>
+              {/* FORGE_CRASH Track E \u2014 nav buttons safe: tesoreria + shop locked */}
+              <View style={s.shop_navRow}>
+                <TouchableOpacity
+                  style={s.shop_navBtn}
+                  onPress={() => router.push('/treasury')}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.shop_navIcon}>{'\uD83C\uDFE6'}</Text>
+                  <Text style={s.shop_navTxt}>Apri Tesoreria</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={s.shop_navBtnSecondary}
+                  onPress={() => router.push('/shop')}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.shop_navIcon}>{'\uD83D\uDED2'}</Text>
+                  <Text style={s.shop_navTxtSecondary}>Vai al Negozio</Text>
+                  <View style={s.shop_navLockMini}>
+                    <Text style={s.shop_navLockMiniTxt}>{'\uD83D\uDD12'}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
 
@@ -671,6 +800,27 @@ export default function SoulForgeScreen() {
                   <Text style={s.merge_shopItemStock}>{it.remaining_stock ?? it.stock ?? '\u221E'}</Text>
                 </View>
               ))}
+              {/* FORGE_CRASH Track E \u2014 nav: item-shop \u00e8 locked read-only */}
+              <View style={s.shop_navRow}>
+                <TouchableOpacity
+                  style={s.shop_navBtnSecondary}
+                  onPress={() => router.push('/item-shop')}
+                  activeOpacity={0.7}
+                >
+                  <Text style={s.shop_navIcon}>{'\uD83D\uDCE6'}</Text>
+                  <Text style={s.shop_navTxtSecondary}>Apri Negozio Oggetti</Text>
+                  <View style={s.shop_navLockMini}>
+                    <Text style={s.shop_navLockMiniTxt}>{'\uD83D\uDD12'}</Text>
+                  </View>
+                </TouchableOpacity>
+                <View style={[s.shop_navBtnSecondary, { opacity: 0.55 }]}>
+                  <Text style={s.shop_navIcon}>{'\u2728'}</Text>
+                  <Text style={s.shop_navTxtSecondary}>Negozio Polvere</Text>
+                  <View style={[s.shop_navLockMini, { backgroundColor: 'rgba(255,165,0,0.25)' }]}>
+                    <Text style={s.shop_navLockMiniTxt}>IN PREP</Text>
+                  </View>
+                </View>
+              </View>
             </View>
           )}
 
@@ -718,7 +868,7 @@ export default function SoulForgeScreen() {
                   {'\uD83D\uDC80'} +{previewEssence.toLocaleString()} Soul Essence
                 </Text>
                 <Text style={s.modalBreakLineV2}>
-                  Bilancio finale stimato: {(balance + previewEssence).toLocaleString()}
+                  Bilancio finale stimato: {((Number.isFinite(balance) ? balance : 0) + previewEssence).toLocaleString()}
                 </Text>
               </View>
 
@@ -757,13 +907,19 @@ export default function SoulForgeScreen() {
                 <TouchableOpacity
                   style={[
                     s.modalConfirmV2,
-                    isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA' && { opacity: 0.35 },
+                    (isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA') && { opacity: 0.35 },
+                    forging && { opacity: 0.5 },
                   ]}
                   onPress={confirmForge}
-                  disabled={isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA'}
+                  disabled={
+                    forging ||
+                    (isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA')
+                  }
                   activeOpacity={0.7}
                 >
-                  <Text style={s.modalConfirmTxtV2}>{'\uD83D\uDD25'} FORGE</Text>
+                  <Text style={s.modalConfirmTxtV2}>
+                    {forging ? '\u2026 IN CORSO' : '\uD83D\uDD25 FORGE'}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </ScrollView>
@@ -1050,4 +1206,52 @@ const s = StyleSheet.create({
   merge_treasuryTitle: { color: '#FFD700', fontSize: 11, fontWeight: '900' },
   merge_treasuryDesc: { color: 'rgba(255,215,0,0.7)', fontSize: 9, marginTop: 2 },
   merge_treasuryArrow: { color: '#FFD700', fontSize: 18, fontWeight: '900' },
+  // FORGE_CRASH Track B \u2014 visible error/warn banners
+  forgeErrorBox: {
+    flexDirection: 'row', gap: 8, alignItems: 'flex-start',
+    padding: 10, borderRadius: 10,
+    backgroundColor: 'rgba(255,68,68,0.10)',
+    borderWidth: 1, borderColor: 'rgba(255,68,68,0.55)',
+  },
+  forgeErrorIcon: { fontSize: 18, marginTop: 1 },
+  forgeErrorTitle: { color: '#FF8888', fontSize: 12, fontWeight: '900' },
+  forgeErrorMsg: { color: 'rgba(255,210,210,0.92)', fontSize: 11, lineHeight: 16, marginTop: 3 },
+  forgeErrorHint: { color: 'rgba(255,210,210,0.65)', fontSize: 9, lineHeight: 13, marginTop: 4, fontStyle: 'italic' },
+  forgeErrorDismiss: {
+    width: 22, height: 22, borderRadius: 11,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  forgeErrorDismissTxt: { color: '#fff', fontSize: 11, fontWeight: '900' },
+  postWarnBox: {
+    flexDirection: 'row', gap: 8, alignItems: 'center',
+    padding: 8, borderRadius: 8,
+    backgroundColor: 'rgba(255,215,0,0.08)',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.30)',
+  },
+  postWarnIcon: { fontSize: 14 },
+  postWarnTxt: { flex: 1, color: 'rgba(255,225,140,0.85)', fontSize: 10, lineHeight: 14 },
+  postWarnDismiss: { color: 'rgba(255,225,140,0.65)', fontSize: 14, paddingHorizontal: 4 },
+  // FORGE_CRASH Track E \u2014 shop navigation buttons (read-only safe targets)
+  shop_navRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
+  shop_navBtn: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+    paddingVertical: 10, paddingHorizontal: 8, borderRadius: 8,
+    backgroundColor: 'rgba(255,215,0,0.12)',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.55)',
+  },
+  shop_navTxt: { color: '#FFD700', fontSize: 10, fontWeight: '900', letterSpacing: 0.5 },
+  shop_navBtnSecondary: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+    paddingVertical: 10, paddingHorizontal: 8, borderRadius: 8,
+    backgroundColor: 'rgba(153,68,255,0.10)',
+    borderWidth: 1, borderColor: 'rgba(153,68,255,0.50)',
+  },
+  shop_navTxtSecondary: { color: '#C877FF', fontSize: 10, fontWeight: '900', letterSpacing: 0.5 },
+  shop_navIcon: { fontSize: 14 },
+  shop_navLockMini: {
+    paddingHorizontal: 5, paddingVertical: 2, borderRadius: 4,
+    backgroundColor: 'rgba(255,255,255,0.10)',
+  },
+  shop_navLockMiniTxt: { color: '#fff', fontSize: 8, fontWeight: '800' },
 });

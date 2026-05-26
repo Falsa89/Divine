@@ -1,0 +1,101 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "A",
+  "verdict": "TRACK_A_SOUL_FORGE_FORGE_CRASH_ROOT_CAUSE_IDENTIFIED",
+  "regression_introduced_by": "PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX_PACK (confirmForge response handling not defensive enough)",
+  "regression_pre_fix_md5_soul_forge_tsx": "ba8f802d10cc774e65e8c552a1482099",
+  "backend_contract_audit": {
+    "endpoint": "POST /api/soul/forge",
+    "found_at": "backend/routes/soul_forge.py:368",
+    "auth_protected": true,
+    "request_body_shape": {
+      "hero_ids": "list[str]"
+    },
+    "response_shape": {
+      "gained_essence": "int",
+      "new_balance": "int"
+    },
+    "safety_guards": [
+      "rejects empty hero_ids with 400",
+      "rejects heroes not owned by user with 404",
+      "rejects heroes in active team with 400",
+      "deduplicates hero_ids before processing"
+    ],
+    "reward_formula": "base SOUL_ESSENCE_VALUES[1-5] * (1 + level*0.02), level bonus rate 2% per level. Same as frontend calcEssence preview function.",
+    "conclusion": "BACKEND CONTRACT IS CORRECT AND MATCHES FRONTEND EXPECTATIONS. No backend changes required."
+  },
+  "frontend_crash_candidates": [
+    {
+      "id": "FC1_SET_BALANCE_UNDEFINED",
+      "severity": "P0_LIKELY_PRIMARY_CRASH",
+      "code_path": "confirmForge -> setBalance(r.new_balance)",
+      "scenario": "If response is malformed (missing new_balance) or apiCall returns null body, setBalance(undefined) is committed to state. Next render of header balance badge does {balance.toLocaleString()} which throws TypeError: Cannot read properties of undefined.",
+      "fix": "Normalize response with fallback chain (Number(r?.new_balance ?? r?.balance ?? r?.soul_essence ?? balance)). Validate before setBalance. Never setBalance(non-finite)."
+    },
+    {
+      "id": "FC2_RESULT_NEW_BALANCE_RENDER",
+      "severity": "P0_LIKELY",
+      "code_path": "result.newBalance.toLocaleString() inside resultBox JSX",
+      "scenario": "If r.new_balance is undefined and we setResult({gained: ..., newBalance: undefined}), the conditional render passes (gained>0) and then renders newBalance.toLocaleString() -> CRASH.",
+      "fix": "Render with (result.newBalance ?? 0).toLocaleString() AND normalize at setResult time."
+    },
+    {
+      "id": "FC3_OPTIMISTIC_HERO_DELETION_BEFORE_VALIDATION",
+      "severity": "P1",
+      "code_path": "setHeroes(prev => prev.filter(h => !selected.has(h.id)))",
+      "scenario": "Heroes removed from UI optimistically without validating response success. If backend returned 200 with malformed payload, UI state becomes inconsistent.",
+      "fix": "Only remove heroes after response normalization validates gained_essence >= 0 AND server says success."
+    },
+    {
+      "id": "FC4_NO_VISIBLE_ERROR_ON_FAILURE",
+      "severity": "P1",
+      "code_path": "catch (e) { setResult({gained: 0, newBalance: balance}) }",
+      "scenario": "On API failure, the error message is swallowed. User sees no feedback because result.gained === 0 fails the conditional render.",
+      "fix": "Introduce dedicated errorMessage state shown as a visible card in the forge panel after a failed forge."
+    },
+    {
+      "id": "FC5_DOUBLE_SUBMIT",
+      "severity": "P2",
+      "code_path": "confirmForge button onPress (not guarded by 'forging' state explicitly)",
+      "scenario": "User could double-tap CONFERMA before forging flips. Already partially mitigated because setConfirmOpen(false) hides the modal, but defensive guard recommended.",
+      "fix": "Add 'if (forging) return;' at the top of confirmForge."
+    }
+  ],
+  "fix_strategy": {
+    "track_B_response_normalization": [
+      "Add normalizeForgeResponse() helper that accepts multiple field aliases (gained_essence|gained|essence_gained, new_balance|balance|soul_essence)",
+      "Validate gained is a finite number >= 0; if not, treat as failure",
+      "Validate newBalance is a finite number >= 0; if not, fall back to balance + gained",
+      "Only mutate state (setBalance, setHeroes) after validation passes",
+      "Introduce errorMessage state shown in a red error card with retry semantics",
+      "On error: keep selected heroes intact (user can retry without re-picking)"
+    ],
+    "track_D_modal_and_post_success": [
+      "Add 'if (forging) return;' double-submit guard in confirmForge",
+      "Confirm button disabled while forging===true",
+      "Refresh failures after success show a soft warning but DO NOT crash",
+      "Result rendering uses (result.newBalance ?? 0).toLocaleString() pattern"
+    ]
+  },
+  "files_to_change_in_this_pack": [
+    "frontend/app/soul-forge.tsx",
+    "memory/test_credentials.md (hygiene)"
+  ],
+  "files_kept_unchanged": [
+    "backend/routes/soul_forge.py (contract verified correct)",
+    "backend/battle_engine.py (MD5 invariant)",
+    "backend/.env (MD5 invariant)",
+    "frontend/app/economy.tsx (already locked)",
+    "frontend/app/exclusive.tsx (already locked)"
+  ],
+  "forbidden_kept_clean": [
+    "no_reward_formula_changes",
+    "no_backend_route_changes",
+    "no_db_writes_from_scripts",
+    "no_hero_deletion_from_scripts",
+    "no_gacha_or_shop_or_iap_changes",
+    "no_battle_engine_changes",
+    "no_validator_weakening",
+    "no_fake_PASS"
+  ]
+}

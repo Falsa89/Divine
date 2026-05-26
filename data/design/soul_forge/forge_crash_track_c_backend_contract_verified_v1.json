@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "C",
+  "verdict": "TRACK_C_BACKEND_FORGE_ENDPOINT_CONTRACT_ALIGNED_OR_VERIFIED",
+  "backend_change_required": false,
+  "audit": {
+    "endpoint_path": "/api/soul/forge",
+    "http_method": "POST",
+    "file": "backend/routes/soul_forge.py",
+    "line_range": [368, 401],
+    "auth_protected": true,
+    "request_body_model": {"hero_ids": "list"},
+    "response_body_shape": {
+      "gained_essence": "int (>=0)",
+      "new_balance": "int (>=0)"
+    },
+    "safety_guards_observed": [
+      "HTTPException 400 if hero_ids empty",
+      "HTTPException 404 if hero not owned by user",
+      "HTTPException 400 if hero in active team",
+      "deduplication of hero_ids before processing",
+      "single update_one operation on users.soul_essence"
+    ],
+    "reward_formula": "int(SOUL_ESSENCE_VALUES[min(stars,5)] * (1 + level*0.02))",
+    "reward_formula_match_frontend": true,
+    "frontend_calcEssence_formula": "Math.floor(ESSENCE_VALUES[min(stars,5)] * (1 + level*0.02))",
+    "contract_alignment": "OK - frontend expected (gained_essence, new_balance) matches backend response 1:1"
+  },
+  "empirical_verification": {
+    "test_curl_request": "POST /api/soul/forge with hero_ids:[uhid]",
+    "observed_response": {"gained_essence": 10, "new_balance": 10},
+    "observed_match_expected_contract": true
+  },
+  "conclusion": "Backend contract is correct. Frontend must defensively normalize the response to prevent crash on edge cases (token expiry returning HTML, partial responses, network errors). Track B implements that crash-proofing without any backend change.",
+  "backend_changes": 0,
+  "db_writes": 0,
+  "reward_formula_change": false
+}

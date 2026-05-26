@@ -1,0 +1,93 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "track": "H",
+  "verdict": "TRACK_H_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_SHOP_NAV_COMPLETION_READY",
+  "global_verdict": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX_COMPLETE",
+  "track_verdicts": {
+    "A": "TRACK_A_SOUL_FORGE_FORGE_CRASH_ROOT_CAUSE_IDENTIFIED",
+    "B": "TRACK_B_FRONTEND_FORGE_CRASH_PROOFING_FIXED_SAFE",
+    "C": "TRACK_C_BACKEND_FORGE_ENDPOINT_CONTRACT_ALIGNED_OR_VERIFIED",
+    "D": "TRACK_D_MOBILE_CONFIRM_MODAL_AND_POST_SUCCESS_STATE_SAFE",
+    "E": "TRACK_E_SOUL_SHOP_NAVIGATION_BUTTONS_READY_SAFE",
+    "F": "TRACK_F_ECONOMY_EXCLUSIVE_NAVIGATION_RECHECK_READY",
+    "G": "TRACK_G_REDIS_SUITE_NOISE_AND_TEST_CREDENTIALS_HYGIENE_READY",
+    "H": "TRACK_H_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_SHOP_NAV_COMPLETION_READY"
+  },
+  "files_changed": [
+    {
+      "file": "frontend/app/soul-forge.tsx",
+      "md5_pre": "ba8f802d10cc774e65e8c552a1482099",
+      "md5_post": "88a39590454ecc1c5f16e34e09d90b63"
+    },
+    {
+      "file": "memory/test_credentials.md",
+      "md5_post": "d2c867673c75f703f6580174a2cef091",
+      "hygiene": true
+    }
+  ],
+  "files_kept_unchanged": [
+    {
+      "file": "backend/routes/soul_forge.py",
+      "reason": "contract verified correct"
+    },
+    {
+      "file": "backend/battle_engine.py",
+      "md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "reason": "MD5 invariant"
+    },
+    {
+      "file": "backend/.env",
+      "md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+      "reason": "MD5 invariant"
+    },
+    {
+      "file": "frontend/app/economy.tsx",
+      "reason": "already locked redirect"
+    },
+    {
+      "file": "frontend/app/exclusive.tsx",
+      "reason": "already locked notice"
+    }
+  ],
+  "backend_changes": 0,
+  "db_writes": 0,
+  "reward_formula_change": false,
+  "invariants_respected": [
+    "backend/battle_engine.py untouched",
+    "backend/.env untouched",
+    "no validator weakening",
+    "no reward formula changes",
+    "no gacha/pity/pool changes",
+    "no shop price/item changes",
+    "no IAP implementation",
+    "no flag flips",
+    "no hidden failures or fake PASS",
+    "no plaintext password committed"
+  ],
+  "mobile_qa_checklist": [
+    "Soul Forge si apre senza crash",
+    "Hero card / filtri / scroll OK",
+    "Selezione di un eroe 1-3 stars funziona",
+    "Press FORGE SOUL apre il modal",
+    "Press CONFERMA esegue la chiamata",
+    "Success: result panel mostra +N essenza e nuovo bilancio",
+    "Failure di rete: forgeError banner rosso visibile + heroes restano selezionati",
+    "App MAI crasha (n\u00e9 prima n\u00e9 durante n\u00e9 dopo)",
+    "Bottone Apri Tesoreria nel Negozio Anime preview funziona",
+    "Bottone Vai al Negozio (locked) nel Negozio Anime preview funziona",
+    "Bottone Apri Negozio Oggetti (locked) nel Negozio Polvere preview funziona",
+    "Bottone In Preparazione (disabled) NON \u00e8 cliccabile e non porta a fake nav",
+    "/economy ancora redirect-only, no retire/buy",
+    "/exclusive ancora locked notice, no craft",
+    "memory/test_credentials.md non contiene password plaintext"
+  ],
+  "redis_validator_status": {
+    "failing_count": 5,
+    "all_environmental_pre_existing": true,
+    "fake_pass_attempts": 0,
+    "validator_weakening_attempts": 0,
+    "documented_in_track_g": true
+  },
+  "remaining_blockers": [],
+  "next_pack_recommendation": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF_PACK (P0 dal Master Batch Plan precedente)"
+}
