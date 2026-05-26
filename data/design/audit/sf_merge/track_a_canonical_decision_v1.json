@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT",
+  "track": "A",
+  "verdict": "TRACK_A_CANONICAL_PRODUCT_DECISION_LOCK_READY",
+  "decisions": [
+    {"id": "D-01", "area": "soul_forge", "decision": "Soul Forge \u00e8 la sede canonica per la distruzione/smaltimento eroi e per i materiali Soul."},
+    {"id": "D-02", "area": "economy", "decision": "/economy non resta modalit\u00e0 autonoma; la parte utile (materiali, soul essence, anteprima shop anime, regole, link Tesoreria) \u00e8 assorbita nella Soul Forge."},
+    {"id": "D-03", "area": "economy_route", "decision": "/economy retired: file frontend riscritto come redirect a /soul-forge. Backend invariato."},
+    {"id": "D-04", "area": "exclusive", "decision": "/exclusive \u00e8 legacy non-canonical (Divine Weapons sono character-bound, non craftate). Route loccata con disclaimer e link a Catalogo Armi Divine e Soul Forge."},
+    {"id": "D-05", "area": "navigation", "decision": "HomeOverflowPanel e menu allineati: economy \u2192 Hub Anime/Soul Forge; exclusive rimosso dalle voci player-facing."}
+  ],
+  "product_invariants": [
+    "Divine Weapons sono character-bound, non craftate da /exclusive",
+    "Artifact rimane account-wide collection futura (non equipment, non divine weapon)",
+    "IAP non implementato; ogni shop con monete reali resta locked",
+    "Nessuna modifica a rate/pity/pool/prezzi/reward/battle_engine"
+  ],
+  "db_writes": 0,
+  "backend_changes": 0
+}

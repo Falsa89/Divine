@@ -1,0 +1,48 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT",
+  "track": "H",
+  "verdict": "TRACK_H_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT_COMPLETION_READY",
+  "global_verdict": "PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT_COMPLETE",
+  "track_verdicts": {
+    "A": "TRACK_A_CANONICAL_PRODUCT_DECISION_LOCK_READY",
+    "B": "TRACK_B_SOUL_FORGE_MOBILE_LAYOUT_REACHABILITY_FIXED_SAFE",
+    "C": "TRACK_C_SOUL_FORGE_ABSORB_ECONOMY_MATERIALS_AND_SHOP_PREVIEW_READY",
+    "D": "TRACK_D_ECONOMY_ROUTE_RETIRED_TO_SOUL_FORGE_SAFE",
+    "E": "TRACK_E_EXCLUSIVE_ROUTE_RETIRED_LEGACY_LOCK_SAFE",
+    "F": "TRACK_F_HOME_OVERFLOW_AND_MENU_NAVIGATION_ALIGNED_SAFE",
+    "G": "TRACK_G_REGRESSION_GUARDS_AND_MOBILE_QA_READY",
+    "H": "TRACK_H_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT_COMPLETION_READY"
+  },
+  "files_changed": [
+    {"file": "frontend/app/soul-forge.tsx", "md5_post": "d2300bbe5171f62ac8f9fd54e8711d50"},
+    {"file": "frontend/app/economy.tsx", "md5_post": "495fe455acb30ea16914e04afb2238eb"},
+    {"file": "frontend/app/exclusive.tsx", "md5_post": "c691181a7ec0dd28ed308a8130914b3c"},
+    {"file": "frontend/app/(tabs)/menu.tsx", "md5_post": "53d11b9dc42bb6ebb44f3f6fc5cbf36d"},
+    {"file": "frontend/app/(tabs)/home.tsx", "md5_post": "52d3676f8f3fcac10ade6c9aa767c56b"}
+  ],
+  "invariant_files_md5": {
+    "battle_engine_py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "db_writes": 0,
+  "backend_changes": 0,
+  "flag_flips": 0,
+  "hero_deletion": 0,
+  "user_heroes_mutation": 0,
+  "iap_implementation": false,
+  "rate_changes": 0,
+  "price_changes": 0,
+  "reward_changes": 0,
+  "character_bible_mutation": false,
+  "recommended_next_pack_order": [
+    "BATCH_2_GACHA_RATE_SIGNOFF",
+    "BATCH_3_ARTIFACT_BIBLE_CANONICAL",
+    "BATCH_4_IAP_DESIGN",
+    "BATCH_5_SHOP_BP_VIP_MODERNIZATION",
+    "BATCH_6_HERO_LEGACY_AND_SF_BACKEND_GUARD",
+    "BATCH_7_ANNOUNCEMENTS_AND_LIVE_FEED",
+    "BATCH_8_SERVER_PRE_HOME",
+    "BATCH_9_COMBAT_UI_DECOMP",
+    "BATCH_10_FULL_MOBILE_QA_REGRESSION"
+  ]
+}

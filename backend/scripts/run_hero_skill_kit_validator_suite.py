@@ -1037,6 +1037,15 @@ OPTIONAL = [
     ('PROJECT-ALIGN-FIX-TRACK-F-REGRESSION-GUARDS', 'validate_alignment_fix_track_f_regression_guards_v1.py'),
     ('PROJECT-ALIGN-FIX-TRACK-G-BATCH-PLAN', 'validate_alignment_fix_track_g_batch_plan_v1.py'),
     ('PROJECT-ALIGN-FIX-TRACK-H-COMPLETION', 'validate_alignment_fix_track_h_completion_v1.py'),
+    # PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT (SF mobile fix + economy merge + exclusive lock)
+    ('PROJECT-SF-MERGE-TRACK-A-CANONICAL-DECISION', 'validate_sf_merge_track_a_canonical_decision_v1.py'),
+    ('PROJECT-SF-MERGE-TRACK-B-MOBILE-REACHABILITY', 'validate_sf_merge_track_b_mobile_reachability_v1.py'),
+    ('PROJECT-SF-MERGE-TRACK-C-ANIME-HUB', 'validate_sf_merge_track_c_anime_hub_v1.py'),
+    ('PROJECT-SF-MERGE-TRACK-D-ECONOMY-RETIRED', 'validate_sf_merge_track_d_economy_retired_v1.py'),
+    ('PROJECT-SF-MERGE-TRACK-E-EXCLUSIVE-RETIRED', 'validate_sf_merge_track_e_exclusive_retired_v1.py'),
+    ('PROJECT-SF-MERGE-TRACK-F-NAVIGATION', 'validate_sf_merge_track_f_navigation_v1.py'),
+    ('PROJECT-SF-MERGE-TRACK-G-REGRESSION-QA', 'validate_sf_merge_track_g_regression_qa_v1.py'),
+    ('PROJECT-SF-MERGE-TRACK-H-COMPLETION', 'validate_sf_merge_track_h_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

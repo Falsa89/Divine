@@ -1,0 +1,17 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT",
+  "track": "D",
+  "verdict": "TRACK_D_ECONOMY_ROUTE_RETIRED_TO_SOUL_FORGE_SAFE",
+  "file_changed": "frontend/app/economy.tsx",
+  "economy_tsx_md5_post": "495fe455acb30ea16914e04afb2238eb",
+  "strategy": "redirect_to_soul_forge",
+  "redirect_target": "/soul-forge",
+  "forbidden_kept_clean": [
+    "no_db_writes",
+    "no_backend_route_changes",
+    "no_mutating_api_calls_from_screen",
+    "no_retire_buy_live_actions"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0
+}

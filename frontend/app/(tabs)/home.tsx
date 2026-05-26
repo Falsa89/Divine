@@ -1936,7 +1936,7 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
     { key: 'raid',       label: 'Raid',             icon: '\uD83D\uDD25', onPress: () => { onClose(); router.push('/raid' as any); } },
     { key: 'events',     label: 'Eventi',           icon: '\uD83C\uDF1F', onPress: () => { onClose(); router.push('/events' as any); } },
     { key: 'auras',      label: 'Aure',             icon: '\u2728',       onPress: () => { onClose(); router.push('/(tabs)/cosmetics' as any); } },
-    { key: 'exclusive',  label: 'Esclusivi',        icon: '\uD83D\uDC51', onPress: () => { onClose(); router.push('/exclusive' as any); } },
+    // SF_MERGE Track F \u2014 Exclusive rimosso dall'HomeOverflowPanel (legacy non-canonical).
     { key: 'equip',      label: 'Equipaggiamento',  icon: '\u2694\uFE0F', onPress: () => { onClose(); router.push('/equipment' as any); } },
     { key: 'battlepass', label: 'Battle Pass',      icon: '\uD83C\uDFC6', onPress: () => { onClose(); router.push('/battlepass' as any); } },
     { key: 'achievements', label: 'Obiettivi',      icon: '\uD83C\uDFC5', onPress: () => { onClose(); router.push('/achievements' as any); } },
@@ -1954,7 +1954,8 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
     { key: 'rankings',   label: 'Classifiche',      icon: '\uD83D\uDCCA', onPress: () => { onClose(); router.push('/rankings' as any); } },
     { key: 'servers',    label: 'Server',           icon: '\uD83C\uDF10', onPress: () => { onClose(); router.push('/servers' as any); } },
     { key: 'pvp',        label: 'Arena PVP',        icon: '\uD83E\uDD4A', onPress: () => { onClose(); router.push('/pvp' as any); } },
-    { key: 'economy',    label: 'Economia',         icon: '\uD83D\uDCB9', onPress: () => { onClose(); router.push('/economy' as any); } },
+    // SF_MERGE Track D+F \u2014 Economy consolidato in Soul Forge.
+    { key: 'economy',    label: 'Hub Anime',        icon: '\uD83D\uDD25', onPress: () => { onClose(); router.push('/soul-forge' as any); } },
     { key: 'spoffer',    label: 'SP Offer',         icon: '\uD83D\uDCB3', onPress: () => { onClose(); router.push('/shop' as any); } },
   ];
 

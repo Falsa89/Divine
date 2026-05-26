@@ -294,6 +294,12 @@ export default function SoulForgeScreen() {
         {/* Right: Forge Panel */}
         <View style={s.forgePanel}>
           <LinearGradient colors={['rgba(153,68,255,0.08)', 'rgba(10,10,30,0.9)']} style={s.forgePanelInner}>
+            {/* SF_MERGE Track B \u2014 ScrollView per raggiungibilit\u00e0 mobile del bottone FORGE */}
+            <ScrollView
+              contentContainerStyle={s.forgeScrollContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
             {/* Preview */}
             <Animated.View entering={FadeIn} style={s.previewBox}>
               <Text style={s.previewLabel}>ESSENZA OTTENIBILE</Text>
@@ -383,6 +389,56 @@ export default function SoulForgeScreen() {
                 <Text style={s.resultBalance}>Bilancio: {result.newBalance.toLocaleString()}</Text>
               </Animated.View>
             )}
+
+            {/* SF_MERGE Track C \u2014 Anime Hub: assorbe la parte safe di /economy.
+                Pannelli read-only: Materiali / Negozio Anime / Regole / link Tesoreria.
+                Nessun bottone di acquisto live: in attesa di IAP design. */}
+            <View style={s.merge_hub}>
+              <Text style={s.merge_sectionTitle}>{'\uD83D\uDC80'} ANIME HUB</Text>
+
+              <View style={s.merge_card}>
+                <Text style={s.merge_cardTitle}>{'\u2728'} Materiali Anime</Text>
+                <View style={s.merge_row}>
+                  <Text style={s.merge_resIcon}>{'\uD83D\uDC80'}</Text>
+                  <Text style={s.merge_resLabel}>Soul Essence</Text>
+                  <Text style={s.merge_resVal}>{balance.toLocaleString()}</Text>
+                </View>
+                <Text style={s.merge_hint}>Generata dal sacrificio di eroi non necessari.</Text>
+              </View>
+
+              <View style={s.merge_card}>
+                <Text style={s.merge_cardTitle}>{'\uD83D\uDED2'} Negozio Anime</Text>
+                <View style={s.merge_lockBadge}>
+                  <Text style={s.merge_lockTxt}>{'\uD83D\uDD12'} IN PREPARAZIONE</Text>
+                </View>
+                <Text style={s.merge_hint}>
+                  Spendere Soul Essence in upgrade/oggetti dedicati sar{'\u00e0'} disponibile
+                  dopo il signoff economy. Anteprima informativa.
+                </Text>
+              </View>
+
+              <View style={s.merge_card}>
+                <Text style={s.merge_cardTitle}>{'\uD83D\uDCDC'} Regole / Protezioni</Text>
+                <Text style={s.merge_rule}>{'\u2022'} Eroi in team sempre protetti.</Text>
+                <Text style={s.merge_rule}>{'\u2022'} Eroi bloccati/preferiti/nativi/evento/unique protetti.</Text>
+                <Text style={s.merge_rule}>{'\u2022'} Eroi 4{'\u2605'}+ richiedono override esplicito.</Text>
+                <Text style={s.merge_rule}>{'\u2022'} Forge {'\u2265'}10 eroi o eroi 4{'\u2605'}+: digitazione CONFERMA obbligatoria.</Text>
+              </View>
+
+              <TouchableOpacity
+                style={s.merge_treasuryBtn}
+                onPress={() => router.push('/treasury')}
+                activeOpacity={0.7}
+              >
+                <Text style={s.merge_treasuryIcon}>{'\uD83C\uDFE6'}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={s.merge_treasuryTitle}>Tesoreria</Text>
+                  <Text style={s.merge_treasuryDesc}>Tutte le valute globali (gemme, oro, monete...)</Text>
+                </View>
+                <Text style={s.merge_treasuryArrow}>{'\u203A'}</Text>
+              </TouchableOpacity>
+            </View>
+            </ScrollView>
           </LinearGradient>
         </View>
       </View>
@@ -480,9 +536,11 @@ const s = StyleSheet.create({
   balanceIcon: { fontSize: 12 },
   balanceVal: { color: '#C877FF', fontSize: 12, fontWeight: '900' },
   // Body
-  body: { flex: 1, flexDirection: 'row', padding: 6, gap: 6 },
+  // SF_MERGE Track B \u2014 mobile-first layout: stack verticale, panel forge sotto la griglia
+  // garantisce raggiungibilit\u00e0 del FORGE button via scroll del wrapper esterno.
+  body: { flex: 1, flexDirection: 'column', padding: 6, gap: 6 },
   // Grid
-  gridPanel: { flex: 1, gap: 4 },
+  gridPanel: { gap: 4 },
   gridHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   gridTitle: { color: 'rgba(255,255,255,0.5)', fontSize: 8, fontWeight: '800', letterSpacing: 0.5 },
   gridActions: { flexDirection: 'row', gap: 4 },
@@ -515,7 +573,7 @@ const s = StyleSheet.create({
   heroLvl: { fontSize: 6, color: 'rgba(255,255,255,0.4)', marginTop: 1 },
   heroEssence: { fontSize: 7, color: '#C877FF', fontWeight: '700', marginTop: 2 },
   // Forge Panel
-  forgePanel: { width: 200 },
+  forgePanel: { width: '100%' },
   forgePanelInner: {
     flex: 1, borderRadius: 10, padding: 10, gap: 8,
     borderWidth: 1, borderColor: 'rgba(153,68,255,0.15)',
@@ -641,4 +699,42 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   modalConfirmTxtV2: { color: '#fff', fontSize: 12, fontWeight: '900', letterSpacing: 1 },
+  // SF_MERGE Track B+C \u2014 scroll content + Anime Hub styles
+  forgeScrollContent: { paddingBottom: 40, gap: 6 },
+  merge_hub: { marginTop: 10, gap: 8 },
+  merge_sectionTitle: {
+    color: '#C877FF', fontSize: 12, fontWeight: '900', letterSpacing: 1,
+    marginBottom: 2,
+  },
+  merge_card: {
+    padding: 8, borderRadius: 8,
+    backgroundColor: 'rgba(0,0,0,0.30)',
+    borderWidth: 1, borderColor: 'rgba(153,68,255,0.25)',
+    gap: 4,
+  },
+  merge_cardTitle: { color: '#fff', fontSize: 10, fontWeight: '800' },
+  merge_row: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  merge_resIcon: { fontSize: 14 },
+  merge_resLabel: { flex: 1, color: 'rgba(255,255,255,0.85)', fontSize: 10, fontWeight: '600' },
+  merge_resVal: { color: '#C877FF', fontSize: 11, fontWeight: '900' },
+  merge_hint: { color: 'rgba(255,255,255,0.45)', fontSize: 8, lineHeight: 11, fontStyle: 'italic' },
+  merge_lockBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 6, paddingVertical: 2,
+    borderRadius: 6,
+    backgroundColor: 'rgba(255,165,0,0.15)',
+    borderWidth: 1, borderColor: 'rgba(255,165,0,0.45)',
+  },
+  merge_lockTxt: { color: '#FFB347', fontSize: 8, fontWeight: '800', letterSpacing: 0.5 },
+  merge_rule: { color: 'rgba(255,255,255,0.65)', fontSize: 8, lineHeight: 12 },
+  merge_treasuryBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    padding: 10, borderRadius: 8,
+    backgroundColor: 'rgba(255,215,0,0.10)',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.45)',
+  },
+  merge_treasuryIcon: { fontSize: 18 },
+  merge_treasuryTitle: { color: '#FFD700', fontSize: 10, fontWeight: '900' },
+  merge_treasuryDesc: { color: 'rgba(255,215,0,0.7)', fontSize: 8, marginTop: 1 },
+  merge_treasuryArrow: { color: '#FFD700', fontSize: 16, fontWeight: '900' },
 });

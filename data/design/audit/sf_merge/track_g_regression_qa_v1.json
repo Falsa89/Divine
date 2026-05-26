@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT",
+  "track": "G",
+  "verdict": "TRACK_G_REGRESSION_GUARDS_AND_MOBILE_QA_READY",
+  "regression_guards": [
+    {"id": "GUARD-SF-MOBILE-SCROLL", "check": "ScrollView wrapper present in soul-forge forgePanel; body uses column layout", "validator": "validate_sf_merge_track_b_mobile_reachability_v1.py"},
+    {"id": "GUARD-SF-ANIME-HUB", "check": "merge_hub panels present (Materiali / Negozio Anime / Regole / Tesoreria)", "validator": "validate_sf_merge_track_c_anime_hub_v1.py"},
+    {"id": "GUARD-ECONOMY-REDIRECT", "check": "economy.tsx is redirect-only to /soul-forge; no mutating API", "validator": "validate_sf_merge_track_d_economy_retired_v1.py"},
+    {"id": "GUARD-EXCLUSIVE-LEGACY-LOCK", "check": "exclusive.tsx is legacy lock notice; no craft/buy", "validator": "validate_sf_merge_track_e_exclusive_retired_v1.py"},
+    {"id": "GUARD-NAV-ALIGNMENT", "check": "menu.tsx and home.tsx no longer reference /economy or /exclusive as player-facing target", "validator": "validate_sf_merge_track_f_navigation_v1.py"},
+    {"id": "GUARD-SF-4PLUS-RULES-PRESERVED", "check": "Soul Forge V2 invariants preserved (override + typed CONFERMA + protections)", "validator": "validate_alignment_fix_track_b_soul_forge_v1.py (existing)"}
+  ],
+  "mobile_qa_checklist": [
+    {"id": "MQ-01", "area": "soul_forge", "steps": ["aprire /soul-forge", "scrollare verticalmente", "verificare bottone FORGE SOUL raggiungibile sotto al pannello eroi", "selezionare eroi 1-3\u2605 con Tutti", "verificare pannello Anime Hub (Materiali, Negozio Anime, Regole, Tesoreria)"]},
+    {"id": "MQ-02", "area": "economy", "steps": ["navigare a /economy via deep link", "verificare schermata 'Economia trasferita' + redirect a /soul-forge"]},
+    {"id": "MQ-03", "area": "exclusive", "steps": ["aprire /exclusive via deep link", "verificare lock card con disclaimer Divine Weapons character-bound", "verificare bottoni Catalogo Armi Divine e Soul Forge"]},
+    {"id": "MQ-04", "area": "menu", "steps": ["aprire menu", "verificare assenza voce 'Oggetti Esclusivi'", "verificare presenza 'Hub Anime (Soul Forge)' al posto di 'Economia & Negozi'"]},
+    {"id": "MQ-05", "area": "home_overflow", "steps": ["aprire HomeOverflowPanel", "verificare assenza Exclusive", "verificare voce 'Hub Anime' che apre /soul-forge"]},
+    {"id": "MQ-06", "area": "regression", "steps": ["verificare /shop, /battlepass, /vip, /item-shop ancora locked V2", "verificare /gacha banner premium/targeted ancora IN REVISIONE", "verificare /artifacts ancora redirect a /artifacts-preview"]}
+  ],
+  "db_writes": 0,
+  "backend_changes": 0
+}

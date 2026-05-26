@@ -15,7 +15,9 @@ const CATEGORIES = [
       { label: 'Torre', icon: '\uD83C\uDFEF', route: '/tower', gradient: ['#8844FF', '#5522CC'] as const },
       { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pvp', gradient: ['#FF4444', '#CC2222'] as const },
       { label: 'Fucina di Efesto', icon: '\u2692\uFE0F', route: '/equipment', gradient: ['#FFAA44', '#CC6622'] as const },
-      { label: 'Oggetti Esclusivi', icon: '\uD83D\uDC51', route: '/exclusive', gradient: ['#FFD700', '#CC9900'] as const },
+      // SF_MERGE Track F \u2014 Oggetti Esclusivi rimosso dal menu player.
+      // \u00c8 una schermata legacy con disclaimer; non rappresenta il sistema
+      // canonico delle Divine Weapons. Mantenuto come deep link informativo.
     ],
   },
   {
@@ -35,7 +37,8 @@ const CATEGORIES = [
     title: 'Economia',
     items: [
       { label: 'Tesoreria', icon: '\uD83C\uDFE6', route: '/treasury', gradient: ['#FFD700', '#4499FF'] as const },
-      { label: 'Economia & Negozi', icon: '\uD83D\uDCB0', route: '/economy', gradient: ['#FFD700', '#CC9900'] as const },
+      // SF_MERGE Track D+F \u2014 Economia consolidata dentro Soul Forge (\"Anime Hub\").
+      { label: 'Hub Anime (Soul Forge)', icon: '\uD83D\uDD25', route: '/soul-forge', gradient: ['#C877FF', '#9944FF'] as const },
       { label: 'Inventario', icon: '\uD83C\uDF92', route: '/inventory', gradient: ['#FF8844', '#CC6622'] as const },
       { label: 'Negozio Oggetti', icon: '\uD83D\uDED2', route: '/item-shop', gradient: ['#44DD88', '#22AA66'] as const },
       { label: 'Negozio', icon: '\uD83C\uDFEA', route: '/shop', gradient: ['#44AAFF', '#2288CC'] as const },

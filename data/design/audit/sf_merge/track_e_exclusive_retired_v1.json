@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT",
+  "track": "E",
+  "verdict": "TRACK_E_EXCLUSIVE_ROUTE_RETIRED_LEGACY_LOCK_SAFE",
+  "file_changed": "frontend/app/exclusive.tsx",
+  "exclusive_tsx_md5_post": "c691181a7ec0dd28ed308a8130914b3c",
+  "strategy": "legacy_lock_notice_with_redirect_options",
+  "disclaimer_content": [
+    "schermata legacy archiviata",
+    "Divine Weapons sono character-bound, non craftate",
+    "sistema dedicato separato per Divine Weapons"
+  ],
+  "redirect_options": ["/divine-weapons-catalog", "/soul-forge"],
+  "forbidden_kept_clean": [
+    "no_craft_buttons",
+    "no_buy_calls",
+    "no_mutating_api_calls",
+    "no_db_writes"
+  ],
+  "character_bible_mutation": false,
+  "backend_changes": 0,
+  "db_writes": 0
+}

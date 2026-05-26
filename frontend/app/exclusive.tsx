@@ -1,105 +1,126 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
+// SF_MERGE Track E \u2014 /exclusive route legacy lock notice.
+//
+// La schermata /exclusive era stata creata in passato pensando erroneamente che
+// le armi esclusive / Divine Weapons fossero craftabili da un'interfaccia
+// generica di crafting. Questo NON \u00e8 corretto: le Divine Weapons sono
+// character-bound (soprattutto nativi 6\u2605) e gestite da un sistema dedicato
+// completamente separato dal vecchio /exclusive.
+//
+// Questo file diventa una pagina locked legacy con disclaimer chiaro.
+// Nessuna chiamata API mutativa, nessun bottone craft.
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
-import { apiCall } from '../utils/api';
-import { useAuth } from '../context/AuthContext';
+import { COLORS } from '../constants/theme';
 
-const RC: Record<number,string> = { 1:'#888', 2:'#44aa44', 3:'#4488ff', 4:'#aa44ff', 5:'#ff4444', 6:'#ffd700' };
-const SLOT_ICONS: Record<string,string> = { weapon:'\uD83D\uDDE1\uFE0F', armor:'\uD83D\uDEE1\uFE0F', accessory:'\uD83D\uDC8D', rune:'\uD83D\uDD2E' };
-
-export default function ExclusiveItemsScreen() {
+export default function ExclusiveLegacyLocked() {
   const router = useRouter();
-  const { user, refreshUser } = useAuth();
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [crafting, setCrafting] = useState('');
-
-  useEffect(() => { load(); }, []);
-  const load = async () => { try { const d = await apiCall('/api/exclusive-items'); setItems(d); } catch(e){} finally { setLoading(false); } };
-
-  const craft = async (heroName: string) => {
-    setCrafting(heroName);
-    try {
-      const r = await apiCall('/api/exclusive-items/craft', { method:'POST', body: JSON.stringify({hero_name:heroName}) });
-      await refreshUser(); await load();
-      Alert.alert('Oggetto Creato!', `${r.item?.name} e ora nel tuo inventario!`);
-    } catch(e:any) { Alert.alert('Errore', e.message); } finally { setCrafting(''); }
-  };
-
-  if (loading) return <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}><ActivityIndicator size="large" color="#ffd700" /></LinearGradient>;
-
   return (
-    <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}>
-      <View style={s.hdr}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{"\u2190"}</Text></TouchableOpacity>
-        <Text style={s.title}>OGGETTI ESCLUSIVI</Text>
-        <Text style={s.res}>{"\uD83D\uDCB0"} {(user?.gold||0).toLocaleString()} | {"\uD83D\uDC8E"} {user?.gems}</Text>
+    <LinearGradient colors={[COLORS.bgPrimary, '#1A0A2E', '#0D0820']} style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} activeOpacity={0.7}>
+          <Text style={styles.back}>{'\u2190'}</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Oggetti Esclusivi</Text>
       </View>
-      <ScrollView contentContainerStyle={s.list}>
-        {items.map((ei:any, idx:number) => {
-          const col = RC[ei.item.rarity] || '#888';
-          return (
-            <View key={idx} style={[s.card, {borderColor:col}, !ei.hero_owned && {opacity:0.4}]}>
-              <View style={s.cardTop}>
-                <Text style={s.itemIcon}>{SLOT_ICONS[ei.item.slot] || '\u2728'}</Text>
-                <View style={s.cardInfo}>
-                  <Text style={[s.itemName, {color:col}]}>{ei.item.name}</Text>
-                  <Text style={s.heroFor}>Esclusivo di: <Text style={{color:'#ff6b35',fontWeight:'700'}}>{ei.hero_name}</Text></Text>
-                  <Text style={s.itemDesc}>{ei.item.description}</Text>
-                </View>
-              </View>
-              <View style={s.statsRow}>
-                {Object.entries(ei.item.stats||{}).map(([k,v]) => (
-                  <View key={k} style={s.statBadge}>
-                    <Text style={s.statKey}>{k.toUpperCase()}</Text>
-                    <Text style={[s.statVal, {color: Number(v) > 0 ? '#44cc44' : '#ff4444'}]}>{Number(v) > 0 ? '+' : ''}{v}</Text>
-                  </View>
-                ))}
-              </View>
-              <View style={s.bottom}>
-                <Text style={s.rarityTxt}>{'\u2B50'.repeat(ei.item.rarity)} {ei.item.slot.toUpperCase()}</Text>
-                {ei.item_owned ? (
-                  <Text style={s.ownedTxt}>\u2705 Posseduto</Text>
-                ) : ei.hero_owned ? (
-                  <TouchableOpacity style={[s.craftBtn, {borderColor:col}, crafting===ei.hero_name&&{opacity:0.5}]} onPress={() => craft(ei.hero_name)} disabled={crafting===ei.hero_name}>
-                    <Text style={[s.craftTxt, {color:col}]}>{crafting===ei.hero_name ? '...' : `FORGIA (${ei.item.rarity>=6?'50K/150':'20K/50'} ${"\uD83D\uDC8E"})`}</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <Text style={s.lockedTxt}>\uD83D\uDD12 Ottieni {ei.hero_name} prima</Text>
-                )}
-              </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.lockCard}>
+          <Text style={styles.lockIcon}>{'\uD83D\uDD12'}</Text>
+          <Text style={styles.lockTitle}>Schermata legacy archiviata</Text>
+          <Text style={styles.lockSubtitle}>
+            La vecchia funzione \u201cOggetti Esclusivi\u201d non riflette pi{'\u00f9'} il design
+            corrente. La modalit{'\u00e0'} \u00e8 disabilitata e non rappresenta lo stato
+            canonico delle armi del gioco.
+          </Text>
+
+          <View style={styles.divider} />
+
+          <Text style={styles.sectionTitle}>{'\u2728'} Cosa sono davvero le Divine Weapons</Text>
+          <Text style={styles.bodyTxt}>
+            Le <Text style={styles.b}>Divine Weapons</Text> sono armi
+            <Text style={styles.b}> character-bound</Text>, legate stabilmente a un
+            eroe specifico (in particolare ai <Text style={styles.b}>nativi 6{'\u2605'}</Text>).
+          </Text>
+          <Text style={styles.bodyTxt}>
+            Non vengono <Text style={styles.b}>craftate</Text> da una schermata generica:
+            sono gestite da un <Text style={styles.b}>sistema dedicato separato</Text>,
+            allineato al Character Bible.
+          </Text>
+
+          <View style={styles.divider} />
+
+          <Text style={styles.sectionTitle}>{'\uD83D\uDDFA\uFE0F'} Dove guardare invece</Text>
+          <TouchableOpacity
+            style={styles.cta}
+            onPress={() => router.push('/divine-weapons-catalog')}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.ctaIcon}>{'\u2694\uFE0F'}</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.ctaTitle}>Catalogo Armi Divine</Text>
+              <Text style={styles.ctaDesc}>Anteprima read-only delle armi attualmente progettate</Text>
             </View>
-          );
-        })}
+            <Text style={styles.ctaArrow}>{'\u203A'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.cta, { backgroundColor: 'rgba(153,68,255,0.10)', borderColor: 'rgba(153,68,255,0.45)' }]}
+            onPress={() => router.push('/soul-forge')}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.ctaIcon}>{'\uD83D\uDD25'}</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.ctaTitle, { color: '#C877FF' }]}>Soul Forge</Text>
+              <Text style={[styles.ctaDesc, { color: 'rgba(200,119,255,0.7)' }]}>
+                Sacrificio eroi + materiali anime canonici
+              </Text>
+            </View>
+            <Text style={[styles.ctaArrow, { color: '#C877FF' }]}>{'\u203A'}</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </LinearGradient>
   );
 }
 
-const s = StyleSheet.create({
-  c:{flex:1,backgroundColor:'transparent'},
-  hdr:{flexDirection:'row',alignItems:'center',gap:12,paddingHorizontal:16,paddingVertical:8,borderBottomWidth:1,borderBottomColor:'rgba(255,215,0,0.3)'},
-  back:{color:'#ffd700',fontSize:20,fontWeight:'700'},
-  title:{color:'#ffd700',fontSize:16,fontWeight:'800',letterSpacing:2,flex:1},
-  res:{color:'#888',fontSize:10},
-  list:{padding:10,gap:8},
-  card:{padding:10,borderRadius:12,backgroundColor:'rgba(255,255,255,0.03)',borderWidth:1.5,gap:6},
-  cardTop:{flexDirection:'row',gap:10},
-  itemIcon:{fontSize:28},
-  cardInfo:{flex:1},
-  itemName:{fontSize:14,fontWeight:'900'},
-  heroFor:{color:'#aaa',fontSize:10,marginTop:1},
-  itemDesc:{color:'#888',fontSize:9,marginTop:2,fontStyle:'italic'},
-  statsRow:{flexDirection:'row',gap:6,flexWrap:'wrap'},
-  statBadge:{backgroundColor:'rgba(255,255,255,0.05)',paddingHorizontal:8,paddingVertical:3,borderRadius:6},
-  statKey:{color:'#888',fontSize:8,fontWeight:'600'},
-  statVal:{fontSize:10,fontWeight:'800'},
-  bottom:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},
-  rarityTxt:{color:'#888',fontSize:9},
-  ownedTxt:{color:'#44cc44',fontSize:11,fontWeight:'700'},
-  craftBtn:{paddingHorizontal:12,paddingVertical:6,borderRadius:6,borderWidth:1.5},
-  craftTxt:{fontSize:10,fontWeight:'800'},
-  lockedTxt:{color:'#888',fontSize:10},
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  header: {
+    flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 12, paddingTop: 12, paddingBottom: 8,
+  },
+  backBtn: { padding: 4 },
+  back: { color: COLORS.textPrimary, fontSize: 22 },
+  headerTitle: {
+    flex: 1, textAlign: 'center', color: COLORS.textPrimary,
+    fontSize: 16, fontWeight: '800', marginRight: 28,
+  },
+  scrollContent: { paddingHorizontal: 12, paddingBottom: 40 },
+  lockCard: {
+    padding: 16, borderRadius: 14,
+    backgroundColor: 'rgba(0,0,0,0.30)',
+    borderWidth: 1, borderColor: 'rgba(255,165,0,0.45)',
+    gap: 6,
+  },
+  lockIcon: { fontSize: 36, textAlign: 'center', marginBottom: 4 },
+  lockTitle: { color: '#FFB347', fontSize: 16, fontWeight: '900', textAlign: 'center' },
+  lockSubtitle: {
+    color: 'rgba(255,210,150,0.85)', fontSize: 12, lineHeight: 18,
+    textAlign: 'center', marginTop: 4,
+  },
+  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.10)', marginVertical: 10 },
+  sectionTitle: { color: COLORS.accent, fontSize: 12, fontWeight: '800', marginBottom: 4 },
+  bodyTxt: { color: 'rgba(255,255,255,0.78)', fontSize: 11, lineHeight: 17, marginBottom: 6 },
+  b: { color: '#fff', fontWeight: '800' },
+  cta: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    padding: 12, borderRadius: 10, marginTop: 8,
+    backgroundColor: 'rgba(255,215,0,0.08)',
+    borderWidth: 1, borderColor: 'rgba(255,215,0,0.4)',
+  },
+  ctaIcon: { fontSize: 20 },
+  ctaTitle: { color: '#FFD700', fontSize: 12, fontWeight: '900' },
+  ctaDesc: { color: 'rgba(255,215,0,0.7)', fontSize: 9, marginTop: 2 },
+  ctaArrow: { color: '#FFD700', fontSize: 20, fontWeight: '900' },
 });
