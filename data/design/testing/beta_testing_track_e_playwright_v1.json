@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
+  "track": "E",
+  "verdict": "TRACK_E_PLAYWRIGHT_EXPO_WEB_SMOKE_HARNESS_READY",
+  "playwright_version": "1.60.0",
+  "installed_browser": "chromium headless shell v1223 at /pw-browsers",
+  "config_path": "frontend/playwright.config.ts",
+  "viewport_default": {"width": 390, "height": 844},
+  "test_files": [
+    "frontend/tests/e2e/player-facing-routes.spec.ts",
+    "frontend/tests/e2e/soul-forge-smoke.spec.ts",
+    "frontend/tests/e2e/locked-surfaces-smoke.spec.ts"
+  ],
+  "npm_scripts": ["test:e2e", "test:beta-smoke", "test:beta-smoke:headed"],
+  "output_paths": {
+    "json_report": "frontend/test-results/beta-smoke-report.json",
+    "artifacts_dir": "frontend/test-results"
+  },
+  "non_invasive_only": true,
+  "no_user_data_mutation": true,
+  "backend_changes": 0,
+  "db_writes": 0
+}

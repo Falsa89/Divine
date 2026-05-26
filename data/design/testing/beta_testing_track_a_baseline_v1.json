@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
+  "track": "A",
+  "verdict": "TRACK_A_BASELINE_AND_BRANCH_POLICY_LOCKED",
+  "branch_policy": {
+    "working_branch_inside_container": "master",
+    "reason": "The Emergent container uses git default branch 'master'. There is NO 'origin' remote configured inside the container; outbound sync to GitHub (which may use 'main' as default) is handled by the Emergent platform auto-commit/auto-sync layer, NOT by the working agent.",
+    "public_repo_branch_may_be": "main (or master) depending on platform sync target",
+    "discrepancy_resolution": "If a public GitHub branch (typically 'main') appears stale relative to in-container files, the agent must NOT attempt manual `git remote add origin` + `git push`. The correct path is to wait for the platform auto-sync or call support_agent. Discrepancies that block validation should be raised to the user with: MD5 of the in-container file + git rev-parse HEAD + an excerpt to prove the local state is correct.",
+    "truthful_proof_requirements_on_request": [
+      "md5 of in-container file via md5sum",
+      "git rev-parse HEAD",
+      "git rev-parse --abbrev-ref HEAD",
+      "git remote -v output (often empty in container)",
+      "file content excerpt grep for key tokens"
+    ]
+  },
+  "baseline_md5": {
+    "frontend/app/soul-forge.tsx": "b7659de11ac36f341e7a2f54fd29e6ed",
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "baseline_locked_at_utc": "set_by_validator_at_runtime",
+  "git_state_proof_command": "cd /app && md5sum frontend/app/soul-forge.tsx backend/battle_engine.py backend/.env && git rev-parse HEAD && git rev-parse --abbrev-ref HEAD",
+  "baseline_inviolable": [
+    "backend/battle_engine.py",
+    "backend/.env"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0
+}

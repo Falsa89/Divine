@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
+  "track": "C",
+  "verdict": "TRACK_C_SOUL_FORGE_REGRESSION_STATIC_TESTS_READY",
+  "file_under_audit": "frontend/app/soul-forge.tsx",
+  "file_md5_pinned": "b7659de11ac36f341e7a2f54fd29e6ed",
+  "required_markers": [
+    "inlineConfirmOpen",
+    "setInlineConfirmOpen",
+    "inlineConfirmCard",
+    "normalizeForgeResponse",
+    "heroIdsSnapshot",
+    "forgeError",
+    "postSuccessWarn",
+    "if (forging) return;",
+    "apiCall('/api/soul/forge'"
+  ],
+  "forbidden_modal_path_markers": [
+    "<Modal",
+    "<KeyboardAvoidingView",
+    "setConfirmOpen",
+    "Confirm Modal"
+  ],
+  "defensive_render_markers": [
+    "Number.isFinite(balance)",
+    "Number(result.gained) || 0",
+    "Number(result.newBalance) || 0"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0
+}

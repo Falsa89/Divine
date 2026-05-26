@@ -1081,6 +1081,18 @@ OPTIONAL = [
     ('PROJECT-INLINE-CONFIRM-TRACK-F-SHOP-NAV-BYPASS', 'validate_inline_confirm_track_f_shop_nav_bypass_v1.py'),
     ('PROJECT-INLINE-CONFIRM-TRACK-G-SMOKE', 'validate_inline_confirm_track_g_smoke_v1.py'),
     ('PROJECT-INLINE-CONFIRM-TRACK-H-COMPLETION', 'validate_inline_confirm_track_h_completion_v1.py'),
+    # PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION_PACK (8 validators)
+    # Installs beta testing tech harness (Playwright + static audits) and stabilizes
+    # Redis infrastructure (apt install + supervisor RUNNING). Pre-existing 5 Redis
+    # validators now PASS for real (not faked).
+    ('PROJECT-BETA-TESTING-TRACK-A-BASELINE', 'validate_beta_testing_track_a_baseline_v1.py'),
+    ('PROJECT-BETA-TESTING-TRACK-B-ROUTE-AUDIT', 'validate_beta_testing_track_b_route_audit_v1.py'),
+    ('PROJECT-BETA-TESTING-TRACK-C-SOUL-FORGE-REGRESSION', 'validate_beta_testing_track_c_soul_forge_regression_v1.py'),
+    ('PROJECT-BETA-TESTING-TRACK-D-LOCKED-SURFACES', 'validate_beta_testing_track_d_locked_surfaces_v1.py'),
+    ('PROJECT-BETA-TESTING-TRACK-E-PLAYWRIGHT', 'validate_beta_testing_track_e_playwright_v1.py'),
+    ('PROJECT-BETA-TESTING-TRACK-F-REDIS', 'validate_beta_testing_track_f_redis_v1.py'),
+    ('PROJECT-BETA-TESTING-TRACK-G-REPORTING', 'validate_beta_testing_track_g_reporting_v1.py'),
+    ('PROJECT-BETA-TESTING-TRACK-I-COMPLETION', 'validate_beta_testing_track_i_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

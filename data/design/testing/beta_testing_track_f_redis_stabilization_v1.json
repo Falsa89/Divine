@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
+  "track": "F",
+  "verdict": "TRACK_F_REDIS_INFRA_STABILIZED",
+  "before_pack": {
+    "redis_server_binary_present": false,
+    "redis_cli_present": false,
+    "supervisor_redis_status": "FATAL_EXITED_TOO_QUICKLY",
+    "failing_validators_count": 5
+  },
+  "after_pack": {
+    "redis_server_binary_present": true,
+    "redis_server_path": "/usr/bin/redis-server",
+    "redis_cli_path": "/usr/bin/redis-cli",
+    "redis_version_installed_via": "apt-get install -y redis-server (Debian package)",
+    "supervisor_redis_status": "RUNNING",
+    "supervisor_command": "/usr/bin/redis-server --port 6379 --bind 127.0.0.1 --protected-mode no --save '' --appendonly no",
+    "ping_response": "PONG",
+    "port_listening": 6379,
+    "failing_validators_count": 0,
+    "validators_now_passing": [
+      "validate_af2n_v23_preflight.py",
+      "validate_af2n_v23_redis_switch.py",
+      "validate_ultra_combo_v23_redis_switch_observation.py",
+      "validate_af2n_v24_preflight.py",
+      "validate_ultra_combo_v24_observation_abuse_rollback_redisHA.py"
+    ]
+  },
+  "fake_pass_attempts": 0,
+  "validator_weakening_attempts": 0,
+  "backend_changes": 0,
+  "db_writes": 0
+}

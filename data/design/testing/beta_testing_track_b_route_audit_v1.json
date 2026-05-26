@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
+  "track": "B",
+  "verdict": "TRACK_B_PLAYER_ROUTE_STATIC_AUDIT_SCRIPT_READY",
+  "audit_script": "backend/scripts/run_player_route_static_audit.py",
+  "audit_output_path": "backend/reports/player_route_static_audit_latest.json",
+  "routes_audited": 13,
+  "locked_routes_checked": ["shop.tsx","item-shop.tsx","gacha.tsx","battlepass.tsx","vip.tsx","exclusive.tsx","economy.tsx","servers.tsx"],
+  "forbidden_live_mutation_patterns": [
+    "apiCall('/api/shops/buy'",
+    "apiCall('/api/shop/buy'",
+    "apiCall('/api/item-shop/buy'",
+    "apiCall('/api/gacha/pull'",
+    "apiCall('/api/battlepass/claim'",
+    "apiCall('/api/battlepass/purchase'",
+    "apiCall('/api/vip/purchase'",
+    "apiCall('/api/exclusive/craft'",
+    "apiCall('/api/soul-forge/retire'",
+    "apiCall('/api/equipment/forge'"
+  ],
+  "gating_strategy": "forbidden mutation calls are allowed ONLY when the file declares a *_LOCKED_V2 = true flag AND has `if (FLAG) return;` early-return preceding the call site. Otherwise the audit marks the route FAIL.",
+  "runs_read_only": true,
+  "backend_changes": 0,
+  "db_writes": 0
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION",
+  "track": "D",
+  "verdict": "TRACK_D_LOCKED_SURFACES_STATIC_TESTS_READY",
+  "locked_surfaces": [
+    {"file": "frontend/app/shop.tsx", "flag_marker": "SHOP_LOCKED_V2 = true", "gate_required": true},
+    {"file": "frontend/app/item-shop.tsx", "flag_marker": "ITEM_SHOP_LOCKED_V2 = true", "gate_required": true},
+    {"file": "frontend/app/battlepass.tsx", "flag_marker": "_LOCKED_V2 = true", "gate_required": true},
+    {"file": "frontend/app/vip.tsx", "flag_marker": "_LOCKED_V2 = true", "gate_required": true},
+    {"file": "frontend/app/(tabs)/gacha.tsx", "flag_marker": "LOCKED_BANNERS_V2", "gate_required": true},
+    {"file": "frontend/app/economy.tsx", "flag_marker": "router.replace('/soul-forge')", "gate_required": false},
+    {"file": "frontend/app/exclusive.tsx", "flag_marker": "Schermata legacy archiviata", "gate_required": false}
+  ],
+  "forbidden_live_action_labels": ["COMPRA ORA","ACQUISTA","CRAFT NOW","FORGIA SUBITO"],
+  "audit_output_path": "backend/reports/player_route_static_audit_latest.json",
+  "backend_changes": 0,
+  "db_writes": 0
+}
