@@ -1,0 +1,59 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN",
+  "track": "E",
+  "verdict": "TRACK_E_ARTIFACT_PREVIEW_UI_COPY_AND_LOCK_POLICY_READY",
+  "routes": {
+    "/artifacts": {
+      "behavior": "redirect immediato a /artifacts-preview",
+      "player_buttons": [],
+      "mutation_calls": 0,
+      "file": "frontend/app/artifacts.tsx",
+      "status": "locked_redirect"
+    },
+    "/artifacts-preview": {
+      "behavior": "read-only preview",
+      "player_buttons": ["back"],
+      "mutation_calls": 0,
+      "file": "frontend/app/artifacts-preview.tsx",
+      "status": "preview_read_only",
+      "sections_allowed": [
+        "intro paragraph (cosa sono le Reliquie)",
+        "category cards (taxonomy)",
+        "example preview cards (da Bible, marcate come 'esempio non finale' se associated_character_status=future_reserved)",
+        "copy 'Sistema in preparazione'",
+        "no live pull/equip/fuse/craft button"
+      ],
+      "sections_forbidden": [
+        "EVOCA / PULL / EQUIPAGGIA / FONDI / CRAFTA / VENDI / SCAMBIA",
+        "IAP / gemme / monete / prezzi",
+        "barra progresso live",
+        "valore stat in numeri reali",
+        "hero unlock implicito"
+      ]
+    }
+  },
+  "copy_it": {
+    "title": "Anteprima Reliquie Divine",
+    "intro_body": "Le Reliquie sono una collezione divina d'account in preparazione. Sono distinte da Armi Divine, Equipaggiamento, Rune e Costellazioni: non sono potenziamenti diretti dell'eroe, ma testimonianze del tuo percorso fra i pantheon. Niente di tutto questo \u00e8 attivo al momento.",
+    "lock_notice": "\ud83d\udd12 Sistema in preparazione \u2014 le Reliquie verranno introdotte in patch dedicata. Nessuna evocazione, equipaggiamento, fusione o craft \u00e8 disponibile.",
+    "card_badge_preview": "ANTEPRIMA",
+    "card_badge_future_reserved": "ESEMPIO NON FINALE",
+    "future_source_hint_default": "In arrivo via eventi e traguardi dedicati (NON IAP).",
+    "no_live_disclaimer": "Questa pagina non effettua alcuna chiamata di modifica. \u00c8 una vetrina di design."
+  },
+  "placeholder_names_policy": {
+    "legacy_backend_names_visible_in_player_ui": false,
+    "strategy": "I nomi placeholder backend (Santo Graal, Occhio di Ra, Frammento di Mjolnir, Specchio di Yata, Mela di Idunn, ecc.) NON devono apparire in /artifacts-preview finch\u00e9 non sono allineati alla Bible canonica. La preview pesca esclusivamente dalla Bible v1 quando attiveremo la lettura design.",
+    "player_visible_examples_must": [
+      "essere nomi della Bible canonica (es. 'Calice del Vespro', 'Occhio Solare', 'Frammento del Martello Tonante')",
+      "avere badge 'ANTEPRIMA' o 'ESEMPIO NON FINALE' (se future_reserved)",
+      "non avere prezzi, non avere bottoni, non avere stat numeriche"
+    ]
+  },
+  "accessibility": {
+    "text_min_size_pt": 12,
+    "contrast_min": "WCAG AA",
+    "back_button_label_a11y": "Indietro",
+    "badge_accessible_text": true
+  }
+}

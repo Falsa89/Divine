@@ -1,0 +1,111 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN",
+  "track": "F",
+  "verdict": "TRACK_F_ARTIFACT_MIGRATION_AND_IMPORT_PLAN_READY",
+  "stages": [
+    {
+      "stage": 1,
+      "id": "DESIGN_ONLY_NOW",
+      "approval_marker": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN_APPROVAL=true",
+      "risks": ["design drift", "hero promise leakage"],
+      "db_writes": false,
+      "rollback": "delete /app/data/design/artifacts/* files",
+      "validators": ["validate_project_artifact_bible_canonical_design_v1.py"],
+      "mobile_qa": "opzionale: verificare che artifact/constellation siano hidden e /artifacts-preview locked"
+    },
+    {
+      "stage": 2,
+      "id": "ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+      "approval_marker": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF_APPROVAL=true",
+      "risks": ["category sprawl", "lore inconsistency"],
+      "db_writes": false,
+      "rollback": "bump bible_version, mark v1 deprecated, switch to v2 draft",
+      "validators": ["validate_artifact_bible_signoff_v1.py (future)"],
+      "mobile_qa": "none"
+    },
+    {
+      "stage": 3,
+      "id": "PREVIEW_UI_POPULATION_FROM_BIBLE",
+      "approval_marker": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_APPROVAL=true",
+      "risks": ["player misinterpretation di future_reserved come live"],
+      "db_writes": false,
+      "rollback": "revert artifacts-preview.tsx a static categories-only",
+      "validators": ["validate_artifact_preview_ui_population_v1.py (future)"],
+      "mobile_qa": "verifica che 'ESEMPIO NON FINALE' compaia su future_reserved e che non ci siano bottoni live"
+    },
+    {
+      "stage": 4,
+      "id": "BACKEND_READONLY_CATALOG_ENDPOINT",
+      "approval_marker": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_APPROVAL=true",
+      "risks": ["esposizione di future_reserved come reale"],
+      "db_writes": false,
+      "rollback": "disable endpoint via feature flag",
+      "validators": ["validate_artifact_catalog_ro_v1.py (future)"],
+      "mobile_qa": "none (smoke via curl/Playwright)"
+    },
+    {
+      "stage": 5,
+      "id": "INVENTORY_SCHEMA_DRY_RUN",
+      "approval_marker": "PROJECT_ARTIFACT_INVENTORY_SCHEMA_DRYRUN_APPROVAL=true",
+      "risks": ["DB migration footgun"],
+      "db_writes": false,
+      "rollback": "design rollback only (nessuna scrittura)",
+      "validators": ["validate_artifact_inventory_schema_dryrun_v1.py (future)"],
+      "mobile_qa": "none"
+    },
+    {
+      "stage": 6,
+      "id": "IMPORT_APPLY_GATED",
+      "approval_marker": "PROJECT_ARTIFACT_IMPORT_APPLY_APPROVAL=true",
+      "risks": ["DB writes su user_artifacts; richiede backup + rollback runbook"],
+      "db_writes": true,
+      "rollback": "snapshot pre-import + restore script",
+      "validators": ["validate_artifact_import_apply_v1.py (future)"],
+      "mobile_qa": "audit account su staging"
+    },
+    {
+      "stage": 7,
+      "id": "UI_READONLY_COLLECTION",
+      "approval_marker": "PROJECT_ARTIFACT_UI_RO_COLLECTION_APPROVAL=true",
+      "risks": ["player aspettativa di equip/fuse"],
+      "db_writes": false,
+      "rollback": "nascondi collection page via flag",
+      "validators": ["validate_artifact_ui_ro_collection_v1.py (future)"],
+      "mobile_qa": "full mobile pass"
+    },
+    {
+      "stage": 8,
+      "id": "BONUS_RESOLVER_DESIGN_AND_CAP",
+      "approval_marker": "PROJECT_ARTIFACT_BONUS_RESOLVER_CAP_APPROVAL=true",
+      "risks": ["power creep", "PvP imbalance"],
+      "db_writes": false,
+      "rollback": "flag-off resolver",
+      "validators": ["validate_artifact_bonus_resolver_cap_v1.py (future)"],
+      "mobile_qa": "none (design)"
+    },
+    {
+      "stage": 9,
+      "id": "LIVE_UNLOCK_REWARD_SOURCES",
+      "approval_marker": "PROJECT_ARTIFACT_LIVE_UNLOCK_SOURCES_APPROVAL=true",
+      "risks": ["reward inflation"],
+      "db_writes": true,
+      "rollback": "disabilita reward source via flag",
+      "validators": ["validate_artifact_live_unlock_sources_v1.py (future)"],
+      "mobile_qa": "end-to-end claim test"
+    },
+    {
+      "stage": 10,
+      "id": "ARTIFACT_BANNER_OR_ACQUISITION_SIGNOFF",
+      "approval_marker": "PROJECT_ARTIFACT_BANNER_ACQUISITION_SIGNOFF_APPROVAL=true",
+      "risks": ["economy P2W", "rate sanity"],
+      "db_writes": true,
+      "rollback": "flag-off banner; revert rates",
+      "validators": ["validate_artifact_banner_signoff_v1.py (future)"],
+      "mobile_qa": "full QA + simulation come fatto per Hero Gacha"
+    }
+  ],
+  "current_stage": 1,
+  "next_stage_recommended": 2,
+  "db_writes_in_current_pack": 0,
+  "backend_runtime_activation_in_current_pack": 0
+}

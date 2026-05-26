@@ -1,0 +1,70 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN",
+  "track": "D",
+  "verdict": "TRACK_D_CONSTELLATION_AND_RELIC_BOUNDARY_READY",
+  "systems": {
+    "artifacts": {
+      "scope": "account-wide collectible divine relics",
+      "acquisition": "future banner / event / milestone (NOT IAP, NOT shop)",
+      "persistence": "per account, server-aware future",
+      "combat_role": "none at launch; future capped bonus only post Bonus Resolver Signoff",
+      "never_mix_with": ["equipment slot", "runes socket", "divine weapon", "hero star-up", "hero dupe consumption"]
+    },
+    "constellations": {
+      "scope": "hero progression: star-up, duplicate consumption, reincarnation materials",
+      "acquisition": "future hero dupe / shard system / event",
+      "persistence": "per hero instance + account",
+      "combat_role": "hero growth (stars, abilities unlock) \u2014 already partially modeled in user_constellations + ARTIFACTS_SET legacy backend, NOT activated in UI player",
+      "never_mix_with": ["account relic collection", "divine weapon assignment", "equipment slot"]
+    },
+    "divine_weapons": {
+      "scope": "hero-specific or archetype-specific signature weapons",
+      "acquisition": "future hero milestone / event",
+      "persistence": "per hero",
+      "combat_role": "power expression on owner hero",
+      "never_mix_with": ["account artifact collection", "generic equipment", "constellation materials"]
+    },
+    "equipment": {
+      "scope": "generic gear/stat items per hero",
+      "acquisition": "drops, shop (future signoff), craft",
+      "persistence": "per hero",
+      "combat_role": "base stat layer",
+      "never_mix_with": ["artifact collection", "divine weapon slot", "constellation materials"]
+    },
+    "runes": {
+      "scope": "socket/modifier items che si inseriscono in equipment",
+      "acquisition": "drops, craft",
+      "persistence": "per equipment piece",
+      "combat_role": "modifier per equipment",
+      "never_mix_with": ["artifact collection", "constellation materials", "divine weapon"]
+    }
+  },
+  "non_overlap_table": [
+    {"artifact": null, "constellation": null, "divine_weapon": null, "equipment": null, "runes": null, "note": "Le 5 dimensioni sono ortogonali. UI, schema DB e validators devono riflettere questa separazione."}
+  ],
+  "ui_separation": {
+    "artifacts_collection_page": "/artifacts-preview (locked) -> /artifacts/collection (future, design-only ora)",
+    "constellations_page": "sotto hero detail / star-up flow (future)",
+    "divine_weapons_page": "sotto hero detail / divine weapon flow (future, separato)",
+    "equipment_page": "/equipment (esistente)",
+    "runes_page": "sotto equipment / forge (future)"
+  },
+  "db_schema_isolation_design": {
+    "artifacts_collection": "db.user_artifacts (account-scoped) \u2014 future",
+    "constellation_materials": "db.user_constellations (per hero) \u2014 esiste backend, non player-attivo",
+    "divine_weapons_user": "db.user_divine_weapons (per hero) \u2014 future",
+    "equipment": "db.user_equipment (per hero) \u2014 esistente",
+    "runes": "db.user_runes (per equipment) \u2014 future"
+  },
+  "forbidden_cross_writes": [
+    "artifact pull NON deve scrivere su user_heroes",
+    "constellation fuse NON deve modificare account artifact collection",
+    "divine weapon assignment NON deve consumare equipment generico",
+    "runes NON devono essere classificate come artifacts"
+  ],
+  "legacy_migration_notes": {
+    "old_exclusive_items_route": "deprecata via /exclusive (locked notice); item-shop legacy non touch",
+    "old_set_bonus_concept": "backend ARTIFACT_SETS resta come dato legacy ma NON \u00e8 il modello canonico. Il nuovo modello \u00e8 'pantheon_emblem + collection_set_future' design-only.",
+    "backend_constellation_routes": "esistono ma non player-reachable dalle UI player live"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN",
+  "track": "A",
+  "verdict": "TRACK_A_EXISTING_ARTIFACT_SURFACE_AUDIT_READY",
+  "frontend_surfaces": [
+    {
+      "path": "frontend/app/(tabs)/gacha.tsx",
+      "role": "main gacha tab",
+      "artifact_visibility": "HIDDEN via HIDDEN_BANNERS_V2 = new Set(['artifact','constellation']); banner entries restano fisicamente nell'array BANNERS ma filtrati a runtime con visibleBanners.",
+      "constellation_visibility": "HIDDEN via stesso filtro",
+      "lock_status": "hidden"
+    },
+    {
+      "path": "frontend/app/artifacts.tsx",
+      "role": "legacy player route",
+      "behavior": "Redirect immediato a /artifacts-preview. Nessuna API call, nessun bottone live. Codice originale pull/fuse/equip irraggiungibile.",
+      "lock_status": "locked_redirect"
+    },
+    {
+      "path": "frontend/app/artifacts-preview.tsx",
+      "role": "preview safe page",
+      "behavior": "Read-only. Mostra categorie/rarit\u00e0 statiche. Nessuna pull/equip/fuse/craft UI. Copy 'Sistema in preparazione'.",
+      "lock_status": "preview_only_read_only"
+    },
+    {
+      "path": "frontend/app/sanctuary.tsx",
+      "role": "sanctuary screen",
+      "constellation_references": true,
+      "lock_status": "existing_locked_in_sanctuary_lock_pack"
+    },
+    {
+      "path": "frontend/app/hero-detail.tsx",
+      "role": "hero detail",
+      "constellation_references": "informational (constellation_id display only)",
+      "lock_status": "informational_only"
+    },
+    {
+      "path": "frontend/app/(tabs)/battle.tsx",
+      "constellation_references": "display of equipped constellation in team builder",
+      "lock_status": "read_only_display"
+    },
+    {
+      "path": "frontend/types/artifacts.ts",
+      "role": "TypeScript types",
+      "lock_status": "design_types_only"
+    }
+  ],
+  "backend_surfaces": [
+    {
+      "path": "backend/routes/artifacts.py",
+      "endpoints": [
+        "POST /api/artifacts/pull",
+        "POST /api/artifacts/pull10",
+        "POST /api/artifacts/fuse",
+        "POST /api/artifacts/equip",
+        "GET /api/artifacts",
+        "GET /api/constellations",
+        "POST /api/constellations/equip",
+        "POST /api/constellations/fuse"
+      ],
+      "called_from_player_ui": false,
+      "called_from_legacy_artifacts_tsx": "NO (redirect prevents call)",
+      "lock_status": "backend_alive_but_unreachable_from_player_ui"
+    },
+    {
+      "path": "backend/game_logic/artifact_bonus_resolver_stub.py",
+      "role": "flag-gated stub",
+      "flag": "ARTIFACT_LIVE_BONUS_ENABLED",
+      "runtime_active": false,
+      "lock_status": "stub_inactive_flag_off"
+    }
+  ],
+  "non_canonical_placeholder_names": [
+    {"id": "holy_grail", "name": "Santo Graal", "issue": "Arthurian system non in roster: rischio implicare King Arthur playable.", "recommended_action": "mark associated_character_status=future_reserved + rename optional"},
+    {"id": "eye_of_ra", "name": "Occhio di Ra", "issue": "Ra non in roster current_launch; rischio implicare Ra playable.", "recommended_action": "mark future_reserved + simbolico"},
+    {"id": "mjolnir_frag", "name": "Frammento di Mjolnir", "issue": "Thor non in roster current_launch: stesso rischio implicito.", "recommended_action": "mark future_reserved"},
+    {"id": "aegis_shard", "name": "Scheggia dell'Egida", "issue": "Zeus current_launch presence ambigua; verificare prima di marcare live.", "recommended_action": "mark future_reserved se Zeus non confermato"},
+    {"id": "golden_apple", "name": "Mela d'Oro di Idunn", "issue": "Idunn non in roster; placeholder.", "recommended_action": "future_reserved"},
+    {"id": "yata_mirror", "name": "Specchio di Yata", "issue": "Amaterasu/Yata system non roster; future_reserved"}
+  ],
+  "legacy_set_bonuses_in_backend": ["divino", "nordico", "olimpico", "giapponese", "egizio", "orientale", "mitico", "celeste", "classico"],
+  "runtime_combat_artifact_wiring": false,
+  "runtime_combat_constellation_wiring": false,
+  "recommendations": [
+    "Mantenere /artifacts redirect a /artifacts-preview",
+    "Mantenere /artifacts-preview come unica vetrina player",
+    "Backend /api/artifacts/* + /api/constellations/* restano ma non collegati a UI player",
+    "Sostituire placeholder names player-facing con bible canonical o nasconderli totalmente fino a signoff bible",
+    "Aggiungere static guard: nessun bottone live di pull/fuse/equip/craft in artifacts-preview",
+    "Aggiungere static guard: artifact/constellation continuano hidden in gacha.tsx"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN",
+  "track": "G",
+  "verdict": "TRACK_G_ARTIFACT_STATIC_GUARD_BETA_HARNESS_READY",
+  "guards": [
+    {
+      "id": "GUARD_GACHA_ARTIFACT_CONSTELLATION_HIDDEN",
+      "file": "frontend/app/(tabs)/gacha.tsx",
+      "contract": "HIDDEN_BANNERS_V2 must contain both 'artifact' and 'constellation'",
+      "validator_check": "grep \"HIDDEN_BANNERS_V2 = new Set(['artifact', 'constellation'])\""
+    },
+    {
+      "id": "GUARD_ARTIFACTS_TSX_REDIRECT_ONLY",
+      "file": "frontend/app/artifacts.tsx",
+      "contract": "file deve effettuare router.replace('/artifacts-preview') e non contenere fetch/apiCall/pull/equip/fuse/craft",
+      "validator_check": "grep redirect; nessuna 'fetch(' / 'apiCall(' / 'pull' / 'equip' / 'fuse' / 'craft'"
+    },
+    {
+      "id": "GUARD_ARTIFACTS_PREVIEW_NO_MUTATION",
+      "file": "frontend/app/artifacts-preview.tsx",
+      "contract": "nessuna chiamata mutativa: niente 'method: POST', 'apiCall', 'fetch' verso /api/artifacts/* o /api/constellations/*",
+      "validator_check": "grep 'method' / 'POST' / 'apiCall' devono non comparire associate ad endpoint artifact/constellation"
+    },
+    {
+      "id": "GUARD_NO_COMBAT_ARTIFACT_RUNTIME",
+      "file": "backend/battle_engine.py + backend/battle_core.py",
+      "contract": "nessuna lettura di user_artifacts / user_constellations dentro simulate_battle",
+      "validator_check": "grep 'user_artifacts'|'user_constellations' nei file battle_*"
+    },
+    {
+      "id": "GUARD_ARTIFACT_BONUS_RESOLVER_STUB_INACTIVE",
+      "file": "backend/game_logic/artifact_bonus_resolver_stub.py",
+      "contract": "ARTIFACT_LIVE_BONUS_ENABLED flag deve essere unset/false (verificato gi\u00e0 da validate_project_m_status_first_slice_canary_env_rc_gate_v1.py FORBIDDEN_FLAGS)",
+      "validator_check": "riuso del validator esistente"
+    },
+    {
+      "id": "GUARD_PLAYER_ROUTE_STATIC_AUDIT_INCLUDES_ARTIFACT",
+      "file": "backend/scripts/run_player_route_static_audit.py",
+      "contract": "l'audit gi\u00e0 controlla /artifacts e /artifacts-preview esistenti",
+      "validator_check": "riuso audit run"
+    }
+  ],
+  "playwright_smoke_status": {
+    "feasible_in_current_container": false,
+    "reason": "Live Playwright richiede preview URL stabile; design-only \u00e8 sufficiente per questo pack",
+    "specs_available": ["frontend/tests/e2e/locked-surfaces-smoke.spec.ts (gi\u00e0 esistente, copre artifact/constellation/premium/targeted lock)"]
+  },
+  "suite_extension": {
+    "new_validator": "backend/scripts/validate_project_artifact_bible_canonical_design_v1.py",
+    "registered_in_optional": true
+  },
+  "package_json_stable": true,
+  "yarn_lock_stable": true
+}

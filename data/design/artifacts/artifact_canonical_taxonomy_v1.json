@@ -1,0 +1,116 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN",
+  "track": "B",
+  "verdict": "TRACK_B_ARTIFACT_CANONICAL_TAXONOMY_READY",
+  "taxonomy_version": "v1",
+  "categories": [
+    {
+      "id": "divine_relic",
+      "description_it": "Reliquie generiche di natura divina, non legate a un eroe specifico.",
+      "can_do": ["cosmetic prestige badge", "collection completion bonus (future, capped)"],
+      "must_not_do": ["hero unlock", "large stat boost", "P2W gating"],
+      "ui_usage": "Tab principale Collezione Reliquie Divine.",
+      "naming_rules": "Generic divine symbolism (es. 'Reliquia della Luce', 'Calice del Vespro'). Evitare nomi che implichino un personaggio specifico non in roster.",
+      "rarity_applicability": ["epic", "legendary", "mythic", "divine"],
+      "unlock_source": ["future_artifact_banner", "future_event_reward", "future_collection_milestone"]
+    },
+    {
+      "id": "mythic_weapon_relic",
+      "description_it": "Frammenti o repliche simboliche di armi mitologiche celebri.",
+      "can_do": ["prestige display", "capped bonus (future)"],
+      "must_not_do": ["sostituire Divine Weapons", "diventare equip diretto"],
+      "ui_usage": "Card distinta da Divine Weapons; etichetta 'frammento simbolico'.",
+      "naming_rules": "Usare 'Frammento di X' o 'Scheggia di X' invece del nome completo dell'arma divina; se il portatore non \u00e8 playable, marcare future_reserved.",
+      "rarity_applicability": ["legendary", "mythic"],
+      "unlock_source": ["future_event_chain", "future_questline"]
+    },
+    {
+      "id": "sacred_symbol",
+      "description_it": "Simboli sacri pan-pantheon (occhi, mani, sigilli, mandala).",
+      "can_do": ["collection prestige", "thematic flair"],
+      "must_not_do": ["implicare un dio specifico playable senza future_reserved"],
+      "ui_usage": "Sezione simbologia.",
+      "naming_rules": "Usare descrittori (es. 'Occhio Solare', 'Sigillo Lunare') senza nominare un dio playable se non in roster.",
+      "rarity_applicability": ["rare", "epic", "legendary"],
+      "unlock_source": ["future_collection_quest"]
+    },
+    {
+      "id": "primordial_fragment",
+      "description_it": "Frammenti di concetti primordiali (caos, abisso, prima luce, prima parola).",
+      "can_do": ["endgame collection set", "capped meta bonus (future)"],
+      "must_not_do": ["essere obbligatori per progressione PvE base"],
+      "ui_usage": "Tab endgame.",
+      "naming_rules": "Lessico cosmogonico, non personificato.",
+      "rarity_applicability": ["mythic", "divine"],
+      "unlock_source": ["future_endgame_milestone"]
+    },
+    {
+      "id": "pantheon_emblem",
+      "description_it": "Emblemi tematici di un pantheon (greco, nordico, egizio, indiano, giapponese, ecc.).",
+      "can_do": ["set bonus thematic (future capped)", "collection progress"],
+      "must_not_do": ["replace hero faction system"],
+      "ui_usage": "Filtro pantheon nella collezione.",
+      "naming_rules": "'Emblema del Pantheon X' o equivalente.",
+      "rarity_applicability": ["epic", "legendary", "mythic"],
+      "unlock_source": ["future_pantheon_event"]
+    },
+    {
+      "id": "world_memory",
+      "description_it": "Memorie del mondo: pagine, frammenti di canto, echi di eventi cosmici.",
+      "can_do": ["lore unlock", "codex bonus (future)"],
+      "must_not_do": ["alterare combat"],
+      "ui_usage": "Sezione lore-collection.",
+      "naming_rules": "Tono narrativo-poetico.",
+      "rarity_applicability": ["rare", "epic", "legendary"],
+      "unlock_source": ["future_story_progression"]
+    },
+    {
+      "id": "forbidden_relic",
+      "description_it": "Reliquie con conseguenze rituali: ricompense alte ma con costo collection/condizione.",
+      "can_do": ["endgame trade-off bonus (future capped)", "lore endgame"],
+      "must_not_do": ["forzare P2W", "unlock direttamente da gacha standard"],
+      "ui_usage": "Sezione separata 'Vietati', con warning copy.",
+      "naming_rules": "Lessico oscuro/proibito senza riferimenti a personaggi reali.",
+      "rarity_applicability": ["legendary", "mythic", "divine"],
+      "unlock_source": ["future_endgame_questline"]
+    },
+    {
+      "id": "event_relic",
+      "description_it": "Reliquie temporanee legate a eventi limitati.",
+      "can_do": ["event display", "event-bound bonus (future)"],
+      "must_not_do": ["diventare core progression"],
+      "ui_usage": "Sezione 'Evento'.",
+      "naming_rules": "Naming legato all'evento (es. 'Frammento di Yule', 'Petalo di Hanami').",
+      "rarity_applicability": ["rare", "epic", "legendary"],
+      "unlock_source": ["future_event_only"]
+    },
+    {
+      "id": "collaboration_relic",
+      "description_it": "Reliquie da future collaborazioni (NON ATTIVO).",
+      "can_do": ["future placeholder"],
+      "must_not_do": ["essere creato senza accordo legale"],
+      "ui_usage": "Non visibile.",
+      "naming_rules": "Riservato.",
+      "rarity_applicability": ["legendary", "mythic"],
+      "unlock_source": ["future_collab_only"]
+    },
+    {
+      "id": "hero_signature_relic",
+      "description_it": "Reliquia opzionale legata a un eroe specifico playable (RARO, non default).",
+      "can_do": ["flair collection per eroi playable"],
+      "must_not_do": ["diventare obbligatoria per max-power", "essere il pilastro di artifact design"],
+      "ui_usage": "Card 'Reliquia Firma' nel profilo eroe (futuro).",
+      "naming_rules": "Riferimento esplicito a un eroe PLAYABLE current_launch.",
+      "rarity_applicability": ["legendary", "mythic"],
+      "unlock_source": ["future_hero_milestone"]
+    }
+  ],
+  "global_forbidden": [
+    "P2W stat wall",
+    "required for base progression",
+    "replace divine_weapons system",
+    "replace equipment system",
+    "replace runes system",
+    "hero gating"
+  ]
+}
