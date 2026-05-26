@@ -41,7 +41,7 @@ export default function CosmeticsScreen() {
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}>
       <View style={s.hdr}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>\u2190</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{'\u2190'}</Text></TouchableOpacity>
         <Text style={s.title}>AURE & AVATAR</Text>
         <Text style={s.res}>\uD83D\uDCB0 {(user?.gold||0).toLocaleString()} | \uD83D\uDC8E {user?.gems||0}</Text>
       </View>

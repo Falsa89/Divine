@@ -29,7 +29,7 @@ export default function MailScreen() {
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}>
       <View style={s.hdr}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>\u2190</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{'\u2190'}</Text></TouchableOpacity>
         <Text style={s.title}>POSTA</Text>
         <Text style={s.cnt}>{mails.filter(m=>!m.claimed).length} non lette</Text>
       </View>

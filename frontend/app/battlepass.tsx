@@ -52,7 +52,7 @@ export default function BattlePassScreen() {
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}>
       <View style={s.hdr}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>\u2190</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{'\u2190'}</Text></TouchableOpacity>
         <Text style={s.title}>BATTLE PASS</Text>
         <Text style={s.season}>Stagione {data?.season || 1}</Text>
       </View>

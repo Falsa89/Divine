@@ -1,0 +1,101 @@
+{
+  "task_id": "PROJECT_BETA_HARNESS_PUBLIC_REPO_SYNC_AND_MINOR_UI_HYGIENE_FIX",
+  "track": "STABILIZATION",
+  "verdict": "PROJECT_BETA_HARNESS_PUBLIC_REPO_SYNC_AND_MINOR_UI_HYGIENE_FIX_COMPLETE",
+  "scope_summary": "Mini-pack di stabilizzazione che chiude formalmente PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION rieseguendo: (a) yarn install per allineare frontend/yarn.lock con @playwright/test, (b) fix dei back-arrow legacy con escape literal raw '\\u2190' renderizzato come testo invece che freccia, (c) ri-esecuzione completa del validator suite, audit statico player routes, redis ping e guard Soul Forge no-modal. Zero modifiche a logica, endpoint, prezzi, item, reward, IAP, schema DB o invarianti backend.",
+  "p1_a_playwright_yarn_alignment": {
+    "package_json_path": "frontend/package.json",
+    "package_json_md5_post": "7fb50b6042864f7159ae3d0bd4eb2ede",
+    "scripts_present": {
+      "test:e2e": "playwright test",
+      "test:beta-smoke": "playwright test",
+      "test:beta-smoke:headed": "playwright test --headed"
+    },
+    "devDependencies_playwright_test": "^1.60.0",
+    "yarn_lock_path": "frontend/yarn.lock",
+    "yarn_lock_md5_post": "aa0c59eaa5f8740235116032c366e85e",
+    "yarn_lock_contains_playwright_resolution": true,
+    "yarn_lock_contains_playwright_core_resolution": true,
+    "yarn_install_result": "Already up-to-date",
+    "playwright_binary_version_in_node_modules": "1.60.0",
+    "playwright_config_path": "frontend/playwright.config.ts",
+    "playwright_config_md5": "49c74cf254d3ab4465a66f79b04c3b1f",
+    "e2e_specs": [
+      "frontend/tests/e2e/player-facing-routes.spec.ts",
+      "frontend/tests/e2e/soul-forge-smoke.spec.ts",
+      "frontend/tests/e2e/locked-surfaces-smoke.spec.ts"
+    ],
+    "verdict": "P1_A_PLAYWRIGHT_YARN_ALIGNMENT_READY"
+  },
+  "p1_b_back_arrow_unicode_hygiene": {
+    "scope": "Sostituzione del literal raw '\\u2190' (8 caratteri visibili sullo schermo invece della freccia) con escape JSX '{\\'\\u2190\\'}' che renderizza correttamente il glifo arrow-left.",
+    "files_fixed": [
+      {"file": "frontend/app/shop.tsx",       "md5_post": "1a39f50e8da9c09a1f0b017b25b73390", "back_arrow_pattern": "{'\\u2190'}"},
+      {"file": "frontend/app/battlepass.tsx", "md5_post": "54568b8cb75a07033f78ef6593aba839", "back_arrow_pattern": "{'\\u2190'}"},
+      {"file": "frontend/app/cosmetics.tsx",  "md5_post": "baf9559fea60af52e4be87a46ef2bb9c", "back_arrow_pattern": "{'\\u2190'}"},
+      {"file": "frontend/app/mail.tsx",       "md5_post": "dba1713ae97686273f44941388100d58", "back_arrow_pattern": "{'\\u2190'}"}
+    ],
+    "logic_changes": 0,
+    "endpoint_changes": 0,
+    "shop_price_changes": 0,
+    "shop_item_changes": 0,
+    "reward_changes": 0,
+    "iap_implementation": false,
+    "verdict": "P1_B_BACK_ARROW_UNICODE_HYGIENE_FIX_APPLIED"
+  },
+  "p1_c_revalidation": {
+    "validator_suite_command": "python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py --parallel",
+    "validator_suite_result": {"pass": 695, "fail": 0, "miss": 0, "overall": "PASS"},
+    "player_route_static_audit_command": "python3 /app/backend/scripts/run_player_route_static_audit.py",
+    "player_route_static_audit_result": {"pass": 13, "warn": 0, "fail": 0, "miss": 0},
+    "redis_command": "redis-cli ping",
+    "redis_result": "PONG",
+    "redis_supervisor_status": "RUNNING",
+    "soul_forge_no_modal_guard": {
+      "file": "frontend/app/soul-forge.tsx",
+      "count_of_Modal_or_KeyboardAvoidingView_or_confirmOpen": 0,
+      "guard_status": "OK"
+    },
+    "locked_surfaces_md5_pin_refreshed": [
+      "data/design/audit/batch1_v2/track_e_shop_bp_vip_lock_v1.json",
+      "data/design/audit/batch1_v2/track_h_completion_v1.json"
+    ],
+    "verdict": "P1_C_REVALIDATION_GREEN"
+  },
+  "invariant_files_md5": {
+    "battle_engine_py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "invariants_respected": [
+    "backend/battle_engine.py untouched",
+    "backend/.env untouched",
+    "no validator weakening",
+    "no reward formula changes",
+    "no gacha/pity/pool changes",
+    "no shop price/item changes",
+    "no IAP implementation",
+    "no DB writes from scripts",
+    "no user_heroes mutation",
+    "no fake PASS",
+    "no <Modal> or <KeyboardAvoidingView> or confirmOpen reintroduced in soul-forge.tsx"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0,
+  "reward_formula_change": false,
+  "files_modified": [
+    "frontend/app/shop.tsx (back arrow literal -> JSX escape)",
+    "frontend/app/battlepass.tsx (back arrow literal -> JSX escape)",
+    "frontend/app/cosmetics.tsx (back arrow literal -> JSX escape)",
+    "frontend/app/mail.tsx (back arrow literal -> JSX escape)",
+    "frontend/yarn.lock (yarn install alignment for @playwright/test)",
+    "data/design/audit/batch1_v2/track_e_shop_bp_vip_lock_v1.json (md5_post refresh per shop/battlepass)",
+    "data/design/audit/batch1_v2/track_h_completion_v1.json (md5_post refresh per shop/battlepass)",
+    "data/design/testing/beta_testing_track_i_completion_v1.json (global_verdict promoted, blockers cleared)"
+  ],
+  "files_added": [
+    "data/design/testing/beta_harness_public_repo_sync_and_minor_ui_hygiene_fix_v1.json",
+    "backend/scripts/validate_beta_harness_public_repo_sync_and_minor_ui_hygiene_fix_v1.py"
+  ],
+  "remaining_blockers": [],
+  "next_pack_recommendation": "PROJECT_GACHA_RATE_SANITY_FINAL_SIGNOFF_PACK (P0)"
+}

@@ -48,7 +48,7 @@ export default function ShopScreen() {
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}>
       <View style={s.hdr}>
-        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>\u2190</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}><Text style={s.back}>{'\u2190'}</Text></TouchableOpacity>
         <Text style={s.title}>NEGOZIO</Text>
         <Text style={s.res}>\uD83D\uDCB0 {(user?.gold||0).toLocaleString()} | \uD83D\uDC8E {user?.gems?.toLocaleString()}</Text>
       </View>
