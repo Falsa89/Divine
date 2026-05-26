@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ScrollView,
-  ActivityIndicator, Image, Modal, TextInput, Alert,
-  KeyboardAvoidingView, Platform,
+  ActivityIndicator, Image, TextInput, Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -91,8 +90,10 @@ export default function SoulForgeScreen() {
   // EMERGENCY_RESTORE Track C \u2014 filtri
   const [rarityFilter, setRarityFilter] = useState<RarityFilter>('all');
 
-  // BATCH_1_V2 Track D \u2014 confirm modal state
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  // INLINE_CONFIRM Track B/C \u2014 stato dell'inline confirm panel (NO Modal RN).
+  // Su mobile RN, il componente Modal+KeyboardAvoidingView causava crash al primo tap
+  // FORGE SOUL. Il path \u00e8 stato sostituito da un pannello inline dentro la ScrollView.
+  const [inlineConfirmOpen, setInlineConfirmOpen] = useState(false);
   const [typedConfirm, setTypedConfirm] = useState('');
   const [overrideHighRarity, setOverrideHighRarity] = useState(false);
 
@@ -247,12 +248,26 @@ export default function SoulForgeScreen() {
   }, [selected, available]);
 
   const requestForge = () => {
-    if (selected.size === 0) return;
-    if (forging) return; // double-submit guard
-    setTypedConfirm('');
-    setForgeError(null);
-    setPostSuccessWarn(null);
-    setConfirmOpen(true);
+    try {
+      if (selected.size === 0) return;
+      if (forging) return; // double-submit guard
+      // Snapshot the selection to ensure heroes still exist before opening confirm.
+      const stillAvailable = available.filter(h => selected.has(h.id));
+      if (stillAvailable.length === 0) {
+        // Stale selection: clear and show error instead of crashing.
+        setSelected(new Set());
+        setForgeError('La selezione non \u00e8 pi\u00f9 valida. Ricarica e riprova.');
+        return;
+      }
+      setTypedConfirm('');
+      setForgeError(null);
+      setPostSuccessWarn(null);
+      // INLINE_CONFIRM Track C: open inline panel, NOT a Modal.
+      setInlineConfirmOpen(true);
+    } catch (e: any) {
+      // Track D: handler never crashes.
+      setForgeError(e?.message || 'Errore apertura conferma forge.');
+    }
   };
 
   // =====================================================================
@@ -305,7 +320,8 @@ export default function SoulForgeScreen() {
     // Snapshot selection BEFORE any state mutation to keep heroes alive on failure
     const heroIdsSnapshot = Array.from(selected);
     if (heroIdsSnapshot.length === 0) return;
-    setConfirmOpen(false);
+    // INLINE_CONFIRM Track C: chiudi il pannello inline (NON Modal).
+    setInlineConfirmOpen(false);
     setForgeError(null);
     setPostSuccessWarn(null);
     setForging(true);
@@ -663,6 +679,99 @@ export default function SoulForgeScreen() {
                 </TouchableOpacity>
               </View>
             )}
+
+            {/* ================================================================ */}
+            {/* INLINE_CONFIRM Track C \u2014 Pannello di conferma INLINE (NO Modal).  */}
+            {/* Appare in pagina sotto il Forge button, scorre con la ScrollView   */}
+            {/* esterna. Sostituisce il Modal RN che causava crash su mobile.      */}
+            {/* ================================================================ */}
+            {inlineConfirmOpen && (
+              <Animated.View entering={FadeInUp.duration(220)} style={s.inlineConfirmCard}>
+                <Text style={s.inlineConfirmTitle}>
+                  {'\u26A0\uFE0F'} CONFERMA FORGE
+                </Text>
+                <Text style={s.inlineConfirmSub}>
+                  Stai per distruggere {selected.size} {selected.size === 1 ? 'eroe' : 'eroi'} in modo PERMANENTE.
+                </Text>
+
+                <View style={s.inlineConfirmBreakdown}>
+                  <Text style={s.inlineConfirmSection}>Cosa perdi:</Text>
+                  {Object.keys(selectionBreakdown).sort((a, b) => Number(b) - Number(a)).map(starKey => (
+                    <Text key={starKey} style={s.inlineConfirmLine}>
+                      {'\u2022'} {selectionBreakdown[Number(starKey)] || 0} eroi {starKey}{'\u2605'}
+                      {Number(starKey) >= HIGH_RARITY_PROTECT_MIN ? '  (\uD83D\uDD12 alta rarit\u00e0)' : ''}
+                    </Text>
+                  ))}
+                  <Text style={[s.inlineConfirmSection, { marginTop: 8 }]}>Cosa ottieni:</Text>
+                  <Text style={s.inlineConfirmLine}>
+                    {'\uD83D\uDC80'} +{(Number(previewEssence) || 0).toLocaleString()} Soul Essence
+                  </Text>
+                  <Text style={s.inlineConfirmLine}>
+                    Bilancio finale stimato:{' '}
+                    {((Number.isFinite(balance) ? balance : 0) + (Number(previewEssence) || 0)).toLocaleString()}
+                  </Text>
+                </View>
+
+                {isRiskyForge && (
+                  <View style={s.inlineConfirmRiskBox}>
+                    <Text style={s.inlineConfirmRiskTitle}>{'\uD83D\uDEA8'} OPERAZIONE A RISCHIO</Text>
+                    <Text style={s.inlineConfirmRiskTxt}>
+                      {selectedHighRarity.length > 0
+                        ? `Stai distruggendo ${selectedHighRarity.length} eroi 4\u2605+. `
+                        : ''}
+                      {selected.size >= RISKY_BULK_THRESHOLD
+                        ? `Distruzione massiva (\u2265${RISKY_BULK_THRESHOLD}). `
+                        : ''}
+                      Digita CONFERMA per procedere.
+                    </Text>
+                    <TextInput
+                      value={typedConfirm}
+                      onChangeText={setTypedConfirm}
+                      placeholder="CONFERMA"
+                      placeholderTextColor="rgba(255,255,255,0.25)"
+                      style={s.inlineConfirmInput}
+                      autoCapitalize="characters"
+                      autoCorrect={false}
+                    />
+                  </View>
+                )}
+
+                <View style={s.inlineConfirmActions}>
+                  <TouchableOpacity
+                    style={s.inlineConfirmCancel}
+                    onPress={() => {
+                      try {
+                        setInlineConfirmOpen(false);
+                        setTypedConfirm('');
+                      } catch {}
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={s.inlineConfirmCancelTxt}>ANNULLA</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      s.inlineConfirmConfirm,
+                      (isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA') && { opacity: 0.35 },
+                      forging && { opacity: 0.5 },
+                    ]}
+                    onPress={confirmForge}
+                    disabled={
+                      forging ||
+                      (isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA')
+                    }
+                    activeOpacity={0.7}
+                  >
+                    <Text style={s.inlineConfirmConfirmTxt}>
+                      {forging ? '\u2026 IN CORSO' : '\uD83D\uDD25 CONFERMA FORGE'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={s.inlineConfirmHint}>
+                  Suggerimento: scorri se l'azione finale non \u00e8 visibile.
+                </Text>
+              </Animated.View>
+            )}
           </LinearGradient>
         </View>
 
@@ -837,95 +946,6 @@ export default function SoulForgeScreen() {
           </View>
         </View>
       </ScrollView>
-
-      {/* ===== Confirm Modal ===== */}
-      <Modal visible={confirmOpen} transparent animationType="fade" onRequestClose={() => setConfirmOpen(false)}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={s.modalBackdropV2}
-        >
-          <View style={s.modalCardV2}>
-            {/* EMERGENCY_RESTORE Track D \u2014 modal scrollabile per tastiera + safe-area */}
-            <ScrollView
-              contentContainerStyle={{ paddingBottom: 8 }}
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-            >
-              <Text style={s.modalTitleV2}>{'\u26A0\uFE0F'} CONFERMA FORGE</Text>
-              <Text style={s.modalSubV2}>
-                Stai per distruggere {selected.size} {selected.size === 1 ? 'eroe' : 'eroi'} in modo PERMANENTE.
-              </Text>
-              <View style={s.modalBreakdownV2}>
-                <Text style={s.modalSectionV2}>Cosa perdi:</Text>
-                {Object.keys(selectionBreakdown).sort((a, b) => Number(b) - Number(a)).map(starKey => (
-                  <Text key={starKey} style={s.modalBreakLineV2}>
-                    {'\u2022'} {selectionBreakdown[Number(starKey)]} eroi {starKey}{'\u2605'}
-                    {Number(starKey) >= HIGH_RARITY_PROTECT_MIN ? '  (\uD83D\uDD12 alta rarit\u00e0)' : ''}
-                  </Text>
-                ))}
-                <Text style={[s.modalSectionV2, { marginTop: 8 }]}>Cosa ottieni:</Text>
-                <Text style={s.modalBreakLineV2}>
-                  {'\uD83D\uDC80'} +{previewEssence.toLocaleString()} Soul Essence
-                </Text>
-                <Text style={s.modalBreakLineV2}>
-                  Bilancio finale stimato: {((Number.isFinite(balance) ? balance : 0) + previewEssence).toLocaleString()}
-                </Text>
-              </View>
-
-              {isRiskyForge && (
-                <View style={s.modalRiskBoxV2}>
-                  <Text style={s.modalRiskTitleV2}>{'\uD83D\uDEA8'} OPERAZIONE A RISCHIO</Text>
-                  <Text style={s.modalRiskTxtV2}>
-                    {selectedHighRarity.length > 0
-                      ? `Stai distruggendo ${selectedHighRarity.length} eroi 4\u2605+. `
-                      : ''}
-                    {selected.size >= RISKY_BULK_THRESHOLD
-                      ? `Distruzione massiva (\u2265${RISKY_BULK_THRESHOLD}). `
-                      : ''}
-                    Digita CONFERMA per procedere.
-                  </Text>
-                  <TextInput
-                    value={typedConfirm}
-                    onChangeText={setTypedConfirm}
-                    placeholder="CONFERMA"
-                    placeholderTextColor="rgba(255,255,255,0.25)"
-                    style={s.modalInputV2}
-                    autoCapitalize="characters"
-                    autoCorrect={false}
-                  />
-                </View>
-              )}
-
-              <View style={s.modalActionsV2}>
-                <TouchableOpacity
-                  style={s.modalCancelV2}
-                  onPress={() => { setConfirmOpen(false); setTypedConfirm(''); }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={s.modalCancelTxtV2}>ANNULLA</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    s.modalConfirmV2,
-                    (isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA') && { opacity: 0.35 },
-                    forging && { opacity: 0.5 },
-                  ]}
-                  onPress={confirmForge}
-                  disabled={
-                    forging ||
-                    (isRiskyForge && typedConfirm.trim().toUpperCase() !== 'CONFERMA')
-                  }
-                  activeOpacity={0.7}
-                >
-                  <Text style={s.modalConfirmTxtV2}>
-                    {forging ? '\u2026 IN CORSO' : '\uD83D\uDD25 FORGE'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </View>
-        </KeyboardAvoidingView>
-      </Modal>
     </LinearGradient>
   );
 }
@@ -1254,4 +1274,58 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.10)',
   },
   shop_navLockMiniTxt: { color: '#fff', fontSize: 8, fontWeight: '800' },
+  // INLINE_CONFIRM Track C \u2014 pannello di conferma inline (sostituisce il Modal RN)
+  inlineConfirmCard: {
+    marginTop: 6,
+    padding: 14, borderRadius: 12,
+    backgroundColor: 'rgba(20,8,35,0.95)',
+    borderWidth: 2, borderColor: 'rgba(153,68,255,0.6)',
+    gap: 8,
+  },
+  inlineConfirmTitle: {
+    color: '#FFB347', fontSize: 14, fontWeight: '900',
+    letterSpacing: 1, textAlign: 'center',
+  },
+  inlineConfirmSub: {
+    color: 'rgba(255,255,255,0.85)', fontSize: 11, lineHeight: 16,
+    textAlign: 'center',
+  },
+  inlineConfirmBreakdown: {
+    marginTop: 4, padding: 10, borderRadius: 8,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    borderWidth: 1, borderColor: 'rgba(153,68,255,0.25)',
+  },
+  inlineConfirmSection: { color: '#C877FF', fontSize: 11, fontWeight: '800', marginBottom: 4 },
+  inlineConfirmLine: { color: 'rgba(255,255,255,0.80)', fontSize: 11, lineHeight: 16 },
+  inlineConfirmRiskBox: {
+    marginTop: 4, padding: 10, borderRadius: 8,
+    backgroundColor: 'rgba(255,68,68,0.10)',
+    borderWidth: 1, borderColor: 'rgba(255,68,68,0.5)',
+  },
+  inlineConfirmRiskTitle: { color: '#FF7777', fontSize: 11, fontWeight: '900', marginBottom: 4 },
+  inlineConfirmRiskTxt: { color: 'rgba(255,210,210,0.85)', fontSize: 10, lineHeight: 14, marginBottom: 8 },
+  inlineConfirmInput: {
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderRadius: 6, borderWidth: 1, borderColor: 'rgba(255,68,68,0.5)',
+    color: '#fff', fontSize: 14, fontWeight: '800', letterSpacing: 1,
+    paddingHorizontal: 12, paddingVertical: 10, textAlign: 'center',
+  },
+  inlineConfirmActions: { flexDirection: 'row', gap: 10, marginTop: 6 },
+  inlineConfirmCancel: {
+    flex: 1, paddingVertical: 12, borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center',
+  },
+  inlineConfirmCancelTxt: { color: '#fff', fontSize: 12, fontWeight: '800', letterSpacing: 1 },
+  inlineConfirmConfirm: {
+    flex: 1, paddingVertical: 12, borderRadius: 8,
+    backgroundColor: 'rgba(153,68,255,0.25)',
+    borderWidth: 1, borderColor: '#9944FF',
+    alignItems: 'center',
+  },
+  inlineConfirmConfirmTxt: { color: '#fff', fontSize: 12, fontWeight: '900', letterSpacing: 0.5 },
+  inlineConfirmHint: {
+    color: 'rgba(255,255,255,0.45)', fontSize: 9, textAlign: 'center', fontStyle: 'italic', marginTop: 2,
+  },
 });

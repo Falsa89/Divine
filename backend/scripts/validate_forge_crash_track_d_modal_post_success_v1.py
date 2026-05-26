@@ -13,10 +13,17 @@ def main():
     # confirm button respects forging
     assert 'forging && { opacity: 0.5 }' in t, 'modal confirm dim while forging missing'
     assert "IN CORSO" in t, 'modal confirm label swap missing'
-    # disabled prop also respects forging
-    assert 'disabled={\n                    forging ||' in t, 'modal confirm disabled while forging missing'
-    # KeyboardAvoidingView still present (no regression)
-    assert 'KeyboardAvoidingView' in t
+    # INLINE_CONFIRM supersession: confirmForge ora chiude il pannello inline (non un Modal),
+    # ma il guardrail double-submit + label-swap-during-forging \u00e8 stato preservato sul
+    # bottone finale dell'inline panel.
+    # inline confirm button respects forging (uses same forging-disable + label-swap pattern)
+    assert 'inlineConfirmConfirm' in t, 'inline confirm button style missing'
+    # The disabled prop on the inline confirm uses the same multi-line ternary
+    assert 'disabled={\n                      forging ||' in t, 'inline confirm disabled while forging missing'
+    # KeyboardAvoidingView is REMOVED by INLINE_CONFIRM pack (Modal+KAV caused mobile crash).
+    # The inline panel does NOT need KAV because it lives inside the outer ScrollView.
+    head = t.split("from 'react-native';")[0]
+    assert 'KeyboardAvoidingView' not in head, 'KAV still imported (must be removed by INLINE_CONFIRM)'
     assert d['selected_heroes_preserved_on_failure'] is True
     assert d['never_crash_app'] is True
     assert d['backend_changes'] == 0

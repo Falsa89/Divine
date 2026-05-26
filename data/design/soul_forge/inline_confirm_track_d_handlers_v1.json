@@ -1,0 +1,54 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_INLINE_CONFIRM_RESTORE_NO_MODAL_CRASH",
+  "track": "D",
+  "verdict": "TRACK_D_CRASH_PROOF_EVENT_HANDLERS_READY",
+  "event_handlers_audited": [
+    {
+      "name": "requestForge",
+      "protections": [
+        "wrapped in try/catch with forgeError fallback",
+        "selected.size === 0 early return",
+        "forging double-submit guard",
+        "stale-selection check: if all selected heroes are gone from available, clears selection and shows forgeError",
+        "never sets state with undefined or invalid values"
+      ]
+    },
+    {
+      "name": "confirmForge",
+      "protections": [
+        "top-level forging guard",
+        "typed CONFERMA check on risky",
+        "snapshot heroIdsSnapshot before any state mutation",
+        "main try/catch around api call",
+        "normalizeForgeResponse never throws",
+        "only removes heroes after norm.ok===true",
+        "refreshUser wrapped in inner try/catch (soft warn)",
+        "secondary apiCall wallet/soul-forge swallow errors via allSettled + catch",
+        "finally clears forging and typedConfirm"
+      ]
+    },
+    {
+      "name": "toggle (hero select)",
+      "protections": [
+        "alerts on high-rarity without override (no immediate state mutation)",
+        "no number operations on undefined heroes"
+      ]
+    },
+    {
+      "name": "inline cancel onPress",
+      "protections": [
+        "empty try/catch around setState pair so accidental setter exception cannot crash UI"
+      ]
+    }
+  ],
+  "render_audits": {
+    "balance_header": "(Number.isFinite(balance) ? balance : 0).toLocaleString()",
+    "result_box": "(Number(result.gained) || 0).toLocaleString() and (Number(result.newBalance) || 0).toLocaleString()",
+    "inline_confirm_balance_estimate": "((Number.isFinite(balance) ? balance : 0) + (Number(previewEssence) || 0)).toLocaleString()",
+    "inline_confirm_preview": "(Number(previewEssence) || 0).toLocaleString()",
+    "selection_breakdown_lines": "selectionBreakdown[Number(starKey)] || 0",
+    "no_raw_object_rendered_in_Text": true
+  },
+  "backend_changes": 0,
+  "db_writes": 0
+}

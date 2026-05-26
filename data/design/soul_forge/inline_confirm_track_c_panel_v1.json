@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_INLINE_CONFIRM_RESTORE_NO_MODAL_CRASH",
+  "track": "C",
+  "verdict": "TRACK_C_INLINE_CONFIRMATION_PANEL_READY_SAFE",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "behavior": {
+    "trigger": "tap FORGE SOUL button (in main forgePanel)",
+    "effect": "requestForge() sets inlineConfirmOpen=true and the inline confirmation card renders INSIDE the outer ScrollView, just under the forge action area",
+    "no_modal_rendered": true,
+    "no_keyboard_avoiding_view_in_confirm_path": true,
+    "reachable_via_scroll": true,
+    "keyboard_safety": "outer ScrollView is keyboardShouldPersistTaps=handled and the inline TextInput sits inside this same ScrollView, so keyboard does not cover the actions if user scrolls"
+  },
+  "contents": [
+    "selected count",
+    "breakdown per star with high-rarity marker",
+    "essence gained preview",
+    "final balance estimate",
+    "risk box with operation-at-risk warning when applicable",
+    "typed CONFERMA TextInput when risky",
+    "cancel button (closes panel, preserves selection)",
+    "final confirm button (calls confirmForge)"
+  ],
+  "safety_rules_preserved": {
+    "no_one_tap_destruction": true,
+    "high_rarity_4plus_protection": true,
+    "typed_CONFERMA_required_for_risky": true,
+    "protected_flags_set_intact": true,
+    "team_heroes_excluded": true,
+    "double_submit_guard": true,
+    "defensive_number_renders": true
+  },
+  "backend_changes": 0,
+  "db_writes": 0
+}

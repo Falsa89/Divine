@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_INLINE_CONFIRM_RESTORE_NO_MODAL_CRASH",
+  "track": "F",
+  "verdict": "TRACK_F_SHOP_NAV_AND_BYPASS_REGRESSION_GUARD_READY",
+  "checks": [
+    {
+      "id": "soul_forge_shop_nav_buttons_present",
+      "expected": ["Apri Tesoreria", "Vai al Negozio", "Apri Negozio Oggetti"],
+      "actual_present": true
+    },
+    {
+      "id": "shop_locked_v2_flag",
+      "file": "frontend/app/shop.tsx",
+      "expected": "SHOP_LOCKED_V2 = true",
+      "actual_present": true
+    },
+    {
+      "id": "item_shop_locked_v2_flag",
+      "file": "frontend/app/item-shop.tsx",
+      "expected": "ITEM_SHOP_LOCKED_V2 = true",
+      "actual_present": true
+    },
+    {
+      "id": "economy_redirect_only",
+      "file": "frontend/app/economy.tsx",
+      "md5": "495fe455acb30ea16914e04afb2238eb",
+      "no_retire_or_buy_calls": true
+    },
+    {
+      "id": "exclusive_locked_notice_only",
+      "file": "frontend/app/exclusive.tsx",
+      "md5": "c691181a7ec0dd28ed308a8130914b3c",
+      "no_craft_calls": true
+    }
+  ],
+  "backend_changes": 0,
+  "db_writes": 0
+}

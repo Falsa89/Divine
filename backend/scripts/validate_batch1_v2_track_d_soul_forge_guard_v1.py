@@ -19,7 +19,7 @@ def main():
         'team_filter',
         'flag_filter_locked_favorite_native_event_unique',
         'high_rarity_default_protect_min_4\u2605',
-        'multi_step_confirm_modal',
+        'multi_step_inline_confirm_panel',
         'typed_confirmation_CONFERMA_for_risky_forge',
         'exact_loss_and_gain_preview_in_modal',
     }
@@ -28,8 +28,12 @@ def main():
     assert not missing, f'missing guard layers: {missing}'
     # File content checks
     text = F.read_text()
+    # INLINE_CONFIRM supersession: confirmOpen was replaced by inlineConfirmOpen
+    # (the multi-step confirm is now an inline panel inside the outer ScrollView,
+    # not a React Native Modal, to avoid the mobile RN Modal+KAV crash). The safety
+    # invariants are preserved by the inline panel.
     for tok in ['HIGH_RARITY_PROTECT_MIN', 'PROTECTED_FLAGS', 'isHeroProtectedByFlags',
-                'confirmOpen', 'typedConfirm', 'overrideHighRarity', 'requestForge',
+                'inlineConfirmOpen', 'typedConfirm', 'overrideHighRarity', 'requestForge',
                 'confirmForge', 'CONFERMA']:
         assert tok in text, f'missing token in soul-forge.tsx: {tok}'
     # /api/soul/forge call must still be present (mode preserved)

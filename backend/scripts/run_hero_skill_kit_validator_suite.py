@@ -1069,6 +1069,18 @@ OPTIONAL = [
     ('PROJECT-FORGE-CRASH-TRACK-F-ECONOMY-EXCLUSIVE-RECHECK', 'validate_forge_crash_track_f_economy_exclusive_recheck_v1.py'),
     ('PROJECT-FORGE-CRASH-TRACK-G-HYGIENE', 'validate_forge_crash_track_g_hygiene_v1.py'),
     ('PROJECT-FORGE-CRASH-TRACK-H-COMPLETION', 'validate_forge_crash_track_h_completion_v1.py'),
+    # PROJECT_SOUL_FORGE_INLINE_CONFIRM_RESTORE_NO_MODAL_CRASH_PACK (8 validators)
+    # P0 fix: removes React Native Modal+KeyboardAvoidingView from the confirm path
+    # (which caused immediate crash on first FORGE SOUL tap on mobile) and replaces
+    # it with an inline confirmation panel inside the existing outer ScrollView.
+    ('PROJECT-INLINE-CONFIRM-TRACK-A-TRUE-CAUSE', 'validate_inline_confirm_track_a_true_cause_v1.py'),
+    ('PROJECT-INLINE-CONFIRM-TRACK-B-MODAL-REMOVED', 'validate_inline_confirm_track_b_modal_removed_v1.py'),
+    ('PROJECT-INLINE-CONFIRM-TRACK-C-PANEL', 'validate_inline_confirm_track_c_panel_v1.py'),
+    ('PROJECT-INLINE-CONFIRM-TRACK-D-HANDLERS', 'validate_inline_confirm_track_d_handlers_v1.py'),
+    ('PROJECT-INLINE-CONFIRM-TRACK-E-API-CONTRACT', 'validate_inline_confirm_track_e_api_contract_v1.py'),
+    ('PROJECT-INLINE-CONFIRM-TRACK-F-SHOP-NAV-BYPASS', 'validate_inline_confirm_track_f_shop_nav_bypass_v1.py'),
+    ('PROJECT-INLINE-CONFIRM-TRACK-G-SMOKE', 'validate_inline_confirm_track_g_smoke_v1.py'),
+    ('PROJECT-INLINE-CONFIRM-TRACK-H-COMPLETION', 'validate_inline_confirm_track_h_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

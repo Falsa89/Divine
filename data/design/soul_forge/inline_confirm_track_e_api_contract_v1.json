@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_INLINE_CONFIRM_RESTORE_NO_MODAL_CRASH",
+  "track": "E",
+  "verdict": "TRACK_E_API_CONTRACT_KEPT_NO_FORMULA_CHANGE_READY",
+  "contract": {
+    "endpoint": "POST /api/soul/forge",
+    "body": {"hero_ids": "list[str]"},
+    "response": {"gained_essence": "int", "new_balance": "int"}
+  },
+  "normalize_helper_present": true,
+  "normalize_helper_name": "normalizeForgeResponse",
+  "normalize_helper_aliases": [
+    "gained_essence | gained | essence_gained | soul_essence_gained",
+    "new_balance | balance | soul_essence | new_soul_essence"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0,
+  "reward_formula_change": false,
+  "battle_engine_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+  "backend_env_md5": "ff60bbb79efa329b71aa8ed351ea89b3"
+}

@@ -1,0 +1,44 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_INLINE_CONFIRM_RESTORE_NO_MODAL_CRASH",
+  "track": "A",
+  "verdict": "TRACK_A_TRUE_MOBILE_CRASH_CAUSE_CORRECTED_READY",
+  "previous_pack": "PROJECT_SOUL_FORGE_FORGE_CRASH_API_CONTRACT_AND_SHOP_NAV_FIX",
+  "previous_root_cause_claim": "setBalance(r.new_balance) with undefined value causing balance.toLocaleString() crash at next render.",
+  "previous_root_cause_status": "INSUFFICIENT - mobile user confirmed crash still occurs on FIRST tap of FORGE SOUL.",
+  "timing_analysis": {
+    "first_FORGE_SOUL_tap_calls": "requestForge()",
+    "requestForge_only_sets": "setConfirmOpen(true) and clears local UI state",
+    "no_api_call_at_first_tap": true,
+    "conclusion": "Because the first tap NEVER touches /api/soul/forge nor mutates balance, the crash CANNOT be caused by setBalance(undefined). The previous diagnosis was wrong (or only a partial cause)."
+  },
+  "true_root_cause_corrected": {
+    "id": "RC_REACT_NATIVE_MODAL_RENDER_PATH_ON_MOBILE",
+    "description": "The confirmation flow was implemented using React Native Modal wrapping a KeyboardAvoidingView wrapping a ScrollView, all rendered when setConfirmOpen(true). On Android/iOS native Modal + KeyboardAvoidingView + inner ScrollView interactions are a well-known source of layout/render crashes (especially with FadeInUp animations, dynamic content, and inputs). When the user taps FORGE SOUL the entire Modal subtree mounts — ANY render-time issue in the modal children (animated entering, TextInput inside KeyboardAvoidingView under a transparent Modal, computed style arrays, etc.) crashes the JS thread BEFORE any backend call happens.",
+    "supporting_evidence": [
+      "Crash timing: tap FORGE SOUL -> crash. No /api/soul/forge call has happened yet.",
+      "Backend test via curl returns clean JSON {gained_essence,new_balance} — contract not implicated.",
+      "Previous defensive normalize/setBalance fix did NOT remove the crash, confirming the crash is upstream of any state update from server response.",
+      "Modal + KeyboardAvoidingView + nested ScrollView is a documented anti-pattern combination in React Native on Android, particularly when content includes Reanimated Animated.View entering animations and a TextInput."
+    ]
+  },
+  "fix_decision": "Remove the React Native Modal-based confirmation entirely. Replace with an inline confirmation panel rendered inside the existing outer ScrollView (no Modal, no KeyboardAvoidingView in the confirm path).",
+  "residual_value_of_previous_pack": [
+    "normalizeForgeResponse helper kept (defends against malformed responses)",
+    "snapshot heroIdsSnapshot kept (preserves heroes on failure)",
+    "double-submit guard kept",
+    "defensive Number.isFinite balance render kept",
+    "visible forgeError banner kept",
+    "postSuccessWarn banner kept",
+    "shop nav buttons kept",
+    "backend contract verified correct - no backend changes"
+  ],
+  "forbidden_kept_clean": [
+    "no_reward_formula_changes",
+    "no_backend_route_changes",
+    "no_db_writes_from_scripts",
+    "no_hero_deletion_from_scripts",
+    "no_battle_engine_changes",
+    "no_validator_weakening",
+    "no_fake_PASS"
+  ]
+}

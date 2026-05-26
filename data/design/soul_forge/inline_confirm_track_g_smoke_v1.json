@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_INLINE_CONFIRM_RESTORE_NO_MODAL_CRASH",
+  "track": "G",
+  "verdict": "TRACK_G_MINIMAL_BETA_SMOKE_HARNESS_READY_OR_DEFERRED",
+  "approach": "static_smoke_only",
+  "playwright_or_e2e_harness": "deferred (heavy install, not justified for this P0 frontend crash fix)",
+  "static_checks_implemented_in_validators": [
+    "no <Modal></Modal> element in soul-forge.tsx confirm path",
+    "no React Native Modal import in soul-forge.tsx",
+    "no KeyboardAvoidingView import in soul-forge.tsx",
+    "inlineConfirmCard style present",
+    "inlineConfirmOpen state present",
+    "requestForge sets inlineConfirmOpen=true (not setConfirmOpen)",
+    "confirmForge sets inlineConfirmOpen=false",
+    "economy redirect-only (no apiCall to /api/shops/buy or /api/soul-forge/retire)",
+    "exclusive locked notice (no apiCall to /api/exclusive/craft)",
+    "shop/item-shop locked flags intact"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0
+}
