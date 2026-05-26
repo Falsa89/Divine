@@ -4,8 +4,8 @@
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-05-25T23:44:49.949931Z",
-  "overall_status": "PASS",
+  "generated_at_utc": "2026-05-26T01:36:03.541208Z",
+  "overall_status": "FAIL",
   "gates": {
     "api_health_200": true,
     "heroes_100": true,
@@ -30,8 +30,8 @@
     "no_borea_hero_rows": true,
     "baseline_v6_diff_pass": true,
     "suite_pass": true,
-    "redis_cli_alive": true,
-    "redis_via_python_backend": true,
+    "redis_cli_alive": false,
+    "redis_via_python_backend": false,
     "backend_url_set": true,
     "rate_limit_backend_redis": true,
     "ui_preview_present": true,
@@ -40,7 +40,7 @@
     "locust_binary_present": true
   },
   "redis_availability": {
-    "redis_cli_alive": true,
+    "redis_cli_alive": false,
     "backend_url_set": true,
     "rate_limit_backend_live": true
   },

@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX",
+  "track": "C",
+  "verdict": "TRACK_C_SOUL_FORGE_HERO_GRID_AND_FILTERS_RESTORED",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "hero_card_fields_visible": [
+    "hero_name (numberOfLines=1)",
+    "stars (StarDisplay <=12 / TranscendenceStars >12)",
+    "level (Lv.X)",
+    "essence_preview (calcEssence per card)",
+    "selection_check_badge",
+    "protected_lock_badge_for_4plus_when_no_override",
+    "hero_image_or_initial_letter_placeholder"
+  ],
+  "filter_controls_added": {
+    "control_type": "horizontal_scrollable_chips",
+    "options": [
+      {"key": "all", "label": "Tutti"},
+      {"key": "safe", "label": "1-3\u2605 (safe)"},
+      {"key": "high", "label": "4\u2605+"},
+      {"key": "1", "label": "1\u2605"},
+      {"key": "2", "label": "2\u2605"},
+      {"key": "3", "label": "3\u2605"},
+      {"key": "4", "label": "4\u2605"},
+      {"key": "5", "label": "5\u2605"}
+    ],
+    "behavior": "filter is applied on top of available (already-protected-excluded) heroes; selectAll respects current filter intersection with safe-only constraint"
+  },
+  "grid_visible_count_indicator": "EROI DISPONIBILI (visible/available) when filter active, else (available)",
+  "selectAll_btn_label": "Tutti safe",
+  "deselectAll_btn_label": "Nessuno",
+  "override_4plus_flow_preserved": true,
+  "backend_changes": 0,
+  "db_writes": 0
+}

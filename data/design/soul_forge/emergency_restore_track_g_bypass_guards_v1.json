@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX",
+  "track": "G",
+  "verdict": "TRACK_G_ECONOMY_EXCLUSIVE_BYPASS_GUARDS_READY",
+  "checks": [
+    {
+      "file": "frontend/app/economy.tsx",
+      "md5": "495fe455acb30ea16914e04afb2238eb",
+      "strategy": "redirect_to_soul_forge",
+      "renders_only": ["redirect_notice", "loading_indicator"],
+      "renders_no": ["buy_buttons", "retire_buttons", "mutation_api_calls"]
+    },
+    {
+      "file": "frontend/app/exclusive.tsx",
+      "md5": "c691181a7ec0dd28ed308a8130914b3c",
+      "strategy": "legacy_lock_notice_with_redirect_options",
+      "renders_only": ["lock_notice", "divine_weapons_catalog_redirect", "soul_forge_redirect"],
+      "renders_no": ["craft_buttons", "mutation_api_calls"]
+    }
+  ],
+  "home_overflow_panel_safe": true,
+  "menu_links_safe": true,
+  "backend_changes": 0,
+  "db_writes": 0
+}

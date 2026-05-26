@@ -1,0 +1,81 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX",
+  "track": "A",
+  "verdict": "TRACK_A_SOUL_FORGE_BLANK_SCREEN_ROOT_CAUSE_IDENTIFIED",
+  "regression_introduced_by": "PROJECT_SOUL_FORGE_ECONOMY_MERGE_AND_EXCLUSIVE_RETIREMENT_PACK (Track B mobile reachability)",
+  "regression_pre_fix_md5_soul_forge_tsx": "d2300bbe5171f62ac8f9fd54e8711d50",
+  "symptom": "Mobile QA reports /soul-forge opens but shows no hero cards, no panels, no usable UI (only the header bar is visible).",
+  "root_cause_primary": {
+    "id": "RC1_BROKEN_FLEX_DISTRIBUTION_IN_BODY_COLUMN_STACK",
+    "description": "The previous SF_MERGE Track B pack converted the body layout from horizontal split to a vertical column stack ('body: { flex: 1, flexDirection: column, padding: 6, gap: 6 }') but FORGOT to assign flex/height to the two child panels. gridPanel only declares 'gap: 4' and forgePanel only declares 'width: 100%'. Neither has flex nor an explicit height. Result:",
+    "consequence_grid_panel": [
+      "gridPanel collapses to intrinsic min height (~14px just for the gridHeader)",
+      "Inside it, gridScroll declares 'flex: 1' BUT its parent has no bounded height, so the ScrollView renders at height 0",
+      "Therefore the hero cards never appear on screen even though heroes array is populated"
+    ],
+    "consequence_forge_panel": [
+      "forgePanel has no flex assignment, so it sizes to its content only",
+      "Its child forgePanelInner declares 'flex: 1' but the parent provides no bounded height, so the LinearGradient collapses",
+      "The inner ScrollView (added by SF_MERGE Track B for reachability) has paddingBottom 40 but with collapsed parent it shows almost nothing"
+    ]
+  },
+  "root_cause_secondary": {
+    "id": "RC2_RAW_ESCAPE_LITERALS_IN_JSX_TEXT_CONTENT",
+    "file": "frontend/app/soul-forge.tsx",
+    "line": 458,
+    "description": "Inside the breakdown <Text> of the confirm modal, the bullet and star characters are written as escape sequences (\\u2022, \\u2605) directly in JSX text content. Since JSX text between > and < is taken literally, these render as the raw 6-character strings '\\u2022' and '\\u2605' rather than the bullet/star glyphs.",
+    "severity": "cosmetic (does NOT cause the blank screen but compounds the broken UX inside the confirm modal)"
+  },
+  "supporting_evidence": [
+    "File pre-fix has only ONE outer container hierarchy: LinearGradient > header View + body View(flex column)",
+    "There is NO outer ScrollView wrapping the body, so the page is intrinsically non-scrollable on mobile portrait",
+    "Inside body, BOTH children depend on flex sizing they never receive",
+    "Children that internally use flex:1 (gridScroll, forgePanelInner) require a bounded parent height to render correctly in React Native; otherwise they collapse to 0"
+  ],
+  "fix_strategy": {
+    "track_B_restore_visible_screen": [
+      "Replace the broken vertical column body with a top-level ScrollView wrapping the entire content below the header",
+      "Remove the inner gridScroll ScrollView (avoids nested ScrollView height issues); render hero grid as a wrapping View",
+      "Remove flex:1 from forgePanelInner (let it size to content; outer ScrollView handles scrolling)",
+      "Add explicit loading/error/empty states so the screen is NEVER blank even if API calls fail or return empty arrays",
+      "Add bottom safe-area inset padding for final FORGE button reachability on 390x844 and 360x800 viewports"
+    ],
+    "track_C_filters_and_grid": [
+      "Add quick rarity filter controls: Tutti / Solo 1-3 stelle (safe) / Solo 4+ stelle / per-star chips",
+      "Keep existing protection: 4+ heroes still require explicit override toggle before they become selectable"
+    ],
+    "track_D_modal_mobile_fix": [
+      "Wrap confirm modal content in a vertical ScrollView so it scrolls when keyboard opens",
+      "Add KeyboardAvoidingView around the modal card on iOS/Android",
+      "Fix the raw escape literals on line 458 by using JSX expression containers"
+    ],
+    "track_E_F_economy_import": [
+      "Fetch /api/wallet, /api/soul-forge and /api/shops as READ-ONLY display sources",
+      "Show materials panel with prana, soul_seals, star_dust, soul_essence, plus quick view of global currencies",
+      "Show legacy soul forge shop preview in read-only mode (no live purchase actions)",
+      "All these reads are SAFE: GET endpoints, no mutation, no reward formula change"
+    ]
+  },
+  "forbidden_kept_clean": [
+    "no_backend_route_changes",
+    "no_db_writes_from_scripts",
+    "no_hero_deletion_from_scripts",
+    "no_reward_formula_changes",
+    "no_gacha_changes",
+    "no_shop_price_changes",
+    "no_IAP_implementation",
+    "no_battle_engine_changes",
+    "no_character_bible_changes",
+    "no_validator_weakening"
+  ],
+  "files_to_change_in_this_pack": [
+    "frontend/app/soul-forge.tsx"
+  ],
+  "files_to_keep_unchanged": [
+    "frontend/app/economy.tsx (already locked redirect)",
+    "frontend/app/exclusive.tsx (already locked legacy notice)",
+    "backend/routes/soul_forge.py",
+    "backend/battle_engine.py",
+    "backend/.env"
+  ]
+}

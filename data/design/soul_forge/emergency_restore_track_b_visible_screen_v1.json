@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX",
+  "track": "B",
+  "verdict": "TRACK_B_SOUL_FORGE_VISIBLE_SCREEN_RESTORED_SAFE",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "soul_forge_tsx_md5_pre": "d2300bbe5171f62ac8f9fd54e8711d50",
+  "soul_forge_tsx_md5_post": "ba8f802d10cc774e65e8c552a1482099",
+  "layout_changes": [
+    "replaced_inner_gridScroll_ScrollView_with_single_outer_ScrollView_wrapping_entire_body",
+    "removed_flex_1_on_forgePanelInner_so_it_sizes_to_content",
+    "removed_broken_flex_column_body_View_in_favor_of_outer_ScrollView",
+    "outer_ScrollView_uses_safe_area_insets_bottom_padding_for_FORGE_button_reachability"
+  ],
+  "fail_safe_states_added": [
+    "loading_state_with_ActivityIndicator_and_label_Caricamento_Soul_Forge",
+    "error_state_with_retry_button_when_primary_apis_fail",
+    "empty_state_when_available_heroes_array_is_empty",
+    "empty_state_when_current_filter_returns_zero_heroes",
+    "secondary_api_reads_are_best_effort_via_Promise_allSettled_so_screen_never_blocks_on_them"
+  ],
+  "backend_changes": 0,
+  "db_writes": 0,
+  "behavior_rules_preserved": {
+    "4plus_protected_by_default": true,
+    "protected_flags_locked_favorite_native_event_unique_excluded": true,
+    "team_heroes_excluded": true,
+    "override_toggle_present": true,
+    "typed_CONFERMA_required_for_risky_forge": true,
+    "forge_mutation_endpoint_unchanged": "/api/soul/forge",
+    "reward_formula_unchanged": true
+  },
+  "visual_proof": "manual_screenshot_390x844_login_sfqa_test_account_shows_header_balance_filters_hero_cards_forge_button_anime_hub_panels_treasury_link_legacy_shop_preview_rules_panel_all_visible_and_scrollable"
+}

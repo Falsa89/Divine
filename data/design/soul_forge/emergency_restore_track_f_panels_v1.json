@@ -1,0 +1,58 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX",
+  "track": "F",
+  "verdict": "TRACK_F_SOUL_FORGE_MATERIALS_SHOP_TREASURY_PANELS_READY",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "panels_visible_in_anime_hub": [
+    {
+      "id": "smaltimento_eroi",
+      "location": "forgePanel (top of one-page-scroll under hero grid)",
+      "contents": ["essence_preview", "value_table", "warning_box", "protection_info", "override_toggle", "FORGE_SOUL_button", "result_box"]
+    },
+    {
+      "id": "materiali_anime",
+      "contents": [
+        {"icon": "\ud83d\udc80", "label": "Soul Essence", "source": "user.profile.soul_essence"},
+        {"icon": "\ud83c\udf00", "label": "Prana", "source": "GET /api/soul-forge.prana || GET /api/wallet.currencies.prana.amount"},
+        {"icon": "\ud83d\udd2e", "label": "Sigilli Anima", "source": "GET /api/soul-forge.soul_seals || GET /api/wallet.currencies.soul_seals.amount"},
+        {"icon": "\u2728", "label": "Polvere Stellare", "source": "GET /api/soul-forge.star_dust || GET /api/wallet.currencies.star_dust.amount"}
+      ],
+      "mutation": "none (read-only)",
+      "hint_text_includes_legacy_read_only_note": true
+    },
+    {
+      "id": "valute_globali_tesoreria",
+      "contents": ["gold", "gems", "honor"],
+      "source": "GET /api/wallet",
+      "cta_button_to_treasury": true,
+      "cta_target": "/treasury"
+    },
+    {
+      "id": "negozio_anime_preview",
+      "source": "GET /api/shops -> shops.soul_forge.items (first 6)",
+      "buy_buttons_rendered": false,
+      "status_badge": "READ-ONLY",
+      "fields_shown_per_item": ["icon", "name", "description", "cost_map", "remaining_stock_or_stock"]
+    },
+    {
+      "id": "negozio_polvere_stellare_preview",
+      "source": "GET /api/shops -> shops.star_dust.items (first 4)",
+      "buy_buttons_rendered": false,
+      "status_badge": "READ-ONLY"
+    },
+    {
+      "id": "regole_protezioni",
+      "rules": [
+        "Eroi in team sempre protetti",
+        "Eroi bloccati/preferiti/nativi/evento/unique protetti",
+        "Eroi 4\u2605+ richiedono override esplicito",
+        "Forge >=10 o 4\u2605+: digitazione CONFERMA obbligatoria",
+        "Distruzione PERMANENTE: nessun ripristino"
+      ]
+    }
+  ],
+  "unmapped_materials": [],
+  "explicit_blockers": [],
+  "backend_changes": 0,
+  "db_writes": 0
+}

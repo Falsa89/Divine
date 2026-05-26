@@ -1,7 +1,7 @@
 {
   "result_id": "af2n_v23_redis_switch_result_v1",
   "task_origin": "V23-REDIS-SWITCH-VALIDATION",
-  "generated_at_utc": "2026-05-25T23:44:50.715785Z",
+  "generated_at_utc": "2026-05-26T01:36:04.260004Z",
   "canary_status_backend_advertised": "redis",
   "canary_status_url_set": true,
   "burst_results": [
@@ -38,30 +38,30 @@
     {
       "i": 6,
       "code": 429,
-      "snapshot_backend": "redis"
+      "snapshot_backend": "memory_fallback"
     },
     {
       "i": 7,
       "code": 429,
-      "snapshot_backend": "redis"
+      "snapshot_backend": "memory_fallback"
     },
     {
       "i": 8,
       "code": 429,
-      "snapshot_backend": "redis"
+      "snapshot_backend": "memory_fallback"
     },
     {
       "i": 9,
       "code": 429,
-      "snapshot_backend": "redis"
+      "snapshot_backend": "memory_fallback"
     }
   ],
   "saw_429_at_least_once": true,
   "snapshot_backends_observed": [
-    "redis"
+    "memory_fallback"
   ],
-  "redis_keys_count": 37,
-  "redis_keys_present_after_burst": true,
-  "overall_status": "PASS",
-  "mode": "redis_live_switch_applied_safely"
+  "redis_keys_count": -1,
+  "redis_keys_present_after_burst": false,
+  "overall_status": "FAIL",
+  "reason": "inconsistent: advertised=redis observed={'memory_fallback'} keys=-1"
 }

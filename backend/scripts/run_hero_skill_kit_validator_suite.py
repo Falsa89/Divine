@@ -1046,6 +1046,17 @@ OPTIONAL = [
     ('PROJECT-SF-MERGE-TRACK-F-NAVIGATION', 'validate_sf_merge_track_f_navigation_v1.py'),
     ('PROJECT-SF-MERGE-TRACK-G-REGRESSION-QA', 'validate_sf_merge_track_g_regression_qa_v1.py'),
     ('PROJECT-SF-MERGE-TRACK-H-COMPLETION', 'validate_sf_merge_track_h_completion_v1.py'),
+    # PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX_PACK (8 validators)
+    # Fixes P0 blank screen regression introduced by SF_MERGE Track B and properly
+    # imports legacy economy materials/shop into Soul Forge as read-only display.
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-A-ROOT-CAUSE', 'validate_emergency_restore_track_a_root_cause_v1.py'),
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-B-VISIBLE-SCREEN', 'validate_emergency_restore_track_b_visible_screen_v1.py'),
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-C-HERO-GRID-FILTERS', 'validate_emergency_restore_track_c_hero_grid_filters_v1.py'),
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-D-MOBILE-MODAL', 'validate_emergency_restore_track_d_mobile_modal_v1.py'),
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-E-ECONOMY-MAPPING', 'validate_emergency_restore_track_e_economy_mapping_v1.py'),
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-F-PANELS', 'validate_emergency_restore_track_f_panels_v1.py'),
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-G-BYPASS-GUARDS', 'validate_emergency_restore_track_g_bypass_guards_v1.py'),
+    ('PROJECT-EMERGENCY-RESTORE-TRACK-H-COMPLETION', 'validate_emergency_restore_track_h_completion_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

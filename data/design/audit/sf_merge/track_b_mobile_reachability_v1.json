@@ -3,13 +3,19 @@
   "track": "B",
   "verdict": "TRACK_B_SOUL_FORGE_MOBILE_LAYOUT_REACHABILITY_FIXED_SAFE",
   "file_changed": "frontend/app/soul-forge.tsx",
-  "soul_forge_tsx_md5_post": "d2300bbe5171f62ac8f9fd54e8711d50",
+  "soul_forge_tsx_md5_post": "ba8f802d10cc774e65e8c552a1482099",
   "changes": [
-    "body_layout_changed_to_column_stack_for_mobile",
-    "forgePanel_width_100_percent",
-    "forgePanelInner_wrapped_in_ScrollView_with_paddingBottom_40",
-    "forge_button_now_reachable_on_390x844_viewport"
+    "body_replaced_with_single_outer_ScrollView_bodyScroll",
+    "forgePanel_width_100_percent_no_flex_so_outer_scroll_drives_layout",
+    "forgePanelInner_renders_at_intrinsic_height_inside_outer_ScrollView",
+    "forge_button_now_reachable_on_390x844_viewport_via_outer_scroll",
+    "modal_wrapped_in_KeyboardAvoidingView_and_inner_ScrollView_for_keyboard_safety",
+    "safe_area_insets_top_and_bottom_applied"
   ],
+  "supersedes_previous_buggy_pattern": {
+    "removed_pattern_forgeScrollContent": "the previous SF_MERGE Track B introduced an inner forgePanel ScrollView with flex:1 inside a parent without bounded height, which collapsed to 0. Replaced with single outer ScrollView pattern.",
+    "removed_pattern_body_column_flex_without_child_flex": "body was 'flex:1, flexDirection:column' with children having no flex; children collapsed. Replaced with outer ScrollView body."
+  },
   "backend_changes": 0,
   "db_writes": 0,
   "behavior_rules_preserved": {

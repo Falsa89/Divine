@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_SOUL_FORGE_EMERGENCY_RESTORE_AND_FULL_MERGE_FIX",
+  "track": "D",
+  "verdict": "TRACK_D_SOUL_FORGE_MOBILE_LAYOUT_AND_CONFIRM_MODAL_FIXED",
+  "file_changed": "frontend/app/soul-forge.tsx",
+  "mobile_layout_fixes": [
+    "single_outer_ScrollView_wraps_entire_body_with_keyboardShouldPersistTaps_handled",
+    "bottom_safe_area_padding_via_useSafeAreaInsets_max_with_24",
+    "top_safe_area_padding_in_header",
+    "forge_button_FORGE_SOUL_reachable_at_390x844_and_360x800_after_scrolling_grid"
+  ],
+  "confirm_modal_fixes": [
+    "KeyboardAvoidingView_wrapping_modal_backdrop",
+    "modal_card_maxHeight_90_percent",
+    "inner_ScrollView_with_keyboardShouldPersistTaps_handled_so_CONFERMA_input_reachable_with_open_keyboard",
+    "fixed_raw_unicode_literals_bullet_and_star_on_breakdown_lines_now_use_JSX_expression_containers"
+  ],
+  "one_tap_destruction_blocked": true,
+  "safety_features_preserved": {
+    "breakdown_per_star_in_modal": true,
+    "risk_box_when_high_rarity_or_bulk": true,
+    "typed_CONFERMA_input_for_risky": true,
+    "forge_disabled_until_CONFERMA_typed_for_risky": true
+  },
+  "backend_changes": 0,
+  "db_writes": 0
+}
