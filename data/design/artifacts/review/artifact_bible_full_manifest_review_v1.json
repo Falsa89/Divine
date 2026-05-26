@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+  "track": "A",
+  "verdict": "TRACK_A_ARTIFACT_BIBLE_FULL_MANIFEST_REVIEW_READY",
+  "source_pack": "PROJECT_ARTIFACT_BIBLE_CANONICAL_DESIGN_COMPLETE_PUBLIC_REPO_VERIFIED",
+  "public_branch_expected": "main",
+  "manifest": [
+    {"path": "data/design/artifacts/artifact_existing_surface_audit_v1.json",            "bytes": 4543,  "md5": "f6d17e97c269fc3e6c5f39ee7f9c331d", "role": "audit superfici artifact/constellation esistenti (frontend, backend, lock/redirect/hidden state)", "non_empty": true, "structure_keys_present": ["frontend_surfaces", "backend_surfaces", "non_canonical_placeholder_names", "recommendations"]},
+    {"path": "data/design/artifacts/artifact_canonical_taxonomy_v1.json",                "bytes": 5797,  "md5": "bb8835a0ecd2d5d0bd011145bf614e5d", "role": "10 categorie canoniche con can_do / must_not_do / rarity_applicability / unlock_source", "non_empty": true, "structure_keys_present": ["categories", "global_forbidden"]},
+    {"path": "data/design/artifacts/artifact_bible_launch_draft_v1.json",                "bytes": 23748, "md5": "8b224f869ff14dbacb8a765c4317e50f", "role": "Bible v1 launch draft, 32 entries", "non_empty": true, "structure_keys_present": ["artifacts", "summary_by_category", "summary_by_release_status"]},
+    {"path": "data/design/artifacts/artifact_constellation_relic_boundary_v1.json",     "bytes": 3859,  "md5": "2fbd1cdaafb0f864917b67bbbe071a4e", "role": "boundary 5 sistemi (Artifacts, Constellations, Divine Weapons, Equipment, Runes)", "non_empty": true, "structure_keys_present": ["systems", "forbidden_cross_writes", "ui_separation"]},
+    {"path": "data/design/artifacts/artifact_preview_ui_copy_lock_policy_v1.json",       "bytes": 2928,  "md5": "507d9a2b29def7537d28dcf646ed22b4", "role": "preview UI copy + lock policy per /artifacts e /artifacts-preview", "non_empty": true, "structure_keys_present": ["routes", "copy_it", "placeholder_names_policy"]},
+    {"path": "data/design/artifacts/artifact_migration_import_plan_v1.json",             "bytes": 4558,  "md5": "d77cd742533fe60f0120efea4c2c52d5", "role": "migration plan a 10 stage gated", "non_empty": true, "structure_keys_present": ["stages", "current_stage", "db_writes_in_current_pack"]},
+    {"path": "data/design/artifacts/artifact_static_guard_beta_harness_v1.json",        "bytes": 2715,  "md5": "5c9137bc0b8b1786ef78d47951550c9f", "role": "6 static guards anti-attivazione", "non_empty": true, "structure_keys_present": ["guards", "playwright_smoke_status", "suite_extension"]},
+    {"path": "data/design/artifacts/artifact_bible_canonical_design_completion_v1.json", "bytes": 4392,  "md5": "aff34b27f88f91399a292a07c96d4996", "role": "completion del pack canonical design (verdict + summary + invariants)", "non_empty": true, "structure_keys_present": ["global_verdict_local_container", "runtime_changes_made", "artifact_bible_summary"]},
+    {"path": "docs/divine/167_ARTIFACT_BIBLE_CANONICAL_DESIGN.md",                       "bytes": 3811,  "md5": "dc70d5f078ea854ee064f6027e68f281", "role": "documento narrativo che riassume il pack canonical design", "non_empty": true},
+    {"path": "backend/scripts/validate_project_artifact_bible_canonical_design_v1.py",  "bytes": 7608,  "md5": "9705c3d1aad130e45537161fe4291b72", "role": "master validator del pack canonical design", "non_empty": true}
+  ],
+  "all_files_present": true,
+  "all_files_non_empty": true,
+  "partial_doc_or_empty_section_detected": false,
+  "public_main_visibility_check": "Tutti i 10 file confermati committati nel commit container 'a153361c' atomico. Verifica utente: 7 JSON visibili su GitHub main; doc 167 e validator script in stato 'percepiti come mancanti' ma in realt\u00e0 nello stesso commit (probabile cache web). Da promuovere a COMPLETE_PUBLIC_REPO_VERIFIED dopo conferma utente hard-refresh.",
+  "summary_role_by_file": {
+    "audit": "superficie esistente artifact/constellation",
+    "taxonomy": "categorie canoniche",
+    "bible_draft": "32 entries canoniche",
+    "boundary": "5 sistemi ortogonali",
+    "preview_lock_policy": "lock UI policy /artifacts-preview",
+    "migration_plan": "10 stage staged",
+    "static_guards": "6 guard anti-attivazione",
+    "completion": "verdict + invariants pack precedente",
+    "doc_167": "summary narrativo",
+    "validator": "master validator design-only"
+  }
+}

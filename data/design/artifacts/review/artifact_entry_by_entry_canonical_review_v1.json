@@ -1,0 +1,71 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+  "track": "B",
+  "verdict": "TRACK_B_ARTIFACT_ENTRY_BY_ENTRY_CANONICAL_REVIEW_READY",
+  "entries_total": 32,
+  "reviewed_entries": 32,
+  "approved_entries": [
+    "relic_aurora_eterna", "relic_calice_vespro", "relic_sigillo_lunare", "relic_lacrima_oceano",
+    "relic_emblema_olimpo", "relic_frammento_caos", "relic_prima_parola", "relic_abisso_oblio",
+    "relic_pagina_libro_perduto", "relic_eco_canto", "relic_scheggia_scudo_consiglio",
+    "relic_seme_albero_mondo", "relic_pluma_fenix", "relic_scaglia_drago_antico",
+    "relic_petalo_hanami", "relic_frammento_yule", "relic_clessidra_eone",
+    "relic_corona_spine_eterne", "relic_mandala_otto_porte", "relic_runa_radice",
+    "relic_runa_cielo", "relic_sigillo_giuramento", "relic_lampada_pellegrino",
+    "relic_ago_destini", "relic_ciotola_offerta", "relic_chiave_soglia"
+  ],
+  "future_reserved_entries": [
+    {"id": "relic_occhio_solare",                  "reason": "Egyptian-inspired; Ra non in roster current_launch."},
+    {"id": "relic_emblema_asgard",                  "reason": "Norse roster (Thor/Odin/Loki) non confermato; emblema collettivo evita promesse specifiche."},
+    {"id": "relic_emblema_yamato",                  "reason": "Japanese pantheon (Amaterasu/Susanoo) non in roster current_launch."},
+    {"id": "relic_frammento_martello_tonante",     "reason": "Norse mythic weapon symbolism; Thor non in roster."},
+    {"id": "relic_specchio_riflesso_perduto",      "reason": "Japan-inspired symbolic; Amaterasu non in roster."},
+    {"id": "relic_pomo_giovinezza",                "reason": "Norse-inspired symbolic; Idunn non in roster."}
+  ],
+  "launch_candidate_entries_count": 24,
+  "preview_only_entries_count": 8,
+  "needs_revision_entries": [],
+  "rename_recommendations": [
+    {
+      "id": "relic_scheggia_scudo_consiglio",
+      "current_name_it": "Scheggia dello Scudo del Consiglio",
+      "recommendation": "keep_as_is",
+      "rationale": "associated_character_status=current_launch e nome esplicitamente collettivo evita di promettere un \"aegis di Zeus\" singolare; sicuro."
+    },
+    {
+      "id": "relic_emblema_olimpo",
+      "current_name_it": "Emblema dell'Olimpo",
+      "recommendation": "keep_as_is",
+      "rationale": "associated_character_status=current_launch e nome del consiglio olimpico (non di singolo dio)."
+    },
+    {
+      "id": "relic_corona_spine_eterne",
+      "current_name_it": "Corona delle Spine Eterne",
+      "recommendation": "keep_as_is_with_lore_review",
+      "rationale": "Voce 'forbidden_relic'; lore generica di sacrificio; verifica che la copy short non evochi simbolismo religioso reale al lancio."
+    }
+  ],
+  "per_entry_checks": {
+    "id_naming_consistency": "PASS (prefix relic_ omogeneo, snake_case Italian-rooted)",
+    "italian_display_name_quality": "PASS (32/32 readable, no typos osservati)",
+    "category_valid": "PASS (tutte le category in taxonomy v1)",
+    "faction_or_origin_valid": "PASS",
+    "associated_hero_id_coherent": "PASS (null per 32/32; nessun hero_id finto)",
+    "associated_character_status_coherent": "PASS (24 none + 2 current_launch + 6 future_reserved)",
+    "rarity_band_coherent": "PASS (rare/epic/legendary/mythic/divine usate coerentemente con category)",
+    "release_status_coherent": "PASS (24 launch_candidate + 8 preview_only)",
+    "gameplay_status_safe": "PASS (24 cosmetic_prestige_only + 8 inactive; zero capped_bonus_future al review pass)",
+    "lore_copy_not_contradictory": "PASS",
+    "visual_identity_usable": "PASS (32/32 hanno descrittore card-art-ready)",
+    "forbidden_interpretations_present": "PASS (32/32 hanno almeno un disclaimer)",
+    "source_hint_safe": "PASS (tutti riferiscono future_* event/quest, nessuna fonte attuale)",
+    "ui_copy_short_usable": "PASS (32/32 sotto 80 char)"
+  },
+  "risk_notes": [
+    "relic_corona_spine_eterne: lore review minore raccomandata per evitare letture religiose reali; voce \u00e8 forbidden_relic, copy resta simbolica\"sacrificio/redenzione\".",
+    "relic_clessidra_eone: nessuna funzione runtime; assicurare che nessun cap-bonus futuro deroghi al battle_engine.",
+    "relic_seme_albero_mondo: lore evita esplicitamente la dicitura 'Yggdrasil' come dichiarazione norreno-esclusiva; lasciare cos\u00ec.",
+    "relic_runa_radice / relic_runa_cielo: NON sono sistema Runes (equip socket); naming gestito a UI separating."
+  ],
+  "signoff_decision": "APPROVED_FOR_PREVIEW_POPULATION_GATE"
+}

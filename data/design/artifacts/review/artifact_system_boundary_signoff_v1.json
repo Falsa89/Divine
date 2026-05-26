@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+  "track": "D",
+  "verdict": "TRACK_D_SYSTEM_BOUNDARY_SIGNOFF_READY",
+  "boundary_signoff_table": [
+    {"system": "Artifacts",     "scope": "account-wide collectible prestige", "per_hero": false, "combat": "none at launch (capped future, signoff stage 8)", "acquisition": "future event/milestone (no IAP)",  "db_collection_future": "db.user_artifacts (account)",        "signoff": "SIGNED"},
+    {"system": "Constellations","scope": "per-hero star-up/dupe/reincarnation", "per_hero": true,  "combat": "hero growth (future activation)",                "acquisition": "future hero dupe/shard",            "db_collection_future": "db.user_constellations (per-hero)", "signoff": "SIGNED"},
+    {"system": "Divine Weapons","scope": "hero-specific signature",          "per_hero": true,  "combat": "power expression on owner",                       "acquisition": "future hero milestone",             "db_collection_future": "db.user_divine_weapons (per-hero)",  "signoff": "SIGNED"},
+    {"system": "Equipment",     "scope": "generic gear stats",                "per_hero": true,  "combat": "base stat layer (existing)",                      "acquisition": "drops/shop signoff/craft",          "db_collection_future": "db.user_equipment (per-hero, existing)", "signoff": "SIGNED"},
+    {"system": "Runes",         "scope": "socket modifier per equipment",     "per_hero": false, "combat": "modifier per equipment",                          "acquisition": "drops/craft",                       "db_collection_future": "db.user_runes (per equipment, future)", "signoff": "SIGNED"}
+  ],
+  "five_systems_orthogonal": true,
+  "ambiguous_entries_from_32_bible": [
+    {"entry_id": "relic_runa_radice", "ambiguity": "prefisso 'Runa' nel nome italiano potrebbe sovrapporsi al sistema Runes (socket).", "resolution": "category resta divine_relic con campo 'forbidden_interpretations' che dichiara esplicitamente 'non sostituisce sistema Runes di equip'. UI separation lascia il sistema Runes in /equipment forge (future). NESSUN RENAME RICHIESTO al momento."},
+    {"entry_id": "relic_runa_cielo", "ambiguity": "come sopra", "resolution": "forbidden_interpretations gi\u00e0 dichiara la non sovrapposizione; rename non richiesto."},
+    {"entry_id": "relic_frammento_martello_tonante", "ambiguity": "potrebbe essere confuso con un Divine Weapon di Thor.", "resolution": "category mythic_weapon_relic + associated_character_status=future_reserved + forbidden_interpretations 'non sostituisce un Divine Weapon'. SIGNED."},
+    {"entry_id": "relic_scheggia_scudo_consiglio", "ambiguity": "potrebbe essere confuso con scudo divino assegnato a Zeus o Achille.", "resolution": "category mythic_weapon_relic + faction_or_origin='olympus_council_symbolic' (collettivo) + forbidden_interpretations esplicita. SIGNED."},
+    {"entry_id": "relic_pomo_giovinezza", "ambiguity": "frutto mitologico potrebbe essere assimilato a consumabile/equip.", "resolution": "category mythic_weapon_relic + gameplay_status='inactive' + forbidden_interpretations 'non heal/buff runtime'. SIGNED."}
+  ],
+  "any_artifact_functioning_as": {
+    "equipment_gear": false,
+    "hero_exclusive_weapon": false,
+    "rune_socket": false,
+    "constellation_dupe_material": false,
+    "live_combat_buff": false
+  },
+  "migration_rules": {
+    "old_exclusive_page": "resta locked_notice; nessuna riassegnazione automatica a Artifact. Eventuale recupero dei contenuti in PROJECT_DIVINE_WEAPONS_DESIGN_PACK (future).",
+    "economy_overlap": "nessun materiale shop verr\u00e0 promosso a artifact; reward fonti gi\u00e0 elencate nel migration plan stage 9.",
+    "legacy_backend_artifact_route": "manca rimozione fisica fino a PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK (stage 4); endpoint resta non chiamato da UI player."
+  },
+  "signoff_final": "BOUNDARY_5_SYSTEMS_SIGNED_NO_AMBIGUOUS_LIVE_OVERLAP"
+}

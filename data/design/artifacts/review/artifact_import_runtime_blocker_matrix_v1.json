@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+  "track": "F",
+  "verdict": "TRACK_F_IMPORT_AND_RUNTIME_BLOCKER_MATRIX_READY",
+  "blockers": [
+    {"id": "CATALOG_ENDPOINT_DESIGN",     "description": "Specifica completa endpoint read-only /api/artifacts/catalog",                       "severity": "high",   "owner_pack": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK (stage 4)",     "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "INVENTORY_SCHEMA",            "description": "Schema MongoDB di db.user_artifacts (account-bound), index, vincoli",            "severity": "high",   "owner_pack": "PROJECT_ARTIFACT_INVENTORY_SCHEMA_DRYRUN_PACK (stage 5)", "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "OWNERSHIP_MODEL",             "description": "Definire ownership: account-bound vs server-bound; binding cross-server",        "severity": "high",   "owner_pack": "PROJECT_ARTIFACT_OWNERSHIP_MODEL_PACK",                  "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "SERVER_ACCOUNT_BINDING",      "description": "Integrazione con server_profiles e SLC future",                                  "severity": "high",   "owner_pack": "PROJECT_SLC_ARTIFACT_BINDING_PACK",                       "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "BONUS_CAP_RESOLVER",          "description": "Cap massimo bonus aggregato + cooldown PvP",                                   "severity": "high",   "owner_pack": "PROJECT_ARTIFACT_BONUS_RESOLVER_CAP_PACK (stage 8)",      "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "ECONOMY_SOURCE",              "description": "Definire fonti reward (event/milestone/quest); no shop/IAP",                   "severity": "medium", "owner_pack": "PROJECT_ARTIFACT_LIVE_UNLOCK_SOURCES_PACK (stage 9)",     "db_writes": true,  "can_proceed_before_resolved": false},
+    {"id": "ACQUISITION_POLICY",          "description": "Policy: niente artifact in banner hero; banner dedicato? bundle quest?",       "severity": "high",   "owner_pack": "PROJECT_ARTIFACT_BANNER_ACQUISITION_SIGNOFF_PACK (10)",   "db_writes": true,  "can_proceed_before_resolved": false},
+    {"id": "GACHA_OR_NO_GACHA_DECISION",  "description": "Decisione esplicita: artefatti NON tramite gacha hero. Banner dedicato gated.",   "severity": "high",   "owner_pack": "stesso pack di ACQUISITION_POLICY",                       "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "PITY_OR_NO_PITY_DECISION",    "description": "Decisione esplicita: nessuna pity sugli artefatti al lancio",                  "severity": "medium", "owner_pack": "stesso pack di ACQUISITION_POLICY",                       "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "MONETIZATION_CONSTRAINTS",    "description": "Artefatti NON acquistabili via IAP al lancio",                                  "severity": "high",   "owner_pack": "PROJECT_IAP_DESIGN_PACK (intersezione)",                  "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "PVP_FAIRNESS",                "description": "Cap bonus deve garantire PvP fairness; verifica simulazioni",                 "severity": "high",   "owner_pack": "PROJECT_ARTIFACT_BONUS_RESOLVER_CAP_PACK",                "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "ROLLBACK_RUNBOOK",            "description": "Backup + restore procedure prima di IMPORT_APPLY_GATED",                       "severity": "high",   "owner_pack": "PROJECT_ARTIFACT_IMPORT_APPLY_PACK (stage 6)",            "db_writes": false, "can_proceed_before_resolved": false},
+    {"id": "MOBILE_UI_QA",                "description": "Full mobile pass su preview e collection RO",                                "severity": "medium", "owner_pack": "PROJECT_ARTIFACT_UI_RO_COLLECTION_PACK (stage 7)",        "db_writes": false, "can_proceed_before_resolved": true},
+    {"id": "BETA_HARNESS_EXTENSION",      "description": "Aggiungere E2E Playwright su /artifacts-preview e /artifacts (redirect)",      "severity": "low",    "owner_pack": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_PACK (stage 3)",   "db_writes": false, "can_proceed_before_resolved": true},
+    {"id": "PLAYER_COMMUNICATION",        "description": "Patch note draft + in-app notice quando attiveremo il sistema",                "severity": "medium", "owner_pack": "PROJECT_ARTIFACT_LIVE_UNLOCK_SOURCES_PACK",                "db_writes": false, "can_proceed_before_resolved": true}
+  ],
+  "summary": {
+    "total_blockers": 15,
+    "high_severity": 9,
+    "medium_severity": 4,
+    "low_severity": 1,
+    "db_writes_required_in_future": 3,
+    "can_proceed_before_resolved_count": 3,
+    "hard_blockers_for_runtime_activation": 12
+  },
+  "runtime_activation_allowed_now": false,
+  "next_safe_pack_after_review_signoff": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_PACK (stage 3) \u2014 design-only, zero DB writes"
+}

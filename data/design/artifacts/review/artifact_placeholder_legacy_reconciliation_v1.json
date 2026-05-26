@@ -1,0 +1,103 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+  "track": "C",
+  "verdict": "TRACK_C_PLACEHOLDER_AND_LEGACY_NAME_RECONCILIATION_READY",
+  "decisions": [
+    {
+      "legacy_placeholder_id": "holy_grail",
+      "legacy_name_it": "Santo Graal",
+      "origin": "backend/routes/artifacts.py legacy roster",
+      "decision": "deprecate_player_facing_AND_keep_backend_legacy_dataset_inert",
+      "rationale": "Implica ciclo arturiano (King Arthur) non in roster; rischio promessa playable. La Bible canonica gi\u00e0 fornisce 'Calice del Vespro' come equivalente simbolico (non religioso).",
+      "player_visibility": "hidden",
+      "renamed_to_bible_id": "relic_calice_vespro",
+      "removal_from_backend_dataset": false,
+      "removal_target_pack": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK (stage 4 del migration plan)",
+      "db_writes": false
+    },
+    {
+      "legacy_placeholder_id": "eye_of_ra",
+      "legacy_name_it": "Occhio di Ra",
+      "origin": "backend legacy",
+      "decision": "deprecate_player_facing_AND_keep_backend_legacy_dataset_inert",
+      "rationale": "Implica Ra playable; non in roster. Bible canonica fornisce 'Occhio Solare' (egyptian_inspired_symbolic, future_reserved) come surrogato non specifico.",
+      "player_visibility": "hidden",
+      "renamed_to_bible_id": "relic_occhio_solare",
+      "removal_from_backend_dataset": false,
+      "removal_target_pack": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK",
+      "db_writes": false
+    },
+    {
+      "legacy_placeholder_id": "mjolnir_frag",
+      "legacy_name_it": "Frammento di Mjolnir",
+      "origin": "backend legacy",
+      "decision": "deprecate_player_facing_AND_keep_backend_legacy_dataset_inert",
+      "rationale": "Nomenclatura esplicita di un'arma divina di Thor (non in roster). Bible canonica fornisce 'Frammento del Martello Tonante' (mythic_weapon_relic, future_reserved) come surrogato simbolico non Marvel-codified.",
+      "player_visibility": "hidden",
+      "renamed_to_bible_id": "relic_frammento_martello_tonante",
+      "removal_from_backend_dataset": false,
+      "removal_target_pack": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK",
+      "db_writes": false
+    },
+    {
+      "legacy_placeholder_id": "yata_mirror",
+      "legacy_name_it": "Specchio di Yata",
+      "origin": "backend legacy",
+      "decision": "deprecate_player_facing_AND_keep_backend_legacy_dataset_inert",
+      "rationale": "Implica regalia imperiali giapponesi e Amaterasu (non in roster). Bible canonica fornisce 'Specchio del Riflesso Perduto' (sacred_symbol, future_reserved) come surrogato non specifico.",
+      "player_visibility": "hidden",
+      "renamed_to_bible_id": "relic_specchio_riflesso_perduto",
+      "removal_from_backend_dataset": false,
+      "removal_target_pack": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK",
+      "db_writes": false
+    },
+    {
+      "legacy_placeholder_id": "golden_apple",
+      "legacy_name_it": "Mela d'Oro di Idunn",
+      "origin": "backend legacy",
+      "decision": "deprecate_player_facing_AND_keep_backend_legacy_dataset_inert",
+      "rationale": "Implica Idunn playable. Bible canonica fornisce 'Pomo della Giovinezza' (mythic_weapon_relic, future_reserved) senza dichiarare il portatore.",
+      "player_visibility": "hidden",
+      "renamed_to_bible_id": "relic_pomo_giovinezza",
+      "removal_from_backend_dataset": false,
+      "removal_target_pack": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK",
+      "db_writes": false
+    },
+    {
+      "legacy_placeholder_id": "aegis_shard",
+      "legacy_name_it": "Scheggia dell'Egida",
+      "origin": "backend legacy / batch audit",
+      "decision": "replace_with_bible_canonical",
+      "rationale": "L'aegis come arma personale di Zeus rischia promessa playable singolare. Bible canonica gi\u00e0 include 'Scheggia dello Scudo del Consiglio' (Olympus collective) come canonical sostituto.",
+      "player_visibility": "hidden",
+      "renamed_to_bible_id": "relic_scheggia_scudo_consiglio",
+      "removal_from_backend_dataset": false,
+      "removal_target_pack": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK",
+      "db_writes": false
+    },
+    {
+      "legacy_concept": "old_exclusive_items_route",
+      "current_state": "frontend/app/exclusive*.tsx \u2014 lock notice / deprecated route",
+      "decision": "keep_locked_notice_no_artifact_promotion",
+      "rationale": "L'antico flusso 'exclusive weapon craft' non deve essere confuso con Artifacts (Divine Weapons \u00e8 sistema separato). Mantenere il lock notice esistente.",
+      "player_visibility": "locked_notice",
+      "db_writes": false
+    },
+    {
+      "legacy_concept": "economy_artifact_like_material",
+      "current_state": "item-shop / inventory legacy \u2014 nessun materiale gi\u00e0 classificato come 'artifact' per acquisto",
+      "decision": "no_acquisition_via_shop_now_or_at_launch",
+      "rationale": "Boundary signoff: gli artefatti non sono acquistabili via shop o IAP al lancio; eventuali materiali futuri seguiranno acquisition_policy gated nel TRACK F blocker matrix.",
+      "player_visibility": "none",
+      "db_writes": false
+    }
+  ],
+  "global_rules": [
+    "Player UI legge SOLO dalla Bible canonica v1 quando attiveremo la lettura design (stage 3 del migration plan).",
+    "I nomi placeholder backend restano inerti nel dataset legacy ma non vengono mai esposti al player finch\u00e9 non rinominati allineati alla Bible.",
+    "La rimozione fisica dal backend dataset \u00e8 deferita a PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK (stage 4); questo pack \u00e8 design-only.",
+    "Nessuna mutazione runtime di user inventory durante la reconciliation."
+  ],
+  "player_facing_exposure_to_legacy_placeholders": false,
+  "db_writes_in_track_c": 0
+}

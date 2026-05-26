@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+  "track": "E",
+  "verdict": "TRACK_E_PREVIEW_POPULATION_READINESS_GATE_READY",
+  "gate_decision": "READY_TO_POPULATE_PREVIEW_IN_NEXT_PACK",
+  "important_note": "Questo pack NON popola la UI. Decide solo che il prossimo pack (PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_PACK, stage 3 del migration plan) PU\u00d2 procedere alla popolazione di /artifacts-preview dal Bible canonico.",
+  "safe_preview_population_criteria": [
+    {"id": "NO_API_MUTATION",          "requirement": "nessuna fetch/apiCall/POST verso /api/artifacts/* o /api/constellations/* dalla pagina preview"},
+    {"id": "NO_INVENTORY",             "requirement": "nessuna lettura/scrittura di inventario utente"},
+    {"id": "NO_LIVE_BUTTONS",          "requirement": "nessun bottone EVOCA/PULL/EQUIPAGGIA/FONDI/CRAFTA/VENDI/SCAMBIA"},
+    {"id": "CANONICAL_JSON_ONLY",      "requirement": "la pagina legge esclusivamente da data/design/artifacts/artifact_bible_launch_draft_v1.json (o snapshot statico bundled)"},
+    {"id": "MAX_6_TO_12_PREVIEW_CARDS","requirement": "mostra 6-12 esempi rappresentativi della tassonomia, non tutti i 32 entries"},
+    {"id": "COPY_SISTEMA_IN_PREPARAZIONE", "requirement": "banner copy chiaro: 'Sistema in preparazione \u2014 Nessuna evocazione, equip, fusione o craft \u00e8 disponibile.'"},
+    {"id": "NO_STAT_BONUS_DISPLAY",    "requirement": "nessun numero di stat visualizzato per i preview card"},
+    {"id": "NO_ACTIVE_REWARD_CLAIM",   "requirement": "source_hint_future visualizzato come 'In arrivo via eventi e traguardi dedicati' senza claim attivi"},
+    {"id": "FUTURE_RESERVED_BADGE_OR_HIDDEN", "requirement": "entries future_reserved \u2192 obbligo di badge 'ESEMPIO NON FINALE' OPPURE omissione dal preview set"},
+    {"id": "ACCESSIBILITY",            "requirement": "contrast WCAG AA, back button con label accessibile, font min 12pt"}
+  ],
+  "recommended_preview_set_examples_safe": [
+    {"id": "relic_aurora_eterna",           "category": "divine_relic",        "rationale": "divine generico, launch_candidate, none"},
+    {"id": "relic_calice_vespro",            "category": "divine_relic",        "rationale": "sostituto del 'Santo Graal' legacy, launch_candidate"},
+    {"id": "relic_sigillo_lunare",           "category": "sacred_symbol",       "rationale": "sacred symbol generico"},
+    {"id": "relic_emblema_olimpo",           "category": "pantheon_emblem",     "rationale": "current_launch, sicuro"},
+    {"id": "relic_frammento_caos",           "category": "primordial_fragment", "rationale": "esempio mythic primordiale"},
+    {"id": "relic_pagina_libro_perduto",     "category": "world_memory",        "rationale": "world_memory esemplificativa"},
+    {"id": "relic_petalo_hanami",            "category": "event_relic",         "rationale": "event_relic stagionale"},
+    {"id": "relic_corona_spine_eterne",      "category": "forbidden_relic",     "rationale": "forbidden_relic esempio (verifica lore minore)"},
+    {"id": "relic_pluma_fenix",              "category": "divine_relic",        "rationale": "divine_relic con rebirth flair"},
+    {"id": "relic_scheggia_scudo_consiglio", "category": "mythic_weapon_relic", "rationale": "current_launch, mythic_weapon_relic collettivo non Marvel-codified"}
+  ],
+  "recommended_preview_set_examples_avoid_for_preview": [
+    {"id": "relic_occhio_solare",                  "reason": "future_reserved + rischio confusione con 'Occhio di Ra'; visibile solo con badge esplicito"},
+    {"id": "relic_emblema_asgard",                  "reason": "future_reserved; mostrare solo con badge ESEMPIO NON FINALE"},
+    {"id": "relic_emblema_yamato",                  "reason": "future_reserved; come sopra"},
+    {"id": "relic_frammento_martello_tonante",     "reason": "future_reserved + rischio percezione Thor; meglio nascondere fino a roster signoff"},
+    {"id": "relic_specchio_riflesso_perduto",      "reason": "future_reserved; come sopra"},
+    {"id": "relic_pomo_giovinezza",                "reason": "future_reserved + rischio percezione Idunn; come sopra"}
+  ],
+  "preview_population_pack_target": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_PACK (stage 3 del migration plan)",
+  "ui_population_NOT_executed_in_this_pack": true,
+  "db_writes_in_track_e": 0
+}

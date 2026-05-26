@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BIBLE_REVIEW_SIGNOFF",
+  "track": "G",
+  "verdict": "TRACK_G_STATIC_GUARD_VALIDATION_AND_UPDATE_READY",
+  "existing_validator_rerun": {
+    "command": "python3 /app/backend/scripts/validate_project_artifact_bible_canonical_design_v1.py",
+    "result": "PASS",
+    "checks_executed": [
+      "Track A-I source pack JSON loaded",
+      "Bible draft 30-40 entries",
+      "HIDDEN_BANNERS_V2 includes artifact + constellation",
+      "artifacts.tsx redirects only",
+      "artifacts-preview.tsx no mutation endpoints",
+      "battle_engine + battle_core no user_artifacts/user_constellations",
+      "battle_engine.py / .env MD5 invariants"
+    ]
+  },
+  "live_static_audit_summary": {
+    "hidden_banners_v2_contains_artifact": true,
+    "hidden_banners_v2_contains_constellation": true,
+    "artifacts_route_redirect_only": true,
+    "artifacts_preview_no_mutation_endpoint": true,
+    "no_player_ui_call_to_artifact_pull_pull10_fuse_equip": true,
+    "no_combat_wiring_to_artifacts": true,
+    "no_combat_wiring_to_constellations": true,
+    "flag_ARTIFACT_LIVE_BONUS_ENABLED_off": true
+  },
+  "new_review_validator_added": {
+    "path": "backend/scripts/validate_project_artifact_bible_review_signoff_v1.py",
+    "covers_tracks": ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+  },
+  "suite_registration": "appended to OPTIONAL list of run_hero_skill_kit_validator_suite.py",
+  "target_suite_count": 699,
+  "package_json_stable": true,
+  "yarn_lock_stable": true
+}
