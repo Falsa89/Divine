@@ -1,0 +1,52 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING",
+  "track": "TRACK_A_LEGACY_MUTATION_ENDPOINT_AUDIT",
+  "verdict": "TRACK_A_ARTIFACT_LEGACY_MUTATION_ENDPOINT_AUDIT_READY",
+  "audit_scope": ["backend/routes/artifacts.py"],
+  "endpoints_inventory": [
+    {"method": "GET",  "path": "/api/artifacts",                  "category": "legacy_read_only_with_db", "mutative": false, "db_reads": true,  "db_writes": false, "player_reachable": false, "hidden_by": "frontend HIDDEN_BANNERS_V2 + no UI surface"},
+    {"method": "POST", "path": "/api/artifacts/fuse",            "category": "legacy_mutative",            "mutative": true,  "db_reads": false, "db_writes": false, "player_reachable": false, "locked_in_this_pack": true},
+    {"method": "POST", "path": "/api/artifacts/pull",            "category": "legacy_mutative",            "mutative": true,  "db_reads": false, "db_writes": false, "player_reachable": false, "locked_in_this_pack": true},
+    {"method": "POST", "path": "/api/artifacts/pull10",          "category": "legacy_mutative",            "mutative": true,  "db_reads": false, "db_writes": false, "player_reachable": false, "locked_in_this_pack": true},
+    {"method": "GET",  "path": "/api/constellations",              "category": "legacy_read_only_with_db", "mutative": false, "db_reads": true,  "db_writes": false, "player_reachable": false, "hidden_by": "frontend HIDDEN_BANNERS_V2 + no UI surface"},
+    {"method": "POST", "path": "/api/constellations/equip",     "category": "legacy_mutative",            "mutative": true,  "db_reads": false, "db_writes": false, "player_reachable": false, "locked_in_this_pack": true},
+    {"method": "POST", "path": "/api/constellations/fuse",      "category": "legacy_mutative",            "mutative": true,  "db_reads": false, "db_writes": false, "player_reachable": false, "locked_in_this_pack": true},
+    {"method": "POST", "path": "/api/constellations/pull",      "category": "legacy_mutative",            "mutative": true,  "db_reads": false, "db_writes": false, "player_reachable": false, "locked_in_this_pack": true},
+    {"method": "POST", "path": "/api/constellations/pull10",    "category": "legacy_mutative",            "mutative": true,  "db_reads": false, "db_writes": false, "player_reachable": false, "locked_in_this_pack": true},
+    {"method": "GET",  "path": "/api/banners/special",            "category": "info_only",                 "mutative": false, "db_reads": false, "db_writes": false, "player_reachable": false},
+    {"method": "GET",  "path": "/api/artifacts/catalog",         "category": "ro_catalog",               "mutative": false, "db_reads": false, "db_writes": false, "player_reachable": true,  "preserved": true},
+    {"method": "GET",  "path": "/api/artifacts/catalog/preview", "category": "ro_catalog",               "mutative": false, "db_reads": false, "db_writes": false, "player_reachable": true,  "preserved": true}
+  ],
+  "frontend_audit": {
+    "file": "frontend/app/(tabs)/gacha.tsx",
+    "references_to_mutation_endpoints": [
+      "/api/artifacts/pull", "/api/artifacts/pull10",
+      "/api/constellations/pull", "/api/constellations/pull10"
+    ],
+    "references_reachable_by_player": false,
+    "reason_unreachable": [
+      "HIDDEN_BANNERS_V2 contains 'artifact' and 'constellation' -> banners not in visibleBanners list",
+      "banner setter rejects hidden banners (line 78)",
+      "doPull() exits early if isActiveBannerLocked"
+    ],
+    "new_mutation_buttons_added_this_pack": false,
+    "artifacts_preview_tsx_modified": false,
+    "artifacts_legacy_redirect_unchanged": true
+  },
+  "placeholder_legacy_arrays_in_module": {
+    "ARTIFACTS_legacy_array_present": true,
+    "CONSTELLATIONS_legacy_array_present": true,
+    "ARTIFACT_SETS_legacy_present": true,
+    "ARTIFACT_BANNER_legacy_present": true,
+    "CONSTELLATION_BANNER_legacy_present": true,
+    "player_reachable": false,
+    "used_by_locked_handlers": false,
+    "note": "Le strutture legacy in memoria restano per non rompere import storici, ma nessun handler attivo le legge piu' per scopi mutativi."
+  },
+  "db_collections_touched_by_handlers_after_lock": {
+    "user_artifacts": false,
+    "user_constellations": false,
+    "users": false,
+    "teams": false
+  }
+}

@@ -22,7 +22,9 @@
     "backend/routes/sanctuary.py", "backend/routes/social.py", "backend/routes/soul_forge.py",
     "backend/routes/unique_items.py"
   ],
-  "total_write_surfaces_detected": 201,
+  "total_write_surfaces_detected": 181,
+  "total_write_surfaces_detected_pre_hardening_171": 201,
+  "delta_from_hardening_171_explanation": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING (doc 171) ha rimosso ~20 write-surfaces dai POST mutativi legacy artifact/constellation hard-lockati (pull/pull10/fuse/equip). Drift autorizzato.",
   "total_files_with_writes": 20,
   "classification_table": [
     {"file": "backend/routes/hero_progression.py", "helper_import": true, "helper_calls": 3, "classification": "ALREADY_PATCHED_SAFE", "batch": "Batch-0/1", "notes": "Patched in Batch-0/1; helper actively used."},

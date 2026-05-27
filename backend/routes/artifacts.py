@@ -17,10 +17,44 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 from fastapi import HTTPException, Depends, Query
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 # SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
 from utils.server_scope import ensure_server_scope
+
+# ========================================================================
+# PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING (Stage 4.5)
+# ------------------------------------------------------------------------
+# Tutti gli endpoint POST mutativi legacy di artifact/constellation sono
+# stati hard-lockati con HTTP 423 Locked e payload coerente. Le handler
+# locked NON hanno dipendenza da `get_current_user` (zero DB auth call),
+# NON accettano body request, NON eseguono random roll, NON spendono
+# gemme, NON creano righe in user_artifacts / user_constellations e NON
+# modificano teams. Le sole superfici attive su questo modulo restano i
+# GET catalog read-only e i GET legacy puramente di lettura.
+# ========================================================================
+ARTIFACT_MUTATION_LOCK_ENVELOPE = {
+    "success": False,
+    "locked": True,
+    "system": "artifacts",
+    "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED",
+    "message": "Sistema Artefatti in preparazione. Azioni mutative non disponibili.",
+    "allowed_now": [
+        "GET /api/artifacts/catalog",
+        "GET /api/artifacts/catalog/preview",
+    ],
+}
+CONSTELLATION_MUTATION_LOCK_ENVELOPE = {
+    "success": False,
+    "locked": True,
+    "system": "constellations",
+    "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED",
+    "message": "Sistema Costellazioni in preparazione. Azioni mutative non disponibili.",
+    "allowed_now": [],
+}
+ARTIFACT_MUTATION_LOCK_STATUS = 423
+ARTIFACT_MUTATION_ENDPOINTS_LOCKED_V1 = True
 
 # ===================== ARTIFACT DEFINITIONS =====================
 ARTIFACTS = [
@@ -222,105 +256,30 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
         artifact_id: str
 
     @router.post("/artifacts/fuse")
-    async def fuse_artifact(req: ArtifactFuseRequest, current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        ua = await db.user_artifacts.find_one({"user_id": uid, "artifact_id": req.artifact_id})
-        if not ua:
-            raise HTTPException(404, "Artefatto non posseduto")
-        if ua.get("duplicates", 0) < 1:
-            raise HTTPException(400, "Servono duplicati per potenziare! Evoca altri artefatti.")
-        max_level = 10
-        if ua.get("level", 1) >= max_level:
-            raise HTTPException(400, f"Livello massimo ({max_level}) raggiunto!")
-        await db.user_artifacts.update_one(
-            {"user_id": uid, "artifact_id": req.artifact_id},
-            {"$inc": {"level": 1, "duplicates": -1}}
+    async def fuse_artifact():
+        # LOCKED — PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING
+        # Nessuna dipendenza auth (no DB call). Nessun body. Nessuna mutazione.
+        return JSONResponse(
+            status_code=ARTIFACT_MUTATION_LOCK_STATUS,
+            content=ARTIFACT_MUTATION_LOCK_ENVELOPE,
         )
-        new_level = ua.get("level", 1) + 1
-        art = next((a for a in ARTIFACTS if a["id"] == req.artifact_id), None)
-        level_mult = 1 + (new_level - 1) * 0.2
-        new_buff = {k: round(v * level_mult, 4) for k, v in art["buff"].items()} if art else {}
-        return {"success": True, "new_level": new_level, "new_buff": new_buff, "duplicates_remaining": ua.get("duplicates", 0) - 1}
 
     @router.post("/artifacts/pull")
-    async def pull_artifact(current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        user = await db.users.find_one({"id": uid})
-        cost = ARTIFACT_BANNER["cost_single"]
-        if user.get("gems", 0) < cost:
-            raise HTTPException(400, f"Servono {cost} gemme!")
-        await db.users.update_one({"id": uid}, {"$inc": {"gems": -cost}})
-        # Roll rarity
-        roll = random.random()
-        cumul = 0
-        rarity = 1
-        for r, rate in ARTIFACT_BANNER["rates"].items():
-            cumul += rate
-            if roll <= cumul:
-                rarity = r
-                break
-        # Pick artifact of that rarity
-        pool = [a for a in ARTIFACTS if a["rarity"] == rarity]
-        if not pool:
-            pool = [a for a in ARTIFACTS if a["rarity"] <= rarity]
-        art = random.choice(pool)
-        # Check if already owned
-        existing = await db.user_artifacts.find_one({"user_id": uid, "artifact_id": art["id"]})
-        is_duplicate = existing is not None
-        if existing:
-            await db.user_artifacts.update_one(
-                {"user_id": uid, "artifact_id": art["id"]},
-                {"$inc": {"duplicates": 1}}
-            )
-        else:
-            _art_doc = {
-                "user_id": uid, "artifact_id": art["id"],
-                "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow(),
-            }
-            ensure_server_scope(_art_doc, uid)
-            await db.user_artifacts.insert_one(_art_doc)
-        updated_user = await db.users.find_one({"id": uid})
-        return {
-            "artifact": art, "is_duplicate": is_duplicate,
-            "remaining_gems": updated_user.get("gems", 0),
-        }
+    async def pull_artifact():
+        # LOCKED — PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING
+        # Nessun random roll, nessuno spend gemme, nessun grant artifact.
+        return JSONResponse(
+            status_code=ARTIFACT_MUTATION_LOCK_STATUS,
+            content=ARTIFACT_MUTATION_LOCK_ENVELOPE,
+        )
 
     @router.post("/artifacts/pull10")
-    async def pull_artifact_10(current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        user = await db.users.find_one({"id": uid})
-        cost = ARTIFACT_BANNER["cost_multi"]
-        if user.get("gems", 0) < cost:
-            raise HTTPException(400, f"Servono {cost} gemme!")
-        await db.users.update_one({"id": uid}, {"$inc": {"gems": -cost}})
-        results = []
-        for i in range(10):
-            roll = random.random()
-            cumul = 0
-            rarity = 1
-            rates = ARTIFACT_BANNER["rates"]
-            if i == 9:  # Guaranteed 4+ on last
-                rates = {4: 0.55, 5: 0.30, 6: 0.15}
-            for r, rate in rates.items():
-                cumul += rate
-                if roll <= cumul:
-                    rarity = r
-                    break
-            pool = [a for a in ARTIFACTS if a["rarity"] == rarity]
-            if not pool:
-                pool = [a for a in ARTIFACTS if a["rarity"] <= rarity]
-            art = random.choice(pool)
-            existing = await db.user_artifacts.find_one({"user_id": uid, "artifact_id": art["id"]})
-            is_dup = existing is not None
-            if existing:
-                await db.user_artifacts.update_one({"user_id": uid, "artifact_id": art["id"]}, {"$inc": {"duplicates": 1}})
-            else:
-                _art_doc2 = {"user_id": uid, "artifact_id": art["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()}
-                ensure_server_scope(_art_doc2, uid)
-                await db.user_artifacts.insert_one(_art_doc2)
-            results.append({"artifact": art, "is_duplicate": is_dup})
-        updated_user = await db.users.find_one({"id": uid})
-        return {"results": results, "remaining_gems": updated_user.get("gems", 0)}
+    async def pull_artifact_10():
+        # LOCKED — PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING
+        return JSONResponse(
+            status_code=ARTIFACT_MUTATION_LOCK_STATUS,
+            content=ARTIFACT_MUTATION_LOCK_ENVELOPE,
+        )
 
     # ==================== CONSTELLATIONS ====================
     @router.get("/constellations")
@@ -367,108 +326,36 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
         constellation_id: str
 
     @router.post("/constellations/equip")
-    async def equip_constellation(req: EquipConstellationRequest, current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        uc = await db.user_constellations.find_one({"user_id": uid, "constellation_id": req.constellation_id})
-        if not uc:
-            raise HTTPException(404, "Costellazione non posseduta!")
-        await db.teams.update_one(
-            {"user_id": uid, "is_active": True},
-            {"$set": {"constellation_id": req.constellation_id}, "$setOnInsert": {"server_id": "s1", "account_id": uid}},
-            upsert=True
+    async def equip_constellation():
+        # LOCKED — PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING
+        return JSONResponse(
+            status_code=ARTIFACT_MUTATION_LOCK_STATUS,
+            content=CONSTELLATION_MUTATION_LOCK_ENVELOPE,
         )
-        c = next((x for x in CONSTELLATIONS if x["id"] == req.constellation_id), None)
-        return {"success": True, "constellation": c.get("name", "?") if c else "?"}
 
     @router.post("/constellations/fuse")
-    async def fuse_constellation(req: EquipConstellationRequest, current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        uc = await db.user_constellations.find_one({"user_id": uid, "constellation_id": req.constellation_id})
-        if not uc:
-            raise HTTPException(404, "Costellazione non posseduta")
-        if uc.get("duplicates", 0) < 1:
-            raise HTTPException(400, "Servono duplicati per potenziare!")
-        if uc.get("level", 1) >= 5:
-            raise HTTPException(400, "Livello massimo raggiunto!")
-        await db.user_constellations.update_one(
-            {"user_id": uid, "constellation_id": req.constellation_id},
-            {"$inc": {"level": 1, "duplicates": -1}}
+    async def fuse_constellation():
+        # LOCKED — PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING
+        return JSONResponse(
+            status_code=ARTIFACT_MUTATION_LOCK_STATUS,
+            content=CONSTELLATION_MUTATION_LOCK_ENVELOPE,
         )
-        new_level = uc.get("level", 1) + 1
-        c = next((x for x in CONSTELLATIONS if x["id"] == req.constellation_id), None)
-        level_mult = 1 + (new_level - 1) * 0.15
-        return {
-            "success": True, "new_level": new_level,
-            "new_buff": {k: round(v * level_mult, 4) for k, v in c["buff"].items()} if c else {},
-        }
 
     @router.post("/constellations/pull")
-    async def pull_constellation(current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        user = await db.users.find_one({"id": uid})
-        cost = CONSTELLATION_BANNER["cost_single"]
-        if user.get("gems", 0) < cost:
-            raise HTTPException(400, f"Servono {cost} gemme!")
-        await db.users.update_one({"id": uid}, {"$inc": {"gems": -cost}})
-        roll = random.random()
-        cumul = 0
-        rarity = 3
-        for r, rate in CONSTELLATION_BANNER["rates"].items():
-            cumul += rate
-            if roll <= cumul:
-                rarity = r
-                break
-        pool = [c for c in CONSTELLATIONS if c["rarity"] == rarity]
-        if not pool:
-            pool = [c for c in CONSTELLATIONS if c["rarity"] <= rarity]
-        const = random.choice(pool)
-        existing = await db.user_constellations.find_one({"user_id": uid, "constellation_id": const["id"]})
-        is_dup = existing is not None
-        if existing:
-            await db.user_constellations.update_one({"user_id": uid, "constellation_id": const["id"]}, {"$inc": {"duplicates": 1}})
-        else:
-            _const_doc = {"user_id": uid, "constellation_id": const["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()}
-            ensure_server_scope(_const_doc, uid)
-            await db.user_constellations.insert_one(_const_doc)
-        updated_user = await db.users.find_one({"id": uid})
-        return {"constellation": const, "is_duplicate": is_dup, "remaining_gems": updated_user.get("gems", 0)}
+    async def pull_constellation():
+        # LOCKED — PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING
+        return JSONResponse(
+            status_code=ARTIFACT_MUTATION_LOCK_STATUS,
+            content=CONSTELLATION_MUTATION_LOCK_ENVELOPE,
+        )
 
     @router.post("/constellations/pull10")
-    async def pull_constellation_10(current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        user = await db.users.find_one({"id": uid})
-        cost = CONSTELLATION_BANNER["cost_multi"]
-        if user.get("gems", 0) < cost:
-            raise HTTPException(400, f"Servono {cost} gemme!")
-        await db.users.update_one({"id": uid}, {"$inc": {"gems": -cost}})
-        results = []
-        for i in range(10):
-            roll = random.random()
-            cumul = 0
-            rarity = 3
-            rates = CONSTELLATION_BANNER["rates"]
-            if i == 9:
-                rates = {4: 0.40, 5: 0.40, 6: 0.20}
-            for r, rate in rates.items():
-                cumul += rate
-                if roll <= cumul:
-                    rarity = r
-                    break
-            pool = [c for c in CONSTELLATIONS if c["rarity"] == rarity]
-            if not pool:
-                pool = [c for c in CONSTELLATIONS if c["rarity"] <= rarity]
-            const = random.choice(pool)
-            existing = await db.user_constellations.find_one({"user_id": uid, "constellation_id": const["id"]})
-            is_dup = existing is not None
-            if existing:
-                await db.user_constellations.update_one({"user_id": uid, "constellation_id": const["id"]}, {"$inc": {"duplicates": 1}})
-            else:
-                _const_doc2 = {"user_id": uid, "constellation_id": const["id"], "level": 1, "duplicates": 0, "obtained_at": datetime.utcnow()}
-                ensure_server_scope(_const_doc2, uid)
-                await db.user_constellations.insert_one(_const_doc2)
-            results.append({"constellation": const, "is_duplicate": is_dup})
-        updated_user = await db.users.find_one({"id": uid})
-        return {"results": results, "remaining_gems": updated_user.get("gems", 0)}
+    async def pull_constellation_10():
+        # LOCKED — PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING
+        return JSONResponse(
+            status_code=ARTIFACT_MUTATION_LOCK_STATUS,
+            content=CONSTELLATION_MUTATION_LOCK_ENVELOPE,
+        )
 
     # ==================== BANNERS INFO ====================
     @router.get("/banners/special")

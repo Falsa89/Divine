@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-27T00:30:29.105545+00:00",
+  "timestamp_utc": "2026-05-27T00:47:42.458490+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1097,
+  "backend_python_files_scanned": 1098,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 504,
+      "files_with_hits": 505,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -149,7 +149,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 121
+      "user_id_only_files_count": 122
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -269,7 +269,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 246,
+      "files_with_hits": 247,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -365,7 +365,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 69
+      "user_id_only_files_count": 70
     },
     "currencies": {
       "expected_scope": "server_bound",
@@ -542,11 +542,11 @@
         {
           "file": "backend/routes/artifacts.py",
           "keyword": "purchase",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 500,
+              "line": 387,
               "snippet": "\"price\", \"purchase_url\", \"duplicates\","
             }
           ]
@@ -593,7 +593,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 0
+      "user_id_only_files_count": 1
     },
     "gacha_history": {
       "expected_scope": "server_bound",
@@ -793,7 +793,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 17
+      "user_id_only_files_count": 18
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -1405,7 +1405,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 4
+      "user_id_only_files_count": 5
     },
     "event_progress": {
       "expected_scope": "server_bound",
@@ -1524,7 +1524,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 381,
+  "cross_server_leak_risk_candidates_count": 386,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1603,6 +1603,11 @@
     },
     {
       "category": "accounts_users_auth",
+      "file": "backend/routes/artifacts.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
       "file": "backend/routes/rankings.py",
       "keyword": "user"
     },
@@ -1619,11 +1624,6 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/level_sharing.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/player_faction_v2.py",
       "keyword": "user"
     }
   ],

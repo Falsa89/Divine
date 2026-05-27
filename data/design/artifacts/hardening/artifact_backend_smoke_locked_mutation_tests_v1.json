@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING",
+  "track": "TRACK_E_BACKEND_SMOKE_LOCKED_MUTATION_TESTS",
+  "verdict": "TRACK_E_ARTIFACT_BACKEND_SMOKE_LOCKED_MUTATION_TESTS_READY",
+  "ro_catalog_smoke": {
+    "GET /api/artifacts/catalog":          {"http_status": 200, "count": 32, "forbidden_fields_present": false},
+    "GET /api/artifacts/catalog/preview":  {"http_status": 200, "count": 10, "forbidden_fields_present": false},
+    "GET /api/artifacts/catalog?category=invalid": {"http_status": 400, "db_write_observed": false}
+  },
+  "locked_mutation_smoke": [
+    {"endpoint": "POST /api/artifacts/pull",         "http_status": 423, "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED",      "db_write_observed": false, "random_used": false, "currency_spent": false},
+    {"endpoint": "POST /api/artifacts/pull10",       "http_status": 423, "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED",      "db_write_observed": false, "random_used": false, "currency_spent": false},
+    {"endpoint": "POST /api/artifacts/fuse",         "http_status": 423, "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED",      "db_write_observed": false},
+    {"endpoint": "POST /api/constellations/equip",   "http_status": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED", "db_write_observed": false},
+    {"endpoint": "POST /api/constellations/fuse",    "http_status": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED", "db_write_observed": false},
+    {"endpoint": "POST /api/constellations/pull",    "http_status": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED", "db_write_observed": false, "random_used": false, "currency_spent": false},
+    {"endpoint": "POST /api/constellations/pull10",  "http_status": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED", "db_write_observed": false, "random_used": false, "currency_spent": false}
+  ],
+  "invariants": {
+    "battle_engine_md5_unchanged": true,
+    "battle_engine_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env_md5_unchanged": true,
+    "backend_env_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "frontend_artifacts_preview_md5": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend_artifacts_preview_unchanged": true,
+    "gacha_hidden_banners_v2_unchanged": true,
+    "no_db_write_in_pack": true,
+    "no_user_creation_in_pack": true,
+    "no_seed_in_pack": true
+  }
+}

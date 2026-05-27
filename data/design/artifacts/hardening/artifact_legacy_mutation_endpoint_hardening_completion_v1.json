@@ -1,0 +1,48 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING",
+  "track": "TRACK_H_COMPLETION_AND_NEXT_PACK",
+  "verdict": "TRACK_H_ARTIFACT_LEGACY_MUTATION_HARDENING_COMPLETION_READY",
+  "global_verdict_local": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "endpoints_locked_count": 7,
+  "endpoints_locked": [
+    "POST /api/artifacts/pull",
+    "POST /api/artifacts/pull10",
+    "POST /api/artifacts/fuse",
+    "POST /api/constellations/equip",
+    "POST /api/constellations/fuse",
+    "POST /api/constellations/pull",
+    "POST /api/constellations/pull10"
+  ],
+  "endpoints_preserved_ro": [
+    "GET /api/artifacts/catalog",
+    "GET /api/artifacts/catalog/preview"
+  ],
+  "endpoint_artifacts_equip_existed_before_pack": false,
+  "endpoint_artifacts_equip_added_this_pack": false,
+  "runtime_changes_made": {
+    "frontend_ui_changes": 0,
+    "frontend_logic_changes": 0,
+    "backend_route_changes": 1,
+    "backend_logic_changes": 1,
+    "db_writes_from_scripts": 0,
+    "battle_engine_changes": 0,
+    "gacha_rate_changes": 0,
+    "hidden_banners_changes": 0,
+    "iap_implementation": false,
+    "artifact_banner_activation": false,
+    "constellation_banner_activation": false,
+    "character_bible_mutation": false,
+    "inventory_state_added": false,
+    "ownership_state_added": false,
+    "new_mutation_endpoint_added": false
+  },
+  "invariants": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a"
+  },
+  "artifact_mutation_endpoints_locked_v1": true,
+  "next_pack_recommendation": "PROJECT_ARTIFACT_INVENTORY_SCHEMA_DRY_RUN_PACK (Stage 5)"
+}

@@ -1,0 +1,58 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING",
+  "track": "TRACK_C_RESPONSE_CONTRACT_AND_ERROR_ENVELOPE",
+  "verdict": "TRACK_C_ARTIFACT_LOCK_RESPONSE_CONTRACT_READY",
+  "http_status_used": 423,
+  "http_status_rationale": "HTTP 423 Locked: stato semantico ufficiale per risorse temporaneamente bloccate, distinguibile sia da 401/403 (auth) sia da 503 (downtime).",
+  "artifact_lock_envelope": {
+    "success": false,
+    "locked": true,
+    "system": "artifacts",
+    "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED",
+    "message": "Sistema Artefatti in preparazione. Azioni mutative non disponibili.",
+    "allowed_now": [
+      "GET /api/artifacts/catalog",
+      "GET /api/artifacts/catalog/preview"
+    ]
+  },
+  "constellation_lock_envelope": {
+    "success": false,
+    "locked": true,
+    "system": "constellations",
+    "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED",
+    "message": "Sistema Costellazioni in preparazione. Azioni mutative non disponibili.",
+    "allowed_now": []
+  },
+  "forbidden_in_locked_handlers": [
+    "random_roll",
+    "db_read",
+    "db_write",
+    "auth_dependency",
+    "user_lookup_for_mutation",
+    "artifact_creation",
+    "constellation_creation",
+    "currency_spend",
+    "item_spend",
+    "equip_state_change",
+    "fuse_state_change",
+    "craft_state_change",
+    "request_body_parsing"
+  ],
+  "handler_implementation_invariants": {
+    "depends_on_get_current_user": false,
+    "accepts_request_body": false,
+    "returns_JSONResponse": true,
+    "returns_status_code": 423,
+    "calls_db_module": false,
+    "imports_random_used": false
+  },
+  "endpoints_locked": [
+    {"method": "POST", "path": "/api/artifacts/fuse",         "envelope": "artifact"},
+    {"method": "POST", "path": "/api/artifacts/pull",         "envelope": "artifact"},
+    {"method": "POST", "path": "/api/artifacts/pull10",       "envelope": "artifact"},
+    {"method": "POST", "path": "/api/constellations/equip",  "envelope": "constellation"},
+    {"method": "POST", "path": "/api/constellations/fuse",   "envelope": "constellation"},
+    {"method": "POST", "path": "/api/constellations/pull",   "envelope": "constellation"},
+    {"method": "POST", "path": "/api/constellations/pull10", "envelope": "constellation"}
+  ]
+}

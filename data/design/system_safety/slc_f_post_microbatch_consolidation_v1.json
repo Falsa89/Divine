@@ -43,7 +43,9 @@
 
   "helper_usage_matrix": {
     "total_files_importing_helper": 12,
-    "total_ensure_server_scope_calls": 22,
+    "total_ensure_server_scope_calls": 19,
+    "total_ensure_server_scope_calls_pre_hardening_171": 22,
+    "delta_from_hardening_171_explanation": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING (doc 171) ha rimosso ensure_server_scope dai POST mutativi legacy artifact/constellation hard-lockati (pull/pull10). Drift autorizzato, non regressionale.",
     "insert_one_calls_patched": 20,
     "upsert_with_setOnInsert_patched": 1,
     "degenerate_imports_only": 1,

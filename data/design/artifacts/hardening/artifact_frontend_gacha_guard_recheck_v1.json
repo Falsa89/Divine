@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING",
+  "track": "TRACK_D_FRONTEND_AND_GACHA_GUARD_RECHECK",
+  "verdict": "TRACK_D_ARTIFACT_FRONTEND_AND_GACHA_GUARD_RECHECK_READY",
+  "checks": {
+    "gacha_hidden_banners_v2_contains_artifact_and_constellation": true,
+    "gacha_hidden_banner_setter_guard_present": true,
+    "gacha_doPull_locked_guard_present": true,
+    "artifacts_preview_tsx_md5": "0e75c94e00899af773dbc9faf7326a15",
+    "artifacts_preview_tsx_unchanged_this_pack": true,
+    "artifacts_preview_remains_static_read_only": true,
+    "artifacts_legacy_redirect_to_preview_unchanged": true,
+    "new_mutation_buttons_added": false,
+    "frontend_calls_added_to_locked_endpoints_this_pack": false
+  },
+  "acceptance": {
+    "no_ui_regression_this_pack": true,
+    "player_cannot_reach_mutation_endpoints_via_ui": true
+  }
+}
