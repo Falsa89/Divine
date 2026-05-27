@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# PUBLIC_SYNC_TAG: suite_runner_gated_import_v1_force_resnapshot
 """
 RM1.31-B — Hero Skill Kit Validator Suite Runner
 ─────────────────────────────────────────────────────────────────────────
