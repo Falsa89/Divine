@@ -1,0 +1,61 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY",
+  "track": "TRACK_E_ROLLBACK_AND_IDEMPOTENCY_VERIFICATION",
+  "verdict": "TRACK_E_ARTIFACT_LIVE_APPLY_ROLLBACK_IDEMPOTENCY_READY",
+  "idempotency_rerun": {
+    "second_invocation_of_apply": "performed",
+    "idempotent_noop_count": 2,
+    "new_grants_count": 0,
+    "collections_counts_unchanged": {
+      "user_artifact_inventory": 2,
+      "artifact_inventory_ledger": 2,
+      "artifact_idempotency_registry": 2,
+      "artifact_collection_state": 2
+    },
+    "duplicate_inventory_rows_created": 0,
+    "duplicate_ledger_events_created": 0,
+    "verdict": "IDEMPOTENCY_PASS"
+  },
+  "ledger_consistency_check": {
+    "every_ledger_event_has_corresponding_inventory": true,
+    "orphan_ledger_events": 0,
+    "orphan_inventory_rows": 0,
+    "every_inventory_row_has_idempotency_record": true
+  },
+  "rollback_plan_design_only": true,
+  "rollback_executed_in_this_pack": false,
+  "rollback_plan": {
+    "owner": "emergent_main_agent_acting_as_rollback_owner_per_user_authorization",
+    "trigger_conditions": [
+      "any post-apply smoke failure",
+      "any forbidden collection write detected",
+      "any MD5 invariant drift",
+      "user explicit revoke request"
+    ],
+    "steps_pre_visibility": [
+      "db.artifact_idempotency_registry.deleteMany({source_id: 'artifact_inventory_live_apply_stage8_canary_2026_05_27'})",
+      "db.user_artifact_inventory.deleteMany({source_id: 'artifact_inventory_live_apply_stage8_canary_2026_05_27'}) -- only because no UI ever exposed these rows",
+      "db.artifact_inventory_ledger.deleteMany({source_id: 'artifact_inventory_live_apply_stage8_canary_2026_05_27'}) -- only acceptable while pre-visibility",
+      "db.artifact_collection_state.deleteMany({user_id: {$in: ['e15599e2-fe11-4d2e-86c9-10b9eab88acf', '651253e2-da8d-466b-98f3-82f008d158ed']}})",
+      "OPTIONAL: db.artifact_catalog_snapshot.drop() if no other dependent reads"
+    ],
+    "steps_post_visibility_NEVER_USE_NOW_FUTURE_REFERENCE": [
+      "For each grant: append compensating ledger entry event_type=revoke, source_type=rollback",
+      "Set user_artifact_inventory.status='revoked', quantity=0 ONLY if locked=false (canary items are locked=true; admin override required)",
+      "NEVER deleteMany on user_artifact_inventory after a player UI has been exposed"
+    ],
+    "locked_items_block_revoke": true,
+    "canary_items_locked_true": true,
+    "actor_system_on_rollback": "stage_8_canary_rollback_v1",
+    "reason_field_required_on_revoke": true
+  },
+  "rollback_dry_run": {
+    "would_delete_idempotency_records": 2,
+    "would_delete_inventory_rows": 2,
+    "would_delete_ledger_events": 2,
+    "would_delete_state_aggregates": 2,
+    "would_optionally_drop_catalog_snapshot": true,
+    "dry_run_executed": false,
+    "rationale_no_dry_run_now": "prompt esplicitamente vieta rollback automatico salvo failure verifica; tutti i check sono PASS"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY",
+  "track": "TRACK_H_COMPLETION_AND_NEXT_PACK",
+  "verdict": "TRACK_H_ARTIFACT_LIVE_APPLY_COMPLETION_READY",
+  "global_verdict_local": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_CANARY_APPLIED_INTERNAL_ONLY",
+  "runtime_changes_made": {
+    "frontend_ui_changes": 0,
+    "frontend_logic_changes": 0,
+    "backend_route_changes": 0,
+    "backend_logic_changes": 0,
+    "db_writes_from_scripts": 40,
+    "db_collections_created_live": 5,
+    "battle_engine_changes": 0,
+    "gacha_rate_changes": 0,
+    "hidden_banners_changes": 0,
+    "env_live_markers_injected_to_dotenv": 0,
+    "iap_implementation": false,
+    "artifact_banner_activation": false,
+    "constellation_banner_activation": false,
+    "character_bible_mutation": false,
+    "inventory_state_added_live": true,
+    "ownership_state_added_live": true,
+    "new_endpoint_added_live": false,
+    "locked_endpoint_unlocked": false,
+    "validator_required_weakened": false
+  },
+  "db_writes_breakdown": {
+    "artifact_catalog_snapshot": 32,
+    "user_artifact_inventory": 2,
+    "artifact_inventory_ledger": 2,
+    "artifact_idempotency_registry": 2,
+    "artifact_collection_state": 2,
+    "total": 40,
+    "budget_max": 52
+  },
+  "canary_users_affected": 2,
+  "canary_users_emails": ["sfqa@test.com", "test@test.com"],
+  "invariants": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a"
+  },
+  "deliverables": {
+    "track_a": "data/design/artifacts/live_apply/artifact_live_apply_authorized_gate_preflight_v1.json",
+    "track_b": "data/design/artifacts/live_apply/artifact_live_apply_canary_user_resolution_writeset_v1.json",
+    "track_c": "data/design/artifacts/live_apply/artifact_live_apply_canary_execution_v1.json",
+    "track_d": "data/design/artifacts/live_apply/artifact_live_apply_runtime_lock_guard_v1.json",
+    "track_e": "data/design/artifacts/live_apply/artifact_live_apply_rollback_idempotency_v1.json",
+    "track_f_proof_marker": "data/design/artifacts/live_apply/artifact_live_apply_suite_registration_proof_marker_v1.json",
+    "track_f_validator": "backend/scripts/validate_project_artifact_inventory_live_apply_v1.py",
+    "doc_176": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md"
+  },
+  "next_pack_recommendation": "Nessun pack automatico. La preview UI puo' opzionalmente essere cablata via GET /api/artifacts/inventory in pack frontend dedicato; oppure shift di priorita' su IAP/BP/Shop modernization."
+}

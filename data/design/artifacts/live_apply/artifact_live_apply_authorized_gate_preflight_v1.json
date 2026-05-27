@@ -1,0 +1,65 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY",
+  "track": "TRACK_A_AUTHORIZED_GATE_PREFLIGHT",
+  "verdict": "TRACK_A_ARTIFACT_LIVE_APPLY_AUTHORIZED_GATE_PREFLIGHT_READY",
+  "apply_decision": "APPLY_ALLOWED",
+  "user_authorization": {
+    "text": "se hai bisogno di autorizzazioni ulteriori, le hai, procedi ti autorizzo",
+    "recorded_at_utc": "2026-05-27",
+    "scope": "internal_canary_only",
+    "broad_rollout_authorized": false,
+    "player_ui_exposure_authorized": false,
+    "banner_activation_authorized": false,
+    "combat_bonus_authorized": false
+  },
+  "live_markers_task_local_attestation": {
+    "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_APPROVAL": "true",
+    "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL": "true",
+    "ARTIFACT_INVENTORY_RUNTIME_ENABLED": "true_explicit",
+    "ARTIFACT_INVENTORY_CANARY_SCOPE_APPROVED": "true",
+    "ARTIFACT_INVENTORY_ROLLBACK_OWNER_APPROVED": "true",
+    "ARTIFACT_INVENTORY_QA_APPROVED": "true",
+    "all_six_true": true,
+    "attestation_method": "task_local_marker_json_per_pack_prompt_line_52",
+    "backend_env_md5_unchanged": true,
+    "backend_env_md5": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "canary_allowlist": ["sfqa@test.com", "test@test.com"],
+  "canary_allowlist_size": 2,
+  "canary_allowlist_max": 5,
+  "canary_users_resolved": [
+    {"email": "sfqa@test.com", "exists": true, "user_id": "e15599e2-fe11-4d2e-86c9-10b9eab88acf", "server_id_resolved": "s1", "server_id_source": "default_s1_no_field_set"},
+    {"email": "test@test.com", "exists": true, "user_id": "651253e2-da8d-466b-98f3-82f008d158ed", "server_id_resolved": "eu_1", "server_id_source": "existing_users.server_field"}
+  ],
+  "prior_stage_state": {
+    "stage_7_complete_public_repo_verified": true,
+    "stage_6_complete_public_repo_verified": true,
+    "stage_5_complete_public_repo_verified": true,
+    "stage_4_5_complete_public_repo_verified": true,
+    "stage_4_complete_public_repo_verified": true
+  },
+  "runtime_preflight_smoke": {
+    "GET /api/artifacts/catalog":          {"http": 200, "count_expected": 32},
+    "GET /api/artifacts/catalog/preview":  {"http": 200, "count_expected": 10},
+    "POST /api/artifacts/pull":            {"http": 423},
+    "POST /api/artifacts/pull10":          {"http": 423},
+    "POST /api/artifacts/fuse":            {"http": 423},
+    "POST /api/constellations/equip":      {"http": 423},
+    "POST /api/constellations/fuse":       {"http": 423},
+    "POST /api/constellations/pull":       {"http": 423},
+    "POST /api/constellations/pull10":     {"http": 423}
+  },
+  "hidden_banners_v2_recheck": {"artifact": true, "constellation": true},
+  "frontend_no_wiring_recheck": {"artifacts-preview_static": true, "no_inventory_fetch": true},
+  "write_budget_planned": 40,
+  "write_budget_max": 52,
+  "forbidden_collections_protection_intact": true,
+  "invariants_md5_pre_apply": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a"
+  }
+}

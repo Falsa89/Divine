@@ -1,0 +1,55 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY",
+  "track": "TRACK_C_CANARY_APPLY_EXECUTION",
+  "verdict": "TRACK_C_ARTIFACT_LIVE_APPLY_CANARY_EXECUTION_READY",
+  "executed_at_utc": "2026-05-27",
+  "applied": true,
+  "actual_db_writes": {
+    "artifact_catalog_snapshot_inserts": 32,
+    "user_artifact_inventory_inserts": 2,
+    "artifact_inventory_ledger_appends": 2,
+    "artifact_idempotency_registry_inserts": 2,
+    "artifact_collection_state_upserts": 2,
+    "total_actual_writes": 40
+  },
+  "actual_collection_counts_post_apply": {
+    "artifact_catalog_snapshot": 32,
+    "user_artifact_inventory": 2,
+    "artifact_inventory_ledger": 2,
+    "artifact_collection_state": 2,
+    "artifact_idempotency_registry": 2
+  },
+  "indexes_created": [
+    {"collection": "artifact_catalog_snapshot",   "name": "ix_uniq_artifact_id",         "unique": true},
+    {"collection": "user_artifact_inventory",     "name": "ix_uniq_user_profile_artifact", "unique": true},
+    {"collection": "artifact_inventory_ledger",   "name": "ix_uniq_idempotency",         "unique": true},
+    {"collection": "artifact_collection_state",   "name": "ix_uniq_user_profile",         "unique": true},
+    {"collection": "artifact_idempotency_registry","name": "ix_uniq_idempotency",         "unique": true}
+  ],
+  "granted_inventory_rows": [
+    {"user_id": "e15599e2-fe11-4d2e-86c9-10b9eab88acf", "server_profile_id": "e15599e2-fe11-4d2e-86c9-10b9eab88acf@s1",    "artifact_id": "relic_aurora_eterna", "quantity": 1, "locked": true, "status": "owned"},
+    {"user_id": "651253e2-da8d-466b-98f3-82f008d158ed", "server_profile_id": "651253e2-da8d-466b-98f3-82f008d158ed@eu_1", "artifact_id": "relic_aurora_eterna", "quantity": 1, "locked": true, "status": "owned"}
+  ],
+  "ledger_events_created": [
+    {"event_id": "9a108da5-ea6d-4a3d-bcf8-4c3df9fb17b2", "user_id": "e15599e2-fe11-4d2e-86c9-10b9eab88acf", "event_type": "grant", "delta_quantity": 1},
+    {"event_id": "29f97b43-110e-46cd-b33f-34d765e19aa4", "user_id": "651253e2-da8d-466b-98f3-82f008d158ed", "event_type": "grant", "delta_quantity": 1}
+  ],
+  "forbidden_writes_check": {
+    "users_writes_during_apply": 0,
+    "teams_writes_during_apply": 0,
+    "user_artifacts_legacy_writes_during_apply": 0,
+    "user_constellations_legacy_writes_during_apply": 0,
+    "any_write_outside_5_canonical_collections": false
+  },
+  "budget_compliance": {
+    "total_writes": 40,
+    "budget_max": 52,
+    "within_budget": true
+  },
+  "player_exposure_during_apply": {
+    "new_endpoint_live_added": false,
+    "frontend_route_added": false,
+    "banner_changed": false,
+    "locked_post_unlocked": false
+  }
+}

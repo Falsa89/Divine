@@ -1,0 +1,41 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY",
+  "track": "TRACK_D_POST_APPLY_RUNTIME_LOCK_GUARD",
+  "verdict": "TRACK_D_ARTIFACT_LIVE_APPLY_RUNTIME_LOCK_GUARD_READY",
+  "post_apply_smoke": {
+    "GET /api/artifacts/catalog":          {"http": 200},
+    "GET /api/artifacts/catalog/preview":  {"http": 200},
+    "POST /api/artifacts/pull":            {"http": 423},
+    "POST /api/artifacts/pull10":          {"http": 423},
+    "POST /api/artifacts/fuse":            {"http": 423},
+    "POST /api/constellations/equip":      {"http": 423},
+    "POST /api/constellations/fuse":       {"http": 423},
+    "POST /api/constellations/pull":       {"http": 423},
+    "POST /api/constellations/pull10":     {"http": 423}
+  },
+  "hidden_banners_v2_state": {"artifact": "hidden", "constellation": "hidden"},
+  "frontend_state_recheck": {
+    "artifacts-preview.tsx_md5": "0e75c94e00899af773dbc9faf7326a15",
+    "artifacts-preview.tsx_modified_post_apply": false,
+    "artifacts-preview.tsx_calls_inventory_api": false,
+    "new_inventory_screen_added": false,
+    "acquisition_button_added": false
+  },
+  "runtime_invariants_md5_unchanged_post_apply": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a"
+  },
+  "no_acquisition_endpoint_live": true,
+  "no_equip_endpoint_live": true,
+  "no_fuse_endpoint_live": true,
+  "no_craft_endpoint_live": true,
+  "no_pull_endpoint_live": true,
+  "no_combat_bonus_active": true,
+  "no_hero_stat_delta_via_artifact": true,
+  "catalog_RO_preserved": true,
+  "gacha_unchanged": true
+}

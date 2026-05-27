@@ -1,0 +1,54 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY",
+  "track": "TRACK_B_CANARY_USER_RESOLUTION_AND_WRITESET_DRY_RUN",
+  "verdict": "TRACK_B_ARTIFACT_LIVE_APPLY_CANARY_USER_RESOLUTION_WRITESET_READY",
+  "resolution_strategy": "strict_allowlist_no_wildcard_no_broad_query",
+  "db_queries_during_resolution": [
+    "db.users.find_one({'email': 'sfqa@test.com'})",
+    "db.users.find_one({'email': 'test@test.com'})"
+  ],
+  "resolved_users": [
+    {
+      "email": "sfqa@test.com",
+      "user_id": "e15599e2-fe11-4d2e-86c9-10b9eab88acf",
+      "server_id": "s1",
+      "server_profile_id": "e15599e2-fe11-4d2e-86c9-10b9eab88acf@s1",
+      "account_id": "e15599e2-fe11-4d2e-86c9-10b9eab88acf"
+    },
+    {
+      "email": "test@test.com",
+      "user_id": "651253e2-da8d-466b-98f3-82f008d158ed",
+      "server_id": "eu_1",
+      "server_profile_id": "651253e2-da8d-466b-98f3-82f008d158ed@eu_1",
+      "account_id": "651253e2-da8d-466b-98f3-82f008d158ed"
+    }
+  ],
+  "writeset_dry_run": {
+    "artifact_catalog_snapshot_inserts": 32,
+    "user_artifact_inventory_inserts": 2,
+    "artifact_inventory_ledger_appends": 2,
+    "artifact_collection_state_upserts": 2,
+    "artifact_idempotency_registry_inserts": 2,
+    "forbidden_collection_writes": 0,
+    "users_writes": 0,
+    "teams_writes": 0,
+    "legacy_user_artifacts_writes": 0,
+    "legacy_user_constellations_writes": 0,
+    "total_planned_writes": 40,
+    "budget_max": 52,
+    "budget_exceeded": false
+  },
+  "writeset_invariants": {
+    "only_canary_artifact": "relic_aurora_eterna",
+    "only_source_type": "system_seed",
+    "reason_set": "artifact_inventory_live_apply_stage8_canary",
+    "bonus_status_value": "inactive",
+    "all_inventory_rows_locked_true": true,
+    "idempotency_key_pattern": "<source_type>:<source_id>:<user_id>:<artifact_id>",
+    "idempotency_keys_planned": [
+      "system_seed:artifact_inventory_live_apply_stage8_canary_2026_05_27:e15599e2-fe11-4d2e-86c9-10b9eab88acf:relic_aurora_eterna",
+      "system_seed:artifact_inventory_live_apply_stage8_canary_2026_05_27:651253e2-da8d-466b-98f3-82f008d158ed:relic_aurora_eterna"
+    ]
+  },
+  "approval_to_proceed": true
+}
