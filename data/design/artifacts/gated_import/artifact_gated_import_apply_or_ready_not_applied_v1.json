@@ -1,0 +1,47 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT",
+  "track": "TRACK_D_APPLY_OR_READY_NOT_APPLIED_EXECUTION",
+  "verdict": "TRACK_D_ARTIFACT_GATED_IMPORT_READY_NOT_APPLIED_MISSING_LIVE_MARKERS",
+  "execution_path_taken": "READY_NOT_APPLIED",
+  "live_markers_present": false,
+  "live_markers_state": {
+    "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL": "ABSENT_in_backend_env",
+    "ARTIFACT_INVENTORY_RUNTIME_ENABLED": "ABSENT_in_backend_env"
+  },
+  "db_writes_performed": 0,
+  "collections_created": 0,
+  "indexes_created": 0,
+  "grants_emitted": 0,
+  "revokes_emitted": 0,
+  "users_touched": 0,
+  "endpoints_added_live": 0,
+  "frontend_changes": 0,
+  "battle_engine_changes": 0,
+  "gacha_changes": 0,
+  "iap_changes": 0,
+  "character_bible_mutations": 0,
+  "dry_run_invocation_result": {
+    "command": "python3 backend/scripts/artifact_inventory_gated_import_apply.py --dry-run",
+    "exit_code": 0,
+    "reported_state": "READY_NOT_APPLIED_MISSING_LIVE_MARKERS",
+    "reported_collection_states": {
+      "artifact_catalog_snapshot": "NOT_PRESENT",
+      "user_artifact_inventory": "NOT_PRESENT",
+      "artifact_inventory_ledger": "NOT_PRESENT",
+      "artifact_collection_state": "NOT_PRESENT",
+      "artifact_idempotency_registry": "NOT_PRESENT"
+    },
+    "catalog_rows_that_would_be_inserted_if_live": 32,
+    "canary_grants_that_would_be_emitted_if_live": 0
+  },
+  "attempted_apply_without_markers_result": {
+    "command_attempted": "python3 backend/scripts/artifact_inventory_gated_import_apply.py --apply --i-understand-this-will-write",
+    "exit_code": 2,
+    "refusal_reason": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL or ARTIFACT_INVENTORY_RUNTIME_ENABLED missing",
+    "db_writes_performed_during_attempt": 0
+  },
+  "audit_invariants_unchanged": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  }
+}

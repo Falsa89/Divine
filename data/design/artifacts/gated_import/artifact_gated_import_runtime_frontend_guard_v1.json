@@ -1,0 +1,43 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT",
+  "track": "TRACK_E_RUNTIME_AND_FRONTEND_GUARD_RECHECK",
+  "verdict": "TRACK_E_ARTIFACT_GATED_IMPORT_RUNTIME_AND_FRONTEND_GUARD_READY",
+  "runtime_recheck": {
+    "GET_artifacts_catalog_http": 200,
+    "GET_artifacts_catalog_count": 32,
+    "GET_artifacts_catalog_preview_http": 200,
+    "GET_artifacts_catalog_preview_count": 10,
+    "locked_post_endpoints_all_return_423": true,
+    "new_inventory_endpoints_added_this_pack": 0,
+    "new_grant_endpoint_added": false,
+    "new_revoke_endpoint_added": false
+  },
+  "frontend_recheck": {
+    "artifacts_preview_tsx_modified": false,
+    "artifacts_preview_tsx_fetches_any_inventory_api": false,
+    "artifacts_preview_tsx_md5": "0e75c94e00899af773dbc9faf7326a15",
+    "artifacts_tsx_redirect_to_preview_unchanged": true,
+    "gacha_hidden_banners_v2_contains_artifact_and_constellation": true,
+    "no_new_inventory_button_added": true,
+    "no_inventory_screen_added": true
+  },
+  "systems_not_touched": {
+    "battle_engine": true,
+    "battle_core": true,
+    "gacha_rates": true,
+    "iap": true,
+    "shop": true,
+    "battle_pass": true,
+    "vip": true,
+    "soul_forge": true,
+    "character_bible": true
+  },
+  "invariants_md5": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293"
+  }
+}

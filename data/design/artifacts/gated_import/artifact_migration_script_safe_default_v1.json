@@ -1,0 +1,47 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT",
+  "track": "TRACK_C_MIGRATION_SCRIPT_OR_PLAN_SAFE_DEFAULT",
+  "verdict": "TRACK_C_ARTIFACT_MIGRATION_SCRIPT_OR_PLAN_SAFE_DEFAULT_READY",
+  "script_path": "backend/scripts/artifact_inventory_gated_import_apply.py",
+  "script_default_mode": "dry_run",
+  "script_apply_required_flags": {
+    "env_PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL": "true",
+    "env_ARTIFACT_INVENTORY_RUNTIME_ENABLED": "true_explicit",
+    "cli_flag_required": "--i-understand-this-will-write"
+  },
+  "script_refuses_apply_if_any_flag_missing": true,
+  "script_registered_in_server_startup": false,
+  "script_registered_in_supervisord": false,
+  "script_registered_in_cron": false,
+  "script_idempotent_on_rerun": true,
+  "script_idempotency_key_pattern": "<source_type>:<source_id>:<user_id>:<artifact_id>",
+  "script_supports_rollback": true,
+  "script_rollback_strategy": "compensating_ledger_entry_via_separate_rollback_subcommand",
+  "script_canary_default": {
+    "canary_user_allowlist": [],
+    "canary_artifact_allowlist": ["relic_aurora_eterna"],
+    "max_grants_per_run": 0,
+    "would_write_count_with_empty_allowlist": 0
+  },
+  "safe_defaults_summary": {
+    "default_no_db_write": true,
+    "default_no_collection_create": true,
+    "default_no_index_create": true,
+    "default_no_grant": true,
+    "default_no_revoke": true,
+    "default_no_user_exposure": true
+  },
+  "dry_run_output_describes": [
+    "target collection list with create-or-noop status",
+    "catalog snapshot rows to be inserted (count, sample id)",
+    "canary grant plan (count, ids)",
+    "rollback plan reference",
+    "MD5 invariants of battle_engine.py and backend/.env"
+  ],
+  "static_analysis_invariants": {
+    "no_motor_client_calls_at_import_time": true,
+    "no_db_write_at_module_load": true,
+    "all_db_writes_inside_apply_function": true,
+    "apply_function_first_action_is_guard_check": true
+  }
+}

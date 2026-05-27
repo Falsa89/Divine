@@ -1101,6 +1101,7 @@ OPTIONAL = [
     ('PROJECT-ARTIFACT-BACKEND-CATALOG-RO', 'validate_project_artifact_backend_catalog_ro_v1.py'),
     ('PROJECT-ARTIFACT-LEGACY-MUTATION-ENDPOINT-HARDENING', 'validate_project_artifact_legacy_mutation_endpoint_hardening_v1.py'),
     ('PROJECT-ARTIFACT-INVENTORY-SCHEMA-DRY-RUN', 'validate_project_artifact_inventory_schema_dry_run_v1.py'),
+    ('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', 'validate_project_artifact_inventory_gated_import_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

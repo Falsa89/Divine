@@ -1,0 +1,78 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT",
+  "track": "TRACK_A_GATED_IMPORT_READINESS_AUDIT",
+  "verdict": "TRACK_A_ARTIFACT_GATED_IMPORT_READINESS_AUDIT_READY",
+  "global_markers_required": {
+    "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT_APPROVAL": "true (assumed from pack invocation context)",
+    "PROJECT_ACCELERATION_MODE": "ARTIFACT_INVENTORY_GATED_IMPORT (assumed from pack)"
+  },
+  "live_markers_required_for_any_write": {
+    "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL": "true",
+    "ARTIFACT_INVENTORY_RUNTIME_ENABLED": "true_explicit"
+  },
+  "live_markers_observed_in_env": {
+    "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL": "ABSENT",
+    "ARTIFACT_INVENTORY_RUNTIME_ENABLED": "ABSENT"
+  },
+  "apply_decision": "READY_NOT_APPLIED",
+  "apply_reason": "Live markers PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL e ARTIFACT_INVENTORY_RUNTIME_ENABLED non sono presenti in backend/.env ne' altrove. Nessuna scrittura DB e' permessa.",
+  "prior_stages_state": {
+    "stage_5_schema_dry_run": {
+      "status": "COMPLETE",
+      "completion_file": "data/design/artifacts/inventory_schema_dry_run/artifact_inventory_schema_dry_run_completion_v1.json",
+      "db_writes_in_stage_5": 0,
+      "unresolved_blockers": []
+    },
+    "stage_4_5_hardening": {
+      "status": "COMPLETE_PUBLIC_REPO_VERIFIED",
+      "locked_post_endpoints_count": 7,
+      "all_locked_return_423": true
+    },
+    "stage_4_catalog_ro": {
+      "status": "COMPLETE_PUBLIC_REPO_VERIFIED",
+      "endpoints": ["GET /api/artifacts/catalog", "GET /api/artifacts/catalog/preview"]
+    },
+    "stage_3_preview_ui": {
+      "status": "COMPLETE_PUBLIC_REPO_VERIFIED",
+      "frontend_static": true
+    }
+  },
+  "runtime_surface_recheck": {
+    "GET_artifacts_catalog_http_200": true,
+    "GET_artifacts_catalog_count": 32,
+    "GET_artifacts_catalog_preview_http_200": true,
+    "GET_artifacts_catalog_preview_count": 10,
+    "locked_post_endpoints_recheck": {
+      "POST /api/artifacts/pull":         {"http": 423},
+      "POST /api/artifacts/pull10":       {"http": 423},
+      "POST /api/artifacts/fuse":         {"http": 423},
+      "POST /api/constellations/equip":   {"http": 423},
+      "POST /api/constellations/fuse":    {"http": 423},
+      "POST /api/constellations/pull":    {"http": 423},
+      "POST /api/constellations/pull10":  {"http": 423}
+    }
+  },
+  "legacy_get_endpoints_must_NOT_be_used_as_import_source": [
+    "GET /api/artifacts",
+    "GET /api/constellations",
+    "GET /api/banners/special"
+  ],
+  "canonical_import_sources_only": [
+    "data/design/artifacts/artifact_bible_launch_draft_v1.json",
+    "data/design/artifacts/preview/artifact_preview_dataset_v1.json",
+    "data/design/artifacts/inventory_schema_dry_run/artifact_inventory_schema_design_v1.json"
+  ],
+  "frontend_inventory_wiring_recheck": {
+    "artifacts_preview_tsx_calls_inventory_api": false,
+    "artifacts_preview_tsx_fetches_anything": false,
+    "any_route_imports_inventory": false
+  },
+  "db_collections_state": {
+    "artifact_catalog_snapshot": "NOT_PRESENT",
+    "user_artifact_inventory": "NOT_PRESENT",
+    "artifact_inventory_ledger": "NOT_PRESENT",
+    "artifact_collection_state": "NOT_PRESENT",
+    "artifact_idempotency_registry": "NOT_PRESENT"
+  },
+  "unresolved_blockers": []
+}

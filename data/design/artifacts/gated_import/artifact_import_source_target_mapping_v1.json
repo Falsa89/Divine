@@ -1,0 +1,107 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT",
+  "track": "TRACK_B_IMPORT_SOURCE_AND_TARGET_MAPPING",
+  "verdict": "TRACK_B_ARTIFACT_IMPORT_SOURCE_TARGET_MAPPING_READY",
+  "source_strategy": "canonical_design_files_only_no_legacy_GET_no_DB_read_of_user_artifacts",
+  "sources": [
+    {
+      "role": "primary_catalog_source",
+      "path": "data/design/artifacts/artifact_bible_launch_draft_v1.json",
+      "key_field": "artifacts[].artifact_id",
+      "row_count": 32,
+      "required_fields": [
+        "artifact_id", "display_name_it", "display_name_en",
+        "category", "rarity_band", "release_status", "gameplay_status",
+        "associated_hero_id", "associated_character_status"
+      ],
+      "version_field": "bible_version",
+      "version_value": "launch_draft_v1"
+    },
+    {
+      "role": "preview_dataset_reference_only",
+      "path": "data/design/artifacts/preview/artifact_preview_dataset_v1.json",
+      "row_count": 10,
+      "note": "NON e' una sorgente di import diretta: serve solo per cross-validation del subset launch_candidate"
+    },
+    {
+      "role": "schema_design_reference",
+      "path": "data/design/artifacts/inventory_schema_dry_run/artifact_inventory_schema_design_v1.json",
+      "note": "definisce shape target delle 5 collection"
+    }
+  ],
+  "explicitly_forbidden_sources": [
+    {"endpoint": "GET /api/artifacts",        "reason": "legacy placeholder, contiene Santo Graal/Mjolnir/Occhio di Ra"},
+    {"endpoint": "GET /api/constellations",   "reason": "out-of-scope; constellation track separato"},
+    {"endpoint": "GET /api/banners/special",  "reason": "legacy rates non canonici"},
+    {"collection": "user_artifacts",          "reason": "legacy schema con level/duplicates non compatibile"},
+    {"collection": "user_constellations",     "reason": "out-of-scope per artifact inventory"}
+  ],
+  "targets": [
+    {
+      "role": "primary_catalog_target",
+      "collection": "artifact_catalog_snapshot",
+      "expected_row_count_on_seed": 32,
+      "unique_index": ["artifact_id"],
+      "version_pinned": "launch_draft_v1",
+      "snapshot_md5_required": true,
+      "created_only_with_live_markers": true
+    },
+    {
+      "role": "inventory_target",
+      "collection": "user_artifact_inventory",
+      "expected_row_count_on_seed": "0_if_canary_list_empty_else_<= canary_size",
+      "unique_compound_index": ["user_id", "server_profile_id", "artifact_id"],
+      "created_only_with_live_markers": true
+    },
+    {
+      "role": "ledger_target",
+      "collection": "artifact_inventory_ledger",
+      "append_only": true,
+      "unique_index": ["idempotency_key"],
+      "created_only_with_live_markers": true
+    },
+    {
+      "role": "collection_state_target",
+      "collection": "artifact_collection_state",
+      "bonus_status_default": "inactive",
+      "created_only_with_live_markers": true
+    },
+    {
+      "role": "idempotency_registry_target",
+      "collection": "artifact_idempotency_registry",
+      "unique_index": ["idempotency_key"],
+      "created_only_with_live_markers": true
+    }
+  ],
+  "metadata_version": {
+    "value": "launch_draft_v1",
+    "frozen": true,
+    "new_imports_must_match": true
+  },
+  "scoping": {
+    "server_id_required": true,
+    "server_profile_id_pattern": "<user_id>@<server_id>",
+    "account_id_alias": "user_id",
+    "multishard_compatible": true
+  },
+  "idempotency_strategy": {
+    "key_pattern": "<source_type>:<source_id>:<user_id>:<artifact_id>",
+    "duplicate_grant_behavior": "no_quantity_change_returns_existing_event_id",
+    "key_conflict_with_different_payload_behavior": "http_409_idempotency_key_conflict"
+  },
+  "rollback_revoke_reference": {
+    "never_hard_delete_after_live": true,
+    "compensating_ledger_entry_required": true,
+    "reason_field_required_on_revoke": true,
+    "locked_items_revoke_blocked": true
+  },
+  "canary_internal_only_scope": {
+    "enabled_only_with_live_markers": true,
+    "canary_user_allowlist": [],
+    "canary_artifact_allowlist": ["relic_aurora_eterna"],
+    "canary_source_type": "system_seed",
+    "canary_source_id_prefix": "gated_import_canary_2026_05_27",
+    "max_canary_grants_per_run": 0
+  },
+  "live_marker_requirement_summary": "Senza i due live marker, TUTTI i 5 target restano NOT_PRESENT e nessun grant viene emesso."
+}
