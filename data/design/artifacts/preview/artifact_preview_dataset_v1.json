@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION",
+  "track": "B",
+  "verdict": "TRACK_B_ARTIFACT_PREVIEW_DATASET_SELECTION_READY",
+  "dataset_version": "v1",
+  "entries_count": 10,
+  "selection_rules": [
+    "associated_character_status \u2208 {none, current_launch} (no future_reserved)",
+    "release_status = launch_candidate",
+    "gameplay_status = cosmetic_prestige_only",
+    "forbidden_interpretations declared in Bible",
+    "no legacy placeholder names (Santo Graal, Occhio di Ra, Mjolnir, Yata, Idunn)"
+  ],
+  "entries": [
+    {"artifact_id": "relic_aurora_eterna",          "display_name_it": "Aurora Eterna",                  "category": "divine_relic",        "rarity_band": "legendary", "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Frammento della prima alba.",                     "visual_hint": "cristallo dorato pulsante con halo solare"},
+    {"artifact_id": "relic_calice_vespro",          "display_name_it": "Calice del Vespro",              "category": "divine_relic",        "rarity_band": "legendary", "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Custodisce l'ultima luce del giorno.",              "visual_hint": "calice argentato con liquido luminescente blu-viola"},
+    {"artifact_id": "relic_lacrima_oceano",         "display_name_it": "Lacrima dell'Oceano",            "category": "divine_relic",        "rarity_band": "epic",      "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Lacrima dell'oceano primordiale.",                   "visual_hint": "goccia turchese sospesa in cornice corallina"},
+    {"artifact_id": "relic_seme_albero_mondo",      "display_name_it": "Seme dell'Albero del Mondo",     "category": "divine_relic",        "rarity_band": "legendary", "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Seme dell'asse del mondo.",                          "visual_hint": "ghianda dorata con radici fluttuanti"},
+    {"artifact_id": "relic_pluma_fenix",             "display_name_it": "Piuma di Fenice",                "category": "divine_relic",        "rarity_band": "epic",      "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Piuma che non si consuma.",                          "visual_hint": "piuma rosso-oro che brilla pulsando"},
+    {"artifact_id": "relic_scaglia_drago_antico",   "display_name_it": "Scaglia del Drago Antico",       "category": "divine_relic",        "rarity_band": "epic",      "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Scaglia di un drago oltre il tempo.",                 "visual_hint": "scaglia verde-oro iridescente"},
+    {"artifact_id": "relic_sigillo_lunare",         "display_name_it": "Sigillo Lunare",                 "category": "sacred_symbol",       "rarity_band": "epic",      "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Lega le maree alle fasi lunari.",                     "visual_hint": "disco di madreperla con incisioni a crescenti concentrici"},
+    {"artifact_id": "relic_mandala_otto_porte",     "display_name_it": "Mandala delle Otto Porte",        "category": "sacred_symbol",       "rarity_band": "epic",      "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Otto soglie tra i piani.",                           "visual_hint": "disco mandala oro su sfondo blu profondo"},
+    {"artifact_id": "relic_emblema_olimpo",         "display_name_it": "Emblema dell'Olimpo",            "category": "pantheon_emblem",     "rarity_band": "legendary", "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Emblema del consiglio olimpico.",                     "visual_hint": "scudo dodecagonale con 12 simboli olimpici"},
+    {"artifact_id": "relic_pagina_libro_perduto",   "display_name_it": "Pagina del Libro Perduto",        "category": "world_memory",         "rarity_band": "epic",      "release_status": "launch_candidate", "gameplay_status": "cosmetic_prestige_only", "ui_copy_short_it": "Pagina di una storia non vissuta.",                 "visual_hint": "pergamena ingiallita con inchiostro che cambia leggermente quando guardata"}
+  ],
+  "categories_used": ["divine_relic", "sacred_symbol", "pantheon_emblem", "world_memory"],
+  "no_future_reserved_in_dataset": true,
+  "no_legacy_placeholder_names_in_dataset": true,
+  "no_stat_or_bonus_field_displayed": true,
+  "badge_for_each_card": "ANTEPRIMA",
+  "status_for_each_card": "Non ottenibile ora",
+  "system_status_copy": "Sistema in preparazione"
+}

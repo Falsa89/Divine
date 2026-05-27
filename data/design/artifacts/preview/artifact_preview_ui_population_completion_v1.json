@@ -1,0 +1,73 @@
+{
+  "task_id": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION",
+  "track": "H",
+  "verdict": "TRACK_H_ARTIFACT_PREVIEW_COMPLETION_READY",
+  "global_verdict_local_container": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_READY",
+  "global_verdict_public_sync_status_default": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "promotion_rule": "Promosso a 'PROJECT_ARTIFACT_PREVIEW_UI_POPULATION_COMPLETE_PUBLIC_REPO_VERIFIED' SOLO dopo verifica branch pubblico GitHub 'main' Falsa89/Divine.",
+  "track_verdicts": {
+    "A": "TRACK_A_ARTIFACT_PREVIEW_SOURCE_MANIFEST_REVALIDATION_READY",
+    "B": "TRACK_B_ARTIFACT_PREVIEW_DATASET_SELECTION_READY",
+    "C": "TRACK_C_ARTIFACT_FRONTEND_PREVIEW_UI_IMPLEMENTED_READ_ONLY_SAFE",
+    "D": "TRACK_D_ARTIFACT_ROUTE_AND_LOCK_GUARD_VALIDATION_READY",
+    "E": "TRACK_E_ARTIFACT_PREVIEW_BETA_HARNESS_SMOKE_READY",
+    "F": "TRACK_F_ARTIFACT_PREVIEW_STATIC_VALIDATOR_AND_SUITE_READY",
+    "G": "TRACK_G_ARTIFACT_PREVIEW_PUBLIC_REPO_SYNC_READY",
+    "H": "TRACK_H_ARTIFACT_PREVIEW_COMPLETION_READY"
+  },
+  "runtime_changes_made": {
+    "frontend_ui_changes": 1,
+    "frontend_logic_changes": 0,
+    "backend_route_changes": 0,
+    "backend_logic_changes": 0,
+    "db_writes_from_scripts": 0,
+    "battle_engine_changes": 0,
+    "soul_forge_changes": 0,
+    "gacha_rate_changes": 0,
+    "iap_implementation": false,
+    "artifact_banner_activation": false,
+    "constellation_banner_activation": false,
+    "character_bible_mutation": false,
+    "backend_catalog_endpoint_added": false,
+    "inventory_state_added": false
+  },
+  "frontend_ui_change_detail": {
+    "file": "frontend/app/artifacts-preview.tsx",
+    "change_type": "populated_read_only_with_10_canonical_entries",
+    "new_md5": "0e75c94e00899af773dbc9faf7326a15",
+    "safefeaturecard_dependency_removed": true,
+    "animated_only_via_TouchableOpacity_no_modal": true,
+    "no_new_dependencies_added": true
+  },
+  "files_added": [
+    "data/design/artifacts/preview/artifact_preview_source_manifest_revalidation_v1.json",
+    "data/design/artifacts/preview/artifact_preview_dataset_v1.json",
+    "data/design/artifacts/preview/artifact_route_lock_guard_validation_v1.json",
+    "data/design/artifacts/preview/artifact_preview_beta_harness_smoke_v1.json",
+    "data/design/artifacts/preview/artifact_preview_ui_population_completion_v1.json",
+    "backend/scripts/validate_project_artifact_preview_ui_population_v1.py",
+    "docs/divine/169_ARTIFACT_PREVIEW_UI_POPULATION.md"
+  ],
+  "files_modified": [
+    "frontend/app/artifacts-preview.tsx (read-only UI population)",
+    "backend/scripts/run_hero_skill_kit_validator_suite.py (+1 OPTIONAL)"
+  ],
+  "invariants": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3"
+  },
+  "mobile_qa_checklist": [
+    "/artifacts-preview si apre senza crash",
+    "Titolo 'Reliquie Divine' visibile",
+    "Banner 'Sistema in preparazione' visibile con notice 'Nessuna evocazione...'",
+    "Chip Categorie funzionano (filtraggio client-side puro)",
+    "10 cards visibili con badge ANTEPRIMA + 'Non ottenibile ora'",
+    "Nessun bottone EVOCA/EQUIPAGGIA/FONDI/CRAFT/ACQUISTA/OTTIENI ORA",
+    "Back button (\u2190) torna alla schermata precedente",
+    "Gacha tab: artefatti e costellazioni continuano a NON apparire",
+    "/artifacts redirect a /artifacts-preview"
+  ],
+  "suite_target": "700 PASS / 0 FAIL / 0 MISS",
+  "next_pack_recommendation_primary": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO_PACK (stage 4)",
+  "next_pack_recommendation_alternative": "PROJECT_IAP_DESIGN_PACK"
+}

@@ -1097,6 +1097,7 @@ OPTIONAL = [
     ('PROJECT-GACHA-RATE-SANITY-FINAL-SIGNOFF', 'validate_project_gacha_rate_sanity_final_signoff_v1.py'),
     ('PROJECT-ARTIFACT-BIBLE-CANONICAL-DESIGN', 'validate_project_artifact_bible_canonical_design_v1.py'),
     ('PROJECT-ARTIFACT-BIBLE-REVIEW-SIGNOFF', 'validate_project_artifact_bible_review_signoff_v1.py'),
+    ('PROJECT-ARTIFACT-PREVIEW-UI-POPULATION', 'validate_project_artifact_preview_ui_population_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION",
+  "track": "A",
+  "verdict": "TRACK_A_ARTIFACT_PREVIEW_SOURCE_MANIFEST_REVALIDATION_READY",
+  "canonical_files_revalidated": [
+    {"path": "data/design/artifacts/artifact_existing_surface_audit_v1.json",            "md5": "f6d17e97c269fc3e6c5f39ee7f9c331d", "ok": true},
+    {"path": "data/design/artifacts/artifact_canonical_taxonomy_v1.json",                "md5": "bb8835a0ecd2d5d0bd011145bf614e5d", "ok": true},
+    {"path": "data/design/artifacts/artifact_bible_launch_draft_v1.json",                "md5": "8b224f869ff14dbacb8a765c4317e50f", "ok": true},
+    {"path": "data/design/artifacts/artifact_constellation_relic_boundary_v1.json",     "md5": "2fbd1cdaafb0f864917b67bbbe071a4e", "ok": true},
+    {"path": "data/design/artifacts/artifact_preview_ui_copy_lock_policy_v1.json",       "md5": "507d9a2b29def7537d28dcf646ed22b4", "ok": true},
+    {"path": "data/design/artifacts/artifact_migration_import_plan_v1.json",             "md5": "d77cd742533fe60f0120efea4c2c52d5", "ok": true},
+    {"path": "data/design/artifacts/artifact_static_guard_beta_harness_v1.json",        "md5": "5c9137bc0b8b1786ef78d47951550c9f", "ok": true},
+    {"path": "data/design/artifacts/artifact_bible_canonical_design_completion_v1.json", "md5": "aff34b27f88f91399a292a07c96d4996", "ok": true},
+    {"path": "docs/divine/167_ARTIFACT_BIBLE_CANONICAL_DESIGN.md",                       "md5": "dc70d5f078ea854ee064f6027e68f281", "ok": true},
+    {"path": "backend/scripts/validate_project_artifact_bible_canonical_design_v1.py",  "md5": "9705c3d1aad130e45537161fe4291b72", "ok": true}
+  ],
+  "review_files_revalidated": [
+    {"path": "data/design/artifacts/review/artifact_bible_full_manifest_review_v1.json",                "md5": "b924bf7c904ecbd15ed65ed14c7c0d02", "ok": true},
+    {"path": "data/design/artifacts/review/artifact_entry_by_entry_canonical_review_v1.json",          "md5": "558f3472a63f87394b5b6810c6ca0b99", "ok": true},
+    {"path": "data/design/artifacts/review/artifact_placeholder_legacy_reconciliation_v1.json",        "md5": "c7d67a29cf875354b2e68ba3a722dcae", "ok": true},
+    {"path": "data/design/artifacts/review/artifact_system_boundary_signoff_v1.json",                  "md5": "2f88b356cfcc8964c39803f5a4f8bf32", "ok": true},
+    {"path": "data/design/artifacts/review/artifact_preview_population_readiness_gate_v1.json",        "md5": "d439d0de2ccd122b71ca8b74653533c1", "ok": true},
+    {"path": "data/design/artifacts/review/artifact_import_runtime_blocker_matrix_v1.json",            "md5": "9d95e8e40c11b1b3e565576605a1325d", "ok": true},
+    {"path": "data/design/artifacts/review/artifact_static_guard_validation_update_v1.json",          "md5": "4a6e26f2fa860472b22b0ed0f5f64507", "ok": true},
+    {"path": "data/design/artifacts/review/artifact_review_signoff_completion_v1.json",                 "md5": "3d04f50ff6b486a7369a9b414f8a0404", "ok": true},
+    {"path": "docs/divine/168_ARTIFACT_BIBLE_REVIEW_SIGNOFF.md",                                       "md5": "f8a80a11a734dd733c9cb5de6026551e", "ok": true},
+    {"path": "backend/scripts/validate_project_artifact_bible_review_signoff_v1.py",                  "md5": "853caab5ac78e8248acbe46f2186733e", "ok": true}
+  ],
+  "bible_entries_count_confirmed": 32,
+  "review_summary_confirmed": {"approved": 26, "future_reserved": 6, "needs_revision": 0},
+  "preview_readiness_gate_confirmed": "READY_TO_POPULATE_PREVIEW_IN_NEXT_PACK",
+  "safe_preview_examples_confirmed_count": 10,
+  "avoid_entries_confirmed_count": 6,
+  "legacy_placeholders_deprecated_player_facing": ["Santo Graal", "Occhio di Ra", "Frammento di Mjolnir", "Specchio di Yata", "Mela di Idunn"],
+  "spec_id_mismatch_resolved": [
+    {
+      "spec_id": "relic_piuma_fenice",
+      "bible_canonical_id": "relic_pluma_fenix",
+      "resolution": "Use canonical Bible id 'relic_pluma_fenix'. Pack spec contains a minor naming typo; canonical Bible \u00e8 source of truth. Display name UI invariato: 'Piuma di Fenice'."
+    }
+  ]
+}

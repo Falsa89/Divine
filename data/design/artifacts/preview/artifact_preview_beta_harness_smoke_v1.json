@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION",
+  "track": "E",
+  "verdict": "TRACK_E_ARTIFACT_PREVIEW_BETA_HARNESS_SMOKE_READY",
+  "playwright_live_smoke": {
+    "feasible_in_current_container": false,
+    "reason": "Preview URL Expo Web non stabile container-side; live Playwright deferito.",
+    "specs_already_available": [
+      "frontend/tests/e2e/locked-surfaces-smoke.spec.ts",
+      "frontend/tests/e2e/player-facing-routes.spec.ts"
+    ]
+  },
+  "static_smoke_coverage": {
+    "strategy": "Master validator esegue assertion statiche equivalenti agli smoke E2E.",
+    "assertions_documented": [
+      "frontend/app/artifacts-preview.tsx contiene il titolo 'Reliquie Divine'",
+      "contiene la stringa 'Sistema in preparazione'",
+      "contiene la stringa 'ANTEPRIMA' (badge)",
+      "contiene la stringa 'Non ottenibile ora' (status copy)",
+      "contiene >=6 (in realt\u00e0 10) entries del PREVIEW_ENTRIES array",
+      "NON contiene nessuna delle 6 forbidden_live_labels",
+      "NON contiene chiamate fetch() o apiCall() o /api/artifacts/* o /api/constellations/* mutative",
+      "NON contiene nessuno dei 6 future_reserved artifact_id",
+      "NON contiene nessuno dei 5 legacy placeholder display names"
+    ]
+  },
+  "package_json_stable": true,
+  "yarn_lock_stable": true,
+  "harness_extension_status": "covered_by_master_validator_in_this_pack"
+}

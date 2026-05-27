@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_ARTIFACT_PREVIEW_UI_POPULATION",
+  "track": "D",
+  "verdict": "TRACK_D_ARTIFACT_ROUTE_AND_LOCK_GUARD_VALIDATION_READY",
+  "checks": [
+    {"id": "GACHA_HIDDEN_BANNERS_V2_INTACT", "file": "frontend/app/(tabs)/gacha.tsx", "expected": "HIDDEN_BANNERS_V2 = new Set(['artifact', 'constellation'])", "ok": true},
+    {"id": "ARTIFACTS_LEGACY_ROUTE_STILL_REDIRECT", "file": "frontend/app/artifacts.tsx", "expected": "router.replace('/artifacts-preview')", "ok": true},
+    {"id": "ARTIFACTS_PREVIEW_NO_MUTATIVE_API", "file": "frontend/app/artifacts-preview.tsx", "expected": "nessuna stringa /api/artifacts/* o /api/constellations/* mutativa, nessun fetch( / apiCall(", "ok": true},
+    {"id": "ARTIFACTS_PREVIEW_NO_FORBIDDEN_LIVE_LABELS", "file": "frontend/app/artifacts-preview.tsx", "forbidden_labels": ["EVOCA", "EQUIPAGGIA", "FONDI", "CRAFT", "ACQUISTA", "OTTIENI ORA"], "ok": true},
+    {"id": "PREMIUM_TARGETED_GACHA_LOCK_INTACT", "file": "frontend/app/(tabs)/gacha.tsx", "expected": "LOCKED_BANNERS_V2 = new Set(['premium', 'targeted'])", "ok": true},
+    {"id": "NO_BACKEND_ARTIFACT_ROUTE_CHANGES", "file": "backend/routes/artifacts.py", "expected": "file unchanged in this pack", "ok": true},
+    {"id": "NO_BACKEND_BATTLE_ENGINE_CHANGES", "file": "backend/battle_engine.py", "expected_md5": "151ca35ad3bc35f0a6209cb3744ed440", "ok": true},
+    {"id": "NO_BACKEND_ENV_CHANGES", "file": "backend/.env", "expected_md5": "ff60bbb79efa329b71aa8ed351ea89b3", "ok": true}
+  ],
+  "summary": {
+    "all_guards_ok": true,
+    "artifact_or_constellation_runtime_activated": false,
+    "premium_or_targeted_unlocked": false,
+    "backend_changes": 0,
+    "db_writes": 0
+  }
+}
