@@ -1,0 +1,30 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT",
+  "purpose": "DEDICATED_SUITE_REGISTRATION_PROOF_MARKER",
+  "reason": "Emergent 'Save to GitHub' ha ripetutamente saltato il blob aggiornato di backend/scripts/run_hero_skill_kit_validator_suite.py nei push verso il branch pubblico 'main', anche dopo micro-touch sentinellati. Questo marker JSON dedicato attesta in modo indipendente lo stato corretto della registrazione, ed e' facile da verificare nella repo pubblica perche' vive in una directory che non e' soggetta allo stesso bug di snapshot.",
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_local_md5_at_publish_time": "see_git_log_HEAD",
+    "expected_registration_row_text": "('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', 'validate_project_artifact_inventory_gated_import_v1.py'),",
+    "expected_sentinel_line_text": "# PUBLIC_SYNC_TAG: suite_runner_gated_import_v2_force_resnapshot_2026_05_27",
+    "expected_inline_sentinel_above_row_text": "# STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_row_location": "approx_line_1106_after_inline_comment_at_line_1105"
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main, open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Confirm line 2 contains PUBLIC_SYNC_TAG: suite_runner_gated_import_v2_force_resnapshot_2026_05_27",
+    "Confirm there is an inline comment STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL near the artifact registration block",
+    "Confirm the tuple ('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', 'validate_project_artifact_inventory_gated_import_v1.py') is present",
+    "If any of the above is missing on public main, the verdict is PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT_READY_PUBLIC_REPO_PARTIAL_SUITE_REGISTRATION_MISMATCH and the user must re-run Save to GitHub -> main -> PUSH"
+  ],
+  "validator_file_path": "backend/scripts/validate_project_artifact_inventory_gated_import_v1.py",
+  "validator_file_role": "OPTIONAL",
+  "weakens_REQUIRED_validators": false,
+  "do_not_touch": [
+    "backend/battle_engine.py",
+    "backend/.env",
+    "backend/routes/artifacts.py (locked POSTs unchanged)",
+    "frontend/app/artifacts-preview.tsx",
+    "frontend/app/(tabs)/gacha.tsx"
+  ]
+}

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# PUBLIC_SYNC_TAG: suite_runner_gated_import_v1_force_resnapshot
+# PUBLIC_SYNC_TAG: suite_runner_gated_import_v2_force_resnapshot_2026_05_27
+# This file MUST be synced together with backend/scripts/validate_project_artifact_inventory_gated_import_v1.py
+# Registered OPTIONAL row for Stage 6 lives near line ~1105: ('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', ...).
 """
 RM1.31-B — Hero Skill Kit Validator Suite Runner
 ─────────────────────────────────────────────────────────────────────────
@@ -1102,6 +1104,7 @@ OPTIONAL = [
     ('PROJECT-ARTIFACT-BACKEND-CATALOG-RO', 'validate_project_artifact_backend_catalog_ro_v1.py'),
     ('PROJECT-ARTIFACT-LEGACY-MUTATION-ENDPOINT-HARDENING', 'validate_project_artifact_legacy_mutation_endpoint_hardening_v1.py'),
     ('PROJECT-ARTIFACT-INVENTORY-SCHEMA-DRY-RUN', 'validate_project_artifact_inventory_schema_dry_run_v1.py'),
+    # STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     ('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', 'validate_project_artifact_inventory_gated_import_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
