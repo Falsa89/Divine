@@ -9,6 +9,13 @@ Aggiunti SOLO endpoint GET read-only che leggono dai file JSON versionati
 sotto /app/data/design/artifacts/. Nessuna DB call, nessuna mutazione,
 nessun campo di ownership/inventory/equip/fuse/craft/pull/price.
 La logica mutativa preesistente NON e' stata modificata in questo pack.
+
+PROJECT_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING (Stage 4.5)
+─────────────────────────────────────────────────────────────────────
+PUBLIC_SYNC_TAG: hardening_v1_locked_handlers_force_resnapshot
+I 7 endpoint POST legacy artifact/constellation sono hard-lockati con
+HTTP 423 e envelope coerente. Nessun DB, nessuna auth, nessun random,
+nessun body, nessun grant/spend. Vedi docs/divine/171.
 """
 import json
 import random
