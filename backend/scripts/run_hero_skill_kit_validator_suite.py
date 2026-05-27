@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # PUBLIC_SYNC_TAG: suite_runner_live_signoff_v3_force_resnapshot_2026_05_27
+# PUBLIC_SYNC_TAG_RESYNC_v4: suite_runner_live_signoff_v4_force_resnapshot_after_stale_push_175
 # Stage 6 GATED-IMPORT and Stage 7 LIVE-ACTIVATION-SIGNOFF OPTIONAL validators
 # are both registered in the OPTIONAL block below. Search for the inline
 # sentinels STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL and
@@ -1112,7 +1113,10 @@ OPTIONAL = [
     # STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     ('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', 'validate_project_artifact_inventory_gated_import_v1.py'),
     # STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_RESYNC_v4 (sync fix 175; do not remove):
     ('PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF', 'validate_project_artifact_inventory_live_activation_signoff_v1.py'),
+    # STAGE_7B_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_REGISTRATION_SENTINEL (sync fix 175):
+    ('PROJECT-ARTIFACT-LIVE-SIGNOFF-SUITE-RUNNER-SYNC-FIX', 'validate_project_artifact_live_signoff_suite_runner_sync_fix_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

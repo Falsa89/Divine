@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX",
+  "track": "TRACK_C_SUITE_RUNNER_SYNC_FIX_VALIDATION",
+  "verdict": "TRACK_C_ARTIFACT_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_VALIDATION_READY",
+  "local_verification": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "md5_post_patch": "92892b9d64b9919548c1b2a1a2380dc7",
+    "top_sentinel_v3_present": true,
+    "top_sentinel_v4_present": true,
+    "inline_sentinel_stage_7_present": true,
+    "inline_sentinel_resync_v4_present": true,
+    "registration_tuple_count": 1,
+    "registration_tuple_text": "('PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF', 'validate_project_artifact_inventory_live_activation_signoff_v1.py')",
+    "ast_parse_ok": true,
+    "suite_run_pass": true,
+    "suite_total_pass": 706,
+    "suite_total_fail": 0,
+    "suite_total_miss": 0
+  },
+  "invariants_md5_unchanged": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a"
+  },
+  "db_writes_in_this_pack": 0,
+  "db_collections_created_in_this_pack": 0,
+  "env_marker_injections_in_this_pack": 0,
+  "inventory_apply_invoked_in_this_pack": false,
+  "stage_8_invoked_in_this_pack": false,
+  "validator_required_weakened": false
+}

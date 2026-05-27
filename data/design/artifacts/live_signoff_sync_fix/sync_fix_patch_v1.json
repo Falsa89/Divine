@@ -1,0 +1,43 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX",
+  "track": "TRACK_B_SUITE_RUNNER_SYNC_FIX_PATCH",
+  "verdict": "TRACK_B_ARTIFACT_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_PATCH_READY",
+  "patch_scope": "single_file_comments_only",
+  "file_patched": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+  "hunks": [
+    {
+      "location": "header lines 1-9",
+      "change_type": "add_one_comment_line",
+      "added": [
+        "# PUBLIC_SYNC_TAG_RESYNC_v4: suite_runner_live_signoff_v4_force_resnapshot_after_stale_push_175"
+      ],
+      "kept": [
+        "# PUBLIC_SYNC_TAG: suite_runner_live_signoff_v3_force_resnapshot_2026_05_27"
+      ],
+      "removed": [],
+      "reason": "Aggiungere v4 senza rimuovere v3 cosi' che una verifica pubblica trovi almeno UNO dei due tag e dimostri il sync."
+    },
+    {
+      "location": "OPTIONAL block near line 1115",
+      "change_type": "add_one_comment_line_above_existing_tuple",
+      "added": [
+        "    # STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_RESYNC_v4 (sync fix 175; do not remove):"
+      ],
+      "kept": [
+        "    # STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+        "    ('PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF', 'validate_project_artifact_inventory_live_activation_signoff_v1.py'),"
+      ],
+      "removed": [],
+      "reason": "Cambia il blob nel punto della registrazione senza duplicare la tupla. La tupla resta una singola."
+    }
+  ],
+  "required_validator_block_touched": false,
+  "any_validator_logic_modified": false,
+  "new_tuple_added": false,
+  "existing_tuple_modified": false,
+  "existing_tuple_duplicated": false,
+  "file_remains_python_parseable": true,
+  "runtime_routes_modified": false,
+  "env_modified": false,
+  "db_modified": false
+}

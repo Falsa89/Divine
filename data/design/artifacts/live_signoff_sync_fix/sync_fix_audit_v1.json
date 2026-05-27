@@ -1,0 +1,58 @@
+{
+  "task_id": "PROJECT_ARTIFACT_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX",
+  "track": "TRACK_A_SUITE_RUNNER_SYNC_FIX_AUDIT",
+  "verdict": "TRACK_A_ARTIFACT_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_AUDIT_READY",
+  "public_repo_mismatch_pattern": "stale_push_recurring_specifically_on_backend_scripts_run_hero_skill_kit_validator_suite_py",
+  "observed_mismatch_history": [
+    {"pack": "171_HARDENING",        "mismatch_file": "backend/routes/artifacts.py",                            "resolved_via": "micro_touch_v1"},
+    {"pack": "173_GATED_IMPORT",    "mismatch_file": "backend/scripts/run_hero_skill_kit_validator_suite.py",  "resolved_via": "micro_touch_v1_then_v2"},
+    {"pack": "174_LIVE_SIGNOFF",    "mismatch_file": "backend/scripts/run_hero_skill_kit_validator_suite.py",  "resolved_via": "this_sync_fix_pack_175_v4"}
+  ],
+  "local_state_at_audit_time": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "md5_before_touch": "8f6f2efac6c12b0c18248577e5366e65",
+    "top_sentinel_v3_present_before": true,
+    "inline_sentinel_stage_7_present_before": true,
+    "registration_tuple_present_before": true,
+    "registration_tuple_duplicated_before": false,
+    "head_blob_contains_tuple": true,
+    "working_tree_equals_head_before": true
+  },
+  "local_state_after_touch": {
+    "md5_after_touch": "92892b9d64b9919548c1b2a1a2380dc7",
+    "top_sentinel_v3_present_after": true,
+    "top_sentinel_v4_present_after": true,
+    "inline_sentinel_stage_7_present_after": true,
+    "inline_sentinel_resync_v4_present_after": true,
+    "registration_tuple_count_after": 1,
+    "registration_tuple_duplicated_after": false,
+    "ast_parse_ok": true
+  },
+  "public_repo_files_already_synced_correctly": [
+    "backend/scripts/validate_project_artifact_inventory_live_activation_signoff_v1.py",
+    "data/design/artifacts/live_signoff/artifact_live_signoff_previous_stage_revalidation_v1.json",
+    "data/design/artifacts/live_signoff/artifact_live_activation_approval_matrix_v1.json",
+    "data/design/artifacts/live_signoff/artifact_live_canary_scope_write_budget_v1.json",
+    "data/design/artifacts/live_signoff/artifact_live_apply_runbook_rollback_v1.json",
+    "data/design/artifacts/live_signoff/artifact_runtime_locks_post_apply_policy_v1.json",
+    "data/design/artifacts/live_signoff/artifact_live_signoff_suite_registration_proof_marker_v1.json",
+    "data/design/artifacts/live_signoff/artifact_live_signoff_completion_v1.json",
+    "docs/divine/174_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF.md"
+  ],
+  "public_repo_file_with_stale_blob": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+  "why_targeted_micro_fix_is_safe": "Il file e' un orchestratore di test. Nessuna logica runtime, DB, frontend, gameplay. La modifica e' limitata a 2 commenti (1 header + 1 inline) per cambiare il blob e forzare il watcher.",
+  "systems_NOT_touched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "backend/routes/* (any runtime route)",
+    "frontend/app/*",
+    "gacha runtime",
+    "IAP/shop/BP/VIP",
+    "Soul Forge",
+    "Character Bible",
+    "REQUIRED validators",
+    "any .env env injection"
+  ]
+}
