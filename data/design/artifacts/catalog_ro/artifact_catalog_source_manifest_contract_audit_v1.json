@@ -1,0 +1,87 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO",
+  "track": "TRACK_A_ARTIFACT_CATALOG_SOURCE_MANIFEST_AND_CONTRACT_AUDIT",
+  "verdict": "TRACK_A_ARTIFACT_CATALOG_SOURCE_MANIFEST_AND_CONTRACT_AUDIT_READY",
+  "canonical_files_revalidated": [
+    {"path": "data/design/artifacts/artifact_bible_launch_draft_v1.json", "md5": "8b224f869ff14dbacb8a765c4317e50f"},
+    {"path": "data/design/artifacts/artifact_canonical_taxonomy_v1.json", "md5": "bb8835a0ecd2d5d0bd011145bf614e5d"},
+    {"path": "data/design/artifacts/artifact_constellation_relic_boundary_v1.json", "md5": "2fbd1cdaafb0f864917b67bbbe071a4e"},
+    {"path": "data/design/artifacts/artifact_preview_ui_copy_lock_policy_v1.json", "md5": "507d9a2b29def7537d28dcf646ed22b4"},
+    {"path": "data/design/artifacts/artifact_migration_import_plan_v1.json", "md5": "d77cd742533fe60f0120efea4c2c52d5"},
+    {"path": "data/design/artifacts/artifact_static_guard_beta_harness_v1.json", "md5": "5c9137bc0b8b1786ef78d47951550c9f"}
+  ],
+  "review_files_revalidated": [
+    {"path": "data/design/artifacts/review/artifact_entry_by_entry_canonical_review_v1.json", "md5": "558f3472a63f87394b5b6810c6ca0b99"},
+    {"path": "data/design/artifacts/review/artifact_placeholder_legacy_reconciliation_v1.json", "md5": "c7d67a29cf875354b2e68ba3a722dcae"},
+    {"path": "data/design/artifacts/review/artifact_system_boundary_signoff_v1.json", "md5": "2f88b356cfcc8964c39803f5a4f8bf32"},
+    {"path": "data/design/artifacts/review/artifact_preview_population_readiness_gate_v1.json", "md5": "d439d0de2ccd122b71ca8b74653533c1"},
+    {"path": "data/design/artifacts/review/artifact_import_runtime_blocker_matrix_v1.json", "md5": "9d95e8e40c11b1b3e565576605a1325d"}
+  ],
+  "preview_files_revalidated": [
+    {"path": "data/design/artifacts/preview/artifact_preview_dataset_v1.json", "md5": "dc6425fd89bc2583e2fcfd460a3ef223"},
+    {"path": "data/design/artifacts/preview/artifact_route_lock_guard_validation_v1.json", "md5": "e587ef290fbca5760f437e2c18fd7c1b"},
+    {"path": "data/design/artifacts/preview/artifact_preview_ui_population_completion_v1.json", "md5": "62fd2c376a467e1497cb068a8d7904ad"}
+  ],
+  "bible_entries_count_confirmed": 32,
+  "preview_entries_count_confirmed": 10,
+  "deprecated_legacy_placeholders_not_player_facing_confirmed": true,
+  "runtime_activation_blockers_remain_confirmed": true,
+  "existing_artifact_routes_inspected": {
+    "path": "backend/routes/artifacts.py",
+    "existing_mutative_endpoints_unchanged": true,
+    "existing_endpoints": [
+      "GET /api/artifacts",
+      "POST /api/artifacts/fuse",
+      "POST /api/artifacts/pull",
+      "POST /api/artifacts/pull10",
+      "GET /api/constellations",
+      "POST /api/constellations/equip",
+      "POST /api/constellations/fuse",
+      "POST /api/constellations/pull",
+      "POST /api/constellations/pull10",
+      "GET /api/banners/special"
+    ],
+    "mutative_endpoints_behavior_change": false,
+    "mutative_endpoints_remain_gated_by_hidden_banners_v2": true
+  },
+  "new_endpoints_contract": {
+    "GET /api/artifacts/catalog": {
+      "source_json": "data/design/artifacts/artifact_bible_launch_draft_v1.json",
+      "reads_db": false,
+      "writes_db": false,
+      "requires_auth": false,
+      "count_expected": 32,
+      "response_envelope": {
+        "status": "read_only",
+        "system_status": "preview_catalog_only",
+        "source": "artifact_bible_launch_draft_v1",
+        "count": "int",
+        "items": "list"
+      },
+      "item_whitelist": [
+        "artifact_id", "display_name_it", "display_name_en", "category",
+        "faction_or_origin", "associated_hero_id", "associated_character_status",
+        "rarity_band", "release_status", "gameplay_status",
+        "short_lore_it", "visual_identity", "source_hint_future", "ui_copy_short_it"
+      ]
+    },
+    "GET /api/artifacts/catalog/preview": {
+      "source_json": "data/design/artifacts/preview/artifact_preview_dataset_v1.json",
+      "reads_db": false,
+      "writes_db": false,
+      "requires_auth": false,
+      "count_expected": 10,
+      "item_whitelist": [
+        "artifact_id", "display_name_it", "category", "rarity_band",
+        "release_status", "gameplay_status", "ui_copy_short_it", "visual_hint"
+      ]
+    }
+  },
+  "forbidden_fields_guard": [
+    "owned", "equipped", "level", "stars_upgrade_progress",
+    "player_owned", "inventory_id", "acquisition_active",
+    "craft_cost", "fuse_cost", "equip_slot",
+    "stat_bonus_active", "combat_modifier",
+    "price", "purchase_url", "duplicates"
+  ]
+}

@@ -2,11 +2,21 @@
 Divine Waifus - Artifacts & Constellations System
 Artifacts: passive team buffs on unlock, level up via duplicate fusion
 Constellations: equippable, give team buff + unique skill every 3 turns
+
+PROJECT_ARTIFACT_BACKEND_CATALOG_RO (Stage 4 della Artifact Migration)
+─────────────────────────────────────────────────────────────────────
+Aggiunti SOLO endpoint GET read-only che leggono dai file JSON versionati
+sotto /app/data/design/artifacts/. Nessuna DB call, nessuna mutazione,
+nessun campo di ownership/inventory/equip/fuse/craft/pull/price.
+La logica mutativa preesistente NON e' stata modificata in questo pack.
 """
+import json
 import random
 import uuid
 from datetime import datetime
-from fastapi import HTTPException, Depends
+from pathlib import Path
+from typing import Optional
+from fastapi import HTTPException, Depends, Query
 from pydantic import BaseModel
 
 # SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
@@ -466,4 +476,211 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
         return {
             "artifact_banner": {**ARTIFACT_BANNER, "total_artifacts": len(ARTIFACTS)},
             "constellation_banner": {**CONSTELLATION_BANNER, "total_constellations": len(CONSTELLATIONS)},
+        }
+
+    # ==================== ARTIFACT BIBLE READ-ONLY CATALOG ====================
+    # PROJECT_ARTIFACT_BACKEND_CATALOG_RO — Stage 4
+    # Pure read-only endpoints che leggono SOLO dai JSON canonici versionati
+    # in /app/data/design/artifacts/. NESSUNA DB call, NESSUNA mutazione,
+    # NESSUN campo ownership/inventory/equip/fuse/craft/pull/price.
+    # I dati sono separati dal vecchio array ARTIFACTS (legacy placeholder
+    # mai esposto al player).
+
+    _ARTIFACT_BIBLE_PATH = Path("/app/data/design/artifacts/artifact_bible_launch_draft_v1.json")
+    _ARTIFACT_PREVIEW_DATASET_PATH = Path(
+        "/app/data/design/artifacts/preview/artifact_preview_dataset_v1.json"
+    )
+
+    # Campi che NON devono MAI comparire nella response (forbidden per spec).
+    _CATALOG_FORBIDDEN_FIELDS = frozenset({
+        "owned", "equipped", "level", "stars_upgrade_progress",
+        "player_owned", "inventory_id", "acquisition_active",
+        "craft_cost", "fuse_cost", "equip_slot",
+        "stat_bonus_active", "combat_modifier",
+        "price", "purchase_url", "duplicates",
+    })
+
+    # Whitelist dei campi catalog-only ammessi per ogni item (catalog completo).
+    _CATALOG_ALLOWED_ITEM_FIELDS = (
+        "artifact_id",
+        "display_name_it",
+        "display_name_en",
+        "category",
+        "faction_or_origin",
+        "associated_hero_id",
+        "associated_character_status",
+        "rarity_band",
+        "release_status",
+        "gameplay_status",
+        "short_lore_it",
+        "visual_identity",
+        "source_hint_future",
+        "ui_copy_short_it",
+    )
+
+    # Whitelist per /preview (UI mostra meno campi).
+    _PREVIEW_ALLOWED_ITEM_FIELDS = (
+        "artifact_id",
+        "display_name_it",
+        "category",
+        "rarity_band",
+        "release_status",
+        "gameplay_status",
+        "ui_copy_short_it",
+        "visual_hint",
+    )
+
+    # Categorie ammesse come filtro (whitelist statica derivata dalla Bible).
+    _ALLOWED_CATEGORIES = frozenset({
+        "divine_relic", "event_relic", "forbidden_relic",
+        "mythic_weapon_relic", "pantheon_emblem",
+        "primordial_fragment", "sacred_symbol", "world_memory",
+    })
+    _ALLOWED_RELEASE_STATUS = frozenset({"launch_candidate", "preview_only"})
+    _ALLOWED_GAMEPLAY_STATUS = frozenset({"cosmetic_prestige_only", "inactive"})
+
+    def _safe_load_json(p: Path):
+        """Carica un JSON versionato. NON tocca il DB. In caso di errore
+        restituisce None lasciando agli endpoint il compito di emettere
+        un envelope 503 sicuro (nessuna scrittura, nessun seed)."""
+        try:
+            if not p.is_file():
+                return None
+            with p.open("r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return None
+
+    def _strip_to_whitelist(item: dict, allowed: tuple) -> dict:
+        """Restituisce un dict che contiene SOLO i campi della whitelist.
+        Garantisce assenza dei campi vietati anche se la sorgente cambia."""
+        out = {}
+        for k in allowed:
+            if k in item:
+                out[k] = item[k]
+        # Hard guard: rimuove esplicitamente qualunque chiave vietata
+        for fk in _CATALOG_FORBIDDEN_FIELDS:
+            out.pop(fk, None)
+        return out
+
+    def _stable_sort_key(it: dict):
+        """Ordine stabile: prima per release_status (launch_candidate prima),
+        poi per rarity_band fissato, poi per artifact_id."""
+        rarity_order = {
+            "divine": 0, "mythic": 1, "legendary": 2,
+            "epic": 3, "rare": 4, "uncommon": 5, "common": 6,
+        }
+        rel_order = {"launch_candidate": 0, "preview_only": 1, "future_reserved": 2}
+        return (
+            rel_order.get(it.get("release_status", ""), 99),
+            rarity_order.get(it.get("rarity_band", ""), 99),
+            it.get("artifact_id", ""),
+        )
+
+    @router.get("/artifacts/catalog")
+    async def get_artifacts_catalog(
+        category: Optional[str] = Query(None, description="Filtra per category (whitelist)"),
+        release_status: Optional[str] = Query(None, description="Filtra per release_status"),
+        gameplay_status: Optional[str] = Query(None, description="Filtra per gameplay_status"),
+        include_future_reserved: bool = Query(
+            False,
+            description="Se true, include voci future_reserved (al momento la Bible non ne contiene).",
+        ),
+    ):
+        """
+        GET /api/artifacts/catalog
+        Restituisce il catalogo canonico read-only degli artefatti, letto
+        ESCLUSIVAMENTE da artifact_bible_launch_draft_v1.json.
+
+        NO DB CALL. NO MUTATION. NO OWNERSHIP. NO COMBAT BONUS.
+        """
+        bible = _safe_load_json(_ARTIFACT_BIBLE_PATH)
+        if not bible or "artifacts" not in bible:
+            # Envelope sicuro: nessuna scrittura, nessun seed, nessun DB.
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "error": "artifact_catalog_unavailable",
+                    "message": "Catalogo non disponibile: sorgente canonica mancante o malformata.",
+                    "source": "artifact_bible_launch_draft_v1",
+                },
+            )
+
+        raw_items = bible.get("artifacts", [])
+        items = []
+        for it in raw_items:
+            rel = it.get("release_status", "")
+            if rel == "future_reserved" and not include_future_reserved:
+                continue
+            if category is not None:
+                if category not in _ALLOWED_CATEGORIES:
+                    raise HTTPException(400, detail=f"Categoria non valida: {category}")
+                if it.get("category") != category:
+                    continue
+            if release_status is not None:
+                if release_status not in _ALLOWED_RELEASE_STATUS:
+                    raise HTTPException(400, detail=f"release_status non valido: {release_status}")
+                if it.get("release_status") != release_status:
+                    continue
+            if gameplay_status is not None:
+                if gameplay_status not in _ALLOWED_GAMEPLAY_STATUS:
+                    raise HTTPException(400, detail=f"gameplay_status non valido: {gameplay_status}")
+                if it.get("gameplay_status") != gameplay_status:
+                    continue
+            items.append(_strip_to_whitelist(it, _CATALOG_ALLOWED_ITEM_FIELDS))
+
+        items.sort(key=_stable_sort_key)
+
+        return {
+            "status": "read_only",
+            "system_status": "preview_catalog_only",
+            "source": "artifact_bible_launch_draft_v1",
+            "bible_version": bible.get("bible_version"),
+            "naming_policy": bible.get("naming_policy"),
+            "global_gameplay_status_default": bible.get("global_gameplay_status_default"),
+            "count": len(items),
+            "total_in_bible": len(raw_items),
+            "filters_applied": {
+                "category": category,
+                "release_status": release_status,
+                "gameplay_status": gameplay_status,
+                "include_future_reserved": include_future_reserved,
+            },
+            "items": items,
+        }
+
+    @router.get("/artifacts/catalog/preview")
+    async def get_artifacts_catalog_preview():
+        """
+        GET /api/artifacts/catalog/preview
+        Restituisce SOLO il dataset preview-safe gia' firmato (10 entries),
+        usato come riferimento dal pannello /artifacts-preview.
+
+        NB: il frontend in questo pack NON consuma questo endpoint
+        (mantenuto statico). E' esposto come contratto pronto per un
+        eventuale wiring futuro, in un pack separato.
+
+        NO DB CALL. NO MUTATION.
+        """
+        dataset = _safe_load_json(_ARTIFACT_PREVIEW_DATASET_PATH)
+        if not dataset or "entries" not in dataset:
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "error": "artifact_preview_catalog_unavailable",
+                    "message": "Preview catalog non disponibile: sorgente mancante o malformata.",
+                    "source": "artifact_preview_dataset_v1",
+                },
+            )
+        raw_items = dataset.get("entries", [])
+        items = [_strip_to_whitelist(it, _PREVIEW_ALLOWED_ITEM_FIELDS) for it in raw_items]
+        items.sort(key=_stable_sort_key)
+        return {
+            "status": "read_only",
+            "system_status": "preview_catalog_only",
+            "source": "artifact_preview_dataset_v1",
+            "dataset_version": dataset.get("dataset_version"),
+            "system_status_copy": dataset.get("system_status_copy"),
+            "count": len(items),
+            "items": items,
         }

@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO",
+  "track": "TRACK_D_ARTIFACT_FRONTEND_INTEGRATION_POLICY_NO_WIRING",
+  "verdict": "TRACK_D_ARTIFACT_FRONTEND_INTEGRATION_POLICY_NO_WIRING_READY",
+  "policy": {
+    "frontend_runtime_api_fetch_added_this_pack": false,
+    "artifacts_preview_tsx_modified": false,
+    "artifacts_preview_tsx_remains_static_read_only": true,
+    "gacha_hidden_banners_v2_unchanged": true,
+    "artifacts_legacy_redirect_to_preview_unchanged": true
+  },
+  "future_wiring_plan_when_authorized": {
+    "target_endpoint": "GET /api/artifacts/catalog/preview",
+    "frontend_target_file": "frontend/app/artifacts-preview.tsx",
+    "loading_state_required": true,
+    "error_state_required": true,
+    "fallback_to_static_dataset_on_failure": true,
+    "must_remain_read_only": true,
+    "must_remain_zero_mutation": true,
+    "requires_separate_signed_pack": true
+  },
+  "acceptance": {
+    "no_ui_regression_this_pack": true,
+    "no_runtime_loading_state_needed_now": true,
+    "no_runtime_error_state_needed_now": true
+  }
+}

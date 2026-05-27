@@ -1,0 +1,65 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO",
+  "track": "TRACK_E_ARTIFACT_CATALOG_BACKEND_SMOKE_AND_NO_DB_GUARD",
+  "verdict": "TRACK_E_ARTIFACT_CATALOG_BACKEND_SMOKE_AND_NO_DB_GUARD_READY",
+  "smoke_results": {
+    "GET /api/artifacts/catalog": {
+      "http_status": 200,
+      "response_status": "read_only",
+      "source": "artifact_bible_launch_draft_v1",
+      "count": 32,
+      "forbidden_fields_present": false,
+      "db_calls_observed": 0
+    },
+    "GET /api/artifacts/catalog/preview": {
+      "http_status": 200,
+      "response_status": "read_only",
+      "source": "artifact_preview_dataset_v1",
+      "count": 10,
+      "forbidden_fields_present": false,
+      "db_calls_observed": 0
+    },
+    "GET /api/artifacts/catalog?category=divine_relic": {
+      "http_status": 200,
+      "count": 11,
+      "forbidden_fields_present": false
+    },
+    "GET /api/artifacts/catalog?release_status=preview_only": {
+      "http_status": 200,
+      "count": 6,
+      "forbidden_fields_present": false
+    },
+    "GET /api/artifacts/catalog?category=invalid": {
+      "http_status": 400,
+      "db_write_on_invalid_filter": false
+    }
+  },
+  "static_no_db_guard": {
+    "db_module_imports_in_catalog_helpers": 0,
+    "db_method_calls_in_catalog_handlers": 0,
+    "db_collection_writes_in_catalog_handlers": 0,
+    "reads_only_versioned_json": true,
+    "battle_engine_md5_unchanged": true,
+    "battle_engine_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend_env_md5_unchanged": true,
+    "backend_env_md5": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "gacha_hidden_banners_v2_unchanged": true
+  },
+  "invariants": {
+    "no_user_specific_fields_in_response": true,
+    "no_combat_bonus_in_response": true,
+    "no_pull_endpoint_added": true,
+    "no_fuse_endpoint_added": true,
+    "no_equip_endpoint_added": true,
+    "no_craft_endpoint_added": true,
+    "no_inventory_added": true,
+    "no_ownership_added": true,
+    "no_acquisition_active": true,
+    "no_iap_change": true,
+    "no_shop_change": true,
+    "no_battle_pass_change": true,
+    "no_vip_change": true,
+    "no_soul_forge_change": true,
+    "no_character_bible_mutation": true
+  }
+}

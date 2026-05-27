@@ -1,0 +1,54 @@
+{
+  "task_id": "PROJECT_ARTIFACT_BACKEND_CATALOG_RO",
+  "track": "TRACK_C_ARTIFACT_CATALOG_NORMALIZATION_AND_FILTERS",
+  "verdict": "TRACK_C_ARTIFACT_CATALOG_NORMALIZATION_AND_FILTERS_READY",
+  "normalization": {
+    "strip_unknown_keys": true,
+    "item_whitelist_catalog": [
+      "artifact_id", "display_name_it", "display_name_en", "category",
+      "faction_or_origin", "associated_hero_id", "associated_character_status",
+      "rarity_band", "release_status", "gameplay_status",
+      "short_lore_it", "visual_identity", "source_hint_future", "ui_copy_short_it"
+    ],
+    "item_whitelist_preview": [
+      "artifact_id", "display_name_it", "category", "rarity_band",
+      "release_status", "gameplay_status", "ui_copy_short_it", "visual_hint"
+    ],
+    "stable_sort_order": [
+      "release_status_priority",
+      "rarity_band_priority",
+      "artifact_id"
+    ],
+    "release_status_priority": {
+      "launch_candidate": 0,
+      "preview_only": 1,
+      "future_reserved": 2
+    },
+    "rarity_band_priority": {
+      "divine": 0,
+      "mythic": 1,
+      "legendary": 2,
+      "epic": 3,
+      "rare": 4,
+      "uncommon": 5,
+      "common": 6
+    }
+  },
+  "allowed_filters": [
+    {"name": "category", "whitelist": [
+      "divine_relic", "event_relic", "forbidden_relic",
+      "mythic_weapon_relic", "pantheon_emblem",
+      "primordial_fragment", "sacred_symbol", "world_memory"
+    ]},
+    {"name": "release_status", "whitelist": ["launch_candidate", "preview_only"]},
+    {"name": "gameplay_status", "whitelist": ["cosmetic_prestige_only", "inactive"]},
+    {"name": "include_future_reserved", "type": "bool", "default": false}
+  ],
+  "forbidden_filters": [
+    "user_owned", "equipped", "inventory", "acquisition_availability",
+    "price", "power_sort", "stat_sort"
+  ],
+  "preview_endpoint_excludes_future_reserved": true,
+  "preview_endpoint_returns_exactly_10": true,
+  "invalid_filter_value_behavior": "return_http_400_no_db_write"
+}
