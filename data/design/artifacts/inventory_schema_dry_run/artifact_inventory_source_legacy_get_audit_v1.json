@@ -1,0 +1,121 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_SCHEMA_DRY_RUN",
+  "track": "TRACK_A_SOURCE_AND_LEGACY_GET_AUDIT",
+  "verdict": "TRACK_A_ARTIFACT_INVENTORY_SOURCE_AND_LEGACY_GET_AUDIT_READY",
+  "sources_reread": {
+    "canonical": [
+      {"path": "data/design/artifacts/artifact_bible_launch_draft_v1.json", "md5": "8b224f869ff14dbacb8a765c4317e50f", "entries": 32},
+      {"path": "data/design/artifacts/artifact_canonical_taxonomy_v1.json", "md5": "bb8835a0ecd2d5d0bd011145bf614e5d"},
+      {"path": "data/design/artifacts/artifact_constellation_relic_boundary_v1.json", "md5": "2fbd1cdaafb0f864917b67bbbe071a4e"},
+      {"path": "data/design/artifacts/artifact_migration_import_plan_v1.json", "md5": "d77cd742533fe60f0120efea4c2c52d5"}
+    ],
+    "review": [
+      {"path": "data/design/artifacts/review/artifact_entry_by_entry_canonical_review_v1.json", "md5": "558f3472a63f87394b5b6810c6ca0b99"},
+      {"path": "data/design/artifacts/review/artifact_system_boundary_signoff_v1.json", "md5": "2f88b356cfcc8964c39803f5a4f8bf32"},
+      {"path": "data/design/artifacts/review/artifact_import_runtime_blocker_matrix_v1.json", "md5": "9d95e8e40c11b1b3e565576605a1325d"}
+    ],
+    "preview": [
+      {"path": "data/design/artifacts/preview/artifact_preview_dataset_v1.json", "md5": "dc6425fd89bc2583e2fcfd460a3ef223", "entries": 10}
+    ],
+    "catalog_ro": [
+      {"path": "data/design/artifacts/catalog_ro/artifact_catalog_source_manifest_contract_audit_v1.json"},
+      {"path": "data/design/artifacts/catalog_ro/artifact_catalog_normalization_filters_v1.json"},
+      {"path": "data/design/artifacts/catalog_ro/artifact_frontend_integration_policy_no_wiring_v1.json"},
+      {"path": "data/design/artifacts/catalog_ro/artifact_catalog_backend_smoke_no_db_guard_v1.json"},
+      {"path": "data/design/artifacts/catalog_ro/artifact_backend_catalog_ro_completion_v1.json"}
+    ],
+    "hardening": [
+      {"path": "data/design/artifacts/hardening/artifact_legacy_mutation_endpoint_audit_v1.json"},
+      {"path": "data/design/artifacts/hardening/artifact_mutation_lock_response_contract_v1.json"},
+      {"path": "data/design/artifacts/hardening/artifact_frontend_gacha_guard_recheck_v1.json"},
+      {"path": "data/design/artifacts/hardening/artifact_backend_smoke_locked_mutation_tests_v1.json"},
+      {"path": "data/design/artifacts/hardening/artifact_legacy_mutation_endpoint_hardening_completion_v1.json"}
+    ]
+  },
+  "current_runtime_surface_state": {
+    "catalog_endpoints": {
+      "GET /api/artifacts/catalog": "active_ro_32_entries",
+      "GET /api/artifacts/catalog/preview": "active_ro_10_entries"
+    },
+    "mutation_endpoints_locked": [
+      "POST /api/artifacts/pull",
+      "POST /api/artifacts/pull10",
+      "POST /api/artifacts/fuse",
+      "POST /api/constellations/equip",
+      "POST /api/constellations/fuse",
+      "POST /api/constellations/pull",
+      "POST /api/constellations/pull10"
+    ],
+    "mutation_endpoints_status_code": 423,
+    "hidden_banners_v2": ["artifact", "constellation"],
+    "artifacts_preview_static": true
+  },
+  "legacy_get_endpoints_audit": [
+    {
+      "endpoint": "GET /api/artifacts",
+      "file": "backend/routes/artifacts.py",
+      "reads_db": true,
+      "db_collections_read": ["user_artifacts"],
+      "writes_db": false,
+      "requires_auth": true,
+      "exposes_legacy_placeholder_names": true,
+      "placeholder_examples": ["Santo Graal", "Frammento di Mjolnir", "Occhio di Ra", "Ambrosia Divina"],
+      "player_reachable_via_ui": false,
+      "reason_unreachable": "frontend gacha HIDDEN_BANNERS_V2 nasconde artifact/constellation; nessuna pagina UI player attiva chiama questo GET",
+      "future_recommendation": "DEPRECATE_AND_LOCK in pack futuro; sostituibile da GET /api/artifacts/inventory contro user_artifact_inventory canonico",
+      "safe_to_keep_for_now": true,
+      "do_NOT_use_as_base_for_inventory": true
+    },
+    {
+      "endpoint": "GET /api/constellations",
+      "file": "backend/routes/artifacts.py",
+      "reads_db": true,
+      "db_collections_read": ["user_constellations", "teams"],
+      "writes_db": false,
+      "requires_auth": true,
+      "exposes_legacy_placeholder_names": true,
+      "placeholder_examples": ["Leone", "Scorpione", "Ariete", "Cancro"],
+      "player_reachable_via_ui": false,
+      "reason_unreachable": "HIDDEN_BANNERS_V2; pagina costellazioni player non implementata",
+      "future_recommendation": "DEPRECATE_AND_LOCK in pack costellazioni dedicato; Constellation inventory e' OUT OF SCOPE di questo pack",
+      "safe_to_keep_for_now": true,
+      "do_NOT_use_as_base_for_inventory": true
+    },
+    {
+      "endpoint": "GET /api/banners/special",
+      "file": "backend/routes/artifacts.py",
+      "reads_db": false,
+      "writes_db": false,
+      "requires_auth": false,
+      "exposes_legacy_rates": true,
+      "legacy_payload": {"artifact_banner": "ARTIFACT_BANNER cost_single=120 cost_multi=1000", "constellation_banner": "CONSTELLATION_BANNER cost_single=200 cost_multi=1800"},
+      "player_reachable_via_ui": false,
+      "future_recommendation": "REPLACE con feed banner gacha canonico (al di fuori di questo pack); per ora innocuo, no DB write, no spend",
+      "safe_to_keep_for_now": true
+    }
+  ],
+  "frontend_legacy_get_callers_audit": {
+    "files_inspected": [
+      "frontend/app/artifacts.tsx (redirect-only to /artifacts-preview)",
+      "frontend/app/artifacts-preview.tsx (static, no fetch)",
+      "frontend/app/(tabs)/gacha.tsx (artifact/constellation hidden by HIDDEN_BANNERS_V2)"
+    ],
+    "frontend_calls_to_legacy_get_artifacts": 0,
+    "frontend_calls_to_legacy_get_constellations": 0,
+    "frontend_calls_to_banners_special": 0,
+    "note": "Anche se /api/banners/special e' importato in qualche schermata generica, non e' un blocker: e' read-only e non espone inventory ownership."
+  },
+  "existing_inventory_collections_overlap_audit": {
+    "collections_identified_in_repo": [
+      "users (legacy)", "user_heroes (canonico, gated)", "user_artifacts (legacy, NON usare)",
+      "user_constellations (legacy, NON usare)", "inventory (items/runes)", "user_equipment",
+      "user_runes", "user_divine_weapons", "teams"
+    ],
+    "new_artifact_inventory_must_be_named": "user_artifact_inventory",
+    "rationale_for_new_name": "user_artifacts (legacy) contiene gia' righe storiche con schema diverso (rarity int, set string, level/duplicates) e con grant via random.choice da array ARTIFACTS placeholder. Riutilizzarla violerebbe il principio di isolamento canonico",
+    "must_NOT_extend_collections": [
+      "user_artifacts", "user_constellations", "user_equipment", "user_runes", "user_divine_weapons", "inventory"
+    ],
+    "must_keep_constellations_separate": true
+  }
+}

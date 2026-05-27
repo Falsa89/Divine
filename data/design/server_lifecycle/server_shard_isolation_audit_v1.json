@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-27T01:02:26.219585+00:00",
+  "timestamp_utc": "2026-05-27T01:16:25.300748+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1098,
+  "backend_python_files_scanned": 1099,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 505,
+      "files_with_hits": 506,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -149,7 +149,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 122
+      "user_id_only_files_count": 123
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -269,7 +269,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 247,
+      "files_with_hits": 248,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -365,7 +365,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 70
+      "user_id_only_files_count": 71
     },
     "currencies": {
       "expected_scope": "server_bound",
@@ -497,7 +497,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 25,
+      "files_with_hits": 26,
       "hits_sample": [
         {
           "file": "backend/routes/soul_forge.py",
@@ -593,11 +593,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 1
+      "user_id_only_files_count": 2
     },
     "gacha_history": {
       "expected_scope": "server_bound",
-      "files_with_hits": 8,
+      "files_with_hits": 9,
       "hits_sample": [
         {
           "file": "backend/scripts/apply_slc_g_commit_a.py",
@@ -673,7 +673,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 0
+      "user_id_only_files_count": 1
     },
     "teams": {
       "expected_scope": "server_bound",
@@ -1524,7 +1524,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 386,
+  "cross_server_leak_risk_candidates_count": 390,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1633,6 +1633,7 @@
       "user_heroes",
       "inventory",
       "currencies",
+      "gacha_history",
       "teams",
       "story_progress",
       "guilds",
@@ -1644,7 +1645,6 @@
     "P2": [
       "accounts_users_auth",
       "paid_currency_purchase",
-      "gacha_history",
       "event_progress",
       "server_config"
     ]

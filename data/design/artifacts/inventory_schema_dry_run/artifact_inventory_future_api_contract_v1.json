@@ -1,0 +1,135 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_SCHEMA_DRY_RUN",
+  "track": "TRACK_D_FUTURE_API_CONTRACT_DESIGN_ONLY",
+  "verdict": "TRACK_D_ARTIFACT_INVENTORY_FUTURE_API_CONTRACT_DESIGN_READY",
+  "implementation_status": "design_only_NOT_implemented_in_this_pack",
+  "global_gate": {
+    "required_marker_env": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL=true",
+    "required_db_collections_present": ["user_artifact_inventory", "artifact_inventory_ledger", "artifact_idempotency_registry"],
+    "required_backend_flag": "ARTIFACT_INVENTORY_RUNTIME_ENABLED=true_explicit",
+    "until_gate_open_endpoint_response": {"status_code": 423, "code": "ARTIFACT_INVENTORY_NOT_LIVE"}
+  },
+  "future_endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/artifacts/inventory",
+      "requires_auth": true,
+      "auth_role": "player_authenticated",
+      "query_params": [
+        {"name": "server_profile_id", "type": "string", "required": true},
+        {"name": "status", "type": "enum", "required": false, "default": "owned", "values": ["owned", "archived", "revoked", "all"]}
+      ],
+      "response_envelope_design": {
+        "status": "ok",
+        "system": "artifacts",
+        "system_status": "cosmetic_prestige_only",
+        "server_profile_id": "string",
+        "count": "int",
+        "items": [
+          {
+            "artifact_id": "string",
+            "quantity": "int",
+            "status": "enum",
+            "first_acquired_at": "iso8601",
+            "last_acquired_at": "iso8601",
+            "metadata_version": "string"
+          }
+        ]
+      },
+      "forbidden_response_fields": [
+        "level", "equip_slot", "stat_bonus_active", "combat_modifier",
+        "price", "purchase_url"
+      ],
+      "idempotency_required": false,
+      "design_only": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/artifacts/inventory/summary",
+      "requires_auth": true,
+      "auth_role": "player_authenticated",
+      "response_envelope_design": {
+        "status": "ok",
+        "server_profile_id": "string",
+        "total_owned_unique": "int",
+        "total_owned_quantity": "int",
+        "unique_by_category": "object",
+        "unique_by_rarity_band": "object",
+        "bonus_status": "enum:inactive|preview|capped_future",
+        "collection_score": "int"
+      },
+      "no_live_bonus": true,
+      "design_only": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/artifacts/inventory/grant",
+      "requires_auth": true,
+      "auth_role": "system_or_admin",
+      "request_body_design": {
+        "user_id": "string",
+        "server_profile_id": "string",
+        "artifact_id": "string",
+        "source_type": "enum:system_seed|event_reward|compensation|future_gacha|future_shop|future_iap|admin_grant",
+        "source_id": "string",
+        "idempotency_key": "string",
+        "locked": "bool",
+        "reason": "string|null"
+      },
+      "idempotency_required": true,
+      "idempotency_strategy": "reject_409_if_key_exists_with_different_payload_else_return_existing_event_id",
+      "response_envelope_design": {
+        "status": "ok|idempotent_noop",
+        "event_id": "uuid4",
+        "inventory_id": "uuid4",
+        "resulting_quantity": "int"
+      },
+      "error_states": [
+        {"code": "ARTIFACT_NOT_IN_CATALOG",       "http_status": 404},
+        {"code": "FORBIDDEN_NOT_ADMIN_OR_SYSTEM", "http_status": 403},
+        {"code": "IDEMPOTENCY_KEY_CONFLICT",     "http_status": 409},
+        {"code": "ARTIFACT_INVENTORY_NOT_LIVE",  "http_status": 423}
+      ],
+      "design_only": true,
+      "live_now": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/artifacts/inventory/revoke",
+      "requires_auth": true,
+      "auth_role": "system_or_admin",
+      "request_body_design": {
+        "user_id": "string",
+        "server_profile_id": "string",
+        "artifact_id": "string",
+        "delta_quantity": "int_negative",
+        "source_type": "enum:rollback|admin_grant",
+        "source_id": "string",
+        "idempotency_key": "string",
+        "reason": "string_required_on_revoke"
+      },
+      "idempotency_required": true,
+      "response_envelope_design": {
+        "status": "ok|idempotent_noop",
+        "event_id": "uuid4",
+        "resulting_quantity": "int",
+        "resulting_status": "enum:owned|archived|revoked"
+      },
+      "error_states": [
+        {"code": "INVENTORY_ITEM_NOT_FOUND",       "http_status": 404},
+        {"code": "LOCKED_ITEM_REVOKE_BLOCKED",     "http_status": 423},
+        {"code": "FORBIDDEN_NOT_ADMIN_OR_SYSTEM",  "http_status": 403},
+        {"code": "REASON_REQUIRED_ON_REVOKE",     "http_status": 400},
+        {"code": "ARTIFACT_INVENTORY_NOT_LIVE",   "http_status": 423}
+      ],
+      "design_only": true,
+      "live_now": false
+    }
+  ],
+  "live_now_state": {
+    "no_endpoint_implemented_in_this_pack": true,
+    "backend_route_changes_this_pack": 0,
+    "locked_legacy_mutation_endpoints_unchanged": true,
+    "catalog_ro_endpoints_unchanged": true
+  }
+}

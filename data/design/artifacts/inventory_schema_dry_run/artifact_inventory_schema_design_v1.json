@@ -1,0 +1,159 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_SCHEMA_DRY_RUN",
+  "track": "TRACK_B_INVENTORY_SCHEMA_DESIGN",
+  "verdict": "TRACK_B_ARTIFACT_INVENTORY_SCHEMA_DESIGN_READY",
+  "schema_version": "v1",
+  "design_status": "design_only_not_applied",
+  "collections": [
+    {
+      "name": "artifact_catalog_snapshot",
+      "purpose": "Snapshot canonico immutabile pubblicato da artifact_bible_launch_draft_v1.json. Serve come fonte autoritativa per validazione grant futuri.",
+      "is_live": false,
+      "fields": [
+        {"name": "artifact_id", "type": "string", "required": true, "primary_key": true, "pattern": "^relic_[a-z0-9_]+$"},
+        {"name": "bible_version", "type": "string", "required": true, "example": "launch_draft_v1"},
+        {"name": "release_status", "type": "enum", "required": true, "values": ["launch_candidate", "preview_only", "future_reserved"]},
+        {"name": "gameplay_status", "type": "enum", "required": true, "values": ["cosmetic_prestige_only", "inactive"]},
+        {"name": "category", "type": "enum", "required": true, "values": ["divine_relic", "event_relic", "forbidden_relic", "mythic_weapon_relic", "pantheon_emblem", "primordial_fragment", "sacred_symbol", "world_memory"]},
+        {"name": "rarity_band", "type": "enum", "required": true, "values": ["divine", "mythic", "legendary", "epic", "rare"]},
+        {"name": "associated_hero_id", "type": "string|null", "required": true},
+        {"name": "associated_character_status", "type": "enum", "required": true, "values": ["none", "canonical", "pending"]},
+        {"name": "display_name_it", "type": "string", "required": true},
+        {"name": "display_name_en", "type": "string", "required": true},
+        {"name": "snapshot_md5", "type": "string", "required": true, "description": "MD5 della riga della Bible per integrita'"},
+        {"name": "published_at_utc", "type": "iso8601", "required": true}
+      ],
+      "indexes": [
+        {"keys": ["artifact_id"], "unique": true, "name": "ix_uniq_artifact_id"},
+        {"keys": ["bible_version", "release_status"], "unique": false, "name": "ix_version_status"}
+      ]
+    },
+    {
+      "name": "user_artifact_inventory",
+      "purpose": "Inventario artefatti per (user_id, server_profile_id, artifact_id). Strettamente cosmetic_prestige_only finche' gameplay_status resta inactive in Bible. ZERO bonus combattimento.",
+      "is_live": false,
+      "compound_uniqueness": ["user_id", "server_profile_id", "artifact_id"],
+      "fields": [
+        {"name": "inventory_id", "type": "uuid4", "required": true, "primary_key": true},
+        {"name": "user_id", "type": "string", "required": true},
+        {"name": "server_id", "type": "string", "required": true, "example": "s1"},
+        {"name": "server_profile_id", "type": "string", "required": true, "description": "composito user_id+server_id per multi-shard"},
+        {"name": "account_id", "type": "string", "required": true, "description": "alias account-wide, oggi uguale a user_id"},
+        {"name": "artifact_id", "type": "string", "required": true, "foreign_to": "artifact_catalog_snapshot.artifact_id"},
+        {"name": "quantity", "type": "int", "required": true, "min": 0, "default": 1, "description": "quantita' duplicati; 0 = revoked totalmente"},
+        {"name": "first_acquired_at", "type": "iso8601", "required": true},
+        {"name": "last_acquired_at", "type": "iso8601", "required": true},
+        {"name": "source_type", "type": "enum", "required": true, "values": ["system_seed", "event_reward", "compensation", "future_gacha", "future_shop", "future_iap", "admin_grant"]},
+        {"name": "source_id", "type": "string|null", "required": true},
+        {"name": "status", "type": "enum", "required": true, "values": ["owned", "archived", "revoked"], "default": "owned"},
+        {"name": "locked", "type": "bool", "required": true, "default": false, "description": "se true, l'item non puo' essere revocato finche' non viene sbloccato da admin"},
+        {"name": "metadata_version", "type": "string", "required": true, "example": "launch_draft_v1"},
+        {"name": "created_at", "type": "iso8601", "required": true},
+        {"name": "updated_at", "type": "iso8601", "required": true}
+      ],
+      "indexes": [
+        {"keys": ["user_id", "server_profile_id", "artifact_id"], "unique": true, "name": "ix_uniq_user_profile_artifact"},
+        {"keys": ["user_id", "server_profile_id", "status"], "unique": false, "name": "ix_user_status"},
+        {"keys": ["artifact_id"], "unique": false, "name": "ix_by_artifact"},
+        {"keys": ["source_type", "source_id"], "unique": false, "name": "ix_by_source"}
+      ],
+      "forbidden_fields": [
+        "level", "stars_upgrade_progress", "equipped", "equip_slot",
+        "stat_bonus_active", "combat_modifier", "craft_cost", "fuse_cost",
+        "price", "purchase_url", "pity_count", "hero_stat_delta", "pvp_power"
+      ]
+    },
+    {
+      "name": "artifact_inventory_ledger",
+      "purpose": "Append-only ledger di ogni evento di grant/revoke/archive. Garantisce idempotency e auditability.",
+      "is_live": false,
+      "append_only": true,
+      "fields": [
+        {"name": "event_id", "type": "uuid4", "required": true, "primary_key": true},
+        {"name": "user_id", "type": "string", "required": true},
+        {"name": "server_id", "type": "string", "required": true},
+        {"name": "server_profile_id", "type": "string", "required": true},
+        {"name": "artifact_id", "type": "string", "required": true},
+        {"name": "delta_quantity", "type": "int", "required": true, "description": "+N grant, -N revoke, 0 archive"},
+        {"name": "event_type", "type": "enum", "required": true, "values": ["grant", "revoke", "archive", "unarchive", "correction"]},
+        {"name": "source_type", "type": "enum", "required": true, "values": ["system_seed", "event_reward", "compensation", "future_gacha", "future_shop", "future_iap", "admin_grant", "rollback"]},
+        {"name": "source_id", "type": "string|null", "required": true},
+        {"name": "idempotency_key", "type": "string", "required": true, "description": "chiave unica per evitare doppi grant; pattern <source_type>:<source_id>:<user_id>:<artifact_id>"},
+        {"name": "created_at", "type": "iso8601", "required": true},
+        {"name": "reason", "type": "string|null", "required": false},
+        {"name": "actor_system", "type": "string", "required": true, "description": "identificativo del sistema/admin che ha emesso l'evento"}
+      ],
+      "indexes": [
+        {"keys": ["idempotency_key"], "unique": true, "name": "ix_uniq_idempotency"},
+        {"keys": ["user_id", "server_profile_id", "created_at"], "unique": false, "name": "ix_user_time"},
+        {"keys": ["artifact_id", "created_at"], "unique": false, "name": "ix_artifact_time"},
+        {"keys": ["source_type", "source_id"], "unique": false, "name": "ix_by_source"}
+      ]
+    },
+    {
+      "name": "artifact_collection_state",
+      "purpose": "Aggregato per-user del progresso collezione (cosmetic_prestige). Nessun bonus attivo finche' Bible.gameplay_status = inactive.",
+      "is_live": false,
+      "fields": [
+        {"name": "user_id", "type": "string", "required": true, "primary_key": true},
+        {"name": "server_profile_id", "type": "string", "required": true, "primary_key": true},
+        {"name": "total_owned_unique", "type": "int", "required": true, "min": 0, "max": 32},
+        {"name": "total_owned_quantity", "type": "int", "required": true, "min": 0},
+        {"name": "unique_by_category", "type": "object", "required": true, "description": "map category -> count"},
+        {"name": "unique_by_rarity_band", "type": "object", "required": true, "description": "map rarity_band -> count"},
+        {"name": "collection_score", "type": "int", "required": true, "min": 0, "description": "score cosmetico calcolato"},
+        {"name": "bonus_status", "type": "enum", "required": true, "values": ["inactive", "preview", "capped_future"], "default": "inactive"},
+        {"name": "last_recalc_at", "type": "iso8601", "required": true}
+      ],
+      "indexes": [
+        {"keys": ["user_id", "server_profile_id"], "unique": true, "name": "ix_uniq_user_profile"}
+      ],
+      "no_live_bonus": true
+    },
+    {
+      "name": "artifact_idempotency_registry",
+      "purpose": "Registry secondaria delle idempotency_key (ridondanza con ledger) per fast-path lookup pre-write futuro.",
+      "is_live": false,
+      "fields": [
+        {"name": "idempotency_key", "type": "string", "required": true, "primary_key": true},
+        {"name": "resolved_event_id", "type": "uuid4", "required": true},
+        {"name": "created_at", "type": "iso8601", "required": true},
+        {"name": "ttl_seconds", "type": "int", "required": false, "default": null, "description": "opzionale TTL Mongo per cleanup automatico"}
+      ],
+      "indexes": [
+        {"keys": ["idempotency_key"], "unique": true, "name": "ix_uniq_idempotency"}
+      ]
+    }
+  ],
+  "scoping_rules": {
+    "server_scope_required": true,
+    "account_scope_required": true,
+    "compound_key": ["user_id", "server_profile_id", "artifact_id"],
+    "future_server_profile_selection_compatible": true,
+    "future_multishard_compatible": true
+  },
+  "separation_from_other_systems": {
+    "constellations": {"separate": true, "share_collection": false},
+    "equipment":     {"separate": true, "share_collection": false},
+    "runes":         {"separate": true, "share_collection": false},
+    "divine_weapons":{"separate": true, "share_collection": false},
+    "heroes":        {"linked_by_artifact_id.associated_hero_id_only": true, "no_hero_stat_delta_via_artifact": true}
+  },
+  "idempotency_design": {
+    "key_pattern": "<source_type>:<source_id>:<user_id>:<artifact_id>",
+    "duplicate_grant_behavior": "second_grant_with_same_key_resolves_to_existing_event_id_no_quantity_change",
+    "different_key_same_artifact_behavior": "increments_quantity_appends_ledger_event"
+  },
+  "rollback_design": {
+    "revoke_event_type": "revoke",
+    "compensating_ledger_entry_required": true,
+    "never_hard_delete": true,
+    "locked_items_revoke_blocked": true,
+    "reason_field_required_on_revoke": true
+  },
+  "forbidden_global": [
+    "equip_slot_active", "stat_bonus_active", "combat_modifier",
+    "price", "purchase_url", "gacha_pity_counter",
+    "direct_hero_stat_delta", "pvp_power_flag"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_SCHEMA_DRY_RUN",
+  "track": "TRACK_E_DB_MIGRATION_AND_ROLLBACK_DRY_RUN_PLAN",
+  "verdict": "TRACK_E_ARTIFACT_INVENTORY_DB_MIGRATION_ROLLBACK_DRY_RUN_PLAN_READY",
+  "applied_now": false,
+  "db_writes_performed": 0,
+  "migration_stages": [
+    {
+      "stage": 1,
+      "name": "PREFLIGHT_DRY_RUN",
+      "actions": [
+        "Verifica MD5 di artifact_bible_launch_draft_v1.json",
+        "Verifica che data/design/artifacts/inventory_schema_dry_run/* esista e validi",
+        "Verifica markers PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL=true + ARTIFACT_INVENTORY_RUNTIME_ENABLED=true_explicit",
+        "Verifica che POST mutativi legacy restino lockati (HTTP 423)",
+        "Verifica MD5 invarianti su backend/battle_engine.py e backend/.env"
+      ],
+      "db_write": false,
+      "rollback_safe": true
+    },
+    {
+      "stage": 2,
+      "name": "BACKUP_REQUIREMENT",
+      "actions": [
+        "Snapshot mongodump completo della collection users (sola lettura nel piano)",
+        "Snapshot dump delle collection user_artifacts e user_constellations LEGACY come archivio storico (NON modificate da questo piano)",
+        "Snapshot directory /app/data/design/artifacts/ in repo public main",
+        "Retention dump: 30 giorni minimo"
+      ],
+      "db_write": false,
+      "rollback_safe": true
+    },
+    {
+      "stage": 3,
+      "name": "CREATE_NEW_COLLECTIONS_DRY_RUN",
+      "actions": [
+        "In ambiente staging isolato: db.createCollection('artifact_catalog_snapshot')",
+        "db.createCollection('user_artifact_inventory')",
+        "db.createCollection('artifact_inventory_ledger')",
+        "db.createCollection('artifact_collection_state')",
+        "db.createCollection('artifact_idempotency_registry')",
+        "Creazione indici come da schema_design Track B",
+        "NESSUN insert reale"
+      ],
+      "db_write": "staging_only_false_in_this_pack",
+      "rollback": "db.<collection>.drop() in ordine inverso"
+    },
+    {
+      "stage": 4,
+      "name": "POPULATE_CATALOG_SNAPSHOT_DRY_RUN",
+      "actions": [
+        "Lettura artifact_bible_launch_draft_v1.json",
+        "Trasformazione 32 entry -> documenti artifact_catalog_snapshot",
+        "Validazione schema in memoria",
+        "Calcolo MD5 per ogni riga -> snapshot_md5",
+        "In staging: bulk insert con ordered=true; in questo pack solo dry-run"
+      ],
+      "db_write": "staging_only_false_in_this_pack",
+      "rollback": "db.artifact_catalog_snapshot.deleteMany({bible_version: 'launch_draft_v1'})",
+      "idempotent_rerun": true
+    },
+    {
+      "stage": 5,
+      "name": "INTERNAL_BETA_SEED_DRY_RUN",
+      "actions": [
+        "Selezione N utenti dell'allowlist beta",
+        "Generazione idempotency_key per ciascun (user, artifact, source)",
+        "Dry-run del grant pipeline: validazione schema sample docs gia' presenti in Track C",
+        "Nessuna scrittura"
+      ],
+      "db_write": false,
+      "rollback": "Non necessario per dry-run; in fase live il revoke avviene via compensating ledger entries"
+    },
+    {
+      "stage": 6,
+      "name": "GO_LIVE_GATE_REQUIRES_SEPARATE_PACK",
+      "actions": [
+        "Pack futuro PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT_PACK (Stage 6)",
+        "Imposta ARTIFACT_INVENTORY_RUNTIME_ENABLED=true_explicit dietro signoff doppio",
+        "Apre solo gli endpoint GET inventario; grant/revoke restano system-only"
+      ],
+      "db_write": false,
+      "out_of_scope_this_pack": true
+    }
+  ],
+  "rollback_plan": {
+    "global_strategy": "never_hard_delete_user_data_after_live",
+    "pre_live_rollback": [
+      "drop_idempotency_registry",
+      "drop_collection_state",
+      "drop_ledger",
+      "drop_user_artifact_inventory",
+      "drop_artifact_catalog_snapshot"
+    ],
+    "post_live_rollback": [
+      "Compensating ledger entry per ogni grant erroneo",
+      "NO drop di user_artifact_inventory dopo go-live",
+      "Snapshot point-in-time del catalog congelato"
+    ],
+    "rollback_invariants": {
+      "battle_engine_unchanged": true,
+      "gacha_rates_unchanged": true,
+      "iap_unchanged": true,
+      "character_bible_unchanged": true
+    }
+  },
+  "rerun_idempotency_guarantees": {
+    "catalog_snapshot_rerun_safe": true,
+    "seed_grant_rerun_safe_via_idempotency_key": true,
+    "ledger_append_only_no_duplicate_due_to_unique_idempotency_index": true
+  },
+  "failure_modes_addressed": [
+    {"mode": "duplicate_grant_same_key",      "mitigation": "unique index su idempotency_key"},
+    {"mode": "partial_seed_failure",          "mitigation": "ledger append-only ricostruisce stato; ledger_replay tool futuro"},
+    {"mode": "catalog_drift_mid_migration",   "mitigation": "snapshot_md5 frozen + bible_version pinned"},
+    {"mode": "server_profile_id_collision",   "mitigation": "compound index unique (user_id, server_profile_id, artifact_id)"},
+    {"mode": "revoke_on_locked_item",         "mitigation": "LOCKED_ITEM_REVOKE_BLOCKED -> HTTP 423"}
+  ]
+}
