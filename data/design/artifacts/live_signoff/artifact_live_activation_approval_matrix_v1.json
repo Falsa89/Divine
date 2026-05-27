@@ -1,0 +1,105 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF",
+  "track": "TRACK_B_LIVE_ACTIVATION_APPROVAL_MATRIX",
+  "verdict": "TRACK_B_ARTIFACT_LIVE_ACTIVATION_APPROVAL_MATRIX_READY",
+  "matrix_design_only": true,
+  "approvals_required_for_future_live_apply": [
+    {
+      "id": "APP_001",
+      "area": "user_product",
+      "description": "Approvazione del product owner / utente finale: il prodotto Artifact Inventory entra in fase live canary internal-only.",
+      "required_marker": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL=true",
+      "owner": "product_owner",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["explicit user prompt in next pack request"]
+    },
+    {
+      "id": "APP_002",
+      "area": "engineering",
+      "description": "Approvazione tecnica: schema, indici, scoping, idempotency e ledger appoggiati su MongoDB esistente.",
+      "required_marker": "ARTIFACT_INVENTORY_RUNTIME_ENABLED=true_explicit",
+      "owner": "backend_engineering",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["docs/divine/172", "validate_project_artifact_inventory_schema_dry_run_v1.py PASS"]
+    },
+    {
+      "id": "APP_003",
+      "area": "qa",
+      "description": "Approvazione QA: la suite custom Python deve restare al 100% PASS prima e dopo dry-run del runner.",
+      "required_marker": "ARTIFACT_INVENTORY_QA_APPROVED=true",
+      "owner": "qa_lead",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["suite custom Python 100% PASS pre-pack", "suite 100% PASS post-pack"]
+    },
+    {
+      "id": "APP_004",
+      "area": "rollback_owner",
+      "description": "Approvazione del rollback owner: chi e' formalmente responsabile di applicare il rollback in caso di anomalie post-apply.",
+      "required_marker": "ARTIFACT_INVENTORY_ROLLBACK_OWNER_APPROVED=true",
+      "owner": "sre_or_on_call_lead",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["runbook 174D firmato", "backup snapshot pianificato"]
+    },
+    {
+      "id": "APP_005",
+      "area": "data_model",
+      "description": "Approvazione data model: 5 collection design (snapshot, inventory, ledger, collection_state, idempotency_registry) confermate immutabili nelle aree forbidden fields.",
+      "required_marker": "none_separate_from_engineering",
+      "owner": "data_architect",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["data/design/artifacts/inventory_schema_dry_run/artifact_inventory_schema_design_v1.json"]
+    },
+    {
+      "id": "APP_006",
+      "area": "security_safety",
+      "description": "Approvazione sicurezza: nessun item exposure player-facing in questo apply, nessun token, nessun secret, nessuna esposizione PII oltre user_id/server_profile_id gia' esistenti.",
+      "required_marker": "none_separate_from_engineering",
+      "owner": "security_lead",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["audit forbidden_fields nel response envelope futuri"]
+    },
+    {
+      "id": "APP_007",
+      "area": "economy_balance",
+      "description": "Approvazione economy/balance: gli artefatti restano cosmetic_prestige_only. Nessun bonus combattimento, nessun delta stat eroe.",
+      "required_marker": "none_separate_from_engineering",
+      "owner": "game_designer_balance",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["Bible gameplay_status=inactive/cosmetic_prestige_only", "battle_engine MD5 invariato"]
+    },
+    {
+      "id": "APP_008",
+      "area": "server_profile_scoping",
+      "description": "Approvazione scoping: tutte le scritture devono usare (user_id, server_profile_id, artifact_id) e l'idempotency key concordata.",
+      "required_marker": "none_separate_from_engineering",
+      "owner": "platform_lead",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["data/design/artifacts/inventory_schema_dry_run/artifact_inventory_schema_design_v1.json scoping_rules"]
+    },
+    {
+      "id": "APP_009",
+      "area": "player_visibility",
+      "description": "Approvazione visibilita' player: in questa fase NESSUN player vede inventario in UI. /artifacts-preview rimane statico.",
+      "required_marker": "ARTIFACT_INVENTORY_CANARY_SCOPE_APPROVED=true",
+      "owner": "product_owner",
+      "status_in_this_pack": "NOT_GRANTED",
+      "blocking_if_missing": true,
+      "evidence_required": ["frontend MD5 invariati", "gacha HIDDEN_BANNERS_V2 immutato"]
+    }
+  ],
+  "approvals_summary": {
+    "total": 9,
+    "granted_in_this_pack": 0,
+    "required_for_next_apply": 9,
+    "missing": 9
+  },
+  "future_apply_blocked_until_all_granted": true
+}

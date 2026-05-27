@@ -1,0 +1,75 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF",
+  "track": "TRACK_C_CANARY_SCOPE_AND_WRITE_BUDGET",
+  "verdict": "TRACK_C_ARTIFACT_LIVE_CANARY_SCOPE_AND_WRITE_BUDGET_READY",
+  "canary_scope_definition": {
+    "scope_type": "internal_only",
+    "player_facing": false,
+    "allowlist_required": true,
+    "allowlist_default": [],
+    "allowlist_max_size_initial": 5,
+    "server_ids_allowed": ["s1"],
+    "allowed_artifact_ids_initial": ["relic_aurora_eterna"],
+    "allowed_source_types_initial": ["system_seed"],
+    "allowed_source_id_prefix": "live_activation_canary_2026_05_27_",
+    "forbidden_source_types_initial": ["future_iap", "future_gacha", "future_shop", "event_reward", "compensation", "admin_grant"],
+    "requires_canary_approval_marker": "ARTIFACT_INVENTORY_CANARY_SCOPE_APPROVED=true"
+  },
+  "write_budget_first_apply": {
+    "artifact_catalog_snapshot_max_inserts": 32,
+    "artifact_catalog_snapshot_max_inserts_rationale": "Snapshot completo della Bible 32 entry, idempotente per bible_version=launch_draft_v1",
+    "user_artifact_inventory_max_inserts": 5,
+    "user_artifact_inventory_max_updates": 0,
+    "artifact_inventory_ledger_max_appends": 5,
+    "artifact_collection_state_max_upserts": 5,
+    "artifact_idempotency_registry_max_inserts": 5,
+    "users_collection_writes_allowed": 0,
+    "user_artifacts_legacy_writes_allowed": 0,
+    "user_constellations_legacy_writes_allowed": 0,
+    "teams_collection_writes_allowed": 0,
+    "max_total_db_operations_first_apply": 52,
+    "abort_if_budget_exceeded": true
+  },
+  "allowed_collections_first_apply": [
+    "artifact_catalog_snapshot",
+    "user_artifact_inventory",
+    "artifact_inventory_ledger",
+    "artifact_collection_state",
+    "artifact_idempotency_registry"
+  ],
+  "forbidden_collections_first_apply": [
+    "users",
+    "user_heroes",
+    "user_artifacts",
+    "user_constellations",
+    "user_equipment",
+    "user_runes",
+    "user_divine_weapons",
+    "inventory",
+    "teams",
+    "banners",
+    "shop_items",
+    "iap_receipts",
+    "battle_pass_state",
+    "vip_state",
+    "soul_forge_state",
+    "character_bible"
+  ],
+  "forbidden_scopes": {
+    "broad_rollout": true,
+    "player_facing_ui": true,
+    "acquisition_source_player_initiated": true,
+    "paid_flow": true,
+    "combat_bonus": true,
+    "gacha_banner_activation": true,
+    "real_player_grant_outside_allowlist": true
+  },
+  "write_pipeline_invariants": {
+    "idempotency_key_required": true,
+    "idempotency_key_pattern": "<source_type>:<source_id>:<user_id>:<artifact_id>",
+    "all_writes_inside_apply_function": true,
+    "all_writes_logged_in_ledger": true,
+    "all_writes_reversible_via_ledger_compensation": true,
+    "locked_inventory_items_marked_revoke_blocked": true
+  }
+}

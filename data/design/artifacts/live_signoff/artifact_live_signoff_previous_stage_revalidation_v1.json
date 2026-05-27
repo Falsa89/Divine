@@ -1,0 +1,60 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF",
+  "track": "TRACK_A_PREVIOUS_STAGE_MANIFEST_REVALIDATION",
+  "verdict": "TRACK_A_ARTIFACT_LIVE_SIGNOFF_PREVIOUS_STAGE_REVALIDATION_READY",
+  "stage_chain_status": [
+    {"stage": 1, "name": "ARTIFACT_BIBLE_CANONICAL_DESIGN",            "doc": "docs/divine/167_ARTIFACT_BIBLE_CANONICAL_DESIGN.md",     "status": "COMPLETE_PUBLIC_REPO_VERIFIED"},
+    {"stage": 2, "name": "ARTIFACT_BIBLE_REVIEW_SIGNOFF",              "doc": "docs/divine/168_ARTIFACT_BIBLE_REVIEW_SIGNOFF.md",        "status": "COMPLETE_PUBLIC_REPO_VERIFIED"},
+    {"stage": 3, "name": "ARTIFACT_PREVIEW_UI_POPULATION",             "doc": "docs/divine/169_ARTIFACT_PREVIEW_UI_POPULATION.md",       "status": "COMPLETE_PUBLIC_REPO_VERIFIED"},
+    {"stage": 4, "name": "ARTIFACT_BACKEND_CATALOG_RO",                "doc": "docs/divine/170_ARTIFACT_BACKEND_CATALOG_RO.md",          "status": "COMPLETE_PUBLIC_REPO_VERIFIED"},
+    {"stage": "4.5", "name": "ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING", "doc": "docs/divine/171_ARTIFACT_LEGACY_MUTATION_ENDPOINT_HARDENING.md", "status": "COMPLETE_PUBLIC_REPO_VERIFIED"},
+    {"stage": 5, "name": "ARTIFACT_INVENTORY_SCHEMA_DRY_RUN",          "doc": "docs/divine/172_ARTIFACT_INVENTORY_SCHEMA_DRY_RUN.md",    "status": "COMPLETE_PUBLIC_REPO_VERIFIED"},
+    {"stage": 6, "name": "ARTIFACT_INVENTORY_GATED_IMPORT",            "doc": "docs/divine/173_ARTIFACT_INVENTORY_GATED_IMPORT.md",      "status": "COMPLETE_PUBLIC_REPO_VERIFIED", "verdict_local": "READY_NOT_APPLIED_MISSING_LIVE_MARKERS"}
+  ],
+  "stage_chain_complete": true,
+  "stage_6_complete_public_repo_verified": true,
+  "stage_6_blockers_remaining": [],
+  "safe_default_runner_state": {
+    "file": "backend/scripts/artifact_inventory_gated_import_apply.py",
+    "default_mode_dry_run": true,
+    "refuses_apply_without_markers": true,
+    "refuses_apply_without_cli_flag": true,
+    "not_registered_in_startup": true,
+    "not_registered_in_supervisord": true,
+    "not_registered_in_cron": true
+  },
+  "runtime_surface_state": {
+    "GET /api/artifacts/catalog":          {"http": 200, "count": 32},
+    "GET /api/artifacts/catalog/preview":  {"http": 200, "count": 10},
+    "POST /api/artifacts/pull":            {"http": 423, "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED"},
+    "POST /api/artifacts/pull10":          {"http": 423, "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED"},
+    "POST /api/artifacts/fuse":            {"http": 423, "code": "ARTIFACT_MUTATION_ENDPOINT_LOCKED"},
+    "POST /api/constellations/equip":      {"http": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED"},
+    "POST /api/constellations/fuse":       {"http": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED"},
+    "POST /api/constellations/pull":       {"http": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED"},
+    "POST /api/constellations/pull10":     {"http": 423, "code": "CONSTELLATION_MUTATION_ENDPOINT_LOCKED"}
+  },
+  "frontend_state": {
+    "artifacts_preview_tsx_static_read_only": true,
+    "artifacts_legacy_redirect_to_preview": true,
+    "gacha_hidden_banners_v2": ["artifact", "constellation"],
+    "no_inventory_wiring": true
+  },
+  "db_state": {
+    "artifact_catalog_snapshot": "NOT_PRESENT",
+    "user_artifact_inventory": "NOT_PRESENT",
+    "artifact_inventory_ledger": "NOT_PRESENT",
+    "artifact_collection_state": "NOT_PRESENT",
+    "artifact_idempotency_registry": "NOT_PRESENT"
+  },
+  "invariants_md5": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a"
+  },
+  "unresolved_blockers": [],
+  "signoff_pack_can_proceed": true
+}

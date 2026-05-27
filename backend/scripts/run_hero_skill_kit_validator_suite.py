@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-# PUBLIC_SYNC_TAG: suite_runner_gated_import_v2_force_resnapshot_2026_05_27
-# This file MUST be synced together with backend/scripts/validate_project_artifact_inventory_gated_import_v1.py
-# Registered OPTIONAL row for Stage 6 lives near line ~1105: ('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', ...).
+# PUBLIC_SYNC_TAG: suite_runner_live_signoff_v3_force_resnapshot_2026_05_27
+# Stage 6 GATED-IMPORT and Stage 7 LIVE-ACTIVATION-SIGNOFF OPTIONAL validators
+# are both registered in the OPTIONAL block below. Search for the inline
+# sentinels STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL and
+# STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL to locate them.
+# This file MUST be synced together with both:
+#   backend/scripts/validate_project_artifact_inventory_gated_import_v1.py
+#   backend/scripts/validate_project_artifact_inventory_live_activation_signoff_v1.py
 """
 RM1.31-B — Hero Skill Kit Validator Suite Runner
 ─────────────────────────────────────────────────────────────────────────
@@ -1106,6 +1111,8 @@ OPTIONAL = [
     ('PROJECT-ARTIFACT-INVENTORY-SCHEMA-DRY-RUN', 'validate_project_artifact_inventory_schema_dry_run_v1.py'),
     # STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     ('PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT', 'validate_project_artifact_inventory_gated_import_v1.py'),
+    # STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    ('PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF', 'validate_project_artifact_inventory_live_activation_signoff_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

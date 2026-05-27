@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-27T01:33:28.630857+00:00",
+  "timestamp_utc": "2026-05-27T01:51:25.978458+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1101,
+  "backend_python_files_scanned": 1102,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 508,
+      "files_with_hits": 509,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -269,7 +269,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 250,
+      "files_with_hits": 251,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -677,7 +677,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 85,
+      "files_with_hits": 86,
       "hits_sample": [
         {
           "file": "backend/synergy_system.py",

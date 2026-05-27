@@ -1,0 +1,83 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF",
+  "track": "TRACK_D_FUTURE_APPLY_RUNBOOK_AND_ROLLBACK",
+  "verdict": "TRACK_D_ARTIFACT_LIVE_APPLY_RUNBOOK_AND_ROLLBACK_READY",
+  "runbook_design_only": true,
+  "no_apply_executed_in_this_pack": true,
+  "preflight": [
+    {"step": 1, "action": "Verifica suite custom Python 100% PASS", "command": "python3 backend/scripts/run_hero_skill_kit_validator_suite.py", "abort_if": "fail|miss > 0"},
+    {"step": 2, "action": "Verifica MD5 invariants su battle_engine.py e backend/.env", "command": "md5sum backend/battle_engine.py backend/.env", "abort_if": "md5 differs from expected"},
+    {"step": 3, "action": "Verifica POST legacy 423", "command": "curl -s -o /dev/null -w '%{http_code}' -X POST /api/artifacts/pull", "abort_if": "http != 423"},
+    {"step": 4, "action": "Verifica GET catalog 200", "command": "curl -s /api/artifacts/catalog | jq .count", "abort_if": "count != 32"},
+    {"step": 5, "action": "Verifica frontend artifacts-preview MD5", "command": "md5sum frontend/app/artifacts-preview.tsx", "abort_if": "md5 != 0e75c94e00899af773dbc9faf7326a15"},
+    {"step": 6, "action": "Verifica hidden banners gacha", "command": "grep HIDDEN_BANNERS_V2 frontend/app/\\(tabs\\)/gacha.tsx", "abort_if": "artifact/constellation missing"},
+    {"step": 7, "action": "Backup mongodump della collezione users (sola lettura per integrita')", "command": "mongodump --db=$DB_NAME --collection=users --out=/var/backups/pre_artifact_live_$(date +%F)", "abort_if": "backup fails"},
+    {"step": 8, "action": "Verifica esistenza tutti i marker live", "command": "env | grep -E 'PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL|ARTIFACT_INVENTORY_(RUNTIME_ENABLED|CANARY_SCOPE_APPROVED|ROLLBACK_OWNER_APPROVED|QA_APPROVED)'", "abort_if": "any marker missing"}
+  ],
+  "env_marker_verification_required": [
+    "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL=true",
+    "ARTIFACT_INVENTORY_RUNTIME_ENABLED=true_explicit",
+    "ARTIFACT_INVENTORY_CANARY_SCOPE_APPROVED=true",
+    "ARTIFACT_INVENTORY_ROLLBACK_OWNER_APPROVED=true",
+    "ARTIFACT_INVENTORY_QA_APPROVED=true"
+  ],
+  "canary_user_verification": {
+    "allowlist_must_be_non_empty": true,
+    "allowlist_max_size": 5,
+    "each_user_must_exist_in_users_collection": true,
+    "each_user_must_have_server_profile_id_set": true,
+    "each_user_already_owns_artifact_must_be_idempotent": true
+  },
+  "dry_run_before_apply": {
+    "command": "python3 backend/scripts/artifact_inventory_gated_import_apply.py",
+    "expected_verdict": "READY_TO_APPLY_LIVE_MARKERS_PRESENT (only when env markers set)",
+    "expected_db_writes": 0
+  },
+  "apply_command": {
+    "command": "python3 backend/scripts/artifact_inventory_gated_import_apply.py --apply --i-understand-this-will-write",
+    "expected_in_this_stage_7_pack": "REFUSED (markers absent)",
+    "expected_in_future_stage_8_pack": "PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL_RECEIVED_DEFERRED_TO_NEXT_PACK or actual write per future pack",
+    "this_pack_does_NOT_invoke": true
+  },
+  "post_apply_checks": [
+    {"check": "collection counts match write budget", "abort_if": "any count > budget"},
+    {"check": "all writes have corresponding ledger entry", "abort_if": "any orphan write"},
+    {"check": "GET /api/artifacts/catalog still 200 with count 32", "abort_if": "http != 200 or count != 32"},
+    {"check": "POST legacy still 423", "abort_if": "http != 423 on any of 7 legacy POSTs"},
+    {"check": "frontend artifacts-preview MD5 unchanged", "abort_if": "md5 differs"},
+    {"check": "gacha HIDDEN_BANNERS_V2 still contains artifact and constellation", "abort_if": "missing"},
+    {"check": "battle_engine.py and .env MD5 unchanged", "abort_if": "md5 differs"}
+  ],
+  "rollback_runbook": {
+    "safe_window": "before any user UI exposes inventory; aka entire Stage 7-8 period",
+    "pre_live_rollback_commands": [
+      "db.artifact_idempotency_registry.drop()",
+      "db.artifact_collection_state.drop()",
+      "db.artifact_inventory_ledger.drop()",
+      "db.user_artifact_inventory.drop()",
+      "db.artifact_catalog_snapshot.drop()"
+    ],
+    "post_live_rollback_commands": [
+      "For each canary grant: append compensating ledger entry event_type=revoke, source_type=rollback, reason=...",
+      "Set user_artifact_inventory.status='revoked' and quantity=0 ONLY if locked=false",
+      "NEVER db.<collection>.deleteMany on user-touching data after live"
+    ],
+    "audit_logs_required": [
+      "every rollback action appended to artifact_inventory_ledger",
+      "actor_system field must identify the rollback console/script",
+      "reason field required on every revoke"
+    ]
+  },
+  "abort_criteria": [
+    "any preflight step fails",
+    "write budget exceeded",
+    "any forbidden collection touched",
+    "any HTTP smoke fails",
+    "any MD5 invariant drifts",
+    "any locked legacy POST returns non-423"
+  ],
+  "emergency_stop": {
+    "action": "kill apply process (Ctrl-C or kill -TERM)",
+    "effect": "pending writes inside still-open Mongo bulk operations are aborted; ledger consistency restored via partial rerun with same idempotency keys"
+  }
+}

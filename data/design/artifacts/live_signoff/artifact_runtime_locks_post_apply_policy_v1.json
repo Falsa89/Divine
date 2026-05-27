@@ -1,0 +1,66 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF",
+  "track": "TRACK_E_RUNTIME_LOCKS_POST_APPLY_POLICY",
+  "verdict": "TRACK_E_ARTIFACT_RUNTIME_LOCKS_POST_APPLY_POLICY_READY",
+  "policy_design_only": true,
+  "locks_that_remain_after_future_internal_apply": {
+    "gacha_artifact_banner_hidden": true,
+    "gacha_constellation_banner_hidden": true,
+    "legacy_post_artifacts_pull_remains_423": true,
+    "legacy_post_artifacts_pull10_remains_423": true,
+    "legacy_post_artifacts_fuse_remains_423": true,
+    "legacy_post_constellations_equip_remains_423": true,
+    "legacy_post_constellations_fuse_remains_423": true,
+    "legacy_post_constellations_pull_remains_423": true,
+    "legacy_post_constellations_pull10_remains_423": true,
+    "no_equip_endpoint_added": true,
+    "no_fuse_endpoint_added": true,
+    "no_craft_endpoint_added": true,
+    "no_pull_endpoint_added": true,
+    "artifacts_preview_remains_static": true,
+    "artifacts_preview_may_become_api_driven_only_in_separate_frontend_pack": true,
+    "no_combat_bonus_active": true,
+    "no_hero_stat_delta_via_artifact": true,
+    "no_iap_flow_added": true,
+    "no_shop_listing_added": true,
+    "no_public_inventory_route_unless_separate_endpoint_pack": true,
+    "no_player_initiated_acquisition": true,
+    "no_player_visible_ownership_unless_separate_ui_pack": true,
+    "no_constellation_inventory_activation": true
+  },
+  "allowed_after_apply_internal_only": [
+    "writing to artifact_catalog_snapshot (snapshot canonical immutabile)",
+    "writing to user_artifact_inventory for canary allowlist only",
+    "writing to artifact_inventory_ledger append-only",
+    "writing to artifact_collection_state aggregate for canary users",
+    "writing to artifact_idempotency_registry"
+  ],
+  "forbidden_after_apply_until_separate_pack": [
+    "unhide artifact banner",
+    "unhide constellation banner",
+    "unlock POST artifacts/pull",
+    "unlock POST artifacts/pull10",
+    "unlock POST artifacts/fuse",
+    "unlock POST constellations/*",
+    "add equip/fuse/craft/pull endpoint",
+    "add combat bonus / stat delta",
+    "add IAP / shop / BP / VIP referencing artifacts",
+    "add player-facing inventory UI screen",
+    "wire /artifacts-preview to inventory API"
+  ],
+  "file_invariants_post_apply": {
+    "backend/battle_engine.py": "MUST_REMAIN_151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "MUST_REMAIN_ff60bbb79efa329b71aa8ed351ea89b3_OR_RECORD_NEW_HASH_IF_LIVE_MARKERS_ADDED",
+    "frontend/app/artifacts-preview.tsx": "MUST_REMAIN_0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/(tabs)/gacha.tsx": "MUST_REMAIN_f68b9239cec04ea54879f0be381e772a"
+  },
+  "beta_tests_required_before_visibility_pack": [
+    "canary write/read smoke (internal only)",
+    "idempotent re-run (zero duplicate grants)",
+    "rollback exercise on test user",
+    "locked-revoke-blocked scenario verified",
+    "GET /api/artifacts/catalog stays 200/32",
+    "all 7 legacy POST stay 423",
+    "suite custom Python remains 100% PASS"
+  ]
+}

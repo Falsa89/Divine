@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF",
+  "track": "TRACK_F_VALIDATOR_AND_SUITE_REGISTRATION_PROOF_MARKER",
+  "purpose": "DEDICATED_SUITE_REGISTRATION_PROOF_MARKER",
+  "reason": "Save to GitHub di Emergent ha avuto sync flaky su backend/scripts/run_hero_skill_kit_validator_suite.py nei pack precedenti. Questo marker JSON dedicato attesta lo stato della registrazione attesa per il validator di Stage 7, ed e' verificabile in una directory che non e' soggetta allo stesso stale-push bug.",
+  "validator_file_path": "backend/scripts/validate_project_artifact_inventory_live_activation_signoff_v1.py",
+  "validator_file_role": "OPTIONAL",
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_registration_row_text": "('PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF', 'validate_project_artifact_inventory_live_activation_signoff_v1.py'),",
+    "expected_row_location": "OPTIONAL block, immediately after PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT line",
+    "expected_inline_sentinel_above_row_text": "# STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_top_sentinel_v3": "# PUBLIC_SYNC_TAG: suite_runner_live_signoff_v3_force_resnapshot_2026_05_27"
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verify top sentinel v3 line near line 2",
+    "Verify inline sentinel STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL near the new registration row",
+    "Verify tuple ('PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF', 'validate_project_artifact_inventory_live_activation_signoff_v1.py') present",
+    "If any item missing, verdict is PROJECT_ARTIFACT_INVENTORY_LIVE_ACTIVATION_SIGNOFF_READY_PUBLIC_REPO_PARTIAL_SUITE_REGISTRATION_MISMATCH",
+    "User must re-run Save to GitHub -> main -> PUSH until both this proof marker AND suite runner are correctly synced"
+  ],
+  "weakens_REQUIRED_validators": false,
+  "do_not_touch": [
+    "backend/battle_engine.py",
+    "backend/.env (no live markers injected)",
+    "backend/routes/artifacts.py (locked POSTs unchanged)",
+    "frontend/app/artifacts-preview.tsx",
+    "frontend/app/(tabs)/gacha.tsx"
+  ]
+}
