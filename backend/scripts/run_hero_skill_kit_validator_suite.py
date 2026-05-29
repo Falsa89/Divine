@@ -18,6 +18,8 @@
 # PUBLIC_SYNC_TAG_RESYNC_v13: suite_runner_combat_finalize_for_release_v13_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v14: suite_runner_login_auth_hardening_v14_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v14b: suite_runner_login_auth_sync_fix_v14b_2026_05_29_force_blob_resnapshot
+# PUBLIC_SYNC_TAG_RESYNC_v14c: suite_runner_login_auth_sync_fix_v14c_2026_05_29_force_public_blob_refresh
+# PUBLIC_SYNC_TAG_RESYNC_v14c_REASON: previous public push still exposed pre-v14 runner, so this marker exists only to force suite runner public sync; no logic change.
 # RESYNC_v14b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
 # era ancora stale dopo il commit del pack PROJECT_LOGIN_AUTH_HARDENING (188).
 # Sentinella v13 Combat Finalize era presente ma v14 Login Auth + tupla
@@ -1302,6 +1304,7 @@ OPTIONAL = [
     # smoke test live 10/10 PASS; ownership matrix prodotta; locks VIP/BP/Shop intatti.
     # Proof marker dedicato: data/design/login_auth_hardening/login_auth_hardening_suite_registration_proof_marker_v1.json
     # SYNC_FIX_v14b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_LOGIN_AUTH_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/login_auth_hardening/login_auth_suite_runner_sync_fix_marker_v1.json
+    # SYNC_FIX_v14c 2026_05_29: second public-main resync attempt after v14b stale; tuple count remains 1; no semantics change. Proof marker fix: data/design/login_auth_hardening/login_auth_suite_runner_sync_fix_v2_marker_v1.json
     ('PROJECT-LOGIN-AUTH-HARDENING', 'validate_project_login_auth_hardening_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
