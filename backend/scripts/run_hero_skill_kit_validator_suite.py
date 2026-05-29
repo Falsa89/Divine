@@ -5,6 +5,13 @@
 # PUBLIC_SYNC_TAG_RESYNC_v6: suite_runner_iap_design_v6_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v7: suite_runner_shop_iap_integration_v7_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v8: suite_runner_battle_pass_surface_modernization_v8_2026_05_29
+# PUBLIC_SYNC_TAG_RESYNC_v8b: suite_runner_battle_pass_sync_fix_v8b_2026_05_29_force_blob_resnapshot
+# RESYNC_v8b RATIONALE: Public branch main was stale on this file after Battle Pass pack commit
+# (tuple ('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', ...) and inline sentinel
+# BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL were missing on remote). This v8b
+# micro-touch comment is a recurrent stale-push mitigation: force a new blob hash so the next
+# Save to GitHub PUSH cannot skip this file again. Proof marker dedicated:
+#   data/design/battle_pass/bp_suite_runner_sync_fix_marker_v1.json
 # Stage 6 GATED-IMPORT, Stage 7 LIVE-ACTIVATION-SIGNOFF, Stage 7B SUITE-RUNNER-SYNC-FIX,
 # Stage 8 CANARY-LIVE-APPLY, IAP-DESIGN, SHOP-IAP-INTEGRATION and BATTLE-PASS-SURFACE-MODERNIZATION
 # OPTIONAL validators are all registered in the OPTIONAL block below. Inline sentinels:
@@ -1152,6 +1159,7 @@ OPTIONAL = [
     # BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     # Sentinella inline BATTLE PASS SURFACE MODERNIZATION — design-only validator; BP_LOCKED_V2 + BP_PREMIUM_BUY_LOCKED_V2 must remain true; no live BP progression/claim/premium purchase.
     # Proof marker dedicato (tripled-sentinel): data/design/battle_pass/bp_suite_registration_proof_marker_v1.json
+    # SYNC_FIX_v8b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_BATTLE_PASS_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/battle_pass/bp_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', 'validate_project_battle_pass_surface_modernization_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)

@@ -1,0 +1,68 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SUITE_RUNNER_SYNC_FIX",
+  "purpose": "DEDICATED_SUITE_RUNNER_SYNC_FIX_PROOF_MARKER",
+  "reason": "Public branch main was stale on backend/scripts/run_hero_skill_kit_validator_suite.py after the PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION commit. The tuple ('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', '...') and inline sentinel BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL were already present locally but the public blob did not refresh on PUSH. This pack applies a value-only micro-touch (fresh comment markers) to force a new blob hash so the next Save to GitHub PUSH cannot skip the file.",
+  "local_state_before_fix": {
+    "tuple_present_locally": true,
+    "tuple_count_locally": 1,
+    "inline_sentinel_present_locally": true,
+    "top_sentinel_v8_present_locally": true
+  },
+  "local_state_after_fix": {
+    "tuple_present_locally": true,
+    "tuple_count_locally": 1,
+    "tuple_unchanged": true,
+    "tuple_unchanged_text": "('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', 'validate_project_battle_pass_surface_modernization_v1.py'),",
+    "inline_sentinel_present_locally": true,
+    "top_sentinel_v8_present_locally": true,
+    "added_top_sentinel_v8b": "# PUBLIC_SYNC_TAG_RESYNC_v8b: suite_runner_battle_pass_sync_fix_v8b_2026_05_29_force_blob_resnapshot",
+    "added_inline_sync_fix_comment": "# SYNC_FIX_v8b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_BATTLE_PASS_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1.",
+    "tuple_duplicated": false,
+    "REQUIRED_validator_weakened": false,
+    "OPTIONAL_validator_weakened": false,
+    "ast_parse_ok": true
+  },
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_registration_row_text": "('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', 'validate_project_battle_pass_surface_modernization_v1.py'),",
+    "expected_inline_sentinel_above_row_text": "# BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_top_sentinel_v8": "# PUBLIC_SYNC_TAG_RESYNC_v8: suite_runner_battle_pass_surface_modernization_v8_2026_05_29",
+    "expected_top_sentinel_v8b": "# PUBLIC_SYNC_TAG_RESYNC_v8b: suite_runner_battle_pass_sync_fix_v8b_2026_05_29_force_blob_resnapshot",
+    "expected_inline_sync_fix_comment_present": true
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verify top sentinel v8 present (line ~7)",
+    "Verify top sentinel v8b present (line ~8) -- this is the resync marker",
+    "Verify inline sentinel BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL present",
+    "Verify inline SYNC_FIX_v8b comment present immediately above the tuple",
+    "Verify tuple ('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', 'validate_project_battle_pass_surface_modernization_v1.py') present exactly once",
+    "Verify backend/scripts/validate_project_battle_pass_surface_modernization_v1.py exists",
+    "Verify data/design/battle_pass/* contains 8 JSON (6 design + 1 registration proof marker + 1 sync_fix marker)"
+  ],
+  "out_of_scope": [
+    "DB writes",
+    "Battle Pass live progression",
+    "reward claim live",
+    "premium pass purchase",
+    "paid pass unlock",
+    "frontend changes",
+    "frontend/app/battlepass.tsx changes",
+    "gacha changes",
+    "artifact changes",
+    "Soul Forge changes",
+    "backend/routes/artifacts.py changes",
+    "backend/battle_engine.py changes",
+    "backend/.env changes",
+    "IAP runtime changes",
+    "REQUIRED validator weakening",
+    "fake PASS"
+  ],
+  "weakens_REQUIRED_validators": false,
+  "weakens_OPTIONAL_validators": false,
+  "tuple_added": false,
+  "tuple_modified": false,
+  "tuple_removed": false,
+  "value_only_micro_touch": true,
+  "semantics_change": false
+}
