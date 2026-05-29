@@ -1,0 +1,48 @@
+{
+  "task_id": "PROJECT_SERVER_PROFILES_LIVE_MULTISHARD",
+  "track": "D",
+  "track_name": "GATED_RUNNER_AND_CANARY_PLAN",
+  "verdict": "TRACK_D_GATED_RUNNER_AND_CANARY_PLAN_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "description": "Piano di gated runner / canary apply. In questa esecuzione il gated runner NON applica alcun DB write (mancano i marker runtime).",
+  "required_runtime_markers_for_canary_apply": [
+    {"marker": "SERVER_PROFILES_RUNTIME_ENABLED",            "required_value": "true_explicit", "observed": null, "satisfied": false},
+    {"marker": "SERVER_PROFILES_CANARY_ALLOWLIST_ENABLED",   "required_value": "true_explicit", "observed": null, "satisfied": false},
+    {"marker": "SERVER_PROFILES_CANARY_USER_EMAILS",         "required_value": "comma-separated email list (1-5 emails)", "observed": null, "satisfied": false},
+    {"marker": "SERVER_PROFILES_SECOND_SERVER_PUBLIC_OPEN",  "required_value": "false (sempre false in questo pack)", "observed": null, "satisfied": "n/a (default false)"}
+  ],
+  "gated_runner_behavior": {
+    "current_resolved_action": "REFUSE_APPLY",
+    "reason": "required runtime markers UNSET; gate audit only",
+    "db_writes_executed": 0,
+    "canary_users_processed": 0,
+    "server_profile_docs_created": 0,
+    "users_server_mutation_executed": false,
+    "dual_write_executed": false,
+    "second_server_opened": false,
+    "verdict_emitted": "PROJECT_SERVER_PROFILES_LIVE_MULTISHARD_GATE_READY_NOT_APPLIED"
+  },
+  "canary_apply_plan_when_markers_set": {
+    "stage_1": "backup pre-apply: dump JSON di users + user_heroes + server_profiles per canary allowlist",
+    "stage_2": "create_one_server_profile per ogni canary email (server_id='s1', is_archived=false, account_id=user_id)",
+    "stage_3": "idempotent stamp users.account_id se mancante; NO altro write a users",
+    "stage_4": "smoke read: GET/POST select per canary user deve ritornare success=true con server_profile_id",
+    "stage_5": "rollback ready: script rollback_project_a_server_profiles_collection.py o delete dei singoli docs",
+    "max_canary_users": 5,
+    "max_db_writes_total": "5 server_profiles INSERT + 5 users.account_id $set (idempotent)",
+    "refuses_if": [
+      "any marker UNSET",
+      "canary user list > 5",
+      "canary user not found in users collection",
+      "SERVER_PROFILES_SECOND_SERVER_PUBLIC_OPEN=true",
+      "any user already has active server_profile"
+    ]
+  },
+  "second_server_opening": {
+    "executed": false,
+    "public_open": false,
+    "refuses_unless": "SERVER_PROFILES_SECOND_SERVER_PUBLIC_OPEN=true_explicit (NEVER in this pack)"
+  },
+  "language": "it"
+}

@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_SERVER_PROFILES_LIVE_MULTISHARD",
+  "track": "E",
+  "track_name": "ROUTE_PROTECTION_AND_AUTH_OWNERSHIP_GATE",
+  "verdict": "TRACK_E_ROUTE_PROTECTION_AND_AUTH_OWNERSHIP_GATE_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "description": "Matrice route-protection + ownership gate specifica per multishard. Documenta i contratti senza implementarli.",
+  "auth_dependency_required": "get_current_user (Bearer JWT HS256) — invariato dal pack 188",
+  "ownership_gate_design": {
+    "server_profiles": "account_id == current_user.id (or future account_id)",
+    "user_heroes":     "user_id == current_user.id  AND  server_id == active_server_id (resolved da server_profile attivo)",
+    "user_artifacts":  "user_id == current_user.id  AND  server_id == active_server_id (POST resta 423)",
+    "guild":           "user_id == current_user.id  AND  server_id == active_server_id",
+    "events / season": "server_id scoped (no per-user ownership)",
+    "friends / DM / push": "account_id == current_user.account_id (account-wide)"
+  },
+  "route_protection_matrix": [
+    {"route": "GET /api/server-profiles/select",  "auth": "bearer", "ownership_check": "self via token",        "current_state": "503",  "status": "DISABLED_BY_DESIGN"},
+    {"route": "POST /api/server-profiles/select", "auth": "bearer", "ownership_check": "self via token",        "current_state": "503",  "status": "DISABLED_BY_DESIGN"},
+    {"route": "GET /api/server-profiles/list",    "auth": "bearer", "ownership_check": "self via token",        "current_state": "not_implemented_yet", "status": "DESIGN_ONLY"},
+    {"route": "POST /api/server-profiles/archive","auth": "bearer", "ownership_check": "account_id match",      "current_state": "not_implemented_yet", "status": "DESIGN_ONLY"},
+    {"route": "GET /api/server-profiles/registry","auth": "public_or_bearer", "ownership_check": "n/a",         "current_state": "not_implemented_yet", "status": "DESIGN_ONLY"},
+    {"route": "GET /api/user/profile",            "auth": "bearer", "ownership_check": "self",                  "current_state": "live", "status": "PROTECTED (pack 188)"},
+    {"route": "GET /api/user/heroes",             "auth": "bearer", "ownership_check": "self + server_id scope (future)", "current_state": "live", "status": "PROTECTED (pack 188)"},
+    {"route": "POST /api/artifacts/* legacy mutation", "auth": "bearer", "ownership_check": "locked", "current_state": "423", "status": "LOCKED_BY_DESIGN"}
+  ],
+  "server_scope_util_invariants": [
+    "resolve_server_id() ritorna SEMPRE 's1' finché SECOND_SERVER_OPENING_ENABLED non è true",
+    "ensure_server_scope() stampa server_id/account_id SOLO SE MANCANTI (idempotent)",
+    "nessun cambio runtime su ensure_server_scope in questo pack"
+  ],
+  "auth_hardening_pack_188_invariants_preserved": {
+    "bcrypt_hashing": true,
+    "jwt_exp_30d": true,
+    "password_filter_universal": true,
+    "no_log_secrets": true,
+    "locks_VIP_BP_Shop_ItemShop": true,
+    "artifacts_constellation_locked_423": true
+  },
+  "language": "it"
+}

@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_SERVER_PROFILES_LIVE_MULTISHARD",
+  "track": "B",
+  "track_name": "ACCOUNT_WIDE_VS_SERVER_BOUNDARY_MATRIX",
+  "verdict": "TRACK_B_ACCOUNT_WIDE_VS_SERVER_BOUNDARY_MATRIX_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "description": "Matrice canonica di scope (account-wide vs server-bound) per ogni collection/entità. Documenta lo stato desiderato dopo multishard; nessuna migrazione applicata.",
+  "scope_matrix": [
+    {"entity": "users",                       "scope": "account_wide",  "current_field": "single doc per email", "future": "add `account_id` (idempotent stamp)", "migration_required": false},
+    {"entity": "users.email",                 "scope": "account_wide",  "current_field": "unique",               "future": "unchanged",                          "migration_required": false},
+    {"entity": "users.password",              "scope": "account_wide",  "current_field": "bcrypt hash",          "future": "unchanged",                          "migration_required": false},
+    {"entity": "server_profiles",             "scope": "server_bound",  "current_field": "0 docs",               "future": "1+ docs per (account_id, server_id)", "migration_required": false},
+    {"entity": "user_heroes",                 "scope": "server_bound",  "current_field": "user_id",              "future": "add `server_id` (default 's1')",      "migration_required": false},
+    {"entity": "user_artifacts",              "scope": "server_bound",  "current_field": "user_id (POST locked 423)", "future": "add `server_id` (default 's1')",  "migration_required": false},
+    {"entity": "wallet (gold, gems, paid)",   "scope": "server_bound",  "current_field": "users.gold/gems",      "future": "split paid (account-wide)/free (server-bound)", "migration_required": false, "reference_doc": "data/design/server_lifecycle/_slc_c_paid_free_currency_split_plan_v1_result.json"},
+    {"entity": "guild",                       "scope": "server_bound",  "current_field": "user_id, guild_id",    "future": "server_id scoped",                   "migration_required": false},
+    {"entity": "gvg, arena, ranks",           "scope": "server_bound",  "current_field": "user_id",              "future": "server_id scoped",                   "migration_required": false},
+    {"entity": "gacha pity",                  "scope": "server_bound",  "current_field": "user_id",              "future": "server_id scoped (pity per server)", "migration_required": false},
+    {"entity": "events / season",             "scope": "server_bound",  "current_field": "server-wide",          "future": "server_id keyed",                    "migration_required": false},
+    {"entity": "battle pass / VIP / shop",    "scope": "server_bound",  "current_field": "locked (V2 locks)",    "future": "server_bound when unlocked",         "migration_required": false},
+    {"entity": "friends list",                "scope": "account_wide",  "current_field": "user_id",              "future": "account_id",                         "migration_required": false},
+    {"entity": "DM / chat",                   "scope": "account_wide",  "current_field": "user_id",              "future": "account_id",                         "migration_required": false},
+    {"entity": "notifications / push tokens", "scope": "account_wide",  "current_field": "user_id",              "future": "account_id",                         "migration_required": false},
+    {"entity": "server_id resolution",        "scope": "util",          "current_field": "resolve_server_id() -> 's1'", "future": "resolve from active server_profile", "migration_required": false}
+  ],
+  "account_wide_count": 6,
+  "server_bound_count": 9,
+  "util_count": 1,
+  "migration_required_in_this_pack": false,
+  "broad_user_schema_rewrite_in_this_pack": false,
+  "language": "it"
+}

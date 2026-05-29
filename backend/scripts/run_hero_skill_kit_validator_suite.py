@@ -20,6 +20,15 @@
 # PUBLIC_SYNC_TAG_RESYNC_v14b: suite_runner_login_auth_sync_fix_v14b_2026_05_29_force_blob_resnapshot
 # PUBLIC_SYNC_TAG_RESYNC_v14c: suite_runner_login_auth_sync_fix_v14c_2026_05_29_force_public_blob_refresh
 # PUBLIC_SYNC_TAG_RESYNC_v14c_REASON: previous public push still exposed pre-v14 runner, so this marker exists only to force suite runner public sync; no logic change.
+# PUBLIC_SYNC_TAG_RESYNC_v15: suite_runner_server_profiles_live_multishard_v15_2026_05_29
+# RESYNC_v15 RATIONALE: Registrazione OPTIONAL del nuovo validator
+# validate_project_server_profiles_live_multishard_v1.py
+# (PROJECT_SERVER_PROFILES_LIVE_MULTISHARD). Pack GATE AUDIT ONLY: tutti i
+# marker runtime sono UNSET, nessun DB write, nessuna canary apply, nessuna
+# apertura secondo server. Validator OPTIONAL asserisce: 7 JSON tracks +
+# proof marker, MD5 invariants, locks attivi, server_profiles routes ancora
+# gated 503, server_scope util intatto, nessun nuovo endpoint live, auth
+# invariants pack 188 preservati.
 # RESYNC_v14b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
 # era ancora stale dopo il commit del pack PROJECT_LOGIN_AUTH_HARDENING (188).
 # Sentinella v13 Combat Finalize era presente ma v14 Login Auth + tupla
@@ -1306,6 +1315,13 @@ OPTIONAL = [
     # SYNC_FIX_v14b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_LOGIN_AUTH_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/login_auth_hardening/login_auth_suite_runner_sync_fix_marker_v1.json
     # SYNC_FIX_v14c 2026_05_29: second public-main resync attempt after v14b stale; tuple count remains 1; no semantics change. Proof marker fix: data/design/login_auth_hardening/login_auth_suite_runner_sync_fix_v2_marker_v1.json
     ('PROJECT-LOGIN-AUTH-HARDENING', 'validate_project_login_auth_hardening_v1.py'),
+    # SERVER_PROFILES_LIVE_MULTISHARD_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline SERVER PROFILES LIVE MULTISHARD — gate audit-only validator;
+    # tutti i marker runtime UNSET; nessun DB write; nessuna canary apply; nessuna apertura
+    # secondo server; server_profiles routes restano gated 503; auth pack 188 preservato;
+    # locks VIP/BP/Shop intatti; artifact/constellation 423; nessun nuovo endpoint live.
+    # Proof marker dedicato: data/design/server_profiles_live_multishard/server_profiles_live_multishard_suite_registration_proof_marker_v1.json
+    ('PROJECT-SERVER-PROFILES-LIVE-MULTISHARD', 'validate_project_server_profiles_live_multishard_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

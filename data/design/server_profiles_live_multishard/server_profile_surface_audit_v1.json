@@ -1,0 +1,57 @@
+{
+  "task_id": "PROJECT_SERVER_PROFILES_LIVE_MULTISHARD",
+  "track": "A",
+  "track_name": "SERVER_PROFILE_SURFACE_AUDIT",
+  "verdict": "TRACK_A_SERVER_PROFILE_SURFACE_AUDIT_READY",
+  "audit_only": true,
+  "db_writes": 0,
+  "runtime_changes": 0,
+  "description": "Censimento read-only delle superfici server-profile/multishard esistenti. Nessuna mutazione runtime né DB.",
+  "backend_surfaces": {
+    "routes_file": "backend/routes/server_profiles.py",
+    "routes": [
+      {"method": "GET",  "path": "/api/server-profiles/select", "current_state": "503_DISABLED", "gating": "SERVER_PROFILES_RUNTIME_ENABLED"},
+      {"method": "POST", "path": "/api/server-profiles/select", "current_state": "503_DISABLED", "gating": "SERVER_PROFILES_RUNTIME_ENABLED", "mutation_executed": false}
+    ],
+    "behavior_layer": {
+      "phase": "PROJECT_C_TRACK_A_BEHAVIOR_LAYER_READ_ONLY",
+      "calls_db_write": false,
+      "calls_users_server_mutation": false,
+      "calls_active_server_switch": false,
+      "calls_dual_write": false,
+      "called_only_when_flag_on": true
+    },
+    "preview_layer": {
+      "phase": "PROJECT_D_TRACK_A_FLAGGED_PREVIEW_DRY_RUN_READ_ONLY",
+      "double_gated_by": ["SERVER_PROFILES_RUNTIME_ENABLED", "SERVER_PROFILES_PREVIEW_ENABLED"],
+      "callable_from_default_routes": false
+    },
+    "scope_util": "backend/utils/server_scope.py",
+    "scope_util_helpers": [
+      "server_profiles_runtime_enabled() -> bool",
+      "second_server_opening_enabled() -> bool",
+      "resolve_server_id(request) -> 's1' (until second server opens)",
+      "resolve_account_id(user_id) -> account_id|None",
+      "ensure_server_scope(doc, user_id, request) -> stamps server_id/account_id ONLY IF MISSING (idempotent)"
+    ],
+    "rollback_script": "backend/scripts/rollback_project_a_server_profiles_collection.py (safe drop only if 0 docs)"
+  },
+  "mongo_state": {
+    "collection_present": "server_profiles (design; 0 docs in current state)",
+    "indexes_design": ["user_id", "account_id", "is_archived"],
+    "docs_present_now": "unknown_at_audit_time_no_query_executed"
+  },
+  "runtime_flags_observed": {
+    "SERVER_PROFILES_RUNTIME_ENABLED": null,
+    "SERVER_PROFILES_PREVIEW_ENABLED": null,
+    "SERVER_PROFILES_CANARY_ALLOWLIST_ENABLED": null,
+    "SECOND_SERVER_OPENING_ENABLED": null,
+    "SERVER_PROFILES_SECOND_SERVER_PUBLIC_OPEN": null,
+    "all_unset_required_for_gate_audit_only": true
+  },
+  "smoke_observed": {
+    "GET /api/server-profiles/select": "503 + runtime_enabled=False",
+    "POST /api/server-profiles/select": "503"
+  },
+  "language": "it"
+}

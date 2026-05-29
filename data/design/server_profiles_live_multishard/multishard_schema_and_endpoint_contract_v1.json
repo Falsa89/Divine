@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_SERVER_PROFILES_LIVE_MULTISHARD",
+  "track": "C",
+  "track_name": "MULTISHARD_SCHEMA_AND_ENDPOINT_CONTRACT",
+  "verdict": "TRACK_C_MULTISHARD_SCHEMA_AND_ENDPOINT_CONTRACT_READY",
+  "design_only": true,
+  "db_migration": false,
+  "db_writes": 0,
+  "description": "Contratto schema + endpoint per multishard. Tutto design-only. Nessun endpoint live, nessuna migrazione, nessun secondo server.",
+  "server_profiles_collection_design": {
+    "collection": "server_profiles",
+    "primary_key": "_id (ObjectId)",
+    "unique_index_design": "(account_id, server_id) UNIQUE",
+    "fields": [
+      {"name": "_id",         "type": "ObjectId"},
+      {"name": "user_id",     "type": "str (uuid)",        "required": true,  "index": true},
+      {"name": "account_id",  "type": "str (uuid)",        "required": true,  "index": true, "derivation": "users.id (1:1 with users; future split allowed)"},
+      {"name": "server_id",   "type": "str (e.g. 's1','s2')", "required": true, "index": true, "default": "s1"},
+      {"name": "is_archived", "type": "bool",              "required": true,  "default": false},
+      {"name": "created_at",  "type": "datetime"},
+      {"name": "last_active_at", "type": "datetime"}
+    ],
+    "invariants": [
+      "max 1 active (is_archived=false) profile per (account_id, server_id)",
+      "archived profiles preserved (cap 5 archived per account_id; design)",
+      "server_id MUST be in canonical server registry (currently {'s1'} only)"
+    ]
+  },
+  "endpoint_contract": [
+    {"method": "GET",  "path": "/api/server-profiles/select",       "auth": "bearer",      "gating": "SERVER_PROFILES_RUNTIME_ENABLED=true",  "current_state": "503", "mutation": false,  "design_response": {"status":"flag_on_behavior_layer_read_only","data":{"...":"read-only envelope"}}},
+    {"method": "POST", "path": "/api/server-profiles/select",       "auth": "bearer",      "gating": "SERVER_PROFILES_RUNTIME_ENABLED=true",  "current_state": "503", "mutation": false,  "design_response": "INERT; will become create-or-switch active profile when canary applies"},
+    {"method": "GET",  "path": "/api/server-profiles/list",         "auth": "bearer",      "gating": "SERVER_PROFILES_RUNTIME_ENABLED=true",  "current_state": "not_implemented_yet", "mutation": false, "design_response": {"profiles":[],"server_registry":["s1"]}},
+    {"method": "POST", "path": "/api/server-profiles/archive",      "auth": "bearer",      "gating": "SERVER_PROFILES_RUNTIME_ENABLED=true",  "current_state": "not_implemented_yet", "mutation": "design-only (toggle is_archived)", "design_response": {"archived":true}},
+    {"method": "GET",  "path": "/api/server-profiles/registry",     "auth": "public_or_bearer", "gating": "SERVER_PROFILES_RUNTIME_ENABLED=true",  "current_state": "not_implemented_yet", "mutation": false, "design_response": {"servers":[{"server_id":"s1","open":true,"region":"global"}]}}
+  ],
+  "server_registry_design": [
+    {"server_id": "s1", "open": true,  "public": true,  "region": "global", "created_at_design": "baseline", "notes": "legacy default; tutti gli utenti esistenti restano qui"},
+    {"server_id": "s2", "open": false, "public": false, "region": "reserved", "created_at_design": "future", "notes": "design-only; NON aperto in questo pack; richiede SERVER_PROFILES_SECOND_SERVER_PUBLIC_OPEN=true_explicit + canary plan"}
+  ],
+  "second_server_opening_in_this_pack": false,
+  "language": "it"
+}
