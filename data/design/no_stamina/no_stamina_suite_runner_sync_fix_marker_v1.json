@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_NO_STAMINA_SUITE_RUNNER_SYNC_FIX",
+  "purpose": "DEDICATED_SUITE_RUNNER_SYNC_FIX_PROOF_MARKER",
+  "parent_pack": "PROJECT_NO_STAMINA_REMEDIATION",
+  "fix_type": "micro_touch_resync_only",
+  "semantics_change": false,
+  "tuple_added_or_removed": false,
+  "expected_tuple_count": 1,
+  "weakens_REQUIRED_validators": false,
+  "weakens_OPTIONAL_validators": false,
+  "validator_logic_changes": false,
+  "fakes_PASS": false,
+  "rationale": "Public main branch su backend/scripts/run_hero_skill_kit_validator_suite.py risultava stale dopo il commit del pack 183 (No-Stamina Remediation). La tupla ('PROJECT-NO-STAMINA-REMEDIATION', ...) e l'inline sentinel NO_STAMINA_REMEDIATION_REGISTRATION_SENTINEL erano presenti localmente ma non riflessi sul remote main. Questo pack applica solo un micro-touch comment/sentinel per forzare il blob hash refresh, in linea con la strategia anti-stale-push già usata per v4 (175), v8b (BP), v10b (Runtime Audit).",
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_top_sentinel_v11": "# PUBLIC_SYNC_TAG_RESYNC_v11: suite_runner_no_stamina_remediation_v11_2026_05_29",
+    "expected_top_sentinel_v11b": "# PUBLIC_SYNC_TAG_RESYNC_v11b: suite_runner_no_stamina_sync_fix_v11b_2026_05_29_force_blob_resnapshot",
+    "expected_inline_sentinel": "# NO_STAMINA_REMEDIATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_inline_sync_fix_marker": "# SYNC_FIX_v11b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_NO_STAMINA_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1.",
+    "expected_registration_row_text": "('PROJECT-NO-STAMINA-REMEDIATION', 'validate_project_no_stamina_remediation_v1.py'),"
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verify top sentinel PUBLIC_SYNC_TAG_RESYNC_v11 present",
+    "Verify top sentinel PUBLIC_SYNC_TAG_RESYNC_v11b present (NEW after this sync fix)",
+    "Verify inline NO_STAMINA_REMEDIATION_REGISTRATION_SENTINEL present",
+    "Verify inline SYNC_FIX_v11b 2026_05_29 marker present (NEW after this sync fix)",
+    "Verify tuple ('PROJECT-NO-STAMINA-REMEDIATION', '...') present exactly once",
+    "Verify backend/scripts/validate_project_no_stamina_remediation_v1.py still exists",
+    "Verify data/design/no_stamina/no_stamina_suite_runner_sync_fix_marker_v1.json present"
+  ],
+  "do_not_touch": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "backend/routes/soul_forge.py",
+    "frontend/app/combat.tsx",
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/(tabs)/gacha.tsx",
+    "frontend/app/shop.tsx",
+    "frontend/app/item-shop.tsx",
+    "frontend/app/battlepass.tsx",
+    "frontend/app/vip.tsx",
+    "frontend/app/artifacts.tsx",
+    "all validator scripts under backend/scripts/ (logic untouched)"
+  ],
+  "verdict_local_expected": "PROJECT_NO_STAMINA_SUITE_RUNNER_SYNC_FIX_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "verdict_after_public_main_verification_promotes_umbrella_to": "PROJECT_NO_STAMINA_REMEDIATION_COMPLETE_PUBLIC_REPO_VERIFIED"
+}

@@ -10,6 +10,16 @@
 # PUBLIC_SYNC_TAG_RESYNC_v10: suite_runner_full_runtime_feature_reality_audit_v10_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v10b: suite_runner_full_runtime_audit_sync_fix_v10b_2026_05_29_force_blob_resnapshot
 # PUBLIC_SYNC_TAG_RESYNC_v11: suite_runner_no_stamina_remediation_v11_2026_05_29
+# PUBLIC_SYNC_TAG_RESYNC_v11b: suite_runner_no_stamina_sync_fix_v11b_2026_05_29_force_blob_resnapshot
+# RESYNC_v11b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
+# era ancora stale dopo il commit del pack PROJECT_NO_STAMINA_REMEDIATION
+# (la tupla ('PROJECT-NO-STAMINA-REMEDIATION', ...) e la sentinella inline
+# NO_STAMINA_REMEDIATION_REGISTRATION_SENTINEL non venivano riflessi sul remote).
+# Questo v11b è un micro-touch comment di mitigazione ricorrente per lo stale-push bug:
+# forza un nuovo blob hash così il prossimo "Save to GitHub" PUSH non può ri-skippare questo file.
+# Proof marker dedicato per questo sync-fix:
+#   data/design/no_stamina/no_stamina_suite_runner_sync_fix_marker_v1.json
+# Nessun cambio di semantica. Tuple count della tupla No-Stamina resta 1. Nessun REQUIRED/OPTIONAL validator logic toccato.
 # RESYNC_v11 RATIONALE: Registrazione OPTIONAL del nuovo validator
 # validate_project_no_stamina_remediation_v1.py (PROJECT_NO_STAMINA_REMEDIATION).
 # Strategia tripled-sentinel applicata (anti stale-push):
@@ -1215,6 +1225,7 @@ OPTIONAL = [
     # NO_STAMINA_REMEDIATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     # Sentinella inline NO STAMINA REMEDIATION — controlled-patch validator; canonica NO_STAMINA_SYSTEM applicata a 6 backend gate + 4 frontend label; no new economy; no premium stamina refill; no DB migrations; no wallet balance changes; no Soul Forge / combat.tsx / battle_engine touched.
     # Proof marker dedicato (tripled-sentinel): data/design/no_stamina/no_stamina_suite_registration_proof_marker_v1.json
+    # SYNC_FIX_v11b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_NO_STAMINA_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/no_stamina/no_stamina_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-NO-STAMINA-REMEDIATION', 'validate_project_no_stamina_remediation_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
