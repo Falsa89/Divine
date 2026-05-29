@@ -1,0 +1,52 @@
+{
+  "task_id": "PROJECT_AUDIO_PLACEHOLDER_FOUNDATION",
+  "track": "TRACK_C_PLACEHOLDER_AUDIO_ASSET_GENERATION",
+  "verdict": "TRACK_C_PLACEHOLDER_AUDIO_ASSET_GENERATION_READY",
+  "generation_method": "procedural_python_stdlib_only",
+  "libraries_used": ["wave (stdlib)", "struct (stdlib)", "math (stdlib)"],
+  "external_audio_files_used": 0,
+  "copyrighted_content_used": false,
+  "voice_acting_used": false,
+  "audio_engine_modifications": 0,
+  "generator_script": "backend/scripts/generate_audio_test_placeholders_v1.py",
+  "audio_format": {
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "bit_depth": 16,
+    "format": "WAV PCM uncompressed",
+    "global_max_amplitude": 0.4,
+    "envelope": "AR (attack-release) to prevent clicks at boundaries"
+  },
+  "generated_files": [
+    {"name": "test_ui_click.wav",                  "size_bytes": 1644,   "samples": 800,   "duration_ms": 50,   "placeholder_description": "1500Hz exponential decay click"},
+    {"name": "test_ui_confirm.wav",                "size_bytes": 3884,   "samples": 1920,  "duration_ms": 120,  "placeholder_description": "880Hz tone with AR envelope"},
+    {"name": "test_ui_back_cancel.wav",            "size_bytes": 3244,   "samples": 1600,  "duration_ms": 100,  "placeholder_description": "descending chirp 660->330Hz"},
+    {"name": "test_ui_error_locked.wav",           "size_bytes": 9644,   "samples": 4800,  "duration_ms": 300,  "placeholder_description": "dissonant 220+233Hz mix"},
+    {"name": "test_reward_basic.wav",              "size_bytes": 16044,  "samples": 8000,  "duration_ms": 500,  "placeholder_description": "ascending chirp 440->880Hz"},
+    {"name": "test_notification_basic.wav",        "size_bytes": 8044,   "samples": 4000,  "duration_ms": 250,  "placeholder_description": "B5+E6 chord (987.77 + 1318.51Hz)"},
+    {"name": "test_mode_enter.wav",                "size_bytes": 12844,  "samples": 6400,  "duration_ms": 400,  "placeholder_description": "ascending chirp 220->880Hz"},
+    {"name": "test_battle_start.wav",              "size_bytes": 22444,  "samples": 11200, "duration_ms": 700,  "placeholder_description": "3-note C4-E4-G4 arpeggio"},
+    {"name": "test_battle_hit_soft.wav",           "size_bytes": 2604,   "samples": 1280,  "duration_ms": 80,   "placeholder_description": "deterministic LFSR pseudo-noise pulse"},
+    {"name": "test_battle_victory_stinger.wav",    "size_bytes": 48044,  "samples": 24000, "duration_ms": 1500, "placeholder_description": "4-note ascending C5-E5-G5-C6"},
+    {"name": "test_battle_defeat_stinger.wav",     "size_bytes": 48044,  "samples": 24000, "duration_ms": 1500, "placeholder_description": "A4->A3 descending"},
+    {"name": "test_ambient_placeholder_loop.wav",  "size_bytes": 128044, "samples": 64000, "duration_ms": 4000, "placeholder_description": "110Hz + 110.7Hz detuned drone with fade-edges"}
+  ],
+  "file_size_summary": {
+    "total_bytes": 304528,
+    "total_kib": 297.4,
+    "largest_file_kib": 125.04,
+    "smallest_file_kib": 1.61,
+    "average_kib": 24.78
+  },
+  "safety_properties": [
+    "All amplitudes capped at 0.4 of max int16",
+    "AR envelope applied to all samples to avoid speaker-damaging clicks",
+    "Ambient loop has fade-in/fade-out edges for clean loopability",
+    "Total package <300 KiB (insignificant binary bloat)",
+    "Procedurally generated, deterministic, no external audio files",
+    "Clearly audible as placeholder (pure tones, chirps, deterministic noise) so QA cannot mistake for final audio"
+  ],
+  "db_writes": 0,
+  "runtime_attached": false,
+  "manifest_written_in_track_B": true
+}

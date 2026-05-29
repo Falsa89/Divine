@@ -1,0 +1,39 @@
+{
+  "task_id": "PROJECT_AUDIO_PLACEHOLDER_FOUNDATION",
+  "purpose": "DEDICATED_SUITE_REGISTRATION_PROOF_MARKER",
+  "validator_file_path": "backend/scripts/validate_project_audio_placeholder_foundation_v1.py",
+  "validator_file_role": "OPTIONAL",
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_registration_row_text": "('PROJECT-AUDIO-PLACEHOLDER-FOUNDATION', 'validate_project_audio_placeholder_foundation_v1.py'),",
+    "expected_inline_sentinel_above_row_text": "# AUDIO_PLACEHOLDER_FOUNDATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_top_sentinel_v12": "# PUBLIC_SYNC_TAG_RESYNC_v12: suite_runner_audio_placeholder_foundation_v12_2026_05_29"
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verify top sentinel v12 present",
+    "Verify inline AUDIO_PLACEHOLDER_FOUNDATION_REGISTRATION_SENTINEL present",
+    "Verify tuple ('PROJECT-AUDIO-PLACEHOLDER-FOUNDATION', '...') present exactly once",
+    "Verify backend/scripts/validate_project_audio_placeholder_foundation_v1.py exists",
+    "Verify backend/scripts/generate_audio_test_placeholders_v1.py exists",
+    "Verify frontend/assets/audio/test_placeholders/ contains 12 WAV files + manifest.json",
+    "Verify data/design/audio_placeholder/ contains 5 design JSON + this proof marker (total 6)"
+  ],
+  "weakens_REQUIRED_validators": false,
+  "do_not_touch": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "backend/routes/soul_forge.py",
+    "frontend/app/combat.tsx",
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/(tabs)/gacha.tsx",
+    "frontend/app/shop.tsx",
+    "frontend/app/item-shop.tsx",
+    "frontend/app/battlepass.tsx",
+    "frontend/app/vip.tsx",
+    "frontend/app/artifacts.tsx",
+    "all UI surfaces (no audio runtime attachment)"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "task_id": "PROJECT_AUDIO_PLACEHOLDER_FOUNDATION",
+  "track": "TRACK_D_AUDIO_RUNTIME_ATTACHMENT_POLICY",
+  "verdict": "TRACK_D_AUDIO_RUNTIME_ATTACHMENT_POLICY_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "runtime_attached_in_this_pack": false,
+  "runtime_engine_implementation_in_this_pack": false,
+  "policy_v1": {
+    "runtime_attachment_status": "DESIGN_ONLY",
+    "current_runtime_engine": "NONE_INSTALLED",
+    "future_engine_candidates": [
+      "expo-av (deprecated track but still in Expo SDK; supports unified audio cross-platform)",
+      "expo-audio (newer, lighter, recommended for Expo SDK 51+)",
+      "react-native-sound (if expo-av removed)"
+    ],
+    "engine_selection_required_before_runtime_attach": true,
+    "engine_selection_owning_pack": "PROJECT_AUDIO_RUNTIME_ENGINE_SELECTION_PACK (future P3)",
+    "runtime_engine_install_NOT_done_in_this_pack": true
+  },
+  "runtime_attach_contract": {
+    "loader_responsibility": [
+      "read frontend/assets/audio/test_placeholders/manifest.json",
+      "preload only audio_keys flagged runtime_attached=true (none currently)",
+      "register audio with engine using audio_key as identifier",
+      "expose play(audio_key) function to UI",
+      "respect volume_hint when triggering playback",
+      "respect loop flag for ambient_loop entries",
+      "pause all audio on app background; resume on foreground"
+    ],
+    "safety_constraints": [
+      "NEVER load real money sound effects (cash register etc.) during pack experiments",
+      "NEVER autoplay audio without user interaction (mobile platform policy)",
+      "NEVER play audio on screens with VIP_LOCKED_V2 / BP_LOCKED_V2 / SHOP_LOCKED_V2 / ITEM_SHOP_LOCKED_V2 active",
+      "NEVER load placeholder audio in production release (replace_before_release=true check)",
+      "NEVER hardcode audio paths in runtime code; always go through manifest.json + audio_key resolution",
+      "FAIL SAFE: missing audio_key must be a silent no-op, never crash UI"
+    ],
+    "hud_visibility": {
+      "audio_settings_screen_required": true,
+      "volume_master_slider_required": true,
+      "volume_per_category_optional": true,
+      "mute_all_toggle_required": true,
+      "mute_persists_via_secure_store": true
+    }
+  },
+  "feature_flags_design": {
+    "AUDIO_ENGINE_ENABLED": false,
+    "AUDIO_PLACEHOLDER_AUDIBLE_IN_QA_ONLY": true,
+    "AUDIO_GLOBAL_DISABLED": true,
+    "AUDIO_CANARY_INTERNAL": false
+  },
+  "surfaces_NOT_attached_in_this_pack": [
+    "frontend/app/(tabs)/home.tsx",
+    "frontend/app/(tabs)/battle.tsx",
+    "frontend/app/(tabs)/gacha.tsx",
+    "frontend/app/(tabs)/heroes.tsx",
+    "frontend/app/(tabs)/menu.tsx",
+    "frontend/app/combat.tsx (broad refactor forbidden)",
+    "frontend/app/soul-forge.tsx",
+    "all stack routes",
+    "all locked surfaces (Shop, BP, VIP, Item Shop)"
+  ],
+  "future_implementation_roadmap": [
+    "Stage 1: PROJECT_AUDIO_RUNTIME_ENGINE_SELECTION_PACK — picks expo-av vs expo-audio vs react-native-sound; installs lib; adds smoke screen.",
+    "Stage 2: PROJECT_AUDIO_LOADER_AND_MANIFEST_CONSUMER_PACK — implements loader from manifest.json with audio_key lookup. Feature flag AUDIO_ENGINE_ENABLED stays false.",
+    "Stage 3: PROJECT_AUDIO_SETTINGS_UI_PACK — audio settings screen + master volume + per-category sliders + mute persistence.",
+    "Stage 4: PROJECT_AUDIO_UI_HOOKS_CANARY_PACK — attach test_ui_click/confirm/back/error to global UI events. Canary internal-only.",
+    "Stage 5: PROJECT_AUDIO_BATTLE_HOOKS_CANARY_PACK — attach battle stingers to combat phases. NO battle_engine modifications; pure observer pattern in frontend.",
+    "Stage 6: PROJECT_AUDIO_AMBIENT_LOOPS_CANARY_PACK — attach ambient_loop to idle screens with fade-in/out.",
+    "Stage 7: PROJECT_FINAL_AUDIO_BGM_SFX_KIT_PACK — replace all placeholders with final commissioned audio; flips AUDIO_ENGINE_ENABLED=true in production."
+  ]
+}
