@@ -5,7 +5,13 @@
   "scope_summary": "Mini-pack di stabilizzazione che chiude formalmente PROJECT_BETA_TESTING_AUTOMATION_HARNESS_AND_REDIS_STABILIZATION rieseguendo: (a) yarn install per allineare frontend/yarn.lock con @playwright/test, (b) fix dei back-arrow legacy con escape literal raw '\\u2190' renderizzato come testo invece che freccia, (c) ri-esecuzione completa del validator suite, audit statico player routes, redis ping e guard Soul Forge no-modal. Zero modifiche a logica, endpoint, prezzi, item, reward, IAP, schema DB o invarianti backend.",
   "p1_a_playwright_yarn_alignment": {
     "package_json_path": "frontend/package.json",
-    "package_json_md5_post": "7fb50b6042864f7159ae3d0bd4eb2ede",
+    "package_json_md5_post": "bf8117614d334d7cd74115e1f9dfa038",
+    "package_json_md5_post_prior_pre_stage8_audit": "7fb50b6042864f7159ae3d0bd4eb2ede",
+    "delta_from_stage8_context_explanation": "frontend/package.json MD5 drift caused by platform auto-commit patch bump expo ~54.0.34->~54.0.35 and expo-router ~6.0.23->~6.0.24; not caused by Stage 8; pin refreshed to current public/container state; validator logic unchanged.",
+    "pin_refresh_authorized_by": "user_explicit_authorization_stage8_finalization_2026_05_27",
+    "pin_refresh_scope": "value-only_refresh_no_validator_weakening_no_logic_change",
+    "drift_introducing_commit_short": "dc068e4a",
+    "drift_introducing_commit_subject": "Auto-generated changes",
     "scripts_present": {
       "test:e2e": "playwright test",
       "test:beta-smoke": "playwright test",
