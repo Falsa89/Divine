@@ -1,0 +1,60 @@
+{
+  "task_id": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE",
+  "track": "A",
+  "track_name": "COMBAT_SURFACE_AUDIT",
+  "verdict": "TRACK_A_COMBAT_SURFACE_AUDIT_READY",
+  "audit_only": true,
+  "db_writes": 0,
+  "runtime_changes": 0,
+  "description": "Censimento read-only del combat: file frontend, file backend, route, formati dati, modalità di consumo. Nessuna mutazione runtime.",
+  "frontend_surface": {
+    "primary_screen": "frontend/app/combat.tsx",
+    "line_count": 1848,
+    "qa_lab_screen": "frontend/app/dev-combat-qa-lab.tsx",
+    "components": [
+      "frontend/components/BattleSprite.tsx",
+      "frontend/components/RuntimeSheetSprite.tsx",
+      "frontend/components/battle/BattleReport.tsx",
+      "frontend/components/battle/PostBattleSummary.tsx",
+      "frontend/components/battle/buildPostBattleSummary.ts",
+      "frontend/components/battle/motionSystem.ts",
+      "frontend/components/battle/heroBattleAnimations.ts",
+      "frontend/components/battle/postBattleTypes.ts"
+    ],
+    "types": [
+      "frontend/types/index.ts",
+      "frontend/types/rewards.ts",
+      "frontend/types/battleStats.ts"
+    ]
+  },
+  "backend_surface": {
+    "engine": "backend/battle_engine.py",
+    "engine_line_count": 1298,
+    "engine_md5_baseline": "151ca35ad3bc35f0a6209cb3744ed440",
+    "engine_status": "MD5_LOCKED_NOT_TOUCHED",
+    "routes": ["backend/routes/combat.py"],
+    "story_route": "NOT_PRESENT (verified absent)"
+  },
+  "data_contract_observed": {
+    "grid_per_unit": ["grid_x", "grid_y"],
+    "unit_state": ["id", "name", "hp", "hp_max", "alive", "is_team_a"],
+    "result_payload": ["winner", "mvp", "rounds", "battle_log", "rewards"],
+    "rewards_payload": ["auto_claim", "manual_claim", "account_level_up", "new_account_level", "per_hero_exp"]
+  },
+  "audio_attachment_observed": {
+    "runtime_audio_imports_in_combat": 0,
+    "runtime_audio_imports_in_battle_components": 0,
+    "observed_audio_libs": []
+  },
+  "locks_observed": {
+    "VIP_LOCKED_V2": true,
+    "BP_LOCKED_V2": true,
+    "SHOP_LOCKED_V2": true,
+    "ITEM_SHOP_LOCKED_V2": true
+  },
+  "semantics_change": false,
+  "logic_change": false,
+  "hero_kit_change": false,
+  "character_bible_change": false,
+  "language": "it"
+}

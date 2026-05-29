@@ -1,0 +1,20 @@
+{
+  "task_id": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE",
+  "track": "G",
+  "track_name": "COMPLETION_AND_PUBLIC_SYNC",
+  "verdict": "TRACK_G_COMPLETION_AND_PUBLIC_SYNC_READY",
+  "local_verdict": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE_AUDIT_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "after_public_repo_verified_verdict": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE_COMPLETE_PUBLIC_REPO_VERIFIED",
+  "public_repo_verification_checklist": [
+    "Aprire su main backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verificare la riga: # PUBLIC_SYNC_TAG_RESYNC_v13: suite_runner_combat_finalize_for_release_v13_2026_05_29",
+    "Verificare la sentinella inline COMBAT_FINALIZE_FOR_RELEASE_REGISTRATION_SENTINEL",
+    "Verificare la tupla ('PROJECT-COMBAT-FINALIZE-FOR-RELEASE', 'validate_project_combat_finalize_for_release_v1.py') esattamente 1 volta",
+    "Verificare backend/scripts/validate_project_combat_finalize_for_release_v1.py presente",
+    "Verificare data/design/combat_finalize/ con 7 JSON tracks + proof marker",
+    "Verificare docs/divine/187_COMBAT_FINALIZE_FOR_RELEASE.md presente"
+  ],
+  "db_writes": 0,
+  "runtime_change": false,
+  "language": "it"
+}

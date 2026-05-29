@@ -1,0 +1,47 @@
+{
+  "task_id": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE",
+  "track": "E",
+  "track_name": "MOBILE_QA_AND_RELEASE_READINESS_MATRIX",
+  "verdict": "TRACK_E_MOBILE_QA_AND_RELEASE_READINESS_MATRIX_READY",
+  "design_only": true,
+  "mobile_qa_checklist": [
+    {"id": "MQA-01", "area": "Grid",       "check": "3x3 grid renders correctly both teams", "expected": "all 9 cells available; grid_x/grid_y respected"},
+    {"id": "MQA-02", "area": "Facing",     "check": "Team A sprites face right; Team B sprites face left", "expected": "facing right vs left as per spec"},
+    {"id": "MQA-03", "area": "HUD",        "check": "top HUD portrait cards use splash art", "expected": "HeroCard portrait uses splash; not combat pose"},
+    {"id": "MQA-04", "area": "Field",      "check": "field sprites use combat pose runtime sheet", "expected": "RuntimeSheetSprite active for field; not splash"},
+    {"id": "MQA-05", "area": "Drawer",     "check": "battle log drawer toggleable bottom-left", "expected": "open/close non blocca battle; non invasivo"},
+    {"id": "MQA-06", "area": "Speed",      "check": "speed buttons 1x/2x/3x respond mid-battle", "expected": "speedRef applies before next action"},
+    {"id": "MQA-07", "area": "NoFlicker",  "check": "no flicker/remount/source swap durante battle", "expected": "chatDrawerNode memoized"},
+    {"id": "MQA-08", "area": "PostBattle", "check": "victory: rewards row + EXP per hero + level up", "expected": "PostBattleSummary mostra tutto"},
+    {"id": "MQA-09", "area": "Report",     "check": "battle report allies/enemies + damage/heal/MVP", "expected": "BattleReport mostra tabella completa"},
+    {"id": "MQA-10", "area": "NoStamina",  "check": "no stamina gate pre-battle", "expected": "NO_STAMINA_SYSTEM canonica"},
+    {"id": "MQA-11", "area": "Audio",      "check": "nessun import audio runtime", "expected": "audio TEST only, niente attach"},
+    {"id": "MQA-12", "area": "Locks",      "check": "VIP/BP/Shop locks attivi", "expected": "V2 locks rispettati"},
+    {"id": "MQA-13", "area": "SafeArea",   "check": "HUD safe-area su iPhone notch e Android", "expected": "SafeAreaView coerente"},
+    {"id": "MQA-14", "area": "Keyboard",   "check": "chat composer non invasivo con keyboard aperta", "expected": "KeyboardAvoidingView gestito"},
+    {"id": "MQA-15", "area": "Touch",      "check": "target touch HUD >=44pt iOS / 48dp Android", "expected": "HUD_HIT_SLOP applicato"}
+  ],
+  "release_readiness_matrix": [
+    {"area": "battle engine",       "status": "RELEASE_READY",    "notes": "MD5_LOCKED; nessuna mutazione"},
+    {"area": "combat.tsx UI",       "status": "RELEASE_READY",    "notes": "compliance canonica verificata"},
+    {"area": "BattleReport",        "status": "RELEASE_READY",    "notes": "shape compliant"},
+    {"area": "PostBattleSummary",   "status": "RELEASE_READY",    "notes": "shape compliant"},
+    {"area": "buildPostBattleSummary", "status": "RELEASE_READY", "notes": "MVP calc robust"},
+    {"area": "audio runtime",       "status": "NOT_ATTACHED_BY_DESIGN", "notes": "policy 184 + 187"},
+    {"area": "speed profiles",      "status": "VARIANCE_NOTED",   "notes": "1500/650/300 vs canonical 1700/950/580 (entro tolleranza UX)"},
+    {"area": "locks VIP/BP/Shop",   "status": "RELEASE_READY",    "notes": "V2 attivi"},
+    {"area": "Synergy V2 battle",   "status": "INTENTIONALLY_OFF", "notes": "non in scope qui"},
+    {"area": "Artifact/Divine Weapon runtime", "status": "INTENTIONALLY_OFF", "notes": "non in scope qui"},
+    {"area": "Status/VFX runtime",  "status": "P1_FUTURE",        "notes": "non bloccante per release combat"}
+  ],
+  "remaining_P0": [
+    "LOGIN_AUTH_HARDENING (email verify + password reset)",
+    "SERVER_PROFILES_LIVE_MULTISHARD (SLC_H gate)"
+  ],
+  "remaining_P1": [
+    "TOWER_OF_THE_HELLS_RUNTIME",
+    "COMBAT_SPEED_PROFILE_ALIGNMENT (opzionale, se UX richiede valori esatti 1700/950/580)",
+    "COMBAT_UI_REFACTOR (decomposition combat.tsx)"
+  ],
+  "language": "it"
+}

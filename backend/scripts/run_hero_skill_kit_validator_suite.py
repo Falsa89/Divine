@@ -15,6 +15,15 @@
 # PUBLIC_SYNC_TAG_RESYNC_v12b: suite_runner_audio_placeholder_sync_fix_v12b_2026_05_29_force_blob_resnapshot
 # PUBLIC_SYNC_TAG_RESYNC_v12c: suite_runner_audio_placeholder_sync_fix_v12c_2026_05_29_force_public_blob_refresh
 # PUBLIC_SYNC_TAG_RESYNC_v12c_REASON: previous public push still exposed v11b, so this marker exists only to force suite runner public sync; no logic change.
+# PUBLIC_SYNC_TAG_RESYNC_v13: suite_runner_combat_finalize_for_release_v13_2026_05_29
+# RESYNC_v13 RATIONALE: Registrazione OPTIONAL del nuovo validator
+# validate_project_combat_finalize_for_release_v1.py
+# (PROJECT_COMBAT_FINALIZE_FOR_RELEASE). Audit + finalize controllato del combat:
+# nessuna patch runtime; nessuna mutazione battle engine; nessun cambio formule/balance;
+# nessuna attivazione runtime non autorizzata (Synergy V2 battle / Artifact / Divine Weapon
+# / Status / VFX). Validator OPTIONAL asserisce: 7 JSON tracks + proof marker, MD5 invariants,
+# locks VIP/BP/Shop attivi, combat.tsx canonical tokens, BattleReport/PostBattleSummary shape,
+# nessun audio runtime import, 12 WAV placeholders intatti.
 # RESYNC_v12b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
 # era ancora stale dopo il commit del pack PROJECT_AUDIO_PLACEHOLDER_FOUNDATION
 # (la tupla ('PROJECT-AUDIO-PLACEHOLDER-FOUNDATION', ...) e l'inline sentinel
@@ -1255,6 +1264,14 @@ OPTIONAL = [
     # SYNC_FIX_v12b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_AUDIO_PLACEHOLDER_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/audio_placeholder/audio_placeholder_suite_runner_sync_fix_marker_v1.json
     # SYNC_FIX_v12c 2026_05_29: second public-main resync attempt after v12b stale; tuple count remains 1; no semantics change. Proof marker fix: data/design/audio_placeholder/audio_placeholder_suite_runner_sync_fix_v2_marker_v1.json
     ('PROJECT-AUDIO-PLACEHOLDER-FOUNDATION', 'validate_project_audio_placeholder_foundation_v1.py'),
+    # COMBAT_FINALIZE_FOR_RELEASE_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline COMBAT FINALIZE FOR RELEASE — audit + finalize controlled validator;
+    # nessuna patch runtime al combat; battle_engine.py MD5_LOCKED intatto; combat.tsx no broad refactor;
+    # BattleReport/PostBattleSummary/buildPostBattleSummary shape compliant; nessun audio runtime import;
+    # 12 WAV placeholders intatti dal pack 184; locks VIP/BP/Shop V2 attivi; nessun Synergy V2 battle /
+    # Artifact / Divine Weapon / Status / VFX runtime non autorizzato.
+    # Proof marker dedicato: data/design/combat_finalize/combat_finalize_for_release_suite_registration_proof_marker_v1.json
+    ('PROJECT-COMBAT-FINALIZE-FOR-RELEASE', 'validate_project_combat_finalize_for_release_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

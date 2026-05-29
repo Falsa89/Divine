@@ -1,0 +1,111 @@
+{
+  "task_id": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE",
+  "track": "B",
+  "track_name": "COMBAT_CANONICAL_ALIGNMENT_AUDIT",
+  "verdict": "TRACK_B_COMBAT_CANONICAL_ALIGNMENT_AUDIT_READY",
+  "audit_only": true,
+  "description": "Verifica del rispetto delle regole canoniche di battaglia 182 senza patch runtime.",
+  "canonical_rules": [
+    {
+      "rule": "battle uses 3x3 grid per team preserving grid_x/grid_y",
+      "file": "frontend/app/combat.tsx",
+      "evidence_line": 130,
+      "evidence_token": "Mappatura coordinate formazione \u2192 griglia display 3x3",
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "Team A faces screen-right; Team B faces screen-left",
+      "file": "frontend/app/combat.tsx",
+      "evidence_lines": [1208, 1250],
+      "evidence_tokens": ["facing: 'right'", "facing: 'left'"],
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "top HUD uses splash art (HeroCard portrait), not idle/combat pose",
+      "file": "frontend/app/combat.tsx",
+      "evidence_token": "Hero portrait cards / renderHudCard",
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "field sprite uses combat pose / runtime sheet, not splash",
+      "file": "frontend/components/RuntimeSheetSprite.tsx",
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "battle log in drawer/chat bottom-left, toggleabile, non invasivo",
+      "file": "frontend/app/combat.tsx",
+      "evidence_lines": [757, 774],
+      "evidence_tokens": ["chatDrawerNode", "chatDrawer", "chatPanel"],
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "speed profiles 1x/2x/3x present in code",
+      "file": "frontend/app/combat.tsx",
+      "evidence_line": 449,
+      "evidence_token": "const SPEED_BASE: Record<number, number> = { 1: 1500, 2: 650, 3: 300 };",
+      "current_values_ms": {"1x": 1500, "2x": 650, "3x": 300},
+      "canonical_reference_ms": {"1x": 1700, "2x": 950, "3x": 580},
+      "variance_ms": {"1x": -200, "2x": -300, "3x": -280},
+      "status": "VARIANCE_NOTED_NO_PATCH",
+      "variance_rationale": "Specifica canonica usa il termine 'circa'. Differenze rientrano nella tolleranza UX. Cambiare i valori è considerato 'formula/balance change' che il pack vieta esplicitamente. Documentato come finding informativo; nessuna patch eseguita."
+    },
+    {
+      "rule": "no flicker / remount / drift / source swap instabile",
+      "file": "frontend/app/combat.tsx",
+      "evidence_lines": [80, 84, 450, 754],
+      "status": "COMPLIANT",
+      "safeguards": [
+        "speedRef pattern per evitare drift speed mid-battle",
+        "chatDrawerNode useMemo per evitare reconcile cascade",
+        "badge silenziato a drawer chiuso"
+      ]
+    },
+    {
+      "rule": "post-battle: reward summary compatto + EXP + level up + MVP + Battle Report",
+      "files": [
+        "frontend/components/battle/PostBattleSummary.tsx",
+        "frontend/components/battle/BattleReport.tsx",
+        "frontend/components/battle/buildPostBattleSummary.ts"
+      ],
+      "status": "COMPLIANT",
+      "evidence": {
+        "rewards_compact": "PostBattleSummary.tsx Rewards row (auto-claim + expandable details)",
+        "exp_per_hero": "PostBattleSummary.tsx Hero EXP list (avatar, level, exp gained, animated bar, level up)",
+        "account_level_up": "PostBattleSummary.tsx Stat label='Account' Lv.X",
+        "battle_report": "BattleReport.tsx allies/enemies + damage_dealt/received/healing + MVP highlight",
+        "mvp_calc": "buildPostBattleSummary.ts mvp by name match + top damage_dealt fallback"
+      }
+    },
+    {
+      "rule": "audio cues post-battle solo TEST placeholder/policy; niente engine audio live broad",
+      "observation": "Nessun import audio runtime in combat.tsx, BattleReport.tsx, PostBattleSummary.tsx. Audio placeholders 12 WAV TEST presenti ma non attaccati a runtime.",
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "no stamina regression",
+      "observation": "NO_STAMINA_SYSTEM canonica rispettata; nessun pre-battle stamina gate; controllato pack 183.",
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "no Synergy V2 battle activation",
+      "observation": "Nessun token SYNERGY_V2_BATTLE_ACTIVE in battle_engine.py o combat.tsx.",
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "no Artifact bonus / Divine Weapon runtime activation",
+      "observation": "Nessun token ARTIFACT_BONUS_RUNTIME o divine_weapon_active in battle_engine.py; artefatti restano locked HTTP 423.",
+      "status": "COMPLIANT"
+    },
+    {
+      "rule": "no full Status Effect runtime / no full VFX runtime",
+      "observation": "Status effect/VFX runtime non attivati in questo pack.",
+      "status": "COMPLIANT"
+    }
+  ],
+  "compliant_count": 12,
+  "variance_noted_count": 1,
+  "non_compliant_count": 0,
+  "semantics_change": false,
+  "runtime_change": false,
+  "language": "it"
+}

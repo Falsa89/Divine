@@ -1,0 +1,45 @@
+{
+  "task_id": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE",
+  "track": "D",
+  "track_name": "POST_BATTLE_REPORT_AND_AUDIO_QA_POLICY",
+  "verdict": "TRACK_D_POST_BATTLE_REPORT_AND_AUDIO_QA_POLICY_READY",
+  "design_only": true,
+  "description": "Policy di QA per il flusso post-battle e per le placeholder audio. Nessuna attivazione runtime audio in questo pack.",
+  "post_battle_report": {
+    "required_fields": [
+      "allies", "enemies",
+      "mvp_ally_id", "mvp_enemy_id",
+      "per-unit damage_dealt", "per-unit damage_received", "per-unit healing_done"
+    ],
+    "acceptance": [
+      "victory: mvp_ally_id != null",
+      "defeat: mvp_ally_id può essere null (backend non lo restituisce); fallback locale a top damage_dealt",
+      "format(0) coerente per numeri damage/heal",
+      "in-tree overlay, NO Modal (policy v16.5+)"
+    ],
+    "forbidden_changes": [
+      "NESSUN cambio formule damage/heal nel backend",
+      "NESSUN cambio battle_log shape",
+      "NESSUN cambio rewards shape"
+    ]
+  },
+  "audio_qa_policy": {
+    "runtime_attached": false,
+    "allowed_in_this_pack": "solo riferimenti TEST/placeholder già dichiarati dal pack 184",
+    "forbidden_in_this_pack": [
+      "broad audio engine activation",
+      "import di expo-av/expo-audio/react-native-sound",
+      "qualsiasi attach audio in combat.tsx/BattleReport.tsx/PostBattleSummary.tsx"
+    ],
+    "cue_inventory_referenced": [
+      "test_battle_start",
+      "test_battle_hit_soft",
+      "test_battle_victory_stinger",
+      "test_battle_defeat_stinger",
+      "test_reward_basic"
+    ]
+  },
+  "runtime_change": false,
+  "db_writes": 0,
+  "language": "it"
+}
