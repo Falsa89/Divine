@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-29T21:05:57.025608+00:00",
+  "timestamp_utc": "2026-05-29T21:24:51.690793+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1109,
+  "backend_python_files_scanned": 1110,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 511,
+      "files_with_hits": 512,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -889,7 +889,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 61,
+      "files_with_hits": 62,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1086,7 +1086,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 144,
+              "line": 143,
               "snippet": "# ==================== PVP ARENA ===================="
             }
           ]
@@ -1321,7 +1321,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 38,
+      "files_with_hits": 39,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
