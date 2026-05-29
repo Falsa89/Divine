@@ -1,7 +1,7 @@
 {
   "result_id": "af2n_v23_redis_switch_result_v1",
   "task_origin": "V23-REDIS-SWITCH-VALIDATION",
-  "generated_at_utc": "2026-05-29T23:22:48.393134Z",
+  "generated_at_utc": "2026-05-29T23:32:24.794805Z",
   "canary_status_backend_advertised": "redis",
   "canary_status_url_set": true,
   "burst_results": [
@@ -60,7 +60,7 @@
   "snapshot_backends_observed": [
     "redis"
   ],
-  "redis_keys_count": 25,
+  "redis_keys_count": 27,
   "redis_keys_present_after_burst": true,
   "overall_status": "PASS",
   "mode": "redis_live_switch_applied_safely"
