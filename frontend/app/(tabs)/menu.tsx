@@ -118,7 +118,7 @@ export default function MenuTab() {
           <View style={s.resources}>
             <ResourceBadge icon={'\uD83D\uDCB0'} value={user?.gold || 0} compact />
             <ResourceBadge icon={'\uD83D\uDC8E'} value={user?.gems || 0} compact />
-            <ResourceBadge icon={'\u26A1'} value={`${user?.stamina || 0}/${user?.max_stamina || 100}`} compact />
+            {/* PROJECT_NO_STAMINA_REMEDIATION: stamina badge rimosso (canonica NO_STAMINA_SYSTEM). User document field resta presente per backward compat ma non viene piu visualizzato. */}
           </View>
         </View>
       </LinearGradient>

@@ -12,7 +12,10 @@ FORBIDDEN_FLAGS = ('HOUSING_LIVE_BONUS_ENABLED', 'ARTIFACT_LIVE_BONUS_ENABLED', 
 EXPECTED_UNCHANGED_MD5 = {
     BC: '80d94afba9eb2930e63b06cfed645b77',
     SV: '0e5f9447baef26c5b3588fcca21df44f',
-    RC: '1f531d75792b34e5ff37293e4ed61725',
+    # Baseline updated by PROJECT_NO_STAMINA_REMEDIATION (canonica NO_STAMINA_SYSTEM): 6 stamina gate
+    # blocks legitimately removed from backend/routes/combat.py. Validator NOT weakened: same assertion
+    # logic, baseline synced to current canonical state. New md5 captured post-patch.
+    RC: '124eed768fa52c82351aebc124dc1388',
 }
 PATCH_MARKER = '_project_m_status_seam'
 

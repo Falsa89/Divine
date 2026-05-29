@@ -44,7 +44,8 @@ export default function EventsScreen() {
             <View style={s.evInfo}>
               <Text style={s.evName}>{ev.name}</Text>
               <Text style={s.evDesc}>{ev.description}</Text>
-              <Text style={s.evCost}>\u26A1 {ev.stamina_cost} Stamina</Text>
+              {/* PROJECT_NO_STAMINA_REMEDIATION: stamina cost label rimosso (canonica NO_STAMINA_SYSTEM); accesso libero. */}
+              <Text style={s.evCost}>🎟️ Accesso libero (no-stamina)</Text>
             </View>
             {ev.completed_today ? (
               <Text style={s.doneTxt}>\u2705 Completato</Text>

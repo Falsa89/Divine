@@ -9,6 +9,15 @@
 # PUBLIC_SYNC_TAG_RESYNC_v9: suite_runner_vip_design_and_iap_integration_v9_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v10: suite_runner_full_runtime_feature_reality_audit_v10_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v10b: suite_runner_full_runtime_audit_sync_fix_v10b_2026_05_29_force_blob_resnapshot
+# PUBLIC_SYNC_TAG_RESYNC_v11: suite_runner_no_stamina_remediation_v11_2026_05_29
+# RESYNC_v11 RATIONALE: Registrazione OPTIONAL del nuovo validator
+# validate_project_no_stamina_remediation_v1.py (PROJECT_NO_STAMINA_REMEDIATION).
+# Strategia tripled-sentinel applicata (anti stale-push):
+#   1) fresh PUBLIC_SYNC_TAG_RESYNC_v11 in cima a questo file (qui sopra)
+#   2) sentinella inline NO_STAMINA_REMEDIATION_REGISTRATION_SENTINEL
+#      immediatamente sopra la tupla nel blocco OPTIONAL
+#   3) proof marker JSON dedicato:
+#      data/design/no_stamina/no_stamina_suite_registration_proof_marker_v1.json
 # RESYNC_v10b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
 # era ancora stale dopo il commit del pack PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY
 # (la tupla ('PROJECT-FULL-RUNTIME-FEATURE-REALITY-AUDIT', ...) e la sentinella inline
@@ -1203,6 +1212,10 @@ OPTIONAL = [
     # Proof marker dedicato (tripled-sentinel): data/design/runtime_audit/runtime_audit_suite_registration_proof_marker_v1.json
     # SYNC_FIX_v10b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_FULL_RUNTIME_AUDIT_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/runtime_audit/runtime_audit_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-FULL-RUNTIME-FEATURE-REALITY-AUDIT', 'validate_project_full_runtime_feature_reality_audit_v1.py'),
+    # NO_STAMINA_REMEDIATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline NO STAMINA REMEDIATION — controlled-patch validator; canonica NO_STAMINA_SYSTEM applicata a 6 backend gate + 4 frontend label; no new economy; no premium stamina refill; no DB migrations; no wallet balance changes; no Soul Forge / combat.tsx / battle_engine touched.
+    # Proof marker dedicato (tripled-sentinel): data/design/no_stamina/no_stamina_suite_registration_proof_marker_v1.json
+    ('PROJECT-NO-STAMINA-REMEDIATION', 'validate_project_no_stamina_remediation_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

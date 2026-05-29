@@ -1,0 +1,76 @@
+{
+  "task_id": "PROJECT_NO_STAMINA_REMEDIATION",
+  "track": "TRACK_D_CANONICAL_POLICY_AND_FUTURE_ENTRY_MODEL",
+  "verdict": "TRACK_D_CANONICAL_POLICY_AND_FUTURE_ENTRY_MODEL_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "canonical_policy_no_stamina_v1": {
+    "core_rule": "Divine Waifus NON ha stamina globale. Nessun wallet stamina. Nessun refill premium. Nessun costo stamina per entrare nelle modalita normali.",
+    "forbidden_constructs": [
+      "global_stamina_wallet",
+      "max_stamina_field_as_gameplay_gate",
+      "premium_stamina_refill_iap",
+      "stamina_cost_to_play_mode",
+      "stamina_decay_passive",
+      "stamina_regen_timer_visible_to_player",
+      "vip_stamina_max_perk",
+      "battle_pass_stamina_reward_active_grant",
+      "shop_category_stamina_visible"
+    ],
+    "allowed_constructs": [
+      "daily_attempts_remaining (per-mode counter)",
+      "guild_attack_attempts (per-day counter)",
+      "mode_attempts (nested dict per mode_id)",
+      "entry_tokens (per-event/per-mode)",
+      "tickets (raid/event tickets)",
+      "no_cost_prototype_access (default)",
+      "time_windows (cooldown-based gating)"
+    ],
+    "client_authority": "Server-authoritative su tutti i counters. Client mai grant/recompute.",
+    "server_authority": "Server valida ogni decremento; refuse on exhausted; reset counter on UTC day boundary (future scheduler)."
+  },
+  "future_entry_model_design": {
+    "counter_reset_cadence_default": "daily_utc",
+    "counter_reset_alternatives": ["weekly_utc", "per_war_window", "per_event_window"],
+    "counter_field_naming_convention": {
+      "per_user_daily": "daily_attempts_remaining.{mode_id}",
+      "per_user_guild": "guild_attack_attempts",
+      "per_user_mode_nested": "mode_attempts.{mode_id}",
+      "per_user_entry_tokens": "entry_tokens.{mode_id}",
+      "per_user_tickets": "tickets.{ticket_type}"
+    },
+    "refill_policy": {
+      "daily_reset_via_scheduler": "server cron at 00:00 UTC; resets counters to canonical defaults",
+      "manual_refill_via_iap": false,
+      "vip_increases_attempts_cap": "design-only; max +50% at VIP 10; never bypasses time window",
+      "event_grant_increases_attempts": true,
+      "premium_unlock_doesnt_bypass_caps": true
+    },
+    "per_mode_initial_defaults": {
+      "story_chapter_battle": {"attempts_model": "no_cost_prototype_access", "daily_cap": null},
+      "tower_battle": {"attempts_model": "no_cost_prototype_access", "daily_cap": null, "future_target": "mode_attempts.tower 10/day"},
+      "daily_event_battle": {"attempts_model": "no_cost_prototype_access", "daily_cap": null, "future_target": "mode_attempts.event_{id} 3/day per event"},
+      "territory_attack": {"attempts_model": "no_cost_prototype_access", "daily_cap": null, "future_target": "guild_attack_attempts shared"},
+      "guild_war_attack": {"attempts_model": "guild_attack_attempts", "daily_cap": 10, "applied_now": true},
+      "raid_attack": {"attempts_model": "mode_attempts.raid", "daily_cap": 5, "applied_now": true},
+      "pvp_arena": {"attempts_model": "daily_attempts_remaining.pvp", "daily_cap": 10, "future_target": true},
+      "world_boss_battle": {"attempts_model": "tickets.world_boss", "daily_cap": 3, "future_target": true}
+    }
+  },
+  "deprecated_fields_to_remove_in_future_packs": [
+    {"field": "users.stamina", "removal_pack": "USER_SCHEMA_CLEANUP_PACK", "safe_default_now": 100, "reads_required_to_drop": ["backend/server.py:143", "backend/routes/economy.py:50-95", "backend/routes/achievements.py:252"]},
+    {"field": "users.max_stamina", "removal_pack": "USER_SCHEMA_CLEANUP_PACK", "safe_default_now": 100, "reads_required_to_drop": ["backend/server.py:144"]},
+    {"field": "daily_events.stamina_cost", "removal_pack": "DAILY_EVENTS_REFACTOR_PACK", "safe_value_now": "static catalog field, no longer enforced"},
+    {"field": "shop_items.category=stamina", "removal_pack": "SHOP_UNLOCK_STAGE", "current_state": "behind SHOP_LOCKED_V2; UI category already removed"},
+    {"field": "vip_tiers.perks.stamina_max", "removal_pack": "VIP_TIER_THRESHOLD_SIGNOFF (Stage 2 of 181G roadmap)", "current_state": "behind VIP_LOCKED_V2; not active"},
+    {"field": "battle_pass_rewards.stamina", "removal_pack": "BP_TIER_REWARDS_SIGNOFF", "current_state": "behind BP_LOCKED_V2; not active"},
+    {"field": "soul_forge_products.{hs_stamina,sd_stamina_full,ms_stamina}", "removal_pack": "SOUL_FORGE_NO_STAMINA_CLEANUP_PACK", "current_state": "functional Soul Forge protected; explicit authorization required to touch"}
+  ],
+  "alignment_with_other_roadmaps": {
+    "vip_perks_stamina_max_will_be_replaced_in_181G_stage_2": true,
+    "bp_rewards_stamina_will_be_replaced_in_bp_tier_rewards_signoff": true,
+    "shop_category_stamina_already_removed_from_UI_in_this_pack": true,
+    "soul_forge_stamina_products_addressed_separately": true,
+    "daily_events_stamina_cost_field_will_be_dropped_in_DAILY_EVENTS_REFACTOR": true
+  }
+}

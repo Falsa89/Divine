@@ -248,7 +248,8 @@ export default function GvGScreen() {
                 {acting === 'match' ? 'CERCANDO...' : !canMatch ? 'COOLDOWN ATTIVO' : '\u2694\uFE0F CERCA AVVERSARIO'}
               </Text>
             </TouchableOpacity>
-            <Text style={styles.matchInfo}>{'\u26A1'} 12 stamina per attacco | {'\u23F0'} 30 min per guerra</Text>
+            {/* PROJECT_NO_STAMINA_REMEDIATION: stamina label rimosso. Sostituito con guild_attack_attempts. */}
+            <Text style={styles.matchInfo}>🎟️ 1 tentativo gilda per attacco | {'\u23F0'} 30 min per guerra</Text>
           </Animated.View>
         )}
 

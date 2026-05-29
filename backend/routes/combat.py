@@ -45,9 +45,9 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
         if req.chapter_id > progress.get("current_chapter", 1):
             raise HTTPException(400, "Capitolo non ancora sbloccato!")
         user = await db.users.find_one({"id": uid})
-        if user.get("stamina", 0) < 6:
-            raise HTTPException(400, "Stamina insufficiente!")
-        await db.users.update_one({"id": uid}, {"$inc": {"stamina": -6}})
+        # PROJECT_NO_STAMINA_REMEDIATION: stamina gating rimosso (decisione canonica NO_STAMINA_SYSTEM).
+        # Story chapter access è no-cost prototype access; non viene scalato alcun wallet.
+        _ = user  # canonical placeholder; user fetched for downstream logic compatibility
         team = await db.teams.find_one({"user_id": uid, "is_active": True})
         team_power = team.get("total_power", 5000) if team else 5000
         stage_mult = 1 + (req.stage - 1) * 0.15
@@ -106,9 +106,8 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
             await db.tower_progress.insert_one(tower)
         floor = tower.get("floor", 1)
         user = await db.users.find_one({"id": uid})
-        if user.get("stamina", 0) < 8:
-            raise HTTPException(400, "Stamina insufficiente!")
-        await db.users.update_one({"id": uid}, {"$inc": {"stamina": -8}})
+        # PROJECT_NO_STAMINA_REMEDIATION: stamina gating rimosso. Tower è no-cost prototype access.
+        _ = user
         team = await db.teams.find_one({"user_id": uid, "is_active": True})
         team_power = team.get("total_power", 5000) if team else 5000
         enemy_power = int(2000 + floor * 800 + (floor ** 1.5) * 200)
@@ -208,9 +207,9 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
         if not event:
             raise HTTPException(404, "Evento non trovato")
         user = await db.users.find_one({"id": uid})
-        if user.get("stamina", 0) < event["stamina_cost"]:
-            raise HTTPException(400, "Stamina insufficiente!")
-        await db.users.update_one({"id": uid}, {"$inc": {"stamina": -event["stamina_cost"]}})
+        # PROJECT_NO_STAMINA_REMEDIATION: stamina_cost rimosso. Eventi giornalieri sono no-cost prototype access.
+        # Future: replace con mode_attempts counter per event_id in pack DAILY_ATTEMPTS_FOUNDATION.
+        _ = user
         team = await db.teams.find_one({"user_id": uid, "is_active": True})
         team_power = team.get("total_power", 5000) if team else 5000
         victory = random.random() < 0.8

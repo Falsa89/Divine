@@ -1,0 +1,119 @@
+{
+  "task_id": "PROJECT_NO_STAMINA_REMEDIATION",
+  "track": "TRACK_B_CONTROLLED_REMEDIATION_PATCH",
+  "verdict": "TRACK_B_CONTROLLED_REMEDIATION_PATCH_READY",
+  "db_writes_via_script": 0,
+  "db_migrations": 0,
+  "wallet_balance_changes": false,
+  "new_economy_introduced": false,
+  "premium_stamina_refill_introduced": false,
+  "patches": [
+    {
+      "file": "backend/routes/combat.py",
+      "context": "story chapter battle",
+      "replacement_type": "no_cost_prototype_access",
+      "removed_logic": "if user.get('stamina', 0) < 6: raise HTTPException + $inc stamina -6",
+      "new_logic": "user fetched only for downstream compat; no gating; canonical NO_STAMINA_SYSTEM",
+      "db_write": false,
+      "comment_marker": "PROJECT_NO_STAMINA_REMEDIATION"
+    },
+    {
+      "file": "backend/routes/combat.py",
+      "context": "tower battle",
+      "replacement_type": "no_cost_prototype_access",
+      "removed_logic": "if user.get('stamina', 0) < 8: raise + $inc stamina -8",
+      "new_logic": "no gating; canonical",
+      "db_write": false
+    },
+    {
+      "file": "backend/routes/combat.py",
+      "context": "daily event battle",
+      "replacement_type": "no_cost_prototype_access",
+      "removed_logic": "if user.get('stamina', 0) < event['stamina_cost']: raise + $inc stamina -event['stamina_cost']",
+      "new_logic": "no gating; future placeholder for mode_attempts per event_id",
+      "db_write": false
+    },
+    {
+      "file": "backend/routes/cosmetics.py",
+      "context": "territory attack",
+      "replacement_type": "no_cost_prototype_access",
+      "removed_logic": "if user.get('stamina', 0) < 15: raise + $inc stamina -15",
+      "new_logic": "no gating",
+      "db_write": false
+    },
+    {
+      "file": "backend/routes/gvg.py",
+      "context": "guild war attack",
+      "replacement_type": "guild_attack_attempts_counter",
+      "removed_logic": "if user.get('stamina', 0) < 12: raise + $inc stamina -12",
+      "new_logic": "guild_attack_attempts default 10/day; idempotent $inc -1; HTTPException 400 se exhausted",
+      "db_write": "runtime only on guild attack call ($inc on guild_attack_attempts field); no migration",
+      "wallet_balance_change": false,
+      "new_field_added": "guild_attack_attempts (optional, default 10 at read-time if absent)"
+    },
+    {
+      "file": "backend/routes/raids.py",
+      "context": "raid attack",
+      "replacement_type": "mode_attempts_counter",
+      "removed_logic": "if user.get('stamina', 0) < 10: raise + $inc stamina -10",
+      "new_logic": "mode_attempts.raid default 5/day; idempotent $inc -1; HTTPException 400 se exhausted",
+      "db_write": "runtime only on raid attack call ($inc on mode_attempts.raid field); no migration",
+      "wallet_balance_change": false,
+      "new_field_added": "mode_attempts.raid (optional nested, default 5 at read-time if absent)"
+    },
+    {
+      "file": "frontend/app/events.tsx",
+      "context": "event card stamina cost label",
+      "replacement_type": "ui_label_swap",
+      "removed_label": "⚡ {ev.stamina_cost} Stamina",
+      "new_label": "✨ Accesso libero (no-stamina)"
+    },
+    {
+      "file": "frontend/app/gvg.tsx",
+      "context": "guild war match info",
+      "replacement_type": "ui_label_swap",
+      "removed_label": "⚡ 12 stamina per attacco | ⏰ 30 min per guerra",
+      "new_label": "✨ 1 tentativo gilda per attacco | ⏰ 30 min per guerra"
+    },
+    {
+      "file": "frontend/app/shop.tsx",
+      "context": "shop category list",
+      "replacement_type": "ui_category_remove",
+      "removed_category": "{id:'stamina',label:'Stamina'}",
+      "new_state": "CATS senza category stamina; SHOP_LOCKED_V2 resta true"
+    },
+    {
+      "file": "frontend/app/(tabs)/menu.tsx",
+      "context": "profile header resource badges",
+      "replacement_type": "ui_badge_remove",
+      "removed_badge": "<ResourceBadge icon=⚡ value={stamina/max_stamina}>",
+      "new_state": "badge rimosso; Gold + Gems badges restano. User document fields stamina/max_stamina restano per backward compat ma non visualizzati."
+    }
+  ],
+  "protected_files_NOT_touched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "backend/routes/soul_forge.py",
+    "frontend/app/combat.tsx",
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/(tabs)/gacha.tsx",
+    "frontend/app/battlepass.tsx",
+    "frontend/app/vip.tsx",
+    "frontend/app/artifacts.tsx",
+    "backend/routes/game_data.py (catalog historical refs, gated by SHOP/BP/VIP locks)"
+  ],
+  "counts": {
+    "total_patches": 10,
+    "backend_patches": 6,
+    "frontend_patches": 4,
+    "no_cost_replacements": 4,
+    "counter_replacements": 2,
+    "ui_swaps": 2,
+    "ui_removes": 2,
+    "db_writes_via_script": 0,
+    "db_migrations": 0,
+    "protected_files_touched": 0
+  }
+}

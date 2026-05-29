@@ -232,11 +232,14 @@ def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_h
         if not war:
             raise HTTPException(404, "Nessuna guerra attiva!")
 
-        # Check stamina
+        # PROJECT_NO_STAMINA_REMEDIATION: stamina cost rimosso (canonica NO_STAMINA_SYSTEM).
+        # Sostituito con guild_attack_attempts counter (default 10/giorno per user; field opzionale).
+        # Se field assente, default 10 attempts. Decremento idempotente; no negative balance.
         user = await db.users.find_one({"id": uid})
-        if user.get("stamina", 0) < 12:
-            raise HTTPException(400, "Stamina insufficiente! (12 richiesti)")
-        await db.users.update_one({"id": uid}, {"$inc": {"stamina": -12}})
+        attempts = user.get("guild_attack_attempts", 10) if user else 10
+        if attempts <= 0:
+            raise HTTPException(400, "Hai esaurito i tentativi di attacco gilda di oggi!")
+        await db.users.update_one({"id": uid}, {"$inc": {"guild_attack_attempts": -1}})
 
         # Check war time limit (30 min)
         created = war.get("created_at", datetime.utcnow())

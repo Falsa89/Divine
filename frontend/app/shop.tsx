@@ -42,7 +42,8 @@ export default function ShopScreen() {
 
   if (loading) return <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}><ActivityIndicator size="large" color="#ff6b35" /></LinearGradient>;
 
-  const CATS = [{id:'all',label:'Tutto'},{id:'gems',label:'Gemme'},{id:'gold',label:'Oro'},{id:'stamina',label:'Stamina'},{id:'gacha',label:'Gacha'},{id:'boost',label:'Boost'}];
+  // PROJECT_NO_STAMINA_REMEDIATION: rimosso 'stamina' dalla categoria shop (canonica NO_STAMINA_SYSTEM). SHOP_LOCKED_V2 resta true.
+  const CATS = [{id:'all',label:'Tutto'},{id:'gems',label:'Gemme'},{id:'gold',label:'Oro'},{id:'gacha',label:'Gacha'},{id:'boost',label:'Boost'}];
   const filtered = tab === 'all' ? data?.items : data?.items?.filter((i:any) => i.category === tab);
 
   return (

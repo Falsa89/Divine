@@ -66,10 +66,14 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
             raise HTTPException(404, "Nessun raid attivo per questo boss")
         if uid not in raid.get("participants", []):
             raise HTTPException(400, "Non sei in questo raid! Unisciti prima.")
+        # PROJECT_NO_STAMINA_REMEDIATION: stamina cost rimosso (canonica NO_STAMINA_SYSTEM).
+        # Sostituito con mode_attempts.raid counter (default 5/giorno per user; field opzionale).
         user = await db.users.find_one({"id": uid})
-        if user.get("stamina", 0) < 10:
-            raise HTTPException(400, "Stamina insufficiente! (10 richiesti)")
-        await db.users.update_one({"id": uid}, {"$inc": {"stamina": -10}})
+        mode_attempts = (user or {}).get("mode_attempts", {}) or {}
+        raid_attempts = mode_attempts.get("raid", 5)
+        if raid_attempts <= 0:
+            raise HTTPException(400, "Hai esaurito i tentativi raid di oggi!")
+        await db.users.update_one({"id": uid}, {"$inc": {"mode_attempts.raid": -1}})
         team = await db.teams.find_one({"user_id": uid, "is_active": True})
         team_power = team.get("total_power", 5000) if team else 5000
         element_bonus = 1.0

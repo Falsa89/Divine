@@ -1,0 +1,46 @@
+{
+  "task_id": "PROJECT_NO_STAMINA_REMEDIATION",
+  "track": "TRACK_C_MODE_REACHABILITY_AND_SMOKE",
+  "verdict": "TRACK_C_MODE_REACHABILITY_AND_SMOKE_READY",
+  "audit_only": true,
+  "static_check_only": true,
+  "modes_audited": [
+    {"mode": "story_chapter_battle", "backend_route": "POST /api/combat/story", "frontend": "frontend/app/story.tsx + combat.tsx", "pre_patch_state": "BLOCKED_BY_STAMINA", "post_patch_state": "REACHABLE_NO_COST", "reachable_from_locked_user": true},
+    {"mode": "tower_battle", "backend_route": "POST /api/combat/tower", "frontend": "frontend/app/tower.tsx", "pre_patch_state": "BLOCKED_BY_STAMINA", "post_patch_state": "REACHABLE_NO_COST"},
+    {"mode": "daily_event_battle", "backend_route": "POST /api/combat/event", "frontend": "frontend/app/events.tsx", "pre_patch_state": "BLOCKED_BY_STAMINA", "post_patch_state": "REACHABLE_NO_COST"},
+    {"mode": "territory_attack", "backend_route": "POST /api/territory/attack", "frontend": "frontend/app/territory.tsx", "pre_patch_state": "BLOCKED_BY_STAMINA", "post_patch_state": "REACHABLE_NO_COST"},
+    {"mode": "guild_war_attack", "backend_route": "POST /api/gvg/attack", "frontend": "frontend/app/gvg.tsx", "pre_patch_state": "BLOCKED_BY_STAMINA", "post_patch_state": "REACHABLE_VIA_GUILD_ATTACK_ATTEMPTS", "daily_attempts_default": 10},
+    {"mode": "raid_attack", "backend_route": "POST /api/raids/attack", "frontend": "frontend/app/raid.tsx", "pre_patch_state": "BLOCKED_BY_STAMINA", "post_patch_state": "REACHABLE_VIA_MODE_ATTEMPTS", "daily_attempts_default": 5},
+    {"mode": "pvp_arena", "backend_route": "backend/routes/combat.py pvp endpoints", "frontend": "frontend/app/pvp.tsx", "pre_patch_state": "NO_STAMINA_GATE_PRESENT", "post_patch_state": "REACHABLE_NO_CHANGE", "note": "No violation found in PvP routes"},
+    {"mode": "training_addestramento", "backend_route": "backend/routes/hero_progression.py training endpoints", "frontend": "frontend/app/hero-training.tsx", "pre_patch_state": "NO_STAMINA_GATE_PRESENT", "post_patch_state": "REACHABLE_NO_CHANGE"},
+    {"mode": "afk_autobattle", "backend_route": "backend/routes/combat.py afk endpoints", "frontend": "none (background)", "pre_patch_state": "NO_STAMINA_GATE_PRESENT", "post_patch_state": "REACHABLE_NO_CHANGE"},
+    {"mode": "daily_hub", "backend_route": "backend/routes/social.py + economy.py", "frontend": "frontend/app/daily-hub.tsx", "pre_patch_state": "NO_STAMINA_GATE_PRESENT", "post_patch_state": "REACHABLE_NO_CHANGE"}
+  ],
+  "backend_health_check": {
+    "endpoint": "GET /api/health",
+    "expected_response": {"status": "ok", "game": "Divine Waifus", "version": "1.0.0"},
+    "actual_status": "OK",
+    "backend_restart_post_patch": "clean (RUNNING)"
+  },
+  "python_ast_parse": {
+    "backend/routes/combat.py": "AST_OK",
+    "backend/routes/cosmetics.py": "AST_OK",
+    "backend/routes/gvg.py": "AST_OK",
+    "backend/routes/raids.py": "AST_OK"
+  },
+  "frontend_lock_invariants_post_patch": {
+    "VIP_LOCKED_V2 = true": true,
+    "BP_LOCKED_V2 = true": true,
+    "BP_PREMIUM_BUY_LOCKED_V2 = true": true,
+    "SHOP_LOCKED_V2 = true": true,
+    "ITEM_SHOP_LOCKED_V2 = true": true
+  },
+  "counts": {
+    "modes_audited": 10,
+    "modes_blocked_pre_patch": 6,
+    "modes_reachable_post_patch": 10,
+    "modes_with_counter_replacement": 2,
+    "modes_with_no_cost_replacement": 4,
+    "modes_unchanged_no_violation": 4
+  }
+}

@@ -92,9 +92,9 @@ def register_cosmetics_routes(router, db, get_current_user, serialize_doc, calcu
         if not territory:
             raise HTTPException(404, "Territorio non trovato")
         user = await db.users.find_one({"id": uid})
-        if user.get("stamina", 0) < 15:
-            raise HTTPException(400, "Stamina insufficiente! (15 richiesti)")
-        await db.users.update_one({"id": uid}, {"$inc": {"stamina": -15}})
+        # PROJECT_NO_STAMINA_REMEDIATION: stamina cost rimosso. Territory attack è no-cost prototype access.
+        # Future: replace con guild_attack_attempts counter (vedi GvG) in pack DAILY_ATTEMPTS_FOUNDATION.
+        _ = user
         team = await db.teams.find_one({"user_id": uid, "is_active": True})
         atk_power = team.get("total_power", 5000) if team else 5000
         control = await db.territory_control.find_one({"territory_id": req.territory_id})

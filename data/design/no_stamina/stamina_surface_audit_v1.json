@@ -1,0 +1,57 @@
+{
+  "task_id": "PROJECT_NO_STAMINA_REMEDIATION",
+  "track": "TRACK_A_STAMINA_SURFACE_AUDIT",
+  "verdict": "TRACK_A_STAMINA_SURFACE_AUDIT_READY",
+  "audit_only": true,
+  "db_writes": 0,
+  "runtime_changes_during_audit": false,
+  "canonical_decision": "NO_STAMINA_SYSTEM",
+  "audited_at_utc": "2026-05-29T21:25:00Z",
+  "true_violations_to_patch": {
+    "backend": [
+      {"file": "backend/routes/combat.py", "lines_before": [48, 49, 50, 51, 52], "context": "story chapter battle", "violation": "stamina<6 gate + $inc stamina -6", "severity": "HIGH"},
+      {"file": "backend/routes/combat.py", "lines_before": [109, 110, 111], "context": "tower battle", "violation": "stamina<8 gate + $inc stamina -8", "severity": "HIGH"},
+      {"file": "backend/routes/combat.py", "lines_before": [211, 212, 213], "context": "daily event battle", "violation": "stamina<event['stamina_cost'] gate + $inc stamina -event['stamina_cost']", "severity": "HIGH"},
+      {"file": "backend/routes/cosmetics.py", "lines_before": [95, 96, 97], "context": "territory attack", "violation": "stamina<15 gate + $inc stamina -15", "severity": "HIGH"},
+      {"file": "backend/routes/gvg.py", "lines_before": [235, 236, 237, 238, 239], "context": "guild war attack", "violation": "stamina<12 gate + $inc stamina -12", "severity": "HIGH"},
+      {"file": "backend/routes/raids.py", "lines_before": [70, 71, 72], "context": "raid attack", "violation": "stamina<10 gate + $inc stamina -10", "severity": "HIGH"}
+    ],
+    "frontend": [
+      {"file": "frontend/app/events.tsx", "line_before": 47, "violation": "text label 'X Stamina' su event card", "severity": "MEDIUM"},
+      {"file": "frontend/app/gvg.tsx", "line_before": 251, "violation": "text label '12 stamina per attacco'", "severity": "MEDIUM"},
+      {"file": "frontend/app/shop.tsx", "line_before": 45, "violation": "CATS array contiene 'stamina' category", "severity": "LOW (gated by SHOP_LOCKED_V2)"},
+      {"file": "frontend/app/(tabs)/menu.tsx", "line_before": 121, "violation": "ResourceBadge stamina visibile in header profilo", "severity": "MEDIUM"}
+    ]
+  },
+  "allowed_historical_references": {
+    "backend": [
+      {"file": "backend/routes/economy.py", "lines": [50, 51, 52, 71, 95], "context": "reward handlers passive accept of stamina key", "reason": "defensive no-op for legacy reward dicts; no new content generates stamina; route is reward-applier not gate"},
+      {"file": "backend/routes/achievements.py", "line": 252, "context": "reward dict iteration", "reason": "defensive whitelist of legacy keys for backward compat"},
+      {"file": "backend/routes/game_data.py", "lines": [72, 73, 74, 75, 76], "context": "daily event catalog stamina_cost field", "reason": "static catalog field; route combat.py no longer enforces it (patched). Field retained for legacy data clients; will be removed in future DAILY_ATTEMPTS_FOUNDATION pack."},
+      {"file": "backend/routes/game_data.py", "lines": [203, 204, 214, 221, 225, 230, 250, 251, 252, 253, 254], "context": "shop products + battle pass rewards + VIP perks containing stamina/stamina_max", "reason": "behind SHOP_LOCKED_V2 / BP_LOCKED_V2 / VIP_LOCKED_V2; unreachable from runtime UI; will be cleansed when respective surfaces are unlocked (in future stage packs)"},
+      {"file": "backend/routes/soul_forge.py", "lines": [77, 104, 109, 308], "context": "Soul Forge stamina products + reward handler", "reason": "DO NOT TOUCH per brief constraint (Soul Forge functional inline confirm protected). To be addressed in future SOUL_FORGE_NO_STAMINA_CLEANUP pack with explicit authorization."},
+      {"file": "backend/server.py", "lines": [143, 144], "context": "user document init: stamina=100, max_stamina=100", "reason": "default field initialization for backward compat; no gating logic relies on it; will be marked deprecated and removed in future schema cleanup pack"}
+    ],
+    "frontend": [
+      {"file": "frontend/app/treasury.tsx", "lines": [53, 65], "context": "legacy_stamina category with explicit 'LEGACY' label and gray color", "reason": "already explicitly marked as LEGACY in code; canonical historical display"}
+    ]
+  },
+  "replacement_strategy_applied": {
+    "backend/routes/combat.py": "no-cost prototype access (canonical NO_STAMINA_SYSTEM). User fetch kept for downstream compat. Three gating blocks replaced with audit-trail comments.",
+    "backend/routes/cosmetics.py": "no-cost prototype access. Comment hints future migration to guild_attack_attempts.",
+    "backend/routes/gvg.py": "guild_attack_attempts counter (default 10/day). Idempotent decrement. No DB migration required (field optional, defaults handled at read).",
+    "backend/routes/raids.py": "mode_attempts.raid counter (default 5/day). Idempotent decrement. No DB migration required.",
+    "frontend/app/events.tsx": "label sostituito con 'Accesso libero (no-stamina)'.",
+    "frontend/app/gvg.tsx": "label sostituito con '1 tentativo gilda per attacco'.",
+    "frontend/app/shop.tsx": "category 'stamina' rimossa da CATS. SHOP_LOCKED_V2 resta true.",
+    "frontend/app/(tabs)/menu.tsx": "ResourceBadge stamina rimosso dal header profilo. Gold + Gems restano."
+  },
+  "counts": {
+    "true_violations_backend": 6,
+    "true_violations_frontend": 4,
+    "allowed_historical_backend": 6,
+    "allowed_historical_frontend": 1,
+    "total_occurrences_audited": 47,
+    "patches_applied": 10
+  }
+}
