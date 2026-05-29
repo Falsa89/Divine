@@ -1,0 +1,47 @@
+{
+  "task_id": "PROJECT_LOGIN_AUTH_HARDENING",
+  "track": "A",
+  "track_name": "AUTH_SURFACE_AUDIT",
+  "verdict": "TRACK_A_AUTH_SURFACE_AUDIT_READY",
+  "audit_only": true,
+  "db_writes": 0,
+  "runtime_changes": 0,
+  "description": "Censimento read-only delle auth surfaces backend e frontend. Nessuna mutazione.",
+  "backend_auth_primitives": {
+    "hashing": "bcrypt.hashpw(password, bcrypt.gensalt()) + bcrypt.checkpw",
+    "token": "JWT HS256 con exp=30d, jwt.encode/decode",
+    "dependency": "get_current_user (Header Authorization: Bearer <token>)",
+    "jwt_secret_source": "os.getenv('JWT_SECRET', '<hardcoded_fallback>')",
+    "jwt_secret_env_present": true,
+    "jwt_secret_fallback_observation": "Fallback hardcoded esiste in server.py L41 ma viene override da .env. Suggerimento P1: rimuovere fallback hardcoded e far failure-fast se JWT_SECRET non è settato."
+  },
+  "auth_endpoints": [
+    {"method": "POST", "path": "/api/register",     "auth": "none",     "returns_password": false, "hashes_password": true,  "creates_token": true},
+    {"method": "POST", "path": "/api/login",        "auth": "none",     "returns_password": false, "verifies_password": true, "creates_token": true},
+    {"method": "GET",  "path": "/api/user/profile", "auth": "bearer",  "returns_password": false, "filters_password": true},
+    {"method": "GET",  "path": "/api/server-profiles/select", "auth": "bearer", "gated_by": "SERVER_PROFILES_RUNTIME_ENABLED", "current_state": "503_DISABLED"},
+    {"method": "POST", "path": "/api/server-profiles/select", "auth": "bearer", "gated_by": "SERVER_PROFILES_RUNTIME_ENABLED", "current_state": "503_DISABLED"}
+  ],
+  "frontend_auth_surfaces": {
+    "context": "frontend/context/AuthContext.tsx",
+    "storage": "AsyncStorage ('token' key)",
+    "storage_observation": "AsyncStorage non è crittografato per default. Suggerimento P1: migrare a expo-secure-store per il token JWT. Non bloccante per release iniziale.",
+    "login_screen": "frontend/app/login.tsx",
+    "register_screen": "frontend/app/register.tsx",
+    "logout_clears_token": true
+  },
+  "password_filter_audit": {
+    "register_returns_password": false,
+    "login_returns_password": false,
+    "profile_returns_password": false,
+    "any_route_returns_password": false,
+    "any_log_prints_password_or_token": false
+  },
+  "server_profile_runtime_state": {
+    "SERVER_PROFILES_RUNTIME_ENABLED": null,
+    "SECOND_SERVER_OPENING_ENABLED": null,
+    "both_unset_required_for_this_pack": true
+  },
+  "semantics_change": false,
+  "language": "it"
+}

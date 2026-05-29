@@ -16,6 +16,17 @@
 # PUBLIC_SYNC_TAG_RESYNC_v12c: suite_runner_audio_placeholder_sync_fix_v12c_2026_05_29_force_public_blob_refresh
 # PUBLIC_SYNC_TAG_RESYNC_v12c_REASON: previous public push still exposed v11b, so this marker exists only to force suite runner public sync; no logic change.
 # PUBLIC_SYNC_TAG_RESYNC_v13: suite_runner_combat_finalize_for_release_v13_2026_05_29
+# PUBLIC_SYNC_TAG_RESYNC_v14: suite_runner_login_auth_hardening_v14_2026_05_29
+# RESYNC_v14 RATIONALE: Registrazione OPTIONAL del nuovo validator
+# validate_project_login_auth_hardening_v1.py
+# (PROJECT_LOGIN_AUTH_HARDENING). Audit + hardening controllato dell'auth:
+# nessuna patch runtime; bcrypt + JWT exp 30d intoccati; nessun cambio .env;
+# nessuna attivazione server profiles live; nessun secondo server aperto;
+# email verify + password reset = DESIGN-ONLY CONTRACT (nessun endpoint live).
+# Validator OPTIONAL asserisce: 7 JSON tracks + proof marker, MD5 invariants,
+# locks attivi, auth primitives su server.py, nessun log password/token,
+# nessun endpoint forgot/reset live, JWT_SECRET via os.getenv, feature flag
+# server_profiles unset, smoke 10/10 PASS.
 # RESYNC_v13 RATIONALE: Registrazione OPTIONAL del nuovo validator
 # validate_project_combat_finalize_for_release_v1.py
 # (PROJECT_COMBAT_FINALIZE_FOR_RELEASE). Audit + finalize controllato del combat:
@@ -1272,6 +1283,13 @@ OPTIONAL = [
     # Artifact / Divine Weapon / Status / VFX runtime non autorizzato.
     # Proof marker dedicato: data/design/combat_finalize/combat_finalize_for_release_suite_registration_proof_marker_v1.json
     ('PROJECT-COMBAT-FINALIZE-FOR-RELEASE', 'validate_project_combat_finalize_for_release_v1.py'),
+    # LOGIN_AUTH_HARDENING_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline LOGIN AUTH HARDENING — audit + hardening controlled validator;
+    # nessuna patch runtime; bcrypt + JWT exp 30d intoccati; nessun .env change; nessun secret leak;
+    # server_profiles live OFF; email verify + password reset = DESIGN-ONLY CONTRACT;
+    # smoke test live 10/10 PASS; ownership matrix prodotta; locks VIP/BP/Shop intatti.
+    # Proof marker dedicato: data/design/login_auth_hardening/login_auth_hardening_suite_registration_proof_marker_v1.json
+    ('PROJECT-LOGIN-AUTH-HARDENING', 'validate_project_login_auth_hardening_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

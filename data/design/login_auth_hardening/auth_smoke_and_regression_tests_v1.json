@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_LOGIN_AUTH_HARDENING",
+  "track": "E",
+  "track_name": "AUTH_SMOKE_AND_REGRESSION_TESTS",
+  "verdict": "TRACK_E_AUTH_SMOKE_AND_REGRESSION_TESTS_READY",
+  "smoke_only": true,
+  "db_writes_during_smoke": "1 test user created (registration smoke); cleanup_optional",
+  "description": "Smoke test read-eseguito live in container per validare invarianti auth chiave. Nessuna mutazione di utenti reali; user di smoke con email random.",
+  "smoke_results": [
+    {"id": "SM-01", "check": "POST /api/register success",                  "expected": "200 + token",        "observed": "200 + token",        "status": "PASS"},
+    {"id": "SM-02", "check": "register response excludes password",          "expected": "password NOT in user obj", "observed": "password NOT present", "status": "PASS"},
+    {"id": "SM-03", "check": "POST /api/login success",                     "expected": "200 + token",        "observed": "200 + token",        "status": "PASS"},
+    {"id": "SM-04", "check": "login response excludes password",             "expected": "password NOT in user obj", "observed": "password NOT present", "status": "PASS"},
+    {"id": "SM-05", "check": "GET /api/user/profile with valid token",       "expected": "200 + password NOT in body", "observed": "200 + password NOT present", "status": "PASS"},
+    {"id": "SM-06", "check": "GET /api/user/profile with invalid token",     "expected": "401",                  "observed": "401",                  "status": "PASS"},
+    {"id": "SM-07", "check": "GET /api/user/profile without token",          "expected": "401",                  "observed": "401",                  "status": "PASS"},
+    {"id": "SM-08", "check": "POST /api/login with wrong password",          "expected": "401 generic message",  "observed": "401 'Credenziali non valide'", "status": "PASS"},
+    {"id": "SM-09", "check": "POST /api/register duplicate email",           "expected": "400",                  "observed": "400",                  "status": "PASS"},
+    {"id": "SM-10", "check": "GET /api/server-profiles/select when flag unset", "expected": "503",               "observed": "503",                  "status": "PASS"}
+  ],
+  "smoke_pass_count": 10,
+  "smoke_fail_count": 0,
+  "regression_observed": false,
+  "language": "it"
+}

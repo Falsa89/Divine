@@ -1,0 +1,16 @@
+{
+  "task_id": "PROJECT_LOGIN_AUTH_HARDENING",
+  "track": "F",
+  "track_name": "VALIDATOR_AND_SUITE_REGISTRATION",
+  "verdict": "TRACK_F_VALIDATOR_AND_SUITE_REGISTRATION_READY",
+  "validator_file": "backend/scripts/validate_project_login_auth_hardening_v1.py",
+  "validator_role": "OPTIONAL",
+  "weakens_REQUIRED_validators": false,
+  "weakens_OPTIONAL_validators": false,
+  "suite_runner_sentinel": "PUBLIC_SYNC_TAG_RESYNC_v14: suite_runner_login_auth_hardening_v14_2026_05_29",
+  "inline_sentinel": "LOGIN_AUTH_HARDENING_REGISTRATION_SENTINEL",
+  "tuple_added": "('PROJECT-LOGIN-AUTH-HARDENING', 'validate_project_login_auth_hardening_v1.py')",
+  "tuple_count_expected": 1,
+  "semantics_change": false,
+  "language": "it"
+}

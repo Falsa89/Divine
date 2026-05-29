@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_LOGIN_AUTH_HARDENING",
+  "track": "D",
+  "track_name": "OWNERSHIP_AND_ROUTE_PROTECTION_MATRIX",
+  "verdict": "TRACK_D_OWNERSHIP_AND_ROUTE_PROTECTION_MATRIX_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "description": "Matrice read-only di protezione e ownership per le route auth-sensitive. Documenta lo stato attuale.",
+  "protection_matrix": [
+    {"route": "POST /api/register",                       "auth": "public",  "ownership_check": "n/a",                  "sensitive_data_filter": "password+_id filtered on return", "status": "PROTECTED"},
+    {"route": "POST /api/login",                          "auth": "public",  "ownership_check": "n/a",                  "sensitive_data_filter": "password+_id filtered on return", "status": "PROTECTED"},
+    {"route": "GET /api/user/profile",                    "auth": "bearer",  "ownership_check": "self (from token user_id)", "sensitive_data_filter": "password filtered",            "status": "PROTECTED"},
+    {"route": "GET /api/user/heroes",                     "auth": "bearer",  "ownership_check": "self (current_user.id)",   "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "GET /api/team",                            "auth": "bearer",  "ownership_check": "self",                 "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "POST /api/gacha/pull",                     "auth": "bearer",  "ownership_check": "self",                 "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "POST /api/gacha/pull10",                   "auth": "bearer",  "ownership_check": "self",                 "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "GET /api/gacha/banners",                   "auth": "public",  "ownership_check": "n/a",                  "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "GET /api/heroes",                          "auth": "public",  "ownership_check": "n/a",                  "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "GET /api/heroes/{id}",                     "auth": "public",  "ownership_check": "n/a",                  "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "GET /api/health",                          "auth": "public",  "ownership_check": "n/a",                  "sensitive_data_filter": "n/a",                          "status": "PROTECTED"},
+    {"route": "GET /api/server-profiles/select",          "auth": "bearer",  "ownership_check": "feature-flag gated 503", "sensitive_data_filter": "n/a",                        "status": "DISABLED_BY_DESIGN"},
+    {"route": "POST /api/server-profiles/select",         "auth": "bearer",  "ownership_check": "feature-flag gated 503", "sensitive_data_filter": "n/a",                        "status": "DISABLED_BY_DESIGN"},
+    {"route": "POST /api/admin/bots/run-cycle",           "auth": "bearer",  "ownership_check": "NO_ADMIN_ROLE_CHECK",  "sensitive_data_filter": "n/a",                          "status": "FINDING_P1", "note": "Solo bearer; nessun controllo admin role. Non muove economia user. Suggerimento P1: aggiungere is_admin check o spostare in dev-tools."},
+    {"route": "GET /api/admin/bots/status",               "auth": "bearer",  "ownership_check": "NO_ADMIN_ROLE_CHECK",  "sensitive_data_filter": "password excluded via projection {password:0}", "status": "FINDING_P1", "note": "Solo bearer; password sempre esclusa, output read-only. Suggerimento P1: aggiungere is_admin check."},
+    {"route": "POST /api/artifacts/* (legacy mutation)",  "auth": "bearer",  "ownership_check": "hard-locked to HTTP 423",   "sensitive_data_filter": "n/a",                          "status": "LOCKED_BY_DESIGN"},
+    {"route": "POST /api/constellation/*",                "auth": "bearer",  "ownership_check": "hard-locked to HTTP 423",   "sensitive_data_filter": "n/a",                          "status": "LOCKED_BY_DESIGN"}
+  ],
+  "findings_summary": {
+    "PROTECTED": 11,
+    "DISABLED_BY_DESIGN": 2,
+    "LOCKED_BY_DESIGN": 2,
+    "FINDING_P1": 2,
+    "CRITICAL": 0
+  },
+  "language": "it"
+}
