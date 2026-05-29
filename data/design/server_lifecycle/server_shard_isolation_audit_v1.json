@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-27T02:12:20.852567+00:00",
+  "timestamp_utc": "2026-05-29T16:48:02.999497+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1103,
+  "backend_python_files_scanned": 1104,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,8 +25,28 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 509,
+      "files_with_hits": 510,
       "hits_sample": [
+        {
+          "file": "backend/battle_engine.py",
+          "keyword": "user",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 219,
+              "snippet": "# the user_hero instance used."
+            },
+            {
+              "line": 857,
+              "snippet": "def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, position: dict = None) -> dict:"
+            },
+            {
+              "line": 864,
+              "snippet": "level = user_hero_data.get('level', 1) if user_hero_data else 1"
+            }
+          ]
+        },
         {
           "file": "backend/bot_system.py",
           "keyword": "user",
@@ -88,73 +108,73 @@
           ]
         },
         {
-          "file": "backend/battle_engine.py",
+          "file": "backend/routes/artifacts.py",
           "keyword": "user",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 219,
-              "snippet": "# the user_hero instance used."
+              "line": 38,
+              "snippet": "# locked NON hanno dipendenza da `get_current_user` (zero DB auth call),"
             },
             {
-              "line": 857,
-              "snippet": "def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, position: dict = None) -> dict:"
+              "line": 40,
+              "snippet": "# gemme, NON creano righe in user_artifacts / user_constellations e NON"
             },
             {
-              "line": 864,
-              "snippet": "level = user_hero_data.get('level', 1) if user_hero_data else 1"
+              "line": 205,
+              "snippet": "def register_artifacts_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):"
             }
           ]
         },
         {
-          "file": "backend/utils/server_scope.py",
-          "keyword": "user",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 11,
-              "snippet": "- `resolve_account_id(user_id)` returns the SLC-G migration convention:"
-            },
-            {
-              "line": 12,
-              "snippet": "account_id == user_id (verbatim)."
-            },
-            {
-              "line": 13,
-              "snippet": "- `ensure_server_scope(doc, user_id)` MUTATES the dict by ADDING"
-            }
-          ]
-        },
-        {
-          "file": "backend/utils/team_synergy_v2_calculator.py",
+          "file": "backend/routes/forge.py",
           "keyword": "user",
           "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
+          "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 10,
-              "snippet": "team.formation[i].user_hero_id"
+              "line": 156,
+              "snippet": "def register_forge_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):"
             },
             {
-              "line": 11,
-              "snippet": "\u2192 user_heroes (.hero_id)"
+              "line": 160,
+              "snippet": "async def get_forge_info(current_user: dict = Depends(get_current_user)):"
             },
             {
-              "line": 26,
-              "snippet": "user_heroes_by_id: Dict[str, Dict[str, Any]],"
+              "line": 161,
+              "snippet": "uid = current_user[\"id\"]"
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 123
+      "user_id_only_files_count": 124
     },
     "user_heroes": {
       "expected_scope": "server_bound",
       "files_with_hits": 123,
       "hits_sample": [
+        {
+          "file": "backend/battle_engine.py",
+          "keyword": "user_heroes",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 1045,
+              "snippet": "user_hero = await db.user_heroes.find_one({\"id\": pos['user_hero_id'], \"user_id\": user_id})"
+            },
+            {
+              "line": 1121,
+              "snippet": "_v2_uhs = await db.user_heroes.find({\"id\": {\"$in\": _v2_uhids}, \"user_id\": user_id}).to_list(None)"
+            },
+            {
+              "line": 1128,
+              "snippet": "user_heroes_by_id=_v2_uh_map,"
+            }
+          ]
+        },
         {
           "file": "backend/bot_system.py",
           "keyword": "user_heroes",
@@ -208,58 +228,30 @@
           ]
         },
         {
-          "file": "backend/battle_engine.py",
+          "file": "backend/routes/forge.py",
           "keyword": "user_heroes",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 1045,
-              "snippet": "user_hero = await db.user_heroes.find_one({\"id\": pos['user_hero_id'], \"user_id\": user_id})"
+              "line": 366,
+              "snippet": "uh = await db.user_heroes.find_one({\"id\": req.user_hero_id, \"user_id\": uid})"
             },
             {
-              "line": 1121,
-              "snippet": "_v2_uhs = await db.user_heroes.find({\"id\": {\"$in\": _v2_uhids}, \"user_id\": user_id}).to_list(None)"
-            },
-            {
-              "line": 1128,
-              "snippet": "user_heroes_by_id=_v2_uh_map,"
+              "line": 394,
+              "snippet": "uh = await db.user_heroes.find_one({\"id\": user_hero_id, \"user_id\": uid})"
             }
           ]
         },
         {
-          "file": "backend/utils/team_synergy_v2_calculator.py",
+          "file": "backend/routes/equipment.py",
           "keyword": "user_heroes",
           "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
+          "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 11,
-              "snippet": "\u2192 user_heroes (.hero_id)"
-            },
-            {
-              "line": 26,
-              "snippet": "user_heroes_by_id: Dict[str, Dict[str, Any]],"
-            },
-            {
-              "line": 43,
-              "snippet": "uh = user_heroes_by_id.get(uhid)"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/affinity_gifts.py",
-          "keyword": "roster",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 155,
-              "snippet": "'restore_condition: Character Bible / live roster confirms '"
-            },
-            {
-              "line": 275,
-              "snippet": "'restore_condition: Character Bible / live roster confirms '"
+              "line": 32,
+              "snippet": "hero = await db.user_heroes.find_one({\"id\": req.user_hero_id, \"user_id\": uid})"
             }
           ]
         }
@@ -269,20 +261,8 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 252,
+      "files_with_hits": 253,
       "hits_sample": [
-        {
-          "file": "backend/game_systems.py",
-          "keyword": "inventory",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 78,
-              "snippet": "# Strictly GET-only, no DB, no inventory, no spend, no user state."
-            }
-          ]
-        },
         {
           "file": "backend/battle_engine.py",
           "keyword": "inventory",
@@ -296,50 +276,34 @@
           ]
         },
         {
-          "file": "backend/routes/affinity_gifts.py",
+          "file": "backend/game_systems.py",
           "keyword": "inventory",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
+              "line": 78,
+              "snippet": "# Strictly GET-only, no DB, no inventory, no spend, no user state."
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/artifacts.py",
+          "keyword": "inventory",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
               "line": 10,
-              "snippet": "- No DB writes. No inventory mutation. No spend / claim / give."
+              "snippet": "nessun campo di ownership/inventory/equip/fuse/craft/pull/price."
             },
             {
-              "line": 52,
-              "snippet": "'inventory_enabled': False,"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/soul_forge.py",
-          "keyword": "materials",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 311,
-              "snippet": "await db.user_materials.update_one({\"user_id\": uid}, {\"$inc\": {rk: rv}, \"$setOnInsert\": {\"server_id\": \"s1\", \"account_id\": uid}}, upsert=True)"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/hero_progression.py",
-          "keyword": "materials",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 67,
-              "snippet": "# Fusion materials"
+              "line": 379,
+              "snippet": "# NESSUN campo ownership/inventory/equip/fuse/craft/pull/price."
             },
             {
-              "line": 68,
-              "snippet": "FUSION_MATERIALS = {"
-            },
-            {
-              "line": 697,
-              "snippet": "# Check materials"
+              "line": 391,
+              "snippet": "\"player_owned\", \"inventory_id\", \"acquisition_active\","
             }
           ]
         },
@@ -362,35 +326,51 @@
               "snippet": "ugi = db[\"user_gift_inventory\"]"
             }
           ]
+        },
+        {
+          "file": "backend/routes/items.py",
+          "keyword": "inventory",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 68,
+              "snippet": "# ============ INVENTORY ============"
+            },
+            {
+              "line": 69,
+              "snippet": "@router.get(\"/inventory\")"
+            },
+            {
+              "line": 70,
+              "snippet": "async def get_inventory(current_user: dict = Depends(get_current_user)):"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/affinity_gifts.py",
+          "keyword": "inventory",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 10,
+              "snippet": "- No DB writes. No inventory mutation. No spend / claim / give."
+            },
+            {
+              "line": 52,
+              "snippet": "'inventory_enabled': False,"
+            }
+          ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 71
+      "user_id_only_files_count": 72
     },
     "currencies": {
       "expected_scope": "server_bound",
       "files_with_hits": 33,
       "hits_sample": [
-        {
-          "file": "backend/routes/soul_forge.py",
-          "keyword": "currency",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 2,
-              "snippet": "Divine Waifus - Multi-Currency System & Soul Forge (Fucina delle Anime)"
-            },
-            {
-              "line": 11,
-              "snippet": "- Soul Seals (Sigilli dell'Anima) - Rare hero retirement currency"
-            },
-            {
-              "line": 25,
-              "snippet": "# ===================== CURRENCY DEFINITIONS ====================="
-            }
-          ]
-        },
         {
           "file": "backend/routes/economy.py",
           "keyword": "currency",
@@ -408,26 +388,6 @@
             {
               "line": 44,
               "snippet": "raise HTTPException(400, f\"{'Gemme' if currency == 'gems' else 'Oro'} insufficiente!\")"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/game_data.py",
-          "keyword": "currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 130,
-              "snippet": "{\"id\": \"flame\", \"name\": \"Aura di Fiamma\", \"icon\": \"\\U0001f525\", \"color\": \"#ff4444\", \"cost\": 2000, \"currency\": \"gold\"},"
-            },
-            {
-              "line": 131,
-              "snippet": "{\"id\": \"ice\", \"name\": \"Aura Glaciale\", \"icon\": \"\\u2744\\ufe0f\", \"color\": \"#44aaff\", \"cost\": 2000, \"currency\": \"gold\"},"
-            },
-            {
-              "line": 132,
-              "snippet": "{\"id\": \"thunder\", \"name\": \"Aura del Tuono\", \"icon\": \"\\u26a1\", \"color\": \"#ffd700\", \"cost\": 3000, \"currency\": \"gold\"},"
             }
           ]
         },
@@ -490,6 +450,46 @@
               "snippet": "\"V2 selection saved. Nessuna currency spesa. Nessun bonus \""
             }
           ]
+        },
+        {
+          "file": "backend/routes/game_data.py",
+          "keyword": "currency",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 130,
+              "snippet": "{\"id\": \"flame\", \"name\": \"Aura di Fiamma\", \"icon\": \"\\U0001f525\", \"color\": \"#ff4444\", \"cost\": 2000, \"currency\": \"gold\"},"
+            },
+            {
+              "line": 131,
+              "snippet": "{\"id\": \"ice\", \"name\": \"Aura Glaciale\", \"icon\": \"\\u2744\\ufe0f\", \"color\": \"#44aaff\", \"cost\": 2000, \"currency\": \"gold\"},"
+            },
+            {
+              "line": 132,
+              "snippet": "{\"id\": \"thunder\", \"name\": \"Aura del Tuono\", \"icon\": \"\\u26a1\", \"color\": \"#ffd700\", \"cost\": 3000, \"currency\": \"gold\"},"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/soul_forge.py",
+          "keyword": "currency",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 2,
+              "snippet": "Divine Waifus - Multi-Currency System & Soul Forge (Fucina delle Anime)"
+            },
+            {
+              "line": 11,
+              "snippet": "- Soul Seals (Sigilli dell'Anima) - Rare hero retirement currency"
+            },
+            {
+              "line": 25,
+              "snippet": "# ===================== CURRENCY DEFINITIONS ====================="
+            }
+          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -500,22 +500,14 @@
       "files_with_hits": 26,
       "hits_sample": [
         {
-          "file": "backend/routes/soul_forge.py",
+          "file": "backend/routes/artifacts.py",
           "keyword": "purchase",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 241,
-              "snippet": "# Get daily purchase counts"
-            },
-            {
-              "line": 243,
-              "snippet": "purchases = await db.shop_purchases_special.find({\"user_id\": uid, \"date\": today}).to_list(200)"
-            },
-            {
-              "line": 244,
-              "snippet": "purchase_counts = {}"
+              "line": 394,
+              "snippet": "\"price\", \"purchase_url\", \"duplicates\","
             }
           ]
         },
@@ -540,54 +532,58 @@
           ]
         },
         {
-          "file": "backend/routes/artifacts.py",
+          "file": "backend/routes/soul_forge.py",
           "keyword": "purchase",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 394,
-              "snippet": "\"price\", \"purchase_url\", \"duplicates\","
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_server_profile_creation_contract_v1.py",
-          "keyword": "paid_currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 35,
-              "snippet": "require(sr.get('paid_currency_scope') == 'account_wide', 'paid_currency_scope must be account_wide', errs)"
-            },
-            {
-              "line": 45,
-              "snippet": "require(inv.get('paid_currency_balance_not_cloned_to_server_profile') is True, 'paid balance not cloned to server profile', errs)"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_c_server_profile_creation_contract_v1.py",
-          "keyword": "paid_currency",
           "has_server_id_anywhere": true,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 22,
-              "snippet": "require(inv.get('paid_currency_balance_not_cloned_to_server_profile') is True, 'paid_currency not cloned to server_profile', errs)"
+              "line": 241,
+              "snippet": "# Get daily purchase counts"
+            },
+            {
+              "line": 243,
+              "snippet": "purchases = await db.shop_purchases_special.find({\"user_id\": uid, \"date\": today}).to_list(200)"
+            },
+            {
+              "line": 244,
+              "snippet": "purchase_counts = {}"
             }
           ]
         },
         {
-          "file": "backend/scripts/validate_slc_h_endpoint_contract_v1.py",
+          "file": "backend/scripts/validate_project_e_qa_login_dryrun_safety_v1.py",
+          "keyword": "paid_currency",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 30,
+              "snippet": "for k in (\"account_creation\", \"real_gacha_spend\", \"paid_currency_mutation\", \"destructive_action\", \"secret_logging\", \"frontend\"):"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_project_d_qa_runner_login_safety.py",
           "keyword": "paid_currency",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 38,
-              "snippet": "('paid_currency_account_wide',True),('free_resources_server_bound',True),"
+              "snippet": "for k in (\"real_gacha_spend\", \"paid_currency_mutation\", \"destructive_action\", \"frontend\", \"user_creation\", \"account_state_mutation\"):"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/repo_audit_scanner.py",
+          "keyword": "purchase",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 529,
+              "snippet": "'observation': 'VIP spend-based progression visible without real-money purchase backend.',"
             }
           ]
         }
@@ -600,38 +596,50 @@
       "files_with_hits": 9,
       "hits_sample": [
         {
-          "file": "backend/scripts/apply_slc_g_commit_a.py",
-          "keyword": "gacha_history",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 34,
-              "snippet": "'servers','server_profiles','server_wallets_free','gacha_history',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_c_collection_scope_migration_matrix_v1.py",
-          "keyword": "gacha_history",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 12,
-              "snippet": "'gacha_history', 'story_progress', 'guilds', 'arena_rankings',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
-          "keyword": "gacha_history",
+          "file": "backend/scripts/validate_project_gacha_rate_sanity_final_signoff_v1.py",
+          "keyword": "gacha_pity",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 8,
-              "snippet": "'servers','server_wallets_free','user_heroes','teams','inventory','gacha_history',"
+              "line": 109,
+              "snippet": "f = load_json('data/design/gacha/gacha_pity_and_disclosure_contract_v1.json')"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_project_d_artifact_bible_v1_approval_freeze.py",
+          "keyword": "gacha_pity",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 43,
+              "snippet": "for k in (\"artifact_live_bonus\", \"artifact_summon_behavior\", \"gacha_pity_rate_change\", \"frontend\", \"db_writes\", \"equipment_semantics\"):"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/simulate_slc_g_default_s1_backfill_dryrun.py",
+          "keyword": "gacha_history",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 21,
+              "snippet": "'server_wallets_free','gacha_history','story_progress',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_project_artifact_inventory_schema_dry_run_v1.py",
+          "keyword": "gacha_pity",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 30,
+              "snippet": "\"gacha_pity_counter\","
             }
           ]
         },
@@ -648,26 +656,14 @@
           ]
         },
         {
-          "file": "backend/scripts/validate_project_gacha_rate_sanity_final_signoff_v1.py",
-          "keyword": "gacha_pity",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 109,
-              "snippet": "f = load_json('data/design/gacha/gacha_pity_and_disclosure_contract_v1.json')"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/audit_server_shard_isolation_v1.py",
+          "file": "backend/scripts/apply_slc_g_commit_a.py",
           "keyword": "gacha_history",
           "has_server_id_anywhere": true,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 21,
-              "snippet": "'gacha_history':           ['gacha_history', 'gacha_log', 'gacha_pity'],"
+              "line": 34,
+              "snippet": "'servers','server_profiles','server_wallets_free','gacha_history',"
             }
           ]
         }
@@ -677,25 +673,25 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 86,
+      "files_with_hits": 87,
       "hits_sample": [
         {
-          "file": "backend/synergy_system.py",
+          "file": "backend/battle_engine.py",
           "keyword": "team",
           "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
+          "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 2,
-              "snippet": "Divine Waifus - Team Synergy System"
+              "line": 4,
+              "snippet": "6 characters per team, 9x9 grid positioning with buffs"
             },
             {
-              "line": 16,
-              "snippet": "#   - buffs: dict of stat bonuses applied to the WHOLE team"
+              "line": 30,
+              "snippet": "def _project_m_status_seam(team_payload, active_statuses=None, *, dry_run=False):"
             },
             {
-              "line": 56,
-              "snippet": "\"description\": \"Sakuya, Benzaiten e Hestia: la benedizione delle sacerdotesse protegge il team.\","
+              "line": 31,
+              "snippet": "return team_payload"
             }
           ]
         },
@@ -720,46 +716,6 @@
           ]
         },
         {
-          "file": "backend/server.py",
-          "keyword": "team",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 437,
-              "snippet": "# ===================== TEAM ====================="
-            },
-            {
-              "line": 438,
-              "snippet": "@app.get(\"/api/team\")"
-            },
-            {
-              "line": 439,
-              "snippet": "async def get_team(current_user: dict = Depends(get_current_user)):"
-            }
-          ]
-        },
-        {
-          "file": "backend/battle_engine.py",
-          "keyword": "team",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 4,
-              "snippet": "6 characters per team, 9x9 grid positioning with buffs"
-            },
-            {
-              "line": 30,
-              "snippet": "def _project_m_status_seam(team_payload, active_statuses=None, *, dry_run=False):"
-            },
-            {
-              "line": 31,
-              "snippet": "return team_payload"
-            }
-          ]
-        },
-        {
           "file": "backend/battle_core.py",
           "keyword": "team",
           "has_server_id_anywhere": false,
@@ -780,20 +736,68 @@
           ]
         },
         {
-          "file": "backend/utils/hero_visibility.py",
+          "file": "backend/synergy_system.py",
           "keyword": "team",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 91,
-              "snippet": "non rompere active teams che li contengono.\"\"\""
+              "line": 2,
+              "snippet": "Divine Waifus - Team Synergy System"
+            },
+            {
+              "line": 16,
+              "snippet": "#   - buffs: dict of stat bonuses applied to the WHOLE team"
+            },
+            {
+              "line": 56,
+              "snippet": "\"description\": \"Sakuya, Benzaiten e Hestia: la benedizione delle sacerdotesse protegge il team.\","
+            }
+          ]
+        },
+        {
+          "file": "backend/server.py",
+          "keyword": "team",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 437,
+              "snippet": "# ===================== TEAM ====================="
+            },
+            {
+              "line": 438,
+              "snippet": "@app.get(\"/api/team\")"
+            },
+            {
+              "line": 439,
+              "snippet": "async def get_team(current_user: dict = Depends(get_current_user)):"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/artifacts.py",
+          "keyword": "team",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 3,
+              "snippet": "Artifacts: passive team buffs on unlock, level up via duplicate fusion"
+            },
+            {
+              "line": 4,
+              "snippet": "Constellations: equippable, give team buff + unique skill every 3 turns"
+            },
+            {
+              "line": 41,
+              "snippet": "# modificano teams. Le sole superfici attive su questo modulo restano i"
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 18
+      "user_id_only_files_count": 19
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -820,6 +824,42 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_slc_g_commit_a_post_apply_v1.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 18,
+              "snippet": "SERVER_BOUND_PRESENT = ['user_heroes','teams','inventory','story_progress','guilds',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/simulate_slc_g_default_s1_backfill_dryrun.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 21,
+              "snippet": "'server_wallets_free','gacha_history','story_progress',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 27,
+              "snippet": "'user_heroes', 'teams', 'inventory', 'gacha_history', 'story_progress',"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/apply_slc_g_commit_a.py",
           "keyword": "story_progress",
           "has_server_id_anywhere": true,
@@ -840,42 +880,6 @@
             {
               "line": 12,
               "snippet": "'gacha_history', 'story_progress', 'guilds', 'arena_rankings',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 9,
-              "snippet": "'story_progress','guilds','arena_rankings','user_affinity_state',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_g_commit_a_post_apply_v1.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 18,
-              "snippet": "SERVER_BOUND_PRESENT = ['user_heroes','teams','inventory','story_progress','guilds',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 27,
-              "snippet": "'user_heroes', 'teams', 'inventory', 'gacha_history', 'story_progress',"
             }
           ]
         }
@@ -936,42 +940,42 @@
           ]
         },
         {
-          "file": "backend/routes/soul_forge.py",
+          "file": "backend/routes/social.py",
           "keyword": "guild",
           "has_server_id_anywhere": true,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 9,
-              "snippet": "- Guild Points (Punti Gilda) - Guild activities"
+              "line": 45,
+              "snippet": "# Channels supported: global | system | faction | guild"
             },
             {
-              "line": 30,
-              "snippet": "\"guild_points\": {\"name\": \"Punti Gilda\", \"icon\": \"\\U0001F3DB\\uFE0F\", \"color\": \"#6644ff\", \"description\": \"Guadagnati da attivita di gilda, territori e GvG.\"},"
+              "line": 49,
+              "snippet": "# Faction/Guild require user to have respective context, otherwise read returns []"
             },
             {
-              "line": 82,
-              "snippet": "GUILD_SHOP = ["
+              "line": 51,
+              "snippet": "VALID_CHANNELS = {\"global\", \"system\", \"faction\", \"guild\"}"
             }
           ]
         },
         {
-          "file": "backend/routes/achievements.py",
+          "file": "backend/routes/rankings.py",
           "keyword": "guild",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 121,
-              "snippet": "{\"id\": \"guild_joined\", \"name\": \"Compagno\", \"icon\": \"\\u2605\", \"category\": \"social\","
+              "line": 87,
+              "snippet": "@router.get(\"/rankings/guild\")"
             },
             {
-              "line": 125,
-              "snippet": "], \"track_field\": \"guild_joined\"},"
+              "line": 88,
+              "snippet": "async def get_guild_ranking(current_user: dict = Depends(get_current_user)):"
             },
             {
-              "line": 186,
-              "snippet": "progress[\"gvg_wins\"] = await db.gvg_wars.count_documents({\"winner_guild_id\": user.get(\"guild_id\", \"none\")}) if user and user.get(\"guild_id\") else 0"
+              "line": 89,
+              "snippet": "guilds = await db.guilds.find({}).to_list(50)"
             }
           ]
         },
@@ -1040,18 +1044,50 @@
           ]
         },
         {
-          "file": "backend/routes/soul_forge.py",
+          "file": "backend/routes/rankings.py",
           "keyword": "arena",
-          "has_server_id_anywhere": true,
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 46,
+              "snippet": "@router.get(\"/rankings/arena\")"
+            },
+            {
+              "line": 47,
+              "snippet": "async def get_arena_ranking(current_user: dict = Depends(get_current_user)):"
+            },
+            {
+              "line": 49,
+              "snippet": "return {\"type\": \"arena\", \"title\": \"Classifica Arena\", \"ranking\": ranking, \"my_rank\": my_rank}"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/__init__.py",
+          "keyword": "ranking",
+          "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 8,
-              "snippet": "- Honor (Onore) - PvP Arena rewards"
+              "snippet": "from .rankings import register_rankings_routes"
             },
             {
               "line": 29,
-              "snippet": "\"honor\": {\"name\": \"Onore\", \"icon\": \"\\u2694\\uFE0F\", \"color\": \"#ff4444\", \"description\": \"Guadagnato in Arena PvP e GvG. Spendibile nel Negozio Onore.\"},"
+              "snippet": "'register_rankings_routes',"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/combat.py",
+          "keyword": "arena",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 144,
+              "snippet": "# ==================== PVP ARENA ===================="
             }
           ]
         },
@@ -1068,30 +1104,6 @@
             {
               "line": 29,
               "snippet": "{\"target\": 500, \"reward\": {\"gems\": 500}, \"title\": \"Campione Arena\"},"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/game_data.py",
-          "keyword": "ranking",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 188,
-              "snippet": "# ===================== RANKINGS ====================="
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/combat.py",
-          "keyword": "arena",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 144,
-              "snippet": "# ==================== PVP ARENA ===================="
             }
           ]
         }
@@ -1120,6 +1132,22 @@
             {
               "line": 77,
               "snippet": "# AF2-E \u2014 Affinity gifts read-only design preview API (3 GET endpoints)."
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/affinity_gift_spend.py",
+          "keyword": "user_affinity_state",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 547,
+              "snippet": "uas = db[\"user_affinity_state\"]"
+            },
+            {
+              "line": 702,
+              "snippet": "\"gift_transaction_ledger + user_gift_inventory + user_affinity_state (Stage1 allowlist only)\""
             }
           ]
         },
@@ -1164,50 +1192,34 @@
           ]
         },
         {
-          "file": "backend/routes/affinity_gift_spend.py",
-          "keyword": "user_affinity_state",
+          "file": "backend/scripts/validate_af2n_v22_preflight.py",
+          "keyword": "affinity",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 547,
-              "snippet": "uas = db[\"user_affinity_state\"]"
+              "line": 11,
+              "snippet": "OUT = Path('/app/data/design/affinity/af2n_v22_preflight_result_v1.json')"
             },
             {
-              "line": 702,
-              "snippet": "\"gift_transaction_ledger + user_gift_inventory + user_affinity_state (Stage1 allowlist only)\""
+              "line": 45,
+              "snippet": "code, status = _get('/affinity/gift-spend/canary-status'); gates['canary_status_200'] = code == 200"
+            },
+            {
+              "line": 56,
+              "snippet": "gates['borea_404'] = _post('/affinity/gift-spend', {'gift_id':'x','hero_id':'borea','quantity':1,'idempotency_key':'v22pre01a','user_id':'stage4_qa_001'}) == 40"
             }
           ]
         },
         {
-          "file": "backend/scripts/validate_affinity_phase2_migration_plan_draft.py",
+          "file": "backend/scripts/backup_axis_patch_sources_rm134b.py",
           "keyword": "affinity",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 3,
-              "snippet": "AF2-D \u2014 Validator for affinity_phase2_migration_plan_draft_v1.json."
-            },
-            {
-              "line": 26,
-              "snippet": "PLAN = ROOT / 'data' / 'design' / 'affinity' / 'affinity_phase2_migration_plan_draft_v1.json'"
-            },
-            {
-              "line": 27,
-              "snippet": "SCHEMA = ROOT / 'data' / 'design' / 'affinity' / 'affinity_gift_inventory_schema_draft_v1.json'"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/apply_affinity_inventory_wiring_stage1_retry.py",
-          "keyword": "user_affinity_state",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 31,
-              "snippet": "schema_ready = 'user_gift_inventory' in cols and 'user_affinity_state' in cols"
+              "line": 29,
+              "snippet": "ROOT / 'data' / 'design' / 'affinity' / 'affinity_gift_catalog_faction_element_draft_v1.json',"
             }
           ]
         }
@@ -1240,59 +1252,35 @@
           ]
         },
         {
-          "file": "backend/scripts/validate_affinity_phase2_migration_plan_draft.py",
-          "keyword": "gift_transaction_ledger",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 68,
-              "snippet": "for required in ['user_gift_inventory', 'gift_transaction_ledger',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/apply_affinity_inventory_wiring_stage1_retry.py",
-          "keyword": "gift_transaction_ledger",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 37,
-              "snippet": "inv_mut_rows = db['gift_transaction_ledger'].count_documents({'inventory_mutated':True})"
-            },
-            {
-              "line": 38,
-              "snippet": "aff_mut_rows = db['gift_transaction_ledger'].count_documents({'affinity_points_mutated':True})"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/apply_affinity_gift_remaining_signoffs_v4.py",
-          "keyword": "gift_transaction_ledger",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 46,
-              "snippet": "rows = MongoClient('mongodb://localhost:27017', serverSelectionTimeoutMS=3000)['divine_waifus']['gift_transaction_ledger'].count_documents({})"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/run_affinity_inventory_live_monitoring_stage1.py",
+          "file": "backend/scripts/validate_af2n_v22_preflight.py",
           "keyword": "gift_transaction_ledger",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 65,
-              "snippet": "coll = MongoClient('mongodb://localhost:27017', serverSelectionTimeoutMS=3000)['divine_waifus']['gift_transaction_ledger']"
+              "line": 72,
+              "snippet": "gates['no_borea_hero_rows'] = db['gift_transaction_ledger'].count_documents({'hero_id': {'$in': ['borea','greek_borea','primordial_gaia']}}) == 0"
+            },
+            {
+              "line": 74,
+              "snippet": "agg = list(db['gift_transaction_ledger'].aggregate(["
             }
           ]
         },
         {
-          "file": "backend/scripts/validate_af2n_v17_preflight.py",
+          "file": "backend/scripts/validate_af2j_af2kpre_axisf_opsb_rollupb_combo.py",
+          "keyword": "gift_transaction_ledger",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 131,
+              "snippet": "k.get('future_collection_name') == 'gift_transaction_ledger', '')"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_af2n_v18_preflight.py",
           "keyword": "gift_transaction_ledger",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": true,
@@ -1300,6 +1288,30 @@
             {
               "line": 61,
               "snippet": "ugi = db['user_gift_inventory']; uas = db['user_affinity_state']; coll = db['gift_transaction_ledger']"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/run_affinity_gift_inventory_shadow_probe.py",
+          "keyword": "gift_transaction_ledger",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 26,
+              "snippet": "coll = MongoClient('mongodb://localhost:27017', serverSelectionTimeoutMS=3000)['divine_waifus']['gift_transaction_ledger']"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_cs2c_af2c_stackb_axisb_combo.py",
+          "keyword": "gift_transaction_ledger",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 82,
+              "snippet": "for required in ['user_gift_inventory_future', 'gift_transaction_ledger_future',"
             }
           ]
         }
@@ -1344,42 +1356,14 @@
           ]
         },
         {
-          "file": "backend/routes/achievements.py",
-          "keyword": "title_",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 258,
-              "snippet": "return {\"success\": True, \"achievement\": ach[\"name\"], \"tier\": req.tier_index + 1, \"reward\": reward, \"title_earned\": tier.get(\"title\")}"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/sanctuary.py",
-          "keyword": "title_",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 124,
-              "snippet": "\"unlock\": \"title_legame_eterno\","
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/game_data.py",
+          "file": "backend/routes/artifacts.py",
           "keyword": "cosmetic",
           "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
+          "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 3,
-              "snippet": "All static game data: equipment, story chapters, events, cosmetics, etc."
-            },
-            {
-              "line": 128,
-              "snippet": "# ===================== AURAS & COSMETICS ====================="
+              "line": 434,
+              "snippet": "_ALLOWED_GAMEPLAY_STATUS = frozenset({\"cosmetic_prestige_only\", \"inactive\"})"
             }
           ]
         },
@@ -1402,6 +1386,46 @@
               "snippet": "\"frame\": cosmetics.get(\"active_frame\", \"bronze\") if cosmetics else \"bronze\","
             }
           ]
+        },
+        {
+          "file": "backend/routes/rankings.py",
+          "keyword": "cosmetic",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 19,
+              "snippet": "cosmetics = await db.user_cosmetics.find_one({\"user_id\": uid})"
+            },
+            {
+              "line": 37,
+              "snippet": "\"frame\": cosmetics.get(\"active_frame\", \"bronze\") if cosmetics else \"bronze\","
+            },
+            {
+              "line": 38,
+              "snippet": "\"aura\": cosmetics.get(\"active_aura\") if cosmetics else None,"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/cosmetics.py",
+          "keyword": "cosmetic",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 2,
+              "snippet": "Divine Waifus - Cosmetics & Territory Conquest Routes"
+            },
+            {
+              "line": 11,
+              "snippet": "def register_cosmetics_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):"
+            },
+            {
+              "line": 13,
+              "snippet": "@router.get(\"/cosmetics\")"
+            }
+          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -1411,6 +1435,30 @@
       "expected_scope": "server_bound",
       "files_with_hits": 8,
       "hits_sample": [
+        {
+          "file": "backend/scripts/simulate_slc_g_default_s1_backfill_dryrun.py",
+          "keyword": "event_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 24,
+              "snippet": "'server_cosmetics','equipped_cosmetics','event_progress',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/simulate_slc_d_merge_tooling_offline_v1.py",
+          "keyword": "event_state",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 27,
+              "snippet": "if name == 'blocked_protected_event_state':"
+            }
+          ]
+        },
         {
           "file": "backend/scripts/validate_server_merge_dryrun_scenarios_v1.py",
           "keyword": "event_state",
@@ -1424,6 +1472,18 @@
             {
               "line": 25,
               "snippet": "blocked = next((s for s in scs if s.get('name') == 'blocked_protected_event_state'), None)"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
+          "keyword": "event_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 29,
+              "snippet": "'event_progress', 'guilds', 'arena_rankings',"
             }
           ]
         },
@@ -1448,42 +1508,6 @@
             {
               "line": 14,
               "snippet": "'event_progress',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
-          "keyword": "event_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 10,
-              "snippet": "'gift_transaction_ledger','user_gift_inventory','event_progress',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_d_merge_tooling_offline_v1.py",
-          "keyword": "event_state",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 27,
-              "snippet": "if name == 'blocked_protected_event_state':"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
-          "keyword": "event_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 29,
-              "snippet": "'event_progress', 'guilds', 'arena_rankings',"
             }
           ]
         }
@@ -1524,13 +1548,8 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 390,
+  "cross_server_leak_risk_candidates_count": 393,
   "cross_server_leak_risk_samples": [
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/server.py",
-      "keyword": "user"
-    },
     {
       "category": "accounts_users_auth",
       "file": "backend/battle_engine.py",
@@ -1538,42 +1557,12 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/achievements.py",
+      "file": "backend/server.py",
       "keyword": "user"
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/heroes.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/sanctuary.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/gvg.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/unique_items.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/combat.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/housing_preview.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/affinity_gift_spend.py",
+      "file": "backend/routes/artifacts.py",
       "keyword": "user"
     },
     {
@@ -1588,27 +1577,27 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/push_notifications.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/synergies.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
       "file": "backend/routes/equipment.py",
       "keyword": "user"
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/artifacts.py",
+      "file": "backend/routes/rankings.py",
       "keyword": "user"
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/rankings.py",
+      "file": "backend/routes/heroes.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/gvg.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/level_sharing.py",
       "keyword": "user"
     },
     {
@@ -1623,7 +1612,42 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/level_sharing.py",
+      "file": "backend/routes/synergies.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/affinity_gift_spend.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/combat.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/unique_items.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/player_faction_v2.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/sanctuary.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/achievements.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/push_notifications.py",
       "keyword": "user"
     }
   ],

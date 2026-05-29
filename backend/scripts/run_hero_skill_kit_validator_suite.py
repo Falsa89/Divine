@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 # PUBLIC_SYNC_TAG: suite_runner_live_signoff_v3_force_resnapshot_2026_05_27
 # PUBLIC_SYNC_TAG_RESYNC_v4: suite_runner_live_signoff_v4_force_resnapshot_after_stale_push_175
-# Stage 6 GATED-IMPORT and Stage 7 LIVE-ACTIVATION-SIGNOFF OPTIONAL validators
-# are both registered in the OPTIONAL block below. Search for the inline
-# sentinels STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL and
-# STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL to locate them.
-# This file MUST be synced together with both:
+# PUBLIC_SYNC_TAG_RESYNC_v5: suite_runner_stage_8_canary_apply_v5_2026_05_27
+# Stage 6 GATED-IMPORT, Stage 7 LIVE-ACTIVATION-SIGNOFF, Stage 7B SUITE-RUNNER-SYNC-FIX
+# and Stage 8 CANARY-LIVE-APPLY OPTIONAL validators are all registered in the OPTIONAL
+# block below. Search for the inline sentinels:
+#   STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL
+#   STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL
+#   STAGE_7B_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_REGISTRATION_SENTINEL
+#   STAGE_8_CANARY_LIVE_APPLY_REGISTRATION_SENTINEL
+# This file MUST be synced together with:
 #   backend/scripts/validate_project_artifact_inventory_gated_import_v1.py
 #   backend/scripts/validate_project_artifact_inventory_live_activation_signoff_v1.py
+#   backend/scripts/validate_project_artifact_live_signoff_suite_runner_sync_fix_v1.py
+#   backend/scripts/validate_project_artifact_inventory_live_apply_v1.py
+# Stage 8 dedicated proof marker (tripled-sentinel strategy, separate directory):
+#   data/design/artifacts/live_apply/artifact_live_apply_suite_registration_proof_marker_v1.json
 """
 RM1.31-B — Hero Skill Kit Validator Suite Runner
 ─────────────────────────────────────────────────────────────────────────
@@ -1117,6 +1125,10 @@ OPTIONAL = [
     ('PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF', 'validate_project_artifact_inventory_live_activation_signoff_v1.py'),
     # STAGE_7B_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_REGISTRATION_SENTINEL (sync fix 175):
     ('PROJECT-ARTIFACT-LIVE-SIGNOFF-SUITE-RUNNER-SYNC-FIX', 'validate_project_artifact_live_signoff_suite_runner_sync_fix_v1.py'),
+    # STAGE_8_CANARY_LIVE_APPLY_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline Stage 8 — registrazione canary live apply autorizzata SOLO per sfqa@test.com e test@test.com.
+    # Proof marker dedicato (tripled-sentinel): data/design/artifacts/live_apply/artifact_live_apply_suite_registration_proof_marker_v1.json
+    ('PROJECT-ARTIFACT-INVENTORY-LIVE-APPLY', 'validate_project_artifact_inventory_live_apply_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
