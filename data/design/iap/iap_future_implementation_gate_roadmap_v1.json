@@ -1,0 +1,99 @@
+{
+  "task_id": "PROJECT_IAP_DESIGN",
+  "track": "TRACK_F_FUTURE_IMPLEMENTATION_GATE_AND_ROADMAP",
+  "verdict": "TRACK_F_IAP_FUTURE_IMPLEMENTATION_GATE_ROADMAP_READY",
+  "design_only": true,
+  "future_stages": [
+    {
+      "stage_index": 1,
+      "stage_id": "IAP_DESIGN_SIGNOFF",
+      "description": "This pack. Canonical IAP design.",
+      "required_inputs": ["all Track A-G outputs"],
+      "required_signoff_markers": ["PROJECT_IAP_DESIGN_APPROVAL=true"],
+      "blockers_before_advance": ["Public Repo Sync Verification of design pack"],
+      "rollback": "document is text-only; rollback = revert commit"
+    },
+    {
+      "stage_index": 2,
+      "stage_id": "PRODUCT_ID_MOCK_CATALOG",
+      "description": "Define real product IDs to register on App Store Connect / Play Console as mock catalog. No live charge.",
+      "required_inputs": ["Track B taxonomy"],
+      "required_signoff_markers": ["PROJECT_IAP_PRODUCT_ID_CATALOG_APPROVAL"],
+      "blockers_before_advance": ["App Store Connect bundle id provisioning", "Google Play Console internal app track"],
+      "rollback": "deactivate App Store Connect products, no DB changes"
+    },
+    {
+      "stage_index": 3,
+      "stage_id": "BACKEND_PURCHASE_LEDGER_SCHEMA_DRY_RUN",
+      "description": "Schema dry-run for purchase_ledger + wallet_ledger collections. Indexes, idempotency. Mongo only, no live writes.",
+      "required_inputs": ["Track C currency contract", "Track D receipt architecture"],
+      "required_signoff_markers": ["PROJECT_IAP_LEDGER_SCHEMA_DRY_RUN_APPROVAL"],
+      "blockers_before_advance": ["unique index plan vetted", "idempotency plan vetted"],
+      "rollback": "drop indexes (no data ever written)"
+    },
+    {
+      "stage_index": 4,
+      "stage_id": "RECEIPT_VERIFICATION_ENDPOINT_DESIGN_IMPLEMENTATION",
+      "description": "Implement POST /api/iap/verify_apple and POST /api/iap/verify_google in DEV-only mode with mocked validation responses behind feature flag.",
+      "required_inputs": ["Stage 2 catalog", "Stage 3 schema"],
+      "required_signoff_markers": ["PROJECT_IAP_RECEIPT_VERIFY_DEV_ONLY_APPROVAL"],
+      "blockers_before_advance": ["feature flag IAP_VERIFY_ENABLED=false in production env"],
+      "rollback": "unmount route, no live impact"
+    },
+    {
+      "stage_index": 5,
+      "stage_id": "SANDBOX_STOREKIT_PLAY_BILLING_INTEGRATION",
+      "description": "Integrate StoreKit + Google Play Billing client SDKs against sandbox/license-tester accounts only.",
+      "required_inputs": ["Stage 4 endpoint live in DEV"],
+      "required_signoff_markers": ["PROJECT_IAP_SANDBOX_INTEGRATION_APPROVAL"],
+      "blockers_before_advance": ["sandbox accounts provisioned", "non-production builds only"],
+      "rollback": "unship SDK from build, revert manifest"
+    },
+    {
+      "stage_index": 6,
+      "stage_id": "INTERNAL_PURCHASE_FULFILLMENT_CANARY",
+      "description": "Limit live fulfillment to canary users only. Same pattern as Artifact Stage 8.",
+      "required_inputs": ["Stage 5 sandbox green"],
+      "required_signoff_markers": ["PROJECT_IAP_FULFILLMENT_CANARY_AUTHORIZED_APPROVAL=true"],
+      "canary_users_expected": ["sfqa@test.com", "test@test.com"],
+      "blockers_before_advance": ["explicit per-account allowlist", "feature flag IAP_FULFILLMENT_CANARY_ONLY=true"],
+      "rollback": "disable allowlist, revoke entitlements via refund flow"
+    },
+    {
+      "stage_index": 7,
+      "stage_id": "REFUND_REVOKE_TEST",
+      "description": "Exercise Apple/Google refund webhooks against canary accounts.",
+      "required_inputs": ["Stage 6 canary writes present"],
+      "required_signoff_markers": ["PROJECT_IAP_REFUND_TEST_APPROVAL"],
+      "blockers_before_advance": ["refund webhook stub validated"],
+      "rollback": "document and re-run"
+    },
+    {
+      "stage_index": 8,
+      "stage_id": "PUBLIC_SHOP_IAP_UI",
+      "description": "Unlock shop.tsx + item-shop.tsx live purchase buttons. Battle Pass / VIP remain locked in their own packs.",
+      "required_inputs": ["Stages 1-7 complete + public repo verified"],
+      "required_signoff_markers": ["PROJECT_SHOP_IAP_UI_LIVE_ROLLOUT_APPROVAL"],
+      "blockers_before_advance": ["server-side fulfillment idempotency green", "refund/revoke green", "localization signoff"],
+      "rollback": "flip SHOP_LOCKED_V2 back to true, restore lock banner"
+    },
+    {
+      "stage_index": 9,
+      "stage_id": "PRICING_LOCALIZATION_SIGNOFF",
+      "description": "Fill all price placeholders. Localized currency display across supported regions.",
+      "required_inputs": ["App Store Connect / Play Console price tiers"],
+      "required_signoff_markers": ["PROJECT_IAP_PRICING_LOCALIZATION_APPROVAL"],
+      "blockers_before_advance": ["tax/legal review"],
+      "rollback": "revert pricing tier mapping"
+    },
+    {
+      "stage_index": 10,
+      "stage_id": "RELEASE_GATE",
+      "description": "Final release: enable IAP in production. App Store and Play submission.",
+      "required_inputs": ["Stages 1-9 verified"],
+      "required_signoff_markers": ["PROJECT_IAP_RELEASE_GATE_APPROVAL"],
+      "blockers_before_advance": ["App Store review", "Play Store review"],
+      "rollback": "emergency switch IAP_GLOBAL_DISABLED=true"
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "task_id": "PROJECT_IAP_DESIGN",
+  "track": "TRACK_B_IAP_TAXONOMY_AND_PRODUCT_FAMILIES",
+  "verdict": "TRACK_B_IAP_TAXONOMY_PRODUCT_FAMILIES_READY",
+  "design_only": true,
+  "product_id_naming_convention": {
+    "format": "dw_<family>_<variant>_<size>_v1",
+    "prefix": "dw_",
+    "reserved_prefix_for_real_store_ids": "dw_real_",
+    "note": "Real store product IDs (App Store / Play) will be assigned at Track F stage 2 (Product ID Mock Catalog). Until then, IDs are design placeholders only.",
+    "examples_design_only": [
+      "dw_crystal_pack_starter_v1",
+      "dw_crystal_pack_small_v1",
+      "dw_crystal_pack_medium_v1",
+      "dw_crystal_pack_large_v1",
+      "dw_crystal_pack_mega_v1",
+      "dw_summon_pack_standard_10x_v1",
+      "dw_summon_pack_elemental_10x_v1",
+      "dw_summon_pack_selective_10x_v1",
+      "dw_launch_support_pack_devoted_v1",
+      "dw_launch_support_pack_eternal_v1",
+      "dw_monthly_pass_devotion_v1",
+      "dw_cosmetic_skin_<hero_id>_<skin_id>_v1",
+      "dw_cosmetic_title_<title_id>_v1"
+    ]
+  },
+  "product_families": [
+    {
+      "family": "divine_crystal_pack",
+      "platform_type": "consumable",
+      "description": "Direct consumable purchase of paid Divine Crystals. Premium currency entry point.",
+      "granted_currency": "divine_crystals_paid",
+      "sizes": ["starter", "small", "medium", "large", "mega"],
+      "first_time_bonus_allowed": true,
+      "reset_policy": "first-time bonus once per Apple/Google account",
+      "max_per_day": null,
+      "out_of_scope_for_artifacts": true,
+      "can_drive_pity": false
+    },
+    {
+      "family": "summon_pack",
+      "platform_type": "consumable",
+      "description": "Bundle that grants Sigilli to use on Standard/Elemental/Selective banner. NEVER grants Sigilli for Premium/Targeted (locked) or Artifact/Constellation (hidden).",
+      "granted_currency": "sigilli_<banner>",
+      "banner_scope_allowed": ["standard", "elemental", "selective"],
+      "banner_scope_forbidden": ["premium", "targeted", "artifact", "constellation"],
+      "can_drive_pity": false,
+      "odds_disclosure_required": true
+    },
+    {
+      "family": "launch_support_pack",
+      "platform_type": "consumable",
+      "description": "Limited time launch support bundle. Mixed contents: paid Divine Crystals + Sigilli (standard/elemental/selective only) + cosmetic guarantee.",
+      "limit_per_account_lifetime": 1,
+      "forbids_artifact_grant": true,
+      "forbids_premium_targeted_sigilli": true,
+      "forbids_combat_power_grant": true
+    },
+    {
+      "family": "monthly_pass",
+      "platform_type": "non_renewing_subscription_initially",
+      "future_platform_type": "auto_renewable_subscription",
+      "description": "Monthly Devotion Pass. Daily login bonus stream of paid Divine Crystals + cosmetic flair. NO combat stat bonus. NO artifact grant. NO pity bypass.",
+      "first_time_bonus_allowed": true,
+      "can_drive_pity": false,
+      "renewable": false,
+      "requires_clear_terms": true
+    },
+    {
+      "family": "cosmetic_pack",
+      "platform_type": "non_consumable",
+      "description": "One-shot cosmetic skin/title/banner-frame purchase. NEVER grants combat power, stats, hero levels, artifact, or constellation copies.",
+      "refund_policy": "per-platform refund honored; entitlement revoked on refund",
+      "forbids_combat_power_grant": true
+    },
+    {
+      "family": "battle_pass",
+      "platform_type": "non_renewing_subscription_or_consumable_per_season",
+      "design_only": true,
+      "lock_status_until_separate_pack": "BP_LOCKED_V2",
+      "future_pack": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_PACK",
+      "forbids_artifact_grant": true,
+      "forbids_premium_targeted_sigilli": true
+    },
+    {
+      "family": "vip_tier",
+      "platform_type": "non_consumable_progression_marker",
+      "design_only": true,
+      "lock_status_until_separate_pack": "VIP_LOCKED_V2",
+      "future_pack": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION_PACK",
+      "vip_can_grant_combat_power": false,
+      "vip_can_grant_artifact": false,
+      "vip_only_grants": ["cosmetic flair", "convenience", "daily Divine Crystal stipend", "shop discount on Divine Crystal packs (max 20%)"]
+    },
+    {
+      "family": "offer_code_promo",
+      "platform_type": "server_redeemed_non_iap",
+      "description": "Promo codes redeemable server-side. Never used for live purchases. Limit per account. Audit logged.",
+      "can_grant_artifact": false,
+      "can_grant_premium_targeted_sigilli": false
+    }
+  ],
+  "forbidden_product_families": [
+    {"family": "artifact_direct_purchase", "reason": "Artifact inventory is internal-only canary; IAP must NEVER grant artifact ownership."},
+    {"family": "constellation_direct_purchase", "reason": "Constellation grants are hidden and locked at design level."},
+    {"family": "premium_sigilli_direct_purchase", "reason": "Premium banner is locked until separate economy signoff."},
+    {"family": "targeted_sigilli_direct_purchase", "reason": "Targeted banner is locked until separate economy signoff."},
+    {"family": "stat_boost_consumable", "reason": "No paid combat power."},
+    {"family": "hero_direct_grant", "reason": "Hero acquisition must remain gacha-driven; never direct paid grant."},
+    {"family": "pity_skip", "reason": "Pity is design-protected; no purchase can shortcut pity."},
+    {"family": "surprise_random_charge", "reason": "Predatory; explicitly forbidden by anti-P2W boundary."}
+  ],
+  "price_placeholders_only": {
+    "note": "No real currency values in this pack. Pricing/localization signoff happens at Track F stage 9.",
+    "placeholders": [
+      {"id": "dw_crystal_pack_starter_v1", "placeholder_price": "<<TIER_LOW>>"},
+      {"id": "dw_crystal_pack_small_v1", "placeholder_price": "<<TIER_S>>"},
+      {"id": "dw_crystal_pack_medium_v1", "placeholder_price": "<<TIER_M>>"},
+      {"id": "dw_crystal_pack_large_v1", "placeholder_price": "<<TIER_L>>"},
+      {"id": "dw_crystal_pack_mega_v1", "placeholder_price": "<<TIER_XL>>"},
+      {"id": "dw_monthly_pass_devotion_v1", "placeholder_price": "<<TIER_SUB_M>>"}
+    ]
+  }
+}

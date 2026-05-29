@@ -1,0 +1,174 @@
+{
+  "task_id": "PROJECT_IAP_DESIGN",
+  "track": "TRACK_A_MONETIZATION_SURFACE_AUDIT",
+  "verdict": "TRACK_A_IAP_MONETIZATION_SURFACE_AUDIT_READY",
+  "approval_markers": {
+    "PROJECT_IAP_DESIGN_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "IAP_DESIGN_ONLY"
+  },
+  "audited_at_utc": "2026-05-29",
+  "frontend_monetization_surfaces": [
+    {
+      "route": "frontend/app/shop.tsx",
+      "md5": "1a39f50e8da9c09a1f0b017b25b73390",
+      "line_count": 130,
+      "classification": "locked",
+      "lock_flag": "SHOP_LOCKED_V2 = true",
+      "lock_banner_text": "Negozio in revisione \u2014 sistema acquisti reali (IAP) in preparazione.",
+      "buys_disabled_until_iap": true,
+      "daily_claims_disabled": true,
+      "has_real_payment_sdk": false,
+      "has_purchase_button_live": false
+    },
+    {
+      "route": "frontend/app/item-shop.tsx",
+      "md5": "d09d616db14f4c6f98606e9ccd625379",
+      "line_count": 175,
+      "classification": "locked",
+      "lock_flag": "ITEM_SHOP_LOCKED_V2 = true",
+      "has_real_payment_sdk": false,
+      "has_purchase_button_live": false
+    },
+    {
+      "route": "frontend/app/treasury.tsx",
+      "md5": "7dae97ac1530150e8270dfe6166bda24",
+      "line_count": 622,
+      "classification": "preview-only",
+      "description": "Read-only consumer of frontend/data/currencies.ts. Shows wallet snapshot. No purchase.",
+      "has_real_payment_sdk": false
+    },
+    {
+      "route": "frontend/app/economy.tsx",
+      "md5": "495fe455acb30ea16914e04afb2238eb",
+      "line_count": 43,
+      "classification": "redirect-only",
+      "description": "SF_MERGE Track D: redirects to /soul-forge. Logic absorbed into Anime Hub.",
+      "has_real_payment_sdk": false
+    },
+    {
+      "route": "frontend/app/exclusive.tsx",
+      "md5": "c691181a7ec0dd28ed308a8130914b3c",
+      "line_count": 126,
+      "classification": "locked",
+      "description": "Legacy lock notice; Divine Weapons are not craftable via generic crafting UI.",
+      "has_real_payment_sdk": false
+    },
+    {
+      "route": "frontend/app/(tabs)/gacha.tsx",
+      "md5": "f68b9239cec04ea54879f0be381e772a",
+      "line_count": 537,
+      "classification": "live (gacha functional)",
+      "banner_visibility": {
+        "standard": "visible",
+        "elemental": "visible",
+        "selective": "visible",
+        "premium": "locked",
+        "targeted": "locked",
+        "artifact": "hidden",
+        "constellation": "hidden"
+      },
+      "has_real_payment_sdk": false,
+      "has_iap_purchase_button": false,
+      "divine_crystal_to_sigilli_conversion": "approved with explicit confirmation; design-only execution flow"
+    },
+    {
+      "route": "frontend/app/battlepass.tsx",
+      "md5": "54568b8cb75a07033f78ef6593aba839",
+      "line_count": 164,
+      "classification": "locked",
+      "lock_flags": ["BP_LOCKED_V2 = true", "BP_PREMIUM_BUY_LOCKED_V2 = true"],
+      "lock_banner_text": "Battle Pass in revisione \u2014 nuovo contratto account-wide + IAP in preparazione.",
+      "has_real_payment_sdk": false,
+      "premium_buy_disabled": true,
+      "free_claim_disabled": true
+    },
+    {
+      "route": "frontend/app/vip.tsx",
+      "md5": "45fcc9890b6b128c37088bc33aa54caf",
+      "line_count": 123,
+      "classification": "locked",
+      "lock_flag": "VIP_LOCKED_V2 = true",
+      "lock_banner_text": "VIP in revisione \u2014 sistema spesa reale (IAP) non ancora implementato.",
+      "vip_preview_only": true,
+      "has_real_payment_sdk": false,
+      "daily_claim_disabled": true
+    },
+    {
+      "route": "frontend/app/soul-forge.tsx",
+      "md5": "b7659de11ac36f341e7a2f54fd29e6ed",
+      "line_count": 1331,
+      "classification": "live (functional, do_not_touch)",
+      "description": "Anime Hub. Inline confirmation. No Modal. No KeyboardAvoidingView. Crash-proof.",
+      "has_real_payment_sdk": false,
+      "out_of_scope_for_iap_design": true
+    },
+    {
+      "route": "frontend/app/cosmetics.tsx",
+      "md5": "baf9559fea60af52e4be87a46ef2bb9c",
+      "line_count": 107,
+      "classification": "preview-only",
+      "has_real_payment_sdk": false
+    }
+  ],
+  "backend_routes_scanned": [
+    "backend/routes/economy.py",
+    "backend/routes/items.py",
+    "backend/routes/artifacts.py",
+    "backend/routes/forge.py",
+    "backend/routes/cosmetics.py",
+    "backend/routes/heroes.py",
+    "backend/routes/raids.py",
+    "backend/routes/gvg.py",
+    "backend/routes/social.py",
+    "backend/routes/level_sharing.py"
+  ],
+  "backend_iap_or_payment_routes_present": false,
+  "backend_receipt_endpoint_present": false,
+  "backend_payment_sdk_present": false,
+  "backend_purchase_fulfillment_endpoint_present": false,
+  "third_party_billing_sdk_in_dependencies": false,
+  "env_keys_present": ["DB_NAME", "EMERGENT_LLM_KEY", "JWT_SECRET", "MONGO_URL"],
+  "env_keys_iap_or_secret_payment_related": false,
+  "surfaces_classification_summary": {
+    "locked": ["shop.tsx", "item-shop.tsx", "exclusive.tsx", "battlepass.tsx", "vip.tsx"],
+    "preview-only": ["treasury.tsx", "cosmetics.tsx"],
+    "redirect-only": ["economy.tsx"],
+    "live_functional": ["(tabs)/gacha.tsx", "soul-forge.tsx"],
+    "design-only": [],
+    "unsafe_unknown": []
+  },
+  "locks_verified": {
+    "premium_banner_locked": true,
+    "targeted_banner_locked": true,
+    "artifact_banner_hidden": true,
+    "constellation_banner_hidden": true,
+    "shop_locked": true,
+    "item_shop_locked": true,
+    "battlepass_locked": true,
+    "vip_locked": true,
+    "legacy_post_artifact_constellation_http_423": true
+  },
+  "invariants_md5": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293"
+  },
+  "scope_violations_found": [],
+  "forbidden_during_design": [
+    "StoreKit runtime",
+    "Google Play Billing runtime",
+    "RevenueCat SDK",
+    "real product IDs in code",
+    "live purchase buttons",
+    "receipt verification endpoint live",
+    "purchase fulfillment live",
+    "DB writes",
+    "gacha rate changes",
+    "premium/targeted unlock",
+    "artifact/constellation unhide",
+    "Soul Forge changes",
+    "battle_engine changes",
+    "Character Bible mutations",
+    ".env secrets injection"
+  ]
+}

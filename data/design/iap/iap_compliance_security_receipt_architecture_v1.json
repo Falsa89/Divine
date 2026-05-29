@@ -1,0 +1,114 @@
+{
+  "task_id": "PROJECT_IAP_DESIGN",
+  "track": "TRACK_D_COMPLIANCE_SECURITY_AND_RECEIPT_ARCHITECTURE",
+  "verdict": "TRACK_D_IAP_COMPLIANCE_SECURITY_RECEIPT_ARCHITECTURE_READY",
+  "design_only": true,
+  "no_runtime_sdk_integrated": true,
+  "no_live_receipt_endpoint": true,
+  "platform_compliance_principles": {
+    "apple_iap_types_supported_future": ["consumable", "non_consumable", "auto_renewable_subscription", "non_renewing_subscription"],
+    "android_billing_requirement": "Google Play Billing required for digital products on Google Play",
+    "apple_storekit": "App Store Connect product catalog + StoreKit 2 client + App Store Server API for verification",
+    "google_play_billing": "Google Play Console product catalog + Google Play Billing Library client + Google Play Developer API for verification"
+  },
+  "ios_high_level_flow": [
+    "client request product catalog from server (design-only) and from StoreKit",
+    "user selects product, StoreKit initiates payment",
+    "on successful purchase, client obtains StoreKit JWS signed transaction",
+    "client POSTs JWS transaction to server (future endpoint: POST /api/iap/verify_apple)",
+    "server validates JWS via App Store Server API",
+    "server applies idempotency check on transaction id",
+    "server appends purchase ledger + wallet ledger entries",
+    "server returns entitlement delta",
+    "client refreshes wallet cache"
+  ],
+  "android_high_level_flow": [
+    "client request product catalog from server (design-only) and from Google Play Billing",
+    "user selects product, BillingClient.launchBillingFlow",
+    "on success, client obtains purchase token",
+    "client POSTs purchase token to server (future endpoint: POST /api/iap/verify_google)",
+    "server validates purchase token via Google Play Developer API",
+    "server applies idempotency check on purchase token",
+    "server appends purchase ledger + wallet ledger entries",
+    "server acknowledges/consumes via Google Play Developer API",
+    "client refreshes wallet cache"
+  ],
+  "server_receipt_verification_design": {
+    "endpoint_future_paths": [
+      "POST /api/iap/verify_apple",
+      "POST /api/iap/verify_google",
+      "POST /api/iap/refund_webhook_apple",
+      "POST /api/iap/refund_webhook_google"
+    ],
+    "design_only_no_code_in_this_pack": true,
+    "required_request_fields": ["user_id", "server_profile_id", "platform", "signed_transaction_or_token", "client_product_id", "idempotency_key"],
+    "required_server_steps": [
+      "authenticate user via JWT",
+      "validate signature/JWS or call Google Play Developer API",
+      "check transaction not already consumed",
+      "map verified product id to internal product family",
+      "compute entitlement delta",
+      "append purchase_ledger + wallet_ledger atomically",
+      "return delta to client"
+    ],
+    "required_error_modes": [
+      "INVALID_SIGNATURE -> reject 401",
+      "DUPLICATE_TRANSACTION -> idempotent return 200 with same delta",
+      "UNKNOWN_PRODUCT_ID -> reject 400",
+      "USER_MISMATCH -> reject 403",
+      "REVOKED_OR_REFUNDED -> reject 410",
+      "REPLAY_DETECTED -> reject 409"
+    ]
+  },
+  "purchase_ledger_design": {
+    "collection_name_future": "purchase_ledger",
+    "append_only": true,
+    "entry_fields": [
+      "purchase_id",
+      "user_id",
+      "server_profile_id",
+      "platform",
+      "platform_transaction_id",
+      "product_id_real",
+      "product_id_internal",
+      "verification_status",
+      "verification_signature_hash",
+      "timestamp_utc",
+      "price_local",
+      "price_local_currency",
+      "price_usd_estimate",
+      "entitlement_delta_summary",
+      "linked_wallet_ledger_ids",
+      "refund_status",
+      "refund_at_utc"
+    ]
+  },
+  "fraud_and_duplicate_prevention": {
+    "duplicate_transaction_check": "unique index on (platform, platform_transaction_id)",
+    "replay_attack_protection": "JWS signature + nonce + server-side timestamp window",
+    "cross_account_abuse": "verify Apple/Google account binding to internal user_id; reject mismatched account_id",
+    "rate_limiting": "per-user purchase verification rate cap (design: 60/min)",
+    "suspicious_burst_flag": "design: > N verified purchases / 24h triggers manual review"
+  },
+  "sandbox_and_testing_plan": {
+    "apple_sandbox_account_required": true,
+    "google_license_tester_required": true,
+    "internal_test_track": true,
+    "future_canary_users": ["sfqa@test.com", "test@test.com"],
+    "production_real_purchases_until_release_gate": false
+  },
+  "compliance_checklist": [
+    {"item": "Apple: use only StoreKit/IAP for digital content (no external payment links inside app)", "status": "design_principle"},
+    {"item": "Google Play: use Google Play Billing for digital content on Play distribution", "status": "design_principle"},
+    {"item": "Display real, complete pricing in local currency at point of purchase", "status": "design_principle"},
+    {"item": "Disclose gacha odds for any IAP that ultimately leads to randomized outcomes (loot box transparency)", "status": "design_principle"},
+    {"item": "Provide refund policy + restore purchases for non-consumables / subscriptions", "status": "design_principle"},
+    {"item": "Privacy/Terms required to be available pre-purchase", "status": "design_principle"},
+    {"item": "Children-targeted features and Kids category compliance (design: not children-targeted)", "status": "design_principle"},
+    {"item": "GDPR/CCPA wallet data export and deletion handle paid history retention obligations", "status": "design_principle"}
+  ],
+  "secrets_in_env_in_this_pack": 0,
+  "env_modified": false,
+  "runtime_sdk_changes": 0,
+  "db_writes_in_this_pack": 0
+}

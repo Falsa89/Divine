@@ -1,0 +1,141 @@
+{
+  "task_id": "PROJECT_IAP_DESIGN",
+  "track": "TRACK_C_CURRENCY_AND_WALLET_CONTRACT_DESIGN",
+  "verdict": "TRACK_C_IAP_CURRENCY_WALLET_CONTRACT_READY",
+  "design_only": true,
+  "db_writes_during_design": 0,
+  "currency_taxonomy": [
+    {
+      "key": "divine_crystals_free",
+      "label": "Cristalli Divini (gratuiti)",
+      "source": ["gameplay", "event", "login_streak", "non_paid promo"],
+      "paid": false,
+      "refundable": false
+    },
+    {
+      "key": "divine_crystals_paid",
+      "label": "Cristalli Divini (acquistati)",
+      "source": ["IAP consumable Divine Crystal packs", "Monthly Pass daily stipend (paid origin)", "Launch Support Pack"],
+      "paid": true,
+      "refundable": true,
+      "refund_action": "revoke matching amount + downstream conversion ledger entry"
+    },
+    {
+      "key": "sigilli_standard",
+      "label": "Sigilli Standard",
+      "source": ["gameplay", "divine_crystal_conversion in banner", "summon_pack_standard"],
+      "banner_target": "standard"
+    },
+    {
+      "key": "sigilli_elemental",
+      "label": "Sigilli Elementali",
+      "banner_target": "elemental"
+    },
+    {
+      "key": "sigilli_selective",
+      "label": "Sigilli Selettivi",
+      "banner_target": "selective"
+    },
+    {
+      "key": "sigilli_premium",
+      "label": "Sigilli Premium (locked)",
+      "banner_target": "premium",
+      "locked": true,
+      "lock_reason": "Premium banner locked until separate economy signoff."
+    },
+    {
+      "key": "sigilli_targeted",
+      "label": "Sigilli Mirati (locked)",
+      "banner_target": "targeted",
+      "locked": true
+    },
+    {
+      "key": "event_currency_<event_id>",
+      "label": "Valute evento (retention until rerun)",
+      "retention_policy": "retained until rerun, NOT auto-expired"
+    },
+    {
+      "key": "soul_essence",
+      "label": "Soul Essence",
+      "out_of_iap_scope": true,
+      "note": "Owned by Soul Forge. Do not touch."
+    }
+  ],
+  "paid_vs_free_distinction_policy": {
+    "separate_balances": true,
+    "spend_order_default": "FREE_FIRST_THEN_PAID",
+    "spend_order_override_allowed": false,
+    "reason": "FREE-first spending preserves refundability of paid balance and reduces refund-related downstream conversion complexity."
+  },
+  "divine_crystal_to_sigilli_conversion": {
+    "surface": "in_banner_modal_with_explicit_confirmation",
+    "surface_state": "approved (gacha rate sanity signoff)",
+    "ui_requirements": [
+      "single-step confirmation",
+      "shows source crystal amount",
+      "shows target sigilli amount",
+      "shows conversion rate clearly",
+      "shows resulting wallet snapshot before commit",
+      "shows whether paid crystals or free crystals are being used",
+      "cancel always available before commit"
+    ],
+    "forbidden_ui": [
+      "auto-conversion without click",
+      "hidden conversion ratio",
+      "undisclosed paid balance consumption",
+      "surprise charge"
+    ],
+    "banner_scope_allowed": ["standard", "elemental", "selective"],
+    "banner_scope_forbidden": ["premium", "targeted", "artifact", "constellation"]
+  },
+  "ledger_design": {
+    "collection_name_future": "wallet_ledger",
+    "design_only": true,
+    "entry_fields": [
+      "ledger_id",
+      "user_id",
+      "server_profile_id",
+      "timestamp_utc",
+      "currency_key",
+      "delta",
+      "balance_after",
+      "reason",
+      "source",
+      "product_id_design",
+      "transaction_id_design",
+      "idempotency_key",
+      "refund_link_ledger_id"
+    ],
+    "append_only": true,
+    "server_authoritative": true,
+    "client_balance_is_cache_only": true,
+    "reconciliation_job_design": "daily wallet reconciliation: sum(ledger) == wallet_snapshot"
+  },
+  "idempotency_policy": {
+    "key_format": "<user_id>:<product_id>:<purchase_token_or_transaction_id>",
+    "required_for": ["purchase fulfillment", "refund/revoke", "event currency grants", "divine_crystal_to_sigilli_conversion"],
+    "retry_safe": true
+  },
+  "refund_and_revoke_policy": {
+    "trigger_sources": ["Apple App Store Server Notification", "Google Play RTDN", "manual support refund"],
+    "action": "append revoke ledger entry; recompute paid balance; refuse to revoke past converted sigilli that are already spent on banner pulls; flag account for review if abuse detected.",
+    "forbids_partial_silent_revoke": true,
+    "forbids_revoking_gacha_results": true
+  },
+  "server_authority": {
+    "client_never_grants_currency": true,
+    "client_never_validates_receipt": true,
+    "server_validates_all_receipts": true,
+    "server_writes_all_ledger_entries": true
+  },
+  "iap_grants_in_this_pack": {
+    "hero_direct_grant": false,
+    "artifact_direct_grant": false,
+    "constellation_direct_grant": false,
+    "premium_targeted_sigilli": false,
+    "pity_skip": false,
+    "combat_stat_boost": false
+  },
+  "pricing_in_this_pack": false,
+  "placeholders_only": true
+}

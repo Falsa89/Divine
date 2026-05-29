@@ -1,0 +1,93 @@
+{
+  "task_id": "PROJECT_IAP_DESIGN",
+  "track": "TRACK_E_ANTI_P2W_AND_ECONOMY_BOUNDARY",
+  "verdict": "TRACK_E_IAP_ANTI_P2W_ECONOMY_BOUNDARY_READY",
+  "design_only": true,
+  "core_principles": [
+    "Desire over coercion",
+    "Devotion over FOMO",
+    "Immersion over interruption",
+    "Conquest over surprise charge",
+    "Premium collection identity over P2W shortcut"
+  ],
+  "paid_power_limits": {
+    "paid_combat_stat_boost": false,
+    "paid_artifact_grant": false,
+    "paid_constellation_grant": false,
+    "paid_hero_direct_grant": false,
+    "paid_pity_skip": false,
+    "paid_premium_or_targeted_sigilli": false,
+    "paid_battle_outcome_reroll": false,
+    "paid_xp_potion_max_levels_skip": false,
+    "paid_cooldown_skip_for_pvp": false
+  },
+  "premium_gacha_limits": {
+    "premium_banner_unlock_via_iap": false,
+    "targeted_banner_unlock_via_iap": false,
+    "artifact_banner_unhide_via_iap": false,
+    "constellation_banner_unhide_via_iap": false
+  },
+  "vip_limits": {
+    "vip_only_grants": ["cosmetic flair", "convenience UX", "daily Divine Crystal stipend", "shop discount on Divine Crystal packs (max 20%)", "badge/title display"],
+    "vip_forbids_combat_power_grant": true,
+    "vip_forbids_artifact_grant": true,
+    "vip_forbids_pity_change": true,
+    "vip_forbids_targeted_unlock": true
+  },
+  "battle_pass_limits": {
+    "bp_track_only_cosmetic_and_currency": true,
+    "bp_can_grant_paid_divine_crystals": true,
+    "bp_can_grant_standard_elemental_selective_sigilli": true,
+    "bp_forbids_artifact_grant": true,
+    "bp_forbids_premium_targeted_sigilli": true,
+    "bp_forbids_pity_skip": true,
+    "bp_forbids_paid_combat_stat": true
+  },
+  "cosmetics_limits": {
+    "cosmetic_skin_grants_combat_power": false,
+    "cosmetic_can_grant_stats": false,
+    "cosmetic_can_grant_hero_unlock": false,
+    "refund_revokes_entitlement": true
+  },
+  "artifact_iap_prohibition": {
+    "strict": true,
+    "reason": "Artifact inventory Stage 8 canary apply is internal-only; IAP must NEVER touch artifact ownership or grant artifact copies.",
+    "applies_to_all_product_families": true
+  },
+  "combat_bonus_sale_forbidden": true,
+  "locked_system_bypass_forbidden": true,
+  "hidden_odds_forbidden": true,
+  "forced_conversion_forbidden": true,
+  "surprise_charge_forbidden": true,
+  "first_time_purchase_bonus_policy": {
+    "allowed": true,
+    "scope_per_account": "per Apple ID / Google account, once per family of products",
+    "max_bonus_multiplier_on_starter_pack": 2.0,
+    "bonus_must_be_clearly_disclosed": true,
+    "bonus_can_be_resold_after_reset_window_days": 180,
+    "reset_must_be_user_visible": true
+  },
+  "offer_pack_reset_rules": {
+    "daily_offers": "reset at server UTC daily boundary; never auto-charge",
+    "weekly_offers": "reset at server UTC weekly boundary",
+    "event_offers": "reset at event end",
+    "limited_lifetime_offers": "never reset; explicit lifetime cap"
+  },
+  "player_communication_policy": {
+    "loot_box_odds_visible_in_banner": true,
+    "loot_box_odds_link_in_iap_purchase_screen": true,
+    "pricing_displayed_in_local_currency": true,
+    "terms_and_refund_link_in_iap_purchase_screen": true,
+    "no_dark_patterns": true,
+    "no_aggressive_modals_on_purchase_screen": true,
+    "no_pressure_countdown_below_60s": true
+  },
+  "economy_boundary_summary": {
+    "iap_can_accelerate": true,
+    "iap_can_bypass_progression": false,
+    "iap_can_break_balance": false,
+    "iap_can_change_pity": false,
+    "iap_can_unhide_locked_banners": false,
+    "iap_can_inject_artifact_state": false
+  }
+}
