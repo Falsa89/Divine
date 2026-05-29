@@ -1,0 +1,142 @@
+{
+  "task_id": "PROJECT_SHOP_IAP_INTEGRATION",
+  "track": "TRACK_D_WALLET_LEDGER_FULFILLMENT_CONTRACT",
+  "verdict": "TRACK_D_SHOP_IAP_WALLET_LEDGER_FULFILLMENT_CONTRACT_READY",
+  "design_only": true,
+  "db_writes_in_this_pack": 0,
+  "wallet_currency_taxonomy": {
+    "divine_crystals_paid": {
+      "label_it": "Cristalli Divini acquistati",
+      "scope": "account_wide",
+      "reason_for_account_wide": "IAP purchases follow Apple/Google account; cannot be partitioned per server profile without UX harm.",
+      "refundable": true,
+      "convertible_to_sigilli": true
+    },
+    "divine_crystals_free": {
+      "label_it": "Cristalli Divini gratuiti",
+      "scope": "server_bound",
+      "reason_for_server_bound": "Free earnings belong to a server profile lifecycle; merging across servers complicates merge/recovery flows.",
+      "refundable": false,
+      "convertible_to_sigilli": true
+    },
+    "sigilli_standard_elemental_selective": {
+      "scope": "server_bound",
+      "refundable": false
+    },
+    "event_currencies": {
+      "scope": "server_bound",
+      "retention": "retained_until_rerun",
+      "refundable": false
+    },
+    "gold": {
+      "scope": "server_bound",
+      "homepage_visible": true
+    },
+    "exp_account": {
+      "scope": "account_wide",
+      "homepage_visible": true
+    }
+  },
+  "spend_order_policy": {
+    "summon_consumes_sigilli_first_then_divine_crystals": true,
+    "divine_crystals_free_then_paid": true,
+    "order_override_allowed": false,
+    "reason": "FREE-first preserves refundability; sigilli-first preserves transparency of conversion confirmation."
+  },
+  "sigilli_conversion_design": {
+    "surface": "in_banner_modal_with_explicit_confirmation",
+    "required_ui": [
+      "single-step confirmation",
+      "shows divine crystals consumed (split free vs paid)",
+      "shows sigilli granted",
+      "shows conversion rate",
+      "cancel always available"
+    ],
+    "forbidden_ui": [
+      "auto-convert",
+      "hidden ratio",
+      "silent paid-balance consumption"
+    ]
+  },
+  "wallet_ledger_contract": {
+    "collection_name_future": "wallet_ledger",
+    "append_only": true,
+    "server_authoritative": true,
+    "required_fields": [
+      "ledger_id",
+      "user_id",
+      "server_profile_id_or_null_if_account_wide",
+      "currency_key",
+      "delta",
+      "balance_after",
+      "reason",
+      "source",
+      "timestamp_utc",
+      "idempotency_key",
+      "linked_purchase_id",
+      "linked_refund_ledger_id"
+    ],
+    "index_design": [
+      {"name": "ix_uniq_idempotency", "unique": true, "fields": ["idempotency_key"]},
+      {"name": "ix_user_time", "fields": ["user_id", "timestamp_utc"]}
+    ]
+  },
+  "purchase_ledger_contract": {
+    "collection_name_future": "purchase_ledger",
+    "append_only": true,
+    "server_authoritative": true,
+    "required_fields": [
+      "purchase_id",
+      "user_id",
+      "platform",
+      "platform_transaction_id",
+      "product_id_real",
+      "product_id_internal_mock",
+      "verification_status",
+      "timestamp_utc",
+      "price_local",
+      "price_local_currency",
+      "entitlement_delta_summary",
+      "linked_wallet_ledger_ids",
+      "refund_status",
+      "refund_at_utc"
+    ],
+    "index_design": [
+      {"name": "ix_uniq_tx", "unique": true, "fields": ["platform", "platform_transaction_id"]}
+    ]
+  },
+  "fulfillment_contract": {
+    "trigger": "server-side after verified receipt",
+    "steps": [
+      "verify receipt JWS (apple) or purchase token (google)",
+      "map verified product id to mock product id",
+      "compute entitlement delta",
+      "append purchase_ledger + wallet_ledger atomically",
+      "return delta to client",
+      "client refresh wallet cache"
+    ],
+    "forbidden_steps": [
+      "client-side currency grant",
+      "client-side receipt validation",
+      "double fulfillment without idempotency",
+      "granting artifact/constellation/premium/targeted via fulfillment"
+    ]
+  },
+  "refund_revoke_contract": {
+    "trigger_sources": ["Apple ASSN", "Google RTDN", "manual support"],
+    "action": "append revoke ledger entry; recompute paid balance; never revoke gacha results already executed; flag for manual review on abuse signal",
+    "forbids_silent_partial_revoke": true
+  },
+  "idempotency_design": {
+    "key_format": "<user_id>:<product_id_internal_mock>:<platform_transaction_id>",
+    "reuse_returns_same_delta": true
+  },
+  "iap_grants_in_this_pack": {
+    "hero_direct": false,
+    "artifact_direct": false,
+    "constellation_direct": false,
+    "sigilli_premium_or_targeted": false,
+    "combat_stat": false,
+    "pity_skip": false
+  }
+}

@@ -3,24 +3,29 @@
 # PUBLIC_SYNC_TAG_RESYNC_v4: suite_runner_live_signoff_v4_force_resnapshot_after_stale_push_175
 # PUBLIC_SYNC_TAG_RESYNC_v5: suite_runner_stage_8_canary_apply_v5_2026_05_27
 # PUBLIC_SYNC_TAG_RESYNC_v6: suite_runner_iap_design_v6_2026_05_29
+# PUBLIC_SYNC_TAG_RESYNC_v7: suite_runner_shop_iap_integration_v7_2026_05_29
 # Stage 6 GATED-IMPORT, Stage 7 LIVE-ACTIVATION-SIGNOFF, Stage 7B SUITE-RUNNER-SYNC-FIX,
-# Stage 8 CANARY-LIVE-APPLY and IAP-DESIGN OPTIONAL validators are all registered in
-# the OPTIONAL block below. Search for the inline sentinels:
+# Stage 8 CANARY-LIVE-APPLY, IAP-DESIGN and SHOP-IAP-INTEGRATION OPTIONAL validators
+# are all registered in the OPTIONAL block below. Search for the inline sentinels:
 #   STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL
 #   STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL
 #   STAGE_7B_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_REGISTRATION_SENTINEL
 #   STAGE_8_CANARY_LIVE_APPLY_REGISTRATION_SENTINEL
 #   IAP_DESIGN_REGISTRATION_SENTINEL
+#   SHOP_IAP_INTEGRATION_REGISTRATION_SENTINEL
 # This file MUST be synced together with:
 #   backend/scripts/validate_project_artifact_inventory_gated_import_v1.py
 #   backend/scripts/validate_project_artifact_inventory_live_activation_signoff_v1.py
 #   backend/scripts/validate_project_artifact_live_signoff_suite_runner_sync_fix_v1.py
 #   backend/scripts/validate_project_artifact_inventory_live_apply_v1.py
 #   backend/scripts/validate_project_iap_design_v1.py
+#   backend/scripts/validate_project_shop_iap_integration_v1.py
 # Stage 8 dedicated proof marker (tripled-sentinel strategy, separate directory):
 #   data/design/artifacts/live_apply/artifact_live_apply_suite_registration_proof_marker_v1.json
 # IAP design dedicated proof marker (tripled-sentinel strategy, separate directory):
 #   data/design/iap/iap_suite_registration_proof_marker_v1.json
+# Shop IAP integration dedicated proof marker (tripled-sentinel strategy, separate directory):
+#   data/design/shop_iap/shop_iap_suite_registration_proof_marker_v1.json
 """
 RM1.31-B — Hero Skill Kit Validator Suite Runner
 ─────────────────────────────────────────────────────────────────────────
@@ -1138,6 +1143,10 @@ OPTIONAL = [
     # Sentinella inline IAP DESIGN — design-only validator; no runtime SDK, no DB writes, no live receipt endpoint.
     # Proof marker dedicato (tripled-sentinel): data/design/iap/iap_suite_registration_proof_marker_v1.json
     ('PROJECT-IAP-DESIGN', 'validate_project_iap_design_v1.py'),
+    # SHOP_IAP_INTEGRATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline SHOP IAP INTEGRATION — design-only validator; mock product IDs only; no live purchase button; no live receipt endpoint.
+    # Proof marker dedicato (tripled-sentinel): data/design/shop_iap/shop_iap_suite_registration_proof_marker_v1.json
+    ('PROJECT-SHOP-IAP-INTEGRATION', 'validate_project_shop_iap_integration_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

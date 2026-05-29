@@ -1,0 +1,157 @@
+{
+  "task_id": "PROJECT_SHOP_IAP_INTEGRATION",
+  "track": "TRACK_E_FUTURE_API_RECEIPT_CONTRACT_DESIGN_ONLY",
+  "verdict": "TRACK_E_SHOP_IAP_FUTURE_API_RECEIPT_CONTRACT_READY",
+  "design_only": true,
+  "no_runtime_endpoints_added_in_this_pack": true,
+  "no_live_purchase_button": true,
+  "no_live_receipt_endpoint": true,
+  "future_endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/iap/products",
+      "purpose": "Server-side product catalog source of truth for client display",
+      "auth_required": true,
+      "design_only": true,
+      "response_shape": {
+        "products": [
+          {
+            "mock_id": "mock.divinewaifus.crystals.starter",
+            "real_id": "<<TBD_STAGE_2_ROADMAP>>",
+            "family": "divine_crystal_pack",
+            "label_it": "string",
+            "price_placeholder": "<<TIER_LOW>>",
+            "localized_price_display": "<<TBD_STAGE_9_ROADMAP>>",
+            "granted_entitlement_summary": {"currency_key": "divine_crystals_paid", "amount": 0},
+            "first_time_bonus_eligible": true,
+            "available": false,
+            "locked_reason": "shop_locked_v2"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/iap/verify/apple",
+      "purpose": "Validate JWS signed transaction from StoreKit on iOS",
+      "auth_required": true,
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "server_profile_id": "string",
+        "signed_jws": "string",
+        "client_product_id": "string",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "VERIFIED|DUPLICATE|REVOKED|INVALID_SIGNATURE|UNKNOWN_PRODUCT|REPLAY_DETECTED",
+        "entitlement_delta": {},
+        "purchase_id": "string"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/iap/verify/google",
+      "purpose": "Validate purchase token from Google Play Billing",
+      "auth_required": true,
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "server_profile_id": "string",
+        "purchase_token": "string",
+        "client_product_id": "string",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "VERIFIED|DUPLICATE|REVOKED|INVALID_TOKEN|UNKNOWN_PRODUCT|REPLAY_DETECTED",
+        "entitlement_delta": {},
+        "purchase_id": "string"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/iap/fulfill",
+      "purpose": "Apply entitlement delta to wallet after verified receipt; idempotent",
+      "auth_required": true,
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "server_profile_id": "string",
+        "purchase_id": "string",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "FULFILLED|ALREADY_FULFILLED|REJECTED",
+        "wallet_after": {},
+        "ledger_ids": []
+      },
+      "forbidden_payload": [
+        "granting artifact_id",
+        "granting constellation_id",
+        "granting sigilli_premium",
+        "granting sigilli_targeted",
+        "granting pity_skip",
+        "granting hero_direct",
+        "granting combat_stat_boost"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/iap/refund-reconcile",
+      "purpose": "Apple ASSN / Google RTDN webhook entry point; append revoke ledger",
+      "auth_required": "webhook_shared_secret",
+      "design_only": true,
+      "request_shape": {
+        "platform": "APPLE|GOOGLE",
+        "signed_payload": "string",
+        "event_type": "REFUND|REVOKE|CHARGEBACK|GRACE_PERIOD_END"
+      },
+      "response_shape": {
+        "status": "ACCEPTED|DUPLICATE|REJECTED",
+        "linked_purchase_id": "string",
+        "revoke_ledger_id": "string"
+      },
+      "forbidden": ["revoking already spent gacha results", "silent partial revoke"]
+    },
+    {
+      "method": "GET",
+      "path": "/api/iap/history",
+      "purpose": "Read-only purchase + refund history for the authenticated user",
+      "auth_required": true,
+      "design_only": true,
+      "response_shape": {
+        "items": [
+          {
+            "purchase_id": "string",
+            "platform": "APPLE|GOOGLE",
+            "product_id_real": "string",
+            "product_id_internal_mock": "string",
+            "timestamp_utc": "string",
+            "price_local": "string",
+            "price_local_currency": "string",
+            "status": "VERIFIED|REFUNDED|REVOKED"
+          }
+        ]
+      }
+    }
+  ],
+  "error_modes_global": {
+    "INVALID_SIGNATURE": 401,
+    "DUPLICATE_TRANSACTION": 200,
+    "UNKNOWN_PRODUCT_ID": 400,
+    "USER_MISMATCH": 403,
+    "REVOKED_OR_REFUNDED": 410,
+    "REPLAY_DETECTED": 409,
+    "FEATURE_FLAG_DISABLED": 423
+  },
+  "feature_flag_design": {
+    "IAP_PRODUCTS_ENDPOINT_ENABLED": false,
+    "IAP_VERIFY_APPLE_ENABLED": false,
+    "IAP_VERIFY_GOOGLE_ENABLED": false,
+    "IAP_FULFILL_ENABLED": false,
+    "IAP_REFUND_RECONCILE_ENABLED": false,
+    "IAP_HISTORY_ENABLED": false,
+    "IAP_FULFILLMENT_CANARY_ONLY": true,
+    "IAP_GLOBAL_DISABLED": true
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "task_id": "PROJECT_SHOP_IAP_INTEGRATION",
+  "track": "TRACK_A_SHOP_IAP_SURFACE_REVALIDATION",
+  "verdict": "TRACK_A_SHOP_IAP_SURFACE_REVALIDATION_READY",
+  "approval_markers": {
+    "PROJECT_SHOP_IAP_INTEGRATION_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "SHOP_IAP_INTEGRATION_DESIGN_ONLY"
+  },
+  "baseline_reference": "PROJECT_IAP_DESIGN_COMPLETE_PUBLIC_REPO_VERIFIED (docs/divine/178_IAP_DESIGN.md)",
+  "revalidated_surfaces": [
+    {
+      "route": "frontend/app/shop.tsx",
+      "md5_current": "1a39f50e8da9c09a1f0b017b25b73390",
+      "md5_at_178": "1a39f50e8da9c09a1f0b017b25b73390",
+      "drift": false,
+      "classification": "locked",
+      "lock_flag": "SHOP_LOCKED_V2 = true",
+      "buy_button_live": false,
+      "buy_button_disabled": true,
+      "daily_claims_disabled": true,
+      "lock_banner_present": true
+    },
+    {
+      "route": "frontend/app/item-shop.tsx",
+      "md5_current": "d09d616db14f4c6f98606e9ccd625379",
+      "md5_at_178": "d09d616db14f4c6f98606e9ccd625379",
+      "drift": false,
+      "classification": "locked",
+      "lock_flag": "ITEM_SHOP_LOCKED_V2 = true",
+      "buy_button_live": false
+    },
+    {
+      "route": "frontend/app/treasury.tsx",
+      "md5_current": "7dae97ac1530150e8270dfe6166bda24",
+      "md5_at_178": "7dae97ac1530150e8270dfe6166bda24",
+      "drift": false,
+      "classification": "preview-only",
+      "description": "Tesoreria valute non homepage (Sigilli, Cristalli Divini paid/free, event currencies). Read-only."
+    },
+    {
+      "route": "frontend/app/(tabs)/gacha.tsx",
+      "md5_current": "f68b9239cec04ea54879f0be381e772a",
+      "md5_at_178": "f68b9239cec04ea54879f0be381e772a",
+      "drift": false,
+      "classification": "live (functional, no IAP)",
+      "banner_visibility": {
+        "standard": "visible",
+        "elemental": "visible",
+        "selective": "visible",
+        "premium": "locked",
+        "targeted": "locked",
+        "artifact": "hidden",
+        "constellation": "hidden"
+      },
+      "gacha_rate_changes": false,
+      "pity_changes": false,
+      "summon_consumes_sigilli_first_then_crystals": true,
+      "summon_conversion_requires_explicit_confirmation": true
+    },
+    {
+      "route": "frontend/app/battlepass.tsx",
+      "md5_current": "54568b8cb75a07033f78ef6593aba839",
+      "drift": false,
+      "classification": "locked (separate pack later)",
+      "out_of_scope_for_this_pack": true
+    },
+    {
+      "route": "frontend/app/vip.tsx",
+      "md5_current": "45fcc9890b6b128c37088bc33aa54caf",
+      "drift": false,
+      "classification": "locked (separate pack later)",
+      "out_of_scope_for_this_pack": true
+    },
+    {
+      "route": "frontend/app/soul-forge.tsx",
+      "md5_current": "b7659de11ac36f341e7a2f54fd29e6ed",
+      "drift": false,
+      "classification": "live (functional, do_not_touch)",
+      "out_of_scope_for_this_pack": true
+    }
+  ],
+  "homepage_currencies_policy": {
+    "visible_on_homepage": ["gold", "divine_crystals", "exp_account"],
+    "hidden_on_homepage_visible_in_tesoreria": ["sigilli_standard", "sigilli_elemental", "sigilli_selective", "event_currencies", "paid_vs_free_breakdown"]
+  },
+  "event_currency_retention_policy": {
+    "retain_until_rerun": true,
+    "auto_expire_disabled": true
+  },
+  "locks_verified": {
+    "shop_locked": true,
+    "item_shop_locked": true,
+    "battlepass_locked": true,
+    "vip_locked": true,
+    "premium_banner_locked": true,
+    "targeted_banner_locked": true,
+    "artifact_banner_hidden": true,
+    "constellation_banner_hidden": true,
+    "legacy_post_artifact_constellation_http_423": true
+  },
+  "invariants_md5": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293"
+  },
+  "backend_routes_for_iap_or_receipt_present": false,
+  "third_party_billing_sdk_in_dependencies": false,
+  "db_writes_during_revalidation": 0,
+  "runtime_changes_during_revalidation": false
+}

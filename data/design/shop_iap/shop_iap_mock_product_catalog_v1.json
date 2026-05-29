@@ -1,0 +1,149 @@
+{
+  "task_id": "PROJECT_SHOP_IAP_INTEGRATION",
+  "track": "TRACK_B_MOCK_PRODUCT_CATALOG_CONTRACT",
+  "verdict": "TRACK_B_SHOP_IAP_MOCK_PRODUCT_CATALOG_READY",
+  "design_only": true,
+  "mock_id_prefix": "mock.divinewaifus.",
+  "real_store_ids_in_this_pack": false,
+  "live_prices_in_this_pack": false,
+  "naming_rules": [
+    "all mock IDs MUST start with prefix mock.divinewaifus.",
+    "all mock IDs MUST contain family + size",
+    "all mock IDs MUST be lower-case, dot-separated",
+    "real Apple/Google store IDs are allocated only at PRODUCT_ID_MOCK_CATALOG stage 2 of the 178F roadmap and use dw_real_ prefix"
+  ],
+  "mock_product_catalog": [
+    {
+      "mock_id": "mock.divinewaifus.crystals.starter",
+      "family": "divine_crystal_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Cristalli Starter",
+      "granted_currency": "divine_crystals_paid",
+      "first_time_bonus_eligible": true,
+      "price_placeholder": "<<TIER_LOW>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.crystals.small",
+      "family": "divine_crystal_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Cristalli Piccolo",
+      "granted_currency": "divine_crystals_paid",
+      "price_placeholder": "<<TIER_S>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.crystals.medium",
+      "family": "divine_crystal_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Cristalli Medio",
+      "granted_currency": "divine_crystals_paid",
+      "price_placeholder": "<<TIER_M>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.crystals.large",
+      "family": "divine_crystal_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Cristalli Grande",
+      "granted_currency": "divine_crystals_paid",
+      "price_placeholder": "<<TIER_L>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.crystals.mega",
+      "family": "divine_crystal_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Cristalli Mega",
+      "granted_currency": "divine_crystals_paid",
+      "price_placeholder": "<<TIER_XL>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.summon.standard.10x",
+      "family": "summon_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Sigilli Standard x10",
+      "granted_currency": "sigilli_standard",
+      "banner_scope_allowed": ["standard"],
+      "banner_scope_forbidden": ["premium", "targeted", "artifact", "constellation"],
+      "price_placeholder": "<<TIER_M>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.summon.elemental.10x",
+      "family": "summon_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Sigilli Elementali x10",
+      "granted_currency": "sigilli_elemental",
+      "banner_scope_allowed": ["elemental"],
+      "banner_scope_forbidden": ["premium", "targeted", "artifact", "constellation"],
+      "price_placeholder": "<<TIER_M>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.summon.selective.10x",
+      "family": "summon_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Sigilli Selettivi x10",
+      "granted_currency": "sigilli_selective",
+      "banner_scope_allowed": ["selective"],
+      "banner_scope_forbidden": ["premium", "targeted", "artifact", "constellation"],
+      "price_placeholder": "<<TIER_L>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.launchpack.devoted",
+      "family": "launch_support_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Supporto Lancio \u2014 Devoto",
+      "limit_per_account_lifetime": 1,
+      "contents_design": [
+        "divine_crystals_paid",
+        "sigilli_standard",
+        "cosmetic_skin_launch_v1"
+      ],
+      "forbidden_contents": ["artifact", "constellation", "sigilli_premium", "sigilli_targeted", "hero_direct", "combat_stat"],
+      "price_placeholder": "<<TIER_L>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.launchpack.eternal",
+      "family": "launch_support_pack",
+      "platform_category_candidate": "consumable",
+      "label_design": "Pacchetto Supporto Lancio \u2014 Eterno",
+      "limit_per_account_lifetime": 1,
+      "contents_design": [
+        "divine_crystals_paid",
+        "sigilli_standard",
+        "sigilli_elemental",
+        "cosmetic_title_launch_eternal_v1"
+      ],
+      "forbidden_contents": ["artifact", "constellation", "sigilli_premium", "sigilli_targeted", "hero_direct", "combat_stat"],
+      "price_placeholder": "<<TIER_XL>>",
+      "live_buyable": false
+    },
+    {
+      "mock_id": "mock.divinewaifus.monthlypass.devotion",
+      "family": "monthly_pass",
+      "platform_category_candidate": "non_renewing_subscription",
+      "future_platform_category_candidate": "auto_renewable_subscription",
+      "label_design": "Devotion Pass mensile",
+      "daily_grant_design": "divine_crystals_paid stipend + cosmetic flair",
+      "forbidden_grants": ["combat_stat", "artifact", "constellation", "pity_skip", "sigilli_premium", "sigilli_targeted"],
+      "price_placeholder": "<<TIER_SUB_M>>",
+      "live_buyable": false
+    }
+  ],
+  "forbidden_in_catalog": [
+    "artifact direct grant",
+    "constellation direct grant",
+    "sigilli_premium / sigilli_targeted direct grant",
+    "pity skip",
+    "combat stat boost",
+    "hero direct grant",
+    "surprise random charge",
+    "hidden odds"
+  ],
+  "catalog_source_of_truth_future_endpoint": "GET /api/iap/products (design-only contract, see Track E)"
+}

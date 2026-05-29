@@ -1,0 +1,74 @@
+{
+  "task_id": "PROJECT_SHOP_IAP_INTEGRATION",
+  "track": "TRACK_C_SHOP_UI_LOCK_AND_PREVIEW_POLICY",
+  "verdict": "TRACK_C_SHOP_IAP_UI_LOCK_PREVIEW_POLICY_READY",
+  "design_only": true,
+  "shop_surfaces_in_scope": [
+    "frontend/app/shop.tsx (SHOP_LOCKED_V2)",
+    "frontend/app/item-shop.tsx (ITEM_SHOP_LOCKED_V2)"
+  ],
+  "locked_state_required": {
+    "buttons_buy_or_acquista_disabled": true,
+    "buttons_visible_but_inert": "allowed if visually marked locked",
+    "daily_claims_disabled": true,
+    "lock_banner_visible": true,
+    "redirect_to_paywall": false
+  },
+  "allowed_label_text_set": [
+    "In preparazione",
+    "Preview",
+    "Non acquistabile ora",
+    "Prezzi non finali",
+    "Sistema acquisti reali (IAP) in preparazione",
+    "Negozio in revisione",
+    "Anteprima informativa"
+  ],
+  "forbidden_label_or_action_text_set": [
+    "ACQUISTA ORA (live)",
+    "BUY (live)",
+    "Compra subito (live)",
+    "Aggiungi al carrello (live)",
+    "Apri StoreKit (live)",
+    "Inizia checkout (live)",
+    "Conferma acquisto reale"
+  ],
+  "forbidden_ui_behaviors": [
+    "live BUY flow",
+    "live ACQUISTA flow",
+    "opening native StoreKit / Play Billing sheet",
+    "redirecting to external web purchase",
+    "silent paywall popup",
+    "countdown < 60s on a price",
+    "hidden price tags",
+    "hidden loot box odds"
+  ],
+  "preview_only_card_contract": {
+    "required_visible_fields": [
+      "product mock label",
+      "product family badge (e.g. Cristalli, Sigilli, Pacchetto Lancio, Pass)",
+      "price_placeholder string (e.g. <<TIER_M>>)",
+      "granted currency description in Italian",
+      "explicit lock label from allowed set"
+    ],
+    "forbidden_fields": [
+      "final localized real currency price",
+      "buy CTA active",
+      "countdown timer triggering purchase"
+    ]
+  },
+  "loot_box_odds_disclosure_in_shop": {
+    "summon_pack_card_must_link_to_gacha_odds": true,
+    "crystals_pack_card_may_link_to_gacha_odds": true,
+    "odds_link_destination_design": "banner_odds_modal in (tabs)/gacha.tsx"
+  },
+  "refund_and_restore_ui_state": {
+    "restore_purchases_button_visible": false,
+    "refund_history_button_visible": false,
+    "reason": "No real purchases yet; both surfaces appear at Stage 8 of roadmap when shop unlocks live."
+  },
+  "future_unlock_gate": {
+    "gate_marker": "PROJECT_SHOP_IAP_UI_LIVE_ROLLOUT_APPROVAL",
+    "future_pack": "PROJECT_SHOP_IAP_UI_LIVE_ROLLOUT_PACK",
+    "rollback_lever": "SHOP_LOCKED_V2=true + ITEM_SHOP_LOCKED_V2=true (restore lock banners)"
+  }
+}

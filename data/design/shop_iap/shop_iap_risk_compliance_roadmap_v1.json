@@ -1,0 +1,102 @@
+{
+  "task_id": "PROJECT_SHOP_IAP_INTEGRATION",
+  "track": "TRACK_F_RISK_COMPLIANCE_AND_ROADMAP",
+  "verdict": "TRACK_F_SHOP_IAP_RISK_COMPLIANCE_ROADMAP_READY",
+  "design_only": true,
+  "risk_register": [
+    {
+      "risk_id": "R1",
+      "name": "Replay attack on receipt verification",
+      "likelihood": "medium",
+      "impact": "high",
+      "mitigation": "JWS signature + nonce + server timestamp window + unique index on (platform, platform_transaction_id)"
+    },
+    {
+      "risk_id": "R2",
+      "name": "Cross-account purchase abuse",
+      "likelihood": "low",
+      "impact": "high",
+      "mitigation": "Bind Apple/Google account to internal user_id at first purchase; reject mismatched account_id on subsequent calls"
+    },
+    {
+      "risk_id": "R3",
+      "name": "Refund-then-spend exploit (revoke after gacha pull)",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "Refund flow never reverses gacha outcomes; track refund_status on purchase_ledger; flag accounts with refund>spend ratio for manual review"
+    },
+    {
+      "risk_id": "R4",
+      "name": "Hidden odds non-compliance",
+      "likelihood": "low",
+      "impact": "high",
+      "mitigation": "Loot box odds disclosure linked from every summon_pack shop card and in banner"
+    },
+    {
+      "risk_id": "R5",
+      "name": "P2W combat purchase pressure",
+      "likelihood": "low",
+      "impact": "high",
+      "mitigation": "Hard family ban: no stat boost, no artifact, no premium/targeted sigilli, no pity skip in catalog"
+    },
+    {
+      "risk_id": "R6",
+      "name": "Server merge / multishard wallet split inconsistency",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "paid currency account-wide; free currency server-bound; document split in SLC merge tooling"
+    },
+    {
+      "risk_id": "R7",
+      "name": "Sandbox leakage to production fulfillment",
+      "likelihood": "low",
+      "impact": "high",
+      "mitigation": "Feature flags IAP_FULFILLMENT_CANARY_ONLY=true + IAP_GLOBAL_DISABLED=true until release gate; sandbox accounts strictly internal"
+    },
+    {
+      "risk_id": "R8",
+      "name": "Real product IDs leaking into code before catalog stage",
+      "likelihood": "low",
+      "impact": "medium",
+      "mitigation": "Static validator forbids real product id patterns in product code (only mock.divinewaifus.* allowed in this pack)"
+    },
+    {
+      "risk_id": "R9",
+      "name": "User confusion between paid and free Divine Crystals",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "Tesoreria shows split; banner conversion modal shows split; homepage shows unified count but conversion is transparent"
+    },
+    {
+      "risk_id": "R10",
+      "name": "Suite stale-push of validator runner",
+      "likelihood": "medium",
+      "impact": "low",
+      "mitigation": "Tripled-sentinel strategy (top tag + inline sentinel + proof marker JSON separate directory)"
+    }
+  ],
+  "compliance_checklist": [
+    {"item": "Apple StoreKit IAP only for digital content on iOS", "status": "design_principle"},
+    {"item": "Google Play Billing only for digital content on Google Play", "status": "design_principle"},
+    {"item": "Real, complete price in local currency at point of purchase", "status": "design_principle"},
+    {"item": "Loot box odds disclosure visible (per banner card + per summon_pack shop card)", "status": "design_principle"},
+    {"item": "Refund / restore purchases UX available at Stage 8 of roadmap", "status": "design_principle"},
+    {"item": "Privacy / Terms accessible pre-purchase", "status": "design_principle"},
+    {"item": "GDPR / CCPA wallet data export + paid history retention", "status": "design_principle"},
+    {"item": "No dark patterns / no pressure timers < 60s / no surprise random charge", "status": "design_principle"}
+  ],
+  "roadmap_alignment_with_178F": {
+    "this_pack_completes_stage": "1 (IAP_DESIGN_SIGNOFF, extending Shop integration contract)",
+    "next_stage": "PRODUCT_ID_MOCK_CATALOG (allocate real Apple/Google product IDs)",
+    "future_stages_remaining": [
+      "BACKEND_PURCHASE_LEDGER_SCHEMA_DRY_RUN",
+      "RECEIPT_VERIFICATION_ENDPOINT_DESIGN_IMPL (DEV-only, feature flag)",
+      "SANDBOX_STOREKIT_PLAY_BILLING_INTEGRATION",
+      "INTERNAL_PURCHASE_FULFILLMENT_CANARY (same pattern as artifact Stage 8: sfqa + test only)",
+      "REFUND_REVOKE_TEST",
+      "PUBLIC_SHOP_IAP_UI (flip SHOP_LOCKED_V2 -> false)",
+      "PRICING_LOCALIZATION_SIGNOFF",
+      "RELEASE_GATE"
+    ]
+  }
+}
