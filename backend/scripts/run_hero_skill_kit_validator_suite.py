@@ -23,7 +23,39 @@
 # PUBLIC_SYNC_TAG_RESYNC_v15: suite_runner_server_profiles_live_multishard_v15_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v15b: suite_runner_server_profiles_sync_fix_v15b_2026_05_29_force_blob_resnapshot
 # PUBLIC_SYNC_TAG_RESYNC_v15c: suite_runner_server_profiles_sync_fix_v15c_2026_05_29_force_public_blob_refresh
-# PUBLIC_SYNC_TAG_RESYNC_v15c_REASON: previous public push still exposed pre-v15 runner, so this marker exists only to force suite runner public sync; no logic change.
+# PUBLIC_SYNC_TAG_RESYNC_v15d: suite_runner_server_profiles_sync_fix_v15d_2026_05_29_force_public_blob_refresh_large_comment_block
+# PUBLIC_SYNC_TAG_RESYNC_v15d_REASON: V1/V2 marker docs reached public main but suite runner remained stale; this marker is comment-only and exists only to force suite runner public sync; no logic change.
+#
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_SERVER_PROFILES_V15D:
+# expected_validator_id = PROJECT-SERVER-PROFILES-LIVE-MULTISHARD
+# expected_validator_file = validate_project_server_profiles_live_multishard_v1.py
+# expected_inline_sentinel = SERVER_PROFILES_LIVE_MULTISHARD_REGISTRATION_SENTINEL
+# expected_tuple_count = 1
+# semantics_change = false
+# runtime_change = false
+# db_write = false
+# server_profile_runtime_change = false
+# route_behavior_change = false
+# auth_runtime_change = false
+# login_register_change = false
+# frontend_change = false
+# env_change = false
+# second_server_opening = false
+# canary_apply = false
+# migration_apply_execution = false
+# validator_logic_change = false
+# weakens_REQUIRED_validators = false
+# weakens_OPTIONAL_validators = false
+# fakes_PASS = false
+# tuple_duplicated = false
+# If after this v15d the public main suite runner still doesn't expose the
+# Server Profiles registration tuple as executable line, classify the issue as
+# PROJECT_SERVER_PROFILES_SUITE_RUNNER_SYNC_FIX_V3_PUBLIC_SUITE_RUNNER_STALE_PLATFORM_BUG_PERSISTENT
+# and escalate to platform support: local container is consistent, validator passes,
+# AST parses, MD5 invariants hold, tuple count = 1 — but the "Save to GitHub" push
+# repeatedly skips this specific file blob across v15b/v15c/v15d cycles.
+#
+# RESYNC_v15c_REASON: previous public push still exposed pre-v15 runner, so this marker exists only to force suite runner public sync; no logic change.
 # RESYNC_v15b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
 # era ancora stale dopo il commit del pack PROJECT_SERVER_PROFILES_LIVE_MULTISHARD (191).
 # Sentinella v14c Login Auth presente ma v15 Server Profiles + tupla
@@ -1338,6 +1370,7 @@ OPTIONAL = [
     # Proof marker dedicato: data/design/server_profiles_live_multishard/server_profiles_live_multishard_suite_registration_proof_marker_v1.json
     # SYNC_FIX_v15b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_SERVER_PROFILES_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/server_profiles_live_multishard/server_profiles_suite_runner_sync_fix_marker_v1.json
     # SYNC_FIX_v15c 2026_05_29: second public-main resync attempt after v15b stale; tuple count remains 1; no semantics change. Proof marker fix: data/design/server_profiles_live_multishard/server_profiles_suite_runner_sync_fix_v2_marker_v1.json
+    # SYNC_FIX_v15d 2026_05_29: third public-main resync attempt with large comment-only diagnostic block; tuple count remains 1; no semantics change. Proof marker fix: data/design/server_profiles_live_multishard/server_profiles_suite_runner_sync_fix_v3_marker_v1.json
     ('PROJECT-SERVER-PROFILES-LIVE-MULTISHARD', 'validate_project_server_profiles_live_multishard_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
