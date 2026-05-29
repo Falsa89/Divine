@@ -21,6 +21,19 @@
 # PUBLIC_SYNC_TAG_RESYNC_v14c: suite_runner_login_auth_sync_fix_v14c_2026_05_29_force_public_blob_refresh
 # PUBLIC_SYNC_TAG_RESYNC_v14c_REASON: previous public push still exposed pre-v14 runner, so this marker exists only to force suite runner public sync; no logic change.
 # PUBLIC_SYNC_TAG_RESYNC_v15: suite_runner_server_profiles_live_multishard_v15_2026_05_29
+# PUBLIC_SYNC_TAG_RESYNC_v15b: suite_runner_server_profiles_sync_fix_v15b_2026_05_29_force_blob_resnapshot
+# RESYNC_v15b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
+# era ancora stale dopo il commit del pack PROJECT_SERVER_PROFILES_LIVE_MULTISHARD (191).
+# Sentinella v14c Login Auth presente ma v15 Server Profiles + tupla
+# ('PROJECT-SERVER-PROFILES-LIVE-MULTISHARD', ...) non venivano riflesse sul remote.
+# Questo v15b è un micro-touch comment di mitigazione per lo stale-push bug:
+# forza un nuovo blob hash così il prossimo "Save to GitHub" PUSH non può
+# ri-skippare questo file. Nessun cambio di semantica. Tuple count della tupla
+# Server Profiles resta 1. Nessun REQUIRED/OPTIONAL validator logic toccato.
+# Nessun server profile runtime, route behavior, auth runtime, login/register,
+# frontend, DB, .env, second server flag, canary apply, migration/apply script,
+# validator logic toccato.
+# Proof marker dedicato: data/design/server_profiles_live_multishard/server_profiles_suite_runner_sync_fix_marker_v1.json
 # RESYNC_v15 RATIONALE: Registrazione OPTIONAL del nuovo validator
 # validate_project_server_profiles_live_multishard_v1.py
 # (PROJECT_SERVER_PROFILES_LIVE_MULTISHARD). Pack GATE AUDIT ONLY: tutti i
@@ -1321,6 +1334,7 @@ OPTIONAL = [
     # secondo server; server_profiles routes restano gated 503; auth pack 188 preservato;
     # locks VIP/BP/Shop intatti; artifact/constellation 423; nessun nuovo endpoint live.
     # Proof marker dedicato: data/design/server_profiles_live_multishard/server_profiles_live_multishard_suite_registration_proof_marker_v1.json
+    # SYNC_FIX_v15b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_SERVER_PROFILES_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/server_profiles_live_multishard/server_profiles_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-SERVER-PROFILES-LIVE-MULTISHARD', 'validate_project_server_profiles_live_multishard_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
