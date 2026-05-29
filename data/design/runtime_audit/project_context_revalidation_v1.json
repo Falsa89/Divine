@@ -1,0 +1,136 @@
+{
+  "task_id": "PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY",
+  "track": "TRACK_A_PROJECT_CONTEXT_REVALIDATION",
+  "verdict": "TRACK_A_PROJECT_CONTEXT_REVALIDATION_READY",
+  "audit_only": true,
+  "db_writes": 0,
+  "runtime_changes": false,
+  "prior_context_revalidated": {
+    "benchmark_canonical": {
+      "source_files": [
+        "data/design/benchmark_canonical/benchmark_canonical_readiness_rollup_v1.json",
+        "data/design/benchmark_canonical/divine_live_mode_benchmark_reconciliation_v1.json",
+        "data/design/benchmark_canonical/divine_live_mode_benchmark_risk_policy_v1.json",
+        "data/design/benchmark_canonical/divine_live_mode_calendar_v1.json",
+        "data/design/benchmark_canonical/server_lifecycle_calendar_merge_canonical_v1.json",
+        "data/design/benchmark_canonical/equipment_forge_relic_canonical_v1.json",
+        "data/design/benchmark_canonical/summon_pity_fragment_canonical_v1.json",
+        "data/design/benchmark_canonical/guild_social_coop_canonical_v1.json",
+        "data/design/benchmark_canonical/battle_stats_reporting_canonical_v1.json",
+        "docs/divine/96_LIVE_SPECIAL_MODES_CANONICAL.md",
+        "docs/divine/96_BENCHMARK_CANONICAL_SOURCE_OF_TRUTH.md"
+      ],
+      "expected_modes_count": 16,
+      "docs_index": [
+        "96_BENCHMARK_CANONICAL_SOURCE_OF_TRUTH.md",
+        "96_LIVE_SPECIAL_MODES_CANONICAL.md",
+        "95_LIVE_MODES_RECONCILIATION_AND_SLC_NEXT_A.md"
+      ]
+    },
+    "monetization_locks": {
+      "178_iap_design": {
+        "doc": "docs/divine/178_IAP_DESIGN.md",
+        "status": "COMPLETE_PUBLIC_REPO_VERIFIED",
+        "runtime_active": false
+      },
+      "179_shop_iap_integration": {
+        "doc": "docs/divine/179_SHOP_IAP_INTEGRATION.md",
+        "status": "COMPLETE_PUBLIC_REPO_VERIFIED",
+        "runtime_active": false,
+        "frontend_lock": "SHOP_LOCKED_V2 = true + ITEM_SHOP_LOCKED_V2 = true"
+      },
+      "180_battle_pass_surface_modernization": {
+        "doc": "docs/divine/180_BATTLE_PASS_SURFACE_MODERNIZATION.md",
+        "status": "COMPLETE_PUBLIC_REPO_VERIFIED",
+        "runtime_active": false,
+        "frontend_lock": "BP_LOCKED_V2 = true + BP_PREMIUM_BUY_LOCKED_V2 = true"
+      },
+      "181_vip_design_and_iap_integration": {
+        "doc": "docs/divine/181_VIP_DESIGN_AND_IAP_INTEGRATION.md",
+        "status": "READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+        "runtime_active": false,
+        "frontend_lock": "VIP_LOCKED_V2 = true"
+      }
+    },
+    "artifact_stage_8_internal_canary": {
+      "doc": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md",
+      "public_exposure": false,
+      "frontend_banner_state": "hidden",
+      "legacy_POST_endpoints_locked": true,
+      "legacy_POST_http_status": 423,
+      "backend_md5": "893f244d85fd45cbe825996463995293"
+    },
+    "slc_server_lifecycle": {
+      "docs": ["92_SERVER_LIFECYCLE_CALENDAR_A_FOUNDATION.md", "93_SLC_C_MULTISHARD_MIGRATION_PLAN.md", "94_SLC_BE_SERVER_PROFILE_SELECTION_CONTRACT.md", "97_SLC_F_ROUTE_PATCH_DRYRUN_CANONICAL.md", "99_SLC_G_DEFAULT_S1_MIGRATION_GATED.md"],
+      "status": "DESIGN_AND_PARTIAL_RUNTIME"
+    },
+    "housing_dimora_divina": {
+      "design_state": "DESIGN_ONLY_PREVIEW",
+      "docs": ["data/design/housing/*", "data/design/benchmark_canonical/sanctuary_housing_dimora_divina_canonical_v1.json"],
+      "frontend": "frontend/app/housing-preview.tsx"
+    },
+    "gacha_rate_sanity": {
+      "doc": "validate_project_gacha_rate_sanity_final_signoff_v1.py",
+      "standard_rate_5_6_star_combined": 1.5,
+      "elemental_rate": 2.5,
+      "selective_rate": 3.5,
+      "premium_targeted_locked": true,
+      "premium_targeted_announced_rate": 5.0,
+      "artifact_constellation_hidden": true,
+      "pity_design_only": true
+    },
+    "soul_forge_inline_confirm": {
+      "state": "FUNCTIONAL_INLINE_PANEL",
+      "modal_removed": true,
+      "docs": ["docs/divine/INLINE_CONFIRM_TRACK_B_MODAL_REMOVED_v1.md"],
+      "do_not_touch_unless_audit": true
+    },
+    "no_stamina_decision": {
+      "canonical_decision": "NO_STAMINA_SYSTEM",
+      "compliance_status_runtime": "VIOLATED_LEGACY_CODE_STILL_PRESENT",
+      "legacy_violation_files": [
+        "backend/routes/combat.py",
+        "backend/routes/cosmetics.py",
+        "backend/routes/economy.py",
+        "backend/routes/gvg.py",
+        "backend/routes/raids.py",
+        "frontend/app/events.tsx",
+        "frontend/app/gvg.tsx",
+        "frontend/app/shop.tsx",
+        "frontend/app/tower.tsx",
+        "frontend/app/treasury.tsx"
+      ],
+      "note": "Audit-only finding. NOT remediated in this pack. See Track D tech-debt report."
+    },
+    "homepage_currencies": {
+      "allowed": ["Oro", "Cristalli Divini", "EXP Account"],
+      "deeper_currencies_location": "Tesoreria (treasury.tsx)"
+    },
+    "summon_currency_order": {
+      "first": "Sigilli",
+      "then": "Cristalli Divini",
+      "requires_explicit_confirmation": true
+    },
+    "asset_placeholder_pipeline_rule": {
+      "new_canonical_rule_introduced_in_this_pack": true,
+      "description": "TEST placeholder assets/audio must be explicitly registered with required metadata.",
+      "required_metadata_keys": ["mode_id", "screen_id", "asset_key", "asset_status", "audio_key", "audio_status", "replace_before_release"]
+    }
+  },
+  "forbidden_in_pack_compliance": {
+    "no_runtime_implementation": true,
+    "no_db_writes": true,
+    "no_player_data_mutation": true,
+    "no_unlock_locked_systems": true,
+    "no_gacha_or_pity_changes": true,
+    "no_iap_bp_vip_shop_live_activation": true,
+    "no_artifact_public_activation": true,
+    "no_battle_engine_or_combat_changes": true,
+    "no_character_bible_mutation": true,
+    "no_hero_kit_final_numbers_change": true,
+    "no_final_assets_or_audio_added": true,
+    "no_paid_product_ids_added": true,
+    "no_env_secrets_added": true,
+    "no_required_validator_weakening": true
+  }
+}

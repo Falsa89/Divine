@@ -1,0 +1,82 @@
+{
+  "task_id": "PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY",
+  "track": "TRACK_E_TEST_ASSET_AUDIO_REGISTRY_DESIGN",
+  "verdict": "TRACK_E_TEST_ASSET_AUDIO_REGISTRY_READY",
+  "audit_only": true,
+  "design_only": true,
+  "registry_schema": {
+    "entry_required_keys": [
+      "mode_id",
+      "screen_id",
+      "asset_key",
+      "asset_status",
+      "audio_key",
+      "audio_status",
+      "replace_before_release"
+    ],
+    "entry_optional_keys": [
+      "final_asset_expected",
+      "final_audio_expected",
+      "owner_system",
+      "notes",
+      "user_sketch_provided",
+      "user_sketch_path",
+      "sketch_required_for_next_stage",
+      "created_at_utc",
+      "last_audit_utc",
+      "placeholder_naming_convention"
+    ],
+    "allowed_statuses": [
+      "test_placeholder",
+      "placeholder_dev",
+      "missing_final_asset",
+      "missing_final_audio",
+      "final_ready",
+      "not_required"
+    ],
+    "placeholder_naming_pattern": "test_<mode_id>_<screen_id>_<purpose>",
+    "placeholder_naming_examples": [
+      "test_guild_war_lobby_background",
+      "test_guild_war_lobby_ambient_loop",
+      "test_tower_floor_select_panel_bg",
+      "test_story_chapter1_intro_voice",
+      "test_combat_victory_jingle",
+      "test_event_hub_seasonal_banner"
+    ],
+    "audit_query_design": {
+      "find_all_replace_before_release_true": "All entries WHERE replace_before_release == true must be listed before any production tag.",
+      "find_all_test_placeholder": "All entries WHERE asset_status == 'test_placeholder' OR audio_status == 'test_placeholder'",
+      "find_missing_finals": "asset_status IN ('missing_final_asset', 'missing_final_audio')",
+      "find_unsketched_complex_modes": "sketch_required_for_next_stage == true AND user_sketch_provided == false"
+    },
+    "final_release_blocker_rules": [
+      "Any entry with replace_before_release=true blocks RELEASE_TAG_v1.",
+      "Any mode in benchmark canonical with no registered placeholder OR final_ready blocks RELEASE_TAG_v1.",
+      "Any mode needing sketch but sketch_required_for_next_stage=true && user_sketch_provided=false blocks NEXT_STAGE_TAG."
+    ]
+  },
+  "user_sketch_policy": {
+    "sketches_optional_global": true,
+    "sketches_recommended_for_modes": [
+      "guild_war", "war_three_thrones", "housing", "tower", "world_boss",
+      "guild_raid", "sanctuary", "event_hub", "live_multi_panel_modes", "territory_map"
+    ],
+    "sketches_blocking": false,
+    "note": "Sketches accelerate accurate implementation but do NOT block audit."
+  },
+  "asset_categories": [
+    "background", "panel_bg", "icon", "button", "banner", "hero_portrait",
+    "vfx_overlay", "status_icon", "map_tile", "cutscene_still", "loading_screen"
+  ],
+  "audio_categories": [
+    "ambient_loop", "bgm_track", "sfx_short", "voice_line", "jingle",
+    "ui_click", "battle_hit", "victory_fanfare", "defeat_sting"
+  ],
+  "storage_layout_design": {
+    "placeholder_assets_dir": "frontend/assets/test_placeholders/<mode_id>/<screen_id>/",
+    "placeholder_audio_dir": "frontend/assets/test_placeholders_audio/<mode_id>/<screen_id>/",
+    "registry_file": "data/design/runtime_audit/test_asset_audio_registry_initial_inventory_v1.json (+ future delta files)"
+  },
+  "db_writes": 0,
+  "runtime_writes": false
+}

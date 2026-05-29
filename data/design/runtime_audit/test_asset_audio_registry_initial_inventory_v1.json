@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY",
+  "track": "TRACK_E_TEST_ASSET_AUDIO_REGISTRY_DESIGN",
+  "verdict": "TRACK_E_TEST_ASSET_AUDIO_REGISTRY_READY",
+  "schema_ref": "data/design/runtime_audit/test_asset_audio_registry_schema_v1.json",
+  "audit_only": true,
+  "entries": [
+    {"mode_id": "home", "screen_id": "home_main", "asset_key": "test_home_main_background", "asset_status": "test_placeholder", "audio_key": "test_home_main_ambient_loop", "audio_status": "missing_final_audio", "replace_before_release": true, "final_asset_expected": true, "final_audio_expected": true, "owner_system": "mode_placeholder_registry", "notes": "home_bg directory contains placeholder backgrounds; no audio yet."},
+    {"mode_id": "combat", "screen_id": "combat_battle", "asset_key": "test_combat_battle_vfx_overlay", "asset_status": "placeholder_dev", "audio_key": "test_combat_battle_hit_sfx", "audio_status": "missing_final_audio", "replace_before_release": true, "owner_system": "mode_placeholder_registry"},
+    {"mode_id": "combat", "screen_id": "combat_victory", "asset_key": "test_combat_victory_panel_bg", "asset_status": "placeholder_dev", "audio_key": "test_combat_victory_fanfare", "audio_status": "missing_final_audio", "replace_before_release": true},
+    {"mode_id": "gacha", "screen_id": "gacha_main", "asset_key": "test_gacha_main_banner", "asset_status": "placeholder_dev", "audio_key": "test_gacha_summon_jingle", "audio_status": "missing_final_audio", "replace_before_release": true},
+    {"mode_id": "story", "screen_id": "story_chapter_select", "asset_key": "test_story_chapter_select_panel", "asset_status": "missing_final_asset", "audio_key": "test_story_chapter_select_ambient", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": false, "notes": "Scaffold only; chapter content TBD."},
+    {"mode_id": "guild_war", "screen_id": "guild_war_lobby", "asset_key": "test_guild_war_lobby_background", "asset_status": "missing_final_asset", "audio_key": "test_guild_war_lobby_ambient_loop", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true, "user_sketch_provided": false, "notes": "Complex multi-panel mode; user sketch strongly recommended."},
+    {"mode_id": "war_three_thrones", "screen_id": "territory_map", "asset_key": "test_territory_map_tile_set", "asset_status": "missing_final_asset", "audio_key": "test_territory_ambient", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true, "user_sketch_provided": false},
+    {"mode_id": "tower", "screen_id": "tower_floor_select", "asset_key": "test_tower_floor_select_panel_bg", "asset_status": "missing_final_asset", "audio_key": "test_tower_ambient", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true, "user_sketch_provided": false},
+    {"mode_id": "world_boss", "screen_id": "world_boss_lobby", "asset_key": "test_world_boss_lobby_bg", "asset_status": "missing_final_asset", "audio_key": "test_world_boss_battle_intro", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true, "user_sketch_provided": false},
+    {"mode_id": "guild_raid", "screen_id": "guild_raid_lobby", "asset_key": "test_guild_raid_lobby_bg", "asset_status": "missing_final_asset", "audio_key": "test_guild_raid_battle_loop", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true, "user_sketch_provided": false},
+    {"mode_id": "housing", "screen_id": "housing_main", "asset_key": "test_housing_main_bg", "asset_status": "missing_final_asset", "audio_key": "test_housing_ambient_loop", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true, "user_sketch_provided": false, "notes": "Dimora Divina structural complexity — sketch strongly recommended."},
+    {"mode_id": "sanctuary", "screen_id": "sanctuary_main", "asset_key": "test_sanctuary_main_bg", "asset_status": "missing_final_asset", "audio_key": "test_sanctuary_ambient", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true, "user_sketch_provided": false},
+    {"mode_id": "event_hub", "screen_id": "event_hub_main", "asset_key": "test_event_hub_banner", "asset_status": "missing_final_asset", "audio_key": "test_event_hub_ambient", "audio_status": "missing_final_audio", "replace_before_release": true, "sketch_required_for_next_stage": true},
+    {"mode_id": "daily_guide", "screen_id": "daily_hub", "asset_key": "test_daily_hub_card_set", "asset_status": "placeholder_dev", "audio_key": "test_daily_claim_jingle", "audio_status": "missing_final_audio", "replace_before_release": true},
+    {"mode_id": "arena_pvp", "screen_id": "pvp_main", "asset_key": "test_pvp_main_bg", "asset_status": "missing_final_asset", "audio_key": "test_pvp_ambient", "audio_status": "missing_final_audio", "replace_before_release": true},
+    {"mode_id": "shop", "screen_id": "shop_main", "asset_key": "test_shop_locked_banner", "asset_status": "placeholder_dev", "audio_key": "none", "audio_status": "not_required", "replace_before_release": true, "notes": "Shop locked; minimal placeholder until SHOP_LOCKED_V2 flipped."},
+    {"mode_id": "battle_pass", "screen_id": "battlepass_main", "asset_key": "test_battlepass_locked_banner", "asset_status": "placeholder_dev", "audio_key": "none", "audio_status": "not_required", "replace_before_release": true},
+    {"mode_id": "vip", "screen_id": "vip_main", "asset_key": "test_vip_locked_banner", "asset_status": "placeholder_dev", "audio_key": "none", "audio_status": "not_required", "replace_before_release": true},
+    {"mode_id": "global_ui", "screen_id": "navigation_tabs", "asset_key": "test_nav_icon_set", "asset_status": "placeholder_dev", "audio_key": "test_ui_click", "audio_status": "missing_final_audio", "replace_before_release": true},
+    {"mode_id": "global_ui", "screen_id": "loading_screen", "asset_key": "test_loading_screen_art", "asset_status": "missing_final_asset", "audio_key": "none", "audio_status": "not_required", "replace_before_release": true}
+  ],
+  "counts": {
+    "total_entries": 20,
+    "by_asset_status": {
+      "test_placeholder": 1,
+      "placeholder_dev": 8,
+      "missing_final_asset": 11,
+      "final_ready": 0,
+      "not_required": 0
+    },
+    "by_audio_status": {
+      "test_placeholder": 0,
+      "placeholder_dev": 0,
+      "missing_final_audio": 16,
+      "final_ready": 0,
+      "not_required": 4
+    },
+    "replace_before_release_count": 20,
+    "sketch_required_count": 8,
+    "sketch_provided_count": 0
+  },
+  "db_writes": 0
+}

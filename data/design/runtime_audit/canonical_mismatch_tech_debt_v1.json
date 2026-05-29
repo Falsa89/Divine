@@ -1,0 +1,122 @@
+{
+  "task_id": "PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY",
+  "track": "TRACK_D_CANONICAL_MISMATCH_AND_TECH_DEBT_REPORT",
+  "verdict": "TRACK_D_CANONICAL_MISMATCH_TECH_DEBT_READY",
+  "audit_only": true,
+  "db_writes": 0,
+  "mismatches": [
+    {
+      "id": "MISMATCH_NO_STAMINA_VIOLATION",
+      "severity": "HIGH",
+      "canonical_decision": "NO_STAMINA_SYSTEM (decisione canonica progetto)",
+      "current_state": "Legacy stamina-cost gating ancora presente in 5 backend route + 5 frontend screen",
+      "backend_evidence": [
+        "backend/routes/combat.py:48,50,109,111,211,213 ($inc stamina -N)",
+        "backend/routes/cosmetics.py:95,97 ($inc stamina -15)",
+        "backend/routes/economy.py:50,51,52,71,95",
+        "backend/routes/gvg.py:235,237,239 ($inc stamina -12)",
+        "backend/routes/raids.py:70,72 ($inc stamina -10)"
+      ],
+      "frontend_evidence": [
+        "frontend/app/events.tsx",
+        "frontend/app/gvg.tsx",
+        "frontend/app/shop.tsx",
+        "frontend/app/tower.tsx",
+        "frontend/app/treasury.tsx"
+      ],
+      "impact": "Combat/cosmetics/gvg/raids/events bloccati da stamina cost che NON esiste più nel design canonico",
+      "recommendation": "Pack dedicato STAMINA_REMOVAL_AND_REWARD_REPLACEMENT (P0 release blocker). Sostituire stamina cost con cooldown/daily-attempts/no-cost a seconda della modalità",
+      "release_blocker": true,
+      "remediation_pack_suggested": "PROJECT_NO_STAMINA_REMEDIATION_PACK"
+    },
+    {
+      "id": "MISMATCH_BENCHMARK_16_MODES_NOT_FULLY_IMPLEMENTED",
+      "severity": "HIGH",
+      "canonical_decision": "16 live/special modes canonical (Benchmark Source-of-Truth)",
+      "current_state": "Solo 4-5 modalità hanno scaffold/prototype (GvG, Tower, PvP, Event Hub). 9+ modalità sono DESIGN_ONLY",
+      "missing_modes": [
+        "Titanomachia", "Assalto del Ragnarok", "Server Boss / Crepuscolo dei Titani",
+        "Faction Boss / Giudizio delle Stirpi", "Trial / Prove del Pantheon",
+        "Sigilli degli Dei", "Giudizio di Asgard", "Cammino dell'Ade",
+        "Scala dell'Olimpo", "Troni dell'Eclissi", "Abisso del Colosso",
+        "Guild Boss / Fame del Behemoth", "Guild Raid / Furie del Pantheon"
+      ],
+      "recommendation": "Implementazione iterativa con TEST placeholder kit (vedi Track E + F)",
+      "release_blocker": false,
+      "note": "Soft-launch acceptable senza tutti i 16 modes, ma necessario stato chiaro su quali sono LOCKED vs COMING_SOON"
+    },
+    {
+      "id": "MISMATCH_AUDIO_MISSING_GLOBAL",
+      "severity": "HIGH",
+      "canonical_decision": "Asset Pipeline VFX/audio placeholder pipeline",
+      "current_state": "Nessuna directory audio rilevata in frontend/assets/. Zero SFX/music wiring.",
+      "recommendation": "Track E definisce schema TEST audio placeholder; Track F prioritizza audio kit P3 polish",
+      "release_blocker": true
+    },
+    {
+      "id": "MISMATCH_BORE_GAIA_LEGACY",
+      "severity": "LOW",
+      "canonical_decision": "Borea soft-deactivated / Gaia controlled exposure (rm134b patches)",
+      "current_state": "Borea inert baseline validato; Gaia exposure gestita via canonical axis activation",
+      "recommendation": "Nessuna azione richiesta",
+      "release_blocker": false,
+      "status": "resolved_validated"
+    },
+    {
+      "id": "MISMATCH_ARTIFACT_LEGACY_POST_LOCK",
+      "severity": "NONE",
+      "canonical_decision": "Legacy POST artifact/constellation mutation = HTTP 423",
+      "current_state": "backend/routes/artifacts.py applica ARTIFACT_MUTATION_LOCK_STATUS = 423; banner hidden; Stage 8 canary internal-only",
+      "release_blocker": false,
+      "status": "aligned"
+    },
+    {
+      "id": "MISMATCH_SERVER_PROFILE_PARTIAL",
+      "severity": "MEDIUM",
+      "canonical_decision": "Server profiles canonical with S1 default migration gated (SLC G)",
+      "current_state": "server_profiles.py preview gated; multi-shard live not fully implemented",
+      "recommendation": "Pack SLC_H release candidate gate per attivare live multi-shard",
+      "release_blocker": true
+    },
+    {
+      "id": "MISMATCH_PLACEHOLDER_PRETENDING_FINAL",
+      "severity": "LOW",
+      "canonical_decision": "Placeholder UI/audio devono essere etichettati come TEST",
+      "current_state": "Alcuni asset placeholder esistenti (hero sprites, home_bg) NON ancora registrati nel registry canonico",
+      "recommendation": "Track E initial inventory copre questo; pack futuro ASSET_REGISTRY_BACKFILL",
+      "release_blocker": false
+    },
+    {
+      "id": "MISMATCH_VFX_STATUS_ICON_PIPELINE_PARTIAL",
+      "severity": "MEDIUM",
+      "canonical_decision": "VFX/status icon pipeline with traceable replacement",
+      "current_state": "Catalogs presenti (skill_status_vfx_catalogs) ma rendering VFX live combat parziale",
+      "recommendation": "Combat polish pack (P3)",
+      "release_blocker": false
+    },
+    {
+      "id": "MISMATCH_RUNES_NOT_IMPLEMENTED",
+      "severity": "LOW",
+      "canonical_decision": "Runes design canonical",
+      "current_state": "Nessuna superficie runes runtime; DESIGN_ONLY",
+      "recommendation": "Pack RUNES_FOUNDATION quando prioritario",
+      "release_blocker": false
+    },
+    {
+      "id": "MISMATCH_STORY_CONTENT_MISSING",
+      "severity": "MEDIUM",
+      "canonical_decision": "Story core loop functional",
+      "current_state": "frontend/app/story.tsx scaffold; no chapter content, no cutscenes",
+      "recommendation": "Story content pack + voice/cutscene placeholder kit (Track E)",
+      "release_blocker": true
+    }
+  ],
+  "counts": {
+    "total_mismatches": 10,
+    "high_severity": 3,
+    "medium_severity": 3,
+    "low_severity": 3,
+    "none_severity_aligned": 1,
+    "release_blockers": 4
+  }
+}

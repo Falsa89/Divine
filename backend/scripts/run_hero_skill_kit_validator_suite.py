@@ -7,6 +7,16 @@
 # PUBLIC_SYNC_TAG_RESYNC_v8: suite_runner_battle_pass_surface_modernization_v8_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v8b: suite_runner_battle_pass_sync_fix_v8b_2026_05_29_force_blob_resnapshot
 # PUBLIC_SYNC_TAG_RESYNC_v9: suite_runner_vip_design_and_iap_integration_v9_2026_05_29
+# PUBLIC_SYNC_TAG_RESYNC_v10: suite_runner_full_runtime_feature_reality_audit_v10_2026_05_29
+# RESYNC_v10 RATIONALE: Registrazione OPTIONAL del nuovo validator
+# validate_project_full_runtime_feature_reality_audit_v1.py
+# (PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY).
+# Strategia tripled-sentinel applicata (anti stale-push):
+#   1) fresh PUBLIC_SYNC_TAG_RESYNC_v10 in cima a questo file (qui sopra)
+#   2) sentinella inline FULL_RUNTIME_FEATURE_REALITY_AUDIT_REGISTRATION_SENTINEL
+#      immediatamente sopra la tupla nel blocco OPTIONAL
+#   3) proof marker JSON dedicato:
+#      data/design/runtime_audit/runtime_audit_suite_registration_proof_marker_v1.json
 # RESYNC_v9 RATIONALE: Registrazione OPTIONAL del nuovo validator
 # validate_project_vip_design_and_iap_integration_v1.py (PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION).
 # Strategia tripled-sentinel applicata (anti stale-push):
@@ -1178,6 +1188,10 @@ OPTIONAL = [
     # Sentinella inline VIP DESIGN AND IAP INTEGRATION — design-only validator; VIP_LOCKED_V2 must remain true; no live VIP progression/claim/grant/revoke; no IAP SDK runtime; no real product IDs; no DB writes.
     # Proof marker dedicato (tripled-sentinel): data/design/vip/vip_suite_registration_proof_marker_v1.json
     ('PROJECT-VIP-DESIGN-AND-IAP-INTEGRATION', 'validate_project_vip_design_and_iap_integration_v1.py'),
+    # FULL_RUNTIME_FEATURE_REALITY_AUDIT_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline FULL RUNTIME FEATURE REALITY AUDIT — audit-only/registry-design-only validator; no runtime implementation; no DB writes; no player data mutation; no IAP/BP/VIP/Shop live activation; no gacha/pity changes; no battle_engine/combat changes; no final assets/audio.
+    # Proof marker dedicato (tripled-sentinel): data/design/runtime_audit/runtime_audit_suite_registration_proof_marker_v1.json
+    ('PROJECT-FULL-RUNTIME-FEATURE-REALITY-AUDIT', 'validate_project_full_runtime_feature_reality_audit_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

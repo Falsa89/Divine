@@ -1,0 +1,77 @@
+{
+  "task_id": "PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY",
+  "track": "TRACK_F_MODE_IMPLEMENTATION_PRIORITY_ROADMAP",
+  "verdict": "TRACK_F_MODE_IMPLEMENTATION_PRIORITY_ROADMAP_READY",
+  "audit_only": true,
+  "priority_buckets": {
+    "P0_release_blockers": [
+      {"item": "PROJECT_NO_STAMINA_REMEDIATION_PACK", "reason": "Remove 5 backend + 5 frontend stamina violations", "impact": "blocks soft launch", "estimated_complexity": "medium"},
+      {"item": "PROJECT_AUDIO_PLACEHOLDER_FOUNDATION_PACK", "reason": "Currently 0 audio assets; need minimal SFX/BGM kit registered as TEST", "estimated_complexity": "medium"},
+      {"item": "PROJECT_COMBAT_FINALIZE_FOR_RELEASE_PACK", "reason": "battle_engine green but VFX/audio + report polish needed", "estimated_complexity": "high"},
+      {"item": "PROJECT_LOGIN_AUTH_HARDENING_PACK", "reason": "email verify + password reset polish", "estimated_complexity": "low"},
+      {"item": "PROJECT_SERVER_PROFILES_LIVE_MULTISHARD_PACK", "reason": "SLC_H release candidate gate", "estimated_complexity": "high"}
+    ],
+    "P1_core_playable_mode_completion": [
+      {"item": "PROJECT_HERO_PROGRESSION_RUNTIME_GREEN", "reason": "Hero level/ascension/stars 55-65% — close out", "estimated_complexity": "medium"},
+      {"item": "PROJECT_TEAMS_FORMATIONS_FINALIZATION", "reason": "Teams 55% — ship as canonical", "estimated_complexity": "medium"},
+      {"item": "PROJECT_INVENTORY_EQUIPMENT_FORGE_POLISH", "reason": "Three systems in 50-55%", "estimated_complexity": "medium"},
+      {"item": "PROJECT_GACHA_PITY_ACTIVATION_DESIGN_TO_RUNTIME", "reason": "Pity DESIGN_ONLY; bring to runtime safely", "estimated_complexity": "medium"},
+      {"item": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME_PACK", "reason": "Tower prototype; sketch needed", "sketch_recommended": true, "estimated_complexity": "high"},
+      {"item": "PROJECT_PVP_ARENA_RUNTIME_PACK", "reason": "PvP prototype 35%", "estimated_complexity": "high"}
+    ],
+    "P2_live_modes": [
+      {"item": "PROJECT_GUILD_WAR_FRONTI_DEL_VALHALLA_MVP", "sketch_recommended": true, "estimated_complexity": "high"},
+      {"item": "PROJECT_GUILD_BOSS_FAME_DEL_BEHEMOTH_MVP", "sketch_recommended": true, "estimated_complexity": "high"},
+      {"item": "PROJECT_GUILD_RAID_FURIE_DEL_PANTHEON_MVP", "sketch_recommended": true, "estimated_complexity": "high"},
+      {"item": "PROJECT_TERRITORY_GUERRA_DEI_TRE_TRONI_MVP", "sketch_recommended": true, "estimated_complexity": "very_high"},
+      {"item": "PROJECT_CREPUSCOLO_DEI_TITANI_WORLD_BOSS_MVP", "sketch_recommended": true, "estimated_complexity": "high"},
+      {"item": "PROJECT_GIUDIZIO_DELLE_STIRPI_FACTION_BOSS_MVP", "estimated_complexity": "medium"},
+      {"item": "PROJECT_TITANOMACHIA_MVP", "estimated_complexity": "high"},
+      {"item": "PROJECT_ASSALTO_DEL_RAGNAROK_MVP", "estimated_complexity": "high"},
+      {"item": "PROJECT_TRIAL_PROVE_DEL_PANTHEON_MVP", "estimated_complexity": "medium"},
+      {"item": "PROJECT_HOUSING_DIMORA_DIVINA_MVP", "sketch_recommended": true, "estimated_complexity": "very_high"},
+      {"item": "PROJECT_EVENT_HUB_SEASONAL_PACK", "sketch_recommended": true, "estimated_complexity": "medium"},
+      {"item": "PROJECT_RANKINGS_LEADERBOARDS_FINAL", "estimated_complexity": "low"}
+    ],
+    "P3_polish_asset_audio": [
+      {"item": "PROJECT_FINAL_ART_HEROES", "estimated_complexity": "very_high"},
+      {"item": "PROJECT_FINAL_AUDIO_BGM_SFX_KIT", "estimated_complexity": "high"},
+      {"item": "PROJECT_COMBAT_VFX_FINAL", "estimated_complexity": "high"},
+      {"item": "PROJECT_STORY_CONTENT_AND_VOICE", "estimated_complexity": "very_high"},
+      {"item": "PROJECT_RUNES_FOUNDATION", "estimated_complexity": "medium"},
+      {"item": "PROJECT_NOTIFICATIONS_FOUNDATION", "estimated_complexity": "medium"}
+    ],
+    "P3_monetization_release_unlock_sequence": [
+      {"item": "PROJECT_SHOP_PUBLIC_UI_UNLOCK_STAGE", "depends_on": ["179 Stage 5+"], "estimated_complexity": "medium"},
+      {"item": "PROJECT_IAP_LIVE_RECEIPT_VERIFIER", "depends_on": ["178 Stage 4+"], "estimated_complexity": "high"},
+      {"item": "PROJECT_BATTLE_PASS_UI_IMPL_AND_CANARY", "depends_on": ["180 Stage 5+"], "estimated_complexity": "medium"},
+      {"item": "PROJECT_VIP_UI_IMPL_AND_CANARY", "depends_on": ["181 Stage 5+"], "estimated_complexity": "medium"}
+    ]
+  },
+  "modes_needing_user_sketches": [
+    "guild_war", "war_three_thrones", "housing", "tower", "world_boss",
+    "guild_raid", "sanctuary", "event_hub", "territory_map", "live_multi_panel_modes"
+  ],
+  "modes_standard_placeholder_kit_sufficient": [
+    "daily_guide", "mail", "plaza", "friends", "dm", "rankings", "settings",
+    "notifications", "trial_pantheon", "sigilli_degli_dei", "giudizio_di_asgard",
+    "cammino_dell_ade", "scala_dell_olimpo", "troni_dell_eclissi", "abisso_del_colosso"
+  ],
+  "implementation_order_recommendation": [
+    "1. P0 stamina removal + audio foundation + login hardening (parallelizable).",
+    "2. P1 hero progression/teams/inventory polish.",
+    "3. P1 gacha pity activation.",
+    "4. P1 tower + pvp runtime.",
+    "5. P2 guild war as first live mode (with sketch).",
+    "6. P2 territory + world boss with sketches.",
+    "7. P3 audio/art polish + monetization unlock sequence in parallel.",
+    "8. P3 housing as last big content drop."
+  ],
+  "honest_project_completion_estimate": {
+    "design_architecture_pct": 75,
+    "runtime_playable_pct": 38,
+    "release_ready_excluding_graphics_audio_pct": 32,
+    "release_ready_including_graphics_audio_pct": 18,
+    "rationale": "Strong design foundation (16 modes canonical, monetization 178/179/180/181 designed, gacha rates green). Runtime: only Soul Forge, Gacha standard, Daily Guide, Divine Weapons are CANONICAL_RUNTIME_READY. Combat partial. 9+ live modes design-only. Audio missing. Stamina violation blocks 6 features. Art partial."
+  }
+}

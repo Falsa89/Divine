@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_FULL_RUNTIME_FEATURE_REALITY_AUDIT_WITH_TEST_ASSET_REGISTRY",
+  "purpose": "DEDICATED_SUITE_REGISTRATION_PROOF_MARKER",
+  "validator_file_path": "backend/scripts/validate_project_full_runtime_feature_reality_audit_v1.py",
+  "validator_file_role": "OPTIONAL",
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_registration_row_text": "('PROJECT-FULL-RUNTIME-FEATURE-REALITY-AUDIT', 'validate_project_full_runtime_feature_reality_audit_v1.py'),",
+    "expected_inline_sentinel_above_row_text": "# FULL_RUNTIME_FEATURE_REALITY_AUDIT_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_top_sentinel_v10": "# PUBLIC_SYNC_TAG_RESYNC_v10: suite_runner_full_runtime_feature_reality_audit_v10_2026_05_29"
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verify top sentinel v10 present",
+    "Verify inline sentinel FULL_RUNTIME_FEATURE_REALITY_AUDIT_REGISTRATION_SENTINEL present",
+    "Verify tuple ('PROJECT-FULL-RUNTIME-FEATURE-REALITY-AUDIT', '...') present exactly once",
+    "Verify backend/scripts/validate_project_full_runtime_feature_reality_audit_v1.py exists",
+    "Verify data/design/runtime_audit/* contains 6 design JSON + this proof marker (total 7)"
+  ],
+  "weakens_REQUIRED_validators": false,
+  "do_not_touch": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "frontend/app/combat.tsx",
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/(tabs)/gacha.tsx (gacha rates / pity)",
+    "frontend/app/shop.tsx (SHOP_LOCKED_V2)",
+    "frontend/app/item-shop.tsx (ITEM_SHOP_LOCKED_V2)",
+    "frontend/app/battlepass.tsx (BP_LOCKED_V2)",
+    "frontend/app/vip.tsx (VIP_LOCKED_V2)",
+    "frontend/app/artifacts.tsx (artifact banner hidden)"
+  ]
+}
