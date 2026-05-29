@@ -1,0 +1,32 @@
+{
+  "task_id": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION",
+  "purpose": "DEDICATED_SUITE_REGISTRATION_PROOF_MARKER",
+  "validator_file_path": "backend/scripts/validate_project_vip_design_and_iap_integration_v1.py",
+  "validator_file_role": "OPTIONAL",
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_registration_row_text": "('PROJECT-VIP-DESIGN-AND-IAP-INTEGRATION', 'validate_project_vip_design_and_iap_integration_v1.py'),",
+    "expected_inline_sentinel_above_row_text": "# VIP_DESIGN_AND_IAP_INTEGRATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_top_sentinel_v9": "# PUBLIC_SYNC_TAG_RESYNC_v9: suite_runner_vip_design_and_iap_integration_v9_2026_05_29"
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verify top sentinel v9 present",
+    "Verify inline sentinel VIP_DESIGN_AND_IAP_INTEGRATION_REGISTRATION_SENTINEL present",
+    "Verify tuple ('PROJECT-VIP-DESIGN-AND-IAP-INTEGRATION', '...') present exactly once",
+    "Verify backend/scripts/validate_project_vip_design_and_iap_integration_v1.py exists",
+    "Verify data/design/vip/* contains 7 design JSON + this proof marker (total 8)"
+  ],
+  "weakens_REQUIRED_validators": false,
+  "do_not_touch": [
+    "backend/battle_engine.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/(tabs)/gacha.tsx (gacha rates / pity)",
+    "frontend/app/shop.tsx (SHOP_LOCKED_V2)",
+    "frontend/app/item-shop.tsx (ITEM_SHOP_LOCKED_V2)",
+    "frontend/app/battlepass.tsx (BP_LOCKED_V2)",
+    "frontend/app/vip.tsx (VIP_LOCKED_V2 must remain true)"
+  ]
+}

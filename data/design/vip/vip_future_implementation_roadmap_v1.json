@@ -1,0 +1,88 @@
+{
+  "task_id": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION",
+  "track": "TRACK_G_VIP_FUTURE_IMPLEMENTATION_ROADMAP",
+  "verdict": "TRACK_G_VIP_FUTURE_IMPLEMENTATION_ROADMAP_READY",
+  "design_only": true,
+  "stages": [
+    {
+      "stage_index": 1,
+      "stage_id": "VIP_DESIGN_AND_IAP_INTEGRATION_SIGNOFF_LOCKED",
+      "description": "This pack. Canonical VIP design + IAP entitlement mapping, locked.",
+      "required_signoff_markers": ["PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION_APPROVAL=true"],
+      "blockers_before_advance": ["public repo sync verification of this pack"],
+      "rollback": "revert commit; no DB/runtime affected"
+    },
+    {
+      "stage_index": 2,
+      "stage_id": "VIP_TIER_THRESHOLD_SIGNOFF",
+      "description": "Fill <<VIP_TIER_X>> placeholders with final spend thresholds; explicit benefit table per tier.",
+      "required_signoff_markers": ["PROJECT_VIP_TIER_THRESHOLD_APPROVAL"],
+      "blockers_before_advance": ["economy team review", "anti-P2W recheck"],
+      "rollback": "revert threshold JSON"
+    },
+    {
+      "stage_index": 3,
+      "stage_id": "VIP_SCHEMA_DRY_RUN",
+      "description": "Mongo schema dry-run for vip_points_ledger + vip_status_snapshot. Indexes, idempotency. No live writes.",
+      "required_signoff_markers": ["PROJECT_VIP_SCHEMA_DRY_RUN_APPROVAL"],
+      "blockers_before_advance": ["unique index plan", "idempotency plan"],
+      "rollback": "drop indexes (no data ever written)"
+    },
+    {
+      "stage_index": 4,
+      "stage_id": "VIP_BACKEND_ENDPOINTS_DEV_ONLY",
+      "description": "Implement /api/vip/status, /claim-daily, /grant, /revoke, /history behind feature flags VIP_*_ENABLED=false.",
+      "required_signoff_markers": ["PROJECT_VIP_BACKEND_DEV_APPROVAL"],
+      "blockers_before_advance": ["feature flags forced off in production"],
+      "rollback": "unmount routes"
+    },
+    {
+      "stage_index": 5,
+      "stage_id": "VIP_LOCKED_UI_MODERNIZATION_IMPLEMENTATION",
+      "description": "Implement Track E copy + tier ladder preview in frontend/app/vip.tsx; keep VIP_LOCKED_V2 = true; no claim, no buy.",
+      "required_signoff_markers": ["PROJECT_VIP_LOCKED_UI_IMPL_APPROVAL"],
+      "blockers_before_advance": ["copy review", "accessibility review"],
+      "rollback": "revert vip.tsx"
+    },
+    {
+      "stage_index": 6,
+      "stage_id": "VIP_CANARY_PROGRESSION",
+      "description": "Enable vip_points grant + tier compute for canary internal users only (sfqa@test.com, test@test.com).",
+      "required_signoff_markers": ["PROJECT_VIP_PROGRESSION_CANARY_APPROVAL=true"],
+      "canary_users_expected": ["sfqa@test.com", "test@test.com"],
+      "blockers_before_advance": ["178F Stage 6 canary fulfillment green", "179 Track D wallet ledger ready"],
+      "rollback": "disable allowlist; archive ledger"
+    },
+    {
+      "stage_index": 7,
+      "stage_id": "VIP_DAILY_CLAIM_CANARY",
+      "description": "Enable /api/vip/claim-daily for canary users only; verify idempotency + correct crystal stipend.",
+      "required_signoff_markers": ["PROJECT_VIP_DAILY_CLAIM_CANARY_APPROVAL=true"],
+      "blockers_before_advance": ["Stage 6 progression canary green"],
+      "rollback": "disable allowlist; revoke via ledger"
+    },
+    {
+      "stage_index": 8,
+      "stage_id": "VIP_REFUND_REVOKE_TEST",
+      "description": "Exercise Apple ASSN / Google RTDN refund webhooks on canary VIP points; verify tier demotion correctness.",
+      "required_signoff_markers": ["PROJECT_VIP_REFUND_TEST_APPROVAL"],
+      "blockers_before_advance": ["179 refund-reconcile design + Stage 7 of 178F roadmap"],
+      "rollback": "document and re-run"
+    },
+    {
+      "stage_index": 9,
+      "stage_id": "VIP_PUBLIC_RELEASE_GATE",
+      "description": "Flip VIP_LOCKED_V2 = false in production; enable claim + benefits.",
+      "required_signoff_markers": ["PROJECT_VIP_RELEASE_GATE_APPROVAL"],
+      "blockers_before_advance": ["Stages 1-8 verified", "178F Release Gate alignment", "179 Stage 8 Public Shop IAP UI live"],
+      "rollback": "emergency VIP_LOCKED_V2=true; pause writes; freeze tiers"
+    }
+  ],
+  "alignment_with_other_roadmaps": {
+    "vip_canary_stage_6_blocks_on_178F_stage_6": true,
+    "vip_canary_stage_6_blocks_on_179_track_D": true,
+    "vip_refund_test_stage_8_blocks_on_178F_stage_7": true,
+    "vip_release_gate_stage_9_blocks_on_178F_release_gate_stage_10": true,
+    "vip_release_gate_stage_9_blocks_on_179_stage_8": true
+  }
+}

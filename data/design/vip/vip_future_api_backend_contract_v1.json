@@ -1,0 +1,131 @@
+{
+  "task_id": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION",
+  "track": "TRACK_F_VIP_FUTURE_API_BACKEND_CONTRACT_DESIGN_ONLY",
+  "verdict": "TRACK_F_VIP_FUTURE_API_BACKEND_CONTRACT_READY",
+  "design_only": true,
+  "no_runtime_implementation_added_in_this_pack": true,
+  "no_db_writes_in_this_pack": true,
+  "feature_flag_design": {
+    "VIP_PROGRESSION_ENABLED": false,
+    "VIP_DAILY_CLAIM_ENABLED": false,
+    "VIP_BENEFITS_RUNTIME_ENABLED": false,
+    "VIP_GRANT_ENABLED": false,
+    "VIP_CANARY_ONLY": true,
+    "VIP_GLOBAL_DISABLED": true
+  },
+  "future_endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/vip/status",
+      "purpose": "Read-only VIP status for authenticated user (current tier, vip_points, next_tier_threshold, benefits summary).",
+      "auth_required": true,
+      "role": "player",
+      "account_scoped": true,
+      "design_only": true,
+      "response_shape": {
+        "user_id": "string",
+        "vip_points": 0,
+        "current_tier": 0,
+        "next_tier": 1,
+        "next_tier_threshold_placeholder": "<<VIP_TIER_1>>",
+        "vip_points_to_next_tier": 0,
+        "benefits_active": [],
+        "locked": true
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/vip/claim-daily",
+      "purpose": "Claim daily Divine Crystal stipend for the current VIP tier. Idempotent per UTC day.",
+      "auth_required": true,
+      "role": "player",
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "utc_day": "YYYY-MM-DD",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "CLAIMED|ALREADY_CLAIMED|NO_TIER|FEATURE_DISABLED|TIER_GATED",
+        "crystals_granted": 0,
+        "wallet_after": {}
+      },
+      "forbidden_grants_in_response": [
+        "artifact_id",
+        "constellation_id",
+        "sigilli_premium",
+        "sigilli_targeted",
+        "hero_direct_grant",
+        "combat_stat_boost",
+        "pity_skip"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/vip/grant",
+      "purpose": "System-only route to credit vip_points after a verified purchase. NOT player-callable.",
+      "auth_required": true,
+      "role": "system_only",
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "linked_purchase_id": "string",
+        "delta_vip_points": 0,
+        "source": "iap_purchase_paid_crystal_component",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "APPLIED|DUPLICATE|REJECTED|FEATURE_DISABLED",
+        "vip_points_after": 0,
+        "new_tier": 0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/vip/revoke",
+      "purpose": "System-only route to revoke vip_points after refund/chargeback/ASSN/RTDN. NOT player-callable.",
+      "auth_required": true,
+      "role": "system_only",
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "linked_purchase_id": "string",
+        "delta_vip_points_negative": 0,
+        "reason": "REFUND|CHARGEBACK|FRAUD_REVERSE",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "REVOKED|DUPLICATE|REJECTED|FEATURE_DISABLED",
+        "vip_points_after": 0,
+        "new_tier": 0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/vip/history",
+      "purpose": "Read-only vip_points ledger history for the authenticated user.",
+      "auth_required": true,
+      "role": "player",
+      "design_only": true
+    }
+  ],
+  "idempotency_design": {
+    "daily_claim_key": "<user_id>:<utc_day>",
+    "grant_key": "<user_id>:<linked_purchase_id>",
+    "revoke_key": "<user_id>:<linked_purchase_id>:REVOKE",
+    "reuse_returns_same_result": true
+  },
+  "error_modes_global": {
+    "FEATURE_FLAG_DISABLED": 423,
+    "DUPLICATE": 200,
+    "NOT_AUTHORIZED": 403,
+    "USER_MISMATCH": 403,
+    "NO_TIER": 200
+  },
+  "premium_entitlement_source": {
+    "primary_source": "purchase_ledger from PROJECT_SHOP_IAP_INTEGRATION (179D)",
+    "product_family_filter": ["divine_crystal_pack", "launch_support_pack", "monthly_pass (paid crystal stipend portion only)"],
+    "design_only": true
+  },
+  "vip_endpoints_remain_gated": true
+}

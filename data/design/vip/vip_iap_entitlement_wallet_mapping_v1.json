@@ -1,0 +1,77 @@
+{
+  "task_id": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION",
+  "track": "TRACK_D_VIP_IAP_ENTITLEMENT_AND_WALLET_MAPPING",
+  "verdict": "TRACK_D_VIP_IAP_ENTITLEMENT_AND_WALLET_MAPPING_READY",
+  "design_only": true,
+  "db_writes_in_this_pack": 0,
+  "vip_points_accrual_rule": {
+    "rule": "1 paid Divine Crystal granted via verified IAP = 1 vip_point",
+    "placeholder_ratio": "<<VIP_POINTS_PER_PAID_CRYSTAL>>",
+    "design_only": true,
+    "source": "purchase_ledger entries with product_id_internal_mock in {crystal_pack family, launch_support_pack family with paid crystals component, monthly_pass daily crystals stipend portion}",
+    "forbidden_source": [
+      "free Divine Crystals (divine_crystals_free)",
+      "event currencies",
+      "gameplay-earned currencies",
+      "in-banner Crystal\u2192Sigilli conversion (no double-count)"
+    ]
+  },
+  "product_family_mapping_design": [
+    {"product_family": "divine_crystal_pack",     "contributes_to_vip_points": true,  "contribution_basis": "granted_paid_crystals_amount"},
+    {"product_family": "launch_support_pack",     "contributes_to_vip_points": true,  "contribution_basis": "paid_crystals_component_only"},
+    {"product_family": "monthly_pass",            "contributes_to_vip_points": true,  "contribution_basis": "daily_paid_crystals_stipend_actually_received"},
+    {"product_family": "summon_pack",             "contributes_to_vip_points": false, "reason": "sigilli grant, not paid crystals; avoid double-rewarding gacha + VIP"},
+    {"product_family": "cosmetic_pack",           "contributes_to_vip_points": false, "reason": "non-consumable cosmetic; vip_points only via paid crystals"},
+    {"product_family": "battle_pass",             "contributes_to_vip_points": false, "reason": "BP entitlement separate; design boundary"},
+    {"product_family": "vip_tier",                "contributes_to_vip_points": false, "reason": "VIP is progression marker derived from spend, not a direct purchase product"},
+    {"product_family": "offer_code_promo",        "contributes_to_vip_points": false, "reason": "promo codes are server-redeemed non-IAP"}
+  ],
+  "vip_points_ledger_design": {
+    "collection_name_future": "vip_points_ledger",
+    "append_only": true,
+    "server_authoritative": true,
+    "required_fields": [
+      "vip_ledger_id",
+      "user_id",
+      "timestamp_utc",
+      "delta_vip_points",
+      "vip_points_after",
+      "new_tier",
+      "source",
+      "linked_purchase_id",
+      "linked_refund_ledger_id",
+      "idempotency_key"
+    ],
+    "index_design": [
+      {"name": "ix_uniq_vip_idempotency", "unique": true, "fields": ["idempotency_key"]},
+      {"name": "ix_user_time", "fields": ["user_id", "timestamp_utc"]}
+    ]
+  },
+  "refund_revoke_behavior": {
+    "trigger_sources": ["Apple ASSN", "Google RTDN", "manual support"],
+    "action": "append revoke entry to vip_points_ledger; delta_vip_points negative; recompute tier on next read; never revoke already-claimed VIP daily stipend retroactively unless explicit chargeback fraud",
+    "tier_demotion_allowed_on_refund": true,
+    "forbid_silent_partial_demotion": true,
+    "reason_for_demotion_allowed_only_on_refund": "Paying players should not lose tier randomly; only refunds/chargebacks demote."
+  },
+  "idempotency_design": {
+    "vip_points_grant_key": "<user_id>:<linked_purchase_id>",
+    "vip_points_revoke_key": "<user_id>:<linked_purchase_id>:REVOKE",
+    "reuse_returns_same_result": true
+  },
+  "wallet_separation_policy": {
+    "vip_points_are_not_a_spendable_currency": true,
+    "vip_points_are_progression_marker_only": true,
+    "vip_points_visible_in_treasury": true,
+    "vip_points_homepage_visible": false,
+    "reason_not_homepage": "Homepage shows only Oro + Cristalli Divini + EXP Account per design 178/179."
+  },
+  "server_authority": {
+    "client_never_grants_vip_points": true,
+    "client_never_recomputes_tier": true,
+    "server_validates_all_iap_receipts_before_grant": true,
+    "server_writes_all_vip_ledger_entries": true
+  },
+  "applies_to_runtime": false,
+  "runtime_blocked_by": "VIP_LOCKED_V2 (frontend) + future feature flag VIP_GRANT_ENABLED=false"
+}

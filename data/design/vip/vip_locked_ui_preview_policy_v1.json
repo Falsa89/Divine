@@ -1,0 +1,57 @@
+{
+  "task_id": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION",
+  "track": "TRACK_E_VIP_LOCKED_UI_PREVIEW_POLICY",
+  "verdict": "TRACK_E_VIP_LOCKED_UI_PREVIEW_POLICY_READY",
+  "design_only": true,
+  "frontend_vip_modified_in_this_pack": false,
+  "reason_for_no_frontend_change_in_this_pack": "Design contract for future modernization. Implementation UI follows in a dedicated sub-pack with explicit user authorization. Keeping vip.tsx MD5 unchanged minimizes regression risk.",
+  "future_implementation_guarded_changes_allowed": [
+    "improve copy: 'VIP \u2014 Aura Divina' with tier badges 0..10 preview",
+    "show tier ladder preview with locked pills on tiers 1-10",
+    "show benefit list (cosmetic + convenience) per tier with explicit lock label",
+    "price placeholder (<<VIP_TIER_X>>) for crystals required",
+    "link to /shop preview (still locked)",
+    "accessibility: minimum touch targets 44pt iOS / 48dp Android",
+    "mobile layout: SafeAreaView + ScrollView; no fixed positioning; no KeyboardAvoidingView needed (no input)"
+  ],
+  "future_implementation_guarded_changes_forbidden": [
+    "active claim button bypassing VIP_LOCKED_V2",
+    "active buy-tier button (VIP is spend-based, not directly purchased; tier upgrades come from IAP crystal packs)",
+    "apiCall to /api/vip/claim-daily while VIP_LOCKED_V2",
+    "IAP SDK import",
+    "real product ID literal",
+    "direct ledger write",
+    "countdown < 60s",
+    "hidden price",
+    "hidden tier benefit",
+    "removal or weakening of VIP_LOCKED_V2"
+  ],
+  "locked_state_invariants_required_after_any_future_change": {
+    "VIP_LOCKED_V2_must_remain_true": true,
+    "claim_button_disabled": true,
+    "no_buy_tier_button_visible": true,
+    "lock_banner_visible": true,
+    "no_live_api_call_on_press": true
+  },
+  "copy_proposals_it": {
+    "page_title": "VIP \u2014 Aura Divina",
+    "lock_banner": "VIP in preparazione. Il sistema di spesa reale (IAP) e i benefit non sono ancora attivi.",
+    "tier_0_label": "VIP 0 \u2014 Visitatore",
+    "tier_n_locked_pill": "Bloccato \u2014 in preparazione",
+    "claim_button_label_locked": "Disponibile presto",
+    "benefit_list_locked_note": "Benefit anteprima \u2014 non riscuotibili ora.",
+    "discount_note": "Sconto su pacchetti Cristalli fino al 20% a VIP 10 (anteprima)."
+  },
+  "accessibility_requirements": {
+    "min_touch_target_pt": 44,
+    "min_touch_target_dp": 48,
+    "screen_reader_labels_present": true,
+    "high_contrast_locked_pill_color": true
+  },
+  "mobile_layout_requirements": {
+    "safe_area_view_required": true,
+    "scrollview_or_flashlist_required": true,
+    "no_fixed_positioning": true,
+    "keyboard_avoiding_view_needed": false
+  }
+}

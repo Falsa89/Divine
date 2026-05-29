@@ -1,0 +1,49 @@
+{
+  "task_id": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION",
+  "track": "TRACK_B_VIP_CANONICAL_TIER_DESIGN",
+  "verdict": "TRACK_B_VIP_CANONICAL_TIER_DESIGN_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "name_candidates": ["VIP", "Vergine Divina", "Anima Privilegiata", "Aura Divina"],
+  "recommended_name": "VIP",
+  "recommended_name_localized_it": "VIP \u2014 Aura Divina",
+  "vip_model": "spend-based progression (account-wide accumulated IAP spend in tagged 'paid' Divine Crystals)",
+  "vip_progression_metric": "vip_points",
+  "vip_points_source": [
+    "IAP purchases of dw_real_* products mapped to internal mock IDs",
+    "explicit grant via system endpoint only (admin/refund-reverse correction)"
+  ],
+  "vip_points_forbidden_sources": [
+    "gameplay grind",
+    "free Divine Crystals spend",
+    "event currency conversion",
+    "social rewards"
+  ],
+  "vip_points_decay": false,
+  "vip_points_decay_reason": "Decay penalizes legitimate paying players; tiers are sticky once earned.",
+  "vip_tiers": [
+    {"tier": 0, "label_it": "VIP 0 \u2014 Visitatore",  "required_vip_points_placeholder": 0,                 "locked": false, "live": false},
+    {"tier": 1, "label_it": "VIP 1 \u2014 Devoto",      "required_vip_points_placeholder": "<<VIP_TIER_1>>",  "locked": true,  "live": false},
+    {"tier": 2, "label_it": "VIP 2 \u2014 Iniziato",    "required_vip_points_placeholder": "<<VIP_TIER_2>>",  "locked": true,  "live": false},
+    {"tier": 3, "label_it": "VIP 3 \u2014 Custode",     "required_vip_points_placeholder": "<<VIP_TIER_3>>",  "locked": true,  "live": false},
+    {"tier": 4, "label_it": "VIP 4 \u2014 Sacerdote",   "required_vip_points_placeholder": "<<VIP_TIER_4>>",  "locked": true,  "live": false},
+    {"tier": 5, "label_it": "VIP 5 \u2014 Asceta",      "required_vip_points_placeholder": "<<VIP_TIER_5>>",  "locked": true,  "live": false},
+    {"tier": 6, "label_it": "VIP 6 \u2014 Eletto",      "required_vip_points_placeholder": "<<VIP_TIER_6>>",  "locked": true,  "live": false},
+    {"tier": 7, "label_it": "VIP 7 \u2014 Mistico",     "required_vip_points_placeholder": "<<VIP_TIER_7>>",  "locked": true,  "live": false},
+    {"tier": 8, "label_it": "VIP 8 \u2014 Saggio",      "required_vip_points_placeholder": "<<VIP_TIER_8>>",  "locked": true,  "live": false},
+    {"tier": 9, "label_it": "VIP 9 \u2014 Veggente",    "required_vip_points_placeholder": "<<VIP_TIER_9>>",  "locked": true,  "live": false},
+    {"tier": 10,"label_it": "VIP 10 \u2014 Aura Divina","required_vip_points_placeholder": "<<VIP_TIER_10>>", "locked": true,  "live": false}
+  ],
+  "tier_progression_design_principles": [
+    "VIP 0 is the default state for non-paying or new players (NOT locked; just baseline).",
+    "VIP 1-10 require paid spend; all locked until VIP_LOCKED_V2 flip.",
+    "Progression is monotonic (never demote unless refund/chargeback).",
+    "Tier benefits cumulative (higher tiers inherit lower-tier benefits).",
+    "Refunded purchase reduces vip_points; recomputed tier on next read."
+  ],
+  "no_live_amounts_in_this_pack": true,
+  "no_combat_power_unlock_via_tier": true,
+  "no_artifact_constellation_via_tier": true,
+  "no_premium_targeted_sigilli_via_tier": true,
+  "no_pity_skip_via_tier": true
+}

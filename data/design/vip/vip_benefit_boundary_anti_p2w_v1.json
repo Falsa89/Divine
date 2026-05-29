@@ -1,0 +1,93 @@
+{
+  "task_id": "PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION",
+  "track": "TRACK_C_VIP_BENEFIT_BOUNDARY_AND_ANTI_P2W",
+  "verdict": "TRACK_C_VIP_BENEFIT_BOUNDARY_READY",
+  "design_only": true,
+  "allowed_benefit_categories": [
+    {
+      "benefit_id": "daily_crystal_stipend",
+      "category": "convenience",
+      "description": "Daily stipend of divine_crystals_paid (paid-origin tagged), scaling with tier.",
+      "scaling_with_tier": true,
+      "cap_per_day_design": "placeholder",
+      "forbid_artifact_grant": true,
+      "forbid_combat_power": true
+    },
+    {
+      "benefit_id": "shop_crystal_pack_discount",
+      "category": "convenience",
+      "description": "Discount on Divine Crystal packs in shop, max 20% at VIP 10.",
+      "max_discount_pct_at_vip10": 20,
+      "applies_to_other_iap_families": false,
+      "forbid_discount_on_battle_pass": false,
+      "forbid_discount_below_5_pct_at_vip1": false
+    },
+    {
+      "benefit_id": "cosmetic_flair_per_tier",
+      "category": "cosmetic",
+      "description": "Profile badge / nameplate / chat color per tier.",
+      "forbid_combat_power": true
+    },
+    {
+      "benefit_id": "profile_title",
+      "category": "cosmetic",
+      "description": "Tier title shown on profile (e.g. VIP 5 \u2014 Asceta).",
+      "forbid_combat_power": true
+    },
+    {
+      "benefit_id": "daily_login_priority",
+      "category": "convenience",
+      "description": "Faster server queue / priority login slot at high tiers. Cosmetic-equivalent QoL.",
+      "forbid_combat_power": true
+    },
+    {
+      "benefit_id": "customer_support_priority",
+      "category": "convenience",
+      "description": "Higher support response priority at VIP 5+."
+    },
+    {
+      "benefit_id": "mailbox_expansion",
+      "category": "convenience",
+      "description": "Mailbox slot expansion / longer retention at high tiers."
+    },
+    {
+      "benefit_id": "friend_list_expansion",
+      "category": "convenience",
+      "description": "More friend slots at high tiers."
+    },
+    {
+      "benefit_id": "daily_summon_qol",
+      "category": "convenience",
+      "description": "QoL like 'view recent pulls history' extended; NOT extra summons, NOT pity skip.",
+      "forbid_pity_skip": true,
+      "forbid_extra_pulls": true
+    }
+  ],
+  "forbidden_benefits": [
+    {"benefit": "combat_stat_boost",                    "reason": "P2W combat power"},
+    {"benefit": "artifact_direct_grant",                "reason": "artifact internal-only canary"},
+    {"benefit": "constellation_direct_grant",           "reason": "banner hidden"},
+    {"benefit": "hero_direct_grant",                    "reason": "heroes must remain gacha"},
+    {"benefit": "premium_targeted_sigilli",             "reason": "banners locked"},
+    {"benefit": "pity_skip",                            "reason": "pity is design-protected"},
+    {"benefit": "pvp_rank_skip",                        "reason": "breaks competitive ladder"},
+    {"benefit": "battle_pass_premium_auto_grant",       "reason": "BP premium must be purchased separately"},
+    {"benefit": "unlock_locked_systems_via_tier",       "reason": "locked surfaces require their own signoff packs"},
+    {"benefit": "discount_on_premium_or_targeted_summon","reason": "banners locked, no discount lever"},
+    {"benefit": "reduced_cost_for_paid_artifact_or_pity","reason": "forbidden product categories"},
+    {"benefit": "surprise_random_charge_for_tier_upgrade","reason": "predatory"}
+  ],
+  "benefit_boundary_summary": {
+    "vip_only_grants": ["cosmetic flair", "convenience UX", "daily Divine Crystal stipend (paid origin)", "shop discount on Divine Crystal packs (max 20%)", "badge/title display", "support priority", "mailbox/friend slots"],
+    "vip_forbids_combat_power_grant": true,
+    "vip_forbids_artifact_grant": true,
+    "vip_forbids_pity_change": true,
+    "vip_forbids_targeted_unlock": true,
+    "vip_forbids_bp_premium_auto_unlock": true,
+    "vip_can_accelerate": true,
+    "vip_can_bypass_progression": false,
+    "vip_can_break_balance": false
+  },
+  "applies_to_vip_endpoints_runtime": false,
+  "endpoints_remain_gated_by_VIP_LOCKED_V2": true
+}
