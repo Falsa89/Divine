@@ -6,6 +6,15 @@
 # PUBLIC_SYNC_TAG_RESYNC_v7: suite_runner_shop_iap_integration_v7_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v8: suite_runner_battle_pass_surface_modernization_v8_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v8b: suite_runner_battle_pass_sync_fix_v8b_2026_05_29_force_blob_resnapshot
+# PUBLIC_SYNC_TAG_RESYNC_v9: suite_runner_vip_design_and_iap_integration_v9_2026_05_29
+# RESYNC_v9 RATIONALE: Registrazione OPTIONAL del nuovo validator
+# validate_project_vip_design_and_iap_integration_v1.py (PROJECT_VIP_DESIGN_AND_IAP_INTEGRATION).
+# Strategia tripled-sentinel applicata (anti stale-push):
+#   1) fresh PUBLIC_SYNC_TAG_RESYNC_v9 in cima a questo file (qui sopra)
+#   2) sentinella inline VIP_DESIGN_AND_IAP_INTEGRATION_REGISTRATION_SENTINEL
+#      immediatamente sopra la tupla nel blocco OPTIONAL
+#   3) proof marker JSON dedicato:
+#      data/design/vip/vip_suite_registration_proof_marker_v1.json
 # RESYNC_v8b RATIONALE: Public branch main was stale on this file after Battle Pass pack commit
 # (tuple ('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', ...) and inline sentinel
 # BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL were missing on remote). This v8b
@@ -13,8 +22,9 @@
 # Save to GitHub PUSH cannot skip this file again. Proof marker dedicated:
 #   data/design/battle_pass/bp_suite_runner_sync_fix_marker_v1.json
 # Stage 6 GATED-IMPORT, Stage 7 LIVE-ACTIVATION-SIGNOFF, Stage 7B SUITE-RUNNER-SYNC-FIX,
-# Stage 8 CANARY-LIVE-APPLY, IAP-DESIGN, SHOP-IAP-INTEGRATION and BATTLE-PASS-SURFACE-MODERNIZATION
-# OPTIONAL validators are all registered in the OPTIONAL block below. Inline sentinels:
+# Stage 8 CANARY-LIVE-APPLY, IAP-DESIGN, SHOP-IAP-INTEGRATION, BATTLE-PASS-SURFACE-MODERNIZATION
+# and VIP-DESIGN-AND-IAP-INTEGRATION OPTIONAL validators are all registered in the OPTIONAL
+# block below. Inline sentinels:
 #   STAGE_6_GATED_IMPORT_REGISTRATION_SENTINEL
 #   STAGE_7_LIVE_ACTIVATION_SIGNOFF_REGISTRATION_SENTINEL
 #   STAGE_7B_LIVE_SIGNOFF_SUITE_RUNNER_SYNC_FIX_REGISTRATION_SENTINEL
@@ -22,6 +32,7 @@
 #   IAP_DESIGN_REGISTRATION_SENTINEL
 #   SHOP_IAP_INTEGRATION_REGISTRATION_SENTINEL
 #   BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL
+#   VIP_DESIGN_AND_IAP_INTEGRATION_REGISTRATION_SENTINEL
 # This file MUST be synced together with:
 #   backend/scripts/validate_project_artifact_inventory_gated_import_v1.py
 #   backend/scripts/validate_project_artifact_inventory_live_activation_signoff_v1.py
@@ -30,11 +41,13 @@
 #   backend/scripts/validate_project_iap_design_v1.py
 #   backend/scripts/validate_project_shop_iap_integration_v1.py
 #   backend/scripts/validate_project_battle_pass_surface_modernization_v1.py
+#   backend/scripts/validate_project_vip_design_and_iap_integration_v1.py
 # Dedicated proof markers (tripled-sentinel strategy, separate directories):
 #   data/design/artifacts/live_apply/artifact_live_apply_suite_registration_proof_marker_v1.json
 #   data/design/iap/iap_suite_registration_proof_marker_v1.json
 #   data/design/shop_iap/shop_iap_suite_registration_proof_marker_v1.json
 #   data/design/battle_pass/bp_suite_registration_proof_marker_v1.json
+#   data/design/vip/vip_suite_registration_proof_marker_v1.json
 """
 RM1.31-B — Hero Skill Kit Validator Suite Runner
 ─────────────────────────────────────────────────────────────────────────
@@ -1161,6 +1174,10 @@ OPTIONAL = [
     # Proof marker dedicato (tripled-sentinel): data/design/battle_pass/bp_suite_registration_proof_marker_v1.json
     # SYNC_FIX_v8b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_BATTLE_PASS_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/battle_pass/bp_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', 'validate_project_battle_pass_surface_modernization_v1.py'),
+    # VIP_DESIGN_AND_IAP_INTEGRATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline VIP DESIGN AND IAP INTEGRATION — design-only validator; VIP_LOCKED_V2 must remain true; no live VIP progression/claim/grant/revoke; no IAP SDK runtime; no real product IDs; no DB writes.
+    # Proof marker dedicato (tripled-sentinel): data/design/vip/vip_suite_registration_proof_marker_v1.json
+    ('PROJECT-VIP-DESIGN-AND-IAP-INTEGRATION', 'validate_project_vip_design_and_iap_integration_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
