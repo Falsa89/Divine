@@ -1,0 +1,95 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION",
+  "track": "TRACK_F_FUTURE_IMPLEMENTATION_ROADMAP",
+  "verdict": "TRACK_F_BATTLE_PASS_FUTURE_IMPLEMENTATION_ROADMAP_READY",
+  "design_only": true,
+  "stages": [
+    {
+      "stage_index": 1,
+      "stage_id": "BP_SURFACE_MODERNIZATION_LOCKED",
+      "description": "This pack. Locked/safe surface modernization design.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_APPROVAL=true"],
+      "blockers_before_advance": ["public repo sync verification of this pack"],
+      "rollback": "revert commit; no DB/runtime affected"
+    },
+    {
+      "stage_index": 2,
+      "stage_id": "BP_REWARD_TABLE_DESIGN_SIGNOFF",
+      "description": "Fill placeholder amounts (<<TIER_BASE_*>>, <<TIER_PREMIUM_*>>) with final values; explicit reward table per level per track.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_REWARD_TABLE_APPROVAL"],
+      "blockers_before_advance": ["economy team review", "P2W boundary recheck"],
+      "rollback": "revert reward table JSON"
+    },
+    {
+      "stage_index": 3,
+      "stage_id": "BP_SCHEMA_DRY_RUN",
+      "description": "Mongo schema dry-run for bp_reward_claim_ledger + season_state + premium_entitlement; index plan vetted; idempotency proven; no live writes.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_SCHEMA_DRY_RUN_APPROVAL"],
+      "blockers_before_advance": ["unique index plan", "idempotency plan"],
+      "rollback": "drop indexes (no data ever written)"
+    },
+    {
+      "stage_index": 4,
+      "stage_id": "BP_MISSION_XP_CONTRACT",
+      "description": "Define daily/weekly/season mission contract and XP economy; no live missions yet.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_MISSION_CONTRACT_APPROVAL"],
+      "blockers_before_advance": ["mission catalog signoff", "XP curve signoff"],
+      "rollback": "revert mission catalog JSON"
+    },
+    {
+      "stage_index": 5,
+      "stage_id": "BP_FREE_TRACK_READ_ONLY_PREVIEW",
+      "description": "Unlock read-only preview of free track table (no claim, no progress write). BP_LOCKED_V2 stays true.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_FREE_TRACK_PREVIEW_APPROVAL"],
+      "blockers_before_advance": ["backend GET /api/battlepass/season + /progress design-only endpoints implemented behind feature flag"],
+      "rollback": "flip flag IAP_GLOBAL_DISABLED-style for BP"
+    },
+    {
+      "stage_index": 6,
+      "stage_id": "BP_BACKEND_PROGRESS_CANARY",
+      "description": "Enable XP add / progress write for canary internal users only (sfqa@test.com, test@test.com), same pattern as Artifact Stage 8.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_PROGRESS_CANARY_APPROVAL=true"],
+      "canary_users_expected": ["sfqa@test.com", "test@test.com"],
+      "blockers_before_advance": ["explicit allowlist", "feature flag BP_CANARY_ONLY=true"],
+      "rollback": "disable allowlist; archive ledger"
+    },
+    {
+      "stage_index": 7,
+      "stage_id": "BP_REWARD_CLAIM_CANARY_INTERNAL_ONLY",
+      "description": "Enable POST /api/battlepass/claim for canary internal users only. Verify idempotency and entitlement_delta.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_CLAIM_CANARY_APPROVAL=true"],
+      "blockers_before_advance": ["Stage 6 progress canary green"],
+      "rollback": "disable allowlist; revoke via ledger"
+    },
+    {
+      "stage_index": 8,
+      "stage_id": "BP_PREMIUM_ENTITLEMENT_DESIGN_IMPL",
+      "description": "Implement POST /api/battlepass/premium/verify wiring to purchase_ledger from PROJECT_SHOP_IAP_INTEGRATION Track D. DEV-only.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_PREMIUM_ENTITLEMENT_DEV_APPROVAL"],
+      "blockers_before_advance": ["178F Stage 3 schema dry-run done", "178F Stage 4 receipt verify DEV-only ready"],
+      "rollback": "unmount route, no live impact"
+    },
+    {
+      "stage_index": 9,
+      "stage_id": "BP_IAP_SANDBOX_LINK",
+      "description": "Link premium pass mock product IDs to Apple sandbox + Google license tester; verify end-to-end DEV flow against canary accounts.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_IAP_SANDBOX_APPROVAL"],
+      "blockers_before_advance": ["178F Stage 5 sandbox green"],
+      "rollback": "deactivate sandbox products; canary accounts only"
+    },
+    {
+      "stage_index": 10,
+      "stage_id": "BP_PUBLIC_RELEASE_GATE",
+      "description": "Flip BP_LOCKED_V2 + BP_PREMIUM_BUY_LOCKED_V2 to false in production. Enable claim, premium buy, public progression.",
+      "required_signoff_markers": ["PROJECT_BATTLE_PASS_RELEASE_GATE_APPROVAL"],
+      "blockers_before_advance": ["all Stages 1-9 verified", "178F Release Gate alignment"],
+      "rollback": "emergency BP_LOCKED_V2=true + BP_PREMIUM_BUY_LOCKED_V2=true; pause writes; freeze season"
+    }
+  ],
+  "alignment_with_178F_iap_roadmap": {
+    "this_pack_blocks_on": "none (this pack is design-only, locked)",
+    "bp_premium_stage_8_blocks_on_178F_stage_3_and_4": true,
+    "bp_iap_sandbox_stage_9_blocks_on_178F_stage_5": true,
+    "bp_release_gate_stage_10_blocks_on_178F_release_gate_stage_10": true
+  }
+}

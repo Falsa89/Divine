@@ -1,0 +1,205 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION",
+  "track": "TRACK_E_FUTURE_API_AND_BACKEND_CONTRACT_DESIGN_ONLY",
+  "verdict": "TRACK_E_BATTLE_PASS_FUTURE_API_BACKEND_CONTRACT_READY",
+  "design_only": true,
+  "no_runtime_implementation_added_in_this_pack": true,
+  "no_db_writes_in_this_pack": true,
+  "feature_flag_design": {
+    "BP_LIVE_PROGRESSION_ENABLED": false,
+    "BP_LIVE_CLAIM_ENABLED": false,
+    "BP_PREMIUM_BUY_ENABLED": false,
+    "BP_SEASON_PUBLIC_ENABLED": false,
+    "BP_CANARY_ONLY": true,
+    "BP_GLOBAL_DISABLED": true
+  },
+  "future_endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/battlepass/season",
+      "purpose": "Read-only season metadata (current season id, start/end, levels count, theme).",
+      "auth_required": true,
+      "role": "player",
+      "server_profile_scoped": false,
+      "account_scoped": true,
+      "design_only": true,
+      "response_shape": {
+        "season_id": "string",
+        "label_it": "string",
+        "start_utc": "string",
+        "end_utc": "string",
+        "length_days": 42,
+        "max_levels": 50,
+        "theme": "string",
+        "locked": true
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/battlepass/progress",
+      "purpose": "Read-only player progress in current season (level, xp, claimed_free, claimed_premium).",
+      "auth_required": true,
+      "role": "player",
+      "server_profile_scoped": true,
+      "design_only": true,
+      "response_shape": {
+        "season_id": "string",
+        "user_id": "string",
+        "server_profile_id": "string",
+        "current_level": 0,
+        "current_xp": 0,
+        "xp_to_next_level": 0,
+        "claimed_free": [],
+        "claimed_premium": [],
+        "is_premium": false,
+        "is_deluxe": false,
+        "locked": true
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/battlepass/claim",
+      "purpose": "Claim a specific reward by (season_id, level, track_id). Idempotent.",
+      "auth_required": true,
+      "role": "player",
+      "server_profile_scoped": true,
+      "design_only": true,
+      "request_shape": {
+        "season_id": "string",
+        "level": 0,
+        "track_id": "FREE|PREMIUM|DELUXE",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "CLAIMED|ALREADY_CLAIMED|LOCKED|NOT_ELIGIBLE|FEATURE_DISABLED",
+        "entitlement_delta": {},
+        "reward_claim_ledger_id": "string"
+      },
+      "forbidden_grants_in_response": [
+        "artifact_id",
+        "constellation_id",
+        "sigilli_premium",
+        "sigilli_targeted",
+        "pity_skip",
+        "combat_stat_boost",
+        "hero_direct_grant",
+        "pvp_rank_skip"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/battlepass/premium/verify",
+      "purpose": "After IAP receipt verified by /api/iap/verify/{apple|google}, map premium entitlement to active season and grant track upgrade. Idempotent.",
+      "auth_required": true,
+      "role": "player",
+      "server_profile_scoped": false,
+      "account_scoped": true,
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "verified_purchase_id": "string (from purchase_ledger)",
+        "season_id": "string",
+        "track_target": "PREMIUM|DELUXE",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "ENTITLED|ALREADY_ENTITLED|REJECTED|REVOKED|FEATURE_DISABLED",
+        "new_track": "FREE|PREMIUM|DELUXE",
+        "season_id": "string"
+      },
+      "entitlement_source": "purchase_ledger from PROJECT_SHOP_IAP_INTEGRATION Track D",
+      "refund_revoke_behavior": "On Apple ASSN / Google RTDN refund, append revoke ledger; downgrade track at next claim attempt or scheduled reconciliation; never revoke already-claimed rewards retroactively unless explicit chargeback fraud signal"
+    },
+    {
+      "method": "POST",
+      "path": "/api/battlepass/xp/add",
+      "purpose": "System/admin route to credit XP from completed missions, events, or login bonus. NOT player-callable.",
+      "auth_required": true,
+      "role": "system_or_admin_only",
+      "design_only": true,
+      "request_shape": {
+        "user_id": "string",
+        "season_id": "string",
+        "xp_delta": 0,
+        "source": "daily_mission|weekly_mission|season_mission|login_bonus|event|admin",
+        "source_ref": "string",
+        "idempotency_key": "string"
+      },
+      "response_shape": {
+        "status": "APPLIED|DUPLICATE|REJECTED|FEATURE_DISABLED",
+        "new_xp": 0,
+        "new_level": 0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/battlepass/history",
+      "purpose": "Read-only history of past seasons + claim log.",
+      "auth_required": true,
+      "role": "player",
+      "design_only": true,
+      "response_shape": {
+        "seasons": [
+          {
+            "season_id": "string",
+            "final_level": 0,
+            "final_track": "FREE|PREMIUM|DELUXE",
+            "reward_count_claimed": 0
+          }
+        ]
+      }
+    }
+  ],
+  "auth_role_rules": {
+    "player_role_endpoints": ["season", "progress", "claim", "premium/verify", "history"],
+    "system_role_endpoints": ["xp/add"],
+    "admin_role_endpoints": ["xp/add (admin override path)"]
+  },
+  "idempotency_design": {
+    "claim_key": "<user_id>:<season_id>:<level>:<track_id>",
+    "premium_verify_key": "<user_id>:<verified_purchase_id>:<season_id>",
+    "xp_add_key": "<user_id>:<source>:<source_ref>",
+    "reuse_returns_same_result": true
+  },
+  "reward_claim_ledger_design": {
+    "collection_name_future": "bp_reward_claim_ledger",
+    "append_only": true,
+    "server_authoritative": true,
+    "required_fields": [
+      "claim_id",
+      "user_id",
+      "server_profile_id",
+      "season_id",
+      "level",
+      "track_id",
+      "timestamp_utc",
+      "entitlement_delta_summary",
+      "linked_wallet_ledger_ids",
+      "idempotency_key",
+      "refund_link_revoke_ledger_id"
+    ],
+    "index_design": [
+      {"name": "ix_uniq_bp_claim", "unique": true, "fields": ["user_id", "season_id", "level", "track_id"]},
+      {"name": "ix_user_season", "fields": ["user_id", "season_id"]}
+    ]
+  },
+  "premium_entitlement_mapping": {
+    "source": "purchase_ledger.product_id_internal_mock matches monthly_pass or future bp_premium_pack family",
+    "future_mock_product_ids": [
+      "mock.divinewaifus.bp.premium.season",
+      "mock.divinewaifus.bp.deluxe.season"
+    ],
+    "real_store_ids_pending": "Stage 2 of 178F roadmap"
+  },
+  "season_rollover_design": {
+    "hard_reset_at_end_utc": true,
+    "unclaimed_rewards_expire": true,
+    "premium_entitlement_does_not_carry_over": true,
+    "history_preserved": true
+  },
+  "server_profile_vs_account_wide_scope": {
+    "xp_and_progress": "server_profile_scoped",
+    "premium_entitlement": "account_wide",
+    "reason": "Premium follows Apple/Google account (consistent with 178/179); progress follows server profile so player can have different progress per server."
+  }
+}

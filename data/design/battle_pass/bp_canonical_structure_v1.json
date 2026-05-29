@@ -1,0 +1,113 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION",
+  "track": "TRACK_B_BATTLE_PASS_CANONICAL_STRUCTURE_DESIGN",
+  "verdict": "TRACK_B_BATTLE_PASS_CANONICAL_STRUCTURE_READY",
+  "design_only": true,
+  "db_writes": 0,
+  "name_candidates": [
+    "Divine Pass",
+    "Patto Divino",
+    "Cammino degli Eroi"
+  ],
+  "recommended_name": "Divine Pass",
+  "recommended_name_localized_it": "Patto Divino",
+  "tracks": [
+    {
+      "track_id": "FREE",
+      "label_it": "Cammino del Devoto (Free)",
+      "requires_purchase": false,
+      "description": "Track gratuito accessibile a tutti i player. Reward base preview-safe.",
+      "design_only": true,
+      "live": false
+    },
+    {
+      "track_id": "PREMIUM",
+      "label_it": "Patto Divino Premium (locked)",
+      "requires_purchase": true,
+      "locked": true,
+      "lock_reason": "BP_PREMIUM_BUY_LOCKED_V2 = true; richiede future IAP integration al Stage 8 della roadmap 178F.",
+      "description": "Track premium con reward maggiori ma NON pay-to-win. Cosmetici, profile flair, sigilli limitati, QoL/catch-up entro caps.",
+      "design_only": true,
+      "live": false
+    },
+    {
+      "track_id": "DELUXE",
+      "label_it": "Patto Divino Eterno (Deluxe, locked)",
+      "requires_purchase": true,
+      "locked": true,
+      "lock_reason": "BP_PREMIUM_BUY_LOCKED_V2 = true; tier deluxe richiede signoff dedicato dopo premium tier.",
+      "description": "Track deluxe con exclusive cosmetic/title/profile + skip parziale + bonus catch-up. NON include combat power.",
+      "design_only": true,
+      "live": false
+    }
+  ],
+  "season_design": {
+    "recommended_season_length_days": 42,
+    "min_season_length_days": 28,
+    "max_season_length_days": 56,
+    "motivation": "6 settimane = compromesso tra retention e burnout; allineato a benchmark HSR/Genshin pass mensili+settimanali.",
+    "max_levels_recommended": 50,
+    "reset_policy": "hard reset at season end; unclaimed rewards expire at season end unless ATC (after-the-clock) extension authorized",
+    "catch_up_policy": {
+      "design_only": true,
+      "description": "Player che entra a met\u00e0 stagione riceve XP scaled boost limitato (max 30% di levels gi\u00e0 trascorsi) per non penalizzare il join in ritardo, ma senza saltare a livello finale.",
+      "max_catch_up_xp_pct": 30,
+      "forbid_paid_skip_to_max_level": true,
+      "forbid_paid_skip_to_max_level_reason": "Anti-P2W. Skip massivo a livello max via pagamento \u00e8 P2W mascherato."
+    }
+  },
+  "xp_mission_model_design": {
+    "daily_missions_count": 3,
+    "daily_missions_design": "breve, completabili in <10 minuti, NO stamina, NO grind forzato",
+    "weekly_missions_count": 5,
+    "weekly_missions_design": "medio, completabili durante la settimana, mix di PvE/PvP/social",
+    "season_missions_count": 10,
+    "season_missions_design": "long-arc obiettivi narrativi/collezione; riprendono trama stagionale",
+    "forbid_mandatory_paid_daily_chores": true,
+    "forbid_stamina_dependency": true,
+    "forbid_login_only_xp_for_free_track": false,
+    "login_only_xp_design": "login-bonus XP minimo (es. 50 XP/giorno) consentito per non penalizzare casual; <= 10% del XP totale stagione"
+  },
+  "reward_themes": [
+    "profile cosmetic frames",
+    "name plates / titoli",
+    "sticker emote",
+    "avatar accessories",
+    "Sigilli Standard/Elemental/Selective limitati",
+    "Cristalli Divini (free amount per Free track; paid stipend per Premium track design-only)",
+    "Gold / risorse base",
+    "materials catch-up entro caps"
+  ],
+  "forbidden_reward_themes": [
+    "direct 6\u2605 hero grant",
+    "premium/targeted sigilli",
+    "artifact direct grant",
+    "constellation direct grant",
+    "combat stat boost permanent",
+    "PvP rank skip",
+    "meta hero exclusive power",
+    "uncapped progression materials",
+    "paid-only mandatory resources",
+    "pity skip"
+  ],
+  "relationship_to_daily_weekly": {
+    "sources_of_xp": ["daily missions", "weekly missions", "season missions", "login bonus minimo", "event activities (event-driven, opt-in)"],
+    "missions_must_not_replace_existing_event_progression": true,
+    "missions_overlap_with_event_currency_allowed": true
+  },
+  "no_stamina_dependency": true,
+  "no_live_reward_amounts_in_this_pack": true,
+  "reward_amounts_placeholders": {
+    "divine_crystals_free_track": "<<TIER_BASE_CRYSTALS>>",
+    "divine_crystals_paid_premium_track": "<<TIER_PREMIUM_CRYSTALS>>",
+    "sigilli_per_season_free": "<<TIER_BASE_SIGILLI>>",
+    "sigilli_per_season_premium": "<<TIER_PREMIUM_SIGILLI>>",
+    "gold_per_season_free": "<<TIER_BASE_GOLD>>",
+    "cosmetic_count_deluxe": "<<TIER_DELUXE_COSMETIC>>"
+  },
+  "benchmark_inspiration": {
+    "hsr_genshin_free_premium_deluxe_pattern": "accepted as design inspiration only",
+    "deluxe_safety_rule": "deluxe MUST grant cosmetic/QoL only; cannot grant combat power or pity skip",
+    "anti_burnout": "missions must be completable without paid daily chores; if a daily mission requires paid item, it must be removable/skippable for free track"
+  }
+}

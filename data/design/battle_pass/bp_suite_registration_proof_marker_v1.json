@@ -1,0 +1,32 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION",
+  "purpose": "DEDICATED_SUITE_REGISTRATION_PROOF_MARKER",
+  "validator_file_path": "backend/scripts/validate_project_battle_pass_surface_modernization_v1.py",
+  "validator_file_role": "OPTIONAL",
+  "expected_local_state": {
+    "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "expected_registration_row_text": "('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', 'validate_project_battle_pass_surface_modernization_v1.py'),",
+    "expected_inline_sentinel_above_row_text": "# BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):",
+    "expected_top_sentinel_v8": "# PUBLIC_SYNC_TAG_RESYNC_v8: suite_runner_battle_pass_surface_modernization_v8_2026_05_29"
+  },
+  "public_repo_verification_checklist": [
+    "On GitHub main open backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "Verify top sentinel v8 present",
+    "Verify inline sentinel BATTLE_PASS_SURFACE_MODERNIZATION_REGISTRATION_SENTINEL present",
+    "Verify tuple ('PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION', '...') present",
+    "Verify backend/scripts/validate_project_battle_pass_surface_modernization_v1.py exists",
+    "Verify data/design/battle_pass/* contains 6 design JSON + this proof marker"
+  ],
+  "weakens_REQUIRED_validators": false,
+  "do_not_touch": [
+    "backend/battle_engine.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/(tabs)/gacha.tsx (gacha rates / pity)",
+    "frontend/app/shop.tsx (SHOP_LOCKED_V2)",
+    "frontend/app/item-shop.tsx (ITEM_SHOP_LOCKED_V2)",
+    "frontend/app/battlepass.tsx (BP_LOCKED_V2 / BP_PREMIUM_BUY_LOCKED_V2 must remain true)",
+    "frontend/app/vip.tsx (VIP_LOCKED_V2)"
+  ]
+}

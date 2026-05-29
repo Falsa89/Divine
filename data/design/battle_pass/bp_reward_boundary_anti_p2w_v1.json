@@ -1,0 +1,93 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION",
+  "track": "TRACK_C_REWARD_BOUNDARY_AND_ANTI_P2W_POLICY",
+  "verdict": "TRACK_C_BATTLE_PASS_REWARD_BOUNDARY_READY",
+  "design_only": true,
+  "allowed_rewards": {
+    "divine_crystals_free": {
+      "allowed_in_free_track": true,
+      "allowed_in_premium_track": true,
+      "allowed_in_deluxe_track": true,
+      "cap_per_season_design": "placeholder; soft cap to maintain economy parity vs gameplay-earned"
+    },
+    "divine_crystals_paid_origin": {
+      "allowed_in_free_track": false,
+      "allowed_in_premium_track": true,
+      "allowed_in_deluxe_track": true,
+      "note": "Crystals granted by paid premium pass are tagged paid origin and refundable."
+    },
+    "gold_and_basic_resources": {
+      "allowed_in_all_tracks": true,
+      "cap_per_season_design": "placeholder"
+    },
+    "sigilli_standard": {
+      "allowed_in_all_tracks": true,
+      "cap_per_season_design": "placeholder; limited count",
+      "banner_scope": ["standard"]
+    },
+    "sigilli_elemental": {
+      "allowed_in_premium_or_deluxe": true,
+      "allowed_in_free_track": true,
+      "cap_per_season_design": "placeholder; limited count",
+      "banner_scope": ["elemental"]
+    },
+    "sigilli_selective": {
+      "allowed_in_premium_or_deluxe": true,
+      "allowed_in_free_track": "only as one-time milestone reward",
+      "cap_per_season_design": "placeholder; very limited count",
+      "banner_scope": ["selective"]
+    },
+    "cosmetics": {
+      "allowed_in_all_tracks": true,
+      "exclusivity_pattern": "deluxe = exclusive cosmetic flair (profile frame / title / nameplate); premium = themed cosmetic; free = chibi/limited theme",
+      "combat_power_grant": false
+    },
+    "qol_catch_up_materials": {
+      "allowed_in_premium_or_deluxe": true,
+      "cap_per_season_design": "placeholder; soft cap so free players don't fall behind unfairly",
+      "forbid_paid_only_mandatory": true
+    },
+    "titles_and_profile_frames": {
+      "allowed_in_all_tracks": true,
+      "combat_power_grant": false
+    }
+  },
+  "forbidden_rewards": [
+    {"reward": "direct 6\u2605 hero grant", "reason": "P2W; hero acquisition must remain gacha"},
+    {"reward": "artifact_id direct grant", "reason": "artifact internal-only canary; IAP/BP must NEVER grant artifact"},
+    {"reward": "constellation direct grant", "reason": "banner hidden; design-protected"},
+    {"reward": "combat stat boost (permanent or seasonal)", "reason": "P2W combat power forbidden"},
+    {"reward": "exclusive meta-hero with unique combat power", "reason": "P2W; meta hero must remain reachable via gacha for all players"},
+    {"reward": "uncapped progression material", "reason": "breaks balance and forces paid pass"},
+    {"reward": "paid-only mandatory resource (e.g. required for daily gate)", "reason": "creates forced purchase; predatory"},
+    {"reward": "PvP rank/elo skip", "reason": "breaks fair competitive ladder"},
+    {"reward": "sigilli_premium grant", "reason": "banner locked"},
+    {"reward": "sigilli_targeted grant", "reason": "banner locked"},
+    {"reward": "pity skip", "reason": "pity is design-protected economy lever"}
+  ],
+  "paid_vs_free_value_boundaries": {
+    "max_paid_value_to_free_value_ratio_design": "3:1 (paid track must NOT exceed 3x free track value to avoid coercion)",
+    "deluxe_to_premium_value_extra_must_be_cosmetic_or_qol": true,
+    "deluxe_must_not_grant_extra_combat_power_over_premium": true,
+    "free_track_must_be_meaningfully_rewarding": true,
+    "premium_track_must_not_unlock_locked_systems": true
+  },
+  "fairness_policy": {
+    "all_meta_heroes_reachable_via_gacha": true,
+    "premium_pass_can_accelerate_not_unlock": true,
+    "missions_doable_without_paid_resources": true,
+    "login_window_grace_days": 3,
+    "login_window_grace_purpose": "avoid penalizing player with 1-2 day gaps; missions remain available for 3 days post-period"
+  },
+  "communication_policy": {
+    "reward_table_publicly_visible_before_purchase": true,
+    "paid_track_disclosed_clearly": true,
+    "cosmetics_marked_exclusive_clearly": true,
+    "forbid_loot_box_inside_pass_track": true,
+    "forbid_loot_box_inside_pass_track_reason": "BP rewards must be deterministic; loot boxes inside pass = double monetization layer.",
+    "forbid_pressure_countdown_below_60s": true,
+    "refund_revoke_policy_aligned_with_178D": true
+  },
+  "applies_to_bp_endpoints_runtime": false,
+  "endpoints_remain_gated_by_BP_LOCKED_V2": true
+}

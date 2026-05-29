@@ -1,0 +1,63 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION",
+  "track": "TRACK_D_LOCKED_UI_MODERNIZATION_POLICY",
+  "verdict": "TRACK_D_BATTLE_PASS_LOCKED_UI_MODERNIZATION_POLICY_READY",
+  "design_only": true,
+  "frontend_battlepass_modified_in_this_pack": false,
+  "reason_for_no_frontend_change_in_this_pack": "This pack is the design contract for future modernization. Actual UI implementation will follow at a dedicated implementation sub-pack with explicit user authorization to touch frontend/app/battlepass.tsx. Keeping frontend MD5 unchanged = lowest risk of regression.",
+  "future_implementation_guarded_changes_allowed": [
+    "improve locked preview UI copy from generic to themed (Divine Pass / Patto Divino)",
+    "clarify 'in preparazione' messaging with explicit ETA-free copy",
+    "show free / premium / deluxe preview cards side by side (no purchase, no claim)",
+    "display placeholder reward icons + price placeholder (<<TIER_X>>) without live price",
+    "add link from premium card to /shop preview area (still locked)",
+    "accessibility: minimum touch targets 44pt iOS / 48dp Android",
+    "mobile layout: SafeAreaView + ScrollView; no fixed positioning",
+    "loot box odds disclosure note adjacent to any summon-related reward (linking to banner)"
+  ],
+  "future_implementation_guarded_changes_forbidden": [
+    "any active BUY/ACQUISTA button",
+    "any active claim button bypassing BP_LOCKED_V2",
+    "any apiCall to /api/battlepass/claim or /api/battlepass/buy-premium when locks are true",
+    "any IAP SDK import",
+    "any real product ID literal in code",
+    "any direct ledger write",
+    "countdown < 60s",
+    "hidden price",
+    "hidden odds",
+    "removal or weakening of BP_LOCKED_V2 / BP_PREMIUM_BUY_LOCKED_V2"
+  ],
+  "locked_state_invariants_required_after_any_future_change": {
+    "BP_LOCKED_V2_must_remain_true": true,
+    "BP_PREMIUM_BUY_LOCKED_V2_must_remain_true": true,
+    "claim_button_disabled": true,
+    "premium_buy_button_disabled_or_hidden": true,
+    "lock_banner_visible": true,
+    "no_live_api_call_on_press": true
+  },
+  "copy_proposals_it": {
+    "page_title": "Patto Divino",
+    "lock_banner": "Patto Divino \u2014 in preparazione. Nuovo contratto account-wide e sistema acquisti reali (IAP) in arrivo.",
+    "free_track_label": "Cammino del Devoto (Free)",
+    "premium_track_label": "Patto Divino Premium",
+    "premium_track_locked_pill": "Bloccato \u2014 in preparazione",
+    "deluxe_track_label": "Patto Divino Eterno (Deluxe)",
+    "deluxe_track_locked_pill": "Bloccato \u2014 in preparazione",
+    "claim_button_label_locked": "Reclamabile presto",
+    "buy_premium_button_label_locked": "Disponibile presto",
+    "loot_box_odds_disclosure_link": "Vedi probabilit\u00e0 banner"
+  },
+  "accessibility_requirements": {
+    "min_touch_target_pt": 44,
+    "min_touch_target_dp": 48,
+    "screen_reader_labels_present": true,
+    "high_contrast_locked_pill_color": true
+  },
+  "mobile_layout_requirements": {
+    "safe_area_view_required": true,
+    "scrollview_or_flashlist_required": true,
+    "no_fixed_positioning": true,
+    "keyboard_avoiding_view_not_needed_here": true,
+    "reason_no_kav": "BP page has no text input."
+  }
+}

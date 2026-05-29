@@ -1,0 +1,71 @@
+{
+  "task_id": "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION",
+  "track": "TRACK_A_BATTLE_PASS_SURFACE_AUDIT",
+  "verdict": "TRACK_A_BATTLE_PASS_SURFACE_AUDIT_READY",
+  "approval_markers": {
+    "PROJECT_BATTLE_PASS_SURFACE_MODERNIZATION_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "BATTLE_PASS_SURFACE_MODERNIZATION_LOCKED_ONLY"
+  },
+  "battlepass_frontend": {
+    "route": "frontend/app/battlepass.tsx",
+    "md5_current": "54568b8cb75a07033f78ef6593aba839",
+    "line_count": 164,
+    "classification": "locked",
+    "lock_tokens_present": [
+      "BP_LOCKED_V2 = true",
+      "BP_PREMIUM_BUY_LOCKED_V2 = true"
+    ],
+    "claim_disabled": true,
+    "premium_buy_disabled": true,
+    "lock_banner_visible": true,
+    "iap_sdk_imported": false,
+    "storekit_imported": false,
+    "play_billing_imported": false,
+    "revenuecat_imported": false
+  },
+  "battlepass_backend": {
+    "router_file": "backend/routes/economy.py",
+    "endpoints_present": [
+      "GET /api/battlepass",
+      "POST /api/battlepass/claim/{level}",
+      "POST /api/battlepass/buy-premium",
+      "POST /api/battlepass/add-exp"
+    ],
+    "endpoints_reachable_from_frontend": false,
+    "endpoints_gated_by_frontend_locks": true,
+    "endpoints_iap_verified_payment_required": false,
+    "note": "Legacy endpoints exist but frontend never reaches them because BP_LOCKED_V2/BP_PREMIUM_BUY_LOCKED_V2 short-circuit before any apiCall."
+  },
+  "related_locked_surfaces": [
+    {"route": "frontend/app/shop.tsx", "md5": "1a39f50e8da9c09a1f0b017b25b73390", "lock_token": "SHOP_LOCKED_V2 = true"},
+    {"route": "frontend/app/item-shop.tsx", "md5": "d09d616db14f4c6f98606e9ccd625379", "lock_token": "ITEM_SHOP_LOCKED_V2 = true"},
+    {"route": "frontend/app/vip.tsx", "md5": "45fcc9890b6b128c37088bc33aa54caf", "lock_token": "VIP_LOCKED_V2 = true"}
+  ],
+  "unrelated_live_surfaces_unchanged": [
+    {"route": "frontend/app/(tabs)/gacha.tsx", "md5": "f68b9239cec04ea54879f0be381e772a"},
+    {"route": "frontend/app/soul-forge.tsx", "md5": "b7659de11ac36f341e7a2f54fd29e6ed"}
+  ],
+  "shop_iap_locks_still_in_place": true,
+  "gacha_rate_locks_preserved": true,
+  "artifact_constellation_hidden": true,
+  "locks_verified": {
+    "bp_locked": true,
+    "bp_premium_buy_locked": true,
+    "shop_locked": true,
+    "item_shop_locked": true,
+    "vip_locked": true,
+    "premium_banner_locked": true,
+    "targeted_banner_locked": true,
+    "artifact_banner_hidden": true,
+    "constellation_banner_hidden": true,
+    "legacy_post_artifact_constellation_http_423": true
+  },
+  "invariants_md5": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293"
+  },
+  "surface_classification": "locked",
+  "db_writes_during_audit": 0,
+  "runtime_changes_during_audit": false
+}
