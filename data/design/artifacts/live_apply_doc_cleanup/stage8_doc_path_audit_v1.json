@@ -1,0 +1,92 @@
+{
+  "task_id": "PROJECT_ARTIFACT_STAGE8_DOC_PATH_CLEANUP",
+  "track": "TRACK_A_STAGE8_DOC_PATH_AUDIT",
+  "verdict": "TRACK_A_STAGE8_DOC_PATH_AUDIT_COMPLETE",
+  "mode": "documentation_cleanup_only",
+  "approval_markers": {
+    "PROJECT_ARTIFACT_STAGE8_DOC_PATH_CLEANUP_APPROVAL": true,
+    "PROJECT_ACCELERATION_MODE": "ARTIFACT_STAGE8_DOC_PATH_CLEANUP_ONLY"
+  },
+  "canonical_doc_decision": {
+    "canonical_path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md",
+    "reason": "Stage 8 was not generic live apply; it was authorized internal-only canary apply restricted to sfqa@test.com and test@test.com.",
+    "alias_path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY.md",
+    "alias_status": "redirect_note_only_no_canonical_content"
+  },
+  "audit_findings_pre_cleanup": {
+    "physical_files_present": [
+      {
+        "path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY.md",
+        "present": true,
+        "role_pre_cleanup": "canonical_doc_at_non_canonical_path",
+        "md5_pre_cleanup": "df1465b0732e8f7b783a3c7b76b7f7db"
+      },
+      {
+        "path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md",
+        "present": false,
+        "role_pre_cleanup": "canonical_path_missing_broken_link_target"
+      }
+    ],
+    "references_to_canonical_path_found_in": [
+      {
+        "file": "data/design/artifacts/live_apply/artifact_live_apply_completion_v1.json",
+        "key": "doc_176",
+        "value": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md",
+        "status": "already_canonical_was_broken_link_pre_cleanup"
+      }
+    ],
+    "references_to_non_canonical_path_found_in": [
+      {
+        "file": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY.md",
+        "location": "file_itself_filename",
+        "status": "file_is_non_canonical_path"
+      }
+    ],
+    "references_in_validator_script": {
+      "file": "backend/scripts/validate_project_artifact_inventory_live_apply_v1.py",
+      "doc_176_hardcoded_path_reference": false,
+      "note": "Validator does not hardcode doc 176 path; no change needed."
+    },
+    "references_in_suite_runner": {
+      "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+      "doc_176_hardcoded_path_reference": false,
+      "note": "Suite runner does not hardcode doc 176 path; no change needed."
+    },
+    "other_live_apply_json_files_inspected": [
+      "data/design/artifacts/live_apply/artifact_live_apply_authorized_gate_preflight_v1.json",
+      "data/design/artifacts/live_apply/artifact_live_apply_canary_user_resolution_writeset_v1.json",
+      "data/design/artifacts/live_apply/artifact_live_apply_canary_execution_v1.json",
+      "data/design/artifacts/live_apply/artifact_live_apply_rollback_idempotency_v1.json",
+      "data/design/artifacts/live_apply/artifact_live_apply_runtime_lock_guard_v1.json",
+      "data/design/artifacts/live_apply/artifact_live_apply_suite_registration_proof_marker_v1.json"
+    ],
+    "other_live_apply_json_files_doc_176_path_reference": false,
+    "other_live_apply_json_files_note": "Contain ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY as task_id/track only; no doc 176 path reference; no change needed."
+  },
+  "audit_summary": {
+    "canonical_doc_referenced_correctly_by": 1,
+    "non_canonical_doc_referenced_directly_by": 0,
+    "broken_links_pre_cleanup": 1,
+    "broken_links_pre_cleanup_detail": "data/design/artifacts/live_apply/artifact_live_apply_completion_v1.json key doc_176 pointed to canonical path that did not exist as physical file",
+    "action_required": "create_canonical_path_file_with_authoritative_content_and_demote_existing_to_alias"
+  },
+  "invariants_pre_cleanup_md5": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293"
+  },
+  "forbidden_during_cleanup": [
+    "DB writes",
+    "new artifact grants/revokes",
+    "endpoint/runtime backend changes",
+    "frontend changes",
+    "gacha changes",
+    "battle_engine/battle_core changes",
+    "backend/routes/artifacts.py changes",
+    "backend/.env changes",
+    "IAP/shop/BP/VIP/Soul Forge changes",
+    "Character Bible mutation",
+    "REQUIRED validator weakening",
+    "fake PASS"
+  ]
+}

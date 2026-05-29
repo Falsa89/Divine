@@ -1,0 +1,90 @@
+{
+  "task_id": "PROJECT_ARTIFACT_STAGE8_DOC_PATH_CLEANUP",
+  "track": "TRACK_B_DOC_REFERENCE_NORMALIZATION",
+  "verdict": "TRACK_B_DOC_REFERENCE_NORMALIZATION_APPLIED",
+  "canonical_path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md",
+  "alias_path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY.md",
+  "changes_applied": [
+    {
+      "action": "CREATE_CANONICAL_FILE",
+      "target": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md",
+      "source_content_from": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY.md (pre-cleanup md5 df1465b0732e8f7b783a3c7b76b7f7db)",
+      "post_action_modification": "added explicit canonical-path banner header at top",
+      "md5_post_cleanup": "000b17aa5b88b068f5df687b221fe0a4",
+      "line_count_post": 245
+    },
+    {
+      "action": "REWRITE_AS_ALIAS_REDIRECT_NOTE",
+      "target": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY.md",
+      "new_role": "alias_redirect_note_only",
+      "new_content_summary": "Brief markdown note redirecting readers to the canonical path; explains reason for normalization; reaffirms no DB/runtime/frontend/gacha/combat/IAP/Character-Bible changes.",
+      "md5_pre_cleanup": "df1465b0732e8f7b783a3c7b76b7f7db",
+      "md5_post_cleanup": "40dcef8ad0a3b646c081c93c30ea6f59",
+      "line_count_post": 44,
+      "justification": "Preserve historical links from chat/trackers without duplicating authoritative content; complies with pack acceptance criterion 'keep generic doc only as alias if present'."
+    },
+    {
+      "action": "NO_CHANGE",
+      "target": "data/design/artifacts/live_apply/artifact_live_apply_completion_v1.json",
+      "reason": "Already references canonical path docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md (key doc_176); broken link resolved by creating physical file at canonical path (see CREATE_CANONICAL_FILE above)."
+    },
+    {
+      "action": "NO_CHANGE",
+      "target": "backend/scripts/validate_project_artifact_inventory_live_apply_v1.py",
+      "reason": "No hardcoded doc path reference. Validator inspects JSON deliverables only."
+    },
+    {
+      "action": "NO_CHANGE",
+      "target": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+      "reason": "No hardcoded doc path reference. Stage 8 registration tuple unchanged."
+    },
+    {
+      "action": "NO_CHANGE",
+      "target": "data/design/artifacts/live_apply/* (6 other JSONs)",
+      "reason": "task_id/track references use uppercase identifier ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY only; no file-path references to doc 176 inside these JSONs."
+    }
+  ],
+  "new_files_created": [
+    {
+      "path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY_AUTHORIZED_CANARY.md",
+      "role": "canonical_stage8_doc",
+      "md5_post": "000b17aa5b88b068f5df687b221fe0a4"
+    },
+    {
+      "path": "data/design/artifacts/live_apply_doc_cleanup/stage8_doc_path_audit_v1.json",
+      "role": "track_A_audit_output"
+    },
+    {
+      "path": "data/design/artifacts/live_apply_doc_cleanup/stage8_doc_reference_normalization_v1.json",
+      "role": "track_B_normalization_output"
+    }
+  ],
+  "files_modified": [
+    {
+      "path": "docs/divine/176_ARTIFACT_INVENTORY_LIVE_APPLY.md",
+      "change": "demoted_to_alias_redirect_note",
+      "md5_pre": "df1465b0732e8f7b783a3c7b76b7f7db",
+      "md5_post": "40dcef8ad0a3b646c081c93c30ea6f59"
+    }
+  ],
+  "files_renamed": [],
+  "files_deleted": [],
+  "forbidden_changes_applied": [],
+  "forbidden_changes_check": {
+    "db_writes": 0,
+    "runtime_changes": false,
+    "frontend_changes": false,
+    "gacha_changes": false,
+    "battle_changes": false,
+    "backend_routes_artifacts_changes": false,
+    "backend_env_changes": false,
+    "iap_changes": false,
+    "shop_changes": false,
+    "bp_changes": false,
+    "vip_changes": false,
+    "soul_forge_changes": false,
+    "character_bible_changes": false,
+    "required_validator_weakening": false,
+    "fake_pass": false
+  }
+}

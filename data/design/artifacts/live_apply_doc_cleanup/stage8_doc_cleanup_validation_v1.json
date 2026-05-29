@@ -1,0 +1,46 @@
+{
+  "task_id": "PROJECT_ARTIFACT_STAGE8_DOC_PATH_CLEANUP",
+  "track": "TRACK_C_VALIDATION_AND_INVARIANTS",
+  "verdict": "TRACK_C_VALIDATION_AND_INVARIANTS_PASS",
+  "validation_commands": {
+    "stage8_master_validator": "python3 /app/backend/scripts/validate_project_artifact_inventory_live_apply_v1.py",
+    "suite_runner": "python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py --parallel --json-out /app/backend/reports/stage8_doc_cleanup_suite_run.json"
+  },
+  "stage8_master_validator_result": "PASS",
+  "actual_suite_result": {
+    "pass": 707,
+    "fail": 0,
+    "miss": 0,
+    "overall": "PASS"
+  },
+  "suite_flakiness_note": "First suite run reported a transient FAIL on the OPTIONAL validator V21-PREFLIGHT due to parallel-mode race on shared result JSON file; single re-run of V21-PREFLIGHT was green (PASS), and second full suite run was clean 707/707 PASS. No logic regression; flakiness is preexisting parallel-mode artifact unrelated to doc path cleanup.",
+  "expected_suite_result": {
+    "pass": 707,
+    "fail": 0,
+    "miss": 0,
+    "overall": "PASS"
+  },
+  "invariants_md5_expected_unchanged": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293"
+  },
+  "frontend_protected_md5_expected_unchanged": {
+    "frontend/app/artifacts-preview.tsx": "0e75c94e00899af773dbc9faf7326a15",
+    "frontend/app/artifacts.tsx": "8849e21c44207fc1d0074cae2cdc6879",
+    "frontend/app/(tabs)/gacha.tsx": "f68b9239cec04ea54879f0be381e772a"
+  },
+  "db_writes_during_cleanup": 0,
+  "db_writes_check_method": "No motor/mongo client call invoked by cleanup; only filesystem edits to docs/divine/ and data/design/artifacts/live_apply_doc_cleanup/.",
+  "runtime_lock_state_check": {
+    "legacy_post_artifacts_locked_http_423": true,
+    "gacha_banner_artifact_hidden": true,
+    "gacha_banner_constellation_hidden": true,
+    "frontend_inventory_ui_exposed_live": false
+  },
+  "required_validator_weakening_applied": false,
+  "optional_validator_weakening_applied": false,
+  "new_validator_added": false,
+  "suite_registration_changes": false,
+  "scope_violation": false
+}
