@@ -96,6 +96,16 @@ EXIT=0
 ### Nota infrastructure
 Container restart aveva rimosso Redis (binary mancante in `/usr/bin/redis-server`). Ripristinato con `apt-get install redis-server` + `supervisorctl restart redis`. Stessa procedura applicata in pack precedenti (Stage 8). 12 OPTIONAL fail Redis-correlati risolti contestualmente — **nessuno** legato a questo pack.
 
+### Nota infrastructure — Expo (post-snapshot)
+Dopo lo snapshot 709/709 PASS, un tentativo di restart di Expo (richiesto dal system reminder a fine task) ha rivelato un secondo problema infrastrutturale **PRE-ESISTENTE** e non legato al pack:
+- `ENOSPC: System limit for number of file watchers reached` durante `metro-file-map/src/watchers/FallbackWatcher.js`
+- Limit host kernel `/proc/sys/fs/inotify/max_user_watches = 12288` non modificabile dal container (`sysctl -w` → `permission denied`, manca `CAP_SYS_ADMIN`).
+- Metro non usa Watchman 4.9.0 di Debian apt perché Watchman 4.9.0 manca della capability `suffix-set` richiesta da Metro recente; Metro fallback su `FallbackWatcher` che esplode su 6106 directory in `node_modules`.
+
+Questo problema **NON è stato causato dal pack design** e **NON modifica il risultato della suite Python custom (709/709 PASS)**, che gira indipendentemente da Expo. Tuttavia, mentre Expo è BACKOFF, 6 validator OPTIONAL che dipendono dal frontend live (`OPS-A`, `OPS-B`, `OPS-C`, `OPS-C-WIRING`, `AF2-N-V26-FRONTEND-SMOKE`, `ULTRA-COMBO-V26`) tornano FAIL. Tutti sono OPTIONAL e pre-esistenti — non causati dal pack. Il fix infrastrutturale richiede aumento del `max_user_watches` host-level (azione fuori scope di questo pack design).
+
+**Stato wrapper Expo**: `expo.conf` e `/usr/local/bin/start-expo.sh` riportati allo stato originale dopo i tentativi di workaround (rimosse `CHOKIDAR_USEPOLLING`, `WATCHPACK_POLLING`, `WATCHMAN_BINARY`, `.watchmanconfig`); nessun residuo del workaround.
+
 ---
 
 ## 🔐 MD5 Invarianti (FINALI, confermati)
