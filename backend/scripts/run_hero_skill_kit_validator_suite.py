@@ -13,6 +13,8 @@
 # PUBLIC_SYNC_TAG_RESYNC_v11b: suite_runner_no_stamina_sync_fix_v11b_2026_05_29_force_blob_resnapshot
 # PUBLIC_SYNC_TAG_RESYNC_v12: suite_runner_audio_placeholder_foundation_v12_2026_05_29
 # PUBLIC_SYNC_TAG_RESYNC_v12b: suite_runner_audio_placeholder_sync_fix_v12b_2026_05_29_force_blob_resnapshot
+# PUBLIC_SYNC_TAG_RESYNC_v12c: suite_runner_audio_placeholder_sync_fix_v12c_2026_05_29_force_public_blob_refresh
+# PUBLIC_SYNC_TAG_RESYNC_v12c_REASON: previous public push still exposed v11b, so this marker exists only to force suite runner public sync; no logic change.
 # RESYNC_v12b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
 # era ancora stale dopo il commit del pack PROJECT_AUDIO_PLACEHOLDER_FOUNDATION
 # (la tupla ('PROJECT-AUDIO-PLACEHOLDER-FOUNDATION', ...) e l'inline sentinel
@@ -1251,6 +1253,7 @@ OPTIONAL = [
     # Sentinella inline AUDIO PLACEHOLDER FOUNDATION — audio TEST foundation validator; 12 WAV placeholders procedurali (stdlib only); no runtime engine; no final audio; no audio attached to UI; no expo-av/expo-audio/react-native-sound; no combat/battle_engine/Soul Forge touched; no DB writes.
     # Proof marker dedicato (tripled-sentinel): data/design/audio_placeholder/audio_placeholder_suite_registration_proof_marker_v1.json
     # SYNC_FIX_v12b 2026_05_29: micro-touch resync to force public main blob hash refresh; pack PROJECT_AUDIO_PLACEHOLDER_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/audio_placeholder/audio_placeholder_suite_runner_sync_fix_marker_v1.json
+    # SYNC_FIX_v12c 2026_05_29: second public-main resync attempt after v12b stale; tuple count remains 1; no semantics change. Proof marker fix: data/design/audio_placeholder/audio_placeholder_suite_runner_sync_fix_v2_marker_v1.json
     ('PROJECT-AUDIO-PLACEHOLDER-FOUNDATION', 'validate_project_audio_placeholder_foundation_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
