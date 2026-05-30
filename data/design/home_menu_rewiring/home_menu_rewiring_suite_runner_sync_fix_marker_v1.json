@@ -1,0 +1,77 @@
+{
+  "task_id": "PROJECT_HOME_MENU_REWIRING_SUITE_RUNNER_SYNC_FIX",
+  "pack": "PROJECT_HOME_MENU_REWIRING_SUITE_RUNNER_SYNC_FIX_PACK",
+  "sentinel": "v20b",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_RESYNC_v20b_HOME_MENU_REWIRING",
+  "timestamp_utc": "2026-05-30T02:00:00Z",
+  "parent_pack": {
+    "id": "PROJECT_HOME_MENU_REWIRING",
+    "sentinel": "v20",
+    "status_on_public": "functional_changes_synced_home_tsx_menu_tsx_doc_validator_marker_present_on_main_BUT_suite_runner_blob_stale"
+  },
+  "rationale": "Il pack parent v20 ha sincronizzato correttamente home.tsx, menu.tsx, doc 200, validator OPTIONAL e proof marker su public main. Resta stale solo il blob di backend/scripts/run_hero_skill_kit_validator_suite.py: il raw pubblico non mostra ancora la sentinella v20, il commento PROJECT_HOME_MENU_REWIRING n\u00e8 la tupla ('PROJECT-HOME-MENU-REWIRING', 'validate_project_home_menu_rewiring_v1.py'). Questo \u00e8 il noto stale-push / blob skip bug della piattaforma su questo specifico file. Il pack v20b applica un micro-touch comment no-op-safe per forzare il blob hash refresh.",
+  "change_kind": "suite_runner_comment_sentinel_micro_touch_only",
+  "change_scope": "three_new_comment_lines_inserted_immediately_above_existing_PROJECT-HOME-MENU-REWIRING_tuple",
+  "target_file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+  "tuple_registration": {
+    "name": "PROJECT-HOME-MENU-REWIRING",
+    "script": "validate_project_home_menu_rewiring_v1.py",
+    "occurrence_count_executable": 1,
+    "duplicated": false,
+    "block": "OPTIONAL"
+  },
+  "new_sentinels_added": [
+    "PUBLIC_SYNC_TAG_RESYNC_v20b_HOME_MENU_REWIRING",
+    "HOME_MENU_REWIRING_REGISTRATION_SENTINEL",
+    "SYNC_FIX_v20b"
+  ],
+  "verifications": {
+    "grep_v20_sentinel_count_min": 1,
+    "grep_v20b_sentinel_count_min": 1,
+    "grep_HOME_MENU_REWIRING_REGISTRATION_SENTINEL_count_min": 1,
+    "grep_tuple_executable_count": 1,
+    "ast_py_compile": true,
+    "validator_PROJECT_HOME_MENU_REWIRING_direct": "PASS",
+    "home_tsx_untouched_in_this_pack": true,
+    "menu_tsx_untouched_in_this_pack": true,
+    "layout_tsx_untouched_in_this_pack": true,
+    "guide_tsx_untouched_in_this_pack": true,
+    "tower_of_the_hells_tsx_untouched_in_this_pack": true
+  },
+  "constraints_honored": {
+    "no_frontend_runtime_changes_in_this_pack":  true,
+    "no_db_writes_or_migrations":                true,
+    "no_backend_route_changes":                  true,
+    "no_economy_or_reward_changes":              true,
+    "no_combat_or_battle_engine_changes":        true,
+    "no_validator_logic_changes":                true,
+    "no_required_or_optional_validator_weakening": true,
+    "no_tuple_duplication":                      true,
+    "no_fake_pass":                              true,
+    "no_gacha_or_pity_changes":                  true,
+    "no_shop_bp_vip_iap_unlock":                 true,
+    "no_artifact_or_constellation_unhide":       true,
+    "no_server_profiles_live":                   true,
+    "no_stamina_tickets_paid_attempts":          true,
+    "no_final_art_or_audio":                     true,
+    "no_tower_gameplay_progress_asyncstorage_changes": true,
+    "no_guide_or_codex_content_or_schema_changes": true,
+    "no_tutorial_overlay_or_storage_changes":    true
+  },
+  "md5_invariants_expected": {
+    "backend/battle_engine.py":    "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env":                "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/battlepass.tsx": "54568b8cb75a07033f78ef6593aba839",
+    "frontend/app/vip.tsx":        "45fcc9890b6b128c37088bc33aa54caf"
+  },
+  "verdict_local": "PROJECT_HOME_MENU_REWIRING_SUITE_RUNNER_SYNC_FIX_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "verdict_parent_after_public_sync_verified": "PROJECT_HOME_MENU_REWIRING_COMPLETE_PUBLIC_REPO_VERIFIED",
+  "verdict_if_still_stale_on_public_main": "PROJECT_HOME_MENU_REWIRING_SUITE_RUNNER_SYNC_FIX_V2_PUBLIC_SUITE_RUNNER_STALE_PLATFORM_BUG_PERSISTENT",
+  "public_sync_instructions": [
+    "Premere 'Save to GitHub' nella UI Emergent per pushare il commit locale su main",
+    "Verificare sul repo pubblico che backend/scripts/run_hero_skill_kit_validator_suite.py mostri: PUBLIC_SYNC_TAG_RESYNC_v20_HOME_MENU_REWIRING, PUBLIC_SYNC_TAG_RESYNC_v20b_HOME_MENU_REWIRING, HOME_MENU_REWIRING_REGISTRATION_SENTINEL, tupla ('PROJECT-HOME-MENU-REWIRING', 'validate_project_home_menu_rewiring_v1.py') con count = 1",
+    "Se ancora stale dopo v20b \u2192 escalare come PROJECT_HOME_MENU_REWIRING_SUITE_RUNNER_SYNC_FIX_V2_PUBLIC_SUITE_RUNNER_STALE_PLATFORM_BUG_PERSISTENT",
+    "Dopo verifica positiva, promuovere parent a PROJECT_HOME_MENU_REWIRING_COMPLETE_PUBLIC_REPO_VERIFIED"
+  ]
+}

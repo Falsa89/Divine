@@ -1425,6 +1425,12 @@ OPTIONAL = [
     # Zero touch a guide.tsx (schema). Zero DB writes, zero backend, zero combat/battle_engine, zero gacha, zero
     # shop/BP/VIP/IAP unlock (locks LOCKED_V2 preservati true), zero artifact/constellation unhide, zero server profile
     # live, zero stamina/tickets, zero final art/audio, zero REQUIRED validator weakening, zero fake PASS. Validator OPTIONAL.
+    # PUBLIC_SYNC_TAG_RESYNC_v20b_HOME_MENU_REWIRING: suite_runner_home_menu_rewiring_sync_fix_v20b_2026_05_30_force_blob_resnapshot
+    # HOME_MENU_REWIRING_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # SYNC_FIX_v20b 2026_05_30: micro-touch resync to force public main blob hash refresh; tuple count remains 1.
+    # Pack PROJECT_HOME_MENU_REWIRING_SUITE_RUNNER_SYNC_FIX. No semantics change. No tuple add/remove (already registered at v20).
+    # No validator logic change. No home.tsx / menu.tsx / _layout.tsx / guide.tsx / tower-of-the-hells.tsx touch.
+    # Proof marker: data/design/home_menu_rewiring/home_menu_rewiring_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-HOME-MENU-REWIRING', 'validate_project_home_menu_rewiring_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
