@@ -1,0 +1,120 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "B",
+  "track_name": "GUIDE_CONTENT_AND_TUTORIAL_SCHEMA",
+  "verdict": "TRACK_B_GUIDE_CONTENT_AND_TUTORIAL_SCHEMA_READY",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "content_status": "test_content",
+  "replace_before_release": true,
+  "entries": [
+    {
+      "id": "guide_getting_started",
+      "category": "getting_started",
+      "order": 1,
+      "title_it": "Benvenuto in Project T",
+      "summary_it": "Inizia da qui per capire come funzionano combattimento, squadra ed economia.",
+      "sections": [
+        {"heading_it": "Obiettivo del gioco", "body_it": "PLACEHOLDER: testo segnaposto. Sostituire prima del rilascio."},
+        {"heading_it": "Primi passi",         "body_it": "PLACEHOLDER: testo segnaposto."}
+      ]
+    },
+    {
+      "id": "guide_combat_basics",
+      "category": "combat_basics",
+      "order": 2,
+      "title_it": "Basi del combattimento",
+      "summary_it": "Come funzionano turni, abilita', Active Battle Power.",
+      "sections": [
+        {"heading_it": "Schema turni", "body_it": "PLACEHOLDER."},
+        {"heading_it": "Abilita' Q/U", "body_it": "PLACEHOLDER."}
+      ]
+    },
+    {
+      "id": "guide_team_columns_positioning",
+      "category": "team_columns_and_positioning",
+      "order": 3,
+      "title_it": "Colonne squadra e posizionamento",
+      "summary_it": "Avanguardia / DPS / Support: come pensare le tre colonne dal punto di vista della propria squadra.",
+      "sections": [
+        {"heading_it": "Avanguardia", "body_it": "PLACEHOLDER: prima linea, tank/duellanti."},
+        {"heading_it": "DPS",          "body_it": "PLACEHOLDER: dealers principali."},
+        {"heading_it": "Support",      "body_it": "PLACEHOLDER: healer / buffer / debuffer."}
+      ]
+    },
+    {
+      "id": "guide_active_battle_power",
+      "category": "battle_power_and_power_delta",
+      "order": 4,
+      "title_it": "Active Battle Power (POWER) e variazioni",
+      "summary_it": "Active Battle Power riassume la forza attuale del team. Le variazioni sono mostrate come +BP / -BP (feature futura).",
+      "sections": [
+        {"heading_it": "Cosa contribuisce a POWER", "body_it": "PLACEHOLDER."},
+        {"heading_it": "Delta overlay +BP/-BP",     "body_it": "FUTURE_FEATURE_DESIGN_ONLY: overlay verra' agganciato quando cambia la BP attiva del team. Non runtime in questo pack."}
+      ]
+    },
+    {
+      "id": "guide_items_materials_farming",
+      "category": "items_materials_and_farming",
+      "order": 5,
+      "title_it": "Oggetti, Materiali e Farming",
+      "summary_it": "Cosa farmare, dove e perche'.",
+      "sections": [{"heading_it": "Materiali base", "body_it": "PLACEHOLDER."}]
+    },
+    {
+      "id": "guide_buff_sources",
+      "category": "buff_sources",
+      "order": 6,
+      "title_it": "Fonti di Buff",
+      "summary_it": "Da dove arrivano i buff: passive, sinergie, artefatti, costellazioni, divine weapon (anteprima).",
+      "sections": [{"heading_it": "Sinergie", "body_it": "PLACEHOLDER."}]
+    },
+    {
+      "id": "guide_tower_of_the_hells",
+      "category": "modes",
+      "order": 7,
+      "title_it": "Torre degli Inferi",
+      "summary_it": "20 piani design-only con boss ogni 5 piani. Progresso locale, primo clear da badge UI.",
+      "sections": [
+        {"heading_it": "Struttura piani", "body_it": "PLACEHOLDER: 20 piani, boss ai piani 5/10/15/20."},
+        {"heading_it": "Niente Stamina",  "body_it": "La Torre non usa stamina/ticket/paid attempts."},
+        {"heading_it": "Persistenza",     "body_it": "Progresso salvato localmente via AsyncStorage in fase di TEST."}
+      ]
+    },
+    {
+      "id": "guide_home_avatars",
+      "category": "home_and_avatars",
+      "order": 8,
+      "title_it": "Home e Avatar",
+      "summary_it": "Tre famiglie di avatar (anteprima futura): Avatar HD serio, War Avatar chibi/tattico, Hero Room Avatar.",
+      "sections": [
+        {"heading_it": "Avatar HD serio",      "body_it": "FUTURE_FEATURE_DESIGN_ONLY."},
+        {"heading_it": "War Avatar chibi/tattico", "body_it": "FUTURE_FEATURE_DESIGN_ONLY."},
+        {"heading_it": "Hero Room Avatar",    "body_it": "FUTURE_FEATURE_DESIGN_ONLY."}
+      ]
+    },
+    {
+      "id": "guide_guild_war_fronti_del_valhalla",
+      "category": "guild_and_social",
+      "order": 9,
+      "title_it": "Fronti del Valhalla (Guild War)",
+      "summary_it": "PLACEHOLDER. Modalita' futura. Non attiva.",
+      "sections": [{"heading_it": "Anteprima", "body_it": "FUTURE_FEATURE_DESIGN_ONLY."}]
+    },
+    {
+      "id": "guide_artifacts",
+      "category": "modes",
+      "order": 10,
+      "title_it": "Artefatti (anteprima)",
+      "summary_it": "Catalogo read-only. Mutazioni live attualmente bloccate (HTTP 423).",
+      "sections": [{"heading_it": "Stato", "body_it": "DESIGN_ONLY_AND_CATALOG_READ_ONLY."}]
+    },
+    {
+      "id": "guide_shop_bp_vip_iap",
+      "category": "economy_shop_bp_vip_iap",
+      "order": 11,
+      "title_it": "Negozio, Battle Pass, VIP, IAP",
+      "summary_it": "Superfici attualmente bloccate / design-only. Non sono attive in questo build.",
+      "sections": [{"heading_it": "Stato", "body_it": "LOCKED_DESIGN_ONLY_NO_MONETIZATION_IN_THIS_BUILD."}]
+    }
+  ]
+}

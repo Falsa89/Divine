@@ -1,0 +1,56 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "H+I",
+  "verdict": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "sentinel": "v19",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_RESYNC_v19_GUIDE_CODEX_AND_TUTORIAL",
+  "design_tracks": {
+    "A_guide_codex_surface_audit_v1.json": "TRACK_A_GUIDE_CODEX_SURFACE_AUDIT_READY",
+    "B_guide_categories_v1.json":          "TRACK_B_GUIDE_CONTENT_AND_TUTORIAL_SCHEMA_READY",
+    "B_guide_entries_v1.json":             "TRACK_B_GUIDE_CONTENT_AND_TUTORIAL_SCHEMA_READY",
+    "C_guide_codex_runtime_mvp_design_v1.json": "TRACK_C_GUIDE_CODEX_RUNTIME_MVP_READY",
+    "D_tutorial_entries_v1.json":          "TRACK_D_TUTORIAL_RUNTIME_FOUNDATION_READY",
+    "D_tutorial_runtime_foundation_v1.json": "TRACK_D_TUTORIAL_RUNTIME_FOUNDATION_READY",
+    "E_tower_guide_and_first_unlock_v1.json": "TRACK_E_TOWER_GUIDE_AND_FIRST_UNLOCK_TUTORIAL_READY",
+    "F_mode_guide_tutorial_coverage_registry_v1.json": "TRACK_F_MODE_GUIDE_TUTORIAL_COVERAGE_REGISTRY_READY",
+    "G_mobile_qa_release_gate_policy_v1.json": "TRACK_G_MOBILE_QA_AND_RELEASE_GATE_POLICY_READY"
+  },
+  "runtime_components": {
+    "route_screen":            "frontend/app/guide.tsx",
+    "tutorial_overlay":        "frontend/components/TutorialOverlay.tsx",
+    "async_storage_helper":    "frontend/utils/tutorialStorage.ts",
+    "guide_constants_ts":      "frontend/constants/guideCodex.ts",
+    "tutorials_constants_ts":  "frontend/constants/tutorials.ts"
+  },
+  "deferred_runtime": {
+    "layout_tsx_route_registration": "BLOCKED_BY_PLATFORM_SYNC_BUG",
+    "home_menu_guide_entry":         "DEFERRED_FUTURE_PACK",
+    "tower_screen_tutorial_wiring":  "BLOCKED_BY_NO_TOWER_GAMEPLAY_TOUCH"
+  },
+  "constraints_honored": {
+    "no_combat_formula_changes":        true,
+    "no_battle_engine_changes":         true,
+    "no_layout_tsx_changes":            true,
+    "no_home_menu_changes":             true,
+    "no_server_profiles_live_changes":  true,
+    "no_shop_bp_vip_iap_unlock":        true,
+    "no_artifact_unhide":               true,
+    "no_gacha_rate_changes":            true,
+    "no_db_migrations":                 true,
+    "no_broad_user_mutation":           true,
+    "no_final_art_or_audio":            true,
+    "no_monetization":                  true,
+    "no_stamina_or_tickets":            true,
+    "no_tower_gameplay_changes":        true,
+    "no_required_validator_weakening":  true,
+    "no_fake_pass":                     true
+  },
+  "md5_invariants_expected": {
+    "backend/battle_engine.py":    "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env":                "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/battlepass.tsx": "54568b8cb75a07033f78ef6593aba839",
+    "frontend/app/vip.tsx":        "45fcc9890b6b128c37088bc33aa54caf"
+  }
+}

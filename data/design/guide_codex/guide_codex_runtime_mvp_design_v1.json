@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "C",
+  "track_name": "GUIDE_CODEX_RUNTIME_MVP_OR_DESIGN",
+  "verdict": "TRACK_C_GUIDE_CODEX_RUNTIME_MVP_READY",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "runtime_mode": "RUNTIME_MVP_FRONTEND_ONLY_NO_BACKEND",
+  "runtime_components": {
+    "route_screen": "frontend/app/guide.tsx",
+    "layout_tsx_registration": "DEFERRED_BLOCKED_BY_LAYOUT_PLATFORM_SYNC_BUG",
+    "discoverability": "deeplink_only_in_this_pack",
+    "menu_entry": "DEFERRED_FUTURE_PACK_PROJECT_HOME_MENU_REWIRING",
+    "constants_registry_ts": [
+      "frontend/constants/guideCodex.ts",
+      "frontend/constants/tutorials.ts"
+    ],
+    "async_storage_keys": {
+      "tutorial_completion_namespace": "@project_t/tutorial/v1/completion",
+      "guide_last_read_namespace":     "@project_t/guide/v1/last_read"
+    },
+    "backend_endpoints": "NONE_IN_THIS_PACK",
+    "db_writes": false
+  },
+  "safety_constraints": {
+    "no_layout_tsx_change": true,
+    "no_home_menu_change": true,
+    "no_tower_gameplay_change": true,
+    "no_combat_engine_change": true,
+    "no_server_profile_change": true,
+    "no_db_writes": true,
+    "no_monetization_unlock": true,
+    "no_required_validator_weakening": true
+  },
+  "replace_before_release": true,
+  "content_status": "test_content"
+}

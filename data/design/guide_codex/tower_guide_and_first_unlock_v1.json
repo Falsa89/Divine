@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "E",
+  "track_name": "TOWER_GUIDE_AND_FIRST_UNLOCK_TUTORIAL",
+  "verdict": "TRACK_E_TOWER_GUIDE_AND_FIRST_UNLOCK_TUTORIAL_READY",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "target_mode_id": "tower_of_the_hells",
+  "guide_entry_id": "guide_tower_of_the_hells",
+  "guide_entry_category": "modes",
+  "tutorial_entry_id": "tutorial_tower_of_the_hells_first_unlock_v1",
+  "tutorial_trigger": "mode_first_unlock",
+  "runtime_wiring": {
+    "guide_runtime_visible": true,
+    "guide_route": "frontend/app/guide.tsx",
+    "tutorial_runtime_wired_in_tower_screen": false,
+    "tutorial_wiring_reason_blocked": "NO_TOWER_GAMEPLAY_TOUCH_AUTHORIZED_IN_THIS_PACK"
+  },
+  "replace_before_release": true,
+  "content_status": "test_content",
+  "tutorial_status": "test_content"
+}

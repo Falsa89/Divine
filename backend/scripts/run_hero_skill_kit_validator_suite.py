@@ -1409,6 +1409,14 @@ OPTIONAL = [
     # Proof marker dedicato: data/design/tower_of_the_hells/tower_of_the_hells_runtime_suite_registration_proof_marker_v1.json
     # SYNC_FIX_v16b 2026_05_30: micro-touch resync to force public main blob hash refresh; pack PROJECT_TOWER_OF_THE_HELLS_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/tower_of_the_hells/tower_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-TOWER-OF-THE-HELLS-RUNTIME', 'validate_project_tower_of_the_hells_runtime_v1.py'),
+    # PUBLIC_SYNC_TAG_RESYNC_v19_GUIDE_CODEX_AND_TUTORIAL: pack PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION 2026_05_30.
+    # Foundation onboarding/guida (P1). Runtime MVP frontend-only (route guide.tsx + TutorialOverlay + AsyncStorage local
+    # completion) + 9 design-only JSON tracks (A..G) + proof marker. Tower e' primo caso guida/tutorial (entry design-only;
+    # wiring nel tower screen DEFERRED perche' Tower gameplay touch e' vietato dal pack). _layout.tsx NON modificato (route
+    # auto-rilevata da expo-router file-based). Home menu NON modificato (deferred a pack futuro). Zero DB writes, zero
+    # monetization unlock, zero combat/battle_engine touch, zero stamina, zero artifact/BP/VIP/shop unlock, zero gacha
+    # changes, zero server profile live, zero REQUIRED validator weakening, zero fake PASS. Validator OPTIONAL.
+    ('PROJECT-GUIDE-CODEX-AND-TUTORIAL-FOUNDATION', 'validate_project_guide_codex_and_tutorial_foundation_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

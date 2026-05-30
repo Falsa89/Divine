@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "A",
+  "track_name": "GUIDE_CODEX_SURFACE_AUDIT",
+  "verdict": "TRACK_A_GUIDE_CODEX_SURFACE_AUDIT_READY",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "audit_findings": {
+    "existing_guide_route_or_screen": false,
+    "existing_tutorial_overlay": false,
+    "existing_codex_entries": false,
+    "existing_tooltip_system": false,
+    "existing_completion_state_storage": false,
+    "existing_coverage_registry": false,
+    "modes_without_guide_or_tutorial": [
+      "tower_of_the_hells",
+      "combat",
+      "guild_war_fronti_del_valhalla",
+      "events",
+      "plaza",
+      "raid",
+      "pvp",
+      "territory",
+      "rankings",
+      "economy_shop_bp_vip",
+      "artifacts",
+      "soul_forge",
+      "hero_room_avatars"
+    ]
+  },
+  "baseline_state": "NO_GUIDE_NO_TUTORIAL_NO_REGISTRY",
+  "surface_risk": {
+    "layout_tsx_touch": "FORBIDDEN_BY_PACK_PLATFORM_SYNC_BUG_ACTIVE",
+    "home_menu_rewiring": "DEFERRED_FUTURE_PACK",
+    "tower_gameplay_touch": "FORBIDDEN_BY_PACK",
+    "combat_engine_touch": "FORBIDDEN_BY_PACK"
+  },
+  "new_canonical_rule": "Ogni nuova modalita' deve avere: 1) route/screen, 2) mode_id, 3) Mode Feature Wiring Registry entry, 4) TEST asset/audio registry se placeholder, 5) Guida Codex entry, 6) Tutorial first-unlock, 7) Mobile QA checklist."
+}

@@ -1,0 +1,56 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "F",
+  "track_name": "MODE_GUIDE_TUTORIAL_COVERAGE_REGISTRY",
+  "verdict": "TRACK_F_MODE_GUIDE_TUTORIAL_COVERAGE_REGISTRY_READY",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "canonical_rule": "Ogni nuova modalita' deve avere: route/screen, mode_id, Mode Feature Wiring Registry entry, TEST asset/audio registry se placeholder, Guida Codex entry, Tutorial first-unlock, Mobile QA checklist.",
+  "coverage": [
+    {
+      "mode_id": "tower_of_the_hells",
+      "route_screen": "frontend/app/tower-of-the-hells.tsx",
+      "wiring_registry_entry": true,
+      "test_asset_audio_registry": true,
+      "guide_entry": "guide_tower_of_the_hells",
+      "tutorial_entry": "tutorial_tower_of_the_hells_first_unlock_v1",
+      "mobile_qa_checklist": true,
+      "status": "DESIGN_AND_GUIDE_READY_TUTORIAL_DESIGN_ONLY"
+    },
+    {
+      "mode_id": "combat",
+      "route_screen": "frontend/app/battle/combat.tsx",
+      "wiring_registry_entry": "partial",
+      "test_asset_audio_registry": "partial",
+      "guide_entry": "guide_combat_basics",
+      "tutorial_entry": null,
+      "mobile_qa_checklist": false,
+      "status": "GUIDE_DESIGN_READY_TUTORIAL_MISSING"
+    },
+    {
+      "mode_id": "guild_war_fronti_del_valhalla",
+      "route_screen": null,
+      "wiring_registry_entry": false,
+      "test_asset_audio_registry": false,
+      "guide_entry": "guide_guild_war_fronti_del_valhalla",
+      "tutorial_entry": null,
+      "mobile_qa_checklist": false,
+      "status": "GUIDE_DESIGN_PLACEHOLDER_FUTURE_MODE"
+    },
+    {
+      "mode_id": "events",          "route_screen": "frontend/app/events.tsx",          "guide_entry": null, "tutorial_entry": null, "status": "COVERAGE_GAP"},
+    {"mode_id": "plaza",            "route_screen": "frontend/app/plaza.tsx",           "guide_entry": null, "tutorial_entry": null, "status": "COVERAGE_GAP"},
+    {"mode_id": "raid",             "route_screen": "frontend/app/raid.tsx",            "guide_entry": null, "tutorial_entry": null, "status": "COVERAGE_GAP"},
+    {"mode_id": "pvp",              "route_screen": "frontend/app/pvp.tsx",             "guide_entry": null, "tutorial_entry": null, "status": "COVERAGE_GAP"},
+    {"mode_id": "territory",        "route_screen": "frontend/app/territory.tsx",       "guide_entry": null, "tutorial_entry": null, "status": "COVERAGE_GAP"},
+    {"mode_id": "rankings",         "route_screen": "frontend/app/rankings.tsx",        "guide_entry": null, "tutorial_entry": null, "status": "COVERAGE_GAP"},
+    {"mode_id": "artifacts",        "route_screen": "frontend/app/artifacts.tsx",       "guide_entry": "guide_artifacts",        "tutorial_entry": null, "status": "GUIDE_DESIGN_READY_TUTORIAL_MISSING"},
+    {"mode_id": "soul_forge",       "route_screen": "frontend/app/soul-forge.tsx",      "guide_entry": null, "tutorial_entry": null, "status": "COVERAGE_GAP"},
+    {"mode_id": "home_avatars",     "route_screen": "frontend/app/(tabs)/home.tsx",     "guide_entry": "guide_home_avatars",     "tutorial_entry": null, "status": "GUIDE_DESIGN_READY_FUTURE_FEATURE"},
+    {"mode_id": "economy_shop_bp_vip_iap", "route_screen": "multiple",                  "guide_entry": "guide_shop_bp_vip_iap",   "tutorial_entry": null, "status": "GUIDE_DESIGN_READY_LOCKED_SURFACES"}
+  ],
+  "gap_count": 7,
+  "future_packs_required": [
+    "PROJECT_GUIDE_CODEX_FILL_GAPS_PACK",
+    "PROJECT_TUTORIAL_FIRST_UNLOCK_WIRING_PACK"
+  ]
+}

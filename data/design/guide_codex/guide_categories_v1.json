@@ -1,0 +1,29 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "B",
+  "track_name": "GUIDE_CONTENT_AND_TUTORIAL_SCHEMA",
+  "verdict": "TRACK_B_GUIDE_CONTENT_AND_TUTORIAL_SCHEMA_READY",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "content_status": "test_content",
+  "replace_before_release": true,
+  "categories": [
+    { "id": "getting_started",          "order": 1,  "label_it": "Inizia qui",                           "icon_hint": "book" },
+    { "id": "combat_basics",            "order": 2,  "label_it": "Basi del combattimento",               "icon_hint": "sword" },
+    { "id": "heroes_and_team",          "order": 3,  "label_it": "Eroi e Squadra",                       "icon_hint": "team" },
+    { "id": "team_columns_and_positioning", "order": 4, "label_it": "Colonne squadra e posizionamento", "icon_hint": "grid" },
+    { "id": "battle_power_and_power_delta", "order": 5, "label_it": "Potere di Battaglia e variazioni",  "icon_hint": "flame" },
+    { "id": "items_materials_and_farming", "order": 6, "label_it": "Oggetti, Materiali e Farming",       "icon_hint": "chest" },
+    { "id": "buff_sources",             "order": 7,  "label_it": "Fonti di Buff",                        "icon_hint": "spark" },
+    { "id": "modes",                    "order": 8,  "label_it": "Modalita' di gioco",                   "icon_hint": "map" },
+    { "id": "home_and_avatars",         "order": 9,  "label_it": "Home e Avatar",                        "icon_hint": "home" },
+    { "id": "guild_and_social",         "order": 10, "label_it": "Gilda e Social",                       "icon_hint": "shield" },
+    { "id": "events",                   "order": 11, "label_it": "Eventi",                               "icon_hint": "calendar" },
+    { "id": "economy_shop_bp_vip_iap",  "order": 12, "label_it": "Economia, Negozio, BP, VIP, IAP",      "icon_hint": "coin" },
+    { "id": "faq",                      "order": 13, "label_it": "FAQ",                                  "icon_hint": "help" }
+  ],
+  "tutorial_schema": {
+    "fields": ["id", "trigger", "category", "steps", "completion_storage", "replace_before_release", "tutorial_status"],
+    "trigger_types": ["app_first_launch", "mode_first_unlock", "feature_first_touch", "manual"],
+    "completion_storage": "local_async_storage_only_no_server_db_in_this_pack"
+  }
+}

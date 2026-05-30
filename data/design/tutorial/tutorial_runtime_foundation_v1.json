@@ -1,0 +1,28 @@
+{
+  "task_id": "PROJECT_GUIDE_CODEX_AND_TUTORIAL_FOUNDATION",
+  "track": "D",
+  "track_name": "TUTORIAL_RUNTIME_FOUNDATION",
+  "verdict": "TRACK_D_TUTORIAL_RUNTIME_FOUNDATION_READY",
+  "timestamp_utc": "2026-05-30T01:00:00Z",
+  "runtime_component": "frontend/components/TutorialOverlay.tsx",
+  "storage_helper": "frontend/utils/tutorialStorage.ts",
+  "storage_keys": {
+    "tutorial_completion_namespace": "@project_t/tutorial/v1/completion"
+  },
+  "api": {
+    "isTutorialCompleted": "(tutorialId: string) => Promise<boolean>",
+    "markTutorialCompleted": "(tutorialId: string) => Promise<void>",
+    "resetAllTutorials": "() => Promise<void> (test-only helper)"
+  },
+  "wiring_status": {
+    "wired_in_tower_of_the_hells_tsx": false,
+    "wired_in_home_tsx":               false,
+    "reason": "Pack vieta touch a Tower gameplay e a home menu rewiring. Wiring deferred a pack futuro."
+  },
+  "future_server_side_completion_contract": {
+    "status": "DESIGN_ONLY_DEFERRED",
+    "hypothetical_endpoint": "POST /api/tutorials/complete",
+    "db_collection": "user_tutorial_progress",
+    "db_writes_in_this_pack": false
+  }
+}
