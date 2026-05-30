@@ -506,6 +506,15 @@ app.include_router(hero_elevation_preview_router)
 from routes.gear_cap_preview import router as gear_cap_preview_router
 app.include_router(gear_cap_preview_router)
 
+# PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
+# Returns 503 when GEAR_FORGE_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
+# no materials spent, no live mutation. Fusion commit DISABLED in this pack: l'audit
+# (track A) ha trovato guards mancanti sul legacy /forge/fuse. Il legacy /forge/* resta
+# completamente intoccato. Separato da Hero Elevation, Gemme, Rune, Artifact, Divine Weapon,
+# BP Delta, combat, battle_engine, character bible.
+from routes.gear_forge_preview import router as gear_forge_preview_router
+app.include_router(gear_forge_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

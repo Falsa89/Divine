@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-30T20:03:48.194300+00:00",
+  "timestamp_utc": "2026-05-30T20:34:18.006367+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1123,
+  "backend_python_files_scanned": 1125,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 519,
+      "files_with_hits": 521,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -257,7 +257,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 260,
+      "files_with_hits": 262,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -272,6 +272,10 @@
             {
               "line": 503,
               "snippet": "# no materials spent, no live mutation. Replica Bible 202 track D (gear_level_cap=50,"
+            },
+            {
+              "line": 511,
+              "snippet": "# no materials spent, no live mutation. Fusion commit DISABLED in this pack: l'audit"
             }
           ]
         },
@@ -349,7 +353,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 35,
+      "files_with_hits": 37,
       "hits_sample": [
         {
           "file": "backend/routes/economy.py",
@@ -368,6 +372,18 @@
             {
               "line": 44,
               "snippet": "raise HTTPException(400, f\"{'Gemme' if currency == 'gems' else 'Oro'} insufficiente!\")"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/gear_forge_preview.py",
+          "keyword": "currency",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 219,
+              "snippet": "\"no_paid_currency\", \"no_negative_balance\","
             }
           ]
         },
@@ -450,26 +466,6 @@
               "snippet": "raise HTTPException(400, f\"{'Gemme' if currency_field == 'gems' else 'Oro'} insufficiente!\")"
             }
           ]
-        },
-        {
-          "file": "backend/routes/player_faction_v2.py",
-          "keyword": "currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 23,
-              "snippet": "\u2022 Nessuna currency spend; nessun monetization gate."
-            },
-            {
-              "line": 207,
-              "snippet": "- NESSUNA currency spend."
-            },
-            {
-              "line": 324,
-              "snippet": "\"V2 selection saved. Nessuna currency spesa. Nessun bonus \""
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -477,7 +473,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 32,
+      "files_with_hits": 34,
       "hits_sample": [
         {
           "file": "backend/routes/economy.py",
@@ -496,6 +492,18 @@
             {
               "line": 23,
               "snippet": "for p in purchases:"
+            }
+          ]
+        },
+        {
+          "file": "backend/routes/gear_forge_preview.py",
+          "keyword": "paid_currency",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 219,
+              "snippet": "\"no_paid_currency\", \"no_negative_balance\","
             }
           ]
         },
@@ -560,22 +568,6 @@
             {
               "line": 45,
               "snippet": "'react-native-purchases',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/audit_server_shard_isolation_v1.py",
-          "keyword": "purchase",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 20,
-              "snippet": "'paid_currency_purchase':  ['purchase', 'paid_currency', 'topup', 'top_up'],"
-            },
-            {
-              "line": 81,
-              "snippet": "'expected_scope': 'server_bound' if category not in ('accounts_users_auth','paid_currency_purchase') else 'account_wide_or_mixed',"
             }
           ]
         }
@@ -665,7 +657,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 87,
+      "files_with_hits": 89,
       "hits_sample": [
         {
           "file": "backend/battle_core.py",

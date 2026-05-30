@@ -1480,6 +1480,21 @@ OPTIONAL = [
     # No validator logic change. No backend/routes/gear_cap_preview.py / server.py / frontend Gear Cap runtime touch.
     # Proof marker: data/design/gear_cap_plus_50/gear_cap_plus_50_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-GEAR-CAP-PLUS-50-RUNTIME', 'validate_project_gear_cap_plus_50_runtime_v1.py'),
+    # PUBLIC_SYNC_TAG_RESYNC_v24_GEAR_FORGE_FUSION_REFORGE_RUNTIME: pack PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME 2026_05_30.
+    # Phase 3 dalla Bible 202: foundation PREVIEW-ONLY per Forge standard del Gear (4 subsystem: enhance/fusion/reforge/enchant).
+    # Backend: /api/gear-forge/config + /fusion/preview + /enhance/preview + /reforge/preview + /enchant/preview,
+    # tutti gated da GEAR_FORGE_RUNTIME_PREVIEW_ENABLED. Default flag-off returns 503 inert envelope.
+    # Fusion commit DISABLED in questo pack (audit track A: legacy /forge/fuse manca guards equipped_to/locked/active-team/atomic).
+    # Frontend: constants TS + sandbox /gear-forge-test (deeplink-only).
+    # Legacy /forge/* (forge.py) NON modificato. Zero DB writes, zero materials spent, zero mutation, zero combat/battle_engine,
+    # zero hero final_numbers, zero Character Bible mutation, zero gacha/pity, zero Shop/BP/VIP/IAP unlock,
+    # zero artifact/constellation unhide, zero gemme/rune/DW/BP delta runtime, zero Hero Elevation changes,
+    # zero Gear Cap preview route behavior changes, zero server profiles live, zero broad DB migration,
+    # zero player data mutation, zero economy live, zero final art/audio, zero _layout/home/menu touch,
+    # zero tower/guide runtime changes, zero Material Raid runtime, zero REQUIRED/OPTIONAL validator weakening,
+    # zero fake PASS. Validator OPTIONAL.
+    # Proof marker: data/design/gear_forge_fusion_reforge_runtime/gear_forge_fusion_reforge_runtime_suite_registration_proof_marker_v1.json
+    ('PROJECT-GEAR-FORGE-FUSION-REFORGE-RUNTIME', 'validate_project_gear_forge_fusion_reforge_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

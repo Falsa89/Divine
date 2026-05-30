@@ -1,0 +1,24 @@
+{
+  "task_id": "PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME",
+  "track": "H",
+  "track_name": "SMOKE_AND_QA",
+  "verdict": "TRACK_H_SMOKE_AND_QA_READY",
+  "timestamp_utc": "2026-05-30T12:00:00Z",
+  "smoke_tests": [
+    {"test_id": "flag_off_default", "method": "GET",  "path": "/api/gear-forge/config", "expected_status": 503, "expected_payload_status": "disabled"},
+    {"test_id": "flag_on_config",   "method": "GET",  "path": "/api/gear-forge/config", "expected_status": 200, "expected_payload_keys": ["subsystems", "staged_caps", "gear_cap_canonical"]},
+    {"test_id": "fusion_preview_ok", "method": "POST", "path": "/api/gear-forge/fusion/preview", "body_hint": {"base_id": "x", "fodder_ids": ["a", "b", "c"]}, "expected_status": 200, "expected_payload_status": "preview_ok"},
+    {"test_id": "fusion_preview_min_fodder", "method": "POST", "path": "/api/gear-forge/fusion/preview", "body_hint": {"base_id": "x", "fodder_ids": ["a"]}, "expected_status": 200, "expected_payload_status": "insufficient_fodder"},
+    {"test_id": "enhance_preview_ok", "method": "POST", "path": "/api/gear-forge/enhance/preview", "body_hint": {"equipment_id": "x", "current_level": 19, "target_level": 21}, "expected_status": 200, "expected_payload_status": "preview_ok"},
+    {"test_id": "enhance_preview_above_cap", "method": "POST", "path": "/api/gear-forge/enhance/preview", "body_hint": {"equipment_id": "x", "current_level": 49, "target_level": 60}, "expected_status": 200, "expected_payload_status": "target_above_cap"},
+    {"test_id": "reforge_preview_design_only", "method": "POST", "path": "/api/gear-forge/reforge/preview", "body_hint": {"equipment_id": "x"}, "expected_status": 200, "expected_payload_status": "preview_design_only"},
+    {"test_id": "enchant_preview_design_only", "method": "POST", "path": "/api/gear-forge/enchant/preview", "body_hint": {"equipment_id": "x"}, "expected_status": 200, "expected_payload_status": "preview_design_only"}
+  ],
+  "qa_observations": [
+    "Tutti gli endpoint sono read-only/preview-only. Nessuna scrittura DB possibile in alcuna risposta.",
+    "Il calcolo enhance/preview rispetta cap canonico +50 e blocca target > 50.",
+    "Fusion/preview valida solo schema: min 3 fodder, base != fodder, ZERO ownership lookup (legacy DB intoccato).",
+    "Reforge ed Enchant ritornano envelope design-only, deliberatamente senza output deterministico per evitare drift di spec."
+  ],
+  "runtime_mode": "PREVIEW_ONLY"
+}

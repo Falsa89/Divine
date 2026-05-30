@@ -1,0 +1,45 @@
+{
+  "task_id": "PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME",
+  "track": "A",
+  "track_name": "FORGE_SURFACE_AUDIT",
+  "verdict": "TRACK_A_FORGE_SURFACE_AUDIT_READY",
+  "timestamp_utc": "2026-05-30T12:00:00Z",
+  "legacy_forge_routes_present": [
+    {"path": "/forge",            "handler": "get_forge_info",        "db_writes": false},
+    {"path": "/forge/upgrade",    "handler": "forge_upgrade",         "db_writes": true,  "writes": ["users.gold", "user_equipment.level/stats"]},
+    {"path": "/forge/fuse",       "handler": "forge_fuse_equipment",  "db_writes": true,  "writes": ["user_equipment.delete (fodder)", "user_equipment.update (base rarity/stats)"]},
+    {"path": "/runes",            "handler": "get_runes",             "db_writes": false},
+    {"path": "/runes/craft",      "handler": "craft_rune",            "db_writes": true,  "writes": ["users.gold", "user_runes.insert"]}
+  ],
+  "legacy_forge_safety_guards_present": {
+    "auth_required": true,
+    "ownership_filter_user_id": true,
+    "base_not_in_fodder": true,
+    "rarity_cap_check": true,
+    "min_fodder_count": true
+  },
+  "legacy_forge_safety_guards_MISSING": {
+    "check_fodder_equipped_to": true,
+    "check_fodder_locked_or_favorite": true,
+    "check_base_not_in_active_team": true,
+    "check_protected_or_seasonal": true,
+    "transactional_atomicity_across_fodder_deletes": true,
+    "explicit_deterministic_result_envelope": true,
+    "negative_balance_pre_check_atomic": true
+  },
+  "legacy_forge_classification": "LIVE_BUT_NOT_CLEARLY_SAFE_FOR_RUNTIME_EXTENSION",
+  "decision": "PREVIEW_ONLY_NEW_NAMESPACE",
+  "decision_rationale": "Il pack policy esige guards complete (auth + ownership + not equipped + not locked + not active-team + deterministic + no paid currency + no negative balance + atomic). Il legacy /forge/* non le esprime tutte. NON si attiva fusion commit; NON si tocca il legacy. Il nuovo namespace /api/gear-forge/* e' interamente preview-only, gated da feature flag, separato.",
+  "new_namespace_runtime_added": "/api/gear-forge/*",
+  "legacy_namespace_modified": false,
+  "legacy_namespace_touched_files": [],
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false,
+  "frontend_runtime_surface_audit": {
+    "equipment_tsx": "stub_no_cap_or_forge_runtime",
+    "soul_forge_tsx": "hero_sacrifice_to_essence_only (NOT gear forge)",
+    "forge_runtime_screens": "NONE_in_this_pack"
+  }
+}

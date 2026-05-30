@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME",
+  "track": "C",
+  "track_name": "BACKEND_FORGE_PREVIEW_OR_RUNTIME",
+  "verdict": "TRACK_C_BACKEND_FORGE_PREVIEW_OR_RUNTIME_READY",
+  "timestamp_utc": "2026-05-30T12:00:00Z",
+  "chosen_runtime_mode": "PREVIEW_ONLY",
+  "feature_flag": "GEAR_FORGE_RUNTIME_PREVIEW_ENABLED",
+  "default_state_when_flag_absent": "HTTP_503_DISABLED_INERT_ENVELOPE",
+  "router_prefix": "/api/gear-forge",
+  "endpoints": [
+    {"method": "GET",  "path": "/api/gear-forge/config",           "role": "config canonico subsystems + staged caps + cost source", "db_writes": false, "mutation": false, "flag_gated": true},
+    {"method": "POST", "path": "/api/gear-forge/fusion/preview",   "role": "preview-only fusion outcome (next quality + cost) NO mutation NO delete", "db_writes": false, "mutation": false, "flag_gated": true},
+    {"method": "POST", "path": "/api/gear-forge/enhance/preview",  "role": "preview-only enhance cost from current_level to target_level rispettando cap +50 e stage gates", "db_writes": false, "mutation": false, "flag_gated": true},
+    {"method": "POST", "path": "/api/gear-forge/reforge/preview",  "role": "preview-only reforge shape (sub-stat reroll envelope, design-only)", "db_writes": false, "mutation": false, "flag_gated": true},
+    {"method": "POST", "path": "/api/gear-forge/enchant/preview",  "role": "preview-only enchant shape (design-only, runtime disabled)", "db_writes": false, "mutation": false, "flag_gated": true}
+  ],
+  "fusion_commit_endpoint_added": false,
+  "fusion_commit_decision_rationale": "Legacy /forge/fuse manca guards: equipped_to, locked/favorite, active-team. Policy del pack richiede tutte le guards prima del commit. PREVIEW-ONLY.",
+  "legacy_forge_routes_modified": false,
+  "server_py_change": "include_router additive only (gear_forge_preview_router)",
+  "contract_version": "project_gear_forge_fusion_reforge_runtime_preview_v1",
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}

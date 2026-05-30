@@ -1,0 +1,32 @@
+{
+  "task_id": "PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME",
+  "track": "G",
+  "track_name": "VALIDATOR_AND_SUITE_REGISTRATION",
+  "verdict": "TRACK_G_VALIDATOR_AND_SUITE_REGISTRATION_READY",
+  "timestamp_utc": "2026-05-30T12:00:00Z",
+  "validator_file": "backend/scripts/validate_project_gear_forge_fusion_reforge_runtime_v1.py",
+  "validator_tier": "OPTIONAL",
+  "suite_runner_tuple": ["PROJECT-GEAR-FORGE-FUSION-REFORGE-RUNTIME", "validate_project_gear_forge_fusion_reforge_runtime_v1.py"],
+  "suite_tuple_added_in_optional_block": true,
+  "required_validators_weakened": false,
+  "optional_validators_weakened": false,
+  "separated_from": [
+    "hero_level", "star_up", "ascension", "skill_upgrade",
+    "costellazioni", "reincarnation", "hero_elevation",
+    "gemme", "rune_scroll_talisman", "artifact", "divine_weapon",
+    "bp_delta", "combat_formulas", "battle_engine",
+    "character_bible_final_numbers", "shop_iap", "battle_pass",
+    "vip", "server_profiles_live", "material_raid_runtime"
+  ],
+  "this_pack_only_touches": [
+    "backend/routes/gear_forge_preview.py (new)",
+    "backend/server.py include_router (additive only)",
+    "frontend/constants/gearForge.ts (new)",
+    "frontend/app/gear-forge-test.tsx (new)",
+    "backend/scripts/validate_project_gear_forge_fusion_reforge_runtime_v1.py (new)",
+    "backend/scripts/run_hero_skill_kit_validator_suite.py (suite tuple add only)",
+    "data/design/gear_forge_fusion_reforge_runtime/*.json (new design assets)",
+    "docs/divine/207*_GEAR_FORGE_FUSION_REFORGE_RUNTIME*.md (new docs)"
+  ],
+  "runtime_mode": "PREVIEW_ONLY"
+}

@@ -1,0 +1,43 @@
+{
+  "task_id": "PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME",
+  "track": "E",
+  "track_name": "FUSION_SAFETY_AND_ECONOMY_POLICY",
+  "verdict": "TRACK_E_FUSION_SAFETY_AND_ECONOMY_POLICY_READY",
+  "timestamp_utc": "2026-05-30T12:00:00Z",
+  "fusion_commit_enabled": false,
+  "fusion_commit_blockers": [
+    "legacy /forge/fuse manca check fodder.equipped_to",
+    "legacy /forge/fuse manca check fodder.locked/favorite",
+    "legacy /forge/fuse manca check base.in_active_team",
+    "manca atomicita transactional sui delete cascata",
+    "manca pre-check negative balance gold pre-mutation",
+    "manca deterministic outcome envelope esplicito"
+  ],
+  "required_guards_for_future_commit": {
+    "auth_required": true,
+    "ownership_user_id_match": true,
+    "base_belongs_to_user": true,
+    "fodder_belongs_to_user": true,
+    "fodder_not_equipped": true,
+    "fodder_not_locked_or_favorite": true,
+    "fodder_not_protected_or_seasonal": true,
+    "base_not_in_active_team": true,
+    "deterministic_result_envelope": true,
+    "no_paid_currency": true,
+    "no_negative_balance": true,
+    "no_broad_db_migration": true,
+    "atomic_transaction": true,
+    "reversible_within_session": false
+  },
+  "economy_touched_in_this_pack": false,
+  "paid_currency_in_this_pack": false,
+  "gold_spent_in_this_pack": false,
+  "materials_spent_in_this_pack": false,
+  "shop_unlock_in_this_pack": false,
+  "bp_vip_iap_unlock_in_this_pack": false,
+  "future_commit_pack_proposal": "PROJECT_GEAR_FORGE_FUSION_COMMIT_SAFETY_HARDENING_PACK",
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}
