@@ -1,0 +1,73 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "B",
+  "track_name": "HERO_PROGRESSION_LAYER_BIBLE",
+  "verdict": "TRACK_B_HERO_PROGRESSION_LAYER_BIBLE_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "hero_progression_layers": [
+    {
+      "layer": "hero_level",
+      "label_it": "Livello Eroe",
+      "scope": "per_hero",
+      "axis": "linear_xp_curve",
+      "interacts_with": ["ascension_cap_unlock"],
+      "separated_from": ["star_up", "hero_elevation", "skill_upgrade", "costellazioni", "reincarnation"],
+      "runtime_state": "present"
+    },
+    {
+      "layer": "hero_elevation_quality_frame",
+      "label_it": "Elevazione / Cornice Qualit\u00e0",
+      "scope": "per_hero",
+      "axis": "discrete_tiers_with_color_frame_and_quality_+1_+2_+3",
+      "separated_from": ["star_up", "ascension"],
+      "note": "NUOVO sistema canonico: l'eroe ha una cornice colorata + qualit\u00e0 +1/+2/+3 indipendente da Star Up e da Ascensione. Vedi Track C.",
+      "runtime_state": "design_only_not_implemented"
+    },
+    {
+      "layer": "star_up",
+      "label_it": "Stelle (Star Up)",
+      "scope": "per_hero",
+      "axis": "rarity_stars_via_duplicates_or_fragments",
+      "separated_from": ["hero_elevation", "ascension", "costellazioni", "reincarnation"],
+      "runtime_state": "present"
+    },
+    {
+      "layer": "ascension",
+      "label_it": "Ascensione (Breakthrough)",
+      "scope": "per_hero",
+      "axis": "breakthrough_cap_unlock_via_role_and_element_materials",
+      "separated_from": ["star_up", "hero_elevation", "hero_level"],
+      "interacts_with": ["hero_level (sblocca cap)"],
+      "runtime_state": "present_partial"
+    },
+    {
+      "layer": "skill_upgrade",
+      "label_it": "Potenziamento Abilit\u00e0",
+      "scope": "per_hero_per_skill_Q_U",
+      "axis": "skill_level_via_skill_materials",
+      "runtime_state": "present"
+    },
+    {
+      "layer": "costellazioni",
+      "label_it": "Costellazioni",
+      "scope": "per_hero",
+      "axis": "long_term_endgame_via_duplicates_fragments",
+      "separated_from": ["star_up", "reincarnation"],
+      "runtime_state": "design_only_frozen"
+    },
+    {
+      "layer": "reincarnation",
+      "label_it": "Reincarnation",
+      "scope": "per_hero",
+      "axis": "endgame_reset_and_carryover",
+      "separated_from": ["costellazioni", "star_up"],
+      "runtime_state": "design_only"
+    }
+  ],
+  "separation_matrix": {
+    "hero_elevation_vs_star_up": "DISTINCT_AXIS: Elevation = cornice colore + quality +1/+2/+3 indipendente; Star Up = numero stelle",
+    "ascension_vs_star_up": "DISTINCT_AXIS: Ascension = cap unlock via materiali ruolo/elemento; Star Up = duplicati/frammenti",
+    "costellazioni_vs_star_up": "DISTINCT_AXIS: Costellazioni = endgame long-term separato",
+    "reincarnation_vs_costellazioni": "DISTINCT_AXIS: Reincarnation = endgame reset; Costellazioni = endgame additive"
+  }
+}

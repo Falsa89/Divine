@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "D",
+  "track_name": "GEAR_PROGRESSION_BIBLE",
+  "verdict": "TRACK_D_GEAR_PROGRESSION_BIBLE_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "gear_level_cap_canonical": 50,
+  "gear_level_cap_legacy_to_replace": 20,
+  "gear_level_stages": [
+    {"stage_id": "early",    "label_it": "Avvio",     "min": 0,  "max": 10, "unlock_via": "hero_level_or_ascension_low"},
+    {"stage_id": "mid",      "label_it": "Intermedio", "min": 11, "max": 20, "unlock_via": "hero_level_mid + ascension_unlock"},
+    {"stage_id": "late",     "label_it": "Avanzato",   "min": 21, "max": 35, "unlock_via": "forge_enhance + materials_late"},
+    {"stage_id": "endgame",  "label_it": "Endgame",    "min": 36, "max": 50, "unlock_via": "forge_reforge + endgame_materials + costellazione_gate_optional"}
+  ],
+  "gear_slots": [
+    {"slot_id": "weapon",   "label_it": "Arma"},
+    {"slot_id": "armor",    "label_it": "Armatura"},
+    {"slot_id": "helm",     "label_it": "Elmo"},
+    {"slot_id": "boots",    "label_it": "Stivali"},
+    {"slot_id": "gloves",   "label_it": "Guanti"},
+    {"slot_id": "accessory","label_it": "Accessorio"}
+  ],
+  "gear_qualities": ["common", "uncommon", "rare", "epic", "legendary", "mythic"],
+  "forge_subsystems_design_only": {
+    "enhance": "alza il +level del gear",
+    "fusion": "combina pezzi same-slot per upgrade quality",
+    "reforge": "reroll dei sub-stat secondari mantenendo +level",
+    "enchant": "aggiunge proprieta\u2019 magiche temporanee/permanenti (design-only)"
+  },
+  "gear_sockets": {
+    "gem_sockets_per_gear": "variable_by_quality: common=0, uncommon=1, rare=1, epic=2, legendary=3, mythic=4",
+    "socket_unlock_via": "forge_unlock_socket (consuma materiali)",
+    "socket_payload_type": "gem_only (NON rune)"
+  },
+  "runtime_state": "design_only_pack"
+}

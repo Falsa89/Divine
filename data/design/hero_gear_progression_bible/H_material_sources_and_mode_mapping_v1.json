@@ -1,0 +1,36 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "H",
+  "track_name": "MATERIAL_SOURCES_AND_MODE_MAPPING",
+  "verdict": "TRACK_H_MATERIAL_SOURCES_AND_MODE_MAPPING_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "material_categories": [
+    {"category": "hero_xp",                   "primary_source": "story / daily_quests",            "secondary_source": "events"},
+    {"category": "ascension_role_materials",  "primary_source": "material_raid_design_only",       "secondary_source": "tower_of_the_hells_test_mvp"},
+    {"category": "ascension_element_materials","primary_source": "material_raid_design_only",      "secondary_source": "element_dungeon_future"},
+    {"category": "star_up_fragments",         "primary_source": "gacha_duplicates / hero_shop",     "secondary_source": "events"},
+    {"category": "skill_books",               "primary_source": "daily_quests / weekly_events",    "secondary_source": "shop_test_locked"},
+    {"category": "hero_elevation_materials",  "primary_source": "costellazioni_unlock_gate / endgame", "secondary_source": "events_design_only"},
+    {"category": "gear_pieces",               "primary_source": "story_mid_late + tower_of_the_hells_test_mvp", "secondary_source": "events"},
+    {"category": "gear_enhance_stones",       "primary_source": "daily_quests / material_raid_design_only", "secondary_source": "shop_test_locked"},
+    {"category": "gear_fusion_catalysts",     "primary_source": "events_design_only",              "secondary_source": "endgame_raid_design_only"},
+    {"category": "forge_reforge_materials",   "primary_source": "endgame_raid_design_only",        "secondary_source": "events"},
+    {"category": "gem_shards",                "primary_source": "gem_dungeon_design_only",         "secondary_source": "events"},
+    {"category": "rune_scroll_drops",         "primary_source": "rune_dungeon_design_only",        "secondary_source": "events"},
+    {"category": "costellazioni_fragments",   "primary_source": "endgame_long_term_design_only",   "secondary_source": "reincarnation_carryover"},
+    {"category": "reincarnation_essence",     "primary_source": "endgame_design_only",             "secondary_source": "events"}
+  ],
+  "mode_to_materials_map": {
+    "tower_of_the_hells":           ["ascension_role_materials", "gear_pieces"],
+    "material_raid_design_only":    ["ascension_role_materials", "ascension_element_materials", "gear_enhance_stones"],
+    "gem_dungeon_design_only":      ["gem_shards"],
+    "rune_dungeon_design_only":     ["rune_scroll_drops"],
+    "endgame_raid_design_only":     ["forge_reforge_materials", "gear_fusion_catalysts"],
+    "events_design_only":           ["any_periodic_boost"]
+  },
+  "prerequisites_before_material_raid_runtime": [
+    "Conferma mappa material_raid_design_only \u2192 ascension_role + gear_enhance",
+    "Lock di hero_elevation_quality_frame_runtime + gear_cap_50 prima del runtime Material Raid",
+    "BP Delta integration contract pronto (Track I)"
+  ]
+}

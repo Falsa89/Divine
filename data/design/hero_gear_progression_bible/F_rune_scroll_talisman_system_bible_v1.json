@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "F",
+  "track_name": "RUNE_SCROLL_TALISMAN_SYSTEM_BIBLE",
+  "verdict": "TRACK_F_RUNE_SCROLL_TALISMAN_SYSTEM_BIBLE_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "system_name": "Rune (canonical) = scroll / talismani / pergamene / sigilli",
+  "canonical_definition": "Le Rune sono il NOME PRINCIPALE del layer di scroll/talismani/pergamene/sigilli equipaggiabili direttamente SULL'EROE. NON sono un sistema separato.",
+  "placement": "equipped_on_hero_dedicated_slots",
+  "NOT_socketed_in_gear": true,
+  "NOT_separate_from_scroll_talisman_pergamena_sigillo": true,
+  "aliases_unified_under_rune": ["scroll", "talisman", "talismano", "pergamena", "sigillo"],
+  "rune_slots_per_hero": [
+    {"slot_id": "rune_1", "label_it": "Runa Primaria"},
+    {"slot_id": "rune_2", "label_it": "Runa Secondaria"},
+    {"slot_id": "rune_3", "label_it": "Runa Terziaria"},
+    {"slot_id": "rune_4", "label_it": "Runa Quaternaria"}
+  ],
+  "rune_families": [
+    {"family_id": "scroll_offensive",   "label_it": "Pergamena Offensiva"},
+    {"family_id": "scroll_defensive",   "label_it": "Pergamena Difensiva"},
+    {"family_id": "talisman_support",   "label_it": "Talismano di Supporto"},
+    {"family_id": "talisman_elemental", "label_it": "Talismano Elementale"},
+    {"family_id": "sigillo_role",       "label_it": "Sigillo di Ruolo (Avanguardia/DPS/Support)"},
+    {"family_id": "sigillo_synergy",    "label_it": "Sigillo di Sinergia"}
+  ],
+  "rune_tiers": ["R1", "R2", "R3", "R4", "R5"],
+  "rune_set_bonus_design_only": "2/4 pezzi stesso family attivano bonus di set",
+  "separation_from_gem": "Rune NON e\u2019 una Gemma. Gemma e\u2019 socket-in-gear. Rune e\u2019 equipaggiata sull'eroe.",
+  "separation_from_artifact": "Rune NON e\u2019 Artifact. Artifact e\u2019 globale account/roster (vedi Track G).",
+  "separation_from_divine_weapon": "Rune NON e\u2019 Divine Weapon. DW e\u2019 character-bound dei 6\u2605 (vedi Track G).",
+  "runtime_state": "design_only_pack"
+}

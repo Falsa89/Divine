@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "A",
+  "track_name": "CURRENT_PROGRESSION_AUDIT",
+  "verdict": "TRACK_A_CURRENT_PROGRESSION_AUDIT_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "baseline_findings": {
+    "hero_level_runtime": "present (combat formula stable, MD5-locked battle_engine.py)",
+    "hero_star_up_runtime": "present",
+    "ascension_runtime": "present (partial; cap unlock + role/element materials)",
+    "skill_upgrade_runtime": "present",
+    "costellazioni_runtime": "design-only (FROZEN_BY_PACK; long-term endgame)",
+    "reincarnation_runtime": "design-only",
+    "gear_level_runtime": "present but capped LEGACY +20",
+    "gear_quality_fusion_forge_runtime": "design-only / partial",
+    "gem_socket_runtime": "NOT_IMPLEMENTED",
+    "rune_scroll_talisman_runtime": "NOT_IMPLEMENTED",
+    "artifact_runtime": "catalog read-only, mutations HTTP 423",
+    "divine_weapon_runtime": "design-only / preview-only",
+    "hero_elevation_quality_frame_runtime": "NOT_IMPLEMENTED_AND_NOT_CLEARLY_SEPARATED_FROM_STAR_UP"
+  },
+  "overlap_risks_identified": [
+    "Gear Level cap legacy +20 vs canonical target +50 \u2014 risk: hardcoded numbers nei moduli legacy",
+    "Hero Elevation / quality frame potrebbe essere confuso con Star Up se non separato a livello di Bible",
+    "Rune potrebbe essere reintrodotto come 'scroll' o 'talisman' o 'sigillo' come sistemi separati \u2014 deve essere unificato",
+    "Artifact potrebbe essere implementato come equip per-eroe \u2014 deve restare globale account/roster",
+    "Divine Weapon potrebbe sovrapporsi a Artifact se non separato esplicitamente",
+    "Costellazioni / Reincarnation rischiano sovrapposizione con Star Up (entrambi usano duplicati/frammenti)",
+    "Material sources per Gear/Rune/Gem non mappate \u2192 rischio Material Raid runtime senza coverage"
+  ],
+  "layout_tsx_touched": false,
+  "runtime_changes_in_this_pack": false
+}

@@ -1432,6 +1432,16 @@ OPTIONAL = [
     # No validator logic change. No home.tsx / menu.tsx / _layout.tsx / guide.tsx / tower-of-the-hells.tsx touch.
     # Proof marker: data/design/home_menu_rewiring/home_menu_rewiring_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-HOME-MENU-REWIRING', 'validate_project_home_menu_rewiring_v1.py'),
+    # PUBLIC_SYNC_TAG_RESYNC_v21_HERO_GEAR_PROGRESSION_BIBLE: pack PROJECT_HERO_GEAR_PROGRESSION_BIBLE 2026_05_30.
+    # Bible design-only P1: lock del modello canonico per Hero/Gear/Gem/Rune/Artifact/Divine Weapon prima di qualsiasi
+    # runtime upgrade. 10 JSON tracks (A audit + B hero layers + C elevation/quality frame + D gear cap +50 staged +
+    # E gem socket-in-gear + F rune hero-equipped scroll/talismani/pergamene/sigilli + G artifact global vs DW 6star
+    # character-bound + H material sources & mode mapping + I BP delta & guide/tutorial integration contract + J
+    # roadmap & release gates) + proof marker. Zero runtime change. Zero hero stats / final_numbers / combat /
+    # battle_engine / character bible / gacha / shop / BP / VIP / IAP unlock / artifact unhide / server profile live /
+    # DB / player data / economy / Tower/Guide/Home/Menu runtime / final art/audio / REQUIRED-OPTIONAL validator
+    # weakening / fake PASS. Validator OPTIONAL.
+    ('PROJECT-HERO-GEAR-PROGRESSION-BIBLE', 'validate_project_hero_gear_progression_bible_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

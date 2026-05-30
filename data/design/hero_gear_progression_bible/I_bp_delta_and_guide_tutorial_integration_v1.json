@@ -1,0 +1,43 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "I",
+  "track_name": "BP_DELTA_AND_GUIDE_TUTORIAL_INTEGRATION",
+  "verdict": "TRACK_I_BP_DELTA_AND_GUIDE_TUTORIAL_INTEGRATION_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "bp_delta_integration_contract": {
+    "trigger_layers": [
+      "hero_level", "hero_elevation_quality_frame", "star_up", "ascension",
+      "skill_upgrade", "costellazioni", "reincarnation",
+      "gear_level", "gear_quality_fusion", "gem_socket_change", "rune_equip_change",
+      "artifact_global_change", "divine_weapon_change"
+    ],
+    "recompute_strategy_design_only": "BP attivo del team = sum(per_hero_active_power) usando snapshot dei layer attivi nel team corrente. Delta +BP/-BP visualizzato come overlay quando il valore cambia.",
+    "overlay_runtime_state": "DEFERRED_FUTURE_PACK",
+    "depends_on_pack": "PROJECT_ACTIVE_BATTLE_POWER_DELTA_OVERLAY_PACK_FUTURE"
+  },
+  "guide_codex_requirements": {
+    "required_guide_entries": [
+      "guide_hero_progression_layers",
+      "guide_hero_elevation_quality_frame",
+      "guide_gear_progression_+50",
+      "guide_gem_socket_in_gear",
+      "guide_rune_scroll_talisman_on_hero",
+      "guide_artifact_global_account",
+      "guide_divine_weapon_6star",
+      "guide_material_sources_and_modes",
+      "guide_active_battle_power_delta"
+    ],
+    "depends_on_pack": "PROJECT_GUIDE_CODEX_FILL_GAPS_PACK_FUTURE"
+  },
+  "tutorial_requirements": {
+    "required_tutorial_entries": [
+      "tutorial_hero_elevation_quality_frame_first_unlock_v1",
+      "tutorial_gear_+50_milestones_v1",
+      "tutorial_gem_socket_first_use_v1",
+      "tutorial_rune_equip_first_use_v1",
+      "tutorial_artifact_global_vs_per_hero_v1",
+      "tutorial_divine_weapon_unlock_6star_v1"
+    ],
+    "depends_on_pack": "PROJECT_TUTORIAL_FIRST_UNLOCK_WIRING_PACK_FUTURE"
+  }
+}

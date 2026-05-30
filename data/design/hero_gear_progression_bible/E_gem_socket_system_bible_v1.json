@@ -1,0 +1,28 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "E",
+  "track_name": "GEM_SOCKET_SYSTEM_BIBLE",
+  "verdict": "TRACK_E_GEM_SOCKET_SYSTEM_BIBLE_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "system_name": "Gem Socket System",
+  "canonical_definition": "Le Gemme sono pietre/cristalli incastonabili dentro i socket dei Gear/Equip. NON sono equipaggiate sull'eroe. NON sono Rune.",
+  "placement": "socketed_in_gear",
+  "NOT_socketed_on_hero": true,
+  "gem_families": [
+    {"family_id": "atk",       "label_it": "Gemma Attacco",     "primary_stat": "attack_flat_or_percent"},
+    {"family_id": "hp",        "label_it": "Gemma Vita",        "primary_stat": "hp_flat_or_percent"},
+    {"family_id": "def",       "label_it": "Gemma Difesa",      "primary_stat": "defense_flat_or_percent"},
+    {"family_id": "crit",      "label_it": "Gemma Critico",     "primary_stat": "crit_rate_or_damage"},
+    {"family_id": "speed",     "label_it": "Gemma Velocita\u2019", "primary_stat": "speed_or_action_value"},
+    {"family_id": "elemental", "label_it": "Gemma Elementale",  "primary_stat": "elemental_damage_or_resist"}
+  ],
+  "gem_tiers": ["T1", "T2", "T3", "T4", "T5"],
+  "gem_fusion_design_only": "3xT_n \u2192 1xT_(n+1)",
+  "socket_compatibility": {
+    "any_gem_in_any_socket": true,
+    "slot_specific_bonuses_design_only": true
+  },
+  "separation_from_rune": "Le Gemme NON sostituiscono e NON si sovrappongono a Rune. Rune e\u2019 hero-equipped (vedi Track F). Gemma e\u2019 gear-socketed.",
+  "separation_from_artifact": "Le Gemme NON sono Artifact. Artifact e\u2019 globale account/roster (vedi Track G).",
+  "runtime_state": "design_only_pack"
+}

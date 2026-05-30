@@ -1,0 +1,33 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "C",
+  "track_name": "HERO_ELEVATION_QUALITY_FRAME_BIBLE",
+  "verdict": "TRACK_C_HERO_ELEVATION_QUALITY_FRAME_BIBLE_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "system_name": "Hero Elevation / Quality Frame / Color Tier",
+  "separated_from": ["star_up", "ascension", "costellazioni", "reincarnation"],
+  "canonical_color_tiers": [
+    {"tier_id": "E1", "label_it": "Comune",      "frame_color_hint": "#9aa0a6", "order": 1},
+    {"tier_id": "E2", "label_it": "Non Comune", "frame_color_hint": "#3ddc84", "order": 2},
+    {"tier_id": "E3", "label_it": "Raro",        "frame_color_hint": "#4a90e2", "order": 3},
+    {"tier_id": "E4", "label_it": "Epico",       "frame_color_hint": "#a96bff", "order": 4},
+    {"tier_id": "E5", "label_it": "Leggendario", "frame_color_hint": "#ffb84a", "order": 5},
+    {"tier_id": "E6", "label_it": "Mitico",      "frame_color_hint": "#ff5470", "order": 6},
+    {"tier_id": "E7", "label_it": "Divino",      "frame_color_hint": "#ffe27a", "order": 7}
+  ],
+  "quality_substeps_per_tier": ["+1", "+2", "+3"],
+  "max_quality_per_tier": 3,
+  "upgrade_path": "E_n+3 \u2192 promotion to E_(n+1)_+1",
+  "material_categories_design_only": [
+    "elevation_dust_common",
+    "elevation_crystal_rare",
+    "elevation_essence_epic",
+    "elevation_orb_legendary"
+  ],
+  "interaction_rules": {
+    "frame_color": "determinata da tier_id corrente",
+    "quality_substep": "mostrato come +1/+2/+3 accanto al tier_id",
+    "stat_impact": "design-only: increase % small linear per substep; FROZEN per ora"
+  },
+  "runtime_state": "design_only_not_implemented"
+}

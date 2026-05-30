@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_HERO_GEAR_PROGRESSION_BIBLE",
+  "track": "G",
+  "track_name": "ARTIFACT_DIVINE_WEAPON_SEPARATION_RULES",
+  "verdict": "TRACK_G_ARTIFACT_DIVINE_WEAPON_SEPARATION_RULES_READY",
+  "timestamp_utc": "2026-05-30T02:30:00Z",
+  "artifact_canonical_rules": {
+    "scope": "global_account_roster",
+    "NOT_equipped_on_individual_hero": true,
+    "current_runtime_state": "catalog_read_only_mutations_HTTP_423",
+    "separated_from_gear": true,
+    "separated_from_gem": true,
+    "separated_from_rune": true,
+    "separated_from_divine_weapon": true
+  },
+  "divine_weapon_canonical_rules": {
+    "scope": "per_hero_6star_only",
+    "character_bound": true,
+    "NOT_global_account": true,
+    "NOT_gear": true,
+    "NOT_gem": true,
+    "NOT_rune": true,
+    "NOT_artifact": true,
+    "current_runtime_state": "design_only_preview"
+  },
+  "separation_matrix": {
+    "gear_vs_artifact":         "DISTINCT: gear = per_hero equip; artifact = global account",
+    "gear_vs_divine_weapon":    "DISTINCT: gear = per_hero any rarity; divine_weapon = per_hero 6\u2605 only",
+    "gem_vs_artifact":          "DISTINCT: gem = socket in gear; artifact = global account",
+    "gem_vs_divine_weapon":     "DISTINCT axis (gem in gear socket; DW = 6\u2605 character-bound)",
+    "rune_vs_artifact":         "DISTINCT: rune = per_hero equip; artifact = global account",
+    "rune_vs_divine_weapon":    "DISTINCT: rune = any rarity; DW = 6\u2605 character-bound",
+    "artifact_vs_divine_weapon":"DISTINCT: artifact = global account; DW = per_hero 6\u2605"
+  }
+}
