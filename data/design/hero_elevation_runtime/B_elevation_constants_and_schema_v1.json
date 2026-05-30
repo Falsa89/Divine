@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_HERO_ELEVATION_QUALITY_FRAME_RUNTIME",
+  "track": "B",
+  "track_name": "ELEVATION_CONSTANTS_AND_SCHEMA",
+  "verdict": "TRACK_B_ELEVATION_CONSTANTS_AND_SCHEMA_READY",
+  "timestamp_utc": "2026-05-30T03:00:00Z",
+  "default_tier_id": "E0",
+  "tiers": [
+    {"tier_id": "E0",  "order": 0,  "color_id": "white",  "label_it": "Bianco",      "quality": 0},
+    {"tier_id": "E1",  "order": 1,  "color_id": "green",  "label_it": "Verde",       "quality": 0},
+    {"tier_id": "E2",  "order": 2,  "color_id": "green",  "label_it": "Verde +1",    "quality": 1},
+    {"tier_id": "E3",  "order": 3,  "color_id": "blue",   "label_it": "Blu",         "quality": 0},
+    {"tier_id": "E4",  "order": 4,  "color_id": "blue",   "label_it": "Blu +1",      "quality": 1},
+    {"tier_id": "E5",  "order": 5,  "color_id": "blue",   "label_it": "Blu +2",      "quality": 2},
+    {"tier_id": "E6",  "order": 6,  "color_id": "purple", "label_it": "Viola +1",    "quality": 1},
+    {"tier_id": "E7",  "order": 7,  "color_id": "purple", "label_it": "Viola +2",    "quality": 2},
+    {"tier_id": "E8",  "order": 8,  "color_id": "purple", "label_it": "Viola +3",    "quality": 3},
+    {"tier_id": "E9",  "order": 9,  "color_id": "gold",   "label_it": "Oro +1",      "quality": 1},
+    {"tier_id": "E10", "order": 10, "color_id": "gold",   "label_it": "Oro +2",      "quality": 2},
+    {"tier_id": "E11", "order": 11, "color_id": "gold",   "label_it": "Oro +3",      "quality": 3},
+    {"tier_id": "E12", "order": 12, "color_id": "red",    "label_it": "Rosso +1",    "quality": 1},
+    {"tier_id": "E13", "order": 13, "color_id": "red",    "label_it": "Rosso +2",    "quality": 2},
+    {"tier_id": "E14", "order": 14, "color_id": "red",    "label_it": "Rosso +3",    "quality": 3}
+  ],
+  "db_schema_design_only": {
+    "collection_proposed": "user_heroes",
+    "field_proposed": "elevation_tier_id",
+    "default_when_missing": "E0",
+    "db_writes_in_this_pack": false
+  }
+}

@@ -1442,6 +1442,17 @@ OPTIONAL = [
     # DB / player data / economy / Tower/Guide/Home/Menu runtime / final art/audio / REQUIRED-OPTIONAL validator
     # weakening / fake PASS. Validator OPTIONAL.
     ('PROJECT-HERO-GEAR-PROGRESSION-BIBLE', 'validate_project_hero_gear_progression_bible_v1.py'),
+    # PUBLIC_SYNC_TAG_RESYNC_v22_HERO_ELEVATION_RUNTIME: pack PROJECT_HERO_ELEVATION_QUALITY_FRAME_RUNTIME 2026_05_30.
+    # Phase 1 dalla Bible 202: runtime PREVIEW-ONLY (disabled by default returns 503) per Hero Elevation / Quality Frame.
+    # 15 tier canonici E0..E14 (Bianco/Verde/Verde+1/Blu/Blu+1+2/Viola+1+2+3/Oro+1+2+3/Rosso+1+2+3). Default E0 se assente.
+    # Backend: /api/hero/elevation/tiers + /{hero_id} + /{hero_id}/upgrade/preview, tutti gated da HERO_ELEVATION_PREVIEW_ENABLED.
+    # Frontend: constants TS + HeroElevationBadge component + sandbox screen /hero-elevation-test (deeplink-only).
+    # Zero DB writes, zero materials spent, zero mutation, zero combat/battle_engine, zero hero final_numbers,
+    # zero Character Bible mutation, zero gacha/pity, zero Shop/BP/VIP/IAP unlock, zero artifact/constellation unhide,
+    # zero gear/gemme/rune/DW/BP delta runtime, zero server profiles live, zero broad DB migration, zero player data
+    # mutation, zero economy live (outside safe preview), zero final art/audio, zero _layout/home/menu touch,
+    # zero REQUIRED/OPTIONAL validator weakening, zero fake PASS. Validator OPTIONAL.
+    ('PROJECT-HERO-ELEVATION-QUALITY-FRAME-RUNTIME', 'validate_project_hero_elevation_quality_frame_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

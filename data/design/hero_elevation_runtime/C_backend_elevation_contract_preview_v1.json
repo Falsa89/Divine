@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_HERO_ELEVATION_QUALITY_FRAME_RUNTIME",
+  "track": "C",
+  "track_name": "BACKEND_ELEVATION_CONTRACT_OR_PREVIEW",
+  "verdict": "TRACK_C_BACKEND_ELEVATION_CONTRACT_PREVIEW_READY",
+  "timestamp_utc": "2026-05-30T03:00:00Z",
+  "backend_runtime_mode": "PREVIEW_ONLY_DISABLED_BY_DEFAULT_INERT",
+  "feature_flag": "HERO_ELEVATION_PREVIEW_ENABLED",
+  "default_state": "disabled_returns_503",
+  "router_file": "backend/routes/hero_elevation_preview.py",
+  "server_py_registered": true,
+  "endpoints": [
+    {"method": "GET",  "path": "/api/hero/elevation/tiers",                    "behavior": "503 if flag off; else returns canonical tier list (read-only)"},
+    {"method": "GET",  "path": "/api/hero/elevation/{hero_id}",                "behavior": "503 if flag off; else returns current_tier_id with fallback E0 (no DB read in preview)"},
+    {"method": "POST", "path": "/api/hero/elevation/{hero_id}/upgrade/preview","behavior": "503 if flag off; else returns next tier + cost preview. NESSUNA mutation, NESSUN DB write, NESSUN materiale speso"}
+  ],
+  "db_writes": 0,
+  "materials_spent": false,
+  "combat_mutation": false,
+  "economy_live_changes": false
+}

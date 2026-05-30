@@ -1,0 +1,21 @@
+{
+  "task_id": "PROJECT_HERO_ELEVATION_QUALITY_FRAME_RUNTIME",
+  "track": "A",
+  "track_name": "ELEVATION_RUNTIME_SURFACE_AUDIT",
+  "verdict": "TRACK_A_ELEVATION_RUNTIME_SURFACE_AUDIT_READY",
+  "timestamp_utc": "2026-05-30T03:00:00Z",
+  "baseline": {
+    "existing_elevation_constants": false,
+    "existing_elevation_backend_endpoints": false,
+    "existing_elevation_ui_badge": false,
+    "existing_elevation_db_field": false,
+    "current_runtime_state": "NOT_IMPLEMENTED"
+  },
+  "chosen_runtime_mode": "PREVIEW_ONLY_DISABLED_BY_DEFAULT_INERT",
+  "rationale_preview_only": "Materiali/inventory non sono pronti per spend sicuro (elevation_dust_common / elevation_crystal_rare / elevation_essence_epic / elevation_orb_legendary non sono in produzione). Niente DB write. Endpoint gated dietro flag HERO_ELEVATION_PREVIEW_ENABLED (default false \u2192 HTTP 503).",
+  "separation_from_other_layers": [
+    "hero_level", "star_up", "ascension", "skill_upgrade",
+    "costellazioni", "reincarnation", "gear", "gemme",
+    "rune_scroll_talisman", "artifact", "divine_weapon"
+  ]
+}

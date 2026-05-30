@@ -491,6 +491,13 @@ app.include_router(server_profiles_router)
 from routes.housing_preview import router as housing_preview_router
 app.include_router(housing_preview_router)
 
+# PROJECT_HERO_ELEVATION_QUALITY_FRAME_RUNTIME Phase 1 preview-only route
+# (DISABLED-BY-DEFAULT INERT). Returns 503 when HERO_ELEVATION_PREVIEW_ENABLED is
+# unset/!=true. No DB writes, no materials spent, no combat/account stat mutation.
+# Upstream design: docs/divine/202_HERO_GEAR_PROGRESSION_BIBLE.md (Bible 202).
+from routes.hero_elevation_preview import router as hero_elevation_preview_router
+app.include_router(hero_elevation_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_HERO_ELEVATION_QUALITY_FRAME_RUNTIME",
+  "track": "E",
+  "track_name": "MATERIAL_COST_POLICY",
+  "verdict": "TRACK_E_MATERIAL_COST_POLICY_READY",
+  "timestamp_utc": "2026-05-30T03:00:00Z",
+  "policy": "PREVIEW_ONLY_NO_SPEND",
+  "materials_referenced_design_only": [
+    "elevation_dust_common",
+    "elevation_crystal_rare",
+    "elevation_essence_epic",
+    "elevation_orb_legendary"
+  ],
+  "cost_preview_table_visible_in": "backend/routes/hero_elevation_preview.py ELEVATION_COST_PREVIEW",
+  "db_writes": false,
+  "materials_spent": false,
+  "economy_live_changes": false,
+  "replace_before_release": true,
+  "upgrade_mutation_endpoint_enabled": false,
+  "upgrade_mutation_endpoint_status": "NOT_IMPLEMENTED_INTENTIONAL",
+  "future_full_runtime_pack": "PROJECT_HERO_ELEVATION_QUALITY_FRAME_FULL_RUNTIME_MUTATION_PACK (after materials & inventory readiness)"
+}
