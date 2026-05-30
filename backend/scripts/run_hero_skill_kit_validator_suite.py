@@ -1535,6 +1535,18 @@ OPTIONAL = [
     # No REQUIRED/OPTIONAL validator weakening. No tuple duplicate. No fake PASS. Validator OPTIONAL.
     # Proof marker: data/design/battle_report_replay_share/battle_report_replay_save_share_proof_marker_v1.json
     ('PROJECT-BATTLE-REPORT-REPLAY-SAVE-SHARE-FOUNDATION', 'validate_project_battle_report_replay_save_share_foundation_v1.py'),
+    # PUBLIC_SYNC_TAG_v27_GEM_SOCKET_RUNTIME: pack PROJECT_GEM_SOCKET_RUNTIME 2026_05_30.
+    # GEM_SOCKET_RUNTIME_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Foundation runtime PREVIEW-ONLY per Gemme Socket. Gemme = incastonabili nei gear (NON Rune, NON premium gems).
+    # 6 famiglie (ruby/sapphire/emerald/topaz/amethyst/diamond), 6 tier (common..divine).
+    # max_sockets_by_rarity {1:0,2:0,3:1,4:1,5:2,6:3}, socket_level_unlocks {1:+10,2:+20,3:+35}.
+    # Backend: /api/gem-socket/{config,catalog,socket-preview,replace-preview,unsocket-preview,power-preview},
+    # tutti gated da GEM_SOCKET_RUNTIME_PREVIEW_ENABLED. Default 503 inert envelope.
+    # Live socket/unsocket/replace commit DISABLED. No DB writes, no premium gems spend, no user_materials,
+    # no gear mutation, no material raid changes, no legacy /forge/* changes, no rune/artifact/DW runtime.
+    # No gacha/Shop/BP/VIP/IAP. No battle_engine/combat changes. No REQUIRED/OPTIONAL weakening. Validator OPTIONAL.
+    # Proof marker: data/design/gem_socket_runtime/gem_socket_runtime_proof_marker_v1.json
+    ('PROJECT-GEM-SOCKET-RUNTIME', 'validate_project_gem_socket_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

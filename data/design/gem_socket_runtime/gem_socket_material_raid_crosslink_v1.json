@@ -1,0 +1,18 @@
+{
+  "task_id": "PROJECT_GEM_SOCKET_RUNTIME",
+  "crosslink_version": 1,
+  "material_raid_runtime_unchanged_in_this_pack": true,
+  "material_raid_preview_py_modified": false,
+  "material_raid_gem_track_state_in_repo": "locked_deferred",
+  "material_raid_gem_track_state_after_socket_foundation": "preview_ready_after_gem_socket_foundation",
+  "material_raid_live_reward_claim_enabled": false,
+  "material_raid_live_gem_drops_enabled": false,
+  "user_materials_collection_present": false,
+  "idempotent_grant_present": false,
+  "future_packs_required": [
+    "PROJECT_MATERIAL_RAID_GEM_TRACK_PREVIEW_UNLOCK_PACK (optional: surface gem track in raid preview)",
+    "PROJECT_MATERIAL_RAID_LIVE_CLAIM_SAFETY_HARDENING_PACK (canonical user_materials + idempotency + audit log)",
+    "PROJECT_GEM_SOCKET_COMMIT_SAFETY_HARDENING_PACK (live socket commit with ownership/locks)"
+  ],
+  "runtime_mode": "PREVIEW_ONLY"
+}

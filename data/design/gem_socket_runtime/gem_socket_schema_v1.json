@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_GEM_SOCKET_RUNTIME",
+  "schema_version": 1,
+  "runtime_mode": "PREVIEW_ONLY",
+  "feature_flag": "GEM_SOCKET_RUNTIME_PREVIEW_ENABLED",
+  "default_state_when_flag_absent": "HTTP_503_DISABLED_INERT_ENVELOPE",
+  "router_prefix": "/api/gem-socket",
+  "endpoints": [
+    {"method":"GET", "path":"/api/gem-socket/config",            "db_writes":0, "mutation":false},
+    {"method":"GET", "path":"/api/gem-socket/catalog",           "db_writes":0, "mutation":false},
+    {"method":"POST","path":"/api/gem-socket/socket-preview",    "db_writes":0, "mutation":false},
+    {"method":"POST","path":"/api/gem-socket/replace-preview",   "db_writes":0, "mutation":false},
+    {"method":"POST","path":"/api/gem-socket/unsocket-preview",  "db_writes":0, "mutation":false},
+    {"method":"POST","path":"/api/gem-socket/power-preview",     "db_writes":0, "mutation":false}
+  ],
+  "gear_slots_canonical": ["weapon","armor","helm","boots","gloves","accessory"],
+  "gear_slots_legacy":    ["weapon","armor","accessory"],
+  "tiers": ["common","uncommon","rare","epic","legendary","divine"],
+  "max_sockets_by_rarity": {"1":0,"2":0,"3":1,"4":1,"5":2,"6":3},
+  "socket_level_unlocks":   {"socket_1_unlock_level":10,"socket_2_unlock_level":20,"socket_3_unlock_level":35},
+  "final_numbers": null,
+  "balance_status": "preview_non_final"
+}

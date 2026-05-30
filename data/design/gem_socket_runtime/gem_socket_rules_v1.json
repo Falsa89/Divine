@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_GEM_SOCKET_RUNTIME",
+  "rules_version": 1,
+  "socket_naming_policy": {
+    "use_socket_gem_prefix": true,
+    "forbidden_prefixes": ["user.gems", "user_gems", "divine_crystals"],
+    "reason": "Project already uses premium currency `gems`. Socket gems must not collide."
+  },
+  "socket_eligibility_rules": [
+    "max_sockets_by_rarity must hold",
+    "socket_index must be within rarity max",
+    "gear level must meet SOCKET_LEVEL_UNLOCKS for socket_index",
+    "diamond family: max 1 per item in preview"
+  ],
+  "replace_policy_preview": {
+    "destroy_old_gem": false,
+    "return_old_gem_to_inventory": "deferred_to_safety_hardening_pack",
+    "requires_idempotency_key": true,
+    "diff_stats_returned": true
+  },
+  "unsocket_policy_preview": {
+    "destroys_gem": false,
+    "returns_gem_full": "deferred_to_safety_hardening_pack",
+    "returns_partial_material": "deferred_to_safety_hardening_pack"
+  },
+  "premium_currency_policy": {
+    "premium_gems_used": false,
+    "premium_gems_decremented": false,
+    "divine_crystals_used": false
+  },
+  "battle_runtime_attachment": false,
+  "bp_delta_runtime_attachment": false,
+  "final_numbers": null,
+  "balance_status": "preview_non_final"
+}

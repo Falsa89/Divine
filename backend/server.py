@@ -534,6 +534,14 @@ app.include_router(gear_forge_preview_router)
 from routes.material_raid_preview import router as material_raid_preview_router
 app.include_router(material_raid_preview_router)
 
+# PROJECT_GEM_SOCKET_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
+# Returns 503 when GEM_SOCKET_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
+# no mutation, no premium gems spend, no material spend, no live socket commit.
+# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`).
+# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI.
+from routes.gem_socket_preview import router as gem_socket_preview_router
+app.include_router(gem_socket_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).
