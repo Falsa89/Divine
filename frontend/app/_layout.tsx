@@ -36,6 +36,7 @@ export default function RootLayout() {
           <Stack.Screen name="combat" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="story" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="tower" options={{ animation: 'slide_from_right' }} />
+          {/* PUBLIC_SYNC_TAG_RESYNC_v17_LAYOUT_ROUTE: PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX 2026_05_30 — micro-touch JSX comment no-op-safe per forzare blob resnapshot del file _layout.tsx sul public main. Nessuna modifica a behavior/route/gameplay/economy/AsyncStorage/backend. Tower route registration count rimane = 1. Marker: data/design/tower_of_the_hells/tower_layout_route_sync_fix_marker_v1.json. */}
           <Stack.Screen name="tower-of-the-hells" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="pvp" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="equipment" options={{ animation: 'slide_from_bottom' }} />
