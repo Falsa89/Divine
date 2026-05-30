@@ -1,0 +1,23 @@
+{
+  "task_id": "PROJECT_TOWER_OF_THE_HELLS_SUITE_RUNNER_SYNC_FIX",
+  "check_name": "LAYOUT_ROUTE_REGISTRATION_CHECK",
+  "target_file": "frontend/app/_layout.tsx",
+  "expected_token": "<Stack.Screen name=\"tower-of-the-hells\" options={{ animation: 'slide_from_right' }} />",
+  "local_state": {
+    "file_exists": true,
+    "contains_tower_of_the_hells_stack_screen": true,
+    "line_observed": 39,
+    "local_modification_applied_in_this_pack": false,
+    "reason_no_modification": "Local file already contains the Stack.Screen registration since pack 195. Re-patching would be a no-op and would not change the file MD5; nothing to do locally."
+  },
+  "public_state": {
+    "public_file_observation": "User report: public _layout.tsx raw on main did not show tower-of-the-hells at the time of verification of pack 195.",
+    "classification": "STALE_PUBLIC_ONLY (local OK, public main not yet refreshed)"
+  },
+  "recommended_action": [
+    "Premere 'Save to GitHub' (questo pack)",
+    "Verificare frontend/app/_layout.tsx su main e cercare la riga: <Stack.Screen name=\"tower-of-the-hells\" ... />",
+    "Se ancora assente dopo questa push, classificare come stale-push selettivo del platform sync (analogo a quanto osservato per il suite runner cicli v15b/v15c/v15d) e considerare escalation"
+  ],
+  "language": "it"
+}

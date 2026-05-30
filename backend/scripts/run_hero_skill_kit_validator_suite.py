@@ -25,7 +25,23 @@
 # PUBLIC_SYNC_TAG_RESYNC_v15c: suite_runner_server_profiles_sync_fix_v15c_2026_05_29_force_public_blob_refresh
 # PUBLIC_SYNC_TAG_RESYNC_v15d: suite_runner_server_profiles_sync_fix_v15d_2026_05_29_force_public_blob_refresh_large_comment_block
 # PUBLIC_SYNC_TAG_RESYNC_v15d_REASON: V1/V2 marker docs reached public main but suite runner remained stale; this marker is comment-only and exists only to force suite runner public sync; no logic change.
-# PUBLIC_SYNC_TAG_RESYNC_v16: suite_runner_tower_of_the_hells_runtime_v16_2026_05_29
+# PUBLIC_SYNC_TAG_RESYNC_v16: suite_runner_tower_of_the_hells_runtime_v16_2026_05_30
+# PUBLIC_SYNC_TAG_RESYNC_v16b: suite_runner_tower_of_the_hells_sync_fix_v16b_2026_05_30_force_blob_resnapshot
+# RESYNC_v16b RATIONALE: Public branch main su backend/scripts/run_hero_skill_kit_validator_suite.py
+# era ancora stale dopo il commit del pack PROJECT_TOWER_OF_THE_HELLS_RUNTIME (195).
+# Sentinella v16 Tower e tupla
+# ('PROJECT-TOWER-OF-THE-HELLS-RUNTIME', ...) non venivano riflesse sul remote.
+# Questo v16b è un micro-touch comment di mitigazione per lo stale-push bug:
+# forza un nuovo blob hash così il prossimo "Save to GitHub" PUSH non può
+# ri-skippare questo file. Nessun cambio di semantica. Tuple count della
+# tupla Tower resta 1. Nessun REQUIRED/OPTIONAL validator logic toccato.
+# Nessun gameplay Tower, AsyncStorage behavior, backend runtime endpoint Tower,
+# reward/economy, stamina/ticket, paid attempts, combat/battle_engine,
+# auth runtime, frontend visual redesign, .env, server profile flag,
+# validator logic toccato. _layout.tsx contiene già "tower-of-the-hells"
+# (riga 39 locale): NON modificato in questo pack.
+# Proof marker dedicato: data/design/tower_of_the_hells/tower_suite_runner_sync_fix_marker_v1.json
+# Route registration check: data/design/tower_of_the_hells/tower_layout_route_registration_check_v1.json
 # RESYNC_v16 RATIONALE: Registrazione OPTIONAL del nuovo validator
 # validate_project_tower_of_the_hells_runtime_v1.py
 # (PROJECT_TOWER_OF_THE_HELLS_RUNTIME). Modalità Torre degli Inferi (mode_id =
@@ -1391,6 +1407,7 @@ OPTIONAL = [
     # no Synergy V2 / Artifact / Divine Weapon / Status / VFX runtime activation;
     # no server profile live; combat engine NON chiamato (simulazione TEST).
     # Proof marker dedicato: data/design/tower_of_the_hells/tower_of_the_hells_runtime_suite_registration_proof_marker_v1.json
+    # SYNC_FIX_v16b 2026_05_30: micro-touch resync to force public main blob hash refresh; pack PROJECT_TOWER_OF_THE_HELLS_SUITE_RUNNER_SYNC_FIX. No semantics change. Tuple count remains 1. Proof marker fix: data/design/tower_of_the_hells/tower_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-TOWER-OF-THE-HELLS-RUNTIME', 'validate_project_tower_of_the_hells_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
