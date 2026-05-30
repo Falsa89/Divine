@@ -1,6 +1,6 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-30T23:17:08.266888+00:00",
+  "timestamp_utc": "2026-05-30T23:40:44.577746+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
@@ -274,7 +274,7 @@
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 541,
+              "line": 548,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -362,11 +362,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 540,
+              "line": 543,
+              "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
+            },
+            {
+              "line": 547,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 541,
+              "line": 548,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
