@@ -1520,6 +1520,12 @@ OPTIONAL = [
     # Proof marker: data/design/material_raid_runtime/material_raid_runtime_suite_registration_proof_marker_v1.json
     ('PROJECT-MATERIAL-RAID-RUNTIME', 'validate_project_material_raid_runtime_v1.py'),
     # PUBLIC_SYNC_TAG_v26_BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION: pack PROJECT_BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION 2026_05_30.
+    # PUBLIC_SYNC_TAG_RESYNC_v26b_BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION: suite_runner_battle_report_replay_save_share_sync_fix_v26b_2026_05_30_force_blob_resnapshot
+    # BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # SYNC_FIX_v26b 2026_05_30: micro-touch resync to force public main blob hash refresh; tuple count remains 1.
+    # Pack PROJECT_BATTLE_REPORT_REPLAY_SAVE_SHARE_SUITE_RUNNER_SYNC_FIX_PACK_v26b. No semantics change. No tuple add/remove.
+    # No validator logic change. No frontend Replay/Save/Share touch. No backend route. No DB. No economy/gacha/BP/VIP/shop/artifact/DW/gem/rune runtime.
+    # Proof marker: data/design/battle_report_replay_share/battle_report_replay_save_share_suite_runner_sync_fix_v26b_marker_v1.json
     # BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     # Foundation FRONTEND-ONLY: 3 azioni Replay/Salva/Condividi su PostBattleSummary.
     # Replay = VISIVO-ONLY (overlay, no /api/battle/simulate, no RNG rerun, no reward grant, no EXP grant, no item grant,
