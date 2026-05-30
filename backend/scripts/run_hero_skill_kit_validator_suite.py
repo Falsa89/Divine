@@ -1494,6 +1494,13 @@ OPTIONAL = [
     # zero tower/guide runtime changes, zero Material Raid runtime, zero REQUIRED/OPTIONAL validator weakening,
     # zero fake PASS. Validator OPTIONAL.
     # Proof marker: data/design/gear_forge_fusion_reforge_runtime/gear_forge_fusion_reforge_runtime_suite_registration_proof_marker_v1.json
+    # PUBLIC_SYNC_TAG_RESYNC_v24_GEAR_FORGE_FUSION_REFORGE_RUNTIME: suite_runner_gear_forge_fusion_reforge_runtime_v24_2026_05_30
+    # PUBLIC_SYNC_TAG_RESYNC_v24b_GEAR_FORGE_FUSION_REFORGE_RUNTIME: suite_runner_gear_forge_sync_fix_v24b_2026_05_30_force_blob_resnapshot
+    # GEAR_FORGE_FUSION_REFORGE_RUNTIME_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # SYNC_FIX_v24b 2026_05_30: micro-touch resync to force public main blob hash refresh; tuple count remains 1.
+    # Pack PROJECT_GEAR_FORGE_SUITE_RUNNER_SYNC_FIX. No semantics change. No tuple add/remove (already registered at v24).
+    # No validator logic change. No backend/routes/gear_forge_preview.py / server.py / frontend Gear Forge / legacy /forge/* touch.
+    # Proof marker: data/design/gear_forge_fusion_reforge_runtime/gear_forge_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-GEAR-FORGE-FUSION-REFORGE-RUNTIME', 'validate_project_gear_forge_fusion_reforge_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
