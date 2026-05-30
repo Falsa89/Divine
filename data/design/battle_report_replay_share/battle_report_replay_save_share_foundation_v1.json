@@ -1,0 +1,56 @@
+{
+  "task_id": "PROJECT_BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION",
+  "version": 1,
+  "timestamp_utc": "2026-05-30T15:00:00Z",
+  "mode": "FRONTEND_FOUNDATION_LOCAL_ONLY",
+  "verdict": "PROJECT_BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION_PREVIEW_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "backend_routes_added": [],
+  "backend_routes_modified": [],
+  "frontend_files_added": [
+    "frontend/components/battle/battleReplayTypes.ts",
+    "frontend/components/battle/BattleReplayPreview.tsx",
+    "frontend/utils/buildBattleReplaySnapshot.ts",
+    "frontend/utils/battleReplayStorage.ts",
+    "frontend/utils/battleShareText.ts"
+  ],
+  "frontend_files_modified": [
+    "frontend/components/battle/PostBattleSummary.tsx"
+  ],
+  "replay_behavior": {
+    "opens_overlay": true,
+    "calls_battle_simulate": false,
+    "reruns_rng": false,
+    "grants_rewards": false,
+    "grants_exp": false,
+    "grants_items": false,
+    "advances_quest_or_daily_or_achievement": false,
+    "controls": ["play", "pause", "step", "restart", "close"]
+  },
+  "save_behavior": {
+    "storage": "AsyncStorage",
+    "key": "divinewaifus.saved_battle_replays.v1",
+    "max_local_entries": 20,
+    "evict_policy": "oldest_non_favorite_first",
+    "server_synced": false,
+    "sensitive_data_stripped": true
+  },
+  "share_behavior": {
+    "api": "react-native Share.share",
+    "content_type": "plain_text_only",
+    "includes_url": false,
+    "includes_share_code": false,
+    "includes_user_or_account_id": false,
+    "includes_token": false
+  },
+  "separation_from_other_layers": [
+    "battle_engine", "combat_formulas", "character_bible_final_numbers",
+    "gacha_pity", "shop_iap", "battle_pass", "vip",
+    "artifact_runtime", "divine_weapon_runtime",
+    "gem_socket_runtime", "rune_scroll_talisman_runtime",
+    "bp_delta_overlay", "hero_elevation",
+    "gear_cap_route_behavior", "gear_forge_commit",
+    "material_raid_runtime_grant", "server_profiles_live"
+  ]
+}

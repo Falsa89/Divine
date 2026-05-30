@@ -1519,6 +1519,16 @@ OPTIONAL = [
     # zero REQUIRED/OPTIONAL validator weakening, zero fake PASS. Validator OPTIONAL.
     # Proof marker: data/design/material_raid_runtime/material_raid_runtime_suite_registration_proof_marker_v1.json
     ('PROJECT-MATERIAL-RAID-RUNTIME', 'validate_project_material_raid_runtime_v1.py'),
+    # PUBLIC_SYNC_TAG_v26_BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION: pack PROJECT_BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION 2026_05_30.
+    # BATTLE_REPORT_REPLAY_SAVE_SHARE_FOUNDATION_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Foundation FRONTEND-ONLY: 3 azioni Replay/Salva/Condividi su PostBattleSummary.
+    # Replay = VISIVO-ONLY (overlay, no /api/battle/simulate, no RNG rerun, no reward grant, no EXP grant, no item grant,
+    #          no quest/daily/achievement progression). Save = LOCAL-ONLY (AsyncStorage cap 20). Share = TEXT-ONLY (Share.share).
+    # No backend route added. No DB writes. No combat formula change. No battle_engine/.env/artifacts/battlepass/vip touch.
+    # No gacha/economy/BP/VIP/shop/Artifact/DW/Gem/Rune runtime. No combat.tsx broad refactor.
+    # No REQUIRED/OPTIONAL validator weakening. No tuple duplicate. No fake PASS. Validator OPTIONAL.
+    # Proof marker: data/design/battle_report_replay_share/battle_report_replay_save_share_proof_marker_v1.json
+    ('PROJECT-BATTLE-REPORT-REPLAY-SAVE-SHARE-FOUNDATION', 'validate_project_battle_report_replay_save_share_foundation_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

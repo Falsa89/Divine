@@ -16,12 +16,17 @@
  * dal caller (combat.tsx). Le formule di balancing NON sono qui.
  */
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, Share } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import AnimatedExpBar from './AnimatedExpBar';
 import BattleReportView from './BattleReport';
+import BattleReplayPreview from './BattleReplayPreview';
 import type { PostBattleSummaryData, RewardItem, HeroExpBreakdown } from './postBattleTypes';
+import type { BattleReplaySnapshotV1 } from './battleReplayTypes';
+import { buildBattleReplaySnapshot } from '../../utils/buildBattleReplaySnapshot';
+import { saveBattleReplay } from '../../utils/battleReplayStorage';
+import { buildBattleShareText } from '../../utils/battleShareText';
 import { COLORS } from '../../constants/theme';
 import { resolveHeroPortraitSource } from '../ui/hopliteAssets';
 
@@ -31,9 +36,48 @@ export interface PostBattleSummaryProps {
   onExit: () => void;
 }
 
+type SaveFeedback = { kind: 'idle' } | { kind: 'ok'; msg: string } | { kind: 'err'; msg: string };
+
 export default function PostBattleSummary({ summary, onRetry, onExit }: PostBattleSummaryProps) {
   const [rewardsExpanded, setRewardsExpanded] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const [replayOpen, setReplayOpen] = useState(false);
+  const [replaySnapshot, setReplaySnapshot] = useState<BattleReplaySnapshotV1 | null>(null);
+  const [saveFeedback, setSaveFeedback] = useState<SaveFeedback>({ kind: 'idle' });
+
+  // Replay: VISIVO-ONLY. Costruisce uno snapshot dal summary gia' calcolato.
+  // NESSUNA chiamata al backend simulate. NESSUN RNG. NESSUN reward grant.
+  const handleOpenReplay = () => {
+    const snap = replaySnapshot ?? buildBattleReplaySnapshot(summary);
+    setReplaySnapshot(snap);
+    setReplayOpen(true);
+  };
+
+  // Save: LOCAL-ONLY (AsyncStorage). Nessuna chiamata backend.
+  const handleSave = async () => {
+    const snap = replaySnapshot ?? buildBattleReplaySnapshot(summary);
+    setReplaySnapshot(snap);
+    const res = await saveBattleReplay(snap);
+    if (res.status === 'saved') {
+      setSaveFeedback({ kind: 'ok', msg: `Salvato (${res.total}/20)` });
+    } else if (res.status === 'updated') {
+      setSaveFeedback({ kind: 'ok', msg: `Aggiornato (${res.total}/20)` });
+    } else {
+      setSaveFeedback({ kind: 'err', msg: 'Salvataggio fallito' });
+    }
+    setTimeout(() => setSaveFeedback({ kind: 'idle' }), 2500);
+  };
+
+  // Share: solo testo summary. NESSUN URL, NESSUN codice, NESSUN token.
+  const handleShare = async () => {
+    try {
+      const message = buildBattleShareText(summary);
+      await Share.share({ message });
+    } catch {
+      /* graceful (es. web/simulator senza share dialog) */
+    }
+  };
+
 
   const win = summary.outcome === 'victory';
   const allAutoRewards = summary.rewards.auto_claim;
@@ -156,6 +200,42 @@ export default function PostBattleSummary({ summary, onRetry, onExit }: PostBatt
             <Text style={s.actionTxt}>{'\u2190'} INDIETRO</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Battle Report Replay/Save/Share Foundation row (v26) — frontend-only, NO RNG rerun, NO reward grant. */}
+        <View style={s.actionRowSecondary}>
+          <TouchableOpacity
+            onPress={handleOpenReplay}
+            activeOpacity={0.78}
+            style={[s.actionBtnMini, s.actionBtnSecondary]}
+            accessibilityRole="button"
+            accessibilityLabel="Replay visivo della battaglia"
+          >
+            <Text style={s.actionTxtMini}>{'\u25B6'} REPLAY</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleSave}
+            activeOpacity={0.78}
+            style={[s.actionBtnMini, s.actionBtnSecondary]}
+            accessibilityRole="button"
+            accessibilityLabel="Salva replay locale"
+          >
+            <Text style={s.actionTxtMini}>{'\uD83D\uDCBE'} SALVA</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleShare}
+            activeOpacity={0.78}
+            style={[s.actionBtnMini, s.actionBtnSecondary]}
+            accessibilityRole="button"
+            accessibilityLabel="Condividi summary testuale"
+          >
+            <Text style={s.actionTxtMini}>{'\u2197'} CONDIVIDI</Text>
+          </TouchableOpacity>
+        </View>
+        {saveFeedback.kind !== 'idle' && (
+          <Text style={[s.saveFeedbackTxt, saveFeedback.kind === 'err' && s.saveFeedbackErr]}>
+            {saveFeedback.msg}
+          </Text>
+        )}
       </ScrollView>
 
       {/* Modal-less report overlay */}
@@ -163,6 +243,13 @@ export default function PostBattleSummary({ summary, onRetry, onExit }: PostBatt
         visible={reportOpen}
         onClose={() => setReportOpen(false)}
         report={summary.battle_report}
+      />
+
+      {/* Replay preview overlay — VISIVO-ONLY, no RNG rerun, no reward grant */}
+      <BattleReplayPreview
+        visible={replayOpen}
+        snapshot={replaySnapshot}
+        onClose={() => setReplayOpen(false)}
       />
     </LinearGradient>
   );
@@ -430,5 +517,37 @@ const s = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: 0.8,
     paddingHorizontal: 8,
+  },
+  actionRowSecondary: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 8,
+  },
+  actionBtnMini: {
+    flex: 1,
+    minHeight: 36,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(91,200,255,0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(91,200,255,0.30)',
+  },
+  actionTxtMini: {
+    color: '#d8d8f0',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.6,
+    paddingHorizontal: 6,
+  },
+  saveFeedbackTxt: {
+    color: '#9ce3a8',
+    fontSize: 11,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: 6,
+  },
+  saveFeedbackErr: {
+    color: '#ff7a7a',
   },
 });
