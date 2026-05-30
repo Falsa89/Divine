@@ -1,0 +1,55 @@
+{
+  "task_id": "PROJECT_HOME_MENU_REWIRING",
+  "track": "F+G",
+  "verdict": "PROJECT_HOME_MENU_REWIRING_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "timestamp_utc": "2026-05-30T01:30:00Z",
+  "sentinel": "v20",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_RESYNC_v20_HOME_MENU_REWIRING",
+  "design_tracks": {
+    "A_navigation_surface_audit_v1.json":              "TRACK_A_NAVIGATION_SURFACE_AUDIT_READY",
+    "B_safe_menu_rewiring_implementation_v1.json":     "TRACK_B_SAFE_MENU_REWIRING_IMPLEMENTATION_READY",
+    "C_mode_discoverability_registry_update_v1.json":  "TRACK_C_MODE_DISCOVERABILITY_REGISTRY_UPDATE_READY",
+    "D_guide_and_tower_smoke_checks_v1.json":          "TRACK_D_GUIDE_AND_TOWER_SMOKE_CHECKS_READY",
+    "E_mobile_qa_and_ui_policy_v1.json":               "TRACK_E_MOBILE_QA_AND_UI_POLICY_READY"
+  },
+  "runtime_changes": {
+    "home_tsx_modified": true,
+    "menu_tsx_modified": true,
+    "layout_tsx_modified": false,
+    "tower_of_the_hells_tsx_modified": false,
+    "guide_tsx_modified": false,
+    "tutorial_overlay_modified": false
+  },
+  "constraints_honored": {
+    "no_layout_tsx_edit":                       true,
+    "no_tower_gameplay_progress_asyncstorage":  true,
+    "no_guide_content_schema_rewrites":         true,
+    "no_tutorial_first_unlock_wiring":          true,
+    "no_backend_routes_endpoints":              true,
+    "no_db_writes_migrations":                  true,
+    "no_combat_or_battle_engine":               true,
+    "no_gacha_or_pity":                         true,
+    "no_shop_bp_vip_iap_unlock":                true,
+    "no_artifact_or_constellation_unhide":      true,
+    "no_server_profiles_live":                  true,
+    "no_stamina_or_tickets":                    true,
+    "no_final_art_or_audio":                    true,
+    "no_broad_home_menu_redesign":              true,
+    "no_required_validator_weakening":          true,
+    "no_fake_pass":                             true
+  },
+  "locks_preserved": {
+    "SHOP_LOCKED_V2":             true,
+    "ITEM_SHOP_LOCKED_V2":        true,
+    "BP_LOCKED_V2":               true,
+    "BP_PREMIUM_BUY_LOCKED_V2":   true,
+    "VIP_LOCKED_V2":              true
+  },
+  "md5_invariants_expected": {
+    "backend/battle_engine.py":    "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env":                "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/battlepass.tsx": "54568b8cb75a07033f78ef6593aba839",
+    "frontend/app/vip.tsx":        "45fcc9890b6b128c37088bc33aa54caf"
+  }
+}

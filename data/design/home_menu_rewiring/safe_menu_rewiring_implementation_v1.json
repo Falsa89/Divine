@@ -1,0 +1,43 @@
+{
+  "task_id": "PROJECT_HOME_MENU_REWIRING",
+  "track": "B",
+  "track_name": "SAFE_MENU_REWIRING_IMPLEMENTATION",
+  "verdict": "TRACK_B_SAFE_MENU_REWIRING_IMPLEMENTATION_READY",
+  "timestamp_utc": "2026-05-30T01:30:00Z",
+  "sentinel": "v20",
+  "diff_mapping": [
+    {
+      "file": "frontend/app/(tabs)/home.tsx",
+      "location": "HomeOverflowPanel.items",
+      "before": "{ key: 'tower', label: 'Torre', icon: '🏯', onPress: () => router.push('/tower') }",
+      "after":  "{ key: 'tower', label: 'Torre', icon: '🏯', onPress: () => router.push('/tower-of-the-hells') }",
+      "added":  "{ key: 'guide', label: 'Guida', icon: '📖', onPress: () => router.push('/guide') }"
+    },
+    {
+      "file": "frontend/app/(tabs)/menu.tsx",
+      "location": "CATEGORIES['Combattimento'].items",
+      "before": "{ label: 'Torre', icon: '🏯', route: '/tower', gradient: ['#8844FF','#5522CC'] }",
+      "after":  "{ label: 'Torre degli Inferi (TEST)', icon: '🏯', route: '/tower-of-the-hells', gradient: ['#8844FF','#5522CC'] }"
+    },
+    {
+      "file": "frontend/app/(tabs)/menu.tsx",
+      "location": "CATEGORIES['Altro'].items",
+      "added":  "{ label: 'Guida / Codex', icon: '📖', route: '/guide', gradient: ['#5b6df0','#3a4ad0'] }"
+    }
+  ],
+  "layout_tsx_touched": false,
+  "backend_touched": false,
+  "db_writes": false,
+  "tower_gameplay_or_progress_touched": false,
+  "guide_content_schema_rewrites": false,
+  "tutorial_overlay_wiring": false,
+  "combat_or_battle_engine_touched": false,
+  "locks_preserved": {
+    "SHOP_LOCKED_V2": true,
+    "ITEM_SHOP_LOCKED_V2": true,
+    "BP_LOCKED_V2": true,
+    "BP_PREMIUM_BUY_LOCKED_V2": true,
+    "VIP_LOCKED_V2": true
+  },
+  "label_test_marker": "Torre degli Inferi (TEST) in menu.tsx \u2014 esplicito TEST per consistenza con asset_status/audio_status test_placeholder"
+}

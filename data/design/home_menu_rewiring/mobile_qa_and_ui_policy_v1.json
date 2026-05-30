@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_HOME_MENU_REWIRING",
+  "track": "E",
+  "track_name": "MOBILE_QA_AND_UI_POLICY",
+  "verdict": "TRACK_E_MOBILE_QA_AND_UI_POLICY_READY",
+  "timestamp_utc": "2026-05-30T01:30:00Z",
+  "mobile_qa_checklist": [
+    "viewport iPhone 12/13/14 (390x844): voci menu leggibili, label 'Torre degli Inferi (TEST)' non taglia",
+    "viewport Samsung Galaxy S21 (360x800): scroll smooth in HomeOverflowPanel",
+    "touch target >= 44pt iOS / 48dp Android sulle nuove voci menu",
+    "tap su 'Guida' apre /guide (read-only screen)",
+    "tap su 'Torre' / 'Torre degli Inferi (TEST)' apre /tower-of-the-hells (TEST MVP)",
+    "nessun menu entry apre piu' /tower legacy",
+    "locks UI ancora visibili: BP/VIP/Shop/ItemShop banner LOCKED_V2 attivi su rispettive schermate",
+    "no console.error nei log app"
+  ],
+  "ui_policy": {
+    "label_test_marker_required": true,
+    "applies_to": ["Torre degli Inferi (TEST)"],
+    "rationale": "asset_status/audio_status = test_placeholder; il marker (TEST) e' la convenzione UI canonica per le surface in TEST."
+  }
+}

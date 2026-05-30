@@ -1,0 +1,22 @@
+{
+  "task_id": "PROJECT_HOME_MENU_REWIRING",
+  "track": "D",
+  "track_name": "GUIDE_AND_TOWER_SMOKE_CHECKS",
+  "verdict": "TRACK_D_GUIDE_AND_TOWER_SMOKE_CHECKS_READY",
+  "timestamp_utc": "2026-05-30T01:30:00Z",
+  "smoke_checks": [
+    {"check": "frontend/app/guide.tsx exists",                       "expected": true,  "status": "runtime"},
+    {"check": "frontend/app/tower-of-the-hells.tsx exists",          "expected": true,  "status": "runtime"},
+    {"check": "home.tsx contains router.push('/guide')",             "expected": true,  "status": "verified"},
+    {"check": "home.tsx contains router.push('/tower-of-the-hells')","expected": true,  "status": "verified"},
+    {"check": "menu.tsx contains route '/guide'",                    "expected": true,  "status": "verified"},
+    {"check": "menu.tsx contains route '/tower-of-the-hells'",       "expected": true,  "status": "verified"},
+    {"check": "no active legacy router.push('/tower') in menu surfaces", "expected": true,  "status": "verified"},
+    {"check": "no active legacy route '/tower' in menu surfaces",    "expected": true,  "status": "verified"},
+    {"check": "frontend/app/_layout.tsx untouched (git diff empty)", "expected": true,  "status": "verified"}
+  ],
+  "web_smoke": {
+    "GET_/guide_status":           "200",
+    "GET_/tower-of-the-hells_status": "runtime_present_will_be_verified_via_screenshot"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_HOME_MENU_REWIRING",
+  "track": "C",
+  "track_name": "MODE_DISCOVERABILITY_REGISTRY_UPDATE",
+  "verdict": "TRACK_C_MODE_DISCOVERABILITY_REGISTRY_UPDATE_READY",
+  "timestamp_utc": "2026-05-30T01:30:00Z",
+  "registry": [
+    {
+      "surface_id": "guide_codex",
+      "route": "/guide",
+      "runtime_file": "frontend/app/guide.tsx",
+      "discoverability_pre_pack": "deeplink_only",
+      "discoverability_post_pack": "home_overflow_panel + menu_tab.Altro",
+      "entry_points": [
+        "HomeOverflowPanel.items.guide",
+        "CATEGORIES.Altro.items.Guida_Codex"
+      ]
+    },
+    {
+      "surface_id": "tower_of_the_hells",
+      "route": "/tower-of-the-hells",
+      "runtime_file": "frontend/app/tower-of-the-hells.tsx",
+      "discoverability_pre_pack": "menu_points_to_legacy_/tower",
+      "discoverability_post_pack": "home_overflow_panel + menu_tab.Combattimento (entrambi puntano alla TEST MVP route corretta)",
+      "entry_points": [
+        "HomeOverflowPanel.items.tower (legacy key, now correct route)",
+        "CATEGORIES.Combattimento.items.Torre_degli_Inferi_TEST"
+      ]
+    },
+    {
+      "surface_id": "tower_legacy",
+      "route": "/tower",
+      "runtime_file": "frontend/app/tower.tsx",
+      "discoverability_post_pack": "NO_PLAYER_FACING_LINK",
+      "status": "ORPHAN_LEGACY_NOT_REACHABLE_FROM_MENU_AFTER_REWIRING"
+    }
+  ]
+}

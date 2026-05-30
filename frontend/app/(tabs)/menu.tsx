@@ -12,7 +12,8 @@ const CATEGORIES = [
     title: 'Combattimento',
     items: [
       { label: 'Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
-      { label: 'Torre', icon: '\uD83C\uDFEF', route: '/tower', gradient: ['#8844FF', '#5522CC'] as const },
+      // PROJECT_HOME_MENU_REWIRING v20: legacy '/tower' link redirected to canonical TEST MVP '/tower-of-the-hells'. Tower gameplay/progress/AsyncStorage NOT touched in this pack.
+      { label: 'Torre degli Inferi (TEST)', icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', gradient: ['#8844FF', '#5522CC'] as const },
       { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pvp', gradient: ['#FF4444', '#CC2222'] as const },
       { label: 'Fucina di Efesto', icon: '\u2692\uFE0F', route: '/equipment', gradient: ['#FFAA44', '#CC6622'] as const },
       // SF_MERGE Track F \u2014 Oggetti Esclusivi rimosso dal menu player.
@@ -62,6 +63,8 @@ const CATEGORIES = [
   {
     title: 'Altro',
     items: [
+      // PROJECT_HOME_MENU_REWIRING v20: discoverability per Guida/Codex aggiunta. Route /guide gia' esistente (runtime read-only).
+      { label: 'Guida / Codex', icon: '\uD83D\uDCD6', route: '/guide', gradient: ['#5b6df0', '#3a4ad0'] as const },
       { label: 'Classifiche', icon: '\uD83C\uDFC6', route: '/rankings', gradient: ['#FFD700', '#CC9900'] as const },
       { label: 'Posta', icon: '\uD83D\uDCE9', route: '/mail', gradient: ['#4499FF', '#2277CC'] as const },
       { label: 'Amici', icon: '\uD83D\uDC65', route: '/friends', gradient: ['#4499FF', '#2277CC'] as const },

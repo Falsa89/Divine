@@ -1417,6 +1417,15 @@ OPTIONAL = [
     # monetization unlock, zero combat/battle_engine touch, zero stamina, zero artifact/BP/VIP/shop unlock, zero gacha
     # changes, zero server profile live, zero REQUIRED validator weakening, zero fake PASS. Validator OPTIONAL.
     ('PROJECT-GUIDE-CODEX-AND-TUTORIAL-FOUNDATION', 'validate_project_guide_codex_and_tutorial_foundation_v1.py'),
+    # PUBLIC_SYNC_TAG_RESYNC_v20_HOME_MENU_REWIRING: pack PROJECT_HOME_MENU_REWIRING 2026_05_30.
+    # Discoverability/navigation P1: rewire safe menu entries verso route gia' runtime (/guide read-only + /tower-of-the-hells
+    # TEST MVP). Legacy '/tower' link in home.tsx HomeOverflowPanel e menu.tsx CATEGORIES.Combattimento redirezionato a
+    # '/tower-of-the-hells'. Aggiunta nuova voce 'Guida / Codex' -> '/guide' in home.tsx HomeOverflowPanel e menu.tsx
+    # CATEGORIES.Altro. Zero touch a _layout.tsx (bug platform sync). Zero touch a tower-of-the-hells.tsx (gameplay).
+    # Zero touch a guide.tsx (schema). Zero DB writes, zero backend, zero combat/battle_engine, zero gacha, zero
+    # shop/BP/VIP/IAP unlock (locks LOCKED_V2 preservati true), zero artifact/constellation unhide, zero server profile
+    # live, zero stamina/tickets, zero final art/audio, zero REQUIRED validator weakening, zero fake PASS. Validator OPTIONAL.
+    ('PROJECT-HOME-MENU-REWIRING', 'validate_project_home_menu_rewiring_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

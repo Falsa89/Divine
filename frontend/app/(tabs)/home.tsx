@@ -1932,7 +1932,10 @@ type OverflowItem = { key: string; label: string; icon: string; onPress: () => v
 function HomeOverflowPanel({ open, onClose, router }: any) {
   const items: OverflowItem[] = [
     { key: 'story',      label: 'Storia',           icon: '\uD83D\uDCDC', onPress: () => { onClose(); router.push('/story' as any); } },
-    { key: 'tower',      label: 'Torre',            icon: '\uD83C\uDFEF', onPress: () => { onClose(); router.push('/tower' as any); } },
+    // PROJECT_HOME_MENU_REWIRING v20: legacy '/tower' link redirected to canonical TEST MVP '/tower-of-the-hells'. Tower gameplay/progress/AsyncStorage NOT touched in this pack.
+    { key: 'tower',      label: 'Torre',            icon: '\uD83C\uDFEF', onPress: () => { onClose(); router.push('/tower-of-the-hells' as any); } },
+    // PROJECT_HOME_MENU_REWIRING v20: discoverability per Guida/Codex aggiunta. Route /guide gia' esistente (runtime read-only).
+    { key: 'guide',      label: 'Guida',            icon: '\uD83D\uDCD6', onPress: () => { onClose(); router.push('/guide' as any); } },
     { key: 'raid',       label: 'Raid',             icon: '\uD83D\uDD25', onPress: () => { onClose(); router.push('/raid' as any); } },
     { key: 'events',     label: 'Eventi',           icon: '\uD83C\uDF1F', onPress: () => { onClose(); router.push('/events' as any); } },
     { key: 'auras',      label: 'Aure',             icon: '\u2728',       onPress: () => { onClose(); router.push('/(tabs)/cosmetics' as any); } },

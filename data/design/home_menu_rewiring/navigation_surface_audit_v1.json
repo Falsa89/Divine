@@ -1,0 +1,42 @@
+{
+  "task_id": "PROJECT_HOME_MENU_REWIRING",
+  "track": "A",
+  "track_name": "NAVIGATION_SURFACE_AUDIT",
+  "verdict": "TRACK_A_NAVIGATION_SURFACE_AUDIT_READY",
+  "timestamp_utc": "2026-05-30T01:30:00Z",
+  "sentinel": "v20",
+  "surfaces_audited": [
+    "frontend/app/(tabs)/home.tsx",
+    "frontend/app/(tabs)/menu.tsx",
+    "frontend/app/_layout.tsx"
+  ],
+  "layout_tsx_touched": false,
+  "layout_tsx_reason_untouched": "Pack PROJECT_HOME_MENU_REWIRING vieta touch _layout.tsx; bug platform sync attivo dal pack v17/v18.",
+  "pre_pack_legacy_findings": [
+    {
+      "file": "frontend/app/(tabs)/home.tsx",
+      "line": 1935,
+      "finding": "HomeOverflowPanel item 'tower' aveva router.push('/tower' as any) (legacy stale)",
+      "correct_target_route": "/tower-of-the-hells"
+    },
+    {
+      "file": "frontend/app/(tabs)/menu.tsx",
+      "line": 15,
+      "finding": "CATEGORIES.Combattimento.items label 'Torre' aveva route '/tower' (legacy stale)",
+      "correct_target_route": "/tower-of-the-hells"
+    },
+    {
+      "surface": "home + menu",
+      "finding": "Nessun menu entry verso /guide (route runtime ready ma deeplink-only)",
+      "target_route_to_add": "/guide"
+    }
+  ],
+  "orphan_legacy_files": [
+    {
+      "file": "frontend/app/tower.tsx",
+      "status": "ORPHAN_LEGACY_NOT_TOUCHED_BY_THIS_PACK",
+      "player_facing_links_after_rewire": 0,
+      "note": "Nessun menu player punta piu' a /tower. File legacy resta in repo per consultazione storica; non rappresenta gameplay attivo. Deferred a pack futuro per eventuale removal/archive."
+    }
+  ]
+}
