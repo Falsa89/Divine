@@ -1452,6 +1452,12 @@ OPTIONAL = [
     # zero gear/gemme/rune/DW/BP delta runtime, zero server profiles live, zero broad DB migration, zero player data
     # mutation, zero economy live (outside safe preview), zero final art/audio, zero _layout/home/menu touch,
     # zero REQUIRED/OPTIONAL validator weakening, zero fake PASS. Validator OPTIONAL.
+    # PUBLIC_SYNC_TAG_RESYNC_v22b_HERO_ELEVATION_RUNTIME: suite_runner_hero_elevation_sync_fix_v22b_2026_05_30_force_blob_resnapshot
+    # HERO_ELEVATION_QUALITY_FRAME_RUNTIME_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # SYNC_FIX_v22b 2026_05_30: micro-touch resync to force public main blob hash refresh; tuple count remains 1.
+    # Pack PROJECT_HERO_ELEVATION_SUITE_RUNNER_SYNC_FIX. No semantics change. No tuple add/remove (already registered at v22).
+    # No validator logic change. No backend/routes/hero_elevation_preview.py / server.py / frontend Hero Elevation runtime touch.
+    # Proof marker: data/design/hero_elevation_runtime/hero_elevation_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-HERO-ELEVATION-QUALITY-FRAME-RUNTIME', 'validate_project_hero_elevation_quality_frame_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
