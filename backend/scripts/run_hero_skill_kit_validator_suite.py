@@ -1472,6 +1472,13 @@ OPTIONAL = [
     # zero player data mutation, zero economy live (outside safe preview), zero final art/audio, zero _layout/home/menu touch,
     # zero tower/guide runtime changes, zero REQUIRED/OPTIONAL validator weakening, zero fake PASS. Validator OPTIONAL.
     # Proof marker: data/design/gear_cap_plus_50/gear_cap_plus_50_runtime_suite_registration_proof_marker_v1.json
+    # PUBLIC_SYNC_TAG_RESYNC_v23_GEAR_CAP_PLUS_50_RUNTIME: suite_runner_gear_cap_plus_50_runtime_v23_2026_05_30
+    # PUBLIC_SYNC_TAG_RESYNC_v23b_GEAR_CAP_PLUS_50_RUNTIME: suite_runner_gear_cap_plus_50_sync_fix_v23b_2026_05_30_force_blob_resnapshot
+    # GEAR_CAP_PLUS_50_RUNTIME_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # SYNC_FIX_v23b 2026_05_30: micro-touch resync to force public main blob hash refresh; tuple count remains 1.
+    # Pack PROJECT_GEAR_CAP_PLUS_50_SUITE_RUNNER_SYNC_FIX. No semantics change. No tuple add/remove (already registered at v23).
+    # No validator logic change. No backend/routes/gear_cap_preview.py / server.py / frontend Gear Cap runtime touch.
+    # Proof marker: data/design/gear_cap_plus_50/gear_cap_plus_50_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-GEAR-CAP-PLUS-50-RUNTIME', 'validate_project_gear_cap_plus_50_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
