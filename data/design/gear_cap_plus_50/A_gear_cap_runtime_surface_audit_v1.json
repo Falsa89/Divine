@@ -1,0 +1,54 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "track": "A",
+  "track_name": "GEAR_CAP_RUNTIME_SURFACE_AUDIT",
+  "verdict": "TRACK_A_GEAR_CAP_RUNTIME_SURFACE_AUDIT_READY",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "audit_summary": "Codebase audit per identificare ogni superficie runtime che usa o assume il gear cap legacy +20. Risultato: ZERO superfici runtime attive trovate. Il valore +20 esiste SOLO come metadata legacy nella Bible (D_gear_progression_bible_v1.json campo gear_level_cap_legacy_to_replace) e nei validator strutturali. Nessun forge/equipment/hero screen runtime ne dipende.",
+  "audit_scope_files": [
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/equipment.tsx",
+    "backend/routes/*",
+    "backend/server.py",
+    "backend/scripts/*",
+    "data/design/*"
+  ],
+  "matches_found": {
+    "hardcoded_plus_20_gear_cap_runtime": 0,
+    "hardcoded_plus_50_gear_cap_runtime": 0,
+    "references_in_bible_only": 1,
+    "references_in_validators_only": 1
+  },
+  "hardcoded_plus_20_runtime_locations": [],
+  "legacy_metadata_locations": [
+    {"file": "data/design/hero_gear_progression_bible/D_gear_progression_bible_v1.json", "key": "gear_level_cap_legacy_to_replace", "value": 20, "action": "keep_as_documented_debt_marker"},
+    {"file": "backend/scripts/validate_project_hero_gear_progression_bible_v1.py", "action": "validator_structural_only_keep"}
+  ],
+  "runtime_surfaces_to_be_added_in_this_pack": [
+    {"surface": "backend", "path": "/api/gear-cap/tiers",       "mutation": false, "db_writes": false, "feature_flag": "GEAR_CAP_PLUS_50_PREVIEW_ENABLED"},
+    {"surface": "backend", "path": "/api/gear-cap/preview-tiers","mutation": false, "db_writes": false, "feature_flag": "GEAR_CAP_PLUS_50_PREVIEW_ENABLED"},
+    {"surface": "backend", "path": "/api/gear-cap/{hero_id}/preview", "mutation": false, "db_writes": false, "feature_flag": "GEAR_CAP_PLUS_50_PREVIEW_ENABLED"},
+    {"surface": "frontend", "path": "/gear-cap-test", "mutation": false, "db_writes": false, "deeplink_only": true}
+  ],
+  "forbidden_touches": [
+    "backend/battle_engine.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "frontend/app/battlepass.tsx",
+    "frontend/app/vip.tsx",
+    "backend/server.py (apart from include_router add)",
+    "frontend/app/_layout.tsx",
+    "frontend/app/(tabs)/home.tsx",
+    "frontend/app/(tabs)/menu.tsx",
+    "frontend/app/tower-of-the-hells.tsx",
+    "frontend/app/guide.tsx",
+    "frontend/app/hero-elevation-test.tsx",
+    "frontend/app/soul-forge.tsx (no runtime cap there)",
+    "data/design/hero_gear_progression_bible/*",
+    "data/design/hero_elevation_runtime/*"
+  ],
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}

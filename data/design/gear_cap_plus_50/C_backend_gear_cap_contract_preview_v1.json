@@ -1,0 +1,49 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "track": "C",
+  "track_name": "BACKEND_GEAR_CAP_CONTRACT_PREVIEW",
+  "verdict": "TRACK_C_BACKEND_GEAR_CAP_CONTRACT_PREVIEW_READY",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "feature_flag": "GEAR_CAP_PLUS_50_PREVIEW_ENABLED",
+  "default_state_when_flag_absent": "HTTP_503_DISABLED_INERT_ENVELOPE",
+  "router_prefix": "/api/gear-cap",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/gear-cap/tiers",
+      "role": "lista canonica staged caps + cap_canonical/legacy",
+      "db_writes": false,
+      "mutation": false,
+      "flag_gated": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/gear-cap/preview-tiers",
+      "role": "alias preview-only equivalente a /tiers per nomenclatura coerente con altri preview pack",
+      "db_writes": false,
+      "mutation": false,
+      "flag_gated": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/gear-cap/{hero_id}/preview",
+      "role": "current cap preview per hero_id (fallback 0 senza DB read)",
+      "db_writes": false,
+      "mutation": false,
+      "flag_gated": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/gear-cap/{hero_id}/upgrade/preview",
+      "role": "preview-only: dato current_level ritorna next_stage e cost preview design-only. ZERO mutation, ZERO materiali spesi",
+      "db_writes": false,
+      "mutation": false,
+      "flag_gated": true
+    }
+  ],
+  "contract_version": "project_gear_cap_plus_50_runtime_preview_v1",
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}

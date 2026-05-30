@@ -1,0 +1,26 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "track": "E",
+  "track_name": "MATERIAL_COST_POLICY",
+  "verdict": "TRACK_E_MATERIAL_COST_POLICY_READY",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "design_only_replace_before_release": true,
+  "materials_spent": false,
+  "db_writes": 0,
+  "mutation_enabled": false,
+  "cost_preview_by_stage": {
+    "early":    {"per_plus_level": {"gear_dust_common": 5}, "gold_per_plus_level": 200},
+    "mid":      {"per_plus_level": {"gear_dust_common": 12, "gear_shard_uncommon": 1}, "gold_per_plus_level": 600},
+    "late":     {"per_plus_level": {"gear_shard_uncommon": 3, "gear_core_rare": 1}, "gold_per_plus_level": 1800},
+    "endgame":  {"per_plus_level": {"gear_core_rare": 4, "gear_essence_epic": 1}, "gold_per_plus_level": 5400}
+  },
+  "stage_gates_unlock_policy": {
+    "early_to_mid":  "hero_level >= 30 OR ascension_tier >= 1",
+    "mid_to_late":   "hero_level >= 60 AND forge_enhance_unlocked",
+    "late_to_endgame":"hero_level >= 90 AND forge_reforge_unlocked AND optional_costellazione_gate"
+  },
+  "materials_inventory_runtime_in_this_pack": false,
+  "shop_unlock_in_this_pack": false,
+  "economy_mutation_in_this_pack": false,
+  "runtime_mode": "PREVIEW_ONLY"
+}

@@ -1,0 +1,50 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "track": "I",
+  "track_name": "RELEASE_GATES_AND_ROLLBACK",
+  "verdict": "TRACK_I_RELEASE_GATES_AND_ROLLBACK_READY",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "release_gates": [
+    {
+      "gate_id": "R1_preview_local_container",
+      "label_it": "R1 \u2014 Preview locale (questo pack)",
+      "status": "ACHIEVED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+      "requires": [
+        "validator OPTIONAL passing",
+        "MD5 invariants intatti",
+        "feature flag GEAR_CAP_PLUS_50_PREVIEW_ENABLED non impostato (default disabled)"
+      ]
+    },
+    {
+      "gate_id": "R2_preview_envelope_enabled_internal",
+      "label_it": "R2 \u2014 Envelope preview attivabile (interno)",
+      "status": "DEFERRED_TO_FUTURE_PACK",
+      "requires": [
+        "PROJECT_GEAR_CAP_PLUS_50_RUNTIME_PREVIEW_ENABLE_INTERNAL_PACK (futuro)",
+        "GEAR_CAP_PLUS_50_PREVIEW_ENABLED=true settato in canary env (NON main)"
+      ]
+    },
+    {
+      "gate_id": "R3_live_upgrade_runtime",
+      "label_it": "R3 \u2014 Forge runtime live (mutation reale)",
+      "status": "DEFERRED_TO_FUTURE_PACK",
+      "requires": [
+        "PROJECT_GEAR_FORGE_FUSION_RUNTIME_PACK",
+        "materials inventory runtime (PROJECT_MATERIAL_RAID_RUNTIME_PACK)",
+        "cost policy track E ratificata"
+      ]
+    }
+  ],
+  "rollback_plan": [
+    "1. Rimuovere include_router gear_cap_preview da server.py.",
+    "2. Cancellare backend/routes/gear_cap_preview.py.",
+    "3. Rimuovere frontend/constants/gearCap.ts + frontend/components/GearCapBadge.tsx + frontend/app/gear-cap-test.tsx.",
+    "4. Rimuovere tuple registrazione validator suite ('PROJECT-GEAR-CAP-PLUS-50-RUNTIME', ...).",
+    "5. Rimuovere data/design/gear_cap_plus_50/* e docs/divine/205*.md.",
+    "6. Bible (D_gear_progression_bible_v1.json) NON viene mai toccata: cap_canonical=50 e legacy=20 restano la fonte di verita\u2019."
+  ],
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}

@@ -1,0 +1,35 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "track": "F",
+  "track_name": "LEGACY_PLUS_20_MIGRATION_DEBT",
+  "verdict": "TRACK_F_LEGACY_PLUS_20_MIGRATION_DEBT_READY",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "legacy_cap": 20,
+  "canonical_cap": 50,
+  "migration_state": "PREVIEW_ONLY_NO_LIVE_MIGRATION_YET",
+  "debt_locations": [
+    {
+      "file": "data/design/hero_gear_progression_bible/D_gear_progression_bible_v1.json",
+      "key": "gear_level_cap_legacy_to_replace",
+      "keep_as": "documented_debt_marker",
+      "reason": "track storico utile per audit migrazione futura"
+    },
+    {
+      "file": "backend/scripts/validate_project_hero_gear_progression_bible_v1.py",
+      "keep_as": "structural_validator_check",
+      "reason": "il validator OPTIONAL verifica che la Bible esponga ENTRAMBI cap=50 e legacy=20"
+    }
+  ],
+  "runtime_debt_locations": [],
+  "migration_steps_when_live_unlock": [
+    "1. Abilitare GEAR_CAP_PLUS_50_PREVIEW_ENABLED=true sul backend.",
+    "2. Soft-wire hero/equipment screens al constants frontend gearCap.ts (preview badge).",
+    "3. Aggiungere validazione lato API che gear_level >= 0 AND <= GEAR_CAP_CANONICAL prima di accettare mutation (pack futuro).",
+    "4. Quando upgrade runtime arriva (forge enhance/fusion pack), agganciare cost policy track E (cost_preview_by_stage).",
+    "5. Solo allora rimuovere fisicamente il valore legacy 20 dalla Bible (pack di chiusura debt)."
+  ],
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}

@@ -1459,6 +1459,20 @@ OPTIONAL = [
     # No validator logic change. No backend/routes/hero_elevation_preview.py / server.py / frontend Hero Elevation runtime touch.
     # Proof marker: data/design/hero_elevation_runtime/hero_elevation_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-HERO-ELEVATION-QUALITY-FRAME-RUNTIME', 'validate_project_hero_elevation_quality_frame_runtime_v1.py'),
+    # PUBLIC_SYNC_TAG_RESYNC_v23_GEAR_CAP_PLUS_50_RUNTIME: pack PROJECT_GEAR_CAP_PLUS_50_RUNTIME 2026_05_30.
+    # Phase 1 dalla Bible 202 track D: runtime PREVIEW-ONLY (disabled by default returns 503) per Gear Cap +50.
+    # 4 stage canonici staged caps (early 0-10, mid 11-20, late 21-35, endgame 36-50) + cap legacy +20 documentato come debt.
+    # 6 slot canonici (weapon/armor/helm/boots/gloves/accessory). Fallback level=0 senza DB read (no DB writes).
+    # Backend: /api/gear-cap/tiers + /preview-tiers + /{hero_id}/preview + /{hero_id}/upgrade/preview,
+    # tutti gated da GEAR_CAP_PLUS_50_PREVIEW_ENABLED.
+    # Frontend: constants TS + GearCapBadge component + sandbox screen /gear-cap-test (deeplink-only).
+    # Zero DB writes, zero materials spent, zero mutation, zero combat/battle_engine, zero hero final_numbers,
+    # zero Character Bible mutation, zero gacha/pity, zero Shop/BP/VIP/IAP unlock, zero artifact/constellation unhide,
+    # zero gemme/rune/DW/BP delta runtime, zero Hero Elevation changes, zero server profiles live, zero broad DB migration,
+    # zero player data mutation, zero economy live (outside safe preview), zero final art/audio, zero _layout/home/menu touch,
+    # zero tower/guide runtime changes, zero REQUIRED/OPTIONAL validator weakening, zero fake PASS. Validator OPTIONAL.
+    # Proof marker: data/design/gear_cap_plus_50/gear_cap_plus_50_runtime_suite_registration_proof_marker_v1.json
+    ('PROJECT-GEAR-CAP-PLUS-50-RUNTIME', 'validate_project_gear_cap_plus_50_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

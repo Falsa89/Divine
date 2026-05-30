@@ -1,0 +1,25 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "track": "D",
+  "track_name": "FRONTEND_GEAR_CAP_UI_MVP",
+  "verdict": "TRACK_D_FRONTEND_GEAR_CAP_UI_MVP_READY",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "frontend_files_added": [
+    "frontend/constants/gearCap.ts",
+    "frontend/components/GearCapBadge.tsx",
+    "frontend/app/gear-cap-test.tsx"
+  ],
+  "route": "/gear-cap-test",
+  "deeplink_only": true,
+  "home_menu_wiring_in_this_pack": false,
+  "tower_guide_wiring_in_this_pack": false,
+  "layout_tsx_modified": false,
+  "badge_role": "Mostra il +level corrente vs cap canonico (+50) con band color hint per stage.",
+  "sandbox_role": "Lista tutti e 4 i stage caps + 6 slot. Read-only. Nessuna chiamata backend obbligatoria in default-disabled state.",
+  "safe_area_aware": true,
+  "back_navigation": "router.back()",
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}

@@ -498,6 +498,14 @@ app.include_router(housing_preview_router)
 from routes.hero_elevation_preview import router as hero_elevation_preview_router
 app.include_router(hero_elevation_preview_router)
 
+# PROJECT_GEAR_CAP_PLUS_50_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
+# Returns 503 when GEAR_CAP_PLUS_50_PREVIEW_ENABLED is unset/!=true. No DB writes,
+# no materials spent, no live mutation. Replica Bible 202 track D (gear_level_cap=50,
+# legacy=20, staged caps +10/+20/+35/+50). Separato da Hero Elevation, Gemme, Rune,
+# Artifact, Divine Weapon, BP Delta, combat, battle_engine, character bible.
+from routes.gear_cap_preview import router as gear_cap_preview_router
+app.include_router(gear_cap_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

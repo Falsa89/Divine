@@ -1,0 +1,52 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "marker_type": "suite_registration_proof_marker",
+  "verdict": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME_PREVIEW_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false,
+  "feature_flag": "GEAR_CAP_PLUS_50_PREVIEW_ENABLED",
+  "default_state_when_flag_absent": "HTTP_503_DISABLED_INERT_ENVELOPE",
+  "design_tracks_registered": [
+    "A_gear_cap_runtime_surface_audit_v1.json",
+    "B_gear_cap_constants_and_schema_v1.json",
+    "C_backend_gear_cap_contract_preview_v1.json",
+    "D_frontend_gear_cap_ui_mvp_v1.json",
+    "E_material_cost_policy_v1.json",
+    "F_legacy_plus_20_migration_debt_v1.json",
+    "G_separation_from_other_layers_v1.json",
+    "H_guide_codex_and_tutorial_links_v1.json",
+    "I_release_gates_and_rollback_v1.json"
+  ],
+  "separation_from_other_layers": [
+    "hero_level", "star_up", "ascension", "skill_upgrade",
+    "costellazioni", "reincarnation", "hero_elevation",
+    "gemme", "rune_scroll_talisman", "artifact", "divine_weapon",
+    "bp_delta", "combat_formulas", "battle_engine",
+    "character_bible_final_numbers", "shop_iap", "battle_pass",
+    "vip", "server_profiles_live"
+  ],
+  "constraints_honored": {
+    "no_gem_runtime": true,
+    "no_rune_runtime": true,
+    "no_artifact_runtime": true,
+    "no_divine_weapon_runtime": true,
+    "no_bp_delta_runtime": true,
+    "no_hero_elevation_changes": true,
+    "no_combat_formula_changes": true,
+    "no_battle_engine_changes": true,
+    "no_character_bible_mutation": true,
+    "no_hero_final_numbers_changes": true,
+    "no_layout_tsx_changes": true,
+    "no_home_menu_changes": true,
+    "no_tower_or_guide_runtime_changes": true,
+    "no_shop_bp_vip_iap_unlock": true,
+    "no_server_profiles_live": true,
+    "no_db_writes": true,
+    "no_materials_spent": true,
+    "no_required_or_optional_validator_weakening": true,
+    "no_fake_pass": true
+  }
+}

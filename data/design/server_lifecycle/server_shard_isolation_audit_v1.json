@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-30T19:29:10.176747+00:00",
+  "timestamp_utc": "2026-05-30T19:51:07.286793+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1121,
+  "backend_python_files_scanned": 1123,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 518,
+      "files_with_hits": 519,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -137,7 +137,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 125,
+      "files_with_hits": 126,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -257,7 +257,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 258,
+      "files_with_hits": 260,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -268,6 +268,10 @@
             {
               "line": 496,
               "snippet": "# unset/!=true. No DB writes, no materials spent, no combat/account stat mutation."
+            },
+            {
+              "line": 503,
+              "snippet": "# no materials spent, no live mutation. Replica Bible 202 track D (gear_level_cap=50,"
             }
           ]
         },

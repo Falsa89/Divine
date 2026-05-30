@@ -1,0 +1,40 @@
+{
+  "task_id": "PROJECT_GEAR_CAP_PLUS_50_RUNTIME",
+  "track": "B",
+  "track_name": "GEAR_CAP_CONSTANTS_AND_SCHEMA",
+  "verdict": "TRACK_B_GEAR_CAP_CONSTANTS_AND_SCHEMA_READY",
+  "timestamp_utc": "2026-05-30T10:00:00Z",
+  "gear_level_cap_canonical": 50,
+  "gear_level_cap_legacy_to_replace": 20,
+  "gear_level_min": 0,
+  "staged_caps": [
+    {"stage_id": "early",   "label_it": "Avvio",      "min": 0,  "max": 10, "display_color_hint": "#9ea0c8", "unlock_via": "hero_level_or_ascension_low"},
+    {"stage_id": "mid",     "label_it": "Intermedio", "min": 11, "max": 20, "display_color_hint": "#4a90e2", "unlock_via": "hero_level_mid + ascension_unlock"},
+    {"stage_id": "late",    "label_it": "Avanzato",   "min": 21, "max": 35, "display_color_hint": "#a96bff", "unlock_via": "forge_enhance + materials_late"},
+    {"stage_id": "endgame", "label_it": "Endgame",    "min": 36, "max": 50, "display_color_hint": "#ff5470", "unlock_via": "forge_reforge + endgame_materials + costellazione_gate_optional"}
+  ],
+  "gear_slots": [
+    {"slot_id": "weapon",    "label_it": "Arma"},
+    {"slot_id": "armor",     "label_it": "Armatura"},
+    {"slot_id": "helm",      "label_it": "Elmo"},
+    {"slot_id": "boots",     "label_it": "Stivali"},
+    {"slot_id": "gloves",    "label_it": "Guanti"},
+    {"slot_id": "accessory", "label_it": "Accessorio"}
+  ],
+  "json_schema_hint": {
+    "gear_level_cap": {"type": "integer", "min": 0, "max": 50},
+    "gear_stage_id": {"type": "string", "enum": ["early", "mid", "late", "endgame"]},
+    "gear_slot_id":  {"type": "string", "enum": ["weapon", "armor", "helm", "boots", "gloves", "accessory"]}
+  },
+  "frontend_constants_export_targets": [
+    "GEAR_CAP_CANONICAL",
+    "GEAR_CAP_LEGACY_TO_REPLACE",
+    "GEAR_STAGED_CAPS",
+    "GEAR_SLOTS",
+    "resolveGearStage(level: number)"
+  ],
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "mutation_enabled": false
+}
