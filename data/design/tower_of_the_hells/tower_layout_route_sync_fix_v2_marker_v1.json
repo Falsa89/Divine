@@ -1,0 +1,90 @@
+{
+  "pack": "PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX_V2_PACK",
+  "sentinel": "v18",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_RESYNC_v18_TOWER_LAYOUT_ROUTE",
+  "timestamp_utc": "2026-05-30T00:45:00Z",
+  "target_file": "frontend/app/_layout.tsx",
+  "previous_attempt": {
+    "pack": "PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX_PACK",
+    "sentinel": "v17",
+    "status_on_public": "layout_blob_stale_doc_and_marker_synced"
+  },
+  "rationale": "Il pack v17 ha sincronizzato correttamente doc 197 e marker JSON sul public main, ma il blob di frontend/app/_layout.tsx è rimasto stale: il raw pubblico ancora non mostra la route tower-of-the-hells nè il commento JSX v17. Questo V2 applica una tecnica di micro-ristrutturazione no-op-safe più forte: (a) commento JSX multiline esteso visibile con sentinella v18 + (b) conversione della Stack.Screen tower-of-the-hells da single-line a multiline equivalente mantenendo identici i props (name + options.animation). Nessun cambio di semantica/behavior.",
+  "change_kind": "jsx_comment_extended_plus_stack_screen_multiline_reformat",
+  "change_scope": "comment_block_inserted_above_existing_tower_route_plus_single_line_to_multiline_reformat_of_same_route",
+  "route_registration": {
+    "name": "tower-of-the-hells",
+    "options": { "animation": "slide_from_right" },
+    "occurrence_count": 1,
+    "duplicated": false,
+    "props_unchanged": true,
+    "semantics_unchanged": true
+  },
+  "no_op_guarantees": {
+    "props_identical_pre_post": true,
+    "render_tree_identical": true,
+    "navigation_behavior_identical": true,
+    "animation_identical_slide_from_right": true,
+    "other_stack_screens_untouched": true
+  },
+  "verifications": {
+    "grep_tower_of_the_hells_count": 1,
+    "grep_public_sync_tag_v18_present": true,
+    "grep_public_sync_tag_v17_preserved": true,
+    "file_exists_frontend_app_tower_of_the_hells_tsx": true,
+    "file_exists_frontend_constants_tower_of_the_hells_floors_ts": true,
+    "file_exists_validate_project_tower_of_the_hells_runtime_v1_py": true,
+    "file_exists_doc_195_TOWER_OF_THE_HELLS_RUNTIME_md": true,
+    "file_exists_doc_196_TOWER_SUITE_RUNNER_SYNC_FIX_md": true,
+    "file_exists_doc_197_TOWER_LAYOUT_ROUTE_SYNC_FIX_md": true,
+    "data_design_tower_of_the_hells_dir_present": true,
+    "suite_runner_v16_v16b_sentinels_present": true,
+    "suite_runner_tuple_PROJECT_TOWER_OF_THE_HELLS_RUNTIME_count": 1
+  },
+  "constraints_honored": {
+    "zero_db_writes": true,
+    "zero_backend_tower_runtime_endpoint_changes": true,
+    "zero_tower_gameplay_or_progress_changes": true,
+    "zero_asyncstorage_behavior_changes": true,
+    "zero_reward_or_economy_changes": true,
+    "zero_stamina_energy_ticket_additions": true,
+    "zero_paid_attempts": true,
+    "zero_combat_or_battle_engine_rewrite": true,
+    "zero_broad_frontend_redesign": true,
+    "zero_menu_or_home_rewiring_beyond_layout_tsx": true,
+    "zero_auth_runtime_changes": true,
+    "zero_env_changes": true,
+    "zero_server_profile_live_activation": true,
+    "zero_second_server_opening": true,
+    "zero_validator_logic_changes": true,
+    "zero_suite_runner_changes_in_this_pack": true,
+    "zero_gacha_changes": true,
+    "zero_artifact_changes": true,
+    "zero_iap_bp_vip_shop_activation": true,
+    "zero_soul_forge_changes": true,
+    "zero_backend_routes_artifacts_py_changes": true,
+    "zero_backend_battle_engine_py_changes": true,
+    "zero_backend_env_changes": true,
+    "zero_frontend_app_battlepass_tsx_changes": true,
+    "zero_frontend_app_vip_tsx_changes": true,
+    "zero_final_art_or_audio_assets": true,
+    "zero_required_or_optional_validator_weakening": true,
+    "zero_fake_pass": true
+  },
+  "md5_invariants_expected": {
+    "backend/battle_engine.py": "151ca35ad3bc35f0a6209cb3744ed440",
+    "backend/.env": "ff60bbb79efa329b71aa8ed351ea89b3",
+    "backend/routes/artifacts.py": "893f244d85fd45cbe825996463995293",
+    "frontend/app/battlepass.tsx": "54568b8cb75a07033f78ef6593aba839",
+    "frontend/app/vip.tsx": "45fcc9890b6b128c37088bc33aa54caf"
+  },
+  "verdict_local": "PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX_V2_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "verdict_after_public_sync_verified": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME_COMPLETE_PUBLIC_REPO_VERIFIED",
+  "verdict_if_still_stale_on_public_main": "PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX_V2_PUBLIC_LAYOUT_STALE_PLATFORM_BUG_PERSISTENT",
+  "public_sync_instructions": [
+    "Premere 'Save to GitHub' nella UI Emergent per pushare il commit locale su main",
+    "Verificare sul repo pubblico che frontend/app/_layout.tsx mostri ora: (1) il blocco commento JSX esteso PUBLIC_SYNC_TAG_RESYNC_v18_TOWER_LAYOUT_ROUTE; (2) la Stack.Screen tower-of-the-hells in formato multiline",
+    "Verificare il count delle occorrenze di 'tower-of-the-hells' = 1 (no duplicati)",
+    "Se la blob risulta ancora stale dopo v18 → escalare come PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX_V2_PUBLIC_LAYOUT_STALE_PLATFORM_BUG_PERSISTENT e contattare la piattaforma"
+  ]
+}

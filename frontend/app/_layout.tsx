@@ -37,7 +37,36 @@ export default function RootLayout() {
           <Stack.Screen name="story" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="tower" options={{ animation: 'slide_from_right' }} />
           {/* PUBLIC_SYNC_TAG_RESYNC_v17_LAYOUT_ROUTE: PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX 2026_05_30 — micro-touch JSX comment no-op-safe per forzare blob resnapshot del file _layout.tsx sul public main. Nessuna modifica a behavior/route/gameplay/economy/AsyncStorage/backend. Tower route registration count rimane = 1. Marker: data/design/tower_of_the_hells/tower_layout_route_sync_fix_marker_v1.json. */}
-          <Stack.Screen name="tower-of-the-hells" options={{ animation: 'slide_from_right' }} />
+          {/*
+            ============================================================================
+            PUBLIC_SYNC_TAG_RESYNC_v18_TOWER_LAYOUT_ROUTE
+            ============================================================================
+            Pack: PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX_V2_PACK
+            Sentinella: v18 (secondo tentativo dopo v17 stale sul raw pubblico)
+            Data UTC: 2026-05-30
+            Scopo: forzare un blob resnapshot più forte (ma no-op-safe) del file
+                   frontend/app/_layout.tsx sul public main GitHub.
+            Tecnica: (a) commento JSX visibile esteso + (b) Stack.Screen Tower
+                     convertita da single-line a multiline equivalente con gli
+                     STESSI props (name + options.animation). Semantica invariata.
+            Garanzie no-op:
+              - route registration count di "tower-of-the-hells" resta = 1
+              - props identici: name="tower-of-the-hells", animation='slide_from_right'
+              - nessun cambio behavior runtime
+              - nessun cambio gameplay/economy/AsyncStorage/backend
+              - nessun cambio sulle altre Stack.Screen
+              - nessun cambio sul suite runner / validator logic
+              - nessun cambio sui 5 file MD5-locked
+            Marker JSON: data/design/tower_of_the_hells/tower_layout_route_sync_fix_v2_marker_v1.json
+            Doc: docs/divine/198_TOWER_LAYOUT_ROUTE_SYNC_FIX_V2.md
+            Se questa V2 resta ancora stale sul raw pubblico:
+              PROJECT_TOWER_OF_THE_HELLS_LAYOUT_ROUTE_SYNC_FIX_V2_PUBLIC_LAYOUT_STALE_PLATFORM_BUG_PERSISTENT
+            ============================================================================
+          */}
+          <Stack.Screen
+            name="tower-of-the-hells"
+            options={{ animation: 'slide_from_right' }}
+          />
           <Stack.Screen name="pvp" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="equipment" options={{ animation: 'slide_from_bottom' }} />
           <Stack.Screen name="guild" options={{ animation: 'slide_from_right' }} />
