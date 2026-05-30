@@ -1,0 +1,87 @@
+{
+  "task_id": "PROJECT_MATERIAL_RAID_RUNTIME",
+  "track": "B",
+  "track_name": "MATERIAL_RAID_SCHEMA_CONFIG",
+  "verdict": "TRACK_B_MATERIAL_RAID_SCHEMA_CONFIG_READY",
+  "timestamp_utc": "2026-05-30T14:00:00Z",
+  "tracks": [
+    {
+      "track_id": "gear_material_raid",
+      "label_it": "Raid Materiali Gear",
+      "description_it": "Fonte primaria per gear_dust/gear_shard/gear_core/gear_essence/gear_orb.",
+      "runtime_state": "open_preview",
+      "depends_on": ["PROJECT_GEAR_CAP_PLUS_50_RUNTIME", "PROJECT_GEAR_FORGE_FUSION_REFORGE_RUNTIME"],
+      "feeds_into": ["gear_enhance", "gear_fusion", "gear_reforge"]
+    },
+    {
+      "track_id": "hero_growth_raid",
+      "label_it": "Raid Crescita Eroe",
+      "description_it": "Fonte materiali per hero level/star/ascension (hero_growth_dust/crystal/essence).",
+      "runtime_state": "open_preview",
+      "depends_on": [],
+      "feeds_into": ["hero_level_up", "hero_star_up", "hero_ascension"]
+    },
+    {
+      "track_id": "gem_material_raid",
+      "label_it": "Raid Materiali Gemme",
+      "description_it": "Fonte materiali per gem socket/upgrade (gem_dust/gem_shard).",
+      "runtime_state": "locked_deferred",
+      "depends_on": ["PROJECT_GEM_SOCKET_RUNTIME_PACK"],
+      "feeds_into": ["gem_socket_unlock", "gem_level_up"]
+    },
+    {
+      "track_id": "rune_material_raid",
+      "label_it": "Raid Materiali Rune",
+      "description_it": "Fonte materiali per rune/scroll/talisman (rune_paper_common/rare).",
+      "runtime_state": "locked_deferred",
+      "depends_on": ["PROJECT_RUNE_SCROLL_TALISMAN_RUNTIME_PACK"],
+      "feeds_into": ["rune_craft", "rune_upgrade"]
+    },
+    {
+      "track_id": "artifact_divine_material_raid",
+      "label_it": "Raid Materiali Artefatto/Divino",
+      "description_it": "Fonte materiali per artifact runtime e divine weapon 6\u2605 (frammenti locked).",
+      "runtime_state": "locked_deferred",
+      "depends_on": ["PROJECT_ARTIFACT_RUNTIME_PACK", "PROJECT_DIVINE_WEAPON_RUNTIME_PACK"],
+      "feeds_into": ["artifact_bonus_unhide", "divine_weapon_progression"]
+    }
+  ],
+  "stage_model": {
+    "stages_per_open_track": 5,
+    "difficulty_ids": ["I", "II", "III", "IV", "V"],
+    "recommended_power_preview_only": true,
+    "rewards_preview_only": true,
+    "no_stamina": true,
+    "no_tickets": true,
+    "no_paid_attempts": true
+  },
+  "stage_recommended_power": {
+    "I":   5000,
+    "II":  15000,
+    "III": 45000,
+    "IV":  120000,
+    "V":   320000
+  },
+  "reward_families_canonical": {
+    "gear":           ["gear_dust_common", "gear_shard_uncommon", "gear_core_rare", "gear_essence_epic", "gear_orb_legendary"],
+    "hero_growth":    ["hero_growth_dust", "hero_growth_crystal", "hero_growth_essence"],
+    "gem_locked":     ["gem_dust_common", "gem_shard_rare"],
+    "rune_locked":    ["rune_paper_common", "rune_paper_rare"],
+    "artifact_divine_locked": ["artifact_fragment_locked", "divine_fragment_locked"]
+  },
+  "json_schema_hint": {
+    "reward_preview_request": {
+      "track_id": {"type": "string"},
+      "stage_id": {"type": "string", "enum": ["I", "II", "III", "IV", "V"]}
+    },
+    "clear_preview_request": {
+      "track_id":     {"type": "string"},
+      "stage_id":     {"type": "string", "enum": ["I", "II", "III", "IV", "V"]},
+      "team_power":   {"type": "integer", "min": 0}
+    }
+  },
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_granted": false,
+  "mutation_enabled": false
+}

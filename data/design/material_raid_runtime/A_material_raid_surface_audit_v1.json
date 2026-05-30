@@ -1,0 +1,52 @@
+{
+  "task_id": "PROJECT_MATERIAL_RAID_RUNTIME",
+  "track": "A",
+  "track_name": "MATERIAL_RAID_SURFACE_AUDIT",
+  "verdict": "TRACK_A_MATERIAL_RAID_SURFACE_AUDIT_READY",
+  "timestamp_utc": "2026-05-30T14:00:00Z",
+  "legacy_routes_audited": [
+    {"path": "/raids",                    "handler": "get_raids",          "role": "boss raids esistenti (NOT material raid)", "db_writes": false},
+    {"path": "/raid/create",              "handler": "create_raid",        "role": "create boss raid",                          "db_writes": true,  "writes": ["active_raids.insert/update"]},
+    {"path": "/raid/attack/{boss_id}",    "handler": "attack_raid_boss",   "role": "attack boss \u2192 grant gold/gems/exp",       "db_writes": true,  "writes": ["active_raids.update", "users.gold/gems/experience"]},
+    {"path": "/inventory",                "handler": "get_inventory",      "role": "read inventory EXP_ITEMS+SKILL_MATERIALS", "db_writes": false},
+    {"path": "/item-shop/buy",            "handler": "buy_item",           "role": "buy EXP_ITEMS",                              "db_writes": true,  "writes": ["users.gold", "inventory.upsert"]}
+  ],
+  "legacy_classification": "BOSS_RAIDS_NOT_MATERIAL_RAIDS",
+  "canonical_material_ids_in_db": [],
+  "canonical_material_ids_expected": [
+    "gear_dust_common", "gear_shard_uncommon", "gear_core_rare",
+    "gear_essence_epic", "gear_orb_legendary",
+    "hero_growth_dust", "hero_growth_crystal", "hero_growth_essence",
+    "gem_dust_common", "gem_shard_rare",
+    "rune_paper_common", "rune_paper_rare",
+    "artifact_fragment_locked", "divine_fragment_locked"
+  ],
+  "safety_guards_MISSING_for_live_grant": {
+    "canonical_material_id_registry": true,
+    "idempotent_grant_with_request_id": true,
+    "atomic_transaction": true,
+    "rate_limit_or_attempt_counter": true,
+    "deterministic_drop_resolver": true,
+    "audit_log": true,
+    "no_negative_balance_pre_check": true,
+    "replay_protection": true
+  },
+  "decision": "PREVIEW_ONLY_NEW_NAMESPACE",
+  "decision_rationale": "Nessuna collection user_materials canonica. I material_id della Bible 202 non esistono ancora nel DB. Drop tables live mutate economy senza audit/idempotency. Reward claim NON abilitato. Nuovo namespace /api/material-raid/* preview-only, gated. Legacy /raids/*, /raid/*, /inventory, /item-shop NON modificati.",
+  "new_namespace_runtime_added": "/api/material-raid/*",
+  "legacy_namespace_modified": false,
+  "legacy_namespace_touched_files": [],
+  "frontend_runtime_surface_audit": {
+    "equipment_tsx": "stub_no_material_raid_runtime",
+    "soul_forge_tsx": "hero_sacrifice_only",
+    "material_raid_screens": "NONE_in_repo"
+  },
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_spent": false,
+  "materials_granted": false,
+  "mutation_enabled": false,
+  "stamina_used": false,
+  "tickets_used": false,
+  "paid_attempts": false
+}

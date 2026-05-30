@@ -1,0 +1,27 @@
+{
+  "task_id": "PROJECT_MATERIAL_RAID_RUNTIME",
+  "track": "J",
+  "track_name": "COMPLETION_AND_PUBLIC_SYNC",
+  "verdict": "TRACK_J_COMPLETION_AND_PUBLIC_SYNC_READY",
+  "timestamp_utc": "2026-05-30T14:00:00Z",
+  "release_gates": [
+    {"gate_id": "R1_preview_local_container",          "label_it": "R1 \u2014 Preview locale (questo pack)",       "status": "ACHIEVED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"},
+    {"gate_id": "R2_preview_envelope_enabled_internal", "label_it": "R2 \u2014 Envelope preview attivabile canary", "status": "DEFERRED_TO_FUTURE_PACK"},
+    {"gate_id": "R3_live_claim_runtime",                "label_it": "R3 \u2014 Claim live (mutation reale)",        "status": "BLOCKED_BY_INVENTORY_SAFETY_HARDENING",
+      "requires": ["PROJECT_MATERIAL_RAID_LIVE_CLAIM_SAFETY_HARDENING_PACK", "canonical user_materials collection", "idempotent grant with request_id", "atomic transaction", "audit log"]},
+    {"gate_id": "R4_locked_tracks_unlock",              "label_it": "R4 \u2014 Sblocco track Gemme/Rune/Artifact_Divine", "status": "DEFERRED_TO_FUTURE_PACK",
+      "requires": ["PROJECT_GEM_SOCKET_RUNTIME_PACK", "PROJECT_RUNE_SCROLL_TALISMAN_RUNTIME_PACK", "PROJECT_ARTIFACT_RUNTIME_PACK", "PROJECT_DIVINE_WEAPON_RUNTIME_PACK"]}
+  ],
+  "rollback_plan": [
+    "1. Rimuovere include_router material_raid_preview da server.py.",
+    "2. Cancellare backend/routes/material_raid_preview.py.",
+    "3. Rimuovere frontend/constants/materialRaid.ts + frontend/app/material-raid-test.tsx.",
+    "4. Rimuovere tuple registrazione validator dalla suite runner.",
+    "5. Rimuovere data/design/material_raid_runtime/* e docs/divine/209*.md.",
+    "6. Legacy /raids/*, /raid/*, /inventory, /item-shop NON vengono mai toccati."
+  ],
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_granted": false,
+  "mutation_enabled": false
+}

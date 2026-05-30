@@ -515,6 +515,25 @@ app.include_router(gear_cap_preview_router)
 from routes.gear_forge_preview import router as gear_forge_preview_router
 app.include_router(gear_forge_preview_router)
 
+# PROJECT_MATERIAL_RAID_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
+# Returns 503 when MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
+# no materials granted, no live mutation, no stamina, no tickets, no paid attempts.
+# Reward claim DISABLED in questo pack: l'audit (track A) ha trovato che non esiste una
+# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,
+# /item-shop restano completamente intoccati. Separato da Hero Elevation, Gemme, Rune,
+from routes.gear_forge_preview import router as gear_forge_preview_router
+app.include_router(gear_forge_preview_router)
+
+# PROJECT_MATERIAL_RAID_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
+# Returns 503 when MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
+# no materials granted, no live mutation, no stamina, no tickets, no paid attempts.
+# Reward claim DISABLED in questo pack: l'audit (track A) ha trovato che non esiste una
+# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,
+# /item-shop restano completamente intoccati. Separato da Hero Elevation, Gemme, Rune,
+# Artifact, Divine Weapon, BP Delta, combat, battle_engine, character bible, gear forge commit.
+from routes.material_raid_preview import router as material_raid_preview_router
+app.include_router(material_raid_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

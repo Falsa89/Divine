@@ -1,0 +1,28 @@
+{
+  "task_id": "PROJECT_MATERIAL_RAID_RUNTIME",
+  "track": "C",
+  "track_name": "BACKEND_MATERIAL_RAID_PREVIEW_OR_RUNTIME",
+  "verdict": "TRACK_C_BACKEND_MATERIAL_RAID_PREVIEW_OR_RUNTIME_READY",
+  "timestamp_utc": "2026-05-30T14:00:00Z",
+  "chosen_runtime_mode": "PREVIEW_ONLY",
+  "feature_flag": "MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED",
+  "default_state_when_flag_absent": "HTTP_503_DISABLED_INERT_ENVELOPE",
+  "router_prefix": "/api/material-raid",
+  "endpoints": [
+    {"method": "GET",  "path": "/api/material-raid/config",           "role": "config canonico tracks + reward families + stage model", "db_writes": false, "mutation": false, "flag_gated": true},
+    {"method": "GET",  "path": "/api/material-raid/stages",           "role": "lista stages I..V con recommended_power per ogni track",    "db_writes": false, "mutation": false, "flag_gated": true},
+    {"method": "POST", "path": "/api/material-raid/reward-preview",   "role": "preview-only reward envelope per track+stage (no claim live)", "db_writes": false, "mutation": false, "flag_gated": true},
+    {"method": "POST", "path": "/api/material-raid/clear-preview",    "role": "preview-only clear-eligibility per team_power vs recommended",  "db_writes": false, "mutation": false, "flag_gated": true}
+  ],
+  "reward_claim_endpoint_added": false,
+  "reward_claim_decision_rationale": "Track A audit: no canonical user_materials collection, no idempotent grant, no drop table audit. Policy del pack richiede inventory clearly safe prima del claim live. PREVIEW-ONLY.",
+  "legacy_raids_routes_modified": false,
+  "server_py_change": "include_router additive only (material_raid_preview_router)",
+  "contract_version": "project_material_raid_runtime_preview_v1",
+  "runtime_mode": "PREVIEW_ONLY",
+  "db_writes": 0,
+  "materials_granted": false,
+  "mutation_enabled": false,
+  "stamina_used": false,
+  "tickets_used": false
+}

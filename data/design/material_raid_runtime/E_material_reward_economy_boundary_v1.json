@@ -1,0 +1,61 @@
+{
+  "task_id": "PROJECT_MATERIAL_RAID_RUNTIME",
+  "track": "E",
+  "track_name": "MATERIAL_REWARD_ECONOMY_BOUNDARY",
+  "verdict": "TRACK_E_MATERIAL_REWARD_ECONOMY_BOUNDARY_READY",
+  "timestamp_utc": "2026-05-30T14:00:00Z",
+  "reward_claim_enabled": false,
+  "reward_claim_blockers": [
+    "no canonical user_materials collection in DB",
+    "no idempotent grant_material with request_id",
+    "no atomic transaction infrastructure for grants",
+    "no replay protection / no audit log",
+    "no deterministic drop resolver",
+    "no rate-limit / attempt counter for clears",
+    "no pre-check negative-balance for cost-of-attempt (when introduced)"
+  ],
+  "required_guards_for_future_live_claim": {
+    "auth_required": true,
+    "ownership_user_id_match": true,
+    "request_id_idempotency": true,
+    "atomic_transaction": true,
+    "deterministic_drop_resolver": true,
+    "audit_log_entry": true,
+    "rate_limit_or_attempt_counter": true,
+    "no_negative_balance": true,
+    "no_paid_currency_consumed_in_preview": true,
+    "no_broad_db_migration": true
+  },
+  "reward_preview_envelope_design": {
+    "gear_material_raid": {
+      "I":   {"materials": {"gear_dust_common": 50}},
+      "II":  {"materials": {"gear_dust_common": 120, "gear_shard_uncommon": 2}},
+      "III": {"materials": {"gear_shard_uncommon": 8,  "gear_core_rare": 1}},
+      "IV":  {"materials": {"gear_core_rare": 5,         "gear_essence_epic": 1}},
+      "V":   {"materials": {"gear_essence_epic": 6,      "gear_orb_legendary": 1}}
+    },
+    "hero_growth_raid": {
+      "I":   {"materials": {"hero_growth_dust": 80}},
+      "II":  {"materials": {"hero_growth_dust": 200, "hero_growth_crystal": 2}},
+      "III": {"materials": {"hero_growth_crystal": 8,  "hero_growth_essence": 1}},
+      "IV":  {"materials": {"hero_growth_crystal": 18, "hero_growth_essence": 3}},
+      "V":   {"materials": {"hero_growth_essence": 12}}
+    }
+  },
+  "reward_preview_for_locked_tracks": {
+    "gem_material_raid":              {"status": "locked_deferred", "materials": null},
+    "rune_material_raid":             {"status": "locked_deferred", "materials": null},
+    "artifact_divine_material_raid":  {"status": "locked_deferred", "materials": null}
+  },
+  "economy_touched_in_this_pack": false,
+  "paid_currency_in_this_pack": false,
+  "gold_spent_in_this_pack": false,
+  "materials_granted_in_this_pack": false,
+  "stamina_consumed_in_this_pack": false,
+  "tickets_consumed_in_this_pack": false,
+  "shop_unlock_in_this_pack": false,
+  "bp_vip_iap_unlock_in_this_pack": false,
+  "design_only_replace_before_release": true,
+  "future_live_claim_pack_proposal": "PROJECT_MATERIAL_RAID_LIVE_CLAIM_SAFETY_HARDENING_PACK",
+  "runtime_mode": "PREVIEW_ONLY"
+}

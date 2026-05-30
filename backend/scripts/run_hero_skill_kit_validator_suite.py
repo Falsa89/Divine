@@ -1502,6 +1502,23 @@ OPTIONAL = [
     # No validator logic change. No backend/routes/gear_forge_preview.py / server.py / frontend Gear Forge / legacy /forge/* touch.
     # Proof marker: data/design/gear_forge_fusion_reforge_runtime/gear_forge_suite_runner_sync_fix_marker_v1.json
     ('PROJECT-GEAR-FORGE-FUSION-REFORGE-RUNTIME', 'validate_project_gear_forge_fusion_reforge_runtime_v1.py'),
+    # PUBLIC_SYNC_TAG_RESYNC_v25_MATERIAL_RAID_RUNTIME: pack PROJECT_MATERIAL_RAID_RUNTIME 2026_05_30.
+    # Foundation runtime PREVIEW-ONLY per Material Raid (modalita PvE per material farm).
+    # 5 tracks (2 open preview: gear_material_raid, hero_growth_raid; 3 locked_deferred: gem/rune/artifact_divine).
+    # 5 stages I..V con recommended_power preview-only. NO stamina, NO tickets, NO paid attempts.
+    # Backend: /api/material-raid/config + /stages + /reward-preview + /clear-preview,
+    # tutti gated da MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED. Default flag-off returns 503 inert envelope.
+    # Reward claim DISABLED in questo pack (audit track A: no canonical user_materials, no idempotent grant,
+    # no atomic transaction, no audit log). Legacy /raids/*, /raid/*, /inventory, /item-shop NON modificati.
+    # Frontend: constants TS + sandbox /material-raid-test (deeplink-only).
+    # Zero DB writes, zero materials granted, zero mutation, zero combat/battle_engine, zero hero final_numbers,
+    # zero Character Bible mutation, zero gacha/pity, zero Shop/BP/VIP/IAP unlock, zero artifact/constellation unhide,
+    # zero gemme/rune/DW/BP delta runtime, zero Hero Elevation changes, zero Gear Cap route behavior changes,
+    # zero Gear Forge commit enabling, zero server profiles live, zero broad DB migration, zero player data mutation,
+    # zero economy live, zero final art/audio, zero _layout/home/menu touch, zero tower/guide runtime changes,
+    # zero REQUIRED/OPTIONAL validator weakening, zero fake PASS. Validator OPTIONAL.
+    # Proof marker: data/design/material_raid_runtime/material_raid_runtime_suite_registration_proof_marker_v1.json
+    ('PROJECT-MATERIAL-RAID-RUNTIME', 'validate_project_material_raid_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

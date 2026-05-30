@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-30T20:42:21.992143+00:00",
+  "timestamp_utc": "2026-05-30T21:18:31.799384+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1125,
+  "backend_python_files_scanned": 1127,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 521,
+      "files_with_hits": 523,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -257,25 +257,21 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 262,
+      "files_with_hits": 264,
       "hits_sample": [
         {
           "file": "backend/server.py",
-          "keyword": "materials",
+          "keyword": "inventory",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 496,
-              "snippet": "# unset/!=true. No DB writes, no materials spent, no combat/account stat mutation."
+              "line": 522,
+              "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 503,
-              "snippet": "# no materials spent, no live mutation. Replica Bible 202 track D (gear_level_cap=50,"
-            },
-            {
-              "line": 511,
-              "snippet": "# no materials spent, no live mutation. Fusion commit DISABLED in this pack: l'audit"
+              "line": 531,
+              "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             }
           ]
         },
@@ -657,7 +653,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 89,
+      "files_with_hits": 90,
       "hits_sample": [
         {
           "file": "backend/battle_core.py",

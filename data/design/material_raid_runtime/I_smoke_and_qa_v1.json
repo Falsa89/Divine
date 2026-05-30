@@ -1,0 +1,24 @@
+{
+  "task_id": "PROJECT_MATERIAL_RAID_RUNTIME",
+  "track": "I",
+  "track_name": "SMOKE_AND_QA",
+  "verdict": "TRACK_I_SMOKE_AND_QA_READY",
+  "timestamp_utc": "2026-05-30T14:00:00Z",
+  "smoke_tests": [
+    {"test_id": "flag_off_default",         "method": "GET",  "path": "/api/material-raid/config",          "expected_status": 503, "expected_payload_status": "disabled"},
+    {"test_id": "flag_on_config",           "method": "GET",  "path": "/api/material-raid/config",          "expected_status": 200, "expected_payload_keys": ["tracks", "reward_families", "stage_model"]},
+    {"test_id": "flag_on_stages",           "method": "GET",  "path": "/api/material-raid/stages",          "expected_status": 200, "expected_payload_keys": ["stages", "recommended_power_by_stage"]},
+    {"test_id": "reward_preview_open",      "method": "POST", "path": "/api/material-raid/reward-preview",  "body_hint": {"track_id": "gear_material_raid", "stage_id": "III"}, "expected_status": 200, "expected_payload_status": "preview_ok"},
+    {"test_id": "reward_preview_locked",    "method": "POST", "path": "/api/material-raid/reward-preview",  "body_hint": {"track_id": "gem_material_raid", "stage_id": "III"}, "expected_status": 200, "expected_payload_status": "locked_deferred"},
+    {"test_id": "reward_preview_invalid",   "method": "POST", "path": "/api/material-raid/reward-preview",  "body_hint": {"track_id": "nonexistent", "stage_id": "III"}, "expected_status": 200, "expected_payload_status": "invalid_track"},
+    {"test_id": "clear_preview_ok",         "method": "POST", "path": "/api/material-raid/clear-preview",   "body_hint": {"track_id": "hero_growth_raid", "stage_id": "III", "team_power": 60000}, "expected_status": 200, "expected_payload_status": "preview_ok"},
+    {"test_id": "clear_preview_underpowered","method": "POST", "path": "/api/material-raid/clear-preview",   "body_hint": {"track_id": "hero_growth_raid", "stage_id": "V", "team_power": 1000}, "expected_status": 200, "expected_payload_status": "team_underpowered_preview"}
+  ],
+  "qa_observations": [
+    "Tutti gli endpoint sono read-only/preview-only. ZERO scrittura DB possibile in nessuna risposta.",
+    "Reward preview blocca i 3 track locked (gem/rune/artifact_divine) con status locked_deferred.",
+    "clear_preview restituisce solo eligibility booleano + delta vs recommended_power, NESSUN claim.",
+    "NO stamina consumption, NO ticket consumption, NO paid currency."
+  ],
+  "runtime_mode": "PREVIEW_ONLY"
+}
