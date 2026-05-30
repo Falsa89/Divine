@@ -1,0 +1,27 @@
+{
+  "pack": "PROJECT_GEM_SOCKET_RUNTIME_SERVER_REGISTRATION_SYNC_FIX_PACK_v27c",
+  "parent_pack": "PROJECT_GEM_SOCKET_RUNTIME_PACK",
+  "parent_commit": "72595f78",
+  "previous_sync_fix": "PROJECT_GEM_SOCKET_RUNTIME_SYNC_FIX_PACK_v27b",
+  "mode": "SERVER_REGISTRATION_SYNC_FIX_ONLY",
+  "created_for": "public GitHub main server.py missing Gem Socket preview router registration",
+  "runtime_semantics_changed": false,
+  "db_writes": 0,
+  "server_registration_only": true,
+  "suite_runner_changed": false,
+  "live_socket_commit_enabled": false,
+  "gear_mutation_enabled": false,
+  "premium_gems_currency_used": false,
+  "material_spend_enabled": false,
+  "rune_runtime_changed": false,
+  "material_raid_behavior_changed": false,
+  "battle_runtime_changed": false,
+  "economy_changed": false,
+  "required_server_tokens": [
+    "from routes.gem_socket_preview import router as gem_socket_preview_router",
+    "app.include_router(gem_socket_preview_router)",
+    "PUBLIC_SYNC_TAG_RESYNC_v27c_GEM_SOCKET_SERVER_REGISTRATION"
+  ],
+  "expected_local_verdict": "PROJECT_GEM_SOCKET_RUNTIME_SERVER_REGISTRATION_SYNC_FIX_v27c_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "expected_public_verdict_after_verification": "PROJECT_GEM_SOCKET_RUNTIME_PREVIEW_COMPLETE_PUBLIC_REPO_VERIFIED"
+}
