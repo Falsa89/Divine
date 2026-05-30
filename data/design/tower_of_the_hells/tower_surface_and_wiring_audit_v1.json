@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME",
+  "track": "A",
+  "track_name": "TOWER_SURFACE_AND_WIRING_AUDIT",
+  "verdict": "TRACK_A_TOWER_SURFACE_AND_WIRING_AUDIT_READY",
+  "audit_only": true,
+  "description": "Censimento read-only del wiring Tower preesistente e definizione dello stato di partenza.",
+  "prior_state": {
+    "frontend_route_file": "frontend/app/tower.tsx (NOT_PRESENT)",
+    "layout_stack_screen_entry": "frontend/app/_layout.tsx L38: <Stack.Screen name=\"tower\" ... /> (orphan; target file mancante)",
+    "home_menu_entry": "frontend/app/(tabs)/home.tsx L1935: { key: 'tower', label: 'Torre', ... router.push('/tower') } (MD5-LOCKED dal pack SF_MERGE; il link punta al pack legacy tower.tsx che ha endpoint backend propri, non modificati)",
+    "types_mode_id": "frontend/types/modes.ts L25: 'tower' nel TopLevelGameMode union (design-only; refactor placeholder)",
+    "backend_endpoints_existing": ["/api/tower/status (legacy)", "/api/tower/battle (legacy)"],
+    "legacy_pack_separation": "Il file legacy frontend/app/tower.tsx con i suoi endpoint /api/tower/* NON \u00e8 in scope di questo pack. La nuova modalit\u00e0 Torre degli Inferi vive su /tower-of-the-hells con mode_id distinto.",
+    "existing_data_design": ["data/design/server_lifecycle/_SLC_* (non Tower-specific)"]
+  },
+  "new_state": {
+    "mode_id_canonical": "tower_of_the_hells",
+    "display_name_it": "Torre degli Inferi",
+    "display_name_en": "Tower of the Hells",
+    "frontend_route_file": "frontend/app/tower-of-the-hells.tsx",
+    "floor_catalog": "frontend/constants/towerOfTheHellsFloors.ts",
+    "home_menu_entry_updated": false,
+    "home_menu_entry_md5_preserved_for": "SF_MERGE pack invariant",
+    "layout_stack_screen_updated": true,
+    "backend_runtime": false,
+    "db_collections_created": [],
+    "db_writes": 0
+  },
+  "language": "it"
+}

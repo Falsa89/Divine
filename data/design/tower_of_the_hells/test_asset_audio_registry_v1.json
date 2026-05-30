@@ -1,0 +1,31 @@
+{
+  "task_id": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME",
+  "track": "C",
+  "track_name": "TEST_ASSET_AUDIO_REGISTRY",
+  "verdict": "TRACK_C_TEST_ASSET_AUDIO_REGISTRY_READY",
+  "description": "Registry degli asset visuali e audio TEST placeholder usati dalla schermata Torre degli Inferi. Tutti TEST. Sostituzione obbligatoria prima del release.",
+  "asset_status": "test_placeholder",
+  "audio_status": "test_placeholder",
+  "replace_before_release": true,
+  "visual_assets": [
+    {"id": "tower_screen_background",      "kind": "color",  "value": "#10031d",  "status": "test_placeholder", "replace_before_release": true},
+    {"id": "floor_locked_icon",            "kind": "emoji", "value": "\uD83D\uDD12", "status": "test_placeholder", "replace_before_release": true},
+    {"id": "floor_unlocked_icon",          "kind": "emoji", "value": "\u2694\uFE0F", "status": "test_placeholder", "replace_before_release": true},
+    {"id": "floor_completed_icon",         "kind": "emoji", "value": "\u2705", "status": "test_placeholder", "replace_before_release": true},
+    {"id": "floor_boss_icon",              "kind": "emoji", "value": "\uD83D\uDC79", "status": "test_placeholder", "replace_before_release": true},
+    {"id": "floor_hellfire_icon",          "kind": "emoji", "value": "\uD83D\uDD25", "status": "test_placeholder", "replace_before_release": true},
+    {"id": "first_clear_reward_badge",     "kind": "emoji", "value": "\u2728", "status": "test_placeholder", "replace_before_release": true},
+    {"id": "tower_title_text",             "kind": "text",  "value": "Torre degli Inferi (TEST)", "status": "test_placeholder", "replace_before_release": true}
+  ],
+  "audio_cues_referenced_design_only": [
+    {"cue_id": "test_floor_start",          "manifest_ref": "frontend/assets/audio/test_placeholders/manifest.json#test_battle_start",       "runtime_attached": false, "status": "test_placeholder", "replace_before_release": true},
+    {"cue_id": "test_floor_victory",        "manifest_ref": "frontend/assets/audio/test_placeholders/manifest.json#test_battle_victory_stinger", "runtime_attached": false, "status": "test_placeholder", "replace_before_release": true},
+    {"cue_id": "test_floor_defeat",         "manifest_ref": "frontend/assets/audio/test_placeholders/manifest.json#test_battle_defeat_stinger",  "runtime_attached": false, "status": "test_placeholder", "replace_before_release": true},
+    {"cue_id": "test_floor_first_clear_reward", "manifest_ref": "frontend/assets/audio/test_placeholders/manifest.json#test_reward_basic",   "runtime_attached": false, "status": "test_placeholder", "replace_before_release": true},
+    {"cue_id": "test_ui_tap",               "manifest_ref": "frontend/assets/audio/test_placeholders/manifest.json#test_ui_tap",              "runtime_attached": false, "status": "test_placeholder", "replace_before_release": true}
+  ],
+  "broad_audio_engine_attached": false,
+  "final_art_imported": false,
+  "final_audio_imported": false,
+  "language": "it"
+}

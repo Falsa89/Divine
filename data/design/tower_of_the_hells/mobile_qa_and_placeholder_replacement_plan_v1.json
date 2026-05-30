@@ -1,0 +1,34 @@
+{
+  "task_id": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME",
+  "track": "F",
+  "track_name": "MOBILE_QA_AND_PLACEHOLDER_REPLACEMENT_PLAN",
+  "verdict": "TRACK_F_MOBILE_QA_AND_PLACEHOLDER_REPLACEMENT_PLAN_READY",
+  "design_only": true,
+  "mobile_qa_checklist": [
+    {"id": "MQA-T-01", "area": "Routing",       "check": "home menu 'Torre' apre /tower-of-the-hells",         "expected": "navigazione ok, no crash"},
+    {"id": "MQA-T-02", "area": "Header",        "check": "header mostra 'Torre degli Inferi (TEST)' + back button", "expected": "label TEST visibile, back funzionante"},
+    {"id": "MQA-T-03", "area": "Floor list",    "check": "20 floors elencati con stato locked/unlocked/completed",  "expected": "floor 1 unlocked, floor 2..20 locked al primo accesso"},
+    {"id": "MQA-T-04", "area": "Boss markers",  "check": "floor 5/10/15/20 mostrano icona boss",              "expected": "4 boss markers visibili"},
+    {"id": "MQA-T-05", "area": "Unlock chain",  "check": "clear floor N sblocca floor N+1",                   "expected": "highest_cleared_floor=N \u2192 floor N+1 unlocked"},
+    {"id": "MQA-T-06", "area": "First clear",   "check": "first clear di un floor mostra badge ricompensa TEST","expected": "badge \u2728 + label 'First Clear (TEST)'"},
+    {"id": "MQA-T-07", "area": "Replay",        "check": "replay floor gi\u00e0 completato non mostra nuovo badge", "expected": "no double reward"},
+    {"id": "MQA-T-08", "area": "NoStamina",     "check": "nessun pre-battle stamina gate",                    "expected": "start floor possibile sempre"},
+    {"id": "MQA-T-09", "area": "NoIAP",         "check": "nessun ticket / IAP / paywall",                     "expected": "floor entry free"},
+    {"id": "MQA-T-10", "area": "NoBackend",     "check": "nessuna chiamata API runtime",                      "expected": "0 network call al backend per Tower"},
+    {"id": "MQA-T-11", "area": "NoEconomy",     "check": "wallet/inventory non cambiano dopo clear",          "expected": "economy invariata"},
+    {"id": "MQA-T-12", "area": "Persistence",   "check": "chiusura/riapertura app preserva progress",         "expected": "AsyncStorage restore"},
+    {"id": "MQA-T-13", "area": "Reset (debug)", "check": "pulsante TEST 'Reset progress' funziona",           "expected": "progress azzerato"},
+    {"id": "MQA-T-14", "area": "TEST label",    "check": "label TEST/PLACEHOLDER visibile su tutta la schermata","expected": "banner TEST sempre visibile"},
+    {"id": "MQA-T-15", "area": "SafeArea",      "check": "safe-area iOS notch e Android",                     "expected": "contenuto non clippato"}
+  ],
+  "placeholder_replacement_plan": [
+    {"item": "tower_screen_background",         "current": "#10031d (solid color)", "future": "final 2D art lobby Tower"},
+    {"item": "floor icons",                    "current": "emoji set",            "future": "final SVG/PNG asset pack"},
+    {"item": "audio cues",                     "current": "WAV TEST manifest references (NOT attached runtime)", "future": "final audio engine + final WAV/OGG"},
+    {"item": "floor names",                    "current": "\"Floor 1 (TEST)\" generic",         "future": "narrative floor names + boss names"},
+    {"item": "backend runtime",                "current": "NONE",                 "future": "Tower runtime endpoints + DB collection tower_progress (server_id scoped quando multishard live)"},
+    {"item": "reward grant",                   "current": "badge UI only",         "future": "first-clear grant validato lato server con anti-replay"},
+    {"item": "combat integration",             "current": "simulazione TEST modal", "future": "chiamata combat engine reale con team selezionato"}
+  ],
+  "language": "it"
+}

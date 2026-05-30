@@ -1,0 +1,38 @@
+{
+  "task_id": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME",
+  "track": "B",
+  "track_name": "TOWER_RUNTIME_MVP_IMPLEMENTATION",
+  "verdict": "TRACK_B_TOWER_RUNTIME_MVP_IMPLEMENTATION_READY",
+  "mvp_scope": "frontend_test_mvp_only",
+  "description": "MVP TEST della Torre degli Inferi. Solo frontend. Nessun backend runtime, nessun DB write, nessuna economy mutation. Progresso locale via AsyncStorage. 20 floors. Boss ogni 5 floors. First-clear marker locale (simulato). TEST placeholder visibile su tutta la schermata.",
+  "floors": {
+    "count": 20,
+    "boss_every": 5,
+    "boss_floors": [5, 10, 15, 20],
+    "unlock_chain": "floor N unlocked when floor N-1 cleared (floor 1 always unlocked)"
+  },
+  "states_supported": ["locked", "unlocked", "completed"],
+  "reward_model": {
+    "first_clear_reward": "DESIGN_ONLY_DISPLAY (no economy mutation; nessun wallet update)",
+    "replay_reward": false,
+    "farming_possible": false,
+    "infinite_reward_path": false
+  },
+  "combat_integration": "NONE_RUNTIME (simulazione TEST; bottone Start → modal TEST con esito simulato; nessun call al backend combat engine)",
+  "stamina_or_ticket_cost": "NONE (no_stamina_canonical; pack 183 invariant preserved)",
+  "monetized_attempts": false,
+  "persistence": {
+    "layer": "AsyncStorage",
+    "key": "tower_of_the_hells_local_progress_v1",
+    "shape": {"highest_cleared_floor": "int", "updated_at": "iso8601"},
+    "db_writes": 0
+  },
+  "backend_endpoints_added": [],
+  "backend_runtime": false,
+  "runtime_audit_182_compatible": true,
+  "no_stamina_183_compatible": true,
+  "audio_placeholder_184_compatible": true,
+  "combat_finalize_187_compatible": true,
+  "server_profiles_191_compatible": true,
+  "language": "it"
+}

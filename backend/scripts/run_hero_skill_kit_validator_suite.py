@@ -25,6 +25,16 @@
 # PUBLIC_SYNC_TAG_RESYNC_v15c: suite_runner_server_profiles_sync_fix_v15c_2026_05_29_force_public_blob_refresh
 # PUBLIC_SYNC_TAG_RESYNC_v15d: suite_runner_server_profiles_sync_fix_v15d_2026_05_29_force_public_blob_refresh_large_comment_block
 # PUBLIC_SYNC_TAG_RESYNC_v15d_REASON: V1/V2 marker docs reached public main but suite runner remained stale; this marker is comment-only and exists only to force suite runner public sync; no logic change.
+# PUBLIC_SYNC_TAG_RESYNC_v16: suite_runner_tower_of_the_hells_runtime_v16_2026_05_29
+# RESYNC_v16 RATIONALE: Registrazione OPTIONAL del nuovo validator
+# validate_project_tower_of_the_hells_runtime_v1.py
+# (PROJECT_TOWER_OF_THE_HELLS_RUNTIME). Modalità Torre degli Inferi (mode_id =
+# tower_of_the_hells) MVP TEST frontend-only: nessun backend runtime, nessun
+# DB write, nessuna economy mutation, nessun grant gacha/IAP/BP/VIP/Shop,
+# nessun Artifact/Divine Weapon/Synergy V2/Status runtime, nessun server
+# profile live activation. Asset e audio = test_placeholder.
+# replace_before_release = true. 20 floors, boss ogni 5. Progress AsyncStorage
+# locale. First-clear reward = solo badge UI design-only (no economy).
 #
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_SERVER_PROFILES_V15D:
 # expected_validator_id = PROJECT-SERVER-PROFILES-LIVE-MULTISHARD
@@ -1372,6 +1382,16 @@ OPTIONAL = [
     # SYNC_FIX_v15c 2026_05_29: second public-main resync attempt after v15b stale; tuple count remains 1; no semantics change. Proof marker fix: data/design/server_profiles_live_multishard/server_profiles_suite_runner_sync_fix_v2_marker_v1.json
     # SYNC_FIX_v15d 2026_05_29: third public-main resync attempt with large comment-only diagnostic block; tuple count remains 1; no semantics change. Proof marker fix: data/design/server_profiles_live_multishard/server_profiles_suite_runner_sync_fix_v3_marker_v1.json
     ('PROJECT-SERVER-PROFILES-LIVE-MULTISHARD', 'validate_project_server_profiles_live_multishard_v1.py'),
+    # TOWER_OF_THE_HELLS_RUNTIME_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Sentinella inline TOWER OF THE HELLS RUNTIME — modalità Torre degli Inferi MVP TEST;
+    # mode_id=tower_of_the_hells; 20 floors design-only client-side; AsyncStorage local progress;
+    # asset_status/audio_status = test_placeholder; replace_before_release = true;
+    # zero backend runtime, zero DB writes, zero economy mutation, zero stamina,
+    # zero monetized attempts, zero farming; locks VIP/BP/Shop/ItemShop intatti;
+    # no Synergy V2 / Artifact / Divine Weapon / Status / VFX runtime activation;
+    # no server profile live; combat engine NON chiamato (simulazione TEST).
+    # Proof marker dedicato: data/design/tower_of_the_hells/tower_of_the_hells_runtime_suite_registration_proof_marker_v1.json
+    ('PROJECT-TOWER-OF-THE-HELLS-RUNTIME', 'validate_project_tower_of_the_hells_runtime_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

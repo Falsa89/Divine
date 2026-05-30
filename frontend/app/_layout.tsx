@@ -36,6 +36,7 @@ export default function RootLayout() {
           <Stack.Screen name="combat" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="story" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="tower" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="tower-of-the-hells" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="pvp" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="equipment" options={{ animation: 'slide_from_bottom' }} />
           <Stack.Screen name="guild" options={{ animation: 'slide_from_right' }} />

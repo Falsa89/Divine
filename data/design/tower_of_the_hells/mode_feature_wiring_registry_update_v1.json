@@ -1,0 +1,37 @@
+{
+  "task_id": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME",
+  "track": "E",
+  "track_name": "MODE_FEATURE_WIRING_REGISTRY_UPDATE",
+  "verdict": "TRACK_E_MODE_FEATURE_WIRING_REGISTRY_UPDATE_READY",
+  "description": "Aggiornamento del Mode/Feature Wiring Registry per Torre degli Inferi.",
+  "mode_entry": {
+    "mode_id": "tower_of_the_hells",
+    "display_name_it": "Torre degli Inferi",
+    "display_name_en": "Tower of the Hells",
+    "frontend_route": "/tower-of-the-hells",
+    "frontend_file": "frontend/app/tower-of-the-hells.tsx",
+    "floor_catalog_file": "frontend/constants/towerOfTheHellsFloors.ts",
+    "home_menu_label_key": "tower (label: 'Torre') \u2014 MD5_LOCKED da SF_MERGE; non modificato",
+    "home_menu_route_after_update": "/tower (invariato; punta a tower.tsx legacy con endpoint /api/tower/*)",
+    "new_canonical_route_for_this_pack": "/tower-of-the-hells (navigabile via deep-link o future menu update)",
+    "layout_stack_screen_name": "tower-of-the-hells",
+    "backend_runtime": false,
+    "db_writes": 0,
+    "db_collections": [],
+    "reward_model": "design_only_first_clear_badge",
+    "asset_status": "test_placeholder",
+    "audio_status": "test_placeholder",
+    "replace_before_release": true,
+    "stamina": "none (no_stamina canonical)",
+    "monetized_attempts": false,
+    "farming_possible": false,
+    "runtime_audit_182_compatible": true,
+    "introduced_in_pack": "PROJECT_TOWER_OF_THE_HELLS_RUNTIME",
+    "doc_ref": "docs/divine/195_TOWER_OF_THE_HELLS_RUNTIME.md"
+  },
+  "existing_orphan_links_resolved": [
+    {"location": "frontend/app/_layout.tsx", "before": "<Stack.Screen name='tower' ... /> (presente)", "after": "<Stack.Screen name='tower' ... /> (preservato) + <Stack.Screen name='tower-of-the-hells' ... /> (aggiunto)"},
+    {"location": "frontend/app/(tabs)/home.tsx menu 'tower' entry", "before": "router.push('/tower')", "after": "router.push('/tower') (INVARIATO, MD5_LOCKED SF_MERGE; nuova modalit\u00e0 raggiungibile via deep-link /tower-of-the-hells o futuro menu update non in scope di questo pack)"}
+  ],
+  "language": "it"
+}
