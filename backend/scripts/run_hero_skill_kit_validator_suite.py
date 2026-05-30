@@ -1536,6 +1536,10 @@ OPTIONAL = [
     # Proof marker: data/design/battle_report_replay_share/battle_report_replay_save_share_proof_marker_v1.json
     ('PROJECT-BATTLE-REPORT-REPLAY-SAVE-SHARE-FOUNDATION', 'validate_project_battle_report_replay_save_share_foundation_v1.py'),
     # PUBLIC_SYNC_TAG_v27_GEM_SOCKET_RUNTIME: pack PROJECT_GEM_SOCKET_RUNTIME 2026_05_30.
+    # PUBLIC_SYNC_TAG_RESYNC_v27b_GEM_SOCKET_RUNTIME: suite_runner_gem_socket_sync_fix_v27b_2026_05_30_force_blob_resnapshot
+    # SYNC_FIX_v27b 2026_05_30: micro-touch resync to force public main blob hash refresh; tuple count remains 1.
+    # Also re-asserts server.py registers gem_socket_preview_router (parent v27 commit if missing from public main).
+    # Pack PROJECT_GEM_SOCKET_RUNTIME_SYNC_FIX_PACK_v27b. No semantics change. No tuple add/remove. No validator logic change.
     # GEM_SOCKET_RUNTIME_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     # Foundation runtime PREVIEW-ONLY per Gemme Socket. Gemme = incastonabili nei gear (NON Rune, NON premium gems).
     # 6 famiglie (ruby/sapphire/emerald/topaz/amethyst/diamond), 6 tier (common..divine).

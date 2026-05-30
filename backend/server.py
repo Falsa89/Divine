@@ -535,6 +535,8 @@ from routes.material_raid_preview import router as material_raid_preview_router
 app.include_router(material_raid_preview_router)
 
 # PROJECT_GEM_SOCKET_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
+# PUBLIC_SYNC_TAG_v27_GEM_SOCKET_RUNTIME / PUBLIC_SYNC_TAG_RESYNC_v27b_GEM_SOCKET_RUNTIME
+# (do not remove; sentinels required for public sync verification of server.py blob).
 # Returns 503 when GEM_SOCKET_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
 # no mutation, no premium gems spend, no material spend, no live socket commit.
 # Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`).
