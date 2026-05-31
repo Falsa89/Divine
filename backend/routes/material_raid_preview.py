@@ -39,6 +39,18 @@ router = APIRouter(prefix="/api/material-raid", tags=["material_raid"])
 # Tracks canonici (5 totali). v31 Mega Batch Acceleration 1 Track B unlock:
 # gem_material_raid passa da locked_deferred a open_preview (preview-only).
 # Rune e Artifact/Divine restano locked_deferred (preview-only, runtime futuro).
+# ----------------------------------------------------------------------------
+# MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR_v31b: this comment block exists to
+# force a public GitHub main blob refresh of material_raid_preview.py after the
+# v31 parent push left this file stale on public main (gem_material_raid was
+# still showing locked_deferred on public despite local open_preview). No logic
+# change. No reward grant. No DB write. No premium users.gems usage. No stamina
+# spend. No tickets spend. No paid attempts. Gem Socket commit disabled. Rune
+# runtime untouched. Artifact runtime untouched. Divine Weapon runtime untouched.
+# Material Raid live claim remains disabled (preview-only). Gem track now
+# open_preview. Rune track still locked_deferred. Artifact/Divine still locked.
+# MATERIAL_RAID_GEM_TRACK_PREVIEW_UNLOCK_REGISTRATION_SENTINEL_v31b (do not remove).
+# ----------------------------------------------------------------------------
 MATERIAL_RAID_TRACKS = [
     {"track_id": "gear_material_raid",            "label_it": "Raid Materiali Gear",          "runtime_state": "open_preview"},
     {"track_id": "hero_growth_raid",              "label_it": "Raid Crescita Eroe",            "runtime_state": "open_preview"},

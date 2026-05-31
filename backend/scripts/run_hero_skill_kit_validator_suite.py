@@ -1,5 +1,51 @@
 #!/usr/bin/env python3
 # ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR_v31b
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_RESYNC_v31b_MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR
+# MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR_REGISTRATION_SENTINEL
+# ----------------------------------------------------------------------------
+# MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR_PACK_v31b
+# Parent: MEGA_BATCH_ACCELERATION_1_STORY_PREVIEW_MATERIAL_RAID_GEM_GUIDE_REGISTRY_PACK
+# Parent commit: 5a7c8e1e184ca7ef4b2172103732fac6caa4f99c
+#
+# Repair scope: public GitHub main suite_runner blob received the v31 top-level
+# diagnostic block but did NOT receive the 5 OPTIONAL tuples introduced by v31.
+# This v31b block applies the same STRONGER strategy that finally worked for the
+# v29 series (top diagnostic block + tuples already near TOP of OPTIONAL).
+# Local state already has all 5 tuples count=1 in OPTIONAL near the top; this
+# block is intentionally large and uniquely worded to force public blob refresh.
+#
+# Tuples that MUST appear in public suite runner (count=1 each, OPTIONAL tier):
+#   PROJECT-STORY-BATTLE-INSTANCE-PREVIEW-ENDPOINT
+#   PROJECT-MATERIAL-RAID-GEM-TRACK-PREVIEW-UNLOCK
+#   PROJECT-MODE-BATTLE-ENTRYPOINT-REGISTRY-EXPANSION
+#   PROJECT-GUIDE-CODEX-FILL-GAPS
+#   MEGA-BATCH-ACCELERATION-1-ROLLUP
+#
+# Safety booleans (unchanged from v31):
+#   - runtime_semantics_changed:                          false
+#   - db_writes:                                          0
+#   - story_runtime_conversion:                           false
+#   - story_tsx_changed:                                  false
+#   - combat_tsx_changed:                                 false
+#   - home_routes_changed:                                false
+#   - battle_engine_changed:                              false
+#   - /api/story/battle changed:                          false
+#   - /api/battle/simulate changed:                       false
+#   - reward/EXP/story_progress/quest/daily/achievement:  false
+#   - economy / gacha / pity / shop / BP / VIP / IAP:     false
+#   - material_raid_live_claim_enabled:                   false
+#   - gem_socket_commit_enabled:                          false
+#   - rune/artifact/divine_weapon/guild_war runtime:      false
+#   - validator weakening:                                false
+#   - tuple duplicate:                                    false
+#   - fake PASS:                                          false
+#
+# If public blob still stale after v31b: classify as
+#   MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR_v31b_PLATFORM_BUG_ESCALATE
+# and recommend manual GitHub edit or alternative sync mechanism.
+# ============================================================================
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_BATCH_ACCELERATION_1_v31
 # ----------------------------------------------------------------------------
 # PUBLIC_SYNC_TAG_v31_MEGA_BATCH_ACCELERATION_1
@@ -492,6 +538,7 @@ OPTIONAL = [
     ('PROJECT-STORY-VISUAL-BATTLE-WIRING-CONTRACT', 'validate_project_story_visual_battle_wiring_contract_v1.py'),
     # ========================================================================
     # PUBLIC_SYNC_TAG_v31_MEGA_BATCH_ACCELERATION_1
+    # PUBLIC_SYNC_TAG_RESYNC_v31b_MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR
     # MEGA_BATCH_ACCELERATION_1_REGISTRATION_SENTINEL
     # ------------------------------------------------------------------------
     # MEGA_BATCH_ACCELERATION_1_STORY_PREVIEW_MATERIAL_RAID_GEM_GUIDE_REGISTRY_PACK
