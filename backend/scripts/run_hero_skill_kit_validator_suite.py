@@ -763,6 +763,77 @@ OPTIONAL = [
     ('PROJECT-MATERIAL-RAID-CLAIM-SAFETY-HARDENING', 'validate_project_material_raid_claim_safety_hardening_v1.py'),
     ('PROJECT-ECONOMY-IDEMPOTENCY-AND-ATOMIC-COMMIT-CONTRACT', 'validate_project_economy_idempotency_and_atomic_commit_contract_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-1-v37-ROLLUP', 'validate_mega_economy_safety_acceleration_1_v37_rollup.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v38_MEGA_ECONOMY_SAFETY_ACCELERATION_2
+    # PUBLIC_SYNC_TAG_v38_MEGA_ECONOMY_SAFETY_ACCELERATION_2
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_2_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_2_GEAR_FORGE_AND_RUNE_HARDENING_PACK_v38
+    # (combo pack, 2 build-system tracks + registry v2 + rollup). All OPTIONAL,
+    # count=1 each.
+    # ------------------------------------------------------------------------
+    # TRACK A: PROJECT_GEAR_FORGE_FUSION_COMMIT_SAFETY_HARDENING_PACK (PHASE_8A).
+    # BUILD_SYSTEM_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT. New
+    # gated route at /api/gear-forge-fusion-safety-preview/* (config GET,
+    # validate-request POST, guard-plan-preview POST, idempotency-preview POST).
+    # Default 503 disabled. Feature flag:
+    # GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED. operation_family =
+    # gear_forge_fusion_commit. allowed_operation_types: gear_upgrade,
+    # gear_fusion, gear_reforge_preview. db_writes=0. No live commit. No gear
+    # mutation. No material/currency consumption. No premium users.gems use.
+    # No BP Delta trigger. No call to battle_engine. No call to
+    # /api/battle/simulate or /api/story/battle. backend/routes/forge.py
+    # UNCHANGED.
+    # ------------------------------------------------------------------------
+    # TRACK B: PROJECT_RUNE_SCROLL_TALISMAN_COMMIT_SAFETY_HARDENING_PACK
+    # (PHASE_8B). BUILD_SYSTEM_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_
+    # COMMIT. New gated route at /api/rune-scroll-talisman-safety-preview/*
+    # (config GET, validate-request POST, guard-plan-preview POST,
+    # idempotency-preview POST). Default 503 disabled. Feature flag:
+    # RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED. operation_family =
+    # rune_scroll_talisman_commit. allowed_operation_types: rune_equip,
+    # rune_replace, rune_unsocket, rune_fuse, rune_upgrade. Canonical
+    # distinction explicit: Rune (scroll/talismani/pergamene/sigilli on hero)
+    # is NOT Gemme, NOT Artifact, NOT Divine Weapon. db_writes=0. No live
+    # commit. No hero rune slot mutation. No rune inventory mutation. No
+    # material/currency consumption. No premium users.gems use. No BP Delta
+    # trigger. backend/routes/forge.py UNCHANGED.
+    # ------------------------------------------------------------------------
+    # TRACK C: PROJECT_BUILD_SYSTEM_ECONOMY_SAFETY_REGISTRY_v2.
+    # DESIGN_CONTRACT_AUDIT_ONLY. Shared registry v2 extends v37 framework to
+    # 4 active safety-layered operation families + 4 placeholders. Global:
+    # build_system_safety_hardening_v38_ready=true,
+    # live_commit_allowed_in_this_pack=false, db_writes=0,
+    # bp_delta_runtime_enabled=false. No new backend route in this track.
+    # ------------------------------------------------------------------------
+    # ROLLUP: MEGA-ECONOMY-SAFETY-ACCELERATION-2-v38-ROLLUP runs Track A/B
+    # validators back-to-back and asserts the 5 MD5-locked core files, the 3
+    # suite tuple counts (count=1 each), registry v2 coherence, v37 shared
+    # contract still present, forge.py unchanged. No fake PASS. No validator
+    # weakening. No tuple duplicate.
+    # ------------------------------------------------------------------------
+    # Files:
+    #   Route A:   backend/routes/gear_forge_fusion_safety_preview.py
+    #   Route B:   backend/routes/rune_scroll_talisman_safety_preview.py
+    #   Design A:  data/design/gear_forge/gear_forge_fusion_commit_safety_hardening_v1.json
+    #   Schema A:  data/design/gear_forge/gear_forge_fusion_commit_request_schema_v1.json
+    #   Guard A:   data/design/gear_forge/gear_forge_fusion_guard_policy_v1.json
+    #   Proof A:   data/design/gear_forge/gear_forge_fusion_safety_proof_marker_v1.json
+    #   Design B:  data/design/rune_scroll_talisman/rune_scroll_talisman_commit_safety_hardening_v1.json
+    #   Schema B:  data/design/rune_scroll_talisman/rune_scroll_talisman_commit_request_schema_v1.json
+    #   Guard B:   data/design/rune_scroll_talisman/rune_scroll_talisman_guard_policy_v1.json
+    #   Proof B:   data/design/rune_scroll_talisman/rune_scroll_talisman_safety_proof_marker_v1.json
+    #   Registry:  data/design/economy_safety/build_system_economy_safety_registry_v2.json
+    #   Rollup:    data/design/economy_safety/mega_economy_safety_acceleration_2_v38_rollup_marker_v1.json
+    #   Doc 242:   docs/divine/242_GEAR_FORGE_FUSION_COMMIT_SAFETY_HARDENING.md
+    #   Doc 243:   docs/divine/243_RUNE_SCROLL_TALISMAN_COMMIT_SAFETY_HARDENING.md
+    #   Doc 244:   docs/divine/244_MEGA_ECONOMY_SAFETY_ACCELERATION_2_v38.md
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. No v38b/v38c sync-fix pack will be attempted.
+    # ========================================================================
+    ('PROJECT-GEAR-FORGE-FUSION-COMMIT-SAFETY-HARDENING', 'validate_project_gear_forge_fusion_commit_safety_hardening_v1.py'),
+    ('PROJECT-RUNE-SCROLL-TALISMAN-COMMIT-SAFETY-HARDENING', 'validate_project_rune_scroll_talisman_commit_safety_hardening_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-2-v38-ROLLUP', 'validate_mega_economy_safety_acceleration_2_v38_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

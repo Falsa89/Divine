@@ -603,6 +603,10 @@ from routes.gem_socket_commit_safety_preview import router as gem_socket_commit_
 app.include_router(gem_socket_commit_safety_preview_router)
 from routes.material_raid_claim_safety_preview import router as material_raid_claim_safety_preview_router
 app.include_router(material_raid_claim_safety_preview_router)
+from routes.gear_forge_fusion_safety_preview import router as gear_forge_fusion_safety_preview_router
+app.include_router(gear_forge_fusion_safety_preview_router)
+from routes.rune_scroll_talisman_safety_preview import router as rune_scroll_talisman_safety_preview_router
+app.include_router(rune_scroll_talisman_safety_preview_router)
 
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background

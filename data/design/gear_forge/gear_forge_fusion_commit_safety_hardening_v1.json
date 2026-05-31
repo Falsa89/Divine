@@ -1,0 +1,42 @@
+{
+  "pack": "PROJECT_GEAR_FORGE_FUSION_COMMIT_SAFETY_HARDENING_PACK",
+  "version": 1,
+  "phase": "PHASE_8A_GEAR_FORGE_FUSION_COMMIT_SAFETY_HARDENING",
+  "created_at_utc": "2026-05-31T20:00:00Z",
+  "mode": "BUILD_SYSTEM_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT",
+  "feature_flag": "GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED",
+  "default_runtime_enabled": false,
+  "default_http_status": 503,
+  "operation_family": "gear_forge_fusion_commit",
+  "allowed_operation_types": ["gear_upgrade", "gear_fusion", "gear_reforge_preview"],
+  "endpoint_namespace": "/api/gear-forge-fusion-safety-preview",
+  "endpoints": [
+    {"method":"GET","path":"/api/gear-forge-fusion-safety-preview/config"},
+    {"method":"POST","path":"/api/gear-forge-fusion-safety-preview/validate-request"},
+    {"method":"POST","path":"/api/gear-forge-fusion-safety-preview/guard-plan-preview"},
+    {"method":"POST","path":"/api/gear-forge-fusion-safety-preview/idempotency-preview"}
+  ],
+  "safety_invariants": {
+    "commit_enabled": false,
+    "live_mutation_enabled": false,
+    "gear_mutation_enabled": false,
+    "materials_consumed": false,
+    "currency_consumed": false,
+    "premium_gems_currency_used": false,
+    "bp_delta_triggered": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "stamina_consumed": false,
+    "tickets_consumed": false,
+    "calls_battle_engine": false,
+    "calls_api_battle_simulate": false,
+    "calls_api_story_battle": false,
+    "calls_forge_legacy": false
+  },
+  "existing_systems_unchanged": [
+    "backend/routes/forge.py",
+    "backend/routes/gem_socket_preview.py",
+    "backend/routes/gem_socket_commit_safety_preview.py"
+  ]
+}

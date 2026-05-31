@@ -1,0 +1,39 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_2_GEAR_FORGE_AND_RUNE_HARDENING_PACK_v38",
+  "version": 1,
+  "phase": "MEGA_BATCH_ECONOMY_SAFETY_ACCELERATION_2",
+  "runtime_activation": false,
+  "db_writes": 0,
+  "bp_delta_runtime_enabled": false,
+  "track_a": {
+    "pack": "PROJECT_GEAR_FORGE_FUSION_COMMIT_SAFETY_HARDENING_PACK",
+    "route": "backend/routes/gear_forge_fusion_safety_preview.py",
+    "design": "data/design/gear_forge/gear_forge_fusion_commit_safety_hardening_v1.json",
+    "schema": "data/design/gear_forge/gear_forge_fusion_commit_request_schema_v1.json",
+    "guard_policy": "data/design/gear_forge/gear_forge_fusion_guard_policy_v1.json",
+    "proof_marker": "data/design/gear_forge/gear_forge_fusion_safety_proof_marker_v1.json",
+    "validator": "backend/scripts/validate_project_gear_forge_fusion_commit_safety_hardening_v1.py",
+    "suite_tuple": "PROJECT-GEAR-FORGE-FUSION-COMMIT-SAFETY-HARDENING",
+    "feature_flag": "GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED"
+  },
+  "track_b": {
+    "pack": "PROJECT_RUNE_SCROLL_TALISMAN_COMMIT_SAFETY_HARDENING_PACK",
+    "route": "backend/routes/rune_scroll_talisman_safety_preview.py",
+    "design": "data/design/rune_scroll_talisman/rune_scroll_talisman_commit_safety_hardening_v1.json",
+    "schema": "data/design/rune_scroll_talisman/rune_scroll_talisman_commit_request_schema_v1.json",
+    "guard_policy": "data/design/rune_scroll_talisman/rune_scroll_talisman_guard_policy_v1.json",
+    "proof_marker": "data/design/rune_scroll_talisman/rune_scroll_talisman_safety_proof_marker_v1.json",
+    "validator": "backend/scripts/validate_project_rune_scroll_talisman_commit_safety_hardening_v1.py",
+    "suite_tuple": "PROJECT-RUNE-SCROLL-TALISMAN-COMMIT-SAFETY-HARDENING",
+    "feature_flag": "RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED"
+  },
+  "track_c": {
+    "pack": "PROJECT_BUILD_SYSTEM_ECONOMY_SAFETY_REGISTRY_v2",
+    "registry": "data/design/economy_safety/build_system_economy_safety_registry_v2.json"
+  },
+  "rollup": {
+    "validator": "backend/scripts/validate_mega_economy_safety_acceleration_2_v38_rollup.py",
+    "suite_tuple": "MEGA-ECONOMY-SAFETY-ACCELERATION-2-v38-ROLLUP"
+  },
+  "public_sync_caveat": "SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION accepted. No v38b/v38c sync-fix pack."
+}

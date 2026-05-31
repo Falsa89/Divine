@@ -1,0 +1,43 @@
+{
+  "schema": "gear_forge_fusion_commit_request_schema_v1",
+  "version": 1,
+  "operation_family": "gear_forge_fusion_commit",
+  "allowed_operation_types": ["gear_upgrade", "gear_fusion", "gear_reforge_preview"],
+  "required_fields": [
+    "request_id",
+    "idempotency_key",
+    "operation_type",
+    "user_id",
+    "server_id",
+    "base_gear_instance_id",
+    "fodder_gear_instance_ids",
+    "target_level",
+    "target_rarity",
+    "expected_base_gear_version",
+    "expected_inventory_version",
+    "expected_materials_version",
+    "client_trace_id",
+    "created_at"
+  ],
+  "field_types": {
+    "request_id": "string",
+    "idempotency_key": "string",
+    "operation_type": "enum(gear_upgrade,gear_fusion,gear_reforge_preview)",
+    "user_id": "string",
+    "server_id": "string",
+    "base_gear_instance_id": "string",
+    "fodder_gear_instance_ids": "array<string>",
+    "target_level": "integer",
+    "target_rarity": "integer",
+    "expected_base_gear_version": "integer",
+    "expected_inventory_version": "integer",
+    "expected_materials_version": "integer",
+    "client_trace_id": "string",
+    "created_at": "iso8601_string"
+  },
+  "constraints": {
+    "fodder_gear_instance_ids_unique": true,
+    "base_gear_instance_id_not_in_fodder": true,
+    "idempotency_key_required": true
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "registry": "build_system_economy_safety_registry_v2",
+  "version": 2,
+  "supersedes": "economy_idempotency_and_atomic_commit_contract_v1",
+  "phase": "BUILD_SYSTEM_SAFETY_HARDENING_v38",
+  "created_at_utc": "2026-05-31T20:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "global": {
+    "build_system_safety_hardening_v38_ready": true,
+    "live_commit_allowed_in_this_pack": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "materials_consumed": false,
+    "premium_currency_used": false,
+    "bp_delta_runtime_enabled": false
+  },
+  "shared_economy_contract_v1_reference": "data/design/economy_safety/economy_idempotency_and_atomic_commit_contract_v1.json",
+  "operation_families": {
+    "gem_socket_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v37_track_a",
+      "safety_route": "backend/routes/gem_socket_commit_safety_preview.py",
+      "feature_flag": "GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED",
+      "namespace": "/api/gem-socket-commit-safety-preview",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "material_raid_claim": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v37_track_b",
+      "safety_route": "backend/routes/material_raid_claim_safety_preview.py",
+      "feature_flag": "MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED",
+      "namespace": "/api/material-raid-claim-safety-preview",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "gear_forge_fusion_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v38_track_a",
+      "safety_route": "backend/routes/gear_forge_fusion_safety_preview.py",
+      "feature_flag": "GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED",
+      "namespace": "/api/gear-forge-fusion-safety-preview",
+      "allowed_operation_types": ["gear_upgrade", "gear_fusion", "gear_reforge_preview"],
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false,
+      "gear_mutation_enabled": false,
+      "materials_consumed": false,
+      "currency_consumed": false,
+      "premium_gems_currency_used": false,
+      "forge_legacy_route_unchanged": true
+    },
+    "rune_scroll_talisman_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v38_track_b",
+      "safety_route": "backend/routes/rune_scroll_talisman_safety_preview.py",
+      "feature_flag": "RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED",
+      "namespace": "/api/rune-scroll-talisman-safety-preview",
+      "allowed_operation_types": ["rune_equip", "rune_replace", "rune_unsocket", "rune_fuse", "rune_upgrade"],
+      "canonical_distinction": {
+        "rune_is": "scroll/talismani/pergamene/sigilli equipped on the hero",
+        "rune_is_not_gemme": true,
+        "rune_is_not_artifact": true,
+        "rune_is_not_divine_weapon": true
+      },
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false,
+      "hero_rune_slot_mutation_enabled": false,
+      "rune_inventory_mutation_enabled": false,
+      "materials_consumed": false,
+      "currency_consumed": false,
+      "premium_gems_currency_used": false,
+      "forge_legacy_route_unchanged": true
+    },
+    "artifact_upgrade_commit": {
+      "status": "placeholder_no_safety_layer_yet",
+      "phase": "future",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "divine_weapon_upgrade_commit": {
+      "status": "placeholder_no_safety_layer_yet",
+      "phase": "future",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "battle_pass_reward_claim": {
+      "status": "placeholder_no_safety_layer_yet",
+      "phase": "future",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "mail_reward_claim": {
+      "status": "placeholder_no_safety_layer_yet",
+      "phase": "future",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    }
+  }
+}
