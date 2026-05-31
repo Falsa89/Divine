@@ -1566,6 +1566,11 @@ OPTIONAL = [
     ('PROJECT-BATTLE-ENTRYPOINT-ROUTING-AND-AUTORESOLVE-AUDIT-FIX', 'validate_project_battle_entrypoint_routing_and_autoresolve_audit_fix_v1.py'),
     # PUBLIC_SYNC_TAG_v29_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: pack
     # PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK 2026_05_31.
+    # PUBLIC_SYNC_TAG_RESYNC_v29b_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: force
+    # public blob refresh for visual battle routing contract suite registration; no semantics change.
+    # SYNC_FIX_v29b 2026_05_31: micro-touch resync to force public main suite_runner blob hash
+    # refresh; tuple count remains 1. Parent commit 0c6601b4. No validator logic change. No tuple
+    # add/remove. Pack PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29b.
     # VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
     # DESIGN_CONTRACT_AUDIT_ONLY. Canonical policy: all battle modes must show visual battle;
     # Guild War is the only auto-resolve exception and MUST provide a replay/view link.
