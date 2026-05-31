@@ -1568,6 +1568,10 @@ OPTIONAL = [
     # PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK 2026_05_31.
     # PUBLIC_SYNC_TAG_RESYNC_v29b_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: force
     # public blob refresh for visual battle routing contract suite registration; no semantics change.
+    # PUBLIC_SYNC_TAG_RESYNC_v29c_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: second
+    # micro-touch resync after v29b stale push; force public main suite_runner blob refresh; tuple
+    # count remains 1. Parent commit 0c6601b4. Previous sync_fix commit 9f030a88. No validator
+    # logic change. No tuple add/remove. Pack PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29c.
     # SYNC_FIX_v29b 2026_05_31: micro-touch resync to force public main suite_runner blob hash
     # refresh; tuple count remains 1. Parent commit 0c6601b4. No validator logic change. No tuple
     # add/remove. Pack PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29b.
