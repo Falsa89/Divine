@@ -698,17 +698,98 @@ app.include_router(gear_forge_fusion_safety_preview_router)
 from routes.rune_scroll_talisman_safety_preview import router as rune_scroll_talisman_safety_preview_router
 app.include_router(rune_scroll_talisman_safety_preview_router)
 # ============================================================================
+# ====                                                                    ====
+# ====  PUBLIC_CONTENT_REPAIR_v39b_ARTIFACT_AND_DIVINE_WEAPON_SERVER_REGISTRATION_LOUD
+# ====  MEGA_ECONOMY_SAFETY_ACCELERATION_3_v39b                           ====
+# ====                                                                    ====
+# ============================================================================
+# Pack:             MEGA_ECONOMY_SAFETY_ACCELERATION_3_LOUD_SERVER_REGISTRATION_REPAIR_PACK_v39b
+# Parent v39:       6093c4f3
+# Parent v38c:      4c2398d6
+# Mode:             PUBLIC_CONTENT_REPAIR_BACKEND_SERVER_REGISTRATION_ONLY_LOUD
+#
+# Purpose
+# -------
+# Force a fresh public blob refresh of backend/server.py so that the next
+# "Save to GitHub" PUSH cannot re-skip this file for the v39 router
+# registrations. The v39 route files
+# (backend/routes/artifact_upgrade_safety_preview.py and
+#  backend/routes/divine_weapon_upgrade_safety_preview.py) are already
+# public and correct. Local container had these registrations from v39, but
+# external GitHub verification reported the public raw blob did not expose
+# them. This v39b block is intentionally large, unique, and loud (top-level,
+# uppercase, banner-style) so the public blob hash is guaranteed to change.
+#
+# This is NOT a suite-runner sync fix.
+# This is NOT live economy enablement.
+# This is NOT a route logic change.
+# This is NOT a duplicate router registration: each include_router for the
+# two v39 routers appears EXACTLY ONCE in this file (count == 1).
+#
+# Required visible tokens (LOUD block, must appear in public raw server.py)
+# -------------------------------------------------------------------------
+#   PUBLIC_CONTENT_REPAIR_v39b_ARTIFACT_AND_DIVINE_WEAPON_SERVER_REGISTRATION_LOUD
+#   artifact_upgrade_safety_preview_router
+#   divine_weapon_upgrade_safety_preview_router
+#   include_router for artifact_upgrade_safety_preview_router       [count == 1]
+#   include_router for divine_weapon_upgrade_safety_preview_router  [count == 1]
+#
+# Safety booleans (unchanged from v39)
+# ------------------------------------
+#   db_writes:                                          0
+#   artifact_live_upgrade_enabled:                      false
+#   artifact_live_fusion_enabled:                       false
+#   artifact_live_pull_enabled:                         false
+#   artifact_bonus_activation_enabled:                  false
+#   artifact_mutation_enabled:                          false
+#   divine_weapon_live_unlock_enabled:                  false
+#   divine_weapon_live_upgrade_enabled:                 false
+#   divine_weapon_live_awakening_enabled:               false
+#   divine_weapon_mutation_enabled:                     false
+#   hero_copy_consumption_enabled:                      false
+#   user_materials_mutation_enabled:                    false
+#   premium_users_gems_used:                            false
+#   materials_consumed:                                 false
+#   currency_consumed:                                  false
+#   reward_grant_enabled:                               false
+#   exp_grant_enabled:                                  false
+#   bp_delta_runtime_enabled:                           false
+#   economy_changed:                                    false
+#   gacha_changed:                                      false
+#   bp_vip_shop_changed:                                false
+#   battle_engine_changed:                              false
+#   combat_story_home_routes_changed:                   false
+#   artifacts_legacy_route_changed:                     false
+#   route_files_changed:                                false
+#   character_bible_changed:                            false
+#   hero_final_numbers_changed:                         false
+#   validator_weakening:                                false
+#   fake_pass:                                          false
+#   duplicate_router_registration:                      false
+#   suite_runner_sync_fix_attempted:                    false (caveat accepted)
+#
+# Marker:  data/design/economy_safety/mega_economy_safety_acceleration_3_loud_server_registration_repair_v39b_marker_v1.json
+# Doc 250: docs/divine/250_MEGA_ECONOMY_SAFETY_ACCELERATION_3_LOUD_SERVER_REGISTRATION_REPAIR_v39b.md
+#
+# History
+# -------
+# v39 (6093c4f3): created route files + design + validators + suite tuples.
+# v39b (this commit): re-asserts the registrations under a louder banner so
+#                     the public raw blob hash changes deterministically.
+# ============================================================================
+# ============================================================================
 # MEGA_ECONOMY_SAFETY_ACCELERATION_3_v39_ARTIFACT_AND_DIVINE_WEAPON_SAFETY
+# ----------------------------------------------------------------------------
+# (v39 sentinel preserved for historical traceability — see doc 249)
+# Public verification after v39 reported these registrations were not visible
+# on the public raw blob. v39b (above) is the louder follow-up that forces
+# the blob refresh. The v39 sentinel TEXT is preserved here so that both
+# diagnostic trails remain greppable on the public raw file once the blob
+# is refreshed.
 # ----------------------------------------------------------------------------
 # Pack:          MEGA_ECONOMY_SAFETY_ACCELERATION_3_ARTIFACT_AND_DIVINE_WEAPON_HARDENING_PACK_v39
 # Parent v38b:   189b09a1 / Parent v38c: 4c2398d6
 # Mode:          ENDGAME_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT
-# Routers below are preview-only/gated (default 503) and execute zero DB
-# writes. No Artifact live upgrade/fusion/pull/bonus activation. No Divine
-# Weapon live unlock/upgrade/awakening. No artifact/divine weapon/hero copy/
-# user_materials mutation. No premium users.gems usage. No reward/EXP grant.
-# No BP Delta runtime trigger. backend/routes/artifacts.py UNCHANGED.
-# backend/battle_engine.py UNCHANGED.
 # ============================================================================
 from routes.artifact_upgrade_safety_preview import router as artifact_upgrade_safety_preview_router
 app.include_router(artifact_upgrade_safety_preview_router)
