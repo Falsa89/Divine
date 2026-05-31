@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-31T18:51:18.077605+00:00",
+  "timestamp_utc": "2026-05-31T19:12:28.660705+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1148,
+  "backend_python_files_scanned": 1154,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 536,
+      "files_with_hits": 541,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -133,11 +133,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 124
+      "user_id_only_files_count": 129
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 130,
+      "files_with_hits": 132,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -237,11 +237,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 20
+      "user_id_only_files_count": 22
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 267,
+      "files_with_hits": 272,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -288,6 +288,18 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_project_economy_idempotency_and_atomic_commit_contract_v1.py",
+          "keyword": "inventory",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 168,
+              "snippet": "'gem_inventory_mutation_in_preview',"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_af2n_v17_preflight.py",
           "keyword": "user_gift_inventory",
           "has_server_id_anywhere": false,
@@ -326,30 +338,10 @@
               "snippet": "n = db['user_gift_inventory'].count_documents(flt)"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/validate_project_artifact_inventory_gated_import_v1.py",
-          "keyword": "inventory",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 3,
-              "snippet": "PROJECT_ARTIFACT_INVENTORY_GATED_IMPORT master validator."
-            },
-            {
-              "line": 23,
-              "snippet": "RUNNER = ROOT / 'backend/scripts/artifact_inventory_gated_import_apply.py'"
-            },
-            {
-              "line": 39,
-              "snippet": "assert a['live_markers_observed_in_env']['PROJECT_ARTIFACT_INVENTORY_LIVE_APPROVAL'] == 'ABSENT'"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 73
+      "user_id_only_files_count": 78
     },
     "currencies": {
       "expected_scope": "server_bound",
@@ -633,7 +625,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 97,
+      "files_with_hits": 98,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -749,7 +741,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 19
+      "user_id_only_files_count": 20
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -849,7 +841,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 74,
+      "files_with_hits": 75,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -953,7 +945,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 7
+      "user_id_only_files_count": 8
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
@@ -1452,7 +1444,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 395,
+  "cross_server_leak_risk_candidates_count": 409,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1462,6 +1454,11 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/battle_engine.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/scripts/validate_project_economy_idempotency_and_atomic_commit_contract_v1.py",
       "keyword": "user"
     },
     {
@@ -1526,6 +1523,11 @@
     },
     {
       "category": "accounts_users_auth",
+      "file": "backend/scripts/validate_project_material_raid_claim_safety_hardening_v1.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
       "file": "backend/scripts/validate_project_d_housing_resolver_stub_caps_v1.py",
       "keyword": "user"
     },
@@ -1542,16 +1544,6 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/scripts/run_af2n_stress_2x_v26.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/scripts/run_af2n_stage1_k6_prep_probe.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/scripts/validate_affinity_gift_spend_idempotency_ledger_contract.py",
       "keyword": "user"
     }
   ],
