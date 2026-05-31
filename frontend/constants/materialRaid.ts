@@ -28,7 +28,9 @@ export type MaterialRaidTrack = {
 export const MATERIAL_RAID_TRACKS: MaterialRaidTrack[] = [
   { track_id: 'gear_material_raid',            label_it: 'Raid Materiali Gear',           description_it: 'Fonte primaria per gear dust/shard/core/essence/orb.',          runtime_state: 'open_preview' },
   { track_id: 'hero_growth_raid',              label_it: 'Raid Crescita Eroe',             description_it: 'Materiali per hero level/star/ascension.',                       runtime_state: 'open_preview' },
-  { track_id: 'gem_material_raid',             label_it: 'Raid Materiali Gemme',           description_it: 'Materiali per gem socket/upgrade. Sbloccato con Gem Socket pack.',runtime_state: 'locked_deferred' },
+  // v31 Mega Batch Acceleration 1 Track B: gem_material_raid preview unlock.
+  // preview-only; no live claim; no premium users.gems; no Gem Socket commit; no stamina/tickets.
+  { track_id: 'gem_material_raid',             label_it: 'Raid Materiali Gemme',           description_it: 'Materiali per gem socket/upgrade (preview-only, non-final).',     runtime_state: 'open_preview' },
   { track_id: 'rune_material_raid',            label_it: 'Raid Materiali Rune',             description_it: 'Materiali per rune/scroll/talisman. Sbloccato con Rune pack.',  runtime_state: 'locked_deferred' },
   { track_id: 'artifact_divine_material_raid', label_it: 'Raid Materiali Artefatto/Divino', description_it: 'Frammenti per artifact e divine weapon 6★. Locked.',           runtime_state: 'locked_deferred' },
 ];

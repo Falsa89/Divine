@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "pack": "MEGA_BATCH_ACCELERATION_1 TRACK D",
+  "mode": "content_foundation_only",
+  "runtime_wiring_changed": false,
+  "home_changed": false,
+  "menu_changed": false,
+  "tutorial_unlock_changed": false,
+  "topics": [
+    {
+      "id": "story_visual_battle_transition",
+      "title_it": "Story — transizione a battaglia visuale",
+      "summary_it": "Le battaglie Story oggi si risolvono in auto-resolve invisibile. La direzione canonica è mostrare la battaglia visuale per ogni stage. La transizione passerà da un endpoint preview (PHASE_2) a una sandbox (PHASE_3) a una canary dual-route (PHASE_4) prima dell'attivazione runtime (PHASE_5).",
+      "key_rules": [
+        "Niente reward duplicati: ogni battle_instance_id concede reward al massimo una volta.",
+        "Niente EXP duplicato.",
+        "Niente avanzamento story progress duplicato.",
+        "Il replay/view del risultato non concede mai reward né avanza progressi."
+      ]
+    },
+    {
+      "id": "battle_report_replay_save_share",
+      "title_it": "Battle Report — Replay, Salva, Condividi",
+      "summary_it": "Il replay visuale è puramente lato client e non riavvia la battaglia per ottenere reward. Il Save è locale (storage del dispositivo). Il Share avviene come testo, senza esporre PII o dati account privati.",
+      "key_rules": [
+        "replay = view-only, niente reward.",
+        "save = locale, niente upload server.",
+        "share = testo, niente account secrets."
+      ]
+    },
+    {
+      "id": "gear",
+      "title_it": "Gear — Equipaggiamento",
+      "summary_it": "Il livello Gear cap è stato esteso a +50 (preview). Il Forge supporta forge/fusion/reforge in modalità preview-only: nessun live commit dei materiali fino a quando il pack di safety hardening non sarà spedito.",
+      "key_rules": [
+        "Forge live disabilitato dove applicabile.",
+        "Nessun consumo reale di materiali in preview.",
+        "Lo stack Gear è separato da Gemme, Rune, Artifact e Divine Weapon."
+      ]
+    },
+    {
+      "id": "gemme",
+      "title_it": "Gemme — Socket nel Gear",
+      "summary_it": "Le Gemme sono pietre che si incastonano negli slot socket dell'equipaggiamento Gear. NON sono la valuta premium 'gems' (`users.gems`) e NON sono Rune.",
+      "key_rules": [
+        "Gemme = socket nel gear/equip.",
+        "Gemme ≠ valuta premium (`users.gems`).",
+        "Gemme ≠ Rune (scroll/talisman/pergamene/sigilli)."
+      ]
+    },
+    {
+      "id": "rune",
+      "title_it": "Rune — Scroll, Talismani, Pergamene, Sigilli",
+      "summary_it": "Le Rune sono un layer separato applicato direttamente all'eroe, distinto da Gemme e Gear. Includono scroll, talismani, pergamene e sigilli.",
+      "key_rules": [
+        "Rune sull'eroe, non sul gear.",
+        "Rune separate da Gemme e Gear.",
+        "Rune separate da Artifact e Divine Weapon."
+      ]
+    },
+    {
+      "id": "material_raid",
+      "title_it": "Material Raid — Farm materiali",
+      "summary_it": "Modalità dedicata al farm di materiali per Gear, Hero Growth e ora Gemme (preview). Niente stamina, niente ticket, niente paid attempt. Il claim live arriverà con un pack di safety hardening dedicato.",
+      "key_rules": [
+        "Preview-only: nessun reward grant live.",
+        "Nessun consumo di stamina/tickets/paid attempts.",
+        "Gem track ora open_preview (Track B di questo pack).",
+        "Rune e Artifact/Divine restano locked finché i runtime pack non sono spediti."
+      ]
+    },
+    {
+      "id": "artifact",
+      "title_it": "Artifact — Roster globale di account",
+      "summary_it": "Gli Artifact sono una collezione globale di account, NON equipaggiamento personale per singolo eroe.",
+      "key_rules": [
+        "Artifact = roster globale, non slot equip.",
+        "Artifact separati da Divine Weapon.",
+        "Artifact separati da Gear/Gemme/Rune."
+      ]
+    },
+    {
+      "id": "divine_weapon",
+      "title_it": "Divine Weapon — Arma personale 6★",
+      "summary_it": "La Divine Weapon è un sistema personale legato al singolo eroe 6★, distinto da Gear e Artifact.",
+      "key_rules": [
+        "Divine Weapon = personale per eroe 6★.",
+        "Divine Weapon ≠ Gear (Gear è equipaggiamento standard).",
+        "Divine Weapon ≠ Artifact (Artifact è roster di account)."
+      ]
+    },
+    {
+      "id": "guild_war",
+      "title_it": "Guild War — Eccezione auto-resolve con replay link",
+      "summary_it": "Guild War è l'unica modalità che può auto-risolvere la battaglia, perché il flow è spesso asincrono e cross-server. In compenso, deve fornire un link replay/view per consentire al giocatore di vedere la battaglia appena risolta.",
+      "key_rules": [
+        "Auto-resolve permesso per Guild War.",
+        "Replay/view link obbligatorio dopo la risoluzione.",
+        "Il replay non concede mai reward, non muta war_score, non leakka PII."
+      ]
+    }
+  ]
+}

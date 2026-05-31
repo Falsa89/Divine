@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "pack": "MEGA_BATCH_ACCELERATION_1 TRACK A",
+  "phase": "PHASE_2_STORY_BATTLE_INSTANCE_PREVIEW_ENDPOINT",
+  "mode": "preview_only_gated",
+  "feature_flag": "STORY_BATTLE_INSTANCE_PREVIEW_ENABLED",
+  "endpoint_prefix": "/api/story/battle-instance-preview",
+  "endpoints": [
+    "GET /api/story/battle-instance-preview/config",
+    "POST /api/story/battle-instance-preview/create-preview",
+    "POST /api/story/battle-instance-preview/validate-payload",
+    "GET /api/story/battle-instance-preview/sample"
+  ],
+  "default_flag_off_returns": 503,
+  "flag_on_returns_preview_payload": true,
+  "required_payload_fields": [
+    "battle_instance_id", "idempotency_key", "mode_id", "chapter_id", "stage_id",
+    "source_entrypoint", "team_snapshot", "enemy_snapshot", "formation_snapshot",
+    "battle_seed", "precomputed_battle_log", "reward_policy", "exp_policy",
+    "story_progress_policy", "result_commit_policy", "replay_snapshot_policy",
+    "created_at", "expires_at",
+    "preview_only", "db_writes", "reward_grant_enabled", "exp_grant_enabled",
+    "story_progress_enabled", "visual_runtime_enabled"
+  ],
+  "safety": {
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "story_progress_enabled": false,
+    "visual_runtime_enabled": false,
+    "story_runtime_conversion": false,
+    "battle_engine_changed": false,
+    "story_battle_endpoint_changed": false,
+    "battle_simulate_endpoint_changed": false,
+    "story_tsx_changed": false,
+    "combat_tsx_changed": false
+  }
+}

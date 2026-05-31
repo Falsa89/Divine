@@ -1,5 +1,54 @@
 #!/usr/bin/env python3
 # ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_BATCH_ACCELERATION_1_v31
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_v31_MEGA_BATCH_ACCELERATION_1
+# MEGA_BATCH_ACCELERATION_1_REGISTRATION_SENTINEL
+# ----------------------------------------------------------------------------
+# MEGA_BATCH_ACCELERATION_1_STORY_PREVIEW_MATERIAL_RAID_GEM_GUIDE_REGISTRY_PACK
+# Multi-track acceleration pack registering 4 independent OPTIONAL validators
+# plus 1 rollup OPTIONAL validator in a single strong blob refresh.
+# Strategy reuses v29d STRONGER from day 1 (top diagnostic block + tuples near
+# TOP of OPTIONAL list, never REQUIRED, count=1 per validator).
+#
+# Tracks:
+#   A) Story Battle Instance Preview Endpoint (PHASE_2)
+#      validator: validate_project_story_battle_instance_preview_endpoint_v1.py
+#      tuple id : PROJECT-STORY-BATTLE-INSTANCE-PREVIEW-ENDPOINT
+#   B) Material Raid Gem Track Preview Unlock
+#      validator: validate_project_material_raid_gem_track_preview_unlock_v1.py
+#      tuple id : PROJECT-MATERIAL-RAID-GEM-TRACK-PREVIEW-UNLOCK
+#   C) Mode Battle Entrypoint Registry Expansion (v4)
+#      validator: validate_project_mode_battle_entrypoint_registry_expansion_v1.py
+#      tuple id : PROJECT-MODE-BATTLE-ENTRYPOINT-REGISTRY-EXPANSION
+#   D) Guide/Codex Fill Gaps Foundation
+#      validator: validate_project_guide_codex_fill_gaps_v1.py
+#      tuple id : PROJECT-GUIDE-CODEX-FILL-GAPS
+#   ROLLUP) Aggregator validator
+#      validator: validate_mega_batch_acceleration_1_rollup.py
+#      tuple id : MEGA-BATCH-ACCELERATION-1-ROLLUP
+#
+# Safety booleans:
+#   - runtime_semantics_changed:                          false
+#   - db_writes:                                          0
+#   - story_runtime_conversion:                           false
+#   - story_tsx_changed:                                  false
+#   - combat_tsx_changed:                                 false
+#   - home_routes_changed:                                false
+#   - battle_engine_changed:                              false
+#   - /api/story/battle changed:                          false
+#   - /api/battle/simulate changed:                       false
+#   - reward/EXP/story_progress/quest/daily/achievement:  false
+#   - economy / gacha / pity / shop / BP / VIP / IAP:     false
+#   - material_raid_live_claim_enabled:                   false
+#   - gem_socket_commit_enabled:                          false
+#   - rune/artifact/divine_weapon/guild_war runtime:      false
+#   - guide_runtime_wiring_changed:                       false
+#   - character_bible / hero final_numbers:               false
+#   - validator weakening:                                false
+#   - tuple duplicate:                                    false
+#   - fake PASS:                                          false
+# ============================================================================
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_STORY_VISUAL_BATTLE_WIRING_CONTRACT_V30B
 # ----------------------------------------------------------------------------
 # PUBLIC_SYNC_TAG_v30_STORY_VISUAL_BATTLE_WIRING_CONTRACT
@@ -441,6 +490,26 @@ OPTIONAL = [
     # Doc 222:      docs/divine/222_STORY_VISUAL_BATTLE_WIRING_CONTRACT.md
     # ========================================================================
     ('PROJECT-STORY-VISUAL-BATTLE-WIRING-CONTRACT', 'validate_project_story_visual_battle_wiring_contract_v1.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_TAG_v31_MEGA_BATCH_ACCELERATION_1
+    # MEGA_BATCH_ACCELERATION_1_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # MEGA_BATCH_ACCELERATION_1_STORY_PREVIEW_MATERIAL_RAID_GEM_GUIDE_REGISTRY_PACK
+    # 5 OPTIONAL tuples (Track A/B/C/D + ROLLUP). Tier = OPTIONAL only.
+    # Each tuple count = 1. No REQUIRED weakening. No fake PASS.
+    # Track A: backend/routes/story_battle_instance_preview.py
+    # Track B: backend/routes/material_raid_preview.py + frontend/constants/materialRaid.ts
+    # Track C: data/design/battle_entrypoints/battle_entrypoint_registry_v4.json
+    # Track D: data/design/guide_codex/guide_codex_fill_gaps_v1.json
+    # Rollup:  backend/scripts/validate_mega_batch_acceleration_1_rollup.py
+    # Proof marker: data/design/mega_batch_acceleration/mega_batch_acceleration_1_proof_marker_v1.json
+    # Doc 228:      docs/divine/228_MEGA_BATCH_ACCELERATION_1_STORY_PREVIEW_MATERIAL_RAID_GEM_GUIDE_REGISTRY.md
+    # ========================================================================
+    ('PROJECT-STORY-BATTLE-INSTANCE-PREVIEW-ENDPOINT', 'validate_project_story_battle_instance_preview_endpoint_v1.py'),
+    ('PROJECT-MATERIAL-RAID-GEM-TRACK-PREVIEW-UNLOCK', 'validate_project_material_raid_gem_track_preview_unlock_v1.py'),
+    ('PROJECT-MODE-BATTLE-ENTRYPOINT-REGISTRY-EXPANSION', 'validate_project_mode_battle_entrypoint_registry_expansion_v1.py'),
+    ('PROJECT-GUIDE-CODEX-FILL-GAPS', 'validate_project_guide_codex_fill_gaps_v1.py'),
+    ('MEGA-BATCH-ACCELERATION-1-ROLLUP', 'validate_mega_batch_acceleration_1_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

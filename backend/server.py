@@ -549,6 +549,17 @@ app.include_router(material_raid_preview_router)
 from routes.gem_socket_preview import router as gem_socket_preview_router
 app.include_router(gem_socket_preview_router)
 
+# PROJECT_STORY_BATTLE_INSTANCE_PREVIEW_ENDPOINT (MEGA_BATCH_ACCELERATION_1 TRACK A v31).
+# PUBLIC_SYNC_TAG_v31_MEGA_BATCH_ACCELERATION_1 / STORY_BATTLE_INSTANCE_PREVIEW_ENDPOINT_REGISTRATION_SENTINEL.
+# Preview-only/gated route at /api/story/battle-instance-preview/* (DISABLED-BY-DEFAULT INERT).
+# Flag: STORY_BATTLE_INSTANCE_PREVIEW_ENABLED. Returns 503 inert envelope when off.
+# No DB writes, no reward grant, no EXP grant, no story progress mutation. story.tsx
+# UNCHANGED, combat.tsx UNCHANGED, battle_engine UNCHANGED. /api/story/battle and
+# /api/battle/simulate UNCHANGED. Provides battle_instance_id + idempotency_key +
+# snapshots + reward/commit/replay policies for future visual battle runner consumption.
+from routes.story_battle_instance_preview import router as story_battle_instance_preview_router
+app.include_router(story_battle_instance_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

@@ -36,16 +36,18 @@ RUNTIME_MODE_TAG = "preview_only"  # Marker esplicito per validator e log: quest
 
 router = APIRouter(prefix="/api/material-raid", tags=["material_raid"])
 
-# Tracks canonici (5 totali, 2 open preview + 3 locked deferred).
+# Tracks canonici (5 totali). v31 Mega Batch Acceleration 1 Track B unlock:
+# gem_material_raid passa da locked_deferred a open_preview (preview-only).
+# Rune e Artifact/Divine restano locked_deferred (preview-only, runtime futuro).
 MATERIAL_RAID_TRACKS = [
     {"track_id": "gear_material_raid",            "label_it": "Raid Materiali Gear",          "runtime_state": "open_preview"},
     {"track_id": "hero_growth_raid",              "label_it": "Raid Crescita Eroe",            "runtime_state": "open_preview"},
-    {"track_id": "gem_material_raid",             "label_it": "Raid Materiali Gemme",          "runtime_state": "locked_deferred"},
+    {"track_id": "gem_material_raid",             "label_it": "Raid Materiali Gemme",          "runtime_state": "open_preview"},
     {"track_id": "rune_material_raid",            "label_it": "Raid Materiali Rune",            "runtime_state": "locked_deferred"},
     {"track_id": "artifact_divine_material_raid", "label_it": "Raid Materiali Artefatto/Divino", "runtime_state": "locked_deferred"},
 ]
-OPEN_TRACK_IDS = {"gear_material_raid", "hero_growth_raid"}
-LOCKED_TRACK_IDS = {"gem_material_raid", "rune_material_raid", "artifact_divine_material_raid"}
+OPEN_TRACK_IDS = {"gear_material_raid", "hero_growth_raid", "gem_material_raid"}
+LOCKED_TRACK_IDS = {"rune_material_raid", "artifact_divine_material_raid"}
 ALL_TRACK_IDS = {t["track_id"] for t in MATERIAL_RAID_TRACKS}
 
 # Stage model (5 stage per ogni open track).
@@ -82,6 +84,17 @@ REWARD_PREVIEW_BY_TRACK_STAGE = {
         "III": {"materials": {"hero_growth_crystal": 8,  "hero_growth_essence": 1}},
         "IV":  {"materials": {"hero_growth_crystal": 18, "hero_growth_essence": 3}},
         "V":   {"materials": {"hero_growth_essence": 12}},
+    },
+    # v31 Mega Batch Acceleration 1 Track B: gem_material_raid preview unlock.
+    # preview_non_final=true, replace_before_release=true, materials_granted=false,
+    # reward_claim_enabled=false, db_writes=0. No live claim, no user_materials,
+    # no premium users.gems, no stamina/tickets/paid attempts, no Gem Socket commit.
+    "gem_material_raid": {
+        "I":   {"materials": {"gem_dust_common": 40}},
+        "II":  {"materials": {"gem_dust_common": 100, "gem_shard_rare": 1}},
+        "III": {"materials": {"gem_dust_common": 180, "gem_shard_rare": 3}},
+        "IV":  {"materials": {"gem_dust_common": 320, "gem_shard_rare": 7}},
+        "V":   {"materials": {"gem_dust_common": 550, "gem_shard_rare": 14}},
     },
 }
 
