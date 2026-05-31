@@ -574,6 +574,22 @@ app.include_router(story_battle_instance_preview_router)
 from routes.generic_visual_battle_runner_preview import router as generic_visual_battle_runner_preview_router
 app.include_router(generic_visual_battle_runner_preview_router)
 
+# ============================================================================
+# PROJECT_BATTLE_REPLAY_PREVIEW_ROUTE_PACK (v36 PHASE_6).
+# BATTLE_REPLAY_PREVIEW_ROUTE_GATED_VIEW_ONLY. Disabled-by-default 503 envelope.
+# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view.
+# No DB writes, no reward, no EXP, no story/daily/quest/achievement progress.
+# No war score mutation. No guild points mutation. No call to battle_engine.
+# No call to /api/battle/simulate. No call to /api/story/battle. No live
+# /battle-replay route created. Guild War runtime UNCHANGED. combat.tsx /
+# story.tsx / story-visual-battle-sandbox.tsx / generic-visual-battle-runner-
+# preview.tsx UNCHANGED. Home routes UNCHANGED. battle_engine.py UNCHANGED.
+# Frontend deeplink-only sandbox screen /battle-replay-preview reusing v35
+# VisualBattlePreviewShell with a local pure adapter.
+# ============================================================================
+from routes.battle_replay_preview import router as battle_replay_preview_router
+app.include_router(battle_replay_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

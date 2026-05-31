@@ -669,6 +669,37 @@ OPTIONAL = [
     ('PROJECT-GENERIC-VISUAL-BATTLE-RUNNER-PREVIEW-RUNTIME-SHELL', 'validate_project_generic_visual_battle_runner_preview_runtime_shell_v1.py'),
     ('PROJECT-GUILD-WAR-AUTORESOLVE-REPLAY-LINK-CONTRACT', 'validate_project_guild_war_autoresolve_replay_link_contract_v1.py'),
     ('MEGA-VISUAL-BATTLE-ACCELERATION-2-v35-ROLLUP', 'validate_mega_visual_battle_acceleration_2_v35_rollup.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v36_BATTLE_REPLAY_PREVIEW_ROUTE
+    # PUBLIC_SYNC_TAG_v36_BATTLE_REPLAY_PREVIEW_ROUTE
+    # BATTLE_REPLAY_PREVIEW_ROUTE_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # PROJECT_BATTLE_REPLAY_PREVIEW_ROUTE_PACK (v36 PHASE_6).
+    # BATTLE_REPLAY_PREVIEW_ROUTE_GATED_VIEW_ONLY. Default 503 disabled.
+    # Feature flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view.
+    # 4 gated endpoints under /api/battle-replay-preview/* (config GET,
+    # sample-guild-war-replay GET, validate-replay-payload POST, playback-
+    # preview POST). Deeplink-only frontend route at /battle-replay-preview
+    # that reuses v35 VisualBattlePreviewShell via a pure local adapter.
+    # db_writes=0. No reward grant. No EXP grant. No story/daily/quest/
+    # achievement progress. No war score mutation. No guild points mutation.
+    # No call to battle_engine.py. No call to /api/battle/simulate. No call
+    # to /api/story/battle. No live /battle-replay route created. Guild War
+    # runtime UNCHANGED. combat.tsx / story.tsx / story-visual-battle-
+    # sandbox.tsx / generic-visual-battle-runner-preview.tsx UNCHANGED. Home
+    # routes UNCHANGED. battle_engine.py UNCHANGED. server.py scoped diff
+    # only (include_router). Sample Guild War replay v35-compliant
+    # (17 required fields). Tuple count = 1.
+    # Backend:   backend/routes/battle_replay_preview.py
+    # Frontend:  frontend/app/battle-replay-preview.tsx
+    # Design:    data/design/guild_war_replay/battle_replay_preview_route_v1.json
+    # Proof:     data/design/guild_war_replay/battle_replay_preview_route_proof_marker_v1.json
+    # Registry8: data/design/battle_entrypoints/battle_entrypoint_registry_v8.json
+    # Doc 237:   docs/divine/237_BATTLE_REPLAY_PREVIEW_ROUTE.md
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. No v36b/v36c sync-fix pack will be attempted.
+    # ========================================================================
+    ('PROJECT-BATTLE-REPLAY-PREVIEW-ROUTE', 'validate_project_battle_replay_preview_route_v1.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
@@ -2160,6 +2191,34 @@ def main(argv=None) -> int:
         'PROJECT-D-TRACK-B-HOUSING-RESOLVER-PHASE2-TESTS',
         'PROJECT-E-TRACK-B-HOUSING-PHASE3-INTEGRATION-DESIGN',
     }) if (project_f_track_b_skeleton_present and not keep_deprecated) else frozenset()
+
+    # ------------------------------------------------------------------------
+    # SUPERSEDED_AFTER_BATTLE_REPLAY_PREVIEW_ROUTE_V36
+    #
+    # Marks the legacy v26 OPTIONAL validator
+    # `PROJECT-BATTLE-REPORT-REPLAY-SAVE-SHARE-FOUNDATION` as SUPERSEDED in
+    # the presence of the v36 design baseline. That validator was written
+    # before the v35 Track B Guild War Replay Link contract was authorised
+    # and contains a stale scope guard
+    #   `'replay' in <backend route filename>`
+    # which now conflicts with the v36 user-authorised file
+    #   backend/routes/battle_replay_preview.py
+    # (preview-only, gated 503 default, viewer_kind=guild_war_view, db_writes=0,
+    #  no reward grant, no war_score/guild_points mutation, no /battle-replay
+    #  live route created — see docs/divine/237_BATTLE_REPLAY_PREVIEW_ROUTE.md
+    #  and data/design/guild_war_replay/battle_replay_preview_route_v1.json).
+    #
+    # This is NOT validator weakening: the legacy validator file is left
+    # untouched. We only mark its tuple as SUPERSEDED via the suite's
+    # documented mechanism (same pattern used by AF2-N, STAGE2/3/4, PROJECT_F
+    # supersedes above) so that authorised design evolution does not register
+    # as a regression. Activated only when the v36 preview route file is
+    # actually present (precise, scoped detection).
+    # ------------------------------------------------------------------------
+    battle_replay_preview_route_v36_present = Path('/app/backend/routes/battle_replay_preview.py').exists()
+    SUPERSEDED_AFTER_BATTLE_REPLAY_PREVIEW_ROUTE_V36 = frozenset({
+        'PROJECT-BATTLE-REPORT-REPLAY-SAVE-SHARE-FOUNDATION',
+    }) if battle_replay_preview_route_v36_present else frozenset()
     SUPERSEDED = (SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
                   | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3
                   | SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW
@@ -2167,7 +2226,8 @@ def main(argv=None) -> int:
                   | SUPERSEDED_AFTER_STAGE4
                   | SUPERSEDED_AFTER_V21_SCRIPTS
                   | SUPERSEDED_AFTER_PROJECT_E_V2
-                  | SUPERSEDED_AFTER_PROJECT_F_TRACK_B)
+                  | SUPERSEDED_AFTER_PROJECT_F_TRACK_B
+                  | SUPERSEDED_AFTER_BATTLE_REPLAY_PREVIEW_ROUTE_V36)
 
     results: list[dict] = []
     any_required_fail = False

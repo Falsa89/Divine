@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-31T18:33:42.266226+00:00",
+  "timestamp_utc": "2026-05-31T18:51:18.077605+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1146,
+  "backend_python_files_scanned": 1148,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 534,
+      "files_with_hits": 536,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -137,7 +137,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 129,
+      "files_with_hits": 130,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -633,7 +633,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 96,
+      "files_with_hits": 97,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -849,7 +849,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 72,
+      "files_with_hits": 74,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -880,6 +880,14 @@
             {
               "line": 149,
               "snippet": "\"guild_id\": None,"
+            },
+            {
+              "line": 580,
+              "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
+            },
+            {
+              "line": 582,
+              "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
         },
