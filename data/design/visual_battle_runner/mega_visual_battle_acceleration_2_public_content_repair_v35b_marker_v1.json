@@ -1,0 +1,53 @@
+{
+  "pack": "MEGA_VISUAL_BATTLE_ACCELERATION_2_PUBLIC_CONTENT_REPAIR_PACK_v35b",
+  "parent_pack": "MEGA_VISUAL_BATTLE_ACCELERATION_2_RUNTIME_SHELL_AND_GUILD_WAR_REPLAY_CONTRACT_PACK_v35",
+  "parent_commit": "38c265136cc802ba262255339b021921ba61678a",
+  "created_at_utc": "2026-05-31T18:05:00Z",
+  "mode": "PUBLIC_CONTENT_REPAIR_FRONTEND_ROUTE_MOUNT_ONLY",
+  "created_for": "public generic-visual-battle-runner-preview route did not mount VisualBattlePreviewShell even though components were public",
+
+  "frontend_preview_route_repaired": true,
+  "frontend_preview_route_imports_shell": true,
+  "frontend_preview_route_mounts_shell": true,
+  "frontend_preview_route_mount_gate": "samplePayload && playback?.status === 'preview_ok'",
+  "public_content_sentinel_added": true,
+  "public_content_sentinel": "PUBLIC_CONTENT_REPAIR_v35b_VISUAL_BATTLE_PREVIEW_SHELL_MOUNT",
+
+  "visual_shell_components_changed": false,
+  "backend_routes_changed": false,
+  "backend_server_py_changed": false,
+  "guild_war_contract_changed": false,
+  "registry_v7_changed": false,
+  "suite_runner_sync_fix_attempted": false,
+  "suite_runner_modified_in_this_pack": false,
+  "public_suite_runner_stale_caveat_accepted": true,
+
+  "combat_tsx_changed": false,
+  "story_tsx_changed": false,
+  "story_sandbox_changed": false,
+  "home_routes_changed": false,
+  "battle_engine_changed": false,
+  "story_battle_endpoint_changed": false,
+  "battle_simulate_endpoint_changed": false,
+  "battle_replay_route_live_created": false,
+  "guild_war_runtime_changed": false,
+
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "exp_grant_enabled": false,
+  "progress_enabled": false,
+  "economy_changed": false,
+  "gacha_changed": false,
+  "bp_vip_shop_changed": false,
+  "material_raid_changed": false,
+  "gem_socket_changed": false,
+  "rune_runtime_changed": false,
+  "artifact_runtime_changed": false,
+  "divine_weapon_runtime_changed": false,
+
+  "file_modified": "frontend/app/generic-visual-battle-runner-preview.tsx",
+  "diff_summary": [
+    "add comment block PUBLIC_CONTENT_REPAIR_v35b_VISUAL_BATTLE_PREVIEW_SHELL_MOUNT next to existing VisualBattlePreviewShell import",
+    "tighten mount to explicit gate: samplePayload && playback?.status === 'preview_ok' ? <VisualBattlePreviewShell .../> : null"
+  ]
+}

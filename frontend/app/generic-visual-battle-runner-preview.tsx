@@ -29,6 +29,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Constants from 'expo-constants';
+// PUBLIC_CONTENT_REPAIR_v35b_VISUAL_BATTLE_PREVIEW_SHELL_MOUNT
+// v35b: ensures public frontend file imports & mounts the Track A visual shell.
+// Parent commit v35: 38c265136cc802ba262255339b021921ba61678a
 import { VisualBattlePreviewShell } from '../components/visualBattleRunner/VisualBattlePreviewShell';
 
 const BACKEND_URL =
@@ -164,8 +167,11 @@ export default function GenericVisualBattleRunnerPreviewScreen() {
           <DisabledCard config={config} httpStatus={configHttpStatus} onRetry={onRefresh} />
         ) : (
           <View>
-            {/* v35 Track A: visual runtime shell - renders playback envelope as a battle-like UI. */}
-            <VisualBattlePreviewShell payload={samplePayload} playback={playback as any} />
+            {/* v35 Track A / v35b public content repair: visual runtime shell renders the playback envelope */}
+            {/* Mounted only when sample payload exists AND playback.status === 'preview_ok' */}
+            {samplePayload && playback?.status === 'preview_ok' ? (
+              <VisualBattlePreviewShell payload={samplePayload} playback={playback as any} />
+            ) : null}
             <EnabledView
               config={config}
               samplePayload={samplePayload}
