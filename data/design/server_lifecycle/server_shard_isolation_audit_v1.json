@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-31T13:38:23.332539+00:00",
+  "timestamp_utc": "2026-05-31T13:50:19.547590+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1132,
+  "backend_python_files_scanned": 1133,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 525,
+      "files_with_hits": 526,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -637,7 +637,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 91,
+      "files_with_hits": 92,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -757,7 +757,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 9,
+      "files_with_hits": 10,
       "hits_sample": [
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
@@ -768,6 +768,26 @@
             {
               "line": 23,
               "snippet": "'story_progress':          ['story_progress', 'chapter_progress'],"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_project_story_visual_battle_wiring_contract_v1.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 79,
+              "snippet": "'advance_story_progress_once',"
+            },
+            {
+              "line": 116,
+              "snippet": "'story_progress_must_be_once_only',"
+            },
+            {
+              "line": 124,
+              "snippet": "for k in ('live_ledger_creation', 'db_writes', 'reward_grant', 'exp_grant', 'story_progress_mutation'):"
             }
           ]
         },
@@ -818,18 +838,6 @@
               "snippet": "COLLECTIONS = ['user_heroes','teams','inventory','story_progress','guilds',"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 27,
-              "snippet": "'user_heroes', 'teams', 'inventory', 'gacha_history', 'story_progress',"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -837,7 +845,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 64,
+      "files_with_hits": 65,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
