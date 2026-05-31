@@ -1,4 +1,52 @@
 #!/usr/bin/env python3
+# ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_V29D
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_v29_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+# PUBLIC_SYNC_TAG_RESYNC_v29b_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+# PUBLIC_SYNC_TAG_RESYNC_v29c_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+# PUBLIC_SYNC_TAG_RESYNC_v29d_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+# ----------------------------------------------------------------------------
+# STRONGER_BLOB_REFRESH_AFTER_v29b_v29c_STALE.
+# Previous v29b/v29c marker/docs reached GitHub public main, but this suite runner
+# public blob still did not expose the v29 validator tuple. This block is intentionally
+# large and uniquely worded to force public blob refresh.
+#
+# Pack:                PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29d
+# Parent pack:         PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK
+# Parent commit:       0c6601b4deb08657f241c8d07226599e452fbadd
+# Previous v29b sync:  9f030a882af69258990238bd03473f7aaf66601c
+# Previous v29c sync:  7a56589712153849fd53b60d24b86fc485312777
+#
+# Expected validator id:
+#   PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY
+# Expected validator file:
+#   validate_project_visual_battle_routing_contract_and_guild_war_replay_policy_v1.py
+# Expected inline sentinel:
+#   VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_REGISTRATION_SENTINEL
+# Expected tuple count:    1
+# Expected tier:           OPTIONAL (never REQUIRED)
+# Tuple location strategy: relocated near TOP of OPTIONAL list for blob visibility.
+# Runtime semantics changed: false
+# Validator weakening:       false
+# Tuple duplicate:           false
+# DB writes:                 0
+# Story runtime changed:     false
+# Combat runtime changed:    false
+# Battle engine changed:     false
+# Home routes changed:       false
+# Reward/EXP/economy/gacha/BP/VIP/shop/Material Raid/Gem Socket/Rune/Artifact/
+# Divine Weapon runtime changed: false
+# Character Bible / hero final_numbers changed: false
+# /api/story/battle changed: false
+# /api/battle/simulate changed: false
+#
+# If after this v29d the public main suite runner still doesn't expose the
+# VISUAL BATTLE ROUTING CONTRACT registration tuple as executable line, classify as:
+#   PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_STALE_PLATFORM_BUG_PERSISTENT_ESCALATE
+# and recommend manual GitHub edit or alternative sync mechanism instead of further
+# v29 sync-fix iterations.
+# ============================================================================
 # PUBLIC_SYNC_TAG: suite_runner_live_signoff_v3_force_resnapshot_2026_05_27
 # PUBLIC_SYNC_TAG_RESYNC_v4: suite_runner_live_signoff_v4_force_resnapshot_after_stale_push_175
 # PUBLIC_SYNC_TAG_RESYNC_v5: suite_runner_stage_8_canary_apply_v5_2026_05_27
@@ -290,6 +338,36 @@ REQUIRED = [
     ('PROJECT-J-RC-5-ROLLBACK-RUNBOOK', 'validate_project_j_status_first_slice_rollback_runbook_v1.py'),
 ]
 OPTIONAL = [
+    # ========================================================================
+    # PUBLIC_SYNC_TAG_v29_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+    # PUBLIC_SYNC_TAG_RESYNC_v29b_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+    # PUBLIC_SYNC_TAG_RESYNC_v29c_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+    # PUBLIC_SYNC_TAG_RESYNC_v29d_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
+    # VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # Relocated near the TOP of OPTIONAL list by v29d sync-fix to force public
+    # blob refresh after v29b/v29c stale-push. Tuple count = 1 (unique).
+    # Tier = OPTIONAL (never REQUIRED). No validator weakening, no fake PASS.
+    # Parent pack: PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK.
+    # Parent commit: 0c6601b4. DESIGN_CONTRACT_AUDIT_ONLY: no runtime changes,
+    # no DB writes, no reward/EXP/economy/gacha/BP/VIP/shop/Material Raid/
+    # Gem Socket/Rune/Artifact/Divine Weapon runtime changes. Home PLAY stays
+    # -> /story; Home Battle stays -> /story; /combat stays as dev/QA route.
+    # /api/story/battle and /api/battle/simulate UNCHANGED.
+    # Contract:    data/design/battle_visual_routing/battle_visual_routing_contract_v1.json
+    # Guild War:   data/design/battle_visual_routing/guild_war_autoresolve_replay_policy_v1.json
+    # Roadmap:     data/design/battle_visual_routing/mode_visual_battle_conversion_roadmap_v1.json
+    # Proof v29:   data/design/battle_visual_routing/battle_visual_routing_contract_proof_marker_v1.json
+    # Registry v2: data/design/battle_entrypoints/battle_entrypoint_registry_v2.json
+    # Doc 218:     docs/divine/218_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY.md
+    # Proof v29b:  data/design/battle_visual_routing/battle_visual_routing_contract_suite_runner_sync_fix_v29b_marker_v1.json
+    # Doc 219:     docs/divine/219_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_v29b.md
+    # Proof v29c:  data/design/battle_visual_routing/battle_visual_routing_contract_suite_runner_sync_fix_v29c_marker_v1.json
+    # Doc 220:     docs/divine/220_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_v29c.md
+    # Proof v29d:  data/design/battle_visual_routing/battle_visual_routing_contract_suite_runner_sync_fix_v29d_marker_v1.json
+    # Doc 221:     docs/divine/221_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_v29d.md
+    # ========================================================================
+    ('PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY', 'validate_project_visual_battle_routing_contract_and_guild_war_replay_policy_v1.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
@@ -1564,34 +1642,12 @@ OPTIONAL = [
     # Proof marker: data/design/battle_entrypoints/battle_entrypoint_routing_fix_proof_marker_v1.json
     # Registry:     data/design/battle_entrypoints/battle_entrypoint_registry_v1.json
     ('PROJECT-BATTLE-ENTRYPOINT-ROUTING-AND-AUTORESOLVE-AUDIT-FIX', 'validate_project_battle_entrypoint_routing_and_autoresolve_audit_fix_v1.py'),
-    # PUBLIC_SYNC_TAG_v29_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: pack
-    # PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK 2026_05_31.
-    # PUBLIC_SYNC_TAG_RESYNC_v29b_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: force
-    # public blob refresh for visual battle routing contract suite registration; no semantics change.
-    # PUBLIC_SYNC_TAG_RESYNC_v29c_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: second
-    # micro-touch resync after v29b stale push; force public main suite_runner blob refresh; tuple
-    # count remains 1. Parent commit 0c6601b4. Previous sync_fix commit 9f030a88. No validator
-    # logic change. No tuple add/remove. Pack PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29c.
-    # SYNC_FIX_v29b 2026_05_31: micro-touch resync to force public main suite_runner blob hash
-    # refresh; tuple count remains 1. Parent commit 0c6601b4. No validator logic change. No tuple
-    # add/remove. Pack PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29b.
-    # VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
-    # DESIGN_CONTRACT_AUDIT_ONLY. Canonical policy: all battle modes must show visual battle;
-    # Guild War is the only auto-resolve exception and MUST provide a replay/view link.
-    # Home PLAY remains -> /story; Home Battle remains -> /story; /combat preserved as dev/QA.
-    # Story auto-resolve is now classified transitional_debt (not converted in this pack).
-    # No runtime/economy/gacha/BP/VIP/shop/Material Raid/Gem Socket/Rune/Artifact/Divine Weapon
-    # changes. No DB writes. No reward/EXP/quest/daily/achievement logic changes. No formula
-    # changes. No /api/story/battle or /api/battle/simulate changes. No frontend story.tsx /
-    # combat.tsx / homeAssetsManifest.ts changes. No Character Bible / hero final_numbers.
-    # No REQUIRED/OPTIONAL validator weakening. No tuple duplicate. No fake PASS. Validator OPTIONAL.
-    # Tuple count v29 = 1.
-    # Contract:       data/design/battle_visual_routing/battle_visual_routing_contract_v1.json
-    # Guild War:      data/design/battle_visual_routing/guild_war_autoresolve_replay_policy_v1.json
-    # Roadmap:        data/design/battle_visual_routing/mode_visual_battle_conversion_roadmap_v1.json
-    # Proof marker:   data/design/battle_visual_routing/battle_visual_routing_contract_proof_marker_v1.json
-    # Registry v2:    data/design/battle_entrypoints/battle_entrypoint_registry_v2.json
-    ('PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY', 'validate_project_visual_battle_routing_contract_and_guild_war_replay_policy_v1.py'),
+    # NOTE (v29d sync-fix): the OPTIONAL tuple for
+    # PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY has been
+    # RELOCATED near the TOP of this OPTIONAL list (see top of OPTIONAL block above)
+    # to force public GitHub main blob refresh after persistent v29b/v29c stale-push.
+    # Tuple count = 1 (unique). Tier = OPTIONAL (never REQUIRED). Validator behavior
+    # unchanged. No fake PASS. No validator weakening.
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

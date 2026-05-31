@@ -1,0 +1,54 @@
+{
+  "pack": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29d",
+  "parent_pack": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK",
+  "parent_commit": "0c6601b4deb08657f241c8d07226599e452fbadd",
+  "previous_sync_fixes": [
+    "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29b",
+    "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v29c"
+  ],
+  "previous_sync_fix_commits": [
+    "9f030a882af69258990238bd03473f7aaf66601c",
+    "7a56589712153849fd53b60d24b86fc485312777"
+  ],
+  "mode": "SUITE_RUNNER_SYNC_FIX_ONLY_STRONGER_BLOB_REFRESH",
+  "created_for": "persistent public GitHub main suite runner stale after v29b/v29c; marker/docs public but suite runner missing v29 tuple/sentinels",
+  "stronger_strategy": {
+    "top_level_diagnostic_block": true,
+    "tuple_moved_or_inserted_near_top_of_optional_list": true,
+    "large_unique_comment_block": true,
+    "tuple_count_required": 1
+  },
+  "runtime_semantics_changed": false,
+  "db_writes": 0,
+  "suite_runner_only": true,
+  "parent_contract_changed": false,
+  "story_runtime_changed": false,
+  "combat_runtime_changed": false,
+  "battle_engine_changed": false,
+  "reward_logic_changed": false,
+  "exp_logic_changed": false,
+  "economy_changed": false,
+  "gacha_changed": false,
+  "bp_vip_shop_changed": false,
+  "material_raid_changed": false,
+  "gem_socket_changed": false,
+  "rune_runtime_changed": false,
+  "artifact_runtime_changed": false,
+  "divine_weapon_runtime_changed": false,
+  "home_routes_changed": false,
+  "required_suite_runner_tokens": [
+    "PUBLIC_SYNC_TAG_v29_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY",
+    "PUBLIC_SYNC_TAG_RESYNC_v29b_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY",
+    "PUBLIC_SYNC_TAG_RESYNC_v29c_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY",
+    "PUBLIC_SYNC_TAG_RESYNC_v29d_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY",
+    "VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_REGISTRATION_SENTINEL",
+    "PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY",
+    "validate_project_visual_battle_routing_contract_and_guild_war_replay_policy_v1.py"
+  ],
+  "tuple_count_required": 1,
+  "tuple_relocated_to_top_of_optional_list": true,
+  "tuple_tier": "OPTIONAL",
+  "if_public_suite_runner_still_stale_after_this": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_STALE_PLATFORM_BUG_PERSISTENT_ESCALATE",
+  "expected_local_verdict": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_v29d_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "expected_public_verdict_after_verification": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_COMPLETE_PUBLIC_REPO_VERIFIED"
+}
