@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "pack": "PROJECT_STORY_VISUAL_BATTLE_SANDBOX_PACK",
+  "phase": "PHASE_3_STORY_VISUAL_BATTLE_SANDBOX",
+  "created_at_utc": "2026-05-31T15:00:00Z",
+  "mode": "sandbox_dev_qa_only",
+  "feature_flag": "STORY_BATTLE_INSTANCE_PREVIEW_ENABLED",
+  "backend_route": {
+    "prefix": "/api/story/battle-instance-preview",
+    "new_endpoint": "GET /api/story/battle-instance-preview/sandbox-playback",
+    "default_flag_off_returns": 503,
+    "flag_on_returns_synthetic_timeline": true,
+    "timeline_deterministic_from_battle_seed": true,
+    "timeline_tick_count": 8
+  },
+  "frontend_route": {
+    "path": "/story-visual-battle-sandbox",
+    "file": "frontend/app/story-visual-battle-sandbox.tsx",
+    "linked_from_home": false,
+    "linked_from_menu": false,
+    "linked_from_tabs": false,
+    "dev_qa_only": true
+  },
+  "required_safety_flags": {
+    "sandbox": true,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "story_progress_enabled": false,
+    "replay_reward_enabled": false,
+    "battle_engine_invoked": false,
+    "api_story_battle_invoked": false,
+    "api_battle_simulate_invoked": false
+  },
+  "isolated_from": [
+    "/api/story/battle (legacy auto-resolve)",
+    "/api/battle/simulate (direct visual route)",
+    "battle_engine",
+    "reward_grant",
+    "exp_grant",
+    "story_progress_mutation",
+    "async_storage_progress"
+  ],
+  "runtime_activation_for_normal_users_allowed_in_this_pack": false,
+  "frontend_async_storage_writes": 0
+}

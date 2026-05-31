@@ -557,6 +557,24 @@ OPTIONAL = [
     ('PROJECT-MODE-BATTLE-ENTRYPOINT-REGISTRY-EXPANSION', 'validate_project_mode_battle_entrypoint_registry_expansion_v1.py'),
     ('PROJECT-GUIDE-CODEX-FILL-GAPS', 'validate_project_guide_codex_fill_gaps_v1.py'),
     ('MEGA-BATCH-ACCELERATION-1-ROLLUP', 'validate_mega_batch_acceleration_1_rollup.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_TAG_v32_STORY_VISUAL_BATTLE_SANDBOX
+    # STORY_VISUAL_BATTLE_SANDBOX_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # PROJECT_STORY_VISUAL_BATTLE_SANDBOX_PACK (PHASE_3). Sandbox dev/QA only.
+    # Synthetic deterministic playback timeline. No reward. No EXP. No story
+    # progress. No replay reward. No DB writes. No AsyncStorage writes.
+    # Reuses STORY_BATTLE_INSTANCE_PREVIEW_ENABLED flag. battle_engine UNCHANGED.
+    # /api/story/battle UNCHANGED. /api/battle/simulate UNCHANGED. story.tsx
+    # UNCHANGED. combat.tsx UNCHANGED. homeAssetsManifest.ts UNCHANGED. New
+    # sandbox route NOT linked from Home/menu/tabs. Tuple count = 1.
+    # Contract:    data/design/story_visual_battle/story_visual_battle_sandbox_contract_v1.json
+    # Proof:       data/design/story_visual_battle/story_visual_battle_sandbox_proof_marker_v1.json
+    # Doc 230:     docs/divine/230_PROJECT_STORY_VISUAL_BATTLE_SANDBOX.md
+    # Frontend:    frontend/app/story-visual-battle-sandbox.tsx
+    # Backend +:   backend/routes/story_battle_instance_preview.py (sandbox-playback endpoint)
+    # ========================================================================
+    ('PROJECT-STORY-VISUAL-BATTLE-SANDBOX', 'validate_project_story_visual_battle_sandbox_v1.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

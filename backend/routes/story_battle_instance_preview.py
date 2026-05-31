@@ -220,3 +220,86 @@ async def story_battle_instance_sample() -> dict:
         "battle_instance": _sample_payload("chapter_1", "1-1"),
         "safety": _safety_flags(),
     }
+
+
+
+# ============================================================================
+# PROJECT_STORY_VISUAL_BATTLE_SANDBOX (v32 PHASE_3)
+# Synthetic deterministic playback timeline for sandbox visualization.
+# NO DB writes. NO reward grant. NO EXP grant. NO story progress. NO replay
+# reward. Isolated from /api/battle/simulate and /api/story/battle.
+# Reuses same feature flag STORY_BATTLE_INSTANCE_PREVIEW_ENABLED.
+# ============================================================================
+SANDBOX_CONTRACT_VERSION = "project_story_visual_battle_sandbox_v1"
+
+
+def _synthetic_timeline(battle_seed: str, chapter_id: str, stage_id: str) -> list:
+    """Deterministic synthetic playback timeline for sandbox."""
+    base = int(hashlib.sha256(f"{battle_seed}|{chapter_id}|{stage_id}".encode()).hexdigest()[:8], 16)
+    actors = ["player_hero_1", "player_hero_2", "player_hero_3", "enemy_1", "enemy_2"]
+    abilities = ["basic_attack", "skill_alpha", "skill_beta", "ultimate"]
+    events = []
+    for i in range(8):
+        actor = actors[(base + i) % len(actors)]
+        ability = abilities[(base + i * 3) % len(abilities)]
+        target_idx = (base + i * 5 + 1) % len(actors)
+        target = actors[target_idx]
+        if target == actor:
+            target = actors[(target_idx + 1) % len(actors)]
+        synthetic_damage = ((base + i * 7) % 900) + 100
+        is_crit = ((base + i * 11) % 7) == 0
+        events.append({
+            "tick": i + 1,
+            "actor": actor,
+            "ability": ability,
+            "target": target,
+            "synthetic_damage": synthetic_damage,
+            "is_crit": is_crit,
+            "sandbox": True,
+        })
+    return events
+
+
+def _sandbox_safety_flags() -> dict:
+    return {
+        "sandbox": True,
+        "db_writes": 0,
+        "reward_grant_enabled": False,
+        "exp_grant_enabled": False,
+        "story_progress_enabled": False,
+        "replay_reward_enabled": False,
+        "battle_engine_invoked": False,
+        "api_story_battle_invoked": False,
+        "api_battle_simulate_invoked": False,
+    }
+
+
+@router.get("/sandbox-playback")
+async def story_battle_instance_sandbox_playback(
+    chapter_id: str = "chapter_1",
+    stage_id: str = "1-1",
+    battle_seed: Optional[str] = None,
+) -> dict:
+    """Return a deterministic synthetic playback timeline for sandbox use."""
+    if not _flag_enabled():
+        raise HTTPException(status_code=503, detail=_disabled_payload("GET", "sandbox-playback"))
+    if not battle_seed:
+        battle_seed = hashlib.sha256(f"{chapter_id}|{stage_id}|sandbox".encode()).hexdigest()[:16]
+    timeline = _synthetic_timeline(battle_seed, chapter_id, stage_id)
+    return {
+        "status": "preview_ok",
+        "contract_version": SANDBOX_CONTRACT_VERSION,
+        "runtime_mode": "sandbox_synthetic_playback",
+        "sandbox": True,
+        "chapter_id": chapter_id,
+        "stage_id": stage_id,
+        "battle_seed": battle_seed,
+        "timeline": timeline,
+        "tick_count": len(timeline),
+        "final_result": {
+            "winner": "player",
+            "sandbox": True,
+            "note": "sandbox synthetic result; no reward; no story progress",
+        },
+        "safety": _sandbox_safety_flags(),
+    }
