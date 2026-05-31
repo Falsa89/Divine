@@ -700,6 +700,69 @@ OPTIONAL = [
     # accepted. No v36b/v36c sync-fix pack will be attempted.
     # ========================================================================
     ('PROJECT-BATTLE-REPLAY-PREVIEW-ROUTE', 'validate_project_battle_replay_preview_route_v1.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v37_MEGA_ECONOMY_SAFETY_ACCELERATION_1
+    # PUBLIC_SYNC_TAG_v37_MEGA_ECONOMY_SAFETY_ACCELERATION_1
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_1_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_1_GEM_SOCKET_AND_MATERIAL_RAID_HARDENING
+    # _PACK_v37 (combo pack, 3 tracks + rollup). All OPTIONAL, count=1 each.
+    # ------------------------------------------------------------------------
+    # TRACK A: PROJECT_GEM_SOCKET_COMMIT_SAFETY_HARDENING_PACK (PHASE_7A).
+    # ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT. New gated route at
+    # /api/gem-socket-commit-safety-preview/* (config GET, validate-request POST,
+    # guard-plan-preview POST, idempotency-preview POST). Default 503 disabled.
+    # Feature flag: GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED. operation_family
+    # = gem_socket_commit. db_writes=0. No live commit. No gear mutation. No
+    # gem inventory mutation. No premium users.gems used. No reward/EXP grant.
+    # No stamina/tickets consumption. No call to battle_engine. No call to
+    # /api/battle/simulate or /api/story/battle. Existing
+    # backend/routes/gem_socket_preview.py UNCHANGED.
+    # ------------------------------------------------------------------------
+    # TRACK B: PROJECT_MATERIAL_RAID_LIVE_CLAIM_SAFETY_HARDENING_PACK (PHASE_7B).
+    # ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_CLAIM. New gated route at
+    # /api/material-raid-claim-safety-preview/* (config GET,
+    # validate-claim-request POST, grant-plan-preview POST, idempotency-preview
+    # POST). Default 503 disabled. Feature flag:
+    # MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED. operation_family =
+    # material_raid_claim. db_writes=0. No live claim. No materials granted.
+    # No user_materials mutation. No reward/EXP grant. No stamina/tickets/
+    # paid attempt consumption. No call to battle_engine. No call to
+    # /api/battle/simulate or /api/story/battle. Existing
+    # backend/routes/material_raid_preview.py UNCHANGED.
+    # ------------------------------------------------------------------------
+    # TRACK C: PROJECT_ECONOMY_IDEMPOTENCY_AND_ATOMIC_COMMIT_CONTRACT_PACK
+    # (PHASE_7C). DESIGN_CONTRACT_AUDIT_ONLY. Shared economy safety contract
+    # (idempotency, request hash, atomic commit, rollback, audit log, TTL).
+    # No runtime activation. No new backend route created by this track.
+    # db_writes=0. Referenced by Track A and Track B.
+    # ------------------------------------------------------------------------
+    # ROLLUP: MEGA-ECONOMY-SAFETY-ACCELERATION-1-v37-ROLLUP runs Track A/B/C
+    # validators back-to-back and asserts the 5 MD5-locked core files and the
+    # 4 suite tuple counts (count=1 each). No fake PASS. No validator
+    # weakening. No tuple duplicate.
+    # ------------------------------------------------------------------------
+    # Files:
+    #   Route A:   backend/routes/gem_socket_commit_safety_preview.py
+    #   Route B:   backend/routes/material_raid_claim_safety_preview.py
+    #   Design A:  data/design/economy_safety/gem_socket_commit_safety_preview_v1.json
+    #   Design B:  data/design/economy_safety/material_raid_claim_safety_preview_v1.json
+    #   Design C:  data/design/economy_safety/economy_idempotency_and_atomic_commit_contract_v1.json
+    #   Proof A:   data/design/economy_safety/gem_socket_commit_safety_preview_proof_marker_v1.json
+    #   Proof B:   data/design/economy_safety/material_raid_claim_safety_preview_proof_marker_v1.json
+    #   Proof C:   data/design/economy_safety/economy_idempotency_and_atomic_commit_contract_proof_marker_v1.json
+    #   Rollup:    data/design/economy_safety/mega_economy_safety_acceleration_1_v37_rollup_marker_v1.json
+    #   Doc 238:   docs/divine/238_GEM_SOCKET_COMMIT_SAFETY_HARDENING.md
+    #   Doc 239:   docs/divine/239_MATERIAL_RAID_LIVE_CLAIM_SAFETY_HARDENING.md
+    #   Doc 240:   docs/divine/240_ECONOMY_IDEMPOTENCY_AND_ATOMIC_COMMIT_CONTRACT.md
+    #   Doc 241:   docs/divine/241_MEGA_ECONOMY_SAFETY_ACCELERATION_1_v37.md
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. No v37b/v37c sync-fix pack will be attempted.
+    # ========================================================================
+    ('PROJECT-GEM-SOCKET-COMMIT-SAFETY-HARDENING', 'validate_project_gem_socket_commit_safety_hardening_v1.py'),
+    ('PROJECT-MATERIAL-RAID-CLAIM-SAFETY-HARDENING', 'validate_project_material_raid_claim_safety_hardening_v1.py'),
+    ('PROJECT-ECONOMY-IDEMPOTENCY-AND-ATOMIC-COMMIT-CONTRACT', 'validate_project_economy_idempotency_and_atomic_commit_contract_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-1-v37-ROLLUP', 'validate_mega_economy_safety_acceleration_1_v37_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
