@@ -1,0 +1,54 @@
+{
+  "contract_name": "VisualBattleRunnerResultCommitContract",
+  "version": 1,
+  "created_at_utc": "2026-05-31T16:50:00Z",
+  "runtime_activation": false,
+
+  "purpose": "Defines who is authoritative for committing results of a visual battle. The runner itself is NEVER the committer.",
+
+  "invariants": {
+    "runner_commits_results": false,
+    "runner_commits_rewards": false,
+    "runner_commits_exp": false,
+    "runner_commits_story_progress": false,
+    "runner_commits_daily_progress": false,
+    "runner_commits_quest_progress": false,
+    "runner_commits_achievement_progress": false,
+    "runner_writes_to_db": false,
+    "runner_consumes_stamina": false,
+    "runner_consumes_tickets": false,
+    "runner_calls_battle_simulate_in_authoritative_mode": false,
+    "committer": "future_server_authoritative_mode_service",
+    "idempotency_key_required": true,
+    "reward_duplication_guard_required": true,
+    "exp_duplication_guard_required": true,
+    "progress_duplication_guard_required": true,
+    "replay_commits_anything": false,
+    "sandbox_commits_anything": false,
+    "qa_direct_commits_anything": false
+  },
+
+  "flow": {
+    "step_1": "Mode service issues battle_instance_id + snapshots + precomputed log/seed + result_summary.",
+    "step_2": "Runner renders playback timeline.",
+    "step_3": "Runner emits result-ready signal (no DB write, no grant).",
+    "step_4": "Future mode service receives signal + battle_instance_id and performs an idempotent commit on its own (rewards/EXP/progress).",
+    "step_5": "Mode service is single source of truth. Runner is view-only."
+  },
+
+  "forbidden_in_runner": [
+    "db.users.update_one",
+    "db.user_heroes.update_one",
+    "db.server_profiles.update_one",
+    "db.story_progress.update_one",
+    "db.quests.update_one",
+    "db.daily.update_one",
+    "db.achievements.update_one",
+    "grant_reward",
+    "grant_exp",
+    "advance_progress",
+    "consume_stamina",
+    "consume_tickets",
+    "reroll_rng_client_side_in_authoritative_modes"
+  ]
+}

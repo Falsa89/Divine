@@ -575,6 +575,33 @@ OPTIONAL = [
     # Backend +:   backend/routes/story_battle_instance_preview.py (sandbox-playback endpoint)
     # ========================================================================
     ('PROJECT-STORY-VISUAL-BATTLE-SANDBOX', 'validate_project_story_visual_battle_sandbox_v1.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v33_GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT
+    # PUBLIC_SYNC_TAG_v33_GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT
+    # GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT_PACK (PHASE_3 sister).
+    # DESIGN_CONTRACT_AUDIT_ONLY. Zero runtime conversion. Zero new live route.
+    # combat.tsx UNCHANGED (still calls /api/battle/simulate on mount).
+    # story.tsx UNCHANGED (still auto-resolves via /api/story/battle).
+    # story-visual-battle-sandbox.tsx UNCHANGED (sandbox preview-only).
+    # Home routes UNCHANGED (play/battle -> /story).
+    # battle_engine.py UNCHANGED. /api/story/battle UNCHANGED.
+    # /api/battle/simulate UNCHANGED. No backend route added. db_writes = 0.
+    # No reward/EXP/progress/economy/gacha/BP/VIP/IAP/Material Raid/Gem Socket/
+    # Rune/Artifact/Divine Weapon/Guild War runtime changes. Tuple count = 1.
+    # Contract:    data/design/visual_battle_runner/generic_visual_battle_runner_contract_v1.json
+    # Payload:     data/design/visual_battle_runner/visual_battle_runner_payload_schema_v1.json
+    # Adapters:    data/design/visual_battle_runner/visual_battle_runner_mode_adapter_matrix_v1.json
+    # Commit:      data/design/visual_battle_runner/visual_battle_runner_result_commit_contract_v1.json
+    # Replay/View: data/design/visual_battle_runner/visual_battle_runner_replay_view_contract_v1.json
+    # Proof:       data/design/visual_battle_runner/generic_visual_battle_runner_contract_proof_marker_v1.json
+    # Registry v5: data/design/battle_entrypoints/battle_entrypoint_registry_v5.json
+    # Doc 231:     docs/divine/231_GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT.md
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. No v33b/v33c sync-fix pack will be attempted.
+    # ========================================================================
+    ('PROJECT-GENERIC-VISUAL-BATTLE-RUNNER-CONTRACT', 'validate_project_generic_visual_battle_runner_contract_v1.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

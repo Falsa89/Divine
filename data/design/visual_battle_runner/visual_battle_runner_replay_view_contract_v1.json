@@ -1,0 +1,50 @@
+{
+  "contract_name": "VisualBattleRunnerReplayViewContract",
+  "version": 1,
+  "created_at_utc": "2026-05-31T16:50:00Z",
+  "runtime_activation": false,
+
+  "purpose": "Defines replay/view/sandbox view-only semantics in the Generic Visual Battle Runner. Replay and view modes can NEVER grant rewards, EXP, or advance progress, and can NEVER re-run the underlying battle.",
+
+  "viewer_kinds_view_only": [
+    "replay_view",
+    "guild_war_view",
+    "sandbox_preview",
+    "qa_direct"
+  ],
+
+  "invariants": {
+    "replay_view_grants_rewards": false,
+    "replay_view_grants_exp": false,
+    "replay_view_advances_story_progress": false,
+    "replay_view_advances_daily_progress": false,
+    "replay_view_advances_quest_progress": false,
+    "replay_view_advances_achievement_progress": false,
+    "replay_view_writes_to_db": false,
+    "replay_view_reruns_battle": false,
+    "replay_view_consumes_stamina": false,
+    "replay_view_consumes_tickets": false,
+    "guild_war_view_grants_rewards": false,
+    "guild_war_view_advances_progress": false,
+    "sandbox_preview_grants_rewards": false,
+    "sandbox_preview_advances_progress": false,
+    "qa_direct_grants_rewards": false,
+    "qa_direct_advances_progress": false
+  },
+
+  "snapshot_policy": {
+    "source": "server_issued_battle_instance_snapshot",
+    "recomputation_allowed": false,
+    "client_side_simulation_allowed": false,
+    "display_only": true,
+    "ttl_required": true,
+    "privacy_redaction_required_for_other_players": true
+  },
+
+  "ui_policy": {
+    "commit_buttons_hidden": true,
+    "reward_claim_buttons_hidden": true,
+    "skip_speed_auto_allowed": true,
+    "spectator_only": true
+  }
+}

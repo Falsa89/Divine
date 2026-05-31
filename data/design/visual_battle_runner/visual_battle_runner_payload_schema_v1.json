@@ -1,0 +1,177 @@
+{
+  "schema_name": "VisualBattleRunnerPayload",
+  "version": 1,
+  "created_at_utc": "2026-05-31T16:50:00Z",
+  "purpose": "Canonical payload schema consumed by the FUTURE Generic Visual Battle Runner. Design-only in this pack. No runtime activation.",
+  "runtime_activation": false,
+
+  "required_fields": [
+    "battle_instance_id",
+    "runner_mode",
+    "mode_id",
+    "source_entrypoint",
+    "viewer_kind",
+    "team_snapshot",
+    "enemy_snapshot",
+    "formation_snapshot",
+    "battle_background_context",
+    "battle_seed_or_precomputed_battle_log",
+    "playback_timeline",
+    "result_summary",
+    "reward_policy",
+    "exp_policy",
+    "progress_policy",
+    "result_commit_policy",
+    "replay_snapshot_policy",
+    "ui_policy",
+    "privacy_policy",
+    "created_at",
+    "expires_at"
+  ],
+
+  "fields": {
+    "battle_instance_id": {
+      "type": "string",
+      "format": "uuid_v4_or_server_issued_token",
+      "description": "Server-issued identifier. The runner is forbidden from generating this client-side in authoritative modes.",
+      "required": true,
+      "server_authoritative": true
+    },
+    "runner_mode": {
+      "type": "enum",
+      "values": ["live_preview", "live_commit_pending_future", "replay_view", "guild_war_view", "sandbox_preview", "qa_direct"],
+      "description": "Top-level operational mode of the runner. Only live_commit_pending_future allows a downstream commit, and only via the future mode service (never the runner itself).",
+      "required": true
+    },
+    "mode_id": {
+      "type": "enum",
+      "values": ["story", "story_sandbox", "direct_qa_combat", "guild_war_replay", "tower", "raid", "material_raid", "boss", "event_battle", "trial", "pvp"],
+      "description": "Game mode that produced/owns the battle instance.",
+      "required": true
+    },
+    "source_entrypoint": {
+      "type": "string",
+      "description": "Logical entrypoint string from battle_entrypoint_registry_v5 (e.g. story_stage_battle, direct_visual_combat_route, guild_war).",
+      "required": true
+    },
+    "viewer_kind": {
+      "type": "enum",
+      "values": ["live_preview", "live_commit_pending_future", "replay_view", "guild_war_view", "sandbox_preview", "qa_direct"],
+      "description": "Viewer perspective. Mirrors runner_mode in this version; reserved for future split.",
+      "required": true
+    },
+    "team_snapshot": {
+      "type": "object",
+      "description": "Frozen hero team data at battle_instance creation time. Read-only for the runner.",
+      "required": true,
+      "immutable_during_playback": true
+    },
+    "enemy_snapshot": {
+      "type": "object",
+      "description": "Frozen enemy/wave/boss data at battle_instance creation time. Read-only for the runner.",
+      "required": true,
+      "immutable_during_playback": true
+    },
+    "formation_snapshot": {
+      "type": "object",
+      "description": "Frozen formation/positioning data. Read-only.",
+      "required": true,
+      "immutable_during_playback": true
+    },
+    "battle_background_context": {
+      "type": "object",
+      "description": "Visual/audio context: background art id, music id, weather, lighting, faction theme.",
+      "required": true
+    },
+    "battle_seed_or_precomputed_battle_log": {
+      "type": "oneOf",
+      "oneOf": [
+        {"battle_seed": "string", "description": "Deterministic seed; runner-side simulation forbidden in authoritative modes."},
+        {"precomputed_battle_log": "array<object>", "description": "Server-issued precomputed log. Runner replays it as-is."}
+      ],
+      "required": true,
+      "client_side_simulation_forbidden_in_authoritative_modes": true
+    },
+    "playback_timeline": {
+      "type": "array<object>",
+      "description": "Ordered timeline of turn events, animations, hit triggers and camera cues.",
+      "required": true
+    },
+    "result_summary": {
+      "type": "object",
+      "description": "Server-issued summary (winner, mvp, stars, duration). Display-only inside runner.",
+      "required": true,
+      "display_only_in_runner": true
+    },
+    "reward_policy": {
+      "type": "object",
+      "description": "How rewards are eventually issued. Always external to the runner.",
+      "required": true,
+      "runner_can_grant": false,
+      "committer": "future_server_authoritative_mode_service"
+    },
+    "exp_policy": {
+      "type": "object",
+      "description": "How EXP is eventually issued. Always external to the runner.",
+      "required": true,
+      "runner_can_grant": false,
+      "committer": "future_server_authoritative_mode_service"
+    },
+    "progress_policy": {
+      "type": "object",
+      "description": "How story/daily/quest/achievement progress is eventually advanced. Always external.",
+      "required": true,
+      "runner_can_advance": false,
+      "committer": "future_server_authoritative_mode_service"
+    },
+    "result_commit_policy": {
+      "type": "object",
+      "description": "Commit policy. Runner emits a result-ready signal; commit is server-side and idempotent.",
+      "required": true,
+      "runner_commits": false,
+      "idempotency_key_required": true,
+      "committer": "future_server_authoritative_mode_service"
+    },
+    "replay_snapshot_policy": {
+      "type": "object",
+      "description": "How a battle snapshot is captured for replay/view. View-only; never re-runs the battle.",
+      "required": true,
+      "replay_grants_rewards": false,
+      "replay_advances_progress": false,
+      "replay_reruns_battle": false
+    },
+    "ui_policy": {
+      "type": "object",
+      "description": "UI affordances: skip/auto/speed/HUD/spectator-only flags. Sandbox and replay modes hide commit buttons.",
+      "required": true
+    },
+    "privacy_policy": {
+      "type": "object",
+      "description": "PII redaction rules (other-player snapshots in PvP/guild_war_view, etc.).",
+      "required": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "iso8601_utc",
+      "required": true
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "iso8601_utc",
+      "required": true,
+      "description": "Hard TTL. Expired payloads are refused by the runner."
+    }
+  },
+
+  "invariants": [
+    "runner_never_writes_to_db",
+    "runner_never_grants_rewards",
+    "runner_never_grants_exp",
+    "runner_never_advances_progress",
+    "runner_never_recomputes_winner",
+    "runner_only_renders_server_authoritative_payload",
+    "client_side_simulation_forbidden_in_authoritative_modes",
+    "sandbox_mode_is_view_only",
+    "replay_view_mode_is_view_only"
+  ]
+}

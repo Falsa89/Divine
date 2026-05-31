@@ -1,0 +1,150 @@
+{
+  "pack": "PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT_PACK",
+  "phase": "PHASE_3_SISTER_GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT",
+  "version": 1,
+  "created_at_utc": "2026-05-31T16:50:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "purpose": "Defines the contract for a FUTURE Generic Visual Battle Runner reusable across Story, Story Sandbox, Direct QA Combat, Guild War Replay, Tower, Raid, Material Raid, Boss, Event, Trial and PvP. This pack does NOT introduce runtime. It is contract/design/audit only.",
+
+  "runtime_activation": false,
+  "runtime_changed_this_pack": false,
+  "runtime_route_created_this_pack": false,
+  "backend_route_added_this_pack": false,
+  "db_writes": 0,
+
+  "current_state": {
+    "combat_route": {
+      "path": "frontend/app/combat.tsx",
+      "role": "direct_dev_qa_visual_battle_player",
+      "calls_endpoint_on_mount": "/api/battle/simulate",
+      "changed_in_this_pack": false,
+      "refactored_in_this_pack": false,
+      "must_remain_unchanged": true,
+      "future_role_when_runner_is_live": "may be backed by Generic Visual Battle Runner via opt-in flag in a FUTURE pack (not now)"
+    },
+    "story_route": {
+      "path": "frontend/app/story.tsx",
+      "role": "transitional_auto_resolve",
+      "calls_endpoint": "/api/story/battle",
+      "changed_in_this_pack": false,
+      "future_role": "will be switched to visual battle via runner in a FUTURE PHASE_5 runtime apply pack"
+    },
+    "story_sandbox_route": {
+      "path": "frontend/app/story-visual-battle-sandbox.tsx",
+      "role": "sandbox_preview_only_dev_qa",
+      "changed_in_this_pack": false,
+      "isolated_from_runner_runtime": true
+    },
+    "home_routes": {
+      "play": "/story",
+      "battle": "/story",
+      "changed_in_this_pack": false
+    },
+    "backend_battle_engine": {
+      "path": "backend/battle_engine.py",
+      "changed_in_this_pack": false
+    },
+    "backend_endpoint_battle_simulate": {
+      "path": "/api/battle/simulate",
+      "changed_in_this_pack": false
+    },
+    "backend_endpoint_story_battle": {
+      "path": "/api/story/battle",
+      "changed_in_this_pack": false
+    }
+  },
+
+  "future_runner_contract": {
+    "runner_role": "reusable_visual_battle_player",
+    "runner_is_view_layer": true,
+    "runner_is_authoritative": false,
+    "runner_never_grants_rewards": true,
+    "runner_never_grants_exp": true,
+    "runner_never_advances_story_progress": true,
+    "runner_never_advances_daily_progress": true,
+    "runner_never_advances_quest_progress": true,
+    "runner_never_advances_achievement_progress": true,
+    "runner_never_consumes_stamina": true,
+    "runner_never_consumes_tickets": true,
+    "runner_never_writes_to_db": true,
+    "runner_never_calls_battle_simulate_directly_in_authoritative_mode": true,
+    "runner_must_accept_battle_instance_id": true,
+    "runner_must_accept_mode_id": true,
+    "runner_must_accept_source_entrypoint": true,
+    "runner_must_accept_viewer_kind": true,
+    "runner_must_accept_team_snapshot": true,
+    "runner_must_accept_enemy_snapshot": true,
+    "runner_must_accept_formation_snapshot": true,
+    "runner_must_accept_battle_background_context": true,
+    "runner_must_accept_either_battle_seed_or_precomputed_battle_log": true,
+    "runner_must_accept_playback_timeline": true,
+    "runner_must_accept_result_summary": true,
+    "runner_must_accept_reward_policy": true,
+    "runner_must_accept_exp_policy": true,
+    "runner_must_accept_progress_policy": true,
+    "runner_must_accept_result_commit_policy": true,
+    "runner_must_accept_replay_snapshot_policy": true,
+    "runner_must_accept_ui_policy": true,
+    "runner_must_accept_privacy_policy": true,
+    "runner_must_accept_created_at": true,
+    "runner_must_accept_expires_at": true,
+    "result_commit_layer": "future_server_authoritative_mode_service",
+    "replay_view_modes_are_view_only": true,
+    "sandbox_modes_are_view_only": true
+  },
+
+  "consumers_future": [
+    "story_stage_battle",
+    "story_sandbox",
+    "direct_qa_combat",
+    "guild_war_replay",
+    "tower",
+    "raid",
+    "material_raid",
+    "boss",
+    "event_battle",
+    "trial",
+    "pvp"
+  ],
+
+  "guard_rails": {
+    "do_not_refactor_combat_tsx": true,
+    "do_not_modify_story_tsx": true,
+    "do_not_modify_story_sandbox_tsx": true,
+    "do_not_modify_home_routes": true,
+    "do_not_create_live_runner_route_in_this_pack": true,
+    "do_not_modify_battle_engine_py": true,
+    "do_not_modify_api_story_battle": true,
+    "do_not_modify_api_battle_simulate": true,
+    "do_not_add_backend_route": true,
+    "do_not_grant_rewards": true,
+    "do_not_grant_exp": true,
+    "do_not_advance_progress": true,
+    "do_not_change_economy": true,
+    "do_not_change_gacha_pity": true,
+    "do_not_change_bp_vip_shop_iap": true,
+    "do_not_change_material_raid_runtime": true,
+    "do_not_change_gem_socket_runtime": true,
+    "do_not_change_rune_runtime": true,
+    "do_not_change_artifact_runtime": true,
+    "do_not_change_divine_weapon_runtime": true,
+    "do_not_change_guild_war_runtime": true,
+    "do_not_change_character_bible": true,
+    "do_not_change_hero_final_numbers": true,
+    "do_not_weaken_validators": true,
+    "do_not_fake_pass": true,
+    "do_not_duplicate_tuple": true,
+    "do_not_attempt_v33b_v33c_sync_fix": true
+  },
+
+  "references": {
+    "payload_schema": "data/design/visual_battle_runner/visual_battle_runner_payload_schema_v1.json",
+    "mode_adapter_matrix": "data/design/visual_battle_runner/visual_battle_runner_mode_adapter_matrix_v1.json",
+    "result_commit_contract": "data/design/visual_battle_runner/visual_battle_runner_result_commit_contract_v1.json",
+    "replay_view_contract": "data/design/visual_battle_runner/visual_battle_runner_replay_view_contract_v1.json",
+    "proof_marker": "data/design/visual_battle_runner/generic_visual_battle_runner_contract_proof_marker_v1.json",
+    "registry_v5": "data/design/battle_entrypoints/battle_entrypoint_registry_v5.json",
+    "doc": "docs/divine/231_GENERIC_VISUAL_BATTLE_RUNNER_CONTRACT.md",
+    "validator": "backend/scripts/validate_project_generic_visual_battle_runner_contract_v1.py"
+  }
+}

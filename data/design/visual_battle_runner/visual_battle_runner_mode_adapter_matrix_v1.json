@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "created_at_utc": "2026-05-31T16:50:00Z",
+  "purpose": "Mode adapter matrix for the FUTURE Generic Visual Battle Runner. Each entry declares how a mode would feed the runner in the future and confirms that THIS pack does not change runtime for that mode.",
+  "runtime_activation": false,
+  "all_adapters_runtime_changed_this_pack": false,
+
+  "adapters": {
+    "story": {
+      "mode_id": "story",
+      "source_entrypoint": "story_stage_battle",
+      "runner_mode_default": "live_commit_pending_future",
+      "current_state": "auto_resolve_via_/api/story/battle",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE_PACK -> PHASE_5 runtime apply"
+    },
+    "story_sandbox": {
+      "mode_id": "story_sandbox",
+      "source_entrypoint": "story_visual_battle_sandbox",
+      "runner_mode_default": "sandbox_preview",
+      "current_state": "sandbox_preview_only_dev_qa",
+      "desired_state": "sandbox_preview_only_dev_qa",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "none_sandbox_is_view_only",
+      "future_pack": "none"
+    },
+    "direct_qa_combat": {
+      "mode_id": "direct_qa_combat",
+      "source_entrypoint": "direct_visual_combat_route",
+      "runner_mode_default": "qa_direct",
+      "current_state": "direct_dev_qa_route_calls_/api/battle/simulate_on_mount",
+      "desired_state": "opt_in_qa_runner_view_with_existing_simulate_payload_no_refactor_of_combat_tsx",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "none_qa_direct_is_view_only",
+      "future_pack": "PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE_PACK"
+    },
+    "guild_war_replay": {
+      "mode_id": "guild_war_replay",
+      "source_entrypoint": "guild_war",
+      "runner_mode_default": "guild_war_view",
+      "current_state": "auto_resolve_only_no_replay_link_yet",
+      "desired_state": "auto_resolve_with_replay_view_only_link_/battle-replay",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "none_replay_view_is_view_only",
+      "future_pack": "PROJECT_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_PACK",
+      "is_only_autoresolve_exception": true
+    },
+    "tower": {
+      "mode_id": "tower",
+      "source_entrypoint": "tower",
+      "runner_mode_default": "live_commit_pending_future",
+      "current_state": "audit_required",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_TOWER_VISUAL_BATTLE_WIRING_PACK"
+    },
+    "raid": {
+      "mode_id": "raid",
+      "source_entrypoint": "raid",
+      "runner_mode_default": "live_commit_pending_future",
+      "current_state": "audit_required",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_RAID_VISUAL_BATTLE_WIRING_PACK"
+    },
+    "material_raid": {
+      "mode_id": "material_raid",
+      "source_entrypoint": "material_raid_battle",
+      "runner_mode_default": "live_commit_pending_future",
+      "current_state": "preview_only_no_visual_battle",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_MATERIAL_RAID_VISUAL_BATTLE_WIRING_PACK"
+    },
+    "boss": {
+      "mode_id": "boss",
+      "source_entrypoint": "boss_battle",
+      "runner_mode_default": "live_commit_pending_future",
+      "current_state": "audit_required",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_BOSS_BATTLE_VISUAL_WIRING_PACK"
+    },
+    "event_battle": {
+      "mode_id": "event_battle",
+      "source_entrypoint": "event_battle",
+      "runner_mode_default": "live_commit_pending_future",
+      "current_state": "audit_required",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_EVENT_BATTLE_VISUAL_WIRING_PACK"
+    },
+    "trial": {
+      "mode_id": "trial",
+      "source_entrypoint": "trial_battle",
+      "runner_mode_default": "live_commit_pending_future",
+      "current_state": "audit_required",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_TRIAL_BATTLE_VISUAL_WIRING_PACK"
+    },
+    "pvp": {
+      "mode_id": "pvp",
+      "source_entrypoint": "pvp",
+      "runner_mode_default": "live_commit_pending_future_or_replay_view_if_async",
+      "current_state": "audit_required",
+      "desired_state": "visual_battle_via_generic_runner_with_battle_instance_id_or_replay_view",
+      "runtime_changed_this_pack": false,
+      "can_grant_rewards_in_runner": false,
+      "can_advance_progress_in_runner": false,
+      "committer": "future_server_authoritative_mode_service",
+      "future_pack": "PROJECT_PVP_VISUAL_BATTLE_WIRING_PACK"
+    }
+  }
+}
