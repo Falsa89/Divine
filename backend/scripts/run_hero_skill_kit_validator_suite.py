@@ -1551,6 +1551,19 @@ OPTIONAL = [
     # No gacha/Shop/BP/VIP/IAP. No battle_engine/combat changes. No REQUIRED/OPTIONAL weakening. Validator OPTIONAL.
     # Proof marker: data/design/gem_socket_runtime/gem_socket_runtime_proof_marker_v1.json
     ('PROJECT-GEM-SOCKET-RUNTIME', 'validate_project_gem_socket_runtime_v1.py'),
+    # PUBLIC_SYNC_TAG_v28_BATTLE_ENTRYPOINT_ROUTING_AND_AUTORESOLVE_AUDIT_FIX: pack
+    # PROJECT_BATTLE_ENTRYPOINT_ROUTING_AND_AUTORESOLVE_AUDIT_FIX_PACK 2026_05_31.
+    # BATTLE_ENTRYPOINT_ROUTING_AND_AUTORESOLVE_AUDIT_FIX_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # Routing fix + audit registry only. HOME_ROUTES.play moved from `/combat` to `/story`.
+    # `/combat` route preserved as direct/dev/QA visual battle entrypoint. `/api/battle/simulate`
+    # and `/api/story/battle` UNCHANGED. Story auto-resolve UNCHANGED. No mass auto-resolve
+    # conversion. No DB writes, no reward/EXP/economy/gacha/BP/VIP/shop/Material Raid/Gem Socket/
+    # Rune/Artifact/Divine Weapon runtime changes. No battle_engine/combat.tsx behavior changes.
+    # No Character Bible / hero final_numbers. No REQUIRED/OPTIONAL validator weakening. No tuple duplicate.
+    # No fake PASS. Validator OPTIONAL. Tuple count v28 = 1.
+    # Proof marker: data/design/battle_entrypoints/battle_entrypoint_routing_fix_proof_marker_v1.json
+    # Registry:     data/design/battle_entrypoints/battle_entrypoint_registry_v1.json
+    ('PROJECT-BATTLE-ENTRYPOINT-ROUTING-AND-AUTORESOLVE-AUDIT-FIX', 'validate_project_battle_entrypoint_routing_and_autoresolve_audit_fix_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

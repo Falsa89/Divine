@@ -404,7 +404,14 @@ export const HOME_ROUTES: Partial<Record<ButtonKey | NavKey | 'heroTap' | 'mainB
 
   heroTap:    '/sanctuary',
   mainBanner: '/(tabs)/gacha',
-  play:       '/combat',
+  // PROJECT_BATTLE_ENTRYPOINT_ROUTING_AND_AUTORESOLVE_AUDIT_FIX v28:
+  // Il PLAY centrale della Home apre lo Story/Campaign hub (`/story`), NON la
+  // route diretta del simulatore visuale `/combat`. La route `/combat` resta
+  // disponibile come direct/dev/QA entrypoint per il visual battle player e
+  // verrà ricablata in futuro tramite un pack dedicato di Story/Mode visual
+  // battle wiring (contract-safe, no duplicate rewards). NON ripristinare
+  // `play: '/combat'` qui senza un pack dedicato.
+  play:       '/story',
 
   profileTap: '/profile',
   vipTap:     '/vip',

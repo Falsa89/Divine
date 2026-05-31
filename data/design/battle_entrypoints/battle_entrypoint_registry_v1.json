@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "pack": "PROJECT_BATTLE_ENTRYPOINT_ROUTING_AND_AUTORESOLVE_AUDIT_FIX_PACK",
+  "created_at_utc": "2026-05-31T11:47:06Z",
+  "purpose": "Track all battle-related frontend entrypoints and whether they use visual combat or auto-resolve.",
+  "entries": [
+    {
+      "feature": "home_play",
+      "frontend_source": "frontend/constants/homeAssetsManifest.ts",
+      "current_route_after_pack": "/story",
+      "previous_route": "/combat",
+      "resolution_type_after_pack": "opens_story_hub",
+      "desired_long_term": "Story screen should eventually offer visual battle launch per stage, but not direct random /combat from Home PLAY.",
+      "status": "fixed_this_pack"
+    },
+    {
+      "feature": "home_mode_battle_button",
+      "frontend_source": "frontend/constants/homeAssetsManifest.ts",
+      "current_route_after_pack": "/story",
+      "resolution_type_after_pack": "opens_story_hub",
+      "status": "already_correct"
+    },
+    {
+      "feature": "story_stage_battle",
+      "frontend_source": "frontend/app/story.tsx",
+      "backend_endpoint": "/api/story/battle",
+      "resolution_type_current": "auto_resolve_alert",
+      "desired_long_term": "future dedicated Story visual battle wiring; must preserve reward/idempotency safety",
+      "status": "audit_only_not_changed"
+    },
+    {
+      "feature": "direct_visual_combat_route",
+      "frontend_source": "frontend/app/combat.tsx",
+      "backend_endpoint": "/api/battle/simulate",
+      "resolution_type_current": "visual_battle_player",
+      "desired_long_term": "become reusable visual battle viewer/runner for selected modes once contracts are safe",
+      "status": "kept_unchanged"
+    },
+    {
+      "feature": "raid",
+      "frontend_source": "frontend/app/raid.tsx",
+      "resolution_type_current": "audit_required",
+      "desired_long_term": "future mode-specific battle wiring decision",
+      "status": "registry_placeholder"
+    },
+    {
+      "feature": "tower",
+      "frontend_source": "frontend/app/tower.tsx or canonical tower route",
+      "resolution_type_current": "audit_required",
+      "desired_long_term": "future mode-specific battle wiring decision",
+      "status": "registry_placeholder"
+    },
+    {
+      "feature": "pvp",
+      "frontend_source": "frontend/app/pvp.tsx",
+      "resolution_type_current": "audit_required",
+      "desired_long_term": "future PVP visual battle/replay policy",
+      "status": "registry_placeholder"
+    }
+  ],
+  "global_policy": {
+    "do_not_direct_home_play_to_combat": true,
+    "do_not_convert_all_autoresolve_modes_in_one_pack": true,
+    "future_visual_battle_wiring_requires_contract": true,
+    "reward_duplication_guard_required": true,
+    "db_write_audit_required": true
+  }
+}
