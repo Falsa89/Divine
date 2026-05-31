@@ -590,6 +590,20 @@ app.include_router(generic_visual_battle_runner_preview_router)
 from routes.battle_replay_preview import router as battle_replay_preview_router
 app.include_router(battle_replay_preview_router)
 
+# ============================================================================
+# MEGA_ECONOMY_SAFETY_ACCELERATION_1_v37 (Track A + Track B + Track C).
+# ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT.
+# - Gem Socket commit safety preview (flag GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED)
+# - Material Raid claim safety preview (flag MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED)
+# All default 503. No live commit. No live claim. No gear/gem/user_materials
+# mutation. No DB writes. No premium users.gems use. No stamina/tickets/paid
+# attempts. server.py scoped diff only.
+# ============================================================================
+from routes.gem_socket_commit_safety_preview import router as gem_socket_commit_safety_preview_router
+app.include_router(gem_socket_commit_safety_preview_router)
+from routes.material_raid_claim_safety_preview import router as material_raid_claim_safety_preview_router
+app.include_router(material_raid_claim_safety_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

@@ -1,0 +1,97 @@
+{
+  "pack": "PROJECT_ECONOMY_IDEMPOTENCY_AND_ATOMIC_COMMIT_CONTRACT_PACK",
+  "version": 1,
+  "phase": "PHASE_7C_ECONOMY_IDEMPOTENCY_AND_ATOMIC_COMMIT_CONTRACT",
+  "created_at_utc": "2026-05-31T19:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "purpose": "Shared economy safety contract: idempotency, request hash, atomic commit, rollback, audit log, TTL. Used by Track A (gem_socket_commit), Track B (material_raid_claim), and a future operation family set. No live activation in this pack.",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "required_fields_for_safe_operation_request": [
+    "request_id",
+    "user_id",
+    "operation",
+    "operation_family",
+    "client_idempotency_key",
+    "expected_state_version_set",
+    "created_at"
+  ],
+
+  "idempotency_contract": {
+    "client_idempotency_key_required": true,
+    "server_idempotency_key_derivation": "sha256_of(operation_family|user_id|client_idempotency_key|critical_payload_subset)_truncated_24",
+    "retry_same_key_same_payload_returns_same_result": true,
+    "retry_same_key_conflicting_payload_rejected": true,
+    "server_idempotency_ttl_seconds": 86400,
+    "server_idempotency_ttl_max_seconds": 604800,
+    "server_idempotency_persistence_future": true,
+    "client_local_persistence_of_idempotency_keys": false
+  },
+
+  "atomic_commit_contract": {
+    "single_transactional_unit_required": true,
+    "partial_commit_forbidden": true,
+    "reads_must_use_expected_versions": true,
+    "writes_must_check_version_match": true,
+    "on_version_mismatch": "abort_and_rollback",
+    "on_any_step_failure": "abort_and_rollback",
+    "two_phase_recommended": true
+  },
+
+  "rollback_contract": {
+    "rollback_strategy_required": true,
+    "rollback_must_restore_prior_state": true,
+    "rollback_must_not_leave_partial_state": true,
+    "rollback_audit_log_required": true
+  },
+
+  "audit_log_contract": {
+    "audit_log_required": true,
+    "audit_fields": [
+      "request_id",
+      "server_idempotency_key",
+      "operation",
+      "operation_family",
+      "user_id",
+      "prior_state_versions",
+      "resulting_state_versions",
+      "started_at",
+      "completed_at",
+      "outcome",
+      "rolled_back"
+    ],
+    "audit_must_not_contain_pii": true,
+    "audit_retention_days_default": 30,
+    "audit_retention_days_max": 90
+  },
+
+  "operation_families": [
+    "gem_socket_commit",
+    "material_raid_claim",
+    "gear_forge_fusion_commit",
+    "rune_scroll_talisman_commit",
+    "artifact_upgrade_commit",
+    "divine_weapon_upgrade_commit",
+    "battle_pass_reward_claim",
+    "mail_reward_claim"
+  ],
+
+  "forbidden": [
+    "premium_users_gems_use_in_preview",
+    "db_write_in_preview",
+    "gear_mutation_in_preview",
+    "gem_inventory_mutation_in_preview",
+    "user_materials_mutation_in_preview",
+    "reward_grant_in_preview",
+    "exp_grant_in_preview",
+    "stamina_consumption_in_preview",
+    "tickets_consumption_in_preview",
+    "paid_attempt_consumption_in_preview"
+  ],
+
+  "references": {
+    "track_a_route": "backend/routes/gem_socket_commit_safety_preview.py",
+    "track_b_route": "backend/routes/material_raid_claim_safety_preview.py"
+  }
+}

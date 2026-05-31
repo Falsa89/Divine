@@ -1,0 +1,52 @@
+{
+  "pack": "PROJECT_MATERIAL_RAID_LIVE_CLAIM_SAFETY_HARDENING_PACK",
+  "version": 1,
+  "phase": "PHASE_7B_MATERIAL_RAID_CLAIM_SAFETY_HARDENING",
+  "created_at_utc": "2026-05-31T19:00:00Z",
+  "mode": "ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_CLAIM",
+  "feature_flag": "MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED",
+  "default_runtime_enabled": false,
+  "default_http_status": 503,
+  "operation_family": "material_raid_claim",
+  "endpoint_namespace": "/api/material-raid-claim-safety-preview",
+  "endpoints": [
+    {"method":"GET","path":"/api/material-raid-claim-safety-preview/config"},
+    {"method":"POST","path":"/api/material-raid-claim-safety-preview/validate-claim-request"},
+    {"method":"POST","path":"/api/material-raid-claim-safety-preview/grant-plan-preview"},
+    {"method":"POST","path":"/api/material-raid-claim-safety-preview/idempotency-preview"}
+  ],
+  "guard_checks": [
+    "ownership_verified",
+    "track_id_valid",
+    "stage_id_valid",
+    "raid_clear_instance_id_future_match",
+    "not_already_claimed_future",
+    "expected_reward_hash_match",
+    "expected_reward_table_version_match",
+    "idempotency_key_required",
+    "user_materials_future_target_acquired",
+    "atomic_increment_future",
+    "rollback_strategy_required_future",
+    "audit_log_required_future",
+    "no_stamina_consumed",
+    "no_tickets_consumed",
+    "no_paid_attempt_consumed"
+  ],
+  "safety_invariants": {
+    "claim_enabled": false,
+    "materials_granted": false,
+    "user_materials_mutation_enabled": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "stamina_consumed": false,
+    "tickets_consumed": false,
+    "paid_attempt_consumed": false,
+    "calls_battle_engine": false,
+    "calls_api_battle_simulate": false,
+    "calls_api_story_battle": false
+  },
+  "existing_systems_unchanged": [
+    "backend/routes/material_raid_preview.py"
+  ]
+}

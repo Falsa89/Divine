@@ -1,0 +1,52 @@
+{
+  "pack": "PROJECT_GEM_SOCKET_COMMIT_SAFETY_HARDENING_PACK",
+  "version": 1,
+  "phase": "PHASE_7A_GEM_SOCKET_COMMIT_SAFETY_HARDENING",
+  "created_at_utc": "2026-05-31T19:00:00Z",
+  "mode": "ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT",
+  "feature_flag": "GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED",
+  "default_runtime_enabled": false,
+  "default_http_status": 503,
+  "operation_family": "gem_socket_commit",
+  "endpoint_namespace": "/api/gem-socket-commit-safety-preview",
+  "endpoints": [
+    {"method":"GET","path":"/api/gem-socket-commit-safety-preview/config"},
+    {"method":"POST","path":"/api/gem-socket-commit-safety-preview/validate-request"},
+    {"method":"POST","path":"/api/gem-socket-commit-safety-preview/guard-plan-preview"},
+    {"method":"POST","path":"/api/gem-socket-commit-safety-preview/idempotency-preview"}
+  ],
+  "guard_checks": [
+    "ownership_verified",
+    "gear_locked_or_favorite_check",
+    "active_team_loadout_check",
+    "active_pvp_loadout_check",
+    "active_guild_war_loadout_check",
+    "socket_index_eligible",
+    "gem_valid_and_not_consumed",
+    "expected_gear_version_match",
+    "expected_gem_version_match",
+    "expected_gear_socket_state_version_match",
+    "expected_gem_inventory_version_match",
+    "idempotency_key_required",
+    "atomic_commit_required_future",
+    "rollback_strategy_required_future",
+    "audit_log_required_future"
+  ],
+  "safety_invariants": {
+    "commit_enabled": false,
+    "gear_mutation_enabled": false,
+    "gem_inventory_mutation_enabled": false,
+    "premium_users_gems_used": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "stamina_consumed": false,
+    "tickets_consumed": false,
+    "calls_battle_engine": false,
+    "calls_api_battle_simulate": false,
+    "calls_api_story_battle": false
+  },
+  "existing_systems_unchanged": [
+    "backend/routes/gem_socket_preview.py"
+  ]
+}
