@@ -603,6 +603,48 @@ from routes.gem_socket_commit_safety_preview import router as gem_socket_commit_
 app.include_router(gem_socket_commit_safety_preview_router)
 from routes.material_raid_claim_safety_preview import router as material_raid_claim_safety_preview_router
 app.include_router(material_raid_claim_safety_preview_router)
+# ============================================================================
+# PUBLIC_CONTENT_REPAIR_v38b_GEAR_FORGE_AND_RUNE_SERVER_REGISTRATION
+# ----------------------------------------------------------------------------
+# MEGA_ECONOMY_SAFETY_ACCELERATION_2_SERVER_REGISTRATION_REPAIR_PACK_v38b
+# Parent pack:   MEGA_ECONOMY_SAFETY_ACCELERATION_2_GEAR_FORGE_AND_RUNE_HARDENING_PACK_v38
+# Parent commit: 97d74515
+#
+# Repair scope (strict):
+#   - Functional public content repair only: ensure that the public
+#     backend/server.py visibly imports and registers the two v38
+#     preview-only safety routers (Gear Forge/Fusion + Rune/Scroll/Talisman).
+#   - Local container already had these registrations after v38; this
+#     sentinel comment is added explicitly to force public blob refresh so
+#     that the "Save to GitHub" PUSH cannot re-skip backend/server.py.
+#
+# Safety booleans (unchanged from v38):
+#   - db_writes:                                          0
+#   - gear_forge_live_commit_enabled:                     false
+#   - rune_scroll_talisman_live_commit_enabled:           false
+#   - gear_mutation_enabled:                              false
+#   - rune_inventory_mutation_enabled:                    false
+#   - hero_rune_slot_mutation_enabled:                    false
+#   - user_materials_mutation_enabled:                    false
+#   - premium_users_gems_used:                            false
+#   - materials_consumed:                                 false
+#   - currency_consumed:                                  false
+#   - reward_grant_enabled:                               false
+#   - exp_grant_enabled:                                  false
+#   - bp_delta_runtime_enabled:                           false
+#   - economy_changed:                                    false
+#   - gacha_changed:                                      false
+#   - bp_vip_shop_changed:                                false
+#   - battle_engine_changed:                              false
+#   - combat_story_home_routes_changed:                   false
+#   - forge_py_changed:                                   false
+#   - route_files_changed:                                false
+#   - suite_runner_sync_fix_attempted:                    false (caveat accepted)
+#
+# This is NOT a suite-runner sync fix. No v38c will be attempted.
+# Marker:  data/design/economy_safety/mega_economy_safety_acceleration_2_server_registration_repair_v38b_marker_v1.json
+# Doc 245: docs/divine/245_MEGA_ECONOMY_SAFETY_ACCELERATION_2_SERVER_REGISTRATION_REPAIR_v38b.md
+# ============================================================================
 from routes.gear_forge_fusion_safety_preview import router as gear_forge_fusion_safety_preview_router
 app.include_router(gear_forge_fusion_safety_preview_router)
 from routes.rune_scroll_talisman_safety_preview import router as rune_scroll_talisman_safety_preview_router
