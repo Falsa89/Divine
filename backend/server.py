@@ -560,6 +560,20 @@ app.include_router(gem_socket_preview_router)
 from routes.story_battle_instance_preview import router as story_battle_instance_preview_router
 app.include_router(story_battle_instance_preview_router)
 
+# ============================================================================
+# PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE_PACK (v34 PHASE_4).
+# PREVIEW_ROUTE_GATED_NO_LIVE_COMMIT. Disabled-by-default-inert (503 envelope).
+# Flag: GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ENABLED. No DB writes, no reward
+# grant, no EXP grant, no story/daily/quest/achievement progress. No call to
+# battle_engine. No call to /api/battle/simulate. No call to /api/story/battle.
+# combat.tsx UNCHANGED. story.tsx UNCHANGED. story-visual-battle-sandbox.tsx
+# UNCHANGED. Home routes UNCHANGED. battle_engine.py UNCHANGED.
+# Frontend deeplink-only sandbox screen /generic-visual-battle-runner-preview.
+# Provides a preview shell that consumes v33 contract sample payload.
+# ============================================================================
+from routes.generic_visual_battle_runner_preview import router as generic_visual_battle_runner_preview_router
+app.include_router(generic_visual_battle_runner_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).

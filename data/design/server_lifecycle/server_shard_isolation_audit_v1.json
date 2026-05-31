@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-05-31T16:56:30.159046+00:00",
+  "timestamp_utc": "2026-05-31T17:24:53.179459+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1141,
+  "backend_python_files_scanned": 1143,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 530,
+      "files_with_hits": 532,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -137,7 +137,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 127,
+      "files_with_hits": 128,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -212,6 +212,18 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_project_generic_visual_battle_runner_preview_route_v1.py",
+          "keyword": "user_heroes",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 219,
+              "snippet": "'db.user_heroes',"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/audit_slc_c_critical_files_no_diff.py",
           "keyword": "roster",
           "has_server_id_anywhere": false,
@@ -220,22 +232,6 @@
             {
               "line": 26,
               "snippet": "'/app/backend/routes/roster.py',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_full_repo_economy_risk_audit_v1.py",
-          "keyword": "roster",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 5,
-              "snippet": "P = Path('/app/data/design/audit/full_repo/economy_gacha_roster_risk_audit_v1.json')"
-            },
-            {
-              "line": 8,
-              "snippet": "assert d['verdict'] == 'TRACK_E_ECONOMY_MONETIZATION_GACHA_ROSTER_RISK_AUDIT_READY'"
             }
           ]
         }
@@ -637,7 +633,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 94,
+      "files_with_hits": 96,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -757,8 +753,20 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 15,
+      "files_with_hits": 17,
       "hits_sample": [
+        {
+          "file": "backend/scripts/validate_project_generic_visual_battle_runner_preview_route_v1.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 221,
+              "snippet": "'db.story_progress',"
+            }
+          ]
+        },
         {
           "file": "backend/scripts/audit_server_shard_isolation_v1.py",
           "keyword": "story_progress",
@@ -834,18 +842,6 @@
               "snippet": "SERVER_BOUND_PRESENT = ['user_heroes','teams','inventory','story_progress','guilds',"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_c_collection_scope_migration_matrix_v1.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 12,
-              "snippet": "'gacha_history', 'story_progress', 'guilds', 'arena_rankings',"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -853,7 +849,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 68,
+      "files_with_hits": 70,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -916,6 +912,26 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_project_generic_visual_battle_runner_preview_route_v1.py",
+          "keyword": "guild",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 79,
+              "snippet": "'guild_war_runtime_changed': False,"
+            },
+            {
+              "line": 402,
+              "snippet": "# guild_war preserved as only autoresolve exception"
+            },
+            {
+              "line": 403,
+              "snippet": "gw = by_feat.get('guild_war')"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_slc_f_equipment_scope_post_apply_v1.py",
           "keyword": "guild",
           "has_server_id_anywhere": false,
@@ -924,26 +940,6 @@
             {
               "line": 51,
               "snippet": "'backend/routes/guild.py',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_g_guilds_cleanup_rollback_plan_v1.py",
-          "keyword": "guild",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 2,
-              "snippet": "# SLC-G-GUILDS CLEANUP ROLLBACK PLAN VALIDATOR (READ-ONLY)"
-            },
-            {
-              "line": 9,
-              "snippet": "OUT = DESIGN_DIR / '_slc_g_guilds_cleanup_rollback_plan_v1_result.json'"
-            },
-            {
-              "line": 10,
-              "snippet": "SRC = DESIGN_DIR / 'slc_g_guilds_cleanup_rollback_plan_v1.json'"
             }
           ]
         }

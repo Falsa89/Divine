@@ -602,6 +602,33 @@ OPTIONAL = [
     # accepted. No v33b/v33c sync-fix pack will be attempted.
     # ========================================================================
     ('PROJECT-GENERIC-VISUAL-BATTLE-RUNNER-CONTRACT', 'validate_project_generic_visual_battle_runner_contract_v1.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v34_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE
+    # PUBLIC_SYNC_TAG_v34_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE
+    # GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE_PACK (v34 PHASE_4).
+    # PREVIEW_ROUTE_GATED_NO_LIVE_COMMIT. Default 503 disabled. Feature flag:
+    # GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ENABLED. 4 gated endpoints under
+    # /api/generic-visual-battle-runner-preview/* (config, sample-payload,
+    # validate-payload, playback-preview). Deeplink-only frontend route at
+    # /generic-visual-battle-runner-preview. db_writes=0. No reward grant.
+    # No EXP grant. No story/daily/quest/achievement progress. No claim/commit
+    # buttons. No call to battle_engine.py. No call to /api/battle/simulate.
+    # No call to /api/story/battle. combat.tsx UNCHANGED. story.tsx UNCHANGED.
+    # story-visual-battle-sandbox.tsx UNCHANGED. Home routes UNCHANGED.
+    # battle_engine.py UNCHANGED. server.py scoped diff only (include_router).
+    # Sample payload v33-compliant (21 required fields). Tuple count = 1.
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. No v34b/v34c sync-fix pack will be attempted.
+    # Backend:   backend/routes/generic_visual_battle_runner_preview.py
+    # Frontend:  frontend/app/generic-visual-battle-runner-preview.tsx
+    # Design:    data/design/visual_battle_runner/generic_visual_battle_runner_preview_route_v1.json
+    # Proof:     data/design/visual_battle_runner/generic_visual_battle_runner_preview_route_proof_marker_v1.json
+    # Registry6: data/design/battle_entrypoints/battle_entrypoint_registry_v6.json
+    # Doc 232:   docs/divine/232_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE.md
+    # ========================================================================
+    ('PROJECT-GENERIC-VISUAL-BATTLE-RUNNER-PREVIEW-ROUTE', 'validate_project_generic_visual_battle_runner_preview_route_v1.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

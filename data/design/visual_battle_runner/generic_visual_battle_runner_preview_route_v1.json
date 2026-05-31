@@ -1,0 +1,108 @@
+{
+  "pack": "PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE_PACK",
+  "version": 1,
+  "phase": "PHASE_4_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE",
+  "created_at_utc": "2026-05-31T17:20:00Z",
+  "mode": "PREVIEW_ROUTE_GATED_NO_LIVE_COMMIT",
+
+  "purpose": "First safe preview/runtime shell for the FUTURE Generic Visual Battle Runner. Adds an isolated, deeplink-only preview route + 4 gated backend endpoints under /api/generic-visual-battle-runner-preview/*. Default-disabled (HTTP 503). When enabled, returns a deterministic sample payload that is compliant with the v33 Generic Visual Battle Runner contract/payload schema. No live runtime conversion of /combat, Story or any battle mode.",
+
+  "feature_flag": "GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ENABLED",
+  "default_runtime_enabled": false,
+  "default_http_status": 503,
+  "endpoint_namespace": "/api/generic-visual-battle-runner-preview",
+  "endpoints": [
+    {"method": "GET",  "path": "/api/generic-visual-battle-runner-preview/config",            "purpose": "disabled/default config and safety flags"},
+    {"method": "GET",  "path": "/api/generic-visual-battle-runner-preview/sample-payload",    "purpose": "deterministic v33-compliant sample payload"},
+    {"method": "POST", "path": "/api/generic-visual-battle-runner-preview/validate-payload",  "purpose": "validates supplied payload shape against v33 schema required fields"},
+    {"method": "POST", "path": "/api/generic-visual-battle-runner-preview/playback-preview",  "purpose": "display-only playback envelope from payload (no battle simulation, no winner recomputation)"}
+  ],
+
+  "frontend_route": {
+    "path": "frontend/app/generic-visual-battle-runner-preview.tsx",
+    "deeplink": "/generic-visual-battle-runner-preview",
+    "linked_from_home_menu_story_combat": false,
+    "reward_claim_button": false,
+    "commit_button": false,
+    "calls_api_battle_simulate": false,
+    "calls_api_story_battle": false,
+    "writes_async_storage": false
+  },
+
+  "payload_schema_source": "data/design/visual_battle_runner/visual_battle_runner_payload_schema_v1.json",
+  "contract_source": "data/design/visual_battle_runner/generic_visual_battle_runner_contract_v1.json",
+
+  "supported_viewer_kinds": [
+    "live_preview",
+    "live_commit_pending_future",
+    "replay_view",
+    "guild_war_view",
+    "sandbox_preview",
+    "qa_direct"
+  ],
+  "default_viewer_kind": "sandbox_preview",
+
+  "sample_payload_defaults": {
+    "runner_mode": "sandbox_preview",
+    "mode_id": "generic_preview",
+    "viewer_kind": "sandbox_preview",
+    "source_entrypoint": "generic_visual_battle_runner_preview",
+    "reward_policy.grant_enabled": false,
+    "exp_policy.grant_enabled": false,
+    "progress_policy.advance_enabled": false,
+    "result_commit_policy.commit_enabled": false,
+    "replay_snapshot_policy.write_enabled": false,
+    "ui_policy.show_claim_buttons": false,
+    "privacy_policy.share_contains_pii": false
+  },
+
+  "safety_invariants": {
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "progress_enabled": false,
+    "story_progress_enabled": false,
+    "daily_progress_enabled": false,
+    "quest_progress_enabled": false,
+    "achievement_progress_enabled": false,
+    "battle_simulation_enabled": false,
+    "calls_battle_engine": false,
+    "calls_api_battle_simulate": false,
+    "calls_api_story_battle": false,
+    "claim_button_enabled": false,
+    "commit_button_enabled": false,
+    "economy_changed": false,
+    "gacha_changed": false,
+    "bp_vip_shop_changed": false,
+    "material_raid_changed": false,
+    "gem_socket_changed": false,
+    "rune_runtime_changed": false,
+    "artifact_runtime_changed": false,
+    "divine_weapon_runtime_changed": false,
+    "guild_war_runtime_changed": false,
+    "character_bible_changed": false,
+    "hero_final_numbers_changed": false
+  },
+
+  "unchanged_in_this_pack": [
+    "frontend/app/combat.tsx",
+    "frontend/app/story.tsx",
+    "frontend/app/story-visual-battle-sandbox.tsx",
+    "frontend/constants/homeAssetsManifest.ts",
+    "backend/battle_engine.py",
+    "backend/.env",
+    "backend/routes/artifacts.py",
+    "frontend/app/battlepass.tsx",
+    "frontend/app/vip.tsx",
+    "backend/routes/story.py",
+    "backend/routes/story_battle_instance_preview.py",
+    "backend/routes/material_raid_preview.py",
+    "backend/routes/gem_socket_preview.py",
+    "backend/routes/forge.py"
+  ],
+  "scoped_diff_in_this_pack": [
+    "backend/server.py (only adds include_router for generic_visual_battle_runner_preview)"
+  ],
+
+  "public_sync_caveat": "SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION accepted. No v34b/v34c sync-fix pack."
+}
