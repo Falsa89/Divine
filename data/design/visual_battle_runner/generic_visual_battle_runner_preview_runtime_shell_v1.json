@@ -1,0 +1,52 @@
+{
+  "pack": "PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_RUNTIME_SHELL_PACK",
+  "version": 1,
+  "phase": "PHASE_4B_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_RUNTIME_SHELL",
+  "created_at_utc": "2026-05-31T17:45:00Z",
+  "mode": "PREVIEW_ROUTE_GATED_NO_LIVE_COMMIT",
+  "purpose": "First isolated React Native preview runtime shell that renders the playback envelope returned by /api/generic-visual-battle-runner-preview/playback-preview as a battle-like UI (HP bars, timeline stepper, hit markers, result summary, safety panel). Deeplink-only, preview-only, no live runtime conversion.",
+
+  "feature_flag": "GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ENABLED",
+  "runtime_activation": false,
+  "default_runtime_enabled": false,
+  "default_http_status": 503,
+  "reuses_existing_v34_route": true,
+  "existing_route_path": "/generic-visual-battle-runner-preview",
+  "existing_namespace": "/api/generic-visual-battle-runner-preview",
+
+  "components_created": [
+    "frontend/components/visualBattleRunner/VisualBattlePreviewShell.tsx",
+    "frontend/components/visualBattleRunner/VisualBattleTimelinePlayer.tsx",
+    "frontend/components/visualBattleRunner/VisualBattlePreviewHpBars.tsx",
+    "frontend/components/visualBattleRunner/VisualBattleSafetyPanel.tsx"
+  ],
+  "route_modified": "frontend/app/generic-visual-battle-runner-preview.tsx",
+
+  "visual_behavior": {
+    "flag_off": "preserves v34 disabled 503 UI; no fake playback rendered",
+    "flag_on": "renders deterministic shell from /playback-preview envelope only",
+    "timeline_driver": "setInterval visual stepper, no battle simulation",
+    "hp_bars_driver": "deterministic replay of precomputed_battle_log up to activeTurn",
+    "hit_markers": "display-only damage log row + short border flash",
+    "random_numbers_used": false,
+    "winner_recomputed": false,
+    "client_side_simulation_used": false
+  },
+
+  "safety_invariants": {
+    "reward_button_present": false,
+    "claim_button_present": false,
+    "commit_button_present": false,
+    "async_storage_writes": false,
+    "calls_api_battle_simulate": false,
+    "calls_api_story_battle": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "progress_enabled": false,
+    "home_menu_story_combat_link_added": false,
+    "new_dependency_installed": false,
+    "backend_route_changed": false,
+    "battle_engine_changed": false
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "pack": "PROJECT_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_CONTRACT_PACK",
+  "version": 1,
+  "phase": "PHASE_5_GUILD_WAR_REPLAY_LINK_CONTRACT",
+  "created_at_utc": "2026-05-31T17:45:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "purpose": "Define the contract foundation for the FUTURE Guild War auto-resolve replay/view link. Guild War remains the only auto-resolve exception, but every Guild War battle must expose a view/replay entrypoint backed by the Generic Visual Battle Runner (view-only). This pack is design/contract/audit-only; no Guild War runtime mutation; no live /battle-replay route created.",
+
+  "runtime_activation_allowed_in_this_pack": false,
+  "runtime_activation": false,
+  "guild_war_runtime_changed": false,
+  "battle_replay_route_live_created": false,
+  "db_writes": 0,
+
+  "guild_war_is_only_autoresolve_exception": true,
+  "autoresolve_allowed": true,
+  "replay_or_view_link_required": true,
+  "replay_link_target_future": "/battle-replay",
+  "replay_viewer_kind": "guild_war_view",
+  "generic_runner_view_mode_future": true,
+
+  "no_rerun_for_rewards": true,
+  "no_duplicate_rewards": true,
+  "no_war_score_mutation_from_replay": true,
+  "no_guild_points_mutation_from_replay": true,
+  "no_pii_in_share_payload": true,
+
+  "snapshot_or_timeline_required": true,
+  "attacker_snapshot_required": true,
+  "defender_snapshot_required": true,
+  "result_summary_required": true,
+  "timeline_or_log_required": true,
+  "privacy_policy_required": true,
+  "retention_policy_required": true,
+
+  "future_flow": {
+    "step_1": "Guild War service issues auto-resolve battle; on completion it freezes attacker_snapshot, defender_snapshot, precomputed log/seed, result_summary, and war_score_delta_display_only.",
+    "step_2": "Guild War service emits a server-issued guild_war_battle_id and a battle_instance_id for the Generic Visual Battle Runner.",
+    "step_3": "Players can deeplink/open /battle-replay?guild_war_battle_id=... in a FUTURE runtime pack.",
+    "step_4": "Generic Visual Battle Runner mounts in viewer_kind=guild_war_view and renders the frozen replay payload.",
+    "step_5": "Replay/view never re-runs the battle, never grants rewards, never mutates war score or guild points."
+  },
+
+  "forbidden_in_replay": [
+    "db.guild_war.update_one",
+    "db.guild.update_one",
+    "db.users.update_one",
+    "db.user_heroes.update_one",
+    "grant_war_reward",
+    "mutate_war_score",
+    "mutate_guild_points",
+    "replay_rerun_battle",
+    "reward_claim_button",
+    "commit_button"
+  ],
+
+  "references": {
+    "payload_schema": "data/design/guild_war_replay/guild_war_replay_payload_schema_v1.json",
+    "privacy_policy": "data/design/guild_war_replay/guild_war_replay_privacy_policy_v1.json",
+    "retention_policy": "data/design/guild_war_replay/guild_war_replay_retention_policy_v1.json",
+    "proof_marker": "data/design/guild_war_replay/guild_war_replay_link_contract_proof_marker_v1.json",
+    "registry_v7": "data/design/battle_entrypoints/battle_entrypoint_registry_v7.json",
+    "doc": "docs/divine/234_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_CONTRACT.md",
+    "generic_runner_contract": "data/design/visual_battle_runner/generic_visual_battle_runner_contract_v1.json",
+    "generic_runner_payload_schema": "data/design/visual_battle_runner/visual_battle_runner_payload_schema_v1.json"
+  }
+}

@@ -29,6 +29,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Constants from 'expo-constants';
+import { VisualBattlePreviewShell } from '../components/visualBattleRunner/VisualBattlePreviewShell';
 
 const BACKEND_URL =
   // EXPO_BACKEND_URL is injected via .env; fallback to /api on same origin.
@@ -162,12 +163,16 @@ export default function GenericVisualBattleRunnerPreviewScreen() {
         ) : isDisabled ? (
           <DisabledCard config={config} httpStatus={configHttpStatus} onRetry={onRefresh} />
         ) : (
-          <EnabledView
-            config={config}
-            samplePayload={samplePayload}
-            playback={playback}
-            validationOk={validationOk}
-          />
+          <View>
+            {/* v35 Track A: visual runtime shell - renders playback envelope as a battle-like UI. */}
+            <VisualBattlePreviewShell payload={samplePayload} playback={playback as any} />
+            <EnabledView
+              config={config}
+              samplePayload={samplePayload}
+              playback={playback}
+              validationOk={validationOk}
+            />
+          </View>
         )}
 
         {errorMsg ? (

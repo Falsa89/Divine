@@ -1,0 +1,25 @@
+{
+  "policy_name": "GuildWarReplayRetentionPolicy",
+  "version": 1,
+  "created_at_utc": "2026-05-31T17:45:00Z",
+  "runtime_activation": false,
+
+  "default_retention_days": 14,
+  "max_retention_days": 30,
+  "ttl_hard_required": true,
+  "server_side_purge_required": true,
+  "client_caches_replay_after_ttl": false,
+  "snapshot_immutable_during_retention": true,
+
+  "storage_layer": "future_server_authoritative_mode_service",
+  "client_local_cache_size_bytes_max": 0,
+  "client_local_persistence_allowed": false,
+  "async_storage_writes_allowed": false,
+
+  "purge_triggers": [
+    "ttl_expired",
+    "war_concluded_plus_default_retention_days",
+    "explicit_admin_purge",
+    "data_protection_request"
+  ]
+}

@@ -629,6 +629,46 @@ OPTIONAL = [
     # Doc 232:   docs/divine/232_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ROUTE.md
     # ========================================================================
     ('PROJECT-GENERIC-VISUAL-BATTLE-RUNNER-PREVIEW-ROUTE', 'validate_project_generic_visual_battle_runner_preview_route_v1.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v35_MEGA_VISUAL_BATTLE_ACCELERATION_2
+    # PUBLIC_SYNC_TAG_v35_MEGA_VISUAL_BATTLE_ACCELERATION_2
+    # MEGA_VISUAL_BATTLE_ACCELERATION_2_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # MEGA_VISUAL_BATTLE_ACCELERATION_2_RUNTIME_SHELL_AND_GUILD_WAR_REPLAY_
+    # CONTRACT_PACK_v35 (combo pack, 2 tracks + rollup).
+    # ------------------------------------------------------------------------
+    # TRACK A: PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_RUNTIME_SHELL_PACK
+    # PHASE_4B. PREVIEW_ROUTE_GATED_NO_LIVE_COMMIT. First isolated RN preview
+    # runtime shell rendering /api/generic-visual-battle-runner-preview/
+    # playback-preview envelope visually (HP bars, timeline stepper, hit
+    # markers, result_summary, safety panel). Reuses existing v34 route and
+    # v34 feature flag GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_ENABLED. Default
+    # 503 disabled state preserved. Deeplink-only. No reward/claim/commit
+    # buttons. No AsyncStorage writes. No call to battle_engine. No call to
+    # /api/battle/simulate or /api/story/battle. combat.tsx/story.tsx/story-
+    # visual-battle-sandbox.tsx/Home routes/battle_engine.py UNCHANGED. No
+    # new dependency installed. No new backend route. db_writes=0.
+    # ------------------------------------------------------------------------
+    # TRACK B: PROJECT_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_CONTRACT_PACK
+    # PHASE_5. DESIGN_CONTRACT_AUDIT_ONLY. Defines contract foundation for the
+    # FUTURE Guild War auto-resolve replay/view link. Guild War remains the
+    # only auto-resolve exception. Future target /battle-replay. Future
+    # viewer_kind=guild_war_view via Generic Visual Battle Runner. No live
+    # /battle-replay route created. No Guild War runtime mutation. No reward
+    # grant. No war_score mutation. No guild_points mutation. No PII in share
+    # payload. Privacy + retention policies attached. Registry v7 supersedes
+    # v6 with new isolated battle_replay_viewer_future entry. db_writes=0.
+    # ------------------------------------------------------------------------
+    # ROLLUP: MEGA-VISUAL-BATTLE-ACCELERATION-2-v35-ROLLUP runs Track A +
+    # Track B validators back-to-back and asserts global invariants (5 MD5-
+    # locked files, suite tuples count=1 each, sentinels present).
+    # ------------------------------------------------------------------------
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. No v35b/v35c sync-fix pack will be attempted.
+    # ========================================================================
+    ('PROJECT-GENERIC-VISUAL-BATTLE-RUNNER-PREVIEW-RUNTIME-SHELL', 'validate_project_generic_visual_battle_runner_preview_runtime_shell_v1.py'),
+    ('PROJECT-GUILD-WAR-AUTORESOLVE-REPLAY-LINK-CONTRACT', 'validate_project_guild_war_autoresolve_replay_link_contract_v1.py'),
+    ('MEGA-VISUAL-BATTLE-ACCELERATION-2-v35-ROLLUP', 'validate_mega_visual_battle_acceleration_2_v35_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

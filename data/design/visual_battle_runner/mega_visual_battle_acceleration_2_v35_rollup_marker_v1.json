@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_VISUAL_BATTLE_ACCELERATION_2_RUNTIME_SHELL_AND_GUILD_WAR_REPLAY_CONTRACT_PACK_v35",
+  "version": 1,
+  "created_at_utc": "2026-05-31T17:45:00Z",
+  "phase": "MEGA_BATCH_ACCELERATION_2",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "track_a": {
+    "pack": "PROJECT_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_RUNTIME_SHELL_PACK",
+    "contract": "data/design/visual_battle_runner/generic_visual_battle_runner_preview_runtime_shell_v1.json",
+    "proof_marker": "data/design/visual_battle_runner/generic_visual_battle_runner_preview_runtime_shell_proof_marker_v1.json",
+    "doc": "docs/divine/233_GENERIC_VISUAL_BATTLE_RUNNER_PREVIEW_RUNTIME_SHELL.md",
+    "validator": "backend/scripts/validate_project_generic_visual_battle_runner_preview_runtime_shell_v1.py",
+    "suite_tuple": "PROJECT-GENERIC-VISUAL-BATTLE-RUNNER-PREVIEW-RUNTIME-SHELL"
+  },
+  "track_b": {
+    "pack": "PROJECT_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_CONTRACT_PACK",
+    "contract": "data/design/guild_war_replay/guild_war_autoresolve_replay_link_contract_v1.json",
+    "payload_schema": "data/design/guild_war_replay/guild_war_replay_payload_schema_v1.json",
+    "privacy_policy": "data/design/guild_war_replay/guild_war_replay_privacy_policy_v1.json",
+    "retention_policy": "data/design/guild_war_replay/guild_war_replay_retention_policy_v1.json",
+    "proof_marker": "data/design/guild_war_replay/guild_war_replay_link_contract_proof_marker_v1.json",
+    "registry_v7": "data/design/battle_entrypoints/battle_entrypoint_registry_v7.json",
+    "doc": "docs/divine/234_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_CONTRACT.md",
+    "validator": "backend/scripts/validate_project_guild_war_autoresolve_replay_link_contract_v1.py",
+    "suite_tuple": "PROJECT-GUILD-WAR-AUTORESOLVE-REPLAY-LINK-CONTRACT"
+  },
+  "rollup": {
+    "doc": "docs/divine/235_MEGA_VISUAL_BATTLE_ACCELERATION_2_v35.md",
+    "validator": "backend/scripts/validate_mega_visual_battle_acceleration_2_v35_rollup.py",
+    "suite_tuple": "MEGA-VISUAL-BATTLE-ACCELERATION-2-v35-ROLLUP"
+  },
+  "public_sync_caveat": "SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION accepted. No v35b/v35c sync-fix pack."
+}

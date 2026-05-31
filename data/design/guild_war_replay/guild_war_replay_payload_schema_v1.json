@@ -1,0 +1,75 @@
+{
+  "schema_name": "GuildWarReplayPayload",
+  "version": 1,
+  "created_at_utc": "2026-05-31T17:45:00Z",
+  "purpose": "Frozen replay payload schema for Guild War auto-resolve battles. Consumed by the FUTURE Generic Visual Battle Runner in viewer_kind=guild_war_view. View-only.",
+  "runtime_activation": false,
+  "viewer_kind": "guild_war_view",
+
+  "required_fields": [
+    "guild_war_battle_id",
+    "battle_instance_id",
+    "war_id",
+    "guild_id_attacker",
+    "guild_id_defender",
+    "attacker_snapshot",
+    "defender_snapshot",
+    "battle_seed_or_precomputed_log",
+    "playback_timeline",
+    "result_summary",
+    "war_score_delta_display_only",
+    "reward_policy",
+    "guild_points_policy",
+    "privacy_policy",
+    "retention_policy",
+    "created_at",
+    "expires_at"
+  ],
+
+  "fields": {
+    "guild_war_battle_id": {"type": "string", "server_authoritative": true, "required": true},
+    "battle_instance_id": {"type": "string", "server_authoritative": true, "required": true},
+    "war_id":              {"type": "string", "required": true},
+    "guild_id_attacker":   {"type": "string", "required": true, "redactable": true},
+    "guild_id_defender":   {"type": "string", "required": true, "redactable": true},
+    "attacker_snapshot":   {"type": "object", "required": true, "immutable_during_replay": true},
+    "defender_snapshot":   {"type": "object", "required": true, "immutable_during_replay": true},
+    "battle_seed_or_precomputed_log": {
+      "type": "oneOf",
+      "required": true,
+      "client_side_simulation_forbidden": true
+    },
+    "playback_timeline":   {"type": "array<object>", "required": true},
+    "result_summary":      {"type": "object", "required": true, "display_only_in_replay": true},
+    "war_score_delta_display_only": {"type": "object", "required": true, "display_only_in_replay": true},
+    "reward_policy": {
+      "type": "object",
+      "required": true,
+      "grant_enabled": false,
+      "replay_grants_rewards": false,
+      "no_duplicate_rewards": true
+    },
+    "guild_points_policy": {
+      "type": "object",
+      "required": true,
+      "mutate_enabled": false,
+      "replay_mutates_guild_points": false
+    },
+    "privacy_policy":      {"type": "object", "required": true, "no_pii_in_share_payload": true, "redact_other_players": true},
+    "retention_policy":    {"type": "object", "required": true},
+    "created_at":          {"type": "string", "format": "iso8601_utc", "required": true},
+    "expires_at":          {"type": "string", "format": "iso8601_utc", "required": true}
+  },
+
+  "invariants": [
+    "replay_never_grants_rewards",
+    "replay_never_mutates_war_score",
+    "replay_never_mutates_guild_points",
+    "replay_never_reruns_battle",
+    "replay_never_recomputes_winner",
+    "replay_only_renders_server_authoritative_payload",
+    "client_side_simulation_forbidden",
+    "viewer_is_view_only",
+    "share_payload_redacts_pii"
+  ]
+}
