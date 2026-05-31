@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "pack": "PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK",
+  "created_at_utc": "2026-05-31T13:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "phase": "PHASE_1_STORY_VISUAL_BATTLE_CONTRACT_AND_PAYLOAD",
+  "parent_policy": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK",
+  "story_current_state": {
+    "frontend_source": "frontend/app/story.tsx",
+    "current_endpoint": "/api/story/battle",
+    "current_resolution": "auto_resolve_alert",
+    "current_progress_storage": "server-side via /api/story/battle response handling",
+    "current_player_sees_battle": false,
+    "runtime_changed_in_this_pack": false
+  },
+  "story_desired_state": {
+    "resolution": "visual_battle_required",
+    "player_must_see_battle": true,
+    "home_play_still_opens_story_hub": true,
+    "home_battle_still_opens_story_hub": true,
+    "story_stage_play_launches_visual_battle_future": true,
+    "direct_combat_route_is_dev_qa_only": true,
+    "replay_view_is_view_only_no_reward": true
+  },
+  "required_future_flow": [
+    "create_or_reuse_battle_instance",
+    "navigate_to_visual_battle_with_battle_instance_id",
+    "play_visual_battle_from_snapshot_or_precomputed_log",
+    "commit_result_once",
+    "grant_rewards_once",
+    "grant_exp_once",
+    "advance_story_progress_once",
+    "show_post_battle_summary",
+    "store_view_only_replay_snapshot"
+  ],
+  "separation_of_concerns": {
+    "battle_initialization": "future preview endpoint (PHASE_2); returns battle_instance_id + payload",
+    "visual_playback": "future generalized /combat runner (PHASE_3 sandbox first)",
+    "result_commit": "server-authoritative; idempotent on battle_instance_id; commit-once",
+    "reward_grant": "separate idempotent endpoint; never re-grant on replay",
+    "story_progress_update": "idempotent on battle_instance_id; once-only advance",
+    "replay_viewer": "view-only; no reward; no progress; no rerun"
+  },
+  "non_goals_this_pack": [
+    "runtime conversion of story.tsx",
+    "creation of /api/story/battle-instance live endpoint",
+    "change of /api/story/battle behavior",
+    "change of /api/battle/simulate behavior",
+    "reward/EXP/story_progress mutation",
+    "DB ledger creation",
+    "generic visual battle runner conversion of /combat"
+  ],
+  "runtime_activation_allowed_in_this_pack": false,
+  "home_play_route_expected": "/story",
+  "home_battle_route_expected": "/story",
+  "direct_combat_route_expected": "/combat"
+}

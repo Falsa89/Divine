@@ -1,0 +1,132 @@
+{
+  "version": 3,
+  "supersedes": ["battle_entrypoint_registry_v1.json", "battle_entrypoint_registry_v2.json"],
+  "pack": "PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK",
+  "created_at_utc": "2026-05-31T13:00:00Z",
+  "purpose": "Canonical registry of all battle entrypoints. Story now has PHASE_1 contract ready; runtime conversion pending. Guild War remains the only auto-resolve exception with replay link required.",
+  "entries": [
+    {
+      "feature": "home_play",
+      "frontend_source": "frontend/constants/homeAssetsManifest.ts",
+      "current_route": "/story",
+      "resolution_type_current": "opens_story_hub",
+      "desired_state": "opens_story_hub",
+      "status": "correct",
+      "priority": "P1_kept"
+    },
+    {
+      "feature": "home_mode_battle_button",
+      "frontend_source": "frontend/constants/homeAssetsManifest.ts",
+      "current_route": "/story",
+      "resolution_type_current": "opens_story_hub",
+      "desired_state": "opens_story_hub",
+      "status": "correct"
+    },
+    {
+      "feature": "story_stage_battle",
+      "frontend_source": "frontend/app/story.tsx",
+      "backend_endpoint": "/api/story/battle",
+      "resolution_type_current": "auto_resolve_alert",
+      "desired_state": "visual_battle_required",
+      "status": "contract_ready_runtime_pending",
+      "priority": "P0",
+      "current_pack": "PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK",
+      "next_runtime_pack": "PROJECT_STORY_BATTLE_INSTANCE_PREVIEW_ENDPOINT_PACK",
+      "runtime_changed_this_pack": false
+    },
+    {
+      "feature": "direct_visual_combat_route",
+      "frontend_source": "frontend/app/combat.tsx",
+      "backend_endpoint": "/api/battle/simulate",
+      "current_route": "/combat",
+      "resolution_type_current": "visual_battle_player",
+      "desired_state": "reusable_visual_battle_player_with_payload_and_replay",
+      "status": "needs_contract_before_universal_use",
+      "priority": "P1",
+      "future_pack": "PHASE_3_GENERIC_VISUAL_BATTLE_RUNNER"
+    },
+    {
+      "feature": "material_raid_battle",
+      "frontend_source": "frontend/app/material-raid-test.tsx or runtime route",
+      "resolution_type_current": "audit_required",
+      "desired_state": "visual_battle_required",
+      "status": "registry_placeholder",
+      "priority": "P2"
+    },
+    {
+      "feature": "raid",
+      "frontend_source": "frontend/app/raid.tsx",
+      "resolution_type_current": "audit_required",
+      "desired_state": "visual_battle_required",
+      "status": "registry_placeholder",
+      "priority": "P2"
+    },
+    {
+      "feature": "tower",
+      "frontend_source": "frontend/app/tower.tsx or canonical tower route",
+      "resolution_type_current": "audit_required",
+      "desired_state": "visual_battle_required",
+      "status": "registry_placeholder",
+      "priority": "P2"
+    },
+    {
+      "feature": "pvp",
+      "frontend_source": "frontend/app/pvp.tsx",
+      "resolution_type_current": "audit_required",
+      "desired_state": "visual_battle_required_or_visual_replay_if_async",
+      "status": "registry_placeholder",
+      "priority": "P2"
+    },
+    {
+      "feature": "event_battle",
+      "frontend_source": "frontend/app/events.tsx or event modes route",
+      "resolution_type_current": "audit_required",
+      "desired_state": "visual_battle_required",
+      "status": "registry_placeholder",
+      "priority": "P3"
+    },
+    {
+      "feature": "boss_battle",
+      "frontend_source": "frontend/app/boss.tsx or boss modes route",
+      "resolution_type_current": "audit_required",
+      "desired_state": "visual_battle_required",
+      "status": "registry_placeholder",
+      "priority": "P2"
+    },
+    {
+      "feature": "trial_battle",
+      "frontend_source": "frontend/app/trial.tsx or trials route",
+      "resolution_type_current": "audit_required",
+      "desired_state": "visual_battle_required",
+      "status": "registry_placeholder",
+      "priority": "P3"
+    },
+    {
+      "feature": "guild_war",
+      "frontend_source": "frontend/app/guild-war.tsx or guild war route",
+      "resolution_type_current": "audit_required",
+      "desired_state": "autoresolve_with_replay_or_view_link",
+      "status": "allowed_autoresolve_exception",
+      "replay_link_required": true,
+      "replay_link_target_future": "/battle-replay",
+      "priority": "P2",
+      "future_pack": "PROJECT_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_PACK"
+    }
+  ],
+  "global_policy": {
+    "all_battle_modes_must_show_visual_battle": true,
+    "only_guild_war_can_autoresolve": true,
+    "guild_war_requires_replay_link": true,
+    "story_visual_battle_contract_ready": true,
+    "story_runtime_conversion_done": false,
+    "do_not_convert_all_modes_in_one_pack": true,
+    "future_visual_wiring_requires_contract": true,
+    "reward_duplication_guard_required": true,
+    "exp_duplication_guard_required": true,
+    "quest_daily_achievement_guard_required": true,
+    "battle_instance_id_required": true,
+    "replay_must_not_grant_rewards": true,
+    "replay_must_not_rerun_battle": true,
+    "replay_view_must_not_grant_rewards": true
+  }
+}

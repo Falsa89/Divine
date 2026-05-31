@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "pack": "PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "phases": [
+    {
+      "id": "PHASE_1_CONTRACT",
+      "label": "Story Visual Battle Wiring Contract + payload + idempotency + transition plan + registry v3 (this pack)",
+      "status": "in_this_pack",
+      "runtime_changes": false,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "story_progress_idempotency_guard": true,
+      "fallback_or_rollback": "n/a (no runtime)",
+      "validator": "validate_project_story_visual_battle_wiring_contract_v1.py",
+      "smoke_tests": "none_runtime"
+    },
+    {
+      "id": "PHASE_2_STORY_BATTLE_INSTANCE_PREVIEW_ENDPOINT",
+      "label": "Inert/preview endpoint contract for battle instance creation (no reward commit, gated 503 default)",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "story_progress_idempotency_guard": true,
+      "fallback_or_rollback": "feature flag off => endpoint 503 inert envelope",
+      "validator": "future",
+      "smoke_tests": "flag-off 503; flag-on preview payload contract validated",
+      "target_pack": "PROJECT_STORY_BATTLE_INSTANCE_PREVIEW_ENDPOINT_PACK"
+    },
+    {
+      "id": "PHASE_3_STORY_VISUAL_BATTLE_SANDBOX",
+      "label": "Sandbox route for story battle payload visualization (no live story progress)",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "story_progress_idempotency_guard": true,
+      "fallback_or_rollback": "sandbox isolated from live progress",
+      "validator": "future",
+      "smoke_tests": "sandbox playback with synthetic payload"
+    },
+    {
+      "id": "PHASE_4_STORY_VISUAL_BATTLE_DUAL_ROUTE_CANARY",
+      "label": "Selected story stage may route to visual battle with fallback to current auto-resolve (canary, gated)",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "story_progress_idempotency_guard": true,
+      "fallback_or_rollback": "canary flag toggle returns to auto-resolve",
+      "validator": "future",
+      "smoke_tests": "canary on/off parity; no duplicate reward across dual route"
+    },
+    {
+      "id": "PHASE_5_STORY_VISUAL_BATTLE_RUNTIME_APPLY",
+      "label": "Replace Story auto-resolve for normal player flow; idempotent commit required",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "story_progress_idempotency_guard": true,
+      "fallback_or_rollback": "server-side switch back to auto-resolve fallback if commit ledger anomaly",
+      "validator": "future",
+      "smoke_tests": "full live flow with idempotency commit verification"
+    },
+    {
+      "id": "PHASE_6_REPLAY_AND_REPORT_HARDENING",
+      "label": "Replay snapshot + battle report + save/share alignment with foundation pack",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "story_progress_idempotency_guard": true,
+      "fallback_or_rollback": "replay store rollback ttl",
+      "validator": "future",
+      "smoke_tests": "replay view grants no reward, no progress, no rerun"
+    },
+    {
+      "id": "PHASE_7_REMOVE_STORY_AUTORESSOLVE_DEBT",
+      "label": "Deprecate invisible Story auto-resolve except debug/admin",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "story_progress_idempotency_guard": true,
+      "fallback_or_rollback": "debug/admin path preserved",
+      "validator": "future",
+      "smoke_tests": "normal player flow always visual; debug/admin still auto-resolve"
+    }
+  ],
+  "global_safety_invariants": {
+    "never_grant_reward_on_replay_view": true,
+    "never_advance_progress_on_replay_view": true,
+    "never_rerun_battle_for_rewards": true,
+    "reward_grants_must_be_idempotent": true,
+    "all_phases_require_db_write_audit": true,
+    "all_phases_require_fallback_or_rollback": true
+  }
+}

@@ -368,6 +368,30 @@ OPTIONAL = [
     # Doc 221:     docs/divine/221_VISUAL_BATTLE_ROUTING_CONTRACT_SUITE_RUNNER_SYNC_FIX_v29d.md
     # ========================================================================
     ('PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY', 'validate_project_visual_battle_routing_contract_and_guild_war_replay_policy_v1.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_TAG_v30_STORY_VISUAL_BATTLE_WIRING_CONTRACT
+    # STORY_VISUAL_BATTLE_WIRING_CONTRACT_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # PHASE_1 DESIGN_CONTRACT_AUDIT_ONLY pack: defines Story visual battle wiring
+    # contract, battle_instance payload contract, reward/EXP/story progress
+    # idempotency contract, transition plan PHASE_1->PHASE_7, registry v3.
+    # No runtime conversion of Story. No DB writes. No reward/EXP/story progress
+    # mutation. story.tsx UNCHANGED. combat.tsx UNCHANGED. homeAssetsManifest.ts
+    # UNCHANGED. /api/story/battle UNCHANGED. /api/battle/simulate UNCHANGED.
+    # battle_engine.py UNCHANGED. No gacha/Shop/BP/VIP/IAP changes. No Material
+    # Raid/Gem Socket/Rune/Artifact/Divine Weapon/Guild War runtime changes.
+    # No Character Bible/hero final_numbers. No REQUIRED/OPTIONAL validator
+    # weakening. No tuple duplicate. No fake PASS. Validator OPTIONAL. Tuple
+    # count v30 = 1. Tuple placed near TOP of OPTIONAL list for blob visibility.
+    # Contract:     data/design/story_visual_battle/story_visual_battle_wiring_contract_v1.json
+    # Payload:      data/design/story_visual_battle/story_battle_instance_payload_contract_v1.json
+    # Idempotency:  data/design/story_visual_battle/story_reward_idempotency_contract_v1.json
+    # Transition:   data/design/story_visual_battle/story_visual_battle_transition_plan_v1.json
+    # Proof marker: data/design/story_visual_battle/story_visual_battle_wiring_contract_proof_marker_v1.json
+    # Registry v3:  data/design/battle_entrypoints/battle_entrypoint_registry_v3.json
+    # Doc 222:      docs/divine/222_STORY_VISUAL_BATTLE_WIRING_CONTRACT.md
+    # ========================================================================
+    ('PROJECT-STORY-VISUAL-BATTLE-WIRING-CONTRACT', 'validate_project_story_visual_battle_wiring_contract_v1.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

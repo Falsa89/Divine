@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "pack": "PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "phase": "PHASE_1_STORY_VISUAL_BATTLE_CONTRACT_AND_PAYLOAD",
+  "reward_idempotency": {
+    "battle_instance_id_required": true,
+    "idempotency_key_required": true,
+    "result_commit_must_be_once_only": true,
+    "reward_grant_must_be_once_only": true,
+    "hero_exp_grant_must_be_once_only": true,
+    "account_exp_grant_must_be_once_only": true,
+    "story_progress_must_be_once_only": true,
+    "daily_progress_must_be_once_only_if_applicable": true,
+    "quest_progress_must_be_once_only_if_applicable": true,
+    "achievement_progress_must_be_once_only_if_applicable": true,
+    "replay_view_must_not_grant_rewards": true,
+    "replay_view_must_not_advance_progress": true,
+    "retry_same_request_returns_same_result": true
+  },
+  "future_storage": {
+    "battle_instance_ledger": "required_future",
+    "reward_commit_ledger": "required_future",
+    "replay_snapshot_store": "required_future",
+    "ttl_policy": "required_future"
+  },
+  "future_ledger_contract": {
+    "battle_instance_ledger": {
+      "key": "battle_instance_id",
+      "unique_per_logical_attempt": true,
+      "stores": ["user_id", "server_id", "mode_id", "chapter_id", "stage_id", "created_at", "expires_at", "state"]
+    },
+    "reward_commit_ledger": {
+      "key": "idempotency_key",
+      "linked_battle_instance_id": true,
+      "once_only_grant_state": "PENDING|GRANTED|REJECTED_DUPLICATE",
+      "server_authoritative": true
+    }
+  },
+  "forbidden_in_this_pack": {
+    "live_ledger_creation": true,
+    "db_writes": true,
+    "reward_grant": true,
+    "exp_grant": true,
+    "story_progress_mutation": true,
+    "quest_daily_achievement_mutation": true
+  },
+  "runtime_activation_allowed_in_this_pack": false
+}

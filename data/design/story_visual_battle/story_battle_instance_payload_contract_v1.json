@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "pack": "PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "phase": "PHASE_1_STORY_VISUAL_BATTLE_CONTRACT_AND_PAYLOAD",
+  "required_future_payload_fields": {
+    "battle_instance_id": "required",
+    "idempotency_key": "required",
+    "mode_id": "story",
+    "chapter_id": "required",
+    "stage_id": "required",
+    "user_id": "required_runtime_but_not_exposed_to_share",
+    "server_id": "required_future_if_multi_server_active",
+    "source_entrypoint": "story_stage_play",
+    "team_snapshot": "required",
+    "enemy_snapshot": "required",
+    "formation_snapshot": "required",
+    "campaign_context": {
+      "chapter_id": "required",
+      "stage_id": "required",
+      "element_or_faction_theme": "optional",
+      "background_override": "optional"
+    },
+    "battle_seed": "required_or_precomputed_log_required",
+    "precomputed_battle_log": "allowed",
+    "reward_policy": "required",
+    "exp_policy": "required",
+    "story_progress_policy": "required",
+    "result_commit_policy": "required",
+    "replay_snapshot_policy": "required",
+    "created_at": "required",
+    "expires_at": "required"
+  },
+  "policy_objects_detail": {
+    "reward_policy": {
+      "idempotency_key": "required",
+      "granted_state": "PENDING|GRANTED|REJECTED_DUPLICATE",
+      "claim_window_seconds": "required",
+      "server_authoritative": true
+    },
+    "exp_policy": {
+      "hero_exp_idempotency_key": "required",
+      "account_exp_idempotency_key": "required",
+      "once_only": true
+    },
+    "story_progress_policy": {
+      "advance_once_only_per_battle_instance_id": true,
+      "first_clear_flag_once_only": true,
+      "replay_does_not_advance": true
+    },
+    "result_commit_policy": {
+      "commit_once": true,
+      "idempotency_key": "required",
+      "server_authoritative": true,
+      "retry_returns_same_result": true
+    },
+    "replay_snapshot_policy": {
+      "ttl_seconds": "required",
+      "scope": "private|account|public_account_link",
+      "pii_safe": true,
+      "never_grants_reward": true,
+      "never_advances_progress": true,
+      "never_reruns_battle_logic_for_reward": true
+    }
+  },
+  "rules": {
+    "battle_instance_id_must_be_stable_per_logical_attempt": true,
+    "idempotency_key_must_prevent_double_reward_and_progress": true,
+    "payload_must_preserve_mode_context": true,
+    "payload_must_preserve_team_and_enemy_snapshots": true,
+    "payload_must_not_expose_private_tokens_or_pii_to_share_or_replay": true,
+    "future_combat_runner_must_require_battle_instance_id_before_serving_story": true,
+    "snapshot_alternatives": "deterministic battle_seed OR precomputed_battle_log"
+  },
+  "runtime_activation_allowed_in_this_pack": false
+}
