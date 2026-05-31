@@ -1564,6 +1564,25 @@ OPTIONAL = [
     # Proof marker: data/design/battle_entrypoints/battle_entrypoint_routing_fix_proof_marker_v1.json
     # Registry:     data/design/battle_entrypoints/battle_entrypoint_registry_v1.json
     ('PROJECT-BATTLE-ENTRYPOINT-ROUTING-AND-AUTORESOLVE-AUDIT-FIX', 'validate_project_battle_entrypoint_routing_and_autoresolve_audit_fix_v1.py'),
+    # PUBLIC_SYNC_TAG_v29_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY: pack
+    # PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK 2026_05_31.
+    # VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_REGISTRATION_SENTINEL (do not remove; required for public sync verification):
+    # DESIGN_CONTRACT_AUDIT_ONLY. Canonical policy: all battle modes must show visual battle;
+    # Guild War is the only auto-resolve exception and MUST provide a replay/view link.
+    # Home PLAY remains -> /story; Home Battle remains -> /story; /combat preserved as dev/QA.
+    # Story auto-resolve is now classified transitional_debt (not converted in this pack).
+    # No runtime/economy/gacha/BP/VIP/shop/Material Raid/Gem Socket/Rune/Artifact/Divine Weapon
+    # changes. No DB writes. No reward/EXP/quest/daily/achievement logic changes. No formula
+    # changes. No /api/story/battle or /api/battle/simulate changes. No frontend story.tsx /
+    # combat.tsx / homeAssetsManifest.ts changes. No Character Bible / hero final_numbers.
+    # No REQUIRED/OPTIONAL validator weakening. No tuple duplicate. No fake PASS. Validator OPTIONAL.
+    # Tuple count v29 = 1.
+    # Contract:       data/design/battle_visual_routing/battle_visual_routing_contract_v1.json
+    # Guild War:      data/design/battle_visual_routing/guild_war_autoresolve_replay_policy_v1.json
+    # Roadmap:        data/design/battle_visual_routing/mode_visual_battle_conversion_roadmap_v1.json
+    # Proof marker:   data/design/battle_visual_routing/battle_visual_routing_contract_proof_marker_v1.json
+    # Registry v2:    data/design/battle_entrypoints/battle_entrypoint_registry_v2.json
+    ('PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY', 'validate_project_visual_battle_routing_contract_and_guild_war_replay_policy_v1.py'),
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "pack": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "purpose": "Define a safe, mode-by-mode roadmap to convert auto-resolve battle flows into visual battle flows without duplicating rewards/EXP/economy/quest/daily/achievement progress.",
+  "phases": [
+    {
+      "id": "PHASE_0_CONTRACT",
+      "label": "Contract + Registry + Policy + Roadmap (this pack)",
+      "status": "in_this_pack",
+      "runtime_changes": false,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "economy_regression_guard": true,
+      "replay_snapshot_guard": true
+    },
+    {
+      "id": "PHASE_1_STORY_VISUAL_BATTLE_CONTRACT_AND_PAYLOAD",
+      "label": "Define Story stage battle instance payload + idempotency contract",
+      "status": "future",
+      "runtime_changes": false,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "economy_regression_guard": true,
+      "replay_snapshot_guard": true,
+      "target_pack": "PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK"
+    },
+    {
+      "id": "PHASE_2_STORY_VISUAL_BATTLE_IMPLEMENTATION",
+      "label": "Wire Story stage to visual battle (gated, dual-route, fallback to auto-resolve)",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "economy_regression_guard": true,
+      "replay_snapshot_guard": true
+    },
+    {
+      "id": "PHASE_3_GENERIC_VISUAL_BATTLE_RUNNER",
+      "label": "Generalize /combat into a reusable visual battle viewer/runner accepting battle_instance payloads",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "economy_regression_guard": true,
+      "replay_snapshot_guard": true
+    },
+    {
+      "id": "PHASE_4_MODE_BY_MODE_CONVERSION",
+      "label": "Convert Material Raid, Raid, Tower, Trials, Boss, Events, PvP to visual battle",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "economy_regression_guard": true,
+      "replay_snapshot_guard": true,
+      "per_mode_order_recommendation": [
+        "material_raid",
+        "raid",
+        "tower",
+        "trial_battle",
+        "boss_battle",
+        "event_battle",
+        "pvp"
+      ]
+    },
+    {
+      "id": "PHASE_5_GUILD_WAR_AUTORESOLVE_REPLAY_LINK",
+      "label": "Implement Guild War replay/view link (auto-resolve preserved, view-only entrypoint added)",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "economy_regression_guard": true,
+      "replay_snapshot_guard": true,
+      "target_pack": "PROJECT_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_PACK"
+    },
+    {
+      "id": "PHASE_6_REWARD_IDEMPOTENCY_HARDENING",
+      "label": "Server-side reward idempotency ledger + auditor on all converted modes",
+      "status": "future",
+      "runtime_changes": true,
+      "db_write_audit": true,
+      "reward_duplication_guard": true,
+      "exp_duplication_guard": true,
+      "economy_regression_guard": true,
+      "replay_snapshot_guard": true
+    }
+  ],
+  "global_safety_invariants": {
+    "never_grant_reward_on_replay_view": true,
+    "never_rerun_battle_for_rewards": true,
+    "reward_grants_must_be_idempotent": true,
+    "all_phases_require_db_write_audit": true
+  }
+}

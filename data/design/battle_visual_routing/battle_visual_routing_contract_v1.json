@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "pack": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK",
+  "created_at_utc": "2026-05-31T12:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "canonical_policy": {
+    "all_battle_modes_must_show_visual_battle": true,
+    "guild_war_is_only_autoresolve_exception": true,
+    "guild_war_must_provide_replay_or_view_link": true,
+    "home_play_opens_story_hub": true,
+    "home_battle_opens_story_hub": true,
+    "direct_combat_route_is_dev_qa_only": true,
+    "story_auto_resolve_is_transitional_debt": true
+  },
+  "visual_battle_contract_requirements": {
+    "must_not_rerun_rng_for_reward": true,
+    "must_not_duplicate_rewards": true,
+    "must_not_duplicate_exp": true,
+    "must_not_duplicate_quest_progress": true,
+    "must_not_duplicate_daily_progress": true,
+    "must_not_duplicate_achievement_progress": true,
+    "must_preserve_mode_context": true,
+    "must_preserve_enemy_payload_or_snapshot": true,
+    "must_have_battle_instance_id_or_request_id": true,
+    "must_have_reward_claim_state": true,
+    "must_have_idempotency_guard": true,
+    "must_have_result_commit_guard": true,
+    "must_have_replay_viewer_contract": true
+  },
+  "future_visual_battle_payload_contract": {
+    "battle_instance_id": "string, ULID/UUID, unique per battle instance",
+    "mode_id": "string, e.g. story|raid|tower|pvp|event|boss|trial|material_raid|guild_war",
+    "source_entrypoint": "string, e.g. story_stage|tower_floor|raid_node|pvp_lobby",
+    "team_snapshot": "object, frozen team composition at resolution time",
+    "enemy_snapshot": "object, frozen enemy composition at resolution time",
+    "formation_snapshot": "object, frozen 9-grid formation",
+    "battle_seed_or_precomputed_log": "either deterministic seed OR precomputed battle log",
+    "reward_policy": "object: idempotency_key, granted_state, claim_window",
+    "result_commit_policy": "object: commit_once, idempotency_key, server_authoritative",
+    "replay_snapshot_policy": "object: ttl, scope (private|guild|public), pii_safe"
+  },
+  "separation_of_concerns": {
+    "battle_visualization": "frontend visual battle player; pure presentation",
+    "battle_resolution": "server-authoritative; deterministic from seed or precomputed log",
+    "reward_grant": "separate idempotent endpoint; never re-grant on replay",
+    "replay_viewer": "read-only; never triggers reward or resolution",
+    "idempotency_ledger": "server-side, keyed by battle_instance_id"
+  },
+  "runtime_activation_allowed_in_this_pack": false,
+  "home_play_route_expected": "/story",
+  "home_battle_route_expected": "/story",
+  "direct_combat_route_expected": "/combat",
+  "direct_combat_route_role": "dev/QA visual battle player only until generic visual battle runner contract is ready"
+}

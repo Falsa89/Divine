@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "pack": "PROJECT_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_PACK",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "feature": "guild_war",
+  "is_only_autoresolve_exception": true,
+  "autoresolve_allowed": true,
+  "visual_battle_live_required": false,
+  "replay_or_view_link_required": true,
+  "link_must_be_available_after_resolution": true,
+  "link_target_future": "/battle-replay",
+  "link_target_role": "view-only entrypoint to the just-resolved Guild War battle",
+  "runtime_activation_allowed_in_this_pack": false,
+  "safety_requirements": {
+    "must_not_rerun_battle_for_rewards": true,
+    "must_not_duplicate_rewards": true,
+    "must_not_duplicate_guild_points": true,
+    "must_not_duplicate_war_score": true,
+    "must_preserve_battle_snapshot_or_log": true,
+    "must_capture_attacker_defender_snapshots": true,
+    "must_capture_result_summary": true,
+    "must_capture_timeline_or_battle_log": true,
+    "must_support_expiration_policy": true,
+    "must_support_privacy_policy": true,
+    "replay_must_not_modify_war_score": true,
+    "replay_must_not_grant_rewards": true,
+    "replay_must_not_leak_private_account_data": true
+  },
+  "future_replay_payload_contract": {
+    "battle_instance_id": "string, unique per Guild War battle",
+    "war_id": "string, parent war id",
+    "attacker_snapshot": "object, attacker team/formation at resolution time",
+    "defender_snapshot": "object, defender team/formation at resolution time",
+    "result_summary": "object: winner, score_delta, casualties",
+    "timeline_or_battle_log": "deterministic log replayable client-side",
+    "resolved_at_utc": "ISO8601",
+    "expires_at_utc": "ISO8601",
+    "scope": "guild|war_participants_only",
+    "pii_safe": true
+  },
+  "forbidden": {
+    "replay_farming": true,
+    "reward_grant_on_view": true,
+    "war_score_mutation_on_view": true,
+    "private_data_leak": true,
+    "unauthenticated_access": true
+  },
+  "future_pack": "PROJECT_GUILD_WAR_AUTORESOLVE_REPLAY_LINK_PACK"
+}
