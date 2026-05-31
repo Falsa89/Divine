@@ -1,5 +1,53 @@
 #!/usr/bin/env python3
 # ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_STORY_VISUAL_BATTLE_WIRING_CONTRACT_V30B
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_v30_STORY_VISUAL_BATTLE_WIRING_CONTRACT
+# PUBLIC_SYNC_TAG_RESYNC_v30b_STORY_VISUAL_BATTLE_WIRING_CONTRACT
+# ----------------------------------------------------------------------------
+# STRONGER_BLOB_REFRESH_AFTER_v30_STALE.
+# Previous v30 parent pack reached GitHub public main for design/doc/validator
+# files, but this suite runner public blob still did not expose the v30 validator
+# tuple or v30 sentinels. This block is intentionally large and uniquely worded
+# to force public blob refresh, using the same strategy that finally worked for
+# the v29 series (v29d top-level diagnostic block + tuple at TOP of OPTIONAL).
+#
+# Pack:                PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_SUITE_RUNNER_SYNC_FIX_PACK_v30b
+# Parent pack:         PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_PACK
+# Parent commit:       e441fc1ecafbce6e2415e789dbefc9dcaaf23e2a
+#
+# Expected validator id:
+#   PROJECT-STORY-VISUAL-BATTLE-WIRING-CONTRACT
+# Expected validator file:
+#   validate_project_story_visual_battle_wiring_contract_v1.py
+# Expected inline sentinel:
+#   STORY_VISUAL_BATTLE_WIRING_CONTRACT_REGISTRATION_SENTINEL
+# Expected tuple count:    1
+# Expected tier:           OPTIONAL (never REQUIRED)
+# Tuple location strategy: near TOP of OPTIONAL list (right after v29 tuple).
+# Phase:                   PHASE_1_STORY_VISUAL_BATTLE_CONTRACT_AND_PAYLOAD
+# Mode:                    DESIGN_CONTRACT_AUDIT_ONLY
+# Runtime semantics changed: false
+# Validator weakening:       false
+# Tuple duplicate:           false
+# DB writes:                 0
+# Story tsx changed:         false (auto-resolve preserved as transitional debt)
+# Combat tsx changed:        false (dev/QA visual route preserved)
+# Home routes changed:       false (play=/story, battle=/story)
+# Battle engine changed:     false
+# /api/story/battle changed: false
+# /api/battle/simulate changed: false
+# Reward/EXP/story_progress/quest/daily/achievement/economy/gacha/BP/VIP/shop/
+# Material Raid/Gem Socket/Rune/Artifact/Divine Weapon/Guild War runtime changed: false
+# Character Bible / hero final_numbers changed: false
+#
+# If after this v30b the public main suite runner still doesn't expose the
+# STORY VISUAL BATTLE WIRING CONTRACT registration tuple as executable line,
+# classify as:
+#   PROJECT_STORY_VISUAL_BATTLE_WIRING_CONTRACT_SUITE_RUNNER_STALE_PLATFORM_BUG_PERSISTENT_ESCALATE
+# and recommend manual GitHub edit or alternative sync mechanism instead of
+# further v30 sync-fix iterations.
+# ============================================================================
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY_V29D
 # ----------------------------------------------------------------------------
 # PUBLIC_SYNC_TAG_v29_VISUAL_BATTLE_ROUTING_CONTRACT_AND_GUILD_WAR_REPLAY_POLICY
@@ -370,6 +418,7 @@ OPTIONAL = [
     ('PROJECT-VISUAL-BATTLE-ROUTING-CONTRACT-AND-GUILD-WAR-REPLAY-POLICY', 'validate_project_visual_battle_routing_contract_and_guild_war_replay_policy_v1.py'),
     # ========================================================================
     # PUBLIC_SYNC_TAG_v30_STORY_VISUAL_BATTLE_WIRING_CONTRACT
+    # PUBLIC_SYNC_TAG_RESYNC_v30b_STORY_VISUAL_BATTLE_WIRING_CONTRACT
     # STORY_VISUAL_BATTLE_WIRING_CONTRACT_REGISTRATION_SENTINEL
     # ------------------------------------------------------------------------
     # PHASE_1 DESIGN_CONTRACT_AUDIT_ONLY pack: defines Story visual battle wiring
