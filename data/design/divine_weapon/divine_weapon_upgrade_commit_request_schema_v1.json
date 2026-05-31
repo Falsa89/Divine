@@ -1,0 +1,46 @@
+{
+  "schema": "divine_weapon_upgrade_commit_request_schema_v1",
+  "version": 1,
+  "operation_family": "divine_weapon_upgrade_commit",
+  "allowed_operation_types": ["divine_weapon_unlock_preview", "divine_weapon_upgrade", "divine_weapon_awaken_preview"],
+  "required_fields": [
+    "request_id",
+    "idempotency_key",
+    "operation_type",
+    "user_id",
+    "server_id",
+    "hero_instance_id",
+    "hero_id",
+    "divine_weapon_id",
+    "target_stage",
+    "target_level",
+    "fodder_hero_copy_instance_ids",
+    "expected_hero_version",
+    "expected_divine_weapon_version",
+    "expected_materials_version",
+    "client_trace_id",
+    "created_at"
+  ],
+  "field_types": {
+    "request_id": "string",
+    "idempotency_key": "string",
+    "operation_type": "enum(divine_weapon_unlock_preview,divine_weapon_upgrade,divine_weapon_awaken_preview)",
+    "user_id": "string",
+    "server_id": "string",
+    "hero_instance_id": "string",
+    "hero_id": "string",
+    "divine_weapon_id": "string",
+    "target_stage": "integer",
+    "target_level": "integer",
+    "fodder_hero_copy_instance_ids": "array<string>",
+    "expected_hero_version": "integer",
+    "expected_divine_weapon_version": "integer",
+    "expected_materials_version": "integer",
+    "client_trace_id": "string",
+    "created_at": "iso8601_string"
+  },
+  "constraints": {
+    "fodder_hero_copy_instance_ids_unique": true,
+    "idempotency_key_required": true
+  }
+}

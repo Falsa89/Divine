@@ -1,0 +1,53 @@
+{
+  "pack": "PROJECT_DIVINE_WEAPON_UPGRADE_COMMIT_SAFETY_HARDENING_PACK",
+  "version": 1,
+  "phase": "PHASE_9B_DIVINE_WEAPON_UPGRADE_COMMIT_SAFETY_HARDENING",
+  "created_at_utc": "2026-05-31T21:30:00Z",
+  "mode": "ENDGAME_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT",
+  "feature_flag": "DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED",
+  "default_runtime_enabled": false,
+  "default_http_status": 503,
+  "operation_family": "divine_weapon_upgrade_commit",
+  "allowed_operation_types": ["divine_weapon_unlock_preview", "divine_weapon_upgrade", "divine_weapon_awaken_preview"],
+  "endpoint_namespace": "/api/divine-weapon-upgrade-safety-preview",
+  "canonical_distinction": {
+    "divine_weapon_is": "character-bound personal weapon/relic for native 6_star heroes",
+    "divine_weapon_native_6_star_only": true,
+    "divine_weapon_is_character_bound": true,
+    "divine_weapon_is_not_generic_gear": true,
+    "divine_weapon_is_not_artifact": true,
+    "divine_weapon_is_not_rune_or_gem": true,
+    "divine_weapon_authentic_mythological_identity_required_before_live": true,
+    "divine_weapon_character_bible_required_before_live": true
+  },
+  "endpoints": [
+    {"method":"GET","path":"/api/divine-weapon-upgrade-safety-preview/config"},
+    {"method":"POST","path":"/api/divine-weapon-upgrade-safety-preview/validate-request"},
+    {"method":"POST","path":"/api/divine-weapon-upgrade-safety-preview/guard-plan-preview"},
+    {"method":"POST","path":"/api/divine-weapon-upgrade-safety-preview/idempotency-preview"}
+  ],
+  "safety_invariants": {
+    "commit_enabled": false,
+    "live_mutation_enabled": false,
+    "divine_weapon_mutation_enabled": false,
+    "hero_copy_consumption_enabled": false,
+    "materials_consumed": false,
+    "currency_consumed": false,
+    "premium_gems_currency_used": false,
+    "bp_delta_triggered": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "exp_grant_enabled": false,
+    "stamina_consumed": false,
+    "tickets_consumed": false,
+    "calls_battle_engine": false,
+    "calls_api_battle_simulate": false,
+    "calls_api_story_battle": false,
+    "character_bible_changed": false,
+    "hero_final_numbers_changed": false
+  },
+  "existing_systems_unchanged": [
+    "backend/routes/artifacts.py",
+    "backend/battle_engine.py"
+  ]
+}

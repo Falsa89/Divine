@@ -834,6 +834,82 @@ OPTIONAL = [
     ('PROJECT-GEAR-FORGE-FUSION-COMMIT-SAFETY-HARDENING', 'validate_project_gear_forge_fusion_commit_safety_hardening_v1.py'),
     ('PROJECT-RUNE-SCROLL-TALISMAN-COMMIT-SAFETY-HARDENING', 'validate_project_rune_scroll_talisman_commit_safety_hardening_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-2-v38-ROLLUP', 'validate_mega_economy_safety_acceleration_2_v38_rollup.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v39_MEGA_ECONOMY_SAFETY_ACCELERATION_3
+    # PUBLIC_SYNC_TAG_v39_MEGA_ECONOMY_SAFETY_ACCELERATION_3
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_3_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_3_ARTIFACT_AND_DIVINE_WEAPON_HARDENING
+    # _PACK_v39 (combo pack, 2 endgame tracks + registry v3 + rollup). All
+    # OPTIONAL, count=1 each.
+    # ------------------------------------------------------------------------
+    # TRACK A: PROJECT_ARTIFACT_UPGRADE_COMMIT_SAFETY_HARDENING_PACK (PHASE_9A).
+    # ENDGAME_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT. New gated
+    # route at /api/artifact-upgrade-safety-preview/* (config GET,
+    # validate-request POST, guard-plan-preview POST, idempotency-preview
+    # POST). Default 503 disabled. Feature flag:
+    # ARTIFACT_UPGRADE_SAFETY_PREVIEW_ENABLED. operation_family =
+    # artifact_upgrade_commit. allowed_operation_types: artifact_upgrade,
+    # artifact_duplicate_fusion, artifact_limit_break_preview. db_writes=0.
+    # No live upgrade/fusion/pull. No artifact mutation. No global bonus
+    # activation. No material/currency consumption. No premium users.gems
+    # use. No BP Delta trigger. No call to battle_engine. No call to
+    # /api/battle/simulate or /api/story/battle. backend/routes/artifacts.py
+    # UNCHANGED (MD5 locked, asserted in validator).
+    # ------------------------------------------------------------------------
+    # TRACK B: PROJECT_DIVINE_WEAPON_UPGRADE_COMMIT_SAFETY_HARDENING_PACK
+    # (PHASE_9B). ENDGAME_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT.
+    # New gated route at /api/divine-weapon-upgrade-safety-preview/* (config
+    # GET, validate-request POST, guard-plan-preview POST, idempotency-preview
+    # POST). Default 503 disabled. Feature flag:
+    # DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED. operation_family =
+    # divine_weapon_upgrade_commit. allowed_operation_types:
+    # divine_weapon_unlock_preview, divine_weapon_upgrade,
+    # divine_weapon_awaken_preview. Canonical distinction explicit: Divine
+    # Weapon is native-6-star-only, character-bound, NOT generic gear, NOT
+    # artifact, NOT rune/gem. db_writes=0. No live unlock/upgrade/awakening.
+    # No divine weapon mutation. No hero copy consumption. No material/
+    # currency consumption. No premium users.gems use. No BP Delta trigger.
+    # Character Bible unchanged. hero final_numbers unchanged.
+    # ------------------------------------------------------------------------
+    # TRACK C: PROJECT_ENDGAME_SYSTEM_ECONOMY_SAFETY_REGISTRY_v3.
+    # DESIGN_CONTRACT_AUDIT_ONLY. Shared registry v3 supersedes v2 and adds
+    # the 2 new endgame operation families. Global:
+    # endgame_safety_hardening_v39_ready=true,
+    # artifact_upgrade_safety_preview_ready=true,
+    # divine_weapon_upgrade_safety_preview_ready=true,
+    # live_commit_allowed_in_this_pack=false, db_writes=0,
+    # bp_delta_runtime_enabled=false. No new backend route in this track.
+    # ------------------------------------------------------------------------
+    # ROLLUP: MEGA-ECONOMY-SAFETY-ACCELERATION-3-v39-ROLLUP runs Track A/B
+    # validators back-to-back and asserts the 5 MD5-locked core files, the 3
+    # suite tuple counts (count=1 each), registry v3 coherence, v37 shared
+    # contract + v38 registry v2 still present, backend/routes/artifacts.py
+    # unchanged (strict MD5). No fake PASS. No validator weakening. No tuple
+    # duplicate.
+    # ------------------------------------------------------------------------
+    # Files:
+    #   Route A:   backend/routes/artifact_upgrade_safety_preview.py
+    #   Route B:   backend/routes/divine_weapon_upgrade_safety_preview.py
+    #   Design A:  data/design/artifacts/artifact_upgrade_commit_safety_hardening_v1.json
+    #   Schema A:  data/design/artifacts/artifact_upgrade_commit_request_schema_v1.json
+    #   Guard A:   data/design/artifacts/artifact_upgrade_guard_policy_v1.json
+    #   Proof A:   data/design/artifacts/artifact_upgrade_safety_proof_marker_v1.json
+    #   Design B:  data/design/divine_weapon/divine_weapon_upgrade_commit_safety_hardening_v1.json
+    #   Schema B:  data/design/divine_weapon/divine_weapon_upgrade_commit_request_schema_v1.json
+    #   Guard B:   data/design/divine_weapon/divine_weapon_guard_policy_v1.json
+    #   Proof B:   data/design/divine_weapon/divine_weapon_safety_proof_marker_v1.json
+    #   Registry:  data/design/economy_safety/endgame_economy_safety_registry_v3.json
+    #   Rollup:    data/design/economy_safety/mega_economy_safety_acceleration_3_v39_rollup_marker_v1.json
+    #   Doc 247:   docs/divine/247_ARTIFACT_UPGRADE_COMMIT_SAFETY_HARDENING.md
+    #   Doc 248:   docs/divine/248_DIVINE_WEAPON_UPGRADE_COMMIT_SAFETY_HARDENING.md
+    #   Doc 249:   docs/divine/249_MEGA_ECONOMY_SAFETY_ACCELERATION_3_v39.md
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. No v39b/v39c sync-fix pack will be attempted.
+    # ========================================================================
+    ('PROJECT-ARTIFACT-UPGRADE-COMMIT-SAFETY-HARDENING', 'validate_project_artifact_upgrade_commit_safety_hardening_v1.py'),
+    ('PROJECT-DIVINE-WEAPON-UPGRADE-COMMIT-SAFETY-HARDENING', 'validate_project_divine_weapon_upgrade_commit_safety_hardening_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-3-v39-ROLLUP', 'validate_mega_economy_safety_acceleration_3_v39_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,43 @@
+{
+  "schema": "artifact_upgrade_commit_request_schema_v1",
+  "version": 1,
+  "operation_family": "artifact_upgrade_commit",
+  "allowed_operation_types": ["artifact_upgrade", "artifact_duplicate_fusion", "artifact_limit_break_preview"],
+  "required_fields": [
+    "request_id",
+    "idempotency_key",
+    "operation_type",
+    "user_id",
+    "server_id",
+    "artifact_instance_id",
+    "fodder_artifact_instance_ids",
+    "target_level",
+    "target_rank",
+    "expected_artifact_version",
+    "expected_inventory_version",
+    "expected_materials_version",
+    "client_trace_id",
+    "created_at"
+  ],
+  "field_types": {
+    "request_id": "string",
+    "idempotency_key": "string",
+    "operation_type": "enum(artifact_upgrade,artifact_duplicate_fusion,artifact_limit_break_preview)",
+    "user_id": "string",
+    "server_id": "string",
+    "artifact_instance_id": "string",
+    "fodder_artifact_instance_ids": "array<string>",
+    "target_level": "integer",
+    "target_rank": "integer",
+    "expected_artifact_version": "integer",
+    "expected_inventory_version": "integer",
+    "expected_materials_version": "integer",
+    "client_trace_id": "string",
+    "created_at": "iso8601_string"
+  },
+  "constraints": {
+    "fodder_artifact_instance_ids_unique": true,
+    "artifact_instance_id_not_in_fodder": true,
+    "idempotency_key_required": true
+  }
+}

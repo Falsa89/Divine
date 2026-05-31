@@ -1,0 +1,303 @@
+"""PROJECT_ARTIFACT_UPGRADE_COMMIT_SAFETY_HARDENING_PACK (v39 Track A).
+
+Preview-only/gated safety layer for the FUTURE Artifact upgrade/fusion/
+duplicate commit. Strictly preview-gated. No live commit. No DB write.
+No artifact mutation. No artifact bonus activation. No material/currency
+consumption. No premium users.gems usage. No BP Delta.
+
+Artifact canonical distinction:
+- Artifact = global roster/account collection.
+- Artifact is NOT equip / NOT Gear / NOT Gemme / NOT Rune / NOT Divine Weapon.
+- Artifact live bonuses/upgrades must not activate without dedicated
+  approved Bible/validator.
+
+backend/routes/artifacts.py is MD5 locked and is NOT modified by this pack.
+"""
+from __future__ import annotations
+import hashlib
+import os
+from typing import Any, Dict, Optional
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+
+FEATURE_FLAG = "ARTIFACT_UPGRADE_SAFETY_PREVIEW_ENABLED"
+CONTRACT_VERSION = "artifact_upgrade_safety_preview_v1"
+RUNTIME_MODE_TAG = "artifact_upgrade_safety_preview_gated_no_live_commit"
+
+CANONICAL_DISTINCTION = {
+    "artifact_is": "global roster/account collection",
+    "artifact_is_not_equip": True,
+    "artifact_is_not_gear": True,
+    "artifact_is_not_gemme": True,
+    "artifact_is_not_rune": True,
+    "artifact_is_not_divine_weapon": True,
+    "artifact_live_bonus_activation_requires_dedicated_bible": True,
+}
+
+router = APIRouter(
+    prefix="/api/artifact-upgrade-safety-preview",
+    tags=["artifact_upgrade_safety_preview"],
+)
+
+
+class RequestPayload(BaseModel):
+    payload: Optional[Dict[str, Any]] = None
+
+
+def _flag_enabled() -> bool:
+    return os.environ.get(FEATURE_FLAG, "").strip().lower() == "true"
+
+
+def _safety_flags() -> Dict[str, Any]:
+    return {
+        "preview_only": True,
+        "commit_enabled": False,
+        "live_mutation_enabled": False,
+        "artifact_mutation_enabled": False,
+        "artifact_bonus_activation_enabled": False,
+        "materials_consumed": False,
+        "currency_consumed": False,
+        "premium_gems_currency_used": False,
+        "bp_delta_triggered": False,
+        "db_writes": 0,
+        "reward_grant_enabled": False,
+        "exp_grant_enabled": False,
+        "stamina_consumed": False,
+        "tickets_consumed": False,
+        "calls_battle_engine": False,
+        "calls_api_battle_simulate": False,
+        "calls_api_story_battle": False,
+        "calls_artifacts_legacy": False,
+    }
+
+
+def _disabled(method: str, path_suffix: str) -> Dict[str, Any]:
+    return {
+        "status": "disabled",
+        "contract_version": CONTRACT_VERSION,
+        "runtime_mode": RUNTIME_MODE_TAG,
+        "feature_flag": FEATURE_FLAG,
+        "method": method,
+        "path_suffix": path_suffix,
+        "runtime_enabled": False,
+        "preview_only": True,
+        "commit_enabled": False,
+        "live_mutation_enabled": False,
+        "artifact_mutation_enabled": False,
+        "artifact_bonus_activation_enabled": False,
+        "materials_consumed": False,
+        "currency_consumed": False,
+        "premium_gems_currency_used": False,
+        "bp_delta_triggered": False,
+        "db_writes": 0,
+        "canonical_distinction": CANONICAL_DISTINCTION,
+    }
+
+
+def _idem(seed: str) -> str:
+    return "idem_" + hashlib.sha256(f"artifact_upgrade_safety|{seed}".encode()).hexdigest()[:24]
+
+
+ALLOWED_OPERATION_TYPES = (
+    "artifact_upgrade", "artifact_duplicate_fusion", "artifact_limit_break_preview",
+)
+
+
+def _sample_request() -> Dict[str, Any]:
+    return {
+        "request_id": "req_artifact_upgrade_preview_static_v1",
+        "idempotency_key": "client_idem_static_v1",
+        "operation_type": "artifact_upgrade",
+        "operation_family": "artifact_upgrade_commit",
+        "user_id": "user_preview_static",
+        "server_id": "server_s1_preview_static",
+        "artifact_instance_id": "artifact_preview_static_v1",
+        "fodder_artifact_instance_ids": [],
+        "target_level": 10,
+        "target_rank": 1,
+        "expected_artifact_version": 1,
+        "expected_inventory_version": 1,
+        "expected_materials_version": 1,
+        "client_trace_id": "trace_preview_static_v1",
+        "created_at": "2026-05-31T21:30:00Z",
+    }
+
+
+GUARD_CHECKS = [
+    "auth_required",
+    "user_owns_artifact",
+    "user_owns_all_fodder_artifacts",
+    "artifact_not_locked",
+    "artifact_not_favorite",
+    "artifact_not_in_restricted_state",
+    "fodder_artifacts_not_locked",
+    "fodder_artifacts_not_favorite",
+    "no_duplicate_fodder_ids",
+    "base_artifact_not_in_fodder",
+    "target_level_within_cap",
+    "target_rank_within_cap",
+    "upgrade_recipe_valid",
+    "duplicate_fusion_recipe_valid",
+    "artifact_bible_required_before_live",
+    "anti_power_creep_validator_required_before_live",
+    "global_bonus_activation_disabled",
+    "material_cost_policy_defined_but_not_charged",
+    "currency_cost_policy_defined_but_not_charged",
+    "same_request_id_not_committed",
+    "idempotency_key_required",
+    "expected_versions_match",
+    "premium_users_gems_not_used",
+    "atomic_commit_required_future",
+    "rollback_policy_required_future",
+    "audit_log_required_future",
+    "bp_delta_not_triggered_in_preview",
+]
+
+
+def _guard_plan(req: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "operation": req.get("operation_type", "artifact_upgrade"),
+        "operation_family": "artifact_upgrade_commit",
+        "guard_checks": [
+            {"name": c, "status": "would_run", "preview_only": True} for c in GUARD_CHECKS
+        ],
+        "live_commit_will_run_in_preview": False,
+        "artifact_mutation_will_apply_in_preview": False,
+        "artifact_bonus_activation_will_apply_in_preview": False,
+        "materials_will_be_consumed_in_preview": False,
+        "currency_will_be_consumed_in_preview": False,
+        "premium_gems_currency_will_be_used_in_preview": False,
+        "bp_delta_will_be_triggered_in_preview": False,
+    }
+
+
+REQUIRED_FIELDS = [
+    "request_id", "idempotency_key", "operation_type", "user_id", "server_id",
+    "artifact_instance_id", "fodder_artifact_instance_ids",
+    "target_level", "target_rank",
+    "expected_artifact_version", "expected_inventory_version",
+    "expected_materials_version", "client_trace_id", "created_at",
+]
+
+
+def _validate_request(req: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not isinstance(req, dict):
+        return {"valid": False, "errors": ["payload must be an object"], "missing_fields": REQUIRED_FIELDS}
+    missing = [f for f in REQUIRED_FIELDS if f not in req]
+    errors = [f"missing required field: {f}" for f in missing]
+    op = req.get("operation_type")
+    if op is not None and op not in ALLOWED_OPERATION_TYPES:
+        errors.append(f"operation_type must be one of {list(ALLOWED_OPERATION_TYPES)}")
+    fodder = req.get("fodder_artifact_instance_ids")
+    if fodder is not None:
+        if not isinstance(fodder, list):
+            errors.append("fodder_artifact_instance_ids must be a list")
+        else:
+            if len(set(fodder)) != len(fodder):
+                errors.append("fodder_artifact_instance_ids must not contain duplicates")
+            if req.get("artifact_instance_id") in fodder:
+                errors.append("artifact_instance_id must not be in fodder_artifact_instance_ids")
+    return {"valid": len(errors) == 0, "errors": errors, "missing_fields": missing}
+
+
+def _idempotency_preview(req: Dict[str, Any]) -> Dict[str, Any]:
+    seed = "|".join(str(req.get(k)) for k in (
+        "request_id", "user_id", "server_id",
+        "artifact_instance_id", "operation_type", "idempotency_key",
+    ))
+    return {
+        "server_idempotency_key": _idem(seed),
+        "request_hash": hashlib.sha256(seed.encode()).hexdigest()[:16],
+        "retry_same_key_must_return_same_result": True,
+        "conflicting_payload_with_same_key_must_be_rejected": True,
+        "atomic_commit_future": True,
+        "audit_log_future": True,
+        "rollback_strategy_future": True,
+        "ttl_seconds_recommended": 86400,
+        "live_commit_allowed": False,
+    }
+
+
+@router.get("/config")
+async def get_config() -> Dict[str, Any]:
+    if not _flag_enabled():
+        raise HTTPException(status_code=503, detail=_disabled("GET", "config"))
+    return {
+        "status": "enabled",
+        "contract_version": CONTRACT_VERSION,
+        "runtime_mode": RUNTIME_MODE_TAG,
+        "feature_flag": FEATURE_FLAG,
+        "runtime_enabled": True,
+        "preview_only": True,
+        "operation_family": "artifact_upgrade_commit",
+        "allowed_operation_types": list(ALLOWED_OPERATION_TYPES),
+        "supported_guard_checks": GUARD_CHECKS,
+        "canonical_distinction": CANONICAL_DISTINCTION,
+        "endpoints": {
+            "config": "GET /api/artifact-upgrade-safety-preview/config",
+            "validate_request": "POST /api/artifact-upgrade-safety-preview/validate-request",
+            "guard_plan_preview": "POST /api/artifact-upgrade-safety-preview/guard-plan-preview",
+            "idempotency_preview": "POST /api/artifact-upgrade-safety-preview/idempotency-preview",
+        },
+        "safety_flags": _safety_flags(),
+    }
+
+
+@router.post("/validate-request")
+async def validate_request(body: RequestPayload) -> Dict[str, Any]:
+    if not _flag_enabled():
+        raise HTTPException(status_code=503, detail=_disabled("POST", "validate-request"))
+    req = body.payload if body and body.payload is not None else _sample_request()
+    return {
+        "status": "preview_ok",
+        "contract_version": CONTRACT_VERSION,
+        "operation_family": "artifact_upgrade_commit",
+        "validation": _validate_request(req),
+        "safety_flags": _safety_flags(),
+        "canonical_distinction": CANONICAL_DISTINCTION,
+    }
+
+
+@router.post("/guard-plan-preview")
+async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
+    if not _flag_enabled():
+        raise HTTPException(status_code=503, detail=_disabled("POST", "guard-plan-preview"))
+    req = body.payload if body and body.payload is not None else _sample_request()
+    return {
+        "status": "preview_ok",
+        "contract_version": CONTRACT_VERSION,
+        "operation_family": "artifact_upgrade_commit",
+        "guard_plan": _guard_plan(req),
+        "validation": _validate_request(req),
+        "safety_flags": _safety_flags(),
+        "canonical_distinction": CANONICAL_DISTINCTION,
+        "notes": [
+            "guard_plan_is_display_only",
+            "no_live_commit_in_preview",
+            "no_artifact_mutation_in_preview",
+            "no_artifact_bonus_activation_in_preview",
+            "no_materials_consumed_in_preview",
+            "no_currency_consumed_in_preview",
+            "no_premium_gems_currency_used_in_preview",
+            "no_bp_delta_triggered_in_preview",
+            "no_db_write_in_preview",
+        ],
+    }
+
+
+@router.post("/idempotency-preview")
+async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
+    if not _flag_enabled():
+        raise HTTPException(status_code=503, detail=_disabled("POST", "idempotency-preview"))
+    req = body.payload if body and body.payload is not None else _sample_request()
+    validation = _validate_request(req)
+    return {
+        "status": "preview_ok",
+        "contract_version": CONTRACT_VERSION,
+        "operation_family": "artifact_upgrade_commit",
+        "idempotency_preview": _idempotency_preview(req) if validation.get("valid") else None,
+        "validation": validation,
+        "safety_flags": _safety_flags(),
+        "canonical_distinction": CANONICAL_DISTINCTION,
+        "live_commit_allowed": False,
+    }

@@ -697,6 +697,23 @@ from routes.gear_forge_fusion_safety_preview import router as gear_forge_fusion_
 app.include_router(gear_forge_fusion_safety_preview_router)
 from routes.rune_scroll_talisman_safety_preview import router as rune_scroll_talisman_safety_preview_router
 app.include_router(rune_scroll_talisman_safety_preview_router)
+# ============================================================================
+# MEGA_ECONOMY_SAFETY_ACCELERATION_3_v39_ARTIFACT_AND_DIVINE_WEAPON_SAFETY
+# ----------------------------------------------------------------------------
+# Pack:          MEGA_ECONOMY_SAFETY_ACCELERATION_3_ARTIFACT_AND_DIVINE_WEAPON_HARDENING_PACK_v39
+# Parent v38b:   189b09a1 / Parent v38c: 4c2398d6
+# Mode:          ENDGAME_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_COMMIT
+# Routers below are preview-only/gated (default 503) and execute zero DB
+# writes. No Artifact live upgrade/fusion/pull/bonus activation. No Divine
+# Weapon live unlock/upgrade/awakening. No artifact/divine weapon/hero copy/
+# user_materials mutation. No premium users.gems usage. No reward/EXP grant.
+# No BP Delta runtime trigger. backend/routes/artifacts.py UNCHANGED.
+# backend/battle_engine.py UNCHANGED.
+# ============================================================================
+from routes.artifact_upgrade_safety_preview import router as artifact_upgrade_safety_preview_router
+app.include_router(artifact_upgrade_safety_preview_router)
+from routes.divine_weapon_upgrade_safety_preview import router as divine_weapon_upgrade_safety_preview_router
+app.include_router(divine_weapon_upgrade_safety_preview_router)
 
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
