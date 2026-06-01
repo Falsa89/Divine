@@ -910,6 +910,75 @@ OPTIONAL = [
     ('PROJECT-ARTIFACT-UPGRADE-COMMIT-SAFETY-HARDENING', 'validate_project_artifact_upgrade_commit_safety_hardening_v1.py'),
     ('PROJECT-DIVINE-WEAPON-UPGRADE-COMMIT-SAFETY-HARDENING', 'validate_project_divine_weapon_upgrade_commit_safety_hardening_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-3-v39-ROLLUP', 'validate_mega_economy_safety_acceleration_3_v39_rollup.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_v40_MEGA_ECONOMY_SAFETY_ACCELERATION_4
+    # PUBLIC_SYNC_TAG_v40_MEGA_ECONOMY_SAFETY_ACCELERATION_4
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_4_REGISTRATION_SENTINEL
+    # ------------------------------------------------------------------------
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_4_BATTLE_PASS_AND_MAIL_CLAIM_HARDENING
+    # _PACK_v40 (combo pack, 2 reward-claim tracks + registry v4 + rollup).
+    # All OPTIONAL, count=1 each. Closes the last 2 placeholders of the
+    # endgame economy safety registry. After this pack, ALL 8 operation
+    # families have a preview-only safety layer.
+    # ------------------------------------------------------------------------
+    # TRACK A: PROJECT_BATTLE_PASS_REWARD_CLAIM_SAFETY_HARDENING_PACK (PHASE_10A).
+    # REWARD_CLAIM_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_CLAIM. New
+    # gated route at /api/battle-pass-claim-safety-preview/* (config GET,
+    # validate-request POST, guard-plan-preview POST, idempotency-preview
+    # POST). Default 503 disabled. Feature flag:
+    # BATTLE_PASS_CLAIM_SAFETY_PREVIEW_ENABLED. operation_family =
+    # battle_pass_reward_claim. allowed_operation_types: free_reward_claim,
+    # premium_reward_claim_preview, milestone_reward_claim,
+    # season_reward_claim_preview. db_writes=0. No live claim. No reward
+    # grant. No inventory/currency mutation. No premium currency. No BP
+    # purchase. No premium track unlock. No VIP/shop mutation. No BP Delta.
+    # frontend/app/battlepass.tsx UNCHANGED (MD5 locked, asserted).
+    # frontend/app/vip.tsx UNCHANGED (MD5 locked, asserted).
+    # ------------------------------------------------------------------------
+    # TRACK B: PROJECT_MAIL_REWARD_CLAIM_SAFETY_HARDENING_PACK (PHASE_10B).
+    # REWARD_CLAIM_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_CLAIM. New
+    # gated route at /api/mail-claim-safety-preview/* (config GET,
+    # validate-request POST, guard-plan-preview POST, idempotency-preview
+    # POST). Default 503 disabled. Feature flag:
+    # MAIL_CLAIM_SAFETY_PREVIEW_ENABLED. operation_family =
+    # mail_reward_claim. allowed_operation_types: single_reward_claim,
+    # bulk_reward_claim_preview, attachment_claim,
+    # compensation_claim_preview, event_reward_claim_preview. db_writes=0.
+    # No live claim. No reward grant. No mail state mutation (no delete,
+    # no read/unread, no claim state). No inventory/currency mutation. No
+    # premium currency. No BP Delta. No admin/sender live tooling.
+    # ------------------------------------------------------------------------
+    # TRACK C: PROJECT_REWARD_CLAIM_ECONOMY_SAFETY_REGISTRY_v4.
+    # DESIGN_CONTRACT_AUDIT_ONLY. Shared registry v4 supersedes v3 and
+    # marks both BP claim + Mail claim as preview_only_safety_layer_present.
+    # Global: all_8_operation_families_have_preview_safety_layer=true,
+    # live_commit_allowed_in_this_pack=false,
+    # live_claim_allowed_in_this_pack=false, db_writes=0,
+    # reward_grant_enabled=false, bp_delta_runtime_enabled=false.
+    # ------------------------------------------------------------------------
+    # ROLLUP: MEGA-ECONOMY-SAFETY-ACCELERATION-4-v40-ROLLUP runs Track A/B
+    # validators back-to-back and asserts the 5 MD5-locked core files, the
+    # 3 suite tuple counts (count=1 each), registry v4 coherence (8 op
+    # families), v37 shared contract + v38/v39 registries v2/v3 still
+    # present, server.py LOUD sentinel present, include_router counts = 1
+    # each. No fake PASS. No validator weakening. No tuple duplicate.
+    # ------------------------------------------------------------------------
+    # Files:
+    #   Route A:    backend/routes/battle_pass_claim_safety_preview.py
+    #   Route B:    backend/routes/mail_claim_safety_preview.py
+    #   Proof A:    data/design/economy_safety/battle_pass_claim_safety_proof_marker_v1.json
+    #   Proof B:    data/design/economy_safety/mail_claim_safety_proof_marker_v1.json
+    #   Registry:   data/design/economy_safety/reward_claim_economy_safety_registry_v4.json
+    #   Rollup:     data/design/economy_safety/mega_economy_safety_acceleration_4_v40_rollup_marker_v1.json
+    #   Doc 251:    docs/divine/251_BATTLE_PASS_REWARD_CLAIM_SAFETY_HARDENING.md
+    #   Doc 252:    docs/divine/252_MAIL_REWARD_CLAIM_SAFETY_HARDENING.md
+    #   Doc 253:    docs/divine/253_MEGA_ECONOMY_SAFETY_ACCELERATION_4_v40.md
+    # Known caveat: SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION
+    # accepted. server.py LOUD sentinel block ensures public blob refresh.
+    # ========================================================================
+    ('PROJECT-BATTLE-PASS-CLAIM-SAFETY-HARDENING', 'validate_project_battle_pass_claim_safety_hardening_v1.py'),
+    ('PROJECT-MAIL-CLAIM-SAFETY-HARDENING', 'validate_project_mail_claim_safety_hardening_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-4-v40-ROLLUP', 'validate_mega_economy_safety_acceleration_4_v40_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

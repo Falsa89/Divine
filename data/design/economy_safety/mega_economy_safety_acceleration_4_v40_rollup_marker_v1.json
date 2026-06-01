@@ -1,0 +1,34 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_4_BATTLE_PASS_AND_MAIL_CLAIM_HARDENING_PACK_v40",
+  "version": 1,
+  "phase": "MEGA_BATCH_ECONOMY_SAFETY_ACCELERATION_4",
+  "runtime_activation": false,
+  "db_writes": 0,
+  "bp_delta_runtime_enabled": false,
+  "all_8_operation_families_have_preview_safety_layer": true,
+  "track_a": {
+    "pack": "PROJECT_BATTLE_PASS_REWARD_CLAIM_SAFETY_HARDENING_PACK",
+    "route": "backend/routes/battle_pass_claim_safety_preview.py",
+    "proof_marker": "data/design/economy_safety/battle_pass_claim_safety_proof_marker_v1.json",
+    "validator": "backend/scripts/validate_project_battle_pass_claim_safety_hardening_v1.py",
+    "suite_tuple": "PROJECT-BATTLE-PASS-CLAIM-SAFETY-HARDENING",
+    "feature_flag": "BATTLE_PASS_CLAIM_SAFETY_PREVIEW_ENABLED"
+  },
+  "track_b": {
+    "pack": "PROJECT_MAIL_REWARD_CLAIM_SAFETY_HARDENING_PACK",
+    "route": "backend/routes/mail_claim_safety_preview.py",
+    "proof_marker": "data/design/economy_safety/mail_claim_safety_proof_marker_v1.json",
+    "validator": "backend/scripts/validate_project_mail_claim_safety_hardening_v1.py",
+    "suite_tuple": "PROJECT-MAIL-CLAIM-SAFETY-HARDENING",
+    "feature_flag": "MAIL_CLAIM_SAFETY_PREVIEW_ENABLED"
+  },
+  "track_c": {
+    "pack": "PROJECT_REWARD_CLAIM_ECONOMY_SAFETY_REGISTRY_v4",
+    "registry": "data/design/economy_safety/reward_claim_economy_safety_registry_v4.json"
+  },
+  "rollup": {
+    "validator": "backend/scripts/validate_mega_economy_safety_acceleration_4_v40_rollup.py",
+    "suite_tuple": "MEGA-ECONOMY-SAFETY-ACCELERATION-4-v40-ROLLUP"
+  },
+  "public_sync_caveat": "SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION accepted. Public content registration block PUBLIC_CONTENT_REGISTRATION_v40_BATTLE_PASS_AND_MAIL_CLAIM_SAFETY_LOUD added to backend/server.py to force blob refresh."
+}

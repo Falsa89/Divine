@@ -1,0 +1,129 @@
+{
+  "registry": "reward_claim_economy_safety_registry_v4",
+  "version": 4,
+  "supersedes": "endgame_economy_safety_registry_v3",
+  "phase": "REWARD_CLAIM_ECONOMY_SAFETY_HARDENING_v40",
+  "created_at_utc": "2026-05-31T22:30:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "global": {
+    "all_8_operation_families_have_preview_safety_layer": true,
+    "battle_pass_claim_safety_preview_ready": true,
+    "mail_claim_safety_preview_ready": true,
+    "live_commit_allowed_in_this_pack": false,
+    "live_claim_allowed_in_this_pack": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "materials_consumed": false,
+    "premium_currency_used": false,
+    "bp_delta_runtime_enabled": false
+  },
+  "registry_v3_reference": "data/design/economy_safety/endgame_economy_safety_registry_v3.json",
+  "registry_v2_reference": "data/design/economy_safety/build_system_economy_safety_registry_v2.json",
+  "shared_economy_contract_v1_reference": "data/design/economy_safety/economy_idempotency_and_atomic_commit_contract_v1.json",
+  "operation_families": {
+    "gem_socket_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v37_track_a",
+      "safety_route": "backend/routes/gem_socket_commit_safety_preview.py",
+      "feature_flag": "GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "material_raid_claim": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v37_track_b",
+      "safety_route": "backend/routes/material_raid_claim_safety_preview.py",
+      "feature_flag": "MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "gear_forge_fusion_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v38_track_a",
+      "safety_route": "backend/routes/gear_forge_fusion_safety_preview.py",
+      "feature_flag": "GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "rune_scroll_talisman_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v38_track_b",
+      "safety_route": "backend/routes/rune_scroll_talisman_safety_preview.py",
+      "feature_flag": "RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "artifact_upgrade_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v39_track_a",
+      "safety_route": "backend/routes/artifact_upgrade_safety_preview.py",
+      "feature_flag": "ARTIFACT_UPGRADE_SAFETY_PREVIEW_ENABLED",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "divine_weapon_upgrade_commit": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v39_track_b",
+      "safety_route": "backend/routes/divine_weapon_upgrade_safety_preview.py",
+      "feature_flag": "DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED",
+      "live_commit_allowed": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    },
+    "battle_pass_reward_claim": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v40_track_a",
+      "safety_route": "backend/routes/battle_pass_claim_safety_preview.py",
+      "feature_flag": "BATTLE_PASS_CLAIM_SAFETY_PREVIEW_ENABLED",
+      "namespace": "/api/battle-pass-claim-safety-preview",
+      "allowed_operation_types": [
+        "battle_pass_free_reward_claim",
+        "battle_pass_premium_reward_claim_preview",
+        "battle_pass_milestone_reward_claim",
+        "battle_pass_season_reward_claim_preview"
+      ],
+      "live_claim_allowed": false,
+      "reward_grant_enabled": false,
+      "inventory_mutation_enabled": false,
+      "currency_mutation_enabled": false,
+      "premium_currency_used": false,
+      "battle_pass_purchase_enabled": false,
+      "premium_track_unlock_enabled": false,
+      "vip_mutation_enabled": false,
+      "shop_mutation_enabled": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false,
+      "frontend_battlepass_tsx_unchanged": true,
+      "frontend_vip_tsx_unchanged": true
+    },
+    "mail_reward_claim": {
+      "status": "preview_only_safety_layer_present",
+      "phase": "v40_track_b",
+      "safety_route": "backend/routes/mail_claim_safety_preview.py",
+      "feature_flag": "MAIL_CLAIM_SAFETY_PREVIEW_ENABLED",
+      "namespace": "/api/mail-claim-safety-preview",
+      "allowed_operation_types": [
+        "mail_single_reward_claim",
+        "mail_bulk_reward_claim_preview",
+        "mail_attachment_claim",
+        "mail_compensation_claim_preview",
+        "mail_event_reward_claim_preview"
+      ],
+      "live_claim_allowed": false,
+      "reward_grant_enabled": false,
+      "inventory_mutation_enabled": false,
+      "currency_mutation_enabled": false,
+      "premium_currency_used": false,
+      "mail_state_mutation_enabled": false,
+      "mail_delete_enabled": false,
+      "mail_read_state_mutation_enabled": false,
+      "db_writes": 0,
+      "bp_delta_runtime_enabled": false
+    }
+  }
+}

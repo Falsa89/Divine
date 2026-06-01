@@ -796,6 +796,74 @@ app.include_router(artifact_upgrade_safety_preview_router)
 from routes.divine_weapon_upgrade_safety_preview import router as divine_weapon_upgrade_safety_preview_router
 app.include_router(divine_weapon_upgrade_safety_preview_router)
 
+# ============================================================================
+# ====                                                                    ====
+# ====  PUBLIC_CONTENT_REGISTRATION_v40_BATTLE_PASS_AND_MAIL_CLAIM_SAFETY_LOUD
+# ====  MEGA_ECONOMY_SAFETY_ACCELERATION_4_v40                            ====
+# ====                                                                    ====
+# ============================================================================
+# Pack:             MEGA_ECONOMY_SAFETY_ACCELERATION_4_BATTLE_PASS_AND_MAIL_CLAIM_HARDENING_PACK_v40
+# Parent v39:       6093c4f3
+# Parent v39b:      8998a7f9
+# Mode:             REWARD_CLAIM_ECONOMY_SAFETY_HARDENING_PREVIEW_ONLY_NO_LIVE_CLAIM
+#
+# Purpose
+# -------
+# Close the last 2 placeholders of the endgame economy safety registry v3
+# (battle_pass_reward_claim + mail_reward_claim) by attaching preview-only
+# safety routers. After this commit, ALL 8 operation families have an
+# active preview-only safety layer (registry v4).
+#
+# This is NOT live reward grant enablement.
+# This is NOT a duplicate router registration: each include_router for the
+# two v40 routers appears EXACTLY ONCE in this file (count == 1).
+#
+# Required visible tokens
+# -----------------------
+#   PUBLIC_CONTENT_REGISTRATION_v40_BATTLE_PASS_AND_MAIL_CLAIM_SAFETY_LOUD
+#   battle_pass_claim_safety_preview_router
+#   mail_claim_safety_preview_router
+#   include_router for battle_pass_claim_safety_preview_router  [count == 1]
+#   include_router for mail_claim_safety_preview_router         [count == 1]
+#
+# Safety booleans
+# ---------------
+#   db_writes:                                          0
+#   battle_pass_live_claim_enabled:                     false
+#   mail_live_claim_enabled:                            false
+#   reward_grant_enabled:                               false
+#   inventory_mutation_enabled:                         false
+#   currency_mutation_enabled:                          false
+#   user_wallet_mutation_enabled:                       false
+#   premium_users_gems_used:                            false
+#   battle_pass_purchase_enabled:                       false
+#   premium_track_unlock_enabled:                       false
+#   vip_mutation_enabled:                               false
+#   shop_mutation_enabled:                              false
+#   mail_state_mutation_enabled:                        false
+#   mail_delete_enabled:                                false
+#   mail_read_state_mutation_enabled:                   false
+#   bp_delta_runtime_enabled:                           false
+#   battle_engine_changed:                              false
+#   combat_story_home_routes_changed:                   false
+#   frontend_battlepass_tsx_changed:                    false
+#   frontend_vip_tsx_changed:                           false
+#   artifact_dw_gem_gear_rune_routes_changed:           false
+#   character_bible_changed:                            false
+#   hero_final_numbers_changed:                         false
+#   validator_weakening:                                false
+#   fake_pass:                                          false
+#   duplicate_router_registration:                      false
+#
+# Marker:  data/design/economy_safety/mega_economy_safety_acceleration_4_v40_rollup_marker_v1.json
+# Doc 253: docs/divine/253_MEGA_ECONOMY_SAFETY_ACCELERATION_4_v40.md
+# Registry: data/design/economy_safety/reward_claim_economy_safety_registry_v4.json
+# ============================================================================
+from routes.battle_pass_claim_safety_preview import router as battle_pass_claim_safety_preview_router
+app.include_router(battle_pass_claim_safety_preview_router)
+from routes.mail_claim_safety_preview import router as mail_claim_safety_preview_router
+app.include_router(mail_claim_safety_preview_router)
+
 # ===================== SEED =====================
 # Mappa nome eroe → faction canonica (valori che il resolver background
 # accetta direttamente: greek/norse/egyptian/japanese/celtic).
