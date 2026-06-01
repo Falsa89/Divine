@@ -1,0 +1,79 @@
+{
+  "contract_version": "replay_conflict_telemetry_dry_run_v1",
+  "dry_run_only": true,
+  "persisted": false,
+  "db_writes": 0,
+  "live_enforcement_enabled": false,
+  "preview_request_blocked": false,
+  "pii_safe": true,
+  "raw_payload_captured": false,
+  "operation_families": [
+    "gem_socket_commit",
+    "material_raid_claim",
+    "gear_forge_fusion_commit",
+    "rune_scroll_talisman_commit",
+    "artifact_upgrade_commit",
+    "divine_weapon_upgrade_commit",
+    "battle_pass_reward_claim",
+    "mail_reward_claim"
+  ],
+  "tracked_statuses": [
+    "new_key_preview",
+    "same_key_same_hash_replay_preview",
+    "same_key_diff_hash_conflict_preview",
+    "missing_key_preview",
+    "new_client_key_preview",
+    "same_client_key_same_hash_replay_preview",
+    "same_client_key_diff_hash_conflict_preview",
+    "missing_client_key_preview"
+  ],
+  "counters": {
+    "v43_server_key": [
+      "new_key_preview",
+      "same_key_same_hash_replay_preview",
+      "same_key_diff_hash_conflict_preview",
+      "missing_key_preview"
+    ],
+    "v44_client_key": [
+      "new_client_key_preview",
+      "same_client_key_same_hash_replay_preview",
+      "same_client_key_diff_hash_conflict_preview",
+      "missing_client_key_preview"
+    ]
+  },
+  "response_envelope_key": "replay_conflict_telemetry_dry_run",
+  "config_envelope_key": "observability_aggregation_dry_run",
+  "peek_buffer_envelope_key": "aggregation_snapshot",
+  "forbidden": [
+    "no_db_writes",
+    "no_redis",
+    "no_filesystem_persistence",
+    "no_persistent_ledger",
+    "no_live_enforcement",
+    "no_blocking_preview_on_conflict",
+    "no_reward_grant",
+    "no_inventory_mutation",
+    "no_material_mutation",
+    "no_currency_mutation",
+    "no_wallet_mutation",
+    "no_premium_gems_mutation",
+    "no_mail_state_mutation",
+    "no_bp_delta_runtime",
+    "no_endpoint_path_change",
+    "no_feature_flag_change",
+    "no_default_503_change",
+    "no_safety_flag_change",
+    "no_server_py_change",
+    "no_frontend_change",
+    "no_battle_engine_change",
+    "no_character_bible_change",
+    "no_final_numbers_change"
+  ],
+  "notes": [
+    "All telemetry is in-memory, per-process, bounded ring (4096 events).",
+    "Rolling windows: 60s / 300s / 900s.",
+    "Only PII-safe summaries are recorded (no raw payload).",
+    "This contract does NOT modify any v43/v44 envelopes.",
+    "The preview request must NEVER be blocked by telemetry."
+  ]
+}

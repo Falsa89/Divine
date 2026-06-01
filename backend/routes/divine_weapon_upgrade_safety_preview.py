@@ -101,6 +101,25 @@ except Exception:  # pragma: no cover - safe fallbacks
     def _v44_buffer_status_block(*_a, **_kw):  # type: ignore
         return {"enabled": False, "sizes_by_family": {}, "db_writes": 0}
 
+try:
+    from utils.economy_observability_aggregation_dry_run import (
+        build_config_block as _v45_agg_config_block,
+        build_aggregation_snapshot as _v45_agg_snapshot,
+        build_replay_conflict_telemetry_envelope as _v45_telemetry_envelope,
+    )
+    _V45_DRY_RUN_AVAILABLE = True
+except Exception:  # pragma: no cover - safe fallbacks
+    _V45_DRY_RUN_AVAILABLE = False
+
+    def _v45_agg_config_block():  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "db_writes": 0, "live_enforcement_enabled": False, "preview_request_blocked": False, "persisted": False}
+
+    def _v45_agg_snapshot(*_a, **_kw):  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "windows": [], "db_writes": 0, "persisted": False}
+
+    def _v45_telemetry_envelope(operation_family, detection_statuses=None, route_name=None):  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "operation_family": operation_family, "route": route_name, "statuses": [], "event_id_preview": None, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False}
+
 FEATURE_FLAG = "DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED"
 CONTRACT_VERSION = "divine_weapon_upgrade_safety_preview_v1"
 RUNTIME_MODE_TAG = "divine_weapon_upgrade_safety_preview_gated_no_live_commit"
@@ -334,6 +353,7 @@ async def get_config() -> Dict[str, Any]:
         "idempotency_replay_detection_dry_run": _v43_replay_config_block(),
         "client_key_replay_detection_dry_run": _v44_client_key_replay_config_block(),
         "observability_buffer_peek_dry_run": _v44_buffer_status_block(),
+        "observability_aggregation_dry_run": _v45_agg_config_block(),
     }
 
 
@@ -393,6 +413,14 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
         "observability_dry_run": _v42_obs_env,
         "idempotency_replay_detection_dry_run": _v43_replay_env,
         "client_key_replay_detection_dry_run": _v44_ck_env,
+        "replay_conflict_telemetry_dry_run": _v45_telemetry_envelope(
+            "divine_weapon_upgrade_commit",
+            detection_statuses=[
+                _v43_replay_env.get("detection_status") if isinstance(_v43_replay_env, dict) else None,
+                _v44_ck_env.get("detection_status") if isinstance(_v44_ck_env, dict) else None,
+            ],
+            route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
+        ),
         "canonical_distinction": CANONICAL_DISTINCTION,
     }
 
@@ -454,6 +482,14 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
         "observability_dry_run": _v42_obs_env,
         "idempotency_replay_detection_dry_run": _v43_replay_env,
         "client_key_replay_detection_dry_run": _v44_ck_env,
+        "replay_conflict_telemetry_dry_run": _v45_telemetry_envelope(
+            "divine_weapon_upgrade_commit",
+            detection_statuses=[
+                _v43_replay_env.get("detection_status") if isinstance(_v43_replay_env, dict) else None,
+                _v44_ck_env.get("detection_status") if isinstance(_v44_ck_env, dict) else None,
+            ],
+            route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
+        ),
         "canonical_distinction": CANONICAL_DISTINCTION,
         "notes": [
             "guard_plan_is_display_only",
@@ -529,6 +565,14 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
         "observability_dry_run": _v42_obs_env,
         "idempotency_replay_detection_dry_run": _v43_replay_env,
         "client_key_replay_detection_dry_run": _v44_ck_env,
+        "replay_conflict_telemetry_dry_run": _v45_telemetry_envelope(
+            "divine_weapon_upgrade_commit",
+            detection_statuses=[
+                _v43_replay_env.get("detection_status") if isinstance(_v43_replay_env, dict) else None,
+                _v44_ck_env.get("detection_status") if isinstance(_v44_ck_env, dict) else None,
+            ],
+            route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
+        ),
         "canonical_distinction": CANONICAL_DISTINCTION,
         "live_commit_allowed": False,
     }
@@ -549,5 +593,6 @@ async def peek_buffer_endpoint(limit: int = 25) -> Dict[str, Any]:
         "persisted": False,
         "live_enforcement_enabled": False,
         "preview_request_blocked": False,
+        "aggregation_snapshot": _v45_agg_snapshot("divine_weapon_upgrade_commit"),
     }
 

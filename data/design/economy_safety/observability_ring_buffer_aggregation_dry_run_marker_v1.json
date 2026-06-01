@@ -1,0 +1,29 @@
+{
+  "marker_version": "observability_ring_buffer_aggregation_dry_run_marker_v1",
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_9_OBSERVABILITY_RING_BUFFER_AGGREGATION_AND_REPLAY_TELEMETRY_PACK_v45",
+  "track": "A",
+  "contract_version": "economy_observability_aggregation_dry_run_v1",
+  "utility_path": "backend/utils/economy_observability_aggregation_dry_run.py",
+  "public_api": [
+    "record_telemetry_event",
+    "build_aggregation_snapshot",
+    "build_config_block",
+    "build_replay_conflict_telemetry_envelope",
+    "_test_reset"
+  ],
+  "rolling_windows_seconds": [60, 300, 900],
+  "buffer_capacity": 4096,
+  "persisted": false,
+  "db_writes": 0,
+  "live_enforcement_enabled": false,
+  "preview_request_blocked": false,
+  "pii_safe": true,
+  "raw_payload_captured": false,
+  "in_memory_only": true,
+  "per_process": true,
+  "not_durable_across_restart": true,
+  "no_redis": true,
+  "no_filesystem": true,
+  "no_persistent_ledger": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v45_MEGA_ECONOMY_SAFETY_ACCELERATION_9"
+}

@@ -1,0 +1,374 @@
+{
+  "contract_version": "all_family_canary_qa_rehearsal_matrix_v1",
+  "dry_run_only": true,
+  "signoff_state": "pending",
+  "persisted": false,
+  "db_writes": 0,
+  "live_enforcement_enabled": false,
+  "live_flip_allowed": false,
+  "reward_grant_enabled": false,
+  "mutation_enabled": false,
+  "canary_enabled": false,
+  "canary_percentage": 0,
+  "live_enabled": false,
+  "operation_families": [
+    {
+      "operation_family": "gem_socket_commit",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no inventory mutation",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true
+      }
+    },
+    {
+      "operation_family": "material_raid_claim",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no material mutation",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true
+      }
+    },
+    {
+      "operation_family": "gear_forge_fusion_commit",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no gear mutation",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true
+      }
+    },
+    {
+      "operation_family": "rune_scroll_talisman_commit",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no rune/scroll/talisman mutation",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true
+      }
+    },
+    {
+      "operation_family": "artifact_upgrade_commit",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set ARTIFACT_UPGRADE_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no artifact mutation",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true
+      }
+    },
+    {
+      "operation_family": "divine_weapon_upgrade_commit",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no divine weapon mutation",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true
+      }
+    },
+    {
+      "operation_family": "battle_pass_reward_claim",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set BATTLE_PASS_CLAIM_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no BP delta runtime",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true,
+        "no_bp_delta_runtime": true
+      }
+    },
+    {
+      "operation_family": "mail_reward_claim",
+      "signoff_state": "pending",
+      "canary_enabled": false,
+      "canary_percentage": 0,
+      "live_enabled": false,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "mutation_enabled": false,
+      "live_flip_allowed": false,
+      "kill_switch_test_plan": {
+        "trigger": "set MAIL_CLAIM_SAFETY_PREVIEW_ENABLED=false",
+        "expected_response": "HTTP 503 on all preview routes",
+        "verification": "smoke test /config returns 503 within 1s"
+      },
+      "rollback_template_execution_steps": [
+        "flip feature flag OFF",
+        "verify /config 503",
+        "verify db_writes=0",
+        "verify no mail state/delete/read mutation",
+        "capture observability_aggregation_dry_run snapshot"
+      ],
+      "rehearsal_scenarios": [
+        {"name": "happy_path_dry_run", "expected_status": "preview_ok", "expected_db_writes": 0},
+        {"name": "duplicate_same_hash", "expected_status": "same_key_same_hash_replay_preview", "expected_db_writes": 0},
+        {"name": "duplicate_diff_hash", "expected_status": "same_key_diff_hash_conflict_preview", "expected_db_writes": 0},
+        {"name": "missing_idempotency_key", "expected_status": "missing_key_preview", "expected_db_writes": 0},
+        {"name": "expected_version_mismatch", "expected_status": "validation_error_preview", "expected_db_writes": 0},
+        {"name": "unauthorized_user", "expected_status": "unauthorized_preview", "expected_db_writes": 0},
+        {"name": "feature_flag_disabled", "expected_status": "http_503_preview", "expected_db_writes": 0},
+        {"name": "simulated_rollback_trigger", "expected_status": "rollback_preview", "expected_db_writes": 0},
+        {"name": "observability_alert_trigger_dry_run", "expected_status": "alert_preview", "expected_db_writes": 0}
+      ],
+      "pass_fail_criteria": {
+        "db_writes_must_be": 0,
+        "live_enforcement_must_be": false,
+        "reward_grant_must_be": false,
+        "mutation_must_be": false,
+        "preview_request_must_not_be_blocked": true,
+        "no_mail_state_mutation": true,
+        "no_mail_delete_mutation": true,
+        "no_mail_read_mutation": true
+      }
+    }
+  ],
+  "forbidden": [
+    "no_db_writes",
+    "no_redis",
+    "no_filesystem_persistence",
+    "no_persistent_ledger",
+    "no_live_enforcement",
+    "no_live_flip",
+    "no_blocking_preview_on_conflict",
+    "no_reward_grant",
+    "no_inventory_mutation",
+    "no_material_mutation",
+    "no_currency_mutation",
+    "no_wallet_mutation",
+    "no_premium_gems_mutation",
+    "no_mail_state_mutation",
+    "no_bp_delta_runtime",
+    "no_endpoint_path_change",
+    "no_feature_flag_change",
+    "no_default_503_change",
+    "no_safety_flag_change",
+    "no_server_py_change",
+    "no_frontend_change",
+    "no_battle_engine_change",
+    "no_character_bible_change",
+    "no_final_numbers_change"
+  ]
+}

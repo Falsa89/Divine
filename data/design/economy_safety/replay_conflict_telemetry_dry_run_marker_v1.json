@@ -1,0 +1,31 @@
+{
+  "marker_version": "replay_conflict_telemetry_dry_run_marker_v1",
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_9_OBSERVABILITY_RING_BUFFER_AGGREGATION_AND_REPLAY_TELEMETRY_PACK_v45",
+  "track": "B",
+  "contract_version": "replay_conflict_telemetry_dry_run_v1",
+  "design_path": "data/design/economy_safety/replay_conflict_telemetry_dry_run_v1.json",
+  "wired_routes": [
+    "backend/routes/gem_socket_commit_safety_preview.py",
+    "backend/routes/material_raid_claim_safety_preview.py",
+    "backend/routes/gear_forge_fusion_safety_preview.py",
+    "backend/routes/rune_scroll_talisman_safety_preview.py",
+    "backend/routes/artifact_upgrade_safety_preview.py",
+    "backend/routes/divine_weapon_upgrade_safety_preview.py",
+    "backend/routes/battle_pass_claim_safety_preview.py",
+    "backend/routes/mail_claim_safety_preview.py"
+  ],
+  "response_envelope_key": "replay_conflict_telemetry_dry_run",
+  "config_envelope_key": "observability_aggregation_dry_run",
+  "peek_buffer_envelope_key": "aggregation_snapshot",
+  "persisted": false,
+  "db_writes": 0,
+  "live_enforcement_enabled": false,
+  "preview_request_blocked": false,
+  "endpoint_paths_changed": false,
+  "feature_flags_changed": false,
+  "default_503_changed": false,
+  "safety_flags_changed": false,
+  "server_py_changed": false,
+  "frontend_changed": false,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v45_MEGA_ECONOMY_SAFETY_ACCELERATION_9"
+}

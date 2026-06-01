@@ -1097,6 +1097,47 @@ OPTIONAL = [
     ('PROJECT-OBSERVABILITY-BUFFER-PEEK-DRY-RUN', 'validate_observability_buffer_peek_dry_run_v1.py'),
     ('PROJECT-MATERIAL-RAID-CANARY-QA-REHEARSAL-DRY-RUN', 'validate_material_raid_canary_qa_rehearsal_dry_run_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-8-v44-ROLLUP', 'validate_mega_economy_safety_acceleration_8_v44_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_9_OBSERVABILITY_RING_BUFFER_AGGREGATION_AND_REPLAY_TELEMETRY_PACK_v45
+    # PUBLIC_SYNC_TAG_v45_MEGA_ECONOMY_SAFETY_ACCELERATION_9
+    # ------------------------------------------------------------------------
+    # Observability ring-buffer aggregation + replay/conflict telemetry +
+    # all-family canary QA rehearsal matrix (design-only):
+    #   TRACK A: in-memory ring-buffer aggregation utility, rolling windows
+    #            60s/300s/900s, capacity 4096, per-process, non-durable.
+    #            NO DB, NO Redis, NO filesystem, NO persistent ledger.
+    #            PII-safe; no raw payload captured.
+    #   TRACK B: wire-up on 8/8 safety preview routes:
+    #            - /config exposes `observability_aggregation_dry_run`
+    #            - POST responses include `replay_conflict_telemetry_dry_run`
+    #            - /peek-buffer includes `aggregation_snapshot`
+    #            No endpoint path/flag/default 503/safety flag changes.
+    #            Preview request NEVER blocked by telemetry.
+    #   TRACK C: design-only canary QA rehearsal matrix covering all 8
+    #            operation families. signoff_state=pending, canary_enabled=
+    #            false, canary_percentage=0, live_enabled=false, db_writes=0,
+    #            reward_grant_enabled=false, mutation_enabled=false,
+    #            live_flip_allowed=false.
+    #   ROLLUP : runs Track A + B + C + MD5 invariants (5 core) + suite
+    #            tuple counts + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v45:
+    #   - 8/8 safety preview route endpoint paths / feature flags / default
+    #     503 / safety_flags unchanged
+    #   - v42 + v43 + v44 envelopes and utils unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v45
+    #   - No frontend changes (battlepass/vip/combat/story/Home untouched)
+    #   - DB writes total = 0; preview request never blocked
+    #   - No reward grant; no inventory/material/currency/wallet mutation
+    #   - No premium users.gems mutation; no mail state/delete/read mutation
+    #   - No BP Delta runtime; no live enforcement; no persistent ledger
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-OBSERVABILITY-RING-BUFFER-AGGREGATION-DRY-RUN', 'validate_observability_ring_buffer_aggregation_dry_run_v1.py'),
+    ('PROJECT-REPLAY-CONFLICT-TELEMETRY-DRY-RUN', 'validate_replay_conflict_telemetry_dry_run_v1.py'),
+    ('PROJECT-ALL-FAMILY-CANARY-QA-REHEARSAL-MATRIX', 'validate_all_family_canary_qa_rehearsal_matrix_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-9-v45-ROLLUP', 'validate_mega_economy_safety_acceleration_9_v45_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
