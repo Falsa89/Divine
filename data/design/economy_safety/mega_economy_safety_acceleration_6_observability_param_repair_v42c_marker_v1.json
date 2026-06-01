@@ -1,0 +1,82 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_OBSERVABILITY_PARAM_REPAIR_PACK_v42c",
+  "marker": "mega_economy_safety_acceleration_6_observability_param_repair_v42c_marker_v1",
+  "version": 1,
+  "created_at_utc": "2026-06-01T16:00:00Z",
+  "parent_v42_commit": "f23916b59d8699c6b81f8261a7acfd94dcf4b2c3",
+  "parent_v42b_commit": "59b908685b7c7fa3659e79757470bd94a94e2b53",
+  "mode": "PUBLIC_CONTENT_REPAIR_OBSERVABILITY_PARAMETER_ONLY",
+
+  "reason": "Public verification after v42b showed v42b refinements (operation_type fallback + idempotency_key alt-key detection) were NOT visible in the public blobs for battle_pass_claim_safety_preview.py and mail_claim_safety_preview.py. Public _v42_obs_envelope(...) calls still used the operation_family string as operation_type and only checked client_idempotency_key. v42c extracts these refinements into named helper functions (_v42_operation_type, _v42_client_idempotency_key_present) and routes every observability call through them, making the public content explicit and stable.",
+
+  "battle_pass_route_repaired": true,
+  "mail_route_repaired": true,
+  "operation_type_fallback_repaired": true,
+  "idempotency_key_alt_detection_repaired": true,
+  "named_helpers_extracted": true,
+
+  "battle_pass_route": "backend/routes/battle_pass_claim_safety_preview.py",
+  "mail_route": "backend/routes/mail_claim_safety_preview.py",
+  "battle_pass_operation_family": "battle_pass_reward_claim",
+  "mail_operation_family": "mail_reward_claim",
+  "battle_pass_operation_type_fallback": "battle_pass_free_reward_claim",
+  "mail_operation_type_fallback": "mail_single_reward_claim",
+  "idempotency_key_alt_keys": ["client_idempotency_key", "idempotency_key"],
+
+  "helpers_added_per_route": [
+    "_v42_operation_type(req: Dict[str, Any]) -> str",
+    "_v42_client_idempotency_key_present(req: Dict[str, Any]) -> bool"
+  ],
+
+  "helper_call_sites_battle_pass": {
+    "validate-request": ["_v42_operation_type(req)", "_v42_client_idempotency_key_present(req)"],
+    "guard-plan-preview": ["_v42_operation_type(req)", "_v42_client_idempotency_key_present(req)"],
+    "idempotency-preview": ["_v42_operation_type(req)", "_v42_client_idempotency_key_present(req)"]
+  },
+  "helper_call_sites_mail": {
+    "validate-request": ["_v42_operation_type(req)", "_v42_client_idempotency_key_present(req)"],
+    "guard-plan-preview": ["_v42_operation_type(req)", "_v42_client_idempotency_key_present(req)"],
+    "idempotency-preview": ["_v42_operation_type(req)", "_v42_client_idempotency_key_present(req)"]
+  },
+
+  "other_safety_routes_changed": false,
+  "utils_changed": false,
+  "server_py_changed": false,
+  "suite_runner_sync_fix_attempted": false,
+  "suite_runner_changed": false,
+  "frontend_changed": false,
+  "battle_engine_changed": false,
+  "character_bible_changed": false,
+  "final_numbers_changed": false,
+  "economy_gacha_shop_bp_vip_iap_runtime_changed": false,
+
+  "endpoint_paths_changed": false,
+  "feature_flags_changed": false,
+  "default_503_changed": false,
+  "safety_flags_changed": false,
+  "request_hash_envelope_changed": false,
+  "allowed_operation_types_changed": false,
+  "guard_checks_changed": false,
+
+  "runtime_activation": false,
+  "db_writes": 0,
+  "live_apply_claim_commit_enabled": false,
+  "reward_grant_enabled": false,
+  "mail_state_mutation_enabled": false,
+  "premium_users_gems_mutation_enabled": false,
+  "bp_delta_runtime_enabled": false,
+
+  "fake_pass": false,
+  "validator_weakening": false,
+
+  "verdict_local": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_OBSERVABILITY_PARAM_REPAIR_v42c_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "verdict_public_expected_after_sync": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_DRY_RUN_RUNTIME_INSTRUMENTATION_FUNCTIONAL_PUBLIC_CONTENT_VERIFIED_WITH_SUITE_RUNNER_STALE_CAVEAT",
+
+  "references": {
+    "doc": "docs/divine/263_MEGA_ECONOMY_SAFETY_ACCELERATION_6_OBSERVABILITY_PARAM_REPAIR_v42c.md",
+    "v42_rollup_marker": "data/design/economy_safety/mega_economy_safety_acceleration_6_v42_rollup_marker_v1.json",
+    "v42b_marker": "data/design/economy_safety/mega_economy_safety_acceleration_6_public_route_wireup_repair_v42b_marker_v1.json"
+  },
+
+  "public_sync_caveat": "SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION accepted. v42c re-touches the two public-stale routes with explicit helper functions to force blob refresh."
+}
