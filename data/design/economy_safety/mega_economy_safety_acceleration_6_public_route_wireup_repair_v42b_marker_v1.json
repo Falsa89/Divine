@@ -1,0 +1,63 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_PUBLIC_ROUTE_WIREUP_REPAIR_PACK_v42b",
+  "marker": "mega_economy_safety_acceleration_6_public_route_wireup_repair_v42b_marker_v1",
+  "version": 1,
+  "created_at_utc": "2026-06-01T14:00:00Z",
+  "parent_pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_DRY_RUN_RUNTIME_INSTRUMENTATION_PACK_v42",
+  "parent_v42_commit": "f23916b59d8699c6b81f8261a7acfd94dcf4b2c3",
+
+  "reason": "Public verification after v42 showed v40-style content still served for battle_pass_claim_safety_preview.py and mail_claim_safety_preview.py. v42 utils are public and correct. Other safety routes have public v42 wire-up visible. This pack repairs only the two missing public routes.",
+
+  "battle_pass_route_repaired": true,
+  "mail_route_repaired": true,
+  "battle_pass_route": "backend/routes/battle_pass_claim_safety_preview.py",
+  "mail_route": "backend/routes/mail_claim_safety_preview.py",
+  "battle_pass_operation_family": "battle_pass_reward_claim",
+  "mail_operation_family": "mail_reward_claim",
+  "battle_pass_operation_type_fallback": "battle_pass_free_reward_claim",
+  "mail_operation_type_fallback": "mail_single_reward_claim",
+  "client_idempotency_key_detection_supports_both": [
+    "client_idempotency_key",
+    "idempotency_key"
+  ],
+
+  "other_safety_routes_changed": false,
+  "utils_changed": false,
+  "server_py_changed": false,
+  "suite_runner_sync_fix_attempted": false,
+  "suite_runner_changed": false,
+  "frontend_changed": false,
+  "battle_engine_changed": false,
+  "character_bible_changed": false,
+  "final_numbers_changed": false,
+
+  "endpoint_paths_changed": false,
+  "feature_flags_changed": false,
+  "default_503_changed": false,
+  "safety_flags_changed": false,
+  "allowed_operation_types_changed": false,
+  "guard_checks_changed": false,
+
+  "runtime_activation": false,
+  "db_writes": 0,
+  "live_apply_claim_commit_enabled": false,
+  "reward_grant_enabled": false,
+  "mail_state_mutation_enabled": false,
+  "premium_users_gems_mutation_enabled": false,
+  "bp_delta_runtime_enabled": false,
+
+  "fake_pass": false,
+  "validator_weakening": false,
+
+  "verdict_local": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_PUBLIC_ROUTE_WIREUP_REPAIR_v42b_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "verdict_public_expected_after_sync": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_DRY_RUN_RUNTIME_INSTRUMENTATION_FUNCTIONAL_PUBLIC_CONTENT_VERIFIED_WITH_SUITE_RUNNER_STALE_CAVEAT",
+
+  "references": {
+    "doc": "docs/divine/262_MEGA_ECONOMY_SAFETY_ACCELERATION_6_PUBLIC_ROUTE_WIREUP_REPAIR_v42b.md",
+    "v42_rollup_marker": "data/design/economy_safety/mega_economy_safety_acceleration_6_v42_rollup_marker_v1.json",
+    "v42_track_a_marker": "data/design/economy_safety/request_hash_runtime_enforcement_dry_run_marker_v1.json",
+    "v42_track_b_marker": "data/design/economy_safety/economy_observability_runtime_dry_run_marker_v1.json"
+  },
+
+  "public_sync_caveat": "SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION accepted. v42b touches the two public-stale routes to force blob refresh."
+}

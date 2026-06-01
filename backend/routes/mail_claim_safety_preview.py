@@ -255,12 +255,12 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
     req = body.payload if body and body.payload is not None else _sample_request()
     _v42_rh_env = _v42_rh_envelope(req, "mail_reward_claim")
     _v42_obs_env = _v42_obs_envelope(
-        "mail_reward_claim", "mail_reward_claim", "validate-request",
+        "mail_reward_claim", (req.get("operation") if isinstance(req, dict) and req.get("operation") else "mail_single_reward_claim"), "validate-request",
         outcome="success_preview_503", status="preview_ok",
         request_hash=_v42_rh_env.get("request_hash"),
         server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
         user_id=(req.get("user_id") if isinstance(req, dict) else None),
-        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+        client_idempotency_key_present=bool(isinstance(req, dict) and (req.get("client_idempotency_key") or req.get("idempotency_key"))),
     )
     return {
         "status": "preview_ok",
@@ -280,12 +280,12 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
     req = body.payload if body and body.payload is not None else _sample_request()
     _v42_rh_env = _v42_rh_envelope(req, "mail_reward_claim")
     _v42_obs_env = _v42_obs_envelope(
-        "mail_reward_claim", "mail_reward_claim", "guard-plan-preview",
+        "mail_reward_claim", (req.get("operation") if isinstance(req, dict) and req.get("operation") else "mail_single_reward_claim"), "guard-plan-preview",
         outcome="success_preview_503", status="preview_ok",
         request_hash=_v42_rh_env.get("request_hash"),
         server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
         user_id=(req.get("user_id") if isinstance(req, dict) else None),
-        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+        client_idempotency_key_present=bool(isinstance(req, dict) and (req.get("client_idempotency_key") or req.get("idempotency_key"))),
     )
     return {
         "status": "preview_ok",
@@ -319,12 +319,12 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
     req = body.payload if body and body.payload is not None else _sample_request()
     _v42_rh_env = _v42_rh_envelope(req, "mail_reward_claim")
     _v42_obs_env = _v42_obs_envelope(
-        "mail_reward_claim", "mail_reward_claim", "idempotency-preview",
+        "mail_reward_claim", (req.get("operation") if isinstance(req, dict) and req.get("operation") else "mail_single_reward_claim"), "idempotency-preview",
         outcome="success_preview_503", status="preview_ok",
         request_hash=_v42_rh_env.get("request_hash"),
         server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
         user_id=(req.get("user_id") if isinstance(req, dict) else None),
-        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+        client_idempotency_key_present=bool(isinstance(req, dict) and (req.get("client_idempotency_key") or req.get("idempotency_key"))),
     )
     validation = _validate_request(req)
     return {
