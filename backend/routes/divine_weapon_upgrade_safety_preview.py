@@ -20,6 +20,31 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
+try:
+    from utils.economy_request_hash_dry_run import (
+        build_request_hash_dry_run_envelope as _v42_rh_envelope,
+        build_config_block as _v42_rh_config_block,
+    )
+    from utils.economy_observability_dry_run import (
+        build_observability_dry_run_envelope as _v42_obs_envelope,
+        build_config_block as _v42_obs_config_block,
+    )
+    _V42_DRY_RUN_AVAILABLE = True
+except Exception:  # pragma: no cover - keep route safe even if utils missing
+    _V42_DRY_RUN_AVAILABLE = False
+
+    def _v42_rh_envelope(*_a, **_kw):  # type: ignore
+        return {"enabled": False, "db_writes": 0}
+
+    def _v42_rh_config_block():  # type: ignore
+        return {"request_hash_dry_run_enabled": False, "db_writes": 0}
+
+    def _v42_obs_envelope(*_a, **_kw):  # type: ignore
+        return {"enabled": False, "db_writes": 0}
+
+    def _v42_obs_config_block():  # type: ignore
+        return {"enabled": False, "db_writes": 0}
+
 FEATURE_FLAG = "DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED"
 CONTRACT_VERSION = "divine_weapon_upgrade_safety_preview_v1"
 RUNTIME_MODE_TAG = "divine_weapon_upgrade_safety_preview_gated_no_live_commit"
@@ -248,6 +273,8 @@ async def get_config() -> Dict[str, Any]:
             "idempotency_preview": "POST /api/divine-weapon-upgrade-safety-preview/idempotency-preview",
         },
         "safety_flags": _safety_flags(),
+        "request_hash_dry_run": _v42_rh_config_block(),
+        "observability_dry_run": _v42_obs_config_block(),
     }
 
 
@@ -256,12 +283,23 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
     if not _flag_enabled():
         raise HTTPException(status_code=503, detail=_disabled("POST", "validate-request"))
     req = body.payload if body and body.payload is not None else _sample_request()
+    _v42_rh_env = _v42_rh_envelope(req, "divine_weapon_upgrade_commit")
+    _v42_obs_env = _v42_obs_envelope(
+        "divine_weapon_upgrade_commit", "divine_weapon_upgrade_commit", "validate-request",
+        outcome="success_preview_503", status="preview_ok",
+        request_hash=_v42_rh_env.get("request_hash"),
+        server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+    )
     return {
         "status": "preview_ok",
         "contract_version": CONTRACT_VERSION,
         "operation_family": "divine_weapon_upgrade_commit",
         "validation": _validate_request(req),
         "safety_flags": _safety_flags(),
+        "request_hash_dry_run": _v42_rh_env,
+        "observability_dry_run": _v42_obs_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
     }
 
@@ -271,6 +309,15 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
     if not _flag_enabled():
         raise HTTPException(status_code=503, detail=_disabled("POST", "guard-plan-preview"))
     req = body.payload if body and body.payload is not None else _sample_request()
+    _v42_rh_env = _v42_rh_envelope(req, "divine_weapon_upgrade_commit")
+    _v42_obs_env = _v42_obs_envelope(
+        "divine_weapon_upgrade_commit", "divine_weapon_upgrade_commit", "guard-plan-preview",
+        outcome="success_preview_503", status="preview_ok",
+        request_hash=_v42_rh_env.get("request_hash"),
+        server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+    )
     return {
         "status": "preview_ok",
         "contract_version": CONTRACT_VERSION,
@@ -278,6 +325,8 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
         "guard_plan": _guard_plan(req),
         "validation": _validate_request(req),
         "safety_flags": _safety_flags(),
+        "request_hash_dry_run": _v42_rh_env,
+        "observability_dry_run": _v42_obs_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
         "notes": [
             "guard_plan_is_display_only",
@@ -300,6 +349,15 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
     if not _flag_enabled():
         raise HTTPException(status_code=503, detail=_disabled("POST", "idempotency-preview"))
     req = body.payload if body and body.payload is not None else _sample_request()
+    _v42_rh_env = _v42_rh_envelope(req, "divine_weapon_upgrade_commit")
+    _v42_obs_env = _v42_obs_envelope(
+        "divine_weapon_upgrade_commit", "divine_weapon_upgrade_commit", "idempotency-preview",
+        outcome="success_preview_503", status="preview_ok",
+        request_hash=_v42_rh_env.get("request_hash"),
+        server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+    )
     validation = _validate_request(req)
     return {
         "status": "preview_ok",
@@ -308,6 +366,8 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
         "idempotency_preview": _idempotency_preview(req) if validation.get("valid") else None,
         "validation": validation,
         "safety_flags": _safety_flags(),
+        "request_hash_dry_run": _v42_rh_env,
+        "observability_dry_run": _v42_obs_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
         "live_commit_allowed": False,
     }

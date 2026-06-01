@@ -1,0 +1,55 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_6_DRY_RUN_RUNTIME_INSTRUMENTATION_PACK_v42",
+  "version": 1,
+  "phase": "MEGA_BATCH_ECONOMY_SAFETY_ACCELERATION_6",
+  "created_at_utc": "2026-06-01T12:00:00Z",
+  "mode": "DRY_RUN_RUNTIME_INSTRUMENTATION_NO_LIVE_APPLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+  "live_apply_allowed": false,
+  "live_commit_allowed": false,
+  "live_claim_allowed": false,
+  "reward_grant_enabled": false,
+  "bp_delta_runtime_enabled": false,
+  "all_8_operation_families_instrumented_with_request_hash_dry_run": true,
+  "all_8_operation_families_instrumented_with_observability_dry_run": true,
+  "endpoint_paths_unchanged": true,
+  "feature_flags_unchanged": true,
+  "default_503_behavior_unchanged": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v42_MEGA_ECONOMY_SAFETY_ACCELERATION_6",
+  "track_a": {
+    "pack": "PROJECT_REQUEST_HASH_RUNTIME_ENFORCEMENT_DRY_RUN_PACK",
+    "utility": "backend/utils/economy_request_hash_dry_run.py",
+    "proof_marker": "data/design/economy_safety/request_hash_runtime_enforcement_dry_run_marker_v1.json",
+    "validator": "backend/scripts/validate_request_hash_runtime_enforcement_dry_run_v1.py",
+    "suite_tuple": "PROJECT-REQUEST-HASH-RUNTIME-ENFORCEMENT-DRY-RUN",
+    "doc": "docs/divine/259_REQUEST_HASH_RUNTIME_ENFORCEMENT_DRY_RUN.md"
+  },
+  "track_b": {
+    "pack": "PROJECT_ECONOMY_OBSERVABILITY_RUNTIME_DRY_RUN_PACK",
+    "utility": "backend/utils/economy_observability_dry_run.py",
+    "proof_marker": "data/design/economy_safety/economy_observability_runtime_dry_run_marker_v1.json",
+    "validator": "backend/scripts/validate_economy_observability_runtime_dry_run_v1.py",
+    "suite_tuple": "PROJECT-ECONOMY-OBSERVABILITY-RUNTIME-DRY-RUN",
+    "doc": "docs/divine/260_ECONOMY_OBSERVABILITY_RUNTIME_DRY_RUN.md"
+  },
+  "track_c": {
+    "pack": "PROJECT_ECONOMY_SAFETY_CANARY_SIGNOFF_DRY_RUN_PACK",
+    "pilot": "data/design/economy_safety/economy_safety_canary_signoff_dry_run_pilot_v1.json",
+    "proof_marker": "data/design/economy_safety/economy_safety_canary_signoff_dry_run_proof_marker_v1.json",
+    "validator": "backend/scripts/validate_economy_safety_canary_signoff_dry_run_pilot_v1.py",
+    "suite_tuple": "PROJECT-ECONOMY-SAFETY-CANARY-SIGNOFF-DRY-RUN-PILOT",
+    "doc": "docs/divine/258_ECONOMY_SAFETY_CANARY_SIGNOFF_DRY_RUN_PILOT.md",
+    "pilot_operation_family": "material_raid_claim",
+    "signoff_state": "pending",
+    "canary_enabled": false,
+    "canary_percentage": 0,
+    "live_enabled": false
+  },
+  "rollup": {
+    "validator": "backend/scripts/validate_mega_economy_safety_acceleration_6_v42_rollup.py",
+    "suite_tuple": "MEGA-ECONOMY-SAFETY-ACCELERATION-6-v42-ROLLUP",
+    "doc": "docs/divine/261_MEGA_ECONOMY_SAFETY_ACCELERATION_6_v42.md"
+  },
+  "public_sync_caveat": "SUITE_RUNNER_PUBLIC_BLOB_STALE_KNOWN_PLATFORM_LIMITATION accepted. v42 wires dry-run runtime envelopes into the 8 safety preview routes without changing path/feature flag/default 503. server.py not modified."
+}

@@ -1008,6 +1008,36 @@ OPTIONAL = [
     ('PROJECT-ECONOMY-SAFETY-OBSERVABILITY-FOUNDATION', 'validate_economy_safety_observability_foundation_v1.py'),
     ('PROJECT-ECONOMY-SAFETY-PRE-SIGNOFF-ROLLBACK-BUNDLE', 'validate_economy_safety_pre_signoff_bundle_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-5-v41-ROLLUP', 'validate_mega_economy_safety_acceleration_5_v41_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_6_DRY_RUN_RUNTIME_INSTRUMENTATION_PACK_v42
+    # PUBLIC_SYNC_TAG_v42_MEGA_ECONOMY_SAFETY_ACCELERATION_6
+    # ------------------------------------------------------------------------
+    # Dry-run runtime instrumentation:
+    #   TRACK A: shared request hash dry-run utility +
+    #            wire-up into 8 safety preview routes (no ledger, no DB).
+    #   TRACK B: observability dry-run utility (audit/metric preview) +
+    #            wire-up into 8 safety preview routes (no persistence,
+    #            no external sink, no PII).
+    #   TRACK C: canary/signoff pilot design for material_raid_claim:
+    #            signoff=pending, canary_enabled=false, canary_percentage=0,
+    #            live_enabled=false, reward/material grant=false.
+    #   ROLLUP : runs A/B/C back-to-back + MD5 invariants + suite tuple
+    #            counts + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v42:
+    #   - 8/8 safety preview route endpoint paths unchanged
+    #   - 8/8 safety preview route feature flags unchanged
+    #   - 8/8 safety preview route default 503 behavior unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v42
+    #   - DB writes total = 0; live commit/claim/reward = false
+    #   - canary pilot signoff = pending; canary = false; live = false
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-REQUEST-HASH-RUNTIME-ENFORCEMENT-DRY-RUN', 'validate_request_hash_runtime_enforcement_dry_run_v1.py'),
+    ('PROJECT-ECONOMY-OBSERVABILITY-RUNTIME-DRY-RUN', 'validate_economy_observability_runtime_dry_run_v1.py'),
+    ('PROJECT-ECONOMY-SAFETY-CANARY-SIGNOFF-DRY-RUN-PILOT', 'validate_economy_safety_canary_signoff_dry_run_pilot_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-6-v42-ROLLUP', 'validate_mega_economy_safety_acceleration_6_v42_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
