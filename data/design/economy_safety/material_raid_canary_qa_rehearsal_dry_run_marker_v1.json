@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_8_CLIENT_KEY_BUFFER_AND_CANARY_REHEARSAL_PACK_v44",
+  "marker": "material_raid_canary_qa_rehearsal_dry_run_marker_v1",
+  "track": "TRACK_C",
+  "version": 1,
+  "created_at_utc": "2026-06-01T20:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+  "operation_family": "material_raid_claim",
+  "signoff_state": "pending",
+  "canary_enabled": false,
+  "canary_percentage": 0,
+  "live_enabled": false,
+  "reward_grant_enabled": false,
+  "material_grant_enabled": false,
+  "premium_currency_use_enabled": false,
+  "bp_delta_runtime_enabled": false,
+  "rehearsal_scenarios_count": 7,
+  "references": {
+    "design": "data/design/economy_safety/material_raid_canary_qa_rehearsal_dry_run_v1.json",
+    "doc": "docs/divine/268_MATERIAL_RAID_CANARY_QA_REHEARSAL_DRY_RUN.md",
+    "validator": "backend/scripts/validate_material_raid_canary_qa_rehearsal_dry_run_v1.py",
+    "suite_tuple": "PROJECT-MATERIAL-RAID-CANARY-QA-REHEARSAL-DRY-RUN",
+    "v41_canary_pilot": "data/design/economy_safety/economy_safety_canary_signoff_dry_run_pilot_v1.json",
+    "v41_rollback_templates": "data/design/economy_safety/economy_safety_pre_signoff_rollback_templates_v1.json"
+  }
+}

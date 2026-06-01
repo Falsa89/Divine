@@ -1,0 +1,158 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_8_CLIENT_KEY_BUFFER_AND_CANARY_REHEARSAL_PACK_v44_TRACK_C",
+  "design": "material_raid_canary_qa_rehearsal_dry_run_v1",
+  "version": 1,
+  "phase": "PHASE_8F_MATERIAL_RAID_CANARY_QA_REHEARSAL_DRY_RUN",
+  "created_at_utc": "2026-06-01T20:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "operation_family": "material_raid_claim",
+  "signoff_state": "pending",
+  "canary_enabled": false,
+  "canary_percentage": 0,
+  "live_enabled": false,
+  "reward_grant_enabled": false,
+  "material_grant_enabled": false,
+  "premium_currency_use_enabled": false,
+  "bp_delta_runtime_enabled": false,
+
+  "rehearsal_scenarios": [
+    {
+      "id": "SCN_HAPPY_PATH",
+      "title": "Happy path single claim preview",
+      "input": {
+        "flag": "on",
+        "client_idempotency_key": "CIK_HAPPY_1",
+        "payload_variant": "valid"
+      },
+      "expected": {
+        "http_status": 200,
+        "v43_server_key_detection": "new_key_preview",
+        "v44_client_key_detection": "new_client_key_preview",
+        "v44_observability_buffer_grew_by": 1,
+        "db_writes": 0,
+        "preview_request_blocked": false
+      }
+    },
+    {
+      "id": "SCN_DUPLICATE_SAME_HASH",
+      "title": "Duplicate same payload, same client key",
+      "input": {
+        "flag": "on",
+        "client_idempotency_key": "CIK_DUP_SAME",
+        "payload_variant": "valid",
+        "replay_count": 2
+      },
+      "expected": {
+        "http_status": 200,
+        "v43_server_key_detection_on_second_call": "same_key_same_hash_replay_preview",
+        "v44_client_key_detection_on_second_call": "same_client_key_same_hash_replay_preview",
+        "db_writes": 0,
+        "preview_request_blocked": false
+      }
+    },
+    {
+      "id": "SCN_DUPLICATE_DIFF_HASH",
+      "title": "Same client key, different payload",
+      "input": {
+        "flag": "on",
+        "client_idempotency_key": "CIK_DUP_DIFF",
+        "payload_variants": ["valid_a", "valid_b_diff"]
+      },
+      "expected": {
+        "http_status": 200,
+        "v44_client_key_detection_on_second_call": "same_client_key_diff_hash_conflict_preview",
+        "would_block_live": true,
+        "preview_request_blocked": false,
+        "db_writes": 0
+      }
+    },
+    {
+      "id": "SCN_VERSION_MISMATCH",
+      "title": "Contract version mismatch",
+      "input": {
+        "flag": "on",
+        "client_idempotency_key": "CIK_VER",
+        "payload_variant": "version_mismatch"
+      },
+      "expected": {
+        "http_status": 200,
+        "validation_passes": false,
+        "db_writes": 0,
+        "preview_request_blocked": false
+      }
+    },
+    {
+      "id": "SCN_UNAUTHORIZED",
+      "title": "Unauthorized actor (no auth headers)",
+      "input": {
+        "flag": "on",
+        "auth_headers_present": false,
+        "client_idempotency_key": "CIK_UNAUTH"
+      },
+      "expected": {
+        "http_status": 200,
+        "observability_records_attempt": true,
+        "db_writes": 0,
+        "preview_request_blocked": false,
+        "note": "preview routes are unauthenticated by design; rehearsal asserts no live escalation"
+      }
+    },
+    {
+      "id": "SCN_FLAG_DISABLED",
+      "title": "Feature flag OFF",
+      "input": {
+        "flag": "off",
+        "client_idempotency_key": "CIK_FLAG_OFF"
+      },
+      "expected": {
+        "http_status": 503,
+        "db_writes": 0,
+        "observability_records": 0
+      }
+    },
+    {
+      "id": "SCN_ROLLBACK_TRIGGER",
+      "title": "Rollback template dry-run trigger",
+      "input": {
+        "trigger_alert": "ALERT_DB_WRITES_NONZERO",
+        "rollback_template": "ROLLBACK_MATERIAL_RAID_CLAIM_V1"
+      },
+      "expected": {
+        "rollback_dry_run_only": true,
+        "rollback_idempotent": true,
+        "db_writes": 0,
+        "live_apply": false
+      }
+    }
+  ],
+
+  "approval_required_from": [
+    "game_director", "technical_producer", "qa_owner", "rollback_owner"
+  ],
+
+  "kill_switch_env_var": "MATERIAL_RAID_CLAIM_CANARY_KILL_SWITCH",
+  "kill_switch_default_state": "engaged_kill",
+
+  "global_invariants": {
+    "signoff_state_must_be_pending_in_this_pack": true,
+    "canary_must_remain_disabled_in_this_pack": true,
+    "live_must_remain_disabled_in_this_pack": true,
+    "reward_grant_must_remain_disabled_in_this_pack": true,
+    "material_grant_must_remain_disabled_in_this_pack": true,
+    "db_writes": 0
+  },
+
+  "forbidden": [
+    "flipping_signoff_to_approved",
+    "flipping_canary_enabled",
+    "flipping_live_enabled",
+    "granting_rewards",
+    "granting_materials",
+    "db_write_in_preview",
+    "persistent_audit_write",
+    "alert_sink_live"
+  ]
+}

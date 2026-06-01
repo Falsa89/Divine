@@ -66,6 +66,35 @@ except Exception:  # pragma: no cover - keep route safe even if util missing
             "live_enforcement_enabled": False,
         }
 
+try:
+    from utils.economy_client_idem_key_replay_detection_dry_run import (
+        build_client_key_replay_detection_dry_run_envelope as _v44_client_key_replay_envelope,
+        build_config_block as _v44_client_key_replay_config_block,
+    )
+    from utils.economy_observability_buffer_peek_dry_run import (
+        record_observability_preview as _v44_buffer_record,
+        peek_buffer as _v44_buffer_peek,
+        build_buffer_status_block as _v44_buffer_status_block,
+    )
+    _V44_DRY_RUN_AVAILABLE = True
+except Exception:  # pragma: no cover - safe fallbacks
+    _V44_DRY_RUN_AVAILABLE = False
+
+    def _v44_client_key_replay_envelope(*_a, **_kw):  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "detection_status": "missing_client_key_preview", "db_writes": 0, "live_enforcement_enabled": False, "preview_request_blocked": False}
+
+    def _v44_client_key_replay_config_block():  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "db_writes": 0, "live_enforcement_enabled": False}
+
+    def _v44_buffer_record(*_a, **_kw):  # type: ignore
+        return None
+
+    def _v44_buffer_peek(*_a, **_kw):  # type: ignore
+        return {"enabled": False, "entries_by_family": {}, "sizes_by_family": {}, "db_writes": 0}
+
+    def _v44_buffer_status_block(*_a, **_kw):  # type: ignore
+        return {"enabled": False, "sizes_by_family": {}, "db_writes": 0}
+
 FEATURE_FLAG = "RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED"
 CONTRACT_VERSION = "rune_scroll_talisman_safety_preview_v1"
 RUNTIME_MODE_TAG = "rune_scroll_talisman_safety_preview_gated_no_live_commit"
@@ -292,6 +321,8 @@ async def get_config() -> Dict[str, Any]:
         "request_hash_dry_run": _v42_rh_config_block(),
         "observability_dry_run": _v42_obs_config_block(),
         "idempotency_replay_detection_dry_run": _v43_replay_config_block(),
+        "client_key_replay_detection_dry_run": _v44_client_key_replay_config_block(),
+        "observability_buffer_peek_dry_run": _v44_buffer_status_block(),
     }
 
 
@@ -318,6 +349,29 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
         server_id=(req.get("server_id") if isinstance(req, dict) else None),
         operation_type="rune_scroll_talisman_commit",
     )
+    _v44_ck_env = _v44_client_key_replay_envelope(
+        "rune_scroll_talisman_commit",
+        client_idempotency_key=(isinstance(req, dict) and (req.get("client_idempotency_key") or req.get("idempotency_key")) or None) if isinstance(req, dict) else None,
+        request_hash=_v42_rh_env.get("request_hash"),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        server_id=(req.get("server_id") if isinstance(req, dict) else None),
+        operation_type="rune_scroll_talisman_commit",
+    )
+    try:
+        _v44_buffer_record(
+            "rune_scroll_talisman_commit",
+            audit_event_preview=_v42_obs_env.get("audit_event_preview") if isinstance(_v42_obs_env, dict) else None,
+            metric_sample_preview=_v42_obs_env.get("metric_sample_preview") if isinstance(_v42_obs_env, dict) else None,
+            route_name="validate-request",
+            detection_summaries={
+                "decision": "preview_ok",
+                "v43_status": _v43_replay_env.get("detection_status") if isinstance(_v43_replay_env, dict) else None,
+                "v44_status": _v44_ck_env.get("detection_status") if isinstance(_v44_ck_env, dict) else None,
+                "blocked_reason_codes": [],
+            },
+        )
+    except Exception:
+        pass
     return {
         "status": "preview_ok",
         "contract_version": CONTRACT_VERSION,
@@ -327,6 +381,7 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
         "request_hash_dry_run": _v42_rh_env,
         "observability_dry_run": _v42_obs_env,
         "idempotency_replay_detection_dry_run": _v43_replay_env,
+        "client_key_replay_detection_dry_run": _v44_ck_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
     }
 
@@ -354,6 +409,29 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
         server_id=(req.get("server_id") if isinstance(req, dict) else None),
         operation_type="rune_scroll_talisman_commit",
     )
+    _v44_ck_env = _v44_client_key_replay_envelope(
+        "rune_scroll_talisman_commit",
+        client_idempotency_key=(isinstance(req, dict) and (req.get("client_idempotency_key") or req.get("idempotency_key")) or None) if isinstance(req, dict) else None,
+        request_hash=_v42_rh_env.get("request_hash"),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        server_id=(req.get("server_id") if isinstance(req, dict) else None),
+        operation_type="rune_scroll_talisman_commit",
+    )
+    try:
+        _v44_buffer_record(
+            "rune_scroll_talisman_commit",
+            audit_event_preview=_v42_obs_env.get("audit_event_preview") if isinstance(_v42_obs_env, dict) else None,
+            metric_sample_preview=_v42_obs_env.get("metric_sample_preview") if isinstance(_v42_obs_env, dict) else None,
+            route_name="guard-plan-preview",
+            detection_summaries={
+                "decision": "preview_ok",
+                "v43_status": _v43_replay_env.get("detection_status") if isinstance(_v43_replay_env, dict) else None,
+                "v44_status": _v44_ck_env.get("detection_status") if isinstance(_v44_ck_env, dict) else None,
+                "blocked_reason_codes": [],
+            },
+        )
+    except Exception:
+        pass
     return {
         "status": "preview_ok",
         "contract_version": CONTRACT_VERSION,
@@ -364,6 +442,7 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
         "request_hash_dry_run": _v42_rh_env,
         "observability_dry_run": _v42_obs_env,
         "idempotency_replay_detection_dry_run": _v43_replay_env,
+        "client_key_replay_detection_dry_run": _v44_ck_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
         "notes": [
             "guard_plan_is_display_only",
@@ -402,6 +481,29 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
         server_id=(req.get("server_id") if isinstance(req, dict) else None),
         operation_type="rune_scroll_talisman_commit",
     )
+    _v44_ck_env = _v44_client_key_replay_envelope(
+        "rune_scroll_talisman_commit",
+        client_idempotency_key=(isinstance(req, dict) and (req.get("client_idempotency_key") or req.get("idempotency_key")) or None) if isinstance(req, dict) else None,
+        request_hash=_v42_rh_env.get("request_hash"),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        server_id=(req.get("server_id") if isinstance(req, dict) else None),
+        operation_type="rune_scroll_talisman_commit",
+    )
+    try:
+        _v44_buffer_record(
+            "rune_scroll_talisman_commit",
+            audit_event_preview=_v42_obs_env.get("audit_event_preview") if isinstance(_v42_obs_env, dict) else None,
+            metric_sample_preview=_v42_obs_env.get("metric_sample_preview") if isinstance(_v42_obs_env, dict) else None,
+            route_name="idempotency-preview",
+            detection_summaries={
+                "decision": "preview_ok",
+                "v43_status": _v43_replay_env.get("detection_status") if isinstance(_v43_replay_env, dict) else None,
+                "v44_status": _v44_ck_env.get("detection_status") if isinstance(_v44_ck_env, dict) else None,
+                "blocked_reason_codes": [],
+            },
+        )
+    except Exception:
+        pass
     validation = _validate_request(req)
     return {
         "status": "preview_ok",
@@ -413,6 +515,26 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
         "request_hash_dry_run": _v42_rh_env,
         "observability_dry_run": _v42_obs_env,
         "idempotency_replay_detection_dry_run": _v43_replay_env,
+        "client_key_replay_detection_dry_run": _v44_ck_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
         "live_commit_allowed": False,
     }
+
+
+@router.get("/peek-buffer")
+async def peek_buffer_endpoint(limit: int = 25) -> Dict[str, Any]:
+    if not _flag_enabled():
+        raise HTTPException(status_code=503, detail=_disabled("GET", "peek-buffer"))
+    safe_limit = int(max(0, min(int(limit), 100)))
+    snapshot = _v44_buffer_peek("rune_scroll_talisman_commit", limit=safe_limit)
+    return {
+        "status": "preview_ok",
+        "contract_version": CONTRACT_VERSION,
+        "operation_family": "rune_scroll_talisman_commit",
+        "buffer": snapshot,
+        "db_writes": 0,
+        "persisted": False,
+        "live_enforcement_enabled": False,
+        "preview_request_blocked": False,
+    }
+

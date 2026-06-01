@@ -1,0 +1,29 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_8_CLIENT_KEY_BUFFER_AND_CANARY_REHEARSAL_PACK_v44",
+  "marker": "client_idem_key_replay_detection_dry_run_marker_v1",
+  "track": "TRACK_A",
+  "version": 1,
+  "created_at_utc": "2026-06-01T20:00:00Z",
+  "mode": "DRY_RUN_RUNTIME_INSTRUMENTATION_NO_LIVE_APPLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+  "live_enforcement_enabled": false,
+  "persistent_ledger_enabled": false,
+  "redis_enabled": false,
+  "filesystem_writes_enabled": false,
+  "preview_request_blocked": false,
+  "key_strategy": "client_key_user_server_family",
+  "max_entries": 256,
+  "ttl_seconds": 60,
+  "all_8_operation_families_instrumented": true,
+  "endpoint_paths_unchanged": true,
+  "feature_flags_unchanged": true,
+  "default_503_behavior_unchanged": true,
+  "safety_flags_unchanged": true,
+  "utility_module": "backend/utils/economy_client_idem_key_replay_detection_dry_run.py",
+  "references": {
+    "doc": "docs/divine/266_CLIENT_IDEM_KEY_REPLAY_DETECTION_DRY_RUN.md",
+    "validator": "backend/scripts/validate_client_idem_key_replay_detection_dry_run_v1.py",
+    "suite_tuple": "PROJECT-CLIENT-IDEM-KEY-REPLAY-DETECTION-DRY-RUN"
+  }
+}
