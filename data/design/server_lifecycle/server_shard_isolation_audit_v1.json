@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-01T18:43:52.123666+00:00",
+  "timestamp_utc": "2026-06-01T19:02:24.740216+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1173,
+  "backend_python_files_scanned": 1179,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 555,
+      "files_with_hits": 559,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -137,7 +137,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 130
+      "user_id_only_files_count": 133
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -357,7 +357,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 56,
+      "files_with_hits": 58,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -430,11 +430,11 @@
               "snippet": "No divine weapon mutation. No hero copy consumption. No material/currency"
             },
             {
-              "line": 60,
+              "line": 85,
               "snippet": "\"currency_consumed\": False,"
             },
             {
-              "line": 61,
+              "line": 86,
               "snippet": "\"premium_gems_currency_used\": False,"
             }
           ]
@@ -450,11 +450,11 @@
               "snippet": "read/unread flip, no claim state). No inventory/currency/material mutation."
             },
             {
-              "line": 40,
+              "line": 65,
               "snippet": "\"currency_mutation_enabled\": False,"
             },
             {
-              "line": 41,
+              "line": 66,
               "snippet": "\"premium_currency_used\": False,"
             }
           ]
@@ -470,11 +470,11 @@
               "snippet": "No material/currency consumption. No premium users.gems usage. No BP Delta."
             },
             {
-              "line": 39,
+              "line": 64,
               "snippet": "\"currency_consumed\": False,"
             },
             {
-              "line": 40,
+              "line": 65,
               "snippet": "\"premium_gems_currency_used\": False,"
             }
           ]
@@ -542,11 +542,11 @@
               "snippet": "No premium users.gems usage. No premium Battle Pass unlock/purchase."
             },
             {
-              "line": 43,
+              "line": 68,
               "snippet": "\"battle_pass_purchase_enabled\": False,"
             },
             {
-              "line": 72,
+              "line": 97,
               "snippet": "\"battle_pass_purchase_enabled\": False,"
             }
           ]
@@ -1552,7 +1552,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 411,
+  "cross_server_leak_risk_candidates_count": 414,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
