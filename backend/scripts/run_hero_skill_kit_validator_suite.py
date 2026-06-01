@@ -1063,6 +1063,40 @@ OPTIONAL = [
     # ========================================================================
     ('PROJECT-ECONOMY-IDEMPOTENCY-REPLAY-DETECTION-DRY-RUN', 'validate_economy_idempotency_replay_detection_dry_run_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-7-v43-ROLLUP', 'validate_mega_economy_safety_acceleration_7_v43_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_8_CLIENT_KEY_BUFFER_AND_CANARY_REHEARSAL_PACK_v44
+    # PUBLIC_SYNC_TAG_v44_MEGA_ECONOMY_SAFETY_ACCELERATION_8
+    # ------------------------------------------------------------------------
+    # Client-key replay detection + observability buffer peek + canary rehearsal:
+    #   TRACK A: in-memory client_idem_key replay/conflict detection utility
+    #            (TTL-bounded, max 256 entries, TTL 60s, per-process; NO DB,
+    #            NO Redis, NO filesystem, NO persistent ledger, NO live
+    #            enforcement, NO blocking the preview request on conflict).
+    #   TRACK B: read-only /peek-buffer endpoint exposing observability buffer
+    #            snapshot (counts only, no payload mutation, default 503 when
+    #            safety flag OFF; NO DB writes, NO Redis, NO filesystem).
+    #   TRACK C: Material Raid canary QA rehearsal dry-run (design-only matrix,
+    #            no live enforcement, no reward grant, no inventory mutation).
+    #   ROLLUP : runs Track A + B + C + MD5 invariants (5 core) + suite tuple
+    #            counts + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v44:
+    #   - 8/8 safety preview route endpoint paths / feature flags / default 503
+    #     / safety_flags unchanged
+    #   - v42 + v43 utils MD5 unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v44
+    #   - No frontend changes
+    #   - DB writes total = 0; preview request never blocked
+    #   - No reward grant; no inventory/material/currency/wallet mutation
+    #   - No premium users.gems mutation; no mail state/delete/read mutation
+    #   - No BP Delta runtime; no live enforcement; no persistent ledger
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-CLIENT-IDEM-KEY-REPLAY-DETECTION-DRY-RUN', 'validate_client_idem_key_replay_detection_dry_run_v1.py'),
+    ('PROJECT-OBSERVABILITY-BUFFER-PEEK-DRY-RUN', 'validate_observability_buffer_peek_dry_run_v1.py'),
+    ('PROJECT-MATERIAL-RAID-CANARY-QA-REHEARSAL-DRY-RUN', 'validate_material_raid_canary_qa_rehearsal_dry_run_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-8-v44-ROLLUP', 'validate_mega_economy_safety_acceleration_8_v44_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
