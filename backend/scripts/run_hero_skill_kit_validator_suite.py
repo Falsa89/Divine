@@ -1038,6 +1038,31 @@ OPTIONAL = [
     ('PROJECT-ECONOMY-OBSERVABILITY-RUNTIME-DRY-RUN', 'validate_economy_observability_runtime_dry_run_v1.py'),
     ('PROJECT-ECONOMY-SAFETY-CANARY-SIGNOFF-DRY-RUN-PILOT', 'validate_economy_safety_canary_signoff_dry_run_pilot_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-6-v42-ROLLUP', 'validate_mega_economy_safety_acceleration_6_v42_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_7_DRY_RUN_REPLAY_DETECTION_PACK_v43
+    # PUBLIC_SYNC_TAG_v43_MEGA_ECONOMY_SAFETY_ACCELERATION_7
+    # ------------------------------------------------------------------------
+    # Dry-run replay/conflict detection:
+    #   TRACK A: in-memory TTL-bounded utility for idempotency replay/conflict
+    #            detection across the 8 safety preview routes.
+    #            Max 256 entries, TTL 60s, per-process (not shared, not durable).
+    #            No DB, no Redis, no filesystem, no persistent ledger, no live
+    #            enforcement, no blocking the preview request on conflict.
+    #   ROLLUP : runs Track A + MD5 invariants (5 core + 2 v42 utils) + suite
+    #            tuple counts + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v43:
+    #   - 8/8 safety preview route endpoint paths/feature flags/default 503/
+    #     safety_flags unchanged
+    #   - v42 request_hash_dry_run / observability_dry_run envelopes unchanged
+    #   - v42 utils MD5 unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v43
+    #   - DB writes total = 0; preview request never blocked
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-ECONOMY-IDEMPOTENCY-REPLAY-DETECTION-DRY-RUN', 'validate_economy_idempotency_replay_detection_dry_run_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-7-v43-ROLLUP', 'validate_mega_economy_safety_acceleration_7_v43_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

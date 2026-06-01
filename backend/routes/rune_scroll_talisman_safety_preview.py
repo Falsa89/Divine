@@ -39,6 +39,33 @@ except Exception:  # pragma: no cover - keep route safe even if utils missing
     def _v42_obs_config_block():  # type: ignore
         return {"enabled": False, "db_writes": 0}
 
+try:
+    from utils.economy_idempotency_replay_detection_dry_run import (
+        build_replay_detection_dry_run_envelope as _v43_replay_envelope,
+        build_config_block as _v43_replay_config_block,
+    )
+    _V43_REPLAY_DRY_RUN_AVAILABLE = True
+except Exception:  # pragma: no cover - keep route safe even if util missing
+    _V43_REPLAY_DRY_RUN_AVAILABLE = False
+
+    def _v43_replay_envelope(*_a, **_kw):  # type: ignore
+        return {
+            "enabled": False,
+            "dry_run_only": True,
+            "detection_status": "missing_key_preview",
+            "db_writes": 0,
+            "live_enforcement_enabled": False,
+            "preview_request_blocked": False,
+        }
+
+    def _v43_replay_config_block():  # type: ignore
+        return {
+            "enabled": False,
+            "dry_run_only": True,
+            "db_writes": 0,
+            "live_enforcement_enabled": False,
+        }
+
 FEATURE_FLAG = "RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED"
 CONTRACT_VERSION = "rune_scroll_talisman_safety_preview_v1"
 RUNTIME_MODE_TAG = "rune_scroll_talisman_safety_preview_gated_no_live_commit"
@@ -264,6 +291,7 @@ async def get_config() -> Dict[str, Any]:
         "safety_flags": _safety_flags(),
         "request_hash_dry_run": _v42_rh_config_block(),
         "observability_dry_run": _v42_obs_config_block(),
+        "idempotency_replay_detection_dry_run": _v43_replay_config_block(),
     }
 
 
@@ -281,6 +309,15 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
         user_id=(req.get("user_id") if isinstance(req, dict) else None),
         client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
     )
+    _v43_replay_env = _v43_replay_envelope(
+        "rune_scroll_talisman_commit",
+        server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
+        request_hash=_v42_rh_env.get("request_hash"),
+        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        server_id=(req.get("server_id") if isinstance(req, dict) else None),
+        operation_type="rune_scroll_talisman_commit",
+    )
     return {
         "status": "preview_ok",
         "contract_version": CONTRACT_VERSION,
@@ -289,6 +326,7 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
         "safety_flags": _safety_flags(),
         "request_hash_dry_run": _v42_rh_env,
         "observability_dry_run": _v42_obs_env,
+        "idempotency_replay_detection_dry_run": _v43_replay_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
     }
 
@@ -307,6 +345,15 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
         user_id=(req.get("user_id") if isinstance(req, dict) else None),
         client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
     )
+    _v43_replay_env = _v43_replay_envelope(
+        "rune_scroll_talisman_commit",
+        server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
+        request_hash=_v42_rh_env.get("request_hash"),
+        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        server_id=(req.get("server_id") if isinstance(req, dict) else None),
+        operation_type="rune_scroll_talisman_commit",
+    )
     return {
         "status": "preview_ok",
         "contract_version": CONTRACT_VERSION,
@@ -316,6 +363,7 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
         "safety_flags": _safety_flags(),
         "request_hash_dry_run": _v42_rh_env,
         "observability_dry_run": _v42_obs_env,
+        "idempotency_replay_detection_dry_run": _v43_replay_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
         "notes": [
             "guard_plan_is_display_only",
@@ -345,6 +393,15 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
         user_id=(req.get("user_id") if isinstance(req, dict) else None),
         client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
     )
+    _v43_replay_env = _v43_replay_envelope(
+        "rune_scroll_talisman_commit",
+        server_idempotency_key=_v42_rh_env.get("server_idempotency_key_preview"),
+        request_hash=_v42_rh_env.get("request_hash"),
+        client_idempotency_key_present=bool(isinstance(req, dict) and req.get("client_idempotency_key")),
+        user_id=(req.get("user_id") if isinstance(req, dict) else None),
+        server_id=(req.get("server_id") if isinstance(req, dict) else None),
+        operation_type="rune_scroll_talisman_commit",
+    )
     validation = _validate_request(req)
     return {
         "status": "preview_ok",
@@ -355,6 +412,7 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
         "safety_flags": _safety_flags(),
         "request_hash_dry_run": _v42_rh_env,
         "observability_dry_run": _v42_obs_env,
+        "idempotency_replay_detection_dry_run": _v43_replay_env,
         "canonical_distinction": CANONICAL_DISTINCTION,
         "live_commit_allowed": False,
     }

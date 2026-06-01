@@ -1,0 +1,107 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_7_DRY_RUN_REPLAY_DETECTION_PACK_v43",
+  "design": "economy_idempotency_replay_detection_dry_run_v1",
+  "version": 1,
+  "phase": "PHASE_8E_ECONOMY_IDEMPOTENCY_REPLAY_DETECTION_DRY_RUN",
+  "created_at_utc": "2026-06-01T18:00:00Z",
+  "mode": "DRY_RUN_RUNTIME_INSTRUMENTATION_NO_LIVE_APPLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "purpose": "In-memory, TTL-bounded, non-persistent replay/conflict detector for idempotency preview across the 8 safety preview routes. Detects same_key_same_hash replays and same_key_diff_hash conflicts without ever blocking the preview request, writing DB, persisting ledger, using Redis or filesystem. Resets at process restart by design.",
+
+  "storage": {
+    "backing": "in_memory_ordered_dict",
+    "shared_across_workers": false,
+    "durable_across_restart": false,
+    "max_entries": 256,
+    "ttl_seconds": 60,
+    "eviction_policy": "expire_first_then_oldest_lru",
+    "persistent_ledger": false,
+    "redis": false,
+    "filesystem": false,
+    "db": false
+  },
+
+  "detection_statuses": [
+    "new_key_preview",
+    "same_key_same_hash_replay_preview",
+    "same_key_diff_hash_conflict_preview",
+    "missing_key_preview"
+  ],
+
+  "envelope_required_fields": [
+    "enabled",
+    "dry_run_only",
+    "persistent_ledger_enabled",
+    "redis_enabled",
+    "db_writes",
+    "max_entries",
+    "ttl_seconds",
+    "operation_family",
+    "operation_type",
+    "server_id",
+    "client_idempotency_key_present",
+    "server_idempotency_key_present",
+    "request_hash_present",
+    "detection_status",
+    "new_key_detected",
+    "same_key_same_hash_detected",
+    "same_key_diff_hash_detected",
+    "conflict_detected",
+    "missing_key_detected",
+    "would_replay_live",
+    "would_block_live",
+    "would_pass_live",
+    "preview_request_blocked",
+    "not_shared_across_workers",
+    "not_durable_across_restart",
+    "live_enforcement_enabled",
+    "persisted"
+  ],
+
+  "safety_invariants": {
+    "preview_request_never_blocked": true,
+    "live_enforcement_disabled": true,
+    "db_writes_zero": true,
+    "persistent_ledger_disabled": true,
+    "redis_disabled": true,
+    "filesystem_writes_disabled": true,
+    "reset_on_process_restart": true,
+    "not_shared_across_workers": true
+  },
+
+  "operation_families": [
+    "gem_socket_commit",
+    "material_raid_claim",
+    "gear_forge_fusion_commit",
+    "rune_scroll_talisman_commit",
+    "artifact_upgrade_commit",
+    "divine_weapon_upgrade_commit",
+    "battle_pass_reward_claim",
+    "mail_reward_claim"
+  ],
+  "all_8_operation_families_covered": true,
+
+  "forbidden": [
+    "blocking_preview_request_on_conflict",
+    "persistent_ledger",
+    "db_writes",
+    "redis_usage",
+    "filesystem_writes",
+    "live_enforcement",
+    "reward_grant_in_preview",
+    "premium_currency_use_in_preview",
+    "mail_state_mutation_in_preview",
+    "public_reset_endpoint",
+    "public_debug_endpoint"
+  ],
+
+  "references": {
+    "utility": "backend/utils/economy_idempotency_replay_detection_dry_run.py",
+    "validator": "backend/scripts/validate_economy_idempotency_replay_detection_dry_run_v1.py",
+    "doc": "docs/divine/264_ECONOMY_IDEMPOTENCY_REPLAY_DETECTION_DRY_RUN.md",
+    "v42_request_hash_contract": "data/design/economy_safety/shared_request_hash_idempotency_contract_v1.json",
+    "v42_observability": "data/design/economy_safety/economy_observability_runtime_dry_run_marker_v1.json"
+  }
+}
