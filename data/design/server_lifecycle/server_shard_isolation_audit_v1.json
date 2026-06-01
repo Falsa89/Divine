@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-01T21:19:59.141578+00:00",
+  "timestamp_utc": "2026-06-01T21:38:39.525357+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1179,
+  "backend_python_files_scanned": 1182,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 559,
+      "files_with_hits": 560,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -137,7 +137,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 133
+      "user_id_only_files_count": 131
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -353,7 +353,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 78
+      "user_id_only_files_count": 76
     },
     "currencies": {
       "expected_scope": "server_bound",
@@ -430,11 +430,11 @@
               "snippet": "No divine weapon mutation. No hero copy consumption. No material/currency"
             },
             {
-              "line": 85,
+              "line": 112,
               "snippet": "\"currency_consumed\": False,"
             },
             {
-              "line": 86,
+              "line": 113,
               "snippet": "\"premium_gems_currency_used\": False,"
             }
           ]
@@ -450,11 +450,11 @@
               "snippet": "read/unread flip, no claim state). No inventory/currency/material mutation."
             },
             {
-              "line": 84,
+              "line": 111,
               "snippet": "\"currency_mutation_enabled\": False,"
             },
             {
-              "line": 85,
+              "line": 112,
               "snippet": "\"premium_currency_used\": False,"
             }
           ]
@@ -470,11 +470,11 @@
               "snippet": "No material/currency consumption. No premium users.gems usage. No BP Delta."
             },
             {
-              "line": 64,
+              "line": 91,
               "snippet": "\"currency_consumed\": False,"
             },
             {
-              "line": 65,
+              "line": 92,
               "snippet": "\"premium_gems_currency_used\": False,"
             }
           ]
@@ -542,11 +542,11 @@
               "snippet": "No premium users.gems usage. No premium Battle Pass unlock/purchase."
             },
             {
-              "line": 87,
+              "line": 114,
               "snippet": "\"battle_pass_purchase_enabled\": False,"
             },
             {
-              "line": 116,
+              "line": 143,
               "snippet": "\"battle_pass_purchase_enabled\": False,"
             }
           ]
@@ -785,7 +785,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 20
+      "user_id_only_files_count": 19
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -1017,7 +1017,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 8
+      "user_id_only_files_count": 7
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
@@ -1552,7 +1552,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 414,
+  "cross_server_leak_risk_candidates_count": 408,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1587,11 +1587,6 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/heroes.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/gem_socket_commit_safety_preview.py",
       "keyword": "user"
     },
     {
@@ -1641,17 +1636,22 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/material_raid_claim_safety_preview.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
       "file": "backend/routes/synergies.py",
       "keyword": "user"
     },
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/sanctuary.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/forge.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/server_profiles.py",
       "keyword": "user"
     }
   ],
