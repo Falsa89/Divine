@@ -1,0 +1,170 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_C",
+  "design": "economy_safety_pre_signoff_rollback_templates_v1",
+  "version": 1,
+  "phase": "PHASE_8C_ECONOMY_SAFETY_PRE_SIGNOFF_AND_ROLLBACK_BUNDLE",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "rollback_templates": {
+    "gem_socket_commit": {
+      "template_id": "ROLLBACK_GEM_SOCKET_COMMIT_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_COMMIT_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    },
+    "material_raid_claim": {
+      "template_id": "ROLLBACK_MATERIAL_RAID_CLAIM_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_CLAIM_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    },
+    "gear_forge_fusion_commit": {
+      "template_id": "ROLLBACK_GEAR_FORGE_FUSION_COMMIT_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_COMMIT_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    },
+    "rune_scroll_talisman_commit": {
+      "template_id": "ROLLBACK_RUNE_SCROLL_TALISMAN_COMMIT_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_COMMIT_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    },
+    "artifact_upgrade_commit": {
+      "template_id": "ROLLBACK_ARTIFACT_UPGRADE_COMMIT_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_COMMIT_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_ARTIFACT_UPGRADE_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    },
+    "divine_weapon_upgrade_commit": {
+      "template_id": "ROLLBACK_DIVINE_WEAPON_UPGRADE_COMMIT_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_COMMIT_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    },
+    "battle_pass_reward_claim": {
+      "template_id": "ROLLBACK_BATTLE_PASS_REWARD_CLAIM_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_CLAIM_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_BATTLE_PASS_CLAIM_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    },
+    "mail_reward_claim": {
+      "template_id": "ROLLBACK_MAIL_REWARD_CLAIM_V1",
+      "trigger_conditions": [
+        "ALERT_DB_WRITES_NONZERO",
+        "ALERT_LIVE_CLAIM_NONZERO",
+        "ALERT_REWARD_GRANTS_NONZERO",
+        "manual_safety_override"
+      ],
+      "steps_dry_run_only": [
+        "set_feature_flag_MAIL_CLAIM_SAFETY_PREVIEW_ENABLED_to_false",
+        "freeze_signoff_state_to_blocked",
+        "emit_audit_event_signoff_state_transition",
+        "notify_oncall_economy_lead",
+        "snapshot_observability_metrics_window_60m"
+      ],
+      "rollback_idempotent": true,
+      "db_writes": 0
+    }
+  },
+
+  "global_invariants": {
+    "all_8_operation_families_have_rollback_template": true,
+    "rollback_idempotent_for_all": true,
+    "rollback_dry_run_only_in_this_pack": true,
+    "db_writes": 0
+  },
+
+  "forbidden": [
+    "executing_rollback_live_in_this_pack",
+    "db_write_in_preview",
+    "live_apply_in_preview"
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B",
+  "design": "economy_safety_observability_alert_rules_v1",
+  "version": 1,
+  "phase": "PHASE_8B_ECONOMY_SAFETY_OBSERVABILITY_FOUNDATION",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "alert_rules": [
+    {
+      "rule_id": "ALERT_DB_WRITES_NONZERO",
+      "severity": "critical",
+      "description": "DB writes must remain 0 in preview-only pack. Any nonzero value indicates safety breach.",
+      "metric": "economy_safety_db_writes_total",
+      "condition": "sum(rate(economy_safety_db_writes_total[5m])) > 0",
+      "for_seconds": 0,
+      "action": "page_oncall_immediately_and_freeze_signoff"
+    },
+    {
+      "rule_id": "ALERT_LIVE_COMMIT_NONZERO",
+      "severity": "critical",
+      "description": "Live commit executions must remain 0 in preview-only pack.",
+      "metric": "economy_safety_live_commit_executions_total",
+      "condition": "sum(rate(economy_safety_live_commit_executions_total[5m])) > 0",
+      "for_seconds": 0,
+      "action": "page_oncall_immediately_and_freeze_signoff"
+    },
+    {
+      "rule_id": "ALERT_LIVE_CLAIM_NONZERO",
+      "severity": "critical",
+      "description": "Live claim executions must remain 0 in preview-only pack.",
+      "metric": "economy_safety_live_claim_executions_total",
+      "condition": "sum(rate(economy_safety_live_claim_executions_total[5m])) > 0",
+      "for_seconds": 0,
+      "action": "page_oncall_immediately_and_freeze_signoff"
+    },
+    {
+      "rule_id": "ALERT_REWARD_GRANTS_NONZERO",
+      "severity": "critical",
+      "description": "Reward grants must remain 0 in preview-only pack.",
+      "metric": "economy_safety_reward_grants_total",
+      "condition": "sum(rate(economy_safety_reward_grants_total[5m])) > 0",
+      "for_seconds": 0,
+      "action": "page_oncall_immediately_and_freeze_signoff"
+    },
+    {
+      "rule_id": "ALERT_IDEMPOTENCY_CONFLICT_SPIKE",
+      "severity": "warning",
+      "description": "Idempotency conflict rate elevated may indicate client bug or replay attack.",
+      "metric": "economy_safety_idempotency_conflicts_total",
+      "condition": "sum(rate(economy_safety_idempotency_conflicts_total[10m])) > 0.05",
+      "for_seconds": 600,
+      "action": "notify_team_channel"
+    },
+    {
+      "rule_id": "ALERT_REQUEST_HASH_MISMATCH_SPIKE",
+      "severity": "warning",
+      "description": "Request hash mismatch rate elevated may indicate client canonicalization bug.",
+      "metric": "economy_safety_request_hash_mismatches_total",
+      "condition": "sum(rate(economy_safety_request_hash_mismatches_total[10m])) > 0.05",
+      "for_seconds": 600,
+      "action": "notify_team_channel"
+    },
+    {
+      "rule_id": "ALERT_VALIDATION_ERRORS_SPIKE",
+      "severity": "warning",
+      "description": "Validation error rate elevated may indicate contract drift.",
+      "metric": "economy_safety_validation_errors_total",
+      "condition": "sum(rate(economy_safety_validation_errors_total[10m])) > 0.10",
+      "for_seconds": 600,
+      "action": "notify_team_channel"
+    },
+    {
+      "rule_id": "ALERT_PREVIEW_LATENCY_P95_HIGH",
+      "severity": "info",
+      "description": "Preview p95 latency above 1s may indicate backend pressure.",
+      "metric": "economy_safety_preview_latency_seconds",
+      "condition": "histogram_quantile(0.95, sum(rate(economy_safety_preview_latency_seconds_bucket[5m])) by (le, operation_family)) > 1.0",
+      "for_seconds": 900,
+      "action": "notify_team_channel"
+    }
+  ],
+
+  "runbook_links": {
+    "ALERT_DB_WRITES_NONZERO": "docs/divine/255_MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B.md",
+    "ALERT_LIVE_COMMIT_NONZERO": "docs/divine/255_MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B.md",
+    "ALERT_LIVE_CLAIM_NONZERO": "docs/divine/255_MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B.md",
+    "ALERT_REWARD_GRANTS_NONZERO": "docs/divine/255_MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B.md"
+  },
+
+  "forbidden": [
+    "alert_payload_contains_pii",
+    "alert_payload_contains_raw_user_id"
+  ]
+}

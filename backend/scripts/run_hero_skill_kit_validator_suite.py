@@ -979,6 +979,35 @@ OPTIONAL = [
     ('PROJECT-BATTLE-PASS-CLAIM-SAFETY-HARDENING', 'validate_project_battle_pass_claim_safety_hardening_v1.py'),
     ('PROJECT-MAIL-CLAIM-SAFETY-HARDENING', 'validate_project_mail_claim_safety_hardening_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-4-v40-ROLLUP', 'validate_mega_economy_safety_acceleration_4_v40_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41
+    # ------------------------------------------------------------------------
+    # 3 design-only track + 1 rollup:
+    #   TRACK A: shared request hash + idempotency contract (cross-family,
+    #            covers all 8 op families v37-v40). Design JSON only.
+    #   TRACK B: economy safety observability foundation (audit schema,
+    #            privacy policy, metrics, dashboard panels, alert rules).
+    #            Design JSON only. No runtime.
+    #   TRACK C: pre-signoff & rollback bundle (readiness matrix, signoff
+    #            register, canary/live state, rollback templates). Design
+    #            JSON only. All signoff=pending, canary=false, live=false.
+    #   ROLLUP : runs A/B/C back-to-back + MD5 invariants + suite tuple
+    #            counts + prior rollup markers presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced:
+    #   - runtime_activation=false, db_writes=0 across all v41 files
+    #   - no_pii_in_request_hash, no_pii_in_idempotency_key
+    #   - no_live_apply, no_live_commit, no_live_claim, no_reward_grant
+    #   - no_premium_currency_use, no_bp_delta_runtime
+    #   - all 8 op families: signoff=pending, canary=false, live=false
+    #   - 5 MD5-locked core files unchanged
+    # No new FastAPI routers added by v41. server.py unchanged for v41.
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-SHARED-REQUEST-HASH-IDEMPOTENCY-CONTRACT', 'validate_shared_request_hash_idempotency_contract_v1.py'),
+    ('PROJECT-ECONOMY-SAFETY-OBSERVABILITY-FOUNDATION', 'validate_economy_safety_observability_foundation_v1.py'),
+    ('PROJECT-ECONOMY-SAFETY-PRE-SIGNOFF-ROLLBACK-BUNDLE', 'validate_economy_safety_pre_signoff_bundle_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-5-v41-ROLLUP', 'validate_mega_economy_safety_acceleration_5_v41_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,68 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B",
+  "design": "economy_safety_observability_privacy_policy_v1",
+  "version": 1,
+  "phase": "PHASE_8B_ECONOMY_SAFETY_OBSERVABILITY_FOUNDATION",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "privacy_classification": {
+    "audit_records_are_pseudonymous": true,
+    "user_id_must_be_hashed_with_server_salt": true,
+    "user_id_hash_algorithm": "sha256",
+    "user_id_hash_truncation_chars": 32,
+    "server_salt_rotation_days_default": 90,
+    "server_salt_rotation_days_max": 365,
+    "raw_user_id_forbidden_in_audit": true,
+    "email_forbidden_in_audit": true,
+    "display_name_forbidden_in_audit": true,
+    "ip_forbidden_in_audit": true,
+    "device_id_forbidden_in_audit": true,
+    "push_token_forbidden_in_audit": true
+  },
+
+  "redaction_rules": {
+    "redact_before_export": true,
+    "redact_before_log_aggregator_shipping": true,
+    "redact_validation_error_messages_to_safe_codes": true,
+    "validation_error_message_safe_max_chars": 240,
+    "validation_error_must_not_echo_payload": true,
+    "validation_error_must_not_echo_user_id": true,
+    "validation_error_must_not_echo_pii": true
+  },
+
+  "retention_policy": {
+    "audit_records_retention_days_default": 30,
+    "audit_records_retention_days_max": 90,
+    "metrics_retention_days_default": 90,
+    "metrics_retention_days_max": 365,
+    "dashboard_screenshots_retention_days_default": 30,
+    "dashboard_screenshots_retention_days_max": 90,
+    "after_retention_action": "hard_delete_or_irreversible_aggregation"
+  },
+
+  "export_policy": {
+    "export_requires_signoff": true,
+    "export_recipients_must_be_internal": true,
+    "export_redacted_only": true,
+    "export_must_be_logged": true
+  },
+
+  "data_subject_rights": {
+    "erasure_supported_via_user_id_hash_index": true,
+    "erasure_must_cascade_to_audit": true,
+    "erasure_must_cascade_to_metrics_aggregations": false,
+    "erasure_request_response_sla_days": 30
+  },
+
+  "forbidden": [
+    "raw_user_id_export",
+    "raw_payload_export",
+    "pii_export",
+    "external_log_aggregator_shipping_without_redaction",
+    "db_write_in_preview",
+    "live_apply_in_preview"
+  ]
+}

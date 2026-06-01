@@ -1,0 +1,118 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B",
+  "design": "economy_safety_observability_metrics_v1",
+  "version": 1,
+  "phase": "PHASE_8B_ECONOMY_SAFETY_OBSERVABILITY_FOUNDATION",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "metric_namespace": "economy_safety",
+
+  "metrics": [
+    {
+      "name": "economy_safety_preview_invocations_total",
+      "type": "counter",
+      "description": "Numero totale di invocazioni preview per famiglia operation.",
+      "labels": ["operation_family", "operation", "outcome", "safety_feature_flag_state"]
+    },
+    {
+      "name": "economy_safety_preview_rejections_total",
+      "type": "counter",
+      "description": "Numero totale di reject (503/4xx) per famiglia.",
+      "labels": ["operation_family", "operation", "rejection_code"]
+    },
+    {
+      "name": "economy_safety_validation_errors_total",
+      "type": "counter",
+      "description": "Errori di validazione preview safe-coded.",
+      "labels": ["operation_family", "operation", "validation_error_code"]
+    },
+    {
+      "name": "economy_safety_idempotency_replay_hits_total",
+      "type": "counter",
+      "description": "Replay idempotency hits cumulativi.",
+      "labels": ["operation_family", "operation"]
+    },
+    {
+      "name": "economy_safety_idempotency_conflicts_total",
+      "type": "counter",
+      "description": "Conflitti idempotency (same key, diff hash).",
+      "labels": ["operation_family", "operation"]
+    },
+    {
+      "name": "economy_safety_request_hash_mismatches_total",
+      "type": "counter",
+      "description": "Mismatch tra request hash atteso e ricevuto.",
+      "labels": ["operation_family", "operation"]
+    },
+    {
+      "name": "economy_safety_db_writes_total",
+      "type": "counter",
+      "description": "DB writes osservati in preview (MUST stay 0).",
+      "labels": ["operation_family"],
+      "safety_must_remain_zero": true
+    },
+    {
+      "name": "economy_safety_live_commit_executions_total",
+      "type": "counter",
+      "description": "Live commit eseguiti in questo pack (MUST stay 0).",
+      "labels": ["operation_family"],
+      "safety_must_remain_zero": true
+    },
+    {
+      "name": "economy_safety_live_claim_executions_total",
+      "type": "counter",
+      "description": "Live claim eseguiti in questo pack (MUST stay 0).",
+      "labels": ["operation_family"],
+      "safety_must_remain_zero": true
+    },
+    {
+      "name": "economy_safety_reward_grants_total",
+      "type": "counter",
+      "description": "Reward grant in questo pack (MUST stay 0).",
+      "labels": ["operation_family"],
+      "safety_must_remain_zero": true
+    },
+    {
+      "name": "economy_safety_preview_latency_seconds",
+      "type": "histogram",
+      "description": "Latenza preview (rivelativa).",
+      "labels": ["operation_family", "operation"],
+      "buckets_seconds": [0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0]
+    },
+    {
+      "name": "economy_safety_signoff_state",
+      "type": "gauge",
+      "description": "Stato signoff per operation family (0=pending,1=approved,2=blocked).",
+      "labels": ["operation_family"]
+    }
+  ],
+
+  "label_cardinality_limits": {
+    "operation_family_max": 8,
+    "operation_max": 64,
+    "outcome_max": 5,
+    "rejection_code_max": 32,
+    "validation_error_code_max": 64,
+    "safety_feature_flag_state_max": 2
+  },
+
+  "label_forbidden_values": [
+    "raw_user_id",
+    "email",
+    "display_name",
+    "ip",
+    "device_id",
+    "push_token"
+  ],
+
+  "forbidden": [
+    "pii_in_metric_labels",
+    "user_id_in_metric_labels",
+    "high_cardinality_labels",
+    "db_write_in_preview",
+    "live_apply_in_preview"
+  ]
+}

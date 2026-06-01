@@ -1,0 +1,122 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B",
+  "design": "economy_safety_observability_audit_schema_v1",
+  "version": 1,
+  "phase": "PHASE_8B_ECONOMY_SAFETY_OBSERVABILITY_FOUNDATION",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "audit_event_kinds": [
+    "preview_invocation",
+    "preview_rejection",
+    "preview_validation_error",
+    "safety_feature_flag_check",
+    "idempotency_replay_hit",
+    "idempotency_conflict",
+    "request_hash_mismatch",
+    "rollback_simulation",
+    "signoff_state_transition"
+  ],
+
+  "audit_record_schema": {
+    "required_fields": [
+      "audit_event_id",
+      "audit_event_kind",
+      "operation_family",
+      "operation",
+      "server_request_hash",
+      "server_idempotency_key",
+      "client_idempotency_key_present",
+      "user_id_hashed",
+      "started_at_utc",
+      "completed_at_utc",
+      "outcome",
+      "db_writes",
+      "live_commit_executed",
+      "live_claim_executed",
+      "reward_granted",
+      "safety_feature_flag_state"
+    ],
+    "optional_fields": [
+      "validation_error_code",
+      "validation_error_message_safe",
+      "prior_state_versions",
+      "resulting_state_versions",
+      "rolled_back",
+      "rollback_reason_code"
+    ],
+    "forbidden_fields": [
+      "email",
+      "display_name",
+      "raw_user_id",
+      "ip",
+      "client_ip",
+      "device_id",
+      "device_serial",
+      "hwid",
+      "push_token",
+      "phone",
+      "phone_number",
+      "raw_payload",
+      "premium_currency_amount_used",
+      "premium_users_gems_balance",
+      "bp_delta_runtime_value"
+    ]
+  },
+
+  "audit_record_field_types": {
+    "audit_event_id": "uuid_v4",
+    "audit_event_kind": "enum(preview_invocation,preview_rejection,preview_validation_error,safety_feature_flag_check,idempotency_replay_hit,idempotency_conflict,request_hash_mismatch,rollback_simulation,signoff_state_transition)",
+    "operation_family": "enum(gem_socket_commit,material_raid_claim,gear_forge_fusion_commit,rune_scroll_talisman_commit,artifact_upgrade_commit,divine_weapon_upgrade_commit,battle_pass_reward_claim,mail_reward_claim)",
+    "operation": "string_max_64",
+    "server_request_hash": "hex_lowercase_32",
+    "server_idempotency_key": "hex_lowercase_24",
+    "client_idempotency_key_present": "bool",
+    "user_id_hashed": "sha256_hex_lowercase_32_of_user_id_with_server_salt",
+    "started_at_utc": "iso8601",
+    "completed_at_utc": "iso8601",
+    "outcome": "enum(success_preview_503,rejected,validation_error,replay_hit,conflict)",
+    "db_writes": "int_must_be_0",
+    "live_commit_executed": "bool_must_be_false",
+    "live_claim_executed": "bool_must_be_false",
+    "reward_granted": "bool_must_be_false",
+    "safety_feature_flag_state": "enum(disabled,enabled_preview_only)"
+  },
+
+  "audit_storage": {
+    "location": "audit_log_collection_future",
+    "persistence_in_this_pack": false,
+    "retention_days_default": 30,
+    "retention_days_max": 90,
+    "redaction_required_before_export": true
+  },
+
+  "audit_record_sample": {
+    "audit_event_id": "00000000-0000-4000-8000-000000000000",
+    "audit_event_kind": "preview_invocation",
+    "operation_family": "gem_socket_commit",
+    "operation": "gem_socket_commit_preview",
+    "server_request_hash": "00000000000000000000000000000000",
+    "server_idempotency_key": "000000000000000000000000",
+    "client_idempotency_key_present": true,
+    "user_id_hashed": "00000000000000000000000000000000",
+    "started_at_utc": "2026-06-01T10:00:00Z",
+    "completed_at_utc": "2026-06-01T10:00:00Z",
+    "outcome": "success_preview_503",
+    "db_writes": 0,
+    "live_commit_executed": false,
+    "live_claim_executed": false,
+    "reward_granted": false,
+    "safety_feature_flag_state": "disabled"
+  },
+
+  "forbidden": [
+    "pii_in_audit_record",
+    "raw_user_id_in_audit_record",
+    "raw_payload_in_audit_record",
+    "db_write_in_preview",
+    "live_apply_in_preview"
+  ]
+}

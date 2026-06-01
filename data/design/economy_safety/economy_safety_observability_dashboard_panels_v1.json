@@ -1,0 +1,114 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_B",
+  "design": "economy_safety_observability_dashboard_panels_v1",
+  "version": 1,
+  "phase": "PHASE_8B_ECONOMY_SAFETY_OBSERVABILITY_FOUNDATION",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "dashboard_id": "economy_safety_overview_v1",
+  "dashboard_title": "Economy Safety Overview (Preview-Only)",
+  "refresh_interval_seconds_default": 60,
+  "timezone": "UTC",
+
+  "panels": [
+    {
+      "panel_id": "preview_invocations_by_family",
+      "title": "Preview Invocations per Family",
+      "type": "timeseries",
+      "metric": "economy_safety_preview_invocations_total",
+      "aggregation": "rate_5m",
+      "group_by": ["operation_family"]
+    },
+    {
+      "panel_id": "preview_rejections_by_code",
+      "title": "Preview Rejections by Code",
+      "type": "timeseries",
+      "metric": "economy_safety_preview_rejections_total",
+      "aggregation": "rate_5m",
+      "group_by": ["operation_family", "rejection_code"]
+    },
+    {
+      "panel_id": "validation_errors_top",
+      "title": "Top Validation Error Codes",
+      "type": "top_n",
+      "metric": "economy_safety_validation_errors_total",
+      "top_n": 10,
+      "group_by": ["operation_family", "validation_error_code"]
+    },
+    {
+      "panel_id": "idempotency_replay_vs_conflicts",
+      "title": "Idempotency Replay Hits vs Conflicts",
+      "type": "timeseries",
+      "metrics": [
+        "economy_safety_idempotency_replay_hits_total",
+        "economy_safety_idempotency_conflicts_total"
+      ],
+      "aggregation": "rate_5m",
+      "group_by": ["operation_family"]
+    },
+    {
+      "panel_id": "request_hash_mismatches",
+      "title": "Request Hash Mismatches",
+      "type": "timeseries",
+      "metric": "economy_safety_request_hash_mismatches_total",
+      "aggregation": "rate_5m",
+      "group_by": ["operation_family"]
+    },
+    {
+      "panel_id": "safety_invariant_db_writes",
+      "title": "Safety Invariant: DB Writes (MUST be 0)",
+      "type": "single_stat",
+      "metric": "economy_safety_db_writes_total",
+      "aggregation": "sum",
+      "alert_when_nonzero": true
+    },
+    {
+      "panel_id": "safety_invariant_live_commit",
+      "title": "Safety Invariant: Live Commits (MUST be 0)",
+      "type": "single_stat",
+      "metric": "economy_safety_live_commit_executions_total",
+      "aggregation": "sum",
+      "alert_when_nonzero": true
+    },
+    {
+      "panel_id": "safety_invariant_live_claim",
+      "title": "Safety Invariant: Live Claims (MUST be 0)",
+      "type": "single_stat",
+      "metric": "economy_safety_live_claim_executions_total",
+      "aggregation": "sum",
+      "alert_when_nonzero": true
+    },
+    {
+      "panel_id": "safety_invariant_reward_grants",
+      "title": "Safety Invariant: Reward Grants (MUST be 0)",
+      "type": "single_stat",
+      "metric": "economy_safety_reward_grants_total",
+      "aggregation": "sum",
+      "alert_when_nonzero": true
+    },
+    {
+      "panel_id": "preview_latency_p95",
+      "title": "Preview Latency p95",
+      "type": "timeseries",
+      "metric": "economy_safety_preview_latency_seconds",
+      "aggregation": "histogram_quantile_0_95",
+      "group_by": ["operation_family"]
+    },
+    {
+      "panel_id": "signoff_state_matrix",
+      "title": "Signoff State per Family",
+      "type": "heatmap",
+      "metric": "economy_safety_signoff_state",
+      "group_by": ["operation_family"]
+    }
+  ],
+
+  "forbidden": [
+    "panel_displaying_raw_user_id",
+    "panel_displaying_email",
+    "panel_displaying_payload"
+  ]
+}

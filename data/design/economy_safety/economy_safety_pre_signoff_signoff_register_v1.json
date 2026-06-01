@@ -1,0 +1,45 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_C",
+  "design": "economy_safety_pre_signoff_signoff_register_v1",
+  "version": 1,
+  "phase": "PHASE_8C_ECONOMY_SAFETY_PRE_SIGNOFF_AND_ROLLBACK_BUNDLE",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "signoff_register": {
+    "gem_socket_commit": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" },
+    "material_raid_claim": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" },
+    "gear_forge_fusion_commit": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" },
+    "rune_scroll_talisman_commit": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" },
+    "artifact_upgrade_commit": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" },
+    "divine_weapon_upgrade_commit": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" },
+    "battle_pass_reward_claim": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" },
+    "mail_reward_claim": { "signoff_state": "pending", "approved_by": null, "approved_at_utc": null, "notes": "awaiting v42 live activation pack" }
+  },
+
+  "signoff_state_machine": {
+    "states": ["pending", "approved", "blocked", "rolled_back"],
+    "transitions": {
+      "pending->approved": "requires_v42_live_activation_pack_signed_zip",
+      "pending->blocked": "set_by_safety_breach_alert",
+      "approved->blocked": "set_by_safety_breach_alert",
+      "approved->rolled_back": "requires_rollback_template_execution_signed_zip",
+      "blocked->pending": "requires_remediation_signed_zip"
+    }
+  },
+
+  "approvers_required": {
+    "min_approvers_for_approved": 2,
+    "approvers_must_include": ["economy_lead", "engineering_lead"],
+    "recorded_in_audit": true
+  },
+
+  "forbidden": [
+    "flipping_signoff_to_approved_in_this_pack",
+    "flipping_signoff_to_approved_without_v42_signed_zip",
+    "db_write_in_preview",
+    "live_apply_in_preview"
+  ]
+}

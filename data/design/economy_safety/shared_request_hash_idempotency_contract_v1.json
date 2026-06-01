@@ -1,0 +1,143 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_A",
+  "contract": "shared_request_hash_idempotency_contract_v1",
+  "version": 1,
+  "phase": "PHASE_8A_SHARED_REQUEST_HASH_IDEMPOTENCY_CONTRACT",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+  "live_commit_allowed": false,
+  "live_claim_allowed": false,
+  "reward_grant_enabled": false,
+  "bp_delta_runtime_enabled": false,
+
+  "purpose": "Contratto condiviso di request hash + idempotency unificato per tutte le 8 famiglie operation economy (v37-v40). Estende economy_idempotency_and_atomic_commit_contract_v1 con regole canoniche di hashing della request, raccordo client/server idempotency, conflict detection cross-family. Nessuna attivazione live: solo design + audit.",
+
+  "extends": "economy_idempotency_and_atomic_commit_contract_v1",
+  "supersedes": null,
+
+  "shared_request_hash_contract": {
+    "algorithm": "sha256",
+    "truncation_chars": 32,
+    "output_lowercase_hex": true,
+    "canonicalization": {
+      "json_keys_sorted_ascending": true,
+      "strip_volatile_fields": true,
+      "volatile_fields": [
+        "created_at",
+        "client_received_at",
+        "client_sent_at",
+        "client_clock_skew_ms",
+        "client_local_request_uuid",
+        "telemetry_session_id",
+        "telemetry_sequence_id",
+        "client_device_model_string",
+        "client_app_version_string",
+        "client_locale",
+        "client_user_agent"
+      ],
+      "strip_pii_fields": true,
+      "pii_fields": [
+        "email",
+        "display_name",
+        "ip",
+        "client_ip",
+        "device_id",
+        "device_serial",
+        "hwid",
+        "push_token",
+        "phone",
+        "phone_number"
+      ],
+      "include_operation_family": true,
+      "include_operation": true,
+      "include_user_id": true,
+      "include_critical_payload_subset": true
+    },
+    "derivation": "sha256(operation_family|operation|user_id|canonicalize(critical_payload_subset))",
+    "server_request_hash_field_name": "server_request_hash",
+    "client_idempotency_key_field_name": "client_idempotency_key",
+    "server_idempotency_key_field_name": "server_idempotency_key",
+    "server_idempotency_key_derivation": "sha256_of(operation_family|user_id|client_idempotency_key|critical_payload_subset)_truncated_24",
+    "server_idempotency_key_truncation_chars": 24
+  },
+
+  "idempotency_conflict_rules": {
+    "same_key_same_hash": "return_cached_result",
+    "same_key_diff_hash": "reject_with_conflict",
+    "diff_key_same_hash": "allowed_if_distinct_user_id_or_distinct_operation_family",
+    "cross_user_collision": "forbidden",
+    "cross_family_collision_with_same_user": "forbidden",
+    "replay_window_seconds": 86400,
+    "replay_window_max_seconds": 604800
+  },
+
+  "per_family_critical_payload_subsets": {
+    "gem_socket_commit": ["hero_id", "slot_index", "gem_inventory_id", "target_socket_level"],
+    "material_raid_claim": ["raid_id", "node_id", "attempt_index"],
+    "gear_forge_fusion_commit": ["gear_id", "forge_recipe_id", "fusion_inputs_sorted"],
+    "rune_scroll_talisman_commit": ["hero_id", "slot_kind", "slot_index", "item_inventory_id", "operation_subtype"],
+    "artifact_upgrade_commit": ["artifact_instance_id", "upgrade_path_id", "target_level"],
+    "divine_weapon_upgrade_commit": ["weapon_id", "upgrade_path_id", "target_level"],
+    "battle_pass_reward_claim": ["season_id", "track", "tier_index"],
+    "mail_reward_claim": ["mail_id", "attachment_index_set_sorted"]
+  },
+
+  "operation_families": [
+    "gem_socket_commit",
+    "material_raid_claim",
+    "gear_forge_fusion_commit",
+    "rune_scroll_talisman_commit",
+    "artifact_upgrade_commit",
+    "divine_weapon_upgrade_commit",
+    "battle_pass_reward_claim",
+    "mail_reward_claim"
+  ],
+
+  "per_family_status": {
+    "gem_socket_commit": "preview_only_safety_layer_present",
+    "material_raid_claim": "preview_only_safety_layer_present",
+    "gear_forge_fusion_commit": "preview_only_safety_layer_present",
+    "rune_scroll_talisman_commit": "preview_only_safety_layer_present",
+    "artifact_upgrade_commit": "preview_only_safety_layer_present",
+    "divine_weapon_upgrade_commit": "preview_only_safety_layer_present",
+    "battle_pass_reward_claim": "preview_only_safety_layer_present",
+    "mail_reward_claim": "preview_only_safety_layer_present"
+  },
+
+  "safety_invariants": {
+    "no_pii_in_request_hash": true,
+    "no_pii_in_idempotency_key": true,
+    "no_live_apply_in_this_pack": true,
+    "no_live_claim_in_this_pack": true,
+    "no_live_commit_in_this_pack": true,
+    "no_db_writes_in_this_pack": true,
+    "no_reward_grant_in_this_pack": true,
+    "no_premium_currency_use_in_this_pack": true,
+    "no_bp_delta_runtime_in_this_pack": true,
+    "no_gear_mutation_in_this_pack": true,
+    "no_gem_inventory_mutation_in_this_pack": true,
+    "no_user_materials_mutation_in_this_pack": true
+  },
+
+  "forbidden": [
+    "hashing_pii",
+    "hashing_client_clock",
+    "db_write_in_preview",
+    "live_apply_in_preview",
+    "live_commit_in_preview",
+    "live_claim_in_preview",
+    "reward_grant_in_preview",
+    "premium_currency_use_in_preview"
+  ],
+
+  "references": {
+    "shared_economy_contract_v1": "data/design/economy_safety/economy_idempotency_and_atomic_commit_contract_v1.json",
+    "registry_v4": "data/design/economy_safety/reward_claim_economy_safety_registry_v4.json",
+    "v37_rollup_marker": "data/design/economy_safety/mega_economy_safety_acceleration_1_v37_rollup_marker_v1.json",
+    "v38_rollup_marker": "data/design/economy_safety/mega_economy_safety_acceleration_2_v38_rollup_marker_v1.json",
+    "v39_rollup_marker": "data/design/economy_safety/mega_economy_safety_acceleration_3_v39_rollup_marker_v1.json",
+    "v40_rollup_marker": "data/design/economy_safety/mega_economy_safety_acceleration_4_v40_rollup_marker_v1.json"
+  }
+}

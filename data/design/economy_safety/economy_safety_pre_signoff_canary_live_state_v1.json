@@ -1,0 +1,47 @@
+{
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_5_OBSERVABILITY_SIGNOFF_AND_REQUEST_HASH_PACK_v41_TRACK_C",
+  "design": "economy_safety_pre_signoff_canary_live_state_v1",
+  "version": 1,
+  "phase": "PHASE_8C_ECONOMY_SAFETY_PRE_SIGNOFF_AND_ROLLBACK_BUNDLE",
+  "created_at_utc": "2026-06-01T10:00:00Z",
+  "mode": "DESIGN_CONTRACT_AUDIT_ONLY",
+  "runtime_activation": false,
+  "db_writes": 0,
+
+  "canary_live_state": {
+    "gem_socket_commit": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "GEM_SOCKET_COMMIT_SAFETY_PREVIEW_ENABLED" },
+    "material_raid_claim": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "MATERIAL_RAID_CLAIM_SAFETY_PREVIEW_ENABLED" },
+    "gear_forge_fusion_commit": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "GEAR_FORGE_FUSION_SAFETY_PREVIEW_ENABLED" },
+    "rune_scroll_talisman_commit": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "RUNE_SCROLL_TALISMAN_SAFETY_PREVIEW_ENABLED" },
+    "artifact_upgrade_commit": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "ARTIFACT_UPGRADE_SAFETY_PREVIEW_ENABLED" },
+    "divine_weapon_upgrade_commit": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "DIVINE_WEAPON_UPGRADE_SAFETY_PREVIEW_ENABLED" },
+    "battle_pass_reward_claim": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "BATTLE_PASS_CLAIM_SAFETY_PREVIEW_ENABLED" },
+    "mail_reward_claim": { "canary_enabled": false, "live_enabled": false, "canary_pct": 0, "feature_flag": "MAIL_CLAIM_SAFETY_PREVIEW_ENABLED" }
+  },
+
+  "canary_policy": {
+    "min_observation_window_hours": 24,
+    "max_canary_pct_step": 5,
+    "abort_canary_on": [
+      "ALERT_DB_WRITES_NONZERO",
+      "ALERT_LIVE_COMMIT_NONZERO",
+      "ALERT_LIVE_CLAIM_NONZERO",
+      "ALERT_REWARD_GRANTS_NONZERO"
+    ]
+  },
+
+  "global_invariants": {
+    "all_canary_disabled": true,
+    "all_live_disabled": true,
+    "max_canary_pct_observed": 0,
+    "db_writes": 0
+  },
+
+  "forbidden": [
+    "flipping_canary_enabled_in_this_pack",
+    "flipping_live_enabled_in_this_pack",
+    "setting_canary_pct_above_zero_in_this_pack",
+    "db_write_in_preview",
+    "live_apply_in_preview"
+  ]
+}
