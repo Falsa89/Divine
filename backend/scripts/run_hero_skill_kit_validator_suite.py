@@ -1336,6 +1336,59 @@ OPTIONAL = [
     ('PROJECT-LIVE-SIMULATION-SMOKE-SCENARIOS', 'validate_live_simulation_smoke_scenarios_v1.py'),
     ('PROJECT-POST-V48-PRE-LIVE-GATE-INTEGRATION', 'validate_post_v48_pre_live_gate_integration_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-13-v49-ROLLUP', 'validate_mega_economy_safety_acceleration_13_v49_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_14_EPHEMERAL_SIMULATION_INVARIANT_REPORT_AND_STAGING_DB_BLUEPRINT_PACK_v50
+    # PUBLIC_SYNC_TAG_v50_MEGA_ECONOMY_SAFETY_ACCELERATION_14
+    # ------------------------------------------------------------------------
+    # Ephemeral simulation invariant report + staging DB blueprint + live
+    # ledger design + manual user approval handshake (ALL DRY-RUN / DESIGN-ONLY):
+    #   TRACK A: invariant report aggregator over v49 ephemeral simulator.
+    #            8 families x 9 scenarios = 72 scenarios. real_db_writes=0
+    #            ALWAYS. production_db_touched=false ALWAYS. NO route exposure.
+    #            NO server.py change. NO env read. NO filesystem writes.
+    #            NO pymongo / motor / redis / MongoClient / AsyncIOMotorClient.
+    #   TRACK B: staging DB blueprint (design-only). 8 families with
+    #            readiness=not_ready_until_manual_approval. NO actual staging
+    #            DB created. NO real DB connection. NO production credentials.
+    #            NO MONGO_URL. NO pymongo. NO motor. NO env read.
+    #            NO filesystem writes. live_enabled=false,
+    #            safe_to_enable_live=false.
+    #   TRACK C: live ledger (design-only). 4 schemas (idempotency_ledger_entry,
+    #            audit_event, rollback_record, operator_decision) with
+    #            design_only=true, runtime_created=false. PII-safe audit_event
+    #            with raw_payload_captured=false. NO runtime ledger creation.
+    #            NO live apply. live_implementation_deferred=true.
+    #   TRACK D: manual user approval handshake (dry-run). Approval phrase
+    #            template with 4 required placeholders. transition enum
+    #            includes *_BLOCKED states. NO endpoint. NO runtime execution.
+    #            NO automatic approval. All 8 families current_approval_state
+    #            =pending.
+    #   ROLLUP : runs Tracks A + B + C + D + MD5 invariants (5 core) +
+    #            suite tuple counts + public sync tag presence + rollup
+    #            marker invariants.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v50:
+    #   - 8/8 safety preview route endpoint paths / feature flags / default
+    #     503 / safety_flags unchanged (no wire-up in v50)
+    #   - v42-v49 utils / envelopes unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v50
+    #   - No frontend changes
+    #   - real DB writes total = 0; production_db_touched=false
+    #   - NO real DB connection; NO MONGO_URL read; NO pymongo; NO motor
+    #   - NO env read in v50 utility; NO filesystem writes; NO redis
+    #   - NO external alert dispatch; NO live apply; NO rollback live
+    #   - NO reward grant; NO inventory/material/currency/wallet mutation
+    #   - NO premium users.gems mutation; NO mail state/delete/read mutation
+    #   - NO BP Delta runtime; NO live enforcement; NO persistent ledger
+    #   - NO runtime ledger creation; NO automatic approval; NO endpoint
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-EPHEMERAL-SIMULATION-INVARIANT-REPORT-DRY-RUN', 'validate_ephemeral_simulation_invariant_report_dry_run_v1.py'),
+    ('PROJECT-STAGING-DB-BLUEPRINT-DESIGN-ONLY', 'validate_staging_db_blueprint_v1.py'),
+    ('PROJECT-LIVE-LEDGER-DESIGN-ONLY', 'validate_live_ledger_design_only_v1.py'),
+    ('PROJECT-MANUAL-USER-APPROVAL-HANDSHAKE-DRY-RUN', 'validate_manual_user_approval_handshake_dry_run_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-14-v50-ROLLUP', 'validate_mega_economy_safety_acceleration_14_v50_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
