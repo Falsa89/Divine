@@ -1,0 +1,28 @@
+{
+  "contract_version": "live_apply_decision_log_dry_run_v1",
+  "dry_run_only": true,
+  "generated_for_pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_12_AUDIT_BUNDLE_CHECKSUM_AND_PRE_LIVE_GO_NO_GO_FINAL_CONSOLIDATION_PACK_v48",
+  "schema_only": true,
+  "actual_decisions_persisted": false,
+  "future_live_decision_requires_manual_user_approval": true,
+  "canary_allowed": false,
+  "live_allowed": false,
+  "db_writes": 0,
+  "entry_schema": {
+    "required_fields": ["operation_family", "timestamp_preview", "decision", "approver", "rationale", "evidence_refs", "rollback_plan_ref"],
+    "decision_enum": ["no_go_signoff_pending", "no_go_blockers_open", "go_canary_rehearsal_only_dry_run", "go_canary_live_BLOCKED_REQUIRES_MANUAL_USER_APPROVAL", "go_live_BLOCKED_REQUIRES_MANUAL_USER_APPROVAL"],
+    "approver_enum": ["system_dry_run", "owner_pending", "qa_pending", "game_director_pending"],
+    "evidence_refs_must_include": ["validator_pass_list", "md5_invariants_proof", "default_503_proof", "db_writes_zero_proof", "alert_dispatched_false_proof", "persisted_false_proof"]
+  },
+  "entries": [
+    {"operation_family": "gem_socket_commit", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger"},
+    {"operation_family": "material_raid_claim", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger"},
+    {"operation_family": "gear_forge_fusion_commit", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger"},
+    {"operation_family": "rune_scroll_talisman_commit", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger"},
+    {"operation_family": "artifact_upgrade_commit", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger"},
+    {"operation_family": "divine_weapon_upgrade_commit", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger"},
+    {"operation_family": "battle_pass_reward_claim", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger, no_bp_delta_runtime", "no_bp_delta_runtime": true},
+    {"operation_family": "mail_reward_claim", "current_decision": "no_go_signoff_pending", "approver": "system_dry_run", "db_writes": 0, "live_apply_allowed": false, "canary_allowed": false, "live_allowed": false, "requires_manual_user_approval": true, "rationale": "v48 baseline: signoff pending, no live ledger, no_mail_state_mutation", "no_mail_state_mutation": true}
+  ],
+  "forbidden": ["no_db_writes", "no_actual_decisions_persisted", "no_live_apply", "no_canary_apply", "no_automatic_promotion", "no_external_alert_dispatch", "no_reward_grant", "no_inventory_mutation", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change"]
+}

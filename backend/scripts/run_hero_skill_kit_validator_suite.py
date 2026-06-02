@@ -1235,6 +1235,57 @@ OPTIONAL = [
     ('PROJECT-ROLLBACK-RUNBOOK-REHEARSAL-MATRIX', 'validate_rollback_runbook_rehearsal_matrix_v1.py'),
     ('PROJECT-PRE-LIVE-AUDIT-TRACEABILITY-BUNDLE', 'validate_pre_live_audit_traceability_bundle_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-11-v47-ROLLUP', 'validate_mega_economy_safety_acceleration_11_v47_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_12_AUDIT_BUNDLE_CHECKSUM_AND_PRE_LIVE_GO_NO_GO_FINAL_CONSOLIDATION_PACK_v48
+    # PUBLIC_SYNC_TAG_v48_MEGA_ECONOMY_SAFETY_ACCELERATION_12
+    # ------------------------------------------------------------------------
+    # Audit bundle checksum + final GO/NO-GO consolidation + decision log
+    # schema + Expo watcher ENOSPC diagnostic note (all dry-run / design-only):
+    #   TRACK A: deterministic SHA-256 checksum utility over the consolidated
+    #            v37-v48 audit bundle (markers/contracts/validators/routes/
+    #            utils/docs). Sort lexicographic path, normalize CRLF->LF.
+    #            Read-only. NO DB / Redis / filesystem persistence /
+    #            persistent ledger. live_apply_allowed=false.
+    #   TRACK B: final GO/NO-GO consolidation (design-only). Consolidates
+    #            v46 GO/NO-GO + v46 signoff promotion + v47 traceability
+    #            bundle + v47 rollback runbook + v45 canary QA rehearsal.
+    #            global_go=false, canary_go=false, live_go=false,
+    #            safe_to_continue_dry_run=true, safe_to_enable_canary=false,
+    #            safe_to_enable_live=false, live_apply_allowed=false,
+    #            next_required_phase=staging_or_local_live_simulation_with_
+    #            ephemeral_test_db.
+    #   TRACK C: live apply decision log dry-run (schema-only). No actual
+    #            decisions persisted. future_live_decision_requires_manual_
+    #            user_approval=true; canary_allowed=false; live_allowed=false.
+    #            8 entries: current_decision=no_go_signoff_pending.
+    #   TRACK D: Expo Watcher ENOSPC diagnostic note. Classifies OPS-A/B/C/
+    #            C-WIRING + AF2-N-V26-FRONTEND-SMOKE + ULTRA-COMBO-V26 as
+    #            `environmental_optional_fail_not_v47_regression`. Does NOT
+    #            weaken any validator; does NOT skip any tuple in suite
+    #            runner; does NOT fake PASS.
+    #   ROLLUP : runs Tracks A + B + C + D + MD5 invariants (5 core) +
+    #            suite tuple counts + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v48:
+    #   - 8/8 safety preview route endpoint paths / feature flags / default
+    #     503 / safety_flags unchanged (no wire-up in v48)
+    #   - v42-v47 utils / envelopes unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v48
+    #   - No frontend changes
+    #   - DB writes total = 0; live_apply_allowed=false
+    #   - NO external alert dispatch; alert_dispatched=false
+    #   - NO rollback live execution; NO reward grant/reversal live
+    #   - No inventory/material/currency/wallet mutation
+    #   - No premium users.gems mutation; no mail state/delete/read mutation
+    #   - No BP Delta runtime; no live enforcement; no persistent ledger
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-AUDIT-BUNDLE-CHECKSUM-DRY-RUN', 'validate_audit_bundle_checksum_dry_run_v1.py'),
+    ('PROJECT-FINAL-GO-NO-GO-CONSOLIDATION', 'validate_final_go_no_go_consolidation_v1.py'),
+    ('PROJECT-LIVE-APPLY-DECISION-LOG-DRY-RUN', 'validate_live_apply_decision_log_dry_run_v1.py'),
+    ('PROJECT-EXPO-WATCHER-ENOSPC-DIAGNOSTIC', 'validate_expo_watcher_enospc_diagnostic_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-12-v48-ROLLUP', 'validate_mega_economy_safety_acceleration_12_v48_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

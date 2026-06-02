@@ -1,0 +1,42 @@
+{
+  "contract_version": "final_go_no_go_consolidation_v1",
+  "generated_for_pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_12_AUDIT_BUNDLE_CHECKSUM_AND_PRE_LIVE_GO_NO_GO_FINAL_CONSOLIDATION_PACK_v48",
+  "dry_run_only": true,
+  "global_go": false,
+  "canary_go": false,
+  "live_go": false,
+  "per_family_go": false,
+  "safe_to_continue_dry_run": true,
+  "safe_to_enable_canary": false,
+  "safe_to_enable_live": false,
+  "live_apply_allowed": false,
+  "db_writes": 0,
+  "next_required_phase": "staging_or_local_live_simulation_with_ephemeral_test_db",
+  "consolidates": {
+    "v46_go_no_go_snapshot": "data/design/economy_safety/go_no_go_snapshot_dry_run_v1.json",
+    "v46_signoff_promotion_rehearsal_matrix": "data/design/economy_safety/signoff_promotion_rehearsal_matrix_v1.json",
+    "v47_pre_live_audit_traceability_bundle": "data/design/economy_safety/pre_live_audit_traceability_bundle_v1.json",
+    "v47_rollback_runbook_rehearsal_matrix": "data/design/economy_safety/rollback_runbook_rehearsal_matrix_v1.json",
+    "v45_all_family_canary_qa_rehearsal_matrix": "data/design/economy_safety/all_family_canary_qa_rehearsal_matrix_v1.json"
+  },
+  "operation_families": [
+    {"operation_family": "gem_socket_commit", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger"]},
+    {"operation_family": "material_raid_claim", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger"]},
+    {"operation_family": "gear_forge_fusion_commit", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger"]},
+    {"operation_family": "rune_scroll_talisman_commit", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger"]},
+    {"operation_family": "artifact_upgrade_commit", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger"]},
+    {"operation_family": "divine_weapon_upgrade_commit", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger"]},
+    {"operation_family": "battle_pass_reward_claim", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger", "no_bp_delta_runtime"], "no_bp_delta_runtime": true},
+    {"operation_family": "mail_reward_claim", "go": false, "canary_go": false, "live_go": false, "safe_to_enable_canary": false, "safe_to_enable_live": false, "db_writes": 0, "signoff_state": "pending", "rollback_rehearsal_state": "pending", "reasons": ["signoff_pending", "no_live_ledger", "no_mail_state_mutation"], "no_mail_state_mutation": true}
+  ],
+  "global_blockers": [
+    "signoff_pending",
+    "no_live_ledger",
+    "no_persistent_audit_sink",
+    "no_rollback_dry_run_in_staging",
+    "no_real_qa_canary_group",
+    "no_production_monitoring_sink",
+    "requires_staging_or_local_live_simulation_with_ephemeral_test_db"
+  ],
+  "forbidden": ["no_db_writes", "no_live_apply", "no_canary_apply", "no_external_alert_dispatch", "no_reward_grant", "no_inventory_mutation", "no_material_mutation", "no_currency_mutation", "no_wallet_mutation", "no_premium_gems_mutation", "no_mail_state_mutation", "no_bp_delta_runtime", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_safety_flag_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change", "no_character_bible_change", "no_final_numbers_change"]
+}

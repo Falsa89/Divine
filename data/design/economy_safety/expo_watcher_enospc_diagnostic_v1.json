@@ -1,0 +1,41 @@
+{
+  "contract_version": "expo_watcher_enospc_diagnostic_v1",
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_12_AUDIT_BUNDLE_CHECKSUM_AND_PRE_LIVE_GO_NO_GO_FINAL_CONSOLIDATION_PACK_v48",
+  "dry_run_only": true,
+  "classification": "environmental_optional_fail_not_v47_regression",
+  "root_cause": "fs.inotify.max_user_watches kernel limit exhausted in container; sysctl read-only; not modifiable by application code",
+  "affected_validators": [
+    "OPS-A: audit_start_expo_wrapper_resilience.py",
+    "OPS-B: audit_ops_start_expo_persistence.py",
+    "OPS-C: audit_ops_start_expo_autorestore.py",
+    "OPS-C-WIRING: audit_ops_start_expo_boot_wiring.py",
+    "AF2-N-V26-FRONTEND-SMOKE: audit_affinity_gifts_frontend_smoke_v26.py",
+    "ULTRA-COMBO-V26: validate_ultra_combo_v26_broad_readiness_plan.py"
+  ],
+  "v47_validator_status": "all_v47_validators_PASS",
+  "md5_invariants_status": "5_of_5_intact",
+  "server_py_status": "unchanged",
+  "frontend_status": "unchanged",
+  "db_writes": 0,
+  "live_apply_allowed": false,
+  "mitigation_plan_design_only": [
+    "document_limit_in_handoff (DONE in handoff summary)",
+    "never_attempt_sysctl_write_at_runtime (sysctl read-only in container)",
+    "classify_OPS_and_v26_fails_as_environmental_OPTIONAL (this document)",
+    "never_weaken_validators_to_force_PASS (forbidden by strict mode)",
+    "future: request infra to bump fs.inotify.max_user_watches to >= 524288 at host level",
+    "future: investigate watcher reduction via metro.config polling fallback (out-of-scope for safety packs)"
+  ],
+  "do_not": [
+    "do_not_weaken_validators",
+    "do_not_fake_PASS",
+    "do_not_modify_server_py",
+    "do_not_modify_frontend",
+    "do_not_modify_battle_engine",
+    "do_not_modify_md5_locked_files",
+    "do_not_skip_OPS_or_v26_in_suite_runner",
+    "do_not_call_sysctl_write_at_runtime"
+  ],
+  "forbidden": ["no_db_writes", "no_live_apply", "no_validator_weakening", "no_fake_PASS", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change"],
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v48_MEGA_ECONOMY_SAFETY_ACCELERATION_12"
+}
