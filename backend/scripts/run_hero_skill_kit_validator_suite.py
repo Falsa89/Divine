@@ -1183,6 +1183,58 @@ OPTIONAL = [
     ('PROJECT-SIGNOFF-PROMOTION-REHEARSAL-MATRIX', 'validate_signoff_promotion_rehearsal_matrix_v1.py'),
     ('PROJECT-GO-NO-GO-SNAPSHOT-DRY-RUN', 'validate_go_no_go_snapshot_dry_run_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-10-v46-ROLLUP', 'validate_mega_economy_safety_acceleration_10_v46_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_11_ALERT_HISTORY_RING_BUFFER_AND_ROLLBACK_RUNBOOK_REHEARSAL_PACK_v47
+    # PUBLIC_SYNC_TAG_v47_MEGA_ECONOMY_SAFETY_ACCELERATION_11
+    # ------------------------------------------------------------------------
+    # Alert history ring buffer + rollback runbook rehearsal + pre-live audit
+    # traceability bundle (all dry-run):
+    #   TRACK A: in-memory bounded ring buffer (MAX_ENTRIES=1024) capturing
+    #            v46 alert_evaluation envelopes (PII-safe projection only:
+    #            ts/family/route/overall_level/rates/critical_immediate/
+    #            alerts metric+level+window). Rolling windows 60/300/900s.
+    #            NO DB, NO Redis, NO filesystem, NO persistent ledger,
+    #            NO external alert dispatch. Preview request never blocked.
+    #   TRACK B: wire-up on 8/8 safety preview routes:
+    #            - /config exposes `alert_history_dry_run`
+    #            - POST responses include `alert_history_record_dry_run`
+    #            - /peek-buffer includes `alert_history_snapshot`
+    #            No endpoint path/flag/default 503/safety flag changes.
+    #   TRACK C: rollback runbook rehearsal matrix (design-only) covering all
+    #            8 families x 8 ordered steps (kill-switch toggle, verify 503,
+    #            verify db_writes=0, capture aggregation/alert/GO-NO-GO,
+    #            owner notification dry-run, rollback blocked if no live ledger).
+    #            live_rollback_enabled=false, actual_rollback_performed=false,
+    #            reward_reversal_enabled=false, mutation_reversal_enabled=false.
+    #   TRACK D: pre-live audit traceability bundle (design-only). Matrix
+    #            operation_family -> route -> validators -> markers -> docs ->
+    #            feature_flag -> MD5 guard -> smoke evidence -> blocker.
+    #            global_go=false, canary_enable_allowed=false,
+    #            live_enable_allowed=false, safe_to_continue_dry_run=true,
+    #            safe_to_enable_live=false.
+    #   ROLLUP : runs Tracks A + C + D + MD5 invariants (5 core) + suite
+    #            tuple counts + public sync tag presence + 8-route wire-up.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v47:
+    #   - 8/8 safety preview route endpoint paths / feature flags / default
+    #     503 / safety_flags unchanged
+    #   - v42 + v43 + v44 + v45 + v46 utils / envelopes unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v47
+    #   - No frontend changes
+    #   - DB writes total = 0; preview request never blocked
+    #   - NO external alert dispatch; alert_sink_live_enabled=false
+    #   - NO rollback live execution; live_rollback_enabled=false
+    #   - No reward grant / reversal live
+    #   - No inventory/material/currency/wallet mutation
+    #   - No premium users.gems mutation; no mail state/delete/read mutation
+    #   - No BP Delta runtime; no live enforcement; no persistent ledger
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-ALERT-HISTORY-RING-BUFFER-DRY-RUN', 'validate_alert_history_ring_buffer_dry_run_v1.py'),
+    ('PROJECT-ROLLBACK-RUNBOOK-REHEARSAL-MATRIX', 'validate_rollback_runbook_rehearsal_matrix_v1.py'),
+    ('PROJECT-PRE-LIVE-AUDIT-TRACEABILITY-BUNDLE', 'validate_pre_live_audit_traceability_bundle_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-11-v47-ROLLUP', 'validate_mega_economy_safety_acceleration_11_v47_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

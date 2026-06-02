@@ -135,6 +135,25 @@ except Exception:  # pragma: no cover - safe fallbacks
     def _v46_evaluate_alerts(_snap):  # type: ignore
         return {"enabled": False, "dry_run_only": True, "evaluated": False, "overall_level": "ok", "alerts": [], "alert_sink_live_enabled": False, "alert_dispatched": False, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False}
 
+try:
+    from utils.economy_alert_history_ring_buffer_dry_run import (
+        build_config_block as _v47_hist_config_block,
+        peek_alert_history as _v47_hist_peek,
+        build_alert_history_record_envelope as _v47_hist_record,
+    )
+    _V47_DRY_RUN_AVAILABLE = True
+except Exception:  # pragma: no cover - safe fallbacks
+    _V47_DRY_RUN_AVAILABLE = False
+
+    def _v47_hist_config_block():  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "rolling_windows_seconds": [60, 300, 900], "buffer_capacity": 1024, "alert_sink_live_enabled": False, "alert_dispatched": False, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False, "external_sink_used": False}
+
+    def _v47_hist_peek(operation_family=None, limit=25):  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "operation_family": operation_family, "windows": [], "recent_entries": [], "buffer_size_current": 0, "buffer_capacity": 1024, "alert_sink_live_enabled": False, "alert_dispatched": False, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False}
+
+    def _v47_hist_record(operation_family, alert_evaluation=None, route_name=None):  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "operation_family": operation_family, "route": route_name, "entry_id_preview": None, "recorded_overall_level": "ok", "alert_sink_live_enabled": False, "alert_dispatched": False, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False}
+
 FEATURE_FLAG = "ARTIFACT_UPGRADE_SAFETY_PREVIEW_ENABLED"
 CONTRACT_VERSION = "artifact_upgrade_safety_preview_v1"
 RUNTIME_MODE_TAG = "artifact_upgrade_safety_preview_gated_no_live_commit"
@@ -362,6 +381,7 @@ async def get_config() -> Dict[str, Any]:
         "observability_buffer_peek_dry_run": _v44_buffer_status_block(),
         "observability_aggregation_dry_run": _v45_agg_config_block(),
         "alerting_thresholds_dry_run": _v46_alert_config_block(),
+        "alert_history_dry_run": _v47_hist_config_block(),
     }
 
 
@@ -430,6 +450,11 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
             route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
         ),
         "telemetry_alert_evaluation_dry_run": _v46_evaluate_alerts(_v45_agg_snapshot("artifact_upgrade_commit")),
+        "alert_history_record_dry_run": _v47_hist_record(
+            "artifact_upgrade_commit",
+            alert_evaluation=_v46_evaluate_alerts(_v45_agg_snapshot("artifact_upgrade_commit")),
+            route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
+        ),
         "canonical_distinction": CANONICAL_DISTINCTION,
     }
 
@@ -500,6 +525,11 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
             route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
         ),
         "telemetry_alert_evaluation_dry_run": _v46_evaluate_alerts(_v45_agg_snapshot("artifact_upgrade_commit")),
+        "alert_history_record_dry_run": _v47_hist_record(
+            "artifact_upgrade_commit",
+            alert_evaluation=_v46_evaluate_alerts(_v45_agg_snapshot("artifact_upgrade_commit")),
+            route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
+        ),
         "canonical_distinction": CANONICAL_DISTINCTION,
         "notes": [
             "guard_plan_is_display_only",
@@ -582,6 +612,11 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
             route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
         ),
         "telemetry_alert_evaluation_dry_run": _v46_evaluate_alerts(_v45_agg_snapshot("artifact_upgrade_commit")),
+        "alert_history_record_dry_run": _v47_hist_record(
+            "artifact_upgrade_commit",
+            alert_evaluation=_v46_evaluate_alerts(_v45_agg_snapshot("artifact_upgrade_commit")),
+            route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
+        ),
         "canonical_distinction": CANONICAL_DISTINCTION,
         "live_commit_allowed": False,
     }
@@ -604,5 +639,6 @@ async def peek_buffer_endpoint(limit: int = 25) -> Dict[str, Any]:
         "preview_request_blocked": False,
         "aggregation_snapshot": _v45_agg_snapshot("artifact_upgrade_commit"),
         "alert_evaluation": _v46_evaluate_alerts(_v45_agg_snapshot("artifact_upgrade_commit")),
+        "alert_history_snapshot": _v47_hist_peek("artifact_upgrade_commit", limit=safe_limit),
     }
 
