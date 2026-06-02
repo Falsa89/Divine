@@ -1,0 +1,78 @@
+{
+  "contract_version": "material_raid_alpha_loop_closure_audit_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_3_MATERIAL_RAID_POST_VISUAL_REWARD_SUMMARY_AND_ALPHA_LOOP_CLOSURE_PACK_v53",
+  "home_menu_routing_required": false,
+  "loop_steps": [
+    {
+      "step": 1,
+      "kind": "frontend_route",
+      "id": "/material-raid-alpha",
+      "preview_only": true,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "home_menu_required": false
+    },
+    {
+      "step": 2,
+      "kind": "backend_endpoint",
+      "id": "POST /api/material-raid/alpha-battle-preview",
+      "preview_only": true,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "result_authoritative": false,
+      "battle_engine_runtime_used": false
+    },
+    {
+      "step": 3,
+      "kind": "frontend_route",
+      "id": "/material-raid-visual-preview",
+      "preview_only": true,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "result_authoritative": false,
+      "battle_engine_runtime_used": false
+    },
+    {
+      "step": 4,
+      "kind": "frontend_route",
+      "id": "/material-raid-reward-preview",
+      "preview_only": true,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "result_authoritative": false,
+      "backend_endpoint_called": "POST /api/material-raid/alpha-reward-summary-preview"
+    },
+    {
+      "step": 5,
+      "kind": "frontend_route",
+      "id": "/material-raid-alpha",
+      "preview_only": true,
+      "db_writes": 0,
+      "reward_grant_enabled": false,
+      "home_menu_required": false,
+      "return_step": true
+    }
+  ],
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "reward_grant_enabled": false,
+  "reward_claim_enabled": false,
+  "materials_granted": false,
+  "inventory_mutation": false,
+  "battle_engine_runtime_used": false,
+  "battle_engine_py_changed": false,
+  "result_authoritative_anywhere": false,
+  "compatible_with_future_material_raid_claim_safety": true,
+  "forbidden": [
+    "no_real_db_writes", "no_reward_grant", "no_inventory_mutation",
+    "no_material_mutation", "no_currency_wallet_mutation",
+    "no_premium_users_gems", "no_live_claim_commit",
+    "no_battle_engine_runtime_use", "no_real_battle_result",
+    "no_mongo_url", "no_pymongo", "no_motor", "no_redis",
+    "no_server_py_change", "no_existing_endpoint_path_change",
+    "no_existing_feature_flag_change", "no_existing_default_503_change",
+    "no_guild_war_policy_change", "no_home_mandatory_routing",
+    "no_character_bible_change", "no_final_numbers_change",
+    "no_validator_weakening", "no_fake_pass"
+  ]
+}

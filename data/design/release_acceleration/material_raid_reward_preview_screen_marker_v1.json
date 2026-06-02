@@ -1,0 +1,22 @@
+{
+  "marker_version": "material_raid_reward_preview_screen_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_3_MATERIAL_RAID_POST_VISUAL_REWARD_SUMMARY_AND_ALPHA_LOOP_CLOSURE_PACK_v53",
+  "track": "B",
+  "frontend_route": "/material-raid-reward-preview",
+  "frontend_screen_path": "frontend/app/material-raid-reward-preview.tsx",
+  "deeplink_only": true,
+  "home_menu_wiring": false,
+  "accepts_query_params": ["track_id", "stage_id", "battle_seed_preview", "battle_result_preview", "mvp_hero_id", "team_power", "recommended_power"],
+  "handles_missing_query_params_without_crash": true,
+  "safe_fallback_when_backend_off": true,
+  "calls_backend_endpoint": "POST /api/material-raid/alpha-reward-summary-preview",
+  "calls_battle_engine": false,
+  "calls_battle_simulate": false,
+  "calls_story_battle": false,
+  "claim_button_present": false,
+  "inventory_mutation": false,
+  "materials_granted": false,
+  "db_writes": 0,
+  "text_language": "it",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v53_MEGA_RELEASE_ACCELERATION_3_MATERIAL_RAID_ALPHA_LOOP_CLOSURE"
+}

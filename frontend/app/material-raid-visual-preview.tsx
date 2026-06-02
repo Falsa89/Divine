@@ -67,6 +67,20 @@ export default function MaterialRaidVisualPreviewScreen() {
     }
   };
 
+  // v53 — Open Reward Summary Preview button handler (deeplink with query params).
+  const onOpenRewardPreview = () => {
+    if (!hasMinimumParams) return;
+    const params: Record<string, string> = {
+      track_id: String(trackId),
+      stage_id: String(stageId),
+      battle_seed_preview: String(seed),
+      battle_result_preview: 'victory_preview',
+    };
+    if (teamPower !== undefined) params.team_power = String(teamPower);
+    if (recommendedPower !== undefined) params.recommended_power = String(recommendedPower);
+    router.push({ pathname: '/material-raid-reward-preview', params });
+  };
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -135,6 +149,11 @@ export default function MaterialRaidVisualPreviewScreen() {
             <TouchableOpacity style={styles.primaryBtn} onPress={onBack}>
               <Text style={styles.primaryBtnText}>Torna ad Alpha</Text>
             </TouchableOpacity>
+            {hasMinimumParams ? (
+              <TouchableOpacity style={styles.rewardBtn} onPress={onOpenRewardPreview}>
+                <Text style={styles.rewardBtnText}>Apri reward summary preview</Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         )}
 
@@ -217,6 +236,17 @@ const styles = StyleSheet.create({
     minHeight: 48,
   },
   primaryBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  rewardBtn: {
+    backgroundColor: '#2b7a4f',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#4abe7f',
+    minHeight: 48,
+  },
+  rewardBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
   footerBox: { marginTop: 24, alignItems: 'center' },
   footerText: { color: '#5a6473', fontSize: 11 },
 });

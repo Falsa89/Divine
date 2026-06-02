@@ -1,0 +1,27 @@
+{
+  "contract_version": "material_raid_alpha_loop_closure_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_3_MATERIAL_RAID_POST_VISUAL_REWARD_SUMMARY_AND_ALPHA_LOOP_CLOSURE_PACK_v53",
+  "severity_levels": ["P0", "P1", "P2", "P3"],
+  "flows": [
+    {"id": "alpha_open",                  "label_it": "Apri /material-raid-alpha",                                                  "severity": "P0", "expected": "schermata caricata, nessun crash"},
+    {"id": "prepare_battle",              "label_it": "Prepara battaglia su track aperto/stage valido/team sopra soglia",             "severity": "P0", "expected": "alpha_battle_preview_ready visibile e bottone visual"},
+    {"id": "open_visual_preview",         "label_it": "Apri /material-raid-visual-preview da Alpha",                                  "severity": "P0", "expected": "setup battaglia + seed + warning"},
+    {"id": "visual_preview_missing",      "label_it": "Apri /material-raid-visual-preview senza params",                              "severity": "P0", "expected": "nessun crash, blocco errore parametri mancanti"},
+    {"id": "open_reward_preview",         "label_it": "Apri /material-raid-reward-preview da Visual",                                  "severity": "P0", "expected": "reward summary preview con guardie no-grant visibili"},
+    {"id": "reward_preview_backend_off",  "label_it": "Reward preview con backend OFF",                                                "severity": "P1", "expected": "fallback sicuro, nessun crash, guardie no-grant visibili"},
+    {"id": "reward_preview_backend_on",   "label_it": "Reward preview con backend ON",                                                 "severity": "P0", "expected": "status=post_battle_reward_summary_preview, materials_granted=false, claim_button_enabled=false"},
+    {"id": "no_claim_button",             "label_it": "Nessun pulsante di claim live in alcuna schermata del loop",                    "severity": "P0", "expected": "claim_button_enabled=false e nessun pulsante claim visibile"},
+    {"id": "return_to_alpha",             "label_it": "Da reward preview torna ad Alpha",                                              "severity": "P1", "expected": "navigazione torna a /material-raid-alpha"},
+    {"id": "locked_track_no_loop",        "label_it": "Track locked_deferred non avvia il loop visuale",                                "severity": "P1", "expected": "bottone visuale e reward nascosti"},
+    {"id": "underpowered_no_loop",        "label_it": "team_underpowered_preview non avvia il loop visuale",                            "severity": "P1", "expected": "bottone visuale e reward nascosti"},
+    {"id": "mobile_rotation_layout",      "label_it": "Rotazione/portrait/landscape regge layout sulle 3 schermate",                  "severity": "P2", "expected": "nessun overflow/clipping critico"},
+    {"id": "no_db_write_no_grant",        "label_it": "Nessuna DB write e nessun reward grant durante l'intero loop",                  "severity": "P0", "expected": "db_writes=0, materials_granted=false ovunque"}
+  ],
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "live_apply_allowed": false,
+  "forbidden": [
+    "no_live_reward_grant", "no_db_writes", "no_mutation",
+    "no_validator_weakening", "no_fake_pass"
+  ]
+}

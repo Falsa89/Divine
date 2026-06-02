@@ -604,5 +604,15 @@ async def material_raid_alpha_reward_summary_preview(payload: AlphaRewardSummary
         "no_paid_attempts": True,
         "live_mutation_applied": False,
         "design_only_replace_before_release": True,
+        # v53 MEGA_RELEASE_ACCELERATION_3 — Post-Visual Reward Summary refinement
+        # (append-only). Same path, same flag, same default 503, same status,
+        # same reward table, no DB write, no reward grant, no live claim.
+        "source_visual_preview_supported": True,
+        "result_authoritative": False,
+        "reward_claim_enabled": False,
+        "reward_grant_enabled": False,
+        "battle_engine_runtime_used": False,
+        "next_allowed_action": "return_to_alpha_or_wait_for_staging_claim",
+        "target_frontend_route": "/material-raid-reward-preview",
     }
 
