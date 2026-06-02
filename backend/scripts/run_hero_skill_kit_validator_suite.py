@@ -1286,6 +1286,56 @@ OPTIONAL = [
     ('PROJECT-LIVE-APPLY-DECISION-LOG-DRY-RUN', 'validate_live_apply_decision_log_dry_run_v1.py'),
     ('PROJECT-EXPO-WATCHER-ENOSPC-DIAGNOSTIC', 'validate_expo_watcher_enospc_diagnostic_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-12-v48-ROLLUP', 'validate_mega_economy_safety_acceleration_12_v48_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_13_EPHEMERAL_TEST_DB_LIVE_SIMULATION_PRE_FLIGHT_PACK_v49
+    # PUBLIC_SYNC_TAG_v49_MEGA_ECONOMY_SAFETY_ACCELERATION_13
+    # ------------------------------------------------------------------------
+    # Ephemeral test DB live simulation + pre-flight matrix + smoke scenarios
+    # + post-v48 pre-live gate integration (all DRY-RUN, mock-only):
+    #   TRACK A: in-memory mock DB simulator. NO real DB connection. NO
+    #            pymongo. NO motor. NO redis. NO MONGO_URL. NO env read.
+    #            NO filesystem writes. 11 mock collections, 8 operation
+    #            families, 9 scenarios. real_db_writes=0 ALWAYS,
+    #            production_db_touched=false ALWAYS.
+    #            simulated_ephemeral_writes_count tracks MOCK writes only.
+    #   TRACK B: pre-flight matrix (design-only). 8 families. real_db_
+    #            connection_allowed=false, mongo_url_allowed=false,
+    #            pymongo_allowed=false, motor_allowed=false,
+    #            env_read_allowed=false, filesystem_writes_allowed=false,
+    #            production_db_touched=false, ephemeral_db_required=true,
+    #            rollback_simulation_required=true, live_enabled=false,
+    #            safe_to_enable_live=false.
+    #   TRACK C: smoke scenarios matrix (design-only). 8 families x 9
+    #            scenarios. expected_real_db_writes=0,
+    #            expected_live_apply_allowed=false,
+    #            expected_production_db_touched=false for ALL.
+    #   TRACK D: post-v48 pre-live gate integration. Connects v48 GO/NO-GO
+    #            + decision log + audit bundle to v49 pre-flight + smoke.
+    #            v49_does_not_change_go_status=true. global_go=false.
+    #   ROLLUP : runs Tracks A + B + C + D + MD5 invariants (5 core) +
+    #            suite tuple counts + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v49:
+    #   - 8/8 safety preview route endpoint paths / feature flags / default
+    #     503 / safety_flags unchanged (no wire-up in v49)
+    #   - v42-v48 utils / envelopes unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v49
+    #   - No frontend changes
+    #   - real DB writes total = 0; production_db_touched=false
+    #   - NO real DB connection; NO MONGO_URL read; NO pymongo; NO motor
+    #   - NO env read in v49 utility; NO filesystem writes
+    #   - NO external alert dispatch; NO live apply; NO rollback live
+    #   - No reward grant; no inventory/material/currency/wallet mutation
+    #   - No premium users.gems mutation; no mail state/delete/read mutation
+    #   - No BP Delta runtime; no live enforcement; no persistent ledger
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-EPHEMERAL-TEST-DB-LIVE-SIMULATION-DRY-RUN', 'validate_ephemeral_test_db_live_simulation_dry_run_v1.py'),
+    ('PROJECT-EPHEMERAL-TEST-DB-PRE-FLIGHT-MATRIX', 'validate_ephemeral_test_db_pre_flight_matrix_v1.py'),
+    ('PROJECT-LIVE-SIMULATION-SMOKE-SCENARIOS', 'validate_live_simulation_smoke_scenarios_v1.py'),
+    ('PROJECT-POST-V48-PRE-LIVE-GATE-INTEGRATION', 'validate_post_v48_pre_live_gate_integration_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-13-v49-ROLLUP', 'validate_mega_economy_safety_acceleration_13_v49_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

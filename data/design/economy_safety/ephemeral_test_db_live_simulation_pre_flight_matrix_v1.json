@@ -1,0 +1,40 @@
+{
+  "contract_version": "ephemeral_test_db_live_simulation_pre_flight_matrix_v1",
+  "dry_run_only": true,
+  "real_db_connection_allowed": false,
+  "mongo_url_allowed": false,
+  "pymongo_allowed": false,
+  "motor_allowed": false,
+  "env_read_allowed": false,
+  "filesystem_writes_allowed": false,
+  "production_db_touched": false,
+  "ephemeral_db_required": true,
+  "rollback_simulation_required": true,
+  "live_enabled": false,
+  "safe_to_enable_live": false,
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "operation_families": [
+    {"operation_family": "gem_socket_commit", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "gear", "idempotency_ledger", "audit_log"]},
+    {"operation_family": "material_raid_claim", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "user_materials", "idempotency_ledger", "audit_log"]},
+    {"operation_family": "gear_forge_fusion_commit", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "gear", "idempotency_ledger", "audit_log"]},
+    {"operation_family": "rune_scroll_talisman_commit", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "runes", "idempotency_ledger", "audit_log"]},
+    {"operation_family": "artifact_upgrade_commit", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "artifacts", "idempotency_ledger", "audit_log"]},
+    {"operation_family": "divine_weapon_upgrade_commit", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "divine_weapons", "idempotency_ledger", "audit_log"]},
+    {"operation_family": "battle_pass_reward_claim", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "battle_pass_claims", "idempotency_ledger", "audit_log"], "no_bp_delta_runtime": true},
+    {"operation_family": "mail_reward_claim", "real_db_connection_allowed": false, "mongo_url_allowed": false, "production_db_touched": false, "ephemeral_db_required": true, "rollback_simulation_required": true, "live_enabled": false, "safe_to_enable_live": false, "real_db_writes": 0, "required_collections": ["users", "mail_claims", "idempotency_ledger", "audit_log"], "no_mail_state_mutation": true}
+  ],
+  "global_blockers": [
+    "real_db_connection_forbidden_at_runtime",
+    "mongo_url_must_not_be_read",
+    "pymongo_must_not_be_imported",
+    "motor_must_not_be_imported",
+    "env_read_must_not_occur_in_utility",
+    "filesystem_writes_forbidden",
+    "signoff_pending",
+    "no_live_ledger",
+    "no_persistent_audit_sink",
+    "no_real_qa_canary_group"
+  ],
+  "forbidden": ["no_real_db_connection", "no_mongo_url", "no_pymongo", "no_motor", "no_env_read", "no_db_writes", "no_redis", "no_filesystem_writes", "no_persistent_ledger", "no_live_apply", "no_production_mutation", "no_reward_grant", "no_inventory_mutation", "no_material_mutation", "no_currency_mutation", "no_wallet_mutation", "no_premium_gems_mutation", "no_mail_state_mutation", "no_bp_delta_runtime", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_safety_flag_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change", "no_character_bible_change", "no_final_numbers_change"]
+}

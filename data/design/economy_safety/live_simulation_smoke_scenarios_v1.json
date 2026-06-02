@@ -1,0 +1,29 @@
+{
+  "contract_version": "live_simulation_smoke_scenarios_v1",
+  "dry_run_only": true,
+  "expected_real_db_writes": 0,
+  "expected_live_apply_allowed": false,
+  "expected_production_db_touched": false,
+  "scenarios_required": [
+    "happy_path",
+    "duplicate_same_hash",
+    "duplicate_diff_hash",
+    "missing_idempotency_key",
+    "rollback_simulation",
+    "version_mismatch",
+    "unauthorized",
+    "audit_event",
+    "no_production_db_touched"
+  ],
+  "operation_families": [
+    {"operation_family": "gem_socket_commit", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false},
+    {"operation_family": "material_raid_claim", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false},
+    {"operation_family": "gear_forge_fusion_commit", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false},
+    {"operation_family": "rune_scroll_talisman_commit", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false},
+    {"operation_family": "artifact_upgrade_commit", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false},
+    {"operation_family": "divine_weapon_upgrade_commit", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false},
+    {"operation_family": "battle_pass_reward_claim", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false, "no_bp_delta_runtime": true},
+    {"operation_family": "mail_reward_claim", "scenarios": ["happy_path", "duplicate_same_hash", "duplicate_diff_hash", "missing_idempotency_key", "rollback_simulation", "version_mismatch", "unauthorized", "audit_event", "no_production_db_touched"], "expected_real_db_writes": 0, "expected_live_apply_allowed": false, "expected_production_db_touched": false, "no_mail_state_mutation": true}
+  ],
+  "forbidden": ["no_real_db_connection", "no_mongo_url", "no_production_db_touched", "no_live_apply", "no_db_writes", "no_reward_grant", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change"]
+}

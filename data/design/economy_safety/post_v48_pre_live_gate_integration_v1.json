@@ -1,0 +1,33 @@
+{
+  "contract_version": "post_v48_pre_live_gate_integration_v1",
+  "dry_run_only": true,
+  "v49_does_not_change_go_status": true,
+  "v49_adds_ephemeral_simulation_evidence": true,
+  "global_go": false,
+  "canary_go": false,
+  "live_go": false,
+  "safe_to_continue_dry_run": true,
+  "safe_to_enable_canary": false,
+  "safe_to_enable_live": false,
+  "live_apply_allowed": false,
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "production_db_touched": false,
+  "connects": {
+    "v48_final_go_no_go_consolidation": "data/design/economy_safety/final_go_no_go_consolidation_v1.json",
+    "v48_live_apply_decision_log_dry_run": "data/design/economy_safety/live_apply_decision_log_dry_run_v1.json",
+    "v48_audit_bundle_checksum_dry_run_marker": "data/design/economy_safety/audit_bundle_checksum_dry_run_marker_v1.json",
+    "v49_ephemeral_test_db_pre_flight_matrix": "data/design/economy_safety/ephemeral_test_db_live_simulation_pre_flight_matrix_v1.json",
+    "v49_live_simulation_smoke_scenarios": "data/design/economy_safety/live_simulation_smoke_scenarios_v1.json"
+  },
+  "future_transition_requirements": [
+    "staging_db_provisioned_ephemeral_or_isolated",
+    "persistent_audit_sink_available",
+    "live_ledger_implemented_design_then_validated",
+    "rollback_dry_run_in_staging_passed",
+    "real_qa_canary_group_with_opt_in_users",
+    "production_monitoring_sink_configured",
+    "manual_user_approval_recorded_in_decision_log"
+  ],
+  "forbidden": ["no_real_db_connection", "no_mongo_url", "no_live_apply", "no_canary_apply", "no_external_alert_dispatch", "no_reward_grant", "no_inventory_mutation", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change"]
+}
