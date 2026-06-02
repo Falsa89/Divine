@@ -1,0 +1,45 @@
+{
+  "contract_version": "staging_db_blueprint_v1",
+  "dry_run_only": true,
+  "actual_staging_db_created": false,
+  "real_db_connection_used": false,
+  "production_db_credentials_allowed": false,
+  "mongo_url_allowed": false,
+  "pymongo_allowed": false,
+  "motor_allowed": false,
+  "env_read_allowed": false,
+  "filesystem_writes_allowed": false,
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "production_db_touched": false,
+  "live_enabled": false,
+  "safe_to_enable_live": false,
+  "live_apply_allowed": false,
+  "isolation_requirements": [
+    "separate_database_name_from_production",
+    "separate_credentials_from_production",
+    "network_isolated_or_local_only_during_simulation",
+    "ephemeral_lifecycle_no_persistence_beyond_run",
+    "no_shared_data_with_production_collections",
+    "isolated_audit_sink_for_simulation_events"
+  ],
+  "required_infrastructure": [
+    "persistent_audit_sink_isolated",
+    "monitoring_sink_for_simulation",
+    "observability_aggregation_dry_run_compatible",
+    "alert_history_ring_buffer_dry_run_compatible",
+    "telemetry_alerting_thresholds_dry_run_compatible",
+    "audit_bundle_checksum_dry_run_verification"
+  ],
+  "operation_families": [
+    {"operation_family": "gem_socket_commit", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false},
+    {"operation_family": "material_raid_claim", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false},
+    {"operation_family": "gear_forge_fusion_commit", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false},
+    {"operation_family": "rune_scroll_talisman_commit", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false},
+    {"operation_family": "artifact_upgrade_commit", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false},
+    {"operation_family": "divine_weapon_upgrade_commit", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false},
+    {"operation_family": "battle_pass_reward_claim", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false, "no_bp_delta_runtime": true},
+    {"operation_family": "mail_reward_claim", "readiness": "not_ready_until_manual_approval", "actual_staging_db_created": false, "real_db_connection_used": false, "db_writes": 0, "live_enabled": false, "safe_to_enable_live": false, "no_mail_state_mutation": true}
+  ],
+  "forbidden": ["no_real_db_connection", "no_mongo_url", "no_production_credentials", "no_pymongo", "no_motor", "no_env_read", "no_db_writes", "no_redis", "no_filesystem_writes", "no_persistent_ledger", "no_live_apply", "no_production_mutation", "no_reward_grant", "no_inventory_mutation", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_safety_flag_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change", "no_character_bible_change", "no_final_numbers_change"]
+}

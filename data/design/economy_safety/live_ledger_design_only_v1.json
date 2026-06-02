@@ -1,0 +1,49 @@
+{
+  "contract_version": "live_ledger_design_only_v1",
+  "dry_run_only": true,
+  "runtime_ledger_created": false,
+  "live_apply_allowed": false,
+  "live_implementation_deferred": true,
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "production_db_touched": false,
+  "schemas": {
+    "idempotency_ledger_entry": {
+      "required_fields": ["ledger_key", "operation_family", "user_id", "payload_hash", "table_version", "status", "created_at_design", "ttl_design_seconds"],
+      "ttl_design_seconds_default": 86400,
+      "unique_by": ["ledger_key"],
+      "design_only": true,
+      "runtime_created": false
+    },
+    "audit_event": {
+      "required_fields": ["event_id_preview", "operation_family", "user_id", "event_type", "scenario", "created_at_design"],
+      "pii_safe": true,
+      "raw_payload_captured": false,
+      "design_only": true,
+      "runtime_created": false
+    },
+    "rollback_record": {
+      "required_fields": ["rollback_id_preview", "operation_family", "user_id", "reason", "original_ledger_key_ref", "created_at_design"],
+      "design_only": true,
+      "runtime_created": false,
+      "actual_reversal_performed": false
+    },
+    "operator_decision": {
+      "required_fields": ["decision_id_preview", "operation_family", "approver", "decision", "rationale", "approval_phrase_recorded", "checksum_sha256_ref", "created_at_design"],
+      "approver_enum": ["system_dry_run", "owner_pending", "qa_pending", "game_director_pending"],
+      "design_only": true,
+      "runtime_created": false
+    }
+  },
+  "operation_families": [
+    {"operation_family": "gem_socket_commit", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0},
+    {"operation_family": "material_raid_claim", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0},
+    {"operation_family": "gear_forge_fusion_commit", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0},
+    {"operation_family": "rune_scroll_talisman_commit", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0},
+    {"operation_family": "artifact_upgrade_commit", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0},
+    {"operation_family": "divine_weapon_upgrade_commit", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0},
+    {"operation_family": "battle_pass_reward_claim", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0, "no_bp_delta_runtime": true},
+    {"operation_family": "mail_reward_claim", "runtime_ledger_created": false, "live_apply_allowed": false, "live_implementation_deferred": true, "db_writes": 0, "no_mail_state_mutation": true}
+  ],
+  "forbidden": ["no_runtime_ledger_creation", "no_real_db_connection", "no_mongo_url", "no_pymongo", "no_motor", "no_env_read", "no_filesystem_writes", "no_live_apply", "no_production_mutation", "no_reward_grant", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change"]
+}

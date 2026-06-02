@@ -1,0 +1,26 @@
+{
+  "contract_version": "manual_user_approval_handshake_dry_run_v1",
+  "dry_run_only": true,
+  "no_endpoint": true,
+  "no_runtime_execution": true,
+  "no_automatic_approval": true,
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "production_db_touched": false,
+  "live_apply_allowed": false,
+  "approval_phrase_template": "I APPROVE <operation_family> <transition> WITH CHECKSUM <checksum_sha256> ON <date>",
+  "approval_phrase_required_placeholders": ["<operation_family>", "<transition>", "<checksum_sha256>", "<date>"],
+  "future_live_decision_requires_manual_user_approval": true,
+  "transition_enum": ["dry_run_to_staging_dry_run", "staging_dry_run_to_canary_dry_run", "canary_dry_run_to_canary_live_BLOCKED", "canary_live_to_live_BLOCKED"],
+  "operation_families": [
+    {"operation_family": "gem_socket_commit", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false},
+    {"operation_family": "material_raid_claim", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false},
+    {"operation_family": "gear_forge_fusion_commit", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false},
+    {"operation_family": "rune_scroll_talisman_commit", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false},
+    {"operation_family": "artifact_upgrade_commit", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false},
+    {"operation_family": "divine_weapon_upgrade_commit", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false},
+    {"operation_family": "battle_pass_reward_claim", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false, "no_bp_delta_runtime": true},
+    {"operation_family": "mail_reward_claim", "current_approval_state": "pending", "approval_phrase_recorded": null, "checksum_sha256_recorded": null, "date_recorded": null, "transition_recorded": null, "db_writes": 0, "live_apply_allowed": false, "no_mail_state_mutation": true}
+  ],
+  "forbidden": ["no_endpoint", "no_runtime_execution", "no_automatic_approval", "no_real_db_connection", "no_mongo_url", "no_pymongo", "no_motor", "no_env_read", "no_filesystem_writes", "no_db_writes", "no_live_apply", "no_production_mutation", "no_endpoint_path_change", "no_feature_flag_change", "no_default_503_change", "no_server_py_change", "no_frontend_change", "no_battle_engine_change"]
+}
