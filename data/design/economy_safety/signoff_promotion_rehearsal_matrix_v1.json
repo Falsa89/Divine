@@ -1,0 +1,57 @@
+{
+  "contract_version": "signoff_promotion_rehearsal_matrix_v1",
+  "dry_run_only": true,
+  "actual_promotion_performed": false,
+  "canary_enabled": false,
+  "live_enabled": false,
+  "live_flip_allowed": false,
+  "db_writes": 0,
+  "states": [
+    "pending",
+    "dry_run_ready",
+    "qa_ready",
+    "canary_rehearsal_ready",
+    "live_ready_blocked"
+  ],
+  "transition_rules": {
+    "pending": ["dry_run_ready"],
+    "dry_run_ready": ["qa_ready"],
+    "qa_ready": ["canary_rehearsal_ready"],
+    "canary_rehearsal_ready": ["live_ready_blocked"],
+    "live_ready_blocked": []
+  },
+  "operation_families": [
+    {"operation_family": "gem_socket_commit", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false}},
+    {"operation_family": "material_raid_claim", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false}},
+    {"operation_family": "gear_forge_fusion_commit", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false}},
+    {"operation_family": "rune_scroll_talisman_commit", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false}},
+    {"operation_family": "artifact_upgrade_commit", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false}},
+    {"operation_family": "divine_weapon_upgrade_commit", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false}},
+    {"operation_family": "battle_pass_reward_claim", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false, "no_bp_delta_runtime": true}},
+    {"operation_family": "mail_reward_claim", "current_state": "pending", "target_state_after_rehearsal": "dry_run_ready", "actual_promotion_performed": false, "canary_enabled": false, "live_enabled": false, "live_flip_allowed": false, "db_writes": 0, "owner_signoff": "pending", "qa_signoff": "pending", "game_director_signoff": "pending", "evidence_checklist": {"validators_passing": false, "suite_zero_required_fail": false, "md5_invariants_intact": false, "default_503_with_flag_off": false, "dry_run_smoke_passed": false, "replay_conflict_detection_dry_run": false, "alert_thresholds_dry_run": false, "rollback_runbook_present": false, "no_mail_state_mutation": true, "no_mail_delete_mutation": true, "no_mail_read_mutation": true}}
+  ],
+  "forbidden": [
+    "no_db_writes",
+    "no_actual_live_promotion",
+    "no_canary_enable",
+    "no_live_enable",
+    "no_live_flip",
+    "no_reward_grant",
+    "no_inventory_mutation",
+    "no_material_mutation",
+    "no_currency_mutation",
+    "no_wallet_mutation",
+    "no_premium_gems_mutation",
+    "no_mail_state_mutation",
+    "no_bp_delta_runtime",
+    "no_endpoint_path_change",
+    "no_feature_flag_change",
+    "no_default_503_change",
+    "no_safety_flag_change",
+    "no_server_py_change",
+    "no_frontend_change",
+    "no_battle_engine_change",
+    "no_character_bible_change",
+    "no_final_numbers_change"
+  ]
+}

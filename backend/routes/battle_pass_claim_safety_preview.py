@@ -113,6 +113,21 @@ except Exception:  # pragma: no cover - safe fallbacks
     def _v45_telemetry_envelope(operation_family, detection_statuses=None, route_name=None):  # type: ignore
         return {"enabled": False, "dry_run_only": True, "operation_family": operation_family, "route": route_name, "statuses": [], "event_id_preview": None, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False}
 
+try:
+    from utils.economy_telemetry_alerting_thresholds_dry_run import (
+        build_alerting_thresholds_config as _v46_alert_config_block,
+        evaluate_alerts_from_snapshot as _v46_evaluate_alerts,
+    )
+    _V46_DRY_RUN_AVAILABLE = True
+except Exception:  # pragma: no cover - safe fallbacks
+    _V46_DRY_RUN_AVAILABLE = False
+
+    def _v46_alert_config_block():  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "thresholds": {}, "alert_sink_live_enabled": False, "alert_dispatched": False, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False, "external_sink_used": False}
+
+    def _v46_evaluate_alerts(_snap):  # type: ignore
+        return {"enabled": False, "dry_run_only": True, "evaluated": False, "overall_level": "ok", "alerts": [], "alert_sink_live_enabled": False, "alert_dispatched": False, "db_writes": 0, "persisted": False, "live_enforcement_enabled": False, "preview_request_blocked": False}
+
 FEATURE_FLAG = "BATTLE_PASS_CLAIM_SAFETY_PREVIEW_ENABLED"
 CONTRACT_VERSION = "battle_pass_claim_safety_preview_v1"
 RUNTIME_MODE_TAG = "battle_pass_claim_safety_preview_gated_no_live_claim"
@@ -348,6 +363,7 @@ async def get_config() -> Dict[str, Any]:
         "client_key_replay_detection_dry_run": _v44_client_key_replay_config_block(),
         "observability_buffer_peek_dry_run": _v44_buffer_status_block(),
         "observability_aggregation_dry_run": _v45_agg_config_block(),
+        "alerting_thresholds_dry_run": _v46_alert_config_block(),
     }
 
 
@@ -415,6 +431,7 @@ async def validate_request(body: RequestPayload) -> Dict[str, Any]:
             ],
             route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
         ),
+        "telemetry_alert_evaluation_dry_run": _v46_evaluate_alerts(_v45_agg_snapshot("battle_pass_reward_claim")),
     }
 
 
@@ -483,6 +500,7 @@ async def guard_plan_preview(body: RequestPayload) -> Dict[str, Any]:
             ],
             route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
         ),
+        "telemetry_alert_evaluation_dry_run": _v46_evaluate_alerts(_v45_agg_snapshot("battle_pass_reward_claim")),
         "notes": [
             "guard_plan_is_display_only",
             "no_live_claim_in_preview",
@@ -566,6 +584,7 @@ async def idempotency_preview(body: RequestPayload) -> Dict[str, Any]:
             ],
             route_name=(obs_env.get("path_suffix") if isinstance(obs_env, dict) else None),
         ),
+        "telemetry_alert_evaluation_dry_run": _v46_evaluate_alerts(_v45_agg_snapshot("battle_pass_reward_claim")),
         "live_claim_allowed": False,
     }
 
@@ -586,5 +605,6 @@ async def peek_buffer_endpoint(limit: int = 25) -> Dict[str, Any]:
         "live_enforcement_enabled": False,
         "preview_request_blocked": False,
         "aggregation_snapshot": _v45_agg_snapshot("battle_pass_reward_claim"),
+        "alert_evaluation": _v46_evaluate_alerts(_v45_agg_snapshot("battle_pass_reward_claim")),
     }
 

@@ -1,0 +1,30 @@
+{
+  "marker_version": "telemetry_alerting_thresholds_dry_run_marker_v1",
+  "pack": "MEGA_ECONOMY_SAFETY_ACCELERATION_10_TELEMETRY_ALERTING_THRESHOLDS_AND_SIGNOFF_PROMOTION_REHEARSAL_PACK_v46",
+  "track": "A",
+  "contract_version": "economy_telemetry_alerting_thresholds_dry_run_v1",
+  "utility_path": "backend/utils/economy_telemetry_alerting_thresholds_dry_run.py",
+  "public_api": ["evaluate_alerts_from_snapshot", "build_alerting_thresholds_config", "_test_reset"],
+  "thresholds": {
+    "replay_rate": {"warn": 0.20, "critical": 0.50},
+    "conflict_rate": {"warn": 0.05, "critical": 0.15},
+    "missing_key_rate": {"warn": 0.10, "critical": 0.25}
+  },
+  "critical_immediate_fields": [
+    "db_writes_observed_total",
+    "reward_grants_observed_total",
+    "mutation_observed_total",
+    "bp_delta_observed_total",
+    "live_enforcement_observed_total"
+  ],
+  "alert_sink_live_enabled": false,
+  "alert_dispatched": false,
+  "external_sink_used": false,
+  "db_writes": 0,
+  "persisted": false,
+  "live_enforcement_enabled": false,
+  "preview_request_blocked": false,
+  "pii_safe": true,
+  "raw_payload_captured": false,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v46_MEGA_ECONOMY_SAFETY_ACCELERATION_10"
+}

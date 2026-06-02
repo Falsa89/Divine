@@ -1138,6 +1138,51 @@ OPTIONAL = [
     ('PROJECT-REPLAY-CONFLICT-TELEMETRY-DRY-RUN', 'validate_replay_conflict_telemetry_dry_run_v1.py'),
     ('PROJECT-ALL-FAMILY-CANARY-QA-REHEARSAL-MATRIX', 'validate_all_family_canary_qa_rehearsal_matrix_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-9-v45-ROLLUP', 'validate_mega_economy_safety_acceleration_9_v45_rollup.py'),
+    # ========================================================================
+    # MEGA_ECONOMY_SAFETY_ACCELERATION_10_TELEMETRY_ALERTING_THRESHOLDS_AND_SIGNOFF_PROMOTION_REHEARSAL_PACK_v46
+    # PUBLIC_SYNC_TAG_v46_MEGA_ECONOMY_SAFETY_ACCELERATION_10
+    # ------------------------------------------------------------------------
+    # Telemetry alerting thresholds + signoff promotion rehearsal + GO/NO-GO snapshot (dry-run):
+    #   TRACK A: telemetry alerting thresholds utility (DRY-RUN). Evaluates
+    #            v45 60s window. Replay/conflict/missing-key rate thresholds
+    #            (warn/critical). Critical-immediate on db_writes/reward/
+    #            mutation/bp_delta/live_enforcement observed.
+    #            NO external alert sink. NO DB / Redis / filesystem /
+    #            persistent ledger. Preview request never blocked.
+    #            Wire-up on 8/8 routes:
+    #            - /config exposes `alerting_thresholds_dry_run`
+    #            - POST responses include `telemetry_alert_evaluation_dry_run`
+    #            - /peek-buffer includes `alert_evaluation`
+    #   TRACK B: signoff promotion rehearsal matrix (design-only, 8 families,
+    #            5 states pending->dry_run_ready->qa_ready->canary_rehearsal_
+    #            ready->live_ready_blocked). v46: current_state=pending,
+    #            actual_promotion_performed=false, canary/live=false,
+    #            live_flip_allowed=false, owner/QA/Game Director signoff pending.
+    #   TRACK C: GO/NO-GO snapshot dry-run. global_go=false, canary_go=false,
+    #            live_go=false, per_family_go=false,
+    #            safe_to_continue_dry_run=true, safe_to_enable_live=false,
+    #            db_writes=0, live_apply_allowed=false. 6 blockers documented.
+    #   ROLLUP : runs Tracks A + B + C + MD5 invariants (5 core) + suite
+    #            tuple counts + public sync tag presence + 8-route wire-up.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v46:
+    #   - 8/8 safety preview route endpoint paths / feature flags / default
+    #     503 / safety_flags unchanged
+    #   - v42 + v43 + v44 + v45 utils / envelopes unchanged
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v46
+    #   - No frontend changes
+    #   - DB writes total = 0; preview request never blocked
+    #   - NO external alert dispatch; alert_sink_live_enabled=false
+    #   - No reward grant; no inventory/material/currency/wallet mutation
+    #   - No premium users.gems mutation; no mail state/delete/read mutation
+    #   - No BP Delta runtime; no live enforcement; no persistent ledger
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-TELEMETRY-ALERTING-THRESHOLDS-DRY-RUN', 'validate_telemetry_alerting_thresholds_dry_run_v1.py'),
+    ('PROJECT-SIGNOFF-PROMOTION-REHEARSAL-MATRIX', 'validate_signoff_promotion_rehearsal_matrix_v1.py'),
+    ('PROJECT-GO-NO-GO-SNAPSHOT-DRY-RUN', 'validate_go_no_go_snapshot_dry_run_v1.py'),
+    ('MEGA-ECONOMY-SAFETY-ACCELERATION-10-v46-ROLLUP', 'validate_mega_economy_safety_acceleration_10_v46_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
