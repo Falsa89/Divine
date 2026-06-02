@@ -1,0 +1,60 @@
+{
+  "contract_version": "device_beta_tester_smoke_matrix_v1",
+  "playable_alpha_phase": "v51",
+  "device_info_fields": [
+    "device_model", "os_name", "os_version", "screen_size", "network_type", "locale"
+  ],
+  "build_version_fields": [
+    "app_version", "expo_runtime_version", "git_commit_hash", "feature_flags_active"
+  ],
+  "tester_roles": ["internal_qa", "closed_beta", "open_beta"],
+  "test_session_duration_minutes_recommended": [15, 30, 60],
+  "evidence_format": {
+    "screenshot": {"format": "png_or_jpg", "required_for": ["P0", "P1"]},
+    "video": {"format": "mp4", "required_for": ["P0"], "recommended_for": ["P1"]},
+    "logs": {"format": "text", "recommended_for": ["P0", "P1", "P2"]}
+  },
+  "bug_severity": [
+    {"id": "P0", "label_it": "Crash o blocco totale", "sla_h": 4},
+    {"id": "P1", "label_it": "Feature core compromessa", "sla_h": 24},
+    {"id": "P2", "label_it": "Bug significativo aggirabile", "sla_h": 72},
+    {"id": "P3", "label_it": "Rifinitura/cosmetico", "sla_h": 168}
+  ],
+  "reproduction_steps_template": [
+    "Precondizioni", "Passi numerati", "Risultato atteso", "Risultato osservato",
+    "Frequenza (sempre/spesso/raro)", "Workaround se presente"
+  ],
+  "flows_to_test": [
+    "app_boot", "login_or_register_if_available", "home", "heroes", "story",
+    "visual_battle", "post_battle_report", "material_raid_alpha",
+    "reward_preview", "guide_codex", "navigation_back_rotation",
+    "crash_freeze_performance"
+  ],
+  "pass_fail_criteria": {
+    "app_boot": "app loads to home/login without crash within 5s on mid-range device",
+    "home": "home renders, no missing assets > 50% of slots",
+    "heroes": "hero list scrolls without lag, filters operate",
+    "story": "story chapter selectable, battle entrypoint reachable",
+    "visual_battle": "visual battle starts and finishes (where wired)",
+    "post_battle_report": "report screen shows MVP/seed/rewards preview",
+    "material_raid_alpha": "alpha screen loads even with backend OFF, no crash; with flag ON, alpha-slice-config returns 200 and battle preview returns deterministic seed",
+    "reward_preview": "preview shows materials but claim button is disabled",
+    "guide_codex": "alpha guide loads, italian text visible",
+    "navigation_back_rotation": "back gesture/button works, rotation handled",
+    "crash_freeze_performance": "no crash > 0, no freeze > 2s"
+  },
+  "known_caveats": [
+    "preview_only_economy",
+    "no_live_reward_claim",
+    "expo_enospc_optional_environmental_caveat_dev_env_only",
+    "github_stale_push_known_platform_caveat",
+    "visual_battle_runner_for_material_raid_alpha_pending_v52"
+  ],
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "live_apply_allowed": false,
+  "forbidden": [
+    "no_live_reward_grant", "no_db_writes", "no_mutation",
+    "no_validator_weakening", "no_fake_pass"
+  ]
+}

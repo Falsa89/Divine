@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-02T20:16:31.084349+00:00",
+  "timestamp_utc": "2026-06-02T20:45:34.038957+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1221,
+  "backend_python_files_scanned": 1227,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 573,
+      "files_with_hits": 574,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -249,7 +249,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 290,
+      "files_with_hits": 292,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -837,7 +837,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 82,
+      "files_with_hits": 85,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -953,7 +953,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 22,
+      "files_with_hits": 24,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1016,6 +1016,18 @@
           ]
         },
         {
+          "file": "backend/scripts/run_hero_skill_kit_validator_suite.py",
+          "keyword": "arena",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 1414,
+              "snippet": "#            8 modes (story, material_raid, tower, arena, guild_war,"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
           "keyword": "arena",
           "has_server_id_anywhere": false,
@@ -1024,18 +1036,6 @@
             {
               "line": 9,
               "snippet": "'story_progress','guilds','arena_rankings','user_affinity_state',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_c_account_entity_schema_v1.py",
-          "keyword": "arena",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 24,
-              "snippet": "for f in ('gold', 'diamonds_free', 'event_currency', 'team_active', 'equipped_skin', 'affinity_points', 'arena_rank'):"
             }
           ]
         }
@@ -1253,7 +1253,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 39,
+      "files_with_hits": 40,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",

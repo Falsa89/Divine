@@ -1,0 +1,66 @@
+{
+  "contract_version": "hero_asset_import_readiness_schema_v1",
+  "design_only": true,
+  "no_real_assets_required_yet": true,
+  "no_assets_imported_in_v51": true,
+  "frontend_assets_heroes_changed": false,
+  "hero_contracts_changed": false,
+  "character_bible_changed": false,
+  "final_numbers_changed": false,
+  "required_asset_slots": [
+    "hero_id", "rarity", "faction", "element", "role",
+    "splash", "portrait", "card", "detail", "fullscreen",
+    "combat_base",
+    "idle_sheet", "attack_sheet", "skill_sheet", "hit_sheet", "death_sheet",
+    "battle_animations_json",
+    "source_reference_notes", "chroma_status", "alpha_cleanup_status"
+  ],
+  "required_field_specs": {
+    "hero_id": {"type": "string", "required": true},
+    "rarity": {"type": "enum", "values": ["3star", "4star", "5star", "6star"], "required": true},
+    "faction": {"type": "enum_subset", "required": true},
+    "element": {"type": "enum_subset", "required": true},
+    "role": {"type": "enum_subset", "required": true},
+    "splash": {"type": "image", "required": true},
+    "portrait": {"type": "image", "required": true},
+    "card": {"type": "image", "required": true},
+    "detail": {"type": "image", "required": true},
+    "fullscreen": {"type": "image", "required": false},
+    "combat_base": {"type": "image", "required": true},
+    "idle_sheet": {"type": "spritesheet_or_image", "required": true},
+    "attack_sheet": {"type": "spritesheet_or_image", "required": true},
+    "skill_sheet": {"type": "spritesheet_or_image", "required": true},
+    "hit_sheet": {"type": "spritesheet_or_image", "required": false},
+    "death_sheet": {"type": "spritesheet_or_image", "required": false},
+    "battle_animations_json": {"type": "json", "required": true},
+    "source_reference_notes": {"type": "string", "required": false},
+    "chroma_status": {"type": "enum", "values": ["clean", "needs_cleanup", "unknown"], "required": false},
+    "alpha_cleanup_status": {"type": "enum", "values": ["clean", "needs_cleanup", "unknown"], "required": false}
+  },
+  "readiness_categories": [
+    "ready_to_import",
+    "missing_non_blocking_metadata",
+    "missing_required_asset",
+    "needs_manual_review",
+    "rejected_wrong_contract"
+  ],
+  "drop_zone_instructions": {
+    "asset_pack_drop_location": "data/staging/hero_asset_pack/<hero_id>/",
+    "naming_convention": "<hero_id>__<slot>.<ext>",
+    "battle_animations_json_path": "data/staging/hero_asset_pack/<hero_id>/battle_animations.json",
+    "how_to_run_when_ready": "asset import script will be introduced in a dedicated future pack; for now this schema is design-only."
+  },
+  "db_writes": 0,
+  "filesystem_writes": 0,
+  "forbidden": [
+    "no_real_asset_import_in_v51",
+    "no_frontend_assets_heroes_change",
+    "no_hero_contracts_change",
+    "no_character_bible_change",
+    "no_final_numbers_change",
+    "no_db_writes",
+    "no_filesystem_writes_at_validation_time",
+    "no_validator_weakening",
+    "no_fake_pass"
+  ]
+}

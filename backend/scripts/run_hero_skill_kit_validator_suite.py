@@ -1389,6 +1389,70 @@ OPTIONAL = [
     ('PROJECT-LIVE-LEDGER-DESIGN-ONLY', 'validate_live_ledger_design_only_v1.py'),
     ('PROJECT-MANUAL-USER-APPROVAL-HANDSHAKE-DRY-RUN', 'validate_manual_user_approval_handshake_dry_run_v1.py'),
     ('MEGA-ECONOMY-SAFETY-ACCELERATION-14-v50-ROLLUP', 'validate_mega_economy_safety_acceleration_14_v50_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_1_PLAYABLE_ALPHA_FOUNDATION_PACK_v51
+    # PUBLIC_SYNC_TAG_v51_MEGA_RELEASE_ACCELERATION_1_PLAYABLE_ALPHA_FOUNDATION
+    # ------------------------------------------------------------------------
+    # Strategic split shift: 70% runtime/UI/test/asset integration, 30% safety.
+    # First playable-alpha foundation slice around Material Raid + asset import
+    # readiness for ~40 heroes + visual battle routing audit + QA/beta tester
+    # matrix + guide/codex onboarding. ALL preview-only / design-only / dry-run:
+    #   TRACK A: backend patch to backend/routes/material_raid_preview.py adding
+    #            MATERIAL_RAID_PLAYABLE_ALPHA_SLICE_ENABLED flag (default OFF)
+    #            and 3 new endpoints under existing namespace:
+    #              GET  /api/material-raid/alpha-slice-config
+    #              POST /api/material-raid/alpha-battle-preview
+    #              POST /api/material-raid/alpha-reward-summary-preview
+    #            Flag OFF => 503 on the new endpoints. Existing /config, /stages,
+    #            /reward-preview, /clear-preview UNCHANGED. No battle_engine
+    #            call, no /api/battle/simulate, no /api/story/battle.
+    #            db_writes=0, materials_granted=false, reward_claim_enabled=false.
+    #   TRACK B: frontend deeplink-only screen frontend/app/material-raid-alpha.tsx.
+    #            No home menu wiring. Safe fallback when backend flag OFF
+    #            (must not crash). No live claim button. No mutation.
+    #   TRACK C: visual_battle_routing_playable_slice_audit_v1 (design-only).
+    #            8 modes (story, material_raid, tower, arena, guild_war,
+    #            training, event, boss). material_raid visual_battle_required
+    #            =true. guild_war auto_resolve_allowed=true + replay_link_required
+    #            =true. NO battle_engine.py / combat.tsx / story.tsx runtime change.
+    #   TRACK D: hero_asset_import_readiness_schema_v1 + report (design-only).
+    #            ~40 heroes target. 20 required asset slots. 5 readiness
+    #            categories. Validator must PASS with zero scaffold (no real
+    #            asset files required yet). frontend/assets/heroes UNCHANGED.
+    #            Hero contracts / Character Bible / final_numbers UNCHANGED.
+    #   TRACK E: guide_codex_onboarding_alpha_foundation_v1 + optional static
+    #            frontend/app/alpha-guide.tsx (deeplink-only, no backend, IT text).
+    #   TRACK F: device_beta_tester_smoke_matrix_v1 + doc 297. 12 flows,
+    #            4 severity P0/P1/P2/P3, 3 tester roles, pass/fail criteria,
+    #            known caveats (preview-only economy, expo ENOSPC, github stale).
+    #   ROLLUP : runs Tracks A + B + C + D + E + F + 5 MD5 invariants +
+    #            suite tuple counts + public sync tag presence + 6 required docs.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v51:
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v51
+    #   - backend/battle_engine.py not modified by v51
+    #   - frontend/app/combat.tsx not modified by v51
+    #   - frontend/app/story.tsx not modified by v51
+    #   - Character Bible / final_numbers unchanged
+    #   - frontend/assets/heroes unchanged; no real asset imported
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - no home menu mandatory routing for the new alpha screens
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis; no filesystem writes
+    #   - no live reward grant; no inventory/material/currency/wallet mutation
+    #   - no premium users.gems mutation; no mail state mutation
+    #   - no stamina/tickets/paid attempts; no BP Delta runtime
+    #   - no gacha/shop/VIP/BP monetization changes
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-MATERIAL-RAID-PLAYABLE-ALPHA-SLICE', 'validate_material_raid_playable_alpha_slice_v1.py'),
+    ('PROJECT-VISUAL-BATTLE-ROUTING-PLAYABLE-SLICE-AUDIT', 'validate_visual_battle_routing_playable_slice_audit_v1.py'),
+    ('PROJECT-HERO-ASSET-IMPORT-READINESS-SCHEMA', 'validate_hero_asset_import_readiness_schema_v1.py'),
+    ('PROJECT-GUIDE-CODEX-ONBOARDING-ALPHA-FOUNDATION', 'validate_guide_codex_onboarding_alpha_foundation_v1.py'),
+    ('PROJECT-DEVICE-BETA-TESTER-SMOKE-MATRIX', 'validate_device_beta_tester_smoke_matrix_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-1-v51-ROLLUP', 'validate_mega_release_acceleration_1_v51_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

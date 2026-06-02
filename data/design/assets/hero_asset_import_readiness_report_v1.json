@@ -1,0 +1,35 @@
+{
+  "contract_version": "hero_asset_import_readiness_report_v1",
+  "linked_schema": "hero_asset_import_readiness_schema_v1",
+  "design_only": true,
+  "assets_present_in_repo": false,
+  "assets_imported_in_v51": false,
+  "target_hero_count_estimate": 40,
+  "hero_entries_scaffold": [],
+  "category_summary": {
+    "ready_to_import": 0,
+    "missing_non_blocking_metadata": 0,
+    "missing_required_asset": 0,
+    "needs_manual_review": 0,
+    "rejected_wrong_contract": 0
+  },
+  "how_user_drops_asset_pack_later": [
+    "crea cartella data/staging/hero_asset_pack/<hero_id>/ per ciascun eroe",
+    "deposita splash/portrait/card/detail/combat_base e i 5 sprite/animation sheets seguendo il naming <hero_id>__<slot>.<ext>",
+    "deposita battle_animations.json per hero con metadati di durata/frame",
+    "un pack futuro introdurrà lo script di import vero, validator di chroma/alpha cleanup e mapping nei contratti hero"
+  ],
+  "validator_must_not_fail_when_assets_missing": true,
+  "validator_must_pass_with_zero_scaffold": true,
+  "db_writes": 0,
+  "filesystem_writes": 0,
+  "forbidden": [
+    "no_real_asset_import_in_v51",
+    "no_frontend_assets_heroes_change",
+    "no_hero_contracts_change",
+    "no_character_bible_change",
+    "no_final_numbers_change",
+    "no_db_writes",
+    "no_filesystem_writes_at_validation_time"
+  ]
+}

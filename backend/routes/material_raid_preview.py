@@ -34,6 +34,18 @@ FEATURE_FLAG = "MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED"
 CONTRACT_VERSION = "project_material_raid_runtime_preview_v1"
 RUNTIME_MODE_TAG = "preview_only"  # Marker esplicito per validator e log: questo pack e' preview_only.
 
+# v51 MEGA_RELEASE_ACCELERATION_1_PLAYABLE_ALPHA_FOUNDATION:
+# Aggiunge una "playable alpha slice" sopra il preview Material Raid esistente.
+# Default OFF. Quando OFF, i nuovi endpoint /alpha-* tornano 503 (come gli altri).
+# Quando ON, restituiscono payload di preview deterministici, senza alcuna
+# chiamata a battle_engine, senza DB write, senza grant materiale, senza stamina.
+# Gli endpoint esistenti /config, /stages, /reward-preview, /clear-preview
+# restano gated dal flag legacy MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED e non
+# cambiano comportamento, path, default 503, o feature flag.
+ALPHA_SLICE_FEATURE_FLAG = "MATERIAL_RAID_PLAYABLE_ALPHA_SLICE_ENABLED"
+ALPHA_SLICE_CONTRACT_VERSION = "material_raid_playable_alpha_slice_v1"
+ALPHA_SLICE_PHASE = "v51"
+
 router = APIRouter(prefix="/api/material-raid", tags=["material_raid"])
 
 # Tracks canonici (5 totali). v31 Mega Batch Acceleration 1 Track B unlock:
@@ -318,3 +330,268 @@ async def material_raid_clear_preview(payload: ClearPreviewRequest) -> dict:
         "eligible_preview": eligible_preview,
         "design_only_replace_before_release": True,
     }
+
+
+# ============================================================================
+# v51 MEGA_RELEASE_ACCELERATION_1_PLAYABLE_ALPHA_FOUNDATION_PACK
+# PUBLIC_SYNC_TAG_v51_MEGA_RELEASE_ACCELERATION_1_PLAYABLE_ALPHA_FOUNDATION
+# ----------------------------------------------------------------------------
+# Playable alpha slice preview endpoints. Default OFF.
+# Strict mode: PLAYABLE_ALPHA_FOUNDATION_PREVIEW_ONLY_NO_LIVE_ECONOMY.
+#   - No battle_engine call, no /api/battle/simulate call, no /api/story/battle.
+#   - No DB writes. No materials granted. No reward claim. No stamina/tickets.
+#   - No premium users.gems mutation. No mail mutation. No BP Delta runtime.
+#   - No endpoint path change to existing endpoints. No default 503 change to
+#     existing endpoints. No safety flag weakening.
+# ============================================================================
+
+
+def _alpha_slice_flag_enabled() -> bool:
+    return os.environ.get(ALPHA_SLICE_FEATURE_FLAG, "").strip().lower() == "true"
+
+
+def _alpha_disabled_payload(method: str, path_suffix: str) -> dict:
+    return {
+        "status": "disabled",
+        "feature_flag": ALPHA_SLICE_FEATURE_FLAG,
+        "alpha_slice_enabled": False,
+        "method": method,
+        "path": f"/api/material-raid/{path_suffix}",
+        "phase": "MATERIAL_RAID_PLAYABLE_ALPHA_SLICE_INERT",
+        "contract_version": ALPHA_SLICE_CONTRACT_VERSION,
+        "playable_alpha_phase": ALPHA_SLICE_PHASE,
+        "hint": (
+            "Material Raid Playable Alpha Slice is disabled by default. "
+            "Set MATERIAL_RAID_PLAYABLE_ALPHA_SLICE_ENABLED=true to enable "
+            "preview-only alpha endpoints. NO live mutation will ever happen."
+        ),
+        "live_mutation_applied": False,
+        "db_writes": 0,
+        "materials_granted": False,
+        "reward_claim_enabled": False,
+        "stamina_used": False,
+        "tickets_used": False,
+        "no_paid_attempts": True,
+        "visual_battle_required": True,
+        "guild_war_exception": False,
+    }
+
+
+class AlphaBattlePreviewRequest(BaseModel):
+    track_id: Optional[str] = None
+    stage_id: Optional[str] = None
+    team_power: int = 0
+    selected_hero_ids: Optional[list] = None
+
+
+class AlphaRewardSummaryPreviewRequest(BaseModel):
+    track_id: Optional[str] = None
+    stage_id: Optional[str] = None
+    battle_result_preview: Optional[str] = None
+    mvp_hero_id: Optional[str] = None
+
+
+def _enemy_family_for_track(track_id: str) -> str:
+    return {
+        "gear_material_raid": "gear_construct_preview",
+        "hero_growth_raid": "spirit_essence_preview",
+        "gem_material_raid": "gem_elemental_preview",
+        "rune_material_raid": "rune_phantom_locked",
+        "artifact_divine_material_raid": "divine_relic_locked",
+    }.get(track_id, "unknown_preview")
+
+
+def _deterministic_battle_seed(track_id: str, stage_id: str, team_power: int) -> str:
+    """Deterministic seed for visual battle preview. NO randomness."""
+    base = f"{track_id}|{stage_id}|{int(team_power)}|{ALPHA_SLICE_CONTRACT_VERSION}"
+    return f"alpha-seed-{abs(hash(base)) % (10 ** 12):012d}"
+
+
+@router.get("/alpha-slice-config")
+async def material_raid_alpha_slice_config() -> dict:
+    """v51 Playable Alpha Slice config. Default disabled => 503."""
+    if not _alpha_slice_flag_enabled():
+        raise HTTPException(status_code=503, detail=_alpha_disabled_payload("GET", "alpha-slice-config"))
+    return {
+        "status": "ok",
+        "contract_version": ALPHA_SLICE_CONTRACT_VERSION,
+        "alpha_slice_enabled": True,
+        "playable_alpha_phase": ALPHA_SLICE_PHASE,
+        "open_tracks": sorted(OPEN_TRACK_IDS),
+        "locked_tracks": sorted(LOCKED_TRACK_IDS),
+        "stage_ids": STAGE_DIFFICULTIES,
+        "recommended_power_by_stage": STAGE_RECOMMENDED_POWER,
+        "no_stamina": True,
+        "no_tickets": True,
+        "no_paid_attempts": True,
+        "reward_claim_enabled": False,
+        "materials_granted": False,
+        "db_writes": 0,
+        "visual_battle_required": True,
+        "guild_war_exception": False,
+        "live_mutation_applied": False,
+        "compatible_with_future_material_raid_claim_safety": True,
+    }
+
+
+@router.post("/alpha-battle-preview")
+async def material_raid_alpha_battle_preview(payload: AlphaBattlePreviewRequest) -> dict:
+    """v51 Playable Alpha Slice battle preview. NO battle_engine call. NO DB write."""
+    if not _alpha_slice_flag_enabled():
+        raise HTTPException(status_code=503, detail=_alpha_disabled_payload("POST", "alpha-battle-preview"))
+    track_id = (payload.track_id or "").strip()
+    stage_id = (payload.stage_id or "").strip().upper()
+    team_power = max(0, int(payload.team_power or 0))
+    if track_id not in ALL_TRACK_IDS:
+        return {
+            "status": "invalid_track",
+            "alpha_slice_enabled": True,
+            "db_writes": 0,
+            "materials_granted": False,
+            "reward_claim_enabled": False,
+            "valid_tracks": sorted(ALL_TRACK_IDS),
+            "visual_battle_required": True,
+        }
+    if stage_id not in STAGE_DIFFICULTIES:
+        return {
+            "status": "invalid_stage",
+            "alpha_slice_enabled": True,
+            "db_writes": 0,
+            "materials_granted": False,
+            "reward_claim_enabled": False,
+            "valid_stages": STAGE_DIFFICULTIES,
+            "visual_battle_required": True,
+        }
+    if track_id in LOCKED_TRACK_IDS:
+        return {
+            "status": "locked_deferred",
+            "alpha_slice_enabled": True,
+            "db_writes": 0,
+            "materials_granted": False,
+            "reward_claim_enabled": False,
+            "track_id": track_id,
+            "stage_id": stage_id,
+            "reason": "track is locked until corresponding runtime pack ships",
+            "visual_battle_required": True,
+        }
+    rec = STAGE_RECOMMENDED_POWER[stage_id]
+    if team_power < rec:
+        return {
+            "status": "team_underpowered_preview",
+            "alpha_slice_enabled": True,
+            "contract_version": ALPHA_SLICE_CONTRACT_VERSION,
+            "db_writes": 0,
+            "materials_granted": False,
+            "reward_claim_enabled": False,
+            "stamina_used": False,
+            "tickets_used": False,
+            "track_id": track_id,
+            "stage_id": stage_id,
+            "team_power": team_power,
+            "recommended_power": rec,
+            "delta": team_power - rec,
+            "visual_battle_required": True,
+            "live_mutation_applied": False,
+        }
+    seed = _deterministic_battle_seed(track_id, stage_id, team_power)
+    enemy_family = _enemy_family_for_track(track_id)
+    return {
+        "status": "alpha_battle_preview_ready",
+        "contract_version": ALPHA_SLICE_CONTRACT_VERSION,
+        "alpha_slice_enabled": True,
+        "playable_alpha_phase": ALPHA_SLICE_PHASE,
+        "track_id": track_id,
+        "stage_id": stage_id,
+        "team_power": team_power,
+        "recommended_power": rec,
+        "delta": team_power - rec,
+        "battle_seed_preview": seed,
+        "visual_battle_payload_preview": {
+            "mode": "material_raid",
+            "track_id": track_id,
+            "stage_id": stage_id,
+            "recommended_power": rec,
+            "team_power": team_power,
+            "enemy_family_preview": enemy_family,
+            "battle_visual_required": True,
+            "auto_resolve_allowed": False,
+        },
+        "no_battle_engine_call": True,
+        "no_battle_simulate_call": True,
+        "no_story_battle_call": True,
+        "db_writes": 0,
+        "materials_granted": False,
+        "reward_claim_enabled": False,
+        "stamina_used": False,
+        "tickets_used": False,
+        "no_paid_attempts": True,
+        "live_mutation_applied": False,
+        "design_only_replace_before_release": True,
+    }
+
+
+@router.post("/alpha-reward-summary-preview")
+async def material_raid_alpha_reward_summary_preview(payload: AlphaRewardSummaryPreviewRequest) -> dict:
+    """v51 Playable Alpha Slice post-battle reward summary preview. NO grant. NO DB write."""
+    if not _alpha_slice_flag_enabled():
+        raise HTTPException(status_code=503, detail=_alpha_disabled_payload("POST", "alpha-reward-summary-preview"))
+    track_id = (payload.track_id or "").strip()
+    stage_id = (payload.stage_id or "").strip().upper()
+    if track_id not in ALL_TRACK_IDS:
+        return {
+            "status": "invalid_track",
+            "alpha_slice_enabled": True,
+            "db_writes": 0,
+            "materials_granted": False,
+            "inventory_mutation": False,
+            "claim_button_enabled": False,
+            "valid_tracks": sorted(ALL_TRACK_IDS),
+        }
+    if stage_id not in STAGE_DIFFICULTIES:
+        return {
+            "status": "invalid_stage",
+            "alpha_slice_enabled": True,
+            "db_writes": 0,
+            "materials_granted": False,
+            "inventory_mutation": False,
+            "claim_button_enabled": False,
+            "valid_stages": STAGE_DIFFICULTIES,
+        }
+    if track_id in LOCKED_TRACK_IDS:
+        return {
+            "status": "locked_deferred",
+            "alpha_slice_enabled": True,
+            "db_writes": 0,
+            "materials_granted": False,
+            "inventory_mutation": False,
+            "claim_button_enabled": False,
+            "track_id": track_id,
+            "stage_id": stage_id,
+            "reason": "track is locked until corresponding runtime pack ships",
+        }
+    envelope = REWARD_PREVIEW_BY_TRACK_STAGE.get(track_id, {}).get(stage_id, {})
+    mvp = (payload.mvp_hero_id or "").strip() or None
+    return {
+        "status": "post_battle_reward_summary_preview",
+        "contract_version": ALPHA_SLICE_CONTRACT_VERSION,
+        "alpha_slice_enabled": True,
+        "playable_alpha_phase": ALPHA_SLICE_PHASE,
+        "track_id": track_id,
+        "stage_id": stage_id,
+        "recommended_power": STAGE_RECOMMENDED_POWER.get(stage_id),
+        "battle_result_preview": (payload.battle_result_preview or "victory_preview"),
+        "mvp_hero_id_preview": mvp,
+        "reward_preview": envelope,
+        "materials_granted": False,
+        "inventory_mutation": False,
+        "db_writes": 0,
+        "claim_button_enabled": False,
+        "claim_flow_state": "preview_locked_until_staging_approval",
+        "compatible_with_future_material_raid_claim_safety": True,
+        "no_stamina_used": True,
+        "no_tickets_used": True,
+        "no_paid_attempts": True,
+        "live_mutation_applied": False,
+        "design_only_replace_before_release": True,
+    }
+

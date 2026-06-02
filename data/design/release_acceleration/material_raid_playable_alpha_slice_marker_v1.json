@@ -1,0 +1,50 @@
+{
+  "contract_version": "material_raid_playable_alpha_slice_v1",
+  "playable_alpha_phase": "v51",
+  "backend_route_patched": "backend/routes/material_raid_preview.py",
+  "feature_flag": "MATERIAL_RAID_PLAYABLE_ALPHA_SLICE_ENABLED",
+  "feature_flag_default": "off",
+  "new_endpoints": [
+    {"method": "GET",  "path": "/api/material-raid/alpha-slice-config"},
+    {"method": "POST", "path": "/api/material-raid/alpha-battle-preview"},
+    {"method": "POST", "path": "/api/material-raid/alpha-reward-summary-preview"}
+  ],
+  "existing_endpoints_unchanged": [
+    "GET /api/material-raid/config",
+    "GET /api/material-raid/stages",
+    "POST /api/material-raid/reward-preview",
+    "POST /api/material-raid/clear-preview"
+  ],
+  "flag_off_behavior": "503",
+  "flag_on_behavior": "preview_payload",
+  "open_tracks": ["gear_material_raid", "hero_growth_raid", "gem_material_raid"],
+  "locked_tracks": ["rune_material_raid", "artifact_divine_material_raid"],
+  "stage_ids": ["I", "II", "III", "IV", "V"],
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "materials_granted": false,
+  "reward_claim_enabled": false,
+  "stamina_used": false,
+  "tickets_used": false,
+  "no_paid_attempts": true,
+  "visual_battle_required": true,
+  "guild_war_exception": false,
+  "no_battle_engine_call": true,
+  "no_battle_simulate_call": true,
+  "no_story_battle_call": true,
+  "live_mutation_applied": false,
+  "compatible_with_future_material_raid_claim_safety": true,
+  "forbidden": [
+    "no_real_db_writes", "no_mongo_url", "no_pymongo", "no_motor", "no_redis",
+    "no_live_reward_grant", "no_inventory_mutation", "no_material_mutation",
+    "no_currency_wallet_mutation", "no_premium_users_gems",
+    "no_stamina_used", "no_tickets_used", "no_paid_attempts",
+    "no_gacha_change", "no_shop_change", "no_vip_change", "no_bp_monetization_change",
+    "no_battle_pass_reward_live_claim", "no_mail_state_mutation", "no_bp_delta_runtime",
+    "no_battle_engine_change", "no_server_py_change",
+    "no_existing_endpoint_path_change", "no_existing_feature_flag_change",
+    "no_existing_default_503_change", "no_home_menu_mandatory_routing",
+    "no_character_bible_change", "no_final_numbers_change",
+    "no_validator_weakening", "no_fake_pass"
+  ]
+}

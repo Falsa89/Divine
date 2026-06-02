@@ -1,0 +1,27 @@
+{
+  "contract_version": "guide_codex_onboarding_alpha_foundation_v1",
+  "playable_alpha_phase": "v51",
+  "frontend_screen_optional": "frontend/app/alpha-guide.tsx",
+  "frontend_screen_is_static": true,
+  "frontend_screen_is_deeplink_only": true,
+  "frontend_screen_has_backend_dependency": false,
+  "frontend_screen_has_home_menu_wiring": false,
+  "frontend_screen_has_mutation": false,
+  "text_language": "it",
+  "guide_entries": [
+    {"key": "material_raid", "title_it": "Material Raid (Alpha)", "required": true},
+    {"key": "reward_preview_vs_claim", "title_it": "Reward preview vs claim reale", "required": true},
+    {"key": "visual_battle_policy", "title_it": "Visual Battle policy", "required": true},
+    {"key": "asset_placeholder_vs_final", "title_it": "Asset placeholder vs final art", "required": true},
+    {"key": "qa_tester_instructions", "title_it": "Istruzioni per QA tester", "required": true},
+    {"key": "bug_report_severity", "title_it": "Severità bug", "required": true},
+    {"key": "economy_safety_dry_run_vs_live", "title_it": "Economy safety: dry-run vs live", "required": true}
+  ],
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "live_apply_allowed": false,
+  "forbidden": [
+    "no_backend_dependency", "no_home_menu_mandatory_wiring",
+    "no_mutation", "no_validator_weakening", "no_fake_pass"
+  ]
+}

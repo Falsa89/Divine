@@ -1,0 +1,100 @@
+{
+  "contract_version": "visual_battle_routing_playable_slice_audit_v1",
+  "playable_alpha_phase": "v51",
+  "policy_summary": "all_user_visible_battles_must_route_to_visual_battle_when_possible. guild_war_is_the_only_autoresolve_exception_and_requires_replay_link.",
+  "battle_engine_py_changed": false,
+  "combat_tsx_changed": false,
+  "story_tsx_changed": false,
+  "battle_simulate_endpoint_changed": false,
+  "story_battle_endpoint_changed": false,
+  "modes": [
+    {
+      "mode": "story",
+      "desired_behavior": "visual_battle",
+      "current_known_state": "visual_battle_routed_via_story_runner",
+      "playable_alpha_priority": "P1",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "replay_link_required": false,
+      "next_pack_action": "audit_no_regression_in_v52"
+    },
+    {
+      "mode": "material_raid",
+      "desired_behavior": "visual_battle",
+      "current_known_state": "alpha_slice_preview_only_in_v51_visual_runner_pending",
+      "playable_alpha_priority": "P0",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "replay_link_required": false,
+      "next_pack_action": "wire_visual_battle_runner_in_v52"
+    },
+    {
+      "mode": "tower",
+      "desired_behavior": "visual_battle",
+      "current_known_state": "runtime_present_visual_battle_routing_pending_full_alignment",
+      "playable_alpha_priority": "P2",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "replay_link_required": false,
+      "next_pack_action": "audit_tower_visual_battle_alignment"
+    },
+    {
+      "mode": "arena",
+      "desired_behavior": "visual_battle",
+      "current_known_state": "runtime_future",
+      "playable_alpha_priority": "P2",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "replay_link_required": false,
+      "next_pack_action": "defer_to_arena_runtime_pack"
+    },
+    {
+      "mode": "guild_war",
+      "desired_behavior": "autoresolve_with_replay_link",
+      "current_known_state": "autoresolve_replay_link_policy_documented",
+      "playable_alpha_priority": "P3",
+      "visual_battle_required": false,
+      "auto_resolve_allowed": true,
+      "replay_link_required": true,
+      "next_pack_action": "maintain_existing_guild_war_replay_policy"
+    },
+    {
+      "mode": "training",
+      "desired_behavior": "visual_battle_sandbox",
+      "current_known_state": "sandbox_pending",
+      "playable_alpha_priority": "P2",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "replay_link_required": false,
+      "next_pack_action": "introduce_training_sandbox_pack"
+    },
+    {
+      "mode": "event",
+      "desired_behavior": "visual_battle",
+      "current_known_state": "staged_future",
+      "playable_alpha_priority": "P3",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "replay_link_required": false,
+      "next_pack_action": "defer_to_event_runtime_pack"
+    },
+    {
+      "mode": "boss",
+      "desired_behavior": "visual_battle",
+      "current_known_state": "staged_future",
+      "playable_alpha_priority": "P2",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "replay_link_required": false,
+      "next_pack_action": "audit_boss_visual_battle_alignment"
+    }
+  ],
+  "forbidden": [
+    "no_battle_engine_change", "no_combat_tsx_runtime_change",
+    "no_story_tsx_runtime_change", "no_battle_simulate_endpoint_change",
+    "no_story_battle_endpoint_change", "no_endpoint_path_change",
+    "no_feature_flag_change", "no_default_503_change", "no_safety_flag_change",
+    "no_server_py_change", "no_character_bible_change", "no_final_numbers_change",
+    "no_validator_weakening", "no_fake_pass"
+  ]
+}
