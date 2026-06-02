@@ -1,0 +1,27 @@
+{
+  "contract_version": "material_raid_visual_preview_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_2_VISUAL_BATTLE_RUNNER_WIRING_FOR_MATERIAL_RAID_ALPHA_PACK_v52",
+  "severity_levels": ["P0", "P1", "P2", "P3"],
+  "flows": [
+    {"id": "alpha_open",                     "label_it": "Apri /material-raid-alpha",                                          "severity": "P0", "expected": "schermata caricata, nessun crash"},
+    {"id": "alpha_flag_off_503",             "label_it": "Backend flag OFF su 3 alpha endpoint",                                "severity": "P0", "expected": "503 su alpha-slice-config, alpha-battle-preview, alpha-reward-summary-preview"},
+    {"id": "alpha_flag_on",                  "label_it": "Backend flag ON su alpha-slice-config",                              "severity": "P1", "expected": "200, alpha_slice_enabled=true, db_writes=0"},
+    {"id": "visual_preview_open_no_params",  "label_it": "Apri /material-raid-visual-preview senza query params",              "severity": "P0", "expected": "nessun crash, mostra errore parametri mancanti, bottone torna ad Alpha"},
+    {"id": "visual_preview_open_valid",      "label_it": "Apri /material-raid-visual-preview con query params validi",         "severity": "P0", "expected": "rendering setup battaglia, seed, warning visibili"},
+    {"id": "locked_track_no_visual",         "label_it": "Track locked_deferred non mostra bottone visuale",                    "severity": "P1", "expected": "bottone Apri preview battaglia visuale nascosto"},
+    {"id": "underpowered_no_visual",         "label_it": "team_underpowered_preview non mostra bottone visuale",                "severity": "P1", "expected": "bottone nascosto"},
+    {"id": "valid_preview_shows_visual_btn", "label_it": "alpha_battle_preview_ready mostra bottone visuale",                   "severity": "P0", "expected": "bottone visibile"},
+    {"id": "return_to_alpha",                "label_it": "Da visual preview torna ad Alpha via back",                          "severity": "P1", "expected": "navigazione torna alla schermata alpha"},
+    {"id": "no_claim_button",                "label_it": "Nessun pulsante di claim live in alcuna schermata",                   "severity": "P0", "expected": "claim_button_enabled=false e nessun pulsante claim visibile"},
+    {"id": "no_db_write",                    "label_it": "Nessuna DB write durante tutto il flusso",                            "severity": "P0", "expected": "db_writes=0 ovunque"},
+    {"id": "no_mobile_crash",                "label_it": "Nessun crash su mobile Expo Go",                                      "severity": "P0", "expected": "0 crash; flussi base senza ANR"},
+    {"id": "rotation_layout",                "label_it": "Rotazione/portrait/landscape regge layout",                          "severity": "P2", "expected": "nessun overflow/clipping critico"}
+  ],
+  "db_writes": 0,
+  "real_db_writes": 0,
+  "live_apply_allowed": false,
+  "forbidden": [
+    "no_live_reward_grant", "no_db_writes", "no_mutation",
+    "no_validator_weakening", "no_fake_pass"
+  ]
+}

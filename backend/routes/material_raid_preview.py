@@ -527,6 +527,17 @@ async def material_raid_alpha_battle_preview(payload: AlphaBattlePreviewRequest)
         "no_paid_attempts": True,
         "live_mutation_applied": False,
         "design_only_replace_before_release": True,
+        # v52 MEGA_RELEASE_ACCELERATION_2 \u2014 payload contract v2 refinement (append-only).
+        # Same path, same flag, same status, same locked/underpowered behavior.
+        "result_authoritative": False,
+        "alpha_preview_only": True,
+        "battle_engine_runtime_used": False,
+        "reward_grant_enabled": False,
+        "target_frontend_route": "/material-raid-visual-preview",
+        "background_hint": f"material_raid_bg_{track_id}_{stage_id.lower()}",
+        "music_hint": "material_raid_battle_loop_alpha",
+        "tutorial_hint": "preview_visual_battle_non_authoritative_no_reward_grant",
+        "reward_preview_hint": "open_alpha_reward_summary_preview_after_visual_return",
     }
 
 

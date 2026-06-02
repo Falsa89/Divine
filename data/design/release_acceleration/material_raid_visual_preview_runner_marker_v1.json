@@ -1,0 +1,24 @@
+{
+  "marker_version": "material_raid_visual_preview_runner_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_2_VISUAL_BATTLE_RUNNER_WIRING_FOR_MATERIAL_RAID_ALPHA_PACK_v52",
+  "track": "B",
+  "frontend_route": "/material-raid-visual-preview",
+  "frontend_screen_path": "frontend/app/material-raid-visual-preview.tsx",
+  "deeplink_only": true,
+  "home_menu_wiring": false,
+  "accepts_query_params": [
+    "track_id", "stage_id", "team_power",
+    "recommended_power", "enemy_family_preview", "battle_seed_preview"
+  ],
+  "handles_missing_query_params_without_crash": true,
+  "warning_non_authoritative_visible": true,
+  "warning_no_reward_visible": true,
+  "claim_button_present": false,
+  "calls_battle_engine": false,
+  "calls_battle_simulate": false,
+  "calls_story_battle": false,
+  "db_writes": 0,
+  "combat_tsx_changed": false,
+  "text_language": "it",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v52_MEGA_RELEASE_ACCELERATION_2_VISUAL_BATTLE_RUNNER_WIRING_FOR_MATERIAL_RAID_ALPHA"
+}

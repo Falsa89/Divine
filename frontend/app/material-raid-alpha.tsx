@@ -19,6 +19,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import {
   MATERIAL_RAID_TRACKS,
   MATERIAL_RAID_STAGE_IDS,
@@ -51,12 +52,20 @@ type BattlePreview = {
   recommended_power?: number;
   team_power?: number;
   delta?: number;
+  track_id?: string;
+  stage_id?: string;
   visual_battle_payload_preview?: {
     mode?: string;
     enemy_family_preview?: string;
     battle_visual_required?: boolean;
     auto_resolve_allowed?: boolean;
   };
+  // v52 contract refinements (append-only):
+  result_authoritative?: boolean;
+  reward_grant_enabled?: boolean;
+  alpha_preview_only?: boolean;
+  battle_engine_runtime_used?: boolean;
+  target_frontend_route?: string;
 };
 
 type RewardSummary = {
@@ -84,6 +93,7 @@ async function safeFetch<T>(path: string, init?: RequestInit): Promise<{ ok: boo
 }
 
 export default function MaterialRaidAlphaScreen() {
+  const router = useRouter();
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
   const [config, setConfig] = useState<AlphaConfig | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<MaterialRaidTrackId>('gear_material_raid');
@@ -140,6 +150,26 @@ export default function MaterialRaidAlphaScreen() {
     });
     setRewardSummary(r.ok ? r.data || null : { status: 'backend_offline' });
     setLoading(false);
+  };
+
+  // v52 \u2014 Open Visual Preview button handler (deeplink with query params).
+  const isValidBattlePreview =
+    !!battlePreview &&
+    battlePreview.status === 'alpha_battle_preview_ready' &&
+    !!battlePreview.battle_seed_preview;
+
+  const onOpenVisualPreview = () => {
+    if (!isValidBattlePreview) return;
+    const vp = battlePreview!.visual_battle_payload_preview || {};
+    const params: Record<string, string> = {
+      track_id: selectedTrack,
+      stage_id: selectedStage,
+      team_power: String(teamPower),
+      recommended_power: String(battlePreview!.recommended_power ?? recommendedPower),
+      enemy_family_preview: String(vp.enemy_family_preview || ''),
+      battle_seed_preview: String(battlePreview!.battle_seed_preview || ''),
+    };
+    router.push({ pathname: '/material-raid-visual-preview', params });
   };
 
   return (
@@ -261,6 +291,14 @@ export default function MaterialRaidAlphaScreen() {
                 Visual battle runner sarà cablato nel prossimo pack di release acceleration.
               </Text>
             </View>
+            {isValidBattlePreview ? (
+              <TouchableOpacity
+                style={styles.visualBtn}
+                onPress={onOpenVisualPreview}
+              >
+                <Text style={styles.visualBtnText}>Apri preview battaglia visuale</Text>
+              </TouchableOpacity>
+            ) : null}
             <TouchableOpacity
               style={[styles.secondaryBtn, !backendOnline && styles.btnDisabled]}
               onPress={onShowRewardSummary}
@@ -429,6 +467,17 @@ const styles = StyleSheet.create({
     borderColor: '#2a4554',
   },
   visualPendingText: { color: '#8ab8d8', fontSize: 12 },
+  visualBtn: {
+    backgroundColor: '#7a4abe',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#9a6ade',
+    minHeight: 48,
+  },
+  visualBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
   rewardList: { marginTop: 8, marginBottom: 8 },
   rewardLine: { color: '#cdd6e0', fontSize: 13 },
   footerBox: { marginTop: 24, alignItems: 'center' },

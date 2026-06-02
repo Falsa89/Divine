@@ -1,0 +1,16 @@
+{
+  "marker_version": "material_raid_alpha_to_visual_preview_wiring_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_2_VISUAL_BATTLE_RUNNER_WIRING_FOR_MATERIAL_RAID_ALPHA_PACK_v52",
+  "track": "C",
+  "patched_frontend_path": "frontend/app/material-raid-alpha.tsx",
+  "deeplink_target": "/material-raid-visual-preview",
+  "trigger_condition": "battlePreview.status == 'alpha_battle_preview_ready' AND battlePreview.battle_seed_preview present",
+  "button_label_it": "Apri preview battaglia visuale",
+  "hidden_when_backend_offline_or_invalid_preview": true,
+  "offline_fallback_preserved": true,
+  "live_claim_button_added": false,
+  "home_menu_wiring_added": false,
+  "combat_tsx_changed": false,
+  "db_writes": 0,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v52_MEGA_RELEASE_ACCELERATION_2_VISUAL_BATTLE_RUNNER_WIRING_FOR_MATERIAL_RAID_ALPHA"
+}

@@ -1453,6 +1453,62 @@ OPTIONAL = [
     ('PROJECT-GUIDE-CODEX-ONBOARDING-ALPHA-FOUNDATION', 'validate_guide_codex_onboarding_alpha_foundation_v1.py'),
     ('PROJECT-DEVICE-BETA-TESTER-SMOKE-MATRIX', 'validate_device_beta_tester_smoke_matrix_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-1-v51-ROLLUP', 'validate_mega_release_acceleration_1_v51_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_2_VISUAL_BATTLE_RUNNER_WIRING_FOR_MATERIAL_RAID_ALPHA_PACK_v52
+    # PUBLIC_SYNC_TAG_v52_MEGA_RELEASE_ACCELERATION_2_VISUAL_BATTLE_RUNNER_WIRING_FOR_MATERIAL_RAID_ALPHA
+    # ------------------------------------------------------------------------
+    # Wire v51 Material Raid Alpha slice toward a visual battle preview runner
+    # WITHOUT live rewards and WITHOUT touching battle_engine.py:
+    #   TRACK A: payload contract v2 between POST /api/material-raid/alpha-battle-preview
+    #            and frontend route /material-raid-visual-preview. mode=material_raid,
+    #            visual_battle_required=true, auto_resolve_allowed=false,
+    #            battle_engine_runtime_used=false, result_authoritative=false,
+    #            reward_grant_enabled=false, materials_granted=false, db_writes=0.
+    #   TRACK B: frontend/app/material-raid-visual-preview.tsx (deeplink-only).
+    #            Accepts 6 query params, handles missing params without crash.
+    #            Italian text, warnings visible: non-authoritative + no reward.
+    #            No claim button. No fetch to backend (pure visualization).
+    #            No /api/battle/simulate, no /api/story/battle, no battle_engine.
+    #   TRACK C: patch frontend/app/material-raid-alpha.tsx to add the
+    #            "Apri preview battaglia visuale" button after a valid
+    #            alpha_battle_preview_ready (hidden otherwise). Uses
+    #            useRouter from expo-router. Preserves offline fallback.
+    #            combat.tsx UNCHANGED.
+    #   TRACK D: backend/routes/material_raid_preview.py append-only payload
+    #            refinement on alpha_battle_preview_ready response only:
+    #            result_authoritative, alpha_preview_only, battle_engine_runtime_used,
+    #            reward_grant_enabled, target_frontend_route, background_hint,
+    #            music_hint, tutorial_hint, reward_preview_hint.
+    #            Path / flag / default 503 / status values / locked / underpowered
+    #            UNCHANGED. No battle_engine, no DB writes, no reward grant.
+    #   TRACK E: QA smoke matrix 13 flows, severity P0/P1/P2/P3.
+    #   ROLLUP : runs Tracks A-E + 5 MD5 invariants + preferred-unchanged check
+    #            (server.py / combat.tsx / story.tsx) + suite tuple counts +
+    #            public sync tag presence + 5 required docs.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v52:
+    #   - 5 MD5-locked core files unchanged
+    #   - backend/server.py not modified by v52
+    #   - backend/battle_engine.py not modified by v52
+    #   - frontend/app/combat.tsx unchanged
+    #   - frontend/app/story.tsx unchanged
+    #   - Guild War policy unchanged
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - /api/battle/simulate and /api/story/battle UNCHANGED
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis; no filesystem writes
+    #   - no live reward grant; no inventory/material/currency/wallet mutation
+    #   - no premium users.gems mutation; no mail state mutation
+    #   - no real battle result generation; result_authoritative=false
+    #   - battle_engine_runtime_used=false
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-MATERIAL-RAID-VISUAL-BATTLE-PAYLOAD-CONTRACT-v2', 'validate_material_raid_visual_battle_payload_contract_v2.py'),
+    ('PROJECT-MATERIAL-RAID-VISUAL-PREVIEW-RUNNER', 'validate_material_raid_visual_preview_runner_v1.py'),
+    ('PROJECT-MATERIAL-RAID-ALPHA-TO-VISUAL-PREVIEW-WIRING', 'validate_material_raid_alpha_to_visual_preview_wiring_v1.py'),
+    ('PROJECT-MATERIAL-RAID-VISUAL-PREVIEW-SMOKE-MATRIX', 'validate_material_raid_visual_preview_smoke_matrix_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-2-v52-ROLLUP', 'validate_mega_release_acceleration_2_v52_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
