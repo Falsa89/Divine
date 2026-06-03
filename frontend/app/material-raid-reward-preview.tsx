@@ -130,7 +130,7 @@ export default function MaterialRaidRewardPreviewScreen() {
           <Text style={styles.subtitle}>v53 · MATERIAL_RAID_POST_VISUAL_REWARD_SUMMARY</Text>
           <View style={styles.warningBox}>
             <Text style={styles.warningText}>Nessun materiale verrà assegnato.</Text>
-            <Text style={styles.warningText}>Claim live disabilitato.</Text>
+            <Text style={styles.warningText}>Riscossione live disabilitata.</Text>
           </View>
         </View>
 

@@ -21,7 +21,7 @@ else:
         'battle_result_preview', 'mvp_hero_id',
         'Reward Summary Preview',
         'Nessun materiale verr',
-        'Claim live disabilitato',
+        'Riscossione live disabilitata',
         '/api/material-raid/alpha-reward-summary-preview',
     ):
         if needle not in s: fail(f'screen missing needle: {needle}')

@@ -1509,6 +1509,62 @@ OPTIONAL = [
     ('PROJECT-MATERIAL-RAID-ALPHA-TO-VISUAL-PREVIEW-WIRING', 'validate_material_raid_alpha_to_visual_preview_wiring_v1.py'),
     ('PROJECT-MATERIAL-RAID-VISUAL-PREVIEW-SMOKE-MATRIX', 'validate_material_raid_visual_preview_smoke_matrix_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-2-v52-ROLLUP', 'validate_mega_release_acceleration_2_v52_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_3_MATERIAL_RAID_POST_VISUAL_REWARD_SUMMARY_AND_ALPHA_LOOP_CLOSURE_PACK_v53
+    # PUBLIC_SYNC_TAG_v53_MEGA_RELEASE_ACCELERATION_3_MATERIAL_RAID_ALPHA_LOOP_CLOSURE
+    # ------------------------------------------------------------------------
+    # Close the Material Raid Alpha loop (Alpha -> Visual Preview -> Reward
+    # Summary Preview -> Back to Alpha) WITHOUT any live grant, WITHOUT touching
+    # battle_engine.py, WITHOUT mutating inventory/materials/currency/wallet,
+    # WITHOUT premium gems mutation, WITHOUT MONGO_URL / pymongo / motor /
+    # redis / DB writes / filesystem writes:
+    #   TRACK A: backend contract POST /api/material-raid/alpha-reward-summary-preview.
+    #            Append-only addition: returns a reward_preview block with
+    #            materials_granted=false, inventory_mutation=false,
+    #            claim_button_enabled=false, reward_claim_enabled=false,
+    #            reward_grant_enabled=false, result_authoritative=false,
+    #            battle_engine_runtime_used=false, db_writes=0,
+    #            compatible_with_future_material_raid_claim_safety=true,
+    #            next_allowed_action='alpha_loop_return_no_live_claim'.
+    #            Does NOT mutate any existing endpoint path, feature flag,
+    #            default 503 or safety flag of any prior endpoint.
+    #   TRACK B: frontend/app/material-raid-reward-preview.tsx (deeplink-only).
+    #            Accepts 5 query params, handles missing params without crash.
+    #            Italian text, no claim button, only "Torna ad Alpha" CTA.
+    #            No /api/battle/simulate, no /api/story/battle, no battle_engine.
+    #   TRACK C: visual-to-reward wiring marker — material-raid-visual-preview
+    #            now exposes a Italian-labelled deeplink to the new reward
+    #            preview screen (combat.tsx UNCHANGED, story.tsx UNCHANGED).
+    #   TRACK D-E-F: alpha loop closure audit + smoke matrix (13+ flows P0/P1/P2/P3,
+    #            plus deeplink-only / no-crash / preview-only enforcement,
+    #            audit JSON marker with loop_closed=true, loop_steps_count=5).
+    #   TRACK G/ROLLUP : MD5 invariants + preferred-unchanged guardrails
+    #            (server.py / combat.tsx / story.tsx) + suite tuple counts +
+    #            public sync tag presence + 5 required docs (308-312).
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v53:
+    #   - 5 MD5-locked core files unchanged
+    #     (battle_engine.py / .env / artifacts.py / battlepass.tsx / vip.tsx)
+    #   - preferred-unchanged guardrails (server.py / combat.tsx / story.tsx)
+    #   - Guild War policy unchanged
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - /api/battle/simulate and /api/story/battle UNCHANGED
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis; no filesystem writes
+    #   - no live reward grant; no live claim; no inventory/material/currency/
+    #     wallet mutation; no premium users.gems mutation
+    #   - no real battle result generation; result_authoritative=false
+    #   - battle_engine_runtime_used=false
+    #   - loop_closed=true; loop_steps_count=5
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-MATERIAL-RAID-POST-VISUAL-REWARD-SUMMARY-CONTRACT-v1', 'validate_material_raid_post_visual_reward_summary_contract_v1.py'),
+    ('PROJECT-MATERIAL-RAID-REWARD-PREVIEW-SCREEN', 'validate_material_raid_reward_preview_screen_v1.py'),
+    ('PROJECT-MATERIAL-RAID-VISUAL-TO-REWARD-WIRING', 'validate_material_raid_visual_to_reward_wiring_v1.py'),
+    ('PROJECT-MATERIAL-RAID-ALPHA-LOOP-CLOSURE-AUDIT', 'validate_material_raid_alpha_loop_closure_audit_v1.py'),
+    ('PROJECT-MATERIAL-RAID-ALPHA-LOOP-CLOSURE-SMOKE-MATRIX', 'validate_material_raid_alpha_loop_closure_smoke_matrix_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-3-v53-ROLLUP', 'validate_mega_release_acceleration_3_v53_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
