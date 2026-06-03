@@ -2002,6 +2002,56 @@ OPTIONAL = [
     ('PROJECT-ROUTER-ADAPTER-EVENT-ARENA-LOCAL-TIMELINE-SMOKE-MATRIX', 'validate_router_adapter_event_arena_local_timeline_smoke_matrix_v1.py'),
     ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v5', 'validate_visual_preview_runtime_shell_progress_report_v5.py'),
     ('MEGA-RELEASE-ACCELERATION-9-v60-ROLLUP', 'validate_mega_release_acceleration_9_v60_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE_SUPER_PACK_v61
+    # PUBLIC_SYNC_TAG_v61_MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE
+    # ------------------------------------------------------------------------
+    # Accorpa 3 lane low-risk (same pattern, same risk, same guardrails):
+    #   1) story_local_dummy_seed_wiring             (FRONTEND local preview)
+    #   2) router_adapter_preview_hardening          (FRONTEND/design-only)
+    #   3) visual_preview_to_real_runtime_gate_design (DESIGN-ONLY)
+    # ESCLUSA (gated): material_raid_claim_safety_hardening_v2_preview_only
+    #
+    # State transitions:
+    #   story  preview_shell_v58 -> local_dummy_seed_wired_v61
+    # Tutte le altre modalità: invariate (v53/v56/v59/v60 unchanged).
+    # Guild War: autoresolve + replay_link exception (unchanged).
+    #
+    # TRACK A+B: story_local_dummy_seed_wiring_contract_v1 + story_delta_v61.
+    #            frontend/app/story-visual-preview.tsx patchato con
+    #            buildStoryTimeline 6-step deterministic + state stepIndex +
+    #            play/pause + cleanup timer. Default seed story-alpha-v61.
+    #            story_runtime_used=false, story_tsx_changed=false,
+    #            api_story_battle_changed=false.\n    # TRACK C:   visual_battle_runner_router_adapter_hardening_contract_v1 +
+    #            validation rules v1. Router patchato con:
+    #              - adapter_preview_version=adapter_preview_v61
+    #              - contract_version=visual_battle_runner_payload_v0\n    #              - adapter_status (payload_like_ready / missing_required_fields)
+    #              - missing_fields display\n    #              - per-mode state snapshot (7 modes)\n    # TRACK D:   visual_preview_to_real_runtime_gate_design_v1 + per-mode
+    #            activation gate matrix. design-only. approved_modes_now=[].
+    #            7 gates per mode + 8 forbidden_without_separate_pack.
+    # TRACK E:   local_visual_preview_timeline_schema_v4_delta esteso a 6 modi
+    #            (training/boss/tower/event/arena/story) + 3 nuovi optional
+    #            (story_tutorial_hint_optional, story_faction_hint_optional,
+    #            chapter_node_hint_optional).
+    # TRACK F:   QA smoke matrix v1 (26 flows P0-P3) + progress report v6.
+    # TRACK G:   7 OPTIONAL tuples count=1 + tag + 7 docs (358-364) + 7 markers.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v61: 5 MD5-locked files unchanged, 3 preferred-
+    # unchanged guardrails intact, Guild War unchanged, /api/* untouched,
+    # db_writes=0, no MONGO_URL/pymongo/motor/redis, no live reward/claim,
+    # battle_engine_runtime_used=false, backend_used=false,
+    # runtime_runner_created=false, adapter_preview_only=true,
+    # runtime_activation_enabled=false, manual_approval_required=true,
+    # no Reanimated, no combat.tsx/story.tsx import, no new runtime endpoint.
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-STORY-LOCAL-DUMMY-SEED-WIRING', 'validate_story_local_dummy_seed_wiring_v1.py'),
+    ('PROJECT-ROUTER-ADAPTER-PREVIEW-HARDENING', 'validate_router_adapter_preview_hardening_v1.py'),
+    ('PROJECT-VISUAL-PREVIEW-TO-REAL-RUNTIME-GATE-DESIGN', 'validate_visual_preview_to_real_runtime_gate_design_v1.py'),
+    ('PROJECT-LOCAL-TIMELINE-SCHEMA-v4-DELTA', 'validate_local_timeline_schema_v4_delta_v1.py'),
+    ('PROJECT-STORY-TIMELINE-ROUTER-HARDENING-RUNTIME-GATE-SMOKE-MATRIX', 'validate_story_timeline_router_hardening_runtime_gate_smoke_matrix_v1.py'),
+    ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v6', 'validate_visual_preview_runtime_shell_progress_report_v6.py'),
+    ('MEGA-RELEASE-ACCELERATION-10-v61-ROLLUP', 'validate_mega_release_acceleration_10_v61_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,29 @@
+{
+  "version": "visual_battle_runner_payload_adapter_validation_rules_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE_SUPER_PACK_v61",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v61_MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE",
+  "design_only": true,
+  "db_writes": 0,
+  "rules": [
+    {
+      "rule_id": "R1",
+      "description": "mode is REQUIRED for payload_like_ready"
+    },
+    {
+      "rule_id": "R2",
+      "description": "battle_seed_preview is REQUIRED for payload_like_ready"
+    },
+    {
+      "rule_id": "R3",
+      "description": "if either missing -> status=missing_required_fields"
+    },
+    {
+      "rule_id": "R4",
+      "description": "if both present -> status=payload_like_ready"
+    },
+    {
+      "rule_id": "R5",
+      "description": "all invariant fields default false except db_writes=0"
+    }
+  ]
+}

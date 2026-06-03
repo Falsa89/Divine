@@ -1,0 +1,32 @@
+{
+  "version": "visual_battle_runner_router_adapter_hardening_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE_SUPER_PACK_v61",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v61_MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE",
+  "extends": "visual_battle_runner_router_adapter_preview_contract_v1",
+  "design_only": true,
+  "adapter_preview_only": true,
+  "runtime_runner_created": false,
+  "backend_used": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "adapter_preview_version": "adapter_preview_v61",
+  "contract_version": "visual_battle_runner_payload_v0",
+  "required_fields_for_payload_like_ready": [
+    "mode",
+    "battle_seed_preview"
+  ],
+  "adapter_status_values": [
+    "payload_like_ready",
+    "missing_required_fields"
+  ],
+  "per_mode_state_display": {
+    "material_raid": "alpha_loop_closed_v53",
+    "training": "local_dummy_seed_wired_v56",
+    "boss": "local_dummy_seed_wired_v59",
+    "tower": "local_dummy_seed_wired_v59",
+    "event": "local_dummy_seed_wired_v60",
+    "arena": "local_dummy_seed_wired_v60",
+    "story": "local_dummy_seed_wired_v61"
+  },
+  "screen_path": "frontend/app/visual-battle-preview-router.tsx"
+}

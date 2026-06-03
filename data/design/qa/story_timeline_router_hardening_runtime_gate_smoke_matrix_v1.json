@@ -1,0 +1,177 @@
+{
+  "version": "story_timeline_router_hardening_runtime_gate_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE_SUPER_PACK_v61",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v61_MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE",
+  "mode": "qa_smoke_matrix",
+  "db_writes": 0,
+  "flows": [
+    {
+      "id": "F01",
+      "name": "Story /story-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, fallback timeline"
+    },
+    {
+      "id": "F02",
+      "name": "Story con params validi",
+      "severity": "P1",
+      "expected": "timeline mostrata"
+    },
+    {
+      "id": "F03",
+      "name": "Story timeline 5-7 step deterministica",
+      "severity": "P0",
+      "expected": "numero step in [5,7]"
+    },
+    {
+      "id": "F04",
+      "name": "Story step/reset",
+      "severity": "P1",
+      "expected": "stato avanza/reset"
+    },
+    {
+      "id": "F05",
+      "name": "Story play/pause cleanup timer",
+      "severity": "P1",
+      "expected": "no leak su unmount"
+    },
+    {
+      "id": "F06",
+      "name": "Router no params",
+      "severity": "P0",
+      "expected": "no crash"
+    },
+    {
+      "id": "F07",
+      "name": "Router missing required adapter fields",
+      "severity": "P1",
+      "expected": "adapter_status=missing_required_fields"
+    },
+    {
+      "id": "F08",
+      "name": "Router payload_like_ready (mode+seed)",
+      "severity": "P1",
+      "expected": "adapter_status=payload_like_ready"
+    },
+    {
+      "id": "F09",
+      "name": "Router mode story con story-alpha-v61",
+      "severity": "P1",
+      "expected": "mostra local_dummy_seed_wired_v61"
+    },
+    {
+      "id": "F10",
+      "name": "No regressione Material Raid",
+      "severity": "P0",
+      "expected": "alpha_loop_closed_v53"
+    },
+    {
+      "id": "F11",
+      "name": "No regressione Training",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v56"
+    },
+    {
+      "id": "F12",
+      "name": "No regressione Boss",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v59"
+    },
+    {
+      "id": "F13",
+      "name": "No regressione Tower",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v59"
+    },
+    {
+      "id": "F14",
+      "name": "No regressione Event",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v60"
+    },
+    {
+      "id": "F15",
+      "name": "No regressione Arena",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v60"
+    },
+    {
+      "id": "F16",
+      "name": "Runtime gate design presente",
+      "severity": "P1",
+      "expected": "design_only_v1 disponibile"
+    },
+    {
+      "id": "F17",
+      "name": "No claim/reward",
+      "severity": "P0",
+      "expected": "no Claim CTA, no reward"
+    },
+    {
+      "id": "F18",
+      "name": "No DB write",
+      "severity": "P0",
+      "expected": "db_writes=0"
+    },
+    {
+      "id": "F19",
+      "name": "No backend fetch",
+      "severity": "P0",
+      "expected": "network idle"
+    },
+    {
+      "id": "F20",
+      "name": "No battle_engine call",
+      "severity": "P0",
+      "expected": "battle_engine_runtime_used=false"
+    },
+    {
+      "id": "F21",
+      "name": "No /api/battle/simulate",
+      "severity": "P0",
+      "expected": "invariato"
+    },
+    {
+      "id": "F22",
+      "name": "No /api/story/battle",
+      "severity": "P0",
+      "expected": "invariato"
+    },
+    {
+      "id": "F23",
+      "name": "No import story.tsx/combat.tsx",
+      "severity": "P0",
+      "expected": "nessun import"
+    },
+    {
+      "id": "F24",
+      "name": "Mobile layout / rotation",
+      "severity": "P2",
+      "expected": "SafeAreaView, no overflow"
+    },
+    {
+      "id": "F25",
+      "name": "Guild War policy unchanged",
+      "severity": "P0",
+      "expected": "autoresolve+replay invariata"
+    },
+    {
+      "id": "F26",
+      "name": "Italian text",
+      "severity": "P3",
+      "expected": "warning italiani"
+    }
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "backend_fetch_present": false,
+    "battle_engine_called": false,
+    "story_tsx_modified": false,
+    "story_battle_endpoint_called": false,
+    "battle_simulate_endpoint_called": false,
+    "guild_war_policy_regression": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}

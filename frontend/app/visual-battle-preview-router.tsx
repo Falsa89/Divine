@@ -93,7 +93,7 @@ export default function VisualBattlePreviewRouterScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerCard}>
           <Text style={styles.title}>Visual Battle Preview Router</Text>
-          <Text style={styles.subtitle}>v55+v58+v60 · deeplink-only · adapter preview · multi-mode (story/tower/event/arena/boss/training)</Text>
+          <Text style={styles.subtitle}>v55+v58+v60+v61 · deeplink-only · adapter preview hardened · multi-mode (story/tower/event/arena/boss/training)</Text>
           <View style={styles.warningBox}>
             <Text style={styles.warningText}>Preview visuale non autoritativa.</Text>
             <Text style={styles.warningText}>Nessun reward verrà assegnato.</Text>
@@ -141,6 +141,9 @@ export default function VisualBattlePreviewRouterScreen() {
         {mode !== 'unknown' && seed ? (
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Payload Contract v0 Adapter Preview</Text>
+            <Text style={styles.line}>adapter_preview_version: adapter_preview_v61</Text>
+            <Text style={styles.line}>contract_version: visual_battle_runner_payload_v0</Text>
+            <Text style={styles.line}>adapter_status: payload_like_ready</Text>
             <Text style={styles.line}>mode: {mode}</Text>
             {sourceRoute ? <Text style={styles.line}>source_route: {sourceRoute}</Text> : null}
             <Text style={styles.line}>battle_seed_preview: {seed}</Text>
@@ -175,7 +178,49 @@ export default function VisualBattlePreviewRouterScreen() {
               visual_battle_runner_payload_contract_v0.
             </Text>
           </View>
-        ) : null}
+        ) : (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Payload Contract v0 Adapter Preview</Text>
+            <Text style={styles.line}>adapter_preview_version: adapter_preview_v61</Text>
+            <Text style={styles.line}>contract_version: visual_battle_runner_payload_v0</Text>
+            <Text style={styles.line}>adapter_status: missing_required_fields</Text>
+            <Text style={styles.line}>
+              missing_fields:{' '}
+              {[
+                mode === 'unknown' ? 'mode' : null,
+                !seed ? 'battle_seed_preview' : null,
+              ]
+                .filter(Boolean)
+                .join(', ') || '—'}
+            </Text>
+            <Text style={styles.helper}>
+              Adapter preview-only, design-only. I campi richiesti (mode +
+              battle_seed_preview) non sono completi.
+            </Text>
+          </View>
+        )}
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Per-mode state (snapshot)</Text>
+          <Text style={styles.line}>material_raid: alpha_loop_closed_v53</Text>
+          <Text style={styles.line}>training: local_dummy_seed_wired_v56</Text>
+          <Text style={styles.line}>boss: local_dummy_seed_wired_v59</Text>
+          <Text style={styles.line}>
+            story:{' '}
+            {(seed === 'story-alpha-v61' ||
+              (asString(raw.source_route) || '').toLowerCase().includes('story') ||
+              mode === 'story')
+              ? 'local_dummy_seed_wired_v61'
+              : 'preview_shell_v58'}
+          </Text>
+          <Text style={styles.line}>tower: local_dummy_seed_wired_v59</Text>
+          <Text style={styles.line}>event: local_dummy_seed_wired_v60</Text>
+          <Text style={styles.line}>arena: local_dummy_seed_wired_v60</Text>
+          <Text style={styles.helper}>
+            Stato design-only mostrato per riferimento. Guild War: autoresolve +
+            replay_link exception, invariata.
+          </Text>
+        </View>
 
         {mode === 'training' ? (
           <View style={styles.card}>

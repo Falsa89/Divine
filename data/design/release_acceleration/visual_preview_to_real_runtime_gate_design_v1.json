@@ -1,0 +1,42 @@
+{
+  "version": "visual_preview_to_real_runtime_gate_design_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE_SUPER_PACK_v61",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v61_MEGA_RELEASE_ACCELERATION_10_STORY_TIMELINE_ROUTER_HARDENING_RUNTIME_GATE",
+  "design_only": true,
+  "runtime_activation_enabled": false,
+  "battle_engine_runtime_enabled": false,
+  "backend_routes_enabled": false,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "approved_modes_now": [],
+  "candidate_modes_future": [
+    "material_raid",
+    "training",
+    "boss",
+    "story",
+    "tower",
+    "event",
+    "arena"
+  ],
+  "forbidden_without_separate_pack": [
+    "battle_engine.py changes",
+    "/api/battle/simulate changes",
+    "/api/story/battle changes",
+    "DB writes",
+    "reward grant",
+    "inventory mutation",
+    "live claim",
+    "gacha/shop/VIP/BP changes"
+  ],
+  "gates_per_mode": [
+    "payload_contract_complete",
+    "visual_preview_smoke_pass",
+    "local_timeline_smoke_pass_where_applicable",
+    "runtime_adapter_design_approved",
+    "reward_policy_approved",
+    "rollback_plan_approved",
+    "manual_checksum_approved"
+  ]
+}
