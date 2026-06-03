@@ -2122,6 +2122,47 @@ OPTIONAL = [
     ('PROJECT-MATERIAL-RAID-DRY-RUN-REQUEST-RESPONSE-CONTRACT', 'validate_material_raid_dry_run_request_response_contract_v1.py'),
     ('PROJECT-MATERIAL-RAID-CLAIM-SAFETY-STAGING-BLUEPRINT-READINESS', 'validate_material_raid_claim_safety_staging_blueprint_readiness_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-12-v63-ROLLUP', 'validate_mega_release_acceleration_12_v63_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION_PACK_v64
+    # PUBLIC_SYNC_TAG_v64_MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION
+    # ------------------------------------------------------------------------
+    # DRY-RUN / STAGING simulation pack. Esegue in-memory una simulazione del
+    # futuro Material Raid claim usando i contratti v63, senza scrivere DB,
+    # senza creare collection, senza grant reward, senza abilitare claim live
+    # e senza creare route runtime:
+    #   1) material_raid_claim_dry_run_simulator         (TRACK A)
+    #   2) material_raid_canary_dry_run_scenarios        (TRACK B)
+    #   3) material_raid_ledger_replay_dry_run_evidence  (TRACK C)
+    #   4) material_raid_rollback_observation_simulation (TRACK D)
+    #   5) material_raid_v65_go_no_go_readiness          (TRACK E)
+    #   6) material_raid_staging_dry_run_canary_qa       (TRACK F)
+    # TRACK G: 7 OPTIONAL tuples + tag + 7 docs (379-385) + 7 markers + rollup.
+    # ESCLUSI: live_claim, reward_grant, db_writes, backend_route_enablement.
+    #
+    # State transitions: NONE. v64 e' dry-run-only.
+    # Nessun .tsx frontend modificato. Nessuna route backend aggiunta o
+    # modificata. backend/routes/material_raid_preview.py unchanged. db_writes=0.
+    # Il simulator e' Python puro, niente pymongo/motor/redis, niente MONGO_URL,
+    # niente import di server.py / battle_engine.py.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v64: 5 MD5-locked files unchanged + 4 preferred-
+    # unchanged guardrails (server.py, combat.tsx, story.tsx,
+    # material_raid_preview.py), Guild War unchanged, /api/* untouched,
+    # no MONGO_URL/pymongo/motor/redis, no live reward/claim, no inventory/
+    # wallet/premium mutation, runtime_runner_created=false,
+    # runtime_activation_enabled=false, manual_approval_required=true,
+    # v65_readiness=READY_FOR_MANUAL_REVIEW_NOT_APPROVED, character_bible_changed=false,
+    # final_numbers_changed=false. No fake PASS. No validator weakening.
+    # No tuple duplicate. material_raid_live_claim=false,
+    # material_raid_reward_grant=false, material_raid_db_writes=0.
+    # ========================================================================
+    ('PROJECT-MATERIAL-RAID-CLAIM-DRY-RUN-SIMULATOR', 'validate_material_raid_claim_dry_run_simulator_v1.py'),
+    ('PROJECT-MATERIAL-RAID-CANARY-DRY-RUN-SCENARIOS', 'validate_material_raid_canary_dry_run_scenarios_v1.py'),
+    ('PROJECT-MATERIAL-RAID-LEDGER-REPLAY-DRY-RUN-EVIDENCE', 'validate_material_raid_ledger_replay_dry_run_v1.py'),
+    ('PROJECT-MATERIAL-RAID-ROLLBACK-OBSERVATION-SIMULATION', 'validate_material_raid_rollback_observation_simulation_v1.py'),
+    ('PROJECT-MATERIAL-RAID-v65-GO-NO-GO-READINESS', 'validate_material_raid_v65_go_no_go_readiness_v1.py'),
+    ('PROJECT-MATERIAL-RAID-STAGING-DRY-RUN-CANARY-QA', 'validate_material_raid_staging_dry_run_canary_qa_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-13-v64-ROLLUP', 'validate_mega_release_acceleration_13_v64_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

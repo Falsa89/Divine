@@ -1,0 +1,58 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "claim_button_enabled": false,
+  "db_writes": 0,
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "fixture_version": "material_raid_claim_canary_dry_run_fixture_v1",
+  "inventory_mutation": false,
+  "limits": {
+    "material_only": true,
+    "max_claims_per_user": 1,
+    "max_total_claims_first_wave": 10,
+    "max_users_first_wave": 5,
+    "premium_currency_allowed": false
+  },
+  "live_apply_allowed": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "no_real_user_ids": true,
+  "observation_window_ref": "obs_window_dry_run_v64_001",
+  "pack": "MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION_PACK_v64",
+  "placeholder_only": true,
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v64_MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "reward_grant_enabled": false,
+  "reward_payload_simulated": {
+    "materials": [
+      {
+        "item_id": "mat_iron_ore",
+        "qty": 3
+      },
+      {
+        "item_id": "mat_essence_shard",
+        "qty": 1
+      }
+    ],
+    "premium_currency": null
+  },
+  "users_allowlist_fictional": [
+    "test_user_001",
+    "test_user_002",
+    "test_user_003",
+    "test_user_004",
+    "test_user_005"
+  ],
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

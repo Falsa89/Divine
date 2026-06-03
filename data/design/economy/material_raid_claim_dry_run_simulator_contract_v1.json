@@ -1,0 +1,55 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "claim_button_enabled": false,
+  "contract_version": "material_raid_claim_dry_run_simulator_contract_v1",
+  "db_writes": 0,
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "forbidden_env_reads": [
+    "MONGO_URL"
+  ],
+  "forbidden_imports": [
+    "pymongo",
+    "motor",
+    "redis",
+    "server",
+    "battle_engine"
+  ],
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "output_evidence_path": "data/design/economy/results/material_raid_claim_dry_run_simulator_result_v1.json",
+  "pack": "MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION_PACK_v64",
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v64_MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_invariants": {
+    "collection_created": false,
+    "db_writes": 0,
+    "indexes_created": false,
+    "live_apply_allowed": false,
+    "would_grant_rewards": false
+  },
+  "reward_grant_enabled": false,
+  "simulated_decisions": [
+    "first_claim_would_stage",
+    "duplicate_same_payload_would_return_existing",
+    "duplicate_conflict_would_reject",
+    "missing_idempotency_key_would_reject",
+    "over_canary_cap_would_reject",
+    "rollback_preview_required"
+  ],
+  "simulator_script": "backend/scripts/material_raid_claim_dry_run_simulator_v1.py",
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

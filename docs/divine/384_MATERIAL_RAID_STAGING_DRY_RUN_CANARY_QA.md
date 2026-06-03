@@ -1,0 +1,6 @@
+# 384 — Material Raid Staging Dry-Run + Canary QA
+
+Pack: `MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION_PACK_v64`
+
+20 controlli QA, severity P0=16, P1=2, P2=1, P3=0.
+Tutti i P0 PASS.

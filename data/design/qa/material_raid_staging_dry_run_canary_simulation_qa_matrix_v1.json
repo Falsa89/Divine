@@ -1,0 +1,156 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "checks": [
+    {
+      "id": "C01",
+      "name": "simulator_script_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C02",
+      "name": "simulator_imports_no_db_libraries",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C03",
+      "name": "scenario_fixture_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C04",
+      "name": "all_scenarios_covered",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C05",
+      "name": "replay_result_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C06",
+      "name": "ledger_dry_run_output_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C07",
+      "name": "rollback_simulation_exists",
+      "severity": "P1",
+      "status": "pass"
+    },
+    {
+      "id": "C08",
+      "name": "observation_result_exists",
+      "severity": "P1",
+      "status": "pass"
+    },
+    {
+      "id": "C09",
+      "name": "v65_readiness_report_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C10",
+      "name": "no_backend_route_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C11",
+      "name": "no_server_py_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C12",
+      "name": "no_battle_engine_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C13",
+      "name": "no_material_raid_preview_change_preferred",
+      "severity": "P2",
+      "status": "pass"
+    },
+    {
+      "id": "C14",
+      "name": "no_db_write",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C15",
+      "name": "no_reward_grant",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C16",
+      "name": "no_live_claim",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C17",
+      "name": "no_claim_button",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C18",
+      "name": "no_frontend_tsx_touched",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C19",
+      "name": "md5_invariants_intact",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "C20",
+      "name": "simulator_result_evidence_emitted",
+      "severity": "P0",
+      "status": "pass"
+    }
+  ],
+  "claim_button_enabled": false,
+  "db_writes": 0,
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "matrix_version": "material_raid_staging_dry_run_canary_simulation_qa_matrix_v1",
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION_PACK_v64",
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v64_MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "reward_grant_enabled": false,
+  "severity_summary": {
+    "P0": 16,
+    "P1": 2,
+    "P2": 1,
+    "P3": 0
+  },
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

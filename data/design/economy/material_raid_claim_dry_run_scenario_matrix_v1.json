@@ -1,0 +1,438 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "claim_button_enabled": false,
+  "db_writes": 0,
+  "descriptive_only_signals": {
+    "observation_threshold_critical_simulated": false,
+    "observation_threshold_warning_simulated": true,
+    "reward_hash_mismatch": "enforced_in_v65_grant_layer_not_in_dry_run",
+    "rollback_token_preview": "returned_on_every_successful_stage"
+  },
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "matrix_version": "material_raid_claim_dry_run_scenario_matrix_v1",
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION_PACK_v64",
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v64_MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "reward_grant_enabled": false,
+  "scenarios": [
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S01",
+      "name": "first_valid_claim_user_001",
+      "request": {
+        "claim_attempt_nonce": "n001",
+        "dry_run_nonce": "drnc_n001",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_001",
+        "preview_session_id": "sess_001",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "duplicate_same_payload_would_return_existing",
+      "id": "S02",
+      "name": "duplicate_same_payload_user_001",
+      "request": {
+        "claim_attempt_nonce": "n001",
+        "dry_run_nonce": "drnc_n001",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_001",
+        "preview_session_id": "sess_001",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "duplicate_conflict_would_reject",
+      "id": "S03",
+      "name": "duplicate_conflict_user_001",
+      "request": {
+        "claim_attempt_nonce": "n001",
+        "dry_run_nonce": "drnc_n001",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_DIFFERENT",
+        "preview_session_id": "sess_001",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "missing_idempotency_key_would_reject",
+      "id": "S04",
+      "name": "missing_idempotency_key_user_002",
+      "request": {
+        "claim_attempt_nonce": "n002",
+        "dry_run_nonce": "drnc_n002",
+        "idempotency_key": null,
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_002",
+        "preview_session_id": "sess_002",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_002"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S05",
+      "name": "first_valid_claim_user_002",
+      "request": {
+        "claim_attempt_nonce": "n002b",
+        "dry_run_nonce": "drnc_n002b",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_005",
+        "preview_session_id": "sess_002",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_002"
+      }
+    },
+    {
+      "expected_decision": "over_canary_cap_would_reject",
+      "id": "S06",
+      "name": "over_per_user_cap_user_002",
+      "request": {
+        "claim_attempt_nonce": "n002c",
+        "dry_run_nonce": "drnc_n002c",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_006",
+        "preview_session_id": "sess_002",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_002"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S07",
+      "name": "first_valid_claim_test_user_003",
+      "request": {
+        "claim_attempt_nonce": "n003",
+        "dry_run_nonce": "drnc_n003",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_user3",
+        "preview_session_id": "sess_003",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_003"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S08",
+      "name": "first_valid_claim_test_user_004",
+      "request": {
+        "claim_attempt_nonce": "n004",
+        "dry_run_nonce": "drnc_n004",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_user4",
+        "preview_session_id": "sess_004",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_004"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S09",
+      "name": "first_valid_claim_test_user_005",
+      "request": {
+        "claim_attempt_nonce": "n005",
+        "dry_run_nonce": "drnc_n005",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_user5",
+        "preview_session_id": "sess_005",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_005"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S12",
+      "name": "first_valid_claim_test_user_extra_006",
+      "request": {
+        "claim_attempt_nonce": "nx6",
+        "dry_run_nonce": "drnc_nx6",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_extra_6",
+        "preview_session_id": "sess_extra_6",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_extra_006"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S13",
+      "name": "first_valid_claim_test_user_extra_007",
+      "request": {
+        "claim_attempt_nonce": "nx7",
+        "dry_run_nonce": "drnc_nx7",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_extra_7",
+        "preview_session_id": "sess_extra_7",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_extra_007"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S14",
+      "name": "first_valid_claim_test_user_extra_008",
+      "request": {
+        "claim_attempt_nonce": "nx8",
+        "dry_run_nonce": "drnc_nx8",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_extra_8",
+        "preview_session_id": "sess_extra_8",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_extra_008"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S15",
+      "name": "first_valid_claim_test_user_extra_009",
+      "request": {
+        "claim_attempt_nonce": "nx9",
+        "dry_run_nonce": "drnc_nx9",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_extra_9",
+        "preview_session_id": "sess_extra_9",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_extra_009"
+      }
+    },
+    {
+      "expected_decision": "first_claim_would_stage",
+      "id": "S16",
+      "name": "first_valid_claim_test_user_extra_010",
+      "request": {
+        "claim_attempt_nonce": "nx10",
+        "dry_run_nonce": "drnc_nx10",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_extra_10",
+        "preview_session_id": "sess_extra_10",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_extra_010"
+      }
+    },
+    {
+      "expected_decision": "over_canary_cap_would_reject",
+      "id": "S17",
+      "name": "over_total_canary_cap",
+      "request": {
+        "claim_attempt_nonce": "nover",
+        "dry_run_nonce": "drnc_nover",
+        "idempotency_key": "__AUTO__",
+        "material_raid_run_id": "run_v64_alpha",
+        "mode_id": "material_raid_normal",
+        "payload_hash": "ph_over",
+        "preview_session_id": "sess_over",
+        "reward_hash": "rh_alpha",
+        "reward_preview_payload": {
+          "materials": [
+            {
+              "item_id": "mat_iron_ore",
+              "qty": 3
+            }
+          ]
+        },
+        "reward_table_version": "rwd_table_2026_06",
+        "server_id": "s1",
+        "user_id": "test_user_over_cap"
+      }
+    }
+  ],
+  "scenarios_descriptive_categories": [
+    "first valid claim",
+    "duplicate same payload",
+    "duplicate conflicting payload",
+    "missing idempotency key",
+    "over per-user cap",
+    "over total canary cap",
+    "reward hash mismatch",
+    "rollback token preview",
+    "observation threshold warning",
+    "observation threshold critical"
+  ],
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

@@ -1,0 +1,215 @@
+{
+  "all_match": true,
+  "all_would_grant_rewards_false": true,
+  "collection_created": false,
+  "db_writes": 0,
+  "design_only": true,
+  "dry_run_only": true,
+  "final_ledger_size_simulated": 10,
+  "final_total_claims_simulated": 10,
+  "indexes_created": false,
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "matches": 15,
+  "mismatches": 0,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_13_MATERIAL_RAID_STAGING_DRY_RUN_AND_CANARY_SIMULATION_PACK_v64",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "results": [
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S01",
+      "scenario_name": "first_valid_claim_user_001",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "duplicate_same_payload_would_return_existing",
+      "dry_run_status": "duplicate_same_payload",
+      "duplicate_status": "duplicate_same_payload",
+      "errors": [],
+      "expected_decision": "duplicate_same_payload_would_return_existing",
+      "match": true,
+      "scenario_id": "S02",
+      "scenario_name": "duplicate_same_payload_user_001",
+      "would_create_ledger": false,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "duplicate_conflict_would_reject",
+      "dry_run_status": "rejected",
+      "duplicate_status": "duplicate_conflict",
+      "errors": [
+        "duplicate_conflict_different_payload"
+      ],
+      "expected_decision": "duplicate_conflict_would_reject",
+      "match": true,
+      "scenario_id": "S03",
+      "scenario_name": "duplicate_conflict_user_001",
+      "would_create_ledger": false,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "missing_idempotency_key_would_reject",
+      "dry_run_status": "rejected",
+      "duplicate_status": "none",
+      "errors": [
+        "missing_idempotency_key"
+      ],
+      "expected_decision": "missing_idempotency_key_would_reject",
+      "match": true,
+      "scenario_id": "S04",
+      "scenario_name": "missing_idempotency_key_user_002",
+      "would_create_ledger": false,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S05",
+      "scenario_name": "first_valid_claim_user_002",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "over_canary_cap_would_reject",
+      "dry_run_status": "rejected",
+      "duplicate_status": "none",
+      "errors": [
+        "per_user_cap_exceeded"
+      ],
+      "expected_decision": "over_canary_cap_would_reject",
+      "match": true,
+      "scenario_id": "S06",
+      "scenario_name": "over_per_user_cap_user_002",
+      "would_create_ledger": false,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S07",
+      "scenario_name": "first_valid_claim_test_user_003",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S08",
+      "scenario_name": "first_valid_claim_test_user_004",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S09",
+      "scenario_name": "first_valid_claim_test_user_005",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S12",
+      "scenario_name": "first_valid_claim_test_user_extra_006",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S13",
+      "scenario_name": "first_valid_claim_test_user_extra_007",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S14",
+      "scenario_name": "first_valid_claim_test_user_extra_008",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S15",
+      "scenario_name": "first_valid_claim_test_user_extra_009",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "first_claim_would_stage",
+      "dry_run_status": "staged_pending",
+      "duplicate_status": "none",
+      "errors": [],
+      "expected_decision": "first_claim_would_stage",
+      "match": true,
+      "scenario_id": "S16",
+      "scenario_name": "first_valid_claim_test_user_extra_010",
+      "would_create_ledger": true,
+      "would_grant_rewards": false
+    },
+    {
+      "actual_decision": "over_canary_cap_would_reject",
+      "dry_run_status": "rejected",
+      "duplicate_status": "none",
+      "errors": [
+        "total_canary_cap_exceeded"
+      ],
+      "expected_decision": "over_canary_cap_would_reject",
+      "match": true,
+      "scenario_id": "S17",
+      "scenario_name": "over_total_canary_cap",
+      "would_create_ledger": false,
+      "would_grant_rewards": false
+    }
+  ],
+  "reward_grant_executed": false,
+  "simulator_version": "material_raid_claim_dry_run_simulator_v1",
+  "total_scenarios": 15,
+  "wallet_mutation": false
+}
