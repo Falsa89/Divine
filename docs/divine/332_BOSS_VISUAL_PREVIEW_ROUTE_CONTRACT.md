@@ -1,0 +1,30 @@
+# 332 — Boss Visual Preview Route Contract
+
+Pack: `MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE_PACK_v57`
+Track: A
+Tag: `PUBLIC_SYNC_TAG_v57_MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE`
+
+Contratto della nuova route Boss Visual Preview (preview shell, NO runtime reale).
+
+## Transizione
+- `previous_state = design_only_runtime_deferred`
+- `target_state = preview_shell_v57`
+- `source_route = /boss-visual-preview`
+- `default_seed = boss-alpha-v57`
+
+## Boss Family Preview fields
+`boss_family_id`, `boss_display_name`, `boss_phase_preview`, `weakness_hint_preview`, `enrage_hint_preview`, `background_hint`, `music_hint`
+
+## Default fallback
+- `boss_family_id = training_boss_preview`
+- `boss_display_name = Boss Preview`
+- `boss_phase_preview = phase_1`
+- `battle_seed_preview = boss-alpha-v57`
+
+## Vincoli enforced dal validator
+- `local_only=true`, `backend_used=false`, `backend_preview_endpoint=null`
+- `battle_engine_runtime_used=false`, `result_authoritative=false`
+- `reward_claim_enabled=false`, `reward_grant_enabled=false`
+- `db_writes=0`, `no_inventory_mutation=true`, `no_wallet_mutation=true`
+- no Reanimated, no `combat.tsx` import
+- no Guild War policy regression

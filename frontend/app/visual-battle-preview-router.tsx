@@ -29,6 +29,10 @@ type Params = {
   team_power?: string;
   recommended_power?: string;
   enemy_family_preview?: string;
+  // v57 boss preview extension (deeplink-only, no backend, no claim)
+  boss_family_id?: string;
+  boss_display_name?: string;
+  boss_phase_preview?: string;
 };
 
 function asString(v: unknown): string | undefined {
@@ -119,6 +123,28 @@ export default function VisualBattlePreviewRouterScreen() {
               Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
               nessun reward verrà assegnato. Materiale Raid e altre modalità
               restano invariate.
+            </Text>
+          </View>
+        ) : null}
+
+        {mode === 'boss' ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Boss Preview Details</Text>
+            <Text style={styles.line}>Stato: preview_shell_v57</Text>
+            <Text style={styles.line}>
+              Boss family: {asString(raw.boss_family_id) || 'training_boss_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Display name: {asString(raw.boss_display_name) || 'Boss Preview'}
+            </Text>
+            <Text style={styles.line}>
+              Phase preview: {asString(raw.boss_phase_preview) || 'phase_1'}
+            </Text>
+            <Text style={styles.line}>Seed: {seed || 'boss-alpha-v57'}</Text>
+            <Text style={styles.helper}>
+              Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
+              nessun reward verrà assegnato. Material Raid e Training restano
+              invariate.
             </Text>
           </View>
         ) : null}

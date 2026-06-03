@@ -1,0 +1,42 @@
+{
+  "version": "visual_preview_runtime_shell_progress_report_v2",
+  "pack": "MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE_PACK_v57",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v57_MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE",
+  "db_writes": 0,
+  "battle_engine_runtime_used": false,
+  "reward_grant_enabled": false,
+  "live_claim_enabled": false,
+  "modes_status": {
+    "material_raid": "alpha_loop_closed_v53",
+    "training": "local_dummy_seed_wired_v56",
+    "boss": "preview_shell_v57",
+    "story": "design_only_runtime_deferred",
+    "tower": "design_only_runtime_deferred",
+    "event": "design_only_runtime_deferred",
+    "arena": "design_only_runtime_deferred",
+    "guild_war": "autoresolve_with_replay_link_exception_unchanged"
+  },
+  "next_recommended_mode_after_boss": [
+    "story_visual_preview_contract_to_deeplink",
+    "visual_battle_runner_payload_contract_v0"
+  ],
+  "director_approvals": {
+    "approved_so_far": [
+      "B7",
+      "training_local_dummy_seed_wiring",
+      "boss_visual_preview_route"
+    ],
+    "not_approved": [
+      "B8",
+      "live_economy",
+      "db_writes",
+      "reward_grant",
+      "reward_claim",
+      "battle_engine_runtime"
+    ]
+  },
+  "open_questions": [
+    "Promuovere story a preview shell o lavorare prima sul visual battle runner payload contract v0?",
+    "Boss local timeline (sul pattern Training v56) come step intermedio v58?"
+  ]
+}

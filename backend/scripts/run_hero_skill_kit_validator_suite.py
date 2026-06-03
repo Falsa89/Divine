@@ -1748,6 +1748,66 @@ OPTIONAL = [
     ('PROJECT-TRAINING-VISUAL-PREVIEW-LOCAL-DUMMY-SEED-SMOKE-MATRIX', 'validate_training_visual_preview_local_dummy_seed_smoke_matrix_v1.py'),
     ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT', 'validate_visual_preview_runtime_shell_progress_report_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-5-v56-ROLLUP', 'validate_mega_release_acceleration_5_v56_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE_PACK_v57
+    # PUBLIC_SYNC_TAG_v57_MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE
+    # ------------------------------------------------------------------------
+    # Promote 'boss' from design_only_runtime_deferred to preview_shell_v57
+    # on the Material Raid / Training pattern: a new dedicated preview shell
+    # at /boss-visual-preview, deeplink-only, no backend, no battle_engine,
+    # no reward, no DB writes, no core system changes.
+    #
+    # State transition: boss design_only_runtime_deferred -> preview_shell_v57.
+    # Material Raid: alpha_loop_closed_v53 (unchanged).
+    # Training: local_dummy_seed_wired_v56 (unchanged).
+    # Guild War: autoresolve + replay_link exception (unchanged).
+    #
+    #   TRACK A: boss_visual_preview_route_contract_v1.json +
+    #            battle_entrypoint_registry_v2_boss_delta_v57.json
+    #            (mode_id=boss, default_seed=boss-alpha-v57, 7 boss_family_
+    #            preview fields, default_fallback for missing query params).
+    #   TRACK B: frontend/app/boss-visual-preview.tsx (NEW) deeplink-only
+    #            screen with Boss Card, phase/weakness/enrage hints, team
+    #            power vs recommended, reset preview button, deeplink to
+    #            generic router. Italian text. No Reanimated. No combat.tsx.
+    #   TRACK C: frontend/app/visual-battle-preview-router.tsx augmented
+    #            with 'mode === \"boss\"' detail block showing
+    #            preview_shell_v57 + boss_family_id/display_name/phase +
+    #            disclaimer. Material Raid / Training behavior UNCHANGED.
+    #   TRACK D: boss_visual_preview_route_smoke_matrix_v1.json (18 flows,
+    #            P0/P1/P2/P3) covering open-no-params, valid-params,\n    #            boss card, hints, generic router, no-claim/no-reward/no-DB/\n    #            no-backend/no-battle_engine, rotation, italian, Guild War
+    #            policy unchanged.
+    #   TRACK E: visual_preview_runtime_shell_progress_report_v2.json
+    #            (modes_status snapshot: boss promoted to preview_shell_v57,\n    #            director_approvals updated with boss_visual_preview_route).
+    #   TRACK F/ROLLUP: 6 OPTIONAL tuples + 5 MD5 invariants + preferred-
+    #            unchanged (server.py / combat.tsx / story.tsx) + 6 docs
+    #            (332-337) + 6 markers + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v57:
+    #   - 5 MD5-locked core files unchanged
+    #     (battle_engine.py / .env / artifacts.py / battlepass.tsx / vip.tsx)
+    #   - preferred-unchanged guardrails (server.py / combat.tsx / story.tsx)
+    #   - Guild War policy UNCHANGED (auto_resolve + replay_link preserved)
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - /api/battle/simulate and /api/story/battle UNCHANGED
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis; no filesystem writes
+    #   - no live reward grant; no live claim; no inventory/material/currency/
+    #     wallet mutation; no premium users.gems mutation
+    #   - no real battle result generation; result_authoritative=false
+    #   - battle_engine_runtime_used=false; backend_used=false
+    #   - no Reanimated import; no combat.tsx import
+    #   - Character Bible / final_numbers unchanged
+    #   - no new runtime endpoint created in v57
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-BOSS-VISUAL-PREVIEW-ROUTE-CONTRACT', 'validate_boss_visual_preview_route_contract_v1.py'),
+    ('PROJECT-BOSS-VISUAL-PREVIEW-SCREEN', 'validate_boss_visual_preview_screen_v1.py'),
+    ('PROJECT-GENERIC-ROUTER-BOSS-DETAIL', 'validate_generic_router_boss_detail_v1.py'),
+    ('PROJECT-BOSS-VISUAL-PREVIEW-ROUTE-SMOKE-MATRIX', 'validate_boss_visual_preview_route_smoke_matrix_v1.py'),
+    ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v2', 'validate_visual_preview_runtime_shell_progress_report_v2.py'),
+    ('MEGA-RELEASE-ACCELERATION-6-v57-ROLLUP', 'validate_mega_release_acceleration_6_v57_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

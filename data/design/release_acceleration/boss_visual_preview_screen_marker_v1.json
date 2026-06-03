@@ -1,0 +1,31 @@
+{
+  "marker_version": "boss_visual_preview_screen_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE_PACK_v57",
+  "track": "B",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v57_MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE",
+  "screen_path": "frontend/app/boss-visual-preview.tsx",
+  "screen_route": "/boss-visual-preview",
+  "deeplink_only": true,
+  "static": true,
+  "calls_backend": false,
+  "calls_battle_engine": false,
+  "claim_button_present": false,
+  "reward_grant_enabled": false,
+  "home_menu_mandatory_routing": false,
+  "links_to_router_route": "/visual-battle-preview-router",
+  "accepts_query_params": [
+    "boss_family_id",
+    "boss_display_name",
+    "boss_phase_preview",
+    "battle_seed_preview",
+    "team_power",
+    "recommended_power"
+  ],
+  "handles_missing_query_params_without_crash": true,
+  "default_seed": "boss-alpha-v57",
+  "default_boss_family_id": "training_boss_preview",
+  "db_writes": 0,
+  "text_language": "it",
+  "validator_weakening": false,
+  "fake_pass": false
+}

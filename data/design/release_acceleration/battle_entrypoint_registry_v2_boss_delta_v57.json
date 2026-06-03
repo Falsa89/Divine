@@ -1,0 +1,36 @@
+{
+  "version": "battle_entrypoint_registry_v2_boss_delta_v57",
+  "pack": "MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE_PACK_v57",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v57_MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE",
+  "parent_registry": "data/design/release_acceleration/battle_entrypoint_registry_v2_preview.json",
+  "applies_to": "boss",
+  "delta": {
+    "mode_id": "boss",
+    "previous_state": "design_only_runtime_deferred",
+    "new_state": "preview_shell_v57",
+    "new_implementation_tier": "preview_shell",
+    "new_frontend_entry_route": "/boss-visual-preview",
+    "new_preview_route": "/boss-visual-preview",
+    "new_next_pack_action": "evaluate_boss_local_timeline_or_story_visual_preview_in_v58",
+    "default_seed": "boss-alpha-v57"
+  },
+  "preserved_invariants": {
+    "visual_battle_required": true,
+    "auto_resolve_allowed": false,
+    "result_authoritative": false,
+    "reward_claim_enabled": false,
+    "reward_grant_enabled": false,
+    "db_writes": 0,
+    "battle_engine_runtime_used": false,
+    "backend_used": false
+  },
+  "other_modes_unchanged": {
+    "material_raid": "alpha_loop_closed_v53",
+    "training": "local_dummy_seed_wired_v56",
+    "story": "design_only_v55",
+    "tower": "design_only_v55",
+    "event": "design_only_v55",
+    "arena": "design_only_v55",
+    "guild_war": "autoresolve_with_replay_link_v55"
+  }
+}

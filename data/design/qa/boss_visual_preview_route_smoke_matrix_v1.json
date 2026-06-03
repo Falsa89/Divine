@@ -1,0 +1,36 @@
+{
+  "version": "boss_visual_preview_route_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE_PACK_v57",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v57_MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE",
+  "mode": "qa_smoke_matrix",
+  "db_writes": 0,
+  "flows": [
+    {"id": "F01", "name": "Open /boss-visual-preview senza params", "severity": "P0", "expected": "screen renders con default fallback, no crash"},
+    {"id": "F02", "name": "Open /boss-visual-preview con params validi", "severity": "P1", "expected": "params visibili nel boss card"},
+    {"id": "F03", "name": "Default fallback no crash", "severity": "P0", "expected": "boss_family_id=training_boss_preview default"},
+    {"id": "F04", "name": "Boss card visible", "severity": "P1", "expected": "titolo + nome + phase visibili"},
+    {"id": "F05", "name": "Phase preview visibile", "severity": "P1", "expected": "phase string mostrata"},
+    {"id": "F06", "name": "Weakness hint preview visibile", "severity": "P2", "expected": "weakness label mostrata"},
+    {"id": "F07", "name": "Enrage hint preview visibile", "severity": "P2", "expected": "enrage label mostrata"},
+    {"id": "F08", "name": "Open generic router mode=boss", "severity": "P1", "expected": "navigates to /visual-battle-preview-router?mode=boss"},
+    {"id": "F09", "name": "Generic router boss detail block", "severity": "P1", "expected": "mostra boss details quando mode=boss"},
+    {"id": "F10", "name": "Generic router missing params no crash", "severity": "P1", "expected": "fallback messaging visibile"},
+    {"id": "F11", "name": "No claim button anywhere", "severity": "P0", "expected": "no Claim CTA"},
+    {"id": "F12", "name": "No reward granted", "severity": "P0", "expected": "no reward state mutated"},
+    {"id": "F13", "name": "No DB write", "severity": "P0", "expected": "db_writes=0"},
+    {"id": "F14", "name": "No backend fetch", "severity": "P0", "expected": "network idle"},
+    {"id": "F15", "name": "No battle_engine call", "severity": "P0", "expected": "battle_engine_runtime_used=false"},
+    {"id": "F16", "name": "Mobile layout / safe area / rotation", "severity": "P2", "expected": "SafeAreaView, no overflow"},
+    {"id": "F17", "name": "Guild War policy unchanged", "severity": "P0", "expected": "autoresolve+replay invariata"},
+    {"id": "F18", "name": "Italian text on warnings", "severity": "P3", "expected": "warning in italiano visibili"}
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "backend_fetch_present": false,
+    "battle_engine_called": false,
+    "guild_war_policy_regression": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}
