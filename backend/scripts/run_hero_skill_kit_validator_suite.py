@@ -2204,6 +2204,45 @@ OPTIONAL = [
     ('PROJECT-MATERIAL-RAID-v65-ROLLBACK-OBSERVATION', 'validate_material_raid_v65_rollback_observation_v1.py'),
     ('PROJECT-MATERIAL-RAID-v65-QA-AND-v66-READINESS', 'validate_material_raid_v65_qa_and_v66_readiness_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-14-v65-ROLLUP', 'validate_mega_release_acceleration_14_v65_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_15_STORY_RUNTIME_ADAPTER_AND_FIRST_NODE_ALPHA_SUPER_PACK_v66
+    # PUBLIC_SYNC_TAG_v66_MEGA_RELEASE_ACCELERATION_15_STORY_RUNTIME_ADAPTER_AND_FIRST_NODE_ALPHA
+    # ------------------------------------------------------------------------
+    # PREVIEW/ALPHA pack. Introduce il primo Story Runtime Adapter + First
+    # Node Alpha Preview:
+    #   1) story_runtime_adapter_v1_contract                       (TRACK A)
+    #   2) story_first_node_alpha_fixture_and_runtime_payload      (TRACK B)
+    #   3) story_first_node_runtime_preview_screen                 (TRACK C)
+    #   4) story_result_reward_progress_preview_boundary           (TRACK D)
+    #   5) story_anti_double_clear_idempotency_design              (TRACK E)
+    #   6) story_runtime_adapter_first_node_alpha_qa_progress_v10  (TRACK F)
+    # TRACK G: 7 OPTIONAL tuples + tag + 7 docs (392-398) + 6 markers + rollup.
+    #
+    # Una nuova schermata DEEPLINK-ONLY e' stata aggiunta:
+    #   frontend/app/story-first-node-runtime-preview.tsx
+    # NON e' collegata ad alcun menu pubblico. Non importa story.tsx ne'
+    # combat.tsx ne' battle_engine. Nessun /api call. db_writes=0.
+    #
+    # ESCLUSI: authoritative_runtime, permanent_progress, reward_grant,
+    # db_writes, backend_route_enablement, story.tsx/combat.tsx changes,
+    # /api/story/battle e /api/battle/simulate changes.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v66: 5 MD5-locked unchanged + 4 preferred-
+    # unchanged guardrails (server.py, combat.tsx, story.tsx,
+    # material_raid_preview.py), Guild War unchanged, /api/* untouched,
+    # no MONGO_URL/pymongo/motor/redis, runtime_runner_created=false,
+    # runtime_activation_enabled=false, story_runtime_authoritative=false,
+    # story_permanent_progress=false, story_reward_grant=false,
+    # character_bible_changed=false, final_numbers_changed=false.
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-STORY-RUNTIME-ADAPTER-v1-CONTRACT', 'validate_story_runtime_adapter_v1_contract.py'),
+    ('PROJECT-STORY-FIRST-NODE-ALPHA-FIXTURE-AND-PAYLOAD', 'validate_story_first_node_alpha_fixture_and_payload_v1.py'),
+    ('PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN', 'validate_story_first_node_runtime_preview_screen_v1.py'),
+    ('PROJECT-STORY-RESULT-REWARD-PROGRESS-PREVIEW-BOUNDARY', 'validate_story_result_reward_progress_preview_boundary_v1.py'),
+    ('PROJECT-STORY-ANTI-DOUBLE-CLEAR-IDEMPOTENCY-DESIGN', 'validate_story_anti_double_clear_idempotency_design_v1.py'),
+    ('PROJECT-STORY-RUNTIME-ADAPTER-FIRST-NODE-ALPHA-QA-AND-PROGRESS-v10', 'validate_story_runtime_adapter_first_node_alpha_qa_and_progress_v10_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-15-v66-ROLLUP', 'validate_mega_release_acceleration_15_v66_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

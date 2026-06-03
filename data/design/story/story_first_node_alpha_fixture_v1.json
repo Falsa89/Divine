@@ -1,0 +1,79 @@
+{
+  "authoritative_runtime": false,
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "chapter_id": "chapter_alpha",
+  "db_writes": 0,
+  "design_only": true,
+  "enemy_party_simulated": [
+    "enemy_alpha_grunt_a",
+    "enemy_alpha_grunt_b"
+  ],
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "fixture_version": "story_first_node_alpha_fixture_v1",
+  "inventory_mutation": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "node_id": "story_alpha_node_001",
+  "pack": "MEGA_RELEASE_ACCELERATION_15_STORY_RUNTIME_ADAPTER_AND_FIRST_NODE_ALPHA_SUPER_PACK_v66",
+  "permanent_progress": false,
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v66_MEGA_RELEASE_ACCELERATION_15_STORY_RUNTIME_ADAPTER_AND_FIRST_NODE_ALPHA",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant": false,
+  "reward_grant_enabled": false,
+  "reward_grant_executed": false,
+  "reward_preview_only": [
+    {
+      "item_id": "mat_alpha_shard",
+      "qty": 1,
+      "scope": "preview_only"
+    },
+    {
+      "item_id": "mat_alpha_ember",
+      "qty": 2,
+      "scope": "preview_only"
+    }
+  ],
+  "steps": [
+    {
+      "delay_ms": 400,
+      "id": "st1",
+      "kind": "narration"
+    },
+    {
+      "delay_ms": 600,
+      "id": "st2",
+      "kind": "choice_hint"
+    },
+    {
+      "delay_ms": 700,
+      "id": "st3",
+      "kind": "mock_skill_cast"
+    },
+    {
+      "delay_ms": 700,
+      "id": "st4",
+      "kind": "damage_tick"
+    },
+    {
+      "delay_ms": 700,
+      "id": "st5",
+      "kind": "enemy_phase"
+    },
+    {
+      "delay_ms": 500,
+      "id": "st6",
+      "kind": "result_preview"
+    }
+  ],
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

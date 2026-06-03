@@ -1,0 +1,162 @@
+{
+  "authoritative_runtime": false,
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "checks": [
+    {
+      "id": "Q01",
+      "name": "adapter_contract_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q02",
+      "name": "first_node_fixture_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q03",
+      "name": "runtime_payload_draft_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q04",
+      "name": "new_screen_file_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q05",
+      "name": "screen_is_deeplink_only",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q06",
+      "name": "no_import_from_story_tsx",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q07",
+      "name": "no_import_from_combat_tsx",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q08",
+      "name": "no_import_from_battle_engine",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q09",
+      "name": "no_api_calls_in_screen",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q10",
+      "name": "no_async_storage",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q11",
+      "name": "no_reanimated",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q12",
+      "name": "reward_preview_boundary_present",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q13",
+      "name": "progress_not_persisted",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q14",
+      "name": "idempotency_design_present",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q15",
+      "name": "observation_metrics_design_present",
+      "severity": "P1",
+      "status": "pass"
+    },
+    {
+      "id": "Q16",
+      "name": "no_backend_route_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q17",
+      "name": "no_server_py_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q18",
+      "name": "no_battle_engine_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q19",
+      "name": "no_story_tsx_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q20",
+      "name": "no_combat_tsx_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q21",
+      "name": "md5_invariants_intact",
+      "severity": "P0",
+      "status": "pass"
+    }
+  ],
+  "db_writes": 0,
+  "design_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "matrix_version": "story_runtime_adapter_and_first_node_alpha_qa_matrix_v1",
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_15_STORY_RUNTIME_ADAPTER_AND_FIRST_NODE_ALPHA_SUPER_PACK_v66",
+  "permanent_progress": false,
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v66_MEGA_RELEASE_ACCELERATION_15_STORY_RUNTIME_ADAPTER_AND_FIRST_NODE_ALPHA",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "reward_grant_executed": false,
+  "severity_summary": {
+    "P0": 20,
+    "P1": 1,
+    "P2": 0,
+    "P3": 0
+  },
+  "validator_weakening": false,
+  "wallet_mutation": false
+}
