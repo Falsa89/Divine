@@ -1,0 +1,34 @@
+{
+  "version": "master_release_acceleration_dependency_graph_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN_PACK_v54",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v54_MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN",
+  "nodes": [
+    {"id": "v53", "label": "Material Raid Alpha Loop Closure (v53)", "status": "done"},
+    {"id": "B1", "label": "Material Raid Alpha Loop Consolidation", "status": "ready"},
+    {"id": "B2", "label": "Battle Entrypoint Registry Design", "status": "ready"},
+    {"id": "B3", "label": "Asset Import Readiness Scanner", "status": "ready"},
+    {"id": "B4", "label": "QA/Beta Tester Execution Kit", "status": "ready"},
+    {"id": "B5", "label": "Guide/Codex Runtime Plan", "status": "ready"},
+    {"id": "B6", "label": "Story Playable Alpha Slice Plan (design-only)", "status": "ready"},
+    {"id": "B7", "label": "Visual Battle Routing Expansion Plan", "status": "deferred"},
+    {"id": "B8", "label": "Staging/Canary Economy Pilot (MR only)", "status": "deferred"}
+  ],
+  "edges": [
+    {"from": "v53", "to": "B1", "kind": "prerequisite"},
+    {"from": "B1", "to": "B2", "kind": "recommended"},
+    {"from": "B1", "to": "B3", "kind": "recommended"},
+    {"from": "B1", "to": "B5", "kind": "recommended"},
+    {"from": "B1", "to": "B6", "kind": "recommended"},
+    {"from": "B2", "to": "B7", "kind": "hard"},
+    {"from": "B6", "to": "B7", "kind": "hard"},
+    {"from": "B1", "to": "B8", "kind": "hard"},
+    {"from": "B2", "to": "B8", "kind": "hard"}
+  ],
+  "executable_in_v54": ["B1", "B2", "B3", "B4", "B5", "B6"],
+  "manual_approval_required": ["B7", "B8"],
+  "stop_gates": {
+    "GATE_0": "v53 must be PASS before any v54 batch runs",
+    "GATE_1": "if any v54 validator fails, halt and report",
+    "GATE_2": "high-risk batches B7/B8 require explicit director approval"
+  }
+}

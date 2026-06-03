@@ -1565,6 +1565,64 @@ OPTIONAL = [
     ('PROJECT-MATERIAL-RAID-ALPHA-LOOP-CLOSURE-AUDIT', 'validate_material_raid_alpha_loop_closure_audit_v1.py'),
     ('PROJECT-MATERIAL-RAID-ALPHA-LOOP-CLOSURE-SMOKE-MATRIX', 'validate_material_raid_alpha_loop_closure_smoke_matrix_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-3-v53-ROLLUP', 'validate_mega_release_acceleration_3_v53_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN_PACK_v54
+    # PUBLIC_SYNC_TAG_v54_MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN
+    # ------------------------------------------------------------------------
+    # Option B (maximum safe acceleration) approved by Game Director.
+    # Master batch execution plan with internal batches B1-B8, internal
+    # stop-gates (GATE_0 v53 PASS, GATE_1 halt on validator fail,
+    # GATE_2 manual approval for B7/B8), maximum safe parallelism.
+    # Executable now (low/medium risk): B1, B2, B3, B4, B5, B6.
+    # Deferred (require manual director approval): B7, B8.
+    #
+    #   TRACK A: Master roadmap + dependency graph (8 batches, risk tiers,
+    #            dependencies, stop_gate per batch).
+    #   TRACK B: Battle entrypoint registry design (material_raid registered
+    #            in preview, guild_war design deferred, story/boss locked).
+    #   TRACK C: Hero asset import manifest preview/scanner (READ-ONLY scan
+    #            of frontend/assets/heroes, NO copy, NO mutation, NO
+    #            Character Bible / final_numbers touch).
+    #   TRACK D: QA beta tester execution kit (docs-only, device matrix,
+    #            sessions 30/60/90, severity P0-P3, bug template, daily
+    #            smoke checklist, focus areas).
+    #   TRACK E: Guide/Codex runtime plan (static deeplink-only) + new
+    #            frontend/app/alpha-codex.tsx screen (no backend, no
+    #            mutation, no home menu mandatory routing, Italian text).
+    #   TRACK F: Story playable alpha slice plan (DESIGN-ONLY, no story.tsx,
+    #            no /api/story/battle, no battle_engine, no reward live).
+    #   TRACK G/ROLLUP: 7 OPTIONAL tuples + 5 MD5 invariants + preferred-
+    #            unchanged (server.py / combat.tsx / story.tsx) + 7 docs
+    #            (313-319) + 7 markers + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v54:
+    #   - 5 MD5-locked core files unchanged
+    #     (battle_engine.py / .env / artifacts.py / battlepass.tsx / vip.tsx)
+    #   - preferred-unchanged guardrails (server.py / combat.tsx / story.tsx)
+    #   - Guild War policy unchanged (auto_resolve_allowed + replay_link)
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - /api/battle/simulate and /api/story/battle UNCHANGED
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis
+    #   - filesystem_writes restricted to design JSON / scanner output only
+    #   - no live reward grant; no live claim; no inventory/material/currency/
+    #     wallet mutation; no premium users.gems mutation
+    #   - no real battle result generation; result_authoritative=false
+    #   - battle_engine_runtime_used=false
+    #   - no asset copy / no asset import / frontend/assets/heroes not mutated
+    #   - Character Bible / final_numbers unchanged
+    #   - GATE_0 v53 PASS verified; GATE_1 v54 validators PASS;
+    #     GATE_2 B7/B8 require manual director approval
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-MASTER-RELEASE-ACCELERATION-ROADMAP', 'validate_master_release_acceleration_roadmap_v1.py'),
+    ('PROJECT-BATTLE-ENTRYPOINT-REGISTRY-DESIGN', 'validate_battle_entrypoint_registry_design_v1.py'),
+    ('PROJECT-HERO-ASSET-IMPORT-MANIFEST-PREVIEW', 'validate_hero_asset_import_manifest_preview_v1.py'),
+    ('PROJECT-BETA-TESTER-EXECUTION-KIT', 'validate_beta_tester_execution_kit_v1.py'),
+    ('PROJECT-GUIDE-CODEX-RUNTIME-PLAN', 'validate_guide_codex_runtime_plan_v1.py'),
+    ('PROJECT-STORY-PLAYABLE-ALPHA-SLICE-PLAN', 'validate_story_playable_alpha_slice_plan_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-MASTER-v54-ROLLUP', 'validate_mega_release_acceleration_master_v54_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

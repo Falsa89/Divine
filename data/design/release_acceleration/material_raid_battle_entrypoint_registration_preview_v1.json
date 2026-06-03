@@ -1,0 +1,35 @@
+{
+  "version": "material_raid_battle_entrypoint_registration_preview_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN_PACK_v54",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v54_MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN",
+  "mode": "preview",
+  "runtime_wired": false,
+  "registration": {
+    "mode": "material_raid",
+    "frontend_entry_route": "/material-raid-alpha",
+    "visual_preview_route": "/material-raid-visual-preview",
+    "reward_preview_route": "/material-raid-reward-preview",
+    "visual_battle_required": true,
+    "auto_resolve_allowed": false,
+    "reward_claim_enabled": false,
+    "battle_engine_runtime_used": false,
+    "result_authoritative": false,
+    "db_writes": 0
+  },
+  "loop_steps": [
+    "alpha_slice_config_read",
+    "alpha_battle_preview",
+    "visual_battle_preview_render",
+    "reward_summary_preview",
+    "return_to_alpha_no_live_claim"
+  ],
+  "loop_closed": true,
+  "loop_steps_count": 5,
+  "forbidden": {
+    "battle_engine_runtime_used": false,
+    "reward_grant_enabled": false,
+    "materials_granted": false,
+    "inventory_mutation": false,
+    "db_writes_nonzero": false
+  }
+}

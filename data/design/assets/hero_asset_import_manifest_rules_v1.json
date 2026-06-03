@@ -1,0 +1,53 @@
+{
+  "version": "hero_asset_import_manifest_rules_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN_PACK_v54",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v54_MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN",
+  "mode": "read_only_scan",
+  "no_asset_copy": true,
+  "no_asset_import": true,
+  "frontend_assets_heroes_mutation": false,
+  "character_bible_changed": false,
+  "final_numbers_changed": false,
+  "required_slots": [
+    "splash",
+    "portrait",
+    "card",
+    "detail",
+    "fullscreen",
+    "combat_base"
+  ],
+  "optional_slots": [
+    "idle_sheet",
+    "attack_sheet",
+    "skill_sheet",
+    "hit_sheet",
+    "death_sheet",
+    "battle_animations_json",
+    "metadata"
+  ],
+  "slot_filename_patterns": {
+    "splash": ["splash.png", "splash.webp", "splash.jpg"],
+    "portrait": ["portrait.png", "portrait.webp"],
+    "card": ["card.png", "card.webp"],
+    "detail": ["detail.png", "detail.webp"],
+    "fullscreen": ["fullscreen.png", "fullscreen.webp"],
+    "combat_base": ["combat.png", "combat_base.png"],
+    "idle_sheet": ["idle.png", "idle_sheet.png"],
+    "attack_sheet": ["attack.png", "attack_sheet.png"],
+    "skill_sheet": ["skill.png", "skill_sheet.png"],
+    "hit_sheet": ["hit.png", "hit_sheet.png"],
+    "death_sheet": ["death.png", "death_sheet.png"],
+    "battle_animations_json": ["battle_animations.json"],
+    "metadata": ["metadata.json", "meta.json"]
+  },
+  "readiness_states": [
+    "ready_to_import",
+    "missing_required_asset",
+    "missing_optional_asset",
+    "needs_manual_review",
+    "rejected_wrong_contract"
+  ],
+  "directory_root": "frontend/assets/heroes",
+  "scaffold_if_missing": true,
+  "drop_pack_instructions": "Drop hero asset bundles under frontend/assets/heroes/<hero_id>/ following the slot_filename_patterns above. The scanner is read-only and will NOT copy or move files."
+}

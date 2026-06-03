@@ -1,0 +1,80 @@
+{
+  "version": "beta_tester_execution_kit_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN_PACK_v54",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v54_MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN",
+  "mode": "docs_only",
+  "text_language": "it",
+  "onboarding": {
+    "signup_url_placeholder": "https://example.invalid/beta-signup",
+    "credentials_policy": "use email magic link, never share password",
+    "build_distribution": "Expo Go QR code or internal TestFlight/Internal Track"
+  },
+  "device_matrix": [
+    {"os": "iOS", "version": "16+", "models": ["iPhone 13", "iPhone 14 Pro", "iPhone SE 3"]},
+    {"os": "Android", "version": "11+", "models": ["Pixel 6", "Samsung Galaxy S22", "Xiaomi Redmi Note 11"]}
+  ],
+  "build_version": {
+    "app_version_target": "alpha_v54",
+    "backend_target": "preview_only",
+    "feature_flags_default": "503_safe"
+  },
+  "sessions": [
+    {"length_minutes": 30, "focus": "Material Raid Alpha loop + smoke nav"},
+    {"length_minutes": 60, "focus": "Material Raid + Heroes browse + Codex"},
+    {"length_minutes": 90, "focus": "Full smoke matrix + bug hunting"}
+  ],
+  "bug_template": {
+    "fields": [
+      "title",
+      "severity",
+      "reproduction_steps",
+      "expected",
+      "actual",
+      "device",
+      "os_version",
+      "app_version",
+      "screenshot_or_video_url",
+      "log_excerpt",
+      "frequency"
+    ]
+  },
+  "severity": {
+    "P0": "crash, data loss, app un-usable",
+    "P1": "major feature broken, no workaround",
+    "P2": "feature degraded, workaround exists",
+    "P3": "polish, copy, minor UI"
+  },
+  "evidence_required": {
+    "screenshot": true,
+    "video": "for P0/P1 only",
+    "log": "console excerpt when reproducible"
+  },
+  "daily_smoke_checklist": [
+    "open app cold start",
+    "login flow",
+    "home menu loads",
+    "open Material Raid Alpha",
+    "trigger alpha_battle_preview",
+    "open Visual Preview",
+    "open Reward Summary Preview",
+    "return to Alpha",
+    "heroes list scroll",
+    "hero detail open/close",
+    "story screen opens (no battle)",
+    "navigation back/forward",
+    "device rotation safe",
+    "60s idle no crash",
+    "background/foreground resume"
+  ],
+  "focus_areas": [
+    "material_raid_loop",
+    "visual_preview",
+    "reward_preview",
+    "story",
+    "heroes",
+    "navigation",
+    "rotation",
+    "performance",
+    "crash"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "version": "battle_entrypoint_registry_design_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN_PACK_v54",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v54_MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN",
+  "mode": "design_only",
+  "runtime_wired": false,
+  "db_writes": 0,
+  "entries": [
+    {
+      "mode": "material_raid",
+      "frontend_entry_route": "/material-raid-alpha",
+      "visual_preview_route": "/material-raid-visual-preview",
+      "reward_preview_route": "/material-raid-reward-preview",
+      "visual_battle_required": true,
+      "auto_resolve_allowed": false,
+      "reward_claim_enabled": false,
+      "battle_engine_runtime_used": false,
+      "result_authoritative": false,
+      "db_writes": 0,
+      "status": "alpha_loop_closed_v53"
+    },
+    {
+      "mode": "guild_war",
+      "frontend_entry_route": "/guild-war",
+      "visual_preview_route": null,
+      "reward_preview_route": null,
+      "visual_battle_required": false,
+      "auto_resolve_allowed": true,
+      "replay_link_required": true,
+      "reward_claim_enabled": false,
+      "battle_engine_runtime_used": false,
+      "result_authoritative": false,
+      "db_writes": 0,
+      "status": "design_deferred_to_post_v54"
+    },
+    {
+      "mode": "story",
+      "frontend_entry_route": "/story",
+      "visual_preview_route": null,
+      "reward_preview_route": null,
+      "visual_battle_required": false,
+      "auto_resolve_allowed": false,
+      "reward_claim_enabled": false,
+      "battle_engine_runtime_used": false,
+      "result_authoritative": false,
+      "db_writes": 0,
+      "status": "runtime_locked_no_changes_in_v54"
+    },
+    {
+      "mode": "boss",
+      "frontend_entry_route": null,
+      "visual_preview_route": null,
+      "reward_preview_route": null,
+      "visual_battle_required": false,
+      "auto_resolve_allowed": false,
+      "reward_claim_enabled": false,
+      "battle_engine_runtime_used": false,
+      "result_authoritative": false,
+      "db_writes": 0,
+      "status": "design_placeholder"
+    }
+  ],
+  "forbidden": {
+    "battle_engine_py_modified": false,
+    "combat_tsx_modified": false,
+    "story_tsx_modified": false,
+    "battle_simulate_endpoint_modified": false,
+    "story_battle_endpoint_modified": false
+  }
+}

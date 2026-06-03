@@ -1,0 +1,27 @@
+{
+  "version": "story_playable_alpha_slice_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN_PACK_v54",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v54_MEGA_RELEASE_ACCELERATION_MASTER_BATCH_EXECUTION_PLAN",
+  "mode": "design_only",
+  "runtime_wired": false,
+  "story_tsx_changed": false,
+  "story_battle_endpoint_changed": false,
+  "battle_engine_changed": false,
+  "reward_live": false,
+  "db_writes": 0,
+  "stages": [
+    {"id": "s01", "name": "Prologo", "playable_alpha": false, "design_status": "sketch"},
+    {"id": "s02", "name": "Primo scontro tutorial", "playable_alpha": true, "design_status": "draft"},
+    {"id": "s03", "name": "Mini boss eco", "playable_alpha": false, "design_status": "placeholder"}
+  ],
+  "alpha_visual_battle_transition": {
+    "required": true,
+    "contract_draft_ref": "data/design/release_acceleration/story_visual_battle_transition_contract_draft_v1.json"
+  },
+  "out_of_scope_v54": [
+    "any story.tsx edits",
+    "any /api/story/battle edits",
+    "any battle_engine.py edits",
+    "any live reward grant"
+  ]
+}
