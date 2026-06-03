@@ -1,0 +1,193 @@
+{
+  "applied": false,
+  "approval_checksum_sha256": "f67336fc69a7a4a2bf46fd31f3ae0fb871521c261f1f3c43dd457511ca81f137",
+  "approval_phrase_received": "approvo",
+  "battle_pass_mutation_allowed": false,
+  "broad_rollout_allowed": false,
+  "checks": [
+    {
+      "id": "Q01",
+      "name": "approval_phrase_received",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q02",
+      "name": "approval_checksum_verified",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q03",
+      "name": "scope_locked_to_material_only",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q04",
+      "name": "allowlist_max_5_users",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q05",
+      "name": "per_user_cap_1",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q06",
+      "name": "total_cap_10",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q07",
+      "name": "premium_currency_blocked",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q08",
+      "name": "gacha_blocked",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q09",
+      "name": "shop_blocked",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q10",
+      "name": "vip_blocked",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q11",
+      "name": "battle_pass_blocked",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q12",
+      "name": "broad_rollout_blocked",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q13",
+      "name": "public_claim_blocked",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q14",
+      "name": "apply_default_dry_run",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q15",
+      "name": "isolated_staging_marker_required",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q16",
+      "name": "staging_mongo_url_distinct_required",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q17",
+      "name": "no_pymongo_motor_redis_in_script",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q18",
+      "name": "no_server_py_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q19",
+      "name": "no_battle_engine_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q20",
+      "name": "no_frontend_tsx_change",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q21",
+      "name": "no_material_raid_preview_change_preferred",
+      "severity": "P1",
+      "status": "pass"
+    },
+    {
+      "id": "Q22",
+      "name": "rollback_plan_present",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q23",
+      "name": "observation_metrics_complete",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q24",
+      "name": "blocked_result_includes_failed_gate",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q25",
+      "name": "v66_readiness_report_present",
+      "severity": "P0",
+      "status": "pass"
+    }
+  ],
+  "checksum_required": true,
+  "checksum_verified": true,
+  "claim_button_enabled": false,
+  "db_writes": 0,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "gacha_currency_allowed": false,
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "manual_approval_received": true,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "matrix_version": "material_raid_first_controlled_live_staging_claim_qa_matrix_v1",
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_14_MATERIAL_RAID_FIRST_CONTROLLED_LIVE_STAGING_CLAIM_PACK_v65",
+  "premium_currency_allowed": false,
+  "public_claim_allowed": false,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v65_MEGA_RELEASE_ACCELERATION_14_MATERIAL_RAID_FIRST_CONTROLLED_LIVE_STAGING_CLAIM",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "reward_grant_enabled": false,
+  "reward_grant_executed": false,
+  "severity_summary": {
+    "P0": 24,
+    "P1": 1,
+    "P2": 0,
+    "P3": 0
+  },
+  "shop_mutation_allowed": false,
+  "validator_weakening": false,
+  "vip_mutation_allowed": false,
+  "wallet_mutation": false
+}

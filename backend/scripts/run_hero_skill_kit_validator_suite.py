@@ -2163,6 +2163,47 @@ OPTIONAL = [
     ('PROJECT-MATERIAL-RAID-v65-GO-NO-GO-READINESS', 'validate_material_raid_v65_go_no_go_readiness_v1.py'),
     ('PROJECT-MATERIAL-RAID-STAGING-DRY-RUN-CANARY-QA', 'validate_material_raid_staging_dry_run_canary_qa_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-13-v64-ROLLUP', 'validate_mega_release_acceleration_13_v64_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_14_MATERIAL_RAID_FIRST_CONTROLLED_LIVE_STAGING_CLAIM_PACK_v65
+    # PUBLIC_SYNC_TAG_v65_MEGA_RELEASE_ACCELERATION_14_MATERIAL_RAID_FIRST_CONTROLLED_LIVE_STAGING_CLAIM
+    # ------------------------------------------------------------------------
+    # PRIMO PACK CON POTENZIALE MUTAZIONE STAGING CONTROLLATA.
+    # Approvazione utente esplicita: phrase=`approvo`,
+    #   checksum=f67336fc69a7a4a2bf46fd31f3ae0fb871521c261f1f3c43dd457511ca81f137,
+    #   scope=v65|material_raid_only|material_only_reward|allowlist_1_to_5|
+    #         max_1_claim_per_user|max_10_total_claims|premium_currency_allowed_false|
+    #         no_gacha_no_shop_no_vip_no_bp|rollback_required|observation_required.
+    #
+    # Outcome in questo container locale: BLOCKED_NOT_APPLIED_SAFE.
+    # Motivo: nessuna superficie staging isolata disponibile
+    #   (no STAGING_MONGO_URL, no /app/data/staging/material_raid_v65/.staging_ready).
+    # Lo script `material_raid_first_controlled_live_staging_claim_v65.py` ha
+    # rilevato i gate falliti e ha prodotto blocked_result. db_writes=0,
+    # reward_grant_executed=false, materials_granted=false.
+    #
+    # Lane:
+    #   1) v65_user_approval_handshake_and_scope_lock              (TRACK A)
+    #   2) v65_staging_claim_apply_guard_and_canary_allowlist      (TRACK B)
+    #   3) v65_first_controlled_live_staging_claim_runner          (TRACK C - script)
+    #   4) v65_first_claim_result_blocked_evidence                 (TRACK D)
+    #   5) v65_rollback_execution_plan_and_observation_window      (TRACK E)
+    #   6) v65_qa_matrix_and_v66_readiness                         (TRACK F)
+    # TRACK G: 6 OPTIONAL tuples + tag + 6 docs (386-391) + 6 markers + rollup.
+    #
+    # Invariants: 5 MD5-locked + 4 preferred-unchanged + Character Bible +
+    # final_numbers unchanged. /api/* untouched, no MONGO_URL/pymongo/motor/redis
+    # used by the runner script. No live reward/claim, no broad rollout, no
+    # public claim, no premium/gacha/shop/VIP/BP mutation. No fake PASS. No
+    # validator weakening. No tuple duplicate. material_raid_live_claim=false,
+    # material_raid_reward_grant=false, material_raid_db_writes=0.
+    # Verdict: BLOCKED_NOT_APPLIED_SAFE (alternative authorized by pack).
+    # ========================================================================
+    ('PROJECT-MATERIAL-RAID-v65-APPROVAL-HANDSHAKE', 'validate_material_raid_v65_approval_handshake_v1.py'),
+    ('PROJECT-MATERIAL-RAID-v65-APPLY-GUARD', 'validate_material_raid_v65_apply_guard_v1.py'),
+    ('PROJECT-MATERIAL-RAID-v65-FIRST-CLAIM-RESULT', 'validate_material_raid_v65_first_claim_result_v1.py'),
+    ('PROJECT-MATERIAL-RAID-v65-ROLLBACK-OBSERVATION', 'validate_material_raid_v65_rollback_observation_v1.py'),
+    ('PROJECT-MATERIAL-RAID-v65-QA-AND-v66-READINESS', 'validate_material_raid_v65_qa_and_v66_readiness_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-14-v65-ROLLUP', 'validate_mega_release_acceleration_14_v65_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
