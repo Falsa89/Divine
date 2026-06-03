@@ -33,6 +33,31 @@ type Params = {
   boss_family_id?: string;
   boss_display_name?: string;
   boss_phase_preview?: string;
+  // v58 MULTI_MODE_VISUAL_PREVIEW_SHELL_BATCH — deeplink-only, no backend, no claim
+  // story
+  node_id?: string;
+  encounter_id?: string;
+  encounter_display_name?: string;
+  faction_hint?: string;
+  background_hint?: string;
+  music_hint?: string;
+  tutorial_hint?: string;
+  // tower
+  tower_id?: string;
+  floor_id?: string;
+  floor_number_preview?: string;
+  modifier_hint_preview?: string;
+  // event
+  event_id?: string;
+  event_node_id?: string;
+  event_display_name?: string;
+  event_theme_hint?: string;
+  bonus_rule_hint_preview?: string;
+  // arena
+  arena_bracket_preview?: string;
+  opponent_name_preview?: string;
+  opponent_power_preview?: string;
+  ruleset_hint_preview?: string;
 };
 
 function asString(v: unknown): string | undefined {
@@ -68,7 +93,7 @@ export default function VisualBattlePreviewRouterScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerCard}>
           <Text style={styles.title}>Visual Battle Preview Router</Text>
-          <Text style={styles.subtitle}>v55 · deeplink-only · shell preview multi-mode</Text>
+          <Text style={styles.subtitle}>v55+v58 · deeplink-only · shell preview multi-mode (story/tower/event/arena)</Text>
           <View style={styles.warningBox}>
             <Text style={styles.warningText}>Preview visuale non autoritativa.</Text>
             <Text style={styles.warningText}>Nessun reward verrà assegnato.</Text>
@@ -144,6 +169,167 @@ export default function VisualBattlePreviewRouterScreen() {
             <Text style={styles.helper}>
               Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
               nessun reward verrà assegnato. Material Raid e Training restano
+              invariate.
+            </Text>
+          </View>
+        ) : null}
+
+        {mode === 'story' ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Story Preview Details</Text>
+            <Text style={styles.line}>Stato: preview_shell_v58</Text>
+            <Text style={styles.line}>
+              Chapter ID: {chapterId || 'chapter_preview_1'}
+            </Text>
+            <Text style={styles.line}>
+              Node ID: {asString(raw.node_id) || 'node_preview_1'}
+            </Text>
+            <Text style={styles.line}>
+              Encounter ID: {asString(raw.encounter_id) || 'story_encounter_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Display name:{' '}
+              {asString(raw.encounter_display_name) || 'Story Encounter Preview'}
+            </Text>
+            <Text style={styles.line}>
+              Faction hint: {asString(raw.faction_hint) || 'neutral_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Enemy family: {enemyFamily || 'story_training_enemy'}
+            </Text>
+            <Text style={styles.line}>
+              Background hint: {asString(raw.background_hint) || 'story_chapter1_bg'}
+            </Text>
+            <Text style={styles.line}>
+              Music hint: {asString(raw.music_hint) || 'story_chapter1_theme'}
+            </Text>
+            <Text style={styles.line}>
+              Tutorial hint:{' '}
+              {asString(raw.tutorial_hint) || 'first_encounter_tutorial'}
+            </Text>
+            <Text style={styles.line}>Seed: {seed || 'story-alpha-v58'}</Text>
+            <Text style={styles.helper}>
+              Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
+              nessun reward verrà assegnato. Material Raid, Training e Boss restano
+              invariate. story.tsx, combat.tsx, /api/story/battle e
+              /api/battle/simulate non vengono toccati.
+            </Text>
+          </View>
+        ) : null}
+
+        {mode === 'tower' ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Tower Preview Details</Text>
+            <Text style={styles.line}>Stato: preview_shell_v58</Text>
+            <Text style={styles.line}>
+              Tower ID: {asString(raw.tower_id) || 'tower_preview_1'}
+            </Text>
+            <Text style={styles.line}>
+              Floor ID: {asString(raw.floor_id) || 'floor_preview_1'}
+            </Text>
+            <Text style={styles.line}>
+              Floor number: {asString(raw.floor_number_preview) || '1'}
+            </Text>
+            <Text style={styles.line}>
+              Display name:{' '}
+              {asString(raw.encounter_display_name) || 'Tower Floor Preview'}
+            </Text>
+            <Text style={styles.line}>
+              Enemy family: {enemyFamily || 'tower_guardian_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Modifier hint:{' '}
+              {asString(raw.modifier_hint_preview) || 'attack_buff_low'}
+            </Text>
+            <Text style={styles.line}>
+              Background hint: {asString(raw.background_hint) || 'tower_f1_bg'}
+            </Text>
+            <Text style={styles.line}>
+              Music hint: {asString(raw.music_hint) || 'tower_theme'}
+            </Text>
+            <Text style={styles.line}>Seed: {seed || 'tower-alpha-v58'}</Text>
+            <Text style={styles.helper}>
+              Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
+              nessun reward verrà assegnato. Material Raid, Training e Boss restano
+              invariate.
+            </Text>
+          </View>
+        ) : null}
+
+        {mode === 'event' ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Event Preview Details</Text>
+            <Text style={styles.line}>Stato: preview_shell_v58</Text>
+            <Text style={styles.line}>
+              Event ID: {asString(raw.event_id) || 'event_preview_1'}
+            </Text>
+            <Text style={styles.line}>
+              Event node ID:{' '}
+              {asString(raw.event_node_id) || 'event_node_preview_1'}
+            </Text>
+            <Text style={styles.line}>
+              Display name:{' '}
+              {asString(raw.event_display_name) || 'Event Battle Preview'}
+            </Text>
+            <Text style={styles.line}>
+              Theme hint:{' '}
+              {asString(raw.event_theme_hint) || 'limited_time_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Enemy family: {enemyFamily || 'event_enemy_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Bonus rule hint:{' '}
+              {asString(raw.bonus_rule_hint_preview) || 'bonus_drop_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Background hint: {asString(raw.background_hint) || 'event_bg'}
+            </Text>
+            <Text style={styles.line}>
+              Music hint: {asString(raw.music_hint) || 'event_theme'}
+            </Text>
+            <Text style={styles.line}>Seed: {seed || 'event-alpha-v58'}</Text>
+            <Text style={styles.helper}>
+              Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
+              nessun reward verrà assegnato. Material Raid, Training e Boss restano
+              invariate.
+            </Text>
+          </View>
+        ) : null}
+
+        {mode === 'arena' ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Arena Preview Details</Text>
+            <Text style={styles.line}>Stato: preview_shell_v58</Text>
+            <Text style={styles.line}>
+              Bracket:{' '}
+              {asString(raw.arena_bracket_preview) || 'bronze_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Opponent name:{' '}
+              {asString(raw.opponent_name_preview) || 'Training Rival Preview'}
+            </Text>
+            <Text style={styles.line}>
+              Opponent power:{' '}
+              {asString(raw.opponent_power_preview) || '45000'}
+            </Text>
+            <Text style={styles.line}>
+              Enemy family: {enemyFamily || 'arena_rival_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Ruleset hint:{' '}
+              {asString(raw.ruleset_hint_preview) || 'standard_ruleset_preview'}
+            </Text>
+            <Text style={styles.line}>
+              Background hint: {asString(raw.background_hint) || 'arena_bg'}
+            </Text>
+            <Text style={styles.line}>
+              Music hint: {asString(raw.music_hint) || 'arena_theme'}
+            </Text>
+            <Text style={styles.line}>Seed: {seed || 'arena-alpha-v58'}</Text>
+            <Text style={styles.helper}>
+              Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
+              nessun reward verrà assegnato. Material Raid, Training e Boss restano
               invariate.
             </Text>
           </View>

@@ -1,0 +1,189 @@
+{
+  "version": "multi_mode_visual_preview_shell_batch_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_7_MULTI_MODE_VISUAL_PREVIEW_SHELL_BATCH_PACK_v58",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v58_MEGA_RELEASE_ACCELERATION_7_MULTI_MODE_VISUAL_PREVIEW_SHELL_BATCH",
+  "mode": "qa_smoke_matrix",
+  "db_writes": 0,
+  "flows": [
+    {
+      "id": "F01",
+      "name": "Open /story-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, default fallback visibile"
+    },
+    {
+      "id": "F02",
+      "name": "Open /story-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "params visibili nel card"
+    },
+    {
+      "id": "F03",
+      "name": "Default fallback story no crash",
+      "severity": "P0",
+      "expected": "fallback applicato"
+    },
+    {
+      "id": "F04",
+      "name": "Generic router mode=story",
+      "severity": "P1",
+      "expected": "mostra story preview details"
+    },
+    {
+      "id": "F05",
+      "name": "Open /tower-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, default fallback visibile"
+    },
+    {
+      "id": "F06",
+      "name": "Open /tower-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "params visibili nel card"
+    },
+    {
+      "id": "F07",
+      "name": "Default fallback tower no crash",
+      "severity": "P0",
+      "expected": "fallback applicato"
+    },
+    {
+      "id": "F08",
+      "name": "Generic router mode=tower",
+      "severity": "P1",
+      "expected": "mostra tower preview details"
+    },
+    {
+      "id": "F09",
+      "name": "Open /event-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, default fallback visibile"
+    },
+    {
+      "id": "F10",
+      "name": "Open /event-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "params visibili nel card"
+    },
+    {
+      "id": "F11",
+      "name": "Default fallback event no crash",
+      "severity": "P0",
+      "expected": "fallback applicato"
+    },
+    {
+      "id": "F12",
+      "name": "Generic router mode=event",
+      "severity": "P1",
+      "expected": "mostra event preview details"
+    },
+    {
+      "id": "F13",
+      "name": "Open /arena-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, default fallback visibile"
+    },
+    {
+      "id": "F14",
+      "name": "Open /arena-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "params visibili nel card"
+    },
+    {
+      "id": "F15",
+      "name": "Default fallback arena no crash",
+      "severity": "P0",
+      "expected": "fallback applicato"
+    },
+    {
+      "id": "F16",
+      "name": "Generic router mode=arena",
+      "severity": "P1",
+      "expected": "mostra arena preview details"
+    },
+    {
+      "id": "F17",
+      "name": "Generic router missing params no crash",
+      "severity": "P1",
+      "expected": "fallback messaging visibile"
+    },
+    {
+      "id": "F18",
+      "name": "No claim button anywhere multi-mode",
+      "severity": "P0",
+      "expected": "no Claim CTA in story/tower/event/arena"
+    },
+    {
+      "id": "F19",
+      "name": "No reward granted in multi-mode",
+      "severity": "P0",
+      "expected": "no reward state mutated"
+    },
+    {
+      "id": "F20",
+      "name": "No DB write",
+      "severity": "P0",
+      "expected": "db_writes=0"
+    },
+    {
+      "id": "F21",
+      "name": "No backend fetch",
+      "severity": "P0",
+      "expected": "network idle"
+    },
+    {
+      "id": "F22",
+      "name": "No battle_engine call",
+      "severity": "P0",
+      "expected": "battle_engine_runtime_used=false"
+    },
+    {
+      "id": "F23",
+      "name": "No story.tsx import / change",
+      "severity": "P0",
+      "expected": "story.tsx MD5 unchanged"
+    },
+    {
+      "id": "F24",
+      "name": "No /api/story/battle",
+      "severity": "P0",
+      "expected": "endpoint not called/modified"
+    },
+    {
+      "id": "F25",
+      "name": "No /api/battle/simulate",
+      "severity": "P0",
+      "expected": "endpoint not called/modified"
+    },
+    {
+      "id": "F26",
+      "name": "Mobile layout / safe area / rotation",
+      "severity": "P2",
+      "expected": "SafeAreaView, no overflow"
+    },
+    {
+      "id": "F27",
+      "name": "Guild War policy unchanged",
+      "severity": "P0",
+      "expected": "autoresolve+replay invariata"
+    },
+    {
+      "id": "F28",
+      "name": "Italian text on warnings",
+      "severity": "P3",
+      "expected": "warning in italiano"
+    }
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "backend_fetch_present": false,
+    "battle_engine_called": false,
+    "story_tsx_modified": false,
+    "story_battle_endpoint_called": false,
+    "battle_simulate_endpoint_called": false,
+    "guild_war_policy_regression": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}

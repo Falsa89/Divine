@@ -1,0 +1,42 @@
+{
+  "marker_version": "multi_mode_visual_preview_screens_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_7_MULTI_MODE_VISUAL_PREVIEW_SHELL_BATCH_PACK_v58",
+  "track": "B",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v58_MEGA_RELEASE_ACCELERATION_7_MULTI_MODE_VISUAL_PREVIEW_SHELL_BATCH",
+  "screens": {
+    "story": {
+      "path": "frontend/app/story-visual-preview.tsx",
+      "route": "/story-visual-preview",
+      "default_seed": "story-alpha-v58"
+    },
+    "tower": {
+      "path": "frontend/app/tower-visual-preview.tsx",
+      "route": "/tower-visual-preview",
+      "default_seed": "tower-alpha-v58"
+    },
+    "event": {
+      "path": "frontend/app/event-visual-preview.tsx",
+      "route": "/event-visual-preview",
+      "default_seed": "event-alpha-v58"
+    },
+    "arena": {
+      "path": "frontend/app/arena-visual-preview.tsx",
+      "route": "/arena-visual-preview",
+      "default_seed": "arena-alpha-v58"
+    }
+  },
+  "deeplink_only": true,
+  "home_menu_mandatory_routing": false,
+  "calls_backend": false,
+  "calls_battle_engine": false,
+  "claim_button_present": false,
+  "reward_grant_enabled": false,
+  "reanimated_used": false,
+  "combat_tsx_imported": false,
+  "story_tsx_imported": false,
+  "handles_missing_params_without_crash": true,
+  "text_language": "it",
+  "db_writes": 0,
+  "validator_weakening": false,
+  "fake_pass": false
+}
