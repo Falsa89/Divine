@@ -1,0 +1,44 @@
+{
+  "version": "local_visual_preview_timeline_schema_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED_WIRING_PACK_v56",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v56_MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED",
+  "mode": "design_schema",
+  "deterministic_from_seed": true,
+  "required_step_fields": [
+    "step_index",
+    "actor_side",
+    "actor_label",
+    "action_key",
+    "target_label",
+    "floating_text_preview",
+    "hp_delta_preview",
+    "pose_hint",
+    "vfx_hint",
+    "duration_ms"
+  ],
+  "actor_sides_allowed": ["team", "enemy"],
+  "action_keys_allowed": ["basic_attack", "skill_a", "skill_b", "ultimate", "enemy_strike", "defend", "recover"],
+  "pose_hints_allowed": ["idle", "attack", "skill", "hit", "recover"],
+  "vfx_hints_allowed": ["none", "slash", "flame", "ice", "holy", "shock", "poison", "heal"],
+  "duration_ms_bounds": {
+    "min": 200,
+    "max": 1200
+  },
+  "hp_delta_preview_bounds": {
+    "min": -250,
+    "max": 150
+  },
+  "floating_text_preview_examples": [
+    "-120",
+    "-80 CRIT",
+    "+40 HEAL",
+    "MISS",
+    "BLOCK"
+  ],
+  "forbidden": {
+    "backend_fetch": false,
+    "battle_engine_runtime": false,
+    "reward_grant": false,
+    "db_writes_nonzero": false
+  }
+}

@@ -109,6 +109,20 @@ export default function VisualBattlePreviewRouterScreen() {
           </Text>
         </View>
 
+        {mode === 'training' ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Training Dummy Seed Details</Text>
+            <Text style={styles.line}>Stato: local_dummy_seed_wired_v56</Text>
+            <Text style={styles.line}>Seed: {seed || 'training-alpha-v56'}</Text>
+            <Text style={styles.line}>Pattern: timeline deterministica 5-7 step</Text>
+            <Text style={styles.helper}>
+              Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
+              nessun reward verrà assegnato. Materiale Raid e altre modalità
+              restano invariate.
+            </Text>
+          </View>
+        ) : null}
+
         <View style={styles.guardsBox}>
           <Text style={styles.guardLine}>result_authoritative = false</Text>
           <Text style={styles.guardLine}>reward_claim_enabled = false</Text>

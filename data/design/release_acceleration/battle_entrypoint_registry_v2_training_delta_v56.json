@@ -1,0 +1,36 @@
+{
+  "version": "battle_entrypoint_registry_v2_training_delta_v56",
+  "pack": "MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED_WIRING_PACK_v56",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v56_MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED",
+  "parent_registry": "data/design/release_acceleration/battle_entrypoint_registry_v2_preview.json",
+  "applies_to": "training",
+  "delta": {
+    "mode_id": "training",
+    "previous_state": "preview_shell_v55",
+    "new_state": "local_dummy_seed_wired_v56",
+    "new_implementation_tier": "local_dummy_seed_preview",
+    "new_next_pack_action": "evaluate_wire_to_visual_battle_runner_payload_contract_in_v57",
+    "seed": "training-alpha-v56",
+    "timeline_steps_min": 5,
+    "timeline_steps_max": 7
+  },
+  "preserved_invariants": {
+    "visual_battle_required": true,
+    "auto_resolve_allowed": false,
+    "result_authoritative": false,
+    "reward_claim_enabled": false,
+    "reward_grant_enabled": false,
+    "db_writes": 0,
+    "battle_engine_runtime_used": false,
+    "safe_sandbox": true
+  },
+  "other_modes_unchanged": {
+    "material_raid": "alpha_loop_closed_v53",
+    "story": "design_only_v55",
+    "boss": "design_only_v55",
+    "tower": "design_only_v55",
+    "event": "design_only_v55",
+    "arena": "design_only_v55",
+    "guild_war": "autoresolve_with_replay_link_v55"
+  }
+}

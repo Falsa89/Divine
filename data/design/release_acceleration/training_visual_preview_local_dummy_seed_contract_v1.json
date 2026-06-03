@@ -1,0 +1,30 @@
+{
+  "version": "training_visual_preview_local_dummy_seed_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED_WIRING_PACK_v56",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v56_MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED",
+  "mode_id": "training",
+  "previous_state": "preview_shell_v55",
+  "target_state": "local_dummy_seed_wired_v56",
+  "source_route": "/training-visual-preview",
+  "router_route": "/visual-battle-preview-router",
+  "seed": "training-alpha-v56",
+  "timeline_steps_min": 5,
+  "timeline_steps_max": 7,
+  "local_only": true,
+  "backend_used": false,
+  "battle_engine_runtime_used": false,
+  "result_authoritative": false,
+  "reward_claim_enabled": false,
+  "reward_grant_enabled": false,
+  "db_writes": 0,
+  "no_inventory_mutation": true,
+  "no_wallet_mutation": true,
+  "forbidden": {
+    "backend_fetch": false,
+    "battle_engine_runtime": false,
+    "battle_simulate_endpoint_used": false,
+    "story_battle_endpoint_used": false,
+    "reanimated_used": false,
+    "combat_tsx_imported": false
+  }
+}

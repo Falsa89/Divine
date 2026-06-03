@@ -1682,6 +1682,72 @@ OPTIONAL = [
     ('PROJECT-MULTI-MODE-VISUAL-BATTLE-PREVIEW-CONTRACTS', 'validate_multi_mode_visual_battle_preview_contracts_v1.py'),
     ('PROJECT-VISUAL-BATTLE-ROUTING-EXPANSION-SMOKE-MATRIX', 'validate_visual_battle_routing_expansion_smoke_matrix_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-4-v55-ROLLUP', 'validate_mega_release_acceleration_4_v55_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED_WIRING_PACK_v56
+    # PUBLIC_SYNC_TAG_v56_MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED
+    # ------------------------------------------------------------------------
+    # Evolve Training Visual Preview from static shell (v55) to a small local
+    # deterministic preview based on dummy seed 'training-alpha-v56', without
+    # backend, without battle_engine.py, without /api/battle/simulate, without
+    # /api/story/battle, without reward, without DB writes.
+    #
+    # State transition: training preview_shell_v55 -> local_dummy_seed_wired_v56.
+    # Material Raid remains alpha_loop_closed_v53. Guild War policy preserved
+    # (autoresolve + replay_link exception).
+    #
+    #   TRACK A: training_visual_preview_local_dummy_seed_contract_v1.json +
+    #            local_visual_preview_timeline_schema_v1.json +
+    #            battle_entrypoint_registry_v2_training_delta_v56.json
+    #            (10 required step fields, deterministic_from_seed=true).
+    #   TRACK B: frontend/app/training-visual-preview.tsx patched with a pure
+    #            deterministic buildLocalTimeline(seed) helper (6 steps),
+    #            step/next/reset + optional play/pause with safe timer cleanup
+    #            (clearTimeout on unmount AND on pause). Italian text. No
+    #            Reanimated. No combat.tsx import. No backend fetch.
+    #   TRACK C: frontend/app/visual-battle-preview-router.tsx augmented with
+    #            a 'mode === \"training\"' detail block that shows
+    #            local_dummy_seed_wired_v56 + disclaimer. Material Raid /
+    #            other modes behavior UNCHANGED. No fetch.
+    #   TRACK D: training_visual_preview_local_dummy_seed_smoke_matrix_v1.json
+    #            (16 flows, severity P0/P1/P2/P3) covering open, timeline,
+    #            step/next/reset, play/pause cleanup, generic router routing,
+    #            missing params no crash, no claim/no reward/no DB write/no
+    #            backend/no battle_engine, rotation, italian text.
+    #   TRACK E: visual_preview_runtime_shell_progress_report_v1.json
+    #            (modes_status snapshot: material_raid alpha_loop_closed_v53,
+    #            training local_dummy_seed_wired_v56, story/boss/tower/event/
+    #            arena design_only_runtime_deferred, guild_war policy unchanged;
+    #            next recommended: boss_visual_preview_route OR
+    #            story_visual_preview_contract_to_deeplink).
+    #   TRACK F/ROLLUP: 6 OPTIONAL tuples + 5 MD5 invariants + preferred-
+    #            unchanged (server.py / combat.tsx / story.tsx) + 6 docs
+    #            (326-331) + 6 markers + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v56:
+    #   - 5 MD5-locked core files unchanged
+    #     (battle_engine.py / .env / artifacts.py / battlepass.tsx / vip.tsx)
+    #   - preferred-unchanged guardrails (server.py / combat.tsx / story.tsx)
+    #   - Guild War policy UNCHANGED (auto_resolve + replay_link preserved)
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - /api/battle/simulate and /api/story/battle UNCHANGED
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis; no filesystem writes
+    #   - no live reward grant; no live claim; no inventory/material/currency/
+    #     wallet mutation; no premium users.gems mutation
+    #   - no real battle result generation; result_authoritative=false
+    #   - battle_engine_runtime_used=false; backend_used=false
+    #   - no Reanimated import; no combat.tsx import; timer cleanup obbligatorio
+    #   - Character Bible / final_numbers unchanged
+    #   - no new runtime endpoint created in v56
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-TRAINING-VISUAL-PREVIEW-LOCAL-DUMMY-SEED-CONTRACT', 'validate_training_visual_preview_local_dummy_seed_contract_v1.py'),
+    ('PROJECT-TRAINING-VISUAL-PREVIEW-LOCAL-TIMELINE', 'validate_training_visual_preview_local_timeline_v1.py'),
+    ('PROJECT-GENERIC-ROUTER-TRAINING-DETAIL', 'validate_generic_router_training_detail_v1.py'),
+    ('PROJECT-TRAINING-VISUAL-PREVIEW-LOCAL-DUMMY-SEED-SMOKE-MATRIX', 'validate_training_visual_preview_local_dummy_seed_smoke_matrix_v1.py'),
+    ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT', 'validate_visual_preview_runtime_shell_progress_report_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-5-v56-ROLLUP', 'validate_mega_release_acceleration_5_v56_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,33 @@
+{
+  "version": "training_visual_preview_local_dummy_seed_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED_WIRING_PACK_v56",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v56_MEGA_RELEASE_ACCELERATION_5_TRAINING_VISUAL_PREVIEW_LOCAL_DUMMY_SEED",
+  "mode": "qa_smoke_matrix",
+  "db_writes": 0,
+  "flows": [
+    {"id": "F01", "name": "Open /training-visual-preview", "severity": "P0", "expected": "screen renders without crash"},
+    {"id": "F02", "name": "Seed locale training-alpha-v56 visibile", "severity": "P1", "expected": "seed string mostrato in UI"},
+    {"id": "F03", "name": "Timeline 5-7 step deterministica", "severity": "P0", "expected": "step list len in [5,7] from local helper"},
+    {"id": "F04", "name": "Step next button avanza step_index", "severity": "P1", "expected": "step_index += 1 capped at last"},
+    {"id": "F05", "name": "Reset button riporta step_index a 0", "severity": "P1", "expected": "step_index = 0"},
+    {"id": "F06", "name": "Play/Pause timer cleanup", "severity": "P1", "expected": "timer cleared on unmount and on pause"},
+    {"id": "F07", "name": "Open generic router from training", "severity": "P1", "expected": "navigates to /visual-battle-preview-router?mode=training"},
+    {"id": "F08", "name": "Generic router mode=training detail block", "severity": "P1", "expected": "shows training dummy seed detail and disclaimers"},
+    {"id": "F09", "name": "Missing params no crash on router", "severity": "P1", "expected": "fallback messaging visible"},
+    {"id": "F10", "name": "No claim button anywhere", "severity": "P0", "expected": "no Claim CTA"},
+    {"id": "F11", "name": "No reward granted", "severity": "P0", "expected": "no reward state mutated"},
+    {"id": "F12", "name": "No DB write", "severity": "P0", "expected": "db_writes=0"},
+    {"id": "F13", "name": "No backend fetch", "severity": "P0", "expected": "network idle, only static deeplinks"},
+    {"id": "F14", "name": "No battle_engine call", "severity": "P0", "expected": "battle_engine_runtime_used=false"},
+    {"id": "F15", "name": "Mobile layout / safe area / rotation", "severity": "P2", "expected": "SafeAreaView, no overflow"},
+    {"id": "F16", "name": "Italian text on warnings", "severity": "P3", "expected": "warnings in italian visible"}
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "backend_fetch_present": false,
+    "battle_engine_called": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}
