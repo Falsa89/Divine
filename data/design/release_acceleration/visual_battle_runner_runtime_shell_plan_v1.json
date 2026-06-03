@@ -1,0 +1,48 @@
+{
+  "version": "visual_battle_runner_runtime_shell_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN_AND_FULL_COVERAGE_ROLLUP_SUPER_PACK_v62",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v62_MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN",
+  "design_only": true,
+  "runtime_runner_created": false,
+  "runtime_activation_enabled": false,
+  "battle_engine_runtime_enabled": false,
+  "backend_routes_enabled": false,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "planned_future_runner_route": "/visual-battle-runner-runtime",
+  "current_preview_router": "/visual-battle-preview-router",
+  "source_contract": "visual_battle_runner_payload_contract_v0",
+  "future_contract": "runtime_runner_payload_v1_draft",
+  "supported_modes_future": [
+    "material_raid",
+    "training",
+    "boss",
+    "story",
+    "tower",
+    "event",
+    "arena"
+  ],
+  "guild_war_policy": "autoresolve_with_replay_link_exception",
+  "runtime_shell_components_planned": [
+    "payload_ingestion",
+    "timeline_render_adapter",
+    "replay_adapter",
+    "battle_result_display_adapter",
+    "reward_separation_adapter",
+    "progress_separation_adapter",
+    "rollback_visibility"
+  ],
+  "forbidden_now": [
+    "battle_engine.py changes",
+    "/api/battle/simulate changes",
+    "/api/story/battle changes",
+    "backend route enablement",
+    "DB writes",
+    "reward grant",
+    "inventory mutation",
+    "live claim",
+    "gacha/shop/VIP/BP changes"
+  ]
+}

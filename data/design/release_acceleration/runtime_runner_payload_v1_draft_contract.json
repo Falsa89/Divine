@@ -1,0 +1,26 @@
+{
+  "version": "runtime_runner_payload_v1_draft_contract",
+  "pack": "MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN_AND_FULL_COVERAGE_ROLLUP_SUPER_PACK_v62",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v62_MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN",
+  "design_only": true,
+  "not_consumed_by_runtime": true,
+  "result_authoritative_allowed": false,
+  "battle_engine_result_allowed": false,
+  "reward_grant_allowed": false,
+  "db_writes_allowed": false,
+  "fields": [
+    "payload_version",
+    "mode",
+    "source_route",
+    "battle_seed",
+    "runtime_session_id",
+    "preview_session_id",
+    "timeline_steps",
+    "result_authoritative",
+    "battle_engine_runtime_used",
+    "reward_policy_ref",
+    "rollback_token_ref",
+    "observation_window_ref"
+  ],
+  "notes": "Draft only. Not consumed by any runtime in v62. All allowed flags false."
+}

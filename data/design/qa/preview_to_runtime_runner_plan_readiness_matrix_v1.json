@@ -1,0 +1,174 @@
+{
+  "version": "preview_to_runtime_runner_plan_readiness_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN_AND_FULL_COVERAGE_ROLLUP_SUPER_PACK_v62",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v62_MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN",
+  "mode": "qa_readiness_matrix",
+  "db_writes": 0,
+  "flows": [
+    {
+      "id": "Q01",
+      "name": "Full coverage rollup present",
+      "severity": "P0",
+      "expected": "rollup v1 file exists"
+    },
+    {
+      "id": "Q02",
+      "name": "7 non-Guild War modes preview/local coverage",
+      "severity": "P0",
+      "expected": "tutti i 7 stati noti"
+    },
+    {
+      "id": "Q03",
+      "name": "Guild War exception preserved",
+      "severity": "P0",
+      "expected": "autoresolve+replay invariata"
+    },
+    {
+      "id": "Q04",
+      "name": "Payload v0 present",
+      "severity": "P1",
+      "expected": "visual_battle_runner_payload_contract_v0"
+    },
+    {
+      "id": "Q05",
+      "name": "Router adapter v61 present",
+      "severity": "P1",
+      "expected": "adapter_preview_v61_hardened"
+    },
+    {
+      "id": "Q06",
+      "name": "Runtime gate design present",
+      "severity": "P1",
+      "expected": "design_only_v1"
+    },
+    {
+      "id": "Q07",
+      "name": "Runtime shell plan design-only",
+      "severity": "P0",
+      "expected": "runtime_runner_created=false"
+    },
+    {
+      "id": "Q08",
+      "name": "Transition plan design-only",
+      "severity": "P0",
+      "expected": "activation_now=false"
+    },
+    {
+      "id": "Q09",
+      "name": "Payload v1 draft not consumed",
+      "severity": "P0",
+      "expected": "not_consumed_by_runtime=true"
+    },
+    {
+      "id": "Q10",
+      "name": "Rollback plan design-only",
+      "severity": "P0",
+      "expected": "design_only=true"
+    },
+    {
+      "id": "Q11",
+      "name": "No runtime activation",
+      "severity": "P0",
+      "expected": "runtime_activation_enabled=false"
+    },
+    {
+      "id": "Q12",
+      "name": "No backend route",
+      "severity": "P0",
+      "expected": "backend_routes_enabled=false"
+    },
+    {
+      "id": "Q13",
+      "name": "No DB write",
+      "severity": "P0",
+      "expected": "db_writes=0"
+    },
+    {
+      "id": "Q14",
+      "name": "No reward grant",
+      "severity": "P0",
+      "expected": "reward_grant_enabled=false"
+    },
+    {
+      "id": "Q15",
+      "name": "No battle_engine change",
+      "severity": "P0",
+      "expected": "battle_engine.py invariato"
+    },
+    {
+      "id": "Q16",
+      "name": "No /api/battle/simulate",
+      "severity": "P0",
+      "expected": "invariato"
+    },
+    {
+      "id": "Q17",
+      "name": "No /api/story/battle",
+      "severity": "P0",
+      "expected": "invariato"
+    },
+    {
+      "id": "Q18",
+      "name": "MD5 invariants",
+      "severity": "P0",
+      "expected": "5/5 ufficiali intatti"
+    },
+    {
+      "id": "Q19",
+      "name": "Preferred unchanged guardrails",
+      "severity": "P0",
+      "expected": "3/3 intatti"
+    },
+    {
+      "id": "Q20",
+      "name": "No frontend changes in v62",
+      "severity": "P1",
+      "expected": "router/event/story/arena/boss/tower invariati"
+    },
+    {
+      "id": "Q21",
+      "name": "Per-mode readiness matrix completa",
+      "severity": "P1",
+      "expected": "7 modi con campi attesi"
+    },
+    {
+      "id": "Q22",
+      "name": "Recommended first runtime: material_raid or training",
+      "severity": "P2",
+      "expected": "safe candidates"
+    },
+    {
+      "id": "Q23",
+      "name": "Disallowed first runtime: arena ranked/event currency",
+      "severity": "P2",
+      "expected": "risk gated"
+    },
+    {
+      "id": "Q24",
+      "name": "Mobile/UX no impact",
+      "severity": "P3",
+      "expected": "no UI change"
+    },
+    {
+      "id": "Q25",
+      "name": "Italian docs",
+      "severity": "P3",
+      "expected": "docs in italiano"
+    }
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "backend_fetch_present": false,
+    "battle_engine_called": false,
+    "story_tsx_modified": false,
+    "story_battle_endpoint_called": false,
+    "battle_simulate_endpoint_called": false,
+    "guild_war_policy_regression": false,
+    "runtime_activation_enabled": false,
+    "runtime_runner_created": false,
+    "frontend_runtime_screen_changed": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}

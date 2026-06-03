@@ -1,0 +1,36 @@
+{
+  "version": "preview_to_runtime_transition_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN_AND_FULL_COVERAGE_ROLLUP_SUPER_PACK_v62",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v62_MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN",
+  "design_only": true,
+  "activation_now": false,
+  "sequence": [
+    "preview/local coverage complete",
+    "payload contract v1 approved",
+    "runtime shell skeleton approved",
+    "one-mode sandbox adapter approved",
+    "one-mode backend dry-run approved",
+    "one-mode staging result approved",
+    "reward/claim policy approved",
+    "canary/manual checksum approved"
+  ],
+  "recommended_first_runtime_candidate": [
+    "material_raid",
+    "training"
+  ],
+  "disallowed_first_runtime_candidate": [
+    "arena ranked",
+    "event currency",
+    "gacha/shop/VIP/BP"
+  ],
+  "stop_conditions": [
+    "md5 invariant drift",
+    "runtime route enabled without approval",
+    "DB write detected",
+    "reward grant detected",
+    "battle_engine change detected",
+    "missing rollback",
+    "missing smoke",
+    "validator weakening"
+  ]
+}

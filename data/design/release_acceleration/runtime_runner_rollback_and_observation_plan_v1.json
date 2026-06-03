@@ -1,0 +1,24 @@
+{
+  "version": "runtime_runner_rollback_and_observation_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN_AND_FULL_COVERAGE_ROLLUP_SUPER_PACK_v62",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v62_MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN",
+  "design_only": true,
+  "rollback_required": true,
+  "observation_window_required": true,
+  "suggested_window_minutes": 30,
+  "escalation_levels": [
+    "P0",
+    "P1",
+    "P2",
+    "P3"
+  ],
+  "stop_on": [
+    "DB write outside allowlist",
+    "reward duplication",
+    "battle_engine exception",
+    "client crash rate spike",
+    "mismatch preview/result",
+    "missing idempotency key",
+    "unauthorized route exposure"
+  ]
+}
