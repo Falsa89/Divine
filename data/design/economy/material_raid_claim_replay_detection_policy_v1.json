@@ -1,0 +1,41 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "claim_button_enabled": false,
+  "db_writes": 0,
+  "design_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT_SUPER_PACK_v63",
+  "policy_version": "material_raid_claim_replay_detection_policy_v1",
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v63_MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "replay_decision_table": {
+    "diff_key_same_payload_short_window": "duplicate_conflict",
+    "nonce_reuse": "rejected",
+    "same_key_diff_payload": "duplicate_conflict",
+    "same_key_same_payload": "duplicate_same_payload"
+  },
+  "replay_detection_required": true,
+  "replay_signals": [
+    "same_idempotency_key_different_payload_hash",
+    "same_payload_hash_different_idempotency_key",
+    "same_user_same_run_within_window",
+    "nonce_reuse_detected",
+    "preview_session_id_mismatch"
+  ],
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

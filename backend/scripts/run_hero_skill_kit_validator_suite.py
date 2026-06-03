@@ -2085,6 +2085,43 @@ OPTIONAL = [
     ('PROJECT-RUNTIME-RUNNER-PAYLOAD-v1-DRAFT-AND-ROLLBACK-PLAN', 'validate_runtime_runner_payload_v1_draft_and_rollback_plan_v1.py'),
     ('PROJECT-PREVIEW-TO-RUNTIME-RUNNER-PLAN-READINESS-MATRIX', 'validate_preview_to_runtime_runner_plan_readiness_matrix_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-11-v62-ROLLUP', 'validate_mega_release_acceleration_11_v62_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT_SUPER_PACK_v63
+    # PUBLIC_SYNC_TAG_v63_MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT
+    # ------------------------------------------------------------------------
+    # DESIGN-ONLY pack. Affronta la lane gated rimasta da v62 (Material Raid
+    # claim safety) come pura blueprint preview/design/staging:
+    #   1) material_raid_claim_safety_v2_preview_contract       (TRACK A)
+    #   2) material_raid_claim_idempotency_and_replay_policy    (TRACK B)
+    #   3) material_raid_staging_db_blueprint_and_ledger_draft  (TRACK C)
+    #   4) material_raid_rollback_manual_approval_canary_scope  (TRACK D)
+    #   5) material_raid_dry_run_request_response_contract_v64  (TRACK E)
+    #   6) material_raid_claim_safety_staging_blueprint_qa      (TRACK F)
+    # TRACK G: 7 OPTIONAL tuples + tag + 7 docs (372-378) + 7 markers + rollup.
+    # ESCLUSI: live_claim, reward_grant, db_writes, backend_route_enablement.
+    #
+    # State transitions: NONE. v63 e' design-only puro.
+    # Nessun .tsx frontend modificato. Nessuna route backend aggiunta o
+    # modificata. backend/routes/material_raid_preview.py unchanged. db_writes=0.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v63: 5 MD5-locked files unchanged + 4 preferred-
+    # unchanged guardrails (server.py, combat.tsx, story.tsx,
+    # material_raid_preview.py), Guild War unchanged, /api/* untouched,
+    # no MONGO_URL/pymongo/motor/redis, no live reward/claim, no inventory/
+    # wallet/premium mutation, runtime_runner_created=false,
+    # runtime_activation_enabled=false, manual_approval_required=true,
+    # future_live_pack_minimum=v65, character_bible_changed=false,
+    # final_numbers_changed=false. No fake PASS. No validator weakening.
+    # No tuple duplicate. material_raid_live_claim=false,
+    # material_raid_reward_grant=false, material_raid_db_writes=0.
+    # ========================================================================
+    ('PROJECT-MATERIAL-RAID-CLAIM-SAFETY-v2-PREVIEW-CONTRACT', 'validate_material_raid_claim_safety_v2_preview_contract.py'),
+    ('PROJECT-MATERIAL-RAID-IDEMPOTENCY-AND-REPLAY-POLICY', 'validate_material_raid_idempotency_and_replay_policy_v1.py'),
+    ('PROJECT-MATERIAL-RAID-STAGING-BLUEPRINT-AND-LEDGER-DRAFT', 'validate_material_raid_staging_blueprint_and_ledger_v1.py'),
+    ('PROJECT-MATERIAL-RAID-ROLLBACK-MANUAL-APPROVAL-CANARY-SCOPE', 'validate_material_raid_rollback_manual_approval_canary_v1.py'),
+    ('PROJECT-MATERIAL-RAID-DRY-RUN-REQUEST-RESPONSE-CONTRACT', 'validate_material_raid_dry_run_request_response_contract_v1.py'),
+    ('PROJECT-MATERIAL-RAID-CLAIM-SAFETY-STAGING-BLUEPRINT-READINESS', 'validate_material_raid_claim_safety_staging_blueprint_readiness_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-12-v63-ROLLUP', 'validate_mega_release_acceleration_12_v63_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

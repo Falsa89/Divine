@@ -1,0 +1,59 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "canary_limits": {
+    "material_raid_only": true,
+    "max_claims_per_user": 1,
+    "max_total_claims_first_wave": 10,
+    "max_users_first_wave_max": 5,
+    "max_users_first_wave_min": 1,
+    "premium_currency_allowed": false
+  },
+  "canary_user_allowlist_required": true,
+  "claim_button_enabled": false,
+  "db_writes": 0,
+  "design_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "matrix_version": "material_raid_claim_canary_scope_matrix_v1",
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT_SUPER_PACK_v63",
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v63_MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "validator_weakening": false,
+  "wallet_mutation": false,
+  "waves": [
+    {
+      "claims_per_user": 1,
+      "pack": "v65",
+      "total_max": 10,
+      "users": "1..5",
+      "wave": 1
+    },
+    {
+      "claims_per_user": 1,
+      "pack": "v65+",
+      "total_max": 40,
+      "users": "6..20",
+      "wave": 2
+    },
+    {
+      "claims_per_user": 1,
+      "pack": "v65++",
+      "total_max": 200,
+      "users": "21..100",
+      "wave": 3
+    }
+  ]
+}

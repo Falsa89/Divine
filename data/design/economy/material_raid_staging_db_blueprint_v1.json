@@ -1,0 +1,97 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "blueprint_only": true,
+  "blueprint_version": "material_raid_staging_db_blueprint_v1",
+  "claim_button_enabled": false,
+  "collections_created": false,
+  "db_writes": 0,
+  "design_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "indexes_created": false,
+  "inventory_mutation": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "migration_applied": false,
+  "migration_created": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT_SUPER_PACK_v63",
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "proposed_collections": [
+    "material_raid_claim_ledger_staging",
+    "material_raid_claim_idempotency_keys_staging",
+    "material_raid_claim_audit_events_staging"
+  ],
+  "proposed_indexes": {
+    "material_raid_claim_audit_events_staging": [
+      {
+        "fields": [
+          "created_at"
+        ]
+      },
+      {
+        "fields": [
+          "idempotency_key"
+        ]
+      },
+      {
+        "fields": [
+          "event_type"
+        ]
+      }
+    ],
+    "material_raid_claim_idempotency_keys_staging": [
+      {
+        "fields": [
+          "idempotency_key"
+        ],
+        "unique": true
+      },
+      {
+        "fields": [
+          "user_id",
+          "server_id"
+        ]
+      },
+      {
+        "fields": [
+          "ttl_at"
+        ],
+        "ttl": true
+      }
+    ],
+    "material_raid_claim_ledger_staging": [
+      {
+        "fields": [
+          "user_id",
+          "server_id",
+          "material_raid_run_id"
+        ],
+        "unique": true
+      },
+      {
+        "fields": [
+          "idempotency_key"
+        ],
+        "unique": true
+      },
+      {
+        "fields": [
+          "created_at"
+        ]
+      }
+    ]
+  },
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v63_MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

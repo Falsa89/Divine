@@ -1,0 +1,113 @@
+{
+  "backend_route_enabled": false,
+  "battle_engine_runtime_used": false,
+  "claim_button_enabled": false,
+  "collection_target": "material_raid_claim_ledger_staging",
+  "db_writes": 0,
+  "design_only": true,
+  "draft_only": true,
+  "fake_pass": false,
+  "fields": {
+    "approval_phrase_hash": {
+      "required": false,
+      "type": "string"
+    },
+    "canary_wave_ref": {
+      "required": false,
+      "type": "string"
+    },
+    "claim_attempt_nonce": {
+      "required": true,
+      "type": "string"
+    },
+    "compensation_state": {
+      "default": "none",
+      "type": "enum",
+      "values": [
+        "none",
+        "pending",
+        "applied"
+      ]
+    },
+    "created_at": {
+      "required": true,
+      "type": "datetime"
+    },
+    "idempotency_key": {
+      "required": true,
+      "type": "string",
+      "unique": true
+    },
+    "material_raid_run_id": {
+      "required": true,
+      "type": "string"
+    },
+    "mode_id": {
+      "required": true,
+      "type": "string"
+    },
+    "payload_hash": {
+      "required": true,
+      "type": "string"
+    },
+    "preview_session_id": {
+      "required": true,
+      "type": "string"
+    },
+    "reward_hash": {
+      "required": true,
+      "type": "string"
+    },
+    "reward_table_version": {
+      "required": true,
+      "type": "string"
+    },
+    "rollback_token": {
+      "required": false,
+      "type": "string"
+    },
+    "server_id": {
+      "required": true,
+      "type": "string"
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "preview_only",
+        "staged_pending",
+        "staged_committed",
+        "duplicate_same_payload",
+        "duplicate_conflict",
+        "rollback_required",
+        "rejected"
+      ]
+    },
+    "updated_at": {
+      "required": true,
+      "type": "datetime"
+    },
+    "user_id": {
+      "required": true,
+      "type": "string"
+    }
+  },
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "live_claim_enabled": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "pack": "MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT_SUPER_PACK_v63",
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v63_MEGA_RELEASE_ACCELERATION_12_MATERIAL_RAID_CLAIM_SAFETY_AND_STAGING_BLUEPRINT",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "schema_version": "material_raid_claim_ledger_schema_draft_v1",
+  "validator_weakening": false,
+  "wallet_mutation": false
+}
