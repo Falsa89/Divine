@@ -2052,6 +2052,39 @@ OPTIONAL = [
     ('PROJECT-STORY-TIMELINE-ROUTER-HARDENING-RUNTIME-GATE-SMOKE-MATRIX', 'validate_story_timeline_router_hardening_runtime_gate_smoke_matrix_v1.py'),
     ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v6', 'validate_visual_preview_runtime_shell_progress_report_v6.py'),
     ('MEGA-RELEASE-ACCELERATION-10-v61-ROLLUP', 'validate_mega_release_acceleration_10_v61_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN_AND_FULL_COVERAGE_ROLLUP_SUPER_PACK_v62
+    # PUBLIC_SYNC_TAG_v62_MEGA_RELEASE_ACCELERATION_11_PREVIEW_TO_RUNTIME_RUNNER_PLAN
+    # ------------------------------------------------------------------------
+    # DESIGN-ONLY pack. Accorpa 6 lane di pianificazione transizione preview->runtime:
+    #   1) visual_battle_runner_runtime_shell_plan        (TRACK A)
+    #   2) preview_to_runtime_transition_plan             (TRACK B)
+    #   3) visual_preview_full_coverage_rollup            (TRACK C)
+    #   4) per_mode_runtime_readiness_matrix              (TRACK D)
+    #   5) runtime_runner_payload_v1_draft_and_rollback   (TRACK E)
+    #   6) preview_to_runtime_runner_plan_readiness_matrix(TRACK F)
+    # TRACK G: 7 OPTIONAL tuples count=1 + tag + 7 docs (365-371) + rollup marker.
+    # ESCLUSA (gated): material_raid_claim_safety_hardening_v2_preview_only (-> v63).
+    #
+    # State transitions: NONE. v62 e' design-only puro.
+    # Nessun .tsx frontend modificato. Nessun /api/* aggiunto. db_writes=0.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v62: 5 MD5-locked files unchanged, 3 preferred-
+    # unchanged guardrails intact (server.py, combat.tsx, story.tsx), Guild War
+    # unchanged, /api/* untouched, no MONGO_URL/pymongo/motor/redis, no live
+    # reward/claim, battle_engine_runtime_used=false, backend_used=false,
+    # runtime_runner_created=false, runtime_activation_enabled=false,
+    # manual_approval_required=true, character_bible_changed=false,
+    # final_numbers_changed=false. No fake PASS. No validator weakening.
+    # No tuple duplicate. visual_preview_local_layer_complete=true.
+    # ========================================================================
+    ('PROJECT-VISUAL-BATTLE-RUNNER-RUNTIME-SHELL-PLAN', 'validate_visual_battle_runner_runtime_shell_plan_v1.py'),
+    ('PROJECT-PREVIEW-TO-RUNTIME-TRANSITION-PLAN', 'validate_preview_to_runtime_transition_plan_v1.py'),
+    ('PROJECT-VISUAL-PREVIEW-FULL-COVERAGE-ROLLUP', 'validate_visual_preview_full_coverage_rollup_v1.py'),
+    ('PROJECT-PER-MODE-RUNTIME-READINESS-MATRIX', 'validate_per_mode_runtime_readiness_matrix_v1.py'),
+    ('PROJECT-RUNTIME-RUNNER-PAYLOAD-v1-DRAFT-AND-ROLLBACK-PLAN', 'validate_runtime_runner_payload_v1_draft_and_rollback_plan_v1.py'),
+    ('PROJECT-PREVIEW-TO-RUNTIME-RUNNER-PLAN-READINESS-MATRIX', 'validate_preview_to_runtime_runner_plan_readiness_matrix_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-11-v62-ROLLUP', 'validate_mega_release_acceleration_11_v62_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
