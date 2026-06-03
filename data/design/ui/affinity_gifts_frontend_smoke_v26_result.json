@@ -1,12 +1,12 @@
 {
   "task_origin": "AF2-N-V26-FRONTEND-SMOKE",
-  "timestamp_utc": "2026-06-03T15:46:55.248220+00:00",
+  "timestamp_utc": "2026-06-03T16:04:12.978205+00:00",
   "mode": "READ_ONLY",
   "file_present": true,
   "http_checks": {
-    "frontend_preview_route": -1,
+    "frontend_preview_route": 200,
     "backend_canary_status": 200,
-    "frontend_reachable": false,
+    "frontend_reachable": true,
     "backend_canary_ok": true
   },
   "static_checks": {
@@ -20,5 +20,5 @@
     "a11y_hits": 16,
     "a11y_present": true
   },
-  "verdict": "FAIL"
+  "verdict": "PASS"
 }
