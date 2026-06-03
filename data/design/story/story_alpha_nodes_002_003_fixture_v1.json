@@ -1,0 +1,128 @@
+{
+  "authoritative_runtime": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "fixture_version": "story_alpha_nodes_002_003_fixture_v1",
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "nodes": [
+    {
+      "background_hint": "mountain_pass",
+      "battle_seed": "seed_alpha_002",
+      "chapter_id": "chapter_alpha",
+      "encounter_display_name": "Capitolo I \u00b7 Crepuscolo Spezzato",
+      "encounter_id": "enc_alpha_002",
+      "enemy_family_preview": "mountain_brigand",
+      "music_hint": "theme_alpha_tension",
+      "node_id": "story_alpha_node_002",
+      "recommended_power_preview": 1450,
+      "steps": [
+        {
+          "delay_ms": 400,
+          "id": "st1",
+          "kind": "narration"
+        },
+        {
+          "delay_ms": 600,
+          "id": "st2",
+          "kind": "choice_hint"
+        },
+        {
+          "delay_ms": 700,
+          "id": "st3",
+          "kind": "mock_skill_cast"
+        },
+        {
+          "delay_ms": 600,
+          "id": "st4",
+          "kind": "damage_tick"
+        },
+        {
+          "delay_ms": 700,
+          "id": "st5",
+          "kind": "enemy_phase"
+        },
+        {
+          "delay_ms": 500,
+          "id": "st6",
+          "kind": "result_preview"
+        }
+      ],
+      "team_power_preview": 1500,
+      "tutorial_hint": "I duplicati con lo stesso payload restituiscono il preview esistente"
+    },
+    {
+      "background_hint": "crypt_torchlight",
+      "battle_seed": "seed_alpha_003",
+      "chapter_id": "chapter_alpha",
+      "encounter_display_name": "Capitolo I \u00b7 Cripta del Sigillo",
+      "encounter_id": "enc_alpha_003",
+      "enemy_family_preview": "crypt_warden",
+      "music_hint": "theme_alpha_climax",
+      "node_id": "story_alpha_node_003",
+      "recommended_power_preview": 1700,
+      "steps": [
+        {
+          "delay_ms": 400,
+          "id": "st1",
+          "kind": "narration"
+        },
+        {
+          "delay_ms": 600,
+          "id": "st2",
+          "kind": "choice_hint"
+        },
+        {
+          "delay_ms": 700,
+          "id": "st3",
+          "kind": "mock_skill_cast"
+        },
+        {
+          "delay_ms": 600,
+          "id": "st4",
+          "kind": "damage_tick"
+        },
+        {
+          "delay_ms": 700,
+          "id": "st5",
+          "kind": "enemy_phase"
+        },
+        {
+          "delay_ms": 500,
+          "id": "st6",
+          "kind": "result_preview"
+        },
+        {
+          "delay_ms": 400,
+          "id": "st7",
+          "kind": "narration"
+        }
+      ],
+      "team_power_preview": 1750,
+      "tutorial_hint": "Replay con payload differente viene rifiutato come duplicate_conflict"
+    }
+  ],
+  "not_consumed_by_runtime": true,
+  "pack": "MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_AND_IDEMPOTENCY_SIMULATION_PACK_v67",
+  "permanent_progress_enabled": false,
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "progress_preview_not_persisted": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v67_MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_IDEMPOTENCY",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "reward_preview_not_granted": true,
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

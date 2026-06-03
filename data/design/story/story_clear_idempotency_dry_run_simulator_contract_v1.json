@@ -1,0 +1,57 @@
+{
+  "authoritative_runtime": false,
+  "battle_engine_runtime_used": false,
+  "contract_version": "story_clear_idempotency_dry_run_simulator_contract_v1",
+  "db_writes": 0,
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "forbidden_env_reads": [
+    "MONGO_URL"
+  ],
+  "forbidden_imports": [
+    "pymongo",
+    "motor",
+    "redis",
+    "server",
+    "battle_engine"
+  ],
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "mongo_url_used": false,
+  "motor_used": false,
+  "not_consumed_by_runtime": true,
+  "output_evidence_path": "data/design/story/results/story_clear_idempotency_dry_run_simulator_result_v1.json",
+  "pack": "MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_AND_IDEMPOTENCY_SIMULATION_PACK_v67",
+  "permanent_progress_enabled": false,
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "progress_preview_not_persisted": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v67_MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_IDEMPOTENCY",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "result_invariants": {
+    "db_writes": 0,
+    "live_apply_allowed": false,
+    "permanent_progress_written": false,
+    "reward_grant_executed": false
+  },
+  "reward_grant_enabled": false,
+  "reward_preview_not_granted": true,
+  "simulated_decisions": [
+    "first_clear_would_stage",
+    "duplicate_same_payload_would_return_existing",
+    "duplicate_conflict_would_reject",
+    "missing_idempotency_key_would_reject",
+    "result_hash_mismatch_would_reject",
+    "rollback_preview_required"
+  ],
+  "simulator_script": "backend/scripts/story_clear_idempotency_dry_run_simulator_v1.py",
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

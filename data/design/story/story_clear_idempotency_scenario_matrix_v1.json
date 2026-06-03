@@ -1,0 +1,164 @@
+{
+  "authoritative_runtime": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "descriptive_only_signals": {
+    "observation_threshold_critical_simulated": false,
+    "observation_threshold_warning_simulated": true,
+    "over_chapter_sequence_attempt": "enforced_in_future_runtime_layer_not_in_dry_run",
+    "rollback_token_preview": "returned_on_every_successful_stage"
+  },
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "matrix_version": "story_clear_idempotency_scenario_matrix_v1",
+  "mongo_url_used": false,
+  "motor_used": false,
+  "not_consumed_by_runtime": true,
+  "pack": "MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_AND_IDEMPOTENCY_SIMULATION_PACK_v67",
+  "permanent_progress_enabled": false,
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "progress_preview_not_persisted": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v67_MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_IDEMPOTENCY",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "reward_preview_not_granted": true,
+  "scenarios": [
+    {
+      "expected_decision": "first_clear_would_stage",
+      "id": "S01",
+      "name": "first_clear_node_001",
+      "request": {
+        "attempt_nonce": "n001",
+        "chapter_id": "chapter_alpha",
+        "idempotency_key": "__AUTO__",
+        "node_id": "story_alpha_node_001",
+        "payload_hash": "ph_001",
+        "preview_session_id": "sess_001",
+        "result_hash": "rh_001",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "first_clear_would_stage",
+      "id": "S02",
+      "name": "first_clear_node_002",
+      "request": {
+        "attempt_nonce": "n002",
+        "chapter_id": "chapter_alpha",
+        "idempotency_key": "__AUTO__",
+        "node_id": "story_alpha_node_002",
+        "payload_hash": "ph_002",
+        "preview_session_id": "sess_001",
+        "result_hash": "rh_002",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "first_clear_would_stage",
+      "id": "S03",
+      "name": "first_clear_node_003",
+      "request": {
+        "attempt_nonce": "n003",
+        "chapter_id": "chapter_alpha",
+        "idempotency_key": "__AUTO__",
+        "node_id": "story_alpha_node_003",
+        "payload_hash": "ph_003",
+        "preview_session_id": "sess_001",
+        "result_hash": "rh_003",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "duplicate_same_payload_would_return_existing",
+      "id": "S04",
+      "name": "duplicate_same_payload_node_001",
+      "request": {
+        "attempt_nonce": "n001",
+        "chapter_id": "chapter_alpha",
+        "idempotency_key": "__AUTO__",
+        "node_id": "story_alpha_node_001",
+        "payload_hash": "ph_001",
+        "preview_session_id": "sess_001",
+        "result_hash": "rh_001",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "duplicate_conflict_would_reject",
+      "id": "S05",
+      "name": "duplicate_conflict_node_002",
+      "request": {
+        "attempt_nonce": "n002",
+        "chapter_id": "chapter_alpha",
+        "idempotency_key": "__AUTO__",
+        "node_id": "story_alpha_node_002",
+        "payload_hash": "ph_DIFFERENT",
+        "preview_session_id": "sess_001",
+        "result_hash": "rh_002",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "missing_idempotency_key_would_reject",
+      "id": "S06",
+      "name": "missing_idempotency_key_node_003",
+      "request": {
+        "attempt_nonce": "n003b",
+        "chapter_id": "chapter_alpha",
+        "idempotency_key": null,
+        "node_id": "story_alpha_node_003",
+        "payload_hash": "ph_006",
+        "preview_session_id": "sess_001",
+        "result_hash": "rh_006",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    },
+    {
+      "expected_decision": "result_hash_mismatch_would_reject",
+      "id": "S07",
+      "name": "result_hash_mismatch_node_001",
+      "request": {
+        "attempt_nonce": "n001",
+        "chapter_id": "chapter_alpha",
+        "idempotency_key": "__AUTO__",
+        "node_id": "story_alpha_node_001",
+        "payload_hash": "ph_001",
+        "preview_session_id": "sess_001",
+        "result_hash": "rh_DIFFERENT",
+        "server_id": "s1",
+        "user_id": "test_user_001"
+      }
+    }
+  ],
+  "scenarios_descriptive_categories": [
+    "first clear node 001",
+    "first clear node 002",
+    "first clear node 003",
+    "duplicate same payload",
+    "duplicate conflicting payload",
+    "missing idempotency key",
+    "result hash mismatch",
+    "over chapter sequence attempt",
+    "rollback token preview",
+    "observation warning threshold",
+    "observation critical threshold"
+  ],
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

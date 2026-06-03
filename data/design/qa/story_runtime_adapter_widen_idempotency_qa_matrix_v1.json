@@ -1,0 +1,171 @@
+{
+  "authoritative_runtime": false,
+  "battle_engine_runtime_used": false,
+  "checks": [
+    {
+      "id": "Q01",
+      "name": "v66_safe_state_present",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q02",
+      "name": "node_002_fixture_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q03",
+      "name": "node_003_fixture_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q04",
+      "name": "payload_draft_instances_exist",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q05",
+      "name": "screen_supports_nodes_1_to_3",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q06",
+      "name": "no_backend_fetch",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q07",
+      "name": "no_import_from_story_tsx",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q08",
+      "name": "no_import_from_combat_tsx",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q09",
+      "name": "no_battle_engine_reference",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q10",
+      "name": "no_api_story_battle",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q11",
+      "name": "no_api_battle_simulate",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q12",
+      "name": "no_reward_grant",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q13",
+      "name": "no_permanent_progress",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q14",
+      "name": "idempotency_simulator_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q15",
+      "name": "simulator_imports_no_db_libs",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q16",
+      "name": "scenario_matrix_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q17",
+      "name": "replay_result_exists",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q18",
+      "name": "rollback_simulation_exists",
+      "severity": "P1",
+      "status": "pass"
+    },
+    {
+      "id": "Q19",
+      "name": "observation_result_exists",
+      "severity": "P1",
+      "status": "pass"
+    },
+    {
+      "id": "Q20",
+      "name": "md5_invariants_intact",
+      "severity": "P0",
+      "status": "pass"
+    },
+    {
+      "id": "Q21",
+      "name": "mobile_layout_rotation_ok",
+      "severity": "P2",
+      "status": "pass"
+    },
+    {
+      "id": "Q22",
+      "name": "typescript_check_pass",
+      "severity": "P0",
+      "status": "pass"
+    }
+  ],
+  "db_writes": 0,
+  "design_only": true,
+  "dry_run_only": true,
+  "fake_pass": false,
+  "filesystem_writes": 0,
+  "inventory_mutation": false,
+  "live_apply_allowed": false,
+  "manual_approval_required": true,
+  "materials_granted": false,
+  "matrix_version": "story_runtime_adapter_widen_idempotency_qa_matrix_v1",
+  "mongo_url_used": false,
+  "motor_used": false,
+  "not_consumed_by_runtime": true,
+  "pack": "MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_AND_IDEMPOTENCY_SIMULATION_PACK_v67",
+  "permanent_progress_enabled": false,
+  "premium_users_gems_mutation": false,
+  "preview_only": true,
+  "progress_preview_not_persisted": true,
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v67_MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_IDEMPOTENCY",
+  "pymongo_used": false,
+  "real_db_writes": 0,
+  "redis_used": false,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "reward_preview_not_granted": true,
+  "severity_summary": {
+    "P0": 18,
+    "P1": 2,
+    "P2": 1,
+    "P3": 0
+  },
+  "validator_weakening": false,
+  "wallet_mutation": false
+}

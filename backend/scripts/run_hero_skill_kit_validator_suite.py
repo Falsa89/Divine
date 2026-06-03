@@ -2243,6 +2243,42 @@ OPTIONAL = [
     ('PROJECT-STORY-ANTI-DOUBLE-CLEAR-IDEMPOTENCY-DESIGN', 'validate_story_anti_double_clear_idempotency_design_v1.py'),
     ('PROJECT-STORY-RUNTIME-ADAPTER-FIRST-NODE-ALPHA-QA-AND-PROGRESS-v10', 'validate_story_runtime_adapter_first_node_alpha_qa_and_progress_v10_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-15-v66-ROLLUP', 'validate_mega_release_acceleration_15_v66_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_AND_IDEMPOTENCY_SIMULATION_PACK_v67
+    # PUBLIC_SYNC_TAG_v67_MEGA_RELEASE_ACCELERATION_16_STORY_RUNTIME_ADAPTER_WIDEN_IDEMPOTENCY
+    # ------------------------------------------------------------------------
+    # PREVIEW/ALPHA pack. Estende l'adapter Story da 1 a 3 nodi alpha e
+    # implementa il simulator in-memory dell'idempotency design v66:
+    #   1) story_alpha_nodes_002_003_fixture_and_payload          (TRACK A)
+    #   2) story_runtime_preview_widening_screen_patch            (TRACK B)
+    #   3) story_clear_idempotency_dry_run_simulator              (TRACK C)
+    #   4) story_clear_replay_and_ledger_dry_run_evidence         (TRACK D)
+    #   5) story_clear_rollback_and_observation_simulation        (TRACK E)
+    #   6) story_runtime_adapter_widen_idempotency_qa_and_v11     (TRACK F)
+    # TRACK G: 7 OPTIONAL tuples + tag + 7 docs (399-405) + 6 markers + rollup.
+    #
+    # Screen patched (still DEEPLINK-ONLY):
+    #   frontend/app/story-first-node-runtime-preview.tsx
+    # Supporta nodi 1-3 via query param ?node_id=... (fallback node_001).
+    # Italian UI, no /api calls, no Reanimated/AsyncStorage,
+    # no import from story.tsx/combat.tsx/battle_engine.
+    #
+    # Simulator: Python puro, AST-checked, no pymongo/motor/redis/MONGO_URL,
+    # no server/battle_engine imports. Evidence under
+    #   data/design/story/results/story_clear_idempotency_dry_run_simulator_result_v1.json
+    # ------------------------------------------------------------------------
+    # Invariants: 5 MD5-locked unchanged + 4 preferred-unchanged guardrails.
+    # No DB writes, no reward grant, no permanent progress, no live claim,
+    # no battle_engine_runtime, runtime_runner_created=false,
+    # story_runtime_authoritative=false. No fake PASS. No validator weakening.
+    # ========================================================================
+    ('PROJECT-STORY-ALPHA-NODES-002-003-PAYLOAD', 'validate_story_alpha_nodes_002_003_payload_v1.py'),
+    ('PROJECT-STORY-RUNTIME-PREVIEW-WIDENING', 'validate_story_runtime_preview_widening_v1.py'),
+    ('PROJECT-STORY-CLEAR-IDEMPOTENCY-SIMULATOR', 'validate_story_clear_idempotency_simulator_v1.py'),
+    ('PROJECT-STORY-CLEAR-REPLAY-LEDGER-DRY-RUN', 'validate_story_clear_replay_ledger_dry_run_v1.py'),
+    ('PROJECT-STORY-CLEAR-ROLLBACK-OBSERVATION', 'validate_story_clear_rollback_observation_v1.py'),
+    ('PROJECT-STORY-RUNTIME-ADAPTER-WIDEN-IDEMPOTENCY-QA', 'validate_story_runtime_adapter_widen_idempotency_qa_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-16-v67-ROLLUP', 'validate_mega_release_acceleration_16_v67_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
