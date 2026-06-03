@@ -93,7 +93,7 @@ export default function VisualBattlePreviewRouterScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerCard}>
           <Text style={styles.title}>Visual Battle Preview Router</Text>
-          <Text style={styles.subtitle}>v55+v58 · deeplink-only · shell preview multi-mode (story/tower/event/arena)</Text>
+          <Text style={styles.subtitle}>v55+v58+v60 · deeplink-only · adapter preview · multi-mode (story/tower/event/arena/boss/training)</Text>
           <View style={styles.warningBox}>
             <Text style={styles.warningText}>Preview visuale non autoritativa.</Text>
             <Text style={styles.warningText}>Nessun reward verrà assegnato.</Text>
@@ -137,6 +137,45 @@ export default function VisualBattlePreviewRouterScreen() {
             Layout placeholder: nessun asset reale, nessuna chiamata backend.
           </Text>
         </View>
+
+        {mode !== 'unknown' && seed ? (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Payload Contract v0 Adapter Preview</Text>
+            <Text style={styles.line}>mode: {mode}</Text>
+            {sourceRoute ? <Text style={styles.line}>source_route: {sourceRoute}</Text> : null}
+            <Text style={styles.line}>battle_seed_preview: {seed}</Text>
+            {teamPower ? <Text style={styles.line}>team_power: {teamPower}</Text> : null}
+            {recommendedPower ? (
+              <Text style={styles.line}>recommended_power: {recommendedPower}</Text>
+            ) : null}
+            {enemyFamily ? (
+              <Text style={styles.line}>enemy_family_preview: {enemyFamily}</Text>
+            ) : null}
+            {asString(raw.background_hint) ? (
+              <Text style={styles.line}>
+                background_hint: {asString(raw.background_hint)}
+              </Text>
+            ) : null}
+            {asString(raw.music_hint) ? (
+              <Text style={styles.line}>music_hint: {asString(raw.music_hint)}</Text>
+            ) : null}
+            {asString(raw.tutorial_hint) ? (
+              <Text style={styles.line}>
+                tutorial_hint: {asString(raw.tutorial_hint)}
+              </Text>
+            ) : null}
+            <Text style={styles.line}>result_authoritative: false</Text>
+            <Text style={styles.line}>battle_engine_runtime_used: false</Text>
+            <Text style={styles.line}>db_writes: 0</Text>
+            <Text style={styles.line}>reward_grant_enabled: false</Text>
+            <Text style={styles.line}>reward_claim_enabled: false</Text>
+            <Text style={styles.helper}>
+              Adapter preview-only, design-only. Nessun runner runtime creato.
+              Nessuna chiamata backend o battle_engine. Conforme al
+              visual_battle_runner_payload_contract_v0.
+            </Text>
+          </View>
+        ) : null}
 
         {mode === 'training' ? (
           <View style={styles.card}>

@@ -1,0 +1,189 @@
+{
+  "version": "router_adapter_event_arena_local_timeline_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH_PACK_v60",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v60_MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH",
+  "mode": "qa_smoke_matrix",
+  "db_writes": 0,
+  "flows": [
+    {
+      "id": "F01",
+      "name": "Generic router: payload adapter block visibile con mode+seed",
+      "severity": "P0",
+      "expected": "blocco adapter mostrato"
+    },
+    {
+      "id": "F02",
+      "name": "Generic router no params",
+      "severity": "P0",
+      "expected": "no crash, helper visibile"
+    },
+    {
+      "id": "F03",
+      "name": "Generic router con payload v0-like params",
+      "severity": "P1",
+      "expected": "tutti i campi mostrati"
+    },
+    {
+      "id": "F04",
+      "name": "Event /event-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, fallback timeline"
+    },
+    {
+      "id": "F05",
+      "name": "Event /event-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "timeline mostrata"
+    },
+    {
+      "id": "F06",
+      "name": "Event timeline 5-7 step deterministica",
+      "severity": "P0",
+      "expected": "numero step in [5,7]"
+    },
+    {
+      "id": "F07",
+      "name": "Event step next/reset",
+      "severity": "P1",
+      "expected": "stato avanza/torna a 0"
+    },
+    {
+      "id": "F08",
+      "name": "Event play/pause cleanup timer",
+      "severity": "P1",
+      "expected": "no timer leak su unmount"
+    },
+    {
+      "id": "F09",
+      "name": "Arena /arena-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, fallback timeline"
+    },
+    {
+      "id": "F10",
+      "name": "Arena /arena-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "timeline mostrata"
+    },
+    {
+      "id": "F11",
+      "name": "Arena timeline 5-7 step deterministica",
+      "severity": "P0",
+      "expected": "numero step in [5,7]"
+    },
+    {
+      "id": "F12",
+      "name": "Arena step next/reset",
+      "severity": "P1",
+      "expected": "stato avanza/torna a 0"
+    },
+    {
+      "id": "F13",
+      "name": "Arena play/pause cleanup timer",
+      "severity": "P1",
+      "expected": "no timer leak su unmount"
+    },
+    {
+      "id": "F14",
+      "name": "No regressione Material Raid",
+      "severity": "P0",
+      "expected": "alpha_loop_closed_v53 invariato"
+    },
+    {
+      "id": "F15",
+      "name": "No regressione Training",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v56 invariato"
+    },
+    {
+      "id": "F16",
+      "name": "No regressione Boss",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v59 invariato"
+    },
+    {
+      "id": "F17",
+      "name": "No regressione Story",
+      "severity": "P0",
+      "expected": "preview_shell_v58 invariato"
+    },
+    {
+      "id": "F18",
+      "name": "No regressione Tower",
+      "severity": "P0",
+      "expected": "local_dummy_seed_wired_v59 invariato"
+    },
+    {
+      "id": "F19",
+      "name": "No claim button event/arena",
+      "severity": "P0",
+      "expected": "no Claim CTA"
+    },
+    {
+      "id": "F20",
+      "name": "No reward grant event/arena",
+      "severity": "P0",
+      "expected": "no reward state"
+    },
+    {
+      "id": "F21",
+      "name": "No DB write",
+      "severity": "P0",
+      "expected": "db_writes=0"
+    },
+    {
+      "id": "F22",
+      "name": "No backend fetch",
+      "severity": "P0",
+      "expected": "network idle"
+    },
+    {
+      "id": "F23",
+      "name": "No battle_engine call",
+      "severity": "P0",
+      "expected": "battle_engine_runtime_used=false"
+    },
+    {
+      "id": "F24",
+      "name": "No /api/battle/simulate",
+      "severity": "P0",
+      "expected": "endpoint not called/modified"
+    },
+    {
+      "id": "F25",
+      "name": "No /api/story/battle",
+      "severity": "P0",
+      "expected": "endpoint not called/modified"
+    },
+    {
+      "id": "F26",
+      "name": "Mobile layout / safe area / rotation",
+      "severity": "P2",
+      "expected": "SafeAreaView, no overflow"
+    },
+    {
+      "id": "F27",
+      "name": "Guild War policy unchanged",
+      "severity": "P0",
+      "expected": "autoresolve+replay invariata"
+    },
+    {
+      "id": "F28",
+      "name": "Italian text on warnings",
+      "severity": "P3",
+      "expected": "warning in italiano"
+    }
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "backend_fetch_present": false,
+    "battle_engine_called": false,
+    "story_tsx_modified": false,
+    "story_battle_endpoint_called": false,
+    "battle_simulate_endpoint_called": false,
+    "guild_war_policy_regression": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}

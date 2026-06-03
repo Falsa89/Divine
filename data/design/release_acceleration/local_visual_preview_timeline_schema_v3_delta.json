@@ -1,0 +1,26 @@
+{
+  "version": "local_visual_preview_timeline_schema_v3_delta",
+  "pack": "MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH_PACK_v60",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v60_MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH",
+  "extends": "local_visual_preview_timeline_schema_v2",
+  "design_only": true,
+  "local_only": true,
+  "backend_used": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "deterministic_from_seed": true,
+  "timeline_steps_min": 5,
+  "timeline_steps_max": 7,
+  "compatible_modes": [
+    "training",
+    "boss",
+    "tower",
+    "event",
+    "arena"
+  ],
+  "new_optional_fields": [
+    "event_rule_hint_optional",
+    "arena_ruleset_hint_optional",
+    "bracket_hint_optional"
+  ]
+}

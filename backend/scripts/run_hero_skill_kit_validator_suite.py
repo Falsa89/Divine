@@ -1948,6 +1948,60 @@ OPTIONAL = [
     ('PROJECT-LOCAL-TIMELINE-AND-PAYLOAD-CONTRACT-BATCH-SMOKE-MATRIX', 'validate_local_timeline_and_payload_contract_batch_smoke_matrix_v1.py'),
     ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v4', 'validate_visual_preview_runtime_shell_progress_report_v4.py'),
     ('MEGA-RELEASE-ACCELERATION-8-v59-ROLLUP', 'validate_mega_release_acceleration_8_v59_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH_PACK_v60
+    # PUBLIC_SYNC_TAG_v60_MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH
+    # ------------------------------------------------------------------------
+    # Accorpa 3 lane compatibili (same pattern, same risk, same guardrails):
+    #   1) visual_battle_runner_router_adapter_preview (FRONTEND/design-only)
+    #   2) event_local_dummy_seed_wiring              (FRONTEND local preview)
+    #   3) arena_local_dummy_seed_wiring              (FRONTEND local preview)
+    # ESCLUSA (gated): material_raid_claim_safety_hardening_v2_preview_only
+    #
+    # State transitions:
+    #   event  preview_shell_v58 -> local_dummy_seed_wired_v60
+    #   arena  preview_shell_v58 -> local_dummy_seed_wired_v60
+    # Material Raid: alpha_loop_closed_v53 (unchanged).
+    # Training: local_dummy_seed_wired_v56 (unchanged).
+    # Boss/Tower: local_dummy_seed_wired_v59 (unchanged).
+    # Story: preview_shell_v58 (unchanged).
+    # Guild War: autoresolve + replay_link exception (unchanged).
+    #
+    # TRACK A+B: Router Adapter Preview (design-only contract v1 + mapping v1).
+    #            visual-battle-preview-router.tsx mostra blocco
+    #            "Payload Contract v0 Adapter Preview" quando query ha almeno
+    #            mode + battle_seed_preview. Nessun runner runtime.
+    # TRACK C:   event-visual-preview.tsx patchato con buildEventTimeline
+    #            6-step + state stepIndex + play/pause + cleanup timer.
+    #            Default seed event-alpha-v60.
+    # TRACK D:   arena-visual-preview.tsx patchato con buildArenaTimeline
+    #            6-step + state stepIndex + play/pause + cleanup timer.
+    #            Default seed arena-alpha-v60.
+    # TRACK E:   local_visual_preview_timeline_schema_v3_delta esteso a
+    #            training/boss/tower/event/arena con nuovi optional fields
+    #            event_rule_hint_optional, arena_ruleset_hint_optional,
+    #            bracket_hint_optional.
+    # TRACK F:   router_adapter_event_arena_local_timeline_smoke_matrix_v1
+    #            (28 flows P0-P3) + visual_preview_runtime_shell_progress_report_v5
+    #            (10 modes incl. router_adapter_preview=adapter_preview_v60).
+    # TRACK G:   7 OPTIONAL tuples count=1 + tag + 7 docs (351-357) + 7 markers.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v60: 5 MD5-locked files unchanged, 3 preferred-
+    # unchanged guardrails intact, Guild War unchanged, /api/* untouched,
+    # db_writes=0, no MONGO_URL/pymongo/motor/redis, no live reward/claim,
+    # battle_engine_runtime_used=false, backend_used=false,
+    # runtime_runner_created=false, adapter_preview_only=true,
+    # no Reanimated, no combat.tsx/story.tsx import, Character Bible /
+    # final_numbers unchanged, no new runtime endpoint, no home menu mandatory
+    # routing. No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-VISUAL-BATTLE-RUNNER-ROUTER-ADAPTER-PREVIEW', 'validate_visual_battle_runner_router_adapter_preview_v1.py'),
+    ('PROJECT-EVENT-LOCAL-DUMMY-SEED-WIRING', 'validate_event_local_dummy_seed_wiring_v1.py'),
+    ('PROJECT-ARENA-LOCAL-DUMMY-SEED-WIRING', 'validate_arena_local_dummy_seed_wiring_v1.py'),
+    ('PROJECT-LOCAL-TIMELINE-SCHEMA-v3-DELTA', 'validate_local_timeline_schema_v3_delta_v1.py'),
+    ('PROJECT-ROUTER-ADAPTER-EVENT-ARENA-LOCAL-TIMELINE-SMOKE-MATRIX', 'validate_router_adapter_event_arena_local_timeline_smoke_matrix_v1.py'),
+    ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v5', 'validate_visual_preview_runtime_shell_progress_report_v5.py'),
+    ('MEGA-RELEASE-ACCELERATION-9-v60-ROLLUP', 'validate_mega_release_acceleration_9_v60_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

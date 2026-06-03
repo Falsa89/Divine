@@ -1,0 +1,27 @@
+{
+  "version": "visual_battle_runner_payload_adapter_preview_mapping_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH_PACK_v60",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v60_MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH",
+  "design_only": true,
+  "db_writes": 0,
+  "source_contract": "visual_battle_runner_payload_contract_v0",
+  "mappings": {
+    "mode": "mode",
+    "source_route": "source_route",
+    "battle_seed_preview": "battle_seed_preview",
+    "team_power": "team_power",
+    "recommended_power": "recommended_power",
+    "enemy_family_preview": "enemy_family_preview",
+    "background_hint": "background_hint",
+    "music_hint": "music_hint",
+    "tutorial_hint": "tutorial_hint"
+  },
+  "invariant_fields_default_values": {
+    "result_authoritative": false,
+    "battle_engine_runtime_used": false,
+    "db_writes": 0,
+    "reward_grant_enabled": false,
+    "reward_claim_enabled": false
+  },
+  "trigger_condition": "query has at least mode AND battle_seed_preview"
+}

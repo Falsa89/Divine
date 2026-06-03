@@ -1,0 +1,65 @@
+{
+  "version": "visual_battle_runner_router_adapter_preview_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH_PACK_v60",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v60_MEGA_RELEASE_ACCELERATION_9_ROUTER_ADAPTER_EVENT_ARENA_LOCAL_TIMELINE_BATCH",
+  "design_only": true,
+  "adapter_preview_only": true,
+  "runtime_runner_created": false,
+  "backend_used": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "result_authoritative": false,
+  "reward_grant_enabled": false,
+  "reward_claim_enabled": false,
+  "compatible_with_payload_contract_v0": true,
+  "source_contract": "visual_battle_runner_payload_contract_v0",
+  "target_route": "/visual-battle-preview-router",
+  "supported_modes": [
+    "material_raid",
+    "training",
+    "boss",
+    "story",
+    "tower",
+    "event",
+    "arena"
+  ],
+  "guild_war_policy": "autoresolve_with_replay_link_exception",
+  "adapter_fields_to_display": [
+    "mode",
+    "source_route",
+    "battle_seed_preview",
+    "team_power",
+    "recommended_power",
+    "enemy_family_preview",
+    "background_hint",
+    "music_hint",
+    "tutorial_hint",
+    "result_authoritative",
+    "battle_engine_runtime_used",
+    "db_writes",
+    "reward_grant_enabled",
+    "reward_claim_enabled"
+  ],
+  "stop_gates": [
+    {
+      "id": "SG1",
+      "rule": "no_runtime_runner_without_director_approval"
+    },
+    {
+      "id": "SG2",
+      "rule": "no_backend_route_without_api_approval"
+    },
+    {
+      "id": "SG3",
+      "rule": "no_battle_engine_wiring_without_separate_pack"
+    },
+    {
+      "id": "SG4",
+      "rule": "no_reward_or_claim_result_without_economy_approval"
+    },
+    {
+      "id": "SG5",
+      "rule": "no_db_writes_without_manual_approval_checksum"
+    }
+  ]
+}
