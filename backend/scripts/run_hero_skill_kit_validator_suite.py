@@ -1877,6 +1877,77 @@ OPTIONAL = [
     ('PROJECT-MULTI-MODE-VISUAL-PREVIEW-SHELL-BATCH-SMOKE-MATRIX', 'validate_multi_mode_visual_preview_shell_batch_smoke_matrix_v1.py'),
     ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v3', 'validate_visual_preview_runtime_shell_progress_report_v3.py'),
     ('MEGA-RELEASE-ACCELERATION-7-v58-ROLLUP', 'validate_mega_release_acceleration_7_v58_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_8_LOCAL_TIMELINE_AND_RUNNER_PAYLOAD_CONTRACT_BATCH_PACK_v59
+    # PUBLIC_SYNC_TAG_v59_MEGA_RELEASE_ACCELERATION_8_LOCAL_TIMELINE_AND_RUNNER_PAYLOAD_CONTRACT_BATCH
+    # ------------------------------------------------------------------------
+    # Accorpa 3 lane compatibili (same pattern, same risk, same guardrails):
+    #   1) visual_battle_runner_payload_contract_v0  (DESIGN-ONLY, no runner)
+    #   2) boss_local_timeline_wiring                (FRONTEND local preview)
+    #   3) tower_local_dummy_seed_wiring             (FRONTEND local preview)
+    # ESCLUSA dal pack (gated separato):
+    #   - material_raid_claim_safety_hardening_v2_preview_only
+    #
+    # State transitions:
+    #   boss   preview_shell_v57 -> local_dummy_seed_wired_v59
+    #   tower  preview_shell_v58 -> local_dummy_seed_wired_v59
+    # Material Raid: alpha_loop_closed_v53 (unchanged).
+    # Training: local_dummy_seed_wired_v56 (unchanged).
+    # Story/Event/Arena: preview_shell_v58 (unchanged).
+    # Guild War: autoresolve + replay_link exception (unchanged).
+    #
+    #   TRACK A: visual_battle_runner_payload_contract_v0.json +
+    #            visual_battle_runner_payload_contract_stop_gates_v0.json.
+    #            design-only. runtime_runner_created=false. db_writes=0.
+    #            consumer_future_route=/visual-battle-preview-router.
+    #            compatible_modes: material_raid/training/boss/story/tower/event/arena.
+    #   TRACK B: local_visual_preview_timeline_schema_v2.json.
+    #            5-7 step deterministic, design-only, local-only,
+    #            compatible modes: training/boss/tower.
+    #   TRACK C: boss_local_timeline_wiring_contract_v1.json + boss_delta_v59.
+    #            frontend/app/boss-visual-preview.tsx patchato con
+    #            buildBossTimeline 6-step + state stepIndex + play/pause +
+    #            cleanup timer. Default seed boss-alpha-v59.
+    #   TRACK D: tower_local_dummy_seed_wiring_contract_v1.json + tower_delta_v59.
+    #            frontend/app/tower-visual-preview.tsx patchato con
+    #            buildTowerTimeline 6-step + state stepIndex + play/pause +
+    #            cleanup timer. Default seed tower-alpha-v59.
+    #   TRACK E: frontend/app/visual-battle-preview-router.tsx (opzionale low-risk)
+    #            mostra local_dummy_seed_wired_v59 quando seed boss-alpha-v59 /
+    #            tower-alpha-v59 o source_route boss/tower.
+    #   TRACK F: local_timeline_and_payload_contract_batch_smoke_matrix_v1
+    #            (28 flussi P0/P1/P2/P3) +
+    #            visual_preview_runtime_shell_progress_report_v4
+    #            (8 modes + payload_contract design_only_v0 snapshot).
+    #   TRACK G: 7 OPTIONAL tuples count=1 + tag + 7 docs (344-350) + 7 markers.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v59:
+    #   - 5 MD5-locked core files unchanged
+    #     (battle_engine.py / .env / artifacts.py / battlepass.tsx / vip.tsx)
+    #   - preferred-unchanged guardrails (server.py / combat.tsx / story.tsx)
+    #   - Guild War policy UNCHANGED (auto_resolve + replay_link preserved)
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - /api/battle/simulate and /api/story/battle UNCHANGED
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis; no filesystem writes
+    #   - no live reward grant; no live claim; no inventory/material/currency/
+    #     wallet mutation; no premium users.gems mutation
+    #   - no real battle result generation; result_authoritative=false
+    #   - battle_engine_runtime_used=false; backend_used=false
+    #   - no Reanimated import; no combat.tsx import; no story.tsx import
+    #   - Character Bible / final_numbers unchanged
+    #   - no new runtime endpoint created in v59
+    #   - no home menu mandatory routing
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-VISUAL-BATTLE-RUNNER-PAYLOAD-CONTRACT-v0', 'validate_visual_battle_runner_payload_contract_v0.py'),
+    ('PROJECT-SHARED-LOCAL-TIMELINE-SCHEMA-v2', 'validate_shared_local_timeline_schema_v2.py'),
+    ('PROJECT-BOSS-LOCAL-TIMELINE-WIRING', 'validate_boss_local_timeline_wiring_v1.py'),
+    ('PROJECT-TOWER-LOCAL-DUMMY-SEED-WIRING', 'validate_tower_local_dummy_seed_wiring_v1.py'),
+    ('PROJECT-LOCAL-TIMELINE-AND-PAYLOAD-CONTRACT-BATCH-SMOKE-MATRIX', 'validate_local_timeline_and_payload_contract_batch_smoke_matrix_v1.py'),
+    ('PROJECT-VISUAL-PREVIEW-RUNTIME-SHELL-PROGRESS-REPORT-v4', 'validate_visual_preview_runtime_shell_progress_report_v4.py'),
+    ('MEGA-RELEASE-ACCELERATION-8-v59-ROLLUP', 'validate_mega_release_acceleration_8_v59_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

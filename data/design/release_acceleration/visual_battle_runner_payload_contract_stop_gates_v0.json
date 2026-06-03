@@ -1,0 +1,29 @@
+{
+  "version": "visual_battle_runner_payload_contract_stop_gates_v0",
+  "pack": "MEGA_RELEASE_ACCELERATION_8_LOCAL_TIMELINE_AND_RUNNER_PAYLOAD_CONTRACT_BATCH_PACK_v59",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v59_MEGA_RELEASE_ACCELERATION_8_LOCAL_TIMELINE_AND_RUNNER_PAYLOAD_CONTRACT_BATCH",
+  "stop_gates": [
+    {
+      "id": "SG1",
+      "rule": "no_runtime_runner_without_director_approval"
+    },
+    {
+      "id": "SG2",
+      "rule": "no_battle_engine_wiring_without_separate_pack"
+    },
+    {
+      "id": "SG3",
+      "rule": "no_reward_result_without_economy_approval"
+    },
+    {
+      "id": "SG4",
+      "rule": "no_backend_route_without_api_approval"
+    },
+    {
+      "id": "SG5",
+      "rule": "no_db_writes_without_manual_approval_checksum"
+    }
+  ],
+  "design_only": true,
+  "db_writes": 0
+}

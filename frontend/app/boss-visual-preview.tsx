@@ -2,15 +2,19 @@
  * frontend/app/boss-visual-preview.tsx
  *
  * v57 MEGA_RELEASE_ACCELERATION_6_BOSS_VISUAL_PREVIEW_ROUTE — Track B
- * Boss Visual Preview deeplink shell (STATIC + DEEPLINK-ONLY).
+ * v59 MEGA_RELEASE_ACCELERATION_8_LOCAL_TIMELINE_AND_RUNNER_PAYLOAD_CONTRACT_BATCH — Track C
+ *      Promotion: preview_shell_v57 -> local_dummy_seed_wired_v59
+ *
+ * Boss Visual Preview deeplink shell + LOCAL DETERMINISTIC timeline.
  *
  * NO home menu wiring. NO backend. NO battle_engine.
  * NO /api/battle/simulate. NO /api/story/battle.
  * NO claim button. NO reward. NO mutation. NO Reanimated. NO combat.tsx import.
  *
- * Default seed: boss-alpha-v57.
+ * v57 default seed: boss-alpha-v57 (kept for backward-compat reference).
+ * v59 default seed: boss-alpha-v59 — deterministic 6-step timeline.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -39,7 +43,52 @@ function asString(v: unknown): string | undefined {
 const DEFAULT_BOSS_FAMILY = 'training_boss_preview';
 const DEFAULT_BOSS_NAME = 'Boss Preview';
 const DEFAULT_PHASE = 'phase_1';
-const DEFAULT_SEED = 'boss-alpha-v57';
+// v57 backward-compat reference (previous seed: boss-alpha-v57 — superseded by v59)
+const DEFAULT_SEED = 'boss-alpha-v59';
+
+type ActorSide = 'team' | 'enemy';
+type TimelineStep = {
+  step_index: number;
+  actor_side: ActorSide;
+  actor_label: string;
+  action_key: string;
+  target_label: string;
+  floating_text_preview: string;
+  hp_delta_preview: number;
+  pose_hint: string;
+  vfx_hint: string;
+  duration_ms: number;
+  phase_hint_optional?: string;
+};
+
+/**
+ * Deterministic 6-step boss timeline from seed. Pure function. No randomness.
+ * Conforms to local_visual_preview_timeline_schema_v2.
+ */
+function buildBossTimeline(seed: string): TimelineStep[] {
+  // Defensive: behavior stays stable even with unexpected seed.
+  void seed;
+  return [
+    { step_index: 0, actor_side: 'team', actor_label: 'Eroe A', action_key: 'basic_attack',
+      target_label: 'boss', floating_text_preview: '-150', hp_delta_preview: -150,
+      pose_hint: 'attack', vfx_hint: 'slash', duration_ms: 600, phase_hint_optional: 'phase_1' },
+    { step_index: 1, actor_side: 'enemy', actor_label: 'boss', action_key: 'boss_smash',
+      target_label: 'Eroe A', floating_text_preview: '-110', hp_delta_preview: -110,
+      pose_hint: 'heavy', vfx_hint: 'shockwave', duration_ms: 700, phase_hint_optional: 'phase_1' },
+    { step_index: 2, actor_side: 'team', actor_label: 'Eroe B', action_key: 'skill_one',
+      target_label: 'boss', floating_text_preview: '-220', hp_delta_preview: -220,
+      pose_hint: 'cast', vfx_hint: 'fire_ring', duration_ms: 800, phase_hint_optional: 'phase_1' },
+    { step_index: 3, actor_side: 'enemy', actor_label: 'boss', action_key: 'boss_enrage_warmup',
+      target_label: 'self', floating_text_preview: 'ENRAGE!', hp_delta_preview: 0,
+      pose_hint: 'enrage', vfx_hint: 'aura_red', duration_ms: 750, phase_hint_optional: 'phase_2' },
+    { step_index: 4, actor_side: 'team', actor_label: 'Eroe A', action_key: 'basic_attack',
+      target_label: 'boss', floating_text_preview: '-180', hp_delta_preview: -180,
+      pose_hint: 'attack', vfx_hint: 'slash', duration_ms: 600, phase_hint_optional: 'phase_2' },
+    { step_index: 5, actor_side: 'enemy', actor_label: 'boss', action_key: 'boss_ultimate',
+      target_label: 'team', floating_text_preview: '-200', hp_delta_preview: -200,
+      pose_hint: 'ultimate', vfx_hint: 'meteor', duration_ms: 900, phase_hint_optional: 'phase_2' },
+  ];
+}
 
 // Static hint table — fully local, no backend.
 const HINTS: Record<string, { weakness: string; enrage: string; background: string; music: string }> = {
@@ -67,13 +116,60 @@ export default function BossVisualPreviewScreen() {
   const [phase, setPhase] = useState<string>(initialPhase);
   const [seed, setSeed] = useState<string>(initialSeed);
 
+  // v59 local timeline state
+  const timeline = buildBossTimeline(seed);
+  const [stepIndex, setStepIndex] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    if (!isPlaying) {
+      clearTimer();
+      return;
+    }
+    if (stepIndex >= timeline.length - 1) {
+      setIsPlaying(false);
+      return;
+    }
+    const cur = timeline[stepIndex];
+    timerRef.current = setTimeout(() => {
+      setStepIndex((s) => Math.min(s + 1, timeline.length - 1));
+    }, cur.duration_ms);
+    return () => clearTimer();
+  }, [isPlaying, stepIndex, timeline]);
+
+  // unmount cleanup
+  useEffect(() => () => clearTimer(), []);
+
   const hints = HINTS[bossFamily] || HINTS[DEFAULT_BOSS_FAMILY];
+  const currentStep = timeline[Math.min(stepIndex, timeline.length - 1)];
 
   const onResetPreview = () => {
     setBossFamily(DEFAULT_BOSS_FAMILY);
     setBossName(DEFAULT_BOSS_NAME);
     setPhase(DEFAULT_PHASE);
     setSeed(DEFAULT_SEED);
+    setStepIndex(0);
+    setIsPlaying(false);
+    clearTimer();
+  };
+
+  const onStepNext = () => {
+    setStepIndex((s) => Math.min(s + 1, timeline.length - 1));
+  };
+
+  const onTogglePlay = () => {
+    if (stepIndex >= timeline.length - 1) {
+      setStepIndex(0);
+    }
+    setIsPlaying((p) => !p);
   };
 
   const openRouter = () => {
@@ -103,7 +199,7 @@ export default function BossVisualPreviewScreen() {
         <View style={styles.headerCard}>
           <Text style={styles.title}>Boss Visual Preview</Text>
           <Text style={styles.subtitle}>
-            v57 · preview shell · deeplink-only · static
+            v57+v59 · local timeline · deeplink-only · 5-7 step deterministica
           </Text>
           <View style={styles.warningBox}>
             <Text style={styles.warningText}>Preview visuale boss non autoritativa.</Text>
@@ -139,6 +235,43 @@ export default function BossVisualPreviewScreen() {
           </Text>
         </View>
 
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>
+            Timeline locale (step {stepIndex + 1}/{timeline.length})
+          </Text>
+          <Text style={styles.line}>Azione: {currentStep.action_key}</Text>
+          <Text style={styles.line}>
+            Attore: {currentStep.actor_label} ({currentStep.actor_side})
+          </Text>
+          <Text style={styles.line}>Target: {currentStep.target_label}</Text>
+          <Text style={styles.line}>
+            HP delta preview: {currentStep.hp_delta_preview}
+          </Text>
+          <Text style={styles.line}>
+            Floating text: {currentStep.floating_text_preview}
+          </Text>
+          <Text style={styles.line}>
+            Phase hint: {currentStep.phase_hint_optional || phase}
+          </Text>
+          <Text style={styles.line}>
+            VFX/Pose: {currentStep.vfx_hint} / {currentStep.pose_hint}
+          </Text>
+          <Text style={styles.helper}>
+            Durata step: {currentStep.duration_ms}ms · seed: {seed}
+          </Text>
+
+          <View style={styles.rowButtons}>
+            <TouchableOpacity style={styles.smallBtn} onPress={onStepNext}>
+              <Text style={styles.smallBtnText}>Step succ.</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.smallBtn} onPress={onTogglePlay}>
+              <Text style={styles.smallBtnText}>
+                {isPlaying ? 'Pausa' : 'Play'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <View style={styles.guardsBox}>
           <Text style={styles.guardLine}>result_authoritative = false</Text>
           <Text style={styles.guardLine}>db_writes = 0</Text>
@@ -160,7 +293,7 @@ export default function BossVisualPreviewScreen() {
 
         <View style={styles.footerBox}>
           <Text style={styles.footerText}>
-            v57 MEGA_RELEASE_ACCELERATION_6 · boss preview shell · no claim · deeplink-only
+            v57+v59 · boss local_dummy_seed_wired_v59 · no claim · deeplink-only
           </Text>
         </View>
       </ScrollView>
@@ -237,6 +370,16 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   secondaryBtnText: { color: '#cdd6e0', fontSize: 14, fontWeight: '600' },
+  rowButtons: { flexDirection: 'row', marginTop: 10, gap: 8 },
+  smallBtn: {
+    flex: 1,
+    backgroundColor: '#2a3340',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    minHeight: 44,
+  },
+  smallBtnText: { color: '#cdd6e0', fontSize: 13, fontWeight: '600' },
   footerBox: { marginTop: 24, alignItems: 'center' },
   footerText: { color: '#5a6473', fontSize: 11 },
 });

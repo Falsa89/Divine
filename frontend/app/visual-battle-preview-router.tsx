@@ -155,7 +155,13 @@ export default function VisualBattlePreviewRouterScreen() {
         {mode === 'boss' ? (
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Boss Preview Details</Text>
-            <Text style={styles.line}>Stato: preview_shell_v57</Text>
+            <Text style={styles.line}>
+              Stato:{' '}
+              {seed === 'boss-alpha-v59' ||
+              (asString(raw.source_route) || '').toLowerCase().includes('boss')
+                ? 'local_dummy_seed_wired_v59'
+                : 'preview_shell_v57'}
+            </Text>
             <Text style={styles.line}>
               Boss family: {asString(raw.boss_family_id) || 'training_boss_preview'}
             </Text>
@@ -165,7 +171,7 @@ export default function VisualBattlePreviewRouterScreen() {
             <Text style={styles.line}>
               Phase preview: {asString(raw.boss_phase_preview) || 'phase_1'}
             </Text>
-            <Text style={styles.line}>Seed: {seed || 'boss-alpha-v57'}</Text>
+            <Text style={styles.line}>Seed: {seed || 'boss-alpha-v59'}</Text>
             <Text style={styles.helper}>
               Disclaimer: nessuna chiamata backend, nessuna chiamata battle_engine,
               nessun reward verrà assegnato. Material Raid e Training restano
@@ -220,7 +226,13 @@ export default function VisualBattlePreviewRouterScreen() {
         {mode === 'tower' ? (
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Tower Preview Details</Text>
-            <Text style={styles.line}>Stato: preview_shell_v58</Text>
+            <Text style={styles.line}>
+              Stato:{' '}
+              {seed === 'tower-alpha-v59' ||
+              (asString(raw.source_route) || '').toLowerCase().includes('tower')
+                ? 'local_dummy_seed_wired_v59'
+                : 'preview_shell_v58'}
+            </Text>
             <Text style={styles.line}>
               Tower ID: {asString(raw.tower_id) || 'tower_preview_1'}
             </Text>

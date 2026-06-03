@@ -1,0 +1,189 @@
+{
+  "version": "local_timeline_and_payload_contract_batch_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_8_LOCAL_TIMELINE_AND_RUNNER_PAYLOAD_CONTRACT_BATCH_PACK_v59",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v59_MEGA_RELEASE_ACCELERATION_8_LOCAL_TIMELINE_AND_RUNNER_PAYLOAD_CONTRACT_BATCH",
+  "mode": "qa_smoke_matrix",
+  "db_writes": 0,
+  "flows": [
+    {
+      "id": "F01",
+      "name": "Payload contract v0 design-only schema sanity",
+      "severity": "P1",
+      "expected": "fields/required/optional coerenti"
+    },
+    {
+      "id": "F02",
+      "name": "Open /boss-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, default fallback timeline"
+    },
+    {
+      "id": "F03",
+      "name": "Open /boss-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "timeline mostrata"
+    },
+    {
+      "id": "F04",
+      "name": "Boss timeline 5-7 step deterministica",
+      "severity": "P0",
+      "expected": "numero step in [5,7]"
+    },
+    {
+      "id": "F05",
+      "name": "Boss step next/reset",
+      "severity": "P1",
+      "expected": "stato avanza/torna a 0"
+    },
+    {
+      "id": "F06",
+      "name": "Boss play/pause cleanup timer",
+      "severity": "P1",
+      "expected": "no leak timer su unmount"
+    },
+    {
+      "id": "F07",
+      "name": "Open /tower-visual-preview senza params",
+      "severity": "P0",
+      "expected": "no crash, default fallback timeline"
+    },
+    {
+      "id": "F08",
+      "name": "Open /tower-visual-preview con params validi",
+      "severity": "P1",
+      "expected": "timeline mostrata"
+    },
+    {
+      "id": "F09",
+      "name": "Tower timeline 5-7 step deterministica",
+      "severity": "P0",
+      "expected": "numero step in [5,7]"
+    },
+    {
+      "id": "F10",
+      "name": "Tower step next/reset",
+      "severity": "P1",
+      "expected": "stato avanza/torna a 0"
+    },
+    {
+      "id": "F11",
+      "name": "Tower play/pause cleanup timer",
+      "severity": "P1",
+      "expected": "no leak timer su unmount"
+    },
+    {
+      "id": "F12",
+      "name": "Generic router boss timeline detail",
+      "severity": "P1",
+      "expected": "mostra local_dummy_seed_wired_v59 se boss-alpha-v59"
+    },
+    {
+      "id": "F13",
+      "name": "Generic router tower timeline detail",
+      "severity": "P1",
+      "expected": "mostra local_dummy_seed_wired_v59 se tower-alpha-v59"
+    },
+    {
+      "id": "F14",
+      "name": "No regressione Material Raid (alpha_loop_closed_v53)",
+      "severity": "P0",
+      "expected": "comportamento invariato"
+    },
+    {
+      "id": "F15",
+      "name": "No regressione Training (local_dummy_seed_wired_v56)",
+      "severity": "P0",
+      "expected": "comportamento invariato"
+    },
+    {
+      "id": "F16",
+      "name": "No regressione Story preview_shell_v58",
+      "severity": "P0",
+      "expected": "comportamento invariato"
+    },
+    {
+      "id": "F17",
+      "name": "No regressione Event preview_shell_v58",
+      "severity": "P0",
+      "expected": "comportamento invariato"
+    },
+    {
+      "id": "F18",
+      "name": "No regressione Arena preview_shell_v58",
+      "severity": "P0",
+      "expected": "comportamento invariato"
+    },
+    {
+      "id": "F19",
+      "name": "No claim button (boss/tower)",
+      "severity": "P0",
+      "expected": "no Claim CTA"
+    },
+    {
+      "id": "F20",
+      "name": "No reward grant (boss/tower)",
+      "severity": "P0",
+      "expected": "no reward state mutated"
+    },
+    {
+      "id": "F21",
+      "name": "No DB write",
+      "severity": "P0",
+      "expected": "db_writes=0"
+    },
+    {
+      "id": "F22",
+      "name": "No backend fetch",
+      "severity": "P0",
+      "expected": "network idle"
+    },
+    {
+      "id": "F23",
+      "name": "No battle_engine call",
+      "severity": "P0",
+      "expected": "battle_engine_runtime_used=false"
+    },
+    {
+      "id": "F24",
+      "name": "No /api/battle/simulate",
+      "severity": "P0",
+      "expected": "endpoint not called/modified"
+    },
+    {
+      "id": "F25",
+      "name": "No /api/story/battle",
+      "severity": "P0",
+      "expected": "endpoint not called/modified"
+    },
+    {
+      "id": "F26",
+      "name": "Mobile layout / safe area / rotation",
+      "severity": "P2",
+      "expected": "SafeAreaView, no overflow"
+    },
+    {
+      "id": "F27",
+      "name": "Guild War policy unchanged",
+      "severity": "P0",
+      "expected": "autoresolve+replay invariata"
+    },
+    {
+      "id": "F28",
+      "name": "Italian text on warnings",
+      "severity": "P3",
+      "expected": "warning in italiano"
+    }
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "backend_fetch_present": false,
+    "battle_engine_called": false,
+    "story_tsx_modified": false,
+    "story_battle_endpoint_called": false,
+    "battle_simulate_endpoint_called": false,
+    "guild_war_policy_regression": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}
