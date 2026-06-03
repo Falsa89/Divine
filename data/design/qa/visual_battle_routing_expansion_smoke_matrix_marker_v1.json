@@ -1,0 +1,32 @@
+{
+  "marker_version": "visual_battle_routing_expansion_smoke_matrix_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW_PACK_v55",
+  "track": "E",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v55_MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW",
+  "matrix_ref": "data/design/qa/visual_battle_routing_expansion_smoke_matrix_v1.json",
+  "flows_count": 16,
+  "severity_levels": ["P0", "P1", "P2", "P3"],
+  "covers": [
+    "material_raid_visual_preview_unchanged",
+    "generic_router_no_params",
+    "generic_router_material_raid_params",
+    "generic_router_training_params",
+    "training_visual_preview",
+    "story_preview_contract",
+    "boss_preview_contract",
+    "tower_preview_contract",
+    "event_preview_contract",
+    "arena_preview_contract",
+    "guild_war_autoresolve_replay_exception",
+    "no_claim_button",
+    "no_db_writes",
+    "no_battle_engine_call",
+    "mobile_layout_rotation",
+    "italian_text"
+  ],
+  "db_writes": 0,
+  "claim_button_present": false,
+  "battle_engine_called": false,
+  "validator_weakening": false,
+  "fake_pass": false
+}

@@ -1,0 +1,32 @@
+{
+  "version": "visual_battle_routing_expansion_smoke_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW_PACK_v55",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v55_MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW",
+  "mode": "qa_smoke_matrix",
+  "db_writes": 0,
+  "flows": [
+    {"id": "F01", "name": "Material Raid visual preview still works", "severity": "P0", "expected": "loop alpha->visual->reward unchanged from v53"},
+    {"id": "F02", "name": "Generic router opens with no params", "severity": "P1", "expected": "no crash, fallback messaging visible"},
+    {"id": "F03", "name": "Generic router with material_raid params", "severity": "P1", "expected": "renders mode, source_route, seed, team_power, recommended_power"},
+    {"id": "F04", "name": "Generic router with training params", "severity": "P1", "expected": "renders training mode and safe sandbox notice"},
+    {"id": "F05", "name": "Training visual preview deeplink opens", "severity": "P1", "expected": "static screen renders, button to router visible"},
+    {"id": "F06", "name": "Story preview contract design-only", "severity": "P2", "expected": "no story.tsx diff, no runtime call"},
+    {"id": "F07", "name": "Boss preview contract design-only", "severity": "P2", "expected": "no battle_engine call"},
+    {"id": "F08", "name": "Tower preview contract design-only", "severity": "P2", "expected": "no runtime endpoint created"},
+    {"id": "F09", "name": "Event preview contract design-only", "severity": "P2", "expected": "no runtime endpoint created"},
+    {"id": "F10", "name": "Arena preview contract design-only", "severity": "P2", "expected": "no runtime endpoint created"},
+    {"id": "F11", "name": "Guild War autoresolve+replay exception preserved", "severity": "P0", "expected": "policy unchanged from v54"},
+    {"id": "F12", "name": "No claim button anywhere in v55 surfaces", "severity": "P0", "expected": "router/training screens have NO claim CTA"},
+    {"id": "F13", "name": "No DB write triggered by v55 surfaces", "severity": "P0", "expected": "db_writes=0"},
+    {"id": "F14", "name": "No battle_engine runtime call", "severity": "P0", "expected": "battle_engine_runtime_used=false"},
+    {"id": "F15", "name": "Mobile layout / safe area / rotation", "severity": "P2", "expected": "SafeAreaView wraps content; no overflow on rotation"},
+    {"id": "F16", "name": "Italian text on router + training screens", "severity": "P3", "expected": "warnings in italian visible"}
+  ],
+  "forbidden": {
+    "claim_button_present": false,
+    "db_writes_nonzero": false,
+    "battle_engine_called": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}

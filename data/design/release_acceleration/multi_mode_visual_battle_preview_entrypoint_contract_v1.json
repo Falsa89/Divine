@@ -1,0 +1,82 @@
+{
+  "version": "multi_mode_visual_battle_preview_entrypoint_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW_PACK_v55",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v55_MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW",
+  "mode": "design_only",
+  "runtime_wired": false,
+  "battle_engine_changed": false,
+  "combat_tsx_changed": false,
+  "story_tsx_changed": false,
+  "db_writes": 0,
+  "modes": {
+    "boss": {
+      "runtime_wiring_deferred": true,
+      "future_payload_minimum": {
+        "mode": "boss",
+        "boss_id": "<string>",
+        "battle_seed_preview": "<string>",
+        "team_power": "<int_or_null>",
+        "recommended_power": "<int_or_null>",
+        "enemy_family_preview": "<string>",
+        "target_frontend_route": "/visual-battle-preview-router",
+        "result_authoritative": false,
+        "reward_claim_enabled": false,
+        "battle_engine_runtime_used": false
+      },
+      "stop_gates": ["draft_boss_visual_preview_route", "validator_pass_for_router_shell"]
+    },
+    "tower": {
+      "runtime_wiring_deferred": true,
+      "future_payload_minimum": {
+        "mode": "tower",
+        "floor_id": "<string>",
+        "stage_id": "<string>",
+        "battle_seed_preview": "<string>",
+        "team_power": "<int_or_null>",
+        "recommended_power": "<int_or_null>",
+        "target_frontend_route": "/visual-battle-preview-router",
+        "result_authoritative": false,
+        "reward_claim_enabled": false,
+        "battle_engine_runtime_used": false
+      },
+      "stop_gates": ["draft_tower_visual_preview_route", "validator_pass_for_router_shell"]
+    },
+    "event": {
+      "runtime_wiring_deferred": true,
+      "future_payload_minimum": {
+        "mode": "event",
+        "event_id": "<string>",
+        "stage_id": "<string>",
+        "battle_seed_preview": "<string>",
+        "target_frontend_route": "/visual-battle-preview-router",
+        "result_authoritative": false,
+        "reward_claim_enabled": false,
+        "battle_engine_runtime_used": false
+      },
+      "stop_gates": ["draft_event_visual_preview_route", "validator_pass_for_router_shell"]
+    },
+    "arena": {
+      "runtime_wiring_deferred": true,
+      "future_payload_minimum": {
+        "mode": "arena",
+        "match_id": "<string>",
+        "battle_seed_preview": "<string>",
+        "team_power": "<int_or_null>",
+        "opponent_power": "<int_or_null>",
+        "target_frontend_route": "/visual-battle-preview-router",
+        "result_authoritative": false,
+        "reward_claim_enabled": false,
+        "battle_engine_runtime_used": false
+      },
+      "stop_gates": ["draft_arena_visual_preview_route", "validator_pass_for_router_shell"]
+    }
+  },
+  "forbidden": {
+    "battle_engine_modified": false,
+    "combat_tsx_modified": false,
+    "story_tsx_modified": false,
+    "battle_simulate_endpoint_modified": false,
+    "story_battle_endpoint_modified": false,
+    "new_runtime_endpoint_in_v55": false
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "version": "visual_battle_routing_expansion_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW_PACK_v55",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v55_MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW",
+  "parent_design": "data/design/release_acceleration/battle_entrypoint_registry_design_v1.json",
+  "expansion_target": "battle_entrypoint_registry_v2_preview",
+  "mode": "preview_only",
+  "runtime_wired": false,
+  "shared_preview_router": {
+    "route": "/visual-battle-preview-router",
+    "file": "frontend/app/visual-battle-preview-router.tsx",
+    "deeplink_only": true,
+    "calls_backend": false,
+    "renders_authoritative_result": false
+  },
+  "supported_query_params": [
+    "mode",
+    "source_route",
+    "track_id",
+    "stage_id",
+    "chapter_id",
+    "battle_seed_preview",
+    "team_power",
+    "recommended_power",
+    "enemy_family_preview"
+  ],
+  "contract_invariants": {
+    "result_authoritative": false,
+    "reward_claim_enabled": false,
+    "reward_grant_enabled": false,
+    "db_writes": 0,
+    "battle_engine_runtime_used": false,
+    "materials_granted": false,
+    "inventory_mutation": false,
+    "home_menu_mandatory_routing": false
+  },
+  "guild_war_exception": {
+    "auto_resolve_allowed": true,
+    "replay_link_required": true,
+    "unchanged_in_v55": true
+  }
+}

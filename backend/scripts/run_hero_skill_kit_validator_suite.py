@@ -1623,6 +1623,65 @@ OPTIONAL = [
     ('PROJECT-GUIDE-CODEX-RUNTIME-PLAN', 'validate_guide_codex_runtime_plan_v1.py'),
     ('PROJECT-STORY-PLAYABLE-ALPHA-SLICE-PLAN', 'validate_story_playable_alpha_slice_plan_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-MASTER-v54-ROLLUP', 'validate_mega_release_acceleration_master_v54_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW_PACK_v55
+    # PUBLIC_SYNC_TAG_v55_MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW
+    # ------------------------------------------------------------------------
+    # Director approved: ONLY B7 (visual_battle_routing_expansion_plan) in
+    # preview / design / runtime-shell mode. NOT approved: B8, live economy,
+    # DB writes, reward grant, reward claim, battle_engine runtime.
+    #
+    # Expand visual battle routing beyond Material Raid as preview/deeplink/
+    # read-only shells, without touching battle_engine.py, without modifying
+    # combat.tsx, without changing /api/story/battle or /api/battle/simulate,
+    # and without any reward/claim live:
+    #   TRACK A: Battle Entrypoint Registry v2 Preview \u2014 8 modes registered
+    #            (material_raid, training, story, boss, tower, event, arena,
+    #            guild_war). Universal invariants: result_authoritative=false,
+    #            reward_claim_enabled=false, reward_grant_enabled=false,
+    #            db_writes=0, battle_engine_runtime_used=false.
+    #            Guild War policy preserved: auto_resolve_allowed=true,
+    #            replay_link_required=true, replay_visualization_required=true.
+    #   TRACK B: frontend/app/visual-battle-preview-router.tsx (deeplink-only
+    #            generic shell). 9 supported query params. Handles missing
+    #            params without crash. Italian text. Warnings visible.
+    #            No backend fetch. No claim button. No mutation.
+    #   TRACK C: frontend/app/training-visual-preview.tsx (static + deeplink-
+    #            only). Safe sandbox. Links to /visual-battle-preview-router
+    #            with deterministic seed training-alpha-v55.
+    #   TRACK D: Story / Boss / Tower / Event / Arena design-only contracts.
+    #            Future_payload_minimum + stop_gates. No story.tsx diff.
+    #            No /api/story/battle / /api/battle/simulate diff.
+    #   TRACK E: QA smoke matrix 16 flows, severity P0/P1/P2/P3. Covers all
+    #            modes + claim absence + DB-writes absence + Guild War policy.\n    #   TRACK F/ROLLUP: 6 OPTIONAL tuples + 5 MD5 invariants + preferred-
+    #            unchanged (server.py / combat.tsx / story.tsx) + 6 docs
+    #            (320-325) + 6 markers + public sync tag presence.
+    # ------------------------------------------------------------------------
+    # Invariants enforced by v55:
+    #   - 5 MD5-locked core files unchanged
+    #     (battle_engine.py / .env / artifacts.py / battlepass.tsx / vip.tsx)
+    #   - preferred-unchanged guardrails (server.py / combat.tsx / story.tsx)
+    #   - Guild War policy UNCHANGED (auto_resolve + replay_link preserved)
+    #   - existing endpoint paths / feature flags / default 503 / safety flags
+    #     of existing endpoints unchanged
+    #   - /api/battle/simulate and /api/story/battle UNCHANGED
+    #   - db_writes=0; real_db_writes=0; production_db_touched=false
+    #   - no MONGO_URL; no pymongo; no motor; no redis; no filesystem writes
+    #   - no live reward grant; no live claim; no inventory/material/currency/
+    #     wallet mutation; no premium users.gems mutation
+    #   - no real battle result generation; result_authoritative=false
+    #   - battle_engine_runtime_used=false; battle_engine_runtime not invoked
+    #   - no asset copy / no asset import
+    #   - Character Bible / final_numbers unchanged
+    #   - no new runtime endpoint created in v55
+    # No fake PASS. No validator weakening. No tuple duplicate.
+    # ========================================================================
+    ('PROJECT-BATTLE-ENTRYPOINT-REGISTRY-v2-PREVIEW', 'validate_battle_entrypoint_registry_v2_preview_v1.py'),
+    ('PROJECT-GENERIC-VISUAL-BATTLE-PREVIEW-ROUTER', 'validate_generic_visual_battle_preview_router_v1.py'),
+    ('PROJECT-TRAINING-VISUAL-PREVIEW-DEEPLINK', 'validate_training_visual_preview_deeplink_v1.py'),
+    ('PROJECT-MULTI-MODE-VISUAL-BATTLE-PREVIEW-CONTRACTS', 'validate_multi_mode_visual_battle_preview_contracts_v1.py'),
+    ('PROJECT-VISUAL-BATTLE-ROUTING-EXPANSION-SMOKE-MATRIX', 'validate_visual_battle_routing_expansion_smoke_matrix_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-4-v55-ROLLUP', 'validate_mega_release_acceleration_4_v55_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

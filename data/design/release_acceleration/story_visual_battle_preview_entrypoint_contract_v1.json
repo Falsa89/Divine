@@ -1,0 +1,36 @@
+{
+  "version": "story_visual_battle_preview_entrypoint_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW_PACK_v55",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v55_MEGA_RELEASE_ACCELERATION_4_VISUAL_BATTLE_ROUTING_EXPANSION_PREVIEW",
+  "mode": "design_only",
+  "runtime_wired": false,
+  "story_tsx_changed": false,
+  "story_battle_endpoint_changed": false,
+  "battle_engine_changed": false,
+  "combat_tsx_changed": false,
+  "db_writes": 0,
+  "future_payload_minimum": {
+    "mode": "story",
+    "chapter_id": "<string>",
+    "stage_id": "<string>",
+    "battle_seed_preview": "<string>",
+    "team_power": "<int_or_null>",
+    "recommended_power": "<int_or_null>",
+    "enemy_family_preview": "<string_or_null>",
+    "target_frontend_route": "/visual-battle-preview-router",
+    "result_authoritative": false,
+    "reward_claim_enabled": false,
+    "battle_engine_runtime_used": false
+  },
+  "stop_gates": [
+    "director_approval_for_runtime_wiring",
+    "validator_pass_for_router_shell",
+    "no_story_tsx_diff_allowed_in_future_pack_unless_authorized"
+  ],
+  "forbidden": {
+    "story_tsx_modified": false,
+    "story_battle_endpoint_modified": false,
+    "battle_simulate_endpoint_modified": false,
+    "new_runtime_endpoint_in_v55": false
+  }
+}
