@@ -2538,6 +2538,42 @@ OPTIONAL = [
     ('PROJECT-v72-P3-POLISH-CARRYFORWARD', 'validate_v72_p3_polish_carryforward_v1.py'),
     ('PROJECT-ALPHA-READINESS-PROGRESS-v18', 'validate_alpha_readiness_progress_v18_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-23-v74-ROLLUP', 'validate_mega_release_acceleration_23_v74_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_AND_P3_POLISH_PACK_v75
+    # PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH
+    # ------------------------------------------------------------------------
+    # CLOSED ALPHA KICKOFF EXECUTION (manual readiness only) +
+    # FINDINGS TRIAGE WORKFLOW + v72 P3 POLISH BATCH APPLIED.
+    # - Kickoff execution mode: manual_recruitment_readiness_only.
+    # - No automated live invites, no email/DM send, no networking.
+    # - Manual recruitment plan: 8 slot template, channels manual_only.
+    # - Session tracker + evidence templates (external storage,
+    #   no in-app persistence, no async storage).
+    # - Findings triage workflow (P0/P1/P2/P3 buckets + SLA + decision matrix).
+    # - Kickoff dry-run: 17/17 PASS, DRY_RUN_PASS_READY_FOR_MANUAL_KICKOFF.
+    # - v72 P3 polish batch APPLIED (3/3 micro-patch su due file preview,
+    #   ts_clean, static scan ok, MD5 invariants invariati, backlog cleared).
+    # - Progress report v19 emesso.
+    # 8 OPTIONAL tuples + tag + docs (453-460) + markers + rollup.
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post polish.
+    # db_writes=0, no reward grant, no permanent progress, no account
+    # persistence/flag writes, no async storage persistence, no event
+    # currency, no arena ranking/MMR, no matchmaking live, no real asset
+    # import, no resolver runtime change, no Character Bible/final_numbers,
+    # no broad commercial release. No story.tsx/combat.tsx import nei file
+    # patchati. No backend route change. No server.py. No battle_engine.
+    # No api/story/battle. No api/battle/simulate. No automated live
+    # invites. No email send. No validator weakening. No fake PASS.
+    # ========================================================================
+    ('PROJECT-CLOSED-ALPHA-KICKOFF-EXECUTION-STATE', 'validate_closed_alpha_kickoff_execution_state_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-MANUAL-RECRUITMENT-PLAN', 'validate_closed_alpha_manual_recruitment_plan_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-SESSION-TRACKER-EVIDENCE', 'validate_closed_alpha_session_tracker_evidence_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-FINDINGS-TRIAGE-WORKFLOW', 'validate_closed_alpha_findings_triage_workflow_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-KICKOFF-DRY-RUN', 'validate_closed_alpha_kickoff_dry_run_v1.py'),
+    ('PROJECT-v72-P3-POLISH-BATCH-APPLIED', 'validate_v72_p3_polish_batch_applied_v1.py'),
+    ('PROJECT-ALPHA-READINESS-PROGRESS-v19', 'validate_alpha_readiness_progress_v19_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-24-v75-ROLLUP', 'validate_mega_release_acceleration_24_v75_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

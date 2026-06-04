@@ -1,0 +1,19 @@
+{
+  "template_version": "closed_alpha_session_evidence_template_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_24_v75",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH",
+  "evidence_fields": [
+    {"id": "session_id", "type": "string", "required": true},
+    {"id": "timestamp_utc", "type": "iso8601", "required": true},
+    {"id": "flow_id", "type": "string", "required": true},
+    {"id": "step_index", "type": "int", "required": true},
+    {"id": "event_type", "type": "enum", "values": ["open", "step", "complete", "abandon", "crash", "bug_observed"], "required": true},
+    {"id": "observation_text", "type": "text", "required": false},
+    {"id": "screenshot_url_optional", "type": "string", "required": false}
+  ],
+  "storage": "external_shared_doc",
+  "in_app_persistence": false,
+  "db_writes": 0,
+  "account_persistence": false,
+  "async_storage_persistence": false
+}

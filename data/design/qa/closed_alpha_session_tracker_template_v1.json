@@ -1,0 +1,35 @@
+{
+  "template_version": "closed_alpha_session_tracker_template_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_24_v75",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH",
+  "columns": [
+    {"id": "slot_id", "type": "string", "required": true},
+    {"id": "tester_nickname", "type": "string", "required": false},
+    {"id": "device", "type": "string", "required": true},
+    {"id": "os_version", "type": "string", "required": true},
+    {"id": "session_start_utc", "type": "iso8601", "required": true},
+    {"id": "session_end_utc", "type": "iso8601", "required": true},
+    {"id": "flow_first_session_onboarding", "type": "enum", "values": ["completed", "abandoned", "crash", "skipped"], "required": true},
+    {"id": "flow_training_preview", "type": "enum", "values": ["completed", "abandoned", "crash", "skipped"], "required": true},
+    {"id": "flow_story_alpha_slice", "type": "enum", "values": ["completed", "abandoned", "crash", "skipped"], "required": true},
+    {"id": "flow_boss_tower_alpha_loop", "type": "enum", "values": ["completed", "abandoned", "crash", "skipped"], "required": true},
+    {"id": "flow_event_arena_alpha_preview", "type": "enum", "values": ["completed", "abandoned", "crash", "skipped"], "required": true},
+    {"id": "flow_alpha_preview_hub", "type": "enum", "values": ["completed", "abandoned", "crash", "skipped"], "required": true},
+    {"id": "feedback_form_submitted", "type": "bool", "required": true},
+    {"id": "bug_reports_count", "type": "int", "required": true},
+    {"id": "notes", "type": "text", "required": false}
+  ],
+  "row_count_default": 8,
+  "prepared_rows": [
+    {"slot_id": "slot_01"},
+    {"slot_id": "slot_02"},
+    {"slot_id": "slot_03"},
+    {"slot_id": "slot_04"},
+    {"slot_id": "slot_05"},
+    {"slot_id": "slot_06"},
+    {"slot_id": "slot_07"},
+    {"slot_id": "slot_08"}
+  ],
+  "db_writes": 0,
+  "account_persistence": false
+}

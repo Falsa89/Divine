@@ -33,14 +33,6 @@ type PreviewEntry = {
 
 const ENTRIES: PreviewEntry[] = [
   {
-    route: "training-combat-onboarding-preview",
-    title: "Training + Combat Onboarding",
-    status: "preview_ready_v69",
-    guardrails: ["db_writes=0", "reward_grant=false", "permanent_progress=false"],
-    publicReleaseBadge: "DEEPLINK_ONLY",
-    qaPriority: "P1",
-  },
-  {
     route: "first-session-onboarding-preview",
     title: "First Session Onboarding (hardened v71)",
     status: "preview_hardened_v71",
@@ -52,6 +44,14 @@ const ENTRIES: PreviewEntry[] = [
     ],
     publicReleaseBadge: "DEEPLINK_ONLY",
     qaPriority: "P0",
+  },
+  {
+    route: "training-combat-onboarding-preview",
+    title: "Training + Combat Onboarding",
+    status: "preview_ready_v69",
+    guardrails: ["db_writes=0", "reward_grant=false", "permanent_progress=false"],
+    publicReleaseBadge: "DEEPLINK_ONLY",
+    qaPriority: "P1",
   },
   {
     route: "story-alpha-slice-preview",
@@ -122,7 +122,7 @@ export default function AlphaPreviewHubScreen() {
         <View style={styles.banner}>
           <Text style={styles.bannerText}>ALPHA PREVIEW HUB (DEEPLINK-ONLY)</Text>
           <Text style={styles.bannerSub}>
-            Mappa locale delle anteprime alpha - nessun routing pubblico, nessun reward, nessuna scrittura
+            Mappa locale anteprime alpha. No routing pubblico, no reward, no writes.
           </Text>
         </View>
 

@@ -1,0 +1,35 @@
+{
+  "design_version": "closed_alpha_kickoff_dry_run_result_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_24_v75",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH",
+  "dry_run": true,
+  "timestamp_utc": "2026-06-04T14:08:00Z",
+  "checks": [
+    {"id": "approval_checksum_still_verified", "status": "pass"},
+    {"id": "menu_public_exposure_applied", "status": "pass", "source": "menu_public_exposure_apply_result_v1"},
+    {"id": "observation_pass", "status": "pass", "source": "menu_public_exposure_observation_result_v1"},
+    {"id": "kickoff_gate_ready", "status": "pass", "source": "closed_alpha_kickoff_gate_v1"},
+    {"id": "manual_recruitment_plan_ready", "status": "pass"},
+    {"id": "session_tracker_template_ready", "status": "pass"},
+    {"id": "session_evidence_template_ready", "status": "pass"},
+    {"id": "findings_triage_workflow_ready", "status": "pass"},
+    {"id": "feedback_form_template_ready", "status": "pass"},
+    {"id": "bug_report_workflow_ready", "status": "pass"},
+    {"id": "rollback_runbook_ready", "status": "pass"},
+    {"id": "alpha_menu_preview_screen_present", "status": "pass"},
+    {"id": "alpha_preview_hub_screen_present", "status": "pass"},
+    {"id": "no_automated_live_invites", "status": "pass"},
+    {"id": "no_email_send_enabled", "status": "pass"},
+    {"id": "no_db_writes", "status": "pass"},
+    {"id": "md5_invariants_unchanged", "status": "pass"}
+  ],
+  "summary": {
+    "total": 17,
+    "pass": 17,
+    "fail": 0
+  },
+  "verdict": "DRY_RUN_PASS_READY_FOR_MANUAL_KICKOFF",
+  "applied": false,
+  "db_writes": 0,
+  "production_navigation_changed": false
+}

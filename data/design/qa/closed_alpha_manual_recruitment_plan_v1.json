@@ -1,0 +1,43 @@
+{
+  "plan_version": "closed_alpha_manual_recruitment_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_24_v75",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH",
+  "recruitment_mode": "manual_only",
+  "channels_allowed": ["private_DM", "shared_document_link"],
+  "channels_forbidden": ["automated_email", "automated_DM", "public_form_link", "social_media_broadcast", "in_app_invite_system"],
+  "automated_live_invites": false,
+  "email_send_enabled": false,
+  "dm_send_enabled": false,
+  "target_tester_count": 8,
+  "minimum_tester_count": 4,
+  "selection_criteria": [
+    "trusted_contact_or_internal_qa",
+    "diverse_device_os_combination",
+    "english_or_italian_language_proficiency",
+    "available_for_30_min_session"
+  ],
+  "slot_template": {
+    "slot_id": "{SLOT_ID}",
+    "tester_nickname": "{TESTER_NICKNAME_OPTIONAL}",
+    "device": "{DEVICE}",
+    "os": "{OS_VERSION}",
+    "deeplink_target": "{DEEPLINK_URL}",
+    "language": "{LANG}",
+    "availability_window": "{WINDOW_ISO}",
+    "status": "prepared"
+  },
+  "slot_count_default": 8,
+  "prepared_slots": [
+    {"slot_id": "slot_01", "status": "prepared"},
+    {"slot_id": "slot_02", "status": "prepared"},
+    {"slot_id": "slot_03", "status": "prepared"},
+    {"slot_id": "slot_04", "status": "prepared"},
+    {"slot_id": "slot_05", "status": "prepared"},
+    {"slot_id": "slot_06", "status": "prepared"},
+    {"slot_id": "slot_07", "status": "prepared"},
+    {"slot_id": "slot_08", "status": "prepared"}
+  ],
+  "db_writes": 0,
+  "account_persistence": false,
+  "backend_route_changes": false
+}

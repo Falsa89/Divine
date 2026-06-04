@@ -1,0 +1,39 @@
+{
+  "design_version": "closed_alpha_kickoff_execution_state_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_24_v75",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH",
+  "kickoff_execution_mode": "manual_recruitment_readiness_only",
+  "kickoff_execution_started": false,
+  "kickoff_execution_authorized": true,
+  "automated_live_invites": false,
+  "email_send_enabled": false,
+  "dm_send_enabled": false,
+  "networking_enabled": false,
+  "db_writes": 0,
+  "account_persistence": false,
+  "reward_grant": false,
+  "permanent_progress": false,
+  "phases_state": [
+    {"phase": "phase_1_pre_kickoff", "state": "ready"},
+    {"phase": "phase_2_kickoff", "state": "pending_manual_trigger"},
+    {"phase": "phase_3_capture", "state": "pending_manual_trigger"},
+    {"phase": "phase_4_triage", "state": "workflow_ready"},
+    {"phase": "phase_5_wrap", "state": "workflow_ready"}
+  ],
+  "halt_conditions": [
+    "any_P0_finding_open",
+    "manual_approval_revoked",
+    "md5_invariant_drift",
+    "db_write_detected",
+    "unexpected_network_call"
+  ],
+  "dependencies": [
+    {"id": "approval_checksum_verified", "satisfied": true},
+    {"id": "menu_public_exposure_applied", "satisfied": true},
+    {"id": "observation_pass", "satisfied": true},
+    {"id": "kickoff_gate_ready", "satisfied": true},
+    {"id": "feedback_form_template_ready", "satisfied": true},
+    {"id": "bug_report_workflow_ready", "satisfied": true},
+    {"id": "rollback_runbook_ready", "satisfied": true}
+  ]
+}

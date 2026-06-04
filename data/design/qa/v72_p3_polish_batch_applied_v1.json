@@ -1,0 +1,70 @@
+{
+  "plan_version": "v72_p3_polish_batch_applied_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_24_v75",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH",
+  "applied": true,
+  "apply_mode": "ui_copy_layout_only_safe",
+  "micro_patches": [
+    {
+      "finding_id": "p3_alpha_preview_hub_copy_shortening",
+      "file": "frontend/app/alpha-preview-hub.tsx",
+      "patch_type": "copy_shortening",
+      "applied": true,
+      "details": "Banner sub copy: 'Mappa locale anteprime alpha. No routing pubblico, no reward, no writes.' (shortened from previous longer sentence).",
+      "behavior_change": false,
+      "routing_change": false,
+      "fetch_change": false,
+      "async_storage_change": false,
+      "db_change": false,
+      "reward_change": false,
+      "battle_engine_change": false,
+      "story_combat_import_change": false
+    },
+    {
+      "finding_id": "p3_first_session_state_label_line_height_margin",
+      "file": "frontend/app/first-session-onboarding-preview.tsx",
+      "patch_type": "style_line_height_margin",
+      "applied": true,
+      "details": "stateMachineLabel: marginTop 4->6, marginBottom 4->6, added lineHeight 14. Pure style change.",
+      "behavior_change": false,
+      "routing_change": false,
+      "fetch_change": false,
+      "async_storage_change": false,
+      "db_change": false,
+      "reward_change": false,
+      "battle_engine_change": false,
+      "story_combat_import_change": false
+    },
+    {
+      "finding_id": "p3_alpha_preview_hub_qa_priority_ordering",
+      "file": "frontend/app/alpha-preview-hub.tsx",
+      "patch_type": "qa_priority_ordering",
+      "applied": true,
+      "details": "ENTRIES order: P0 (first-session-onboarding-preview) ora in prima posizione. Resto invariato.",
+      "behavior_change": false,
+      "routing_change": false,
+      "fetch_change": false,
+      "async_storage_change": false,
+      "db_change": false,
+      "reward_change": false,
+      "battle_engine_change": false,
+      "story_combat_import_change": false
+    }
+  ],
+  "micro_patches_count": 3,
+  "micro_patches_applied_count": 3,
+  "files_modified": [
+    "frontend/app/alpha-preview-hub.tsx",
+    "frontend/app/first-session-onboarding-preview.tsx"
+  ],
+  "files_modified_count": 2,
+  "alpha_menu_preview_modified": false,
+  "all_patches_safe": true,
+  "ts_clean_on_patched_files": true,
+  "static_scan_no_forbidden_patterns": true,
+  "md5_invariants_unchanged": true,
+  "db_writes": 0,
+  "deferred_findings": [],
+  "deferred_findings_count": 0,
+  "backlog_cleared": true
+}

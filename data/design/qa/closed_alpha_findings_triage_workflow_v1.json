@@ -1,0 +1,29 @@
+{
+  "workflow_version": "closed_alpha_findings_triage_workflow_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_24_v75",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v75_MEGA_RELEASE_ACCELERATION_24_CLOSED_ALPHA_KICKOFF_EXECUTION_TRIAGE_P3_POLISH",
+  "intake_channel": "shared_doc_or_email",
+  "buckets": ["P0", "P1", "P2", "P3"],
+  "bucket_definitions": {
+    "P0": "crash o data corruption o guardrail violation",
+    "P1": "flow blocker, ma non crash",
+    "P2": "flow degraded ma completabile",
+    "P3": "polish/copy/layout, non blocker"
+  },
+  "sla_minutes": {"P0": 60, "P1": 1440, "P2": 4320, "P3": null},
+  "decision_matrix": [
+    {"bucket": "P0", "action": "halt_closed_alpha + rollback_if_needed + escalate + hotfix_plan"},
+    {"bucket": "P1", "action": "plan_fix_in_v76_or_earlier_pack"},
+    {"bucket": "P2", "action": "plan_fix_in_v76_v77_batch"},
+    {"bucket": "P3", "action": "aggregate_into_polish_batch"}
+  ],
+  "rollback_reference": "data/design/navigation/menu_public_exposure_rollback_runbook_v1.json",
+  "db_writes": 0,
+  "account_persistence": false,
+  "forbidden": [
+    "public_live_ticketing_system",
+    "persistent_bug_db_writes_app_side",
+    "automatic_backend_route_creation",
+    "automated_invite_or_notification"
+  ]
+}

@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   stepLabel: { color: "#fff", fontSize: 16, fontWeight: "bold", marginBottom: 6 },
   stepBody: { color: "#c0c0c0", fontSize: 13, lineHeight: 18 },
   deeplinkHint: { color: "#66ddaa", fontSize: 11, marginTop: 8 },
-  stateMachineLabel: { color: "#88aabb", fontSize: 10, marginTop: 4, marginBottom: 4, fontStyle: "italic" },
+  stateMachineLabel: { color: "#88aabb", fontSize: 10, marginTop: 6, marginBottom: 6, lineHeight: 14, fontStyle: "italic" },
   hardeningBlock: {
     backgroundColor: "#0f0f18",
     padding: 12,
