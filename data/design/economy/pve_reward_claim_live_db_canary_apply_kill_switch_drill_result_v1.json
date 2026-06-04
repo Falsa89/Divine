@@ -1,0 +1,62 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T18:06:30Z",
+  "drill_id": "kill_switch_trigger",
+  "states": [
+    {
+      "phase": "init",
+      "state": "DISENGAGED",
+      "incoming_claims_simulated": 3,
+      "outcome": "all_claims_pass_design_only_simulated"
+    },
+    {
+      "phase": "engage",
+      "state_transition": "DISENGAGED->ENGAGE",
+      "dual_approval": false,
+      "outcome": "allowed"
+    },
+    {
+      "phase": "engaged_window",
+      "state": "ENGAGE",
+      "incoming_claims_simulated": 5,
+      "outcome": "all_claims_rejected_kill_switch_active"
+    },
+    {
+      "phase": "disengage_attempt_single_approval",
+      "state_transition": "ENGAGE->DISENGAGED",
+      "dual_approval": false,
+      "outcome": "rejected_dual_approval_required"
+    },
+    {
+      "phase": "disengage_with_dual_approval",
+      "state_transition": "ENGAGE->DISENGAGED",
+      "dual_approval": true,
+      "outcome": "allowed"
+    }
+  ],
+  "audit_log_design": [
+    {
+      "ts": "2026-06-04T18:06:30Z",
+      "event": "kill_switch_engaged",
+      "actor": "release_owner"
+    },
+    {
+      "ts": "2026-06-04T18:06:30Z",
+      "event": "kill_switch_disengage_rejected_single_approval",
+      "actor": "release_owner"
+    },
+    {
+      "ts": "2026-06-04T18:06:30Z",
+      "event": "kill_switch_disengaged",
+      "actor": "release_owner+security_owner"
+    }
+  ],
+  "all_engage_window_claims_rejected": true,
+  "single_approval_disengage_rejected": true,
+  "dual_approval_disengage_allowed": true,
+  "db_writes": 0,
+  "endpoint_implemented": false,
+  "live_reward_grant": false,
+  "design_only": true,
+  "notes": "Kill switch trigger drill design-only. NESSUNA chiamata HTTP reale, NESSUN flag env mutato."
+}

@@ -1,0 +1,21 @@
+{
+  "version": "v1",
+  "pack": "v85",
+  "design_only": true,
+  "checksum_algorithm": "sha256",
+  "sequence": [
+    {"step": "submit", "payload_fields_hashed": ["pack_id", "approval_scope", "target_environment", "max_users", "max_claims_total", "timestamp_utc"], "output_field": "submit_checksum"},
+    {"step": "second_approval", "input": "submit_checksum", "additional_fields": ["security_owner_id", "timestamp_utc"], "output_field": "second_approval_checksum"},
+    {"step": "step_up_auth", "input": "second_approval_checksum", "additional_fields": ["hardware_token_proof", "passkey_proof"], "output_field": "step_up_checksum"},
+    {"step": "final_go", "input": "step_up_checksum", "additional_fields": ["release_owner_final_ack", "timestamp_utc"], "output_field": "final_go_checksum"}
+  ],
+  "required_checksum_match_between_steps": [
+    ["submit_checksum", "second_approval_checksum_input"],
+    ["second_approval_checksum", "step_up_checksum_input"],
+    ["step_up_checksum", "final_go_checksum_input"]
+  ],
+  "mismatch_action": "halt",
+  "db_writes": 0,
+  "endpoint_implemented": false,
+  "notes": "Sequenza checksum design-only. Nessuna chiamata HTTP reale, nessuna mutazione DB."
+}

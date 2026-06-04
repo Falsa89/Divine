@@ -1,0 +1,56 @@
+{
+  "version": "v1",
+  "pack": "v85",
+  "design_only": true,
+  "endpoint_implemented": false,
+  "step_up_auth": {
+    "factors_required": ["hardware_token", "passkey"],
+    "min_factor_count": 2,
+    "step_up_window_minutes": 5,
+    "step_up_required_for_roles": ["release_owner", "security_owner"],
+    "server_signed_challenge_required": true,
+    "deny_anonymous": true,
+    "deny_single_factor": true,
+    "deny_replay_within_window": true
+  },
+  "endpoint_stub": {
+    "method": "POST",
+    "path": "/api/pve/reward/canary-apply/design-only",
+    "status": "DESIGN_ONLY_NOT_IMPLEMENTED",
+    "request_schema_design": {
+      "pack_id": "string",
+      "approval_chain_checksum": "sha256:32",
+      "target_environment": "const:design_only_dry_run",
+      "max_users": "int<=5",
+      "max_claims_total": "int<=5"
+    },
+    "response_design": {
+      "accepted": "bool",
+      "reason_code": "enum_or_null",
+      "server_time_utc": "iso_utc"
+    },
+    "reject_reason_codes": [
+      "approval_chain_mismatch",
+      "step_up_missing",
+      "kill_switch_engaged",
+      "forbidden_route",
+      "non_allowlisted_user",
+      "forbidden_reward_type",
+      "over_cap_reward",
+      "malformed_payload",
+      "real_account_id_forbidden",
+      "rate_limited"
+    ],
+    "hard_block_outside_design": true
+  },
+  "rate_limit_design": {
+    "window_seconds": 60,
+    "max_attempts_per_release_owner": 3,
+    "max_attempts_per_security_owner": 3,
+    "max_global_attempts": 6,
+    "on_breach": "reject_rate_limited"
+  },
+  "db_writes": 0,
+  "backend_routes_changed": false,
+  "notes": "Step-up auth + endpoint stub + rate limit design-only. NESSUN endpoint reale registrato in server.py."
+}

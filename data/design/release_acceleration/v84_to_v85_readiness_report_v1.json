@@ -2,27 +2,13 @@
   "version": "v1",
   "from": "v84",
   "to": "v85",
-  "recommendation": "live_db_canary_apply_design_pack_v85_still_no_apply",
-  "alternative_if_blocked": "continue_live_db_dry_run_hardening_v85",
-  "required_for_future_v85_pack": [
-    "dual_human_approval",
-    "checksum_sha256_approval",
-    "step_up_admin_auth",
-    "kill_switch_disengaged_with_dual_approval",
-    "observation_sink_live_off",
-    "explicit_no_apply_to_db"
-  ],
-  "hard_constraints": [
-    "no_live_db_writes",
-    "no_endpoint_implementation",
-    "no_real_reward_grant",
-    "no_premium_currency",
-    "no_battle_engine_change",
-    "no_server_py_change",
-    "manual_dual_approval_required",
-    "checksum_required"
-  ],
+  "v84_commit_hash": "3a56d734ed062698a6573f8751cd0162c1d74577",
+  "v85_strong_public_sync_repair_done": true,
+  "v85_canary_apply_design_complete": true,
+  "v85_v86_gate_ready": true,
   "db_writes": 0,
   "applied_to_live": false,
-  "endpoint_implemented": false
+  "live_db_apply_active": false,
+  "endpoint_implemented": false,
+  "notes": "v85 rinforza il public sync tag/sentinelle nel suite runner per v82/v83/v84/v85 e completa il design pack canary apply (workflow, runbook, step-up auth, drill). Nessun apply DB."
 }

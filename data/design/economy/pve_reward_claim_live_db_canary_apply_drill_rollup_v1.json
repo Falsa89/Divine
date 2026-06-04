@@ -1,0 +1,161 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T18:06:30Z",
+  "pack": "v85",
+  "kill_switch_drill": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T18:06:30Z",
+    "drill_id": "kill_switch_trigger",
+    "states": [
+      {
+        "phase": "init",
+        "state": "DISENGAGED",
+        "incoming_claims_simulated": 3,
+        "outcome": "all_claims_pass_design_only_simulated"
+      },
+      {
+        "phase": "engage",
+        "state_transition": "DISENGAGED->ENGAGE",
+        "dual_approval": false,
+        "outcome": "allowed"
+      },
+      {
+        "phase": "engaged_window",
+        "state": "ENGAGE",
+        "incoming_claims_simulated": 5,
+        "outcome": "all_claims_rejected_kill_switch_active"
+      },
+      {
+        "phase": "disengage_attempt_single_approval",
+        "state_transition": "ENGAGE->DISENGAGED",
+        "dual_approval": false,
+        "outcome": "rejected_dual_approval_required"
+      },
+      {
+        "phase": "disengage_with_dual_approval",
+        "state_transition": "ENGAGE->DISENGAGED",
+        "dual_approval": true,
+        "outcome": "allowed"
+      }
+    ],
+    "audit_log_design": [
+      {
+        "ts": "2026-06-04T18:06:30Z",
+        "event": "kill_switch_engaged",
+        "actor": "release_owner"
+      },
+      {
+        "ts": "2026-06-04T18:06:30Z",
+        "event": "kill_switch_disengage_rejected_single_approval",
+        "actor": "release_owner"
+      },
+      {
+        "ts": "2026-06-04T18:06:30Z",
+        "event": "kill_switch_disengaged",
+        "actor": "release_owner+security_owner"
+      }
+    ],
+    "all_engage_window_claims_rejected": true,
+    "single_approval_disengage_rejected": true,
+    "dual_approval_disengage_allowed": true,
+    "db_writes": 0,
+    "endpoint_implemented": false,
+    "live_reward_grant": false,
+    "design_only": true,
+    "notes": "Kill switch trigger drill design-only. NESSUNA chiamata HTTP reale, NESSUN flag env mutato."
+  },
+  "rollback_chain_drill": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T18:06:30Z",
+    "drill_id": "rollback_approval_chain",
+    "approval_chain": [
+      {
+        "step": 1,
+        "actor": "release_owner",
+        "action": "rollback_request",
+        "checksum": "sha256:669c4fb37d9cf3b4a5b419058481eb7ac25a8cf04f3ad83741003a6203005d58",
+        "approved": true
+      },
+      {
+        "step": 2,
+        "actor": "security_owner",
+        "action": "rollback_second_approval",
+        "input_checksum_match": true,
+        "checksum": "sha256:30f8369ad628e637392453ed51c8dee024a20a53f32c9ec378fb235951e38655",
+        "approved": true
+      },
+      {
+        "step": 3,
+        "actor": "automation",
+        "action": "verify_md5_invariants",
+        "approved": true,
+        "design_only": true
+      },
+      {
+        "step": 4,
+        "actor": "automation",
+        "action": "verify_suite_zero_required_fail",
+        "approved": true,
+        "design_only": true
+      },
+      {
+        "step": 5,
+        "actor": "automation",
+        "action": "verify_no_db_writes",
+        "approved": true,
+        "design_only": true
+      },
+      {
+        "step": 6,
+        "actor": "release_owner+security_owner",
+        "action": "final_rollback_go",
+        "step_up_required": true,
+        "approved": true,
+        "design_only": true
+      }
+    ],
+    "negative_cases": [
+      {
+        "case": "checksum_mismatch_at_second_approval",
+        "outcome": "halted_checksum_mismatch",
+        "design_only": true
+      },
+      {
+        "case": "single_human_only_approval",
+        "outcome": "halted_dual_approval_required",
+        "design_only": true
+      },
+      {
+        "case": "step_up_missing_at_final_go",
+        "outcome": "halted_step_up_missing",
+        "design_only": true
+      }
+    ],
+    "rolled_back_tx_simulated": [
+      {
+        "tx_id_simulated": "dryrun-tx-rb-001",
+        "rolled_back": true,
+        "db_rollback": false,
+        "design_only": true
+      },
+      {
+        "tx_id_simulated": "dryrun-tx-rb-002",
+        "rolled_back": true,
+        "db_rollback": false,
+        "design_only": true
+      }
+    ],
+    "all_chain_approved": true,
+    "all_negatives_halted": true,
+    "db_rollback": false,
+    "db_writes": 0,
+    "endpoint_implemented": false,
+    "live_reward_grant": false,
+    "design_only": true,
+    "notes": "Rollback chain drill design-only. NESSUN apply DB, NESSUN endpoint reale."
+  },
+  "db_writes": 0,
+  "endpoint_implemented": false,
+  "live_reward_grant": false,
+  "design_only": true
+}

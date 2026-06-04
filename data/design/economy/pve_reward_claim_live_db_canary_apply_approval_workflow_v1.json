@@ -1,0 +1,42 @@
+{
+  "version": "v1",
+  "pack": "v85",
+  "design_only": true,
+  "workflow_id": "pve_reward_claim_live_db_canary_apply_workflow",
+  "dual_human_approval_required": true,
+  "checksum_required": true,
+  "checksum_algorithm": "sha256",
+  "approval_roles": ["release_owner", "security_owner"],
+  "forbid_self_approval": true,
+  "approval_window_minutes": 60,
+  "steps": [
+    {"step": 1, "name": "submit_canary_apply_request", "actor": "release_owner", "requires_checksum": true, "on_fail": "halt"},
+    {"step": 2, "name": "static_validation_md5_invariants", "actor": "automation", "on_fail": "halt"},
+    {"step": 3, "name": "static_validation_suite_runner_zero_required_fail", "actor": "automation", "on_fail": "halt"},
+    {"step": 4, "name": "dry_run_simulator_pass", "actor": "automation", "on_fail": "halt"},
+    {"step": 5, "name": "second_human_approval", "actor": "security_owner", "requires_checksum_match": true, "on_fail": "halt"},
+    {"step": 6, "name": "step_up_admin_auth_challenge", "actor": "both_humans", "factors": ["hardware_token", "passkey"], "on_fail": "halt"},
+    {"step": 7, "name": "kill_switch_pre_engage_acknowledged", "actor": "automation", "required_state": "DISENGAGED", "on_fail": "halt"},
+    {"step": 8, "name": "final_go_decision", "actor": "release_owner", "requires_security_owner_present": true, "on_fail": "halt"},
+    {"step": 9, "name": "future_pack_required_for_actual_apply", "actor": "system", "design_only": true, "on_fail": "halt"}
+  ],
+  "halt_conditions": [
+    "md5_invariants_changed",
+    "suite_required_fail_gt_0",
+    "dry_run_pass_false",
+    "checksum_mismatch",
+    "single_human_only",
+    "step_up_auth_missing",
+    "kill_switch_engaged",
+    "any_forbidden_route_present",
+    "any_premium_currency_in_payload",
+    "arena_ranking_reward_in_payload",
+    "real_account_id_in_payload",
+    "approval_window_expired"
+  ],
+  "db_writes": 0,
+  "endpoint_implemented": false,
+  "live_reward_grant": false,
+  "applies_to_live": false,
+  "notes": "Workflow di approvazione design-only. NESSUNA esecuzione live, NESSUN apply DB."
+}

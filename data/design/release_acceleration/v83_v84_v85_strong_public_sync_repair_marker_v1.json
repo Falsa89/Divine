@@ -1,0 +1,21 @@
+{
+  "marker": "v83_v84_v85_strong_public_sync_repair",
+  "version": "v1",
+  "created_at_utc": "2026-06-04T18:04:00Z",
+  "source_pack": "v85",
+  "v84_commit_hash": "3a56d734ed062698a6573f8751cd0162c1d74577",
+  "suite_runner_updated": true,
+  "public_sync_tag_v82_present": true,
+  "public_sync_tag_v83_present": true,
+  "public_sync_tag_v84_present": true,
+  "public_sync_tag_v85_present": true,
+  "sentinel_v83_present": true,
+  "sentinel_v84_present": true,
+  "sentinel_v85_present": true,
+  "validator_weakening": false,
+  "fake_pass": false,
+  "db_writes": 0,
+  "public_sync_may_still_be_stale_due_to_platform": true,
+  "public_sync_platform_caveat_notes": "La sincronizzazione pubblica del repository può rimanere stale a causa di limitazioni della piattaforma di push (GitHub stale push). Localmente i tag/sentinelle sono iniettati e verificabili.",
+  "notes": "Riparazione strong del tag/registry/sentinel del suite runner per v82/v83/v84/v85. Nessun validator indebolito."
+}

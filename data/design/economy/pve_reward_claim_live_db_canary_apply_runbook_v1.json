@@ -1,0 +1,34 @@
+{
+  "version": "v1",
+  "pack": "v85",
+  "design_only": true,
+  "runbook_id": "pve_reward_claim_live_db_canary_apply_runbook",
+  "environment": "design_only_dry_run",
+  "target_population_max_users": 5,
+  "target_population_max_claims_total": 5,
+  "phases": [
+    {"phase": "P0_preflight", "actions": ["verify_md5_invariants", "verify_suite_zero_required_fail", "verify_dry_run_v84_pass"], "on_fail": "halt"},
+    {"phase": "P1_approval", "actions": ["submit", "second_approval", "step_up_auth", "final_go"], "on_fail": "halt", "requires_dual_human": true},
+    {"phase": "P2_observation_window_open", "actions": ["open_observation_sink_design", "engage_metrics_emitter_design"], "on_fail": "halt"},
+    {"phase": "P3_canary_design_apply", "actions": ["design_only_simulated_tx_emit", "no_db_writes", "no_endpoint_call"], "on_fail": "halt"},
+    {"phase": "P4_observe", "actions": ["collect_metrics_design", "compare_against_pass_criteria_design"], "on_fail": "halt"},
+    {"phase": "P5_decision", "actions": ["hold_or_rollback_or_continue"], "on_fail": "halt"},
+    {"phase": "P6_rollback_or_finalize", "actions": ["rollback_chain_drill_design", "finalize_design_only_artifacts"], "on_fail": "halt"}
+  ],
+  "halt_conditions": [
+    "any_md5_drift",
+    "suite_required_fail_gt_0",
+    "dry_run_regression",
+    "kill_switch_engaged",
+    "observation_metric_breach",
+    "approval_window_expired",
+    "checksum_mismatch_any_step",
+    "endpoint_implementation_detected",
+    "db_write_detected"
+  ],
+  "db_writes": 0,
+  "endpoint_implemented": false,
+  "live_reward_grant": false,
+  "applies_to_live": false,
+  "notes": "Runbook design-only. NESSUNA esecuzione live, NESSUN apply DB, NESSUN endpoint."
+}

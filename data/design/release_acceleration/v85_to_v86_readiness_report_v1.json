@@ -1,0 +1,29 @@
+{
+  "version": "v1",
+  "from": "v85",
+  "to": "v86",
+  "recommendation": "live_db_canary_apply_dry_run_with_dual_approval_pack_v86_still_no_apply",
+  "alternative_if_blocked": "continue_design_hardening_v86",
+  "required_for_future_v86_pack": [
+    "dual_human_approval",
+    "checksum_sha256_approval_chain",
+    "step_up_admin_auth",
+    "kill_switch_disengaged_with_dual_approval",
+    "observation_sink_design_active",
+    "explicit_no_apply_to_db"
+  ],
+  "hard_constraints": [
+    "no_live_db_writes",
+    "no_endpoint_implementation",
+    "no_real_reward_grant",
+    "no_premium_currency",
+    "no_battle_engine_change",
+    "no_server_py_change",
+    "manual_dual_approval_required",
+    "checksum_required",
+    "step_up_auth_required"
+  ],
+  "db_writes": 0,
+  "applied_to_live": false,
+  "endpoint_implemented": false
+}
