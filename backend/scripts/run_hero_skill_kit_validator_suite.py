@@ -3022,6 +3022,19 @@ OPTIONAL = [
     ('PROJECT-V86-PLAYABLE-MODE-ROUTE-SAFETY', 'validate_v86_playable_mode_route_safety.py'),
     ('PROJECT-V86-RAID-BOSS-PLACEHOLDER-SCHEMA', 'validate_v86_raid_boss_placeholder_schema.py'),
     ('MEGA-RELEASE-ACCELERATION-35-v86-ROLLUP', 'validate_mega_release_acceleration_35_v86_rollup.py'),
+    # ========================================================================
+    # v87 - MEGA_RELEASE_ACCELERATION_36_MOBILE_QA_ACCESS_AND_BATTLE_PREVIEW_VISUAL_LAYER
+    # Mobile QA hub route + visual layer (portrait placeholder + reactive HP bar + turn highlight).
+    # preview_only=true, deterministic=true, authoritative=false, db_writes=0, reward_live=false,
+    # endpoint_live=false, battle_engine_authoritative=false.
+    # validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v87_MEGA_RELEASE_ACCELERATION_36_MOBILE_QA_ACCESS_AND_BATTLE_PREVIEW_VISUAL_LAYER
+    # PUBLIC_SYNC_SENTINEL_v87_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V87-MOBILE-QA-ACCESS', 'validate_v87_mobile_qa_access.py'),
+    ('PROJECT-V87-BATTLE-PREVIEW-VISUAL-LAYER', 'validate_v87_battle_preview_visual_layer.py'),
+    ('PROJECT-V87-PREVIEW-PORTRAIT-PLACEHOLDER-CATALOG', 'validate_v87_preview_portrait_placeholder_catalog.py'),
+    ('MEGA-RELEASE-ACCELERATION-36-v87-ROLLUP', 'validate_mega_release_acceleration_36_v87_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

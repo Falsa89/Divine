@@ -288,6 +288,124 @@ export default function PlayableModeBattlePreview() {
   const prev = () => setStep((s) => Math.max(s - 1, 0));
   const reset = () => setStep(0);
 
+  // === v87 Visual Layer (preview-only, deterministic, local) ============================
+  // Calcola HP locale di ciascuna unità accumulando preview_dmg / preview_heal lungo la
+  // timeline fino allo step corrente. NON modifica alcun dato esterno e NON applica
+  // alcun effetto reale: è solo una proiezione visiva del payload.
+  const previewHpByAlias = useMemo<Record<string, { current: number; max: number }>>(() => {
+    const map: Record<string, { current: number; max: number }> = {};
+    payload.player_team.forEach((u) => {
+      map[u.alias] = { current: u.hp, max: u.hp };
+    });
+    (payload.enemy_team ?? []).forEach((u) => {
+      map[u.alias] = { current: u.hp, max: u.hp };
+    });
+    if (payload.boss) {
+      map[payload.boss.alias] = { current: payload.boss.hp, max: payload.boss.hp };
+    }
+    // Applica gli step fino a quello corrente (incluso).
+    const playerAliases = new Set(payload.player_team.map((u) => u.alias));
+    const enemyAliases = new Set([
+      ...(payload.enemy_team ?? []).map((u) => u.alias),
+      ...(payload.boss ? [payload.boss.alias] : []),
+    ]);
+    for (let i = 0; i <= Math.min(step, totalSteps - 1); i++) {
+      const ev = payload.timeline[i];
+      const dmg = ev.preview_dmg ?? 0;
+      const heal = ev.preview_heal ?? 0;
+      if (dmg > 0 && ev.target) {
+        const isPlayerActor = playerAliases.has(ev.actor);
+        // target speciali: distribuisci ai gruppi
+        if (ev.target === "all_enemies") {
+          const enemies = isPlayerActor ? enemyAliases : playerAliases;
+          enemies.forEach((a) => {
+            if (map[a]) map[a].current = Math.max(0, map[a].current - dmg);
+          });
+        } else if (ev.target === "all_player") {
+          playerAliases.forEach((a) => {
+            if (map[a]) map[a].current = Math.max(0, map[a].current - dmg);
+          });
+        } else if (ev.target !== "self_team" && map[ev.target]) {
+          map[ev.target].current = Math.max(0, map[ev.target].current - dmg);
+        }
+      }
+      if (heal > 0 && ev.target) {
+        if (ev.target === "all_player") {
+          playerAliases.forEach((a) => {
+            if (map[a]) map[a].current = Math.min(map[a].max, map[a].current + heal);
+          });
+        } else if (map[ev.target]) {
+          map[ev.target].current = Math.min(map[ev.target].max, map[ev.target].current + heal);
+        }
+      }
+    }
+    return map;
+  }, [payload, step, totalSteps]);
+
+  const isActive = (alias: string): boolean =>
+    currentStep.actor === alias || currentStep.target === alias;
+
+  const isAllyTarget = (alias: string): boolean => {
+    const t = currentStep.target;
+    if (!t) return false;
+    const playerAliases = new Set(payload.player_team.map((u) => u.alias));
+    if (t === "all_player") return playerAliases.has(alias);
+    if (t === "all_enemies") return !playerAliases.has(alias);
+    return t === alias;
+  };
+
+  const renderHpBar = (alias: string) => {
+    const hp = previewHpByAlias[alias];
+    if (!hp) return null;
+    const pct = hp.max > 0 ? Math.max(0, Math.min(1, hp.current / hp.max)) : 0;
+    const color =
+      pct > 0.66 ? "#22c55e" : pct > 0.33 ? "#eab308" : "#ef4444";
+    return (
+      <View style={styles.hpBarOuter}>
+        <View style={[styles.hpBarFill, { width: `${Math.round(pct * 100)}%`, backgroundColor: color }]} />
+        <Text style={styles.hpBarText}>
+          {hp.current} / {hp.max}
+        </Text>
+      </View>
+    );
+  };
+
+  // Portrait/silhouette placeholder: deriva una "lettera + accent color" dall'alias.
+  // Nessun asset esterno, nessun import di immagini reali.
+  const PORTRAIT_COLORS = ["#f97316", "#22d3ee", "#a78bfa", "#34d399", "#f43f5e", "#facc15", "#60a5fa", "#fb7185"];
+  const portraitFor = (alias: string) => {
+    const seed = Array.from(alias).reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    const color = PORTRAIT_COLORS[seed % PORTRAIT_COLORS.length];
+    const letter = (alias.match(/[A-Za-z0-9]/)?.[0] ?? "?").toUpperCase();
+    return { color, letter };
+  };
+
+  const renderUnitCard = (alias: string, opts?: { isBoss?: boolean; sub?: string }) => {
+    const { color, letter } = portraitFor(alias);
+    const active = isActive(alias);
+    const targeted = isAllyTarget(alias) && currentStep.target !== alias.split(":")[0];
+    return (
+      <View
+        key={alias}
+        style={[styles.unitCard, active ? styles.unitCardActive : null, opts?.isBoss ? styles.unitCardBoss : null]}
+      >
+        <View style={[styles.portraitBox, { backgroundColor: color }]}>
+          <Text style={styles.portraitLetter}>{letter}</Text>
+          {opts?.isBoss ? <Text style={styles.portraitBossTag}>BOSS</Text> : null}
+        </View>
+        <View style={styles.unitInfo}>
+          <Text style={styles.unitAlias} numberOfLines={1}>
+            {alias}
+          </Text>
+          {opts?.sub ? <Text style={styles.unitSub}>{opts.sub}</Text> : null}
+          {renderHpBar(alias)}
+          {targeted ? <Text style={styles.targetedTag}>· bersaglio del turno</Text> : null}
+        </View>
+      </View>
+    );
+  };
+  // === END v87 Visual Layer =============================================================
+
   return (
     <SafeAreaView style={styles.screen}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -320,27 +438,24 @@ export default function PlayableModeBattlePreview() {
           <Text style={styles.cardMono}>{payload.seed}</Text>
         </View>
 
-        <View style={styles.teamsRow}>
-          <View style={styles.teamCard}>
-            <Text style={styles.teamTitle}>Player Team</Text>
-            {payload.player_team.map((u) => (
-              <Text key={u.alias} style={styles.unitLine}>
-                {u.alias} · HP {u.hp} · ATK {u.atk ?? "-"} · DEF {u.def ?? "-"}
-              </Text>
-            ))}
+        <View style={styles.teamsCol}>
+          <Text style={styles.teamHeader}>Player Team</Text>
+          <View style={styles.unitsGrid}>
+            {payload.player_team.map((u) =>
+              renderUnitCard(u.alias, { sub: `${u.role ?? "unit"} · ATK ${u.atk ?? "-"} · DEF ${u.def ?? "-"}` })
+            )}
           </View>
-          <View style={styles.teamCard}>
-            <Text style={styles.teamTitle}>{payload.boss ? "Boss" : "Enemy Team"}</Text>
+          <Text style={styles.teamHeader}>{payload.boss ? "Boss" : "Enemy Team"}</Text>
+          <View style={styles.unitsGrid}>
             {payload.boss ? (
-              <Text style={styles.unitLine}>
-                {payload.boss.alias} · HP {payload.boss.hp} · ATK {payload.boss.atk ?? "-"} · DEF {payload.boss.def ?? "-"}
-              </Text>
+              renderUnitCard(payload.boss.alias, {
+                isBoss: true,
+                sub: `ATK ${payload.boss.atk ?? "-"} · DEF ${payload.boss.def ?? "-"} · phases ${payload.boss.phases?.length ?? 0}`,
+              })
             ) : (
-              (payload.enemy_team ?? []).map((u) => (
-                <Text key={u.alias} style={styles.unitLine}>
-                  {u.alias} · HP {u.hp} · ATK {u.atk ?? "-"} · DEF {u.def ?? "-"}
-                </Text>
-              ))
+              (payload.enemy_team ?? []).map((u) =>
+                renderUnitCard(u.alias, { sub: `enemy · ATK ${u.atk ?? "-"} · DEF ${u.def ?? "-"}` })
+              )
             )}
           </View>
         </View>
@@ -445,6 +560,74 @@ const styles = StyleSheet.create({
   cardMono: { color: "#a5f3fc", fontSize: 12, fontFamily: "Menlo" },
   bold: { color: "#fff", fontWeight: "700" },
   teamsRow: { flexDirection: "row", gap: 8, marginTop: 8 },
+  teamsCol: { marginTop: 8 },
+  teamHeader: {
+    color: "#cbd5e1",
+    fontWeight: "700",
+    fontSize: 13,
+    letterSpacing: 0.4,
+    textTransform: "uppercase",
+    marginTop: 8,
+    marginBottom: 6,
+  },
+  unitsGrid: { flexDirection: "row", flexWrap: "wrap", marginBottom: 6 },
+  unitCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "#0b1220",
+    borderColor: "#1f2937",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 8,
+    marginBottom: 6,
+  },
+  unitCardActive: { borderColor: "#22d3ee", backgroundColor: "#0f1f2e" },
+  unitCardBoss: { borderColor: "#f97316" },
+  portraitBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
+  },
+  portraitLetter: { color: "#0d1117", fontSize: 20, fontWeight: "800" },
+  portraitBossTag: {
+    position: "absolute",
+    bottom: -10,
+    color: "#fb923c",
+    fontSize: 9,
+    fontWeight: "800",
+    letterSpacing: 0.6,
+  },
+  unitInfo: { flex: 1 },
+  unitAlias: { color: "#fff", fontSize: 13, fontWeight: "700" },
+  unitSub: { color: "#94a3b8", fontSize: 11, marginTop: 2 },
+  targetedTag: { color: "#22d3ee", fontSize: 10, marginTop: 2 },
+  hpBarOuter: {
+    height: 12,
+    backgroundColor: "#1f2937",
+    borderRadius: 6,
+    marginTop: 6,
+    overflow: "hidden",
+    position: "relative",
+    justifyContent: "center",
+  },
+  hpBarFill: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    borderRadius: 6,
+  },
+  hpBarText: {
+    color: "#fff",
+    fontSize: 9,
+    fontWeight: "700",
+    textAlign: "center",
+    zIndex: 1,
+  },
   teamCard: {
     flex: 1,
     backgroundColor: "#0b1220",

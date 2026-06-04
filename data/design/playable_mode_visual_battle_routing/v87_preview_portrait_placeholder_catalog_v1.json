@@ -1,0 +1,35 @@
+{
+  "version": "v1",
+  "pack": "v87",
+  "catalog_id": "preview_portrait_placeholder_catalog",
+  "design_only": true,
+  "runtime_attached": false,
+  "asset_final_import": false,
+  "production_ui_exposure": false,
+  "render_strategy": "local_letter_plus_accent_color",
+  "accent_palette": [
+    "#f97316", "#22d3ee", "#a78bfa", "#34d399",
+    "#f43f5e", "#facc15", "#60a5fa", "#fb7185"
+  ],
+  "alias_groups": {
+    "training": ["alpha_trainee_hero_01", "alpha_trainee_hero_02", "alpha_trainee_hero_03", "training_dummy_a", "training_dummy_b"],
+    "story":    ["alpha_story_hero_01", "alpha_story_hero_02", "alpha_story_hero_03", "story_grunt_a", "story_grunt_b", "story_lieutenant"],
+    "boss":     ["alpha_boss_hero_01", "alpha_boss_hero_02", "alpha_boss_hero_03", "alpha_boss_hero_04", "alpha_raid_boss_placeholder_01"],
+    "tower":    ["alpha_tower_hero_01", "alpha_tower_hero_02", "alpha_tower_hero_03", "tower_minion_a", "tower_minion_b", "tower_minion_c"],
+    "event":    ["alpha_event_hero_01", "alpha_event_hero_02", "alpha_event_hero_03", "event_mob_a", "event_elite_b"],
+    "arena":    ["alpha_arena_hero_01", "alpha_arena_hero_02", "alpha_arena_hero_03", "arena_dummy_pvp_a", "arena_dummy_pvp_b", "arena_dummy_pvp_c"]
+  },
+  "forbidden": [
+    "final_asset_import",
+    "character_bible_link",
+    "hero_roster_link",
+    "production_ui_exposure",
+    "reward_grant_link",
+    "summon_link",
+    "inventory_link"
+  ],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false,
+  "notes": "Catalogo placeholder dei portrait per le 6 mode preview. Solo lettera+colore accent, nessun asset finale."
+}
