@@ -1,0 +1,29 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "frontend_session_result",
+  "version": 1,
+  "files": [
+    {"file": "frontend/src/auth/AuthContext.tsx", "role": "v96 AuthProvider (session restore, login, logout, refreshMe)", "storage": "expo-secure-store"},
+    {"file": "frontend/app/login.tsx", "role": "Login screen UI (Google/Apple/Guest)", "branding_neutral_strings": true},
+    {"file": "frontend/app/_layout.tsx", "role": "AuthProvider v96 wrap registered as <V96AuthProvider>"}
+  ],
+  "features": {
+    "session_restore": true,
+    "login_google": true,
+    "login_apple_ios_only": true,
+    "login_guest_gated_qa": true,
+    "logout": true,
+    "error_state": true,
+    "loading_state": true,
+    "provider_status_banner": true,
+    "secure_storage": "expo-secure-store (token + account JSON)",
+    "plain_async_storage_for_tokens": false,
+    "raw_oauth_token_logged": false
+  },
+  "branding": {
+    "google_button_placeholder_neutral_string": true,
+    "apple_button_ios_only_visible": true,
+    "store_assets_required_for_production": true
+  },
+  "verdict": "FRONTEND_SESSION_RUNTIME_READY_PROVIDER_CREDENTIALS_REQUIRED_FOR_STORE_BUILD"
+}

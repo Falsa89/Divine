@@ -1,0 +1,48 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "login_provider_contract",
+  "version": 1,
+  "google": {
+    "status": "STRUCTURE_READY_CREDENTIALS_REQUIRED_FOR_STORE_BUILD",
+    "frontend_button_implemented": true,
+    "backend_endpoint": "POST /api/auth/google",
+    "library_recommendation": "@react-native-google-signin/google-signin",
+    "dev_build_required": true,
+    "sandbox_path_active": true,
+    "production_verify_path": "placeholder (requires GOOGLE_CLIENT_ID env + google-auth lib)",
+    "branding_guidelines_required": true,
+    "credentials_required_for_store_build": true
+  },
+  "apple": {
+    "status": "STRUCTURE_READY_CREDENTIALS_REQUIRED_FOR_STORE_BUILD",
+    "frontend_button_implemented_ios_only": true,
+    "backend_endpoint": "POST /api/auth/apple",
+    "library_recommendation": "expo-apple-authentication",
+    "ios_only_client_side": true,
+    "android_web_path": "not supported by Apple",
+    "sandbox_path_active": true,
+    "production_verify_path": "placeholder (requires APPLE_CLIENT_ID + JWT verify)",
+    "app_store_guideline_4_8": "required when third-party login offered",
+    "credentials_required_for_store_build": true
+  },
+  "guest": {
+    "status": "GATED_QA_ONLY",
+    "backend_endpoint": "POST /api/auth/guest",
+    "env_flag": "V96_AUTH_GUEST_ENABLED",
+    "current_value": true,
+    "reward_exploit_protection": "guest accounts created with 0 gold/0 gems/no reward grant",
+    "production_recommendation": "disable in store build"
+  },
+  "account_linking": {
+    "idempotent": true,
+    "strategy": "sha256_hash(provider:subject) primary key",
+    "no_duplicate_for_same_subject": true,
+    "provider_user_id_raw_stored": false
+  },
+  "safety": {
+    "raw_oauth_token_logged": false,
+    "provider_secret_in_repo": false,
+    "alias_only_in_qa_announcements": true,
+    "db_writes_scope": "users_collection_only_auth_fields"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "release_candidate_final_gate",
+  "version": 1,
+  "gates": {
+    "auth_account": {
+      "internal_alpha": "READY_WITH_SANDBOX_PROVIDERS",
+      "closed_alpha": "CONDITIONAL_REQUIRES_REAL_GOOGLE_APPLE_CREDENTIALS",
+      "commercial_release": "BLOCKED_REQUIRES_REAL_GOOGLE_APPLE_CREDENTIALS_AND_STORE_REVIEW"
+    },
+    "engine": {"internal_alpha": "READY", "closed_alpha": "READY", "commercial_release": "READY"},
+    "formation": {"internal_alpha": "READY", "closed_alpha": "READY", "commercial_release": "READY"},
+    "modes": {"internal_alpha": "READY", "closed_alpha": "CONDITIONAL", "commercial_release": "CONDITIONAL"},
+    "rewards": {"internal_alpha": "READY_CANARY_SANDBOX", "closed_alpha": "CONDITIONAL", "commercial_release": "BLOCKED"},
+    "live_guild": {"internal_alpha": "READY_GATED", "closed_alpha": "CONDITIONAL", "commercial_release": "CONDITIONAL"},
+    "announcements": {"internal_alpha": "READY_SANDBOX", "closed_alpha": "CONDITIONAL", "commercial_release": "BLOCKED"},
+    "mobile_qa": {"internal_alpha": "CONDITIONAL_REQUIRES_PHYSICAL_DEVICE_RUN", "closed_alpha": "BLOCKED_UNTIL_QA_RUN", "commercial_release": "BLOCKED"},
+    "performance": {"internal_alpha": "READY_LOW_IMPACT_SMOKE", "closed_alpha": "CONDITIONAL_REQUIRES_LOAD_LOCUST", "commercial_release": "BLOCKED"},
+    "optional_fail_baseline": {"internal_alpha": "READY_RECONCILED", "closed_alpha": "CONDITIONAL_NEEDS_CLEANUP", "commercial_release": "BLOCKED_REQUIRES_<=30_OPTIONAL_FAIL"},
+    "store_readiness": {"internal_alpha": "NOT_REQUIRED", "closed_alpha": "BLOCKED", "commercial_release": "BLOCKED"},
+    "art_audio_readiness": {"internal_alpha": "CONDITIONAL_PLACEHOLDERS", "closed_alpha": "BLOCKED", "commercial_release": "BLOCKED"},
+    "compliance_privacy": {"internal_alpha": "DESIGN_READY", "closed_alpha": "BLOCKED_REQUIRES_LIVE_POLICY_URLS", "commercial_release": "BLOCKED"},
+    "known_issues": {"internal_alpha": "ACCEPTABLE_CAVEAT_DOCUMENTED", "closed_alpha": "CONDITIONAL", "commercial_release": "CONDITIONAL"}
+  },
+  "overall_verdict": {
+    "READY_FOR_INTERNAL_ALPHA": true,
+    "CONDITIONAL_FOR_CLOSED_ALPHA": true,
+    "BLOCKED_FOR_RELEASE_CANDIDATE": false,
+    "BLOCKED_FOR_COMMERCIAL_RELEASE": true
+  },
+  "blockers_for_internal_alpha": [
+    "mobile_qa: physical Android/iOS device run"
+  ],
+  "blockers_for_closed_alpha": [
+    "auth: real Google/Apple credentials",
+    "mobile_qa: physical device run",
+    "performance: load/locust",
+    "compliance: live privacy/terms URLs",
+    "optional_fail_baseline: cleanup ~110 stale_proof+deprecated"
+  ],
+  "blockers_for_commercial_release": [
+    "all closed_alpha blockers",
+    "store_readiness (App Store / Play Console)",
+    "art/audio final assets",
+    "monetization (IAP) live activation",
+    "final_numbers balance lock (NOT in v96 scope)"
+  ],
+  "safety": {
+    "db_writes_scope": "users_collection_auth_fields_only",
+    "reward_live": false,
+    "ranking_live": false,
+    "production_broadcast": false,
+    "push_notification_live": false,
+    "monetization_active": false
+  }
+}

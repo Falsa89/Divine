@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "mobile_qa_matrix",
+  "version": 1,
+  "matrix": {
+    "android_physical_device": {
+      "status": "PLANNED_NOT_EXECUTED_IN_CONTAINER",
+      "required_for_internal_alpha": true,
+      "reason": "emergent container ha solo expo packager dev server, niente device fisico"
+    },
+    "ios_physical_device": {
+      "status": "PLANNED_NOT_EXECUTED_IN_CONTAINER",
+      "required_for_internal_alpha": true,
+      "caveat": "per Apple sign-in serve build TestFlight"
+    },
+    "google_login_dev_build": {
+      "status": "PLANNED",
+      "requires": "GOOGLE_CLIENT_ID + expo dev build + @react-native-google-signin/google-signin"
+    },
+    "apple_login_ios_only": {
+      "status": "PLANNED",
+      "requires": "APPLE_CLIENT_ID + expo dev build + expo-apple-authentication + iOS device"
+    },
+    "session_restore": {"status": "IMPLEMENTED", "backend_verified": true, "local_smoke_passed": true},
+    "logout": {"status": "IMPLEMENTED", "backend_verified": true},
+    "formation_fetch": {"status": "IMPLEMENTED", "endpoint": "/api/team/get-formation", "local_smoke_passed": true},
+    "pre_battle_with_real_formation": {"status": "CONDITIONAL", "note": "pre-battle-lobby still uses safe_fallback for unauthenticated path. Post-login should fetch real formation."},
+    "smoke_15_modes": {
+      "story": "design_ready",
+      "tower": "design_ready",
+      "arena": "design_ready",
+      "training": "design_ready",
+      "raid": "design_ready",
+      "event": "design_ready",
+      "guild_live": "design_ready",
+      "guild_war": "design_ready",
+      "guild_raid": "design_ready",
+      "world_boss": "design_ready",
+      "faction_boss": "design_ready",
+      "territory": "design_ready",
+      "crepuscolo_titani": "design_ready",
+      "assalto_ragnarok": "design_ready",
+      "summer_invasion": "design_ready"
+    },
+    "live_guild_qa_hub": {"status": "IMPLEMENTED", "endpoint_used": "/api/live-mode/catalog"},
+    "live_announcements_qa": {"status": "IMPLEMENTED_SANDBOX_ONLY"},
+    "engine_v95_battle_smoke": {"status": "IMPLEMENTED", "regression_tests": "21/21 PASS"}
+  },
+  "open_blockers_for_internal_alpha": [
+    "Android physical device QA run",
+    "iOS physical device QA run (TestFlight)",
+    "Provider credentials reali (Google/Apple) per end-to-end provider flow"
+  ],
+  "verdict": "MOBILE_QA_MATRIX_DECLARED_PHYSICAL_RUNS_REQUIRED_FOR_INTERNAL_ALPHA",
+  "safety": {"db_writes": 0, "reward_live": false, "random_opponents": false}
+}

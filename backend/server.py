@@ -528,6 +528,26 @@ except Exception as _v95_err:
     import logging
     logging.getLogger(__name__).warning("v95_readonly_catalog router import failed: %s", _v95_err)
 
+# MEGA_RELEASE_ACCELERATION_45_v96 — Auth (Google/Apple/Guest/Me/Logout/Refresh)
+# + Team Formation account-bridged endpoint (chiude blocker v95).
+# auth_db_writes = allowed (collection users).
+# gameplay/economy/reward/score db_writes = 0.
+# NO raw OAuth token logging. NO provider secret in repo.
+try:
+    from routes.v96_auth import create_auth_router, provider_status_router
+    app.include_router(create_auth_router(db, get_current_user))
+    app.include_router(provider_status_router)
+except Exception as _v96_auth_err:
+    import logging
+    logging.getLogger(__name__).warning("v96_auth router import failed: %s", _v96_auth_err)
+
+try:
+    from routes.v96_team_formation import create_team_formation_router
+    app.include_router(create_team_formation_router(db, get_current_user))
+except Exception as _v96_tf_err:
+    import logging
+    logging.getLogger(__name__).warning("v96_team_formation router import failed: %s", _v96_tf_err)
+
 # PROJECT_MATERIAL_RAID_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
 # Returns 503 when MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
 # no materials granted, no live mutation, no stamina, no tickets, no paid attempts.

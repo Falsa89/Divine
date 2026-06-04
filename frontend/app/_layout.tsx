@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider as V96AuthProvider } from '../src/auth/AuthContext';
 import { NotificationProvider } from '../context/NotificationContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet, Platform } from 'react-native';
@@ -22,6 +23,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <AuthProvider>
+        <V96AuthProvider>
         <NotificationProvider>
         <StatusBar style="light" hidden />
         <Stack
@@ -93,8 +95,11 @@ export default function RootLayout() {
           <Stack.Screen name="soul-forge" options={{ animation: 'slide_from_bottom' }} />
           {/* CS2-E — Read-only preview screen (design-only, no buttons mutativi). */}
           <Stack.Screen name="collection-synergies-preview" options={{ animation: 'slide_from_right' }} />
+          {/* v96 — Login screen (Google/Apple/Guest) */}
+          <Stack.Screen name="login" options={{ animation: 'fade' }} />
         </Stack>
         </NotificationProvider>
+        </V96AuthProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );

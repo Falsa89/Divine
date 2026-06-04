@@ -1,0 +1,52 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "auth_account_audit",
+  "version": 1,
+  "audit_summary": {
+    "pre_existing": {
+      "jwt_lib": {"library": "PyJWT==2.12.1", "status": "present"},
+      "bcrypt": {"library": "bcrypt==5.0.0", "status": "present"},
+      "legacy_email_password_login": {
+        "endpoints": ["POST /api/register", "POST /api/login"],
+        "status": "implemented",
+        "file": "backend/server.py"
+      },
+      "get_current_user_dependency": {"status": "implemented", "file": "backend/server.py"},
+      "users_collection": {"status": "present", "db": "mongodb"},
+      "frontend_auth_context_legacy": {"file": "frontend/context/AuthContext.tsx", "status": "partial (email/password only)", "token_storage": "AsyncStorage (NOT secure)"}
+    },
+    "v96_additions": {
+      "backend_routes": [
+        {"file": "backend/routes/v96_auth.py", "endpoints": ["POST /api/auth/google", "POST /api/auth/apple", "POST /api/auth/guest", "GET /api/auth/me", "POST /api/auth/logout", "POST /api/auth/refresh (CONTRACT, DEFERRED)", "GET /api/auth/provider-status"], "status": "implemented"},
+        {"file": "backend/routes/v96_team_formation.py", "endpoints": ["GET /api/team/get-formation"], "status": "implemented (chiude blocker v95)"}
+      ],
+      "frontend_files": [
+        {"file": "frontend/src/auth/AuthContext.tsx", "status": "implemented (v96 AuthProvider, expo-secure-store)"},
+        {"file": "frontend/app/login.tsx", "status": "implemented (Google/Apple/Guest UI + status banner)"}
+      ],
+      "secure_storage": {"library": "expo-secure-store@56.0.4", "status": "installed"}
+    },
+    "missing_classification": {
+      "google_credentials": "CREDENTIALS_REQUIRED_FOR_STORE_BUILD (no GOOGLE_CLIENT_ID env)",
+      "apple_credentials": "CREDENTIALS_REQUIRED_FOR_STORE_BUILD (no APPLE_CLIENT_ID env, iOS-only client side)",
+      "google_signin_native_lib": "NOT INSTALLED (requires dev build) - @react-native-google-signin/google-signin",
+      "apple_authentication_lib": "NOT INSTALLED - expo-apple-authentication",
+      "refresh_token_runtime": "DEFERRED (contract only)"
+    }
+  },
+  "classifications": {
+    "implemented": ["backend auth router structure", "backend team formation endpoint", "frontend auth context v96", "frontend login screen", "secure storage policy", "sandbox guest login", "alias-safe account model", "jwt token issuance", "session restore", "logout"],
+    "partial": ["legacy email/password (pre-v96 only, not part of v96 store flow)"],
+    "missing": ["google id_token verification runtime", "apple identity_token verification runtime", "native google-signin client library", "native apple-authentication client library", "refresh token rotation runtime"],
+    "unsafe": [],
+    "blocked_by_env_provider_credentials": ["google production flow", "apple production flow"],
+    "safe_fallback": ["sandbox guest login", "sandbox google flow", "sandbox apple flow"]
+  },
+  "safety": {
+    "raw_oauth_token_logged": false,
+    "provider_secret_in_repo": false,
+    "plain_token_storage": false,
+    "alias_only_in_logs": true,
+    "real_pii_in_logs": false
+  }
+}

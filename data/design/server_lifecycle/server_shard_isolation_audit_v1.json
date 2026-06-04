@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T22:59:54.075559+00:00",
+  "timestamp_utc": "2026-06-04T23:24:06.378518+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1533,
+  "backend_python_files_scanned": 1547,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 748,
+      "files_with_hits": 759,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -141,7 +141,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 135
+      "user_id_only_files_count": 136
     },
     "user_heroes": {
       "expected_scope": "server_bound",
@@ -274,15 +274,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 535,
+              "line": 555,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 542,
+              "line": 562,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 559,
+              "line": 579,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -370,15 +370,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 554,
+              "line": 574,
               "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
             },
             {
-              "line": 558,
+              "line": 578,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 559,
+              "line": 579,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -494,7 +494,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 850,
+              "line": 870,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
             }
           ]
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 132,
+      "files_with_hits": 140,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -793,7 +793,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 19
+      "user_id_only_files_count": 20
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -901,7 +901,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 148,
+      "files_with_hits": 150,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -914,11 +914,11 @@
               "snippet": "\"guild_id\": None,"
             },
             {
-              "line": 591,
+              "line": 611,
               "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
             },
             {
-              "line": 593,
+              "line": 613,
               "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
@@ -1025,7 +1025,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 138,
+      "files_with_hits": 140,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1564,7 +1564,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 416,
+  "cross_server_leak_risk_candidates_count": 418,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1658,12 +1658,12 @@
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/heroes.py",
+      "file": "backend/routes/v96_auth.py",
       "keyword": "user"
     },
     {
       "category": "accounts_users_auth",
-      "file": "backend/routes/raids.py",
+      "file": "backend/routes/heroes.py",
       "keyword": "user"
     }
   ],

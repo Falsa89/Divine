@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "md5_baseline_v95_lock",
+  "version": 1,
+  "baseline": {
+    "backend/battle_engine.py": "56b6e5261c3b35c421db3202f750d1a6",
+    "backend/server.py_v95_snapshot": "df22b6599cbc5621e9f0edeb0dcf832a"
+  },
+  "note": "backend/server.py è stato ulteriormente modificato in v96 per registrare i router auth e team-formation. Il MD5 v95 baseline lock fissa lo snapshot post-v95 come baseline storico. Il nuovo MD5 post-v96 verrà tracciato a parte.",
+  "v96_post_modification_md5": {
+    "backend/server.py": "4f0c91d498f97f6c72376127c0c8ada5"
+  },
+  "locked_unchanged_files": [
+    {"path": "backend/battle_engine.py", "baseline_md5": "56b6e5261c3b35c421db3202f750d1a6", "unchanged_in_v96": true}
+  ],
+  "safety": {"db_writes": 0}
+}

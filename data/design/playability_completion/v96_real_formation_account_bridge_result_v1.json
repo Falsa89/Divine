@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "real_formation_account_bridge_result",
+  "version": 1,
+  "endpoint": "GET /api/team/get-formation",
+  "endpoint_present": true,
+  "router_file": "backend/routes/v96_team_formation.py",
+  "reads_from": "user.team_formation (autenticated user document)",
+  "writes": "NONE (read-only)",
+  "chain_implemented": ["saved_formation", "local_cached_formation", "safe_fallback_formation"],
+  "sources_returned": {
+    "saved_formation": "when user.team_formation non-empty",
+    "safe_fallback_formation": "when authenticated but no team_formation OR no user doc"
+  },
+  "ui_source_label_visible": true,
+  "fallback_used_flag_visible": true,
+  "account_id_propagated": true,
+  "v95_blocker_closed": true,
+  "verdict": "READY",
+  "safety": {
+    "db_writes": 0,
+    "team_mutation": false,
+    "hero_roster_mutation": false,
+    "reward_live": false
+  }
+}

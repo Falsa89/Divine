@@ -1,0 +1,59 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "account_privacy_and_store_compliance_matrix",
+  "version": 1,
+  "privacy_policy": {
+    "text_status": "DRAFT_REQUIRED_FOR_STORE_BUILD",
+    "requires_url_in_store_listings": true,
+    "data_collected": ["provider_subject_hash", "email_optional", "alias", "created_at", "last_login", "team_formation_progress"],
+    "data_NOT_collected": ["real_name_PII_raw", "physical_address", "phone_number", "raw_oauth_token"]
+  },
+  "terms_of_service": {"status": "DRAFT_REQUIRED_FOR_STORE_BUILD"},
+  "account_deletion": {
+    "endpoint_planned": "POST /api/auth/account/delete",
+    "status": "CONTRACT_ONLY_DEFERRED_TO_POST_V96",
+    "gdpr_required": true,
+    "ccpa_required": true
+  },
+  "account_linking_unlinking": {
+    "linking_implemented": true,
+    "unlinking_planned": "CONTRACT_ONLY",
+    "multi_provider_per_account": "DEFERRED_POST_V96"
+  },
+  "branding": {
+    "google": {"branding_guidelines_followed_placeholder": true, "official_asset_required": true},
+    "apple": {"sign_in_with_apple_button_required": true, "hig_compliance_required": true}
+  },
+  "logging_policy": {
+    "no_PII_in_logs": true,
+    "no_raw_oauth_token_in_logs": true,
+    "alias_only": true
+  },
+  "analytics_policy": {
+    "current": "DESIGN_ONLY",
+    "production": "requires opt-in/out per GDPR/CCPA"
+  },
+  "gdpr_checklist": {
+    "data_collected_disclosed": true,
+    "right_to_be_forgotten": "CONTRACT_ONLY_DEFERRED",
+    "data_export": "CONTRACT_ONLY_DEFERRED",
+    "consent_mechanism_required": true
+  },
+  "ccpa_checklist": {
+    "do_not_sell_data": "applicable_design_only",
+    "data_categories_disclosed": true
+  },
+  "app_store_checklist": {
+    "sign_in_with_apple_4_8": "REQUIRED when third-party login offered",
+    "privacy_policy_url": "REQUIRED",
+    "app_privacy_questionnaire": "REQUIRED",
+    "data_collection_disclosure": "REQUIRED"
+  },
+  "play_console_checklist": {
+    "data_safety_section": "REQUIRED",
+    "privacy_policy_url": "REQUIRED",
+    "sensitive_permissions_disclosure": "REQUIRED"
+  },
+  "qa_announcements_pii_check": {"real_pii_in_qa_broadcasts": false, "alias_only": true},
+  "verdict": "PRIVACY_STORE_COMPLIANCE_MATRIX_DESIGNED_DOCS_AND_ACCOUNT_DELETION_DEFERRED_TO_POST_V96"
+}

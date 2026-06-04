@@ -1,0 +1,37 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_45_v96",
+  "type": "load_and_engine_smoke_result",
+  "version": 1,
+  "low_impact_tests_executed": [
+    {"endpoint": "/api/auth/provider-status", "method": "GET", "status": 200},
+    {"endpoint": "/api/auth/guest", "method": "POST", "status": 200, "sandbox": true},
+    {"endpoint": "/api/auth/google (sandbox)", "method": "POST", "status": 200, "sandbox": true},
+    {"endpoint": "/api/auth/apple (sandbox)", "method": "POST", "status": 200, "sandbox": true},
+    {"endpoint": "/api/auth/me", "method": "GET", "status": 200, "requires_auth": true},
+    {"endpoint": "/api/auth/logout", "method": "POST", "status": 200, "requires_auth": true},
+    {"endpoint": "/api/team/get-formation", "method": "GET", "status": 200, "requires_auth": true},
+    {"endpoint": "/api/encounter-source/catalog", "method": "GET", "status": 200},
+    {"endpoint": "/api/live-mode/catalog", "method": "GET", "status": 200},
+    {"endpoint": "/api/avatar-placeholder/catalog", "method": "GET", "status": 200}
+  ],
+  "engine_smoke": {
+    "regression_test_runner": "backend/scripts/test_v95_battle_engine_runtime_status_dot.py",
+    "result": "21/21 PASS",
+    "battle_report_extension": "verified"
+  },
+  "load_test": {
+    "executed": false,
+    "reason": "low-impact smoke only; full load/locust deferred (see v96_release_candidate_final_gate)"
+  },
+  "reward_canary_sandbox_smoke": {
+    "executed": false,
+    "reason": "v95 reward canary sandbox è documentato; lo smoke runtime resta DEFERRED a v97 quando saranno cablati i runner di canary apply."
+  },
+  "safety": {
+    "db_writes_during_test": "users only (auth)",
+    "reward_live": false,
+    "ranking_live": false,
+    "production_broadcast": false
+  },
+  "verdict": "LOAD_AND_ENGINE_SMOKE_PASSED_LOW_IMPACT"
+}

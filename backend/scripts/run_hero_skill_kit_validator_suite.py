@@ -3199,6 +3199,23 @@ OPTIONAL = [
     ('PROJECT-V95-LIVE-ANNOUNCEMENT-SANDBOX-RUNTIME', 'validate_v95_live_announcement_sandbox_runtime.py'),
     ('PROJECT-V95-RELEASE-CANDIDATE-PREP-GATE', 'validate_v95_release_candidate_prep_gate.py'),
     ('MEGA-RELEASE-ACCELERATION-44-v95-ROLLUP', 'validate_mega_release_acceleration_44_v95_rollup.py'),
+    # ========================================================================
+    # v96 - MEGA_RELEASE_ACCELERATION_45_AUTH_ACCOUNT_AND_RELEASE_CANDIDATE_FINAL_SUPERPACK
+    # PUBLIC_SYNC_TAG_v96_MEGA_RELEASE_ACCELERATION_45_AUTH_ACCOUNT_AND_RELEASE_CANDIDATE_FINAL_SUPERPACK
+    # PUBLIC_SYNC_SENTINEL_v96_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V96-AUTH-ACCOUNT-AUDIT', 'validate_v96_auth_account_audit.py'),
+    ('PROJECT-V96-LOGIN-PROVIDER-CONTRACT', 'validate_v96_login_provider_contract.py'),
+    ('PROJECT-V96-AUTH-ENDPOINTS', 'validate_v96_auth_endpoints.py'),
+    ('PROJECT-V96-FRONTEND-SESSION', 'validate_v96_frontend_session.py'),
+    ('PROJECT-V96-REAL-FORMATION-ACCOUNT-BRIDGE', 'validate_v96_real_formation_account_bridge.py'),
+    ('PROJECT-V96-ACCOUNT-PRIVACY-COMPLIANCE', 'validate_v96_account_privacy_compliance.py'),
+    ('PROJECT-V96-MOBILE-QA-MATRIX', 'validate_v96_mobile_qa_matrix.py'),
+    ('PROJECT-V96-LOAD-ENGINE-SMOKE', 'validate_v96_load_engine_smoke.py'),
+    ('PROJECT-V96-OPTIONAL-FAIL-RECONCILIATION', 'validate_v96_optional_fail_reconciliation.py'),
+    ('PROJECT-V96-MD5-BASELINE-LOCK', 'validate_v96_md5_baseline_lock.py'),
+    ('PROJECT-V96-RELEASE-CANDIDATE-FINAL-GATE', 'validate_v96_release_candidate_final_gate.py'),
+    ('MEGA-RELEASE-ACCELERATION-45-v96-ROLLUP', 'validate_mega_release_acceleration_45_v96_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
