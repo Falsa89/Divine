@@ -1,0 +1,18 @@
+{
+  "boundary_version": "story_boss_tower_alpha_idempotency_boundary_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_17_STORY_PLAYABLE_ALPHA_AND_BOSS_TOWER_ALPHA_LOOP_SUPER_PACK_v68",
+  "applies_to": [
+    "story_alpha_slice",
+    "boss_alpha_loop",
+    "tower_alpha_loop"
+  ],
+  "idempotency_design_required_before_live": true,
+  "observation_required_before_live": true,
+  "rollback_required_before_live": true,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "battle_engine_runtime_used": false,
+  "backend_route_changed": false,
+  "notes": "Boundary di idempotenza condivisa: nessun side-effect persistente; tutte le anteprime restano client-side e non autoritative finche' non viene approvato un live runtime."
+}

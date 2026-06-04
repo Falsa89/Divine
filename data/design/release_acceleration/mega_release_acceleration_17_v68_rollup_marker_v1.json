@@ -1,0 +1,43 @@
+{
+  "marker": "mega_release_acceleration_17_v68_rollup_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_17_STORY_PLAYABLE_ALPHA_AND_BOSS_TOWER_ALPHA_LOOP_SUPER_PACK_v68",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v68_MEGA_RELEASE_ACCELERATION_17_STORY_BOSS_TOWER_ALPHA_LOOP",
+  "included_lanes": [
+    "story_first_playable_alpha_slice_preview",
+    "boss_alpha_loop_preview",
+    "tower_alpha_loop_preview",
+    "shared_alpha_result_idempotency_boundary"
+  ],
+  "docs": [
+    "docs/divine/406_STORY_FIRST_PLAYABLE_ALPHA_SLICE_CONTRACT.md",
+    "docs/divine/407_STORY_ALPHA_SLICE_PREVIEW_SCREEN.md",
+    "docs/divine/408_BOSS_TOWER_ALPHA_LOOP_CONTRACTS.md",
+    "docs/divine/409_BOSS_TOWER_ALPHA_LOOP_PREVIEW_UI.md",
+    "docs/divine/410_ALPHA_SLICE_RESULT_IDEMPOTENCY_BOUNDARY.md",
+    "docs/divine/411_STORY_BOSS_TOWER_ALPHA_LOOP_QA.md",
+    "docs/divine/412_MEGA_RELEASE_ACCELERATION_17_STORY_BOSS_TOWER_ALPHA_LOOP_v68.md"
+  ],
+  "validators": [
+    "backend/scripts/validate_story_first_playable_alpha_slice_contract_v1.py",
+    "backend/scripts/validate_story_alpha_slice_preview_screen_v1.py",
+    "backend/scripts/validate_boss_tower_alpha_loop_contracts_v1.py",
+    "backend/scripts/validate_boss_tower_alpha_loop_preview_ui_v1.py",
+    "backend/scripts/validate_alpha_slice_result_idempotency_boundary_v1.py",
+    "backend/scripts/validate_story_boss_tower_alpha_loop_qa_v1.py",
+    "backend/scripts/validate_mega_release_acceleration_17_v68_rollup.py"
+  ],
+  "new_screens": [
+    "frontend/app/story-alpha-slice-preview.tsx",
+    "frontend/app/boss-tower-alpha-loop-preview.tsx"
+  ],
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "battle_engine_runtime_used": false,
+  "backend_route_changed": false,
+  "server_py_changed": false,
+  "story_tsx_changed": false,
+  "combat_tsx_changed": false,
+  "validator_weakening": false,
+  "fake_pass": false
+}

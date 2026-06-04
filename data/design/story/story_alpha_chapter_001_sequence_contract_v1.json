@@ -1,0 +1,41 @@
+{
+  "contract_version": "story_alpha_chapter_001_sequence_contract_v1",
+  "chapter_id": "chapter_alpha",
+  "chapter_label": "Capitolo Alpha",
+  "alpha_slice_preview": true,
+  "authoritative_runtime": false,
+  "local_preview_adapter": true,
+  "nodes": [
+    {
+      "order": 1,
+      "node_id": "story_alpha_node_001",
+      "label": "Nodo Alpha 001 - Apertura",
+      "preview_only": true
+    },
+    {
+      "order": 2,
+      "node_id": "story_alpha_node_002",
+      "label": "Nodo Alpha 002 - Scontro Intermedio",
+      "preview_only": true
+    },
+    {
+      "order": 3,
+      "node_id": "story_alpha_node_003",
+      "label": "Nodo Alpha 003 - Chiusura",
+      "preview_only": true
+    }
+  ],
+  "clear_sequence_preview_only": true,
+  "chapter_complete_preview_only": true,
+  "chapter_result_preview": {
+    "shown_after_node": "story_alpha_node_003",
+    "reward_preview_disabled": true,
+    "progress_preview_disabled": true,
+    "result_authoritative": false
+  },
+  "backend_used": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false
+}

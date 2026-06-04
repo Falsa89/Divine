@@ -1,0 +1,27 @@
+{
+  "plan_version": "alpha_slice_observation_preview_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_17_STORY_PLAYABLE_ALPHA_AND_BOSS_TOWER_ALPHA_LOOP_SUPER_PACK_v68",
+  "applies_to": [
+    "story_alpha_slice",
+    "boss_alpha_loop",
+    "tower_alpha_loop"
+  ],
+  "observation_required_before_live": true,
+  "observation_targets": [
+    "step_progression_consistency",
+    "chapter_complete_preview_boundary",
+    "reward_preview_disabled",
+    "progress_preview_disabled",
+    "no_backend_fetch",
+    "no_battle_engine_runtime",
+    "no_db_writes",
+    "no_leaderboard_writes",
+    "no_ranking_writes"
+  ],
+  "observation_critical_count": 0,
+  "rollback_required_before_live": true,
+  "manual_approval_required": true,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false
+}

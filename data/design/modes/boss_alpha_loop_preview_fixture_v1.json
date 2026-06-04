@@ -1,0 +1,44 @@
+{
+  "fixture_version": "boss_alpha_loop_preview_fixture_v1",
+  "mode": "boss",
+  "alpha_loop_preview": true,
+  "authoritative_runtime": false,
+  "backend_used": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "result_authoritative": false,
+  "local_preview_adapter": true,
+  "boss_family_preview": "family_alpha_titan_preview",
+  "boss_phase_preview": [
+    {"phase_id": "phase_1", "label": "Fase Apertura", "hp_band_pct": [100, 66]},
+    {"phase_id": "phase_2", "label": "Fase Pressione", "hp_band_pct": [66, 33]},
+    {"phase_id": "phase_3", "label": "Fase Decisiva", "hp_band_pct": [33, 0]}
+  ],
+  "enrage_hint_preview": {
+    "trigger_pct": 25,
+    "label": "Enrage anticipata anteprima",
+    "authoritative": false
+  },
+  "weakness_hint_preview": {
+    "element": "light",
+    "label": "Punto debole indicativo (preview)",
+    "authoritative": false
+  },
+  "timeline_steps_preview": [
+    "Spawn boss alpha (preview)",
+    "Skill base alleato (preview)",
+    "Attacco area boss (preview)",
+    "Burst combo team (preview)",
+    "Enrage hint preview (non autoritativa)",
+    "Fase decisiva (preview)",
+    "Esito boss preview (non autoritativo)"
+  ],
+  "result_preview": {
+    "outcome_preview": "victory_preview",
+    "reward_grant_enabled": false,
+    "permanent_progress_enabled": false,
+    "result_authoritative": false
+  }
+}

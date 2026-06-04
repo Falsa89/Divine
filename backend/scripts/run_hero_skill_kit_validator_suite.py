@@ -2279,6 +2279,38 @@ OPTIONAL = [
     ('PROJECT-STORY-CLEAR-ROLLBACK-OBSERVATION', 'validate_story_clear_rollback_observation_v1.py'),
     ('PROJECT-STORY-RUNTIME-ADAPTER-WIDEN-IDEMPOTENCY-QA', 'validate_story_runtime_adapter_widen_idempotency_qa_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-16-v67-ROLLUP', 'validate_mega_release_acceleration_16_v67_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_17_STORY_PLAYABLE_ALPHA_AND_BOSS_TOWER_ALPHA_LOOP_SUPER_PACK_v68
+    # PUBLIC_SYNC_TAG_v68_MEGA_RELEASE_ACCELERATION_17_STORY_BOSS_TOWER_ALPHA_LOOP
+    # ------------------------------------------------------------------------
+    # PREVIEW/ALPHA pack. Accorpa due lane (stesso pattern, stesso rischio,
+    # stessi guardrail):
+    #   1) Story first playable alpha slice preview - concatena i nodi alpha
+    #      001/002/003 in un mini-loop locale deeplink-only.
+    #   2) Boss + Tower alpha loop preview - loop alpha preview Boss e Tower
+    #      in un'unica schermata deeplink-only con fixtures locali.
+    # 7 OPTIONAL tuples + tag + 7 docs (406-412) + 7 markers + rollup.
+    #
+    # New deeplink-only screens (NO public menu routing):
+    #   frontend/app/story-alpha-slice-preview.tsx
+    #   frontend/app/boss-tower-alpha-loop-preview.tsx
+    # Italian UI, no /api calls, no Reanimated/AsyncStorage,
+    # no import from story.tsx/combat.tsx/battle_engine.
+    # ------------------------------------------------------------------------
+    # Invariants: 5 MD5-locked official unchanged + extra unchanged guardrails
+    # (server.py, combat.tsx, story.tsx, material_raid_preview.py,
+    # Character Bible/final_numbers). No DB writes, no reward grant, no
+    # permanent progress, no leaderboard/ranking writes, no live claim,
+    # no battle_engine_runtime, result_authoritative=false. No fake PASS.
+    # No validator weakening.
+    # ========================================================================
+    ('PROJECT-STORY-FIRST-PLAYABLE-ALPHA-SLICE-CONTRACT', 'validate_story_first_playable_alpha_slice_contract_v1.py'),
+    ('PROJECT-STORY-ALPHA-SLICE-PREVIEW-SCREEN', 'validate_story_alpha_slice_preview_screen_v1.py'),
+    ('PROJECT-BOSS-TOWER-ALPHA-LOOP-CONTRACTS', 'validate_boss_tower_alpha_loop_contracts_v1.py'),
+    ('PROJECT-BOSS-TOWER-ALPHA-LOOP-PREVIEW-UI', 'validate_boss_tower_alpha_loop_preview_ui_v1.py'),
+    ('PROJECT-ALPHA-SLICE-RESULT-IDEMPOTENCY-BOUNDARY', 'validate_alpha_slice_result_idempotency_boundary_v1.py'),
+    ('PROJECT-STORY-BOSS-TOWER-ALPHA-LOOP-QA', 'validate_story_boss_tower_alpha_loop_qa_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-17-v68-ROLLUP', 'validate_mega_release_acceleration_17_v68_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

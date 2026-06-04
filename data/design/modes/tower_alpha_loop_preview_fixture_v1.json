@@ -1,0 +1,36 @@
+{
+  "fixture_version": "tower_alpha_loop_preview_fixture_v1",
+  "mode": "tower",
+  "alpha_loop_preview": true,
+  "authoritative_runtime": false,
+  "backend_used": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "result_authoritative": false,
+  "local_preview_adapter": true,
+  "tower_id": "tower_alpha_preview",
+  "floor_id": "floor_alpha_001",
+  "floor_number_preview": 1,
+  "modifier_hint_preview": {
+    "modifier_id": "mod_alpha_fragility",
+    "label": "Fragilita aumentata (preview)",
+    "authoritative": false
+  },
+  "enemy_family_preview": "family_alpha_construct_preview",
+  "timeline_steps_preview": [
+    "Spawn ondata 1 (preview)",
+    "Skill alleato base (preview)",
+    "Attacco coordinato nemico (preview)",
+    "Spawn ondata 2 (preview)",
+    "Burst combo team (preview)",
+    "Esito floor preview (non autoritativo)"
+  ],
+  "result_preview": {
+    "outcome_preview": "floor_clear_preview",
+    "reward_grant_enabled": false,
+    "permanent_progress_enabled": false,
+    "result_authoritative": false
+  }
+}
