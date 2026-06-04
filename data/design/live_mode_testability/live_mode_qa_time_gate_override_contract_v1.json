@@ -1,0 +1,91 @@
+{
+  "contract_name": "live_mode_qa_time_gate_override_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_41_v92",
+  "purpose": "Contratto QA-only per simulare l'apertura di finestre orarie live SENZA attivarle in produzione.",
+  "qa_override_only": true,
+  "production_enabled": false,
+  "reward_live": false,
+  "ranking_live": false,
+  "event_currency_live": false,
+  "db_writes": 0,
+  "requires_debug_label": true,
+  "required_ui_labels": [
+    "TEST MODE",
+    "QA TIME OVERRIDE",
+    "NO LIVE REWARD",
+    "NO RANKING APPLIED"
+  ],
+  "override_targets": [
+    {
+      "mode_id": "crepuscolo_dei_titani",
+      "real_schedule": "lun/mer/ven 20:30-21:30 local",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "assalto_del_ragnarok",
+      "real_schedule": "daily 11-12 + 19-20 local",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "guild_war",
+      "real_schedule": "scheduled per stagione",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "guild_raid",
+      "real_schedule": "weekly reset",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "server_boss",
+      "real_schedule": "weekly reset Monday UTC",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "faction_boss",
+      "real_schedule": "daily window",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "territory",
+      "real_schedule": "scheduled wave + guild season",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "event",
+      "real_schedule": "per-event scheduled window",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    },
+    {
+      "mode_id": "event_avatar_mode",
+      "real_schedule": "per-event scheduled window",
+      "qa_simulate_open": true,
+      "qa_window_label": "FORZATO APERTO (QA)",
+      "production_enabled": false
+    }
+  ],
+  "forbidden": [
+    "production time-gate override",
+    "live reward emission",
+    "ranking write",
+    "event currency grant",
+    "db writes",
+    "endpoint live mutation"
+  ]
+}

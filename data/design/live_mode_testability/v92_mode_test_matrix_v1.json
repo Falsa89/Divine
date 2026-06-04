@@ -1,0 +1,184 @@
+{
+  "matrix_name": "v92_mode_test_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_41_v92",
+  "random_opponents_allowed": false,
+  "modes": [
+    {
+      "mode_id": "story",
+      "menu_path": "/(tabs)/menu -> Battaglia (Renderer Reale v90)",
+      "pre_entry_path": "/pre-battle-lobby?mode=story",
+      "qa_override": false,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "story_stage_encounter_table",
+      "expected_test_action": "avvia battle preview via /combat",
+      "safety_flags": {"reward_live": false, "ranking_live": false},
+      "current_status": "TESTABLE"
+    },
+    {
+      "mode_id": "tower",
+      "menu_path": "/(tabs)/menu -> Battaglia (Renderer Reale v90)",
+      "pre_entry_path": "/pre-battle-lobby?mode=tower",
+      "qa_override": false,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "tower_floor_encounter_table",
+      "expected_test_action": "avvia battle preview via /combat",
+      "safety_flags": {"reward_live": false, "ranking_live": false},
+      "current_status": "TESTABLE"
+    },
+    {
+      "mode_id": "arena",
+      "menu_path": "/(tabs)/menu -> Battaglia (Renderer Reale v90)",
+      "pre_entry_path": "/pre-battle-lobby?mode=arena",
+      "qa_override": false,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "real_player_or_bot",
+      "expected_test_action": "avvia battle preview via /combat",
+      "safety_flags": {"reward_live": false, "ranking_live": false, "mmr": false},
+      "current_status": "TESTABLE"
+    },
+    {
+      "mode_id": "training",
+      "menu_path": "/(tabs)/menu -> Battaglia (Renderer Reale v90)",
+      "pre_entry_path": "/pre-battle-lobby?mode=training",
+      "qa_override": false,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "training_preset_catalog",
+      "expected_test_action": "avvia battle preview via /combat",
+      "safety_flags": {"reward_live": false},
+      "current_status": "TESTABLE"
+    },
+    {
+      "mode_id": "raid",
+      "menu_path": "/(tabs)/menu -> Battaglia (Renderer Reale v90)",
+      "pre_entry_path": "/pre-battle-lobby?mode=boss",
+      "qa_override": false,
+      "avatar_placeholder_needed": true,
+      "avatar_placeholder_id": "raid_boss_avatar_placeholder_dev",
+      "encounter_source": "raid_boss_catalog",
+      "expected_test_action": "avvia battle preview via /combat",
+      "safety_flags": {"reward_live": false, "boss_fragments": false},
+      "current_status": "TESTABLE"
+    },
+    {
+      "mode_id": "event",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=event",
+      "qa_override": true,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "event_schedule_encounter",
+      "expected_test_action": "QA simulate window open -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "event_currency_live": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "crepuscolo_dei_titani",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=crepuscolo_dei_titani",
+      "qa_override": true,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "event_schedule_encounter",
+      "expected_test_action": "QA simulate window open -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "ranking_live": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "assalto_del_ragnarok",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=assalto_del_ragnarok",
+      "qa_override": true,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "event_schedule_encounter",
+      "expected_test_action": "QA simulate window open -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "ranking_live": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "guild_war",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=guild_war",
+      "qa_override": true,
+      "avatar_placeholder_needed": true,
+      "avatar_placeholder_id": "guild_war_avatar_base_dev",
+      "encounter_source": "guild_defense_team",
+      "expected_test_action": "QA simulate window + avatar placeholder -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "guild_score_mutation": false, "ranking_live": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "guild_raid",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=guild_raid",
+      "qa_override": true,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "raid_boss_catalog",
+      "expected_test_action": "QA simulate window -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "boss_fragments": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "server_boss",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=server_boss",
+      "qa_override": true,
+      "avatar_placeholder_needed": false,
+      "encounter_source": "server_boss_catalog",
+      "expected_test_action": "QA simulate window -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "ranking_live": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "faction_boss",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=faction_boss",
+      "qa_override": true,
+      "avatar_placeholder_needed": true,
+      "avatar_placeholder_id": "faction_boss_avatar_placeholder_dev",
+      "encounter_source": "faction_boss_catalog",
+      "expected_test_action": "QA simulate window + avatar placeholder -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "ranking_live": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "territory",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=territory",
+      "qa_override": true,
+      "avatar_placeholder_needed": true,
+      "avatar_placeholder_id": "player_war_avatar_mini_base_dev",
+      "encounter_source": "authored_encounter_catalog",
+      "expected_test_action": "QA simulate window + war avatar placeholder -> /live-mode-pre-entry-lobby",
+      "safety_flags": {"reward_live": false, "guild_score_mutation": false},
+      "current_status": "TESTABLE_VIA_QA_HUB"
+    },
+    {
+      "mode_id": "war_avatar_mode",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=war_avatar_mode",
+      "qa_override": false,
+      "avatar_placeholder_needed": true,
+      "avatar_placeholder_id": "player_war_avatar_mini_base_dev",
+      "encounter_source": "avatar_layout_only",
+      "expected_test_action": "layout preview avatar war",
+      "safety_flags": {"reward_live": false, "cosmetic_unlock": false},
+      "current_status": "TESTABLE_VIA_QA_HUB_LAYOUT_ONLY"
+    },
+    {
+      "mode_id": "event_avatar_mode",
+      "menu_path": "/(tabs)/menu -> Modalita' Live & Guild QA (v92)",
+      "pre_entry_path": "/live-guild-qa-hub?mode=event_avatar_mode",
+      "qa_override": true,
+      "avatar_placeholder_needed": true,
+      "avatar_placeholder_id": "event_avatar_base_dev",
+      "encounter_source": "event_layout_only",
+      "expected_test_action": "layout preview avatar evento + QA simulate window",
+      "safety_flags": {"reward_live": false, "cosmetic_unlock": false},
+      "current_status": "TESTABLE_VIA_QA_HUB_LAYOUT_ONLY"
+    }
+  ],
+  "summary": {
+    "total_modes": 15,
+    "testable_direct": 5,
+    "testable_via_qa_hub": 10,
+    "untestable": 0
+  }
+}

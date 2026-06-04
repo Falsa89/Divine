@@ -1,0 +1,107 @@
+{
+  "catalog_name": "live_guild_special_mode_encounter_source_catalog_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_41_v92",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "extends": "canonical_encounter_source_policy_v1.json (v91)",
+  "sources": [
+    {
+      "mode_id": "crepuscolo_dei_titani",
+      "source_type": "event_schedule_encounter",
+      "source_id": "event_crepuscolo_titani_wave_01",
+      "encounter_id": "enc_crepuscolo_titani_w1",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "boss": {"hero_id": "alpha_boss_hero_02", "role": "boss", "level": 45, "stars": 5, "power": 30000}
+    },
+    {
+      "mode_id": "assalto_del_ragnarok",
+      "source_type": "event_schedule_encounter",
+      "source_id": "event_assalto_ragnarok_wave_01",
+      "encounter_id": "enc_assalto_ragnarok_w1",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "boss": {"hero_id": "alpha_boss_hero_01", "role": "boss", "level": 50, "stars": 5, "power": 35000}
+    },
+    {
+      "mode_id": "guild_war",
+      "source_type": "guild_defense_team",
+      "source_id": "gw_defense_team_design_v1",
+      "encounter_id": "enc_guild_war_defense_design",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "team": [
+        {"hero_id": "alpha_arena_hero_01", "role": "dps", "level": 30, "stars": 4, "power": 8000},
+        {"hero_id": "alpha_arena_hero_02", "role": "dps", "level": 30, "stars": 4, "power": 8000},
+        {"hero_id": "alpha_arena_hero_03", "role": "healer", "level": 30, "stars": 4, "power": 7500}
+      ]
+    },
+    {
+      "mode_id": "guild_raid",
+      "source_type": "raid_boss_catalog",
+      "source_id": "guild_raid_boss_design_v1",
+      "encounter_id": "enc_guild_raid_boss_design",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "boss": {"hero_id": "alpha_raid_boss_placeholder_01", "role": "boss", "level": 55, "stars": 5, "power": 50000}
+    },
+    {
+      "mode_id": "server_boss",
+      "source_type": "server_boss_catalog",
+      "source_id": "server_boss_weekly_design_v1",
+      "encounter_id": "enc_server_boss_weekly_design",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "boss": {"hero_id": "alpha_raid_boss_placeholder_01", "role": "boss", "level": 60, "stars": 5, "power": 75000}
+    },
+    {
+      "mode_id": "faction_boss",
+      "source_type": "faction_boss_catalog",
+      "source_id": "faction_boss_design_v1",
+      "encounter_id": "enc_faction_boss_design",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "boss": {"hero_id": "alpha_boss_hero_04", "role": "boss", "level": 35, "stars": 4, "power": 15000}
+    },
+    {
+      "mode_id": "territory",
+      "source_type": "authored_encounter_catalog",
+      "source_id": "territory_wave_design_v1",
+      "encounter_id": "enc_territory_wave_design",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "wave": [
+        {"hero_id": "tower_minion_a", "role": "dps", "level": 25, "stars": 3, "power": 5000},
+        {"hero_id": "tower_minion_b", "role": "tank", "level": 25, "stars": 3, "power": 5500}
+      ]
+    },
+    {
+      "mode_id": "war_avatar_mode",
+      "source_type": "avatar_layout_only",
+      "source_id": "war_avatar_layout_design_v1",
+      "encounter_id": null,
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "note": "Mode di solo layout/posizionamento, nessun encounter battle"
+    },
+    {
+      "mode_id": "event_avatar_mode",
+      "source_type": "event_layout_only",
+      "source_id": "event_avatar_layout_design_v1",
+      "encounter_id": null,
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "note": "Mode di solo layout/posizionamento evento, nessun encounter battle"
+    }
+  ]
+}

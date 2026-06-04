@@ -96,6 +96,18 @@ const CATEGORIES = [
     ],
   },
   {
+    // MEGA_RELEASE_ACCELERATION_41 v92 — Live/Guild/Special Mode Testability.
+    // Hub QA accessibile da menu reale per testare modalita' live/guild/time-gated
+    // /avatar-based con QA time-gate override, avatar placeholder dev, encounter
+    // canonici (NO random). preview-only / db_writes=0 / reward_live=false /
+    // ranking_live=false / event_currency_live=false / guild_score_mutation=0 /
+    // production_enabled=false / qa_override_only=true.
+    title: 'Modalità Live & Guild QA (v92)',
+    items: [
+      { label: 'Hub QA Live/Guild/Special', icon: '\u26A1', route: '/live-guild-qa-hub', gradient: ['#AA22FF', '#6611BB'] as const },
+    ],
+  },
+  {
     // MEGA_RELEASE_ACCELERATION_39 v90 — RESTORE Home battle renderer.
     // MEGA_RELEASE_ACCELERATION_40 v91_FIXED — Pre-Battle Lobby intermediario.
     // Le 5 modalità ora puntano alla Pre-Battle Lobby (/pre-battle-lobby?mode=X)

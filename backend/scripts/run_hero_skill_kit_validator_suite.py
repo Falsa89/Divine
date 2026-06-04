@@ -3101,6 +3101,32 @@ OPTIONAL = [
     ('PROJECT-V91-FIXED-CANONICAL-ENCOUNTER-STUB-CATALOGS', 'validate_v91_canonical_encounter_stub_catalogs.py'),
     ('PROJECT-V91-FIXED-BATTLE-ENGINE-STATUS-DOT-AUDIT', 'validate_v91_battle_engine_status_dot_audit.py'),
     ('MEGA-RELEASE-ACCELERATION-40-v91-FIXED-ROLLUP', 'validate_mega_release_acceleration_40_v91_fixed_rollup.py'),
+
+    # ========================================================================
+    # v92 - MEGA_RELEASE_ACCELERATION_41_LIVE_EVENTS_GUILD_MODE_TESTABILITY
+    #       _AND_AVATAR_PLACEHOLDER
+    # Live/guild/special mode testability hub + avatar placeholder dev registry.
+    # QA time-gate override (qa_override_only=true, production_enabled=false).
+    # 7 avatar placeholder dev (player HD, war mini, guild war, event, hero room
+    # chibi, raid boss, faction boss) \u2014 placeholder_dev_only=true, final_asset_ready=false.
+    # 15 modalita' in mode test matrix; 9 encounter sources canoniche per
+    # live/guild/special (NO random opponents).
+    # db_writes=0, reward_live=false, ranking_live=false, event_currency_live=false,
+    # guild_score_mutation=0, arena_mmr=false, story_progress=false,
+    # tower_completion=false, boss_fragments=false, inventory_grant=false,
+    # cosmetic_unlock=false, monetization=false, random_opponents=false,
+    # final_asset_import=false, production_time_gate_override=false,
+    # production_ui_exposure=false, validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v92_MEGA_RELEASE_ACCELERATION_41_LIVE_EVENTS_GUILD_MODE_TESTABILITY_AND_AVATAR_PLACEHOLDER
+    # PUBLIC_SYNC_SENTINEL_v92_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V92-LIVE-GUILD-SPECIAL-MODE-INVENTORY', 'validate_v92_live_guild_special_mode_inventory.py'),
+    ('PROJECT-V92-QA-TIME-GATE-OVERRIDE-CONTRACT', 'validate_v92_qa_time_gate_override_contract.py'),
+    ('PROJECT-V92-AVATAR-PLACEHOLDER-DEV-REGISTRY', 'validate_v92_avatar_placeholder_dev_registry.py'),
+    ('PROJECT-V92-LIVE-GUILD-MODE-QA-HUB', 'validate_v92_live_guild_mode_qa_hub.py'),
+    ('PROJECT-V92-LIVE-GUILD-ENCOUNTER-SOURCE-CATALOG', 'validate_v92_live_guild_encounter_source_catalog.py'),
+    ('PROJECT-V92-MODE-TEST-MATRIX', 'validate_v92_mode_test_matrix.py'),
+    ('MEGA-RELEASE-ACCELERATION-41-v92-ROLLUP', 'validate_mega_release_acceleration_41_v92_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
