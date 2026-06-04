@@ -1,0 +1,41 @@
+{
+  "version": "v1",
+  "pack": "v89",
+  "audit_id": "v89_home_battle_flow_audit",
+  "created_at_utc": "2026-06-04T19:00:00Z",
+  "sources_inspected_read_only": [
+    "frontend/app/story-visual-battle-sandbox.tsx",
+    "frontend/app/generic-visual-battle-runner-preview.tsx",
+    "frontend/app/training-visual-preview.tsx",
+    "frontend/app/arena-visual-preview.tsx",
+    "frontend/app/boss-visual-preview.tsx",
+    "frontend/app/story-visual-preview.tsx",
+    "frontend/app/tower-visual-preview.tsx",
+    "frontend/assets/backgrounds/",
+    "frontend/assets/placeholders/heroes/"
+  ],
+  "old_home_battle_visual_traits": [
+    "background image regionale (Nordic/Celtic/Egypt/Greek/Japanese)",
+    "layout 2 lati: player sinistra, enemy destra",
+    "sprite combat_base.png per ogni unità",
+    "griglia/slot 3 unità per lato (fino a 4 lato player per modalità boss)",
+    "HP bar sotto al portrait/sprite",
+    "indicatore di turno e di azione"
+  ],
+  "v88_screen_traits_missing": [
+    "background battlefield assente",
+    "layout column generico card-only",
+    "sprite reale assente (solo lettera+colore)",
+    "separazione player/enemy non spaziale"
+  ],
+  "v89_rescue_strategy": [
+    "riusare i background esistenti in frontend/assets/backgrounds/ con mapping per mode",
+    "riusare i placeholder ufficiali in frontend/assets/placeholders/heroes/ per role -> sprite combat_base.png",
+    "layout 2 lati: player sinistra (slot 1..N), enemy destra (slot 1..M) o boss centro-destra",
+    "mantenere il visual layer v87 e l'experience layer v88"
+  ],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false,
+  "battle_engine_authoritative": false
+}

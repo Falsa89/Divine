@@ -15,6 +15,8 @@
 
 import React, { useMemo, useState } from "react";
 import {
+  ImageBackground,
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -263,6 +265,76 @@ const MODE_LABELS: Record<Mode, string> = {
   event: "Event",
   arena: "Arena",
 };
+
+// === v89 Real Battlefield Mapping (asset reuse-only, no final asset import) ===
+// Background regionale per modalità.
+const BACKGROUND_BY_MODE: Record<Mode, ReturnType<typeof require>> = {
+  training: require("../assets/backgrounds/nordic_bg_01.png"),
+  story:    require("../assets/backgrounds/celtic_bg_01.png"),
+  boss:     require("../assets/backgrounds/egypt_bg_02.png"),
+  tower:    require("../assets/backgrounds/japanese_bg_01.png"),
+  event:    require("../assets/backgrounds/greek_bg_01.png"),
+  arena:    require("../assets/backgrounds/nordic_bg_02.png"),
+};
+
+// Sprite placeholder ufficiali (solo asset esistenti) -> require statico per alias noti.
+const SPRITE_BY_ALIAS: Record<string, ReturnType<typeof require>> = {
+  // Player (role-based)
+  alpha_trainee_hero_01: require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  alpha_trainee_hero_02: require("../assets/placeholders/heroes/healer_standard_v1/combat_base.png"),
+  alpha_trainee_hero_03: require("../assets/placeholders/heroes/tank_standard_v1/combat_base.png"),
+  alpha_story_hero_01:   require("../assets/placeholders/heroes/dps_ranged_standard_v1/combat_base.png"),
+  alpha_story_hero_02:   require("../assets/placeholders/heroes/support_buffer_standard_v1/combat_base.png"),
+  alpha_story_hero_03:   require("../assets/placeholders/heroes/tank_standard_v1/combat_base.png"),
+  alpha_boss_hero_01:    require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  alpha_boss_hero_02:    require("../assets/placeholders/heroes/dps_ranged_standard_v1/combat_base.png"),
+  alpha_boss_hero_03:    require("../assets/placeholders/heroes/healer_standard_v1/combat_base.png"),
+  alpha_boss_hero_04:    require("../assets/placeholders/heroes/tank_standard_v1/combat_base.png"),
+  alpha_tower_hero_01:   require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  alpha_tower_hero_02:   require("../assets/placeholders/heroes/support_buffer_standard_v1/combat_base.png"),
+  alpha_tower_hero_03:   require("../assets/placeholders/heroes/tank_standard_v1/combat_base.png"),
+  alpha_event_hero_01:   require("../assets/placeholders/heroes/dps_ranged_standard_v1/combat_base.png"),
+  alpha_event_hero_02:   require("../assets/placeholders/heroes/healer_standard_v1/combat_base.png"),
+  alpha_event_hero_03:   require("../assets/placeholders/heroes/tank_standard_v1/combat_base.png"),
+  alpha_arena_hero_01:   require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  alpha_arena_hero_02:   require("../assets/placeholders/heroes/dps_ranged_standard_v1/combat_base.png"),
+  alpha_arena_hero_03:   require("../assets/placeholders/heroes/support_buffer_standard_v1/combat_base.png"),
+  // Enemy
+  training_dummy_a:   require("../assets/placeholders/heroes/control_debuff_standard_v1/combat_base.png"),
+  training_dummy_b:   require("../assets/placeholders/heroes/control_debuff_standard_v1/combat_base.png"),
+  story_grunt_a:      require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  story_grunt_b:      require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  story_lieutenant:   require("../assets/placeholders/heroes/mage_aoe_standard_v1/combat_base.png"),
+  alpha_raid_boss_placeholder_01: require("../assets/placeholders/heroes/hybrid_special_standard_v1/combat_base.png"),
+  tower_minion_a:     require("../assets/placeholders/heroes/assassin_burst_standard_v1/combat_base.png"),
+  tower_minion_b:     require("../assets/placeholders/heroes/assassin_burst_standard_v1/combat_base.png"),
+  tower_minion_c:     require("../assets/placeholders/heroes/assassin_burst_standard_v1/combat_base.png"),
+  event_mob_a:        require("../assets/placeholders/heroes/dps_ranged_standard_v1/combat_base.png"),
+  event_elite_b:      require("../assets/placeholders/heroes/mage_aoe_standard_v1/combat_base.png"),
+  arena_dummy_pvp_a:  require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  arena_dummy_pvp_b:  require("../assets/placeholders/heroes/dps_ranged_standard_v1/combat_base.png"),
+  arena_dummy_pvp_c:  require("../assets/placeholders/heroes/support_buffer_standard_v1/combat_base.png"),
+};
+
+// Fallback sprite by role
+const SPRITE_BY_ROLE: Record<string, ReturnType<typeof require>> = {
+  tank:       require("../assets/placeholders/heroes/tank_standard_v1/combat_base.png"),
+  dps_melee:  require("../assets/placeholders/heroes/dps_melee_standard_v1/combat_base.png"),
+  dps_ranged: require("../assets/placeholders/heroes/dps_ranged_standard_v1/combat_base.png"),
+  healer:     require("../assets/placeholders/heroes/healer_standard_v1/combat_base.png"),
+  support:    require("../assets/placeholders/heroes/support_buffer_standard_v1/combat_base.png"),
+  mage:       require("../assets/placeholders/heroes/mage_aoe_standard_v1/combat_base.png"),
+  assassin:   require("../assets/placeholders/heroes/assassin_burst_standard_v1/combat_base.png"),
+  control:    require("../assets/placeholders/heroes/control_debuff_standard_v1/combat_base.png"),
+  hybrid:     require("../assets/placeholders/heroes/hybrid_special_standard_v1/combat_base.png"),
+};
+
+function spriteFor(alias: string, role?: string): ReturnType<typeof require> {
+  if (SPRITE_BY_ALIAS[alias]) return SPRITE_BY_ALIAS[alias];
+  if (role && SPRITE_BY_ROLE[role]) return SPRITE_BY_ROLE[role];
+  return SPRITE_BY_ROLE.dps_melee;
+}
+// === END v89 mapping ===
 
 function isValidMode(s: string | undefined): s is Mode {
   return s === "training" || s === "story" || s === "boss" || s === "tower" || s === "event" || s === "arena";
@@ -541,6 +613,106 @@ export default function PlayableModeBattlePreview() {
           <Text style={styles.cardMono}>{payload.seed}</Text>
         </View>
 
+        {/* v89 — Real Battlefield Preview: background + 2 lati + sprite */}
+        <ImageBackground
+          source={BACKGROUND_BY_MODE[activeMode]}
+          style={styles.battlefield}
+          imageStyle={styles.battlefieldImage}
+          resizeMode="cover"
+        >
+          <View style={styles.battlefieldOverlay} />
+          <View style={styles.battlefieldRow}>
+            {/* Player side (sinistra) */}
+            <View style={styles.battlefieldSide}>
+              <Text style={styles.sideLabelPlayer}>ALLEATI</Text>
+              {payload.player_team.slice(0, 4).map((u, i) => (
+                <View
+                  key={u.alias}
+                  style={[
+                    styles.battlefieldUnit,
+                    styles.battlefieldUnitPlayer,
+                    isActive(u.alias) ? styles.battlefieldUnitActive : null,
+                  ]}
+                >
+                  <Image source={spriteFor(u.alias, u.role)} style={styles.battlefieldSprite} resizeMode="contain" />
+                  <Text style={styles.battlefieldUnitName} numberOfLines={1}>
+                    {u.alias}
+                  </Text>
+                  {renderHpBar(u.alias)}
+                  {toasts
+                    .filter((t) => t.target === u.alias)
+                    .map((t) => (
+                      <Text
+                        key={t.id}
+                        style={[
+                          styles.battlefieldFloatToast,
+                          t.kind === "dmg" ? styles.floatingToastDmg : styles.floatingToastHeal,
+                        ]}
+                      >
+                        {t.text}
+                      </Text>
+                    ))}
+                </View>
+              ))}
+            </View>
+
+            <View style={styles.battlefieldVs}>
+              <Text style={styles.battlefieldVsText}>VS</Text>
+            </View>
+
+            {/* Enemy side (destra) */}
+            <View style={styles.battlefieldSide}>
+              <Text style={styles.sideLabelEnemy}>NEMICI</Text>
+              {payload.boss ? (
+                <View
+                  key={payload.boss.alias}
+                  style={[
+                    styles.battlefieldUnit,
+                    styles.battlefieldUnitEnemy,
+                    styles.battlefieldUnitBoss,
+                    isActive(payload.boss.alias) ? styles.battlefieldUnitActive : null,
+                  ]}
+                >
+                  <Image
+                    source={spriteFor(payload.boss.alias)}
+                    style={styles.battlefieldSpriteBoss}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.battlefieldUnitNameBoss} numberOfLines={1}>
+                    {payload.boss.alias}
+                  </Text>
+                  {renderHpBar(payload.boss.alias)}
+                  {(() => {
+                    const hint = aiHintFor(payload.boss.alias);
+                    return hint ? <Text style={styles.battlefieldHint}>{hint}</Text> : null;
+                  })()}
+                </View>
+              ) : (
+                (payload.enemy_team ?? []).slice(0, 3).map((u) => (
+                  <View
+                    key={u.alias}
+                    style={[
+                      styles.battlefieldUnit,
+                      styles.battlefieldUnitEnemy,
+                      isActive(u.alias) ? styles.battlefieldUnitActive : null,
+                    ]}
+                  >
+                    <Image source={spriteFor(u.alias)} style={styles.battlefieldSprite} resizeMode="contain" />
+                    <Text style={styles.battlefieldUnitName} numberOfLines={1}>
+                      {u.alias}
+                    </Text>
+                    {renderHpBar(u.alias)}
+                    {(() => {
+                      const hint = aiHintFor(u.alias);
+                      return hint ? <Text style={styles.battlefieldHint}>{hint}</Text> : null;
+                    })()}
+                  </View>
+                ))
+              )}
+            </View>
+          </View>
+        </ImageBackground>
+
         <View style={styles.teamsCol}>
           <Text style={styles.teamHeader}>Player Team</Text>
           <View style={styles.unitsGrid}>
@@ -781,6 +953,103 @@ const styles = StyleSheet.create({
   },
   endSummaryTitle: { color: "#bbf7d0", fontSize: 14, fontWeight: "800", marginBottom: 6 },
   endSummaryLine: { color: "#86efac", fontSize: 12, marginBottom: 2 },
+  // v89 battlefield styles
+  battlefield: {
+    width: "100%",
+    minHeight: 320,
+    borderRadius: 12,
+    overflow: "hidden",
+    marginTop: 8,
+    marginBottom: 12,
+    backgroundColor: "#0b1220",
+  },
+  battlefieldImage: { borderRadius: 12 },
+  battlefieldOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.35)",
+  },
+  battlefieldRow: { flexDirection: "row", padding: 8, minHeight: 320 },
+  battlefieldSide: { flex: 1, justifyContent: "space-around" },
+  battlefieldVs: {
+    width: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  battlefieldVsText: {
+    color: "#fbbf24",
+    fontSize: 18,
+    fontWeight: "900",
+    letterSpacing: 1,
+  },
+  sideLabelPlayer: {
+    color: "#22d3ee",
+    fontWeight: "800",
+    fontSize: 11,
+    letterSpacing: 1,
+    marginBottom: 4,
+    textAlign: "left",
+  },
+  sideLabelEnemy: {
+    color: "#fb7185",
+    fontWeight: "800",
+    fontSize: 11,
+    letterSpacing: 1,
+    marginBottom: 4,
+    textAlign: "right",
+  },
+  battlefieldUnit: {
+    borderRadius: 10,
+    padding: 6,
+    marginVertical: 4,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.15)",
+    backgroundColor: "rgba(15,23,42,0.6)",
+    position: "relative",
+  },
+  battlefieldUnitPlayer: { borderColor: "rgba(34,211,238,0.6)" },
+  battlefieldUnitEnemy: { borderColor: "rgba(251,113,133,0.6)" },
+  battlefieldUnitBoss: {
+    borderColor: "#f97316",
+    backgroundColor: "rgba(28,16,12,0.7)",
+    padding: 10,
+  },
+  battlefieldUnitActive: {
+    borderColor: "#22d3ee",
+    backgroundColor: "rgba(15,31,46,0.85)",
+  },
+  battlefieldSprite: { width: 64, height: 64, alignSelf: "center" },
+  battlefieldSpriteBoss: { width: 96, height: 96, alignSelf: "center" },
+  battlefieldUnitName: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "700",
+    textAlign: "center",
+    marginTop: 2,
+  },
+  battlefieldUnitNameBoss: {
+    color: "#fbbf24",
+    fontSize: 12,
+    fontWeight: "800",
+    textAlign: "center",
+    marginTop: 2,
+  },
+  battlefieldHint: {
+    color: "#fbbf24",
+    fontSize: 9,
+    fontStyle: "italic",
+    textAlign: "center",
+    marginTop: 2,
+  },
+  battlefieldFloatToast: {
+    position: "absolute",
+    top: -8,
+    alignSelf: "center",
+    fontSize: 13,
+    fontWeight: "800",
+    paddingHorizontal: 4,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
   hpBarOuter: {
     height: 12,
     backgroundColor: "#1f2937",

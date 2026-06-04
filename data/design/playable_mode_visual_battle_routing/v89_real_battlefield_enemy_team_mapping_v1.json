@@ -1,0 +1,43 @@
+{
+  "version": "v1",
+  "pack": "v89",
+  "design_only": true,
+  "asset_reuse_only": true,
+  "background_root": "frontend/assets/backgrounds",
+  "mode_to_background": {
+    "training": "nordic_bg_01.png",
+    "story":    "celtic_bg_01.png",
+    "boss":     "egypt_bg_02.png",
+    "tower":    "japanese_bg_01.png",
+    "event":    "greek_bg_01.png",
+    "arena":    "nordic_bg_02.png"
+  },
+  "enemy_sprite_pool": {
+    "training_dummy_a":   "control_debuff_standard_v1/combat_base.png",
+    "training_dummy_b":   "control_debuff_standard_v1/combat_base.png",
+    "story_grunt_a":      "dps_melee_standard_v1/combat_base.png",
+    "story_grunt_b":      "dps_melee_standard_v1/combat_base.png",
+    "story_lieutenant":   "mage_aoe_standard_v1/combat_base.png",
+    "alpha_raid_boss_placeholder_01": "hybrid_special_standard_v1/combat_base.png",
+    "tower_minion_a":     "assassin_burst_standard_v1/combat_base.png",
+    "tower_minion_b":     "assassin_burst_standard_v1/combat_base.png",
+    "tower_minion_c":     "assassin_burst_standard_v1/combat_base.png",
+    "event_mob_a":        "dps_ranged_standard_v1/combat_base.png",
+    "event_elite_b":      "mage_aoe_standard_v1/combat_base.png",
+    "arena_dummy_pvp_a":  "dps_melee_standard_v1/combat_base.png",
+    "arena_dummy_pvp_b":  "dps_ranged_standard_v1/combat_base.png",
+    "arena_dummy_pvp_c":  "support_buffer_standard_v1/combat_base.png"
+  },
+  "battlefield_layout": {
+    "player_side": "left",
+    "enemy_side": "right",
+    "player_slots_max": 4,
+    "enemy_slots_max": 3,
+    "grid_rows": 3,
+    "grid_cols_per_side": 1
+  },
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false,
+  "notes": "Mapping mode->background + alias nemico->sprite placeholder + layout battlefield. Solo asset esistenti."
+}
