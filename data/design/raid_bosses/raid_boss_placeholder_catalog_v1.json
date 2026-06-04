@@ -1,0 +1,81 @@
+{
+  "version": "v1",
+  "catalog_id": "raid_boss_placeholder_catalog",
+  "design_only": true,
+  "runtime_attached": false,
+  "reward_grant_attached": false,
+  "obtainable": false,
+  "show_in_summon": false,
+  "entries": [
+    {
+      "boss_id": "raid_boss_placeholder_001",
+      "alias":   "alpha_raid_boss_placeholder_01",
+      "family":  "demon",
+      "element": "fire",
+      "rarity_design": "SSR",
+      "hp_design": 12000, "atk_design": 380, "def_design": 220,
+      "phases": [
+        { "phase_id": "p_intro",  "name": "Intro",  "hp_threshold_pct": 100, "behaviors": ["taunt_window", "basic_atk"], "design_only": true },
+        { "phase_id": "p_enrage", "name": "Enrage", "hp_threshold_pct": 50,  "behaviors": ["aoe_sweep", "buff_self_atk"], "design_only": true },
+        { "phase_id": "p_final",  "name": "Final",  "hp_threshold_pct": 20,  "behaviors": ["meteor", "raid_call"], "design_only": true }
+      ],
+      "playable_form_design": {
+        "playable_form_id": "raid_boss_placeholder_001_playable",
+        "display_name":     "Demon Lord Placeholder Form",
+        "unlocked":         false,
+        "stats_design": { "hp": 2400, "atk": 280, "def": 160, "speed": 85 },
+        "skills_design": [
+          { "skill_id": "placeholder_skill_001", "name": "Inferno Surge", "design_only": true },
+          { "skill_id": "placeholder_skill_002", "name": "Dread Mantle",  "design_only": true }
+        ],
+        "obtainable_via": "design_only_not_live",
+        "design_only": true
+      },
+      "fragment_model_design": {
+        "fragment_id": "raid_boss_placeholder_001_fragment",
+        "required_for_unlock": 50,
+        "grant_allowed": false,
+        "show_in_inventory": false,
+        "design_only": true
+      },
+      "placeholder": true
+    },
+    {
+      "boss_id": "raid_boss_placeholder_002",
+      "alias":   "alpha_raid_boss_placeholder_02",
+      "family":  "dragon",
+      "element": "water",
+      "rarity_design": "UR",
+      "hp_design": 18000, "atk_design": 460, "def_design": 280,
+      "phases": [
+        { "phase_id": "p_calm",   "name": "Calm",   "hp_threshold_pct": 100, "behaviors": ["basic_atk", "tail_swipe"], "design_only": true },
+        { "phase_id": "p_storm",  "name": "Storm",  "hp_threshold_pct": 60,  "behaviors": ["aoe_water", "chill_zone"], "design_only": true },
+        { "phase_id": "p_abyss",  "name": "Abyss",  "hp_threshold_pct": 25,  "behaviors": ["abyss_call", "crushing_wave"], "design_only": true }
+      ],
+      "playable_form_design": {
+        "playable_form_id": "raid_boss_placeholder_002_playable",
+        "display_name":     "Sea Dragon Placeholder Form",
+        "unlocked":         false,
+        "stats_design": { "hp": 2800, "atk": 300, "def": 180, "speed": 90 },
+        "skills_design": [
+          { "skill_id": "placeholder_skill_003", "name": "Tidecaller",    "design_only": true },
+          { "skill_id": "placeholder_skill_004", "name": "Crushing Tide", "design_only": true }
+        ],
+        "obtainable_via": "design_only_not_live",
+        "design_only": true
+      },
+      "fragment_model_design": {
+        "fragment_id": "raid_boss_placeholder_002_fragment",
+        "required_for_unlock": 80,
+        "grant_allowed": false,
+        "show_in_inventory": false,
+        "design_only": true
+      },
+      "placeholder": true
+    }
+  ],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false,
+  "notes": "Catalogo placeholder di raid boss e relative forme giocabili. Tutto design-only."
+}

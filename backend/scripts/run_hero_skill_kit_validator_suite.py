@@ -3009,6 +3009,19 @@ OPTIONAL = [
     ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-CANARY-APPLY-STEP-UP-AUTH', 'validate_pve_reward_claim_live_db_canary_apply_step_up_auth_endpoint_stub_v1.py'),
     ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-CANARY-APPLY-DRILL', 'validate_pve_reward_claim_live_db_canary_apply_drill_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-34-v85-ROLLUP', 'validate_mega_release_acceleration_34_v85_rollup.py'),
+    # ========================================================================
+    # v86 - MEGA_RELEASE_ACCELERATION_35_PLAYABLE_MODE_VISUAL_BATTLE_ROUTING_AND_RAID_BOSS_PLACEHOLDER_SCHEMA
+    # Playable Mode visual battle routing (training/story/boss/tower/event/arena) + raid boss schema design-only.
+    # preview_only=true, deterministic=true, authoritative=false, db_writes=0, reward_live=false,
+    # endpoint_live=false, battle_engine_authoritative=false.
+    # validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v86_MEGA_RELEASE_ACCELERATION_35_PLAYABLE_MODE_VISUAL_BATTLE_ROUTING_AND_RAID_BOSS_PLACEHOLDER_SCHEMA
+    # PUBLIC_SYNC_SENTINEL_v86_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V86-PLAYABLE-MODE-VISUAL-BATTLE-PAYLOADS', 'validate_v86_playable_mode_visual_battle_payloads.py'),
+    ('PROJECT-V86-PLAYABLE-MODE-ROUTE-SAFETY', 'validate_v86_playable_mode_route_safety.py'),
+    ('PROJECT-V86-RAID-BOSS-PLACEHOLDER-SCHEMA', 'validate_v86_raid_boss_placeholder_schema.py'),
+    ('MEGA-RELEASE-ACCELERATION-35-v86-ROLLUP', 'validate_mega_release_acceleration_35_v86_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,62 @@
+{
+  "version": "v1",
+  "schema_id": "raid_boss_playable_schema",
+  "design_only": true,
+  "runtime_attached": false,
+  "reward_grant_attached": false,
+  "obtainable": false,
+  "show_in_summon": false,
+  "required_fields": {
+    "boss_id":            "string<=64",
+    "alias":              "string<=64",
+    "family":             "enum:demon|beast|dragon|construct|elemental|undead|celestial",
+    "element":            "enum:fire|water|earth|air|light|dark|neutral",
+    "rarity_design":      "enum:R|SR|SSR|UR",
+    "hp_design":          "int>=1000",
+    "atk_design":         "int>=50",
+    "def_design":         "int>=20",
+    "phases":             "list<phase_design>",
+    "playable_form_design": "playable_form_block",
+    "fragment_model_design": "fragment_block",
+    "placeholder":        "const:true"
+  },
+  "phase_design_block": {
+    "phase_id":    "string",
+    "name":        "string",
+    "hp_threshold_pct": "int 0..100",
+    "behaviors":   "list<string>",
+    "design_only": true
+  },
+  "playable_form_block": {
+    "playable_form_id": "string<=64",
+    "display_name":     "string<=64",
+    "unlocked":         "const:false",
+    "stats_design": {
+      "hp": "int>=1000", "atk": "int>=100", "def": "int>=50", "speed": "int>=40"
+    },
+    "skills_design": "list<skill_placeholder>",
+    "obtainable_via": "const:design_only_not_live",
+    "design_only": true
+  },
+  "fragment_block": {
+    "fragment_id":     "string<=64",
+    "required_for_unlock": "int>=1",
+    "grant_allowed":   "const:false",
+    "show_in_inventory": "const:false",
+    "design_only": true
+  },
+  "forbidden": [
+    "runtime_attachment",
+    "reward_grant_attachment",
+    "obtainable_true",
+    "show_in_summon_true",
+    "real_fragment_grant",
+    "real_playable_boss_unlock",
+    "final_numbers",
+    "production_ui_exposure"
+  ],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false,
+  "notes": "Schema design-only per raid boss giocabili e modello frammenti. Nessuna attivazione runtime, nessuna concessione live, nessun summon."
+}

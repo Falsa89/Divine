@@ -1,0 +1,35 @@
+{
+  "version": "v1",
+  "pack": "v86",
+  "audit_id": "v86_current_preview_audit",
+  "created_at_utc": "2026-06-04T18:18:00Z",
+  "current_state": {
+    "training": { "status": "preview_or_mock", "playable_visual_battle": false, "deeplink_alpha": "training-combat-onboarding-preview" },
+    "story":    { "status": "preview_or_mock", "playable_visual_battle": false, "deeplink_alpha": "story-alpha-slice-preview" },
+    "boss":     { "status": "preview_or_mock", "playable_visual_battle": false, "deeplink_alpha": "boss-tower-alpha-loop-preview" },
+    "tower":    { "status": "preview_or_mock", "playable_visual_battle": false, "deeplink_alpha": "boss-tower-alpha-loop-preview" },
+    "event":    { "status": "preview_or_mock", "playable_visual_battle": false, "deeplink_alpha": "event-arena-alpha-gate-preview" },
+    "arena":    { "status": "preview_or_mock", "playable_visual_battle": false, "deeplink_alpha": "event-arena-first-alpha-slice-preview" }
+  },
+  "target_state": {
+    "all_modes_route_to": "playable-mode-battle-preview",
+    "preview_only": true,
+    "deterministic": true,
+    "authoritative": false,
+    "reward_grant": false,
+    "db_write": false,
+    "account_mutation": false,
+    "inventory_mutation": false,
+    "battle_engine_attached": false
+  },
+  "gap_summary": [
+    "Nessun runner visuale comune locale: ogni preview era stub statico.",
+    "Manca un payload deterministico per modalità (team, nemici, timeline azioni).",
+    "Mancano deeplink espliciti dal menu alpha verso un'unica schermata di battle preview."
+  ],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false,
+  "battle_engine_authoritative": false,
+  "notes": "Audit dello stato pre-v86 dei sei modes e definizione del target preview-only deterministico."
+}

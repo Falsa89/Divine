@@ -1,0 +1,35 @@
+{
+  "version": "v1",
+  "mode": "event",
+  "preview_only": true,
+  "deterministic": true,
+  "authoritative": false,
+  "reward_grant": false,
+  "db_write": false,
+  "account_mutation": false,
+  "inventory_mutation": false,
+  "battle_engine_attached": false,
+  "seed": "event-preview-seed-0001",
+  "event_alias": "alpha_event_demo_stage_03",
+  "player_team": [
+    { "slot": 1, "alias": "alpha_event_hero_01", "role": "dps_ranged", "hp": 1150, "atk": 230, "def": 85, "speed": 120 },
+    { "slot": 2, "alias": "alpha_event_hero_02", "role": "healer",     "hp": 1000, "atk": 125, "def": 80, "speed": 105 },
+    { "slot": 3, "alias": "alpha_event_hero_03", "role": "tank",       "hp": 1800, "atk": 130, "def": 165, "speed": 60 }
+  ],
+  "enemy_team": [
+    { "slot": 1, "alias": "event_mob_a",     "hp": 900,  "atk": 110, "def": 70 },
+    { "slot": 2, "alias": "event_elite_b",   "hp": 1400, "atk": 150, "def": 95 }
+  ],
+  "timeline": [
+    { "turn": 1, "actor": "alpha_event_hero_03", "action": "taunt",       "target": "all_enemies", "preview_dmg": 0 },
+    { "turn": 1, "actor": "alpha_event_hero_01", "action": "basic_atk",  "target": "event_elite_b", "preview_dmg": 300 },
+    { "turn": 2, "actor": "event_elite_b",       "action": "basic_atk",  "target": "alpha_event_hero_03", "preview_dmg": 160 },
+    { "turn": 2, "actor": "alpha_event_hero_02", "action": "heal",       "target": "alpha_event_hero_03", "preview_heal": 240 },
+    { "turn": 3, "actor": "alpha_event_hero_01", "action": "ultimate",   "target": "event_elite_b", "preview_dmg": 720 }
+  ],
+  "preview_outcome": { "player_wins": true, "authoritative": false, "applies_to_account": false, "event_currency_granted": false },
+  "ui_labels_required": ["PREVIEW", "LOCAL", "NOT LIVE REWARD", "NON AUTHORITATIVE"],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false
+}

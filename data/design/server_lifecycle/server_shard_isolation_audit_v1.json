@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T18:10:40.775924+00:00",
+  "timestamp_utc": "2026-06-04T18:59:07.985821+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1468,
+  "backend_python_files_scanned": 1472,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 724,
+      "files_with_hits": 727,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 328,
+      "files_with_hits": 330,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 104,
+      "files_with_hits": 106,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 114,
+      "files_with_hits": 115,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -797,7 +797,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 17,
+      "files_with_hits": 19,
       "hits_sample": [
         {
           "file": "backend/routes/combat.py",
@@ -856,6 +856,22 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_v86_playable_mode_visual_battle_payloads.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 50,
+              "snippet": "if m == \"story\" and outcome.get(\"story_progress_applied\") not in (False, None):"
+            },
+            {
+              "line": 51,
+              "snippet": "if outcome.get(\"story_progress_applied\") is not False: ERR.append(\"story.outcome.story_progress_applied_not_false\")"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
           "keyword": "story_progress",
           "has_server_id_anywhere": true,
@@ -884,18 +900,6 @@
             {
               "line": 243,
               "snippet": "'replay_view_advances_story_progress',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_c_collection_scope_migration_matrix_v1.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 12,
-              "snippet": "'gacha_history', 'story_progress', 'guilds', 'arena_rankings',"
             }
           ]
         }
@@ -1025,7 +1029,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 109,
+      "files_with_hits": 111,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",

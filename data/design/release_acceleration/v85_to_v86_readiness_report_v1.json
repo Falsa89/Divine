@@ -2,28 +2,13 @@
   "version": "v1",
   "from": "v85",
   "to": "v86",
-  "recommendation": "live_db_canary_apply_dry_run_with_dual_approval_pack_v86_still_no_apply",
-  "alternative_if_blocked": "continue_design_hardening_v86",
-  "required_for_future_v86_pack": [
-    "dual_human_approval",
-    "checksum_sha256_approval_chain",
-    "step_up_admin_auth",
-    "kill_switch_disengaged_with_dual_approval",
-    "observation_sink_design_active",
-    "explicit_no_apply_to_db"
-  ],
-  "hard_constraints": [
-    "no_live_db_writes",
-    "no_endpoint_implementation",
-    "no_real_reward_grant",
-    "no_premium_currency",
-    "no_battle_engine_change",
-    "no_server_py_change",
-    "manual_dual_approval_required",
-    "checksum_required",
-    "step_up_auth_required"
-  ],
+  "v85_commit_hash": "1158c8c0d1570cfb1e5643c61a3810002b08c169",
+  "v86_playable_routing_ready": true,
+  "v86_raid_boss_schema_design_only": true,
   "db_writes": 0,
   "applied_to_live": false,
-  "endpoint_implemented": false
+  "reward_live": false,
+  "endpoint_live": false,
+  "battle_engine_authoritative": false,
+  "notes": "v86 introduce un visual battle preview locale deterministico per 6 mode (Training/Story/Boss/Tower/Event/Arena) e uno schema placeholder design-only per raid boss e forme giocabili."
 }

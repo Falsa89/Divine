@@ -1,0 +1,36 @@
+{
+  "version": "v1",
+  "mode": "story",
+  "preview_only": true,
+  "deterministic": true,
+  "authoritative": false,
+  "reward_grant": false,
+  "db_write": false,
+  "account_mutation": false,
+  "inventory_mutation": false,
+  "battle_engine_attached": false,
+  "seed": "story-preview-seed-0001",
+  "chapter_alias": "alpha_chapter_01_intro_slice",
+  "player_team": [
+    { "slot": 1, "alias": "alpha_story_hero_01", "role": "dps_ranged", "hp": 1100, "atk": 200, "def": 80, "speed": 110 },
+    { "slot": 2, "alias": "alpha_story_hero_02", "role": "support",    "hp": 1050, "atk": 130, "def": 85, "speed": 100 },
+    { "slot": 3, "alias": "alpha_story_hero_03", "role": "tank",       "hp": 1700, "atk": 115, "def": 150, "speed": 65 }
+  ],
+  "enemy_team": [
+    { "slot": 1, "alias": "story_grunt_a",    "hp": 850,  "atk": 110, "def": 60 },
+    { "slot": 2, "alias": "story_grunt_b",    "hp": 850,  "atk": 110, "def": 60 },
+    { "slot": 3, "alias": "story_lieutenant", "hp": 1500, "atk": 160, "def": 90 }
+  ],
+  "timeline": [
+    { "turn": 1, "actor": "alpha_story_hero_03", "action": "shield_wall", "target": "self_team", "preview_dmg": 0 },
+    { "turn": 1, "actor": "alpha_story_hero_01", "action": "piercing_arrow", "target": "story_lieutenant", "preview_dmg": 320 },
+    { "turn": 2, "actor": "story_grunt_a",       "action": "basic_atk",  "target": "alpha_story_hero_03", "preview_dmg": 130 },
+    { "turn": 2, "actor": "alpha_story_hero_02", "action": "buff_atk",   "target": "alpha_story_hero_01", "preview_dmg": 0 },
+    { "turn": 3, "actor": "alpha_story_hero_01", "action": "ultimate",   "target": "all_enemies", "preview_dmg": 540 }
+  ],
+  "preview_outcome": { "player_wins": true, "authoritative": false, "applies_to_account": false, "story_progress_applied": false },
+  "ui_labels_required": ["PREVIEW", "LOCAL", "NOT LIVE REWARD", "NON AUTHORITATIVE"],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false
+}

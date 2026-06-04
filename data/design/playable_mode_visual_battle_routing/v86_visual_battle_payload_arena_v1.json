@@ -1,0 +1,35 @@
+{
+  "version": "v1",
+  "mode": "arena",
+  "preview_only": true,
+  "deterministic": true,
+  "authoritative": false,
+  "reward_grant": false,
+  "db_write": false,
+  "account_mutation": false,
+  "inventory_mutation": false,
+  "battle_engine_attached": false,
+  "seed": "arena-preview-seed-0001",
+  "player_team": [
+    { "slot": 1, "alias": "alpha_arena_hero_01", "role": "dps_melee",  "hp": 1250, "atk": 215, "def": 95,  "speed": 110 },
+    { "slot": 2, "alias": "alpha_arena_hero_02", "role": "dps_ranged", "hp": 1150, "atk": 235, "def": 80,  "speed": 115 },
+    { "slot": 3, "alias": "alpha_arena_hero_03", "role": "support",    "hp": 1050, "atk": 130, "def": 85,  "speed": 100 }
+  ],
+  "enemy_team": [
+    { "slot": 1, "alias": "arena_dummy_pvp_a", "hp": 1100, "atk": 200, "def": 90, "speed": 105 },
+    { "slot": 2, "alias": "arena_dummy_pvp_b", "hp": 1100, "atk": 200, "def": 90, "speed": 105 },
+    { "slot": 3, "alias": "arena_dummy_pvp_c", "hp": 1100, "atk": 200, "def": 90, "speed": 105 }
+  ],
+  "timeline": [
+    { "turn": 1, "actor": "alpha_arena_hero_03", "action": "buff_atk",  "target": "alpha_arena_hero_02", "preview_dmg": 0 },
+    { "turn": 1, "actor": "alpha_arena_hero_02", "action": "piercing_shot", "target": "arena_dummy_pvp_a", "preview_dmg": 320 },
+    { "turn": 2, "actor": "arena_dummy_pvp_a",   "action": "basic_atk", "target": "alpha_arena_hero_01", "preview_dmg": 150 },
+    { "turn": 2, "actor": "alpha_arena_hero_01", "action": "cleave",   "target": "all_enemies", "preview_dmg": 220 },
+    { "turn": 3, "actor": "alpha_arena_hero_02", "action": "ultimate", "target": "all_enemies", "preview_dmg": 540 }
+  ],
+  "preview_outcome": { "player_wins": true, "authoritative": false, "applies_to_account": false, "mmr_applied": false, "ranking_applied": false, "reward_granted": false },
+  "ui_labels_required": ["PREVIEW", "LOCAL", "NOT LIVE REWARD", "NON AUTHORITATIVE"],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false
+}

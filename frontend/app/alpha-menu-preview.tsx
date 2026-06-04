@@ -126,6 +126,29 @@ const ENTRIES: PreviewMenuEntry[] = [
       "labels:PREVIEW|STAGING|CANARY_LOCAL|NOT_LIVE_REWARD|DB_WRITES_0|LOCAL_FILE_ONLY",
     ],
   },
+  {
+    route: "playable-mode-battle-preview",
+    title: "Playable Mode Visual Battle Preview (v86)",
+    qaPriority: "P0",
+    exposureBadge: "ALPHA_MENU_EXPOSED",
+    guardrails: [
+      "deeplink_only",
+      "preview_only=true",
+      "deterministic=true",
+      "authoritative=false",
+      "reward_grant=false",
+      "db_write=false",
+      "account_mutation=false",
+      "inventory_mutation=false",
+      "battle_engine_attached=false",
+      "no_real_claim_button",
+      "no_endpoint_live",
+      "no_story_progress_mutation",
+      "no_arena_mmr_mutation",
+      "no_tower_completion_mutation",
+      "labels:PREVIEW|LOCAL|NOT_LIVE_REWARD|NON_AUTHORITATIVE",
+    ],
+  },
 ];
 
 export default function AlphaMenuPreview() {
@@ -144,7 +167,7 @@ export default function AlphaMenuPreview() {
         <View style={styles.banner}>
           <Text style={styles.bannerTitle}>Stato exposure</Text>
           <Text style={styles.bannerLine}>apply: APPLIED_CONTROLLED_SAFE</Text>
-          <Text style={styles.bannerLine}>route esposte: 7</Text>
+          <Text style={styles.bannerLine}>route esposte: 8</Text>
           <Text style={styles.bannerLine}>home_root_changed: false</Text>
           <Text style={styles.bannerLine}>tab_bar_changed: false</Text>
           <Text style={styles.bannerLine}>db_writes: 0</Text>

@@ -1,0 +1,34 @@
+{
+  "version": "v1",
+  "mode": "boss",
+  "preview_only": true,
+  "deterministic": true,
+  "authoritative": false,
+  "reward_grant": false,
+  "db_write": false,
+  "account_mutation": false,
+  "inventory_mutation": false,
+  "battle_engine_attached": false,
+  "seed": "boss-preview-seed-0001",
+  "boss_alias": "alpha_raid_boss_placeholder_01",
+  "player_team": [
+    { "slot": 1, "alias": "alpha_boss_hero_01", "role": "dps_melee", "hp": 1400, "atk": 220, "def": 100, "speed": 105 },
+    { "slot": 2, "alias": "alpha_boss_hero_02", "role": "dps_ranged", "hp": 1200, "atk": 240, "def": 80, "speed": 115 },
+    { "slot": 3, "alias": "alpha_boss_hero_03", "role": "healer", "hp": 1100, "atk": 130, "def": 90, "speed": 95 },
+    { "slot": 4, "alias": "alpha_boss_hero_04", "role": "tank", "hp": 2200, "atk": 130, "def": 180, "speed": 55 }
+  ],
+  "boss": { "alias": "alpha_raid_boss_placeholder_01", "hp": 12000, "atk": 380, "def": 220, "phases": ["intro", "enrage", "final"] },
+  "timeline": [
+    { "turn": 1, "actor": "alpha_boss_hero_04", "action": "taunt",        "target": "alpha_raid_boss_placeholder_01", "preview_dmg": 0 },
+    { "turn": 1, "actor": "alpha_boss_hero_01", "action": "basic_atk",   "target": "alpha_raid_boss_placeholder_01", "preview_dmg": 360 },
+    { "turn": 1, "actor": "alpha_boss_hero_02", "action": "piercing_shot", "target": "alpha_raid_boss_placeholder_01", "preview_dmg": 420 },
+    { "turn": 2, "actor": "alpha_raid_boss_placeholder_01", "action": "sweep", "target": "all_player", "preview_dmg": 280 },
+    { "turn": 2, "actor": "alpha_boss_hero_03", "action": "aoe_heal",     "target": "all_player", "preview_heal": 280 },
+    { "turn": 3, "actor": "alpha_boss_hero_01", "action": "ultimate",    "target": "alpha_raid_boss_placeholder_01", "preview_dmg": 900 }
+  ],
+  "preview_outcome": { "player_wins": false, "reason": "boss_phase_demo_only", "authoritative": false, "applies_to_account": false, "fragments_granted": false },
+  "ui_labels_required": ["PREVIEW", "LOCAL", "NOT LIVE REWARD", "NON AUTHORITATIVE"],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false
+}
