@@ -1,0 +1,39 @@
+{
+  "catalog_name": "raid_boss_encounter_stub_catalog_v1",
+  "mode": "raid",
+  "source_type": "raid_boss_catalog",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "bosses": [
+    {
+      "source_type": "raid_boss_catalog",
+      "source_id": "raid_world_boss_01",
+      "mode": "raid",
+      "raid_id": "raid_wb_01",
+      "raid_boss_id": "alpha_raid_boss_placeholder_01",
+      "encounter_id": "enc_raid_world_boss_01",
+      "boss": {"hero_id": "alpha_raid_boss_placeholder_01", "role": "boss", "level": 40, "stars": 5, "power": 25000, "hp_pool": 1000000},
+      "adds": [],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "raid_boss_catalog",
+      "source_id": "raid_coop_dragon_01",
+      "mode": "raid",
+      "raid_id": "raid_dragon_01",
+      "raid_boss_id": "alpha_boss_hero_01",
+      "encounter_id": "enc_raid_dragon_with_adds",
+      "boss": {"hero_id": "alpha_boss_hero_01", "role": "boss", "level": 50, "stars": 5, "power": 40000, "hp_pool": 2500000},
+      "adds": [
+        {"hero_id": "alpha_boss_hero_03", "role": "healer", "level": 35, "stars": 3, "power": 6000},
+        {"hero_id": "alpha_boss_hero_04", "role": "tank", "level": 35, "stars": 3, "power": 7000}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "catalog_name": "event_encounter_stub_catalog_v1",
+  "mode": "event",
+  "source_type": "event_schedule_encounter",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "events": [
+    {
+      "source_type": "event_schedule_encounter",
+      "source_id": "event_summer_invasion_stage_01",
+      "mode": "event",
+      "event_id": "evt_summer_invasion_v1",
+      "stage_id": 1,
+      "encounter_id": "enc_event_summer_invasion_s1_grunts",
+      "window_utc": {"start": "2026-07-01T00:00:00Z", "end": "2026-07-14T23:59:59Z"},
+      "enemies": [
+        {"hero_id": "alpha_event_hero_01", "role": "dps", "level": 20, "stars": 3, "power": 4000},
+        {"hero_id": "alpha_event_hero_02", "role": "healer", "level": 20, "stars": 3, "power": 4200},
+        {"hero_id": "alpha_event_hero_03", "role": "tank", "level": 22, "stars": 3, "power": 5000}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "event_schedule_encounter",
+      "source_id": "event_summer_invasion_boss",
+      "mode": "event",
+      "event_id": "evt_summer_invasion_v1",
+      "stage_id": 5,
+      "encounter_id": "enc_event_summer_invasion_boss",
+      "window_utc": {"start": "2026-07-01T00:00:00Z", "end": "2026-07-14T23:59:59Z"},
+      "enemies": [
+        {"hero_id": "alpha_boss_hero_02", "role": "boss", "level": 35, "stars": 4, "power": 18000}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    }
+  ]
+}

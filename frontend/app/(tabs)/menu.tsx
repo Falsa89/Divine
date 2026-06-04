@@ -97,18 +97,18 @@ const CATEGORIES = [
   },
   {
     // MEGA_RELEASE_ACCELERATION_39 v90 — RESTORE Home battle renderer.
-    // EMERGENCY RESTORE: le 5 modalità ora puntano al renderer Home REALE
-    // (frontend/app/combat.tsx, MD5-locked) che usa BattleSprite + pickBattleBackground +
-    // buildBattleLayout + getHomePosition + teamA/teamB caricati via /api/battle/simulate
-    // (endpoint pre-esistente). NESSUN nuovo mock parallelo. NESSUNA mutazione.
-    // db_writes=0 / reward_live=false / endpoint_live=false / battle_engine_authoritative=false (no new).
+    // MEGA_RELEASE_ACCELERATION_40 v91_FIXED — Pre-Battle Lobby intermediario.
+    // Le 5 modalità ora puntano alla Pre-Battle Lobby (/pre-battle-lobby?mode=X)
+    // che mostra source canonica deterministica + team avversario + team player
+    // salvato + bottoni Modifica Team / Avvia Battaglia → /combat reale.
+    // db_writes=0 / reward_live=false / endpoint_live=false / random_opponents_allowed=false.
     title: 'Battaglia (Renderer Reale v90)',
     items: [
-      { label: 'Storia · Battaglia', icon: '\uD83D\uDCDC', route: '/combat?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
-      { label: 'Torre · Battaglia', icon: '\uD83C\uDFEF', route: '/combat?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
-      { label: 'Arena PvP · Battaglia', icon: '\uD83E\uDD4A', route: '/combat?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
-      { label: 'Addestramento · Battaglia', icon: '\u2694\uFE0F', route: '/combat?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
-      { label: 'Raid · Battaglia', icon: '\uD83D\uDC32', route: '/combat?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
+      { label: 'Storia · Battaglia', icon: '\uD83D\uDCDC', route: '/pre-battle-lobby?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
+      { label: 'Torre · Battaglia', icon: '\uD83C\uDFEF', route: '/pre-battle-lobby?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
+      { label: 'Arena PvP · Battaglia', icon: '\uD83E\uDD4A', route: '/pre-battle-lobby?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
+      { label: 'Addestramento · Battaglia', icon: '\u2694\uFE0F', route: '/pre-battle-lobby?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
+      { label: 'Raid · Battaglia', icon: '\uD83D\uDC32', route: '/pre-battle-lobby?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
     ],
   },
   {

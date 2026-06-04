@@ -1,0 +1,50 @@
+{
+  "catalog_name": "arena_opponent_source_stub_catalog_v1",
+  "mode": "arena",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "opponent_sources": [
+    {
+      "source_type": "real_player_defense_team",
+      "source_id": "arena_target_real_player_001",
+      "mode": "arena",
+      "opponent_id": "player_sfqa_test_001",
+      "team_id": "defense_team_v1",
+      "hero_ids": ["hero_player_a", "hero_player_b", "hero_player_c"],
+      "team_power": 18000,
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "note": "Squadra difensiva salvata dal giocatore reale. Caricata da DB user.defense_team al momento del matchmaking."
+    },
+    {
+      "source_type": "persistent_bot_profile_team",
+      "source_id": "arena_bot_low_tier",
+      "mode": "arena",
+      "bot_id": "bot_arena_low_001",
+      "team_id": "bot_low_001_defense",
+      "hero_ids": ["alpha_arena_hero_01", "alpha_arena_hero_02", "alpha_arena_hero_03"],
+      "levels": [10, 10, 10],
+      "stars": [2, 2, 2],
+      "team_power": 6500,
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "persistent_bot_profile_team",
+      "source_id": "arena_bot_mid_tier",
+      "mode": "arena",
+      "bot_id": "bot_arena_mid_001",
+      "team_id": "bot_mid_001_defense",
+      "hero_ids": ["alpha_arena_hero_01", "alpha_arena_hero_02", "alpha_arena_hero_03"],
+      "levels": [25, 25, 25],
+      "stars": [3, 3, 3],
+      "team_power": 16000,
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    }
+  ]
+}

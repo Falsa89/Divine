@@ -67,10 +67,13 @@ def main() -> None:
     if 'playable-mode-battle-preview' in block:
         fail("real renderer category must NOT route to playable-mode-battle-preview mock")
 
-    # Tutte le 5 entry della categoria reale devono usare /combat
-    combat_routes = re.findall(r"route:\s*'/combat\?mode=([a-z]+)'", block)
-    if sorted(combat_routes) != sorted(['story', 'tower', 'arena', 'training', 'boss']):
-        fail(f"real renderer category modes mismatch: got {combat_routes}")
+    # Tutte le 5 entry della categoria reale devono usare /combat oppure
+    # /pre-battle-lobby (entrambi puntano al renderer reale: la lobby v91
+    # e' l'intermediario canonico verso /combat, non un mock parallelo).
+    real_routes = re.findall(r"route:\s*'/(combat|pre-battle-lobby)\?mode=([a-z]+)'", block)
+    found_modes = sorted(m for _, m in real_routes)
+    if found_modes != sorted(['story', 'tower', 'arena', 'training', 'boss']):
+        fail(f"real renderer category modes mismatch: got {found_modes}")
 
     # La vecchia categoria deve essere marcata come deprecata
     if deprecated_marker not in menu_text:

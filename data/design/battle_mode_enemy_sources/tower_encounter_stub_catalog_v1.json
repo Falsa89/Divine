@@ -1,0 +1,55 @@
+{
+  "catalog_name": "tower_encounter_stub_catalog_v1",
+  "mode": "tower",
+  "source_type": "tower_floor_encounter_table",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "encounters": [
+    {
+      "source_type": "tower_floor_encounter_table",
+      "source_id": "tower_season_01_floor_01",
+      "mode": "tower",
+      "floor_id": 1,
+      "season_id": "S01",
+      "encounter_id": "enc_tower_S01_F01_minor_minions",
+      "enemies": [
+        {"hero_id": "tower_minion_a", "role": "dps", "level": 5, "stars": 2, "power": 1800},
+        {"hero_id": "tower_minion_b", "role": "dps", "level": 5, "stars": 2, "power": 1850}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "tower_floor_encounter_table",
+      "source_id": "tower_season_01_floor_10",
+      "mode": "tower",
+      "floor_id": 10,
+      "season_id": "S01",
+      "encounter_id": "enc_tower_S01_F10_mid_boss",
+      "enemies": [
+        {"hero_id": "tower_minion_a", "role": "tank", "level": 15, "stars": 3, "power": 4200},
+        {"hero_id": "tower_minion_b", "role": "dps", "level": 15, "stars": 3, "power": 4500},
+        {"hero_id": "tower_minion_c", "role": "healer", "level": 15, "stars": 3, "power": 4000}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "tower_floor_encounter_table",
+      "source_id": "tower_season_01_floor_30",
+      "mode": "tower",
+      "floor_id": 30,
+      "season_id": "S01",
+      "encounter_id": "enc_tower_S01_F30_tower_warden",
+      "enemies": [
+        {"hero_id": "alpha_boss_hero_02", "role": "boss", "level": 30, "stars": 4, "power": 12000}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    }
+  ]
+}

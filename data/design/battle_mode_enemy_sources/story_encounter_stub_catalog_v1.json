@@ -1,0 +1,54 @@
+{
+  "catalog_name": "story_encounter_stub_catalog_v1",
+  "mode": "story",
+  "source_type": "story_stage_encounter_table",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "encounters": [
+    {
+      "source_type": "story_stage_encounter_table",
+      "source_id": "story_chapter_01_stage_01",
+      "mode": "story",
+      "stage_id": "1-1",
+      "encounter_id": "enc_story_1_1_intro_grunts",
+      "enemies": [
+        {"hero_id": "story_grunt_a", "role": "dps", "level": 1, "stars": 1, "power": 800},
+        {"hero_id": "story_grunt_b", "role": "dps", "level": 1, "stars": 1, "power": 850},
+        {"hero_id": "story_lieutenant", "role": "tank", "level": 2, "stars": 1, "power": 1200}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "story_stage_encounter_table",
+      "source_id": "story_chapter_01_stage_02",
+      "mode": "story",
+      "stage_id": "1-2",
+      "encounter_id": "enc_story_1_2_outpost_guards",
+      "enemies": [
+        {"hero_id": "story_grunt_a", "role": "dps", "level": 2, "stars": 1, "power": 950},
+        {"hero_id": "story_grunt_b", "role": "dps", "level": 2, "stars": 1, "power": 1000},
+        {"hero_id": "story_lieutenant", "role": "tank", "level": 3, "stars": 1, "power": 1500},
+        {"hero_id": "alpha_story_hero_02", "role": "support", "level": 2, "stars": 1, "power": 1100}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "story_stage_encounter_table",
+      "source_id": "story_chapter_02_boss",
+      "mode": "story",
+      "stage_id": "2-boss",
+      "encounter_id": "enc_story_2_boss_dark_warden",
+      "enemies": [
+        {"hero_id": "alpha_boss_hero_01", "role": "boss", "level": 10, "stars": 3, "power": 5000}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    }
+  ]
+}

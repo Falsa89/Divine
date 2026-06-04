@@ -1,0 +1,98 @@
+{
+  "catalog_name": "training_encounter_stub_catalog_v1",
+  "mode": "training",
+  "source_type": "training_preset_catalog",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "presets": [
+    {
+      "source_type": "training_preset_catalog",
+      "source_id": "training_basic_dummy",
+      "mode": "training",
+      "training_preset_id": "basic_dummy_v1",
+      "encounter_id": "enc_training_basic_dummy",
+      "purpose": "basic dummy",
+      "enemies": [
+        {"hero_id": "training_dummy_a", "role": "tank", "level": 1, "stars": 1, "power": 500}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "training_preset_catalog",
+      "source_id": "training_frontline",
+      "mode": "training",
+      "training_preset_id": "frontline_test_v1",
+      "encounter_id": "enc_training_frontline_test",
+      "purpose": "frontline test",
+      "enemies": [
+        {"hero_id": "alpha_trainee_hero_03", "role": "tank", "level": 10, "stars": 2, "power": 2500},
+        {"hero_id": "alpha_trainee_hero_01", "role": "dps", "level": 10, "stars": 2, "power": 2300}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "training_preset_catalog",
+      "source_id": "training_healer",
+      "mode": "training",
+      "training_preset_id": "healer_test_v1",
+      "encounter_id": "enc_training_healer_test",
+      "purpose": "healer test",
+      "enemies": [
+        {"hero_id": "alpha_trainee_hero_02", "role": "healer", "level": 15, "stars": 2, "power": 2800},
+        {"hero_id": "alpha_trainee_hero_03", "role": "tank", "level": 15, "stars": 2, "power": 3200}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "training_preset_catalog",
+      "source_id": "training_aoe",
+      "mode": "training",
+      "training_preset_id": "aoe_test_v1",
+      "encounter_id": "enc_training_aoe_test",
+      "purpose": "AoE test",
+      "enemies": [
+        {"hero_id": "alpha_trainee_hero_01", "role": "dps", "level": 12, "stars": 2, "power": 2400},
+        {"hero_id": "alpha_trainee_hero_01", "role": "dps", "level": 12, "stars": 2, "power": 2400},
+        {"hero_id": "alpha_trainee_hero_01", "role": "dps", "level": 12, "stars": 2, "power": 2400}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "training_preset_catalog",
+      "source_id": "training_anti_control",
+      "mode": "training",
+      "training_preset_id": "anti_control_v1",
+      "encounter_id": "enc_training_anti_control",
+      "purpose": "anti-control test",
+      "enemies": [
+        {"hero_id": "story_lieutenant", "role": "control", "level": 18, "stars": 3, "power": 3500}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "training_preset_catalog",
+      "source_id": "training_boss_dummy",
+      "mode": "training",
+      "training_preset_id": "boss_dummy_v1",
+      "encounter_id": "enc_training_boss_dummy",
+      "purpose": "boss dummy",
+      "enemies": [
+        {"hero_id": "alpha_raid_boss_placeholder_01", "role": "boss", "level": 30, "stars": 4, "power": 10000}
+      ],
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    }
+  ]
+}

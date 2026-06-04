@@ -1,0 +1,88 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_40_v91_FIXED",
+  "policy_name": "canonical_encounter_source_policy_v1",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "applies_to_all_modes": true,
+  "rationale": "Gli avversari non sono mai random in nessuna modalita'. Ogni battaglia deriva da una source esplicita, deterministica, salvata, autoriale, schedulata o persistente. Generazione random e' permessa solo in un futuro roguelike/randomizer esplicitamente progettato e seeded/authored, mai come fallback generico.",
+  "allowed_enemy_sources": [
+    "authored_encounter_catalog",
+    "story_stage_encounter_table",
+    "tower_floor_encounter_table",
+    "event_schedule_encounter",
+    "raid_boss_catalog",
+    "training_preset_catalog",
+    "real_player_defense_team",
+    "persistent_bot_profile_team",
+    "deterministic_seeded_fixture_stored_in_catalog"
+  ],
+  "mode_matrix": {
+    "story": {
+      "required_source_type": "story_stage_encounter_table",
+      "identifier": "stage_id -> encounter_id",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "catalog": "story_encounter_stub_catalog_v1.json"
+    },
+    "tower": {
+      "required_source_type": "tower_floor_encounter_table",
+      "identifier": "floor_id (+ season_id opzionale) -> encounter_id",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "catalog": "tower_encounter_stub_catalog_v1.json"
+    },
+    "arena": {
+      "required_source_type": ["real_player_defense_team", "persistent_bot_profile_team"],
+      "identifier": "opponent_id (player) o bot_id (persistente)",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "catalog": "arena_opponent_source_stub_catalog_v1.json"
+    },
+    "training": {
+      "required_source_type": "training_preset_catalog",
+      "identifier": "training_preset_id -> encounter",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "catalog": "training_encounter_stub_catalog_v1.json"
+    },
+    "raid": {
+      "required_source_type": "raid_boss_catalog",
+      "identifier": "raid_id -> raid_boss_id (+ adds)",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "catalog": "raid_boss_encounter_stub_catalog_v1.json"
+    },
+    "event": {
+      "required_source_type": "event_schedule_encounter",
+      "identifier": "event_id + stage_id -> scheduled encounter",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "catalog": "event_encounter_stub_catalog_v1.json"
+    },
+    "guild_live_future": {
+      "required_source_type": ["authored_encounter_catalog", "deterministic_seeded_fixture_stored_in_catalog"],
+      "identifier": "guild_defense_id | server_boss_id | faction_boss_id | wave_id",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false,
+      "catalog": "guild_live_encounter_source_stub_catalog_v1.json"
+    }
+  },
+  "forbidden_patterns": [
+    "is_random=true",
+    "runtime_generated=true",
+    "fallback_random_allowed=true",
+    "Math.random for enemy selection",
+    "random.choice for enemy selection",
+    "random.sample for enemy selection"
+  ],
+  "sentinel": "PUBLIC_SYNC_SENTINEL_v91_FIXED_PRESENT=YES",
+  "tag": "PUBLIC_SYNC_TAG_v91_FIXED_MEGA_RELEASE_ACCELERATION_40_CANONICAL_ENCOUNTER_SOURCE"
+}

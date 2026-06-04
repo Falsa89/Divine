@@ -49,10 +49,12 @@ def main() -> None:
         fail("menu.tsx missing category 'Battaglia (Renderer Reale v90)'")
 
     expected_modes = ['story', 'tower', 'arena', 'training', 'boss']
+    # v91_FIXED: il routing canonico passa attraverso /pre-battle-lobby (lobby intermediaria)
+    # che poi lancia /combat. Accetta /combat?mode=X o /pre-battle-lobby?mode=X.
     for mode in expected_modes:
-        expected_route = f"'/combat?mode={mode}'"
-        if expected_route not in menu_text:
-            fail(f"menu.tsx missing route {expected_route}")
+        ok = (f"'/combat?mode={mode}'" in menu_text) or (f"'/pre-battle-lobby?mode={mode}'" in menu_text)
+        if not ok:
+            fail(f"menu.tsx missing real-renderer route for mode={mode} (/combat or /pre-battle-lobby)")
 
     if not os.path.isfile(COMBAT):
         fail(f"missing combat.tsx: {COMBAT}")

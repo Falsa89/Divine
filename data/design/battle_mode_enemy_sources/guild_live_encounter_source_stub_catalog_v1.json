@@ -1,0 +1,52 @@
+{
+  "catalog_name": "guild_live_encounter_source_stub_catalog_v1",
+  "mode": "guild_live_future",
+  "random_opponents_allowed": false,
+  "runtime_random_enemy_generation_allowed": false,
+  "fallback_random_allowed": false,
+  "sources": [
+    {
+      "source_type": "authored_encounter_catalog",
+      "source_id": "guild_defense_team_design_v1",
+      "mode": "guild_defense",
+      "guild_defense_id": "gd_design_v1",
+      "encounter_id": "enc_guild_defense_design_team",
+      "team_composition_source": "guild member-designed defense team persisted server-side",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "authored_encounter_catalog",
+      "source_id": "server_boss_weekly_design_v1",
+      "mode": "server_boss",
+      "server_boss_id": "sb_weekly_design_v1",
+      "encounter_id": "enc_server_boss_weekly",
+      "schedule": "weekly_reset_monday_utc",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "authored_encounter_catalog",
+      "source_id": "faction_boss_design_v1",
+      "mode": "faction_boss",
+      "faction_boss_id": "fb_design_v1",
+      "encounter_id": "enc_faction_boss_design",
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    },
+    {
+      "source_type": "deterministic_seeded_fixture_stored_in_catalog",
+      "source_id": "wave_schedule_design_v1",
+      "mode": "wave_schedule",
+      "wave_id": "wv_design_v1",
+      "encounter_id": "enc_wave_schedule_design",
+      "seed": 12345,
+      "is_random": false,
+      "runtime_generated": false,
+      "fallback_random_allowed": false
+    }
+  ]
+}

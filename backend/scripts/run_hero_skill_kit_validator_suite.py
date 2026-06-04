@@ -3081,6 +3081,26 @@ OPTIONAL = [
     ('PROJECT-V90-RESTORED-BATTLE-RENDERER-REUSE', 'validate_v90_restored_battle_renderer_reuse.py'),
     ('PROJECT-V90-NO-MOCK-PREVIEW-REGRESSION', 'validate_v90_no_mock_preview_regression.py'),
     ('MEGA-RELEASE-ACCELERATION-39-v90-ROLLUP', 'validate_mega_release_acceleration_39_v90_rollup.py'),
+
+    # ========================================================================
+    # v91_FIXED - MEGA_RELEASE_ACCELERATION_40_PRE_BATTLE_LOBBY_ENGINE_STATUS_DOT
+    #             _AND_CANONICAL_ENCOUNTER_SOURCE
+    # Pre-battle lobby intermediario tra menu modalita' e /combat reale.
+    # Universal policy: random_opponents_allowed=false in TUTTE le modalita'.
+    # 7 stub catalog deterministic (story/tower/arena/training/raid/event/guild_live).
+    # Engine audit read-only su status/DoT/targeting (NO engine patch in v91).
+    # db_writes=0, rewards=0, live_endpoints=0 (no NEW),
+    # battle_engine_authoritative=false (no NEW),
+    # random_opponents_allowed=false (universal policy),
+    # validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v91_FIXED_MEGA_RELEASE_ACCELERATION_40
+    # PUBLIC_SYNC_SENTINEL_v91_FIXED_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V91-FIXED-PRE-BATTLE-LOBBY-FLOW', 'validate_v91_pre_battle_lobby_flow.py'),
+    ('PROJECT-V91-FIXED-UNIVERSAL-NO-RANDOM-ENEMY-SOURCE-POLICY', 'validate_v91_universal_no_random_enemy_source_policy.py'),
+    ('PROJECT-V91-FIXED-CANONICAL-ENCOUNTER-STUB-CATALOGS', 'validate_v91_canonical_encounter_stub_catalogs.py'),
+    ('PROJECT-V91-FIXED-BATTLE-ENGINE-STATUS-DOT-AUDIT', 'validate_v91_battle_engine_status_dot_audit.py'),
+    ('MEGA-RELEASE-ACCELERATION-40-v91-FIXED-ROLLUP', 'validate_mega_release_acceleration_40_v91_fixed_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
