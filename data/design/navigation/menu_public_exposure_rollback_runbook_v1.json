@@ -1,0 +1,23 @@
+{
+  "design_version": "menu_public_exposure_rollback_runbook_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v73_MEGA_RELEASE_ACCELERATION_22_MENU_EXPOSURE_CLOSED_ALPHA",
+  "purpose": "Reversibilita' atomica di qualsiasi futura abilitazione public menu exposure. In v73 NON e' stato applicato nulla, ma il runbook e' pronto per i pack di execution successivi.",
+  "max_steps": 5,
+  "data_loss_on_rollback": false,
+  "steps": [
+    {"step": 1, "id": "flag_disable", "action": "set public_menu_exposure_enabled=false in menu section config", "reversible": true},
+    {"step": 2, "id": "remove_section_entry", "action": "remove alpha_preview_section entries from menu component", "reversible": true},
+    {"step": 3, "id": "keep_deeplinks", "action": "verify deeplink-only routes still resolvable (file presence)", "reversible": true},
+    {"step": 4, "id": "verify_md5_invariants", "action": "re-run md5sum sui 8 file core", "reversible": true},
+    {"step": 5, "id": "validator_suite_replay", "action": "re-run run_hero_skill_kit_validator_suite.py, check 0 REQUIRED FAIL", "reversible": true}
+  ],
+  "smoke_after_rollback": [
+    "home screen unchanged",
+    "tab bar unchanged",
+    "deeplink to alpha-preview-hub still works",
+    "no crash on app start"
+  ],
+  "db_writes": 0,
+  "account_persistence": false
+}

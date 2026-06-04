@@ -1,0 +1,20 @@
+{
+  "template_version": "closed_alpha_feedback_form_template_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "fields": [
+    {"id": "tester_id", "type": "string", "required": false, "note": "nickname opzionale"},
+    {"id": "device", "type": "string", "required": true},
+    {"id": "os_version", "type": "string", "required": true},
+    {"id": "flow_tested", "type": "enum", "values": ["first_session_onboarding_preview", "training_preview", "story_alpha_slice", "boss_tower_alpha_loop", "event_arena_alpha_preview", "alpha_preview_hub"], "required": true},
+    {"id": "completion_status", "type": "enum", "values": ["completed", "abandoned", "crash"], "required": true},
+    {"id": "clarity_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "interest_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "pace_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "copy_quality_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "open_feedback", "type": "text", "required": false},
+    {"id": "would_recommend_1_5", "type": "int", "min": 1, "max": 5, "required": true}
+  ],
+  "db_writes": 0,
+  "account_persistence": false,
+  "note": "Form esterno (google form o doc condiviso). Nessuna integrazione runtime."
+}

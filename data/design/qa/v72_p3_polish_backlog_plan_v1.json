@@ -1,0 +1,38 @@
+{
+  "plan_version": "v72_p3_polish_backlog_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v73_MEGA_RELEASE_ACCELERATION_22_MENU_EXPOSURE_CLOSED_ALPHA",
+  "source": "v72 alpha internal QA bug backlog",
+  "findings": [
+    {
+      "id": "p3_alpha_preview_hub_copy_shortening",
+      "severity": "P3",
+      "area": "frontend/app/alpha-preview-hub.tsx",
+      "description": "Alpha preview hub: accorciare alcune copy/label per coerenza visiva. Non blocker.",
+      "apply_now": false,
+      "safe_to_fix_later": true
+    },
+    {
+      "id": "p3_first_session_state_label_line_height_margin",
+      "severity": "P3",
+      "area": "frontend/app/first-session-onboarding-preview.tsx",
+      "description": "First session preview: leggero aggiustamento line-height/margin sulle state label dell'hardening panel.",
+      "apply_now": false,
+      "safe_to_fix_later": true
+    },
+    {
+      "id": "p3_alpha_preview_hub_qa_priority_ordering",
+      "severity": "P3",
+      "area": "frontend/app/alpha-preview-hub.tsx",
+      "description": "Alpha preview hub: re-ordinare le card per priorita' QA suggerita (P0 prima).",
+      "apply_now": false,
+      "safe_to_fix_later": true
+    }
+  ],
+  "apply_now_default": false,
+  "aggregate_into_future_polish_batch": true,
+  "is_blocker": false,
+  "required_before_public_design_review": false,
+  "safe_to_fix_later": true,
+  "db_writes": 0
+}

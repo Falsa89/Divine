@@ -1,0 +1,44 @@
+{
+  "plan_version": "closed_alpha_testing_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v73_MEGA_RELEASE_ACCELERATION_22_MENU_EXPOSURE_CLOSED_ALPHA",
+  "closed_alpha_plan_only": true,
+  "closed_alpha_invites_enabled": false,
+  "live_invite_system": false,
+  "account_persistence_changes": false,
+  "backend_route_changes": false,
+  "db_writes": 0,
+  "target_flows": [
+    {"id": "first_session_onboarding_preview", "route": "first-session-onboarding-preview", "priority": "P0"},
+    {"id": "training_preview", "route": "training-combat-onboarding-preview", "priority": "P1"},
+    {"id": "story_alpha_slice", "route": "story-alpha-slice-preview", "priority": "P0"},
+    {"id": "boss_tower_alpha_loop", "route": "boss-tower-alpha-loop-preview", "priority": "P1"},
+    {"id": "event_arena_alpha_preview", "route": "event-arena-first-alpha-slice-preview", "priority": "P1"},
+    {"id": "alpha_preview_hub", "route": "alpha-preview-hub", "priority": "P0"}
+  ],
+  "tester_count_target": 8,
+  "tester_count_min": 4,
+  "session_duration_minutes": 30,
+  "channels": {
+    "recruitment": "manual_dm_only",
+    "feedback": "google_form_or_shared_doc",
+    "bug_report": "shared_doc_or_email"
+  },
+  "phases": [
+    {"id": "phase_1_pre_kickoff", "actions": ["recruit testers manually", "share onboarding template", "share feedback form template"]},
+    {"id": "phase_2_kickoff", "actions": ["tester opens deeplink to alpha-preview-hub", "runs each target flow once"]},
+    {"id": "phase_3_capture", "actions": ["fill feedback form", "report bugs via workflow"]},
+    {"id": "phase_4_triage", "actions": ["author classifies feedback P0/P1/P2/P3", "decides apply or defer"]},
+    {"id": "phase_5_wrap", "actions": ["summary report", "decide v74 readiness"]}
+  ],
+  "forbidden_during_closed_alpha": [
+    "reward_grant",
+    "account_persistence",
+    "db_writes",
+    "real_asset_import",
+    "public_menu_routing_enabled",
+    "production_navigation_changes",
+    "backend_route_changes"
+  ],
+  "manual_approval_required_for_public_exposure": true
+}

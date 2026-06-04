@@ -1,0 +1,35 @@
+{
+  "workflow_version": "closed_alpha_bug_report_workflow_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "intake_channel": "shared_doc_or_email",
+  "required_fields": [
+    "tester_id_optional",
+    "device",
+    "os_version",
+    "flow",
+    "repro_steps",
+    "expected",
+    "actual",
+    "screenshot_optional",
+    "severity_suggested"
+  ],
+  "triage_buckets": ["P0", "P1", "P2", "P3"],
+  "triage_owner": "author",
+  "sla_minutes": {
+    "P0": 60,
+    "P1": 1440,
+    "P2": 4320,
+    "P3": null
+  },
+  "on_P0": "halt closed alpha, rollback if needed, escalate",
+  "on_P1": "plan fix in v74 or earlier",
+  "on_P2": "plan fix in v74-v75 batch",
+  "on_P3": "aggregate in polish batch",
+  "db_writes": 0,
+  "account_persistence": false,
+  "forbidden": [
+    "public live ticketing system",
+    "persistent bug DB writes app-side",
+    "automatic backend route creation"
+  ]
+}

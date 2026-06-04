@@ -1,0 +1,42 @@
+{
+  "design_version": "menu_public_exposure_scope_lock_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v73_MEGA_RELEASE_ACCELERATION_22_MENU_EXPOSURE_CLOSED_ALPHA",
+  "purpose": "Lock the exact scope of any future public menu exposure execution to a finite, reversible set of preview-only routes.",
+  "locked_scope": {
+    "routes_allowed": [
+      "alpha-preview-hub",
+      "first-session-onboarding-preview",
+      "training-combat-onboarding-preview",
+      "story-alpha-slice-preview",
+      "boss-tower-alpha-loop-preview",
+      "event-arena-alpha-gate-preview",
+      "event-arena-first-alpha-slice-preview"
+    ],
+    "navigation_targets_allowed": [
+      "menu_alpha_preview_section_only"
+    ],
+    "home_root_modification": false,
+    "tab_bar_modification": false,
+    "backend_route_modification": false,
+    "server_py_modification": false,
+    "battle_engine_modification": false,
+    "story_tsx_modification": false,
+    "combat_tsx_modification": false,
+    "reward_grant": false,
+    "account_persistence": false,
+    "async_storage_persistence": false,
+    "db_writes": 0,
+    "asset_import": false
+  },
+  "reversibility": {
+    "reversible": true,
+    "rollback_runbook": "data/design/navigation/menu_public_exposure_rollback_runbook_v1.json",
+    "rollback_step_count_max": 5,
+    "rollback_data_loss": false
+  },
+  "manual_approval_required": true,
+  "manual_approval_received": false,
+  "public_menu_exposure_apply_default": false,
+  "public_menu_exposure_enabled": false
+}

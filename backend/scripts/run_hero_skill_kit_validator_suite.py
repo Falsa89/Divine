@@ -2457,6 +2457,52 @@ OPTIONAL = [
     ('PROJECT-MENU-PUBLIC-EXPOSURE-DESIGN-AFTER-QA', 'validate_menu_public_exposure_design_after_qa_v1.py'),
     ('PROJECT-ALPHA-QA-EXIT-CRITERIA-v73-READINESS', 'validate_alpha_qa_exit_criteria_v73_readiness_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-21-v72-ROLLUP', 'validate_mega_release_acceleration_21_v72_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_22_MENU_PUBLIC_EXPOSURE_GATED_EXECUTION_AND_CLOSED_ALPHA_PLAN_PACK_v73
+    # PUBLIC_SYNC_TAG_v73_MEGA_RELEASE_ACCELERATION_22_MENU_EXPOSURE_CLOSED_ALPHA
+    # ------------------------------------------------------------------------
+    # MENU PUBLIC EXPOSURE GATED EXECUTION + CLOSED ALPHA PLAN pack. Accorpa:
+    #   1) Public Exposure Approval Handshake + Scope Lock + Execution
+    #      Forbidden Scope - manual approval phrase + checksum required.
+    #   2) Menu Exposure Dry-run + Apply/Blocked Evidence -
+    #      verdict BLOCKED_NOT_APPLIED_SAFE (no approval phrase in v73 prompt).
+    #   3) Candidate Route Map (7 deeplink-only preview routes) +
+    #      Rollback Runbook (<=5 step, no data loss) + Observation Plan
+    #      (60min window, P0/P1 trigger).
+    #   4) Closed Alpha Testing Plan + Tester Onboarding Template +
+    #      Feedback Form Template + Bug Report Workflow (design-only,
+    #      no live invites, no account persistence).
+    #   5) v72 P3 Polish Backlog Plan + Deferred Decision (3 findings,
+    #      apply_now=false, safe_to_fix_later=true).
+    #   6) Menu Exposure Closed Alpha Readiness Matrix +
+    #      Progress Report v17 (10 areas all ready, apply blocked).
+    #   7) Rollup v73 meta validator.
+    # 7 OPTIONAL tuples + tag + docs (439-445) + markers + rollup.
+    #
+    # ESCLUSO/DEFERRED:
+    #   - menu_public_exposure_actual_apply (waiting for explicit user
+    #     approval phrase in a future v74 pack).
+    #   - hero_asset_staging_import_and_resolver_super_pack (waiting for
+    #     real asset pack supplied by user).
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali + extra unchanged guardrails preservati.
+    # db_writes=0, no reward grant, no permanent progress, no account
+    # persistence/flag writes, no async storage persistence, no event
+    # currency, no arena ranking/MMR, no matchmaking live,
+    # no public_menu_routing_enabled, no production_navigation_changed,
+    # no home_menu_routing_enabled, no real asset import/copy,
+    # no runtime asset resolver change, no Character Bible/final_numbers.
+    # No story.tsx/combat.tsx import. No backend route change. No server.py.
+    # No battle_engine.py. No api/story/battle. No api/battle/simulate.
+    # No micro-patch .tsx. No validator weakening. No fake PASS.
+    # ========================================================================
+    ('PROJECT-MENU-PUBLIC-EXPOSURE-APPROVAL-HANDSHAKE', 'validate_menu_public_exposure_approval_handshake_v1.py'),
+    ('PROJECT-MENU-PUBLIC-EXPOSURE-DRYRUN-BLOCKED', 'validate_menu_public_exposure_dryrun_blocked_v1.py'),
+    ('PROJECT-MENU-PUBLIC-EXPOSURE-ROUTE-ROLLBACK', 'validate_menu_public_exposure_route_rollback_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-TESTING-PLAN', 'validate_closed_alpha_testing_plan_v1.py'),
+    ('PROJECT-v72-P3-POLISH-BACKLOG', 'validate_v72_p3_polish_backlog_v1.py'),
+    ('PROJECT-MENU-EXPOSURE-CLOSED-ALPHA-READINESS', 'validate_menu_exposure_closed_alpha_readiness_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-22-v73-ROLLUP', 'validate_mega_release_acceleration_22_v73_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,23 @@
+{
+  "design_version": "menu_public_exposure_observation_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v73_MEGA_RELEASE_ACCELERATION_22_MENU_EXPOSURE_CLOSED_ALPHA",
+  "observation_window_minutes": 60,
+  "observation_required_before_promotion": true,
+  "signals": [
+    {"id": "home_render_unchanged", "type": "visual_smoke", "severity": "P0"},
+    {"id": "tab_bar_unchanged", "type": "visual_smoke", "severity": "P0"},
+    {"id": "alpha_preview_section_renders", "type": "visual_smoke", "severity": "P1"},
+    {"id": "deeplink_routes_resolve", "type": "navigation_smoke", "severity": "P1"},
+    {"id": "no_crash_on_app_start", "type": "runtime", "severity": "P0"},
+    {"id": "no_unexpected_db_writes", "type": "guardrail", "severity": "P0"},
+    {"id": "no_unexpected_network_calls_to_battle_engine", "type": "guardrail", "severity": "P0"},
+    {"id": "no_async_storage_unexpected_writes", "type": "guardrail", "severity": "P1"}
+  ],
+  "rollback_trigger": {
+    "any_P0_failure": true,
+    "two_or_more_P1_failures": true
+  },
+  "db_writes": 0,
+  "manual_approval_required": true
+}

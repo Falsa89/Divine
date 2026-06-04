@@ -1,0 +1,43 @@
+{
+  "design_version": "menu_public_exposure_approval_handshake_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_22_v73",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v73_MEGA_RELEASE_ACCELERATION_22_MENU_EXPOSURE_CLOSED_ALPHA",
+  "purpose": "Define the explicit manual approval handshake required before any public menu exposure execution is applied.",
+  "manual_approval_required": true,
+  "manual_approval_received": false,
+  "approval_phrase_required": true,
+  "approval_phrase_examples": [
+    "APPROVE_MENU_PUBLIC_EXPOSURE_APPLY_v73",
+    "APPLY_MENU_PUBLIC_EXPOSURE_v73_NOW"
+  ],
+  "approval_phrase_received": null,
+  "approval_phrase_source": null,
+  "checksum_required": true,
+  "checksum_algorithm": "sha256",
+  "checksum_target": "menu_public_exposure_scope_lock_v1.json",
+  "checksum_received": null,
+  "public_menu_exposure_apply_default": false,
+  "public_menu_exposure_enabled": false,
+  "production_navigation_changed": false,
+  "home_menu_routing_enabled": false,
+  "db_writes": 0,
+  "reward_grant": false,
+  "account_persistence": false,
+  "handshake_steps": [
+    {"step": 1, "id": "qa_exit_pass", "required": true, "source": "data/design/qa/alpha_internal_qa_exit_criteria_v1.json"},
+    {"step": 2, "id": "scope_lock_present", "required": true, "source": "data/design/navigation/menu_public_exposure_scope_lock_v1.json"},
+    {"step": 3, "id": "approval_phrase_received", "required": true, "source": "user_prompt_or_env"},
+    {"step": 4, "id": "checksum_verified", "required": true, "source": "sha256(scope_lock)"},
+    {"step": 5, "id": "dry_run_pass", "required": true, "source": "data/design/navigation/menu_public_exposure_dry_run_result_v1.json"},
+    {"step": 6, "id": "explicit_apply_instruction", "required": true, "source": "user_prompt"}
+  ],
+  "on_missing_approval": {
+    "verdict": "BLOCKED_NOT_APPLIED_SAFE",
+    "failed_gate": "manual_approval_missing",
+    "applied": false,
+    "db_writes": 0,
+    "production_navigation_changed": false,
+    "public_menu_exposure_enabled": false,
+    "rollback_required": false
+  }
+}
