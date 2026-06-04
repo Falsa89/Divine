@@ -1,18 +1,20 @@
 // reward-claim-summary-preview.tsx
 //
 // PREVIEW SHELL — DEEPLINK-ONLY — NON PRODUCTION UI
+// HARDENED v82 — UX hardening, status chips, db_writes vs local_file_writes row,
+// observation pass row, rollback state row, live vs staging distinction text.
 // ----------------------------------------------------------------------------
-// Vincoli rispettati:
-// - NO backend fetch / NO API call
+// Vincoli rispettati (v81 + v82):
+// - NO backend fetch / NO API call / NO process.env
 // - NO AsyncStorage / NO account mutation / NO DB
 // - NO real claim button / NO live reward grant
 // - NO import da story.tsx / combat.tsx / battle_engine
-// - Solo dati statici locali derivati dai contratti v80/v81
-// - Labels obbligatori: PREVIEW, STAGING, CANARY_LOCAL, NOT LIVE REWARD
-// - Stile premium mobile-friendly compatto con dettagli espandibili
+// - Solo dati statici locali derivati dai contratti v80/v81/v82
+// - Labels visibili obbligatori:
+//     PREVIEW, STAGING, CANARY_LOCAL, NOT LIVE REWARD, DB_WRITES_0, LOCAL_FILE_ONLY
 //
 // Accesso: deeplink-only (es: /reward-claim-summary-preview)
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 import React, { useState } from 'react';
 import {
@@ -29,6 +31,7 @@ import { Stack, useRouter } from 'expo-router';
 // ============================================================================
 // Static preview data (locale, no fetch). Allineato a:
 // data/design/economy/reward_claim_ui_summary_preview_shell_static_data_v1.json
+// data/design/economy/reward_claim_ui_summary_preview_hardening_static_data_v1.json
 // ============================================================================
 const STATIC_PREVIEW_DATA = {
   reward_preview: {
@@ -37,18 +40,18 @@ const STATIC_PREVIEW_DATA = {
     cap_hint: { gold: 500, account_exp: 50, hero_exp: 100, basic_material: 3 },
   },
   claim_result_sample: {
-    tx_id: 'canary-wave3-tx-000001',
+    tx_id: 'canary-wave4-tx-000001',
     applied_to_local_staging: true,
     applied_to_live: false,
     idempotent_replay: false,
     is_preview: true,
   },
   idempotency_status_sample: {
-    key_format: 'idem:wave3:<user>:<claim_id>',
+    key_format: 'idem:wave4:<user>:<claim_id>',
     status: 'unique_first_seen',
   },
   rollback_state_sample: {
-    rollback_token: 'rb-wave3-token-000001',
+    rollback_token: 'rb-wave4-token-000001',
     rolled_back: false,
   },
   rejected_examples: [
@@ -56,19 +59,37 @@ const STATIC_PREVIEW_DATA = {
     { scenario: 'non_allowlisted_user', reason: 'non_allowlisted_user' },
     { scenario: 'over_cap_gold', reason: 'over_cap:gold' },
     { scenario: 'malformed_route', reason: 'malformed_route' },
+    { scenario: 'event_arena_ranking_reward', reason: 'forbidden_reward_type:arena_ranking_reward' },
     { scenario: 'duplicate_conflict', reason: 'idempotency_conflict_hash_mismatch' },
   ],
+  // v82 hardening: counters separati e stato osservazione
+  status_snapshot: {
+    wave: 4,
+    db_writes: 0,
+    local_file_writes: 6,
+    observation_pass: true,
+    rollback_drill_executed: true,
+    rolled_back_count: 2,
+    live_db_readiness_design_gate: 'design_only_no_apply',
+  },
   local_ledger_summary: {
-    wave: 3,
+    wave: 4,
     isolated_from_live: true,
     canary: true,
-    entries_displayed: 5,
+    entries_displayed: 8,
     db_writes: 0,
     live_reward_grant: false,
   },
 };
 
-const LABELS = ['PREVIEW', 'STAGING', 'CANARY_LOCAL', 'NOT LIVE REWARD'];
+const LABELS = [
+  'PREVIEW',
+  'STAGING',
+  'CANARY_LOCAL',
+  'NOT LIVE REWARD',
+  'DB_WRITES_0',
+  'LOCAL_FILE_ONLY',
+];
 
 // ============================================================================
 // Componenti
@@ -102,11 +123,23 @@ function ExpandableSection({ title, subtitle, children, initiallyOpen = false }:
   );
 }
 
-function KeyValueRow({ label, value }: { label: string; value: string | number | boolean | null }) {
+function KeyValueRow({
+  label,
+  value,
+  emphasis,
+}: {
+  label: string;
+  value: string | number | boolean | null;
+  emphasis?: 'good' | 'warn' | 'neutral';
+}) {
+  const valueStyle =
+    emphasis === 'good' ? styles.kvValueGood
+      : emphasis === 'warn' ? styles.kvValueWarn
+      : styles.kvValue;
   return (
     <View style={styles.kvRow}>
       <Text style={styles.kvLabel}>{label}</Text>
-      <Text style={styles.kvValue}>{String(value)}</Text>
+      <Text style={valueStyle}>{String(value)}</Text>
     </View>
   );
 }
@@ -123,12 +156,25 @@ function LabelChips() {
   );
 }
 
+function StatusChip({ label, tone }: { label: string; tone: 'good' | 'warn' | 'neutral' }) {
+  const style =
+    tone === 'good' ? styles.statusChipGood
+      : tone === 'warn' ? styles.statusChipWarn
+      : styles.statusChipNeutral;
+  return (
+    <View style={[styles.statusChip, style]}>
+      <Text style={styles.statusChipText}>{label}</Text>
+    </View>
+  );
+}
+
 // ============================================================================
 // Screen
 // ============================================================================
 export default function RewardClaimSummaryPreview() {
   const router = useRouter();
   const data = STATIC_PREVIEW_DATA;
+  const s = data.status_snapshot;
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
@@ -138,7 +184,7 @@ export default function RewardClaimSummaryPreview() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
+        {/* Header chiaro */}
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => router.back()}
@@ -151,16 +197,53 @@ export default function RewardClaimSummaryPreview() {
           </TouchableOpacity>
           <View style={styles.headerTitleBlock}>
             <Text style={styles.headerTitle}>Reward Claim Summary</Text>
-            <Text style={styles.headerSubtitle}>Preview Shell \u00b7 v81</Text>
+            <Text style={styles.headerSubtitle}>
+              Preview Shell \u00b7 v82 hardened \u00b7 wave-{s.wave}
+            </Text>
           </View>
         </View>
 
         <LabelChips />
 
+        {/* Status chips (v82 hardening) */}
+        <View style={styles.statusChipsRow}>
+          <StatusChip label="local staging apply" tone="good" />
+          <StatusChip label="live claim NOT active" tone="warn" />
+          <StatusChip label="future live DB \u2192 dedicated pack" tone="neutral" />
+        </View>
+
         <Text style={styles.banner}>
           Questa \u00e8 una preview deeplink-only. Nessun reward viene assegnato,
           nessuna chiamata API viene eseguita. Tutti i dati sono statici locali.
+          Lo stato live-DB \u00e8 design-only: richieder\u00e0 un pack dedicato per essere abilitato.
         </Text>
+
+        {/* v82 status snapshot compatto */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.sectionTitle}>Status Snapshot (v82)</Text>
+              <Text style={styles.sectionSubtitle}>
+                Counters separati: DB vs local file
+              </Text>
+            </View>
+          </View>
+          <View style={styles.sectionBody}>
+            <KeyValueRow label="db_writes" value={s.db_writes} emphasis="good" />
+            <KeyValueRow label="local_file_writes" value={s.local_file_writes} />
+            <KeyValueRow label="observation_pass" value={s.observation_pass} emphasis="good" />
+            <KeyValueRow
+              label="rollback_drill_executed"
+              value={s.rollback_drill_executed}
+            />
+            <KeyValueRow label="rolled_back_count" value={s.rolled_back_count} />
+            <KeyValueRow
+              label="live_db_readiness_design_gate"
+              value={s.live_db_readiness_design_gate}
+              emphasis="warn"
+            />
+          </View>
+        </View>
 
         {/* Reward Preview */}
         <ExpandableSection
@@ -191,10 +274,12 @@ export default function RewardClaimSummaryPreview() {
           <KeyValueRow
             label="applied_to_local_staging"
             value={data.claim_result_sample.applied_to_local_staging}
+            emphasis="good"
           />
           <KeyValueRow
             label="applied_to_live"
             value={data.claim_result_sample.applied_to_live}
+            emphasis="warn"
           />
           <KeyValueRow
             label="idempotent_replay"
@@ -243,16 +328,22 @@ export default function RewardClaimSummaryPreview() {
           <KeyValueRow
             label="isolated_from_live"
             value={data.local_ledger_summary.isolated_from_live}
+            emphasis="good"
           />
           <KeyValueRow label="canary" value={data.local_ledger_summary.canary} />
           <KeyValueRow
             label="entries_displayed"
             value={data.local_ledger_summary.entries_displayed}
           />
-          <KeyValueRow label="db_writes" value={data.local_ledger_summary.db_writes} />
+          <KeyValueRow
+            label="db_writes"
+            value={data.local_ledger_summary.db_writes}
+            emphasis="good"
+          />
           <KeyValueRow
             label="live_reward_grant"
             value={data.local_ledger_summary.live_reward_grant}
+            emphasis="warn"
           />
         </ExpandableSection>
 
@@ -260,9 +351,11 @@ export default function RewardClaimSummaryPreview() {
         <View style={styles.footer}>
           <Text style={styles.footerText}>
             Nessun reward live viene mai assegnato da questa schermata. Vietato
-            uso in produzione. Solo deeplink alpha.
+            uso in produzione. Solo deeplink alpha. Live DB richiede pack dedicato.
           </Text>
-          <Text style={styles.footerVersion}>preview-shell v81 \u00b7 design-only</Text>
+          <Text style={styles.footerVersion}>
+            preview-shell v82 hardened \u00b7 design-only
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -304,7 +397,7 @@ const styles = StyleSheet.create({
   chipsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 6,
     paddingVertical: 8,
   },
   chip: {
@@ -317,9 +410,39 @@ const styles = StyleSheet.create({
   },
   chipText: {
     color: '#C9D2E6',
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.4,
+  },
+
+  statusChipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    paddingBottom: 8,
+  },
+  statusChip: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  statusChipGood: {
+    backgroundColor: '#0F2A1F',
+    borderColor: '#1F5A3D',
+  },
+  statusChipWarn: {
+    backgroundColor: '#2A1F0F',
+    borderColor: '#5A3D1F',
+  },
+  statusChipNeutral: {
+    backgroundColor: '#1A2236',
+    borderColor: '#293553',
+  },
+  statusChipText: {
+    color: '#E6E8EE',
+    fontSize: 11,
+    fontWeight: '700',
   },
 
   banner: {
@@ -406,6 +529,20 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     flexShrink: 1,
     ...Platform.select({ ios: {}, android: {} }),
+  },
+  kvValueGood: {
+    color: '#7BD89E',
+    fontSize: 12,
+    fontWeight: '700',
+    textAlign: 'right',
+    flexShrink: 1,
+  },
+  kvValueWarn: {
+    color: '#FFB547',
+    fontSize: 12,
+    fontWeight: '700',
+    textAlign: 'right',
+    flexShrink: 1,
   },
 
   rejectRow: {

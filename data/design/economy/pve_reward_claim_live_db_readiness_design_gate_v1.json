@@ -1,0 +1,22 @@
+{
+  "version": "v1",
+  "design_only": true,
+  "live_db_apply_allowed": false,
+  "live_db_readiness_design_ready": true,
+  "future_dedicated_pack_required": true,
+  "required_for_future_live_db_pack": [
+    "db_transaction_policy",
+    "real_account_allowlist",
+    "auth_guard",
+    "endpoint_contract",
+    "rollback_script",
+    "observation_sink",
+    "hard_kill_switch",
+    "manual_approval_and_checksum"
+  ],
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "notes": "live_db_readiness_design_ready=true significa solo: il design del gate è completo. NESSUN live DB apply attivato in v82.",
+  "next_step_if_ready": "pve_reward_claim_live_db_design_contract_v83",
+  "next_step_if_blocked": "pve_reward_claim_canary_wave4_fix_v83"
+}

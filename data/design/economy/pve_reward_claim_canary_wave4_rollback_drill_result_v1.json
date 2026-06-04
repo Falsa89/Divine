@@ -1,0 +1,22 @@
+{
+  "version": "v1",
+  "mode": "wave4_rollback_drill",
+  "timestamp_utc": "2026-06-04T17:06:22Z",
+  "drill_executed": true,
+  "rolled_back_count": 2,
+  "policy": "sample_two_canary_tx",
+  "db_rollback": false,
+  "db_writes": 0,
+  "local_file_writes": 3,
+  "results": [
+    {
+      "tx_id": "canary-wave4-tx-000001",
+      "rolled_back": true
+    },
+    {
+      "tx_id": "canary-wave4-tx-000002",
+      "rolled_back": true
+    }
+  ],
+  "notes": "Drill rollback wave4 file-only (2 tx campione). Nessuna mutazione DB."
+}

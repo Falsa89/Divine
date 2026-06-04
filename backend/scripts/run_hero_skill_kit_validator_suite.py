@@ -2924,6 +2924,39 @@ OPTIONAL = [
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-OBSERVATION', 'validate_pve_reward_claim_canary_wave3_observation_v1.py'),
     ('PROJECT-REWARD-CLAIM-UI-SUMMARY-PREVIEW-SHELL', 'validate_reward_claim_ui_summary_preview_shell_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-30-v81-ROLLUP', 'validate_mega_release_acceleration_30_v81_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_31_PVE_REWARD_CLAIM_WAVE4_LIVE_STAGING_DESIGN_AND_UI_HARDENING_PACK_v82
+    # PUBLIC_SYNC_TAG_v82_MEGA_RELEASE_ACCELERATION_31_PVE_REWARD_CLAIM_WAVE4_LIVE_STAGING_UI
+    # ------------------------------------------------------------------------
+    # WAVE-4 (8 alias-only / 8 claim) + LIVE-DB READINESS DESIGN-ONLY GATE + UI HARDENING.
+    # - Wave4 scope lock + plan + live-staging boundary + forbidden scope
+    # - 3 staging file wave4 + manifest
+    # - Runner upgrade: --wave4-preflight/--wave4-apply/--wave4-observe/--wave4-rollback-drill
+    # - Wave4 apply: 8 ledger entry isolati + 7 negative test PASS (+ event_arena_ranking_reward)
+    # - Observation PASS (8 criteria) + rollback drill (2 sample) + live-DB readiness DESIGN gate (design-only)
+    # - Frontend reward-claim-summary-preview.tsx HARDENED (status chips, snapshot section, labels DB_WRITES_0/LOCAL_FILE_ONLY)
+    # - QA matrix 24 PASS + progress v26 + readiness v82->v83
+    # - Verdict: WAVE4_LIVE_STAGING_DESIGN_AND_UI_HARDENING_READY (db_writes=0, local_file_writes=6,
+    #   live_reward_grant=false, applied_to_live=false, live_db_apply_active=false, production_ui_exposure=false)
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post pack.
+    # db_writes=0, applied_to_live=false, live_reward_grant=false, live_db_apply_active=false,
+    # mongo_url_used=false, pymongo_used=false, motor_used=false, redis_used=false,
+    # broad_rollout=false, premium_currency=false, gacha/shop/VIP/BP=false,
+    # arena_ranking_reward=false, backend_route_exposure=false,
+    # server.py/battle_engine/story.tsx/combat.tsx unchanged,
+    # asset_import=false, env_mutation=false, production_ui_exposure=false,
+    # real_claim_button=false, live_claim_endpoint=false,
+    # validator_weakening=false, fake_PASS=false.
+    # Approval checksum sha256: 468cac7a8894ae81867f6e4c1f81ec3e9b458c9c4a4221668a68f486ea9b4d58
+    # ========================================================================
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE4-SCOPE', 'validate_pve_reward_claim_canary_wave4_scope_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE4-FILES', 'validate_pve_reward_claim_canary_wave4_files_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-WAVE4', 'validate_pve_reward_claim_canary_runner_wave4_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE4-APPLY', 'validate_pve_reward_claim_canary_wave4_apply_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE4-OBS-LIVE-DB-DESIGN', 'validate_pve_reward_claim_canary_wave4_observation_live_db_design_v1.py'),
+    ('PROJECT-REWARD-CLAIM-UI-SUMMARY-PREVIEW-HARDENING', 'validate_reward_claim_ui_summary_preview_hardening_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-31-v82-ROLLUP', 'validate_mega_release_acceleration_31_v82_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

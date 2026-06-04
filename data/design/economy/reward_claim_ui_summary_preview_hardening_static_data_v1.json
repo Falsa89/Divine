@@ -1,0 +1,32 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T16:30:00Z",
+  "hardening_summary": {
+    "labels_displayed": ["PREVIEW", "STAGING", "CANARY_LOCAL", "NOT LIVE REWARD", "DB_WRITES_0", "LOCAL_FILE_ONLY"],
+    "status_chips_added": true,
+    "db_writes_vs_local_file_writes_row_added": true,
+    "observation_pass_row_added": true,
+    "rollback_state_row_added": true,
+    "clearer_header": true,
+    "live_vs_staging_distinction_text": [
+      "local staging apply",
+      "live claim not active",
+      "future live DB requires dedicated pack"
+    ]
+  },
+  "local_status_snapshot": {
+    "wave": 4,
+    "applied_to_local_staging": true,
+    "applied_to_live": false,
+    "db_writes": 0,
+    "local_file_writes": 6,
+    "observation_pass": true,
+    "rollback_drill_executed": true,
+    "live_db_readiness_design_gate": "design_only_no_apply"
+  },
+  "derived_from": [
+    "v81_reward_claim_ui_summary_preview_shell_static_data",
+    "v82_wave4_plan",
+    "v82_live_staging_design_boundary"
+  ]
+}

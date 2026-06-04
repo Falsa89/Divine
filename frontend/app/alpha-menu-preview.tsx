@@ -109,19 +109,21 @@ const ENTRIES: PreviewMenuEntry[] = [
   },
   {
     route: "reward-claim-summary-preview",
-    title: "Reward Claim Summary (preview shell v81)",
+    title: "Reward Claim Summary (preview shell v82 hardened)",
     qaPriority: "P1",
     exposureBadge: "ALPHA_MENU_EXPOSED",
     guardrails: [
       "deeplink_only",
       "db_writes=0",
+      "local_file_writes_separate_counter",
       "no_real_claim_button",
       "no_live_reward",
       "no_backend_fetch",
       "no_account_mutation",
       "no_asyncstorage",
       "static_local_preview_data_only",
-      "labels:PREVIEW|STAGING|CANARY_LOCAL|NOT_LIVE_REWARD",
+      "live_db_readiness_design_only_no_apply",
+      "labels:PREVIEW|STAGING|CANARY_LOCAL|NOT_LIVE_REWARD|DB_WRITES_0|LOCAL_FILE_ONLY",
     ],
   },
 ];

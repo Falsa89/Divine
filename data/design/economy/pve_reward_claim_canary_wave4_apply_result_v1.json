@@ -1,0 +1,112 @@
+{
+  "mode": "wave4_apply_attempt",
+  "timestamp_utc": "2026-06-04T17:06:22Z",
+  "applied_to_local_staging": true,
+  "applied_to_live": false,
+  "blocked_safe": false,
+  "reason": null,
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "local_file_writes": 3,
+  "gates": {
+    "staging_dir_exists": true,
+    "wave4_allowlist_present": true,
+    "wave4_fixtures_present": true,
+    "wave4_plan_present": true,
+    "mode_flag_present": true,
+    "wave4_flag_present": true,
+    "all_wave4_apply_gates_pass": true
+  },
+  "wave4_success_count": 8,
+  "wave4_max_claims_total": 8,
+  "happy_paths": [
+    {
+      "user": "canary_user_001",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000001",
+      "rollback_token": "rb-wave4-token-000001",
+      "idempotency_key": "idem:wave4:canary_user_001:claim-wave4-000001"
+    },
+    {
+      "user": "canary_user_002",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000002",
+      "rollback_token": "rb-wave4-token-000002",
+      "idempotency_key": "idem:wave4:canary_user_002:claim-wave4-000002"
+    },
+    {
+      "user": "canary_user_003",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000003",
+      "rollback_token": "rb-wave4-token-000003",
+      "idempotency_key": "idem:wave4:canary_user_003:claim-wave4-000003"
+    },
+    {
+      "user": "canary_user_004",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000004",
+      "rollback_token": "rb-wave4-token-000004",
+      "idempotency_key": "idem:wave4:canary_user_004:claim-wave4-000004"
+    },
+    {
+      "user": "canary_user_005",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000005",
+      "rollback_token": "rb-wave4-token-000005",
+      "idempotency_key": "idem:wave4:canary_user_005:claim-wave4-000005"
+    },
+    {
+      "user": "canary_user_006",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000006",
+      "rollback_token": "rb-wave4-token-000006",
+      "idempotency_key": "idem:wave4:canary_user_006:claim-wave4-000006"
+    },
+    {
+      "user": "canary_user_007",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000007",
+      "rollback_token": "rb-wave4-token-000007",
+      "idempotency_key": "idem:wave4:canary_user_007:claim-wave4-000007"
+    },
+    {
+      "user": "canary_user_008",
+      "applied": true,
+      "tx_id": "canary-wave4-tx-000008",
+      "rollback_token": "rb-wave4-token-000008",
+      "idempotency_key": "idem:wave4:canary_user_008:claim-wave4-000008"
+    }
+  ],
+  "negative_tests_results": [
+    {
+      "test": "duplicate_idempotency_replay",
+      "result": "idempotent_replay_returned"
+    },
+    {
+      "test": "duplicate_conflicting_hash",
+      "result": "rejected_idempotency_conflict"
+    },
+    {
+      "test": "non_allowlisted_user",
+      "result": "rejected_non_allowlisted_user"
+    },
+    {
+      "test": "premium_reward_reject",
+      "result": "rejected_forbidden_reward_type"
+    },
+    {
+      "test": "over_cap_reward_reject",
+      "result": "rejected_over_cap"
+    },
+    {
+      "test": "malformed_route_reject",
+      "result": "rejected_malformed_route"
+    },
+    {
+      "test": "event_arena_ranking_reward_reject",
+      "result": "rejected_event_arena_ranking_reward"
+    }
+  ],
+  "verdict_local": "PVE_REWARD_CLAIM_CANARY_WAVE4_OBSERVED_SAFE",
+  "notes": "Wave4 apply file-only. Nessuna mutazione DB, nessun reward live."
+}

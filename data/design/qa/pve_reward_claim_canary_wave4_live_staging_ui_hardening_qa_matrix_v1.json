@@ -1,0 +1,32 @@
+{
+  "version": "v1",
+  "matrix": [
+    {"id": "QA1", "area": "scope", "check": "max_8_users_max_8_claims", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA2", "area": "scope", "check": "no_live_db_no_routes", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA3", "area": "files", "check": "wave4_allowlist_alias_only", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA4", "area": "files", "check": "wave4_fixtures_non_premium_caps", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA5", "area": "runner_wave4", "check": "requires_mode_and_wave4_flag", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA6", "area": "runner_wave4", "check": "no_pymongo_no_motor_no_redis_no_mongo_url", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA7", "area": "apply", "check": "applied_to_local_staging_8_users", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA8", "area": "apply", "check": "db_writes_zero", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA9", "area": "apply", "check": "live_reward_grant_false", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA10", "area": "negative", "check": "premium_reward_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA11", "area": "negative", "check": "non_allowlisted_user_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA12", "area": "negative", "check": "over_cap_reward_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA13", "area": "negative", "check": "duplicate_idempotency_replay", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA14", "area": "negative", "check": "duplicate_conflicting_hash", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA15", "area": "negative", "check": "malformed_route_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA16", "area": "negative", "check": "event_arena_ranking_reward_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA17", "area": "observation", "check": "metrics_pass_all_8_criteria", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA18", "area": "rollback", "check": "sample_two_rollback_file_only", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA19", "area": "live_db_readiness_design_gate", "check": "design_only_no_apply", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA20", "area": "ui_hardening", "check": "new_labels_DB_WRITES_0_LOCAL_FILE_ONLY", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA21", "area": "ui_hardening", "check": "status_snapshot_section_added", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA22", "area": "ui_hardening", "check": "no_fetch_no_asyncstorage_no_account_mutation", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA23", "area": "ui_hardening", "check": "tsc_no_errors_on_modified_tsx", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA24", "area": "alpha_menu", "check": "label_v82_hardened_and_guardrails_extended", "expected": "PASS", "actual": "PASS"}
+  ],
+  "current_state": "WAVE4_OBSERVED_SAFE_LIVE_STAGING_DESIGN_READY_UI_HARDENED",
+  "db_writes": 0,
+  "local_file_writes_session": 6
+}
