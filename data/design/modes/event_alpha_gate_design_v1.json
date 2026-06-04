@@ -1,0 +1,25 @@
+{
+  "design_version": "event_alpha_gate_design_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS_SUPER_PACK_v69",
+  "mode": "event",
+  "alpha_gate_design": true,
+  "authoritative_runtime": false,
+  "required_gates": [
+    "event_design_contract_signed",
+    "event_currency_design_locked",
+    "event_reward_table_design_locked",
+    "event_idempotency_design_locked",
+    "event_rollback_design_locked",
+    "event_observation_plan_signed",
+    "event_anti_abuse_design_locked",
+    "manual_approval_pre_live"
+  ],
+  "event_currency_enabled": false,
+  "event_shop_enabled": false,
+  "reward_claim_enabled": false,
+  "backend_route_added": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "public_release_routing": false,
+  "manual_approval_required": true
+}

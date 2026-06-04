@@ -1,0 +1,19 @@
+{
+  "flow_version": "combat_basics_tutorial_flow_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS_SUPER_PACK_v69",
+  "onboarding_preview": true,
+  "authoritative_runtime": false,
+  "local_preview_adapter": true,
+  "steps": [
+    {"order": 1, "id": "team_positioning", "label": "Posizionamento del team (anteprima)", "hint": "Mostra slot front/back senza mutazioni"},
+    {"order": 2, "id": "attack_order", "label": "Ordine di attacco (anteprima)", "hint": "Spiega lo SPEED ordering preview"},
+    {"order": 3, "id": "skill_preview", "label": "Skill in anteprima", "hint": "Mostra skill base/active/ultimate non autoritative"},
+    {"order": 4, "id": "result_preview", "label": "Risultato in anteprima", "hint": "Result non autoritativo, no reward grant"},
+    {"order": 5, "id": "reward_preview_disabled", "label": "Reward preview disabilitato", "hint": "Nessuna assegnazione di reward"},
+    {"order": 6, "id": "preview_vs_real_battle", "label": "Preview vs battle reale", "hint": "Spiega chiaramente la differenza"}
+  ],
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "battle_engine_runtime_used": false
+}

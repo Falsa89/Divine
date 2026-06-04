@@ -2311,6 +2311,41 @@ OPTIONAL = [
     ('PROJECT-ALPHA-SLICE-RESULT-IDEMPOTENCY-BOUNDARY', 'validate_alpha_slice_result_idempotency_boundary_v1.py'),
     ('PROJECT-STORY-BOSS-TOWER-ALPHA-LOOP-QA', 'validate_story_boss_tower_alpha_loop_qa_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-17-v68-ROLLUP', 'validate_mega_release_acceleration_17_v68_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS_SUPER_PACK_v69
+    # PUBLIC_SYNC_TAG_v69_MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS
+    # ------------------------------------------------------------------------
+    # READINESS pack. Accorpa tre lane low-risk (preview/design/read-only):
+    #   1) Training + Combat Onboarding preview - nuovo screen deeplink-only
+    #      con 6 step tutorial (team_positioning, attack_order, skill_preview,
+    #      result_preview, reward_preview_disabled, preview_vs_real_battle).
+    #   2) Event + Arena Alpha Gate design + preview - nuovo screen deeplink-
+    #      only con required gates per Event e Arena; nessuna currency, nessun
+    #      ranking, nessun matchmaking live, nessun PVP pubblico.
+    #   3) Hero Asset Dry-run + Manifest readiness - design contract/schema/
+    #      matrix/forbidden scope + scanner Python read-only opzionale
+    #      (placeholder report quando --path assente).
+    # 7 OPTIONAL tuples + tag + 7 docs (413-419) + 7 markers + rollup.
+    #
+    # New deeplink-only screens (NO public menu routing):
+    #   frontend/app/training-combat-onboarding-preview.tsx
+    #   frontend/app/event-arena-alpha-gate-preview.tsx
+    # Italian UI, no /api calls, no Reanimated/AsyncStorage,
+    # no import from story.tsx/combat.tsx/battle_engine.
+    # ------------------------------------------------------------------------
+    # Invariants: 5 MD5 ufficiali + extra unchanged guardrails preservati.
+    # db_writes=0, no reward grant, no permanent progress, no event currency,
+    # no arena ranking/MMR, no leaderboard, no real asset import/copy,
+    # no asset_runtime_resolver_change, no Character Bible change.
+    # No fake PASS. No validator weakening.
+    # ========================================================================
+    ('PROJECT-TRAINING-COMBAT-ONBOARDING-CONTRACT', 'validate_training_combat_onboarding_contract_v1.py'),
+    ('PROJECT-TRAINING-COMBAT-ONBOARDING-PREVIEW-UI', 'validate_training_combat_onboarding_preview_ui_v1.py'),
+    ('PROJECT-EVENT-ARENA-ALPHA-GATE-DESIGN', 'validate_event_arena_alpha_gate_design_v1.py'),
+    ('PROJECT-EVENT-ARENA-ALPHA-GATE-PREVIEW-UI', 'validate_event_arena_alpha_gate_preview_ui_v1.py'),
+    ('PROJECT-HERO-ASSET-DRYRUN-MANIFEST-READINESS', 'validate_hero_asset_dryrun_manifest_readiness_v1.py'),
+    ('PROJECT-TRAINING-EVENT-ARENA-ASSET-READINESS-QA', 'validate_training_event_arena_asset_readiness_qa_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-18-v69-ROLLUP', 'validate_mega_release_acceleration_18_v69_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,34 @@
+{
+  "matrix_version": "hero_asset_readiness_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS_SUPER_PACK_v69",
+  "dry_run_only": true,
+  "scan_executed_default": false,
+  "asset_source_path_default": null,
+  "target_hero_count_approx": 40,
+  "readiness_columns": [
+    "hero_id",
+    "splash",
+    "no_background",
+    "combat_base",
+    "idle",
+    "attack",
+    "skill",
+    "hit",
+    "death",
+    "chibi_home_optional",
+    "naming_ok",
+    "duplicate_warning"
+  ],
+  "missing_assets_list": [],
+  "naming_issues_list": [],
+  "duplicate_hero_id_warnings": [],
+  "safe_staging_plan_future": [
+    "create_isolated_staging_folder",
+    "copy_only_after_resolver_design_locked",
+    "run_dry_run_scanner_against_staging",
+    "manual_approval_before_runtime_resolver_change"
+  ],
+  "db_writes": 0,
+  "real_asset_import": false,
+  "file_copy_enabled": false
+}

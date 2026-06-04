@@ -1,0 +1,28 @@
+{
+  "design_version": "arena_alpha_gate_design_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS_SUPER_PACK_v69",
+  "mode": "arena",
+  "alpha_gate_design": true,
+  "authoritative_runtime": false,
+  "required_gates": [
+    "arena_design_contract_signed",
+    "arena_ranking_design_locked",
+    "arena_mmr_design_locked",
+    "arena_match_idempotency_design_locked",
+    "arena_rollback_design_locked",
+    "arena_observation_plan_signed",
+    "arena_anti_abuse_design_locked",
+    "manual_approval_pre_live"
+  ],
+  "arena_ranking_enabled": false,
+  "mmr_enabled": false,
+  "leaderboard_writes": false,
+  "matchmaking_live": false,
+  "public_pvp_enabled": false,
+  "reward_claim_enabled": false,
+  "backend_route_added": false,
+  "battle_engine_runtime_used": false,
+  "db_writes": 0,
+  "public_release_routing": false,
+  "manual_approval_required": true
+}

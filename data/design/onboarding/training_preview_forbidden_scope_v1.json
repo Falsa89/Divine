@@ -1,0 +1,42 @@
+{
+  "contract_version": "training_preview_forbidden_scope_v1",
+  "applies_to": "training_combat_onboarding",
+  "forbidden": [
+    "db_writes",
+    "reward_grant",
+    "permanent_progress",
+    "backend_route_changes",
+    "server_py_changes",
+    "battle_engine_py_changes",
+    "battle_engine_runtime",
+    "api_story_battle_changes",
+    "api_battle_simulate_changes",
+    "story_tsx_changes",
+    "combat_tsx_changes",
+    "import_from_story_tsx",
+    "import_from_combat_tsx",
+    "claim_button",
+    "reward_button",
+    "inventory_mutation",
+    "wallet_mutation",
+    "premium_users_gems_mutation",
+    "home_menu_mandatory_routing",
+    "public_runtime_routing",
+    "character_bible_changes",
+    "final_numbers_changes",
+    "real_asset_import",
+    "validator_weakening",
+    "fake_pass"
+  ],
+  "allowed": [
+    "new_deeplink_only_training_combat_onboarding_preview_screen",
+    "design_json",
+    "docs",
+    "markers",
+    "validators",
+    "suite_runner_tuple_and_tag"
+  ],
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false
+}

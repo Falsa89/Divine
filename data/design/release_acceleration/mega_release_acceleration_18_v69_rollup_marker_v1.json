@@ -1,0 +1,49 @@
+{
+  "marker": "mega_release_acceleration_18_v69_rollup_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS_SUPER_PACK_v69",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v69_MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS",
+  "included_lanes": [
+    "training_combat_onboarding_preview",
+    "event_arena_alpha_gate_design_and_preview",
+    "hero_asset_dryrun_manifest_readiness"
+  ],
+  "docs": [
+    "docs/divine/413_TRAINING_COMBAT_ONBOARDING_CONTRACT.md",
+    "docs/divine/414_TRAINING_COMBAT_ONBOARDING_PREVIEW_UI.md",
+    "docs/divine/415_EVENT_ARENA_ALPHA_GATE_DESIGN.md",
+    "docs/divine/416_EVENT_ARENA_ALPHA_GATE_PREVIEW_UI.md",
+    "docs/divine/417_HERO_ASSET_DRYRUN_MANIFEST_READINESS.md",
+    "docs/divine/418_TRAINING_EVENT_ARENA_ASSET_READINESS_QA.md",
+    "docs/divine/419_MEGA_RELEASE_ACCELERATION_18_TRAINING_EVENT_ARENA_ASSET_READINESS_v69.md"
+  ],
+  "validators": [
+    "backend/scripts/validate_training_combat_onboarding_contract_v1.py",
+    "backend/scripts/validate_training_combat_onboarding_preview_ui_v1.py",
+    "backend/scripts/validate_event_arena_alpha_gate_design_v1.py",
+    "backend/scripts/validate_event_arena_alpha_gate_preview_ui_v1.py",
+    "backend/scripts/validate_hero_asset_dryrun_manifest_readiness_v1.py",
+    "backend/scripts/validate_training_event_arena_asset_readiness_qa_v1.py",
+    "backend/scripts/validate_mega_release_acceleration_18_v69_rollup.py"
+  ],
+  "new_screens": [
+    "frontend/app/training-combat-onboarding-preview.tsx",
+    "frontend/app/event-arena-alpha-gate-preview.tsx"
+  ],
+  "scanner": "backend/scripts/hero_asset_dryrun_manifest_scanner_v1.py",
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "battle_engine_runtime_used": false,
+  "backend_route_changed": false,
+  "server_py_changed": false,
+  "story_tsx_changed": false,
+  "combat_tsx_changed": false,
+  "event_currency_enabled": false,
+  "arena_ranking_enabled": false,
+  "real_asset_import": false,
+  "file_copy_enabled": false,
+  "asset_runtime_resolver_changed": false,
+  "character_bible_changed": false,
+  "validator_weakening": false,
+  "fake_pass": false
+}

@@ -1,0 +1,36 @@
+{
+  "contract_version": "hero_asset_import_forbidden_scope_v1",
+  "applies_to": "hero_asset_dryrun_manifest",
+  "forbidden": [
+    "real_asset_import",
+    "file_copy",
+    "asset_overwrite",
+    "asset_runtime_resolver_change",
+    "character_bible_changes",
+    "hero_roster_changes",
+    "final_numbers_changes",
+    "image_processing",
+    "pil_usage",
+    "opencv_usage",
+    "generated_image_modification",
+    "public_runtime_exposure",
+    "db_writes",
+    "backend_route_changes",
+    "server_py_changes",
+    "battle_engine_py_changes",
+    "battle_engine_runtime",
+    "validator_weakening",
+    "fake_pass"
+  ],
+  "allowed": [
+    "read_only_scanner",
+    "placeholder_readiness_report",
+    "design_json",
+    "docs",
+    "markers",
+    "validators"
+  ],
+  "db_writes": 0,
+  "real_asset_import": false,
+  "file_copy_enabled": false
+}
