@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "server_actor_admin_controls",
+  "version": 1,
+  "admin_visibility_fields": ["is_bot", "synthetic_server_actor", "bot_archetype", "bot_power_band_percentile", "event_participation_status", "chat_rate_limit_status", "created_at", "last_simulated_activity", "current_server_age_at_birth_days", "current_player_average_level_at_birth"],
+  "admin_panel_endpoints_planned": ["GET /api/admin/bots/list", "GET /api/admin/bots/{id}/details", "POST /api/admin/bots/disable-all", "POST /api/admin/bots/disable-chat", "POST /api/admin/bots/disable-live-event-fill", "POST /api/admin/bots/cap-power-percentile"],
+  "endpoints_runtime": "DESIGN_CONTRACT_ONLY_V97_RUNTIME_DEFERRED_TO_V98",
+  "kill_switches": {
+    "disable_all_bots": {"env_var": "V97_BOTS_DISABLE_ALL", "default": false, "effect": "all bot activity halted, existing accounts marked dormant"},
+    "disable_bot_chat": {"env_var": "V97_BOTS_DISABLE_CHAT", "default": false, "effect": "bots stop sending chat messages"},
+    "disable_bot_live_event_fill": {"env_var": "V97_BOTS_DISABLE_LIVE_FILL", "default": false, "effect": "bots do not join live events even if population is low"},
+    "disable_bot_ranking_visibility": {"env_var": "V97_BOTS_DISABLE_RANKING_VISIBILITY", "default": false, "effect": "bots not shown in leaderboards"},
+    "cap_bot_power_percentile": {"env_var": "V97_BOTS_POWER_PERCENTILE_CAP", "default": 90, "effect": "hard cap on bot power band"}
+  },
+  "admin_safety_rules": {"admin_panel_authenticated_only": true, "audit_log_required": true, "no_fake_users_presented_as_real": true, "admin_can_distinguish_bots_from_real_players": true, "public_facing_indistinguishable": false},
+  "verdict": "SERVER_ACTOR_ADMIN_CONTROLS_DESIGN_READY_RUNTIME_DEFERRED"
+}

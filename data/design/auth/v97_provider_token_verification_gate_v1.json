@@ -1,0 +1,27 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "provider_token_verification_gate",
+  "version": 1,
+  "google": {
+    "verification_runtime": "GATED_CREDENTIALS_REQUIRED",
+    "env_required": ["GOOGLE_CLIENT_ID"],
+    "library_required": "google-auth>=2.0.0 (per google.oauth2.id_token.verify_oauth2_token)",
+    "current_state": "SANDBOX_MODE_ACTIVE",
+    "production_verify_path_implementation_status": "placeholder_with_safe_fallback",
+    "test_stub": "sandbox_subject simulato genera account con provider_sandbox=true",
+    "verdict": "STRUCTURE_READY_CREDENTIALS_REQUIRED_FOR_STORE_BUILD"
+  },
+  "apple": {
+    "verification_runtime": "GATED_CREDENTIALS_REQUIRED",
+    "env_required": ["APPLE_CLIENT_ID", "APPLE_TEAM_ID", "APPLE_KEY_ID"],
+    "library_required": "PyJWT (esistente) + Apple JWKS endpoint https://appleid.apple.com/auth/keys",
+    "client_constraint": "iOS-only client side per policy Apple",
+    "current_state": "SANDBOX_MODE_ACTIVE",
+    "production_verify_path_implementation_status": "placeholder_with_safe_fallback",
+    "app_store_guideline_4_8": "required_when_third_party_login_offered",
+    "verdict": "STRUCTURE_READY_CREDENTIALS_REQUIRED_FOR_STORE_BUILD"
+  },
+  "safety": {"no_fake_production_readiness": true, "raw_id_token_logged": false, "provider_secret_in_repo": false, "sandbox_mode_clearly_labeled": true, "credentials_required_for_store_build_marker": true},
+  "closed_alpha_blocker": true,
+  "verdict": "PROVIDER_TOKEN_VERIFICATION_GATE_DESIGN_READY_CREDENTIALS_REQUIRED"
+}

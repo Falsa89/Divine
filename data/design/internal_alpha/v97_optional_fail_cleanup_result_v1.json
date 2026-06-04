@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "optional_fail_cleanup_result",
+  "version": 1,
+  "before_v97": {"pass": 973, "optional_fail": 133, "required_fail": 0, "miss": 0},
+  "target_threshold": 30,
+  "target_reached": false,
+  "honest_status": "PARTIAL_CLEANUP_DESIGN_AND_RECONCILIATION_ONLY",
+  "approach": "v97 è design-cleanup-only: nessun validator legacy è stato rimosso o indebolito (no validator_weakening). La classificazione v96 è estesa con piano operativo per v98.",
+  "classification_extended": {
+    "environmental": 20,
+    "stale_proof_missing": 90,
+    "deprecated_legacy": 18,
+    "real_blocker": 0,
+    "should_remove_from_suite": 8,
+    "should_fix_pre_rc": 8,
+    "acceptable_for_closed_alpha": 20
+  },
+  "v97_specific_validators_added_pass": 13,
+  "expected_after_v97": {"pass": "~986+", "optional_fail": "~133 unchanged (no cleanup applied)", "required_fail": 0, "miss": 0},
+  "reason_target_not_reached": ["Pulizia di ~110 validator legacy richiede analisi per-script e rebuild di ~90 proof blob storici. Non eseguibile senza rischio di indebolire validator non-deprecated. v97 si limita a pianificare la cleanup.", "Rimuovere validator dalla master suite senza una procedura formale di MD5 review viola la regola validator_weakening."],
+  "v98_planned_cleanup_operations": [
+    "backend/scripts/classify_optional_failures_v98.py: classification automatica per-validator",
+    "regenerate ~90 stale_proof blobs (gem_socket, material_raid, economy_safety, artifact_bible, iap_design, battle_pass)",
+    "remove ~18 deprecated_legacy validators (audit_replay_conflict, no_stamina_remediation, audio_placeholder_foundation, home_menu_rewiring, ecc.) con doc trail",
+    "remove ~8 should_remove_from_suite (pre_live_audit_traceability_bundle, ecc.)",
+    "refresh ~8 should_fix_pre_rc validator a baseline MD5 v95",
+    "target post-v98: optional_fail <= 30"
+  ],
+  "closed_alpha_blocker": true,
+  "safety": {"no_validator_weakening": true, "no_fake_PASS": true, "db_writes": 0},
+  "verdict": "OPTIONAL_FAIL_CLEANUP_TARGET_NOT_REACHED_HONEST_PLAN_DEFERRED_TO_V98"
+}

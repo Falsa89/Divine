@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "server_actor_lifecycle_policy",
+  "version": 1,
+  "core_rules": {
+    "is_bot_internal_flag": true,
+    "synthetic_server_actor_flag": true,
+    "created_by_system": true,
+    "no_real_iap": true,
+    "no_real_pii": true,
+    "alias_prefix": "sa_",
+    "alias_namespace_distinguishable_from_real": true,
+    "admin_distinguishable": true,
+    "public_facing_indistinguishable": false
+  },
+  "start_state": {"account_level": 1, "gold": 0, "gems": 0, "stamina": 100, "team_formation": [], "day_one_high_level_forbidden": true},
+  "progression_rules": {
+    "server_age_based": {"daily_level_gain_baseline": 1, "daily_level_gain_active": 2, "max_level_cap_by_server_age_days_formula": "min(player_avg_level + 5, server_age_days * 1.5, hard_cap)", "hard_cap_internal_alpha": 60},
+    "player_average_adaptation": {"enabled": true, "sample_window_days": 7, "min_sample_size": 10, "fallback_when_undersampled": "server_age_only"},
+    "caps": {"by_server_age": true, "by_player_percentile": true, "percentile_p95_max": true, "never_dominates_top_10": true}
+  },
+  "event_access": {"respect_level_unlock": true, "respect_event_unlock": true, "respect_guild_membership": true, "respect_guild_requirements": true, "no_bypass": true},
+  "forbidden": ["day_one_level_100_bots", "random_runtime_generation", "ranking_domination", "premium_reward_theft", "economy_exploit", "real_iap", "real_pii", "event_access_bypass"],
+  "persistence_runtime": "DESIGN_CONTRACT_ONLY_V97_DB_WRITES_DEFERRED_TO_V98",
+  "db_writes_scope": 0,
+  "reason_no_db_writes_yet": "v97 è design-only per i bot: creare bot accounts persistenti con DB writes irreversibili richiede ulteriore review. Le policy sono pronte per il rollout v98 gated.",
+  "verdict": "SERVER_ACTOR_LIFECYCLE_POLICY_READY_RUNTIME_DEFERRED_TO_V98"
+}

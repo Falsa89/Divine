@@ -3216,6 +3216,24 @@ OPTIONAL = [
     ('PROJECT-V96-MD5-BASELINE-LOCK', 'validate_v96_md5_baseline_lock.py'),
     ('PROJECT-V96-RELEASE-CANDIDATE-FINAL-GATE', 'validate_v96_release_candidate_final_gate.py'),
     ('MEGA-RELEASE-ACCELERATION-45-v96-ROLLUP', 'validate_mega_release_acceleration_45_v96_rollup.py'),
+    # ========================================================================
+    # v97 - MEGA_RELEASE_ACCELERATION_46_INTERNAL_ALPHA_HARDENING_AND_SERVER_ACTORS_SUPERPACK
+    # PUBLIC_SYNC_TAG_v97_MEGA_RELEASE_ACCELERATION_46_INTERNAL_ALPHA_HARDENING_AND_SERVER_ACTORS_SUPERPACK
+    # PUBLIC_SYNC_SENTINEL_v97_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V97-ACCOUNT-DELETION-GDPR', 'validate_v97_account_deletion_gdpr.py'),
+    ('PROJECT-V97-REFRESH-TOKEN-ROTATION', 'validate_v97_refresh_token_rotation.py'),
+    ('PROJECT-V97-PROVIDER-TOKEN-GATE', 'validate_v97_provider_token_gate.py'),
+    ('PROJECT-V97-PHYSICAL-MOBILE-QA-MATRIX', 'validate_v97_physical_mobile_qa_matrix.py'),
+    ('PROJECT-V97-LOAD-LOCUST-RESULT', 'validate_v97_load_locust_result.py'),
+    ('PROJECT-V97-OPTIONAL-FAIL-CLEANUP', 'validate_v97_optional_fail_cleanup.py'),
+    ('PROJECT-V97-SERVER-ACTOR-LIFECYCLE', 'validate_v97_server_actor_lifecycle.py'),
+    ('PROJECT-V97-BOT-PROGRESSION-ECONOMY', 'validate_v97_bot_progression_economy.py'),
+    ('PROJECT-V97-BOT-LIVE-EVENT-PARTICIPATION', 'validate_v97_bot_live_event_participation.py'),
+    ('PROJECT-V97-CONTEXTUAL-BOT-CHAT', 'validate_v97_contextual_bot_chat.py'),
+    ('PROJECT-V97-SERVER-ACTOR-ADMIN-CONTROLS', 'validate_v97_server_actor_admin_controls.py'),
+    ('PROJECT-V97-INTERNAL-ALPHA-GATE', 'validate_v97_internal_alpha_gate.py'),
+    ('MEGA-RELEASE-ACCELERATION-46-v97-ROLLUP', 'validate_mega_release_acceleration_46_v97_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

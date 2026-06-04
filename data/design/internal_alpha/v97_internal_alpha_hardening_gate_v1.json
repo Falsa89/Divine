@@ -1,0 +1,67 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "internal_alpha_hardening_gate",
+  "version": 1,
+  "gates": {
+    "account_auth": {
+      "deletion_request_endpoint": "READY_SOFT_DELETE",
+      "logout_all": "READY",
+      "privacy_status": "READY",
+      "refresh_token_rotation": "READY_RUNTIME_ACTIVE",
+      "provider_token_verification": "GATED_CREDENTIALS_REQUIRED",
+      "hard_delete_runtime": "COMMERCIAL_NEEDS_REVIEW",
+      "data_export_runtime": "CONTRACT_DEFERRED_TO_V98",
+      "verdict": "INTERNAL_ALPHA_READY"
+    },
+    "engine": {"verdict": "READY", "regression": "21/21 PASS"},
+    "playability": {"verdict": "READY", "formation_account_bridge": "v96 closed v95 blocker"},
+    "live_guild": {"verdict": "READY_GATED"},
+    "bots_server_actors": {
+      "lifecycle_policy": "DESIGN_READY",
+      "archetypes_5": "DESIGN_READY",
+      "progression_economy": "DESIGN_READY",
+      "live_participation_thresholds": "DESIGN_READY",
+      "low_population_policy": "DESIGN_READY",
+      "admin_controls_kill_switches": "DESIGN_READY",
+      "runtime_persistence": "DEFERRED_TO_V98",
+      "verdict": "DESIGN_READY_RUNTIME_DEFERRED"
+    },
+    "chat": {"contextual_chat_policy": "DESIGN_READY", "borea_fixture_pass": true, "manual_ultimate_forbidden_topic": true, "verdict": "DESIGN_READY"},
+    "optional_fail_cleanup": {"target_threshold": 30, "target_reached": false, "current_optional_fail": 133, "verdict": "CLOSED_ALPHA_BLOCKER_HONEST", "v98_plan": "documented"},
+    "mobile_qa": {"physical_run": "MANUAL_QA_REQUIRED", "verdict": "INTERNAL_ALPHA_CONDITIONAL"},
+    "load_locust": {"low_impact_smoke": "PASSED", "full_run": "DEFERRED", "verdict": "INTERNAL_ALPHA_READY"},
+    "compliance_privacy": {"design_docs": "READY", "live_policy_urls": "REQUIRED_FOR_CLOSED_ALPHA", "verdict": "INTERNAL_ALPHA_DESIGN_READY"}
+  },
+  "overall_verdict": {
+    "READY_FOR_INTERNAL_ALPHA_HARDENED": true,
+    "CONDITIONAL_FOR_CLOSED_ALPHA": true,
+    "BLOCKED_FOR_COMMERCIAL_RELEASE": true
+  },
+  "blockers_for_closed_alpha": [
+    "provider_token_verification: real Google/Apple credentials required",
+    "optional_fail_cleanup: target<=30 not reached (current=133)",
+    "mobile_qa: physical device run",
+    "load_locust: full dedicated infra run",
+    "compliance: live privacy/terms URLs",
+    "bot_runtime_persistence: deferred to v98 (controlled rollout)",
+    "hard_delete_runtime: commercial review"
+  ],
+  "safety": {
+    "reward_live": false,
+    "iap_active": false,
+    "production_push": false,
+    "production_broadcast": false,
+    "real_pii_in_bot_chat": false,
+    "fake_users_presented_as_real": false,
+    "day_one_high_level_bots": false,
+    "bot_event_access_bypass": false,
+    "bot_ranking_domination": false,
+    "bot_premium_reward_theft": false,
+    "random_opponents": false,
+    "bot_economy_exploit": false,
+    "raw_oauth_logs": false,
+    "provider_secrets_in_repo": false,
+    "validator_weakening": false,
+    "fake_PASS": false
+  }
+}

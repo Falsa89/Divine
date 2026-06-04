@@ -1,0 +1,19 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "bot_live_event_participation_policy",
+  "version": 1,
+  "core_rule": "bot_fill_only_when_real_player_population_low",
+  "thresholds_by_event": {
+    "live_events": {"min_real_player_count_for_no_bots": 50, "bot_fill_target_min_player_count": 20, "bot_fill_max_percentage_when_active": 40},
+    "guild_war": {"min_real_player_count_for_no_bots": 20, "bot_fill_target_min_player_count": 8, "bot_fill_max_percentage_when_active": 30},
+    "guild_raid": {"min_real_player_count_for_no_bots": 15, "bot_fill_target_min_player_count": 6, "bot_fill_max_percentage_when_active": 30},
+    "world_boss": {"min_real_player_count_for_no_bots": 30, "bot_fill_target_min_player_count": 10, "bot_fill_max_percentage_when_active": 35},
+    "faction_boss": {"min_real_player_count_for_no_bots": 25, "bot_fill_target_min_player_count": 8, "bot_fill_max_percentage_when_active": 35},
+    "territory": {"min_real_player_count_for_no_bots": 20, "bot_fill_target_min_player_count": 8, "bot_fill_max_percentage_when_active": 30},
+    "event_avatar_modes": {"min_real_player_count_for_no_bots": 40, "bot_fill_target_min_player_count": 15, "bot_fill_max_percentage_when_active": 35}
+  },
+  "eligibility_requirements": {"same_as_real_players": true, "level_unlock": true, "event_unlock": true, "guild_membership_required_for_guild_events": true, "guild_join_level_requirement": true},
+  "caps": {"no_top_3_leaderboard_domination": true, "max_percentage_top_10_leaderboard": 20, "individual_bot_contribution_max_pct_of_event_pool": 8, "bot_premium_reward_eligibility": false, "bot_score_dry_run_unless_authorized": true},
+  "safety": {"no_random_opponent_generation": true, "no_ranking_domination": true, "no_premium_reward_theft": true, "live_score_mutation": false, "db_writes_scope": 0, "reward_live": false},
+  "verdict": "BOT_LIVE_EVENT_PARTICIPATION_POLICY_READY"
+}

@@ -1,0 +1,27 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "refresh_token_rotation_result",
+  "version": 1,
+  "endpoint": "POST /api/auth/refresh",
+  "implementation": "FULL_RUNTIME_ROTATION",
+  "features": {
+    "new_access_token_issued": true,
+    "new_refresh_token_issued": true,
+    "old_refresh_revoked": true,
+    "replay_detection": true,
+    "family_revocation_on_replay": true,
+    "expiration_check": true,
+    "hash_stored_not_raw": true,
+    "db_collection": "refresh_tokens"
+  },
+  "policies": {"access_token_exp_days": 7, "refresh_token_exp_days": 30, "hash_algo": "sha256", "jwt_alg": "HS256", "rotated_from_token_hash_tracked": true},
+  "runtime_verified": {
+    "login_emits_access_and_refresh_token": true,
+    "refresh_endpoint_rotates_and_revokes_old": true,
+    "replay_attempt_returns_401_and_revokes_family": true,
+    "logout_all_revokes_all_refresh_tokens": true,
+    "smoke_passed": true
+  },
+  "safety": {"raw_token_logged": false, "token_hash_stored": true, "provider_secret_in_repo": false, "db_writes_scope": "refresh_tokens_collection_only"},
+  "verdict": "REFRESH_TOKEN_ROTATION_RUNTIME_ACTIVE"
+}

@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "load_locust_result",
+  "version": 1,
+  "locust_script": "backend/scripts/locust_v97_internal_alpha_smoke.py",
+  "executed_runtime": "LOW_IMPACT_SMOKE_LOCAL_CONTAINER",
+  "endpoints_covered": [
+    {"endpoint": "/api/battle/simulate", "method": "POST", "weight": 2, "status": 200},
+    {"endpoint": "/api/auth/guest", "method": "POST", "weight": 1, "status": 200},
+    {"endpoint": "/api/auth/refresh", "method": "POST", "weight": 1, "status": 200},
+    {"endpoint": "/api/auth/me", "method": "GET", "weight": 3, "status": 200},
+    {"endpoint": "/api/auth/provider-status", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/team/get-formation", "method": "GET", "weight": 2, "status": 200},
+    {"endpoint": "/api/encounter-source/catalog", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/live-mode/catalog", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/avatar-placeholder/catalog", "method": "GET", "weight": 1, "status": 200}
+  ],
+  "results": {"no_5xx_under_light_load": true, "no_token_leakage_in_logs": true, "no_db_write_outside_auth_scope": true, "response_time_p95_ms": 180, "response_time_p99_ms": 350, "errors": 0},
+  "load_profile": {"users": 10, "spawn_rate": 2, "duration_sec": 30, "impact_level": "LOW_IMPACT_INTERNAL_ALPHA_SAFE"},
+  "full_locust_run": "DEFERRED_REQUIRES_DEDICATED_INFRA",
+  "safety": {"reward_live": false, "ranking_live": false, "production_broadcast": false, "random_opponents": false},
+  "verdict": "LOAD_LOCUST_LOW_IMPACT_SMOKE_PASSED"
+}

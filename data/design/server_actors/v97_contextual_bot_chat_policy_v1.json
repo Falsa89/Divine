@@ -1,0 +1,13 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "contextual_bot_chat_policy",
+  "version": 1,
+  "core_rules": {"context_window_messages": 20, "answer_direct_questions": true, "detect_mentioned_hero": true, "detect_mentioned_banner_or_event": true, "detect_current_mode_context": true, "avoid_repetition_window_messages": 5, "anti_spam_cooldown_seconds_per_bot": 60, "max_messages_per_bot_per_hour": 12, "small_talk_allowed_if_natural": true, "max_small_talk_per_session_pct": 30, "out_of_context_response_forbidden": true},
+  "intent_categories": ["direct_question_hero_opinion", "direct_question_banner_advice", "direct_question_event_strategy", "direct_question_team_building", "small_talk_greeting", "small_talk_status", "small_talk_farming", "frustration_unlucky_pull", "frustration_difficult_content", "announcement_meta"],
+  "forbidden_response_topics": ["manual_ultimate_usage_suggestion", "real_iap_recommendation", "real_PII_exposure", "toxic_or_offensive_content", "competing_game_advertising"],
+  "ultimate_behavior_clarification": "Nel sistema Divine le ultimate partono AUTOMATICAMENTE quando pronte. Bot non devono mai suggerire timing manuale ultimate. Risposte tipo 'tieni ultimate per il boss' sono VIETATE.",
+  "personality_modifiers": ["casual", "hyped", "calm_analytical", "meme_friendly", "newbie_friendly"],
+  "chat_rate_limits": {"per_bot_per_minute": 1, "per_bot_per_hour": 12, "per_channel_per_minute_global": 30, "global_dedupe_window_seconds": 90},
+  "safety": {"no_real_pii": true, "no_raw_oauth_token_logged": true, "alias_only": true, "no_competing_game_ads": true, "no_toxicity": true},
+  "verdict": "CONTEXTUAL_BOT_CHAT_POLICY_READY"
+}

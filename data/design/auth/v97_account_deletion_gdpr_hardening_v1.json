@@ -1,0 +1,19 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "account_deletion_gdpr_hardening",
+  "version": 1,
+  "endpoints_implemented": [
+    {"endpoint": "POST /api/auth/delete-account-request", "mode": "soft_delete_with_grace_period", "grace_period_days": 14, "reversible_within_grace_period": true},
+    {"endpoint": "POST /api/auth/logout-all", "mode": "revoke_all_refresh_tokens"},
+    {"endpoint": "GET /api/auth/privacy-status", "mode": "read_only"}
+  ],
+  "soft_delete_runtime": "INTERNAL_ALPHA_READY",
+  "hard_delete_runtime": "COMMERCIAL_NEEDS_REVIEW",
+  "data_export_endpoint_runtime": "CONTRACT_DEFERRED_TO_V98",
+  "provider_unlink_policy": {"runtime": "DESIGN_ONLY_DEFERRED_TO_V98", "rule": "unlinking_last_provider_requires_delete_or_alternative_auth"},
+  "retention_policy": {"active_account_days": 365, "inactive_account_days": 730, "deletion_request_grace_days": 14, "log_retention_days": 90, "pii_minimization": true},
+  "pii_minimization": {"raw_provider_user_id_stored": false, "raw_oauth_token_logged": false, "email_optional": true, "real_name_collected": false, "phone_collected": false, "physical_address_collected": false},
+  "gdpr_alignment": {"right_to_be_forgotten": "SOFT_DELETE_ALPHA_HARD_DELETE_DEFERRED", "data_portability": "CONTRACT_DEFERRED_TO_V98", "consent_mechanism": "DESIGN_REQUIRED_FOR_CLOSED_ALPHA", "data_breach_notification_process": "DESIGN_DEFERRED"},
+  "safety": {"db_writes_scope": "users_only_auth_fields", "reward_live": false, "raw_oauth_token_logged": false, "provider_secret_in_repo": false, "real_pii_in_logs": false},
+  "verdict": "ACCOUNT_DELETION_GDPR_HARDENING_INTERNAL_ALPHA_READY_HARD_DELETE_DEFERRED"
+}

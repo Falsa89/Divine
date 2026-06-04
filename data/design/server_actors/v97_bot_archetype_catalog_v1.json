@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "bot_archetype_catalog",
+  "version": 1,
+  "archetypes": [
+    {"id": "f2p_base", "label": "F2P Base", "daily_login_chance": 0.5, "daily_activity_minutes": 15, "pull_rate_per_week": 5, "premium_pull_rate_per_week": 0, "event_participation": "low", "chat_chance": 0.05, "guild_join_chance": 0.3, "power_band_percentile_max": 40, "description": "Player F2P casuale, login non garantito"},
+    {"id": "f2p_active", "label": "F2P Active", "daily_login_chance": 0.95, "daily_activity_minutes": 60, "pull_rate_per_week": 20, "premium_pull_rate_per_week": 2, "event_participation": "medium", "chat_chance": 0.15, "guild_join_chance": 0.8, "power_band_percentile_max": 70, "description": "Player F2P attivo, completion farm regolare"},
+    {"id": "advanced_pull_bot", "label": "Advanced Pull Bot", "daily_login_chance": 0.85, "daily_activity_minutes": 90, "pull_rate_per_week": 35, "premium_pull_rate_per_week": 8, "event_participation": "high", "chat_chance": 0.2, "guild_join_chance": 0.7, "power_band_percentile_max": 80, "description": "Pulla regolarmente, ma non spende; advanced F2P/dolphin lite"},
+    {"id": "spender_like_controlled", "label": "Spender-like Controlled", "daily_login_chance": 0.9, "daily_activity_minutes": 75, "pull_rate_per_week": 50, "premium_pull_rate_per_week": 25, "event_participation": "high", "chat_chance": 0.18, "guild_join_chance": 0.85, "power_band_percentile_max": 90, "description": "Simula dolphin senza spesa reale; cap forte su top ranking", "no_real_iap": true, "cap_top_10_percentile": false},
+    {"id": "whale_like_limited", "label": "Whale-like Limited", "daily_login_chance": 0.95, "daily_activity_minutes": 120, "pull_rate_per_week": 80, "premium_pull_rate_per_week": 50, "event_participation": "very_high", "chat_chance": 0.12, "guild_join_chance": 0.95, "power_band_percentile_max": 95, "description": "Simula whale ma cap pesante; mai dominanza assoluta. Limitato a percentile p95 max", "no_real_iap": true, "max_count_per_server": 3, "cap_top_3_forbidden": true}
+  ],
+  "global_caps": {"never_dominate_top_3": true, "never_steal_premium_rewards": true, "max_total_bots_pct_of_player_count_pct": 30, "max_bots_per_guild": 4, "max_bots_in_top_10_leaderboard_pct": 20},
+  "safety": {"no_real_iap": true, "no_real_pii": true, "alias_only": true, "is_bot_internal_flag_visible_to_admin": true},
+  "verdict": "BOT_ARCHETYPE_CATALOG_DESIGN_READY"
+}

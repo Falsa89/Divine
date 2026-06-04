@@ -1,0 +1,12 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "low_population_thresholds",
+  "version": 1,
+  "global_thresholds": {"min_real_player_count_global_health": 100, "healthy_concurrent_threshold": 200, "under_population_threshold": 30, "critical_under_population_threshold": 10},
+  "sampling_window_minutes": 5,
+  "hysteresis_minutes": 15,
+  "adjustment_policy": {"under_population": {"bot_fill_enabled": true, "bot_fill_aggressive": false}, "critical_under_population": {"bot_fill_enabled": true, "bot_fill_aggressive": true, "max_bot_percentage_floor": 60}, "healthy": {"bot_fill_enabled": false, "bot_count_reduction_pct": 90}, "saturated": {"bot_fill_enabled": false, "bot_count_reduction_pct": 100}},
+  "per_region_or_server_overrides": true,
+  "admin_override_kill_switches": ["disable_all_bots", "force_under_population_mode", "force_healthy_mode"],
+  "verdict": "LOW_POPULATION_THRESHOLDS_DEFINED"
+}

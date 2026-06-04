@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "bot_progression_economy_simulation",
+  "version": 1,
+  "simulated_activities": {
+    "daily_login": true,
+    "exp_account_progress": true,
+    "roster_growth": true,
+    "pull_banner_history": true,
+    "reward_accumulation_controlled": true,
+    "team_upgrades": true,
+    "guild_faction_participation_if_unlocked": true,
+    "event_progress_if_eligible": true
+  },
+  "forbidden": ["real_iap", "economy_exploit", "tradeable_inventory", "reward_claims_impacting_real_economy", "premium_currency_inflation", "hidden_advantage_over_players"],
+  "economy_isolation": {"bot_currency_pool_separate": true, "bot_inventory_pool_separate": true, "bot_drops_not_added_to_global_drop_table_statistics": false, "bot_iap_simulated_no_real_charge": true},
+  "reward_grant_policy": {"bot_rewards_internal_only": true, "bot_rewards_do_not_affect_global_economy": true, "bot_rewards_not_displayed_in_real_player_leaderboards": false, "bot_premium_rewards_capped": true},
+  "team_upgrade_policy": {"hero_levels_match_account_level_within_5": true, "gear_quality_matches_account_progression": true, "no_max_gear_at_day_one": true},
+  "pull_policy": {"pull_rates_match_real_player_rates": true, "no_pity_bypass": true, "banner_eligibility_same_as_players": true},
+  "safety": {"db_writes_scope": "design_only_v97_runtime_deferred_v98", "reward_live": false, "economy_exploit": false, "hidden_advantage": false},
+  "verdict": "BOT_PROGRESSION_ECONOMY_SIMULATION_POLICY_READY"
+}

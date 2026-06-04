@@ -1,0 +1,75 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "bot_chat_intent_response_fixtures",
+  "version": 1,
+  "fixtures": [
+    {
+      "id": "hero_question_borea",
+      "input": "Ho trovato Borea, è un buon personaggio?",
+      "intent": "direct_question_hero_opinion",
+      "mentioned_hero": "Borea",
+      "valid_responses": [
+        "Secondo me sì, se ti serve sustain/support la terrei assolutamente.",
+        "Borea non è male, soprattutto come supporto. Dipende dalla tua squadra però.",
+        "Borea è utile contro boss prolungati. Provala con un DPS forte.",
+        "Dipende dal tuo team. Se vai corto di healing, Borea è un buon pick."
+      ],
+      "invalid_responses": [
+        "Sono le 8 di sera.",
+        "Tieni l'ultimate di Borea per il momento giusto.",
+        "Compra il pack premium per Borea."
+      ]
+    },
+    {
+      "id": "banner_advice",
+      "input": "Conviene pullare sul banner Ragnarok?",
+      "intent": "direct_question_banner_advice",
+      "valid_responses": [
+        "Se hai gemme da spendere e ti manca un tank top-tier, sì.",
+        "Dipende dal tuo roster. Se sei nuovo, meglio aspettare il prossimo standard.",
+        "Io aspetterei l'evento collab che arriva tra poco."
+      ],
+      "invalid_responses": ["Sono le 8 di sera.", "Spendi soldi reali per il banner."]
+    },
+    {
+      "id": "event_strategy",
+      "input": "Come faccio piano 50 dell'Assalto Ragnarok?",
+      "intent": "direct_question_event_strategy",
+      "valid_responses": [
+        "Serve un team Fire/Light bilanciato. Cleanse contro il boss è utile.",
+        "Prova con Tank + 2 DPS + Healer. Watch out per le AoE.",
+        "Io ho fatto piano 50 con Borea support, tieni le difese alte."
+      ],
+      "invalid_responses": ["Usa l'ultimate al momento giusto.", "Sono le 8 di sera."]
+    },
+    {
+      "id": "small_talk_greeting",
+      "input": "ciao a tutti",
+      "intent": "small_talk_greeting",
+      "valid_responses": ["ciao!", "ciao, come va?", "hey", "buonasera"],
+      "invalid_responses": ["compra il pack mensile", "sono le 8 di sera quasi"]
+    },
+    {
+      "id": "small_talk_farming",
+      "input": "sto farmando l'evento, qualcuno vuole aiutare?",
+      "intent": "small_talk_farming",
+      "valid_responses": ["sono dentro pure io, joiniamo?", "vado anch'io tra 5 min", "daje farmiamo"],
+      "invalid_responses": ["tieni l'ultimate manuale", "compra le gemme"]
+    },
+    {
+      "id": "frustration_unlucky_pull",
+      "input": "30 pull senza SSR sono distrutto",
+      "intent": "frustration_unlucky_pull",
+      "valid_responses": ["mi spiace, succede. la pity è vicina", "capita anche a me, mantieni la calma", "prossima sicuro arriva"],
+      "invalid_responses": ["compra più gemme", "usa ultimate manuale"]
+    }
+  ],
+  "global_validation_rules": {
+    "manual_ultimate_usage_topic_forbidden": true,
+    "forbidden_keywords_in_responses": ["manuale", "manualmente", "premi l'ultimate", "attiva ultimate", "compra", "acquista", "pack premium", "soldi reali"],
+    "check_forbidden_keywords_in_responses": true,
+    "alias_only": true,
+    "no_real_pii": true
+  },
+  "verdict": "BOT_CHAT_INTENT_RESPONSE_FIXTURES_READY"
+}

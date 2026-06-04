@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T23:24:06.378518+00:00",
+  "timestamp_utc": "2026-06-04T23:42:16.143511+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1547,
+  "backend_python_files_scanned": 1561,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 759,
+      "files_with_hits": 771,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -145,7 +145,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 153,
+      "files_with_hits": 154,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 338,
+      "files_with_hits": 339,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 119,
+      "files_with_hits": 120,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 140,
+      "files_with_hits": 143,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -901,7 +901,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 150,
+      "files_with_hits": 155,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1025,7 +1025,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 140,
+      "files_with_hits": 144,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1453,7 +1453,7 @@
     },
     "event_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 8,
+      "files_with_hits": 9,
       "hits_sample": [
         {
           "file": "backend/scripts/simulate_slc_c_migration_dryrun.py",
@@ -1476,6 +1476,18 @@
             {
               "line": 14,
               "snippet": "'event_progress',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/validate_v97_bot_progression_economy.py",
+          "keyword": "event_progress",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 9,
+              "snippet": "for k in ('daily_login','exp_account_progress','roster_growth','pull_banner_history','reward_accumulation_controlled','team_upgrades','guild_faction_participati"
             }
           ]
         },
@@ -1512,18 +1524,6 @@
             {
               "line": 27,
               "snippet": "if name == 'blocked_protected_event_state':"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/audit_server_shard_isolation_v1.py",
-          "keyword": "event_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 29,
-              "snippet": "'event_progress':          ['event_progress', 'event_state'],"
             }
           ]
         }

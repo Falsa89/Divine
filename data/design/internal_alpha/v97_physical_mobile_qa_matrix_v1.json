@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_46_v97",
+  "type": "physical_mobile_qa_matrix",
+  "version": 1,
+  "matrix": {
+    "android_physical_device": {"status": "MANUAL_QA_REQUIRED", "not_executed_in_container": true},
+    "ios_physical_device": {"status": "MANUAL_QA_REQUIRED", "not_executed_in_container": true, "requires_testflight": true},
+    "login_guest_qa": {"status": "BACKEND_VERIFIED_RUNTIME_PASS", "smoke_runtime_executed": true},
+    "login_google_dev_build": {"status": "PLANNED", "requires": "GOOGLE_CLIENT_ID + dev build + google-signin lib"},
+    "login_apple_ios_only": {"status": "PLANNED", "requires": "APPLE_CLIENT_ID + iOS device + expo-apple-authentication"},
+    "session_restore": {"status": "IMPLEMENTED_VERIFIED_LOCALLY"},
+    "logout": {"status": "IMPLEMENTED_VERIFIED_LOCALLY"},
+    "logout_all": {"status": "IMPLEMENTED_VERIFIED_LOCALLY_V97"},
+    "delete_account_request": {"status": "IMPLEMENTED_VERIFIED_LOCALLY_V97"},
+    "refresh_token_rotation": {"status": "IMPLEMENTED_VERIFIED_LOCALLY_V97"},
+    "formation_fetch_authenticated": {"status": "IMPLEMENTED_VERIFIED_LOCALLY"},
+    "battle_engine_smoke": {"status": "IMPLEMENTED", "regression_21_of_21": true},
+    "15_modes_smoke": {"story": "design_ready", "tower": "design_ready", "arena": "design_ready", "training": "design_ready", "raid": "design_ready", "event": "design_ready", "guild_live": "design_ready", "guild_war": "design_ready", "guild_raid": "design_ready", "world_boss": "design_ready", "faction_boss": "design_ready", "territory": "design_ready", "crepuscolo_titani": "design_ready", "assalto_ragnarok": "design_ready", "summer_invasion": "design_ready"},
+    "live_guild_qa_hub": {"status": "IMPLEMENTED_VERIFIED_LOCALLY"},
+    "live_announcements_qa": {"status": "IMPLEMENTED_SANDBOX_ONLY"},
+    "war_event_avatar_previews": {"status": "IMPLEMENTED"},
+    "guild_war_sandbox": {"status": "IMPLEMENTED_SANDBOX_ONLY"},
+    "contextual_bot_chat_demo": {"status": "DESIGN_FIXTURES_READY"}
+  },
+  "open_blockers_for_internal_alpha": ["Android physical device run", "iOS physical device run", "Provider credentials Google/Apple"],
+  "verdict": "PHYSICAL_MOBILE_QA_MATRIX_DECLARED_RUN_REQUIRED",
+  "safety": {"db_writes": 0, "reward_live": false}
+}
