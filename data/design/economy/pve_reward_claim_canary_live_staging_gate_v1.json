@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "live_staging_gate_ready": true,
+  "wave3_local_apply_clean": true,
+  "wave3_observation_pass": true,
+  "wave3_rollback_drill_pass": true,
+  "no_critical_errors": true,
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "notes": "live_staging != live_db; significa eligible per future dedicated pack design-only.",
+  "next_step_if_ready": "pve_reward_claim_live_staging_design_or_wave4_v82",
+  "next_step_if_blocked": "pve_reward_claim_canary_wave3_fix_v82"
+}

@@ -1,5 +1,45 @@
 #!/usr/bin/env python3
 # ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_RELEASE_ACCELERATION_30_PVE_REWARD_CLAIM_CANARY_WAVE3_UI_v81
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_v81_MEGA_RELEASE_ACCELERATION_30_PVE_REWARD_CLAIM_CANARY_WAVE3_UI
+# MEGA_RELEASE_ACCELERATION_30_v81_REGISTRATION_SENTINEL
+# ----------------------------------------------------------------------------
+# Canonical v81 = PvE Reward Claim Canary Wave-3 + Reward Claim UI Summary Preview Shell.
+# Wave-3 file-based locale (5 alias-only / 5 claim) eseguita CLEAN.
+# UI Preview Shell: deeplink-only TSX statico, nessuna UI di produzione, no fetch, no api.
+# Verdetto attuale (gates pieni, wave3 clean, ui preview ready):
+#   MEGA_RELEASE_ACCELERATION_30_PVE_REWARD_CLAIM_CANARY_WAVE3_AND_UI_SUMMARY_PREVIEW_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING
+# wave3_success_count=5, applied_to_live=false, db_writes=0, local_file_writes=6,
+# live_reward_grant=false, live_staging_gate_ready=true.
+#
+# 7 OPTIONAL tuples (count=1 ciascuna):
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-SCOPE
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-FILES
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-WAVE3
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-APPLY
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-OBSERVATION
+#   PROJECT-REWARD-CLAIM-UI-SUMMARY-PREVIEW-SHELL
+#   MEGA-RELEASE-ACCELERATION-30-v81-ROLLUP
+#
+# Safety booleans v81:
+#   - db_writes:                                          0
+#   - applied_to_live:                                    false
+#   - live_reward_grant:                                  false
+#   - mongo_url_used / pymongo_used / motor_used:         false
+#   - redis_used:                                         false
+#   - broad_rollout:                                      false
+#   - premium_currency / gacha / shop / VIP / BP:         false
+#   - event currency live / arena ranking / guild war:    false
+#   - backend route exposure:                             false
+#   - server.py / battle_engine / story.tsx / combat.tsx: unchanged
+#   - asset import / Character Bible / final_numbers:     false
+#   - AsyncStorage / auth mutation / .env mutation:       false
+#   - production_ui_exposure:                             false
+#   - real_claim_button / live_claim_endpoint:            false
+#   - validator weakening / fake PASS:                    false
+# Approval checksum sha256: 8a910565ed94e75eca4085a38f9233adeaf3349fda09aa933587dbb07ab3a66a
+# ============================================================================
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_RELEASE_ACCELERATION_29_PVE_REWARD_CLAIM_CANARY_WAVE2_v80
 # ----------------------------------------------------------------------------
 # PUBLIC_SYNC_TAG_v80_MEGA_RELEASE_ACCELERATION_29_PVE_REWARD_CLAIM_CANARY_WAVE2
@@ -2852,6 +2892,38 @@ OPTIONAL = [
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-OBSERVATION', 'validate_pve_reward_claim_canary_wave2_observation_v1.py'),
     ('PROJECT-REWARD-CLAIM-UI-SUMMARY-GATED-DESIGN', 'validate_reward_claim_ui_summary_gated_design_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-29-v80-ROLLUP', 'validate_mega_release_acceleration_29_v80_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_30_PVE_REWARD_CLAIM_CANARY_WAVE3_AND_UI_SUMMARY_PREVIEW_SHELL_PACK_v81
+    # PUBLIC_SYNC_TAG_v81_MEGA_RELEASE_ACCELERATION_30_PVE_REWARD_CLAIM_CANARY_WAVE3_UI
+    # ------------------------------------------------------------------------
+    # WAVE-3 CANARY LOCALE FILE-BASED (5 alias-only / 5 claim) + UI SUMMARY PREVIEW SHELL.
+    # - Wave3 scope lock + plan + UI preview contract + forbidden scope
+    # - 3 staging file wave3 + manifest
+    # - Runner upgrade: --wave3-preflight/--wave3-apply/--wave3-observe/--wave3-rollback-drill
+    # - Wave3 apply: 5 ledger entry isolati + 6 negative test PASS (+ malformed_route)
+    # - Observation PASS (7 criteria) + rollback drill + live-staging gate ready
+    # - Frontend reward-claim-summary-preview.tsx deeplink-only + alpha-menu link safe
+    # - QA matrix 22 PASS + progress v25 + readiness v81->v82
+    # - Verdict: WAVE3_AND_UI_SUMMARY_PREVIEW_READY (db_writes=0, local_file_writes=6,
+    #   live_reward_grant=false, applied_to_live=false, production_ui_exposure=false)
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post pack.
+    # db_writes=0, applied_to_live=false, live_reward_grant=false,
+    # mongo_url_used=false, pymongo_used=false, motor_used=false, redis_used=false,
+    # broad_rollout=false, premium_currency=false, gacha/shop/VIP/BP=false,
+    # backend_route_exposure=false, server.py/battle_engine/story.tsx/combat.tsx unchanged,
+    # asset_import=false, env_mutation=false, production_ui_exposure=false,
+    # real_claim_button=false, live_claim_endpoint=false,
+    # validator_weakening=false, fake_PASS=false.
+    # Approval checksum sha256: 8a910565ed94e75eca4085a38f9233adeaf3349fda09aa933587dbb07ab3a66a
+    # ========================================================================
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-SCOPE', 'validate_pve_reward_claim_canary_wave3_scope_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-FILES', 'validate_pve_reward_claim_canary_wave3_files_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-WAVE3', 'validate_pve_reward_claim_canary_runner_wave3_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-APPLY', 'validate_pve_reward_claim_canary_wave3_apply_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE3-OBSERVATION', 'validate_pve_reward_claim_canary_wave3_observation_v1.py'),
+    ('PROJECT-REWARD-CLAIM-UI-SUMMARY-PREVIEW-SHELL', 'validate_reward_claim_ui_summary_preview_shell_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-30-v81-ROLLUP', 'validate_mega_release_acceleration_30_v81_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

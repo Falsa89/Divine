@@ -1,0 +1,41 @@
+{
+  "version": "v1",
+  "static_preview": true,
+  "derived_from": ["v80_ui_summary_gated_contract", "v80_wave2_observation_metrics", "v81_wave3_plan"],
+  "reward_preview": {
+    "route_id": "story_alpha_slice_preview",
+    "reward_payload_summary": {"gold": 100, "account_exp": 10, "hero_exp": 20, "basic_material": 1},
+    "cap_hint": {"gold": 500, "account_exp": 50, "hero_exp": 100, "basic_material": 3}
+  },
+  "claim_result_sample": {
+    "tx_id": "canary-wave3-tx-000001",
+    "applied_to_local_staging": true,
+    "applied_to_live": false,
+    "idempotent_replay": false,
+    "is_preview": true
+  },
+  "idempotency_status_sample": {
+    "key_format": "idem:wave3:<user>:<claim_id>",
+    "status": "unique_first_seen"
+  },
+  "rollback_state_sample": {
+    "rollback_token": "rb-wave3-token-000001",
+    "rolled_back": false
+  },
+  "rejected_examples": [
+    {"scenario": "premium_currency_in_payload", "reason": "forbidden_reward_type:premium_currency"},
+    {"scenario": "non_allowlisted_user", "reason": "non_allowlisted_user"},
+    {"scenario": "over_cap_gold", "reason": "over_cap:gold"},
+    {"scenario": "malformed_route", "reason": "malformed_route"},
+    {"scenario": "duplicate_conflict", "reason": "idempotency_conflict_hash_mismatch"}
+  ],
+  "local_ledger_summary": {
+    "wave": 3,
+    "isolated_from_live": true,
+    "canary": true,
+    "entries_displayed": 5,
+    "db_writes": 0,
+    "live_reward_grant": false
+  },
+  "labels": ["PREVIEW", "STAGING", "CANARY_LOCAL", "NOT LIVE REWARD"]
+}

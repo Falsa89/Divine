@@ -1,0 +1,27 @@
+{
+  "version": "v1",
+  "surface": "reward_claim_summary_preview",
+  "deeplink_only": true,
+  "production_ui_exposure": false,
+  "no_real_claim_button": true,
+  "no_live_claim_endpoint": true,
+  "no_backend_fetch": true,
+  "no_api_call": true,
+  "no_async_storage": true,
+  "no_account_mutation": true,
+  "no_db": true,
+  "no_battle_engine_import": true,
+  "no_story_combat_import": true,
+  "data_source": "static_or_local_canary_preview_only",
+  "required_labels": ["PREVIEW", "STAGING", "CANARY_LOCAL", "NOT LIVE REWARD"],
+  "display_sections": [
+    "reward_preview",
+    "claim_result",
+    "idempotency_status",
+    "rollback_state",
+    "blocked_rejected_reason_examples",
+    "local_ledger_summary"
+  ],
+  "style": "premium_mobile_friendly_compact_with_expandable_details",
+  "typescript_pass_required": true
+}

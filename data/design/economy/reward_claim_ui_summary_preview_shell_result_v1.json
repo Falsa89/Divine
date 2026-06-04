@@ -1,0 +1,33 @@
+{
+  "version": "v1",
+  "surface": "reward_claim_summary_preview",
+  "file": "/app/frontend/app/reward-claim-summary-preview.tsx",
+  "deeplink_only": true,
+  "production_ui_exposure": false,
+  "no_real_claim_button": true,
+  "no_live_claim_endpoint": true,
+  "no_backend_fetch": true,
+  "no_api_call": true,
+  "no_async_storage": true,
+  "no_account_mutation": true,
+  "no_db": true,
+  "no_battle_engine_import": true,
+  "no_story_combat_import": true,
+  "no_fetch_real": true,
+  "static_data_source": "/app/data/design/economy/reward_claim_ui_summary_preview_shell_static_data_v1.json",
+  "labels_present": ["PREVIEW", "STAGING", "CANARY_LOCAL", "NOT LIVE REWARD"],
+  "display_sections_present": [
+    "reward_preview",
+    "claim_result",
+    "idempotency_status",
+    "rollback_state",
+    "blocked_rejected_reason_examples",
+    "local_ledger_summary"
+  ],
+  "typescript_pass": true,
+  "static_forbidden_check_pass": true,
+  "alpha_menu_link_added": true,
+  "alpha_menu_link_target": "reward-claim-summary-preview",
+  "db_writes": 0,
+  "local_file_writes_session": 0
+}

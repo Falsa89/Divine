@@ -1,0 +1,50 @@
+{
+  "mode": "wave3_preflight",
+  "timestamp_utc": "2026-06-04T16:38:49Z",
+  "applied_to_local_staging": false,
+  "applied_to_live": false,
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "local_file_writes": 0,
+  "gates": {
+    "staging_dir_exists": true,
+    "wave3_allowlist_present": true,
+    "wave3_fixtures_present": true,
+    "wave3_plan_present": true,
+    "mode_flag_present": true,
+    "wave3_flag_present": true,
+    "all_wave3_apply_gates_pass": false
+  },
+  "wave3_allowlist_size": 5,
+  "wave3_max_users": 5,
+  "wave3_max_claims_total": 5,
+  "wave3_routes": [
+    "story_alpha_slice_preview",
+    "training_combat_onboarding_preview",
+    "boss_tower_alpha_loop_preview",
+    "first_session_onboarding_preview",
+    "alpha_menu_preview"
+  ],
+  "valid_routes": [
+    "alpha_menu_preview",
+    "boss_tower_alpha_loop_preview",
+    "first_session_onboarding_preview",
+    "story_alpha_slice_preview",
+    "training_combat_onboarding_preview"
+  ],
+  "fixtures_caps": {
+    "gold": 500,
+    "account_exp": 50,
+    "hero_exp": 100,
+    "basic_material": 3
+  },
+  "forbidden_reward_keys_enforced": [
+    "arena_points",
+    "battle_pass_xp",
+    "event_currency",
+    "gacha_currency",
+    "premium_currency",
+    "vip_points"
+  ],
+  "notes": "Wave3 preflight: lettura file di staging wave3. Nessuna scrittura DB."
+}

@@ -1,0 +1,31 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T16:38:49Z",
+  "observation_source": "/app/data/canary_staging/wave3_observation_log_v1.json",
+  "window_minutes": 60,
+  "metrics": {
+    "wave3_claim_attempts_total": 11,
+    "wave3_claim_success_total": 5,
+    "wave3_claim_reject_total": 5,
+    "idempotent_replay_total": 1,
+    "duplicate_conflict_total": 1,
+    "non_allowlisted_reject_total": 1,
+    "over_cap_reject_total": 1,
+    "premium_reward_reject_total": 1,
+    "malformed_route_reject_total": 1,
+    "db_write_total": 0,
+    "live_reward_grant_total": 0,
+    "rollback_required_total": 0,
+    "error_total": 0
+  },
+  "pass_criteria": {
+    "db_write_total_zero": true,
+    "live_reward_grant_total_zero": true,
+    "premium_reward_reject_at_least_one": true,
+    "non_allowlisted_reject_at_least_one": true,
+    "over_cap_reject_at_least_one": true,
+    "malformed_route_reject_at_least_one": true,
+    "no_critical_errors": true
+  },
+  "observation_pass": true
+}

@@ -107,6 +107,23 @@ const ENTRIES: PreviewMenuEntry[] = [
       "leaderboard_writes=false",
     ],
   },
+  {
+    route: "reward-claim-summary-preview",
+    title: "Reward Claim Summary (preview shell v81)",
+    qaPriority: "P1",
+    exposureBadge: "ALPHA_MENU_EXPOSED",
+    guardrails: [
+      "deeplink_only",
+      "db_writes=0",
+      "no_real_claim_button",
+      "no_live_reward",
+      "no_backend_fetch",
+      "no_account_mutation",
+      "no_asyncstorage",
+      "static_local_preview_data_only",
+      "labels:PREVIEW|STAGING|CANARY_LOCAL|NOT_LIVE_REWARD",
+    ],
+  },
 ];
 
 export default function AlphaMenuPreview() {

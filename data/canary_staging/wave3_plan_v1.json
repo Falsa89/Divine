@@ -1,0 +1,29 @@
+{
+  "version": "v1",
+  "wave": 3,
+  "max_users": 5,
+  "max_claims_total": 5,
+  "users": ["canary_user_001", "canary_user_002", "canary_user_003", "canary_user_004", "canary_user_005"],
+  "routes": [
+    "story_alpha_slice_preview",
+    "training_combat_onboarding_preview",
+    "boss_tower_alpha_loop_preview",
+    "first_session_onboarding_preview",
+    "alpha_menu_preview"
+  ],
+  "plan": [
+    {"user": "canary_user_001", "route": "story_alpha_slice_preview", "claim_id": "claim-wave3-000001", "reward_preview": {"gold": 100, "account_exp": 10, "hero_exp": 20, "basic_material": 1}},
+    {"user": "canary_user_002", "route": "training_combat_onboarding_preview", "claim_id": "claim-wave3-000002", "reward_preview": {"gold": 50, "account_exp": 5, "hero_exp": 10, "basic_material": 1}},
+    {"user": "canary_user_003", "route": "boss_tower_alpha_loop_preview", "claim_id": "claim-wave3-000003", "reward_preview": {"gold": 200, "account_exp": 20, "hero_exp": 50, "basic_material": 2}},
+    {"user": "canary_user_004", "route": "first_session_onboarding_preview", "claim_id": "claim-wave3-000004", "reward_preview": {"gold": 75, "account_exp": 8, "hero_exp": 15, "basic_material": 1}},
+    {"user": "canary_user_005", "route": "alpha_menu_preview", "claim_id": "claim-wave3-000005", "reward_preview": {"gold": 25, "account_exp": 3, "hero_exp": 5, "basic_material": 1}}
+  ],
+  "negative_tests_required": [
+    "duplicate_idempotency_replay",
+    "duplicate_conflicting_hash",
+    "non_allowlisted_user",
+    "premium_reward_reject",
+    "over_cap_reward_reject",
+    "malformed_route_reject"
+  ]
+}

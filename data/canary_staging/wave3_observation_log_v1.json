@@ -1,0 +1,109 @@
+{
+  "version": "v1",
+  "wave": 3,
+  "metrics": {
+    "wave3_claim_attempts_total": 11,
+    "wave3_claim_success_total": 5,
+    "wave3_claim_reject_total": 5,
+    "idempotent_replay_total": 1,
+    "duplicate_conflict_total": 1,
+    "non_allowlisted_reject_total": 1,
+    "over_cap_reject_total": 1,
+    "premium_reward_reject_total": 1,
+    "malformed_route_reject_total": 1,
+    "db_write_total": 0,
+    "live_reward_grant_total": 0,
+    "rollback_required_total": 1,
+    "error_total": 0
+  },
+  "events": [
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "success",
+      "user": "canary_user_001",
+      "tx_id": "canary-wave3-tx-000001",
+      "route": "story_alpha_slice_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "success",
+      "user": "canary_user_002",
+      "tx_id": "canary-wave3-tx-000002",
+      "route": "training_combat_onboarding_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "success",
+      "user": "canary_user_003",
+      "tx_id": "canary-wave3-tx-000003",
+      "route": "boss_tower_alpha_loop_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "success",
+      "user": "canary_user_004",
+      "tx_id": "canary-wave3-tx-000004",
+      "route": "first_session_onboarding_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "success",
+      "user": "canary_user_005",
+      "tx_id": "canary-wave3-tx-000005",
+      "route": "alpha_menu_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "idempotent_replay",
+      "user": "canary_user_001",
+      "idempotency_key": "idem:wave3:canary_user_001:claim-wave3-000001",
+      "scenario": "duplicate_replay"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "reject",
+      "user": "canary_user_001",
+      "reason": "idempotency_conflict_hash_mismatch",
+      "scenario": "duplicate_conflicting_hash"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "reject",
+      "user": "intruder_user_999",
+      "reason": "non_allowlisted_user",
+      "scenario": "negative_non_allowlist"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "reject",
+      "user": "canary_user_001",
+      "reason": "forbidden_reward_type:premium_currency",
+      "scenario": "negative_premium_attempt"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "reject",
+      "user": "canary_user_002",
+      "reason": "over_cap:gold",
+      "scenario": "negative_over_cap"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "reject",
+      "user": "canary_user_003",
+      "reason": "malformed_route",
+      "scenario": "negative_malformed_route"
+    },
+    {
+      "ts": "2026-06-04T16:38:49Z",
+      "kind": "rollback_drill",
+      "tx_id": "canary-wave3-tx-000001",
+      "wave": 3
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "version": "v1",
+  "matrix": [
+    {"id": "QA1", "area": "scope", "check": "max_5_users_max_5_claims", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA2", "area": "scope", "check": "no_live_db_no_routes", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA3", "area": "files", "check": "wave3_allowlist_alias_only", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA4", "area": "files", "check": "wave3_fixtures_non_premium_caps", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA5", "area": "runner_wave3", "check": "requires_mode_and_wave3_flag", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA6", "area": "runner_wave3", "check": "no_pymongo_no_motor_no_redis_no_mongo_url", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA7", "area": "apply", "check": "applied_to_local_staging_5_users", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA8", "area": "apply", "check": "db_writes_zero", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA9", "area": "apply", "check": "live_reward_grant_false", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA10", "area": "negative", "check": "premium_reward_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA11", "area": "negative", "check": "non_allowlisted_user_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA12", "area": "negative", "check": "over_cap_reward_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA13", "area": "negative", "check": "duplicate_idempotency_replay", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA14", "area": "negative", "check": "duplicate_conflicting_hash", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA15", "area": "negative", "check": "malformed_route_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA16", "area": "observation", "check": "metrics_pass_all_criteria", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA17", "area": "rollback", "check": "sample_rollback_file_only", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA18", "area": "live_staging_gate", "check": "ready_after_clean_wave3", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA19", "area": "ui_preview_shell", "check": "deeplink_only_tsx_static_data", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA20", "area": "ui_preview_shell", "check": "no_fetch_no_asyncstorage_no_account_mutation", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA21", "area": "ui_preview_shell", "check": "labels_PREVIEW_STAGING_CANARY_LOCAL_NOT_LIVE", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA22", "area": "ui_preview_shell", "check": "tsc_no_errors_on_new_tsx", "expected": "PASS", "actual": "PASS"}
+  ],
+  "current_state": "WAVE3_OBSERVED_SAFE_AND_UI_PREVIEW_READY",
+  "db_writes": 0,
+  "local_file_writes_session": 6
+}
