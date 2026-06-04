@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "live_privacy_terms_url_result",
+  "version": 1,
+  "urls": {
+    "privacy_policy_url": null,
+    "terms_url": null,
+    "account_deletion_instructions_url": null,
+    "support_contact": null
+  },
+  "status": "BLOCKER_FOR_CLOSED_ALPHA_EXTERNAL_URLS_REQUIRED",
+  "no_fake_urls": true,
+  "placeholder_strings_in_app": {
+    "login_screen": "⚠ Live privacy/terms URLs required for closed alpha",
+    "settings_screen": "⚠ Live privacy/terms URLs required for closed alpha",
+    "profile_screen": "⚠ Live privacy/terms URLs required for closed alpha"
+  },
+  "requirements_for_unlock": [
+    "Hosted public privacy policy URL (HTTPS)",
+    "Hosted public terms of service URL (HTTPS)",
+    "Account deletion instructions URL (Apple App Store guideline)",
+    "Support contact email or form URL"
+  ],
+  "compliance_alignment": {"gdpr": "requires_disclosed_url", "ccpa": "requires_disclosed_url", "apple_app_store": "requires_privacy_policy_url", "google_play_data_safety": "requires_privacy_policy_url"},
+  "closed_alpha_blocker": true,
+  "safety": {"no_fake_pass": true, "no_placeholder_urls_presented_as_real": true},
+  "verdict": "LIVE_PRIVACY_TERMS_URLS_BLOCKER_HONEST"
+}

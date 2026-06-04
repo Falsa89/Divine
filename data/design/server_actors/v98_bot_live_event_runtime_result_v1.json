@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "bot_live_event_runtime_result",
+  "version": 1,
+  "runtime_mode": "GATED_DRY_RUN",
+  "core_rule": "bot_fill_only_when_real_player_count_below_min_threshold",
+  "events_covered": {
+    "live_event": {"min_threshold": 50, "max_threshold_disable": 200, "healthy_threshold": 100, "bot_fill_max_pct": 40},
+    "guild_war": {"min_threshold": 20, "max_threshold_disable": 80, "healthy_threshold": 40, "bot_fill_max_pct": 30},
+    "guild_raid": {"min_threshold": 15, "max_threshold_disable": 60, "healthy_threshold": 30, "bot_fill_max_pct": 30},
+    "server_world_boss": {"min_threshold": 30, "max_threshold_disable": 150, "healthy_threshold": 80, "bot_fill_max_pct": 35},
+    "faction_boss": {"min_threshold": 25, "max_threshold_disable": 120, "healthy_threshold": 60, "bot_fill_max_pct": 35},
+    "territory_front": {"min_threshold": 20, "max_threshold_disable": 100, "healthy_threshold": 50, "bot_fill_max_pct": 30},
+    "event_avatar_mode": {"min_threshold": 40, "max_threshold_disable": 180, "healthy_threshold": 90, "bot_fill_max_pct": 35}
+  },
+  "eligibility_checks_runtime": {"level_unlock": true, "event_unlock": true, "guild_membership_required_for_guild_events": true, "guild_join_level_requirement": true},
+  "contribution_caps": {"per_bot_contribution_max_pct_of_event_pool": 8, "max_bot_pct_in_top_10": 20, "top_3_leaderboard_domination_forbidden": true, "premium_reward_eligibility": false, "bot_score_dry_run_unless_authorized": true},
+  "runtime_apply_status": "DRY_RUN_ONLY_GATED",
+  "runtime_apply_env_flag": "V98_BOTS_DISABLE_LIVE_FILL (default true => disabled)",
+  "hysteresis_minutes": 15,
+  "safety": {"db_writes": 0, "reward_live": false, "ranking_live": false, "random_opponents": false, "premium_reward_theft": false},
+  "verdict": "BOT_LIVE_EVENT_RUNTIME_DRY_RUN_GATED"
+}

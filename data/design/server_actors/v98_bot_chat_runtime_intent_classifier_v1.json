@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "bot_chat_runtime_intent_classifier",
+  "version": 1,
+  "runtime_mode": "GATED_DRY_RUN",
+  "classifier_engine": "pattern_based_with_keyword_extraction",
+  "intent_categories": ["direct_question_hero_opinion", "direct_question_banner_advice", "direct_question_event_strategy", "direct_question_team_building", "direct_question_guild_war_coordination", "small_talk_greeting", "small_talk_status", "small_talk_farming", "frustration_unlucky_pull", "frustration_difficult_content", "announcement_meta", "off_topic_harmless"],
+  "classifier_features": {"context_window_messages": 20, "mentioned_hero_detection": true, "mentioned_banner_event_detection": true, "direct_question_detection": true, "cooldown_per_bot_seconds": 60, "anti_spam_max_per_hour": 12, "repetition_avoidance_window": 5, "persona_variation": true, "out_of_context_response_forbidden": true, "manual_ultimate_advice_forbidden": true},
+  "keyword_dictionaries": {"hero_names": ["Borea", "Aetheron", "Ignis", "Astra", "Verdaria"], "banner_terms": ["banner", "pull", "pity", "summon"], "event_terms": ["evento", "raid", "war", "boss", "piano"], "frustration_terms": ["distrutto", "sfiga", "unlucky", "30 pull", "50 pull"], "greeting_terms": ["ciao", "hey", "buonasera", "yo", "salve"]},
+  "response_strategy": {"hero_opinion": "give_balanced_opinion_based_on_hero_role", "banner_advice": "contextual_pull_advice_no_iap", "event_strategy": "team_composition_suggestion_no_manual_ultimate", "small_talk": "reciprocate_naturally_no_spam", "frustration": "empathy_and_pity_reminder", "off_topic": "ignore_or_neutral_filler"},
+  "runtime_apply_status": "DRY_RUN_ONLY_GATED",
+  "runtime_apply_env_flag": "V98_BOTS_DISABLE_CHAT (default true => disabled)",
+  "safety": {"no_real_pii": true, "no_raw_oauth": true, "alias_only": true, "no_iap_recommendation": true, "no_competing_game_ads": true, "no_toxicity": true, "manual_ultimate_topic_forbidden": true},
+  "verdict": "BOT_CHAT_RUNTIME_INTENT_CLASSIFIER_DESIGN_READY_DRY_RUN_GATED"
+}

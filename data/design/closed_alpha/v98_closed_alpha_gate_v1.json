@@ -1,0 +1,43 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "closed_alpha_gate",
+  "version": 1,
+  "gates": {
+    "auth_providers": {"status": "CONDITIONAL", "blocker": "Google/Apple credentials not present (sandbox active)"},
+    "refresh_session": {"status": "READY", "runtime": "refresh rotation + logout-all active"},
+    "data_deletion_export": {"status": "READY_SOFT_DELETE_AND_DATA_EXPORT", "hard_delete": "DISABLED_PENDING_COMMERCIAL_REVIEW"},
+    "engine": {"status": "READY", "regression": "21/21"},
+    "rewards_canary": {"status": "READY_SANDBOX_ONLY"},
+    "live_guild": {"status": "READY_GATED"},
+    "bot_runtime": {"status": "DESIGN_READY_DRY_RUN_GATED_DEFAULT_OFF"},
+    "bot_chat": {"status": "DESIGN_READY_DRY_RUN_GATED_DEFAULT_OFF"},
+    "load": {"status": "READY_LOW_IMPACT_FULL_INFRA_DEFERRED"},
+    "mobile_qa": {"status": "MANUAL_QA_REQUIRED_NOT_EXECUTED", "closed_alpha_blocker": true},
+    "optional_fail_baseline": {"status": "CONDITIONAL_TARGET_30_NOT_REACHED", "current": 134, "target": 30, "closed_alpha_blocker": true},
+    "privacy_terms": {"status": "BLOCKED_LIVE_URLS_REQUIRED", "closed_alpha_blocker": true},
+    "store_readiness": {"status": "BLOCKED", "commercial_blocker": true},
+    "multi_provider_linking": {"status": "DESIGN_CONTRACT_ONLY", "closed_alpha_blocker": false, "runtime_deferred_v99": true}
+  },
+  "overall_verdict": {
+    "READY_FOR_CLOSED_ALPHA": false,
+    "CONDITIONAL_FOR_CLOSED_ALPHA": true,
+    "BLOCKED_FOR_CLOSED_ALPHA": false,
+    "BLOCKED_FOR_COMMERCIAL_RELEASE": true
+  },
+  "blockers_for_closed_alpha": [
+    "auth_providers: Google/Apple real credentials",
+    "mobile_qa: physical Android/iOS execution required",
+    "optional_fail_baseline: target<=30 not reached (current 134)",
+    "privacy_terms: live public URLs required"
+  ],
+  "blockers_for_commercial_release": [
+    "all closed alpha blockers",
+    "store_readiness (App Store + Play Console submission)",
+    "hard_delete_runtime commercial review and enable",
+    "art/audio final assets",
+    "monetization (IAP) live activation",
+    "final_numbers balance lock",
+    "multi_provider_linking runtime activation"
+  ],
+  "safety": {"reward_live": false, "iap_active": false, "production_push": false, "production_broadcast": false, "real_pii_in_bot_chat": false, "fake_users_presented_as_real": false, "day_one_high_level_bots": false, "bot_event_access_bypass": false, "bot_ranking_domination": false, "bot_premium_reward_theft": false, "random_opponents": false, "bot_economy_exploit": false, "raw_oauth_logs": false, "provider_secrets_in_repo": false, "validator_weakening": false, "fake_PASS": false}
+}

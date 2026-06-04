@@ -548,6 +548,16 @@ except Exception as _v96_tf_err:
     import logging
     logging.getLogger(__name__).warning("v96_team_formation router import failed: %s", _v96_tf_err)
 
+# MEGA_RELEASE_ACCELERATION_47_v98 — Admin server-actors status (read-only)
+# + GDPR data export + hard-delete-confirm (runtime gated).
+try:
+    from routes.v98_admin_and_gdpr import router as v98_admin_router, create_auth_extra_router
+    app.include_router(v98_admin_router)
+    app.include_router(create_auth_extra_router(db, get_current_user))
+except Exception as _v98_err:
+    import logging
+    logging.getLogger(__name__).warning("v98_admin_and_gdpr router import failed: %s", _v98_err)
+
 # PROJECT_MATERIAL_RAID_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
 # Returns 503 when MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
 # no materials granted, no live mutation, no stamina, no tickets, no paid attempts.

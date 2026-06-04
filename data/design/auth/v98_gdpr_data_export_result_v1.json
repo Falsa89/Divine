@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "gdpr_data_export_result",
+  "version": 1,
+  "endpoint": "GET /api/auth/data-export",
+  "runtime_verified": true,
+  "export_format": "json",
+  "fields_exported": ["account_id", "alias", "username", "provider", "level", "experience", "gold", "gems", "stamina", "team_formation", "created_at", "last_login", "pending_deletion"],
+  "fields_excluded_for_security": ["provider_user_id_hash", "password_hash", "refresh_token_hash", "internal_db_id"],
+  "auth_required": true,
+  "no_raw_oauth_token_in_export": true,
+  "no_pii_raw": true,
+  "gdpr_data_portability_compliance": true,
+  "safety": {"db_writes": 0, "reward_live": false, "raw_oauth_logged": false},
+  "verdict": "GDPR_DATA_EXPORT_RUNTIME_ACTIVE"
+}

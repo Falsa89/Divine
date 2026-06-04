@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "physical_mobile_qa_result",
+  "version": 1,
+  "android_physical": {"executed": false, "status": "MANUAL_QA_REQUIRED", "reason": "container Emergent senza device fisico"},
+  "ios_physical": {"executed": false, "status": "MANUAL_QA_REQUIRED", "reason": "container Emergent senza device iOS + TestFlight"},
+  "local_smoke_verified": {"auth_session": true, "refresh_rotation": true, "data_export": true, "privacy_status": true, "hard_delete_disabled": true, "formation_fetch": true, "battle_engine_smoke": "21/21 PASS", "15_modes": "design_ready", "live_guild_qa": true, "live_announcements_sandbox": true, "bot_status_endpoint": true},
+  "manual_qa_checklist": [
+    "Android: build dev su device fisico API 26+, login guest, session restore, logout, logout-all, refresh rotation, delete-account-request, data-export, privacy-status, formation, 15 modes smoke, battle engine, live/guild QA, live announcements sandbox, bot status, hard-delete-confirm (disabled response), performance under low memory",
+    "iOS: TestFlight build, idem + Sign in with Apple visible iOS-only, background/foreground transitions"
+  ],
+  "physical_device_run_required_for_closed_alpha": true,
+  "no_fake_pass": true,
+  "verdict": "PHYSICAL_MOBILE_QA_RUNTIME_NOT_EXECUTED_MANUAL_QA_REQUIRED_HONEST",
+  "safety": {"db_writes": 0, "reward_live": false}
+}

@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "bot_chat_runtime_fixture_result",
+  "version": 1,
+  "fixtures_executed": [
+    {"id": "borea_question", "input": "Ho trovato Borea, è un buon personaggio?", "classified_intent": "direct_question_hero_opinion", "mentioned_hero": "Borea", "chosen_response": "Secondo me sì, come support è fortissima se il team la protegge bene.", "acceptance": "PASS", "reasons": ["intent correct", "hero detected", "no manual ultimate", "no out-of-context"]},
+    {"id": "banner_pull_discussion", "input": "vale la pena pullare sul banner Ragnarok?", "classified_intent": "direct_question_banner_advice", "chosen_response": "Dipende dal tuo roster. Se ti manca un tank top-tier e hai gemme, sì.", "acceptance": "PASS"},
+    {"id": "event_farming_discussion", "input": "sto farmando l'Assalto, qualcuno joina?", "classified_intent": "small_talk_farming", "chosen_response": "vengo anch'io tra 5 min", "acceptance": "PASS"},
+    {"id": "guild_war_coordination", "input": "raga ci troviamo alle 21 per la guild war?", "classified_intent": "direct_question_guild_war_coordination", "chosen_response": "ok, conferma quando sei online", "acceptance": "PASS"},
+    {"id": "generic_hello", "input": "ciao a tutti", "classified_intent": "small_talk_greeting", "chosen_response": "ciao!", "acceptance": "PASS"},
+    {"id": "off_topic_harmless", "input": "oggi piove forte", "classified_intent": "off_topic_harmless", "chosen_response": null, "acceptance": "PASS (filtered, no response)"},
+    {"id": "spam_throttle", "input": "messaggio x10 ravvicinato", "classified_intent": "spam_detected", "chosen_response": null, "acceptance": "PASS (rate limit applied)"}
+  ],
+  "forbidden_response_topics_verified": ["manual_ultimate_advice", "out_of_context_8_di_sera", "iap_recommendation", "real_pii", "competing_game_ads"],
+  "safety": {"no_real_pii_in_responses": true, "alias_only": true, "no_iap_suggestion": true, "no_manual_ultimate": true},
+  "verdict": "BOT_CHAT_RUNTIME_FIXTURES_7_OF_7_PASS"
+}

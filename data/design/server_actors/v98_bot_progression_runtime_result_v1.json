@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "bot_progression_runtime_result",
+  "version": 1,
+  "script": "backend/scripts/simulate_v98_bot_progression_runtime.py",
+  "runtime_mode": "DRY_RUN_ONLY",
+  "db_writes_during_simulation": 0,
+  "simulated_features": {"daily_activity": true, "account_exp": true, "roster_growth": true, "pull_history_simulation": true, "reward_accumulation_controlled": true, "team_upgrades": true, "event_unlock_progression": true, "guild_faction_participation_if_eligible": true},
+  "caps_enforced": {"max_level_by_server_age": true, "max_level_by_player_avg": true, "p95_cap": true, "top3_domination_forbidden": true, "day_one_high_level_forbidden": true},
+  "forbidden_runtime": ["real_iap", "economy_exploit", "tradeable_inventory", "premium_currency_inflation", "hidden_advantage_over_players", "premium_reward_theft", "random_opponent_generation"],
+  "dry_run_output": {"sample_archetype": "f2p_active", "sample_days_simulated": 7, "sample_final_level": 14, "sample_final_gold": 5400, "sample_final_gems": 90, "sample_pulls_executed": 14, "caps_respected": true},
+  "runtime_apply_status": "GATED_DEFAULT_OFF",
+  "runtime_apply_env_flag": "V98_BOT_PROGRESSION_RUNTIME_ENABLED (default false)",
+  "safety": {"db_writes": 0, "reward_live": false, "economy_exploit": false, "hidden_advantage": false},
+  "verdict": "BOT_PROGRESSION_RUNTIME_DRY_RUN_PASSED_GATED_FOR_RUNTIME_APPLY"
+}

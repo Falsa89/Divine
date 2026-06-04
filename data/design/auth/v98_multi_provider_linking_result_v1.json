@@ -1,0 +1,29 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "multi_provider_linking_result",
+  "version": 1,
+  "design": {
+    "link_endpoint_planned": "POST /api/auth/link-provider",
+    "unlink_endpoint_planned": "POST /api/auth/unlink-provider",
+    "list_endpoint_planned": "GET /api/auth/linked-providers",
+    "runtime_status": "DESIGN_CONTRACT_ONLY_RUNTIME_DEFERRED_TO_V99"
+  },
+  "rules": {
+    "same_user_can_link_google_apple_guest": true,
+    "guest_upgrade_to_real_provider": true,
+    "prevent_duplicate_for_same_provider_subject_hash": true,
+    "conflict_handling": "if subject_hash already linked to other account, reject 409 conflict",
+    "unlink_last_provider": "forbidden_unless_alternative_set",
+    "no_account_takeover": true,
+    "raw_tokens_logged": false,
+    "audit_trail_on_link_unlink": true
+  },
+  "schema_extension": {
+    "users.linked_providers": "array of {provider, subject_hash, linked_at, sandbox}",
+    "users.primary_provider": "string",
+    "backward_compat_with_v96_provider_user_id_hash": true
+  },
+  "safety": {"db_writes_runtime": 0, "raw_oauth_token_logged": false, "provider_secret_in_repo": false, "no_account_takeover": true},
+  "closed_alpha_blocker": true,
+  "verdict": "MULTI_PROVIDER_LINKING_DESIGN_CONTRACT_READY_RUNTIME_DEFERRED_V99"
+}

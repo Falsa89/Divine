@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "hard_delete_cron_result",
+  "version": 1,
+  "endpoint": "POST /api/auth/hard-delete-confirm",
+  "runtime_apply_status": "GATED_DEFAULT_OFF",
+  "runtime_apply_env_flag": "V98_HARD_DELETE_RUNTIME_ENABLED (default false)",
+  "current_response_when_disabled": "DISABLED_PENDING_COMMERCIAL_REVIEW",
+  "cron_script": "backend/scripts/cron_v98_hard_delete_dry_run.py",
+  "cron_runtime_mode": "DRY_RUN_ONLY_SCAN_PENDING_DELETION",
+  "flow": ["soft delete request set pending_deletion=true + scheduled_deletion_at=now+14d", "cron daily scan for now > scheduled_deletion_at", "dry-run logs candidates without DB mutation", "when V98_HARD_DELETE_RUNTIME_ENABLED=true => hard delete with audit trail (refresh_tokens.delete_many + users.delete_one)"],
+  "audit_trail_required": true,
+  "commercial_review_required": true,
+  "safety": {"db_writes_when_disabled": 0, "reversible_within_grace_period": true, "no_accidental_destructive_deletion": true},
+  "verdict": "HARD_DELETE_CRON_DRY_RUN_READY_RUNTIME_GATED_COMMERCIAL_REVIEW"
+}

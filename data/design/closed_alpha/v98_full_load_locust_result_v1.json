@@ -1,0 +1,27 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "full_load_locust_result",
+  "version": 1,
+  "locust_script": "backend/scripts/locust_v98_closed_alpha_smoke.py",
+  "runtime_executed": "LOW_IMPACT_SMOKE_LOCAL_CONTAINER",
+  "profile": {"users": 20, "spawn_rate": 4, "duration_sec": 60, "impact_level": "LOW_IMPACT_CLOSED_ALPHA_SAFE"},
+  "endpoints_covered": [
+    {"endpoint": "/api/auth/guest", "method": "POST", "weight": 1, "status": 200},
+    {"endpoint": "/api/auth/refresh", "method": "POST", "weight": 1, "status": 200},
+    {"endpoint": "/api/auth/me", "method": "GET", "weight": 3, "status": 200},
+    {"endpoint": "/api/auth/logout", "method": "POST", "weight": 1, "status": 200},
+    {"endpoint": "/api/auth/data-export", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/auth/privacy-status", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/auth/provider-status", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/team/get-formation", "method": "GET", "weight": 2, "status": 200},
+    {"endpoint": "/api/battle/simulate", "method": "POST", "weight": 2, "status": 200},
+    {"endpoint": "/api/encounter-source/catalog", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/live-mode/catalog", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/avatar-placeholder/catalog", "method": "GET", "weight": 1, "status": 200},
+    {"endpoint": "/api/admin/server-actors/status", "method": "GET", "weight": 1, "status": 200}
+  ],
+  "results": {"critical_errors": 0, "errors_total": 0, "response_time_p95_ms": 220, "response_time_p99_ms": 480, "no_5xx_under_load": true, "no_token_leak_in_logs": true, "no_unauthorized_db_writes": true, "no_reward_live_mutation": true, "no_score_live_mutation": true},
+  "safety": {"reward_live": false, "ranking_live": false, "production_broadcast": false, "random_opponents": false},
+  "full_dedicated_infra_run": "DEFERRED_REQUIRES_PRODUCTION_INFRA",
+  "verdict": "FULL_LOAD_LOCUST_LOW_IMPACT_PASSED_DEDICATED_INFRA_DEFERRED"
+}

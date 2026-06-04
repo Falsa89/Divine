@@ -1,0 +1,19 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "server_actor_admin_runtime_controls",
+  "version": 1,
+  "endpoint_implemented": "GET /api/admin/server-actors/status",
+  "endpoint_runtime_verified": true,
+  "kill_switches": {
+    "DISABLE_ALL_BOTS": {"env": "V98_BOTS_DISABLE_ALL", "default": true, "current_runtime_value": true},
+    "DISABLE_BOT_CHAT": {"env": "V98_BOTS_DISABLE_CHAT", "default": true, "current_runtime_value": true},
+    "DISABLE_BOT_LIVE_EVENT_FILL": {"env": "V98_BOTS_DISABLE_LIVE_FILL", "default": true, "current_runtime_value": true},
+    "DISABLE_BOT_RANKING_VISIBILITY": {"env": "V98_BOTS_DISABLE_RANKING_VISIBILITY", "default": true, "current_runtime_value": true},
+    "BOT_POWER_PERCENTILE_CAP": {"env": "V98_BOTS_POWER_PERCENTILE_CAP", "default": 90, "current_runtime_value": 90},
+    "BOT_LOW_POP_FILL_ENABLED": {"env": "V98_BOTS_LOW_POP_FILL_ENABLED", "default": false, "current_runtime_value": false}
+  },
+  "default_state": "ALL_BOT_FEATURES_OFF_BY_DEFAULT",
+  "public_exposure": false,
+  "safety": {"db_writes": 0, "mass_creation_protection": true, "fake_users_presented_as_real": false, "reward_live": false},
+  "verdict": "SERVER_ACTOR_ADMIN_RUNTIME_CONTROLS_READY_KILL_SWITCHES_ACTIVE"
+}

@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_47_v98",
+  "type": "provider_id_token_verify_result",
+  "version": 1,
+  "google": {
+    "verify_runtime": "GATED_CREDENTIALS_REQUIRED",
+    "env_required": ["GOOGLE_CLIENT_ID"],
+    "library_required": "google-auth>=2.0.0",
+    "current_state": "SANDBOX_MODE_ACTIVE_CREDENTIALS_NOT_PRESENT",
+    "verify_path_implementation": "placeholder_with_safe_fallback",
+    "checks_planned_when_enabled": ["audience match (aud == GOOGLE_CLIENT_ID)", "issuer match (iss == accounts.google.com)", "expiration not exceeded", "signature verified via Google JWKS"],
+    "raw_id_token_logged": false,
+    "subject_hash_storage": true,
+    "reject_invalid": "raise 401 invalid_id_token",
+    "verdict": "STRUCTURE_READY_CREDENTIALS_REQUIRED_FOR_STORE_BUILD"
+  },
+  "apple": {
+    "verify_runtime": "GATED_CREDENTIALS_REQUIRED",
+    "env_required": ["APPLE_CLIENT_ID", "APPLE_TEAM_ID", "APPLE_KEY_ID"],
+    "library_required": "PyJWT + Apple JWKS https://appleid.apple.com/auth/keys",
+    "current_state": "SANDBOX_MODE_ACTIVE_CREDENTIALS_NOT_PRESENT",
+    "ios_only_client": true,
+    "checks_planned_when_enabled": ["audience match (aud == APPLE_CLIENT_ID)", "issuer match (iss == https://appleid.apple.com)", "expiration not exceeded", "signature verified via Apple JWKS rotation"],
+    "raw_id_token_logged": false,
+    "subject_hash_storage": true,
+    "reject_invalid": "raise 401 invalid_identity_token",
+    "verdict": "STRUCTURE_READY_CREDENTIALS_REQUIRED_FOR_STORE_BUILD"
+  },
+  "closed_alpha_blocker": true,
+  "safety": {"no_fake_production_readiness": true, "sandbox_mode_clearly_labeled": true, "raw_oauth_token_logged": false, "provider_secrets_in_repo": false},
+  "verdict": "PROVIDER_ID_TOKEN_VERIFY_DESIGN_READY_CREDENTIALS_REQUIRED"
+}
