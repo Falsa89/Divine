@@ -1,0 +1,32 @@
+{
+  "result_version": "alpha_internal_qa_run_result_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_21_v72",
+  "run_read_only": true,
+  "network_used": false,
+  "backend_calls": false,
+  "db_writes": 0,
+  "reward_grant": false,
+  "account_persistence": false,
+  "real_asset_import": false,
+  "runner_invoked": "backend/scripts/alpha_internal_qa_readiness_runner_v1.py",
+  "runner_overall_ready": true,
+  "screens_present": [
+    "frontend/app/training-combat-onboarding-preview.tsx",
+    "frontend/app/first-session-onboarding-preview.tsx",
+    "frontend/app/story-alpha-slice-preview.tsx",
+    "frontend/app/boss-tower-alpha-loop-preview.tsx",
+    "frontend/app/event-arena-alpha-gate-preview.tsx",
+    "frontend/app/event-arena-first-alpha-slice-preview.tsx"
+  ],
+  "screens_missing": [],
+  "contracts_present_count": 8,
+  "contracts_missing": [],
+  "qa_design_present_count": 4,
+  "qa_design_missing": [],
+  "smoke_pass": "PASS",
+  "navigation_pass": "PASS",
+  "guardrail_pass": "PASS",
+  "isolation_pass": "PASS",
+  "ui_polish_pass": "PASS_WITH_MINOR_FINDINGS_DEFERRED",
+  "notes": "Run interamente read-only. Nessuna navigazione automatizzata, solo static presence + guardrail string assertions."
+}

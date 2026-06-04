@@ -1,0 +1,21 @@
+{
+  "criteria_version": "alpha_internal_qa_exit_criteria_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_21_v72",
+  "criteria": [
+    {"id": "no_p0_open", "required": true, "satisfied": true},
+    {"id": "no_p1_open_or_waiver", "required": true, "satisfied": true},
+    {"id": "no_guardrail_violation", "required": true, "satisfied": true},
+    {"id": "no_db_write", "required": true, "satisfied": true},
+    {"id": "no_reward_grant", "required": true, "satisfied": true},
+    {"id": "no_permanent_progress", "required": true, "satisfied": true},
+    {"id": "no_account_persistence", "required": true, "satisfied": true},
+    {"id": "no_public_menu_exposure", "required": true, "satisfied": true},
+    {"id": "ts_clean_on_modified_screens", "required": true, "satisfied": true},
+    {"id": "master_suite_zero_required_fail", "required": true, "satisfied": true},
+    {"id": "md5_invariants_unchanged", "required": true, "satisfied": true},
+    {"id": "qa_evidence_complete", "required": true, "satisfied": true}
+  ],
+  "overall_exit_pass": true,
+  "deferred_p3_findings_count": 3,
+  "db_writes": 0
+}

@@ -1,0 +1,25 @@
+{
+  "matrix_version": "alpha_internal_qa_run_bugfix_menu_design_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_21_v72",
+  "cases": [
+    {"id": "QA-001", "severity": "P0", "area": "prereq", "check": "v71 safe state present", "expected": "PASS"},
+    {"id": "QA-002", "severity": "P0", "area": "qa_run", "check": "QA runner v71 invocato read-only e overall_ready=true", "expected": "PASS"},
+    {"id": "QA-003", "severity": "P0", "area": "qa_run", "check": "Run result + route smoke + guardrail assertion JSON esistono", "expected": "PASS"},
+    {"id": "QA-004", "severity": "P0", "area": "backlog", "check": "Bug backlog + triage matrix + decision log esistono", "expected": "PASS"},
+    {"id": "QA-005", "severity": "P0", "area": "backlog", "check": "p0_open=0 AND p1_open=0", "expected": "PASS"},
+    {"id": "QA-006", "severity": "P0", "area": "bugfix", "check": "applied=false, applied_fixes_count=0, reason=no_safe_fix_needed_or_all_deferred", "expected": "PASS"},
+    {"id": "QA-007", "severity": "P0", "area": "menu_design", "check": "Menu public exposure design + gate matrix + forbidden scope esistono", "expected": "PASS"},
+    {"id": "QA-008", "severity": "P0", "area": "menu_design", "check": "public_menu_exposure_enabled=false AND manual_approval_required=true", "expected": "PASS"},
+    {"id": "QA-009", "severity": "P0", "area": "exit_criteria", "check": "Exit criteria overall_exit_pass=true", "expected": "PASS"},
+    {"id": "QA-010", "severity": "P0", "area": "assets", "check": "Hero asset staging import resta deferred", "expected": "PASS"},
+    {"id": "QA-011", "severity": "P0", "area": "db", "check": "db_writes=0", "expected": "PASS"},
+    {"id": "QA-012", "severity": "P0", "area": "invariants", "check": "MD5 invariants unchanged", "expected": "PASS"},
+    {"id": "QA-013", "severity": "P0", "area": "isolation", "check": "No forbidden imports/fetch/persistence", "expected": "PASS"},
+    {"id": "QA-014", "severity": "P1", "area": "ux", "check": "Coerenza copy hardening panel + state machine labels", "expected": "PASS"},
+    {"id": "QA-015", "severity": "P2", "area": "ux", "check": "Findings P3 documentati con reason_if_deferred", "expected": "PASS"},
+    {"id": "QA-016", "severity": "P3", "area": "docs", "check": "6 docs (433-438) exist", "expected": "PASS"},
+    {"id": "QA-017", "severity": "P3", "area": "validators", "check": "6 validators exist and PASS", "expected": "PASS"}
+  ],
+  "severities": ["P0", "P1", "P2", "P3"],
+  "db_writes": 0
+}

@@ -1,0 +1,31 @@
+{
+  "design_version": "menu_public_exposure_design_after_qa_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_21_v72",
+  "design_only": true,
+  "public_menu_exposure_enabled": false,
+  "home_menu_routing_enabled": false,
+  "production_navigation_changed": false,
+  "db_writes": 0,
+  "manual_approval_required": true,
+  "qa_pass_required": true,
+  "zero_p0_required": true,
+  "zero_p1_required": true,
+  "asset_pack_not_required_for_preview_exposure": true,
+  "asset_pack_required_for_production_exposure": true,
+  "candidate_menu_sections_future": [
+    "Training preview",
+    "Story alpha preview",
+    "Event/Arena alpha preview",
+    "Alpha Preview Hub"
+  ],
+  "forbidden_before_approval": [
+    "public_tabs_route",
+    "home_cta_route",
+    "mandatory_onboarding_route",
+    "account_completion_flag",
+    "reward_progress_persistence",
+    "production_release_exposure"
+  ],
+  "validator_weakening": false,
+  "fake_pass": false
+}

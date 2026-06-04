@@ -1,0 +1,22 @@
+{
+  "contract_version": "menu_public_exposure_forbidden_scope_v1",
+  "applies_to": "menu_public_exposure_design",
+  "forbidden": [
+    "public_menu_exposure", "home_cta_route",
+    "production_navigation_changes", "mandatory_onboarding_route",
+    "account_completion_flag", "reward_progress_persistence",
+    "production_release_exposure", "public_tabs_route",
+    "db_writes", "reward_grant", "battle_engine_runtime",
+    "server_py_changes", "backend_route_changes",
+    "combat_tsx_changes", "story_tsx_changes",
+    "import_from_combat_tsx", "import_from_story_tsx",
+    "character_bible_changes", "final_numbers_changes",
+    "hero_roster_changes", "real_asset_import",
+    "validator_weakening", "fake_pass"
+  ],
+  "allowed": [
+    "design_json", "docs", "markers", "validators",
+    "suite_runner_tuple_and_tag"
+  ],
+  "db_writes": 0
+}

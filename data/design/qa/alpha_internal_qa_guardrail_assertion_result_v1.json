@@ -1,0 +1,18 @@
+{
+  "result_version": "alpha_internal_qa_guardrail_assertion_result_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_21_v72",
+  "assertions": [
+    {"id": "no_backend_fetch_in_preview_screens", "result": "PASS", "evidence": "grep -E 'fetch\\(' su screen preview: nessuna occorrenza fuori da commenti guardrail"},
+    {"id": "no_api_story_battle", "result": "PASS", "evidence": "grep '/api/story/battle' sugli screen preview: nessuna occorrenza fuori commenti"},
+    {"id": "no_api_battle_simulate", "result": "PASS", "evidence": "grep '/api/battle/simulate' sugli screen preview: nessuna occorrenza fuori commenti"},
+    {"id": "no_import_from_story_tsx", "result": "PASS", "evidence": "grep 'from .*story' sugli screen preview: nessuna occorrenza"},
+    {"id": "no_import_from_combat_tsx", "result": "PASS", "evidence": "grep 'from .*combat' sugli screen preview: nessuna occorrenza"},
+    {"id": "no_async_storage", "result": "PASS", "evidence": "grep AsyncStorage sugli screen preview: nessuna occorrenza fuori commenti"},
+    {"id": "no_reward_grant_active", "result": "PASS", "evidence": "validator screen pre-esistenti tutti PASS in master suite"},
+    {"id": "no_public_menu_routing", "result": "PASS", "evidence": "public_menu_routing_enabled=false in tutti i marker e contract"},
+    {"id": "no_asset_import_or_copy", "result": "PASS", "evidence": "v70_deferred_asset_import_gate + report v15 confermano deferred"},
+    {"id": "no_battle_engine_runtime", "result": "PASS", "evidence": "battle_engine_runtime_used=false in tutti i marker pertinenti"}
+  ],
+  "db_writes": 0,
+  "overall": "PASS"
+}

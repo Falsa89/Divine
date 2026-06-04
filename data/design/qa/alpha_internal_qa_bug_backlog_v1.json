@@ -1,0 +1,50 @@
+{
+  "backlog_version": "alpha_internal_qa_bug_backlog_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_21_v72",
+  "open_findings_count": 3,
+  "db_writes": 0,
+  "findings": [
+    {
+      "id": "BUG-V72-001",
+      "severity": "P3",
+      "route": "alpha-preview-hub",
+      "file": "frontend/app/alpha-preview-hub.tsx",
+      "evidence_ref": "alpha_internal_qa_route_smoke_result_v1.json#alpha-preview-hub",
+      "expected": "Etichetta 'public release' coerente e ben leggibile in italiano",
+      "actual": "Etichetta corretta ma testo lungo 'DEEPLINK-ONLY (disabled)' potrebbe essere ridotto a 'DEEPLINK-ONLY' per leggibilita' mobile",
+      "recommended_action": "Polish copy minore in futuro batch P3",
+      "safe_to_fix_now": false,
+      "reason_if_deferred": "P3 cosmetic only, fuori soglia bugfix v72 (default no fix, batch P3 puo' essere aggregato in cycle dedicato)"
+    },
+    {
+      "id": "BUG-V72-002",
+      "severity": "P3",
+      "route": "first-session-onboarding-preview",
+      "file": "frontend/app/first-session-onboarding-preview.tsx",
+      "evidence_ref": "alpha_internal_qa_route_smoke_result_v1.json#first-session-onboarding-preview",
+      "expected": "State machine label sotto step label visibile su schermi piccoli (360px)",
+      "actual": "Visibile, italic 10pt - su 360px potrebbe beneficiare di line-height >14 o margin maggiore",
+      "recommended_action": "Micro polish stilistico, non bloccante",
+      "safe_to_fix_now": false,
+      "reason_if_deferred": "P3 polish, non blocker. Default no fix v72."
+    },
+    {
+      "id": "BUG-V72-003",
+      "severity": "P3",
+      "route": "alpha-preview-hub",
+      "file": "frontend/app/alpha-preview-hub.tsx",
+      "evidence_ref": "alpha_internal_qa_guardrail_assertion_result_v1.json",
+      "expected": "Ordinamento entries per QA priority (P0 -> P3) opzionale",
+      "actual": "Ordinamento attuale per area logica, non per priorita'",
+      "recommended_action": "Opzionale: aggiungere sort P0 first in batch successivo",
+      "safe_to_fix_now": false,
+      "reason_if_deferred": "P3 enhancement, non difetto. Default no fix."
+    }
+  ],
+  "p0_open": 0,
+  "p1_open": 0,
+  "p2_open": 0,
+  "p3_open": 3,
+  "validator_weakening": false,
+  "fake_pass": false
+}

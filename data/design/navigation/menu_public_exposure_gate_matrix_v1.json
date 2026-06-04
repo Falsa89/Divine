@@ -1,0 +1,17 @@
+{
+  "matrix_version": "menu_public_exposure_gate_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_21_v72",
+  "gates": [
+    {"id": "qa_pass", "label": "Alpha internal QA pass completata", "satisfied": true, "required": true},
+    {"id": "zero_p0_open", "label": "Zero finding P0 aperti", "satisfied": true, "required": true},
+    {"id": "zero_p1_open", "label": "Zero finding P1 aperti (o waiver firmato)", "satisfied": true, "required": true},
+    {"id": "guardrail_assertions_pass", "label": "Tutte le guardrail assertion PASS", "satisfied": true, "required": true},
+    {"id": "md5_invariants_intact", "label": "MD5 invariants ufficiali intatti", "satisfied": true, "required": true},
+    {"id": "manual_approval", "label": "Manual approval esplicita dell'utente", "satisfied": false, "required": true},
+    {"id": "closed_alpha_testing_complete", "label": "Closed alpha testing completato", "satisfied": false, "required": true},
+    {"id": "asset_pack_for_production_exposure", "label": "Asset pack reale fornito per production exposure", "satisfied": false, "required": true}
+  ],
+  "overall_ready_for_public_exposure": false,
+  "db_writes": 0,
+  "public_menu_exposure_enabled": false
+}
