@@ -2420,6 +2420,43 @@ OPTIONAL = [
     ('PROJECT-ALPHA-INTERNAL-QA-EXECUTION', 'validate_alpha_internal_qa_execution_v1.py'),
     ('PROJECT-ONBOARDING-MENU-GATE-ALPHA-QA-MATRIX', 'validate_onboarding_menu_gate_alpha_qa_matrix_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-20-v71-ROLLUP', 'validate_mega_release_acceleration_20_v71_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_21_ALPHA_INTERNAL_QA_RUN_BUGFIX_TRIAGE_AND_MENU_EXPOSURE_DESIGN_PACK_v72
+    # PUBLIC_SYNC_TAG_v72_MEGA_RELEASE_ACCELERATION_21_ALPHA_QA_MENU_DESIGN
+    # ------------------------------------------------------------------------
+    # ALPHA QA RUN + BUGFIX TRIAGE + MENU EXPOSURE DESIGN pack. Accorpa:
+    #   1) Alpha Internal QA Run Evidence - device matrix + run log +
+    #      severity bucket evidence (design-only, JSON fixtures).
+    #   2) Alpha Internal QA Bug Backlog - triage list + P0/P1/P2/P3 bucket
+    #      assignment + deferred backlog (design-only).
+    #   3) Controlled Preview-Only Bugfix - default no code change.
+    #      Micro-fix solo se P0/P1, safe, preview/deeplink only,
+    #      UI/copy/guardrail/static TS, no fetch/API/DB/persistence.
+    #   4) Menu Public Exposure Design (AFTER QA gate) - design-only,
+    #      no production navigation changes, no public_menu_routing_enabled.
+    #   5) Alpha QA Exit Criteria + v73 Readiness - exit gate criteria,
+    #      readiness check fixtures (design-only).
+    #   6) Rollup v72 - blanket meta validator.
+    # 6 OPTIONAL tuples + tag + docs (433-438) + markers + rollup.
+    #
+    # ESCLUSO/DEFERRED: hero_asset_staging_import_and_resolver_super_pack
+    # (gated finche' asset pack reale non fornito dall'utente),
+    # menu_public_exposure_execution (solo design in v72, execution in v73).
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali + extra unchanged guardrails preservati.
+    # db_writes=0, no reward grant, no permanent progress, no account
+    # persistence/flag writes, no async storage persistence, no event
+    # currency, no arena ranking/MMR, no matchmaking live,
+    # no public_menu_routing_enabled, no real asset import/copy,
+    # no runtime asset resolver change, no Character Bible/final_numbers.
+    # No story.tsx/combat.tsx import. No fake PASS. No validator weakening.
+    # ========================================================================
+    ('PROJECT-ALPHA-INTERNAL-QA-RUN-EVIDENCE', 'validate_alpha_internal_qa_run_evidence_v1.py'),
+    ('PROJECT-ALPHA-INTERNAL-QA-BUG-BACKLOG', 'validate_alpha_internal_qa_bug_backlog_v1.py'),
+    ('PROJECT-CONTROLLED-PREVIEW-ONLY-BUGFIX', 'validate_controlled_preview_only_bugfix_v1.py'),
+    ('PROJECT-MENU-PUBLIC-EXPOSURE-DESIGN-AFTER-QA', 'validate_menu_public_exposure_design_after_qa_v1.py'),
+    ('PROJECT-ALPHA-QA-EXIT-CRITERIA-v73-READINESS', 'validate_alpha_qa_exit_criteria_v73_readiness_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-21-v72-ROLLUP', 'validate_mega_release_acceleration_21_v72_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
