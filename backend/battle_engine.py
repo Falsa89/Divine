@@ -1296,3 +1296,46 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
         }
 
     return router
+
+
+# ===========================================================================
+# MEGA_RELEASE_ACCELERATION_44_v95 — Engine status/DoT/taunt patch metadata.
+# Old MD5: 151ca35ad3bc35f0a6209cb3744ed440 (v94 unchanged)
+# This append is ADDITIVE-ONLY: nessuna modifica alla logica esistente.
+# Espone le costanti del design contract v94 come metadata importabili per
+# eventuali integrazioni runtime future. Le esistenti funzioni del battle
+# engine NON sono modificate.
+# v95 unlock authorized for this minimal additive metadata block.
+# ===========================================================================
+
+V95_ENGINE_STATUS_DOT_METADATA = {
+    "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+    "applied_runtime": "metadata_only_no_behavior_change",
+    "dot_core": {
+        "Burn": {"category": "elemental_fire", "tick": "end_of_target_turn", "duration": 3, "stack": "sum_ticks", "max_stacks": 5},
+        "Poison": {"category": "bio", "tick": "end_of_target_turn", "duration": 4, "stack": "sum_ticks", "max_stacks": 5},
+        "Bleed": {"category": "physical", "tick": "end_of_target_turn", "duration": 3, "stack": "sum_ticks", "max_stacks": 5},
+        "Shock": {"category": "elemental_thunder", "tick": "on_action_attempt", "duration": 2, "stack": "reset_duration", "max_stacks": 1},
+        "Frostbite": {"category": "elemental_ice", "tick": "end_of_target_turn", "duration": 3, "stack": "cap_stacks", "max_stacks": 3},
+        "Curse": {"category": "shadow", "tick": "end_of_target_turn", "duration": 4, "stack": "overwrite", "max_stacks": 1},
+    },
+    "cleanse_policies": ["all", "top", "by_category", "by_priority", "one_stack", "remove_status"],
+    "immunity_behavior": "blocks_new_application_only",
+    "taunt": {
+        "single_target_intercepts": True,
+        "aoe_all_intercepts": False,
+        "aoe_partial_must_respect": True,
+    },
+    "boss_hard_control_conversion": {
+        "Freeze": "speed_down_30pct",
+        "Stun": "skill_power_reduction_25pct",
+        "Silence": "skill_power_reduction_15pct",
+        "Sleep": "turn_delay_1",
+        "Petrify": "defense_down_20pct",
+    },
+    "battle_report_extension_fields": [
+        "dot_damage_done", "status_applied_count", "healing_done",
+        "cleanse_count", "status_prevented_by_immunity_count", "taunt_redirect_count",
+    ],
+    "safety": {"db_writes": 0, "reward_live": False, "final_numbers_balance_lock": False},
+}

@@ -515,14 +515,25 @@ app.include_router(gear_cap_preview_router)
 from routes.gear_forge_preview import router as gear_forge_preview_router
 app.include_router(gear_forge_preview_router)
 
+# MEGA_RELEASE_ACCELERATION_44_v95 — Read-only catalog router (runtime apply).
+# Endpoints: GET /api/encounter-source/catalog, GET /api/encounter-source/get,
+# GET /api/live-mode/catalog, GET /api/avatar-placeholder/catalog.
+# Read-only / idempotent / NO DB writes / NO reward / NO ranking / NO PII.
+# Old MD5 server.py: 055df030553f4791e8cac14254f1b148. v95 unlock authorized.
+try:
+    from routes.v95_readonly_catalog import router as v95_readonly_catalog_router
+    app.include_router(v95_readonly_catalog_router)
+except Exception as _v95_err:
+    # Fail-safe: se l'import fallisce non blocca il boot
+    import logging
+    logging.getLogger(__name__).warning("v95_readonly_catalog router import failed: %s", _v95_err)
+
 # PROJECT_MATERIAL_RAID_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
 # Returns 503 when MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
 # no materials granted, no live mutation, no stamina, no tickets, no paid attempts.
 # Reward claim DISABLED in questo pack: l'audit (track A) ha trovato che non esiste una
 # canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,
 # /item-shop restano completamente intoccati. Separato da Hero Elevation, Gemme, Rune,
-from routes.gear_forge_preview import router as gear_forge_preview_router
-app.include_router(gear_forge_preview_router)
 
 # PROJECT_MATERIAL_RAID_RUNTIME preview-only route (DISABLED-BY-DEFAULT INERT).
 # Returns 503 when MATERIAL_RAID_RUNTIME_PREVIEW_ENABLED is unset/!=true. No DB writes,
