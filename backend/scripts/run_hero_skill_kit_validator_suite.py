@@ -2346,6 +2346,42 @@ OPTIONAL = [
     ('PROJECT-HERO-ASSET-DRYRUN-MANIFEST-READINESS', 'validate_hero_asset_dryrun_manifest_readiness_v1.py'),
     ('PROJECT-TRAINING-EVENT-ARENA-ASSET-READINESS-QA', 'validate_training_event_arena_asset_readiness_qa_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-18-v69-ROLLUP', 'validate_mega_release_acceleration_18_v69_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_19_EVENT_ARENA_FIRST_ALPHA_AND_FIRST_SESSION_ONBOARDING_SUPER_PACK_v70
+    # PUBLIC_SYNC_TAG_v70_MEGA_RELEASE_ACCELERATION_19_EVENT_ARENA_FIRST_ALPHA_AND_FIRST_SESSION_ONBOARDING
+    # ------------------------------------------------------------------------
+    # ALPHA SLICE + ONBOARDING pack. Accorpa due lane:
+    #   1) Event/Arena First Alpha Slice preview - nuovo screen deeplink-only
+    #      con switch Event/Arena, timeline 6-7 step deterministica per slice,
+    #      result preview disabled (no reward, no currency, no ranking/MMR).
+    #   2) First Session Onboarding preview - nuovo screen deeplink-only con
+    #      6 step (welcome -> training -> story -> event/arena -> asset
+    #      explainer -> next steps). I "link" sono solo hint testuali.
+    # 7 OPTIONAL tuples + tag + 7 docs (420-426) + 7 markers + rollup.
+    #
+    # ESCLUSO: hero_asset_staging_import_and_resolver_super_pack. Resta
+    # deferred/gated finche' non viene fornito un asset pack reale.
+    #
+    # New deeplink-only screens (NO public menu routing):
+    #   frontend/app/event-arena-first-alpha-slice-preview.tsx
+    #   frontend/app/first-session-onboarding-preview.tsx
+    # Italian UI, no /api calls, no Reanimated/AsyncStorage,
+    # no import from story.tsx/combat.tsx/battle_engine.
+    # ------------------------------------------------------------------------
+    # Invariants: 5 MD5 ufficiali + extra unchanged guardrails preservati.
+    # db_writes=0, no reward grant, no permanent progress, no event currency,
+    # no arena ranking/MMR, no leaderboard, no matchmaking live,
+    # no account flag writes, no AsyncStorage persistence,
+    # no permanent_onboarding_complete, no real asset import/copy.
+    # No fake PASS. No validator weakening.
+    # ========================================================================
+    ('PROJECT-EVENT-ARENA-FIRST-ALPHA-SLICE-CONTRACT', 'validate_event_arena_first_alpha_slice_contract_v1.py'),
+    ('PROJECT-EVENT-ARENA-FIRST-ALPHA-SLICE-PREVIEW-UI', 'validate_event_arena_first_alpha_slice_preview_ui_v1.py'),
+    ('PROJECT-FIRST-SESSION-ONBOARDING-CONTRACT', 'validate_first_session_onboarding_contract_v1.py'),
+    ('PROJECT-FIRST-SESSION-ONBOARDING-PREVIEW-UI', 'validate_first_session_onboarding_preview_ui_v1.py'),
+    ('PROJECT-ALPHA-PREVIEW-NAVIGATION-ASSET-BOUNDARY', 'validate_alpha_preview_navigation_asset_boundary_v1.py'),
+    ('PROJECT-EVENT-ARENA-ONBOARDING-ALPHA-QA', 'validate_event_arena_onboarding_alpha_qa_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-19-v70-ROLLUP', 'validate_mega_release_acceleration_19_v70_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

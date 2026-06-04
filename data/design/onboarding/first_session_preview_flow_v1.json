@@ -1,0 +1,17 @@
+{
+  "flow_version": "first_session_preview_flow_v1",
+  "first_session_preview_only": true,
+  "steps": [
+    {"order": 1, "id": "welcome", "label": "Benvenuto (preview)", "hint": "Introduzione locale, nessun account write"},
+    {"order": 2, "id": "training_combat_onboarding_preview", "label": "Training di combattimento", "hint": "Deeplink-only verso training-combat-onboarding-preview"},
+    {"order": 3, "id": "story_alpha_slice_preview", "label": "Story alpha slice", "hint": "Deeplink-only verso story-alpha-slice-preview"},
+    {"order": 4, "id": "event_arena_gate_or_alpha_preview", "label": "Event/Arena gate o alpha", "hint": "Deeplink-only verso event-arena-alpha-gate-preview o event-arena-first-alpha-slice-preview"},
+    {"order": 5, "id": "hero_asset_status_explainer", "label": "Stato Hero Asset", "hint": "Spiegazione locale: asset reali deferred fino a pack reale"},
+    {"order": 6, "id": "next_steps_summary", "label": "Prossimi passi", "hint": "Riepilogo locale, nessun completion write"}
+  ],
+  "db_writes": 0,
+  "permanent_onboarding_complete": false,
+  "reward_grant_enabled": false,
+  "account_flag_writes": false,
+  "async_storage_persistence": false
+}

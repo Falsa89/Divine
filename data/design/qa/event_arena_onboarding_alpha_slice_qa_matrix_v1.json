@@ -1,0 +1,31 @@
+{
+  "matrix_version": "event_arena_onboarding_alpha_slice_qa_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_19_v70",
+  "cases": [
+    {"id": "QA-001", "severity": "P0", "area": "prereq", "check": "v69 safe state present", "expected": "PASS"},
+    {"id": "QA-002", "severity": "P0", "area": "event_arena", "check": "Event/Arena first alpha contracts exist", "expected": "PASS"},
+    {"id": "QA-003", "severity": "P0", "area": "event_arena", "check": "Event/Arena first alpha preview screen exists deeplink-only", "expected": "PASS"},
+    {"id": "QA-004", "severity": "P0", "area": "event_arena", "check": "Event timeline 5-7 steps", "expected": "PASS"},
+    {"id": "QA-005", "severity": "P0", "area": "event_arena", "check": "Arena bot/non-ranked timeline 5-7 steps", "expected": "PASS"},
+    {"id": "QA-006", "severity": "P0", "area": "event_arena", "check": "No event currency", "expected": "PASS"},
+    {"id": "QA-007", "severity": "P0", "area": "event_arena", "check": "No arena ranking/MMR/leaderboard/matchmaking live", "expected": "PASS"},
+    {"id": "QA-008", "severity": "P0", "area": "first_session", "check": "First Session contracts exist", "expected": "PASS"},
+    {"id": "QA-009", "severity": "P0", "area": "first_session", "check": "First Session preview screen exists", "expected": "PASS"},
+    {"id": "QA-010", "severity": "P0", "area": "first_session", "check": "Onboarding preview writes no account / no local persistence", "expected": "PASS"},
+    {"id": "QA-011", "severity": "P0", "area": "navigation", "check": "Links are deeplink-only, no public menu routing", "expected": "PASS"},
+    {"id": "QA-012", "severity": "P0", "area": "assets", "check": "Hero Asset import remains deferred / gated", "expected": "PASS"},
+    {"id": "QA-013", "severity": "P0", "area": "isolation", "check": "No backend fetch in new screens", "expected": "PASS"},
+    {"id": "QA-014", "severity": "P0", "area": "isolation", "check": "No import from story.tsx or combat.tsx", "expected": "PASS"},
+    {"id": "QA-015", "severity": "P0", "area": "isolation", "check": "No battle_engine / /api/story/battle / /api/battle/simulate", "expected": "PASS"},
+    {"id": "QA-016", "severity": "P0", "area": "rewards", "check": "No reward grant", "expected": "PASS"},
+    {"id": "QA-017", "severity": "P0", "area": "progress", "check": "No permanent progress / no onboarding complete write", "expected": "PASS"},
+    {"id": "QA-018", "severity": "P0", "area": "db", "check": "db_writes=0", "expected": "PASS"},
+    {"id": "QA-019", "severity": "P0", "area": "invariants", "check": "MD5 invariants unchanged", "expected": "PASS"},
+    {"id": "QA-020", "severity": "P1", "area": "ui", "check": "Mobile layout / rotation safe", "expected": "PASS"},
+    {"id": "QA-021", "severity": "P2", "area": "ux", "check": "Event/Arena switch + step nav + autoplay cleanup", "expected": "PASS"},
+    {"id": "QA-022", "severity": "P3", "area": "docs", "check": "7 docs (420-426) exist", "expected": "PASS"},
+    {"id": "QA-023", "severity": "P3", "area": "validators", "check": "7 validators exist and PASS", "expected": "PASS"}
+  ],
+  "severities": ["P0", "P1", "P2", "P3"],
+  "db_writes": 0
+}

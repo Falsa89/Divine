@@ -1,0 +1,55 @@
+{
+  "marker": "mega_release_acceleration_19_v70_rollup_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_19_EVENT_ARENA_FIRST_ALPHA_AND_FIRST_SESSION_ONBOARDING_SUPER_PACK_v70",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v70_MEGA_RELEASE_ACCELERATION_19_EVENT_ARENA_FIRST_ALPHA_AND_FIRST_SESSION_ONBOARDING",
+  "included_lanes": [
+    "event_arena_first_alpha_slice_preview",
+    "first_session_onboarding_preview"
+  ],
+  "deferred_lanes": [
+    "hero_asset_staging_import_and_resolver_super_pack"
+  ],
+  "docs": [
+    "docs/divine/420_EVENT_ARENA_FIRST_ALPHA_SLICE_CONTRACT.md",
+    "docs/divine/421_EVENT_ARENA_FIRST_ALPHA_SLICE_PREVIEW_UI.md",
+    "docs/divine/422_FIRST_SESSION_ONBOARDING_CONTRACT.md",
+    "docs/divine/423_FIRST_SESSION_ONBOARDING_PREVIEW_UI.md",
+    "docs/divine/424_ALPHA_PREVIEW_NAVIGATION_AND_ASSET_IMPORT_BOUNDARY.md",
+    "docs/divine/425_EVENT_ARENA_ONBOARDING_ALPHA_QA.md",
+    "docs/divine/426_MEGA_RELEASE_ACCELERATION_19_EVENT_ARENA_ONBOARDING_v70.md"
+  ],
+  "validators": [
+    "backend/scripts/validate_event_arena_first_alpha_slice_contract_v1.py",
+    "backend/scripts/validate_event_arena_first_alpha_slice_preview_ui_v1.py",
+    "backend/scripts/validate_first_session_onboarding_contract_v1.py",
+    "backend/scripts/validate_first_session_onboarding_preview_ui_v1.py",
+    "backend/scripts/validate_alpha_preview_navigation_asset_boundary_v1.py",
+    "backend/scripts/validate_event_arena_onboarding_alpha_qa_v1.py",
+    "backend/scripts/validate_mega_release_acceleration_19_v70_rollup.py"
+  ],
+  "new_screens": [
+    "frontend/app/event-arena-first-alpha-slice-preview.tsx",
+    "frontend/app/first-session-onboarding-preview.tsx"
+  ],
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "permanent_onboarding_complete": false,
+  "battle_engine_runtime_used": false,
+  "backend_route_changed": false,
+  "server_py_changed": false,
+  "story_tsx_changed": false,
+  "combat_tsx_changed": false,
+  "event_currency_enabled": false,
+  "arena_ranking_enabled": false,
+  "matchmaking_live": false,
+  "account_flag_writes": false,
+  "async_storage_persistence": false,
+  "real_asset_import": false,
+  "file_copy_enabled": false,
+  "asset_runtime_resolver_changed": false,
+  "character_bible_changed": false,
+  "hero_roster_changed": false,
+  "validator_weakening": false,
+  "fake_pass": false
+}
