@@ -1,0 +1,26 @@
+{
+  "version": "v1",
+  "mode": "wave5_rollback_drill",
+  "timestamp_utc": "2026-06-04T17:36:46Z",
+  "drill_executed": true,
+  "rolled_back_count": 3,
+  "policy": "sample_three_canary_tx",
+  "db_rollback": false,
+  "db_writes": 0,
+  "local_file_writes": 3,
+  "results": [
+    {
+      "tx_id": "canary-wave5-tx-000001",
+      "rolled_back": true
+    },
+    {
+      "tx_id": "canary-wave5-tx-000002",
+      "rolled_back": true
+    },
+    {
+      "tx_id": "canary-wave5-tx-000003",
+      "rolled_back": true
+    }
+  ],
+  "notes": "Drill rollback wave5 file-only (3 tx campione). Nessuna mutazione DB."
+}

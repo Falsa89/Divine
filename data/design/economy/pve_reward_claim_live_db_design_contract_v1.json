@@ -1,0 +1,132 @@
+{
+  "version": "v1",
+  "contract": "pve_reward_claim_live_db_design",
+  "design_only": true,
+  "live_db_apply_allowed": false,
+  "endpoint_implemented": false,
+  "future_dedicated_pack_required": true,
+  "sections": {
+    "db_transaction_policy": {
+      "isolation_level": "snapshot_read_committed",
+      "two_phase": false,
+      "single_writer_per_user": true,
+      "unique_constraint": ["user_id", "claim_id"],
+      "idempotency_required": true,
+      "idempotency_key_field": "idempotency_key",
+      "idempotency_key_format": "idem:live:{user_id_hash}:{claim_id}",
+      "max_retries": 3,
+      "retry_backoff_ms": [50, 200, 800],
+      "deadline_ms": 1500,
+      "on_conflict": "return_existing_tx_no_double_grant",
+      "on_failure": "reject_and_log_no_partial_write"
+    },
+    "real_account_allowlist_schema": {
+      "collection": "pve_reward_claim_live_allowlist",
+      "fields": {
+        "user_id_hash": "sha256:32",
+        "alias": "string<=24",
+        "server_id": "string",
+        "added_by": "string",
+        "added_at": "iso_utc",
+        "expires_at": "iso_utc|null",
+        "reason": "string"
+      },
+      "pii_allowed": false,
+      "max_size": 200,
+      "alias_only": true,
+      "hard_block_outside_allowlist": true
+    },
+    "auth_guard": {
+      "required_scopes": ["pve.reward_claim:invoke"],
+      "required_role": "player",
+      "deny_anonymous": true,
+      "server_signed_request_required": true,
+      "abuse_rate_limit": { "window_seconds": 60, "max_attempts": 6 },
+      "step_up_required_for_admin": true
+    },
+    "endpoint_contract": {
+      "method": "POST",
+      "path": "/api/pve/reward/claim",
+      "status": "DESIGN_ONLY_NOT_IMPLEMENTED",
+      "request": {
+        "user_id_hash": "sha256:32",
+        "claim_id": "string<=64",
+        "route_id": "enum_of_8_alpha_preview_routes",
+        "idempotency_key": "string<=128",
+        "client_nonce": "uuidv4"
+      },
+      "response_ok": {
+        "tx_id": "string",
+        "applied": "bool",
+        "reward_summary_hash": "sha256:32",
+        "server_time_utc": "iso_utc"
+      },
+      "response_reject": {
+        "applied": false,
+        "reason_code": "enum",
+        "server_time_utc": "iso_utc"
+      },
+      "reason_codes": [
+        "non_allowlisted_user",
+        "over_user_cap",
+        "over_cap_reward",
+        "forbidden_reward_type",
+        "malformed_route",
+        "event_arena_ranking_reward_forbidden",
+        "idempotency_conflict_hash_mismatch",
+        "idempotent_replay",
+        "real_account_id_forbidden_in_canary",
+        "kill_switch_active"
+      ]
+    },
+    "rollback_script": {
+      "file": "backend/scripts/pve_reward_claim_live_rollback_design_only.py",
+      "status": "DESIGN_ONLY_NOT_CREATED",
+      "strategy": "per_tx_token_revoke",
+      "max_rollback_window_minutes": 60,
+      "requires_admin_dual_approval": true,
+      "requires_checksum": true
+    },
+    "observation_sink": {
+      "sink_type": "append_only_jsonl",
+      "path_pattern": "data/observation/live/pve_reward_claim/{yyyy-mm-dd}.jsonl",
+      "retention_days": 30,
+      "redact_pii": true,
+      "metrics_required": [
+        "live_claim_attempts_total",
+        "live_claim_success_total",
+        "live_claim_reject_total",
+        "idempotent_replay_total",
+        "duplicate_conflict_total",
+        "non_allowlisted_reject_total",
+        "over_cap_reject_total",
+        "premium_reward_reject_total",
+        "malformed_route_reject_total",
+        "event_arena_ranking_reward_reject_total",
+        "real_account_id_reject_total",
+        "kill_switch_active_total",
+        "rollback_required_total",
+        "error_total"
+      ]
+    },
+    "kill_switch": {
+      "flag": "PVE_REWARD_CLAIM_LIVE_KILL_SWITCH",
+      "trigger_value": "ENGAGE",
+      "default": "DISENGAGED",
+      "on_engage_reject_all": true,
+      "admin_dual_approval_required_to_engage": false,
+      "admin_dual_approval_required_to_disengage": true,
+      "audit_log_required": true
+    },
+    "manual_approval_for_apply": {
+      "required": true,
+      "checksum_required": true,
+      "checksum_format": "sha256",
+      "two_humans_required": true,
+      "approval_phrase_required": true
+    }
+  },
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "notes": "Contratto di design completo. NESSUNA implementazione di endpoint, NESSUN apply DB. Sezioni necessarie a un futuro pack v84 di live_db_dry_run (mai con apply)."
+}

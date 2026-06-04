@@ -1,0 +1,29 @@
+{
+  "version": "v1",
+  "from": "v83",
+  "to": "v84",
+  "recommendation": "live_db_dry_run_pack_v84_no_apply",
+  "alternative_if_blocked": "continue_local_canary_or_hardening_v84",
+  "required_for_future_live_db_pack": [
+    "db_transaction_policy",
+    "real_account_allowlist_schema",
+    "auth_guard",
+    "endpoint_contract",
+    "rollback_script",
+    "observation_sink",
+    "kill_switch",
+    "manual_approval_for_apply"
+  ],
+  "hard_constraints": [
+    "no_live_db_writes",
+    "no_endpoint_implementation",
+    "no_real_reward_grant",
+    "no_premium_currency",
+    "no_battle_engine_change",
+    "no_server_py_change",
+    "manual_dual_approval_required",
+    "checksum_required"
+  ],
+  "db_writes": 0,
+  "applied_to_live": false
+}

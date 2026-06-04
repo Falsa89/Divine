@@ -1,0 +1,20 @@
+{
+  "marker": "pve_reward_claim_live_db_design_contract",
+  "version": "v1",
+  "created_at_utc": "2026-06-04T17:32:00Z",
+  "source_pack": "v83",
+  "design_only": true,
+  "live_db_apply_allowed": false,
+  "endpoint_implemented": false,
+  "db_writes": 0,
+  "required_for_future_live_db_pack": [
+    "db_transaction_policy",
+    "real_account_allowlist_schema",
+    "auth_guard",
+    "endpoint_contract",
+    "rollback_script",
+    "observation_sink",
+    "kill_switch",
+    "manual_approval_for_apply"
+  ]
+}

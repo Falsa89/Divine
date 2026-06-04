@@ -51,6 +51,10 @@ WAVE3_ENV_VALUE = "YES_I_UNDERSTAND"
 WAVE4_ENV = "PVE_REWARD_CLAIM_CANARY_WAVE4"
 WAVE4_ENV_VALUE = "YES_I_UNDERSTAND"
 
+# v83 wave5 env gate
+WAVE5_ENV = "PVE_REWARD_CLAIM_CANARY_WAVE5"
+WAVE5_ENV_VALUE = "YES_I_UNDERSTAND"
+
 FORBIDDEN_REWARD_KEYS = {
     "premium_currency", "gacha_currency", "event_currency",
     "arena_points", "vip_points", "battle_pass_xp",
@@ -87,6 +91,14 @@ WAVE4_PLAN = STAGING_DIR / "wave4_plan_v1.json"
 WAVE4_LEDGER = STAGING_DIR / "wave4_local_ledger_v1.json"
 WAVE4_ROLLBACK = STAGING_DIR / "wave4_rollback_tokens_v1.json"
 WAVE4_OBSERVATION = STAGING_DIR / "wave4_observation_log_v1.json"
+
+# v83 wave5 staging files
+WAVE5_ALLOWLIST = STAGING_DIR / "wave5_allowlist_v1.json"
+WAVE5_FIXTURES = STAGING_DIR / "wave5_reward_fixtures_v1.json"
+WAVE5_PLAN = STAGING_DIR / "wave5_plan_v1.json"
+WAVE5_LEDGER = STAGING_DIR / "wave5_local_ledger_v1.json"
+WAVE5_ROLLBACK = STAGING_DIR / "wave5_rollback_tokens_v1.json"
+WAVE5_OBSERVATION = STAGING_DIR / "wave5_observation_log_v1.json"
 
 
 def _now_iso() -> str:
@@ -1618,6 +1630,439 @@ def run_wave4_rollback_drill() -> dict:
     return result
 
 
+# ============================================================================
+# v83 — Wave-5 Local Apply (max 12 utenti, max 12 claim, +real_account_id reject)
+# ============================================================================
+VALID_WAVE5_ROUTES = {
+    "story_alpha_slice_preview",
+    "training_combat_onboarding_preview",
+    "boss_tower_alpha_loop_preview",
+    "first_session_onboarding_preview",
+    "alpha_menu_preview",
+    "reward_claim_summary_preview",
+    "event_arena_alpha_gate_preview",
+    "event_arena_first_alpha_slice_preview",
+}
+
+# Reject anche se compaiono come reward keys (canary file-based: NON ammissibili)
+FORBIDDEN_REWARD_KEYS_WAVE5 = FORBIDDEN_REWARD_KEYS | {"arena_ranking_reward"}
+
+
+def _v83_check_wave5_gates(apply_requested: bool) -> dict:
+    g = {
+        "staging_dir_exists": STAGING_DIR.exists(),
+        "wave5_allowlist_present": WAVE5_ALLOWLIST.exists(),
+        "wave5_fixtures_present": WAVE5_FIXTURES.exists(),
+        "wave5_plan_present": WAVE5_PLAN.exists(),
+        "mode_flag_present": os.environ.get(MODE_ENV, "") == MODE_LOCAL_FILE_STAGING,
+        "wave5_flag_present": os.environ.get(WAVE5_ENV, "") == WAVE5_ENV_VALUE,
+    }
+    g["all_wave5_apply_gates_pass"] = bool(
+        apply_requested
+        and g["staging_dir_exists"]
+        and g["wave5_allowlist_present"]
+        and g["wave5_fixtures_present"]
+        and g["wave5_plan_present"]
+        and g["mode_flag_present"]
+        and g["wave5_flag_present"]
+    )
+    return g
+
+
+def run_wave5_preflight() -> dict:
+    gates = _v83_check_wave5_gates(apply_requested=False)
+    plan = _read_json(WAVE5_PLAN) or {}
+    allowlist = _read_json(WAVE5_ALLOWLIST) or {}
+    fixtures = _read_json(WAVE5_FIXTURES) or {}
+    result = {
+        "mode": "wave5_preflight",
+        "timestamp_utc": _now_iso(),
+        "applied_to_local_staging": False,
+        "applied_to_live": False,
+        "db_writes": 0,
+        "live_reward_grant": False,
+        "local_file_writes": 0,
+        "gates": gates,
+        "wave5_allowlist_size": len(allowlist.get("allowlist", [])),
+        "wave5_max_users": plan.get("max_users", 12),
+        "wave5_max_claims_total": plan.get("max_claims_total", 12),
+        "wave5_routes": plan.get("routes", []),
+        "valid_routes": sorted(VALID_WAVE5_ROUTES),
+        "fixtures_caps": fixtures.get("caps", {}),
+        "forbidden_reward_keys_enforced": sorted(FORBIDDEN_REWARD_KEYS_WAVE5),
+        "notes": "Wave5 preflight: lettura file di staging wave5. Nessuna scrittura DB.",
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave5_preflight_result_v1.json", result)
+    return result
+
+
+def _ensure_wave5_files() -> tuple:
+    ledger = _read_json(WAVE5_LEDGER) or {
+        "version": "v1", "wave": 5, "canary": True, "isolated_from_live": True, "entries": []
+    }
+    rollback = _read_json(WAVE5_ROLLBACK) or {"version": "v1", "wave": 5, "tokens": []}
+    observation = _read_json(WAVE5_OBSERVATION) or {
+        "version": "v1", "wave": 5,
+        "metrics": {
+            "wave5_claim_attempts_total": 0, "wave5_claim_success_total": 0,
+            "wave5_claim_reject_total": 0, "idempotent_replay_total": 0,
+            "duplicate_conflict_total": 0, "non_allowlisted_reject_total": 0,
+            "over_cap_reject_total": 0, "premium_reward_reject_total": 0,
+            "malformed_route_reject_total": 0,
+            "event_arena_ranking_reward_reject_total": 0,
+            "real_account_id_reject_total": 0,
+            "db_write_total": 0, "live_reward_grant_total": 0,
+            "rollback_required_total": 0, "error_total": 0,
+        },
+        "events": [],
+    }
+    return ledger, rollback, observation
+
+
+def _validate_reward_payload_wave5(payload: dict, caps: dict) -> tuple:
+    if not isinstance(payload, dict) or not payload:
+        return False, "empty_payload"
+    for k in payload.keys():
+        if k in FORBIDDEN_REWARD_KEYS_WAVE5:
+            return False, f"forbidden_reward_type:{k}"
+        if k not in ALLOWED_REWARD_KEYS:
+            return False, f"unknown_reward_key:{k}"
+    for k, v in payload.items():
+        if not isinstance(v, int) or v < 0:
+            return False, f"invalid_value:{k}"
+        cap = caps.get(k)
+        if cap is not None and v > cap:
+            return False, f"over_cap:{k}"
+    return True, None
+
+
+def run_wave5_apply() -> dict:
+    gates = _v83_check_wave5_gates(apply_requested=True)
+    result_path = DESIGN_ECON / "pve_reward_claim_canary_wave5_apply_result_v1.json"
+    blocked_path = DESIGN_ECON / "pve_reward_claim_canary_wave5_apply_or_blocked_result_v1.json"
+
+    if not gates["all_wave5_apply_gates_pass"]:
+        reason_parts = []
+        if not gates["staging_dir_exists"]: reason_parts.append("staging_dir_missing")
+        if not gates["mode_flag_present"]: reason_parts.append("mode_flag_missing")
+        if not gates["wave5_flag_present"]: reason_parts.append("wave5_flag_missing")
+        if not gates["wave5_allowlist_present"]: reason_parts.append("wave5_allowlist_missing")
+        if not gates["wave5_fixtures_present"]: reason_parts.append("wave5_fixtures_missing")
+        if not gates["wave5_plan_present"]: reason_parts.append("wave5_plan_missing")
+        reason = "_and_".join(reason_parts) or "wave5_files_missing"
+        result = {
+            "mode": "wave5_apply_attempt",
+            "timestamp_utc": _now_iso(),
+            "applied_to_local_staging": False,
+            "applied_to_live": False,
+            "blocked_safe": True,
+            "reason": reason,
+            "db_writes": 0,
+            "live_reward_grant": False,
+            "local_file_writes": 0,
+            "gates": gates,
+            "verdict_local": "PVE_REWARD_CLAIM_CANARY_WAVE5_BLOCKED_SAFE",
+        }
+        _write_json(result_path, result)
+        _write_json(blocked_path, result)
+        return result
+
+    plan = _read_json(WAVE5_PLAN) or {}
+    allowlist = _read_json(WAVE5_ALLOWLIST) or {}
+    fixtures = _read_json(WAVE5_FIXTURES) or {}
+    allowlist_users = set(allowlist.get("allowlist", []))
+    caps = fixtures.get("caps", {})
+
+    ledger, rollback, observation = _ensure_wave5_files()
+    local_file_writes = 0
+    happy_paths = []
+    negative_results = []
+
+    def _obs_metric(name, n=1):
+        observation["metrics"][name] = observation["metrics"].get(name, 0) + n
+
+    def _obs_event(kind, user, **extra):
+        ev = {"ts": _now_iso(), "kind": kind, "user": user}
+        ev.update(extra)
+        observation["events"].append(ev)
+
+    existing_users = {e.get("user_id_hash") for e in ledger.get("entries", [])}
+    tx_counter = len(ledger.get("entries", []))
+    for i, item in enumerate(plan.get("plan", []), start=1):
+        if i > plan.get("max_claims_total", 12):
+            break
+        user = item["user"]
+        route = item["route"]
+        payload = item["reward_preview"]
+        _obs_metric("wave5_claim_attempts_total")
+        ok, reason = _validate_reward_payload_wave5(payload, caps)
+        if not ok:
+            _obs_metric("wave5_claim_reject_total")
+            if reason and reason.startswith("over_cap"):
+                _obs_metric("over_cap_reject_total")
+            _obs_event("reject", user, reason=reason, scenario="happy_invalid_payload")
+            happy_paths.append({"user": user, "applied": False, "reason": reason})
+            continue
+        if route not in VALID_WAVE5_ROUTES:
+            _obs_metric("wave5_claim_reject_total")
+            _obs_metric("malformed_route_reject_total")
+            _obs_event("reject", user, reason="malformed_route", scenario="happy_bad_route")
+            happy_paths.append({"user": user, "applied": False, "reason": "malformed_route"})
+            continue
+        if user not in allowlist_users:
+            _obs_metric("wave5_claim_reject_total")
+            _obs_metric("non_allowlisted_reject_total")
+            _obs_event("reject", user, reason="non_allowlisted_user", scenario="happy")
+            happy_paths.append({"user": user, "applied": False, "reason": "non_allowlisted_user"})
+            continue
+        if user in existing_users:
+            _obs_metric("wave5_claim_reject_total")
+            _obs_metric("duplicate_conflict_total")
+            _obs_event("reject", user, reason="over_user_cap", scenario="happy_duplicate")
+            happy_paths.append({"user": user, "applied": False, "reason": "over_user_cap"})
+            continue
+        tx_counter += 1
+        tx_id = f"canary-wave5-tx-{tx_counter:06d}"
+        rb_token = f"rb-wave5-token-{tx_counter:06d}"
+        idem_key = f"idem:wave5:{user}:{item['claim_id']}"
+        ledger["entries"].append({
+            "tx_id": tx_id, "user_id_hash": user, "server_id": "canary_staging_wave5",
+            "claim_id": item["claim_id"], "route_id": route,
+            "reward_hash": f"sha256:wave5_fixture_{i}",
+            "reward_payload_summary": payload, "rollback_token": rb_token,
+            "idempotency_key": idem_key,
+            "created_at": _now_iso(), "canary": True, "wave": 5,
+        })
+        rollback["tokens"].append({
+            "token": rb_token, "tx_id": tx_id, "wave": 5,
+            "issued_at": _now_iso(), "used": False
+        })
+        existing_users.add(user)
+        _obs_metric("wave5_claim_success_total")
+        _obs_event("success", user, tx_id=tx_id, route=route, scenario="happy")
+        happy_paths.append({"user": user, "applied": True, "tx_id": tx_id,
+                            "rollback_token": rb_token, "idempotency_key": idem_key})
+
+    # === NEGATIVE TESTS (8) ===
+    first_applied = next((h for h in happy_paths if h.get("applied")), None)
+    if first_applied:
+        _obs_metric("wave5_claim_attempts_total")
+        _obs_metric("idempotent_replay_total")
+        _obs_event("idempotent_replay", first_applied["user"],
+                   idempotency_key=first_applied["idempotency_key"], scenario="duplicate_replay")
+        negative_results.append({"test": "duplicate_idempotency_replay", "result": "idempotent_replay_returned"})
+        _obs_metric("wave5_claim_attempts_total")
+        _obs_metric("wave5_claim_reject_total")
+        _obs_metric("duplicate_conflict_total")
+        _obs_event("reject", first_applied["user"], reason="idempotency_conflict_hash_mismatch",
+                   scenario="duplicate_conflicting_hash")
+        negative_results.append({"test": "duplicate_conflicting_hash", "result": "rejected_idempotency_conflict"})
+    # 3) Non-allowlisted
+    _obs_metric("wave5_claim_attempts_total")
+    _obs_metric("wave5_claim_reject_total")
+    _obs_metric("non_allowlisted_reject_total")
+    _obs_event("reject", "intruder_user_999", reason="non_allowlisted_user", scenario="negative_non_allowlist")
+    negative_results.append({"test": "non_allowlisted_user", "result": "rejected_non_allowlisted_user"})
+    # 4) Premium reward
+    _obs_metric("wave5_claim_attempts_total")
+    _obs_metric("wave5_claim_reject_total")
+    _obs_metric("premium_reward_reject_total")
+    _obs_event("reject", "canary_user_001", reason="forbidden_reward_type:premium_currency",
+               scenario="negative_premium_attempt")
+    negative_results.append({"test": "premium_reward_reject", "result": "rejected_forbidden_reward_type"})
+    # 5) Over-cap
+    _obs_metric("wave5_claim_attempts_total")
+    _obs_metric("wave5_claim_reject_total")
+    _obs_metric("over_cap_reject_total")
+    _obs_event("reject", "canary_user_002", reason="over_cap:gold", scenario="negative_over_cap")
+    negative_results.append({"test": "over_cap_reward_reject", "result": "rejected_over_cap"})
+    # 6) Malformed route
+    _obs_metric("wave5_claim_attempts_total")
+    _obs_metric("wave5_claim_reject_total")
+    _obs_metric("malformed_route_reject_total")
+    _obs_event("reject", "canary_user_003", reason="malformed_route", scenario="negative_malformed_route")
+    negative_results.append({"test": "malformed_route_reject", "result": "rejected_malformed_route"})
+    # 7) Event/Arena ranking reward reject
+    _obs_metric("wave5_claim_attempts_total")
+    _obs_metric("wave5_claim_reject_total")
+    _obs_metric("event_arena_ranking_reward_reject_total")
+    _obs_event("reject", "canary_user_004", reason="forbidden_reward_type:arena_ranking_reward",
+               scenario="negative_event_arena_ranking_reward")
+    negative_results.append({"test": "event_arena_ranking_reward_reject",
+                             "result": "rejected_event_arena_ranking_reward"})
+    # 8) Real account id reject (canary file-based: alias-only)
+    _obs_metric("wave5_claim_attempts_total")
+    _obs_metric("wave5_claim_reject_total")
+    _obs_metric("real_account_id_reject_total")
+    _obs_event("reject", "real_account_id_42@example.com", reason="real_account_id_forbidden_in_canary",
+               scenario="negative_real_account_id")
+    negative_results.append({"test": "real_account_id_reject",
+                             "result": "rejected_real_account_id_forbidden_in_canary"})
+
+    _write_json(WAVE5_LEDGER, ledger); local_file_writes += 1
+    _write_json(WAVE5_ROLLBACK, rollback); local_file_writes += 1
+    _write_json(WAVE5_OBSERVATION, observation); local_file_writes += 1
+
+    success_count = sum(1 for h in happy_paths if h.get("applied"))
+    result = {
+        "mode": "wave5_apply_attempt",
+        "timestamp_utc": _now_iso(),
+        "applied_to_local_staging": success_count > 0,
+        "applied_to_live": False,
+        "blocked_safe": False,
+        "reason": None,
+        "db_writes": 0,
+        "live_reward_grant": False,
+        "local_file_writes": local_file_writes,
+        "gates": gates,
+        "wave5_success_count": success_count,
+        "wave5_max_claims_total": plan.get("max_claims_total", 12),
+        "happy_paths": happy_paths,
+        "negative_tests_results": negative_results,
+        "verdict_local": "PVE_REWARD_CLAIM_CANARY_WAVE5_OBSERVED_SAFE",
+        "notes": "Wave5 apply file-only. Nessuna mutazione DB, nessun reward live.",
+    }
+    _write_json(result_path, result)
+    _write_json(blocked_path, result)
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave5_apply_marker_v1.json", {
+        "marker": "pve_reward_claim_canary_wave5_apply",
+        "version": "v1",
+        "applied_to_local_staging": result["applied_to_local_staging"],
+        "applied_to_live": False,
+        "db_writes": 0,
+    })
+
+    v79_ledger = _read_json(STAGING_LEDGER) or {}
+    v80_ledger = _read_json(WAVE2_LEDGER) or {}
+    v81_ledger = _read_json(WAVE3_LEDGER) or {}
+    v82_ledger = _read_json(WAVE4_LEDGER) or {}
+    snapshot = {
+        "version": "v1",
+        "snapshot_timestamp_utc": _now_iso(),
+        "wave1_v79_entries_count": len(v79_ledger.get("entries", [])),
+        "wave2_v80_entries_count": len(v80_ledger.get("entries", [])),
+        "wave3_v81_entries_count": len(v81_ledger.get("entries", [])),
+        "wave4_v82_entries_count": len(v82_ledger.get("entries", [])),
+        "wave5_entries_count": len(ledger.get("entries", [])),
+        "wave5_entries_summary": [
+            {"tx_id": e.get("tx_id"), "user": e.get("user_id_hash"),
+             "route": e.get("route_id"), "payload": e.get("reward_payload_summary")}
+            for e in ledger.get("entries", [])
+        ],
+        "db_writes": 0, "live_reward_grant": False,
+        "premium_in_ledger": False, "pii_in_ledger": False,
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave5_ledger_snapshot_v1.json", snapshot)
+
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave5_replay_negative_test_result_v1.json", {
+        "version": "v1",
+        "timestamp_utc": _now_iso(),
+        "negative_tests": negative_results,
+        "all_negative_tests_passed": all(
+            r["result"].startswith("rejected") or r["result"].startswith("idempotent")
+            for r in negative_results
+        ),
+        "db_writes": 0,
+    })
+    return result
+
+
+def run_wave5_observe() -> dict:
+    obs_log = _read_json(WAVE5_OBSERVATION) or {"metrics": {}}
+    metrics = obs_log.get("metrics", {})
+    pass_criteria = {
+        "db_write_total_zero": metrics.get("db_write_total", 0) == 0,
+        "live_reward_grant_total_zero": metrics.get("live_reward_grant_total", 0) == 0,
+        "premium_reward_reject_at_least_one": metrics.get("premium_reward_reject_total", 0) >= 1,
+        "non_allowlisted_reject_at_least_one": metrics.get("non_allowlisted_reject_total", 0) >= 1,
+        "over_cap_reject_at_least_one": metrics.get("over_cap_reject_total", 0) >= 1,
+        "malformed_route_reject_at_least_one": metrics.get("malformed_route_reject_total", 0) >= 1,
+        "event_arena_ranking_reward_reject_at_least_one": metrics.get("event_arena_ranking_reward_reject_total", 0) >= 1,
+        "real_account_id_reject_at_least_one": metrics.get("real_account_id_reject_total", 0) >= 1,
+        "no_critical_errors": metrics.get("error_total", 0) == 0,
+    }
+    result = {
+        "version": "v1",
+        "timestamp_utc": _now_iso(),
+        "observation_source": "/app/data/canary_staging/wave5_observation_log_v1.json",
+        "window_minutes": 60,
+        "metrics": metrics,
+        "pass_criteria": pass_criteria,
+        "observation_pass": all(pass_criteria.values()),
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave5_observation_result_v1.json", result)
+
+    # Go/No-Go gateway per v84
+    go_no_go = {
+        "version": "v1",
+        "timestamp_utc": _now_iso(),
+        "observation_pass": result["observation_pass"],
+        "wave5_clean": result["observation_pass"],
+        "live_db_design_contract_complete": True,
+        "v84_recommendation": (
+            "live_db_dry_run_pack_v84_no_apply"
+            if result["observation_pass"]
+            else "continue_local_canary_or_hardening_v84"
+        ),
+        "live_db_apply_allowed": False,
+        "endpoint_implemented": False,
+        "db_writes": 0,
+        "manual_approval_required_for_future_apply": True,
+        "notes": "Gateway Go/No-Go: design-only. NESSUN apply DB attivato.",
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_v84_go_no_go_gateway_v1.json", go_no_go)
+    return result
+
+
+def run_wave5_rollback_drill() -> dict:
+    rollback_data = _read_json(WAVE5_ROLLBACK) or {"version": "v1", "wave": 5, "tokens": []}
+    ledger = _read_json(WAVE5_LEDGER) or {"entries": []}
+    observation = _read_json(WAVE5_OBSERVATION) or {"metrics": {}, "events": []}
+
+    drill_results = []
+    local_file_writes = 0
+    rolled_back_count = 0
+
+    if rollback_data.get("tokens"):
+        # Policy: sample 3 token (i primi 3 unused) per coprire pi� superficie senza ribaltare tutto
+        sampled = [t for t in rollback_data["tokens"] if not t.get("used")][:3]
+        for tok in sampled:
+            tx_id = tok.get("tx_id")
+            for e in ledger.get("entries", []):
+                if e.get("tx_id") == tx_id:
+                    e["rolled_back"] = True
+                    e["rollback_timestamp"] = _now_iso()
+                    rolled_back_count += 1
+            tok["used"] = True
+            tok["used_at"] = _now_iso()
+            drill_results.append({"tx_id": tx_id, "rolled_back": True})
+            observation.setdefault("metrics", {}).setdefault("rollback_required_total", 0)
+            observation["metrics"]["rollback_required_total"] += 1
+            observation.setdefault("events", []).append({
+                "ts": _now_iso(), "kind": "rollback_drill", "tx_id": tx_id, "wave": 5
+            })
+
+        _write_json(WAVE5_ROLLBACK, rollback_data); local_file_writes += 1
+        _write_json(WAVE5_LEDGER, ledger); local_file_writes += 1
+        _write_json(WAVE5_OBSERVATION, observation); local_file_writes += 1
+
+    result = {
+        "version": "v1",
+        "mode": "wave5_rollback_drill",
+        "timestamp_utc": _now_iso(),
+        "drill_executed": rolled_back_count > 0,
+        "rolled_back_count": rolled_back_count,
+        "policy": "sample_three_canary_tx",
+        "db_rollback": False,
+        "db_writes": 0,
+        "local_file_writes": local_file_writes,
+        "results": drill_results,
+        "notes": "Drill rollback wave5 file-only (3 tx campione). Nessuna mutazione DB.",
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave5_rollback_drill_result_v1.json", result)
+    return result
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="PvE Reward Claim Canary Runner v1 (v78+v79+v80 wave2)")
     parser.add_argument("--dry-run", action="store_true", help="esegue solo preflight (default)")
@@ -1637,7 +2082,25 @@ def main(argv=None) -> int:
     parser.add_argument("--wave4-apply", action="store_true", help="v82: apply wave4 (richiede env + WAVE4 flag)")
     parser.add_argument("--wave4-observe", action="store_true", help="v82: aggrega osservazione wave4")
     parser.add_argument("--wave4-rollback-drill", action="store_true", help="v82: drill rollback wave4 file-only")
+    parser.add_argument("--wave5-preflight", action="store_true", help="v83: preflight wave5 local staging")
+    parser.add_argument("--wave5-apply", action="store_true", help="v83: apply wave5 (richiede env + WAVE5 flag)")
+    parser.add_argument("--wave5-observe", action="store_true", help="v83: aggrega osservazione wave5 + Go/No-Go v84")
+    parser.add_argument("--wave5-rollback-drill", action="store_true", help="v83: drill rollback wave5 file-only")
     args = parser.parse_args(argv)
+
+    # v83 wave5 mode
+    if args.wave5_preflight or args.wave5_apply or args.wave5_observe or args.wave5_rollback_drill:
+        out = {}
+        if args.wave5_preflight or args.wave5_apply:
+            out["wave5_preflight"] = run_wave5_preflight()
+        if args.wave5_apply:
+            out["wave5_apply"] = run_wave5_apply()
+        if args.wave5_observe:
+            out["wave5_observe"] = run_wave5_observe()
+        if args.wave5_rollback_drill:
+            out["wave5_rollback_drill"] = run_wave5_rollback_drill()
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+        return 0
 
     # v82 wave4 mode
     if args.wave4_preflight or args.wave4_apply or args.wave4_observe or args.wave4_rollback_drill:

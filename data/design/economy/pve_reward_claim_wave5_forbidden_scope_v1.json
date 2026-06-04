@@ -1,0 +1,30 @@
+{
+  "version": "v1",
+  "wave": 5,
+  "forbidden_in_wave5": [
+    "live_db_writes",
+    "mongo_url_use",
+    "pymongo_import",
+    "motor_import",
+    "redis_use",
+    "backend_route_registration",
+    "endpoint_implementation",
+    "premium_currency",
+    "gacha_currency",
+    "event_currency",
+    "arena_ranking_reward",
+    "vip_points",
+    "battle_pass_xp",
+    "production_ui_exposure",
+    "real_claim_button",
+    "real_account_id",
+    "env_mutation",
+    "asset_import",
+    "battle_engine_change",
+    "server_py_change",
+    "story_tsx_change",
+    "combat_tsx_change",
+    "validator_weakening",
+    "fake_pass"
+  ]
+}

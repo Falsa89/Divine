@@ -1,0 +1,40 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T17:36:40Z",
+  "negative_tests": [
+    {
+      "test": "duplicate_idempotency_replay",
+      "result": "idempotent_replay_returned"
+    },
+    {
+      "test": "duplicate_conflicting_hash",
+      "result": "rejected_idempotency_conflict"
+    },
+    {
+      "test": "non_allowlisted_user",
+      "result": "rejected_non_allowlisted_user"
+    },
+    {
+      "test": "premium_reward_reject",
+      "result": "rejected_forbidden_reward_type"
+    },
+    {
+      "test": "over_cap_reward_reject",
+      "result": "rejected_over_cap"
+    },
+    {
+      "test": "malformed_route_reject",
+      "result": "rejected_malformed_route"
+    },
+    {
+      "test": "event_arena_ranking_reward_reject",
+      "result": "rejected_event_arena_ranking_reward"
+    },
+    {
+      "test": "real_account_id_reject",
+      "result": "rejected_real_account_id_forbidden_in_canary"
+    }
+  ],
+  "all_negative_tests_passed": true,
+  "db_writes": 0
+}

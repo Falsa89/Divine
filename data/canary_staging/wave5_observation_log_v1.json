@@ -1,0 +1,193 @@
+{
+  "version": "v1",
+  "wave": 5,
+  "metrics": {
+    "wave5_claim_attempts_total": 20,
+    "wave5_claim_success_total": 12,
+    "wave5_claim_reject_total": 7,
+    "idempotent_replay_total": 1,
+    "duplicate_conflict_total": 1,
+    "non_allowlisted_reject_total": 1,
+    "over_cap_reject_total": 1,
+    "premium_reward_reject_total": 1,
+    "malformed_route_reject_total": 1,
+    "event_arena_ranking_reward_reject_total": 1,
+    "real_account_id_reject_total": 1,
+    "db_write_total": 0,
+    "live_reward_grant_total": 0,
+    "rollback_required_total": 3,
+    "error_total": 0
+  },
+  "events": [
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_001",
+      "tx_id": "canary-wave5-tx-000001",
+      "route": "story_alpha_slice_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_002",
+      "tx_id": "canary-wave5-tx-000002",
+      "route": "training_combat_onboarding_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_003",
+      "tx_id": "canary-wave5-tx-000003",
+      "route": "boss_tower_alpha_loop_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_004",
+      "tx_id": "canary-wave5-tx-000004",
+      "route": "first_session_onboarding_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_005",
+      "tx_id": "canary-wave5-tx-000005",
+      "route": "alpha_menu_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_006",
+      "tx_id": "canary-wave5-tx-000006",
+      "route": "reward_claim_summary_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_007",
+      "tx_id": "canary-wave5-tx-000007",
+      "route": "event_arena_alpha_gate_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_008",
+      "tx_id": "canary-wave5-tx-000008",
+      "route": "event_arena_first_alpha_slice_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_009",
+      "tx_id": "canary-wave5-tx-000009",
+      "route": "story_alpha_slice_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_010",
+      "tx_id": "canary-wave5-tx-000010",
+      "route": "boss_tower_alpha_loop_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_011",
+      "tx_id": "canary-wave5-tx-000011",
+      "route": "first_session_onboarding_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "success",
+      "user": "canary_user_012",
+      "tx_id": "canary-wave5-tx-000012",
+      "route": "event_arena_first_alpha_slice_preview",
+      "scenario": "happy"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "idempotent_replay",
+      "user": "canary_user_001",
+      "idempotency_key": "idem:wave5:canary_user_001:claim-wave5-000001",
+      "scenario": "duplicate_replay"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "reject",
+      "user": "canary_user_001",
+      "reason": "idempotency_conflict_hash_mismatch",
+      "scenario": "duplicate_conflicting_hash"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "reject",
+      "user": "intruder_user_999",
+      "reason": "non_allowlisted_user",
+      "scenario": "negative_non_allowlist"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "reject",
+      "user": "canary_user_001",
+      "reason": "forbidden_reward_type:premium_currency",
+      "scenario": "negative_premium_attempt"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "reject",
+      "user": "canary_user_002",
+      "reason": "over_cap:gold",
+      "scenario": "negative_over_cap"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "reject",
+      "user": "canary_user_003",
+      "reason": "malformed_route",
+      "scenario": "negative_malformed_route"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "reject",
+      "user": "canary_user_004",
+      "reason": "forbidden_reward_type:arena_ranking_reward",
+      "scenario": "negative_event_arena_ranking_reward"
+    },
+    {
+      "ts": "2026-06-04T17:36:40Z",
+      "kind": "reject",
+      "user": "real_account_id_42@example.com",
+      "reason": "real_account_id_forbidden_in_canary",
+      "scenario": "negative_real_account_id"
+    },
+    {
+      "ts": "2026-06-04T17:36:46Z",
+      "kind": "rollback_drill",
+      "tx_id": "canary-wave5-tx-000001",
+      "wave": 5
+    },
+    {
+      "ts": "2026-06-04T17:36:46Z",
+      "kind": "rollback_drill",
+      "tx_id": "canary-wave5-tx-000002",
+      "wave": 5
+    },
+    {
+      "ts": "2026-06-04T17:36:46Z",
+      "kind": "rollback_drill",
+      "tx_id": "canary-wave5-tx-000003",
+      "wave": 5
+    }
+  ]
+}

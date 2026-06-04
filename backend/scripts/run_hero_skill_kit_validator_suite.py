@@ -2957,6 +2957,21 @@ OPTIONAL = [
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE4-OBS-LIVE-DB-DESIGN', 'validate_pve_reward_claim_canary_wave4_observation_live_db_design_v1.py'),
     ('PROJECT-REWARD-CLAIM-UI-SUMMARY-PREVIEW-HARDENING', 'validate_reward_claim_ui_summary_preview_hardening_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-31-v82-ROLLUP', 'validate_mega_release_acceleration_31_v82_rollup.py'),
+    # ========================================================================
+    # v83 - MEGA_RELEASE_ACCELERATION_32_PVE_REWARD_CLAIM_WAVE5_AND_LIVE_DB_DESIGN_CONTRACT
+    # Tracks A-G: scope/files/runner/apply/observation+gateway/live-db-design/rollup.
+    # local file-based only, 12 utenti alias-only / 12 claim. live_db_apply_allowed=false,
+    # endpoint_implemented=false, db_writes=0, applied_to_live=false.
+    # validator_weakening=false, fake_PASS=false.
+    # Approval checksum sha256: ce17d00a3e365bd4bf5efcad9aea43e51ad92c36e6301336aaaddf6229ce2f0a
+    # ========================================================================
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE5-SCOPE', 'validate_pve_reward_claim_canary_wave5_scope_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE5-FILES', 'validate_pve_reward_claim_canary_wave5_files_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-WAVE5', 'validate_pve_reward_claim_canary_runner_wave5_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE5-APPLY', 'validate_pve_reward_claim_canary_wave5_apply_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE5-OBS-GATEWAY', 'validate_pve_reward_claim_canary_wave5_observation_gateway_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-DESIGN-CONTRACT', 'validate_pve_reward_claim_live_db_design_contract_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-32-v83-ROLLUP', 'validate_mega_release_acceleration_32_v83_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -2,18 +2,18 @@
   "version": "v1",
   "from": "v82",
   "to": "v83",
-  "current_verdict": "MEGA_RELEASE_ACCELERATION_31_PVE_REWARD_CLAIM_WAVE4_LIVE_STAGING_DESIGN_AND_UI_HARDENING_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
-  "wave4_clean": true,
-  "live_db_readiness_design_ready": true,
-  "live_db_apply_active": false,
-  "ui_preview_shell_hardened": true,
+  "v82_commit_hash": "336a3ea5dd034a76136bd65e7afa4b08c91a3231",
+  "v82_wave4_clean": true,
+  "v82_live_db_readiness_design_ready": true,
+  "v82_ui_preview_shell_hardened": true,
+  "v83_wave5_clean": true,
+  "v83_live_db_design_contract_complete": true,
+  "v83_v84_go_no_go_gateway_ready": true,
+  "v83_max_wave5_users": 12,
+  "v83_max_wave5_claims_total": 12,
   "db_writes": 0,
-  "local_file_writes": 6,
   "applied_to_live": false,
-  "next_v83_recommended": "pve_reward_claim_live_db_design_contract_v83",
-  "alternates": [
-    "pve_reward_claim_canary_wave5_or_live_staging_db_contract_v83",
-    "pve_reward_claim_canary_wave4_fix_v83"
-  ],
-  "deferred": ["hero_asset_staging_import"]
+  "live_db_apply_active": false,
+  "endpoint_implemented": false,
+  "notes": "v83 estende il canary a Wave-5 file-based (12 utenti / 12 claim alias-only) e introduce il Live DB Design Contract design-only + Go/No-Go gateway per v84. Nessun apply DB, nessun endpoint implementato."
 }

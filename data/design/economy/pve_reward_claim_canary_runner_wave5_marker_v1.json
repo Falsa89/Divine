@@ -1,0 +1,19 @@
+{
+  "marker": "pve_reward_claim_canary_runner_wave5",
+  "version": "v1",
+  "created_at_utc": "2026-06-04T17:32:00Z",
+  "source_pack": "v83",
+  "runner_file": "backend/scripts/pve_reward_claim_canary_runner_v1.py",
+  "new_commands": [
+    "--wave5-preflight",
+    "--wave5-apply",
+    "--wave5-observe",
+    "--wave5-rollback-drill"
+  ],
+  "env_required_for_apply": {
+    "PVE_REWARD_CLAIM_CANARY_MODE": "LOCAL_FILE_STAGING",
+    "PVE_REWARD_CLAIM_CANARY_WAVE5": "YES_I_UNDERSTAND"
+  },
+  "db_writes": 0,
+  "applied_to_live": false
+}
