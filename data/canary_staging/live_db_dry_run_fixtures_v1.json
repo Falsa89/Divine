@@ -1,0 +1,44 @@
+{
+  "version": "v1",
+  "pack": "v84",
+  "alias_only": true,
+  "pii": false,
+  "users": [
+    { "user_id_hash": "sha256:fake_user_hash_a1b2c3d4e5f6", "alias": "alpha_canary_001", "server_id": "canary_dryrun_shard_a" },
+    { "user_id_hash": "sha256:fake_user_hash_a2b3c4d5e6f7", "alias": "alpha_canary_002", "server_id": "canary_dryrun_shard_a" },
+    { "user_id_hash": "sha256:fake_user_hash_a3b4c5d6e7f8", "alias": "alpha_canary_003", "server_id": "canary_dryrun_shard_a" },
+    { "user_id_hash": "sha256:fake_user_hash_a4b5c6d7e8f9", "alias": "alpha_canary_004", "server_id": "canary_dryrun_shard_b" },
+    { "user_id_hash": "sha256:fake_user_hash_a5b6c7d8e9fa", "alias": "alpha_canary_005", "server_id": "canary_dryrun_shard_b" }
+  ],
+  "claims": [
+    { "claim_id": "claim-dryrun-000001", "user_id_hash": "sha256:fake_user_hash_a1b2c3d4e5f6", "route_id": "story_alpha_slice_preview",          "reward_preview": { "gold": 100, "account_exp": 10, "hero_exp": 20, "basic_material": 1 }, "client_nonce": "00000000-0000-4000-8000-000000000001" },
+    { "claim_id": "claim-dryrun-000002", "user_id_hash": "sha256:fake_user_hash_a2b3c4d5e6f7", "route_id": "training_combat_onboarding_preview", "reward_preview": { "gold":  50, "account_exp":  5, "hero_exp": 10, "basic_material": 1 }, "client_nonce": "00000000-0000-4000-8000-000000000002" },
+    { "claim_id": "claim-dryrun-000003", "user_id_hash": "sha256:fake_user_hash_a3b4c5d6e7f8", "route_id": "boss_tower_alpha_loop_preview",      "reward_preview": { "gold": 200, "account_exp": 20, "hero_exp": 50, "basic_material": 2 }, "client_nonce": "00000000-0000-4000-8000-000000000003" },
+    { "claim_id": "claim-dryrun-000004", "user_id_hash": "sha256:fake_user_hash_a4b5c6d7e8f9", "route_id": "first_session_onboarding_preview",   "reward_preview": { "gold":  75, "account_exp":  8, "hero_exp": 15, "basic_material": 1 }, "client_nonce": "00000000-0000-4000-8000-000000000004" },
+    { "claim_id": "claim-dryrun-000005", "user_id_hash": "sha256:fake_user_hash_a5b6c7d8e9fa", "route_id": "alpha_menu_preview",                 "reward_preview": { "gold":  25, "account_exp":  3, "hero_exp":  5, "basic_material": 1 }, "client_nonce": "00000000-0000-4000-8000-000000000005" }
+  ],
+  "negative_cases": [
+    { "name": "non_allowlisted_user",     "user_id_hash": "sha256:fake_intruder_999", "route_id": "story_alpha_slice_preview",          "reward_preview": { "gold": 10 }, "expected_reason": "non_allowlisted_user" },
+    { "name": "premium_currency",        "user_id_hash": "sha256:fake_user_hash_a1b2c3d4e5f6", "route_id": "story_alpha_slice_preview", "reward_preview": { "premium_currency": 1 }, "expected_reason": "forbidden_reward_type:premium_currency" },
+    { "name": "arena_ranking_reward",    "user_id_hash": "sha256:fake_user_hash_a1b2c3d4e5f6", "route_id": "event_arena_alpha_gate_preview", "reward_preview": { "arena_ranking_reward": 1 }, "expected_reason": "forbidden_reward_type:arena_ranking_reward" },
+    { "name": "over_cap_reward",         "user_id_hash": "sha256:fake_user_hash_a2b3c4d5e6f7", "route_id": "story_alpha_slice_preview",  "reward_preview": { "gold": 99999 }, "expected_reason": "over_cap:gold" },
+    { "name": "malformed_route",         "user_id_hash": "sha256:fake_user_hash_a3b4c5d6e7f8", "route_id": "unknown_route_x",             "reward_preview": { "gold": 10 }, "expected_reason": "malformed_route" },
+    { "name": "real_account_id",         "user_id_hash": "plaintext_user@example.com",        "route_id": "story_alpha_slice_preview",  "reward_preview": { "gold": 10 }, "expected_reason": "real_account_id_forbidden_in_dry_run" },
+    { "name": "kill_switch_engaged",     "user_id_hash": "sha256:fake_user_hash_a4b5c6d7e8f9", "route_id": "alpha_menu_preview",         "reward_preview": { "gold": 10 }, "expected_reason": "kill_switch_active", "with_kill_switch": true }
+  ],
+  "caps": { "gold": 500, "account_exp": 50, "hero_exp": 100, "basic_material": 3 },
+  "forbidden_reward_keys": [
+    "premium_currency", "gacha_currency", "event_currency",
+    "arena_points", "arena_ranking_reward", "vip_points", "battle_pass_xp"
+  ],
+  "valid_routes": [
+    "story_alpha_slice_preview",
+    "training_combat_onboarding_preview",
+    "boss_tower_alpha_loop_preview",
+    "first_session_onboarding_preview",
+    "alpha_menu_preview",
+    "reward_claim_summary_preview",
+    "event_arena_alpha_gate_preview",
+    "event_arena_first_alpha_slice_preview"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T17:54:55Z",
+  "auth_policy_applied": {
+    "required_scopes": [
+      "pve.reward_claim:invoke"
+    ],
+    "required_role": "player",
+    "deny_anonymous": true,
+    "server_signed_request_required": true,
+    "abuse_rate_limit": {
+      "window_seconds": 60,
+      "max_attempts": 6
+    },
+    "step_up_required_for_admin": true
+  },
+  "checks": [
+    {
+      "case": "anonymous_request",
+      "outcome": "rejected_deny_anonymous"
+    },
+    {
+      "case": "missing_scope_pve.reward_claim_invoke",
+      "outcome": "rejected_missing_scope"
+    },
+    {
+      "case": "role_admin_without_step_up",
+      "outcome": "rejected_step_up_required"
+    },
+    {
+      "case": "rate_limit_7_attempts_in_60s",
+      "outcome": "rejected_rate_limit"
+    },
+    {
+      "case": "missing_server_signed_request",
+      "outcome": "rejected_unsigned"
+    },
+    {
+      "case": "valid_player_with_scope_and_signed_request",
+      "outcome": "accepted_no_db_write"
+    }
+  ],
+  "all_negative_cases_rejected": true,
+  "happy_case_accepted": true,
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "endpoint_implemented": false,
+  "dry_run_only": true,
+  "notes": "Simulazione auth guard: nessuna chiamata HTTP reale, nessuna autenticazione live."
+}

@@ -1,0 +1,35 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T17:54:55Z",
+  "rollback_policy_applied": {
+    "file": "backend/scripts/pve_reward_claim_live_rollback_design_only.py",
+    "status": "DESIGN_ONLY_NOT_CREATED",
+    "strategy": "per_tx_token_revoke",
+    "max_rollback_window_minutes": 60,
+    "requires_admin_dual_approval": true,
+    "requires_checksum": true
+  },
+  "sampled_count": 2,
+  "rolled_back": [
+    {
+      "tx_id": "dryrun-tx-22e037d90833",
+      "rolled_back": true,
+      "rollback_token_simulated": "rb-dryrun-dryrun-tx-22e037d90833",
+      "rollback_timestamp": "2026-06-04T17:54:55Z",
+      "db_rollback": false
+    },
+    {
+      "tx_id": "dryrun-tx-0432dd311c5f",
+      "rolled_back": true,
+      "rollback_token_simulated": "rb-dryrun-dryrun-tx-0432dd311c5f",
+      "rollback_timestamp": "2026-06-04T17:54:55Z",
+      "db_rollback": false
+    }
+  ],
+  "db_rollback": false,
+  "db_writes": 0,
+  "endpoint_implemented": false,
+  "dry_run_only": true,
+  "requires_admin_dual_approval": true,
+  "notes": "Simulazione rollback: nessuna mutazione DB. Token rollback simulati in memoria."
+}

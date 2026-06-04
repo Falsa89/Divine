@@ -2964,6 +2964,7 @@ OPTIONAL = [
     # endpoint_implemented=false, db_writes=0, applied_to_live=false.
     # validator_weakening=false, fake_PASS=false.
     # Approval checksum sha256: ce17d00a3e365bd4bf5efcad9aea43e51ad92c36e6301336aaaddf6229ce2f0a
+    # PUBLIC_SYNC_TAG_v83_MEGA_RELEASE_ACCELERATION_32_PVE_REWARD_CLAIM_WAVE5_AND_LIVE_DB_DESIGN_CONTRACT
     # ========================================================================
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE5-SCOPE', 'validate_pve_reward_claim_canary_wave5_scope_v1.py'),
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE5-FILES', 'validate_pve_reward_claim_canary_wave5_files_v1.py'),
@@ -2972,6 +2973,22 @@ OPTIONAL = [
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE5-OBS-GATEWAY', 'validate_pve_reward_claim_canary_wave5_observation_gateway_v1.py'),
     ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-DESIGN-CONTRACT', 'validate_pve_reward_claim_live_db_design_contract_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-32-v83-ROLLUP', 'validate_mega_release_acceleration_32_v83_rollup.py'),
+    # ========================================================================
+    # v84 - MEGA_RELEASE_ACCELERATION_33_PVE_REWARD_CLAIM_LIVE_DB_DRY_RUN_AND_PUBLIC_SYNC_REPAIR
+    # Tracks A-G: public_sync_repair / scope / fixtures / simulator / tx-auth-endpoint-killswitch /
+    # rollback-observation / v85-gate / rollup. NO APPLY DB, NO ENDPOINT IMPLEMENTATION.
+    # live_db_apply_allowed=false, endpoint_implemented=false, db_writes=0, applied_to_live=false.
+    # validator_weakening=false, fake_PASS=false.
+    # Approval checksum sha256: 86efe1aac64e15f6350be77e627cc37be3c122480cf8f86b1173781b3f464d54
+    # PUBLIC_SYNC_TAG_v84_MEGA_RELEASE_ACCELERATION_33_PVE_REWARD_CLAIM_LIVE_DB_DRY_RUN_AND_PUBLIC_SYNC_REPAIR
+    # ========================================================================
+    ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-DRY-RUN-SCOPE', 'validate_pve_reward_claim_live_db_dry_run_scope_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-DRY-RUN-FIXTURES', 'validate_pve_reward_claim_live_db_dry_run_fixtures_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-DRY-RUN-SIMULATOR', 'validate_pve_reward_claim_live_db_dry_run_simulator_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-DRY-RUN-CONTRACT', 'validate_pve_reward_claim_live_db_dry_run_contract_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-LIVE-DB-DRY-RUN-ROLLBACK-OBS', 'validate_pve_reward_claim_live_db_dry_run_rollback_observation_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-V83-PUBLIC-SYNC-REPAIR', 'validate_pve_reward_claim_v83_public_sync_repair_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-33-v84-ROLLUP', 'validate_mega_release_acceleration_33_v84_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

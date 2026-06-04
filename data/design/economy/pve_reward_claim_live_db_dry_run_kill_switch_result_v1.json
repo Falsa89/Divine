@@ -1,0 +1,51 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T17:54:55Z",
+  "kill_switch_policy_applied": {
+    "flag": "PVE_REWARD_CLAIM_LIVE_KILL_SWITCH",
+    "trigger_value": "ENGAGE",
+    "default": "DISENGAGED",
+    "on_engage_reject_all": true,
+    "admin_dual_approval_required_to_engage": false,
+    "admin_dual_approval_required_to_disengage": true,
+    "audit_log_required": true
+  },
+  "cases": [
+    {
+      "state": "DISENGAGED",
+      "incoming_claim": "claim-dryrun-000001",
+      "outcome": "accepted_no_db_write"
+    },
+    {
+      "state": "ENGAGE",
+      "incoming_claim": "claim-dryrun-000001",
+      "outcome": "rejected_kill_switch_active"
+    },
+    {
+      "state": "ENGAGE",
+      "incoming_claim": "claim-dryrun-000002",
+      "outcome": "rejected_kill_switch_active"
+    },
+    {
+      "state_transition": "DISENGAGED->ENGAGE",
+      "dual_approval": false,
+      "outcome": "allowed"
+    },
+    {
+      "state_transition": "ENGAGE->DISENGAGED",
+      "dual_approval": false,
+      "outcome": "rejected_dual_approval_required"
+    },
+    {
+      "state_transition": "ENGAGE->DISENGAGED",
+      "dual_approval": true,
+      "outcome": "allowed"
+    }
+  ],
+  "all_engage_cases_reject_all": true,
+  "dual_approval_to_disengage_enforced": true,
+  "db_writes": 0,
+  "endpoint_implemented": false,
+  "dry_run_only": true,
+  "notes": "Simulazione kill switch: nessun flag reale impostato in ambiente, solo logica simulata."
+}

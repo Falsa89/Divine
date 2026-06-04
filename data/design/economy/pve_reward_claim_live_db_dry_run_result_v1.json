@@ -1,0 +1,328 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T17:54:55Z",
+  "pack": "v84",
+  "transaction_policy": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T17:54:55Z",
+    "policy_applied": {
+      "isolation_level": "snapshot_read_committed",
+      "two_phase": false,
+      "single_writer_per_user": true,
+      "unique_constraint": [
+        "user_id",
+        "claim_id"
+      ],
+      "idempotency_required": true,
+      "idempotency_key_field": "idempotency_key",
+      "idempotency_key_format": "idem:live:{user_id_hash}:{claim_id}",
+      "max_retries": 3,
+      "retry_backoff_ms": [
+        50,
+        200,
+        800
+      ],
+      "deadline_ms": 1500,
+      "on_conflict": "return_existing_tx_no_double_grant",
+      "on_failure": "reject_and_log_no_partial_write"
+    },
+    "simulated_tx": [
+      {
+        "claim_id": "claim-dryrun-000001",
+        "applied": true,
+        "tx_id": "dryrun-tx-22e037d90833",
+        "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a1b2c3d4e5f6:claim-dryrun-000001",
+        "reward_summary_hash": "sha256:ef8b720deeaa9ea8f216e3dd7a433584"
+      },
+      {
+        "claim_id": "claim-dryrun-000002",
+        "applied": true,
+        "tx_id": "dryrun-tx-0432dd311c5f",
+        "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a2b3c4d5e6f7:claim-dryrun-000002",
+        "reward_summary_hash": "sha256:4ede5e347fae492f27457b889049db40"
+      },
+      {
+        "claim_id": "claim-dryrun-000003",
+        "applied": true,
+        "tx_id": "dryrun-tx-04d8a72d8a26",
+        "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a3b4c5d6e7f8:claim-dryrun-000003",
+        "reward_summary_hash": "sha256:ed90f3df4dd61005f30a92b161f26f63"
+      },
+      {
+        "claim_id": "claim-dryrun-000004",
+        "applied": true,
+        "tx_id": "dryrun-tx-1fb104e99217",
+        "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a4b5c6d7e8f9:claim-dryrun-000004",
+        "reward_summary_hash": "sha256:65641f64ae7b1a000effb3b6f2662b80"
+      },
+      {
+        "claim_id": "claim-dryrun-000005",
+        "applied": true,
+        "tx_id": "dryrun-tx-4fc85308be60",
+        "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a5b6c7d8e9fa:claim-dryrun-000005",
+        "reward_summary_hash": "sha256:3bf25e3a593532acdf6de5f1c693996f"
+      },
+      {
+        "claim_id": "claim-dryrun-000001",
+        "applied": false,
+        "reason": "idempotent_replay_returned",
+        "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a1b2c3d4e5f6:claim-dryrun-000001",
+        "replay": true
+      }
+    ],
+    "applied_count": 5,
+    "rejected_count": 1,
+    "db_writes": 0,
+    "live_reward_grant": false,
+    "endpoint_implemented": false,
+    "dry_run_only": true,
+    "notes": "Simulazione transaction policy: nessuna scrittura DB. Idempotency e unique(user_id,claim_id) verificati in memoria."
+  },
+  "auth_guard": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T17:54:55Z",
+    "auth_policy_applied": {
+      "required_scopes": [
+        "pve.reward_claim:invoke"
+      ],
+      "required_role": "player",
+      "deny_anonymous": true,
+      "server_signed_request_required": true,
+      "abuse_rate_limit": {
+        "window_seconds": 60,
+        "max_attempts": 6
+      },
+      "step_up_required_for_admin": true
+    },
+    "checks": [
+      {
+        "case": "anonymous_request",
+        "outcome": "rejected_deny_anonymous"
+      },
+      {
+        "case": "missing_scope_pve.reward_claim_invoke",
+        "outcome": "rejected_missing_scope"
+      },
+      {
+        "case": "role_admin_without_step_up",
+        "outcome": "rejected_step_up_required"
+      },
+      {
+        "case": "rate_limit_7_attempts_in_60s",
+        "outcome": "rejected_rate_limit"
+      },
+      {
+        "case": "missing_server_signed_request",
+        "outcome": "rejected_unsigned"
+      },
+      {
+        "case": "valid_player_with_scope_and_signed_request",
+        "outcome": "accepted_no_db_write"
+      }
+    ],
+    "all_negative_cases_rejected": true,
+    "happy_case_accepted": true,
+    "db_writes": 0,
+    "live_reward_grant": false,
+    "endpoint_implemented": false,
+    "dry_run_only": true,
+    "notes": "Simulazione auth guard: nessuna chiamata HTTP reale, nessuna autenticazione live."
+  },
+  "endpoint_contract": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T17:54:55Z",
+    "endpoint_contract_status": "DESIGN_ONLY_NOT_IMPLEMENTED",
+    "status_is_design_only": true,
+    "route_present_in_server_py": false,
+    "endpoint_implemented": false,
+    "sample_request_shape": {
+      "user_id_hash": "sha256:fake_user_hash_a1b2c3d4e5f6",
+      "claim_id": "claim-dryrun-000001",
+      "route_id": "story_alpha_slice_preview",
+      "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a1b2c3d4e5f6:claim-dryrun-000001",
+      "client_nonce": "00000000-0000-4000-8000-000000000001"
+    },
+    "sample_response_ok_shape": {
+      "tx_id": "dryrun-tx-simulated",
+      "applied": true,
+      "reward_summary_hash": "sha256:7364247b40154e21faf86bfa9607236d",
+      "server_time_utc": "2026-06-04T17:54:55Z"
+    },
+    "sample_response_reject_shape": {
+      "applied": false,
+      "reason_code": "non_allowlisted_user",
+      "server_time_utc": "2026-06-04T17:54:55Z"
+    },
+    "reason_codes_coverage": {
+      "non_allowlisted_user": true,
+      "over_user_cap": true,
+      "over_cap_reward": true,
+      "forbidden_reward_type": true,
+      "malformed_route": true,
+      "event_arena_ranking_reward_forbidden": true,
+      "idempotency_conflict_hash_mismatch": true,
+      "idempotent_replay": true,
+      "real_account_id_forbidden_in_canary": true,
+      "kill_switch_active": true
+    },
+    "all_reason_codes_covered_by_dry_run": true,
+    "db_writes": 0,
+    "dry_run_only": true,
+    "notes": "Simulazione endpoint contract: nessun endpoint reale registrato, nessun handler creato."
+  },
+  "kill_switch": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T17:54:55Z",
+    "kill_switch_policy_applied": {
+      "flag": "PVE_REWARD_CLAIM_LIVE_KILL_SWITCH",
+      "trigger_value": "ENGAGE",
+      "default": "DISENGAGED",
+      "on_engage_reject_all": true,
+      "admin_dual_approval_required_to_engage": false,
+      "admin_dual_approval_required_to_disengage": true,
+      "audit_log_required": true
+    },
+    "cases": [
+      {
+        "state": "DISENGAGED",
+        "incoming_claim": "claim-dryrun-000001",
+        "outcome": "accepted_no_db_write"
+      },
+      {
+        "state": "ENGAGE",
+        "incoming_claim": "claim-dryrun-000001",
+        "outcome": "rejected_kill_switch_active"
+      },
+      {
+        "state": "ENGAGE",
+        "incoming_claim": "claim-dryrun-000002",
+        "outcome": "rejected_kill_switch_active"
+      },
+      {
+        "state_transition": "DISENGAGED->ENGAGE",
+        "dual_approval": false,
+        "outcome": "allowed"
+      },
+      {
+        "state_transition": "ENGAGE->DISENGAGED",
+        "dual_approval": false,
+        "outcome": "rejected_dual_approval_required"
+      },
+      {
+        "state_transition": "ENGAGE->DISENGAGED",
+        "dual_approval": true,
+        "outcome": "allowed"
+      }
+    ],
+    "all_engage_cases_reject_all": true,
+    "dual_approval_to_disengage_enforced": true,
+    "db_writes": 0,
+    "endpoint_implemented": false,
+    "dry_run_only": true,
+    "notes": "Simulazione kill switch: nessun flag reale impostato in ambiente, solo logica simulata."
+  },
+  "rollback": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T17:54:55Z",
+    "rollback_policy_applied": {
+      "file": "backend/scripts/pve_reward_claim_live_rollback_design_only.py",
+      "status": "DESIGN_ONLY_NOT_CREATED",
+      "strategy": "per_tx_token_revoke",
+      "max_rollback_window_minutes": 60,
+      "requires_admin_dual_approval": true,
+      "requires_checksum": true
+    },
+    "sampled_count": 2,
+    "rolled_back": [
+      {
+        "tx_id": "dryrun-tx-22e037d90833",
+        "rolled_back": true,
+        "rollback_token_simulated": "rb-dryrun-dryrun-tx-22e037d90833",
+        "rollback_timestamp": "2026-06-04T17:54:55Z",
+        "db_rollback": false
+      },
+      {
+        "tx_id": "dryrun-tx-0432dd311c5f",
+        "rolled_back": true,
+        "rollback_token_simulated": "rb-dryrun-dryrun-tx-0432dd311c5f",
+        "rollback_timestamp": "2026-06-04T17:54:55Z",
+        "db_rollback": false
+      }
+    ],
+    "db_rollback": false,
+    "db_writes": 0,
+    "endpoint_implemented": false,
+    "dry_run_only": true,
+    "requires_admin_dual_approval": true,
+    "notes": "Simulazione rollback: nessuna mutazione DB. Token rollback simulati in memoria."
+  },
+  "observation_sink": {
+    "version": "v1",
+    "timestamp_utc": "2026-06-04T17:54:55Z",
+    "observation_sink_policy_applied": {
+      "sink_type": "append_only_jsonl",
+      "path_pattern": "data/observation/live/pve_reward_claim/{yyyy-mm-dd}.jsonl",
+      "retention_days": 30,
+      "redact_pii": true,
+      "metrics_required": [
+        "live_claim_attempts_total",
+        "live_claim_success_total",
+        "live_claim_reject_total",
+        "idempotent_replay_total",
+        "duplicate_conflict_total",
+        "non_allowlisted_reject_total",
+        "over_cap_reject_total",
+        "premium_reward_reject_total",
+        "malformed_route_reject_total",
+        "event_arena_ranking_reward_reject_total",
+        "real_account_id_reject_total",
+        "kill_switch_active_total",
+        "rollback_required_total",
+        "error_total"
+      ]
+    },
+    "metrics_simulated": {
+      "error_total": 0,
+      "live_claim_success_total": 5,
+      "duplicate_conflict_total": 0,
+      "over_cap_reject_total": 0,
+      "real_account_id_reject_total": 0,
+      "event_arena_ranking_reward_reject_total": 0,
+      "premium_reward_reject_total": 0,
+      "malformed_route_reject_total": 0,
+      "idempotent_replay_total": 1,
+      "live_claim_attempts_total": 6,
+      "rollback_required_total": 0,
+      "kill_switch_active_total": 0,
+      "live_claim_reject_total": 1,
+      "non_allowlisted_reject_total": 0
+    },
+    "metrics_coverage": {
+      "error_total": true,
+      "live_claim_success_total": true,
+      "duplicate_conflict_total": true,
+      "over_cap_reject_total": true,
+      "real_account_id_reject_total": true,
+      "event_arena_ranking_reward_reject_total": true,
+      "premium_reward_reject_total": true,
+      "malformed_route_reject_total": true,
+      "idempotent_replay_total": true,
+      "live_claim_attempts_total": true,
+      "rollback_required_total": true,
+      "kill_switch_active_total": true,
+      "live_claim_reject_total": true,
+      "non_allowlisted_reject_total": true
+    },
+    "all_required_metrics_covered": true,
+    "redact_pii_enforced": true,
+    "retention_days": 30,
+    "db_writes": 0,
+    "endpoint_implemented": false,
+    "dry_run_only": true,
+    "notes": "Simulazione observation sink: nessun sink remoto, nessun network IO."
+  },
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "endpoint_implemented": false,
+  "dry_run_only": true
+}

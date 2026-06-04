@@ -1,0 +1,76 @@
+{
+  "version": "v1",
+  "timestamp_utc": "2026-06-04T17:54:55Z",
+  "policy_applied": {
+    "isolation_level": "snapshot_read_committed",
+    "two_phase": false,
+    "single_writer_per_user": true,
+    "unique_constraint": [
+      "user_id",
+      "claim_id"
+    ],
+    "idempotency_required": true,
+    "idempotency_key_field": "idempotency_key",
+    "idempotency_key_format": "idem:live:{user_id_hash}:{claim_id}",
+    "max_retries": 3,
+    "retry_backoff_ms": [
+      50,
+      200,
+      800
+    ],
+    "deadline_ms": 1500,
+    "on_conflict": "return_existing_tx_no_double_grant",
+    "on_failure": "reject_and_log_no_partial_write"
+  },
+  "simulated_tx": [
+    {
+      "claim_id": "claim-dryrun-000001",
+      "applied": true,
+      "tx_id": "dryrun-tx-22e037d90833",
+      "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a1b2c3d4e5f6:claim-dryrun-000001",
+      "reward_summary_hash": "sha256:ef8b720deeaa9ea8f216e3dd7a433584"
+    },
+    {
+      "claim_id": "claim-dryrun-000002",
+      "applied": true,
+      "tx_id": "dryrun-tx-0432dd311c5f",
+      "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a2b3c4d5e6f7:claim-dryrun-000002",
+      "reward_summary_hash": "sha256:4ede5e347fae492f27457b889049db40"
+    },
+    {
+      "claim_id": "claim-dryrun-000003",
+      "applied": true,
+      "tx_id": "dryrun-tx-04d8a72d8a26",
+      "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a3b4c5d6e7f8:claim-dryrun-000003",
+      "reward_summary_hash": "sha256:ed90f3df4dd61005f30a92b161f26f63"
+    },
+    {
+      "claim_id": "claim-dryrun-000004",
+      "applied": true,
+      "tx_id": "dryrun-tx-1fb104e99217",
+      "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a4b5c6d7e8f9:claim-dryrun-000004",
+      "reward_summary_hash": "sha256:65641f64ae7b1a000effb3b6f2662b80"
+    },
+    {
+      "claim_id": "claim-dryrun-000005",
+      "applied": true,
+      "tx_id": "dryrun-tx-4fc85308be60",
+      "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a5b6c7d8e9fa:claim-dryrun-000005",
+      "reward_summary_hash": "sha256:3bf25e3a593532acdf6de5f1c693996f"
+    },
+    {
+      "claim_id": "claim-dryrun-000001",
+      "applied": false,
+      "reason": "idempotent_replay_returned",
+      "idempotency_key": "idem:dryrun:sha256:fake_user_hash_a1b2c3d4e5f6:claim-dryrun-000001",
+      "replay": true
+    }
+  ],
+  "applied_count": 5,
+  "rejected_count": 1,
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "endpoint_implemented": false,
+  "dry_run_only": true,
+  "notes": "Simulazione transaction policy: nessuna scrittura DB. Idempotency e unique(user_id,claim_id) verificati in memoria."
+}
