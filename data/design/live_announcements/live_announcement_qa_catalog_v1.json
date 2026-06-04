@@ -1,0 +1,40 @@
+{
+  "catalog_name": "live_announcement_qa_catalog_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_42_v93",
+  "qa_simulation_only": true,
+  "production_broadcast": false,
+  "push_notification_live": false,
+  "real_user_data_required": false,
+  "privacy_safe_alias_only": true,
+  "anti_spam_rules_present": true,
+  "static_announcements": [
+    {"id": "news_001", "type": "news", "channel": "global", "title": "Nuova patch in arrivo", "body": "Stay tuned per i dettagli ufficiali della prossima patch.", "visibility": "global", "alias_safe": true},
+    {"id": "maint_001", "type": "maintenance", "channel": "system", "title": "Manutenzione programmata", "body": "I server saranno offline lun 02:00-04:00 UTC.", "visibility": "global", "alias_safe": true},
+    {"id": "evt_001", "type": "event_notice", "channel": "events", "title": "Crepuscolo dei Titani: si avvicina", "body": "Preparati per il prossimo Crepuscolo dei Titani.", "visibility": "global", "alias_safe": true},
+    {"id": "upd_001", "type": "update_note", "channel": "system", "title": "Update note v1.0.42", "body": "Sono stati applicati fix minori al bilanciamento.", "visibility": "global", "alias_safe": true}
+  ],
+  "channels": ["global", "system", "events", "arena", "guild", "community"],
+  "visibility_rules": [
+    {"type": "news", "default_visibility": "global"},
+    {"type": "maintenance", "default_visibility": "global"},
+    {"type": "event_notice", "default_visibility": "global"},
+    {"type": "update_note", "default_visibility": "global"},
+    {"type": "six_star_pull", "default_visibility": "global_or_per_server"},
+    {"type": "arena_top3_change", "default_visibility": "arena_channel"},
+    {"type": "guild_boss_milestone", "default_visibility": "guild_or_global_per_threshold"}
+  ],
+  "anti_spam": {
+    "max_per_user_per_minute": 3,
+    "max_per_channel_per_minute": 30,
+    "global_burst_cap": 100,
+    "dedupe_window_seconds": 60,
+    "throttle_strategy": "token_bucket"
+  },
+  "safety": {
+    "db_writes": 0,
+    "production_broadcast": false,
+    "push_notification_live": false,
+    "real_user_pii": false,
+    "reward_live": false
+  }
+}

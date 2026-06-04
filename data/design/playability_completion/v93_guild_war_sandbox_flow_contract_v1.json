@@ -1,0 +1,27 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_42_v93",
+  "contract_name": "v93_guild_war_sandbox_flow_contract_v1",
+  "sandbox_screen": "frontend/app/guild-war-sandbox-flow.tsx",
+  "flow": [
+    "Mostra attaccante (mock alias-safe, NESSUN dato reale PII)",
+    "Mostra difensore (mock alias-safe)",
+    "Mostra defense team source (deterministic catalog)",
+    "Mostra lane/territory (se disponibile)",
+    "Bottone 'Apri lobby battaglia test' -> /pre-battle-lobby?mode=arena&...",
+    "Bottone 'Indietro' -> hub QA"
+  ],
+  "attacker_alias": "qa_alias_attacker_001",
+  "defender_alias": "qa_alias_defender_001",
+  "defense_team_source": "gw_defense_team_design_v1 (live_guild_special_mode_encounter_source_catalog v92)",
+  "lane_present": true,
+  "lanes": ["lane_north", "lane_center", "lane_south"],
+  "safety": {
+    "db_writes": 0,
+    "guild_score_mutation": 0,
+    "leaderboard_mutation": false,
+    "season_progress": false,
+    "real_user_pii": false,
+    "reward_live": false,
+    "ranking_live": false
+  }
+}

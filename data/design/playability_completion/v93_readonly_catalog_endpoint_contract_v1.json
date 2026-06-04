@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_42_v93",
+  "contract_name": "v93_readonly_catalog_endpoint_contract_v1",
+  "endpoints_designed": [
+    {"method": "GET", "path": "/api/encounter-source/catalog", "purpose": "return canonical encounter catalogs (story/tower/arena/training/raid/event/guild_live)", "read_only": true, "db_writes": 0, "idempotent": true, "status": "BLOCKED_MD5_LOCKED_SERVER"},
+    {"method": "GET", "path": "/api/encounter-source/get?mode=X&source_id=Y", "purpose": "return specific encounter", "read_only": true, "db_writes": 0, "idempotent": true, "status": "BLOCKED_MD5_LOCKED_SERVER"},
+    {"method": "GET", "path": "/api/live-mode/catalog", "purpose": "return live/guild/special mode encounter catalog", "read_only": true, "db_writes": 0, "idempotent": true, "status": "BLOCKED_MD5_LOCKED_SERVER"},
+    {"method": "GET", "path": "/api/avatar-placeholder/catalog", "purpose": "return avatar placeholder dev registry", "read_only": true, "db_writes": 0, "idempotent": true, "status": "BLOCKED_MD5_LOCKED_SERVER"}
+  ],
+  "blocker_reason": "backend/server.py e' MD5-locked (055df030553f4791e8cac14254f1b148). L'inclusione di un nuovo router richiede modifica a server.py. v93 NON modifica file MD5-lockati; gli endpoint sono progettati e bloccati come design contract pronto per un futuro pack che apra MD5 lock su server.py con approvazione esplicita.",
+  "fallback_strategy": "local inline mirror dei catalog JSON dentro le schermate, etichettato apertamente come 'inline mirror (v93 endpoint blocked)'",
+  "removal_of_inline_mirror": "skipped_due_to_md5_lock_blocker",
+  "contract_status": "DESIGN_READY_IMPLEMENTATION_BLOCKED",
+  "safety": {"db_writes": 0, "reward_live": false, "endpoint_live_mutation": false, "md5_lock_mutation": false}
+}

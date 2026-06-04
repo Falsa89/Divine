@@ -1,0 +1,23 @@
+{
+  "manifest_name": "v93_avatar_placeholder_visual_manifest_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_42_v93",
+  "placeholder_dev_only": true,
+  "final_asset_ready": false,
+  "production_asset": false,
+  "do_not_treat_as_canonical": true,
+  "no_monetization": true,
+  "no_cosmetic_unlock": true,
+  "no_inventory_grant": true,
+  "asset_kind": "react_native_svg_component",
+  "avatars": [
+    {"avatar_id": "player_avatar_hd_base_dev", "visual_component": "AvatarPlaceholderHD", "silhouette_color": "#4488FF", "shape": "rounded_rectangle_humanoid", "label": "PLAYER HD"},
+    {"avatar_id": "player_war_avatar_mini_base_dev", "visual_component": "AvatarPlaceholderWarMini", "silhouette_color": "#FFAA22", "shape": "diamond_armored_mini", "label": "WAR MINI"},
+    {"avatar_id": "guild_war_avatar_base_dev", "visual_component": "AvatarPlaceholderGuildWar", "silhouette_color": "#AA22FF", "shape": "shield_with_crest", "label": "GUILD WAR"},
+    {"avatar_id": "event_avatar_base_dev", "visual_component": "AvatarPlaceholderEvent", "silhouette_color": "#22DDAA", "shape": "star_humanoid", "label": "EVENT"},
+    {"avatar_id": "hero_room_chibi_avatar_base_dev", "visual_component": "AvatarPlaceholderChibi", "silhouette_color": "#FF77CC", "shape": "chibi_circle_head", "label": "CHIBI"},
+    {"avatar_id": "raid_boss_avatar_placeholder_dev", "visual_component": "AvatarPlaceholderRaidBoss", "silhouette_color": "#FF4444", "shape": "massive_horned", "label": "RAID BOSS"},
+    {"avatar_id": "faction_boss_avatar_placeholder_dev", "visual_component": "AvatarPlaceholderFactionBoss", "silhouette_color": "#CC4488", "shape": "crowned_massive", "label": "FACTION BOSS"}
+  ],
+  "frontend_component_file": "frontend/components/avatarPlaceholders/AvatarPlaceholderDev.tsx",
+  "safety": {"db_writes": 0, "final_asset_import": false, "production_exposure": false, "cosmetic_unlock": false}
+}

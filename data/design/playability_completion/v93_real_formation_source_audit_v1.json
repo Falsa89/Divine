@@ -1,0 +1,44 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_42_v93",
+  "audit_name": "v93_real_formation_source_audit_v1",
+  "purpose": "Audit della formazione del player usata nella pre-battle lobby. v92 usava team mock hardcoded; v93 deve leggere fonte reale dove safe o dichiarare fallback.",
+  "current_status_pre_v93": {
+    "file": "frontend/app/pre-battle-lobby.tsx",
+    "team_source": "PLAYER_SAVED_TEAM hardcoded",
+    "is_real_formation": false,
+    "source_label_shown": false
+  },
+  "available_sources_audit": [
+    {
+      "source": "backend /api/team/update-formation + /api/team/get-formation",
+      "safe_for_v93_read_only": true,
+      "requires_md5_locked_change": false,
+      "note": "endpoint pre-esistenti referenziati in (tabs)/battle.tsx (vedi v16.30 history)"
+    },
+    {
+      "source": "AsyncStorage local cache (saved_formation key)",
+      "safe_for_v93_read_only": true,
+      "requires_md5_locked_change": false,
+      "note": "cache locale opzionale"
+    },
+    {
+      "source": "safe_fallback_formation deterministic",
+      "safe_for_v93_read_only": true,
+      "requires_md5_locked_change": false,
+      "note": "fallback locale, etichettato"
+    }
+  ],
+  "v93_implementation": {
+    "team_source_resolution_order": [
+      "saved_formation (api or async storage)",
+      "local_cached_formation",
+      "safe_fallback_formation"
+    ],
+    "ui_label_required": true,
+    "ui_label_values": ["saved_formation", "local_cached_formation", "safe_fallback_formation"],
+    "fallback_used_flag": true,
+    "writes_to_db": false,
+    "updates_to_formation": false
+  },
+  "safety": {"db_writes": 0, "reward_live": false, "formation_mutation": false}
+}

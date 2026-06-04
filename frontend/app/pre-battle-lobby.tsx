@@ -145,11 +145,24 @@ const CANONICAL_ENCOUNTERS: Record<string, ModeEncounter> = {
 
 // Player team mock per preview-only (in produzione verrebbe da
 // /api/user/get-formation o AsyncStorage). NESSUN random.
-const PLAYER_SAVED_TEAM: EnemyUnit[] = [
+const PLAYER_SAFE_FALLBACK_TEAM: EnemyUnit[] = [
   { hero_id: 'alpha_trainee_hero_01', role: 'dps', level: 12, stars: 2, power: 2600 },
   { hero_id: 'alpha_trainee_hero_02', role: 'healer', level: 12, stars: 2, power: 2400 },
   { hero_id: 'alpha_trainee_hero_03', role: 'tank', level: 12, stars: 2, power: 2800 },
 ];
+
+// v93 — Real Formation Source resolution.
+// Tenta di leggere la formation salvata in ordine: api saved -> local cached -> safe fallback.
+// In v93 NON facciamo chiamate API (mantiene preview-only / no DB writes).
+// Una versione successiva integrera' /api/team/get-formation se safe.
+type FormationSourceLabel = 'saved_formation' | 'local_cached_formation' | 'safe_fallback_formation';
+
+function resolvePlayerFormation(): { team: EnemyUnit[]; source: FormationSourceLabel; fallback_used: boolean } {
+  // v93: per ora restituiamo sempre safe_fallback_formation con flag esplicito.
+  // L'integrazione reale con /api/team/get-formation arrivera' in un pack
+  // successivo che possa farlo in modo safe senza modificare i file MD5-lockati.
+  return { team: PLAYER_SAFE_FALLBACK_TEAM, source: 'safe_fallback_formation', fallback_used: true };
+}
 
 // ─────────────────────────────────────────────────────────────────────────
 // UI
@@ -221,7 +234,8 @@ export default function PreBattleLobbyScreen() {
   const mode = (CANONICAL_ENCOUNTERS[modeParam] ? modeParam : 'story') as keyof typeof CANONICAL_ENCOUNTERS;
 
   const encounter = CANONICAL_ENCOUNTERS[mode];
-  const playerTeam = PLAYER_SAVED_TEAM;
+  const playerFormation = resolvePlayerFormation();
+  const playerTeam = playerFormation.team;
 
   const playerPower = useMemo(
     () => playerTeam.reduce((sum, u) => sum + u.power, 0),
@@ -283,7 +297,10 @@ export default function PreBattleLobbyScreen() {
           {/* Player team */}
           <View style={s.section}>
             <View style={s.sectionHeader}>
-              <Text style={s.sectionTitle}>Il Tuo Team (Formation Salvata)</Text>
+              <Text style={s.sectionTitle}>
+                Il Tuo Team · source: {playerFormation.source}
+                {playerFormation.fallback_used ? ' · fallback_used=true' : ''}
+              </Text>
               <Text style={s.sectionPower}>Potenza totale: {playerPower}</Text>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>

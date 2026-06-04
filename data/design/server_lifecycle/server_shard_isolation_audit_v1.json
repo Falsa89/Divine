@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T21:34:20.503529+00:00",
+  "timestamp_utc": "2026-06-04T21:51:55.360163+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1500,
+  "backend_python_files_scanned": 1509,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 739,
+      "files_with_hits": 742,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 335,
+      "files_with_hits": 336,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 112,
+      "files_with_hits": 113,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 119,
+      "files_with_hits": 124,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -909,7 +909,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 132,
+      "files_with_hits": 137,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1029,7 +1029,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 125,
+      "files_with_hits": 128,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1349,7 +1349,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 42,
+      "files_with_hits": 43,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",

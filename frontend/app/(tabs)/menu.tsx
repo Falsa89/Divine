@@ -96,6 +96,19 @@ const CATEGORIES = [
     ],
   },
   {
+    // MEGA_RELEASE_ACCELERATION_42 v93 — Playability Completion Superpack.
+    // Hub QA aggiuntivo per: Guild War sandbox, War/Event avatar previews,
+    // Live Announcements QA. NO production broadcast, NO push notification,
+    // NO real user PII, NO cosmetic unlock.
+    title: 'Playability & Announcements QA (v93)',
+    items: [
+      { label: 'Guild War Sandbox', icon: '\u2694\uFE0F', route: '/guild-war-sandbox-flow', gradient: ['#AA22FF', '#5511AA'] as const },
+      { label: 'War Avatar Layout Preview', icon: '\uD83D\uDEE1', route: '/war-avatar-layout-preview', gradient: ['#FFAA22', '#CC6611'] as const },
+      { label: 'Event Avatar Layout Preview', icon: '\u2728', route: '/event-avatar-layout-preview', gradient: ['#22DDAA', '#118866'] as const },
+      { label: 'Live Announcements QA', icon: '\uD83D\uDCE2', route: '/live-announcements-qa', gradient: ['#FF6644', '#CC3322'] as const },
+    ],
+  },
+  {
     // MEGA_RELEASE_ACCELERATION_41 v92 — Live/Guild/Special Mode Testability.
     // Hub QA accessibile da menu reale per testare modalita' live/guild/time-gated
     // /avatar-based con QA time-gate override, avatar placeholder dev, encounter

@@ -1,0 +1,19 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_42_v93",
+  "audit_name": "v93_team_editor_wiring_audit_v1",
+  "current_button_behavior": "router.push('/(tabs)/battle')",
+  "target_route": "/(tabs)/battle",
+  "target_file": "frontend/app/(tabs)/battle.tsx",
+  "target_status": "PRESENT_AND_FUNCTIONAL",
+  "target_features": [
+    "3 colonne Support/DPS/Tank x 3 row",
+    "drag heroes nella griglia 9-cell",
+    "salva via /api/team/update-formation (endpoint pre-esistente)",
+    "filtri elemento + sort + selezione costellazione"
+  ],
+  "history_reference": "v16.30 ROOT CAUSE / FIX: HOME_ROUTES.team mappato a /(tabs)/battle",
+  "return_to_param_supported": false,
+  "v93_decision": "WIRED_OK_NO_BLOCKER",
+  "blocker": null,
+  "safety": {"db_writes": 0, "team_mutation_from_v93": false}
+}

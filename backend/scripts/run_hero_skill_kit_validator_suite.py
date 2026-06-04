@@ -3127,6 +3127,35 @@ OPTIONAL = [
     ('PROJECT-V92-LIVE-GUILD-ENCOUNTER-SOURCE-CATALOG', 'validate_v92_live_guild_encounter_source_catalog.py'),
     ('PROJECT-V92-MODE-TEST-MATRIX', 'validate_v92_mode_test_matrix.py'),
     ('MEGA-RELEASE-ACCELERATION-41-v92-ROLLUP', 'validate_mega_release_acceleration_41_v92_rollup.py'),
+
+    # ========================================================================
+    # v93 - MEGA_RELEASE_ACCELERATION_42_PLAYABILITY_COMPLETION_SUPERPACK
+    # Playability layer completion: real formation source (saved/local/fallback),
+    # team editor wiring, read-only catalog endpoints contract (blocked by MD5
+    # lock on server.py - design ready), avatar placeholder visuals (7 SVG-like
+    # components dev-only), war/event avatar layout preview, guild war sandbox,
+    # full 15-mode playability matrix, live announcements QA (4 static + 9
+    # dynamic event templates, alias-safe, anti-spam token_bucket).
+    # db_writes=0, reward_live=false, ranking_live=false, event_currency_live=false,
+    # guild_score_mutation=0, arena_mmr=false, story_progress=false,
+    # tower_completion=false, boss_fragments=false, inventory_grant=false,
+    # cosmetic_unlock=false, monetization=false,
+    # production_announcements_broadcast=false, production_push_notifications=false,
+    # real_user_pii=false, production_time_gate_override=false,
+    # random_opponents=false, final_asset_import=false,
+    # validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v93_MEGA_RELEASE_ACCELERATION_42_PLAYABILITY_COMPLETION_SUPERPACK
+    # PUBLIC_SYNC_SENTINEL_v93_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V93-REAL-FORMATION-SOURCE', 'validate_v93_real_formation_source.py'),
+    ('PROJECT-V93-TEAM-EDITOR-WIRING', 'validate_v93_team_editor_wiring.py'),
+    ('PROJECT-V93-READONLY-CATALOG-ENDPOINTS', 'validate_v93_readonly_catalog_endpoints.py'),
+    ('PROJECT-V93-AVATAR-PLACEHOLDER-VISUALS', 'validate_v93_avatar_placeholder_visuals.py'),
+    ('PROJECT-V93-WAR-EVENT-AVATAR-PREVIEW-SCREENS', 'validate_v93_war_event_avatar_preview_screens.py'),
+    ('PROJECT-V93-GUILD-WAR-SANDBOX-FLOW', 'validate_v93_guild_war_sandbox_flow.py'),
+    ('PROJECT-V93-FULL-MODE-PLAYABILITY-MATRIX', 'validate_v93_full_mode_playability_matrix.py'),
+    ('PROJECT-V93-LIVE-ANNOUNCEMENTS-QA', 'validate_v93_live_announcements_qa.py'),
+    ('MEGA-RELEASE-ACCELERATION-42-v93-ROLLUP', 'validate_mega_release_acceleration_42_v93_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
