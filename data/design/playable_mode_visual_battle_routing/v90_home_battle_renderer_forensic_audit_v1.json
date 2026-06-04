@@ -1,0 +1,114 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_39_RESTORE_HOME_BATTLE_RENDERER_AND_REAL_MODE_ROUTING_PACK_v90",
+  "version": "v90",
+  "mode": "emergency_restore_preview_only",
+  "audit_result": "OLD_RENDERER_FOUND_IN_CURRENT_REPO",
+  "old_home_battle_renderer": {
+    "file": "frontend/app/combat.tsx",
+    "md5_locked": true,
+    "md5": "fc792a05b2ada6e677d80400732ae5c3",
+    "component_name": "CombatScreen",
+    "lines": 1848,
+    "status": "PRESENT_IN_REPO_NOT_LOST"
+  },
+  "old_home_routing_path": {
+    "home_play_shield_original": "router.push('/combat')",
+    "home_play_shield_current": "router.push('/story') via HOME_ROUTES.play",
+    "home_routes_file": "frontend/constants/homeAssetsManifest.ts",
+    "home_routes_play_line": 414,
+    "current_play_route": "/story",
+    "reason_for_play_indirection": "PROJECT_BATTLE_ENTRYPOINT_ROUTING_AND_AUTORESOLVE_AUDIT_FIX v28 esplicito comment 407-413 vieta ripristino diretto play->/combat senza pack dedicato. v90 NON e' quel pack: v90 si focalizza solo sul rewiring delle modalita' di menu, non sul PLAY shield.",
+    "combat_route_active": true,
+    "combat_route_target": "/combat",
+    "reachable_via": [
+      "PLAY shield -> /story -> Story hub -> /combat (indirect)",
+      "direct deeplink /combat (dev/QA)",
+      "v90 NEW: menu.tsx category 'Battaglia (Renderer Reale v90)' -> /combat?mode=<X>"
+    ]
+  },
+  "renderer_internal_architecture": {
+    "sprite_component": "frontend/components/BattleSprite.tsx (889 lines)",
+    "background_resolver": "frontend/components/ui/battleBackgrounds.ts (254 lines) -> pickBattleBackground / preloadBattleAsset / BattleBgResult",
+    "layout_system": "frontend/components/battle/motionSystem.ts -> buildBattleLayout / getHomePosition",
+    "animations": "frontend/components/battle/heroBattleAnimations.ts (398 lines)",
+    "debug_overlay": "frontend/components/battle/BattleDebugOverlay.tsx",
+    "loading_screen": "frontend/components/battle/BattleLoadingScreen.tsx",
+    "post_battle": "frontend/components/battle/PostBattleSummary.tsx + buildPostBattleSummary.ts",
+    "hoplite_assets": "frontend/components/ui/hopliteAssets.ts + hopliteAssetManifest.ts"
+  },
+  "player_team_source": {
+    "state_var": "teamA",
+    "loader": "startBattle() at combat.tsx line 314",
+    "backend_endpoint": "/api/battle/simulate",
+    "backend_method": "POST",
+    "backend_file": "backend/battle_engine.py line 1030 (MD5-locked)",
+    "response_field": "team_a_final",
+    "is_real": true,
+    "is_authoritative_for_v90": false,
+    "v90_introduces_new_endpoint": false
+  },
+  "enemy_team_source": {
+    "state_var": "teamB",
+    "loader": "startBattle() at combat.tsx line 314",
+    "backend_endpoint": "/api/battle/simulate",
+    "backend_method": "POST",
+    "response_field": "team_b_final",
+    "is_real": true,
+    "v90_introduces_new_endpoint": false
+  },
+  "battlefield_background_source": {
+    "state_var": "battleBg",
+    "resolver": "pickBattleBackground from frontend/components/ui/battleBackgrounds.ts",
+    "preload": "preloadBattleAsset for each asset",
+    "layout_anchor": "bfRect measured via onLayout (line 116)",
+    "is_real": true
+  },
+  "why_v86_to_v89_were_wrong": {
+    "summary": "v86-v89 hanno creato un sistema PARALLELO di preview tecnica (/playable-mode-battle-preview) invece di riusare /combat. Hanno costruito un layout 3x3 con sprite placeholder/card tecniche/letter portrait al posto del battlefield reale gia' esistente in combat.tsx.",
+    "wrong_artifacts": [
+      "frontend/app/playable-mode-battle-preview.tsx (v86-v89): grid 3x3 con sprite placeholder ma niente buildBattleLayout/getHomePosition reali e niente pickBattleBackground integrato col motion system del combat.tsx originale.",
+      "frontend/app/visual-battle-preview-router.tsx (v86): dichiarato 'Placeholder griglia 3x3, nessun asset reale, nessuna chiamata backend' — non e' il renderer Home.",
+      "frontend/app/generic-visual-battle-runner-preview.tsx: preview route gated non collegata a Home/menu/Story/combat.",
+      "frontend/app/story-visual-battle-sandbox.tsx: sandbox dev/QA non linkata da Home/menu/tabs."
+    ],
+    "diagnosis": "Lookup miss del renderer esistente. I pack v86+ hanno cercato di creare un nuovo mock 'preview-only' senza prima verificare che il renderer Home autoritativo (combat.tsx) era gia' presente, gia' MD5-lockato (intatto), gia' wired all'endpoint /api/battle/simulate, gia' completo di sprite/background/layout/animations/post-summary.",
+    "reuse_strategy_v90": "NON modificare combat.tsx (MD5-locked). NON modificare battle_engine.py. Solo aggiornare il routing in (tabs)/menu.tsx delle 5 categorie modalita' (Storia/Torre/Arena PvP/Addestramento/Raid) dal mock /playable-mode-battle-preview a /combat. Le vecchie entry restano come 'Wireframe Deprecato v88' per QA diagnostico ma marcate visivamente in grigio."
+  },
+  "restoration_plan_executed": {
+    "file_modified": "frontend/app/(tabs)/menu.tsx",
+    "category_added": "Battaglia (Renderer Reale v90) -> 5 entry verso /combat?mode=<X>",
+    "category_deprecated": "Battle Preview (Wireframe Deprecato v88) -> 5 entry verso /playable-mode-battle-preview (gradient grigio per segnalare deprecazione)",
+    "files_not_modified": [
+      "frontend/app/combat.tsx (MD5-locked, intact)",
+      "backend/battle_engine.py (MD5-locked, intact)",
+      "backend/server.py (MD5-locked, intact)",
+      "backend/.env (MD5-locked, intact)",
+      "backend/routes/artifacts.py (MD5-locked, intact)",
+      "frontend/app/battlepass.tsx (MD5-locked, intact)",
+      "frontend/app/vip.tsx (MD5-locked, intact)",
+      "frontend/app/story.tsx (MD5-locked, intact)",
+      "frontend/constants/homeAssetsManifest.ts (HOME_ROUTES.play e' fuori scope v90)",
+      "frontend/app/(tabs)/home.tsx (PLAY shield e' fuori scope v90)"
+    ]
+  },
+  "safety_envelope": {
+    "db_writes": 0,
+    "reward_live": false,
+    "endpoint_live": false,
+    "battle_engine_authoritative": false,
+    "account_mutation": false,
+    "inventory_mutation": false,
+    "premium_currency": false,
+    "event_currency": false,
+    "mmr": false,
+    "story_progress": false,
+    "tower_completion": false,
+    "boss_fragments": false,
+    "character_bible_mutation": false,
+    "hero_roster_mutation": false,
+    "final_numbers": false,
+    "fake_pass": false,
+    "validator_weakening": false
+  },
+  "verdict": "MEGA_RELEASE_ACCELERATION_39_RESTORE_HOME_BATTLE_RENDERER_AND_REAL_MODE_ROUTING_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

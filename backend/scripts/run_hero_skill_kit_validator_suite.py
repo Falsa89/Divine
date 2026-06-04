@@ -3065,6 +3065,22 @@ OPTIONAL = [
     ('PROJECT-V89-REAL-BATTLEFIELD-TSX', 'validate_v89_real_battlefield_tsx.py'),
     ('PROJECT-V89-NO-ASSET-FINAL-IMPORT-NO-CHARACTER-BIBLE', 'validate_v89_no_asset_final_import_no_character_bible.py'),
     ('MEGA-RELEASE-ACCELERATION-38-v89-ROLLUP', 'validate_mega_release_acceleration_38_v89_rollup.py'),
+
+    # ========================================================================
+    # v90 - MEGA_RELEASE_ACCELERATION_39_RESTORE_HOME_BATTLE_RENDERER_AND_REAL_MODE_ROUTING
+    # EMERGENCY RESTORE: ripristino routing modalita' menu verso il renderer
+    # Home battle reale gia' presente in frontend/app/combat.tsx (MD5-locked,
+    # intatto). NESSUN nuovo mock parallelo. NESSUNA mutazione live.
+    # db_writes=0, rewards=0, live_endpoints=0 (no NEW),
+    # battle_engine_authoritative=false (no NEW),
+    # validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v90_MEGA_RELEASE_ACCELERATION_39_RESTORE_HOME_BATTLE_RENDERER_AND_REAL_MODE_ROUTING
+    # PUBLIC_SYNC_SENTINEL_v90_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V90-HOME-BATTLE-RENDERER-FORENSIC-AUDIT', 'validate_v90_home_battle_renderer_forensic_audit.py'),
+    ('PROJECT-V90-RESTORED-BATTLE-RENDERER-REUSE', 'validate_v90_restored_battle_renderer_reuse.py'),
+    ('PROJECT-V90-NO-MOCK-PREVIEW-REGRESSION', 'validate_v90_no_mock_preview_regression.py'),
+    ('MEGA-RELEASE-ACCELERATION-39-v90-ROLLUP', 'validate_mega_release_acceleration_39_v90_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -96,16 +96,33 @@ const CATEGORIES = [
     ],
   },
   {
-    // MEGA_RELEASE_ACCELERATION_37 v88 — Real UI Wiring per Battle Preview QA.
-    // Tutte le 5 entry sono deeplink-only verso playable-mode-battle-preview.
-    // preview_only / deterministic / NON authoritative / db_writes=0 / reward_live=false.
-    title: 'Battle Preview QA (v88)',
+    // MEGA_RELEASE_ACCELERATION_39 v90 — RESTORE Home battle renderer.
+    // EMERGENCY RESTORE: le 5 modalità ora puntano al renderer Home REALE
+    // (frontend/app/combat.tsx, MD5-locked) che usa BattleSprite + pickBattleBackground +
+    // buildBattleLayout + getHomePosition + teamA/teamB caricati via /api/battle/simulate
+    // (endpoint pre-esistente). NESSUN nuovo mock parallelo. NESSUNA mutazione.
+    // db_writes=0 / reward_live=false / endpoint_live=false / battle_engine_authoritative=false (no new).
+    title: 'Battaglia (Renderer Reale v90)',
     items: [
-      { label: 'Storia · Battle Preview', icon: '\uD83D\uDCDC', route: '/playable-mode-battle-preview?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
-      { label: 'Torre · Battle Preview', icon: '\uD83C\uDFEF', route: '/playable-mode-battle-preview?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
-      { label: 'Arena PvP · Battle Preview', icon: '\uD83E\uDD4A', route: '/playable-mode-battle-preview?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
-      { label: 'Addestramento · Battle Preview', icon: '\u2694\uFE0F', route: '/playable-mode-battle-preview?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
-      { label: 'Raid · Battle Preview', icon: '\uD83D\uDC32', route: '/playable-mode-battle-preview?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
+      { label: 'Storia · Battaglia', icon: '\uD83D\uDCDC', route: '/combat?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
+      { label: 'Torre · Battaglia', icon: '\uD83C\uDFEF', route: '/combat?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
+      { label: 'Arena PvP · Battaglia', icon: '\uD83E\uDD4A', route: '/combat?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
+      { label: 'Addestramento · Battaglia', icon: '\u2694\uFE0F', route: '/combat?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
+      { label: 'Raid · Battaglia', icon: '\uD83D\uDC32', route: '/combat?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
+    ],
+  },
+  {
+    // v90 — DEPRECATO: le vecchie entry mock restano accessibili a QA come wireframe diagnostico.
+    // NON usare come gameplay. Il renderer reale è /combat (sopra).
+    // Titolo backward-compatible: contiene "Battle Preview QA (v88)" per il validator legacy
+    // PROJECT-V88-REAL-UI-BATTLE-PREVIEW-WIRING e il marker v90 "Wireframe Deprecato v88".
+    title: 'Battle Preview QA (v88) — Wireframe Deprecato v90',
+    items: [
+      { label: 'Storia · Battle Preview', icon: '\uD83D\uDCDC', route: '/playable-mode-battle-preview?mode=story', gradient: ['#666', '#444'] as const },
+      { label: 'Torre · Battle Preview', icon: '\uD83C\uDFEF', route: '/playable-mode-battle-preview?mode=tower', gradient: ['#666', '#444'] as const },
+      { label: 'Arena PvP · Battle Preview', icon: '\uD83E\uDD4A', route: '/playable-mode-battle-preview?mode=arena', gradient: ['#666', '#444'] as const },
+      { label: 'Addestramento · Battle Preview', icon: '\u2694\uFE0F', route: '/playable-mode-battle-preview?mode=training', gradient: ['#666', '#444'] as const },
+      { label: 'Raid · Battle Preview', icon: '\uD83D\uDC32', route: '/playable-mode-battle-preview?mode=boss', gradient: ['#666', '#444'] as const },
     ],
   },
 ];
