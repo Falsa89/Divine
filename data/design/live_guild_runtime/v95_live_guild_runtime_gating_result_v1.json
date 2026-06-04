@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+  "type": "live_guild_runtime_gating_result",
+  "version": 1,
+  "gates": {
+    "guild_score": "gated",
+    "live_boss_score": "gated",
+    "faction_boss_score": "gated",
+    "territory_score": "gated",
+    "live_event_kill_score": "gated",
+    "live_event_streak_score": "gated",
+    "global_ranking_update": "blocked",
+    "arena_mmr": "blocked"
+  },
+  "qa_time_override_in_production": false,
+  "canary_apply_flag_required": true,
+  "qa_canary_explicit_only": true,
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false,
+    "non_canary_reward": false,
+    "ranking_live": false,
+    "event_currency_live": false,
+    "guild_score_mutation": false,
+    "arena_mmr_live": false
+  },
+  "verdict": "LIVE_GUILD_RUNTIME_GATED_NO_LIVE_MUTATION"
+}

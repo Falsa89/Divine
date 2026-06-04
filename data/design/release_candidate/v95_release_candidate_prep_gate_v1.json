@@ -1,0 +1,37 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+  "type": "release_candidate_prep_gate",
+  "version": 1,
+  "gates": {
+    "battle_engine": "READY",
+    "reward_safety": "READY",
+    "live_guild": "READY",
+    "formation": "CONDITIONAL",
+    "readonly_endpoints": "READY",
+    "mode_playability": "READY",
+    "live_announcements": "READY",
+    "mobile_qa": "CONDITIONAL",
+    "performance": "CONDITIONAL",
+    "known_issues": "CONDITIONAL",
+    "store_readiness": "BLOCKED"
+  },
+  "blockers_for_v96": [
+    "formation: /api/team/get-formation non esposto, fallback dichiarato (BLOCKER_FOR_RELEASE_CANDIDATE)",
+    "mobile_qa: pieno run su device fisici Android/iOS richiesto prima della RC",
+    "performance: load/locust runs su scenari engine v95 mancanti",
+    "known_issues: Expo File Watcher ENOSPC + Redis non disponibile + GitHub stale push (caveat ambientali, 20 OPTIONAL FAIL atteso)",
+    "store_readiness: art/audio/store/compliance/monetization fuori scope di questo pack"
+  ],
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false,
+    "non_canary_reward": false,
+    "ranking_live": false,
+    "event_currency_live": false,
+    "guild_score_mutation": false,
+    "arena_mmr_live": false,
+    "production_broadcast": false,
+    "push_notification_live": false
+  },
+  "overall_verdict": "RC_PREP_PARTIAL_READY_BLOCKERS_DOCUMENTED"
+}

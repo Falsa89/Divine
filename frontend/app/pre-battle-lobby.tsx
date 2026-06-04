@@ -22,7 +22,7 @@
  * per evitare richieste di rete al backend (preview-only). Una versione successiva
  * potrà sostituire l'inline con un fetch a /api/encounter-source/get (NUOVO pack).
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -237,6 +237,24 @@ export default function PreBattleLobbyScreen() {
   const playerFormation = resolvePlayerFormation();
   const playerTeam = playerFormation.team;
 
+  // v95 — Endpoint runtime fetch (read-only catalog) per dichiarare la source attiva.
+  //  - endpoint_active=true      → /api/encounter-source/get raggiunto e dati validi
+  //  - endpoint_fetch_failed_fallback_local_readonly=true → fallback inline locale dichiarato
+  // NESSUNA modifica al dato visualizzato: il fetch serve a confermare che
+  // l'endpoint v95 risponde. I mirror inline restano come safe fallback dichiarato.
+  const backendUrl = (process.env.EXPO_BACKEND_URL || '').toString();
+  const [v95SourceStatus, setV95SourceStatus] = useState<'unknown' | 'endpoint_active' | 'endpoint_fetch_failed_fallback_local_readonly'>('unknown');
+  useEffect(() => {
+    let cancelled = false;
+    const ctrl = new AbortController();
+    const url = `${backendUrl}/api/encounter-source/get?mode=${encodeURIComponent(mode)}`;
+    fetch(url, { signal: ctrl.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { if (!cancelled && d && d.v95_readonly === true) setV95SourceStatus('endpoint_active'); else if (!cancelled) setV95SourceStatus('endpoint_fetch_failed_fallback_local_readonly'); })
+      .catch(() => { if (!cancelled) setV95SourceStatus('endpoint_fetch_failed_fallback_local_readonly'); });
+    return () => { cancelled = true; ctrl.abort(); };
+  }, [mode, backendUrl]);
+
   const playerPower = useMemo(
     () => playerTeam.reduce((sum, u) => sum + u.power, 0),
     [playerTeam],
@@ -278,6 +296,18 @@ export default function PreBattleLobbyScreen() {
 
           {/* Source canonica */}
           <SourceBadge enc={encounter} />
+
+          {/* v95 — Catalog source status (endpoint runtime vs fallback locale) */}
+          <View style={s.section}>
+            <Text style={s.sectionTitle}>v95 Catalog Source</Text>
+            <Text style={s.sourceVal}>
+              {v95SourceStatus === 'endpoint_active'
+                ? '✓ endpoint_active (/api/encounter-source/get)'
+                : v95SourceStatus === 'endpoint_fetch_failed_fallback_local_readonly'
+                  ? '⚠ endpoint_fetch_failed_fallback_local_readonly=true (mirror locale read-only)'
+                  : '… in attesa…'}
+            </Text>
+          </View>
 
           {/* Enemy team */}
           <View style={s.section}>

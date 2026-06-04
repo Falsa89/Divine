@@ -51,10 +51,11 @@
       ]
     },
     "runtime_safety_audit": {
-      "exit_code": 0,
-      "status": "PASS",
+      "exit_code": 1,
+      "status": "FAIL",
       "stdout_tail": [
-        "[benchmark_canonical_runtime_safety_v1] PASS errors=0"
+        "[benchmark_canonical_runtime_safety_v1] FAIL errors=1",
+        "  - CRITICAL FILE MUTATED: /app/backend/battle_engine.py"
       ]
     },
     "sanctuary_housing": {
@@ -99,7 +100,7 @@
     "no_runtime_change": true,
     "second_server_opening_allowed": false
   },
-  "status": "PASS",
+  "status": "FAIL",
   "task": "benchmark_canonical_combo_v1",
-  "utc": "2026-06-04T22:06:47.064463+00:00"
+  "utc": "2026-06-04T23:00:01.289299+00:00"
 }

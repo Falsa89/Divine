@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T22:06:40.093447+00:00",
+  "timestamp_utc": "2026-06-04T22:59:54.075559+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1520,
+  "backend_python_files_scanned": 1533,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 746,
+      "files_with_hits": 748,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -98,11 +98,11 @@
               "snippet": "# the user_hero instance used."
             },
             {
-              "line": 857,
+              "line": 971,
               "snippet": "def prepare_battle_character(hero_data: dict, user_hero_data: dict = None, position: dict = None) -> dict:"
             },
             {
-              "line": 864,
+              "line": 978,
               "snippet": "level = user_hero_data.get('level', 1) if user_hero_data else 1"
             }
           ]
@@ -145,7 +145,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 152,
+      "files_with_hits": 153,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -206,15 +206,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 1045,
+              "line": 1159,
               "snippet": "user_hero = await db.user_heroes.find_one({\"id\": pos['user_hero_id'], \"user_id\": user_id})"
             },
             {
-              "line": 1121,
+              "line": 1235,
               "snippet": "_v2_uhs = await db.user_heroes.find({\"id\": {\"$in\": _v2_uhids}, \"user_id\": user_id}).to_list(None)"
             },
             {
-              "line": 1128,
+              "line": 1242,
               "snippet": "user_heroes_by_id=_v2_uh_map,"
             }
           ]
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 337,
+      "files_with_hits": 338,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -274,15 +274,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 522,
+              "line": 535,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 531,
+              "line": 542,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 548,
+              "line": 559,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -306,7 +306,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 1219,
+              "line": 1333,
               "snippet": "await db.inventory.update_one({\"user_id\": user_id, \"item_id\": did}, {\"$inc\": {\"quantity\": qty}}, upsert=True)"
             }
           ]
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 118,
+      "files_with_hits": 119,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -370,15 +370,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 543,
+              "line": 554,
               "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
             },
             {
-              "line": 547,
+              "line": 558,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 548,
+              "line": 559,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -494,7 +494,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 839,
+              "line": 850,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
             }
           ]
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 128,
+      "files_with_hits": 132,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -797,7 +797,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 21,
+      "files_with_hits": 22,
       "hits_sample": [
         {
           "file": "backend/routes/combat.py",
@@ -884,22 +884,14 @@
           ]
         },
         {
-          "file": "backend/scripts/validate_project_generic_visual_battle_runner_contract_v1.py",
+          "file": "backend/scripts/validate_v95_reward_score_canary_sandbox.py",
           "keyword": "story_progress",
           "has_server_id_anywhere": false,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 99,
-              "snippet": "'story_progress_logic_changed': False,"
-            },
-            {
-              "line": 218,
-              "snippet": "'runner_commits_story_progress',"
-            },
-            {
-              "line": 243,
-              "snippet": "'replay_view_advances_story_progress',"
+              "line": 15,
+              "snippet": "'guild_score_mutation', 'arena_mmr_live', 'story_progress_commit',"
             }
           ]
         }
@@ -909,7 +901,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 143,
+      "files_with_hits": 148,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -922,11 +914,11 @@
               "snippet": "\"guild_id\": None,"
             },
             {
-              "line": 580,
+              "line": 591,
               "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
             },
             {
-              "line": 582,
+              "line": 593,
               "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
@@ -988,6 +980,26 @@
           ]
         },
         {
+          "file": "backend/routes/v95_readonly_catalog.py",
+          "keyword": "guild",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 34,
+              "snippet": "\"guild_live\": \"battle_mode_enemy_sources/guild_live_encounter_source_stub_catalog_v1.json\","
+            },
+            {
+              "line": 36,
+              "snippet": "_LIVE_MODE_CATALOG = \"live_mode_testability/live_guild_special_mode_encounter_source_catalog_v1.json\""
+            },
+            {
+              "line": 50,
+              "snippet": "\"\"\"Read-only: ritorna tutti i 7 encounter catalog (story/tower/arena/training/raid/event/guild_live).\"\"\""
+            }
+          ]
+        },
+        {
           "file": "backend/routes/soul_forge.py",
           "keyword": "guild",
           "has_server_id_anywhere": true,
@@ -1006,22 +1018,6 @@
               "snippet": "GUILD_SHOP = ["
             }
           ]
-        },
-        {
-          "file": "backend/routes/material_raid_preview.py",
-          "keyword": "guild",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 376,
-              "snippet": "\"guild_war_exception\": False,"
-            },
-            {
-              "line": 431,
-              "snippet": "\"guild_war_exception\": False,"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -1029,8 +1025,20 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 134,
+      "files_with_hits": 138,
       "hits_sample": [
+        {
+          "file": "backend/server.py",
+          "keyword": "ranking",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": true,
+          "sample_lines": [
+            {
+              "line": 521,
+              "snippet": "# Read-only / idempotent / NO DB writes / NO reward / NO ranking / NO PII."
+            }
+          ]
+        },
         {
           "file": "backend/bot_system.py",
           "keyword": "arena",
@@ -1068,6 +1076,26 @@
           ]
         },
         {
+          "file": "backend/routes/v95_readonly_catalog.py",
+          "keyword": "arena",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 30,
+              "snippet": "\"arena\": \"battle_mode_enemy_sources/arena_opponent_source_stub_catalog_v1.json\","
+            },
+            {
+              "line": 50,
+              "snippet": "\"\"\"Read-only: ritorna tutti i 7 encounter catalog (story/tower/arena/training/raid/event/guild_live).\"\"\""
+            },
+            {
+              "line": 68,
+              "snippet": "mode: str = Query(..., description=\"story|tower|arena|training|raid|event|guild_live\"),"
+            }
+          ]
+        },
+        {
           "file": "backend/routes/soul_forge.py",
           "keyword": "arena",
           "has_server_id_anywhere": true,
@@ -1094,38 +1122,10 @@
               "snippet": "# ==================== PVP ARENA ===================="
             }
           ]
-        },
-        {
-          "file": "backend/routes/game_data.py",
-          "keyword": "ranking",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 188,
-              "snippet": "# ===================== RANKINGS ====================="
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/achievements.py",
-          "keyword": "arena",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 24,
-              "snippet": "\"description\": \"Vinci battaglie in Arena PvP\","
-            },
-            {
-              "line": 29,
-              "snippet": "{\"target\": 500, \"reward\": {\"gems\": 500}, \"title\": \"Campione Arena\"},"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 3
+      "user_id_only_files_count": 4
     },
     "affinity": {
       "expected_scope": "server_bound",
@@ -1349,7 +1349,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 43,
+      "files_with_hits": 44,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1564,7 +1564,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 415,
+  "cross_server_leak_risk_candidates_count": 416,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",

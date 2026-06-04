@@ -1,0 +1,119 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+  "type": "engine_runtime_regression_test_result",
+  "total": 21,
+  "passed": 21,
+  "failed": 0,
+  "verdict": "PASS",
+  "results": [
+    {
+      "name": "burn_tick",
+      "result": "PASS",
+      "details": "hp=9500 dot_done=500"
+    },
+    {
+      "name": "poison_tick",
+      "result": "PASS",
+      "details": ""
+    },
+    {
+      "name": "bleed_tick",
+      "result": "PASS",
+      "details": ""
+    },
+    {
+      "name": "frostbite_dot_and_slow",
+      "result": "PASS",
+      "details": "hp=9500 speed=170"
+    },
+    {
+      "name": "curse_overwrite_policy",
+      "result": "PASS",
+      "details": "effects=[{'type': 'curse', 'damage_per_turn': 0.07, 'turns_remaining': 5, 'source': 'src2', 'category': 'shadow'}]"
+    },
+    {
+      "name": "shock_reset_duration",
+      "result": "PASS",
+      "details": "shock=[{'type': 'shock', 'damage_per_turn': 0.0, 'turns_remaining': 4, 'source': 'src', 'category': 'elemental_thunder'}]"
+    },
+    {
+      "name": "burn_sum_ticks_stacks",
+      "result": "PASS",
+      "details": "stacks=3"
+    },
+    {
+      "name": "frostbite_cap_stacks",
+      "result": "PASS",
+      "details": "stacks=3 applied=[True, True, True, False, False]"
+    },
+    {
+      "name": "cleanse_all",
+      "result": "PASS",
+      "details": ""
+    },
+    {
+      "name": "cleanse_by_category",
+      "result": "PASS",
+      "details": "leftover=['burn']"
+    },
+    {
+      "name": "cleanse_one_stack",
+      "result": "PASS",
+      "details": "left=1"
+    },
+    {
+      "name": "immunity_blocks_new",
+      "result": "PASS",
+      "details": ""
+    },
+    {
+      "name": "immunity_keeps_existing",
+      "result": "PASS",
+      "details": "dot_done=500"
+    },
+    {
+      "name": "taunt_intercepts_single",
+      "result": "PASS",
+      "details": "chosen=Tank"
+    },
+    {
+      "name": "aoe_bypasses_taunt",
+      "result": "PASS",
+      "details": ""
+    },
+    {
+      "name": "aoe_partial_respects_taunt",
+      "result": "PASS",
+      "details": ""
+    },
+    {
+      "name": "boss_freeze_converts_to_slow",
+      "result": "PASS",
+      "details": "conv={'type': 'slow', 'speed_reduction': 0.3, 'turns_remaining': 2, 'damage_per_turn': 0.0}"
+    },
+    {
+      "name": "non_boss_freeze_not_converted",
+      "result": "PASS",
+      "details": ""
+    },
+    {
+      "name": "boss_stun_converts",
+      "result": "PASS",
+      "details": "conv={'type': 'weaken', 'attack_reduction': 0.25, 'turns_remaining': 1, 'damage_per_turn': 0.0}"
+    },
+    {
+      "name": "battle_report_extension_present",
+      "result": "PASS",
+      "details": "report_keys=['dot_damage_done', 'status_applied_count', 'healing_done', 'cleanse_count', 'status_prevented_by_immunity_count', 'taunt_redirect_count', 'pack']"
+    },
+    {
+      "name": "battle_report_preserves_legacy",
+      "result": "PASS",
+      "details": "keys=['victory', 'turns', 'battle_log', 'team_a_survivors', 'team_b_survivors', 'team_a_final', 'team_b_final', 'mvp', 'total_damage_done', 'total_damage_taken']"
+    }
+  ],
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false
+  }
+}

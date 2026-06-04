@@ -1,0 +1,47 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+  "type": "reward_score_canary_sandbox_result",
+  "version": 1,
+  "mode_under_canary": "qa_canary_pve_sandbox_mode",
+  "allowlist": ["qa_alias_canary_001"],
+  "dry_run_by_default": true,
+  "sandbox_isolation": {
+    "touches_real_accounts": false,
+    "writes_to_live_db": false,
+    "writes_to_canary_sandbox": true,
+    "canary_sandbox_storage": "in_memory_only"
+  },
+  "idempotency": {
+    "replay_protection": true,
+    "dedupe_window_seconds": 60,
+    "per_alias_rate_limit_per_minute": 3
+  },
+  "rollback_drill": {
+    "executed": true,
+    "strategy": "flip_canary_off_then_purge_in_memory_state",
+    "verified": true
+  },
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false,
+    "non_canary_reward": false,
+    "ranking_live": false,
+    "event_currency_live": false,
+    "guild_score_mutation": false,
+    "arena_mmr_live": false,
+    "story_progress_commit": false,
+    "tower_completion_commit": false,
+    "boss_fragment_grant": false,
+    "inventory_grant": false,
+    "cosmetic_unlock": false,
+    "monetization": false,
+    "production_broadcast": false,
+    "push_notification_live": false,
+    "random_opponents": false,
+    "character_bible_mutation": false,
+    "hero_roster_mutation": false,
+    "final_asset_import": false,
+    "final_numbers_balance_lock": false
+  },
+  "verdict": "REWARD_SCORE_CANARY_SANDBOX_DESIGNED_AND_SCOPED_NO_LIVE_APPLY"
+}

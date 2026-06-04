@@ -27,7 +27,7 @@
  * - production_enabled = false (qa_override_only = true)
  * - production_ui_exposure = false (UI marcata "QA HUB")
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -280,6 +280,19 @@ export default function LiveGuildQaHubScreen() {
   const router = useRouter();
   const [qaOpenSet, setQaOpenSet] = useState<Record<string, boolean>>({});
 
+  // v95 — endpoint runtime status (read-only catalog live-mode).
+  const backendUrl = (process.env.EXPO_BACKEND_URL || '').toString();
+  const [v95LiveModeStatus, setV95LiveModeStatus] = useState<'unknown' | 'endpoint_active' | 'endpoint_fetch_failed_fallback_local_readonly'>('unknown');
+  useEffect(() => {
+    let cancelled = false;
+    const ctrl = new AbortController();
+    fetch(`${backendUrl}/api/live-mode/catalog`, { signal: ctrl.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { if (!cancelled && d && d.v95_readonly === true) setV95LiveModeStatus('endpoint_active'); else if (!cancelled) setV95LiveModeStatus('endpoint_fetch_failed_fallback_local_readonly'); })
+      .catch(() => { if (!cancelled) setV95LiveModeStatus('endpoint_fetch_failed_fallback_local_readonly'); });
+    return () => { cancelled = true; ctrl.abort(); };
+  }, [backendUrl]);
+
   const toggleSimulate = (mode_id: string) => {
     setQaOpenSet((prev) => ({ ...prev, [mode_id]: !prev[mode_id] }));
   };
@@ -316,6 +329,13 @@ export default function LiveGuildQaHubScreen() {
               valuta evento, punteggio gilda o progresso viene applicato. Le
               modalità time-gated possono essere simulate aperte localmente.
               Tutti gli avversari sono deterministici (no random).
+            </Text>
+            <Text style={[s.bannerTxt, { marginTop: 6, fontWeight: '700' }]}>
+              {v95LiveModeStatus === 'endpoint_active'
+                ? '✓ v95: endpoint_active (/api/live-mode/catalog)'
+                : v95LiveModeStatus === 'endpoint_fetch_failed_fallback_local_readonly'
+                  ? '⚠ v95: endpoint_fetch_failed_fallback_local_readonly=true (mirror locale read-only)'
+                  : '… v95 endpoint: in attesa…'}
             </Text>
           </View>
 

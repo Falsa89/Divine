@@ -1,0 +1,53 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+  "type": "inline_mirror_removal_result",
+  "version": 1,
+  "applied_runtime": true,
+  "files": [
+    {
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "endpoint": "/api/encounter-source/get",
+      "endpoint_active_label_added": true,
+      "endpoint_fetch_failed_fallback_local_readonly_label_added": true,
+      "inline_mirror_retained_as_explicit_fallback": true,
+      "verdict": "endpoint_runtime_used_with_explicit_fallback"
+    },
+    {
+      "file": "frontend/app/live-guild-qa-hub.tsx",
+      "endpoint": "/api/live-mode/catalog",
+      "endpoint_active_label_added": true,
+      "endpoint_fetch_failed_fallback_local_readonly_label_added": true,
+      "inline_mirror_retained_as_explicit_fallback": true,
+      "verdict": "endpoint_runtime_used_with_explicit_fallback"
+    },
+    {
+      "file": "frontend/app/live-mode-pre-entry-lobby.tsx",
+      "endpoint": "/api/live-mode/catalog",
+      "endpoint_active_label_added": true,
+      "endpoint_fetch_failed_fallback_local_readonly_label_added": true,
+      "inline_mirror_retained_as_explicit_fallback": true,
+      "verdict": "endpoint_runtime_used_with_explicit_fallback"
+    },
+    {
+      "file": "frontend/app/live-announcements-qa.tsx",
+      "endpoint": "/api/live-mode/catalog (sandbox bridge)",
+      "endpoint_active_label_added": true,
+      "endpoint_fetch_failed_fallback_local_readonly_label_added": true,
+      "inline_mirror_retained_as_explicit_fallback": true,
+      "verdict": "endpoint_runtime_used_with_explicit_fallback"
+    }
+  ],
+  "policy": {
+    "do_not_fake_endpoint_use_if_fallback_entered": true,
+    "show_explicit_label_in_ui": true,
+    "no_blank_screen_allowed": true
+  },
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false,
+    "ranking_live": false,
+    "production_broadcast": false,
+    "push_notification_live": false
+  },
+  "verdict": "INLINE_MIRROR_REMOVAL_RUNTIME_APPLIED_WITH_EXPLICIT_FALLBACK"
+}

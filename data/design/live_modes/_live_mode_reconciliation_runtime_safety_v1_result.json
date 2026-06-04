@@ -1,15 +1,17 @@
 {
   "af2n_cap_s2_marker_present": true,
   "design_only": true,
-  "errors": [],
+  "errors": [
+    "CRITICAL FILE MUTATED: /app/backend/battle_engine.py"
+  ],
   "live_mode_collections_found": [],
   "mongo_reachable": true,
   "no_db_write": true,
   "no_live_mode_runtime_routes": true,
-  "protected_files_match": true,
+  "protected_files_match": false,
   "second_server_opening_enabled": null,
   "server_profiles_runtime_enabled": null,
-  "status": "PASS",
+  "status": "FAIL",
   "task": "live_mode_reconciliation_runtime_safety_v1",
-  "utc": "2026-06-04T22:06:44.396322+00:00"
+  "utc": "2026-06-04T22:59:58.451491+00:00"
 }

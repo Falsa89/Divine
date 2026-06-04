@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+  "type": "real_formation_runtime_fetch_result",
+  "version": 1,
+  "target_endpoint": "/api/team/get-formation",
+  "endpoint_present": false,
+  "reason": "endpoint non esposto nel backend corrente (404). Una versione successiva esporrà il fetch della formazione salvata.",
+  "chain_implemented": [
+    "saved_formation",
+    "local_cached_formation",
+    "safe_fallback_formation"
+  ],
+  "ui_source_label_visible": true,
+  "ui_fallback_used_flag_visible": true,
+  "current_active_source": "safe_fallback_formation",
+  "fallback_used": true,
+  "verdict": "CONDITIONAL",
+  "release_candidate_flag": "BLOCKER_FOR_RELEASE_CANDIDATE",
+  "blocker_explanation": "Il backend non espone ancora /api/team/get-formation. La lobby NON spaccia il fallback per team reale: la UI mostra esplicitamente source=safe_fallback_formation e fallback_used=true. La risoluzione runtime della formazione reale è materiale obbligatorio per il prossimo Release Candidate (v96).",
+  "safety": {
+    "db_writes": 0,
+    "team_mutation": false,
+    "hero_roster_mutation": false,
+    "reward_live": false
+  }
+}

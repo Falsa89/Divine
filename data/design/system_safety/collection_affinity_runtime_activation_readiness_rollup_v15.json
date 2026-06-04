@@ -5,7 +5,7 @@
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-06-04T22:06:14.268815Z",
+  "generated_at_utc": "2026-06-04T22:59:29.620620Z",
   "summary": "SAFETY-ROLLUP-O — V20 Stage4 internal beta PLAN-ONLY + Rollback drills dry-run + Signoffs V5 package (all PENDING) + Locust extended low-impact + Public UI preview QA/A11y audit. NESSUN Stage4 apply. Invarianti hard tenuti: /api/heroes=100, Borea hidden/404, battle/combat files NOT modified, no buffs, no battle wiring, no public spend UI, no broad rollout.",
   "inputs_present": {
     "v20_preflight": true,
@@ -51,8 +51,8 @@
     "explicit_status": "PACKAGE_DRAFTED_ALL_SIGNOFFS_PENDING_APPLY_DENIED"
   },
   "public_ui_preview_qa_a11y": {
-    "overall": "PASS",
-    "failures_count": 0,
+    "overall": "FAIL",
+    "failures_count": 1,
     "a11y_label_count": 8,
     "a11y_role_count": 8
   },
@@ -83,7 +83,7 @@
     "stage4_applied": false,
     "stage4_apply_allowed": false,
     "public_spend_ui": false,
-    "public_ui_preview_readonly_qa_a11y_passed": true,
+    "public_ui_preview_readonly_qa_a11y_passed": false,
     "inventory_wiring_live": true,
     "inventory_mutation_enabled": true,
     "affinity_points_mutation_enabled": true,

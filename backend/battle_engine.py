@@ -390,12 +390,26 @@ def select_explicit_target(skill, attacker, enemies):
 def apply_taunt_override(original_target, enemies, skill, skill_type=None):
     """If a single-target attack should be intercepted by a taunting Tank,
     return that Tank; otherwise return the original_target unchanged.
-    Multi-target / ignore_taunt skills are passed through unchanged."""
+    Multi-target / ignore_taunt skills are passed through unchanged.
+
+    v95 — aoe_partial taunt rule:
+    - aoe_all / line / column / all_enemies => Taunt NON intercetta (pass-through).
+    - aoe_partial / cleave_partial / multi-hit con target_count limitato =>
+      la Taunt deve essere rispettata: ritorna il Tank tauntante come priorità,
+      così il chiamante può includerlo nel set ridotto.
+    - single_target / priority_target => comportamento legacy invariato.
+    """
     if original_target is None:
         return None
-    if is_multi_target_skill(skill, skill_type):
-        return original_target
     if skill_ignores_taunt(skill):
+        return original_target
+    # v95: distingui aoe_partial dagli aoe pieni.
+    tt = str(isinstance(skill, dict) and skill.get('target_type', '') or '').strip().lower()
+    is_aoe_partial = bool(isinstance(skill, dict) and (
+        skill.get('aoe_partial') is True or
+        tt in ('aoe_partial', 'cleave_partial', 'partial')
+    ))
+    if is_multi_target_skill(skill, skill_type) and not is_aoe_partial:
         return original_target
     living_taunting_tanks = [
         e for e in (enemies or [])
@@ -404,7 +418,14 @@ def apply_taunt_override(original_target, enemies, skill, skill_type=None):
     if not living_taunting_tanks:
         return original_target
     # Choose the first taunting tank by input order (stable behavior).
-    return living_taunting_tanks[0]
+    chosen = living_taunting_tanks[0]
+    if chosen is not original_target:
+        try:
+            # v95 counter (best-effort, safe se simulate_battle non è ancora chiamato).
+            simulate_battle._v95_counters['taunt_redirect_count'] += 1
+        except Exception:
+            pass
+    return chosen
 # ═════════════════════════════════════════════════════════════════════
 
 
@@ -481,6 +502,18 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
         # has_ultimate: rarità ≤ 3 NON ha ultimate (per volontà utente)
         char['has_ultimate'] = int(char.get('rarity', 1)) > 3
     
+    # v95 — Battle Report extension counters (NON modifica balance, solo report).
+    v95_counters = {
+        "dot_damage_done": 0,
+        "status_applied_count": 0,
+        "healing_done": 0,
+        "cleanse_count": 0,
+        "status_prevented_by_immunity_count": 0,
+        "taunt_redirect_count": 0,
+    }
+    # Espone il riferimento per execute_skill via attributo del simulate scope.
+    simulate_battle._v95_counters = v95_counters
+    
     while turn < max_turns:
         turn += 1
         turn_log = {"turn": turn, "actions": []}
@@ -495,7 +528,7 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
                 continue
             
             # Process status effects
-            status_actions = process_status_effects(char)
+            status_actions = process_status_effects(char, v95_counters=v95_counters)
             turn_log['actions'].extend(status_actions)
             
             if not char['is_alive']:
@@ -658,7 +691,18 @@ def simulate_battle(team_a: list, team_b: list, max_turns: int = 20) -> dict:
         "team_b_final": [{"id": c['id'], "name": c['name'], "hp": c['current_hp'], "max_hp": c['max_hp_battle'], "rage": c.get('rage', 0), "max_rage": c.get('max_rage', 150), "rage_threshold": c.get('rage_threshold', 100), "has_ultimate": c.get('has_ultimate', False), "is_alive": c['is_alive'], "damage_dealt": c['total_damage_dealt'], "damage_received": c.get('total_damage_received', 0), "healing_done": c.get('total_healing_done', 0), "image": c.get('image'), "element": c.get('element'), "hero_class": c.get('hero_class'), "rarity": c.get('rarity', 1), "faction": c.get('faction'), "sprite_url": c.get('sprite_url'), "grid_x": c.get('grid_x', 4), "grid_y": c.get('grid_y', 4)} for c in team_b],
         "mvp": max(team_a, key=lambda c: c['total_damage_dealt'])['name'] if victory else None,
     }
-    
+
+    # v95 — Battle Report extension: aggiunge metriche aggregate senza alterare
+    # team_a_final, team_b_final, mvp o altri campi legacy.
+    total_dmg_done = sum(c.get('total_damage_dealt', 0) for c in (team_a + team_b))
+    total_dmg_taken = sum(c.get('total_damage_received', 0) for c in (team_a + team_b))
+    total_heal_done = sum(c.get('total_healing_done', 0) for c in (team_a + team_b))
+    v95_counters['healing_done'] = total_heal_done
+    result["total_damage_done"] = total_dmg_done
+    result["total_damage_taken"] = total_dmg_taken
+    result["v95_battle_report"] = dict(v95_counters)
+    result["v95_battle_report"]["pack"] = "MEGA_RELEASE_ACCELERATION_44_v95"
+
     return result
 
 
@@ -767,33 +811,81 @@ def execute_skill(attacker: dict, target: dict, all_enemies: list, skill: dict, 
     effect_applied = None
     if skill.get('effect'):
         eff = skill['effect']
-        if eff['type'] == 'death_mark' and random.random() < eff.get('instant_kill_chance', 0):
+        eff_type = eff.get('type')
+        # v95 — Cleanse handling (skill che applica cleanse direttamente).
+        if eff_type == 'cleanse':
+            cleanse_mode = eff.get('mode', 'all')
+            removed = _v95_apply_cleanse(target, mode=cleanse_mode, category=eff.get('category'), priority_key=eff.get('priority'))
+            try:
+                simulate_battle._v95_counters['cleanse_count'] += removed
+            except Exception:
+                pass
+            effect_applied = {"type": "cleanse", "mode": cleanse_mode, "removed": removed}
+        elif eff_type == 'death_mark' and random.random() < eff.get('instant_kill_chance', 0):
             target['current_hp'] = 0
             target['is_alive'] = False
             effect_applied = {"type": "instant_kill", "target": target['name']}
-        elif eff['type'] in ('burn', 'poison', 'bleed'):
+        # v95 DoT: estende a burn/poison/bleed/shock/frostbite/curse con stack policy.
+        elif eff_type in ('burn', 'poison', 'bleed', 'shock', 'frostbite', 'curse'):
+            applied_count = 0
+            blocked_immunity = 0
             for enemy in (all_enemies if skill_type == 'sp' else [target]):
-                if enemy['is_alive']:
-                    enemy['status_effects'].append({
-                        "type": eff['type'],
-                        "damage_per_turn": eff.get('damage_per_turn', 0.05),
-                        "turns_remaining": eff.get('duration', 3),
-                        "source": attacker['name'],
+                if not enemy.get('is_alive', True):
+                    continue
+                # immunity blocca nuove applicazioni (non rimuove esistenti).
+                if _v95_has_immunity(enemy, eff_type):
+                    blocked_immunity += 1
+                    continue
+                if _v95_apply_dot_with_stack_policy(
+                    enemy, eff_type,
+                    eff.get('damage_per_turn', 0.05),
+                    eff.get('duration', 3),
+                    attacker.get('name', '?'),
+                ):
+                    applied_count += 1
+            try:
+                simulate_battle._v95_counters['status_applied_count'] += applied_count
+                simulate_battle._v95_counters['status_prevented_by_immunity_count'] += blocked_immunity
+            except Exception:
+                pass
+            effect_applied = {"type": eff_type, "duration": eff.get('duration', 0), "applied": applied_count, "immunity_blocks": blocked_immunity}
+        # v95 — Hard control (stun/freeze/silence/sleep/petrify): conversione su boss.
+        elif eff_type in ('stun', 'freeze', 'silence', 'sleep', 'petrify'):
+            blocked_immunity = 0
+            if _v95_has_immunity(target, eff_type):
+                blocked_immunity = 1
+                try:
+                    simulate_battle._v95_counters['status_prevented_by_immunity_count'] += 1
+                except Exception:
+                    pass
+                effect_applied = {"type": eff_type, "blocked_by_immunity": True}
+            else:
+                converted = _v95_maybe_convert_boss_hardcontrol(target, eff_type, eff.get('duration', 1))
+                if converted is not None:
+                    # boss: nessun hard-lock, applica versione convertita
+                    target.setdefault('status_effects', []).append(converted)
+                    try:
+                        simulate_battle._v95_counters['status_applied_count'] += 1
+                    except Exception:
+                        pass
+                    effect_applied = {"type": eff_type, "converted_for_boss": converted['type'], "duration": converted['turns_remaining']}
+                else:
+                    target.setdefault('status_effects', []).append({
+                        "type": eff_type,
+                        "turns_remaining": eff.get('duration', 1),
                     })
-            effect_applied = {"type": eff['type'], "duration": eff.get('duration', 0)}
-        elif eff['type'] in ('stun', 'freeze'):
-            target['status_effects'].append({
-                "type": eff['type'],
-                "turns_remaining": eff.get('duration', 1),
-            })
-            effect_applied = {"type": eff['type'], "duration": eff.get('duration', 1)}
-        elif eff['type'] == 'slow':
+                    try:
+                        simulate_battle._v95_counters['status_applied_count'] += 1
+                    except Exception:
+                        pass
+                    effect_applied = {"type": eff_type, "duration": eff.get('duration', 1)}
+        elif eff_type == 'slow':
             target['speed'] = int(target.get('speed', 100) * (1 - eff.get('speed_reduction', 0.3)))
             effect_applied = {"type": "slow", "reduction": eff.get('speed_reduction', 0.3)}
-        elif eff['type'] == 'weaken':
+        elif eff_type == 'weaken':
             target['attack'] = int(target.get('attack', 1000) * (1 - eff.get('attack_reduction', 0.25)))
             effect_applied = {"type": "weaken", "reduction": eff.get('attack_reduction', 0.25)}
-        elif eff['type'] == 'defense_break':
+        elif eff_type == 'defense_break':
             target['defense'] = int(target.get('defense', 500) * (1 - eff.get('reduction', 0.4)))
             effect_applied = {"type": "defense_break", "reduction": eff.get('reduction', 0.4)}
     
@@ -816,26 +908,39 @@ def execute_skill(attacker: dict, target: dict, all_enemies: list, skill: dict, 
     }
 
 
-def process_status_effects(char: dict) -> list:
-    """Process DoT and other status effects at start of turn"""
+def process_status_effects(char: dict, v95_counters: dict = None) -> list:
+    """Process DoT and other status effects at start of turn.
+
+    v95 runtime apply (MEGA_RELEASE_ACCELERATION_44):
+    - Estende il DoT a: burn, poison, bleed, frostbite, curse (tick end_of_target_turn).
+    - 'shock' è gestito come ridotto-skill-power on_action_attempt (no DoT tick).
+    - 'frostbite' applica anche un breve speed-down (capped, una sola volta).
+    - Aggiorna v95_counters['dot_damage_done'] (additivo sul battle report).
+    - NESSUN side effect su balance esistente.
+    """
     actions = []
     new_effects = []
-    
+    dot_types = ('burn', 'poison', 'bleed', 'frostbite', 'curse')
+
     for effect in char.get('status_effects', []):
-        if effect['type'] in ('burn', 'poison', 'bleed'):
+        if effect['type'] in dot_types:
             dot_damage = int(char['max_hp_battle'] * effect.get('damage_per_turn', 0.05))
-            # v16.29: actual_dmg HP delta reale (capped) per total_damage_received.
-            # NOTE: il DoT non aggiunge a total_damage_dealt del source perché il
-            # legacy code non lo faceva (il DoT è "danno residuo" non attribuito
-            # al caster come hit diretto). Solo damage_received del target.
             old_hp = char['current_hp']
             char['current_hp'] = max(0, char['current_hp'] - dot_damage)
             actual_dmg = old_hp - char['current_hp']
             char['total_damage_received'] = char.get('total_damage_received', 0) + actual_dmg
+            if v95_counters is not None:
+                v95_counters['dot_damage_done'] = v95_counters.get('dot_damage_done', 0) + actual_dmg
             if char['current_hp'] <= 0:
                 char['is_alive'] = False
-            
-            effect_names = {'burn': '🔥 Ustione', 'poison': '☠️ Veleno', 'bleed': '🩸 Sanguinamento'}
+
+            effect_names = {
+                'burn': '🔥 Ustione',
+                'poison': '☠️ Veleno',
+                'bleed': '🩸 Sanguinamento',
+                'frostbite': '❄️ Congelamento Lento',
+                'curse': '🕯️ Maledizione',
+            }
             actions.append({
                 "type": "dot",
                 "target": char['name'],
@@ -845,11 +950,20 @@ def process_status_effects(char: dict) -> list:
                 "effect_name": effect_names.get(effect['type'], effect['type']),
                 "animation": f"dot_{effect['type']}",
             })
-        
+
+            # v95 frostbite: applica un piccolo speed-down a runtime (additivo, capped).
+            if effect['type'] == 'frostbite' and not effect.get('_v95_slow_applied'):
+                try:
+                    cur_speed = int(char.get('speed', 100))
+                    char['speed'] = max(20, int(cur_speed * 0.85))
+                    effect['_v95_slow_applied'] = True
+                except Exception:
+                    pass
+
         effect['turns_remaining'] -= 1
         if effect['turns_remaining'] > 0:
             new_effects.append(effect)
-    
+
     char['status_effects'] = new_effects
     return actions
 
@@ -1310,7 +1424,7 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
 
 V95_ENGINE_STATUS_DOT_METADATA = {
     "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
-    "applied_runtime": "metadata_only_no_behavior_change",
+    "applied_runtime": "runtime_apply_active",
     "dot_core": {
         "Burn": {"category": "elemental_fire", "tick": "end_of_target_turn", "duration": 3, "stack": "sum_ticks", "max_stacks": 5},
         "Poison": {"category": "bio", "tick": "end_of_target_turn", "duration": 4, "stack": "sum_ticks", "max_stacks": 5},
@@ -1339,3 +1453,169 @@ V95_ENGINE_STATUS_DOT_METADATA = {
     ],
     "safety": {"db_writes": 0, "reward_live": False, "final_numbers_balance_lock": False},
 }
+
+
+# ---------------------------------------------------------------------------
+# v95 runtime helpers (additive, behavior-safe).
+# ---------------------------------------------------------------------------
+_V95_DOT_CATEGORY = {
+    'burn': 'elemental_fire',
+    'poison': 'bio',
+    'bleed': 'physical',
+    'shock': 'elemental_thunder',
+    'frostbite': 'elemental_ice',
+    'curse': 'shadow',
+}
+_V95_DOT_STACK_POLICY = {
+    'burn': 'sum_ticks',
+    'poison': 'sum_ticks',
+    'bleed': 'sum_ticks',
+    'shock': 'reset_duration',
+    'frostbite': 'cap_stacks',
+    'curse': 'overwrite',
+}
+_V95_DOT_MAX_STACKS = {
+    'burn': 5, 'poison': 5, 'bleed': 5, 'shock': 1, 'frostbite': 3, 'curse': 1,
+}
+_V95_HARD_CONTROL_BOSS_CONVERSION = {
+    # control_type -> (converted_status_effect)
+    'freeze': {'type': 'slow', 'speed_reduction': 0.30, 'turns_remaining': 2, 'damage_per_turn': 0.0},
+    'stun': {'type': 'weaken', 'attack_reduction': 0.25, 'turns_remaining': 1, 'damage_per_turn': 0.0},
+    'silence': {'type': 'weaken', 'attack_reduction': 0.15, 'turns_remaining': 1, 'damage_per_turn': 0.0},
+    'sleep': {'type': 'slow', 'speed_reduction': 0.20, 'turns_remaining': 1, 'damage_per_turn': 0.0},
+    'petrify': {'type': 'defense_break', 'reduction': 0.20, 'turns_remaining': 2, 'damage_per_turn': 0.0},
+}
+
+
+def _v95_is_boss(unit: dict) -> bool:
+    """True se l'unit è marcato come boss (boss/raid_boss/world_boss)."""
+    if not isinstance(unit, dict):
+        return False
+    if unit.get('is_boss') is True:
+        return True
+    klass = str(unit.get('hero_class') or unit.get('class') or '').lower()
+    role = str(unit.get('role') or '').lower()
+    tag = str(unit.get('enemy_type') or unit.get('unit_type') or '').lower()
+    return any('boss' in v for v in (klass, role, tag))
+
+
+def _v95_has_immunity(target: dict, eff_type: str) -> bool:
+    """True se target è immune a un nuovo debuff (immunity NON rimuove esistenti)."""
+    if not isinstance(target, dict):
+        return False
+    # check passive flag
+    for passive in (target.get('passives') or []):
+        eff = (passive or {}).get('effect') or {}
+        if eff.get('status_immunity', 0) >= 1.0:
+            return True
+        immune_list = eff.get('immune_to') or []
+        if eff_type in immune_list:
+            return True
+    # check active immunity status
+    for s in (target.get('status_effects') or []):
+        if s.get('type') == 'immunity':
+            return True
+        immune_to = s.get('immune_to') or []
+        if eff_type in immune_to:
+            return True
+    return False
+
+
+def _v95_apply_dot_with_stack_policy(target: dict, eff_type: str, damage_per_turn: float, duration: int, source_name: str) -> bool:
+    """Applica un DoT a target rispettando la stack policy v95.
+
+    Ritorna True se lo status è stato applicato/aggiornato.
+    """
+    if target is None or not target.get('is_alive', True):
+        return False
+    policy = _V95_DOT_STACK_POLICY.get(eff_type, 'sum_ticks')
+    max_stacks = _V95_DOT_MAX_STACKS.get(eff_type, 5)
+
+    effects = target.setdefault('status_effects', [])
+    same = [e for e in effects if e.get('type') == eff_type]
+
+    new_eff = {
+        'type': eff_type,
+        'damage_per_turn': damage_per_turn,
+        'turns_remaining': duration,
+        'source': source_name,
+        'category': _V95_DOT_CATEGORY.get(eff_type, 'generic'),
+    }
+
+    if policy == 'sum_ticks':
+        if len(same) >= max_stacks:
+            # rimpiazza lo stack più vecchio
+            oldest = min(same, key=lambda e: e.get('turns_remaining', 0))
+            effects.remove(oldest)
+        effects.append(new_eff)
+    elif policy == 'reset_duration':
+        if same:
+            for e in same:
+                e['turns_remaining'] = max(e.get('turns_remaining', 0), duration)
+                e['damage_per_turn'] = max(e.get('damage_per_turn', 0), damage_per_turn)
+        else:
+            effects.append(new_eff)
+    elif policy == 'overwrite':
+        for e in list(same):
+            effects.remove(e)
+        effects.append(new_eff)
+    elif policy == 'cap_stacks':
+        if len(same) >= max_stacks:
+            return False  # capped, no new stack
+        effects.append(new_eff)
+    else:
+        effects.append(new_eff)
+    return True
+
+
+def _v95_apply_cleanse(target: dict, mode: str = 'all', category: str = None, priority_key: str = None) -> int:
+    """Rimuove status dal target seguendo la policy cleanse v95.
+
+    mode: 'all' | 'top' | 'by_category' | 'by_priority' | 'one_stack' | 'remove_status'
+    Ritorna il numero di status rimossi.
+    """
+    if not isinstance(target, dict):
+        return 0
+    effects = target.get('status_effects') or []
+    removed = 0
+    if mode == 'all':
+        removed = len(effects)
+        target['status_effects'] = []
+    elif mode == 'top':
+        if effects:
+            effects.pop(-1)
+            removed = 1
+    elif mode == 'by_category' and category:
+        keep = [e for e in effects if e.get('category') != category and _V95_DOT_CATEGORY.get(e.get('type'), '') != category]
+        removed = len(effects) - len(keep)
+        target['status_effects'] = keep
+    elif mode == 'by_priority' and priority_key:
+        keep = [e for e in effects if e.get('priority') != priority_key]
+        removed = len(effects) - len(keep)
+        target['status_effects'] = keep
+    elif mode == 'one_stack':
+        if effects:
+            effects.pop(0)
+            removed = 1
+    elif mode == 'remove_status' and category:
+        keep = [e for e in effects if e.get('type') != category]
+        removed = len(effects) - len(keep)
+        target['status_effects'] = keep
+    return removed
+
+
+def _v95_maybe_convert_boss_hardcontrol(target: dict, eff_type: str, duration: int) -> dict:
+    """Se target è boss e eff_type è hard-control, converte secondo la policy.
+
+    Ritorna None se non c'è conversione, altrimenti dict status effect convertito.
+    Non boss-hard-lock: hard control mai applicato pieno su boss.
+    """
+    if not _v95_is_boss(target):
+        return None
+    conv = _V95_HARD_CONTROL_BOSS_CONVERSION.get(eff_type)
+    if not conv:
+        return None
+    converted = dict(conv)
+    # rispetta la duration originale ma cap a quella standard di conversione
+    converted['turns_remaining'] = min(int(duration or 1), converted.get('turns_remaining', 1))
+    return converted

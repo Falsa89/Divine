@@ -19,7 +19,7 @@
  *   - random_opponents_allowed = false
  *   - db_writes = 0
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -268,6 +268,19 @@ export default function LiveModePreEntryLobbyScreen() {
     [enc],
   );
 
+  // v95 — endpoint runtime status (read-only catalog live-mode).
+  const backendUrl = (process.env.EXPO_BACKEND_URL || '').toString();
+  const [v95LiveModeStatus, setV95LiveModeStatus] = useState<'unknown' | 'endpoint_active' | 'endpoint_fetch_failed_fallback_local_readonly'>('unknown');
+  useEffect(() => {
+    let cancelled = false;
+    const ctrl = new AbortController();
+    fetch(`${backendUrl}/api/live-mode/catalog`, { signal: ctrl.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { if (!cancelled && d && d.v95_readonly === true) setV95LiveModeStatus('endpoint_active'); else if (!cancelled) setV95LiveModeStatus('endpoint_fetch_failed_fallback_local_readonly'); })
+      .catch(() => { if (!cancelled) setV95LiveModeStatus('endpoint_fetch_failed_fallback_local_readonly'); });
+    return () => { cancelled = true; ctrl.abort(); };
+  }, [backendUrl]);
+
   const startTestBattle = () => {
     // Route to /combat with mode + encounter_id from canonical source.
     // The combat renderer (MD5-locked) accept extra params; unknowns ignored safely.
@@ -315,6 +328,13 @@ export default function LiveModePreEntryLobbyScreen() {
             </Text>
             <Text style={s.qaWindowSub}>
               production_enabled=false · qa_override_only=true
+            </Text>
+            <Text style={[s.qaWindowSub, { marginTop: 4, fontWeight: '700' }]}>
+              {v95LiveModeStatus === 'endpoint_active'
+                ? '✓ v95: endpoint_active'
+                : v95LiveModeStatus === 'endpoint_fetch_failed_fallback_local_readonly'
+                  ? '⚠ v95: endpoint_fetch_failed_fallback_local_readonly=true'
+                  : '… v95 endpoint: in attesa…'}
             </Text>
           </View>
 

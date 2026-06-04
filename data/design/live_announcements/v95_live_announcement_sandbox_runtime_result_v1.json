@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_44_v95",
+  "type": "live_announcement_sandbox_runtime_result",
+  "version": 1,
+  "sandbox": {
+    "production_broadcast": false,
+    "push_notification_live": false,
+    "real_user_pii": false,
+    "alias_only": true,
+    "alias_namespace": "qa_alias_*"
+  },
+  "anti_spam": {
+    "per_user_per_minute_max": 3,
+    "per_channel_per_minute_max": 30,
+    "dedupe_window_seconds": 60
+  },
+  "channels_testable": ["global", "events", "arena", "guild", "community", "system"],
+  "event_bridge": {
+    "engine_events_generate_broadcast": false,
+    "reward_events_generate_broadcast": false,
+    "live_events_generate_broadcast": false
+  },
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false,
+    "production_broadcast": false,
+    "push_notification_live": false
+  },
+  "verdict": "LIVE_ANNOUNCEMENT_SANDBOX_RUNTIME_SAFE_NO_PRODUCTION_BROADCAST"
+}

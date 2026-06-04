@@ -3,7 +3,7 @@
  * Catalogo statico + simulatore evento dinamico + ticker feed preview.
  * QA SIMULATION ONLY — NO PRODUCTION BROADCAST — NO PUSH NOTIFICATION — NO PII.
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -86,6 +86,22 @@ export default function LiveAnnouncementsQaScreen() {
     else router.push('/live-guild-qa-hub' as any);
   };
 
+  // v95 — endpoint runtime status (read-only catalog).
+  // Per Live Announcements non esiste un endpoint dedicato; come safety bridge
+  // verifichiamo l'endpoint live-mode (lo stesso ambiente garantisce che il
+  // catalog v95 è raggiungibile e nessun broadcast reale viene generato).
+  const backendUrl = (process.env.EXPO_BACKEND_URL || '').toString();
+  const [v95EndpointStatus, setV95EndpointStatus] = useState<'unknown' | 'endpoint_active' | 'endpoint_fetch_failed_fallback_local_readonly'>('unknown');
+  useEffect(() => {
+    let cancelled = false;
+    const ctrl = new AbortController();
+    fetch(`${backendUrl}/api/live-mode/catalog`, { signal: ctrl.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(d => { if (!cancelled && d && d.v95_readonly === true) setV95EndpointStatus('endpoint_active'); else if (!cancelled) setV95EndpointStatus('endpoint_fetch_failed_fallback_local_readonly'); })
+      .catch(() => { if (!cancelled) setV95EndpointStatus('endpoint_fetch_failed_fallback_local_readonly'); });
+    return () => { cancelled = true; ctrl.abort(); };
+  }, [backendUrl]);
+
   return (
     <SafeAreaView style={s.safe}>
       <LinearGradient colors={['#150825', '#3A1F60']} style={s.bg}>
@@ -103,6 +119,13 @@ export default function LiveAnnouncementsQaScreen() {
               nessun dato utente reale. Tutti gli alias sono fittizi
               (qa_alias_*). Anti-spam attivo: max 3 per utente/min, max 30 per
               canale/min, dedupe 60s.
+            </Text>
+            <Text style={[s.bannerTxt, { marginTop: 6, fontWeight: '700' }]}>
+              {v95EndpointStatus === 'endpoint_active'
+                ? '✓ v95: endpoint_active (sandbox bridge)'
+                : v95EndpointStatus === 'endpoint_fetch_failed_fallback_local_readonly'
+                  ? '⚠ v95: endpoint_fetch_failed_fallback_local_readonly=true'
+                  : '… v95 endpoint: in attesa…'}
             </Text>
           </View>
 

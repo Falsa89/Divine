@@ -3184,6 +3184,21 @@ OPTIONAL = [
     ('PROJECT-V94-REAL-FORMATION-INTEGRATION', 'validate_v94_real_formation_integration.py'),
     ('PROJECT-V94-LIVE-ANNOUNCEMENT-SAFETY-BRIDGE', 'validate_v94_live_announcement_safety_bridge.py'),
     ('MEGA-RELEASE-ACCELERATION-43-v94-ROLLUP', 'validate_mega_release_acceleration_43_v94_rollup.py'),
+    # ========================================================================
+    # v95 - MEGA_RELEASE_ACCELERATION_44_RUNTIME_APPLY_AND_RELEASE_CANDIDATE_PREP_SUPERPACK
+    # PUBLIC_SYNC_TAG_v95_MEGA_RELEASE_ACCELERATION_44_RUNTIME_APPLY_AND_RELEASE_CANDIDATE_PREP_SUPERPACK
+    # PUBLIC_SYNC_SENTINEL_v95_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V95-BATTLE-ENGINE-RUNTIME-APPLY', 'validate_v95_battle_engine_runtime_apply.py'),
+    ('PROJECT-V95-ENGINE-RUNTIME-REGRESSION-TESTS', 'validate_v95_engine_runtime_regression_tests.py'),
+    ('PROJECT-V95-READONLY-CATALOG-ENDPOINTS-RUNTIME', 'validate_v95_readonly_catalog_endpoints_runtime.py'),
+    ('PROJECT-V95-INLINE-MIRROR-REMOVAL', 'validate_v95_inline_mirror_removal.py'),
+    ('PROJECT-V95-REAL-FORMATION-RUNTIME-FETCH', 'validate_v95_real_formation_runtime_fetch.py'),
+    ('PROJECT-V95-REWARD-SCORE-CANARY-SANDBOX', 'validate_v95_reward_score_canary_sandbox.py'),
+    ('PROJECT-V95-LIVE-GUILD-RUNTIME-GATING', 'validate_v95_live_guild_runtime_gating.py'),
+    ('PROJECT-V95-LIVE-ANNOUNCEMENT-SANDBOX-RUNTIME', 'validate_v95_live_announcement_sandbox_runtime.py'),
+    ('PROJECT-V95-RELEASE-CANDIDATE-PREP-GATE', 'validate_v95_release_candidate_prep_gate.py'),
+    ('MEGA-RELEASE-ACCELERATION-44-v95-ROLLUP', 'validate_mega_release_acceleration_44_v95_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
