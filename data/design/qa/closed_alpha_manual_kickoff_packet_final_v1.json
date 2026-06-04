@@ -1,0 +1,69 @@
+{
+  "packet_version": "closed_alpha_manual_kickoff_packet_final_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_25_v76",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v76_MEGA_RELEASE_ACCELERATION_25_MANUAL_KICKOFF_FEEDBACK_STORE_BETA_READINESS",
+  "delivery_mode": "manual_author_dm_only",
+  "automated_send": false,
+  "email_send": false,
+  "dm_send": false,
+  "public_form_link_creation": false,
+  "pii_collected_in_repo": false,
+  "packet_sections": [
+    {
+      "id": "welcome",
+      "title": "Benvenuto nella Closed Alpha",
+      "body": "Ciao {TESTER_ALIAS}, sei stato selezionato manualmente per testare alcune anteprime alpha. Nessun progresso reale, nessuna ricompensa, nessun pagamento."
+    },
+    {
+      "id": "how_to_access",
+      "title": "Come accedere",
+      "body": "Apri il deeplink ricevuto privatamente. La sezione 'Alpha Preview Menu' non e' nell'home pubblico del gioco: e' deliberatamente fuori dalla navigation produzione."
+    },
+    {
+      "id": "target_flows",
+      "title": "Cosa testare (7 flussi)",
+      "items": [
+        "alpha-preview-hub (P0)",
+        "first-session-onboarding-preview (P0)",
+        "training-combat-onboarding-preview (P1)",
+        "story-alpha-slice-preview (P0)",
+        "boss-tower-alpha-loop-preview (P1)",
+        "event-arena-alpha-gate-preview (P2)",
+        "event-arena-first-alpha-slice-preview (P1)"
+      ]
+    },
+    {
+      "id": "what_is_not_real",
+      "title": "Cosa NON e' reale",
+      "items": [
+        "Reward / progressi / inventario / wallet (tutto mock)",
+        "Battaglie autoritative (preview-only)",
+        "Account state (no login persistence)",
+        "Asset finali (placeholder)"
+      ]
+    },
+    {
+      "id": "feedback_intake",
+      "title": "Come dare feedback",
+      "body": "Compila il form esterno indicato (link condiviso). Per bug usa il bug report workflow. Nessun dato sara' raccolto automaticamente."
+    },
+    {
+      "id": "halt_and_safety",
+      "title": "Halt / Safety",
+      "items": [
+        "Se crash o anomalia, contatta direttamente l'autore con device + OS + step",
+        "Puoi interrompere in qualsiasi momento, nessun account viene creato",
+        "Nessun dato personale richiesto oltre nickname opzionale"
+      ]
+    }
+  ],
+  "placeholders": {
+    "tester_alias": "{TESTER_ALIAS}",
+    "deeplink_url": "{DEEPLINK_URL}",
+    "feedback_form_link": "{FEEDBACK_FORM_LINK}",
+    "bug_report_link": "{BUG_REPORT_LINK}",
+    "author_contact": "{AUTHOR_CONTACT}"
+  },
+  "db_writes": 0,
+  "account_persistence": false
+}

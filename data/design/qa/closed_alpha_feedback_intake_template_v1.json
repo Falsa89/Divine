@@ -1,0 +1,33 @@
+{
+  "template_version": "closed_alpha_feedback_intake_template_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_25_v76",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v76_MEGA_RELEASE_ACCELERATION_25_MANUAL_KICKOFF_FEEDBACK_STORE_BETA_READINESS",
+  "intake_storage": "external_shared_doc",
+  "in_app_persistence": false,
+  "db_writes": 0,
+  "fields": [
+    {"id": "tester_alias", "type": "string", "required": true, "note": "alias only, no PII"},
+    {"id": "device", "type": "string", "required": true},
+    {"id": "os_version", "type": "string", "required": true},
+    {"id": "flow_tested", "type": "enum", "values": ["alpha_preview_hub", "first_session_onboarding", "training_combat_onboarding", "story_alpha_slice", "boss_tower_alpha_loop", "event_arena_alpha_gate", "event_arena_first_alpha_slice"], "required": true},
+    {"id": "completion_status", "type": "enum", "values": ["completed", "abandoned", "crash", "skipped"], "required": true},
+    {"id": "clarity_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "interest_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "pace_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "copy_quality_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "would_recommend_1_5", "type": "int", "min": 1, "max": 5, "required": true},
+    {"id": "open_feedback", "type": "text", "required": false},
+    {"id": "bug_observed_short", "type": "text", "required": false}
+  ],
+  "pii_policy": {
+    "alias_only": true,
+    "no_email_required": true,
+    "no_phone_required": true,
+    "no_real_name_required": true
+  },
+  "validation_rules": {
+    "int_fields_in_range": true,
+    "completion_status_in_enum": true,
+    "flow_tested_in_enum": true
+  }
+}

@@ -2574,6 +2574,44 @@ OPTIONAL = [
     ('PROJECT-v72-P3-POLISH-BATCH-APPLIED', 'validate_v72_p3_polish_batch_applied_v1.py'),
     ('PROJECT-ALPHA-READINESS-PROGRESS-v19', 'validate_alpha_readiness_progress_v19_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-24-v75-ROLLUP', 'validate_mega_release_acceleration_24_v75_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_25_CLOSED_ALPHA_MANUAL_KICKOFF_FEEDBACK_INTAKE_AND_STORE_BETA_READINESS_PACK_v76
+    # PUBLIC_SYNC_TAG_v76_MEGA_RELEASE_ACCELERATION_25_MANUAL_KICKOFF_FEEDBACK_STORE_BETA_READINESS
+    # ------------------------------------------------------------------------
+    # CLOSED ALPHA MANUAL KICKOFF (packet finale) + FEEDBACK INTAKE +
+    # STORE BETA READINESS NOTES (Google Play / TestFlight, notes_only).
+    # - Manual kickoff packet finale (delivery_mode = manual_author_dm_only)
+    # - Recruitment user-action checklist (7 step, tutti non automatizzabili)
+    # - Session result placeholder (8 slot alias-only, no PII in repo)
+    # - Feedback intake template (storage external, no in-app persistence)
+    # - Post-session triage dry-run (pipeline vuota -> ready for real feedback)
+    # - Store beta readiness notes (Play + TestFlight): solo note, no upload
+    # - v77 readiness plan post-session triage
+    # - Alpha readiness progress report v20
+    # 9 OPTIONAL tuples + tag + docs (461-469) + markers + rollup.
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post pack.
+    # db_writes=0, no automated invites, no email/DM send, no networking,
+    # no store upload (Play/TestFlight), no Play Console changes,
+    # no App Store Connect/TestFlight changes, no build generation,
+    # no PII collected in repo, no reward grant, no permanent progress,
+    # no account persistence/flag writes, no async storage persistence,
+    # no event currency, no arena ranking/MMR, no matchmaking live,
+    # no real asset import, no resolver runtime change,
+    # no Character Bible/final_numbers, no broad commercial release.
+    # No story.tsx/combat.tsx changes. No backend route change. No server.py.
+    # No battle_engine. No api/story/battle. No api/battle/simulate.
+    # No validator weakening. No fake PASS.
+    # ========================================================================
+    ('PROJECT-CLOSED-ALPHA-MANUAL-KICKOFF-PACKET-FINAL', 'validate_closed_alpha_manual_kickoff_packet_final_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-RECRUITMENT-USER-ACTION-CHECKLIST', 'validate_closed_alpha_recruitment_user_action_checklist_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-SESSION-RESULT-PLACEHOLDER', 'validate_closed_alpha_session_result_placeholder_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-FEEDBACK-INTAKE-TEMPLATE', 'validate_closed_alpha_feedback_intake_template_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-POST-SESSION-TRIAGE-DRY-RUN', 'validate_closed_alpha_post_session_triage_dry_run_v1.py'),
+    ('PROJECT-STORE-BETA-READINESS-NOTES', 'validate_store_beta_readiness_notes_v1.py'),
+    ('PROJECT-v77-READINESS-POST-SESSION-TRIAGE-PLAN', 'validate_v77_readiness_post_session_triage_plan_v1.py'),
+    ('PROJECT-ALPHA-READINESS-PROGRESS-v20', 'validate_alpha_readiness_progress_v20_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-25-v76-ROLLUP', 'validate_mega_release_acceleration_25_v76_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

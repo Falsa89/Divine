@@ -1,0 +1,27 @@
+{
+  "design_version": "v77_readiness_post_session_triage_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_25_v76",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v76_MEGA_RELEASE_ACCELERATION_25_MANUAL_KICKOFF_FEEDBACK_STORE_BETA_READINESS",
+  "v77_lanes_planned": [
+    "closed_alpha_actual_feedback_intake_aggregation",
+    "closed_alpha_findings_triage_post_session",
+    "closed_alpha_wrap_summary",
+    "v78_or_beta_readiness_decision"
+  ],
+  "input_required_for_v77": [
+    "manual session execution by author (DM-based recruitment + 30min sessions)",
+    "feedback form submissions aggregated (external)",
+    "bug reports aggregated (external)"
+  ],
+  "v77_entry_conditions": [
+    {"id": "min_sessions_completed", "min": 4, "satisfied_in_v76": false},
+    {"id": "feedback_form_submissions_count", "min": 4, "satisfied_in_v76": false},
+    {"id": "no_P0_blocker_unsolved", "required": true, "satisfied_in_v76": null}
+  ],
+  "manual_step_pending": true,
+  "db_writes": 0,
+  "account_persistence": false,
+  "automated_live_invites": false,
+  "store_upload_in_v77": false,
+  "broad_commercial_release": false
+}

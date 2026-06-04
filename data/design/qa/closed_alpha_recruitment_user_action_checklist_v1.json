@@ -1,0 +1,32 @@
+{
+  "checklist_version": "closed_alpha_recruitment_user_action_checklist_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_25_v76",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v76_MEGA_RELEASE_ACCELERATION_25_MANUAL_KICKOFF_FEEDBACK_STORE_BETA_READINESS",
+  "author_actions_required": [
+    {"step": 1, "action": "Selezionare 4-8 tester dalla rete fidata (NO post pubblico)", "automatable": false},
+    {"step": 2, "action": "Aprire il packet finale da closed_alpha_manual_kickoff_packet_final_v1.json e compilare i placeholder", "automatable": false},
+    {"step": 3, "action": "Inviare il packet via DM privato uno per uno (NO mass send, NO mailing list)", "automatable": false},
+    {"step": 4, "action": "Aggiornare il session tracker locale con slot/tester alias (alias-only, no PII)", "automatable": false},
+    {"step": 5, "action": "Attendere session run 30min/tester", "automatable": false},
+    {"step": 6, "action": "Raccogliere feedback via form esterno e bug report workflow", "automatable": false},
+    {"step": 7, "action": "Triage P0/P1/P2/P3 in v77", "automatable": false}
+  ],
+  "forbidden_during_kickoff": [
+    "public_form_link",
+    "social_media_broadcast",
+    "automated_email_blast",
+    "in_app_invite_system",
+    "persistent_pii_in_repo",
+    "persistent_account_creation_in_app",
+    "automated_dm_send"
+  ],
+  "pii_policy": {
+    "alias_only": true,
+    "no_email_in_repo": true,
+    "no_phone_in_repo": true,
+    "no_real_name_in_repo": true,
+    "no_device_serial_in_repo": true
+  },
+  "db_writes": 0,
+  "account_persistence": false
+}

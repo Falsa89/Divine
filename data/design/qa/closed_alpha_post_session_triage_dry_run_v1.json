@@ -1,0 +1,24 @@
+{
+  "design_version": "closed_alpha_post_session_triage_dry_run_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_25_v76",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v76_MEGA_RELEASE_ACCELERATION_25_MANUAL_KICKOFF_FEEDBACK_STORE_BETA_READINESS",
+  "dry_run": true,
+  "applied": false,
+  "timestamp_utc": "2026-06-04T14:25:00Z",
+  "input_sessions": 0,
+  "input_feedback_submissions": 0,
+  "input_bug_reports": 0,
+  "buckets": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  },
+  "actions_planned": [],
+  "halt_triggered": false,
+  "rollback_required": false,
+  "verdict": "DRY_RUN_EMPTY_PIPELINE_READY_FOR_REAL_FEEDBACK",
+  "db_writes": 0,
+  "production_navigation_changed": false,
+  "notes": "Pipeline triage e' file-based/read-only. Nessuna scrittura DB. Nessuna mutazione account. I bucket sono vuoti perche' nessuna sessione e' ancora stata eseguita: il dry-run verifica solo che pipeline e schema siano funzionanti."
+}
