@@ -1,0 +1,31 @@
+{
+  "version": "v1",
+  "ledger_collection": "pve_reward_claim_canary_ledger_v1",
+  "isolated_from_live": true,
+  "fields": [
+    "tx_id",
+    "user_id_hash",
+    "server_id",
+    "claim_id",
+    "route_id",
+    "reward_hash",
+    "reward_payload_summary",
+    "rollback_token",
+    "created_at",
+    "canary"
+  ],
+  "canary_field_value": true,
+  "forbidden_fields": [
+    "email",
+    "plain_user_id",
+    "premium_currency",
+    "gacha_currency",
+    "event_currency",
+    "arena_points",
+    "vip_points",
+    "battle_pass_xp"
+  ],
+  "pii": false,
+  "premium_fields": false,
+  "db_writes_dryrun": 0
+}

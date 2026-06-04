@@ -1,0 +1,23 @@
+{
+  "version": "v1",
+  "$schema_kind": "design_only_no_runtime_exposure",
+  "request_fields": {
+    "user_id": {"type": "string", "required": true, "note": "allowlist hash only"},
+    "server_id": {"type": "string", "required": true},
+    "route_id": {"type": "string", "required": true, "note": "PvE preview route id"},
+    "run_id": {"type": "string", "required": true},
+    "claim_id": {"type": "string", "required": true},
+    "idempotency_key": {"type": "string", "required": true},
+    "reward_hash": {"type": "string", "required": true},
+    "reward_payload": {"type": "object", "required": true}
+  },
+  "reward_payload_allowed_keys": ["gold", "account_exp", "hero_exp", "basic_material"],
+  "reward_payload_forbidden_keys": ["premium_currency", "gacha_currency", "event_currency", "arena_points", "vip_points", "battle_pass_xp"],
+  "validation_rules": [
+    "user_id MUST be in allowlist",
+    "reward_hash MUST match sha256(reward_payload canonical)",
+    "idempotency_key MUST be unique per (user_id, claim_id)",
+    "reward_payload MUST contain only allowed keys",
+    "all numeric values MUST be non-negative bounded integers"
+  ]
+}

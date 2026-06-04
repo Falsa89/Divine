@@ -1,5 +1,40 @@
 #!/usr/bin/env python3
 # ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY_v78
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_v78_MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY
+# MEGA_RELEASE_ACCELERATION_27_v78_REGISTRATION_SENTINEL
+# ----------------------------------------------------------------------------
+# Canonical v78 = PvE Reward Claim Canary (lane economy/canary from v54/v64/v65).
+# Roadmap realignment: il pack feedback-staging precedente e' deferred e NON
+# canonico v78. Verdetto attuale (gates non soddisfatti):
+#   MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY_BLOCKED_NOT_APPLIED_SAFE_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING
+# applied=false, db_writes=0.
+#
+# 7 OPTIONAL tuples (count=1 ciascuna):
+#   PROJECT-v78-ROADMAP-REALIGNMENT
+#   PROJECT-PVE-REWARD-CLAIM-CONTRACT-SCHEMA
+#   PROJECT-PVE-REWARD-CLAIM-IDEMPOTENCY-LEDGER
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER
+#   PROJECT-PVE-REWARD-CLAIM-ROLLBACK-OBSERVATION
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-QA
+#   MEGA-RELEASE-ACCELERATION-27-v78-ROLLUP
+#
+# Safety booleans v78:
+#   - db_writes:                                          0
+#   - applied:                                            false
+#   - broad_rollout:                                      false
+#   - premium_currency / gacha / shop / VIP / BP:         false
+#   - event currency live / arena ranking / guild war:    false
+#   - backend route exposure:                             false
+#   - server.py / battle_engine / story.tsx / combat.tsx: unchanged
+#   - api/story/battle / api/battle/simulate:             unchanged
+#   - asset import / Character Bible / final_numbers:     false
+#   - AsyncStorage / auth mutation:                       false
+#   - account persistence outside canary:                 false
+#   - validator weakening / fake PASS:                    false
+# Approval checksum sha256: a9247c932c8577330f53edff83752808f415387eb541641340cbbb1a33b8fc99
+# ============================================================================
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR_v31b
 # ----------------------------------------------------------------------------
 # PUBLIC_SYNC_TAG_RESYNC_v31b_MEGA_BATCH_ACCELERATION_1_PUBLIC_SYNC_REPAIR
@@ -2648,6 +2683,38 @@ OPTIONAL = [
     ('PROJECT-v78-READINESS-PLAN', 'validate_v78_readiness_plan_v1.py'),
     ('PROJECT-ALPHA-READINESS-PROGRESS-v21', 'validate_alpha_readiness_progress_v21_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-26-v77-ROLLUP', 'validate_mega_release_acceleration_26_v77_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY_AND_ROADMAP_REALIGNMENT_PACK_v78
+    # PUBLIC_SYNC_TAG_v78_MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY
+    # ------------------------------------------------------------------------
+    # CANONICAL v78 = PvE Reward Claim Canary (lane economy/canary from v54/v64/v65).
+    # - Roadmap realignment + scope lock + forbidden scope
+    # - Contract + request/response schema (PvE non-premium only)
+    # - Idempotency + ledger (isolated canary collection) + replay matrix
+    # - Runner: default dry-run; apply ONLY if isolated staging + apply flag
+    # - Rollback (canary-only) + observation (60min) + kill switch
+    # - QA matrix + progress v22_corrected + readiness v78->v79
+    # - Verdict (current env): BLOCKED_NOT_APPLIED_SAFE (db_writes=0)
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post pack.
+    # db_writes=0, applied=false, broad_rollout=false, premium_currency=false,
+    # gacha/shop/VIP/BP=false, event currency live=false, arena ranking=false,
+    # backend route exposure=false, server.py change=false, battle_engine
+    # change=false, api/story/battle change=false, api/battle/simulate
+    # change=false, story.tsx/combat.tsx change=false, asset import=false,
+    # Character Bible/final_numbers/hero roster=false, AsyncStorage=false,
+    # auth mutation=false, account persistence outside canary=false,
+    # validator weakening=false, fake PASS=false.
+    # Deferred: feedback_input_staging_pack (non canonico v78),
+    #           hero_asset_staging_import (in attesa di asset reali).
+    # ========================================================================
+    ('PROJECT-v78-ROADMAP-REALIGNMENT', 'validate_v78_roadmap_realignment_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CONTRACT-SCHEMA', 'validate_pve_reward_claim_contract_schema_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-IDEMPOTENCY-LEDGER', 'validate_pve_reward_claim_idempotency_ledger_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER', 'validate_pve_reward_claim_canary_runner_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-ROLLBACK-OBSERVATION', 'validate_pve_reward_claim_rollback_observation_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-QA', 'validate_pve_reward_claim_canary_qa_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-27-v78-ROLLUP', 'validate_mega_release_acceleration_27_v78_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

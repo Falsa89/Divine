@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY_AND_ROADMAP_REALIGNMENT_PACK_v78",
+  "version": "v1",
+  "created_at_utc": "2026-06-04T16:00:00Z",
+  "canonical_v78": "pve_reward_claim_canary",
+  "previous_feedback_staging_pack_status": "deferred_not_sent_or_do_not_execute_as_v78",
+  "reason": "Roadmap master canonica riallineata: v78 = PvE Reward Claim Canary (lane economy/canary). Il precedente next-recommended locale parlava di feedback ingest staging che resta deferred come pack ausiliario futuro non canonico.",
+  "v77_status": {
+    "completed": true,
+    "verdict": "MEGA_RELEASE_ACCELERATION_26_CLOSED_ALPHA_FEEDBACK_TRIAGE_WRAP_AWAITING_MANUAL_FEEDBACK_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+    "commit_hash_declared": "489aec1d",
+    "db_writes": 0,
+    "store_upload_performed": false,
+    "real_asset_import": false,
+    "md5_invariants_intact": true
+  },
+  "roadmap_source": {
+    "v54": "master roadmap + dependency graph; economy/canary lane separata e gated",
+    "v64_v65": "simulator, ledger, replay, rollback, observation, readiness per claim/canary",
+    "v78": "riprende il ramo economy/canary in forma PvE Reward Claim Canary"
+  },
+  "approval_phrase": "approvo ogni procedimento d'ora in avanti",
+  "approval_scope": "v78|pve_reward_claim_canary|allowlisted_canary_only|pve_non_premium_rewards_only|no_gacha_no_shop_no_vip_no_bp|no_premium_currency|idempotency_required|ledger_required|rollback_required|observation_required|staging_apply_only_if_isolated_env_and_apply_flag_present|otherwise_dryrun_or_blocked_safe|roadmap_realign",
+  "approval_checksum_sha256": "a9247c932c8577330f53edff83752808f415387eb541641340cbbb1a33b8fc99",
+  "deferred": [
+    "feedback_input_staging_pack_previously_generated_do_not_execute_as_v78",
+    "hero_asset_staging_import_until_real_asset_pack"
+  ],
+  "db_writes": 0
+}

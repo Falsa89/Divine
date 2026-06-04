@@ -1,0 +1,21 @@
+{
+  "version": "v1",
+  "kill_switch_actions": ["disable_canary_immediately"],
+  "p0_conditions": [
+    "premium_reward_granted",
+    "db_write_outside_allowlist",
+    "account_persistence_outside_canary",
+    "duplicate_grant_conflict"
+  ],
+  "p1_conditions": [
+    "observation_window_breach",
+    "unexpected_error_rate_spike"
+  ],
+  "on_trigger": [
+    "set canary_enabled=false",
+    "emit alert kill_switch_triggered",
+    "invoke rollback plan for affected canary tx",
+    "freeze allowlist additions"
+  ],
+  "db_writes_dryrun": 0
+}

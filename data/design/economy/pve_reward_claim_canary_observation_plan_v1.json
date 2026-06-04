@@ -1,0 +1,20 @@
+{
+  "version": "v1",
+  "observation_window_minutes": 60,
+  "metrics": [
+    "claim_attempts_total",
+    "claim_success_total",
+    "claim_reject_total",
+    "idempotent_replay_total",
+    "duplicate_conflict_total",
+    "non_allowlisted_reject_total",
+    "over_cap_reject_total",
+    "premium_reward_reject_total",
+    "db_write_total",
+    "rollback_required_total",
+    "error_total"
+  ],
+  "sinks": ["local_canary_log_only"],
+  "no_pii": true,
+  "db_writes_dryrun": 0
+}

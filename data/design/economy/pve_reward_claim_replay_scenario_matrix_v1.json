@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "scenarios": [
+    {"id": "S1", "name": "same_key_same_hash", "expect": "idempotent_replay_true_no_new_write"},
+    {"id": "S2", "name": "same_key_different_hash", "expect": "reject_idempotency_conflict"},
+    {"id": "S3", "name": "missing_key", "expect": "reject_missing_idempotency_key"},
+    {"id": "S4", "name": "expired_key", "expect": "reject_expired_key"},
+    {"id": "S5", "name": "over_user_cap", "expect": "reject_over_user_cap"},
+    {"id": "S6", "name": "over_total_cap", "expect": "reject_over_total_cap"},
+    {"id": "S7", "name": "non_allowlisted_user", "expect": "reject_non_allowlisted_user"},
+    {"id": "S8", "name": "premium_reward_in_payload", "expect": "reject_forbidden_reward_type"},
+    {"id": "S9", "name": "hash_mismatch", "expect": "reject_reward_hash_mismatch"},
+    {"id": "S10", "name": "happy_path_first_claim", "expect": "applied_true_if_apply_gates_all_pass_else_blocked"}
+  ],
+  "db_writes_dryrun": 0
+}

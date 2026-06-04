@@ -1,0 +1,44 @@
+{
+  "version": "v1",
+  "claim_source": "pve",
+  "supported_sources": [
+    "story_alpha_slice_preview",
+    "training_combat_onboarding_preview",
+    "boss_tower_alpha_loop_preview",
+    "material_raid_pve_preview"
+  ],
+  "excluded_sources": [
+    "event_arena_alpha_preview",
+    "arena_ranking",
+    "guild_war",
+    "gacha",
+    "shop",
+    "vip",
+    "battle_pass"
+  ],
+  "preferred_canary_source": "story_alpha_slice_preview",
+  "alternate_canary_source": "material_raid_pve_preview",
+  "allowed_rewards": [
+    "gold",
+    "account_exp",
+    "hero_exp",
+    "basic_material"
+  ],
+  "forbidden_rewards": [
+    "premium_currency",
+    "gacha_currency",
+    "event_currency",
+    "arena_points",
+    "vip_points",
+    "battle_pass_xp"
+  ],
+  "canary_caps": {
+    "allowlist_size_min": 1,
+    "allowlist_size_max": 5,
+    "max_claim_per_user": 1,
+    "max_claim_total": 20
+  },
+  "requires_isolated_staging": true,
+  "requires_explicit_apply_flag": "PVE_REWARD_CLAIM_CANARY_APPLY=YES_I_UNDERSTAND",
+  "db_writes_default": 0
+}

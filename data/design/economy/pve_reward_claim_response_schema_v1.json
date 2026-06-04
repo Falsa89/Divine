@@ -1,0 +1,23 @@
+{
+  "version": "v1",
+  "$schema_kind": "design_only_no_runtime_exposure",
+  "response_fields": {
+    "applied": {"type": "boolean", "required": true},
+    "idempotent_replay": {"type": "boolean", "required": true},
+    "rejected_reason": {"type": "string", "required": false, "nullable": true},
+    "ledger_tx_id": {"type": "string", "required": false, "nullable": true},
+    "rollback_token": {"type": "string", "required": false, "nullable": true},
+    "observation_ref": {"type": "string", "required": false, "nullable": true},
+    "db_writes": {"type": "integer", "required": true, "min": 0}
+  },
+  "reject_reasons": [
+    "staging_env_or_apply_flag_missing",
+    "non_allowlisted_user",
+    "over_user_cap",
+    "over_total_cap",
+    "idempotency_conflict",
+    "reward_hash_mismatch",
+    "forbidden_reward_type",
+    "expired_key"
+  ]
+}

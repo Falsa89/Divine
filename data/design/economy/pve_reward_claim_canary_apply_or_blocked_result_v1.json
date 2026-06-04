@@ -1,0 +1,22 @@
+{
+  "mode": "apply_attempt",
+  "timestamp_utc": "2026-06-04T15:44:15Z",
+  "applied": false,
+  "db_writes": 0,
+  "blocked": true,
+  "reason": "staging_env_missing_and_apply_flag_missing",
+  "gates": {
+    "staging_dir_exists": false,
+    "apply_flag_present": false,
+    "contract_exists": true,
+    "scope_lock_exists": true,
+    "idempotency_policy_exists": true,
+    "ledger_design_exists": true,
+    "rollback_plan_exists": true,
+    "observation_plan_exists": true,
+    "kill_switch_exists": true,
+    "all_apply_gates_pass": false
+  },
+  "verdict_local": "PVE_REWARD_CLAIM_CANARY_BLOCKED_NOT_APPLIED_SAFE",
+  "notes": "Apply gates non soddisfatti. Nessuna mutazione eseguita."
+}

@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "rollback_token_required": true,
+  "broad_rollback_allowed": false,
+  "rollback_scope": "only_canary_tx_rows_if_applied",
+  "rollback_steps": [
+    "identify canary tx rows by canary=true and ledger_tx_id in window",
+    "verify isolated staging collection",
+    "reverse reward_payload application on canary state only",
+    "mark tx rolled_back=true with rollback_timestamp",
+    "emit observation metric rollback_required_total += 1"
+  ],
+  "forbidden": [
+    "rollback_outside_canary_collection",
+    "rollback_of_live_player_balances",
+    "broad_rollback"
+  ],
+  "db_writes_dryrun": 0
+}

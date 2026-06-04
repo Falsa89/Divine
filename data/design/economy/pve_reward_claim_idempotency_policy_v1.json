@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "policy": {
+    "same_key_same_hash": "return_existing_result_idempotent_replay_true",
+    "same_key_different_hash": "reject_idempotency_conflict",
+    "missing_key": "reject_missing_idempotency_key",
+    "expired_key": "reject_expired_key",
+    "claim_over_user_cap": "reject_over_user_cap",
+    "claim_over_total_cap": "reject_over_total_cap",
+    "non_allowlisted_user": "reject_non_allowlisted_user"
+  },
+  "key_ttl_seconds": 86400,
+  "key_format": "idem:<server_id>:<user_id_hash>:<claim_id>",
+  "storage": "canary_ledger_collection_isolated",
+  "db_writes_dryrun": 0
+}

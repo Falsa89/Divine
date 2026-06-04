@@ -1,0 +1,21 @@
+{
+  "version": "v22_corrected",
+  "v78_canonical": "pve_reward_claim_canary",
+  "roadmap_realigned": true,
+  "feedback_staging_pack": "deferred",
+  "pve_reward_claim_contract": "ready_v78",
+  "pve_reward_claim_canary_runner": "ready_v78",
+  "pve_reward_claim_apply": "blocked_not_applied_safe",
+  "blocked_reason": "staging_env_or_apply_flag_missing",
+  "premium_rewards": false,
+  "db_writes": 0,
+  "reward_grant_live_scope": "none",
+  "broad_rollout": false,
+  "observation_window_minutes": 60,
+  "next_recommended": "pve_reward_claim_canary_env_fix_or_staging_setup_v79",
+  "deferred_branches": [
+    "feedback_input_staging_auxiliary_only_after_roadmap_slot_assigned",
+    "hero_asset_staging_import_only_after_real_asset_pack_supplied"
+  ],
+  "md5_invariants_intact": true
+}

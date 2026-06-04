@@ -1,0 +1,41 @@
+{
+  "version": "v1",
+  "forbidden_reward_types": [
+    "premium_currency",
+    "divine_crystals",
+    "gacha_currency",
+    "event_currency",
+    "arena_points",
+    "vip_points",
+    "battle_pass_xp",
+    "guild_war_reward",
+    "artifact_upgrade_spend",
+    "divine_weapon_upgrade_spend"
+  ],
+  "forbidden_surfaces": [
+    "shop",
+    "vip",
+    "battle_pass",
+    "gacha",
+    "arena_ranking",
+    "guild_war"
+  ],
+  "forbidden_actions": [
+    "broad_rollout",
+    "backend_route_exposure",
+    "battle_engine_change",
+    "server_py_change",
+    "story_tsx_change",
+    "combat_tsx_change",
+    "asset_import",
+    "asset_copy",
+    "character_bible_change",
+    "final_numbers_change",
+    "hero_roster_change",
+    "validator_weakening",
+    "fake_pass",
+    "asyncstorage_use",
+    "auth_mutation",
+    "account_persistence_outside_canary"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "version": "v1",
+  "matrix": [
+    {"id": "QA1", "area": "scope_lock", "check": "forbidden_reward_types_blocked", "expected": "PASS"},
+    {"id": "QA2", "area": "allowlist", "check": "non_allowlisted_user_rejected", "expected": "PASS"},
+    {"id": "QA3", "area": "caps", "check": "max_claim_per_user_enforced", "expected": "PASS"},
+    {"id": "QA4", "area": "caps", "check": "max_claim_total_enforced", "expected": "PASS"},
+    {"id": "QA5", "area": "idempotency", "check": "same_key_same_hash_replay", "expected": "PASS"},
+    {"id": "QA6", "area": "idempotency", "check": "same_key_different_hash_reject", "expected": "PASS"},
+    {"id": "QA7", "area": "ledger", "check": "no_pii_no_premium_fields", "expected": "PASS"},
+    {"id": "QA8", "area": "rollback", "check": "rollback_token_required", "expected": "PASS"},
+    {"id": "QA9", "area": "observation", "check": "metrics_emitted", "expected": "PASS"},
+    {"id": "QA10", "area": "kill_switch", "check": "p0_conditions_defined", "expected": "PASS"},
+    {"id": "QA11", "area": "runner", "check": "default_dry_run", "expected": "PASS"},
+    {"id": "QA12", "area": "runner", "check": "blocked_safe_without_apply_flag", "expected": "PASS"},
+    {"id": "QA13", "area": "runner", "check": "db_writes_zero_when_blocked", "expected": "PASS"}
+  ],
+  "current_state": "BLOCKED_NOT_APPLIED_SAFE",
+  "db_writes": 0
+}
