@@ -1,0 +1,15 @@
+{
+  "integration_result": "v94_real_formation_integration_result_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_43_v94",
+  "endpoint_audit": {
+    "/api/team/get-formation": {"exists": true, "safe_for_v94_read": true, "requires_auth": true, "notes": "endpoint pre-esistente referenziato in (tabs)/battle.tsx"},
+    "/api/team/update-formation": {"exists": true, "safe_for_v94_write": false, "v94_uses_write": false, "notes": "v94 NON usa write"}
+  },
+  "v94_integration_decision": "design_ready_runtime_fetch_blocked_for_safety",
+  "blocker_reason": "il fetch reale all'endpoint richiede gestione auth/session che lobby preview-only non orchestra. v94 dichiara source label come safe_fallback_formation con flag esplicito; v95 puo' integrare runtime fetch con auth bridge.",
+  "source_resolution_chain": ["saved_formation", "local_cached_formation", "safe_fallback_formation"],
+  "current_active_source": "safe_fallback_formation",
+  "fallback_used_flag": true,
+  "ui_label_shown": true,
+  "safety": {"db_writes": 0, "formation_mutation": false, "reward_live": false}
+}

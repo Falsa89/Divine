@@ -1,0 +1,22 @@
+{
+  "contract_name": "v94_live_guild_score_gating_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_43_v94",
+  "dry_run_only": true,
+  "score_live": false,
+  "ranking_live": false,
+  "guild_score_mutation": 0,
+  "event_currency_live": false,
+  "gated_systems": [
+    {"system": "guild_war_score", "applies_to": "victory/lane control", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0},
+    {"system": "guild_raid_contribution", "applies_to": "damage to raid boss", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0},
+    {"system": "server_boss_contribution", "applies_to": "damage to server boss", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0},
+    {"system": "faction_boss_contribution", "applies_to": "damage to faction boss", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0},
+    {"system": "territory_front_score", "applies_to": "territory control points", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0},
+    {"system": "live_event_kill_score", "applies_to": "single kill in live event", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0},
+    {"system": "live_event_kill_streak_score", "applies_to": "kill streak threshold", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0},
+    {"system": "global_ranking_update", "applies_to": "top-N global ranking", "dry_run_only": true, "canary_required": true, "canary_enabled": false, "db_writes": 0}
+  ],
+  "ranking_update_policy": "blocked_unless_canary_flag_explicitly_enabled",
+  "canary_flag_state_in_v94": "DISABLED",
+  "safety": {"db_writes": 0, "reward_live": false, "ranking_live": false, "guild_score_mutation": 0, "event_currency_live": false, "score_live": false}
+}

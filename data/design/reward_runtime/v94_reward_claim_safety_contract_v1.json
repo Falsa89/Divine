@@ -1,0 +1,31 @@
+{
+  "contract_name": "v94_reward_claim_safety_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_43_v94",
+  "dry_run_only": true,
+  "canary_design_no_apply": true,
+  "live_grant": false,
+  "reward_types": [
+    {"type": "story_reward", "grant_live": false, "idempotency_required": true, "replay_protection": true, "negative_inventory_guard": true},
+    {"type": "tower_reward", "grant_live": false, "idempotency_required": true, "replay_protection": true, "negative_inventory_guard": true},
+    {"type": "arena_reward_and_mmr", "grant_live": false, "idempotency_required": true, "replay_protection": true, "mmr_update_live": false},
+    {"type": "raid_boss_reward", "grant_live": false, "idempotency_required": true, "replay_protection": true, "boss_fragment_grant": false},
+    {"type": "guild_reward_and_score", "grant_live": false, "idempotency_required": true, "replay_protection": true, "guild_score_mutation": 0},
+    {"type": "event_currency", "grant_live": false, "idempotency_required": true, "replay_protection": true, "event_currency_live": false},
+    {"type": "live_announcement_triggered", "grant_live": false, "idempotency_required": true, "replay_protection": true, "no_reward_policy": true}
+  ],
+  "global_guards": {
+    "idempotency_key_required": true,
+    "replay_window_seconds": 86400,
+    "negative_inventory_guard": true,
+    "no_duplicate_grant": true,
+    "canary_allowlist_only": true,
+    "canary_allowlist": ["qa_alias_canary_001"],
+    "dry_run_only": true
+  },
+  "rollback": {
+    "strategy": "design_only_no_apply_in_v94",
+    "trigger": "if_any_live_grant_detected_in_validator_or_simulator",
+    "action": "revert_contract_and_report_blocker"
+  },
+  "safety": {"db_writes": 0, "reward_live": false}
+}

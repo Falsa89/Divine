@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T21:51:55.360163+00:00",
+  "timestamp_utc": "2026-06-04T22:06:40.093447+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1509,
+  "backend_python_files_scanned": 1520,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 742,
+      "files_with_hits": 746,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -145,7 +145,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 151,
+      "files_with_hits": 152,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 336,
+      "files_with_hits": 337,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 113,
+      "files_with_hits": 118,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 124,
+      "files_with_hits": 128,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -909,7 +909,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 137,
+      "files_with_hits": 143,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1029,7 +1029,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 128,
+      "files_with_hits": 134,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",

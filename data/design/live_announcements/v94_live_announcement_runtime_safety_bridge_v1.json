@@ -1,0 +1,30 @@
+{
+  "bridge_name": "v94_live_announcement_runtime_safety_bridge_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_43_v94",
+  "production_broadcast": false,
+  "push_notification_live": false,
+  "real_user_pii": false,
+  "privacy_safe_alias_only": true,
+  "qa_simulation_only": true,
+  "event_to_announcement_bridge": [
+    {"event_source": "engine.six_star_pull", "announcement_type": "six_star_pull", "channel": "global", "dry_run_only": true, "production_broadcast": false},
+    {"event_source": "arena.top3_change", "announcement_type": "arena_top3_change", "channel": "arena", "dry_run_only": true, "production_broadcast": false},
+    {"event_source": "guild.boss_milestone", "announcement_type": "guild_boss_milestone", "channel": "guild", "dry_run_only": true, "production_broadcast": false},
+    {"event_source": "event.kill_streak", "announcement_type": "live_event_kill_streak", "channel": "events", "dry_run_only": true, "production_broadcast": false},
+    {"event_source": "engine.native_six_star_star_up", "announcement_type": "native_six_star_star_up", "channel": "global", "dry_run_only": true, "production_broadcast": false},
+    {"event_source": "global.ranking_change", "announcement_type": "global_ranking_change", "channel": "global", "dry_run_only": true, "production_broadcast": false}
+  ],
+  "runtime_safety": {
+    "engine_events_must_not_trigger_broadcast": true,
+    "reward_events_must_not_trigger_push": true,
+    "score_events_must_not_trigger_ranking_live": true
+  },
+  "safety": {
+    "db_writes": 0,
+    "production_broadcast": false,
+    "push_notification_live": false,
+    "real_user_pii": false,
+    "reward_live": false,
+    "ranking_live": false
+  }
+}

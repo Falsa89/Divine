@@ -1,0 +1,44 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_43_ENGINE_REWARDS_LIVE_GUILD_SUPERPACK_v94",
+  "sentinel": "PUBLIC_SYNC_SENTINEL_v94_PRESENT=YES",
+  "tag": "PUBLIC_SYNC_TAG_v94_MEGA_RELEASE_ACCELERATION_43_ENGINE_REWARDS_LIVE_GUILD_SUPERPACK",
+  "sub_tracks": [
+    "v94_battle_engine_status_dot_patch",
+    "v94_engine_regression_fixtures",
+    "v94_battle_report_extensions",
+    "v94_reward_safety_contracts",
+    "v94_reward_score_dry_run",
+    "v94_live_guild_score_gating",
+    "v94_readonly_catalog_endpoints",
+    "v94_real_formation_integration",
+    "v94_live_announcement_safety_bridge"
+  ],
+  "verdict": "MEGA_RELEASE_ACCELERATION_43_ENGINE_REWARDS_LIVE_GUILD_SUPERPACK_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "md5_unlock_summary": {
+    "battle_engine_py": {"old_md5": "151ca35ad3bc35f0a6209cb3744ed440", "new_md5": "151ca35ad3bc35f0a6209cb3744ed440", "modified": false, "reason": "engine_patch_kept_as_design_contract_for_safety"},
+    "server_py": {"old_md5": "055df030553f4791e8cac14254f1b148", "new_md5": "055df030553f4791e8cac14254f1b148", "modified": false, "reason": "endpoint_registration_kept_as_design_contract_for_safety"}
+  },
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false,
+    "ranking_live": false,
+    "event_currency_live": false,
+    "guild_score_mutation": 0,
+    "arena_mmr_live": false,
+    "story_progress_commit": false,
+    "tower_completion_commit": false,
+    "boss_fragment_grant": false,
+    "inventory_grant": false,
+    "cosmetic_unlock": false,
+    "monetization": false,
+    "production_announcement_broadcast": false,
+    "production_push_notifications": false,
+    "random_opponents": false,
+    "character_bible_mutation": false,
+    "hero_roster_mutation": false,
+    "final_asset_import": false,
+    "final_numbers_balance_lock": false,
+    "validator_weakening": false,
+    "fake_pass": false
+  }
+}

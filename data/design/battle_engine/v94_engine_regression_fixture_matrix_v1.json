@@ -1,0 +1,60 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_43_v94",
+  "fixture_matrix_name": "v94_engine_regression_fixture_matrix_v1",
+  "md5_unlock_applied": false,
+  "md5_unlock_decision": "engine_patch_kept_as_design_contract_md5_invariants_preserved",
+  "rollback_strategy": "no_patch_applied_to_battle_engine_py_in_v94; v95 may apply with explicit approval",
+  "dot_core": [
+    {"status": "Burn", "category": "elemental_fire", "tick_timing": "end_of_target_turn", "duration_turns_default": 3, "stack_policy": "sum_ticks", "max_stacks": 5, "cleanse_rule": "by_category", "immunity_rule": "blocks_new_application", "boss_behavior": "dot_cap_tick_reduced_15pct", "battle_report_aggregation": "dot_damage_done"},
+    {"status": "Poison", "category": "bio", "tick_timing": "end_of_target_turn", "duration_turns_default": 4, "stack_policy": "sum_ticks", "max_stacks": 5, "cleanse_rule": "by_category", "immunity_rule": "blocks_new_application", "boss_behavior": "dot_cap_tick_reduced_20pct", "battle_report_aggregation": "dot_damage_done"},
+    {"status": "Bleed", "category": "physical", "tick_timing": "end_of_target_turn", "duration_turns_default": 3, "stack_policy": "sum_ticks", "max_stacks": 5, "cleanse_rule": "by_category", "immunity_rule": "blocks_new_application", "boss_behavior": "dot_cap_tick_reduced_15pct", "battle_report_aggregation": "dot_damage_done"},
+    {"status": "Shock", "category": "elemental_thunder", "tick_timing": "on_action_attempt", "duration_turns_default": 2, "stack_policy": "reset_duration", "max_stacks": 1, "cleanse_rule": "by_category", "immunity_rule": "blocks_new_application", "boss_behavior": "stun_converted_to_skill_power_reduction_25pct_duration_1", "battle_report_aggregation": "status_applied_count"},
+    {"status": "Frostbite", "category": "elemental_ice", "tick_timing": "end_of_target_turn", "duration_turns_default": 3, "stack_policy": "cap_stacks", "max_stacks": 3, "cleanse_rule": "by_category", "immunity_rule": "blocks_new_application_including_slow_component", "boss_behavior": "freeze_converted_to_speed_down_30pct_duration_2", "battle_report_aggregation": "dot_damage_done_plus_status_applied_count"},
+    {"status": "Curse", "category": "shadow", "tick_timing": "end_of_target_turn", "duration_turns_default": 4, "stack_policy": "overwrite", "max_stacks": 1, "cleanse_rule": "by_priority", "immunity_rule": "blocks_new_application", "boss_behavior": "dot_cap_tick_reduced_25pct", "battle_report_aggregation": "dot_damage_done"}
+  ],
+  "cleanse": {"available_policies": ["all", "top", "by_category", "by_priority", "one_stack", "remove_status"], "default_policy_per_skill": "by_category"},
+  "immunity": {"behavior": "blocks_new_application_only", "does_not_remove_existing": true, "declared_exceptions": []},
+  "taunt": {
+    "single_target": "intercepts",
+    "priority_target": "intercepts",
+    "aoe_all_enemies": "NOT_intercepts",
+    "line_targeting": "NOT_intercepts",
+    "column_targeting": "NOT_intercepts",
+    "aoe_partial_cleave_2": "MUST_respect_taunt_explicitly_no_bugged_skip",
+    "v94_bug_fix": "aoe_partial vs taunt: tauntee inserted as first priority slot of partial AoE selection"
+  },
+  "boss_hard_control_conversion": {
+    "Freeze": {"to": "speed_down_30pct", "duration_factor": 0.66, "chance_factor": 1.0},
+    "Stun": {"to": "skill_power_reduction_25pct", "duration_factor": 0.5, "chance_factor": 0.75},
+    "Silence": {"to": "skill_power_reduction_15pct", "duration_factor": 0.75, "chance_factor": 0.85},
+    "Sleep": {"to": "turn_delay_1", "duration_factor": 0.5, "chance_factor": 0.5},
+    "Petrify": {"to": "defense_down_20pct", "duration_factor": 0.5, "chance_factor": 0.5}
+  },
+  "battle_report_extension": {
+    "fields": [
+      "dot_damage_done",
+      "status_applied_count",
+      "healing_done",
+      "cleanse_count",
+      "status_prevented_by_immunity_count",
+      "taunt_redirect_count"
+    ],
+    "does_not_break": ["PostBattleSummary", "total_damage_done", "team_a_final", "team_b_final"]
+  },
+  "regression_fixtures": [
+    {"id": "burn_tick", "expected": "3 ticks over 3 turns, sum_ticks stacks up to 5"},
+    {"id": "poison_tick", "expected": "4 ticks over 4 turns"},
+    {"id": "bleed_tick", "expected": "3 ticks over 3 turns"},
+    {"id": "shock_application", "expected": "stun chance applied at action attempt, reset_duration on reapply"},
+    {"id": "frostbite_slow_dot", "expected": "slow + DoT both gated by immunity"},
+    {"id": "curse_overwrite", "expected": "new curse replaces old curse, duration reset, debuff stat per design"},
+    {"id": "cleanse_by_category", "expected": "removes all elemental_fire OR bio depending on category arg"},
+    {"id": "immunity_blocks_new_debuff", "expected": "new DoT application returns blocked=true, status_prevented_by_immunity_count++"},
+    {"id": "taunt_intercepts_single", "expected": "single-target skill on dps redirected to tauntee"},
+    {"id": "aoe_ignores_taunt", "expected": "aoe_all hits all enemies regardless of taunt"},
+    {"id": "aoe_partial_fixed", "expected": "cleave_2 selection includes tauntee as first slot, then highest threat"},
+    {"id": "boss_freeze_conversion", "expected": "applied as speed_down_30pct duration*0.66 instead of freeze hard-lock"},
+    {"id": "battle_report_aggregates", "expected": "report.dot_damage_done > 0, report.status_applied_count > 0, healing_done aggregated when present"}
+  ],
+  "safety": {"db_writes": 0, "reward_live": false, "final_numbers_balance_lock": false}
+}

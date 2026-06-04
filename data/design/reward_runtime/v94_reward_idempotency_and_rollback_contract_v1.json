@@ -1,0 +1,25 @@
+{
+  "contract_name": "v94_reward_idempotency_and_rollback_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_43_v94",
+  "idempotency_design": {
+    "key_format": "{user_alias}::{reward_type}::{source_id}::{epoch_day}",
+    "storage": "design_only_no_db_in_v94",
+    "replay_window_seconds": 86400,
+    "on_duplicate": "return_existing_receipt_no_apply"
+  },
+  "rollback_design": {
+    "strategy": "two_phase_reservation",
+    "phase_1_reserve": "validate + check idempotency + check caps",
+    "phase_2_apply": "NOT_APPLIED_IN_v94",
+    "on_failure": "rollback_phase_1_reservation",
+    "audit_log_required": true,
+    "audit_log_target": "design_only_no_db_in_v94"
+  },
+  "guards": {
+    "duplicate_claim": "return idempotency receipt, no apply",
+    "malformed_claim": "reject with error code MALFORMED_REWARD_CLAIM",
+    "over_cap_claim": "reject with error code REWARD_CAP_EXCEEDED",
+    "unauthorized_claim": "reject with error code REWARD_UNAUTHORIZED"
+  },
+  "safety": {"db_writes": 0, "reward_live": false}
+}

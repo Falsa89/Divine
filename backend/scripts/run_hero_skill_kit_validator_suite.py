@@ -3156,6 +3156,34 @@ OPTIONAL = [
     ('PROJECT-V93-FULL-MODE-PLAYABILITY-MATRIX', 'validate_v93_full_mode_playability_matrix.py'),
     ('PROJECT-V93-LIVE-ANNOUNCEMENTS-QA', 'validate_v93_live_announcements_qa.py'),
     ('MEGA-RELEASE-ACCELERATION-42-v93-ROLLUP', 'validate_mega_release_acceleration_42_v93_rollup.py'),
+
+    # ========================================================================
+    # v94 - MEGA_RELEASE_ACCELERATION_43_ENGINE_REWARDS_LIVE_GUILD_SUPERPACK
+    # Engine status/DoT/taunt/boss patch (design contract, MD5 invariants
+    # preserved), reward/score safety contracts + dry-run simulator (10 cases),
+    # live/guild score gating (8 systems, all dry_run_only/canary_disabled),
+    # read-only catalog endpoints (server.py unchanged, design ready),
+    # real formation integration (safe_fallback resolution chain), live
+    # announcement runtime safety bridge (6 event sources, dry_run_only).
+    # db_writes=0, reward_live=false, ranking_live=false, event_currency_live=false,
+    # guild_score_mutation=0, arena_mmr_live=false,
+    # production_announcement_broadcast=false, production_push_notifications=false,
+    # random_opponents=false, character_bible_mutation=false,
+    # hero_roster_mutation=false, final_asset_import=false,
+    # final_numbers_balance_lock=false, validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v94_MEGA_RELEASE_ACCELERATION_43_ENGINE_REWARDS_LIVE_GUILD_SUPERPACK
+    # PUBLIC_SYNC_SENTINEL_v94_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V94-BATTLE-ENGINE-STATUS-DOT-PATCH', 'validate_v94_battle_engine_status_dot_patch.py'),
+    ('PROJECT-V94-ENGINE-REGRESSION-FIXTURES', 'validate_v94_engine_regression_fixtures.py'),
+    ('PROJECT-V94-BATTLE-REPORT-EXTENSIONS', 'validate_v94_battle_report_extensions.py'),
+    ('PROJECT-V94-REWARD-SAFETY-CONTRACTS', 'validate_v94_reward_safety_contracts.py'),
+    ('PROJECT-V94-REWARD-SCORE-DRY-RUN', 'validate_v94_reward_score_dry_run.py'),
+    ('PROJECT-V94-LIVE-GUILD-SCORE-GATING', 'validate_v94_live_guild_score_gating.py'),
+    ('PROJECT-V94-READONLY-CATALOG-ENDPOINTS', 'validate_v94_readonly_catalog_endpoints.py'),
+    ('PROJECT-V94-REAL-FORMATION-INTEGRATION', 'validate_v94_real_formation_integration.py'),
+    ('PROJECT-V94-LIVE-ANNOUNCEMENT-SAFETY-BRIDGE', 'validate_v94_live_announcement_safety_bridge.py'),
+    ('MEGA-RELEASE-ACCELERATION-43-v94-ROLLUP', 'validate_mega_release_acceleration_43_v94_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

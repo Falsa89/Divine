@@ -1,0 +1,117 @@
+{
+  "simulator": "v94_reward_score_runtime_dry_run",
+  "timestamp": "2026-06-04T22:03:31.340312Z",
+  "total_cases": 10,
+  "pass_dry_run_cases": 6,
+  "reject_cases": 4,
+  "live_grant_emitted": false,
+  "db_writes_total": 0,
+  "dry_run_only": true,
+  "live_grant": false,
+  "cases": [
+    {
+      "case": "story_victory_reward",
+      "result": {
+        "status": "PASS_DRY_RUN",
+        "idempotency_key": "qa_alias_canary_001::story_reward::enc_story_1_1_intro_grunts::2026-06-04",
+        "live_grant": false,
+        "db_writes": 0,
+        "would_apply_if_canary_enabled": false
+      }
+    },
+    {
+      "case": "tower_floor_reward",
+      "result": {
+        "status": "PASS_DRY_RUN",
+        "idempotency_key": "qa_alias_canary_001::tower_reward::enc_tower_S01_F10_mid_boss::2026-06-04",
+        "live_grant": false,
+        "db_writes": 0,
+        "would_apply_if_canary_enabled": false
+      }
+    },
+    {
+      "case": "arena_win_loss_mmr",
+      "result": {
+        "status": "PASS_DRY_RUN",
+        "idempotency_key": "qa_alias_canary_001::arena_reward_and_mmr::arena_bot_mid_001::2026-06-04",
+        "live_grant": false,
+        "db_writes": 0,
+        "would_apply_if_canary_enabled": false
+      }
+    },
+    {
+      "case": "raid_boss_contribution",
+      "result": {
+        "status": "PASS_DRY_RUN",
+        "idempotency_key": "qa_alias_canary_001::raid_boss_reward::enc_raid_world_boss_01::2026-06-04",
+        "live_grant": false,
+        "db_writes": 0,
+        "would_apply_if_canary_enabled": false
+      }
+    },
+    {
+      "case": "guild_war_score",
+      "result": {
+        "status": "PASS_DRY_RUN",
+        "idempotency_key": "qa_alias_canary_001::guild_reward_and_score::gw_defense_team_design_v1::2026-06-04",
+        "live_grant": false,
+        "db_writes": 0,
+        "would_apply_if_canary_enabled": false
+      }
+    },
+    {
+      "case": "event_currency",
+      "result": {
+        "status": "PASS_DRY_RUN",
+        "idempotency_key": "qa_alias_canary_001::event_currency::event_summer_invasion_stage_01::2026-06-04",
+        "live_grant": false,
+        "db_writes": 0,
+        "would_apply_if_canary_enabled": false
+      }
+    },
+    {
+      "case": "duplicate_claim_replay",
+      "result": {
+        "status": "REJECT",
+        "error": "DUPLICATE_CLAIM_REPLAY",
+        "idempotency_receipt": "qa_alias_canary_001::story_reward::enc_story_1_1_intro_grunts::2026-06-04",
+        "live_grant": false,
+        "db_writes": 0
+      }
+    },
+    {
+      "case": "malformed_claim",
+      "result": {
+        "status": "REJECT",
+        "error": "MALFORMED_REWARD_CLAIM",
+        "live_grant": false,
+        "db_writes": 0
+      }
+    },
+    {
+      "case": "over_cap_claim",
+      "result": {
+        "status": "REJECT",
+        "error": "REWARD_CAP_EXCEEDED",
+        "live_grant": false,
+        "db_writes": 0
+      }
+    },
+    {
+      "case": "unauthorized_claim",
+      "result": {
+        "status": "REJECT",
+        "error": "REWARD_UNAUTHORIZED",
+        "live_grant": false,
+        "db_writes": 0
+      }
+    }
+  ],
+  "safety": {
+    "db_writes": 0,
+    "reward_live": false,
+    "ranking_live": false,
+    "guild_score_mutation": 0,
+    "event_currency_live": false
+  }
+}
