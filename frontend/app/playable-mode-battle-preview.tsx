@@ -275,18 +275,107 @@ export default function PlayableModeBattlePreview() {
   const [activeMode, setActiveMode] = useState<Mode>(initial);
   const [step, setStep] = useState<number>(0);
 
+  // === v88 Battle Preview Experience state ============================================
+  // autoplay / pause / speed: solo timer locale, NESSUNA chiamata HTTP, NESSUNA mutazione persistente.
+  const [autoplay, setAutoplay] = useState<boolean>(false);
+  const [speed, setSpeed] = useState<1 | 2>(1);
+  // floating mock damage/heal toasts (solo visualizzazione locale).
+  type Toast = { id: number; text: string; kind: "dmg" | "heal"; target: string };
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
   const payload = useMemo<BattlePayload>(() => PAYLOADS[activeMode], [activeMode]);
   const totalSteps = payload.timeline.length;
   const currentStep = payload.timeline[Math.min(step, totalSteps - 1)];
+  const atEnd = step >= totalSteps - 1;
+
+  // Sync params -> activeMode when user opens via deeplink ?mode=...
+  React.useEffect(() => {
+    if (isValidMode(params?.mode) && params?.mode !== activeMode) {
+      setActiveMode(params.mode as Mode);
+      setStep(0);
+      setAutoplay(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params?.mode]);
+
+  // Autoplay: NON è un loop di rete, è un setTimeout locale. Si ferma all'end.
+  React.useEffect(() => {
+    if (!autoplay) return;
+    if (atEnd) {
+      setAutoplay(false);
+      return;
+    }
+    const ms = 1200 / speed;
+    const t = setTimeout(() => setStep((s) => Math.min(s + 1, totalSteps - 1)), ms);
+    return () => clearTimeout(t);
+  }, [autoplay, step, speed, atEnd, totalSteps]);
+
+  // Floating mock damage/heal toast su cambio step (preview-only).
+  React.useEffect(() => {
+    const ev = payload.timeline[Math.min(step, totalSteps - 1)];
+    const dmg = ev.preview_dmg ?? 0;
+    const heal = ev.preview_heal ?? 0;
+    if (!ev.target) return;
+    const newToasts: Toast[] = [];
+    const targets =
+      ev.target === "all_enemies" || ev.target === "all_player"
+        ? [ev.target]
+        : [ev.target];
+    if (dmg > 0) {
+      newToasts.push({ id: Date.now() + Math.random(), text: `-${dmg}`, kind: "dmg", target: targets[0] });
+    }
+    if (heal > 0) {
+      newToasts.push({ id: Date.now() + Math.random(), text: `+${heal}`, kind: "heal", target: targets[0] });
+    }
+    if (newToasts.length === 0) return;
+    setToasts((prev) => [...prev.slice(-4), ...newToasts]);
+    const ttl = 900 / speed;
+    const t = setTimeout(() => {
+      setToasts((prev) => prev.filter((x) => !newToasts.some((n) => n.id === x.id)));
+    }, ttl);
+    return () => clearTimeout(t);
+  }, [step, payload, speed, totalSteps]);
+  // === END v88 state ==================================================================
 
   const switchMode = (m: Mode) => {
     setActiveMode(m);
     setStep(0);
+    setAutoplay(false);
+    setToasts([]);
   };
+
+  // === v88 Enemy AI hints (derivati LOCALMENTE dal payload, no engine) =================
+  const enemyAliasSet = useMemo<Set<string>>(
+    () =>
+      new Set([
+        ...(payload.enemy_team ?? []).map((u) => u.alias),
+        ...(payload.boss ? [payload.boss.alias] : []),
+      ]),
+    [payload]
+  );
+  const aiHintFor = (alias: string): string | null => {
+    if (!enemyAliasSet.has(alias)) return null;
+    const future = payload.timeline.slice(step + 1).find((ev) => ev.actor === alias);
+    if (!future) return "in attesa";
+    const dmg = future.preview_dmg ?? 0;
+    const heal = future.preview_heal ?? 0;
+    if (heal > 0) return "intent: cura (preview)";
+    if (future.target === "all_player" && dmg > 0) return `intent: AoE ~${dmg}`;
+    if (future.target === "all_enemies") return "intent: AoE alleati";
+    if (dmg > 0) return `intent: ST ~${dmg}`;
+    if (future.action.includes("taunt")) return "intent: taunt";
+    if (future.action.includes("buff")) return "intent: buff";
+    return `intent: ${future.action}`;
+  };
+  // === END enemy AI hints =============================================================
 
   const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
-  const reset = () => setStep(0);
+  const reset = () => {
+    setStep(0);
+    setAutoplay(false);
+    setToasts([]);
+  };
 
   // === v87 Visual Layer (preview-only, deterministic, local) ============================
   // Calcola HP locale di ciascuna unità accumulando preview_dmg / preview_heal lungo la
@@ -384,6 +473,8 @@ export default function PlayableModeBattlePreview() {
     const { color, letter } = portraitFor(alias);
     const active = isActive(alias);
     const targeted = isAllyTarget(alias) && currentStep.target !== alias.split(":")[0];
+    const hint = aiHintFor(alias);
+    const localToasts = toasts.filter((t) => t.target === alias);
     return (
       <View
         key={alias}
@@ -392,6 +483,17 @@ export default function PlayableModeBattlePreview() {
         <View style={[styles.portraitBox, { backgroundColor: color }]}>
           <Text style={styles.portraitLetter}>{letter}</Text>
           {opts?.isBoss ? <Text style={styles.portraitBossTag}>BOSS</Text> : null}
+          {localToasts.map((t) => (
+            <Text
+              key={t.id}
+              style={[
+                styles.floatingToast,
+                t.kind === "dmg" ? styles.floatingToastDmg : styles.floatingToastHeal,
+              ]}
+            >
+              {t.text}
+            </Text>
+          ))}
         </View>
         <View style={styles.unitInfo}>
           <Text style={styles.unitAlias} numberOfLines={1}>
@@ -400,6 +502,7 @@ export default function PlayableModeBattlePreview() {
           {opts?.sub ? <Text style={styles.unitSub}>{opts.sub}</Text> : null}
           {renderHpBar(alias)}
           {targeted ? <Text style={styles.targetedTag}>· bersaglio del turno</Text> : null}
+          {hint ? <Text style={styles.aiHintTag}>{hint}</Text> : null}
         </View>
       </View>
     );
@@ -498,7 +601,45 @@ export default function PlayableModeBattlePreview() {
               <Text style={styles.ctrlBtnText}>Reset</Text>
             </TouchableOpacity>
           </View>
+
+          {/* v88 — Autoplay / Pause / Speed (preview-only, no network) */}
+          <View style={styles.ctrlRow}>
+            <TouchableOpacity
+              onPress={() => setAutoplay((a) => !a)}
+              style={[styles.ctrlBtn, autoplay ? styles.ctrlBtnActive : null]}
+            >
+              <Text style={[styles.ctrlBtnText, autoplay ? styles.ctrlBtnTextActive : null]}>
+                {autoplay ? "⏸ Pause" : "▶ Autoplay"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setSpeed((s) => (s === 1 ? 2 : 1))}
+              style={[styles.ctrlBtn, speed === 2 ? styles.ctrlBtnActive : null]}
+            >
+              <Text style={[styles.ctrlBtnText, speed === 2 ? styles.ctrlBtnTextActive : null]}>
+                Velocità {speed}x
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.stepBadge}>
+              <Text style={styles.stepBadgeText}>
+                {step + 1}/{totalSteps}
+              </Text>
+            </View>
+          </View>
         </View>
+
+        {/* v88 — End Preview Summary */}
+        {atEnd ? (
+          <View style={styles.endSummaryCard}>
+            <Text style={styles.endSummaryTitle}>Riepilogo preview</Text>
+            <Text style={styles.endSummaryLine}>
+              Esito mock: <Text style={styles.bold}>{payload.preview_outcome.player_wins ? "Vittoria preview" : "Sconfitta preview"}</Text>
+            </Text>
+            <Text style={styles.endSummaryLine}>NON AUTHORITATIVE · NO REWARD APPLIED</Text>
+            <Text style={styles.endSummaryLine}>db_write=false · account_mutation=false · inventory_mutation=false</Text>
+            <Text style={styles.endSummaryLine}>battle_engine_attached=false · endpoint_live=false</Text>
+          </View>
+        ) : null}
 
         <View style={styles.cardWarn}>
           <Text style={styles.cardWarnTitle}>Vincoli locali</Text>
@@ -605,6 +746,41 @@ const styles = StyleSheet.create({
   unitAlias: { color: "#fff", fontSize: 13, fontWeight: "700" },
   unitSub: { color: "#94a3b8", fontSize: 11, marginTop: 2 },
   targetedTag: { color: "#22d3ee", fontSize: 10, marginTop: 2 },
+  aiHintTag: { color: "#fbbf24", fontSize: 10, marginTop: 2, fontStyle: "italic" },
+  floatingToast: {
+    position: "absolute",
+    top: -16,
+    fontSize: 13,
+    fontWeight: "800",
+    paddingHorizontal: 4,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  floatingToastDmg: { color: "#fef2f2", backgroundColor: "#dc2626" },
+  floatingToastHeal: { color: "#f0fdf4", backgroundColor: "#16a34a" },
+  ctrlBtnActive: { backgroundColor: "#2563eb", borderColor: "#2563eb" },
+  ctrlBtnTextActive: { color: "#fff" },
+  stepBadge: {
+    backgroundColor: "#0b1220",
+    borderColor: "#1f2937",
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    minWidth: 56,
+    alignItems: "center",
+  },
+  stepBadgeText: { color: "#94a3b8", fontSize: 12, fontWeight: "700" },
+  endSummaryCard: {
+    backgroundColor: "#0b2516",
+    borderColor: "#16a34a",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 12,
+  },
+  endSummaryTitle: { color: "#bbf7d0", fontSize: 14, fontWeight: "800", marginBottom: 6 },
+  endSummaryLine: { color: "#86efac", fontSize: 12, marginBottom: 2 },
   hpBarOuter: {
     height: 12,
     backgroundColor: "#1f2937",

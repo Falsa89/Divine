@@ -95,6 +95,19 @@ const CATEGORIES = [
       { label: 'Sinergie Collezione', icon: '\uD83D\uDD17', route: '/collection-synergies-preview', gradient: ['#88CCFF', '#3366AA'] as const },
     ],
   },
+  {
+    // MEGA_RELEASE_ACCELERATION_37 v88 — Real UI Wiring per Battle Preview QA.
+    // Tutte le 5 entry sono deeplink-only verso playable-mode-battle-preview.
+    // preview_only / deterministic / NON authoritative / db_writes=0 / reward_live=false.
+    title: 'Battle Preview QA (v88)',
+    items: [
+      { label: 'Storia · Battle Preview', icon: '\uD83D\uDCDC', route: '/playable-mode-battle-preview?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
+      { label: 'Torre · Battle Preview', icon: '\uD83C\uDFEF', route: '/playable-mode-battle-preview?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
+      { label: 'Arena PvP · Battle Preview', icon: '\uD83E\uDD4A', route: '/playable-mode-battle-preview?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
+      { label: 'Addestramento · Battle Preview', icon: '\u2694\uFE0F', route: '/playable-mode-battle-preview?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
+      { label: 'Raid · Battle Preview', icon: '\uD83D\uDC32', route: '/playable-mode-battle-preview?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
+    ],
+  },
 ];
 
 export default function MenuTab() {

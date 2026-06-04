@@ -3035,6 +3035,21 @@ OPTIONAL = [
     ('PROJECT-V87-BATTLE-PREVIEW-VISUAL-LAYER', 'validate_v87_battle_preview_visual_layer.py'),
     ('PROJECT-V87-PREVIEW-PORTRAIT-PLACEHOLDER-CATALOG', 'validate_v87_preview_portrait_placeholder_catalog.py'),
     ('MEGA-RELEASE-ACCELERATION-36-v87-ROLLUP', 'validate_mega_release_acceleration_36_v87_rollup.py'),
+    # ========================================================================
+    # v88 - MEGA_RELEASE_ACCELERATION_37_PLAYABLE_MODE_REAL_UI_WIRING_AND_BATTLE_PREVIEW_EXPERIENCE
+    # Real UI wiring nel menu mobile (categoria "Battle Preview QA (v88)" con 5 deeplink) +
+    # esperienza battaglia preview (autoplay/pause/speed/AI hints/floating toast/end summary) +
+    # 5 raid boss visual preview profiles design-only.
+    # preview_only=true, deterministic=true, authoritative=false, db_writes=0, reward_live=false,
+    # endpoint_live=false, battle_engine_authoritative=false.
+    # validator_weakening=false, fake_PASS=false.
+    # PUBLIC_SYNC_TAG_v88_MEGA_RELEASE_ACCELERATION_37_PLAYABLE_MODE_REAL_UI_WIRING_AND_BATTLE_PREVIEW_EXPERIENCE
+    # PUBLIC_SYNC_SENTINEL_v88_PRESENT=YES
+    # ========================================================================
+    ('PROJECT-V88-REAL-UI-BATTLE-PREVIEW-WIRING', 'validate_v88_real_ui_battle_preview_wiring.py'),
+    ('PROJECT-V88-BATTLE-PREVIEW-EXPERIENCE-LAYER', 'validate_v88_battle_preview_experience_layer.py'),
+    ('PROJECT-V88-RAID-BOSS-VISUAL-PREVIEW-PROFILES', 'validate_v88_raid_boss_visual_preview_profiles.py'),
+    ('MEGA-RELEASE-ACCELERATION-37-v88-ROLLUP', 'validate_mega_release_acceleration_37_v88_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

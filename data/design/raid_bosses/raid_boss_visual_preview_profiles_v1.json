@@ -1,0 +1,122 @@
+{
+  "version": "v1",
+  "pack": "v88",
+  "design_only": true,
+  "runtime_attached": false,
+  "reward_grant_attached": false,
+  "obtainable": false,
+  "show_in_summon": false,
+  "render_strategy": "local_visual_preview_only_no_final_asset",
+  "profiles": [
+    {
+      "boss_id": "raid_boss_jormungandr",
+      "display_name": "Jormungandr",
+      "alias": "alpha_raid_boss_jormungandr_visual",
+      "family": "dragon",
+      "element": "water",
+      "rarity_design": "UR",
+      "accent_color": "#06b6d4",
+      "silhouette_letter": "J",
+      "phases_design": [
+        { "phase_id": "p_coil",   "name": "Coil",   "hp_threshold_pct": 100, "behaviors_design": ["tail_slap", "basic_atk"] },
+        { "phase_id": "p_venom",  "name": "Venom",  "hp_threshold_pct": 60,  "behaviors_design": ["venom_aoe", "poison_dot"] },
+        { "phase_id": "p_abyss",  "name": "Abyss",  "hp_threshold_pct": 25,  "behaviors_design": ["world_coil_call", "crushing_tide"] }
+      ],
+      "intent_hints_design": ["intent: tail slap ST", "intent: venom AoE", "intent: poison DoT"],
+      "playable_form_design": { "playable_form_id": "jormungandr_playable_placeholder", "unlocked": false, "design_only": true },
+      "fragment_model_design": { "fragment_id": "jormungandr_fragment", "required_for_unlock": 100, "grant_allowed": false, "show_in_inventory": false, "design_only": true },
+      "placeholder": true
+    },
+    {
+      "boss_id": "raid_boss_fenrir",
+      "display_name": "Fenrir",
+      "alias": "alpha_raid_boss_fenrir_visual",
+      "family": "beast",
+      "element": "dark",
+      "rarity_design": "SSR",
+      "accent_color": "#94a3b8",
+      "silhouette_letter": "F",
+      "phases_design": [
+        { "phase_id": "p_hunt",   "name": "Hunt",   "hp_threshold_pct": 100, "behaviors_design": ["swift_bite", "basic_atk"] },
+        { "phase_id": "p_howl",   "name": "Howl",   "hp_threshold_pct": 55,  "behaviors_design": ["howl_buff_atk", "frenzy"] },
+        { "phase_id": "p_ragnar", "name": "Ragnarok","hp_threshold_pct": 20, "behaviors_design": ["world_devour", "berserk"] }
+      ],
+      "intent_hints_design": ["intent: swift bite ST", "intent: howl buff", "intent: berserk AoE"],
+      "playable_form_design": { "playable_form_id": "fenrir_playable_placeholder", "unlocked": false, "design_only": true },
+      "fragment_model_design": { "fragment_id": "fenrir_fragment", "required_for_unlock": 80, "grant_allowed": false, "show_in_inventory": false, "design_only": true },
+      "placeholder": true
+    },
+    {
+      "boss_id": "raid_boss_apophis",
+      "display_name": "Apophis",
+      "alias": "alpha_raid_boss_apophis_visual",
+      "family": "serpent",
+      "element": "dark",
+      "rarity_design": "UR",
+      "accent_color": "#7c3aed",
+      "silhouette_letter": "A",
+      "phases_design": [
+        { "phase_id": "p_dusk",   "name": "Dusk",   "hp_threshold_pct": 100, "behaviors_design": ["shadow_strike", "basic_atk"] },
+        { "phase_id": "p_eclipse","name": "Eclipse","hp_threshold_pct": 50,  "behaviors_design": ["sun_devour_aoe", "weaken_def"] },
+        { "phase_id": "p_void",   "name": "Void",   "hp_threshold_pct": 20,  "behaviors_design": ["void_consume", "erasure"] }
+      ],
+      "intent_hints_design": ["intent: shadow strike ST", "intent: eclipse AoE", "intent: erase"],
+      "playable_form_design": { "playable_form_id": "apophis_playable_placeholder", "unlocked": false, "design_only": true },
+      "fragment_model_design": { "fragment_id": "apophis_fragment", "required_for_unlock": 120, "grant_allowed": false, "show_in_inventory": false, "design_only": true },
+      "placeholder": true
+    },
+    {
+      "boss_id": "raid_boss_yamata_no_orochi",
+      "display_name": "Yamata no Orochi",
+      "alias": "alpha_raid_boss_yamata_no_orochi_visual",
+      "family": "hydra",
+      "element": "fire",
+      "rarity_design": "UR",
+      "accent_color": "#f97316",
+      "silhouette_letter": "Y",
+      "phases_design": [
+        { "phase_id": "p_8heads", "name": "Eight Heads", "hp_threshold_pct": 100, "behaviors_design": ["multi_strike_8", "basic_atk"] },
+        { "phase_id": "p_burn",   "name": "Burn",  "hp_threshold_pct": 50,  "behaviors_design": ["flame_aoe", "sake_lure"] },
+        { "phase_id": "p_last",   "name": "Last Head", "hp_threshold_pct": 15, "behaviors_design": ["desperate_breath", "regen_self"] }
+      ],
+      "intent_hints_design": ["intent: multi-strike", "intent: flame AoE", "intent: desperate breath"],
+      "playable_form_design": { "playable_form_id": "yamata_playable_placeholder", "unlocked": false, "design_only": true },
+      "fragment_model_design": { "fragment_id": "yamata_fragment", "required_for_unlock": 150, "grant_allowed": false, "show_in_inventory": false, "design_only": true },
+      "placeholder": true
+    },
+    {
+      "boss_id": "raid_boss_crono",
+      "display_name": "Crono",
+      "alias": "alpha_raid_boss_crono_visual",
+      "family": "titan",
+      "element": "neutral",
+      "rarity_design": "UR",
+      "accent_color": "#facc15",
+      "silhouette_letter": "C",
+      "phases_design": [
+        { "phase_id": "p_aeon",   "name": "Aeon",   "hp_threshold_pct": 100, "behaviors_design": ["time_pull", "basic_atk"] },
+        { "phase_id": "p_warp",   "name": "Warp",   "hp_threshold_pct": 50,  "behaviors_design": ["time_loop_aoe", "rewind"] },
+        { "phase_id": "p_finis",  "name": "Finis",  "hp_threshold_pct": 20,  "behaviors_design": ["sand_of_eternity", "freeze_all"] }
+      ],
+      "intent_hints_design": ["intent: time pull ST", "intent: time loop AoE", "intent: freeze all"],
+      "playable_form_design": { "playable_form_id": "crono_playable_placeholder", "unlocked": false, "design_only": true },
+      "fragment_model_design": { "fragment_id": "crono_fragment", "required_for_unlock": 200, "grant_allowed": false, "show_in_inventory": false, "design_only": true },
+      "placeholder": true
+    }
+  ],
+  "forbidden": [
+    "final_asset_import",
+    "character_bible_link",
+    "hero_roster_link",
+    "production_ui_exposure",
+    "reward_grant_link",
+    "summon_link",
+    "inventory_link",
+    "runtime_attachment",
+    "battle_engine_authoritative"
+  ],
+  "db_writes": 0,
+  "reward_live": false,
+  "endpoint_live": false,
+  "notes": "5 raid boss visual preview profiles design-only: Jormungandr, Fenrir, Apophis, Yamata no Orochi, Crono. Nessun grant frammenti, nessun summon, nessuna esposizione produzione, nessun final asset."
+}
