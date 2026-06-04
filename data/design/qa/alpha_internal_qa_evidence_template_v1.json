@@ -1,0 +1,18 @@
+{
+  "template_version": "alpha_internal_qa_evidence_template_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_v71",
+  "fields": [
+    {"id": "device", "required": true, "type": "string"},
+    {"id": "os", "required": true, "type": "string"},
+    {"id": "app_build_commit", "required": true, "type": "string"},
+    {"id": "route", "required": true, "type": "string"},
+    {"id": "steps", "required": true, "type": "array"},
+    {"id": "expected", "required": true, "type": "string"},
+    {"id": "actual", "required": true, "type": "string"},
+    {"id": "screenshot_or_video", "required": false, "type": "string"},
+    {"id": "severity", "required": true, "type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+    {"id": "regression", "required": true, "type": "boolean"}
+  ],
+  "db_writes": 0,
+  "persistence_required": false
+}

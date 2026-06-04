@@ -1,0 +1,23 @@
+{
+  "contract_version": "alpha_preview_menu_gate_forbidden_scope_v1",
+  "applies_to": "alpha_preview_menu_gate",
+  "forbidden": [
+    "public_menu_exposure", "home_menu_routing",
+    "public_tab_routing", "production_navigation_changes",
+    "required_login_flow_changes", "release_routing_changes",
+    "db_writes", "reward_grant", "permanent_progress",
+    "backend_route_changes", "server_py_changes",
+    "battle_engine_py_changes", "battle_engine_runtime",
+    "combat_tsx_changes", "story_tsx_changes",
+    "import_from_combat_tsx", "import_from_story_tsx",
+    "character_bible_changes", "final_numbers_changes",
+    "hero_roster_changes", "real_asset_import",
+    "validator_weakening", "fake_pass"
+  ],
+  "allowed": [
+    "design_json", "docs", "markers", "validators",
+    "suite_runner_tuple_and_tag",
+    "new_deeplink_only_alpha_preview_hub_screen"
+  ],
+  "db_writes": 0
+}

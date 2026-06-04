@@ -1,0 +1,29 @@
+{
+  "contract_version": "first_session_onboarding_hardening_contract_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_v71",
+  "onboarding_hardening_preview": true,
+  "authoritative_runtime": false,
+  "backend_used": false,
+  "db_writes": 0,
+  "permanent_onboarding_complete": false,
+  "account_flag_writes": false,
+  "async_storage_persistence": false,
+  "reward_grant_enabled": false,
+  "progress_persistence_enabled": false,
+  "local_preview_only": true,
+  "public_mandatory_routing": false,
+  "login_changes": false,
+  "auth_mutation": false,
+  "tutorial_completion_persistence": false,
+  "states": [
+    "intro",
+    "training_preview",
+    "story_alpha_preview",
+    "event_arena_preview",
+    "asset_status_explainer",
+    "qa_ready_summary"
+  ],
+  "transition_rules": "preview_only_local_state_machine",
+  "validator_weakening": false,
+  "fake_pass": false
+}

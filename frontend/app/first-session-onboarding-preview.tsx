@@ -41,6 +41,15 @@ type SessionStep = {
   deeplinkHint: string | null;
 };
 
+const STATE_MACHINE_LABEL: Record<StepId, string> = {
+  welcome: "intro",
+  training_combat_onboarding_preview: "training_preview",
+  story_alpha_slice_preview: "story_alpha_preview",
+  event_arena_gate_or_alpha_preview: "event_arena_preview",
+  hero_asset_status_explainer: "asset_status_explainer",
+  next_steps_summary: "qa_ready_summary",
+};
+
 const STEPS: SessionStep[] = [
   {
     order: 1,
@@ -126,10 +135,25 @@ export default function FirstSessionOnboardingPreviewScreen() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.banner}>
-          <Text style={styles.bannerText}>FIRST SESSION ONBOARDING PREVIEW (DEEPLINK-ONLY)</Text>
+          <Text style={styles.bannerText}>FIRST SESSION ONBOARDING PREVIEW (DEEPLINK-ONLY) - HARDENED v71</Text>
           <Text style={styles.bannerSub}>
             Anteprima locale - nessuna scrittura su account/DB, nessun reward, nessuna persistenza
           </Text>
+        </View>
+
+        <View style={styles.hardeningBlock}>
+          <Text style={styles.hardeningTitle}>Hardening Panel (v71)</Text>
+          <Text style={styles.hardeningLine}>account_mutation: false</Text>
+          <Text style={styles.hardeningLine}>async_storage_persistence: false</Text>
+          <Text style={styles.hardeningLine}>permanent_onboarding_complete: false</Text>
+          <Text style={styles.hardeningLine}>db_writes: 0</Text>
+          <Text style={styles.hardeningLine}>reward_grant_enabled: false</Text>
+          <Text style={styles.hardeningLine}>state_machine: preview_only_local</Text>
+          <View style={styles.completeIndicator}>
+            <Text style={styles.completeIndicatorText}>
+              Completa onboarding: DISABILITATO (preview, nessuna scrittura)
+            </Text>
+          </View>
         </View>
 
         <View style={styles.header}>
@@ -143,6 +167,9 @@ export default function FirstSessionOnboardingPreviewScreen() {
         <View style={styles.stepCard}>
           <Text style={styles.stepOrder}>Step {current.order} / {STEPS.length}</Text>
           <Text style={styles.stepLabel}>{current.label}</Text>
+          <Text style={styles.stateMachineLabel}>
+            state machine (preview): {STATE_MACHINE_LABEL[current.id]} - persists=false
+          </Text>
           <Text style={styles.stepBody}>{current.body}</Text>
           {current.deeplinkHint ? (
             <Text style={styles.deeplinkHint}>Deeplink hint: {current.deeplinkHint}</Text>
@@ -240,6 +267,27 @@ const styles = StyleSheet.create({
   stepLabel: { color: "#fff", fontSize: 16, fontWeight: "bold", marginBottom: 6 },
   stepBody: { color: "#c0c0c0", fontSize: 13, lineHeight: 18 },
   deeplinkHint: { color: "#66ddaa", fontSize: 11, marginTop: 8 },
+  stateMachineLabel: { color: "#88aabb", fontSize: 10, marginTop: 4, marginBottom: 4, fontStyle: "italic" },
+  hardeningBlock: {
+    backgroundColor: "#0f0f18",
+    padding: 12,
+    borderRadius: 8,
+    borderColor: "#66ddaa",
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  hardeningTitle: { color: "#66ddaa", fontSize: 13, fontWeight: "bold", marginBottom: 6 },
+  hardeningLine: { color: "#c0c0c0", fontSize: 11, marginTop: 2 },
+  completeIndicator: {
+    backgroundColor: "#22223a",
+    borderColor: "#444466",
+    borderWidth: 1,
+    borderRadius: 6,
+    padding: 8,
+    marginTop: 8,
+    opacity: 0.6,
+  },
+  completeIndicatorText: { color: "#cccc66", fontSize: 11, textAlign: "center" },
   controls: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 10 },
   btn: { paddingHorizontal: 12, paddingVertical: 10, borderRadius: 6, minHeight: 44 },
   btnPrimary: { backgroundColor: "#66ddaa" },

@@ -1,0 +1,58 @@
+{
+  "marker": "mega_release_acceleration_20_v71_rollup_marker_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_ONBOARDING_MENU_GATE_AND_ALPHA_INTERNAL_QA_SUPER_PACK_v71",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v71_MEGA_RELEASE_ACCELERATION_20_ONBOARDING_MENU_GATE_ALPHA_QA",
+  "included_lanes": [
+    "first_session_onboarding_hardening",
+    "alpha_preview_menu_gate_and_safe_hub",
+    "alpha_internal_qa_execution"
+  ],
+  "deferred_lanes": [
+    "hero_asset_staging_import_and_resolver_super_pack"
+  ],
+  "docs": [
+    "docs/divine/427_FIRST_SESSION_ONBOARDING_HARDENING.md",
+    "docs/divine/428_ALPHA_PREVIEW_MENU_GATE_AND_SAFE_HUB.md",
+    "docs/divine/429_ALPHA_INTERNAL_QA_EXECUTION_PLAN.md",
+    "docs/divine/430_ALPHA_INTERNAL_QA_DEVICE_SEVERITY_EVIDENCE.md",
+    "docs/divine/431_ONBOARDING_MENU_GATE_ALPHA_QA_MATRIX.md",
+    "docs/divine/432_MEGA_RELEASE_ACCELERATION_20_ONBOARDING_MENU_GATE_ALPHA_QA_v71.md"
+  ],
+  "validators": [
+    "backend/scripts/validate_first_session_onboarding_hardening_v1.py",
+    "backend/scripts/validate_alpha_preview_menu_gate_v1.py",
+    "backend/scripts/validate_alpha_preview_safe_hub_v1.py",
+    "backend/scripts/validate_alpha_internal_qa_execution_v1.py",
+    "backend/scripts/validate_onboarding_menu_gate_alpha_qa_matrix_v1.py",
+    "backend/scripts/validate_mega_release_acceleration_20_v71_rollup.py"
+  ],
+  "patched_screens": [
+    "frontend/app/first-session-onboarding-preview.tsx"
+  ],
+  "new_screens": [
+    "frontend/app/alpha-preview-hub.tsx"
+  ],
+  "runner": "backend/scripts/alpha_internal_qa_readiness_runner_v1.py",
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "permanent_progress_enabled": false,
+  "permanent_onboarding_complete": false,
+  "battle_engine_runtime_used": false,
+  "backend_route_changed": false,
+  "server_py_changed": false,
+  "story_tsx_changed": false,
+  "combat_tsx_changed": false,
+  "event_currency_enabled": false,
+  "arena_ranking_enabled": false,
+  "matchmaking_live": false,
+  "account_flag_writes": false,
+  "async_storage_persistence": false,
+  "public_menu_routing_enabled": false,
+  "real_asset_import": false,
+  "file_copy_enabled": false,
+  "asset_runtime_resolver_changed": false,
+  "character_bible_changed": false,
+  "hero_roster_changed": false,
+  "validator_weakening": false,
+  "fake_pass": false
+}

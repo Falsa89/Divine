@@ -1,0 +1,59 @@
+{
+  "map_version": "alpha_preview_safe_hub_route_map_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_v71",
+  "deeplink_only": true,
+  "public_menu_routing_enabled": false,
+  "safe_preview_routes": [
+    {
+      "route": "training-combat-onboarding-preview",
+      "status": "preview_ready_v69",
+      "guardrails": ["db_writes=0", "reward_grant=false", "permanent_progress=false"],
+      "forbidden_live_systems": ["reward_grant", "battle_engine_runtime", "backend_route"],
+      "qa_priority": "P1"
+    },
+    {
+      "route": "first-session-onboarding-preview",
+      "status": "preview_hardened_v71",
+      "guardrails": ["db_writes=0", "permanent_onboarding_complete=false", "account_flag_writes=false", "async_storage_persistence=false"],
+      "forbidden_live_systems": ["account_persistence", "auth_mutation", "reward_grant"],
+      "qa_priority": "P0"
+    },
+    {
+      "route": "story-alpha-slice-preview",
+      "status": "preview_ready_v68",
+      "guardrails": ["db_writes=0", "battle_engine_runtime_used=false", "reward_grant=false"],
+      "forbidden_live_systems": ["battle_engine_runtime", "api_story_battle", "reward_grant"],
+      "qa_priority": "P1"
+    },
+    {
+      "route": "boss-tower-alpha-loop-preview",
+      "status": "preview_ready_v68",
+      "guardrails": ["db_writes=0", "battle_engine_runtime_used=false", "leaderboard_writes=false"],
+      "forbidden_live_systems": ["battle_engine_runtime", "leaderboard_writes", "reward_grant"],
+      "qa_priority": "P1"
+    },
+    {
+      "route": "event-arena-alpha-gate-preview",
+      "status": "design_ready_v69",
+      "guardrails": ["db_writes=0", "event_currency_enabled=false", "arena_ranking_enabled=false", "matchmaking_live=false"],
+      "forbidden_live_systems": ["event_currency", "arena_ranking", "matchmaking_live", "leaderboard_writes"],
+      "qa_priority": "P1"
+    },
+    {
+      "route": "event-arena-first-alpha-slice-preview",
+      "status": "preview_ready_v70",
+      "guardrails": ["db_writes=0", "event_currency_enabled=false", "arena_ranking_enabled=false"],
+      "forbidden_live_systems": ["event_currency", "arena_ranking", "reward_grant"],
+      "qa_priority": "P1"
+    },
+    {
+      "route": "visual-battle-preview-router",
+      "status": "design_ready_legacy",
+      "guardrails": ["db_writes=0", "battle_engine_runtime_used=false"],
+      "forbidden_live_systems": ["battle_engine_runtime", "reward_grant"],
+      "qa_priority": "P2"
+    }
+  ],
+  "manual_approval_required_before_public_menu_exposure": true,
+  "db_writes": 0
+}

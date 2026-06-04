@@ -1,0 +1,31 @@
+{
+  "plan_version": "alpha_internal_qa_execution_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_v71",
+  "qa_execution_plan_only": true,
+  "automated_live_mutation": false,
+  "backend_route_calls_required": false,
+  "db_writes": 0,
+  "reward_grant_enabled": false,
+  "account_persistence": false,
+  "target_flows": [
+    "first_session_onboarding_preview",
+    "training_combat_onboarding_preview",
+    "story_alpha_slice_preview",
+    "boss_alpha_loop_preview",
+    "tower_alpha_loop_preview",
+    "event_arena_first_alpha_preview",
+    "event_arena_gate_preview",
+    "hero_asset_dryrun_readiness_report"
+  ],
+  "execution_phases": [
+    {"id": "smoke_pass", "label": "Smoke pass dei 7 deeplink preview", "priority": "P0"},
+    {"id": "navigation_pass", "label": "Step prec/next/reset + autoplay cleanup", "priority": "P1"},
+    {"id": "guardrail_pass", "label": "Verifica pannelli guardrail visibili e coerenti", "priority": "P0"},
+    {"id": "isolation_pass", "label": "Verifica no backend fetch / no import vietati", "priority": "P0"},
+    {"id": "ui_polish_pass", "label": "Visual/UX polish e copy review", "priority": "P2"}
+  ],
+  "manual_approval_required_before_run": false,
+  "manual_approval_required_before_bugfix_apply": true,
+  "validator_weakening": false,
+  "fake_pass": false
+}

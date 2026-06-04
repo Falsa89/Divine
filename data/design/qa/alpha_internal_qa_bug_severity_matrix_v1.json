@@ -1,0 +1,16 @@
+{
+  "matrix_version": "alpha_internal_qa_bug_severity_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_v71",
+  "severities": [
+    {"id": "P0", "label": "Crash / blocker / security / economy mutation", "sla_hours": 4},
+    {"id": "P1", "label": "Broken navigation / render blocker", "sla_hours": 12},
+    {"id": "P2", "label": "Visual / UX mismatch", "sla_hours": 48},
+    {"id": "P3", "label": "Copy / polish", "sla_hours": 168}
+  ],
+  "forbidden_classifications": [
+    "reward_grant_required_to_reproduce",
+    "db_write_required_to_reproduce",
+    "account_persistence_required_to_reproduce"
+  ],
+  "db_writes": 0
+}

@@ -1,0 +1,29 @@
+{
+  "contract_version": "first_session_onboarding_hardening_forbidden_scope_v1",
+  "applies_to": "first_session_onboarding_hardening",
+  "forbidden": [
+    "db_writes", "reward_grant", "permanent_progress",
+    "permanent_onboarding_complete", "tutorial_completion_persistence",
+    "account_flag_writes", "auth_mutation", "async_storage_persistence",
+    "inventory_mutation", "wallet_mutation", "premium_users_gems_mutation",
+    "backend_route_changes", "server_py_changes",
+    "battle_engine_py_changes", "battle_engine_runtime",
+    "api_story_battle_changes", "api_battle_simulate_changes",
+    "combat_tsx_changes", "story_tsx_changes",
+    "import_from_combat_tsx", "import_from_story_tsx",
+    "home_menu_mandatory_routing", "public_release_routing",
+    "public_menu_exposure", "character_bible_changes",
+    "final_numbers_changes", "hero_roster_changes",
+    "real_asset_import", "asset_overwrite",
+    "runtime_asset_resolver_change",
+    "complete_onboarding_button_active",
+    "validator_weakening", "fake_pass"
+  ],
+  "allowed": [
+    "safe_patch_first_session_onboarding_preview_screen",
+    "new_deeplink_only_alpha_preview_hub",
+    "design_json", "docs", "markers", "validators",
+    "suite_runner_tuple_and_tag"
+  ],
+  "db_writes": 0
+}

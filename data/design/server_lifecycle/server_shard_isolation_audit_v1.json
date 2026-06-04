@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T01:03:07.746089+00:00",
+  "timestamp_utc": "2026-06-04T01:22:56.334382+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1357,
+  "backend_python_files_scanned": 1364,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 646,
+      "files_with_hits": 653,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -149,7 +149,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 142,
+      "files_with_hits": 143,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -369,7 +369,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 79,
+      "files_with_hits": 81,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -977,7 +977,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 68,
+      "files_with_hits": 75,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1028,6 +1028,22 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_alpha_preview_safe_hub_v1.py",
+          "keyword": "arena",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 26,
+              "snippet": "\"event-arena-alpha-gate-preview\","
+            },
+            {
+              "line": 27,
+              "snippet": "\"event-arena-first-alpha-slice-preview\","
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_visual_battle_routing_expansion_smoke_matrix_v1.py",
           "keyword": "arena",
           "has_server_id_anywhere": false,
@@ -1048,18 +1064,6 @@
             {
               "line": 25,
               "snippet": "'no_inherited_progression', 'no_inherited_guild', 'no_inherited_arena_rank'):"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_multi_mode_visual_preview_shell_batch_smoke_matrix_v1.py",
-          "keyword": "arena",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 4,
-              "snippet": "Verifica QA smoke matrix unificata multi-mode (story/tower/event/arena):"
             }
           ]
         }

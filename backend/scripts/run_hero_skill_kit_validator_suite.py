@@ -2382,6 +2382,44 @@ OPTIONAL = [
     ('PROJECT-ALPHA-PREVIEW-NAVIGATION-ASSET-BOUNDARY', 'validate_alpha_preview_navigation_asset_boundary_v1.py'),
     ('PROJECT-EVENT-ARENA-ONBOARDING-ALPHA-QA', 'validate_event_arena_onboarding_alpha_qa_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-19-v70-ROLLUP', 'validate_mega_release_acceleration_19_v70_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_20_ONBOARDING_MENU_GATE_AND_ALPHA_INTERNAL_QA_SUPER_PACK_v71
+    # PUBLIC_SYNC_TAG_v71_MEGA_RELEASE_ACCELERATION_20_ONBOARDING_MENU_GATE_ALPHA_QA
+    # ------------------------------------------------------------------------
+    # HARDENING + GATE + QA pack. Accorpa due lane:
+    #   1) First Session Onboarding Hardening + Menu Preview Gate - patch
+    #      hardening sullo screen onboarding esistente (banner, hardening
+    #      panel, state machine labels, disabled complete indicator) +
+    #      design del menu preview gate + safe hub route map (7 routes) +
+    #      nuovo screen deeplink-only frontend/app/alpha-preview-hub.tsx.
+    #   2) Alpha Internal QA Execution - plan, device matrix, severity
+    #      matrix, evidence template + runner Python read-only
+    #      backend/scripts/alpha_internal_qa_readiness_runner_v1.py
+    #      (nessun network, nessun DB, solo presenza file).
+    # 6 OPTIONAL tuples + tag + 6 docs (427-432) + 6 markers + rollup.
+    #
+    # ESCLUSO: hero_asset_staging_import_and_resolver_super_pack. Resta
+    # deferred/gated finche' non viene fornito un asset pack reale.
+    #
+    # Patched screen: frontend/app/first-session-onboarding-preview.tsx
+    # (solo hardening: banner aggiornato, hardening panel con state machine
+    # labels, complete-onboarding disabled indicator). No fetch backend,
+    # no AsyncStorage, no battle_engine, no story.tsx/combat.tsx import.
+    # New deeplink-only screen: frontend/app/alpha-preview-hub.tsx.
+    # ------------------------------------------------------------------------
+    # Invariants: 5 MD5 ufficiali + extra unchanged guardrails preservati.
+    # db_writes=0, no reward grant, no permanent progress, no account
+    # persistence/flag writes, no async storage persistence,
+    # no event currency, no arena ranking, no matchmaking live,
+    # no public_menu_routing_enabled, no real asset import/copy.
+    # No fake PASS. No validator weakening.
+    # ========================================================================
+    ('PROJECT-FIRST-SESSION-ONBOARDING-HARDENING', 'validate_first_session_onboarding_hardening_v1.py'),
+    ('PROJECT-ALPHA-PREVIEW-MENU-GATE', 'validate_alpha_preview_menu_gate_v1.py'),
+    ('PROJECT-ALPHA-PREVIEW-SAFE-HUB', 'validate_alpha_preview_safe_hub_v1.py'),
+    ('PROJECT-ALPHA-INTERNAL-QA-EXECUTION', 'validate_alpha_internal_qa_execution_v1.py'),
+    ('PROJECT-ONBOARDING-MENU-GATE-ALPHA-QA-MATRIX', 'validate_onboarding_menu_gate_alpha_qa_matrix_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-20-v71-ROLLUP', 'validate_mega_release_acceleration_20_v71_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

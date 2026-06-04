@@ -1,0 +1,33 @@
+{
+  "matrix_version": "onboarding_menu_gate_alpha_internal_qa_matrix_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_v71",
+  "cases": [
+    {"id": "QA-001", "severity": "P0", "area": "prereq", "check": "v70 safe state present", "expected": "PASS"},
+    {"id": "QA-002", "severity": "P0", "area": "onboarding", "check": "Onboarding hardening contract exists", "expected": "PASS"},
+    {"id": "QA-003", "severity": "P0", "area": "onboarding", "check": "Onboarding state machine preview exists", "expected": "PASS"},
+    {"id": "QA-004", "severity": "P0", "area": "onboarding", "check": "Onboarding screen patched with hardening panel", "expected": "PASS"},
+    {"id": "QA-005", "severity": "P0", "area": "onboarding", "check": "Complete onboarding disabled indicator visible", "expected": "PASS"},
+    {"id": "QA-006", "severity": "P0", "area": "menu_gate", "check": "Menu preview gate contract exists", "expected": "PASS"},
+    {"id": "QA-007", "severity": "P0", "area": "menu_gate", "check": "Safe route map exists with at least 7 routes", "expected": "PASS"},
+    {"id": "QA-008", "severity": "P1", "area": "hub", "check": "Optional alpha preview hub screen exists deeplink-only", "expected": "PASS"},
+    {"id": "QA-009", "severity": "P0", "area": "qa", "check": "QA execution plan exists", "expected": "PASS"},
+    {"id": "QA-010", "severity": "P0", "area": "qa", "check": "QA device matrix exists", "expected": "PASS"},
+    {"id": "QA-011", "severity": "P0", "area": "qa", "check": "QA severity matrix exists", "expected": "PASS"},
+    {"id": "QA-012", "severity": "P0", "area": "qa", "check": "QA evidence template exists", "expected": "PASS"},
+    {"id": "QA-013", "severity": "P1", "area": "qa", "check": "Optional QA runner exists and is read-only", "expected": "PASS"},
+    {"id": "QA-014", "severity": "P0", "area": "isolation", "check": "No backend fetch in new/modified screens", "expected": "PASS"},
+    {"id": "QA-015", "severity": "P0", "area": "isolation", "check": "No import from story.tsx or combat.tsx", "expected": "PASS"},
+    {"id": "QA-016", "severity": "P0", "area": "isolation", "check": "No battle_engine / /api/story/battle / /api/battle/simulate", "expected": "PASS"},
+    {"id": "QA-017", "severity": "P0", "area": "rewards", "check": "No reward grant", "expected": "PASS"},
+    {"id": "QA-018", "severity": "P0", "area": "progress", "check": "No permanent progress / no account persistence", "expected": "PASS"},
+    {"id": "QA-019", "severity": "P0", "area": "assets", "check": "Hero asset staging import remains deferred", "expected": "PASS"},
+    {"id": "QA-020", "severity": "P0", "area": "db", "check": "db_writes=0", "expected": "PASS"},
+    {"id": "QA-021", "severity": "P0", "area": "invariants", "check": "MD5 invariants unchanged", "expected": "PASS"},
+    {"id": "QA-022", "severity": "P1", "area": "ui", "check": "Mobile layout / rotation safe", "expected": "PASS"},
+    {"id": "QA-023", "severity": "P2", "area": "ux", "check": "Hardening panel visibile e copy chiara", "expected": "PASS"},
+    {"id": "QA-024", "severity": "P3", "area": "docs", "check": "6 docs (427-432) exist", "expected": "PASS"},
+    {"id": "QA-025", "severity": "P3", "area": "validators", "check": "6 validators exist and PASS", "expected": "PASS"}
+  ],
+  "severities": ["P0", "P1", "P2", "P3"],
+  "db_writes": 0
+}

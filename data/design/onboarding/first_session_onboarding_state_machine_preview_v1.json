@@ -1,0 +1,27 @@
+{
+  "machine_version": "first_session_onboarding_state_machine_preview_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_20_v71",
+  "preview_only": true,
+  "states": [
+    {"id": "intro", "label": "Intro (preview)", "order": 1, "persists": false},
+    {"id": "training_preview", "label": "Training preview", "order": 2, "persists": false},
+    {"id": "story_alpha_preview", "label": "Story alpha preview", "order": 3, "persists": false},
+    {"id": "event_arena_preview", "label": "Event/Arena preview", "order": 4, "persists": false},
+    {"id": "asset_status_explainer", "label": "Asset status (deferred)", "order": 5, "persists": false},
+    {"id": "qa_ready_summary", "label": "QA ready summary", "order": 6, "persists": false}
+  ],
+  "transitions": [
+    {"from": "intro", "to": "training_preview", "trigger": "next", "preview_only": true},
+    {"from": "training_preview", "to": "story_alpha_preview", "trigger": "next", "preview_only": true},
+    {"from": "story_alpha_preview", "to": "event_arena_preview", "trigger": "next", "preview_only": true},
+    {"from": "event_arena_preview", "to": "asset_status_explainer", "trigger": "next", "preview_only": true},
+    {"from": "asset_status_explainer", "to": "qa_ready_summary", "trigger": "next", "preview_only": true},
+    {"from": "qa_ready_summary", "to": "qa_ready_summary", "trigger": "complete_disabled", "preview_only": true}
+  ],
+  "complete_action_enabled": false,
+  "complete_action_label_disabled": "Completa onboarding (DISABILITATO - preview)",
+  "db_writes": 0,
+  "account_flag_writes": false,
+  "async_storage_persistence": false,
+  "reward_grant_enabled": false
+}
