@@ -1,0 +1,28 @@
+{
+  "mode": "local_apply_attempt",
+  "timestamp_utc": "2026-06-04T15:57:58Z",
+  "applied_to_local_staging": true,
+  "applied_to_live": false,
+  "blocked_safe": false,
+  "reason": null,
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "local_file_writes": 3,
+  "gates": {
+    "staging_dir_exists": true,
+    "allowlist_present": true,
+    "fixtures_present": true,
+    "ledger_present": true,
+    "rollback_file_present": true,
+    "observation_file_present": true,
+    "apply_flag_present": true,
+    "mode_flag_present": true,
+    "all_local_apply_gates_pass": true
+  },
+  "ledger_tx_id": "canary-local-tx-000001",
+  "rollback_token": "rb-local-token-000001",
+  "observation_ref": "observation_log_v1.json",
+  "verdict_local": "PVE_REWARD_CLAIM_CANARY_LOCAL_STAGING_APPLIED_SAFE",
+  "negative_tests_passed": true,
+  "notes": "Apply locale isolato. Nessuna mutazione DB, nessun reward live, nessuna mutazione account."
+}

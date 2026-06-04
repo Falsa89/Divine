@@ -1,0 +1,43 @@
+{
+  "version": "v1",
+  "metrics": {
+    "local_claim_attempts_total": 3,
+    "local_claim_success_total": 1,
+    "local_claim_reject_total": 2,
+    "duplicate_conflict_total": 0,
+    "non_allowlisted_reject_total": 1,
+    "premium_reward_reject_total": 1,
+    "db_write_total": 0,
+    "live_reward_grant_total": 0,
+    "rollback_required_total": 1,
+    "error_total": 0
+  },
+  "events": [
+    {
+      "ts": "2026-06-04T15:57:58Z",
+      "kind": "reject",
+      "user": "canary_user_001",
+      "reason": "forbidden_reward_type:premium_currency",
+      "scenario": "negative_premium_attempt"
+    },
+    {
+      "ts": "2026-06-04T15:57:58Z",
+      "kind": "reject",
+      "user": "intruder_user_999",
+      "reason": "non_allowlisted_user",
+      "scenario": "negative_non_allowlist"
+    },
+    {
+      "ts": "2026-06-04T15:57:58Z",
+      "kind": "success",
+      "user": "canary_user_001",
+      "tx_id": "canary-local-tx-000001",
+      "scenario": "happy_path"
+    },
+    {
+      "ts": "2026-06-04T15:58:02Z",
+      "kind": "rollback_drill",
+      "tx_id": "canary-local-tx-000001"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "version": "v1",
+  "canary": true,
+  "isolated_from_live": true,
+  "entries": [
+    {
+      "tx_id": "canary-local-tx-000001",
+      "user_id_hash": "canary_user_001",
+      "server_id": "canary_staging",
+      "claim_id": "claim-local-000001",
+      "route_id": "story_alpha_slice_preview",
+      "reward_hash": "sha256:local_fixture_v1",
+      "reward_payload_summary": {
+        "gold": 100,
+        "account_exp": 10,
+        "hero_exp": 20,
+        "basic_material": 1
+      },
+      "rollback_token": "rb-local-token-000001",
+      "created_at": "2026-06-04T15:57:58Z",
+      "canary": true,
+      "rolled_back": true,
+      "rollback_timestamp": "2026-06-04T15:58:02Z"
+    }
+  ]
+}

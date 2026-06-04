@@ -1,5 +1,43 @@
 #!/usr/bin/env python3
 # ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_STAGING_v79
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_v79_MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_STAGING
+# MEGA_RELEASE_ACCELERATION_28_v79_REGISTRATION_SENTINEL
+# ----------------------------------------------------------------------------
+# Canonical v79 = PvE Reward Claim Canary Staging Setup + Local Apply.
+# Ambiente canary file-based locale isolato sotto /app/data/canary_staging/.
+# Verdetto attuale (gates pieni):
+#   MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_LOCAL_STAGING_APPLIED_SAFE_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING
+# applied_to_local_staging=true, applied_to_live=false, db_writes=0,
+# local_file_writes=6, live_reward_grant=false.
+#
+# 7 OPTIONAL tuples (count=1 ciascuna):
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-ENV
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-FILES
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-LOCAL
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-LOCAL-APPLY
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-ROLLBACK-OBSERVATION
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-QA
+#   MEGA-RELEASE-ACCELERATION-28-v79-ROLLUP
+#
+# Safety booleans v79:
+#   - db_writes:                                          0
+#   - applied_to_live:                                    false
+#   - live_reward_grant:                                  false
+#   - mongo_url_used / pymongo_used / motor_used:         false
+#   - redis_used:                                         false
+#   - broad_rollout:                                      false
+#   - premium_currency / gacha / shop / VIP / BP:         false
+#   - event currency live / arena ranking / guild war:    false
+#   - backend route exposure:                             false
+#   - server.py / battle_engine / story.tsx / combat.tsx: unchanged
+#   - asset import / Character Bible / final_numbers:     false
+#   - AsyncStorage / auth mutation / .env mutation:       false
+#   - account persistence outside canary:                 false
+#   - validator weakening / fake PASS:                    false
+# Approval checksum sha256: b76ae4ebfa01519f17589eb81a43130970cf86c600de0d95a85727547d77af5b
+# ============================================================================
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY_v78
 # ----------------------------------------------------------------------------
 # PUBLIC_SYNC_TAG_v78_MEGA_RELEASE_ACCELERATION_27_PVE_REWARD_CLAIM_CANARY
@@ -2715,6 +2753,35 @@ OPTIONAL = [
     ('PROJECT-PVE-REWARD-CLAIM-ROLLBACK-OBSERVATION', 'validate_pve_reward_claim_rollback_observation_v1.py'),
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-QA', 'validate_pve_reward_claim_canary_qa_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-27-v78-ROLLUP', 'validate_mega_release_acceleration_27_v78_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_STAGING_SETUP_AND_LOCAL_APPLY_PACK_v79
+    # PUBLIC_SYNC_TAG_v79_MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_STAGING
+    # ------------------------------------------------------------------------
+    # CANARY STAGING LOCALE FILE-BASED (no DB, no MongoDB, no Redis, no routes).
+    # - Staging env contract + scope lock + forbidden scope
+    # - 6 staging files locali sotto /app/data/canary_staging/
+    # - Runner v1 upgrade: --local-preflight / --local-apply / --local-rollback-drill
+    # - Local apply eseguito: 1 ledger entry isolato + 2 negative tests passed
+    # - Rollback drill file-only + observation pass + wave2 gate ready
+    # - QA matrix 14 PASS + progress v23 + readiness v79->v80
+    # - Verdict (current env): LOCAL_STAGING_APPLIED_SAFE (db_writes=0,
+    #   local_file_writes=6, live_reward_grant=false)
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post pack.
+    # db_writes=0, applied_to_live=false, live_reward_grant=false,
+    # mongo_url_used=false, pymongo_used=false, motor_used=false, redis_used=false,
+    # broad_rollout=false, premium_currency=false, gacha/shop/VIP/BP=false,
+    # backend_route_exposure=false, server.py/battle_engine/story.tsx/combat.tsx unchanged,
+    # asset_import=false, env_mutation=false, validator_weakening=false, fake_PASS=false.
+    # Approval checksum sha256: b76ae4ebfa01519f17589eb81a43130970cf86c600de0d95a85727547d77af5b
+    # ========================================================================
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-ENV', 'validate_pve_reward_claim_canary_staging_env_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-FILES', 'validate_pve_reward_claim_canary_staging_files_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-LOCAL', 'validate_pve_reward_claim_canary_runner_local_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-LOCAL-APPLY', 'validate_pve_reward_claim_canary_local_apply_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-ROLLBACK-OBSERVATION', 'validate_pve_reward_claim_canary_staging_rollback_observation_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-QA', 'validate_pve_reward_claim_canary_staging_qa_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-28-v79-ROLLUP', 'validate_mega_release_acceleration_28_v79_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

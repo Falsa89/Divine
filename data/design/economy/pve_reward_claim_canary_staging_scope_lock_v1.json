@@ -1,0 +1,29 @@
+{
+  "version": "v1",
+  "staging_canonical": "pve_reward_claim_canary_staging_setup",
+  "local_file_based_canary_only": true,
+  "applied_to_live": false,
+  "live_reward_grant": false,
+  "db_writes_allowed": false,
+  "backend_route_exposure": false,
+  "battle_engine_change": false,
+  "server_py_change": false,
+  "story_tsx_change": false,
+  "combat_tsx_change": false,
+  "asset_import": false,
+  "premium_currency_in_fixtures": false,
+  "gacha_in_fixtures": false,
+  "shop_vip_bp_in_fixtures": false,
+  "event_currency_in_fixtures": false,
+  "arena_ranking_in_fixtures": false,
+  "allowlist_alias_only": true,
+  "pii_in_files": false,
+  "max_claims_per_user": 1,
+  "max_total_claims": 20,
+  "reward_caps": {
+    "gold": 500,
+    "account_exp": 50,
+    "hero_exp": 100,
+    "basic_material": 3
+  }
+}

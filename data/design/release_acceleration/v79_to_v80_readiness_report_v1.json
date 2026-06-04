@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "from": "v79",
+  "to": "v80",
+  "current_verdict": "MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_LOCAL_STAGING_APPLIED_SAFE_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "applied_to_local_staging": true,
+  "applied_to_live": false,
+  "db_writes": 0,
+  "local_file_writes": 6,
+  "next_v80_recommended": "pve_reward_claim_canary_observation_and_wave2_v80",
+  "alternate_if_regressed": "pve_reward_claim_canary_staging_fix_v80",
+  "deferred": [
+    "reward_claim_ui_summary_gated_after_canary_clean",
+    "feedback_input_staging_auxiliary",
+    "hero_asset_staging_import"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "mode": "local_rollback_drill",
+  "timestamp_utc": "2026-06-04T15:58:02Z",
+  "drill_executed": true,
+  "rolled_back_count": 1,
+  "db_rollback": false,
+  "db_writes": 0,
+  "local_file_writes": 3,
+  "results": [
+    {
+      "tx_id": "canary-local-tx-000001",
+      "rolled_back": true
+    }
+  ],
+  "notes": "Drill rollback file-only. Nessuna mutazione DB."
+}

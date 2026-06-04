@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "manifest": [
+    "/app/data/canary_staging/README.md",
+    "/app/data/canary_staging/allowlist_v1.json",
+    "/app/data/canary_staging/reward_fixtures_v1.json",
+    "/app/data/canary_staging/local_ledger_v1.json",
+    "/app/data/canary_staging/rollback_tokens_v1.json",
+    "/app/data/canary_staging/observation_log_v1.json"
+  ],
+  "file_based_only": true,
+  "no_db": true,
+  "no_pii": true,
+  "allowlist_alias_only": true,
+  "reward_fixtures_non_premium_only": true,
+  "production_environment": false
+}

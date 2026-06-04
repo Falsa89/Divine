@@ -1,0 +1,32 @@
+{
+  "version": "v1",
+  "forbidden_in_staging": [
+    "live_db_writes",
+    "mongo_url_use",
+    "pymongo_import",
+    "motor_import",
+    "redis_use",
+    "backend_route_registration",
+    "server_py_change",
+    "battle_engine_change",
+    "story_tsx_change",
+    "combat_tsx_change",
+    "real_user_account_mutation",
+    "live_reward_grant",
+    "premium_currency",
+    "gacha_currency",
+    "event_currency_live",
+    "arena_points",
+    "vip_points",
+    "battle_pass_xp",
+    "asset_import",
+    "asset_copy",
+    "character_bible_change",
+    "final_numbers_change",
+    "hero_roster_change",
+    "broad_rollout",
+    "env_mutation",
+    "validator_weakening",
+    "fake_pass"
+  ]
+}
