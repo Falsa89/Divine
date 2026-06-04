@@ -1,0 +1,26 @@
+{
+  "verification_version": "menu_public_exposure_approval_verification_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_23_v74",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v74_MEGA_RELEASE_ACCELERATION_23_MENU_EXPOSURE_APPLY_CLOSED_ALPHA_KICKOFF",
+  "approval_phrase_received": true,
+  "approval_phrase": "approvo ogni procedimento d'ora in avanti",
+  "approval_scope": "v74|menu_public_exposure_apply|alpha_preview_section_only|routes_from_v73_scope_lock_only|no_db_writes|no_reward|no_account_persistence|no_asyncstorage|no_asset_import|no_backend_routes|no_battle_engine|rollback_required|observation_required|closed_alpha_kickoff_plan",
+  "approval_checksum_required": true,
+  "approval_checksum_algorithm": "sha256",
+  "approval_checksum_formula": "sha256(approval_phrase + '|' + approval_scope)",
+  "approval_checksum_expected": "6129d308d56708e078b7f2c15ff10003b9761a9beecfbf02eb729d1e37290041",
+  "approval_checksum_computed": "6129d308d56708e078b7f2c15ff10003b9761a9beecfbf02eb729d1e37290041",
+  "approval_checksum_verified": true,
+  "scope_lock_reference": "data/design/navigation/menu_public_exposure_scope_lock_v1.json",
+  "handshake_steps_verified": [
+    {"step": 1, "id": "qa_exit_pass", "verified": true},
+    {"step": 2, "id": "scope_lock_present", "verified": true},
+    {"step": 3, "id": "approval_phrase_received", "verified": true},
+    {"step": 4, "id": "checksum_verified", "verified": true},
+    {"step": 5, "id": "dry_run_pass", "verified": true},
+    {"step": 6, "id": "explicit_apply_instruction", "verified": true}
+  ],
+  "all_gates_passed": true,
+  "apply_authorized": true,
+  "db_writes": 0
+}

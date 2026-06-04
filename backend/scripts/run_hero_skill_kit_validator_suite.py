@@ -2503,6 +2503,41 @@ OPTIONAL = [
     ('PROJECT-v72-P3-POLISH-BACKLOG', 'validate_v72_p3_polish_backlog_v1.py'),
     ('PROJECT-MENU-EXPOSURE-CLOSED-ALPHA-READINESS', 'validate_menu_exposure_closed_alpha_readiness_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-22-v73-ROLLUP', 'validate_mega_release_acceleration_22_v73_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_23_MENU_PUBLIC_EXPOSURE_APPLY_AND_CLOSED_ALPHA_KICKOFF_GATE_PACK_v74
+    # PUBLIC_SYNC_TAG_v74_MEGA_RELEASE_ACCELERATION_23_MENU_EXPOSURE_APPLY_CLOSED_ALPHA_KICKOFF
+    # ------------------------------------------------------------------------
+    # MENU PUBLIC EXPOSURE APPLY (CONTROLLED) + CLOSED ALPHA KICKOFF GATE.
+    # Approval phrase ricevuta + checksum sha256 verificato.
+    # Apply CONTROLLED: nuovo screen frontend/app/alpha-menu-preview.tsx
+    # come sezione "Alpha Preview Menu" raggiungibile via route/deeplink.
+    # Home root / tab bar / production navigation: INVARIATI.
+    # 7 route esposte (alpha-preview-hub + 6 preview) coincidenti con
+    # menu_public_exposure_scope_lock_v1 (v73).
+    # Observation result: 8/8 signals PASS, no rollback.
+    # Closed alpha kickoff gate: ready, manual recruitment only,
+    # invites NON enabled, account persistence NON abilitata.
+    # P3 polish carry-forward (3 finding) deferito a polish batch v75+.
+    # Progress report v18 emesso.
+    # 7 OPTIONAL tuples + tag + docs (446-452) + markers + rollup.
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post apply.
+    # db_writes=0, no reward grant, no permanent progress, no account
+    # persistence/flag writes, no async storage persistence, no event
+    # currency, no arena ranking/MMR, no matchmaking live, no real asset
+    # import, no runtime asset resolver change, no Character Bible/
+    # final_numbers, no broad commercial release. No story.tsx/combat.tsx
+    # import nel nuovo screen. No backend route change. No server.py.
+    # No battle_engine. No api/story/battle. No api/battle/simulate.
+    # No validator weakening. No fake PASS.
+    # ========================================================================
+    ('PROJECT-MENU-PUBLIC-EXPOSURE-APPROVAL-VERIFICATION', 'validate_menu_public_exposure_approval_verification_v1.py'),
+    ('PROJECT-MENU-PUBLIC-EXPOSURE-APPLY-CONTROLLED', 'validate_menu_public_exposure_apply_controlled_v1.py'),
+    ('PROJECT-MENU-PUBLIC-EXPOSURE-OBSERVATION-RESULT', 'validate_menu_public_exposure_observation_result_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-KICKOFF-GATE', 'validate_closed_alpha_kickoff_gate_v1.py'),
+    ('PROJECT-v72-P3-POLISH-CARRYFORWARD', 'validate_v72_p3_polish_carryforward_v1.py'),
+    ('PROJECT-ALPHA-READINESS-PROGRESS-v18', 'validate_alpha_readiness_progress_v18_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-23-v74-ROLLUP', 'validate_mega_release_acceleration_23_v74_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

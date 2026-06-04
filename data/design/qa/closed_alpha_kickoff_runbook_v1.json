@@ -1,0 +1,20 @@
+{
+  "runbook_version": "closed_alpha_kickoff_runbook_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_23_v74",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v74_MEGA_RELEASE_ACCELERATION_23_MENU_EXPOSURE_APPLY_CLOSED_ALPHA_KICKOFF",
+  "steps": [
+    {"step": 1, "id": "select_testers", "action": "Selezione manuale 4-8 tester via DM diretto", "owner": "author", "duration_minutes": 30},
+    {"step": 2, "id": "send_onboarding_packet", "action": "Invio packet onboarding + deeplink al hub", "owner": "author", "duration_minutes": 10},
+    {"step": 3, "id": "confirm_receipt", "action": "Tester conferma ricezione/onboarding letto", "owner": "tester", "duration_minutes": 15},
+    {"step": 4, "id": "session_run", "action": "Tester apre deeplink, esegue 6 flussi target, una sessione 30min", "owner": "tester", "duration_minutes": 30},
+    {"step": 5, "id": "feedback_capture", "action": "Tester compila feedback form + segnala bug via workflow", "owner": "tester", "duration_minutes": 15},
+    {"step": 6, "id": "triage", "action": "Author triagea P0/P1/P2/P3 + decide apply/defer", "owner": "author", "duration_minutes": 60},
+    {"step": 7, "id": "wrap", "action": "Summary + decisione v75 readiness", "owner": "author", "duration_minutes": 30}
+  ],
+  "total_steps": 7,
+  "max_session_duration_minutes": 30,
+  "db_writes": 0,
+  "account_persistence": false,
+  "halt_on_p0": true,
+  "rollback_runbook_reference": "data/design/navigation/menu_public_exposure_rollback_runbook_v1.json"
+}

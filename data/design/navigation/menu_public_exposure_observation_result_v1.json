@@ -1,0 +1,29 @@
+{
+  "evidence_version": "menu_public_exposure_observation_result_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_23_v74",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v74_MEGA_RELEASE_ACCELERATION_23_MENU_EXPOSURE_APPLY_CLOSED_ALPHA_KICKOFF",
+  "observation_window_minutes": 60,
+  "observation_started_utc": "2026-06-04T13:55:05Z",
+  "observation_method": "static_evidence_local_container",
+  "signals": [
+    {"id": "home_render_unchanged", "severity": "P0", "status": "pass", "evidence": "home/index.tsx not modified, MD5 invariants 8/8 unchanged"},
+    {"id": "tab_bar_unchanged", "severity": "P0", "status": "pass", "evidence": "no _layout.tsx tab-bar config modified"},
+    {"id": "alpha_preview_section_renders", "severity": "P1", "status": "pass", "evidence": "alpha-menu-preview.tsx created with section UI"},
+    {"id": "deeplink_routes_resolve", "severity": "P1", "status": "pass", "evidence": "7 preview .tsx files present in frontend/app"},
+    {"id": "no_crash_on_app_start", "severity": "P0", "status": "pass", "evidence": "static screen, no runtime fetch, no async effect"},
+    {"id": "no_unexpected_db_writes", "severity": "P0", "status": "pass", "evidence": "no DB driver imported, db_writes=0 asserted"},
+    {"id": "no_unexpected_network_calls_to_battle_engine", "severity": "P0", "status": "pass", "evidence": "no fetch/axios import in alpha-menu-preview.tsx"},
+    {"id": "no_async_storage_unexpected_writes", "severity": "P1", "status": "pass", "evidence": "no @react-native-async-storage import"}
+  ],
+  "rollback_triggered": false,
+  "rollback_required": false,
+  "summary": {
+    "signals_total": 8,
+    "signals_pass": 8,
+    "signals_fail": 0,
+    "P0_fail": 0,
+    "P1_fail": 0
+  },
+  "db_writes": 0,
+  "verdict": "OBSERVATION_PASS_NO_ROLLBACK_REQUIRED"
+}

@@ -1,0 +1,20 @@
+{
+  "plan_version": "v72_p3_polish_carryforward_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_23_v74",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v74_MEGA_RELEASE_ACCELERATION_23_MENU_EXPOSURE_APPLY_CLOSED_ALPHA_KICKOFF",
+  "carryforward_from": "v73 v72_p3_polish_backlog_plan_v1",
+  "findings": [
+    {"id": "p3_alpha_preview_hub_copy_shortening", "severity": "P3", "apply_now": false, "safe_to_fix_later": true},
+    {"id": "p3_first_session_state_label_line_height_margin", "severity": "P3", "apply_now": false, "safe_to_fix_later": true},
+    {"id": "p3_alpha_preview_hub_qa_priority_ordering", "severity": "P3", "apply_now": false, "safe_to_fix_later": true}
+  ],
+  "findings_count": 3,
+  "target_batch": "future_polish_batch_v75_or_later",
+  "apply_now_default": false,
+  "aggregate_into_future_polish_batch": true,
+  "is_blocker": false,
+  "required_before_v75": false,
+  "safe_to_fix_later": true,
+  "db_writes": 0,
+  "reason": "v74 e' focalizzato su menu exposure apply + closed alpha kickoff. I 3 finding P3 restano in carry-forward verso polish batch dedicato."
+}
