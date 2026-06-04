@@ -1,0 +1,32 @@
+{
+  "version": "v1",
+  "design_only": true,
+  "production_ui_exposure": false,
+  "no_real_reward_claim_button": true,
+  "no_account_mutation": true,
+  "no_db": true,
+  "no_tsx_required_in_v80": true,
+  "surface": "future_reward_claim_ui_summary_preview_shell",
+  "data_source_future": [
+    "local_canary_result_summary",
+    "reward_payload_summary",
+    "idempotency_status",
+    "rollback_status"
+  ],
+  "ui_concepts": [
+    "reward_preview",
+    "claim_result",
+    "idempotent_replay_label",
+    "blocked_rejected_reason",
+    "rollback_state"
+  ],
+  "must_distinguish": {
+    "preview_staging_reward_vs_live_reward": true,
+    "forbidden_to_mix_in_same_surface": true
+  },
+  "gating": {
+    "requires_wave2_clean": true,
+    "requires_explicit_v81_approval": true,
+    "requires_no_premium_currency_visible": true
+  }
+}

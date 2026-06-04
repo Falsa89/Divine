@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "design_only": true,
+  "preview_data_fields": {
+    "tx_id": {"type": "string", "required": true, "note": "canary local tx only in v80"},
+    "user_alias": {"type": "string", "required": true, "note": "alias-only, no PII"},
+    "route_id": {"type": "string", "required": true},
+    "reward_payload_summary": {"type": "object", "required": true, "allowed_keys": ["gold", "account_exp", "hero_exp", "basic_material"]},
+    "applied": {"type": "boolean", "required": true},
+    "idempotent_replay": {"type": "boolean", "required": false},
+    "rejected_reason": {"type": "string", "required": false, "nullable": true},
+    "rolled_back": {"type": "boolean", "required": false},
+    "is_preview": {"type": "boolean", "required": true, "const": true, "note": "in v80 sempre true"}
+  },
+  "forbidden_keys_in_preview": [
+    "premium_currency", "gacha_currency", "event_currency",
+    "arena_points", "vip_points", "battle_pass_xp"
+  ]
+}

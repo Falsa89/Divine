@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "forbidden_in_ui_summary": [
+    "production_ui_exposure",
+    "real_reward_claim_button",
+    "account_mutation_trigger",
+    "db_write_trigger",
+    "backend_route_call_to_claim_endpoint",
+    "premium_currency_display_as_grantable",
+    "gacha_currency_display",
+    "event_currency_live_display",
+    "arena_ranking_grant_display",
+    "vip_battle_pass_grant_display",
+    "mixing_preview_and_live_in_same_surface_without_label"
+  ],
+  "required_labels": [
+    "PREVIEW", "STAGING", "CANARY_LOCAL"
+  ]
+}

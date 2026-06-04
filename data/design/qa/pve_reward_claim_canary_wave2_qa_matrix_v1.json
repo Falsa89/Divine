@@ -1,0 +1,26 @@
+{
+  "version": "v1",
+  "matrix": [
+    {"id": "QA1", "area": "scope", "check": "max_3_users_max_3_claims", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA2", "area": "scope", "check": "no_live_db_no_routes", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA3", "area": "files", "check": "wave2_files_allowlist_alias_only", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA4", "area": "files", "check": "wave2_fixtures_non_premium_caps", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA5", "area": "runner_wave2", "check": "requires_mode_and_wave2_flag", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA6", "area": "runner_wave2", "check": "no_pymongo_no_motor_no_redis_no_mongo_url", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA7", "area": "apply", "check": "applied_to_local_staging_only_3_users", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA8", "area": "apply", "check": "db_writes_zero", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA9", "area": "apply", "check": "live_reward_grant_false", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA10", "area": "negative", "check": "premium_reward_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA11", "area": "negative", "check": "non_allowlisted_user_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA12", "area": "negative", "check": "over_cap_reward_rejected", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA13", "area": "negative", "check": "duplicate_idempotency_replay", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA14", "area": "negative", "check": "duplicate_conflicting_hash", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA15", "area": "observation", "check": "metrics_pass_all_criteria", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA16", "area": "rollback", "check": "sample_rollback_file_only", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA17", "area": "wave3_gate", "check": "ready_after_clean_wave2", "expected": "PASS", "actual": "PASS"},
+    {"id": "QA18", "area": "ui_summary", "check": "design_only_no_production_ui", "expected": "PASS", "actual": "PASS"}
+  ],
+  "current_state": "WAVE2_OBSERVED_SAFE",
+  "db_writes": 0,
+  "local_file_writes_session": 6
+}

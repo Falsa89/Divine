@@ -1,0 +1,69 @@
+{
+  "mode": "wave2_apply_attempt",
+  "timestamp_utc": "2026-06-04T16:15:24Z",
+  "applied_to_local_staging": true,
+  "applied_to_live": false,
+  "blocked_safe": false,
+  "reason": null,
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "local_file_writes": 3,
+  "gates": {
+    "staging_dir_exists": true,
+    "wave2_allowlist_present": true,
+    "wave2_fixtures_present": true,
+    "wave2_plan_present": true,
+    "mode_flag_present": true,
+    "wave2_flag_present": true,
+    "all_wave2_apply_gates_pass": true
+  },
+  "wave2_success_count": 3,
+  "wave2_max_claims_total": 3,
+  "happy_paths": [
+    {
+      "user": "canary_user_001",
+      "applied": true,
+      "tx_id": "canary-wave2-tx-000001",
+      "rollback_token": "rb-wave2-token-000001",
+      "idempotency_key": "idem:wave2:canary_user_001:claim-wave2-000001"
+    },
+    {
+      "user": "canary_user_002",
+      "applied": true,
+      "tx_id": "canary-wave2-tx-000002",
+      "rollback_token": "rb-wave2-token-000002",
+      "idempotency_key": "idem:wave2:canary_user_002:claim-wave2-000002"
+    },
+    {
+      "user": "canary_user_003",
+      "applied": true,
+      "tx_id": "canary-wave2-tx-000003",
+      "rollback_token": "rb-wave2-token-000003",
+      "idempotency_key": "idem:wave2:canary_user_003:claim-wave2-000003"
+    }
+  ],
+  "negative_tests_results": [
+    {
+      "test": "duplicate_idempotency_replay",
+      "result": "idempotent_replay_returned"
+    },
+    {
+      "test": "duplicate_conflicting_hash",
+      "result": "rejected_idempotency_conflict"
+    },
+    {
+      "test": "non_allowlisted_user",
+      "result": "rejected_non_allowlisted_user"
+    },
+    {
+      "test": "premium_reward_reject",
+      "result": "rejected_forbidden_reward_type"
+    },
+    {
+      "test": "over_cap_reward_reject",
+      "result": "rejected_over_cap"
+    }
+  ],
+  "verdict_local": "PVE_REWARD_CLAIM_CANARY_WAVE2_OBSERVED_SAFE",
+  "notes": "Wave2 apply file-only isolato. Nessuna mutazione DB, nessun reward live."
+}

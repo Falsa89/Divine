@@ -1,0 +1,52 @@
+{
+  "version": "v1",
+  "snapshot_timestamp_utc": "2026-06-04T16:15:24Z",
+  "wave1_v79_entries_count": 1,
+  "wave1_v79_entries_summary": [
+    {
+      "tx_id": "canary-local-tx-000001",
+      "user": "canary_user_001",
+      "rolled_back": true
+    }
+  ],
+  "wave2_entries_count": 3,
+  "wave2_entries_summary": [
+    {
+      "tx_id": "canary-wave2-tx-000001",
+      "user": "canary_user_001",
+      "route": "story_alpha_slice_preview",
+      "payload": {
+        "gold": 100,
+        "account_exp": 10,
+        "hero_exp": 20,
+        "basic_material": 1
+      }
+    },
+    {
+      "tx_id": "canary-wave2-tx-000002",
+      "user": "canary_user_002",
+      "route": "training_combat_onboarding_preview",
+      "payload": {
+        "gold": 50,
+        "account_exp": 5,
+        "hero_exp": 10,
+        "basic_material": 1
+      }
+    },
+    {
+      "tx_id": "canary-wave2-tx-000003",
+      "user": "canary_user_003",
+      "route": "boss_tower_alpha_loop_preview",
+      "payload": {
+        "gold": 200,
+        "account_exp": 20,
+        "hero_exp": 50,
+        "basic_material": 2
+      }
+    }
+  ],
+  "db_writes": 0,
+  "live_reward_grant": false,
+  "premium_in_ledger": false,
+  "pii_in_ledger": false
+}

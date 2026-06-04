@@ -1,0 +1,33 @@
+{
+  "version": "v1",
+  "plan": [
+    {
+      "user": "canary_user_001",
+      "route": "story_alpha_slice_preview",
+      "claim_id": "claim-wave2-000001",
+      "reward_preview": {"gold": 100, "account_exp": 10, "hero_exp": 20, "basic_material": 1}
+    },
+    {
+      "user": "canary_user_002",
+      "route": "training_combat_onboarding_preview",
+      "claim_id": "claim-wave2-000002",
+      "reward_preview": {"gold": 50, "account_exp": 5, "hero_exp": 10, "basic_material": 1}
+    },
+    {
+      "user": "canary_user_003",
+      "route": "boss_tower_alpha_loop_preview",
+      "claim_id": "claim-wave2-000003",
+      "reward_preview": {"gold": 200, "account_exp": 20, "hero_exp": 50, "basic_material": 2}
+    }
+  ],
+  "negative_tests": [
+    "duplicate_idempotency_replay",
+    "duplicate_conflicting_hash",
+    "non_allowlisted_user",
+    "premium_reward_reject",
+    "over_cap_reward_reject"
+  ],
+  "max_users": 3,
+  "max_claims_total": 3,
+  "db_writes_default": 0
+}

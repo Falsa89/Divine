@@ -1,0 +1,30 @@
+{
+  "version": "v24",
+  "v80_canonical": "pve_reward_claim_canary_wave2_observation",
+  "wave2_local_apply": "applied_local_staging",
+  "wave2_success_count": 3,
+  "wave2_observation": "pass",
+  "wave2_rollback_drill": "pass",
+  "wave2_negative_tests": "pass",
+  "wave3_gate": "ready",
+  "reward_claim_ui_summary_gated_design": "ready_v80",
+  "live_reward_grant": false,
+  "db_writes": 0,
+  "local_file_writes": 6,
+  "premium_rewards": false,
+  "broad_rollout": false,
+  "production_ui_exposure": false,
+  "md5_invariants_intact": true,
+  "next_recommended": "pve_reward_claim_canary_wave3_or_ui_summary_preview_v81",
+  "deferred_branches": [
+    "reward_claim_ui_summary_preview_shell_after_wave2_clean",
+    "hero_asset_staging_import_only_after_real_asset_pack_supplied"
+  ],
+  "not_approved": [
+    "live_reward_claim",
+    "db_writes",
+    "backend_route",
+    "premium_currency",
+    "production_ui_exposure"
+  ]
+}

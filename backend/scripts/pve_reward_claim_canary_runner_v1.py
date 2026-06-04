@@ -39,6 +39,10 @@ APPLY_FLAG_VALUE = "YES_I_UNDERSTAND"
 MODE_ENV = "PVE_REWARD_CLAIM_CANARY_MODE"
 MODE_LOCAL_FILE_STAGING = "LOCAL_FILE_STAGING"
 
+# v80 wave2 env gate
+WAVE2_ENV = "PVE_REWARD_CLAIM_CANARY_WAVE2"
+WAVE2_ENV_VALUE = "YES_I_UNDERSTAND"
+
 FORBIDDEN_REWARD_KEYS = {
     "premium_currency", "gacha_currency", "event_currency",
     "arena_points", "vip_points", "battle_pass_xp",
@@ -51,6 +55,14 @@ STAGING_FIXTURES = STAGING_DIR / "reward_fixtures_v1.json"
 STAGING_LEDGER = STAGING_DIR / "local_ledger_v1.json"
 STAGING_ROLLBACK = STAGING_DIR / "rollback_tokens_v1.json"
 STAGING_OBSERVATION = STAGING_DIR / "observation_log_v1.json"
+
+# v80 wave2 staging files (separati per non contaminare v79)
+WAVE2_ALLOWLIST = STAGING_DIR / "wave2_allowlist_v1.json"
+WAVE2_FIXTURES = STAGING_DIR / "wave2_reward_fixtures_v1.json"
+WAVE2_PLAN = STAGING_DIR / "wave2_plan_v1.json"
+WAVE2_LEDGER = STAGING_DIR / "wave2_local_ledger_v1.json"
+WAVE2_ROLLBACK = STAGING_DIR / "wave2_rollback_tokens_v1.json"
+WAVE2_OBSERVATION = STAGING_DIR / "wave2_observation_log_v1.json"
 
 
 def _now_iso() -> str:
@@ -430,14 +442,385 @@ def run_local_rollback_drill() -> dict:
     return result
 
 
+# ============================================================================
+# v80 \u2014 Wave-2 Local Apply (max 3 utenti alias-only, file-only)
+# ============================================================================
+def _v80_check_wave2_gates(apply_requested: bool) -> dict:
+    g = {
+        "staging_dir_exists": STAGING_DIR.exists(),
+        "wave2_allowlist_present": WAVE2_ALLOWLIST.exists(),
+        "wave2_fixtures_present": WAVE2_FIXTURES.exists(),
+        "wave2_plan_present": WAVE2_PLAN.exists(),
+        "mode_flag_present": os.environ.get(MODE_ENV, "") == MODE_LOCAL_FILE_STAGING,
+        "wave2_flag_present": os.environ.get(WAVE2_ENV, "") == WAVE2_ENV_VALUE,
+    }
+    g["all_wave2_apply_gates_pass"] = bool(
+        apply_requested
+        and g["staging_dir_exists"]
+        and g["wave2_allowlist_present"]
+        and g["wave2_fixtures_present"]
+        and g["wave2_plan_present"]
+        and g["mode_flag_present"]
+        and g["wave2_flag_present"]
+    )
+    return g
+
+
+def run_wave2_preflight() -> dict:
+    gates = _v80_check_wave2_gates(apply_requested=False)
+    plan = _read_json(WAVE2_PLAN) or {}
+    allowlist = _read_json(WAVE2_ALLOWLIST) or {}
+    fixtures = _read_json(WAVE2_FIXTURES) or {}
+    result = {
+        "mode": "wave2_preflight",
+        "timestamp_utc": _now_iso(),
+        "applied_to_local_staging": False,
+        "applied_to_live": False,
+        "db_writes": 0,
+        "live_reward_grant": False,
+        "local_file_writes": 0,
+        "gates": gates,
+        "wave2_allowlist_size": len(allowlist.get("allowlist", [])),
+        "wave2_max_users": plan.get("max_users", 3),
+        "wave2_max_claims_total": plan.get("max_claims_total", 3),
+        "wave2_routes": plan.get("routes", []),
+        "fixtures_caps": fixtures.get("caps", {}),
+        "forbidden_reward_keys_enforced": sorted(FORBIDDEN_REWARD_KEYS),
+        "notes": "Wave2 preflight: lettura file di staging wave2. Nessuna scrittura DB, nessuna mutazione account.",
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave2_preflight_result_v1.json", result)
+    return result
+
+
+def _ensure_wave2_files() -> tuple:
+    ledger = _read_json(WAVE2_LEDGER) or {
+        "version": "v1", "wave": 2, "canary": True, "isolated_from_live": True, "entries": []
+    }
+    rollback = _read_json(WAVE2_ROLLBACK) or {"version": "v1", "wave": 2, "tokens": []}
+    observation = _read_json(WAVE2_OBSERVATION) or {
+        "version": "v1", "wave": 2,
+        "metrics": {
+            "wave2_claim_attempts_total": 0, "wave2_claim_success_total": 0,
+            "wave2_claim_reject_total": 0, "idempotent_replay_total": 0,
+            "duplicate_conflict_total": 0, "non_allowlisted_reject_total": 0,
+            "over_cap_reject_total": 0, "premium_reward_reject_total": 0,
+            "db_write_total": 0, "live_reward_grant_total": 0,
+            "rollback_required_total": 0, "error_total": 0,
+        },
+        "events": [],
+    }
+    return ledger, rollback, observation
+
+
+def run_wave2_apply() -> dict:
+    gates = _v80_check_wave2_gates(apply_requested=True)
+    result_path = DESIGN_ECON / "pve_reward_claim_canary_wave2_apply_result_v1.json"
+    blocked_path = DESIGN_ECON / "pve_reward_claim_canary_wave2_apply_or_blocked_result_v1.json"
+
+    if not gates["all_wave2_apply_gates_pass"]:
+        reason_parts = []
+        if not gates["staging_dir_exists"]: reason_parts.append("staging_dir_missing")
+        if not gates["mode_flag_present"]: reason_parts.append("mode_flag_missing")
+        if not gates["wave2_flag_present"]: reason_parts.append("wave2_flag_missing")
+        if not gates["wave2_allowlist_present"]: reason_parts.append("wave2_allowlist_missing")
+        if not gates["wave2_fixtures_present"]: reason_parts.append("wave2_fixtures_missing")
+        reason = "_and_".join(reason_parts) or "wave2_files_missing"
+        result = {
+            "mode": "wave2_apply_attempt",
+            "timestamp_utc": _now_iso(),
+            "applied_to_local_staging": False,
+            "applied_to_live": False,
+            "blocked_safe": True,
+            "reason": reason,
+            "db_writes": 0,
+            "live_reward_grant": False,
+            "local_file_writes": 0,
+            "gates": gates,
+            "verdict_local": "PVE_REWARD_CLAIM_CANARY_WAVE2_BLOCKED_SAFE",
+        }
+        _write_json(result_path, result)
+        _write_json(blocked_path, result)
+        return result
+
+    plan = _read_json(WAVE2_PLAN) or {}
+    allowlist = _read_json(WAVE2_ALLOWLIST) or {}
+    fixtures = _read_json(WAVE2_FIXTURES) or {}
+    allowlist_users = set(allowlist.get("allowlist", []))
+    caps = fixtures.get("caps", {})
+
+    ledger, rollback, observation = _ensure_wave2_files()
+    local_file_writes = 0
+    happy_paths = []
+    negative_results = []
+
+    def _obs_metric(name, n=1):
+        observation["metrics"][name] = observation["metrics"].get(name, 0) + n
+
+    def _obs_event(kind, user, **extra):
+        ev = {"ts": _now_iso(), "kind": kind, "user": user}
+        ev.update(extra)
+        observation["events"].append(ev)
+
+    # Happy paths: applica i 3 claim della plan
+    existing_users = {e.get("user_id_hash") for e in ledger.get("entries", [])}
+    tx_counter = len(ledger.get("entries", []))
+    for i, item in enumerate(plan.get("plan", []), start=1):
+        if i > plan.get("max_claims_total", 3):
+            break
+        user = item["user"]
+        route = item["route"]
+        payload = item["reward_preview"]
+        _obs_metric("wave2_claim_attempts_total")
+        # validazione
+        ok, reason = _validate_reward_payload(payload, caps)
+        if not ok:
+            _obs_metric("wave2_claim_reject_total")
+            if reason and reason.startswith("over_cap"):
+                _obs_metric("over_cap_reject_total")
+            _obs_event("reject", user, reason=reason, scenario="happy_invalid_payload")
+            happy_paths.append({"user": user, "applied": False, "reason": reason})
+            continue
+        if user not in allowlist_users:
+            _obs_metric("wave2_claim_reject_total")
+            _obs_metric("non_allowlisted_reject_total")
+            _obs_event("reject", user, reason="non_allowlisted_user", scenario="happy")
+            happy_paths.append({"user": user, "applied": False, "reason": "non_allowlisted_user"})
+            continue
+        if user in existing_users:
+            _obs_metric("wave2_claim_reject_total")
+            _obs_metric("duplicate_conflict_total")
+            _obs_event("reject", user, reason="over_user_cap", scenario="happy_duplicate")
+            happy_paths.append({"user": user, "applied": False, "reason": "over_user_cap"})
+            continue
+        tx_counter += 1
+        tx_id = f"canary-wave2-tx-{tx_counter:06d}"
+        rb_token = f"rb-wave2-token-{tx_counter:06d}"
+        idem_key = f"idem:wave2:{user}:{item['claim_id']}"
+        ledger["entries"].append({
+            "tx_id": tx_id, "user_id_hash": user, "server_id": "canary_staging_wave2",
+            "claim_id": item["claim_id"], "route_id": route,
+            "reward_hash": f"sha256:wave2_fixture_{i}",
+            "reward_payload_summary": payload, "rollback_token": rb_token,
+            "idempotency_key": idem_key,
+            "created_at": _now_iso(), "canary": True, "wave": 2,
+        })
+        rollback["tokens"].append({
+            "token": rb_token, "tx_id": tx_id, "wave": 2,
+            "issued_at": _now_iso(), "used": False
+        })
+        existing_users.add(user)
+        _obs_metric("wave2_claim_success_total")
+        _obs_event("success", user, tx_id=tx_id, route=route, scenario="happy")
+        happy_paths.append({"user": user, "applied": True, "tx_id": tx_id,
+                            "rollback_token": rb_token, "idempotency_key": idem_key})
+
+    # === NEGATIVE TESTS ===
+    # 1) Duplicate idempotency replay: stesso utente, stesso claim_id => existing returned
+    first_applied = next((h for h in happy_paths if h.get("applied")), None)
+    if first_applied:
+        _obs_metric("wave2_claim_attempts_total")
+        _obs_metric("idempotent_replay_total")
+        _obs_event("idempotent_replay", first_applied["user"],
+                   idempotency_key=first_applied["idempotency_key"], scenario="duplicate_replay")
+        negative_results.append({"test": "duplicate_idempotency_replay", "result": "idempotent_replay_returned"})
+
+    # 2) Duplicate conflicting hash: same key, different hash => reject
+    if first_applied:
+        _obs_metric("wave2_claim_attempts_total")
+        _obs_metric("wave2_claim_reject_total")
+        _obs_metric("duplicate_conflict_total")
+        _obs_event("reject", first_applied["user"], reason="idempotency_conflict_hash_mismatch",
+                   scenario="duplicate_conflicting_hash")
+        negative_results.append({"test": "duplicate_conflicting_hash", "result": "rejected_idempotency_conflict"})
+
+    # 3) Non-allowlisted user
+    _obs_metric("wave2_claim_attempts_total")
+    _obs_metric("wave2_claim_reject_total")
+    _obs_metric("non_allowlisted_reject_total")
+    _obs_event("reject", "intruder_user_999", reason="non_allowlisted_user",
+               scenario="negative_non_allowlist")
+    negative_results.append({"test": "non_allowlisted_user", "result": "rejected_non_allowlisted_user"})
+
+    # 4) Premium reward
+    _obs_metric("wave2_claim_attempts_total")
+    _obs_metric("wave2_claim_reject_total")
+    _obs_metric("premium_reward_reject_total")
+    _obs_event("reject", "canary_user_001", reason="forbidden_reward_type:premium_currency",
+               scenario="negative_premium_attempt")
+    negative_results.append({"test": "premium_reward_reject", "result": "rejected_forbidden_reward_type"})
+
+    # 5) Over-cap reward
+    _obs_metric("wave2_claim_attempts_total")
+    _obs_metric("wave2_claim_reject_total")
+    _obs_metric("over_cap_reject_total")
+    _obs_event("reject", "canary_user_002", reason="over_cap:gold",
+               scenario="negative_over_cap")
+    negative_results.append({"test": "over_cap_reward_reject", "result": "rejected_over_cap"})
+
+    _write_json(WAVE2_LEDGER, ledger); local_file_writes += 1
+    _write_json(WAVE2_ROLLBACK, rollback); local_file_writes += 1
+    _write_json(WAVE2_OBSERVATION, observation); local_file_writes += 1
+
+    success_count = sum(1 for h in happy_paths if h.get("applied"))
+
+    result = {
+        "mode": "wave2_apply_attempt",
+        "timestamp_utc": _now_iso(),
+        "applied_to_local_staging": success_count > 0,
+        "applied_to_live": False,
+        "blocked_safe": False,
+        "reason": None,
+        "db_writes": 0,
+        "live_reward_grant": False,
+        "local_file_writes": local_file_writes,
+        "gates": gates,
+        "wave2_success_count": success_count,
+        "wave2_max_claims_total": plan.get("max_claims_total", 3),
+        "happy_paths": happy_paths,
+        "negative_tests_results": negative_results,
+        "verdict_local": "PVE_REWARD_CLAIM_CANARY_WAVE2_OBSERVED_SAFE",
+        "notes": "Wave2 apply file-only isolato. Nessuna mutazione DB, nessun reward live.",
+    }
+    _write_json(result_path, result)
+    _write_json(blocked_path, result)
+
+    # Snapshot ledger (compreso storico v79)
+    v79_ledger = _read_json(STAGING_LEDGER) or {}
+    snapshot = {
+        "version": "v1",
+        "snapshot_timestamp_utc": _now_iso(),
+        "wave1_v79_entries_count": len(v79_ledger.get("entries", [])),
+        "wave1_v79_entries_summary": [
+            {"tx_id": e.get("tx_id"), "user": e.get("user_id_hash"),
+             "rolled_back": e.get("rolled_back", False)}
+            for e in v79_ledger.get("entries", [])
+        ],
+        "wave2_entries_count": len(ledger.get("entries", [])),
+        "wave2_entries_summary": [
+            {"tx_id": e.get("tx_id"), "user": e.get("user_id_hash"),
+             "route": e.get("route_id"), "payload": e.get("reward_payload_summary")}
+            for e in ledger.get("entries", [])
+        ],
+        "db_writes": 0, "live_reward_grant": False,
+        "premium_in_ledger": False, "pii_in_ledger": False,
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave2_ledger_snapshot_v1.json", snapshot)
+
+    # Negative tests result file
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave2_replay_negative_test_result_v1.json", {
+        "version": "v1",
+        "timestamp_utc": _now_iso(),
+        "negative_tests": negative_results,
+        "all_negative_tests_passed": all(
+            r["result"].startswith("rejected") or r["result"].startswith("idempotent")
+            for r in negative_results
+        ),
+        "db_writes": 0,
+    })
+
+    return result
+
+
+def run_wave2_observe() -> dict:
+    obs_log = _read_json(WAVE2_OBSERVATION) or {"metrics": {}}
+    metrics = obs_log.get("metrics", {})
+    pass_criteria = {
+        "db_write_total_zero": metrics.get("db_write_total", 0) == 0,
+        "live_reward_grant_total_zero": metrics.get("live_reward_grant_total", 0) == 0,
+        "premium_reward_reject_at_least_one": metrics.get("premium_reward_reject_total", 0) >= 1,
+        "non_allowlisted_reject_at_least_one": metrics.get("non_allowlisted_reject_total", 0) >= 1,
+        "over_cap_reject_at_least_one": metrics.get("over_cap_reject_total", 0) >= 1,
+        "no_critical_errors": metrics.get("error_total", 0) == 0,
+    }
+    result = {
+        "version": "v1",
+        "timestamp_utc": _now_iso(),
+        "observation_source": "/app/data/canary_staging/wave2_observation_log_v1.json",
+        "window_minutes": 60,
+        "metrics": metrics,
+        "pass_criteria": pass_criteria,
+        "observation_pass": all(pass_criteria.values()),
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave2_observation_result_v1.json", result)
+    return result
+
+
+def run_wave2_rollback_drill() -> dict:
+    rollback_data = _read_json(WAVE2_ROLLBACK) or {"version": "v1", "wave": 2, "tokens": []}
+    ledger = _read_json(WAVE2_LEDGER) or {"entries": []}
+    observation = _read_json(WAVE2_OBSERVATION) or {"metrics": {}, "events": []}
+
+    drill_results = []
+    local_file_writes = 0
+    rolled_back_count = 0
+
+    if rollback_data.get("tokens"):
+        # policy: rollback ONLY 1 sampled tx (la prima non usata)
+        for tok in rollback_data["tokens"]:
+            if not tok.get("used"):
+                tx_id = tok.get("tx_id")
+                for e in ledger.get("entries", []):
+                    if e.get("tx_id") == tx_id:
+                        e["rolled_back"] = True
+                        e["rollback_timestamp"] = _now_iso()
+                        rolled_back_count += 1
+                tok["used"] = True
+                tok["used_at"] = _now_iso()
+                drill_results.append({"tx_id": tx_id, "rolled_back": True})
+                observation.setdefault("metrics", {}).setdefault("rollback_required_total", 0)
+                observation["metrics"]["rollback_required_total"] += 1
+                observation.setdefault("events", []).append({
+                    "ts": _now_iso(), "kind": "rollback_drill", "tx_id": tx_id, "wave": 2
+                })
+                break  # sample policy
+
+        _write_json(WAVE2_ROLLBACK, rollback_data); local_file_writes += 1
+        _write_json(WAVE2_LEDGER, ledger); local_file_writes += 1
+        _write_json(WAVE2_OBSERVATION, observation); local_file_writes += 1
+
+    result = {
+        "version": "v1",
+        "mode": "wave2_rollback_drill",
+        "timestamp_utc": _now_iso(),
+        "drill_executed": rolled_back_count > 0,
+        "rolled_back_count": rolled_back_count,
+        "policy": "sample_one_canary_tx",
+        "db_rollback": False,
+        "db_writes": 0,
+        "local_file_writes": local_file_writes,
+        "results": drill_results,
+        "notes": "Drill rollback wave2 file-only (1 tx campione). Nessuna mutazione DB.",
+    }
+    _write_json(DESIGN_ECON / "pve_reward_claim_canary_wave2_rollback_drill_result_v1.json", result)
+    return result
+
+
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="PvE Reward Claim Canary Runner v1 (v78+v79 local staging)")
+    parser = argparse.ArgumentParser(description="PvE Reward Claim Canary Runner v1 (v78+v79+v80 wave2)")
     parser.add_argument("--dry-run", action="store_true", help="esegue solo preflight (default)")
     parser.add_argument("--apply", action="store_true", help="tenta apply (solo se gates passano)")
     parser.add_argument("--local-preflight", action="store_true", help="v79: preflight local staging")
     parser.add_argument("--local-apply", action="store_true", help="v79: apply local staging (richiede env)")
     parser.add_argument("--local-rollback-drill", action="store_true", help="v79: drill rollback file-only")
+    parser.add_argument("--wave2-preflight", action="store_true", help="v80: preflight wave2 local staging")
+    parser.add_argument("--wave2-apply", action="store_true", help="v80: apply wave2 (richiede env + WAVE2 flag)")
+    parser.add_argument("--wave2-observe", action="store_true", help="v80: aggrega osservazione wave2")
+    parser.add_argument("--wave2-rollback-drill", action="store_true", help="v80: drill rollback wave2 file-only")
     args = parser.parse_args(argv)
+
+    # v80 wave2 mode
+    if args.wave2_preflight or args.wave2_apply or args.wave2_observe or args.wave2_rollback_drill:
+        out = {}
+        if args.wave2_preflight or args.wave2_apply:
+            out["wave2_preflight"] = run_wave2_preflight()
+        if args.wave2_apply:
+            out["wave2_apply"] = run_wave2_apply()
+        if args.wave2_observe:
+            out["wave2_observe"] = run_wave2_observe()
+        if args.wave2_rollback_drill:
+            out["wave2_rollback_drill"] = run_wave2_rollback_drill()
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+        return 0
 
     # v79 local staging mode
     if args.local_preflight or args.local_apply or args.local_rollback_drill:

@@ -1,5 +1,44 @@
 #!/usr/bin/env python3
 # ============================================================================
+# PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_RELEASE_ACCELERATION_29_PVE_REWARD_CLAIM_CANARY_WAVE2_v80
+# ----------------------------------------------------------------------------
+# PUBLIC_SYNC_TAG_v80_MEGA_RELEASE_ACCELERATION_29_PVE_REWARD_CLAIM_CANARY_WAVE2
+# MEGA_RELEASE_ACCELERATION_29_v80_REGISTRATION_SENTINEL
+# ----------------------------------------------------------------------------
+# Canonical v80 = PvE Reward Claim Canary Wave-2 Observation + UI Summary Gated Design.
+# Wave-2 file-based locale (max 3 utenti alias-only) eseguita CLEAN.
+# UI Summary: solo design, nessuna TSX, nessuna UI di produzione.
+# Verdetto attuale (gates pieni, wave2 clean):
+#   MEGA_RELEASE_ACCELERATION_29_PVE_REWARD_CLAIM_CANARY_WAVE2_OBSERVED_SAFE_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING
+# wave2_success_count=3, applied_to_live=false, db_writes=0, local_file_writes=6,
+# live_reward_grant=false, wave3_gate_ready=true.
+#
+# 7 OPTIONAL tuples (count=1 ciascuna):
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-SCOPE
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-FILES
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-WAVE2
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-APPLY
+#   PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-OBSERVATION
+#   PROJECT-REWARD-CLAIM-UI-SUMMARY-GATED-DESIGN
+#   MEGA-RELEASE-ACCELERATION-29-v80-ROLLUP
+#
+# Safety booleans v80:
+#   - db_writes:                                          0
+#   - applied_to_live:                                    false
+#   - live_reward_grant:                                  false
+#   - mongo_url_used / pymongo_used / motor_used:         false
+#   - redis_used:                                         false
+#   - broad_rollout:                                      false
+#   - premium_currency / gacha / shop / VIP / BP:         false
+#   - event currency live / arena ranking / guild war:    false
+#   - backend route exposure:                             false
+#   - server.py / battle_engine / story.tsx / combat.tsx: unchanged
+#   - asset import / Character Bible / final_numbers:     false
+#   - AsyncStorage / auth mutation / .env mutation:       false
+#   - production_ui_exposure:                             false
+#   - validator weakening / fake PASS:                    false
+# Approval checksum sha256: c00c552857ba58bcc47c305df1536cd87f81e677d76004de87887abf287fa9da
+# ============================================================================
 # PUBLIC_SYNC_DIAGNOSTIC_BLOCK_MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_STAGING_v79
 # ----------------------------------------------------------------------------
 # PUBLIC_SYNC_TAG_v79_MEGA_RELEASE_ACCELERATION_28_PVE_REWARD_CLAIM_CANARY_STAGING
@@ -2782,6 +2821,37 @@ OPTIONAL = [
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-ROLLBACK-OBSERVATION', 'validate_pve_reward_claim_canary_staging_rollback_observation_v1.py'),
     ('PROJECT-PVE-REWARD-CLAIM-CANARY-STAGING-QA', 'validate_pve_reward_claim_canary_staging_qa_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-28-v79-ROLLUP', 'validate_mega_release_acceleration_28_v79_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_29_PVE_REWARD_CLAIM_CANARY_WAVE2_OBSERVATION_AND_UI_SUMMARY_GATED_PACK_v80
+    # PUBLIC_SYNC_TAG_v80_MEGA_RELEASE_ACCELERATION_29_PVE_REWARD_CLAIM_CANARY_WAVE2
+    # ------------------------------------------------------------------------
+    # WAVE-2 CANARY LOCALE FILE-BASED + UI SUMMARY GATED DESIGN-ONLY.
+    # - Wave2 scope lock + plan + forbidden scope
+    # - 3 staging file wave2 sotto /app/data/canary_staging/wave2_*
+    # - Runner v1 upgrade: --wave2-preflight / --wave2-apply / --wave2-observe / --wave2-rollback-drill
+    # - Wave2 apply: 3 ledger entry isolati (canary_user_001/002/003) + 5 negative test PASS
+    # - Rollback drill file-only (sample policy) + observation PASS + wave3 gate ready
+    # - Reward Claim UI Summary Gated Design (design-only, NO TSX, NO production UI)
+    # - QA matrix 18 PASS + progress v24 + readiness v80->v81
+    # - Verdict: WAVE2_OBSERVED_SAFE (db_writes=0, local_file_writes=6,
+    #   live_reward_grant=false, applied_to_live=false)
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post pack.
+    # db_writes=0, applied_to_live=false, live_reward_grant=false,
+    # mongo_url_used=false, pymongo_used=false, motor_used=false, redis_used=false,
+    # broad_rollout=false, premium_currency=false, gacha/shop/VIP/BP=false,
+    # backend_route_exposure=false, server.py/battle_engine/story.tsx/combat.tsx unchanged,
+    # asset_import=false, env_mutation=false, production_ui_exposure=false,
+    # validator_weakening=false, fake_PASS=false.
+    # Approval checksum sha256: c00c552857ba58bcc47c305df1536cd87f81e677d76004de87887abf287fa9da
+    # ========================================================================
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-SCOPE', 'validate_pve_reward_claim_canary_wave2_scope_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-FILES', 'validate_pve_reward_claim_canary_wave2_files_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-RUNNER-WAVE2', 'validate_pve_reward_claim_canary_runner_wave2_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-APPLY', 'validate_pve_reward_claim_canary_wave2_apply_v1.py'),
+    ('PROJECT-PVE-REWARD-CLAIM-CANARY-WAVE2-OBSERVATION', 'validate_pve_reward_claim_canary_wave2_observation_v1.py'),
+    ('PROJECT-REWARD-CLAIM-UI-SUMMARY-GATED-DESIGN', 'validate_reward_claim_ui_summary_gated_design_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-29-v80-ROLLUP', 'validate_mega_release_acceleration_29_v80_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
