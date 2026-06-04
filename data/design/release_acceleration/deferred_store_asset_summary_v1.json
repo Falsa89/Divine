@@ -1,0 +1,51 @@
+{
+  "deferred_version": "deferred_store_asset_summary_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_26_v77",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v77_MEGA_RELEASE_ACCELERATION_26_FEEDBACK_AGGREGATION_TRIAGE_WRAP_v78_READINESS",
+  "deferred_lanes": [
+    {
+      "id": "store_beta_readiness_apply",
+      "reason": "in attesa di approval phrase esplicita dell'utente per Play closed_testing / TestFlight external testing apply",
+      "requires_user_approval": true,
+      "requires_checksum": true,
+      "action_v77": "no_action",
+      "prerequisites_v78": [
+        "explicit_user_approval_phrase",
+        "explicit_user_authorization_for_store_upload",
+        "signing_keys_provisioning_decision",
+        "privacy_policy_publication"
+      ]
+    },
+    {
+      "id": "hero_asset_staging_import_and_resolver_super_pack",
+      "reason": "in attesa di asset pack reale fornito dall'utente",
+      "requires_user_approval": true,
+      "requires_real_asset_pack_supplied": true,
+      "action_v77": "no_action",
+      "prerequisites_v78": [
+        "real_asset_pack_provided_by_user",
+        "asset_license_check",
+        "asset_resolver_design_approval"
+      ]
+    },
+    {
+      "id": "closed_alpha_actual_session_run",
+      "reason": "sessioni manuali da eseguire dall'autore (DM-based)",
+      "requires_user_approval": false,
+      "action_v77": "no_action",
+      "prerequisites_v78": [
+        "manual_session_execution",
+        "manual_feedback_aggregation_inputs"
+      ]
+    }
+  ],
+  "store_upload_performed": false,
+  "play_console_changes_performed": false,
+  "appstore_connect_changes_performed": false,
+  "testflight_changes_performed": false,
+  "build_generation_performed": false,
+  "real_asset_import": false,
+  "asset_runtime_resolver_changed": false,
+  "broad_commercial_release": false,
+  "db_writes": 0
+}

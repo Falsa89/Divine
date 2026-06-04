@@ -1,0 +1,29 @@
+{
+  "plan_version": "v78_readiness_plan_v1",
+  "pack": "MEGA_RELEASE_ACCELERATION_26_v77",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v77_MEGA_RELEASE_ACCELERATION_26_FEEDBACK_AGGREGATION_TRIAGE_WRAP_v78_READINESS",
+  "v78_lanes_planned": [
+    "closed_alpha_manual_feedback_ingest_when_present",
+    "closed_alpha_findings_triage_apply_or_defer",
+    "closed_alpha_wrap_go_no_go_decision",
+    "store_beta_readiness_optional_apply_only_if_user_authorizes_manually",
+    "hero_asset_staging_import_optional_only_if_real_asset_pack_supplied"
+  ],
+  "v78_entry_conditions": [
+    {"id": "actual_feedback_received", "required": true, "satisfied_in_v77": false},
+    {"id": "min_sessions_completed", "min": 4, "satisfied_in_v77": false},
+    {"id": "feedback_form_submissions_count", "min": 4, "satisfied_in_v77": false},
+    {"id": "no_P0_blocker_unsolved", "required": true, "satisfied_in_v77": null}
+  ],
+  "manual_step_pending": true,
+  "v78_decision_options": [
+    "PROCEED_TO_BROADER_ALPHA",
+    "PROCEED_TO_BETA_GATED",
+    "HOLD_AND_FIX_FINDINGS",
+    "ROLLBACK_CLOSED_ALPHA"
+  ],
+  "db_writes": 0,
+  "automated_live_invites": false,
+  "store_upload_in_v78": false,
+  "broad_commercial_release": false
+}

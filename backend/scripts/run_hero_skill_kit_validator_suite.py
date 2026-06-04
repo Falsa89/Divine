@@ -2612,6 +2612,42 @@ OPTIONAL = [
     ('PROJECT-v77-READINESS-POST-SESSION-TRIAGE-PLAN', 'validate_v77_readiness_post_session_triage_plan_v1.py'),
     ('PROJECT-ALPHA-READINESS-PROGRESS-v20', 'validate_alpha_readiness_progress_v20_v1.py'),
     ('MEGA-RELEASE-ACCELERATION-25-v76-ROLLUP', 'validate_mega_release_acceleration_25_v76_rollup.py'),
+    # ========================================================================
+    # MEGA_RELEASE_ACCELERATION_26_CLOSED_ALPHA_FEEDBACK_AGGREGATION_TRIAGE_WRAP_AND_V78_READINESS_PACK_v77
+    # PUBLIC_SYNC_TAG_v77_MEGA_RELEASE_ACCELERATION_26_FEEDBACK_AGGREGATION_TRIAGE_WRAP_v78_READINESS
+    # ------------------------------------------------------------------------
+    # CLOSED ALPHA FEEDBACK AGGREGATION + TRIAGE + WRAP + v78 READINESS.
+    # - Feedback input discovery in 4 safe path locali (no network/form fetch)
+    # - Aggregation result: empty pipeline (actual_feedback_received=false)
+    # - Findings triage: 0 findings, halt_triggered=false
+    # - Wrap summary: go_no_go=DEFERRED_PENDING_FEEDBACK
+    # - Deferred store/asset summary: tutte le lane in no_action
+    # - v78 readiness plan: lane + entry conditions + decision options
+    # - Progress report v21
+    # - Rollup v77 meta validator
+    # 8 OPTIONAL tuples + tag + docs (470-477) + markers + rollup.
+    # ------------------------------------------------------------------------
+    # Invariants: 8 MD5 ufficiali invariati pre/post pack.
+    # db_writes=0, network_fetch_performed=false, external_form_fetch=false,
+    # automated_live_invites=false, store_upload_performed=false,
+    # play_console/appstore/testflight changes=false, build_generation=false,
+    # pii_collected_in_repo=false, alias_only=true, invented_data=false,
+    # production_navigation_changed=false, no reward grant, no permanent
+    # progress, no account persistence/flag writes, no async storage,
+    # no event currency, no arena ranking, no matchmaking live, no real
+    # asset import, no resolver runtime change, no Character Bible/
+    # final_numbers, no broad commercial release. No story.tsx/combat.tsx.
+    # No backend route. No server.py. No battle_engine. No api/story/battle.
+    # No api/battle/simulate. No validator weakening. No fake PASS.
+    # ========================================================================
+    ('PROJECT-CLOSED-ALPHA-FEEDBACK-INPUT-DISCOVERY', 'validate_closed_alpha_feedback_input_discovery_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-FEEDBACK-AGGREGATION-RESULT', 'validate_closed_alpha_feedback_aggregation_result_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-FINDINGS-TRIAGE-RESULT', 'validate_closed_alpha_findings_triage_result_v1.py'),
+    ('PROJECT-CLOSED-ALPHA-WRAP-SUMMARY', 'validate_closed_alpha_wrap_summary_v1.py'),
+    ('PROJECT-DEFERRED-STORE-ASSET-SUMMARY', 'validate_deferred_store_asset_summary_v1.py'),
+    ('PROJECT-v78-READINESS-PLAN', 'validate_v78_readiness_plan_v1.py'),
+    ('PROJECT-ALPHA-READINESS-PROGRESS-v21', 'validate_alpha_readiness_progress_v21_v1.py'),
+    ('MEGA-RELEASE-ACCELERATION-26-v77-ROLLUP', 'validate_mega_release_acceleration_26_v77_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
