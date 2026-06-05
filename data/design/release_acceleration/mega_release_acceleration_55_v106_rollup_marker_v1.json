@@ -1,0 +1,61 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T18:26:25.466397Z",
+  "validators_total": 10,
+  "validators_pass": 10,
+  "results": [
+    {
+      "validator": "validate_v106_existing_data_model_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 existing data model audit (17 collections)"
+    },
+    {
+      "validator": "validate_v106_player_server_profiles_schema.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 player_server_profiles schema (PK=(account_id,server_id), 5 indexes)"
+    },
+    {
+      "validator": "validate_v106_account_global_vs_server_scoped_matrix.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 account-global vs server-scoped matrix (10 global, 14 scoped, 8 mixed)"
+    },
+    {
+      "validator": "validate_v106_backup_manifest.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 backup manifest (BACKUP_NOT_EXECUTED_DRY_RUN_DEFAULT, 17 planned collections)"
+    },
+    {
+      "validator": "validate_v106_dry_run_migration_result.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 dry-run result (db_inspected=True, estimated_profiles=160)"
+    },
+    {
+      "validator": "validate_v106_apply_script_gated.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 apply script gated (APPLY_SKIPPED_GATED, 0 db writes)"
+    },
+    {
+      "validator": "validate_v106_rollback_script_gated.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 rollback script gated (ROLLBACK_NOT_EXECUTED, non-destructive default)"
+    },
+    {
+      "validator": "validate_v106_server_scoped_read_contract.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 server-scoped read contract (11 endpoints defined)"
+    },
+    {
+      "validator": "validate_v106_bot_server_actor_migration_policy.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 bot/server actor migration policy (5 archetypes, invariants enforced)"
+    },
+    {
+      "validator": "validate_v106_staging_apply_readiness_gate.py",
+      "exit_code": 0,
+      "last_line": "PASS — v106 staging apply readiness gate (NOT_PASSED_APPLY_GATED_NOT_EXECUTED, 12 criteria)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_55_SERVER_SCOPED_DB_SCHEMA_AND_PLAYER_SERVER_PROFILES_GATED_MIGRATION_PREP_DRY_RUN_READY_APPLY_GATED_NOT_EXECUTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

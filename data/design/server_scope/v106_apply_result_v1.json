@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_apply_result",
+  "version": 1,
+  "status": "APPLY_SKIPPED_GATED",
+  "generated_at_utc": "2026-06-05T18:21:17.701002Z",
+  "reason": "Required env flags not all set.",
+  "required_flags": [
+    "V106_PLAYER_SERVER_PROFILES_APPLY",
+    "V106_BACKUP_MANIFEST_CONFIRMED",
+    "V106_STAGING_DB_CONFIRMED",
+    "V106_USER_EXPLICIT_DB_WRITE_APPROVAL"
+  ],
+  "flags_present": [],
+  "db_writes_performed": 0,
+  "collections_created": [],
+  "indexes_created": [],
+  "profiles_backfilled": 0,
+  "original_collections_deleted": [],
+  "premium_currency_granted": false,
+  "reward_granted": false,
+  "legacy_cleanup_applied": false,
+  "forbidden_actions_attempted": [],
+  "safety": {
+    "no_destructive_writes": true,
+    "no_original_data_deleted": true,
+    "no_reward_grant": true,
+    "no_premium_currency_grant": true,
+    "no_legacy_cleanup_apply": true,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

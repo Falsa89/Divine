@@ -1,6 +1,6 @@
 {
   "task_id": "V4_BLOCK_D_SLC_F_OBSERVABILITY_ROLLUP",
-  "timestamp_utc": "20260605T181016Z",
+  "timestamp_utc": "20260605T182716Z",
   "verdict": "BLOCK_D_SLC_F_OBSERVABILITY_HARDENING_READY",
   "metrics": {
     "ensure_server_scope_callsites": 20,
@@ -59,12 +59,13 @@
       "backend/scripts/rollback_slc_g_guilds_cleanup_b.py",
       "backend/scripts/rollback_stage1_qa_gift_inventory_seed.py",
       "backend/scripts/rollback_user_inventory_affinity_state_schema.py",
+      "backend/scripts/rollback_v106_player_server_profiles_migration.py",
       "backend/scripts/rollback_v2_economy_daily_claims_scope.py",
       "backend/scripts/rollback_v2_gvg_user_mail_scope.py",
       "backend/scripts/rollback_v7_battle_pass_technical_hardening.py",
       "backend/scripts/rollback_v7_economy_server_select_deprecation.py"
     ],
-    "rollback_scripts_count": 42,
+    "rollback_scripts_count": 43,
     "post_apply_validators_present": [
       "backend/scripts/validate_slc_f_batch_0_1_post_apply_v1.py",
       "backend/scripts/validate_slc_f_batch_1b_post_apply_v1.py",

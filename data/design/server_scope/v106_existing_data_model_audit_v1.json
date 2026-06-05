@@ -1,0 +1,44 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106_SERVER_SCOPED_DB_SCHEMA_AND_PLAYER_SERVER_PROFILES_GATED_MIGRATION_PREP",
+  "type": "v106_existing_data_model_audit",
+  "version": 1,
+  "language": "it",
+  "audit_method": "static_scan_of_backend_routes_plus_mongodb_collection_inference",
+  "db": "MongoDB local (MONGO_URL backend/.env)",
+  "collections": [
+    {"name":"users","current_keys":["_id","email","password_hash","created_at"],"has_user_id":true,"has_account_id":"user_id_used_as_account_id","has_server_id":false,"should_move_to_player_server_profiles":false,"should_remain_account_global":true,"migration_risk":"low","required_index":["email_unique"],"required_backfill":"none_for_users_remain_global","blocker":"none","note":"identita account globale"},
+    {"name":"user_heroes","current_keys":["_id","user_id","hero_id","level","star","awakening"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"high","required_index":["(account_id,server_id,hero_id)"],"required_backfill":"assign server_id='s1' default per account esistente","blocker":"no server_id field today"},
+    {"name":"teams","current_keys":["_id","user_id","slots","updated_at"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"medium","required_index":["(account_id,server_id)"],"required_backfill":"copy team to profile.team_formation under s1","blocker":"no server_id"},
+    {"name":"inventory","current_keys":["_id","user_id","item_id","quantity"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"high","required_index":["(account_id,server_id,item_id)"],"required_backfill":"assign server_id='s1' default","blocker":"no server_id"},
+    {"name":"currencies","current_keys":["_id","user_id","gold","gems","tokens"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":"split","should_remain_account_global":"split","migration_risk":"high","required_index":["(account_id,server_id)"],"required_backfill":"split soft (server) vs hard (account) currencies","blocker":"design split decision required"},
+    {"name":"story_progress","current_keys":["_id","user_id","chapter","node"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"medium","required_index":["(account_id,server_id)"],"required_backfill":"snapshot under profile.story_progress","blocker":"none"},
+    {"name":"tower_progress","current_keys":["_id","user_id","floor"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"medium","required_index":["(account_id,server_id)"],"required_backfill":"snapshot under profile.tower_progress","blocker":"none"},
+    {"name":"arena_profile","current_keys":["_id","user_id","mmr","rank"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"critical","required_index":["(server_id,mmr_desc)"],"required_backfill":"snapshot under profile.arena_profile","blocker":"ranking compromised cross-server today"},
+    {"name":"guild_membership","current_keys":["_id","user_id","guild_id"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"critical","required_index":["(account_id,server_id)","(server_id,guild_id)"],"required_backfill":"snapshot under profile.guild_profile","blocker":"guild_id semantics cross-server"},
+    {"name":"chat_messages","current_keys":["_id","user_id","channel","text","ts"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":false,"should_remain_account_global":false,"migration_risk":"critical","required_index":["(server_id,channel,ts_desc)"],"required_backfill":"channel_key prefix {server_id}: required v109","blocker":"contract documented v104 e v109"},
+    {"name":"live_event_state","current_keys":["_id","user_id","event_id","state"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"high","required_index":["(account_id,server_id,event_id)"],"required_backfill":"snapshot under profile.live_event_state","blocker":"none"},
+    {"name":"server_actors_bots","current_keys":["_id","bot_id","archetype","server_id?"],"has_user_id":false,"has_account_id":"bot_account_id","has_server_id":"design_yes_runtime_partial","should_move_to_player_server_profiles":true,"should_remain_account_global":false,"migration_risk":"high","required_index":["(server_id,archetype)"],"required_backfill":"bot profile entry per server (s1) con roster valido non vuoto","blocker":"runtime non implementato"},
+    {"name":"gacha_history","current_keys":["_id","user_id","banner_id","timestamp"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":"mixed","should_remain_account_global":"mixed","migration_risk":"medium","required_index":["(account_id,server_id?,banner_id)"],"required_backfill":"design split soft (server pity) vs hard (account ledger)","blocker":"design decision required"},
+    {"name":"reward_claims","current_keys":["_id","user_id","claim_key","ts"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":"mixed","should_remain_account_global":"mixed","migration_risk":"high","required_index":["(account_id,server_id,claim_key)_idempotent"],"required_backfill":"split server-bound vs account-global claim keys","blocker":"idempotency upgrade v111"},
+    {"name":"battle_pass","current_keys":["_id","user_id","season","level"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":"design_decision","should_remain_account_global":"design_decision","migration_risk":"medium","required_index":["(account_id,server_id?,season)"],"required_backfill":"design decision required","blocker":"design decision required"},
+    {"name":"vip","current_keys":["_id","user_id","level"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":false,"should_remain_account_global":true,"migration_risk":"low","required_index":["account_id_unique"],"required_backfill":"none_remain_global","blocker":"none"},
+    {"name":"shop_purchases","current_keys":["_id","user_id","sku"],"has_user_id":true,"has_account_id":false,"has_server_id":false,"should_move_to_player_server_profiles":"split","should_remain_account_global":"split","migration_risk":"medium","required_index":["(account_id,server_id?,sku)"],"required_backfill":"split server-bound vs account entitlement","blocker":"design decision required"}
+  ],
+  "summary": {
+    "collections_audited": 17,
+    "move_to_psp_count": 8,
+    "remain_account_global_count": 3,
+    "mixed_split_count": 5,
+    "chat_separate_collection": 1,
+    "critical_risk": 3,
+    "high_risk": 6
+  },
+  "forbidden_scope_compliance": {
+    "db_writes": false,
+    "destructive_migration": false,
+    "reward_grant": false,
+    "premium_currency_grant": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

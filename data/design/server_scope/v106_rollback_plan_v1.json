@@ -1,0 +1,50 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_rollback_plan",
+  "version": 1,
+  "language": "it",
+  "status": "ROLLBACK_NOT_EXECUTED_PLAN_DOCUMENTED",
+  "reason": "Default policy: rollback non eseguibile senza flag V106_PLAYER_SERVER_PROFILES_ROLLBACK=YES + V106_ROLLBACK_BACKUP_MANIFEST_CONFIRMED=YES.",
+  "rollback_script": "backend/scripts/rollback_v106_player_server_profiles_migration.py",
+  "required_flags": [
+    "V106_PLAYER_SERVER_PROFILES_ROLLBACK=YES",
+    "V106_ROLLBACK_BACKUP_MANIFEST_CONFIRMED=YES"
+  ],
+  "strategies": [
+    {
+      "strategy": "reverse_via_backup_restore",
+      "preferred": true,
+      "steps": [
+        "Verify backup manifest SHA256 integrity",
+        "Restore original collections from backup snapshot",
+        "Archive (NOT delete) player_server_profiles to player_server_profiles_archived_<ts>",
+        "Drop indexes psp_*",
+        "Smoke test loaders"
+      ]
+    },
+    {
+      "strategy": "soft_disable_psp_only",
+      "preferred": false,
+      "steps": [
+        "Set feature_flag server_scoped_runtime_enabled=false",
+        "Loaders fall back a vecchio path account-wide",
+        "player_server_profiles resta letto solo da metrics"
+      ],
+      "note": "Usato quando il backup non e' disponibile"
+    }
+  ],
+  "forbidden_during_rollback": [
+    "delete records non riconosciuti",
+    "truncate users",
+    "truncate user_heroes",
+    "truncate inventory",
+    "grant premium currency",
+    "reward grant"
+  ],
+  "safety": {
+    "non_destructive_default": true,
+    "requires_explicit_flags": true,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

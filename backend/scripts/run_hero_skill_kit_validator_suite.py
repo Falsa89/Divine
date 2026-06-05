@@ -3383,6 +3383,27 @@ OPTIONAL = [
     ('PROJECT-V105-DESIGN-COMPLIANCE-MATRIX', 'validate_v105_design_compliance_matrix.py'),
     ('PROJECT-V105-RUNTIME-CONSOLIDATION-ROADMAP', 'validate_v105_runtime_consolidation_roadmap.py'),
     ('MEGA-RELEASE-ACCELERATION-54-v105-ROLLUP', 'validate_mega_release_acceleration_54_v105_rollup.py'),
+    # ========================================================================
+    # v106 - MEGA_RELEASE_ACCELERATION_55_SERVER_SCOPED_DB_SCHEMA_AND_PLAYER_SERVER_PROFILES_GATED_MIGRATION_PREP_PACK
+    # PUBLIC_SYNC_TAG_v106_MEGA_RELEASE_ACCELERATION_55_SERVER_SCOPED_DB_SCHEMA_AND_PLAYER_SERVER_PROFILES_GATED_MIGRATION_PREP
+    # PUBLIC_SYNC_SENTINEL_v106_PRESENT=YES
+    # P0 foundation pack: defines player_server_profiles schema with compound
+    # unique key (account_id, server_id), 5 indexes, backup/dry-run/apply-gated/
+    # rollback scripts, account-global vs server-scoped matrix, bot migration
+    # policy, staging apply readiness gate. Default outcome:
+    # DRY_RUN_READY_APPLY_GATED_NOT_EXECUTED. NO DB writes without 4 env flags.
+    # ========================================================================
+    ('PROJECT-V106-EXISTING-DATA-MODEL-AUDIT', 'validate_v106_existing_data_model_audit.py'),
+    ('PROJECT-V106-PLAYER-SERVER-PROFILES-SCHEMA', 'validate_v106_player_server_profiles_schema.py'),
+    ('PROJECT-V106-ACCOUNT-GLOBAL-VS-SERVER-SCOPED-MATRIX', 'validate_v106_account_global_vs_server_scoped_matrix.py'),
+    ('PROJECT-V106-BACKUP-MANIFEST', 'validate_v106_backup_manifest.py'),
+    ('PROJECT-V106-DRY-RUN-MIGRATION-RESULT', 'validate_v106_dry_run_migration_result.py'),
+    ('PROJECT-V106-APPLY-SCRIPT-GATED', 'validate_v106_apply_script_gated.py'),
+    ('PROJECT-V106-ROLLBACK-SCRIPT-GATED', 'validate_v106_rollback_script_gated.py'),
+    ('PROJECT-V106-SERVER-SCOPED-READ-CONTRACT', 'validate_v106_server_scoped_read_contract.py'),
+    ('PROJECT-V106-BOT-SERVER-ACTOR-MIGRATION-POLICY', 'validate_v106_bot_server_actor_migration_policy.py'),
+    ('PROJECT-V106-STAGING-APPLY-READINESS-GATE', 'validate_v106_staging_apply_readiness_gate.py'),
+    ('MEGA-RELEASE-ACCELERATION-55-v106-ROLLUP', 'validate_mega_release_acceleration_55_v106_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

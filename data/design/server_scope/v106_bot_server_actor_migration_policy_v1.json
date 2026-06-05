@@ -1,0 +1,51 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_bot_server_actor_migration_policy",
+  "version": 1,
+  "language": "it",
+  "core_rule": "bot non vengono mai svuotati durante migrazione. Roster valido richiesto pre/post.",
+  "approved_archetypes": ["f2p_base","f2p_active","advanced_pull_bot","spender_like_controlled","whale_like_limited"],
+  "per_bot_invariants": {
+    "start_level": 1,
+    "credible_progression": true,
+    "roster_non_empty": true,
+    "roster_min_size": 3,
+    "team_valid": true,
+    "resources_coherent_with_archetype": true,
+    "event_access_same_requirements_as_players": true,
+    "no_day_one_level_100": true,
+    "no_ranking_top_domination": true,
+    "no_premium_reward_theft": true,
+    "premium_currency_granted_to_bot": false,
+    "random_starter_heroes": false,
+    "legacy_heroes_in_starter": false
+  },
+  "migration_steps": [
+    "Per ogni bot esistente, creare entry player_server_profiles con (bot_account_id, server_id='s1')",
+    "Copiare archetype, roster, team_formation, currencies, story_progress, arena_profile",
+    "Validare invariants pre-write",
+    "Marcare flags.migrated_from_account_wide=true"
+  ],
+  "forbidden_during_migration": [
+    "empty_bot_roster",
+    "legacy_hero_id_in_bot_roster",
+    "premium_currency_grant",
+    "random_hero_assignment",
+    "day_one_lv100",
+    "top_ranking_seed"
+  ],
+  "validation_required_post_apply": [
+    "roster non-empty per ogni bot",
+    "team valid per ogni bot",
+    "archetype coerente",
+    "event eligibility = player"
+  ],
+  "safety": {
+    "premium_currency_grant": false,
+    "random_starter_heroes": false,
+    "legacy_heroes": false,
+    "empty_roster": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

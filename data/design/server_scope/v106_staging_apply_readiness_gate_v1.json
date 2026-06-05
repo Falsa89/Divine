@@ -1,0 +1,46 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_staging_apply_readiness_gate",
+  "version": 1,
+  "language": "it",
+  "gate_status": "NOT_PASSED_APPLY_GATED_NOT_EXECUTED",
+  "criteria": [
+    {"criterion":"backup_present","required":true,"current":false,"note":"backup verra' generato solo immediatamente prima di apply gated"},
+    {"criterion":"backup_manifest_sha256_verified","required":true,"current":false},
+    {"criterion":"dry_run_pass","required":true,"current":true,"note":"dry-run completato senza DB write"},
+    {"criterion":"collection_counts_documented","required":true,"current":true,"note":"vedere v106_dry_run_player_server_profiles_result_v1.json"},
+    {"criterion":"index_plan_reviewed","required":true,"current":true,"note":"5 indici definiti in player_server_profiles_schema_v1.json"},
+    {"criterion":"rollback_script_present","required":true,"current":true},
+    {"criterion":"db_target_staging_only","required":true,"current":"not_applicable_no_apply","note":"production env esplicitamente vietato"},
+    {"criterion":"no_production_env_targeted","required":true,"current":true},
+    {"criterion":"user_explicit_approval","required":true,"current":false,"note":"V106_USER_EXPLICIT_DB_WRITE_APPROVAL=YES non presente"},
+    {"criterion":"monitoring_plan","required":true,"current":true,"note":"vedere docs/divine/106_STAGING_APPLY_READINESS_GATE.md"},
+    {"criterion":"post_apply_smoke_plan","required":true,"current":true},
+    {"criterion":"abort_conditions_documented","required":true,"current":true}
+  ],
+  "abort_conditions": [
+    "target db == production",
+    "backup_manifest_sha256 mismatch",
+    "dry_run profile_count_estimate diverge >5% da pre-flight",
+    "any flag missing",
+    "premium currency grant detected",
+    "legacy cleanup apply detected",
+    "reward grant detected"
+  ],
+  "monitoring_plan": [
+    "observability: profili creati / per server / per archetype",
+    "error rate post-apply loaders",
+    "chat duplication test S1 vs S2",
+    "arena leaderboard scoping smoke"
+  ],
+  "post_apply_smoke_plan": [
+    "GET /api/server-profiles/current (gated)",
+    "GET /api/user/heroes?server_id=s1 returns scoped roster",
+    "banner SERVER_DATA_ISOLATION_BACKEND_PENDING removed when flag enabled"
+  ],
+  "safety": {
+    "production_target_forbidden": true,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

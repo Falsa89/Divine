@@ -1,0 +1,37 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_server_scoped_read_contract",
+  "version": 1,
+  "language": "it",
+  "target_packs": ["v107","v108","v109"],
+  "feature_flag_gate": "server_scoped_runtime_enabled (default false)",
+  "endpoints": [
+    {"method":"GET","path":"/api/server-profiles/current","query":[],"returns":"player_server_profile resolved from JWT account_id + AsyncStorage selected_server_id","filter_required":"account_id+server_id","implemented_in":"v106","status":"contract_only"},
+    {"method":"POST","path":"/api/server-profiles/select","query":[],"body":"{server_id}","returns":"echo + ensures starter profile if missing (gated)","filter_required":"none","implemented_in":"v107","status":"contract_only"},
+    {"method":"GET","path":"/api/user/heroes","query":["server_id"],"returns":"roster scoped","filter_required":"(account_id,server_id)","implemented_in":"v107","status":"contract_only"},
+    {"method":"GET","path":"/api/team/get-formation","query":["server_id"],"returns":"team scoped","filter_required":"(account_id,server_id)","implemented_in":"v107","status":"contract_only"},
+    {"method":"GET","path":"/api/inventory","query":["server_id"],"returns":"inventory scoped","filter_required":"(account_id,server_id)","implemented_in":"v107","status":"contract_only"},
+    {"method":"GET","path":"/api/currencies","query":["server_id"],"returns":"split soft (scoped) + hard (account_global)","filter_required":"(account_id,server_id) for soft","implemented_in":"v107","status":"contract_only"},
+    {"method":"GET","path":"/api/chat/messages","query":["server_id","channel"],"returns":"chat scoped","filter_required":"(server_id,channel)","implemented_in":"v109","status":"contract_only"},
+    {"method":"GET","path":"/api/arena/profile","query":["server_id"],"returns":"arena_profile scoped","filter_required":"(account_id,server_id)","implemented_in":"v108","status":"contract_only"},
+    {"method":"GET","path":"/api/story/progress","query":["server_id"],"returns":"story progress scoped","filter_required":"(account_id,server_id)","implemented_in":"v107","status":"contract_only"},
+    {"method":"GET","path":"/api/tower/progress","query":["server_id"],"returns":"tower progress scoped","filter_required":"(account_id,server_id)","implemented_in":"v108","status":"contract_only"},
+    {"method":"GET","path":"/api/guild/membership","query":["server_id"],"returns":"guild scoped","filter_required":"(account_id,server_id)","implemented_in":"v109","status":"contract_only"}
+  ],
+  "server_id_validation_rules": [
+    "server_id required when feature_flag enabled",
+    "server_id must match account's known profile or be eligible for starter create",
+    "missing server_id when flag enabled -> HTTP 400 server_id_required",
+    "unknown server_id -> HTTP 404 server_not_found"
+  ],
+  "fallback_when_flag_disabled": {
+    "behavior": "read account-wide as today",
+    "banner_obligation": "SERVER_DATA_ISOLATION_BACKEND_PENDING (v104)"
+  },
+  "safety": {
+    "no_implementation_yet": true,
+    "no_db_writes": true,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

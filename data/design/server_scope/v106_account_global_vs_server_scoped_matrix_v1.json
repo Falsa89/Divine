@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_account_global_vs_server_scoped_matrix",
+  "version": 1,
+  "language": "it",
+  "account_global": [
+    {"system":"auth_identity","reason":"unique identity across servers"},
+    {"system":"provider_linking","reason":"OAuth provider link is per-account"},
+    {"system":"email_device_session","reason":"login surface"},
+    {"system":"privacy_account_deletion","reason":"GDPR account-wide"},
+    {"system":"hard_currency_wallet","reason":"premium currency follows account (design decision)"},
+    {"system":"vip_status","reason":"VIP is account-wide entitlement"},
+    {"system":"global_settings","reason":"audio/notifications/UI prefs"},
+    {"system":"blocked_users_list","reason":"safety follows account"},
+    {"system":"external_credentials_link","reason":"provider link"},
+    {"system":"iap_entitlement_global","reason":"purchases follow account"}
+  ],
+  "server_scoped": [
+    {"system":"roster_user_heroes","reason":"hero ownership is per-server progression"},
+    {"system":"hero_levels_stars_awakening","reason":"upgrade state belongs to server profile"},
+    {"system":"inventory_materials","reason":"farmed materials are server-bound"},
+    {"system":"soft_currencies","reason":"gold/server_tokens earned on server"},
+    {"system":"team_formation","reason":"composed by server roster"},
+    {"system":"story_progress","reason":"progression on server"},
+    {"system":"tower_progress","reason":"progression on server"},
+    {"system":"arena_mmr_rank","reason":"competitive ranking server-bound"},
+    {"system":"guild_membership","reason":"guild is per-server"},
+    {"system":"chat_messages","reason":"server-scoped channels"},
+    {"system":"live_event_participation","reason":"event windows per server"},
+    {"system":"bot_server_actor_interaction","reason":"bots populate server"},
+    {"system":"reward_claim_state_server_bound","reason":"server-bound claims"},
+    {"system":"ranking_leaderboards","reason":"per server"}
+  ],
+  "mixed_needs_decision": [
+    {"system":"battle_pass","options":["server_bound_with_global_premium_track","account_global"],"recommended":"server_bound_with_global_premium_track"},
+    {"system":"cosmetics_skins_titles","options":["account_global_unlock_equip_per_server","server_bound"],"recommended":"account_global_unlock_equip_per_server"},
+    {"system":"artifact_collection","options":["server_bound","account_global"],"recommended":"server_bound"},
+    {"system":"housing_dimora","options":["server_bound","account_global"],"recommended":"server_bound"},
+    {"system":"friend_list","options":["account_global","server_bound"],"recommended":"account_global"},
+    {"system":"account_level_achievements","options":["account_global","server_bound"],"recommended":"account_global"},
+    {"system":"gacha_history_pity","options":["server_bound_pity_global_ledger","server_bound"],"recommended":"server_bound_pity_global_ledger"},
+    {"system":"shop_purchases","options":["server_bound","account_global_entitlement"],"recommended":"split_by_sku"}
+  ],
+  "summary": {
+    "account_global_count": 10,
+    "server_scoped_count": 14,
+    "mixed_needs_decision_count": 8
+  },
+  "forbidden_scope_compliance": {
+    "db_writes": false,
+    "reward_grant": false,
+    "premium_currency_grant": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

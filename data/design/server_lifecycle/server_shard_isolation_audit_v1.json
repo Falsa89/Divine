@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-05T18:10:04.088580+00:00",
+  "timestamp_utc": "2026-06-05T18:27:04.422950+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1652,
+  "backend_python_files_scanned": 1667,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 819,
+      "files_with_hits": 833,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -153,7 +153,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 163,
+      "files_with_hits": 173,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -273,7 +273,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 348,
+      "files_with_hits": 354,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -381,7 +381,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 128,
+      "files_with_hits": 138,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -505,7 +505,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 38,
+      "files_with_hits": 40,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -609,7 +609,7 @@
     },
     "gacha_history": {
       "expected_scope": "server_bound",
-      "files_with_hits": 10,
+      "files_with_hits": 12,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
@@ -632,6 +632,18 @@
             {
               "line": 12,
               "snippet": "COLLECTIONS = ['users','inventories','server_actors','formations','story_state','pvp_state','tower_state','event_state','gacha_history','summon_history','config"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/backup_v106_player_server_profiles_pre_migration.py",
+          "keyword": "gacha_history",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 29,
+              "snippet": "'gacha_history','reward_claims','battle_pass','vip','shop_purchases',"
             }
           ]
         },
@@ -670,18 +682,6 @@
               "snippet": "\"gacha_pity_counter\","
             }
           ]
-        },
-        {
-          "file": "backend/scripts/validate_project_d_artifact_bible_v1_approval_freeze.py",
-          "keyword": "gacha_pity",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 43,
-              "snippet": "for k in (\"artifact_live_bonus\", \"artifact_summon_behavior\", \"gacha_pity_rate_change\", \"frontend\", \"db_writes\", \"equipment_semantics\"):"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -689,7 +689,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 155,
+      "files_with_hits": 163,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -817,7 +817,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 23,
+      "files_with_hits": 28,
       "hits_sample": [
         {
           "file": "backend/routes/combat.py",
@@ -917,7 +917,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 161,
+      "files_with_hits": 166,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1029,7 +1029,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 153,
+      "files_with_hits": 160,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1461,7 +1461,7 @@
     },
     "event_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 10,
+      "files_with_hits": 14,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
@@ -1500,6 +1500,30 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_v106_player_server_profiles_schema.py",
+          "keyword": "event_state",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 11,
+              "snippet": "required_fields = {'profile_id','account_id','server_id','display_name','account_level','account_exp','created_at','last_played_at','starter_profile','roster','"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/backup_v106_player_server_profiles_pre_migration.py",
+          "keyword": "event_state",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 28,
+              "snippet": "'chat_messages','live_event_state','server_actors_bots',"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_slc_c_collection_scope_migration_matrix_v1.py",
           "keyword": "event_progress",
           "has_server_id_anywhere": true,
@@ -1508,30 +1532,6 @@
             {
               "line": 14,
               "snippet": "'event_progress',"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/audit_server_shard_isolation_v1.py",
-          "keyword": "event_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 29,
-              "snippet": "'event_progress':          ['event_progress', 'event_state'],"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_d_merge_tooling_offline_v1.py",
-          "keyword": "event_state",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 27,
-              "snippet": "if name == 'blocked_protected_event_state':"
             }
           ]
         }

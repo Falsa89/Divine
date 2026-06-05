@@ -1,0 +1,69 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "player_server_profiles_schema",
+  "version": 1,
+  "language": "it",
+  "collection": "player_server_profiles",
+  "primary_key": ["account_id", "server_id"],
+  "profile_id_format": "<account_id>:<server_id>",
+  "document_shape": {
+    "profile_id": "<account_id>:<server_id>",
+    "account_id": "string",
+    "server_id": "string",
+    "display_name": "string",
+    "account_level": 1,
+    "account_exp": 0,
+    "created_at": "iso_datetime",
+    "last_played_at": "iso_datetime",
+    "starter_profile": true,
+    "roster": [],
+    "team_formation": [],
+    "inventory_ref": null,
+    "currencies": {"gold":0,"server_tokens":0},
+    "story_progress": {},
+    "tower_progress": {},
+    "arena_profile": {"mmr": 1000, "rank_tier": "unranked"},
+    "guild_profile": {"guild_id": null, "role": null},
+    "live_event_state": {},
+    "flags": {
+      "server_scoped": true,
+      "migrated_from_account_wide": false,
+      "legacy_quarantine_present": false
+    },
+    "migration_metadata": {
+      "migrated_at": null,
+      "migration_pack": null,
+      "source_user_id": null,
+      "backup_manifest_id": null
+    }
+  },
+  "indexes": [
+    {"fields":["account_id","server_id"],"unique":true,"name":"psp_account_server_unique"},
+    {"fields":["server_id"],"unique":false,"name":"psp_server_id"},
+    {"fields":["account_id"],"unique":false,"name":"psp_account_id"},
+    {"fields":["server_id","last_played_at"],"unique":false,"name":"psp_server_last_played"},
+    {"fields":["server_id","account_level"],"unique":false,"name":"psp_server_level"}
+  ],
+  "separation_rules": {
+    "users_remains_account_global": true,
+    "player_server_profiles_holds_game_state": true,
+    "no_password_hash_duplicated": true,
+    "no_oauth_raw_token_duplicated": true,
+    "no_provider_secrets": true,
+    "no_premium_provider_data": true
+  },
+  "forbidden_fields": [
+    "password_hash",
+    "oauth_access_token",
+    "oauth_refresh_token",
+    "provider_client_secret",
+    "raw_payment_method",
+    "raw_iap_receipt_token"
+  ],
+  "safety": {
+    "premium_currency_in_starter": false,
+    "random_starter_heroes": false,
+    "legacy_heroes_in_starter": false,
+    "reward_grant_on_create": false
+  }
+}

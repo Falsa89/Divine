@@ -1,0 +1,53 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_55_v106",
+  "type": "v106_backup_manifest",
+  "version": 1,
+  "language": "it",
+  "status": "BACKUP_NOT_EXECUTED_DRY_RUN_DEFAULT",
+  "reason": "Default policy: nessun backup live finche' V106_PLAYER_SERVER_PROFILES_APPLY=YES + V106_USER_EXPLICIT_DB_WRITE_APPROVAL=YES non sono presenti. Il backup viene eseguito SOLO immediatamente prima dell'apply gated.",
+  "backup_script": "backend/scripts/backup_v106_player_server_profiles_pre_migration.py",
+  "planned_collections_to_backup": [
+    "users",
+    "user_heroes",
+    "teams",
+    "inventory",
+    "currencies",
+    "story_progress",
+    "tower_progress",
+    "arena_profile",
+    "guild_membership",
+    "chat_messages",
+    "live_event_state",
+    "server_actors_bots",
+    "gacha_history",
+    "reward_claims",
+    "battle_pass",
+    "vip",
+    "shop_purchases"
+  ],
+  "backup_format": "json_per_collection_gzip",
+  "backup_directory_template": "/app/data/backups/v106/<ISO_TIMESTAMP>/",
+  "manifest_template": {
+    "backup_id": "<uuid>",
+    "generated_at_utc": "<iso>",
+    "pack": "v106",
+    "db_target": "staging|production_forbidden",
+    "files": [{"collection":"<name>","path":"<rel>","sha256":"<hex>","record_count":0}],
+    "safety_flags": {"masked_password_hash":true,"masked_oauth_tokens":true,"no_provider_secrets":true},
+    "restore_instructions": "see docs/divine/106_ROLLBACK_PLAYER_SERVER_PROFILES.md"
+  },
+  "masking_rules": {
+    "password_hash": "REDACTED_BCRYPT_HASH",
+    "oauth_access_token": "REDACTED",
+    "oauth_refresh_token": "REDACTED",
+    "raw_iap_receipt_token": "REDACTED",
+    "any_provider_secret": "REDACTED"
+  },
+  "safety": {
+    "no_raw_secrets": true,
+    "no_password_plaintext": true,
+    "no_oauth_raw": true,
+    "no_premium_provider_data": true,
+    "manifest_sha256_required": true
+  }
+}
