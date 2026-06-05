@@ -38,6 +38,42 @@
       ],
       "authorized_change_pack": "v96_v98_v103_v107A_v107C",
       "change_type": "auth_account_routes + admin_gdpr_routes + v103_server_profiles_list_router + v107A_battle_launch_router + v107C_loader_server_id_probe_router"
+    },
+    "frontend/app/combat.tsx": {
+      "current_md5": "cc2ae7ff8dadf81dbd48eb4a5e1f5b4b",
+      "historical_references": [
+        {
+          "md5": "fc792a05b2ada6e677d80400732ae5c3",
+          "pack": "pre_v108_pre_baseline",
+          "status": "superseded_by_v108_pre_battle_launch_contract_binding"
+        }
+      ],
+      "authorized_change_pack": "v108_pre",
+      "change_type": "battle_launch_contract_v1_router_params_binding + PREVIEW_NON_AUTHORITATIVE label + LEGACY_COMBAT_ENTRY fallback. Nessuna riscrittura del renderer, nessuna formula battle_engine modificata, nessuna chiamata reward live."
+    },
+    "frontend/app/story.tsx": {
+      "current_md5": "ea4d8ad171c45c39c53ada6be3677c49",
+      "historical_references": [
+        {
+          "md5": "8520627b4e63f86821d73d8d3880bac3",
+          "pack": "pre_v108_pre_baseline",
+          "status": "superseded_by_v108_pre_story_launch_path_binding"
+        }
+      ],
+      "authorized_change_pack": "v108_pre",
+      "change_type": "player_facing_avvia_battaglia_button + push verso /pre-battle-lobby con Battle Launch Contract v1 params + legacy auto-resolve etichettato 'QA Auto Resolve'. Nessun backend delete, nessun reward live, nessun progress write."
+    },
+    "frontend/app/pre-battle-lobby.tsx": {
+      "current_md5": "6e5c6c66883911d2e24befadbff8bc7d",
+      "historical_references": [
+        {
+          "md5": "e466aea925b3b70a588ceee27324904b",
+          "pack": "v107D_post_v108_pre",
+          "status": "superseded_by_v108_pre_story_params_compatibility"
+        }
+      ],
+      "authorized_change_pack": "v108_pre",
+      "change_type": "router params compatibility per encounter_id / enemy_source_id (oltre al legacy source_id). Nessun cambio al binding gated v107D, nessuna riscrittura del flow."
     }
   },
   "baseline_rebase_mechanism": "SUPERSEDED_AFTER_V100_MD5_REBASELINE frozenset gated by file presence",

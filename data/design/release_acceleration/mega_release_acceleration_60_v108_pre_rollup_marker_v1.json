@@ -1,0 +1,62 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "v108_pre_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T20:21:27.710076Z",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v108_PRE_MEGA_RELEASE_ACCELERATION_60_COMBAT_STORY_TSX_BINDING_SUPERSEDE_PRE_RUNTIME",
+  "validators_total": 10,
+  "validators_pass": 10,
+  "results": [
+    {
+      "validator": "validate_v108_pre_v107d_baseline_snapshot.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre v107D baseline snapshot"
+    },
+    {
+      "validator": "validate_v108_pre_combat_story_md5_forensic_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre combat/story MD5 forensic audit"
+    },
+    {
+      "validator": "validate_v108_pre_combat_story_md5_supersede_review.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre combat/story MD5 supersede review"
+    },
+    {
+      "validator": "validate_v108_pre_combat_launch_context_binding.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre combat launch context binding (preview, non-authoritative)"
+    },
+    {
+      "validator": "validate_v108_pre_story_launch_path_binding.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre story launch path binding (Avvia battaglia + QA Auto Resolve)"
+    },
+    {
+      "validator": "validate_v108_pre_pre_battle_lobby_compatibility.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre pre-battle-lobby compatibility (v107D binding preserved)"
+    },
+    {
+      "validator": "validate_v108_pre_e2e_story_lobby_launch_combat_smoke.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre E2E story/lobby/launch/combat smoke"
+    },
+    {
+      "validator": "validate_v108_pre_backend_loader_server_id_acceptance_status.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre backend loader server_id acceptance status (probe-only, honest)"
+    },
+    {
+      "validator": "validate_v108_pre_route_menu_exposure_safety.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre route/menu exposure safety (0 changes, story preview gated, QA labeled)"
+    },
+    {
+      "validator": "validate_v108_pre_optional_fail_validator_integrity_guard.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_pre optional fail / validator integrity guard"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_60_COMBAT_STORY_TSX_BINDING_SUPERSEDE_PRE_RUNTIME_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

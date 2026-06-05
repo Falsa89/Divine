@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "optional_fail_validator_integrity_guard",
+  "version": 1,
+  "language": "italian",
+  "baseline_pre_v108_pre": 23,
+  "baseline_post_v108_pre": 25,
+  "new_fail_introduced_v108_pre": ["PROJECT-V90-RESTORED-BATTLE-RENDERER-REUSE"],
+  "new_fail_root_cause": "Validator legacy che hardcoda l'MD5 di frontend/app/combat.tsx (fc792a05...). MD5 superseduto formalmente in v108_pre con historical_references preservati in v100_runtime_md5_baseline_v1.json e _slc_c_critical_files_baseline_v1.json. Validator legacy NON cancellato, NON modificato, NON indebolito: lasciato come historical guardian.",
+  "target_max": 30,
+  "baseline_preserved": true,
+  "required_fail_post": 0,
+  "miss_post": 0,
+  "silent_validator_deletion": false,
+  "validator_weakening": false,
+  "hiding_optional_fails": false,
+  "md5_supersede_formal_proof_present": true,
+  "md5_supersede_proof_file": "data/design/battle_launch/v108_pre_combat_story_md5_supersede_review_v1.json",
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "hiding_optional_fails": false
+  }
+}

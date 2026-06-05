@@ -7,10 +7,20 @@
     "/app/backend/routes/gacha.py": null,
     "/app/backend/routes/heroes.py": "774b80937af38a0b153b7ce412d298aea5aa163ed1537761ced3d97a55b61873",
     "/app/backend/routes/roster.py": null,
-    "/app/frontend/app/combat.tsx": "5105feacf7daadedbd75505c5a6a8231614fe7eb91792a8239361df6f015fbf5"
+    "/app/frontend/app/combat.tsx": "e8f7640b4e32eeb0c1fbdccde4a9a319af12823d90bb2c89f1d7a252ba78a91a"
+  },
+  "historical_references": {
+    "/app/frontend/app/combat.tsx": [
+      {
+        "sha256": "5105feacf7daadedbd75505c5a6a8231614fe7eb91792a8239361df6f015fbf5",
+        "pack": "SLC-C original baseline",
+        "status": "superseded_by_v108_pre_combat_launch_context_binding"
+      }
+    ]
   },
   "pack_m_rebaseline_note": "battle_engine.py SHA256 updated from 379a921653... to 094187998b66... as authorized by PROJECT_M single-point seam wiring (verdict TRACK_B_BATTLE_ENGINE_STATUS_SEAM_WIRED_FLAG_OFF_SAFE; flag-OFF byte-identical regression proven by TRACK_C).",
   "pack_t_rebaseline_note": "battle_engine.py SHA256 updated from 094187998b66... to f8a554f8f1c7... as authorized by PROJECT_T single-point second-slice seam wiring (verdict TRACK_B_SECOND_SLICE_BATTLE_ENGINE_WIRED_FLAG_OFF_SAFE; flag-OFF runtime-identity regression proven by TRACK_C; rollback drill OK at TRACK_F; backup at battle_engine.py.project_t_pre_wire_backup matches the pack_m_rebaseline post_patch md5 d04feb03...).",
+  "v108_pre_rebaseline_note": "combat.tsx SHA256 updated from 5105feacf7... to e8f7640b4e... as authorized by MEGA_RELEASE_ACCELERATION_60_v108_pre (combat launch context binding chirurgico: readLaunchContextFromRouterParams + PREVIEW_NON_AUTHORITATIVE label + LEGACY_COMBAT_ENTRY fallback). Nessuna formula battle_engine modificata, nessuna riscrittura del renderer, nessun reward live, nessun progress write. Vecchio SHA256 preservato in historical_references.",
   "task_origin": "SLC-C-CRITICAL-FILES-BASELINE",
   "utc": "2026-05-21T22:45:43.878690+00:00",
   "version": "v1"

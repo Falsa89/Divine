@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "combat_launch_context_binding_result",
+  "version": 1,
+  "language": "italian",
+  "tsx_file": "frontend/app/combat.tsx",
+  "status": "COMBAT_LAUNCH_CONTEXT_BINDING_APPLIED_PREVIEW_NON_AUTHORITATIVE",
+  "parser_helper_imported": "src/battle_launch/consumers/combatLaunchParser",
+  "tokens_present": [
+    "readLaunchContextFromRouterParams",
+    "combatLaunchParser",
+    "PREVIEW_NON_AUTHORITATIVE",
+    "LEGACY_COMBAT_ENTRY",
+    "v108_pre"
+  ],
+  "router_params_read": ["launch_context", "battle_launch", "battle_launch_id", "mode"],
+  "legacy_fallback_preserved": true,
+  "reward_live_added": false,
+  "progress_live_write_added": false,
+  "battle_engine_formula_rewrite": false,
+  "broad_combat_rewrite": false,
+  "renderer_changed": false,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "reward_grant": false,
+    "progress_live_write": false,
+    "battle_engine_formula_rewrite": false,
+    "broad_combat_rewrite": false
+  }
+}

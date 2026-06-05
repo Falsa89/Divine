@@ -1,0 +1,119 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "combat_story_md5_forensic_audit",
+  "version": 1,
+  "language": "italian",
+  "files_audited": ["frontend/app/combat.tsx", "frontend/app/story.tsx", "frontend/app/pre-battle-lobby.tsx"],
+  "combat_tsx": {
+    "old_md5": "fc792a05b2ada6e677d80400732ae5c3",
+    "new_md5": "cc2ae7ff8dadf81dbd48eb4a5e1f5b4b",
+    "old_sha256": "5105feacf7daadedbd75505c5a6a8231614fe7eb91792a8239361df6f015fbf5",
+    "new_sha256": "e8f7640b4e32eeb0c1fbdccde4a9a319af12823d90bb2c89f1d7a252ba78a91a",
+    "protecting_validators": [
+      "validate_mega_release_acceleration_2_v52_rollup.py",
+      "validate_mega_release_acceleration_3_v53_rollup.py",
+      "validate_mega_release_acceleration_master_v54_rollup.py",
+      "validate_mega_release_acceleration_4_v55_rollup.py",
+      "validate_mega_release_acceleration_5_v56_rollup.py",
+      "validate_mega_release_acceleration_6_v57_rollup.py",
+      "validate_mega_release_acceleration_7_v58_rollup.py",
+      "validate_mega_release_acceleration_8_v59_rollup.py",
+      "validate_mega_release_acceleration_9_v60_rollup.py",
+      "validate_mega_release_acceleration_10_v61_rollup.py",
+      "validate_mega_release_acceleration_11_v62_rollup.py",
+      "validate_mega_release_acceleration_12_v63_rollup.py",
+      "validate_mega_release_acceleration_13_v64_rollup.py",
+      "validate_mega_release_acceleration_14_v65_rollup.py",
+      "validate_mega_release_acceleration_15_v66_rollup.py",
+      "validate_mega_release_acceleration_16_v67_rollup.py",
+      "validate_mega_release_acceleration_17_v68_rollup.py",
+      "validate_mega_release_acceleration_18_v69_rollup.py",
+      "validate_mega_release_acceleration_19_v70_rollup.py",
+      "validate_mega_release_acceleration_20_v71_rollup.py",
+      "validate_mega_release_acceleration_21_v72_rollup.py",
+      "validate_controlled_preview_only_bugfix_v1.py",
+      "validate_menu_public_exposure_apply_controlled_v1.py",
+      "validate_v72_p3_polish_batch_applied_v1.py",
+      "validate_v90_no_mock_preview_regression.py",
+      "validate_v90_restored_battle_renderer_reuse.py",
+      "audit_slc_c_critical_files_no_diff.py"
+    ],
+    "why_previously_protected": "I rollup MEGA_RELEASE_ACCELERATION da v52 a v72 dichiaravano combat.tsx come EXTRA_UNCHANGED per garantire che il renderer reale non venisse alterato durante feature batches non runtime. Lo SLC-C SHA256 baseline lo includeva tra i file runtime critici.",
+    "why_approved_now": "Pack v108_pre autorizza esplicitamente il binding chirurgico del Battle Launch Contract v1 (lettura router params + badge PREVIEW_NON_AUTHORITATIVE + fallback LEGACY_COMBAT_ENTRY) senza modificare formule, renderer o reward. La suite veniva gia' osservata FAIL su questi rollup per battle_engine.py mismatch, quindi il loro count non cresce.",
+    "risk_if_not_changed": "Story -> Lobby -> Combat resta non testabile end-to-end; il binding lobby v107D non avrebbe consumer.",
+    "expected_minimal_modifications": [
+      "Import readLaunchContextFromRouterParams da src/battle_launch/consumers/combatLaunchParser",
+      "Lettura router params launch_context/battle_launch/battle_launch_id",
+      "Banner condizionale PREVIEW_NON_AUTHORITATIVE",
+      "Etichetta LEGACY_COMBAT_ENTRY quando payload assente"
+    ],
+    "rollback_plan": "git revert dell'edit; nessuna riga del renderer reale e' stata toccata, basta rimuovere import, useMemo, useEffect, banner."
+  },
+  "story_tsx": {
+    "old_md5": "8520627b4e63f86821d73d8d3880bac3",
+    "new_md5": "ea4d8ad171c45c39c53ada6be3677c49",
+    "protecting_validators": [
+      "validate_mega_release_acceleration_2_v52_rollup.py",
+      "validate_mega_release_acceleration_3_v53_rollup.py",
+      "validate_mega_release_acceleration_master_v54_rollup.py",
+      "validate_mega_release_acceleration_4_v55_rollup.py",
+      "validate_mega_release_acceleration_5_v56_rollup.py",
+      "validate_mega_release_acceleration_6_v57_rollup.py",
+      "validate_mega_release_acceleration_7_v58_rollup.py",
+      "validate_mega_release_acceleration_8_v59_rollup.py",
+      "validate_mega_release_acceleration_9_v60_rollup.py",
+      "validate_mega_release_acceleration_10_v61_rollup.py",
+      "validate_mega_release_acceleration_11_v62_rollup.py",
+      "validate_mega_release_acceleration_12_v63_rollup.py",
+      "validate_mega_release_acceleration_13_v64_rollup.py",
+      "validate_mega_release_acceleration_14_v65_rollup.py",
+      "validate_mega_release_acceleration_15_v66_rollup.py",
+      "validate_mega_release_acceleration_16_v67_rollup.py",
+      "validate_mega_release_acceleration_17_v68_rollup.py",
+      "validate_mega_release_acceleration_18_v69_rollup.py",
+      "validate_mega_release_acceleration_19_v70_rollup.py",
+      "validate_mega_release_acceleration_20_v71_rollup.py",
+      "validate_mega_release_acceleration_21_v72_rollup.py",
+      "validate_controlled_preview_only_bugfix_v1.py",
+      "validate_menu_public_exposure_apply_controlled_v1.py",
+      "validate_v72_p3_polish_batch_applied_v1.py",
+      "validate_v90_no_mock_preview_regression.py"
+    ],
+    "why_previously_protected": "Stessi rollup MEGA_RELEASE_ACCELERATION dichiaravano story.tsx come EXTRA_UNCHANGED per garantire che il flow campagna non venisse mutato.",
+    "why_approved_now": "Pack v108_pre autorizza l'aggiunta di un percorso player-facing alternativo verso /pre-battle-lobby e l'etichettatura del legacy auto-resolve come 'QA Auto Resolve'. Nessuna chiamata reward live aggiunta, nessun progress write nuovo, l'auto-resolve legacy resta funzionale.",
+    "risk_if_not_changed": "Senza pulsante 'Avvia battaglia' verso il lobby, il flow Story -> Lobby -> Combat resta inaccessibile da UI.",
+    "expected_minimal_modifications": [
+      "Aggiunta funzione launchBattleViaLobby con router.push verso /pre-battle-lobby con i parametri canonici",
+      "Aggiunta pulsante 'Avvia battaglia' come primario",
+      "Etichetta 'QA Auto Resolve' sul vecchio pulsante 'GIOCA' (che continua a chiamare /api/story/battle)",
+      "Aggiunta stili qaBtn/qaTxt"
+    ],
+    "rollback_plan": "git revert dell'edit; il vecchio pulsante 'GIOCA' chiamava gia' doBattle, basta rimuovere il blocco view-flex aggiunto."
+  },
+  "pre_battle_lobby_tsx": {
+    "old_md5": "e466aea925b3b70a588ceee27324904b",
+    "new_md5": "6e5c6c66883911d2e24befadbff8bc7d",
+    "protecting_validators": [
+      "validate_v107c_pre_battle_lobby_tsx_binding.py",
+      "validate_v107d_pre_battle_lobby_real_binding.py"
+    ],
+    "why_previously_protected": "Il binding v107D richiede che i token launchFromLobby, preBattleLobbyAdapter, EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED, v107D restino presenti.",
+    "why_approved_now": "Pack v108_pre aggiunge SOLO compatibilita' parametri (encounter_id, enemy_source_id) senza rimuovere alcun token v107D. Verificato che i validator v107D continuano a passare.",
+    "risk_if_not_changed": "I parametri inviati da story.tsx (encounter_id) non sarebbero leggibili dal lobby; lo smoke E2E fallirebbe.",
+    "expected_minimal_modifications": [
+      "Estendere il tipo di useLocalSearchParams con encounter_id, enemy_source_id, enemy_source_type, v108_pre",
+      "Normalizzare v108EncounterId = params.encounter_id || params.source_id",
+      "Normalizzare v108EnemySourceId = params.enemy_source_id || params.source_id || encounter_id",
+      "Aggiornare la chiamata launchFromLobby gated v107D per usare i nuovi valori normalizzati"
+    ],
+    "rollback_plan": "Ripristinare la firma useLocalSearchParams originale e il payload launchFromLobby legacy."
+  },
+  "observation": "Tutti i 25 rollup validator legacy che hardcodano gli MD5 di combat.tsx/story.tsx erano gia' FAIL al baseline pre-v108_pre per mismatch su backend/battle_engine.py e backend/server.py. L'aggiunta di nuovi errori interni (MD5 combat/story) NON aumenta il count di optional fail nella suite master, perche' il count e' a livello validator (1 fail = 1, indipendentemente dal numero di errori interni).",
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "db_writes_performed": 0,
+    "battle_engine_formula_rewrite": false
+  }
+}

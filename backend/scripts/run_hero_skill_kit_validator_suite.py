@@ -3484,6 +3484,29 @@ OPTIONAL = [
     ('PROJECT-V107D-OPTIONAL-FAIL-BASELINE-GUARD', 'validate_v107d_optional_fail_baseline_guard.py'),
     ('MEGA-RELEASE-ACCELERATION-59-v107D-ROLLUP', 'validate_mega_release_acceleration_59_v107d_rollup.py'),
 
+    # v108_pre - MEGA_RELEASE_ACCELERATION_60_COMBAT_STORY_TSX_BINDING_SUPERSEDE_PRE_RUNTIME
+    # PUBLIC_SYNC_TAG_v108_PRE_MEGA_RELEASE_ACCELERATION_60_COMBAT_STORY_TSX_BINDING_SUPERSEDE_PRE_RUNTIME
+    # PUBLIC_SYNC_SENTINEL_v108_PRE_PRESENT=YES
+    # P0 pre-runtime binding pack: applica il binding chirurgico di combat.tsx
+    # e story.tsx al Battle Launch Contract v1, completa il MD5 supersede
+    # formale (historical_references preservati, NO validator weakening, NO
+    # silent deletion, NO fake_PASS). pre-battle-lobby.tsx riceve solo
+    # compatibility per encounter_id/enemy_source_id. Tutti i feature flag
+    # restano OFF: SERVER_SCOPED_RUNTIME_ENABLED, BATTLE_LAUNCH_AUTHORITATIVE_ENABLED,
+    # REWARD_LIVE_ENABLED, PROGRESS_LIVE_ENABLED. NO PSP apply, NO DB write,
+    # NO reward, NO progress, NO formula rewrite, NO broad rewrite.
+    ('PROJECT-V108-PRE-V107D-BASELINE-SNAPSHOT', 'validate_v108_pre_v107d_baseline_snapshot.py'),
+    ('PROJECT-V108-PRE-COMBAT-STORY-MD5-FORENSIC-AUDIT', 'validate_v108_pre_combat_story_md5_forensic_audit.py'),
+    ('PROJECT-V108-PRE-COMBAT-STORY-MD5-SUPERSEDE-REVIEW', 'validate_v108_pre_combat_story_md5_supersede_review.py'),
+    ('PROJECT-V108-PRE-COMBAT-LAUNCH-CONTEXT-BINDING', 'validate_v108_pre_combat_launch_context_binding.py'),
+    ('PROJECT-V108-PRE-STORY-LAUNCH-PATH-BINDING', 'validate_v108_pre_story_launch_path_binding.py'),
+    ('PROJECT-V108-PRE-PRE-BATTLE-LOBBY-COMPATIBILITY', 'validate_v108_pre_pre_battle_lobby_compatibility.py'),
+    ('PROJECT-V108-PRE-E2E-STORY-LOBBY-LAUNCH-COMBAT-SMOKE', 'validate_v108_pre_e2e_story_lobby_launch_combat_smoke.py'),
+    ('PROJECT-V108-PRE-BACKEND-LOADER-SERVER-ID-ACCEPTANCE-STATUS', 'validate_v108_pre_backend_loader_server_id_acceptance_status.py'),
+    ('PROJECT-V108-PRE-ROUTE-MENU-EXPOSURE-SAFETY', 'validate_v108_pre_route_menu_exposure_safety.py'),
+    ('PROJECT-V108-PRE-OPTIONAL-FAIL-VALIDATOR-INTEGRITY-GUARD', 'validate_v108_pre_optional_fail_validator_integrity_guard.py'),
+    ('MEGA-RELEASE-ACCELERATION-60-v108-PRE-ROLLUP', 'validate_mega_release_acceleration_60_v108_pre_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

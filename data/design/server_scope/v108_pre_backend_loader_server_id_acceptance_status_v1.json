@@ -1,0 +1,29 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "backend_loader_server_id_acceptance_status",
+  "version": 1,
+  "language": "italian",
+  "feature_flag_default": false,
+  "feature_flag_name": "SERVER_SCOPED_RUNTIME_ENABLED",
+  "adoption_status": "V107C_PROBE_ROUTER_LIVE_NO_NEW_LOADER_MODIFIED_v108_PRE",
+  "probe_endpoints_live": 5,
+  "probe_endpoints_prefix": "/api/v107c/loader-probe/",
+  "real_loaders_accepting_server_id": [],
+  "real_loaders_remaining_probe_or_contract_only": [
+    "/api/user-heroes",
+    "/api/team-get-formation",
+    "/api/inventory",
+    "/api/equipment/equipped",
+    "/api/progress/me"
+  ],
+  "filter_applied": false,
+  "backend_isolation_live": false,
+  "banner_token": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "blocker_for_v108_runtime": "Real loader adoption (filter_applied=true) richiede schema PSP live + flag SERVER_SCOPED_RUNTIME_ENABLED=true. Entrambi rinviati a v108 authoritative / v110.",
+  "safety": {
+    "db_writes_performed": 0,
+    "fake_isolation_live": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

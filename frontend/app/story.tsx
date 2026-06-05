@@ -6,6 +6,13 @@ import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
+// v108_pre — Story Launch Path binding.
+// Aggiunge il percorso player-facing "Avvia battaglia" → /pre-battle-lobby
+// con i parametri richiesti dal Battle Launch Contract v1 (preview, gated).
+// L'auto-resolve legacy /api/story/battle resta disponibile ma viene
+// etichettato come `QA Auto Resolve` (non più unico percorso giocabile).
+// NO reward live, NO progress write, NO backend delete.
+
 const EC: Record<string,string> = { fire:'#ff4444', water:'#4488ff', earth:'#aa8844', wind:'#44cc88', light:'#ffd700', dark:'#9944ff', neutral:'#888' };
 
 export default function StoryScreen() {
@@ -30,6 +37,25 @@ export default function StoryScreen() {
     } catch(e:any) { Alert.alert('Errore', e.message); } finally { setBattling(false); }
   };
 
+  // v108_pre — Player-facing battle path: Story → Pre-Battle Lobby → /api/battle/launch.
+  // Naviga al lobby con i parametri canonici del Battle Launch Contract v1.
+  // PREVIEW_NON_AUTHORITATIVE: nessun reward live, nessun progress write in questo step.
+  const launchBattleViaLobby = (chId: number, stage: number) => {
+    const encounterId = `story_${chId}_${stage}`;
+    router.push({
+      pathname: '/pre-battle-lobby',
+      params: {
+        mode: 'story',
+        encounter_id: encounterId,
+        enemy_source_type: 'authored',
+        enemy_source_id: encounterId,
+        chapter_id: String(chId),
+        stage: String(stage),
+        v108_pre: '1',
+      },
+    });
+  };
+
   if (loading) return <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}><ActivityIndicator size="large" color="#ff6b35" /></LinearGradient>;
 
   return (
@@ -52,9 +78,16 @@ export default function StoryScreen() {
                 <Text style={s.progTxt}>{ch.completed_stages}/{ch.stages} stadi</Text>
               </View>
               {ch.unlocked && !ch.fully_completed && (
-                <TouchableOpacity style={[s.playBtn, {backgroundColor:col+'30', borderColor:col}]} onPress={() => doBattle(ch.id, ch.completed_stages+1)} disabled={battling}>
-                  <Text style={[s.playTxt, {color:col}]}>{battling?'...':'GIOCA'}</Text>
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'column', alignItems: 'stretch', gap: 4 }}>
+                  {/* v108_pre — pulsante player-facing primario: porta al Pre-Battle Lobby (Battle Launch Contract v1, preview non-authoritative). */}
+                  <TouchableOpacity style={[s.playBtn, {backgroundColor:col+'30', borderColor:col}]} onPress={() => launchBattleViaLobby(ch.id, ch.completed_stages+1)} disabled={battling}>
+                    <Text style={[s.playTxt, {color:col}]}>Avvia battaglia</Text>
+                  </TouchableOpacity>
+                  {/* v108_pre — Auto-resolve legacy etichettato come QA Auto Resolve. Resta disponibile per QA ma non è più l'unico percorso. */}
+                  <TouchableOpacity style={[s.qaBtn, {borderColor:'rgba(255,255,255,0.18)'}]} onPress={() => doBattle(ch.id, ch.completed_stages+1)} disabled={battling}>
+                    <Text style={s.qaTxt}>{battling?'...':'QA Auto Resolve'}</Text>
+                  </TouchableOpacity>
+                </View>
               )}
             </View>
           );
@@ -82,4 +115,6 @@ const s = StyleSheet.create({
   progTxt:{color:'#666',fontSize:8,marginTop:1},
   playBtn:{paddingHorizontal:16,paddingVertical:8,borderRadius:8,borderWidth:1},
   playTxt:{fontSize:11,fontWeight:'800',letterSpacing:1},
+  qaBtn:{paddingHorizontal:10,paddingVertical:4,borderRadius:6,borderWidth:1,backgroundColor:'rgba(255,255,255,0.04)'},
+  qaTxt:{color:'#888',fontSize:9,fontWeight:'700',letterSpacing:0.5,textAlign:'center'},
 });

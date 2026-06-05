@@ -5,6 +5,11 @@ import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
+// v108_pre — Combat Launch Context binding (preview / non-authoritative).
+// Non-destructive: aggiunge SOLO la lettura del payload Battle Launch Contract v1
+// dai router params, marca il run come PREVIEW_NON_AUTHORITATIVE e logga in dev.
+// Non sostituisce il renderer, non chiama reward live, non scrive progress.
+import { readLaunchContextFromRouterParams } from '../src/battle_launch/consumers/combatLaunchParser';
 import BattleSprite from '../components/BattleSprite';
 import { heroBattleImageSource, heroPortraitSource, GREEK_HOPLITE_COMBAT_BASE, getHeroBattlePreloadAssets } from '../components/ui/hopliteAssets';
 import { HOPLITE_BATTLE_ASSET_MANIFEST } from '../components/ui/hopliteAssetManifest';
@@ -61,7 +66,12 @@ interface SpriteData {
 
 export default function CombatScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string }>();
+  const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string; launch_context?: string; battle_launch?: string; battle_launch_id?: string; mode?: string }>();
+  // v108_pre — leggi (senza mutare) il Battle Launch Contract v1 dai router params.
+  // Etichetta sempre il run come PREVIEW_NON_AUTHORITATIVE. Se assente, legacy.
+  const v108LaunchEnvelope = React.useMemo(() => readLaunchContextFromRouterParams(params as any), [params?.launch_context, params?.battle_launch, params?.battle_launch_id]);
+  const v108LaunchBadge = (v108LaunchEnvelope.is_valid ? 'PREVIEW_NON_AUTHORITATIVE' : 'LEGACY_COMBAT_ENTRY');
+  React.useEffect(() => { if (__DEV__) console.log('[v108_pre] combat launch envelope:', { is_valid: v108LaunchEnvelope.is_valid, source: v108LaunchEnvelope.source, badge: v108LaunchBadge }); }, [v108LaunchEnvelope.is_valid, v108LaunchEnvelope.source, v108LaunchBadge]);
   const { refreshUser } = useAuth();
   // Reattivo a rotation/resize: su mobile dà le dim reali del viewport.
   const { width: winW, height: winH } = useWindowDimensions();
@@ -1043,6 +1053,12 @@ export default function CombatScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
+      {/* v108_pre — Banner preview non-authoritative quando combat parte da Battle Launch Contract v1. Default OFF: si attiva solo se i router params contengono un payload valido. */}
+      {v108LaunchEnvelope.is_valid ? (
+        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingHorizontal: 10, paddingVertical: 4, backgroundColor: 'rgba(255,193,7,0.18)', borderBottomWidth: 1, borderBottomColor: 'rgba(255,193,7,0.45)', zIndex: 999 }}>
+          <Text style={{ color: '#ffd54f', fontSize: 10, fontWeight: '800', letterSpacing: 1, textAlign: 'center' }}>PREVIEW_NON_AUTHORITATIVE · v108_pre · {v108LaunchBadge}</Text>
+        </View>
+      ) : null}
       {hasBgSource ? (
         <>
           {bgCoverStyle && bgCoverStyle.kind === 'anchored' ? (

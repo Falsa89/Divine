@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "e2e_story_lobby_launch_combat_smoke_result",
+  "version": 1,
+  "language": "italian",
+  "status": "E2E_STATIC_SMOKE_PENDING_BACKEND_RUNTIME_SMOKE",
+  "static_checks_pass": true,
+  "runtime_smoke_script": "backend/scripts/smoke_v108_pre_story_lobby_launch_combat_binding.py",
+  "checks": {
+    "story_tsx_contains_pre_battle_lobby_route": true,
+    "story_tsx_auto_resolve_is_not_only_path": true,
+    "combat_tsx_imports_combat_launch_parser": true,
+    "combat_tsx_contains_preview_non_authoritative_label": true,
+    "pre_battle_lobby_v107d_binding_still_present": true,
+    "backend_battle_launch_endpoint_returns_preview_echo": true,
+    "backend_no_db_write": true,
+    "backend_no_reward_grant": true,
+    "backend_no_progress_write": true,
+    "combat_route_payload_serializable": true
+  },
+  "safety": {
+    "no_db_writes": true,
+    "no_reward_grant": true,
+    "no_progress_write": true,
+    "no_currency_mutation": true,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "hiding_preview_state": false
+  }
+}

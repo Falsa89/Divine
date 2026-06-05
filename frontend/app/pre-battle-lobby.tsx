@@ -233,9 +233,13 @@ function SourceBadge({ enc }: { enc: ModeEncounter }) {
 
 export default function PreBattleLobbyScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ mode?: string; source_id?: string }>();
+  const params = useLocalSearchParams<{ mode?: string; source_id?: string; encounter_id?: string; enemy_source_id?: string; enemy_source_type?: string; v108_pre?: string }>();
   const modeParam = (params.mode || 'story').toString();
   const mode = (CANONICAL_ENCOUNTERS[modeParam] ? modeParam : 'story') as keyof typeof CANONICAL_ENCOUNTERS;
+  // v108_pre — compatibility: story.tsx passa encounter_id / enemy_source_id;
+  // legacy passa source_id. Normalizziamo qui senza riscrivere il flow.
+  const v108EncounterId = (params.encounter_id || params.source_id || '').toString();
+  const v108EnemySourceId = (params.enemy_source_id || params.source_id || params.encounter_id || '').toString();
 
   const encounter = CANONICAL_ENCOUNTERS[mode];
   const playerFormation = resolvePlayerFormation();
@@ -250,15 +254,15 @@ export default function PreBattleLobbyScreen() {
       try {
         const res = await launchFromLobby({
           server_id: 's1', mode: (mode as 'story') || 'story',
-          encounter_id: String(params.source_id || mode), enemy_source_type: 'authored',
-          enemy_source_id: String(params.source_id || `${mode}_default`),
+          encounter_id: String(v108EncounterId || params.source_id || mode), enemy_source_type: 'authored',
+          enemy_source_id: String(v108EnemySourceId || params.source_id || `${mode}_default`),
           player_team_snapshot: playerTeam, client_trace_id: `v107d-${Date.now()}`,
         });
         if (!cancelled && __DEV__) console.log('[v107D] lobby launch:', res.response_status);
       } catch (_e) { /* preview-only */ }
     })();
     return () => { cancelled = true; };
-  }, [mode, params.source_id, playerTeam]);
+  }, [mode, params.source_id, v108EncounterId, v108EnemySourceId, playerTeam]);
 
   // v95 — Endpoint runtime fetch (read-only catalog) per dichiarare la source attiva.
   //  - endpoint_active=true      → /api/encounter-source/get raggiunto e dati validi

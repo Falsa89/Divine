@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "story_launch_path_binding_result",
+  "version": 1,
+  "language": "italian",
+  "tsx_file": "frontend/app/story.tsx",
+  "status": "STORY_LAUNCH_PATH_BINDING_APPLIED_LOBBY_ROUTE_LIVE_LEGACY_AUTO_RESOLVE_LABELED_QA",
+  "player_facing_primary_button_label": "Avvia battaglia",
+  "player_facing_primary_target_route": "/pre-battle-lobby",
+  "player_facing_primary_params": {
+    "mode": "story",
+    "encounter_id": "story_<chapter>_<stage>",
+    "enemy_source_type": "authored",
+    "enemy_source_id": "story_<chapter>_<stage>",
+    "chapter_id": "<chapter>",
+    "stage": "<stage>",
+    "v108_pre": "1"
+  },
+  "legacy_auto_resolve_button_label": "QA Auto Resolve",
+  "legacy_auto_resolve_endpoint": "/api/story/battle",
+  "legacy_auto_resolve_is_only_player_facing_path": false,
+  "legacy_auto_resolve_backend_deleted": false,
+  "reward_live_added": false,
+  "progress_live_write_added": false,
+  "broad_story_rewrite": false,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "reward_grant": false,
+    "progress_live_write": false,
+    "backend_route_deleted": false,
+    "broad_story_rewrite": false
+  }
+}

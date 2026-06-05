@@ -1,0 +1,45 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_60_v108_pre",
+  "type": "combat_story_md5_supersede_review",
+  "version": 1,
+  "language": "italian",
+  "reason": "v108_pre_battle_launch_contract_binding",
+  "authority": "User approval chain v107D + v108_pre pack",
+  "baseline_files_updated": [
+    "data/design/closed_alpha/v100_runtime_md5_baseline_v1.json",
+    "data/design/server_lifecycle/_slc_c_critical_files_baseline_v1.json"
+  ],
+  "combat_tsx": {
+    "new_md5": "cc2ae7ff8dadf81dbd48eb4a5e1f5b4b",
+    "new_sha256": "e8f7640b4e32eeb0c1fbdccde4a9a319af12823d90bb2c89f1d7a252ba78a91a",
+    "historical_references": [
+      {"md5": "fc792a05b2ada6e677d80400732ae5c3", "sha256": "5105feacf7daadedbd75505c5a6a8231614fe7eb91792a8239361df6f015fbf5", "pack": "pre_v108_pre_baseline", "status": "superseded_by_v108_pre_battle_launch_contract_binding"}
+    ],
+    "superseded": true,
+    "silent_overwrite": false
+  },
+  "story_tsx": {
+    "new_md5": "ea4d8ad171c45c39c53ada6be3677c49",
+    "historical_references": [
+      {"md5": "8520627b4e63f86821d73d8d3880bac3", "pack": "pre_v108_pre_baseline", "status": "superseded_by_v108_pre_story_launch_path_binding"}
+    ],
+    "superseded": true,
+    "silent_overwrite": false
+  },
+  "pre_battle_lobby_tsx": {
+    "new_md5": "6e5c6c66883911d2e24befadbff8bc7d",
+    "historical_references": [
+      {"md5": "e466aea925b3b70a588ceee27324904b", "pack": "v107D_post_v108_pre", "status": "superseded_by_v108_pre_story_params_compatibility"}
+    ],
+    "superseded": true,
+    "silent_overwrite": false
+  },
+  "legacy_validators_action": "PRESERVED_AS_HISTORICAL_REFERENCE_NO_DELETION_NO_WEAKENING",
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "silent_overwrite": false,
+    "old_hash_preserved_as_historical_reference": true
+  }
+}
