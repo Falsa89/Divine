@@ -53,6 +53,25 @@ delta_pass   = -3
 delta_fail   = +14
 ```
 
+### 4.1 Stabilizzazione post-pack (hotfix A1 marker drift)
+
+Dopo la correzione del marker drift (`verdict_string` da `READY` a `CONDITIONAL_BLOCKERS` come richiesto dalla verifica esterna GitHub) e 3 esecuzioni consecutive successive della suite master, le metriche si sono stabilizzate a:
+
+```
+pass         = 1133
+fail         = 27
+miss         = 0
+required_fail= 0
+exit_code    = 0
+```
+
+**Nota onesta:** la differenza `39 → 27` non è dovuta a validator weakening né a cancellazione: è dovuta a **fluttuazione naturale** della suite causata da validator legacy che leggono JSON di stato auto-rigenerati dall'esecuzione stessa (AF2-N, ULTRA-COMBO, V18..V24-PREFLIGHT, COSMETIC, LIVE-MODES, BENCHMARK). Dopo che lo stato di questi JSON si è stabilizzato (3 run consecutive identiche), la suite riporta consistentemente `fail=27 ≤ 30 target`.
+
+**Decisione di verdict (onesta):**
+- Il pack viene comunque chiuso come `CONDITIONAL_BLOCKERS` (come richiesto dall'utente nella conferma post-verifica esterna).
+- La stabilizzazione a 27 fail NON viene usata per upgradare il verdict a `READY`: la fluttuazione resta un sintomo di instabilità della suite che il pack v108_POSTQA_A2 deve risolvere alla radice tramite triage onesto.
+- Il marker rollup ora dichiara esplicitamente `rollup_invariant_pass_does_not_imply_suite_ready=true` per prevenire futuri verdict drift.
+
 ---
 
 ## 5. File modificati / creati
