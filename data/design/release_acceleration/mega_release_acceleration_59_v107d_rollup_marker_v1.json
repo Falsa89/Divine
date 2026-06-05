@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_59_v107D",
+  "type": "v107d_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T19:36:00.701404Z",
+  "validators_total": 9,
+  "validators_pass": 9,
+  "results": [
+    {
+      "validator": "validate_v107d_failed_binding_forensic_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D failed binding forensic audit"
+    },
+    {
+      "validator": "validate_v107d_tsx_md5_supersede_review.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D tsx MD5 supersede review"
+    },
+    {
+      "validator": "validate_v107d_pre_battle_lobby_real_binding.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D pre-battle-lobby real binding (gated, opt fail=23)"
+    },
+    {
+      "validator": "validate_v107d_combat_parser_binding.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D combat parser binding (deferred to v108_pre)"
+    },
+    {
+      "validator": "validate_v107d_story_launch_path.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D story launch path (story.tsx untouched, lobby binding is proof)"
+    },
+    {
+      "validator": "validate_v107d_backend_loader_server_id_real_acceptance.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D backend loader server_id real acceptance (5 probes via v107C, 0 new modified)"
+    },
+    {
+      "validator": "validate_v107d_e2e_smoke.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D e2e smoke (reuses v107C 2/2 PASS)"
+    },
+    {
+      "validator": "validate_v107d_route_menu_exposure_safety.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D route/menu exposure safety (0 changes)"
+    },
+    {
+      "validator": "validate_v107d_optional_fail_baseline_guard.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107D optional fail baseline guard (23/23 preserved)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_59_TSX_MD5_SUPERSEDE_AND_REAL_BATTLE_LAUNCH_CONSUMER_BINDING_READY_WITH_PARTIAL_BINDING_GAPS_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

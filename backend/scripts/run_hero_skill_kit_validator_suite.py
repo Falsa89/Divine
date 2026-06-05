@@ -3464,6 +3464,26 @@ OPTIONAL = [
     ('PROJECT-V107C-STORY-AUTORESOLVE-DEPRECATION-GUARD', 'validate_v107c_story_autoresolve_deprecation_guard.py'),
     ('PROJECT-V107C-ROUTE-MENU-EXPOSURE-SAFETY', 'validate_v107c_route_menu_exposure_safety.py'),
     ('MEGA-RELEASE-ACCELERATION-58-v107C-ROLLUP', 'validate_mega_release_acceleration_58_v107c_rollup.py'),
+
+    # v107D - MEGA_RELEASE_ACCELERATION_59_TSX_MD5_SUPERSEDE_AND_REAL_BATTLE_LAUNCH_CONSUMER_BINDING
+    # PUBLIC_SYNC_TAG_v107D_MEGA_RELEASE_ACCELERATION_59_TSX_MD5_SUPERSEDE_AND_REAL_BATTLE_LAUNCH_CONSUMER_BINDING
+    # PUBLIC_SYNC_SENTINEL_v107D_PRESENT=YES
+    # Rispetta il design del pack: binding reale applicato SOLO a pre-battle-lobby.tsx
+    # (gated da EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED, default OFF). combat.tsx e
+    # story.tsx restano DEFERRED a v108_pre. MD5 supersede formale, NO validator
+    # weakening, NO fake_PASS, NO silent validator deletion. Optional fail invariato
+    # a 23 (target ≤30). Nessuna mutazione DB, ricompense, progressi, route nuove.
+    ('PROJECT-V107D-FAILED-BINDING-FORENSIC-AUDIT', 'validate_v107d_failed_binding_forensic_audit.py'),
+    ('PROJECT-V107D-TSX-MD5-SUPERSEDE-REVIEW', 'validate_v107d_tsx_md5_supersede_review.py'),
+    ('PROJECT-V107D-PRE-BATTLE-LOBBY-REAL-BINDING', 'validate_v107d_pre_battle_lobby_real_binding.py'),
+    ('PROJECT-V107D-COMBAT-PARSER-BINDING', 'validate_v107d_combat_parser_binding.py'),
+    ('PROJECT-V107D-STORY-LAUNCH-PATH', 'validate_v107d_story_launch_path.py'),
+    ('PROJECT-V107D-BACKEND-LOADER-SERVER-ID-REAL-ACCEPTANCE', 'validate_v107d_backend_loader_server_id_real_acceptance.py'),
+    ('PROJECT-V107D-E2E-SMOKE', 'validate_v107d_e2e_smoke.py'),
+    ('PROJECT-V107D-ROUTE-MENU-EXPOSURE-SAFETY', 'validate_v107d_route_menu_exposure_safety.py'),
+    ('PROJECT-V107D-OPTIONAL-FAIL-BASELINE-GUARD', 'validate_v107d_optional_fail_baseline_guard.py'),
+    ('MEGA-RELEASE-ACCELERATION-59-v107D-ROLLUP', 'validate_mega_release_acceleration_59_v107d_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
