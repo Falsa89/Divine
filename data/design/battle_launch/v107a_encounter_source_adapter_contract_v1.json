@@ -1,0 +1,27 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_encounter_source_adapter_contract",
+  "version": 1,
+  "language": "it",
+  "adapters": [
+    {"enemy_source_type":"authored","applies_to_modes":["story","tower","event","raid","training"],"id_format":"<system>:<chapter|floor|encounter>:<node|stage>","source":"data/design/encounters/*.json","legacy_hero_id_risk":"low"},
+    {"enemy_source_type":"player_team","applies_to_modes":["arena","guild_war"],"id_format":"player_server_profile_id","source":"player_server_profiles (PSP) when server-bound; today fallback bot_team","legacy_hero_id_risk":"medium"},
+    {"enemy_source_type":"bot_team","applies_to_modes":["arena","event","guild_war"],"id_format":"server_actor_id","source":"server_actors collection (bot archetype roster)","legacy_hero_id_risk":"medium"},
+    {"enemy_source_type":"boss","applies_to_modes":["boss","raid","world_boss","guild_raid"],"id_format":"boss_template_id","source":"data/design/boss/*.json","legacy_hero_id_risk":"low"},
+    {"enemy_source_type":"training_preset","applies_to_modes":["training"],"id_format":"preset_id","source":"data/design/training_presets/*.json","legacy_hero_id_risk":"low"},
+    {"enemy_source_type":"event_preset","applies_to_modes":["event","live"],"id_format":"event_preset_id","source":"data/design/events/*.json","legacy_hero_id_risk":"low"}
+  ],
+  "adapter_protocol": {
+    "input": "{enemy_source_type, enemy_source_id, mode, server_id}",
+    "output": "{enemy_team_snapshot: [], rules: {}, encounter_meta: {}}",
+    "side_effects": "none",
+    "runtime_implementation_pack": "v108"
+  },
+  "safety": {
+    "legacy_hero_id_propagated": false,
+    "random_starter_heroes_in_encounter": false,
+    "db_writes": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

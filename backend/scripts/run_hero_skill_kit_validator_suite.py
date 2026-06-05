@@ -3404,6 +3404,26 @@ OPTIONAL = [
     ('PROJECT-V106-BOT-SERVER-ACTOR-MIGRATION-POLICY', 'validate_v106_bot_server_actor_migration_policy.py'),
     ('PROJECT-V106-STAGING-APPLY-READINESS-GATE', 'validate_v106_staging_apply_readiness_gate.py'),
     ('MEGA-RELEASE-ACCELERATION-55-v106-ROLLUP', 'validate_mega_release_acceleration_55_v106_rollup.py'),
+    # ========================================================================
+    # v107A - MEGA_RELEASE_ACCELERATION_56_BATTLE_LAUNCH_CONTRACT_AND_SERVER_ID_LOADER_ADOPTION_FLAGGED
+    # PUBLIC_SYNC_TAG_v107A_MEGA_RELEASE_ACCELERATION_56_BATTLE_LAUNCH_CONTRACT_AND_SERVER_ID_LOADER_ADOPTION_FLAGGED
+    # PUBLIC_SYNC_SENTINEL_v107A_PRESENT=YES
+    # P0 runtime seam pack. Battle Launch Contract v1 schema + /api/battle/launch
+    # preview-echo endpoint registered. Feature flags ALL OFF default. Server.py
+    # MD5 baseline rebased (v100 supersede). Loader server_id adoption is contract
+    # only (deferred to v107B). Story auto-resolve deprecation plan documented.
+    # ========================================================================
+    ('PROJECT-V107A-V106-PUBLIC-SYNC-SNAPSHOT', 'validate_v107a_v106_public_sync_snapshot.py'),
+    ('PROJECT-V107A-BATTLE-LAUNCH-CONTRACT-SCHEMA', 'validate_v107a_battle_launch_contract_schema.py'),
+    ('PROJECT-V107A-BATTLE-LAUNCH-ENDPOINT', 'validate_v107a_battle_launch_endpoint.py'),
+    ('PROJECT-V107A-PRE-BATTLE-LOBBY-CONTRACT', 'validate_v107a_pre_battle_lobby_contract.py'),
+    ('PROJECT-V107A-COMBAT-CONTRACT-CONSUMER', 'validate_v107a_combat_contract_consumer.py'),
+    ('PROJECT-V107A-BACKEND-LOADER-SERVER-ID-ADOPTION', 'validate_v107a_backend_loader_server_id_adoption.py'),
+    ('PROJECT-V107A-FRONTEND-LOADER-SERVER-ID-PROPAGATION', 'validate_v107a_frontend_loader_server_id_propagation.py'),
+    ('PROJECT-V107A-STORY-AUTORESOLVE-DEPRECATION', 'validate_v107a_story_autoresolve_deprecation.py'),
+    ('PROJECT-V107A-ENCOUNTER-SOURCE-ADAPTER-CONTRACT', 'validate_v107a_encounter_source_adapter_contract.py'),
+    ('PROJECT-V107A-IDEMPOTENCY-REWARD-PROGRESS-GUARD', 'validate_v107a_idempotency_reward_progress_guard.py'),
+    ('MEGA-RELEASE-ACCELERATION-56-v107A-ROLLUP', 'validate_mega_release_acceleration_56_v107a_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

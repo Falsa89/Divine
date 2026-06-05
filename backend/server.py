@@ -489,6 +489,13 @@ app.include_router(server_profiles_router)
 from routes.v103_server_profiles import router as v103_server_profiles_router
 app.include_router(v103_server_profiles_router)
 
+# v107A — Battle Launch Contract router. POST /api/battle/launch returns preview
+# echo only. NO DB writes, NO reward grant, NO progress write. Live behavior is
+# gated by BATTLE_LAUNCH_AUTHORITATIVE_ENABLED / REWARD_LIVE_ENABLED /
+# PROGRESS_LIVE_ENABLED flags; defaults coerce any live request down to preview.
+from routes.v107a_battle_launch import router as v107a_battle_launch_router
+app.include_router(v107a_battle_launch_router)
+
 # PROJECT_F Track B — Housing read-only preview route skeleton (DISABLED-BY-DEFAULT INERT).
 # Returns 503 when HOUSING_PREVIEW_ENABLED is unset/!=true. No DB writes, no live bonus,
 # no combat/account stat mutation. Upstream design: 127B / 128B (Project F Track B).

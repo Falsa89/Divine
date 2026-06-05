@@ -1,0 +1,39 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_story_autoresolve_deprecation_result",
+  "version": 1,
+  "language": "it",
+  "current_state": {
+    "endpoint": "/story/battle (auto-resolve)",
+    "frontend_consumer": "frontend/app/story.tsx",
+    "is_authoritative_combat": false,
+    "uses_battle_renderer": false,
+    "reward_granted_directly": true,
+    "progress_written_directly": true
+  },
+  "deprecation_plan": {
+    "target_replacement": "POST /api/battle/launch with mode='story', enemy_source_type='authored', enemy_source_id=<chapter:node>",
+    "replacement_flow": [
+      "Story screen produces battle_launch_contract_v1 via buildLaunchContext helper",
+      "POST /api/battle/launch (preview echo in v107A, authoritative in v108+)",
+      "Route to combat.tsx renderer",
+      "Battle Result returns to story screen",
+      "Reward/Progress applied only when REWARD_LIVE_ENABLED + PROGRESS_LIVE_ENABLED + server_id valid + idempotency_key present"
+    ],
+    "deprecation_phases": [
+      {"phase":"v107A","status":"contract_only_no_runtime_change","backend_call":"none"},
+      {"phase":"v107B","status":"frontend_story_screen_calls_launch_endpoint_preview_echo_only","backend_call":"POST /api/battle/launch (preview)"},
+      {"phase":"v108","status":"story_chapters_consume_authoritative_engine","backend_call":"POST /api/battle/launch (authoritative, gated)"},
+      {"phase":"v108_post","status":"/story/battle endpoint marked deprecated","backend_call":"endpoint returns 410 Gone or redirects"}
+    ]
+  },
+  "v107a_action_taken": "plan_documented_no_code_change_to_story_or_/story/battle",
+  "safety": {
+    "reward_granted": false,
+    "progress_written": false,
+    "story_battle_endpoint_modified_v107a": false,
+    "story_tsx_modified_v107a": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "battle_launch_contract_schema",
+  "version": 1,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BattleLaunchContractV1",
+  "description": "Contract unico modalita -> lobby -> battle launch -> combat renderer.",
+  "type": "object",
+  "required": ["server_id","mode","encounter_id","enemy_source_type","enemy_source_id","reward_policy","progress_policy","battle_engine_mode"],
+  "properties": {
+    "server_id": {"type":"string","minLength":1},
+    "mode": {"type":"string","enum":["story","tower","arena","training","boss","raid","event","guild_war","guild_raid","world_boss"]},
+    "encounter_id": {"type":"string","minLength":1},
+    "player_team_id": {"type":["string","null"]},
+    "player_team_snapshot": {"type":"array","default":[]},
+    "enemy_source_type": {"type":"string","enum":["authored","player_team","bot_team","boss","training_preset","event_preset"]},
+    "enemy_source_id": {"type":"string","minLength":1},
+    "reward_policy": {"type":"string","enum":["none","preview","live_gated","live"],"default":"none"},
+    "progress_policy": {"type":"string","enum":["none","preview","live_gated","live"],"default":"none"},
+    "battle_engine_mode": {"type":"string","enum":["preview","authoritative"],"default":"preview"},
+    "idempotency_key": {"type":["string","null"]},
+    "client_trace_id": {"type":["string","null"]}
+  },
+  "validation_rules": [
+    "idempotency_key required when reward_policy in (live_gated, live) OR progress_policy in (live_gated, live)",
+    "server_id required even when flag disabled (used for echo + audit)",
+    "encounter_id may be a training preset key when enemy_source_type=training_preset",
+    "enemy_source_id required and must be string"
+  ],
+  "feature_flag_coercions": {
+    "BATTLE_LAUNCH_AUTHORITATIVE_ENABLED_false": "battle_engine_mode authoritative -> preview",
+    "REWARD_LIVE_ENABLED_false": "reward_policy live|live_gated -> preview",
+    "PROGRESS_LIVE_ENABLED_false": "progress_policy live|live_gated -> preview"
+  },
+  "safety": {
+    "no_db_writes_in_v107a": true,
+    "no_reward_grant": true,
+    "no_progress_write": true,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

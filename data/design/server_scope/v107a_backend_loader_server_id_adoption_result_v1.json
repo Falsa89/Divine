@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_backend_loader_server_id_adoption_result",
+  "version": 1,
+  "language": "it",
+  "feature_flag": "SERVER_SCOPED_RUNTIME_ENABLED",
+  "feature_flag_default": false,
+  "adoption_status": "CONTRACT_ONLY_LOADER_CHANGE_DEFERRED_TO_v107B",
+  "reason": "v107A introduce solo il contract POST /api/battle/launch lato runtime e l'adoption helper. Le modifiche ai loader (heroes/team/inventory/currencies/story_progress/tower_progress/arena_profile/guild_membership) sono pianificate in v107B per evitare rischio MD5 baseline su file multipli simultaneamente.",
+  "endpoints_targeted": [
+    {"endpoint":"/api/user/heroes","current_accepts_server_id":false,"target_behavior_when_flag_on":"filter by (account_id, server_id) via player_server_profiles when PSP applied","adoption_pack":"v107B"},
+    {"endpoint":"/api/team/get-formation","current_accepts_server_id":false,"target_behavior_when_flag_on":"filter by (account_id, server_id)","adoption_pack":"v107B"},
+    {"endpoint":"/api/inventory","current_accepts_server_id":false,"target_behavior_when_flag_on":"filter by (account_id, server_id)","adoption_pack":"v107B"},
+    {"endpoint":"/api/currencies","current_accepts_server_id":false,"target_behavior_when_flag_on":"split soft scoped + hard global","adoption_pack":"v107B"},
+    {"endpoint":"/api/story/progress","current_accepts_server_id":false,"target_behavior_when_flag_on":"filter by (account_id, server_id)","adoption_pack":"v107B"},
+    {"endpoint":"/api/tower/progress","current_accepts_server_id":false,"target_behavior_when_flag_on":"filter by (account_id, server_id)","adoption_pack":"v108"},
+    {"endpoint":"/api/arena/profile","current_accepts_server_id":false,"target_behavior_when_flag_on":"filter by (account_id, server_id)","adoption_pack":"v108"},
+    {"endpoint":"/api/guild/membership","current_accepts_server_id":false,"target_behavior_when_flag_on":"filter by (account_id, server_id)","adoption_pack":"v109"},
+    {"endpoint":"/api/chat/messages","current_accepts_server_id":false,"target_behavior_when_flag_on":"channel_key prefix {server_id}: required","adoption_pack":"v109"}
+  ],
+  "backend_isolation_live": false,
+  "backend_claims_isolation_live": false,
+  "banner_obligation_active": true,
+  "banner_token": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "safety": {
+    "db_writes_performed": 0,
+    "new_endpoints_added_v107a": 1,
+    "loader_endpoints_modified_v107a": 0,
+    "fake_isolation_live": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

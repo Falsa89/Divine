@@ -1,0 +1,44 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_battle_launch_endpoint_result",
+  "version": 1,
+  "language": "it",
+  "endpoint": "POST /api/battle/launch",
+  "router_file": "backend/routes/v107a_battle_launch.py",
+  "registered_in": "backend/server.py",
+  "router_prefix": "/api/battle",
+  "http_status_implemented": [200, 400],
+  "feature_flags_default": {
+    "BATTLE_LAUNCH_AUTHORITATIVE_ENABLED": false,
+    "REWARD_LIVE_ENABLED": false,
+    "PROGRESS_LIVE_ENABLED": false,
+    "SERVER_SCOPED_RUNTIME_ENABLED": false
+  },
+  "default_behavior": "PREVIEW_ECHO_NON_AUTHORITATIVE",
+  "coercions": [
+    "live|live_gated reward_policy -> preview when REWARD_LIVE_ENABLED=false",
+    "live|live_gated progress_policy -> preview when PROGRESS_LIVE_ENABLED=false",
+    "authoritative battle_engine_mode -> preview when BATTLE_LAUNCH_AUTHORITATIVE_ENABLED=false"
+  ],
+  "idempotency_enforcement": "required when coerced_reward_policy or coerced_progress_policy in (live_gated, live)",
+  "db_writes_performed": 0,
+  "reward_granted": false,
+  "progress_written": false,
+  "currency_mutated": false,
+  "server_id_used_as_backend_filter": false,
+  "server_id_used_for": ["echo", "audit_trail"],
+  "verified_with_curl": true,
+  "smoke_test_payload": {"server_id":"s1","mode":"story","encounter_id":"ch1_n1","enemy_source_type":"authored","enemy_source_id":"goblin_pack_1","reward_policy":"live","progress_policy":"live","battle_engine_mode":"authoritative","idempotency_key":"test-key-001"},
+  "smoke_test_response_status": "PREVIEW_ECHO_NON_AUTHORITATIVE",
+  "safety": {
+    "no_db_writes": true,
+    "no_reward_grant": true,
+    "no_progress_write": true,
+    "no_currency_mutation": true,
+    "battle_engine_runtime_modified": false,
+    "combat_tsx_modified": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "hiding_preview_state": false
+  }
+}

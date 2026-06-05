@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_idempotency_reward_progress_guard",
+  "version": 1,
+  "language": "it",
+  "feature_flags_default": {
+    "BATTLE_LAUNCH_AUTHORITATIVE_ENABLED": false,
+    "REWARD_LIVE_ENABLED": false,
+    "PROGRESS_LIVE_ENABLED": false,
+    "SERVER_SCOPED_RUNTIME_ENABLED": false
+  },
+  "guard_rules": [
+    "idempotency_key required when reward_policy in (live_gated, live) or progress_policy in (live_gated, live)",
+    "missing idempotency_key with live policy -> HTTP 400 idempotency_key_required_for_live_gated_or_live",
+    "reward_policy=live not honored when REWARD_LIVE_ENABLED=false -> coerced to preview",
+    "reward_policy=live_gated not honored when REWARD_LIVE_ENABLED=false -> coerced to preview",
+    "progress_policy=live not honored when PROGRESS_LIVE_ENABLED=false -> coerced to preview",
+    "battle_engine_mode=authoritative not honored when BATTLE_LAUNCH_AUTHORITATIVE_ENABLED=false -> coerced to preview",
+    "server_id required even with flag off (used for echo + audit trail)",
+    "no DB writes regardless of flags in v107A endpoint implementation"
+  ],
+  "idempotency_key_format": "opaque string min 1 char (e.g. uuid v4)",
+  "idempotency_dedupe_window_when_live": "server-side dedupe TBD in v111 economy live canary pack",
+  "safety": {
+    "reward_granted_v107a": false,
+    "progress_written_v107a": false,
+    "currency_mutated_v107a": false,
+    "db_writes_v107a": 0,
+    "battle_engine_formula_rewrite": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_frontend_loader_server_id_propagation_result",
+  "version": 1,
+  "language": "it",
+  "hook_extended": "frontend/src/hooks/useServerScope.ts",
+  "hook_status": "v104_hook_present_v107A_compatible",
+  "helper_introduced": "frontend/src/battle_launch/buildLaunchContext.ts",
+  "helper_purpose": "Build battle_launch_contract_v1 payload from selected server_id, mode, encounter, player team snapshot.",
+  "loaders_propagating_server_id_today": [],
+  "loaders_should_propagate_server_id": [
+    "/(tabs)/home","/(tabs)/heroes","/(tabs)/battle","/(tabs)/gacha","/inventory","/treasury","/story","/tower","/pvp","/raid","/events","/guild","/dm","/plaza","/rankings","/hero-training"
+  ],
+  "adoption_status": "HELPER_AVAILABLE_LOADERS_NOT_YET_PROPAGATING",
+  "deferred_to": "v107B",
+  "banner_obligation_active": true,
+  "banner_token": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "safety": {
+    "new_player_facing_feature": false,
+    "combat_tsx_changes": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

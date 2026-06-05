@@ -1,0 +1,38 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_v106_public_sync_snapshot",
+  "version": 1,
+  "language": "it",
+  "target_repo": "https://github.com/Falsa89/Divine",
+  "target_branch": "main",
+  "snapshot_method": "local container verification",
+  "v106_artifacts_present": {
+    "data/design/server_scope/player_server_profiles_schema_v1.json": true,
+    "data/design/server_scope/v106_existing_data_model_audit_v1.json": true,
+    "data/design/server_scope/v106_account_global_vs_server_scoped_matrix_v1.json": true,
+    "data/design/server_scope/v106_backup_manifest_v1.json": true,
+    "data/design/server_scope/v106_dry_run_player_server_profiles_result_v1.json": true,
+    "data/design/server_scope/v106_apply_result_v1.json": true,
+    "data/design/server_scope/v106_rollback_plan_v1.json": true,
+    "data/design/server_scope/v106_server_scoped_read_contract_v1.json": true,
+    "data/design/server_scope/v106_bot_server_actor_migration_policy_v1.json": true,
+    "data/design/server_scope/v106_staging_apply_readiness_gate_v1.json": true,
+    "backend/scripts/backup_v106_player_server_profiles_pre_migration.py": true,
+    "backend/scripts/dry_run_v106_player_server_profiles_migration.py": true,
+    "backend/scripts/apply_v106_player_server_profiles_migration.py": true,
+    "backend/scripts/rollback_v106_player_server_profiles_migration.py": true,
+    "docs/divine/106_FINAL_REPORT.md": true
+  },
+  "v106_apply_status": "APPLY_SKIPPED_GATED",
+  "v106_psp_apply_executed": false,
+  "v106_db_writes_performed": 0,
+  "v106_dry_run_estimated_profiles": 160,
+  "public_sync_pending_tag": "PUBLIC_SYNC_TAG_v106_MEGA_RELEASE_ACCELERATION_55_SERVER_SCOPED_DB_SCHEMA_AND_PLAYER_SERVER_PROFILES_GATED_MIGRATION_PREP",
+  "backend_isolation_live": false,
+  "chat_server_scope_live": false,
+  "safety": {
+    "claim_isolation_live": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

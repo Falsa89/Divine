@@ -18,16 +18,21 @@
       "change_type": "RC_runtime_apply_release_candidate_prep"
     },
     "backend/server.py": {
-      "current_md5": "3eb354dc4d3536dfbb85a472928eb2cc",
+      "current_md5": "5af33f8e58fe9aad7ae552c603e43192",
       "historical_references": [
         {
           "md5": "badf6fc933dd25aaf68ba3bdb9bd316a",
           "pack": "v98_pre_v103_server_py",
           "status": "superseded_by_v103_server_profiles_list_router_include"
+        },
+        {
+          "md5": "3eb354dc4d3536dfbb85a472928eb2cc",
+          "pack": "v103_post_v107a_pre",
+          "status": "superseded_by_v107A_battle_launch_router_include"
         }
       ],
-      "authorized_change_pack": "v96_v98_v103",
-      "change_type": "auth_account_routes + admin_gdpr_routes + v103_server_profiles_list_router"
+      "authorized_change_pack": "v96_v98_v103_v107A",
+      "change_type": "auth_account_routes + admin_gdpr_routes + v103_server_profiles_list_router + v107A_battle_launch_router"
     }
   },
   "baseline_rebase_mechanism": "SUPERSEDED_AFTER_V100_MD5_REBASELINE frozenset gated by file presence",

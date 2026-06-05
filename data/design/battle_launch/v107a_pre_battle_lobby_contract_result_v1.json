@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_pre_battle_lobby_contract_result",
+  "version": 1,
+  "language": "it",
+  "surface": "frontend/app/pre-battle-lobby.tsx",
+  "status": "CONTRACT_PRODUCER_HELPER_INTRODUCED",
+  "helper_module": "frontend/src/battle_launch/buildLaunchContext.ts",
+  "helper_exports": ["buildLaunchContext", "validateLaunchContext", "BattleLaunchContractV1"],
+  "adoption_state": "helper_available_existing_lobby_not_yet_consumed",
+  "why_helper_not_yet_consumed": "Esistente pre-battle-lobby.tsx serve flussi preview multipli; conversione lobby -> contract producer e' pianificata in v107B (incrementale, non distruttiva). v107A introduce solo il contract helper riusabile.",
+  "contract_v1_fields_supported": ["server_id","mode","encounter_id","player_team_id","player_team_snapshot","enemy_source_type","enemy_source_id","reward_policy","progress_policy","battle_engine_mode","idempotency_key","client_trace_id"],
+  "default_field_values": {
+    "reward_policy": "preview",
+    "progress_policy": "preview",
+    "battle_engine_mode": "preview",
+    "player_team_snapshot": []
+  },
+  "safety": {
+    "new_player_facing_feature": false,
+    "combat_tsx_changes": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

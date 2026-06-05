@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_combat_contract_consumer_result",
+  "version": 1,
+  "language": "it",
+  "surface": "frontend/app/combat.tsx",
+  "status": "ADAPTER_DOCUMENTED_BEHAVIOR_UNCHANGED",
+  "reason": "v107A guardrail vieta combat.tsx behavior rewrite. Documenta solo come il renderer ricevera' il contract.",
+  "adapter_helper": "frontend/src/battle_launch/buildLaunchContext.ts (re-export parseLaunchContextFromParams)",
+  "adapter_contract": {
+    "input_source": "useLocalSearchParams() or POST body from /api/battle/launch echo",
+    "required_fields_for_render": ["player_team_snapshot","enemy_source_id","battle_engine_mode"],
+    "fallback_when_missing": "continue rendering existing preview path; do NOT throw; do NOT mutate state",
+    "future_authoritative_path": "v107B/v108 will call /api/battle/launch then route renderer through validated payload"
+  },
+  "combat_tsx_behavior_rewritten": false,
+  "safety": {
+    "combat_tsx_changes": false,
+    "battle_engine_runtime_changes": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

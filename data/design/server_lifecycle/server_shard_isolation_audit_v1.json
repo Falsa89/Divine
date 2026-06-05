@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-05T18:27:04.422950+00:00",
+  "timestamp_utc": "2026-06-05T18:41:37.130471+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1667,
+  "backend_python_files_scanned": 1679,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 833,
+      "files_with_hits": 840,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -282,15 +282,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 569,
-              "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
-            },
-            {
               "line": 576,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 593,
+              "line": 583,
+              "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
+            },
+            {
+              "line": 600,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -381,7 +381,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 138,
+      "files_with_hits": 141,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -390,15 +390,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 588,
+              "line": 595,
               "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
             },
             {
-              "line": 592,
+              "line": 599,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 593,
+              "line": 600,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -514,7 +514,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 884,
+              "line": 891,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
             }
           ]
@@ -689,7 +689,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 163,
+      "files_with_hits": 167,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -917,7 +917,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 166,
+      "files_with_hits": 168,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -950,11 +950,11 @@
               "snippet": "\"guild_id\": None,"
             },
             {
-              "line": 625,
+              "line": 632,
               "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
             },
             {
-              "line": 627,
+              "line": 634,
               "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
@@ -1029,7 +1029,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 160,
+      "files_with_hits": 162,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1058,7 +1058,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 525,
+              "line": 532,
               "snippet": "# Read-only / idempotent / NO DB writes / NO reward / NO ranking / NO PII."
             }
           ]

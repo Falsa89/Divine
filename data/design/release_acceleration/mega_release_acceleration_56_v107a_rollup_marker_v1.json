@@ -1,0 +1,61 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_56_v107A",
+  "type": "v107a_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T18:40:57.750031Z",
+  "validators_total": 10,
+  "validators_pass": 10,
+  "results": [
+    {
+      "validator": "validate_v107a_v106_public_sync_snapshot.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A v106 public sync snapshot (15 artifacts verified)"
+    },
+    {
+      "validator": "validate_v107a_battle_launch_contract_schema.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A battle launch contract schema (10 modes, 6 enemy sources, 4 reward/progress, 2 engine modes)"
+    },
+    {
+      "validator": "validate_v107a_battle_launch_endpoint.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A /api/battle/launch endpoint (preview echo, 0 db writes, all flags off)"
+    },
+    {
+      "validator": "validate_v107a_pre_battle_lobby_contract.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A pre-battle-lobby contract producer (helper introduced, contract v1 supported)"
+    },
+    {
+      "validator": "validate_v107a_combat_contract_consumer.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A combat contract consumer (adapter documented, behavior unchanged)"
+    },
+    {
+      "validator": "validate_v107a_backend_loader_server_id_adoption.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A backend loader server_id adoption (9 endpoints documented contract-only)"
+    },
+    {
+      "validator": "validate_v107a_frontend_loader_server_id_propagation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A frontend loader server_id propagation (hook + helper present, banner obligation active)"
+    },
+    {
+      "validator": "validate_v107a_story_autoresolve_deprecation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A story auto-resolve deprecation (plan documented, no code change)"
+    },
+    {
+      "validator": "validate_v107a_encounter_source_adapter_contract.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A encounter source adapter contract (6 adapters, side_effects=none)"
+    },
+    {
+      "validator": "validate_v107a_idempotency_reward_progress_guard.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107A idempotency/reward/progress guard (8 rules, all flags off)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_56_BATTLE_LAUNCH_CONTRACT_AND_SERVER_ID_LOADER_ADOPTION_FLAGGED_READY_WITH_CONTRACT_ONLY_GAPS_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}
