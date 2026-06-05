@@ -27,7 +27,7 @@ MEGA_RELEASE_ACCELERATION_49_MD5_SUPERSEDE_AND_CLOSED_ALPHA_READINESS_UNLOCK_CON
 
 ## 2. Commit hash
 
-`<<commit_hash_da_popolare>>` — `feat(v100): md5 supersede and closed alpha readiness unlock pack`
+`c585557a` — `feat(v100): md5 supersede and closed alpha readiness unlock pack`
 
 ---
 
