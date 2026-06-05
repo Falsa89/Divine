@@ -1,0 +1,27 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "server_selection_persistence_result",
+  "version": 1,
+  "language": "italian",
+  "persistence_keys": {
+    "v101_selected_server_id": {"storage": "AsyncStorage", "set_on": "tap ENTRA", "clear_on": ["LOGOUT ACCOUNT (menu)", "AuthContext.logout() legacy"]},
+    "v102_selected_server_name": {"storage": "AsyncStorage", "set_on": "tap ENTRA", "clear_on": ["LOGOUT ACCOUNT (menu)"]},
+    "v102_selected_server_has_character": {"storage": "AsyncStorage", "set_on": "tap ENTRA", "clear_on": ["LOGOUT ACCOUNT (menu)"]},
+    "v103_logout_in_progress": {"storage": "AsyncStorage", "set_on": "LOGOUT ACCOUNT start", "clear_on": "auto cleared by index.tsx setTimeout 1500ms", "purpose": "logout race fix - skip redirect in index.tsx useEffect during logout"}
+  },
+  "last_played_tracking": {
+    "implemented": false,
+    "reason": "PENDING - richiede backend list endpoint con is_last_played tracking. v104+ aggiunger\u00e0 timestamp last_login_per_server e order by recency."
+  },
+  "persistence_robust": true,
+  "app_start_no_session_routes_to_login": true,
+  "app_start_session_no_selected_server_routes_to_servers": true,
+  "app_start_session_with_selected_server_routes_to_home": true,
+  "cambia_server_does_not_clear_session": true,
+  "safety": {
+    "token_in_AsyncStorage": false,
+    "raw_oauth_log": false,
+    "provider_secrets": false,
+    "fake_PASS": false
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "server_profile_backend_audit",
+  "version": 1,
+  "language": "italian",
+  "device_qa_feedback": [
+    "server list e card OK",
+    "ENTRA porta in Home OK",
+    "CAMBIA SERVER funziona",
+    "server fallback/fake troppo credibili (nomi senza [QA])",
+    "tutti i server caricano stessi dati account (no isolation)",
+    "LOGOUT ACCOUNT rimbalza brevemente in /servers prima di restare a /login"
+  ],
+  "files_audited": {
+    "backend/routes/server_profiles.py": "GET/POST /api/server-profiles/select -> 503 quando flag OFF (PROJECT_B Track A skeleton). NESSUNA lista /list disponibile.",
+    "backend/routes/v103_server_profiles.py": "NEW v103: GET /api/server-profiles/list safe read-only, is_qa_fallback=true, backend_data_isolation_implemented=false dichiarato.",
+    "backend/server.py": "v103: include_router(v103_server_profiles_router).",
+    "frontend/app/servers.tsx": "v103: nomi fallback prefissati [QA], banner dichiarazione QA/FALLBACK + isolation pending.",
+    "frontend/app/index.tsx": "v103: useEffect skip redirect se v103_logout_in_progress=true (race fix).",
+    "frontend/app/(tabs)/menu.tsx": "v103: LOGOUT ACCOUNT setta flag, clear v101+v102 keys + token legacy + v96 SecureStore + legacy logout + router.replace('/').",
+    "frontend/context/AuthContext.tsx": "invariato (legacy email/password; logout clear token + v101 key).",
+    "frontend/src/auth/AuthContext.tsx": "v96 OAuth/JWT/SecureStore. v103 ora viene clearato esplicitamente dal menu logout (no piu' bridge marker passivo)."
+  },
+  "classification": {
+    "backend_/api/server-profiles/list": "v103_endpoint_added_safe_read_only_qa_fallback",
+    "backend_data_isolation_per_server_id": "NOT_IMPLEMENTED_DECLARED_PENDING",
+    "frontend_servers_tsx_naming": "qa_prefixed_explicit",
+    "frontend_fallback_banner": "truthful_qa_warning_visible",
+    "frontend_logout_race": "flag_based_skip_redirect_implemented",
+    "auth_context_unification": "BRIDGE_LOGOUT_robust_v103 (clear both contexts esplicito)"
+  },
+  "blockers_identified_pre_v103": [
+    "server names mascheravano fallback come produzione",
+    "isolation backend non documentata in UI",
+    "logout race causava rimbalzo a /servers",
+    "v96 SecureStore non clearato dal menu (rimaneva sessione)"
+  ],
+  "actions_applied_in_v103": [
+    "backend/routes/v103_server_profiles.py: nuovo endpoint /api/server-profiles/list (5 server [QA])",
+    "backend/server.py: include_router v103",
+    "frontend/app/servers.tsx: nomi [QA], banner QA/FALLBACK esplicito + isolation pending",
+    "frontend/app/index.tsx: useEffect skip redirect se v103_logout_in_progress",
+    "frontend/app/(tabs)/menu.tsx: LOGOUT ACCOUNT full sequence (flag + AS clear + SecureStore clear + legacy logout)"
+  ],
+  "safety": {
+    "db_destructive_writes": false,
+    "legacy_data_cleanup_apply": false,
+    "reward_economy_inventory_mutation": false,
+    "fake_production_server_data": false,
+    "fake_different_per_server_profiles": false,
+    "token_raw_logs": false,
+    "provider_secrets": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

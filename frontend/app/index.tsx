@@ -60,11 +60,19 @@ export default function LoginScreen() {
   React.useEffect(() => {
     if (!loading && user) {
       // v101 — Login -> Server Select -> Home flow.
-      // Se l'utente NON ha ancora selezionato un server in questa sessione,
-      // lo manda al server select. Altrimenti va in home.
+      // v103 — Skip redirect if v103_logout_in_progress flag set (logout race fix).
       (async () => {
         try {
           const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+          const logoutInProgress = await AsyncStorage.getItem('v103_logout_in_progress');
+          if (logoutInProgress === 'true') {
+            // v103 — race fix: stiamo loggando out, non rimbalzare in /servers o home.
+            // Pulisci il flag dopo un breve delay (lascia tempo al logout di completare).
+            setTimeout(() => {
+              AsyncStorage.removeItem('v103_logout_in_progress').catch(() => {});
+            }, 1500);
+            return;
+          }
           const selected = await AsyncStorage.getItem('v101_selected_server_id');
           if (!selected) {
             router.replace('/servers');

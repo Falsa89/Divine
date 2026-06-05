@@ -1,0 +1,41 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "auth_context_unification_result",
+  "version": 1,
+  "language": "italian",
+  "legacy_context": {
+    "file": "frontend/context/AuthContext.tsx",
+    "storage": "AsyncStorage 'token'"
+  },
+  "v96_context": {
+    "file": "frontend/src/auth/AuthContext.tsx",
+    "storage": "SecureStore ('v96_auth_token', 'v96_auth_account')"
+  },
+  "unification_strategy": "BRIDGE_LOGOUT_ROBUST",
+  "v103_bridge_implementation": {
+    "file": "frontend/app/(tabs)/menu.tsx",
+    "actions": [
+      "AsyncStorage.setItem v103_logout_in_progress",
+      "AsyncStorage.removeItem legacy + v101 + v102 keys",
+      "SecureStore.deleteItemAsync v96_auth_token + v96_auth_account (esplicito)",
+      "legacy AuthContext.logout() per React state",
+      "router.replace('/')"
+    ],
+    "improvement_over_v102": "v102 aveva solo bridge marker passivo (import). v103 chiama SecureStore.deleteItemAsync direttamente."
+  },
+  "full_unification_status": "BRIDGE_LOGOUT_ROBUST_FULL_DEFERRED",
+  "full_unification_deferred_to": "v104+ single-provider AuthContext consolidation",
+  "current_safety_guarantees": [
+    "logout button cancella ENTRAMBI i contesti (legacy + v96)",
+    "clear v101 + v102 + v103 keys atomico",
+    "navigate to /login completa il ciclo senza race",
+    "nessun raw OAuth/token log",
+    "nessun token salvato in plain AsyncStorage oltre al token legacy"
+  ],
+  "safety": {
+    "token_raw_logs": false,
+    "provider_secrets": false,
+    "unexpected_token_loss": false,
+    "fake_PASS": false
+  }
+}

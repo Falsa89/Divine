@@ -3323,6 +3323,23 @@ OPTIONAL = [
     ('PROJECT-V102-AUTH-CONTEXT-UNIFICATION', 'validate_v102_auth_context_unification.py'),
     ('PROJECT-V102-DEVICE-RETEST-MATRIX', 'validate_v102_device_retest_matrix.py'),
     ('MEGA-RELEASE-ACCELERATION-51-v102-ROLLUP', 'validate_mega_release_acceleration_51_v102_rollup.py'),
+    # ========================================================================
+    # v103 - MEGA_RELEASE_ACCELERATION_52_SERVER_PROFILE_BACKEND_DATA_ISOLATION_AND_LOGOUT_RACE_FIX_PACK
+    # PUBLIC_SYNC_TAG_v103_MEGA_RELEASE_ACCELERATION_52_SERVER_PROFILE_BACKEND_DATA_ISOLATION_AND_LOGOUT_RACE_FIX
+    # PUBLIC_SYNC_SENTINEL_v103_PRESENT=YES
+    # P0 device QA bugfix: server names [QA] prefixed, banner QA/FALLBACK + isolation pending,
+    # endpoint /api/server-profiles/list read-only safe, logout race fix via v103_logout_in_progress flag,
+    # AuthContext bridge robust (clear v96 SecureStore esplicito).
+    # ========================================================================
+    ('PROJECT-V103-SERVER-PROFILE-BACKEND-AUDIT', 'validate_v103_server_profile_backend_audit.py'),
+    ('PROJECT-V103-SERVER-PROFILES-ENDPOINT', 'validate_v103_server_profiles_endpoint.py'),
+    ('PROJECT-V103-SERVER-NAMING-STATUS', 'validate_v103_server_naming_status.py'),
+    ('PROJECT-V103-SERVER-SELECTION-PERSISTENCE', 'validate_v103_server_selection_persistence.py'),
+    ('PROJECT-V103-SERVER-SCOPED-DATA-ISOLATION', 'validate_v103_server_scoped_data_isolation.py'),
+    ('PROJECT-V103-LOGOUT-RACE-FIX', 'validate_v103_logout_race_fix.py'),
+    ('PROJECT-V103-AUTH-CONTEXT-UNIFICATION', 'validate_v103_auth_context_unification.py'),
+    ('PROJECT-V103-DEVICE-RETEST-MATRIX', 'validate_v103_device_retest_matrix.py'),
+    ('MEGA-RELEASE-ACCELERATION-52-v103-ROLLUP', 'validate_mega_release_acceleration_52_v103_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

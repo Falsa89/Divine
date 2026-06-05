@@ -227,22 +227,31 @@ export default function MenuTab() {
         <TouchableOpacity
           style={s.logoutBtnOuter}
           onPress={async () => {
-            // v102 — Logout account: clear sessione legacy + selected server, poi /login.
+            // v103 — Logout race fix.
+            // Sequenza ordinata:
+            //  1. Set flag v103_logout_in_progress=true (index.tsx skip redirect).
+            //  2. Clear AsyncStorage selezione server + token legacy.
+            //  3. Clear v96 SecureStore (token + account).
+            //  4. Chiama legacy AuthContext.logout() per propagare lo stato React.
+            //  5. router.replace('/').
+            //  6. Il flag verra' auto-rimosso dopo 1.5s da index.tsx.
             try {
               const AS = (await import('@react-native-async-storage/async-storage')).default;
+              await AS.setItem('v103_logout_in_progress', 'true');
               await AS.removeItem('v101_selected_server_id');
               await AS.removeItem('v102_selected_server_name');
               await AS.removeItem('v102_selected_server_has_character');
+              await AS.removeItem('token'); // legacy token AsyncStorage
             } catch (_e) {}
-            try { await logout(); } catch (_e) {}
-            // v102 — Bridge logout: tenta anche il v96 SecureStore clear se disponibile.
+            // v103 — Clear v96 SecureStore esplicitamente.
             try {
-              const v96 = await import('../../src/auth/AuthContext');
-              // se l'app monta entrambi i provider, il v96 useAuth().logout sara' attivo
-              // qui non possiamo chiamare hooks fuori da component, ma il logout legacy
-              // gia' azzera token AsyncStorage. v96 clear avviene tramite proprio hook
-              // quando lo screen di login si rimonta. Marker presente per v102 bridge.
-              void v96;
+              const SecureStore = await import('expo-secure-store');
+              await SecureStore.deleteItemAsync('v96_auth_token');
+              await SecureStore.deleteItemAsync('v96_auth_account');
+            } catch (_e) {}
+            // v103 — Chiama legacy logout per pulire stato React legacy.
+            try {
+              await logout();
             } catch (_e) {}
             router.replace('/');
           }}

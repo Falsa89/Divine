@@ -54,11 +54,14 @@ const BACKEND_URL =
   (Constants?.expoConfig?.extra as any)?.backendUrl ||
   '';
 
-// SERVER PROFILE FALLBACK — dichiarato. Lista safe locale senza dati reali utente.
+// SERVER PROFILE FALLBACK — dichiarato. Lista safe locale, marcata [QA] esplicito.
+// I server NON sono di produzione. has_character=false ovunque perche'
+// la server data isolation reale (account/inventory/team per server_id)
+// e' PENDING (deferred a v104+).
 const FALLBACK_SERVERS: ServerProfile[] = [
   {
-    server_id: 'eu-01',
-    server_name: 'Aurora · EU-01',
+    server_id: 'qa-eu-01',
+    server_name: '[QA] Aurora · EU-01',
     region: 'EU',
     status: 'online',
     recommended: true,
@@ -68,32 +71,32 @@ const FALLBACK_SERVERS: ServerProfile[] = [
     is_new: true,
   },
   {
-    server_id: 'eu-02',
-    server_name: 'Crepuscolo · EU-02',
+    server_id: 'qa-eu-02',
+    server_name: '[QA] Crepuscolo · EU-02',
     region: 'EU',
     status: 'online',
     has_character: false,
     can_enter: true,
   },
   {
-    server_id: 'na-01',
-    server_name: 'Eclissi · NA-01',
+    server_id: 'qa-na-01',
+    server_name: '[QA] Eclissi · NA-01',
     region: 'NA',
     status: 'busy',
     has_character: false,
     can_enter: true,
   },
   {
-    server_id: 'asia-01',
-    server_name: 'Alba · ASIA-01',
+    server_id: 'qa-asia-01',
+    server_name: '[QA] Alba · ASIA-01',
     region: 'ASIA',
     status: 'online',
     has_character: false,
     can_enter: true,
   },
   {
-    server_id: 'eu-99',
-    server_name: 'Nebbia · EU-99 (Manutenzione)',
+    server_id: 'qa-eu-99',
+    server_name: '[QA] Nebbia · EU-99 (Manutenzione)',
     region: 'EU',
     status: 'maintenance',
     has_character: false,
@@ -303,8 +306,12 @@ export default function ServerSelectScreen() {
         {isFallback ? (
           <View style={styles.fallbackBanner}>
             <Text style={styles.fallbackTxt}>
-              {'\u26A0\uFE0F'} SERVER PROFILE FALLBACK \u00b7 lista server locale (backend live non
-              disponibile)
+              {'\u26A0\uFE0F'} LISTA SERVER QA/FALLBACK \u00b7 DATI NON DI PRODUZIONE
+            </Text>
+            <Text style={styles.fallbackSubTxt}>
+              Server isolation backend (per_server_id account/inventory/team) PENDING. Tutti i
+              server caricheranno lo stesso account corrente finch\u00e9 v104+ non implementa lo
+              shard reale.
             </Text>
           </View>
         ) : null}
@@ -364,7 +371,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 16,
   },
-  fallbackTxt: { color: '#F4B854', fontSize: 11, fontWeight: '700' },
+  fallbackTxt: { color: '#F4B854', fontSize: 11, fontWeight: '800' },
+  fallbackSubTxt: { color: '#F4B854', fontSize: 10, marginTop: 4, opacity: 0.85 },
   sectionTitle: {
     color: COLORS.accent,
     fontSize: 12,

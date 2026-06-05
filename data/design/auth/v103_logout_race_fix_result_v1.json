@@ -1,0 +1,46 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "logout_race_fix_result",
+  "version": 1,
+  "language": "italian",
+  "bug_pre_v103": "LOGOUT ACCOUNT route a /login ma rimbalza brevemente in /servers o /(tabs)/home prima di restare a /login. Su kill+restart resta a /login. Root cause: useEffect in index.tsx ridirige basandosi su user truthy in closure stale prima che logout state propaghi.",
+  "root_cause_taxonomy": [
+    "index.tsx useEffect race su [loading, user] changes",
+    "v96 SecureStore non clearato da menu logout (rimaneva sessione)",
+    "order of operations: logout React state vs router.replace vs AsyncStorage clear"
+  ],
+  "fix_applied": {
+    "flag_key": "v103_logout_in_progress",
+    "flag_set_on": "menu.tsx LOGOUT ACCOUNT button press (sync 1st operation)",
+    "flag_checked_on": "frontend/app/index.tsx useEffect (before any router.replace)",
+    "flag_auto_cleared": "setTimeout 1500ms after detection in index.tsx",
+    "v96_securestore_explicit_clear": true,
+    "v96_keys_cleared": ["v96_auth_token", "v96_auth_account"],
+    "legacy_keys_cleared": ["token", "v101_selected_server_id", "v102_selected_server_name", "v102_selected_server_has_character"],
+    "legacy_logout_called": true,
+    "final_route": "router.replace('/')"
+  },
+  "sequence_diagram": [
+    "1. user tap LOGOUT ACCOUNT",
+    "2. AsyncStorage.setItem('v103_logout_in_progress','true')",
+    "3. AsyncStorage.removeItem('v101_selected_server_id' + v102_* + 'token')",
+    "4. SecureStore.deleteItemAsync('v96_auth_token' + 'v96_auth_account')",
+    "5. await logout() (legacy AuthContext clears user state)",
+    "6. router.replace('/')",
+    "7. index.tsx remount: useEffect vede user truthy ma flag attivo -> NO redirect",
+    "8. dopo 1500ms flag auto-clear; nel frattempo user e' diventato null per davvero",
+    "9. index.tsx mostra login form"
+  ],
+  "expected_behavior_post_v103": {
+    "logout_routes_to_login_immediately": true,
+    "no_bounce_back_to_servers": true,
+    "no_bounce_back_to_home": true,
+    "kill_restart_stays_on_login": true
+  },
+  "safety": {
+    "auth_session_deletion_outside_logout": false,
+    "token_raw_logs": false,
+    "unexpected_token_loss": false,
+    "fake_PASS": false
+  }
+}

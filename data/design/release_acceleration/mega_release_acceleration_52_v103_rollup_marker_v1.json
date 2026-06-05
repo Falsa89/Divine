@@ -1,0 +1,51 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "v103_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T17:12:06.744109Z",
+  "validators_total": 8,
+  "validators_pass": 8,
+  "results": [
+    {
+      "validator": "validate_v103_server_profile_backend_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 server profile backend audit (8 files, 5 actions)"
+    },
+    {
+      "validator": "validate_v103_server_profiles_endpoint.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 server profiles endpoint (read-only, qa_fallback, isolation_pending, 5 servers)"
+    },
+    {
+      "validator": "validate_v103_server_naming_status.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 server naming/status (5 servers all [QA] prefixed, banner visible)"
+    },
+    {
+      "validator": "validate_v103_server_selection_persistence.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 server selection persistence (4 keys, behavior matrix complete)"
+    },
+    {
+      "validator": "validate_v103_server_scoped_data_isolation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 server-scoped data isolation (DECLARED_PENDING honest, 7 loaders audited)"
+    },
+    {
+      "validator": "validate_v103_logout_race_fix.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 logout race fix (flag + SecureStore explicit clear, runtime verified)"
+    },
+    {
+      "validator": "validate_v103_auth_context_unification.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 auth context unification (strategy=BRIDGE_LOGOUT_ROBUST)"
+    },
+    {
+      "validator": "validate_v103_device_retest_matrix.py",
+      "exit_code": 0,
+      "last_line": "PASS — v103 device retest matrix (12 steps, manual QA required)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_52_SERVER_PROFILE_BACKEND_DATA_ISOLATION_AND_LOGOUT_RACE_FIX_READY_WITH_BACKEND_ISOLATION_PENDING_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

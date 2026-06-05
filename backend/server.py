@@ -485,6 +485,10 @@ app.include_router(items_router)
 from routes.server_profiles import router as server_profiles_router
 app.include_router(server_profiles_router)
 
+# v103 — Safe read-only /api/server-profiles/list endpoint (QA fallback dichiarato).
+from routes.v103_server_profiles import router as v103_server_profiles_router
+app.include_router(v103_server_profiles_router)
+
 # PROJECT_F Track B — Housing read-only preview route skeleton (DISABLED-BY-DEFAULT INERT).
 # Returns 503 when HOUSING_PREVIEW_ENABLED is unset/!=true. No DB writes, no live bonus,
 # no combat/account stat mutation. Upstream design: 127B / 128B (Project F Track B).

@@ -1,0 +1,40 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "server_profiles_endpoint_result",
+  "version": 1,
+  "language": "italian",
+  "endpoint": "GET /api/server-profiles/list",
+  "file": "backend/routes/v103_server_profiles.py",
+  "status": "READ_ONLY_LIVE_QA_FALLBACK",
+  "http_method": "GET",
+  "returns_200": true,
+  "returns_servers_count": 5,
+  "is_qa_fallback": true,
+  "is_production_data": false,
+  "backend_data_isolation_implemented": false,
+  "backend_data_isolation_note": "Server-scoped account/inventory/team isolation richiede schema DB multi-shard. DEFERRED a v104+. Per ora ogni selezione server condivide la stessa collezione users (account_id) ma la UI dichiara apertamente la natura QA.",
+  "payload_fields": [
+    "is_qa_fallback (boolean, true)",
+    "is_production_data (boolean, false)",
+    "backend_data_isolation_implemented (boolean, false)",
+    "backend_data_isolation_note (string)",
+    "generated_at_utc (ISO8601)",
+    "pack (string)",
+    "servers (array of ServerProfile)",
+    "safety (object)"
+  ],
+  "server_profile_fields": [
+    "server_id", "server_name", "region", "status", "recommended", "is_last_played", "has_character", "character_name", "character_level", "power", "can_enter", "is_new", "reason_if_locked"
+  ],
+  "sample_server_ids": ["qa-eu-01", "qa-eu-02", "qa-na-01", "qa-asia-01", "qa-eu-99"],
+  "all_server_names_qa_prefixed": true,
+  "safety": {
+    "read_only": true,
+    "no_db_writes": true,
+    "no_raw_token_logs": true,
+    "no_provider_secrets": true,
+    "fake_production_data": false,
+    "declared_qa_fallback": true,
+    "fake_PASS": false
+  }
+}

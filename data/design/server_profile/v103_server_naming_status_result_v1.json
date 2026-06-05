@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "server_naming_status_result",
+  "version": 1,
+  "language": "italian",
+  "all_fallback_names_prefixed_qa": true,
+  "prefix": "[QA] ",
+  "servers": [
+    {"server_id": "qa-eu-01", "server_name": "[QA] Aurora \u00b7 EU-01", "status": "online", "region": "EU", "recommended": true, "is_new": true},
+    {"server_id": "qa-eu-02", "server_name": "[QA] Crepuscolo \u00b7 EU-02", "status": "online", "region": "EU"},
+    {"server_id": "qa-na-01", "server_name": "[QA] Eclissi \u00b7 NA-01", "status": "busy", "region": "NA"},
+    {"server_id": "qa-asia-01", "server_name": "[QA] Alba \u00b7 ASIA-01", "status": "online", "region": "ASIA"},
+    {"server_id": "qa-eu-99", "server_name": "[QA] Nebbia \u00b7 EU-99 (Manutenzione)", "status": "maintenance", "region": "EU", "can_enter": false}
+  ],
+  "ui_banner_visible": true,
+  "ui_banner_text_line1": "\u26A0\uFE0F LISTA SERVER QA/FALLBACK \u00b7 DATI NON DI PRODUZIONE",
+  "ui_banner_text_line2": "Server isolation backend (per_server_id account/inventory/team) PENDING. Tutti i server caricheranno lo stesso account corrente finch\u00e9 v104+ non implementa lo shard reale.",
+  "status_taxonomy": ["online", "busy", "full", "maintenance", "locked"],
+  "misleading_names_present": false,
+  "fake_full_or_recommended_to_attract_clicks": false,
+  "safety": {
+    "fake_production_server_data": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

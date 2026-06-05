@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "device_retest_matrix",
+  "version": 1,
+  "language": "italian",
+  "target_device": "iPhone 13 / Expo Go",
+  "matrix": [
+    {"step": 1, "action": "App start senza session", "expected": "/login"},
+    {"step": 2, "action": "Login valido", "expected": "/servers con banner 'LISTA SERVER QA/FALLBACK \u00b7 DATI NON DI PRODUZIONE' + 5 server [QA] prefixed"},
+    {"step": 3, "action": "Tap ENTRA su [QA] Aurora EU-01", "expected": "route a /(tabs)/home"},
+    {"step": 4, "action": "Verifica Home: account/eroi/inventario mostrano dati account (NON server-scoped - questo e' attesto in v103, declared pending)", "expected": "home renderizza, banner isolation pending visibile in /servers ma la home pu\u00f2 mostrare account_id condiviso"},
+    {"step": 5, "action": "Tab Menu -> CAMBIA SERVER", "expected": "route a /servers (no logout)"},
+    {"step": 6, "action": "Tap ENTRA su [QA] Crepuscolo EU-02", "expected": "route a /(tabs)/home (sovrascrive v101_selected_server_id)"},
+    {"step": 7, "action": "Tab Menu -> LOGOUT ACCOUNT", "expected": "route DIRETTO a /login (no bounce a /servers, no bounce a /home). E' il P0 fix v103."},
+    {"step": 8, "action": "Login di nuovo", "expected": "/servers (no auto-skip a home, perche' v101_selected_server_id e' stato cancellato)"},
+    {"step": 9, "action": "Kill app + restart", "expected": "/login (no auto-home)"},
+    {"step": 10, "action": "Tap ENTRA su [QA] Nebbia EU-99 manutenzione", "expected": "pulsante disabled, label 'Non disponibile'"},
+    {"step": 11, "action": "Verifica safe area iPhone 13 notch + Dynamic Island", "expected": "SafeAreaView rispettato"},
+    {"step": 12, "action": "Verifica backend /api/server-profiles/list raggiungibile da app", "expected": "DevTools network: GET 200 con 5 servers + is_qa_fallback=true; banner pu\u00f2 sparire se UI legge correttamente backend invece di fallback locale"}
+  ],
+  "acceptance": {
+    "min_steps_pass_required": 10,
+    "critical_steps": [2, 3, 5, 7, 9, 12]
+  },
+  "manual_qa_required": true,
+  "manual_qa_executed": false,
+  "reason_not_executed": "Container Emergent non ha device iPhone 13 fisico. Matrix consegnato come checklist QA utente.",
+  "safety": {
+    "fake_mobile_qa": false,
+    "fake_PASS": false
+  }
+}

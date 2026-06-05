@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_52_v103",
+  "type": "server_scoped_data_isolation_result",
+  "version": 1,
+  "language": "italian",
+  "backend_isolation_implemented": false,
+  "status": "DECLARED_PENDING",
+  "reason": "Server-scoped account/inventory/team/roster isolation richiede schema DB multi-shard (account_id + server_id composite key). Implementazione DEFERRED a v104+. v103 NON finge isolamento: dichiara apertamente che ogni selezione server condivide la stessa collezione users.",
+  "loaders_audited": [
+    "frontend/app/(tabs)/home.tsx - non legge selected_server_id (carica account corrente univoco)",
+    "frontend/app/(tabs)/inventory.tsx - non legge selected_server_id",
+    "frontend/app/(tabs)/character.tsx - non legge selected_server_id",
+    "frontend/app/(tabs)/menu.tsx - non legge selected_server_id",
+    "backend /api/auth/me - account scope unico (no server_id key)",
+    "backend /api/inventory/me - account scope unico",
+    "backend /api/formation/me - account scope unico"
+  ],
+  "per_server_data_implementations_required_v104": [
+    "DB schema: collections con composite key (account_id, server_id)",
+    "backend: tutti gli endpoint /api/*/me prendono ?server_id= o leggono v101_selected_server_id dal token",
+    "frontend: tutti gli home loader passano server_id",
+    "migration script: per ogni utente esistente, replicare row per ogni server eletto (no auto-grant)"
+  ],
+  "ui_declares_isolation_pending": true,
+  "ui_banner_position": "frontend/app/servers.tsx fallback banner (visibile quando is_fallback=true)",
+  "fake_per_server_profile_data": false,
+  "safety": {
+    "fake_different_per_server_profiles": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "db_destructive_writes": false
+  }
+}
