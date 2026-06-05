@@ -279,7 +279,7 @@ feat(v98): closed alpha rampup and bot runtime superpack
 
 ### 17a. Commit hash
 
-<<commit_hash_da_popolare_dopo_git_commit>>
+`6f5abf60` (`master`) — `feat(v98): closed alpha rampup and bot runtime superpack`
 
 ---
 
