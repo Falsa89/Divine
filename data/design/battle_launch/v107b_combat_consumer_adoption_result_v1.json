@@ -1,0 +1,15 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_57_v107B",
+  "type":"v107b_combat_consumer_adoption_result",
+  "version":1,
+  "language":"it",
+  "status":"PARSER_HELPER_INTRODUCED_COMBAT_TSX_UNCHANGED",
+  "parser_module":"frontend/src/battle_launch/consumers/combatLaunchParser.ts",
+  "parser_exports":["readLaunchContextFromRouterParams","readLaunchContextFromPostResponse","CombatLaunchEnvelope"],
+  "parser_behavior":"pure helper that parses + validates BattleLaunchContractV1 from router params or POST echo. Returns CombatLaunchEnvelope. No side effects.",
+  "combat_tsx_modified":false,
+  "combat_tsx_behavior_rewritten":false,
+  "is_preview_default":true,
+  "future_integration_pack":"v107C: non-destructive combat.tsx adoption (optional consumer hook)",
+  "safety":{"combat_tsx_changes":false,"battle_engine_runtime_changes":false,"fake_PASS":false,"validator_weakening":false}
+}

@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-05T18:41:37.130471+00:00",
+  "timestamp_utc": "2026-06-05T18:52:08.808881+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1679,
+  "backend_python_files_scanned": 1690,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 840,
+      "files_with_hits": 843,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -381,7 +381,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 141,
+      "files_with_hits": 143,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -689,7 +689,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 167,
+      "files_with_hits": 168,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -1029,7 +1029,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 162,
+      "files_with_hits": 163,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",

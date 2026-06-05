@@ -1,0 +1,16 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_57_v107B",
+  "type":"v107b_pre_battle_lobby_adoption_result",
+  "version":1,
+  "language":"it",
+  "status":"ADAPTER_HELPER_INTRODUCED_TSX_INTEGRATION_DEFERRED",
+  "adapter_module":"frontend/src/battle_launch/consumers/preBattleLobbyAdapter.ts",
+  "adapter_exports":["launchFromLobby","LobbyLaunchInput","LobbyLaunchResult"],
+  "adapter_behavior":"builds BattleLaunchContractV1 via buildLaunchContext, calls POST /api/battle/launch, returns preview echo + validation errors. No state mutation.",
+  "why_tsx_not_modified":"Forbidden scope vieta 'broad combat.tsx rewrite' e pre-battle-lobby.tsx attualmente serve flussi preview multipli che richiederebbero refactor sostanziale. v107B introduce solo l'adapter helper riusabile; il binding visivo della lobby è pianificato v107C.",
+  "reward_policy_default":"preview",
+  "progress_policy_default":"preview",
+  "battle_engine_mode_default":"preview",
+  "backend_endpoint":"POST /api/battle/launch",
+  "safety":{"new_player_facing_feature":false,"combat_tsx_changes":false,"reward_grant":false,"progress_live_write":false,"fake_PASS":false,"validator_weakening":false}
+}

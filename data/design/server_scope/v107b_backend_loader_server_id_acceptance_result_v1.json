@@ -1,0 +1,28 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_57_v107B",
+  "type":"v107b_backend_loader_server_id_acceptance_result",
+  "version":1,
+  "language":"it",
+  "feature_flag":"SERVER_SCOPED_RUNTIME_ENABLED",
+  "feature_flag_default":false,
+  "adoption_status":"REAL_ACCEPTANCE_ON_BATTLE_LAUNCH_ENDPOINT_OTHERS_CONTRACT_ONLY",
+  "endpoints_accepting_server_id_today":[
+    {"endpoint":"POST /api/battle/launch","accepts_server_id":true,"enforces_filtering":false,"used_for":["echo","audit_trail"],"verified_via_smoke":true}
+  ],
+  "endpoints_target_v107c_v108":[
+    {"endpoint":"GET /api/user/heroes","adoption_pack":"v107C"},
+    {"endpoint":"GET /api/team/get-formation","adoption_pack":"v107C"},
+    {"endpoint":"GET /api/inventory","adoption_pack":"v107C"},
+    {"endpoint":"GET /api/currencies","adoption_pack":"v107C"},
+    {"endpoint":"GET /api/story/progress","adoption_pack":"v107C"},
+    {"endpoint":"GET /api/tower/progress","adoption_pack":"v108"},
+    {"endpoint":"GET /api/arena/profile","adoption_pack":"v108"},
+    {"endpoint":"GET /api/guild/membership","adoption_pack":"v109"},
+    {"endpoint":"GET /api/chat/messages","adoption_pack":"v109"}
+  ],
+  "backend_isolation_live":false,
+  "backend_claims_isolation_live":false,
+  "banner_obligation_active":true,
+  "banner_token":"SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "safety":{"db_writes_performed":0,"loader_endpoints_modified_v107b":0,"fake_isolation_live":false,"fake_PASS":false,"validator_weakening":false}
+}

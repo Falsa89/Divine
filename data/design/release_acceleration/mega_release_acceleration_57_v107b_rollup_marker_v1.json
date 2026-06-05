@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_57_v107B",
+  "type": "v107b_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T18:51:31.897761Z",
+  "validators_total": 9,
+  "validators_pass": 9,
+  "results": [
+    {
+      "validator": "validate_v107b_v107a_baseline_snapshot.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B v107A baseline snapshot (11 artifacts verified)"
+    },
+    {
+      "validator": "validate_v107b_pre_battle_lobby_adoption.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B pre-battle-lobby adoption (adapter introduced, preview defaults)"
+    },
+    {
+      "validator": "validate_v107b_combat_consumer_adoption.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B combat consumer adoption (parser helper, combat.tsx unchanged)"
+    },
+    {
+      "validator": "validate_v107b_story_to_lobby_routing.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B story-to-lobby routing (plan documented, no code change)"
+    },
+    {
+      "validator": "validate_v107b_backend_loader_server_id_acceptance.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B backend loader server_id acceptance (1 live, others contract-only)"
+    },
+    {
+      "validator": "validate_v107b_frontend_loader_server_id_propagation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B frontend loader server_id propagation (helper+adapters present)"
+    },
+    {
+      "validator": "validate_v107b_battle_launch_smoke.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B battle launch smoke (3/3 preview echo)"
+    },
+    {
+      "validator": "validate_v107b_story_autoresolve_guard.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B story auto-resolve guard (helpers DONE, runtime unchanged)"
+    },
+    {
+      "validator": "validate_v107b_route_exposure_safety.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107B route exposure safety (0 new player-facing routes)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_57_BATTLE_LAUNCH_CONTRACT_ADOPTION_FRONTEND_CONSUMERS_AND_LOADER_SERVER_ID_ACCEPTANCE_READY_WITH_PARTIAL_ADOPTION_GAPS_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

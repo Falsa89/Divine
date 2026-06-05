@@ -1,0 +1,24 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_57_v107B",
+  "type":"v107b_story_to_lobby_routing_result",
+  "version":1,
+  "language":"it",
+  "status":"ROUTING_PLAN_DOCUMENTED_NO_CODE_CHANGE_v107B",
+  "current_state":{
+    "story_tsx_uses_auto_resolve":true,
+    "story_tsx_modified_v107b":false,
+    "story_calls_battle_launch_endpoint":false
+  },
+  "target_flow":[
+    "Story screen builds contract via buildLaunchContext (helper available)",
+    "Story → pre-battle-lobby with launch_context in params",
+    "Lobby invokes launchFromLobby() (preBattleLobbyAdapter)",
+    "POST /api/battle/launch returns PREVIEW_ECHO_NON_AUTHORITATIVE",
+    "Lobby routes to combat.tsx with echo payload",
+    "Combat parses via readLaunchContextFromPostResponse() (combatLaunchParser)",
+    "Render preview battle; NO reward, NO progress write"
+  ],
+  "deferred_to":"v107C",
+  "reason_deferred":"v107B guardrail vieta 'broad combat.tsx rewrite' e 'new player-facing feature'. Routing tsx change è minor ma rischio MD5 baseline su file multipli. Helper + adapter sono pronti per consumo immediato in v107C.",
+  "safety":{"reward_granted":false,"progress_written":false,"story_tsx_modified_v107b":false,"battle_engine_modified":false,"fake_PASS":false,"validator_weakening":false}
+}

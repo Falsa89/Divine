@@ -1,0 +1,113 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_57_v107B",
+  "type": "v107b_battle_launch_smoke_result",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T18:48:29.615257Z",
+  "url": "http://localhost:8001/api/battle/launch",
+  "cases_total": 3,
+  "cases_pass": 3,
+  "overall_pass": true,
+  "results": [
+    {
+      "case": "story_preview_default",
+      "request_payload": {
+        "server_id": "s1",
+        "mode": "story",
+        "encounter_id": "ch1_n1",
+        "enemy_source_type": "authored",
+        "enemy_source_id": "goblin_pack_1",
+        "reward_policy": "preview",
+        "progress_policy": "preview",
+        "battle_engine_mode": "preview"
+      },
+      "response_status_code": 200,
+      "response_status_string": "PREVIEW_ECHO_NON_AUTHORITATIVE",
+      "coercions_applied": [],
+      "feature_flags": {
+        "BATTLE_LAUNCH_AUTHORITATIVE_ENABLED": false,
+        "REWARD_LIVE_ENABLED": false,
+        "PROGRESS_LIVE_ENABLED": false,
+        "SERVER_SCOPED_RUNTIME_ENABLED": false
+      },
+      "safety": {
+        "db_writes_performed": 0,
+        "reward_granted": false,
+        "progress_written": false,
+        "currency_mutated": false
+      },
+      "pass": true
+    },
+    {
+      "case": "live_attempt_with_idempotency_coerced_to_preview",
+      "request_payload": {
+        "server_id": "s1",
+        "mode": "arena",
+        "encounter_id": "arena_match_1",
+        "enemy_source_type": "bot_team",
+        "enemy_source_id": "bot_archetype_f2p_base_001",
+        "reward_policy": "live",
+        "progress_policy": "live",
+        "battle_engine_mode": "authoritative",
+        "idempotency_key": "smoke-v107b-001"
+      },
+      "response_status_code": 200,
+      "response_status_string": "PREVIEW_ECHO_NON_AUTHORITATIVE",
+      "coercions_applied": [
+        "reward_policy_coerced_to_preview_flag_off",
+        "progress_policy_coerced_to_preview_flag_off",
+        "battle_engine_mode_coerced_to_preview_flag_off"
+      ],
+      "feature_flags": {
+        "BATTLE_LAUNCH_AUTHORITATIVE_ENABLED": false,
+        "REWARD_LIVE_ENABLED": false,
+        "PROGRESS_LIVE_ENABLED": false,
+        "SERVER_SCOPED_RUNTIME_ENABLED": false
+      },
+      "safety": {
+        "db_writes_performed": 0,
+        "reward_granted": false,
+        "progress_written": false,
+        "currency_mutated": false
+      },
+      "pass": true
+    },
+    {
+      "case": "live_without_idempotency_should_400_after_coercion_drops_below_live",
+      "request_payload": {
+        "server_id": "s1",
+        "mode": "tower",
+        "encounter_id": "tower_floor_3",
+        "enemy_source_type": "authored",
+        "enemy_source_id": "tower_floor_3_team",
+        "reward_policy": "preview",
+        "progress_policy": "preview",
+        "battle_engine_mode": "preview"
+      },
+      "response_status_code": 200,
+      "response_status_string": "PREVIEW_ECHO_NON_AUTHORITATIVE",
+      "coercions_applied": [],
+      "feature_flags": {
+        "BATTLE_LAUNCH_AUTHORITATIVE_ENABLED": false,
+        "REWARD_LIVE_ENABLED": false,
+        "PROGRESS_LIVE_ENABLED": false,
+        "SERVER_SCOPED_RUNTIME_ENABLED": false
+      },
+      "safety": {
+        "db_writes_performed": 0,
+        "reward_granted": false,
+        "progress_written": false,
+        "currency_mutated": false
+      },
+      "pass": true
+    }
+  ],
+  "safety": {
+    "no_db_writes": true,
+    "no_reward_grant": true,
+    "no_progress_write": true,
+    "no_currency_mutation": true,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "hiding_preview_state": false
+  }
+}

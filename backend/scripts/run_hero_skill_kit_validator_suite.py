@@ -3424,6 +3424,25 @@ OPTIONAL = [
     ('PROJECT-V107A-ENCOUNTER-SOURCE-ADAPTER-CONTRACT', 'validate_v107a_encounter_source_adapter_contract.py'),
     ('PROJECT-V107A-IDEMPOTENCY-REWARD-PROGRESS-GUARD', 'validate_v107a_idempotency_reward_progress_guard.py'),
     ('MEGA-RELEASE-ACCELERATION-56-v107A-ROLLUP', 'validate_mega_release_acceleration_56_v107a_rollup.py'),
+    # ========================================================================
+    # v107B - MEGA_RELEASE_ACCELERATION_57_BATTLE_LAUNCH_CONTRACT_ADOPTION_FRONTEND_CONSUMERS_AND_LOADER_SERVER_ID_ACCEPTANCE
+    # PUBLIC_SYNC_TAG_v107B_MEGA_RELEASE_ACCELERATION_57_BATTLE_LAUNCH_CONTRACT_ADOPTION_FRONTEND_CONSUMERS_AND_LOADER_SERVER_ID_ACCEPTANCE
+    # PUBLIC_SYNC_SENTINEL_v107B_PRESENT=YES
+    # P0 adoption pack. Pre-battle-lobby adapter + combat parser helper introduced
+    # as pure non-destructive helpers (no tsx rewrite). Real smoke 3/3 PASS on
+    # POST /api/battle/launch with live->preview coercion. tsx integration deferred
+    # to v107C. All flags still default OFF. NO PSP apply, NO DB writes, NO rewards.
+    # ========================================================================
+    ('PROJECT-V107B-V107A-BASELINE-SNAPSHOT', 'validate_v107b_v107a_baseline_snapshot.py'),
+    ('PROJECT-V107B-PRE-BATTLE-LOBBY-ADOPTION', 'validate_v107b_pre_battle_lobby_adoption.py'),
+    ('PROJECT-V107B-COMBAT-CONSUMER-ADOPTION', 'validate_v107b_combat_consumer_adoption.py'),
+    ('PROJECT-V107B-STORY-TO-LOBBY-ROUTING', 'validate_v107b_story_to_lobby_routing.py'),
+    ('PROJECT-V107B-BACKEND-LOADER-SERVER-ID-ACCEPTANCE', 'validate_v107b_backend_loader_server_id_acceptance.py'),
+    ('PROJECT-V107B-FRONTEND-LOADER-SERVER-ID-PROPAGATION', 'validate_v107b_frontend_loader_server_id_propagation.py'),
+    ('PROJECT-V107B-BATTLE-LAUNCH-SMOKE', 'validate_v107b_battle_launch_smoke.py'),
+    ('PROJECT-V107B-STORY-AUTORESOLVE-GUARD', 'validate_v107b_story_autoresolve_guard.py'),
+    ('PROJECT-V107B-ROUTE-EXPOSURE-SAFETY', 'validate_v107b_route_exposure_safety.py'),
+    ('MEGA-RELEASE-ACCELERATION-57-v107B-ROLLUP', 'validate_mega_release_acceleration_57_v107b_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

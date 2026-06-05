@@ -1,0 +1,25 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_57_v107B",
+  "type":"v107b_story_autoresolve_guard_result",
+  "version":1,
+  "language":"it",
+  "current_state":{
+    "story_battle_endpoint_active":true,
+    "story_tsx_uses_auto_resolve":true,
+    "reward_granted_directly_on_story_battle":true
+  },
+  "guard_in_place":{
+    "v107a_contract_only":true,
+    "v107b_adapter_helpers_introduced":true,
+    "v107b_no_runtime_change_to_story_battle":true,
+    "future_deprecation_marker_at":"v108_post"
+  },
+  "deprecation_phases_progress":{
+    "v107A_contract_only":"DONE",
+    "v107B_adapter_helpers":"DONE",
+    "v107C_frontend_consumer_binding":"PENDING",
+    "v108_authoritative_engine":"PENDING",
+    "v108_post_endpoint_410_or_redirect":"PENDING"
+  },
+  "safety":{"reward_granted":false,"progress_written":false,"story_battle_endpoint_modified_v107b":false,"story_tsx_modified_v107b":false,"fake_PASS":false,"validator_weakening":false}
+}
