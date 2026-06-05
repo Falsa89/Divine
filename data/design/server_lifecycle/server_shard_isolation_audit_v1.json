@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-04T23:42:16.143511+00:00",
+  "timestamp_utc": "2026-06-05T00:07:56.559494+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1561,
+  "backend_python_files_scanned": 1579,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 771,
+      "files_with_hits": 783,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -141,11 +141,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 136
+      "user_id_only_files_count": 138
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 154,
+      "files_with_hits": 156,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -274,15 +274,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 555,
+              "line": 565,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 562,
+              "line": 572,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 579,
+              "line": 589,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 120,
+      "files_with_hits": 121,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -370,15 +370,15 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 574,
+              "line": 584,
               "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
             },
             {
-              "line": 578,
+              "line": 588,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 579,
+              "line": 589,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -494,7 +494,7 @@
           "has_user_id_only_without_server_id": true,
           "sample_lines": [
             {
-              "line": 870,
+              "line": 880,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
             }
           ]
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 143,
+      "files_with_hits": 147,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -793,7 +793,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 20
+      "user_id_only_files_count": 21
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -901,7 +901,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 155,
+      "files_with_hits": 157,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -914,11 +914,11 @@
               "snippet": "\"guild_id\": None,"
             },
             {
-              "line": 611,
+              "line": 621,
               "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
             },
             {
-              "line": 613,
+              "line": 623,
               "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
@@ -1025,7 +1025,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 144,
+      "files_with_hits": 147,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1125,7 +1125,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 4
+      "user_id_only_files_count": 5
     },
     "affinity": {
       "expected_scope": "server_bound",
@@ -1564,7 +1564,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 418,
+  "cross_server_leak_risk_candidates_count": 422,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1633,6 +1633,11 @@
     },
     {
       "category": "accounts_users_auth",
+      "file": "backend/routes/v98_admin_and_gdpr.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
       "file": "backend/routes/artifacts.py",
       "keyword": "user"
     },
@@ -1659,11 +1664,6 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/v96_auth.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/routes/heroes.py",
       "keyword": "user"
     }
   ],

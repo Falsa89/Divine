@@ -3234,6 +3234,28 @@ OPTIONAL = [
     ('PROJECT-V97-SERVER-ACTOR-ADMIN-CONTROLS', 'validate_v97_server_actor_admin_controls.py'),
     ('PROJECT-V97-INTERNAL-ALPHA-GATE', 'validate_v97_internal_alpha_gate.py'),
     ('MEGA-RELEASE-ACCELERATION-46-v97-ROLLUP', 'validate_mega_release_acceleration_46_v97_rollup.py'),
+    # ========================================================================
+    # v98 - MEGA_RELEASE_ACCELERATION_47_CLOSED_ALPHA_RAMPUP_AND_BOT_RUNTIME_SUPERPACK
+    # PUBLIC_SYNC_TAG_v98_MEGA_RELEASE_ACCELERATION_47_CLOSED_ALPHA_RAMPUP_AND_BOT_RUNTIME_SUPERPACK
+    # PUBLIC_SYNC_SENTINEL_v98_PRESENT=YES
+    # Strategia: 0 REQUIRED FAIL, optional fail legacy NON mascherati.
+    # Provider Google/Apple: CREDENTIALS_REQUIRED_FOR_STORE_BUILD (non production-ready id_token verify).
+    # Physical mobile QA: MANUAL_QA_REQUIRED. Full locust: FULL_LOAD_REQUIRED.
+    # ========================================================================
+    ('PROJECT-V98-SERVER-ACTOR-RUNTIME-PERSISTENCE', 'validate_v98_server_actor_runtime_persistence.py'),
+    ('PROJECT-V98-BOT-PROGRESSION-RUNTIME', 'validate_v98_bot_progression_runtime.py'),
+    ('PROJECT-V98-BOT-LIVE-EVENT-RUNTIME', 'validate_v98_bot_live_event_runtime.py'),
+    ('PROJECT-V98-BOT-CHAT-RUNTIME-CLASSIFIER', 'validate_v98_bot_chat_runtime_classifier.py'),
+    ('PROJECT-V98-SERVER-ACTOR-ADMIN-CONTROLS', 'validate_v98_server_actor_admin_controls.py'),
+    ('PROJECT-V98-GDPR-DATA-EXPORT-HARD-DELETE', 'validate_v98_gdpr_data_export_hard_delete.py'),
+    ('PROJECT-V98-PROVIDER-ID-TOKEN-VERIFY', 'validate_v98_provider_id_token_verify.py'),
+    ('PROJECT-V98-MULTI-PROVIDER-LINKING', 'validate_v98_multi_provider_linking.py'),
+    ('PROJECT-V98-LIVE-PRIVACY-TERMS-URLS', 'validate_v98_live_privacy_terms_urls.py'),
+    ('PROJECT-V98-FULL-LOAD-LOCUST', 'validate_v98_full_load_locust.py'),
+    ('PROJECT-V98-PHYSICAL-MOBILE-QA', 'validate_v98_physical_mobile_qa.py'),
+    ('PROJECT-V98-OPTIONAL-FAIL-CLEANUP', 'validate_v98_optional_fail_cleanup.py'),
+    ('PROJECT-V98-CLOSED-ALPHA-GATE', 'validate_v98_closed_alpha_gate.py'),
+    ('MEGA-RELEASE-ACCELERATION-47-v98-ROLLUP', 'validate_mega_release_acceleration_47_v98_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
