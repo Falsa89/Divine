@@ -6,20 +6,30 @@
   "authority": "Approval chain v95+v96+v97+v98+v99 autorizzata",
   "files": {
     "backend/battle_engine.py": {
-      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "current_md5": "1ac058bc5c3515bb76187d1c0061df49",
       "historical_references": [
+        {
+          "md5": "56b6e5261c3b35c421db3202f750d1a6",
+          "pack": "pre_v108_POSTQA_A",
+          "status": "superseded_by_v108_POSTQA_A"
+        },
         {
           "md5": "151ca35ad3bc35f0a6209cb3744ed440",
           "pack": "pre_v95_baseline",
           "status": "superseded_by_v95_RC_runtime_apply"
         }
       ],
-      "authorized_change_pack": "v95",
+      "authorized_change_pack": "v95 + v108_POSTQA_A",
       "change_type": "RC_runtime_apply_release_candidate_prep"
     },
     "backend/server.py": {
-      "current_md5": "6a10cd124664c74857e3683110a6909e",
+      "current_md5": "13e27312bb4f46ad3cf4d38d51e39148",
       "historical_references": [
+        {
+          "md5": "6a10cd124664c74857e3683110a6909e",
+          "pack": "pre_v108_POSTQA_A",
+          "status": "superseded_by_v108_POSTQA_A"
+        },
         {
           "md5": "badf6fc933dd25aaf68ba3bdb9bd316a",
           "pack": "v98_pre_v103_server_py",
@@ -36,43 +46,58 @@
           "status": "superseded_by_v107C_loader_server_id_probe_router_include"
         }
       ],
-      "authorized_change_pack": "v96_v98_v103_v107A_v107C",
+      "authorized_change_pack": "v96_v98_v103_v107A_v107C + v108_POSTQA_A",
       "change_type": "auth_account_routes + admin_gdpr_routes + v103_server_profiles_list_router + v107A_battle_launch_router + v107C_loader_server_id_probe_router"
     },
     "frontend/app/combat.tsx": {
-      "current_md5": "cc2ae7ff8dadf81dbd48eb4a5e1f5b4b",
+      "current_md5": "0f0677404535a1a19e98b110212b9742",
       "historical_references": [
+        {
+          "md5": "cc2ae7ff8dadf81dbd48eb4a5e1f5b4b",
+          "pack": "v108_pre",
+          "status": "superseded_by_v108_POSTQA_A_validator_reform_and_preview_reward_lock"
+        },
         {
           "md5": "fc792a05b2ada6e677d80400732ae5c3",
           "pack": "pre_v108_pre_baseline",
           "status": "superseded_by_v108_pre_battle_launch_contract_binding"
         }
       ],
-      "authorized_change_pack": "v108_pre",
+      "authorized_change_pack": "v108_POSTQA_A",
       "change_type": "battle_launch_contract_v1_router_params_binding + PREVIEW_NON_AUTHORITATIVE label + LEGACY_COMBAT_ENTRY fallback. Nessuna riscrittura del renderer, nessuna formula battle_engine modificata, nessuna chiamata reward live."
     },
     "frontend/app/story.tsx": {
-      "current_md5": "ea4d8ad171c45c39c53ada6be3677c49",
+      "current_md5": "6ce181dd4db0eac129e3d4cf0e2154a8",
       "historical_references": [
+        {
+          "md5": "ea4d8ad171c45c39c53ada6be3677c49",
+          "pack": "v108_pre",
+          "status": "superseded_by_v108_POSTQA_A_validator_reform_and_preview_reward_lock"
+        },
         {
           "md5": "8520627b4e63f86821d73d8d3880bac3",
           "pack": "pre_v108_pre_baseline",
           "status": "superseded_by_v108_pre_story_launch_path_binding"
         }
       ],
-      "authorized_change_pack": "v108_pre",
+      "authorized_change_pack": "v108_POSTQA_A",
       "change_type": "player_facing_avvia_battaglia_button + push verso /pre-battle-lobby con Battle Launch Contract v1 params + legacy auto-resolve etichettato 'QA Auto Resolve'. Nessun backend delete, nessun reward live, nessun progress write."
     },
     "frontend/app/pre-battle-lobby.tsx": {
-      "current_md5": "6e5c6c66883911d2e24befadbff8bc7d",
+      "current_md5": "a495baf478924c52eaac9dd22c4032e7",
       "historical_references": [
+        {
+          "md5": "6e5c6c66883911d2e24befadbff8bc7d",
+          "pack": "v108_pre",
+          "status": "superseded_by_v108_POSTQA_A_validator_reform_and_preview_reward_lock"
+        },
         {
           "md5": "e466aea925b3b70a588ceee27324904b",
           "pack": "v107D_post_v108_pre",
           "status": "superseded_by_v108_pre_story_params_compatibility"
         }
       ],
-      "authorized_change_pack": "v108_pre",
+      "authorized_change_pack": "v108_POSTQA_A",
       "change_type": "router params compatibility per encounter_id / enemy_source_id (oltre al legacy source_id). Nessun cambio al binding gated v107D, nessuna riscrittura del flow."
     }
   },

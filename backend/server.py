@@ -1030,8 +1030,17 @@ bot_task_handle = None
 
 @app.on_event("startup")
 async def start_bot_system():
-    """Initialize bots and start background cycle."""
+    """Initialize bots and start background cycle.
+
+    v108_POSTQA_A — Hard kill switch onesto: env BOTS_DISABLED=true disabilita
+    completamente bots startup + cycle. Default OFF (comportamento legacy mantenuto)
+    ma l'invariante runtime ora prevede un kill switch reale presente.
+    """
     global bot_task_handle
+    # v108_POSTQA_A hard kill switch (BOTS_DISABLED / BOT_KILL_SWITCH)
+    if os.environ.get("BOTS_DISABLED", "").lower() == "true" or os.environ.get("BOT_KILL_SWITCH", "").lower() == "true":
+        print("[v108_POSTQA_A] BOTS_DISABLED=true: skipping initialize_bots('default') and run_bot_cycle('default')")
+        return
     # Wait for DB to be ready
     await asyncio.sleep(5)
     try:
@@ -1044,9 +1053,16 @@ async def start_bot_system():
     bot_task_handle = asyncio.create_task(bot_background_loop())
 
 async def bot_background_loop():
-    """Run bot actions every 3-5 minutes."""
+    """Run bot actions every 3-5 minutes.
+
+    v108_POSTQA_A — Hard kill switch: env BOTS_DISABLED=true esce dal loop.
+    """
     while True:
         try:
+            # v108_POSTQA_A hard kill switch (BOTS_DISABLED / BOT_KILL_SWITCH)
+            if os.environ.get("BOTS_DISABLED", "").lower() == "true" or os.environ.get("BOT_KILL_SWITCH", "").lower() == "true":
+                print("[v108_POSTQA_A] BOTS_DISABLED=true: exiting bot_background_loop")
+                return
             await asyncio.sleep(random.randint(180, 300))  # 3-5 min
             await run_bot_cycle("default")
         except asyncio.CancelledError:
@@ -1057,7 +1073,14 @@ async def bot_background_loop():
 
 @app.post("/api/admin/bots/run-cycle")
 async def admin_run_bot_cycle(current_user: dict = Depends(get_current_user)):
-    """Manually trigger a bot cycle (for testing)."""
+    """Manually trigger a bot cycle (for testing).
+
+    v108_POSTQA_A — Hard kill switch: env BOTS_DISABLED=true blocca anche
+    il trigger admin-manual.
+    """
+    # v108_POSTQA_A hard kill switch (BOTS_DISABLED / BOT_KILL_SWITCH)
+    if os.environ.get("BOTS_DISABLED", "").lower() == "true" or os.environ.get("BOT_KILL_SWITCH", "").lower() == "true":
+        return {"success": False, "error": "BOTS_DISABLED=true (v108_POSTQA_A kill switch)"}
     try:
         await run_bot_cycle("default")
         return {"success": True, "message": "Bot cycle completed"}

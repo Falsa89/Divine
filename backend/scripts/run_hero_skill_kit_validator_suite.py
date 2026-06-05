@@ -599,11 +599,18 @@ import json
 import os
 import subprocess
 import sys
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-SCRIPTS_DIR = Path('/app/backend/scripts')
-SAFE_REPORT_DIRS = (Path('/app/backend/reports'), Path('/tmp'))
+# v108_POSTQA_A — Master suite relocatable foundation.
+# Default: directory dello script stesso (relativo, funziona anche fuori da /app).
+# Override opzionale tramite env DIVINE_VALIDATOR_SCRIPTS_DIR. NON e' obbligatorio.
+# v108_POSTQA_A_RELOCATABLE_DEFAULT_RELATIVE
+_DEFAULT_SCRIPTS_DIR = Path(__file__).resolve().parent
+_ENV_SCRIPTS_DIR = os.environ.get('DIVINE_VALIDATOR_SCRIPTS_DIR')
+SCRIPTS_DIR = Path(_ENV_SCRIPTS_DIR).resolve() if _ENV_SCRIPTS_DIR else _DEFAULT_SCRIPTS_DIR
+SAFE_REPORT_DIRS = (Path('/app/backend/reports'), Path('/tmp'), (SCRIPTS_DIR.parent / 'reports'))
 
 REQUIRED = [
     ('RM1.28-A', 'validate_5star_passive_advanced_source.py'),
@@ -3506,6 +3513,29 @@ OPTIONAL = [
     ('PROJECT-V108-PRE-ROUTE-MENU-EXPOSURE-SAFETY', 'validate_v108_pre_route_menu_exposure_safety.py'),
     ('PROJECT-V108-PRE-OPTIONAL-FAIL-VALIDATOR-INTEGRITY-GUARD', 'validate_v108_pre_optional_fail_validator_integrity_guard.py'),
     ('MEGA-RELEASE-ACCELERATION-60-v108-PRE-ROLLUP', 'validate_mega_release_acceleration_60_v108_pre_rollup.py'),
+
+    # v108_POSTQA_A - MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A
+    # PUBLIC_SYNC_TAG_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A
+    # PUBLIC_SYNC_SENTINEL_v108_POSTQA_A_PRESENT=YES
+    # Validator reform onesto: relocatable runner + 9 runtime-invariant validator
+    # che leggono il CODICE REALE e falliscono se preview branch chiama simulate
+    # o refresh user, se QA Auto Resolve e' player-facing, se lobby launcha con
+    # fallback team/enemy, se lobby va a combat senza launch_context, se simulate
+    # endpoint non blocca preview, se bot default startup ha kill switch, se
+    # watchlist mutation endpoints e' incompleta, se server scope false positive.
+    # Tutti i flag QA/preview restano OFF di default. NO PSP apply, NO legacy
+    # cleanup, NO DB write, NO reward, NO progress, NO formula rewrite.
+    ('PROJECT-V108-POSTQA-INVARIANT-SUITE-RELOCATABLE', 'validate_v108_postqa_invariant_suite_relocatable.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-PREVIEW-NO-SIMULATE', 'validate_v108_postqa_invariant_preview_no_simulate.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-PREVIEW-NO-REWARDS-AFFINITY', 'validate_v108_postqa_invariant_preview_no_rewards_affinity.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-STORY-NO-QA-AUTORESOLVE-PLAYER-FACING', 'validate_v108_postqa_invariant_story_no_qa_autoresolve_player_facing.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-LOBBY-NO-FAKE-TEAM-LAUNCH', 'validate_v108_postqa_invariant_lobby_no_fake_team_launch.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-LOBBY-LAUNCH-CONTEXT-TO-COMBAT', 'validate_v108_postqa_invariant_lobby_launch_context_to_combat.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-NO-GENERATE-ENEMY-PLAYER-FACING', 'validate_v108_postqa_invariant_no_generate_enemy_player_facing.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-NO-BOT-DEFAULT-STARTUP', 'validate_v108_postqa_invariant_no_bot_default_startup.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-MUTATION-ENDPOINT-WATCHLIST', 'validate_v108_postqa_invariant_mutation_endpoint_watchlist.py'),
+    ('PROJECT-V108-POSTQA-INVARIANT-SERVER-SCOPE-FALSE-POSITIVE', 'validate_v108_postqa_invariant_server_scope_false_positive.py'),
+    ('MEGA-RELEASE-ACCELERATION-61-v108-POSTQA-ROLLUP', 'validate_mega_release_acceleration_61_v108_postqa_rollup.py'),
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

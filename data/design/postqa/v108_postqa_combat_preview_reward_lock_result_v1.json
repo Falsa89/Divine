@@ -1,0 +1,34 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A",
+  "type": "combat_preview_reward_lock_result",
+  "version": 1,
+  "language": "italian",
+  "file": "frontend/app/combat.tsx",
+  "status": "PREVIEW_REWARD_LOCK_ACTIVE_LEGACY_COMBAT_ENTRY_MUTATING_LABELED",
+  "tokens_present": [
+    "isPreviewNonAuthoritative",
+    "PREVIEW_REWARD_LOCK_ACTIVE",
+    "LEGACY_COMBAT_ENTRY_MUTATING",
+    "v108_POSTQA_A"
+  ],
+  "preview_branches_locked": {
+    "start_battle_simulate_call": "GATED_OFF_WHEN_PREVIEW_REWARD_LOCK_ACTIVE",
+    "playlog_end_refresh_user": "GATED_OFF_WHEN_PREVIEW_REWARD_LOCK_ACTIVE",
+    "playlog_end_grant_affinity": "GATED_OFF_WHEN_PREVIEW_REWARD_LOCK_ACTIVE",
+    "skip_refresh_user": "GATED_OFF_WHEN_PREVIEW_REWARD_LOCK_ACTIVE",
+    "skip_grant_affinity": "GATED_OFF_WHEN_PREVIEW_REWARD_LOCK_ACTIVE"
+  },
+  "preview_locked_screen_visible": true,
+  "preview_locked_screen_shows_no_rewards": true,
+  "legacy_entry_banner_visible_when_no_launch_context": true,
+  "battle_engine_formula_rewrite": false,
+  "renderer_changed": false,
+  "safety": {
+    "reward_grant": false,
+    "progress_live_write": false,
+    "affinity_live_grant": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "hiding_preview_state": false
+  }
+}

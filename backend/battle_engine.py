@@ -11,7 +11,7 @@ import os
 import uuid
 from datetime import datetime
 from typing import List, Dict, Optional, Any
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from pydantic import BaseModel
 
 # ───────────────────────────────────────────────────────────────────────────
@@ -1142,8 +1142,33 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
         }
 
     @router.post("/battle/simulate")
-    async def simulate_battle_endpoint(current_user: dict = Depends(get_current_user)):
-        """Simulate a battle with the user's active team"""
+    async def simulate_battle_endpoint(request: Request, current_user: dict = Depends(get_current_user)):
+        """Simulate a battle with the user's active team.
+
+        v108_POSTQA_A — Preview guard: se il body contiene marker preview
+        (battle_engine_mode=preview, preview=true, reward_policy=preview,
+        progress_policy=preview), blocchiamo esplicitamente la chiamata con
+        HTTP 409 PREVIEW_SIMULATE_MUTATION_BLOCKED. Nessuna scrittura DB
+        nemmeno parziale. Nessuna formula battle modificata.
+        """
+        # v108_POSTQA_A — Preview guard.
+        try:
+            body = await request.json()
+        except Exception:
+            body = None
+        if isinstance(body, dict):
+            preview_markers = (
+                str(body.get('battle_engine_mode') or '').lower() == 'preview' or
+                bool(body.get('preview')) is True or
+                str(body.get('reward_policy') or '').lower() == 'preview' or
+                str(body.get('progress_policy') or '').lower() == 'preview'
+            )
+            if preview_markers:
+                raise HTTPException(status_code=409, detail={
+                    'code': 'PREVIEW_SIMULATE_MUTATION_BLOCKED',
+                    'message': 'v108_POSTQA_A preview guard: /api/battle/simulate non puo\' essere chiamato in modalita\' preview. Il battle engine legacy e\' mutante e concede reward/EXP/gold/drops live. Usa il preview flow non-authoritative lato client (PREVIEW_REWARD_LOCK_ACTIVE) oppure attendi v108 authoritative.',
+                    'pack': 'MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A',
+                })
         user_id = current_user['id']
         
         # Get active team

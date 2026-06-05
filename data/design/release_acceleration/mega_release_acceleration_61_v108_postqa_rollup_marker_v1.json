@@ -1,0 +1,62 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A",
+  "type": "v108_postqa_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T23:13:17.941306Z",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A",
+  "validators_total": 10,
+  "validators_pass": 10,
+  "results": [
+    {
+      "validator": "validate_v108_postqa_invariant_suite_relocatable.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: master suite runner is relocatable (default relative)"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_preview_no_simulate.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: preview branch does NOT call /api/battle/simulate"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_preview_no_rewards_affinity.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: preview branch does NOT call refreshUser()/grantAffinity()"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_story_no_qa_autoresolve_player_facing.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: QA Auto Resolve hidden behind EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_lobby_no_fake_team_launch.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: lobby blocks launch with fallback team/enemy"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_lobby_launch_context_to_combat.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: lobby->/combat carries launch_context/battle_launch_id"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_no_generate_enemy_player_facing.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: no player-facing generate_enemy_team without gate; preview guard present"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_no_bot_default_startup.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: no unguarded bot default startup"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_mutation_endpoint_watchlist.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: mutation watchlist complete (22 endpoints)"
+    },
+    {
+      "validator": "validate_v108_postqa_invariant_server_scope_false_positive.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A invariant: server scope honestly PENDING, no false positive"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

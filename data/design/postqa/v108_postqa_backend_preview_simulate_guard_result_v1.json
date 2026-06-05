@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A",
+  "type": "backend_preview_simulate_guard_result",
+  "version": 1,
+  "language": "italian",
+  "file": "backend/battle_engine.py",
+  "endpoint": "/api/battle/simulate",
+  "status": "PREVIEW_SIMULATE_MUTATION_BLOCKED_GUARD_LIVE",
+  "guard_strategy": "hard_reject_409_with_PREVIEW_SIMULATE_MUTATION_BLOCKED",
+  "preview_markers_checked": [
+    "battle_engine_mode=preview",
+    "preview=true",
+    "reward_policy=preview",
+    "progress_policy=preview"
+  ],
+  "http_status_when_blocked": 409,
+  "error_code": "PREVIEW_SIMULATE_MUTATION_BLOCKED",
+  "db_writes_when_blocked": 0,
+  "battle_engine_formula_rewrite": false,
+  "legacy_path_unchanged_when_no_preview_markers": true,
+  "safety": {
+    "reward_grant": false,
+    "progress_live_write": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "battle_engine_formula_rewrite": false
+  }
+}

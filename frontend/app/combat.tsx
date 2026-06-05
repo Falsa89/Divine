@@ -10,6 +10,13 @@ import { apiCall } from '../utils/api';
 // dai router params, marca il run come PREVIEW_NON_AUTHORITATIVE e logga in dev.
 // Non sostituisce il renderer, non chiama reward live, non scrive progress.
 import { readLaunchContextFromRouterParams } from '../src/battle_launch/consumers/combatLaunchParser';
+// v108_POSTQA_A — Preview reward lock + Legacy mutating entry watchdog.
+// PREVIEW_REWARD_LOCK_ACTIVE: se launch_context valido in modalita' preview,
+// blocchiamo /api/battle/simulate, refreshUser e grantAffinity. NESSUN reward,
+// NESSUN EXP, NESSUN gold, NESSUN drop, NESSUN progress, NESSUNA affinity.
+// LEGACY_COMBAT_ENTRY_MUTATING: se combat parte senza launch_context, il
+// backend legacy /api/battle/simulate resta mutante (realta' attuale onesta);
+// segnaliamo l'utente con badge dedicato e log dev.
 import BattleSprite from '../components/BattleSprite';
 import { heroBattleImageSource, heroPortraitSource, GREEK_HOPLITE_COMBAT_BASE, getHeroBattlePreloadAssets } from '../components/ui/hopliteAssets';
 import { HOPLITE_BATTLE_ASSET_MANIFEST } from '../components/ui/hopliteAssetManifest';
@@ -71,7 +78,17 @@ export default function CombatScreen() {
   // Etichetta sempre il run come PREVIEW_NON_AUTHORITATIVE. Se assente, legacy.
   const v108LaunchEnvelope = React.useMemo(() => readLaunchContextFromRouterParams(params as any), [params?.launch_context, params?.battle_launch, params?.battle_launch_id]);
   const v108LaunchBadge = (v108LaunchEnvelope.is_valid ? 'PREVIEW_NON_AUTHORITATIVE' : 'LEGACY_COMBAT_ENTRY');
+  // v108_POSTQA_A — Stato derivato per il preview reward lock.
+  // isPreviewNonAuthoritative = TRUE se il combat parte da un launch_context valido
+  // in modalita' preview. In questo stato il path runtime NON deve chiamare
+  // simulate endpoint, ne' refresh user, ne' grant affinity, ne' mostrare reward.
+  const isPreviewNonAuthoritative = !!(v108LaunchEnvelope?.is_valid && v108LaunchEnvelope?.is_preview);
+  const isLegacyCombatEntryMutating = !v108LaunchEnvelope?.is_valid;
+  // PREVIEW_REWARD_LOCK_ACTIVE token literal — usato dai runtime-invariant validators.
+  const PREVIEW_REWARD_LOCK_ACTIVE = isPreviewNonAuthoritative;
+  const LEGACY_COMBAT_ENTRY_MUTATING = isLegacyCombatEntryMutating;
   React.useEffect(() => { if (__DEV__) console.log('[v108_pre] combat launch envelope:', { is_valid: v108LaunchEnvelope.is_valid, source: v108LaunchEnvelope.source, badge: v108LaunchBadge }); }, [v108LaunchEnvelope.is_valid, v108LaunchEnvelope.source, v108LaunchBadge]);
+  React.useEffect(() => { if (__DEV__) console.log('[v108_POSTQA_A] preview_reward_lock:', { PREVIEW_REWARD_LOCK_ACTIVE, LEGACY_COMBAT_ENTRY_MUTATING }); }, [PREVIEW_REWARD_LOCK_ACTIVE, LEGACY_COMBAT_ENTRY_MUTATING]);
   const { refreshUser } = useAuth();
   // Reattivo a rotation/resize: su mobile dà le dim reali del viewport.
   const { width: winW, height: winH } = useWindowDimensions();
@@ -322,6 +339,14 @@ export default function CombatScreen() {
   };
 
   const startBattle = async () => {
+    // v108_POSTQA_A — Se il combat parte da un launch_context preview valido,
+    // BLOCCHIAMO la chiamata al simulate endpoint (mutante lato backend).
+    // Mostriamo schermata preview-locked onesta senza alcun reward/EXP/gold/drop.
+    if (PREVIEW_REWARD_LOCK_ACTIVE) {
+      if (__DEV__) console.log('[v108_POSTQA_A] PREVIEW_REWARD_LOCK_ACTIVE: skipping simulate');
+      setPhase('preview_locked' as any); setError(''); setLogLines([]); logLinesRef.current = [];
+      return;
+    }
     setPhase('loading'); setError(''); setLogLines([]); logLinesRef.current = [];
     affinityGrantedRef.current = false;
     try {
@@ -513,8 +538,9 @@ export default function CombatScreen() {
       [...(res.team_a_final || []), ...(res.team_b_final || [])].forEach((c: any) => {
         if (!c.is_alive) setSpriteState(c.id, { state: 'dead' });
       });
-      setPhase('result'); refreshUser();
-      grantAffinity(res.team_a_final || []);
+      setPhase('result');
+      // v108_POSTQA_A — Preview reward lock: NESSUN refreshUser, NESSUN grantAffinity in preview.
+      if (!PREVIEW_REWARD_LOCK_ACTIVE) { refreshUser(); grantAffinity(res.team_a_final || []); }
       return;
     }
     const t = res.battle_log[ti]; setTurn(ti + 1);
@@ -706,8 +732,9 @@ export default function CombatScreen() {
       [...(result.team_a_final || []), ...(result.team_b_final || [])].forEach((c: any) => {
         if (!c.is_alive) setSpriteState(c.id, { state: 'dead' });
       });
-      setPhase('result'); refreshUser();
-      grantAffinity(result.team_a_final || []);
+      setPhase('result');
+      // v108_POSTQA_A — Preview reward lock: anche nel ramo skip, NO refresh/affinity in preview.
+      if (!PREVIEW_REWARD_LOCK_ACTIVE) { refreshUser(); grantAffinity(result.team_a_final || []); }
     }
   };
 
@@ -1056,7 +1083,23 @@ export default function CombatScreen() {
       {/* v108_pre — Banner preview non-authoritative quando combat parte da Battle Launch Contract v1. Default OFF: si attiva solo se i router params contengono un payload valido. */}
       {v108LaunchEnvelope.is_valid ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingHorizontal: 10, paddingVertical: 4, backgroundColor: 'rgba(255,193,7,0.18)', borderBottomWidth: 1, borderBottomColor: 'rgba(255,193,7,0.45)', zIndex: 999 }}>
-          <Text style={{ color: '#ffd54f', fontSize: 10, fontWeight: '800', letterSpacing: 1, textAlign: 'center' }}>PREVIEW_NON_AUTHORITATIVE · v108_pre · {v108LaunchBadge}</Text>
+          <Text style={{ color: '#ffd54f', fontSize: 10, fontWeight: '800', letterSpacing: 1, textAlign: 'center' }}>PREVIEW_NON_AUTHORITATIVE · v108_pre · {v108LaunchBadge} {PREVIEW_REWARD_LOCK_ACTIVE ? '· PREVIEW_REWARD_LOCK_ACTIVE' : ''}</Text>
+        </View>
+      ) : (
+        // v108_POSTQA_A — LEGACY_COMBAT_ENTRY_MUTATING: combat senza launch_context.
+        // Backend legacy /api/battle/simulate resta mutante (realta' attuale onesta).
+        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingHorizontal: 10, paddingVertical: 4, backgroundColor: 'rgba(244,67,54,0.16)', borderBottomWidth: 1, borderBottomColor: 'rgba(244,67,54,0.45)', zIndex: 999 }}>
+          <Text style={{ color: '#ff8a80', fontSize: 9, fontWeight: '800', letterSpacing: 1, textAlign: 'center' }}>LEGACY_COMBAT_ENTRY_MUTATING · v108_POSTQA_A</Text>
+        </View>
+      )}
+      {/* v108_POSTQA_A — Schermata onesta preview_locked: nessun reward/EXP/gold/drop mostrato. */}
+      {phase === ('preview_locked' as any) ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, zIndex: 998 }}>
+          <Text style={{ color: '#ffd54f', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginBottom: 8, textAlign: 'center' }}>PREVIEW_REWARD_LOCK_ACTIVE</Text>
+          <Text style={{ color: '#bbb', fontSize: 11, lineHeight: 16, textAlign: 'center', maxWidth: 320 }}>Questa battaglia parte da un Battle Launch Contract in modalita' preview non-authoritative. Nessuna ricompensa, nessuna esperienza, nessun drop, nessun progresso, nessuna affinity verranno concessi. La conversione authoritative e' in roadmap (v108 / v109).</Text>
+          <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 16, paddingHorizontal: 18, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' }}>
+            <Text style={{ color: '#fff', fontWeight: '700', fontSize: 11, letterSpacing: 1 }}>TORNA INDIETRO</Text>
+          </TouchableOpacity>
         </View>
       ) : null}
       {hasBgSource ? (

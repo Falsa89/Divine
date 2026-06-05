@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A",
+  "type": "runtime_invariant_validator_matrix",
+  "version": 1,
+  "language": "italian",
+  "description": "Matrice dei nuovi runtime-invariant validators. Ogni validator legge il file reale runtime e fallisce se l'invariante non e' rispettata. NON sono marker-only.",
+  "validators": [
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-PREVIEW-NO-SIMULATE", "file": "validate_v108_postqa_invariant_preview_no_simulate.py", "reads": "frontend/app/combat.tsx", "fails_if": ["preview branch puo' chiamare /api/battle/simulate", "manca token PREVIEW_REWARD_LOCK_ACTIVE"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-PREVIEW-NO-REWARDS-AFFINITY", "file": "validate_v108_postqa_invariant_preview_no_rewards_affinity.py", "reads": "frontend/app/combat.tsx", "fails_if": ["preview branch chiama refreshUser() senza gate PREVIEW_REWARD_LOCK_ACTIVE", "preview branch chiama grantAffinity senza gate"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-STORY-NO-QA-AUTORESOLVE-PLAYER-FACING", "file": "validate_v108_postqa_invariant_story_no_qa_autoresolve_player_facing.py", "reads": "frontend/app/story.tsx", "fails_if": ["QA Auto Resolve visibile fuori gate EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-LOBBY-NO-FAKE-TEAM-LAUNCH", "file": "validate_v108_postqa_invariant_lobby_no_fake_team_launch.py", "reads": "frontend/app/pre-battle-lobby.tsx", "fails_if": ["PLAYER_SAFE_FALLBACK_TEAM usato come team reale", "launch consentito con fallback non reale", "manca REAL_PLAYER_TEAM_SOURCE_PENDING o real source"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-LOBBY-LAUNCH-CONTEXT-TO-COMBAT", "file": "validate_v108_postqa_invariant_lobby_launch_context_to_combat.py", "reads": "frontend/app/pre-battle-lobby.tsx", "fails_if": ["lobby naviga a /combat senza launch_context/battle_launch/battle_launch_id"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-NO-GENERATE-ENEMY-PLAYER-FACING", "file": "validate_v108_postqa_invariant_no_generate_enemy_player_facing.py", "reads": "backend/battle_engine.py + backend/routes/*", "fails_if": ["generate_enemy_team() usato da player-facing simulate senza dev/QA gate"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-NO-BOT-DEFAULT-STARTUP", "file": "validate_v108_postqa_invariant_no_bot_default_startup.py", "reads": "backend/server.py", "fails_if": ["initialize_bots(\"default\" o run_bot_cycle(\"default\" attivo senza hard kill switch"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-MUTATION-ENDPOINT-WATCHLIST", "file": "validate_v108_postqa_invariant_mutation_endpoint_watchlist.py", "reads": "data/design/postqa/v108_postqa_legacy_mutation_watchlist_v1.json", "fails_if": ["watchlist non include endpoint mutanti chiave"]},
+    {"id": "PROJECT-V108-POSTQA-INVARIANT-SERVER-SCOPE-FALSE-POSITIVE", "file": "validate_v108_postqa_invariant_server_scope_false_positive.py", "reads": "data/design/server_scope/*", "fails_if": ["report non dichiara che server scope e' pending e ensure_server_scope non e' filtro reale"]},
+    {"id": "MEGA-RELEASE-ACCELERATION-61-v108-POSTQA-ROLLUP", "file": "validate_mega_release_acceleration_61_v108_postqa_rollup.py", "reads": "all sub validators", "fails_if": ["qualsiasi sub validator fallisce"]}
+  ],
+  "safety": {
+    "marker_only_validators": false,
+    "runtime_invariant_validators": true,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false
+  }
+}

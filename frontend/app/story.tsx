@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext';
 // Aggiunge il percorso player-facing "Avvia battaglia" → /pre-battle-lobby
 // con i parametri richiesti dal Battle Launch Contract v1 (preview, gated).
 // L'auto-resolve legacy /api/story/battle resta disponibile ma viene
-// etichettato come `QA Auto Resolve` (non più unico percorso giocabile).
+// etichettato come QA-AutoResolve gated (non più unico percorso giocabile).
 // NO reward live, NO progress write, NO backend delete.
 
 const EC: Record<string,string> = { fire:'#ff4444', water:'#4488ff', earth:'#aa8844', wind:'#44cc88', light:'#ffd700', dark:'#9944ff', neutral:'#888' };
@@ -83,10 +83,12 @@ export default function StoryScreen() {
                   <TouchableOpacity style={[s.playBtn, {backgroundColor:col+'30', borderColor:col}]} onPress={() => launchBattleViaLobby(ch.id, ch.completed_stages+1)} disabled={battling}>
                     <Text style={[s.playTxt, {color:col}]}>Avvia battaglia</Text>
                   </TouchableOpacity>
-                  {/* v108_pre — Auto-resolve legacy etichettato come QA Auto Resolve. Resta disponibile per QA ma non è più l'unico percorso. */}
-                  <TouchableOpacity style={[s.qaBtn, {borderColor:'rgba(255,255,255,0.18)'}]} onPress={() => doBattle(ch.id, ch.completed_stages+1)} disabled={battling}>
-                    <Text style={s.qaTxt}>{battling?'...':'QA Auto Resolve'}</Text>
-                  </TouchableOpacity>
+                  {/* v108_POSTQA_A — QA-AutoResolve nascosto dal player-facing. EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE Visibile SOLO se EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE === 'true'. Default OFF. */}
+                  {process.env.EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE === 'true' ? (
+                    <TouchableOpacity style={[s.qaBtn, {borderColor:'rgba(255,255,255,0.18)'}]} onPress={() => doBattle(ch.id, ch.completed_stages+1)} disabled={battling}>
+                      <Text style={s.qaTxt}>{battling?'...':'QA Auto Resolve'}</Text>
+                    </TouchableOpacity>
+                  ) : null}
                 </View>
               )}
             </View>

@@ -7,10 +7,15 @@
     "/app/backend/routes/gacha.py": null,
     "/app/backend/routes/heroes.py": "774b80937af38a0b153b7ce412d298aea5aa163ed1537761ced3d97a55b61873",
     "/app/backend/routes/roster.py": null,
-    "/app/frontend/app/combat.tsx": "e8f7640b4e32eeb0c1fbdccde4a9a319af12823d90bb2c89f1d7a252ba78a91a"
+    "/app/frontend/app/combat.tsx": "e58198054ffb0064294c9ca7682335add2d8d5f9252224f00b1bc400159cd6ff"
   },
   "historical_references": {
     "/app/frontend/app/combat.tsx": [
+      {
+        "sha256": "e8f7640b4e32eeb0c1fbdccde4a9a319af12823d90bb2c89f1d7a252ba78a91a",
+        "pack": "v108_pre",
+        "status": "superseded_by_v108_POSTQA_A_preview_reward_lock"
+      },
       {
         "sha256": "5105feacf7daadedbd75505c5a6a8231614fe7eb91792a8239361df6f015fbf5",
         "pack": "SLC-C original baseline",
@@ -23,5 +28,6 @@
   "v108_pre_rebaseline_note": "combat.tsx SHA256 updated from 5105feacf7... to e8f7640b4e... as authorized by MEGA_RELEASE_ACCELERATION_60_v108_pre (combat launch context binding chirurgico: readLaunchContextFromRouterParams + PREVIEW_NON_AUTHORITATIVE label + LEGACY_COMBAT_ENTRY fallback). Nessuna formula battle_engine modificata, nessuna riscrittura del renderer, nessun reward live, nessun progress write. Vecchio SHA256 preservato in historical_references.",
   "task_origin": "SLC-C-CRITICAL-FILES-BASELINE",
   "utc": "2026-05-21T22:45:43.878690+00:00",
-  "version": "v1"
+  "version": "v1",
+  "v108_POSTQA_A_rebaseline_note": "combat.tsx SHA256 updated to e58198054f... as authorized by v108_POSTQA_A (preview reward lock + LEGACY_COMBAT_ENTRY_MUTATING banner). NO battle_engine formula rewrite."
 }

@@ -38,6 +38,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 // v107D — Battle Launch Contract real binding (MD5 supersede authorized).
 // Adopts launchFromLobby() helper as a non-destructive telemetry call.
 import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter';
+// v108_POSTQA_A — AsyncStorage per leggere selected server reale (NO hardcoded 's1').
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Inline catalog mirror — DETERMINISTIC, NO RUNTIME RANDOM
@@ -253,7 +255,7 @@ export default function PreBattleLobbyScreen() {
     (async () => {
       try {
         const res = await launchFromLobby({
-          server_id: 's1', mode: (mode as 'story') || 'story',
+          server_id: (selectedServerId || 'unknown'), mode: (mode as 'story') || 'story',
           encounter_id: String(v108EncounterId || params.source_id || mode), enemy_source_type: 'authored',
           enemy_source_id: String(v108EnemySourceId || params.source_id || `${mode}_default`),
           player_team_snapshot: playerTeam, client_trace_id: `v107d-${Date.now()}`,
@@ -262,7 +264,7 @@ export default function PreBattleLobbyScreen() {
       } catch (_e) { /* preview-only */ }
     })();
     return () => { cancelled = true; };
-  }, [mode, params.source_id, v108EncounterId, v108EnemySourceId, playerTeam]);
+  }, [mode, params.source_id, v108EncounterId, v108EnemySourceId, playerTeam, selectedServerId]);
 
   // v95 — Endpoint runtime fetch (read-only catalog) per dichiarare la source attiva.
   //  - endpoint_active=true      → /api/encounter-source/get raggiunto e dati validi
@@ -291,10 +293,63 @@ export default function PreBattleLobbyScreen() {
     [encounter],
   );
 
+  // v108_POSTQA_A — Selected server reale da AsyncStorage. NO hardcoded 's1'.
+  // Se manca, mostriamo blocker SELECTED_SERVER_REQUIRED e disabilitiamo launch.
+  const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
+  const [selectedServerLoaded, setSelectedServerLoaded] = useState<boolean>(false);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const sid = await AsyncStorage.getItem('selected_server_id');
+        if (!cancelled) { setSelectedServerId(sid && sid.trim() ? sid.trim() : null); setSelectedServerLoaded(true); }
+      } catch (_e) { if (!cancelled) { setSelectedServerId(null); setSelectedServerLoaded(true); } }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  // v108_POSTQA_A — Blocker chain onesti.
+  // 1) REAL_PLAYER_TEAM_SOURCE_PENDING: il team del player e' ancora il safe_fallback,
+  //    NON deve essere spacciato per reale. Launch normale disabilitato.
+  // 2) AUTHORED_ENCOUNTER_SOURCE_PENDING: encounter non e' da catalogo authored
+  //    consolidato. Launch normale disabilitato.
+  // 3) SELECTED_SERVER_REQUIRED: server reale assente. Launch normale disabilitato.
+  // 4) QA fallback launch dietro flag EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH.
+  const realPlayerTeamAvailable = (playerFormation.source !== 'safe_fallback_formation' && !playerFormation.fallback_used);
+  const authoredEncounterAvailable = !!(encounter && encounter.source_type === 'authored' && (encounter.enemies?.length || 0) > 0);
+  const selectedServerAvailable = !!(selectedServerLoaded && selectedServerId);
+  const blockerReasons: string[] = [];
+  if (!realPlayerTeamAvailable) blockerReasons.push('REAL_PLAYER_TEAM_SOURCE_PENDING');
+  if (!authoredEncounterAvailable) blockerReasons.push('AUTHORED_ENCOUNTER_SOURCE_PENDING');
+  if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
+  const launchAllowedNormal = blockerReasons.length === 0;
+  const qaFallbackEnabled = process.env.EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH === 'true';
+
   const startBattle = () => {
+    // v108_POSTQA_A — Bloccatore onesto: se non e' tutto reale, NON entrare in /combat
+    // con fallback team/enemy spacciati per reali. Mostriamo i blocker.
+    if (!launchAllowedNormal && !qaFallbackEnabled) {
+      if (__DEV__) console.log('[v108_POSTQA_A] launch blocked:', blockerReasons);
+      return;
+    }
+    // v108_POSTQA_A — passare a /combat un launch_context valido (Battle Launch Contract v1)
+    // affinche' combat.tsx possa applicare PREVIEW_REWARD_LOCK_ACTIVE. Default preview.
+    const launchContext = {
+      battle_engine_mode: 'preview',
+      is_preview: true,
+      reward_policy: 'preview',
+      progress_policy: 'preview',
+      server_id: selectedServerId || 'unknown',
+      mode,
+      encounter_id: encounter.encounter_id,
+      source_id: encounter.source_id,
+      source_type: encounter.source_type,
+      qa_fallback_used: qaFallbackEnabled && !launchAllowedNormal,
+    };
+    const battle_launch_id = `v108_postqa_${Date.now()}`;
     const target = `/combat?mode=${encodeURIComponent(mode)}&encounter_id=${encodeURIComponent(
       encounter.encounter_id,
-    )}&source_id=${encodeURIComponent(encounter.source_id)}`;
+    )}&source_id=${encodeURIComponent(encounter.source_id)}&launch_context=${encodeURIComponent(JSON.stringify(launchContext))}&battle_launch_id=${encodeURIComponent(battle_launch_id)}`;
     router.push(target as any);
   };
 
@@ -379,13 +434,25 @@ export default function PreBattleLobbyScreen() {
               <Text style={s.actionTxt}>✎ Modifica Team</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[s.actionBtn, s.actionStart]}
+              style={[s.actionBtn, s.actionStart, (!launchAllowedNormal && !qaFallbackEnabled) ? { opacity: 0.4 } : null]}
               onPress={startBattle}
               activeOpacity={0.85}
+              disabled={!launchAllowedNormal && !qaFallbackEnabled}
             >
-              <Text style={s.actionTxt}>▶ Avvia Battaglia</Text>
+              <Text style={s.actionTxt}>{(!launchAllowedNormal && !qaFallbackEnabled) ? '⛔ Launch bloccato' : (qaFallbackEnabled && !launchAllowedNormal ? '▶ Avvia (QA Fallback)' : '▶ Avvia Battaglia')}</Text>
             </TouchableOpacity>
           </View>
+
+          {/* v108_POSTQA_A — Blocker chain visibili e onesti. */}
+          {blockerReasons.length > 0 ? (
+            <View style={{ marginTop: 12, padding: 12, borderRadius: 8, backgroundColor: 'rgba(244,67,54,0.10)', borderWidth: 1, borderColor: 'rgba(244,67,54,0.40)' }}>
+              <Text style={{ color: '#ff8a80', fontSize: 11, fontWeight: '800', letterSpacing: 1, marginBottom: 6 }}>LAUNCH BLOCKERS (v108_POSTQA_A)</Text>
+              {blockerReasons.map(b => (
+                <Text key={b} style={{ color: '#ffbcbc', fontSize: 10, fontWeight: '600', marginVertical: 1 }}>• {b}</Text>
+              ))}
+              <Text style={{ color: '#999', fontSize: 9, marginTop: 6, lineHeight: 13 }}>Il fallback team/enemy non puo' essere spacciato come reale. Sblocca caricando team reale, encounter authored e selected server. QA fallback dietro flag EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH.</Text>
+            </View>
+          ) : null}
 
           {/* Safety footer */}
           <View style={s.safetyFooter}>

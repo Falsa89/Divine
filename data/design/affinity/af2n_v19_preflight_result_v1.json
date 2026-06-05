@@ -4,8 +4,8 @@
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-06-05T20:21:38.723299Z",
-  "overall_status": "PASS",
+  "generated_at_utc": "2026-06-05T23:13:27.892282Z",
+  "overall_status": "FAIL",
   "gates": {
     "api_health_200": true,
     "heroes_100": true,
@@ -21,7 +21,7 @@
     "buffs_enabled_false": true,
     "borea_404": true,
     "non_allowlist_423": true,
-    "battle_files_unchanged": true,
+    "battle_files_unchanged": false,
     "ugi_present": true,
     "uas_present": true,
     "ugi_no_negative": true,
@@ -32,7 +32,7 @@
     "v18_stage3_seed_100_present": true,
     "rollback_scripts_present": true,
     "suite_v18_pass": true,
-    "baseline_v6_diff_pass": true,
+    "baseline_v6_diff_pass": false,
     "locust_binary_present": true,
     "ui_safety_no_spend_in_combat": true
   },

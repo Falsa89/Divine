@@ -1,0 +1,29 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A",
+  "type": "pre_battle_lobby_launch_blocker_result",
+  "version": 1,
+  "language": "italian",
+  "file": "frontend/app/pre-battle-lobby.tsx",
+  "status": "FALLBACK_TEAM_BLOCKER_ACTIVE_LAUNCH_CONTEXT_CHAIN_LIVE",
+  "blocker_tokens_present": [
+    "REAL_PLAYER_TEAM_SOURCE_PENDING",
+    "AUTHORED_ENCOUNTER_SOURCE_PENDING",
+    "SELECTED_SERVER_REQUIRED"
+  ],
+  "qa_fallback_env_flag": "EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH",
+  "qa_fallback_env_flag_default": false,
+  "hardcoded_server_id_s1_removed": true,
+  "selected_server_source": "AsyncStorage:selected_server_id",
+  "launch_to_combat_passes_launch_context": true,
+  "launch_to_combat_passes_battle_launch_id": true,
+  "launch_context_marks_preview_non_authoritative": true,
+  "normal_launch_disabled_when_blocker_present": true,
+  "safety": {
+    "fake_team_as_real_team": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "reward_grant": false,
+    "progress_live_write": false,
+    "backend_isolation_live_claim": false
+  }
+}
