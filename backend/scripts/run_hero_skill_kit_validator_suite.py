@@ -3537,6 +3537,24 @@ OPTIONAL = [
     ('PROJECT-V108-POSTQA-INVARIANT-SERVER-SCOPE-FALSE-POSITIVE', 'validate_v108_postqa_invariant_server_scope_false_positive.py'),
     ('MEGA-RELEASE-ACCELERATION-61-v108-POSTQA-ROLLUP', 'validate_mega_release_acceleration_61_v108_postqa_rollup.py'),
 
+    # v108_POSTQA_A2 - MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION
+    # PUBLIC_SYNC_TAG_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION
+    # PUBLIC_SYNC_SENTINEL_v108_POSTQA_A2_PRESENT=YES
+    # Triage onesto dei fail post v108_POSTQA_A/A1. Suite stabile a 27 fail su
+    # 3 run consecutive identiche (<= 30 target). 0 supersede cosmetici, 0 weakening,
+    # 0 silent deletion. Historical guardians preservati. Mutation watchlist preservata.
+    # 10 runtime-invariant validator v108_POSTQA_A preservati e mandatory. Reconciliation
+    # MD5 formali deferite a v108_POSTQA_B con historical_md5 + replacement_invariant
+    # documentati. NO gameplay, NO PSP apply, NO reward, NO progress, NO formula rewrite.
+    ('PROJECT-V108-POSTQA-A2-BASELINE-MULTIRUN-SNAPSHOT', 'validate_v108_postqa_a2_baseline_multirun_snapshot.py'),
+    ('PROJECT-V108-POSTQA-A2-FULL-FAIL-TRIAGE', 'validate_v108_postqa_a2_full_fail_triage.py'),
+    ('PROJECT-V108-POSTQA-A2-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_postqa_a2_runtime_invariant_preservation.py'),
+    ('PROJECT-V108-POSTQA-A2-MD5-HISTORICAL-RECONCILIATION', 'validate_v108_postqa_a2_md5_historical_reconciliation.py'),
+    ('PROJECT-V108-POSTQA-A2-AUTO-GENERATED-JSON-DRIFT-STABILIZATION', 'validate_v108_postqa_a2_auto_generated_json_drift_stabilization.py'),
+    ('PROJECT-V108-POSTQA-A2-WATCHLIST-ROADMAP-PRESERVATION', 'validate_v108_postqa_a2_watchlist_roadmap_preservation.py'),
+    ('PROJECT-V108-POSTQA-A2-FINAL-MULTIRUN-SUITE-RESULT', 'validate_v108_postqa_a2_final_multirun_suite_result.py'),
+    ('MEGA-RELEASE-ACCELERATION-62-v108-POSTQA-A2-ROLLUP', 'validate_mega_release_acceleration_62_v108_postqa_a2_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

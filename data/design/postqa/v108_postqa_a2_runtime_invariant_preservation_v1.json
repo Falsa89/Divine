@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "type": "runtime_invariant_preservation",
+  "version": 1,
+  "language": "italian",
+  "required_invariant_validators": [
+    "validate_v108_postqa_invariant_preview_no_simulate.py",
+    "validate_v108_postqa_invariant_preview_no_rewards_affinity.py",
+    "validate_v108_postqa_invariant_story_no_qa_autoresolve_player_facing.py",
+    "validate_v108_postqa_invariant_lobby_no_fake_team_launch.py",
+    "validate_v108_postqa_invariant_lobby_launch_context_to_combat.py",
+    "validate_v108_postqa_invariant_no_generate_enemy_player_facing.py",
+    "validate_v108_postqa_invariant_no_bot_default_startup.py",
+    "validate_v108_postqa_invariant_mutation_endpoint_watchlist.py",
+    "validate_v108_postqa_invariant_server_scope_false_positive.py",
+    "validate_v108_postqa_invariant_suite_relocatable.py",
+    "validate_mega_release_acceleration_61_v108_postqa_rollup.py"
+  ],
+  "all_present_and_registered": true,
+  "all_passing": true,
+  "any_invariant_deleted": false,
+  "any_invariant_downgraded": false,
+  "rollup_marker_claims_ready_falsely": false,
+  "rollup_marker_verdict": "MEGA_RELEASE_ACCELERATION_61_v108_POSTQA_VALIDATOR_REFORM_AND_PREVIEW_REWARD_LOCK_A_CONDITIONAL_BLOCKERS_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "type": "md5_historical_reconciliation",
+  "version": 1,
+  "language": "italian",
+  "reconciliation_actions_applied_in_a2": [],
+  "reconciliation_actions_deferred_to_v108_postqa_b": [
+    {
+      "file": "frontend/app/combat.tsx",
+      "current_md5": "0f0677404535a1a19e98b110212b9742",
+      "historical_md5": ["fc792a05b2ada6e677d80400732ae5c3", "cc2ae7ff8dadf81dbd48eb4a5e1f5b4b"],
+      "superseded_in": ["v108_pre", "v108_POSTQA_A"],
+      "protected_by_legacy_validator": "validate_v90_restored_battle_renderer_reuse.py",
+      "replacement_invariant": "validate_v108_postqa_invariant_preview_no_simulate.py",
+      "reason_kept_failing": "Historical guardian preserved. Reconciliation formal su rollup MEGA_RELEASE_ACCELERATION_45_v96 e PROJECT-V96-MD5-BASELINE-LOCK posticipata a v108_POSTQA_B per evitare cosmetic supersede."
+    },
+    {
+      "file": "backend/battle_engine.py",
+      "current_md5": "36d74d4ba700b1ec38b3df3aaa56ce4e",
+      "historical_md5": ["baseline_v100", "pre_v108_POSTQA_A"],
+      "superseded_in": ["v108_POSTQA_A_preview_guard"],
+      "protected_by_legacy_validator": "validate_v96_md5_baseline_lock.py / validate_mega_release_acceleration_45_v96_rollup.py",
+      "replacement_invariant": "validate_v108_postqa_invariant_no_generate_enemy_player_facing.py",
+      "reason_kept_failing": "Historical guardian preserved. La reconciliation formal su questi rollup richiede modifica diretta degli MD5 hardcoded nei file Python legacy: deferita a v108_POSTQA_B per processo formale."
+    },
+    {
+      "file": "backend/server.py",
+      "current_md5": "13e27312bb4f46ad3cf4d38d51e39148",
+      "historical_md5": ["pre_v108_POSTQA_A_bots_kill_switch"],
+      "superseded_in": ["v108_POSTQA_A_bots_kill_switch"],
+      "protected_by_legacy_validator": "validate_v96_md5_baseline_lock.py",
+      "replacement_invariant": "validate_v108_postqa_invariant_no_bot_default_startup.py",
+      "reason_kept_failing": "Historical guardian preserved. Formal reconciliation defered."
+    }
+  ],
+  "old_hashes_preserved_as_historical_reference": true,
+  "validators_deleted": [],
+  "validators_weakened": [],
+  "blanket_supersede_applied": false,
+  "runtime_p0_classified_as_historical": false,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "cosmetic_supersede": false,
+    "old_hash_preserved_as_historical_reference": true
+  }
+}

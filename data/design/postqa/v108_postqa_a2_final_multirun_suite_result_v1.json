@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "type": "final_multirun_suite_result",
+  "version": 1,
+  "language": "italian",
+  "runs": [
+    {"run": 1, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
+    {"run": 2, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
+    {"run": 3, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0}
+  ],
+  "deterministic_over_3_runs": true,
+  "required_fail_final": 0,
+  "miss_final": 0,
+  "optional_fail_final": 27,
+  "optional_fail_target_max": 30,
+  "under_target": true,
+  "runtime_invariant_validators_pass": 10,
+  "runtime_invariant_validators_total": 10,
+  "runtime_invariant_rollup_pass": true,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false
+  }
+}

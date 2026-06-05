@@ -1,0 +1,57 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "type": "baseline_multirun_snapshot",
+  "version": 1,
+  "language": "italian",
+  "runs_executed": 3,
+  "runs": [
+    {"run": 1, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
+    {"run": 2, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
+    {"run": 3, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0}
+  ],
+  "deterministic": true,
+  "diff_run_1_vs_2": 0,
+  "diff_run_1_vs_3": 0,
+  "diff_run_2_vs_3": 0,
+  "intersection_fail": [
+    "AF2-N-V23-REDIS-SWITCH",
+    "BENCHMARK-CANONICAL-COMBO-A",
+    "LIVE-MODES-SLC-NEXT-COMBO-A",
+    "MEGA-RELEASE-ACCELERATION-45-v96-ROLLUP",
+    "PROJECT-ALIGN-FIX-TRACK-H-COMPLETION",
+    "PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING",
+    "PROJECT-BETA-TESTING-TRACK-F-REDIS",
+    "PROJECT-BETA-TESTING-TRACK-G-REPORTING",
+    "PROJECT-FORGE-CRASH-TRACK-G-HYGIENE",
+    "PROJECT-GACHA-RATE-SANITY-FINAL-SIGNOFF",
+    "PROJECT-INLINE-CONFIRM-TRACK-E-API-CONTRACT",
+    "PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING",
+    "PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE",
+    "PROJECT-SF-MERGE-TRACK-F-NAVIGATION",
+    "PROJECT-SF-MERGE-TRACK-H-COMPLETION",
+    "PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION",
+    "PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION",
+    "PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION",
+    "PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN",
+    "PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH",
+    "PROJECT-V90-RESTORED-BATTLE-RENDERER-REUSE",
+    "PROJECT-V96-MD5-BASELINE-LOCK",
+    "SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1",
+    "ULTRA-COMBO-V23",
+    "ULTRA-COMBO-V24",
+    "V23-PREFLIGHT",
+    "V24-PREFLIGHT"
+  ],
+  "intermittent_fail": [],
+  "preliminary_classification": {
+    "preexisting_baseline": 17,
+    "legacy_md5_guardian": 3,
+    "environmental_redis_or_dependency": 5,
+    "auto_generated_json_drift": 2
+  },
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "type": "watchlist_roadmap_preservation",
+  "version": 1,
+  "language": "italian",
+  "watchlist_file": "data/design/postqa/v108_postqa_legacy_mutation_watchlist_v1.json",
+  "watchlist_endpoints_count_minimum_required": 22,
+  "watchlist_endpoints_count_actual": 22,
+  "watchlist_present": true,
+  "watchlist_reduced": false,
+  "watchlist_reclassified_as_resolved": false,
+  "all_required_endpoints_present": true,
+  "required_endpoints": [
+    "/api/story/battle",
+    "/api/tower/battle",
+    "/api/pvp/battle",
+    "/api/events/battle",
+    "/api/raid/attack",
+    "/api/gvg/attack",
+    "/api/gvg/end-war",
+    "/api/territory/attack",
+    "/api/friends/gift",
+    "/api/gacha/pull",
+    "/api/inventory/use-exp",
+    "/api/hero/gain-exp",
+    "/api/hero/levelup",
+    "/api/fusion/star-up",
+    "/api/soul/forge",
+    "/api/shop/buy",
+    "/api/battlepass/buy-premium",
+    "/api/vip/add-spend",
+    "/api/mail/claim",
+    "/api/achievements/claim",
+    "/api/cosmetics/buy",
+    "/api/equipment/equip"
+  ],
+  "safety": {
+    "watchlist_downgraded": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

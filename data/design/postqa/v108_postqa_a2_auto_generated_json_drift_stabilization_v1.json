@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "type": "auto_generated_json_drift_stabilization",
+  "version": 1,
+  "language": "italian",
+  "stabilization_actions_applied_in_a2": [],
+  "stabilization_status": "DEFERRED_TO_v108_POSTQA_B",
+  "rationale": "In A2 il count di OPTIONAL FAIL e' gia' stabile a 27 (<= 30 target) su 3 run consecutive identiche. La stabilizzazione attiva (modifica validator per ignorare campi volatili) e' rischiosa e potrebbe introdurre cosmetic supersede. Preferiamo lasciare i 2 fail auto_generated_json_drift (BENCHMARK-CANONICAL-COMBO-A, LIVE-MODES-SLC-NEXT-COMBO-A) come fail onesti e differire stabilizzazione a v108_POSTQA_B con review formale.",
+  "validators_affected": [
+    "validate_benchmark_canonical_combo_a_v1.py",
+    "validate_live_modes_slc_next_combo_a_v1.py"
+  ],
+  "substantive_fields_ignored": [],
+  "volatile_fields_ignored": [],
+  "generated_files_deleted": [],
+  "validators_changed_to_always_pass": [],
+  "behavior_changed_but_marked_pass": false,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "hiding_fail_from_suite": false
+  }
+}

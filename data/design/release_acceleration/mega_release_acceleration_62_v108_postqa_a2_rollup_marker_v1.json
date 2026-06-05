@@ -1,0 +1,58 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "type": "v108_postqa_a2_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T23:58:02.332596Z",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION",
+  "validators_total": 7,
+  "validators_pass": 7,
+  "results": [
+    {
+      "validator": "validate_v108_postqa_a2_baseline_multirun_snapshot.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A2 baseline multirun snapshot (3 run deterministic)"
+    },
+    {
+      "validator": "validate_v108_postqa_a2_full_fail_triage.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A2 full fail triage (27 fails classified)"
+    },
+    {
+      "validator": "validate_v108_postqa_a2_runtime_invariant_preservation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A2 runtime invariant preservation (10/10 invariants + rollup, no drift)"
+    },
+    {
+      "validator": "validate_v108_postqa_a2_md5_historical_reconciliation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A2 MD5 historical reconciliation (deferrals documented, no cosmetic supersede)"
+    },
+    {
+      "validator": "validate_v108_postqa_a2_auto_generated_json_drift_stabilization.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A2 auto-generated JSON drift stabilization (no substantive change, no fake pass)"
+    },
+    {
+      "validator": "validate_v108_postqa_a2_watchlist_roadmap_preservation.py",
+      "exit_code": 0,
+      "last_line": "PASS_WARN — /api/equipment/equip pending coverage (will be added in v108_POSTQA_B). Other 22+ endpoints preserved."
+    },
+    {
+      "validator": "validate_v108_postqa_a2_final_multirun_suite_result.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_A2 final multirun suite (27/30 optional, 3 run deterministic)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_62_v108_POSTQA_A2_LEGACY_FAIL_TRIAGE_AND_BASELINE_RECONCILIATION_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "optional_fail_final": 27,
+  "optional_fail_target_max": 30,
+  "deterministic_over_3_runs": true,
+  "runtime_invariant_validators_pass": 10,
+  "rollup_a2_pass_does_not_imply_global_release_readiness": true,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "cosmetic_supersede_applied": false
+  }
+}
