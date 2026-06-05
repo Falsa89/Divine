@@ -1,0 +1,43 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_48_v99",
+  "type": "privacy_terms_live_url_final",
+  "version": 1,
+  "language": "italian",
+  "env_vars_checked": [
+    "PRIVACY_POLICY_URL",
+    "TERMS_OF_SERVICE_URL",
+    "ACCOUNT_DELETION_URL",
+    "SUPPORT_CONTACT_URL",
+    "SUPPORT_EMAIL"
+  ],
+  "urls": {
+    "privacy_policy_url": null,
+    "terms_of_service_url": null,
+    "account_deletion_url": null,
+    "support_contact_url": null,
+    "support_email": null
+  },
+  "all_present": false,
+  "frontend_login_settings_links": {
+    "status": "PLACEHOLDER_READY_AWAITS_LIVE_URLS",
+    "design_contract_present": true
+  },
+  "backend_provider_status_exposure": {
+    "endpoint": "/api/auth/provider-status",
+    "safe_exposure": true,
+    "exposes_secrets": false
+  },
+  "verdict": "BLOCKER_FOR_CLOSED_ALPHA_EXTERNAL_URLS_REQUIRED",
+  "safety": {
+    "fake_urls": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  },
+  "checklist_for_user_to_unblock": [
+    "Hostare Privacy Policy su dominio legale (es. https://<dominio>/privacy)",
+    "Hostare Terms of Service su dominio legale (es. https://<dominio>/terms)",
+    "Hostare istruzioni Account Deletion (GDPR Art.17) su dominio legale",
+    "Configurare PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL, ACCOUNT_DELETION_URL nelle env del backend",
+    "Configurare expo app.json con i link in settings / login"
+  ]
+}

@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-05T00:07:56.559494+00:00",
+  "timestamp_utc": "2026-06-05T00:23:55.727010+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1579,
+  "backend_python_files_scanned": 1588,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 783,
+      "files_with_hits": 788,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 339,
+      "files_with_hits": 340,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -901,7 +901,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 157,
+      "files_with_hits": 159,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1025,7 +1025,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 147,
+      "files_with_hits": 148,
       "hits_sample": [
         {
           "file": "backend/server.py",

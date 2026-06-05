@@ -1,0 +1,46 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_48_v99",
+  "type": "v99_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T00:23:18.804316Z",
+  "validators_total": 7,
+  "validators_pass": 7,
+  "results": [
+    {
+      "validator": "validate_v99_optional_fail_cleanup.py",
+      "exit_code": 0,
+      "last_line": "PASS — v99 optional fail cleanup (target_reached=False, honest, no_weakening)"
+    },
+    {
+      "validator": "validate_v99_provider_id_token_verification.py",
+      "exit_code": 0,
+      "last_line": "PASS — v99 provider id_token verification (verdict=BLOCKER_FOR_CLOSED_ALPHA_PROVIDER_CREDENTIALS_REQUIRED)"
+    },
+    {
+      "validator": "validate_v99_privacy_terms_urls.py",
+      "exit_code": 0,
+      "last_line": "PASS — v99 privacy/terms URLs (verdict=BLOCKER_FOR_CLOSED_ALPHA_EXTERNAL_URLS_REQUIRED, honest blocker)"
+    },
+    {
+      "validator": "validate_v99_physical_mobile_qa.py",
+      "exit_code": 0,
+      "last_line": "PASS — v99 physical mobile QA (executed=False, status=MANUAL_QA_REQUIRED)"
+    },
+    {
+      "validator": "validate_v99_full_locust.py",
+      "exit_code": 0,
+      "last_line": "PASS — v99 full locust (17 endpoints, 0 critical errors, FULL_LOAD_REQUIRED honest)"
+    },
+    {
+      "validator": "validate_v99_store_internal_testing_readiness.py",
+      "exit_code": 0,
+      "last_line": "PASS — v99 store internal testing readiness (verdict=BLOCKER_FOR_CLOSED_ALPHA_STORE_INTERNAL_TESTING_CREDENTIALS_AND_BUNDLE_REQUIRED)"
+    },
+    {
+      "validator": "validate_v99_closed_alpha_final_gate.py",
+      "exit_code": 0,
+      "last_line": "PASS — v99 closed alpha final gate (6 closed_alpha blockers, 7 commercial blockers, CONDITIONAL)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_48_CLOSED_ALPHA_BLOCKER_CLEANUP_AND_PUBLIC_TEST_GATE_CONDITIONAL_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

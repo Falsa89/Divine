@@ -1,0 +1,62 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_48_v99",
+  "type": "provider_id_token_verification_final",
+  "version": 1,
+  "language": "italian",
+  "credentials_present": {
+    "google_client_id": false,
+    "google_client_secret": false,
+    "apple_client_id": false,
+    "apple_team_id": false,
+    "apple_key_id": false,
+    "apple_private_key": false
+  },
+  "env_vars_checked": [
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_ID_ANDROID",
+    "GOOGLE_CLIENT_ID_IOS",
+    "GOOGLE_WEB_CLIENT_ID",
+    "APPLE_CLIENT_ID",
+    "APPLE_TEAM_ID",
+    "APPLE_KEY_ID",
+    "APPLE_PRIVATE_KEY"
+  ],
+  "google_id_token_verify": {
+    "status": "CREDENTIALS_REQUIRED_FOR_STORE_BUILD",
+    "production_ready": false,
+    "design_contract_present": true,
+    "jwks_endpoint": "https://www.googleapis.com/oauth2/v3/certs",
+    "audience_check": "design_only",
+    "issuer_check": "design_only",
+    "expiry_check": "design_only",
+    "raw_token_logging": false
+  },
+  "apple_id_token_verify": {
+    "status": "CREDENTIALS_REQUIRED_FOR_STORE_BUILD",
+    "production_ready": false,
+    "design_contract_present": true,
+    "jwks_endpoint": "https://appleid.apple.com/auth/keys",
+    "audience_check": "design_only",
+    "issuer_check": "design_only",
+    "expiry_check": "design_only",
+    "raw_token_logging": false
+  },
+  "safety": {
+    "provider_secrets_in_repo": false,
+    "raw_oauth_token_logs": false,
+    "fake_credentials": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "production_ready_claim": false
+  },
+  "checklist_for_user_to_unblock": [
+    "Creare Google OAuth Client ID Android (firma SHA-1 release)",
+    "Creare Google OAuth Client ID iOS (bundle id reale)",
+    "Creare Google OAuth Web Client ID per backend audience check",
+    "Creare Apple Sign In App ID + Services ID + Team ID + Key ID + Private Key",
+    "Configurare le env GOOGLE_CLIENT_ID*, APPLE_* sul backend (NON committare in repo)",
+    "Configurare expo app.json plugin per @react-native-google-signin e expo-apple-authentication con i client_id",
+    "Validare flusso end-to-end su build TestFlight + Google Play Internal Testing"
+  ],
+  "verdict": "BLOCKER_FOR_CLOSED_ALPHA_PROVIDER_CREDENTIALS_REQUIRED"
+}

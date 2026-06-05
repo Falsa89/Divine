@@ -1,0 +1,48 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_48_v99",
+  "type": "physical_mobile_qa_result",
+  "version": 1,
+  "language": "italian",
+  "executed": false,
+  "honest_status": "MANUAL_QA_REQUIRED",
+  "reason": "Container Emergent non ha accesso a device fisici Android/iOS. NO FAKE QA PASS dichiarato.",
+  "checklist_android": [
+    "Install via Google Play Internal Testing",
+    "Cold start tempo <5s",
+    "Login guest funziona",
+    "Session restore dopo killapp",
+    "Logout pulisce sessione",
+    "15 modes (story/arena/guild_war/tower/event/raid/material_raid/training/boss/world_boss/co_op/season/daily/weekend/preview)",
+    "Combat scene rendering + tap targets >=44dp",
+    "Live hub QA banners visibili",
+    "Bot status panel (admin gated)",
+    "Chat preview classifier (non production)",
+    "Announcements QA banner",
+    "Safe area insets su notch + foldable",
+    "Crash test: kill+restart, low-memory, airplane mode, reconnect"
+  ],
+  "checklist_ios": [
+    "Install via Apple TestFlight",
+    "Sign in with Apple button visibility (richiesta App Store)",
+    "Bundle id reale + provisioning",
+    "Cold start tempo <5s",
+    "Login guest + Apple",
+    "Session restore dopo background",
+    "Logout pulisce KeyChain",
+    "15 modes (idem Android)",
+    "Combat scene rendering + tap targets >=44pt",
+    "Live hub + bot status + chat preview + announcements",
+    "Safe area insets + Dynamic Island handling",
+    "Crash test: kill+restart, low-memory, airplane mode, reconnect"
+  ],
+  "google_login_dev_build_check": {
+    "requires_real_credentials": true,
+    "status": "BLOCKED_BY_CREDENTIALS"
+  },
+  "verdict": "BLOCKER_FOR_CLOSED_ALPHA_PHYSICAL_QA_REQUIRED",
+  "safety": {
+    "fake_mobile_qa": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

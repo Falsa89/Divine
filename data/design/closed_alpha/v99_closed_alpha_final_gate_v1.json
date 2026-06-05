@@ -1,0 +1,65 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_48_v99",
+  "type": "closed_alpha_final_gate",
+  "version": 1,
+  "language": "italian",
+  "gates": {
+    "optional_fail_target_<=30": {"reached": false, "status": "BLOCKER", "current": 134, "target": 30},
+    "provider_id_token_verification": {"reached": false, "status": "BLOCKER", "reason": "CREDENTIALS_REQUIRED_FOR_STORE_BUILD"},
+    "privacy_terms_live_urls": {"reached": false, "status": "BLOCKER", "reason": "EXTERNAL_URLS_REQUIRED"},
+    "physical_mobile_qa": {"reached": false, "status": "BLOCKER", "reason": "MANUAL_QA_REQUIRED"},
+    "full_locust_>=1000": {"reached": false, "status": "BLOCKER", "reason": "DEDICATED_STAGING_REQUIRED"},
+    "store_internal_testing_readiness": {"reached": false, "status": "BLOCKER", "reason": "BUNDLE_AND_CREDENTIALS_REQUIRED"},
+    "auth_account": {"reached": true, "status": "OK", "source": "v96+v97"},
+    "engine": {"reached": true, "status": "OK", "source": "v95_rc_patch"},
+    "modes_15": {"reached": true, "status": "OK", "source": "v90+v95"},
+    "bot_runtime": {"reached": true, "status": "OK_DEFAULT_OFF", "source": "v97+v98"},
+    "live_guild": {"reached": true, "status": "OK_QA_READY", "source": "v95+v96"},
+    "announcements": {"reached": true, "status": "OK_QA_READY", "source": "v95"},
+    "known_issues_documented": {"reached": true, "status": "OK", "source": "v98+v99 reports"}
+  },
+  "overall_verdict": {
+    "READY_FOR_CLOSED_ALPHA_CANDIDATE": false,
+    "CONDITIONAL_FOR_CLOSED_ALPHA": true,
+    "BLOCKED_FOR_CLOSED_ALPHA": false,
+    "BLOCKED_FOR_COMMERCIAL_RELEASE": true
+  },
+  "blockers_for_closed_alpha": [
+    "optional_fail target <=30 NOT_REACHED (134 stale-MD5 legacy, no validator weakening)",
+    "provider id_token verification real (Google+Apple) CREDENTIALS_REQUIRED_FOR_STORE_BUILD",
+    "privacy/terms/account-deletion live URLs MISSING",
+    "physical mobile QA Android+iOS NOT_EXECUTED (MANUAL_QA_REQUIRED)",
+    "full locust >=1000 NOT_EXECUTED (container cap ~50)",
+    "store internal testing readiness BUNDLE+CREDENTIALS_REQUIRED"
+  ],
+  "blockers_for_commercial_release": [
+    "all 6 closed_alpha blockers above",
+    "MD5 baseline lock complete (v100)",
+    "IAP design + integration end-to-end (deferred)",
+    "Battle Pass + VIP commercial activation (deferred)",
+    "production push/broadcast pipeline (deferred)",
+    "localization L10n full (deferred)",
+    "compliance audit (GDPR/CCPA/COPPA) external review"
+  ],
+  "safety": {
+    "reward_live": false,
+    "iap_active": false,
+    "production_push": false,
+    "production_broadcast": false,
+    "real_pii_in_bot_chat": false,
+    "fake_users_presented_as_real": false,
+    "day_one_high_level_bots": false,
+    "bot_event_access_bypass": false,
+    "bot_ranking_domination": false,
+    "bot_premium_reward_theft": false,
+    "random_opponents": false,
+    "bot_economy_exploit": false,
+    "raw_oauth_logs": false,
+    "provider_secrets_in_repo": false,
+    "validator_weakening": false,
+    "fake_PASS": false,
+    "hidden_optional_fail": false,
+    "commercial_release_claim": false
+  },
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_48_CLOSED_ALPHA_BLOCKER_CLEANUP_AND_PUBLIC_TEST_GATE_CONDITIONAL_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

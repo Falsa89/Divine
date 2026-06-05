@@ -1,0 +1,59 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_48_v99",
+  "type": "store_internal_testing_readiness",
+  "version": 1,
+  "language": "italian",
+  "scope": "closed_alpha_internal_testing_NOT_commercial_release",
+  "google_play_internal_testing": {
+    "bundle_identifier_ready": false,
+    "app_icon_ready": false,
+    "splash_ready": true,
+    "privacy_disclosures_ready": false,
+    "data_safety_form_ready": false,
+    "login_provider_requirement": "google_signin_credentials_required",
+    "age_rating": "PEGI_12_or_ESRB_TEEN_target",
+    "content_rating_form_ready": false,
+    "iap_status": "DISABLED",
+    "push_notifications_status": "DISABLED",
+    "ads_status": "DISABLED"
+  },
+  "apple_testflight": {
+    "bundle_identifier_ready": false,
+    "app_icon_ready": false,
+    "splash_ready": true,
+    "sign_in_with_apple_requirement": "required_if_other_third_party_login_present",
+    "sign_in_with_apple_credentials_present": false,
+    "privacy_disclosures_ready": false,
+    "data_safety_form_ready": false,
+    "age_rating": "4_plus_to_12_plus_target_TBD",
+    "iap_status": "DISABLED",
+    "push_notifications_status": "DISABLED",
+    "ads_status": "DISABLED"
+  },
+  "expo_eas_build": {
+    "eas_json_ready": false,
+    "profile_internal_testing_ready": false,
+    "profile_testflight_ready": false,
+    "keystore_managed": "deferred_user",
+    "appstore_connect_key_ready": false
+  },
+  "safety": {
+    "iap_active": false,
+    "push_active": false,
+    "ads_active": false,
+    "commercial_release_claim": false,
+    "fake_store_readiness": false
+  },
+  "verdict": "BLOCKER_FOR_CLOSED_ALPHA_STORE_INTERNAL_TESTING_CREDENTIALS_AND_BUNDLE_REQUIRED",
+  "checklist_for_user_to_unblock": [
+    "Decidere bundle identifier definitivo (es. com.<azienda>.<gioco>)",
+    "Preparare app icon + splash hi-res (1024x1024, 2048x2732)",
+    "Compilare Data Safety form di Google Play (no PII raccolta oltre auth)",
+    "Compilare Privacy questionnaire di App Store Connect",
+    "Generare Apple Sign In Services ID + Key ID + Team ID",
+    "Creare Google OAuth client Android+iOS (firma SHA-1 release)",
+    "Configurare eas.json profili internal/testflight",
+    "Caricare keystore Android su EAS o gestire manualmente",
+    "Caricare AppStore Connect API key per EAS submit"
+  ]
+}

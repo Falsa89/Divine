@@ -3256,6 +3256,21 @@ OPTIONAL = [
     ('PROJECT-V98-OPTIONAL-FAIL-CLEANUP', 'validate_v98_optional_fail_cleanup.py'),
     ('PROJECT-V98-CLOSED-ALPHA-GATE', 'validate_v98_closed_alpha_gate.py'),
     ('MEGA-RELEASE-ACCELERATION-47-v98-ROLLUP', 'validate_mega_release_acceleration_47_v98_rollup.py'),
+    # ========================================================================
+    # v99 - MEGA_RELEASE_ACCELERATION_48_CLOSED_ALPHA_BLOCKER_CLEANUP_AND_PUBLIC_TEST_GATE_PACK
+    # PUBLIC_SYNC_TAG_v99_MEGA_RELEASE_ACCELERATION_48_CLOSED_ALPHA_BLOCKER_CLEANUP_AND_PUBLIC_TEST_GATE
+    # PUBLIC_SYNC_SENTINEL_v99_PRESENT=YES
+    # Strategia: 0 REQUIRED FAIL, optional fail legacy NON mascherati, NO validator weakening.
+    # 6 blocker Closed Alpha dichiarati onestamente -> verdetto CONDITIONAL.
+    # ========================================================================
+    ('PROJECT-V99-OPTIONAL-FAIL-CLEANUP', 'validate_v99_optional_fail_cleanup.py'),
+    ('PROJECT-V99-PROVIDER-ID-TOKEN-VERIFICATION', 'validate_v99_provider_id_token_verification.py'),
+    ('PROJECT-V99-PRIVACY-TERMS-URLS', 'validate_v99_privacy_terms_urls.py'),
+    ('PROJECT-V99-PHYSICAL-MOBILE-QA', 'validate_v99_physical_mobile_qa.py'),
+    ('PROJECT-V99-FULL-LOCUST', 'validate_v99_full_locust.py'),
+    ('PROJECT-V99-STORE-INTERNAL-TESTING-READINESS', 'validate_v99_store_internal_testing_readiness.py'),
+    ('PROJECT-V99-CLOSED-ALPHA-FINAL-GATE', 'validate_v99_closed_alpha_final_gate.py'),
+    ('MEGA-RELEASE-ACCELERATION-48-v99-ROLLUP', 'validate_mega_release_acceleration_48_v99_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
