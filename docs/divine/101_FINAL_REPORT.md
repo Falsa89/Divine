@@ -24,7 +24,7 @@ MEGA_RELEASE_ACCELERATION_50_GLOBAL_LEGACY_DATA_SANITATION_AND_SERVER_FLOW_FIX_D
 
 ## 2. Commit hash
 
-`<<commit_hash_da_popolare>>` — `feat(v101): global legacy data sanitation and server flow fix pack`
+`4d1981a8` — `feat(v101): global legacy data sanitation and server flow fix pack`
 
 ---
 
