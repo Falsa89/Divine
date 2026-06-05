@@ -26,7 +26,7 @@ MEGA_RELEASE_ACCELERATION_48_CLOSED_ALPHA_BLOCKER_CLEANUP_AND_PUBLIC_TEST_GATE_C
 
 ## 2. Commit hash
 
-`<<commit_hash_da_popolare>>` — `feat(v99): closed alpha blocker cleanup and public test gate pack`
+`ff799124` — `feat(v99): closed alpha blocker cleanup and public test gate pack`
 
 ---
 
