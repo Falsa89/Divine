@@ -1,0 +1,16 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_59_v107D",
+  "type":"v107d_backend_loader_server_id_real_acceptance_result",
+  "version":1,
+  "language":"it",
+  "feature_flag":"SERVER_SCOPED_RUNTIME_ENABLED",
+  "feature_flag_default":false,
+  "adoption_status":"V107C_PROBE_ROUTER_LIVE_NO_NEW_LOADER_MODIFIED_v107D",
+  "probe_router_file":"backend/routes/v107c_loader_server_id_probe.py",
+  "probe_endpoints_live":5,
+  "existing_loader_endpoints_modified_v107d":0,
+  "reason_no_loader_modification":"v107D scope focalizzato su tsx binding unblock. Loader reali (heroes/team/inventory/currencies/story_progress) richiedono PSP applied + SERVER_SCOPED_RUNTIME_ENABLED=true. Adoption pianificata v108_post_psp.",
+  "backend_isolation_live":false,
+  "banner_token":"SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "safety":{"db_writes_performed":0,"loader_endpoints_modified_v107d":0,"fake_isolation_live":false,"fake_PASS":false,"validator_weakening":false}
+}

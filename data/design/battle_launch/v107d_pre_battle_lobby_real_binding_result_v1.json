@@ -1,0 +1,17 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_59_v107D",
+  "type":"v107d_pre_battle_lobby_real_binding_result",
+  "version":1,
+  "language":"it",
+  "status":"REAL_BINDING_APPLIED_GATED_OFF_BY_DEFAULT",
+  "tsx_file":"frontend/app/pre-battle-lobby.tsx",
+  "binding_changes":["import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter'","useEffect invokes launchFromLobby() gated by EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED=='true'"],
+  "feature_flag":"EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED",
+  "feature_flag_default":"unset (treated as off)",
+  "default_runtime_behavior_unchanged":true,
+  "reward_granted":false,
+  "progress_written":false,
+  "optional_fail_baseline_preserved":true,
+  "optional_fail_count":23,
+  "safety":{"new_player_facing_feature":false,"combat_tsx_changes":false,"reward_grant":false,"progress_live_write":false,"fake_PASS":false,"validator_weakening":false}
+}

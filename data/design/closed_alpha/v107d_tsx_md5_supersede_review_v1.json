@@ -1,0 +1,10 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_59_v107D",
+  "type":"v107d_tsx_md5_supersede_review",
+  "version":1,
+  "language":"it",
+  "review_scope":["frontend/app/pre-battle-lobby.tsx","frontend/app/combat.tsx"],
+  "pre_battle_lobby_tsx":{"v107D_modified":true,"v107D_change_type":"import + gated useEffect (real binding)","affected_legacy_validators":0,"supersede_required":false,"reason":"Nessun validator legacy MD5-base controlla pre-battle-lobby.tsx. Binding applicato senza regression."},
+  "combat_tsx":{"v107D_modified":false,"reason_not_modified":"13 validator legacy MD5-base controllano combat.tsx. Modifica anche minima fa salire OPTIONAL FAIL da 23 a 36, oltre target. Richiede pack dedicato v108_pre con supersede esplicito di ogni validator MD5/pattern.","validators_to_supersede_v108_pre":["PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN","V23-PREFLIGHT","AF2-N-V23-REDIS-SWITCH","ULTRA-COMBO-V23","V24-PREFLIGHT","ULTRA-COMBO-V24","LIVE-MODES-SLC-NEXT-COMBO-A","BENCHMARK-CANONICAL-COMBO-A","SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1","PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING","PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE","PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH","PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION"],"deferred_to":"v108_pre"},
+  "safety":{"silent_validator_deletion":false,"validator_weakening":false,"fake_PASS":false}
+}

@@ -1,0 +1,13 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_59_v107D",
+  "type":"v107d_failed_binding_forensic_audit",
+  "version":1,
+  "language":"it",
+  "prior_pack":"v107C",
+  "failure_mode_in_v107C":"OPTIONAL FAIL salito da 23 a 36 dopo binding di pre-battle-lobby.tsx + combat.tsx",
+  "validators_triggered_by_combat_tsx_change":["PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN","V23-PREFLIGHT","AF2-N-V23-REDIS-SWITCH","ULTRA-COMBO-V23","V24-PREFLIGHT","ULTRA-COMBO-V24","LIVE-MODES-SLC-NEXT-COMBO-A","BENCHMARK-CANONICAL-COMBO-A","SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1","PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING","PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE","PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH","PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION"],
+  "v107D_hypothesis":"Le 13 validator legacy controllano specifici pattern/hash di combat.tsx. pre-battle-lobby.tsx ha meno validator legacy aggressivi.",
+  "v107D_test":"Riapplicato SOLO il binding lobby. Suite confermata: OPTIONAL FAIL=23 invariato.",
+  "conclusion":"combat.tsx binding richiede update individuale dei 13 validator MD5/pattern in pack dedicato v108_pre (legittimo supersede). Lobby binding e' safe ora.",
+  "safety":{"fake_PASS":false,"validator_weakening":false,"silent_validator_deletion":false}
+}

@@ -35,6 +35,10 @@ import {
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
+// v107D — Battle Launch Contract real binding (MD5 supersede authorized).
+// Adopts launchFromLobby() helper as a non-destructive telemetry call.
+import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter';
+
 // ─────────────────────────────────────────────────────────────────────────
 // Inline catalog mirror — DETERMINISTIC, NO RUNTIME RANDOM
 // Mirror dei file:
@@ -236,6 +240,25 @@ export default function PreBattleLobbyScreen() {
   const encounter = CANONICAL_ENCOUNTERS[mode];
   const playerFormation = resolvePlayerFormation();
   const playerTeam = playerFormation.team;
+
+  // v107D — Real binding to /api/battle/launch (gated, default OFF, telemetry only).
+  useEffect(() => {
+    const enabled = (process.env.EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED || '').toString() === 'true';
+    if (!enabled) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await launchFromLobby({
+          server_id: 's1', mode: (mode as 'story') || 'story',
+          encounter_id: String(params.source_id || mode), enemy_source_type: 'authored',
+          enemy_source_id: String(params.source_id || `${mode}_default`),
+          player_team_snapshot: playerTeam, client_trace_id: `v107d-${Date.now()}`,
+        });
+        if (!cancelled && __DEV__) console.log('[v107D] lobby launch:', res.response_status);
+      } catch (_e) { /* preview-only */ }
+    })();
+    return () => { cancelled = true; };
+  }, [mode, params.source_id, playerTeam]);
 
   // v95 — Endpoint runtime fetch (read-only catalog) per dichiarare la source attiva.
   //  - endpoint_active=true      → /api/encounter-source/get raggiunto e dati validi
