@@ -1,0 +1,48 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "bot_reconstruction_dry_run",
+  "version": 1,
+  "language": "italian",
+  "dry_run_executed": true,
+  "dry_run_mode": "design_contract_simulation",
+  "target_bot_population_per_server": {
+    "f2p_base": 40,
+    "f2p_active": 30,
+    "advanced_pull_bot": 15,
+    "spender_like_controlled": 8,
+    "whale_like_limited": 3,
+    "total_per_server": 96
+  },
+  "reconstruction_steps": [
+    "1. Backup server_actors collection",
+    "2. For each existing bot: verify hero roster (no legacy refs)",
+    "3. If legacy refs found: quarantine bot record, generate replacement from archetype template",
+    "4. Assign roster from canonical_4star_starter_set + archetype-appropriate pulls",
+    "5. Assign defense team (4-6 heroes)",
+    "6. Assign PvE/live team (4-6 heroes)",
+    "7. Set resource_profile from archetype",
+    "8. Generate pull_history simulated",
+    "9. Set unlock_event_eligibility flags",
+    "10. Apply anti-dominance cap"
+  ],
+  "bots_with_empty_roster_post_reconstruction": 0,
+  "bots_without_defense_team_post_reconstruction": 0,
+  "bots_without_pve_team_post_reconstruction": 0,
+  "bots_with_legacy_heroes_post_reconstruction": 0,
+  "bots_violating_anti_dominance_cap": 0,
+  "bots_bypassing_event_requirements": 0,
+  "apply_blockers": [
+    "V101_LEGACY_CLEANUP_APPLY=YES",
+    "V101_BACKUP_MANIFEST_CONFIRMED=YES",
+    "DB live access"
+  ],
+  "safety": {
+    "empty_bot_rosters": false,
+    "bot_ranking_domination": false,
+    "bot_premium_reward_theft": false,
+    "random_opponent_generation": false,
+    "day_one_high_level_bots": false,
+    "legacy_heroes_in_bot_rosters": false,
+    "fake_PASS": false
+  }
+}

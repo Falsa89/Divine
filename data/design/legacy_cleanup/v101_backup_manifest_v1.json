@@ -1,0 +1,38 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "backup_manifest",
+  "version": 1,
+  "language": "italian",
+  "backup_script": "backend/scripts/backup_v101_legacy_cleanup_snapshot.py",
+  "collections_to_backup": [
+    "users",
+    "inventories",
+    "server_actors",
+    "formations",
+    "story_state",
+    "pvp_state",
+    "tower_state",
+    "event_state",
+    "gacha_history",
+    "summon_history",
+    "config"
+  ],
+  "backup_format": "JSON dump per collection + MD5 manifest",
+  "backup_output_dir": "/app/data/design/legacy_cleanup/backups_v101/",
+  "backup_includes_secrets": false,
+  "backup_includes_raw_oauth_tokens": false,
+  "backup_includes_provider_secrets": false,
+  "backup_executed": false,
+  "reason_not_executed": "DB live access richiede credenziali. Script generato e dry-run-safe. Backup eseguito automaticamente quando V101_LEGACY_CLEANUP_APPLY=YES.",
+  "rollback_plan": [
+    "1. Stop apply script",
+    "2. Restore JSON dump per collection da backups_v101/",
+    "3. Verify MD5 manifest match",
+    "4. Restart backend"
+  ],
+  "safety": {
+    "raw_oauth_dumps": false,
+    "provider_secrets_in_backup": false,
+    "fake_PASS": false
+  }
+}

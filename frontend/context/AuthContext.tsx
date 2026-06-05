@@ -96,6 +96,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     await AsyncStorage.removeItem('token');
+    // v101 — clear selezione server cosi al prossimo login si passa da /servers
+    try { await AsyncStorage.removeItem('v101_selected_server_id'); } catch (_e) {}
     setToken(null);
     setUser(null);
   };

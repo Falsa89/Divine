@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "player_account_normalization_policy",
+  "version": 1,
+  "language": "italian",
+  "rules": [
+    "Quarantine/remove legacy heroes (move to inventory.heroes_legacy_quarantine, not delete)",
+    "Quarantine/remove legacy items (move to inventory.items_legacy_quarantine, not delete)",
+    "Preserve auth/account/session legal data (users.email, users.provider_user_id_hash, users.account_id)",
+    "Preserve canonical currencies only (gold, gems, diamonds, summon_tokens, event_currency)",
+    "Assign safe starter roster if account roster becomes empty post-quarantine",
+    "Rebuild team_formation from valid canonical heroes only",
+    "NO premium currency grant unless explicitly safe test package (V101_SAFE_TEST_PACKAGE=YES)"
+  ],
+  "safe_starter_roster": {
+    "hero_count": 4,
+    "hero_source": "canonical_4star_starter_set",
+    "hero_level_cap": 1,
+    "gear_provided": false,
+    "currency_provided": {
+      "gold": 1000,
+      "gems": 100
+    }
+  },
+  "auth_session_preserved": true,
+  "auth_session_deletion_only_via_logout_flow": true,
+  "safety": {
+    "auth_session_deletion_outside_logout": false,
+    "premium_currency_grant": false,
+    "fake_PASS": false
+  }
+}

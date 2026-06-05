@@ -3288,6 +3288,25 @@ OPTIONAL = [
     ('PROJECT-V100-EXTERNAL-BLOCKER-CHECKLIST', 'validate_v100_external_blocker_checklist.py'),
     ('PROJECT-V100-CLOSED-ALPHA-CANDIDATE-GATE', 'validate_v100_closed_alpha_candidate_gate.py'),
     ('MEGA-RELEASE-ACCELERATION-49-v100-ROLLUP', 'validate_mega_release_acceleration_49_v100_rollup.py'),
+    # ========================================================================
+    # v101 - MEGA_RELEASE_ACCELERATION_50_GLOBAL_LEGACY_DATA_SANITATION_AND_SERVER_FLOW_FIX_PACK
+    # PUBLIC_SYNC_TAG_v101_MEGA_RELEASE_ACCELERATION_50_GLOBAL_LEGACY_DATA_SANITATION_AND_SERVER_FLOW_FIX
+    # PUBLIC_SYNC_SENTINEL_v101_PRESENT=YES
+    # Tracks A-K: legacy audit + canonical allowlist + backup + dry-run + apply (gated) +
+    # account/bot/encounter cleanup + frontend mock + server select/login/logout fix.
+    # Verdict: DRY_RUN_READY (apply gated by V101_LEGACY_CLEANUP_APPLY + V101_BACKUP_MANIFEST_CONFIRMED).
+    # ========================================================================
+    ('PROJECT-V101-GLOBAL-LEGACY-REFERENCE-AUDIT', 'validate_v101_global_legacy_reference_audit.py'),
+    ('PROJECT-V101-CANONICAL-RUNTIME-ALLOWLIST', 'validate_v101_canonical_runtime_allowlist.py'),
+    ('PROJECT-V101-BACKUP-MANIFEST', 'validate_v101_backup_manifest.py'),
+    ('PROJECT-V101-DRY-RUN-GLOBAL-CLEANUP', 'validate_v101_dry_run_global_cleanup.py'),
+    ('PROJECT-V101-APPLY-SCRIPT-GATED', 'validate_v101_apply_script_gated.py'),
+    ('PROJECT-V101-PLAYER-ACCOUNT-NORMALIZATION', 'validate_v101_player_account_normalization.py'),
+    ('PROJECT-V101-BOT-RECONSTRUCTION', 'validate_v101_bot_reconstruction.py'),
+    ('PROJECT-V101-ENCOUNTER-ENEMY-SOURCE-CLEANUP', 'validate_v101_encounter_enemy_source_cleanup.py'),
+    ('PROJECT-V101-FRONTEND-LEGACY-MOCK-ROUTE-AUDIT', 'validate_v101_frontend_legacy_mock_route_audit.py'),
+    ('PROJECT-V101-SERVER-SELECT-LOGOUT-FLOW', 'validate_v101_server_select_logout_flow.py'),
+    ('MEGA-RELEASE-ACCELERATION-50-v101-ROLLUP', 'validate_mega_release_acceleration_50_v101_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

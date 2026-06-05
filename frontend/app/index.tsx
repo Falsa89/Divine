@@ -59,7 +59,22 @@ export default function LoginScreen() {
 
   React.useEffect(() => {
     if (!loading && user) {
-      router.replace('/(tabs)/home');
+      // v101 — Login -> Server Select -> Home flow.
+      // Se l'utente NON ha ancora selezionato un server in questa sessione,
+      // lo manda al server select. Altrimenti va in home.
+      (async () => {
+        try {
+          const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+          const selected = await AsyncStorage.getItem('v101_selected_server_id');
+          if (!selected) {
+            router.replace('/servers');
+          } else {
+            router.replace('/(tabs)/home');
+          }
+        } catch (_e) {
+          router.replace('/servers');
+        }
+      })();
     }
   }, [loading, user]);
 
@@ -78,7 +93,13 @@ export default function LoginScreen() {
     try {
       if (isLogin) { await login(email, password); }
       else { await register(email, password, username); }
-      router.replace('/(tabs)/home');
+      // v101 — Routing post-login passa per /servers se non c'e' selezione server.
+      try {
+        const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+        const selected = await AsyncStorage.getItem('v101_selected_server_id');
+        if (!selected) { router.replace('/servers'); }
+        else { router.replace('/(tabs)/home'); }
+      } catch (_e) { router.replace('/servers'); }
     } catch (e: any) { setError(e.message || 'Errore'); }
     finally { setSubmitting(false); }
   };

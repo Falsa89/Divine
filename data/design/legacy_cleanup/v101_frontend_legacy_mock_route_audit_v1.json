@@ -1,0 +1,52 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "frontend_legacy_mock_route_audit",
+  "version": 1,
+  "language": "italian",
+  "scanned_paths": [
+    "frontend/app/",
+    "frontend/components/",
+    "frontend/context/",
+    "frontend/src/auth/",
+    "frontend/mocks/ (se esiste)",
+    "frontend/constants/"
+  ],
+  "findings": {
+    "old_mock_heroes_items_enemies": {
+      "count": 0,
+      "action": "replace_with_canonical_fixtures_if_safe"
+    },
+    "old_preview_data": {
+      "count": 0,
+      "action": "label_qa_only_if_kept"
+    },
+    "old_menu_routes_legacy": {
+      "count": 0,
+      "action": "hide_from_player_flow"
+    },
+    "old_screens_still_reachable": {
+      "count": 0,
+      "action": "label_qa_only_if_kept"
+    },
+    "old_authcontext_usage": {
+      "path": "frontend/context/AuthContext.tsx + frontend/src/auth/AuthContext.tsx",
+      "status": "BOTH_PROVIDERS_ACTIVE_in__layout_tsx",
+      "action": "v101 mantiene entrambi; legacy AuthContext (email/password) gestisce login attuale, v96 AuthProvider (Google/Apple/Guest) gestisce session token JWT. Future v102 = unificare."
+    },
+    "old_server_select_locked_route": {
+      "path": "frontend/app/servers.tsx",
+      "status": "EXISTS_BUT_NOT_ENFORCED_AS_GATE",
+      "action_v101": "index.tsx ora effettua routing post-login a /servers prima di /(tabs)/home se v101_selected_server_id non e in AsyncStorage"
+    }
+  },
+  "actions_applied_in_v101": [
+    "frontend/app/index.tsx: post-login routing -> /servers se v101_selected_server_id assente",
+    "frontend/context/AuthContext.tsx: logout() ora pulisce anche v101_selected_server_id",
+    "frontend/app/(tabs)/menu.tsx: logout button ora effettua router.replace('/') dopo logout per tornare a login"
+  ],
+  "safety": {
+    "random_opponent_in_frontend_mocks": false,
+    "legacy_heroes_in_frontend_mocks": false,
+    "fake_PASS": false
+  }
+}

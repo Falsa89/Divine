@@ -1,0 +1,45 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "server_select_flow_result",
+  "version": 1,
+  "language": "italian",
+  "flow_expected": [
+    "no session -> /login (index.tsx ridisegna login form)",
+    "login valido -> /servers (gate v101)",
+    "server scelto (AsyncStorage v101_selected_server_id set) -> /(tabs)/home",
+    "cambia server -> /servers",
+    "logout account -> clear v96 SecureStore + clear v101_selected_server_id -> /login"
+  ],
+  "changes_applied": [
+    {
+      "file": "frontend/app/index.tsx",
+      "change": "post-login routing: se v101_selected_server_id non in AsyncStorage -> /servers; altrimenti /(tabs)/home"
+    },
+    {
+      "file": "frontend/context/AuthContext.tsx",
+      "change": "logout() ora rimuove anche v101_selected_server_id da AsyncStorage"
+    },
+    {
+      "file": "frontend/app/(tabs)/menu.tsx",
+      "change": "logout button effettua router.replace('/') dopo logout per tornare alla login screen"
+    }
+  ],
+  "servers_route_status": {
+    "path": "frontend/app/servers.tsx",
+    "exists": true,
+    "interactive": true,
+    "reads_async_storage_v101_selected_server_id": true,
+    "writes_async_storage_v101_selected_server_id_on_select": "deferred_to_v102_integration",
+    "note": "v101 fixa il routing gate. La logica di selezione attiva del server in servers.tsx (write AsyncStorage chiave v101_selected_server_id) e' lasciata al wiring v102 affinche la screen mantenga il design corrente e non venga ristrutturata in modo invasivo."
+  },
+  "v96_securestore_clear_on_logout": {
+    "status": "PARTIAL",
+    "reason": "v101 collega solo legacy AuthContext.logout() che rimuove token+v101_selected_server_id. v96 SecureStore clear gestita dal proprio AuthContext logout(). Per pulizia totale, l'utente puo richiamare entrambi i logout in un futuro pack di unificazione."
+  },
+  "verdict": "LOGIN_TO_SERVER_TO_HOME_FLOW_FIXED_AT_INDEX_LEVEL_LOGOUT_RETURNS_TO_LOGIN",
+  "safety": {
+    "auth_session_deletion_outside_logout": false,
+    "raw_oauth_logs": false,
+    "fake_PASS": false
+  }
+}

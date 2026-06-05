@@ -1,0 +1,45 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "canonical_runtime_allowlist",
+  "version": 1,
+  "language": "italian",
+  "canonical_hero_ids": {
+    "source": "data/design/hero_skill_kits/ + Character Bible v95",
+    "count_design_only": "defer_runtime_scan_to_dry_run_script"
+  },
+  "hidden_pending_hero_ids_not_usable": {
+    "source": "validate_5star_legacy_status_tags_normalized.py output",
+    "rule": "hidden/pending heroes CANNOT appear in player active rosters or enemy teams unless explicitly allowed by encounter source"
+  },
+  "canonical_items": {
+    "currencies": ["gold", "gems", "diamonds", "summon_tokens", "event_currency"],
+    "materials": ["gear_crystal", "forge_dust", "raid_essence", "divine_shard"],
+    "forbidden_legacy_currencies": ["old_coin_v0", "deprecated_token_v0"]
+  },
+  "placeholder_artifacts_gear_dw": {
+    "allowed_only_if_marked": true,
+    "marker_field": "placeholder=true AND runtime_active=false"
+  },
+  "canonical_enemies_bosses": {
+    "source": "data/design/boss_systems/ + data/design/enemies/",
+    "rule": "legacy enemy ids must be quarantined"
+  },
+  "canonical_bot_archetypes": [
+    "f2p_base",
+    "f2p_active",
+    "advanced_pull_bot",
+    "spender_like_controlled",
+    "whale_like_limited"
+  ],
+  "rules": [
+    "Hidden/pending heroes cannot appear in player inventories",
+    "Hidden/pending heroes cannot appear in enemy teams unless encounter source explicitly allows",
+    "Forbidden legacy currencies must be quarantined",
+    "Bot archetypes must use only canonical heroes"
+  ],
+  "safety": {
+    "hidden_heroes_in_active_runtime_rosters": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

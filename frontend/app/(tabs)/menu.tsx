@@ -211,7 +211,7 @@ export default function MenuTab() {
           </Animated.View>
         ))}
 
-        <TouchableOpacity style={s.logoutBtnOuter} onPress={logout} activeOpacity={0.7}>
+        <TouchableOpacity style={s.logoutBtnOuter} onPress={async () => { try { await logout(); } catch (_e) {} router.replace('/'); }} activeOpacity={0.7}>
           <LinearGradient
             colors={['rgba(255,68,68,0.12)', 'rgba(255,68,68,0.05)']}
             style={s.logoutBtn}

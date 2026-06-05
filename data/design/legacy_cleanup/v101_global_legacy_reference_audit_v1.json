@@ -1,0 +1,64 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "global_legacy_reference_audit",
+  "version": 1,
+  "language": "italian",
+  "scope_scanned": [
+    "backend/",
+    "frontend/",
+    "data/",
+    "docs/",
+    "backend/scripts/seed_*.py",
+    "backend/data/fixtures/",
+    "data/design/heroes/",
+    "data/design/enemies/",
+    "data/design/bots/",
+    "data/design/story/",
+    "data/design/tower/",
+    "data/design/arena/",
+    "data/design/raid/",
+    "data/design/events/",
+    "data/design/live_events/",
+    "data/design/guild_war/",
+    "DB collections: users, server_actors, formations, story_state, gacha_history"
+  ],
+  "classification_taxonomy": {
+    "canonical_current": "hero/item/enemy attualmente nel canonical roster post-v95",
+    "approved_pending_hidden": "hero/item approvato ma hidden, non usable in runtime active rosters",
+    "legacy_noncanonical": "hero/item del vecchio gioco, deve essere quarantined o migrato",
+    "placeholder_runtime_only": "placeholder design-only, non runtime active",
+    "orphan_id": "id referenziato in code/data ma senza definizione canonica",
+    "unknown_needs_review": "richiede review manuale",
+    "safe_to_keep": "riferimento legacy ma in path doc/test, non runtime",
+    "needs_quarantine": "da spostare in archive con backup",
+    "needs_migration": "da convertire al canonical equivalent",
+    "needs_delete_after_backup": "da eliminare solo dopo backup conferm"
+  },
+  "findings_summary": {
+    "canonical_current_heroes": 0,
+    "approved_pending_hidden_heroes": 0,
+    "legacy_noncanonical_heroes": 0,
+    "placeholder_runtime_only_items": 0,
+    "orphan_ids": 0,
+    "safe_to_keep_doc_only": 0,
+    "needs_quarantine": 0,
+    "needs_migration": 0,
+    "needs_delete_after_backup": 0,
+    "audit_status": "DESIGN_CONTRACT_DRY_RUN_READY",
+    "runtime_audit_executed_in_container": false,
+    "reason": "v101 esegue audit design-contract. Esecuzione runtime su account reali richiede DB live disponibile + apply flags. Dry-run script generato."
+  },
+  "findings_categories": {
+    "backend_code_legacy_refs": {"count": 0, "action": "audit deferred to dry-run script"},
+    "frontend_mock_legacy_refs": {"count": 0, "action": "audit deferred to track I"},
+    "data_design_legacy_refs": {"count": 0, "action": "audit deferred to dry-run script"},
+    "db_collections_legacy_refs": {"count": 0, "action": "audit deferred to runtime apply (gated)"}
+  },
+  "safety": {
+    "blind_destructive_reset": false,
+    "delete_without_backup": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "commercial_release_claim": false
+  }
+}

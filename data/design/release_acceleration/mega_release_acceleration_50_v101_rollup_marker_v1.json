@@ -1,0 +1,61 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "v101_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T15:01:28.942814Z",
+  "validators_total": 10,
+  "validators_pass": 10,
+  "results": [
+    {
+      "validator": "validate_v101_global_legacy_reference_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 global legacy reference audit (taxonomy=10, status=DESIGN_CONTRACT_DRY_RUN_READY)"
+    },
+    {
+      "validator": "validate_v101_canonical_runtime_allowlist.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 canonical runtime allowlist (5 archetypes)"
+    },
+    {
+      "validator": "validate_v101_backup_manifest.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 backup manifest (11 collections, script ready)"
+    },
+    {
+      "validator": "validate_v101_dry_run_global_cleanup.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 dry-run global cleanup (risk=LOW)"
+    },
+    {
+      "validator": "validate_v101_apply_script_gated.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 apply script gated by V101_LEGACY_CLEANUP_APPLY + V101_BACKUP_MANIFEST_CONFIRMED"
+    },
+    {
+      "validator": "validate_v101_player_account_normalization.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 player account normalization (7 rules, safe_starter_roster ready)"
+    },
+    {
+      "validator": "validate_v101_bot_reconstruction.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 bot reconstruction (5 archetypes, 0 empty rosters, 0 legacy heroes)"
+    },
+    {
+      "validator": "validate_v101_encounter_enemy_source_cleanup.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 encounter/enemy source cleanup (13 modes, 0 legacy refs)"
+    },
+    {
+      "validator": "validate_v101_frontend_legacy_mock_route_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 frontend legacy mock/route audit (3 actions applied)"
+    },
+    {
+      "validator": "validate_v101_server_select_logout_flow.py",
+      "exit_code": 0,
+      "last_line": "PASS — v101 server select/login/logout flow (3 changes applied, runtime verified)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_50_GLOBAL_LEGACY_DATA_SANITATION_AND_SERVER_FLOW_FIX_DRY_RUN_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

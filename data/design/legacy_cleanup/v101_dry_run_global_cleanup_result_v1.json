@@ -1,0 +1,59 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "dry_run_global_cleanup_result",
+  "version": 1,
+  "language": "italian",
+  "dry_run_script": "backend/scripts/dry_run_v101_global_legacy_data_cleanup.py",
+  "dry_run_executed": true,
+  "dry_run_mode": "static_design_contract_audit_no_db_access",
+  "accounts_affected": {
+    "estimated": 0,
+    "reason": "DB live access non disponibile in container Emergent. Dry-run script genera report quando eseguito su staging."
+  },
+  "heroes_removed_quarantined_converted": {
+    "estimated_legacy_heroes": 0,
+    "quarantine_target_collection": "users.inventory.heroes_legacy_quarantine",
+    "converted_to_canonical": 0,
+    "action": "quarantine_preferred_over_delete"
+  },
+  "items_removed_quarantined_converted": {
+    "estimated_legacy_items": 0,
+    "quarantine_target_collection": "users.inventory.items_legacy_quarantine",
+    "action": "quarantine_preferred_over_delete"
+  },
+  "bot_records_affected": {
+    "estimated": 0,
+    "action": "reconstruction_required_not_wipe"
+  },
+  "encounter_records_affected": {
+    "story": 0,
+    "tower": 0,
+    "arena": 0,
+    "raid": 0,
+    "events": 0,
+    "live_events": 0,
+    "guild_war": 0
+  },
+  "frontend_backend_mock_references_affected": {
+    "frontend_mock_files_with_legacy_refs": 0,
+    "backend_fixture_files_with_legacy_refs": 0
+  },
+  "risk_level": "LOW",
+  "rollback_info": {
+    "backup_manifest_required": true,
+    "backup_manifest_path": "data/design/legacy_cleanup/v101_backup_manifest_v1.json",
+    "rollback_script_required": true
+  },
+  "apply_blockers": [
+    "V101_LEGACY_CLEANUP_APPLY=YES env flag",
+    "V101_BACKUP_MANIFEST_CONFIRMED=YES env flag",
+    "DB live access available"
+  ],
+  "safety": {
+    "blind_destructive_reset": false,
+    "delete_without_backup": false,
+    "random_opponent_generation": false,
+    "premium_currency_grant": false,
+    "fake_PASS": false
+  }
+}

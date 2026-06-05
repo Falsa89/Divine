@@ -1,0 +1,79 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "bot_reconstruction_policy",
+  "version": 1,
+  "language": "italian",
+  "archetypes": {
+    "f2p_base": {
+      "account_level": "1-15",
+      "roster_size": "4-8 canonical 3-4 star",
+      "defense_team_size": 4,
+      "pve_live_team_size": 4,
+      "resource_profile": "low gold + tutorial gems",
+      "pull_history": "tutorial 10x only",
+      "unlock_event_eligibility": "only beginner events",
+      "anti_dominance_cap": "max_pvp_rank=Silver"
+    },
+    "f2p_active": {
+      "account_level": "15-35",
+      "roster_size": "10-20 canonical mixed star",
+      "defense_team_size": 5,
+      "pve_live_team_size": 5,
+      "resource_profile": "med gold + saved gems",
+      "pull_history": "daily summons + event 10x",
+      "unlock_event_eligibility": "all events meeting level req",
+      "anti_dominance_cap": "max_pvp_rank=Gold"
+    },
+    "advanced_pull_bot": {
+      "account_level": "35-60",
+      "roster_size": "30-60 canonical incl 5-6 star",
+      "defense_team_size": 6,
+      "pve_live_team_size": 6,
+      "resource_profile": "high gold + spent gems",
+      "pull_history": "focused 5-star banner pulls",
+      "unlock_event_eligibility": "all events",
+      "anti_dominance_cap": "max_pvp_rank=Platinum"
+    },
+    "spender_like_controlled": {
+      "account_level": "40-70",
+      "roster_size": "50-100 canonical",
+      "defense_team_size": 6,
+      "pve_live_team_size": 6,
+      "resource_profile": "high gold + replenishing gems",
+      "pull_history": "all banners + premium",
+      "unlock_event_eligibility": "all events",
+      "anti_dominance_cap": "max_pvp_rank=Diamond (NOT top-1)",
+      "controlled_note": "NEVER occupy top-3 rank, NEVER steal limited rewards"
+    },
+    "whale_like_limited": {
+      "account_level": "50-80",
+      "roster_size": "100+ canonical",
+      "defense_team_size": 6,
+      "pve_live_team_size": 6,
+      "resource_profile": "highest tier (simulated)",
+      "pull_history": "max premium pulls",
+      "unlock_event_eligibility": "all events",
+      "anti_dominance_cap": "max_pvp_rank=Diamond (NEVER Master/Top10)",
+      "limited_note": "presence cap per server: max 3 whale_like bots"
+    }
+  },
+  "forbidden": [
+    "bot senza eroi (empty roster)",
+    "bot senza team difesa",
+    "bot senza team PvE/live",
+    "bot livello alto day-one",
+    "bot con vecchi eroi legacy",
+    "bot che bypassano requisiti eventi",
+    "bot premium reward theft",
+    "bot ranking domination top-3",
+    "random opponent generation"
+  ],
+  "reconstruction_required_if_wiped": true,
+  "safety": {
+    "empty_bot_rosters": false,
+    "bot_ranking_domination": false,
+    "bot_premium_reward_theft": false,
+    "random_opponent_generation": false,
+    "fake_PASS": false
+  }
+}

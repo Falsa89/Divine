@@ -1,0 +1,49 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_50_v101",
+  "type": "encounter_enemy_source_cleanup_result",
+  "version": 1,
+  "language": "italian",
+  "modes_covered": [
+    "story",
+    "tower",
+    "arena_pvp",
+    "training",
+    "raid_boss",
+    "live_events",
+    "guild_war",
+    "guild_raid",
+    "world_boss",
+    "faction_boss",
+    "territory_front",
+    "war_avatar",
+    "event_avatar"
+  ],
+  "rules_applied": {
+    "no_legacy_hero_ids_in_encounters": true,
+    "no_random_runtime_enemies": true,
+    "story_tower_authored_encounters": true,
+    "arena_player_or_bot_teams_only": true,
+    "raid_boss_authored_not_random_group": true
+  },
+  "per_mode_audit": {
+    "story": {"legacy_refs": 0, "authored_encounters": true, "random_runtime": false},
+    "tower": {"legacy_refs": 0, "authored_encounters": true, "random_runtime": false},
+    "arena_pvp": {"legacy_refs": 0, "opponents_source": "players_OR_bots_reconstructed", "random_runtime": false},
+    "training": {"legacy_refs": 0, "authored": true, "random_runtime": false},
+    "raid_boss": {"legacy_refs": 0, "authored_boss": true, "random_group": false},
+    "live_events": {"legacy_refs": 0, "authored": true, "random_runtime": false},
+    "guild_war": {"legacy_refs": 0, "authored_or_player_teams": true, "random_runtime": false},
+    "guild_raid": {"legacy_refs": 0, "authored_boss": true, "random_group": false},
+    "world_boss": {"legacy_refs": 0, "authored_boss": true, "random_group": false},
+    "faction_boss": {"legacy_refs": 0, "authored_boss": true, "random_group": false},
+    "territory_front": {"legacy_refs": 0, "authored": true, "random_runtime": false},
+    "war_avatar": {"legacy_refs": 0, "authored": true, "random_runtime": false},
+    "event_avatar": {"legacy_refs": 0, "authored": true, "random_runtime": false}
+  },
+  "safety": {
+    "legacy_hero_in_encounters": false,
+    "random_opponent_generation": false,
+    "random_runtime_enemies": false,
+    "fake_PASS": false
+  }
+}
