@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "required_invariant_protection",
+  "version": 1,
+  "language": "italian",
+  "required_validators_protected": [
+    "RM1.28-A", "RM1.28-B", "RM1.28-C", "RM1.28-D", "RM1.28-E",
+    "RM1.29",
+    "RM1.30-A", "RM1.30-B", "RM1.30-C",
+    "RM1.27-A", "RM1.27-D",
+    "RM1.32-A", "RM1.32-B", "RM1.32-C2",
+    "PROJECT-J-RC-1-RESOLVER-PURE-DETERMINISTIC",
+    "PROJECT-J-RC-2-NO-TICK-LOOP-TOUCH",
+    "PROJECT-J-RC-3-CAPS-RESPECT",
+    "PROJECT-J-RC-4-PVP-FAIRNESS-AUDIT",
+    "PROJECT-J-RC-5-ROLLBACK-RUNBOOK"
+  ],
+  "required_total": 19,
+  "required_fail_pre_v100": 0,
+  "required_fail_post_v100": 0,
+  "required_weakened": 0,
+  "v95_engine_regression_check": "PASS",
+  "v96_auth_session_check": "PASS",
+  "v97_refresh_bot_policy_check": "PASS",
+  "v98_bot_runtime_gates_check": "PASS",
+  "v99_blocker_honesty_check": "PASS",
+  "superseded_set_only_modified_via_v100_md5_rebaseline": true,
+  "required_tuple_list_untouched": true,
+  "v100_supersede_targets_intersect_REQUIRED": false,
+  "safety": {
+    "required_weakening": false,
+    "required_removal": false,
+    "required_fake_PASS": false
+  }
+}

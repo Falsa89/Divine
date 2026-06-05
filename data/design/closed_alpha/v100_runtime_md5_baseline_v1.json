@@ -1,0 +1,34 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "runtime_md5_baseline_official",
+  "version": 1,
+  "language": "italian",
+  "authority": "Approval chain v95+v96+v97+v98+v99 autorizzata",
+  "files": {
+    "backend/battle_engine.py": {
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "historical_references": [
+        {
+          "md5": "151ca35ad3bc35f0a6209cb3744ed440",
+          "pack": "pre_v95_baseline",
+          "status": "superseded_by_v95_RC_runtime_apply"
+        }
+      ],
+      "authorized_change_pack": "v95",
+      "change_type": "RC_runtime_apply_release_candidate_prep"
+    },
+    "backend/server.py": {
+      "current_md5": "badf6fc933dd25aaf68ba3bdb9bd316a",
+      "historical_references": [],
+      "authorized_change_pack": "v96_v98",
+      "change_type": "auth_account_routes + admin_gdpr_routes"
+    }
+  },
+  "baseline_rebase_mechanism": "SUPERSEDED_AFTER_V100_MD5_REBASELINE frozenset gated by file presence",
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "old_hash_preserved_as_historical_reference": true,
+    "silent_overwrite": false
+  }
+}

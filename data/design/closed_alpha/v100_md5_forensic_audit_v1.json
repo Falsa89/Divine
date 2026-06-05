@@ -1,0 +1,1175 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "md5_forensic_audit",
+  "version": 1,
+  "language": "italian",
+  "audit_scope": "tutti i 134 OPTIONAL FAIL post-v99 con focus su backend/battle_engine.py drift",
+  "count_total_stale_md5_battle_engine": 111,
+  "count_non_md5_remaining": 23,
+  "file_affected": "backend/battle_engine.py",
+  "expected_old_hash": "151ca35ad3bc35f0a6209cb3744ed440",
+  "current_hash": "56b6e5261c3b35c421db3202f750d1a6",
+  "authorized_replacement_pack": "v95_MEGA_RELEASE_ACCELERATION_44_RUNTIME_APPLY_RELEASE_CANDIDATE_PREP",
+  "approval_chain": [
+    "v95_RC_runtime_apply",
+    "v96_auth_account",
+    "v97_internal_alpha_hardening",
+    "v98_closed_alpha_rampup",
+    "v99_blocker_cleanup"
+  ],
+  "validator_action_taxonomy": {
+    "update_baseline": "aggiorna il baseline MD5 nel validator",
+    "supersede_validator": "marca SUPERSEDED via meccanismo formale (preferito)",
+    "keep_fail": "lascia fallire onestamente",
+    "convert_to_historical_reference": "documenta come riferimento storico",
+    "remove_deprecated": "rimuovi (vietato in v100)"
+  },
+  "entries": [
+    {
+      "task": "BENCHMARK-CANONICAL-RUNTIME-SAFETY-AUDIT-A",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "LIVE-MODES-RUNTIME-SAFETY-AUDIT-A",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-1-v37-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-10-v46-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-11-v47-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-12-v48-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-13-v49-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-14-v50-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-2-v38-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-3-v39-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-4-v40-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-5-v41-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-6-v42-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-7-v43-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-8-v44-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-ECONOMY-SAFETY-ACCELERATION-9-v45-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-1-v51-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-10-v61-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-11-v62-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-12-v63-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-13-v64-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-14-v65-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-15-v66-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-16-v67-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-17-v68-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-18-v69-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-19-v70-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-2-v52-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-20-v71-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-21-v72-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-3-v53-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-4-v55-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-5-v56-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-6-v57-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-7-v58-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-8-v59-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-9-v60-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "MEGA-RELEASE-ACCELERATION-MASTER-v54-ROLLUP",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-BACKEND-CATALOG-RO",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-BIBLE-CANONICAL-DESIGN",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-BIBLE-REVIEW-SIGNOFF",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-INVENTORY-GATED-IMPORT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-INVENTORY-LIVE-ACTIVATION-SIGNOFF",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-INVENTORY-LIVE-APPLY",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-INVENTORY-SCHEMA-DRY-RUN",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-LEGACY-MUTATION-ENDPOINT-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-LIVE-SIGNOFF-SUITE-RUNNER-SYNC-FIX",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-PREVIEW-UI-POPULATION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ARTIFACT-UPGRADE-COMMIT-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-AUDIO-PLACEHOLDER-FOUNDATION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BATCH1-V2-TRACK-H-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BATTLE-ENTRYPOINT-REGISTRY-DESIGN",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BATTLE-ENTRYPOINT-REGISTRY-v2-PREVIEW",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BATTLE-PASS-CLAIM-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BATTLE-PASS-SURFACE-MODERNIZATION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BETA-HARNESS-PUBLIC-REPO-SYNC-AND-MINOR-UI-HYGIENE-FIX",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BETA-TESTING-TRACK-A-BASELINE",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-BETA-TESTING-TRACK-I-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-COMBAT-FINALIZE-FOR-RELEASE",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-CONTROLLED-PREVIEW-ONLY-BUGFIX",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-DIVINE-WEAPON-UPGRADE-COMMIT-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-ECONOMY-IDEMPOTENCY-AND-ATOMIC-COMMIT-CONTRACT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-FORGE-CRASH-TRACK-C-BACKEND-CONTRACT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-FORGE-CRASH-TRACK-H-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-FRONTEND-B-TRACK-B-COMBAT-FLOW-AUDIT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-FRONTEND-C-TRACK-E-DAILY-HUB-MUTATION-GUARD",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-FULL-REPO-TRACK-H-COMPLETION-COVERAGE-PROOF",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-FULL-RUNTIME-FEATURE-REALITY-AUDIT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-GEAR-CAP-PLUS-50-RUNTIME",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-GEAR-FORGE-FUSION-COMMIT-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-GEAR-FORGE-FUSION-REFORGE-RUNTIME",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-GEM-SOCKET-COMMIT-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-GEM-SOCKET-RUNTIME",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-GUIDE-CODEX-AND-TUTORIAL-FOUNDATION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-HERO-ELEVATION-QUALITY-FRAME-RUNTIME",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-HERO-GEAR-PROGRESSION-BIBLE",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-HOME-MENU-REWIRING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-IAP-DESIGN",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-INLINE-CONFIRM-TRACK-H-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-LOGIN-AUTH-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-MAIL-CLAIM-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-MATERIAL-RAID-CLAIM-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-MATERIAL-RAID-RUNTIME",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-MENU-PUBLIC-EXPOSURE-APPLY-CONTROLLED",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-MODE-WIRING-TRACK-H-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-MULTI-MODE-VISUAL-BATTLE-PREVIEW-CONTRACTS",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-NO-STAMINA-REMEDIATION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-PLAYER-LEGACY-TRACK-H-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-PRE-LIVE-AUDIT-TRACEABILITY-BUNDLE",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-REPLAY-CONFLICT-TELEMETRY-DRY-RUN",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-RUNE-SCROLL-TALISMAN-COMMIT-SAFETY-HARDENING",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-SERVER-PROFILES-LIVE-MULTISHARD",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-SHOP-IAP-INTEGRATION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-SP-AUTH-TRACK-H-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-SP-LEGACY-TRACK-H-COMPLETION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-STORY-PLAYABLE-ALPHA-SLICE-PLAN",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-TOWER-OF-THE-HELLS-RUNTIME",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-U-TRACK-F-SECOND-SLICE-ROLLBACK-KILL-SWITCH-DRILL",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-V90-NO-MOCK-PREVIEW-REGRESSION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-VIP-DESIGN-AND-IAP-INTEGRATION",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-W-TRACK-A-SECOND-SLICE-PROD-PRECHECK-SIGNATURE-GATE",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-W-TRACK-B-SECOND-SLICE-PROD-STAGE-1",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-W-TRACK-C-SECOND-SLICE-PROD-STAGE-5",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-W-TRACK-D-SECOND-SLICE-PROD-STAGE-25",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-W-TRACK-E-SECOND-SLICE-PROD-STAGE-100",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-W-TRACK-F-SECOND-SLICE-PROD-FINAL-NO-LEAK-LOAD-ROLLBACK",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "PROJECT-v72-P3-POLISH-BATCH-APPLIED",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "SLC-BE-RUNTIME-SAFETY-AUDIT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "SLC-C-CRITICAL-FILES-NO-DIFF",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "SLC-D-RUNTIME-SAFETY-AUDIT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    },
+    {
+      "task": "SLC-F-RUNTIME-SAFETY-AUDIT",
+      "expected_old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+      "current_md5": "56b6e5261c3b35c421db3202f750d1a6",
+      "file": "backend/battle_engine.py",
+      "superseded_by_pack": "v95_RC_runtime_apply",
+      "validator_action": "supersede_validator",
+      "justification": "Validator legacy che ancorava MD5 baseline pre-v95. Il patch v95 RC su backend/battle_engine.py era autorizzato (battle engine status seam release candidate prep) ed era applicato. Marcato SUPERSEDED via meccanismo formale SUPERSEDED_AFTER_V100_MD5_REBASELINE gated dalla presenza di data/design/closed_alpha/v100_runtime_md5_baseline_v1.json. NON modifica il validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON."
+    }
+  ],
+  "non_md5_remaining": [
+    {
+      "task": "AF2-N-V23-REDIS-SWITCH",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "BENCHMARK-CANONICAL-COMBO-A",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "LIVE-MODES-SLC-NEXT-COMBO-A",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-ALIGN-FIX-TRACK-H-COMPLETION",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-BETA-TESTING-TRACK-F-REDIS",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-FORGE-CRASH-TRACK-G-HYGIENE",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-GACHA-RATE-SANITY-FINAL-SIGNOFF",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-INLINE-CONFIRM-TRACK-E-API-CONTRACT",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-SF-MERGE-TRACK-F-NAVIGATION",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-SF-MERGE-TRACK-H-COMPLETION",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "ULTRA-COMBO-V23",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "ULTRA-COMBO-V24",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "V23-PREFLIGHT",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    },
+    {
+      "task": "V24-PREFLIGHT",
+      "failure_mode": "NON_MD5_LOGIC_OR_ENVIRONMENTAL",
+      "validator_action": "keep_fail",
+      "justification": "Non e un MD5 drift v95-related. Resta failing onestamente. Documentato in supersede_review come keep_as_doc_reference o environmental."
+    }
+  ],
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "hidden_optional_fail": false,
+    "mass_baseline_overwrite": false
+  }
+}

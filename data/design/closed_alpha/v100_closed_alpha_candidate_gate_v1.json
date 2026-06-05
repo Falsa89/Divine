@@ -1,0 +1,73 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "closed_alpha_candidate_gate",
+  "version": 1,
+  "language": "italian",
+  "gates": {
+    "optional_fail_<=30": {"reached": true, "status": "OK", "current": 23, "target": 30},
+    "no_required_fail": {"reached": true, "status": "OK"},
+    "no_miss": {"reached": true, "status": "OK"},
+    "v95_v96_v97_v98_v99_invariants_intact": {"reached": true, "status": "OK"},
+    "v100_md5_rebaseline_formal_audit_present": {"reached": true, "status": "OK"},
+    "external_blockers_documented": {"reached": true, "status": "OK"},
+    "provider_credentials": {"reached": false, "status": "EXTERNAL_BLOCKER", "reason": "CREDENTIALS_REQUIRED_FOR_STORE_BUILD (Google + Apple)"},
+    "privacy_terms_urls": {"reached": false, "status": "EXTERNAL_BLOCKER", "reason": "EXTERNAL_URLS_REQUIRED"},
+    "physical_mobile_qa": {"reached": false, "status": "EXTERNAL_BLOCKER", "reason": "MANUAL_QA_REQUIRED"},
+    "full_load_>=1000": {"reached": false, "status": "EXTERNAL_BLOCKER", "reason": "DEDICATED_STAGING_REQUIRED"},
+    "store_internal_testing_readiness": {"reached": false, "status": "EXTERNAL_BLOCKER", "reason": "BUNDLE_AND_CREDENTIALS_REQUIRED"}
+  },
+  "overall_verdict": {
+    "READY_FOR_CLOSED_ALPHA_CANDIDATE": false,
+    "CONDITIONAL_FOR_CLOSED_ALPHA": true,
+    "BLOCKED_FOR_CLOSED_ALPHA": false,
+    "BLOCKED_FOR_COMMERCIAL_RELEASE": true
+  },
+  "blockers_for_closed_alpha": [
+    "provider Google/Apple credentials",
+    "privacy/terms/account-deletion URL live",
+    "physical mobile QA Android/iOS",
+    "full locust >=1000 staging dedicato",
+    "store internal testing bundle/credentials"
+  ],
+  "blockers_for_commercial_release": [
+    "tutti i 5 closed_alpha external blockers",
+    "IAP design+integration",
+    "Battle Pass + VIP commercial activation",
+    "production push/broadcast",
+    "localization L10n full",
+    "compliance audit GDPR/CCPA/COPPA external"
+  ],
+  "internal_suite_state": {
+    "REQUIRED_FAIL": 0,
+    "MISS": 0,
+    "OPTIONAL_FAIL": 23,
+    "OPTIONAL_FAIL_TARGET": 30,
+    "OPTIONAL_FAIL_TARGET_REACHED": true,
+    "SUPERSEDED_v100_md5_rebaseline": 111,
+    "validators_PASS": 1015
+  },
+  "safety": {
+    "reward_live": false,
+    "iap_active": false,
+    "production_push": false,
+    "production_broadcast": false,
+    "real_pii_in_bot_chat": false,
+    "fake_users_presented_as_real": false,
+    "day_one_high_level_bots": false,
+    "bot_event_access_bypass": false,
+    "bot_ranking_domination": false,
+    "bot_premium_reward_theft": false,
+    "random_opponents": false,
+    "bot_economy_exploit": false,
+    "raw_oauth_logs": false,
+    "provider_secrets_in_repo": false,
+    "validator_weakening": false,
+    "fake_PASS": false,
+    "hidden_optional_fail": false,
+    "silent_validator_deletion": false,
+    "commercial_release_claim": false,
+    "baseline_rebase_authorized_by_v95_RC": true,
+    "old_md5_preserved_as_historical_reference": true
+  },
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_49_MD5_SUPERSEDE_AND_CLOSED_ALPHA_READINESS_UNLOCK_CONDITIONAL_EXTERNAL_BLOCKERS_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

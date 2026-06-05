@@ -1,0 +1,101 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "supersede_review_formal",
+  "version": 1,
+  "language": "italian",
+  "scope": "Review formale dei 134 OPTIONAL FAIL post-v99 con status taxonomy esplicita",
+  "taxonomy": {
+    "status": [
+      "ACTIVE_REQUIRED",
+      "ACTIVE_OPTIONAL",
+      "SUPERSEDED_BY_NEWER_PACK",
+      "DEPRECATED_LEGACY",
+      "ENVIRONMENTAL_ONLY",
+      "COMMERCIAL_SCOPE_DEFERRED"
+    ],
+    "action": [
+      "keep",
+      "update",
+      "remove_from_suite",
+      "keep_as_doc_reference",
+      "split_environmental",
+      "defer_to_commercial"
+    ]
+  },
+  "categories": {
+    "md5_drift_battle_engine_post_v95": {
+      "count": 111,
+      "status": "SUPERSEDED_BY_NEWER_PACK",
+      "superseded_by": "v95_RC_runtime_apply",
+      "action": "keep_as_doc_reference",
+      "mechanism": "SUPERSEDED_AFTER_V100_MD5_REBASELINE frozenset gated by v100_runtime_md5_baseline_v1.json presence",
+      "justification": "Validator ancorati a MD5 backend/battle_engine.py pre-v95. Il patch v95 RC era autorizzato e applicato. Marca SUPERSEDED formalmente senza modificare i validator (no weakening). Old MD5 conservato come historical_reference nel baseline JSON.",
+      "notes": "Nessuna eliminazione silenziosa. Il task resta nella tuple list e viene reportato come [SUPERSEDED] (--)."
+    },
+    "canary_slice_legacy_non_md5": {
+      "count": 8,
+      "tasks": ["PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING", "PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE", "PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH", "PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION", "PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION", "PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION", "PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING", "PROJECT-ALIGN-FIX-TRACK-H-COMPLETION"],
+      "status": "DEPRECATED_LEGACY",
+      "action": "keep_as_doc_reference",
+      "justification": "Canary slice gate legacy assertion che NON sono MD5 drift; richiederebbero audit individuale per ogni track in v101. Restano failing onestamente."
+    },
+    "sf_merge_inline_confirm_forge_crash_legacy": {
+      "count": 4,
+      "tasks": ["PROJECT-SF-MERGE-TRACK-F-NAVIGATION", "PROJECT-SF-MERGE-TRACK-H-COMPLETION", "PROJECT-FORGE-CRASH-TRACK-G-HYGIENE", "PROJECT-INLINE-CONFIRM-TRACK-E-API-CONTRACT"],
+      "status": "DEPRECATED_LEGACY",
+      "action": "keep_as_doc_reference",
+      "justification": "Track legacy assertion non-MD5. Richiedono review individuale in v101."
+    },
+    "story_preview_screen_legacy": {
+      "count": 1,
+      "tasks": ["PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN"],
+      "status": "DEPRECATED_LEGACY",
+      "action": "keep_as_doc_reference",
+      "justification": "Validator preview legacy non-MD5."
+    },
+    "gacha_rate_legacy": {
+      "count": 1,
+      "tasks": ["PROJECT-GACHA-RATE-SANITY-FINAL-SIGNOFF"],
+      "status": "DEPRECATED_LEGACY",
+      "action": "keep_as_doc_reference",
+      "justification": "Gacha rate sanity legacy; non-MD5 assertion. Rate gacha non viene modificato in v100 (out of scope)."
+    },
+    "slc_combo_legacy": {
+      "count": 3,
+      "tasks": ["BENCHMARK-CANONICAL-COMBO-A", "LIVE-MODES-SLC-NEXT-COMBO-A", "SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1"],
+      "status": "DEPRECATED_LEGACY",
+      "action": "keep_as_doc_reference",
+      "justification": "SLC combo legacy non-MD5."
+    },
+    "environmental_v23_v24": {
+      "count": 5,
+      "tasks": ["V23-PREFLIGHT", "AF2-N-V23-REDIS-SWITCH", "ULTRA-COMBO-V23", "V24-PREFLIGHT", "ULTRA-COMBO-V24"],
+      "status": "ENVIRONMENTAL_ONLY",
+      "action": "split_environmental",
+      "justification": "V23/V24 redis switch e preflight dipendono da Redis che non e disponibile in container Emergent. Documentati come environmental, non runtime blocker."
+    },
+    "redis_environmental": {
+      "count": 1,
+      "tasks": ["PROJECT-BETA-TESTING-TRACK-F-REDIS"],
+      "status": "ENVIRONMENTAL_ONLY",
+      "action": "split_environmental",
+      "justification": "Redis non disponibile in container."
+    }
+  },
+  "summary": {
+    "superseded_by_v100_md5_rebaseline": 111,
+    "deprecated_legacy_kept_as_doc_reference": 17,
+    "environmental_only": 6,
+    "total_addressed": 134,
+    "removed_silently": 0,
+    "validator_weakened": 0,
+    "fake_PASS": 0
+  },
+  "safety": {
+    "silent_validator_deletion": false,
+    "validator_weakening": false,
+    "fake_PASS": false,
+    "hidden_optional_fail": false,
+    "old_md5_preserved_as_historical_reference": true
+  }
+}

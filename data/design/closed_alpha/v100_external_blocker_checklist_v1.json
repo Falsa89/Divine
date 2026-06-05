@@ -1,0 +1,162 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "external_blocker_checklist_final",
+  "version": 1,
+  "language": "italian",
+  "scope": "Blocker esterni non chiudibili nel container Emergent. Checklist operative finali per l'utente.",
+  "google_apple_credentials": {
+    "required_env_vars": [
+      "GOOGLE_CLIENT_ID_ANDROID",
+      "GOOGLE_CLIENT_ID_IOS",
+      "GOOGLE_WEB_CLIENT_ID",
+      "APPLE_CLIENT_ID",
+      "APPLE_TEAM_ID",
+      "APPLE_KEY_ID",
+      "APPLE_PRIVATE_KEY"
+    ],
+    "google_client_ids_creation": [
+      "Google Cloud Console -> APIs & Services -> Credentials",
+      "Create OAuth client Android (package name + SHA-1 release)",
+      "Create OAuth client iOS (bundle id reale)",
+      "Create OAuth client Web (per audience check backend)"
+    ],
+    "apple_services_id_creation": [
+      "Apple Developer Account -> Identifiers -> Services IDs",
+      "Create App ID con Sign in with Apple capability",
+      "Create Services ID + Key ID + Team ID",
+      "Generate Private Key (.p8) per identity token validation"
+    ],
+    "dev_build_requirements": [
+      "Expo development build (non Expo Go) per provider sign-in nativo",
+      "app.json plugin: @react-native-google-signin/google-signin",
+      "app.json plugin: expo-apple-authentication"
+    ],
+    "id_token_verification_test_steps": [
+      "1. Login utente da app -> ricevi id_token",
+      "2. Backend chiama JWKS (Google: https://www.googleapis.com/oauth2/v3/certs ; Apple: https://appleid.apple.com/auth/keys)",
+      "3. Validate signature + audience + issuer + exp",
+      "4. Reject se invalid (no fallback to client claims)",
+      "5. NESSUN raw token log"
+    ]
+  },
+  "privacy_terms_account_deletion_urls": {
+    "required_pages": [
+      "Privacy Policy (GDPR Art.13/14 compliant)",
+      "Terms of Service",
+      "Account Deletion Instructions (GDPR Art.17 + Google Play / Apple Store requirement)",
+      "Support Contact / Email"
+    ],
+    "minimum_content": [
+      "Privacy: data collected, purposes, lawful basis, retention, sharing, user rights, contact DPO",
+      "Terms: service description, accounts, prohibited conduct, IP, disclaimers, governing law",
+      "Account Deletion: step-by-step how to request, verification, grace period 30gg, hard delete confirmation"
+    ],
+    "required_env_vars": [
+      "PRIVACY_POLICY_URL",
+      "TERMS_OF_SERVICE_URL",
+      "ACCOUNT_DELETION_URL",
+      "SUPPORT_CONTACT_URL",
+      "SUPPORT_EMAIL"
+    ],
+    "staging_url_minimum": "https://staging.<dominio>/privacy puo bastare per Closed Alpha private testing",
+    "live_url_required_for_store": "Production URL su dominio legale obbligatorio per Google Play + Apple Store",
+    "where_to_configure": [
+      "backend/.env -> PRIVACY_POLICY_URL etc.",
+      "frontend app.json/expo extra -> URL link nel login + settings"
+    ]
+  },
+  "physical_mobile_qa": {
+    "android_checklist": [
+      "Install via Google Play Internal Testing track",
+      "Cold start <5s",
+      "Login guest OK + session restore dopo killapp",
+      "Logout pulisce sessione (StorageEngine.clear)",
+      "15 game modes navigation",
+      "Combat scene rendering + tap targets >=44dp",
+      "Live hub + bot status panel + chat preview + announcements",
+      "Safe area su notch/foldable",
+      "Crash test (kill+restart, low-mem, airplane mode)",
+      "Screenshot + adb logcat richiesti come proof"
+    ],
+    "ios_checklist": [
+      "Install via Apple TestFlight",
+      "Sign in with Apple button visibility (App Store requirement)",
+      "Bundle id reale + provisioning profile",
+      "Cold start <5s",
+      "Login guest + Apple",
+      "Session restore dopo background",
+      "Logout pulisce KeyChain",
+      "15 modes idem Android",
+      "Combat scene + tap targets >=44pt",
+      "Safe area + Dynamic Island handling",
+      "Crash test (kill+restart, low-mem, airplane mode)",
+      "Screenshot + Xcode console logs richiesti come proof"
+    ],
+    "pass_fail_criteria": [
+      "Cold start <5s = PASS",
+      "15 modes navigation senza crash = PASS",
+      "Combat scene render senza freeze/crash = PASS",
+      "Session restore corretto = PASS",
+      "Tap targets >=44dp/44pt = PASS",
+      "Crash test recovery senza data loss = PASS"
+    ],
+    "deliverables_expected": [
+      "matrix device coverage (almeno 3 Android + 2 iOS)",
+      "screenshots per ogni mode",
+      "crash logs (se presenti)",
+      "performance metrics (cold start ms, scene transition ms)"
+    ]
+  },
+  "full_load_locust_1000": {
+    "external_environment_requirements": [
+      "staging cluster dedicato con DB MongoDB isolato",
+      "Redis disponibile",
+      "almeno 4 vCPU + 8GB RAM per locust master + workers",
+      "isolato dalla produzione (no shared DB)"
+    ],
+    "locust_command": "locust -f backend/scripts/locust_v99_closed_alpha_full.py --host https://staging.<dominio> --headless -u 1000 -r 50 -t 30m --html /tmp/v100_load.html",
+    "target_p95_ms": 250,
+    "target_p99_ms": 500,
+    "acceptable_error_rate": "<1%",
+    "db_write_safety": "users collection only (auth/account), NESSUNA economy/inventory/reward write"
+  },
+  "store_internal_testing": {
+    "google_play_internal_track": [
+      "Create Play Console app entry",
+      "Bundle id definitivo (com.<azienda>.<gioco>)",
+      "Sign release APK/AAB con keystore release",
+      "Upload to Internal Testing track",
+      "Compile Data Safety form",
+      "Compile Content Rating questionnaire",
+      "Add internal testers (email list)"
+    ],
+    "apple_testflight_track": [
+      "Create App Store Connect app entry",
+      "Bundle id definitivo + provisioning profile",
+      "Build via Xcode/EAS con cert distribution",
+      "Upload to TestFlight",
+      "Compile App Privacy questionnaire",
+      "Compile Age Rating",
+      "Add internal testers (Apple ID list)"
+    ],
+    "required_signing_credentials": [
+      "Android: keystore release (.jks) + storePassword + keyAlias + keyPassword",
+      "iOS: AppStore Connect API key (.p8) + Distribution Certificate + Provisioning Profile"
+    ],
+    "data_safety": [
+      "Google Play Data Safety: collected data minimum (account id + provider id only)",
+      "Apple Privacy questionnaire: 'Data Not Linked to You' per analytics, 'Account' per auth"
+    ],
+    "app_access_instructions": [
+      "Includere test account login con guest mode (no real credentials)",
+      "Fornire revisori Apple un demo account per Sign in with Apple"
+    ]
+  },
+  "safety": {
+    "fake_credentials": false,
+    "fake_mobile_qa": false,
+    "fake_load_result": false,
+    "fake_store_readiness": false,
+    "commercial_release_claim": false
+  }
+}

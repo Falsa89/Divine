@@ -1,0 +1,46 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "v100_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T00:39:37.442166Z",
+  "validators_total": 7,
+  "validators_pass": 7,
+  "results": [
+    {
+      "validator": "validate_v100_md5_forensic_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v100 md5 forensic audit (111 stale_md5 + 23 non-md5)"
+    },
+    {
+      "validator": "validate_v100_runtime_md5_baseline.py",
+      "exit_code": 0,
+      "last_line": "PASS — v100 runtime md5 baseline (battle_engine current=56b6e5261c3b35c421db3202f750d1a6, historical=1)"
+    },
+    {
+      "validator": "validate_v100_supersede_review.py",
+      "exit_code": 0,
+      "last_line": "PASS — v100 supersede review (superseded=111, deprecated_legacy=17, environmental=6)"
+    },
+    {
+      "validator": "validate_v100_optional_fail_cleanup.py",
+      "exit_code": 0,
+      "last_line": "PASS — v100 optional fail cleanup (before=134, after=23, target<=30=True)"
+    },
+    {
+      "validator": "validate_v100_required_invariant_protection.py",
+      "exit_code": 0,
+      "last_line": "PASS — v100 required invariant protection (19 REQUIRED protected, 0 weakened)"
+    },
+    {
+      "validator": "validate_v100_external_blocker_checklist.py",
+      "exit_code": 0,
+      "last_line": "PASS — v100 external blocker checklist (5 sections, complete)"
+    },
+    {
+      "validator": "validate_v100_closed_alpha_candidate_gate.py",
+      "exit_code": 0,
+      "last_line": "PASS — v100 closed alpha candidate gate (optional_fail=23/30, CONDITIONAL external blockers)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_49_MD5_SUPERSEDE_AND_CLOSED_ALPHA_READINESS_UNLOCK_CONDITIONAL_EXTERNAL_BLOCKERS_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

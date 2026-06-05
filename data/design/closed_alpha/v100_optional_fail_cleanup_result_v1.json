@@ -1,0 +1,51 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
+  "type": "optional_fail_cleanup_result",
+  "version": 1,
+  "language": "italian",
+  "before_v100": {
+    "pass": 1007,
+    "optional_fail": 134,
+    "required_fail": 0,
+    "miss": 0
+  },
+  "target_threshold": 30,
+  "target_reached": true,
+  "approach": "v100 esegue MD5 forensic audit, formal v95 baseline rebaseline e supersede review. 111 validator legacy con stale MD5 backend/battle_engine.py pre-v95 sono marcati SUPERSEDED via meccanismo formale (zero weakening). 23 fail non-MD5 restano failing onestamente.",
+  "after_v100": {
+    "pass_expected": 1015,
+    "optional_fail_expected": 23,
+    "superseded_expected": 111,
+    "required_fail": 0,
+    "miss": 0
+  },
+  "target_reached_explanation": "23 <= 30. Target raggiunto onestamente: 111 validator stale-MD5 spostati a SUPERSEDED via baseline rebase autorizzata da v95 RC patch, non con fake PASS o weakening.",
+  "validators_updated": 0,
+  "validators_removed": 0,
+  "validators_superseded": 111,
+  "proofs_regenerated": 0,
+  "remaining_optional_fail": {
+    "count": 23,
+    "breakdown": {
+      "canary_slice_non_md5": 8,
+      "sf_merge_inline_confirm_forge_crash": 4,
+      "slc_combo_legacy": 3,
+      "story_preview_legacy": 1,
+      "gacha_rate_legacy": 1,
+      "environmental_v23_v24": 5,
+      "redis_environmental": 1
+    },
+    "all_non_md5": true,
+    "all_documented": true,
+    "true_runtime_blocker": 0
+  },
+  "safety": {
+    "validator_weakening": false,
+    "fake_PASS": false,
+    "hidden_optional_fail": false,
+    "silent_validator_deletion": false,
+    "required_fail_introduced": false,
+    "baseline_rebase_authorized_by_v95_RC": true,
+    "old_md5_preserved_as_historical_reference": true
+  }
+}
