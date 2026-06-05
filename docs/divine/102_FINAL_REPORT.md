@@ -24,7 +24,7 @@ MEGA_RELEASE_ACCELERATION_51_SERVER_SELECT_RUNTIME_WIRING_AND_AUTH_UNIFICATION_F
 
 ## 2. Commit hash
 
-`<<commit_hash_da_popolare>>` — `feat(v102): server select runtime wiring and auth unification fix pack`
+`9752fa4f` — `feat(v102): server select runtime wiring and auth unification fix pack`
 
 ---
 
