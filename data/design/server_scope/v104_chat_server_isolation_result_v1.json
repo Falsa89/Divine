@@ -1,0 +1,38 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_chat_server_isolation",
+  "version": 1,
+  "language": "it",
+  "current_state": {
+    "frontend_chat_surface_present": false,
+    "backend_chat_endpoints_present": false,
+    "chat_scoped_by_server_id": false,
+    "observed_duplication_across_S1_S2": true,
+    "observation_source": "manual_qa_iphone13_expo_go_post_v103"
+  },
+  "contract_when_implemented": {
+    "channel_key_format": "{server_id}:{channel_name}",
+    "global_channel_explicit": "global:global",
+    "bot_messages_scope": "server_bound",
+    "live_announcement_scope": "server_bound_or_global_explicit",
+    "local_cache_key": "chat_cache_{server_id}_{channel_name}",
+    "server_id_required_in_send_payload": true
+  },
+  "isolation_status": "DECLARED_PENDING",
+  "reason": "Chat surface non ancora costruita. Quando verra' implementata, deve obbligatoriamente includere server_id nelle chiavi canale, cache e messaggi.",
+  "acceptance_fixture": {
+    "step_1": "Send chat msg M1 on S1 -> appears su S1.",
+    "step_2": "Switch a S2 -> M1 NON deve apparire (a meno che canale sia 'global').",
+    "step_3": "Send chat msg M2 on S2 -> appears su S2.",
+    "step_4": "Switch a S1 -> M2 NON deve apparire (a meno che canale sia 'global')."
+  },
+  "ui_obligation_until_chat_implemented": {
+    "banner_text": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+    "banner_present_on_servers_screen": true
+  },
+  "safety": {
+    "fake_per_server_chat_data": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

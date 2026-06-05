@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104",
+  "type": "v104_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T17:31:51.818499Z",
+  "validators_total": 9,
+  "validators_pass": 9,
+  "results": [
+    {
+      "validator": "validate_v104_server_scoped_data_flow_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 server-scoped data flow audit (13 surfaces, banner token present)"
+    },
+    {
+      "validator": "validate_v104_server_profile_backend_contract.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 server profile backend contract (read-only, isolation_state=DECLARED_PENDING)"
+    },
+    {
+      "validator": "validate_v104_server_naming_canonicalization.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 server naming canonicalization (5 [QA] servers, banner token present)"
+    },
+    {
+      "validator": "validate_v104_server_scoped_user_data_model.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 server-scoped user data model (DECLARED_PENDING, migration plan safe)"
+    },
+    {
+      "validator": "validate_v104_frontend_server_id_propagation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 frontend server_id propagation (9 loaders documented, hook + routing guard live)"
+    },
+    {
+      "validator": "validate_v104_backend_server_id_filtering.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 backend server_id filtering audit (9 endpoints, isolation declared pending)"
+    },
+    {
+      "validator": "validate_v104_chat_server_isolation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 chat server isolation (DECLARED_PENDING, contract documented)"
+    },
+    {
+      "validator": "validate_v104_server_profile_creation_policy.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 server profile creation policy (gated, no premium/random/legacy)"
+    },
+    {
+      "validator": "validate_v104_device_retest_matrix.py",
+      "exit_code": 0,
+      "last_line": "PASS — v104 device retest matrix (11 steps, manual QA required)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_53_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX_READY_WITH_BACKEND_ISOLATION_PENDING_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

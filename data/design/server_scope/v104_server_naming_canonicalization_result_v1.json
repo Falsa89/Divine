@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_server_naming_canonicalization",
+  "version": 1,
+  "language": "it",
+  "policy": "qa_fallback_prefixed",
+  "prefix": "[QA] ",
+  "divine_canonical_optional": ["S1 - Valhalla", "S2 - Elysium", "S3 - Duat", "S4 - Takamagahara"],
+  "divine_canonical_approved_for_runtime": false,
+  "qa_fallback_naming_active": true,
+  "servers": [
+    {"server_id": "qa-eu-01", "server_name": "[QA] Aurora \u00b7 EU-01", "status": "online", "is_qa": true},
+    {"server_id": "qa-eu-02", "server_name": "[QA] Crepuscolo \u00b7 EU-02", "status": "online", "is_qa": true},
+    {"server_id": "qa-na-01", "server_name": "[QA] Eclissi \u00b7 NA-01", "status": "busy", "is_qa": true},
+    {"server_id": "qa-asia-01", "server_name": "[QA] Alba \u00b7 ASIA-01", "status": "online", "is_qa": true},
+    {"server_id": "qa-eu-99", "server_name": "[QA] Nebbia \u00b7 EU-99 (Manutenzione)", "status": "maintenance", "is_qa": true}
+  ],
+  "all_fallback_names_prefixed_qa": true,
+  "misleading_names_present": false,
+  "fake_full_or_recommended_to_attract_clicks": false,
+  "fake_production_server_status": false,
+  "ui_banner_visible": true,
+  "ui_banner_line1": "\u26A0\uFE0F LISTA SERVER QA/FALLBACK \u00b7 DATI NON DI PRODUZIONE",
+  "ui_banner_line2_contains_token": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "safety": {
+    "fake_production_server_data": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

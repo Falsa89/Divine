@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_backend_server_id_filtering",
+  "version": 1,
+  "language": "it",
+  "endpoints_audited": [
+    {"endpoint": "GET /api/user/heroes", "accepts_server_id": false, "filters_by_server_id": false, "status": "NOT_SERVER_SCOPED"},
+    {"endpoint": "GET /api/inventory", "accepts_server_id": false, "filters_by_server_id": false, "status": "NOT_SERVER_SCOPED"},
+    {"endpoint": "GET /api/currencies", "accepts_server_id": false, "filters_by_server_id": false, "status": "NOT_SERVER_SCOPED"},
+    {"endpoint": "GET /api/team/get-formation", "accepts_server_id": false, "filters_by_server_id": false, "status": "NOT_SERVER_SCOPED"},
+    {"endpoint": "POST /api/battle/simulate", "accepts_server_id": false, "filters_by_server_id": false, "status": "NOT_SERVER_SCOPED"},
+    {"endpoint": "GET /api/arena/opponents", "accepts_server_id": false, "filters_by_server_id": false, "status": "BACKEND_PENDING"},
+    {"endpoint": "GET /api/chat/channels", "accepts_server_id": false, "filters_by_server_id": false, "status": "BACKEND_PENDING"},
+    {"endpoint": "GET /api/guild/membership", "accepts_server_id": false, "filters_by_server_id": false, "status": "BACKEND_PENDING"},
+    {"endpoint": "GET /api/server-profiles/list", "accepts_server_id": false, "filters_by_server_id": false, "status": "OK_READONLY_FALLBACK"}
+  ],
+  "verdict": "BACKEND_FILTERING_NOT_IMPLEMENTED_DECLARED_PENDING",
+  "reason": "Schema users non contiene ancora chiave (account_id, server_id). v104 guardrails vietano destructive DB writes e blind migration.",
+  "path_forward": [
+    "Introdurre collection player_server_profiles (vedi v104_server_scoped_user_data_model_result_v1.json).",
+    "Aggiornare loader backend per accettare query param server_id e filtrare per (account_id, server_id).",
+    "Gating tramite feature flag server_scoped_runtime_enabled."
+  ],
+  "no_fake_isolation": true,
+  "safety": {
+    "db_destructive_writes": false,
+    "blind_migration": false,
+    "fake_different_server_data": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

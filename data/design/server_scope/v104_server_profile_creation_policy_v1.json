@@ -1,0 +1,50 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_server_profile_creation_policy",
+  "version": 1,
+  "language": "it",
+  "policy_id": "v104_server_profile_creation_policy",
+  "trigger": "player_enters_server_without_profile",
+  "creation_paths": [
+    {
+      "path": "explicit_user_action_required",
+      "description": "L'app mostra 'Nessun personaggio su questo server' + bottone 'Inizia avventura'.",
+      "preferred": true
+    },
+    {
+      "path": "auto_safe_starter",
+      "description": "Solo se gated da feature flag server_scoped_runtime_enabled. Crea profile vuoto con account_level=1, roster canonico starter, NO premium currency.",
+      "preferred": false,
+      "requires_feature_flag": true,
+      "feature_flag_name": "server_scoped_runtime_enabled",
+      "feature_flag_default": false
+    }
+  ],
+  "starter_profile_template": {
+    "account_level": 1,
+    "roster": ["canonical_starter_hero_1", "canonical_starter_hero_2"],
+    "currencies": {"gold": 0, "gems": 0},
+    "premium_currency_grant": false,
+    "random_heroes": false,
+    "legacy_heroes_allowed": false
+  },
+  "isolation_status": "DECLARED_PENDING",
+  "reason": "Schema multi-shard non attivo. Nessun profilo per-server viene creato finche' DB non e' approvato.",
+  "forbidden": [
+    "random_starter_heroes",
+    "premium_currency_grant",
+    "reward_grant_on_creation",
+    "legacy_heroes",
+    "destructive_db_writes",
+    "silent_blind_migration"
+  ],
+  "safety": {
+    "db_destructive_writes": false,
+    "blind_migration": false,
+    "random_starter_heroes": false,
+    "premium_currency_grant": false,
+    "reward_grant": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

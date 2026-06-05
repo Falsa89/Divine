@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_frontend_server_id_propagation",
+  "version": 1,
+  "language": "it",
+  "selected_server_id_storage_key": "v101_selected_server_id",
+  "selected_server_name_storage_key": "v102_selected_server_name",
+  "hook_introduced": "frontend/src/hooks/useServerScope.ts",
+  "hook_purpose": "Espone selected_server_id, selected_server_name, is_isolation_pending alle superfici loader senza forzare backend isolation.",
+  "loaders_targeted": [
+    {"surface": "/(tabs)/home", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "shows same data cross-server"},
+    {"surface": "/(tabs)/heroes", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "shows same roster cross-server"},
+    {"surface": "/inventory", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "shows same inventory cross-server"},
+    {"surface": "/treasury", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "shows same currencies cross-server"},
+    {"surface": "team formation", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "shows same team cross-server"},
+    {"surface": "/(tabs)/battle", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "uses account roster, not server-scoped"},
+    {"surface": "chat (future surface)", "adoption": "PRE_DECLARED_PENDING", "banner_obligation": true, "risk_if_not_adopted": "chat cache key must include server_id when implemented"},
+    {"surface": "/profile", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "profile is account-wide"},
+    {"surface": "live/guild/event hubs", "adoption": "NOT_YET_ADOPTED", "banner_obligation": true, "risk_if_not_adopted": "server-bound when isolation lands"}
+  ],
+  "routing_guard": {
+    "missing_selected_server_id_redirects_to": "/servers",
+    "implemented_in": ["frontend/app/index.tsx"]
+  },
+  "isolation_pending_label_visible_global": true,
+  "isolation_pending_token": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "no_fake_same_data_across_servers": true,
+  "safety": {
+    "fake_different_server_data": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

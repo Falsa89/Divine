@@ -1,0 +1,64 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_server_profile_backend_contract",
+  "version": 1,
+  "language": "it",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/server-profiles/list",
+      "implemented": true,
+      "source": "backend_readonly",
+      "mutates_db": false,
+      "declares_qa_fallback": true,
+      "backend_data_isolation_implemented": false,
+      "note": "v103 read-only endpoint (route v103_server_profiles.py)."
+    },
+    {
+      "method": "POST",
+      "path": "/api/server-profiles/select",
+      "implemented": false,
+      "source": "fallback_declared",
+      "mutates_db": false,
+      "declares_qa_fallback": true,
+      "backend_data_isolation_implemented": false,
+      "note": "Selezione persistita lato client (AsyncStorage v101_selected_server_id). Endpoint POST DIFFERITO finche' DB multi-shard non e' approvato."
+    },
+    {
+      "method": "GET",
+      "path": "/api/server-profiles/current",
+      "implemented": false,
+      "source": "fallback_declared",
+      "mutates_db": false,
+      "declares_qa_fallback": true,
+      "backend_data_isolation_implemented": false,
+      "note": "Frontend deriva 'current' da AsyncStorage; endpoint formal-GET DIFFERITO."
+    }
+  ],
+  "payload_contract": {
+    "server_id": "qa-eu-01",
+    "server_name": "[QA] Aurora \u00b7 EU-01",
+    "status": "qa_fallback|online|busy|maintenance|locked",
+    "source": "backend_readonly|fallback_declared",
+    "has_profile": false,
+    "profile": null,
+    "profile_contract_when_isolation_ready": {
+      "character_name": "<string|null>",
+      "account_level": "<int|null>",
+      "power": "<int|null>",
+      "last_played_at": "<iso8601|null>",
+      "roster_count": "<int|null>"
+    }
+  },
+  "isolation_state": "DECLARED_PENDING",
+  "reason": "DB shard schema (account_id, server_id) NON ancora attivo. Guardrails v104 vietano destructive DB writes e blind migration.",
+  "safety": {
+    "read_only": true,
+    "no_db_writes": true,
+    "no_raw_token_logs": true,
+    "no_provider_secrets": true,
+    "fake_production_data": false,
+    "fake_PASS": false,
+    "declared_qa_fallback": true
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_server_scoped_data_flow_audit",
+  "version": 1,
+  "language": "it",
+  "audit_method": "static_repo_scan + manual_qa_observation_iphone13_expo_go",
+  "manual_qa_findings_post_v103": [
+    "selected_server_id viene salvato in AsyncStorage ma i loader non lo leggono",
+    "S1 e S2 mostrano gli stessi eroi/monete/cristalli/inventario/team",
+    "chat e' identica su S1 e S2",
+    "nessun loader filtra per server_id lato backend"
+  ],
+  "surfaces": [
+    {
+      "surface": "/(tabs)/home",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "NOT_SERVER_SCOPED",
+      "note": "Home tab carica stato account globale senza scoping; mostra stesso profilo cross-server."
+    },
+    {
+      "surface": "/(tabs)/heroes (roster)",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "NOT_SERVER_SCOPED",
+      "note": "Roster persistente per account, non per server. Da etichettare BACKEND_PENDING."
+    },
+    {
+      "surface": "/inventory",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "NOT_SERVER_SCOPED",
+      "note": "Inventory non scoped. Stesso payload su S1/S2."
+    },
+    {
+      "surface": "/treasury (currencies)",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "NOT_SERVER_SCOPED",
+      "note": "Currencies condivise tra server."
+    },
+    {
+      "surface": "team formation",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "NOT_SERVER_SCOPED",
+      "note": "Formazione team account-wide."
+    },
+    {
+      "surface": "pre-battle lobby / battle/simulate",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "NOT_SERVER_SCOPED",
+      "note": "Battle engine consuma roster account, non scoped."
+    },
+    {
+      "surface": "arena opponent list",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "BACKEND_PENDING",
+      "note": "Arena multi-shard richiede backend filtering; non ancora implementato."
+    },
+    {
+      "surface": "chat (canale globale + dm)",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "NOT_SERVER_SCOPED",
+      "note": "Chat surface frontend assente; tutti i canali futuri DEVONO essere chiavati per server_id."
+    },
+    {
+      "surface": "bot/server actors",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "BACKEND_PENDING",
+      "note": "Bot actor pool da scopare per server_id quando schema multi-shard sara' attivo."
+    },
+    {
+      "surface": "live/event/guild hubs",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": false,
+      "risk": "BACKEND_PENDING",
+      "note": "Eventi e guild membership richiedono shard awareness."
+    },
+    {
+      "surface": "/servers (server select)",
+      "reads_selected_server_id": true,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": true,
+      "risk": "OK",
+      "note": "Lista server marcata [QA] e banner SERVER_DATA_ISOLATION_BACKEND_PENDING visibile."
+    },
+    {
+      "surface": "auth/session",
+      "reads_selected_server_id": true,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": true,
+      "risk": "PARTIAL",
+      "note": "Routing post-login considera selected_server_id; payload auth non lo invia ancora."
+    },
+    {
+      "surface": "GET /api/server-profiles/list",
+      "reads_selected_server_id": false,
+      "sends_server_id_to_backend": false,
+      "backend_filters_by_server_id": false,
+      "fallback_declared": true,
+      "risk": "OK",
+      "note": "Read-only QA fallback dichiarato."
+    }
+  ],
+  "summary": {
+    "surfaces_audited": 13,
+    "server_scoped_now": 0,
+    "declared_fallback": 3,
+    "backend_pending": 3,
+    "not_server_scoped": 7,
+    "verdict": "SERVER_DATA_ISOLATION_BACKEND_PENDING"
+  },
+  "ui_obligation": {
+    "banner_text_required": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+    "banner_present_on_servers_screen": true,
+    "no_fake_per_server_data": true
+  },
+  "safety": {
+    "fake_different_server_data": false,
+    "fake_production_data": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "db_destructive_writes": false
+  }
+}

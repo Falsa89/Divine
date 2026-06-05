@@ -1,0 +1,38 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_device_retest_matrix",
+  "version": 1,
+  "language": "it",
+  "device_target": "iPhone 13 Expo Go",
+  "manual_qa_required": true,
+  "matrix": [
+    {"step": 1, "action": "Apri app", "expected": "Login screen visibile, nessun bounce verso server."},
+    {"step": 2, "action": "Login", "expected": "Routing a /servers (selected_server_id assente)."},
+    {"step": 3, "action": "Apri /servers", "expected": "Card server [QA] visibili. Banner SERVER_DATA_ISOLATION_BACKEND_PENDING visibile."},
+    {"step": 4, "action": "Verifica nomi/status", "expected": "Nessun nome fake-production. Status QA dichiarato. Status maintenance solo se reale."},
+    {"step": 5, "action": "ENTRA S1 (qa-eu-01)", "expected": "Routing a Home. AsyncStorage v101_selected_server_id='qa-eu-01'."},
+    {"step": 6, "action": "Osserva Home/Heroes/Inventory/Currencies/Team su S1", "expected": "Banner SERVER_DATA_ISOLATION_BACKEND_PENDING visibile su /servers; dati di account condivisi finche' isolation backend non attiva. NESSUNA finzione di separazione."},
+    {"step": 7, "action": "Cambia server -> torna a /servers -> ENTRA S2 (qa-eu-02)", "expected": "AsyncStorage v101_selected_server_id aggiornato. Banner ancora visibile."},
+    {"step": 8, "action": "Confronta S1 vs S2: roster, inventory, currencies, team", "expected": "Identici (account condiviso) MA banner pending dichiara apertamente lo stato. Nessuna falsa differenza inventata."},
+    {"step": 9, "action": "Chat scope", "expected": "Chat surface non costruita; documentata come DECLARED_PENDING. NESSUNA chat finta server-specific."},
+    {"step": 10, "action": "LOGOUT ACCOUNT", "expected": "Esce al login; non rientra in server (v103 race fix tenuto). v103_logout_in_progress flag pulisce in <=1500ms."},
+    {"step": 11, "action": "Riapri -> login", "expected": "Routing a /servers (selected_server_id ripristinato o richiesto)."}
+  ],
+  "acceptance": {
+    "min_steps_pass_required": 10,
+    "critical_steps": [3, 4, 5, 6, 7, 8, 10],
+    "banner_must_be_visible_on": ["/servers"],
+    "banner_token_required": "SERVER_DATA_ISOLATION_BACKEND_PENDING"
+  },
+  "forbidden": [
+    "fake_per_server_data",
+    "random_heroes_per_server",
+    "premium_currency_grant_per_server",
+    "silent_data_mutation"
+  ],
+  "safety": {
+    "fake_mobile_qa": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

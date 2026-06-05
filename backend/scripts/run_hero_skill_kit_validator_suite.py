@@ -3340,6 +3340,25 @@ OPTIONAL = [
     ('PROJECT-V103-AUTH-CONTEXT-UNIFICATION', 'validate_v103_auth_context_unification.py'),
     ('PROJECT-V103-DEVICE-RETEST-MATRIX', 'validate_v103_device_retest_matrix.py'),
     ('MEGA-RELEASE-ACCELERATION-52-v103-ROLLUP', 'validate_mega_release_acceleration_52_v103_rollup.py'),
+    # ========================================================================
+    # v104 - MEGA_RELEASE_ACCELERATION_53_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX_PACK
+    # PUBLIC_SYNC_TAG_v104_MEGA_RELEASE_ACCELERATION_53_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX
+    # PUBLIC_SYNC_SENTINEL_v104_PRESENT=YES
+    # P0 device QA bugfix: isolation reale per server (account/roster/inventory/currencies/
+    # team/chat) e' DECLARED_PENDING. UI dichiara SERVER_DATA_ISOLATION_BACKEND_PENDING.
+    # Nessuna finzione di separazione dati cross-server. NO destructive DB writes.
+    # Hook frontend useServerScope introdotto. Backend contract pending documentato.
+    # ========================================================================
+    ('PROJECT-V104-SERVER-SCOPED-DATA-FLOW-AUDIT', 'validate_v104_server_scoped_data_flow_audit.py'),
+    ('PROJECT-V104-SERVER-PROFILE-BACKEND-CONTRACT', 'validate_v104_server_profile_backend_contract.py'),
+    ('PROJECT-V104-SERVER-NAMING-CANONICALIZATION', 'validate_v104_server_naming_canonicalization.py'),
+    ('PROJECT-V104-SERVER-SCOPED-USER-DATA-MODEL', 'validate_v104_server_scoped_user_data_model.py'),
+    ('PROJECT-V104-FRONTEND-SERVER-ID-PROPAGATION', 'validate_v104_frontend_server_id_propagation.py'),
+    ('PROJECT-V104-BACKEND-SERVER-ID-FILTERING', 'validate_v104_backend_server_id_filtering.py'),
+    ('PROJECT-V104-CHAT-SERVER-ISOLATION', 'validate_v104_chat_server_isolation.py'),
+    ('PROJECT-V104-SERVER-PROFILE-CREATION-POLICY', 'validate_v104_server_profile_creation_policy.py'),
+    ('PROJECT-V104-DEVICE-RETEST-MATRIX', 'validate_v104_device_retest_matrix.py'),
+    ('MEGA-RELEASE-ACCELERATION-53-v104-ROLLUP', 'validate_mega_release_acceleration_53_v104_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,0 +1,62 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_53_v104_SERVER_SCOPED_RUNTIME_DATA_AND_CHAT_ISOLATION_FIX",
+  "type": "v104_server_scoped_user_data_model",
+  "version": 1,
+  "language": "it",
+  "preferred_model": {
+    "collection": "player_server_profiles",
+    "primary_key": ["account_id", "server_id"],
+    "fields": {
+      "account_id": "<string>",
+      "server_id": "<string>",
+      "account_level": "<int>",
+      "roster": "<array>",
+      "inventory": "<object>",
+      "currencies": "<object>",
+      "team_formation": "<array>",
+      "story_progress": "<object>",
+      "arena_profile": "<object>",
+      "created_at": "<iso8601>",
+      "last_played_at": "<iso8601>"
+    },
+    "indexes_required": [
+      {"keys": ["account_id", "server_id"], "unique": true},
+      {"keys": ["server_id"], "unique": false},
+      {"keys": ["server_id", "last_played_at"], "unique": false}
+    ]
+  },
+  "status": "DECLARED_PENDING",
+  "reason": "Schema multi-shard NON ancora migrato. v104 guardrails vietano blind migration e destructive DB writes.",
+  "runtime_contract_until_isolation_ready": {
+    "selected_server_id_source": "AsyncStorage v101_selected_server_id",
+    "loader_fallback_strategy": "share_account_state_with_explicit_pending_banner",
+    "banner_token": "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+    "no_fake_per_server_data": true
+  },
+  "migration_plan_safe": [
+    "1. Definire collection player_server_profiles in staging.",
+    "2. Backfill dual-read da users collection con server_id='qa-eu-01' default S1.",
+    "3. Dry-run con observability rollup.",
+    "4. Cutover graduale guarded da feature flag server_scoped_runtime_enabled.",
+    "5. Rollback plan documentato prima di apply."
+  ],
+  "per_server_data_implementations_required_v104_plus": [
+    "player_server_profile.account_level",
+    "player_server_profile.roster",
+    "player_server_profile.inventory",
+    "player_server_profile.currencies",
+    "player_server_profile.team_formation",
+    "player_server_profile.story_progress",
+    "player_server_profile.arena_profile",
+    "player_server_profile.chat_channel_keys"
+  ],
+  "safety": {
+    "db_destructive_writes": false,
+    "blind_migration": false,
+    "premium_currency_grant": false,
+    "random_starter_heroes": false,
+    "fake_per_server_profile_data": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

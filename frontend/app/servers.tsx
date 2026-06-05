@@ -309,9 +309,10 @@ export default function ServerSelectScreen() {
               {'\u26A0\uFE0F'} LISTA SERVER QA/FALLBACK \u00b7 DATI NON DI PRODUZIONE
             </Text>
             <Text style={styles.fallbackSubTxt}>
-              Server isolation backend (per_server_id account/inventory/team) PENDING. Tutti i
-              server caricheranno lo stesso account corrente finch\u00e9 v104+ non implementa lo
-              shard reale.
+              SERVER_DATA_ISOLATION_BACKEND_PENDING \u00b7 Server isolation backend (per_server_id
+              account/inventory/team/chat) PENDING. Tutti i server caricheranno lo stesso account
+              corrente finch\u00e9 il backend multi-shard non e\u0301 attivo. Nessuna finzione di
+              separazione.
             </Text>
           </View>
         ) : null}
