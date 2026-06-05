@@ -1,0 +1,45 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "selected_server_persistence_result",
+  "version": 1,
+  "language": "italian",
+  "storage_keys": {
+    "v101_selected_server_id": {
+      "storage": "AsyncStorage",
+      "reason": "server_id non e' un secret; ok AsyncStorage",
+      "set_on": "tap Entra in servers.tsx",
+      "clear_on": ["Logout account (menu.tsx)", "AuthContext.logout() legacy"]
+    },
+    "v102_selected_server_name": {
+      "storage": "AsyncStorage",
+      "reason": "metadati UI non sensibili",
+      "set_on": "tap Entra in servers.tsx",
+      "clear_on": ["Logout account (menu.tsx)"]
+    },
+    "v102_selected_server_has_character": {
+      "storage": "AsyncStorage",
+      "reason": "flag UI non sensibile",
+      "set_on": "tap Entra in servers.tsx",
+      "clear_on": ["Logout account (menu.tsx)"]
+    }
+  },
+  "session_token_storage": {
+    "location": "v96 AuthContext (SecureStore via expo-secure-store)",
+    "NOT_in_AsyncStorage": true,
+    "legacy_token_in_AsyncStorage_token_key": "presente per provider legacy email/password; non e' OAuth token raw"
+  },
+  "required_behavior": {
+    "app_start_no_session": "-> /login",
+    "app_start_session_no_selected_server": "-> /servers",
+    "app_start_session_with_selected_server": "-> /(tabs)/home",
+    "cambia_server_in_menu": "-> /servers (no logout)",
+    "logout_account_in_menu": "clear v101_selected_server_id + v102_* + session -> /login"
+  },
+  "app_start_routing_implemented_in": "frontend/app/index.tsx (useEffect post-load + onSubmit post-login)",
+  "safety": {
+    "token_in_AsyncStorage": false,
+    "raw_oauth_log": false,
+    "provider_secrets": false,
+    "fake_PASS": false
+  }
+}

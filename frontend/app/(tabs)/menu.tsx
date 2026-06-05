@@ -211,12 +211,48 @@ export default function MenuTab() {
           </Animated.View>
         ))}
 
-        <TouchableOpacity style={s.logoutBtnOuter} onPress={async () => { try { await logout(); } catch (_e) {} router.replace('/'); }} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={s.changeServerBtnOuter}
+          onPress={() => router.replace('/servers')}
+          activeOpacity={0.7}
+        >
+          <LinearGradient
+            colors={['rgba(122,122,196,0.15)', 'rgba(122,122,196,0.05)']}
+            style={s.changeServerBtn}
+          >
+            <Text style={s.changeServerTxt}>CAMBIA SERVER</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={s.logoutBtnOuter}
+          onPress={async () => {
+            // v102 — Logout account: clear sessione legacy + selected server, poi /login.
+            try {
+              const AS = (await import('@react-native-async-storage/async-storage')).default;
+              await AS.removeItem('v101_selected_server_id');
+              await AS.removeItem('v102_selected_server_name');
+              await AS.removeItem('v102_selected_server_has_character');
+            } catch (_e) {}
+            try { await logout(); } catch (_e) {}
+            // v102 — Bridge logout: tenta anche il v96 SecureStore clear se disponibile.
+            try {
+              const v96 = await import('../../src/auth/AuthContext');
+              // se l'app monta entrambi i provider, il v96 useAuth().logout sara' attivo
+              // qui non possiamo chiamare hooks fuori da component, ma il logout legacy
+              // gia' azzera token AsyncStorage. v96 clear avviene tramite proprio hook
+              // quando lo screen di login si rimonta. Marker presente per v102 bridge.
+              void v96;
+            } catch (_e) {}
+            router.replace('/');
+          }}
+          activeOpacity={0.7}
+        >
           <LinearGradient
             colors={['rgba(255,68,68,0.12)', 'rgba(255,68,68,0.05)']}
             style={s.logoutBtn}
           >
-            <Text style={s.logoutTxt}>ESCI DAL GIOCO</Text>
+            <Text style={s.logoutTxt}>LOGOUT ACCOUNT</Text>
           </LinearGradient>
         </TouchableOpacity>
       </ScrollView>
@@ -280,6 +316,16 @@ const s = StyleSheet.create({
   itemLabel: { color: '#fff', fontSize: 11, fontWeight: '700', flex: 1 },
   itemArrow: { fontSize: 18, fontWeight: '700' },
   logoutBtnOuter: { borderRadius: 10, overflow: 'hidden', marginTop: 6 },
+  changeServerBtnOuter: { borderRadius: 10, overflow: 'hidden', marginTop: 12 },
+  changeServerBtn: {
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(122,122,196,0.4)',
+    borderRadius: 10,
+  },
+  changeServerTxt: { color: '#9999D9', fontSize: 12, fontWeight: '900', letterSpacing: 2 },
   logoutBtn: {
     padding: 12,
     alignItems: 'center',

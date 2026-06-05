@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "device_retest_matrix",
+  "version": 1,
+  "language": "italian",
+  "target_device": "iPhone 13 / Expo Go (replica setup utente)",
+  "matrix": [
+    {"step": 1, "action": "App start senza session", "expected": "redirect a /login (form email/password visibile)"},
+    {"step": 2, "action": "Login valido", "expected": "redirect a /servers (gate v101 attivo)"},
+    {"step": 3, "action": "/servers caricato", "expected": "4-5 server cards visibili, banner SERVER PROFILE FALLBACK visibile se backend non disponibile, sezioni Server consigliato/Tutti i server"},
+    {"step": 4, "action": "Tap pulsante ENTRA su server online (Aurora EU-01)", "expected": "label cambia in 'Entrata...', poi route a /(tabs)/home"},
+    {"step": 5, "action": "Verifica home raggiunta", "expected": "tabs visibili: home/inventory/character/menu"},
+    {"step": 6, "action": "Vai a tab Menu", "expected": "pulsanti CAMBIA SERVER (viola) + LOGOUT ACCOUNT (rosso) visibili in fondo alla lista"},
+    {"step": 7, "action": "Tap CAMBIA SERVER", "expected": "route a /servers; session NON cancellata; lista server visibile di nuovo"},
+    {"step": 8, "action": "Tap ENTRA su altro server (Crepuscolo EU-02)", "expected": "sovrascrive v101_selected_server_id; route a /(tabs)/home"},
+    {"step": 9, "action": "Menu -> Tap LOGOUT ACCOUNT", "expected": "clear AsyncStorage v101_selected_server_id + v102_* + token legacy; route a / (login form mostrato di nuovo)"},
+    {"step": 10, "action": "Chiudi e riapri app (kill + restart)", "expected": "App parte direttamente a /login (no auto-home, no auto-server)"},
+    {"step": 11, "action": "Tap ENTRA su server in MANUTENZIONE", "expected": "pulsante grigio disabled, label 'Non disponibile', tap no-op"},
+    {"step": 12, "action": "Test safe area su notch iPhone 13", "expected": "SafeAreaView rispettato; status bar visibile; nessun contenuto coperto"}
+  ],
+  "acceptance": {
+    "min_steps_pass_required": 10,
+    "critical_steps": [2, 3, 4, 7, 9, 10]
+  },
+  "manual_qa_required": true,
+  "manual_qa_executed": false,
+  "reason_not_executed": "Container Emergent non ha device iPhone 13 fisico. Matrix consegnato come checklist per QA utente.",
+  "safety": {
+    "fake_mobile_qa": false,
+    "fake_PASS": false
+  }
+}

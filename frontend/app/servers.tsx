@@ -1,20 +1,19 @@
-// servers.tsx — PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW (Track B)
-// Schermata Selezione Server convertita in LOCKED / READ-ONLY PREVIEW.
+// servers.tsx — v102 — Server Select runtime wiring (functional UI).
 //
-// Storia: la versione legacy effettuava una POST mutativa verso l'endpoint
-// legacy di selezione server (vedi backend routes/economy.py) e modificava
-// users.server. Quel flusso è stato rimosso dalla superficie player in attesa
-// del nuovo sistema server_profiles (attualmente double-flag gated, 503).
+// v102 sostituisce la precedente read-only locked preview con una UI selezionabile reale.
+// Quando il backend /api/server-profiles/select e' 503 (PROJECT_B Track A skeleton),
+// l'UI dichiara apertamente SERVER PROFILE FALLBACK e usa una lista server locale safe.
+// NESSUNA chiamata mutativa lato server. La selezione persiste in AsyncStorage
+// sotto la chiave canonica v101_selected_server_id (compat v101).
 //
-// Vincoli rispettati:
-// - 0 chiamate al POST legacy di server-select (helper select() rimosso)
-// - 0 chiamate a /api/server-profiles/select (rimane 503 lato server)
-// - L'elenco server legacy non viene piu' richiesto dalla UI (lettura rimossa
-//   per allinearsi al pattern degli altri locked previews e per evitare di
-//   stimolare audit di superficie sui legacy listing endpoints)
-// - Pattern coerente con /artifacts-preview, /housing-preview, /status-codex
-// - SafeFeatureCard riutilizzato
-import React, { useEffect, useState } from 'react';
+// Acceptance v102:
+// - lista server selezionabile
+// - card con dettagli + pulsante Entra
+// - tap salva v101_selected_server_id
+// - route a /(tabs)/home
+// - se backend non disponibile -> label fallback visibile
+// - nessun token raw log, nessun secret in repo
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -27,49 +26,268 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { COLORS } from '../constants/theme';
-import { SafeFeatureCard } from '../components/SafeFeatureCard';
 
-type EndpointState = 'loading' | 'preview_503' | 'unavailable' | 'live';
+type ServerStatus = 'online' | 'busy' | 'full' | 'maintenance' | 'locked';
+
+type ServerProfile = {
+  server_id: string;
+  server_name: string;
+  region: string;
+  status: ServerStatus;
+  recommended?: boolean;
+  is_last_played?: boolean;
+  has_character?: boolean;
+  character_name?: string | null;
+  character_level?: number | null;
+  power?: number | null;
+  created_at?: string | null;
+  can_enter: boolean;
+  reason_if_locked?: string | null;
+  is_new?: boolean;
+};
 
 const BACKEND_URL =
   (process.env.EXPO_BACKEND_URL as string | undefined) ||
   (Constants?.expoConfig?.extra as any)?.backendUrl ||
   '';
 
+// SERVER PROFILE FALLBACK — dichiarato. Lista safe locale senza dati reali utente.
+const FALLBACK_SERVERS: ServerProfile[] = [
+  {
+    server_id: 'eu-01',
+    server_name: 'Aurora · EU-01',
+    region: 'EU',
+    status: 'online',
+    recommended: true,
+    is_last_played: false,
+    has_character: false,
+    can_enter: true,
+    is_new: true,
+  },
+  {
+    server_id: 'eu-02',
+    server_name: 'Crepuscolo · EU-02',
+    region: 'EU',
+    status: 'online',
+    has_character: false,
+    can_enter: true,
+  },
+  {
+    server_id: 'na-01',
+    server_name: 'Eclissi · NA-01',
+    region: 'NA',
+    status: 'busy',
+    has_character: false,
+    can_enter: true,
+  },
+  {
+    server_id: 'asia-01',
+    server_name: 'Alba · ASIA-01',
+    region: 'ASIA',
+    status: 'online',
+    has_character: false,
+    can_enter: true,
+  },
+  {
+    server_id: 'eu-99',
+    server_name: 'Nebbia · EU-99 (Manutenzione)',
+    region: 'EU',
+    status: 'maintenance',
+    has_character: false,
+    can_enter: false,
+    reason_if_locked: 'In manutenzione programmata',
+  },
+];
+
+const STATUS_LABEL: Record<ServerStatus, string> = {
+  online: 'Online',
+  busy: 'Affollato',
+  full: 'Pieno',
+  maintenance: 'Manutenzione',
+  locked: 'Bloccato',
+};
+
+const STATUS_COLOR: Record<ServerStatus, string> = {
+  online: '#5DD89A',
+  busy: '#F4B854',
+  full: '#FF6B6B',
+  maintenance: '#7A7AC4',
+  locked: '#888',
+};
+
 export default function ServerSelectScreen() {
   const router = useRouter();
-  const [newEndpointState, setNewEndpointState] = useState<EndpointState>('loading');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [servers, setServers] = useState<ServerProfile[]>([]);
+  const [isFallback, setIsFallback] = useState<boolean>(true);
+  const [entering, setEntering] = useState<string | null>(null);
 
-  // Probe new endpoint state (expected 503 in current phase).
   useEffect(() => {
     let alive = true;
     const url = BACKEND_URL
-      ? `${BACKEND_URL}/api/server-profiles/select`
-      : '/api/server-profiles/select';
-    fetch(url)
-      .then((r) => {
+      ? `${BACKEND_URL}/api/server-profiles/list`
+      : '/api/server-profiles/list';
+    fetch(url, { method: 'GET' })
+      .then(async (r) => {
         if (!alive) return;
-        if (r.status === 503) setNewEndpointState('preview_503');
-        else if (r.status === 200) setNewEndpointState('live');
-        else setNewEndpointState('unavailable');
+        if (r.status === 200) {
+          try {
+            const j = await r.json();
+            if (j && Array.isArray(j.servers) && j.servers.length > 0) {
+              setServers(j.servers as ServerProfile[]);
+              setIsFallback(!!j.is_fallback);
+            } else {
+              setServers(FALLBACK_SERVERS);
+              setIsFallback(true);
+            }
+          } catch {
+            setServers(FALLBACK_SERVERS);
+            setIsFallback(true);
+          }
+        } else {
+          // 503/404/other -> fallback dichiarato
+          setServers(FALLBACK_SERVERS);
+          setIsFallback(true);
+        }
       })
       .catch(() => {
-        if (alive) setNewEndpointState('unavailable');
+        if (alive) {
+          setServers(FALLBACK_SERVERS);
+          setIsFallback(true);
+        }
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
       });
     return () => {
       alive = false;
     };
   }, []);
 
-  // NOTE: legacy select() function has been intentionally REMOVED.
-  // Player-facing UI must NOT call the legacy server-select POST endpoint
-  // during the server_profiles transition (see routes/economy.py for
-  // the legacy backend handler kept intact for the deprecation window).
-  // The legacy server list fetch has also been removed: the locked preview
-  // does not need to display a list, consistently with housing-preview
-  // and artifacts-preview patterns.
+  const sections = useMemo(() => {
+    const recommended = servers.filter((s) => s.recommended);
+    const lastPlayed = servers.filter((s) => s.is_last_played);
+    const withCharacter = servers.filter((s) => s.has_character && !s.is_last_played);
+    const others = servers.filter(
+      (s) => !s.recommended && !s.is_last_played && !s.has_character,
+    );
+    return { recommended, lastPlayed, withCharacter, others };
+  }, [servers]);
+
+  const onEnter = async (s: ServerProfile) => {
+    if (!s.can_enter) return;
+    setEntering(s.server_id);
+    try {
+      await AsyncStorage.setItem('v101_selected_server_id', s.server_id);
+      await AsyncStorage.setItem('v102_selected_server_name', s.server_name);
+      await AsyncStorage.setItem(
+        'v102_selected_server_has_character',
+        s.has_character ? 'true' : 'false',
+      );
+    } catch (_e) {
+      // non logghiamo dettagli sensibili
+    }
+    router.replace('/(tabs)/home');
+  };
+
+  const renderCard = (s: ServerProfile, key: string) => {
+    const statusColor = STATUS_COLOR[s.status];
+    const disabled = !s.can_enter;
+    return (
+      <View key={key} style={cardStyles.outer}>
+        <LinearGradient
+          colors={[statusColor + '22', 'rgba(15,15,45,0.95)']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[cardStyles.card, { borderColor: statusColor + '55' }]}
+        >
+          <View style={cardStyles.headerRow}>
+            <View style={{ flex: 1 }}>
+              <Text style={cardStyles.serverName}>{s.server_name}</Text>
+              <Text style={cardStyles.serverMeta}>
+                {s.region} · <Text style={{ color: statusColor }}>{STATUS_LABEL[s.status]}</Text>
+              </Text>
+            </View>
+            <View style={cardStyles.badges}>
+              {s.recommended ? (
+                <View style={[cardStyles.badge, { backgroundColor: '#FF6B3522' }]}>
+                  <Text style={[cardStyles.badgeTxt, { color: '#FF6B35' }]}>CONSIGLIATO</Text>
+                </View>
+              ) : null}
+              {s.is_new ? (
+                <View style={[cardStyles.badge, { backgroundColor: '#5DD89A22' }]}>
+                  <Text style={[cardStyles.badgeTxt, { color: '#5DD89A' }]}>NUOVO</Text>
+                </View>
+              ) : null}
+              {s.is_last_played ? (
+                <View style={[cardStyles.badge, { backgroundColor: '#7A7AC422' }]}>
+                  <Text style={[cardStyles.badgeTxt, { color: '#7A7AC4' }]}>ULTIMO</Text>
+                </View>
+              ) : null}
+              {s.status === 'maintenance' ? (
+                <View style={[cardStyles.badge, { backgroundColor: '#7A7AC422' }]}>
+                  <Text style={[cardStyles.badgeTxt, { color: '#7A7AC4' }]}>MANUT.</Text>
+                </View>
+              ) : null}
+            </View>
+          </View>
+
+          {s.has_character ? (
+            <View style={cardStyles.characterRow}>
+              <Text style={cardStyles.characterIcon}>{'\u2694\uFE0F'}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={cardStyles.characterName}>{s.character_name || 'Personaggio'}</Text>
+                <Text style={cardStyles.characterMeta}>
+                  {s.character_level ? `Lv.${s.character_level}` : '\u2014'}
+                  {s.power ? ` · Potere ${s.power}` : ''}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+
+          {disabled && s.reason_if_locked ? (
+            <Text style={cardStyles.lockedReason}>{s.reason_if_locked}</Text>
+          ) : null}
+
+          <TouchableOpacity
+            disabled={disabled || entering === s.server_id}
+            onPress={() => onEnter(s)}
+            activeOpacity={0.8}
+            style={[
+              cardStyles.enterBtn,
+              {
+                backgroundColor: disabled ? '#3a3a55' : '#FF6B35',
+                opacity: entering === s.server_id ? 0.6 : 1,
+              },
+            ]}
+          >
+            <Text style={cardStyles.enterBtnTxt}>
+              {entering === s.server_id ? 'Entrata...' : disabled ? 'Non disponibile' : 'ENTRA'}
+            </Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </View>
+    );
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <LinearGradient
+          colors={[COLORS.bgPrimary, COLORS.bgSecondary]}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={styles.loadingWrap}>
+          <ActivityIndicator color={COLORS.accent} size="large" />
+          <Text style={styles.loadingTxt}>Caricamento server...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,111 +296,48 @@ export default function ServerSelectScreen() {
         colors={[COLORS.bgPrimary, COLORS.bgSecondary]}
         style={StyleSheet.absoluteFill}
       />
-      <View style={styles.headerBar}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backBtn}
-          accessibilityLabel="Indietro"
-          accessibilityRole="button"
-        >
-          <Text style={styles.backIcon}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Selezione Server</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <Text style={styles.title}>SELEZIONE SERVER</Text>
+        <Text style={styles.subtitle}>Scegli il server su cui vuoi giocare.</Text>
 
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Banner principale di stato lock */}
-        <View
-          style={styles.banner}
-          accessibilityRole="header"
-          accessibilityLabel="Selezione Server in aggiornamento"
-          accessibilityState={{ disabled: true }}
-        >
-          <Text style={styles.bannerIcon}>🌐</Text>
-          <Text style={styles.bannerTitle}>Selezione Server in aggiornamento</Text>
-          <Text style={styles.bannerSubtitle}>
-            La gestione dei profili server è in fase di migrazione. Il cambio
-            server sarà riattivato quando il nuovo sistema sarà pronto.
-          </Text>
-        </View>
-
-        {/* Track E (dual-read copy polish): riga informativa "Server attuale".
-            Nessuna fetch aggiuntiva: la fonte di lettura (legacy users.server)
-            sarà collegata in un pack futuro auth/contract hardening. Per ora
-            mostra placeholder coerente con la modalità locked. */}
-        <Text style={styles.sectionTitle}>Server attuale</Text>
-        <View
-          style={styles.currentServerCard}
-          accessibilityRole="text"
-          accessibilityLabel="Server attuale: informazione non ancora disponibile in anteprima"
-        >
-          <Text style={styles.currentServerLabel}>Stato</Text>
-          <Text style={styles.currentServerValue}>
-            Anteprima dual-read in preparazione
-          </Text>
-          <Text style={styles.currentServerHint}>
-            Il tuo server attuale resta invariato. Il dettaglio "server attuale"
-            sarà visibile in sola lettura dopo l'attivazione sicura
-            dell'auth/contract hardening del nuovo sistema.
-          </Text>
-        </View>
-
-        {/* Stato del nuovo endpoint (server-profiles) */}
-        <Text style={styles.sectionTitle}>Stato nuovo sistema</Text>
-        {newEndpointState === 'loading' && (
-          <View style={styles.loadingWrap}>
-            <ActivityIndicator color={COLORS.accent} />
-            <Text style={styles.loadingText}>Verifica disponibilità…</Text>
+        {isFallback ? (
+          <View style={styles.fallbackBanner}>
+            <Text style={styles.fallbackTxt}>
+              {'\u26A0\uFE0F'} SERVER PROFILE FALLBACK \u00b7 lista server locale (backend live non
+              disponibile)
+            </Text>
           </View>
-        )}
-        {newEndpointState === 'preview_503' && (
-          <SafeFeatureCard
-            title="Endpoint /api/server-profiles/select"
-            subtitle="Servizio profili server temporaneamente disabilitato."
-            visibility="player_visible_locked"
-            endpointStatus="preview_503"
-            lockReason="Il nuovo endpoint è gated (HTTP 503). In attesa delle firme di abilitazione runtime e preview."
-            icon="🔒"
-            statusBadge="503"
-            testID="sp-new-endpoint-503"
-          />
-        )}
-        {newEndpointState === 'live' && (
-          <SafeFeatureCard
-            title="Endpoint /api/server-profiles/select"
-            subtitle="Anteprima dati disponibile. Nessuna mutazione esposta in UI."
-            visibility="player_visible_active_read_only"
-            endpointStatus="live"
-            icon="🔗"
-            statusBadge="Online"
-          />
-        )}
-        {newEndpointState === 'unavailable' && (
-          <SafeFeatureCard
-            title="Endpoint /api/server-profiles/select"
-            subtitle="Non raggiungibile in questo momento."
-            visibility="player_visible_locked"
-            lockReason="Errore di rete o servizio temporaneamente non disponibile."
-            icon="🌐"
-            statusBadge="Offline"
-          />
-        )}
+        ) : null}
 
-        {/* Elenco server (rimosso intenzionalmente in fase locked preview) */}
+        {sections.recommended.length > 0 ? (
+          <>
+            <Text style={styles.sectionTitle}>SERVER CONSIGLIATO</Text>
+            {sections.recommended.map((s, i) => renderCard(s, `rec-${i}`))}
+          </>
+        ) : null}
 
-        {/* Footer informativo */}
-        <View style={styles.footerNote}>
-          <Text style={styles.footerNoteText}>
-            Nessuna azione di selezione server disponibile in questa fase. Il
-            tuo server attuale resta invariato finché il nuovo sistema Server
-            Profiles non sarà attivato in modo sicuro.
-          </Text>
-        </View>
+        {sections.lastPlayed.length > 0 ? (
+          <>
+            <Text style={styles.sectionTitle}>ULTIMO SERVER</Text>
+            {sections.lastPlayed.map((s, i) => renderCard(s, `last-${i}`))}
+          </>
+        ) : null}
+
+        {sections.withCharacter.length > 0 ? (
+          <>
+            <Text style={styles.sectionTitle}>SERVER CON PERSONAGGI</Text>
+            {sections.withCharacter.map((s, i) => renderCard(s, `ch-${i}`))}
+          </>
+        ) : null}
+
+        {sections.others.length > 0 ? (
+          <>
+            <Text style={styles.sectionTitle}>TUTTI I SERVER</Text>
+            {sections.others.map((s, i) => renderCard(s, `all-${i}`))}
+          </>
+        ) : null}
+
+        <View style={{ height: 32 }} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -190,115 +345,64 @@ export default function ServerSelectScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bgPrimary },
-  headerBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-    paddingTop: 8,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
+  loadingWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  loadingTxt: { color: COLORS.text, opacity: 0.7, fontSize: 14 },
+  scroll: { padding: 16, paddingTop: 24 },
+  title: {
+    color: COLORS.text,
+    fontSize: 22,
+    fontWeight: '900',
+    letterSpacing: 3,
+    marginBottom: 4,
   },
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.bgGlass,
-  },
-  backIcon: { color: COLORS.textPrimary, fontSize: 22, fontWeight: '700' },
-  headerTitle: {
-    color: COLORS.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-  },
-  scroll: { flex: 1 },
-  scrollContent: { padding: 16, paddingBottom: 80 },
-  banner: {
-    alignItems: 'center',
-    padding: 20,
-    borderRadius: 16,
-    backgroundColor: 'rgba(68,170,255,0.10)',
+  subtitle: { color: COLORS.text, opacity: 0.7, fontSize: 13, marginBottom: 14 },
+  fallbackBanner: {
+    backgroundColor: 'rgba(244,184,84,0.12)',
+    borderColor: 'rgba(244,184,84,0.4)',
     borderWidth: 1,
-    borderColor: 'rgba(68,170,255,0.35)',
-    marginBottom: 20,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 16,
   },
-  bannerIcon: { fontSize: 36 },
-  bannerTitle: {
-    color: COLORS.textPrimary,
-    fontSize: 20,
-    fontWeight: '800',
-    marginTop: 8,
-    textAlign: 'center',
-  },
-  bannerSubtitle: {
-    color: COLORS.textSecondary,
-    fontSize: 13,
-    marginTop: 6,
-    textAlign: 'center',
-    lineHeight: 18,
-  },
+  fallbackTxt: { color: '#F4B854', fontSize: 11, fontWeight: '700' },
   sectionTitle: {
-    color: COLORS.gold,
-    fontSize: 14,
+    color: COLORS.accent,
+    fontSize: 12,
     fontWeight: '800',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-    marginTop: 16,
-    marginBottom: 10,
-  },
-  loadingWrap: {
-    padding: 16,
-    alignItems: 'center',
-    backgroundColor: COLORS.bgGlass,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-  },
-  loadingText: { color: COLORS.textMuted, marginTop: 8, fontSize: 13 },
-  currentServerCard: {
-    padding: 14,
-    borderRadius: 12,
-    backgroundColor: COLORS.bgGlass,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    letterSpacing: 2,
+    marginTop: 18,
     marginBottom: 8,
   },
-  currentServerLabel: {
-    color: COLORS.textMuted,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
+});
+
+const cardStyles = StyleSheet.create({
+  outer: { marginBottom: 12, borderRadius: 12, overflow: 'hidden' },
+  card: { borderWidth: 1, borderRadius: 12, padding: 14 },
+  headerRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
+  serverName: { color: COLORS.text, fontSize: 16, fontWeight: '800' },
+  serverMeta: { color: COLORS.text, opacity: 0.75, fontSize: 12, marginTop: 2 },
+  badges: { flexDirection: 'row', gap: 4, flexWrap: 'wrap', maxWidth: 130, justifyContent: 'flex-end' },
+  badge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 },
+  badgeTxt: { fontSize: 9, fontWeight: '900', letterSpacing: 1 },
+  characterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(255,255,255,0.08)',
   },
-  currentServerValue: {
-    color: COLORS.textPrimary,
-    fontSize: 15,
-    fontWeight: '700',
-    marginTop: 6,
+  characterIcon: { fontSize: 20 },
+  characterName: { color: COLORS.text, fontSize: 13, fontWeight: '700' },
+  characterMeta: { color: COLORS.text, opacity: 0.7, fontSize: 11 },
+  lockedReason: { color: '#F4B854', fontSize: 11, marginTop: 8 },
+  enterBtn: {
+    marginTop: 12,
+    height: 44, // >= 44pt iOS / 44dp Android touch target
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  currentServerHint: {
-    color: COLORS.textMuted,
-    fontSize: 12,
-    marginTop: 8,
-    lineHeight: 16,
-    fontStyle: 'italic',
-  },
-  footerNote: {
-    marginTop: 20,
-    padding: 14,
-    borderRadius: 12,
-    backgroundColor: COLORS.bgGlass,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-  },
-  footerNoteText: {
-    color: COLORS.textMuted,
-    fontSize: 12,
-    fontStyle: 'italic',
-    lineHeight: 16,
-  },
+  enterBtnTxt: { color: '#fff', fontSize: 13, fontWeight: '900', letterSpacing: 3 },
 });

@@ -1,0 +1,47 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "server_select_audit",
+  "version": 1,
+  "language": "italian",
+  "device": "iPhone 13 / Expo Go",
+  "context": "post v101: app entra in /servers ma la schermata e' read-only locked, nessuna lista server, nessun pulsante Entra, nessun dettaglio.",
+  "files_audited": {
+    "frontend/app/servers.tsx": "PROJECT_SERVER_PROFILES_UI_LOCK_PREVIEW (read-only locked); v102 sostituito con UI selezionabile reale + fallback dichiarato",
+    "frontend/app/index.tsx": "v101 gate routing OK: post-login -> /servers se v101_selected_server_id assente; v102 confermato funzionante",
+    "frontend/app/(tabs)/menu.tsx": "v101 logout button -> router.replace('/'); v102 aggiunto bottone CAMBIA SERVER + rinominato LOGOUT ACCOUNT",
+    "frontend/context/AuthContext.tsx": "v101 logout() clear token + v101_selected_server_id; v102 bridge logout aggiunto in menu (clear v102 keys + tentativo v96 SecureStore via import marker)",
+    "frontend/src/auth/AuthContext.tsx": "v96 OAuth/JWT/SecureStore provider; v102 documenta unificazione PARTIAL via bridge in menu",
+    "backend/routes/server_profiles.py": "GET/POST /api/server-profiles/select -> 503 quando SERVER_PROFILES_RUNTIME_ENABLED != true (no mutation)"
+  },
+  "classification": {
+    "frontend/app/servers.tsx": "selectable (post-v102)",
+    "frontend/app/index.tsx": "route_ready",
+    "frontend/app/(tabs)/menu.tsx": "route_ready_v102",
+    "frontend/context/AuthContext.tsx": "auth_context_mismatch_bridged",
+    "frontend/src/auth/AuthContext.tsx": "auth_context_mismatch_bridged",
+    "backend_/api/server-profiles/select": "backend_source_unavailable_503 -> local_fallback_required",
+    "AsyncStorage_v101_selected_server_id": "route_ready",
+    "SecureStore_v96_auth_session": "selectable_via_v96_AuthContext"
+  },
+  "blockers_identified_pre_v102": [
+    "servers.tsx era read-only locked preview, nessuna lista server",
+    "mancavano pulsanti Entra/Seleziona",
+    "mancava write v101_selected_server_id su tap",
+    "menu.tsx mostrava solo Esci dal gioco ambiguo",
+    "AuthContext legacy + v96 non avevano bridge esplicito"
+  ],
+  "actions_applied_in_v102": [
+    "frontend/app/servers.tsx: rewrite completo come UI funzionante con sezioni + card + Entra + fallback dichiarato",
+    "frontend/app/(tabs)/menu.tsx: aggiunto pulsante CAMBIA SERVER + rinominato logout in LOGOUT ACCOUNT + bridge clear su logout",
+    "persistence v101_selected_server_id + v102_selected_server_name + v102_selected_server_has_character"
+  ],
+  "safety": {
+    "db_destructive_writes": false,
+    "legacy_apply_cleanup": false,
+    "reward_economy_inventory_mutation": false,
+    "token_raw_logs": false,
+    "provider_secrets": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

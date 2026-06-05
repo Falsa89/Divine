@@ -1,0 +1,51 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "server_select_ui_result",
+  "version": 1,
+  "language": "italian",
+  "file_modified": "frontend/app/servers.tsx",
+  "sections_implemented": [
+    "Server consigliato (recommended=true)",
+    "Ultimo server (is_last_played=true)",
+    "Server con personaggi (has_character=true && !is_last_played)",
+    "Tutti i server (others)"
+  ],
+  "card_fields_displayed": [
+    "server_name",
+    "region",
+    "status (Online/Affollato/Pieno/Manutenzione/Bloccato)",
+    "character_name (se has_character)",
+    "character_level + power (se has_character)",
+    "badge Consigliato (recommended)",
+    "badge Nuovo (is_new)",
+    "badge Ultimo (is_last_played)",
+    "badge Manutenzione (status=maintenance)",
+    "reason_if_locked (se !can_enter)"
+  ],
+  "enter_button": {
+    "label": "ENTRA",
+    "disabled_if": ["!can_enter", "status in (maintenance, locked, full)"],
+    "disabled_label": "Non disponibile",
+    "loading_label": "Entrata...",
+    "touch_target_height_px": 44,
+    "meets_44pt_44dp_target": true
+  },
+  "on_enter_actions": [
+    "AsyncStorage.setItem('v101_selected_server_id', server_id)",
+    "AsyncStorage.setItem('v102_selected_server_name', server_name)",
+    "AsyncStorage.setItem('v102_selected_server_has_character', has_character ? 'true' : 'false')",
+    "router.replace('/(tabs)/home')"
+  ],
+  "fallback_banner_visible_when_no_backend": true,
+  "fallback_banner_text": "\u26A0\uFE0F SERVER PROFILE FALLBACK \u00b7 lista server locale (backend live non disponibile)",
+  "loading_state": true,
+  "loading_message": "Caricamento server...",
+  "safe_area_handled": true,
+  "safety": {
+    "random_opponent_generation": false,
+    "fake_server_profile_real_data": false,
+    "hardcoded_as_production": false,
+    "token_raw_logs": false,
+    "fake_PASS": false
+  }
+}

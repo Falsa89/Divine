@@ -1,0 +1,36 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "logout_change_server_result",
+  "version": 1,
+  "language": "italian",
+  "file_modified": "frontend/app/(tabs)/menu.tsx",
+  "actions_implemented": {
+    "cambia_server": {
+      "button_label": "CAMBIA SERVER",
+      "on_press": "router.replace('/servers')",
+      "clears_account_session": false,
+      "clears_selected_server": false,
+      "note": "l'utente sceglie un nuovo server da /servers; il nuovo tap Entra sovrascrive v101_selected_server_id"
+    },
+    "logout_account": {
+      "button_label": "LOGOUT ACCOUNT",
+      "on_press_sequence": [
+        "AsyncStorage.removeItem('v101_selected_server_id')",
+        "AsyncStorage.removeItem('v102_selected_server_name')",
+        "AsyncStorage.removeItem('v102_selected_server_has_character')",
+        "legacy AuthContext.logout() (rimuove token + v101_selected_server_id)",
+        "bridge marker per v96 SecureStore (import context)",
+        "router.replace('/')"
+      ],
+      "clears_account_session": true,
+      "clears_selected_server": true,
+      "returns_to_login": true
+    }
+  },
+  "old_button_esci_dal_gioco_status": "RINOMINATO_IN_LOGOUT_ACCOUNT (non piu' ambiguo)",
+  "safety": {
+    "auth_session_deletion_outside_logout": false,
+    "token_raw_logs": false,
+    "fake_PASS": false
+  }
+}

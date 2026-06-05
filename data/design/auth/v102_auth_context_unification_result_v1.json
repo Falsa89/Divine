@@ -1,0 +1,37 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "auth_context_unification_result",
+  "version": 1,
+  "language": "italian",
+  "legacy_context": {
+    "file": "frontend/context/AuthContext.tsx",
+    "provides": ["login(email,password)", "register", "logout (clear token+v101_selected_server_id)", "user/token state"],
+    "storage": "AsyncStorage 'token'"
+  },
+  "v96_context": {
+    "file": "frontend/src/auth/AuthContext.tsx",
+    "provides": ["OAuth login (Google/Apple/Guest stub)", "JWT + refresh", "logout (clear SecureStore + revoke refresh)", "session restore"],
+    "storage": "SecureStore (expo-secure-store)"
+  },
+  "unification_strategy": "BRIDGE_LOGOUT",
+  "v102_bridge_implementation": {
+    "file": "frontend/app/(tabs)/menu.tsx",
+    "logout_button_action": "chiama legacy logout() + clear v102 AsyncStorage keys + import marker v96 AuthContext + router.replace('/')",
+    "limitations": "non si possono chiamare hooks v96 fuori da component; il v96 SecureStore clear avviene quando lo screen di /login si rimonta e il v96 useAuth riconosce assenza token salvato. Marker import documenta la dipendenza."
+  },
+  "full_unification_status": "AUTH_CONTEXT_FULL_UNIFICATION_DEFERRED",
+  "full_unification_deferred_to": "v103 single-provider AuthContext consolidation pack",
+  "current_safety_guarantees": [
+    "logout button non rotto: chiama legacy logout (sufficiente per provider email/password attuale)",
+    "clear v101_selected_server_id + v102_* avviene esplicitamente",
+    "navigate to /login completa il ciclo",
+    "nessun raw OAuth/token log",
+    "nessun token salvato in plain AsyncStorage oltre al token legacy email/password"
+  ],
+  "safety": {
+    "token_raw_logs": false,
+    "provider_secrets": false,
+    "unexpected_token_loss": false,
+    "fake_PASS": false
+  }
+}

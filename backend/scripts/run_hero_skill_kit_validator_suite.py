@@ -3307,6 +3307,22 @@ OPTIONAL = [
     ('PROJECT-V101-FRONTEND-LEGACY-MOCK-ROUTE-AUDIT', 'validate_v101_frontend_legacy_mock_route_audit.py'),
     ('PROJECT-V101-SERVER-SELECT-LOGOUT-FLOW', 'validate_v101_server_select_logout_flow.py'),
     ('MEGA-RELEASE-ACCELERATION-50-v101-ROLLUP', 'validate_mega_release_acceleration_50_v101_rollup.py'),
+    # ========================================================================
+    # v102 - MEGA_RELEASE_ACCELERATION_51_SERVER_SELECT_RUNTIME_WIRING_AND_AUTH_UNIFICATION_FIX_PACK
+    # PUBLIC_SYNC_TAG_v102_MEGA_RELEASE_ACCELERATION_51_SERVER_SELECT_RUNTIME_WIRING_AND_AUTH_UNIFICATION_FIX
+    # PUBLIC_SYNC_SENTINEL_v102_PRESENT=YES
+    # P0 device QA bugfix: /servers ora UI selezionabile reale con card + Entra +
+    # fallback dichiarato + persistenza v101_selected_server_id + Cambia server / Logout account separati.
+    # AuthContext bridge logout in menu.tsx (full unification deferred v103).
+    # ========================================================================
+    ('PROJECT-V102-SERVER-SELECT-AUDIT', 'validate_v102_server_select_audit.py'),
+    ('PROJECT-V102-SERVER-LIST-SOURCE', 'validate_v102_server_list_source.py'),
+    ('PROJECT-V102-SERVER-SELECT-UI', 'validate_v102_server_select_ui.py'),
+    ('PROJECT-V102-SELECTED-SERVER-PERSISTENCE', 'validate_v102_selected_server_persistence.py'),
+    ('PROJECT-V102-LOGOUT-CHANGE-SERVER', 'validate_v102_logout_change_server.py'),
+    ('PROJECT-V102-AUTH-CONTEXT-UNIFICATION', 'validate_v102_auth_context_unification.py'),
+    ('PROJECT-V102-DEVICE-RETEST-MATRIX', 'validate_v102_device_retest_matrix.py'),
+    ('MEGA-RELEASE-ACCELERATION-51-v102-ROLLUP', 'validate_mega_release_acceleration_51_v102_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
@@ -4953,6 +4969,21 @@ def main(argv=None) -> int:
         'SLC-D-RUNTIME-SAFETY-AUDIT',
         'SLC-F-RUNTIME-SAFETY-AUDIT',
     }) if v100_md5_rebaseline_authority_present else frozenset()
+    # ------------------------------------------------------------------------
+    # v102 - MEGA_RELEASE_ACCELERATION_51_SERVER_SELECT_RUNTIME_WIRING
+    # Pack v102 unlock formalmente la schermata /servers da locked preview a
+    # selectable runtime UI. I 4 validator legacy che ancoravano lo stato
+    # locked-preview di servers.tsx vengono marcati SUPERSEDED via meccanismo
+    # formale gated dalla presenza del file v102_server_select_audit_v1.json.
+    # Audit forense: data/design/server_select/v102_server_select_audit_v1.json
+    # ------------------------------------------------------------------------
+    v102_server_select_unlock_authority_present = Path('/app/data/design/server_select/v102_server_select_audit_v1.json').exists()
+    SUPERSEDED_AFTER_V102_SERVER_SELECT_UNLOCK = frozenset({
+        'PROJECT-SP-UI-LOCK-TRACK-B-LOCKED-PREVIEW-IMPL',
+        'PROJECT-SP-UI-LOCK-TRACK-D-LOCKED-COPY-503',
+        'PROJECT-SP-UI-LOCK-TRACK-E-MOBILE-A11Y',
+        'PROJECT-SP-DUAL-READ-TRACK-E-LOCKED-PREVIEW-COPY',
+    }) if v102_server_select_unlock_authority_present else frozenset()
     SUPERSEDED = (SUPERSEDED_AFTER_AF2N | SUPERSEDED_AFTER_INV_WRITES
                   | SUPERSEDED_AFTER_STAGE2 | SUPERSEDED_AFTER_STAGE3
                   | SUPERSEDED_AFTER_PUBLIC_UI_PREVIEW
@@ -4962,7 +4993,8 @@ def main(argv=None) -> int:
                   | SUPERSEDED_AFTER_PROJECT_E_V2
                   | SUPERSEDED_AFTER_PROJECT_F_TRACK_B
                   | SUPERSEDED_AFTER_BATTLE_REPLAY_PREVIEW_ROUTE_V36
-                  | SUPERSEDED_AFTER_V100_MD5_REBASELINE)
+                  | SUPERSEDED_AFTER_V100_MD5_REBASELINE
+                  | SUPERSEDED_AFTER_V102_SERVER_SELECT_UNLOCK)
 
     results: list[dict] = []
     any_required_fail = False

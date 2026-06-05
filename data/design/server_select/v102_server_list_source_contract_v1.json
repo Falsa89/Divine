@@ -1,0 +1,48 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "server_list_source_contract",
+  "version": 1,
+  "language": "italian",
+  "preferred_source": {
+    "endpoint": "GET /api/server-profiles/list",
+    "runtime_enabled": false,
+    "current_behavior": "backend espone GET /api/server-profiles/select e POST /api/server-profiles/select entrambi 503 quando SERVER_PROFILES_RUNTIME_ENABLED!=true. Nessun endpoint /list ufficiale attivo. Frontend tenta /list e fa fallback safe se non 200."
+  },
+  "fallback_source": {
+    "label": "SERVER PROFILE FALLBACK",
+    "location": "frontend/app/servers.tsx (FALLBACK_SERVERS array)",
+    "declared_in_ui": true,
+    "declared_in_report": true,
+    "contains_real_user_data": false,
+    "fake_real_profile_data": false
+  },
+  "payload_contract": {
+    "server_id": "string (required)",
+    "server_name": "string (required)",
+    "region": "string (required)",
+    "status": "online | busy | full | maintenance | locked (required)",
+    "recommended": "boolean (optional)",
+    "is_last_played": "boolean (optional)",
+    "has_character": "boolean (optional)",
+    "character_name": "string | null (optional)",
+    "character_level": "number | null (optional)",
+    "power": "number | null (optional)",
+    "created_at": "ISO8601 | null (optional)",
+    "can_enter": "boolean (required)",
+    "reason_if_locked": "string | null (optional)",
+    "is_new": "boolean (optional)"
+  },
+  "fallback_payload_sample": [
+    {"server_id": "eu-01", "server_name": "Aurora \u00b7 EU-01", "region": "EU", "status": "online", "recommended": true, "can_enter": true, "is_new": true},
+    {"server_id": "eu-02", "server_name": "Crepuscolo \u00b7 EU-02", "region": "EU", "status": "online", "can_enter": true},
+    {"server_id": "na-01", "server_name": "Eclissi \u00b7 NA-01", "region": "NA", "status": "busy", "can_enter": true},
+    {"server_id": "asia-01", "server_name": "Alba \u00b7 ASIA-01", "region": "ASIA", "status": "online", "can_enter": true},
+    {"server_id": "eu-99", "server_name": "Nebbia \u00b7 EU-99 (Manutenzione)", "region": "EU", "status": "maintenance", "can_enter": false, "reason_if_locked": "In manutenzione programmata"}
+  ],
+  "safety": {
+    "fake_server_profile_real_data": false,
+    "hardcoding_as_production_if_fallback": false,
+    "token_raw_logs": false,
+    "fake_PASS": false
+  }
+}

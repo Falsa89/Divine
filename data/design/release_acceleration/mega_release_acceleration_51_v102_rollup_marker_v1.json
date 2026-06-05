@@ -1,0 +1,46 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_51_v102",
+  "type": "v102_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T15:24:02.278285Z",
+  "validators_total": 7,
+  "validators_pass": 7,
+  "results": [
+    {
+      "validator": "validate_v102_server_select_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v102 server select audit (6 files audited, 3 actions)"
+    },
+    {
+      "validator": "validate_v102_server_list_source.py",
+      "exit_code": 0,
+      "last_line": "PASS — v102 server list source (14 fields, 5 fallback servers)"
+    },
+    {
+      "validator": "validate_v102_server_select_ui.py",
+      "exit_code": 0,
+      "last_line": "PASS — v102 server select UI (4 sections, 10 card fields, runtime verified)"
+    },
+    {
+      "validator": "validate_v102_selected_server_persistence.py",
+      "exit_code": 0,
+      "last_line": "PASS — v102 selected server persistence (3 keys, behavior matrix complete)"
+    },
+    {
+      "validator": "validate_v102_logout_change_server.py",
+      "exit_code": 0,
+      "last_line": "PASS — v102 logout/change server (CAMBIA SERVER + LOGOUT ACCOUNT separati, menu.tsx verified)"
+    },
+    {
+      "validator": "validate_v102_auth_context_unification.py",
+      "exit_code": 0,
+      "last_line": "PASS — v102 auth context unification (strategy=BRIDGE_LOGOUT, status=AUTH_CONTEXT_FULL_UNIFICATION_DEFERRED)"
+    },
+    {
+      "validator": "validate_v102_device_retest_matrix.py",
+      "exit_code": 0,
+      "last_line": "PASS — v102 device retest matrix (12 steps, manual QA required for utente)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_51_SERVER_SELECT_RUNTIME_WIRING_AND_AUTH_UNIFICATION_FIX_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}
