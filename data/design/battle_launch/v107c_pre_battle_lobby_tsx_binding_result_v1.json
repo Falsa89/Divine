@@ -1,0 +1,15 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_58_v107C",
+  "type":"v107c_pre_battle_lobby_tsx_binding_result",
+  "version":1,
+  "language":"it",
+  "status":"TSX_BINDING_REVERTED_LEGACY_MD5_VALIDATORS_PROTECTED",
+  "tsx_file":"frontend/app/pre-battle-lobby.tsx",
+  "binding_attempted":true,
+  "binding_reverted_reason":"Le validator legacy V90-RESTORED-BATTLE-RENDERER-REUSE, STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN, V18-V24 PREFLIGHT, COSMETIC-RUNTIME-SAFETY, ecc. controllano hash/pattern di pre-battle-lobby.tsx e combat.tsx. Modifiche dirette (anche import-only) hanno fatto salire OPTIONAL FAIL da 23 a 36, violando target <=30. Reverted per mantenere baseline.",
+  "alternative_binding_path":"Backend probe router /api/v107c/loader-probe/* + e2e smoke proof + helper resi consumibili da pack future (v108) quando la baseline MD5 dei tsx legacy verra' superseded.",
+  "default_runtime_behavior_unchanged":true,
+  "reward_granted":false,
+  "progress_written":false,
+  "safety":{"new_player_facing_feature":false,"combat_tsx_changes":false,"reward_grant":false,"progress_live_write":false,"fake_PASS":false,"validator_weakening":false,"hiding_preview_state":false}
+}

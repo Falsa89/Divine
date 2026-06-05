@@ -496,6 +496,12 @@ app.include_router(v103_server_profiles_router)
 from routes.v107a_battle_launch import router as v107a_battle_launch_router
 app.include_router(v107a_battle_launch_router)
 
+# v107C — Loader server_id acceptance probe router. Read-only echo of server_id
+# query parameter on 5 probe paths. Demonstrates acceptance contract without
+# touching existing loader endpoints. NO DB writes, NO mutation.
+from routes.v107c_loader_server_id_probe import router as v107c_loader_server_id_probe_router
+app.include_router(v107c_loader_server_id_probe_router)
+
 # PROJECT_F Track B — Housing read-only preview route skeleton (DISABLED-BY-DEFAULT INERT).
 # Returns 503 when HOUSING_PREVIEW_ENABLED is unset/!=true. No DB writes, no live bonus,
 # no combat/account stat mutation. Upstream design: 127B / 128B (Project F Track B).

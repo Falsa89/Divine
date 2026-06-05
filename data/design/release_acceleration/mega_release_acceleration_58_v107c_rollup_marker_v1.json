@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_58_v107C",
+  "type": "v107c_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T19:06:58.240635Z",
+  "validators_total": 9,
+  "validators_pass": 9,
+  "results": [
+    {
+      "validator": "validate_v107c_v107b_baseline_snapshot.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C v107B baseline snapshot (6 artifacts, smoke 3/3)"
+    },
+    {
+      "validator": "validate_v107c_pre_battle_lobby_tsx_binding.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C pre-battle-lobby tsx binding (reverted to protect MD5 baseline, alternative path active)"
+    },
+    {
+      "validator": "validate_v107c_combat_tsx_parser_binding.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C combat tsx parser binding (reverted to protect MD5 baseline, helper available for v108)"
+    },
+    {
+      "validator": "validate_v107c_story_screen_launch_path.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C story screen launch path (story.tsx unchanged, lobby gated launch is proof)"
+    },
+    {
+      "validator": "validate_v107c_backend_loader_server_id_acceptance.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C backend loader server_id acceptance (5 probes live)"
+    },
+    {
+      "validator": "validate_v107c_frontend_loader_server_id_binding.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C frontend loader server_id binding (helper+adapters ready, tsx binding reverted)"
+    },
+    {
+      "validator": "validate_v107c_e2e_preview_smoke.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C e2e preview smoke (2/2 steps)"
+    },
+    {
+      "validator": "validate_v107c_story_autoresolve_deprecation_guard.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C story auto-resolve deprecation guard (phases DONE through v107C)"
+    },
+    {
+      "validator": "validate_v107c_route_menu_exposure_safety.py",
+      "exit_code": 0,
+      "last_line": "PASS — v107C route/menu exposure safety (0 player-facing, 1 infra probe router)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_58_TSX_CONSUMER_BINDING_AND_BACKEND_LOADER_SERVER_ID_ACCEPTANCE_READY_WITH_PARTIAL_BINDING_GAPS_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

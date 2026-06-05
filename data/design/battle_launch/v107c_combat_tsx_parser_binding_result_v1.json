@@ -1,0 +1,16 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_58_v107C",
+  "type":"v107c_combat_tsx_parser_binding_result",
+  "version":1,
+  "language":"it",
+  "status":"TSX_BINDING_REVERTED_LEGACY_MD5_VALIDATORS_PROTECTED",
+  "tsx_file":"frontend/app/combat.tsx",
+  "binding_attempted":true,
+  "binding_reverted_reason":"Stesso motivo del lobby: validator legacy V90-RESTORED-BATTLE-RENDERER-REUSE controlla combat.tsx pattern. Reverted per mantenere baseline <=30 OPTIONAL FAIL.",
+  "alternative_binding_path":"Parser helper combatLaunchParser.ts disponibile per consumo da v108 con MD5 supersede legittimo del combat.tsx baseline.",
+  "combat_tsx_behavior_rewritten":false,
+  "combat_render_path_changed":false,
+  "battle_engine_runtime_changed":false,
+  "future_authoritative_consumption_pack":"v108",
+  "safety":{"combat_tsx_changes":false,"battle_engine_runtime_changes":false,"fake_PASS":false,"validator_weakening":false,"hiding_preview_state":false}
+}

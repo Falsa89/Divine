@@ -1,0 +1,23 @@
+{
+  "pack":"MEGA_RELEASE_ACCELERATION_58_v107C",
+  "type":"v107c_backend_loader_server_id_acceptance_result",
+  "version":1,
+  "language":"it",
+  "feature_flag":"SERVER_SCOPED_RUNTIME_ENABLED",
+  "feature_flag_default":false,
+  "adoption_status":"PROBE_ROUTER_LIVE_5_ENDPOINTS_ACCEPT_SERVER_ID_NO_FILTER",
+  "probe_router_file":"backend/routes/v107c_loader_server_id_probe.py",
+  "probe_endpoints":[
+    {"endpoint":"GET /api/v107c/loader-probe/user-heroes","accepts_server_id":true,"filter_applied":false,"target_real_loader":"GET /api/user/heroes","target_real_loader_adoption_pack":"v108"},
+    {"endpoint":"GET /api/v107c/loader-probe/team-get-formation","accepts_server_id":true,"filter_applied":false,"target_real_loader":"GET /api/team/get-formation","target_real_loader_adoption_pack":"v108"},
+    {"endpoint":"GET /api/v107c/loader-probe/inventory","accepts_server_id":true,"filter_applied":false,"target_real_loader":"GET /api/inventory","target_real_loader_adoption_pack":"v108"},
+    {"endpoint":"GET /api/v107c/loader-probe/currencies","accepts_server_id":true,"filter_applied":false,"target_real_loader":"GET /api/currencies","target_real_loader_adoption_pack":"v108"},
+    {"endpoint":"GET /api/v107c/loader-probe/story-progress","accepts_server_id":true,"filter_applied":false,"target_real_loader":"GET /api/story/progress","target_real_loader_adoption_pack":"v108"}
+  ],
+  "existing_loader_endpoints_modified_v107c":0,
+  "backend_isolation_live":false,
+  "backend_claims_isolation_live":false,
+  "banner_obligation_active":true,
+  "banner_token":"SERVER_DATA_ISOLATION_BACKEND_PENDING",
+  "safety":{"db_writes_performed":0,"loader_endpoints_modified_v107c":0,"fake_isolation_live":false,"fake_PASS":false,"validator_weakening":false}
+}

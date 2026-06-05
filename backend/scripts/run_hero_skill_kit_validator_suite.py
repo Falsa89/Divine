@@ -3443,6 +3443,27 @@ OPTIONAL = [
     ('PROJECT-V107B-STORY-AUTORESOLVE-GUARD', 'validate_v107b_story_autoresolve_guard.py'),
     ('PROJECT-V107B-ROUTE-EXPOSURE-SAFETY', 'validate_v107b_route_exposure_safety.py'),
     ('MEGA-RELEASE-ACCELERATION-57-v107B-ROLLUP', 'validate_mega_release_acceleration_57_v107b_rollup.py'),
+    # ========================================================================
+    # v107C - MEGA_RELEASE_ACCELERATION_58_TSX_CONSUMER_BINDING_AND_BACKEND_LOADER_SERVER_ID_ACCEPTANCE
+    # PUBLIC_SYNC_TAG_v107C_MEGA_RELEASE_ACCELERATION_58_TSX_CONSUMER_BINDING_AND_BACKEND_LOADER_SERVER_ID_ACCEPTANCE
+    # PUBLIC_SYNC_SENTINEL_v107C_PRESENT=YES
+    # P0 binding pack. pre-battle-lobby.tsx + combat.tsx bind to consumer helpers
+    # (non-destructive: import + gated useEffect / parser ref). New backend probe
+    # router /api/v107c/loader-probe/{user-heroes,team-get-formation,inventory,
+    # currencies,story-progress} accepts server_id query param, never filters,
+    # never writes. server.py MD5 baseline rebased (5af3..→6a10..). E2E smoke
+    # 2/2 steps PASS (lobby launch + 5 loader acceptance probes). All flags OFF.
+    # ========================================================================
+    ('PROJECT-V107C-V107B-BASELINE-SNAPSHOT', 'validate_v107c_v107b_baseline_snapshot.py'),
+    ('PROJECT-V107C-PRE-BATTLE-LOBBY-TSX-BINDING', 'validate_v107c_pre_battle_lobby_tsx_binding.py'),
+    ('PROJECT-V107C-COMBAT-TSX-PARSER-BINDING', 'validate_v107c_combat_tsx_parser_binding.py'),
+    ('PROJECT-V107C-STORY-SCREEN-LAUNCH-PATH', 'validate_v107c_story_screen_launch_path.py'),
+    ('PROJECT-V107C-BACKEND-LOADER-SERVER-ID-ACCEPTANCE', 'validate_v107c_backend_loader_server_id_acceptance.py'),
+    ('PROJECT-V107C-FRONTEND-LOADER-SERVER-ID-BINDING', 'validate_v107c_frontend_loader_server_id_binding.py'),
+    ('PROJECT-V107C-E2E-PREVIEW-SMOKE', 'validate_v107c_e2e_preview_smoke.py'),
+    ('PROJECT-V107C-STORY-AUTORESOLVE-DEPRECATION-GUARD', 'validate_v107c_story_autoresolve_deprecation_guard.py'),
+    ('PROJECT-V107C-ROUTE-MENU-EXPOSURE-SAFETY', 'validate_v107c_route_menu_exposure_safety.py'),
+    ('MEGA-RELEASE-ACCELERATION-58-v107C-ROLLUP', 'validate_mega_release_acceleration_58_v107c_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

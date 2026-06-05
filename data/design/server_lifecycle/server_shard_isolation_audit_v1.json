@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-05T18:52:08.808881+00:00",
+  "timestamp_utc": "2026-06-05T19:07:35.843113+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1690,
+  "backend_python_files_scanned": 1702,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 843,
+      "files_with_hits": 846,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -50,8 +50,8 @@
         {
           "file": "backend/server.py",
           "keyword": "user",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 93,
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 138
+      "user_id_only_files_count": 137
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 173,
+      "files_with_hits": 174,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -174,8 +174,8 @@
         {
           "file": "backend/server.py",
           "keyword": "user_heroes",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 176,
@@ -269,28 +269,28 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 22
+      "user_id_only_files_count": 21
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 354,
+      "files_with_hits": 357,
       "hits_sample": [
         {
           "file": "backend/server.py",
           "keyword": "inventory",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 576,
+              "line": 582,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 583,
+              "line": 589,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 600,
+              "line": 606,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -356,49 +356,49 @@
           ]
         },
         {
-          "file": "backend/routes/rune_scroll_talisman_safety_preview.py",
+          "file": "backend/routes/v107c_loader_server_id_probe.py",
           "keyword": "inventory",
           "has_server_id_anywhere": true,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 7,
-              "snippet": "mutation. No rune inventory mutation. No material/currency consumption."
+              "line": 43,
+              "snippet": "@router.get(\"/inventory\")"
             },
             {
-              "line": 183,
-              "snippet": "\"rune_inventory_mutation_enabled\": False,"
+              "line": 44,
+              "snippet": "def probe_inventory(server_id: Optional[str] = None):"
             },
             {
-              "line": 213,
-              "snippet": "\"rune_inventory_mutation_enabled\": False,"
+              "line": 45,
+              "snippet": "return _echo(\"/api/inventory\", server_id)"
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 78
+      "user_id_only_files_count": 77
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 143,
+      "files_with_hits": 145,
       "hits_sample": [
         {
           "file": "backend/server.py",
           "keyword": "currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 595,
+              "line": 601,
               "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
             },
             {
-              "line": 599,
+              "line": 605,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 600,
+              "line": 606,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -501,7 +501,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 5
+      "user_id_only_files_count": 4
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
@@ -510,11 +510,11 @@
         {
           "file": "backend/server.py",
           "keyword": "purchase",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 891,
+              "line": 897,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
             }
           ]
@@ -605,7 +605,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 3
+      "user_id_only_files_count": 2
     },
     "gacha_history": {
       "expected_scope": "server_bound",
@@ -689,7 +689,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 168,
+      "files_with_hits": 171,
       "hits_sample": [
         {
           "file": "backend/bot_system.py",
@@ -714,8 +714,8 @@
         {
           "file": "backend/server.py",
           "keyword": "team",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 437,
@@ -813,12 +813,24 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 21
+      "user_id_only_files_count": 20
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 28,
+      "files_with_hits": 29,
       "hits_sample": [
+        {
+          "file": "backend/routes/v107c_loader_server_id_probe.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 54,
+              "snippet": "def probe_story_progress(server_id: Optional[str] = None):"
+            }
+          ]
+        },
         {
           "file": "backend/routes/combat.py",
           "keyword": "story_progress",
@@ -898,18 +910,6 @@
               "snippet": "'story_progress','guilds','arena_rankings','user_affinity_state',"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/validate_v86_playable_mode_route_safety.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 31,
-              "snippet": "(r\"\\bstory_progress_apply\\b\", \"story_progress_ref\"),"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -942,19 +942,19 @@
         {
           "file": "backend/server.py",
           "keyword": "guild",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
               "line": 149,
               "snippet": "\"guild_id\": None,"
             },
             {
-              "line": 632,
+              "line": 638,
               "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
             },
             {
-              "line": 634,
+              "line": 640,
               "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
@@ -1025,7 +1025,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 7
+      "user_id_only_files_count": 6
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
@@ -1054,11 +1054,11 @@
         {
           "file": "backend/server.py",
           "keyword": "ranking",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 532,
+              "line": 538,
               "snippet": "# Read-only / idempotent / NO DB writes / NO reward / NO ranking / NO PII."
             }
           ]
@@ -1129,7 +1129,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 5
+      "user_id_only_files_count": 4
     },
     "affinity": {
       "expected_scope": "server_bound",
@@ -1572,13 +1572,8 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 422,
+  "cross_server_leak_risk_candidates_count": 414,
   "cross_server_leak_risk_samples": [
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/server.py",
-      "keyword": "user"
-    },
     {
       "category": "accounts_users_auth",
       "file": "backend/battle_engine.py",
@@ -1672,6 +1667,11 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/routes/v96_auth.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/routes/v98_admin_and_gdpr.py",
       "keyword": "user"
     }
   ],

@@ -1,0 +1,89 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_58_v107C",
+  "type": "v107c_e2e_preview_smoke_result",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T19:00:55.537593Z",
+  "base_url": "http://localhost:8001",
+  "overall_pass": true,
+  "steps_total": 2,
+  "steps_pass": 2,
+  "results": [
+    {
+      "step": "lobby_launch_post",
+      "status_code": 200,
+      "pass": true,
+      "response_status_string": "PREVIEW_ECHO_NON_AUTHORITATIVE",
+      "safety": {
+        "db_writes_performed": 0,
+        "reward_granted": false,
+        "progress_written": false,
+        "currency_mutated": false
+      }
+    },
+    {
+      "step": "loader_acceptance_probes",
+      "probes": [
+        {
+          "probe": "user-heroes",
+          "status_code": 200,
+          "pass": true,
+          "server_id_received": "s1",
+          "filter_applied": false,
+          "flag": {
+            "SERVER_SCOPED_RUNTIME_ENABLED": false
+          }
+        },
+        {
+          "probe": "team-get-formation",
+          "status_code": 200,
+          "pass": true,
+          "server_id_received": "s1",
+          "filter_applied": false,
+          "flag": {
+            "SERVER_SCOPED_RUNTIME_ENABLED": false
+          }
+        },
+        {
+          "probe": "inventory",
+          "status_code": 200,
+          "pass": true,
+          "server_id_received": "s1",
+          "filter_applied": false,
+          "flag": {
+            "SERVER_SCOPED_RUNTIME_ENABLED": false
+          }
+        },
+        {
+          "probe": "currencies",
+          "status_code": 200,
+          "pass": true,
+          "server_id_received": "s1",
+          "filter_applied": false,
+          "flag": {
+            "SERVER_SCOPED_RUNTIME_ENABLED": false
+          }
+        },
+        {
+          "probe": "story-progress",
+          "status_code": 200,
+          "pass": true,
+          "server_id_received": "s1",
+          "filter_applied": false,
+          "flag": {
+            "SERVER_SCOPED_RUNTIME_ENABLED": false
+          }
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "safety": {
+    "no_db_writes": true,
+    "no_reward_grant": true,
+    "no_progress_write": true,
+    "no_currency_mutation": true,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "hiding_preview_state": false
+  }
+}
