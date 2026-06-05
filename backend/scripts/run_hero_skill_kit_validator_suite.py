@@ -3359,6 +3359,30 @@ OPTIONAL = [
     ('PROJECT-V104-SERVER-PROFILE-CREATION-POLICY', 'validate_v104_server_profile_creation_policy.py'),
     ('PROJECT-V104-DEVICE-RETEST-MATRIX', 'validate_v104_device_retest_matrix.py'),
     ('MEGA-RELEASE-ACCELERATION-53-v104-ROLLUP', 'validate_mega_release_acceleration_53_v104_rollup.py'),
+    # ========================================================================
+    # v105 - MEGA_RELEASE_ACCELERATION_54_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT_AND_RUNTIME_CONSOLIDATION_PLAN_PACK
+    # PUBLIC_SYNC_TAG_v105_MEGA_RELEASE_ACCELERATION_54_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT_AND_RUNTIME_CONSOLIDATION_PLAN
+    # PUBLIC_SYNC_SENTINEL_v105_PRESENT=YES
+    # P0 MASTER AUDIT pack. No runtime mutation. Produces AS-IS vs TO-BE matrices
+    # for frontend routes, backend endpoints, server scope, mode runtime,
+    # battle launch contract, encounter sources, legacy data, bot actors,
+    # chat/live/guild, economy/reward claims, auth, design compliance, and the
+    # full runtime consolidation roadmap v106-v114.
+    # ========================================================================
+    ('PROJECT-V105-FRONTEND-ROUTE-INVENTORY', 'validate_v105_frontend_route_inventory.py'),
+    ('PROJECT-V105-BACKEND-ENDPOINT-INVENTORY', 'validate_v105_backend_endpoint_inventory.py'),
+    ('PROJECT-V105-SERVER-SCOPE-AUDIT', 'validate_v105_server_scope_audit.py'),
+    ('PROJECT-V105-MODE-RUNTIME-AUDIT', 'validate_v105_mode_runtime_audit.py'),
+    ('PROJECT-V105-BATTLE-LAUNCH-CONTRACT-AUDIT', 'validate_v105_battle_launch_contract_audit.py'),
+    ('PROJECT-V105-ENCOUNTER-SOURCE-AUDIT', 'validate_v105_encounter_source_audit.py'),
+    ('PROJECT-V105-LEGACY-DATA-RUNTIME-AUDIT', 'validate_v105_legacy_data_runtime_audit.py'),
+    ('PROJECT-V105-BOT-SERVER-ACTOR-AUDIT', 'validate_v105_bot_server_actor_audit.py'),
+    ('PROJECT-V105-CHAT-LIVE-GUILD-AUDIT', 'validate_v105_chat_live_guild_audit.py'),
+    ('PROJECT-V105-ECONOMY-REWARD-CLAIM-AUDIT', 'validate_v105_economy_reward_claim_audit.py'),
+    ('PROJECT-V105-AUTH-ACCOUNT-SERVER-PROFILE-AUDIT', 'validate_v105_auth_account_server_profile_audit.py'),
+    ('PROJECT-V105-DESIGN-COMPLIANCE-MATRIX', 'validate_v105_design_compliance_matrix.py'),
+    ('PROJECT-V105-RUNTIME-CONSOLIDATION-ROADMAP', 'validate_v105_runtime_consolidation_roadmap.py'),
+    ('MEGA-RELEASE-ACCELERATION-54-v105-ROLLUP', 'validate_mega_release_acceleration_54_v105_rollup.py'),
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

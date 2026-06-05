@@ -1,0 +1,130 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_runtime_consolidation_roadmap",
+  "version": 1,
+  "language": "it",
+  "ordering_principle": "dependency_topological",
+  "roadmap": [
+    {
+      "pack":"v106",
+      "title":"Server-Scoped DB Schema + player_server_profiles Gated Migration",
+      "priority":"P0",
+      "depends_on":["v104"],
+      "deliverables":[
+        "player_server_profiles collection con PK (account_id, server_id)",
+        "dual-read loader server_id-aware feature-flag gated",
+        "loader frontend adoption useServerScope hook",
+        "split currencies soft/hard"
+      ],
+      "safety_constraints":["db_writes solo in staging","feature_flag default false","rollback plan obbligatorio"]
+    },
+    {
+      "pack":"v107",
+      "title":"Battle Launch Contract Unification + pre-battle-lobby",
+      "priority":"P0",
+      "depends_on":["v106"],
+      "deliverables":[
+        "launch_context schema v1 enforced in combat.tsx",
+        "pre-battle-lobby builds canonical payload",
+        "/api/battle/launch endpoint (server authoritative, idempotent)",
+        "deprecate /api/story/battle auto-resolve"
+      ],
+      "safety_constraints":["battle_engine non rimosso ma proxato","idempotency_key obbligatorio"]
+    },
+    {
+      "pack":"v108",
+      "title":"Mode Runtime Conversion (Story/Tower/Arena/Boss/Training)",
+      "priority":"P0",
+      "depends_on":["v107"],
+      "deliverables":[
+        "story chapters consumano battle_launch_contract",
+        "tower floors reali con progress server-bound",
+        "arena matchmaking + MMR server-bound",
+        "training unificata",
+        "raid boss runtime",
+        "merge route duplicate (tower-of-the-hells, gvg, item-shop, economy)"
+      ],
+      "safety_constraints":["reward_policy=live_gated default","canary opzionale per economy"]
+    },
+    {
+      "pack":"v109",
+      "title":"Chat / Server Actors / Live / Guild Isolation",
+      "priority":"P1",
+      "depends_on":["v106","v108"],
+      "deliverables":[
+        "chat channel key {server_id}:{channel}",
+        "guild membership server-bound",
+        "GW server-bound scheduling",
+        "bot runtime server-bound",
+        "live event time-windows server-bound"
+      ],
+      "safety_constraints":["no premium reward theft","no ranking domination"]
+    },
+    {
+      "pack":"v110",
+      "title":"Legacy Data Cleanup Apply (Staging)",
+      "priority":"P1",
+      "depends_on":["v108"],
+      "deliverables":[
+        "applica v101 dry-run findings in staging",
+        "sostituisce legacy heroes/items con canonical",
+        "smoke test full suite"
+      ],
+      "safety_constraints":["backup pre-apply obbligatorio","rollback documentato"]
+    },
+    {
+      "pack":"v111",
+      "title":"Economy / Reward Live Canary Controlled",
+      "priority":"P1",
+      "depends_on":["v110"],
+      "deliverables":[
+        "safety_preview -> live canary toggles",
+        "idempotency_key obbligatorio su tutti i claim",
+        "observability metrics rollup"
+      ],
+      "safety_constraints":["premium currency invariata","canary toggle per server_id"]
+    },
+    {
+      "pack":"v112",
+      "title":"Auth Single Context + Refresh Rotation",
+      "priority":"P1",
+      "depends_on":["v111"],
+      "deliverables":[
+        "unica AuthContext",
+        "refresh token rotation",
+        "SecureStore only",
+        "clear selected_server_id on logout"
+      ],
+      "safety_constraints":["no token raw logs","no provider secrets in repo"]
+    },
+    {
+      "pack":"v113+",
+      "title":"Audio + Asset Pipeline Runtime",
+      "priority":"P2",
+      "depends_on":["v112"],
+      "deliverables":["BGM/SFX runtime","asset pipeline production"],
+      "safety_constraints":["no commercial release claim until QA pass"]
+    },
+    {
+      "pack":"v114",
+      "title":"Physical Device Full QA Pass",
+      "priority":"P0_FOR_RELEASE",
+      "depends_on":["v112"],
+      "deliverables":["iPhone 13 + Android full path coverage","Locust load test","regression checklist v104+"],
+      "safety_constraints":["no commercial release claim until completed"]
+    }
+  ],
+  "summary": {
+    "packs_total": 9,
+    "P0_packs": 4,
+    "P1_packs": 4,
+    "P2_packs": 1
+  },
+  "forbidden_scope_compliance": {
+    "implementation_started_in_v105": false,
+    "db_writes": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "commercial_release_claim": false
+  }
+}

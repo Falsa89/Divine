@@ -1,0 +1,103 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_battle_launch_contract_audit",
+  "version": 1,
+  "language": "it",
+  "contract_target": {
+    "server_id": "<string>",
+    "mode": "story|tower|arena|training|boss|raid|event|guild_war",
+    "encounter_id": "<string>",
+    "player_team_id": "<string>",
+    "player_team_snapshot": [],
+    "enemy_source_type": "authored|player_team|bot_team|boss|training_preset",
+    "enemy_source_id": "<string>",
+    "reward_policy": "none|preview|live_gated|live",
+    "progress_policy": "none|preview|live_gated|live",
+    "battle_engine_mode": "preview|authoritative",
+    "idempotency_key": "<string>"
+  },
+  "current_state": {
+    "combat.tsx": {
+      "exists": true,
+      "is_real_renderer": true,
+      "accepts_launch_context": false,
+      "reads_server_id": false,
+      "reads_mode": false,
+      "reads_encounter_id": false,
+      "reads_player_team_snapshot": false,
+      "reads_enemy_source": false,
+      "reads_reward_policy": false,
+      "reads_progress_policy": false,
+      "reads_idempotency_key": false,
+      "note": "Renderer reale ma nessun launch context strutturato. Riceve params loosely tipizzati."
+    },
+    "pre-battle-lobby.tsx": {
+      "exists": true,
+      "builds_launch_context": false,
+      "note": "Lobby presente ma non produce un payload conforme al contract"
+    },
+    "visual-battle-preview-router.tsx": {
+      "exists": true,
+      "purpose": "routes between preview surfaces, NOT a launcher contract"
+    },
+    "story.tsx": {
+      "launches_combat": false,
+      "uses_auto_resolve": true,
+      "endpoint": "/story/battle",
+      "action": "replace with launch_context -> combat.tsx"
+    },
+    "backend/api/battle/simulate": {
+      "exists": true,
+      "accepts_server_id": false,
+      "accepts_mode": false,
+      "accepts_encounter_id": false,
+      "accepts_idempotency_key": false,
+      "is_authoritative": false
+    },
+    "backend/story/battle": {
+      "exists": true,
+      "is_auto_resolve": true,
+      "action": "deprecate after v108"
+    },
+    "backend/routes/story_battle_instance_preview": {
+      "exists": true,
+      "is_preview": true,
+      "action": "replaced by battle_launch_contract endpoint v107"
+    },
+    "backend/routes/generic_visual_battle_runner_preview": {
+      "exists": true,
+      "is_preview": true
+    },
+    "backend/routes/battle_replay_preview": {
+      "exists": true,
+      "is_preview": true
+    }
+  },
+  "surfaces_currently_launching_battle": [
+    "story.tsx (auto-resolve)",
+    "pvp.tsx (preview)",
+    "raid.tsx (catalog-only)",
+    "tower.tsx (catalog-only)",
+    "hero-training.tsx (preview)",
+    "events.tsx (preview)",
+    "gvg.tsx (preview)",
+    "playable-mode-battle-preview.tsx (preview)",
+    "mobile-qa-battle-preview.tsx (qa)",
+    "visual-battle-preview-router.tsx (preview router)"
+  ],
+  "gaps": [
+    "Nessun launcher centrale conforme al contract",
+    "combat.tsx non valida server_id/mode/encounter_id/reward_policy",
+    "backend /api/battle/simulate non e authoritative ne idempotente",
+    "story.tsx by-passa il renderer reale con auto-resolve",
+    "~10 surface launchano combat preview con shape diversi"
+  ],
+  "required_fix_pack": "v107 (Battle Launch Contract Unification)",
+  "forbidden_scope_compliance": {
+    "battle_engine_modified": false,
+    "combat_tsx_rewritten": false,
+    "new_battle_endpoints_added": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

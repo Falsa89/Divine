@@ -1,0 +1,101 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_frontend_route_inventory",
+  "version": 1,
+  "language": "it",
+  "audit_method": "static_scan_of_frontend_app_directory",
+  "total_route_files": 96,
+  "classifications_allowed": ["PLAYER_FACING_READY","PLAYER_FACING_BROKEN","PREVIEW_ONLY","QA_ONLY","SANDBOX","DEPRECATED","HIDDEN_INTENTIONAL","NEEDS_ROUTING_DECISION","DANGEROUS_IF_EXPOSED"],
+  "summary": {
+    "PLAYER_FACING_READY": 9,
+    "PLAYER_FACING_BROKEN": 14,
+    "PREVIEW_ONLY": 36,
+    "QA_ONLY": 10,
+    "SANDBOX": 3,
+    "NEEDS_ROUTING_DECISION": 20,
+    "HIDDEN_INTENTIONAL": 2,
+    "DEPRECATED": 2
+  },
+  "routes": [
+    {"path":"/","file":"frontend/app/index.tsx","classification":"PLAYER_FACING_READY","linked_from":"app_entry","auth_required":false,"server_id_used":true,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/login","file":"frontend/app/login.tsx","classification":"PLAYER_FACING_READY","linked_from":"index.tsx","auth_required":false,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/servers","file":"frontend/app/servers.tsx","classification":"PLAYER_FACING_READY","linked_from":"index.tsx,menu","auth_required":true,"server_id_used":true,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep","note":"QA fallback honest, banner v104 visible"},
+    {"path":"/(tabs)/home","file":"frontend/app/(tabs)/home.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"tabs","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"adopt_useServerScope","note":"does not read selected_server_id"},
+    {"path":"/(tabs)/heroes","file":"frontend/app/(tabs)/heroes.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"tabs","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope"},
+    {"path":"/(tabs)/battle","file":"frontend/app/(tabs)/battle.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"tabs","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":true,"safe_to_expose":true,"action":"unify_via_battle_launch_contract"},
+    {"path":"/(tabs)/gacha","file":"frontend/app/(tabs)/gacha.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"tabs","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_currency"},
+    {"path":"/(tabs)/menu","file":"frontend/app/(tabs)/menu.tsx","classification":"PLAYER_FACING_READY","linked_from":"tabs","auth_required":true,"server_id_used":true,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/combat","file":"frontend/app/combat.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"pre-battle-lobby,multi-preview","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":true,"safe_to_expose":true,"action":"adopt_battle_launch_contract_v107","note":"renderer reale ma launch context incompleto"},
+    {"path":"/pre-battle-lobby","file":"frontend/app/pre-battle-lobby.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"various-modes","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"unify_v107"},
+    {"path":"/story","file":"frontend/app/story.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"replace_auto_resolve_with_combat_launch_v108"},
+    {"path":"/tower","file":"frontend/app/tower.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"convert_to_real_runtime_v108"},
+    {"path":"/tower-of-the-hells","file":"frontend/app/tower-of-the-hells.tsx","classification":"NEEDS_ROUTING_DECISION","linked_from":"menu?","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":false,"action":"merge_or_delete_v108"},
+    {"path":"/pvp","file":"frontend/app/pvp.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"convert_to_arena_real_runtime_v108"},
+    {"path":"/raid","file":"frontend/app/raid.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"convert_to_boss_real_runtime_v108"},
+    {"path":"/events","file":"frontend/app/events.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"event_hub_v109"},
+    {"path":"/guild","file":"frontend/app/guild.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_guild_v109"},
+    {"path":"/gvg","file":"frontend/app/gvg.tsx","classification":"NEEDS_ROUTING_DECISION","linked_from":"menu?","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":false,"action":"merge_or_delete_v109"},
+    {"path":"/inventory","file":"frontend/app/inventory.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/treasury","file":"frontend/app/treasury.tsx","classification":"PLAYER_FACING_BROKEN","linked_from":"menu","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/economy","file":"frontend/app/economy.tsx","classification":"NEEDS_ROUTING_DECISION","linked_from":"menu?","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":false,"action":"merge_with_treasury_v108"},
+    {"path":"/equipment","file":"frontend/app/equipment.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/artifacts","file":"frontend/app/artifacts.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/sanctuary","file":"frontend/app/sanctuary.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/shop","file":"frontend/app/shop.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_currency_v106"},
+    {"path":"/item-shop","file":"frontend/app/item-shop.tsx","classification":"NEEDS_ROUTING_DECISION","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":false,"action":"merge_with_shop_v108"},
+    {"path":"/vip","file":"frontend/app/vip.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/battlepass","file":"frontend/app/battlepass.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/mail","file":"frontend/app/mail.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/friends","file":"frontend/app/friends.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v109"},
+    {"path":"/dm","file":"frontend/app/dm.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_chat_v109"},
+    {"path":"/plaza","file":"frontend/app/plaza.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_chat_v109"},
+    {"path":"/rankings","file":"frontend/app/rankings.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v109"},
+    {"path":"/territory","file":"frontend/app/territory.tsx","classification":"NEEDS_ROUTING_DECISION","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":false,"action":"decision_pending_v109"},
+    {"path":"/cosmetics","file":"frontend/app/cosmetics.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/exclusive","file":"frontend/app/exclusive.tsx","classification":"NEEDS_ROUTING_DECISION","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":false,"action":"clarify_v109"},
+    {"path":"/achievements","file":"frontend/app/achievements.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/daily-hub","file":"frontend/app/daily-hub.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/soul-forge","file":"frontend/app/soul-forge.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/guide","file":"frontend/app/guide.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/select-home-hero","file":"frontend/app/select-home-hero.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/player-faction","file":"frontend/app/player-faction.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/synergy-codex","file":"frontend/app/synergy-codex.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/status-codex","file":"frontend/app/status-codex.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/skill-status-vfx-catalogs","file":"frontend/app/skill-status-vfx-catalogs.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep_readonly_catalog"},
+    {"path":"/divine-weapons-catalog","file":"frontend/app/divine-weapons-catalog.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep_readonly_catalog"},
+    {"path":"/hero-encyclopedia","file":"frontend/app/hero-encyclopedia.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep_readonly_catalog"},
+    {"path":"/hero-skill-kits-catalog","file":"frontend/app/hero-skill-kits-catalog.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep_readonly_catalog"},
+    {"path":"/hero-collection","file":"frontend/app/hero-collection.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/hero-detail","file":"frontend/app/hero-detail.tsx","classification":"PLAYER_FACING_READY","auth_required":true,"server_id_used":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"server_scope_v106"},
+    {"path":"/hero-viewer","file":"frontend/app/hero-viewer.tsx","classification":"PLAYER_FACING_READY","auth_required":false,"reward_mutation":false,"combat_renderer":false,"safe_to_expose":true,"action":"keep"},
+    {"path":"/hero-training","file":"frontend/app/hero-training.tsx","classification":"PLAYER_FACING_BROKEN","auth_required":true,"server_id_used":false,"reward_mutation":true,"combat_renderer":false,"safe_to_expose":true,"action":"convert_real_training_v108"}
+  ],
+  "preview_only_routes": [
+    "affinity-gifts-preview","alpha-codex","alpha-guide","alpha-menu-preview","alpha-preview-hub","arena-visual-preview","artifacts-preview","battle-replay-preview","boss-tower-alpha-loop-preview","boss-visual-preview","collection-synergies-preview","event-arena-alpha-gate-preview","event-arena-first-alpha-slice-preview","event-avatar-layout-preview","event-visual-preview","first-session-onboarding-preview","generic-visual-battle-runner-preview","housing-preview","material-raid-alpha","material-raid-reward-preview","material-raid-visual-preview","mobile-qa-battle-preview","playable-mode-battle-preview","reward-claim-summary-preview","safe-previews","story-alpha-slice-preview","story-first-node-runtime-preview","story-visual-preview","tower-visual-preview","training-combat-onboarding-preview","training-visual-preview","visual-battle-preview-router","war-avatar-layout-preview"
+  ],
+  "qa_only_routes": [
+    "dev-combat-qa-lab","gear-cap-test","gear-forge-test","gem-socket-test","hero-elevation-test","live-announcements-qa","live-guild-qa-hub","live-mode-pre-entry-lobby","material-raid-test","sprite-test"
+  ],
+  "sandbox_routes": [
+    "guild-war-sandbox-flow","story-visual-battle-sandbox","safe-previews"
+  ],
+  "deprecated_routes": [
+    "alpha-codex","alpha-guide"
+  ],
+  "key_findings": [
+    "96 route files totali, di cui ~46 sono preview/qa/sandbox/test (~48% drift)",
+    "nessuna route player-facing legge selected_server_id (a parte servers.tsx)",
+    "combat.tsx, story.tsx, tower.tsx, pvp.tsx, raid.tsx, hero-training.tsx richiedono battle_launch_contract",
+    "esistono route duplicate logicamente (tower vs tower-of-the-hells, gvg vs guild, economy vs treasury, item-shop vs shop)",
+    "alpha-menu-preview e alpha-preview-hub espongono accesso a preview routes"
+  ],
+  "forbidden_scope_compliance": {
+    "db_writes": false,
+    "new_routes_added": false,
+    "reward_mutation": false,
+    "battle_engine_modified": false,
+    "combat_tsx_rewritten": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

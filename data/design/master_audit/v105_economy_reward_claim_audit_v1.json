@@ -1,0 +1,54 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_economy_reward_claim_audit",
+  "version": 1,
+  "language": "it",
+  "claim_endpoints": [
+    {"endpoint":"/achievements/claim","method":"POST","category":"live","idempotency":"unknown","server_scoped":false,"action":"server_scope_v106"},
+    {"endpoint":"/battlepass/claim/{level}","method":"POST","category":"live","idempotency":"level_based","server_scoped":false,"action":"server_scope_v106"},
+    {"endpoint":"/gacha/pull","method":"POST","category":"live_mutation","idempotency":"missing","server_scoped":false,"action":"server_scope_currency_v106"},
+    {"endpoint":"/api/gacha/pull","method":"POST","category":"live_mutation","idempotency":"missing","server_scoped":false,"action":"server_scope_currency_v106"},
+    {"endpoint":"/api/gacha/pull10","method":"POST","category":"live_mutation","idempotency":"missing","server_scoped":false,"action":"server_scope_currency_v106"},
+    {"endpoint":"/artifacts/pull","method":"POST","category":"live_mutation","idempotency":"missing","server_scoped":false,"action":"server_scope_currency_v106"},
+    {"endpoint":"/artifacts/pull10","method":"POST","category":"live_mutation","idempotency":"missing","server_scoped":false,"action":"server_scope_currency_v106"},
+    {"endpoint":"/constellations/pull","method":"POST","category":"live_mutation","idempotency":"missing","server_scoped":false,"action":"server_scope_currency_v106"},
+    {"endpoint":"/constellations/pull10","method":"POST","category":"live_mutation","idempotency":"missing","server_scoped":false,"action":"server_scope_currency_v106"},
+    {"endpoint":"/cosmetics/buy","method":"POST","category":"live_mutation","idempotency":"unknown","server_scoped":false,"action":"server_scope_v106"},
+    {"endpoint":"/exclusive-items/craft","method":"POST","category":"live_mutation","idempotency":"unknown","server_scoped":false,"action":"server_scope_v106"},
+    {"endpoint":"/forge/fuse","method":"POST","category":"live_mutation","idempotency":"unknown","server_scoped":false,"action":"server_scope_v106"},
+    {"endpoint":"/forge/upgrade","method":"POST","category":"live_mutation","idempotency":"unknown","server_scoped":false,"action":"server_scope_v106"}
+  ],
+  "safety_preview_claim_endpoints": [
+    {"endpoint":"/material-raid-claim-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"},
+    {"endpoint":"/gem-socket-commit-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"},
+    {"endpoint":"/gear-forge-fusion-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"},
+    {"endpoint":"/rune-scroll-talisman-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"},
+    {"endpoint":"/artifact-upgrade-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"},
+    {"endpoint":"/divine-weapon-upgrade-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"},
+    {"endpoint":"/battle-pass-claim-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"},
+    {"endpoint":"/mail-claim-safety-preview","category":"safety_preview","dry_run":true,"action":"keep_until_v111"}
+  ],
+  "premium_currency_protection": {
+    "gems_grant_outside_purchase": false,
+    "premium_currency_in_starter_template": false,
+    "verdict": "OK"
+  },
+  "canary_status": {
+    "affinity_gift_spend": "canary-status endpoint exposed",
+    "others": "safety preview status documented per endpoint"
+  },
+  "summary": {
+    "live_mutating_claims_audited": 13,
+    "safety_preview_claims": 8,
+    "server_scoped_claims": 0,
+    "missing_idempotency": 5
+  },
+  "forbidden_scope_compliance": {
+    "reward_mutation_added": false,
+    "new_claim_endpoints": false,
+    "premium_currency_grant": false,
+    "iap_changes": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

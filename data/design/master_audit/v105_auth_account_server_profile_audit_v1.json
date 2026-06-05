@@ -1,0 +1,64 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_auth_account_server_profile_audit",
+  "version": 1,
+  "language": "it",
+  "contexts": {
+    "legacy_auth": {
+      "path": "frontend/src/auth/AuthContext.tsx (legacy bridge)",
+      "storage": "AsyncStorage",
+      "active": true,
+      "reason": "backwards compatibility with v85-v95 surfaces"
+    },
+    "v96_auth": {
+      "path": "frontend/src/auth/AuthContextV96.tsx",
+      "storage": "SecureStore",
+      "jwt": true,
+      "active": true,
+      "reason": "JWT auth introduced v96"
+    },
+    "bridged": true,
+    "bridged_in": ["frontend/app/login.tsx","frontend/app/(tabs)/menu.tsx","frontend/app/index.tsx"],
+    "unification_pending": true,
+    "recommended_pack": "v112 auth single context"
+  },
+  "login_paths": [
+    {"endpoint":"/api/login","method":"POST","category":"legacy_session","jwt":false},
+    {"endpoint":"/api/register","method":"POST","category":"legacy_registration"},
+    {"endpoint":"/auth/guest","method":"POST","category":"v96_guest"},
+    {"endpoint":"/auth/google","method":"POST","category":"v96_oauth_stub"},
+    {"endpoint":"/auth/apple","method":"POST","category":"v96_oauth_stub"}
+  ],
+  "logout": {
+    "v103_race_fix": true,
+    "clears_legacy_context": true,
+    "clears_v96_context": true,
+    "clears_selected_server_id": false,
+    "action": "clear_selected_server_id_on_logout_v106"
+  },
+  "refresh_token_rotation": {
+    "implemented": false,
+    "action": "v112"
+  },
+  "account_deletion": {
+    "endpoint": "/delete-account-request",
+    "present": true,
+    "gdpr_compliant": "v98_baseline",
+    "server_scoped": false
+  },
+  "server_profile_selection": {
+    "endpoint_list": "/api/server-profiles/list (v103 readonly fallback)",
+    "client_storage": "AsyncStorage v101_selected_server_id",
+    "backend_persistence": false,
+    "isolation_pending": true
+  },
+  "verdict": "AUTH_BRIDGED_DUAL_CONTEXT_FUNCTIONAL_UNIFICATION_PENDING",
+  "forbidden_scope_compliance": {
+    "auth_rewrite_done_in_audit": false,
+    "db_writes": false,
+    "raw_token_logs": false,
+    "provider_secrets_in_repo": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

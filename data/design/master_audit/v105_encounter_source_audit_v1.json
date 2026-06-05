@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_encounter_source_audit",
+  "version": 1,
+  "language": "it",
+  "modes": [
+    {"mode":"story","current_source":"authored_chapter_node","random":false,"authored":true,"bot_or_player_team":false,"boss":false,"legacy_hero_id_risk":"low","server_scoped":false,"needs_replacement":false,"note":"OK structurally; needs combat launcher (v107)"},
+    {"mode":"tower","current_source":"authored_floor","random":false,"authored":true,"bot_or_player_team":false,"boss":false,"legacy_hero_id_risk":"medium","server_scoped":false,"needs_replacement":false,"note":"floors authored; per-server progress missing"},
+    {"mode":"arena_pvp","current_source":"preview_static","random":false,"authored":false,"bot_or_player_team":"missing","boss":false,"legacy_hero_id_risk":"high","server_scoped":false,"needs_replacement":true,"note":"real arena requires server-bound player/bot teams"},
+    {"mode":"training","current_source":"preset_or_preview","random":false,"authored":true,"bot_or_player_team":false,"boss":false,"legacy_hero_id_risk":"medium","server_scoped":false,"needs_replacement":false,"note":"acceptable as account-wide; needs unified runtime"},
+    {"mode":"boss","current_source":"catalog_only","random":false,"authored":true,"bot_or_player_team":false,"boss":true,"legacy_hero_id_risk":"low","server_scoped":false,"needs_replacement":false,"note":"single boss entity per encounter"},
+    {"mode":"raid","current_source":"catalog_only","random":false,"authored":true,"bot_or_player_team":false,"boss":true,"legacy_hero_id_risk":"low","server_scoped":false,"needs_replacement":false,"note":"raid boss authored"},
+    {"mode":"event","current_source":"authored_or_preview","random":false,"authored":true,"bot_or_player_team":false,"boss":"sometimes","legacy_hero_id_risk":"medium","server_scoped":false,"needs_replacement":false,"note":"events need time-window enforcement + server scope"},
+    {"mode":"guild_war","current_source":"preview_only","random":false,"authored":false,"bot_or_player_team":"missing","boss":false,"legacy_hero_id_risk":"high","server_scoped":false,"needs_replacement":true,"note":"GW requires enemy guild/player team sourcing"},
+    {"mode":"live_world_boss","current_source":"missing","random":false,"authored":false,"bot_or_player_team":false,"boss":true,"legacy_hero_id_risk":"none","server_scoped":false,"needs_replacement":true,"note":"server-wide boss not implemented"}
+  ],
+  "summary": {
+    "modes_audited": 9,
+    "random_encounter_present": 0,
+    "authored_present": 7,
+    "player_or_bot_team_present": 0,
+    "boss_present": 3,
+    "legacy_hero_id_risk_high": 2,
+    "needs_replacement_count": 3
+  },
+  "forbidden_scope_compliance": {
+    "random_starter_heroes": false,
+    "legacy_heroes": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

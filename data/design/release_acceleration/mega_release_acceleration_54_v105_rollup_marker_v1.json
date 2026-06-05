@@ -1,0 +1,76 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105",
+  "type": "v105_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-05T18:09:27.127974Z",
+  "validators_total": 13,
+  "validators_pass": 13,
+  "results": [
+    {
+      "validator": "validate_v105_frontend_route_inventory.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 frontend route inventory (52 routes detailed, 96 total)"
+    },
+    {
+      "validator": "validate_v105_backend_endpoint_inventory.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 backend endpoint inventory (29 routers, 262 endpoints)"
+    },
+    {
+      "validator": "validate_v105_server_scope_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 server scope audit (15 surfaces)"
+    },
+    {
+      "validator": "validate_v105_mode_runtime_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 mode runtime audit (24 modes)"
+    },
+    {
+      "validator": "validate_v105_battle_launch_contract_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 battle launch contract audit (contract defined, gaps documented)"
+    },
+    {
+      "validator": "validate_v105_encounter_source_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 encounter source audit (9 modes)"
+    },
+    {
+      "validator": "validate_v105_legacy_data_runtime_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 legacy data runtime audit (9 artifacts, apply NOT_APPLIED)"
+    },
+    {
+      "validator": "validate_v105_bot_server_actor_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 bot/server actor audit (DESIGN_OK_RUNTIME_PENDING)"
+    },
+    {
+      "validator": "validate_v105_chat_live_guild_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 chat/live/guild audit (3 sections, all server_scoped=false honest)"
+    },
+    {
+      "validator": "validate_v105_economy_reward_claim_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 economy/reward claim audit (13 live claims, 8 safety-preview)"
+    },
+    {
+      "validator": "validate_v105_auth_account_server_profile_audit.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 auth/account/server profile audit (bridged dual context documented)"
+    },
+    {
+      "validator": "validate_v105_design_compliance_matrix.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 design compliance matrix (30 systems, 9 P0)"
+    },
+    {
+      "validator": "validate_v105_runtime_consolidation_roadmap.py",
+      "exit_code": 0,
+      "last_line": "PASS — v105 runtime consolidation roadmap (9 packs ordered)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_54_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT_AND_RUNTIME_CONSOLIDATION_PLAN_READY_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING"
+}

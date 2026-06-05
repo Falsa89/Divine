@@ -1,0 +1,56 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_bot_server_actor_audit",
+  "version": 1,
+  "language": "it",
+  "approved_design": {
+    "start_level": 1,
+    "credible_progression": true,
+    "event_access_same_as_players": true,
+    "low_population_participation": true,
+    "archetypes": ["f2p_base","f2p_active","advanced_pull_bot","spender_like_controlled","whale_like_limited"],
+    "chat_contextual_not_spam": true,
+    "no_manual_ultimate_suggestions": true,
+    "no_day_one_level_100": true,
+    "no_ranking_domination": true,
+    "no_premium_reward_theft": true,
+    "bot_rosters_valid_non_empty": true
+  },
+  "current_state": {
+    "data_design_present": true,
+    "data_design_paths": ["data/design/server_actors/*.json","data/design/bot/*.json"],
+    "runtime_router": {
+      "endpoint_status": "/api/admin/bots/status (GET)",
+      "endpoint_run_cycle": "/api/admin/bots/run-cycle (POST)",
+      "is_player_facing": false,
+      "is_admin_only": true
+    },
+    "runtime_implementation": "admin_only_runtime",
+    "chat_messages_present": "design_only",
+    "event_participation_runtime": false,
+    "rosters_runtime_used": false,
+    "progression_runtime": false,
+    "economy_runtime": false,
+    "server_scoped": false
+  },
+  "compliance_matrix": [
+    {"rule":"start_level=1","data_design_compliant":true,"runtime_enforced":"not_applicable_no_runtime_yet"},
+    {"rule":"credible_progression","data_design_compliant":true,"runtime_enforced":"not_applicable"},
+    {"rule":"event_access_parity","data_design_compliant":true,"runtime_enforced":false,"action":"v109"},
+    {"rule":"5_archetypes_present","data_design_compliant":true,"runtime_enforced":"not_applicable"},
+    {"rule":"chat_contextual","data_design_compliant":true,"runtime_enforced":false,"action":"v109"},
+    {"rule":"no_manual_ultimate","data_design_compliant":true,"runtime_enforced":"not_applicable"},
+    {"rule":"no_day_one_lv100","data_design_compliant":true,"runtime_enforced":"not_applicable"},
+    {"rule":"no_ranking_domination","data_design_compliant":true,"runtime_enforced":"not_applicable"},
+    {"rule":"no_premium_reward_theft","data_design_compliant":true,"runtime_enforced":"not_applicable"},
+    {"rule":"rosters_valid_non_empty","data_design_compliant":true,"runtime_enforced":"not_applicable"}
+  ],
+  "verdict": "DESIGN_OK_RUNTIME_PENDING",
+  "recommended_fix_pack": "v109",
+  "forbidden_scope_compliance": {
+    "bot_runtime_modified": false,
+    "db_writes": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

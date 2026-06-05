@@ -1,0 +1,53 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_design_compliance_matrix",
+  "version": 1,
+  "language": "it",
+  "severity_levels": ["P0","P1","P2","P3"],
+  "matrix": [
+    {"system":"Server lifecycle","approved":"multi-shard servers with real backend isolation","current":"QA fallback list, no shard","gap":"backend isolation not implemented","severity":"P0","source_ref":"v103/v104","required_pack":"v106"},
+    {"system":"Auth","approved":"single unified context with JWT + refresh rotation","current":"legacy + v96 bridged dual context","gap":"unification + refresh","severity":"P1","source_ref":"v96/v98","required_pack":"v112"},
+    {"system":"Server selection","approved":"persisted server choice influencing all loaders","current":"AsyncStorage only, no loader scope","gap":"loaders do not consume selected_server_id","severity":"P0","source_ref":"v101/v102/v104","required_pack":"v106"},
+    {"system":"Player data isolation","approved":"(account_id, server_id) PK on roster/inventory/team/currency/progress","current":"by_user_id only","gap":"schema not migrated","severity":"P0","source_ref":"v104","required_pack":"v106"},
+    {"system":"Chat","approved":"server-scoped channel keys, global explicit","current":"no server scope","gap":"chat shared cross-server","severity":"P0","source_ref":"v104","required_pack":"v109"},
+    {"system":"Story","approved":"node graph with real combat + gated rewards","current":"auto-resolve + preview surfaces","gap":"missing battle launch","severity":"P0","source_ref":"Game Master 1.4","required_pack":"v107+v108"},
+    {"system":"Tower","approved":"floor authored with server-bound progress","current":"catalog-only","gap":"no real runtime","severity":"P1","source_ref":"Game Master 1.4","required_pack":"v108"},
+    {"system":"Arena","approved":"matchmaking vs server-bound teams + MMR","current":"preview","gap":"no MMR/no matchmaking","severity":"P0","source_ref":"Game Master 1.4","required_pack":"v108"},
+    {"system":"Training","approved":"preset combat practice","current":"multiple preview routes","gap":"no unified runtime","severity":"P2","source_ref":"Nuovo Game Master","required_pack":"v108"},
+    {"system":"Boss/Raid","approved":"authored boss encounters","current":"catalog-only","gap":"no real runtime","severity":"P1","source_ref":"Raid Boss bible","required_pack":"v108"},
+    {"system":"Event Hub","approved":"time-window event runtime, server-bound","current":"preview","gap":"no time enforcement","severity":"P1","source_ref":"Nuovo Game Master","required_pack":"v109"},
+    {"system":"Live Events","approved":"server-wide live announcements + participation","current":"QA hubs only","gap":"no real live runtime","severity":"P1","source_ref":"Nuovo Game Master","required_pack":"v109"},
+    {"system":"Guild","approved":"server-bound guilds + GW","current":"no server scope","gap":"chat/membership cross-server","severity":"P0","source_ref":"Game Master 1.4","required_pack":"v109"},
+    {"system":"Battle renderer","approved":"unique combat.tsx receiving launch context","current":"renderer exists, no contract","gap":"launch context","severity":"P0","source_ref":"v104/v105","required_pack":"v107"},
+    {"system":"Battle engine/status/DoT","approved":"server-authoritative + status runtime schema v1","current":"client-side preview engine","gap":"not authoritative","severity":"P0","source_ref":"Status Effect Runtime Schema v1","required_pack":"v107"},
+    {"system":"Reward claims","approved":"idempotent server-bound claims with canary","current":"safety-preview only or no idempotency","gap":"missing idempotency + server scope","severity":"P1","source_ref":"v95/v98","required_pack":"v111"},
+    {"system":"Inventory","approved":"server-bound (account_id, server_id)","current":"account-wide","gap":"schema","severity":"P0","source_ref":"v104","required_pack":"v106"},
+    {"system":"Roster","approved":"server-bound","current":"account-wide","gap":"schema","severity":"P0","source_ref":"v104","required_pack":"v106"},
+    {"system":"Bot actors","approved":"server-bound bots with 5 archetypes, credible progression","current":"design ready, runtime admin-only","gap":"no runtime","severity":"P1","source_ref":"v98","required_pack":"v109"},
+    {"system":"Summon/Gacha","approved":"server-bound currency, idempotent","current":"real but account-wide","gap":"currency scope","severity":"P1","source_ref":"Game Master 1.4","required_pack":"v106"},
+    {"system":"Shop/VIP/BP","approved":"server-bound or split design decision","current":"account-wide","gap":"design split decision pending","severity":"P2","source_ref":"Game Master 1.4","required_pack":"v106"},
+    {"system":"Artifact","approved":"gacha + upgrade","current":"safety preview only","gap":"no live upgrade","severity":"P2","source_ref":"Artifact System Direction v1","required_pack":"v108"},
+    {"system":"Divine Weapons","approved":"catalog + upgrade live","current":"catalog + safety preview","gap":"no live","severity":"P2","source_ref":"Divine Weapon System Bible v1","required_pack":"v108"},
+    {"system":"Equipment/Gear/Forge","approved":"live gear runtime","current":"preview + partial real (/forge)","gap":"unify","severity":"P2","source_ref":"Game Master 1.4","required_pack":"v108"},
+    {"system":"Rune/Gems","approved":"live","current":"safety preview","gap":"no live","severity":"P3","source_ref":"Game Master 1.4","required_pack":"v108"},
+    {"system":"Housing","approved":"live housing","current":"preview","gap":"no runtime","severity":"P3","source_ref":"Nuovo Game Master","required_pack":"v109+"},
+    {"system":"Affinity/Gifts","approved":"live affinity","current":"preview UI + canary backend","gap":"unify","severity":"P2","source_ref":"Game Master 1.4","required_pack":"v108"},
+    {"system":"Skins/Titles","approved":"cosmetics + titles live","current":"cosmetics live, titles read-only","gap":"titles equip","severity":"P3","source_ref":"Game Master 1.4","required_pack":"v108"},
+    {"system":"Audio","approved":"BGM/SFX runtime","current":"not_in_repo_audit","gap":"out_of_scope_v105","severity":"P3","source_ref":"Asset Pipeline","required_pack":"v113+"},
+    {"system":"Asset pipeline","approved":"Divine RPG Asset Pipeline","current":"design_only","gap":"runtime_pending","severity":"P3","source_ref":"Divine RPG Asset Pipeline","required_pack":"v113+"}
+  ],
+  "counts": {
+    "systems": 30,
+    "P0": 9,
+    "P1": 9,
+    "P2": 7,
+    "P3": 5
+  },
+  "forbidden_scope_compliance": {
+    "design_changes": false,
+    "db_writes": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "commercial_release_claim": false
+  }
+}

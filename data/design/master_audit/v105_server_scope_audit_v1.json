@@ -1,0 +1,39 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_server_scope_audit",
+  "version": 1,
+  "language": "it",
+  "surfaces": [
+    {"surface":"users/account_profile","should_be_server_bound":"mixed","current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"low","fix_required":"split account-global vs server-bound profile per design v106"},
+    {"surface":"user_heroes","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"add server_id to user_heroes index + filter v106"},
+    {"surface":"teams","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"add server_id to teams v106"},
+    {"surface":"inventory","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"server_scope_inventory v106"},
+    {"surface":"currencies","should_be_server_bound":"mixed","current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"split soft (server) vs hard (account) currencies v106"},
+    {"surface":"story_progress","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"server_scope_story v106"},
+    {"surface":"tower_progress","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"server_scope_tower v106"},
+    {"surface":"arena_profile_mmr","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"critical","fix_required":"server_scope_arena_mmr v106"},
+    {"surface":"guild_membership","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"critical","fix_required":"server_scope_guild v109"},
+    {"surface":"event_state","should_be_server_bound":true,"current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"server_scope_event v109"},
+    {"surface":"battle_pass","should_be_server_bound":"mixed","current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"medium","fix_required":"design_decision_required_v106"},
+    {"surface":"chat","should_be_server_bound":true,"current_filter":"none","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"critical","fix_required":"server_scope_chat_v109 - contract gia documentato v104"},
+    {"surface":"server_actors_bots","should_be_server_bound":true,"current_filter":"by_admin_endpoint","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"server_scope_bots_v109"},
+    {"surface":"live_events","should_be_server_bound":true,"current_filter":"none","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"critical","fix_required":"server_scope_live_v109"},
+    {"surface":"reward_claims","should_be_server_bound":"mixed","current_filter":"by_user_id","has_server_id_field":false,"reads_selected_server_id":false,"sends_server_id_to_backend":false,"backend_enforces_server_id":false,"data_leak_risk":"high","fix_required":"server_scope_claims_v106_v111"}
+  ],
+  "summary": {
+    "total_surfaces": 15,
+    "should_be_server_bound_true": 11,
+    "should_be_server_bound_mixed": 4,
+    "backend_enforces_server_id": 0,
+    "critical_data_leak": 4,
+    "high_data_leak": 8
+  },
+  "verdict": "SERVER_SCOPE_BACKEND_NOT_IMPLEMENTED",
+  "forbidden_scope_compliance": {
+    "db_writes": false,
+    "destructive_migration": false,
+    "fake_isolation": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

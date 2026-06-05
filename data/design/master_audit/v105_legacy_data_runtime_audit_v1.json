@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_54_v105_MASTER_REPO_DESIGN_CONSISTENCY_AUDIT",
+  "type": "v105_legacy_data_runtime_audit",
+  "version": 1,
+  "language": "it",
+  "consolidates": "v101_legacy_data_sanitation_dry_run",
+  "legacy_artifacts": [
+    {"type":"hero_id","id":"borea","locations":["frontend/app/dev-combat-qa-lab.tsx","data/design/legacy/*.json","some bot team fixtures"],"runtime_used":false,"action":"keep_as_inert_data_until_v110_apply"},
+    {"type":"hero_id","id":"primordial_gaia","locations":["data/design/legacy/*.json","hero_skill_kits old fixtures"],"runtime_used":false,"action":"keep_as_inert_data_until_v110_apply"},
+    {"type":"placeholder_heroes","ids":["placeholder_*"],"locations":["data/design/heroes_data/placeholders.json"],"runtime_used":false,"action":"v110_apply"},
+    {"type":"old_inventory_items","locations":["data/design/items/legacy_*.json"],"runtime_used":false,"action":"v110_apply"},
+    {"type":"old_materials","locations":["data/design/materials/legacy_*.json"],"runtime_used":false,"action":"v110_apply"},
+    {"type":"old_bot_teams","locations":["data/design/bot/legacy_teams.json"],"runtime_used":false,"action":"v110_apply"},
+    {"type":"old_encounter_teams","locations":["data/design/encounters/legacy/*.json"],"runtime_used":false,"action":"v110_apply"},
+    {"type":"seed_data","locations":["backend/seed/*.json"],"runtime_used":"partial","action":"v110_apply_with_canary"},
+    {"type":"frontend_mock_old_heroes","locations":["frontend/app/dev-combat-qa-lab.tsx"],"runtime_used":false,"action":"v110_apply"}
+  ],
+  "runtime_usage_check": {
+    "legacy_hero_id_in_runtime_player_facing_routes": false,
+    "legacy_inventory_item_in_runtime_player_facing_routes": false,
+    "legacy_bot_team_in_runtime_arena": "unknown_no_real_arena",
+    "legacy_encounter_team_in_runtime_story": false,
+    "legacy_encounter_team_in_runtime_event": false
+  },
+  "v101_status": "DRY_RUN_READY",
+  "apply_status": "NOT_APPLIED",
+  "recommended_apply_pack": "v110",
+  "forbidden_scope_compliance": {
+    "legacy_cleanup_applied": false,
+    "db_writes": false,
+    "destructive_migration": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}
