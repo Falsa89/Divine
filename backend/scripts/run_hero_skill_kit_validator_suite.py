@@ -3637,6 +3637,21 @@ OPTIONAL = [
     ('PROJECT-V108-AUTHORITATIVE-ZERO-MUTATION-PRESERVATION', 'validate_v108_authoritative_zero_mutation_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-68-v108-AUTHORITATIVE-LIVE-PRECONDITIONS-ROLLUP', 'validate_mega_release_acceleration_68_v108_authoritative_live_preconditions_rollup.py'),
 
+    # ===== v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION - audit + contract + onesto =====
+    # PUBLIC_SYNC_TAG_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION
+    ('PROJECT-V109-SERVER-ISOLATION-BASELINE-MULTIRUN', 'validate_v109_server_isolation_baseline_multirun.py'),
+    ('PROJECT-V109-SERVER-SCOPE-SOT-MAP', 'validate_v109_server_scope_sot_map.py'),
+    ('PROJECT-V109-CORE-LOADER-FILTER-PROMOTION', 'validate_v109_core_loader_filter_promotion.py'),
+    ('PROJECT-V109-PLAYER-TEAM-SERVER-SCOPED-READINESS', 'validate_v109_player_team_server_scoped_readiness.py'),
+    ('PROJECT-V109-CHAT-GUILD-GVG-RANKINGS-ISOLATION', 'validate_v109_chat_guild_gvg_rankings_isolation.py'),
+    ('PROJECT-V109-BOT-SERVER-ACTOR-ISOLATION', 'validate_v109_bot_server_actor_isolation.py'),
+    ('PROJECT-V109-LIVE-PRECONDITION-UPDATE', 'validate_v109_live_precondition_update.py'),
+    ('PROJECT-V109-FRONTEND-SELECTED-SERVER-PROPAGATION-AUDIT', 'validate_v109_frontend_selected_server_propagation_audit.py'),
+    ('PROJECT-V109-ZERO-MUTATION-GATE-PRESERVATION', 'validate_v109_zero_mutation_gate_preservation.py'),
+    ('PROJECT-V109-RUNTIME-INVARIANT-PRESERVATION', 'validate_v109_runtime_invariant_preservation.py'),
+    ('PROJECT-V109-SERVER-ISOLATION-FINAL-MULTIRUN', 'validate_v109_server_isolation_final_multirun.py'),
+    ('MEGA-RELEASE-ACCELERATION-69-v109-SERVER-ISOLATION-ROLLUP', 'validate_mega_release_acceleration_69_v109_server_isolation_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

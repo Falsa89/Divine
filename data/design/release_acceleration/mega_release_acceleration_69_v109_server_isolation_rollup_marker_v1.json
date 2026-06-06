@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_69_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "type": "v109_server_isolation_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-06T16:46:49.444261Z",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "validators_total": 11,
+  "validators_pass": 11,
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_69_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "required_fail_final": 0,
+  "miss_final": 0,
+  "optional_fail_final": 22,
+  "optional_fail_target_max": 30,
+  "under_target_max": true,
+  "deterministic": true,
+  "rollup_pass_does_not_imply_release_readiness": true,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "server_isolation_live_claim": false,
+    "false_filter_applied": false,
+    "destructive_migration": false
+  }
+}
