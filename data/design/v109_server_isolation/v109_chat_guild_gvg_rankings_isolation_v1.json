@@ -1,0 +1,55 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_69_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "systems": [
+    {
+      "system": "chat",
+      "current_runtime_server_scoped": false,
+      "contract_server_scope_required": true,
+      "gate_when_missing": "CHAT_SERVER_SCOPE_PENDING",
+      "live_ready": false,
+      "promotion_target": "v109_runtime_followup"
+    },
+    {
+      "system": "guild",
+      "current_runtime_server_scoped": false,
+      "contract_server_scope_required": true,
+      "gate_when_missing": "GUILD_SERVER_SCOPE_PENDING",
+      "live_ready": false,
+      "promotion_target": "v109_runtime_followup"
+    },
+    {
+      "system": "gvg",
+      "current_runtime_server_scoped": false,
+      "contract_server_scope_required": true,
+      "gate_when_missing": "GVG_SERVER_SCOPE_PENDING",
+      "live_ready": false,
+      "promotion_target": "v109_runtime_followup"
+    },
+    {
+      "system": "rankings",
+      "current_runtime_server_scoped": false,
+      "contract_server_scope_required": true,
+      "gate_when_missing": "RANKINGS_SERVER_SCOPE_PENDING",
+      "live_ready": false,
+      "promotion_target": "v109_runtime_followup"
+    },
+    {
+      "system": "live_events",
+      "current_runtime_server_scoped": false,
+      "contract_server_scope_required": true,
+      "gate_when_missing": "LIVE_EVENTS_SERVER_SCOPE_PENDING",
+      "live_ready": false,
+      "promotion_target": "v109_runtime_followup"
+    }
+  ],
+  "isolation_live_ready": false,
+  "isolation_live_claim": false,
+  "safety_flags": {
+    "server_isolation_live_claim": false,
+    "false_filter_applied": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

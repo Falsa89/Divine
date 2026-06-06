@@ -1,0 +1,36 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_69_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "description": "Audit della propagazione selected_server lato frontend.",
+  "surfaces": [
+    {
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "propagates_server_id_to_battle_launch": true,
+      "propagates_server_id_to_battle_instance_preview": false,
+      "note": "attualmente lancia via /api/battle/launch; per battle_instance_envelope serve push esplicito di server_id quando il futuro pack lo abilita"
+    },
+    {
+      "file": "frontend/app/combat.tsx",
+      "reads_selected_server_from_launch_context": true,
+      "mutates_server_id": false
+    },
+    {
+      "file": "frontend/app/story.tsx",
+      "reads_selected_server": false,
+      "note": "story usa story_progress account-wide; server-scope pending v110"
+    },
+    {
+      "file": "frontend/context/AuthContext (selected_server_id)",
+      "exists": true,
+      "persisted_in_local_storage": true,
+      "note": "usato come default per battle_launch e shop/economy"
+    }
+  ],
+  "frontend_runtime_filter_applied_claim": false,
+  "safety_flags": {
+    "false_filter_applied": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

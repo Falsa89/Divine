@@ -1,0 +1,128 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_69_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "track": "B",
+  "sentinel": "PUBLIC_SYNC_TAG_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "description": "Source-of-truth map per ciascuna entita: account_wide vs server_scoped (target). Honest: il runtime attuale e account-wide; il pack v109 NON migra dati, solo documenta.",
+  "entities": [
+    {
+      "entity": "users",
+      "collection": "users",
+      "current_scope": "account_wide",
+      "target_scope": "account_wide",
+      "sot": "authoritative",
+      "migration_pack": null
+    },
+    {
+      "entity": "player_server_profile",
+      "collection": "player_server_profiles",
+      "current_scope": "design_only",
+      "target_scope": "server_scoped",
+      "sot": "authoritative_future",
+      "migration_pack": "v110_PSP_apply"
+    },
+    {
+      "entity": "user_heroes",
+      "collection": "user_heroes",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped_via_psp",
+      "sot": "pending_v110",
+      "migration_pack": "v110"
+    },
+    {
+      "entity": "team_formation",
+      "collection": "team_formation",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped_via_psp",
+      "sot": "pending_v110",
+      "migration_pack": "v110"
+    },
+    {
+      "entity": "inventory",
+      "collection": "user_equipment",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped_via_psp",
+      "sot": "pending_v110",
+      "migration_pack": "v110"
+    },
+    {
+      "entity": "currencies_wallet",
+      "collection": "users.currencies",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped_via_psp",
+      "sot": "pending_v110",
+      "migration_pack": "v110"
+    },
+    {
+      "entity": "story_progress",
+      "collection": "users.story_progress",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped_via_psp",
+      "sot": "pending_v110",
+      "migration_pack": "v110"
+    },
+    {
+      "entity": "chat_messages",
+      "collection": "chat_messages",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped",
+      "sot": "pending_v109_runtime",
+      "migration_pack": "v109_or_v110"
+    },
+    {
+      "entity": "guild_membership",
+      "collection": "guilds",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped",
+      "sot": "pending_v109_runtime",
+      "migration_pack": "v109_or_v110"
+    },
+    {
+      "entity": "gvg_wars",
+      "collection": "guild_wars",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped",
+      "sot": "pending_v109_runtime",
+      "migration_pack": "v109_or_v110"
+    },
+    {
+      "entity": "rankings",
+      "collection": "rankings",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped",
+      "sot": "pending_v109_runtime",
+      "migration_pack": "v109_or_v110"
+    },
+    {
+      "entity": "live_events",
+      "collection": "live_events",
+      "current_scope": "account_wide",
+      "target_scope": "server_scoped",
+      "sot": "pending_v109_runtime",
+      "migration_pack": "v109"
+    },
+    {
+      "entity": "bots",
+      "collection": "bots",
+      "current_scope": "account_wide_disabled_default",
+      "target_scope": "server_scoped_dev_only",
+      "sot": "pending_v109",
+      "migration_pack": "v109"
+    },
+    {
+      "entity": "battle_resolution_ledger_future",
+      "collection": "battle_resolution_ledger",
+      "current_scope": "not_created",
+      "target_scope": "server_scoped",
+      "sot": "design_only",
+      "migration_pack": "v108_authoritative_full"
+    }
+  ],
+  "migration_executed_in_this_pack": false,
+  "destructive_migration": false,
+  "safety_flags": {
+    "destructive_migration": false,
+    "fake_server_data_separation": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_69_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "updated_matrix_reference": "data/design/authoritative_live_preconditions/v108_authoritative_live_precondition_matrix_v1.json",
+  "preconditions_changed_in_v109": [],
+  "preconditions_still_blocked_after_v109": [
+    "server_id_filter_applied",
+    "real_player_team_source",
+    "psp_migration_readiness",
+    "legacy_cleanup_readiness"
+  ],
+  "preconditions_now_pass_after_v109": [],
+  "rationale": "v109 e auditing/contract only: NESSUNA precondizione passa da BLOCKED a PASS senza PSP runtime. Onesto.",
+  "live_overall_ready": false,
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false
+  }
+}

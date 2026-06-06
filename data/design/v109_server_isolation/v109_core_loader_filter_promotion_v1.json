@@ -1,0 +1,78 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_69_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v109_SERVER_ISOLATION_AND_SERVER_ID_FILTER_PROMOTION",
+  "loaders": [
+    {
+      "loader": "user_heroes",
+      "file": "backend/routes/hero_progression.py",
+      "filter_promoted_in_this_pack": false,
+      "parses_server_id": false,
+      "filters_server_id": false,
+      "filter_applied_claim": false,
+      "blocked_reason": "account-wide; PSP not applied (v110)"
+    },
+    {
+      "loader": "team_formation",
+      "file": "backend/routes/teams.py (or frontend/lobby)",
+      "filter_promoted_in_this_pack": false,
+      "parses_server_id": false,
+      "filters_server_id": false,
+      "filter_applied_claim": false,
+      "blocked_reason": "account-wide; PSP not applied (v110)"
+    },
+    {
+      "loader": "inventory",
+      "file": "backend/routes/equipment.py",
+      "filter_promoted_in_this_pack": false,
+      "parses_server_id": false,
+      "filters_server_id": false,
+      "filter_applied_claim": false,
+      "blocked_reason": "account-wide; PSP not applied (v110)"
+    },
+    {
+      "loader": "currencies_wallet",
+      "file": "backend/routes/economy.py",
+      "filter_promoted_in_this_pack": false,
+      "parses_server_id": false,
+      "filters_server_id": false,
+      "filter_applied_claim": false,
+      "blocked_reason": "account-wide; PSP not applied (v110)"
+    },
+    {
+      "loader": "story_progress",
+      "file": "backend/routes/combat.py (story endpoints)",
+      "filter_promoted_in_this_pack": false,
+      "parses_server_id": false,
+      "filters_server_id": false,
+      "filter_applied_claim": false,
+      "blocked_reason": "account-wide; PSP not applied (v110)"
+    },
+    {
+      "loader": "battle_instance_preview",
+      "file": "backend/routes/v108_authoritative_pre_instance.py",
+      "filter_promoted_in_this_pack": false,
+      "parses_server_id": true,
+      "filters_server_id": false,
+      "filter_applied_claim": false,
+      "note": "echo only; missing server_id blocks with BATTLE_INSTANCE_SERVER_REQUIRED"
+    },
+    {
+      "loader": "battle_instance_resolve",
+      "file": "backend/routes/v108_authoritative_runtime_resolve.py",
+      "filter_promoted_in_this_pack": false,
+      "parses_server_id": true,
+      "filters_server_id": false,
+      "filter_applied_claim": false,
+      "note": "echo only; missing server_id blocks with BATTLE_RESULT_INSTANCE_REQUIRED"
+    }
+  ],
+  "any_loader_promoted": false,
+  "rationale": "Promozione runtime richiede PSP apply per data integrity. Senza dati server-scoped reali, ogni claim filter_applied=true sarebbe falso. v109 documenta lo stato onesto.",
+  "filter_applied_anywhere_true": false,
+  "safety_flags": {
+    "false_server_id_filter_claim": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}
