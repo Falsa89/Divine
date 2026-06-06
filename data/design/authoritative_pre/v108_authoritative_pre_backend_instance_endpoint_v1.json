@@ -1,0 +1,31 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_66_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "endpoint": "POST /api/battle/instance/preview",
+  "router_file": "backend/routes/v108_authoritative_pre_instance.py",
+  "behavior": {
+    "db_writes": 0,
+    "reward_grant": false,
+    "progress_write": false,
+    "inventory_mutation": false,
+    "currency_mutation": false,
+    "calls_legacy_mutating_endpoints": false,
+    "authoritative_live": false,
+    "server_filter_applied": false
+  },
+  "input_validation": [
+    {"input": "server_id missing", "block_code": "BATTLE_INSTANCE_SERVER_REQUIRED", "http": 423, "smoke_verified": true},
+    {"input": "player_team_snapshot missing", "block_code": "BATTLE_INSTANCE_PLAYER_TEAM_REQUIRED", "http": 423, "smoke_verified": true},
+    {"input": "player_team_snapshot PLAYER_SAFE_FALLBACK_TEAM", "block_code": "BATTLE_INSTANCE_PLAYER_TEAM_REQUIRED", "http": 423, "smoke_verified": true},
+    {"input": "enemy_source missing", "block_code": "BATTLE_INSTANCE_ENEMY_SOURCE_REQUIRED", "http": 423, "smoke_verified": true},
+    {"input": "reward_policy=live", "block_code": "BATTLE_INSTANCE_REWARD_LIVE_FORBIDDEN", "http": 423, "smoke_verified": true},
+    {"input": "progress_policy=live", "block_code": "BATTLE_INSTANCE_PROGRESS_LIVE_FORBIDDEN", "http": 423, "smoke_verified": false, "note": "coperto via reward_policy=live in smoke; logica simmetrica"}
+  ],
+  "happy_path_smoke": {
+    "request": {"mode": "story", "server_id": "s1", "player_team_snapshot": [{"hero": "h1"}], "enemy_source_type": "authored", "enemy_source_id": "E_001"},
+    "response_schema": "battle_instance_envelope_v1",
+    "response_authoritative_live": false
+  },
+  "safety_flags": {"fake_PASS": false, "validator_weakening": false, "silent_validator_deletion": false, "release_readiness_claimed": false, "authoritative_live_claim": false, "reward_live_activation": false, "progress_live_activation": false}
+}

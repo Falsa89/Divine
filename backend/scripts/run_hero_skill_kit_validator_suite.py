@@ -3597,6 +3597,20 @@ OPTIONAL = [
     ('PROJECT-V108-POSTQA-D-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_postqa_d_runtime_invariant_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-65-v108-POSTQA-D-ROLLUP', 'validate_mega_release_acceleration_65_v108_postqa_d_rollup.py'),
 
+    # ===== v108_AUTHORITATIVE_PRE - Battle Instance Staging (no reward live) =====
+    # PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE
+    ('PROJECT-V108-AUTHORITATIVE-PRE-BASELINE-MULTIRUN', 'validate_v108_authoritative_pre_baseline_multirun.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-BATTLE-INSTANCE-ENVELOPE-SCHEMA', 'validate_v108_authoritative_pre_battle_instance_envelope_schema.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-BACKEND-INSTANCE-ENDPOINT', 'validate_v108_authoritative_pre_backend_instance_endpoint.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-STORY-LOBBY-COMBAT-CHAIN', 'validate_v108_authoritative_pre_story_lobby_combat_chain.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-REAL-TEAM-SOURCE-CONTRACT', 'validate_v108_authoritative_pre_real_team_source_contract.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-ENEMY-SOURCE-CONTRACT', 'validate_v108_authoritative_pre_enemy_source_contract.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-SERVER-ID-LOADER-ADOPTION', 'validate_v108_authoritative_pre_server_id_loader_adoption.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-REWARD-PROGRESS-IDEMPOTENCY-PREFLIGHT', 'validate_v108_authoritative_pre_reward_progress_idempotency_preflight.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-POSTQA-D-GATE-PRESERVATION', 'validate_v108_authoritative_pre_postqa_d_gate_preservation.py'),
+    ('PROJECT-V108-AUTHORITATIVE-PRE-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_authoritative_pre_runtime_invariant_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-66-v108-AUTHORITATIVE-PRE-ROLLUP', 'validate_mega_release_acceleration_66_v108_authoritative_pre_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

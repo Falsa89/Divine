@@ -1,7 +1,7 @@
 {
   "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
   "type": "runtime_md5_baseline_official",
-  "version": 2,
+  "version": 3,
   "language": "italian",
   "authority": "Approval chain v95+v96+v97+v98+v99 autorizzata + v108_POSTQA_D autorizzato per legacy mutation blockers",
   "files": {
@@ -23,8 +23,13 @@
       "change_type": "RC_runtime_apply_release_candidate_prep"
     },
     "backend/server.py": {
-      "current_md5": "13e27312bb4f46ad3cf4d38d51e39148",
+      "current_md5": "c123b1b3459d8291bc2e71e25ce84871",
       "historical_references": [
+        {
+          "md5": "13e27312bb4f46ad3cf4d38d51e39148",
+          "pack": "pre_v108_AUTHORITATIVE_PRE",
+          "status": "superseded_by_v108_AUTHORITATIVE_PRE_battle_instance_router"
+        },
         {
           "md5": "6a10cd124664c74857e3683110a6909e",
           "pack": "pre_v108_POSTQA_A",
@@ -46,8 +51,8 @@
           "status": "superseded_by_v107C_loader_server_id_probe_router_include"
         }
       ],
-      "authorized_change_pack": "v96_v98_v103_v107A_v107C + v108_POSTQA_A",
-      "change_type": "auth_account_routes + admin_gdpr_routes + v103_server_profiles_list_router + v107A_battle_launch_router + v107C_loader_server_id_probe_router"
+      "authorized_change_pack": "v96_v98_v103_v107A_v107C + v108_POSTQA_A + v108_AUTHORITATIVE_PRE",
+      "change_type": "auth_account_routes + admin_gdpr_routes + v103_server_profiles_list_router + v107A_battle_launch_router + v107C_loader_server_id_probe_router | v108_AUTHORITATIVE_PRE: add include_router v108_authoritative_pre_instance (no DB, no reward, no progress)"
     },
     "frontend/app/combat.tsx": {
       "current_md5": "0f0677404535a1a19e98b110212b9742",

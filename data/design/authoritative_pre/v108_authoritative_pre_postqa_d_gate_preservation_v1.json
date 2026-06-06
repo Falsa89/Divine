@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_66_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "track": "I",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "description": "Verifica che i 9 gate POSTQA_D restino default-OFF e attivi.",
+  "gates": [
+    {"endpoint": "/api/hero/gain-exp", "flag": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/hero/levelup", "flag": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/fusion/star-up", "flag": "DIVINE_ALLOW_LEGACY_FUSION_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/soul/forge", "flag": "DIVINE_ALLOW_LEGACY_SOUL_FORGE_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/vip/add-spend", "flag": "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/battlepass/buy-premium", "flag": "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/friends/gift", "flag": "DIVINE_ALLOW_LEGACY_SOCIAL_GIFT_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/gvg/end-war", "flag": "DIVINE_ALLOW_LEGACY_GVG_ADMIN_MUTATIONS", "default_off": true},
+    {"endpoint": "/api/equipment/equip", "flag": "DIVINE_ALLOW_LEGACY_EQUIPMENT_MUTATIONS", "default_off": true}
+  ],
+  "lock_code_expected": "LEGACY_MUTATION_LOCKED_BY_POSTQA_D",
+  "lock_http_status": 423,
+  "gate_module": "backend/utils/postqa_d_mutation_gate.py",
+  "unlocked_in_this_pack": [],
+  "safety_flags": {"unlocking_postqa_d_gates": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

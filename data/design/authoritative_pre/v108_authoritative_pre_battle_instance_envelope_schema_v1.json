@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_66_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "track": "B",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "schema_version": "battle_instance_envelope_v1",
+  "description": "Schema dell'envelope di Battle Instance authoritative-pre. authoritative_live=false sempre. Nessuna scrittura DB.",
+  "fields": [
+    {"name": "battle_instance_id", "type": "string", "required": true, "description": "UUID hex, prefix 'bi_'"},
+    {"name": "server_id", "type": "string", "required": true, "block_code_if_missing": "BATTLE_INSTANCE_SERVER_REQUIRED"},
+    {"name": "account_id", "type": "string", "required": false},
+    {"name": "mode", "type": "enum", "required": true, "allowed": ["story","tower","arena","training","boss","raid","event","guild_war","guild_raid","world_boss"]},
+    {"name": "encounter_id", "type": "string", "required": false},
+    {"name": "player_team_id", "type": "string", "required": false},
+    {"name": "player_team_snapshot", "type": "array", "required": true, "block_code_if_missing": "BATTLE_INSTANCE_PLAYER_TEAM_REQUIRED", "forbidden_markers": ["PLAYER_SAFE_FALLBACK_TEAM","FAKE_TEAM","DEFAULT_TEAM","DEMO_TEAM","STUB_TEAM"]},
+    {"name": "enemy_source_type", "type": "enum", "required": true, "block_code_if_missing": "BATTLE_INSTANCE_ENEMY_SOURCE_REQUIRED", "allowed": ["authored","player_team","bot_team","boss","training_preset","event_preset"], "player_facing_subset": ["authored","boss","training_preset","event_preset"], "qa_only_subset": ["player_team","bot_team"]},
+    {"name": "enemy_source_id", "type": "string", "required": true, "forbidden_markers_unless_qa": ["PLACEHOLDER_ENEMY","ALPHA_ENEMY","STUB_ENEMY","DEMO_ENEMY","GENERATED_ENEMY_RANDOM"]},
+    {"name": "enemy_team_snapshot", "type": "array", "required": false},
+    {"name": "battle_engine_mode", "type": "enum", "required": true, "allowed": ["preview","authoritative_pre"]},
+    {"name": "authoritative_live", "type": "bool", "required": true, "fixed_value": false},
+    {"name": "reward_policy", "type": "enum", "required": true, "allowed": ["none","preview"], "block_code_if_live": "BATTLE_INSTANCE_REWARD_LIVE_FORBIDDEN"},
+    {"name": "progress_policy", "type": "enum", "required": true, "allowed": ["none","preview"], "block_code_if_live": "BATTLE_INSTANCE_PROGRESS_LIVE_FORBIDDEN"},
+    {"name": "idempotency_key", "type": "string", "required": false, "nullable": true},
+    {"name": "client_trace_id", "type": "string", "required": false, "nullable": true},
+    {"name": "feature_flags_observed", "type": "object"},
+    {"name": "safety", "type": "object", "required_subfields": {"db_writes_allowed": false, "reward_live_enabled": false, "progress_live_enabled": false, "server_filter_applied": false, "calls_legacy_mutating_endpoints": false}}
+  ],
+  "block_codes": [
+    "BATTLE_INSTANCE_SERVER_REQUIRED",
+    "BATTLE_INSTANCE_PLAYER_TEAM_REQUIRED",
+    "BATTLE_INSTANCE_ENEMY_SOURCE_REQUIRED",
+    "BATTLE_INSTANCE_REWARD_LIVE_FORBIDDEN",
+    "BATTLE_INSTANCE_PROGRESS_LIVE_FORBIDDEN"
+  ],
+  "safety_flags": {"fake_PASS": false, "validator_weakening": false, "silent_validator_deletion": false, "release_readiness_claimed": false, "authoritative_live_claim": false}
+}

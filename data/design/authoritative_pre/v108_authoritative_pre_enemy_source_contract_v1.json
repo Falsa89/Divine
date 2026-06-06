@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_66_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "description": "Contratto delle sorgenti enemy ammesse player-facing. Vietato random/placeholder/alpha senza qa_flag.",
+  "allowed_source_types": ["authored","player_team","bot_team","boss","training_preset","event_preset"],
+  "player_facing_allowed": ["authored","boss","training_preset","event_preset"],
+  "qa_only": ["player_team","bot_team"],
+  "forbidden_markers_unless_qa": ["PLACEHOLDER_ENEMY","ALPHA_ENEMY","STUB_ENEMY","DEMO_ENEMY","GENERATED_ENEMY_RANDOM"],
+  "block_code_when_no_real_source": "AUTHORED_ENCOUNTER_SOURCE_PENDING",
+  "random_generate_enemy_player_facing": false,
+  "placeholder_alpha_enemy_player_facing": false,
+  "battle_instance_endpoint_rejects_placeholder_enemy": true,
+  "safety_flags": {"random_enemy_player_facing": false, "placeholder_alpha_enemy_player_facing": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

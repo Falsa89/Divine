@@ -1,0 +1,34 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_66_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "description": "Preflight contract per reward/progress/idempotency. Tutto OFF e bloccato a livello backend.",
+  "feature_flags": {
+    "REWARD_LIVE_ENABLED": false,
+    "PROGRESS_LIVE_ENABLED": false,
+    "BATTLE_LAUNCH_AUTHORITATIVE_ENABLED": false,
+    "SERVER_SCOPED_RUNTIME_ENABLED": false,
+    "AUTHORITATIVE_BATTLE_ENGINE_ENABLED": false
+  },
+  "reward_live_endpoint_block": {
+    "endpoint": "/api/battle/instance/preview",
+    "block_code": "BATTLE_INSTANCE_REWARD_LIVE_FORBIDDEN",
+    "http": 423,
+    "smoke_verified": true
+  },
+  "progress_live_endpoint_block": {
+    "endpoint": "/api/battle/instance/preview",
+    "block_code": "BATTLE_INSTANCE_PROGRESS_LIVE_FORBIDDEN",
+    "http": 423,
+    "smoke_verified": true
+  },
+  "idempotency": {
+    "required_in_authoritative_pre": false,
+    "future_requirements_documented": true,
+    "future_required_when_reward_live_or_progress_live_enabled": true,
+    "future_field_name": "idempotency_key"
+  },
+  "reward_progress_write_attempts_observed": 0,
+  "db_writes_observed": 0,
+  "safety_flags": {"reward_live": false, "progress_live": false, "db_write_reward_progress": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

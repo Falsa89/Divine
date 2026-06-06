@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_66_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "description": "Contratto di provenienza del player team. NO fake team, NO fallback team come reale.",
+  "current_team_sources_observed": [
+    {"source": "user_heroes collection", "file": "backend/routes/hero_progression.py + server.py loaders", "account_wide": true, "server_scoped": false, "real": true},
+    {"source": "team_formation collection", "file": "backend/routes/teams.py (se presente) / lobby loader", "slots": 6, "account_wide": true, "server_scoped": false, "real": true},
+    {"source": "PLAYER_SAFE_FALLBACK_TEAM client-side", "file": "frontend/app/pre-battle-lobby.tsx", "real": false, "status": "forbidden_as_real_in_authoritative_pre"}
+  ],
+  "6_slot_formation_exists": true,
+  "server_scoped_team": false,
+  "server_scoped_team_promotion_planned_in": "v109 + v110 (PSP apply)",
+  "block_code_when_team_not_safe": "REAL_PLAYER_TEAM_SOURCE_PENDING",
+  "battle_instance_endpoint_rejects_fake_team": true,
+  "forbidden_markers": ["PLAYER_SAFE_FALLBACK_TEAM","FAKE_TEAM","DEFAULT_TEAM","DEMO_TEAM","STUB_TEAM"],
+  "safety_flags": {"fake_team_as_real": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

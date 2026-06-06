@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-06T13:12:52.294587+00:00",
+  "timestamp_utc": "2026-06-06T14:22:22.680888+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1769,
+  "backend_python_files_scanned": 1782,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 861,
+      "files_with_hits": 874,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 357,
+      "files_with_hits": 358,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -286,15 +286,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 582,
-              "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
-            },
-            {
               "line": 589,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 606,
+              "line": 596,
+              "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
+            },
+            {
+              "line": 613,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 147,
+      "files_with_hits": 148,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -370,15 +370,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 601,
+              "line": 608,
               "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
             },
             {
-              "line": 605,
+              "line": 612,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 606,
+              "line": 613,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -462,7 +462,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 897,
+              "line": 904,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
             }
           ]
@@ -621,7 +621,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 176,
+      "files_with_hits": 182,
       "hits_sample": [
         {
           "file": "backend/battle_core.py",
@@ -845,7 +845,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 168,
+      "files_with_hits": 169,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -858,11 +858,11 @@
               "snippet": "\"guild_id\": None,"
             },
             {
-              "line": 638,
+              "line": 645,
               "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
             },
             {
-              "line": 640,
+              "line": 647,
               "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
@@ -957,7 +957,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 163,
+      "files_with_hits": 164,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -966,7 +966,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 538,
+              "line": 545,
               "snippet": "# Read-only / idempotent / NO DB writes / NO reward / NO ranking / NO PII."
             }
           ]
@@ -1057,7 +1057,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 454,
+      "files_with_hits": 456,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",

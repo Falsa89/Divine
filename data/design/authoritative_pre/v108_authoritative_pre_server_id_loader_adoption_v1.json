@@ -1,0 +1,21 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_66_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_PRE_BATTLE_INSTANCE_STAGING_NO_REWARD_LIVE",
+  "description": "Audit onesto dell'adozione server_id sui loader. NO filter_applied=true a meno che reale.",
+  "loaders": [
+    {"loader": "user_heroes", "file_hint": "backend/routes/hero_progression.py", "parses_server_id": false, "filter_applied": false, "account_wide": true},
+    {"loader": "team_formation", "file_hint": "frontend/app/pre-battle-lobby.tsx + backend/routes/teams.py (se presente)", "parses_server_id": false, "filter_applied": false, "account_wide": true},
+    {"loader": "inventory", "file_hint": "backend/routes/inventory_*.py", "parses_server_id": false, "filter_applied": false, "account_wide": true},
+    {"loader": "currencies_wallet", "file_hint": "backend/routes/economy.py + user document", "parses_server_id": false, "filter_applied": false, "account_wide": true},
+    {"loader": "story_progress", "file_hint": "backend/routes/story.py", "parses_server_id": false, "filter_applied": false, "account_wide": true},
+    {"loader": "battle_launch / battle_instance_preview", "file_hint": "backend/routes/v107a_battle_launch.py + backend/routes/v108_authoritative_pre_instance.py", "parses_server_id": true, "filter_applied": false, "echo_only": true, "missing_server_id_blocks_battle_instance": true}
+  ],
+  "server_filter_applied_anywhere": false,
+  "missing_server_id_blocks_battle_instance": true,
+  "block_code_missing_server_id": "BATTLE_INSTANCE_SERVER_REQUIRED",
+  "server_isolation_live_claim": false,
+  "psp_apply_done": false,
+  "promoted_in": "v109 + v110",
+  "safety_flags": {"false_server_id_filter_claim": false, "server_isolation_live_claim": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}
