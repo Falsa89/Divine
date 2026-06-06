@@ -1,0 +1,42 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "collection_name": "player_server_profiles",
+  "primary_key": ["user_id", "server_id"],
+  "collection_created_in_this_pack": false,
+  "fields": [
+    {"name": "_id", "type": "ObjectId", "required": true},
+    {"name": "user_id", "type": "string", "required": true, "description": "account-global user identity"},
+    {"name": "server_id", "type": "string", "required": true, "description": "world/shard id (es: server_1, server_2)"},
+    {"name": "created_at", "type": "datetime_utc", "required": true},
+    {"name": "updated_at", "type": "datetime_utc", "required": true},
+    {"name": "player_level", "type": "int", "required": true, "default": 1},
+    {"name": "player_exp", "type": "int", "required": true, "default": 0},
+    {"name": "selected_team_id", "type": "string|null", "required": false, "default": null},
+    {"name": "soft_currencies", "type": "object", "required": true, "description": "server-scoped soft currencies (coins, stamina, etc.)"},
+    {"name": "story_progress", "type": "object", "required": false, "description": "chapter/stage status per server"},
+    {"name": "tower_progress", "type": "object", "required": false},
+    {"name": "arena_mmr", "type": "int|null", "required": false, "default": null},
+    {"name": "guild_id", "type": "string|null", "required": false, "default": null},
+    {"name": "battlepass_state", "type": "object", "required": false},
+    {"name": "mail_unread_count", "type": "int", "required": false, "default": 0},
+    {"name": "achievements_state", "type": "object", "required": false},
+    {"name": "shop_state", "type": "object", "required": false},
+    {"name": "server_created_at", "type": "datetime_utc", "required": true, "description": "first time user landed on this server"},
+    {"name": "last_seen_at", "type": "datetime_utc", "required": false},
+    {"name": "migration_source", "type": "string|null", "required": false, "description": "v110_psp_apply marker; null if natively created"}
+  ],
+  "references": {
+    "user_heroes_server_owner_key": ["user_id", "server_id"],
+    "team_formation_server_owner_key": ["user_id", "server_id"],
+    "user_inventory_server_owner_key": ["user_id", "server_id"],
+    "user_equipment_server_owner_key": ["user_id", "server_id"]
+  },
+  "safety_flags": {
+    "collection_created_in_this_pack": false,
+    "index_created_in_this_pack": false,
+    "db_write": false,
+    "fake_PASS": false
+  }
+}

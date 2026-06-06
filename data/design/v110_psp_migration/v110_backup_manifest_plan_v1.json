@@ -1,0 +1,53 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "D",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "snapshot_method": "mongodump",
+  "snapshot_target": "/app/backups/v110_pre_psp_apply/<YYYYMMDD_HHmmss>/",
+  "snapshot_executed_in_this_pack": false,
+  "db_name": "divine_waifus",
+  "collections_to_backup": [
+    "users",
+    "user_heroes",
+    "team_formation",
+    "user_inventory",
+    "user_equipment",
+    "battlepass_progress",
+    "vip_progress",
+    "user_mail",
+    "achievements",
+    "user_cosmetics",
+    "guild_membership",
+    "guild_wars",
+    "chat_messages",
+    "dm_messages",
+    "rankings",
+    "arena_mmr",
+    "live_events",
+    "bots",
+    "battle_instances",
+    "player_server_profiles",
+    "migration_logs"
+  ],
+  "masking_rules": {
+    "mask_secrets": true,
+    "mask_iap_receipts_token": true,
+    "mask_oauth_tokens": true,
+    "mask_email_for_export": true,
+    "never_export_passwords": true
+  },
+  "verification": {
+    "verify_dump_integrity": true,
+    "verify_collection_count_match": true,
+    "verify_document_sample_diff": true,
+    "keep_minimum_versions": 3,
+    "retention_days": 30
+  },
+  "required_before_apply": true,
+  "required_before_rollback": true,
+  "safety_flags": {
+    "snapshot_executed_in_this_pack": false,
+    "db_write": false,
+    "fake_PASS": false
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "bots_default_disabled": true,
+  "bots_server_scoped": true,
+  "empty_roster_after_reset_forbidden": true,
+  "reconstruction_options_on_reset": [
+    {
+      "option": "starter_roster_seed",
+      "description": "al reset il bot riceve un roster starter deterministico (5 eroi 3-4 stelle, no legacy)",
+      "premium_grant": false,
+      "day1_lv100_forbidden": true
+    },
+    {
+      "option": "controlled_summon_access",
+      "description": "il bot ottiene ticket summon controllati per ricostruire il roster con catalogo non-legacy",
+      "premium_grant": false,
+      "day1_lv100_forbidden": true
+    }
+  ],
+  "legacy_heroes_in_bot_roster_forbidden": true,
+  "premium_currency_grant_to_bots_forbidden": true,
+  "empty_roster_observed_runtime_check": true,
+  "bot_lifecycle": {
+    "requires_server_id": true,
+    "requires_active_bot_profile": true,
+    "can_start_only_if_disabled_default_overridden_explicitly": true
+  },
+  "applied_in_this_pack": false,
+  "safety_flags": {
+    "bots_default_startup": false,
+    "bot_empty_roster_after_reset": false,
+    "premium_grant": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

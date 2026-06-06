@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "K",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "prep_only": true,
+  "server_id_filter_applied": false,
+  "real_player_team_source": false,
+  "psp_migration_readiness": "PREP_READY_APPLY_GATED",
+  "legacy_cleanup_readiness": "PREP_READY_APPLY_GATED",
+  "live_overall_ready": false,
+  "preconditions_changed_in_v110": [],
+  "preconditions_now_pass_after_v110": [],
+  "preconditions_still_blocked_after_v110": [
+    "server_id_filter_applied",
+    "real_player_team_source",
+    "psp_migration_readiness",
+    "legacy_cleanup_readiness"
+  ],
+  "rationale": "v110 e prep-only: nessuna precondizione passa a PASS, nessun apply.",
+  "safety_flags": {
+    "false_filter_applied": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

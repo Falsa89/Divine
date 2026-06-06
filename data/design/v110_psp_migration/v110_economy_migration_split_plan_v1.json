@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "split_rules": {
+    "soft_currencies_server_scoped": ["coins", "stamina", "arena_tickets", "guild_coins", "tower_coins", "event_currency"],
+    "hard_currencies_account_global": ["gold", "summon_tickets_general"],
+    "premium_currencies_account_global": ["diamonds", "premium_summon_tickets", "vip_tokens"]
+  },
+  "override_business_decision_required_for": [
+    "qualunque tentativo di server-scope su hard/premium",
+    "qualunque duplicazione di balance soft tra server",
+    "qualunque grant non documentato"
+  ],
+  "audit_rules": {
+    "per_user_total_premium_before_after_must_match": true,
+    "per_user_total_hard_before_after_must_match": true,
+    "per_user_total_soft_before_after_must_match_per_server_aggregated": true,
+    "duplication_forbidden": true,
+    "premium_grant_forbidden": true,
+    "audit_log_collection": "migration_logs.v110_economy_split"
+  },
+  "rollback_strategy": {
+    "restore_from_backup": true,
+    "compare_balance_snapshot_pre_post": true,
+    "abort_on_any_mismatch": true
+  },
+  "applied_in_this_pack": false,
+  "db_writes": 0,
+  "safety_flags": {
+    "premium_grant": false,
+    "currency_duplication": false,
+    "fake_PASS": false
+  }
+}

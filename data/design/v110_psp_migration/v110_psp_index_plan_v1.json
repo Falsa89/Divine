@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "collection": "player_server_profiles",
+  "indexes_planned": [
+    {"name": "ux_user_server", "keys": [["user_id", 1], ["server_id", 1]], "unique": true, "sparse": false, "rationale": "PK logica, garantisce 1 profilo per (user, server)"},
+    {"name": "ix_server_id", "keys": [["server_id", 1]], "unique": false, "rationale": "per ranking/arena/guild scan per server"},
+    {"name": "ix_user_id", "keys": [["user_id", 1]], "unique": false, "rationale": "per ottenere tutti i server di un utente"},
+    {"name": "ix_last_seen", "keys": [["server_id", 1], ["last_seen_at", -1]], "unique": false, "rationale": "active players per server"},
+    {"name": "ix_guild", "keys": [["server_id", 1], ["guild_id", 1]], "unique": false, "sparse": true, "rationale": "guild membership lookup"}
+  ],
+  "indexes_created_in_this_pack": false,
+  "create_command_template": "db.player_server_profiles.createIndex({user_id:1, server_id:1}, {unique:true, name:'ux_user_server'})",
+  "safety_flags": {
+    "index_created_in_this_pack": false,
+    "db_write": false,
+    "fake_PASS": false
+  }
+}

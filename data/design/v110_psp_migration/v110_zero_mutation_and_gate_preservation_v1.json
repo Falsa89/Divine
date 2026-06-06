@@ -1,0 +1,38 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "L",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "static_proof": {
+    "no_route_files_modified": true,
+    "no_loader_runtime_modified": true,
+    "no_db_imports_added_to_loaders": true,
+    "no_new_collection": true,
+    "no_index_created": true,
+    "postqa_d_gate_module_intact": true,
+    "all_9_postqa_d_routes_still_gated": true,
+    "preview_router_intact": true,
+    "resolve_router_intact": true,
+    "ledger_adapter_intact": true,
+    "apply_script_default_skipped": true,
+    "rollback_script_default_skipped": true
+  },
+  "runtime_proof": {
+    "db_writes_observed": 0,
+    "reward_grants_observed": 0,
+    "progress_writes_observed": 0,
+    "currency_mutations_observed": 0,
+    "inventory_mutations_observed": 0,
+    "user_heroes_exp_mutations_observed": 0,
+    "ledger_collection_created": false,
+    "index_created": false,
+    "psp_collection_created": false,
+    "legacy_documents_deleted": 0
+  },
+  "safety_flags": {
+    "db_write": false,
+    "destructive_migration": false,
+    "delete": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

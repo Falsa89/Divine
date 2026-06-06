@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "generated_at_utc": "2026-06-06T17:11:44.637430Z",
+  "read_only": true,
+  "db_writes": 0,
+  "delete_executed": false,
+  "mongo_reachable": true,
+  "findings": {
+    "legacy_heroes_account_wide": 396,
+    "legacy_team_formation_no_server": 0,
+    "legacy_inventory_no_server": 0,
+    "legacy_equipment_no_server": 28,
+    "legacy_arena_no_server": 0,
+    "legacy_guild_no_server": 0,
+    "legacy_chat_no_server": 0,
+    "legacy_rankings_no_server": 0,
+    "legacy_battle_no_server": 0,
+    "legacy_bots_no_server": 0,
+    "legacy_encounters_no_server": 0
+  },
+  "total_legacy_docs_candidate_for_archive": 424,
+  "archive_policy": "move_to_legacy_<collection>_archive_collection (NOT executed)",
+  "delete_policy": "no_hard_delete_in_v110",
+  "warnings": [],
+  "safety_flags": {
+    "db_write": false,
+    "delete": false,
+    "destructive_migration": false,
+    "fake_PASS": false
+  }
+}

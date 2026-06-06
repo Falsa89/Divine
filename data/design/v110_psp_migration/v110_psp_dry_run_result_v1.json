@@ -1,0 +1,40 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "generated_at_utc": "2026-06-06T17:11:43.970567Z",
+  "read_only": true,
+  "db_writes": 0,
+  "mongo_reachable": true,
+  "counts": {
+    "accounts": 850,
+    "server_profiles_existing": 0,
+    "user_heroes": 2362,
+    "team_formation": 0,
+    "user_inventory": 0,
+    "user_equipment": 31,
+    "battle_instances": 0,
+    "story_progress_docs": 1,
+    "bots": 0
+  },
+  "estimated_apply_writes": {
+    "psp_inserts": 850,
+    "user_heroes_updates": 2362,
+    "team_updates": 0
+  },
+  "currency_split_estimation": {
+    "soft_currency_will_move_to_psp": true,
+    "hard_currency_stays_account_global": true,
+    "premium_currency_stays_account_global": true
+  },
+  "warnings": [],
+  "apply_executed": false,
+  "applied_in_this_pack": false,
+  "safety_flags": {
+    "db_write": false,
+    "destructive_migration": false,
+    "delete": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_70_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "track": "J",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED",
+  "generated_at_utc": "2026-06-06T17:11:45.212233Z",
+  "status": "ROLLBACK_SKIPPED_GATED",
+  "rollback_executed": false,
+  "db_writes": 0,
+  "required_flags": [
+    "V110_PSP_ROLLBACK",
+    "V110_BACKUP_RESTORE_CONFIRMED",
+    "V110_USER_EXPLICIT_ROLLBACK_APPROVAL"
+  ],
+  "missing_flags": [
+    "V110_PSP_ROLLBACK",
+    "V110_BACKUP_RESTORE_CONFIRMED",
+    "V110_USER_EXPLICIT_ROLLBACK_APPROVAL"
+  ],
+  "strategy": "restore_from_backup_then_validate_balance_invariants",
+  "safety_flags": {
+    "db_write": false,
+    "rollback_executed": false,
+    "fake_PASS": false
+  }
+}

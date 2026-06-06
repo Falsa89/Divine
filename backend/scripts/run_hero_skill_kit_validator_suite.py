@@ -3652,6 +3652,24 @@ OPTIONAL = [
     ('PROJECT-V109-SERVER-ISOLATION-FINAL-MULTIRUN', 'validate_v109_server_isolation_final_multirun.py'),
     ('MEGA-RELEASE-ACCELERATION-69-v109-SERVER-ISOLATION-ROLLUP', 'validate_mega_release_acceleration_69_v109_server_isolation_rollup.py'),
 
+    # ===== v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED - prep gated, NOT applied =====
+    # PUBLIC_SYNC_TAG_v110_PSP_APPLY_AND_LEGACY_CLEANUP_PREP_GATED_NOT_APPLIED
+    ('PROJECT-V110-BASELINE-MULTIRUN', 'validate_v110_baseline_multirun.py'),
+    ('PROJECT-V110-ACCOUNT-GLOBAL-VS-SERVER-SCOPED-MATRIX', 'validate_v110_account_global_vs_server_scoped_matrix.py'),
+    ('PROJECT-V110-PSP-SCHEMA-AND-INDEX-PLAN', 'validate_v110_psp_schema_and_index_plan.py'),
+    ('PROJECT-V110-BACKUP-MANIFEST-PLAN', 'validate_v110_backup_manifest_plan.py'),
+    ('PROJECT-V110-PSP-DRY-RUN-MIGRATION', 'validate_v110_psp_dry_run_migration.py'),
+    ('PROJECT-V110-LEGACY-CLEANUP-DRY-RUN', 'validate_v110_legacy_cleanup_dry_run.py'),
+    ('PROJECT-V110-BOT-RECONSTRUCTION-POLICY', 'validate_v110_bot_reconstruction_policy.py'),
+    ('PROJECT-V110-ECONOMY-MIGRATION-SPLIT-PLAN', 'validate_v110_economy_migration_split_plan.py'),
+    ('PROJECT-V110-APPLY-SCRIPT-GATED-NOT-EXECUTED', 'validate_v110_apply_script_gated_not_executed.py'),
+    ('PROJECT-V110-ROLLBACK-SCRIPT-GATED-NOT-EXECUTED', 'validate_v110_rollback_script_gated_not_executed.py'),
+    ('PROJECT-V110-SERVER-ID-FILTER-READINESS-UPDATE', 'validate_v110_server_id_filter_readiness_update.py'),
+    ('PROJECT-V110-ZERO-MUTATION-AND-GATE-PRESERVATION', 'validate_v110_zero_mutation_and_gate_preservation.py'),
+    ('PROJECT-V110-RUNTIME-INVARIANT-PRESERVATION', 'validate_v110_runtime_invariant_preservation.py'),
+    ('PROJECT-V110-FINAL-MULTIRUN-SUITE', 'validate_v110_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-70-v110-PSP-PREP-ROLLUP', 'validate_mega_release_acceleration_70_v110_psp_prep_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
