@@ -503,6 +503,14 @@ app.include_router(v107a_battle_launch_router)
 from routes.v108_authoritative_pre_instance import router as v108_authoritative_pre_instance_router
 app.include_router(v108_authoritative_pre_instance_router)
 
+# v108_AUTHORITATIVE_RUNTIME — Battle Result Envelope resolve-preview endpoint.
+# POST /api/battle/instance/resolve-preview returns the authoritative-staging result.
+# authoritative_live=false, authoritative_staging=true. NO DB write, NO reward,
+# NO progress, NO call to /api/battle/simulate. Resolver deterministico in-memory.
+# PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE
+from routes.v108_authoritative_runtime_resolve import router as v108_authoritative_runtime_resolve_router
+app.include_router(v108_authoritative_runtime_resolve_router)
+
 # v107C — Loader server_id acceptance probe router. Read-only echo of server_id
 # query parameter on 5 probe paths. Demonstrates acceptance contract without
 # touching existing loader endpoints. NO DB writes, NO mutation.

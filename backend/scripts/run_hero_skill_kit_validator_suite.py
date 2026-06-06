@@ -3611,6 +3611,19 @@ OPTIONAL = [
     ('PROJECT-V108-AUTHORITATIVE-PRE-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_authoritative_pre_runtime_invariant_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-66-v108-AUTHORITATIVE-PRE-ROLLUP', 'validate_mega_release_acceleration_66_v108_authoritative_pre_rollup.py'),
 
+    # ===== v108_AUTHORITATIVE_RUNTIME - Battle Runtime Staging (no reward live) =====
+    # PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-BASELINE-MULTIRUN', 'validate_v108_authoritative_runtime_baseline_multirun.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-BATTLE-RESULT-ENVELOPE-SCHEMA', 'validate_v108_authoritative_runtime_battle_result_envelope_schema.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-BACKEND-RESOLVE-ENDPOINT', 'validate_v108_authoritative_runtime_backend_resolve_endpoint.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-STORY-LOBBY-COMBAT-CHAIN', 'validate_v108_authoritative_runtime_story_lobby_combat_chain.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-TEAM-ENEMY-VALIDATION', 'validate_v108_authoritative_runtime_team_enemy_validation.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-IDEMPOTENCY-LEDGER-DRYRUN-CONTRACT', 'validate_v108_authoritative_runtime_idempotency_ledger_dryrun_contract.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-ZERO-MUTATION-PROOF', 'validate_v108_authoritative_runtime_zero_mutation_proof.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-PREFLIGHT-PRESERVATION', 'validate_v108_authoritative_runtime_preflight_preservation.py'),
+    ('PROJECT-V108-AUTHORITATIVE-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_authoritative_runtime_invariant_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-67-v108-AUTHORITATIVE-RUNTIME-ROLLUP', 'validate_mega_release_acceleration_67_v108_authoritative_runtime_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_67_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "postqa_d_preservation": {
+    "gates_locked_default_off": 9,
+    "unlocked_in_this_pack": [],
+    "lock_code": "LEGACY_MUTATION_LOCKED_BY_POSTQA_D",
+    "gate_module_intact": true,
+    "smoke_verified": true
+  },
+  "authoritative_pre_preservation": {
+    "endpoint": "/api/battle/instance/preview",
+    "router_intact": true,
+    "micro_smoke_cases_still_pass": [
+      {"case": "progress_policy=live", "http": 423, "code": "BATTLE_INSTANCE_PROGRESS_LIVE_FORBIDDEN"},
+      {"case": "empty team", "http": 423, "code": "BATTLE_INSTANCE_PLAYER_TEAM_REQUIRED"},
+      {"case": "PLAYER_SAFE_FALLBACK_TEAM", "http": 423, "code": "BATTLE_INSTANCE_PLAYER_TEAM_REQUIRED"},
+      {"case": "happy 6-slot", "http": 200, "schema": "battle_instance_envelope_v1", "authoritative_live": false}
+    ]
+  },
+  "safety_flags": {"unlocking_postqa_d_gates": false, "authoritative_pre_regression": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

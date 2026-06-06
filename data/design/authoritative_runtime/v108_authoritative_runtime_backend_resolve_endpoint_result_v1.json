@@ -1,0 +1,36 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_67_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "endpoint": "POST /api/battle/instance/resolve-preview",
+  "router_file": "backend/routes/v108_authoritative_runtime_resolve.py",
+  "behavior": {
+    "db_writes": 0,
+    "reward_grant": false,
+    "progress_write": false,
+    "inventory_mutation": false,
+    "currency_mutation": false,
+    "user_heroes_exp_mutation": false,
+    "calls_battle_simulate": false,
+    "calls_legacy_mutating_endpoints": false,
+    "authoritative_live": false,
+    "authoritative_staging": true,
+    "battle_engine_formula_rewritten": false,
+    "server_filter_applied": false
+  },
+  "deterministic_resolver": {
+    "in_memory": true,
+    "seeded_by": "sha256(battle_instance_id|encounter_id|mode|server_id)",
+    "winner_skew_full_6": 0.55,
+    "winner_skew_partial": 0.50,
+    "turn_count_range": [3, 9],
+    "battle_engine_imported": false
+  },
+  "smoke_results": [
+    {"case": "happy 6-slot", "http": 200, "schema": "battle_result_envelope_v1", "authoritative_live": false, "authoritative_staging": true},
+    {"case": "authoritative_live=true", "http": 423, "code": "BATTLE_RESULT_AUTHORITATIVE_LIVE_FORBIDDEN"},
+    {"case": "reward_policy=live", "http": 423, "code": "BATTLE_RESULT_REWARD_LIVE_FORBIDDEN"},
+    {"case": "player_team empty", "http": 423, "code": "BATTLE_RESULT_PLAYER_TEAM_REQUIRED"}
+  ],
+  "safety_flags": {"fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false, "authoritative_live_claim": false, "reward_live_activation": false, "progress_live_activation": false, "battle_engine_formula_rewrite": false}
+}

@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_67_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "track": "D",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "description": "Audit chain Story → Lobby → Combat per integrazione staging. La chain attuale (v108_pre + POSTQA_A + AUTHORITATIVE_PRE) consuma gia\u0301 launch_context come preview e blocca simulate/refreshUser/grantAffinity tramite preview reward lock. L'envelope battle_result_envelope_v1 e\u0301 strutturalmente compatibile e puo\u0300 essere consumato dal combat senza modifiche aggiuntive in staging.",
+  "chain": [
+    {"node": "story.tsx", "file": "frontend/app/story.tsx", "marker": "v108_pre", "role": "navigate to pre-battle-lobby", "calls_battle_simulate": false},
+    {"node": "pre-battle-lobby.tsx", "file": "frontend/app/pre-battle-lobby.tsx", "markers": ["v107D", "launch_context"], "role": "can call /api/battle/launch and/or /api/battle/instance/preview; passes launch_context to combat", "calls_battle_simulate": false},
+    {"node": "combat.tsx", "file": "frontend/app/combat.tsx", "markers": ["PREVIEW_REWARD_LOCK_ACTIVE", "launch_context"], "role": "reads launch_context; if preview valid blocks /api/battle/simulate, refreshUser, grantAffinity", "calls_battle_simulate": false, "calls_refresh_user": false, "calls_grant_affinity": false, "calls_resolve_preview": false, "staging_consumable": true}
+  ],
+  "resolve_preview_consumable_in_combat": true,
+  "resolve_preview_required_combat_edits": false,
+  "combat_staging_no_reward_state_visible": true,
+  "combat_calls_battle_simulate_in_staging": false,
+  "surgical_edits_applied": [],
+  "rationale": "In staging Combat semplicemente NON chiama simulate (lock attivo). L'integrazione effettiva del resolve-preview lato frontend sara' attivata nel pack v108_authoritative_full quando i flag live verranno abilitati; in questa fase solo la SOMPATIBILITA strutturale dell'envelope conta.",
+  "safety_flags": {"calls_simulate_in_staging": false, "calls_refresh_user_in_staging": false, "calls_grant_affinity_in_staging": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_67_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "static_proof": {
+    "router_file": "backend/routes/v108_authoritative_runtime_resolve.py",
+    "db_imports": [],
+    "motor_imports": [],
+    "battle_engine_imports": [],
+    "battle_simulate_calls": [],
+    "legacy_mutating_endpoint_calls": [],
+    "reward_assignment_statements": [],
+    "progress_assignment_statements": [],
+    "inventory_mutation_statements": [],
+    "currency_mutation_statements": []
+  },
+  "runtime_proof": {
+    "db_snapshot_pre": {
+      "users": 664, "user_heroes": 2357, "battle_pass_progress": 0, "vip_progress": 0,
+      "soul_forge_log": 0, "guild_wars": 0, "friend_gifts": 0, "user_equipment": 31,
+      "equipment_log": 0, "hero_progression_log": 0, "battle_instances": 0, "battle_launches": 0
+    },
+    "db_snapshot_post_smoke_to_be_filled_when_smoke_runs": true,
+    "resolve_preview_smoke_cases_attempted": ["happy_6_slot","authoritative_live_true","reward_live","empty_team"],
+    "db_writes_observed": 0,
+    "reward_grants_observed": 0,
+    "progress_writes_observed": 0,
+    "currency_mutations_observed": 0,
+    "inventory_mutations_observed": 0,
+    "user_heroes_exp_mutations_observed": 0
+  },
+  "safety_flags": {"db_write": false, "reward_grant": false, "progress_write": false, "currency_mutation": false, "inventory_mutation": false, "battle_simulate_called": false, "battle_engine_formula_rewrite": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

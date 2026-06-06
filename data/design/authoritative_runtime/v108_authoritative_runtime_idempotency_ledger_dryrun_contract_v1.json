@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_67_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_BATTLE_RUNTIME_STAGING_NO_REWARD_LIVE",
+  "idempotency": {
+    "key_field_in_request": "idempotency_key",
+    "key_field_in_result_envelope": "idempotency_key",
+    "required_in_staging": false,
+    "required_when_reward_live_or_progress_live": true,
+    "echoed_in_result_when_provided": true
+  },
+  "ledger": {
+    "writes_in_this_pack": 0,
+    "db_collections_touched": [],
+    "future_collections_planned": ["battle_result_ledger","reward_grant_ledger","progress_write_ledger"],
+    "future_writes_gated_by_flags": ["REWARD_LIVE_ENABLED","PROGRESS_LIVE_ENABLED"],
+    "duplicate_resolution_behavior_documented": "future: idempotency_key univoco per (account_id, server_id, battle_instance_id). Duplicate detection: return previous ledger entry (no double-grant). Implementata in v108_authoritative_full."
+  },
+  "reward_progress_live_block_in_staging": {
+    "reward_live": {"http": 423, "code": "BATTLE_RESULT_REWARD_LIVE_FORBIDDEN", "smoke_verified": true},
+    "progress_live": {"http": 423, "code": "BATTLE_RESULT_PROGRESS_LIVE_FORBIDDEN", "smoke_verified": false, "note": "logica simmetrica a reward_live"}
+  },
+  "safety_flags": {"ledger_db_write": false, "reward_live": false, "progress_live": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}
