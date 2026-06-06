@@ -1,0 +1,36 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_65_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS",
+  "track": "D",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS",
+  "description": "Blocker frontend player-facing: il file utils espone la lista degli endpoint locked dal pack D; ciascuna surface chiama isLegacyMutationLocked() PRIMA di apiCall.",
+  "helper_module": "frontend/utils/postqa_d_locked_endpoints.ts",
+  "helper_exports": [
+    "POSTQA_D_PUBLIC_SYNC_TAG",
+    "POSTQA_D_LOCK_CODE",
+    "POSTQA_D_LOCKED_ENDPOINTS",
+    "isLegacyMutationLocked",
+    "POSTQA_D_LOCK_MESSAGE_TITLE",
+    "POSTQA_D_LOCK_MESSAGE_BODY"
+  ],
+  "surfaces": [
+    {"file": "frontend/app/hero-detail.tsx", "endpoint": "/api/hero/gain-exp", "player_reachable": true, "blocker_installed": true, "strategy": "pre-apiCall isLegacyMutationLocked + Alert"},
+    {"file": "frontend/app/hero-detail.tsx", "endpoint": "/api/fusion/star-up", "player_reachable": true, "blocker_installed": true, "strategy": "pre-apiCall isLegacyMutationLocked + Alert"},
+    {"file": "frontend/app/soul-forge.tsx", "endpoint": "/api/soul/forge", "player_reachable": true, "blocker_installed": true, "strategy": "pre-apiCall isLegacyMutationLocked + Alert"},
+    {"file": "frontend/app/gvg.tsx", "endpoint": "/api/gvg/end-war", "player_reachable": true, "blocker_installed": true, "strategy": "pre-apiCall isLegacyMutationLocked + Alert"},
+    {"file": "frontend/app/equipment.tsx", "endpoint": "/api/equipment/equip", "player_reachable": true, "blocker_installed": true, "strategy": "pre-apiCall isLegacyMutationLocked + Alert"},
+    {"file": "frontend/app/friends.tsx", "endpoint": "/api/friends/gift", "player_reachable": true, "blocker_installed": true, "strategy": "pre-apiCall isLegacyMutationLocked + Alert"},
+    {"file": "frontend/app/battlepass.tsx", "endpoint": "/api/battlepass/buy-premium", "player_reachable": true, "blocker_installed": true, "strategy": "pre-apiCall isLegacyMutationLocked + Alert (in aggiunta al BP_PREMIUM_BUY_LOCKED_V2 esistente)"}
+  ],
+  "endpoints_not_reachable_from_frontend": [
+    "/api/hero/levelup",
+    "/api/vip/add-spend"
+  ],
+  "ui_redesign": false,
+  "no_silent_deletion": true,
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "release_readiness_claimed": false
+  }
+}

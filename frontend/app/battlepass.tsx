@@ -5,6 +5,11 @@ import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import {
+  isLegacyMutationLocked,
+  POSTQA_D_LOCK_MESSAGE_TITLE,
+  POSTQA_D_LOCK_MESSAGE_BODY,
+} from '../utils/postqa_d_locked_endpoints';
 
 export default function BattlePassScreen() {
   const router = useRouter();
@@ -33,6 +38,11 @@ export default function BattlePassScreen() {
 
   const buyPremium = async () => {
     if (BP_PREMIUM_BUY_LOCKED_V2) return; // lock UI safe
+    // v108_POSTQA_D: blocco player-facing per endpoint legacy gateato lato backend.
+    if (isLegacyMutationLocked('/api/battlepass/buy-premium')) {
+      Alert.alert(POSTQA_D_LOCK_MESSAGE_TITLE, POSTQA_D_LOCK_MESSAGE_BODY);
+      return;
+    }
     try {
       await apiCall('/api/battlepass/buy-premium', { method:'POST' });
       await refreshUser(); await load();

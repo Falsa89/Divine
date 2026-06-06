@@ -22,6 +22,11 @@ from pydantic import BaseModel
 # SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
 from utils.server_scope import ensure_server_scope
 
+# v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/soul/forge
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 # ===================== CURRENCY DEFINITIONS =====================
 CURRENCIES = {
     "gold": {"name": "Oro", "icon": "\U0001F4B0", "color": "#ffd700", "description": "Valuta base. Guadagnata da battaglie, eventi e missioni."},
@@ -365,7 +370,17 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
     class SoulForgeRequest(BaseModel):
         hero_ids: list
 
-    @router.post("/soul/forge")
+    @router.post(
+        "/soul/forge",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SOUL_FORGE_MUTATIONS",
+                    "/api/soul/forge",
+                )
+            )
+        ],
+    )
     async def soul_forge(req: SoulForgeRequest, current_user: dict = Depends(get_current_user)):
         """Sacrifice heroes to gain soul_essence."""
         uid = current_user["id"]

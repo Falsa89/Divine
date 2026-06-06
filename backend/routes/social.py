@@ -10,6 +10,11 @@ from pydantic import BaseModel
 # SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
 from utils.server_scope import ensure_server_scope
 
+# v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/friends/gift
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 
 def register_social_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -193,7 +198,17 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
         await db.friends.update_one({"user_id": friend_id}, {"$pull": {"friends": uid}})
         return {"success": True}
 
-    @router.post("/friends/gift/{friend_id}")
+    @router.post(
+        "/friends/gift/{friend_id}",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SOCIAL_GIFT_MUTATIONS",
+                    "/api/friends/gift",
+                )
+            )
+        ],
+    )
     async def gift_friend(friend_id: str, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         user = await db.users.find_one({"id": uid})

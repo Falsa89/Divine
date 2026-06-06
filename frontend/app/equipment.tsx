@@ -5,6 +5,11 @@ import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import {
+  isLegacyMutationLocked,
+  POSTQA_D_LOCK_MESSAGE_TITLE,
+  POSTQA_D_LOCK_MESSAGE_BODY,
+} from '../utils/postqa_d_locked_endpoints';
 
 const RC: Record<number,string> = { 1:'#888', 2:'#44aa44', 3:'#4488ff', 4:'#aa44ff', 5:'#ff4444', 6:'#ffd700' };
 const SLOT_ICONS: Record<string,string> = { weapon:'\uD83D\uDDE1\uFE0F', armor:'\uD83D\uDEE1\uFE0F', accessory:'\uD83D\uDC8D', rune:'\uD83D\uDD2E' };
@@ -27,6 +32,11 @@ export default function EquipmentScreen() {
 
   const doEquip = async () => {
     if (!selectedEquip || !selectedHero) return;
+    // v108_POSTQA_D: blocco player-facing per endpoint legacy gateato lato backend.
+    if (isLegacyMutationLocked('/api/equipment/equip')) {
+      Alert.alert(POSTQA_D_LOCK_MESSAGE_TITLE, POSTQA_D_LOCK_MESSAGE_BODY);
+      return;
+    }
     try {
       await apiCall('/api/equipment/equip', { method:'POST', body: JSON.stringify({equipment_id:selectedEquip.id, user_hero_id:selectedHero.id}) });
       Alert.alert('Fatto!', `${selectedEquip.name} equipaggiato a ${selectedHero.hero_name}`);

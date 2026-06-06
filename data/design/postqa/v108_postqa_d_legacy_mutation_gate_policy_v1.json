@@ -1,0 +1,47 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_65_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS",
+  "track": "B",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS",
+  "description": "Policy completa dei 23 endpoint watchlist (estesa con i 9 high-risk del pack D). Specifica per ciascun endpoint: file di rotta, categoria di rischio, raggiungibilita\u0301 player-facing, gate richiesto, stato target.",
+  "target_states": {
+    "blocked_by_default": "Endpoint che mutano stato persistente e devono restare bloccati di default da gate env (default-OFF).",
+    "qa_only": "Endpoint utilizzabili solo in modalit\u00e0 QA/dev con flag esplicito.",
+    "dev_only": "Endpoint utilizzabili solo in dev/CI con flag esplicito.",
+    "preview_only_no_write": "Endpoint di sola lettura/preview che non scrivono mai su DB.",
+    "deferred_runtime_fix": "Endpoint legacy che richiedono refactor runtime nella prossima ondata authoritative."
+  },
+  "endpoints": [
+    {"endpoint": "/api/hero/gain-exp", "file": "backend/routes/hero_progression.py", "risk": "high", "player_reachable": true, "gate": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/hero/levelup", "file": "backend/routes/combat.py", "risk": "high", "player_reachable": false, "gate": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/fusion/star-up", "file": "backend/routes/hero_progression.py", "risk": "high", "player_reachable": true, "gate": "DIVINE_ALLOW_LEGACY_FUSION_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/soul/forge", "file": "backend/routes/soul_forge.py", "risk": "high", "player_reachable": true, "gate": "DIVINE_ALLOW_LEGACY_SOUL_FORGE_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/vip/add-spend", "file": "backend/routes/economy.py", "risk": "high", "player_reachable": false, "gate": "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/battlepass/buy-premium", "file": "backend/routes/economy.py", "risk": "high", "player_reachable": true, "gate": "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/friends/gift", "file": "backend/routes/social.py", "risk": "medium", "player_reachable": true, "gate": "DIVINE_ALLOW_LEGACY_SOCIAL_GIFT_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/gvg/end-war", "file": "backend/routes/gvg.py", "risk": "high", "player_reachable": true, "gate": "DIVINE_ALLOW_LEGACY_GVG_ADMIN_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/equipment/equip", "file": "backend/routes/equipment.py", "risk": "medium", "player_reachable": true, "gate": "DIVINE_ALLOW_LEGACY_EQUIPMENT_MUTATIONS", "target_state": "blocked_by_default"},
+    {"endpoint": "/api/battle/simulate", "file": "backend/routes/battle.py", "risk": "high", "player_reachable": false, "gate": "strict_internal_guard", "target_state": "preview_only_no_write"},
+    {"endpoint": "/api/battle/launch", "file": "backend/routes/battle.py", "risk": "medium", "player_reachable": true, "gate": "preview_reward_lock", "target_state": "preview_only_no_write"},
+    {"endpoint": "/api/story/preview", "file": "backend/routes/story.py", "risk": "low", "player_reachable": true, "gate": "preview_reward_lock", "target_state": "preview_only_no_write"},
+    {"endpoint": "/api/lobby/preview", "file": "backend/routes/lobby.py", "risk": "low", "player_reachable": true, "gate": "preview_reward_lock", "target_state": "preview_only_no_write"},
+    {"endpoint": "/api/qa/auto-resolve", "file": "backend/routes/qa.py", "risk": "high", "player_reachable": false, "gate": "qa_player_facing_block", "target_state": "qa_only"},
+    {"endpoint": "/api/generate-enemy", "file": "backend/routes/qa.py", "risk": "high", "player_reachable": false, "gate": "qa_player_facing_block", "target_state": "qa_only"},
+    {"endpoint": "/api/lobby/fake-team", "file": "backend/routes/lobby.py", "risk": "high", "player_reachable": false, "gate": "qa_player_facing_block", "target_state": "qa_only"},
+    {"endpoint": "/api/bots/spawn", "file": "backend/routes/bots.py", "risk": "high", "player_reachable": false, "gate": "bots_disabled_default_startup", "target_state": "dev_only"},
+    {"endpoint": "/api/dev/seed", "file": "backend/routes/dev.py", "risk": "high", "player_reachable": false, "gate": "dev_only_flag", "target_state": "dev_only"},
+    {"endpoint": "/api/dev/inject-state", "file": "backend/routes/dev.py", "risk": "high", "player_reachable": false, "gate": "dev_only_flag", "target_state": "dev_only"},
+    {"endpoint": "/api/gacha/pull", "file": "backend/routes/gacha.py", "risk": "high", "player_reachable": true, "gate": "gacha_not_implemented", "target_state": "deferred_runtime_fix"},
+    {"endpoint": "/api/shop/buy", "file": "backend/routes/economy.py", "risk": "medium", "player_reachable": true, "gate": "monetization_off", "target_state": "deferred_runtime_fix"},
+    {"endpoint": "/api/server/transfer", "file": "backend/routes/server_admin.py", "risk": "high", "player_reachable": false, "gate": "psp_not_applied", "target_state": "deferred_runtime_fix"},
+    {"endpoint": "/api/admin/reset-economy", "file": "backend/routes/server_admin.py", "risk": "high", "player_reachable": false, "gate": "legacy_cleanup_not_applied", "target_state": "deferred_runtime_fix"}
+  ],
+  "watchlist_total": 23,
+  "new_gates_in_pack_d": 7,
+  "new_endpoints_with_default_off_gate": 9,
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "release_readiness_claimed": false
+  }
+}

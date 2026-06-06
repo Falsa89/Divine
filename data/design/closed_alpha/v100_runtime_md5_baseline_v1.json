@@ -1,9 +1,9 @@
 {
   "pack": "MEGA_RELEASE_ACCELERATION_49_v100",
   "type": "runtime_md5_baseline_official",
-  "version": 1,
+  "version": 2,
   "language": "italian",
-  "authority": "Approval chain v95+v96+v97+v98+v99 autorizzata",
+  "authority": "Approval chain v95+v96+v97+v98+v99 autorizzata + v108_POSTQA_D autorizzato per legacy mutation blockers",
   "files": {
     "backend/battle_engine.py": {
       "current_md5": "1ac058bc5c3515bb76187d1c0061df49",
@@ -99,6 +99,78 @@
       ],
       "authorized_change_pack": "v108_POSTQA_A",
       "change_type": "router params compatibility per encounter_id / enemy_source_id (oltre al legacy source_id). Nessun cambio al binding gated v107D, nessuna riscrittura del flow."
+    },
+    "frontend/app/soul-forge.tsx": {
+      "current_md5": "fe4efcdeb60c69e8827f914cf0ac8e4c",
+      "historical_references": [
+        {
+          "md5": "b7659de11ac36f341e7a2f54fd29e6ed",
+          "pack": "pre_v108_POSTQA_D",
+          "status": "superseded_by_v108_POSTQA_D_legacy_mutation_blocker"
+        }
+      ],
+      "authorized_change_pack": "v108_POSTQA_D",
+      "change_type": "Aggiunto isLegacyMutationLocked() pre-apiCall + Alert per blocker player-facing (no UI redesign, no DB writes, no reward grant)."
+    },
+    "frontend/app/equipment.tsx": {
+      "current_md5": "2a77383ab2b0ca6b8de442e857c5c1aa",
+      "historical_references": [
+        {
+          "md5": "4ec61a5faa87b267a0b388eac269714c",
+          "pack": "pre_v108_POSTQA_D",
+          "status": "superseded_by_v108_POSTQA_D_legacy_mutation_blocker"
+        }
+      ],
+      "authorized_change_pack": "v108_POSTQA_D",
+      "change_type": "Aggiunto isLegacyMutationLocked() pre-apiCall + Alert per blocker player-facing (no UI redesign, no DB writes, no reward grant)."
+    },
+    "frontend/app/friends.tsx": {
+      "current_md5": "9c71f4eee7603c56826d8c6b8daebac7",
+      "historical_references": [
+        {
+          "md5": "3860cd324c38407620032a21ae404a67",
+          "pack": "pre_v108_POSTQA_D",
+          "status": "superseded_by_v108_POSTQA_D_legacy_mutation_blocker"
+        }
+      ],
+      "authorized_change_pack": "v108_POSTQA_D",
+      "change_type": "Aggiunto isLegacyMutationLocked() pre-apiCall + Alert per blocker player-facing (no UI redesign, no DB writes, no reward grant)."
+    },
+    "frontend/app/hero-detail.tsx": {
+      "current_md5": "5993bca3eb7c361362fac1d4eb2a9ff6",
+      "historical_references": [
+        {
+          "md5": "cd5916f683be5cc8778a8bc35f90e554",
+          "pack": "pre_v108_POSTQA_D",
+          "status": "superseded_by_v108_POSTQA_D_legacy_mutation_blocker"
+        }
+      ],
+      "authorized_change_pack": "v108_POSTQA_D",
+      "change_type": "Aggiunto isLegacyMutationLocked() pre-apiCall + Alert per blocker player-facing (no UI redesign, no DB writes, no reward grant)."
+    },
+    "frontend/app/battlepass.tsx": {
+      "current_md5": "f0317a32daabd23f42ef2ddac89752ab",
+      "historical_references": [
+        {
+          "md5": "54568b8cb75a07033f78ef6593aba839",
+          "pack": "pre_v108_POSTQA_D",
+          "status": "superseded_by_v108_POSTQA_D_legacy_mutation_blocker"
+        }
+      ],
+      "authorized_change_pack": "v108_POSTQA_D",
+      "change_type": "Aggiunto isLegacyMutationLocked() pre-apiCall + Alert per blocker player-facing (no UI redesign, no DB writes, no reward grant)."
+    },
+    "frontend/app/gvg.tsx": {
+      "current_md5": "47e1da25636befcaa6e85a11a67c225e",
+      "historical_references": [
+        {
+          "md5": "0f106dea784b5d136e987a5b018c1ac2",
+          "pack": "pre_v108_POSTQA_D",
+          "status": "superseded_by_v108_POSTQA_D_legacy_mutation_blocker"
+        }
+      ],
+      "authorized_change_pack": "v108_POSTQA_D",
+      "change_type": "Aggiunto isLegacyMutationLocked() pre-apiCall + Alert per blocker player-facing (no UI redesign, no DB writes, no reward grant)."
     }
   },
   "baseline_rebase_mechanism": "SUPERSEDED_AFTER_V100_MD5_REBASELINE frozenset gated by file presence",

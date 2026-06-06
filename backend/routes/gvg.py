@@ -8,6 +8,11 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from utils.server_scope import ensure_server_scope
 
+# v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/gvg/end-war
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 
 def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -299,7 +304,17 @@ def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_h
             "my_total_damage": updated_war.get(f"{guild_key}_attacks", {}).get(uid, 0),
         }
 
-    @router.post("/gvg/end-war")
+    @router.post(
+        "/gvg/end-war",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_GVG_ADMIN_MUTATIONS",
+                    "/api/gvg/end-war",
+                )
+            )
+        ],
+    )
     async def end_war(current_user: dict = Depends(get_current_user)):
         """Force end the current war (leader only or timeout)."""
         guild_id = current_user.get("guild_id")

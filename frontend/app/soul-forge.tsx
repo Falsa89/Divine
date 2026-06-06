@@ -9,6 +9,11 @@ import Animated, { FadeIn, FadeInDown, FadeInUp, ZoomIn } from 'react-native-rea
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import {
+  isLegacyMutationLocked,
+  POSTQA_D_LOCK_MESSAGE_TITLE,
+  POSTQA_D_LOCK_MESSAGE_BODY,
+} from '../utils/postqa_d_locked_endpoints';
 import StarDisplay from '../components/ui/StarDisplay';
 import TranscendenceStars from '../components/ui/TranscendenceStars';
 import { heroPortraitSource } from '../components/ui/hopliteAssets';
@@ -320,6 +325,11 @@ export default function SoulForgeScreen() {
     // Snapshot selection BEFORE any state mutation to keep heroes alive on failure
     const heroIdsSnapshot = Array.from(selected);
     if (heroIdsSnapshot.length === 0) return;
+    // v108_POSTQA_D: blocco player-facing per endpoint legacy gateato lato backend.
+    if (isLegacyMutationLocked('/api/soul/forge')) {
+      Alert.alert(POSTQA_D_LOCK_MESSAGE_TITLE, POSTQA_D_LOCK_MESSAGE_BODY);
+      return;
+    }
     // INLINE_CONFIRM Track C: chiudi il pannello inline (NON Modal).
     setInlineConfirmOpen(false);
     setForgeError(null);

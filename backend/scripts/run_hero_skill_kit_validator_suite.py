@@ -3586,6 +3586,18 @@ OPTIONAL = [
     ('PROJECT-V108-POSTQA-C-FINAL-MULTIRUN-SUITE', 'validate_v108_postqa_c_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-64-v108-POSTQA-C-ROLLUP', 'validate_mega_release_acceleration_64_v108_postqa_c_rollup.py'),
 
+    # ===== v108_POSTQA_D - Authoritative Pre-Gates and Mutation Locks =====
+    # PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+    ('PROJECT-V108-POSTQA-D-BASELINE-MULTIRUN', 'validate_v108_postqa_d_baseline_multirun.py'),
+    ('PROJECT-V108-POSTQA-D-LEGACY-MUTATION-GATE-POLICY', 'validate_v108_postqa_d_legacy_mutation_gate_policy.py'),
+    ('PROJECT-V108-POSTQA-D-BACKEND-MUTATION-GATES', 'validate_v108_postqa_d_backend_mutation_gates.py'),
+    ('PROJECT-V108-POSTQA-D-FRONTEND-REACHABILITY-BLOCKERS', 'validate_v108_postqa_d_frontend_reachability_blockers.py'),
+    ('PROJECT-V108-POSTQA-D-AUTHORITATIVE-PREFLIGHT-CONTRACT', 'validate_v108_postqa_d_authoritative_preflight_contract.py'),
+    ('PROJECT-V108-POSTQA-D-SERVER-ID-LOADER-PREFLIGHT', 'validate_v108_postqa_d_server_id_loader_preflight.py'),
+    ('PROJECT-V108-POSTQA-D-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_postqa_d_runtime_invariant_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-65-v108-POSTQA-D-ROLLUP', 'validate_mega_release_acceleration_65_v108_postqa_d_rollup.py'),
+
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

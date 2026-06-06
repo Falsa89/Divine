@@ -5,6 +5,11 @@ import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import {
+  isLegacyMutationLocked,
+  POSTQA_D_LOCK_MESSAGE_TITLE,
+  POSTQA_D_LOCK_MESSAGE_BODY,
+} from '../utils/postqa_d_locked_endpoints';
 
 export default function FriendsScreen() {
   const router = useRouter();
@@ -34,6 +39,11 @@ export default function FriendsScreen() {
   };
 
   const gift = async (id: string) => {
+    // v108_POSTQA_D: blocco player-facing per endpoint legacy gateato lato backend.
+    if (isLegacyMutationLocked('/api/friends/gift')) {
+      Alert.alert(POSTQA_D_LOCK_MESSAGE_TITLE, POSTQA_D_LOCK_MESSAGE_BODY);
+      return;
+    }
     try {
       const r = await apiCall(`/api/friends/gift/${id}`, { method:'POST' });
       await refreshUser(); Alert.alert('Regalo inviato!', `1000 oro e 5 gemme a ${r.recipient}`);

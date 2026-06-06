@@ -8,6 +8,11 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from .game_data import STORY_CHAPTERS, EQUIPMENT_SLOTS, EQUIPMENT_TEMPLATES, DAILY_EVENTS
 
+# v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/hero/levelup
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 
 def register_combat_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -241,7 +246,17 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
     class LevelUpRequest(BaseModel):
         user_hero_id: str
 
-    @router.post("/hero/levelup")
+    @router.post(
+        "/hero/levelup",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS",
+                    "/api/hero/levelup",
+                )
+            )
+        ],
+    )
     async def level_up_hero(req: LevelUpRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         uh = await db.user_heroes.find_one({"id": req.user_hero_id, "user_id": uid})

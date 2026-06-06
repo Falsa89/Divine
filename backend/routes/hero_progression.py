@@ -15,6 +15,12 @@ from typing import Optional
 # SLC-F Batch-0/1: server/account scope helper (set-only-if-missing on insert)
 from utils.server_scope import ensure_server_scope
 
+# v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/hero/gain-exp,
+# /api/hero/levelup (combat.py), /api/fusion/star-up.
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 # ===================== LEVEL CAPS PER STAR (max 15 stars) =====================
 STAR_LEVEL_CAPS = {
     1: 30, 2: 50, 3: 70, 4: 90, 5: 110,
@@ -286,7 +292,17 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
         }
 
     # ==================== IMPROVED LEVEL UP (battle exp) ====================
-    @router.post("/hero/gain-exp")
+    @router.post(
+        "/hero/gain-exp",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS",
+                    "/api/hero/gain-exp",
+                )
+            )
+        ],
+    )
     async def gain_battle_exp(current_user: dict = Depends(get_current_user)):
         """Called after battles - distributes EXP to team heroes."""
         uid = current_user["id"]
@@ -744,7 +760,17 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
         fodder_any_ids: list = []   # IDs of any heroes to sacrifice (for low star fusions)
         fodder_5plus_ids: list = [] # IDs of 5★+ heroes to sacrifice
 
-    @router.post("/fusion/star-up")
+    @router.post(
+        "/fusion/star-up",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_FUSION_MUTATIONS",
+                    "/api/fusion/star-up",
+                )
+            )
+        ],
+    )
     async def star_fusion(req: StarFusionRequest, current_user: dict = Depends(get_current_user)):
         """Fuse heroes to increase stars (Hokage Crisis style)."""
         uid = current_user["id"]

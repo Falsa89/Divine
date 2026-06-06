@@ -6,6 +6,11 @@ import { useRouter } from 'expo-router';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat, withSequence, FadeIn, FadeInDown, SlideInLeft, SlideInRight } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import {
+  isLegacyMutationLocked,
+  POSTQA_D_LOCK_MESSAGE_TITLE,
+  POSTQA_D_LOCK_MESSAGE_BODY,
+} from '../utils/postqa_d_locked_endpoints';
 
 function ScoreBar({ myScore, enemyScore, myColor, enemyColor }: { myScore: number, enemyScore: number, myColor: string, enemyColor: string }) {
   const total = Math.max(1, myScore + enemyScore);
@@ -101,6 +106,11 @@ export default function GvGScreen() {
   };
 
   const endWar = async () => {
+    // v108_POSTQA_D: blocco player-facing per endpoint legacy gateato lato backend.
+    if (isLegacyMutationLocked('/api/gvg/end-war')) {
+      Alert.alert(POSTQA_D_LOCK_MESSAGE_TITLE, POSTQA_D_LOCK_MESSAGE_BODY);
+      return;
+    }
     Alert.alert('Termina Guerra', 'Vuoi terminare la guerra e assegnare le ricompense?', [
       { text: 'Annulla', style: 'cancel' },
       {

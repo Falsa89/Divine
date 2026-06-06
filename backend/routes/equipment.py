@@ -7,6 +7,10 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from .game_data import EQUIPMENT_TEMPLATES
 
+# v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/equipment/equip
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+
 
 def register_equipment_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -23,7 +27,17 @@ def register_equipment_routes(router, db, get_current_user, serialize_doc, calcu
         equipment_id: str
         user_hero_id: str
 
-    @router.post("/equipment/equip")
+    @router.post(
+        "/equipment/equip",
+        dependencies=[
+            Depends(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_EQUIPMENT_MUTATIONS",
+                    "/api/equipment/equip",
+                )
+            )
+        ],
+    )
     async def equip_item(req: EquipRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         equip = await db.user_equipment.find_one({"id": req.equipment_id, "user_id": uid})

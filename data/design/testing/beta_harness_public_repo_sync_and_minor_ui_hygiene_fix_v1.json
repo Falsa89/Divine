@@ -36,10 +36,26 @@
   "p1_b_back_arrow_unicode_hygiene": {
     "scope": "Sostituzione del literal raw '\\u2190' (8 caratteri visibili sullo schermo invece della freccia) con escape JSX '{\\'\\u2190\\'}' che renderizza correttamente il glifo arrow-left.",
     "files_fixed": [
-      {"file": "frontend/app/shop.tsx",       "md5_post": "ec4288eda7f74e8159433784e5eb4a2c", "back_arrow_pattern": "{'\\u2190'}"},
-      {"file": "frontend/app/battlepass.tsx", "md5_post": "54568b8cb75a07033f78ef6593aba839", "back_arrow_pattern": "{'\\u2190'}"},
-      {"file": "frontend/app/cosmetics.tsx",  "md5_post": "baf9559fea60af52e4be87a46ef2bb9c", "back_arrow_pattern": "{'\\u2190'}"},
-      {"file": "frontend/app/mail.tsx",       "md5_post": "dba1713ae97686273f44941388100d58", "back_arrow_pattern": "{'\\u2190'}"}
+      {
+        "file": "frontend/app/shop.tsx",
+        "md5_post": "ec4288eda7f74e8159433784e5eb4a2c",
+        "back_arrow_pattern": "{'\\u2190'}"
+      },
+      {
+        "file": "frontend/app/battlepass.tsx",
+        "md5_post": "f0317a32daabd23f42ef2ddac89752ab",
+        "back_arrow_pattern": "{'\\u2190'}"
+      },
+      {
+        "file": "frontend/app/cosmetics.tsx",
+        "md5_post": "baf9559fea60af52e4be87a46ef2bb9c",
+        "back_arrow_pattern": "{'\\u2190'}"
+      },
+      {
+        "file": "frontend/app/mail.tsx",
+        "md5_post": "dba1713ae97686273f44941388100d58",
+        "back_arrow_pattern": "{'\\u2190'}"
+      }
     ],
     "logic_changes": 0,
     "endpoint_changes": 0,
@@ -51,9 +67,19 @@
   },
   "p1_c_revalidation": {
     "validator_suite_command": "python3 /app/backend/scripts/run_hero_skill_kit_validator_suite.py --parallel",
-    "validator_suite_result": {"pass": 695, "fail": 0, "miss": 0, "overall": "PASS"},
+    "validator_suite_result": {
+      "pass": 695,
+      "fail": 0,
+      "miss": 0,
+      "overall": "PASS"
+    },
     "player_route_static_audit_command": "python3 /app/backend/scripts/run_player_route_static_audit.py",
-    "player_route_static_audit_result": {"pass": 13, "warn": 0, "fail": 0, "miss": 0},
+    "player_route_static_audit_result": {
+      "pass": 13,
+      "warn": 0,
+      "fail": 0,
+      "miss": 0
+    },
     "redis_command": "redis-cli ping",
     "redis_result": "PONG",
     "redis_supervisor_status": "RUNNING",

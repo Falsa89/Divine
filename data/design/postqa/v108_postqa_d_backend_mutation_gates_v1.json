@@ -1,0 +1,44 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_65_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS",
+  "description": "Stato dei gate backend high-risk: env flag default-OFF, codice di errore esplicito, nessuna scrittura DB quando il gate blocca.",
+  "lock_code": "LEGACY_MUTATION_LOCKED_BY_POSTQA_D",
+  "http_status_when_locked": 423,
+  "gate_utility_module": "backend/utils/postqa_d_mutation_gate.py",
+  "env_flags": [
+    {"name": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS", "default": false, "covers": ["/api/hero/gain-exp", "/api/hero/levelup"]},
+    {"name": "DIVINE_ALLOW_LEGACY_FUSION_MUTATIONS", "default": false, "covers": ["/api/fusion/star-up"]},
+    {"name": "DIVINE_ALLOW_LEGACY_SOUL_FORGE_MUTATIONS", "default": false, "covers": ["/api/soul/forge"]},
+    {"name": "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS", "default": false, "covers": ["/api/vip/add-spend", "/api/battlepass/buy-premium"]},
+    {"name": "DIVINE_ALLOW_LEGACY_SOCIAL_GIFT_MUTATIONS", "default": false, "covers": ["/api/friends/gift"]},
+    {"name": "DIVINE_ALLOW_LEGACY_GVG_ADMIN_MUTATIONS", "default": false, "covers": ["/api/gvg/end-war"]},
+    {"name": "DIVINE_ALLOW_LEGACY_EQUIPMENT_MUTATIONS", "default": false, "covers": ["/api/equipment/equip"]}
+  ],
+  "applied_endpoints": [
+    {"endpoint": "/api/hero/gain-exp", "file": "backend/routes/hero_progression.py", "gate": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS"},
+    {"endpoint": "/api/hero/levelup", "file": "backend/routes/combat.py", "gate": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS"},
+    {"endpoint": "/api/fusion/star-up", "file": "backend/routes/hero_progression.py", "gate": "DIVINE_ALLOW_LEGACY_FUSION_MUTATIONS"},
+    {"endpoint": "/api/soul/forge", "file": "backend/routes/soul_forge.py", "gate": "DIVINE_ALLOW_LEGACY_SOUL_FORGE_MUTATIONS"},
+    {"endpoint": "/api/vip/add-spend", "file": "backend/routes/economy.py", "gate": "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS"},
+    {"endpoint": "/api/battlepass/buy-premium", "file": "backend/routes/economy.py", "gate": "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS"},
+    {"endpoint": "/api/friends/gift", "file": "backend/routes/social.py", "gate": "DIVINE_ALLOW_LEGACY_SOCIAL_GIFT_MUTATIONS"},
+    {"endpoint": "/api/gvg/end-war", "file": "backend/routes/gvg.py", "gate": "DIVINE_ALLOW_LEGACY_GVG_ADMIN_MUTATIONS"},
+    {"endpoint": "/api/equipment/equip", "file": "backend/routes/equipment.py", "gate": "DIVINE_ALLOW_LEGACY_EQUIPMENT_MUTATIONS"}
+  ],
+  "behavior_when_locked": {
+    "db_write": false,
+    "reward_grant": false,
+    "progress_mutation": false,
+    "economy_mutation": false,
+    "http_status": 423,
+    "error_code": "LEGACY_MUTATION_LOCKED_BY_POSTQA_D"
+  },
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "release_readiness_claimed": false,
+    "flag_enabled_by_default": false
+  }
+}

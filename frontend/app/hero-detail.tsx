@@ -5,6 +5,11 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import {
+  isLegacyMutationLocked,
+  POSTQA_D_LOCK_MESSAGE_TITLE,
+  POSTQA_D_LOCK_MESSAGE_BODY,
+} from '../utils/postqa_d_locked_endpoints';
 import ScreenHeader from '../components/ui/ScreenHeader';
 import TabSelector from '../components/ui/TabSelector';
 import GradientButton from '../components/ui/GradientButton';
@@ -93,6 +98,11 @@ export default function HeroDetailScreen() {
   };
 
   const doLevelUp = async () => {
+    // v108_POSTQA_D: blocco player-facing per endpoint legacy gateato lato backend.
+    if (isLegacyMutationLocked('/api/hero/gain-exp')) {
+      Alert.alert(POSTQA_D_LOCK_MESSAGE_TITLE, POSTQA_D_LOCK_MESSAGE_BODY);
+      return;
+    }
     setActing(true);
     try {
       const r = await apiCall('/api/hero/gain-exp', {
@@ -112,6 +122,11 @@ export default function HeroDetailScreen() {
   };
 
   const doStarFusion = async () => {
+    // v108_POSTQA_D: blocco player-facing per endpoint legacy gateato lato backend.
+    if (isLegacyMutationLocked('/api/fusion/star-up')) {
+      Alert.alert(POSTQA_D_LOCK_MESSAGE_TITLE, POSTQA_D_LOCK_MESSAGE_BODY);
+      return;
+    }
     Alert.alert(
       'Fusione Stelle',
       `Vuoi fondere ${data?.name} da ${fusionInfo?.current_stars}\u2B50 a ${fusionInfo?.target_stars}\u2B50?`,

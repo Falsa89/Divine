@@ -9,6 +9,12 @@ from pydantic import BaseModel
 from utils.server_scope import ensure_server_scope
 from .game_data import SHOP_ITEMS, DAILY_FREE, BATTLE_PASS_REWARDS, SERVERS, VIP_LEVELS
 
+# v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/battlepass/buy-premium,
+# /api/vip/add-spend.
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 
 def register_economy_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -147,7 +153,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
         await db.battle_pass.update_one({"user_id": uid}, {"$set": {"claimed_free": claimed_free, "claimed_premium": claimed_premium}})
         return {"success": True, "rewards": rewards_given}
 
-    @router.post("/battlepass/buy-premium")
+    @router.post(
+        "/battlepass/buy-premium",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS",
+                    "/api/battlepass/buy-premium",
+                )
+            )
+        ],
+    )
     async def buy_premium_pass(current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         user = await db.users.find_one({"id": uid})
@@ -282,7 +298,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
         await db.vip_data.update_one({"user_id": uid}, {"$set": {"last_daily_claim": datetime.utcnow()}}, upsert=True)
         return {"success": True, "gems_received": daily_gems}
 
-    @router.post("/vip/add-spend")
+    @router.post(
+        "/vip/add-spend",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_MONETIZATION_MUTATIONS",
+                    "/api/vip/add-spend",
+                )
+            )
+        ],
+    )
     async def add_vip_spend(current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         amount = 100
