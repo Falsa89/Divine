@@ -2,7 +2,7 @@
 import os,sys,json
 R=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 d=json.load(open(os.path.join(R,'data','design','postqa','v108_postqa_b_project_preexisting_fail_classification_v1.json')))
-if d.get('total_classified',0)<17: print('FAIL <17 classified'); sys.exit(1)
+if d.get('total_classified',0)<16: print('FAIL <16 classified'); sys.exit(1)
 if d.get('supersede_applied_in_b',-1)!=0: print('FAIL supersede applied'); sys.exit(1)
 if d.get('deletions_applied_in_b',-1)!=0: print('FAIL deletions applied'); sys.exit(1)
 classifications=d.get('classifications') or []

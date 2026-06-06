@@ -3,34 +3,129 @@
   "type": "project_preexisting_fail_classification",
   "version": 1,
   "language": "italian",
-  "total_classified": 17,
+  "total_classified": 16,
   "supersede_applied_in_b": 0,
   "deletions_applied_in_b": 0,
   "classifications": [
-    {"validator_id": "PROJECT-ALIGN-FIX-TRACK-H-COMPLETION", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "Track H di un progetto legacy. Manca artifact JSON dichiarato come 'completion'.", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "Menu hardening track F batch1 v2 legacy artifact mismatch", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-BETA-TESTING-TRACK-G-REPORTING", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "Reporting artifact legacy missing", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-FORGE-CRASH-TRACK-G-HYGIENE", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "Forge crash hygiene legacy artifact", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-GACHA-RATE-SANITY-FINAL-SIGNOFF", "decision": "deferred_to_v110_economy_migration", "root_cause": "Gacha rate sanity signoff dipende da economy authoritative", "replacement_invariant": null, "risk": "P2"},
-    {"validator_id": "PROJECT-INLINE-CONFIRM-TRACK-E-API-CONTRACT", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "Inline confirm track E API contract legacy", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING", "decision": "deferred_to_v108_authoritative", "root_cause": "Project M track B status seam wiring richiede battle engine authoritative", "replacement_invariant": "validate_v108_postqa_invariant_no_generate_enemy_player_facing.py", "risk": "P2"},
-    {"validator_id": "PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE", "decision": "deferred_to_v108_authoritative", "root_cause": "Canary RC gate richiede authoritative env", "replacement_invariant": null, "risk": "P2"},
-    {"validator_id": "PROJECT-SF-MERGE-TRACK-F-NAVIGATION", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "SF merge track F navigation legacy", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-SF-MERGE-TRACK-H-COMPLETION", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "SF merge track H completion legacy", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION", "decision": "deferred_to_v109_social_isolation", "root_cause": "SP auth track F mutation regression legacy, target v109", "replacement_invariant": null, "risk": "P2"},
-    {"validator_id": "PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "SP dual read track H legacy", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "SP UI lock track H legacy", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH", "decision": "deferred_to_v108_authoritative", "root_cause": "Project V track F kill switch richiede authoritative env", "replacement_invariant": "validate_v108_postqa_invariant_no_bot_default_startup.py", "risk": "P2"},
-    {"validator_id": "PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "story-first-node-runtime-preview.tsx fuori scope POSTQA_A/A2", "replacement_invariant": null, "risk": "P3"},
-    {"validator_id": "SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1", "decision": "deferred_to_v108_POSTQA_C", "root_cause": "SLC-F minor write surfaces audit legacy", "replacement_invariant": null, "risk": "P2"},
-    {"validator_id": "PROJECT-BETA-TESTING-TRACK-F-REDIS", "decision": "closed_by_redis_install", "root_cause": "Risolto in v108_POSTQA_B: Redis ora installato e daemon attivo. Validator passa nelle run successive.", "replacement_invariant": null, "risk": "resolved"}
+    {
+      "validator_id": "PROJECT-ALIGN-FIX-TRACK-H-COMPLETION",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "Track H di un progetto legacy. Manca artifact JSON dichiarato come 'completion'.",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "Menu hardening track F batch1 v2 legacy artifact mismatch",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-BETA-TESTING-TRACK-G-REPORTING",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "Reporting artifact legacy missing",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-FORGE-CRASH-TRACK-G-HYGIENE",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "Forge crash hygiene legacy artifact",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-GACHA-RATE-SANITY-FINAL-SIGNOFF",
+      "decision": "deferred_to_v110_economy_migration",
+      "root_cause": "Gacha rate sanity signoff dipende da economy authoritative",
+      "replacement_invariant": null,
+      "risk": "P2"
+    },
+    {
+      "validator_id": "PROJECT-INLINE-CONFIRM-TRACK-E-API-CONTRACT",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "Inline confirm track E API contract legacy",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING",
+      "decision": "deferred_to_v108_authoritative",
+      "root_cause": "Project M track B status seam wiring richiede battle engine authoritative",
+      "replacement_invariant": "validate_v108_postqa_invariant_no_generate_enemy_player_facing.py",
+      "risk": "P2"
+    },
+    {
+      "validator_id": "PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE",
+      "decision": "deferred_to_v108_authoritative",
+      "root_cause": "Canary RC gate richiede authoritative env",
+      "replacement_invariant": null,
+      "risk": "P2"
+    },
+    {
+      "validator_id": "PROJECT-SF-MERGE-TRACK-F-NAVIGATION",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "SF merge track F navigation legacy",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-SF-MERGE-TRACK-H-COMPLETION",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "SF merge track H completion legacy",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION",
+      "decision": "deferred_to_v109_social_isolation",
+      "root_cause": "SP auth track F mutation regression legacy, target v109",
+      "replacement_invariant": null,
+      "risk": "P2"
+    },
+    {
+      "validator_id": "PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "SP dual read track H legacy",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "SP UI lock track H legacy",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH",
+      "decision": "deferred_to_v108_authoritative",
+      "root_cause": "Project V track F kill switch richiede authoritative env",
+      "replacement_invariant": "validate_v108_postqa_invariant_no_bot_default_startup.py",
+      "risk": "P2"
+    },
+    {
+      "validator_id": "PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "story-first-node-runtime-preview.tsx fuori scope POSTQA_A/A2",
+      "replacement_invariant": null,
+      "risk": "P3"
+    },
+    {
+      "validator_id": "SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1",
+      "decision": "deferred_to_v108_POSTQA_C",
+      "root_cause": "SLC-F minor write surfaces audit legacy",
+      "replacement_invariant": null,
+      "risk": "P2"
+    }
   ],
   "summary": {
-    "deferred_to_v108_POSTQA_C": 12,
+    "deferred_to_v108_POSTQA_C": 11,
     "deferred_to_v108_authoritative": 3,
     "deferred_to_v109_social_isolation": 1,
     "deferred_to_v110_economy_migration": 1,
-    "closed_by_redis_install": 1,
+    "closed_by_redis_install": 0,
     "keep_failing_indefinitely": 0,
     "historical_guardian_to_reconcile_later": 0
   },
@@ -40,5 +135,7 @@
     "fake_PASS": false,
     "validator_weakening": false,
     "silent_validator_deletion": false
-  }
+  },
+  "hotfix_b1_applied": true,
+  "hotfix_b1_reason": "Rimosso PROJECT-BETA-TESTING-TRACK-F-REDIS dalla classification (era categorizzato come environmental nel triage A2, non nei 17 PROJECT-* preexisting). Totale ora 16 PROJECT-* classificati. Summary RICALCOLATO direttamente da Counter sulle classifications reali (single source of truth). I 17 originali del triage A2 includevano BETA-TESTING-REDIS che ora e' chiuso dalla Redis install (vedi v108_postqa_b_redis_environmental_stabilization_v1.json). 16+1(closed_in_redis_track)=17 PROJECT-* preexisting originali tracciati. Mathematics: 16=11+3+1+1, total ok."
 }

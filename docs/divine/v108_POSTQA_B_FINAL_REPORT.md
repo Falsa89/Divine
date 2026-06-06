@@ -114,17 +114,20 @@ Aggiunto alla watchlist reale (`data/design/postqa/v108_postqa_legacy_mutation_w
 ## 7. 17 PROJECT-* classification (Track E)
 
 File: `data/design/postqa/v108_postqa_b_project_preexisting_fail_classification_v1.json`
-Validator: `validate_v108_postqa_b_project_preexisting_fail_classification.py` → **PASS** (17/17 classified).
+Validator: `validate_v108_postqa_b_project_preexisting_fail_classification.py` → **PASS** (16/16 classified, coerente con A2).
+
+**Nota hotfix B1 (correzione conteggio):**
+> Il triage A2 listava 17 entry totali sotto la sezione "preexisting baseline", ma una di queste (`PROJECT-BETA-TESTING-TRACK-F-REDIS`) era in realtà categorizzata come `environmental`. La sua chiusura è documentata nel file di environmental stabilization, NON qui. La classification B contiene quindi i **16 veri PROJECT-* preexisting**, somma esatta delle decision:
 
 ```
-deferred_to_v108_POSTQA_C        = 12   (track legacy generici → continueranno in C)
-deferred_to_v108_authoritative   = 3    (M-TRACK-B, M-TRACK-G, V-TRACK-F kill switch)
-deferred_to_v109_social_isolation = 1   (SP-AUTH-TRACK-F)
-deferred_to_v110_economy_migration = 1  (GACHA-RATE-SANITY-FINAL-SIGNOFF)
-closed_by_redis_install          = 1    (BETA-TESTING-TRACK-F-REDIS)
-supersede_applied_in_b           = 0
-deletions_applied_in_b           = 0
-historical_guardian_to_reconcile_later = 0
+deferred_to_v108_POSTQA_C          = 11
+deferred_to_v108_authoritative     = 3    (M-TRACK-B, M-TRACK-G, V-TRACK-F kill switch)
+deferred_to_v109_social_isolation  = 1    (SP-AUTH-TRACK-F)
+deferred_to_v110_economy_migration = 1    (GACHA-RATE-SANITY-FINAL-SIGNOFF)
+closed_by_redis_install            = 0    (Redis closure tracciato in env stabilization JSON)
+TOTALE                             = 16   ✅ match con classifications list
+supersede_applied_in_b             = 0
+deletions_applied_in_b             = 0
 ```
 
 **Onestà:** nessun supersede applicato. Ogni decision ha `root_cause` documentato. Dove esiste invariant runtime equivalente, è listato nel campo `replacement_invariant` (M-TRACK-B → preview_no_simulate, V-TRACK-F → no_bot_default_startup).
@@ -152,11 +155,13 @@ Tutti i 10 runtime-invariant validator v108_POSTQA_A continuano a girare e a pas
 
 ## 9. File modificati / creati
 
-### Creati (15 file)
-- 8 validator B `validate_v108_postqa_b_*.py` + 1 rollup
-- 7 JSON design `data/design/postqa/v108_postqa_b_*.json`
-- `data/design/release_acceleration/mega_release_acceleration_63_v108_postqa_b_rollup_marker_v1.json`
-- `docs/divine/v108_POSTQA_B_FINAL_REPORT.md`
+### Creati (17 totali: 8 validator + 7 JSON + 1 marker rollup + 1 report)
+- **8 validator Python** in `backend/scripts/`: 7 sub `validate_v108_postqa_b_*.py` + 1 rollup `validate_mega_release_acceleration_63_v108_postqa_b_rollup.py`
+- **7 JSON design** in `data/design/postqa/`: baseline_multirun, redis_environmental_stabilization, json_drift_stabilization, watchlist_equipment_equip_added, project_preexisting_fail_classification, runtime_invariant_preservation, final_multirun_suite_result
+- **1 marker rollup**: `data/design/release_acceleration/mega_release_acceleration_63_v108_postqa_b_rollup_marker_v1.json`
+- **1 report finale**: `docs/divine/v108_POSTQA_B_FINAL_REPORT.md` (questo file)
+
+> Nota hotfix B1: nel report originale era riportato "15" come subtotale principale (8 validator + 7 JSON), escludendo marker e report. Chiarito ora: **15 nei subtotali principali, 17 totali** (compresi marker rollup auto-generato e report finale).
 
 ### Modificati (2 file)
 - `data/design/postqa/v108_postqa_legacy_mutation_watchlist_v1.json` — aggiunto 23° endpoint `/api/equipment/equip`
