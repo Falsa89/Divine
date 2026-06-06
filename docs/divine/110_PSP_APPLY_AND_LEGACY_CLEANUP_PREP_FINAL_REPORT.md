@@ -44,7 +44,7 @@
 ## Commit Hash
 
 - Pre-pack HEAD: `4a2fadbc5424bb087eba97789939c9cab73b0fc3`
-- Post-pack commit: vedi `git log` post-merge (creato dopo questo report).
+- Post-pack commit: `be3ee1c7bb1fd19e87967df8cf4eb0c4eec9c35e`
 
 ---
 
