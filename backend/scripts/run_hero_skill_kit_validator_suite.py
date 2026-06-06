@@ -3555,6 +3555,22 @@ OPTIONAL = [
     ('PROJECT-V108-POSTQA-A2-FINAL-MULTIRUN-SUITE-RESULT', 'validate_v108_postqa_a2_final_multirun_suite_result.py'),
     ('MEGA-RELEASE-ACCELERATION-62-v108-POSTQA-A2-ROLLUP', 'validate_mega_release_acceleration_62_v108_postqa_a2_rollup.py'),
 
+    # v108_POSTQA_B - MEGA_RELEASE_ACCELERATION_63_ENVIRONMENTAL_AND_DRIFT_STABILIZATION
+    # PUBLIC_SYNC_TAG_v108_POSTQA_B_ENVIRONMENTAL_AND_DRIFT_STABILIZATION
+    # Redis installato (chiude 5+1 environmental fail), /api/equipment/equip aggiunto
+    # alla mutation watchlist (23 endpoint), 17 PROJECT-* preexisting classificati
+    # con decision-per-uno (12 → v108_POSTQA_C, 3 → v108_authoritative, 1 → v109, 1 → v110, 1 closed).
+    # JSON drift stabilization deferita onestamente a v108_POSTQA_C. Runtime invariant
+    # 10/10 preservati. NO gameplay, NO PSP, NO reward, NO progress, NO formula rewrite.
+    ('PROJECT-V108-POSTQA-B-BASELINE-MULTIRUN', 'validate_v108_postqa_b_baseline_multirun.py'),
+    ('PROJECT-V108-POSTQA-B-REDIS-ENVIRONMENTAL-STABILIZATION', 'validate_v108_postqa_b_redis_environmental_stabilization.py'),
+    ('PROJECT-V108-POSTQA-B-JSON-DRIFT-STABILIZATION', 'validate_v108_postqa_b_json_drift_stabilization.py'),
+    ('PROJECT-V108-POSTQA-B-WATCHLIST-EQUIPMENT-EQUIP-ADDED', 'validate_v108_postqa_b_watchlist_equipment_equip_added.py'),
+    ('PROJECT-V108-POSTQA-B-PROJECT-PREEXISTING-FAIL-CLASSIFICATION', 'validate_v108_postqa_b_project_preexisting_fail_classification.py'),
+    ('PROJECT-V108-POSTQA-B-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_postqa_b_runtime_invariant_preservation.py'),
+    ('PROJECT-V108-POSTQA-B-FINAL-MULTIRUN-SUITE', 'validate_v108_postqa_b_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-63-v108-POSTQA-B-ROLLUP', 'validate_mega_release_acceleration_63_v108_postqa_b_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

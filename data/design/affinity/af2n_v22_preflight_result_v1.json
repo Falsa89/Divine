@@ -4,7 +4,7 @@
   "design_only": false,
   "runtime_attached": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-06-06T00:03:57.784686Z",
+  "generated_at_utc": "2026-06-06T00:24:44.975650Z",
   "overall_status": "PASS",
   "gates": {
     "api_health_200": true,
@@ -44,15 +44,15 @@
   "locust_path": "/usr/local/bin/locust",
   "locust_version": "locust 2.44.0 from /usr/local/lib/python3.11/site-packages/locust (Python 3.11.15)",
   "redis_availability": {
-    "redis_server_binary": false,
-    "redis_cli_binary": false,
+    "redis_server_binary": true,
+    "redis_cli_binary": true,
     "redis_url_env_set": false,
     "redis_url_value": null,
     "py_redis_package": true,
     "py_redis_version": "8.0.0",
-    "redis_alive_ping": false,
-    "redis_alive_detail": null,
-    "overall_redis_available": false
+    "redis_alive_ping": true,
+    "redis_alive_detail": "PONG",
+    "overall_redis_available": true
   },
   "canary_status_snapshot": {
     "task_origin": "AF2-N-READINESS-DASH",

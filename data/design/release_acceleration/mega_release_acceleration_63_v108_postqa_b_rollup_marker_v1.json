@@ -1,0 +1,55 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_63_v108_POSTQA_B_ENVIRONMENTAL_AND_DRIFT_STABILIZATION",
+  "type": "v108_postqa_b_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-06T00:24:29.662340Z",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v108_POSTQA_B_ENVIRONMENTAL_AND_DRIFT_STABILIZATION",
+  "validators_total": 7,
+  "validators_pass": 7,
+  "results": [
+    {
+      "validator": "validate_v108_postqa_b_baseline_multirun.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_B baseline multirun"
+    },
+    {
+      "validator": "validate_v108_postqa_b_redis_environmental_stabilization.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_B redis environmental stabilization (PONG verified)"
+    },
+    {
+      "validator": "validate_v108_postqa_b_json_drift_stabilization.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_B json drift stabilization (deferred onestamente)"
+    },
+    {
+      "validator": "validate_v108_postqa_b_watchlist_equipment_equip_added.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_B watchlist /api/equipment/equip added (23 endpoints)"
+    },
+    {
+      "validator": "validate_v108_postqa_b_project_preexisting_fail_classification.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_B 17 PROJECT-* preexisting classified (17)"
+    },
+    {
+      "validator": "validate_v108_postqa_b_runtime_invariant_preservation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_B runtime invariant preservation (10/10 + rollup, no drift)"
+    },
+    {
+      "validator": "validate_v108_postqa_b_final_multirun_suite.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_B final multirun (22/30 optional, 3 run deterministic)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_63_v108_POSTQA_B_ENVIRONMENTAL_AND_DRIFT_STABILIZATION_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "optional_fail_final": 22,
+  "optional_fail_target_max": 30,
+  "rollup_b_pass_does_not_imply_global_release_readiness": true,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false
+  }
+}

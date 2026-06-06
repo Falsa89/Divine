@@ -3,33 +3,261 @@
   "type": "legacy_mutation_watchlist",
   "version": 1,
   "language": "italian",
-  "description": "Watchlist consolidata degli endpoint legacy MUTANTI da blocchi audit 1-10. In v108_POSTQA_A non vengono ne' bloccati ne' rimossi: vengono solo TRACCIATI come P0 con priorita' e roadmap. Nessuna modifica live su questi endpoint in questo pack.",
+  "description": "Watchlist consolidata degli endpoint legacy MUTANTI da blocchi audit 1-10. In v108_POSTQA_A non vengono ne' bloccati ne' rimossi: vengono solo TRACCIATI come P0 con priorita' e roadmap. Nessuna modifica live su questi endpoint in questo pack. [v108_POSTQA_B: aggiunto /api/equipment/equip come 23esimo endpoint]",
   "endpoints": [
-    {"endpoint": "/api/story/battle", "category": "battle_legacy", "mutates": ["gold", "exp", "user_heroes_exp", "inventory_drops", "story_progress"], "player_facing_gated": "qa_only_via_EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE", "target_pack": "v108_authoritative", "priority": "P0"},
-    {"endpoint": "/api/tower/battle", "category": "battle_legacy", "mutates": ["gold", "exp", "tower_progress", "rewards"], "target_pack": "v108_authoritative", "priority": "P0"},
-    {"endpoint": "/api/pvp/battle", "category": "battle_legacy", "mutates": ["pvp_points", "rewards", "rank"], "target_pack": "v108_authoritative", "priority": "P0"},
-    {"endpoint": "/api/events/battle", "category": "battle_legacy", "mutates": ["event_progress", "rewards"], "target_pack": "v108_authoritative", "priority": "P0"},
-    {"endpoint": "/api/raid/attack", "category": "battle_legacy", "mutates": ["raid_progress", "rewards"], "target_pack": "v108_authoritative", "priority": "P0"},
-    {"endpoint": "/api/gvg/attack", "category": "guild_war_legacy", "mutates": ["gvg_state", "rewards"], "target_pack": "v109_guild_isolation", "priority": "P0"},
-    {"endpoint": "/api/gvg/end-war", "category": "guild_war_legacy", "mutates": ["gvg_state", "rewards", "rankings"], "target_pack": "v109_guild_isolation", "priority": "P0"},
-    {"endpoint": "/api/territory/attack", "category": "battle_legacy", "mutates": ["territory_state", "rewards"], "target_pack": "v108_authoritative", "priority": "P0"},
-    {"endpoint": "/api/friends/gift", "category": "social_legacy", "mutates": ["friend_points", "gold", "inventory"], "target_pack": "v109_social_isolation", "priority": "P1"},
-    {"endpoint": "/api/gacha/pull", "category": "economy_legacy", "mutates": ["currency", "inventory", "user_heroes"], "target_pack": "v110_economy_migration", "priority": "P0"},
-    {"endpoint": "/api/inventory/use-exp", "category": "economy_legacy", "mutates": ["inventory", "user_heroes_exp"], "target_pack": "v110_economy_migration", "priority": "P1"},
-    {"endpoint": "/api/hero/gain-exp", "category": "hero_progression_legacy", "mutates": ["user_heroes_exp", "user_heroes_level"], "target_pack": "v110_economy_migration", "priority": "P0"},
-    {"endpoint": "/api/hero/levelup", "category": "hero_progression_legacy", "mutates": ["user_heroes_level", "stat_block"], "target_pack": "v110_economy_migration", "priority": "P0"},
-    {"endpoint": "/api/fusion/star-up", "category": "hero_progression_legacy", "mutates": ["user_heroes_stars", "materials_consumed"], "target_pack": "v110_economy_migration", "priority": "P0"},
-    {"endpoint": "/api/soul/forge", "category": "economy_legacy", "mutates": ["souls", "inventory"], "target_pack": "v110_economy_migration", "priority": "P1"},
-    {"endpoint": "/api/shop/buy", "category": "economy_legacy", "mutates": ["currency", "inventory"], "target_pack": "v110_economy_migration", "priority": "P0"},
-    {"endpoint": "/api/battlepass/buy-premium", "category": "monetization_legacy", "mutates": ["currency", "battlepass_state"], "target_pack": "v110_economy_migration", "priority": "P0"},
-    {"endpoint": "/api/vip/add-spend", "category": "monetization_legacy", "mutates": ["vip_state", "spend_log"], "target_pack": "v110_economy_migration", "priority": "P0"},
-    {"endpoint": "/api/mail/claim", "category": "social_legacy", "mutates": ["mail_state", "inventory"], "target_pack": "v109_social_isolation", "priority": "P1"},
-    {"endpoint": "/api/achievements/claim", "category": "progression_legacy", "mutates": ["achievements_state", "rewards"], "target_pack": "v110_economy_migration", "priority": "P1"},
-    {"endpoint": "/api/cosmetics/buy", "category": "monetization_legacy", "mutates": ["currency", "cosmetics_state"], "target_pack": "v110_economy_migration", "priority": "P1"},
-    {"endpoint": "/api/battle/simulate", "category": "battle_legacy", "mutates": ["gold", "exp", "user_heroes_exp", "inventory_drops", "affinity"], "preview_guard_applied_v108_postqa_a": true, "target_pack": "v108_authoritative", "priority": "P0"}
+    {
+      "endpoint": "/api/story/battle",
+      "category": "battle_legacy",
+      "mutates": [
+        "gold",
+        "exp",
+        "user_heroes_exp",
+        "inventory_drops",
+        "story_progress"
+      ],
+      "player_facing_gated": "qa_only_via_EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE",
+      "target_pack": "v108_authoritative",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/tower/battle",
+      "category": "battle_legacy",
+      "mutates": [
+        "gold",
+        "exp",
+        "tower_progress",
+        "rewards"
+      ],
+      "target_pack": "v108_authoritative",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/pvp/battle",
+      "category": "battle_legacy",
+      "mutates": [
+        "pvp_points",
+        "rewards",
+        "rank"
+      ],
+      "target_pack": "v108_authoritative",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/events/battle",
+      "category": "battle_legacy",
+      "mutates": [
+        "event_progress",
+        "rewards"
+      ],
+      "target_pack": "v108_authoritative",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/raid/attack",
+      "category": "battle_legacy",
+      "mutates": [
+        "raid_progress",
+        "rewards"
+      ],
+      "target_pack": "v108_authoritative",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/gvg/attack",
+      "category": "guild_war_legacy",
+      "mutates": [
+        "gvg_state",
+        "rewards"
+      ],
+      "target_pack": "v109_guild_isolation",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/gvg/end-war",
+      "category": "guild_war_legacy",
+      "mutates": [
+        "gvg_state",
+        "rewards",
+        "rankings"
+      ],
+      "target_pack": "v109_guild_isolation",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/territory/attack",
+      "category": "battle_legacy",
+      "mutates": [
+        "territory_state",
+        "rewards"
+      ],
+      "target_pack": "v108_authoritative",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/friends/gift",
+      "category": "social_legacy",
+      "mutates": [
+        "friend_points",
+        "gold",
+        "inventory"
+      ],
+      "target_pack": "v109_social_isolation",
+      "priority": "P1"
+    },
+    {
+      "endpoint": "/api/gacha/pull",
+      "category": "economy_legacy",
+      "mutates": [
+        "currency",
+        "inventory",
+        "user_heroes"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/inventory/use-exp",
+      "category": "economy_legacy",
+      "mutates": [
+        "inventory",
+        "user_heroes_exp"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P1"
+    },
+    {
+      "endpoint": "/api/hero/gain-exp",
+      "category": "hero_progression_legacy",
+      "mutates": [
+        "user_heroes_exp",
+        "user_heroes_level"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/hero/levelup",
+      "category": "hero_progression_legacy",
+      "mutates": [
+        "user_heroes_level",
+        "stat_block"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/fusion/star-up",
+      "category": "hero_progression_legacy",
+      "mutates": [
+        "user_heroes_stars",
+        "materials_consumed"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/soul/forge",
+      "category": "economy_legacy",
+      "mutates": [
+        "souls",
+        "inventory"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P1"
+    },
+    {
+      "endpoint": "/api/shop/buy",
+      "category": "economy_legacy",
+      "mutates": [
+        "currency",
+        "inventory"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/battlepass/buy-premium",
+      "category": "monetization_legacy",
+      "mutates": [
+        "currency",
+        "battlepass_state"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/vip/add-spend",
+      "category": "monetization_legacy",
+      "mutates": [
+        "vip_state",
+        "spend_log"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/mail/claim",
+      "category": "social_legacy",
+      "mutates": [
+        "mail_state",
+        "inventory"
+      ],
+      "target_pack": "v109_social_isolation",
+      "priority": "P1"
+    },
+    {
+      "endpoint": "/api/achievements/claim",
+      "category": "progression_legacy",
+      "mutates": [
+        "achievements_state",
+        "rewards"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P1"
+    },
+    {
+      "endpoint": "/api/cosmetics/buy",
+      "category": "monetization_legacy",
+      "mutates": [
+        "currency",
+        "cosmetics_state"
+      ],
+      "target_pack": "v110_economy_migration",
+      "priority": "P1"
+    },
+    {
+      "endpoint": "/api/battle/simulate",
+      "category": "battle_legacy",
+      "mutates": [
+        "gold",
+        "exp",
+        "user_heroes_exp",
+        "inventory_drops",
+        "affinity"
+      ],
+      "preview_guard_applied_v108_postqa_a": true,
+      "target_pack": "v108_authoritative",
+      "priority": "P0"
+    },
+    {
+      "endpoint": "/api/equipment/equip",
+      "category": "hero_progression_legacy",
+      "mutates": [
+        "user_heroes_equipment_slot",
+        "equipment_state",
+        "stat_block_recalc"
+      ],
+      "target_pack": "v108_POSTQA_D_or_v111_equipment_isolation",
+      "priority": "P1",
+      "status": "tracked_pending_fix",
+      "reason": "Account-wide equipment mutation; server-scope pending; deve essere converted authoritative dopo loader server_id adoption.",
+      "added_in_pack": "v108_POSTQA_B"
+    }
   ],
   "safety": {
-    "endpoints_modified": ["/api/battle/simulate"],
+    "endpoints_modified": [
+      "/api/battle/simulate"
+    ],
     "endpoints_modification_type": "preview_guard_only_no_formula_rewrite",
     "endpoints_deleted": [],
     "reward_grant": false,
