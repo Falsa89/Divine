@@ -25,7 +25,7 @@ Nessuna release readiness dichiarata. Nessun reward/progress live abilitato. Nes
 ## Commit Hash
 
 - Pre-pack HEAD: `64d56cb7109887df4e879588834d517436f7b685`
-- Post-pack commit: vedi git log post-merge (commit verrà creato dopo questo report).
+- Post-pack commit: `76d2ba5654a5648d0799e06d2894f472aee14b87`
 
 ---
 
