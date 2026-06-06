@@ -1,0 +1,57 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "environment": "staging",
+  "production_db_forbidden_in_smoke": true,
+  "sample_size": {
+    "users": 5,
+    "user_heroes": 25,
+    "team_formation": 5,
+    "user_equipment": 5,
+    "story_progress": 5
+  },
+  "steps": [
+    "step_01_mongodump_backup_staging",
+    "step_02_run_apply_with_dry_run_flag",
+    "step_03_run_apply_with_plan_only_flag",
+    "step_04_run_apply_with_limit_5",
+    "step_05_verify_psp_count_matches_limit",
+    "step_06_verify_no_duplicate_psp",
+    "step_07_verify_premium_balance_unchanged",
+    "step_08_verify_hard_balance_unchanged",
+    "step_09_verify_soft_balance_aggregated_per_user_unchanged",
+    "step_10_verify_team_size_unchanged_6",
+    "step_11_run_apply_idempotent_second_time_with_limit_5",
+    "step_12_verify_psp_count_unchanged",
+    "step_13_validate_v109_v110_runtime_invariants",
+    "step_14_run_rollback_dry_run",
+    "step_15_validate_rollback_restores_pre_apply_state_signature"
+  ],
+  "expected_results": {
+    "psp_inserts_first_run": 5,
+    "psp_inserts_second_run_with_same_limit": 0,
+    "db_writes_in_dry_run": 0,
+    "db_writes_in_plan_only": 0,
+    "db_writes_in_apply_limit_5": "<= writes_budget(5 user)",
+    "premium_balance_diff": 0,
+    "hard_balance_diff": 0,
+    "team_size_diff": 0,
+    "runtime_invariants_pass": true
+  },
+  "abort_conditions": [
+    "any_premium_balance_mismatch",
+    "any_hard_balance_mismatch",
+    "any_team_size_drift",
+    "any_duplicate_psp",
+    "any_legacy_delete",
+    "runtime_invariant_failure"
+  ],
+  "smoke_executed_in_this_pack": false,
+  "db_writes_in_this_pack": 0,
+  "safety_flags": {
+    "production_db_smoke": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "track": "I",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "server_id_filter_applied": false,
+  "real_player_team_source": false,
+  "psp_migration_readiness": "DESIGN_READY_NOT_APPLIED",
+  "legacy_cleanup_readiness": "NOT_READY",
+  "live_overall_ready": false,
+  "preconditions_changed_in_v110_apply_preflight": [],
+  "preconditions_now_pass_after_v110_apply_preflight": [],
+  "preconditions_still_blocked_after_v110_apply_preflight": [
+    "server_id_filter_applied",
+    "real_player_team_source",
+    "psp_migration_readiness",
+    "legacy_cleanup_readiness"
+  ],
+  "rationale": "Implementare la logica apply NON la esegue. Tutte le precondizioni restano nello stesso stato del pack v110 prep, eccetto che psp_migration_readiness passa da PREP_READY_APPLY_GATED a DESIGN_READY_NOT_APPLIED (semantica equivalente, più onesta).",
+  "safety_flags": {
+    "false_filter_applied": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

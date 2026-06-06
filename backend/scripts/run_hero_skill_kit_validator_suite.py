@@ -3670,6 +3670,22 @@ OPTIONAL = [
     ('PROJECT-V110-FINAL-MULTIRUN-SUITE', 'validate_v110_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-70-v110-PSP-PREP-ROLLUP', 'validate_mega_release_acceleration_70_v110_psp_prep_rollup.py'),
 
+    # ===== v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED - apply/backup/rollback real, gated, NOT executed =====
+    # PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED
+    ('PROJECT-V110-APPLY-IMPL-BASELINE-MULTIRUN', 'validate_v110_apply_impl_baseline_multirun.py'),
+    ('PROJECT-V110-APPLY-IMPLEMENTATION-CONTRACT', 'validate_v110_apply_implementation_contract.py'),
+    ('PROJECT-V110-APPLY-SCRIPT-IMPLEMENTATION-GATED-NOT-EXECUTED', 'validate_v110_apply_script_implementation_gated_not_executed.py'),
+    ('PROJECT-V110-BACKUP-PREFLIGHT-IMPLEMENTATION', 'validate_v110_backup_preflight_implementation.py'),
+    ('PROJECT-V110-ROLLBACK-PREFLIGHT-IMPLEMENTATION', 'validate_v110_rollback_preflight_implementation.py'),
+    ('PROJECT-V110-STAGING-APPLY-SMOKE-PLAN', 'validate_v110_staging_apply_smoke_plan.py'),
+    ('PROJECT-V110-EXPECTED-POST-APPLY-DIFF', 'validate_v110_expected_post_apply_diff.py'),
+    ('PROJECT-V110-APPLY-IDEMPOTENCY-SAFETY', 'validate_v110_apply_idempotency_safety.py'),
+    ('PROJECT-V110-APPLY-PREFLIGHT-LIVE-READINESS-UPDATE', 'validate_v110_apply_preflight_live_readiness_update.py'),
+    ('PROJECT-V110-APPLY-PREFLIGHT-ZERO-MUTATION-PRESERVATION', 'validate_v110_apply_preflight_zero_mutation_preservation.py'),
+    ('PROJECT-V110-APPLY-PREFLIGHT-RUNTIME-INVARIANT-PRESERVATION', 'validate_v110_apply_preflight_runtime_invariant_preservation.py'),
+    ('PROJECT-V110-APPLY-PREFLIGHT-FINAL-MULTIRUN-SUITE', 'validate_v110_apply_preflight_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-71-v110-APPLY-PREFLIGHT-ROLLUP', 'validate_mega_release_acceleration_71_v110_apply_preflight_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

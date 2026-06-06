@@ -1,0 +1,54 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "idempotency_strategy": {
+    "unique_key": ["user_id", "server_id"],
+    "upsert_operation": true,
+    "second_run_inserts_zero_new_psp": true,
+    "second_run_updates_only_non_destructive_fields": true,
+    "non_destructive_fields": [
+      "updated_at",
+      "last_seen_at",
+      "mail_unread_count",
+      "shop_state",
+      "achievements_state"
+    ],
+    "destructive_fields_protected_on_collision": [
+      "player_level",
+      "player_exp",
+      "soft_currencies",
+      "selected_team_id",
+      "story_progress",
+      "tower_progress",
+      "guild_id",
+      "server_created_at",
+      "created_at"
+    ]
+  },
+  "re_run_safety": {
+    "crash_in_middle_safe": true,
+    "resume_via_audit_log_marker": true,
+    "audit_log_marks_each_psp_inserted": true,
+    "audit_log_marks_each_user_heroes_updated": true,
+    "resume_continues_from_last_marker": true,
+    "abort_signal_safe": true
+  },
+  "forbidden_on_rerun": [
+    "duplicate_psp_creation",
+    "player_level_overwrite",
+    "soft_currency_double_grant",
+    "premium_balance_modification",
+    "hard_balance_modification",
+    "team_re_creation"
+  ],
+  "verified_in_this_pack": false,
+  "applied_in_this_pack": false,
+  "db_writes_in_this_pack": 0,
+  "safety_flags": {
+    "duplicate_psp": false,
+    "premium_grant": false,
+    "currency_duplication": false,
+    "fake_PASS": false
+  }
+}

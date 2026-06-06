@@ -1,0 +1,136 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "track": "B",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "algorithm_version": "v110.psp.apply.contract.v1",
+  "source_collections": [
+    "users",
+    "user_heroes",
+    "team_formation",
+    "user_inventory",
+    "user_equipment",
+    "battlepass_progress",
+    "vip_progress",
+    "user_mail",
+    "achievements",
+    "story_progress",
+    "tower_progress",
+    "arena_mmr",
+    "guild_membership"
+  ],
+  "target_collection": "player_server_profiles",
+  "profile_id_format": "{account_id}:{server_id}",
+  "profile_id_example": "abc123:server_1",
+  "default_server_id_policy": {
+    "default_server_id": "server_1",
+    "rationale": "v110_prep matrix elenca server_1 come server di partenza per migrazione di account che non hanno mai selezionato un server. Altri server vengono creati on-demand via /server-select.",
+    "override_via": "--target-server-id",
+    "forbidden": "non viene mai assegnato a un server arbitrario senza che l'account abbia un last_seen su quel server"
+  },
+  "psp_fields_inserted": {
+    "_id": "ObjectId auto",
+    "user_id": "copy from users._id",
+    "server_id": "default_server_id o derivato da metadata account",
+    "profile_id": "<user_id>:<server_id>",
+    "created_at": "now()",
+    "updated_at": "now()",
+    "server_created_at": "now()",
+    "player_level": "from users.level (default 1)",
+    "player_exp": "from users.experience (default 0)",
+    "selected_team_id": "from team_formation.team_id where user_id matches (null if absent)",
+    "soft_currencies": "object copy of users.currencies.soft (server-scoped)",
+    "story_progress": "from story_progress collection",
+    "tower_progress": "from tower_progress collection",
+    "arena_mmr": "from arena_mmr collection",
+    "guild_id": "from guild_membership.guild_id or null",
+    "battlepass_state": "from battlepass_progress",
+    "mail_unread_count": "count(user_mail where unread=true)",
+    "achievements_state": "from achievements",
+    "shop_state": "empty default; server-scoped reset slot",
+    "migration_source": "v110_psp_apply_v1",
+    "last_seen_at": "from users.last_login or null"
+  },
+  "migration_metadata": {
+    "applied_by": "v110_psp_apply_script",
+    "applied_at": "datetime_utc at apply time",
+    "source_pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+    "audit_log_collection": "migration_logs.v110_psp_apply"
+  },
+  "user_heroes_strategy": {
+    "action": "ADD_FIELD",
+    "field": "server_id",
+    "default": "server_1",
+    "forbidden": ["duplicate", "delete", "rewrite_exp", "reset_progress"],
+    "index_planned": "ix_user_server (user_id, server_id)"
+  },
+  "team_formation_strategy": {
+    "action": "ADD_FIELD",
+    "field": "server_id",
+    "default": "server_1",
+    "team_size_preserved": 6,
+    "forbidden": ["duplicate", "reset", "fake_team_creation"]
+  },
+  "inventory_strategy": {
+    "action": "ADD_FIELD",
+    "field": "server_id",
+    "default": "server_1",
+    "forbidden": ["duplicate_materials", "delete", "grant"]
+  },
+  "economy_strategy": {
+    "soft_currencies_move_to_psp": true,
+    "hard_currencies_stay_account_global": true,
+    "premium_currencies_stay_account_global": true,
+    "per_user_total_invariant_must_hold": true,
+    "premium_grant_forbidden": true,
+    "duplication_forbidden": true
+  },
+  "equipment_strategy": {
+    "action": "ADD_FIELD",
+    "field": "server_id",
+    "default": "server_1",
+    "linked_to": "user_heroes.server_id"
+  },
+  "story_progress_strategy": {
+    "action": "COPY_INTO_PSP",
+    "source": "story_progress collection",
+    "target": "player_server_profiles.story_progress",
+    "source_documents_archived": false,
+    "source_documents_deleted": false
+  },
+  "collision_idempotency_strategy": {
+    "primary_key": ["user_id", "server_id"],
+    "upsert": true,
+    "if_psp_exists_action": "UPDATE_NON_DESTRUCTIVE_FIELDS_ONLY",
+    "forbidden_on_collision": ["overwrite_player_level", "overwrite_premium_balance", "overwrite_exp"],
+    "duplicate_psp_forbidden": true,
+    "re_run_safe": true
+  },
+  "rollback_strategy": {
+    "step_1": "abort apply on any safety violation",
+    "step_2": "restore mongodump backup if writes already partially applied",
+    "step_3": "validate balances pre/post via audit_rules in v110_economy_migration_split_plan",
+    "step_4": "clear PSP inserts created during failed run via migration_source marker"
+  },
+  "safety_aborts": [
+    "backup_marker_missing",
+    "rollback_plan_missing",
+    "production_db_without_explicit_approval",
+    "premium_balance_mismatch",
+    "hard_balance_mismatch",
+    "soft_balance_total_mismatch",
+    "duplicate_psp_detected",
+    "team_size_changed",
+    "server_id_assigned_arbitrarily",
+    "any_legacy_delete_attempt",
+    "any_premium_grant_attempt",
+    "runtime_invariant_check_failure"
+  ],
+  "applied_in_this_pack": false,
+  "db_writes": 0,
+  "safety_flags": {
+    "premium_grant": false,
+    "currency_duplication": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

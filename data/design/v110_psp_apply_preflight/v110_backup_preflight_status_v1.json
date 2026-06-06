@@ -1,0 +1,49 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "track": "D",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "generated_at_utc": "2026-06-06T17:54:52.971077Z",
+  "status": "BACKUP_PLAN_ONLY",
+  "reason": "missing_required_flags_for_execute",
+  "export_executed": false,
+  "db_writes": 0,
+  "required_flags": [
+    "V110_BACKUP_EXECUTE",
+    "V110_USER_EXPLICIT_BACKUP_APPROVAL"
+  ],
+  "missing_flags": [
+    "V110_BACKUP_EXECUTE",
+    "V110_USER_EXPLICIT_BACKUP_APPROVAL"
+  ],
+  "production_flag": "V110_PRODUCTION_DB_EXPLICIT_APPROVAL",
+  "is_production_db": false,
+  "production_approval_present": false,
+  "manifest_present": true,
+  "manifest_collections_count": 21,
+  "mongodump_present_in_path": true,
+  "disk_space": {
+    "free_bytes": 6477856768,
+    "total_bytes": 10464022528,
+    "free_gb": 6.03
+  },
+  "command_planned": "mongodump --uri=<MONGO_URL> --db=<DB_NAME> --out=/app/backups/v110_pre_psp_apply/20260606_175452",
+  "target_dir_planned": "/app/backups/v110_pre_psp_apply/20260606_175452",
+  "masking_rules": {
+    "mask_secrets": true,
+    "mask_iap_receipts_token": true,
+    "mask_oauth_tokens": true,
+    "mask_email_for_export": true,
+    "never_export_passwords": true
+  },
+  "cli_args": {
+    "dry_run": false,
+    "plan_only": false,
+    "execute": false
+  },
+  "implementation_real": true,
+  "safety_flags": {
+    "db_write": false,
+    "export_executed": false,
+    "fake_PASS": false
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "expected_psp_inserts_full_run": 850,
+  "expected_psp_inserts_per_user": 1,
+  "expected_user_heroes_updates_full_run": 2362,
+  "expected_team_formation_updates_full_run": 0,
+  "expected_user_equipment_updates_full_run": 31,
+  "expected_story_progress_copies_full_run": 1,
+  "expected_users_modified": 0,
+  "expected_users_deleted": 0,
+  "expected_collection_creations": ["player_server_profiles", "migration_logs"],
+  "expected_index_creations": ["ux_user_server", "ix_server_id", "ix_user_id", "ix_last_seen", "ix_guild"],
+  "no_premium_grant": true,
+  "no_source_deletion": true,
+  "currency_split_enforced": {
+    "soft_currencies_moved_to_psp_per_user": true,
+    "hard_currencies_stay_users_doc": true,
+    "premium_currencies_stay_users_doc": true
+  },
+  "team_constraints": {
+    "team_size_preserved": 6,
+    "no_fake_team_creation": true,
+    "empty_team_psp_default": null
+  },
+  "equipment_constraints": {
+    "linked_to_user_heroes_server_id": true,
+    "no_duplication": true
+  },
+  "story_constraints": {
+    "copy_into_psp": true,
+    "source_not_deleted": true,
+    "source_archived_in_later_legacy_cleanup_pack": true
+  },
+  "bot_constraints": {
+    "bots_default_disabled_preserved": true,
+    "no_empty_roster_after_reset": true,
+    "no_premium_grant_to_bots": true
+  },
+  "db_writes_in_this_pack": 0,
+  "apply_executed_in_this_pack": false,
+  "safety_flags": {
+    "premium_grant": false,
+    "source_deletion": false,
+    "fake_team": false,
+    "fake_PASS": false
+  }
+}
