@@ -3624,6 +3624,19 @@ OPTIONAL = [
     ('PROJECT-V108-AUTHORITATIVE-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_authoritative_runtime_invariant_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-67-v108-AUTHORITATIVE-RUNTIME-ROLLUP', 'validate_mega_release_acceleration_67_v108_authoritative_runtime_rollup.py'),
 
+    # ===== v108_AUTHORITATIVE_LIVE_PRECONDITIONS - precond matrix + idempotency ledger dry-run =====
+    # PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER
+    ('PROJECT-V108-AUTHORITATIVE-LIVE-PRECONDITIONS-BASELINE-MULTIRUN', 'validate_v108_authoritative_live_preconditions_baseline_multirun.py'),
+    ('PROJECT-V108-AUTHORITATIVE-LIVE-PRECONDITION-MATRIX', 'validate_v108_authoritative_live_precondition_matrix.py'),
+    ('PROJECT-V108-AUTHORITATIVE-IDEMPOTENCY-LEDGER-DRYRUN', 'validate_v108_authoritative_idempotency_ledger_dryrun.py'),
+    ('PROJECT-V108-AUTHORITATIVE-LIVE-REWARD-PROGRESS-BLOCKER', 'validate_v108_authoritative_live_reward_progress_blocker.py'),
+    ('PROJECT-V108-AUTHORITATIVE-REAL-TEAM-SOURCE-READINESS', 'validate_v108_authoritative_real_team_source_readiness.py'),
+    ('PROJECT-V108-AUTHORITATIVE-ENEMY-SOURCE-READINESS', 'validate_v108_authoritative_enemy_source_readiness.py'),
+    ('PROJECT-V108-AUTHORITATIVE-SERVER-ID-FILTER-READINESS', 'validate_v108_authoritative_server_id_filter_readiness.py'),
+    ('PROJECT-V108-AUTHORITATIVE-ROLLBACK-PLAN', 'validate_v108_authoritative_rollback_plan.py'),
+    ('PROJECT-V108-AUTHORITATIVE-ZERO-MUTATION-PRESERVATION', 'validate_v108_authoritative_zero_mutation_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-68-v108-AUTHORITATIVE-LIVE-PRECONDITIONS-ROLLUP', 'validate_mega_release_acceleration_68_v108_authoritative_live_preconditions_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

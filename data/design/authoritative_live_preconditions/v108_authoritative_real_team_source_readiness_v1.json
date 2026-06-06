@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_68_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "current_player_team_source": "team_formation collection + user_heroes (account-wide)",
+  "full_6_slot_team_supported": true,
+  "team_server_scoped": false,
+  "heroes_canonical_and_belong_to_account": true,
+  "heroes_server_scoped": false,
+  "legacy_heroes_can_leak_into_team": false,
+  "server_id_filter_actually_applied_on_team_load": false,
+  "forbidden_markers_used_anywhere_as_real": false,
+  "live_ready": false,
+  "live_blocked_reasons": ["team account-wide, non server-scoped", "server_id filter non applicato sui loader team/heroes"],
+  "promotion_planned_in": "v109 + v110 (PSP apply)",
+  "safety_flags": {"fake_team_as_real":false,"runtime_team_migration":false,"fake_PASS":false,"validator_weakening":false,"release_readiness_claimed":false}
+}

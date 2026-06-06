@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_68_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "per_mode": [
+    {"mode":"story","authored_source":"backend STORY_CHAPTERS authored encounters","ready":true,"random_placeholder_player_facing":false},
+    {"mode":"tower","authored_source":"tower waves authored","ready":true,"random_placeholder_player_facing":false},
+    {"mode":"event","authored_source":"event_preset (authored per evento)","ready":false,"random_placeholder_player_facing":false,"blocking_reason":"event_preset registry da espandere per nuovi eventi"},
+    {"mode":"raid","authored_source":"boss authored","ready":true,"random_placeholder_player_facing":false},
+    {"mode":"pvp_arena","authored_source":"opponent player_team server-scoped","ready":false,"random_placeholder_player_facing":false,"blocking_reason":"player_team scoping richiede PSP apply (v110)"},
+    {"mode":"gvg","authored_source":"guild war participants","ready":false,"random_placeholder_player_facing":false,"blocking_reason":"PSP server-scoped guild membership pending"},
+    {"mode":"training","authored_source":"training_preset authored","ready":true,"random_placeholder_player_facing":false}
+  ],
+  "placeholder_alpha_player_facing_modes": [],
+  "random_generate_enemy_player_facing_modes": [],
+  "boss_schema_ready": true,
+  "live_ready": false,
+  "live_blocked_reasons": ["event_preset registry da espandere", "pvp/gvg richiedono PSP server-scoped"],
+  "safety_flags": {"random_enemy_player_facing":false,"placeholder_alpha_enemy_player_facing":false,"fake_PASS":false,"validator_weakening":false,"release_readiness_claimed":false}
+}

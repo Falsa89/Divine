@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_68_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "loaders": [
+    {"loader":"user_heroes","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true},
+    {"loader":"team_formation","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true},
+    {"loader":"inventory","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true},
+    {"loader":"currencies_wallet","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true},
+    {"loader":"story_progress","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true},
+    {"loader":"battle_instance","parses_server_id":true,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true,"missing_blocks_with_code":"BATTLE_INSTANCE_SERVER_REQUIRED"},
+    {"loader":"battle_result","parses_server_id":true,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true},
+    {"loader":"reward_progress_ledger_future","parses_server_id":true,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true,"target_pack":"v108_authoritative_full"},
+    {"loader":"chat_messages","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true,"target_pack":"v109"},
+    {"loader":"guild_membership","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true,"target_pack":"v109"},
+    {"loader":"ranking","parses_server_id":false,"filters_server_id":false,"filter_applied_claim_allowed":false,"live_blocker_if_false":true,"target_pack":"v109"}
+  ],
+  "any_loader_filter_applied_true": false,
+  "live_ready": false,
+  "live_blocked_because_any_account_wide_loader": true,
+  "safety_flags": {"false_server_id_filter_claim":false,"server_isolation_live_claim":false,"fake_PASS":false,"validator_weakening":false,"release_readiness_claimed":false}
+}

@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_68_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "adapter_file": "backend/utils/authoritative_idempotency_ledger.py",
+  "collection_future_name": "battle_resolution_ledger",
+  "collection_created_in_this_pack": false,
+  "index_created_in_this_pack": false,
+  "db_writes_in_this_pack": 0,
+  "adapter_functions": ["compute_request_hash","compute_result_hash","prepare_ledger_entry_dry_run","check_live_preconditions"],
+  "adapter_imports_motor": false,
+  "adapter_imports_db": false,
+  "adapter_calls_db": false,
+  "schema_fields": ["idempotency_key","account_id","server_id","battle_instance_id","battle_result_id","mode","encounter_id","reward_policy","progress_policy","request_hash","result_hash","status","created_at","expires_at","replay_count","safety"],
+  "dry_run_sample": {"safety":{"dry_run":true,"live":false,"db_writes_performed":0,"collection_created":false,"index_created":false}},
+  "safety_flags": {"ledger_db_write": false, "collection_creation": false, "index_creation": false, "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false}
+}

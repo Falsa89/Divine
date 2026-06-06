@@ -1,0 +1,14 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_68_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "track": "D",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "blocker_module": "backend/utils/authoritative_idempotency_ledger.py:check_live_preconditions",
+  "block_codes_defined": ["AUTHORITATIVE_LIVE_REWARD_PRECONDITIONS_NOT_MET","AUTHORITATIVE_LIVE_PROGRESS_PRECONDITIONS_NOT_MET","AUTHORITATIVE_LIVE_IDEMPOTENCY_REQUIRED","AUTHORITATIVE_LIVE_SERVER_FILTER_REQUIRED","AUTHORITATIVE_LIVE_ROLLBACK_REQUIRED"],
+  "env_flags_default_off": {"REWARD_LIVE_ENABLED":false,"PROGRESS_LIVE_ENABLED":false,"BATTLE_LAUNCH_AUTHORITATIVE_ENABLED":false},
+  "runtime_endpoints_with_live_block": [
+    {"endpoint":"/api/battle/instance/preview","reward_live_block_code":"BATTLE_INSTANCE_REWARD_LIVE_FORBIDDEN","progress_live_block_code":"BATTLE_INSTANCE_PROGRESS_LIVE_FORBIDDEN"},
+    {"endpoint":"/api/battle/instance/resolve-preview","reward_live_block_code":"BATTLE_RESULT_REWARD_LIVE_FORBIDDEN","progress_live_block_code":"BATTLE_RESULT_PROGRESS_LIVE_FORBIDDEN","authoritative_live_block_code":"BATTLE_RESULT_AUTHORITATIVE_LIVE_FORBIDDEN"}
+  ],
+  "live_enabled_in_this_pack": false,
+  "safety_flags": {"reward_live":false,"progress_live":false,"fake_PASS":false,"validator_weakening":false,"release_readiness_claimed":false}
+}

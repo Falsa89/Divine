@@ -1,0 +1,8 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_68_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "track": "C-result",
+  "sentinel": "PUBLIC_SYNC_TAG_v108_AUTHORITATIVE_LIVE_PRECONDITIONS_AND_IDEMPOTENCY_LEDGER",
+  "dry_run_smoke": {"request_hash_deterministic": true, "result_hash_deterministic": true, "db_writes": 0, "collection_created": false, "index_created": false, "raises_on_missing_precondition": true},
+  "verified_codes": ["AUTHORITATIVE_LIVE_REWARD_PRECONDITIONS_NOT_MET","AUTHORITATIVE_LIVE_PROGRESS_PRECONDITIONS_NOT_MET","AUTHORITATIVE_LIVE_IDEMPOTENCY_REQUIRED","AUTHORITATIVE_LIVE_SERVER_FILTER_REQUIRED","AUTHORITATIVE_LIVE_ROLLBACK_REQUIRED"],
+  "safety_flags": {"db_write":false,"collection_creation":false,"reward_live":false,"progress_live":false,"fake_PASS":false}
+}
