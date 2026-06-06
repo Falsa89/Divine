@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_64_v108_POSTQA_C",
+  "type": "md5_guardian_reconciliation",
+  "version": 1,
+  "language": "italian",
+  "guardians": [
+    {"validator_id": "PROJECT-V90-RESTORED-BATTLE-RENDERER-REUSE", "file_protected": "frontend/app/combat.tsx", "old_md5_baseline": "fc792a05b2ada6e677d80400732ae5c3", "current_md5": "0f0677404535a1a19e98b110212b9742", "superseded_in_packs": ["v108_pre", "v108_POSTQA_A"], "historical_references_preserved": true, "replacement_invariant": "validate_v108_postqa_invariant_preview_no_simulate.py", "replacement_invariant_passes": true, "action": "historical_guardian_preserved_with_replacement_invariant_functional", "reason": "Replacement invariant runtime-functional documentato e attualmente PASS. Historical guardian preservato per non rompere tracking storico."},
+    {"validator_id": "PROJECT-V96-MD5-BASELINE-LOCK", "file_protected": "backend/battle_engine.py + backend/server.py + multipli", "old_md5_baseline": "v96_baseline_locked", "current_md5": "modified_in_v108_POSTQA_A", "superseded_in_packs": ["v108_POSTQA_A_preview_guard", "v108_POSTQA_A_bots_kill_switch"], "historical_references_preserved": true, "replacement_invariant": "validate_v108_postqa_invariant_no_generate_enemy_player_facing.py + validate_v108_postqa_invariant_no_bot_default_startup.py", "replacement_invariant_passes": true, "action": "historical_guardian_preserved_with_replacement_invariant_functional", "reason": "Due replacement invariant runtime-functional documentati e attualmente PASS. Historical guardian preservato."},
+    {"validator_id": "MEGA-RELEASE-ACCELERATION-45-v96-ROLLUP", "file_protected": "battle_engine.py + server.py rollup v96", "old_md5_baseline": "v96_rollup_baseline", "current_md5": "modified_in_v108_POSTQA_A", "superseded_in_packs": ["v108_POSTQA_A"], "historical_references_preserved": true, "replacement_invariant": "validate_mega_release_acceleration_61_v108_postqa_rollup.py + validate_mega_release_acceleration_62_v108_postqa_a2_rollup.py + validate_mega_release_acceleration_63_v108_postqa_b_rollup.py", "replacement_invariant_passes": true, "action": "historical_guardian_preserved_with_replacement_invariant_functional", "reason": "3 replacement rollup PASS. Historical guardian preservato."}
+  ],
+  "total_guardians": 3,
+  "replacement_invariant_functional_count": 3,
+  "replacement_invariant_pass_count": 3,
+  "all_guardians_have_replacement_invariant": true,
+  "supersede_applied_in_c": 0,
+  "deletions_applied_in_c": 0,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "cosmetic_supersede": false,
+    "old_hash_preserved_as_historical_reference": true
+  }
+}

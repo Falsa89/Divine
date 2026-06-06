@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_64_v108_POSTQA_C",
+  "type": "postqa_c_deferred_resolution",
+  "version": 1,
+  "language": "italian",
+  "total_items": 11,
+  "resolutions": [
+    {"validator_id": "PROJECT-ALIGN-FIX-TRACK-H-COMPLETION", "decision": "historical_guardian_documented", "reason": "Track legacy completion senza artifact JSON disponibile nel container alpha. Validator preservato come historical guardian.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING", "decision": "historical_guardian_documented", "reason": "Menu hardening v2 batch1 legacy artifact. Validator preservato.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-BETA-TESTING-TRACK-G-REPORTING", "decision": "historical_guardian_documented", "reason": "Reporting artifact legacy. Validator preservato.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-FORGE-CRASH-TRACK-G-HYGIENE", "decision": "historical_guardian_documented", "reason": "Forge crash hygiene legacy artifact.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-INLINE-CONFIRM-TRACK-E-API-CONTRACT", "decision": "historical_guardian_documented", "reason": "Inline confirm track E API contract legacy.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-SF-MERGE-TRACK-F-NAVIGATION", "decision": "historical_guardian_documented", "reason": "SF merge track F navigation legacy.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-SF-MERGE-TRACK-H-COMPLETION", "decision": "historical_guardian_documented", "reason": "SF merge track H completion legacy.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION", "decision": "historical_guardian_documented", "reason": "SP dual read track H legacy.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION", "decision": "historical_guardian_documented", "reason": "SP UI lock track H legacy.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "PROJECT-STORY-FIRST-NODE-RUNTIME-PREVIEW-SCREEN", "decision": "historical_guardian_documented", "reason": "story-first-node-runtime-preview.tsx fuori scope v108_POSTQA_A/A2/B. Validator preservato come historical guardian.", "replacement_invariant": "validate_v108_postqa_invariant_preview_no_simulate.py (copre invariante runtime equivalente)", "action_pack": "v108_authoritative_post_release_cleanup"},
+    {"validator_id": "SLC-F-MINOR-WRITE-SURFACES-AUDIT-V1", "decision": "historical_guardian_documented", "reason": "SLC-F minor write surfaces audit legacy.", "replacement_invariant": null, "action_pack": "v108_authoritative_post_release_cleanup"}
+  ],
+  "summary": {
+    "historical_guardian_documented": 11,
+    "closed": 0,
+    "supersede_applied": 0,
+    "deletions_applied": 0
+  },
+  "rationale": "Tutti gli 11 PROJECT-* deferred restano come historical guardian onesti. Nessun supersede attivo (eviterebbe il rischio di cosmetic supersede). Validator NON eliminati, NON indeboliti. La risoluzione formale richiede artifact JSON ricreati o supersede con replacement invariant, che e' fuori scope C (richiede gameplay/runtime touch).",
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "cosmetic_supersede": false
+  }
+}

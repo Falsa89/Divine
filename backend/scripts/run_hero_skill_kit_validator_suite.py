@@ -3571,6 +3571,21 @@ OPTIONAL = [
     ('PROJECT-V108-POSTQA-B-FINAL-MULTIRUN-SUITE', 'validate_v108_postqa_b_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-63-v108-POSTQA-B-ROLLUP', 'validate_mega_release_acceleration_63_v108_postqa_b_rollup.py'),
 
+    # v108_POSTQA_C - LEGACY_PROJECT_FAIL_RESOLUTION_AND_DRIFT_FINALIZATION
+    # PUBLIC_SYNC_TAG_v108_POSTQA_C_LEGACY_PROJECT_FAIL_RESOLUTION_AND_DRIFT_FINALIZATION
+    # 11 PROJECT-* preserved as historical guardian, 2 JSON drift deferred, 3 MD5
+    # guardian con replacement invariant funzionali. Target C (<=15) NON raggiunto
+    # onestamente (resta 22), verdict READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED.
+    # NO supersede, NO weakening, NO deletion, NO release readiness claim.
+    ('PROJECT-V108-POSTQA-C-BASELINE-MULTIRUN', 'validate_v108_postqa_c_baseline_multirun.py'),
+    ('PROJECT-V108-POSTQA-C-DEFERRED-RESOLUTION', 'validate_v108_postqa_c_deferred_resolution.py'),
+    ('PROJECT-V108-POSTQA-C-JSON-DRIFT-FINALIZATION', 'validate_v108_postqa_c_json_drift_finalization.py'),
+    ('PROJECT-V108-POSTQA-C-MD5-GUARDIAN-RECONCILIATION', 'validate_v108_postqa_c_md5_guardian_reconciliation.py'),
+    ('PROJECT-V108-POSTQA-C-LABEL-REPORT-CONSISTENCY-CLEANUP', 'validate_v108_postqa_c_label_report_consistency_cleanup.py'),
+    ('PROJECT-V108-POSTQA-C-RUNTIME-INVARIANT-PRESERVATION', 'validate_v108_postqa_c_runtime_invariant_preservation.py'),
+    ('PROJECT-V108-POSTQA-C-FINAL-MULTIRUN-SUITE', 'validate_v108_postqa_c_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-64-v108-POSTQA-C-ROLLUP', 'validate_mega_release_acceleration_64_v108_postqa_c_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

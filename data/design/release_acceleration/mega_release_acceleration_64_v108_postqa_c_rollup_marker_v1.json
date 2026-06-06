@@ -1,0 +1,57 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_64_v108_POSTQA_C_LEGACY_PROJECT_FAIL_RESOLUTION_AND_DRIFT_FINALIZATION",
+  "type": "v108_postqa_c_rollup_marker",
+  "version": 1,
+  "generated_at_utc": "2026-06-06T00:50:06.065343Z",
+  "public_sync_tag": "PUBLIC_SYNC_TAG_v108_POSTQA_C_LEGACY_PROJECT_FAIL_RESOLUTION_AND_DRIFT_FINALIZATION",
+  "validators_total": 7,
+  "validators_pass": 7,
+  "results": [
+    {
+      "validator": "validate_v108_postqa_c_baseline_multirun.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_C baseline multirun"
+    },
+    {
+      "validator": "validate_v108_postqa_c_deferred_resolution.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_C deferred resolution (11 items)"
+    },
+    {
+      "validator": "validate_v108_postqa_c_json_drift_finalization.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_C json drift finalization (deferred onestamente)"
+    },
+    {
+      "validator": "validate_v108_postqa_c_md5_guardian_reconciliation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_C MD5 guardian reconciliation (3 guardians with replacement invariant)"
+    },
+    {
+      "validator": "validate_v108_postqa_c_label_report_consistency_cleanup.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_C label report consistency cleanup"
+    },
+    {
+      "validator": "validate_v108_postqa_c_runtime_invariant_preservation.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_C runtime invariant preservation"
+    },
+    {
+      "validator": "validate_v108_postqa_c_final_multirun_suite.py",
+      "exit_code": 0,
+      "last_line": "PASS — v108_POSTQA_C final multirun (22/30 optional, target_c=15 under=False)"
+    }
+  ],
+  "verdict_string": "MEGA_RELEASE_ACCELERATION_64_v108_POSTQA_C_LEGACY_PROJECT_FAIL_RESOLUTION_AND_DRIFT_FINALIZATION_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "optional_fail_final": 22,
+  "optional_fail_target_c": 15,
+  "optional_fail_target_max": 30,
+  "under_target_c": false,
+  "rollup_c_pass_does_not_imply_global_release_readiness": true,
+  "safety": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false
+  }
+}
