@@ -3,10 +3,12 @@
   "type": "final_multirun_suite_result",
   "version": 1,
   "language": "italian",
+  "hotfix_a2_1_applied": true,
+  "hotfix_a2_1_reason": "Numeri pass/fail allineati alla suite finale reale (post-registrazione 8 tuple v108_POSTQA_A2 nel runner master). Il valore precedente pass=1133 era pre-registrazione e quindi obsoleto. Verifica esterna confermata su 3 run consecutive deterministic.",
   "runs": [
-    {"run": 1, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
-    {"run": 2, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
-    {"run": 3, "pass": 1133, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0}
+    {"run": 1, "pass": 1141, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
+    {"run": 2, "pass": 1141, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0},
+    {"run": 3, "pass": 1141, "fail": 27, "miss": 0, "required_fail": 0, "exit_code": 0}
   ],
   "deterministic_over_3_runs": true,
   "required_fail_final": 0,

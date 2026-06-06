@@ -9,7 +9,12 @@
   "watchlist_present": true,
   "watchlist_reduced": false,
   "watchlist_reclassified_as_resolved": false,
-  "all_required_endpoints_present": true,
+  "all_required_endpoints_present": false,
+  "missing_endpoints": ["/api/equipment/equip"],
+  "accepted_pending_coverage": true,
+  "target_pack": "v108_POSTQA_B",
+  "hotfix_a2_1_applied": true,
+  "hotfix_a2_1_reason": "Coerenza onesta tra report e marker: /api/equipment/equip e' nello spec A2 ma NON nella watchlist v108_POSTQA_A originale. Marker corretto per dichiarare missing_endpoints in modo trasparente, accepted_pending_coverage=true, target_pack='v108_POSTQA_B'. Gli altri 22 endpoint chiave restano preservati.",
   "required_endpoints": [
     "/api/story/battle",
     "/api/tower/battle",
