@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-06T17:31:53.783818+00:00",
+  "timestamp_utc": "2026-06-06T18:14:48.748587+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1837,
+  "backend_python_files_scanned": 1851,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 916,
+      "files_with_hits": 926,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -145,7 +145,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 183,
+      "files_with_hits": 187,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 366,
+      "files_with_hits": 368,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 157,
+      "files_with_hits": 162,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -621,7 +621,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 199,
+      "files_with_hits": 207,
       "hits_sample": [
         {
           "file": "backend/battle_core.py",
@@ -749,7 +749,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 30,
+      "files_with_hits": 32,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_v95_reward_score_canary_sandbox.py",
@@ -1057,7 +1057,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 461,
+      "files_with_hits": 462,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
