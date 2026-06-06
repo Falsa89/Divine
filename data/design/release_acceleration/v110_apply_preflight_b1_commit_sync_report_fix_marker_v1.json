@@ -1,0 +1,86 @@
+{
+  "hotfix_id": "v110_APPLY_PREFLIGHT_B1_COMMIT_SYNC_REPORT_FIX",
+  "type": "documentation_only_hotfix",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "parent_pack": "MEGA_RELEASE_ACCELERATION_71_v110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_GATED_NOT_EXECUTED",
+  "reason": "incoherence between finish summary and on-disk report regarding post-pack commit hash",
+  "verification_results": {
+    "head_local_pre_hotfix": "633a7f91f53a80556fd89cc2ef91ee24fe2530ee",
+    "head_local_pre_hotfix_note": "auto-generated changes (only .pyc cache removals, no runtime modification)",
+    "git_log_oneline_top5_pre_hotfix": [
+      "633a7f91 Auto-generated changes",
+      "a748aae6 v110_apply_preflight report: aggiorna commit hash post-pack",
+      "b7d12e0e v110 PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT gated NOT executed",
+      "22120496 Auto-generated changes",
+      "3bbd1dbe v110 report: aggiorna commit hash post-pack"
+    ],
+    "pack_content_commit": "b7d12e0e7981f43719affe3f4699c5d25f9ccf63",
+    "pack_content_commit_verified_via_git_cat_file": true,
+    "report_metadata_fix_commit": "a748aae6739bde6de7f7ce4fc947c77896ca6743",
+    "report_metadata_fix_commit_verified_via_git_cat_file": true,
+    "report_post_pack_commit_value_before_fix": "b7d12e0e7981f43719affe3f4699c5d25f9ccf63",
+    "report_was_self_consistent_pre_fix": true,
+    "report_now_lists_both_hashes_explicitly": true,
+    "interpretation": "il report era gia` coerente (puntava al commit del pack, b7d12e0e). Il finish summary aveva impreciso il riferimento citando a748aae6 come post-pack final, che in realta` e` il commit del fix metadata del report stesso. Hotfix B1 rende esplicita la distinzione: hash del contenuto pack vs hash del fix metadata."
+  },
+  "suite_status": {
+    "deterministic": true,
+    "runs": [
+      {"run": 1, "pass": 1241, "fail": 22, "miss": 0, "required_fail": 0},
+      {"run": 2, "pass": 1241, "fail": 22, "miss": 0, "required_fail": 0},
+      {"run": 3, "pass": 1241, "fail": 22, "miss": 0, "required_fail": 0}
+    ],
+    "required_fail_final": 0,
+    "miss_final": 0,
+    "optional_fail_final": 22,
+    "optional_fail_target_max": 30,
+    "under_target_max": true,
+    "source": "data/design/v110_psp_apply_preflight/v110_apply_preflight_final_multirun_suite_result_v1.json (not re-run in this hotfix, value verified from on-disk JSON)"
+  },
+  "execution_status_confirmed": {
+    "apply_executed": false,
+    "apply_status": "APPLY_SKIPPED_GATED",
+    "rollback_executed": false,
+    "rollback_status": "ROLLBACK_SKIPPED_GATED",
+    "backup_executed": false,
+    "backup_status": "BACKUP_PLAN_ONLY",
+    "db_writes": 0
+  },
+  "files_modified_in_this_hotfix": [
+    "docs/divine/110_PSP_APPLY_IMPLEMENTATION_AND_BACKUP_PREFLIGHT_FINAL_REPORT.md",
+    "data/design/release_acceleration/v110_apply_preflight_b1_commit_sync_report_fix_marker_v1.json (this file)"
+  ],
+  "files_NOT_modified_in_this_hotfix": [
+    "backend/scripts/apply_v110_psp_migration_gated.py",
+    "backend/scripts/rollback_v110_psp_migration_gated.py",
+    "backend/scripts/backup_v110_psp_migration_preflight.py",
+    "backend/scripts/run_hero_skill_kit_validator_suite.py",
+    "any v71 validator script",
+    "any runtime backend route",
+    "any frontend code",
+    "MongoDB database"
+  ],
+  "guardrails_respected": {
+    "psp_apply_execution": false,
+    "legacy_cleanup_execution": false,
+    "db_writes": false,
+    "collection_creation": false,
+    "index_creation": false,
+    "destructive_migration": false,
+    "backup_execution": false,
+    "rollback_execution": false,
+    "reward_live_enablement": false,
+    "progress_live_enablement": false,
+    "false_filter_applied": false,
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claim": false
+  },
+  "safety_flags": {
+    "documentation_only": true,
+    "runtime_modified": false,
+    "db_modified": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

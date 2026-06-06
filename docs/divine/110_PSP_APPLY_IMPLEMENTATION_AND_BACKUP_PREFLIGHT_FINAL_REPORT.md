@@ -33,7 +33,14 @@
 ## Commit Hash
 
 - Pre-pack HEAD: `2212049651a0cd94de0a35022ee2740510b4a868`
-- Post-pack commit: `b7d12e0e7981f43719affe3f4699c5d25f9ccf63`
+- Post-pack commit (contenuto pack v71): `b7d12e0e7981f43719affe3f4699c5d25f9ccf63`
+- Post-pack commit (report metadata fix): `a748aae6739bde6de7f7ce4fc947c77896ca6743`
+- Hotfix sync report B1: vedi `git log` post-fix (questo commit).
+
+> **Nota sync**: il commit `b7d12e0e` contiene tutti i file v71 (validator, script, JSON, marker, report iniziale).
+> Il commit `a748aae6` aggiorna solo il campo `Post-pack commit` del report con l'hash del pack (`b7d12e0e`).
+> Il commit corrente (hotfix B1) chiarisce entrambi gli hash in modo esplicito.
+> Nessun runtime modificato. Nessuna scrittura DB. Nessuna esecuzione di apply/backup/rollback.
 
 ---
 
