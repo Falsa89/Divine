@@ -3802,6 +3802,10 @@ OPTIONAL = [
     ('PROJECT-SERVER-FILTER-TEAM-SOURCE-FINAL-MULTIRUN-SUITE', 'validate_server_filter_team_source_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-78-SERVER-FILTER-TEAM-SOURCE-ROLLUP', 'validate_mega_release_acceleration_78_server_filter_team_source_rollup.py'),
 
+    # ===== PACK 79 LOADER PROMOTION UI FIX MD5 REBASE — RUNTIME REAL =====
+    # PUBLIC_SYNC_TAG_LOADER_PROMOTION_UI_FIX_MD5_REBASE
+    ('PROJECT-V110-PACK-79-RUNTIME-REAL', 'validate_v110_pack_79_runtime_real.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

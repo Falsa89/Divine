@@ -149,25 +149,18 @@ const CANONICAL_ENCOUNTERS: Record<string, ModeEncounter> = {
   },
 };
 
-// Player team mock per preview-only (in produzione verrebbe da
-// /api/user/get-formation o AsyncStorage). NESSUN random.
-const PLAYER_SAFE_FALLBACK_TEAM: EnemyUnit[] = [
-  { hero_id: 'alpha_trainee_hero_01', role: 'dps', level: 12, stars: 2, power: 2600 },
-  { hero_id: 'alpha_trainee_hero_02', role: 'healer', level: 12, stars: 2, power: 2400 },
-  { hero_id: 'alpha_trainee_hero_03', role: 'tank', level: 12, stars: 2, power: 2800 },
-];
+// Pack 79 — RUNTIME REAL UI FIX (MD5 rebase autorizzato).
+// NESSUN fallback fake a 3 slot player-facing. La fallback è ora vuota.
+// Quando manca il team reale, viene attivato il blocker PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER.
+const PLAYER_SAFE_FALLBACK_TEAM: EnemyUnit[] = [];
 
-// v93 — Real Formation Source resolution.
-// Tenta di leggere la formation salvata in ordine: api saved -> local cached -> safe fallback.
-// In v93 NON facciamo chiamate API (mantiene preview-only / no DB writes).
-// Una versione successiva integrera' /api/team/get-formation se safe.
-type FormationSourceLabel = 'saved_formation' | 'local_cached_formation' | 'safe_fallback_formation';
+// v93/v110 — Real Formation Source resolution.
+// Pack 79: fallback rimosso, source label estesa a `blocked_no_team_for_server` con
+// blocker chain già attiva nel componente.
+type FormationSourceLabel = 'saved_formation' | 'local_cached_formation' | 'safe_fallback_formation' | 'blocked_no_team_for_server';
 
 function resolvePlayerFormation(): { team: EnemyUnit[]; source: FormationSourceLabel; fallback_used: boolean } {
-  // v93: per ora restituiamo sempre safe_fallback_formation con flag esplicito.
-  // L'integrazione reale con /api/team/get-formation arrivera' in un pack
-  // successivo che possa farlo in modo safe senza modificare i file MD5-lockati.
-  return { team: PLAYER_SAFE_FALLBACK_TEAM, source: 'safe_fallback_formation', fallback_used: true };
+  return { team: PLAYER_SAFE_FALLBACK_TEAM, source: 'blocked_no_team_for_server', fallback_used: true };
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -315,11 +308,17 @@ export default function PreBattleLobbyScreen() {
   //    consolidato. Launch normale disabilitato.
   // 3) SELECTED_SERVER_REQUIRED: server reale assente. Launch normale disabilitato.
   // 4) QA fallback launch dietro flag EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH.
-  const realPlayerTeamAvailable = (playerFormation.source !== 'safe_fallback_formation' && !playerFormation.fallback_used);
+  // Pack 79: il blocker scatta sia con `safe_fallback_formation` sia con `blocked_no_team_for_server`.
+  const realPlayerTeamAvailable = (
+    playerFormation.source !== 'safe_fallback_formation'
+    && playerFormation.source !== 'blocked_no_team_for_server'
+    && !playerFormation.fallback_used
+    && (playerFormation.team?.length || 0) > 0
+  );
   const authoredEncounterAvailable = !!(encounter && encounter.source_type === 'authored' && (encounter.enemies?.length || 0) > 0);
   const selectedServerAvailable = !!(selectedServerLoaded && selectedServerId);
   const blockerReasons: string[] = [];
-  if (!realPlayerTeamAvailable) blockerReasons.push('REAL_PLAYER_TEAM_SOURCE_PENDING');
+  if (!realPlayerTeamAvailable) blockerReasons.push('PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER');
   if (!authoredEncounterAvailable) blockerReasons.push('AUTHORED_ENCOUNTER_SOURCE_PENDING');
   if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
   const launchAllowedNormal = blockerReasons.length === 0;

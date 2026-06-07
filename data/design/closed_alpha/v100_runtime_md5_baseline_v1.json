@@ -94,8 +94,13 @@
       "change_type": "player_facing_avvia_battaglia_button + push verso /pre-battle-lobby con Battle Launch Contract v1 params + legacy auto-resolve etichettato 'QA Auto Resolve'. Nessun backend delete, nessun reward live, nessun progress write."
     },
     "frontend/app/pre-battle-lobby.tsx": {
-      "current_md5": "a495baf478924c52eaac9dd22c4032e7",
+      "current_md5": "5ab539bd6a2fdb617a09edfc95f3d06a",
       "historical_references": [
+        {
+          "md5": "a495baf478924c52eaac9dd22c4032e7",
+          "pack": "pre_v110_pack_79",
+          "status": "superseded_by_PACK_79_LOADER_PROMOTION_UI_FIX_MD5_REBASE"
+        },
         {
           "md5": "6e5c6c66883911d2e24befadbff8bc7d",
           "pack": "v108_pre",
@@ -107,8 +112,8 @@
           "status": "superseded_by_v108_pre_story_params_compatibility"
         }
       ],
-      "authorized_change_pack": "v108_POSTQA_A",
-      "change_type": "router params compatibility per encounter_id / enemy_source_id (oltre al legacy source_id). Nessun cambio al binding gated v107D, nessuna riscrittura del flow."
+      "authorized_change_pack": "v110_PACK_79_LOADER_PROMOTION_UI_FIX_MD5_REBASE",
+      "change_type": "PLAYER_SAFE_FALLBACK_TEAM emptied + FormationSourceLabel extended with blocked_no_team_for_server + blocker PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER enforced + no 3-slot placeholder player-facing. No reward live, no progress live, no battle_engine formula change."
     },
     "frontend/app/soul-forge.tsx": {
       "current_md5": "fe4efcdeb60c69e8827f914cf0ac8e4c",

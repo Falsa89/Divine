@@ -1,0 +1,53 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_79_LOADER_PROMOTION_UI_FIX_MD5_REBASE",
+  "sentinel": "PUBLIC_SYNC_TAG_LOADER_PROMOTION_UI_FIX_MD5_REBASE",
+  "generated_at_utc": "2026-06-07T22:30:00Z",
+  "runtime_files_modified": [
+    "frontend/app/pre-battle-lobby.tsx",
+    "backend/routes/v96_team_formation.py"
+  ],
+  "runtime_files_modified_count": 2,
+  "design_only_changes": [
+    "data/design/closed_alpha/v100_runtime_md5_baseline_v1.json (MD5 rebase autorizzato)",
+    "data/design/battle_launch/v108_pre_combat_story_md5_forensic_audit_v1.json (MD5 rebase autorizzato)",
+    "data/design/battle_launch/v108_pre_combat_story_md5_supersede_review_v1.json (MD5 rebase autorizzato)"
+  ],
+  "md5_rebase_chain": [
+    {"file": "frontend/app/pre-battle-lobby.tsx", "from_md5": "a495baf478924c52eaac9dd22c4032e7", "to_md5": "5ab539bd6a2fdb617a09edfc95f3d06a", "authorized": true, "baseline_files_updated": ["v100_runtime_md5_baseline_v1.json", "v108_pre_combat_story_md5_forensic_audit_v1.json", "v108_pre_combat_story_md5_supersede_review_v1.json"]}
+  ],
+  "team_formation_loader_promotion": {
+    "endpoint": "/api/team/get-formation",
+    "file": "backend/routes/v96_team_formation.py",
+    "new_query_param": "server_id",
+    "filter_applied_when_server_id_present": true,
+    "psp_aware_lookup": true,
+    "blocker_PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER_emitted_when_no_team_for_server": true,
+    "backward_compatible_account_wide_when_no_server_id": true,
+    "db_writes": 0,
+    "reads_only": true,
+    "backend_restarted_and_smoke_ok": true
+  },
+  "lobby_runtime_fix": {
+    "file": "frontend/app/pre-battle-lobby.tsx",
+    "PLAYER_SAFE_FALLBACK_TEAM_emptied": true,
+    "no_3_slot_placeholder_player_facing": true,
+    "new_source_label_blocked_no_team_for_server": true,
+    "blocker_PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER_enforced": true,
+    "battle_launch_disabled_when_blocker": true
+  },
+  "baseline_pre_pack": {"pass": 1324, "fail": 21, "miss": 0, "required_fail": 0},
+  "final_post_pack": {"pass": 1337, "fail": 21, "miss": 0, "required_fail": 0},
+  "delta": {"pass": 13, "fail": 0, "miss": 0, "required_fail": 0},
+  "safety_flags": {
+    "fake_PASS": false, "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "production_apply_executed": false, "production_db_writes": false,
+    "destructive_migration": false, "delete": false,
+    "premium_grant": false, "reward_live": false, "progress_live": false,
+    "legacy_cleanup_executed": false, "false_filter_applied_true": false,
+    "fake_team_as_real": false, "fake_enemy_as_authored": false,
+    "3_slot_placeholder_player_facing": false,
+    "battle_engine_formula_rewrite": false,
+    "approval_flags_changed_to_yes_for_pack_79": false
+  }
+}
