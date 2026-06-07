@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_73_v110_PSP_STAGING_CLONE_PROVISION",
+  "track": "B",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_STAGING_CLONE_PROVISION",
+  "generated_at_utc": "2026-06-07T13:29:47.652303Z",
+  "source": {
+    "db_name": "divine_waifus",
+    "mongo_url_redacted": "mongodb://localhost:27017",
+    "classification": "LOCAL_CONTAINER_NON_PROD",
+    "reason": "localhost_dev_container",
+    "is_production": false,
+    "is_unknown": false,
+    "is_local_dev": true,
+    "safe_to_clone_from": true
+  },
+  "backup_before_clone_required": true,
+  "safety_flags": {
+    "production_db_smoke": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

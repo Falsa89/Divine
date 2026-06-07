@@ -1,0 +1,412 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_73_v110_PSP_STAGING_CLONE_PROVISION",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_STAGING_CLONE_PROVISION",
+  "generated_at_utc": "2026-06-07T13:29:49.395503Z",
+  "target_db_reachable": true,
+  "marker_exists_in_target": true,
+  "target_db_not_equal_source": true,
+  "target_classification": "STAGING_CLONE_CONFIRMED",
+  "source_db_unchanged_at_collection_level": true,
+  "source_collections_post_clone": [
+    "achievement_claims",
+    "active_raids",
+    "artifact_catalog_snapshot",
+    "artifact_collection_state",
+    "artifact_idempotency_registry",
+    "artifact_inventory_ledger",
+    "battle_pass",
+    "daily_claims",
+    "dm_messages",
+    "dm_threads",
+    "event_completions",
+    "friends",
+    "gift_transaction_ledger",
+    "guilds",
+    "gvg_wars",
+    "heroes",
+    "inventory",
+    "level_sharing",
+    "notifications",
+    "plaza_chat",
+    "pvp_data",
+    "refresh_tokens",
+    "retirement_history",
+    "server_profiles",
+    "shop_purchases",
+    "story_progress",
+    "teams",
+    "territory_control",
+    "tower_progress",
+    "user_affinity",
+    "user_affinity_state",
+    "user_artifact_inventory",
+    "user_artifacts",
+    "user_constellation",
+    "user_constellation_daily",
+    "user_constellations",
+    "user_cosmetics",
+    "user_equipment",
+    "user_fragments",
+    "user_gift_inventory",
+    "user_heroes",
+    "user_mail",
+    "user_materials",
+    "user_runes",
+    "users",
+    "vip_data",
+    "wallets"
+  ],
+  "target_collections_post_clone": [
+    "achievement_claims",
+    "active_raids",
+    "artifact_catalog_snapshot",
+    "artifact_collection_state",
+    "artifact_idempotency_registry",
+    "artifact_inventory_ledger",
+    "battle_pass",
+    "daily_claims",
+    "dm_messages",
+    "dm_threads",
+    "environment_markers",
+    "event_completions",
+    "friends",
+    "gift_transaction_ledger",
+    "guilds",
+    "gvg_wars",
+    "heroes",
+    "inventory",
+    "level_sharing",
+    "notifications",
+    "plaza_chat",
+    "pvp_data",
+    "refresh_tokens",
+    "retirement_history",
+    "shop_purchases",
+    "story_progress",
+    "teams",
+    "territory_control",
+    "tower_progress",
+    "user_affinity",
+    "user_affinity_state",
+    "user_artifact_inventory",
+    "user_artifacts",
+    "user_constellation",
+    "user_constellation_daily",
+    "user_constellations",
+    "user_cosmetics",
+    "user_equipment",
+    "user_fragments",
+    "user_gift_inventory",
+    "user_heroes",
+    "user_mail",
+    "user_materials",
+    "user_runes",
+    "users",
+    "vip_data",
+    "wallets"
+  ],
+  "target_counts_post_clone": {
+    "achievement_claims": 23,
+    "active_raids": 1,
+    "artifact_catalog_snapshot": 32,
+    "artifact_collection_state": 2,
+    "artifact_idempotency_registry": 2,
+    "artifact_inventory_ledger": 2,
+    "battle_pass": 1,
+    "daily_claims": 1,
+    "dm_messages": 2,
+    "dm_threads": 2,
+    "environment_markers": 1,
+    "event_completions": 8,
+    "friends": 2,
+    "gift_transaction_ledger": 502,
+    "guilds": 2,
+    "gvg_wars": 2,
+    "heroes": 132,
+    "inventory": 10,
+    "level_sharing": 1,
+    "notifications": 1,
+    "plaza_chat": 4178,
+    "pvp_data": 21,
+    "refresh_tokens": 1430,
+    "retirement_history": 3,
+    "shop_purchases": 1,
+    "story_progress": 1,
+    "teams": 21,
+    "territory_control": 7,
+    "tower_progress": 21,
+    "user_affinity": 13,
+    "user_affinity_state": 1914,
+    "user_artifact_inventory": 2,
+    "user_artifacts": 18,
+    "user_constellation": 1,
+    "user_constellation_daily": 1,
+    "user_constellations": 11,
+    "user_cosmetics": 9,
+    "user_equipment": 31,
+    "user_fragments": 1,
+    "user_gift_inventory": 2500,
+    "user_heroes": 2372,
+    "user_mail": 5,
+    "user_materials": 1,
+    "user_runes": 1,
+    "users": 1108,
+    "vip_data": 1,
+    "wallets": 2
+  },
+  "per_collection_match": {
+    "achievement_claims": {
+      "source": 23,
+      "target": 23,
+      "match": true
+    },
+    "active_raids": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "artifact_catalog_snapshot": {
+      "source": 32,
+      "target": 32,
+      "match": true
+    },
+    "artifact_collection_state": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "artifact_idempotency_registry": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "artifact_inventory_ledger": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "battle_pass": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "daily_claims": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "dm_messages": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "dm_threads": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "event_completions": {
+      "source": 8,
+      "target": 8,
+      "match": true
+    },
+    "friends": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "gift_transaction_ledger": {
+      "source": 502,
+      "target": 502,
+      "match": true
+    },
+    "guilds": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "gvg_wars": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "heroes": {
+      "source": 132,
+      "target": 132,
+      "match": true
+    },
+    "inventory": {
+      "source": 10,
+      "target": 10,
+      "match": true
+    },
+    "level_sharing": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "notifications": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "plaza_chat": {
+      "source": 4178,
+      "target": 4178,
+      "match": true
+    },
+    "pvp_data": {
+      "source": 21,
+      "target": 21,
+      "match": true
+    },
+    "refresh_tokens": {
+      "source": 1430,
+      "target": 1430,
+      "match": true
+    },
+    "retirement_history": {
+      "source": 3,
+      "target": 3,
+      "match": true
+    },
+    "server_profiles": {
+      "source": 0,
+      "target": null,
+      "match": false
+    },
+    "shop_purchases": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "story_progress": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "teams": {
+      "source": 21,
+      "target": 21,
+      "match": true
+    },
+    "territory_control": {
+      "source": 7,
+      "target": 7,
+      "match": true
+    },
+    "tower_progress": {
+      "source": 21,
+      "target": 21,
+      "match": true
+    },
+    "user_affinity": {
+      "source": 13,
+      "target": 13,
+      "match": true
+    },
+    "user_affinity_state": {
+      "source": 1914,
+      "target": 1914,
+      "match": true
+    },
+    "user_artifact_inventory": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    },
+    "user_artifacts": {
+      "source": 18,
+      "target": 18,
+      "match": true
+    },
+    "user_constellation": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "user_constellation_daily": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "user_constellations": {
+      "source": 11,
+      "target": 11,
+      "match": true
+    },
+    "user_cosmetics": {
+      "source": 9,
+      "target": 9,
+      "match": true
+    },
+    "user_equipment": {
+      "source": 31,
+      "target": 31,
+      "match": true
+    },
+    "user_fragments": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "user_gift_inventory": {
+      "source": 2500,
+      "target": 2500,
+      "match": true
+    },
+    "user_heroes": {
+      "source": 2372,
+      "target": 2372,
+      "match": true
+    },
+    "user_mail": {
+      "source": 5,
+      "target": 5,
+      "match": true
+    },
+    "user_materials": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "user_runes": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "users": {
+      "source": 1108,
+      "target": 1108,
+      "match": true
+    },
+    "vip_data": {
+      "source": 1,
+      "target": 1,
+      "match": true
+    },
+    "wallets": {
+      "source": 2,
+      "target": 2,
+      "match": true
+    }
+  },
+  "users_count_match": true,
+  "user_heroes_count_match": true,
+  "no_raw_secrets_exposed_in_artifacts": true,
+  "sensitive_fields_masked_in_clone": [
+    "password",
+    "password_hash",
+    "oauth_token",
+    "refresh_token",
+    "iap_receipt_token",
+    "secret",
+    "api_key"
+  ],
+  "safety_flags": {
+    "db_write_to_production": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

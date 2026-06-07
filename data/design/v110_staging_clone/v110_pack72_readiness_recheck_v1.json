@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_73_v110_PSP_STAGING_CLONE_PROVISION",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_STAGING_CLONE_PROVISION",
+  "generated_at_utc": "2026-06-07T13:29:49.395887Z",
+  "target_db": "divine_waifus_staging_clone",
+  "classification": "STAGING_CLONE_CONFIRMED",
+  "reason": "environment_markers.v110_staging_clone_confirmed=true in target DB AND target db name contains 'staging' and 'clone'",
+  "safe_to_apply_limited": true,
+  "production_apply": false,
+  "recommended_next_command": "DB_NAME=divine_waifus_staging_clone V110_PSP_APPLY=YES V110_BACKUP_CONFIRMED=YES V110_STAGING_DB_CONFIRMED=YES V110_USER_EXPLICIT_DB_WRITE_APPROVAL=YES V110_ROLLBACK_PLAN_CONFIRMED=YES python3 backend/scripts/apply_v110_psp_migration_gated.py --execute --limit 10 --target-server-id s1",
+  "safety_flags": {
+    "production_apply": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

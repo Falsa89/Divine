@@ -3703,6 +3703,21 @@ OPTIONAL = [
     ('PROJECT-V110-STAGING-SMOKE-FINAL-MULTIRUN-SUITE', 'validate_v110_staging_smoke_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-72-v110-PSP-APPLY-STAGING-SMOKE-ROLLUP', 'validate_mega_release_acceleration_72_v110_psp_apply_staging_smoke_rollup.py'),
 
+    # ===== v110_PSP_STAGING_CLONE_PROVISION - staging clone created with marker =====
+    # PUBLIC_SYNC_TAG_v110_PSP_STAGING_CLONE_PROVISION
+    ('PROJECT-V110-STAGING-CLONE-BASELINE-MULTIRUN', 'validate_v110_staging_clone_baseline_multirun.py'),
+    ('PROJECT-V110-SOURCE-DB-CLASSIFICATION', 'validate_v110_source_db_classification.py'),
+    ('PROJECT-V110-STAGING-CLONE-PLAN', 'validate_v110_staging_clone_plan.py'),
+    ('PROJECT-V110-STAGING-CLONE-BACKUP-RESULT', 'validate_v110_staging_clone_backup_result.py'),
+    ('PROJECT-V110-STAGING-CLONE-EXECUTION-RESULT', 'validate_v110_staging_clone_execution_result.py'),
+    ('PROJECT-V110-STAGING-MARKER-RESULT', 'validate_v110_staging_marker_result.py'),
+    ('PROJECT-V110-CLONE-INTEGRITY-VERIFICATION', 'validate_v110_clone_integrity_verification.py'),
+    ('PROJECT-V110-PACK72-READINESS-RECHECK', 'validate_v110_pack72_readiness_recheck.py'),
+    ('PROJECT-V110-ZERO-PRODUCTION-MUTATION-PROOF', 'validate_v110_zero_production_mutation_proof.py'),
+    ('PROJECT-V110-STAGING-CLONE-RUNTIME-INVARIANT-PRESERVATION', 'validate_v110_staging_clone_runtime_invariant_preservation.py'),
+    ('PROJECT-V110-STAGING-CLONE-FINAL-MULTIRUN-SUITE', 'validate_v110_staging_clone_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-73-v110-STAGING-CLONE-PROVISION-ROLLUP', 'validate_mega_release_acceleration_73_v110_staging_clone_provision_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
