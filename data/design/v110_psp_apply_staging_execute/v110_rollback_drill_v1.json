@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_74_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "generated_at_utc": "2026-06-07T14:10:29.807959Z",
+  "rollback_drill_executed": true,
+  "rollback_dry_run_only": false,
+  "method": "delete_psp_with_migration_source_marker_plus_unset_server_id_field_on_staging_clone_only",
+  "target_db": "divine_waifus_staging_clone",
+  "psp_before_rollback": 10,
+  "psp_after_rollback": 0,
+  "psp_deleted": 10,
+  "user_heroes_server_id_unset_modified": 0,
+  "team_formation_server_id_unset_modified": 0,
+  "user_equipment_server_id_unset_modified": 0,
+  "rollback_restored_pre_apply_signature": true,
+  "production_rollback_executed": false,
+  "safety_flags": {
+    "db_write_to_production": false,
+    "rollback_executed_on_production": false,
+    "fake_PASS": false
+  }
+}

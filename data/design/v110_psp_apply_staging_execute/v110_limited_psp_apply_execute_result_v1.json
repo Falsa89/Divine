@@ -1,0 +1,57 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_74_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "generated_at_utc": "2026-06-07T14:13:25.052920Z",
+  "db_name": "divine_waifus_staging_clone",
+  "mongo_url_kind": "localhost",
+  "production_apply_executed": false,
+  "production_flag_present": false,
+  "required_flags": [
+    "V110_PSP_APPLY",
+    "V110_BACKUP_CONFIRMED",
+    "V110_STAGING_DB_CONFIRMED",
+    "V110_USER_EXPLICIT_DB_WRITE_APPROVAL",
+    "V110_ROLLBACK_PLAN_CONFIRMED"
+  ],
+  "missing_flags": [],
+  "cli_args": {
+    "execute": true,
+    "plan_only": false,
+    "target_server_id": "s1",
+    "limit": 10
+  },
+  "safety_flags": {
+    "db_write_to_production": false,
+    "db_write_to_source": false,
+    "destructive_migration": false,
+    "delete": false,
+    "premium_grant": false,
+    "currency_duplication": false,
+    "reward_live": false,
+    "progress_live": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  },
+  "plan": {
+    "target_server_id": "s1",
+    "users_in_scope": 10,
+    "psp_already_present_for_server": 0,
+    "psp_to_upsert": 10,
+    "user_heroes_potential_updates": 0,
+    "team_formation_potential_updates": 0,
+    "user_equipment_potential_updates": 0
+  },
+  "target_marker_present": true,
+  "status": "APPLY_EXECUTED_STAGING_LIMITED",
+  "reason": "staging clone confirmed; limited apply executed",
+  "apply_executed": true,
+  "db_writes": 10,
+  "psp_inserted_in_this_run": 10,
+  "psp_existing_re_run_updates": 0,
+  "user_heroes_server_id_set": 0,
+  "team_formation_server_id_set": 0,
+  "user_equipment_server_id_set": 0,
+  "audit_collection": "migration_logs",
+  "migration_source": "v110_psp_apply_v1"
+}

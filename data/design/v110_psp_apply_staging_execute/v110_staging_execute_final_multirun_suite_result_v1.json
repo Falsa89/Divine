@@ -1,0 +1,41 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_74_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "track": "N",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "runs": [
+    {
+      "run": 1,
+      "pass": 1282,
+      "fail": 21,
+      "miss": 0,
+      "required_fail": 0
+    },
+    {
+      "run": 2,
+      "pass": 1282,
+      "fail": 21,
+      "miss": 0,
+      "required_fail": 0
+    },
+    {
+      "run": 3,
+      "pass": 1282,
+      "fail": 21,
+      "miss": 0,
+      "required_fail": 0
+    }
+  ],
+  "deterministic": true,
+  "pass_final": 1282,
+  "fail_final": 21,
+  "miss_final": 0,
+  "required_fail_final": 0,
+  "optional_fail_final": 21,
+  "optional_fail_target_max": 30,
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "release_readiness_claimed": false
+  }
+}

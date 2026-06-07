@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_74_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "execute_path_enabled_safely": true,
+  "new_script": "backend/scripts/apply_v110_psp_migration_execute_staging.py",
+  "hard_guards_in_new_script": [
+    "DB_NAME must contain BOTH 'staging' AND 'clone'",
+    "environment_markers.v110_staging_clone_confirmed=true MUST exist in target DB",
+    "All 5 required flags must be YES",
+    "MONGO_URL must be localhost (no mongodb+srv://)",
+    "production_marker absence verified in target"
+  ],
+  "original_apply_script_unchanged": "backend/scripts/apply_v110_psp_migration_gated.py (still has APPLY_REFUSED_BY_V110_APPLY_PREFLIGHT_PACK hard-stop intact)",
+  "hard_stop_in_original_pack71_script_intact": true,
+  "execute_only_path": "new dedicated staging-only script",
+  "safety_flags": {
+    "production_apply_path_unlocked": false,
+    "hard_stop_pack71_modified": false,
+    "fake_PASS": false
+  }
+}

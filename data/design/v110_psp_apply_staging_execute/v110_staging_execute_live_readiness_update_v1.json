@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_74_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "track": "L",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE",
+  "production_filter_applied": false,
+  "production_real_player_team_source": false,
+  "production_psp_migration_readiness": "STAGING_SMOKE_VERIFIED_LIMITED",
+  "production_legacy_cleanup_readiness": "NOT_READY",
+  "live_overall_ready": false,
+  "preconditions_changed_in_v110_staging_execute": [
+    "production_psp_migration_readiness moved from DESIGN_READY_NOT_APPLIED to STAGING_SMOKE_VERIFIED_LIMITED"
+  ],
+  "preconditions_now_pass_after_v110_staging_execute": [],
+  "preconditions_still_blocked_after_v110_staging_execute": [
+    "production_filter_applied",
+    "production_real_player_team_source",
+    "production_psp_migration_readiness_full",
+    "production_legacy_cleanup_readiness"
+  ],
+  "rationale": "Smoke staging limitato verifica solo 10 user (di 1108 sul clone). Non promuove production readiness.",
+  "safety_flags": {
+    "false_production_filter_applied": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

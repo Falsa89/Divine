@@ -3718,6 +3718,23 @@ OPTIONAL = [
     ('PROJECT-V110-STAGING-CLONE-FINAL-MULTIRUN-SUITE', 'validate_v110_staging_clone_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-73-v110-STAGING-CLONE-PROVISION-ROLLUP', 'validate_mega_release_acceleration_73_v110_staging_clone_provision_rollup.py'),
 
+    # ===== v110_PSP_APPLY_STAGING_SMOKE_EXECUTE - real apply on staging clone only =====
+    # PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_EXECUTE
+    ('PROJECT-V110-STAGING-EXECUTE-BASELINE-MULTIRUN', 'validate_v110_staging_execute_baseline_multirun.py'),
+    ('PROJECT-V110-STAGING-REVALIDATION', 'validate_v110_staging_revalidation.py'),
+    ('PROJECT-V110-EXECUTE-PATH-STATUS', 'validate_v110_execute_path_status.py'),
+    ('PROJECT-V110-PRE-APPLY-SNAPSHOT', 'validate_v110_pre_apply_snapshot.py'),
+    ('PROJECT-V110-LIMITED-PSP-APPLY-EXECUTE-RESULT', 'validate_v110_limited_psp_apply_execute_result.py'),
+    ('PROJECT-V110-IDEMPOTENCY-RERUN', 'validate_v110_idempotency_rerun.py'),
+    ('PROJECT-V110-POST-APPLY-INVARIANTS-EXECUTE', 'validate_v110_post_apply_invariants_execute.py'),
+    ('PROJECT-V110-ROLLBACK-DRILL-EXECUTE', 'validate_v110_rollback_drill_execute.py'),
+    ('PROJECT-V110-FINAL-STAGING-SNAPSHOT', 'validate_v110_final_staging_snapshot.py'),
+    ('PROJECT-V110-SOURCE-IMMUTABILITY-PROOF', 'validate_v110_source_immutability_proof.py'),
+    ('PROJECT-V110-STAGING-EXECUTE-LIVE-READINESS-UPDATE', 'validate_v110_staging_execute_live_readiness_update.py'),
+    ('PROJECT-V110-STAGING-EXECUTE-GATE-INVARIANT-PRESERVATION', 'validate_v110_staging_execute_gate_invariant_preservation.py'),
+    ('PROJECT-V110-STAGING-EXECUTE-FINAL-MULTIRUN-SUITE', 'validate_v110_staging_execute_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-74-v110-PSP-APPLY-STAGING-EXECUTE-ROLLUP', 'validate_mega_release_acceleration_74_v110_psp_apply_staging_execute_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
