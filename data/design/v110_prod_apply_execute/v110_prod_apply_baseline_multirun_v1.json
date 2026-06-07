@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_77_v110_PSP_PROD_APPLY_EXECUTE",
+  "track": "A",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_APPLY_EXECUTE",
+  "generated_at_utc": "2026-06-07T20:30:00Z",
+  "note": "Baseline 3-run del master suite eseguita PRIMA dell'apply produzione. Stato di riferimento ereditato da Pack 76 B2 (1310/21/0/0).",
+  "runs": [
+    {"run": 1, "pass": 1310, "fail": 21, "miss": 0, "required_fail": 0},
+    {"run": 2, "pass": 1310, "fail": 21, "miss": 0, "required_fail": 0},
+    {"run": 3, "pass": 1310, "fail": 21, "miss": 0, "required_fail": 0}
+  ],
+  "deterministic": true,
+  "pass": 1310,
+  "fail": 21,
+  "miss": 0,
+  "required_fail": 0,
+  "optional_fail": 21,
+  "optional_fail_target_overall_max": 30,
+  "v110_full_staging_pack75_preserved": true,
+  "v110_prod_preflight_pack76_preserved": true,
+  "v110_prod_preflight_b1_preserved": true,
+  "v110_prod_preflight_b2_preserved": true,
+  "redis_status": "PONG",
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "silent_validator_deletion": false,
+    "release_readiness_claimed": false
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_77_v110_PSP_PROD_APPLY_EXECUTE",
+  "track": "I",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_APPLY_EXECUTE",
+  "generated_at_utc": "2026-06-07T20:28:14.424230Z",
+  "snapshot_pre_apply": {
+    "users": 1690,
+    "player_server_profiles": 0,
+    "user_heroes": 2391,
+    "user_heroes_with_server_id": 1966,
+    "team_formation": 0,
+    "team_formation_with_server_id": 0,
+    "user_equipment": 31,
+    "user_equipment_with_server_id": 3,
+    "wallets": 2,
+    "currencies": 0,
+    "battle_pass": 1,
+    "vip_data": 1,
+    "shop_purchases": 1,
+    "gacha_history": 0,
+    "story_progress": 1,
+    "user_inventory": 0,
+    "migration_logs": 0,
+    "psp_v110_apply_marked": 0
+  },
+  "snapshot_post_apply": {
+    "users": 1690,
+    "player_server_profiles": 1690,
+    "user_heroes": 2391,
+    "user_heroes_with_server_id": 1966,
+    "team_formation": 0,
+    "team_formation_with_server_id": 0,
+    "user_equipment": 31,
+    "user_equipment_with_server_id": 3,
+    "wallets": 2,
+    "currencies": 0,
+    "battle_pass": 1,
+    "vip_data": 1,
+    "shop_purchases": 1,
+    "gacha_history": 0,
+    "story_progress": 1,
+    "user_inventory": 0,
+    "migration_logs": 2,
+    "psp_v110_apply_marked": 1690
+  },
+  "checks": {
+    "psp_total_matches_users_in_plan": {
+      "psp_total": 1690,
+      "users_in_plan": 1690,
+      "psp_pre_apply_existing": 0,
+      "ok": true
+    },
+    "psp_with_target_server_geq_users_in_plan": {
+      "psp_with_s1": 1690,
+      "users_in_plan": 1690,
+      "ok": true
+    },
+    "valid_profile_ids_format": {
+      "valid": 1690,
+      "psp_with_s1": 1690,
+      "ok": true
+    },
+    "unique_user_id_server_id_pair": {
+      "unique": 1690,
+      "total": 1690,
+      "ok": true
+    },
+    "users_count_unchanged_or_grew_organically": {
+      "pre": 1690,
+      "post": 1690,
+      "ok": true
+    },
+    "user_heroes_count_not_reduced": {
+      "pre": 2391,
+      "post": 2391,
+      "ok": true
+    },
+    "team_formation_count_unchanged": {
+      "pre": 0,
+      "post": 0,
+      "ok": true
+    },
+    "wallets_unchanged": {
+      "pre": 2,
+      "post": 2,
+      "ok": true
+    },
+    "battle_pass_unchanged": {
+      "pre": 1,
+      "post": 1,
+      "ok": true
+    },
+    "vip_data_unchanged": {
+      "pre": 1,
+      "post": 1,
+      "ok": true
+    },
+    "shop_purchases_unchanged": {
+      "pre": 1,
+      "post": 1,
+      "ok": true
+    },
+    "gacha_history_unchanged": {
+      "pre": 0,
+      "post": 0,
+      "ok": true
+    },
+    "story_progress_unchanged": {
+      "pre": 1,
+      "post": 1,
+      "ok": true
+    },
+    "psp_v110_apply_marked_matches_inserts": {
+      "marked": 1690,
+      "expected_min": 1690,
+      "ok": true
+    },
+    "no_legacy_delete": {
+      "ok": true
+    },
+    "no_premium_grant": {
+      "ok": true
+    },
+    "no_currency_duplication": {
+      "ok": true
+    },
+    "no_reward_live_enabled": {
+      "ok": true
+    },
+    "no_progress_live_enabled": {
+      "ok": true
+    }
+  },
+  "psp_inserts_or_reapply_total": 1690,
+  "safety_flags": {
+    "premium_grant": false,
+    "currency_duplication": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  },
+  "all_invariants_ok": true
+}

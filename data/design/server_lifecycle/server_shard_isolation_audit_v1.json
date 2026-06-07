@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-07T19:54:47.254581+00:00",
+  "timestamp_utc": "2026-06-07T20:36:51.485482+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1926,
+  "backend_python_files_scanned": 1942,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 965,
+      "files_with_hits": 974,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -141,7 +141,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 211,
+      "files_with_hits": 217,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -245,7 +245,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 373,
+      "files_with_hits": 374,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -345,7 +345,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 173,
+      "files_with_hits": 177,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -441,7 +441,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 42,
+      "files_with_hits": 44,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -521,7 +521,7 @@
     },
     "gacha_history": {
       "expected_scope": "server_bound",
-      "files_with_hits": 13,
+      "files_with_hits": 15,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_project_d_artifact_bible_v1_approval_freeze.py",
@@ -560,6 +560,26 @@
           ]
         },
         {
+          "file": "backend/scripts/orchestrate_v110_prod_apply_execute.py",
+          "keyword": "gacha_history",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 93,
+              "snippet": "\"gacha_history\": c(\"gacha_history\"),"
+            },
+            {
+              "line": 281,
+              "snippet": "\"vip_data\", \"shop_purchases\", \"gacha_history\", \"story_progress\","
+            },
+            {
+              "line": 486,
+              "snippet": "\"gacha_history_unchanged\": {"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
           "keyword": "gacha_history",
           "has_server_id_anywhere": false,
@@ -582,18 +602,6 @@
               "snippet": "'gacha_history','reward_claims','battle_pass','vip','shop_purchases',"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/simulate_slc_g_default_s1_backfill_dryrun.py",
-          "keyword": "gacha_history",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 21,
-              "snippet": "'server_wallets_free','gacha_history','story_progress',"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -601,7 +609,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 221,
+      "files_with_hits": 226,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -725,7 +733,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 35,
+      "files_with_hits": 38,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_v106_player_server_profiles_schema.py",
@@ -748,6 +756,26 @@
             {
               "line": 27,
               "snippet": "'story_progress','tower_progress','arena_profile','guild_membership',"
+            }
+          ]
+        },
+        {
+          "file": "backend/scripts/orchestrate_v110_prod_apply_execute.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 94,
+              "snippet": "\"story_progress\": c(\"story_progress\"),"
+            },
+            {
+              "line": 281,
+              "snippet": "\"vip_data\", \"shop_purchases\", \"gacha_history\", \"story_progress\","
+            },
+            {
+              "line": 491,
+              "snippet": "\"story_progress_unchanged\": {"
             }
           ]
         },
@@ -790,22 +818,6 @@
               "snippet": "'story_progress_enabled': False,"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/dry_run_v110_psp_migration.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 50,
-              "snippet": "\"story_progress_docs\": None,"
-            },
-            {
-              "line": 62,
-              "snippet": "\"story_progress_docs\": _safe_count(db, \"story_progress\"),"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -813,7 +825,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 177,
+      "files_with_hits": 179,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -921,7 +933,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 172,
+      "files_with_hits": 173,
       "hits_sample": [
         {
           "file": "backend/server.py",

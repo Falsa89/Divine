@@ -3769,6 +3769,23 @@ OPTIONAL = [
     ('PROJECT-V110-PROD-PREFLIGHT-FINAL-MULTIRUN-SUITE', 'validate_v110_prod_preflight_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-76-v110-PROD-PREFLIGHT-ROLLUP', 'validate_mega_release_acceleration_76_v110_prod_preflight_rollup.py'),
 
+    # ===== v110_PSP_PROD_APPLY_EXECUTE - PRIMA SCRITTURA AUTORIZZATA SU DIVINE_WAIFUS =====
+    # PUBLIC_SYNC_TAG_v110_PSP_PROD_APPLY_EXECUTE
+    ('PROJECT-V110-PROD-APPLY-BASELINE-MULTIRUN', 'validate_v110_prod_apply_baseline_multirun.py'),
+    ('PROJECT-V110-PROD-APPLY-USER-APPROVAL-VERIFICATION', 'validate_v110_prod_apply_user_approval_verification.py'),
+    ('PROJECT-V110-PROD-APPLY-PIN-ARTIFACT-VERIFICATION', 'validate_v110_prod_apply_pin_artifact_verification.py'),
+    ('PROJECT-V110-PROD-APPLY-PRE-SNAPSHOT', 'validate_v110_prod_apply_pre_snapshot.py'),
+    ('PROJECT-V110-PROD-APPLY-FINAL-DRY-RUN', 'validate_v110_prod_apply_final_dry_run.py'),
+    ('PROJECT-V110-PROD-APPLY-BACKUP-CONFIRMATION', 'validate_v110_prod_apply_backup_confirmation.py'),
+    ('PROJECT-V110-PROD-APPLY-EXECUTE-RESULT', 'validate_v110_prod_apply_execute_result.py'),
+    ('PROJECT-V110-PROD-APPLY-IDEMPOTENCY-RERUN', 'validate_v110_prod_apply_idempotency_rerun.py'),
+    ('PROJECT-V110-PROD-APPLY-POST-INVARIANTS', 'validate_v110_prod_apply_post_invariants.py'),
+    ('PROJECT-V110-PROD-APPLY-ROLLBACK-READINESS', 'validate_v110_prod_apply_rollback_readiness.py'),
+    ('PROJECT-V110-PROD-APPLY-LIVE-READINESS-UPDATE', 'validate_v110_prod_apply_live_readiness_update.py'),
+    ('PROJECT-V110-PROD-APPLY-GATE-INVARIANT-PRESERVATION', 'validate_v110_prod_apply_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PROD-APPLY-FINAL-MULTIRUN-SUITE', 'validate_v110_prod_apply_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-77-v110-PROD-APPLY-EXECUTE-ROLLUP', 'validate_mega_release_acceleration_77_v110_prod_apply_execute_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

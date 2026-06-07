@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_77_v110_PSP_PROD_APPLY_EXECUTE",
+  "track": "J",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_APPLY_EXECUTE",
+  "generated_at_utc": "2026-06-07T20:28:14.424481Z",
+  "rollback_plan_present": true,
+  "rollback_executed_on_production": false,
+  "rollback_plan_targets_migration_marker": true,
+  "rollback_steps": [
+    "delete db.player_server_profiles where migration_source='v110_psp_apply_v1'",
+    "$unset server_id on db.user_heroes where server_id='s1'",
+    "$unset server_id on db.team_formation where server_id='s1'",
+    "$unset server_id on db.user_equipment where server_id='s1'",
+    "ricalcolo manifest e confronto col backup pre-apply"
+  ],
+  "psp_v110_marker_count_now": 1690,
+  "user_heroes_with_server_id_s1_now": 1966,
+  "emergency_stop_command": "supervisorctl stop backend && unset V110_PSP_APPLY && unset V110_USER_EXPLICIT_DB_WRITE_APPROVAL",
+  "rollback_readiness_ok": true,
+  "safety_flags": {
+    "rollback_executed_on_production": false,
+    "destructive": false,
+    "fake_PASS": false
+  }
+}

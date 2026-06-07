@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_77_v110_PSP_PROD_APPLY_EXECUTE",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_APPLY_EXECUTE",
+  "generated_at_utc": "2026-06-07T20:28:08.044937Z",
+  "label": "final_production_dry_run_immediately_before_apply",
+  "cmd_returncode": 0,
+  "dry_run_script_status": "PLAN_ONLY_NO_WRITE",
+  "dry_run_apply_executed": false,
+  "dry_run_db_writes": 0,
+  "plan": {
+    "target_server_id": "s1",
+    "users_in_scope": 1690,
+    "psp_already_present_for_server": 0,
+    "psp_to_upsert": 1690,
+    "user_heroes_potential_updates": 0,
+    "team_formation_potential_updates": 0,
+    "user_equipment_potential_updates": 0
+  },
+  "authorization_string_match_in_script": true,
+  "pinned_commit_match_in_script": true,
+  "safe": true,
+  "safety_flags": {
+    "production_apply": false,
+    "production_db_writes": false,
+    "fake_PASS": false
+  }
+}
