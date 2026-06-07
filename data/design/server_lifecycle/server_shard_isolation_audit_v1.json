@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-07T13:47:05.135794+00:00",
+  "timestamp_utc": "2026-06-07T15:03:03.138231+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1880,
+  "backend_python_files_scanned": 1896,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 938,
+      "files_with_hits": 945,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -141,7 +141,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 194,
+      "files_with_hits": 200,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -345,7 +345,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 164,
+      "files_with_hits": 168,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -601,7 +601,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 211,
+      "files_with_hits": 214,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -725,7 +725,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 33,
+      "files_with_hits": 34,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_v106_player_server_profiles_schema.py",
@@ -764,6 +764,18 @@
           ]
         },
         {
+          "file": "backend/scripts/apply_v110_psp_migration_execute_staging.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 95,
+              "snippet": "\"story_progress\": {},"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_project_story_battle_instance_preview_endpoint_v1.py",
           "keyword": "story_progress",
           "has_server_id_anywhere": false,
@@ -794,18 +806,6 @@
               "snippet": "\"story_progress_docs\": _safe_count(db, \"story_progress\"),"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/rollback_slc_g_commit_a.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": true,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 22,
-              "snippet": "COLLECTIONS = ['user_heroes','teams','inventory','story_progress','guilds',"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -813,7 +813,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 175,
+      "files_with_hits": 176,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -921,7 +921,7 @@
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 170,
+      "files_with_hits": 171,
       "hits_sample": [
         {
           "file": "backend/server.py",
