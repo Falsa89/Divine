@@ -68,11 +68,14 @@ def create_team_formation_router(db, get_current_user):
         team_formation = user.get("team_formation") or []
         psp_doc = None
         psp_present_for_server = False
+        profile_id = None
         if server_id:
             psp_doc = await db.player_server_profiles.find_one(
                 {"user_id": str(user.get("_id") or user.get("id")), "server_id": server_id}
             )
             psp_present_for_server = psp_doc is not None
+            if psp_doc:
+                profile_id = str(psp_doc.get("profile_id") or psp_doc.get("_id") or psp_doc.get("id") or "")
         # Blocker esplicito quando server_id richiesto ma nessun team disponibile.
         if server_id and not team_formation:
             return {
@@ -82,6 +85,7 @@ def create_team_formation_router(db, get_current_user):
                 "server_id": server_id,
                 "filter_applied": True,
                 "psp_present_for_server": psp_present_for_server,
+                "profile_id": profile_id,
                 "source": "blocked_no_team_for_server",
                 "fallback_used": True,
                 "team_formation": [],
@@ -94,6 +98,7 @@ def create_team_formation_router(db, get_current_user):
                 "account_id": account_id,
                 "server_id": server_id,
                 "filter_applied": bool(server_id),
+                "profile_id": profile_id,
                 **SAFE_FALLBACK,
             }
         return {
@@ -103,9 +108,11 @@ def create_team_formation_router(db, get_current_user):
             "server_id": server_id,
             "filter_applied": bool(server_id),
             "psp_present_for_server": psp_present_for_server,
+            "profile_id": profile_id,
             "source": "saved_formation_server_scoped" if server_id else "saved_formation",
             "fallback_used": False,
             "team_formation": team_formation,
+            "blocker": None,
         }
 
     return router

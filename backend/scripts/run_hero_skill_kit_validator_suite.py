@@ -3806,6 +3806,21 @@ OPTIONAL = [
     # PUBLIC_SYNC_TAG_LOADER_PROMOTION_UI_FIX_MD5_REBASE
     ('PROJECT-V110-PACK-79-RUNTIME-REAL', 'validate_v110_pack_79_runtime_real.py'),
 
+    # ===== PACK 80 LOBBY TEAM FETCH AND CORE LOADER PROMOTION — RUNTIME REAL =====
+    # PUBLIC_SYNC_TAG_v110_LOBBY_TEAM_FETCH_AND_CORE_LOADER_PROMOTION
+    ('PROJECT-V110-LOBBY-TEAM-FETCH-BASELINE-MULTIRUN', 'validate_v110_lobby_team_fetch_baseline_multirun.py'),
+    ('PROJECT-V110-LOBBY-TEAM-FETCH-ROUTE-USAGE-MAP', 'validate_v110_lobby_team_fetch_route_usage_map.py'),
+    ('PROJECT-V110-PRE-BATTLE-LOBBY-TEAM-FETCH-IMPLEMENTATION', 'validate_v110_pre_battle_lobby_team_fetch_implementation.py'),
+    ('PROJECT-V110-TEAM-FORMATION-ROUTE-HARDENING', 'validate_v110_team_formation_route_hardening.py'),
+    ('PROJECT-V110-REAL-TEAM-SOURCE-RUNTIME-SMOKE', 'validate_v110_real_team_source_runtime_smoke.py'),
+    ('PROJECT-V110-CORE-LOADER-PROMOTION-BATCH', 'validate_v110_core_loader_promotion_batch.py'),
+    ('PROJECT-V110-STORY-LOBBY-COMBAT-PAYLOAD-UPDATE', 'validate_v110_story_lobby_combat_payload_update.py'),
+    ('PROJECT-V110-LOBBY-TEAM-FETCH-ZERO-MUTATION-PRESERVATION', 'validate_v110_lobby_team_fetch_zero_mutation_preservation.py'),
+    ('PROJECT-V110-LOBBY-TEAM-FETCH-LIVE-READINESS-UPDATE', 'validate_v110_lobby_team_fetch_live_readiness_update.py'),
+    ('PROJECT-V110-LOBBY-TEAM-FETCH-MD5-REBASE', 'validate_v110_lobby_team_fetch_md5_rebase.py'),
+    ('PROJECT-V110-LOBBY-TEAM-FETCH-GATE-INVARIANT-PRESERVATION', 'validate_v110_lobby_team_fetch_gate_invariant_preservation.py'),
+    ('PROJECT-V110-LOBBY-TEAM-FETCH-FINAL-MULTIRUN-SUITE', 'validate_v110_lobby_team_fetch_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-80-LOBBY-TEAM-FETCH-ROLLUP', 'validate_mega_release_acceleration_80_lobby_team_fetch_rollup.py'),
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

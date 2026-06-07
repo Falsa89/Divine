@@ -40,6 +40,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter';
 // v108_POSTQA_A — AsyncStorage per leggere selected server reale (NO hardcoded 's1').
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// Pack 80 — SecureStore per leggere bearer token reale (chiave canonica v96_auth_token).
+import * as SecureStore from 'expo-secure-store';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Inline catalog mirror — DETERMINISTIC, NO RUNTIME RANDOM
@@ -154,14 +156,56 @@ const CANONICAL_ENCOUNTERS: Record<string, ModeEncounter> = {
 // Quando manca il team reale, viene attivato il blocker PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER.
 const PLAYER_SAFE_FALLBACK_TEAM: EnemyUnit[] = [];
 
+// Pack 80 — numero di slot player-facing renderizzati nel lobby.
+// Mai 3-slot placeholder, mai fake heroes: slot mancanti -> empty cards onesti.
+const PLAYER_SLOT_COUNT = 6;
+
 // v93/v110 — Real Formation Source resolution.
 // Pack 79: fallback rimosso, source label estesa a `blocked_no_team_for_server` con
 // blocker chain già attiva nel componente.
-type FormationSourceLabel = 'saved_formation' | 'local_cached_formation' | 'safe_fallback_formation' | 'blocked_no_team_for_server';
+type FormationSourceLabel = 'saved_formation' | 'local_cached_formation' | 'safe_fallback_formation' | 'blocked_no_team_for_server' | 'saved_formation_server_scoped';
 
 function resolvePlayerFormation(): { team: EnemyUnit[]; source: FormationSourceLabel; fallback_used: boolean } {
+  // Pack 79/80: lo stato iniziale onesto è "blocked_no_team_for_server" finché
+  // il fetch reale a /api/team/get-formation?server_id=... non risolve.
   return { team: PLAYER_SAFE_FALLBACK_TEAM, source: 'blocked_no_team_for_server', fallback_used: true };
 }
+
+// Pack 80 — Stato runtime del fetch reale del team formation.
+type GetFormationResponse = {
+  authenticated?: boolean;
+  server_id?: string | null;
+  filter_applied?: boolean;
+  source?: string;
+  profile_id?: string | null;
+  team_formation?: Array<{ user_hero_id?: string; x?: number; y?: number }>;
+  blocker?: string | null;
+  psp_present_for_server?: boolean;
+  fallback_used?: boolean;
+  reason?: string;
+};
+
+type PlayerFormationState = {
+  team: EnemyUnit[];
+  source: FormationSourceLabel | string;
+  fallback_used: boolean;
+  filter_applied: boolean;
+  profile_id: string | null;
+  blocker: string | null;
+  fetch_status: 'idle' | 'loading' | 'success' | 'error' | 'skipped_no_server' | 'skipped_no_auth';
+  raw_slot_count: number;
+};
+
+const INITIAL_PLAYER_FORMATION: PlayerFormationState = {
+  team: PLAYER_SAFE_FALLBACK_TEAM,
+  source: 'blocked_no_team_for_server',
+  fallback_used: true,
+  filter_applied: false,
+  profile_id: null,
+  blocker: 'PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER',
+  fetch_status: 'idle',
+  raw_slot_count: 0,
+};
 
 // ─────────────────────────────────────────────────────────────────────────
 // UI
@@ -190,6 +234,21 @@ function UnitCard({ unit }: { unit: EnemyUnit }) {
         Lv.{unit.level} · ★{unit.stars}
       </Text>
       <Text style={s.unitPower}>PWR {unit.power}</Text>
+    </View>
+  );
+}
+
+// Pack 80 — Empty slot card per slot player NON configurato.
+// NON e' un fake hero: e' un placeholder esplicito "configurabile".
+function EmptySlotCard({ index }: { index: number }) {
+  return (
+    <View style={[s.unitCard, s.unitCardEmpty]}>
+      <View style={s.emptySlotBadge}>
+        <Text style={s.emptySlotBadgeTxt}>SLOT {index + 1}</Text>
+      </View>
+      <Text style={s.emptySlotLabel} numberOfLines={1}>vuoto</Text>
+      <Text style={s.emptySlotHint}>configurabile</Text>
+      <Text style={s.emptySlotMeta}>—</Text>
     </View>
   );
 }
@@ -237,8 +296,33 @@ export default function PreBattleLobbyScreen() {
   const v108EnemySourceId = (params.enemy_source_id || params.source_id || params.encounter_id || '').toString();
 
   const encounter = CANONICAL_ENCOUNTERS[mode];
-  const playerFormation = resolvePlayerFormation();
+  // Pack 79 keep: resolvePlayerFormation() rimane lo stato INIZIALE difensivo per v93.
+  // Pack 80: il vero team viene caricato via /api/team/get-formation?server_id=<id>
+  // dentro l'useEffect piu' avanti (real_player_team_fetch).
+  const initialFormation = resolvePlayerFormation();
+  const [playerFormation, setPlayerFormation] = useState<PlayerFormationState>({
+    ...INITIAL_PLAYER_FORMATION,
+    team: initialFormation.team,
+    source: initialFormation.source,
+    fallback_used: initialFormation.fallback_used,
+  });
   const playerTeam = playerFormation.team;
+
+  // v108_POSTQA_A — Selected server reale da AsyncStorage. NO hardcoded 's1'.
+  // Pack 80: dichiarazione anticipata per evitare temporal dead zone con v107D useEffect.
+  // Se manca, mostriamo blocker SELECTED_SERVER_REQUIRED e disabilitiamo launch.
+  const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
+  const [selectedServerLoaded, setSelectedServerLoaded] = useState<boolean>(false);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const sid = await AsyncStorage.getItem('selected_server_id');
+        if (!cancelled) { setSelectedServerId(sid && sid.trim() ? sid.trim() : null); setSelectedServerLoaded(true); }
+      } catch (_e) { if (!cancelled) { setSelectedServerId(null); setSelectedServerLoaded(true); } }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   // v107D — Real binding to /api/battle/launch (gated, default OFF, telemetry only).
   useEffect(() => {
@@ -286,20 +370,85 @@ export default function PreBattleLobbyScreen() {
     [encounter],
   );
 
-  // v108_POSTQA_A — Selected server reale da AsyncStorage. NO hardcoded 's1'.
-  // Se manca, mostriamo blocker SELECTED_SERVER_REQUIRED e disabilitiamo launch.
-  const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
-  const [selectedServerLoaded, setSelectedServerLoaded] = useState<boolean>(false);
+  // v108_POSTQA_A — selectedServerId/selectedServerLoaded ora dichiarati piu' in alto (Pack 80).
+  // Pack 80 — REAL PLAYER TEAM FETCH.
+  // Chiama davvero /api/team/get-formation?server_id=<selectedServerId> con
+  // Bearer token reale (SecureStore.v96_auth_token) e parsea filter_applied,
+  // source, profile_id, team_formation, blocker. Render fino a PLAYER_SLOT_COUNT slot.
+  // NESSUNA fake team. Slot mancanti = empty cards onesti.
   useEffect(() => {
+    if (!selectedServerLoaded) return;
+    if (!selectedServerId) {
+      setPlayerFormation({
+        ...INITIAL_PLAYER_FORMATION,
+        team: PLAYER_SAFE_FALLBACK_TEAM,
+        source: 'blocked_no_team_for_server',
+        fallback_used: true,
+        blocker: 'SELECTED_SERVER_REQUIRED',
+        fetch_status: 'skipped_no_server',
+        raw_slot_count: 0,
+      });
+      return;
+    }
     let cancelled = false;
+    const ctrl = new AbortController();
     (async () => {
+      setPlayerFormation(prev => ({ ...prev, fetch_status: 'loading' }));
       try {
-        const sid = await AsyncStorage.getItem('selected_server_id');
-        if (!cancelled) { setSelectedServerId(sid && sid.trim() ? sid.trim() : null); setSelectedServerLoaded(true); }
-      } catch (_e) { if (!cancelled) { setSelectedServerId(null); setSelectedServerLoaded(true); } }
+        const token = await SecureStore.getItemAsync('v96_auth_token').catch(() => null);
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        const url = `${backendUrl}/api/team/get-formation?server_id=${encodeURIComponent(selectedServerId)}`;
+        const r = await fetch(url, { signal: ctrl.signal, headers });
+        if (!r.ok) throw new Error(`http_${r.status}`);
+        const d: GetFormationResponse = await r.json();
+        if (cancelled) return;
+        // Best-effort enrichment dei metadati eroe via /api/user/heroes
+        // (loader account-wide, NON dichiarato filter_applied=true — promotion deferred).
+        let heroes: any[] = [];
+        try {
+          const rh = await fetch(`${backendUrl}/api/user/heroes`, { signal: ctrl.signal, headers });
+          if (rh.ok) heroes = await rh.json();
+        } catch (_) { /* tolerated, best-effort */ }
+        const heroMap: Record<string, any> = {};
+        (Array.isArray(heroes) ? heroes : []).forEach((h: any) => { if (h && h.id) heroMap[String(h.id)] = h; });
+        const tf = Array.isArray(d.team_formation) ? d.team_formation : [];
+        const slots: EnemyUnit[] = tf
+          .filter((e: any) => e && e.user_hero_id)
+          .slice(0, PLAYER_SLOT_COUNT)
+          .map((e: any) => {
+            const uhid = String(e.user_hero_id);
+            const h = heroMap[uhid] || {};
+            const role = (h.role || h.class || 'dps').toString().toLowerCase();
+            return {
+              hero_id: uhid,
+              role: ROLE_COLOR[role] ? role : 'dps',
+              level: Number(h.level || 1),
+              stars: Number(h.stars || 1),
+              power: Number(h.power || 0),
+            };
+          });
+        const isBlocked = !!(d.blocker || d.source === 'blocked_no_team_for_server');
+        setPlayerFormation({
+          team: slots,
+          source: (d.source ? String(d.source) : 'blocked_no_team_for_server') as any,
+          fallback_used: !!d.fallback_used || isBlocked || slots.length === 0,
+          filter_applied: !!d.filter_applied,
+          profile_id: d.profile_id ? String(d.profile_id) : null,
+          blocker: d.blocker ? String(d.blocker) : (slots.length === 0 ? 'PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER' : null),
+          fetch_status: 'success',
+          raw_slot_count: tf.length,
+        });
+      } catch (_e) {
+        if (cancelled) return;
+        setPlayerFormation({
+          ...INITIAL_PLAYER_FORMATION,
+          fetch_status: 'error',
+        });
+      }
     })();
-    return () => { cancelled = true; };
-  }, []);
+    return () => { cancelled = true; ctrl.abort(); };
+  }, [selectedServerLoaded, selectedServerId, backendUrl]);
 
   // v108_POSTQA_A — Blocker chain onesti.
   // 1) REAL_PLAYER_TEAM_SOURCE_PENDING: il team del player e' ancora il safe_fallback,
@@ -405,20 +554,29 @@ export default function PreBattleLobbyScreen() {
             </ScrollView>
           </View>
 
-          {/* Player team */}
+          {/* Player team — Pack 80: render fino a PLAYER_SLOT_COUNT slot reali
+              fetchati da /api/team/get-formation?server_id=... con empty cards
+              per gli slot mancanti. NESSUNA fake team renderizzata come reale. */}
           <View style={s.section}>
             <View style={s.sectionHeader}>
               <Text style={s.sectionTitle}>
                 Il Tuo Team · source: {playerFormation.source}
                 {playerFormation.fallback_used ? ' · fallback_used=true' : ''}
+                {playerFormation.filter_applied ? ' · filter_applied=true' : ''}
               </Text>
               <Text style={s.sectionPower}>Potenza totale: {playerPower}</Text>
             </View>
+            <Text style={s.playerFetchStatus}>
+              fetch_status={playerFormation.fetch_status} · server_id={selectedServerId || '∅'} · profile_id={playerFormation.profile_id || '∅'} · raw_slots={playerFormation.raw_slot_count} · rendered_slots={playerTeam.length}/{PLAYER_SLOT_COUNT}
+              {playerFormation.blocker ? ` · blocker=${playerFormation.blocker}` : ''}
+            </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={s.unitRow}>
-                {playerTeam.map((u, i) => (
-                  <UnitCard key={`player-${i}`} unit={u} />
-                ))}
+                {Array.from({ length: PLAYER_SLOT_COUNT }, (_, i) => {
+                  const u = playerTeam[i];
+                  if (u) return <UnitCard key={`player-${i}`} unit={u} />;
+                  return <EmptySlotCard key={`player-empty-${i}`} index={i} />;
+                })}
               </View>
             </ScrollView>
           </View>
@@ -510,6 +668,25 @@ const s = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     alignItems: 'center',
+  },
+  // Pack 80 — empty slot card style (placeholder onesto, NON fake hero).
+  unitCardEmpty: {
+    borderColor: '#445577',
+    borderStyle: 'dashed',
+    backgroundColor: 'rgba(20,30,55,0.45)',
+    minHeight: 90,
+    justifyContent: 'center',
+  },
+  emptySlotBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginBottom: 4, backgroundColor: '#334466' },
+  emptySlotBadgeTxt: { color: '#AABBDD', fontSize: 9, fontWeight: '800' },
+  emptySlotLabel: { color: '#778899', fontSize: 11, fontWeight: '700', textAlign: 'center' },
+  emptySlotHint: { color: '#556677', fontSize: 9, marginTop: 2 },
+  emptySlotMeta: { color: '#445566', fontSize: 11, marginTop: 4 },
+  playerFetchStatus: {
+    color: '#88AABB',
+    fontSize: 9,
+    fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
+    marginBottom: 6,
   },
   unitRoleBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginBottom: 4 },
   unitRoleText: { color: '#000', fontSize: 9, fontWeight: '800' },

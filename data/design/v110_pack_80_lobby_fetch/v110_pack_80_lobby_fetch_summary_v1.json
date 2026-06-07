@@ -1,0 +1,174 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_80_LOBBY_TEAM_FETCH_AND_CORE_LOADER_PROMOTION",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_LOBBY_TEAM_FETCH_AND_CORE_LOADER_PROMOTION",
+  "generated_at_utc": "2026-06-07T23:30:00Z",
+  "runtime_files_modified": [
+    "frontend/app/pre-battle-lobby.tsx",
+    "backend/routes/v96_team_formation.py"
+  ],
+  "runtime_files_modified_count": 2,
+  "design_only_changes": [
+    "data/design/closed_alpha/v100_runtime_md5_baseline_v1.json (MD5 rebase autorizzato lobby)",
+    "data/design/battle_launch/v108_pre_combat_story_md5_forensic_audit_v1.json (MD5 rebase autorizzato lobby)",
+    "data/design/battle_launch/v108_pre_combat_story_md5_supersede_review_v1.json (MD5 rebase autorizzato lobby)",
+    "backend/scripts/validate_v110_pack_79_runtime_real.py (rebase MD5 baseline assert)"
+  ],
+  "md5_rebase_chain": [
+    {
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "from_md5": "5ab539bd6a2fdb617a09edfc95f3d06a",
+      "to_md5": "e817fac7a89e4e4ffb4186e91500377c",
+      "authorized": true,
+      "reason": "Pack 80: real fetch /api/team/get-formation?server_id=... + 6-slot rendering + empty cards + auth bearer header",
+      "baseline_files_updated": [
+        "data/design/closed_alpha/v100_runtime_md5_baseline_v1.json",
+        "data/design/battle_launch/v108_pre_combat_story_md5_forensic_audit_v1.json",
+        "data/design/battle_launch/v108_pre_combat_story_md5_supersede_review_v1.json",
+        "backend/scripts/validate_v110_pack_79_runtime_real.py"
+      ]
+    }
+  ],
+  "lobby_team_fetch_implementation": {
+    "file": "frontend/app/pre-battle-lobby.tsx",
+    "fetches_real_route": true,
+    "route_called": "/api/team/get-formation",
+    "server_id_param_used": true,
+    "selected_server_source": "AsyncStorage:selected_server_id",
+    "no_hardcoded_s1_silent_fallback": true,
+    "auth_bearer_token_used": true,
+    "auth_token_source": "SecureStore:v96_auth_token",
+    "parses_filter_applied": true,
+    "parses_source": true,
+    "parses_profile_id": true,
+    "parses_team_formation": true,
+    "parses_blocker": true,
+    "renders_up_to_6_slots": true,
+    "PLAYER_SLOT_COUNT": 6,
+    "empty_slots_are_empty_configurable_not_fake_heroes": true,
+    "missing_team_blocks_honestly": true,
+    "missing_server_blocks_honestly": true,
+    "no_fake_team_rendered_as_real": true,
+    "no_3_slot_placeholder_player_facing": true,
+    "launch_disabled_when_blocker_active": true,
+    "heroes_enrichment_via_user_heroes_loader": true
+  },
+  "team_formation_route_hardening": {
+    "endpoint": "/api/team/get-formation",
+    "file": "backend/routes/v96_team_formation.py",
+    "accepts_server_id": true,
+    "filter_applied_true_only_when_server_id_present": true,
+    "psp_aware_lookup": true,
+    "profile_id_emitted": true,
+    "blocker_PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER": true,
+    "schema_consistent_for_frontend": true,
+    "reads_only": true,
+    "db_writes": 0
+  },
+  "real_team_source_runtime_smoke": {
+    "smoke_authenticated_with_server_id": "see_validator_real_team_source_runtime_smoke",
+    "smoke_missing_server_path": "see_validator_real_team_source_runtime_smoke",
+    "smoke_no_auth_path": "see_validator_real_team_source_runtime_smoke",
+    "db_writes": 0
+  },
+  "core_loader_promotion_batch": {
+    "team_formation": {
+      "endpoint": "/api/team/get-formation",
+      "filter_applied": true,
+      "promotion_status": "PROMOTED_REAL_FILTER_APPLIED"
+    },
+    "user_heroes": {
+      "endpoint": "/api/user/heroes",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NO_REAL_SERVER_FILTER_YET",
+      "reason": "Account-wide loader. No real per-server filter implemented. Cannot honestly claim filter_applied=true."
+    },
+    "inventory": {
+      "endpoint": "/api/inventory",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NO_REAL_SERVER_FILTER_YET",
+      "reason": "Inventory not yet PSP-scoped. Promotion deferred to honest path."
+    },
+    "currencies": {
+      "endpoint": "/api/currencies",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NO_REAL_SERVER_FILTER_YET",
+      "reason": "Currencies still account-wide. PSP soft_currencies path requires separate pack."
+    },
+    "story_progress": {
+      "endpoint": "/api/story/progress",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NO_REAL_SERVER_FILTER_YET",
+      "reason": "Story progress reading not yet PSP-scoped. Promotion deferred."
+    },
+    "false_filter_applied_true_emitted_anywhere": false
+  },
+  "story_lobby_combat_payload_update": {
+    "selected_server_id_propagated": true,
+    "player_team_snapshot_source": "real_fetch_team_formation_route_with_psp_aware_lookup",
+    "slot_count": 6,
+    "enemy_source": "authored_catalog_inline_mirror_with_v95_endpoint_readonly",
+    "no_fake_launch_when_blocker_active": true
+  },
+  "zero_mutation_economy_preservation": {
+    "db_writes": 0,
+    "reward_grant": false,
+    "progress_advance": false,
+    "ledger_writes": false,
+    "premium_currency_grant": false,
+    "gacha_mutation": false,
+    "shop_mutation": false,
+    "vip_mutation": false,
+    "battle_pass_mutation": false
+  },
+  "live_readiness_update": {
+    "reward_live": false,
+    "progress_live": false,
+    "ledger_live": false,
+    "battle_engine_authoritative_live": false,
+    "release_readiness_claimed": false
+  },
+  "gate_invariant_preservation": {
+    "postqa_d_gates_changed": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "v107d_binding_preserved": true,
+    "v108_postqa_a_blockers_preserved": true,
+    "v93_resolvePlayerFormation_token_preserved": true,
+    "v91_required_tokens_preserved": true
+  },
+  "baseline_pre_pack": {"pass": 1330, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack": {"pass": 1343, "fail": 29, "miss": 0, "required_fail": 0},
+  "delta": {"pass": 13, "fail": 0, "miss": 0, "required_fail": 0},
+  "verdict": "MEGA_RELEASE_ACCELERATION_80_LOBBY_TEAM_FETCH_AND_CORE_LOADER_PROMOTION_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "deferred_blockers_documented": [
+    "/api/user/heroes core loader NOT promoted (no real per-server filter yet)",
+    "/api/inventory core loader NOT promoted (no PSP scoping yet)",
+    "/api/currencies core loader NOT promoted (PSP soft_currencies path requires separate pack)",
+    "/api/story/progress core loader NOT promoted (not PSP-scoped yet)",
+    "reward/progress live remain OFF",
+    "legacy cleanup NOT executed",
+    "PSP production apply NOT executed (already done in Pack 77, not repeated)"
+  ],
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "production_apply_executed": false,
+    "production_db_writes": false,
+    "destructive_migration": false,
+    "delete": false,
+    "premium_grant": false,
+    "reward_live": false,
+    "progress_live": false,
+    "legacy_cleanup_executed": false,
+    "false_filter_applied_true": false,
+    "fake_team_as_real": false,
+    "fake_enemy_as_authored": false,
+    "3_slot_placeholder_player_facing": false,
+    "hardcoded_s1_silent_player_facing_fallback": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "approval_flags_changed_to_yes_for_pack_80": false,
+    "postqa_d_gates_unlocked": false
+  }
+}
