@@ -1,0 +1,33 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_75_v110_PSP_APPLY_FULL_STAGING",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_FULL_STAGING",
+  "generated_at_utc": "2026-06-07T15:39:34.137725Z",
+  "first_run": {
+    "psp_inserted": 1108,
+    "psp_re_run_updates": 0,
+    "user_heroes_set": 0,
+    "team_set": 0,
+    "equipment_set": 0
+  },
+  "second_run": {
+    "psp_inserted": 0,
+    "psp_re_run_updates": 1108,
+    "user_heroes_set": 0,
+    "team_set": 0,
+    "equipment_set": 0
+  },
+  "duplicate_profile_ids": 0,
+  "duplicate_user_id_server_id_pairs": 0,
+  "second_run_new_profiles_inserted": 0,
+  "idempotent_second_run_psp_inserts_zero": true,
+  "idempotent_second_run_user_heroes_zero": true,
+  "source_db_writes": 0,
+  "production_db_writes": 0,
+  "psp_total_after_idempotency": 1108,
+  "safety_flags": {
+    "duplicate_psp": false,
+    "db_write_to_production": false,
+    "fake_PASS": false
+  }
+}

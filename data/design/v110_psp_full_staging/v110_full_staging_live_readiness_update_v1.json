@@ -1,0 +1,39 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_75_v110_PSP_APPLY_FULL_STAGING",
+  "track": "K",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_FULL_STAGING",
+  "generated_at_utc": "2026-06-07T15:40:00Z",
+  "note": "Aggiornamento live readiness DOPO il full PSP apply su staging clone. Lo staging apply non costituisce produzione e non sblocca alcun gate live.",
+  "production_apply": false,
+  "production_filter_applied": false,
+  "live_overall_ready": false,
+  "reward_live_enabled": false,
+  "progress_live_enabled": false,
+  "ledger_live_enabled": false,
+  "battle_pass_live_enabled": false,
+  "vip_live_enabled": false,
+  "shop_live_enabled": false,
+  "gacha_live_enabled": false,
+  "v108_postqa_d_gates_unlocked": false,
+  "release_readiness_claimed": false,
+  "rollup_pass_does_not_imply_release_readiness": true,
+  "preconditions_for_production_apply": {
+    "psp_full_staging_apply_green": true,
+    "psp_full_staging_idempotent": true,
+    "psp_full_staging_rollback_real_executed": true,
+    "psp_full_staging_source_immutable": true,
+    "production_dry_run_executed": false,
+    "production_backup_preflight_executed": false,
+    "production_explicit_user_approval": false,
+    "all_17_live_preconditions_pass": false
+  },
+  "next_step": "production_dry_run_and_backup_preflight_combo_pack (NOT production apply directly)",
+  "safety_flags": {
+    "production_apply_executed": false,
+    "production_db_writes": false,
+    "reward_live": false,
+    "progress_live": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

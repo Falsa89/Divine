@@ -3735,6 +3735,23 @@ OPTIONAL = [
     ('PROJECT-V110-STAGING-EXECUTE-FINAL-MULTIRUN-SUITE', 'validate_v110_staging_execute_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-74-v110-PSP-APPLY-STAGING-EXECUTE-ROLLUP', 'validate_mega_release_acceleration_74_v110_psp_apply_staging_execute_rollup.py'),
 
+    # ===== v110_PSP_APPLY_FULL_STAGING - full apply on staging clone only =====
+    # PUBLIC_SYNC_TAG_v110_PSP_APPLY_FULL_STAGING
+    ('PROJECT-V110-FULL-STAGING-BASELINE-MULTIRUN', 'validate_v110_full_staging_baseline_multirun.py'),
+    ('PROJECT-V110-FULL-STAGING-CLONE-REVALIDATION', 'validate_v110_full_staging_clone_revalidation.py'),
+    ('PROJECT-V110-FULL-STAGING-PRE-APPLY-BACKUP', 'validate_v110_full_staging_pre_apply_backup.py'),
+    ('PROJECT-V110-FULL-STAGING-APPLY-RESULT', 'validate_v110_full_staging_apply_result.py'),
+    ('PROJECT-V110-FULL-STAGING-IDEMPOTENCY-RERUN', 'validate_v110_full_staging_idempotency_rerun.py'),
+    ('PROJECT-V110-FULL-STAGING-POST-APPLY-INVARIANTS', 'validate_v110_full_staging_post_apply_invariants.py'),
+    ('PROJECT-V110-FULL-STAGING-BALANCE-ECONOMY-AUDIT', 'validate_v110_full_staging_balance_economy_audit.py'),
+    ('PROJECT-V110-FULL-STAGING-ROLLBACK-DRILL', 'validate_v110_full_staging_rollback_drill.py'),
+    ('PROJECT-V110-FULL-STAGING-FINAL-SNAPSHOT', 'validate_v110_full_staging_final_snapshot.py'),
+    ('PROJECT-V110-FULL-STAGING-SOURCE-PROD-IMMUTABILITY', 'validate_v110_full_staging_source_prod_immutability.py'),
+    ('PROJECT-V110-FULL-STAGING-LIVE-READINESS-UPDATE', 'validate_v110_full_staging_live_readiness_update.py'),
+    ('PROJECT-V110-FULL-STAGING-GATE-INVARIANT-PRESERVATION', 'validate_v110_full_staging_gate_invariant_preservation.py'),
+    ('PROJECT-V110-FULL-STAGING-FINAL-MULTIRUN-SUITE', 'validate_v110_full_staging_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-75-v110-PSP-APPLY-FULL-STAGING-ROLLUP', 'validate_mega_release_acceleration_75_v110_psp_apply_full_staging_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

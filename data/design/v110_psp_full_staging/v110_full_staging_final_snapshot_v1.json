@@ -1,0 +1,63 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_75_v110_PSP_APPLY_FULL_STAGING",
+  "track": "I",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_FULL_STAGING",
+  "generated_at_utc": "2026-06-07T15:39:34.180966Z",
+  "staging_snapshot_post_rollback": {
+    "users": 1108,
+    "player_server_profiles": 0,
+    "user_heroes": 2372,
+    "user_heroes_with_server_id": 0,
+    "team_formation": 0,
+    "team_formation_with_server_id": 0,
+    "user_equipment": 31,
+    "user_equipment_with_server_id": 0,
+    "wallets": 2,
+    "battle_pass": 1,
+    "shop_purchases": 1,
+    "vip_data": 1,
+    "migration_logs": 2,
+    "psp_v110_apply_marked": 0
+  },
+  "staging_checksum_post_rollback": {
+    "users": {
+      "count": 1108,
+      "sha256": "7afb05e3feb479bd2f6c3a820f3bf105fd0d9bc901755ed28a1682f2b593bd01"
+    },
+    "user_heroes": {
+      "count": 2372,
+      "sha256": "d1405aa4a5d2b8bd158797fed0901d55f7d250ba17d6e25cff05f48992de38f0"
+    },
+    "player_server_profiles": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "wallets": {
+      "count": 2,
+      "sha256": "a734a5ff52211f5293cddc5f8c01dd1ae94c59f394d752fe89600f649462b3a9"
+    }
+  },
+  "source_snapshot_readonly": {
+    "users": 1360,
+    "player_server_profiles": 0,
+    "user_heroes": 2381,
+    "user_heroes_with_server_id": 1966,
+    "team_formation": 0,
+    "team_formation_with_server_id": 0,
+    "user_equipment": 31,
+    "user_equipment_with_server_id": 3,
+    "wallets": 2,
+    "battle_pass": 1,
+    "shop_purchases": 1,
+    "vip_data": 1,
+    "migration_logs": 0,
+    "psp_v110_apply_marked": 0
+  },
+  "staging_psp_post_rollback": 0,
+  "staging_user_heroes_with_server_id_post_rollback": 0,
+  "read_only_for_source": true,
+  "safety_flags": {
+    "db_write_to_production": false,
+    "fake_PASS": false
+  }
+}

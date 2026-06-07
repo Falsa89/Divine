@@ -1,0 +1,75 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_75_v110_PSP_APPLY_FULL_STAGING",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_FULL_STAGING",
+  "generated_at_utc": "2026-06-07T15:39:34.148009Z",
+  "checks": {
+    "psp_count_matches_users_selected": {
+      "psp_total": 1108,
+      "users_in_scope": 1108,
+      "ok": true
+    },
+    "psp_with_target_server_matches": {
+      "psp_with_s1": 1108,
+      "users_in_scope": 1108,
+      "ok": true
+    },
+    "valid_profile_ids_format": {
+      "valid": 1108,
+      "total": 1108,
+      "ok": true
+    },
+    "unique_account_server_pair": {
+      "unique": 1108,
+      "total": 1108,
+      "ok": true
+    },
+    "users_count_unchanged": {
+      "pre": 1108,
+      "post": 1108,
+      "ok": true
+    },
+    "user_heroes_count_not_reduced": {
+      "pre": 2372,
+      "post": 2372,
+      "ok": true
+    },
+    "no_team_size_drift": {
+      "team_count_pre": 0,
+      "team_count_post": 0,
+      "ok": true
+    },
+    "no_legacy_delete": {
+      "ok": true
+    },
+    "no_premium_grant": {
+      "ok": true
+    },
+    "no_currency_duplication": {
+      "ok": true
+    },
+    "no_soft_currency_loss_outside_policy": {
+      "ok": true,
+      "note": "PSP soft_currencies popolata da user.currencies.soft; nessuna scrittura sul source"
+    },
+    "no_reward_live_enabled": {
+      "ok": true
+    },
+    "no_progress_live_enabled": {
+      "ok": true
+    },
+    "psp_v110_apply_marked_equals_psp_total": {
+      "marked": 1108,
+      "psp_total": 1108,
+      "ok": true
+    }
+  },
+  "all_invariants_ok": true,
+  "db_writes": "ONLY_STAGING_CLONE",
+  "safety_flags": {
+    "premium_grant": false,
+    "currency_duplication": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}
