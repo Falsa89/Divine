@@ -162,21 +162,55 @@ def main():  # noqa: C901
     env.update({
         "DB_NAME": PROD_DB,
         # Volutamente NON mettiamo V110_PSP_APPLY/V110_USER_EXPLICIT_DB_WRITE_APPROVAL su YES per
-        # impedire qualsiasi accidentale esecuzione di apply. Dry-run è la modalità di default
-        # dello script.
+        # impedire qualsiasi accidentale esecuzione di apply. Plan-only è la modalità di default
+        # dello script (assenza di --execute) e qui la rendiamo esplicita con --plan-only.
     })
-    cmd = [sys.executable, APPLY_SCRIPT, "--dry-run", "--target-server-id", TARGET_SERVER_ID]
+    # HOTFIX B1: lo script NON supporta --dry-run; supporta --plan-only (o assenza di --execute).
+    # Invochiamo esplicitamente --plan-only così il file di output dichiara PLAN_ONLY_NO_WRITE
+    # (oppure APPLY_REFUSED_* in produzione, che è la prova di safety).
+    APPLY_RESULT_FILE = os.path.join(ROOT, "data/design/v110_psp_apply_staging_execute/v110_limited_psp_apply_execute_result_v1.json")
+    # HOTFIX B1.1: il backup DEVE essere letto PRIMA che lo script possa sovrascrivere il file.
+    pack74_backup = open(APPLY_RESULT_FILE).read() if os.path.isfile(APPLY_RESULT_FILE) else None
+
+    cmd = [sys.executable, APPLY_SCRIPT, "--plan-only", "--target-server-id", TARGET_SERVER_ID]
     started = _utc()
     r = subprocess.run(cmd, capture_output=True, text=True, timeout=300, env=env)
     ended = _utc()
 
-    APPLY_RESULT_FILE = os.path.join(ROOT, "data/design/v110_psp_apply_staging_execute/v110_limited_psp_apply_execute_result_v1.json")
-    # Salvataggio di backup prima che lo script possa toccare il file (per dry-run NON dovrebbe).
-    pack74_backup = open(APPLY_RESULT_FILE).read() if os.path.isfile(APPLY_RESULT_FILE) else None
-    dry_run_raw = {}
-    # Lo script dry-run NON scrive il file di risultato. Per sicurezza ripristiniamo comunque.
+    script_status = None
+    script_apply_executed_in_file = None
+    script_db_writes_in_file = None
+    if r.returncode == 0 and os.path.isfile(APPLY_RESULT_FILE):
+        try:
+            script_out = json.load(open(APPLY_RESULT_FILE))
+            script_status = script_out.get("status")
+            script_apply_executed_in_file = script_out.get("apply_executed")
+            script_db_writes_in_file = script_out.get("db_writes")
+        except Exception:
+            pass
+    # Lo script in plan-only sovrascrive il file Pack 74. Ripristiniamo subito dal backup PRE-call.
     if pack74_backup is not None:
         open(APPLY_RESULT_FILE, "w").write(pack74_backup)
+
+    # HOTFIX B1: il dry_run_executed deve essere VERO solo se lo script è uscito con returncode 0
+    # E ha dichiarato apply_executed=false E db_writes=0 E uno status di "rifiuto sicuro" oppure
+    # PLAN_ONLY_NO_WRITE. Su produzione lo script DEVE rifiutarsi (APPLY_REFUSED_MISSING_FLAGS o
+    # APPLY_REFUSED_NOT_STAGING_CLONE) perché:
+    #   * non impostiamo i flag V110_* (per sicurezza);
+    #   * la produzione non ha il marker v110_staging_clone_confirmed.
+    # Questa rifiutalità è la PROVA che lo script è inviolabile contro la produzione.
+    SAFE_DRY_RUN_STATUSES = {
+        "PLAN_ONLY_NO_WRITE",                # piano completato senza scritture (caso clone)
+        "APPLY_REFUSED_MISSING_FLAGS",       # script si rifiuta perché mancano flag
+        "APPLY_REFUSED_NO_DB",               # script si rifiuta perché DB non raggiungibile
+        "APPLY_REFUSED_NOT_STAGING_CLONE",   # script si rifiuta perché target non è clone
+    }
+    dry_run_real_success = (
+        r.returncode == 0
+        and script_status in SAFE_DRY_RUN_STATUSES
+        and script_apply_executed_in_file is False
+        and script_db_writes_in_file == 0
+    )
 
     # Calcolo deterministico dello scope dry-run via query read-only sulla produzione (no apply
     # script side-effects oltre la lettura).
@@ -195,9 +229,15 @@ def main():  # noqa: C901
         "generated_at_utc": _utc(),
         "target_db": PROD_DB,
         "target_server_id": TARGET_SERVER_ID,
-        "dry_run_executed": True,
+        "hotfix_applied": "v110_PROD_PREFLIGHT_B1_DRY_RUN_INVOCATION_AND_DIFF_RECONCILIATION",
+        "dry_run_invocation_mode": "plan_only",
+        "dry_run_executed": dry_run_real_success,
+        "dry_run_real_success": dry_run_real_success,
         "apply_executed": False,
         "production_apply_executed": False,
+        "script_status_in_output_file": script_status,
+        "script_apply_executed_in_output_file": script_apply_executed_in_file,
+        "script_db_writes_in_output_file": script_db_writes_in_file,
         "users_selected": users_in_scope,
         "psp_count_pre_apply": psp_already_present_for_target,
         "psp_to_insert_estimate": psp_to_insert_estimate,
@@ -222,6 +262,7 @@ def main():  # noqa: C901
             "stderr_tail": (r.stderr or "")[-400:],
             "started_at_utc": started,
             "ended_at_utc": ended,
+            "exit_zero": r.returncode == 0,
         },
         "safety_flags": {
             "production_apply": False,
@@ -229,6 +270,7 @@ def main():  # noqa: C901
             "false_filter_applied": False,
             "release_readiness_claimed": False,
             "fake_PASS": False,
+            "fake_dry_run_when_command_failed": False,
         },
     }
     _save("v110_prod_psp_apply_dry_run_result_v1.json", dry_run_payload)
