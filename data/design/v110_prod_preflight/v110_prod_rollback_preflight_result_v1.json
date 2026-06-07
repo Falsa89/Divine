@@ -1,0 +1,54 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_76_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "generated_at_utc": "2026-06-07T17:43:19.565364Z",
+  "rollback_plan_present": true,
+  "rollback_executed_on_production": false,
+  "rollback_executed_in_this_pack": false,
+  "rollback_steps": [
+    {
+      "step": 1,
+      "name": "delete_psp_with_migration_source_marker",
+      "operation": "db.player_server_profiles.delete_many({migration_source: 'v110_psp_apply_v1'})",
+      "destructive_on_production_pre_apply_data": false
+    },
+    {
+      "step": 2,
+      "name": "unset_user_heroes_server_id",
+      "operation": "db.user_heroes.update_many({server_id: 's1'}, {$unset: {server_id: ''}})",
+      "destructive_on_production_pre_apply_data": false
+    },
+    {
+      "step": 3,
+      "name": "unset_team_formation_server_id",
+      "operation": "db.team_formation.update_many({server_id: 's1'}, {$unset: {server_id: ''}})",
+      "destructive_on_production_pre_apply_data": false
+    },
+    {
+      "step": 4,
+      "name": "unset_user_equipment_server_id",
+      "operation": "db.user_equipment.update_many({server_id: 's1'}, {$unset: {server_id: ''}})",
+      "destructive_on_production_pre_apply_data": false
+    },
+    {
+      "step": 5,
+      "name": "verify_post_rollback_signature",
+      "operation": "ricalcola checksum manifest e confronta con backup preflight",
+      "destructive_on_production_pre_apply_data": false
+    }
+  ],
+  "rollback_targets_only_migration_marker": true,
+  "rollback_preserves_pre_apply_user_data": true,
+  "rollback_drill_validated_on_staging_clone_pack_75": true,
+  "rollback_drill_psp_deleted_on_staging_pack_75": 1108,
+  "rollback_drill_dry_run_only_on_staging_pack_75": false,
+  "emergency_stop_command": "supervisorctl stop backend && unset V110_PSP_APPLY && unset V110_USER_EXPLICIT_DB_WRITE_APPROVAL",
+  "production_db_writes_during_preflight": 0,
+  "safety_flags": {
+    "rollback_executed_on_production": false,
+    "destructive": false,
+    "db_write_to_production": false,
+    "fake_PASS": false
+  }
+}

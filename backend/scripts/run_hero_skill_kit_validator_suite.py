@@ -3752,6 +3752,23 @@ OPTIONAL = [
     ('PROJECT-V110-FULL-STAGING-FINAL-MULTIRUN-SUITE', 'validate_v110_full_staging_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-75-v110-PSP-APPLY-FULL-STAGING-ROLLUP', 'validate_mega_release_acceleration_75_v110_psp_apply_full_staging_rollup.py'),
 
+    # ===== v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO - read-only preflight =====
+    # PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO
+    ('PROJECT-V110-PROD-PREFLIGHT-BASELINE-MULTIRUN', 'validate_v110_prod_preflight_baseline_multirun.py'),
+    ('PROJECT-V110-PROD-ENVIRONMENT-CLASSIFICATION', 'validate_v110_prod_environment_classification.py'),
+    ('PROJECT-V110-PROD-PRE-DRY-RUN-SNAPSHOT', 'validate_v110_prod_pre_dry_run_snapshot.py'),
+    ('PROJECT-V110-PROD-PSP-APPLY-DRY-RUN-RESULT', 'validate_v110_prod_psp_apply_dry_run_result.py'),
+    ('PROJECT-V110-PROD-BACKUP-PREFLIGHT-RESULT', 'validate_v110_prod_backup_preflight_result.py'),
+    ('PROJECT-V110-PROD-ROLLBACK-PREFLIGHT-RESULT', 'validate_v110_prod_rollback_preflight_result.py'),
+    ('PROJECT-V110-EXPECTED-PROD-APPLY-DIFF', 'validate_v110_expected_prod_apply_diff.py'),
+    ('PROJECT-V110-PRODUCTION-APPROVAL-GATE-MATRIX', 'validate_v110_production_approval_gate_matrix.py'),
+    ('PROJECT-V110-PRODUCTION-APPLY-SCRIPT-SAFETY-RECHECK', 'validate_v110_production_apply_script_safety_recheck.py'),
+    ('PROJECT-V110-PROD-IMMUTABILITY-AFTER-DRY-RUN', 'validate_v110_prod_immutability_after_dry_run.py'),
+    ('PROJECT-V110-PROD-PREFLIGHT-LIVE-READINESS-UPDATE', 'validate_v110_prod_preflight_live_readiness_update.py'),
+    ('PROJECT-V110-PROD-PREFLIGHT-GATE-INVARIANT-PRESERVATION', 'validate_v110_prod_preflight_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PROD-PREFLIGHT-FINAL-MULTIRUN-SUITE', 'validate_v110_prod_preflight_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-76-v110-PROD-PREFLIGHT-ROLLUP', 'validate_mega_release_acceleration_76_v110_prod_preflight_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

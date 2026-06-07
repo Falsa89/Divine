@@ -1,0 +1,63 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_76_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "generated_at_utc": "2026-06-07T17:43:19.565543Z",
+  "production_execute_allowed": false,
+  "missing_user_approval": true,
+  "apply_not_executed": true,
+  "required_flags": {
+    "V110_PSP_APPLY": {
+      "required_value": "YES",
+      "current_value": "<unset>",
+      "satisfied": false
+    },
+    "V110_BACKUP_CONFIRMED": {
+      "required_value": "YES",
+      "current_value": "<unset>",
+      "satisfied": false
+    },
+    "V110_USER_EXPLICIT_DB_WRITE_APPROVAL": {
+      "required_value": "YES",
+      "current_value": "<unset>",
+      "satisfied": false
+    },
+    "V110_ROLLBACK_PLAN_CONFIRMED": {
+      "required_value": "YES",
+      "current_value": "<unset>",
+      "satisfied": false
+    },
+    "V110_PRODUCTION_DB_EXPLICIT_APPROVAL": {
+      "required_value": "YES",
+      "current_value": "<unset>",
+      "satisfied": false
+    }
+  },
+  "required_artifact_pins": {
+    "exact_git_commit_pin": {
+      "description": "commit hash di Pack 76 (preflight) deve essere pinnato all'apply pack successivo",
+      "pinned_value": null
+    },
+    "backup_artifact_pin": {
+      "description": "manifest_sha256 del Track E",
+      "pinned_value": "5dd4b6618d5114d41ad529e950ed75b7668f12d631642f0d34837ea15706fd5e"
+    },
+    "dry_run_hash_pin": {
+      "description": "sha256 della dry-run result",
+      "pinned_value": "cb40b202ed8e05295f83be6605d6ade2a5f491d1f4d3cf33dcc38341e18f32bb"
+    },
+    "rollback_plan_hash_pin": {
+      "description": "sha256 della rollback preflight result",
+      "pinned_value": "c980189cf63fdd7c24074c7448a2171d26a2f918eb1e9badfdd2fe103bf3bbd0"
+    }
+  },
+  "maintenance_window_required": true,
+  "maintenance_window_proposed_minimum_minutes": 30,
+  "emergency_stop_command": "supervisorctl stop backend && unset V110_PSP_APPLY && unset V110_USER_EXPLICIT_DB_WRITE_APPROVAL",
+  "safety_flags": {
+    "production_execute_allowed": false,
+    "approval_flags_silently_set_to_yes": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

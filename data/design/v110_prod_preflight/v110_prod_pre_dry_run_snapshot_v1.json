@@ -1,0 +1,71 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_76_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "generated_at_utc": "2026-06-07T17:43:19.507194Z",
+  "target_db": "divine_waifus",
+  "method": "read_only_count_documents_plus_id_sequence_sha256",
+  "snapshot": {
+    "users": 1558,
+    "player_server_profiles": 0,
+    "user_heroes": 2384,
+    "user_heroes_with_server_id": 1966,
+    "team_formation": 0,
+    "team_formation_with_server_id": 0,
+    "user_equipment": 31,
+    "user_equipment_with_server_id": 3,
+    "wallets": 2,
+    "currencies": 0,
+    "battle_pass": 1,
+    "shop_purchases": 1,
+    "vip_data": 1,
+    "gacha_history": 0,
+    "story_progress": 1,
+    "user_inventory": 0,
+    "guild_data": 0,
+    "plaza_chat": 4238,
+    "ranking_data": 0,
+    "migration_logs": 0,
+    "environment_markers": 0,
+    "psp_v110_apply_marked": 0
+  },
+  "checksum": {
+    "users": {
+      "count": 1558,
+      "sha256": "86b8735d88063b97e15a98c4043f8b9e33c713839f768770826ca30568eb2d46",
+      "present": true
+    },
+    "user_heroes": {
+      "count": 2384,
+      "sha256": "3c19d6cb4ae588ae1c853a8059d84b8142e77dcc41dff79cbad539978d4136a5",
+      "present": true
+    },
+    "team_formation": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "present": false
+    },
+    "user_equipment": {
+      "count": 31,
+      "sha256": "76605a6f77a1618e4f8b7a96099f1a5f39d41684f47b5fa2dbff041e49fb60a4",
+      "present": true
+    },
+    "player_server_profiles": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "present": false
+    },
+    "wallets": {
+      "count": 2,
+      "sha256": "a734a5ff52211f5293cddc5f8c01dd1ae94c59f394d752fe89600f649462b3a9",
+      "present": true
+    }
+  },
+  "source_db_writes_during_snapshot": 0,
+  "production_db_writes_during_snapshot": 0,
+  "safety_flags": {
+    "db_write": false,
+    "destructive": false,
+    "fake_PASS": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_76_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "generated_at_utc": "2026-06-07T17:43:19.565466Z",
+  "scope_basis": "Track D dry-run (read-only) sulla produzione",
+  "target_db": "divine_waifus",
+  "target_server_id": "s1",
+  "expected_inserts": {
+    "player_server_profiles": 1558
+  },
+  "expected_updates": {
+    "user_heroes_server_id_set": 418,
+    "team_formation_server_id_set": 0,
+    "user_equipment_server_id_set": 28
+  },
+  "expected_deletes": {},
+  "expected_total_db_writes_if_executed": 2004,
+  "users_count_must_remain_unchanged": true,
+  "user_heroes_count_must_not_decrease": true,
+  "team_formation_count_must_remain_unchanged": true,
+  "wallets_count_must_remain_unchanged": true,
+  "battle_pass_count_must_remain_unchanged": true,
+  "vip_data_count_must_remain_unchanged": true,
+  "shop_purchases_count_must_remain_unchanged": true,
+  "gacha_history_count_must_remain_unchanged": true,
+  "story_progress_count_must_remain_unchanged": true,
+  "no_premium_currency_grant_expected": true,
+  "no_soft_currency_duplication_expected": true,
+  "no_negative_balance_expected": true,
+  "no_legacy_collection_deletion_expected": true,
+  "no_reward_live_enablement_expected": true,
+  "no_progress_live_enablement_expected": true,
+  "invariants": {
+    "psp_total_post_apply_equals_users_in_scope": true,
+    "psp_with_target_server_equals_users_in_scope": true,
+    "unique_user_id_server_id_pair": true,
+    "valid_profile_id_regex": "^[a-f0-9]+:s1$",
+    "psp_v110_apply_marked_equals_psp_inserted": true
+  },
+  "safety_flags": {
+    "destructive": false,
+    "production_apply_executed": false,
+    "fake_PASS": false
+  }
+}

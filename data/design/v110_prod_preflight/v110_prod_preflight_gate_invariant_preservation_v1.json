@@ -1,0 +1,48 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_76_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "track": "L",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "generated_at_utc": "2026-06-07T17:35:20Z",
+  "note": "Pack 76 è strettamente read-only sulla produzione. Nessuna route, nessun gate, nessuna formula del battle engine viene modificata.",
+  "battle_engine_formula_modified": false,
+  "battle_engine_files_modified": [],
+  "battle_simulate_route_invoked_from_staging": false,
+  "battle_simulate_route_invoked_from_live": false,
+  "postqa_d_gates_preserved": true,
+  "server_isolation_v109_preserved": true,
+  "v110_prep_preserved": true,
+  "v110_apply_preflight_preserved": true,
+  "v110_staging_smoke_pack72_preserved": true,
+  "v110_staging_clone_pack73_preserved": true,
+  "v110_staging_execute_pack74_preserved": true,
+  "v110_full_staging_pack75_preserved": true,
+  "api_legacy_endpoints_status": "GATED_HTTP_423 unchanged",
+  "feature_flags_live_state": {
+    "reward_live": false,
+    "progress_live": false,
+    "ledger_live": false,
+    "battlepass_live": false,
+    "vip_live": false,
+    "shop_live": false,
+    "gacha_live": false
+  },
+  "approval_flags_state": {
+    "V110_PSP_APPLY": "unset",
+    "V110_BACKUP_CONFIRMED": "unset",
+    "V110_USER_EXPLICIT_DB_WRITE_APPROVAL": "unset",
+    "V110_ROLLBACK_PLAN_CONFIRMED": "unset",
+    "V110_PRODUCTION_DB_EXPLICIT_APPROVAL": "unset"
+  },
+  "validators_weakened": false,
+  "validators_silently_deleted": false,
+  "fake_PASS_introduced": false,
+  "approval_flags_changed_to_yes": false,
+  "safety_flags": {
+    "battle_engine_formula_rewrite": false,
+    "validator_weakening": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false,
+    "postqa_d_unlocked": false,
+    "approval_flags_changed_to_yes": false
+  }
+}

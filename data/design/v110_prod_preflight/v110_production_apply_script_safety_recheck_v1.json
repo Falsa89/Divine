@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_76_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "track": "I",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
+  "generated_at_utc": "2026-06-07T17:43:19.565866Z",
+  "apply_script_path": "/app/backend/scripts/apply_v110_psp_migration_execute_staging.py",
+  "apply_script_sha256": "9232b93e6135d7813c85566b14d734817c1dbda48360b1b25d9c841c5df09d3d",
+  "audits": {
+    "execute_flag_required": true,
+    "v110_psp_apply_env_required": true,
+    "v110_backup_confirmed_env_required": true,
+    "v110_user_explicit_db_write_approval_env_required": true,
+    "v110_rollback_plan_confirmed_env_required": true,
+    "v110_staging_db_confirmed_env_required": true,
+    "dry_run_is_default": true,
+    "no_unconditional_delete_calls_on_source": true,
+    "no_path_writes_production_without_explicit_flag": true,
+    "no_path_executes_apply_without_target_server_id": true
+  },
+  "all_audits_ok": true,
+  "production_db_writes_during_audit": 0,
+  "script_modified_in_this_pack": false,
+  "safety_flags": {
+    "fake_PASS": false,
+    "destructive": false,
+    "production_apply": false
+  }
+}
