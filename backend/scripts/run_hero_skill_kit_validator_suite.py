@@ -3686,6 +3686,23 @@ OPTIONAL = [
     ('PROJECT-V110-APPLY-PREFLIGHT-FINAL-MULTIRUN-SUITE', 'validate_v110_apply_preflight_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-71-v110-APPLY-PREFLIGHT-ROLLUP', 'validate_mega_release_acceleration_71_v110_apply_preflight_rollup.py'),
 
+    # ===== v110_PSP_APPLY_STAGING_SMOKE_LIMITED - environment honest stop, fallback dry-run =====
+    # PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED
+    ('PROJECT-V110-STAGING-SMOKE-BASELINE-MULTIRUN', 'validate_v110_staging_smoke_baseline_multirun.py'),
+    ('PROJECT-V110-STAGING-SMOKE-ENVIRONMENT-CLASSIFICATION', 'validate_v110_staging_smoke_environment_classification.py'),
+    ('PROJECT-V110-PRE-SMOKE-DB-SNAPSHOT', 'validate_v110_pre_smoke_db_snapshot.py'),
+    ('PROJECT-V110-STAGING-BACKUP-EXECUTION', 'validate_v110_staging_backup_execution.py'),
+    ('PROJECT-V110-LIMITED-PSP-APPLY-RESULT', 'validate_v110_limited_psp_apply_result.py'),
+    ('PROJECT-V110-IDEMPOTENCY-RERUN-CHECK', 'validate_v110_idempotency_rerun_check.py'),
+    ('PROJECT-V110-POST-APPLY-INVARIANTS', 'validate_v110_post_apply_invariants.py'),
+    ('PROJECT-V110-ROLLBACK-DRILL-RESULT', 'validate_v110_rollback_drill_result.py'),
+    ('PROJECT-V110-POST-SMOKE-FINAL-SNAPSHOT', 'validate_v110_post_smoke_final_snapshot.py'),
+    ('PROJECT-V110-STAGING-SMOKE-LIVE-READINESS-UPDATE', 'validate_v110_staging_smoke_live_readiness_update.py'),
+    ('PROJECT-V110-STAGING-SMOKE-GATE-PRESERVATION', 'validate_v110_staging_smoke_gate_preservation.py'),
+    ('PROJECT-V110-STAGING-SMOKE-RUNTIME-INVARIANT-PRESERVATION', 'validate_v110_staging_smoke_runtime_invariant_preservation.py'),
+    ('PROJECT-V110-STAGING-SMOKE-FINAL-MULTIRUN-SUITE', 'validate_v110_staging_smoke_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-72-v110-PSP-APPLY-STAGING-SMOKE-ROLLUP', 'validate_mega_release_acceleration_72_v110_psp_apply_staging_smoke_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

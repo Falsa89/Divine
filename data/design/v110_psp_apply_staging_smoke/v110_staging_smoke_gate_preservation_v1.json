@@ -1,0 +1,40 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "K",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "static_proof": {
+    "no_route_files_modified": true,
+    "no_loader_runtime_modified": true,
+    "postqa_d_gate_module_intact": true,
+    "all_9_postqa_d_routes_still_gated": true,
+    "preview_router_intact": true,
+    "resolve_router_intact": true,
+    "ledger_adapter_intact": true,
+    "apply_script_did_not_execute": true,
+    "rollback_script_did_not_execute": true,
+    "backup_script_did_not_execute": true
+  },
+  "runtime_proof": {
+    "db_writes_observed": 0,
+    "reward_grants_observed": 0,
+    "progress_writes_observed": 0,
+    "currency_mutations_observed": 0,
+    "inventory_mutations_observed": 0,
+    "user_heroes_exp_mutations_observed": 0,
+    "psp_inserts_observed": 0,
+    "legacy_documents_deleted": 0,
+    "index_created": false,
+    "collection_created": false,
+    "gacha_shop_vip_bp_mutations": 0,
+    "battle_simulate_call_from_staging_or_live": 0
+  },
+  "safety_flags": {
+    "db_write": false,
+    "destructive_migration": false,
+    "delete": false,
+    "reward_live": false,
+    "progress_live": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

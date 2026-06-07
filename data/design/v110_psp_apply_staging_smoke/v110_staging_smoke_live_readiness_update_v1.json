@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "J",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "production_filter_applied": false,
+  "production_real_player_team_source": false,
+  "production_psp_migration_readiness": "DESIGN_READY_NOT_APPLIED",
+  "production_legacy_cleanup_readiness": "NOT_READY",
+  "live_overall_ready": false,
+  "preconditions_changed_in_v110_staging_smoke": [],
+  "preconditions_now_pass_after_v110_staging_smoke": [],
+  "preconditions_still_blocked_after_v110_staging_smoke": [
+    "production_filter_applied",
+    "production_real_player_team_source",
+    "production_psp_migration_readiness",
+    "production_legacy_cleanup_readiness",
+    "staging_clone_provisioned_and_confirmed"
+  ],
+  "rationale": "v110_staging_smoke non ha eseguito apply (environment LOCAL_CONTAINER_NON_PROD). Tutte le precondizioni production restano allo stesso stato del pack 71.",
+  "safety_flags": {
+    "false_production_filter_applied": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

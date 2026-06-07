@@ -1,0 +1,29 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "G",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "invariants_checked_physically": false,
+  "reason_not_physical": "apply not executed in this pack; pre/post snapshots are identical by construction.",
+  "checks": {
+    "psp_delta_matches_limit_or_zero": {"expected": 0, "observed": 0, "ok": true},
+    "unique_profile_id_holds": {"observed_duplicates": 0, "ok": true},
+    "source_users_count_preserved": {"pre": null, "post": null, "ok_by_construction": true},
+    "user_heroes_count_not_reduced": {"pre": null, "post": null, "ok_by_construction": true},
+    "premium_balance_diff": {"expected": 0, "observed": 0, "ok": true},
+    "hard_balance_diff": {"expected": 0, "observed": 0, "ok": true},
+    "soft_balance_aggregated_per_user": {"expected": "unchanged", "observed": "unchanged", "ok": true},
+    "team_size_diff": {"expected": 0, "observed": 0, "ok": true},
+    "bots_not_empty_if_touched": {"bots_touched": false, "ok": true},
+    "no_legacy_delete": {"observed": 0, "ok": true},
+    "no_premium_grant": {"observed": 0, "ok": true},
+    "no_currency_duplication": {"observed": 0, "ok": true}
+  },
+  "all_invariants_ok": true,
+  "db_writes": 0,
+  "safety_flags": {
+    "premium_grant": false,
+    "currency_duplication": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

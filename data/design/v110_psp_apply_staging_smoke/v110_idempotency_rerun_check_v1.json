@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "rerun_executed": false,
+  "status": "IDEMPOTENCY_RERUN_SKIPPED_NO_APPLY_PRECEDED",
+  "reason": "Track E did not execute apply; idempotency rerun cannot be physically tested in this pack.",
+  "theoretical_contract_re_asserted": {
+    "unique_key": ["user_id", "server_id"],
+    "upsert_non_destructive_on_collision": true,
+    "second_run_inserts_zero": true,
+    "destructive_fields_protected": ["player_level", "player_exp", "soft_currencies", "selected_team_id", "story_progress", "tower_progress", "guild_id", "server_created_at", "created_at"],
+    "source_pack_for_contract": "v110_apply_idempotency_safety_v1.json (pack 71)"
+  },
+  "physical_duplicate_psp_observed": 0,
+  "physical_extra_inserts_observed": 0,
+  "db_writes": 0,
+  "safety_flags": {
+    "duplicate_psp": false,
+    "db_write": false,
+    "fake_PASS": false
+  }
+}

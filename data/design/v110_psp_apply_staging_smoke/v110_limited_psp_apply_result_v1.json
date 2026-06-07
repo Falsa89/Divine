@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "E",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "limited_apply_executed": false,
+  "status": "APPLY_REFUSED_ENVIRONMENT_NOT_STAGING_CLONE_CONFIRMED",
+  "reason": "environment LOCAL_CONTAINER_NON_PROD + V110_STAGING_DB_CONFIRMED not set + V110_BACKUP_CONFIRMED=NO (no backup executed); apply hard-refused.",
+  "environment_classification": "LOCAL_CONTAINER_NON_PROD",
+  "requested_parameters": {
+    "target_server_id": "s1",
+    "limit": 10
+  },
+  "required_flags_check": {
+    "V110_PSP_APPLY": "unset",
+    "V110_BACKUP_CONFIRMED": "no_backup_run",
+    "V110_STAGING_DB_CONFIRMED": "unset_or_no",
+    "V110_USER_EXPLICIT_DB_WRITE_APPROVAL": "unset",
+    "V110_ROLLBACK_PLAN_CONFIRMED": "unset",
+    "V110_PRODUCTION_DB_EXPLICIT_APPROVAL": "unset_or_no"
+  },
+  "production_apply_executed": false,
+  "db_writes": 0,
+  "psp_inserts_in_this_pack": 0,
+  "user_heroes_updates_in_this_pack": 0,
+  "team_updates_in_this_pack": 0,
+  "equipment_updates_in_this_pack": 0,
+  "safety_flags": {
+    "limited_apply_executed": false,
+    "production_apply_executed": false,
+    "db_write": false,
+    "destructive_migration": false,
+    "premium_grant": false,
+    "fake_PASS": false
+  }
+}

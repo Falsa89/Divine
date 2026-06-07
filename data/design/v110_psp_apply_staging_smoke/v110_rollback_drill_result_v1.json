@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "rollback_drill_executed": false,
+  "rollback_dry_run_executed": true,
+  "status": "ROLLBACK_DRY_RUN_ONLY_FALLBACK",
+  "reason": "Track E did not execute apply (LOCAL_CONTAINER_NON_PROD), therefore physical rollback drill is not applicable. Per pack policy, fallback rollback dry-run is allowed.",
+  "dry_run_output": {
+    "script": "backend/scripts/rollback_v110_psp_migration_gated.py",
+    "dry_run_mode": "--plan-only equivalent (no flags + default refusal)",
+    "status_string": "ROLLBACK_SKIPPED_GATED",
+    "available_backups": [],
+    "plan_steps_count": 7,
+    "db_writes": 0
+  },
+  "production_rollback_executed": false,
+  "db_writes": 0,
+  "safety_flags": {
+    "rollback_drill_executed": false,
+    "rollback_dry_run_executed": true,
+    "db_write": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

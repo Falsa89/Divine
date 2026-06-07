@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "B",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "generated_at_utc": "2026-06-07T00:06:34.734378Z",
+  "classification": "LOCAL_CONTAINER_NON_PROD",
+  "reason": "localhost_mongo_dev_container_no_staging_marker",
+  "safe_to_apply": false,
+  "signals": {
+    "mongo_url_kind": "localhost",
+    "mongo_url_redacted": "mongodb://localhost:27017",
+    "db_name": "divine_waifus",
+    "prod_hint_in_name": false,
+    "prod_hint_in_url": false,
+    "staging_hint_in_name": false,
+    "staging_marker_doc_found": false,
+    "production_marker_doc_found": false,
+    "mongo_reachable": true
+  },
+  "db_writes": 0,
+  "safety_flags": {
+    "production_db_smoke": false,
+    "fake_PASS": false,
+    "release_readiness_claimed": false
+  }
+}

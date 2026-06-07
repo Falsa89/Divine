@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_72_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "track": "D",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_APPLY_STAGING_SMOKE_LIMITED",
+  "backup_executed": false,
+  "status": "BACKUP_REFUSED_ENVIRONMENT_NOT_STAGING_CLONE_CONFIRMED",
+  "reason": "environment classified as LOCAL_CONTAINER_NON_PROD; pack requires STAGING_CLONE_CONFIRMED for safe backup execution.",
+  "environment_classification": "LOCAL_CONTAINER_NON_PROD",
+  "flags_check": {
+    "V110_BACKUP_RUN": "unset",
+    "V110_USER_EXPLICIT_BACKUP_APPROVAL": "unset",
+    "V110_STAGING_DB_CONFIRMED": "unset_or_no",
+    "V110_PRODUCTION_DB_EXPLICIT_APPROVAL": "unset_or_no"
+  },
+  "backup_command_planned": "see backup_v110_psp_migration_preflight.py --plan-only output for reference command",
+  "db_writes": 0,
+  "fs_writes_during_backup": 0,
+  "safety_flags": {
+    "backup_executed": false,
+    "db_write": false,
+    "production_db_smoke": false,
+    "fake_PASS": false
+  }
+}
