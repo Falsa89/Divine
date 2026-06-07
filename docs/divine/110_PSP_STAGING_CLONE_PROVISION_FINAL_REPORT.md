@@ -37,7 +37,7 @@
 
 - Pre-pack HEAD: `d17ff3d042bad7a56b53ae1d5b215e02e73bb89b` (pack 72)
 - Working HEAD: `a660fd8a8ccf0db8f43bc642688e4ad21b63f8ff` (auto-generated changes)
-- Post-pack commit: vedi `git log` post-merge.
+- Post-pack commit: `40da83c40433d06c3cc78f3440192b8eaf3b2b6e`
 
 ---
 
