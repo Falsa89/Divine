@@ -3786,6 +3786,22 @@ OPTIONAL = [
     ('PROJECT-V110-PROD-APPLY-FINAL-MULTIRUN-SUITE', 'validate_v110_prod_apply_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-77-v110-PROD-APPLY-EXECUTE-ROLLUP', 'validate_mega_release_acceleration_77_v110_prod_apply_execute_rollup.py'),
 
+    # ===== SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO (Pack 78) =====
+    # PUBLIC_SYNC_TAG_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO
+    ('PROJECT-SERVER-FILTER-TEAM-SOURCE-BASELINE-MULTIRUN', 'validate_server_filter_team_source_baseline_multirun.py'),
+    ('PROJECT-SERVER-SCOPE-POST-PSP-READINESS', 'validate_server_scope_post_psp_readiness.py'),
+    ('PROJECT-BACKEND-LOADER-SERVER-ID-FILTER-PROMOTION-MATRIX', 'validate_backend_loader_server_id_filter_promotion_matrix.py'),
+    ('PROJECT-PSP-BACKED-REAL-PLAYER-TEAM-SOURCE', 'validate_psp_backed_real_player_team_source.py'),
+    ('PROJECT-AUTHORED-ENEMY-SOURCE', 'validate_authored_enemy_source.py'),
+    ('PROJECT-PRE-BATTLE-LOBBY-UI-FIX', 'validate_pre_battle_lobby_ui_fix.py'),
+    ('PROJECT-STORY-TO-LOBBY-TO-COMBAT-PROPAGATION', 'validate_story_to_lobby_to_combat_propagation.py'),
+    ('PROJECT-BACKEND-ROUTE-PROBE-SMOKE', 'validate_backend_route_probe_smoke.py'),
+    ('PROJECT-ZERO-MUTATION-ECONOMY-PRESERVATION', 'validate_zero_mutation_economy_preservation.py'),
+    ('PROJECT-SERVER-FILTER-TEAM-SOURCE-LIVE-READINESS-UPDATE', 'validate_server_filter_team_source_live_readiness_update.py'),
+    ('PROJECT-SERVER-FILTER-TEAM-SOURCE-GATE-INVARIANT-PRESERVATION', 'validate_server_filter_team_source_gate_invariant_preservation.py'),
+    ('PROJECT-SERVER-FILTER-TEAM-SOURCE-FINAL-MULTIRUN-SUITE', 'validate_server_filter_team_source_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-78-SERVER-FILTER-TEAM-SOURCE-ROLLUP', 'validate_mega_release_acceleration_78_server_filter_team_source_rollup.py'),
+
 
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),

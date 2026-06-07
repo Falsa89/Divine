@@ -1,0 +1,49 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_78_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "track": "H",
+  "sentinel": "PUBLIC_SYNC_TAG_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "generated_at_utc": "2026-06-07T21:02:37.884093Z",
+  "probes": [
+    {
+      "endpoint": "/api/v107c/loader-probe/user-heroes?server_id=s1",
+      "status_code": 200,
+      "server_id_received_in_payload": "s1",
+      "filter_applied_in_payload": false,
+      "status_in_payload": "ACCEPTANCE_PROBE_NO_FILTER_APPLIED"
+    },
+    {
+      "endpoint": "/api/v107c/loader-probe/team-get-formation?server_id=s1",
+      "status_code": 200,
+      "server_id_received_in_payload": "s1",
+      "filter_applied_in_payload": false,
+      "status_in_payload": "ACCEPTANCE_PROBE_NO_FILTER_APPLIED"
+    },
+    {
+      "endpoint": "/api/v107c/loader-probe/inventory?server_id=s1",
+      "status_code": 200,
+      "server_id_received_in_payload": "s1",
+      "filter_applied_in_payload": false,
+      "status_in_payload": "ACCEPTANCE_PROBE_NO_FILTER_APPLIED"
+    },
+    {
+      "endpoint": "/api/v107c/loader-probe/currencies?server_id=s1",
+      "status_code": 200,
+      "server_id_received_in_payload": "s1",
+      "filter_applied_in_payload": false,
+      "status_in_payload": "ACCEPTANCE_PROBE_NO_FILTER_APPLIED"
+    },
+    {
+      "endpoint": "/api/v107c/loader-probe/story-progress?server_id=s1",
+      "status_code": 200,
+      "server_id_received_in_payload": "s1",
+      "filter_applied_in_payload": false,
+      "status_in_payload": "ACCEPTANCE_PROBE_NO_FILTER_APPLIED"
+    }
+  ],
+  "all_probes_returned_filter_applied_false": true,
+  "no_probe_returned_filter_applied_true": true,
+  "safety_flags": {
+    "false_filter_applied_true": false,
+    "fake_PASS": false
+  }
+}

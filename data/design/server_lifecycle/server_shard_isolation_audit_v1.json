@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-07T20:44:00.270509+00:00",
+  "timestamp_utc": "2026-06-07T21:30:12.630936+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 1942,
+  "backend_python_files_scanned": 1956,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 974,
+      "files_with_hits": 980,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -141,7 +141,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 217,
+      "files_with_hits": 219,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -245,7 +245,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 374,
+      "files_with_hits": 375,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -345,7 +345,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 177,
+      "files_with_hits": 179,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -441,7 +441,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 44,
+      "files_with_hits": 45,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -521,7 +521,7 @@
     },
     "gacha_history": {
       "expected_scope": "server_bound",
-      "files_with_hits": 15,
+      "files_with_hits": 16,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_project_d_artifact_bible_v1_approval_freeze.py",
@@ -609,7 +609,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 226,
+      "files_with_hits": 240,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -733,7 +733,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 38,
+      "files_with_hits": 39,
       "hits_sample": [
         {
           "file": "backend/scripts/validate_v106_player_server_profiles_schema.py",

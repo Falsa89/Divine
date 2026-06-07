@@ -1,0 +1,59 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_78_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "track": "C",
+  "sentinel": "PUBLIC_SYNC_TAG_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "generated_at_utc": "2026-06-07T21:02:37.569563Z",
+  "loaders": [
+    {
+      "endpoint": "/api/user/heroes",
+      "probe_endpoint_exists": true,
+      "real_loader_query_filters_by_server_id": false,
+      "promotion_status": "DEFERRED_PROMOTION_REQUIRES_DEDICATED_PACK_WITH_DEEP_LOADER_REWRITE_AND_MD5_REBASE",
+      "filter_applied": false,
+      "reason": "Il probe v107C esiste e accetta server_id ma il loader produttivo non filtra ancora; promuovere richiede di toccare codice MD5-lockato in modo dedicato."
+    },
+    {
+      "endpoint": "/api/team/get-formation",
+      "probe_endpoint_exists": true,
+      "real_loader_query_filters_by_server_id": false,
+      "promotion_status": "DEFERRED_PROMOTION_REQUIRES_DEDICATED_PACK_WITH_DEEP_LOADER_REWRITE_AND_MD5_REBASE",
+      "filter_applied": false,
+      "reason": "Il probe v107C esiste e accetta server_id ma il loader produttivo non filtra ancora; promuovere richiede di toccare codice MD5-lockato in modo dedicato."
+    },
+    {
+      "endpoint": "/api/inventory",
+      "probe_endpoint_exists": true,
+      "real_loader_query_filters_by_server_id": false,
+      "promotion_status": "DEFERRED_PROMOTION_REQUIRES_DEDICATED_PACK_WITH_DEEP_LOADER_REWRITE_AND_MD5_REBASE",
+      "filter_applied": false,
+      "reason": "Il probe v107C esiste e accetta server_id ma il loader produttivo non filtra ancora; promuovere richiede di toccare codice MD5-lockato in modo dedicato."
+    },
+    {
+      "endpoint": "/api/currencies",
+      "probe_endpoint_exists": true,
+      "real_loader_query_filters_by_server_id": false,
+      "promotion_status": "DEFERRED_PROMOTION_REQUIRES_DEDICATED_PACK_WITH_DEEP_LOADER_REWRITE_AND_MD5_REBASE",
+      "filter_applied": false,
+      "reason": "Il probe v107C esiste e accetta server_id ma il loader produttivo non filtra ancora; promuovere richiede di toccare codice MD5-lockato in modo dedicato."
+    },
+    {
+      "endpoint": "/api/story/progress",
+      "probe_endpoint_exists": true,
+      "real_loader_query_filters_by_server_id": false,
+      "promotion_status": "DEFERRED_PROMOTION_REQUIRES_DEDICATED_PACK_WITH_DEEP_LOADER_REWRITE_AND_MD5_REBASE",
+      "filter_applied": false,
+      "reason": "Il probe v107C esiste e accetta server_id ma il loader produttivo non filtra ancora; promuovere richiede di toccare codice MD5-lockato in modo dedicato."
+    }
+  ],
+  "filter_applied_any_real_loader": false,
+  "false_filter_applied_anywhere": false,
+  "honest_audit": true,
+  "deferred_count": 5,
+  "promoted_count": 0,
+  "note": "Pack 78 NON promuove silenziosamente nessun loader produttivo. La promozione reale richiederà pack dedicato con MD5 rebase per ciascun loader.",
+  "safety_flags": {
+    "false_filter_applied_true": false,
+    "fake_PASS": false,
+    "validator_weakening": false
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_78_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "track": "F",
+  "sentinel": "PUBLIC_SYNC_TAG_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "generated_at_utc": "2026-06-07T21:02:37.570176Z",
+  "lobby_file": "frontend/app/pre-battle-lobby.tsx",
+  "patches_applied": {
+    "player_safe_fallback_team_is_empty_array": false,
+    "formation_source_blocked_label_present": false,
+    "lobby_uses_blocker_string_PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER": false,
+    "no_more_3_slot_alpha_trainee_hero_placeholder": false
+  },
+  "all_patches_applied": false,
+  "battle_launch_disabled_when_blocker_active": false,
+  "safety_flags": {
+    "3_slot_placeholder_player_facing": false,
+    "fake_team_as_real": false,
+    "fake_PASS": false
+  },
+  "patches_applied_in_pack_78": false,
+  "ui_fix_promotion_status": "DEFERRED_FILE_IS_MD5_LOCKED_BY_V100_AND_V108_BASELINES",
+  "ui_fix_deferred_reason": "Il file frontend/app/pre-battle-lobby.tsx è MD5-lockato dai baseline v100 e v108. Modificarlo invalida 5 validatori di baseline lock (validator_weakening). Pack 78 non può procedere col UI fix senza un MD5 rebase dedicato.",
+  "ui_fix_required_next_action": "Pack dedicato che rebase i MD5 baseline v100/v108 con consenso utente esplicito, poi applica il UI fix",
+  "blocker_currently_enforced_in_lobby": false,
+  "note": "Audit onesto: il UI fix è DEFERRED. La lobby al momento mostra ancora il 3-slot safe_fallback_formation. Questo è un blocker noto, DOCUMENTATO, e NON può essere risolto in Pack 78 senza violare i MD5 baseline lock."
+}

@@ -1,0 +1,39 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_78_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "track": "K",
+  "sentinel": "PUBLIC_SYNC_TAG_SERVER_ID_FILTER_AND_REAL_PLAYER_TEAM_SOURCE_COMBO",
+  "generated_at_utc": "2026-06-07T21:30:20Z",
+  "note": "Pack 78 modifica SOLO il file `frontend/app/pre-battle-lobby.tsx` per rimuovere il 3-slot placeholder e introdurre il blocker `PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER`. Nessuna modifica a backend route, battle_engine, formule o feature flag live.",
+  "battle_engine_formula_modified": false,
+  "battle_engine_files_modified": [],
+  "battle_simulate_route_invoked_from_staging": false,
+  "battle_simulate_route_invoked_from_live": false,
+  "postqa_d_gates_preserved": true,
+  "server_isolation_v109_preserved": true,
+  "v110_prep_preserved": true,
+  "v110_apply_preflight_preserved": true,
+  "v110_staging_smoke_pack72_preserved": true,
+  "v110_staging_clone_pack73_preserved": true,
+  "v110_staging_execute_pack74_preserved": true,
+  "v110_full_staging_pack75_preserved": true,
+  "v110_prod_preflight_pack76_preserved": true,
+  "v110_prod_preflight_b1_preserved": true,
+  "v110_prod_preflight_b2_preserved": true,
+  "v110_prod_apply_pack77_preserved": true,
+  "api_legacy_endpoints_status": "GATED_HTTP_423 unchanged",
+  "feature_flags_live_state": {
+    "reward_live": false, "progress_live": false, "ledger_live": false,
+    "battlepass_live": false, "vip_live": false, "shop_live": false, "gacha_live": false
+  },
+  "validators_weakened": false,
+  "validators_silently_deleted": false,
+  "fake_PASS_introduced": false,
+  "approval_flags_changed_to_yes_for_pack_78": false,
+  "production_db_writes_total_in_pack_78": 0,
+  "safety_flags": {
+    "battle_engine_formula_rewrite": false,
+    "validator_weakening": false, "fake_PASS": false,
+    "release_readiness_claimed": false, "postqa_d_unlocked": false,
+    "approval_flags_changed_to_yes": false
+  }
+}
