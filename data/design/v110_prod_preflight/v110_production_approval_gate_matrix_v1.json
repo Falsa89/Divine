@@ -2,7 +2,7 @@
   "pack": "MEGA_RELEASE_ACCELERATION_76_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
   "track": "H",
   "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_PROD_DRY_RUN_AND_BACKUP_PREFLIGHT_COMBO",
-  "generated_at_utc": "2026-06-07T18:23:53.767497Z",
+  "generated_at_utc": "2026-06-07T19:31:47.522025Z",
   "production_execute_allowed": false,
   "missing_user_approval": true,
   "apply_not_executed": true,
@@ -35,20 +35,28 @@
   },
   "required_artifact_pins": {
     "exact_git_commit_pin": {
-      "description": "commit hash di Pack 76 (preflight) deve essere pinnato all'apply pack successivo",
-      "pinned_value": null
+      "description": "commit hash della preflight chain (Pack 76 + hotfix B1 + B2) — pinnato per il Pack 77 production apply execute",
+      "pinned_value": "fc13fa32ef91530eca031fbeec283bea66bb21d9",
+      "pinned_at_utc": "2026-06-07T19:31:47.522109Z",
+      "hotfix_chain": [
+        "v110_PROD_PREFLIGHT_B1_DRY_RUN_INVOCATION_AND_DIFF_RECONCILIATION",
+        "v110_PROD_PREFLIGHT_B2_APPROVAL_GATE_COMMIT_PIN_FIX"
+      ],
+      "pin_source": "hard_coded_at_pack_76_hotfix_b2",
+      "pin_rationale": "Il pin riferisce il commit dell'hotfix B1 (fc13fa32) che ha reso il dry-run reale e riconciliato i diff. Eventuali auto-commit successivi non spostano questo pin.",
+      "current_head_at_orchestrator_run": "bc3ce6c79721b7bbfb26175f02b8699c7bc6e06e"
     },
     "backup_artifact_pin": {
       "description": "manifest_sha256 del Track E",
-      "pinned_value": "16d4fa19858849c1760bbcafbe69e5613852dc441e12e0e7ed7b5d6638025d4a"
+      "pinned_value": "f68574c39c8976c88b681f313062c0f74f8e2ec4c6e90e3e6c16a09821f9b20c"
     },
     "dry_run_hash_pin": {
       "description": "sha256 della dry-run result",
-      "pinned_value": "34191c9164487a48e4611fc66d0ff25b397b1339709890118cf4659037e4cceb"
+      "pinned_value": "9487f311513b8cdc251f3d49cf7b0cbdf2cec5d38fd7b1f824bb599559acd5e8"
     },
     "rollback_plan_hash_pin": {
       "description": "sha256 della rollback preflight result",
-      "pinned_value": "bf474209d9051bcbf15468d9cd428a721be4689a9557aa0121b11a17b05868c7"
+      "pinned_value": "1ebcac357e25b0616f33f110f0ba3d4c69c8a75b6ae3cc6e0325c6c9e242b9c7"
     }
   },
   "maintenance_window_required": true,

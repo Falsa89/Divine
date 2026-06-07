@@ -454,7 +454,7 @@ def main():  # noqa: C901
             "V110_PRODUCTION_DB_EXPLICIT_APPROVAL": {"required_value": "YES", "current_value": os.environ.get("V110_PRODUCTION_DB_EXPLICIT_APPROVAL", "<unset>"), "satisfied": False},
         },
         "required_artifact_pins": {
-            "exact_git_commit_pin": {"description": "commit hash di Pack 76 (preflight) deve essere pinnato all'apply pack successivo", "pinned_value": None},
+            "exact_git_commit_pin": {"description": "commit hash della preflight chain (Pack 76 + hotfix B1 + B2) — pinnato per il Pack 77 production apply execute", "pinned_value": None},
             "backup_artifact_pin": {"description": "manifest_sha256 del Track E", "pinned_value": manifest_sha},
             "dry_run_hash_pin": {"description": "sha256 della dry-run result", "pinned_value": None},
             "rollback_plan_hash_pin": {"description": "sha256 della rollback preflight result", "pinned_value": None},
@@ -476,6 +476,28 @@ def main():  # noqa: C901
         gate_matrix_payload["required_artifact_pins"]["dry_run_hash_pin"]["pinned_value"] = hashlib.sha256(open(dr_path, "rb").read()).hexdigest()
     if os.path.isfile(rb_path):
         gate_matrix_payload["required_artifact_pins"]["rollback_plan_hash_pin"]["pinned_value"] = hashlib.sha256(open(rb_path, "rb").read()).hexdigest()
+    # HOTFIX B2: pinniamo ESPLICITAMENTE il commit hotfix B1 come pin di riferimento per Pack 77.
+    # Auto-commit successivi al B1 (ambiente) NON spostano questo pin. Tracciamo separatamente
+    # il git HEAD corrente come audit info.
+    PACK_76_B1_COMMIT = "fc13fa32ef91530eca031fbeec283bea66bb21d9"
+    gate_matrix_payload["required_artifact_pins"]["exact_git_commit_pin"]["pinned_value"] = PACK_76_B1_COMMIT
+    gate_matrix_payload["required_artifact_pins"]["exact_git_commit_pin"]["pinned_at_utc"] = _utc()
+    gate_matrix_payload["required_artifact_pins"]["exact_git_commit_pin"]["hotfix_chain"] = [
+        "v110_PROD_PREFLIGHT_B1_DRY_RUN_INVOCATION_AND_DIFF_RECONCILIATION",
+        "v110_PROD_PREFLIGHT_B2_APPROVAL_GATE_COMMIT_PIN_FIX",
+    ]
+    gate_matrix_payload["required_artifact_pins"]["exact_git_commit_pin"]["pin_source"] = "hard_coded_at_pack_76_hotfix_b2"
+    gate_matrix_payload["required_artifact_pins"]["exact_git_commit_pin"]["pin_rationale"] = (
+        "Il pin riferisce il commit dell'hotfix B1 (fc13fa32) che ha reso il dry-run reale e "
+        "riconciliato i diff. Eventuali auto-commit successivi non spostano questo pin."
+    )
+    try:
+        head_commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, timeout=10
+        ).strip()
+        gate_matrix_payload["required_artifact_pins"]["exact_git_commit_pin"]["current_head_at_orchestrator_run"] = head_commit
+    except Exception as exc:
+        gate_matrix_payload["required_artifact_pins"]["exact_git_commit_pin"]["head_capture_error"] = str(exc)
     _save("v110_production_approval_gate_matrix_v1.json", gate_matrix_payload)
 
     # =====================================================================
