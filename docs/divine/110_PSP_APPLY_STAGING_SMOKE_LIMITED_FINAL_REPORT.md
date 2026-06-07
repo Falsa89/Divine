@@ -40,7 +40,7 @@ L'obiettivo primario del pack (apply limitato su staging confermato) **non è st
 
 - Pre-pack HEAD: `7ce89ae2a59cfa423d4beaeb93957d31bd4801f9` (hotfix B1)
 - Working HEAD: `c99b2e2c32123ec0aecefdc8ce96ca9ac3bc019c` (auto-generated changes)
-- Post-pack commit: vedi `git log` post-merge.
+- Post-pack commit: `7d26c66d0f86b4a5db6398f4c0f43f2d268d96b6`
 
 ---
 
