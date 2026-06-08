@@ -3841,6 +3841,21 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-81-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_81_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-81-USER-HEROES-SERVER-SCOPE-ROLLUP', 'validate_mega_release_acceleration_81_user_heroes_server_scope_rollup.py'),
 
+    # ===== PACK 82 PSP USER_ID DUAL-READ COMPAT + SERVER PLAYER PROGRESS SOT — RUNTIME REAL =====
+    # PUBLIC_SYNC_TAG_v110_PSP_USER_ID_DUAL_READ_COMPAT_AND_SERVER_PLAYER_PROGRESS_SOT
+    ('PROJECT-V110-PACK-82-BASELINE-MULTIRUN', 'validate_v110_pack_82_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-82-DUAL-READ-PSP-LOOKUP', 'validate_v110_pack_82_dual_read_psp_lookup.py'),
+    ('PROJECT-V110-PACK-82-SERVER-PLAYER-PROGRESS-SOT', 'validate_v110_pack_82_server_player_progress_sot.py'),
+    ('PROJECT-V110-PACK-82-PSP-NAMESPACE-AUDIT', 'validate_v110_pack_82_psp_namespace_audit.py'),
+    ('PROJECT-V110-PACK-82-RUNTIME-SMOKE-REAL-MIGRATED-USER', 'validate_v110_pack_82_runtime_smoke_real_migrated_user.py'),
+    ('PROJECT-V110-PACK-82-FRESH-START-INVARIANT', 'validate_v110_pack_82_fresh_start_invariant.py'),
+    ('PROJECT-V110-PACK-82-ZERO-DB-WRITES', 'validate_v110_pack_82_zero_db_writes.py'),
+    ('PROJECT-V110-PACK-82-LIVE-READINESS-UPDATE', 'validate_v110_pack_82_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-82-MD5-REBASE', 'validate_v110_pack_82_md5_rebase.py'),
+    ('PROJECT-V110-PACK-82-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_82_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-82-FINAL-3RUN-SUITE', 'validate_v110_pack_82_final_3run_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-82-PSP-DUAL-READ-COMPAT-ROLLUP', 'validate_mega_release_acceleration_82_psp_dual_read_compat_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

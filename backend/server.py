@@ -264,8 +264,21 @@ async def get_user_heroes(
     canonical_decision = "user_heroes_are_server_scoped"
     if server_id and isinstance(server_id, str) and server_id.strip():
         sid = server_id.strip()
-        # PSP-aware blocker honest: senza PSP non si serve roster legacy.
+        # Pack 82 — DUAL-READ PSP LOOKUP.
+        # I PSP migrati da Pack 77 hanno user_id = str(users._id) (ObjectId hex),
+        # mentre i PSP futuri canonici useranno users.id (uuid). Per
+        # compatibilita' senza migrazione fisica (zero DB writes), tentiamo
+        # prima il namespace canonico uuid e poi il fallback ObjectId compat.
+        psp_lookup_mode = "direct_uuid"
         psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+        if not psp:
+            # Fallback compat: cerca via str(users._id). Solo per PSP legacy Pack 77.
+            legacy_uid = str(current_user.get("_id") or "")
+            if legacy_uid:
+                psp_compat = await db.player_server_profiles.find_one({"user_id": legacy_uid, "server_id": sid})
+                if psp_compat:
+                    psp = psp_compat
+                    psp_lookup_mode = "objectid_compat_fallback"
         if not psp:
             response.headers["X-Server-Scope"] = "server_scoped"
             response.headers["X-Filter-Applied"] = "false"
@@ -275,8 +288,15 @@ async def get_user_heroes(
             response.headers["X-Canonical-Decision"] = canonical_decision
             response.headers["X-Roster-Source"] = "server_scoped_no_psp_blocked"
             response.headers["X-Roster-Count"] = "0"
+            response.headers["X-PSP-Lookup-Mode"] = "not_found"
+            response.headers["X-Player-Level"] = "1"
+            response.headers["X-Player-Exp"] = "0"
+            response.headers["X-Server-Progression-State"] = "fresh_start_pending_psp_creation"
             return []
         profile_id = str(psp.get("profile_id") or psp.get("_id") or "")
+        # Pack 82 — Server-scoped player progress SOT (letto dal PSP, MAI da users globale).
+        server_player_level = int(psp.get("player_level") or 1)
+        server_player_exp = int(psp.get("player_exp") or 0)
         # Filtro REALE su {user_id, server_id} — niente fallback account-wide.
         user_heroes = await db.user_heroes.find({"user_id": uid, "server_id": sid}).to_list(1000)
         result = []
@@ -303,6 +323,10 @@ async def get_user_heroes(
         response.headers["X-Canonical-Decision"] = canonical_decision
         response.headers["X-Roster-Source"] = "server_scoped_psp_filtered"
         response.headers["X-Roster-Count"] = str(len(result))
+        response.headers["X-PSP-Lookup-Mode"] = psp_lookup_mode
+        response.headers["X-Player-Level"] = str(server_player_level)
+        response.headers["X-Player-Exp"] = str(server_player_exp)
+        response.headers["X-Server-Progression-State"] = "psp_present_server_scoped"
         return result
     # Nessun server_id -> legacy account-wide DEPRECATED. UI player-facing
     # devono passare server_id o bloccare onestamente.
@@ -331,6 +355,10 @@ async def get_user_heroes(
     response.headers["X-Canonical-Decision"] = canonical_decision
     response.headers["X-Roster-Source"] = "account_wide_legacy_DEPRECATED"
     response.headers["X-Roster-Count"] = str(len(result))
+    response.headers["X-PSP-Lookup-Mode"] = "skipped_no_server_id"
+    response.headers["X-Player-Level"] = ""
+    response.headers["X-Player-Exp"] = ""
+    response.headers["X-Server-Progression-State"] = "account_wide_legacy_DEPRECATED"
     return result
 
 # ===================== GACHA =====================

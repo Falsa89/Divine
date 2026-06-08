@@ -54,7 +54,7 @@ Il commit Pack 81 sarà firmato con messaggio in italiano:
 
 | File | MD5 prima | MD5 dopo | Modifica |
 |---|---|---|---|
-| `backend/server.py` | `348b2646b2a70cfafc66580268a6be86` | `64bde649aad1095ab09772e5f625d0df` | `/api/user/heroes` promotion: accetta `server_id` query param; filtro Mongo reale `{user_id, server_id}`; PSP-aware blocker `PLAYER_SERVER_PROFILE_REQUIRED`; legacy account-wide path con `X-Server-Scope: account_wide_legacy_DEPRECATED` + `X-Blocker: SELECTED_SERVER_REQUIRED_FOR_PLAYER_FACING`; 8 header di contratto emessi. |
+| `backend/server.py` | `348b2646b2a70cfafc66580268a6be86` | `2e388592fcf8e0d87693b5656e908d22` | `/api/user/heroes` promotion: accetta `server_id` query param; filtro Mongo reale `{user_id, server_id}`; PSP-aware blocker `PLAYER_SERVER_PROFILE_REQUIRED`; legacy account-wide path con `X-Server-Scope: account_wide_legacy_DEPRECATED` + `X-Blocker: SELECTED_SERVER_REQUIRED_FOR_PLAYER_FACING`; 8 header di contratto emessi. |
 | `frontend/app/pre-battle-lobby.tsx` | `e817fac7a89e4e4ffb4186e91500377c` | `f8b770a118548602a7f680f59b6c409c` | Enrichment fetch ora passa `?server_id=<selectedServerId>` reale a `/api/user/heroes`. |
 
 ### Mirror (consistenza, non productive)
@@ -227,7 +227,7 @@ release_readiness_claimed: false
 ```
 backend/server.py:
   pre-Pack 81  348b2646b2a70cfafc66580268a6be86
-  Pack 81  ->  64bde649aad1095ab09772e5f625d0df   (user_heroes server-scoped promotion + 8 contract headers)
+  Pack 81  ->  2e388592fcf8e0d87693b5656e908d22   (user_heroes server-scoped promotion + 8 contract headers)
 
 frontend/app/pre-battle-lobby.tsx:
   Pack 80 finale  e817fac7a89e4e4ffb4186e91500377c

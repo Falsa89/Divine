@@ -1,0 +1,202 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_82_PSP_USER_ID_DUAL_READ_COMPAT_AND_SERVER_PLAYER_PROGRESS_SOT",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_USER_ID_DUAL_READ_COMPAT_AND_SERVER_PLAYER_PROGRESS_SOT",
+  "generated_at_utc": "2026-06-08T00:35:00Z",
+  "approach": "A_DUAL_READ_COMPAT_ZERO_DB_WRITES",
+  "rejected_alternatives": ["B_physical_PSP_user_id_normalization (deferred to dedicated pack with explicit authorization + backup/rollback)"],
+  "canonical_decision_server_player_progress": {
+    "statement": "Server-scoped player progress SOT: player_level, player_exp, roster, team, story_progress, inventory, equipment vivono nel PSP/player_server_profiles. NON in users.* global come fonte finale.",
+    "invariant_examples": [
+      "S1 livello 40 != S2 livello 40",
+      "nuovo server mai giocato = livello 1 / exp 0 / progressione iniziale",
+      "roster S1 NON copiato su S2",
+      "level/exp S1 NON copiato su S2",
+      "team formation S1 NON copiato su S2"
+    ],
+    "account_wide_remaining": [
+      "account identity",
+      "auth/login",
+      "entitlements globali",
+      "hard/premium currency se definita account-global",
+      "impostazioni account",
+      "diritti/acquisti globali"
+    ],
+    "psp_creation_for_new_server": "DEFERRED_TO_DEDICATED_ONBOARDING_PACK",
+    "final_behavior_required_for_new_server": "fresh start level 1 / exp 0 / empty roster / empty team / initial story / initial server-bound inventory / no equipment build",
+    "no_fallback_to_old_server_or_account_level": true
+  },
+  "runtime_files_modified": [
+    "backend/server.py"
+  ],
+  "runtime_files_modified_count": 1,
+  "md5_rebase_chain": [
+    {
+      "file": "backend/server.py",
+      "from_md5": "64bde649aad1095ab09772e5f625d0df",
+      "to_md5": "2e388592fcf8e0d87693b5656e908d22",
+      "authorized": true,
+      "reason": "Pack 82: dual-read PSP lookup (uuid -> ObjectId fallback) + server-scoped player progress SOT headers (X-Player-Level, X-Player-Exp, X-Server-Progression-State, X-PSP-Lookup-Mode)"
+    }
+  ],
+  "dual_read_psp_lookup_implementation": {
+    "file": "backend/server.py",
+    "route": "/api/user/heroes",
+    "first_attempt": "db.player_server_profiles.find_one({user_id: current_user.id (uuid), server_id: sid})",
+    "fallback_attempt": "db.player_server_profiles.find_one({user_id: str(current_user._id) (ObjectId hex), server_id: sid})",
+    "lookup_modes_emitted_via_header": [
+      "direct_uuid",
+      "objectid_compat_fallback",
+      "not_found",
+      "skipped_no_server_id"
+    ],
+    "future_psp_namespace_canonical": "users.id (uuid)",
+    "objectid_namespace_is_legacy_compat_only": true,
+    "no_db_writes": true,
+    "no_normalization_executed": true
+  },
+  "psp_namespace_audit_results": {
+    "audited_at_utc": "2026-06-08T00:34:00Z",
+    "psp_total": 1690,
+    "direct_uuid_count": 0,
+    "objectid_compat_fallback_count": 1690,
+    "orphan_count": 0,
+    "audit_script_read_only": true,
+    "audit_db_writes": 0,
+    "interpretation": "All 1690 Pack 77 PSPs use ObjectId-string namespace; ALL are reachable via dual-read ObjectId fallback. Zero orphan PSPs. Physical normalization deferred to dedicated pack."
+  },
+  "runtime_smoke_real_migrated_user": {
+    "user_id_uuid": "651253e2-da8d-466b-98f3-82f008d158ed",
+    "user_email": "test@test.com",
+    "user_object_id": "69db92d8310b06d00182f644",
+    "psp_server_id": "s1",
+    "psp_user_id_namespace": "objectid_compat_fallback",
+    "request": "GET /api/user/heroes?server_id=s1 with Bearer JWT(user_id=651253e2-...)",
+    "response": {
+      "status": 200,
+      "headers": {
+        "X-Server-Scope": "server_scoped",
+        "X-Filter-Applied": "true",
+        "X-Server-Id": "s1",
+        "X-Profile-Id": "69db92d8310b06d00182f644:s1",
+        "X-Blocker": "",
+        "X-Canonical-Decision": "user_heroes_are_server_scoped",
+        "X-Roster-Source": "server_scoped_psp_filtered",
+        "X-Roster-Count": "353",
+        "X-PSP-Lookup-Mode": "objectid_compat_fallback",
+        "X-Player-Level": "50",
+        "X-Player-Exp": "7252292",
+        "X-Server-Progression-State": "psp_present_server_scoped"
+      },
+      "body_length_heroes": 353
+    },
+    "verdict": "MIGRATED_USER_FOUND_VIA_OBJECTID_COMPAT_FALLBACK_FILTER_APPLIED_TRUE"
+  },
+  "runtime_smoke_fresh_start_new_server": {
+    "user_id_uuid": "651253e2-da8d-466b-98f3-82f008d158ed",
+    "request": "GET /api/user/heroes?server_id=s2 (s2 mai giocato per questo utente)",
+    "response": {
+      "status": 200,
+      "headers": {
+        "X-Server-Scope": "server_scoped",
+        "X-Filter-Applied": "false",
+        "X-Server-Id": "s2",
+        "X-Blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+        "X-Roster-Source": "server_scoped_no_psp_blocked",
+        "X-Roster-Count": "0",
+        "X-PSP-Lookup-Mode": "not_found",
+        "X-Player-Level": "1",
+        "X-Player-Exp": "0",
+        "X-Server-Progression-State": "fresh_start_pending_psp_creation"
+      },
+      "body": "[]"
+    },
+    "verdict": "FRESH_START_INVARIANT_RESPECTED_NO_S1_TO_S2_COPY_NO_FALLBACK_ACCOUNT_WIDE_LEVEL_1_EXP_0"
+  },
+  "fresh_start_invariant": {
+    "fresh_player_level": 1,
+    "fresh_player_exp": 0,
+    "fresh_roster_count": 0,
+    "fresh_team_count": 0,
+    "fresh_story_progress": "initial_state",
+    "fresh_inventory": "empty_or_starter",
+    "fresh_equipment": "empty",
+    "no_s1_to_s2_copy_in_code": true,
+    "no_account_wide_fallback_as_final_server_level": true,
+    "no_account_wide_fallback_as_final_server_roster": true,
+    "no_account_wide_fallback_as_final_server_team": true
+  },
+  "zero_mutation_economy_preservation": {
+    "db_writes": 0,
+    "psp_writes": 0,
+    "user_heroes_writes": 0,
+    "users_writes": 0,
+    "reward_grant": false,
+    "progress_advance": false,
+    "ledger_writes": false,
+    "premium_currency_grant": false,
+    "gacha_mutation": false,
+    "shop_mutation": false,
+    "vip_mutation": false,
+    "battle_pass_mutation": false,
+    "physical_psp_normalization_executed": false,
+    "legacy_cleanup_executed": false,
+    "destructive_migration_executed": false
+  },
+  "live_readiness_update": {
+    "reward_live": false,
+    "progress_live": false,
+    "ledger_live": false,
+    "battle_engine_authoritative_live": false,
+    "release_readiness_claimed": false
+  },
+  "gate_invariant_preservation": {
+    "postqa_d_gates_changed": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "pack_80_lobby_fetch_preserved": true,
+    "pack_81_user_heroes_promotion_preserved": true,
+    "v107d_binding_preserved": true,
+    "v108_postqa_a_blockers_preserved": true
+  },
+  "baseline_pre_pack": {"pass": 1359, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack_run1": {"pass": 1371, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack_run2": {"pass": 1371, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack_run3": {"pass": 1371, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack": {"pass": 1371, "fail": 29, "miss": 0, "required_fail": 0},
+  "delta": {"pass": 12, "fail": 0, "miss": 0, "required_fail": 0},
+  "verdict": "MEGA_RELEASE_ACCELERATION_82_PSP_USER_ID_DUAL_READ_COMPAT_AND_SERVER_PLAYER_PROGRESS_SOT_READY_PHYSICAL_NORMALIZATION_DEFERRED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "deferred_blockers_documented": [
+    "Physical PSP user_id normalization (ObjectId-string -> uuid) deferred to dedicated pack with explicit authorization + backup + rollback script",
+    "PSP creation/onboarding for new server deferred to dedicated onboarding pack",
+    "Inventory/currencies/story_progress/equipment loader promotion deferred to follow-up packs",
+    "Roster consumers non-battle migration deferred",
+    "Reward/progress live remain OFF",
+    "Legacy cleanup NOT executed"
+  ],
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "production_apply_executed": false,
+    "production_db_writes": false,
+    "destructive_migration": false,
+    "delete": false,
+    "premium_grant": false,
+    "reward_live": false,
+    "progress_live": false,
+    "legacy_cleanup_executed": false,
+    "physical_psp_normalization_executed": false,
+    "copy_s1_to_s2_roster": false,
+    "copy_s1_to_s2_level": false,
+    "copy_s1_to_s2_progress": false,
+    "copy_s1_to_s2_team": false,
+    "account_wide_player_level_as_final_server_level": false,
+    "account_wide_roster_as_final_server_roster": false,
+    "false_filter_applied_true": false,
+    "hardcoded_s1_silent_player_facing_fallback": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "approval_flags_changed_to_yes_for_pack_82": false,
+    "postqa_d_gates_unlocked": false
+  }
+}
