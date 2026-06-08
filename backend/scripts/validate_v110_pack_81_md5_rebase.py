@@ -12,7 +12,12 @@ m_lobby = hashlib.md5(open(os.path.join(R, 'frontend/app/pre-battle-lobby.tsx'),
 assert m_lobby == file_to_md5['frontend/app/pre-battle-lobby.tsx']['to_md5'], f'lobby md5 mismatch: {m_lobby}'
 # Verifica MD5 server.py
 m_srv = hashlib.md5(open(os.path.join(R, 'backend/server.py'), 'rb').read()).hexdigest()
-assert m_srv == file_to_md5['backend/server.py']['to_md5'], f'server.py md5 mismatch: {m_srv}'
+# Pack 85+: server.py MD5 evolved oltre Pack 81. Accetta Pack 81 to_md5 (storico) o attuale.
+import json as _j
+_v100 = _j.load(open(os.path.join(R, 'data/design/closed_alpha/v100_runtime_md5_baseline_v1.json')))
+assert _v100['files']['backend/server.py']['current_md5'] == m_srv
+_hist = [h.get('md5') for h in _v100['files']['backend/server.py'].get('historical_references', [])]
+assert file_to_md5['backend/server.py']['to_md5'] in _hist or file_to_md5['backend/server.py']['to_md5'] == m_srv
 # Tracking files contengono il NUOVO lobby MD5
 for rel in ('data/design/closed_alpha/v100_runtime_md5_baseline_v1.json',
             'data/design/battle_launch/v108_pre_combat_story_md5_forensic_audit_v1.json',

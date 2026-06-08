@@ -233,6 +233,90 @@ async def get_hero(hero_id: str):
         hero["image_url"] = hero["image"]
     return serialize_doc(hero)
 
+# Pack 85 — PSP onboarding new server (fresh-start).
+# Crea idempotentemente un player_server_profile fresh-start per (user_id, server_id)
+# se non esiste. NESSUNA copia da altri server. NESSUN reward grant. NESSUN starter
+# hero creato (richiede starter flow approvato separatamente).
+@app.post("/api/psp/ensure")
+async def psp_ensure_fresh_start(
+    response: Response,
+    server_id: str,
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Pack 85 — Ensure idempotente PSP fresh-start per (user_id, server_id).
+
+    Decisione canonica:
+      Entrare in un nuovo server = iniziare da ZERO su quel server.
+      NESSUNA copia di roster/level/exp/team/story/inventory/equipment da altri server.
+
+    Schema fresh-start (default):
+      player_level = 1
+      player_exp = 0
+      team_formation = []
+      story_progress = {}
+      soft_currencies = {}
+      onboarding_state = "pending"
+      created_by_pack = "v110_pack_85_psp_onboarding_new_server_fresh_start"
+    """
+    if not server_id or not isinstance(server_id, str) or not server_id.strip():
+        response.status_code = 400
+        return {"v110_psp_ensure": False, "blocker": "SERVER_ID_REQUIRED"}
+    uid = current_user["id"]
+    sid = server_id.strip()
+    existing = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+    if existing:
+        response.headers["X-PSP-Ensure-Mode"] = "already_exists_no_write"
+        response.headers["X-Server-Id"] = sid
+        return {
+            "v110_psp_ensure": True,
+            "created": False,
+            "already_existed": True,
+            "user_id": uid,
+            "server_id": sid,
+            "profile_id": str(existing.get("profile_id") or existing.get("_id") or ""),
+            "player_level": int(existing.get("player_level") or 1),
+            "player_exp": int(existing.get("player_exp") or 0),
+            "onboarding_state": existing.get("onboarding_state") or "active",
+            "fresh_start_applied": False,
+            "no_cross_server_copy": True,
+        }
+    # Fresh-start insert. NESSUNA lettura di altri server. NESSUNA copia.
+    fresh_psp = {
+        "user_id": uid,
+        "server_id": sid,
+        "profile_id": f"{uid}:{sid}",
+        "player_level": 1,
+        "player_exp": 0,
+        "team_formation": [],
+        "story_progress": {},
+        "soft_currencies": {},
+        "onboarding_state": "pending",
+        "_slc_psp_user_id_namespace": "uuid_canonical",
+        "_slc_psp_created_by_pack": "v110_pack_85_psp_onboarding_new_server_fresh_start",
+        "_slc_psp_fresh_start": True,
+        "_slc_psp_no_cross_server_copy": True,
+        "created_at_utc": datetime.utcnow().isoformat() + "Z",
+    }
+    await db.player_server_profiles.insert_one(fresh_psp)
+    response.headers["X-PSP-Ensure-Mode"] = "fresh_start_created"
+    response.headers["X-Server-Id"] = sid
+    return {
+        "v110_psp_ensure": True,
+        "created": True,
+        "already_existed": False,
+        "user_id": uid,
+        "server_id": sid,
+        "profile_id": fresh_psp["profile_id"],
+        "player_level": 1,
+        "player_exp": 0,
+        "onboarding_state": "pending",
+        "fresh_start_applied": True,
+        "no_cross_server_copy": True,
+    }
+
+
+
 @app.get("/api/user/heroes")
 async def get_user_heroes(
     response: Response,

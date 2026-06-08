@@ -3892,6 +3892,21 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-84-FINAL-3RUN-AND-GATE-PRESERVATION', 'validate_v110_pack_84_final_3run_and_gate_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-84-PSP-NORMALIZATION-EXECUTE-ROLLUP', 'validate_mega_release_acceleration_84_psp_normalization_execute_rollup.py'),
 
+    # ===== PACK 85 PSP ONBOARDING NEW SERVER FRESH-START =====
+    # PUBLIC_SYNC_TAG_v110_PSP_ONBOARDING_NEW_SERVER_FRESH_START
+    ('PROJECT-V110-PACK-85-BASELINE-VERIFICATION', 'validate_v110_pack_85_baseline_verification.py'),
+    ('PROJECT-V110-PACK-85-CANONICAL-FRESH-START-SOT', 'validate_v110_pack_85_canonical_fresh_start_sot.py'),
+    ('PROJECT-V110-PACK-85-ROUTE-MAP-AND-ENSURE-IMPLEMENTATION', 'validate_v110_pack_85_route_map_and_ensure_implementation.py'),
+    ('PROJECT-V110-PACK-85-USER-HEROES-INTEGRATION', 'validate_v110_pack_85_user_heroes_integration.py'),
+    ('PROJECT-V110-PACK-85-LOBBY-INTEGRATION', 'validate_v110_pack_85_lobby_integration.py'),
+    ('PROJECT-V110-PACK-85-RUNTIME-SMOKE-FRESH-START', 'validate_v110_pack_85_runtime_smoke_fresh_start.py'),
+    ('PROJECT-V110-PACK-85-DATA-INVARIANTS', 'validate_v110_pack_85_data_invariants.py'),
+    ('PROJECT-V110-PACK-85-ROLLBACK-CLEANUP-STRATEGY', 'validate_v110_pack_85_rollback_cleanup_strategy.py'),
+    ('PROJECT-V110-PACK-85-LIVE-READINESS-UPDATE', 'validate_v110_pack_85_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-85-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_85_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-85-FINAL-3RUN-SUITE', 'validate_v110_pack_85_final_3run_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-85-PSP-ONBOARDING-NEW-SERVER-FRESH-START-ROLLUP', 'validate_mega_release_acceleration_85_psp_onboarding_new_server_fresh_start_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-08T15:22:39.981847+00:00",
+  "timestamp_utc": "2026-06-08T15:52:10.123442+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2032,
+  "backend_python_files_scanned": 2044,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1044,
+      "files_with_hits": 1052,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -145,7 +145,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 255,
+      "files_with_hits": 262,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -158,11 +158,11 @@
               "snippet": "await db.user_heroes.insert_one(user_hero)"
             },
             {
-              "line": 237,
+              "line": 321,
               "snippet": "async def get_user_heroes("
             },
             {
-              "line": 257,
+              "line": 341,
               "snippet": "user_heroes / roster posseduto / livelli / stelle / build operative /"
             }
           ]
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 381,
+      "files_with_hits": 383,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -274,16 +274,16 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 701,
+              "line": 251,
+              "snippet": "NESSUNA copia di roster/level/exp/team/story/inventory/equipment da altri server."
+            },
+            {
+              "line": 785,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
             },
             {
-              "line": 708,
+              "line": 792,
               "snippet": "# canonical user_materials collection ne idempotent grant. Legacy /raids/*, /inventory,"
-            },
-            {
-              "line": 725,
-              "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
         },
@@ -369,7 +369,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 184,
+      "files_with_hits": 185,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -378,15 +378,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 720,
+              "line": 804,
               "snippet": "# No DB writes, no gear mutation, no material spend, no premium gems currency spend,"
             },
             {
-              "line": 724,
+              "line": 808,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
             },
             {
-              "line": 725,
+              "line": 809,
               "snippet": "# Legacy /forge/*, /raid/*, /inventory, premium currency users.gems INTOCCATI."
             }
           ]
@@ -494,7 +494,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 1016,
+              "line": 1100,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
             }
           ]
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 262,
+      "files_with_hits": 265,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -678,16 +678,16 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 258,
-              "snippet": "team formation / battle player team source sono SERVER-SCOPED."
+              "line": 251,
+              "snippet": "NESSUNA copia di roster/level/exp/team/story/inventory/equipment da altri server."
             },
             {
-              "line": 541,
-              "snippet": "# ===================== TEAM ====================="
+              "line": 256,
+              "snippet": "team_formation = []"
             },
             {
-              "line": 542,
-              "snippet": "@app.get(\"/api/team\")"
+              "line": 291,
+              "snippet": "\"team_formation\": [],"
             }
           ]
         },
@@ -797,8 +797,24 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 45,
+      "files_with_hits": 47,
       "hits_sample": [
+        {
+          "file": "backend/server.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 257,
+              "snippet": "story_progress = {}"
+            },
+            {
+              "line": 292,
+              "snippet": "\"story_progress\": {},"
+            }
+          ]
+        },
         {
           "file": "backend/routes/combat.py",
           "keyword": "story_progress",
@@ -878,18 +894,6 @@
               "snippet": "(r\"\\bstory_progress_apply\\b\", \"story_progress_ref\"),"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 9,
-              "snippet": "'story_progress','guilds','arena_rankings','user_affinity_state',"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -910,11 +914,11 @@
               "snippet": "\"guild_id\": None,"
             },
             {
-              "line": 757,
+              "line": 841,
               "snippet": "# Flag: BATTLE_REPLAY_PREVIEW_ENABLED. viewer_kind=guild_war_view."
             },
             {
-              "line": 759,
+              "line": 843,
               "snippet": "# No war score mutation. No guild points mutation. No call to battle_engine."
             }
           ]
@@ -1030,7 +1034,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 657,
+              "line": 741,
               "snippet": "# Read-only / idempotent / NO DB writes / NO reward / NO ranking / NO PII."
             }
           ]
