@@ -1,0 +1,43 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_83_PSP_PHYSICAL_NORMALIZATION_PREFLIGHT",
+  "generated_at_utc": "2026-06-08T01:40:00Z",
+  "normalization_scope_strictly_limited_to": [
+    "player_server_profiles.user_id field rewriting from ObjectId-string to UUID"
+  ],
+  "normalization_does_NOT_touch": [
+    "player_server_profiles.player_level",
+    "player_server_profiles.player_exp",
+    "player_server_profiles.story_progress",
+    "player_server_profiles.soft_currencies",
+    "player_server_profiles.team_formation",
+    "player_server_profiles.server_id",
+    "player_server_profiles.profile_id",
+    "user_heroes.* (any field)",
+    "users.* (any field)",
+    "battle history",
+    "inventory_items",
+    "user_equipment",
+    "any other collection"
+  ],
+  "does_NOT_copy_S1_to_S2": {
+    "roster": true,
+    "player_level": true,
+    "player_exp": true,
+    "team_formation": true,
+    "story_progress": true,
+    "inventory": true,
+    "equipment": true
+  },
+  "does_NOT_create_new_server_PSP": true,
+  "does_NOT_create_new_user": true,
+  "fresh_start_invariant_unchanged_for_servers_never_played": true,
+  "server_player_progress_SOT_unchanged": true,
+  "dual_read_compat_remains_active_during_and_after": true,
+  "safe_during_normalization": [
+    "During normalization, dual-read in /api/user/heroes continues to work because the route tries direct_uuid first; once a PSP is normalized, direct_uuid path matches and objectid_compat_fallback is no longer needed for it.",
+    "Until last PSP is normalized, partial state still functions correctly (dual-read covers both states)."
+  ],
+  "safe_during_rollback": [
+    "Rollback restores user_id to legacy ObjectId-string and removes marker fields; dual-read again finds via objectid_compat_fallback."
+  ]
+}

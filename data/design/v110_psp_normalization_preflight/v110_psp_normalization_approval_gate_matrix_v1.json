@@ -1,0 +1,47 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_83_PSP_PHYSICAL_NORMALIZATION_PREFLIGHT",
+  "generated_at_utc": "2026-06-08T01:40:00Z",
+  "current_approval_present": false,
+  "execute_allowed": false,
+  "required_future_flags": [
+    "--execute",
+    "--approval-string AUTORIZZO_V110_PSP_USER_ID_PHYSICAL_NORMALIZATION_SU_DIVINE_WAIFUS",
+    "--mapping-hash-pin <sha256 from preflight mapping>",
+    "--backup-manifest-hash-pin <sha256 from preflight backup manifest>",
+    "--rollback-plan-pin <sha256 from rollback plan>",
+    "--commit-hash-pin <git commit hash>",
+    "--target-db divine_waifus",
+    "--batch-id v110_psp_user_id_normalization_<ISO8601>"
+  ],
+  "mapping_hash_pin_expected": "1fe15c3a8d953bf9c9c9c6c3bbc0a301dba58d1ccbc77ac5f597b9d6d8daf166",
+  "backup_manifest_hash_pin_expected": "e12b15aa0e45c3a388310b74b8d24473affde0697282d7f30d8781554986b4a2",
+  "rollback_plan_pin_expected": "8573794d23492f0315cb3517a3f50733f90d18ff328ed7412b270d0d3c01b293",
+  "target_db_expected": "divine_waifus",
+  "target_collection_expected": "player_server_profiles",
+  "operator_checklist": [
+    "1. Verify mapping hash pinned matches preflight output (1fe15c3a8d95...).",
+    "2. Verify backup manifest hash pinned matches preflight output (e12b15aa0e45...).",
+    "3. Verify rollback plan hash pinned matches preflight rollback plan (8573794d2349...).",
+    "4. Capture current git commit hash and pin via --commit-hash-pin.",
+    "5. Generate unique batch_id (must contain v110_psp_user_id_normalization_ prefix).",
+    "6. Confirm target-db is exactly divine_waifus (production source).",
+    "7. Run --plan-only first; review output.",
+    "8. Provide explicit approval string EXACTLY as required.",
+    "9. Have rollback script ready with same batch_id.",
+    "10. Notify on-call/operator before --execute run."
+  ],
+  "emergency_stop": {
+    "abort_conditions": [
+      "any collision (uuid, server_id) detected pre-write",
+      "any user.id missing for a legacy user_id",
+      "mapping_hash_pin mismatch",
+      "backup_manifest_hash_pin mismatch",
+      "rollback_plan_pin mismatch",
+      "target-db not divine_waifus",
+      "approval-string mismatch"
+    ],
+    "abort_action": "REFUSED (exit code 2), zero DB writes"
+  },
+  "physical_normalization_executed_during_pack_83": false,
+  "production_db_writes_during_pack_83": 0
+}

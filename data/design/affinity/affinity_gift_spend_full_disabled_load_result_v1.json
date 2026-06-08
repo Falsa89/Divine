@@ -9,12 +9,12 @@
   "no_affinity_points_mutation": true,
   "no_borea_activation": true,
   "baseline_anchor": "hero_skill_kit_catalog_baseline_rm134b_axispatch_v6",
-  "generated_at_utc": "2026-06-07T14:25:05.401451Z",
+  "generated_at_utc": "2026-06-08T01:45:38.028251Z",
   "total_requests": 297,
-  "elapsed_seconds": 0.257,
-  "p50_latency_ms": 0.8,
-  "p95_latency_ms": 1.18,
-  "p99_latency_ms": 1.28,
+  "elapsed_seconds": 0.231,
+  "p50_latency_ms": 0.75,
+  "p95_latency_ms": 0.95,
+  "p99_latency_ms": 1.06,
   "p95_target_ms": 500,
   "total_5xx": 0,
   "unexpected_total": 216,
@@ -22,8 +22,8 @@
     "empty": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 1.14,
-      "p95_latency_ms": 1.49,
+      "p50_latency_ms": 0.8,
+      "p95_latency_ms": 1.06,
       "unexpected_codes": {
         "429": 27
       }
@@ -31,8 +31,8 @@
     "valid": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.96,
-      "p95_latency_ms": 1.18,
+      "p50_latency_ms": 0.79,
+      "p95_latency_ms": 0.97,
       "unexpected_codes": {
         "429": 27
       }
@@ -40,8 +40,8 @@
     "no_idem": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.83,
-      "p95_latency_ms": 1.12,
+      "p50_latency_ms": 0.77,
+      "p95_latency_ms": 0.96,
       "unexpected_codes": {
         "429": 27
       }
@@ -49,8 +49,8 @@
     "dup_idem": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.91,
-      "p95_latency_ms": 1.12,
+      "p50_latency_ms": 0.75,
+      "p95_latency_ms": 0.94,
       "unexpected_codes": {
         "429": 27
       }
@@ -58,8 +58,8 @@
     "malformed_idem": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.89,
-      "p95_latency_ms": 1.09,
+      "p50_latency_ms": 0.74,
+      "p95_latency_ms": 0.93,
       "unexpected_codes": {
         "429": 27
       }
@@ -67,8 +67,8 @@
     "negative_qty": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.81,
-      "p95_latency_ms": 1.06,
+      "p50_latency_ms": 0.75,
+      "p95_latency_ms": 0.92,
       "unexpected_codes": {
         "429": 27
       }
@@ -76,8 +76,8 @@
     "huge_qty": {
       "count": 27,
       "expected_status": 423,
-      "p50_latency_ms": 0.79,
-      "p95_latency_ms": 1.05,
+      "p50_latency_ms": 0.75,
+      "p95_latency_ms": 0.94,
       "unexpected_codes": {
         "429": 27
       }
@@ -86,7 +86,7 @@
       "count": 27,
       "expected_status": 423,
       "p50_latency_ms": 0.76,
-      "p95_latency_ms": 0.94,
+      "p95_latency_ms": 0.95,
       "unexpected_codes": {
         "429": 27
       }
@@ -94,45 +94,45 @@
     "borea": {
       "count": 27,
       "expected_status": 404,
-      "p50_latency_ms": 0.59,
-      "p95_latency_ms": 0.67,
+      "p50_latency_ms": 0.54,
+      "p95_latency_ms": 0.58,
       "unexpected_codes": {}
     },
     "greek_borea": {
       "count": 27,
       "expected_status": 404,
-      "p50_latency_ms": 0.56,
-      "p95_latency_ms": 0.68,
+      "p50_latency_ms": 0.54,
+      "p95_latency_ms": 0.7,
       "unexpected_codes": {}
     },
     "primordial_gaia": {
       "count": 27,
       "expected_status": 404,
-      "p50_latency_ms": 0.58,
-      "p95_latency_ms": 0.74,
+      "p50_latency_ms": 0.59,
+      "p95_latency_ms": 1.53,
       "unexpected_codes": {}
     }
   },
   "regression_gets": {
     "/affinity/gifts": {
       "code": 200,
-      "latency_ms": 3.166990999943664
+      "latency_ms": 3.1188040011329576
     },
     "/affinity/gifts/summary": {
       "code": 200,
-      "latency_ms": 1.080500999933065
+      "latency_ms": 0.9534299970255233
     },
     "/affinity/gifts/by-faction/greek": {
       "code": 200,
-      "latency_ms": 1.0609299999941868
+      "latency_ms": 1.0131990056834184
     },
     "/affinity/gifts/by-element/dark": {
       "code": 200,
-      "latency_ms": 1.1410609999984445
+      "latency_ms": 1.1283100029686466
     },
     "/affinity/gifts/by-element/darkness": {
       "code": 200,
-      "latency_ms": 1.1426720000144996
+      "latency_ms": 1.0911469944403507
     }
   },
   "borea_aliases_blocked": [

@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_83_PSP_PHYSICAL_NORMALIZATION_PREFLIGHT",
+  "rollback_strategy": "PER_BATCH_ID_FIELD_RESTORE_NO_DELETE",
+  "rollback_field_marker": "_slc_psp_user_id_legacy_objectid_backup",
+  "rollback_index_field": "_slc_psp_user_id_normalization_batch_id",
+  "rollback_script_path": "backend/scripts/rollback_v110_psp_user_id_normalization.py",
+  "rollback_script_refuse_by_default": true,
+  "rollback_required_approval_string": "AUTORIZZO_V110_PSP_USER_ID_PHYSICAL_NORMALIZATION_ROLLBACK_SU_DIVINE_WAIFUS",
+  "rollback_no_delete": true,
+  "rollback_dry_run_default": true,
+  "rollback_operation_template": {
+    "$set": {
+      "user_id": "<legacy_objectid_string>",
+      "_slc_psp_user_id_namespace": "objectid_legacy_rolled_back"
+    },
+    "$unset": {
+      "_slc_psp_user_id_normalization_batch_id": "",
+      "_slc_psp_user_id_legacy_objectid_backup": ""
+    }
+  },
+  "rollback_scope": "ONLY_PSPs_WITH_MATCHING_BATCH_ID",
+  "rollback_idempotency": "Running twice with same batch_id is a no-op on already-rolled-back PSPs (marker fields absent).",
+  "rollback_plan_hash_sha256": "8573794d23492f0315cb3517a3f50733f90d18ff328ed7412b270d0d3c01b293"
+}

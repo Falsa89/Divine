@@ -1,0 +1,42 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_83_PSP_PHYSICAL_NORMALIZATION_PREFLIGHT",
+  "generated_at_utc": "2026-06-08T01:38:47.822697Z",
+  "physical_normalization_executed": false,
+  "db_writes": 0,
+  "target_database": "divine_waifus",
+  "target_collection": "player_server_profiles",
+  "planned_update_selector_template": {
+    "_id": "<psp_id>",
+    "user_id": "<legacy_objectid_string>"
+  },
+  "planned_update_operation_template": {
+    "$set": {
+      "user_id": "<target_uuid>",
+      "_slc_psp_user_id_namespace": "uuid_canonical",
+      "_slc_psp_user_id_normalization_batch_id": "v110_psp_user_id_normalization_20260608T013847Z",
+      "_slc_psp_user_id_legacy_objectid_backup": "<legacy_objectid_string>"
+    }
+  },
+  "expected_updates_count_if_executed": 1690,
+  "before_counts": {
+    "direct_uuid": 0,
+    "objectid_compat_fallback": 1690,
+    "orphan": 0,
+    "total": 1690
+  },
+  "after_counts_if_executed": {
+    "direct_uuid": 1690,
+    "objectid_compat_fallback": 0,
+    "orphan": 0,
+    "total": 1690
+  },
+  "planned_migration_batch_id": "v110_psp_user_id_normalization_20260608T013847Z",
+  "idempotency_marker_field": "_slc_psp_user_id_normalization_batch_id",
+  "idempotency_check": "If a PSP already has _slc_psp_user_id_normalization_batch_id set, the future execute MUST skip it.",
+  "rollback_marker_field": "_slc_psp_user_id_legacy_objectid_backup",
+  "reward_grant": false,
+  "progress_advance": false,
+  "user_heroes_mutation": false,
+  "player_level_mutation": false,
+  "s1_to_s2_copy": false
+}

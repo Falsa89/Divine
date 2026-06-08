@@ -3856,6 +3856,24 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-82-FINAL-3RUN-SUITE', 'validate_v110_pack_82_final_3run_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-82-PSP-DUAL-READ-COMPAT-ROLLUP', 'validate_mega_release_acceleration_82_psp_dual_read_compat_rollup.py'),
 
+    # ===== PACK 83 PSP PHYSICAL NORMALIZATION PREFLIGHT — DRY-RUN ONLY =====
+    # PUBLIC_SYNC_TAG_v110_PSP_PHYSICAL_NORMALIZATION_PREFLIGHT
+    ('PROJECT-V110-PACK-83-BASELINE-VERIFICATION', 'validate_v110_pack_83_baseline_verification.py'),
+    ('PROJECT-V110-PACK-83-PSP-NAMESPACE-AUDIT', 'validate_v110_pack_83_psp_namespace_audit.py'),
+    ('PROJECT-V110-PACK-83-DETERMINISTIC-NORMALIZATION-MAPPING', 'validate_v110_pack_83_deterministic_normalization_mapping.py'),
+    ('PROJECT-V110-PACK-83-PRODUCTION-DRY-RUN-DIFF', 'validate_v110_pack_83_production_dry_run_diff.py'),
+    ('PROJECT-V110-PACK-83-BACKUP-PREFLIGHT-MANIFEST', 'validate_v110_pack_83_backup_preflight_manifest.py'),
+    ('PROJECT-V110-PACK-83-ROLLBACK-PLAN-AND-SCRIPT', 'validate_v110_pack_83_rollback_plan_and_script.py'),
+    ('PROJECT-V110-PACK-83-FUTURE-EXECUTE-SCRIPT-SAFETY', 'validate_v110_pack_83_future_execute_script_safety.py'),
+    ('PROJECT-V110-PACK-83-APPROVAL-GATE-MATRIX', 'validate_v110_pack_83_approval_gate_matrix.py'),
+    ('PROJECT-V110-PACK-83-SERVER-LIFECYCLE-PRESERVATION', 'validate_v110_pack_83_server_lifecycle_preservation.py'),
+    ('PROJECT-V110-PACK-83-RUNTIME-SMOKE-READ-ONLY', 'validate_v110_pack_83_runtime_smoke_read_only.py'),
+    ('PROJECT-V110-PACK-83-ZERO-MUTATION-PRESERVATION', 'validate_v110_pack_83_zero_mutation_preservation.py'),
+    ('PROJECT-V110-PACK-83-LIVE-READINESS-UPDATE', 'validate_v110_pack_83_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-83-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_83_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-83-FINAL-3RUN-SUITE', 'validate_v110_pack_83_final_3run_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-83-PSP-PHYSICAL-NORMALIZATION-PREFLIGHT-ROLLUP', 'validate_mega_release_acceleration_83_psp_physical_normalization_preflight_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
