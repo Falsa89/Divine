@@ -21,7 +21,7 @@ ZERO legacy cleanup, ZERO starter heroes grant, ZERO premium grant.
 
 ## Commit Hash
 
-- **Commit hash locale Pack 86:** (vedi git log post-commit nel summary finish)
+- **Commit hash locale Pack 86:** `e2a13ebe10437ceb4a5f17e1eeb427b5caca266d`
 - **Commit hash precedente Pack 85:** `df4f00364cafc485a90fd3ed3bbd5c3690b3946d`
 - **Sync status:** `local_commit_only=true`, `public_push_managed_externally=true`, `no_remote_available=true`
 
