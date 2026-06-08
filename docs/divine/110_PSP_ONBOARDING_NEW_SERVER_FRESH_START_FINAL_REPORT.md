@@ -25,7 +25,8 @@ physical normalization** (Pack 84 già conclusa separatamente).
 - Il container di esecuzione non espone un remote git esterno: il commit è
   esclusivamente locale. La sincronizzazione pubblica sarà gestita dalla
   pipeline di piattaforma post-approvazione esplicita dell'utente.
-- Commit hash locale: si veda `git log -1 --format=%H` post-commit (Pack 85 commit).
+- **Commit hash locale Pack 85:** `df4f00364cafc485a90fd3ed3bbd5c3690b3946d`
+- **Pack 84 precedente:** `2cd0b4c0` (feat(pack-84): PSP user_id physical normalization EXECUTE complete)
 
 ### git diff --stat (Pack 85 scope)
 
