@@ -20,7 +20,7 @@ espliciti su PSP mancante o team vuoto. **ZERO fallback a `user.team_formation` 
 
 ## Commit Hash
 
-- **Commit hash locale Pack 88:** (popolato post-commit nel `finish` summary)
+- **Commit hash locale Pack 88:** `d6db1f4cc1deaa1e539510f215ba02bfed31a0d7`
 - **Commit hash precedente Pack 87:** `fe6ef69d001859f56a444de7f63076563a992b00`
 - **Sync status:** `local_commit_only=true`, `public_push_managed_externally=true`, `no_remote_available=true`
 
