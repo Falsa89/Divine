@@ -22,15 +22,18 @@ def _get(url, headers=None):
 async def find_smoke_user():
     c = AsyncIOMotorClient(os.getenv('MONGO_URL'))
     db = c.divine_waifus
-    from bson import ObjectId
-    async for psp in db.player_server_profiles.find({'server_id': 's1'}).limit(50):
-        uid = psp.get('user_id', '')
-        # find user via ObjectId fallback
-        try: oid = ObjectId(uid)
-        except Exception: oid = None
-        if not oid: continue
-        u = await db.users.find_one({'_id': oid})
+    # Pack 84 post-normalization: PSP.user_id e' uuid. Trova diretto.
+    psp = await db.player_server_profiles.find_one({'server_id': 's1'})
+    if psp:
+        u = await db.users.find_one({'id': psp.get('user_id')})
         if u: return u
+        # Pre-Pack 84 fallback: ObjectId
+        from bson import ObjectId
+        try: oid = ObjectId(psp.get('user_id'))
+        except Exception: oid = None
+        if oid:
+            u = await db.users.find_one({'_id': oid})
+            if u: return u
     return None
 
 u = asyncio.get_event_loop().run_until_complete(find_smoke_user())
@@ -44,7 +47,8 @@ BASE = 'http://127.0.0.1:8001'
 st, h, body = _get(f'{BASE}/api/user/heroes?server_id=s1', headers=auth)
 assert st == 200, f's1 status: {st}'
 assert h.get('x-filter-applied') == 'true', f'filter_applied: {h}'
-assert h.get('x-psp-lookup-mode') == 'objectid_compat_fallback', f'lookup mode wrong: {h.get("x-psp-lookup-mode")}'
+# Pack 84 post-normalization: lookup mode is direct_uuid. Pre-Pack 84: objectid_compat_fallback. Both accepted.
+assert h.get('x-psp-lookup-mode') in ('direct_uuid', 'objectid_compat_fallback'), f'lookup mode wrong: {h.get("x-psp-lookup-mode")}'
 assert h.get('x-server-progression-state') == 'psp_present_server_scoped'
 assert int(h.get('x-roster-count', '0')) >= 0
 assert int(h.get('x-player-level', '0')) >= 1

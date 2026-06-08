@@ -3874,6 +3874,24 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-83-FINAL-3RUN-SUITE', 'validate_v110_pack_83_final_3run_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-83-PSP-PHYSICAL-NORMALIZATION-PREFLIGHT-ROLLUP', 'validate_mega_release_acceleration_83_psp_physical_normalization_preflight_rollup.py'),
 
+    # ===== PACK 84 PSP USER_ID PHYSICAL NORMALIZATION EXECUTE — REAL WRITES (1690 PSP) =====
+    # PUBLIC_SYNC_TAG_v110_PSP_USER_ID_PHYSICAL_NORMALIZATION_EXECUTE
+    ('PROJECT-V110-PACK-84-BASELINE-VERIFICATION', 'validate_v110_pack_84_baseline_verification.py'),
+    ('PROJECT-V110-PACK-84-APPROVAL-PROOF', 'validate_v110_pack_84_approval_proof.py'),
+    ('PROJECT-V110-PACK-84-PIN-VERIFICATION', 'validate_v110_pack_84_pin_verification.py'),
+    ('PROJECT-V110-PACK-84-PRE-WRITE-SNAPSHOT', 'validate_v110_pack_84_pre_write_snapshot.py'),
+    ('PROJECT-V110-PACK-84-BACKUP-CONFIRMATION', 'validate_v110_pack_84_backup_confirmation.py'),
+    ('PROJECT-V110-PACK-84-REAL-EXECUTE-SCRIPT-REALIZATION', 'validate_v110_pack_84_real_execute_script_realization.py'),
+    ('PROJECT-V110-PACK-84-EXECUTE-RESULT', 'validate_v110_pack_84_execute_result.py'),
+    ('PROJECT-V110-PACK-84-IDEMPOTENCY-RERUN', 'validate_v110_pack_84_idempotency_rerun.py'),
+    ('PROJECT-V110-PACK-84-POST-NAMESPACE-AUDIT', 'validate_v110_pack_84_post_namespace_audit.py'),
+    ('PROJECT-V110-PACK-84-RUNTIME-SMOKE', 'validate_v110_pack_84_runtime_smoke.py'),
+    ('PROJECT-V110-PACK-84-SERVER-LIFECYCLE-PRESERVATION', 'validate_v110_pack_84_server_lifecycle_preservation.py'),
+    ('PROJECT-V110-PACK-84-ROLLBACK-READINESS', 'validate_v110_pack_84_rollback_readiness.py'),
+    ('PROJECT-V110-PACK-84-ZERO-MUTATION-AND-LIVE-READINESS', 'validate_v110_pack_84_zero_mutation_and_live_readiness.py'),
+    ('PROJECT-V110-PACK-84-FINAL-3RUN-AND-GATE-PRESERVATION', 'validate_v110_pack_84_final_3run_and_gate_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-84-PSP-NORMALIZATION-EXECUTE-ROLLUP', 'validate_mega_release_acceleration_84_psp_normalization_execute_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

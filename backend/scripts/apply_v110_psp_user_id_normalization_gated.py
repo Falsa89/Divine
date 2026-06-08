@@ -111,22 +111,69 @@ async def main(args):
             print(f'REFUSED: pre-write collision detected for (uuid={e["target_user_id_uuid"]}, server_id={e["server_id"]})')
             sys.exit(2)
         seen.add(key)
-    # SAFE: tutte le gate aperte. Esegui update con marker idempotency.
+    # Pack 84 — REAL EXECUTE.
+    # Tutte le gate aperte. Eseguo update sicuro PSP-per-PSP con:
+    #   - selector EXACT: {_id: ObjectId(psp_id), user_id: legacy_objectid_string}
+    #     -> garantisce che NON tocchiamo PSP gia' normalizzati (compat lookup)
+    #   - $set: user_id=target_uuid + marker idempotency + backup legacy
+    #   - skip se gia' marcato con batch_id (idempotency)
+    from bson import ObjectId
     written = 0
     skipped_idempotent = 0
+    refused_no_match = 0
+    audit_log = []
     for e in mapping_doc.get('entries_full', []):
-        # Idempotency: skip se gia' marcato con stesso batch_id (o qualsiasi batch)
-        existing = await db.player_server_profiles.find_one({'_id_str_alias': None, 'server_id': e['server_id'], 'user_id': e['target_user_id_uuid'], '_slc_psp_user_id_normalization_batch_id': {'$exists': True}})
-        # Trova il PSP per _id (psp_id e' la string di _id; serve ObjectId conversion in future code)
-        # Per sicurezza in script gated, lasciamo placeholder; il pack execute futuro fara' la conversion vera.
-        skipped_idempotent += 0
-    print(json.dumps({
-        'mode': 'execute_gated_skeleton',
+        try:
+            psp_oid = ObjectId(e['psp_id'])
+        except Exception:
+            refused_no_match += 1
+            continue
+        # Idempotency check
+        current = await db.player_server_profiles.find_one({'_id': psp_oid})
+        if not current:
+            refused_no_match += 1
+            continue
+        if current.get('_slc_psp_user_id_normalization_batch_id'):
+            skipped_idempotent += 1
+            continue
+        # Pre-write safety: il PSP DEVE avere ancora user_id == legacy_objectid_string
+        if current.get('user_id') != e['legacy_user_id_objectid_string']:
+            # Stato gia' modificato esternamente. Skip.
+            refused_no_match += 1
+            audit_log.append({'psp_id': e['psp_id'], 'reason': 'user_id_mismatch_pre_write', 'expected': e['legacy_user_id_objectid_string'], 'actual': current.get('user_id')})
+            continue
+        result = await db.player_server_profiles.update_one(
+            {'_id': psp_oid, 'user_id': e['legacy_user_id_objectid_string']},
+            {
+                '$set': {
+                    'user_id': e['target_user_id_uuid'],
+                    '_slc_psp_user_id_namespace': 'uuid_canonical',
+                    '_slc_psp_user_id_normalization_batch_id': args.batch_id,
+                    '_slc_psp_user_id_legacy_objectid_backup': e['legacy_user_id_objectid_string'],
+                }
+            }
+        )
+        if result.modified_count == 1:
+            written += 1
+        else:
+            refused_no_match += 1
+    out = {
+        'mode': 'execute_real',
         'all_gates_open': True,
-        'note': 'Skeleton presente ma la scrittura reale e\' delegata al pack execute dedicato futuro con codice di update completo.',
-        'db_writes_in_this_skeleton': 0,
+        'batch_id': args.batch_id,
         'planned_writes_count': mapping_doc.get('mapping_entries_count'),
-    }, indent=2))
+        'actual_writes_count': written,
+        'skipped_idempotent_count': skipped_idempotent,
+        'refused_no_match_count': refused_no_match,
+        'audit_log_sample': audit_log[:5],
+        'target_db': args.target_db,
+        'target_collection': 'player_server_profiles',
+        'commit_hash_pin': args.commit_hash_pin,
+        'mapping_hash_pin': args.mapping_hash_pin,
+        'backup_manifest_hash_pin': args.backup_manifest_hash_pin,
+        'rollback_plan_pin': args.rollback_plan_pin,
+    }
+    print(json.dumps(out, indent=2))
 
 
 if __name__ == '__main__':

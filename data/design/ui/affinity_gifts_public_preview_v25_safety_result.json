@@ -1,13 +1,23 @@
 {
   "task_origin": "AF2-N-V25-UI-PUBLIC-PREVIEW-SAFETY",
-  "timestamp_utc": "2026-06-08T01:53:07.616224+00:00",
+  "timestamp_utc": "2026-06-08T14:54:38.343032+00:00",
   "frontend_files_scanned": 205,
   "critical_findings": [],
   "critical_findings_count": 0,
   "informational_findings_count": 12,
   "sample_informational": [
     {
-      "file": "frontend/app/affinity-gifts-preview.tsx",
+      "file": "frontend/app/divine-weapons-catalog.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 8
+    },
+    {
+      "file": "frontend/app/select-home-hero.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 1
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
       "count": 1
     },
@@ -17,14 +27,9 @@
       "count": 1
     },
     {
-      "file": "frontend/app/divine-weapons-catalog.tsx",
+      "file": "frontend/app/dev-combat-qa-lab.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 8
-    },
-    {
-      "file": "frontend/app/hero-skill-kits-catalog.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 1
+      "count": 2
     },
     {
       "file": "frontend/app/collection-synergies-preview.tsx",
@@ -32,14 +37,9 @@
       "count": 2
     },
     {
-      "file": "frontend/app/select-home-hero.tsx",
+      "file": "frontend/app/affinity-gifts-preview.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
       "count": 1
-    },
-    {
-      "file": "frontend/app/dev-combat-qa-lab.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 2
     },
     {
       "file": "frontend/app/(tabs)/menu.tsx",
