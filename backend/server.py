@@ -151,32 +151,52 @@ async def register(req: RegisterRequest):
     }
     await db.users.insert_one(user)
     
-    # Give starter heroes (3 random 1-2 star heroes)
-    # RM1.20-C: filter by show_in_summon/obtainable to avoid granting hidden
-    # or pending official heroes as starters. Default behavior preserved
-    # for heroes without flags (helpers default to visible/obtainable).
-    # RM1.20-C2: SAFE — never fallback to all_heroes (would grant hidden
-    # legacy after soft-deactivation). If no eligible starter exists, the
-    # account is created with zero starters; user can later acquire heroes
-    # via gacha. Registration still succeeds.
-    all_heroes = await db.heroes.find({"rarity": {"$lte": 2}}).to_list(100)
-    eligible_starters = [h for h in all_heroes if should_show_in_summon(h)]
-    if eligible_starters:
-        starters = random.sample(eligible_starters, min(3, len(eligible_starters)))
-        for hero in starters:
-            user_hero = {
-                "id": str(uuid.uuid4()),
-                "user_id": user_id,
-                "hero_id": hero["id"],
-                "level": 1,
-                "experience": 0,
-                "stars": hero["rarity"],
-                "obtained_at": datetime.utcnow(),
-            }
-            await db.user_heroes.insert_one(user_hero)
+    # Pack 86 — Legacy starter user_heroes creation GUARDED.
+    # Decisione canonica: gli eroi del player sono SERVER-SCOPED.
+    # /api/register crea SOLO identita' account/auth, non roster operativo
+    # account-wide. La creazione legacy di starter user_heroes senza
+    # server_id e' DEPRECATA e disabilitata per default. Per backward
+    # compatibility di test ambientali precedenti, e' mantenuta dietro un
+    # flag esplicito dev-only `REGISTER_LEGACY_STARTER_HEROES_ENABLED=true`.
+    # In produzione/runtime player-facing il flag DEVE restare OFF: gli
+    # starter heroes saranno assegnati nel contesto server/onboarding
+    # quando uno starter flow separato sara' approvato esplicitamente.
+    # No premium grant. No reward. No progress live.
+    starter_legacy_enabled = (os.environ.get("REGISTER_LEGACY_STARTER_HEROES_ENABLED", "false").lower() == "true")
+    starter_legacy_created_count = 0
+    if starter_legacy_enabled:
+        # DEPRECATED PATH — dev/test only. NOT player-facing production path.
+        # NOT claimed as final roster source. Will be removed once starter
+        # flow is approved and server-scoped onboarding is wired.
+        all_heroes = await db.heroes.find({"rarity": {"$lte": 2}}).to_list(100)
+        eligible_starters = [h for h in all_heroes if should_show_in_summon(h)]
+        if eligible_starters:
+            starters = random.sample(eligible_starters, min(3, len(eligible_starters)))
+            for hero in starters:
+                user_hero = {
+                    "id": str(uuid.uuid4()),
+                    "user_id": user_id,
+                    "hero_id": hero["id"],
+                    "level": 1,
+                    "experience": 0,
+                    "stars": hero["rarity"],
+                    "obtained_at": datetime.utcnow(),
+                    "_slc_pack_86_legacy_dev_only_starter": True,
+                }
+                await db.user_heroes.insert_one(user_hero)
+                starter_legacy_created_count += 1
     
     token = create_token(user_id)
-    return {"token": token, "user": {k: v for k, v in user.items() if k != "password" and k != "_id"}}
+    return {
+        "token": token,
+        "user": {k: v for k, v in user.items() if k != "password" and k != "_id"},
+        # Pack 86 — segnali espliciti per il frontend: server-scoped onboarding
+        # e' richiesto. Roster operativo NON e' creato qui.
+        "server_onboarding_required": True,
+        "starter_flow_required": True,
+        "starter_legacy_created_in_register": starter_legacy_created_count,
+        "_slc_pack_86_register_starter_legacy_guard": True,
+    }
 
 @app.post("/api/login")
 async def login(req: LoginRequest):

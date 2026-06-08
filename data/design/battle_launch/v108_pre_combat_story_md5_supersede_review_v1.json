@@ -46,8 +46,13 @@
     "silent_overwrite": false
   },
   "pre_battle_lobby_tsx": {
-    "new_md5": "f8b770a118548602a7f680f59b6c409c",
+    "new_md5": "4c720c53a29ca2a7fee4ca821221b479",
     "historical_references": [
+      {
+        "md5": "f8b770a118548602a7f680f59b6c409c",
+        "pack": "v110_pack_80_lobby_team_fetch_and_core_loader_promotion",
+        "status": "superseded_by_PACK_86_LOBBY_UI_PSP_ENSURE_DEFENSIVE_GUARD"
+      },
       {
         "md5": "5ab539bd6a2fdb617a09edfc95f3d06a",
         "pack": "v110_pack_79_loader_promotion_ui_fix_md5_rebase",
@@ -91,6 +96,14 @@
       "to_md5": "f8b770a118548602a7f680f59b6c409c",
       "authorized": true,
       "reason": "Real fetch /api/team/get-formation?server_id=... with bearer token, 6-slot rendering with honest empty slots, no fake team as real."
+    },
+    {
+      "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "from_md5": "f8b770a118548602a7f680f59b6c409c",
+      "to_md5": "4c720c53a29ca2a7fee4ca821221b479",
+      "authorized": true,
+      "reason": "Aggiunto defensive useEffect che chiama POST /api/psp/ensure?server_id=<selectedServerId> idempotentemente quando la lobby viene aperta con selected server. NO silent s1, NO global fallback, NO copy S1->S2."
     }
   ]
 }

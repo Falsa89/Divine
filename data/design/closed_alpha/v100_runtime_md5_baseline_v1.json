@@ -23,8 +23,13 @@
       "change_type": "RC_runtime_apply_release_candidate_prep"
     },
     "backend/server.py": {
-      "current_md5": "2ec8fcd03aac47e50ae3eb495783ef16",
+      "current_md5": "272c70b37190e1fa8b6e712e83fdda83",
       "historical_references": [
+        {
+          "md5": "2ec8fcd03aac47e50ae3eb495783ef16",
+          "pack": "v110_pack_85_psp_onboarding_new_server_fresh_start",
+          "status": "superseded_by_PACK_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD"
+        },
         {
           "md5": "2e388592fcf8e0d87693b5656e908d22",
           "pack": "v110_pack_82_psp_dual_read_compat",
@@ -109,8 +114,13 @@
       "change_type": "player_facing_avvia_battaglia_button + push verso /pre-battle-lobby con Battle Launch Contract v1 params + legacy auto-resolve etichettato 'QA Auto Resolve'. Nessun backend delete, nessun reward live, nessun progress write."
     },
     "frontend/app/pre-battle-lobby.tsx": {
-      "current_md5": "f8b770a118548602a7f680f59b6c409c",
+      "current_md5": "4c720c53a29ca2a7fee4ca821221b479",
       "historical_references": [
+        {
+          "md5": "f8b770a118548602a7f680f59b6c409c",
+          "pack": "v110_pack_80_lobby_team_fetch_and_core_loader_promotion",
+          "status": "superseded_by_PACK_86_LOBBY_UI_PSP_ENSURE_DEFENSIVE_GUARD"
+        },
         {
           "md5": "5ab539bd6a2fdb617a09edfc95f3d06a",
           "pack": "v110_pack_79_loader_promotion_ui_fix_md5_rebase",

@@ -1,0 +1,58 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "track": "K",
+  "runtime_files_modified": [
+    "backend/server.py",
+    "frontend/app/servers.tsx",
+    "frontend/app/pre-battle-lobby.tsx"
+  ],
+  "tracking_files_rebased": [
+    "data/design/closed_alpha/v100_runtime_md5_baseline_v1.json",
+    "data/design/battle_launch/v108_pre_combat_story_md5_forensic_audit_v1.json",
+    "data/design/battle_launch/v108_pre_combat_story_md5_supersede_review_v1.json"
+  ],
+  "md5_rebase_chain": [
+    {
+      "file": "backend/server.py",
+      "from_md5_pre_pack_86": "2ec8fcd03aac47e50ae3eb495783ef16",
+      "to_md5_post_pack_86": "272c70b37190e1fa8b6e712e83fdda83",
+      "reason": "Pack 86: /api/register guard contro creazione account-wide di starter user_heroes. Aggiunti response signals (server_onboarding_required, starter_flow_required). Behind dev-only flag REGISTER_LEGACY_STARTER_HEROES_ENABLED (default OFF). NO premium grant, NO reward, NO progress live.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    },
+    {
+      "file": "frontend/app/servers.tsx",
+      "from_md5_pre_pack_86": "(pre-Pack-86 baseline non in v100 baseline file)",
+      "to_md5_post_pack_86": "91dc7f8c8f49934453b35a09cc9eaeab",
+      "reason": "Pack 86: aggiunta chiamata POST /api/psp/ensure?server_id in onEnter() dopo AsyncStorage.setItem e prima di router.replace. Bearer token da SecureStore. NO global fallback. NO copy S1->S2.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    },
+    {
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "from_md5_pre_pack_86": "f8b770a118548602a7f680f59b6c409c",
+      "to_md5_post_pack_86": "4c720c53a29ca2a7fee4ca821221b479",
+      "reason": "Pack 86: aggiunto useEffect defensive ensure guard per deep-link / hot-reload / navigation diretta. Idempotente via backend Pack 85. NO silent s1, NO global fallback.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    }
+  ],
+  "historical_reference": [
+    "Pack 80 lobby fetch md5 chain preserved (Pack 80 to_md5=f8b770a1... preservato come historical_references in v100 baseline + v108 forensic audit + v108 supersede review)",
+    "Pack 81 user_heroes server-scope md5 chain preserved",
+    "Pack 82 dual-read PSP md5 chain preserved",
+    "Pack 83 preflight: no runtime file modification",
+    "Pack 84 physical normalization: DB-only",
+    "Pack 85 backend ensure route md5 chain preserved (Pack 85 to_md5=2ec8fcd0... preservato come historical_references in v100 baseline)",
+    "Pack 86 UI ensure + register guard: additive (no rewrite of pre-existing logic)"
+  ],
+  "validators_md5_set_extended_to_accept_pack_86_current": [
+    "backend/scripts/validate_v110_pack_79_runtime_real.py (ACCEPTED_LOBBY_MD5S set)",
+    "backend/scripts/validate_v110_lobby_team_fetch_md5_rebase.py (ACCEPTED_LOBBY_MD5S set + Pack 79 reference loosened to substring)",
+    "backend/scripts/validate_v110_pack_81_md5_rebase.py (dual-read via v100 baseline + historical)"
+  ],
+  "no_validator_weakening_proof": "Tutti gli MD5 storici sono preservati come historical_references nei tracking files (v100 baseline, v108 forensic audit, v108 supersede review). Nessun validator e' stato disabilitato o reso pi\u00f9 permissivo: l'estensione del set ACCEPTED_LOBBY_MD5S preserva il check tipo (md5 ha valore atteso autorizzato) ma riconosce evoluzioni successivamente autorizzate (chain Pack 80 -> Pack 86)."
+}

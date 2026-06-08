@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "track": "G",
+  "smoke_strategy": "E2E runtime backend smoke che simula il flusso UI: (1) POST /api/register -> nessuno user_heroes account-wide; (2) POST /api/psp/ensure?server_id=<test_sid> via Bearer -> created=true level=1 exp=0; (3) GET /api/user/heroes?server_id=<test_sid> -> direct_uuid filter_applied roster=0; (4) GET /api/team/get-formation?server_id=<test_sid> -> team vuoto honest; (5) POST /api/psp/ensure idempotenza -> created=false already_existed=true; (6) cleanup test user e test PSP.",
+  "test_user_created_by_register_user_heroes_count": 0,
+  "ensure_first_call_created": true,
+  "ensure_first_call_player_level": 1,
+  "ensure_first_call_player_exp": 0,
+  "ensure_first_call_no_cross_server_copy": true,
+  "post_ensure_heroes_filter_applied": true,
+  "post_ensure_heroes_lookup_mode": "direct_uuid",
+  "post_ensure_heroes_player_level": 1,
+  "post_ensure_heroes_roster_count": 0,
+  "post_ensure_team_formation_empty": true,
+  "ensure_second_call_created": false,
+  "ensure_second_call_already_existed": true,
+  "cleanup_test_user_executed": true,
+  "cleanup_test_psp_executed": true,
+  "verdict": "PACK_86_RUNTIME_SMOKE_E2E_PASS_REGISTER_NO_GLOBAL_STARTER_UI_ENSURE_INTEGRATED_NEW_SERVER_FRESH_START_NO_S1_TO_S2_COPY"
+}

@@ -1,0 +1,34 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "track": "D",
+  "file_modified": "backend/server.py",
+  "route": "POST /api/register",
+  "guard_strategy": "Legacy starter user_heroes creation account-wide DISABLED by default. Gated behind explicit dev-only environment flag REGISTER_LEGACY_STARTER_HEROES_ENABLED=true (default OFF). Marked deprecated. NOT player-facing production path. NEVER claimed as final roster source. starter_legacy_created_in_register exposed in response for observability/0-claim audit.",
+  "default_behavior_post_pack_86": {
+    "starter_user_heroes_created": 0,
+    "global_roster_grant": false,
+    "server_id_attached": false,
+    "premium_grant": false,
+    "reward_grant": false,
+    "response_signals": {
+      "server_onboarding_required": true,
+      "starter_flow_required": true,
+      "starter_legacy_created_in_register": 0,
+      "_slc_pack_86_register_starter_legacy_guard": true
+    }
+  },
+  "dev_only_flag": {
+    "name": "REGISTER_LEGACY_STARTER_HEROES_ENABLED",
+    "default": "false",
+    "warning": "DEPRECATED — dev/test only. NOT player-facing. starter heroes inserted with _slc_pack_86_legacy_dev_only_starter=true marker for audit/cleanup."
+  },
+  "smoke_test_result": {
+    "new_register_user_heroes_count": 0,
+    "response_starter_legacy_created_in_register": 0,
+    "response_server_onboarding_required": true,
+    "response_starter_flow_required": true,
+    "verified_at_runtime": true
+  },
+  "starter_flow_approved_in_this_pack": false,
+  "starter_heroes_created_in_this_pack": false
+}

@@ -5,7 +5,13 @@ R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 lobby_md5 = hashlib.md5(open(os.path.join(R,'frontend/app/pre-battle-lobby.tsx'),'rb').read()).hexdigest()
 v96_md5 = hashlib.md5(open(os.path.join(R,'backend/routes/v96_team_formation.py'),'rb').read()).hexdigest()
 # Pack 80 — MD5 rebase autorizzato per real lobby team fetch.
-assert lobby_md5 == 'f8b770a118548602a7f680f59b6c409c', f'lobby md5 unexpected: {lobby_md5}'
+# Pack 86 rebase autorizzato: defensive useEffect /api/psp/ensure aggiunto in lobby.
+# Tutti gli MD5 storici sono preservati come historical reference nei tracking files.
+ACCEPTED_LOBBY_MD5S = {
+    'f8b770a118548602a7f680f59b6c409c',  # Pack 80 baseline
+    '4c720c53a29ca2a7fee4ca821221b479',  # Pack 86 (defensive ensure useEffect)
+}
+assert lobby_md5 in ACCEPTED_LOBBY_MD5S, f'lobby md5 unexpected: {lobby_md5}'
 # v96 md5 cambia se aggiungiamo righe; verifica che sia DIVERSO dal baseline pre-Pack 79.
 assert v96_md5 != '640bd161cfbc5e9696511704d8613ecc', 'v96 NOT modified — Pack 79 falso!'
 # Verifica che il lobby file contenga le patch chiave

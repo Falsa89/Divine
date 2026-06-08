@@ -350,6 +350,48 @@ export default function PreBattleLobbyScreen() {
   // l'endpoint v95 risponde. I mirror inline restano come safe fallback dichiarato.
   const backendUrl = (process.env.EXPO_BACKEND_URL || '').toString();
   const [v95SourceStatus, setV95SourceStatus] = useState<'unknown' | 'endpoint_active' | 'endpoint_fetch_failed_fallback_local_readonly'>('unknown');
+
+  // Pack 86 — Defensive UI ensure guard. Se la lobby viene aperta con un
+  // server_id selezionato MA il flusso servers.tsx non ha avuto modo di
+  // chiamare /api/psp/ensure (deep-link, hot-reload, navigation diretta),
+  // chiamiamo qui in modo idempotente. Il backend e' Pack 85 idempotente:
+  // se PSP esiste gia' ritorna already_exists_no_write senza writes.
+  // NO silent 's1', NO global fallback, NO copia S1->S2.
+  useEffect(() => {
+    if (!selectedServerLoaded || !selectedServerId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const token = await SecureStore.getItemAsync('v96_auth_token').catch(() => null);
+        if (!token || !backendUrl) return;
+        const url = `${backendUrl}/api/psp/ensure?server_id=${encodeURIComponent(selectedServerId)}`;
+        const r = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'X-Pack-86-Lobby-Defensive-Ensure': 'true',
+          },
+        });
+        if (!cancelled && r.ok) {
+          const j = await r.json();
+          if (j && j.v110_psp_ensure === true) {
+            try {
+              await AsyncStorage.setItem(
+                'pack86_psp_ensure_last_mode',
+                j.created ? 'fresh_start_created' : 'already_exists_no_write',
+              );
+              await AsyncStorage.setItem(
+                'pack86_psp_ensure_last_server_id',
+                selectedServerId,
+              );
+            } catch (_e) { /* best-effort */ }
+          }
+        }
+      } catch (_e) { /* best-effort: lobby blocker downstream */ }
+    })();
+    return () => { cancelled = true; };
+  }, [selectedServerLoaded, selectedServerId, backendUrl]);
   useEffect(() => {
     let cancelled = false;
     const ctrl = new AbortController();

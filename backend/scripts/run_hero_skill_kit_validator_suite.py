@@ -3907,6 +3907,23 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-85-FINAL-3RUN-SUITE', 'validate_v110_pack_85_final_3run_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-85-PSP-ONBOARDING-NEW-SERVER-FRESH-START-ROLLUP', 'validate_mega_release_acceleration_85_psp_onboarding_new_server_fresh_start_rollup.py'),
 
+    # Pack 86 — Lobby UI PSP ensure + /api/register starter legacy guard.
+    # 13 track + 1 rollup = 14 nuove validator track.
+    ('PROJECT-V110-PACK-86-BASELINE-MULTIRUN', 'validate_v110_pack_86_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-86-ROUTE-UI-MAP', 'validate_v110_pack_86_route_ui_map.py'),
+    ('PROJECT-V110-PACK-86-LOBBY-PSP-ENSURE-INTEGRATION', 'validate_v110_pack_86_lobby_psp_ensure_integration.py'),
+    ('PROJECT-V110-PACK-86-REGISTER-STARTER-LEGACY-GUARD', 'validate_v110_pack_86_register_starter_legacy_guard.py'),
+    ('PROJECT-V110-PACK-86-BACKEND-ENSURE-ROUTE-HARDENING', 'validate_v110_pack_86_backend_ensure_route_hardening.py'),
+    ('PROJECT-V110-PACK-86-USER-HEROES-TEAM-AFTER-UI-ENSURE', 'validate_v110_pack_86_user_heroes_team_after_ui_ensure.py'),
+    ('PROJECT-V110-PACK-86-RUNTIME-SMOKE-E2E', 'validate_v110_pack_86_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-86-DATA-INVARIANTS', 'validate_v110_pack_86_data_invariants.py'),
+    ('PROJECT-V110-PACK-86-CLEANUP-ROLLBACK-STRATEGY', 'validate_v110_pack_86_cleanup_rollback_strategy.py'),
+    ('PROJECT-V110-PACK-86-LIVE-READINESS-UPDATE', 'validate_v110_pack_86_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-86-MD5-REBASE', 'validate_v110_pack_86_md5_rebase.py'),
+    ('PROJECT-V110-PACK-86-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_86_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-86-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_86_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-86-LOBBY-UI-PSP-ENSURE-REGISTRATION-GUARD-ROLLUP', 'validate_mega_release_acceleration_86_lobby_ui_psp_ensure_registration_guard_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

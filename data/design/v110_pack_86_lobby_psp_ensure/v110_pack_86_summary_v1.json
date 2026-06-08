@@ -1,0 +1,49 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "generated_at_utc": "2026-06-08T19:00:00Z",
+  "verdict": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "production_apply_executed": false,
+    "bulk_psp_apply": false,
+    "physical_normalization_executed_in_this_pack": false,
+    "destructive_migration": false,
+    "delete_of_real_psp": false,
+    "premium_grant": false,
+    "reward_live": false,
+    "progress_live": false,
+    "legacy_cleanup_executed": false,
+    "starter_heroes_grant": false,
+    "starter_flow_approved": false,
+    "copy_s1_to_s2": false,
+    "account_wide_player_level_as_final_server_level": false,
+    "account_wide_roster_as_final_server_roster": false,
+    "postqa_d_gates_unlocked": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "user_heroes_creation_from_register": false
+  },
+  "explicit_statements": {
+    "no_global_starter_user_heroes_from_register": true,
+    "new_server_starts_level_1": true,
+    "no_s1_to_s2_copy": true,
+    "reward_live_off": true,
+    "progress_live_off": true,
+    "legacy_cleanup_not_executed": true
+  },
+  "sync_status": {
+    "local_commit_only": true,
+    "public_push_managed_externally": true,
+    "no_remote_available": true
+  },
+  "deferred_blockers_documented": [
+    "Starter flow (server-scoped onboarding) NOT approved in Pack 86 — starter heroes assignment deferred to dedicated future pack",
+    "Inventory/currencies/story_progress/equipment PSP-scoped loader promotion deferred",
+    "Reward/progress live remain OFF",
+    "Legacy cleanup NOT executed (no destructive migration)",
+    "Pre-existing legacy user_heroes account-wide created prior to Pack 86 still in DB — out of scope (Pack 86 only blocks new creation)"
+  ]
+}

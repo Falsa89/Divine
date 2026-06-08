@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "track": "F",
+  "post_ensure_user_heroes": {
+    "route": "GET /api/user/heroes?server_id=<new_sid>",
+    "x_filter_applied": "true",
+    "x_psp_lookup_mode": "direct_uuid",
+    "x_player_level": "1",
+    "x_player_exp": "0",
+    "x_blocker": "",
+    "roster_count": 0,
+    "fresh_start_preserved": true,
+    "no_global_fallback": true
+  },
+  "post_ensure_team": {
+    "route": "GET /api/team/get-formation?server_id=<new_sid>",
+    "team_formation": [],
+    "team_not_configured_honestly": true,
+    "no_global_fallback": true
+  },
+  "transitions": {
+    "pre_ensure_blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+    "post_ensure_blocker": "",
+    "persisted_via_runtime_smoke": true
+  }
+}

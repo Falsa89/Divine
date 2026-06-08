@@ -1,0 +1,67 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "track": "B",
+  "backend_ensure_route": {
+    "path": "POST /api/psp/ensure?server_id=<sid>",
+    "implementation_file": "backend/server.py",
+    "function": "psp_ensure_fresh_start",
+    "introduced_by": "Pack 85"
+  },
+  "server_selection_ui": {
+    "primary_file": "frontend/app/servers.tsx",
+    "selection_handler": "onEnter(s: ServerProfile)",
+    "async_storage_keys": [
+      "v101_selected_server_id",
+      "v102_selected_server_name",
+      "v102_selected_server_has_character"
+    ],
+    "post_select_route": "/(tabs)/home"
+  },
+  "pre_battle_lobby": {
+    "file": "frontend/app/pre-battle-lobby.tsx",
+    "reads_async_storage_key": "selected_server_id",
+    "fetches": [
+      "/api/team/get-formation?server_id=<sid>",
+      "/api/user/heroes?server_id=<sid>"
+    ],
+    "blockers_honest": [
+      "SELECTED_SERVER_REQUIRED",
+      "PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER",
+      "PLAYER_SERVER_PROFILE_REQUIRED"
+    ]
+  },
+  "pack_86_ensure_call_sites": [
+    {
+      "file": "frontend/app/servers.tsx",
+      "trigger": "onEnter (user clicks Entra)",
+      "primary": true,
+      "header_marker": "X-Pack-86-Frontend-Ensure: true"
+    },
+    {
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "trigger": "useEffect on selectedServerId load (defensive guard)",
+      "primary": false,
+      "header_marker": "X-Pack-86-Lobby-Defensive-Ensure: true"
+    }
+  ],
+  "api_register_legacy_path": {
+    "file": "backend/server.py",
+    "route": "POST /api/register",
+    "pre_pack_86_behavior": "created 3 starter user_heroes account-wide (no server_id)",
+    "pack_86_behavior": "starter creation DISABLED by default. Behind dev-only env flag REGISTER_LEGACY_STARTER_HEROES_ENABLED=true (default OFF). Marked deprecated. NOT player-facing production path.",
+    "response_signals_added": [
+      "server_onboarding_required: true",
+      "starter_flow_required: true",
+      "starter_legacy_created_in_register: 0 (default)",
+      "_slc_pack_86_register_starter_legacy_guard: true"
+    ]
+  },
+  "frontend_consumers_of_user_heroes": {
+    "already_passing_server_id": [
+      "frontend/app/pre-battle-lobby.tsx (Pack 81/85 preserved)"
+    ],
+    "not_yet_audited_in_this_pack": [
+      "other screens may still consume /api/user/heroes — non-blocker for Pack 86 scope (UI ensure + register guard)"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_86_LOBBY_UI_PSP_ENSURE_AND_REGISTRATION_STARTER_LEGACY_GUARD",
+  "track": "E",
+  "route": "POST /api/psp/ensure",
+  "file": "backend/server.py",
+  "introduced_by": "Pack 85",
+  "pack_86_changes": "NONE — Pack 85 implementation already satisfies hardening requirements. No silent 's1' (server_id is required and validated). No starter heroes creation. No reward. No mutation of existing PSP. Idempotent via find_one + insert_one only when missing. No cross-server read.",
+  "hardening_checklist": {
+    "no_silent_s1": true,
+    "explicit_server_id_required": true,
+    "server_id_blank_returns_400_blocker": true,
+    "idempotent": true,
+    "fresh_start_fields_correct": true,
+    "no_s1_copy": true,
+    "no_user_heroes_creation": true,
+    "no_reward": true,
+    "no_mutation_of_existing_psp": true,
+    "no_cross_server_read": true
+  },
+  "static_proof_tokens_in_server_py": [
+    "if not server_id",
+    "SERVER_ID_REQUIRED",
+    "async def psp_ensure_fresh_start",
+    "player_server_profiles.find_one",
+    "already_exists_no_write",
+    "fresh_start_created",
+    "_slc_psp_no_cross_server_copy",
+    "\"player_level\": 1",
+    "\"player_exp\": 0"
+  ]
+}

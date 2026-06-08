@@ -193,6 +193,49 @@ export default function ServerSelectScreen() {
     } catch (_e) {
       // non logghiamo dettagli sensibili
     }
+
+    // Pack 86 — UI -> POST /api/psp/ensure?server_id=<sid>
+    // Quando l'utente entra in un server, il frontend chiama il backend
+    // ensure idempotente (Pack 85) per garantire che esista un PSP
+    // fresh-start (player_level=1, player_exp=0, roster vuoto, NESSUNA
+    // copia S1->S2). Bearer token reale da SecureStore (v96_auth_token).
+    // Se ensure fallisce/no-auth, NON facciamo fallback global roster:
+    // semplicemente proseguiamo e il lobby downstream mostrera' blocker
+    // onesti (PLAYER_SERVER_PROFILE_REQUIRED / SELECTED_SERVER_REQUIRED).
+    // Nessun silent 's1', nessuna mutation oltre PSP fresh-start.
+    try {
+      const SecureStore = await import('expo-secure-store');
+      const token = await SecureStore.getItemAsync('v96_auth_token').catch(() => null);
+      if (token && BACKEND_URL) {
+        const url = `${BACKEND_URL}/api/psp/ensure?server_id=${encodeURIComponent(s.server_id)}`;
+        await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'X-Pack-86-Frontend-Ensure': 'true',
+          },
+        }).then(async (r) => {
+          // Best-effort: salva flag onboarding stato per UI
+          if (r.ok) {
+            try {
+              const j = await r.json();
+              if (j && j.v110_psp_ensure === true) {
+                await AsyncStorage.setItem(
+                  'pack86_psp_ensure_last_mode',
+                  j.created ? 'fresh_start_created' : 'already_exists_no_write',
+                );
+                await AsyncStorage.setItem(
+                  'pack86_psp_ensure_last_server_id',
+                  s.server_id,
+                );
+              }
+            } catch (_e) { /* best-effort */ }
+          }
+        }).catch(() => { /* tolerated: lobby blocker honest downstream */ });
+      }
+    } catch (_e) { /* best-effort, no global fallback */ }
+
     router.replace('/(tabs)/home');
   };
 
