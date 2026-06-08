@@ -21,7 +21,7 @@ ensure), cleanup della stale UI copy. Master suite 3-run deterministica:
 
 ## Commit Hash
 
-- **Commit hash locale Pack 87:** (popolato post-commit dal `finish` summary)
+- **Commit hash locale Pack 87:** `fe6ef69d001859f56a444de7f63076563a992b00`
 - **Commit hash precedente Pack 86:** `e2a13ebe10437ceb4a5f17e1eeb427b5caca266d`
 - **Sync status:** `local_commit_only=true`, `public_push_managed_externally=true`, `no_remote_available=true`
 
