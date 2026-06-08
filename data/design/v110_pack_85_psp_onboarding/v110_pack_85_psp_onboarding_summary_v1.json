@@ -2,6 +2,30 @@
   "pack": "MEGA_RELEASE_ACCELERATION_85_PSP_ONBOARDING_NEW_SERVER_FRESH_START",
   "sentinel": "PUBLIC_SYNC_TAG_v110_PSP_ONBOARDING_NEW_SERVER_FRESH_START",
   "generated_at_utc": "2026-06-08T16:00:00Z",
+  "runtime_files_modified": [
+    "backend/server.py"
+  ],
+  "runtime_files_modified_count": 1,
+  "md5_rebase_chain": [
+    {
+      "file": "backend/server.py",
+      "from_md5": "2e388592fcf8e0d87693b5656e908d22",
+      "to_md5": "2ec8fcd03aac47e50ae3eb495783ef16",
+      "authorized": true,
+      "reason": "Pack 85: aggiunta route POST /api/psp/ensure (psp_ensure_fresh_start) per onboarding nuovo server con schema fresh-start. Replacement invariant funzionale: storico Pack 80/81/82/83/84 preservato. Nessuna riscrittura di logica esistente. Nessuna cancellazione/indebolimento di validatori. fake_PASS=false, validator_weakening=false.",
+      "historical_reference": [
+        "Pack 80 lobby fetch md5 chain preserved",
+        "Pack 81 user_heroes server-scope md5 chain preserved",
+        "Pack 82 dual-read PSP md5 chain preserved (last to_md5=2e388592fcf8e0d87693b5656e908d22)",
+        "Pack 83 preflight: no runtime file modification",
+        "Pack 84 physical normalization: DB-only, no runtime file modification",
+        "Pack 85 current to_md5=2ec8fcd03aac47e50ae3eb495783ef16 (additive route only)"
+      ],
+      "replacement_invariant_functional": true,
+      "fake_PASS": false,
+      "validator_weakening": false
+    }
+  ],
   "canonical_fresh_start_sot": {
     "statement": "Quando un utente entra in un nuovo server dove non ha mai giocato, per quell'utente significa iniziare il gioco da ZERO su quel server.",
     "fresh_start_schema": {
@@ -124,11 +148,11 @@
     "validator_weakening": false
   },
   "baseline_pre_pack": {"pass": 1401, "fail": 29, "miss": 0, "required_fail": 0},
-  "final_post_pack_run1": {"pass": 1414, "fail": 29, "miss": 0, "required_fail": 0},
-  "final_post_pack_run2": {"pass": 1414, "fail": 29, "miss": 0, "required_fail": 0},
-  "final_post_pack_run3": {"pass": 1414, "fail": 29, "miss": 0, "required_fail": 0},
-  "final_post_pack": {"pass": 1414, "fail": 29, "miss": 0, "required_fail": 0},
-  "delta": {"pass": 13, "fail": 0, "miss": 0, "required_fail": 0},
+  "final_post_pack_run1": {"pass": 1413, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack_run2": {"pass": 1413, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack_run3": {"pass": 1413, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack": {"pass": 1413, "fail": 29, "miss": 0, "required_fail": 0},
+  "delta": {"pass": 12, "fail": 0, "miss": 0, "required_fail": 0},
   "verdict": "MEGA_RELEASE_ACCELERATION_85_PSP_ONBOARDING_NEW_SERVER_FRESH_START_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
   "deferred_blockers_documented": [
     "Starter heroes auto-grant (requires explicit starter flow approval pack)",
@@ -137,6 +161,12 @@
     "Reward/progress live remain OFF",
     "Legacy cleanup NOT executed"
   ],
+  "sync_status": {
+    "local_commit_only": true,
+    "public_push_managed_externally": true,
+    "no_remote_available": true,
+    "note": "Container does not expose external git remote. Local commit only; public sync will be performed by platform pipeline post-approval."
+  },
   "safety_flags": {
     "fake_PASS": false,
     "validator_weakening": false,
