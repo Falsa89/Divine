@@ -1,0 +1,49 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "C",
+  "audit_results": {
+    "legacy_register_starter_path": {
+      "file": "backend/server.py",
+      "route": "POST /api/register",
+      "current_state_post_pack_86": "starter user_heroes creation DISABLED by default (REGISTER_LEGACY_STARTER_HEROES_ENABLED flag, default OFF). 0 user_heroes creati per nuovo register.",
+      "deprecated": true,
+      "replacement": "POST /api/psp/starter/claim (Pack 87, server-scoped)"
+    },
+    "hero_catalog_audit": {
+      "total_heroes_rarity_le_2_eligible": 20,
+      "selected_starters": [
+        {"hero_id": "greek_phalanx_recruit",    "name": "Recluta di Falange",     "rarity": 1, "element": "earth", "role": "tank",    "is_official": true, "show_in_catalog": true, "obtainable": true, "deactivated": false, "premium": false},
+        {"hero_id": "celtic_forest_archer",     "name": "Arciera di Bosco",       "rarity": 1, "element": "wind",  "role": "dps",     "is_official": true, "show_in_catalog": true, "obtainable": true, "deactivated": false, "premium": false},
+        {"hero_id": "angelic_sanctuary_acolyte","name": "Accolita del Santuario", "rarity": 1, "element": "light", "role": "support", "is_official": true, "show_in_catalog": true, "obtainable": true, "deactivated": false, "premium": false}
+      ],
+      "selection_criteria": "rarity<=2, is_official=true, show_in_catalog=true, obtainable=true, deactivated_at in {None, ''}, is_premium not true",
+      "no_silent_invention": true,
+      "no_hero_id_outside_catalog": true,
+      "no_premium_or_5star_or_6star": true
+    },
+    "server_entry_ui_flow": {
+      "file": "frontend/app/servers.tsx",
+      "handler": "onEnter",
+      "pack_86_ensure_call": true,
+      "pack_87_starter_claim_call": true,
+      "sequence": ["setAsyncStorage(v101_selected_server_id)", "POST /api/psp/ensure", "POST /api/psp/starter/claim", "router.replace('/(tabs)/home')"]
+    },
+    "psp_ensure_endpoint": {
+      "file": "backend/server.py",
+      "path": "POST /api/psp/ensure",
+      "pack": "Pack 85"
+    },
+    "user_heroes_server_id_usage": {
+      "file": "backend/server.py",
+      "path": "GET /api/user/heroes",
+      "server_scoped": true,
+      "pack": "Pack 81 (preserved)"
+    },
+    "team_formation_write_path": {
+      "file": "backend/server.py",
+      "collection": "player_server_profiles.team_formation",
+      "only_init_if_empty": true,
+      "no_overwrite": true
+    }
+  }
+}

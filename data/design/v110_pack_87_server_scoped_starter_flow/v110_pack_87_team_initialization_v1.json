@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "F",
+  "team_initialization_strategy": "Initialize PSP.team_formation ONLY if currently empty AND only with newly created starter user_hero ids on the same server. Use Mongo conditional update with team_formation in {None, []} to prevent race overwrites. NO overwrite existing team. NO fake team. NO copy from other servers.",
+  "conditions": {
+    "only_if_psp_team_empty": true,
+    "only_with_newly_created_starter_user_hero_ids": true,
+    "only_same_server_id": true,
+    "never_overwrite": true,
+    "never_fake_team": true,
+    "never_copy_other_server": true
+  },
+  "team_formation_schema_when_initialized": [
+    {"slot_index": 0, "user_hero_id": "<uh_uuid>", "_slc_pack_87_starter_team_init": true},
+    {"slot_index": 1, "user_hero_id": "<uh_uuid>", "_slc_pack_87_starter_team_init": true},
+    {"slot_index": 2, "user_hero_id": "<uh_uuid>", "_slc_pack_87_starter_team_init": true}
+  ],
+  "smoke_test_result": {
+    "team_initialized_on_first_claim": true,
+    "team_unchanged_on_second_claim": true,
+    "existing_team_never_overwritten": true
+  }
+}

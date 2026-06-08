@@ -3924,6 +3924,25 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-86-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_86_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-86-LOBBY-UI-PSP-ENSURE-REGISTRATION-GUARD-ROLLUP', 'validate_mega_release_acceleration_86_lobby_ui_psp_ensure_registration_guard_rollup.py'),
 
+    # Pack 87 — Server-scoped starter flow + server UI copy cleanup.
+    # 15 track + 1 rollup = 16 nuove validator track.
+    ('PROJECT-V110-PACK-87-BASELINE-MULTIRUN', 'validate_v110_pack_87_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-87-STARTER-FLOW-SOT', 'validate_v110_pack_87_starter_flow_sot.py'),
+    ('PROJECT-V110-PACK-87-ROUTE-AND-LEGACY-STARTER-AUDIT', 'validate_v110_pack_87_route_and_legacy_starter_audit.py'),
+    ('PROJECT-V110-PACK-87-STARTER-CONFIG', 'validate_v110_pack_87_starter_config.py'),
+    ('PROJECT-V110-PACK-87-BACKEND-STARTER-CLAIM-ENDPOINT', 'validate_v110_pack_87_backend_starter_claim_endpoint.py'),
+    ('PROJECT-V110-PACK-87-TEAM-INITIALIZATION', 'validate_v110_pack_87_team_initialization.py'),
+    ('PROJECT-V110-PACK-87-FRONTEND-ONBOARDING-INTEGRATION', 'validate_v110_pack_87_frontend_onboarding_integration.py'),
+    ('PROJECT-V110-PACK-87-SERVER-UI-COPY-CLEANUP', 'validate_v110_pack_87_server_ui_copy_cleanup.py'),
+    ('PROJECT-V110-PACK-87-RUNTIME-SMOKE-E2E', 'validate_v110_pack_87_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-87-DATA-INVARIANTS', 'validate_v110_pack_87_data_invariants.py'),
+    ('PROJECT-V110-PACK-87-CLEANUP-ROLLBACK-STRATEGY', 'validate_v110_pack_87_cleanup_rollback_strategy.py'),
+    ('PROJECT-V110-PACK-87-LIVE-READINESS-UPDATE', 'validate_v110_pack_87_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-87-MD5-REBASE', 'validate_v110_pack_87_md5_rebase.py'),
+    ('PROJECT-V110-PACK-87-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_87_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-87-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_87_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-87-SERVER-SCOPED-STARTER-FLOW-ROLLUP', 'validate_mega_release_acceleration_87_server_scoped_starter_flow_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

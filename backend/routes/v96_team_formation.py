@@ -68,14 +68,34 @@ def create_team_formation_router(db, get_current_user):
         team_formation = user.get("team_formation") or []
         psp_doc = None
         psp_present_for_server = False
+        psp_team_initialized_pack_87 = False
         profile_id = None
         if server_id:
+            # Pack 82 dual-read compat + Pack 84 normalized PSP user_id (UUID):
+            # PSP.user_id e' UUID standard; usa current_user['id'] (UUID estratto dal JWT)
+            # invece di str(user._id) che ritorna ObjectId stringified e fa miss.
+            uid_uuid = current_user.get("id") or user.get("id")
             psp_doc = await db.player_server_profiles.find_one(
-                {"user_id": str(user.get("_id") or user.get("id")), "server_id": server_id}
+                {"user_id": uid_uuid, "server_id": server_id}
             )
+            if not psp_doc:
+                # Dual-read fallback (Pack 82) per PSP storici con _id-stringified
+                try:
+                    psp_doc = await db.player_server_profiles.find_one(
+                        {"user_id": str(user.get("_id") or user.get("id")), "server_id": server_id}
+                    )
+                except Exception:
+                    psp_doc = None
             psp_present_for_server = psp_doc is not None
             if psp_doc:
                 profile_id = str(psp_doc.get("profile_id") or psp_doc.get("_id") or psp_doc.get("id") or "")
+                # Pack 87 — Se PSP ha team_formation server-scoped (init via starter
+                # claim Pack 87 o via altre fonti server-scoped), preferisci quello
+                # rispetto a team account-wide. Mai overwrite, solo read.
+                psp_team = psp_doc.get("team_formation") or []
+                if isinstance(psp_team, list) and len(psp_team) > 0:
+                    team_formation = psp_team
+                    psp_team_initialized_pack_87 = bool(psp_doc.get("_slc_pack_87_team_initialized_from_starter"))
         # Blocker esplicito quando server_id richiesto ma nessun team disponibile.
         if server_id and not team_formation:
             return {
@@ -112,6 +132,7 @@ def create_team_formation_router(db, get_current_user):
             "source": "saved_formation_server_scoped" if server_id else "saved_formation",
             "fallback_used": False,
             "team_formation": team_formation,
+            "psp_team_initialized_pack_87": psp_team_initialized_pack_87,
             "blocker": None,
         }
 

@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "G",
+  "frontend_file_modified": "frontend/app/servers.tsx",
+  "trigger": "onEnter (post AsyncStorage.setItem + post POST /api/psp/ensure)",
+  "sequence": [
+    "AsyncStorage.setItem('v101_selected_server_id', s.server_id)",
+    "POST /api/psp/ensure?server_id=<sid> (Pack 86)",
+    "POST /api/psp/starter/claim?server_id=<sid> (Pack 87)",
+    "AsyncStorage.setItem('pack87_starter_claim_last_mode', ...)",
+    "AsyncStorage.setItem('pack87_starter_user_hero_ids', JSON.stringify(...))",
+    "router.replace('/(tabs)/home')"
+  ],
+  "header_marker": "X-Pack-87-Frontend-Starter-Claim: true",
+  "bearer_required": true,
+  "no_global_fallback_on_failure": true,
+  "explicit_server_id": true,
+  "idempotent_via_backend_marker": true,
+  "persisted_async_storage_keys": [
+    "pack87_starter_claim_last_mode",
+    "pack87_starter_claim_last_server_id",
+    "pack87_starter_user_hero_ids"
+  ],
+  "defensive_call_site_pre_battle_lobby_planned_future": "Optional defensive ensure already covers PSP creation; starter claim defensive call deferred to future pack to avoid race; backend idempotency handles re-call safely."
+}

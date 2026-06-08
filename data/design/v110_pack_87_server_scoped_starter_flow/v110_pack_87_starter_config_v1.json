@@ -1,0 +1,32 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "D",
+  "starter_set_id": "pack_87_default_starter_set",
+  "server_scoped": true,
+  "claim_once_per_server": true,
+  "hero_ids": [
+    {"hero_id": "greek_phalanx_recruit",     "role": "tank",    "initial_level": 1, "initial_exp": 0, "premium": false},
+    {"hero_id": "celtic_forest_archer",      "role": "dps",     "initial_level": 1, "initial_exp": 0, "premium": false},
+    {"hero_id": "angelic_sanctuary_acolyte", "role": "support", "initial_level": 1, "initial_exp": 0, "premium": false}
+  ],
+  "allow_duplicate_on_same_server": false,
+  "no_equipment": true,
+  "no_currency": true,
+  "no_inventory_reward": true,
+  "no_story_reward": true,
+  "no_player_level_mutation": true,
+  "no_s1_to_s2_copy": true,
+  "no_overwrite_existing_team": true,
+  "team_init_only_if_empty": true,
+  "premium": false,
+  "max_rarity_allowed": 2,
+  "audit_blockers_when_violated": [
+    "STARTER_ROSTER_NOT_CATALOGED",
+    "STARTER_ROSTER_HIGH_RARITY",
+    "STARTER_ROSTER_NOT_OFFICIAL",
+    "STARTER_ROSTER_NOT_OBTAINABLE",
+    "STARTER_ROSTER_NOT_CATALOG_VISIBLE",
+    "STARTER_ROSTER_DEACTIVATED",
+    "STARTER_ROSTER_PREMIUM_FORBIDDEN"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "K",
+  "cleanup_script": "backend/scripts/cleanup_v110_pack_87_test_artifacts.py",
+  "refuse_by_default": true,
+  "dry_run_default": true,
+  "deletes_only_marked_pack_87_test_artifacts": true,
+  "no_deletion_of_real_production_psp_or_user_heroes": true,
+  "markers_used_for_identification": [
+    "users.email LIKE pack87_test_user_%@test.com",
+    "user_heroes.creation_source=server_scoped_starter_flow_pack_87 AND user_id=<test_user_id>",
+    "player_server_profiles.server_id LIKE 's_pack87_%'"
+  ],
+  "production_safety": {
+    "refuse_if_target_count_zero": true,
+    "refuse_if_no_explicit_apply_flag": true,
+    "refuse_if_target_appears_real_user": true,
+    "refuse_if_starter_marker_attached_to_real_user_heroes": true
+  }
+}

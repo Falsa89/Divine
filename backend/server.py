@@ -336,6 +336,196 @@ async def psp_ensure_fresh_start(
     }
 
 
+# Pack 87 — Server-scoped starter flow claim endpoint.
+# Decisione canonica:
+#   Gli starter heroes sono SERVER-SCOPED, non account-wide.
+#   La registrazione NON assegna roster globale operativo (Pack 86 guard).
+#   Lo starter roster e' assegnato SOLO nel contesto (user_id, server_id) e
+#   SOLO via questo endpoint, idempotentemente (claim_once_per_server).
+# Vincoli rigorosi:
+#   - server_id esplicito richiesto;
+#   - solo hero IDs starter-eligible (low-rarity, non-premium, esistenti,
+#     catalogati, obtainable, official, non-deactivated) dal catalogo;
+#   - level=1, exp=0, base stars/rarity dal catalogo;
+#   - NESSUN premium currency, hard currency, inventory, equipment, story reward;
+#   - NESSUNA mutazione player_level esistente;
+#   - NESSUNA copia S1->S2;
+#   - team_formation aggiornato SOLO se vuoto E PSP fresh-start;
+#   - idempotency marker `_slc_pack_87_starter_claim_marker` impedisce doppio claim.
+@app.post("/api/psp/starter/claim")
+async def psp_starter_claim(
+    response: Response,
+    server_id: str,
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Pack 87 — Server-scoped starter flow claim.
+
+    Crea idempotentemente un piccolo starter roster (3 heroes) per
+    (user_id, server_id) usando SOLO hero IDs dal config approvato
+    `STARTER_SET_PACK_87` (low-rarity, non-premium, catalogati).
+
+    Comportamento:
+      - Se starter gia' reclamati per (user_id, server_id) -> no-op idempotente.
+      - Se PSP non esiste -> blocker PLAYER_SERVER_PROFILE_REQUIRED.
+      - Se hero IDs config non esistono nel catalogo o non sono eligible ->
+        blocker STARTER_ROSTER_NOT_CATALOGED (refuse-by-default).
+      - Crea user_heroes (con server_id) e aggiorna team_formation SOLO se vuoto.
+
+    Authorization string Pack 87: AUTORIZZO_V110_SERVER_SCOPED_STARTER_FLOW_PACK_87
+    """
+    if not server_id or not isinstance(server_id, str) or not server_id.strip():
+        response.status_code = 400
+        return {"v110_starter_claim": False, "blocker": "SERVER_ID_REQUIRED"}
+    uid = current_user["id"]
+    sid = server_id.strip()
+    # Verifica PSP esiste (NON crea silently; Pack 85 ensure deve essere stato chiamato).
+    psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+    if not psp:
+        response.headers["X-Starter-Claim-Mode"] = "psp_required"
+        response.status_code = 409
+        return {
+            "v110_starter_claim": False,
+            "blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+            "hint": "Call POST /api/psp/ensure?server_id=<sid> first.",
+        }
+    # Idempotency check: claim_once_per_server marker.
+    already_claimed = bool(psp.get("_slc_pack_87_starter_claim_marker"))
+    if already_claimed:
+        # Conta starter Pack 87 esistenti per server
+        existing_count = await db.user_heroes.count_documents({
+            "user_id": uid,
+            "server_id": sid,
+            "creation_source": "server_scoped_starter_flow_pack_87",
+        })
+        response.headers["X-Starter-Claim-Mode"] = "already_claimed_no_write"
+        response.headers["X-Server-Id"] = sid
+        return {
+            "v110_starter_claim": True,
+            "created": False,
+            "already_claimed": True,
+            "user_id": uid,
+            "server_id": sid,
+            "starter_user_heroes_created_now": 0,
+            "starter_user_heroes_present": existing_count,
+            "no_cross_server_copy": True,
+            "no_account_wide_starter": True,
+            "no_premium_grant": True,
+            "no_reward_grant": True,
+            "no_player_level_mutation": True,
+        }
+    # Carica config starter approvato Pack 87.
+    starter_set = [
+        # (hero_id, role)
+        ("greek_phalanx_recruit", "tank"),
+        ("celtic_forest_archer", "dps"),
+        ("angelic_sanctuary_acolyte", "support"),
+    ]
+    # Verifica che TUTTI gli heroes siano eligible (catalogabili, non-premium, low-rarity, esistenti).
+    approved_heroes = []
+    for hero_id, role in starter_set:
+        h = await db.heroes.find_one({"id": hero_id})
+        if not h:
+            response.status_code = 409
+            response.headers["X-Starter-Claim-Mode"] = "roster_not_cataloged"
+            return {
+                "v110_starter_claim": False,
+                "blocker": "STARTER_ROSTER_NOT_CATALOGED",
+                "missing_hero_id": hero_id,
+            }
+        # Eligibility checks (refuse-by-default, NO silent invention).
+        if int(h.get("rarity") or 0) > 2:
+            response.status_code = 409
+            return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_HIGH_RARITY", "hero_id": hero_id}
+        if h.get("is_official") is not True:
+            response.status_code = 409
+            return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_NOT_OFFICIAL", "hero_id": hero_id}
+        if h.get("obtainable") is not True:
+            response.status_code = 409
+            return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_NOT_OBTAINABLE", "hero_id": hero_id}
+        if h.get("show_in_catalog") is not True:
+            response.status_code = 409
+            return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_NOT_CATALOG_VISIBLE", "hero_id": hero_id}
+        if h.get("deactivated_at"):
+            response.status_code = 409
+            return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_DEACTIVATED", "hero_id": hero_id}
+        # NO premium check
+        if h.get("is_premium") is True:
+            response.status_code = 409
+            return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_PREMIUM_FORBIDDEN", "hero_id": hero_id}
+        approved_heroes.append((h, role))
+    # Crea user_heroes server-scoped. NO writes su altre collections.
+    created_ids = []
+    now = datetime.utcnow()
+    for h, role in approved_heroes:
+        new_uh_id = str(uuid.uuid4())
+        user_hero = {
+            "id": new_uh_id,
+            "user_id": uid,
+            "server_id": sid,  # MANDATORY server_id Pack 87
+            "hero_id": h["id"],
+            "level": 1,
+            "experience": 0,
+            "stars": int(h.get("rarity") or 1),
+            "obtained_at": now,
+            "creation_source": "server_scoped_starter_flow_pack_87",
+            "_slc_pack_87_starter_user_hero": True,
+            "_slc_pack_87_starter_role": role,
+            "_slc_pack_87_authorization": "AUTORIZZO_V110_SERVER_SCOPED_STARTER_FLOW_PACK_87",
+        }
+        await db.user_heroes.insert_one(user_hero)
+        created_ids.append(new_uh_id)
+    # Aggiorna team_formation SOLO se vuoto (no overwrite).
+    team_initialized = False
+    cur_team = psp.get("team_formation") or []
+    if not cur_team or len(cur_team) == 0:
+        team_formation = [
+            {
+                "slot_index": i,
+                "user_hero_id": uh_id,
+                "_slc_pack_87_starter_team_init": True,
+            }
+            for i, uh_id in enumerate(created_ids)
+        ]
+        await db.player_server_profiles.update_one(
+            {"user_id": uid, "server_id": sid, "team_formation": {"$in": [None, []]}},
+            {"$set": {
+                "team_formation": team_formation,
+                "_slc_pack_87_team_initialized_from_starter": True,
+            }},
+        )
+        team_initialized = True
+    # Set idempotency marker SOLO ora, dopo successo (idempotent semantics).
+    await db.player_server_profiles.update_one(
+        {"user_id": uid, "server_id": sid},
+        {"$set": {
+            "_slc_pack_87_starter_claim_marker": True,
+            "_slc_pack_87_starter_claim_marker_at_utc": now.isoformat() + "Z",
+            "onboarding_state": "starter_claimed",
+        }},
+    )
+    response.headers["X-Starter-Claim-Mode"] = "starter_claimed_first_time"
+    response.headers["X-Server-Id"] = sid
+    return {
+        "v110_starter_claim": True,
+        "created": True,
+        "already_claimed": False,
+        "user_id": uid,
+        "server_id": sid,
+        "starter_user_heroes_created_now": len(created_ids),
+        "starter_user_hero_ids": created_ids,
+        "starter_hero_ids": [h["id"] for h, _ in approved_heroes],
+        "team_initialized": team_initialized,
+        "no_cross_server_copy": True,
+        "no_account_wide_starter": True,
+        "no_premium_grant": True,
+        "no_reward_grant": True,
+        "no_player_level_mutation": True,
+        "creation_source": "server_scoped_starter_flow_pack_87",
+        "_slc_pack_87_authorization": "AUTORIZZO_V110_SERVER_SCOPED_STARTER_FLOW_PACK_87",
+    }
+
+
 
 @app.get("/api/user/heroes")
 async def get_user_heroes(

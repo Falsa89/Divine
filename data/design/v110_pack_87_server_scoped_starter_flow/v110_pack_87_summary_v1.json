@@ -1,0 +1,58 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_SERVER_SCOPED_STARTER_FLOW_AND_UI_COPY_CLEANUP",
+  "authorization": "AUTORIZZO_V110_SERVER_SCOPED_STARTER_FLOW_PACK_87",
+  "generated_at_utc": "2026-06-08T22:00:00Z",
+  "verdict": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "production_apply_executed": false,
+    "bulk_psp_apply": false,
+    "physical_normalization_executed_in_this_pack": false,
+    "destructive_migration": false,
+    "delete_of_real_psp": false,
+    "premium_grant": false,
+    "reward_live": false,
+    "progress_live": false,
+    "legacy_cleanup_executed": false,
+    "starter_heroes_account_wide_grant": false,
+    "copy_s1_to_s2": false,
+    "account_wide_player_level_as_final_server_level": false,
+    "account_wide_roster_as_final_server_roster": false,
+    "postqa_d_gates_unlocked": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "user_heroes_creation_from_register": false,
+    "premium_or_5star_or_6star_starter": false,
+    "borea_or_premium_hero_in_starter": false,
+    "inventory_grant_in_starter": false,
+    "equipment_grant_in_starter": false,
+    "currency_grant_in_starter": false,
+    "story_reward_grant_in_starter": false,
+    "team_overwrite_existing": false,
+    "player_level_mutation": false
+  },
+  "explicit_statements": {
+    "starter_heroes_are_server_scoped": true,
+    "no_account_wide_starter_user_heroes": true,
+    "new_server_starts_level_1": true,
+    "no_s1_to_s2_copy": true,
+    "no_premium_currency_equipment_story_rewards": true,
+    "reward_progress_live_off": true,
+    "legacy_cleanup_not_executed": true
+  },
+  "sync_status": {
+    "local_commit_only": true,
+    "public_push_managed_externally": true,
+    "no_remote_available": true
+  },
+  "deferred_blockers_documented": [
+    "Inventory/currencies/story_progress/equipment PSP-scoped loader promotion still deferred",
+    "Reward/progress live remain OFF",
+    "Legacy cleanup of pre-Pack-86 account-wide user_heroes NOT executed (out of scope)",
+    "Lobby defensive starter claim deferred (backend idempotency handles re-call safely; defensive UI call may be added in future pack)",
+    "Starter set composition currently fixed (1★ tank/dps/support); future pack may extend/customize"
+  ]
+}

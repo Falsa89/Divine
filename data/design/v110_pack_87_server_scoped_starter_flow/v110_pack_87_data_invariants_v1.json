@@ -1,0 +1,35 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "J",
+  "account_wide_starter_from_register": false,
+  "starter_user_heroes_only_on_selected_server": true,
+  "all_starter_user_heroes_include_server_id": true,
+  "starter_user_heroes_creation_source_pack_87": true,
+  "copy_s1_to_s2": false,
+  "player_level_mutation": false,
+  "premium_currency_grant": false,
+  "hard_currency_grant": false,
+  "inventory_grant": false,
+  "equipment_grant": false,
+  "story_reward_grant": false,
+  "legacy_cleanup_executed": false,
+  "destructive_migration": false,
+  "delete_of_real_psp": false,
+  "bulk_psp_apply": false,
+  "physical_normalization_executed_in_this_pack": false,
+  "team_overwrite_existing": false,
+  "team_init_only_if_empty": true,
+  "reward_live": false,
+  "progress_live": false,
+  "release_readiness_claimed": false,
+  "net_db_writes_during_smoke_test": {
+    "users": 0,
+    "player_server_profiles": 0,
+    "user_heroes": 0
+  },
+  "net_db_writes_in_production_scope_pack_87": {
+    "users": 0,
+    "player_server_profiles": "new PSP via ensure (Pack 85 route) + idempotency marker update (Pack 87) when claim called",
+    "user_heroes": "3 inserts per first claim per (user_id, server_id)"
+  }
+}

@@ -203,12 +203,18 @@ export default function ServerSelectScreen() {
     // semplicemente proseguiamo e il lobby downstream mostrera' blocker
     // onesti (PLAYER_SERVER_PROFILE_REQUIRED / SELECTED_SERVER_REQUIRED).
     // Nessun silent 's1', nessuna mutation oltre PSP fresh-start.
+    //
+    // Pack 87 — Subito dopo ensure, chiamiamo idempotentemente
+    // POST /api/psp/starter/claim?server_id=<sid> per assegnare lo starter
+    // roster server-scoped (3 heroes low-rarity non-premium) se non ancora
+    // reclamato. Idempotente (claim_once_per_server). NO global fallback.
+    // NO premium currency. NO inventory/equipment/story reward.
     try {
       const SecureStore = await import('expo-secure-store');
       const token = await SecureStore.getItemAsync('v96_auth_token').catch(() => null);
       if (token && BACKEND_URL) {
-        const url = `${BACKEND_URL}/api/psp/ensure?server_id=${encodeURIComponent(s.server_id)}`;
-        await fetch(url, {
+        const ensureUrl = `${BACKEND_URL}/api/psp/ensure?server_id=${encodeURIComponent(s.server_id)}`;
+        await fetch(ensureUrl, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -233,6 +239,39 @@ export default function ServerSelectScreen() {
             } catch (_e) { /* best-effort */ }
           }
         }).catch(() => { /* tolerated: lobby blocker honest downstream */ });
+
+        // Pack 87 — Starter claim post-ensure (idempotente, server-scoped).
+        const claimUrl = `${BACKEND_URL}/api/psp/starter/claim?server_id=${encodeURIComponent(s.server_id)}`;
+        await fetch(claimUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'X-Pack-87-Frontend-Starter-Claim': 'true',
+          },
+        }).then(async (r) => {
+          if (r.ok) {
+            try {
+              const j = await r.json();
+              if (j && j.v110_starter_claim === true) {
+                await AsyncStorage.setItem(
+                  'pack87_starter_claim_last_mode',
+                  j.created ? 'starter_claimed_first_time' : 'already_claimed_no_write',
+                );
+                await AsyncStorage.setItem(
+                  'pack87_starter_claim_last_server_id',
+                  s.server_id,
+                );
+                if (Array.isArray(j.starter_user_hero_ids)) {
+                  await AsyncStorage.setItem(
+                    'pack87_starter_user_hero_ids',
+                    JSON.stringify(j.starter_user_hero_ids),
+                  );
+                }
+              }
+            } catch (_e) { /* best-effort */ }
+          }
+        }).catch(() => { /* tolerated: lobby blocker honest downstream, no global fallback */ });
       }
     } catch (_e) { /* best-effort, no global fallback */ }
 
@@ -352,10 +391,11 @@ export default function ServerSelectScreen() {
               {'\u26A0\uFE0F'} LISTA SERVER QA/FALLBACK \u00b7 DATI NON DI PRODUZIONE
             </Text>
             <Text style={styles.fallbackSubTxt}>
-              SERVER_DATA_ISOLATION_BACKEND_PENDING \u00b7 Server isolation backend (per_server_id
-              account/inventory/team/chat) PENDING. Tutti i server caricheranno lo stesso account
-              corrente finch\u00e9 il backend multi-shard non e\u0301 attivo. Nessuna finzione di
-              separazione.
+              Pack 85-87 attivi: account identity condivisa tra server; profilo
+              giocatore, roster e progressione sono server-scoped. Entrare in un
+              nuovo server crea un PSP fresh-start (livello 1, exp 0) senza copia
+              da altri server. Inventario, valute, story e equipment restano
+              ancora deferred. Nessuna finzione di separazione.
             </Text>
           </View>
         ) : null}

@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "H",
+  "file_modified": "frontend/app/servers.tsx",
+  "stale_texts_removed": [
+    "SERVER_DATA_ISOLATION_BACKEND_PENDING",
+    "Server isolation backend (per_server_id account/inventory/team/chat) PENDING",
+    "Tutti i server caricheranno lo stesso account corrente finché il backend multi-shard non é attivo"
+  ],
+  "new_text_descriptive": "Pack 85-87 attivi: account identity condivisa tra server; profilo giocatore, roster e progressione sono server-scoped. Entrare in un nuovo server crea un PSP fresh-start (livello 1, exp 0) senza copia da altri server. Inventario, valute, story e equipment restano ancora deferred. Nessuna finzione di separazione.",
+  "honest_about_deferred_loaders": true,
+  "no_release_readiness_claim_in_copy": true,
+  "no_fake_separation_claim": true,
+  "static_verification": {
+    "old_text_grep_count_post_pack_87": 0,
+    "new_text_grep_count_post_pack_87": 1
+  }
+}

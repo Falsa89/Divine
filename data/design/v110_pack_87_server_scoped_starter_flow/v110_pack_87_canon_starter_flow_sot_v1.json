@@ -1,0 +1,60 @@
+{
+  "sot_id": "v110_canon_server_scoped_starter_flow_pack_87",
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "authorization": "AUTORIZZO_V110_SERVER_SCOPED_STARTER_FLOW_PACK_87",
+  "canonical_decision": "Starter heroes are SERVER-SCOPED. Account registration does NOT assign global operational roster. Starter roster assigned ONLY within (authenticated_user_id, selected_server_id), idempotently, once per server.",
+  "starter_set": {
+    "starter_set_id": "pack_87_default_starter_set",
+    "hero_ids": [
+      {"hero_id": "greek_phalanx_recruit",     "role": "tank",    "initial_level": 1, "initial_exp": 0, "stars_from_catalog": true, "premium": false},
+      {"hero_id": "celtic_forest_archer",      "role": "dps",     "initial_level": 1, "initial_exp": 0, "stars_from_catalog": true, "premium": false},
+      {"hero_id": "angelic_sanctuary_acolyte", "role": "support", "initial_level": 1, "initial_exp": 0, "stars_from_catalog": true, "premium": false}
+    ],
+    "server_scoped": true,
+    "premium": false,
+    "allow_duplicate_on_same_server": false,
+    "claim_once_per_server": true,
+    "no_equipment": true,
+    "no_currency": true,
+    "no_inventory_reward": true,
+    "no_story_reward": true,
+    "no_player_level_mutation": true,
+    "no_s1_to_s2_copy": true,
+    "no_overwrite_existing_team": true,
+    "team_init_only_if_empty": true
+  },
+  "forbidden": {
+    "account_wide_starter": true,
+    "premium_or_borea_or_5star_or_6star": true,
+    "hard_premium_currency": true,
+    "inventory_equipment_story_reward": true,
+    "player_level_mutation": true,
+    "copy_s1_to_s2": true,
+    "overwrite_existing_team": true,
+    "legacy_cleanup": true,
+    "reward_live": true,
+    "progress_live": true,
+    "release_readiness_claim": true,
+    "fake_PASS": true,
+    "validator_weakening": true
+  },
+  "endpoint": {
+    "path": "POST /api/psp/starter/claim",
+    "params": ["server_id"],
+    "auth": "Bearer (JWT v96_auth_token)",
+    "idempotent": true,
+    "requires_existing_psp": true,
+    "creation_source": "server_scoped_starter_flow_pack_87",
+    "marker_psp": "_slc_pack_87_starter_claim_marker",
+    "marker_user_hero": "_slc_pack_87_starter_user_hero"
+  },
+  "frontend_integration": {
+    "trigger": "servers.tsx::onEnter (post ensure)",
+    "header_marker": "X-Pack-87-Frontend-Starter-Claim: true",
+    "persisted_keys": [
+      "pack87_starter_claim_last_mode",
+      "pack87_starter_claim_last_server_id",
+      "pack87_starter_user_hero_ids"
+    ]
+  }
+}

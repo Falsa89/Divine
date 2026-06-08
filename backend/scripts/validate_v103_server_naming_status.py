@@ -17,8 +17,20 @@ if 'QA/FALLBACK' not in d.get('ui_banner_text_line1',''): print('FAIL \u2014 ban
 srv_tsx = os.path.join(ROOT,'frontend','app','servers.tsx')
 if not os.path.isfile(srv_tsx): print('FAIL \u2014 servers.tsx missing'); sys.exit(1)
 with open(srv_tsx,'r',encoding='utf-8') as f: content = f.read()
-for token in ('[QA] Aurora','LISTA SERVER QA/FALLBACK','DATI NON DI PRODUZIONE','isolation backend','PENDING'):
+for token in ('[QA] Aurora','LISTA SERVER QA/FALLBACK','DATI NON DI PRODUZIONE'):
     if token not in content: print(f'FAIL \u2014 servers.tsx missing token: {token}'); sys.exit(1)
+# Pack 87 — Stale UI copy cleanup: i token "isolation backend" e "PENDING" relativi
+# alla backend isolation NON sono pi\u00f9 attesi nella nuova copy descrittiva. La nuova
+# copy onesta Pack 87 dichiara: account identity condivisa + server-scoped roster
+# + loader inventory/currencies/story/equipment ancora deferred (per honesty).
+# Accept either old stale copy (pre-Pack-87) OR new Pack 87 honest copy.
+ACCEPTED_BANNER_COPY_PATTERNS = [
+    'isolation backend',                       # pre-Pack-87 stale (legacy)
+    'Pack 85-87 attivi',                       # post-Pack-87 cleanup
+    'profilo giocatore, roster e progressione',# Pack 87 honest descriptor
+]
+if not any(p in content for p in ACCEPTED_BANNER_COPY_PATTERNS):
+    print(f'FAIL \u2014 servers.tsx missing both legacy stale token and Pack 87 cleanup copy'); sys.exit(1)
 if d.get('misleading_names_present', True): print('FAIL \u2014 misleading_names_present must be false'); sys.exit(1)
 if d.get('fake_full_or_recommended_to_attract_clicks', True): print('FAIL \u2014 fake_full_or_recommended must be false'); sys.exit(1)
 saf = d.get('safety') or {}

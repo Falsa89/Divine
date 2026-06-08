@@ -1,0 +1,58 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_87_SERVER_SCOPED_STARTER_FLOW_AND_SERVER_UI_COPY_CLEANUP",
+  "track": "M",
+  "runtime_files_modified": [
+    "backend/server.py",
+    "backend/routes/v96_team_formation.py",
+    "frontend/app/servers.tsx"
+  ],
+  "runtime_files_not_modified_in_this_pack": [
+    "frontend/app/pre-battle-lobby.tsx"
+  ],
+  "md5_rebase_chain": [
+    {
+      "file": "backend/server.py",
+      "from_md5_pre_pack_87": "272c70b37190e1fa8b6e712e83fdda83",
+      "to_md5_post_pack_87": "8e0595aaf398c3ba7dd92b9118d5a528",
+      "reason": "Pack 87: aggiunto endpoint POST /api/psp/starter/claim (psp_starter_claim) per server-scoped starter flow idempotente. Crea user_heroes con server_id solo per (user_id, server_id), team init solo se vuoto. NO premium grant, NO currency grant, NO inventory/equipment/story reward, NO copy S1->S2.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    },
+    {
+      "file": "backend/routes/v96_team_formation.py",
+      "reason": "Pack 87: v96 team_formation route ora legge PSP.team_formation server-scoped quando server_id fornito (Pack 87 starter team init letto correttamente). Fix dual-read: lookup PSP via current_user['id'] UUID (Pack 84 normalized) invece di str(user._id). NO write, NO mutation, NO fake team.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    },
+    {
+      "file": "frontend/app/servers.tsx",
+      "from_md5_pre_pack_87": "91dc7f8c8f49934453b35a09cc9eaeab",
+      "to_md5_post_pack_87": "e7b0072ad2d54b5d7a52ec761f66d591",
+      "reason": "Pack 87: aggiunta chiamata POST /api/psp/starter/claim in onEnter dopo /api/psp/ensure (Pack 86). Stale UI copy (SERVER_DATA_ISOLATION_BACKEND_PENDING + tutti i server caricheranno lo stesso account) rimossa e sostituita con copy descrittiva onesta Pack 85-87.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    }
+  ],
+  "tracking_files_rebased": [
+    "data/design/closed_alpha/v100_runtime_md5_baseline_v1.json"
+  ],
+  "historical_reference": [
+    "Pack 80 lobby fetch md5 chain preserved",
+    "Pack 81 user_heroes server-scope md5 chain preserved",
+    "Pack 82 dual-read PSP md5 chain preserved",
+    "Pack 83 preflight: no runtime file modification",
+    "Pack 84 physical normalization: DB-only",
+    "Pack 85 backend ensure route md5 chain preserved",
+    "Pack 86 UI ensure + register guard md5 chain preserved (server.py 272c70b3 preservato come historical reference)",
+    "Pack 87 server-scoped starter flow + UI copy cleanup: additive (no rewrite of pre-existing logic, no validator weakening)"
+  ],
+  "validators_rebased_for_pack_87_ui_cleanup_no_weakening": [
+    "backend/scripts/validate_v103_server_naming_status.py (accept legacy stale token OR Pack 87 honest descriptor)",
+    "backend/scripts/validate_v104_server_scoped_data_flow_audit.py (accept set of banner tokens)",
+    "backend/scripts/validate_v104_server_naming_canonicalization.py (accept set of banner tokens + content patterns)"
+  ],
+  "no_validator_weakening_proof": "I validatori v103/v104 sono stati estesi (set di token accettati) per riconoscere la legittima cleanup UI Pack 87 (Track H). Tutti i type-check originali sono preservati: banner_visible=true, no_fake_per_server_data=true, fake_PASS=false, validator_weakening=false, ecc. La cleanup UI \u00e8 esplicitamente autorizzata dal pack."
+}
