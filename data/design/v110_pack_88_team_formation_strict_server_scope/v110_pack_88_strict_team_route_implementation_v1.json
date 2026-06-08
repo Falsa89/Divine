@@ -1,0 +1,39 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "C",
+  "file_modified": "backend/routes/v96_team_formation.py",
+  "strict_invariants": {
+    "server_id_required_for_player_facing": true,
+    "missing_psp_returns_blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+    "psp_exists_but_team_empty_returns_blocker": "PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER",
+    "team_source_when_server_id_present": "player_server_profile_only",
+    "no_fallback_to_user_team_formation": true,
+    "no_writes_to_users_team_formation_in_server_scoped_flow": true,
+    "no_fake_team": true,
+    "no_global_fallback": true,
+    "dual_read_uuid_objectid_compat": true,
+    "pack_87_starter_team_preserved": true,
+    "legacy_path_non_player_facing": true,
+    "legacy_path_flagged_in_response": "team_source=legacy_account_wide_deprecated AND legacy_account_team_used=true AND _slc_pack_88_legacy_path_warning"
+  },
+  "response_schema_pack_88": {
+    "pack_88_strict_server_scope": true,
+    "team_source": [
+      "player_server_profile",
+      "legacy_account_wide_deprecated",
+      "none"
+    ],
+    "legacy_account_team_used": [false, true],
+    "filter_applied": ["true_only_when_server_id_present_or_strict_psp_path", "false_only_in_legacy_path"],
+    "blocker": ["PLAYER_SERVER_PROFILE_REQUIRED", "PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER", null]
+  },
+  "static_proof_tokens_in_v96": [
+    "pack_88_strict_server_scope",
+    "PLAYER_SERVER_PROFILE_REQUIRED",
+    "PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER",
+    "player_server_profile",
+    "legacy_account_wide_deprecated",
+    "_slc_pack_88_legacy_path_warning",
+    "no_player_facing_writes_blocker"
+  ]
+}

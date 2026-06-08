@@ -1,0 +1,21 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "F",
+  "smoke_strategy": "Test user con email pack88_test_user_<ts>@test.com. Test inietta artificialmente users.team_formation legacy account-wide PRIMA delle chiamate server-scoped per verificare anti-leakage. Cleanup completo finale.",
+  "results": {
+    "step_1_no_psp_team_route_player_server_profile_required": true,
+    "step_2_ensure_creates_psp_fresh_start": true,
+    "step_3_team_route_player_team_not_configured_for_server": true,
+    "step_4_starter_claim_creates_team_psp": true,
+    "step_5_team_route_team_source_player_server_profile_3_slots": true,
+    "step_6_inject_legacy_user_team_formation_account_wide": true,
+    "step_7_other_server_team_route_returns_blocker_despite_legacy_user_team_formation": true,
+    "step_8_legacy_account_team_used_false_in_strict_path": true,
+    "step_9_cleanup_executed": true
+  },
+  "no_reward_live": true,
+  "no_progress_live": true,
+  "no_user_team_formation_writes": true,
+  "no_psp_team_overwrite": true,
+  "verdict": "PACK_88_RUNTIME_SMOKE_E2E_PASS_STRICT_SERVER_SCOPED_NO_ACCOUNT_WIDE_FALLBACK_NO_LEAK"
+}

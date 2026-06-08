@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "D",
+  "starter_team_compatibility_preserved": true,
+  "starter_flow_endpoint": "POST /api/psp/starter/claim",
+  "starter_flow_file": "backend/server.py::psp_starter_claim",
+  "team_init_writes_only_to_psp_team_formation": true,
+  "team_init_only_if_empty": true,
+  "team_init_marker": "_slc_pack_87_starter_team_init=true",
+  "team_init_psp_marker": "_slc_pack_87_team_initialized_from_starter=true",
+  "no_users_team_formation_writes_from_starter_claim": true,
+  "re_claim_no_overwrite": true,
+  "runtime_smoke_results": {
+    "step_1_no_psp_team_route_returns_PLAYER_SERVER_PROFILE_REQUIRED": true,
+    "step_2_ensure_creates_psp_fresh_start": true,
+    "step_3_team_route_returns_PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER": true,
+    "step_4_starter_claim_creates_team_in_psp": true,
+    "step_5_team_route_returns_team_source_player_server_profile_3_slots": true,
+    "step_6_re_claim_no_overwrite_team_unchanged": true,
+    "step_7_other_server_team_route_returns_blocker_no_leak": true
+  }
+}

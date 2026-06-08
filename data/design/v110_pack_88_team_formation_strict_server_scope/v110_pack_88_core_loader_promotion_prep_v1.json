@@ -1,0 +1,68 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "H",
+  "prep_only_no_runtime_promotion": true,
+  "loaders": [
+    {
+      "loader": "/api/inventory",
+      "current_route_status": "exists (legacy account-wide if implemented; check route handler scope)",
+      "current_schema": "account-wide collection (no server_id segregation enforced)",
+      "blockers_for_psp_scope": [
+        "introduce server_id query param + JWT bearer required",
+        "introduce player_server_inventory collection or inventory.server_id indexed field",
+        "migrate legacy account-wide entries (destructive migration, separate pack)",
+        "add ensure auto-call on first access",
+        "frontend consumers must pass server_id"
+      ],
+      "backup_rollback": "do NOT touch existing collection; introduce parallel server-scoped collection for new writes; flag-gated rollout",
+      "staged_plan": [
+        "Step 1 (this pack): document audit + readiness JSON only",
+        "Step 2 (future pack): add server-scoped read path returning [] honestly when scope missing",
+        "Step 3 (future pack): writes promoted server-scoped with explicit authorization string",
+        "Step 4 (future pack): legacy cleanup with destructive migration"
+      ],
+      "runtime_promoted_in_this_pack": false,
+      "filter_applied_emitted_in_this_pack": false
+    },
+    {
+      "loader": "/api/currencies",
+      "current_route_status": "likely account-wide if exists; verify in next promotion pack",
+      "current_schema": "users.<currency_field> or wallets collection account-wide",
+      "blockers_for_psp_scope": [
+        "map currency types to server-scoped vs account-wide (premium hard currency typically account-wide; soft currency server-scoped)",
+        "introduce PSP.soft_currencies authoritative read",
+        "frontend consumers must pass server_id and respect currency scope class"
+      ],
+      "backup_rollback": "document currency classes; read-only audit; no writes",
+      "runtime_promoted_in_this_pack": false
+    },
+    {
+      "loader": "/api/story/progress",
+      "current_route_status": "check users.story_progress account-wide vs PSP.story_progress",
+      "current_schema": "account-wide (legacy)",
+      "blockers_for_psp_scope": [
+        "promote PSP.story_progress as authoritative",
+        "read path STRICT server-scoped when server_id present",
+        "frontend story consumer must include server_id"
+      ],
+      "backup_rollback": "introduce parallel PSP-scoped reads with blockers; no destructive migration",
+      "runtime_promoted_in_this_pack": false
+    },
+    {
+      "loader": "/api/user/equipment",
+      "current_route_status": "check user_equipment collection scope",
+      "current_schema": "account-wide (legacy)",
+      "blockers_for_psp_scope": [
+        "introduce server_id on user_equipment entries",
+        "strict reads + blocker on missing server scope",
+        "separate pack for migration"
+      ],
+      "backup_rollback": "prep readiness only; no schema migration",
+      "runtime_promoted_in_this_pack": false
+    }
+  ],
+  "explicit_no_false_readiness": true,
+  "explicit_no_filter_applied_emitted_in_this_pack": true,
+  "explicit_no_schema_migration_in_this_pack": true,
+  "explicit_no_runtime_writes_in_this_pack": true
+}

@@ -1,0 +1,51 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "B",
+  "audit_results": {
+    "team_routes_identified": [
+      {
+        "path": "GET /api/team/get-formation",
+        "file": "backend/routes/v96_team_formation.py",
+        "reads": ["users.team_formation (legacy)", "player_server_profiles.team_formation (Pack 87 server-scoped)"],
+        "writes": [],
+        "pack_88_status": "STRICT server-scoped when server_id present; legacy path retained only as non-player-facing compat"
+      }
+    ],
+    "team_field_locations": {
+      "account_wide_legacy": {
+        "collection": "users",
+        "field": "team_formation",
+        "player_facing_status": "DEPRECATED (non-player-facing post Pack 88)",
+        "writes_in_server_scoped_flow": false
+      },
+      "server_scoped": {
+        "collection": "player_server_profiles",
+        "field": "team_formation",
+        "player_facing_status": "AUTHORITATIVE",
+        "writes_in_pack_87_starter_flow": true,
+        "writes_only_if_empty": true,
+        "overwrite_protection": "Mongo conditional update with team_formation in {None, []}"
+      }
+    },
+    "pack_87_starter_team_init_path": {
+      "endpoint": "POST /api/psp/starter/claim",
+      "file": "backend/server.py::psp_starter_claim",
+      "writes": ["player_server_profiles.team_formation (init only if empty)"],
+      "preserved": true
+    },
+    "frontend_team_consumers": [
+      {
+        "file": "frontend/app/pre-battle-lobby.tsx",
+        "calls": "/api/team/get-formation?server_id=<sid>",
+        "server_id_required": true,
+        "handles_empty_team_honest": true,
+        "handles_blocker_honest": true
+      },
+      {
+        "file": "frontend/app/servers.tsx",
+        "calls": "/api/psp/ensure + /api/psp/starter/claim",
+        "server_id_required": true
+      }
+    ]
+  }
+}

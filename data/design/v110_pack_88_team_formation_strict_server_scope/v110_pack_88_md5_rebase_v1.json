@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "L",
+  "runtime_files_modified": [
+    "backend/routes/v96_team_formation.py"
+  ],
+  "md5_rebase_chain": [
+    {
+      "file": "backend/routes/v96_team_formation.py",
+      "from_md5_pre_pack_88": "b44b52c9da683ffdcaa7abfa0fbb484a",
+      "to_md5_post_pack_88": "eecbaaf4797a43dc69ae9635125142b6",
+      "reason": "Pack 88: STRICT server-scoped behavior. server_id presente => source ESCLUSIVAMENTE da PSP.team_formation. NO fallback users.team_formation. Blocker espliciti PLAYER_SERVER_PROFILE_REQUIRED / PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER. Legacy path no-server_id flag-ed come non-player-facing. Pack 87 starter team preservato.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    }
+  ],
+  "historical_reference": [
+    "Pack 87 v96 team route partial PSP read introduced (preserved as starter team init read)",
+    "Pack 84 PSP physical normalization preserved",
+    "Pack 85 ensure route preserved",
+    "Pack 86 register guard preserved",
+    "Pack 87 starter flow preserved"
+  ]
+}

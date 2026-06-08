@@ -1,0 +1,50 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PREP",
+  "generated_at_utc": "2026-06-08T23:30:00Z",
+  "verdict": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "account_wide_team_fallback_with_server_id": false,
+    "writes_to_users_team_formation_in_server_scoped_flow": false,
+    "fake_team": false,
+    "fallback_global_roster_or_team": false,
+    "overwrite_existing_team": false,
+    "copy_s1_to_s2": false,
+    "inventory_currency_story_equipment_mutation": false,
+    "bulk_psp_apply": false,
+    "physical_normalization_executed_in_this_pack": false,
+    "destructive_migration": false,
+    "delete_of_real_data": false,
+    "reward_live": false,
+    "progress_live": false,
+    "premium_grant": false,
+    "player_level_mutation": false,
+    "postqa_d_gates_unlocked": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "legacy_cleanup_executed": false
+  },
+  "explicit_statements": {
+    "no_account_wide_team_fallback_with_server_id": true,
+    "no_users_team_formation_writes_in_server_scoped_flow": true,
+    "pack_87_starter_team_preserved": true,
+    "reward_progress_live_off": true,
+    "legacy_cleanup_not_executed": true
+  },
+  "sync_status": {
+    "local_commit_only": true,
+    "public_push_managed_externally": true,
+    "no_remote_available": true
+  },
+  "deferred_blockers_documented": [
+    "Inventory PSP-scoped loader promotion (prep only this pack)",
+    "Currencies PSP-scoped loader promotion (prep only)",
+    "Story progress PSP-scoped loader promotion (prep only)",
+    "Equipment PSP-scoped loader promotion (prep only)",
+    "Legacy cleanup of pre-Pack-86 account-wide user_heroes NOT executed",
+    "Legacy cleanup of pre-Pack-88 users.team_formation NOT executed (campo lasciato come legacy non-player-facing)"
+  ]
+}

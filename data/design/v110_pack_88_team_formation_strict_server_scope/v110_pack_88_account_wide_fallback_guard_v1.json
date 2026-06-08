@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "G",
+  "static_assertions": {
+    "v96_team_formation_route_file": "backend/routes/v96_team_formation.py",
+    "contains_pack_88_strict_token": true,
+    "no_user_team_formation_assignment_before_server_id_branch": true,
+    "no_users_collection_update_one_team_formation_in_server_scoped_block": true,
+    "no_silent_account_wide_fallback_in_server_id_branch": true,
+    "team_source_player_server_profile_only_when_server_id_present": true
+  },
+  "runtime_assertions": {
+    "server_id_present_with_legacy_user_team_formation_returns_blocker_when_psp_missing": true,
+    "server_id_present_with_psp_team_empty_returns_blocker_even_if_user_team_formation_populated": true,
+    "legacy_account_team_used_false_in_strict_path": true
+  }
+}

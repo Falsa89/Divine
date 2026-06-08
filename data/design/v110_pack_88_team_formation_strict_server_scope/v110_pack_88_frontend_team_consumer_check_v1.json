@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_88_TEAM_FORMATION_STRICT_SERVER_SCOPE_AND_CORE_LOADER_PROMOTION_PREP",
+  "track": "E",
+  "frontend_team_consumers_audited": [
+    {
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "includes_server_id": true,
+      "handles_empty_team": true,
+      "handles_blocker": true,
+      "no_global_fallback": true
+    },
+    {
+      "file": "frontend/app/servers.tsx",
+      "calls_ensure_then_starter_claim": true,
+      "includes_server_id": true
+    }
+  ],
+  "frontend_files_modified_in_pack_88": [],
+  "reason_no_frontend_changes_needed": "Existing frontend already passes server_id and handles team_formation=[] + blocker honestly. Pack 88 strict server-scope is purely a backend semantic tightening: the frontend contract is unchanged because previous responses with filter_applied=true + team_formation=[] were already handled honestly by pre-battle-lobby."
+}

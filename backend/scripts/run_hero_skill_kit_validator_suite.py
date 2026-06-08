@@ -3943,6 +3943,24 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-87-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_87_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-87-SERVER-SCOPED-STARTER-FLOW-ROLLUP', 'validate_mega_release_acceleration_87_server_scoped_starter_flow_rollup.py'),
 
+    # Pack 88 — Team formation strict server-scope + core loader promotion prep.
+    # 14 track + 1 rollup = 15 nuove validator track.
+    ('PROJECT-V110-PACK-88-BASELINE-MULTIRUN', 'validate_v110_pack_88_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-88-TEAM-FORMATION-SOURCE-AUDIT', 'validate_v110_pack_88_team_formation_source_audit.py'),
+    ('PROJECT-V110-PACK-88-STRICT-TEAM-ROUTE-IMPLEMENTATION', 'validate_v110_pack_88_strict_team_route_implementation.py'),
+    ('PROJECT-V110-PACK-88-STARTER-TEAM-COMPATIBILITY', 'validate_v110_pack_88_starter_team_compatibility.py'),
+    ('PROJECT-V110-PACK-88-FRONTEND-TEAM-CONSUMER-CHECK', 'validate_v110_pack_88_frontend_team_consumer_check.py'),
+    ('PROJECT-V110-PACK-88-RUNTIME-SMOKE-E2E', 'validate_v110_pack_88_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-88-ACCOUNT-WIDE-FALLBACK-GUARD', 'validate_v110_pack_88_account_wide_fallback_guard.py'),
+    ('PROJECT-V110-PACK-88-CORE-LOADER-PROMOTION-PREP', 'validate_v110_pack_88_core_loader_promotion_prep.py'),
+    ('PROJECT-V110-PACK-88-DATA-INVARIANTS', 'validate_v110_pack_88_data_invariants.py'),
+    ('PROJECT-V110-PACK-88-CLEANUP-ROLLBACK-STRATEGY', 'validate_v110_pack_88_cleanup_rollback_strategy.py'),
+    ('PROJECT-V110-PACK-88-LIVE-READINESS-UPDATE', 'validate_v110_pack_88_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-88-MD5-REBASE', 'validate_v110_pack_88_md5_rebase.py'),
+    ('PROJECT-V110-PACK-88-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_88_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-88-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_88_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-88-TEAM-FORMATION-STRICT-SERVER-SCOPE-ROLLUP', 'validate_mega_release_acceleration_88_team_formation_strict_server_scope_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
