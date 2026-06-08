@@ -3822,6 +3822,25 @@ OPTIONAL = [
     ('PROJECT-V110-LOBBY-TEAM-FETCH-FINAL-MULTIRUN-SUITE', 'validate_v110_lobby_team_fetch_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-80-LOBBY-TEAM-FETCH-ROLLUP', 'validate_mega_release_acceleration_80_lobby_team_fetch_rollup.py'),
 
+    # ===== PACK 81 USER_HEROES SERVER-SCOPE AND CORE LOADERS PROMOTION — RUNTIME REAL =====
+    # PUBLIC_SYNC_TAG_v110_USER_HEROES_SERVER_SCOPE_AND_CORE_LOADERS_PROMOTION
+    ('PROJECT-V110-PACK-81-BASELINE-MULTIRUN', 'validate_v110_pack_81_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-81-CANONICAL-SOT-CONSOLIDATION', 'validate_v110_pack_81_canonical_sot_consolidation.py'),
+    ('PROJECT-V110-PACK-81-USER-HEROES-ROUTE-MAP', 'validate_v110_pack_81_user_heroes_route_map.py'),
+    ('PROJECT-V110-PACK-81-USER-HEROES-SERVER-ID-PSP-PROMOTION', 'validate_v110_pack_81_user_heroes_server_id_psp_promotion.py'),
+    ('PROJECT-V110-PACK-81-FRONTEND-ROSTER-CONSUMERS-UPDATE', 'validate_v110_pack_81_frontend_roster_consumers_update.py'),
+    ('PROJECT-V110-PACK-81-INVENTORY-LOADER-SCOPING', 'validate_v110_pack_81_inventory_loader_scoping.py'),
+    ('PROJECT-V110-PACK-81-CURRENCIES-LOADER-SPLIT', 'validate_v110_pack_81_currencies_loader_split.py'),
+    ('PROJECT-V110-PACK-81-STORY-PROGRESS-LOADER-SCOPING', 'validate_v110_pack_81_story_progress_loader_scoping.py'),
+    ('PROJECT-V110-PACK-81-EQUIPMENT-REFS-BUILD-CONSISTENCY', 'validate_v110_pack_81_equipment_refs_build_consistency.py'),
+    ('PROJECT-V110-PACK-81-USER-HEROES-RUNTIME-SMOKE', 'validate_v110_pack_81_user_heroes_runtime_smoke.py'),
+    ('PROJECT-V110-PACK-81-ZERO-MUTATION-PRESERVATION', 'validate_v110_pack_81_zero_mutation_preservation.py'),
+    ('PROJECT-V110-PACK-81-LIVE-READINESS-UPDATE', 'validate_v110_pack_81_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-81-MD5-REBASE', 'validate_v110_pack_81_md5_rebase.py'),
+    ('PROJECT-V110-PACK-81-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_81_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-81-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_81_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-81-USER-HEROES-SERVER-SCOPE-ROLLUP', 'validate_mega_release_acceleration_81_user_heroes_server_scope_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

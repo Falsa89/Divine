@@ -403,11 +403,12 @@ export default function PreBattleLobbyScreen() {
         if (!r.ok) throw new Error(`http_${r.status}`);
         const d: GetFormationResponse = await r.json();
         if (cancelled) return;
-        // Best-effort enrichment dei metadati eroe via /api/user/heroes
-        // (loader account-wide, NON dichiarato filter_applied=true — promotion deferred).
+        // Pack 81 — enrichment dei metadati eroe via /api/user/heroes
+        // server-scoped (passa server_id reale). Promozione promossa: il roster
+        // recuperato e' filtrato server-scope con PSP-aware blocker honest.
         let heroes: any[] = [];
         try {
-          const rh = await fetch(`${backendUrl}/api/user/heroes`, { signal: ctrl.signal, headers });
+          const rh = await fetch(`${backendUrl}/api/user/heroes?server_id=${encodeURIComponent(selectedServerId)}`, { signal: ctrl.signal, headers });
           if (rh.ok) heroes = await rh.json();
         } catch (_) { /* tolerated, best-effort */ }
         const heroMap: Record<string, any> = {};

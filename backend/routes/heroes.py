@@ -4,7 +4,8 @@ Divine Waifus - Heroes, Gacha & Team Routes
 import random
 import uuid
 from datetime import datetime
-from fastapi import HTTPException, Depends
+from typing import Optional
+from fastapi import HTTPException, Depends, Response
 from pydantic import BaseModel
 
 
@@ -55,8 +56,79 @@ def register_heroes_routes(router, db, get_current_user, serialize_doc, calculat
         return serialize_doc(hero)
 
     @router.get("/user/heroes")
-    async def get_user_heroes(current_user: dict = Depends(get_current_user)):
-        user_heroes = await db.user_heroes.find({"user_id": current_user["id"]}).to_list(200)
+    async def get_user_heroes(
+        response: Response,
+        server_id: Optional[str] = None,
+        current_user: dict = Depends(get_current_user),
+    ):
+        """
+        Pack 81 — `/api/user/heroes` server-scoped promotion.
+
+        Contratto:
+        - Quando `server_id` viene passato, il filtro Mongo include `server_id`
+          REALMENTE (`{"user_id": uid, "server_id": server_id}`) e il PSP viene
+          verificato in `player_server_profiles`. Se manca il PSP, blocker
+          `PLAYER_SERVER_PROFILE_REQUIRED` (header) e roster vuoto.
+        - Quando `server_id` NON viene passato, il route torna un roster legacy
+          account-wide ma marca esplicitamente `X-Server-Scope:
+          account_wide_legacy_DEPRECATED` e `X-Filter-Applied: false`. Le UI
+          player-facing devono passare `server_id` o bloccare onestamente.
+
+        Decisione canonica (Pack 81):
+        ```
+        user_heroes / roster posseduto / livelli / stelle / build operative /
+        team formation / battle player team source sono SERVER-SCOPED.
+        ```
+
+        NESSUN DB write. NESSUN reward grant. NESSUNA mutazione economia.
+        """
+        uid = current_user["id"]
+        canonical_decision = "user_heroes_are_server_scoped"
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            # PSP-aware: il roster server-scoped richiede un PSP esistente
+            # per la coppia (uid, sid). Senza PSP -> blocker onesto, NESSUN
+            # fallback legacy account-wide.
+            psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            if not psp:
+                response.headers["X-Server-Scope"] = "server_scoped"
+                response.headers["X-Filter-Applied"] = "false"
+                response.headers["X-Blocker"] = "PLAYER_SERVER_PROFILE_REQUIRED"
+                response.headers["X-Server-Id"] = sid
+                response.headers["X-Profile-Id"] = ""
+                response.headers["X-Canonical-Decision"] = canonical_decision
+                response.headers["X-Roster-Source"] = "server_scoped_no_psp_blocked"
+                return []
+            profile_id = str(psp.get("profile_id") or psp.get("_id") or "")
+            # Filtro REALE su {user_id, server_id} — niente fallback account-wide.
+            user_heroes = await db.user_heroes.find({"user_id": uid, "server_id": sid}).to_list(500)
+            result = []
+            for uh in user_heroes:
+                hero = await db.heroes.find_one({"id": uh["hero_id"]})
+                if hero:
+                    merged = {
+                        **serialize_doc(uh),
+                        "hero_name": hero.get("name"),
+                        "hero_element": hero.get("element"),
+                        "hero_rarity": hero.get("rarity"),
+                        "hero_image": hero.get("image_url") or hero.get("image_base64"),
+                        "hero_stats": hero.get("base_stats"),
+                        "hero_class": hero.get("hero_class"),
+                    }
+                    result.append(merged)
+            response.headers["X-Server-Scope"] = "server_scoped"
+            response.headers["X-Filter-Applied"] = "true"
+            response.headers["X-Server-Id"] = sid
+            response.headers["X-Profile-Id"] = profile_id
+            response.headers["X-Blocker"] = ""
+            response.headers["X-Canonical-Decision"] = canonical_decision
+            response.headers["X-Roster-Source"] = "server_scoped_psp_filtered"
+            response.headers["X-Roster-Count"] = str(len(result))
+            return result
+        # Nessun server_id -> legacy account-wide DEPRECATED. Le UI player-facing
+        # devono passare server_id o bloccare onestamente. Restituiamo l'array
+        # legacy ma marchiamo esplicitamente il deprecation via headers.
+        user_heroes = await db.user_heroes.find({"user_id": uid}).to_list(500)
         result = []
         for uh in user_heroes:
             hero = await db.heroes.find_one({"id": uh["hero_id"]})
@@ -71,6 +143,14 @@ def register_heroes_routes(router, db, get_current_user, serialize_doc, calculat
                     "hero_class": hero.get("hero_class"),
                 }
                 result.append(merged)
+        response.headers["X-Server-Scope"] = "account_wide_legacy_DEPRECATED"
+        response.headers["X-Filter-Applied"] = "false"
+        response.headers["X-Server-Id"] = ""
+        response.headers["X-Profile-Id"] = ""
+        response.headers["X-Blocker"] = "SELECTED_SERVER_REQUIRED_FOR_PLAYER_FACING"
+        response.headers["X-Canonical-Decision"] = canonical_decision
+        response.headers["X-Roster-Source"] = "account_wide_legacy_DEPRECATED"
+        response.headers["X-Roster-Count"] = str(len(result))
         return result
 
     # ==================== GACHA ====================

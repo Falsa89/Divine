@@ -5,7 +5,7 @@ R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 lobby_md5 = hashlib.md5(open(os.path.join(R,'frontend/app/pre-battle-lobby.tsx'),'rb').read()).hexdigest()
 v96_md5 = hashlib.md5(open(os.path.join(R,'backend/routes/v96_team_formation.py'),'rb').read()).hexdigest()
 # Pack 80 — MD5 rebase autorizzato per real lobby team fetch.
-assert lobby_md5 == 'e817fac7a89e4e4ffb4186e91500377c', f'lobby md5 unexpected: {lobby_md5}'
+assert lobby_md5 == 'f8b770a118548602a7f680f59b6c409c', f'lobby md5 unexpected: {lobby_md5}'
 # v96 md5 cambia se aggiungiamo righe; verifica che sia DIVERSO dal baseline pre-Pack 79.
 assert v96_md5 != '640bd161cfbc5e9696511704d8613ecc', 'v96 NOT modified — Pack 79 falso!'
 # Verifica che il lobby file contenga le patch chiave

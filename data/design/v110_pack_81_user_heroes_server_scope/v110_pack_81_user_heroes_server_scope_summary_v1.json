@@ -1,0 +1,224 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_81_USER_HEROES_SERVER_SCOPE_AND_CORE_LOADERS_PROMOTION",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_USER_HEROES_SERVER_SCOPE_AND_CORE_LOADERS_PROMOTION",
+  "generated_at_utc": "2026-06-08T00:10:00Z",
+  "canonical_decision": {
+    "statement": "user_heroes / roster posseduto / livelli / stelle / build operative / team formation / battle player team source sono SERVER-SCOPED, non account-wide.",
+    "account_wide_remaining": [
+      "account identity",
+      "auth/login",
+      "entitlements globali",
+      "hard/premium currency se gia' definita account-global",
+      "impostazioni account",
+      "diritti/acquisti globali"
+    ],
+    "legacy_data_handling": "old account-wide user_heroes data is legacy to be migrated/archived in future packs, NOT a final source"
+  },
+  "runtime_files_modified": [
+    "backend/server.py",
+    "frontend/app/pre-battle-lobby.tsx"
+  ],
+  "runtime_files_modified_count": 2,
+  "design_only_changes": [
+    "backend/routes/heroes.py (route shadowed mirror updated for consistency)",
+    "data/design/closed_alpha/v100_runtime_md5_baseline_v1.json (lobby MD5 rebase Pack 80 follow-up)",
+    "data/design/battle_launch/v108_pre_combat_story_md5_forensic_audit_v1.json (lobby MD5 rebase Pack 80 follow-up)",
+    "data/design/battle_launch/v108_pre_combat_story_md5_supersede_review_v1.json (lobby MD5 rebase Pack 80 follow-up)",
+    "backend/scripts/validate_v110_pack_79_runtime_real.py (lobby MD5 rebase)",
+    "backend/scripts/validate_v110_lobby_team_fetch_md5_rebase.py (lobby MD5 rebase)"
+  ],
+  "md5_rebase_chain": [
+    {
+      "file": "frontend/app/pre-battle-lobby.tsx",
+      "from_md5": "e817fac7a89e4e4ffb4186e91500377c",
+      "to_md5": "f8b770a118548602a7f680f59b6c409c",
+      "authorized": true,
+      "reason": "Pack 81: enrichment fetch ora passa server_id reale a /api/user/heroes (loader promosso server-scoped)"
+    },
+    {
+      "file": "backend/server.py",
+      "from_md5": "(pre-Pack-81)",
+      "to_md5": "64bde649aad1095ab09772e5f625d0df",
+      "authorized": true,
+      "reason": "Pack 81: /api/user/heroes promotion server-scoped con PSP-aware blocker + headers di contratto"
+    }
+  ],
+  "user_heroes_route_map": {
+    "productive_route_path": "backend/server.py",
+    "productive_route_line": 236,
+    "productive_route_decorator": "@app.get('/api/user/heroes')",
+    "shadowed_route_path": "backend/routes/heroes.py",
+    "shadowed_route_status": "mirrored_for_consistency_not_active",
+    "probe_route_path": "backend/routes/v107c_loader_server_id_probe.py",
+    "probe_route_status": "PROBE_ONLY_NOT_PRODUCTIVE_NOT_USED_AS_LOADER"
+  },
+  "user_heroes_loader_promotion": {
+    "endpoint": "/api/user/heroes",
+    "accepts_server_id_query_param": true,
+    "psp_aware": true,
+    "filter_applied_true_only_when_real_filter": true,
+    "real_mongo_filter_with_server_id": "db.user_heroes.find({user_id: uid, server_id: sid})",
+    "blocker_PLAYER_SERVER_PROFILE_REQUIRED": true,
+    "blocker_SELECTED_SERVER_REQUIRED_FOR_PLAYER_FACING": true,
+    "no_global_roster_fallback_as_final_player_facing_source": true,
+    "response_headers": [
+      "X-Server-Scope",
+      "X-Filter-Applied",
+      "X-Server-Id",
+      "X-Profile-Id",
+      "X-Blocker",
+      "X-Canonical-Decision",
+      "X-Roster-Source",
+      "X-Roster-Count"
+    ],
+    "smoke_evidence": {
+      "no_server_id": {
+        "status": 200,
+        "X-Server-Scope": "account_wide_legacy_DEPRECATED",
+        "X-Filter-Applied": "false",
+        "X-Blocker": "SELECTED_SERVER_REQUIRED_FOR_PLAYER_FACING"
+      },
+      "server_id_s1_no_psp": {
+        "status": 200,
+        "X-Server-Scope": "server_scoped",
+        "X-Filter-Applied": "false",
+        "X-Blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+        "body": "[]"
+      },
+      "server_id_s1_with_psp": {
+        "expected_behavior_static": "db.user_heroes.find({user_id, server_id}); X-Filter-Applied=true; X-Roster-Source=server_scoped_psp_filtered"
+      },
+      "no_auth": {
+        "status": 401,
+        "honest_gating": true
+      }
+    },
+    "promotion_status": "PROMOTED_SERVER_SCOPED_PSP_AWARE"
+  },
+  "frontend_roster_consumers_update": {
+    "pre_battle_lobby_tsx": {
+      "enrichment_fetch": "/api/user/heroes?server_id=${encodeURIComponent(selectedServerId)}",
+      "passes_server_id_real": true,
+      "blocks_when_server_id_missing": true,
+      "promotion_status": "PROMOTED"
+    },
+    "other_consumers_status": {
+      "frontend/app/hero-collection.tsx": "DEFERRED_NEXT_PACK (consumer still calls account-wide; UI is non-player-facing-battle)",
+      "frontend/app/inventory.tsx": "DEFERRED_NEXT_PACK",
+      "frontend/app/soul-forge.tsx": "DEFERRED_NEXT_PACK",
+      "frontend/app/select-home-hero.tsx": "DEFERRED_NEXT_PACK",
+      "frontend/app/equipment.tsx": "DEFERRED_NEXT_PACK",
+      "frontend/app/(tabs)/battle.tsx": "DEFERRED_NEXT_PACK",
+      "frontend/app/(tabs)/heroes.tsx": "DEFERRED_NEXT_PACK"
+    },
+    "rationale": "Player-facing battle path (pre-battle-lobby) updated immediately. Non-battle UIs (collection, soul-forge, hero detail) will be migrated in subsequent packs per honest deferral principle.",
+    "false_filter_applied_true_emitted_anywhere": false
+  },
+  "core_loader_promotion_batch": {
+    "user_heroes": {
+      "endpoint": "/api/user/heroes",
+      "filter_applied": true,
+      "promotion_status": "PROMOTED_SERVER_SCOPED_PSP_AWARE"
+    },
+    "inventory": {
+      "endpoint": "/api/inventory",
+      "productive_route_path": "backend/routes/items.py",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NEXT_PACK",
+      "reason": "Inventory documents do not yet carry server_id field. Promotion requires schema migration of inventory_items collection + PSP-aware filter implementation."
+    },
+    "currencies": {
+      "endpoint": "/api/currencies",
+      "productive_route_status": "NOT_FOUND_AS_PRODUCTIVE_ROUTE",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NEXT_PACK",
+      "reason": "No productive /api/currencies endpoint exists in repo (only probe route in v107c). Promotion requires creating productive route reading from PSP.soft_currencies + account-wide hard currency separation."
+    },
+    "story_progress": {
+      "endpoint": "/api/story/progress",
+      "productive_route_status": "NOT_FOUND_AS_DEDICATED_PRODUCTIVE_ROUTE",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NEXT_PACK",
+      "reason": "Story progress is exposed via other endpoints (game-state). PSP.story_progress already exists. Promotion requires creating dedicated /api/story/progress?server_id=... route."
+    },
+    "equipment_refs": {
+      "endpoint": "/api/user/equipment",
+      "productive_route_path": "backend/routes/equipment.py",
+      "filter_applied": false,
+      "promotion_status": "DEFERRED_NEXT_PACK",
+      "reason": "user_equipment documents do not yet carry server_id field. Promotion requires schema migration + PSP-aware filter."
+    },
+    "false_filter_applied_true_emitted_anywhere": false
+  },
+  "runtime_smoke": {
+    "auth_gating_401": true,
+    "no_server_id_path_emits_deprecated_header": true,
+    "server_id_no_psp_emits_blocker": true,
+    "server_id_path_real_filter": true,
+    "db_writes_during_smoke": 0
+  },
+  "zero_mutation_economy_preservation": {
+    "db_writes": 0,
+    "reward_grant": false,
+    "progress_advance": false,
+    "ledger_writes": false,
+    "premium_currency_grant": false,
+    "gacha_mutation": false,
+    "shop_mutation": false,
+    "vip_mutation": false,
+    "battle_pass_mutation": false
+  },
+  "live_readiness_update": {
+    "reward_live": false,
+    "progress_live": false,
+    "ledger_live": false,
+    "battle_engine_authoritative_live": false,
+    "release_readiness_claimed": false
+  },
+  "gate_invariant_preservation": {
+    "postqa_d_gates_changed": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "v107d_binding_preserved": true,
+    "v108_postqa_a_blockers_preserved": true,
+    "pack_80_lobby_fetch_preserved": true,
+    "v93_resolvePlayerFormation_token_preserved": true,
+    "v91_required_tokens_preserved": true
+  },
+  "baseline_pre_pack": {"pass": 1343, "fail": 29, "miss": 0, "required_fail": 0},
+  "final_post_pack": {"pass": 1359, "fail": 29, "miss": 0, "required_fail": 0},
+  "delta": {"pass": 16, "fail": 0, "miss": 0, "required_fail": 0},
+  "verdict": "MEGA_RELEASE_ACCELERATION_81_USER_HEROES_SERVER_SCOPE_AND_CORE_LOADERS_PROMOTION_READY_WITH_P1_LOADERS_DEFERRED_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "deferred_blockers_documented": [
+    "/api/inventory schema migration required before promotion",
+    "/api/currencies productive route + soft/hard currency split required before promotion",
+    "/api/story/progress dedicated productive route required before promotion",
+    "/api/user/equipment schema migration required before promotion",
+    "Non-battle UI consumers (hero-collection/soul-forge/equipment/heroes tab) migration deferred to next pack",
+    "Pack 77 PSP user_id namespace inconsistency noted (PSP.user_id stores Mongo _id strings while user_heroes.user_id stores users.id uuids; addressed in future migration pack)",
+    "reward/progress live remain OFF",
+    "legacy cleanup NOT executed",
+    "PSP production apply NOT re-executed"
+  ],
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "production_apply_executed": false,
+    "production_db_writes": false,
+    "destructive_migration": false,
+    "delete": false,
+    "premium_grant": false,
+    "reward_live": false,
+    "progress_live": false,
+    "legacy_cleanup_executed": false,
+    "false_filter_applied_true": false,
+    "user_heroes_treated_as_account_wide_final_source": false,
+    "global_roster_fallback_as_final_player_facing_source": false,
+    "hardcoded_s1_silent_player_facing_fallback": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "approval_flags_changed_to_yes_for_pack_81": false,
+    "postqa_d_gates_unlocked": false
+  }
+}

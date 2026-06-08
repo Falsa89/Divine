@@ -83,7 +83,7 @@ Il commit Pack 80 sara' firmato con messaggio in italiano:
 
 | File | MD5 prima | MD5 dopo | Modifica |
 |---|---|---|---|
-| `frontend/app/pre-battle-lobby.tsx` | `5ab539bd6a2fdb617a09edfc95f3d06a` | `e817fac7a89e4e4ffb4186e91500377c` | Fetch reale `/api/team/get-formation?server_id=...`, render 6 slot, empty slot onesti, auth Bearer da SecureStore |
+| `frontend/app/pre-battle-lobby.tsx` | `5ab539bd6a2fdb617a09edfc95f3d06a` | `f8b770a118548602a7f680f59b6c409c` | Fetch reale `/api/team/get-formation?server_id=...`, render 6 slot, empty slot onesti, auth Bearer da SecureStore |
 | `backend/routes/v96_team_formation.py` | `cb92524dfe530f38113713ff3167a800` | `347a625d864702e8cda98c170ba62fd6` | Emette `profile_id` (dal PSP) e `blocker` esplicito nel payload, sempre presenti |
 
 ---
@@ -229,7 +229,7 @@ Catena di rebase autorizzata (mantenendo riferimenti storici):
 frontend/app/pre-battle-lobby.tsx:
   pre-Pack 79   a495baf478924c52eaac9dd22c4032e7
   Pack 79  ->   5ab539bd6a2fdb617a09edfc95f3d06a   (PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER blocker + fallback vuoto)
-  Pack 80  ->   e817fac7a89e4e4ffb4186e91500377c   (real fetch + 6 slot + auth bearer)
+  Pack 80  ->   f8b770a118548602a7f680f59b6c409c   (real fetch + 6 slot + auth bearer)
 ```
 
 Tracking files aggiornati con il nuovo MD5 e preservazione dello storico:
