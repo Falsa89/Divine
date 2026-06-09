@@ -1,6 +1,6 @@
 {
   "task_origin": "AF2-N-V25-UI-PUBLIC-PREVIEW-SAFETY",
-  "timestamp_utc": "2026-06-08T23:33:49.020165+00:00",
+  "timestamp_utc": "2026-06-09T17:48:41.770787+00:00",
   "frontend_files_scanned": 205,
   "critical_findings": [],
   "critical_findings_count": 0,
@@ -8,6 +8,31 @@
   "sample_informational": [
     {
       "file": "frontend/components/home/HomeHeroSplash.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 1
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 1
+    },
+    {
+      "file": "frontend/app/dev-combat-qa-lab.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 2
+    },
+    {
+      "file": "frontend/app/select-home-hero.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 1
+    },
+    {
+      "file": "frontend/app/collection-synergies-preview.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 2
+    },
+    {
+      "file": "frontend/app/affinity-gifts-preview.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
       "count": 1
     },
@@ -20,31 +45,6 @@
       "file": "frontend/app/divine-weapons-catalog.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
       "count": 8
-    },
-    {
-      "file": "frontend/app/collection-synergies-preview.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 2
-    },
-    {
-      "file": "frontend/app/hero-skill-kits-catalog.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 1
-    },
-    {
-      "file": "frontend/app/select-home-hero.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 1
-    },
-    {
-      "file": "frontend/app/dev-combat-qa-lab.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 2
-    },
-    {
-      "file": "frontend/app/affinity-gifts-preview.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 1
     },
     {
       "file": "frontend/app/(tabs)/menu.tsx",
