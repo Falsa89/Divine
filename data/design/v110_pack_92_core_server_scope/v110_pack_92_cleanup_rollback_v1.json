@@ -1,0 +1,13 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "L",
+  "cleanup_script": "backend/scripts/cleanup_v110_pack_92_test_artifacts.py",
+  "refuse_by_default": true,
+  "dry_run_default": true,
+  "requires_apply_flag": true,
+  "deletes_only_marked_or_pattern_matching": true,
+  "test_artifact_marker": "pack_92_test_artifact",
+  "test_user_email_pattern": "pack92_test_user_*@test.com",
+  "production_users_protected": true,
+  "rollback_plan": "Per ripristinare lo stato pre-Pack-92: revert dei file backend (`backend/routes/soul_forge.py`, `backend/routes/combat.py`, `backend/routes/equipment.py`) e dei file frontend modificati al commit pre-Pack-92. Nessuna schema migration eseguita; nessun backfill da invertire."
+}

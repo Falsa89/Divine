@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
+import useServerScope from '../../src/hooks/useServerScope';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
@@ -36,6 +37,8 @@ type SortKey = 'rarity' | 'level' | 'power' | 'name';
 export default function BattleTab() {
   const router = useRouter();
   const { refreshUser, userHeroesVersion } = useAuth();
+  // Pack 92 — server scope sweep su roster reader player-facing.
+  const { selected_server_id } = useServerScope();
   const [heroes, setHeroes] = useState<any[]>([]);
   // grid[col][row] = hero | null  (col: 0=Support, 1=DPS, 2=Tank; row: 0,1,2)
   const [grid, setGrid] = useState<(any | null)[][]>([[null, null, null], [null, null, null], [null, null, null]]);
@@ -132,8 +135,12 @@ export default function BattleTab() {
 
   const loadData = async () => {
     try {
+      // Pack 92 — server scope sweep: /api/user/heroes passa server_id se selezionato.
+      const heroesUrl = selected_server_id
+        ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
+        : '/api/user/heroes';
       const [uh, team, constData] = await Promise.all([
-        apiCall('/api/user/heroes'),
+        apiCall(heroesUrl),
         apiCall('/api/team'),
         apiCall('/api/constellations').catch(() => ({ constellations: [] })),
       ]);

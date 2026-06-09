@@ -1,0 +1,45 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "J",
+  "future_write_paths": [
+    {
+      "name": "currency_spend_write",
+      "endpoints": ["POST /api/wallet/spend (NEW)", "current spend paths su /api/item-shop/buy decremento gold/gems"],
+      "scope": "server-scoped per soft, account-wide per hard/premium (gems) salvo decisione futura",
+      "required_inputs": ["server_id", "PSP exists check", "idempotency token", "audit ledger"],
+      "approval_string_proposed": "AUTORIZZO_V110_CURRENCY_SPEND_WRITE_STRICT_SCOPE_PACK_NN",
+      "backup_rollback": "daily snapshot pre-execute; rollback via reverting wallets/psp.soft_currencies docs to snapshot",
+      "executed_in_pack_92": false
+    },
+    {
+      "name": "story_progress_write",
+      "endpoints": ["POST /api/story/battle (current updates db.story_progress + users.gold/gems)"],
+      "scope": "server-scoped via psp.story_progress",
+      "required_inputs": ["server_id", "PSP exists", "idempotency token", "ledger"],
+      "approval_string_proposed": "AUTORIZZO_V110_STORY_PROGRESS_WRITE_STRICT_SCOPE_PACK_NN",
+      "backup_rollback": "snapshot pre-execute; rollback via PSP revert",
+      "executed_in_pack_92": false
+    },
+    {
+      "name": "equipment_write",
+      "endpoints": ["POST /api/equipment/equip (gated POSTQA_D)", "POST /api/equipment/unequip", "POST /api/forge/upgrade", "POST /api/forge/fuse"],
+      "scope": "server-scoped (richiede prima backfill server_id sui user_equipment docs esistenti)",
+      "required_inputs": ["server_id", "PSP exists", "idempotency token", "forge ledger"],
+      "approval_string_proposed": "AUTORIZZO_V110_EQUIPMENT_WRITE_STRICT_SCOPE_PACK_NN",
+      "backup_rollback": "backfill safe (idempotent) + snapshot user_equipment + idempotency markers",
+      "executed_in_pack_92": false,
+      "migration_needed_first": true,
+      "migration_step_1": "audit/data backfill user_equipment.server_id (dry-run then apply with approval)",
+      "migration_step_2": "promote loader to strict filter",
+      "migration_step_3": "promote write paths to strict server-scope"
+    },
+    {
+      "name": "reward_claim_ledger",
+      "scope": "server-scoped, NOT enabled live in Pack 92",
+      "required_inputs": ["server_id", "PSP", "idempotency token", "audit trail", "backup snapshot"],
+      "approval_string_proposed": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_PACK_NN",
+      "executed_in_pack_92": false
+    }
+  ],
+  "future_migrations_summary": "equipment backfill -> equipment loader strict -> equipment write strict (3 packs sequenziali); currency spend write strict (1 pack); story progress write strict (1 pack); reward claim ledger (1 pack). Tutti DEFERIRTI."
+}

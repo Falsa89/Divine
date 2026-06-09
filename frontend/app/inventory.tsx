@@ -62,7 +62,7 @@ export default function InventoryScreen() {
       const qs = `server_id=${encodeURIComponent(selected_server_id)}`;
       const [inv, uh] = await Promise.all([
         apiCall(`/api/inventory?${qs}`),
-        apiCall('/api/user/heroes'),
+        apiCall(`/api/user/heroes?${qs}`),
       ]);
       setItems(inv.items || []);
       setHeroes(uh || []);

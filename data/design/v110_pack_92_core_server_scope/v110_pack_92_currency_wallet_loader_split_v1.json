@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "D",
+  "endpoint": "GET /api/wallet",
+  "file": "backend/routes/soul_forge.py",
+  "hard_premium_currencies_account_wide": ["gems", "gold"],
+  "soft_server_currencies_server_scoped": ["honor", "guild_points", "prana", "soul_seals", "mission_coins", "dimension_frags", "star_dust"],
+  "server_id_param": true,
+  "real_split_implemented": true,
+  "psp_check_when_server_id_present": true,
+  "blocker_on_missing_psp": "PLAYER_SERVER_PROFILE_REQUIRED",
+  "legacy_no_server_id_flagged": true,
+  "legacy_wallet_source": "legacy_account_wide_deprecated",
+  "false_filter_applied_true": false,
+  "no_balance_mutation": true,
+  "future_write_spend_pack_required": true,
+  "future_write_spend_pack_plan_reference": "v110_pack_92_future_migration_write_path_plan_v1.json#currency_spend_write"
+}

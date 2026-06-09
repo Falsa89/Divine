@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "E",
+  "endpoint": "GET /api/story/chapters",
+  "file": "backend/routes/combat.py",
+  "server_id_param": true,
+  "reads_psp_story_progress_when_server_id_present": true,
+  "psp_check_when_server_id_present": true,
+  "blocker_on_missing_psp": "PLAYER_SERVER_PROFILE_REQUIRED",
+  "no_db_write_in_strict_server_scoped_path": true,
+  "no_story_progress_write_promotion_in_pack_92": true,
+  "legacy_no_server_id_flagged": true,
+  "legacy_progress_source": "legacy_account_wide_deprecated",
+  "false_filter_applied_true": false,
+  "reward_live": false,
+  "progress_live": false,
+  "no_s1_s2_copy": true,
+  "future_write_pack_required": true,
+  "future_write_pack_plan_reference": "v110_pack_92_future_migration_write_path_plan_v1.json#story_progress_write"
+}

@@ -131,18 +131,77 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
 
     # ==================== CURRENCY WALLET ====================
     @router.get("/wallet")
-    async def get_wallet(current_user: dict = Depends(get_current_user)):
+    async def get_wallet(server_id: str = None, current_user: dict = Depends(get_current_user)):
+        """
+        Pack 92 — Wallet split server-scope.
+
+        - server_id presente: split REALE in `currencies_global` (gold/gems
+          su `users`, hard/premium account-wide) e `currencies_server_scoped`
+          (PSP.soft_currencies, REALMENTE filtrato per server_id). PSP check.
+          `filter_applied=true` solo se PSP esiste e lo split è autentico.
+        - server_id assente: legacy path account-wide (`db.wallets` letto come
+          prima, NON player-facing). `filter_applied=false`,
+          `wallet_source=legacy_account_wide_deprecated`.
+        - Nessuna mutazione di balance.
+        """
         uid = current_user["id"]
         user = await db.users.find_one({"id": uid})
+        user_gold = user.get("gold", 0) if user else 0
+        user_gems = user.get("gems", 0) if user else 0
+
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            if not psp:
+                return {
+                    "blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+                    "server_id": sid,
+                    "filter_applied": True,
+                    "wallet_source": "none",
+                    "currencies_global": {
+                        "gold": {"amount": user_gold, **CURRENCIES["gold"]},
+                        "gems": {"amount": user_gems, **CURRENCIES["gems"]},
+                    },
+                    "currencies_server_scoped": {},
+                    "_slc_pack_92_wallet_split": True,
+                }
+            soft = psp.get("soft_currencies") or {}
+            server_scoped = {}
+            for k in ("honor", "guild_points", "prana", "soul_seals", "mission_coins", "dimension_frags", "star_dust"):
+                if k in CURRENCIES:
+                    server_scoped[k] = {"amount": int(soft.get(k, 0) or 0), **CURRENCIES[k]}
+            return {
+                "server_id": sid,
+                "filter_applied": True,
+                "wallet_source": "psp_server_scoped_split",
+                "currencies_global": {
+                    "gold": {"amount": user_gold, **CURRENCIES["gold"]},
+                    "gems": {"amount": user_gems, **CURRENCIES["gems"]},
+                },
+                "currencies_server_scoped": server_scoped,
+                # Backward-compat: legacy `currencies` flat (account-wide-style)
+                # MANTIENE solo i globali; per i server-scoped la UI deve usare
+                # `currencies_server_scoped`.
+                "currencies": {
+                    "gold": {"amount": user_gold, **CURRENCIES["gold"]},
+                    "gems": {"amount": user_gems, **CURRENCIES["gems"]},
+                },
+                "_slc_pack_92_wallet_split": True,
+            }
+
+        # Legacy non-player-facing path (no server_id)
         wallet = await db.wallets.find_one({"user_id": uid})
         if not wallet:
             wallet = {"user_id": uid, "honor": 0, "guild_points": 0, "prana": 0, "soul_seals": 0, "mission_coins": 0, "dimension_frags": 0, "star_dust": 0}
             ensure_server_scope(wallet, uid)
             await db.wallets.insert_one(wallet)
         return {
+            "filter_applied": False,
+            "wallet_source": "legacy_account_wide_deprecated",
+            "_slc_pack_92_wallet_legacy_path_warning": "Non-player-facing path. Player-facing reads MUST include server_id.",
             "currencies": {
-                "gold": {"amount": user.get("gold", 0), **CURRENCIES["gold"]},
-                "gems": {"amount": user.get("gems", 0), **CURRENCIES["gems"]},
+                "gold": {"amount": user_gold, **CURRENCIES["gold"]},
+                "gems": {"amount": user_gems, **CURRENCIES["gems"]},
                 "honor": {"amount": wallet.get("honor", 0), **CURRENCIES["honor"]},
                 "guild_points": {"amount": wallet.get("guild_points", 0), **CURRENCIES["guild_points"]},
                 "prana": {"amount": wallet.get("prana", 0), **CURRENCIES["prana"]},

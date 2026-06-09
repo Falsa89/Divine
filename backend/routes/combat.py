@@ -18,7 +18,57 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
 
     # ==================== STORY MODE ====================
     @router.get("/story/chapters")
-    async def get_story_chapters(current_user: dict = Depends(get_current_user)):
+    async def get_story_chapters(server_id: str = None, current_user: dict = Depends(get_current_user)):
+        """
+        Pack 92 — Story progress loader server-scope guard.
+
+        - server_id presente: read REALE da PSP.story_progress per
+          (user_id, server_id) con PSP existence check. NO DB write
+          (no insert legacy se PSP esiste e story_progress vuoto: si
+          ritorna default in memoria, niente upsert). `filter_applied=true`.
+        - server_id assente: legacy path account-wide (db.story_progress
+          letto/auto-creato come prima). NON player-facing.
+          `filter_applied=false`, `progress_source=legacy_account_wide_deprecated`.
+        - NESSUNA mutazione di progress (no write promotion).
+        """
+        uid = current_user["id"]
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            if not psp:
+                return {
+                    "blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+                    "server_id": sid,
+                    "filter_applied": True,
+                    "progress_source": "none",
+                    "chapters": [],
+                    "progress": {"current_chapter": 1, "current_stage": 1},
+                    "_slc_pack_92_story_loader_server_scope": True,
+                }
+            # Real server-scoped read from PSP.story_progress (no DB write).
+            sp = psp.get("story_progress") or {}
+            completed = sp.get("completed", {}) or {}
+            current_chapter = int(sp.get("current_chapter") or 1)
+            current_stage = int(sp.get("current_stage") or 1)
+            chapters = []
+            for ch in STORY_CHAPTERS:
+                completed_stages = int(completed.get(str(ch["id"]), 0) or 0)
+                chapters.append({
+                    **ch,
+                    "completed_stages": completed_stages,
+                    "unlocked": ch["id"] <= current_chapter,
+                    "fully_completed": completed_stages >= ch["stages"],
+                })
+            return {
+                "server_id": sid,
+                "filter_applied": True,
+                "progress_source": "psp_server_scoped",
+                "chapters": chapters,
+                "progress": {"current_chapter": current_chapter, "current_stage": current_stage},
+                "_slc_pack_92_story_loader_server_scope": True,
+            }
+
+        # Legacy non-player-facing path (no server_id)
         progress = await db.story_progress.find_one({"user_id": current_user["id"]})
         if not progress:
             progress = {"user_id": current_user["id"], "completed": {}, "current_chapter": 1, "current_stage": 1}
@@ -32,7 +82,13 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
                 "unlocked": ch["id"] <= progress.get("current_chapter", 1),
                 "fully_completed": completed_stages >= ch["stages"],
             })
-        return {"chapters": chapters, "progress": {"current_chapter": progress.get("current_chapter", 1), "current_stage": progress.get("current_stage", 1)}}
+        return {
+            "chapters": chapters,
+            "progress": {"current_chapter": progress.get("current_chapter", 1), "current_stage": progress.get("current_stage", 1)},
+            "filter_applied": False,
+            "progress_source": "legacy_account_wide_deprecated",
+            "_slc_pack_92_story_legacy_path_warning": "Non-player-facing path. Player-facing reads MUST include server_id.",
+        }
 
     class StoryBattleRequest(BaseModel):
         chapter_id: int

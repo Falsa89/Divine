@@ -27,6 +27,7 @@ import { isHopliteHero } from '../components/ui/HeroPortrait';
 import { GREEK_HOPLITE_PORTRAIT, heroPortraitSource, hasHeroUiContract } from '../components/ui/hopliteAssets';
 import HeroFramedImage from '../components/ui/HeroFramedImage';
 import { apiCall } from '../utils/api';
+import useServerScope from '../src/hooks/useServerScope';
 
 type Hero = {
   id: string;
@@ -65,6 +66,8 @@ type FilterOwned = 'all' | 'owned' | 'locked';
 export default function HeroCollection() {
   const router = useRouter();
   const { token, userHeroesVersion } = useAuth();
+  // Pack 92 — server scope sweep su roster reader player-facing.
+  const { selected_server_id } = useServerScope();
   const [loading, setLoading] = useState(true);
   const [allHeroes, setAllHeroes] = useState<Hero[]>([]);
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set());
@@ -96,7 +99,7 @@ export default function HeroCollection() {
         setLoading(false);
       });
 
-    apiCall('/api/user/heroes')
+    apiCall(selected_server_id ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}` : '/api/user/heroes')
       .then((owned) => {
         if (cancelled) return;
         const ids = new Set<string>(

@@ -1,0 +1,21 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "H",
+  "static_guard_endpoints": [
+    "/api/user/heroes",
+    "/api/inventory",
+    "/api/item-shop/buy",
+    "/api/inventory/use-exp",
+    "/api/wallet",
+    "/api/story/chapters",
+    "/api/user/equipment"
+  ],
+  "team_get_formation_guard_via_pre_battle_lobby": true,
+  "allowed_non_player_facing_exceptions": [
+    "frontend/components/* (no apiCall to these endpoints expected)",
+    "frontend/app/*-preview.tsx (preview/sandbox screens, non-player-facing)",
+    "frontend/components/visualBattleRunner/* (visual preview only)",
+    "frontend/app/dev-* (developer/QA tools)"
+  ],
+  "comment": "Static validator fa grep su /app/frontend (esclusi node_modules e i percorsi preview/dev) e fallisce se trova chiamata a uno degli endpoint sopra senza server_id (per i mutation/read player-facing)."
+}

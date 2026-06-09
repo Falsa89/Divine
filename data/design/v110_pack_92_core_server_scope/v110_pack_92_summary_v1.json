@@ -1,0 +1,42 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK_CURRENCIES_STORY_EQUIPMENT_FRONTEND_SWEEP",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_CORE_SERVER_SCOPE_MEGAPACK_CURRENCIES_STORY_EQUIPMENT_FRONTEND_SWEEP",
+  "generated_at_utc": "2026-06-09T12:00:00Z",
+  "verdict": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK_CURRENCIES_STORY_EQUIPMENT_FRONTEND_SWEEP_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "verdict_class": "READY",
+  "safety_flags": {
+    "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false,
+    "schema_migration_executed": false, "backfill_executed": false,
+    "production_user_db_writes": false, "unmarked_test_writes": false,
+    "broad_db_writes": false, "currency_write_promotion": false,
+    "story_progress_write_promotion": false, "equipment_write_promotion": false,
+    "reward_live": false, "progress_live": false,
+    "premium_grant": false, "currency_grant": false,
+    "s1_to_s2_copy": false, "copy_s1_to_s2_inventory": false,
+    "account_wide_fallback_for_server_bound_data": false, "silent_s1_fallback": false,
+    "hardcoded_s1_in_writes": false, "false_filter_applied_true": false,
+    "legacy_cleanup_executed": false, "destructive_migration": false, "delete_of_real_data": false,
+    "player_level_mutation": false, "user_heroes_cross_server_mutation": false,
+    "team_route_regression": false, "postqa_d_gates_unlocked": false,
+    "battle_engine_formula_rewrite": false, "battle_simulate_called_from_staging_or_live": false
+  },
+  "explicit_statements": {
+    "inventory_pack_91_preserved": true,
+    "frontend_user_heroes_server_id_sweep_completed_or_blockers": "COMPLETED",
+    "no_broad_db_writes": true,
+    "no_reward_progress_live": true,
+    "no_release_readiness_claim": true,
+    "currency_loader_split_real": true,
+    "story_loader_real_server_scoped_read": true,
+    "equipment_loader_honest_deferred_blocker": true
+  },
+  "sync_status": {"local_commit_only": true, "public_push_managed_externally": true, "no_remote_available": true},
+  "deferred_blockers_documented": [
+    "Equipment loader strict promotion: schema migration (backfill server_id su user_equipment) richiesta prima della promozione (pack futuro autorizzato).",
+    "Currency spend/write strict scope (pack futuro).",
+    "Story progress write strict scope (pack futuro).",
+    "Equipment equip/unequip/forge write strict scope (pack futuro).",
+    "Reward claim ledger live (pack futuro).",
+    "Legacy cleanup pre-Pack-86 user_heroes account-wide (pack futuro)."
+  ]
+}

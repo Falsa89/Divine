@@ -1,0 +1,19 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "F",
+  "endpoint": "GET /api/user/equipment",
+  "file": "backend/routes/equipment.py",
+  "server_id_param": true,
+  "strict_filter_promotion_in_pack_92": false,
+  "honest_deferred_blocker": "EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED",
+  "blocker_filter_applied_true_real_filter_with_honest_negation": true,
+  "migration_required": true,
+  "migration_required_reason": "user_equipment collection schema mixed (server_id present only on ~10% of docs in baseline). Promoting to strict filter without backfill would produce false/empty results for the majority of player docs.",
+  "legacy_no_server_id_flagged": true,
+  "legacy_equipment_source": "legacy_account_wide_deprecated",
+  "false_filter_applied_true": false,
+  "no_equip_unequip_forge_write_promotion_in_pack_92": true,
+  "no_equipment_copy_s1_s2": true,
+  "future_write_pack_required": true,
+  "future_write_pack_plan_reference": "v110_pack_92_future_migration_write_path_plan_v1.json#equipment_write"
+}

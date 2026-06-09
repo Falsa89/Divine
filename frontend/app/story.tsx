@@ -5,6 +5,7 @@ import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import useServerScope from '../src/hooks/useServerScope';
 
 // v108_pre — Story Launch Path binding.
 // Aggiunge il percorso player-facing "Avvia battaglia" → /pre-battle-lobby
@@ -18,12 +19,22 @@ const EC: Record<string,string> = { fire:'#ff4444', water:'#4488ff', earth:'#aa8
 export default function StoryScreen() {
   const router = useRouter();
   const { refreshUser } = useAuth();
+  // Pack 92 — server scope sweep su story progress reader player-facing.
+  const { selected_server_id } = useServerScope();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [battling, setBattling] = useState(false);
 
-  useEffect(() => { load(); }, []);
-  const load = async () => { try { const d = await apiCall('/api/story/chapters'); setData(d); } catch(e){} finally { setLoading(false); } };
+  useEffect(() => { load(); }, [selected_server_id]);
+  const load = async () => {
+    try {
+      const url = selected_server_id
+        ? `/api/story/chapters?server_id=${encodeURIComponent(selected_server_id)}`
+        : '/api/story/chapters';
+      const d = await apiCall(url);
+      setData(d);
+    } catch(e){} finally { setLoading(false); }
+  };
 
   const doBattle = async (chId: number, stage: number) => {
     setBattling(true);

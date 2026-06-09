@@ -5,6 +5,7 @@ import { COLORS } from '../constants/theme';
 import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import useServerScope from '../src/hooks/useServerScope';
 import {
   isLegacyMutationLocked,
   POSTQA_D_LOCK_MESSAGE_TITLE,
@@ -16,17 +17,48 @@ const SLOT_ICONS: Record<string,string> = { weapon:'\uD83D\uDDE1\uFE0F', armor:'
 
 export default function EquipmentScreen() {
   const router = useRouter();
+  // Pack 92 — server scope canonico per equipment/heroes loader.
+  const { selected_server_id, loading: scopeLoading } = useServerScope();
   const [equips, setEquips] = useState<any[]>([]);
   const [heroes, setHeroes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedEquip, setSelectedEquip] = useState<any>(null);
   const [selectedHero, setSelectedHero] = useState<any>(null);
+  const [serverBlocker, setServerBlocker] = useState<string | null>(null);
+  const [equipmentDeferredBlocker, setEquipmentDeferredBlocker] = useState(false);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { if (!scopeLoading) load(); }, [scopeLoading, selected_server_id]);
   const load = async () => {
+    setLoading(true);
+    setServerBlocker(null);
+    setEquipmentDeferredBlocker(false);
     try {
-      const [eq, h] = await Promise.all([apiCall('/api/user/equipment'), apiCall('/api/user/heroes')]);
-      setEquips(eq); setHeroes(h);
+      if (!selected_server_id) {
+        setServerBlocker('NO_SERVER_SELECTED');
+        setEquips([]);
+        setHeroes([]);
+        return;
+      }
+      const qs = `server_id=${encodeURIComponent(selected_server_id)}`;
+      const [eqRaw, h] = await Promise.all([
+        apiCall(`/api/user/equipment?${qs}`),
+        apiCall(`/api/user/heroes?${qs}`),
+      ]);
+      // Pack 92 — backend ora restituisce dict {items|blocker|...}.
+      // Backward-compat: se eqRaw è una list (legacy non-player-facing) la passiamo.
+      let eqList: any[] = [];
+      if (Array.isArray(eqRaw)) {
+        eqList = eqRaw;
+      } else if (eqRaw && eqRaw.blocker === 'EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED') {
+        // Loader server-scoped non ancora promosso (migration pending);
+        // blocker onesto, NESSUN fallback account-wide.
+        setEquipmentDeferredBlocker(true);
+        eqList = [];
+      } else if (eqRaw && Array.isArray(eqRaw.items)) {
+        eqList = eqRaw.items;
+      }
+      setEquips(eqList);
+      setHeroes(Array.isArray(h) ? h : []);
     } catch(e){} finally { setLoading(false); }
   };
 

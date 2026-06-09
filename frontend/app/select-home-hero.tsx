@@ -22,6 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
+import useServerScope from '../src/hooks/useServerScope';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
 import { heroPortraitSource } from '../components/ui/hopliteAssets';
 
@@ -48,6 +49,8 @@ type OwnedHero = {
 
 export default function SelectHomeHeroScreen() {
   const router = useRouter();
+  // Pack 92 — server scope sweep su roster reader player-facing.
+  const { selected_server_id } = useServerScope();
   const [owned, setOwned] = useState<OwnedHero[]>([]);
   const [currentHomeId, setCurrentHomeId] = useState<string | null>(null);
   const [inTutorial, setInTutorial] = useState<boolean>(false);
@@ -58,8 +61,11 @@ export default function SelectHomeHeroScreen() {
   useEffect(() => {
     (async () => {
       try {
+        const heroesUrl = selected_server_id
+          ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
+          : '/api/user/heroes';
         const [uh, hh] = await Promise.all([
-          apiCall('/api/user/heroes').catch(() => []),
+          apiCall(heroesUrl).catch(() => []),
           apiCall('/api/sanctuary/home-hero').catch(() => null),
         ]);
         setOwned(Array.isArray(uh) ? uh : []);
@@ -69,7 +75,7 @@ export default function SelectHomeHeroScreen() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [selected_server_id]);
 
   // Ordiniamo per rarità desc, poi nome
   const sorted = useMemo(() => {

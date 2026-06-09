@@ -1,0 +1,38 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "B",
+  "backend_routes_audited": [
+    {"endpoint": "GET /api/wallet", "file": "backend/routes/soul_forge.py", "collection": "users + db.wallets + player_server_profiles.soft_currencies", "server_id_param_added": true, "real_filter": true, "split_global_vs_server_scoped": true},
+    {"endpoint": "GET /api/story/chapters", "file": "backend/routes/combat.py", "collection": "db.story_progress (legacy) + player_server_profiles.story_progress", "server_id_param_added": true, "real_filter": true, "reads_psp_story_progress": true, "no_db_write_in_strict_path": true},
+    {"endpoint": "GET /api/user/equipment", "file": "backend/routes/equipment.py", "collection": "db.user_equipment (schema mixed)", "server_id_param_added": true, "real_filter": true, "honest_deferred_blocker": true, "migration_required": true},
+    {"endpoint": "GET /api/inventory", "file": "backend/routes/items.py", "status": "Pack 89 strict server-scoped preserved (UNCHANGED in Pack 92)"},
+    {"endpoint": "GET /api/user/heroes", "file": "backend/server.py", "status": "Pack 81 strict server-scoped preserved (UNCHANGED in Pack 92)"},
+    {"endpoint": "GET /api/team/get-formation", "file": "backend/routes/v96_team_formation.py", "status": "Pack 88 strict server-scoped preserved (UNCHANGED in Pack 92)"}
+  ],
+  "frontend_player_facing_callers_audited": [
+    {"file": "frontend/app/(tabs)/heroes.tsx", "endpoint": "/api/user/heroes", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/(tabs)/battle.tsx", "endpoint": "/api/user/heroes", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/hero-collection.tsx", "endpoint": "/api/user/heroes", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/select-home-hero.tsx", "endpoint": "/api/user/heroes", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/equipment.tsx", "endpoint": "/api/user/heroes", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/equipment.tsx", "endpoint": "/api/user/equipment", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/soul-forge.tsx", "endpoint": "/api/user/heroes", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/soul-forge.tsx", "endpoint": "/api/wallet", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/story.tsx", "endpoint": "/api/story/chapters", "pre_pack_92_server_id": false, "post_pack_92_server_id": true},
+    {"file": "frontend/app/inventory.tsx", "endpoint": "/api/user/heroes", "pre_pack_92_server_id": false, "post_pack_92_server_id": true, "caveat_pack_91_resolved": true},
+    {"file": "frontend/app/pre-battle-lobby.tsx", "endpoint": "/api/user/heroes + /api/team/get-formation", "status": "Pack 80/81/88 already passes server_id (UNCHANGED)"}
+  ],
+  "schema_status": {
+    "player_server_profiles": "server_id present 100%",
+    "inventory": "server_id present (Pack 89/90 strict)",
+    "users": "account-wide identity (gold/gems global per SOT)",
+    "wallets": "legacy account-wide (deprecated, replaced by psp.soft_currencies for server-scoped reads)",
+    "story_progress": "mixed legacy (1 doc) + psp.story_progress (canonical)",
+    "user_equipment": "schema mixed: server_id present only on ~10% (3/31). Migration required before strict promotion."
+  },
+  "blocker_or_migration_needs": [
+    "user_equipment: backfill server_id required (deferred future authorized pack)",
+    "db.wallets: legacy collection, deprecation path documented (replaced by psp.soft_currencies)",
+    "db.story_progress legacy collection: kept for non-player-facing path only"
+  ]
+}

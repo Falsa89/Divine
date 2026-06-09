@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "C",
+  "sot_doc": "docs/divine/115_CANON_CORE_SERVER_SCOPE_SPLIT.md",
+  "account_wide": [
+    "account identity / email / username",
+    "auth tokens / JWT",
+    "global entitlements (purchase entitlements, account-level cosmetics if defined global)",
+    "hard/premium currency: gems (definito global, IAP-coupled)",
+    "hard/premium currency: gold (legacy account-wide; deferito promotion server-scoped a pack futuro autorizzato)"
+  ],
+  "server_scoped": [
+    "user_heroes / roster / livelli / stelle / build operative",
+    "team_formation",
+    "inventory / use-exp / item-shop buy",
+    "soft currencies usate nel gameplay (honor, guild_points, prana, soul_seals, mission_coins, dimension_frags, star_dust) -> psp.soft_currencies",
+    "story_progress -> psp.story_progress (canonical)",
+    "equipment / user_equipment (post-migration future pack)",
+    "player_level / player_exp / progression operativa -> psp"
+  ],
+  "new_server_starts_fresh": true,
+  "no_s1_s2_copy": true,
+  "reward_live_off": true,
+  "progress_live_off": true,
+  "release_readiness_claimed": false
+}

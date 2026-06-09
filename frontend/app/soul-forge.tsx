@@ -9,6 +9,7 @@ import Animated, { FadeIn, FadeInDown, FadeInUp, ZoomIn } from 'react-native-rea
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import useServerScope from '../src/hooks/useServerScope';
 import {
   isLegacyMutationLocked,
   POSTQA_D_LOCK_MESSAGE_TITLE,
@@ -81,6 +82,8 @@ export default function SoulForgeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { refreshUser } = useAuth();
+  // Pack 92 — server scope sweep su roster + wallet reader player-facing.
+  const { selected_server_id } = useServerScope();
 
   // Core state
   const [heroes, setHeroes] = useState<any[]>([]);
@@ -112,17 +115,24 @@ export default function SoulForgeScreen() {
   // FORGE_CRASH Track D \u2014 warning soft per refresh post-success fallito
   const [postSuccessWarn, setPostSuccessWarn] = useState<string | null>(null);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [selected_server_id]);
 
   const load = async () => {
     setLoading(true);
     setLoadError(null);
     try {
+      // Pack 92 — server scope sweep.
+      const heroesUrl = selected_server_id
+        ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
+        : '/api/user/heroes';
+      const walletUrl = selected_server_id
+        ? `/api/wallet?server_id=${encodeURIComponent(selected_server_id)}`
+        : '/api/wallet';
       // Le chiamate "primarie" devono andare a buon fine per popolare la griglia.
       // Le chiamate "secondarie" (wallet/soul-forge/shops) sono best-effort:
       // se falliscono, lo screen continua a funzionare con un fallback.
       const [uh, team, user] = await Promise.all([
-        apiCall('/api/user/heroes'),
+        apiCall(heroesUrl),
         apiCall('/api/team').catch(() => ({ formation: [] })),
         apiCall('/api/user/profile').catch(() => null),
       ]);
@@ -140,9 +150,9 @@ export default function SoulForgeScreen() {
       setTeamIds(ids);
       setBalance(user?.soul_essence || 0);
 
-      // Secondary best-effort reads
+      // Secondary best-effort reads (Pack 92: wallet passa server_id se disponibile)
       Promise.allSettled([
-        apiCall('/api/wallet'),
+        apiCall(walletUrl),
         apiCall('/api/soul-forge'),
         apiCall('/api/shops'),
       ]).then(([w, sf, sh]) => {
@@ -151,7 +161,7 @@ export default function SoulForgeScreen() {
         if (sh.status === 'fulfilled') setShopsPreview(sh.value);
       });
     } catch (e: any) {
-      // EMERGENCY_RESTORE Track B \u2014 lo screen NON deve mai essere blank.
+      // EMERGENCY_RESTORE Track B — lo screen NON deve mai essere blank.
       // Anche con API failure mostriamo card di errore + retry.
       setLoadError(e?.message || 'Impossibile caricare gli eroi. Riprova.');
     } finally {

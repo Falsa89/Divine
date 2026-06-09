@@ -19,9 +19,43 @@ def register_equipment_routes(router, db, get_current_user, serialize_doc, calcu
         return EQUIPMENT_TEMPLATES
 
     @router.get("/user/equipment")
-    async def get_user_equipment(current_user: dict = Depends(get_current_user)):
-        equips = await db.user_equipment.find({"user_id": current_user["id"]}).to_list(500)
-        return [serialize_doc(e) for e in equips]
+    async def get_user_equipment(server_id: str = None, current_user: dict = Depends(get_current_user)):
+        """
+        Pack 92 — Equipment loader server-scope guard (HONEST BLOCKER).
+
+        Schema audit: docs `user_equipment` hanno server_id solo ~10%
+        (3/31 in baseline). NON sicuro promuovere a strict filter senza
+        migration/backfill. Pack 92 NON esegue write/migration: se il
+        client passa server_id chiediamo guard onesto.
+
+        - server_id presente: blocker `EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED`
+          con `filter_applied=true` (perché il filtro REALE esiste ma è negato per
+          mancanza di backfill: non è un falso filter_applied). Lista vuota.
+        - server_id assente: legacy account-wide read (non-player-facing).
+        """
+        uid = current_user["id"]
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            return {
+                "blocker": "EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED",
+                "server_id": sid,
+                "psp_exists": bool(psp),
+                "filter_applied": True,
+                "equipment_source": "none",
+                "items": [],
+                "migration_required": True,
+                "migration_required_reason": "user_equipment collection schema mixed (server_id present only on ~10% of docs). Pack 92 read-path guard only; write/migration deferred to future authorized pack.",
+                "_slc_pack_92_equipment_loader_server_scope_guard": True,
+            }
+        # Legacy non-player-facing path
+        equips = await db.user_equipment.find({"user_id": uid}).to_list(500)
+        return {
+            "items": [serialize_doc(e) for e in equips],
+            "filter_applied": False,
+            "equipment_source": "legacy_account_wide_deprecated",
+            "_slc_pack_92_equipment_legacy_path_warning": "Non-player-facing path. Player-facing reads MUST include server_id (will return blocker until migration).",
+        }
 
     class EquipRequest(BaseModel):
         equipment_id: str

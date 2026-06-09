@@ -8,6 +8,7 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
+import useServerScope from '../../src/hooks/useServerScope';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import { isGreekHoplite, GREEK_HOPLITE_PORTRAIT, heroPortraitSource, hasHeroUiContract } from '../../components/ui/hopliteAssets';
 import HeroFramedImage from '../../components/ui/HeroFramedImage';
@@ -21,6 +22,8 @@ const { width } = Dimensions.get('window');
 export default function HeroesTab() {
   const router = useRouter();
   const { userHeroesVersion } = useAuth();
+  // Pack 92 — server scope sweep su roster reader player-facing.
+  const { selected_server_id } = useServerScope();
   const [heroes, setHeroes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<any>(null);
@@ -32,8 +35,12 @@ export default function HeroesTab() {
 
   const load = async () => {
     try {
-      const d = await apiCall('/api/user/heroes');
-      setHeroes(d || []);
+      // Pack 92 — passa server_id se disponibile (no silent s1 fallback).
+      const url = selected_server_id
+        ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
+        : '/api/user/heroes';
+      const d = await apiCall(url);
+      setHeroes(Array.isArray(d) ? d : (d?.heroes || []));
     } catch(e){} finally { setLoading(false); }
   };
 
@@ -42,7 +49,7 @@ export default function HeroesTab() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, [userHeroesVersion]),
+    }, [userHeroesVersion, selected_server_id]),
   );
 
   const elements = ['all', 'fire', 'water', 'earth', 'wind', 'thunder', 'light', 'shadow'];

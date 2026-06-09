@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
+  "track": "G",
+  "frontend_files_migrated": [
+    "frontend/app/(tabs)/heroes.tsx",
+    "frontend/app/(tabs)/battle.tsx",
+    "frontend/app/hero-collection.tsx",
+    "frontend/app/select-home-hero.tsx",
+    "frontend/app/equipment.tsx",
+    "frontend/app/soul-forge.tsx",
+    "frontend/app/story.tsx",
+    "frontend/app/inventory.tsx"
+  ],
+  "endpoints_now_passing_server_id_when_selected": [
+    "/api/user/heroes",
+    "/api/user/equipment",
+    "/api/wallet",
+    "/api/story/chapters"
+  ],
+  "inventory_pack_91_caveat_resolved": true,
+  "silent_s1_fallback": false,
+  "account_wide_fallback_for_server_bound_data": false,
+  "pre_battle_lobby_already_correct_pre_pack_92": true,
+  "sweep_completed": true
+}

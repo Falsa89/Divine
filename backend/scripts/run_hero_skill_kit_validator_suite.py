@@ -3999,6 +3999,26 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-91-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_91_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-91-INVENTORY-FRONTEND-CONSUMER-MIGRATION-AND-MUTATING-SMOKE-ROLLUP', 'validate_mega_release_acceleration_91_inventory_frontend_consumer_migration_and_mutating_smoke_rollup.py'),
 
+    # Pack 92 — Core server-scope megapack: currencies/wallet split, story progress, equipment loader, frontend server_id sweep.
+    # 16 track + 1 rollup = 17 nuove validator track.
+    ('PROJECT-V110-PACK-92-BASELINE-MULTIRUN', 'validate_v110_pack_92_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-92-CORE-ROUTE-SCHEMA-AUDIT', 'validate_v110_pack_92_core_route_schema_audit.py'),
+    ('PROJECT-V110-PACK-92-CORE-SERVER-SCOPE-SOT', 'validate_v110_pack_92_core_server_scope_sot.py'),
+    ('PROJECT-V110-PACK-92-CURRENCY-WALLET-LOADER-SPLIT', 'validate_v110_pack_92_currency_wallet_loader_split.py'),
+    ('PROJECT-V110-PACK-92-STORY-PROGRESS-LOADER-SCOPE', 'validate_v110_pack_92_story_progress_loader_scope.py'),
+    ('PROJECT-V110-PACK-92-EQUIPMENT-LOADER-SCOPE', 'validate_v110_pack_92_equipment_loader_scope.py'),
+    ('PROJECT-V110-PACK-92-FRONTEND-SERVER-ID-SWEEP', 'validate_v110_pack_92_frontend_server_id_sweep.py'),
+    ('PROJECT-V110-PACK-92-FRONTEND-STATIC-REGRESSION-GUARD', 'validate_v110_pack_92_frontend_static_regression_guard.py'),
+    ('PROJECT-V110-PACK-92-RUNTIME-GUARD-SMOKE', 'validate_v110_pack_92_runtime_guard_smoke.py'),
+    ('PROJECT-V110-PACK-92-FUTURE-MIGRATION-WRITE-PATH-PLAN', 'validate_v110_pack_92_future_migration_write_path_plan.py'),
+    ('PROJECT-V110-PACK-92-DATA-INVARIANTS', 'validate_v110_pack_92_data_invariants.py'),
+    ('PROJECT-V110-PACK-92-CLEANUP-ROLLBACK-STRATEGY', 'validate_v110_pack_92_cleanup_rollback_strategy.py'),
+    ('PROJECT-V110-PACK-92-LIVE-READINESS-UPDATE', 'validate_v110_pack_92_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-92-MD5-REBASE', 'validate_v110_pack_92_md5_rebase.py'),
+    ('PROJECT-V110-PACK-92-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_92_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-92-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_92_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-92-CORE-SERVER-SCOPE-MEGAPACK-ROLLUP', 'validate_mega_release_acceleration_92_core_server_scope_megapack_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
