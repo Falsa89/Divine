@@ -1,0 +1,59 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "generated_at_utc": "2026-06-09T11:00:00Z",
+  "verdict": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "verdict_class": "READY",
+  "approval_string": "AUTORIZZO_V110_INVENTORY_FRONTEND_AND_MUTATING_SMOKE_PACK_91",
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "schema_migration_executed": false,
+    "backfill_executed": false,
+    "production_user_db_writes": false,
+    "unmarked_test_writes": false,
+    "account_wide_inventory_write": false,
+    "hardcoded_s1_in_writes": false,
+    "frontend_mutation_without_server_id": false,
+    "silent_s1_fallback": false,
+    "copy_s1_to_s2_inventory": false,
+    "currencies_db_writes": false,
+    "story_db_writes": false,
+    "equipment_db_writes": false,
+    "reward_live": false,
+    "progress_live": false,
+    "premium_grant": false,
+    "currency_grant": false,
+    "legacy_cleanup_executed": false,
+    "destructive_migration": false,
+    "delete_of_real_data": false,
+    "player_level_mutation": false,
+    "user_heroes_cross_server_mutation": false,
+    "team_route_regression": false,
+    "postqa_d_gates_unlocked": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false
+  },
+  "explicit_statements": {
+    "frontend_inventory_mutations_pass_server_id": true,
+    "real_mutating_smoke_executed_or_blocked_honestly": "EXECUTED",
+    "no_account_wide_inventory_writes": true,
+    "no_production_user_db_writes": true,
+    "reward_progress_live_off": true,
+    "legacy_cleanup_not_executed": true
+  },
+  "sync_status": {
+    "local_commit_only": true,
+    "public_push_managed_externally": true,
+    "no_remote_available": true
+  },
+  "deferred_blockers_documented": [
+    "Skill upgrade frontend UI non wired oggi (no caller per /api/hero/skills-upgrade o /api/hero/skill-upgrade in /app/frontend); il backend Pack 90 e' pronto.",
+    "Currencies PSP-scoped loader promotion (deferito)",
+    "Story progress PSP-scoped loader promotion (deferito)",
+    "Equipment PSP-scoped loader promotion (deferito)",
+    "Inventory onboarding/starter rewards (NON concessi, futuro pack)",
+    "Legacy cleanup pre-Pack-86 user_heroes account-wide (deferito)"
+  ]
+}

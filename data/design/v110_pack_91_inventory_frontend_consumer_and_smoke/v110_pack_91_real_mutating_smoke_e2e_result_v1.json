@@ -1,0 +1,27 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "timestamp_utc_ts": 1781033053,
+  "test_user_email_pattern": "pack91_test_user_1781033053@test.com",
+  "server_a": "s_pack91_a_1781033053",
+  "server_b": "s_pack91_b_1781033053",
+  "test_artifact_marker": "pack_91_test_artifact",
+  "proofs": {
+    "register_ok": true,
+    "server_id_required_on_buy": true,
+    "psp_required_on_buy": true,
+    "ensure_psp_a_ok": true,
+    "ensure_psp_b_ok": true,
+    "mark_pack_91_ok": true,
+    "buy_on_a_ok": true,
+    "inventory_a_sees_item": true,
+    "inventory_b_no_leak": true,
+    "use_exp_b_blocked_no_item": true,
+    "starter_claim_a_ok": true,
+    "use_exp_a_consumed_only_a": true,
+    "cleanup_ok": true,
+    "no_hardcoded_s1_observed": true
+  },
+  "required_missing": [],
+  "real_mutating_smoke_executed": true,
+  "safe_blockers": {}
+}

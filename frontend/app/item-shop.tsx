@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import useServerScope from '../src/hooks/useServerScope';
 import ScreenHeader from '../components/ui/ScreenHeader';
 import ResourceBadge from '../components/ui/ResourceBadge';
 import { COLORS } from '../constants/theme';
@@ -14,6 +15,10 @@ const RARITY_COL: Record<number, string> = { 1: '#8899AA', 2: '#44BB66', 3: '#44
 export default function ItemShopScreen() {
   const router = useRouter();
   const { refreshUser } = useAuth();
+  // Pack 91 — adozione canonical server scope sui frontend mutation consumer.
+  // Nessun silent "s1": se manca selected_server_id, l'acquisto è bloccato
+  // e l'utente è rimandato alla selezione server.
+  const { selected_server_id, loading: scopeLoading } = useServerScope();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [buying, setBuying] = useState('');
@@ -30,12 +35,38 @@ export default function ItemShopScreen() {
 
   const buy = async (itemId: string, name: string, qty: number = 1) => {
     if (ITEM_SHOP_LOCKED_V2) return; // lock UI safe
+    // Pack 91 — server_id REQUIRED, no silent s1, no account-wide fallback.
+    if (!selected_server_id) {
+      Alert.alert(
+        'Seleziona un server',
+        'Devi prima entrare in un server prima di acquistare. Vai alla schermata server.',
+        [
+          { text: 'Vai a Server', onPress: () => router.push('/servers' as any) },
+          { text: 'Annulla', style: 'cancel' },
+        ]
+      );
+      return;
+    }
     setBuying(itemId);
     try {
-      await apiCall('/api/item-shop/buy', { method: 'POST', body: JSON.stringify({ item_id: itemId, quantity: qty }) });
+      const qs = `server_id=${encodeURIComponent(selected_server_id)}`;
+      await apiCall(`/api/item-shop/buy?${qs}`, { method: 'POST', body: JSON.stringify({ item_id: itemId, quantity: qty }) });
       await refreshUser(); await load();
       Alert.alert('Acquistato!', `${qty}x ${name}`);
-    } catch (e: any) { Alert.alert('Errore', e.message); }
+    } catch (e: any) {
+      // Pack 91 — gestione esplicita dei blocker server-scope.
+      const msg = e?.message || '';
+      if (msg.includes('SERVER_ID_REQUIRED')) {
+        Alert.alert('Server richiesto', 'Operazione bloccata: server non selezionato.');
+      } else if (msg.includes('PLAYER_SERVER_PROFILE_REQUIRED')) {
+        Alert.alert('Profilo server mancante', 'Devi prima creare il profilo per questo server.', [
+          { text: 'Vai a Server', onPress: () => router.push('/servers' as any) },
+          { text: 'Annulla', style: 'cancel' },
+        ]);
+      } else {
+        Alert.alert('Errore', msg || 'Errore di rete');
+      }
+    }
     finally { setBuying(''); }
   };
 

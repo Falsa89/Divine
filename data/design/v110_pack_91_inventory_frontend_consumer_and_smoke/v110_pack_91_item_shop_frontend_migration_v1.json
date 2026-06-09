@@ -1,0 +1,13 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "track": "D",
+  "file": "frontend/app/item-shop.tsx",
+  "passes_server_id_query": true,
+  "endpoint": "POST /api/item-shop/buy?server_id=<selectedServerId>",
+  "auth_preserved": true,
+  "handles_server_id_required_blocker": true,
+  "handles_player_server_profile_required_blocker": true,
+  "no_account_wide_fallback": true,
+  "no_silent_s1": true,
+  "item_shop_locked_v2_preserved": true
+}

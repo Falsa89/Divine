@@ -1,0 +1,8 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "track": "F",
+  "runtime_frontend_caller_present": false,
+  "honest_documentation": "Nessun caller frontend per /api/hero/skills-upgrade o /api/hero/skill-upgrade in /app/frontend (verificato con grep). La UI runtime skill upgrade non e' wired oggi. Backend e' Pack 90-ready: quando una UI verra' aggiunta, dovra' passare server_id query param come gli altri consumer. Nessuna migration runtime frontend possibile in questo pack (nulla da migrare).",
+  "backend_endpoints_ready_for_future_consumer": ["GET /api/hero/skills-upgrade/{user_hero_id}?server_id=<sid>", "POST /api/hero/skill-upgrade?server_id=<sid>"],
+  "deferred": true
+}

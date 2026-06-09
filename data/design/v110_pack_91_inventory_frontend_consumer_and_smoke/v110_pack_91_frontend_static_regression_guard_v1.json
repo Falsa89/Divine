@@ -1,0 +1,11 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "track": "I",
+  "static_grep_scan": {
+    "item_shop_buy_callers_missing_server_id": 0,
+    "inventory_use_exp_callers_missing_server_id": 0,
+    "silent_s1_literals_in_frontend": 0
+  },
+  "guard_active": true,
+  "note": "Validator esegue grep statico su /app/frontend per garantire che ogni chiamata a /api/item-shop/buy e /api/inventory/use-exp includa server_id come query string."
+}

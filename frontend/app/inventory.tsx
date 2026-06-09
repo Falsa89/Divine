@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import useServerScope from '../src/hooks/useServerScope';
 import ScreenHeader from '../components/ui/ScreenHeader';
 import GradientButton from '../components/ui/GradientButton';
 import TabSelector from '../components/ui/TabSelector';
@@ -27,6 +28,8 @@ const RARITY_COLORS: Record<number, string> = {
 export default function InventoryScreen() {
   const router = useRouter();
   const { refreshUser } = useAuth();
+  // Pack 91 — server scope canonico per inventory mutation consumer.
+  const { selected_server_id, loading: scopeLoading } = useServerScope();
   const [items, setItems] = useState<any[]>([]);
   const [shards, setShards] = useState<any[]>([]);
   const [heroes, setHeroes] = useState<any[]>([]);
@@ -37,13 +40,28 @@ export default function InventoryScreen() {
   const [selectedHero, setSelectedHero] = useState<any>(null);
   const [useQty, setUseQty] = useState(1);
   const [acting, setActing] = useState(false);
+  const [serverBlocker, setServerBlocker] = useState<string | null>(null);
 
-  useEffect(() => { loadAll(); }, []);
+  // Pack 91 — rifetcha quando cambia il server selezionato. Niente silent s1.
+  useEffect(() => { if (!scopeLoading) loadAll(); }, [scopeLoading, selected_server_id]);
 
   const loadAll = async () => {
+    setLoading(true);
+    setServerBlocker(null);
     try {
+      // Pack 91 — passa server_id se disponibile. Pack 89 GET inventory è strict
+      // server-scoped: se manca server_id il backend ritorna legacy non-player path.
+      // Per essere consistenti col Pack 91, il frontend richiede sempre server_id.
+      if (!selected_server_id) {
+        setItems([]);
+        setShards([]);
+        setHeroes([]);
+        setServerBlocker('NO_SERVER_SELECTED');
+        return;
+      }
+      const qs = `server_id=${encodeURIComponent(selected_server_id)}`;
       const [inv, uh] = await Promise.all([
-        apiCall('/api/inventory'),
+        apiCall(`/api/inventory?${qs}`),
         apiCall('/api/user/heroes'),
       ]);
       setItems(inv.items || []);
@@ -64,7 +82,14 @@ export default function InventoryScreen() {
         }
       }
       setShards(shardList);
-    } catch (e) {} finally { setLoading(false); }
+    } catch (e: any) {
+      const msg = e?.message || '';
+      if (msg.includes('PLAYER_SERVER_PROFILE_REQUIRED')) {
+        setServerBlocker('PLAYER_SERVER_PROFILE_REQUIRED');
+      } else if (msg.includes('SERVER_ID_REQUIRED')) {
+        setServerBlocker('SERVER_ID_REQUIRED');
+      }
+    } finally { setLoading(false); }
   };
 
   const getFiltered = () => {
@@ -85,10 +110,19 @@ export default function InventoryScreen() {
 
   const useItem = async () => {
     if (!selectedItem || !selectedHero) return;
+    // Pack 91 — blocca use-exp se manca server selezionato.
+    if (!selected_server_id) {
+      Alert.alert('Seleziona un server', 'Devi prima entrare in un server.', [
+        { text: 'Vai a Server', onPress: () => router.push('/servers' as any) },
+        { text: 'Annulla', style: 'cancel' },
+      ]);
+      return;
+    }
     setActing(true);
     try {
       if (selectedItem.item_id.startsWith('exp_')) {
-        const r = await apiCall('/api/inventory/use-exp', {
+        const qs = `server_id=${encodeURIComponent(selected_server_id)}`;
+        const r = await apiCall(`/api/inventory/use-exp?${qs}`, {
           method: 'POST',
           body: JSON.stringify({
             user_hero_id: selectedHero.id,
@@ -104,7 +138,19 @@ export default function InventoryScreen() {
           `${r.hero_name}: +${r.exp_gained?.toLocaleString()} EXP${r.leveled_up ? `\nLv.${r.old_level} \u2192 Lv.${r.new_level}` : ''}`
         );
       }
-    } catch (e: any) { Alert.alert('Errore', e.message); }
+    } catch (e: any) {
+      const msg = e?.message || '';
+      if (msg.includes('SERVER_ID_REQUIRED')) {
+        Alert.alert('Server richiesto', 'Operazione bloccata: server non selezionato.');
+      } else if (msg.includes('PLAYER_SERVER_PROFILE_REQUIRED')) {
+        Alert.alert('Profilo server mancante', 'Devi prima creare il profilo per questo server.', [
+          { text: 'Vai a Server', onPress: () => router.push('/servers' as any) },
+          { text: 'Annulla', style: 'cancel' },
+        ]);
+      } else {
+        Alert.alert('Errore', msg || 'Errore di rete');
+      }
+    }
     finally { setActing(false); }
   };
 
@@ -126,6 +172,21 @@ export default function InventoryScreen() {
         }
       />
       <TabSelector tabs={TABS} active={tab} onChange={setTab} accentColor={COLORS.gold} />
+
+      {/* Pack 91 — blocker UI server-scope (no silent s1, no account-wide fallback) */}
+      {serverBlocker && (
+        <View style={s.scopeBanner}>
+          <Text style={s.scopeBannerIcon}>{'\u26A0\uFE0F'}</Text>
+          <Text style={s.scopeBannerTxt}>
+            {serverBlocker === 'NO_SERVER_SELECTED' && 'Nessun server selezionato — entra in un server per vedere l\'inventario.'}
+            {serverBlocker === 'PLAYER_SERVER_PROFILE_REQUIRED' && 'Profilo server mancante — vai alla schermata server per crearlo.'}
+            {serverBlocker === 'SERVER_ID_REQUIRED' && 'Server richiesto — operazione bloccata.'}
+          </Text>
+          <TouchableOpacity onPress={() => router.push('/servers' as any)} style={s.scopeBannerBtn}>
+            <Text style={s.scopeBannerBtnTxt}>SERVER</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <ScrollView contentContainerStyle={s.grid}>
         {filtered.length === 0 && (
@@ -286,4 +347,10 @@ const s = StyleSheet.create({
   heroOptName: { color: '#fff', fontSize: 10, fontWeight: '700', maxWidth: 80 },
   heroOptLvl: { color: COLORS.textMuted, fontSize: 8 },
   modalBtns: { flexDirection: 'row', gap: 10, marginTop: 12, justifyContent: 'center' },
+  // Pack 91 — server scope banner
+  scopeBanner: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12, paddingVertical: 10, marginHorizontal: 8, marginTop: 8, borderRadius: 8, backgroundColor: 'rgba(255,165,0,0.10)', borderWidth: 1, borderColor: 'rgba(255,165,0,0.45)' },
+  scopeBannerIcon: { fontSize: 16 },
+  scopeBannerTxt: { flex: 1, color: '#FFD089', fontSize: 11, lineHeight: 15, fontWeight: '600' },
+  scopeBannerBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 6, backgroundColor: 'rgba(255,215,0,0.18)', borderWidth: 1, borderColor: 'rgba(255,215,0,0.4)' },
+  scopeBannerBtnTxt: { color: COLORS.gold, fontSize: 10, fontWeight: '900', letterSpacing: 0.5 },
 });

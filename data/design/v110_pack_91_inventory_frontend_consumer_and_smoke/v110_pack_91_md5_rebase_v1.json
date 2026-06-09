@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "track": "M",
+  "backend_runtime_files_modified": [],
+  "frontend_runtime_files_modified": [
+    "frontend/app/item-shop.tsx",
+    "frontend/app/inventory.tsx"
+  ],
+  "md5_rebase_chain": [
+    {
+      "file": "backend/routes/items.py",
+      "md5_unchanged_from_pack_90": true,
+      "md5": "f887c3ce5eea0a847a1d9a05ae9e2aa5",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    }
+  ],
+  "frontend_md5_tracked": false,
+  "frontend_md5_note": "Nessuna baseline MD5 frontend mantenuta in /app/data/design/. La migration Pack 91 e' verificata via grep statico (frontend_static_regression_guard) + real mutating smoke E2E. Nessun fake_PASS, nessun validator weakening.",
+  "historical_reference": [
+    "Pack 90 strict inventory write paths server-scoped (items.py 86ed0118 -> f887c3ce) preserved",
+    "Pack 89 GET inventory strict server-scoped preserved",
+    "Pack 88/87/86/85/84 invariants preserved"
+  ]
+}

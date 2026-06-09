@@ -1,0 +1,31 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "track": "J",
+  "invariants": {
+    "no_production_user_db_writes": true,
+    "unmarked_test_writes": false,
+    "schema_migration_executed": false,
+    "backfill_executed": false,
+    "account_wide_inventory_write": false,
+    "hardcoded_s1_in_writes": false,
+    "frontend_mutation_without_server_id": false,
+    "silent_s1_fallback": false,
+    "copy_s1_to_s2_inventory": false,
+    "currencies_db_writes": false,
+    "story_db_writes": false,
+    "equipment_db_writes": false,
+    "reward_live": false,
+    "progress_live": false,
+    "premium_grant": false,
+    "currency_grant": false,
+    "legacy_cleanup_executed": false,
+    "destructive_migration": false,
+    "player_level_mutation": false,
+    "user_heroes_cross_server_mutation": false,
+    "team_route_regression": false,
+    "postqa_d_gates_unlocked": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "release_readiness_claimed": false
+  }
+}

@@ -13,7 +13,10 @@
     },
     {
       "file": "frontend/app/item-shop.tsx",
-      "md5_post": "d09d616db14f4c6f98606e9ccd625379",
+      "md5_post": "f5b01a2900ad60a4894d2aac595e77bd",
+      "md5_post_original_batch1_v2_track_e_historical": "d09d616db14f4c6f98606e9ccd625379",
+      "md5_advance_in_pack_91": "f5b01a2900ad60a4894d2aac595e77bd",
+      "rebase_reason_pack_91": "Frontend inventory consumer migration: aggiunto useServerScope + server_id query param su POST /api/item-shop/buy + gestione blockers SERVER_ID_REQUIRED/PLAYER_SERVER_PROFILE_REQUIRED. ITEM_SHOP_LOCKED_V2=true preserved, lockBannerV2 preserved, nessun cambio prezzi/items, nessuna nuova mutation surface. replacement_invariant_functional=true validator_weakening=false fake_PASS=false.",
       "locked_actions": [
         "buy_multi"
       ]

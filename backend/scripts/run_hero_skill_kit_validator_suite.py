@@ -3980,6 +3980,25 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-89-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_89_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-89-INVENTORY-PSP-SCOPED-ROLLUP', 'validate_mega_release_acceleration_89_inventory_psp_scoped_rollup.py'),
 
+    # Pack 91 — Inventory frontend consumer migration + real mutating smoke.
+    # 15 track + 1 rollup = 16 nuove validator track.
+    ('PROJECT-V110-PACK-91-BASELINE-MULTIRUN', 'validate_v110_pack_91_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-91-FRONTEND-MUTATION-CONSUMER-AUDIT', 'validate_v110_pack_91_frontend_mutation_consumer_audit.py'),
+    ('PROJECT-V110-PACK-91-SELECTED-SERVER-SOURCE-ADOPTION', 'validate_v110_pack_91_selected_server_source_adoption.py'),
+    ('PROJECT-V110-PACK-91-ITEM-SHOP-FRONTEND-MIGRATION', 'validate_v110_pack_91_item_shop_frontend_migration.py'),
+    ('PROJECT-V110-PACK-91-INVENTORY-USE-EXP-FRONTEND-MIGRATION', 'validate_v110_pack_91_inventory_use_exp_frontend_migration.py'),
+    ('PROJECT-V110-PACK-91-SKILL-UPGRADE-FRONTEND-MIGRATION', 'validate_v110_pack_91_skill_upgrade_frontend_migration.py'),
+    ('PROJECT-V110-PACK-91-BACKEND-REGRESSION-GUARD', 'validate_v110_pack_91_backend_regression_guard.py'),
+    ('PROJECT-V110-PACK-91-REAL-MUTATING-SMOKE-E2E', 'validate_v110_pack_91_real_mutating_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-91-FRONTEND-STATIC-REGRESSION-GUARD', 'validate_v110_pack_91_frontend_static_regression_guard.py'),
+    ('PROJECT-V110-PACK-91-DATA-INVARIANTS', 'validate_v110_pack_91_data_invariants.py'),
+    ('PROJECT-V110-PACK-91-CLEANUP-ROLLBACK', 'validate_v110_pack_91_cleanup_rollback.py'),
+    ('PROJECT-V110-PACK-91-LIVE-READINESS-UPDATE', 'validate_v110_pack_91_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-91-MD5-REBASE', 'validate_v110_pack_91_md5_rebase.py'),
+    ('PROJECT-V110-PACK-91-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_91_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-91-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_91_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-91-INVENTORY-FRONTEND-CONSUMER-MIGRATION-AND-MUTATING-SMOKE-ROLLUP', 'validate_mega_release_acceleration_91_inventory_frontend_consumer_migration_and_mutating_smoke_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

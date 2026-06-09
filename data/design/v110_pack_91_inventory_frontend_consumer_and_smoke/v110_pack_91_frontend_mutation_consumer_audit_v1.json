@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "track": "B",
+  "frontend_inventory_mutation_callers": [
+    {"file": "frontend/app/item-shop.tsx", "line_hint": 35, "endpoint": "POST /api/item-shop/buy", "pre_pack_91_passes_server_id": false, "post_pack_91_passes_server_id": true},
+    {"file": "frontend/app/inventory.tsx", "line_hint": 91, "endpoint": "POST /api/inventory/use-exp", "pre_pack_91_passes_server_id": false, "post_pack_91_passes_server_id": true}
+  ],
+  "frontend_inventory_read_callers": [
+    {"file": "frontend/app/inventory.tsx", "endpoint": "GET /api/inventory", "pre_pack_91_passes_server_id": false, "post_pack_91_passes_server_id": true}
+  ],
+  "frontend_skill_upgrade_callers": {
+    "runtime_ui_present": false,
+    "note": "Nessun caller frontend per /api/hero/skills-upgrade o /api/hero/skill-upgrade rilevato in /app/frontend (`grep -rn` zero match esclusi node_modules). La UI runtime skill upgrade non e' wired oggi; il backend e' pronto per quando verra' wired in pack futuro."
+  },
+  "audit_complete": true
+}

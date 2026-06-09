@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_91_INVENTORY_FRONTEND_CONSUMER_MIGRATION_AND_MUTATING_SMOKE",
+  "track": "E",
+  "file": "frontend/app/inventory.tsx",
+  "endpoint_use_exp": "POST /api/inventory/use-exp?server_id=<selectedServerId>",
+  "endpoint_inventory_read": "GET /api/inventory?server_id=<selectedServerId>",
+  "passes_server_id_query_on_use_exp": true,
+  "passes_server_id_query_on_inventory_read": true,
+  "refetch_after_mutation": true,
+  "handles_server_id_required_blocker": true,
+  "handles_player_server_profile_required_blocker": true,
+  "no_silent_s1": true,
+  "target_hero_from_server_scoped_roster": true,
+  "scope_banner_added": true
+}
