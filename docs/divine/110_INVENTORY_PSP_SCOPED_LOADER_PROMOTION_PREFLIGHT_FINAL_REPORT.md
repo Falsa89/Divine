@@ -21,7 +21,7 @@ account-wide nel path player-facing. Master suite 3-run deterministica:
 
 ## Commit Hash
 
-- **Commit hash locale Pack 89:** (popolato post-commit nel finish summary)
+- **Commit hash locale Pack 89:** `e8ecb94fcb0ab78277990a7e802e3ae7343e1d8f`
 - **Commit hash precedente Pack 88:** `d6db1f4cc1deaa1e539510f215ba02bfed31a0d7`
 - **Sync status:** `local_commit_only=true`, `public_push_managed_externally=true`, `no_remote_available=true`
 
