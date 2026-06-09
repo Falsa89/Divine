@@ -1,0 +1,31 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "B",
+  "write_endpoints_audited": [
+    {"endpoint": "POST /api/wallet/spend", "file": "backend/routes/soul_forge.py", "pack_93_action": "NEW strict server-scoped spend (psp.soft_currencies) + ledger idempotency", "production_status": "test-only-safe (no existing production caller)"},
+    {"endpoint": "POST /api/story/battle", "file": "backend/routes/combat.py", "pack_93_action": "server_id-aware guard: blocker STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED if server_id present; legacy path unchanged", "production_status": "legacy unchanged"},
+    {"endpoint": "POST /api/equipment/equip", "file": "backend/routes/equipment.py", "pack_93_action": "server_id-aware guard: blocker EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED if server_id present; legacy path unchanged (already POSTQA_D-gated)", "production_status": "legacy POSTQA_D-gated unchanged"},
+    {"endpoint": "POST /api/equipment/unequip/{equipment_id}", "file": "backend/routes/equipment.py", "pack_93_action": "server_id-aware guard: blocker EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED if server_id present; legacy path unchanged", "production_status": "legacy unchanged"},
+    {"endpoint": "POST /api/item-shop/buy", "file": "backend/routes/items.py", "pack_93_action": "UNCHANGED (Pack 90 strict preserved)", "production_status": "Pack 90 strict"},
+    {"endpoint": "POST /api/inventory/use-exp", "file": "backend/routes/items.py", "pack_93_action": "UNCHANGED (Pack 90 strict preserved)", "production_status": "Pack 90 strict"},
+    {"endpoint": "POST /api/hero/skill-upgrade", "file": "backend/routes/items.py", "pack_93_action": "UNCHANGED (Pack 90 strict preserved)", "production_status": "Pack 90 strict"},
+    {"endpoint": "POST /api/soul-forge/retire", "file": "backend/routes/soul_forge.py", "pack_93_action": "UNCHANGED (account-wide retire history; soft currencies grant mantenuto su wallet legacy; promotion deferred a futuro currency_write strict pack)", "production_status": "legacy unchanged", "deferred_pack_string": "AUTORIZZO_V110_RETIRE_SERVER_SCOPE_WRITE_EXECUTE"},
+    {"endpoint": "POST /api/shops/buy", "file": "backend/routes/soul_forge.py", "pack_93_action": "UNCHANGED (legacy account-wide wallets decrement; promotion deferred)", "production_status": "legacy unchanged", "deferred_pack_string": "AUTORIZZO_V110_SHOPS_BUY_SERVER_SCOPE_WRITE_EXECUTE"},
+    {"endpoint": "POST /api/currency/earn-pvp", "file": "backend/routes/soul_forge.py", "pack_93_action": "UNCHANGED (legacy earn-* paths; reward claim ledger required prima della promotion)", "production_status": "legacy unchanged", "deferred_pack_string": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE"},
+    {"endpoint": "POST /api/currency/earn-guild", "file": "backend/routes/soul_forge.py", "pack_93_action": "UNCHANGED", "production_status": "legacy unchanged"},
+    {"endpoint": "POST /api/currency/earn-mission", "file": "backend/routes/soul_forge.py", "pack_93_action": "UNCHANGED", "production_status": "legacy unchanged"},
+    {"endpoint": "POST /api/currency/earn-dimension", "file": "backend/routes/soul_forge.py", "pack_93_action": "UNCHANGED", "production_status": "legacy unchanged"},
+    {"endpoint": "POST /api/tower/battle", "file": "backend/routes/combat.py", "pack_93_action": "UNCHANGED (legacy tower; reward ledger required prima della promotion)", "production_status": "legacy unchanged"},
+    {"endpoint": "POST /api/pvp/battle", "file": "backend/routes/combat.py", "pack_93_action": "UNCHANGED (legacy pvp; reward ledger required prima della promotion)", "production_status": "legacy unchanged"},
+    {"endpoint": "POST /api/events/battle", "file": "backend/routes/combat.py", "pack_93_action": "UNCHANGED (legacy events; reward ledger required prima della promotion)", "production_status": "legacy unchanged"}
+  ],
+  "reward_claim_path_audited": [
+    {"source": "mail", "endpoint_pattern": "/api/mail/claim", "pack_93_status": "deferred to reward_claim_ledger pack"},
+    {"source": "achievements", "endpoint_pattern": "/api/achievements/claim", "pack_93_status": "deferred"},
+    {"source": "daily", "endpoint_pattern": "/api/daily/claim", "pack_93_status": "deferred"},
+    {"source": "battlepass", "endpoint_pattern": "/api/battlepass/claim", "pack_93_status": "deferred"},
+    {"source": "shop", "endpoint_pattern": "/api/shops/buy", "pack_93_status": "deferred"},
+    {"source": "afk", "endpoint_pattern": "/api/afk/claim", "pack_93_status": "deferred"},
+    {"source": "events", "endpoint_pattern": "/api/events/*/claim", "pack_93_status": "deferred"}
+  ]
+}

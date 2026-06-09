@@ -1,0 +1,25 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "E",
+  "collection": "user_equipment",
+  "baseline_audit": {
+    "docs_total": 31,
+    "docs_with_server_id": 3,
+    "docs_without_server_id": 28,
+    "server_id_coverage_pct": 9.7,
+    "user_id_format": "UUID string (consistent)"
+  },
+  "backfill_executed_in_pack_93": false,
+  "backfill_strategy_designed": {
+    "step_1": "Identify user_id -> server_id mapping via psp lookup (last_login_server or starter_claim_server)",
+    "step_2": "Dry-run report con conteggi per server",
+    "step_3": "Idempotent backfill update (only docs without server_id, $set server_id from PSP)",
+    "step_4": "Verify post-backfill: 100% server_id coverage",
+    "step_5": "Promote loader to strict filter (Pack futuro)",
+    "step_6": "Promote write paths to strict server-scope (Pack futuro)"
+  },
+  "approval_string_proposed_for_backfill_execute": "AUTORIZZO_V110_EQUIPMENT_SERVER_SCOPE_BACKFILL_EXECUTE",
+  "preflight_only": true,
+  "no_execute_in_pack_93": true,
+  "loader_blocker_remains": "EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED"
+}

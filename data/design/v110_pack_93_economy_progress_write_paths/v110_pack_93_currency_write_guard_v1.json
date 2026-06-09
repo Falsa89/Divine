@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "C",
+  "endpoint_new": "POST /api/wallet/spend",
+  "file": "backend/routes/soul_forge.py",
+  "strict_server_scoped": true,
+  "server_id_required": true,
+  "psp_check_required": true,
+  "currency_allowlist_soft_only": ["honor", "guild_points", "prana", "soul_seals", "mission_coins", "dimension_frags", "star_dust"],
+  "hard_currency_blocked_account_wide_unchanged": ["gold", "gems"],
+  "idempotency_token_required": true,
+  "idempotency_token_min_length": 8,
+  "ledger_collection": "wallet_spend_ledger",
+  "audit_trail_marker": "_slc_pack_93_wallet_spend",
+  "mutates_only_psp_soft_currencies": true,
+  "mutates_users_gold_or_gems": false,
+  "no_premium_grant": true,
+  "no_reward_live": true,
+  "no_progress_live": true,
+  "production_caller_status": "no_existing_production_caller_test_only_safe",
+  "false_filter_applied_true": false
+}

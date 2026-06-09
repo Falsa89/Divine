@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "N",
+  "backend_runtime_files_modified": [
+    {"file": "backend/routes/soul_forge.py", "md5_post_pack_93": "48c81f4a13d2cb8535906cedd0a46760", "reason": "NEW POST /api/wallet/spend strict server-scoped + idempotency ledger"},
+    {"file": "backend/routes/combat.py", "md5_post_pack_93": "24bd64e908af6aca99728b83e7c870b4", "reason": "POST /api/story/battle server_id-aware guard (STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED)"},
+    {"file": "backend/routes/equipment.py", "md5_post_pack_93": "3a0c2d3511b18f3f4931d41ae79d0868", "reason": "POST /api/equipment/equip + /api/equipment/unequip server_id-aware guard (EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED)"}
+  ],
+  "backend_runtime_files_unchanged": [
+    {"file": "backend/routes/items.py", "md5": "f887c3ce5eea0a847a1d9a05ae9e2aa5", "note": "Pack 90 baseline preserved"}
+  ],
+  "replacement_invariant_functional": true,
+  "validator_weakening": false,
+  "fake_PASS": false,
+  "rebase_reason_pack_93": "economy/progress write path strict scope guards (test-only-safe wallet spend + honest deferred blockers su story/equipment)",
+  "historical_reference": [
+    "Pack 92 core server-scope megapack preserved (wallet split, story read, equipment loader deferred)",
+    "Pack 91 frontend consumer migration preserved",
+    "Pack 90 inventory write paths strict preserved",
+    "Pack 89 GET inventory strict preserved",
+    "Pack 88/87/86/85/84 invariants preserved"
+  ]
+}

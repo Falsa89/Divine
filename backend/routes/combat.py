@@ -95,8 +95,26 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
         stage: int = 1
 
     @router.post("/story/battle")
-    async def story_battle(req: StoryBattleRequest, current_user: dict = Depends(get_current_user)):
+    async def story_battle(req: StoryBattleRequest, server_id: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
+        # Pack 93 — server_id-aware story progress write guard.
+        # Se il client passa server_id, blocker onesto: la promozione strict
+        # server-scoped del write path richiede ledger + idempotency + reward
+        # claim ledger autorizzati (vedi docs/divine/116_REWARD_CLAIM_LEDGER_PRELIVE_PLAN.md).
+        # Pack 93 NON esegue write promotion live; legacy path resta invariato.
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            return {
+                "blocker": "STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED",
+                "server_id": sid,
+                "psp_exists": bool(psp),
+                "filter_applied": True,
+                "reward_live": False,
+                "progress_live": False,
+                "_slc_pack_93_story_write_guard": True,
+                "approval_string_proposed": "AUTORIZZO_V110_STORY_PROGRESS_WRITE_STRICT_SCOPE_EXECUTE",
+            }
         chapter = next((c for c in STORY_CHAPTERS if c["id"] == req.chapter_id), None)
         if not chapter:
             raise HTTPException(404, "Capitolo non trovato")

@@ -1,0 +1,13 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "J",
+  "static_guard_rules": [
+    "no inventory write update_one/insert_one without server_id in selector (Pack 90 strict)",
+    "no users.gold/gems write tied to server currency operations (Pack 92 SOT)",
+    "no hardcoded server_id='s1' in any write path",
+    "all psp.soft_currencies writes must use {user_id, server_id} selector",
+    "wallet_spend_ledger writes must include user_id + server_id + idempotency_token"
+  ],
+  "static_grep_violations": 0,
+  "guard_validator_active": true
+}

@@ -232,6 +232,105 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
     class RetireHeroRequest(BaseModel):
         user_hero_ids: list  # Can retire multiple at once
 
+    # ==================== PACK 93 — STRICT SERVER-SCOPED WALLET SPEND (TEST-ONLY-SAFE) ====================
+    class WalletSpendRequest(BaseModel):
+        currency: str       # one of soft server-scoped keys (honor, guild_points, prana, soul_seals, mission_coins, dimension_frags, star_dust)
+        amount: int         # positive integer
+        reason: str = "test_only_spend"   # audit string
+        idempotency_token: str = ""       # required for write (Pack 93 ledger pre-live)
+
+    @router.post("/wallet/spend")
+    async def wallet_spend(
+        req: WalletSpendRequest,
+        server_id: str = None,
+        current_user: dict = Depends(get_current_user),
+    ):
+        """
+        Pack 93 — Strict server-scoped wallet spend (test-only-safe).
+
+        - server_id REQUIRED (query param).
+        - PSP existence check obbligatorio (blocker PLAYER_SERVER_PROFILE_REQUIRED).
+        - currency must be in soft server-scoped keys: psp.soft_currencies.
+        - amount > 0 e <= balance corrente; sufficiente per evitare overdraft.
+        - idempotency_token REQUIRED non-vuoto: il pack 93 esegue write SOLO se
+          il token non e' gia' presente nel ledger pre-live `wallet_spend_ledger`.
+          Se gia' presente, ritorna l'esito originale (idempotency).
+        - Mutazione: SOLO `psp.soft_currencies.{currency}` -= amount.
+          NESSUNA mutazione di users.gold/gems (hard/premium account-wide).
+        - NESSUN reward live, NESSUN progress live.
+        - Audit trail: insert ledger entry con marker `_slc_pack_93_wallet_spend`.
+        """
+        uid = current_user["id"]
+        # 1) server_id REQUIRED
+        if not server_id or not isinstance(server_id, str) or not server_id.strip():
+            raise HTTPException(400, "SERVER_ID_REQUIRED")
+        sid = server_id.strip()
+        # 2) PSP check
+        psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+        if not psp:
+            raise HTTPException(409, "PLAYER_SERVER_PROFILE_REQUIRED")
+        # 3) Currency in soft server-scoped allow-list
+        SOFT_KEYS = {"honor", "guild_points", "prana", "soul_seals", "mission_coins", "dimension_frags", "star_dust"}
+        if req.currency not in SOFT_KEYS:
+            raise HTTPException(400, "CURRENCY_NOT_SOFT_SERVER_SCOPED")
+        # 4) amount > 0
+        if not isinstance(req.amount, int) or req.amount <= 0:
+            raise HTTPException(400, "AMOUNT_INVALID")
+        # 5) idempotency token required
+        if not req.idempotency_token or not isinstance(req.idempotency_token, str) or len(req.idempotency_token) < 8:
+            raise HTTPException(400, "IDEMPOTENCY_TOKEN_REQUIRED")
+        # 6) Ledger idempotency check
+        existing = await db.wallet_spend_ledger.find_one({
+            "user_id": uid,
+            "server_id": sid,
+            "idempotency_token": req.idempotency_token,
+        })
+        if existing:
+            return {
+                "idempotent_replay": True,
+                "server_id": sid,
+                "currency": existing.get("currency"),
+                "amount": existing.get("amount"),
+                "balance_after": existing.get("balance_after"),
+                "pack_93_strict_server_scoped_spend": True,
+            }
+        # 7) Balance check
+        soft = psp.get("soft_currencies") or {}
+        cur_bal = int(soft.get(req.currency, 0) or 0)
+        if cur_bal < req.amount:
+            raise HTTPException(400, f"INSUFFICIENT_BALANCE currency={req.currency} balance={cur_bal} requested={req.amount}")
+        # 8) Real write — SOLO psp.soft_currencies
+        new_bal = cur_bal - req.amount
+        await db.player_server_profiles.update_one(
+            {"user_id": uid, "server_id": sid},
+            {"$set": {f"soft_currencies.{req.currency}": new_bal, "_slc_pack_93_last_wallet_spend": datetime.utcnow()}},
+        )
+        # 9) Ledger insert (audit trail / idempotency)
+        await db.wallet_spend_ledger.insert_one({
+            "id": str(uuid.uuid4()),
+            "user_id": uid,
+            "server_id": sid,
+            "currency": req.currency,
+            "amount": req.amount,
+            "reason": (req.reason or "test_only_spend")[:128],
+            "idempotency_token": req.idempotency_token,
+            "balance_before": cur_bal,
+            "balance_after": new_bal,
+            "created_at": datetime.utcnow(),
+            "_slc_pack_93_wallet_spend": True,
+        })
+        return {
+            "server_id": sid,
+            "currency": req.currency,
+            "amount": req.amount,
+            "balance_before": cur_bal,
+            "balance_after": new_bal,
+            "idempotent_replay": False,
+            "pack_93_strict_server_scoped_spend": True,
+            "reward_live": False,
+            "progress_live": False,
+        }
+
     @router.post("/soul-forge/retire")
     async def retire_heroes(req: RetireHeroRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]

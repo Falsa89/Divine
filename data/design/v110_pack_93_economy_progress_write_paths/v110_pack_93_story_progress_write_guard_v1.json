@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "D",
+  "endpoint": "POST /api/story/battle",
+  "file": "backend/routes/combat.py",
+  "server_id_query_param_added": true,
+  "blocker_when_server_id_present": "STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED",
+  "reason_for_deferral": "Story battle endpoint muta users.gold/gems + db.story_progress + user_equipment legacy. Promotion strict server-scoped richiede reward claim ledger live + idempotency + battle integrity audit. Pack 93 NON esegue write promotion live.",
+  "legacy_path_unchanged": true,
+  "no_battle_engine_rewrite": true,
+  "no_battle_simulate_from_staging_or_live": true,
+  "no_reward_live": true,
+  "no_progress_live": true,
+  "false_filter_applied_true": false,
+  "approval_string_proposed": "AUTORIZZO_V110_STORY_PROGRESS_WRITE_STRICT_SCOPE_EXECUTE"
+}

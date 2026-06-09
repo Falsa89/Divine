@@ -2,13 +2,38 @@
   "pack": "MEGA_RELEASE_ACCELERATION_92_CORE_SERVER_SCOPE_MEGAPACK",
   "track": "N",
   "backend_runtime_files_modified": [
-    {"file": "backend/routes/soul_forge.py", "md5_post_pack_92": "0bf5e5b493c1503819d2d9e3831cc058", "reason": "Wallet split server-scope (server_id query param, psp.soft_currencies real split, legacy flagged)."},
-    {"file": "backend/routes/combat.py", "md5_post_pack_92": "d0b16edd17ba8a8cd50960caacfd12fa", "reason": "Story chapters loader server-scope guard (server_id query param, psp.story_progress real filter, no DB write strict path)."},
-    {"file": "backend/routes/equipment.py", "md5_post_pack_92": "54867dda3ea4ac58da4fad0ab402123b", "reason": "Equipment loader honest deferred blocker (server_id query param, EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED, migration required)."}
+    {
+      "file": "backend/routes/soul_forge.py",
+      "md5_post_pack_92": "48c81f4a13d2cb8535906cedd0a46760",
+      "reason": "Wallet split server-scope (server_id query param, psp.soft_currencies real split, legacy flagged).",
+      "md5_post_pack_92_pre_pack_93_historical": "0bf5e5b493c1503819d2d9e3831cc058",
+      "advanced_in_pack_93_reason": "Pack 93 economy/progress write path strict scope guards added (server_id-aware blockers + wallet_spend strict). Pack 92 invariants preserved."
+    },
+    {
+      "file": "backend/routes/combat.py",
+      "md5_post_pack_92": "24bd64e908af6aca99728b83e7c870b4",
+      "reason": "Story chapters loader server-scope guard (server_id query param, psp.story_progress real filter, no DB write strict path).",
+      "md5_post_pack_92_pre_pack_93_historical": "d0b16edd17ba8a8cd50960caacfd12fa",
+      "advanced_in_pack_93_reason": "Pack 93 economy/progress write path strict scope guards added (server_id-aware blockers + wallet_spend strict). Pack 92 invariants preserved."
+    },
+    {
+      "file": "backend/routes/equipment.py",
+      "md5_post_pack_92": "3a0c2d3511b18f3f4931d41ae79d0868",
+      "reason": "Equipment loader honest deferred blocker (server_id query param, EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED, migration required).",
+      "md5_post_pack_92_pre_pack_93_historical": "54867dda3ea4ac58da4fad0ab402123b",
+      "advanced_in_pack_93_reason": "Pack 93 economy/progress write path strict scope guards added (server_id-aware blockers + wallet_spend strict). Pack 92 invariants preserved."
+    }
   ],
   "backend_runtime_files_unchanged": [
-    {"file": "backend/routes/items.py", "md5": "f887c3ce5eea0a847a1d9a05ae9e2aa5", "note": "Pack 90 baseline preserved"},
-    {"file": "backend/server.py", "note": "Pack 81/85/86/87 invariants preserved"}
+    {
+      "file": "backend/routes/items.py",
+      "md5": "f887c3ce5eea0a847a1d9a05ae9e2aa5",
+      "note": "Pack 90 baseline preserved"
+    },
+    {
+      "file": "backend/server.py",
+      "note": "Pack 81/85/86/87 invariants preserved"
+    }
   ],
   "frontend_runtime_files_modified": [
     "frontend/app/(tabs)/heroes.tsx",
@@ -25,11 +50,49 @@
   "fake_PASS": false,
   "rebase_reason_pack_92": "core server-scope frontend/loader sweep (currencies/story/equipment loader guards + frontend server_id sweep)",
   "secondary_md5_rebases_required_by_authorized_runtime_changes": [
-    {"file": "frontend/app/soul-forge.tsx", "from_historical": "fe4efcdeb60c69e8827f914cf0ac8e4c", "to_post_pack_92": "58f24f4aac0664460f03ee566d1942c0", "design_jsons_updated": ["soul_forge/inline_confirm_track_b_modal_removed_v1", "soul_forge/emergency_restore_track_b_visible_screen_v1", "soul_forge/forge_crash_track_b_response_normalization_v1", "audit/batch1_v2/track_d_soul_forge_guard_v1", "audit/sf_merge/track_b_mobile_reachability_v1", "audit/alignment_fix/track_b_soul_forge_fix_v1", "testing/beta_testing_track_c_soul_forge_regression_v1", "closed_alpha/v100_runtime_md5_baseline_v1"], "reason": "Pack 92 frontend sweep: useServerScope import + server_id propagato a /api/user/heroes e /api/wallet. Nessun cambio funzionale a forge/upgrade/fuse logica; nessuna nuova mutation surface. SoulForge EMERGENCY_RESTORE/lock/UI invariants preserved."},
-    {"file": "frontend/app/story.tsx", "from_historical": "6ce181dd4db0eac129e3d4cf0e2154a8", "to_post_pack_92": "77144cd718cd2c6cd222637be3ff7f2d", "design_jsons_updated": ["battle_launch/v108_pre_combat_story_md5_forensic_audit_v1", "battle_launch/v108_pre_combat_story_md5_supersede_review_v1", "closed_alpha/v100_runtime_md5_baseline_v1"], "reason": "Pack 92 frontend sweep: useServerScope + server_id propagato a /api/story/chapters. Nessun cambio battle/story UI logic. v108 PRE_COMBAT_STORY MD5 sentinel preservata semantica (story first-node runtime preview screen invariata)."},
-    {"file": "frontend/app/equipment.tsx", "from_historical": "2a77383ab2b0ca6b8de442e857c5c1aa", "to_post_pack_92": "f04050a49204c890a2d352c43681e27c", "design_jsons_updated": ["closed_alpha/v100_runtime_md5_baseline_v1"], "reason": "Pack 92 frontend sweep: useServerScope + server_id propagato a /api/user/equipment e /api/user/heroes; gestione blocker EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED. Nessun cambio equipment.tsx UI logic per equip/unequip/forge (POSTQA_D lock preserved)."}
+    {
+      "file": "frontend/app/soul-forge.tsx",
+      "from_historical": "fe4efcdeb60c69e8827f914cf0ac8e4c",
+      "to_post_pack_92": "58f24f4aac0664460f03ee566d1942c0",
+      "design_jsons_updated": [
+        "soul_forge/inline_confirm_track_b_modal_removed_v1",
+        "soul_forge/emergency_restore_track_b_visible_screen_v1",
+        "soul_forge/forge_crash_track_b_response_normalization_v1",
+        "audit/batch1_v2/track_d_soul_forge_guard_v1",
+        "audit/sf_merge/track_b_mobile_reachability_v1",
+        "audit/alignment_fix/track_b_soul_forge_fix_v1",
+        "testing/beta_testing_track_c_soul_forge_regression_v1",
+        "closed_alpha/v100_runtime_md5_baseline_v1"
+      ],
+      "reason": "Pack 92 frontend sweep: useServerScope import + server_id propagato a /api/user/heroes e /api/wallet. Nessun cambio funzionale a forge/upgrade/fuse logica; nessuna nuova mutation surface. SoulForge EMERGENCY_RESTORE/lock/UI invariants preserved."
+    },
+    {
+      "file": "frontend/app/story.tsx",
+      "from_historical": "6ce181dd4db0eac129e3d4cf0e2154a8",
+      "to_post_pack_92": "77144cd718cd2c6cd222637be3ff7f2d",
+      "design_jsons_updated": [
+        "battle_launch/v108_pre_combat_story_md5_forensic_audit_v1",
+        "battle_launch/v108_pre_combat_story_md5_supersede_review_v1",
+        "closed_alpha/v100_runtime_md5_baseline_v1"
+      ],
+      "reason": "Pack 92 frontend sweep: useServerScope + server_id propagato a /api/story/chapters. Nessun cambio battle/story UI logic. v108 PRE_COMBAT_STORY MD5 sentinel preservata semantica (story first-node runtime preview screen invariata)."
+    },
+    {
+      "file": "frontend/app/equipment.tsx",
+      "from_historical": "2a77383ab2b0ca6b8de442e857c5c1aa",
+      "to_post_pack_92": "f04050a49204c890a2d352c43681e27c",
+      "design_jsons_updated": [
+        "closed_alpha/v100_runtime_md5_baseline_v1"
+      ],
+      "reason": "Pack 92 frontend sweep: useServerScope + server_id propagato a /api/user/equipment e /api/user/heroes; gestione blocker EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED. Nessun cambio equipment.tsx UI logic per equip/unequip/forge (POSTQA_D lock preserved)."
+    }
   ],
-  "rebase_safety": {"replacement_invariant_functional": true, "validator_weakening": false, "fake_PASS": false, "historical_references_preserved": true},
+  "rebase_safety": {
+    "replacement_invariant_functional": true,
+    "validator_weakening": false,
+    "fake_PASS": false,
+    "historical_references_preserved": true
+  },
   "historical_reference": [
     "Pack 91 frontend inventory consumer migration preserved",
     "Pack 90 inventory write paths strict preserved",

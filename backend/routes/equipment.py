@@ -72,8 +72,23 @@ def register_equipment_routes(router, db, get_current_user, serialize_doc, calcu
             )
         ],
     )
-    async def equip_item(req: EquipRequest, current_user: dict = Depends(get_current_user)):
+    async def equip_item(req: EquipRequest, server_id: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
+        # Pack 93 — server_id-aware write guard. user_equipment schema mixed
+        # (server_id presente solo ~10% dei docs). Promozione strict richiede
+        # backfill autorizzato. Se il client passa server_id, blocker onesto.
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            return {
+                "blocker": "EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED",
+                "server_id": sid,
+                "psp_exists": bool(psp),
+                "migration_required": True,
+                "filter_applied": True,
+                "_slc_pack_93_equipment_write_guard": True,
+                "approval_string_proposed": "AUTORIZZO_V110_EQUIPMENT_SERVER_SCOPE_BACKFILL_EXECUTE",
+            }
         equip = await db.user_equipment.find_one({"id": req.equipment_id, "user_id": uid})
         if not equip:
             raise HTTPException(404, "Equipaggiamento non trovato")
@@ -90,9 +105,23 @@ def register_equipment_routes(router, db, get_current_user, serialize_doc, calcu
         return {"success": True}
 
     @router.post("/equipment/unequip/{equipment_id}")
-    async def unequip_item(equipment_id: str, current_user: dict = Depends(get_current_user)):
+    async def unequip_item(equipment_id: str, server_id: str = None, current_user: dict = Depends(get_current_user)):
+        uid = current_user["id"]
+        # Pack 93 — server_id-aware unequip guard (vedi commento su equip).
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            return {
+                "blocker": "EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED",
+                "server_id": sid,
+                "psp_exists": bool(psp),
+                "migration_required": True,
+                "filter_applied": True,
+                "_slc_pack_93_equipment_write_guard": True,
+                "approval_string_proposed": "AUTORIZZO_V110_EQUIPMENT_SERVER_SCOPE_BACKFILL_EXECUTE",
+            }
         await db.user_equipment.update_one(
-            {"id": equipment_id, "user_id": current_user["id"]},
+            {"id": equipment_id, "user_id": uid},
             {"$unset": {"equipped_to": ""}}
         )
         return {"success": True}

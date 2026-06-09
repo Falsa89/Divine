@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "G",
+  "design_doc": "docs/divine/116_REWARD_CLAIM_LEDGER_PRELIVE_PLAN.md",
+  "ledger_collection_designed": "reward_claim_ledger",
+  "indices_designed": [
+    "{user_id:1, server_id:1, claim_key:1} UNIQUE",
+    "{user_id:1, server_id:1, idempotency_token:1} UNIQUE",
+    "{applied_at:1}"
+  ],
+  "claim_sources_documented": ["mail", "achievements", "daily", "battlepass", "shop", "story", "battle", "afk", "event"],
+  "live_in_pack_93": false,
+  "reward_live": false,
+  "approval_string_proposed_for_live_execute": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE",
+  "wallet_spend_ledger_live_in_pack_93": true,
+  "wallet_spend_ledger_collection": "wallet_spend_ledger",
+  "wallet_spend_ledger_scope": "server-scoped spend only (psp.soft_currencies decrement). No reward grant. Test-only-safe."
+}

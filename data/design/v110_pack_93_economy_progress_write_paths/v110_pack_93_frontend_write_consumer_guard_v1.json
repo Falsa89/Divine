@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
+  "track": "H",
+  "frontend_write_consumer_audit": [
+    {"endpoint": "POST /api/wallet/spend", "frontend_callers_present": false, "reason": "NEW endpoint Pack 93; nessun caller frontend (test-only-safe). Adozione frontend deferita a futuro pack quando il path sarà esposto al player."},
+    {"endpoint": "POST /api/story/battle", "frontend_caller": "frontend/app/story.tsx", "frontend_passes_server_id": false, "frontend_action": "NOT migrated in Pack 93 (intenzionalmente): se il frontend passasse server_id il backend ritorna blocker STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED \u2192 la UI mostrerebbe errore. Il path legacy resta funzionante per gli utenti finch\u00e9 il reward claim ledger non viene promosso live.", "deferred_to_future_pack": true},
+    {"endpoint": "POST /api/equipment/equip", "frontend_caller": "frontend/app/equipment.tsx (POSTQA_D-locked UI)", "frontend_passes_server_id": false, "frontend_action": "UI gi\u00e0 POSTQA_D-locked (lock UI safe). Pack 93 backend blocker EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED operativo se mai chiamato con server_id.", "deferred_to_future_pack": true},
+    {"endpoint": "POST /api/equipment/unequip/{id}", "frontend_caller": "frontend/app/equipment.tsx (POSTQA_D-locked UI)", "frontend_passes_server_id": false, "frontend_action": "vedi sopra", "deferred_to_future_pack": true}
+  ],
+  "pack_91_inventory_frontend_consumer_migration_preserved": true,
+  "pack_92_frontend_server_id_sweep_preserved": true,
+  "silent_s1_fallback": false,
+  "no_account_wide_fallback_for_server_bound_writes": true,
+  "frontend_static_guard_pack_92_preserved": true
+}
