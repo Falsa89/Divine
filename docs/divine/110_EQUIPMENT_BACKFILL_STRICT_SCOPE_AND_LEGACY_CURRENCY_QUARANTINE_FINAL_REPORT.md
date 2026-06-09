@@ -209,7 +209,10 @@ no_remote_available = true
 
 ## 22. Post-script — commit hash
 ```
-commit_hash = <da inserire dopo `git commit`>
+commit_hash = 2720ec92e313f79d0ed28839f08258b3dc03a031
+local_commit_only = true
+public_push_managed_externally = true
+no_remote_available = true
 ```
 
 *Fine report Pack 94.*
