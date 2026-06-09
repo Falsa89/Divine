@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-09T18:24:26.281722+00:00",
+  "timestamp_utc": "2026-06-09T19:40:37.597559+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2109,
+  "backend_python_files_scanned": 2127,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1098,
+      "files_with_hits": 1105,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -141,11 +141,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 138
+      "user_id_only_files_count": 139
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 288,
+      "files_with_hits": 292,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -257,11 +257,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 20
+      "user_id_only_files_count": 21
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 412,
+      "files_with_hits": 430,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -357,11 +357,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 77
+      "user_id_only_files_count": 78
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 194,
+      "files_with_hits": 197,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -637,7 +637,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 295,
+      "files_with_hits": 298,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -1484,7 +1484,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 413,
+  "cross_server_leak_risk_candidates_count": 416,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
