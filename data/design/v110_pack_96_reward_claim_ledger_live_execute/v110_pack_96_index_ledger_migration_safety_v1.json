@@ -1,0 +1,13 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "track": "K",
+  "collection": "reward_claim_ledger",
+  "indices_managed": [
+    {"name": "ux_user_server_idem_token_pack96", "fields": ["user_id", "server_id", "idempotency_token"], "unique": true, "idempotent_creation": true},
+    {"name": "ix_applied_at_pack96", "fields": ["applied_at"], "unique": false, "idempotent_creation": true}
+  ],
+  "destructive_drop_disallowed": true,
+  "duplicate_conflict_handling": "DuplicateKey errors propagated and ledger insert returns idempotent_replay with compensating reverse-$inc if grant already applied in same call",
+  "index_creation_method": "motor.create_index with background=True",
+  "no_force_drop_existing_index": true
+}

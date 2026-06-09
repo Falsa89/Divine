@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "track": "O",
+  "files_added": [
+    "backend/utils/reward_source_registry.py",
+    "backend/routes/reward_claim.py"
+  ],
+  "files_modified": [
+    "backend/routes/__init__.py",
+    "backend/game_systems.py"
+  ],
+  "reason": "Pack 96 introduce controlled reward claim live endpoint via nuovi file, senza modificare runtime esistente. Suite touched solo per tuple Pack 96.",
+  "no_validator_weakening": true,
+  "no_historical_md5_collision_via_weakening": true,
+  "baseline_signature_preserved": true
+}

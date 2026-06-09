@@ -1,0 +1,23 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "track": "D",
+  "endpoint": "POST /api/rewards/claim",
+  "file": "backend/routes/reward_claim.py",
+  "auth_required": true,
+  "psp_required": true,
+  "server_id_required": true,
+  "idempotency_token_required": true,
+  "min_idempotency_token_length": 8,
+  "source_must_be_allowlisted": true,
+  "replay_check_via_ledger": true,
+  "replay_returns_same_receipt_no_grant": true,
+  "unique_index_protects_concurrent_double_grant": true,
+  "kill_switch_env": "REWARD_CLAIM_LEDGER_LIVE_ENABLED",
+  "kill_switch_default": false,
+  "blocker_when_disabled": "REWARD_CLAIM_LEDGER_LIVE_DISABLED",
+  "approval_received": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_PACK_96",
+  "premium_grants_blocked_pre_grant": true,
+  "writes_only_to_psp_soft_currencies": true,
+  "writes_to_users_gold_gems": false,
+  "writes_account_wide_for_server_bound": false
+}

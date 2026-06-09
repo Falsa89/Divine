@@ -18,6 +18,7 @@ from .achievements import register_achievement_routes
 from .push_notifications import register_push_routes
 from .heroes import register_heroes_routes
 from .sanctuary import register_sanctuary_routes
+from .reward_claim import register_reward_claim_routes
 
 __all__ = [
     'register_equipment_routes',
@@ -38,4 +39,5 @@ __all__ = [
     'register_achievement_routes',
     'register_push_routes',
     'register_sanctuary_routes',
+    'register_reward_claim_routes',
 ]

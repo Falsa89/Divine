@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "track": "C",
+  "file": "backend/utils/reward_source_registry.py",
+  "sources": {
+    "qa_controlled_soft_currency_claim": {
+      "server_scoped": true, "live": true, "grant_fn_name": "grant_soft_currency_to_psp",
+      "idempotency": "mandatory", "pack_origin": "pack_96",
+      "reward_types": ["gold","honor","guild_points","mission_coins","dimension_frags","prana","soul_seals","star_dust"]
+    },
+    "story_progress_marker_claim": {
+      "server_scoped": true, "live": true, "grant_fn_name": "grant_noop",
+      "idempotency": "mandatory", "pack_origin": "pack_96", "reward_types": []
+    }
+  },
+  "forbidden_reward_types": ["gems", "premium_pull", "standard_pull", "stamina", "experience"],
+  "allowed_soft_currencies": ["gold","honor","guild_points","mission_coins","dimension_frags","prana","soul_seals","star_dust"],
+  "unknown_source_blocker": "REWARD_SOURCE_NOT_ALLOWLISTED",
+  "premium_grant_blocker": "PREMIUM_GRANT_BLOCKED",
+  "reward_type_not_allowed_blocker": "REWARD_TYPE_NOT_ALLOWED",
+  "per_call_amount_cap": 10000,
+  "no_premium_or_hard_currency_grants": true,
+  "no_hero_equipment_grants_in_pack_96": true
+}

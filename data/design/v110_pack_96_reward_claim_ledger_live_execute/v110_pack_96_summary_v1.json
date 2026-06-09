@@ -1,0 +1,62 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "verdict": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "approval_received": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_PACK_96",
+  "baseline_pre": {"pass": 1539, "fail": 34, "miss": 0},
+  "final_post": null,
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "reward_live_general": false,
+    "premium_grant": false,
+    "iap_store_payment_change": false,
+    "gacha_change": false,
+    "broad_production_reward_grants": false,
+    "unmarked_test_writes": false,
+    "legacy_cleanup_general_execute": false,
+    "destructive_migration": false,
+    "account_wide_server_bound_reward_grant": false,
+    "hardcoded_s1_in_pack_96_active_paths": false,
+    "reward_source_outside_allowlist_grants_possible": false,
+    "double_reward_grant_possible": false,
+    "users_gold_gems_grant_in_claim_path": false,
+    "destructive_index_drop": false,
+    "kill_switch_default_on": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false
+  },
+  "explicit_statements": {
+    "reward_claim_ledger_live_execute_implemented_kill_switch_default_off": true,
+    "controlled_claim_endpoint_live_gated": true,
+    "first_controlled_claim_sources_allowlisted_only": true,
+    "grant_engine_blocks_premium_and_unknown": true,
+    "smoke_e2e_executed_first_claim_replay_unknown_block_premium_block_cross_server": true,
+    "static_anti_bypass_guard_present": true,
+    "unique_index_idempotent_no_destructive_drop": true,
+    "no_reward_live_general": true,
+    "no_premium_hard_currency_grant": true,
+    "no_double_reward_grant": true,
+    "pack_91_inventory_preserved": true,
+    "pack_93_wallet_spend_preserved": true,
+    "pack_94_equipment_strict_preserved": true,
+    "pack_95_story_strict_and_legacy_quarantine_preserved": true,
+    "kill_switch_lifecycle_clean_during_smoke_and_restored": true
+  },
+  "sync_status": {
+    "local_commit_only": true,
+    "public_push_managed_externally": true,
+    "no_remote_available": true
+  },
+  "deferred_blockers": [
+    "Reward live activation generale (richiede approval futura distinta da Pack 96)",
+    "Mail/Achievements/Daily/Battlepass/AFK/Event claim path real sources (richiedono allowlisting + smoke E2E aggiuntivi)",
+    "Frontend reward claim consumer UI unlock (`AUTORIZZO_V110_REWARD_CLAIM_FRONTEND_UNLOCK`)",
+    "Shops buy strict server-scoped execute (`AUTORIZZO_V110_SHOPS_BUY_STRICT_SCOPE_EXECUTE`)",
+    "Soul forge retire strict server-scoped execute (`AUTORIZZO_V110_SOUL_FORGE_RETIRE_STRICT_SCOPE_EXECUTE`)",
+    "Forge upgrade/fuse endpoints implementation",
+    "Frontend equipment UI POSTQA_D unlock",
+    "Legacy cleanup pre-Pack-86 user_heroes"
+  ]
+}

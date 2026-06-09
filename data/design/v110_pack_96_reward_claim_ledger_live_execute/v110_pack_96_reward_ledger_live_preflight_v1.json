@@ -1,0 +1,21 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "track": "B",
+  "collection": "reward_claim_ledger",
+  "index_strategy": {
+    "unique_index_fields": ["user_id", "server_id", "idempotency_token"],
+    "unique_index_name": "ux_user_server_idem_token_pack96",
+    "secondary_index": {"fields": ["applied_at"], "name": "ix_applied_at_pack96", "unique": false},
+    "idempotent_creation": true,
+    "destructive_drop_disallowed": true,
+    "duplicate_conflicts_stop_with_error": true
+  },
+  "runtime_endpoint": "POST /api/rewards/claim",
+  "preflight_endpoint": "POST /api/rewards/claim/preflight",
+  "health_endpoint": "GET /api/rewards/claim/health",
+  "kill_switch_env": "REWARD_CLAIM_LEDGER_LIVE_ENABLED",
+  "kill_switch_default": false,
+  "replay_safe": true,
+  "rollback_strategy": "unset env var or set false -> backend restart -> blocker REWARD_CLAIM_LEDGER_LIVE_DISABLED; ledger rows restano in DB ma nessun nuovo claim possibile",
+  "no_production_grant_during_preflight": true
+}

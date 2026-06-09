@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "track": "F",
+  "grant_engine_rules": {
+    "allowed_targets": ["player_server_profiles.soft_currencies.*"],
+    "disallowed_targets": ["users.gold", "users.gems", "users.experience", "users.stamina", "hero/equipment/inventory direct grants (pack 96 scope)"],
+    "premium_grants_pre_grant_block": true,
+    "premium_blocker": "PREMIUM_GRANT_BLOCKED",
+    "per_amount_cap": 10000,
+    "per_amount_lower_bound": 1
+  },
+  "forbidden_reward_types": ["gems", "premium_pull", "standard_pull", "stamina", "experience"],
+  "allowed_soft_currencies": ["gold","honor","guild_points","mission_coins","dimension_frags","prana","soul_seals","star_dust"],
+  "no_hero_equipment_in_pack_96": true
+}

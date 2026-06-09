@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "track": "J",
+  "static_checks": {
+    "reward_claim_route_kill_switch_default_false": true,
+    "reward_claim_route_has_psp_check": true,
+    "reward_claim_route_has_idempotency_check": true,
+    "reward_claim_route_has_source_registry_lookup": true,
+    "reward_claim_route_has_replay_check_before_grant": true,
+    "reward_claim_route_has_premium_block_before_grant": true,
+    "reward_claim_route_writes_only_psp_soft_currencies": true,
+    "reward_claim_route_does_not_write_users_gold_gems": true,
+    "reward_claim_route_no_hardcoded_s1": true,
+    "registry_has_at_least_two_live_sources": true,
+    "unique_index_definition_present": true,
+    "unique_index_creation_idempotent": true
+  },
+  "fail_conditions_validated": [
+    "if grant path bypasses ledger -> FAIL",
+    "if users.gold/gems written by claim -> FAIL",
+    "if premium/hard currency grant allowed -> FAIL",
+    "if source registry missing -> FAIL",
+    "if unknown source can grant -> FAIL",
+    "if hardcoded s1 in claim route -> FAIL",
+    "if write lacks server_id guard -> FAIL",
+    "if replay can grant twice -> FAIL"
+  ]
+}

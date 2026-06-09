@@ -23,6 +23,7 @@ from routes import (
     register_achievement_routes,
     register_push_routes,
     register_sanctuary_routes,
+    register_reward_claim_routes,
 )
 from routes.synergies import register_synergy_routes
 from routes.server_time import register_server_time_routes
@@ -87,5 +88,9 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
 
     # Server time (no auth required; deriva fase dawn/day/sunset/night per la home)
     register_server_time_routes(router)
+
+    # Pack 96 — Controlled reward claim endpoint (live-gated by env kill switch,
+    # default OFF). Allowlist + ledger replay-safe + premium grants blocked.
+    register_reward_claim_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
     return router
