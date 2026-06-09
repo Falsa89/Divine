@@ -1,0 +1,11 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "I",
+  "frontend_inventory_consumers_audited": [
+    {
+      "note": "Current frontend inventory consumers will pass server_id naturally when they include it in the API call. If they call /api/inventory without server_id, they receive legacy non-player-facing path response which is clearly flagged. Pack 89 backend route signals legacy path via response markers, so frontend can detect and switch to server-scoped calls in future updates."
+    }
+  ],
+  "frontend_files_modified_in_pack_89": [],
+  "reason_no_frontend_changes_required_in_this_pack": "Pack 89 is a BACKEND-ONLY runtime promotion that ADDS strict server-scoped behavior under server_id query param. Existing frontend code calling /api/inventory without server_id continues to work (legacy path flagged). Frontend can opt-in to server-scoped path by passing server_id, which is the next refactor step. No regression introduced."
+}

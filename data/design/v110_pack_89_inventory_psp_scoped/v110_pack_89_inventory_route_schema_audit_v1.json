@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "B",
+  "inventory_routes": [
+    {"path": "GET /api/inventory", "file": "backend/routes/items.py::get_inventory", "pack_89_status": "PROMOTED runtime server-scoped (server_id required for player-facing, legacy path flagged)"},
+    {"path": "POST /api/item-shop/buy", "file": "backend/routes/items.py::buy_item", "pack_89_status": "UNCHANGED (writes server_id 's1' setOnInsert as before; not promoted in this pack — future pack)"},
+    {"path": "POST /api/inventory/use-exp", "file": "backend/routes/items.py::use_exp_item", "pack_89_status": "UNCHANGED (write path — future server-scoped pack)"}
+  ],
+  "inventory_collection_schema": {
+    "collection": "inventory",
+    "fields_present": ["_id", "user_id", "server_id", "item_id", "quantity", "account_id", "_slc_g_commit_marker"],
+    "server_id_already_indexed": "server_id field present on ALL existing docs (10/10 = s1)",
+    "migration_needed_for_read_promotion": false
+  },
+  "read_promotion_safe_now": true,
+  "write_promotion_safe_now": false,
+  "reason_writes_deferred": "Existing writes (item-shop buy, use-exp) still use hardcoded 's1' for setOnInsert server_id. Promoting writes requires explicit currency vs material scope mapping + frontend updates + ensure auto-call. Out of Pack 89 scope."
+}

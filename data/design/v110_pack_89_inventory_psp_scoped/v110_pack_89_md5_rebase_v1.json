@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "M",
+  "runtime_files_modified": [
+    "backend/routes/items.py"
+  ],
+  "md5_rebase_chain": [
+    {
+      "file": "backend/routes/items.py",
+      "to_md5_post_pack_89": "86ed0118090306a92cb4f8b1cb2f8d74",
+      "reason": "Pack 89: /api/inventory GET promoted to STRICT server-scoped read. server_id query param triggers strict filter by (user_id, server_id) with PSP existence check; blockers PLAYER_SERVER_PROFILE_REQUIRED / SERVER_ID_REQUIRED. NO account-wide fallback when server_id present. NO DB writes. Legacy path no-server_id flagged non-player-facing. Other inventory routes (buy/use-exp) UNCHANGED.",
+      "replacement_invariant_functional": true,
+      "validator_weakening": false,
+      "fake_PASS": false
+    }
+  ],
+  "historical_reference": [
+    "Pack 88 v96 team formation strict server-scoped preserved",
+    "Pack 87 starter flow preserved",
+    "Pack 86 register guard + ensure UI preserved",
+    "Pack 85 ensure backend preserved",
+    "Pack 84 PSP physical normalization preserved"
+  ]
+}

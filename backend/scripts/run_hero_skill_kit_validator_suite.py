@@ -3961,6 +3961,25 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-88-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_88_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-88-TEAM-FORMATION-STRICT-SERVER-SCOPE-ROLLUP', 'validate_mega_release_acceleration_88_team_formation_strict_server_scope_rollup.py'),
 
+    # Pack 89 — Inventory PSP-scoped loader promotion (runtime ready).
+    # 15 track + 1 rollup = 16 nuove validator track.
+    ('PROJECT-V110-PACK-89-BASELINE-MULTIRUN', 'validate_v110_pack_89_baseline_multirun.py'),
+    ('PROJECT-V110-PACK-89-INVENTORY-ROUTE-SCHEMA-AUDIT', 'validate_v110_pack_89_inventory_route_schema_audit.py'),
+    ('PROJECT-V110-PACK-89-INVENTORY-SOT', 'validate_v110_pack_89_inventory_sot.py'),
+    ('PROJECT-V110-PACK-89-INVENTORY-DATA-AUDIT', 'validate_v110_pack_89_inventory_data_audit.py'),
+    ('PROJECT-V110-PACK-89-INVENTORY-FEASIBILITY-GATE', 'validate_v110_pack_89_inventory_feasibility_gate.py'),
+    ('PROJECT-V110-PACK-89-ROUTE-GUARD-OR-PROMOTION-RESULT', 'validate_v110_pack_89_route_guard_or_promotion_result.py'),
+    ('PROJECT-V110-PACK-89-FUTURE-MIGRATION-BACKFILL-PLAN', 'validate_v110_pack_89_future_migration_backfill_plan.py'),
+    ('PROJECT-V110-PACK-89-BACKUP-ROLLBACK-PREFLIGHT', 'validate_v110_pack_89_backup_rollback_preflight.py'),
+    ('PROJECT-V110-PACK-89-FRONTEND-INVENTORY-CONSUMER-CHECK', 'validate_v110_pack_89_frontend_inventory_consumer_check.py'),
+    ('PROJECT-V110-PACK-89-RUNTIME-SMOKE-E2E', 'validate_v110_pack_89_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-89-DATA-INVARIANTS', 'validate_v110_pack_89_data_invariants.py'),
+    ('PROJECT-V110-PACK-89-LIVE-READINESS-UPDATE', 'validate_v110_pack_89_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-89-MD5-REBASE', 'validate_v110_pack_89_md5_rebase.py'),
+    ('PROJECT-V110-PACK-89-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_89_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-89-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_89_final_multirun_suite.py'),
+    ('MEGA-RELEASE-ACCELERATION-89-INVENTORY-PSP-SCOPED-ROLLUP', 'validate_mega_release_acceleration_89_inventory_psp_scoped_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

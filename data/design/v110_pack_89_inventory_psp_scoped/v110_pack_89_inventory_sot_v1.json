@@ -1,0 +1,13 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "C",
+  "sot_decision": "Inventory/materiali/items operativi sono SERVER-SCOPED. Con server_id presente, /api/inventory legge SOLO inventory del (user_id, server_id) selezionato. NESSUN fallback account-wide come fonte player-facing finale. NESSUNA copia inventory S1->S2. Nuovo server parte inventory vuoto/default finché onboarding rewards non saranno approvati separatamente.",
+  "server_scoped": true,
+  "player_facing_read_strict": true,
+  "player_facing_requires_server_id": true,
+  "no_account_wide_fallback_when_server_id_present": true,
+  "no_copy_s1_to_s2": true,
+  "new_server_starts_empty": true,
+  "onboarding_rewards_not_granted_in_this_pack": true,
+  "legacy_no_server_id_path": "non-player-facing, flagged with inventory_source=legacy_account_wide_deprecated, legacy_account_inventory_used=true, _slc_pack_89_legacy_path_warning"
+}

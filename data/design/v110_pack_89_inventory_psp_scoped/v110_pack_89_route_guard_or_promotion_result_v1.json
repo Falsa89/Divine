@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "F",
+  "action_taken": "PROMOTION_RUNTIME",
+  "file_modified": "backend/routes/items.py",
+  "route_modified": "GET /api/inventory",
+  "strict_invariants": {
+    "server_id_optional_query_param": true,
+    "server_id_present_filters_strict": true,
+    "server_id_present_psp_missing_blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+    "server_id_blank_blocker": "SERVER_ID_REQUIRED",
+    "server_id_present_no_fallback_to_account_wide": true,
+    "server_id_absent_legacy_non_player_facing_path": true,
+    "no_db_writes": true,
+    "dual_read_uuid_objectid_compat": true,
+    "items_dictionary_lookup_unchanged": true,
+    "item_def_returned_with_server_id_when_strict": true,
+    "filter_applied_true_only_when_strict_path": true,
+    "legacy_account_inventory_used_false_in_strict_path": true
+  },
+  "response_schema_pack_89": {
+    "pack_89_inventory_strict_server_scope": true,
+    "server_id": "<sid> | null",
+    "items": "[item_def + quantity (+ server_id if strict)]",
+    "filter_applied": ["true_strict", "false_legacy"],
+    "inventory_source": ["player_server_scoped", "legacy_account_wide_deprecated", "none"],
+    "legacy_account_inventory_used": [false, true],
+    "blocker": ["PLAYER_SERVER_PROFILE_REQUIRED", "SERVER_ID_REQUIRED", null]
+  }
+}

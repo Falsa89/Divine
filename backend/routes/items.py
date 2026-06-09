@@ -66,9 +66,86 @@ BATTLE_DROPS = [
 def register_items_routes(router, db, get_current_user):
 
     # ============ INVENTORY ============
+    # Pack 89 — Inventory PSP-scoped loader promotion (runtime ready).
+    # Decisione canonica: inventario/materiali/items operativi sono SERVER-SCOPED.
+    # Con server_id presente, /api/inventory ritorna SOLO inventory del
+    # (user_id, server_id) selezionato. NESSUN fallback account-wide come
+    # fonte player-facing finale. NESSUNA copia S1->S2. NESSUNA DB write.
+    # PSP missing -> blocker PLAYER_SERVER_PROFILE_REQUIRED.
+    # Senza server_id: legacy non-player-facing path, flagged.
     @router.get("/inventory")
-    async def get_inventory(current_user: dict = Depends(get_current_user)):
+    async def get_inventory(
+        server_id: Optional[str] = None,
+        current_user: dict = Depends(get_current_user),
+    ):
         user_id = current_user['id']
+        base_response = {
+            "pack_89_inventory_strict_server_scope": True,
+            "server_id": server_id,
+        }
+
+        # ---- Pack 89 STRICT SERVER-SCOPED path ----
+        if server_id:
+            sid = server_id.strip() if isinstance(server_id, str) else ""
+            if not sid:
+                return {
+                    **base_response,
+                    "items": [],
+                    "filter_applied": False,
+                    "inventory_source": "none",
+                    "legacy_account_inventory_used": False,
+                    "blocker": "SERVER_ID_REQUIRED",
+                }
+            # PSP existence check (Pack 85/86): non auto-creare PSP qui (read-only loader)
+            psp = await db.player_server_profiles.find_one(
+                {"user_id": user_id, "server_id": sid}
+            )
+            if not psp:
+                # Dual-read fallback (Pack 82) for legacy PSP with stringified ObjectId
+                try:
+                    user_doc = await db.users.find_one({"id": user_id})
+                    if user_doc:
+                        psp = await db.player_server_profiles.find_one(
+                            {"user_id": str(user_doc.get("_id") or user_doc.get("id")),
+                             "server_id": sid}
+                        )
+                except Exception:
+                    psp = None
+            if not psp:
+                return {
+                    **base_response,
+                    "items": [],
+                    "filter_applied": True,
+                    "inventory_source": "none",
+                    "legacy_account_inventory_used": False,
+                    "blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+                }
+            # STRICT read: only (user_id, server_id) entries. No account-wide leak.
+            inv = await db.inventory.find(
+                {"user_id": user_id, "server_id": sid}
+            ).to_list(length=500)
+            items = []
+            for entry in inv:
+                item_def = EXP_ITEMS.get(entry['item_id']) or SKILL_MATERIALS.get(entry['item_id'])
+                if item_def:
+                    items.append({
+                        "item_id": entry['item_id'],
+                        "quantity": entry.get('quantity', 0),
+                        "server_id": sid,
+                        **item_def,
+                    })
+            return {
+                **base_response,
+                "items": items,
+                "filter_applied": True,
+                "inventory_source": "player_server_scoped",
+                "legacy_account_inventory_used": False,
+                "blocker": None,
+            }
+
+        # ---- Pack 89 LEGACY/COMPAT path (no server_id, non-player-facing) ----
+        # Esposto solo per tool/debug retrocompatibili. NESSUNA promessa di
+        # server-scope. filter_applied=False. Marked legacy.
         inv = await db.inventory.find({"user_id": user_id}).to_list(length=500)
         items = []
         for entry in inv:
@@ -79,7 +156,15 @@ def register_items_routes(router, db, get_current_user):
                     "quantity": entry.get('quantity', 0),
                     **item_def,
                 })
-        return {"items": items}
+        return {
+            **base_response,
+            "items": items,
+            "filter_applied": False,
+            "inventory_source": "legacy_account_wide_deprecated",
+            "legacy_account_inventory_used": True,
+            "blocker": None,
+            "_slc_pack_89_legacy_path_warning": "Non-player-facing path. Player-facing reads MUST include server_id.",
+        }
 
     # ============ ITEM SHOP ============
     @router.get("/item-shop")

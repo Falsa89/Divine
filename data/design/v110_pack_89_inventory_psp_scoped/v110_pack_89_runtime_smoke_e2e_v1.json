@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "J",
+  "results": {
+    "step_1_server_id_psp_missing_blocker": true,
+    "step_2_legacy_path_no_server_id_filter_applied_false": true,
+    "step_3_ensure_psp_inventory_empty_strict_filter_applied_true": true,
+    "step_4_inject_s1_legacy_inventory_entry": true,
+    "step_5_new_sid_inventory_route_no_leak": true,
+    "step_6_cleanup_executed": true
+  },
+  "no_db_writes_to_inventory_in_smoke_promotion_path": true,
+  "inject_step_writes_only_to_test_user_inventory_for_leak_test": true,
+  "cleanup_removes_test_artifacts": true,
+  "verdict": "PACK_89_RUNTIME_SMOKE_E2E_PASS_INVENTORY_STRICT_SERVER_SCOPED_NO_ACCOUNT_WIDE_LEAK_NO_DB_WRITES_IN_PROMOTION_PATH"
+}

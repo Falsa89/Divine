@@ -1,0 +1,14 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "D",
+  "read_only_audit": true,
+  "total_inventory_docs": 10,
+  "docs_with_server_id": 10,
+  "docs_with_null_or_missing_server_id": 0,
+  "distinct_server_ids": ["s1"],
+  "s1_docs": 10,
+  "migration_needed_for_read_promotion": false,
+  "reasoning": "All existing inventory docs already have server_id populated (s1) via SLC-G-COMMIT migration. The /api/inventory read route can be safely promoted to STRICT server-scoped without DB writes/migration: when server_id is provided, filter by (user_id, server_id) returns ONLY that server's entries; for new servers (no PSP yet) the route returns empty + blocker PLAYER_SERVER_PROFILE_REQUIRED; for an existing PSP without inventory on that server (e.g., new starter server), the filter returns [] honestly.",
+  "sample_doc_fingerprint": "_id+user_id+server_id+item_id+quantity+account_id+_slc_g_commit_marker",
+  "no_db_writes_during_audit": true
+}

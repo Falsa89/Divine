@@ -1,0 +1,19 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "E",
+  "feasibility_decision": "PROMOTE_RUNTIME",
+  "reasoning": "Inventory schema already server-scoped (Track D audit). Read promotion safe without DB writes or migration. Pack 89 promotes /api/inventory to strict server-scoped read route. Future write paths (buy/use-exp) remain unchanged (deferred to future pack with explicit authorization).",
+  "feasibility_criteria": {
+    "schema_already_has_server_id": true,
+    "no_migration_needed": true,
+    "no_backfill_needed": true,
+    "no_db_writes_required_in_promotion": true,
+    "smoke_e2e_runtime_verified_strict_server_scope": true,
+    "smoke_e2e_runtime_verified_no_account_wide_leak": true,
+    "smoke_e2e_runtime_verified_filter_applied_true_only_in_strict_path": true
+  },
+  "alternative_paths_evaluated": [
+    {"option": "DEFER_PREFLIGHT_ONLY", "rejected_reason": "Schema already server-scoped, deferring would be over-cautious"},
+    {"option": "PROMOTE_WITH_MIGRATION", "rejected_reason": "No migration needed; all existing docs already have server_id"}
+  ]
+}

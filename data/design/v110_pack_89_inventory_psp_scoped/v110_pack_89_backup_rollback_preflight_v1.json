@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "H",
+  "backup_rollback_strategy": "Read-only route promotion. Rollback is git-revertible without DB impact. NO destructive migration to undo. NO data writes performed in this pack.",
+  "refuse_by_default": true,
+  "dry_run_default": true,
+  "db_state_snapshot_audited": true,
+  "no_irreversible_changes_in_this_pack": true,
+  "cleanup_script": "backend/scripts/cleanup_v110_pack_89_test_artifacts.py",
+  "production_safety": {
+    "refuse_if_target_count_zero": true,
+    "refuse_if_no_explicit_apply_flag": true,
+    "refuse_if_target_appears_real_user": true
+  }
+}

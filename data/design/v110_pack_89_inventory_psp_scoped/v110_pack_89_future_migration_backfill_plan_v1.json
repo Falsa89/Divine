@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_89_INVENTORY_PSP_SCOPED_LOADER_PROMOTION_PREFLIGHT",
+  "track": "G",
+  "future_migration_needed": false,
+  "future_backfill_needed": false,
+  "reason": "All existing inventory docs already have server_id populated (s1). No migration required for read promotion completed in Pack 89.",
+  "future_write_paths_promotion_plan": [
+    {
+      "endpoint": "POST /api/item-shop/buy",
+      "current_writes": "db.inventory.update_one upsert with setOnInsert server_id='s1' (hardcoded)",
+      "future_authorization_string": "AUTORIZZO_V110_INVENTORY_WRITE_PATHS_SERVER_SCOPED_MIGRATION_EXECUTE",
+      "required_changes": [
+        "accept server_id from request (or current selected server)",
+        "setOnInsert server_id=<actual_server_id>",
+        "ensure PSP exists before inserting inventory entry",
+        "frontend updates to pass server_id"
+      ]
+    },
+    {
+      "endpoint": "POST /api/inventory/use-exp",
+      "current_writes": "db.inventory.update_one decrement quantity for (user_id, item_id)",
+      "future_authorization_string": "AUTORIZZO_V110_INVENTORY_WRITE_PATHS_SERVER_SCOPED_MIGRATION_EXECUTE",
+      "required_changes": [
+        "filter by (user_id, server_id, item_id)",
+        "frontend updates to pass server_id"
+      ]
+    }
+  ],
+  "future_legacy_data_cleanup_plan": "Existing inventory docs use server_id='s1'. Future packs may introduce data isolation per server. NO destructive migration planned in Pack 89."
+}
