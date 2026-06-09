@@ -1,0 +1,12 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "F",
+  "endpoint": "/api/shops/buy",
+  "file": "backend/routes/soul_forge.py",
+  "server_id_aware": true,
+  "blocker_when_server_id": "SHOPS_BUY_SERVER_SCOPE_DEFERRED",
+  "reason_for_deferral": "shop buy muta users.gold/gems + db.wallets + db.user_materials + db.user_fragments account-wide; server-scoped richiede wallet_spend_ledger + reward_claim_ledger live",
+  "legacy_unchanged_when_no_server_id": true,
+  "approval_string_proposed_for_strict_promotion": "AUTORIZZO_V110_SHOPS_BUY_STRICT_SCOPE_EXECUTE",
+  "no_account_wide_writes_when_server_id_present": true
+}

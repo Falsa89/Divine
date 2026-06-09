@@ -1,0 +1,26 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "J",
+  "static_checks": {
+    "story_battle_strict_path_does_not_mutate_users_gold_gems_when_server_id": true,
+    "story_battle_strict_path_does_not_mutate_users_story_progress_when_server_id": true,
+    "story_battle_strict_path_requires_idempotency_token": true,
+    "story_battle_strict_path_checks_reward_claim_ledger_for_replay": true,
+    "shops_buy_blocks_when_server_id_present": true,
+    "soul_forge_retire_blocks_when_server_id_present": true,
+    "earn_mission_blocks_when_server_id_present": true,
+    "earn_dimension_blocks_when_server_id_present": true,
+    "earn_pvp_blocks_when_server_id_present_pack_94_preserved": true,
+    "earn_guild_blocks_when_server_id_present_pack_94_preserved": true,
+    "no_hardcoded_s1_in_pack_95_active_paths": true,
+    "no_users_gold_gems_in_pack_95_strict_paths": true,
+    "no_users_story_progress_in_pack_95_strict_path": true
+  },
+  "fail_conditions_validated": [
+    "if reward server-bound writes users.gold/gems -> FAIL",
+    "if story progress server-bound writes users.story_progress -> FAIL",
+    "if reward path lacks ledger or idempotency_token -> FAIL",
+    "if hardcoded s1 in active server-scoped player-facing path -> FAIL",
+    "if retire/shop/earn-mission/earn-dimension permits write without server_id guard -> FAIL"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "P",
+  "runs": [
+    {"run": 1, "pass": 1539, "fail": 34, "miss": 0},
+    {"run": 2, "pass": 1539, "fail": 34, "miss": 0},
+    {"run": 3, "pass": 1539, "fail": 34, "miss": 0}
+  ],
+  "deterministic": true,
+  "miss_zero_all_runs": true,
+  "final_signature": "1539/34/0",
+  "baseline_pre": "1522/34/0",
+  "delta_pass_added": 17,
+  "delta_fail_added": 0,
+  "note": "Pack 95 ha aggiunto 17 PASS (validator individuali + rollup) senza incrementare i FAIL. Determinismo verificato su 3 run consecutivi. Nessun validator weakening."
+}

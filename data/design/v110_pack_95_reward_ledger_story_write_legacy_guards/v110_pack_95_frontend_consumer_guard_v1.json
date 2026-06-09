@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "H",
+  "frontend_strict_consumers_already_passing_server_id": ["/api/user/equipment", "/api/wallet", "/api/inventory"],
+  "frontend_endpoints_with_pack_95_blockers_no_silent_s1": ["/api/shops/buy", "/api/soul-forge/retire", "/api/currency/earn-mission", "/api/currency/earn-dimension"],
+  "story_battle_frontend_consumer": {
+    "endpoint": "/api/story/battle",
+    "server_id_must_be_passed_for_strict": true,
+    "idempotency_token_must_be_passed_for_strict": true,
+    "frontend_unlock_strict_promotion_in_pack_95": false,
+    "reason_frontend_unlock_false": "Pack 95 NON modifica frontend story battle consumer; promotion live UI verra' eseguita in pack futuro con AUTORIZZO_V110_STORY_PROGRESS_FRONTEND_UNLOCK"
+  },
+  "no_false_success_on_blocker": true,
+  "no_silent_s1_for_server_bound_paths": true
+}

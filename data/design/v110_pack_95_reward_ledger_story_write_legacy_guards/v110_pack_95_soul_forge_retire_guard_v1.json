@@ -1,0 +1,12 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "G",
+  "endpoint": "/api/soul-forge/retire",
+  "file": "backend/routes/soul_forge.py",
+  "server_id_aware": true,
+  "blocker_when_server_id": "SOUL_FORGE_RETIRE_SERVER_SCOPE_DEFERRED",
+  "reason_for_deferral": "retire muta user_heroes/user_equipment/user_runes/wallets cross-collection; server-scoped richiede hero selector strict server-bound + reward claim ledger live",
+  "legacy_unchanged_when_no_server_id": true,
+  "approval_string_proposed_for_strict_promotion": "AUTORIZZO_V110_SOUL_FORGE_RETIRE_STRICT_SCOPE_EXECUTE",
+  "no_cross_server_hero_destruction_when_server_id_present": true
+}

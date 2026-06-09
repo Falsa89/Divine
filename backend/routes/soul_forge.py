@@ -332,8 +332,25 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         }
 
     @router.post("/soul-forge/retire")
-    async def retire_heroes(req: RetireHeroRequest, current_user: dict = Depends(get_current_user)):
+    async def retire_heroes(req: RetireHeroRequest, server_id: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
+        # Pack 95 — Soul forge retire quarantine/server-safe guard.
+        # Quando `server_id` viene passato dal client, blocchiamo l'esecuzione con un
+        # blocker onesto: il retire muta cross-collection (user_heroes, user_equipment,
+        # user_runes, wallets) e in modalita' server-scoped richiede ledger live + hero
+        # selector server-bound. Pack 95 NON abilita reward live, percio' rifiutiamo.
+        # Legacy path (no server_id) resta invariato per non rompere ambienti dev.
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            return {
+                "blocker": "SOUL_FORGE_RETIRE_SERVER_SCOPE_DEFERRED",
+                "server_id": sid,
+                "endpoint": "/api/soul-forge/retire",
+                "reason": "retire muta user_heroes/user_equipment/user_runes/wallets cross-collection; server-scoped richiede hero selector strict server-bound + reward claim ledger live",
+                "reward_live": False, "progress_live": False,
+                "_slc_pack_95_soul_forge_retire_quarantine": True,
+                "approval_string_proposed": "AUTORIZZO_V110_SOUL_FORGE_RETIRE_STRICT_SCOPE_EXECUTE",
+            }
         if not req.user_hero_ids:
             raise HTTPException(400, "Seleziona almeno un eroe!")
         total_prana = 0
@@ -434,8 +451,24 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         item_id: str
 
     @router.post("/shops/buy")
-    async def buy_from_shop(req: ShopPurchaseRequest, current_user: dict = Depends(get_current_user)):
+    async def buy_from_shop(req: ShopPurchaseRequest, server_id: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
+        # Pack 95 — Shops buy quarantine/server-safe guard.
+        # Lo shop legacy muta users.gold/gems + db.wallets + db.user_materials + db.user_fragments
+        # account-wide. In modalita' server-scoped servirebbe Pack 93 wallet_spend_ledger + grant
+        # via reward_claim_ledger live (NON abilitato in Pack 95). Rifiutiamo onestamente.
+        # Legacy path (no server_id) resta invariato per ambienti dev.
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            sid = server_id.strip()
+            return {
+                "blocker": "SHOPS_BUY_SERVER_SCOPE_DEFERRED",
+                "server_id": sid,
+                "endpoint": "/api/shops/buy",
+                "reason": "shop buy muta users.gold/gems + db.wallets + db.user_materials + db.user_fragments account-wide; server-scoped richiede wallet_spend_ledger + reward_claim_ledger live",
+                "reward_live": False, "progress_live": False,
+                "_slc_pack_95_shops_buy_quarantine": True,
+                "approval_string_proposed": "AUTORIZZO_V110_SHOPS_BUY_STRICT_SCOPE_EXECUTE",
+            }
         shop = ALL_SHOPS.get(req.shop_id)
         if not shop:
             raise HTTPException(404, "Negozio non trovato")
@@ -519,16 +552,26 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
 
     @router.post("/currency/earn-mission")
     async def earn_mission_coins(server_id: str = None, current_user: dict = Depends(get_current_user)):
-        """Award mission coins (legacy)."""
+        """Award mission coins (legacy). Pack 95 — quarantine guard se server_id passato."""
         uid = current_user["id"]
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            return {"blocker": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "server_id": server_id.strip(),
+                    "endpoint": "/api/currency/earn-mission", "filter_applied": True,
+                    "reward_live": False, "_slc_pack_95_legacy_currency_quarantine": True,
+                    "approval_string_proposed": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE"}
         coins = random.randint(5, 15)
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"mission_coins": coins}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"mission_coins_earned": coins}
 
     @router.post("/currency/earn-dimension")
-    async def earn_dimension_frags(current_user: dict = Depends(get_current_user)):
-        """Award dimension fragments from raids."""
+    async def earn_dimension_frags(server_id: str = None, current_user: dict = Depends(get_current_user)):
+        """Award dimension fragments from raids. Pack 95 — quarantine guard se server_id passato."""
         uid = current_user["id"]
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            return {"blocker": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "server_id": server_id.strip(),
+                    "endpoint": "/api/currency/earn-dimension", "filter_applied": True,
+                    "reward_live": False, "_slc_pack_95_legacy_currency_quarantine": True,
+                    "approval_string_proposed": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE"}
         frags = random.randint(5, 25)
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"dimension_frags": frags}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"dimension_frags_earned": frags}

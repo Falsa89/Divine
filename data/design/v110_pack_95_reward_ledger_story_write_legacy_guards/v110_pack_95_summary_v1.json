@@ -1,0 +1,62 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "sentinel": "PUBLIC_SYNC_TAG_v110_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "verdict": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
+  "approval_received": "AUTORIZZO_V110_REWARD_LEDGER_STORY_WRITE_LEGACY_GUARDS_TEST_ONLY_PACK_95",
+  "baseline_pre": {"pass": 1522, "fail": 34, "miss": 0},
+  "final_post": {"pass": 1539, "fail": 34, "miss": 0, "note": "1539/34/0 stabile su 3 run consecutivi finali; nessun FAIL aggiunto rispetto al baseline (+17 PASS)."},
+  "safety_flags": {
+    "fake_PASS": false,
+    "validator_weakening": false,
+    "release_readiness_claimed": false,
+    "reward_live": false,
+    "progress_live": false,
+    "premium_grant": false,
+    "iap_store_payment_change": false,
+    "gacha_change": false,
+    "false_filter_applied_true": false,
+    "false_readiness": false,
+    "account_wide_writes_for_server_bound_data": false,
+    "unmarked_test_writes": false,
+    "destructive_migration": false,
+    "legacy_cleanup_general_execute": false,
+    "postqa_d_gates_unlocked": false,
+    "battle_engine_formula_rewrite": false,
+    "battle_simulate_called_from_staging_or_live": false,
+    "hardcoded_s1_in_pack_95_active_paths": false,
+    "double_reward_grant_possible": false,
+    "account_wide_story_progress_write": false,
+    "users_gold_gems_grant_in_strict_path": false
+  },
+  "explicit_statements": {
+    "reward_claim_ledger_runtime_foundation_implemented": true,
+    "story_progress_write_strict_server_scope_implemented": true,
+    "legacy_currency_quarantine_active": true,
+    "shops_buy_quarantine_active": true,
+    "soul_forge_retire_quarantine_active": true,
+    "smoke_e2e_executed_with_idempotency_replay": true,
+    "static_anti_double_grant_guard_present": true,
+    "no_reward_live_activation_generale": true,
+    "no_premium_hard_currency_grant": true,
+    "no_double_reward_grant": true,
+    "no_account_wide_story_progress_write": true,
+    "pack_91_inventory_preserved": true,
+    "pack_93_wallet_spend_preserved": true,
+    "pack_94_equipment_strict_preserved": true
+  },
+  "sync_status": {
+    "local_commit_only": true,
+    "public_push_managed_externally": true,
+    "no_remote_available": true
+  },
+  "deferred_blockers": [
+    "Reward claim ledger LIVE EXECUTE (richiede AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE)",
+    "Story progress write STRICT PROMOTION frontend (richiede AUTORIZZO_V110_STORY_PROGRESS_FRONTEND_UNLOCK)",
+    "Legacy currency earn-* full strict promotion (richiede reward claim ledger live)",
+    "Shops buy strict server-scoped execute (richiede AUTORIZZO_V110_SHOPS_BUY_STRICT_SCOPE_EXECUTE)",
+    "Soul forge retire strict server-scoped execute (richiede AUTORIZZO_V110_SOUL_FORGE_RETIRE_STRICT_SCOPE_EXECUTE)",
+    "Forge upgrade/fuse endpoints (non implementati; futuro pack)",
+    "Frontend equipment UI POSTQA_D unlock (NON eseguito)",
+    "Legacy cleanup pre-Pack-86 user_heroes account-wide (deferito)"
+  ]
+}

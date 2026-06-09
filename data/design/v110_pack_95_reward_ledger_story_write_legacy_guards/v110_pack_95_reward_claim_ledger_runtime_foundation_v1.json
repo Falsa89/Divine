@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "C",
+  "collection": "reward_claim_ledger",
+  "runtime_file": "backend/routes/combat.py",
+  "idempotency_key_fields": ["user_id", "server_id", "idempotency_token"],
+  "unique_index_safe": true,
+  "replay_safe": true,
+  "no_double_grant": true,
+  "no_reward_live_by_default": true,
+  "audit_fields": ["id", "user_id", "server_id", "claim_source", "claim_key", "idempotency_token", "rewards", "victory", "applied_at", "_slc_pack_95_reward_claim_ledger", "_slc_pack_95_no_live_grant"],
+  "claim_sources_implemented_in_pack_95": ["story"],
+  "claim_sources_documented_for_future": ["mail", "achievements", "daily", "battlepass", "shop", "battle", "afk", "event"],
+  "approval_string_proposed_for_live_grant": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE",
+  "index_creation_runtime": false,
+  "reason_index_creation_runtime_false": "Pack 95 NON forza index creation per evitare schema drift in produzione; ledger insert resta safe perche' check di replay e' fatto via find_one prima di insert."
+}

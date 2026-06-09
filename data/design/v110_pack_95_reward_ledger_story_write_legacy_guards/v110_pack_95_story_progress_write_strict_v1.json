@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "D",
+  "endpoint": "POST /api/story/battle",
+  "file": "backend/routes/combat.py",
+  "server_id_required_for_strict_write": true,
+  "psp_required": true,
+  "idempotency_token_required": true,
+  "min_idempotency_token_length": 8,
+  "writes_when_server_id": ["player_server_profiles.story_progress.completed", "player_server_profiles.story_progress.current_chapter", "player_server_profiles.story_progress.current_stage", "reward_claim_ledger"],
+  "grants_currency_when_server_id": false,
+  "grants_user_gold_gems_when_server_id": false,
+  "writes_to_users_story_progress_when_server_id": false,
+  "replay_idempotent": true,
+  "victory_simulation_only": true,
+  "legacy_path_unchanged_when_no_server_id": true,
+  "approval_received": "AUTORIZZO_V110_REWARD_LEDGER_STORY_WRITE_LEGACY_GUARDS_TEST_ONLY_PACK_95",
+  "no_battle_engine_rewrite": true,
+  "no_battle_simulate_call_from_staging_or_live": true
+}

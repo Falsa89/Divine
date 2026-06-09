@@ -1,0 +1,15 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_95_REWARD_LEDGER_STORY_WRITE_LEGACY_REWARD_CURRENCY_MEGAPACK",
+  "track": "E",
+  "file": "backend/routes/soul_forge.py",
+  "endpoints": [
+    {"endpoint": "/api/currency/earn-mission", "server_id_aware": true, "blocker_when_server_id": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "legacy_unchanged": true, "pack_95_added": true},
+    {"endpoint": "/api/currency/earn-dimension", "server_id_aware": true, "blocker_when_server_id": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "legacy_unchanged": true, "pack_95_added": true},
+    {"endpoint": "/api/currency/earn-pvp", "server_id_aware": true, "blocker_when_server_id": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "pack_94_preserved": true},
+    {"endpoint": "/api/currency/earn-guild", "server_id_aware": true, "blocker_when_server_id": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "pack_94_preserved": true}
+  ],
+  "no_account_wide_write_when_server_id_present": true,
+  "no_users_gold_gems_grant_for_server_bound": true,
+  "no_hardcoded_s1_in_active_player_facing_path_when_server_id": true,
+  "approval_string_proposed_for_strict_promotion": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE"
+}
