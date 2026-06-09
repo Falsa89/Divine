@@ -513,7 +513,7 @@ done
 ## 23. Post-script — commit hash
 
 ```
-commit_hash = <da inserire dopo `git commit`>
+commit_hash = 8cf32a0b407a0a342d28d772d6dbd521c211412e
 local_commit_only = true
 public_push_managed_externally = true
 no_remote_available = true
