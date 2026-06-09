@@ -545,7 +545,7 @@ done
 > commit locale (`git add … && git commit -m "feat(pack-91): …"`).
 
 ```
-commit_hash = <da inserire dopo `git commit`>
+commit_hash = 8d8a1a821e41256f9f13f043ad6b201ab7dc97c3
 local_commit_only = true
 public_push_managed_externally = true
 no_remote_available = true
