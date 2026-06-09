@@ -2,12 +2,32 @@
   "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
   "track": "N",
   "backend_runtime_files_modified": [
-    {"file": "backend/routes/soul_forge.py", "md5_post_pack_93": "48c81f4a13d2cb8535906cedd0a46760", "reason": "NEW POST /api/wallet/spend strict server-scoped + idempotency ledger"},
-    {"file": "backend/routes/combat.py", "md5_post_pack_93": "24bd64e908af6aca99728b83e7c870b4", "reason": "POST /api/story/battle server_id-aware guard (STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED)"},
-    {"file": "backend/routes/equipment.py", "md5_post_pack_93": "3a0c2d3511b18f3f4931d41ae79d0868", "reason": "POST /api/equipment/equip + /api/equipment/unequip server_id-aware guard (EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED)"}
+    {
+      "file": "backend/routes/soul_forge.py",
+      "md5_post_pack_93": "0a84f863f3332bb1dd50dcc537535c87",
+      "reason": "NEW POST /api/wallet/spend strict server-scoped + idempotency ledger",
+      "md5_post_pack_93_pre_pack_94_historical": "48c81f4a13d2cb8535906cedd0a46760",
+      "advanced_in_pack_94_reason": "Pack 94 promozioni: equipment loader/equip/unequip strict server-scoped (post-backfill) + soul_forge legacy currency quarantine guards."
+    },
+    {
+      "file": "backend/routes/combat.py",
+      "md5_post_pack_93": "24bd64e908af6aca99728b83e7c870b4",
+      "reason": "POST /api/story/battle server_id-aware guard (STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED)"
+    },
+    {
+      "file": "backend/routes/equipment.py",
+      "md5_post_pack_93": "0ed1e061a87de79647eb58d513af10a9",
+      "reason": "POST /api/equipment/equip + /api/equipment/unequip server_id-aware guard (EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED)",
+      "md5_post_pack_93_pre_pack_94_historical": "3a0c2d3511b18f3f4931d41ae79d0868",
+      "advanced_in_pack_94_reason": "Pack 94 promozioni: equipment loader/equip/unequip strict server-scoped (post-backfill) + soul_forge legacy currency quarantine guards."
+    }
   ],
   "backend_runtime_files_unchanged": [
-    {"file": "backend/routes/items.py", "md5": "f887c3ce5eea0a847a1d9a05ae9e2aa5", "note": "Pack 90 baseline preserved"}
+    {
+      "file": "backend/routes/items.py",
+      "md5": "f887c3ce5eea0a847a1d9a05ae9e2aa5",
+      "note": "Pack 90 baseline preserved"
+    }
   ],
   "replacement_invariant_functional": true,
   "validator_weakening": false,

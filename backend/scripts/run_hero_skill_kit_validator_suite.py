@@ -4038,6 +4038,11 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-93-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_93_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-93-ECONOMY-PROGRESS-WRITE-PATHS-MEGAPACK-ROLLUP', 'validate_mega_release_acceleration_93_economy_progress_write_paths_megapack_rollup.py'),
 
+    # Pack 94 — Equipment backfill strict scope + legacy currency quarantine.
+    ('PROJECT-V110-PACK-94-BACKFILL-APPLY', 'validate_v110_pack_94_backfill_apply.py'),
+    ('PROJECT-V110-PACK-94-RUNTIME-SMOKE-E2E', 'validate_v110_pack_94_runtime_smoke_e2e.py'),
+    ('MEGA-RELEASE-ACCELERATION-94-EQUIPMENT-BACKFILL-STRICT-SCOPE-AND-LEGACY-CURRENCY-QUARANTINE-ROLLUP', 'validate_mega_release_acceleration_94_equipment_backfill_strict_scope_and_legacy_currency_quarantine_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

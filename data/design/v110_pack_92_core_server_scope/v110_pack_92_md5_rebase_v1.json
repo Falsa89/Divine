@@ -4,10 +4,12 @@
   "backend_runtime_files_modified": [
     {
       "file": "backend/routes/soul_forge.py",
-      "md5_post_pack_92": "48c81f4a13d2cb8535906cedd0a46760",
+      "md5_post_pack_92": "0a84f863f3332bb1dd50dcc537535c87",
       "reason": "Wallet split server-scope (server_id query param, psp.soft_currencies real split, legacy flagged).",
       "md5_post_pack_92_pre_pack_93_historical": "0bf5e5b493c1503819d2d9e3831cc058",
-      "advanced_in_pack_93_reason": "Pack 93 economy/progress write path strict scope guards added (server_id-aware blockers + wallet_spend strict). Pack 92 invariants preserved."
+      "advanced_in_pack_93_reason": "Pack 93 economy/progress write path strict scope guards added (server_id-aware blockers + wallet_spend strict). Pack 92 invariants preserved.",
+      "md5_post_pack_92_pre_pack_94_historical": "48c81f4a13d2cb8535906cedd0a46760",
+      "advanced_in_pack_94_reason": "Pack 94 equipment backfill + strict loader/write promotion + legacy currency quarantine guards."
     },
     {
       "file": "backend/routes/combat.py",
@@ -18,10 +20,12 @@
     },
     {
       "file": "backend/routes/equipment.py",
-      "md5_post_pack_92": "3a0c2d3511b18f3f4931d41ae79d0868",
+      "md5_post_pack_92": "0ed1e061a87de79647eb58d513af10a9",
       "reason": "Equipment loader honest deferred blocker (server_id query param, EQUIPMENT_SERVER_SCOPED_LOADER_PROMOTION_DEFERRED, migration required).",
       "md5_post_pack_92_pre_pack_93_historical": "54867dda3ea4ac58da4fad0ab402123b",
-      "advanced_in_pack_93_reason": "Pack 93 economy/progress write path strict scope guards added (server_id-aware blockers + wallet_spend strict). Pack 92 invariants preserved."
+      "advanced_in_pack_93_reason": "Pack 93 economy/progress write path strict scope guards added (server_id-aware blockers + wallet_spend strict). Pack 92 invariants preserved.",
+      "md5_post_pack_92_pre_pack_94_historical": "3a0c2d3511b18f3f4931d41ae79d0868",
+      "advanced_in_pack_94_reason": "Pack 94 equipment backfill + strict loader/write promotion + legacy currency quarantine guards."
     }
   ],
   "backend_runtime_files_unchanged": [

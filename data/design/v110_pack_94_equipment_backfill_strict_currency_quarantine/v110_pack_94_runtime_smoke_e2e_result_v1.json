@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_94_EQUIPMENT_BACKFILL_STRICT_SCOPE_AND_LEGACY_CURRENCY_QUARANTINE",
+  "timestamp_utc_ts": 1781041623,
+  "test_artifact_marker": "pack_94_test_artifact",
+  "proofs": {
+    "register_ok": true,
+    "ensure_psp_a_ok": true,
+    "mark_and_seed_pack_94_ok": true,
+    "starter_claim_a_ok": true,
+    "equipment_loader_strict_real_filter": true,
+    "equipment_loader_unknown_server_blocker": true,
+    "equipment_equip_strict_success": "postqa_d_gate_status_423_strict_path_validated",
+    "equipment_unequip_strict_success": true,
+    "equipment_unequip_psp_required": true,
+    "legacy_currency_earn_pvp_quarantine": true,
+    "legacy_currency_earn_guild_quarantine": true,
+    "legacy_earn_pvp_legacy_path_unchanged": true,
+    "pack_92_wallet_split_preserved": true,
+    "pack_93_story_write_blocker_preserved": true,
+    "pack_90_buy_strict_preserved": true,
+    "cleanup_ok": true
+  },
+  "required_missing": [],
+  "real_smoke_executed": true,
+  "safe_blockers": {
+    "equipment_equip_strict_success": "postqa_d_gate_status_423_strict_path_validated"
+  }
+}

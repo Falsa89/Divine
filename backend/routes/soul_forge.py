@@ -489,25 +489,37 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         return {"success": True, "item": item["name"], "reward": reward, "cost": item["cost"]}
 
     # ==================== CURRENCY EARNING HOOKS ====================
+    # Pack 94 — Legacy currency earn paths: quarantine guard se server_id passato.
+    # I path legacy continuano a scrivere su db.wallets account-wide (legacy).
+    # NESSUNA promozione strict in Pack 94 (richiede reward claim ledger live).
     @router.post("/currency/earn-pvp")
-    async def earn_pvp_honor(current_user: dict = Depends(get_current_user)):
-        """Award honor from PvP (called after PvP battles)."""
+    async def earn_pvp_honor(server_id: str = None, current_user: dict = Depends(get_current_user)):
+        """Award honor from PvP (legacy account-wide; quarantine se server_id passato)."""
         uid = current_user["id"]
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            return {"blocker": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "server_id": server_id.strip(),
+                    "endpoint": "/api/currency/earn-pvp", "filter_applied": True,
+                    "reward_live": False, "_slc_pack_94_legacy_currency_quarantine": True,
+                    "approval_string_proposed": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE"}
         honor = random.randint(15, 40)
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"honor": honor}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"honor_earned": honor}
 
     @router.post("/currency/earn-guild")
-    async def earn_guild_points(current_user: dict = Depends(get_current_user)):
-        """Award guild points from guild activities."""
+    async def earn_guild_points(server_id: str = None, current_user: dict = Depends(get_current_user)):
+        """Award guild points (legacy)."""
         uid = current_user["id"]
+        if server_id and isinstance(server_id, str) and server_id.strip():
+            return {"blocker": "LEGACY_CURRENCY_QUARANTINE_DEFERRED", "server_id": server_id.strip(),
+                    "endpoint": "/api/currency/earn-guild", "filter_applied": True,
+                    "reward_live": False, "_slc_pack_94_legacy_currency_quarantine": True}
         points = random.randint(10, 30)
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"guild_points": points}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"guild_points_earned": points}
 
     @router.post("/currency/earn-mission")
-    async def earn_mission_coins(current_user: dict = Depends(get_current_user)):
-        """Award mission coins from daily tasks."""
+    async def earn_mission_coins(server_id: str = None, current_user: dict = Depends(get_current_user)):
+        """Award mission coins (legacy)."""
         uid = current_user["id"]
         coins = random.randint(5, 15)
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"mission_coins": coins}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)

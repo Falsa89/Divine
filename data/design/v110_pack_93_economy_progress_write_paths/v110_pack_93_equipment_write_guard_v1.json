@@ -2,13 +2,27 @@
   "pack": "MEGA_RELEASE_ACCELERATION_93_ECONOMY_PROGRESS_WRITE_PATHS_MEGAPACK",
   "track": "F",
   "endpoints": [
-    {"endpoint": "POST /api/equipment/equip", "file": "backend/routes/equipment.py", "server_id_query_param_added": true, "blocker": "EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED", "also_postqa_d_gated": true},
-    {"endpoint": "POST /api/equipment/unequip/{equipment_id}", "file": "backend/routes/equipment.py", "server_id_query_param_added": true, "blocker": "EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED", "also_postqa_d_gated": false}
+    {
+      "endpoint": "POST /api/equipment/equip",
+      "file": "backend/routes/equipment.py",
+      "server_id_query_param_added": true,
+      "blocker": "EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED",
+      "also_postqa_d_gated": true
+    },
+    {
+      "endpoint": "POST /api/equipment/unequip/{equipment_id}",
+      "file": "backend/routes/equipment.py",
+      "server_id_query_param_added": true,
+      "blocker": "EQUIPMENT_SERVER_SCOPE_MIGRATION_REQUIRED",
+      "also_postqa_d_gated": false
+    }
   ],
   "forge_upgrade_fuse_endpoints_present": false,
   "forge_upgrade_fuse_deferred_to_future_pack": true,
   "no_equip_unequip_forge_write_promotion_in_pack_93": true,
   "reason_for_deferral": "user_equipment schema mixed (server_id coverage 9.7%). Promotion strict server-scoped richiede backfill autorizzato (vedi Track E + approval string AUTORIZZO_V110_EQUIPMENT_SERVER_SCOPE_BACKFILL_EXECUTE).",
   "false_readiness": false,
-  "approval_string_proposed": "AUTORIZZO_V110_EQUIPMENT_WRITE_STRICT_SCOPE_EXECUTE"
+  "approval_string_proposed": "AUTORIZZO_V110_EQUIPMENT_WRITE_STRICT_SCOPE_EXECUTE",
+  "superseded_by_pack_94_backfill_executed": true,
+  "pack_94_promotion_note": "Pack 94 ha promosso equip/unequip a strict server-scoped write paths reali (post-backfill 100% coverage). Pack 93 honest deferred blocker semantica preservata storicamente."
 }
