@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-09T19:40:37.597559+00:00",
+  "timestamp_utc": "2026-06-09T20:26:19.029701+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2127,
+  "backend_python_files_scanned": 2146,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1105,
+      "files_with_hits": 1118,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -141,11 +141,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 139
+      "user_id_only_files_count": 138
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 292,
+      "files_with_hits": 297,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -257,11 +257,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 21
+      "user_id_only_files_count": 20
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 430,
+      "files_with_hits": 439,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -357,11 +357,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 78
+      "user_id_only_files_count": 79
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 197,
+      "files_with_hits": 201,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -637,7 +637,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 298,
+      "files_with_hits": 301,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -753,11 +753,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 19
+      "user_id_only_files_count": 18
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 47,
+      "files_with_hits": 53,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -820,6 +820,26 @@
           ]
         },
         {
+          "file": "backend/scripts/validate_v110_pack_92_story_progress_loader_scope.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": false,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 4,
+              "snippet": "d = json.load(open(os.path.join(R, 'data/design/v110_pack_92_core_server_scope/v110_pack_92_story_progress_loader_scope_v1.json')))"
+            },
+            {
+              "line": 6,
+              "snippet": "assert d.get('reads_psp_story_progress_when_server_id_present') is True"
+            },
+            {
+              "line": 8,
+              "snippet": "assert d.get('no_story_progress_write_promotion_in_pack_92') is True"
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/dry_run_v110_psp_migration.py",
           "keyword": "story_progress",
           "has_server_id_anywhere": false,
@@ -832,18 +852,6 @@
             {
               "line": 62,
               "snippet": "\"story_progress_docs\": _safe_count(db, \"story_progress\"),"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/validate_v88_battle_preview_experience_layer.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 44,
-              "snippet": "(r\"\\bstory_progress_apply\\b\", \"story_progress_ref\"),"
             }
           ]
         }
@@ -1053,7 +1061,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 4
+      "user_id_only_files_count": 3
     },
     "affinity": {
       "expected_scope": "server_bound",
@@ -1484,7 +1492,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 416,
+  "cross_server_leak_risk_candidates_count": 413,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
