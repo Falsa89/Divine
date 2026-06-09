@@ -499,7 +499,10 @@ python3 /app/backend/scripts/validate_mega_release_acceleration_89_inventory_psp
 > commit locale (`git add … && git commit -m "feat(pack-90): …"`).
 
 ```
-commit_hash = <da inserire dopo `git commit`>
+commit_hash = 7262a46f026d1490a5168ae87242a0b756e15783
+local_commit_only = true
+public_push_managed_externally = true
+no_remote_available = true
 ```
 
 ---
