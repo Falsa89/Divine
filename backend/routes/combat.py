@@ -95,25 +95,69 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
         stage: int = 1
 
     @router.post("/story/battle")
-    async def story_battle(req: StoryBattleRequest, server_id: str = None, current_user: dict = Depends(get_current_user)):
+    async def story_battle(req: StoryBattleRequest, server_id: str = None, idempotency_token: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
-        # Pack 93 — server_id-aware story progress write guard.
-        # Se il client passa server_id, blocker onesto: la promozione strict
-        # server-scoped del write path richiede ledger + idempotency + reward
-        # claim ledger autorizzati (vedi docs/divine/116_REWARD_CLAIM_LEDGER_PRELIVE_PLAN.md).
-        # Pack 93 NON esegue write promotion live; legacy path resta invariato.
+        # Pack 95 — Story progress STRICT server-scoped write path (test-only-safe via idempotency).
+        # Quando server_id presente: scrive SOLO psp.story_progress, NO users.gold/gems mutation,
+        # NO reward grant live. Idempotency token REQUIRED per write.
         if server_id and isinstance(server_id, str) and server_id.strip():
             sid = server_id.strip()
             psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
+            if not psp:
+                raise HTTPException(409, "PLAYER_SERVER_PROFILE_REQUIRED")
+            if not idempotency_token or not isinstance(idempotency_token, str) or len(idempotency_token) < 8:
+                raise HTTPException(400, "IDEMPOTENCY_TOKEN_REQUIRED")
+            # Ledger replay check (no double grant)
+            existing = await db.reward_claim_ledger.find_one({
+                "user_id": uid, "server_id": sid, "idempotency_token": idempotency_token,
+            })
+            if existing:
+                return {
+                    "idempotent_replay": True, "server_id": sid,
+                    "victory": existing.get("victory"), "rewards": existing.get("rewards"),
+                    "pack_95_strict_story_progress_write": True,
+                }
+            # Strict path: NO reward grant live. Returns 'preview' victory state without mutation
+            # to users.gold/gems. Story progress advancement is SAFE: only psp.story_progress.
+            sp = psp.get("story_progress") or {}
+            completed = sp.get("completed", {}) or {}
+            cur_chapter = int(sp.get("current_chapter") or 1)
+            cur_stage = int(sp.get("current_stage") or 1)
+            ch_id = int(req.chapter_id); st_id = int(req.stage)
+            # Update completed/current_stage/chapter (server-scoped, no account-wide leak)
+            new_completed = dict(completed)
+            ch_key = str(ch_id)
+            prev = int(new_completed.get(ch_key, 0) or 0)
+            if st_id > prev:
+                new_completed[ch_key] = st_id
+            new_cur_chapter = max(cur_chapter, ch_id)
+            new_cur_stage = max(cur_stage, st_id + 1) if new_cur_chapter == ch_id else cur_stage
+            await db.player_server_profiles.update_one(
+                {"user_id": uid, "server_id": sid},
+                {"$set": {
+                    "story_progress.completed": new_completed,
+                    "story_progress.current_chapter": new_cur_chapter,
+                    "story_progress.current_stage": new_cur_stage,
+                    "_slc_pack_95_last_story_write_ts": datetime.utcnow(),
+                }},
+            )
+            # Ledger insert (no grant, audit only)
+            await db.reward_claim_ledger.insert_one({
+                "id": str(uuid.uuid4()),
+                "user_id": uid, "server_id": sid,
+                "claim_source": "story", "claim_key": f"story_{ch_id}_{st_id}",
+                "idempotency_token": idempotency_token,
+                "rewards": {"server_scoped": {}, "account_wide": {}, "live_grant": False},
+                "victory": True, "applied_at": datetime.utcnow(),
+                "_slc_pack_95_reward_claim_ledger": True,
+                "_slc_pack_95_no_live_grant": True,
+            })
             return {
-                "blocker": "STORY_PROGRESS_WRITE_SERVER_SCOPE_DEFERRED",
-                "server_id": sid,
-                "psp_exists": bool(psp),
-                "filter_applied": True,
-                "reward_live": False,
-                "progress_live": False,
-                "_slc_pack_93_story_write_guard": True,
-                "approval_string_proposed": "AUTORIZZO_V110_STORY_PROGRESS_WRITE_STRICT_SCOPE_EXECUTE",
+                "server_id": sid, "victory": True, "idempotent_replay": False,
+                "pack_95_strict_story_progress_write": True,
+                "rewards": {"server_scoped": {}, "account_wide": {}, "live_grant": False},
+                "reward_live": False, "progress_live": False,
+                "story_progress": {"current_chapter": new_cur_chapter, "current_stage": new_cur_stage},
             }
         chapter = next((c for c in STORY_CHAPTERS if c["id"] == req.chapter_id), None)
         if not chapter:

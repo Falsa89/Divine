@@ -1,0 +1,1 @@
+Pack 94 completed equipment backfill and strict equipment promotion. Pack 95 addresses reward ledger foundation, story progress strict writes and legacy reward/currency/shop/soul quarantine without live reward activation.
