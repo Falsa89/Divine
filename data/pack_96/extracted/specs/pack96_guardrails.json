@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
+  "approval_string_required": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_PACK_96",
+  "goals": [
+    "reward ledger live-gated execute",
+    "controlled claim endpoint",
+    "first allowlisted claim sources",
+    "grant engine guard",
+    "no double grant smoke"
+  ],
+  "forbidden": [
+    "reward live activation generale",
+    "premium/hard currency grant",
+    "IAP/store/payment change",
+    "gacha change",
+    "broad production reward grants",
+    "unmarked test writes",
+    "legacy cleanup general execute",
+    "destructive migration",
+    "account-wide server-bound reward/currency grant",
+    "hardcoded server_id=s1 active reward path",
+    "reward source outside allowlist",
+    "double reward grant",
+    "release readiness claim",
+    "fake_PASS",
+    "validator weakening"
+  ]
+}
