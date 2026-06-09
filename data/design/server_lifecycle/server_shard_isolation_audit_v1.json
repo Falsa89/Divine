@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-09T20:26:19.029701+00:00",
+  "timestamp_utc": "2026-06-09T21:32:03.453507+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2146,
+  "backend_python_files_scanned": 2165,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1118,
+      "files_with_hits": 1127,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -141,11 +141,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 138
+      "user_id_only_files_count": 139
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 297,
+      "files_with_hits": 299,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -257,11 +257,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 20
+      "user_id_only_files_count": 21
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 439,
+      "files_with_hits": 444,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -357,11 +357,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 79
+      "user_id_only_files_count": 80
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 201,
+      "files_with_hits": 207,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -637,7 +637,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 301,
+      "files_with_hits": 303,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -757,7 +757,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 53,
+      "files_with_hits": 57,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -857,11 +857,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 1
+      "user_id_only_files_count": 2
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 179,
+      "files_with_hits": 180,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1492,7 +1492,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 413,
+  "cross_server_leak_risk_candidates_count": 417,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
