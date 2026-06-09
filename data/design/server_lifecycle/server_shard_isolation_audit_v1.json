@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-09T22:17:23.371658+00:00",
+  "timestamp_utc": "2026-06-09T23:18:07.540778+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2170,
+  "backend_python_files_scanned": 2189,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1130,
+      "files_with_hits": 1140,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -145,7 +145,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 300,
+      "files_with_hits": 302,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -261,7 +261,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 445,
+      "files_with_hits": 450,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -361,7 +361,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 212,
+      "files_with_hits": 220,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -461,7 +461,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 45,
+      "files_with_hits": 46,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -637,7 +637,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 303,
+      "files_with_hits": 304,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -757,7 +757,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 58,
+      "files_with_hits": 65,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -861,7 +861,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 182,
+      "files_with_hits": 189,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
