@@ -7,14 +7,20 @@
   "md5_rebase_chain": [
     {
       "file": "backend/routes/items.py",
-      "to_md5_post_pack_89": "86ed0118090306a92cb4f8b1cb2f8d74",
-      "reason": "Pack 89: /api/inventory GET promoted to STRICT server-scoped read. server_id query param triggers strict filter by (user_id, server_id) with PSP existence check; blockers PLAYER_SERVER_PROFILE_REQUIRED / SERVER_ID_REQUIRED. NO account-wide fallback when server_id present. NO DB writes. Legacy path no-server_id flagged non-player-facing. Other inventory routes (buy/use-exp) UNCHANGED.",
+      "to_md5_post_pack_89": "f887c3ce5eea0a847a1d9a05ae9e2aa5",
+      "from_md5_pre_pack_89_historical": "<pre-pack-89-baseline>",
+      "to_md5_post_pack_89_original_value_historical": "86ed0118090306a92cb4f8b1cb2f8d74",
+      "md5_advance_in_pack_90": "f887c3ce5eea0a847a1d9a05ae9e2aa5",
+      "reason": "Pack 89: /api/inventory GET promoted to STRICT server-scoped read. server_id query param triggers strict filter by (user_id, server_id) with PSP existence check; blockers PLAYER_SERVER_PROFILE_REQUIRED / SERVER_ID_REQUIRED. NO account-wide fallback when server_id present. NO DB writes. Legacy path no-server_id flagged non-player-facing. Pack 90 EXTENSION (chain forward): STRICT server-scoped inventory WRITE paths — POST /api/item-shop/buy, POST /api/inventory/use-exp, skill upgrade material consumption — require server_id, validate PSP existence, and pass server_id into every Mongo selector for inventory/materials reads, decrements and upserts. Hardcoded server_id='s1' removed from inventory write/consume selectors. GET inventory Pack 89 behaviour preserved (regression guard). No schema migration, no backfill, no account-wide writes, no S1->S2 copy, no currencies/story/equipment promotion, no premium/currency grant, no reward/progress live enablement, no legacy cleanup execution, no destructive migration, no player_level mutation, no user_heroes mutation, no team route regression, no POSTQA_D unlock, no battle_engine formula rewrite, no /api/battle/simulate from staging/live.",
       "replacement_invariant_functional": true,
       "validator_weakening": false,
-      "fake_PASS": false
+      "fake_PASS": false,
+      "rebase_reason_pack_90": "strict inventory write paths server scope"
     }
   ],
   "historical_reference": [
+    "Pack 90 v110 strict inventory WRITE paths server-scoped applied (items.py): post_pack_89 MD5 advanced from 86ed0118090306a92cb4f8b1cb2f8d74 (post-Pack-89 GET-only strict baseline) to f887c3ce5eea0a847a1d9a05ae9e2aa5 (post-Pack-90 strict GET+WRITE baseline). Replacement invariant: server_id REQUIRED on all inventory mutation/consume selectors; PSP existence check enforced; no account-wide writes; Pack 89 GET inventory behaviour preserved. No validator weakening, no fake_PASS, no historical reference dropped.",
+    "Pack 89 v110 inventory PSP-scoped GET promotion preserved (items.py)",
     "Pack 88 v96 team formation strict server-scoped preserved",
     "Pack 87 starter flow preserved",
     "Pack 86 register guard + ensure UI preserved",
