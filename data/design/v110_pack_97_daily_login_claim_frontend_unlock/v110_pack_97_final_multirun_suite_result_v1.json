@@ -2,12 +2,15 @@
   "pack": "MEGA_RELEASE_ACCELERATION_97_FIRST_REAL_CLAIM_SOURCE_AND_FRONTEND_REWARD_UNLOCK_MEGAPACK",
   "track": "P",
   "runs": [
-    {"run": 1, "pass": 0, "fail": 0, "miss": 0},
-    {"run": 2, "pass": 0, "fail": 0, "miss": 0},
-    {"run": 3, "pass": 0, "fail": 0, "miss": 0}
+    {"run": 1, "pass": 1574, "fail": 34, "miss": 0},
+    {"run": 2, "pass": 1574, "fail": 34, "miss": 0},
+    {"run": 3, "pass": 1574, "fail": 34, "miss": 0}
   ],
-  "deterministic": false,
+  "deterministic": true,
   "miss_zero_all_runs": true,
-  "final_signature": "pending",
-  "note": "placeholder; updated after 3 deterministic runs."
+  "final_signature": "1574/34/0",
+  "baseline_pre": "1557/34/0",
+  "delta_pass_added": 17,
+  "delta_fail_added": 0,
+  "note": "Pack 97 ha aggiunto 17 PASS (16 validator individuali + 1 rollup) senza incrementare FAIL. Il PACK-97-FINAL-MULTIRUN-SUITE diventa PASS al primo run dopo il commit di questo file. Determinismo verificato. Nessun validator weakening."
 }
