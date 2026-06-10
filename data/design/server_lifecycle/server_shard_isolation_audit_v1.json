@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-10T00:15:11.729638+00:00",
+  "timestamp_utc": "2026-06-10T01:08:27.103081+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2211,
+  "backend_python_files_scanned": 2231,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1152,
+      "files_with_hits": 1161,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -54,15 +54,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 39,
+              "line": 40,
               "snippet": "def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):"
             },
             {
-              "line": 42,
+              "line": 43,
               "snippet": "register_equipment_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             },
             {
-              "line": 43,
+              "line": 44,
               "snippet": "register_combat_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -139,6 +139,10 @@
             },
             {
               "line": 56,
+              "snippet": "def _grant_daily_login_to_psp(db, user_id: str, server_id: str,"
+            },
+            {
+              "line": 77,
               "snippet": "def _grant_noop(_db, _user_id: str, _server_id: str, _payload: Dict[str, Any]):"
             }
           ]
@@ -149,7 +153,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 304,
+      "files_with_hits": 306,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -178,11 +182,11 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 67,
+              "line": 68,
               "snippet": "# in design catalog ONLY (no roster activation)."
             },
             {
-              "line": 70,
+              "line": 71,
               "snippet": "# NOT connected to battle/HP-bar/VFX/status/gacha/roster runtime."
             }
           ]
@@ -265,7 +269,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 455,
+      "files_with_hits": 459,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -286,7 +290,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 79,
+              "line": 80,
               "snippet": "# Strictly GET-only, no DB, no inventory, no spend, no user state."
             }
           ]
@@ -365,7 +369,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 230,
+      "files_with_hits": 236,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -645,7 +649,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 305,
+      "files_with_hits": 306,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -765,7 +769,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 72,
+      "files_with_hits": 76,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -790,15 +794,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 57,
+              "line": 78,
               "snippet": "\"\"\"No-op grant: usato per source `story_progress_marker_claim`.\"\"\""
             },
             {
-              "line": 83,
+              "line": 104,
               "snippet": "\"story_progress_marker_claim\": {"
             },
             {
-              "line": 90,
+              "line": 111,
               "snippet": "\"description\": \"Marker-only claim per story progress milestones. NESSUN reward grant, scrive solo ledger row + opzionalmente PSP.story_progress (futuro pack).\","
             }
           ]
@@ -873,7 +877,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 191,
+      "files_with_hits": 192,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -886,7 +890,7 @@
               "snippet": "register_guild_routes,"
             },
             {
-              "line": 44,
+              "line": 45,
               "snippet": "register_guild_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -994,7 +998,7 @@
               "snippet": "register_rankings_routes,"
             },
             {
-              "line": 48,
+              "line": 49,
               "snippet": "register_rankings_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -1082,15 +1086,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 35,
+              "line": 36,
               "snippet": "from routes.affinity_gifts import register_affinity_gifts_readonly_routes"
             },
             {
-              "line": 36,
+              "line": 37,
               "snippet": "from routes.affinity_gift_spend import register_affinity_gift_spend_skeleton_routes"
             },
             {
-              "line": 78,
+              "line": 79,
               "snippet": "# AF2-E \u2014 Affinity gifts read-only design preview API (3 GET endpoints)."
             }
           ]
@@ -1310,7 +1314,7 @@
               "snippet": "register_cosmetics_routes,"
             },
             {
-              "line": 45,
+              "line": 46,
               "snippet": "register_cosmetics_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
