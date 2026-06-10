@@ -1,0 +1,30 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_97_FIRST_REAL_CLAIM_SOURCE_AND_FRONTEND_REWARD_UNLOCK_MEGAPACK",
+  "track": "I",
+  "static_checks": {
+    "daily_route_uses_ledger": true,
+    "daily_route_replay_check_before_grant": true,
+    "daily_route_does_not_write_users_gold_gems": true,
+    "daily_route_no_hardcoded_s1": true,
+    "daily_route_kill_switches_default_off": true,
+    "daily_route_both_switches_required_AND": true,
+    "daily_route_test_day_override_requires_marker": true,
+    "daily_route_unique_index_per_user_server_claim_key": true,
+    "daily_grant_fn_only_soft_currencies": true,
+    "daily_grant_fn_fixed_server_side_reward": true,
+    "daily_grant_fn_no_premium": true,
+    "frontend_button_no_false_success": true,
+    "frontend_button_requires_server_id_and_token": true,
+    "no_other_claim_source_added_live_in_pack_97": true
+  },
+  "fail_conditions_validated": [
+    "if daily route bypasses ledger -> FAIL",
+    "if same day can grant multiple times -> FAIL",
+    "if users.gold/gems mutated -> FAIL",
+    "if hardcoded s1 -> FAIL",
+    "if frontend lacks server_id check -> FAIL",
+    "if kill switch default ON -> FAIL",
+    "if mail/achievements/battlepass/event live in pack 97 -> FAIL",
+    "if premium reward allowed -> FAIL"
+  ]
+}

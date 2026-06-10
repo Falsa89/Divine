@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_97_FIRST_REAL_CLAIM_SOURCE_AND_FRONTEND_REWARD_UNLOCK_MEGAPACK",
+  "track": "F",
+  "component_file": "frontend/src/components/DailyLoginClaimButton.tsx",
+  "preview_route": "frontend/app/daily-login-preview.tsx",
+  "feature_flag_env": "EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED",
+  "feature_flag_default": "false",
+  "visible_in_production_by_default": false,
+  "visible_in_preview_route_via_force_visible_prop": true,
+  "gates_required_for_render": ["UI_ENABLED || forceVisible", "useServerScope().serverId", "useAuth().token"],
+  "states_handled": ["idle", "loading", "claimed", "already_claimed", "kill_switch_off (global|daily)", "psp_missing", "error"],
+  "no_false_success_on_blocker": true,
+  "no_silent_s1": true,
+  "no_mail_achievements_battlepass_event_afk_consumers_in_pack_97": true,
+  "refetches_wallet_on_claimed_via_callback": true
+}

@@ -1,0 +1,16 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_97_FIRST_REAL_CLAIM_SOURCE_AND_FRONTEND_REWARD_UNLOCK_MEGAPACK",
+  "track": "E",
+  "fixed_reward_server_side": {"mission_coins": 10, "honor": 5},
+  "reward_types_allowed": ["mission_coins", "honor"],
+  "reward_types_blocked_in_daily": ["gold", "gems", "premium_pull", "standard_pull", "stamina", "experience", "prana", "soul_seals", "star_dust", "guild_points", "dimension_frags"],
+  "amount_cap_per_key": 100,
+  "client_payload_ignored": true,
+  "no_pulls": true,
+  "no_hero_grants": true,
+  "no_equipment_grants": true,
+  "no_inventory_grants": true,
+  "no_premium_or_hard_currency_grants": true,
+  "server_bound_only": true,
+  "writes_target": "player_server_profiles.soft_currencies.*"
+}

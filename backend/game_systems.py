@@ -24,6 +24,7 @@ from routes import (
     register_push_routes,
     register_sanctuary_routes,
     register_reward_claim_routes,
+    register_daily_login_claim_routes,
 )
 from routes.synergies import register_synergy_routes
 from routes.server_time import register_server_time_routes
@@ -92,5 +93,11 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # Pack 96 — Controlled reward claim endpoint (live-gated by env kill switch,
     # default OFF). Allowlist + ledger replay-safe + premium grants blocked.
     register_reward_claim_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
+    # Pack 97 — Daily login claim endpoint (first real player-facing source).
+    # Live-gated dietro DOPPIO kill switch AND: REWARD_CLAIM_LEDGER_LIVE_ENABLED +
+    # DAILY_LOGIN_CLAIM_ENABLED (entrambi default OFF). Server-side deterministic
+    # claim_key + unique index per anti-double-grant DB-level.
+    register_daily_login_claim_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
     return router

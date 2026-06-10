@@ -53,6 +53,27 @@ def _grant_soft_currency_to_psp(db, user_id: str, server_id: str,
     return inc
 
 
+def _grant_daily_login_to_psp(db, user_id: str, server_id: str,
+                              payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Grant per `daily_login_claim`. Reward fisso piccolo, hard-coded server-side.
+
+    Pack 97: payload viene IGNORATO e sostituito col reward definito qui
+    (`mission_coins: 10, honor: 5`). Garantisce che nessun client possa influenzare
+    il valore granted. Reward types interamente server-bound soft currency.
+    """
+    fixed_reward = {"mission_coins": 10, "honor": 5}
+    inc: Dict[str, int] = {}
+    for k, amount in fixed_reward.items():
+        if k in FORBIDDEN_REWARD_TYPES:
+            raise _PremiumGrantBlocked(k)
+        if k not in ALLOWED_SOFT_CURRENCIES:
+            raise _RewardTypeNotAllowed(k)
+        if amount <= 0 or amount > 100:
+            raise _RewardTypeNotAllowed(f"{k}:daily_amount_cap")
+        inc[f"soft_currencies.{k}"] = amount
+    return inc
+
+
 def _grant_noop(_db, _user_id: str, _server_id: str, _payload: Dict[str, Any]):
     """No-op grant: usato per source `story_progress_marker_claim`."""
     return {}
@@ -89,12 +110,27 @@ REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "pack_origin": "pack_96",
         "description": "Marker-only claim per story progress milestones. NESSUN reward grant, scrive solo ledger row + opzionalmente PSP.story_progress (futuro pack).",
     },
+    "daily_login_claim": {
+        "server_scoped": True,
+        "reward_types": ["mission_coins", "honor"],
+        "live": True,
+        "grant_fn_name": "grant_daily_login_to_psp",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_97",
+        "per_source_kill_switch_env": "DAILY_LOGIN_CLAIM_ENABLED",
+        "per_source_kill_switch_default": False,
+        "fixed_reward": {"mission_coins": 10, "honor": 5},
+        "amount_cap_per_key": 100,
+        "daily_idempotency_strategy": "server_side_claim_key_daily_login_<server_id>_<YYYY-MM-DD UTC>",
+        "description": "Pack 97 first real player-facing claim source. Daily login reward server-scoped, soft currency only. Server-side claim_key deterministic. Per-source kill switch default OFF.",
+    },
 }
 
 
 _GRANT_FN_MAP = {
     "grant_soft_currency_to_psp": _grant_soft_currency_to_psp,
     "grant_noop": _grant_noop,
+    "grant_daily_login_to_psp": _grant_daily_login_to_psp,
 }
 
 

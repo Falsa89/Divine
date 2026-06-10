@@ -1,0 +1,21 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_97_FIRST_REAL_CLAIM_SOURCE_AND_FRONTEND_REWARD_UNLOCK_MEGAPACK",
+  "track": "C",
+  "file": "backend/utils/reward_source_registry.py",
+  "new_source_id": "daily_login_claim",
+  "source_definition": {
+    "server_scoped": true, "live": true,
+    "idempotency": "mandatory",
+    "grant_fn_name": "grant_daily_login_to_psp",
+    "reward_types": ["mission_coins", "honor"],
+    "per_source_kill_switch_env": "DAILY_LOGIN_CLAIM_ENABLED",
+    "per_source_kill_switch_default": false,
+    "fixed_reward": {"mission_coins": 10, "honor": 5},
+    "amount_cap_per_key": 100,
+    "pack_origin": "pack_97"
+  },
+  "premium_grants_blocked": true,
+  "only_soft_currencies": true,
+  "no_hero_equipment_inventory_grants": true,
+  "pack_96_sources_preserved": ["qa_controlled_soft_currency_claim", "story_progress_marker_claim"]
+}

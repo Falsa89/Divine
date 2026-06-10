@@ -1,0 +1,17 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_97_FIRST_REAL_CLAIM_SOURCE_AND_FRONTEND_REWARD_UNLOCK_MEGAPACK",
+  "track": "N",
+  "files_added": [
+    "backend/routes/daily_login_claim.py",
+    "frontend/src/components/DailyLoginClaimButton.tsx",
+    "frontend/app/daily-login-preview.tsx"
+  ],
+  "files_modified": [
+    "backend/utils/reward_source_registry.py",
+    "backend/routes/__init__.py",
+    "backend/game_systems.py"
+  ],
+  "reason": "Pack 97 introduce daily_login_claim source + endpoint thin + minimal gated frontend consumer. Pack 96 reward_claim_ledger infrastructure riusata e non duplicata.",
+  "no_validator_weakening": true,
+  "baseline_signature_preserved": true
+}

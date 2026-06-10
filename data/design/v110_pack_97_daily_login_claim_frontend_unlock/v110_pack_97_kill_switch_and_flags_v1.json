@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_97_FIRST_REAL_CLAIM_SOURCE_AND_FRONTEND_REWARD_UNLOCK_MEGAPACK",
+  "track": "G",
+  "global_kill_switch_env": "REWARD_CLAIM_LEDGER_LIVE_ENABLED",
+  "global_kill_switch_default": false,
+  "daily_kill_switch_env": "DAILY_LOGIN_CLAIM_ENABLED",
+  "daily_kill_switch_default": false,
+  "and_logic_required": true,
+  "smoke_lifecycle": {
+    "initial_value": "both off",
+    "override_for_smoke": "both true via /app/backend/.env + restart backend",
+    "final_reset": "env vars removed; both restored to default OFF",
+    "verified_in_smoke": true
+  },
+  "health_endpoint": "GET /api/daily-login/claim/health",
+  "frontend_ui_flag": "EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED",
+  "frontend_ui_flag_default": "false"
+}
