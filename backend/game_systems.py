@@ -26,6 +26,7 @@ from routes import (
     register_reward_claim_routes,
     register_daily_login_claim_routes,
     register_daily_quest_claim_routes,
+    register_daily_quest_tracker_routes,
 )
 from routes.synergies import register_synergy_routes
 from routes.server_time import register_server_time_routes
@@ -105,5 +106,12 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # READY_GATED_COMPLETION_REQUIRED: completion proof obbligatorio server-side
     # (test-only via marker `pack_98_test_artifact`). Doppio kill switch AND.
     register_daily_quest_claim_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
+    # Pack 99 — Daily quest runtime tracker (collection `daily_quest_progress`).
+    # Endpoint GET /api/daily-quest/progress + POST /api/daily-quest/progress/complete.
+    # Kill switch `DAILY_QUEST_TRACKER_ENABLED` default OFF. Completion endpoint
+    # test-only finche` non esiste un runtime di gameplay reale (marker
+    # `pack_99_test_artifact`). Il claim Pack 98 ora consulta questo tracker.
+    register_daily_quest_tracker_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
     return router

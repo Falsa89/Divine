@@ -1,23 +1,30 @@
-"""Pack 98 — Daily Quest Completion Claim endpoint.
+"""Pack 98+99 — Daily Quest Completion Claim endpoint.
 
 POST /api/daily-quest/claim?server_id=<sid>&quest_id=<qid>
 
-Pack 98 SAFETY:
-  * Source `daily_quest_completion_claim` registrata READY_GATED_COMPLETION_REQUIRED.
+Pack 98 SAFETY (preservata):
+  * Source `daily_quest_completion_claim` registrata.
   * Kill switches AND (entrambi default OFF):
       - REWARD_CLAIM_LEDGER_LIVE_ENABLED (Pack 96)
-      - DAILY_QUEST_CLAIM_ENABLED       (Pack 98 nuovo)
-  * **Completion proof obbligatorio**: il claim viene RIFIUTATO con blocker
-    `DAILY_QUEST_COMPLETION_REQUIRED` per qualsiasi utente normale anche se
-    quest_id e' whitelisted. Pack 98 NON sblocca grant reali a player.
-  * Test-only bypass: `_test_completion_proof=true` + user marker
-    `pack_98_test_artifact=true` => claim eseguibile (per smoke E2E).
+      - DAILY_QUEST_CLAIM_ENABLED       (Pack 98)
   * `claim_key = daily_quest_<server_id>_<quest_id>_<YYYY-MM-DD UTC>`
     server-side deterministic.
   * Unique partial index su (user_id, server_id, claim_key) per
     `claim_source=daily_quest_completion_claim`.
   * `idempotency_token = sha1(claim_key)` (client-provided ignorato).
   * Grant solo su `player_server_profiles.soft_currencies.*`. No premium.
+
+Pack 99 SAFETY (nuova):
+  * **Completion runtime tracker server-side**: il claim consulta lo
+    stato `daily_quest_progress` via
+    `routes.daily_quest_tracker.is_quest_completed(...)`. Se lo stato non
+    e' `completed`/`claimed` il claim ritorna 409
+    `DAILY_QUEST_COMPLETION_REQUIRED` (no client spoofing possibile).
+  * Dopo grant riuscito il tracker passa a `claimed` con `claimed_at`.
+  * Bypass legacy Pack 98 `test_completion_proof=true` + marker
+    `pack_98_test_artifact=true` MANTENUTO solo per compatibilita`
+    storica delle smoke pre-Pack-99 (richiesto da test_completion_proof
+    esplicito). Il path nuovo passa per il tracker.
 """
 import hashlib
 import os
@@ -36,6 +43,12 @@ from utils.reward_source_registry import (
     get_grant_fn,
     _PremiumGrantBlocked,
     _RewardTypeNotAllowed,
+)
+# Pack 99 — collegamento al runtime tracker server-side.
+from routes.daily_quest_tracker import (
+    is_quest_completed as _tracker_is_completed,
+    mark_quest_claimed as _tracker_mark_claimed,
+    USER_TEST_MARKER as PACK_99_USER_TEST_MARKER,
 )
 
 GLOBAL_KILL_SWITCH_ENV = "REWARD_CLAIM_LEDGER_LIVE_ENABLED"
@@ -114,12 +127,16 @@ def register_daily_quest_claim_routes(router, db, get_current_user, *_a, **_kw):
             "quest_kill_switch_live_enabled": _quest_on(),
             "claim_executable": _both_on(),
             "source": QUEST_SOURCE,
-            "ready_status": "READY_GATED_COMPLETION_REQUIRED",
+            "ready_status": "READY_TRACKER_GATED",
             "quest_id_whitelist": sorted(QUEST_ID_WHITELIST),
             "completion_proof_required_for_real_users": True,
             "completion_proof_test_only_via_marker": "pack_98_test_artifact",
+            "completion_tracker_required_for_real_users": True,
+            "completion_tracker_marker_required": PACK_99_USER_TEST_MARKER,
+            "completion_tracker_collection": "daily_quest_progress",
             "fixed_reward": {"mission_coins": 15, "honor": 8},
             "pack_origin": "pack_98",
+            "pack_99_tracker_integrated": True,
             "release_readiness_claimed": False,
             "reward_live_general": False,
         }
@@ -180,33 +197,62 @@ def register_daily_quest_claim_routes(router, db, get_current_user, *_a, **_kw):
             raise HTTPException(409, detail={"blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
                                              "server_id": sid})
 
-        # 5. Completion proof check (Pack 98 SAFETY): real users must complete a quest.
-        # Pack 98 NON ha runtime di quest completion vero. Quindi:
-        #   - se test_completion_proof=true E user marked pack_98_test_artifact=true -> bypass test-only
-        #   - altrimenti -> blocker onesto DAILY_QUEST_COMPLETION_REQUIRED
+        # 5. Completion proof check (Pack 98 + Pack 99):
+        #
+        # Path A (legacy Pack 98 fallback test-only):
+        #   - `test_completion_proof=true` + user marker `pack_98_test_artifact=true`
+        #     => bypass diretto (mantenuto per le smoke pre-Pack-99).
+        #
+        # Path B (Pack 99 nuovo - runtime tracker server-side):
+        #   - Si consulta `daily_quest_progress` via tracker.is_quest_completed().
+        #   - Se lo stato e' `completed` (o `claimed` per replay idempotente),
+        #     il claim e' autorizzato.
+        #   - Se lo stato e' `not_started`/`in_progress`/assente, blocker
+        #     `DAILY_QUEST_COMPLETION_REQUIRED` (no client spoofing possibile).
+        #
+        # NOTA: il tracker completion endpoint e' ancora test-only finche` non
+        # esiste un runtime di gameplay reale (vedi Pack 99 SOT). Pertanto i real
+        # player NON possono completare quest via API ad oggi e quindi NON
+        # possono nemmeno claimare reward => safety invariata.
         user_doc = await db.users.find_one({"id": uid})
-        is_marked = bool(user_doc and user_doc.get("pack_98_test_artifact"))
+        is_pack_98_marked = bool(user_doc and user_doc.get("pack_98_test_artifact"))
+
+        # Day override va computato qui per riusarlo nel tracker lookup e nella claim_key.
+        day_override = None
+        if _test_day_override:
+            if not (is_pack_98_marked or user_doc.get(PACK_99_USER_TEST_MARKER)):
+                raise HTTPException(403, detail={
+                    "blocker": "DAY_OVERRIDE_FORBIDDEN_FOR_NON_TEST_USER",
+                })
+            day_override = _test_day_override.strip()
+
+        completion_proof_source = None
         if req.test_completion_proof:
-            if not is_marked:
+            # Path A - legacy bypass Pack 98 (richiede marker pack_98_test_artifact)
+            if not is_pack_98_marked:
                 raise HTTPException(403, detail={
                     "blocker": "TEST_COMPLETION_PROOF_FORBIDDEN_FOR_NON_TEST_USER",
                     "reason": "test_completion_proof accettato SOLO con marker pack_98_test_artifact=true",
                 })
+            completion_proof_source = "test_only_marker"
         else:
-            # Default flow for ANY normal user: completion is required and NOT trackable yet.
-            raise HTTPException(409, detail={
-                "blocker": "DAILY_QUEST_COMPLETION_REQUIRED",
-                "quest_id": qid,
-                "ready_status": "READY_GATED_COMPLETION_REQUIRED",
-                "reason": "Pack 98 NON ha runtime di quest completion. Real quest tracking sara' aggiunto in pack futuro. Test-only smoke usa test_completion_proof=true con marker.",
-            })
-
-        # 6. Day override (test-only, requires marker, double-checked above already)
-        day_override = None
-        if _test_day_override:
-            if not is_marked:
-                raise HTTPException(403, detail={"blocker": "DAY_OVERRIDE_FORBIDDEN_FOR_NON_TEST_USER"})
-            day_override = _test_day_override.strip()
+            # Path B - Pack 99 runtime tracker enforcement (no client spoofing)
+            completed = await _tracker_is_completed(db, uid, sid, qid, day_override)
+            if not completed:
+                raise HTTPException(409, detail={
+                    "blocker": "DAILY_QUEST_COMPLETION_REQUIRED",
+                    "quest_id": qid,
+                    "ready_status": "READY_TRACKER_GATED",
+                    "reason": (
+                        "Pack 99 tracker server-side richiede state=completed "
+                        "sulla collection `daily_quest_progress` prima di concedere il "
+                        "reward. Il client NON puo` impostare lo stato direttamente. "
+                        "Real player ricevono il completamento solo quando il runtime "
+                        "di gameplay diventera` authoritative."
+                    ),
+                    "tracker_collection": "daily_quest_progress",
+                })
+            completion_proof_source = "runtime_tracker"
 
         # 7. Source registry lookup
         src = lookup_source(QUEST_SOURCE)
@@ -279,6 +325,8 @@ def register_daily_quest_claim_routes(router, db, get_current_user, *_a, **_kw):
             "_slc_pack_98_daily_quest_claim": True,
             "_slc_pack_98_server_side_claim_key": True,
             "_slc_pack_98_completion_proof_marker_required": True,
+            "_slc_pack_99_completion_source": completion_proof_source,
+            "_slc_pack_99_tracker_gated": True,
             "_slc_pack_96_controlled_claim": True,
             "_slc_pack_95_reward_claim_ledger": True,
         }
@@ -307,13 +355,22 @@ def register_daily_quest_claim_routes(router, db, get_current_user, *_a, **_kw):
             raise HTTPException(500, detail={"blocker": "LEDGER_INSERT_FAILED",
                                              "error": repr(e)})
 
+        # 13. Transizione tracker Pack 99: completed -> claimed (idempotent)
+        try:
+            await _tracker_mark_claimed(db, uid, sid, qid, day_override)
+        except Exception:
+            # Non-blocking: il claim e' gia` registrato a ledger; tracker e'
+            # solo per audit/idempotency state. Errore silente.
+            pass
+
         return {
             "idempotent_replay": False, "server_id": sid, "quest_id": qid,
             "claim_source": QUEST_SOURCE, "claim_key": claim_key,
             "rewards": ledger_row["rewards"],
             "applied_at": ledger_row["applied_at"].isoformat(),
             "pack_98_daily_quest_claim": True,
-            "completion_proof_used": "test_only_marker" if req.test_completion_proof else "real",
+            "pack_99_tracker_state_after_claim": "claimed",
+            "completion_proof_used": completion_proof_source,
             "reward_live_general": False,
             "premium_grant_blocked": True,
         }

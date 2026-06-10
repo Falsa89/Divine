@@ -1,16 +1,23 @@
 /**
- * Pack 98 — Daily Quest Claim minimal gated consumer.
+ * Pack 98+99 — Daily Quest Claim minimal gated consumer.
  *
- * Stessa logica di gating del Pack 97 (`DailyLoginClaimButton`):
- *   1. UI flag `EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED` (Pack 97) deve essere true.
+ * Pack 99 SAFETY:
+ *   1. UI flag `EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED` deve essere true (default OFF).
  *   2. Server scope presente (`useServerScope().serverId`).
  *   3. Auth token presente.
  *
- * Pack 98 SAFETY: Il backend rifiuta il claim con `DAILY_QUEST_COMPLETION_REQUIRED`
- * per utenti non marcati `pack_98_test_artifact`. Il componente espone questo stato
- * onestamente all'utente come "Quest non disponibile / in arrivo".
+ * Logica claim:
+ *   - Prima del claim, consulta `GET /api/daily-quest/progress` per leggere
+ *     lo stato server-side del tracker Pack 99. Mostra `completion_required`
+ *     in UI se lo stato non e' `completed`/`claimed`, EVITANDO la chiamata
+ *     POST inutile.
+ *   - Se lo stato e' `completed`, mostra il bottone "Riscatta quest". Il
+ *     backend ricontrolla comunque lo stato (no client spoofing possibile).
+ *   - Se lo stato e' `claimed`, mostra "Quest gia` riscattata".
+ *
+ * NESSUN flag attiva il claim di default. UI di default invisibile in produzione.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../auth/AuthContext';
 import { useServerScope } from '../hooks/useServerScope';
@@ -22,8 +29,10 @@ const UI_ENABLED = UI_FLAG === 'true';
 const QUEST_IDS = ['daily_quest_1', 'daily_quest_2', 'daily_quest_3'] as const;
 type QuestId = typeof QUEST_IDS[number];
 
+type TrackerState = 'not_started' | 'in_progress' | 'completed' | 'claimed';
+
 type ClaimState =
-  | { kind: 'idle' }
+  | { kind: 'idle'; tracker: TrackerState }
   | { kind: 'loading' }
   | { kind: 'claimed'; rewards: Record<string, number>; claim_key: string; quest_id: string }
   | { kind: 'already_claimed'; rewards: Record<string, number>; quest_id: string }
@@ -46,13 +55,42 @@ export const DailyQuestClaimButton: React.FC<DailyQuestClaimButtonProps> = ({
 }) => {
   const auth = useAuth();
   const scope = useServerScope();
-  const [state, setState] = useState<ClaimState>({ kind: 'idle' });
+  const [state, setState] = useState<ClaimState>({ kind: 'idle', tracker: 'not_started' });
 
   if (!UI_ENABLED && !forceVisible) return null;
   const serverId = scope?.serverId;
   if (!serverId) return null;
   const token = auth?.token;
   if (!token) return null;
+
+  /** Lettura del tracker server-side (Pack 99). NESSUNA mutation. */
+  const fetchTracker = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `${BACKEND}/api/daily-quest/progress?server_id=${encodeURIComponent(serverId)}`,
+        {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      if (res.status !== 200) return;
+      const data = await res.json().catch(() => ({}));
+      const progress = (data?.progress || []) as Array<{ quest_id: string; state: TrackerState }>;
+      const row = progress.find((p) => p.quest_id === questId);
+      const trackerState: TrackerState = (row?.state as TrackerState) || 'not_started';
+      if (trackerState === 'claimed') {
+        setState({ kind: 'already_claimed', rewards: {}, quest_id: questId });
+      } else {
+        setState({ kind: 'idle', tracker: trackerState });
+      }
+    } catch {
+      // network/health failure: stato neutro, lasciamo il claim provarci.
+    }
+  }, [serverId, token, questId]);
+
+  useEffect(() => {
+    fetchTracker();
+  }, [fetchTracker]);
 
   const claim = useCallback(async () => {
     setState({ kind: 'loading' });
@@ -99,13 +137,22 @@ export const DailyQuestClaimButton: React.FC<DailyQuestClaimButtonProps> = ({
     }
   }, [serverId, token, questId, onClaimed]);
 
+  // Resolve il tracker state corrente per decidere come renderizzare l'idle.
+  const idleTracker = state.kind === 'idle' ? state.tracker : 'not_started';
+  const claimReady = idleTracker === 'completed';
+
   return (
     <View style={styles.wrap}>
       <Text style={styles.title}>Quest giornaliera ({questId})</Text>
-      {state.kind === 'idle' && (
+      {state.kind === 'idle' && claimReady && (
         <Pressable onPress={claim} style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}>
           <Text style={styles.btnText}>Riscatta quest</Text>
         </Pressable>
+      )}
+      {state.kind === 'idle' && !claimReady && (
+        <Text style={styles.warn}>
+          Quest non ancora completata (stato server: {idleTracker}).
+        </Text>
       )}
       {state.kind === 'loading' && (
         <View style={styles.row}>
@@ -123,7 +170,7 @@ export const DailyQuestClaimButton: React.FC<DailyQuestClaimButtonProps> = ({
       )}
       {state.kind === 'completion_required' && (
         <Text style={styles.warn}>
-          Quest non ancora disponibile per il claim (sistema in arrivo).
+          Quest non ancora disponibile per il claim (tracker richiede state=completed).
         </Text>
       )}
       {state.kind === 'kill_switch_off' && (

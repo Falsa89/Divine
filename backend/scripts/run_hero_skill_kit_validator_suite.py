@@ -4122,6 +4122,25 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-98-FINAL-MULTIRUN-SUITE', 'validate_v110_pack_98_final_multirun_suite.py'),
     ('MEGA-RELEASE-ACCELERATION-98-DAILY-HOME-UNLOCK-AND-DAILY-QUEST-CLAIM-SOURCE-ROLLUP', 'validate_mega_release_acceleration_98_daily_home_unlock_and_daily_quest_claim_source_rollup.py'),
 
+    # Pack 99 — Daily quest runtime tracker server-side + Home controlled unlock.
+    # Tracker server-scoped, kill switch DAILY_QUEST_TRACKER_ENABLED default OFF.
+    # Claim endpoint Pack 98 ora consulta il tracker (no client spoofing).
+    # Home unlock Daily resta default OFF (doppio flag EXPO_PUBLIC_*).
+    ('PROJECT-V110-PACK-99-DAILY-QUEST-RUNTIME-TRACKER-SOT', 'validate_v110_pack_99_daily_quest_runtime_tracker_sot.py'),
+    ('PROJECT-V110-PACK-99-DAILY-QUEST-TRACKER-ENDPOINT', 'validate_v110_pack_99_daily_quest_tracker_endpoint.py'),
+    ('PROJECT-V110-PACK-99-CLAIM-TRACKER-ENFORCEMENT', 'validate_v110_pack_99_claim_tracker_enforcement.py'),
+    ('PROJECT-V110-PACK-99-REWARD-PAYLOAD-PRESERVATION', 'validate_v110_pack_99_reward_payload_preservation.py'),
+    ('PROJECT-V110-PACK-99-DAILY-HOME-CONTROLLED-UNLOCK-STATIC', 'validate_v110_pack_99_daily_home_controlled_unlock_static.py'),
+    ('PROJECT-V110-PACK-99-FRONTEND-DAILY-QUEST-TRACKER-GUARD', 'validate_v110_pack_99_frontend_daily_quest_tracker_guard.py'),
+    ('PROJECT-V110-PACK-99-RUNTIME-SMOKE-E2E', 'validate_v110_pack_99_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-99-STATIC-ANTI-LEAK-GUARD', 'validate_v110_pack_99_static_anti_leak_guard.py'),
+    ('PROJECT-V110-PACK-99-LEGACY-CLAIM-NON-REGRESSION', 'validate_v110_pack_99_legacy_claim_non_regression.py'),
+    ('PROJECT-V110-PACK-99-DATA-INVARIANTS', 'validate_v110_pack_99_data_invariants.py'),
+    ('PROJECT-V110-PACK-99-CLEANUP-ROLLBACK', 'validate_v110_pack_99_cleanup_rollback.py'),
+    ('PROJECT-V110-PACK-99-LIVE-READINESS-UPDATE', 'validate_v110_pack_99_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-99-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_99_gate_invariant_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-99-DAILY-QUEST-RUNTIME-TRACKER-AND-HOME-UNLOCK-ROLLUP', 'validate_mega_release_acceleration_99_daily_quest_runtime_tracker_and_home_unlock_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

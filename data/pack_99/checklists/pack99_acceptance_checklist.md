@@ -1,0 +1,21 @@
+# Acceptance Checklist — Pack 99
+
+- [ ] Approval string present.
+- [ ] Daily quest runtime tracker SOT created.
+- [ ] Progress endpoint/server-scoped tracker implemented or honest blocker.
+- [ ] Claim endpoint checks completion tracker.
+- [ ] Client cannot fake completion.
+- [ ] Claim before completion returns DAILY_QUEST_COMPLETION_REQUIRED.
+- [ ] Claim after server-side/test-controlled completion succeeds.
+- [ ] Same-day replay/different-token cannot double grant.
+- [ ] Cross-server no leak.
+- [ ] Reward payload preserved and non-premium.
+- [ ] Home controlled unlock remains flag-gated and default hidden.
+- [ ] Premium/hard grants blocked.
+- [ ] Other real claim sources remain deferred.
+- [ ] Runtime smoke E2E green.
+- [ ] Reward live general false.
+- [ ] Release readiness not claimed.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.
