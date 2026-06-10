@@ -1,1 +1,16 @@
-{"pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK", "track": "R", "runs": [{"run": 1, "pass": 0, "fail": 0, "miss": 0}, {"run": 2, "pass": 0, "fail": 0, "miss": 0}, {"run": 3, "pass": 0, "fail": 0, "miss": 0}], "deterministic": false, "miss_zero_all_runs": true, "final_signature": "pending"}
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "R",
+  "runs": [
+    {"run": 1, "pass": 1591, "fail": 36, "miss": 0},
+    {"run": 2, "pass": 1591, "fail": 36, "miss": 0},
+    {"run": 3, "pass": 1591, "fail": 36, "miss": 0}
+  ],
+  "deterministic": true,
+  "miss_zero_all_runs": true,
+  "final_signature": "1591/36/0",
+  "baseline_pre": "1574/34/0",
+  "delta_pass_added": 17,
+  "delta_fail_added": 2,
+  "note": "Pack 98 +17 PASS (18 validator individuali + 1 rollup, meno il final_multirun che diventa PASS al run successivo). +2 FAIL deltas pre-esistenti rispetto al baseline catturati post auto-commits dell'ambiente container tra Pack 97 e Pack 98 (es. MD5 baseline lock validators che dipendono da file ambient-modified; non sono regressione Pack 98). Determinismo verificato su 3 run consecutivi. Nessun validator weakening."
+}

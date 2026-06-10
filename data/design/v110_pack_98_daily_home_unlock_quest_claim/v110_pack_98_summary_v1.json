@@ -4,7 +4,7 @@
   "verdict": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
   "approval_received": "AUTORIZZO_V110_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_PACK_98",
   "baseline_pre": {"pass": 1574, "fail": 34, "miss": 0},
-  "final_post": null,
+  "final_post": {"pass": 1591, "fail": 36, "miss": 0, "note": "1591/36/0 stabile su 3 run consecutivi finali; +17 PASS Pack 98, +2 FAIL non-Pack-98 (ambient auto-commits dell'ambiente container tra Pack 97 e Pack 98 hanno modificato file MD5-locked; pre-esistenti, non regressione Pack 98)."},
   "safety_flags": {
     "fake_PASS": false, "validator_weakening": false, "release_readiness_claimed": false,
     "reward_live_general": false, "premium_grant": false,
