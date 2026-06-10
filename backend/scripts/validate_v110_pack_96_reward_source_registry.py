@@ -17,5 +17,8 @@ from utils.reward_source_registry import REWARD_SOURCE_REGISTRY, FORBIDDEN_REWAR
 assert 'qa_controlled_soft_currency_claim' in REWARD_SOURCE_REGISTRY
 assert 'story_progress_marker_claim' in REWARD_SOURCE_REGISTRY
 assert 'gems' in FORBIDDEN_REWARD_TYPES
-assert set(list_allowlisted_sources()) == {'qa_controlled_soft_currency_claim', 'story_progress_marker_claim'}
+assert set(list_allowlisted_sources()) >= {'qa_controlled_soft_currency_claim', 'story_progress_marker_claim'}
+# Pack 96 baseline: assert at least the Pack 96 sources are present; Pack 97+ may add more sources.
+assert 'qa_controlled_soft_currency_claim' in list_allowlisted_sources()
+assert 'story_progress_marker_claim' in list_allowlisted_sources()
 print('[v110 PACK_96_REWARD_SOURCE_REGISTRY] OK 2_live_sources gems_forbidden allowlist_consistent')
