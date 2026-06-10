@@ -1,0 +1,13 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "N",
+  "cleanup_script": "backend/scripts/cleanup_v110_pack_98_test_artifacts.py",
+  "refuse_by_default": true,
+  "requires_apply_flag": "--apply",
+  "requires_marker_match": "pack_98_test_artifact=true",
+  "target_collections": ["users", "player_server_profiles", "user_heroes", "user_equipment", "inventory", "wallets", "reward_claim_ledger"],
+  "kill_switches_reset_supported": true,
+  "kill_switch_env_vars": ["REWARD_CLAIM_LEDGER_LIVE_ENABLED", "DAILY_LOGIN_CLAIM_ENABLED", "DAILY_QUEST_CLAIM_ENABLED"],
+  "does_not_touch_production": true,
+  "dry_run_safe": true
+}

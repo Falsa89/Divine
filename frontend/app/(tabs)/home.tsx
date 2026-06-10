@@ -60,6 +60,10 @@ import { DevMetricsOverlay } from '../../components/home/DevMetricsOverlay';
 import { useServerTimePhase, type TimePhase } from '../../utils/serverTimePhase';
 import { preloadAssets } from '../../utils/preloadAssets';
 import HomeLoadingScreen from '../../components/home/HomeLoadingScreen';
+// Pack 98 — Daily home reward section (default hidden by AND of 2 flags;
+// safe import: section returns null when EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED
+// or EXPO_PUBLIC_DAILY_HOME_UNLOCK is not 'true'. No render in production.)
+import DailyHomeRewardSection from '../../src/components/DailyHomeRewardSection';
 
 const { width: W, height: H } = Dimensions.get('window');
 
@@ -553,6 +557,10 @@ export default function HomeTab() {
           />
         </Animated.View>
       )}
+      {/* Pack 98 — Daily Home Reward Section (default hidden by AND of 2 flags).
+          Returns null in production unless both `EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED`
+          and `EXPO_PUBLIC_DAILY_HOME_UNLOCK` are 'true' AND server scope present. */}
+      <DailyHomeRewardSection />
     </View>
   );
 }

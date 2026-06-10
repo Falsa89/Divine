@@ -1,0 +1,12 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "I",
+  "backend_global_kill_switch": {"env": "REWARD_CLAIM_LEDGER_LIVE_ENABLED", "default": false},
+  "backend_daily_login_kill_switch": {"env": "DAILY_LOGIN_CLAIM_ENABLED", "default": false},
+  "backend_daily_quest_kill_switch": {"env": "DAILY_QUEST_CLAIM_ENABLED", "default": false},
+  "and_logic_required": true,
+  "frontend_daily_claim_ui_flag": {"env": "EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED", "default": "false"},
+  "frontend_daily_home_unlock_flag": {"env": "EXPO_PUBLIC_DAILY_HOME_UNLOCK", "default": "false"},
+  "smoke_lifecycle_verified": true,
+  "all_kill_switches_default_off": true
+}

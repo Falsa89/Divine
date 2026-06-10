@@ -53,6 +53,26 @@ def _grant_soft_currency_to_psp(db, user_id: str, server_id: str,
     return inc
 
 
+def _grant_daily_quest_to_psp(db, user_id: str, server_id: str,
+                              payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Grant per `daily_quest_completion_claim`. Reward fisso server-side.
+
+    Pack 98: payload client viene IGNORATO. Reward: `{mission_coins: 15, honor: 8}`.
+    Soft currency server-bound. NESSUN premium.
+    """
+    fixed_reward = {"mission_coins": 15, "honor": 8}
+    inc: Dict[str, int] = {}
+    for k, amount in fixed_reward.items():
+        if k in FORBIDDEN_REWARD_TYPES:
+            raise _PremiumGrantBlocked(k)
+        if k not in ALLOWED_SOFT_CURRENCIES:
+            raise _RewardTypeNotAllowed(k)
+        if amount <= 0 or amount > 100:
+            raise _RewardTypeNotAllowed(f"{k}:daily_quest_amount_cap")
+        inc[f"soft_currencies.{k}"] = amount
+    return inc
+
+
 def _grant_daily_login_to_psp(db, user_id: str, server_id: str,
                               payload: Dict[str, Any]) -> Dict[str, Any]:
     """Grant per `daily_login_claim`. Reward fisso piccolo, hard-coded server-side.
@@ -124,6 +144,24 @@ REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "daily_idempotency_strategy": "server_side_claim_key_daily_login_<server_id>_<YYYY-MM-DD UTC>",
         "description": "Pack 97 first real player-facing claim source. Daily login reward server-scoped, soft currency only. Server-side claim_key deterministic. Per-source kill switch default OFF.",
     },
+    "daily_quest_completion_claim": {
+        "server_scoped": True,
+        "reward_types": ["mission_coins", "honor"],
+        "live": True,
+        "grant_fn_name": "grant_daily_quest_to_psp",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_98",
+        "per_source_kill_switch_env": "DAILY_QUEST_CLAIM_ENABLED",
+        "per_source_kill_switch_default": False,
+        "fixed_reward": {"mission_coins": 15, "honor": 8},
+        "amount_cap_per_key": 100,
+        "quest_id_whitelist": ["daily_quest_1", "daily_quest_2", "daily_quest_3"],
+        "completion_proof_required": True,
+        "completion_proof_test_only_via_marker": "pack_98_test_artifact",
+        "daily_idempotency_strategy": "server_side_claim_key_daily_quest_<server_id>_<quest_id>_<YYYY-MM-DD UTC>",
+        "ready_status": "READY_GATED_COMPLETION_REQUIRED",
+        "description": "Pack 98 second real player-facing claim source. Daily quest completion. Server-side claim_key + completion proof required (test-only via marker until real quest runtime exists).",
+    },
 }
 
 
@@ -131,6 +169,7 @@ _GRANT_FN_MAP = {
     "grant_soft_currency_to_psp": _grant_soft_currency_to_psp,
     "grant_noop": _grant_noop,
     "grant_daily_login_to_psp": _grant_daily_login_to_psp,
+    "grant_daily_quest_to_psp": _grant_daily_quest_to_psp,
 }
 
 

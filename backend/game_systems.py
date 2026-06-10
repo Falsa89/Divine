@@ -25,6 +25,7 @@ from routes import (
     register_sanctuary_routes,
     register_reward_claim_routes,
     register_daily_login_claim_routes,
+    register_daily_quest_claim_routes,
 )
 from routes.synergies import register_synergy_routes
 from routes.server_time import register_server_time_routes
@@ -99,5 +100,10 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # DAILY_LOGIN_CLAIM_ENABLED (entrambi default OFF). Server-side deterministic
     # claim_key + unique index per anti-double-grant DB-level.
     register_daily_login_claim_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
+    # Pack 98 — Daily quest completion claim endpoint (second real source).
+    # READY_GATED_COMPLETION_REQUIRED: completion proof obbligatorio server-side
+    # (test-only via marker `pack_98_test_artifact`). Doppio kill switch AND.
+    register_daily_quest_claim_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
     return router

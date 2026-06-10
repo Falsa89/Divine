@@ -1,0 +1,18 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "P",
+  "files_added": [
+    "backend/routes/daily_quest_claim.py",
+    "frontend/src/components/DailyQuestClaimButton.tsx",
+    "frontend/src/components/DailyHomeRewardSection.tsx",
+    "frontend/app/daily-home-preview.tsx"
+  ],
+  "files_modified": [
+    "backend/utils/reward_source_registry.py",
+    "backend/routes/__init__.py",
+    "backend/game_systems.py",
+    "frontend/app/(tabs)/home.tsx"
+  ],
+  "reason": "Pack 98: daily_quest_completion_claim source + endpoint thin + daily_home gated section + Home embed (default hidden). Pack 97 daily_login_claim runtime non modificato.",
+  "no_validator_weakening": true, "baseline_signature_preserved": true
+}

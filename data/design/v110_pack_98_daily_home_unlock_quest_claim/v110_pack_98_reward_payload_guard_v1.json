@@ -1,0 +1,12 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "G",
+  "fixed_reward_server_side": {"mission_coins": 15, "honor": 8},
+  "reward_types_allowed_for_quest": ["mission_coins", "honor"],
+  "client_payload_ignored": true,
+  "amount_cap_per_key": 100,
+  "no_pulls": true, "no_hero_grants": true, "no_equipment_grants": true,
+  "no_premium_or_hard_currency_grants": true,
+  "writes_target": "player_server_profiles.soft_currencies.*",
+  "completion_proof_required_pre_grant": true
+}

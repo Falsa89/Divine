@@ -1,0 +1,14 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "H",
+  "component_file": "frontend/src/components/DailyQuestClaimButton.tsx",
+  "feature_flag_env": "EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED",
+  "feature_flag_default": "false",
+  "visible_in_production_by_default": false,
+  "quest_id_selectable_default": "daily_quest_1",
+  "states_handled": ["idle", "loading", "claimed", "already_claimed", "completion_required", "kill_switch_off", "whitelist_error", "psp_missing", "error"],
+  "no_false_success_on_blocker": true,
+  "no_silent_s1": true,
+  "no_mail_achievements_battlepass_event_afk_consumers": true,
+  "shows_honest_completion_required_message": true
+}

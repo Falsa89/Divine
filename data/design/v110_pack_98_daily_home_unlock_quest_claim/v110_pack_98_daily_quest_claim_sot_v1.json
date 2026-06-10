@@ -1,0 +1,21 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "D",
+  "sot_doc": "docs/divine/118_DAILY_QUEST_CLAIM_SOT.md",
+  "source_id": "daily_quest_completion_claim",
+  "server_scoped": true,
+  "idempotency": "mandatory",
+  "daily_key_format": "daily_quest_<server_id>_<quest_id>_<YYYY-MM-DD UTC>",
+  "daily_key_computed_server_side": true,
+  "idempotency_token_derived_from_claim_key": true,
+  "sha1_token_derivation": true,
+  "unique_index_fields": ["user_id", "server_id", "claim_key"],
+  "unique_index_partial_filter": {"claim_source": "daily_quest_completion_claim"},
+  "unique_index_name": "ux_user_server_claimkey_daily_quest_pack98",
+  "no_double_claim_per_user_server_quest_day": true,
+  "quest_id_whitelist": ["daily_quest_1", "daily_quest_2", "daily_quest_3"],
+  "completion_proof_required_server_side": true,
+  "completion_proof_test_only_via_marker": "pack_98_test_artifact",
+  "ready_status": "READY_GATED_COMPLETION_REQUIRED",
+  "reward_server_scoped_non_premium": true
+}

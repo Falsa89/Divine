@@ -1,0 +1,22 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_98_DAILY_HOME_UNLOCK_AND_DAILY_QUEST_CLAIM_SOURCE_MEGAPACK",
+  "track": "K",
+  "static_checks": {
+    "quest_route_uses_ledger": true,
+    "quest_route_replay_check_before_grant": true,
+    "quest_route_completion_proof_required_for_real_users": true,
+    "quest_route_test_completion_proof_requires_marker": true,
+    "quest_route_does_not_write_users_gold_gems": true,
+    "quest_route_no_hardcoded_s1": true,
+    "quest_route_kill_switches_default_off": true,
+    "quest_route_both_switches_required_AND": true,
+    "quest_route_quest_id_whitelist_enforced": true,
+    "quest_route_unique_partial_index_defined": true,
+    "quest_grant_fn_only_soft_currencies": true,
+    "quest_grant_fn_fixed_server_side": true,
+    "home_section_AND_two_flags": true,
+    "home_section_server_scope_required": true,
+    "home_section_no_render_in_production_by_default": true,
+    "no_other_claim_source_added_live_in_pack_98": true
+  }
+}
