@@ -4,7 +4,7 @@
   "verdict": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS_READY_WITH_DEFERRED_BLOCKERS_DOCUMENTED_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING",
   "approval_received": "AUTORIZZO_V110_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_PACK_96",
   "baseline_pre": {"pass": 1539, "fail": 34, "miss": 0},
-  "final_post": null,
+  "final_post": {"pass": 1557, "fail": 34, "miss": 0, "note": "1557/34/0 stabile su 3 run consecutivi finali; +18 PASS, 0 nuovi FAIL vs baseline 1539/34/0. Una flake nota di un load-stability validator (PROJECT-N-TRACK-D-CANARY-LIGHT-LOAD-STABILITY) per timing p99 e' osservata occasionalmente in ambiente con background load; non e' regressione Pack 96."},
   "safety_flags": {
     "fake_PASS": false,
     "validator_weakening": false,

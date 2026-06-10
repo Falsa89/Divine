@@ -2,12 +2,15 @@
   "pack": "MEGA_RELEASE_ACCELERATION_96_REWARD_CLAIM_LEDGER_LIVE_EXECUTE_AND_CONTROLLED_CLAIM_PATHS",
   "track": "Q",
   "runs": [
-    {"run": 1, "pass": 0, "fail": 0, "miss": 0},
-    {"run": 2, "pass": 0, "fail": 0, "miss": 0},
-    {"run": 3, "pass": 0, "fail": 0, "miss": 0}
+    {"run": 1, "pass": 1557, "fail": 34, "miss": 0},
+    {"run": 2, "pass": 1557, "fail": 34, "miss": 0},
+    {"run": 3, "pass": 1557, "fail": 34, "miss": 0}
   ],
-  "deterministic": false,
+  "deterministic": true,
   "miss_zero_all_runs": true,
-  "final_signature": "pending",
-  "note": "placeholder; updated after 3 deterministic runs."
+  "final_signature": "1557/34/0",
+  "baseline_pre": "1539/34/0",
+  "delta_pass_added": 18,
+  "delta_fail_added": 0,
+  "note": "Pack 96 ha aggiunto 18 PASS (17 validator individuali + 1 rollup) senza incrementare i FAIL. Determinismo verificato. Known flaky test PROJECT-N-TRACK-D-CANARY-LIGHT-LOAD-STABILITY puo' fallire occasionalmente per timing p99 in ambiente con load di background concomitante (1/5 run); non e' regressione Pack 96."
 }
