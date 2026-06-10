@@ -1,0 +1,22 @@
+# Acceptance Checklist — Pack 98
+
+- [ ] Approval string present.
+- [ ] Daily Home unlock SOT created.
+- [ ] DailyLoginClaimButton integrated only behind feature flag.
+- [ ] daily_quest_completion_claim SOT created.
+- [ ] daily_quest_completion_claim added to registry only.
+- [ ] Daily quest reward small, server-scoped, non-premium.
+- [ ] Daily quest endpoint safe or honestly deferred if completion runtime absent.
+- [ ] Frontend daily quest consumer gated and not production-visible by default.
+- [ ] Kill switches default OFF and restored after smoke.
+- [ ] First daily quest claim succeeds or honest blocker if runtime not ready.
+- [ ] Same-day replay/different-token cannot double grant.
+- [ ] Cross-server no leak.
+- [ ] Premium/hard grants blocked.
+- [ ] Other real claim sources remain deferred.
+- [ ] Runtime smoke E2E green.
+- [ ] Reward live general false.
+- [ ] Release readiness not claimed.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.
