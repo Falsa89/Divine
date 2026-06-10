@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-09T23:18:07.540778+00:00",
+  "timestamp_utc": "2026-06-10T00:15:11.729638+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2189,
+  "backend_python_files_scanned": 2211,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1140,
+      "files_with_hits": 1152,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -54,15 +54,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 38,
+              "line": 39,
               "snippet": "def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):"
             },
             {
-              "line": 41,
+              "line": 42,
               "snippet": "register_equipment_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             },
             {
-              "line": 42,
+              "line": 43,
               "snippet": "register_combat_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -128,14 +128,18 @@
           ]
         },
         {
-          "file": "backend/utils/economy_idempotency_replay_detection_dry_run.py",
+          "file": "backend/utils/reward_source_registry.py",
           "keyword": "user",
           "has_server_id_anywhere": true,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 117,
-              "snippet": "user_id: Optional[str] = None,"
+              "line": 33,
+              "snippet": "def _grant_soft_currency_to_psp(db, user_id: str, server_id: str,"
+            },
+            {
+              "line": 56,
+              "snippet": "def _grant_noop(_db, _user_id: str, _server_id: str, _payload: Dict[str, Any]):"
             }
           ]
         }
@@ -145,7 +149,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 302,
+      "files_with_hits": 304,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -174,11 +178,11 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 66,
+              "line": 67,
               "snippet": "# in design catalog ONLY (no roster activation)."
             },
             {
-              "line": 69,
+              "line": 70,
               "snippet": "# NOT connected to battle/HP-bar/VFX/status/gacha/roster runtime."
             }
           ]
@@ -261,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 450,
+      "files_with_hits": 455,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -282,7 +286,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 78,
+              "line": 79,
               "snippet": "# Strictly GET-only, no DB, no inventory, no spend, no user state."
             }
           ]
@@ -361,7 +365,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 220,
+      "files_with_hits": 230,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -380,6 +384,26 @@
             {
               "line": 1018,
               "snippet": "# Gemme = socket nei gear (NON Rune/scroll/talisman, NON premium currency `gems`)."
+            }
+          ]
+        },
+        {
+          "file": "backend/utils/reward_source_registry.py",
+          "keyword": "currency",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 13,
+              "snippet": "- Premium / hard currency (`gems`) e' BANNATA in Pack 96 per qualunque source."
+            },
+            {
+              "line": 19,
+              "snippet": "\"gems\",                # premium currency"
+            },
+            {
+              "line": 22,
+              "snippet": "\"stamina\",             # not server-scoped soft currency"
             }
           ]
         },
@@ -436,22 +460,6 @@
             {
               "line": 40,
               "snippet": "\"premium_currency_display_as_grantable\"):"
-            }
-          ]
-        },
-        {
-          "file": "backend/scripts/apply_v101_global_legacy_data_cleanup.py",
-          "keyword": "currency",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 15,
-              "snippet": "- premium currency grant"
-            },
-            {
-              "line": 60,
-              "snippet": "'premium_currency_grant':False,"
             }
           ]
         }
@@ -637,7 +645,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 304,
+      "files_with_hits": 305,
       "hits_sample": [
         {
           "file": "backend/battle_engine.py",
@@ -757,7 +765,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 65,
+      "files_with_hits": 72,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -772,6 +780,26 @@
             {
               "line": 312,
               "snippet": "\"story_progress\": {},"
+            }
+          ]
+        },
+        {
+          "file": "backend/utils/reward_source_registry.py",
+          "keyword": "story_progress",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 57,
+              "snippet": "\"\"\"No-op grant: usato per source `story_progress_marker_claim`.\"\"\""
+            },
+            {
+              "line": 83,
+              "snippet": "\"story_progress_marker_claim\": {"
+            },
+            {
+              "line": 90,
+              "snippet": "\"description\": \"Marker-only claim per story progress milestones. NESSUN reward grant, scrive solo ledger row + opzionalmente PSP.story_progress (futuro pack).\","
             }
           ]
         },
@@ -838,22 +866,6 @@
               "snippet": "assert d.get('no_story_progress_write_promotion_in_pack_92') is True"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/dry_run_v110_psp_migration.py",
-          "keyword": "story_progress",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 50,
-              "snippet": "\"story_progress_docs\": None,"
-            },
-            {
-              "line": 62,
-              "snippet": "\"story_progress_docs\": _safe_count(db, \"story_progress\"),"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -861,7 +873,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 189,
+      "files_with_hits": 191,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -874,7 +886,7 @@
               "snippet": "register_guild_routes,"
             },
             {
-              "line": 43,
+              "line": 44,
               "snippet": "register_guild_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -920,6 +932,18 @@
           ]
         },
         {
+          "file": "backend/utils/reward_source_registry.py",
+          "keyword": "guild",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 28,
+              "snippet": "\"gold\", \"honor\", \"guild_points\", \"mission_coins\","
+            }
+          ]
+        },
+        {
           "file": "backend/scripts/validate_slc_f_collection_scope_matrix_v1.py",
           "keyword": "guild",
           "has_server_id_anywhere": false,
@@ -950,22 +974,6 @@
               "snippet": "'v92_live_guild_encounter_source_catalog',"
             }
           ]
-        },
-        {
-          "file": "backend/scripts/validate_visual_preview_runtime_shell_progress_report_v3.py",
-          "keyword": "guild",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": false,
-          "sample_lines": [
-            {
-              "line": 8,
-              "snippet": "boss preview_shell_v57, guild_war autoresolve+replay_link unchanged"
-            },
-            {
-              "line": 46,
-              "snippet": "'guild_war':'autoresolve_with_replay_link_exception_unchanged',"
-            }
-          ]
         }
       ],
       "server_id_present_anywhere": true,
@@ -986,7 +994,7 @@
               "snippet": "register_rankings_routes,"
             },
             {
-              "line": 47,
+              "line": 48,
               "snippet": "register_rankings_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -1074,15 +1082,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 34,
+              "line": 35,
               "snippet": "from routes.affinity_gifts import register_affinity_gifts_readonly_routes"
             },
             {
-              "line": 35,
+              "line": 36,
               "snippet": "from routes.affinity_gift_spend import register_affinity_gift_spend_skeleton_routes"
             },
             {
-              "line": 77,
+              "line": 78,
               "snippet": "# AF2-E \u2014 Affinity gifts read-only design preview API (3 GET endpoints)."
             }
           ]
@@ -1302,7 +1310,7 @@
               "snippet": "register_cosmetics_routes,"
             },
             {
-              "line": 44,
+              "line": 45,
               "snippet": "register_cosmetics_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
