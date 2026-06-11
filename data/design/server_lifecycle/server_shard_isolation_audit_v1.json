@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-11T22:58:57.434632+00:00",
+  "timestamp_utc": "2026-06-11T23:42:38.335772+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2354,
+  "backend_python_files_scanned": 2368,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1219,
+      "files_with_hits": 1228,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 140
+      "user_id_only_files_count": 141
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 323,
+      "files_with_hits": 325,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -261,11 +261,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 22
+      "user_id_only_files_count": 23
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 479,
+      "files_with_hits": 487,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -353,11 +353,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 81
+      "user_id_only_files_count": 82
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 247,
+      "files_with_hits": 250,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -498,15 +498,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 306,
+              "line": 321,
               "snippet": "\"claim_key_strategy\": \"server_side_claim_key_shop_buy_<server_id>_<shop_id>_<item_id>_<purchase_key>\","
             },
             {
-              "line": 342,
+              "line": 357,
               "snippet": "\"claim_key_strategy\": \"server_side_claim_key_equipment_equip_<server_id>_<hero_instance_id>_<slot>_<purchase_key>\","
             },
             {
-              "line": 357,
+              "line": 372,
               "snippet": "\"claim_key_strategy\": \"server_side_claim_key_equipment_unequip_<server_id>_<equipment_instance_id>_<purchase_key>\","
             }
           ]
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 322,
+      "files_with_hits": 324,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -793,7 +793,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 19
+      "user_id_only_files_count": 20
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -826,11 +826,11 @@
               "snippet": "\"\"\"No-op grant: usato per source `story_progress_marker_claim`.\"\"\""
             },
             {
-              "line": 231,
+              "line": 246,
               "snippet": "\"story_progress_marker_claim\": {"
             },
             {
-              "line": 238,
+              "line": 253,
               "snippet": "\"description\": \"Marker-only claim per story progress milestones. NESSUN reward grant, scrive solo ledger row + opzionalmente PSP.story_progress (futuro pack).\","
             }
           ]
@@ -909,7 +909,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 195,
+      "files_with_hits": 196,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1556,7 +1556,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 421,
+  "cross_server_leak_risk_candidates_count": 425,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",

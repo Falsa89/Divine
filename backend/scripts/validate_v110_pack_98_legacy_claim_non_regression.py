@@ -6,6 +6,8 @@ CANONICAL BASELINE EVOLUTION:
   * Pack 103 reconciled (approved): +tower_floor_completion_claim (ledger-gated, per-source kill switch OFF).
   * Pack 104 reconciled (approved): +shop_buy_strict_claim, +soul_forge_retire_strict_claim,
     +equipment_equip_strict_claim, +equipment_unequip_strict_claim (tutti ledger-gated, per-source kill switch OFF).
+  * Pack 105 reconciled (approved): +equipment_upgrade_strict_claim, +forge_craft_strict_claim,
+    +equipment_fusion_strict_claim (tutti ledger-gated, per-source kill switch OFF).
 
 Il check sulle famiglie *_claim_live ESTERNE al set canonico (mail/achievements/battlepass/afk/event)
 RIMANE invariato per preservare la safety.
@@ -35,6 +37,10 @@ allowed={
     'soul_forge_retire_strict_claim',
     'equipment_equip_strict_claim',
     'equipment_unequip_strict_claim',
+    # Pack 105 canonical: ledger-gated equipment upgrade / forge craft / fusion, OFF di default.
+    'equipment_upgrade_strict_claim',
+    'forge_craft_strict_claim',
+    'equipment_fusion_strict_claim',
 }
 diff = set(live) - allowed
 assert not diff, f'unexpected live sources outside canonical allowlist: {diff}'
@@ -42,4 +48,4 @@ assert not diff, f'unexpected live sources outside canonical allowlist: {diff}'
 forbidden_families = {'mail_reward_claim','achievements_claim','battlepass_claim','afk_claim','event_claim','shop_claim_legacy'}
 for ff in forbidden_families:
     assert ff not in live, f'forbidden family must remain NOT_LIVE: {ff}'
-print('[v110 PACK_98_LEGACY_CLAIM_NON_REGRESSION] OK canonical_post_pack_103_104 mail_achievements_etc_NOT_LIVE pack_91_97_preserved')
+print('[v110 PACK_98_LEGACY_CLAIM_NON_REGRESSION] OK canonical_post_pack_103_104_105 mail_achievements_etc_NOT_LIVE pack_91_97_preserved')
