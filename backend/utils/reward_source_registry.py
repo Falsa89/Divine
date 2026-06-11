@@ -111,6 +111,39 @@ class _RewardTypeNotAllowed(Exception):
         self.reward_key = reward_key
 
 
+def _grant_tower_floor_to_psp(db, user_id: str, server_id: str,
+                              payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Pack 103 — Grant per `tower_floor_completion_claim`.
+
+    Reward FISSO server-side per band di floor. Payload client IGNORATO.
+    Solo soft_currencies PSP-scoped (mission_coins, honor). NO premium.
+    """
+    floor = int((payload or {}).get("_server_resolved_floor", 0))
+    if floor < 1 or floor > 100:
+        raise _RewardTypeNotAllowed(f"tower_floor_out_of_band:{floor}")
+    if floor == 100:
+        fixed_reward = {"mission_coins": 100, "honor": 50}
+    elif floor == 50:
+        fixed_reward = {"mission_coins": 50, "honor": 25}
+    elif floor >= 51:
+        fixed_reward = {"mission_coins": 18, "honor": 9}
+    elif floor >= 10:
+        fixed_reward = {"mission_coins": 12, "honor": 6}
+    else:
+        fixed_reward = {"mission_coins": 5, "honor": 3}
+    inc: Dict[str, int] = {}
+    for k, amount in fixed_reward.items():
+        if k in FORBIDDEN_REWARD_TYPES:
+            raise _PremiumGrantBlocked(k)
+        if k not in ALLOWED_SOFT_CURRENCIES:
+            raise _RewardTypeNotAllowed(k)
+        if amount <= 0 or amount > 200:
+            raise _RewardTypeNotAllowed(f"{k}:tower_floor_amount_cap")
+        inc[f"soft_currencies.{k}"] = amount
+    return inc
+
+
+
 REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
     "qa_controlled_soft_currency_claim": {
         "server_scoped": True,
@@ -162,6 +195,28 @@ REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "ready_status": "READY_GATED_COMPLETION_REQUIRED",
         "description": "Pack 98 second real player-facing claim source. Daily quest completion. Server-side claim_key + completion proof required (test-only via marker until real quest runtime exists).",
     },
+    "tower_floor_completion_claim": {
+        "server_scoped": True,
+        "reward_types": ["mission_coins", "honor"],
+        "live": True,
+        "grant_fn_name": "grant_tower_floor_to_psp",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_103",
+        "per_source_kill_switch_env": "TOWER_FLOOR_CLAIM_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 200,
+        "floor_band_rewards": {
+            "1-9": {"mission_coins": 5, "honor": 3},
+            "10-49": {"mission_coins": 12, "honor": 6},
+            "50": {"mission_coins": 50, "honor": 25},
+            "51-99": {"mission_coins": 18, "honor": 9},
+            "100": {"mission_coins": 100, "honor": 50},
+        },
+        "execution_proof_required": True,
+        "claim_key_strategy": "server_side_claim_key_tower_floor_<server_id>_<floor>",
+        "ready_status": "READY_GATED_EXECUTION_REQUIRED",
+        "description": "Pack 103 third real player-facing claim source. Tower floor completion. Server-side claim_key + execution proof via PSP.tower_progress advance. Per-source kill switch default OFF. Reward fisso server-side per floor band, solo PSP soft currencies.",
+    },
 }
 
 
@@ -170,6 +225,7 @@ _GRANT_FN_MAP = {
     "grant_noop": _grant_noop,
     "grant_daily_login_to_psp": _grant_daily_login_to_psp,
     "grant_daily_quest_to_psp": _grant_daily_quest_to_psp,
+    "grant_tower_floor_to_psp": _grant_tower_floor_to_psp,
 }
 
 

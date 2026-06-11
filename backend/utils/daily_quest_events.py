@@ -47,13 +47,15 @@ from routes.daily_quest_tracker import (
 DAILY_QUEST_EVENT_ALLOWLIST: Dict[str, str] = {
     # Pack 100 first real mapping: daily login claim success -> daily_quest_1.
     "daily_login_claim_success": "daily_quest_1",
-    # Slot riservato (NON ATTIVO finché story strict non e` certificato player-facing):
-    # "story_strict_progress_success": "daily_quest_2",
+    # Pack 103 second real mapping: tower floor clear success -> daily_quest_2.
+    # Solo eventi server-authoritative dal /api/tower/strict/battle/execute.
+    "tower_floor_clear_success": "daily_quest_2",
 }
 
 # Source routes ammesse per ogni event_type. Una source route diversa rifiuta l'event.
 DAILY_QUEST_EVENT_SOURCE_ALLOWLIST: Dict[str, set] = {
     "daily_login_claim_success": {"daily_login_claim"},
+    "tower_floor_clear_success": {"tower_strict_battle_execute"},
 }
 
 EVENT_BRIDGE_MARKER = "_slc_pack_100_event_bridge"

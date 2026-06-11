@@ -4200,6 +4200,19 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-102-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_102_gate_invariant_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-102-TOWER-100-FLOOR-CATALOG-DETERMINISTIC-ENEMY-TEAMS-ROLLUP', 'validate_mega_release_acceleration_102_tower_100_floor_catalog_deterministic_enemy_teams_rollup.py'),
 
+    # Pack 103 — Tower execute + floor claim ledger + daily quest 2 hook SUPERPACK.
+    ('PROJECT-V110-PACK-103-SOT', 'validate_v110_pack_103_sot.py'),
+    ('PROJECT-V110-PACK-103-REWARD-SOURCE', 'validate_v110_pack_103_reward_source.py'),
+    ('PROJECT-V110-PACK-103-EXECUTE-ENDPOINT', 'validate_v110_pack_103_execute_endpoint.py'),
+    ('PROJECT-V110-PACK-103-DAILY-QUEST-2-HOOK', 'validate_v110_pack_103_daily_quest_2_hook.py'),
+    ('PROJECT-V110-PACK-103-STATIC-ANTI-LEAK', 'validate_v110_pack_103_static_anti_leak.py'),
+    ('PROJECT-V110-PACK-103-RUNTIME-SMOKE-E2E', 'validate_v110_pack_103_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-103-DATA-INVARIANTS', 'validate_v110_pack_103_data_invariants.py'),
+    ('PROJECT-V110-PACK-103-LIVE-READINESS-UPDATE', 'validate_v110_pack_103_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-103-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_103_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-103-CLEANUP-ROLLBACK', 'validate_v110_pack_103_cleanup_rollback.py'),
+    ('MEGA-RELEASE-ACCELERATION-103-TOWER-EXECUTE-FLOOR-CLAIM-LEDGER-DAILY-QUEST-2-HOOK-ROLLUP', 'validate_mega_release_acceleration_103_tower_execute_floor_claim_ledger_daily_quest_2_hook_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
