@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-11T22:33:11.100920+00:00",
+  "timestamp_utc": "2026-06-11T22:58:57.434632+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2339,
+  "backend_python_files_scanned": 2354,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1211,
+      "files_with_hits": 1219,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 139
+      "user_id_only_files_count": 140
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 318,
+      "files_with_hits": 323,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -248,24 +248,24 @@
           ]
         },
         {
-          "file": "backend/routes/v107c_loader_server_id_probe.py",
+          "file": "backend/utils/reward_source_registry.py",
           "keyword": "user_heroes",
           "has_server_id_anywhere": true,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 34,
-              "snippet": "def probe_user_heroes(server_id: Optional[str] = None):"
+              "line": 182,
+              "snippet": "`_server_resolved_stars` (calcolato dal route dopo lookup user_heroes server-scoped)."
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 21
+      "user_id_only_files_count": 22
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 474,
+      "files_with_hits": 479,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -340,32 +340,24 @@
           ]
         },
         {
-          "file": "backend/routes/rune_scroll_talisman_safety_preview.py",
+          "file": "backend/utils/reward_source_registry.py",
           "keyword": "inventory",
           "has_server_id_anywhere": true,
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 7,
-              "snippet": "mutation. No rune inventory mutation. No material/currency consumption."
-            },
-            {
-              "line": 183,
-              "snippet": "\"rune_inventory_mutation_enabled\": False,"
-            },
-            {
-              "line": 213,
-              "snippet": "\"rune_inventory_mutation_enabled\": False,"
+              "line": 155,
+              "snippet": "Solo PSP soft_currencies. NO premium. NO hard. NO inventory grant in Pack 104."
             }
           ]
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 80
+      "user_id_only_files_count": 81
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 244,
+      "files_with_hits": 247,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -485,7 +477,7 @@
     },
     "paid_currency_purchase": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 46,
+      "files_with_hits": 49,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -496,6 +488,26 @@
             {
               "line": 1310,
               "snippet": "#   battle_pass_purchase_enabled:                       false"
+            }
+          ]
+        },
+        {
+          "file": "backend/utils/reward_source_registry.py",
+          "keyword": "purchase",
+          "has_server_id_anywhere": true,
+          "has_user_id_only_without_server_id": false,
+          "sample_lines": [
+            {
+              "line": 306,
+              "snippet": "\"claim_key_strategy\": \"server_side_claim_key_shop_buy_<server_id>_<shop_id>_<item_id>_<purchase_key>\","
+            },
+            {
+              "line": 342,
+              "snippet": "\"claim_key_strategy\": \"server_side_claim_key_equipment_equip_<server_id>_<hero_instance_id>_<slot>_<purchase_key>\","
+            },
+            {
+              "line": 357,
+              "snippet": "\"claim_key_strategy\": \"server_side_claim_key_equipment_unequip_<server_id>_<equipment_instance_id>_<purchase_key>\","
             }
           ]
         },
@@ -568,18 +580,6 @@
             {
               "line": 424,
               "snippet": "purchase_counts = {}"
-            }
-          ]
-        },
-        {
-          "file": "backend/routes/artifacts.py",
-          "keyword": "purchase",
-          "has_server_id_anywhere": false,
-          "has_user_id_only_without_server_id": true,
-          "sample_lines": [
-            {
-              "line": 394,
-              "snippet": "\"price\", \"purchase_url\", \"duplicates\","
             }
           ]
         }
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 319,
+      "files_with_hits": 322,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -793,7 +793,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 18
+      "user_id_only_files_count": 19
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -826,11 +826,11 @@
               "snippet": "\"\"\"No-op grant: usato per source `story_progress_marker_claim`.\"\"\""
             },
             {
-              "line": 157,
+              "line": 231,
               "snippet": "\"story_progress_marker_claim\": {"
             },
             {
-              "line": 164,
+              "line": 238,
               "snippet": "\"description\": \"Marker-only claim per story progress milestones. NESSUN reward grant, scrive solo ledger row + opzionalmente PSP.story_progress (futuro pack).\","
             }
           ]
@@ -909,7 +909,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 193,
+      "files_with_hits": 195,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -1556,7 +1556,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 417,
+  "cross_server_leak_risk_candidates_count": 421,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
