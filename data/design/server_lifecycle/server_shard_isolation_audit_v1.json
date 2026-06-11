@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-11T21:17:39.100642+00:00",
+  "timestamp_utc": "2026-06-11T21:56:18.773517+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2326,
+  "backend_python_files_scanned": 2339,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1207,
+      "files_with_hits": 1211,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -153,7 +153,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 316,
+      "files_with_hits": 318,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -265,7 +265,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 472,
+      "files_with_hits": 474,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -334,7 +334,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 92,
+              "line": 94,
               "snippet": "NESSUN reward grant. NESSUNA scrittura su users/inventory/wallets."
             }
           ]
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 318,
+      "files_with_hits": 319,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -826,11 +826,11 @@
               "snippet": "\"\"\"No-op grant: usato per source `story_progress_marker_claim`.\"\"\""
             },
             {
-              "line": 124,
+              "line": 157,
               "snippet": "\"story_progress_marker_claim\": {"
             },
             {
-              "line": 131,
+              "line": 164,
               "snippet": "\"description\": \"Marker-only claim per story progress milestones. NESSUN reward grant, scrive solo ledger row + opzionalmente PSP.story_progress (futuro pack).\","
             }
           ]
