@@ -122,4 +122,12 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # `/api/tower/battle` e `/api/tower/status` ora 503 di default.
     register_tower_strict_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
+    # Pack 104 — Economy strict server-scoped writes (shop buy / soul forge retire /
+    # equipment equip/unequip). Triple kill switch AND di default OFF. Test-only
+    # via marker `pack_104_test_artifact`. Server-side catalog/claim_key + ledger
+    # idempotency. Solo PSP soft_currencies mutations. No users.* mutation.
+    # Forge/Upgrade/Fusion deferred onesto.
+    from routes.economy_strict import register_economy_strict_routes
+    register_economy_strict_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
     return router

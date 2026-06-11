@@ -144,6 +144,80 @@ def _grant_tower_floor_to_psp(db, user_id: str, server_id: str,
 
 
 
+def _grant_shop_buy_strict_to_psp(db, user_id: str, server_id: str,
+                                   payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Pack 104 — Grant per `shop_buy_strict_claim`.
+
+    Reward FISSO server-side basato sul catalog `shop_strict_catalog_v1` lookup
+    (catalog_item.grant). Payload client IGNORATO (solo `_server_resolved_grant`
+    e' accettato — viene scritto dal route dopo lookup catalog server-side).
+
+    Solo PSP soft_currencies. NO premium. NO hard. NO inventory grant in Pack 104.
+    """
+    fixed_grant = (payload or {}).get("_server_resolved_grant") or {}
+    if not isinstance(fixed_grant, dict) or not fixed_grant:
+        raise _RewardTypeNotAllowed("shop_buy_grant_missing_server_resolved")
+    inc: Dict[str, int] = {}
+    for k, amount in fixed_grant.items():
+        if k in FORBIDDEN_REWARD_TYPES:
+            raise _PremiumGrantBlocked(k)
+        if k not in ALLOWED_SOFT_CURRENCIES:
+            raise _RewardTypeNotAllowed(k)
+        try:
+            amt = int(amount)
+        except Exception:
+            raise _RewardTypeNotAllowed(f"{k}:invalid_amount")
+        # Cap conservativo per shop buy strict Pack 104.
+        if amt <= 0 or amt > 1000:
+            raise _RewardTypeNotAllowed(f"{k}:shop_buy_amount_cap")
+        inc[f"soft_currencies.{k}"] = amt
+    return inc
+
+
+def _grant_soul_forge_retire_strict_to_psp(db, user_id: str, server_id: str,
+                                            payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Pack 104 — Grant per `soul_forge_retire_strict_claim`.
+
+    Reward FISSO server-side per band di stelle. Payload client IGNORATO eccetto
+    `_server_resolved_stars` (calcolato dal route dopo lookup user_heroes server-scoped).
+
+    Solo PSP soft_currencies. NO prana/soul_seals/star_dust legacy wallet (account-wide).
+    Solo `mission_coins` + `honor` (PSP-scoped).
+    """
+    stars = int((payload or {}).get("_server_resolved_stars", 0))
+    if stars < 1 or stars > 15:
+        raise _RewardTypeNotAllowed(f"soul_forge_stars_out_of_band:{stars}")
+    # Band: 1-2 stars: 5/3; 3-4: 10/5; 5: 20/10; 6+: 40/20.
+    if stars >= 6:
+        fixed_reward = {"mission_coins": 40, "honor": 20}
+    elif stars == 5:
+        fixed_reward = {"mission_coins": 20, "honor": 10}
+    elif stars >= 3:
+        fixed_reward = {"mission_coins": 10, "honor": 5}
+    else:
+        fixed_reward = {"mission_coins": 5, "honor": 3}
+    inc: Dict[str, int] = {}
+    for k, amount in fixed_reward.items():
+        if k in FORBIDDEN_REWARD_TYPES:
+            raise _PremiumGrantBlocked(k)
+        if k not in ALLOWED_SOFT_CURRENCIES:
+            raise _RewardTypeNotAllowed(k)
+        if amount <= 0 or amount > 100:
+            raise _RewardTypeNotAllowed(f"{k}:soul_forge_amount_cap")
+        inc[f"soft_currencies.{k}"] = amount
+    return inc
+
+
+def _grant_equipment_strict_noop(_db, _user_id: str, _server_id: str,
+                                  _payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Pack 104 — equipment_equip/unequip_strict_claim NON dà reward.
+
+    Solo audit row ledger (mutation pura di stato `equipped_to`). Ritorna dict vuoto.
+    Nessun $inc su PSP. Nessuna mutation users.*.
+    """
+    return {}
+
+
 REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
     "qa_controlled_soft_currency_claim": {
         "server_scoped": True,
@@ -217,6 +291,73 @@ REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "ready_status": "READY_GATED_EXECUTION_REQUIRED",
         "description": "Pack 103 third real player-facing claim source. Tower floor completion. Server-side claim_key + execution proof via PSP.tower_progress advance. Per-source kill switch default OFF. Reward fisso server-side per floor band, solo PSP soft currencies.",
     },
+    "shop_buy_strict_claim": {
+        "server_scoped": True,
+        "reward_types": list(ALLOWED_SOFT_CURRENCIES),
+        "live": True,
+        "grant_fn_name": "grant_shop_buy_strict_to_psp",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_104",
+        "per_source_kill_switch_env": "SHOP_BUY_STRICT_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 1000,
+        "client_payload_ignored": True,
+        "server_side_catalog_required": True,
+        "claim_key_strategy": "server_side_claim_key_shop_buy_<server_id>_<shop_id>_<item_id>_<purchase_key>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 104 shop buy strict claim. Server-side catalog/price/grant. Payload client IGNORATO. Solo soft currencies PSP-scoped. NO premium. NO IAP. NO gacha.",
+    },
+    "soul_forge_retire_strict_claim": {
+        "server_scoped": True,
+        "reward_types": ["mission_coins", "honor"],
+        "live": True,
+        "grant_fn_name": "grant_soul_forge_retire_strict_to_psp",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_104",
+        "per_source_kill_switch_env": "SOUL_FORGE_RETIRE_STRICT_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 100,
+        "stars_band_rewards": {
+            "1-2": {"mission_coins": 5, "honor": 3},
+            "3-4": {"mission_coins": 10, "honor": 5},
+            "5": {"mission_coins": 20, "honor": 10},
+            "6-15": {"mission_coins": 40, "honor": 20},
+        },
+        "claim_key_strategy": "server_side_claim_key_soul_forge_retire_<server_id>_<hero_instance_id>",
+        "client_payload_ignored": True,
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 104 soul forge retire strict claim. Cross-server retire vietato. Reward fisso server-side per band stelle, solo PSP soft currencies. NO premium. NO wallet legacy account-wide grants.",
+    },
+    "equipment_equip_strict_claim": {
+        "server_scoped": True,
+        "reward_types": [],
+        "live": True,
+        "grant_fn_name": "grant_equipment_strict_noop",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_104",
+        "per_source_kill_switch_env": "EQUIPMENT_STRICT_WRITES_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 0,
+        "client_payload_ignored": True,
+        "claim_key_strategy": "server_side_claim_key_equipment_equip_<server_id>_<hero_instance_id>_<slot>_<purchase_key>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 104 equipment equip strict claim (no reward grant). Solo audit ledger row + mutation server-scoped di equipped_to. NO grant currency. NO premium. NO cross-server.",
+    },
+    "equipment_unequip_strict_claim": {
+        "server_scoped": True,
+        "reward_types": [],
+        "live": True,
+        "grant_fn_name": "grant_equipment_strict_noop",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_104",
+        "per_source_kill_switch_env": "EQUIPMENT_STRICT_WRITES_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 0,
+        "client_payload_ignored": True,
+        "claim_key_strategy": "server_side_claim_key_equipment_unequip_<server_id>_<equipment_instance_id>_<purchase_key>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 104 equipment unequip strict claim (no reward grant). Solo audit ledger row + mutation server-scoped di $unset equipped_to. NO grant currency. NO premium. NO cross-server.",
+    },
 }
 
 
@@ -226,6 +367,9 @@ _GRANT_FN_MAP = {
     "grant_daily_login_to_psp": _grant_daily_login_to_psp,
     "grant_daily_quest_to_psp": _grant_daily_quest_to_psp,
     "grant_tower_floor_to_psp": _grant_tower_floor_to_psp,
+    "grant_shop_buy_strict_to_psp": _grant_shop_buy_strict_to_psp,
+    "grant_soul_forge_retire_strict_to_psp": _grant_soul_forge_retire_strict_to_psp,
+    "grant_equipment_strict_noop": _grant_equipment_strict_noop,
 }
 
 
