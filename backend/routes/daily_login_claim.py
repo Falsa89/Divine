@@ -31,6 +31,8 @@ from utils.reward_source_registry import (
     _PremiumGrantBlocked,
     _RewardTypeNotAllowed,
 )
+# Pack 100 — bridge eventi gameplay safe -> tracker daily quest (no reward grant).
+from utils.daily_quest_events import record_daily_quest_event as _record_dq_event
 
 GLOBAL_KILL_SWITCH_ENV = "REWARD_CLAIM_LEDGER_LIVE_ENABLED"
 DAILY_KILL_SWITCH_ENV = "DAILY_LOGIN_CLAIM_ENABLED"
@@ -118,6 +120,9 @@ def register_daily_login_claim_routes(router, db, get_current_user, *_args, **_k
             "source_registered": DAILY_SOURCE in REWARD_SOURCE_REGISTRY,
             "fixed_reward": {"mission_coins": 10, "honor": 5},
             "pack_origin": "pack_97",
+            "pack_100_event_bridge_enabled": True,
+            "pack_100_event_emitted_on_success": "daily_login_claim_success",
+            "pack_100_event_target_quest": "daily_quest_1",
             "release_readiness_claimed": False,
             "reward_live_general": False,
         }
@@ -193,6 +198,13 @@ def register_daily_login_claim_routes(router, db, get_current_user, *_args, **_k
         })
         if existing:
             existing.pop("_id", None)
+            # Pack 100 — bridge to daily quest tracker (idempotente, no-op se gia` completed/claimed).
+            dq_event = await _record_dq_event(
+                db, uid, sid, "daily_login_claim_success",
+                payload={"replay": True, "claim_key": claim_key},
+                source_route="daily_login_claim",
+                day_iso=day_override,
+            )
             return {
                 "idempotent_replay": True, "server_id": sid,
                 "claim_source": DAILY_SOURCE, "claim_key": claim_key,
@@ -201,6 +213,8 @@ def register_daily_login_claim_routes(router, db, get_current_user, *_args, **_k
                 "next_claim_available_after_utc_midnight": True,
                 "pack_97_daily_login_claim": True,
                 "reward_live_general": False,
+                "daily_quest_event_bridge": dq_event,
+                "pack_100_event_bridge_attempted": True,
             }
 
         # 7. Grant via registry fn (payload client ignorato; reward fisso)
@@ -274,6 +288,14 @@ def register_daily_login_claim_routes(router, db, get_current_user, *_args, **_k
             raise HTTPException(500, detail={"blocker": "LEDGER_INSERT_FAILED",
                                              "error": repr(e)})
 
+        # Pack 100 — bridge to daily quest tracker (no reward grant, server-scoped, kill-switch-respecting).
+        dq_event = await _record_dq_event(
+            db, uid, sid, "daily_login_claim_success",
+            payload={"replay": False, "claim_key": claim_key},
+            source_route="daily_login_claim",
+            day_iso=day_override,
+        )
+
         return {
             "idempotent_replay": False, "server_id": sid,
             "claim_source": DAILY_SOURCE, "claim_key": claim_key,
@@ -283,4 +305,6 @@ def register_daily_login_claim_routes(router, db, get_current_user, *_args, **_k
             "pack_97_daily_login_claim": True,
             "reward_live_general": False,
             "premium_grant_blocked": True,
+            "daily_quest_event_bridge": dq_event,
+            "pack_100_event_bridge_attempted": True,
         }

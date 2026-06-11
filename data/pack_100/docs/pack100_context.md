@@ -1,0 +1,1 @@
+Pack 99 created a daily quest tracker but completion remained test-authoritative. Pack 100 connects daily quest completion to first real server-side gameplay events and audits story/tower server scope.

@@ -1,0 +1,21 @@
+# Acceptance Checklist — Pack 100
+
+- [ ] Approval string present.
+- [ ] Server-scoped progress canon SOT created.
+- [ ] Daily quest event bridge created.
+- [ ] Daily login claim success completes daily_quest_1 server-side.
+- [ ] Claim before completion blocked.
+- [ ] Claim after server-side event succeeds.
+- [ ] S1 completion does not affect S2.
+- [ ] Story/tower server-scope audit complete.
+- [ ] No client-faked completion.
+- [ ] Same-day replay/different-token cannot double grant.
+- [ ] Home controlled unlock remains flag-gated and default hidden.
+- [ ] Premium/hard grants blocked.
+- [ ] Other real claim sources remain deferred.
+- [ ] Runtime smoke E2E green.
+- [ ] Reward live general false.
+- [ ] Release readiness not claimed.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.

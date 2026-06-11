@@ -137,6 +137,12 @@ def register_daily_quest_claim_routes(router, db, get_current_user, *_a, **_kw):
             "fixed_reward": {"mission_coins": 15, "honor": 8},
             "pack_origin": "pack_98",
             "pack_99_tracker_integrated": True,
+            "pack_100_event_bridge_integrated": True,
+            "pack_100_quest_real_completion_event_status": {
+                "daily_quest_1": "REAL_COMPLETION_EVENT_READY",
+                "daily_quest_2": "COMPLETION_RUNTIME_DEFERRED",
+                "daily_quest_3": "COMPLETION_RUNTIME_DEFERRED",
+            },
             "release_readiness_claimed": False,
             "reward_live_general": False,
         }

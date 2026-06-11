@@ -4141,6 +4141,26 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-99-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_99_gate_invariant_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-99-DAILY-QUEST-RUNTIME-TRACKER-AND-HOME-UNLOCK-ROLLUP', 'validate_mega_release_acceleration_99_daily_quest_runtime_tracker_and_home_unlock_rollup.py'),
 
+    # Pack 100 — Daily Quest Gameplay Completion Events / First Real Task Loop.
+    # Event bus server-authoritative -> tracker (no reward grant lato bridge).
+    # Mapping daily_login_claim_success -> daily_quest_1. Daily Task Loop reale S1.
+    # S2 NON contaminato da S1. Story strict server-scoped OK. Tower deferred.
+    ('PROJECT-V110-PACK-100-SERVER-SCOPED-PROGRESS-CANON-SOT', 'validate_v110_pack_100_server_scoped_progress_canon_sot.py'),
+    ('PROJECT-V110-PACK-100-DAILY-QUEST-EVENT-BUS-STATIC', 'validate_v110_pack_100_daily_quest_event_bus_static.py'),
+    ('PROJECT-V110-PACK-100-DAILY-LOGIN-HOOK', 'validate_v110_pack_100_daily_login_hook.py'),
+    ('PROJECT-V110-PACK-100-FIRST-DAILY-QUEST-EVENT-MAPPING', 'validate_v110_pack_100_first_daily_quest_event_mapping.py'),
+    ('PROJECT-V110-PACK-100-STORY-TOWER-SERVER-SCOPE-AUDIT', 'validate_v110_pack_100_story_tower_server_scope_audit.py'),
+    ('PROJECT-V110-PACK-100-DAILY-QUEST-CLAIM-REAL-PLAYER-STATUS', 'validate_v110_pack_100_daily_quest_claim_real_player_status.py'),
+    ('PROJECT-V110-PACK-100-FRONTEND-DAILY-TASK-LOOP-UI-GUARD', 'validate_v110_pack_100_frontend_daily_task_loop_ui_guard.py'),
+    ('PROJECT-V110-PACK-100-RUNTIME-SMOKE-E2E', 'validate_v110_pack_100_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-100-STATIC-SERVER-SCOPE-ANTI-LEAK-GUARD', 'validate_v110_pack_100_static_server_scope_anti_leak_guard.py'),
+    ('PROJECT-V110-PACK-100-LEGACY-CLAIM-PROGRESS-NON-REGRESSION', 'validate_v110_pack_100_legacy_claim_progress_non_regression.py'),
+    ('PROJECT-V110-PACK-100-DATA-INVARIANTS', 'validate_v110_pack_100_data_invariants.py'),
+    ('PROJECT-V110-PACK-100-CLEANUP-ROLLBACK', 'validate_v110_pack_100_cleanup_rollback.py'),
+    ('PROJECT-V110-PACK-100-LIVE-READINESS-UPDATE', 'validate_v110_pack_100_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-100-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_100_gate_invariant_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-100-DAILY-QUEST-GAMEPLAY-COMPLETION-EVENTS-FIRST-REAL-TASK-LOOP-ROLLUP', 'validate_mega_release_acceleration_100_daily_quest_gameplay_completion_events_first_real_task_loop_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

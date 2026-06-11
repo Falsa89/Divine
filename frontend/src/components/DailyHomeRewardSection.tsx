@@ -21,6 +21,7 @@ import { useAuth } from '../auth/AuthContext';
 import { useServerScope } from '../hooks/useServerScope';
 import DailyLoginClaimButton from './DailyLoginClaimButton';
 import DailyQuestClaimButton from './DailyQuestClaimButton';
+import DailyTaskLoopOverview from './DailyTaskLoopOverview';
 
 const UI_FLAG_PACK_97 = (process.env.EXPO_PUBLIC_DAILY_CLAIM_UI_ENABLED || 'false').toString().toLowerCase();
 const HOME_FLAG_PACK_98 = (process.env.EXPO_PUBLIC_DAILY_HOME_UNLOCK || 'false').toString().toLowerCase();
@@ -64,6 +65,7 @@ const DailyHomeRewardSectionInner: React.FC<DailyHomeRewardSectionProps> = ({
   return (
     <View style={styles.wrap}>
       <Text style={styles.h1}>Ricompense giornaliere</Text>
+      <DailyTaskLoopOverview forceVisible={forceVisible || true} />
       <DailyLoginClaimButton
         forceVisible={forceVisible || true}
         onClaimed={(r) => onClaimed && onClaimed('daily_login', r)}
