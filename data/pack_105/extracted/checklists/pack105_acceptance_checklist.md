@@ -1,0 +1,16 @@
+# Acceptance Checklist — Pack 105
+- [ ] Approval string present.
+- [ ] PSP material storage SOT created.
+- [ ] Material/equipment schema audit complete.
+- [ ] Equipment upgrade strict server-scoped or honest deferred.
+- [ ] Forge craft strict server-scoped or honest deferred.
+- [ ] Fusion strict server-scoped or honest deferred.
+- [ ] Ledger spend/idempotency proof.
+- [ ] S1/S2 isolation proven.
+- [ ] No users.gold/gems/experience mutation.
+- [ ] No premium/hard grants.
+- [ ] No client price/reward trust.
+- [ ] Smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.

@@ -218,6 +218,21 @@ def _grant_equipment_strict_noop(_db, _user_id: str, _server_id: str,
     return {}
 
 
+def _grant_forge_strict_pack_105(_db, _user_id: str, _server_id: str,
+                                  _payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Pack 105 — Grant fn placeholder per upgrade/forge/fusion strict.
+
+    Le mutazioni effettive (PSP.materials, PSP.soft_currencies, user_equipment)
+    avvengono direttamente nell'handler per atomicita`. Questo grant_fn ritorna
+    sempre dict vuoto: la sua presenza serve solo per soddisfare il registry
+    contract (`grant_fn_name`). Eventuali grant currency vengono validati
+    server-side dall'handler stesso (cap, whitelist, no premium).
+
+    Ritorna dict vuoto. Audit ledger row contiene il dettaglio reale.
+    """
+    return {}
+
+
 REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
     "qa_controlled_soft_currency_claim": {
         "server_scoped": True,
@@ -358,6 +373,54 @@ REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "ready_status": "READY_GATED_RUNTIME_REQUIRED",
         "description": "Pack 104 equipment unequip strict claim (no reward grant). Solo audit ledger row + mutation server-scoped di $unset equipped_to. NO grant currency. NO premium. NO cross-server.",
     },
+    "equipment_upgrade_strict_claim": {
+        "server_scoped": True,
+        "reward_types": [],
+        "live": True,
+        "grant_fn_name": "grant_forge_strict_pack_105",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_105",
+        "per_source_kill_switch_env": "EQUIPMENT_UPGRADE_STRICT_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 0,
+        "client_payload_ignored": True,
+        "server_side_catalog_required": True,
+        "claim_key_strategy": "server_side_claim_key_equipment_upgrade_<server_id>_<equipment_instance_id>_<target_level>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 105 equipment upgrade strict claim. Consume PSP materials + soft_currencies server-side. Stat boost +5% per livello. Max level 30. Ledger idempotent. No premium. No users.* mutation.",
+    },
+    "forge_craft_strict_claim": {
+        "server_scoped": True,
+        "reward_types": [],
+        "live": True,
+        "grant_fn_name": "grant_forge_strict_pack_105",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_105",
+        "per_source_kill_switch_env": "FORGE_CRAFT_STRICT_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 0,
+        "client_payload_ignored": True,
+        "server_side_catalog_required": True,
+        "claim_key_strategy": "server_side_claim_key_forge_craft_<server_id>_<recipe_id>_<idempotency_token>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 105 forge craft strict claim. Consume PSP materials + soft + grant nuovo user_equipment server-scoped da template fisso. Ledger idempotent. No premium. No users.* mutation.",
+    },
+    "equipment_fusion_strict_claim": {
+        "server_scoped": True,
+        "reward_types": [],
+        "live": True,
+        "grant_fn_name": "grant_forge_strict_pack_105",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_105",
+        "per_source_kill_switch_env": "EQUIPMENT_FUSION_STRICT_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 0,
+        "client_payload_ignored": True,
+        "server_side_catalog_required": True,
+        "claim_key_strategy": "server_side_claim_key_equipment_fusion_<server_id>_<base_equipment_id>_<idempotency_token>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 105 equipment fusion strict claim. Consume fodder server-scoped (stesso slot, rarity-1) + PSP materials + soft. Rarity +1 + stat boost. Ledger idempotent. No cross-server consume. No premium.",
+    },
 }
 
 
@@ -370,6 +433,7 @@ _GRANT_FN_MAP = {
     "grant_shop_buy_strict_to_psp": _grant_shop_buy_strict_to_psp,
     "grant_soul_forge_retire_strict_to_psp": _grant_soul_forge_retire_strict_to_psp,
     "grant_equipment_strict_noop": _grant_equipment_strict_noop,
+    "grant_forge_strict_pack_105": _grant_forge_strict_pack_105,
 }
 
 
