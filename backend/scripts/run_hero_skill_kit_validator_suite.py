@@ -4213,6 +4213,32 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-103-CLEANUP-ROLLBACK', 'validate_v110_pack_103_cleanup_rollback.py'),
     ('MEGA-RELEASE-ACCELERATION-103-TOWER-EXECUTE-FLOOR-CLAIM-LEDGER-DAILY-QUEST-2-HOOK-ROLLUP', 'validate_mega_release_acceleration_103_tower_execute_floor_claim_ledger_daily_quest_2_hook_rollup.py'),
 
+    # Pack 104 — Shop / Soul Forge Retire / Equipment Equip-Unequip Strict + Forge DEFERRED.
+    ('PROJECT-V110-PACK-104-SOT', 'validate_v110_pack_104_sot.py'),
+    ('PROJECT-V110-PACK-104-REWARD-SOURCE', 'validate_v110_pack_104_reward_source.py'),
+    ('PROJECT-V110-PACK-104-ECONOMY-ENDPOINTS', 'validate_v110_pack_104_economy_endpoints.py'),
+    ('PROJECT-V110-PACK-104-SHOP-CATALOG', 'validate_v110_pack_104_shop_catalog.py'),
+    ('PROJECT-V110-PACK-104-STATIC-ANTI-LEAK', 'validate_v110_pack_104_static_anti_leak.py'),
+    ('PROJECT-V110-PACK-104-RUNTIME-SMOKE-E2E', 'validate_v110_pack_104_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-104-DATA-INVARIANTS', 'validate_v110_pack_104_data_invariants.py'),
+    ('PROJECT-V110-PACK-104-LIVE-READINESS-UPDATE', 'validate_v110_pack_104_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-104-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_104_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-104-CLEANUP-ROLLBACK', 'validate_v110_pack_104_cleanup_rollback.py'),
+    ('MEGA-RELEASE-ACCELERATION-104-SHOP-SOUL-EQUIPMENT-FORGE-STRICT-WRITES-ROLLUP', 'validate_mega_release_acceleration_104_shop_soul_equipment_forge_strict_writes_rollup.py'),
+
+    # Pack 105 — Forge / Upgrade / Fusion Strict + PSP material ledger spend.
+    ('PROJECT-V110-PACK-105-SOT', 'validate_v110_pack_105_sot.py'),
+    ('PROJECT-V110-PACK-105-REWARD-SOURCE', 'validate_v110_pack_105_reward_source.py'),
+    ('PROJECT-V110-PACK-105-FORGE-ENDPOINTS', 'validate_v110_pack_105_forge_endpoints.py'),
+    ('PROJECT-V110-PACK-105-FORGE-CATALOG', 'validate_v110_pack_105_forge_catalog.py'),
+    ('PROJECT-V110-PACK-105-STATIC-ANTI-LEAK', 'validate_v110_pack_105_static_anti_leak.py'),
+    ('PROJECT-V110-PACK-105-RUNTIME-SMOKE-E2E', 'validate_v110_pack_105_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-105-DATA-INVARIANTS', 'validate_v110_pack_105_data_invariants.py'),
+    ('PROJECT-V110-PACK-105-LIVE-READINESS-UPDATE', 'validate_v110_pack_105_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-105-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_105_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-105-CLEANUP-ROLLBACK', 'validate_v110_pack_105_cleanup_rollback.py'),
+    ('MEGA-RELEASE-ACCELERATION-105-FORGE-UPGRADE-FUSION-STRICT-PSP-MATERIAL-LEDGER-SPEND-ROLLUP', 'validate_mega_release_acceleration_105_forge_upgrade_fusion_strict_psp_material_ledger_spend_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
