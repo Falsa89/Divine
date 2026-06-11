@@ -1,0 +1,28 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_104_SHOP_SOUL_EQUIPMENT_FORGE_STRICT_WRITES_SUPERPACK",
+  "approval_string_required": "AUTORIZZO_V110_SHOP_SOUL_EQUIPMENT_FORGE_STRICT_WRITES_PACK_104",
+  "focus": [
+    "shop_buy_strict",
+    "soul_forge_retire_strict",
+    "equipment_strict_writes",
+    "forge_preflight_or_strict",
+    "pack103_validator_reconciliation"
+  ],
+  "forbidden": [
+    "IAP/store/payment integration",
+    "gacha changes",
+    "premium/hard currency grant",
+    "users.gold/gems/experience mutation",
+    "account-wide inventory/currency/equipment writes",
+    "hardcoded server_id=s1",
+    "cross-server economy mutation",
+    "client price/reward trust",
+    "non-idempotent repeat mutation",
+    "broad production DB writes",
+    "destructive migration",
+    "reward_live_general=true",
+    "release readiness claim",
+    "fake_PASS",
+    "validator weakening"
+  ]
+}

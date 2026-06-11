@@ -1,0 +1,15 @@
+# Acceptance Checklist — Pack 104
+- [ ] Approval string present.
+- [ ] Pack 103 canonical validator FAILs reconciled without weakening.
+- [ ] Shop buy strict path server-scoped and idempotent.
+- [ ] Soul Forge retire strict path server-scoped and idempotent.
+- [ ] Equipment equip/unequip strict server-scoped.
+- [ ] Forge/upgrade/fusion safe or honestly deferred.
+- [ ] S1/S2 economy isolation proven.
+- [ ] No users.gold/gems/experience mutation.
+- [ ] No premium/hard grants.
+- [ ] No IAP/gacha/payment.
+- [ ] Runtime smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.
