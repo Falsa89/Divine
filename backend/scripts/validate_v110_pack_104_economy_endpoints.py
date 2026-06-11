@@ -26,9 +26,17 @@ assert 'soul_forge_retire_{sid}_' in src
 assert 'equipment_equip_{sid}_' in src
 assert 'equipment_unequip_{sid}_' in src
 
-# Forge DEFERRED.
-assert 'FORGE_UPGRADE_STRICT_DEFERRED' in src
-assert 'EQUIPMENT_FUSION_STRICT_DEFERRED' in src
+# Forge DEFERRED (Pack 104 canonical) ovvero READY (Pack 105 canonical, dopo riconciliazione).
+# Almeno uno dei due deve essere riconoscibile: o entrambi i marker DEFERRED Pack 104,
+# oppure tutti i sub-path READY Pack 105.
+_forge_deferred_pack_104 = ('FORGE_UPGRADE_STRICT_DEFERRED' in src
+                             and 'EQUIPMENT_FUSION_STRICT_DEFERRED' in src)
+_forge_ready_pack_105 = ('equipment_upgrade_strict' in src
+                          and 'forge_craft_strict' in src
+                          and 'equipment_fusion_strict' in src
+                          and 'EQUIPMENT_UPGRADE_STRICT_ENABLED' in src)
+assert _forge_deferred_pack_104 or _forge_ready_pack_105, \
+    'forge strict status must be either Pack 104 DEFERRED or Pack 105 READY'
 
 # No client price/payload trust nei BaseModel (no `price`, no `cost`, no `grant` keys).
 for pyd_model in ('ShopBuyRequest','SoulForgeRetireRequest','EquipmentEquipRequest','EquipmentUnequipRequest'):
