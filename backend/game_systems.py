@@ -27,6 +27,7 @@ from routes import (
     register_daily_login_claim_routes,
     register_daily_quest_claim_routes,
     register_daily_quest_tracker_routes,
+    register_tower_strict_routes,
 )
 from routes.synergies import register_synergy_routes
 from routes.server_time import register_server_time_routes
@@ -113,5 +114,12 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     # test-only finche` non esiste un runtime di gameplay reale (marker
     # `pack_99_test_artifact`). Il claim Pack 98 ora consulta questo tracker.
     register_daily_quest_tracker_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
+    # Pack 101 — Tower strict server-scoped (PSP.tower_progress).
+    # Endpoint /api/tower/strict/{health,status,preflight,battle/preview}.
+    # Quarantine reward live, no users.* mutation, kill switch
+    # `TOWER_STRICT_PREFLIGHT_ENABLED` default OFF. Path legacy tower
+    # `/api/tower/battle` e `/api/tower/status` ora 503 di default.
+    register_tower_strict_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
     return router

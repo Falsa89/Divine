@@ -4161,6 +4161,26 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-100-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_100_gate_invariant_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-100-DAILY-QUEST-GAMEPLAY-COMPLETION-EVENTS-FIRST-REAL-TASK-LOOP-ROLLUP', 'validate_mega_release_acceleration_100_daily_quest_gameplay_completion_events_first_real_task_loop_rollup.py'),
 
+    # Pack 101 — Tower Progress PSP Migration + Reward Quarantine Strict Scope.
+    # Tower strict server-scoped (PSP.tower_progress). Legacy /api/tower/* quarantined.
+    # No reward grant, no users.* mutation. S1/S2 tower isolation verified.
+    ('PROJECT-V110-PACK-101-TOWER-SERVER-SCOPE-SOT', 'validate_v110_pack_101_tower_server_scope_sot.py'),
+    ('PROJECT-V110-PACK-101-TOWER-LEGACY-PATH-AUDIT', 'validate_v110_pack_101_tower_legacy_path_audit.py'),
+    ('PROJECT-V110-PACK-101-TOWER-PSP-PROGRESS-SCHEMA-LOADER', 'validate_v110_pack_101_tower_psp_progress_schema_loader.py'),
+    ('PROJECT-V110-PACK-101-TOWER-BACKFILL-PREFLIGHT', 'validate_v110_pack_101_tower_backfill_preflight.py'),
+    ('PROJECT-V110-PACK-101-TOWER-STATUS-STRICT-ENDPOINT', 'validate_v110_pack_101_tower_status_strict_endpoint.py'),
+    ('PROJECT-V110-PACK-101-TOWER-BATTLE-PROGRESS-STRICT-PREVIEW', 'validate_v110_pack_101_tower_battle_progress_strict_preview.py'),
+    ('PROJECT-V110-PACK-101-TOWER-REWARD-QUARANTINE', 'validate_v110_pack_101_tower_reward_quarantine.py'),
+    ('PROJECT-V110-PACK-101-FRONTEND-TOWER-CONSUMER-GUARD', 'validate_v110_pack_101_frontend_tower_consumer_guard.py'),
+    ('PROJECT-V110-PACK-101-STORY-DAILY-TOWER-CROSS-VALIDATOR', 'validate_v110_pack_101_story_daily_tower_cross_validator.py'),
+    ('PROJECT-V110-PACK-101-RUNTIME-SMOKE-E2E', 'validate_v110_pack_101_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-101-STATIC-TOWER-ANTI-LEAK-GUARD', 'validate_v110_pack_101_static_tower_anti_leak_guard.py'),
+    ('PROJECT-V110-PACK-101-DATA-INVARIANTS', 'validate_v110_pack_101_data_invariants.py'),
+    ('PROJECT-V110-PACK-101-CLEANUP-ROLLBACK', 'validate_v110_pack_101_cleanup_rollback.py'),
+    ('PROJECT-V110-PACK-101-LIVE-READINESS-UPDATE', 'validate_v110_pack_101_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-101-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_101_gate_invariant_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-101-TOWER-PROGRESS-PSP-MIGRATION-AND-REWARD-QUARANTINE-STRICT-SCOPE-ROLLUP', 'validate_mega_release_acceleration_101_tower_progress_psp_migration_and_reward_quarantine_strict_scope_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

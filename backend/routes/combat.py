@@ -1,6 +1,7 @@
 """
 Divine Waifus - Combat Routes (Story, Tower, PvP, Events, Hero LevelUp, Titles)
 """
+import os
 import random
 import uuid
 from datetime import datetime
@@ -12,6 +13,36 @@ from .game_data import STORY_CHAPTERS, EQUIPMENT_SLOTS, EQUIPMENT_TEMPLATES, DAI
 # PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
 from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
 from fastapi import Depends as _Depends_postqa_d
+
+
+# Pack 101 — Tower legacy quarantine kill switch (default OFF).
+# Quando OFF gli endpoint legacy /api/tower/status e /api/tower/battle ritornano 503.
+# Questo previene mutations su users.gold/users.gems/users.experience e write
+# account-wide su db.tower_progress finche` non viene introdotta una source
+# reward ledger-backed dedicata per Tower (pack futuro).
+_TOWER_LEGACY_KILL_SWITCH_ENV = "TOWER_LEGACY_LIVE_ENABLED"
+
+
+def _pack_101_tower_legacy_on() -> bool:
+    v = os.getenv(_TOWER_LEGACY_KILL_SWITCH_ENV)
+    return str(v or "false").strip().lower() in ("true", "1", "yes", "on")
+
+
+def _pack_101_tower_legacy_block_or_raise():
+    """Solleva 503 se la quarantena legacy e\u0300 attiva (default)."""
+    if not _pack_101_tower_legacy_on():
+        raise HTTPException(503, detail={
+            "blocker": "TOWER_LEGACY_QUARANTINED",
+            "kill_switch_env": _TOWER_LEGACY_KILL_SWITCH_ENV,
+            "reason": (
+                "Pack 101 ha quarantinato il path tower legacy. Il path muta "
+                "users.gold/users.gems/users.experience e scrive db.tower_progress "
+                "account-wide. Usare /api/tower/strict/* (server-scoped, no reward live)."
+            ),
+            "tower_strict_endpoint_group": "/api/tower/strict",
+            "tower_reward_live_grant": False,
+            "reward_live_general": False,
+        })
 
 
 def register_combat_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
@@ -214,6 +245,8 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
     # ==================== TOWER ====================
     @router.get("/tower/status")
     async def get_tower_status(current_user: dict = Depends(get_current_user)):
+        # Pack 101 — quarantena legacy (default OFF -> 503)
+        _pack_101_tower_legacy_block_or_raise()
         tower = await db.tower_progress.find_one({"user_id": current_user["id"]})
         if not tower:
             tower = {"user_id": current_user["id"], "floor": 1, "highest_floor": 1, "rewards_claimed": []}
@@ -222,6 +255,8 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
 
     @router.post("/tower/battle")
     async def tower_battle(current_user: dict = Depends(get_current_user)):
+        # Pack 101 — quarantena legacy (default OFF -> 503)
+        _pack_101_tower_legacy_block_or_raise()
         uid = current_user["id"]
         tower = await db.tower_progress.find_one({"user_id": uid})
         if not tower:

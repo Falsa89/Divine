@@ -1,0 +1,13 @@
+# Acceptance Checklist — Pack 101
+- [ ] Approval string present.
+- [ ] Tower server-scope SOT created.
+- [ ] Tower legacy path audit complete.
+- [ ] Tower progress loader uses PSP/server-bound storage.
+- [ ] Tower status strict endpoint requires server_id.
+- [ ] Tower rewards quarantined/disabled/ledger-required.
+- [ ] S1/S2 tower isolation proven.
+- [ ] No users.gold/gems/experience tower mutation.
+- [ ] Runtime smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.
