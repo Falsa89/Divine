@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-11T17:02:46.848235+00:00",
+  "timestamp_utc": "2026-06-11T17:56:05.083299+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2288,
+  "backend_python_files_scanned": 2308,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1185,
+      "files_with_hits": 1199,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -94,15 +94,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 42,
+              "line": 43,
               "snippet": "def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power):"
             },
             {
-              "line": 45,
+              "line": 46,
               "snippet": "register_equipment_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             },
             {
-              "line": 46,
+              "line": 47,
               "snippet": "register_combat_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -137,7 +137,7 @@
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 312,
+      "files_with_hits": 314,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -202,11 +202,11 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 70,
+              "line": 71,
               "snippet": "# in design catalog ONLY (no roster activation)."
             },
             {
-              "line": 73,
+              "line": 74,
               "snippet": "# NOT connected to battle/HP-bar/VFX/status/gacha/roster runtime."
             }
           ]
@@ -249,7 +249,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 468,
+      "files_with_hits": 470,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -290,7 +290,7 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 82,
+              "line": 83,
               "snippet": "# Strictly GET-only, no DB, no inventory, no spend, no user state."
             }
           ]
@@ -653,7 +653,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 307,
+      "files_with_hits": 309,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -773,7 +773,7 @@
     },
     "story_progress": {
       "expected_scope": "server_bound",
-      "files_with_hits": 82,
+      "files_with_hits": 84,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -846,15 +846,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 25,
+              "line": 56,
               "snippet": "- server_id presente: read REALE da PSP.story_progress per"
             },
             {
-              "line": 27,
+              "line": 58,
               "snippet": "(no insert legacy se PSP esiste e story_progress vuoto: si"
             },
             {
-              "line": 29,
+              "line": 60,
               "snippet": "- server_id assente: legacy path account-wide (db.story_progress"
             }
           ]
@@ -930,7 +930,7 @@
               "snippet": "register_guild_routes,"
             },
             {
-              "line": 47,
+              "line": 48,
               "snippet": "register_guild_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -966,7 +966,7 @@
               "snippet": "from .guild import register_guild_routes"
             },
             {
-              "line": 29,
+              "line": 30,
               "snippet": "'register_guild_routes',"
             }
           ]
@@ -1034,7 +1034,7 @@
               "snippet": "register_rankings_routes,"
             },
             {
-              "line": 51,
+              "line": 52,
               "snippet": "register_rankings_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -1050,7 +1050,7 @@
               "snippet": "from .rankings import register_rankings_routes"
             },
             {
-              "line": 33,
+              "line": 34,
               "snippet": "'register_rankings_routes',"
             }
           ]
@@ -1110,15 +1110,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 38,
+              "line": 39,
               "snippet": "from routes.affinity_gifts import register_affinity_gifts_readonly_routes"
             },
             {
-              "line": 39,
+              "line": 40,
               "snippet": "from routes.affinity_gift_spend import register_affinity_gift_spend_skeleton_routes"
             },
             {
-              "line": 81,
+              "line": 82,
               "snippet": "# AF2-E \u2014 Affinity gifts read-only design preview API (3 GET endpoints)."
             }
           ]
@@ -1342,7 +1342,7 @@
               "snippet": "register_cosmetics_routes,"
             },
             {
-              "line": 48,
+              "line": 49,
               "snippet": "register_cosmetics_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
             }
           ]
@@ -1358,7 +1358,7 @@
               "snippet": "from .cosmetics import register_cosmetics_routes"
             },
             {
-              "line": 30,
+              "line": 31,
               "snippet": "'register_cosmetics_routes',"
             }
           ]
