@@ -1,0 +1,16 @@
+# Acceptance Checklist — Pack 103
+- [ ] Approval string present.
+- [ ] Tower execute strict endpoint implemented/gated.
+- [ ] idempotency_token required.
+- [ ] PSP.tower_progress advances server-scoped.
+- [ ] S1/S2 isolation proven.
+- [ ] tower_floor_completion_claim ledger-backed.
+- [ ] No users.gold/gems/experience mutation.
+- [ ] No premium/hard grants.
+- [ ] daily_quest_2 hook from tower_floor_clear_success.
+- [ ] Legacy tower endpoints quarantined.
+- [ ] Frontend default flags OFF.
+- [ ] Smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.

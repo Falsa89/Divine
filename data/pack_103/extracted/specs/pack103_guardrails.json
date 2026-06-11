@@ -1,0 +1,20 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_103_TOWER_EXECUTE_FLOOR_CLAIM_LEDGER_DAILY_QUEST_2_HOOK_SUPERPACK",
+  "approval_string_required": "AUTORIZZO_V110_TOWER_EXECUTE_FLOOR_CLAIM_LEDGER_DAILY_QUEST_2_PACK_103",
+  "new_claim_source": "tower_floor_completion_claim",
+  "daily_quest_hook": "tower_floor_clear_success -> daily_quest_2",
+  "forbidden": [
+    "reward live activation generale",
+    "premium/hard currency grant",
+    "users.gold/gems/experience mutation from tower",
+    "account-wide tower progress write",
+    "hardcoded server_id=s1",
+    "S1 progress leak into S2",
+    "random enemy teams",
+    "true boss monsters",
+    "gacha/IAP/payment change",
+    "release readiness claim",
+    "fake_PASS",
+    "validator weakening"
+  ]
+}
