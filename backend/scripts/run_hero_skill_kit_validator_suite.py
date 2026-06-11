@@ -4181,6 +4181,25 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-101-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_101_gate_invariant_preservation.py'),
     ('MEGA-RELEASE-ACCELERATION-101-TOWER-PROGRESS-PSP-MIGRATION-AND-REWARD-QUARANTINE-STRICT-SCOPE-ROLLUP', 'validate_mega_release_acceleration_101_tower_progress_psp_migration_and_reward_quarantine_strict_scope_rollup.py'),
 
+    # Pack 102 — Tower 100 Floor Catalog (deterministic enemy teams).
+    # 100 launch floors da LAUNCH_BASE_HERO_IDS, team boss only, S1/S2 isolated.
+    # Endpoint read-only /api/tower/strict/catalog{,/floor/{n}}. Preview wired.
+    ('PROJECT-V110-PACK-102-TOWER-FLOOR-CATALOG-SOT', 'validate_v110_pack_102_tower_floor_catalog_sot.py'),
+    ('PROJECT-V110-PACK-102-HERO-ID-SOURCE-AUDIT', 'validate_v110_pack_102_hero_id_source_audit.py'),
+    ('PROJECT-V110-PACK-102-100-FLOOR-CATALOG-GENERATION', 'validate_v110_pack_102_100_floor_catalog_generation.py'),
+    ('PROJECT-V110-PACK-102-CATALOG-LOADER-READONLY-API', 'validate_v110_pack_102_catalog_loader_readonly_api.py'),
+    ('PROJECT-V110-PACK-102-STRICT-PREVIEW-CATALOG-WIRING', 'validate_v110_pack_102_strict_preview_catalog_wiring.py'),
+    ('PROJECT-V110-PACK-102-BOSS-TEAM-RULES-VALIDATOR', 'validate_v110_pack_102_boss_team_rules_validator.py'),
+    ('PROJECT-V110-PACK-102-FRONTEND-CATALOG-PREVIEW-GUARD', 'validate_v110_pack_102_frontend_catalog_preview_guard.py'),
+    ('PROJECT-V110-PACK-102-EXPANSION-POLICY', 'validate_v110_pack_102_expansion_policy.py'),
+    ('PROJECT-V110-PACK-102-RUNTIME-SMOKE-E2E', 'validate_v110_pack_102_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-102-STATIC-CATALOG-ANTI-LEAK-GUARD', 'validate_v110_pack_102_static_catalog_anti_leak_guard.py'),
+    ('PROJECT-V110-PACK-102-DATA-INVARIANTS', 'validate_v110_pack_102_data_invariants.py'),
+    ('PROJECT-V110-PACK-102-CLEANUP-ROLLBACK', 'validate_v110_pack_102_cleanup_rollback.py'),
+    ('PROJECT-V110-PACK-102-LIVE-READINESS-UPDATE', 'validate_v110_pack_102_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-102-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_102_gate_invariant_preservation.py'),
+    ('MEGA-RELEASE-ACCELERATION-102-TOWER-100-FLOOR-CATALOG-DETERMINISTIC-ENEMY-TEAMS-ROLLUP', 'validate_mega_release_acceleration_102_tower_100_floor_catalog_deterministic_enemy_teams_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

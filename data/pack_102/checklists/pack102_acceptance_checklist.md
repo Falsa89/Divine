@@ -1,0 +1,16 @@
+# Acceptance Checklist — Pack 102
+- [ ] Approval string present.
+- [ ] Catalog has exactly 100 floors.
+- [ ] Floors are 1..100 with no gaps/duplicates.
+- [ ] Every floor has deterministic 6-hero enemy team.
+- [ ] All hero IDs are canonical/eligible/official/player-facing.
+- [ ] Boss floors are team boss, not true boss monsters.
+- [ ] Floors 50 and 100 are major boss teams.
+- [ ] Strict preview reads catalog.
+- [ ] Tower rewards remain quarantined/off.
+- [ ] No users.gold/gems/experience mutation from tower.
+- [ ] S1/S2 progress isolation preserved.
+- [ ] Runtime smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.

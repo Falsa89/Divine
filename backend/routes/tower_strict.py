@@ -22,6 +22,15 @@ from typing import Any, Dict, Optional
 
 from fastapi import HTTPException, Depends
 
+# Pack 102 — import del catalog statico dei 100 piani Tower (read-only).
+from data.tower_floor_catalog_v1 import (
+    TOWER_FLOOR_CATALOG_V1,
+    CATALOG_VERSION as TOWER_CATALOG_VERSION,
+    TOTAL_LAUNCH_FLOORS,
+    get_catalog_summary as _tower_catalog_summary,
+    get_floor as _tower_catalog_floor,
+)
+
 USER_TEST_MARKER = "pack_101_test_artifact"
 LEGACY_KILL_SWITCH_ENV = "TOWER_LEGACY_LIVE_ENABLED"
 PREFLIGHT_KILL_SWITCH_ENV = "TOWER_STRICT_PREFLIGHT_ENABLED"
@@ -108,6 +117,12 @@ def register_tower_strict_routes(router, db, get_current_user, *_a, **_kw):
             "no_users_gold_gems_experience_mutation": True,
             "pack_origin": "pack_101",
             "release_readiness_claimed": False,
+            "tower_catalog_version": TOWER_CATALOG_VERSION,
+            "tower_catalog_total_floors": TOTAL_LAUNCH_FLOORS,
+            "tower_catalog_pack_origin": "pack_102",
+            "tower_catalog_content_identical_across_servers": True,
+            "tower_catalog_deterministic": True,
+            "tower_catalog_uses_only_launch_base_heroes": True,
         }
 
     @router.get("/tower/strict/status")
@@ -219,6 +234,14 @@ def register_tower_strict_routes(router, db, get_current_user, *_a, **_kw):
                 floor_eff = max(1, int(floor))
             except Exception:
                 raise HTTPException(422, detail={"blocker": "INVALID_FLOOR"})
+        # Pack 102 — wiring al catalog. Floor fuori range -> 404 esplicito.
+        catalog_floor = _tower_catalog_floor(floor_eff)
+        if catalog_floor is None:
+            raise HTTPException(404, detail={
+                "blocker": "FLOOR_OUT_OF_CATALOG_RANGE",
+                "floor": floor_eff,
+                "catalog_total_launch_floors": TOTAL_LAUNCH_FLOORS,
+            })
         # team_power lettura: PSP-scoped active team se presente, altrimenti default 5000
         team = await db.teams.find_one({"user_id": uid, "is_active": True})
         team_power = int((team or {}).get("total_power", 5000))
@@ -227,9 +250,57 @@ def register_tower_strict_routes(router, db, get_current_user, *_a, **_kw):
             "server_id": sid,
             "current_floor": current_floor,
             "preview": preview,
+            "catalog_floor": catalog_floor,
+            "catalog_version": TOWER_CATALOG_VERSION,
             "reward_live_general": False,
             "tower_reward_live_grant": False,
             "no_reward_grant_on_preview": True,
             "next_step": "REWARD_QUARANTINED_PENDING_LEDGER",
             "_slc_pack_101_battle_preview": True,
+            "_slc_pack_102_catalog_wired": True,
+        }
+
+    @router.get("/tower/strict/catalog")
+    async def tower_strict_catalog():
+        """Pack 102 — endpoint pubblico (auth-free) per il summary del catalog.
+
+        Read-only: no DB access, no mutation. Contenuto identico per ogni client.
+        """
+        return {
+            "catalog": _tower_catalog_summary(),
+            "reward_live_general": False,
+            "tower_reward_live_grant": False,
+            "release_readiness_claimed": False,
+            "_slc_pack_102_catalog_summary": True,
+        }
+
+    @router.get("/tower/strict/catalog/floor/{floor}")
+    async def tower_strict_catalog_floor(floor: int):
+        """Pack 102 — endpoint pubblico (auth-free) per il dettaglio di un floor.
+
+        Read-only: solo legge dal catalog statico. Validazione range 1..TOTAL_LAUNCH_FLOORS.
+        """
+        try:
+            f_int = int(floor)
+        except Exception:
+            raise HTTPException(422, detail={"blocker": "INVALID_FLOOR"})
+        if f_int < 1 or f_int > TOTAL_LAUNCH_FLOORS:
+            raise HTTPException(404, detail={
+                "blocker": "FLOOR_OUT_OF_CATALOG_RANGE",
+                "floor": f_int,
+                "catalog_total_launch_floors": TOTAL_LAUNCH_FLOORS,
+            })
+        cf = _tower_catalog_floor(f_int)
+        if cf is None:
+            raise HTTPException(404, detail={
+                "blocker": "FLOOR_NOT_FOUND",
+                "floor": f_int,
+            })
+        return {
+            "catalog_floor": cf,
+            "catalog_version": TOWER_CATALOG_VERSION,
+            "content_identical_across_servers": True,
+            "reward_live_general": False,
+            "tower_reward_live_grant": False,
+            "_slc_pack_102_catalog_floor": True,
         }
