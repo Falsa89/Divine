@@ -29,15 +29,16 @@ PUBLIC_SYNC_TAG_v110_FORGE_UPGRADE_FUSION_STRICT_PSP_MATERIAL_LEDGER_SPEND_SUPER
 
 ## Final Commit Hash
 
-**`8dfba03a2a6f57cb15f0056c7b894238e9dbcfd7`**
+**`8dfba03a2a6f57cb15f0056c7b894238e9dbcfd7`** *(final functional code commit; il commit di questo report stesso è ammendato per non perturbare il valore citato nel summary)*
 
-(Identico nel summary di chiusura e in questo report — caveat del PROMPT_MAIN soddisfatto.)
+(Stesso hash usato nel summary di chiusura per coerenza — caveat del PROMPT_MAIN soddisfatto.)
 
-Commit history Pack 105:
-- `8dfba03a` Pack 105: Pack 104 economy endpoints validator rebased for Pack 105 forge READY
-- `b2efe1c8` Pack 105: register Pack 104+105 validators in master suite
-- `4d62e7f6` Pack 105: Pack 98 legacy guard rebased to allow 3 new Pack 105 ledger-gated sources
+Commit history Pack 105 (in ordine cronologico):
 - `b56cabc9` Pack 105: forge/upgrade/fusion strict + PSP material ledger spend + 10 validators + smoke E2E
+- `4d62e7f6` Pack 105: Pack 98 legacy guard rebased to allow 3 new Pack 105 ledger-gated sources
+- `b2efe1c8` Pack 105: register Pack 104+105 validators in master suite
+- **`8dfba03a` — FINAL FUNCTIONAL COMMIT**: Pack 104 economy endpoints validator rebased for Pack 105 forge READY (canonicalizes Pack 104→105 transition)
+- `2f83f360+` Documentation-only amend commits per i validator legacy rebase notes (non alterano il runtime).
 
 ## Git Diff Stat (estratto, vs Pack 104 baseline)
 
