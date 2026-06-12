@@ -29,7 +29,7 @@ assenza di route legacy unsafe, non come regressione.
 ## Commit Hash
 
 - Baseline pre-Pack-109: `d0be55a3` (auto-commit precedente).
-- Final Pack 109: vedere `git log -1 --format=%H` post-auto-commit di chiusura.
+- Final Pack 109: `10e97895772b78328d5d35b452724b82dbd44650` (post auto-commit di chiusura).
 - Il rollup `validate_mega_release_acceleration_109_*` verifica la coerenza
   presenza file/registrazione.
 
