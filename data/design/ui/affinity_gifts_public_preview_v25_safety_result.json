@@ -1,13 +1,18 @@
 {
   "task_origin": "AF2-N-V25-UI-PUBLIC-PREVIEW-SAFETY",
-  "timestamp_utc": "2026-06-12T01:13:39.536782+00:00",
+  "timestamp_utc": "2026-06-12T15:36:00.887384+00:00",
   "frontend_files_scanned": 214,
   "critical_findings": [],
   "critical_findings_count": 0,
   "informational_findings_count": 12,
   "sample_informational": [
     {
-      "file": "frontend/components/home/HomeHeroSplash.tsx",
+      "file": "frontend/app/dev-combat-qa-lab.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 2
+    },
+    {
+      "file": "frontend/app/hero-skill-kits-catalog.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
       "count": 1
     },
@@ -17,17 +22,12 @@
       "count": 1
     },
     {
+      "file": "frontend/app/collection-synergies-preview.tsx",
+      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
+      "count": 2
+    },
+    {
       "file": "frontend/app/sanctuary.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 1
-    },
-    {
-      "file": "frontend/app/affinity-gifts-preview.tsx",
-      "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 1
-    },
-    {
-      "file": "frontend/app/hero-skill-kits-catalog.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
       "count": 1
     },
@@ -37,14 +37,14 @@
       "count": 8
     },
     {
-      "file": "frontend/app/dev-combat-qa-lab.tsx",
+      "file": "frontend/app/affinity-gifts-preview.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 2
+      "count": 1
     },
     {
-      "file": "frontend/app/collection-synergies-preview.tsx",
+      "file": "frontend/app/(tabs)/gacha.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
-      "count": 2
+      "count": 1
     },
     {
       "file": "frontend/app/(tabs)/menu.tsx",
@@ -52,7 +52,7 @@
       "count": 2
     },
     {
-      "file": "frontend/app/(tabs)/gacha.tsx",
+      "file": "frontend/components/home/HomeHeroSplash.tsx",
       "pattern": "static text \"Borea\" (decorative, ALLOWED)",
       "count": 1
     }

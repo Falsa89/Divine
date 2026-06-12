@@ -137,4 +137,10 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     from routes.controlled_rewards import register_controlled_rewards_routes
     register_controlled_rewards_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
+    # Pack 107 — Competitive/Social/Live mode server-scope guards.
+    # Audit + honest blocker per Arena/PvP/Guild/Event.
+    # READY_GATED_REWARDS_DEFERRED ovunque; reward_live_general resta false.
+    from routes.competitive_guards import register_competitive_guards_routes
+    register_competitive_guards_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
     return router

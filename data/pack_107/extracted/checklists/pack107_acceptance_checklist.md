@@ -1,0 +1,19 @@
+# Acceptance Checklist — Pack 107
+- [ ] Approval string present.
+- [ ] ZIP extracted/read before coding.
+- [ ] Arena/PvP legacy path audit complete.
+- [ ] Arena/PvP server-scope guards or blockers.
+- [ ] Guild legacy path audit complete.
+- [ ] Guild membership/search/state server-scope guards or blockers.
+- [ ] Event/live mode audit complete.
+- [ ] Event/live mode server-scope guards or blockers.
+- [ ] Reward paths locked/deferred.
+- [ ] S1/S2 isolation proven.
+- [ ] No users.gold/gems/experience mutation.
+- [ ] No premium/hard/gems grants.
+- [ ] No PvP/Guild/Event rewards live.
+- [ ] Frontend default flags OFF.
+- [ ] Smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.

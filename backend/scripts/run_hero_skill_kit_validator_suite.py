@@ -4252,6 +4252,19 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-106-CLEANUP-ROLLBACK', 'validate_v110_pack_106_cleanup_rollback.py'),
     ('MEGA-RELEASE-ACCELERATION-106-MAIL-ACHIEVEMENTS-DAILY-WEEKLY-CONTROLLED-REWARDS-ROLLUP', 'validate_mega_release_acceleration_106_mail_achievements_daily_weekly_controlled_rewards_rollup.py'),
 
+    # Pack 107 — Arena/PvP/Guild/Event server-scope guards (audit-only).
+    ('PROJECT-V110-PACK-107-SOT', 'validate_v110_pack_107_sot.py'),
+    ('PROJECT-V110-PACK-107-COMPETITIVE-GUARDS-ENDPOINTS', 'validate_v110_pack_107_competitive_guards_endpoints.py'),
+    ('PROJECT-V110-PACK-107-ARENA-AUDIT', 'validate_v110_pack_107_arena_audit.py'),
+    ('PROJECT-V110-PACK-107-PVP-AUDIT', 'validate_v110_pack_107_pvp_audit.py'),
+    ('PROJECT-V110-PACK-107-GUILD-AUDIT', 'validate_v110_pack_107_guild_audit.py'),
+    ('PROJECT-V110-PACK-107-EVENT-AUDIT', 'validate_v110_pack_107_event_audit.py'),
+    ('PROJECT-V110-PACK-107-RUNTIME-SMOKE-E2E', 'validate_v110_pack_107_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-107-DATA-INVARIANTS', 'validate_v110_pack_107_data_invariants.py'),
+    ('PROJECT-V110-PACK-107-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_107_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-107-CLEANUP-ROLLBACK', 'validate_v110_pack_107_cleanup_rollback.py'),
+    ('MEGA-RELEASE-ACCELERATION-107-ARENA-PVP-GUILD-EVENTS-SERVER-SCOPE-GUARDS-ROLLUP', 'validate_mega_release_acceleration_107_arena_pvp_guild_events_server_scope_guards_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
