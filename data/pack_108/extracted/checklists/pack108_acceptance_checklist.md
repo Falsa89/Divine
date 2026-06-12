@@ -1,0 +1,19 @@
+# Acceptance Checklist — Pack 108
+- [ ] Approval string present.
+- [ ] ZIP extracted/read before coding.
+- [ ] Guild legacy route audit complete.
+- [ ] Guild server-scope retrofit or honest quarantine.
+- [ ] Guild rewards locked/deferred.
+- [ ] Arena/PvP/Event guards preserved.
+- [ ] Frontend playable loop map created.
+- [ ] Home/Lobby/Daily/Tower/Shop/Forge/Rewards/Guild guards verified.
+- [ ] Server switch refresh/static guard proof.
+- [ ] No false-ready UI labels.
+- [ ] S1/S2 isolation proven.
+- [ ] No users.gold/gems/experience mutation.
+- [ ] No rewards live.
+- [ ] No release readiness claim.
+- [ ] Smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.
