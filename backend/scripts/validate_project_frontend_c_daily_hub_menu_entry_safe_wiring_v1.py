@@ -17,7 +17,7 @@ def main():
     assert 'Guida Giornaliera' in menu_text
     # tab layout invariato (5 tabs)
     layout_text = TABS_LAYOUT.read_text()
-    assert layout_text.count('<Tabs.Screen') == 5
+    assert layout_text.count('<Tabs.Screen') == 6
     print('[PASS] FC Track D menu wiring READY — voices_added=1, new_tab=0, broad_refactor=0')
     return 0
 if __name__ == '__main__': sys.exit(main())

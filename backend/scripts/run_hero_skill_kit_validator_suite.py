@@ -4305,6 +4305,28 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-109-RUNTIME-SMOKE-E2E', 'validate_v110_pack_109_runtime_smoke_e2e.py'),
     ('MEGA-RELEASE-ACCELERATION-109-CLOSED-ALPHA-RC-SWEEP-AND-RELEASE-GATE-ROLLUP', 'validate_mega_release_acceleration_109_closed_alpha_rc_sweep_and_release_gate_rollup.py'),
 
+    # Pre-QA Stabilization 110 — Alpha Blocker Cleanup (registered Pack 111).
+    ('PROJECT-PRE-QA-110-GACHA-QUARANTINE', 'validate_pre_qa_stabilization_110_gacha_quarantine.py'),
+    ('PROJECT-PRE-QA-110-TEAM-FORMATION-QUARANTINE', 'validate_pre_qa_stabilization_110_team_formation_quarantine.py'),
+    ('PROJECT-PRE-QA-110-USE-SERVER-SCOPE-ALIAS', 'validate_pre_qa_stabilization_110_use_server_scope_alias.py'),
+    ('PROJECT-PRE-QA-110-AUTH-TOKEN-BRIDGE', 'validate_pre_qa_stabilization_110_auth_token_bridge.py'),
+    ('PROJECT-PRE-QA-110-MENU-CLEANUP', 'validate_pre_qa_stabilization_110_menu_cleanup.py'),
+    ('PROJECT-PRE-QA-110-ACHIEVEMENTS-QUARANTINE', 'validate_pre_qa_stabilization_110_achievements_quarantine.py'),
+    ('PROJECT-PRE-QA-110-MUTATING-ROUTE-ALLOWLIST', 'validate_pre_qa_stabilization_110_mutating_route_allowlist.py'),
+    ('PROJECT-PRE-QA-110-STATIC-ANTI-LEAK-GUARD', 'validate_pre_qa_stabilization_110_static_anti_leak_guard.py'),
+    ('PROJECT-PRE-QA-110-DATA-INVARIANTS', 'validate_pre_qa_stabilization_110_data_invariants.py'),
+    ('PROJECT-PRE-QA-110-PACK-91-109-QA-KICKOFF-PRESERVATION', 'validate_pre_qa_stabilization_110_pack_91_109_qa_kickoff_preservation.py'),
+    ('PROJECT-PRE-QA-110-RUNTIME-SMOKE-E2E', 'validate_pre_qa_stabilization_110_runtime_smoke_e2e.py'),
+    ('PROJECT-PRE-QA-110-FINAL-REPORT', 'validate_pre_qa_stabilization_110_final_report.py'),
+    ('PRE-QA-STABILIZATION-110-ROLLUP', 'validate_pre_qa_stabilization_110_alpha_blocker_cleanup_rollup.py'),
+
+    # Pre-QA Stabilization 111 — Rebaseline + Route Classification.
+    ('PROJECT-PRE-QA-111-ROUTE-CLASSIFICATION', 'validate_pre_qa_stabilization_111_route_classification.py'),
+    ('PROJECT-PRE-QA-111-AUTH-TOKEN-COMPAT-ADOPTION', 'validate_pre_qa_stabilization_111_auth_token_compat_adoption.py'),
+    ('PROJECT-PRE-QA-111-VALIDATORS-REGISTERED', 'validate_pre_qa_stabilization_111_validators_registered.py'),
+    ('PROJECT-PRE-QA-111-MD5-REBASELINE-AUTHORIZED', 'validate_pre_qa_stabilization_111_md5_rebaseline_authorized.py'),
+    ('PRE-QA-STABILIZATION-111-ROLLUP', 'validate_pre_qa_stabilization_111_rebaseline_route_classification_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

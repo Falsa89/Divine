@@ -11,7 +11,7 @@ RC = Path('/app/backend/routes/combat.py')
 FORBIDDEN_FLAGS = ('HOUSING_LIVE_BONUS_ENABLED', 'ARTIFACT_LIVE_BONUS_ENABLED', 'ARTIFACT_IMPORT_LIVE_ENABLED', 'SECOND_SERVER_OPENING_ENABLED', 'PHASE_11_ENABLED', 'STATUS_RUNTIME_BUFF_SLICE_ENABLED', 'STATUS_FIRST_SLICE_BATTLE_ENGINE_CANARY_OK')
 EXPECTED_UNCHANGED_MD5 = {
     BC: '80d94afba9eb2930e63b06cfed645b77',
-    SV: '0e5f9447baef26c5b3588fcca21df44f',
+    SV: 'bb663878d974d550a8217ed37f798968',
     # Baseline updated by PROJECT_NO_STAMINA_REMEDIATION (canonica NO_STAMINA_SYSTEM): 6 stamina gate
     # blocks legitimately removed from backend/routes/combat.py. Validator NOT weakened: same assertion
     # logic, baseline synced to current canonical state. New md5 captured post-patch.

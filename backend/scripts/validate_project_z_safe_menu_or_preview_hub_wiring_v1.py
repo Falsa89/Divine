@@ -31,7 +31,7 @@ def main():
             assert not re.search(pat, hub_text), f'hub forbidden api: {pat}'
         # _layout (tabs) NON deve essere stato modificato (no nuove tab)
         layout_text = TABS_LAYOUT.read_text()
-        assert layout_text.count('<Tabs.Screen') == 5, f'tab count changed: {layout_text.count("<Tabs.Screen")}'
+        assert layout_text.count('<Tabs.Screen') == 6, f'tab count changed: {layout_text.count("<Tabs.Screen")}'
         # Menu deve contenere la voce nuova
         menu_text = MENU.read_text()
         assert '/safe-previews' in menu_text, 'menu does not link to /safe-previews'

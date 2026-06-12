@@ -210,8 +210,21 @@ export default function ServerSelectScreen() {
     // reclamato. Idempotente (claim_once_per_server). NO global fallback.
     // NO premium currency. NO inventory/equipment/story reward.
     try {
-      const SecureStore = await import('expo-secure-store');
-      const token = await SecureStore.getItemAsync('v96_auth_token').catch(() => null);
+      // Pre-QA Stabilization 111 — R-01: usa authTokenCompat per leggere il
+      // token sia da SecureStore (v96_auth_token canonico) sia da AsyncStorage
+      // (token login default), senza security downgrade. Se il token manca,
+      // blocker onesto NO_AUTH_TOKEN_PSP_ENSURE_DEFERRED.
+      const { getAuthTokenCompat } = await import('../src/utils/authTokenCompat');
+      const _tokenLookup = await getAuthTokenCompat();
+      const token = _tokenLookup.token;
+      if (!token) {
+        try {
+          await AsyncStorage.setItem(
+            'pack86_psp_ensure_last_mode',
+            'no_auth_token_psp_ensure_deferred',
+          );
+        } catch (_e) { /* best-effort */ }
+      }
       if (token && BACKEND_URL) {
         const ensureUrl = `${BACKEND_URL}/api/psp/ensure?server_id=${encodeURIComponent(s.server_id)}`;
         await fetch(ensureUrl, {

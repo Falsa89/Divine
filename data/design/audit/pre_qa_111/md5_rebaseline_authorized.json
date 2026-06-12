@@ -1,0 +1,108 @@
+{
+  "rebaseline_pack": "PRE_QA_STABILIZATION_111_REBASELINE_ROUTE_CLASSIFICATION",
+  "authorization": "AUTORIZZO_PRE_QA_STABILIZATION_111_REBASELINE_ROUTE_CLASSIFICATION",
+  "scope": "ONLY 9 MD5 pins linked to Pack 110 alpha blocker cleanup edits.",
+  "rebaselined_files": [
+    {
+      "pin_file": "/app/data/design/audit/batch1_v2/track_b_gacha_lock_v1.json",
+      "field": "gacha_tsx_md5_post",
+      "old_hash": "f68b9239cec04ea54879f0be381e772a",
+      "new_hash": "a0304fbadb6c56feaa081c35fcb698d4",
+      "target_file": "frontend/app/(tabs)/gacha.tsx",
+      "reason": "Pack 110 gacha quarantine screen lock placeholder added.",
+      "blocker_pack_110": "P0-A — Gacha live quarantine"
+    },
+    {
+      "pin_file": "/app/data/design/audit/batch1_v2/track_f_menu_hardening_v1.json",
+      "field": "menu_tsx_md5_post",
+      "old_hash": "3cdb2edc6338c1c4991a7872da981fc1",
+      "new_hash": "bdf297a894c3ca08b3183b77c3cb1587",
+      "target_file": "frontend/app/(tabs)/menu.tsx",
+      "reason": "Pack 110 menu cleanup filter (12 routes + 2 QA categories hidden).",
+      "blocker_pack_110": "P0/P1-E — Menu false-ready/dev/QA cleanup"
+    },
+    {
+      "pin_file": "/app/data/design/server_profiles/project_sp_no_mutation_regression_guard_v1.json",
+      "field": "menu_md5_unchanged",
+      "old_hash": "3cdb2edc6338c1c4991a7872da981fc1",
+      "new_hash": "bdf297a894c3ca08b3183b77c3cb1587",
+      "target_file": "frontend/app/(tabs)/menu.tsx",
+      "reason": "Pack 110 menu cleanup filter.",
+      "blocker_pack_110": "P0/P1-E"
+    },
+    {
+      "pin_file": "/app/data/design/project_management/project_server_profiles_ui_lock_completion_v1.json",
+      "field": "battle_engine_md5_post + menu_md5_post",
+      "old_hash": "151ca35ad3bc35f0a6209cb3744ed440 + 3cdb2edc6338c1c4991a7872da981fc1",
+      "new_hash": "8b7f55d4f58605138daa8bbace23f514 + bdf297a894c3ca08b3183b77c3cb1587",
+      "target_file": "backend/battle_engine.py + frontend/app/(tabs)/menu.tsx",
+      "reason": "Pack 110 team formation quarantine guard + menu cleanup.",
+      "blocker_pack_110": "P0-B + P0/P1-E"
+    },
+    {
+      "pin_file": "/app/data/design/project_management/project_server_profiles_dual_read_preview_completion_v1.json",
+      "field": "battle_engine_md5_post + menu_md5_post",
+      "old_hash": "151ca35ad3bc35f0a6209cb3744ed440 + 3cdb2edc6338c1c4991a7872da981fc1",
+      "new_hash": "8b7f55d4f58605138daa8bbace23f514 + bdf297a894c3ca08b3183b77c3cb1587",
+      "target_file": "backend/battle_engine.py + frontend/app/(tabs)/menu.tsx",
+      "reason": "Pack 110 team formation quarantine guard + menu cleanup.",
+      "blocker_pack_110": "P0-B + P0/P1-E"
+    },
+    {
+      "pin_file": "/app/data/design/status_effects/project_v_second_slice_dev_live_rollback_kill_switch_v1.json",
+      "field": "battle_engine_md5_post_rollback",
+      "old_hash": "151ca35ad3bc35f0a6209cb3744ed440",
+      "new_hash": "8b7f55d4f58605138daa8bbace23f514",
+      "target_file": "backend/battle_engine.py",
+      "reason": "Pack 110 team formation quarantine guard.",
+      "blocker_pack_110": "P0-B"
+    },
+    {
+      "pin_file": "/app/data/design/project_management/project_mode_wiring_registry_completion_v1.json",
+      "field": "battle_engine_md5_post",
+      "old_hash": "151ca35ad3bc35f0a6209cb3744ed440",
+      "new_hash": "8b7f55d4f58605138daa8bbace23f514",
+      "target_file": "backend/battle_engine.py",
+      "reason": "Pack 110 team formation quarantine guard.",
+      "blocker_pack_110": "P0-B"
+    },
+    {
+      "pin_file": "/app/backend/scripts/validate_project_m_status_first_slice_canary_env_rc_gate_v1.py",
+      "field": "SV (server.py hardcoded hash)",
+      "old_hash": "0e5f9447baef26c5b3588fcca21df44f",
+      "new_hash": "bb663878d974d550a8217ed37f798968",
+      "target_file": "backend/server.py",
+      "reason": "Pack 110 gacha quarantine guards added to /api/gacha/pull and /api/gacha/pull10.",
+      "blocker_pack_110": "P0-A"
+    },
+    {
+      "pin_file": "/app/backend/scripts/validate_project_z_safe_menu_or_preview_hub_wiring_v1.py",
+      "field": "Tabs.Screen count assertion",
+      "old_hash": "5 (count assertion)",
+      "new_hash": "6 (count assertion, gacha hidden case adds second Tabs.Screen for href:null)",
+      "target_file": "frontend/app/(tabs)/_layout.tsx",
+      "reason": "Pack 110 tab Evoca hidden via conditional Tabs.Screen with href:null.",
+      "blocker_pack_110": "P0-A"
+    },
+    {
+      "pin_file": "/app/backend/scripts/validate_project_frontend_c_daily_hub_menu_entry_safe_wiring_v1.py",
+      "field": "Tabs.Screen count assertion",
+      "old_hash": "5 (count assertion)",
+      "new_hash": "6 (count assertion, gacha hidden case adds second Tabs.Screen for href:null)",
+      "target_file": "frontend/app/(tabs)/_layout.tsx",
+      "reason": "Pack 110 tab Evoca hidden via conditional Tabs.Screen with href:null.",
+      "blocker_pack_110": "P0-A"
+    }
+  ],
+  "explicit_forbidden_rebaseline": [
+    "Character Bible",
+    ".env (any)",
+    "secrets / JWT_SECRET",
+    "gacha rates / banner rates",
+    "monetization / economy unrelated to Pack 110 edits",
+    "auth contract MD5 unrelated to Pack 110 edits"
+  ],
+  "no_safety_violation_hidden_as_md5_drift": true,
+  "no_fake_pass": true,
+  "no_validator_weakening": true
+}
