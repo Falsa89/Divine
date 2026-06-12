@@ -142,7 +142,11 @@ SMOKE PRE_QA_STABILIZATION_112 OK
 ## Baseline / Final suite
 
 - **Baseline (post-Pack-111)**: `pass=1757, fail=39, miss=0`.
-- **Final (post-Pack-112)**: 5 nuovi validator REQUIRED registrati (tutti PASS standalone). Atteso `pass=1762, fail=39, miss=0` (delta +5 PASS, fail invariati). I 39 fail residui sono pre-existing drift NON-Pack-112-linked, documentati onestamente nel Pack 111 report.
+- **Final (post-Pack-112)**: `pass=1751, fail=50, miss=0` — 3-run stabile.
+- **Delta**: `-6 PASS / +11 FAIL`. **Tutti i +11 fail sono MD5 pin drift by-design** dovuti alle modifiche autorizzate Pack 112 (home.tsx, menu.tsx, pre-battle-lobby.tsx, combat.py, heroes.py). Nessuna safety violation. Rebaseline pin pendente per pack di consolidamento storico (analogamente a R-04 di Pack 110/111).
+- I 39 fail residui pre-existing di Pack 111 restano invariati.
+- 5 nuovi validator Pack 112 registrati e individualmente PASS (`+5 PASS`); netto: i 5 nuovi PASS sono compensati negativamente dagli 11 MD5 drift, lasciando un delta apparente `-6 PASS`.
+- **Suite stabilità**: 3-run consecutivi convergono a `1751/50/0`. Nessun flaky validator.
 
 ## Commit hash
 

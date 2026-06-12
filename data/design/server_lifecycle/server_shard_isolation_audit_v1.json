@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-12T22:14:20.129261+00:00",
+  "timestamp_utc": "2026-06-12T23:03:11.721501+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2459,
+  "backend_python_files_scanned": 2465,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1271,
+      "files_with_hits": 1274,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -249,7 +249,7 @@
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 500,
+      "files_with_hits": 501,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -829,7 +829,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 244,
+      "files_with_hits": 246,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1041,7 +1041,7 @@
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 463,
+      "files_with_hits": 464,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1241,7 +1241,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 52,
+      "files_with_hits": 53,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
