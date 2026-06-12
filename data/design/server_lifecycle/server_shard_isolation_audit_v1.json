@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-12T21:38:30.793535+00:00",
+  "timestamp_utc": "2026-06-12T22:14:20.129261+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2453,
+  "backend_python_files_scanned": 2459,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1265,
+      "files_with_hits": 1271,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -141,11 +141,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 143
+      "user_id_only_files_count": 144
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 329,
+      "files_with_hits": 330,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -245,11 +245,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 24
+      "user_id_only_files_count": 25
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 499,
+      "files_with_hits": 500,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -337,7 +337,7 @@
     },
     "currencies": {
       "expected_scope": "server_bound",
-      "files_with_hits": 252,
+      "files_with_hits": 253,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -617,7 +617,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 332,
+      "files_with_hits": 335,
       "hits_sample": [
         {
           "file": "backend/battle_core.py",
@@ -733,7 +733,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 21
+      "user_id_only_files_count": 22
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -829,7 +829,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 242,
+      "files_with_hits": 244,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -937,11 +937,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 6
+      "user_id_only_files_count": 7
     },
     "arena_rankings": {
       "expected_scope": "server_bound",
-      "files_with_hits": 199,
+      "files_with_hits": 200,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1037,11 +1037,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 3
+      "user_id_only_files_count": 4
     },
     "affinity": {
       "expected_scope": "server_bound",
-      "files_with_hits": 462,
+      "files_with_hits": 463,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1241,7 +1241,7 @@
     },
     "cosmetics": {
       "expected_scope": "server_bound",
-      "files_with_hits": 51,
+      "files_with_hits": 52,
       "hits_sample": [
         {
           "file": "backend/game_systems.py",
@@ -1460,7 +1460,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 430,
+  "cross_server_leak_risk_candidates_count": 435,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",
@@ -1495,6 +1495,11 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/scripts/cleanup_v110_pack_106_test_artifacts.py",
+      "keyword": "user"
+    },
+    {
+      "category": "accounts_users_auth",
+      "file": "backend/scripts/smoke_pre_qa_stabilization_111_rebaseline_route_classification.py",
       "keyword": "user"
     },
     {
@@ -1555,11 +1560,6 @@
     {
       "category": "accounts_users_auth",
       "file": "backend/scripts/validate_ultra_combo_v17_stage2_monitoring_cleanup_k6.py",
-      "keyword": "user"
-    },
-    {
-      "category": "accounts_users_auth",
-      "file": "backend/scripts/run_af2n_stage3_monitoring_v18.py",
       "keyword": "user"
     }
   ],
