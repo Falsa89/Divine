@@ -1,0 +1,16 @@
+# Acceptance Checklist — PRE-QA Stabilization 110
+- [ ] Gacha pull/pull10 blocked by default.
+- [ ] Evoca/Gacha hidden or honestly locked/deferred in player menu.
+- [ ] Legacy achievements claim blocked.
+- [ ] Team formation player-facing path server-scoped or blocked.
+- [ ] useServerScope exposes both selected_server_id and serverId consistently.
+- [ ] No silent s1 fallback.
+- [ ] Server Select/PSP ensure token compatible with main login.
+- [ ] Dev/QA/deferred routes hidden from player closed-alpha menu.
+- [ ] Mutating route allowlist/blocklist report created.
+- [ ] users.gold/gems/experience unchanged.
+- [ ] reward_live_general=false.
+- [ ] No gacha/IAP/payment activation.
+- [ ] Final suite REQUIRED=0 MISS=0 or blockers honestly documented.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.

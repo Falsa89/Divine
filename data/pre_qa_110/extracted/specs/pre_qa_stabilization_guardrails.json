@@ -1,0 +1,28 @@
+{
+  "pack": "PRE_QA_STABILIZATION_110_ALPHA_BLOCKER_CLEANUP_PACK",
+  "approval_string_required": "AUTORIZZO_PRE_QA_STABILIZATION_110_ALPHA_BLOCKER_CLEANUP",
+  "verdict_before": "PRE_QA_NOT_READY_FIX_PACK_REQUIRED",
+  "primary_blockers": [
+    "gacha live visible and mutating users.gems/user_heroes",
+    "team formation account-wide",
+    "useServerScope selected_server_id/serverId mismatch",
+    "split auth token stores blocking PSP ensure",
+    "player menu exposes false-ready/dev/deferred routes",
+    "legacy achievements claim grants gold/gems/stamina",
+    "legacy mutating route allowlist missing"
+  ],
+  "forbidden": [
+    "gacha live",
+    "gems spend/grant",
+    "hero grant from gacha",
+    "IAP/payment/store activation",
+    "reward_live_general=true",
+    "users.gold/gems/experience mutation",
+    "legacy achievement reward mutation",
+    "account-wide team formation player-facing write",
+    "public launch claim",
+    "production release claim",
+    "fake_PASS",
+    "validator weakening"
+  ]
+}
