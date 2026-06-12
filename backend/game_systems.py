@@ -143,4 +143,14 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     from routes.competitive_guards import register_competitive_guards_routes
     register_competitive_guards_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
+    # Pack 108 — Guild Server-Scope Retrofit (read/preview strict) +
+    # Frontend Playable Loop Map (Alpha). Tutti i kill switch sono di
+    # default OFF. Le route legacy account-wide in `routes/guild.py`
+    # sono quarantineate via `GUILD_LEGACY_QUARANTINED=true` (default
+    # TRUE). reward_live_general resta false; no users.* mutation.
+    from routes.guild_strict import register_guild_strict_routes
+    register_guild_strict_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+    from routes.playable_loop_map import register_playable_loop_map_routes
+    register_playable_loop_map_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
     return router

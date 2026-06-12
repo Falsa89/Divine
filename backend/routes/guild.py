@@ -1,6 +1,17 @@
 """
-Divine Waifus - Guild & Faction Routes
+Divine Waifus - Guild & Faction Routes (Legacy)
+
+Pack 108 honest quarantine: i path legacy account-wide mutanti
+(`/guild/create`, `/guild/join/{guild_id}`, `/guild/leave`,
+`/faction/join`) sono protetti dal kill switch
+`GUILD_LEGACY_QUARANTINED` (default TRUE). Quando attivo, restituiscono
+HTTP 423 con blocker canonico `GUILD_LEGACY_QUARANTINED`. Il retrofit
+server-scoped read/preview e' in `routes/guild_strict.py`.
+
+Read-only `/guild/info` e `/factions` restano disponibili ma marcati
+come legacy account-wide (no server scope).
 """
+import os
 import uuid
 from datetime import datetime
 from fastapi import HTTPException, Depends
@@ -11,6 +22,27 @@ from .game_data import FACTIONS, FACTION_CHANGE_COST
 from utils.server_scope import ensure_server_scope
 
 
+# Pack 108 honest quarantine kill switch (default TRUE = legacy bloccato).
+def _pack_108_legacy_quarantined() -> bool:
+    v = os.getenv("GUILD_LEGACY_QUARANTINED", "true")
+    return str(v).strip().lower() in ("true", "1", "yes", "on")
+
+
+def _pack_108_raise_quarantined(surface: str):
+    raise HTTPException(423, detail={
+        "blocker": "GUILD_LEGACY_QUARANTINED",
+        "surface": surface,
+        "pack_origin": "pack_108",
+        "guild_server_scope_required": True,
+        "guild_membership_server_scope_required": True,
+        "guild_reward_live_disabled": True,
+        "no_account_wide_guild_writes": True,
+        "no_hardcoded_server_id_s1": True,
+        "deferred_next_step": "AUTORIZZO_V110_GUILD_LIVE_PACK_NEXT",
+        "strict_read_preview_alternative": "/api/guild/strict",
+    })
+
+
 def register_guild_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
     class GuildCreateRequest(BaseModel):
@@ -18,6 +50,8 @@ def register_guild_routes(router, db, get_current_user, serialize_doc, calculate
 
     @router.post("/guild/create")
     async def create_guild(req: GuildCreateRequest, current_user: dict = Depends(get_current_user)):
+        if _pack_108_legacy_quarantined():
+            _pack_108_raise_quarantined("guild_create_legacy_account_wide")
         uid = current_user["id"]
         if current_user.get("guild_id"):
             raise HTTPException(400, "Sei gia in una gilda!")
@@ -55,6 +89,8 @@ def register_guild_routes(router, db, get_current_user, serialize_doc, calculate
 
     @router.post("/guild/join/{guild_id}")
     async def join_guild(guild_id: str, current_user: dict = Depends(get_current_user)):
+        if _pack_108_legacy_quarantined():
+            _pack_108_raise_quarantined("guild_join_legacy_account_wide")
         uid = current_user["id"]
         if current_user.get("guild_id"):
             raise HTTPException(400, "Sei gia in una gilda!")
@@ -69,6 +105,8 @@ def register_guild_routes(router, db, get_current_user, serialize_doc, calculate
 
     @router.post("/guild/leave")
     async def leave_guild(current_user: dict = Depends(get_current_user)):
+        if _pack_108_legacy_quarantined():
+            _pack_108_raise_quarantined("guild_leave_legacy_account_wide")
         uid = current_user["id"]
         guild_id = current_user.get("guild_id")
         if not guild_id:
@@ -101,7 +139,13 @@ def register_guild_routes(router, db, get_current_user, serialize_doc, calculate
 
     @router.post("/faction/join")
     async def join_faction(req: FactionJoinRequest, current_user: dict = Depends(get_current_user)):
-        """Choose faction - first time is free, afterwards costs premium gems."""
+        """Choose faction - first time is free, afterwards costs premium gems.
+
+        Pack 108: questo path muta `users.gems` (premium spend) ed e' account-wide.
+        Quarantineato di default dietro `GUILD_LEGACY_QUARANTINED=true`.
+        """
+        if _pack_108_legacy_quarantined():
+            _pack_108_raise_quarantined("faction_join_legacy_account_wide_gems_mutation")
         faction = next((f for f in FACTIONS if f["id"] == req.faction_id), None)
         if not faction:
             raise HTTPException(404, "Fazione non trovata")
