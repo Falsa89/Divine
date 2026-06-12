@@ -52,7 +52,13 @@ export default function TabsLayout() {
       }} />
       <Tabs.Screen name="heroes" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Eroi" icon={"\u2694\uFE0F"} focused={focused} /> }} />
       <Tabs.Screen name="battle" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Battaglia" icon={"\uD83D\uDD25"} focused={focused} /> }} />
-      <Tabs.Screen name="gacha" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Evoca" icon={"\u2B50"} focused={focused} /> }} />
+      {/* Pre-QA Stabilization 110: tab Evoca/Gacha nascosta nel closed alpha menu.
+          Riabilitazione richiede flag EXPO_PUBLIC_GACHA_UI_ENABLED=true (default OFF). */}
+      {String(process.env.EXPO_PUBLIC_GACHA_UI_ENABLED || 'false').toLowerCase() === 'true' ? (
+        <Tabs.Screen name="gacha" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Evoca" icon={"\u2B50"} focused={focused} /> }} />
+      ) : (
+        <Tabs.Screen name="gacha" options={{ href: null }} />
+      )}
       <Tabs.Screen name="menu" options={{ tabBarIcon: ({ focused }) => <TabIcon label="Menu" icon={"\u2630"} focused={focused} /> }} />
     </Tabs>
   );

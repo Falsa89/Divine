@@ -257,13 +257,29 @@ export default function BattleTab() {
       });
       const body: any = { formation };
       if (selectedConstellation) body.constellation_id = selectedConstellation;
-      const r = await apiCall('/api/team/update-formation', {
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-      setPower(r.total_power || 0);
-      await refreshUser();
-      Alert.alert('Squadra Salvata!', `Potenza: ${r.total_power?.toLocaleString()}`);
+      // Pre-QA Stabilization 110 — team formation server-scope: il path legacy
+      // /api/team/update-formation e' QUARANTINED 423 di default. Mostriamo
+      // un toast onesto e blocchiamo il save player-facing.
+      try {
+        const r = await apiCall('/api/team/update-formation', {
+          method: 'POST',
+          body: JSON.stringify(body),
+        });
+        setPower(r.total_power || 0);
+        await refreshUser();
+        Alert.alert('Squadra Salvata!', `Potenza: ${r.total_power?.toLocaleString()}`);
+      } catch (e: any) {
+        // 423 atteso pre-QA: account-wide write bloccata.
+        const msg = String(e?.message || '');
+        if (msg.includes('423') || msg.toLowerCase().includes('quarant')) {
+          Alert.alert(
+            'Salvataggio in preparazione',
+            'TEAM_FORMATION_LEGACY_QUARANTINED: il save server-scoped sara\' abilitato da un pack futuro. Nessuna mutazione applicata.'
+          );
+        } else {
+          throw e;
+        }
+      }
     } catch (e: any) { Alert.alert('Errore', e.message); } finally { setSaving(false); }
   };
 

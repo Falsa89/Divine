@@ -763,6 +763,18 @@ async def _do_gacha_pull(user_id: str, banner_id: str):
 
 @app.post("/api/gacha/pull")
 async def gacha_pull(req: GachaPullRequest = GachaPullRequest(), current_user: dict = Depends(get_current_user)):
+    # Pre-QA Stabilization 110 — Gacha quarantine guard (default ON).
+    # Blocker canonico: GACHA_LIVE_DISABLED_PRE_QA.
+    if str(os.environ.get("GACHA_LIVE_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
+        raise HTTPException(423, detail={
+            "blocker": "GACHA_LIVE_DISABLED_PRE_QA",
+            "pack_origin": "pre_qa_stabilization_110",
+            "no_gems_spend": True,
+            "no_hero_grant": True,
+            "no_account_wide_user_heroes_mutation": True,
+            "gacha_server_scope_required": True,
+            "deferred_next_step": "AUTORIZZO_V110_GACHA_LIVE_PACK_NEXT",
+        })
     user_id = current_user["id"]
     banner = GACHA_BANNERS.get(req.banner, GACHA_BANNERS["standard"])
     user = await db.users.find_one({"id": user_id})
@@ -780,6 +792,17 @@ async def gacha_pull(req: GachaPullRequest = GachaPullRequest(), current_user: d
 
 @app.post("/api/gacha/pull10")
 async def gacha_pull_10(req: GachaPullRequest = GachaPullRequest(), current_user: dict = Depends(get_current_user)):
+    # Pre-QA Stabilization 110 — Gacha quarantine guard (default ON).
+    if str(os.environ.get("GACHA_LIVE_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
+        raise HTTPException(423, detail={
+            "blocker": "GACHA_LIVE_DISABLED_PRE_QA",
+            "pack_origin": "pre_qa_stabilization_110",
+            "no_gems_spend": True,
+            "no_hero_grant": True,
+            "no_account_wide_user_heroes_mutation": True,
+            "gacha_server_scope_required": True,
+            "deferred_next_step": "AUTORIZZO_V110_GACHA_LIVE_PACK_NEXT",
+        })
     user_id = current_user["id"]
     banner = GACHA_BANNERS.get(req.banner, GACHA_BANNERS["standard"])
     user = await db.users.find_one({"id": user_id})

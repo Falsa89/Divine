@@ -236,6 +236,19 @@ def register_achievement_routes(router, db, get_current_user, serialize_doc, cal
 
     @router.post("/achievements/claim")
     async def claim_achievement(req: ClaimAchievementRequest, current_user: dict = Depends(get_current_user)):
+        # Pre-QA Stabilization 110 — Legacy achievement claim quarantine.
+        # Pack 106 controlled achievement claim path resta preservato e canonico.
+        import os as _os
+        if str(_os.environ.get("ACHIEVEMENT_LEGACY_CLAIM_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
+            raise HTTPException(423, detail={
+                "blocker": "ACHIEVEMENT_LEGACY_CLAIM_QUARANTINED",
+                "alternative": "ACHIEVEMENT_CONTROLLED_CLAIM_REQUIRED",
+                "pack_origin": "pre_qa_stabilization_110",
+                "no_gold_gems_stamina_mutation": True,
+                "no_account_wide_users_inc": True,
+                "controlled_path_preserved": "pack_106_controlled_rewards",
+                "deferred_next_step": "AUTORIZZO_V110_ACHIEVEMENTS_LIVE_PACK_NEXT",
+            })
         uid = current_user["id"]
         ach = next((a for a in ACHIEVEMENTS if a["id"] == req.achievement_id), None)
         if not ach: raise HTTPException(404, "Achievement non trovato")

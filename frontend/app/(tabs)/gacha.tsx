@@ -62,6 +62,25 @@ const BANNERS = [
 ];
 
 export default function GachaTab() {
+  // Pre-QA Stabilization 110 — Gacha UI hard-lock player-facing.
+  // Default OFF: la pagina mostra una placeholder "Bloccato (Closed Alpha)".
+  // Riabilitazione richiede flag EXPO_PUBLIC_GACHA_UI_ENABLED=true (default OFF)
+  // PIU' kill switch backend GACHA_LIVE_ENABLED=true (default OFF).
+  const _gachaUiEnabled = String(process.env.EXPO_PUBLIC_GACHA_UI_ENABLED || 'false').toLowerCase() === 'true';
+  if (!_gachaUiEnabled) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: '#0a0a0f' }} testID="gacha-locked-pre-qa">
+        <Text style={{ fontSize: 22, fontWeight: '600', color: '#FFD700', marginBottom: 12 }}>Evoca</Text>
+        <Text style={{ fontSize: 14, color: '#aaa', textAlign: 'center', marginBottom: 8 }}>Bloccato (Closed Alpha)</Text>
+        <Text style={{ fontSize: 12, color: '#888', textAlign: 'center' }}>
+          GACHA_LIVE_DISABLED_PRE_QA
+        </Text>
+        <Text style={{ fontSize: 11, color: '#666', textAlign: 'center', marginTop: 8 }}>
+          La superficie Gacha live e' deferred. Nessuno spend gems, nessun grant hero.
+        </Text>
+      </View>
+    );
+  }
   const { user, refreshUser, bumpUserHeroesVersion } = useAuth();
   const [pulling, setPulling] = useState(false);
   const [results, setResults] = useState<any[]>([]);

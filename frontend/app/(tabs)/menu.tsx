@@ -155,6 +155,33 @@ const CATEGORIES = [
 export default function MenuTab() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  // Pre-QA Stabilization 110 — Menu cleanup: nascondi false-ready / dev / QA / deferred surfaces.
+  // Reenable richiede flag esplicito EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE=true (default OFF).
+  const _showLegacyUnsafe = String(process.env.EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE || 'false').toLowerCase() === 'true';
+  const _PRE_QA_BLOCKED_ROUTES = new Set<string>([
+    '/pvp',           // Arena PvP deferred
+    '/battlepass',    // Battle Pass deferred
+    '/item-shop',     // Negozio Oggetti legacy
+    '/shop',          // Shop legacy
+    '/vip',           // VIP/IAP-adjacent
+    '/guild',         // Guild legacy account-wide quarantineata
+    '/gvg',           // Guerra tra Gilde deferred
+    '/raid',          // Raid Cooperativi deferred
+    '/territory',     // Conquista Territori deferred
+    '/plaza',         // Piazza Comunitaria deferred
+    '/dm',            // Direct Messages deferred
+    '/events',        // Eventi deferred
+  ]);
+  const _PRE_QA_BLOCKED_CATEGORIES = new Set<string>([
+    'Playability & Announcements QA (v93)',
+    'Modalit\u00e0 Live & Guild QA (v92)',
+  ]);
+  const _filteredCategories = _showLegacyUnsafe
+    ? CATEGORIES
+    : CATEGORIES
+        .filter((c) => !_PRE_QA_BLOCKED_CATEGORIES.has(c.title))
+        .map((c) => ({ ...c, items: c.items.filter((it: any) => !_PRE_QA_BLOCKED_ROUTES.has(it.route)) }))
+        .filter((c) => c.items.length > 0);
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.c}>
       {/* Profile Header */}
@@ -182,7 +209,7 @@ export default function MenuTab() {
       </LinearGradient>
 
       <ScrollView contentContainerStyle={s.list} showsVerticalScrollIndicator={false}>
-        {CATEGORIES.map((cat, ci) => (
+        {_filteredCategories.map((cat, ci) => (
           <Animated.View key={cat.title} entering={FadeInDown.delay(ci * 60).duration(300)}>
             <Text style={s.catTitle}>{cat.title.toUpperCase()}</Text>
             <View style={s.catItems}>

@@ -1377,6 +1377,19 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
     @router.post("/team/update-formation")
     async def update_team_formation(req: UpdateTeamRequest, current_user: dict = Depends(get_current_user)):
         """Update team formation (max 6 heroes on 9x9 grid)"""
+        # Pre-QA Stabilization 110 — Team formation legacy account-wide quarantine.
+        # Il path player-facing deve essere server-scoped. Finche' non lo e',
+        # quarantineiamo la mutation. Pack futuro: AUTORIZZO_V110_TEAM_FORMATION_SERVER_SCOPE_PACK_NEXT.
+        import os as _os
+        if str(_os.environ.get("TEAM_FORMATION_LEGACY_QUARANTINED", "true")).strip().lower() in ("true", "1", "yes", "on"):
+            raise HTTPException(423, detail={
+                "blocker": "TEAM_FORMATION_LEGACY_QUARANTINED",
+                "alternative": "TEAM_FORMATION_SERVER_SCOPE_REQUIRED",
+                "pack_origin": "pre_qa_stabilization_110",
+                "no_account_wide_teams_write": True,
+                "no_silent_s1_fallback": True,
+                "deferred_next_step": "AUTORIZZO_V110_TEAM_FORMATION_SERVER_SCOPE_PACK_NEXT",
+            })
         user_id = current_user['id']
         
         if len([f for f in req.formation if f.get('user_hero_id')]) > 6:
