@@ -4239,6 +4239,19 @@ OPTIONAL = [
     ('PROJECT-V110-PACK-105-CLEANUP-ROLLBACK', 'validate_v110_pack_105_cleanup_rollback.py'),
     ('MEGA-RELEASE-ACCELERATION-105-FORGE-UPGRADE-FUSION-STRICT-PSP-MATERIAL-LEDGER-SPEND-ROLLUP', 'validate_mega_release_acceleration_105_forge_upgrade_fusion_strict_psp_material_ledger_spend_rollup.py'),
 
+    # Pack 106 — Mail / Achievements / Daily-Weekly controlled rewards.
+    ('PROJECT-V110-PACK-106-SOT', 'validate_v110_pack_106_sot.py'),
+    ('PROJECT-V110-PACK-106-REWARD-SOURCE', 'validate_v110_pack_106_reward_source.py'),
+    ('PROJECT-V110-PACK-106-CONTROLLED-REWARDS-ENDPOINTS', 'validate_v110_pack_106_controlled_rewards_endpoints.py'),
+    ('PROJECT-V110-PACK-106-CONTROLLED-REWARD-CATALOG', 'validate_v110_pack_106_controlled_reward_catalog.py'),
+    ('PROJECT-V110-PACK-106-STATIC-ANTI-LEAK', 'validate_v110_pack_106_static_anti_leak.py'),
+    ('PROJECT-V110-PACK-106-RUNTIME-SMOKE-E2E', 'validate_v110_pack_106_runtime_smoke_e2e.py'),
+    ('PROJECT-V110-PACK-106-DATA-INVARIANTS', 'validate_v110_pack_106_data_invariants.py'),
+    ('PROJECT-V110-PACK-106-LIVE-READINESS-UPDATE', 'validate_v110_pack_106_live_readiness_update.py'),
+    ('PROJECT-V110-PACK-106-GATE-INVARIANT-PRESERVATION', 'validate_v110_pack_106_gate_invariant_preservation.py'),
+    ('PROJECT-V110-PACK-106-CLEANUP-ROLLBACK', 'validate_v110_pack_106_cleanup_rollback.py'),
+    ('MEGA-RELEASE-ACCELERATION-106-MAIL-ACHIEVEMENTS-DAILY-WEEKLY-CONTROLLED-REWARDS-ROLLUP', 'validate_mega_release_acceleration_106_mail_achievements_daily_weekly_controlled_rewards_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

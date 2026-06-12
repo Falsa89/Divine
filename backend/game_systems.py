@@ -130,4 +130,11 @@ def create_game_routes(db, get_current_user, serialize_doc, calculate_hero_power
     from routes.economy_strict import register_economy_strict_routes
     register_economy_strict_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
 
+    # Pack 106 — Controlled rewards (mail / achievement / daily-weekly).
+    # Quadruple kill switch AND di default OFF. Test-only via marker `pack_106_test_artifact`.
+    # Server-side catalog reward + ledger idempotency. PSP soft+materials only.
+    # No users.* mutation, no premium/IAP/gacha, no battlepass/event/AFK/PvP/guild live.
+    from routes.controlled_rewards import register_controlled_rewards_routes
+    register_controlled_rewards_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)
+
     return router

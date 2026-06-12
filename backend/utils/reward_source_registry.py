@@ -233,6 +233,49 @@ def _grant_forge_strict_pack_105(_db, _user_id: str, _server_id: str,
     return {}
 
 
+def _grant_controlled_reward_pack_106(_db, _user_id: str, _server_id: str,
+                                       payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Pack 106 — Grant fn per mail/achievement/daily_weekly controlled.
+
+    Payload deve includere `_server_resolved_reward` (dict con `soft_currencies` e
+    `materials`), settato dall'handler dopo lookup catalog server-side. Payload
+    client IGNORATO.
+
+    Ritorna `$inc` dict per PSP.soft_currencies.<k> + PSP.materials.<k>.
+    """
+    fixed = (payload or {}).get("_server_resolved_reward") or {}
+    if not isinstance(fixed, dict):
+        raise _RewardTypeNotAllowed("server_resolved_reward_missing")
+    inc: Dict[str, int] = {}
+    soft = fixed.get("soft_currencies") or {}
+    mats = fixed.get("materials") or {}
+    for k, amount in soft.items():
+        if k in FORBIDDEN_REWARD_TYPES:
+            raise _PremiumGrantBlocked(k)
+        if k not in ALLOWED_SOFT_CURRENCIES:
+            raise _RewardTypeNotAllowed(f"soft:{k}")
+        try:
+            amt = int(amount)
+        except Exception:
+            raise _RewardTypeNotAllowed(f"{k}:invalid_amount")
+        if amt <= 0 or amt > 500:
+            raise _RewardTypeNotAllowed(f"{k}:pack_106_amount_cap")
+        inc[f"soft_currencies.{k}"] = amt
+    # Whitelist materials Pack 106 (5 items)
+    ALLOWED_MAT = {"steel_ore", "magic_dust", "ancient_relic", "phoenix_feather", "crystal_shard"}
+    for k, amount in mats.items():
+        if k not in ALLOWED_MAT:
+            raise _RewardTypeNotAllowed(f"material:{k}")
+        try:
+            amt = int(amount)
+        except Exception:
+            raise _RewardTypeNotAllowed(f"{k}:invalid_amount")
+        if amt <= 0 or amt > 50:
+            raise _RewardTypeNotAllowed(f"{k}:pack_106_material_cap")
+        inc[f"materials.{k}"] = amt
+    return inc
+
+
 REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
     "qa_controlled_soft_currency_claim": {
         "server_scoped": True,
@@ -421,6 +464,56 @@ REWARD_SOURCE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "ready_status": "READY_GATED_RUNTIME_REQUIRED",
         "description": "Pack 105 equipment fusion strict claim. Consume fodder server-scoped (stesso slot, rarity-1) + PSP materials + soft. Rarity +1 + stat boost. Ledger idempotent. No cross-server consume. No premium.",
     },
+    "mail_claim_controlled": {
+        "server_scoped": True,
+        "reward_types": list(ALLOWED_SOFT_CURRENCIES),
+        "live": True,
+        "grant_fn_name": "grant_controlled_reward_pack_106",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_106",
+        "per_source_kill_switch_env": "MAIL_CLAIM_CONTROLLED_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 500,
+        "client_payload_ignored": True,
+        "server_side_catalog_required": True,
+        "claim_key_strategy": "server_side_claim_key_mail_<server_id>_<mail_id>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 106 mail controlled claim. Server-side catalog reward. PSP soft+materials only. No premium. No cross-server. Ledger idempotent.",
+    },
+    "achievement_claim_controlled": {
+        "server_scoped": True,
+        "reward_types": list(ALLOWED_SOFT_CURRENCIES),
+        "live": True,
+        "grant_fn_name": "grant_controlled_reward_pack_106",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_106",
+        "per_source_kill_switch_env": "ACHIEVEMENT_CLAIM_CONTROLLED_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 500,
+        "client_payload_ignored": True,
+        "server_side_catalog_required": True,
+        "completion_proof_required": True,
+        "claim_key_strategy": "server_side_claim_key_achievement_<server_id>_<achievement_id>",
+        "ready_status": "READY_GATED_COMPLETION_REQUIRED",
+        "description": "Pack 106 achievement controlled claim. Server-side catalog reward. Completion proof required (test-only marker). One claim per user/server/achievement_id. PSP soft+materials only.",
+    },
+    "daily_weekly_reward_claim": {
+        "server_scoped": True,
+        "reward_types": list(ALLOWED_SOFT_CURRENCIES),
+        "live": True,
+        "grant_fn_name": "grant_controlled_reward_pack_106",
+        "idempotency": "mandatory",
+        "pack_origin": "pack_106",
+        "per_source_kill_switch_env": "DAILY_WEEKLY_REWARD_CLAIM_ENABLED",
+        "per_source_kill_switch_default": False,
+        "amount_cap_per_key": 500,
+        "client_payload_ignored": True,
+        "server_side_catalog_required": True,
+        "period_keying": "UTC_day_or_iso_week",
+        "claim_key_strategy": "server_side_claim_key_dwr_<server_id>_<task_id>_<period_key>",
+        "ready_status": "READY_GATED_RUNTIME_REQUIRED",
+        "description": "Pack 106 daily/weekly reward claim. Server-side task catalog. Daily=UTC day, Weekly=UTC ISO week. One claim per user/server/task/period. PSP soft+materials only.",
+    },
 }
 
 
@@ -434,6 +527,7 @@ _GRANT_FN_MAP = {
     "grant_soul_forge_retire_strict_to_psp": _grant_soul_forge_retire_strict_to_psp,
     "grant_equipment_strict_noop": _grant_equipment_strict_noop,
     "grant_forge_strict_pack_105": _grant_forge_strict_pack_105,
+    "grant_controlled_reward_pack_106": _grant_controlled_reward_pack_106,
 }
 
 

@@ -1,10 +1,10 @@
 {
   "task_origin": "SLC-A-SHARD-ISOLATION-AUDIT",
-  "timestamp_utc": "2026-06-11T23:56:09.122347+00:00",
+  "timestamp_utc": "2026-06-12T01:13:51.602489+00:00",
   "mode": "READ_ONLY_NO_DB_CONNECT",
   "db_writes_performed": false,
   "db_connection_opened": false,
-  "backend_python_files_scanned": 2368,
+  "backend_python_files_scanned": 2383,
   "collections_audited": [
     "accounts_users_auth",
     "user_heroes",
@@ -25,7 +25,7 @@
   "results_by_category": {
     "accounts_users_auth": {
       "expected_scope": "account_wide_or_mixed",
-      "files_with_hits": 1228,
+      "files_with_hits": 1235,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -149,11 +149,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 141
+      "user_id_only_files_count": 142
     },
     "user_heroes": {
       "expected_scope": "server_bound",
-      "files_with_hits": 325,
+      "files_with_hits": 327,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -261,11 +261,11 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 23
+      "user_id_only_files_count": 24
     },
     "inventory": {
       "expected_scope": "server_bound",
-      "files_with_hits": 487,
+      "files_with_hits": 494,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -353,7 +353,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 82
+      "user_id_only_files_count": 83
     },
     "currencies": {
       "expected_scope": "server_bound",
@@ -498,15 +498,15 @@
           "has_user_id_only_without_server_id": false,
           "sample_lines": [
             {
-              "line": 321,
+              "line": 364,
               "snippet": "\"claim_key_strategy\": \"server_side_claim_key_shop_buy_<server_id>_<shop_id>_<item_id>_<purchase_key>\","
             },
             {
-              "line": 357,
+              "line": 400,
               "snippet": "\"claim_key_strategy\": \"server_side_claim_key_equipment_equip_<server_id>_<hero_instance_id>_<slot>_<purchase_key>\","
             },
             {
-              "line": 372,
+              "line": 415,
               "snippet": "\"claim_key_strategy\": \"server_side_claim_key_equipment_unequip_<server_id>_<equipment_instance_id>_<purchase_key>\","
             }
           ]
@@ -669,7 +669,7 @@
     },
     "teams": {
       "expected_scope": "server_bound",
-      "files_with_hits": 324,
+      "files_with_hits": 326,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -793,7 +793,7 @@
         }
       ],
       "server_id_present_anywhere": true,
-      "user_id_only_files_count": 20
+      "user_id_only_files_count": 21
     },
     "story_progress": {
       "expected_scope": "server_bound",
@@ -826,11 +826,11 @@
               "snippet": "\"\"\"No-op grant: usato per source `story_progress_marker_claim`.\"\"\""
             },
             {
-              "line": 246,
+              "line": 289,
               "snippet": "\"story_progress_marker_claim\": {"
             },
             {
-              "line": 253,
+              "line": 296,
               "snippet": "\"description\": \"Marker-only claim per story progress milestones. NESSUN reward grant, scrive solo ledger row + opzionalmente PSP.story_progress (futuro pack).\","
             }
           ]
@@ -909,7 +909,7 @@
     },
     "guilds": {
       "expected_scope": "server_bound",
-      "files_with_hits": 196,
+      "files_with_hits": 202,
       "hits_sample": [
         {
           "file": "backend/server.py",
@@ -964,6 +964,10 @@
             {
               "line": 48,
               "snippet": "register_guild_routes(router, db, get_current_user, serialize_doc, calculate_hero_power)"
+            },
+            {
+              "line": 136,
+              "snippet": "# No users.* mutation, no premium/IAP/gacha, no battlepass/event/AFK/PvP/guild live."
             }
           ]
         },
@@ -1556,7 +1560,7 @@
       "user_id_only_files_count": 0
     }
   },
-  "cross_server_leak_risk_candidates_count": 425,
+  "cross_server_leak_risk_candidates_count": 429,
   "cross_server_leak_risk_samples": [
     {
       "category": "accounts_users_auth",

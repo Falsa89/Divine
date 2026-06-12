@@ -1,0 +1,17 @@
+# Acceptance Checklist — Pack 106
+- [ ] Approval string present.
+- [ ] ZIP extracted/read before coding.
+- [ ] Mail claim controlled source server-scoped.
+- [ ] Achievement claim controlled source server-scoped or completion-required.
+- [ ] Daily/weekly reward claim source server-scoped.
+- [ ] Ledger/idempotency mandatory.
+- [ ] Server-side reward catalog, no client reward trust.
+- [ ] S1/S2 isolation proven.
+- [ ] No users.gold/gems/experience mutation.
+- [ ] No premium/hard/gems grants.
+- [ ] No battlepass/event/AFK/PvP/guild reward live.
+- [ ] Frontend default flags OFF.
+- [ ] Smoke E2E green.
+- [ ] Final suite REQUIRED=0 MISS=0.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.
