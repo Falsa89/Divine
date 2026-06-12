@@ -128,9 +128,21 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
     @router.post("/story/battle")
     async def story_battle(req: StoryBattleRequest, server_id: str = None, idempotency_token: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
+        # Pre-QA Stabilization 112 — Legacy story battle senza server_id quarantineato.
+        # Strict server_id path resta disponibile (test-only via idempotency_token).
+        if not server_id or not isinstance(server_id, str) or not server_id.strip():
+            import os as _os
+            if str(_os.environ.get("STORY_BATTLE_LEGACY_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
+                from fastapi import HTTPException as _HE
+                raise _HE(423, detail={
+                    "blocker": "STORY_BATTLE_LEGACY_NO_SERVER_ID_QUARANTINED",
+                    "alternative": "STORY_BATTLE_STRICT_SERVER_SCOPED_REQUIRED",
+                    "pack_origin": "pre_qa_stabilization_112",
+                    "no_users_gold_gems_experience_mutation": True,
+                    "no_account_wide_story_progress_write": True,
+                    "deferred_next_step": "AUTORIZZO_V110_STORY_BATTLE_LIVE_PACK_NEXT",
+                })
         # Pack 95 — Story progress STRICT server-scoped write path (test-only-safe via idempotency).
-        # Quando server_id presente: scrive SOLO psp.story_progress, NO users.gold/gems mutation,
-        # NO reward grant live. Idempotency token REQUIRED per write.
         if server_id and isinstance(server_id, str) and server_id.strip():
             sid = server_id.strip()
             psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
@@ -315,6 +327,16 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
 
     @router.post("/pvp/battle")
     async def pvp_battle(current_user: dict = Depends(get_current_user)):
+        # Pre-QA Stabilization 112 — PvP battle legacy account-wide quarantine.
+        import os as _os
+        if str(_os.environ.get("PVP_BATTLE_LEGACY_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
+            raise HTTPException(423, detail={
+                "blocker": "PVP_BATTLE_LEGACY_QUARANTINED",
+                "pack_origin": "pre_qa_stabilization_112",
+                "no_users_gold_gems_experience_mutation": True,
+                "no_pvp_data_account_wide_write": True,
+                "deferred_next_step": "AUTORIZZO_V110_PVP_BATTLE_LIVE_PACK_NEXT",
+            })
         uid = current_user["id"]
         pvp = await db.pvp_data.find_one({"user_id": uid})
         if not pvp:
@@ -360,6 +382,16 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
 
     @router.post("/events/battle")
     async def event_battle(req: EventBattleRequest, current_user: dict = Depends(get_current_user)):
+        # Pre-QA Stabilization 112 — Events battle legacy account-wide quarantine.
+        import os as _os
+        if str(_os.environ.get("EVENTS_BATTLE_LEGACY_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
+            raise HTTPException(423, detail={
+                "blocker": "EVENTS_BATTLE_LEGACY_QUARANTINED",
+                "pack_origin": "pre_qa_stabilization_112",
+                "no_users_gold_gems_experience_mutation": True,
+                "no_event_completions_account_wide_write": True,
+                "deferred_next_step": "AUTORIZZO_V110_EVENTS_BATTLE_LIVE_PACK_NEXT",
+            })
         uid = current_user["id"]
         event = next((e for e in DAILY_EVENTS if e["id"] == req.event_id), None)
         if not event:

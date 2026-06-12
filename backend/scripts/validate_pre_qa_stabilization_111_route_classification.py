@@ -35,8 +35,10 @@ INTERNAL_ONLY_PATHS = {
     '/push/register', '/push/test',
 }
 # Dev/test preview tools: non player-facing, non mutano economy/users.
+# Pre-QA Stabilization 112 (P1-1 fix): RIMOSSI /story/battle, /pvp/battle, /events/battle
+# perche' sono mutating POST (anche se Pack 112 li ha quarantineati, restano LEGACY_QUARANTINED, NON readonly).
 NOT_PLAYER_FACING_READONLY_PATHS = {
-    '/battle/simulate', '/story/battle', '/tower/battle', '/events/battle', '/pvp/battle',
+    '/battle/simulate', '/tower/battle',
     '/alpha-battle-preview', '/alpha-reward-summary-preview',
     '/clear-preview', '/create-preview', '/grant-plan-preview', '/guard-plan-preview',
     '/idempotency-preview', '/instance/preview', '/instance/resolve-preview',

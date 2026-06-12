@@ -31,7 +31,7 @@ import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
   Dimensions, ScrollView, ImageBackground, Pressable,
   useWindowDimensions, Image as RNImage,
-  Animated, InteractionManager,
+  Animated, InteractionManager, Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -418,6 +418,18 @@ export default function HomeTab() {
   const goTo = (key: keyof typeof HOME_ROUTES) => {
     const route = HOME_ROUTES[key];
     if (!route) { setOverflowOpen(true); return; }
+    // Pre-QA Stabilization 112 — shared nav guard: blocca route player-facing
+    // unsafe/deferred di default. Reenable richiede EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE=true.
+    try {
+      const _g = require('../../src/utils/preQaNavGuard');
+      if (!_g.isRouteAllowedInPreQa(String(route))) {
+        Alert?.alert?.(
+          'Surface in preparazione',
+          'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED: questa surface e\' bloccata nel closed alpha pre-QA. Sara\' abilitata da un pack futuro autorizzato.'
+        );
+        return;
+      }
+    } catch (_e) { /* best-effort */ }
     router.push(route as any);
   };
 

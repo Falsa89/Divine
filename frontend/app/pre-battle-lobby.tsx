@@ -317,7 +317,8 @@ export default function PreBattleLobbyScreen() {
     let cancelled = false;
     (async () => {
       try {
-        const sid = await AsyncStorage.getItem('selected_server_id');
+        // Pre-QA Stabilization 112 — server key fix: usa v101_selected_server_id canonical.
+        const sid = await AsyncStorage.getItem('v101_selected_server_id');
         if (!cancelled) { setSelectedServerId(sid && sid.trim() ? sid.trim() : null); setSelectedServerLoaded(true); }
       } catch (_e) { if (!cancelled) { setSelectedServerId(null); setSelectedServerLoaded(true); } }
     })();
@@ -362,7 +363,9 @@ export default function PreBattleLobbyScreen() {
     let cancelled = false;
     (async () => {
       try {
-        const token = await SecureStore.getItemAsync('v96_auth_token').catch(() => null);
+        const { getAuthTokenCompat: _gtc } = await import('../src/utils/authTokenCompat');
+        const _lookup = await _gtc();
+        const token = _lookup.token;
         if (!token || !backendUrl) return;
         const url = `${backendUrl}/api/psp/ensure?server_id=${encodeURIComponent(selectedServerId)}`;
         const r = await fetch(url, {
@@ -437,7 +440,9 @@ export default function PreBattleLobbyScreen() {
     (async () => {
       setPlayerFormation(prev => ({ ...prev, fetch_status: 'loading' }));
       try {
-        const token = await SecureStore.getItemAsync('v96_auth_token').catch(() => null);
+        const { getAuthTokenCompat: _gtc } = await import('../src/utils/authTokenCompat');
+        const _lookup = await _gtc();
+        const token = _lookup.token;
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
         const url = `${backendUrl}/api/team/get-formation?server_id=${encodeURIComponent(selectedServerId)}`;

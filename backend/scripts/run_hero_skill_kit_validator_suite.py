@@ -4327,6 +4327,13 @@ OPTIONAL = [
     ('PROJECT-PRE-QA-111-MD5-REBASELINE-AUTHORIZED', 'validate_pre_qa_stabilization_111_md5_rebaseline_authorized.py'),
     ('PRE-QA-STABILIZATION-111-ROLLUP', 'validate_pre_qa_stabilization_111_rebaseline_route_classification_rollup.py'),
 
+    # Pre-QA Stabilization 112 — Home & Battle Entrypoint Cleanup.
+    ('PROJECT-PRE-QA-112-SHARED-NAV-GUARD', 'validate_pre_qa_stabilization_112_shared_nav_guard.py'),
+    ('PROJECT-PRE-QA-112-PRE-BATTLE-LOBBY-FIX', 'validate_pre_qa_stabilization_112_pre_battle_lobby_fix.py'),
+    ('PROJECT-PRE-QA-112-LEGACY-COMBAT-QUARANTINE', 'validate_pre_qa_stabilization_112_legacy_combat_quarantine.py'),
+    ('PROJECT-PRE-QA-112-HEROES-GACHA-DEAD-CODE', 'validate_pre_qa_stabilization_112_heroes_gacha_dead_code.py'),
+    ('PRE-QA-STABILIZATION-112-ROLLUP', 'validate_pre_qa_stabilization_112_home_battle_entrypoint_cleanup_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

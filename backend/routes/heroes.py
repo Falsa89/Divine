@@ -188,6 +188,28 @@ def register_heroes_routes(router, db, get_current_user, serialize_doc, calculat
 
     @router.post("/gacha/pull")
     async def gacha_pull(req: GachaPullRequest = GachaPullRequest(), current_user: dict = Depends(get_current_user)):
+        # Pre-QA Stabilization 112 — DEAD-CODE QUARANTINE.
+        # Questo endpoint duplica /api/gacha/pull in server.py (gia' quarantineato Pack 110).
+        # Anche se non registrato attivamente, lo blindiamo per anti-regression.
+        raise HTTPException(423, detail={
+            "blocker": "GACHA_DUPLICATE_DEAD_CODE_QUARANTINED",
+            "pack_origin": "pre_qa_stabilization_112",
+            "canonical_path": "see /api/gacha/pull in backend/server.py (quarantined by Pack 110)",
+            "no_gems_spend": True, "no_hero_grant": True,
+        })
+
+    @router.post("/gacha/pull10")
+    async def gacha_pull_10(req: GachaPullRequest = GachaPullRequest(), current_user: dict = Depends(get_current_user)):
+        # Pre-QA Stabilization 112 — DEAD-CODE QUARANTINE.
+        raise HTTPException(423, detail={
+            "blocker": "GACHA_DUPLICATE_DEAD_CODE_QUARANTINED",
+            "pack_origin": "pre_qa_stabilization_112",
+            "canonical_path": "see /api/gacha/pull10 in backend/server.py (quarantined by Pack 110)",
+            "no_gems_spend": True, "no_hero_grant": True,
+        })
+
+    # ORIGINAL legacy implementations preserved as dead code below (unreachable):
+    async def _legacy_gacha_pull_dead_code(req: GachaPullRequest, current_user: dict):
         user_id = current_user["id"]
         banner = GACHA_BANNERS.get(req.banner, GACHA_BANNERS["standard"])
         user = await db.users.find_one({"id": user_id})
@@ -203,8 +225,7 @@ def register_heroes_routes(router, db, get_current_user, serialize_doc, calculat
             "remaining_gems": updated_user.get("gems", 0), "banner": req.banner,
         }
 
-    @router.post("/gacha/pull10")
-    async def gacha_pull_10(req: GachaPullRequest = GachaPullRequest(), current_user: dict = Depends(get_current_user)):
+    async def _legacy_gacha_pull_10_dead_code(req: GachaPullRequest, current_user: dict):
         user_id = current_user["id"]
         banner = GACHA_BANNERS.get(req.banner, GACHA_BANNERS["standard"])
         user = await db.users.find_one({"id": user_id})

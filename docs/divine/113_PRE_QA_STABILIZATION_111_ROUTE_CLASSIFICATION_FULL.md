@@ -64,7 +64,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 |------|------|------|
 | POST | `/guest` | `backend/routes/v96_auth.py` |
 
-## legacy_quarantined (43)
+## legacy_quarantined (48)
 
 | Verb | Path | File |
 |------|------|------|
@@ -79,10 +79,13 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/currency/earn-mission` | `backend/routes/soul_forge.py` |
 | POST | `/currency/earn-pvp` | `backend/routes/soul_forge.py` |
 | POST | `/equipment/unequip/{equipment_id}` | `backend/routes/equipment.py` |
+| POST | `/events/battle` | `backend/routes/combat.py` |
 | POST | `/exclusive-items/craft` | `backend/routes/raids.py` |
 | POST | `/faction/join` | `backend/routes/guild.py` |
 | POST | `/forge/fuse` | `backend/routes/forge.py` |
 | POST | `/forge/upgrade` | `backend/routes/forge.py` |
+| POST | `/gacha/pull` | `backend/routes/heroes.py` |
+| POST | `/gacha/pull10` | `backend/routes/heroes.py` |
 | POST | `/guild/create` | `backend/routes/guild.py` |
 | POST | `/guild/join/{guild_id}` | `backend/routes/guild.py` |
 | POST | `/guild/leave` | `backend/routes/guild.py` |
@@ -93,6 +96,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/item-shop/buy` | `backend/routes/items.py` |
 | POST | `/mail/claim/{mail_id}` | `backend/routes/economy.py` |
 | POST | `/materials/buy` | `backend/routes/hero_progression.py` |
+| POST | `/pvp/battle` | `backend/routes/combat.py` |
 | POST | `/runes/craft` | `backend/routes/forge.py` |
 | POST | `/runes/craft-premium` | `backend/routes/forge.py` |
 | POST | `/runes/equip` | `backend/routes/forge.py` |
@@ -106,6 +110,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/shop/claim-daily/{item_id}` | `backend/routes/economy.py` |
 | POST | `/shops/buy` | `backend/routes/soul_forge.py` |
 | POST | `/soul-forge/retire` | `backend/routes/soul_forge.py` |
+| POST | `/story/battle` | `backend/routes/combat.py` |
 | POST | `/team/update-formation` | `backend/battle_engine.py` |
 | POST | `/unique-items/craft` | `backend/routes/unique_items.py` |
 | POST | `/unique-items/equip` | `backend/routes/unique_items.py` |
@@ -150,7 +155,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/territory/attack` | `backend/routes/cosmetics.py` |
 | POST | `/user/faction-v2/select` | `backend/routes/player_faction_v2.py` |
 
-## not_player_facing_readonly (51)
+## not_player_facing_readonly (48)
 
 | Verb | Path | File |
 |------|------|------|
@@ -161,7 +166,6 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/create-preview` | `backend/routes/story_battle_instance_preview.py` |
 | POST | `/enchant/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/enhance/preview` | `backend/routes/gear_forge_preview.py` |
-| POST | `/events/battle` | `backend/routes/combat.py` |
 | POST | `/fusion/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/grant-plan-preview` | `backend/routes/material_raid_claim_safety_preview.py` |
 | POST | `/guard-plan-preview` | `backend/routes/artifact_upgrade_safety_preview.py` |
@@ -184,12 +188,10 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/playback-preview` | `backend/routes/battle_replay_preview.py` |
 | POST | `/playback-preview` | `backend/routes/generic_visual_battle_runner_preview.py` |
 | POST | `/power-preview` | `backend/routes/gem_socket_preview.py` |
-| POST | `/pvp/battle` | `backend/routes/combat.py` |
 | POST | `/reforge/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/replace-preview` | `backend/routes/gem_socket_preview.py` |
 | POST | `/reward-preview` | `backend/routes/material_raid_preview.py` |
 | POST | `/socket-preview` | `backend/routes/gem_socket_preview.py` |
-| POST | `/story/battle` | `backend/routes/combat.py` |
 | POST | `/tower/battle` | `backend/routes/combat.py` |
 | POST | `/unsocket-preview` | `backend/routes/gem_socket_preview.py` |
 | POST | `/validate-claim-request` | `backend/routes/material_raid_claim_safety_preview.py` |
@@ -211,9 +213,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | Verb | Path | File |
 |------|------|------|
 
-## needs_manual_review_non_blocking (2)
+## needs_manual_review_non_blocking (0)
 
 | Verb | Path | File |
 |------|------|------|
-| POST | `/gacha/pull` | `backend/routes/heroes.py` |
-| POST | `/gacha/pull10` | `backend/routes/heroes.py` |

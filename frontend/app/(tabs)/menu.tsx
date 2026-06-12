@@ -155,32 +155,16 @@ const CATEGORIES = [
 export default function MenuTab() {
   const router = useRouter();
   const { user, logout } = useAuth();
-  // Pre-QA Stabilization 110 — Menu cleanup: nascondi false-ready / dev / QA / deferred surfaces.
-  // Reenable richiede flag esplicito EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE=true (default OFF).
-  const _showLegacyUnsafe = String(process.env.EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE || 'false').toLowerCase() === 'true';
-  const _PRE_QA_BLOCKED_ROUTES = new Set<string>([
-    '/pvp',           // Arena PvP deferred
-    '/battlepass',    // Battle Pass deferred
-    '/item-shop',     // Negozio Oggetti legacy
-    '/shop',          // Shop legacy
-    '/vip',           // VIP/IAP-adjacent
-    '/guild',         // Guild legacy account-wide quarantineata
-    '/gvg',           // Guerra tra Gilde deferred
-    '/raid',          // Raid Cooperativi deferred
-    '/territory',     // Conquista Territori deferred
-    '/plaza',         // Piazza Comunitaria deferred
-    '/dm',            // Direct Messages deferred
-    '/events',        // Eventi deferred
-  ]);
-  const _PRE_QA_BLOCKED_CATEGORIES = new Set<string>([
-    'Playability & Announcements QA (v93)',
-    'Modalit\u00e0 Live & Guild QA (v92)',
-  ]);
+  // Pre-QA Stabilization 112 — usa il SHARED nav guard canonico.
+  const _navGuard = require('../../src/utils/preQaNavGuard');
+  const _showLegacyUnsafe = _navGuard.preQaUnsafeVisible();
+  const _PRE_QA_BLOCKED_ROUTES: ReadonlySet<string> = _navGuard.PRE_QA_BLOCKED_PLAYER_ROUTES;
+  const _PRE_QA_BLOCKED_CATEGORIES: ReadonlySet<string> = _navGuard.PRE_QA_BLOCKED_CATEGORIES;
   const _filteredCategories = _showLegacyUnsafe
     ? CATEGORIES
     : CATEGORIES
         .filter((c) => !_PRE_QA_BLOCKED_CATEGORIES.has(c.title))
-        .map((c) => ({ ...c, items: c.items.filter((it: any) => !_PRE_QA_BLOCKED_ROUTES.has(it.route)) }))
+        .map((c) => ({ ...c, items: c.items.filter((it: any) => _navGuard.isRouteAllowedInPreQa(String(it.route))) }))
         .filter((c) => c.items.length > 0);
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.c}>
