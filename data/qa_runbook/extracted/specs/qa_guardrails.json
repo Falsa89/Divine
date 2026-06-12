@@ -1,0 +1,21 @@
+{
+  "type": "closed_alpha_internal_qa_kickoff",
+  "not_a_runtime_activation_pack": true,
+  "required_authorization": "AUTORIZZO_CLOSED_ALPHA_INTERNAL_QA_KICKOFF_NO_RUNTIME_ACTIVATION",
+  "forbidden": [
+    "reward live activation",
+    "premium/hard currency grant",
+    "IAP/payment/store/gacha activation",
+    "Guild/Arena/PvP/Event/Battlepass/AFK reward live",
+    "broad DB writes",
+    "destructive migration",
+    "release/public launch claim"
+  ],
+  "minimum_testers": 5,
+  "bug_severity": [
+    "P0",
+    "P1",
+    "P2",
+    "P3"
+  ]
+}

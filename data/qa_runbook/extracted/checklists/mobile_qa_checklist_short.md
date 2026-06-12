@@ -1,0 +1,17 @@
+# Closed Alpha Mobile QA Checklist
+- [ ] Install/open app
+- [ ] Login/auth works
+- [ ] Logout works
+- [ ] Select server S1
+- [ ] Switch S1 -> S2 -> S1, no silent fallback
+- [ ] Home/Lobby loads without false-ready labels
+- [ ] Story/battle preview/staging reachable or correctly gated
+- [ ] Tower strict flow reachable or correctly gated
+- [ ] Daily login/daily quest reachable or correctly gated
+- [ ] Controlled rewards reachable or correctly gated
+- [ ] Shop/Soul/Equipment/Forge/Fusion strict surfaces gated correctly
+- [ ] Guild strict preview/gated, legacy mutation blocked
+- [ ] Arena/PvP/Event clearly deferred/locked
+- [ ] No crashes in 20-minute session
+- [ ] No premium/IAP/gacha/payment live
+- [ ] No false reward success
