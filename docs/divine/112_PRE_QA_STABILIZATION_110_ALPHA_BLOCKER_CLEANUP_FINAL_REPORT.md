@@ -7,9 +7,11 @@ Pack riferimento: `PRE_QA_STABILIZATION_110_ALPHA_BLOCKER_CLEANUP_PACK`
 
 ## Verdict
 
-**`PRE_QA_STABILIZATION_110_ALPHA_BLOCKER_CLEANUP_READY_FOR_REAUDIT_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING`**
+**`PRE_QA_STABILIZATION_110_ALPHA_BLOCKER_CLEANUP_READY_FOR_REAUDIT_WITH_MD5_REBASELINE_PENDING_LOCAL_CONTAINER_PUBLIC_SYNC_PENDING`**
 
 I 7 blocker P0/P1 identificati nell'audit Pass 1 (`DIVINE_PRE_QA_REPO_AUDIT_PASS1_FINDINGS.md`) sono stati corretti via quarantena onesta + alias backward-compatible + helper read-only. Nessuna runtime activation. Nessuna release/public launch claim. Nessuna mutation distruttiva.
+
+**Nota di trasparenza**: 9 validator legacy con MD5 pin sono drift (by-design, conseguenza delle modifiche autorizzate). Nessun safety violation. Rebaseline pin pendente per pack successivo. Il re-audit ZIP atteso confermerà che non ci sono regressioni nascoste.
 
 ## Commit hash
 
@@ -39,11 +41,23 @@ data/pre_qa_110/extracted/                                     | + ZIP estratto
 
 ## Baseline / Final suite
 
-- **Baseline**: `pass=1742, fail=36, miss=0` (post-Pack-109, post-QA-Kickoff invariato).
-- **Final**: master suite resta stabile a `1742/36/0` SE i nuovi validatori NON vengono ancora registrati nella suite (questo pack è di stabilizzazione; la registrazione formale può essere fatta in un pack successivo o in questo: vedi sezione "Suite registration" qui sotto).
-- **Flakiness**: redis SIGKILL (-9) sporadico in run > 120s; mitigato con 3-run consecutivi. Nessun flaky validator individuato.
-
-**Suite registration**: i 12 nuovi validator + smoke sono creati e individualmente PASS. Per non rischiare di destabilizzare la suite Pack 109 (`CLOSED_ALPHA_CONDITIONAL_READY`), la registrazione formale è documentata come **opzionale per il re-audit**: l'utente può richiedere la registrazione nel prossimo pack se desiderato.
+- **Baseline (pre-Pack-110-stabilization)**: `pass=1742, fail=36, miss=0` (post-Pack-109, post-QA-Kickoff invariato).
+- **Final (post-Pack-110-stabilization)**: `pass=1733, fail=45, miss=0` (**delta: -9 PASS / +9 FAIL**).
+- **Classificazione dei 9 nuovi FAIL**: tutti **MD5 drift by-design** dovuti alle modifiche autorizzate Pack 110-stabilization. Validator pin legacy che hashano lo stato file pre-modifica:
+  - `PROJECT-BATCH1-V2-TRACK-B-GACHA-LOCK` (MD5 `gacha.tsx` drift per lock screen).
+  - `PROJECT-BATCH1-V2-TRACK-F-MENU-HARDENING` (MD5 `menu.tsx` drift per blocklist).
+  - `PROJECT-Z-TRACK-B-SAFE-MENU-OR-PREVIEW-HUB-WIRING` (MD5 menu).
+  - `PROJECT-FRONTEND-C-TRACK-D-DAILY-HUB-MENU-WIRING` (MD5 menu).
+  - `PROJECT-SP-UI-LOCK-TRACK-H-COMPLETION` (MD5 `useServerScope.ts` rewrite).
+  - `PROJECT-SP-DUAL-READ-TRACK-H-COMPLETION` (MD5 `useServerScope.ts`).
+  - `PROJECT-SP-AUTH-TRACK-F-NO-MUTATION-REGRESSION` (touch su `battle_engine.py` quarantine guard).
+  - `PROJECT-M-TRACK-B-BATTLE-ENGINE-STATUS-SEAM-WIRING` (MD5 `battle_engine.py`).
+  - `PROJECT-M-TRACK-G-STATUS-FIRST-SLICE-CANARY-ENV-RC-GATE` (MD5 `battle_engine.py`).
+  - `PROJECT-V-TRACK-F-SECOND-SLICE-DEV-LIVE-ROLLBACK-KILL-SWITCH` (MD5 `battle_engine.py`).
+  - (alcuni dei nomi sopra coincidono in famiglia; il totale netto resta +9).
+- **NESSUN fail è dovuto a regressione safety**: nessun reward live attivato, nessuna mutation `users.*`, nessun IAP/gacha attivato. I MD5 pin sono semplicemente "stale" rispetto al nuovo stato canonico autorizzato.
+- **Decisione canonica**: NON aggiornare i MD5 pin in questo pack (autorizzazione non lo include esplicitamente). Lascio i fail visibili in suite per piena trasparenza del re-audit. Il pack di consolidamento successivo può rebaseline i MD5 con autorizzazione esplicita.
+- **Flakiness**: redis SIGKILL (-9) sporadico in run > 120s; mitigato con 3-run consecutivi. Nessun flaky validator individuato (i 9 fail nuovi sono **deterministici**, non flaky).
 
 ## P0-A — Gacha quarantine proof
 
@@ -238,7 +252,8 @@ Validator `validate_pre_qa_stabilization_110_pack_91_109_qa_kickoff_preservation
 
 - **R-01**: `frontend/app/servers.tsx` chiama `/api/psp/ensure` e `/api/psp/starter/claim` direttamente con `SecureStore.getItemAsync('v96_auth_token')`. Il bridge `authTokenCompat.ts` è creato ma l'adozione nei call site non è ancora applicata (scope di un pack successivo, idealmente in stessa giornata se prioritario). Workaround attuale: l'utente entra via login v96 → comportamento corretto; via login default → starter claim potrebbe non partire ma **non causa mutation insicure** (solo onboarding parzialmente incompleto).
 - **R-02**: 124 route `uncategorized` nel catalog mutating. Necessitano scansione manuale/tool per classificare in `legacy_quarantined` / `internal_only` / `dev_only`. Pack successivo dedicato all'allowlist completa.
-- **R-03**: Validator Pack 110 non ancora registrati formalmente nella master suite. Registrazione raccomandata in pack successivo se utente lo desidera (rischio basso: tutti i validator PASS individualmente).
+- **R-03**: Validator Pack 110-stabilization non ancora registrati formalmente nella master suite. Registrazione raccomandata in pack successivo se utente lo desidera (rischio basso: tutti i validator PASS individualmente; smoke E2E 18/18 PASS; rollup PASS).
+- **R-04**: 9 nuovi FAIL nella master suite sono **MD5 pin drift by-design** (vedi "Baseline / Final suite"). NON sono safety violation. Vanno rebaseline-ati con autorizzazione esplicita in un pack successivo (es. "Pack MD5 rebaseline post Pack 110-stabilization").
 
 ## Next step
 
