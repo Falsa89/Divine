@@ -1,0 +1,24 @@
+{
+  "pack": "MEGA_RELEASE_ACCELERATION_109_CLOSED_ALPHA_RC_SWEEP_AND_RELEASE_GATE_SUPERPACK",
+  "approval_string_required": "AUTORIZZO_V110_CLOSED_ALPHA_RC_SWEEP_RELEASE_GATE_PACK_109",
+  "gate_values": [
+    "CLOSED_ALPHA_READY",
+    "CLOSED_ALPHA_CONDITIONAL_READY",
+    "CLOSED_ALPHA_NOT_READY"
+  ],
+  "forbidden": [
+    "public launch claim",
+    "production release claim",
+    "reward_live_general=true",
+    "premium/hard currency grant",
+    "gems grant/spend",
+    "users.gold/gems/experience mutation",
+    "IAP/store/payment/gacha activation",
+    "Guild/Arena/PvP/Event/Battlepass/AFK reward live",
+    "broad production DB writes",
+    "destructive migration",
+    "false READY state",
+    "fake_PASS",
+    "validator weakening"
+  ]
+}

@@ -1,0 +1,19 @@
+# Acceptance Checklist — Pack 109
+- [ ] Approval string present.
+- [ ] ZIP extracted/read before execution.
+- [ ] Pack 91-108 preservation matrix complete.
+- [ ] Server/profile isolation audit complete.
+- [ ] Auth/logout/server selection audit complete.
+- [ ] Frontend playable loop audit complete.
+- [ ] Tower/Daily/Economy/Rewards/Guild/Arena/Event audits complete.
+- [ ] Global smoke E2E green or blockers documented.
+- [ ] Mobile QA checklist created.
+- [ ] Deferred blocker matrix created.
+- [ ] Gate verdict honest: READY / CONDITIONAL_READY / NOT_READY.
+- [ ] No users.gold/gems/experience mutation.
+- [ ] No premium/hard/gems grants.
+- [ ] No IAP/gacha/payment activation.
+- [ ] No competitive/social/event rewards live.
+- [ ] Final suite REQUIRED=0 MISS=0 for ready/conditional.
+- [ ] fake_PASS=false.
+- [ ] validator_weakening=false.
