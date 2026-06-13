@@ -83,7 +83,7 @@ Output atteso: **solo i 5 file sopra**. Nessun `data/design/**`.
 
 - **Pre-Pack-114B (baseline):** `1da83d9430695f85dd1b1fa200c9a785b3ee0cd0`
 - **Pack 114B (drift incluso, archiviato in history):** `d7ee3103d826cd65fca98012ad68632dad6888d4`
-- **Pack 114C scope-drift cleanup (HEAD attuale):** *vedi sezione "HEAD finale"*
+- **Pack 114C scope-drift cleanup (HEAD attuale):** `4ec5fafad6a2291f9f88d52357f354ec6de316ad`
 
 > Nota: il commit `d7ee3103d` resta nella history (Git non lo riscrive)
 > ma il **diff cumulativo** rispetto al pre-pack ora contiene SOLO i file
@@ -135,17 +135,22 @@ Exit code: 0
 
 | Run | PASS | FAIL | MISS | Note |
 |----:|-----:|-----:|-----:|---|
-| 1   | 1754 | 52   | 0    | Identico a 114B baseline x3 |
+| 1   | 1754 | 52   | 0    | Identico a 114B baseline x3 — nessuna regressione, drift composition identica |
 
 Output completo verificabile riproducendo:
 `python3 backend/scripts/run_hero_skill_kit_validator_suite.py`.
 
-> **Hygiene (importante)**: la Master Suite scrive automaticamente result
-> artifact sotto `data/design/**`. Il Pack 114C **non committa** questi
-> artifact. Sono presenti nel working tree come "untracked / modified"
-> dopo il run, ma intenzionalmente **non aggiunti allo stage**. Comando di
-> verifica: `git status --short data/design/ | wc -l` mostra le righe ma
-> nessuna è stata committata.
+> **Hygiene eseguita (verificabile):**
+> Dopo il run, la Master Suite ha riprodotto 170 artifact sotto `data/design/**`.
+> È stato eseguito immediatamente `git restore data/design/` per **scartarli**.
+> Verifica finale post-restore:
+>
+> ```
+> git status --short data/design/ | wc -l → 0
+> git diff --name-only 1da83d9430695f85dd1b1fa200c9a785b3ee0cd0 HEAD → 6 file esatti
+> ```
+>
+> Nessun result artifact è stato committato nel Pack 114C.
 
 ---
 
