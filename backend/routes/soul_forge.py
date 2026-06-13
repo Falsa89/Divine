@@ -331,7 +331,17 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
             "progress_live": False,
         }
 
-    @router.post("/soul-forge/retire")
+    @router.post(
+        "/soul-forge/retire",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SOUL_FORGE_RETIRE_MUTATIONS",
+                    "/api/soul-forge/retire",
+                )
+            )
+        ],
+    )
     async def retire_heroes(req: RetireHeroRequest, server_id: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         # Pack 95 — Soul forge retire quarantine/server-safe guard.
@@ -450,7 +460,17 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         shop_id: str
         item_id: str
 
-    @router.post("/shops/buy")
+    @router.post(
+        "/shops/buy",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SPECIAL_SHOP_MUTATIONS",
+                    "/api/shops/buy",
+                )
+            )
+        ],
+    )
     async def buy_from_shop(req: ShopPurchaseRequest, server_id: str = None, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         # Pack 95 — Shops buy quarantine/server-safe guard.
@@ -525,7 +545,17 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
     # Pack 94 — Legacy currency earn paths: quarantine guard se server_id passato.
     # I path legacy continuano a scrivere su db.wallets account-wide (legacy).
     # NESSUNA promozione strict in Pack 94 (richiede reward claim ledger live).
-    @router.post("/currency/earn-pvp")
+    @router.post(
+        "/currency/earn-pvp",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_CURRENCY_EARN_MUTATIONS",
+                    "/api/currency/earn-pvp",
+                )
+            )
+        ],
+    )
     async def earn_pvp_honor(server_id: str = None, current_user: dict = Depends(get_current_user)):
         """Award honor from PvP (legacy account-wide; quarantine se server_id passato)."""
         uid = current_user["id"]
@@ -538,7 +568,17 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"honor": honor}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"honor_earned": honor}
 
-    @router.post("/currency/earn-guild")
+    @router.post(
+        "/currency/earn-guild",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_CURRENCY_EARN_MUTATIONS",
+                    "/api/currency/earn-guild",
+                )
+            )
+        ],
+    )
     async def earn_guild_points(server_id: str = None, current_user: dict = Depends(get_current_user)):
         """Award guild points (legacy)."""
         uid = current_user["id"]
@@ -550,7 +590,17 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"guild_points": points}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"guild_points_earned": points}
 
-    @router.post("/currency/earn-mission")
+    @router.post(
+        "/currency/earn-mission",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_CURRENCY_EARN_MUTATIONS",
+                    "/api/currency/earn-mission",
+                )
+            )
+        ],
+    )
     async def earn_mission_coins(server_id: str = None, current_user: dict = Depends(get_current_user)):
         """Award mission coins (legacy). Pack 95 — quarantine guard se server_id passato."""
         uid = current_user["id"]
@@ -563,7 +613,17 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         await db.wallets.update_one({"user_id": uid}, {"$inc": {"mission_coins": coins}, "$setOnInsert": {"server_id": "s1", "account_id": uid}}, upsert=True)
         return {"mission_coins_earned": coins}
 
-    @router.post("/currency/earn-dimension")
+    @router.post(
+        "/currency/earn-dimension",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_CURRENCY_EARN_MUTATIONS",
+                    "/api/currency/earn-dimension",
+                )
+            )
+        ],
+    )
     async def earn_dimension_frags(server_id: str = None, current_user: dict = Depends(get_current_user)):
         """Award dimension fragments from raids. Pack 95 — quarantine guard se server_id passato."""
         uid = current_user["id"]

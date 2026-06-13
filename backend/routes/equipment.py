@@ -125,8 +125,17 @@ def register_equipment_routes(router, db, get_current_user, serialize_doc, calcu
             if r.matched_count == 0:
                 raise HTTPException(404, "Equipaggiamento non trovato per questo server")
             return {"success": True, "server_id": sid, "pack_94_strict_server_scoped_write": True}
-        await db.user_equipment.update_one(
-            {"id": equipment_id, "user_id": uid},
-            {"$unset": {"equipped_to": ""}}
+        # Pre-QA Stabilization 115B — legacy no-server-id path fail-closed.
+        # In assenza di server_id, l'unequip account-wide e' una mutazione legacy
+        # non autorizzata in pre-QA. Restituiamo 423 esplicito senza side-effect.
+        raise HTTPException(
+            423,
+            {
+                "code": "LEGACY_UNEQUIP_NO_SERVER_ID_FAIL_CLOSED",
+                "pack_origin": "pre_qa_stabilization_115b",
+                "endpoint": "/api/equipment/unequip/{equipment_id}",
+                "reason": "Legacy account-wide unequip path is fail-closed in pre-QA. Provide server_id query param to use the strict server-scoped path.",
+                "no_db_write": True,
+                "strict_path_available": True,
+            },
         )
-        return {"success": True}

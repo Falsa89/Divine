@@ -9,6 +9,12 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from utils.server_scope import ensure_server_scope
 
+# Pre-QA Stabilization 115B — legacy mutation gate default-OFF su
+# /api/unique-items/craft, /api/unique-items/equip (mutano roster/equipment).
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 # ===================== UNIQUE ITEMS FOR ALL 30 HEROES =====================
 UNIQUE_ITEMS = {
     # 6★ heroes - Legendary items
@@ -247,7 +253,17 @@ def register_unique_items_routes(router, db, get_current_user, serialize_doc, ca
     class CraftUniqueRequest(BaseModel):
         hero_name: str
 
-    @router.post("/unique-items/craft")
+    @router.post(
+        "/unique-items/craft",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_UNIQUE_ITEM_MUTATIONS",
+                    "/api/unique-items/craft",
+                )
+            )
+        ],
+    )
     async def craft_unique_item(req: CraftUniqueRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         item = UNIQUE_ITEMS.get(req.hero_name)
@@ -287,7 +303,17 @@ def register_unique_items_routes(router, db, get_current_user, serialize_doc, ca
         hero_name: str
         user_hero_id: str
 
-    @router.post("/unique-items/equip")
+    @router.post(
+        "/unique-items/equip",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_UNIQUE_ITEM_MUTATIONS",
+                    "/api/unique-items/equip",
+                )
+            )
+        ],
+    )
     async def equip_unique_item(req: EquipUniqueRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         item = UNIQUE_ITEMS.get(req.hero_name)

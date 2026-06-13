@@ -14,6 +14,12 @@ from typing import Optional
 # SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
 from utils.server_scope import ensure_server_scope
 
+# Pre-QA Stabilization 115B — legacy mutation gate default-OFF su forge/upgrade,
+# forge/fuse, runes/craft, runes/craft-premium, runes/fuse, runes/equip.
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 # ===================== EQUIPMENT TEMPLATES =====================
 WEAPON_TEMPLATES = [
     {"id": "w_divine_blade", "name": "Lama Divina", "rarity": 6, "base_stats": {"physical_damage": 500, "crit_chance": 0.08, "crit_damage": 0.25}, "icon": "\u2694\uFE0F"},
@@ -173,7 +179,17 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
     class ForgeUpgradeRequest(BaseModel):
         equipment_id: str
 
-    @router.post("/forge/upgrade")
+    @router.post(
+        "/forge/upgrade",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_FORGE_MUTATIONS",
+                    "/api/forge/upgrade",
+                )
+            )
+        ],
+    )
     async def forge_upgrade(req: ForgeUpgradeRequest, current_user: dict = Depends(get_current_user)):
         """Upgrade equipment level in the forge."""
         uid = current_user["id"]
@@ -215,7 +231,17 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
         base_id: str
         fodder_ids: list
 
-    @router.post("/forge/fuse")
+    @router.post(
+        "/forge/fuse",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_FORGE_MUTATIONS",
+                    "/api/forge/fuse",
+                )
+            )
+        ],
+    )
     async def forge_fuse_equipment(req: ForgeFuseRequest, current_user: dict = Depends(get_current_user)):
         """Fuse duplicate equipment to increase rarity (stars)."""
         uid = current_user["id"]
@@ -266,7 +292,17 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
             "main_stat_types": {k: {"name": v["name"], "icon": v["icon"], "color": v["color"]} for k, v in RUNE_MAIN_STATS.items()},
         }
 
-    @router.post("/runes/craft")
+    @router.post(
+        "/runes/craft",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_RUNE_MUTATIONS",
+                    "/api/runes/craft",
+                )
+            )
+        ],
+    )
     async def craft_rune(current_user: dict = Depends(get_current_user)):
         """Craft a random rune (costs gold)."""
         uid = current_user["id"]
@@ -284,7 +320,17 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
         await db.user_runes.insert_one(rune)
         return {"success": True, "rune": rune}
 
-    @router.post("/runes/craft-premium")
+    @router.post(
+        "/runes/craft-premium",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_RUNE_MUTATIONS",
+                    "/api/runes/craft-premium",
+                )
+            )
+        ],
+    )
     async def craft_premium_rune(current_user: dict = Depends(get_current_user)):
         """Craft a guaranteed 4★+ rune (costs gems)."""
         uid = current_user["id"]
@@ -305,7 +351,17 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
         base_rune_id: str
         fodder_rune_ids: list
 
-    @router.post("/runes/fuse")
+    @router.post(
+        "/runes/fuse",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_RUNE_MUTATIONS",
+                    "/api/runes/fuse",
+                )
+            )
+        ],
+    )
     async def fuse_runes(req: RuneFuseRequest, current_user: dict = Depends(get_current_user)):
         """Fuse runes to upgrade level. 3 runes = +1 level to base rune."""
         uid = current_user["id"]
@@ -355,7 +411,17 @@ def register_forge_routes(router, db, get_current_user, serialize_doc, calculate
         user_hero_id: str
         slot: int  # 1 or 2
 
-    @router.post("/runes/equip")
+    @router.post(
+        "/runes/equip",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_RUNE_MUTATIONS",
+                    "/api/runes/equip",
+                )
+            )
+        ],
+    )
     async def equip_rune(req: EquipRuneRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         if req.slot not in [1, 2]:

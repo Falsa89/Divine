@@ -377,7 +377,17 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
     class ReincarnateRequest(BaseModel):
         user_hero_id: str
 
-    @router.post("/hero/reincarnate")
+    @router.post(
+        "/hero/reincarnate",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_REINCARNATION_MUTATIONS",
+                    "/api/hero/reincarnate",
+                )
+            )
+        ],
+    )
     async def reincarnate_hero(req: ReincarnateRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         uh = await db.user_heroes.find_one({"id": req.user_hero_id, "user_id": uid})
@@ -454,7 +464,17 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
     class CombineFragmentsRequest(BaseModel):
         fragment_type: str
 
-    @router.post("/fragments/combine")
+    @router.post(
+        "/fragments/combine",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_FRAGMENT_MUTATIONS",
+                    "/api/fragments/combine",
+                )
+            )
+        ],
+    )
     async def combine_fragments(req: CombineFragmentsRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         ft = next((f for f in FRAGMENT_TYPES if f["id"] == req.fragment_type), None)
@@ -484,7 +504,17 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
             "rarity": hero.get("rarity"),
         }
 
-    @router.post("/fragments/add")
+    @router.post(
+        "/fragments/add",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_FRAGMENT_MUTATIONS",
+                    "/api/fragments/add",
+                )
+            )
+        ],
+    )
     async def add_fragments(current_user: dict = Depends(get_current_user)):
         """Debug/reward endpoint to add fragments."""
         uid = current_user["id"]
@@ -940,7 +970,17 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
         material_id: str
         quantity: int = 1
 
-    @router.post("/materials/buy")
+    @router.post(
+        "/materials/buy",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_MATERIAL_MUTATIONS",
+                    "/api/materials/buy",
+                )
+            )
+        ],
+    )
     async def buy_material(req: BuyMaterialRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         mat = FUSION_MATERIALS.get(req.material_id)

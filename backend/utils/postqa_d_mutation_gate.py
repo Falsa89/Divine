@@ -129,6 +129,81 @@ LEGACY_MUTATION_GATES: Final[dict] = {
         "default": False,
         "category": "territory",
     },
+    # Pre-QA Stabilization 115B — Progression/Forge/Items/Unique/SoulForge/LevelSharing cintura legacy.
+    "DIVINE_ALLOW_LEGACY_FORGE_MUTATIONS": {
+        "endpoints": ["/api/forge/upgrade", "/api/forge/fuse"],
+        "default": False,
+        "category": "forge",
+    },
+    "DIVINE_ALLOW_LEGACY_RUNE_MUTATIONS": {
+        "endpoints": ["/api/runes/craft", "/api/runes/craft-premium", "/api/runes/fuse", "/api/runes/equip"],
+        "default": False,
+        "category": "rune",
+    },
+    "DIVINE_ALLOW_LEGACY_REINCARNATION_MUTATIONS": {
+        "endpoints": ["/api/hero/reincarnate"],
+        "default": False,
+        "category": "reincarnation",
+    },
+    "DIVINE_ALLOW_LEGACY_FRAGMENT_MUTATIONS": {
+        "endpoints": ["/api/fragments/combine", "/api/fragments/add"],
+        "default": False,
+        "category": "fragment",
+    },
+    "DIVINE_ALLOW_LEGACY_MATERIAL_MUTATIONS": {
+        "endpoints": ["/api/materials/buy"],
+        "default": False,
+        "category": "material",
+    },
+    "DIVINE_ALLOW_LEGACY_ITEM_SHOP_MUTATIONS": {
+        "endpoints": ["/api/item-shop/buy"],
+        "default": False,
+        "category": "item_shop",
+    },
+    "DIVINE_ALLOW_LEGACY_INVENTORY_PROGRESS_MUTATIONS": {
+        "endpoints": ["/api/inventory/use-exp"],
+        "default": False,
+        "category": "inventory_progress",
+    },
+    "DIVINE_ALLOW_LEGACY_SKILL_UPGRADE_MUTATIONS": {
+        "endpoints": ["/api/hero/skill-upgrade"],
+        "default": False,
+        "category": "skill_upgrade",
+    },
+    "DIVINE_ALLOW_LEGACY_UNIQUE_ITEM_MUTATIONS": {
+        "endpoints": ["/api/unique-items/craft", "/api/unique-items/equip"],
+        "default": False,
+        "category": "unique_item",
+    },
+    "DIVINE_ALLOW_LEGACY_SOUL_FORGE_RETIRE_MUTATIONS": {
+        "endpoints": ["/api/soul-forge/retire"],
+        "default": False,
+        "category": "soul_forge_retire",
+    },
+    "DIVINE_ALLOW_LEGACY_SPECIAL_SHOP_MUTATIONS": {
+        "endpoints": ["/api/shops/buy"],
+        "default": False,
+        "category": "special_shop",
+    },
+    "DIVINE_ALLOW_LEGACY_CURRENCY_EARN_MUTATIONS": {
+        "endpoints": [
+            "/api/currency/earn-pvp",
+            "/api/currency/earn-guild",
+            "/api/currency/earn-mission",
+            "/api/currency/earn-dimension",
+        ],
+        "default": False,
+        "category": "currency_earn",
+    },
+    "DIVINE_ALLOW_LEGACY_LEVEL_SHARING_MUTATIONS": {
+        "endpoints": [
+            "/api/level-sharing/unlock",
+            "/api/level-sharing/assign",
+            "/api/level-sharing/remove/{slot_number}",
+        ],
+        "default": False,
+        "category": "level_sharing",
+    },
 }
 
 _TRUTHY: Final[set] = {"true", "1", "yes", "on"}

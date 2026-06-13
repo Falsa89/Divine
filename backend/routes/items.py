@@ -10,6 +10,13 @@ from typing import Optional
 # SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
 from utils.server_scope import ensure_server_scope
 
+# Pre-QA Stabilization 115B — legacy mutation gate default-OFF su
+# /api/item-shop/buy (spende users.gold/gems), /api/inventory/use-exp,
+# /api/hero/skill-upgrade (spende users.gold).
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 # ============ EXP ITEMS ============
 EXP_ITEMS = {
     "exp_potion_s": {"name": "Pozione EXP Piccola", "icon": "\U0001f9ea", "exp": 1000, "shop_price": 500, "currency": "gold", "rarity": 1},
@@ -187,7 +194,17 @@ def register_items_routes(router, db, get_current_user):
         item_id: str
         quantity: int = 1
 
-    @router.post("/item-shop/buy")
+    @router.post(
+        "/item-shop/buy",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_ITEM_SHOP_MUTATIONS",
+                    "/api/item-shop/buy",
+                )
+            )
+        ],
+    )
     async def buy_item(req: BuyItemRequest, server_id: str, current_user: dict = Depends(get_current_user)):
         # Pack 90 — STRICT server-scoped write. server_id query param REQUIRED.
         # PSP existence verificato; selector inventory include server_id;
@@ -222,7 +239,17 @@ def register_items_routes(router, db, get_current_user):
         item_id: str
         quantity: int = 1
 
-    @router.post("/inventory/use-exp")
+    @router.post(
+        "/inventory/use-exp",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_INVENTORY_PROGRESS_MUTATIONS",
+                    "/api/inventory/use-exp",
+                )
+            )
+        ],
+    )
     async def use_exp_item(req: UseExpItemRequest, server_id: str, current_user: dict = Depends(get_current_user)):
         # Pack 90 — STRICT server-scoped consume. server_id REQUIRED.
         user_id = current_user['id']
@@ -349,7 +376,17 @@ def register_items_routes(router, db, get_current_user):
         user_hero_id: str
         skill_key: str
 
-    @router.post("/hero/skill-upgrade")
+    @router.post(
+        "/hero/skill-upgrade",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SKILL_UPGRADE_MUTATIONS",
+                    "/api/hero/skill-upgrade",
+                )
+            )
+        ],
+    )
     async def upgrade_skill(req: UpgradeSkillRequest, server_id: str, current_user: dict = Depends(get_current_user)):
         # Pack 90 — STRICT server-scoped.
         user_id = current_user['id']

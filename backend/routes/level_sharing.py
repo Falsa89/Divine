@@ -9,6 +9,13 @@ from pydantic import BaseModel
 
 # SLC-F Batch-1B: server/account scope helper (set-only-if-missing on insert)
 from utils.server_scope import ensure_server_scope
+
+# Pre-QA Stabilization 115B — legacy mutation gate default-OFF su
+# /api/level-sharing/unlock, /api/level-sharing/assign, /api/level-sharing/remove/{slot_number}.
+# Spendono users.gold/gems account-wide; politica server-scoped deferred.
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
 # Slot unlock costs
 LEVEL_SHARE_SLOTS = [
     {"slot": 1, "cost_gold": 50000, "cost_gems": 0, "description": "Primo slot condivisione livello"},
@@ -98,7 +105,17 @@ def register_level_sharing_routes(router, db, get_current_user, serialize_doc, c
     class UnlockSlotRequest(BaseModel):
         slot_number: int
 
-    @router.post("/level-sharing/unlock")
+    @router.post(
+        "/level-sharing/unlock",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_LEVEL_SHARING_MUTATIONS",
+                    "/api/level-sharing/unlock",
+                )
+            )
+        ],
+    )
     async def unlock_slot(req: UnlockSlotRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         slot_info = next((s for s in LEVEL_SHARE_SLOTS if s["slot"] == req.slot_number), None)
@@ -132,7 +149,17 @@ def register_level_sharing_routes(router, db, get_current_user, serialize_doc, c
         slot_number: int
         user_hero_id: str
 
-    @router.post("/level-sharing/assign")
+    @router.post(
+        "/level-sharing/assign",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_LEVEL_SHARING_MUTATIONS",
+                    "/api/level-sharing/assign",
+                )
+            )
+        ],
+    )
     async def assign_hero_to_slot(req: AssignHeroRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         sharing = await db.level_sharing.find_one({"user_id": uid})
@@ -165,7 +192,17 @@ def register_level_sharing_routes(router, db, get_current_user, serialize_doc, c
             "slot": req.slot_number,
         }
 
-    @router.post("/level-sharing/remove/{slot_number}")
+    @router.post(
+        "/level-sharing/remove/{slot_number}",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_LEVEL_SHARING_MUTATIONS",
+                    "/api/level-sharing/remove/{slot_number}",
+                )
+            )
+        ],
+    )
     async def remove_hero_from_slot(slot_number: int, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         sharing = await db.level_sharing.find_one({"user_id": uid})
