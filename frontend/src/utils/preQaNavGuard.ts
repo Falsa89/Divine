@@ -17,6 +17,18 @@ function _truthy(name: string, fallback = false): boolean {
   return TRUTHY.has(String(v).trim().toLowerCase());
 }
 
+// Normalizza route alias: /(tabs)/x -> /x, /(stack)/x -> /x, etc.
+// Pre-QA Stabilization 114: garantisce che /(tabs)/gacha venga riconosciuto come /gacha.
+export function normalizeRoute(route: string): string {
+  if (!route) return route;
+  // Strip parametri/query.
+  const base = String(route).split('?')[0].split('#')[0];
+  // Pattern /(group)/x -> /x.
+  const m = base.match(/^\/\([^)]+\)(\/.*)?$/);
+  if (m) return m[1] || '/';
+  return base;
+}
+
 // Set canonico di route PLAYER-FACING UNSAFE / DEFERRED / LEGACY bloccate di default.
 export const PRE_QA_BLOCKED_PLAYER_ROUTES: ReadonlySet<string> = new Set<string>([
   '/pvp',
@@ -46,6 +58,11 @@ export const PRE_QA_BLOCKED_PLAYER_ROUTES: ReadonlySet<string> = new Set<string>
   '/mail',
   '/wallet',
   '/materials',
+  // Pre-QA Stabilization 114 — missing/dead-link routes da bloccare onestamente.
+  '/quests',
+  '/arena',
+  '/blessings',
+  '/profile',
 ]);
 
 // Set canonico di categorie QA/dev nascoste di default.
@@ -69,9 +86,10 @@ export function preQaGachaUiVisible(): boolean {
 // Helper: decide se una route player-facing deve essere visibile in Home/Menu.
 export function isRouteAllowedInPreQa(route: string): boolean {
   if (preQaUnsafeVisible()) return true;
-  // Normalizza in modo che '/pvp/some-sub' venga bloccato come '/pvp'.
+  // Pre-QA Stabilization 114: normalizza alias /(tabs)/x -> /x prima del lookup.
+  const normalized = normalizeRoute(route);
   for (const blocked of PRE_QA_BLOCKED_PLAYER_ROUTES) {
-    if (route === blocked || route.startsWith(blocked + '/')) return false;
+    if (normalized === blocked || normalized.startsWith(blocked + '/')) return false;
   }
   return true;
 }
@@ -96,6 +114,7 @@ const _api = {
   preQaUnsafeVisible,
   preQaDevQaVisible,
   preQaGachaUiVisible,
+  normalizeRoute,
   SELECTED_SERVER_REQUIRED_BLOCKER,
   PRE_QA_ROUTE_BLOCKED_TOKEN,
 };

@@ -4338,6 +4338,10 @@ OPTIONAL = [
     ('PROJECT-PRE-QA-113-HOME-OVERFLOW-GUARD', 'validate_pre_qa_stabilization_113_home_overflow_guard.py'),
     ('PRE-QA-STABILIZATION-113-ROLLUP', 'validate_pre_qa_stabilization_113_home_overflow_nav_guard_fix_rollup.py'),
 
+    # Pre-QA Stabilization 114 — Home routes canonicalization + dead-link guard.
+    ('PROJECT-PRE-QA-114-HOME-ROUTES-CANONICALIZATION', 'validate_pre_qa_stabilization_114_home_routes_canonicalization.py'),
+    ('PRE-QA-STABILIZATION-114-ROLLUP', 'validate_pre_qa_stabilization_114_home_routes_canonicalization_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

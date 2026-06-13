@@ -410,6 +410,17 @@ export default function HomeTab() {
 
   const onHeroTap = () => {
     if (homeHero?.id) {
+      // Pre-QA Stabilization 114: guarda anche object-route push tramite shared nav guard.
+      try {
+        const _g = require('../../src/utils/preQaNavGuard');
+        if (!_g.isRouteAllowedInPreQa('/sanctuary')) {
+          Alert?.alert?.(
+            'Surface in preparazione',
+            'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED: questa surface e\' bloccata nel closed alpha pre-QA. Sara\' abilitata da un pack futuro autorizzato.'
+          );
+          return;
+        }
+      } catch (_e) { /* best-effort */ }
       router.push({ pathname: '/sanctuary', params: { heroId: homeHero.id } } as any);
     }
   };
