@@ -7,6 +7,8 @@ import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import ResourceBadge from '../../components/ui/ResourceBadge';
 import { COLORS, RARITY } from '../../constants/theme';
 import Animated, { ZoomIn, FadeIn, FadeInDown, BounceIn } from 'react-native-reanimated';
+// Pre-QA Stabilization 115D — self-gate (tab is hidden but route still reachable).
+import PreQaScreenGate, { isScreenGated } from '../../src/components/PreQaScreenGate';
 
 const { width: W, height: H } = Dimensions.get('window');
 
@@ -62,6 +64,10 @@ const BANNERS = [
 ];
 
 export default function GachaTab() {
+  // Pre-QA Stabilization 115D — self-gate diretto (anche se la tab e' nascosta,
+  // la route /(tabs)/gacha resta raggiungibile via deeplink/state).
+  // normalizeRoute -> '/gacha' e' in PRE_QA_BLOCKED_PLAYER_ROUTES.
+  if (isScreenGated('/(tabs)/gacha')) return <PreQaScreenGate route="/(tabs)/gacha" label="Gacha" />;
   // Pre-QA Stabilization 110 — Gacha UI hard-lock player-facing.
   // Default OFF: la pagina mostra una placeholder "Bloccato (Closed Alpha)".
   // Riabilitazione richiede flag EXPO_PUBLIC_GACHA_UI_ENABLED=true (default OFF)

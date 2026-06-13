@@ -11,10 +11,14 @@ import DMPanel from '../components/chat/DMPanel';
 import { useChatChannel } from '../hooks/useChatChannel';
 import { useAuth } from '../context/AuthContext';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 const AURA_COLORS: Record<string,string> = { flame:'#ff4444', ice:'#44aaff', thunder:'#ffd700', shadow:'#9944ff', divine:'#ffd700', celestial:'#ffffff' };
 const FRAME_COLORS: Record<string,string> = { bronze:'#cd7f32', silver:'#c0c0c0', gold:'#ffd700', diamond:'#44ddff', legendary:'#ff4444', divine:'#ffd700' };
 
 export default function PlazaScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/plaza')) return <PreQaScreenGate route="/plaza" />;
   const router = useRouter();
   // v16.14: rimosso useAuth() non utilizzato.
   // v16.18 Phase 1: chat ora multi-canale via useChatChannel hook condiviso.

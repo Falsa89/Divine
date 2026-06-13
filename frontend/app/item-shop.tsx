@@ -10,9 +10,13 @@ import ScreenHeader from '../components/ui/ScreenHeader';
 import ResourceBadge from '../components/ui/ResourceBadge';
 import { COLORS } from '../constants/theme';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 const RARITY_COL: Record<number, string> = { 1: '#8899AA', 2: '#44BB66', 3: '#4499FF', 4: '#BB55FF', 5: '#FF5544' };
 
 export default function ItemShopScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/item-shop')) return <PreQaScreenGate route="/item-shop" />;
   const router = useRouter();
   const { refreshUser } = useAuth();
   // Pack 91 — adozione canonical server scope sui frontend mutation consumer.

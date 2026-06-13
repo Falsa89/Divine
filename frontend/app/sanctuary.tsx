@@ -20,6 +20,8 @@ import { apiCall } from '../utils/api';
 import HeroPortrait, { isHopliteHero } from '../components/ui/HeroPortrait';
 import { heroPortraitSource } from '../components/ui/hopliteAssets';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 const RARITY_COLOR: Record<number, string> = {
   1: '#9AA5B1', 2: '#4ECDC4', 3: '#46A3FF',
   4: '#B05CFF', 5: '#FFB347', 6: '#FF4D6D',
@@ -40,6 +42,8 @@ const STAT_LABEL: Record<string, string> = {
 type Tab = 'overview' | 'affinity' | 'constellation' | 'actions';
 
 export default function SanctuaryScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/sanctuary')) return <PreQaScreenGate route="/sanctuary" />;
   const router = useRouter();
   const params = useLocalSearchParams();
   const heroId = params.heroId as string;

@@ -6,9 +6,13 @@ import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 const EVENT_ICONS: Record<string,string> = { coin:'\uD83D\uDCB0', dumbbell:'\uD83C\uDFCB\uFE0F', sword:'\uD83D\uDDE1\uFE0F', gem:'\uD83D\uDC8E', skull:'\uD83D\uDC80' };
 
 export default function EventsScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/events')) return <PreQaScreenGate route="/events" />;
   const router = useRouter();
   const { refreshUser } = useAuth();
   const [data, setData] = useState<any>(null);

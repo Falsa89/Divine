@@ -7,6 +7,8 @@ import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, wit
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 const { width: SW, height: SH } = Dimensions.get('window');
 const MAP_W = Math.max(SW - 32, 600);
 const MAP_H = Math.max(SH - 130, 260);
@@ -156,6 +158,8 @@ function ConnectionLine({ from, to, territories }: { from: string, to: string, t
 }
 
 export default function TerritoryScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/territory')) return <PreQaScreenGate route="/territory" />;
   const router = useRouter();
   const { user, refreshUser } = useAuth();
   const [data, setData] = useState<any>(null);

@@ -7,6 +7,8 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence, w
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 const EC: Record<string,string> = { fire:'#ff4444', water:'#4488ff', earth:'#88aa44', wind:'#44cc88', light:'#ffd700', dark:'#9944ff', neutral:'#888' };
 const BOSS_EMOJI: Record<string,string> = { dark:'\uD83D\uDC32', fire:'\uD83D\uDD25', water:'\uD83C\uDF0A', neutral:'\uD83D\uDCA0' };
 const WEAKNESS: Record<string,string> = { dark:'Luce', fire:'Acqua', water:'Terra', earth:'Vento', wind:'Fuoco', light:'Oscurita' };
@@ -179,6 +181,8 @@ function BossCard({ boss, activeRaid, onJoin, onAttack, acting, damageLog }: any
 }
 
 export default function RaidScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/raid')) return <PreQaScreenGate route="/raid" />;
   const router = useRouter();
   const { refreshUser } = useAuth();
   const [data, setData] = useState<any>(null);

@@ -6,7 +6,11 @@ import { useRouter } from 'expo-router';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 export default function GuildScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/guild')) return <PreQaScreenGate route="/guild" />;
   const router = useRouter();
   const { user, refreshUser } = useAuth();
   const [guildData, setGuildData] = useState<any>(null);

@@ -20,7 +20,11 @@ import { useDM } from '../hooks/useDM';
 import { useAuth } from '../context/AuthContext';
 import ChatComposer from '../components/chat/ChatComposer';
 
+// Pre-QA Stabilization 115D — screen-entry/deeplink guard.
+import PreQaScreenGate, { isScreenGated } from '../src/components/PreQaScreenGate';
 export default function DMScreen() {
+  // Pre-QA Stabilization 115D — fail-closed screen-entry/deeplink guard.
+  if (isScreenGated('/dm')) return <PreQaScreenGate route="/dm" />;
   const router = useRouter();
   const params = useLocalSearchParams<{ peer?: string; thread?: string }>();
   const { user } = useAuth();
