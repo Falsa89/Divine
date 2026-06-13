@@ -6,7 +6,7 @@
 ## Commit SHAs
 - Baseline (pre-116A): `8b711627a7f938549756f6441850bf3afe3ec503`
 - Pack 116A commit:    `053b34dccbd6f71e17775b61f3ab03a6eeaf0eca`
-- Report/self-ref:     *aggiornato dopo l'eventuale commit del self-ref del report 125.*
+- Report/self-ref:     `024fca9d034d8412f469fbcb743f912310ad493c`
 
 > **Commit policy**: il commit del Pack 116A segue il vincolo esplicito utente: **MAI `git add -A` / `git add .`**. Tutti i file sono stati aggiunti con `git add -- <path>` esplicito file-by-file.
 
