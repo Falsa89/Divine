@@ -40,8 +40,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter';
 // v108_POSTQA_A — AsyncStorage per leggere selected server reale (NO hardcoded 's1').
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// Pack 80 — SecureStore per leggere bearer token reale (chiave canonica v96_auth_token).
-import * as SecureStore from 'expo-secure-store';
+// Pre-QA Stabilization 114B — Bearer token bridged via dynamic authTokenCompat.
+// Direct expo-secure-store import rimosso (dead code). Vedi src/utils/authTokenCompat.ts.
 
 // ─────────────────────────────────────────────────────────────────────────
 // Inline catalog mirror — DETERMINISTIC, NO RUNTIME RANDOM
@@ -418,7 +418,7 @@ export default function PreBattleLobbyScreen() {
   // v108_POSTQA_A — selectedServerId/selectedServerLoaded ora dichiarati piu' in alto (Pack 80).
   // Pack 80 — REAL PLAYER TEAM FETCH.
   // Chiama davvero /api/team/get-formation?server_id=<selectedServerId> con
-  // Bearer token reale (SecureStore.v96_auth_token) e parsea filter_applied,
+  // Bearer token reale via authTokenCompat (Pack 114B: nessun import diretto a expo-secure-store) e parsea filter_applied,
   // source, profile_id, team_formation, blocker. Render fino a PLAYER_SLOT_COUNT slot.
   // NESSUNA fake team. Slot mancanti = empty cards onesti.
   useEffect(() => {

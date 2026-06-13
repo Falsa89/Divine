@@ -4342,6 +4342,9 @@ OPTIONAL = [
     ('PROJECT-PRE-QA-114-HOME-ROUTES-CANONICALIZATION', 'validate_pre_qa_stabilization_114_home_routes_canonicalization.py'),
     ('PRE-QA-STABILIZATION-114-ROLLUP', 'validate_pre_qa_stabilization_114_home_routes_canonicalization_rollup.py'),
 
+    # Pre-QA Stabilization 114B — Gacha/Combat/Lobby guard repair cleanup.
+    ('PROJECT-PRE-QA-114B-GACHA-COMBAT-LOBBY-GUARD', 'validate_pre_qa_stabilization_114_gacha_combat_lobby_guard.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
