@@ -117,8 +117,52 @@ def main():
                 raise AssertionError(f"{hid}/{slot}: slot field mismatch")
             if sk.get("design_status") != "approved_direction":
                 raise AssertionError(f"{hid}/{slot}: design_status must be approved_direction")
-            if sk.get("final_numbers") is not None:
-                raise AssertionError(f"{hid}/{slot}: final_numbers must be null in foundation")
+            # Pack 115G — Skill foundation semantic truth:
+            # `final_numbers` puo' essere non-null SOLO se chiaramente marcato
+            # come foundation_draft preview-only e NON runtime-ready/live/final.
+            fn = sk.get("final_numbers")
+            if fn is not None:
+                if not isinstance(fn, dict):
+                    raise AssertionError(
+                        f"{hid}/{slot}: final_numbers must be null or a dict envelope, "
+                        f"not {type(fn).__name__}"
+                    )
+                status_val = fn.get("status")
+                if status_val != "foundation_draft":
+                    raise AssertionError(
+                        f"{hid}/{slot}: final_numbers.status must be 'foundation_draft', "
+                        f"got {status_val!r}"
+                    )
+                if fn.get("runtime_ready") is not False:
+                    raise AssertionError(
+                        f"{hid}/{slot}: final_numbers.runtime_ready must be explicitly False, "
+                        f"got {fn.get('runtime_ready')!r}"
+                    )
+                # Vietato qualunque flag che dichiari runtime/live/final/finalized.
+                forbidden_live_flags = (
+                    "runtime",
+                    "runtime_attached",
+                    "battle_runtime_attached",
+                    "live",
+                    "is_live",
+                    "final",
+                    "is_final",
+                    "finalized",
+                    "balance_finalized",
+                    "balance_values_finalized",
+                )
+                for flag in forbidden_live_flags:
+                    if fn.get(flag) is True:
+                        raise AssertionError(
+                            f"{hid}/{slot}: final_numbers must not declare {flag}=True"
+                        )
+                # Anche string-valued flags devono non dichiarare semantica live.
+                status_forbidden = {"runtime", "live", "final", "finalized", "ready"}
+                if isinstance(status_val, str) and status_val.lower() in status_forbidden:
+                    raise AssertionError(
+                        f"{hid}/{slot}: final_numbers.status non puo' essere "
+                        f"{status_val!r} in fase foundation"
+                    )
 
     if launch_base_count != 12:
         raise AssertionError(f"expected 12 launch_base 6★ entries, got {launch_base_count}")

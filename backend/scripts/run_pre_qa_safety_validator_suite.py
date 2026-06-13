@@ -153,6 +153,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_115f_repo_hygiene_and_validator_truth.py',
     },
+    # Pack 115G — Skill/Artifact semantic cleanup
+    {
+        'name': 'Validator 115G Skill/Artifact Semantic Cleanup',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_115g_skill_artifact_semantic_cleanup.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

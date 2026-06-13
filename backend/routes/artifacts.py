@@ -63,6 +63,65 @@ CONSTELLATION_MUTATION_LOCK_ENVELOPE = {
 ARTIFACT_MUTATION_LOCK_STATUS = 423
 ARTIFACT_MUTATION_ENDPOINTS_LOCKED_V1 = True
 
+# ========================================================================
+# PACK 115G — Skill/Artifact semantic cleanup
+# ------------------------------------------------------------------------
+# I GET legacy `/api/artifacts` e `/api/constellations` non possono restare
+# active-looking in pre-QA. Vengono neutralizzati con un envelope locked
+# HTTP 423 coerente con il pattern POST-mutation-lock. Le handler:
+#   - NON dipendono da `get_current_user` (zero DB auth call);
+#   - NON leggono `db.user_artifacts` / `db.user_constellations` / `db.teams`;
+#   - NON calcolano `total_buffs`, `effective_buff`, `equipped_buff`,
+#     `equipped_skill`, `set_bonuses`, ne campi di ownership/inventory;
+#   - NON restituiscono nessun campo che possa sembrare "live".
+# Sono preservati invariati i canonical GET catalog read-only:
+#   - `GET /api/artifacts/catalog`
+#   - `GET /api/artifacts/catalog/preview`
+# Sono preservati invariati tutti i POST mutation locks (artifacts +
+# constellations) gia' hard-locked dallo stage 4.5.
+# ========================================================================
+ARTIFACT_LEGACY_GET_LOCK_ENVELOPE = {
+    "success": False,
+    "locked": True,
+    "system": "artifacts",
+    "code": "ARTIFACT_LEGACY_GET_NEUTRALIZED_PRE_QA",
+    "message": (
+        "Endpoint legacy in lock pre-QA. Nessuna lettura DB ownership, "
+        "nessun calcolo buff. Usare i canonical catalog read-only."
+    ),
+    "no_db_ownership_read": True,
+    "no_effective_buff_calculation": True,
+    "no_equipped_buff_calculation": True,
+    "no_equipped_skill_calculation": True,
+    "no_total_buffs_calculation": True,
+    "allowed_now": [
+        "GET /api/artifacts/catalog",
+        "GET /api/artifacts/catalog/preview",
+    ],
+}
+CONSTELLATION_LEGACY_GET_LOCK_ENVELOPE = {
+    "success": False,
+    "locked": True,
+    "system": "constellations",
+    "code": "CONSTELLATION_LEGACY_GET_NEUTRALIZED_PRE_QA",
+    "message": (
+        "Endpoint legacy in lock pre-QA. Nessuna lettura DB ownership, "
+        "nessun calcolo buff/equipped. Catalogo non disponibile su questo "
+        "path; usare i canonical artifact catalog read-only."
+    ),
+    "no_db_ownership_read": True,
+    "no_effective_buff_calculation": True,
+    "no_equipped_buff_calculation": True,
+    "no_equipped_skill_calculation": True,
+    "no_total_buffs_calculation": True,
+    "allowed_now": [
+        "GET /api/artifacts/catalog",
+        "GET /api/artifacts/catalog/preview",
+    ],
+}
+ARTIFACT_LEGACY_GET_LOCK_STATUS = 423
+ARTIFACT_LEGACY_GET_ENDPOINTS_NEUTRALIZED_V1 = True
+
 # ===================== ARTIFACT DEFINITIONS =====================
 ARTIFACTS = [
     {"id": "holy_grail", "name": "Santo Graal", "rarity": 6, "buff": {"hp": 0.15, "defense": 0.10}, "icon": "\U0001F3C6", "description": "Il calice sacro che dona vitalita eterna ai guerrieri.", "set": "divino"},
@@ -205,59 +264,15 @@ CONSTELLATION_BANNER = {
 def register_artifacts_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
     # ==================== ARTIFACTS ====================
+    # PACK 115G — `/artifacts` legacy GET NEUTRALIZED.
+    # Handler senza dipendenza `get_current_user` (no DB auth call), senza
+    # alcuna lettura DB ownership, senza calcolo `effective_buff`/`total_buffs`.
     @router.get("/artifacts")
-    async def get_artifacts(current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        user_artifacts = await db.user_artifacts.find({"user_id": uid}).to_list(200)
-        owned_ids = {ua["artifact_id"]: ua for ua in user_artifacts}
-
-        # Calculate total buffs from all owned artifacts
-        total_buffs = {}
-        active_sets = {}
-        artifacts_list = []
-
-        for art in ARTIFACTS:
-            ua = owned_ids.get(art["id"])
-            owned = ua is not None
-            level = ua.get("level", 1) if ua else 0
-            # Level multiplier: each level adds 20% to base buff
-            level_mult = 1 + (level - 1) * 0.2 if owned else 0
-
-            art_info = {
-                **art,
-                "owned": owned,
-                "level": level,
-                "duplicates": ua.get("duplicates", 0) if ua else 0,
-                "effective_buff": {k: round(v * level_mult, 4) for k, v in art["buff"].items()} if owned else {},
-            }
-            artifacts_list.append(art_info)
-
-            if owned:
-                for stat, val in art["buff"].items():
-                    total_buffs[stat] = total_buffs.get(stat, 0) + val * level_mult
-                # Track sets
-                s = art["set"]
-                active_sets[s] = active_sets.get(s, 0) + 1
-
-        # Calculate set bonuses
-        set_bonuses = {}
-        for set_id, count in active_sets.items():
-            s = ARTIFACT_SETS.get(set_id)
-            if s:
-                for threshold, bonus in sorted(s["bonuses"].items()):
-                    if count >= threshold:
-                        set_bonuses[set_id] = {"name": s["name"], "count": count, "threshold": threshold, "bonus": bonus}
-                        for stat, val in bonus.items():
-                            total_buffs[stat] = total_buffs.get(stat, 0) + val
-
-        return {
-            "artifacts": artifacts_list,
-            "total_buffs": {k: round(v, 4) for k, v in total_buffs.items()},
-            "set_bonuses": set_bonuses,
-            "sets": {k: {"name": v["name"], "bonuses": v["bonuses"]} for k, v in ARTIFACT_SETS.items()},
-            "owned_count": len(owned_ids),
-            "total_count": len(ARTIFACTS),
-        }
+    async def get_artifacts():
+        return JSONResponse(
+            status_code=ARTIFACT_LEGACY_GET_LOCK_STATUS,
+            content=ARTIFACT_LEGACY_GET_LOCK_ENVELOPE,
+        )
 
     class ArtifactFuseRequest(BaseModel):
         artifact_id: str
@@ -289,45 +304,16 @@ def register_artifacts_routes(router, db, get_current_user, serialize_doc, calcu
         )
 
     # ==================== CONSTELLATIONS ====================
+    # PACK 115G — `/constellations` legacy GET NEUTRALIZED.
+    # Handler senza dipendenza `get_current_user` (no DB auth call), senza
+    # alcuna lettura DB ownership (no `db.user_constellations`, no
+    # `db.teams`), senza calcolo `effective_buff`/`equipped_buff`/`equipped_skill`.
     @router.get("/constellations")
-    async def get_constellations(current_user: dict = Depends(get_current_user)):
-        uid = current_user["id"]
-        user_consts = await db.user_constellations.find({"user_id": uid}).to_list(50)
-        owned_ids = {uc["constellation_id"]: uc for uc in user_consts}
-        # Get equipped constellation
-        team = await db.teams.find_one({"user_id": uid, "is_active": True})
-        equipped_id = team.get("constellation_id") if team else None
-        constellations_list = []
-        for c in CONSTELLATIONS:
-            uc = owned_ids.get(c["id"])
-            owned = uc is not None
-            level = uc.get("level", 1) if uc else 0
-            level_mult = 1 + (level - 1) * 0.15 if owned else 0
-            constellations_list.append({
-                **c,
-                "owned": owned,
-                "level": level,
-                "duplicates": uc.get("duplicates", 0) if uc else 0,
-                "equipped": c["id"] == equipped_id,
-                "effective_buff": {k: round(v * level_mult, 4) for k, v in c["buff"].items()} if owned else {},
-                "skill_mult": round(c["skill"]["damage_mult"] * level_mult, 2) if owned and c["skill"]["damage_mult"] > 0 else c["skill"]["damage_mult"],
-            })
-        # Currently equipped buff
-        equipped_buff = {}
-        equipped_skill = None
-        if equipped_id:
-            ec = next((c for c in CONSTELLATIONS if c["id"] == equipped_id), None)
-            uc = owned_ids.get(equipped_id)
-            if ec and uc:
-                level_mult = 1 + (uc.get("level", 1) - 1) * 0.15
-                equipped_buff = {k: round(v * level_mult, 4) for k, v in ec["buff"].items()}
-                equipped_skill = {**ec["skill"], "damage_mult": round(ec["skill"]["damage_mult"] * level_mult, 2)}
-        return {
-            "constellations": constellations_list,
-            "equipped_id": equipped_id,
-            "equipped_buff": equipped_buff,
-            "equipped_skill": equipped_skill,
-        }
+    async def get_constellations():
+        return JSONResponse(
+            status_code=ARTIFACT_LEGACY_GET_LOCK_STATUS,
+            content=CONSTELLATION_LEGACY_GET_LOCK_ENVELOPE,
+        )
 
     class EquipConstellationRequest(BaseModel):
         constellation_id: str

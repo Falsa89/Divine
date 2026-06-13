@@ -574,10 +574,27 @@ function SchemaView({ schema }: { schema: any }) {
       )}
       <View style={[s.card, { borderColor: COLORS.red + '88' }]}>
         <Text style={s.cardTitle}>Stato bilanciamento</Text>
-        <Text style={s.cardSub}>• final_numbers: <Text style={{ color: COLORS.textDim }}>null</Text> su tutte le skill</Text>
-        <Text style={s.cardSub}>• balance_values_finalized: <Text style={{ color: COLORS.red }}>false</Text></Text>
-        <Text style={s.cardSub}>• runtime_attached: <Text style={{ color: COLORS.red }}>false</Text></Text>
-        <Text style={s.cardSub}>• do_not_treat_as_live_kit: <Text style={{ color: COLORS.green }}>true</Text></Text>
+        <Text style={s.cardSub}>
+          • final_numbers: <Text style={{ color: COLORS.gold, fontWeight: '700' }}>foundation_draft preview-only</Text>
+        </Text>
+        <Text style={s.cardSub}>
+          • runtime_ready: <Text style={{ color: COLORS.red, fontWeight: '700' }}>false</Text>
+        </Text>
+        <Text style={s.cardSub}>
+          • balance_values_finalized: <Text style={{ color: COLORS.red }}>false</Text>
+        </Text>
+        <Text style={s.cardSub}>
+          • runtime_attached: <Text style={{ color: COLORS.red }}>false</Text>
+        </Text>
+        <Text style={s.cardSub}>
+          • battle_runtime_attached: <Text style={{ color: COLORS.red }}>false</Text>
+        </Text>
+        <Text style={s.cardSub}>
+          • do_not_treat_as_live_kit: <Text style={{ color: COLORS.green }}>true</Text>
+        </Text>
+        <Text style={[s.cardSub, { marginTop: 6 }]}>
+          {"\u26A0\uFE0F  Solo design/catalogo: NON final balance, NON collegato al battle runtime, NON aggancia HP bar / VFX / combat. Trattare come anteprima di fondazione, non come kit live."}
+        </Text>
       </View>
     </View>
   );
