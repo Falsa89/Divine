@@ -135,13 +135,19 @@ export default function BattleTab() {
 
   const loadData = async () => {
     try {
-      // Pack 92 — server scope sweep: /api/user/heroes passa server_id se selezionato.
-      const heroesUrl = selected_server_id
-        ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
-        : '/api/user/heroes';
+      // Pre-QA Stabilization 115C — fail-closed se manca server_id.
+      if (!selected_server_id) {
+        setHeroes([]);
+        setConstellations([]);
+        setLoading(false);
+        return;
+      }
+      const heroesUrl = `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`;
+      // Pre-QA Stabilization 115C — strict team read: get-formation server-scoped.
+      const teamUrl = `/api/team/get-formation?server_id=${encodeURIComponent(selected_server_id)}`;
       const [uh, team, constData] = await Promise.all([
         apiCall(heroesUrl),
-        apiCall('/api/team'),
+        apiCall(teamUrl).catch(() => ({ formation: [], total_power: 0 })),
         apiCall('/api/constellations').catch(() => ({ constellations: [] })),
       ]);
       setHeroes(uh);
@@ -246,41 +252,14 @@ export default function BattleTab() {
   };
 
   const saveTeam = async () => {
-    setSaving(true);
-    try {
-      const formation: any[] = [];
-      grid.forEach((col, ci) => {
-        col.forEach((h, ri) => {
-          if (!h) return;
-          formation.push({ x: COLUMNS[ci].x, y: ROW_YS[ri], user_hero_id: h.id });
-        });
-      });
-      const body: any = { formation };
-      if (selectedConstellation) body.constellation_id = selectedConstellation;
-      // Pre-QA Stabilization 110 — team formation server-scope: il path legacy
-      // /api/team/update-formation e' QUARANTINED 423 di default. Mostriamo
-      // un toast onesto e blocchiamo il save player-facing.
-      try {
-        const r = await apiCall('/api/team/update-formation', {
-          method: 'POST',
-          body: JSON.stringify(body),
-        });
-        setPower(r.total_power || 0);
-        await refreshUser();
-        Alert.alert('Squadra Salvata!', `Potenza: ${r.total_power?.toLocaleString()}`);
-      } catch (e: any) {
-        // 423 atteso pre-QA: account-wide write bloccata.
-        const msg = String(e?.message || '');
-        if (msg.includes('423') || msg.toLowerCase().includes('quarant')) {
-          Alert.alert(
-            'Salvataggio in preparazione',
-            'TEAM_FORMATION_LEGACY_QUARANTINED: il save server-scoped sara\' abilitato da un pack futuro. Nessuna mutazione applicata.'
-          );
-        } else {
-          throw e;
-        }
-      }
-    } catch (e: any) { Alert.alert('Errore', e.message); } finally { setSaving(false); }
+    // Pre-QA Stabilization 115C — save deferred. Non chiamiamo piu' alcun
+    // /api/team/update-formation: il path strict server-scoped non e' ancora
+    // implementato e quello legacy e' account-wide. Mostriamo messaggio onesto.
+    Alert.alert(
+      'Salvataggio formazione in preparazione',
+      'TEAM_FORMATION_SAVE_DEFERRED_PRE_QA: il save server-scoped sara\' abilitato in un pack successivo (115D+). Per ora la formazione resta locale e non viene persistita.'
+    );
+    return;
   };
 
   const clearAll = () => { setGrid([[null, null, null], [null, null, null], [null, null, null]]); setActiveCell({ col: 0, row: 0 }); };
@@ -292,6 +271,29 @@ export default function BattleTab() {
       <ActivityIndicator size="large" color={COLORS.accent} />
     </LinearGradient>
   );
+
+  // Pre-QA Stabilization 115C — stato server-required (no fallback account-wide).
+  if (!selected_server_id) {
+    return (
+      <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.container}>
+        <View style={{ padding: 24, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+          <Text style={{ color: '#FFD27F', fontSize: 18, fontWeight: '700', marginBottom: 12, textAlign: 'center' }}>
+            Server richiesto
+          </Text>
+          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, textAlign: 'center', marginBottom: 24 }}>
+            La formazione di battaglia richiede un server selezionato. Le superfici account-wide sono disabilitate in pre-QA.
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push('/servers' as any)}
+            activeOpacity={0.85}
+            style={{ backgroundColor: '#7B2CBF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 10 }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '700' }}>Scegli un server</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    );
+  }
 
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.container}>

@@ -4351,6 +4351,9 @@ OPTIONAL = [
     # Pre-QA Stabilization 115B — Progression/Forge/Items mutation classification gates.
     ('PROJECT-PRE-QA-115B-PROGRESSION-FORGE-ITEMS-GATES', 'validate_pre_qa_stabilization_115b_progression_forge_items_gates.py'),
 
+    # Pre-QA Stabilization 115C — Auth + server-scope unification.
+    ('PROJECT-PRE-QA-115C-AUTH-SERVER-SCOPE-UNIFICATION', 'validate_pre_qa_stabilization_115c_auth_server_scope_unification.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

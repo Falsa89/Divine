@@ -121,19 +121,24 @@ export default function SoulForgeScreen() {
     setLoading(true);
     setLoadError(null);
     try {
-      // Pack 92 — server scope sweep.
-      const heroesUrl = selected_server_id
-        ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
-        : '/api/user/heroes';
-      const walletUrl = selected_server_id
-        ? `/api/wallet?server_id=${encodeURIComponent(selected_server_id)}`
-        : '/api/wallet';
+      // Pre-QA Stabilization 115C — fail-closed se manca server_id (no fallback
+      // account-wide su /api/user/heroes, /api/wallet, /api/team).
+      if (!selected_server_id) {
+        setHeroes([]);
+        setTeamIds(new Set());
+        setBalance(0);
+        setWallet(null);
+        setLoading(false);
+        return;
+      }
+      const heroesUrl = `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`;
+      const walletUrl = `/api/wallet?server_id=${encodeURIComponent(selected_server_id)}`;
+      const teamUrl = `/api/team/get-formation?server_id=${encodeURIComponent(selected_server_id)}`;
       // Le chiamate "primarie" devono andare a buon fine per popolare la griglia.
-      // Le chiamate "secondarie" (wallet/soul-forge/shops) sono best-effort:
-      // se falliscono, lo screen continua a funzionare con un fallback.
+      // Le chiamate "secondarie" (wallet/soul-forge/shops) sono best-effort.
       const [uh, team, user] = await Promise.all([
         apiCall(heroesUrl),
-        apiCall('/api/team').catch(() => ({ formation: [] })),
+        apiCall(teamUrl).catch(() => ({ formation: [] })),
         apiCall('/api/user/profile').catch(() => null),
       ]);
       const heroesArr = Array.isArray(uh) ? uh : [];
@@ -150,7 +155,7 @@ export default function SoulForgeScreen() {
       setTeamIds(ids);
       setBalance(user?.soul_essence || 0);
 
-      // Secondary best-effort reads (Pack 92: wallet passa server_id se disponibile)
+      // Secondary best-effort reads (wallet strict server-scoped).
       Promise.allSettled([
         apiCall(walletUrl),
         apiCall('/api/soul-forge'),

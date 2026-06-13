@@ -42,16 +42,17 @@ export default function LoginScreen() {
   const guestEnabled = !!auth.providerStatus?.guest?.enabled;
 
   const onLoginGoogle = async () => {
+    // Pre-QA Stabilization 115C: post-login route → /servers (server scope unification).
     await auth.login('google', { sandbox_subject: `g_qa_${Date.now()}` });
-    if (auth.authenticated) router.replace('/(tabs)/menu' as any);
+    if (auth.authenticated) router.replace('/servers' as any);
   };
   const onLoginApple = async () => {
     await auth.login('apple', { sandbox_subject: `a_qa_${Date.now()}` });
-    if (auth.authenticated) router.replace('/(tabs)/menu' as any);
+    if (auth.authenticated) router.replace('/servers' as any);
   };
   const onLoginGuest = async () => {
     await auth.login('guest', { alias_hint: aliasHint || undefined });
-    if (auth.authenticated) router.replace('/(tabs)/menu' as any);
+    if (auth.authenticated) router.replace('/servers' as any);
   };
 
   // Se già loggato, redirect
@@ -63,7 +64,7 @@ export default function LoginScreen() {
             <Text style={s.title}>Già autenticato</Text>
             <Text style={s.alias}>Alias: {auth.account.alias}</Text>
             <Text style={s.providerLine}>Provider: {auth.account.provider}{auth.account.provider_sandbox ? ' (sandbox)' : ''}</Text>
-            <TouchableOpacity style={s.primaryBtn} onPress={() => router.replace('/(tabs)/menu' as any)} activeOpacity={0.85}>
+            <TouchableOpacity style={s.primaryBtn} onPress={() => router.replace('/servers' as any)} activeOpacity={0.85}>
               <Text style={s.btnTxt}>Entra nel gioco</Text>
             </TouchableOpacity>
             <TouchableOpacity style={s.secondaryBtn} onPress={auth.logout} activeOpacity={0.85}>

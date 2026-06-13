@@ -49,10 +49,9 @@ type ServerProfile = {
   is_new?: boolean;
 };
 
-const BACKEND_URL =
-  (process.env.EXPO_BACKEND_URL as string | undefined) ||
-  (Constants?.expoConfig?.extra as any)?.backendUrl ||
-  '';
+// Pre-QA Stabilization 115C — uso helper canonico condiviso con apiCall.
+import { getCanonicalBackendUrl } from '../src/utils/backendUrl';
+const BACKEND_URL = getCanonicalBackendUrl();
 
 // SERVER PROFILE FALLBACK — dichiarato. Lista safe locale, marcata [QA] esplicito.
 // I server NON sono di produzione. has_character=false ovunque perche'

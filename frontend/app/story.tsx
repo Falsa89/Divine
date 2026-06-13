@@ -28,9 +28,13 @@ export default function StoryScreen() {
   useEffect(() => { load(); }, [selected_server_id]);
   const load = async () => {
     try {
-      const url = selected_server_id
-        ? `/api/story/chapters?server_id=${encodeURIComponent(selected_server_id)}`
-        : '/api/story/chapters';
+      // Pre-QA Stabilization 115C — fail-closed se manca server_id (no fallback account-wide).
+      if (!selected_server_id) {
+        setData(null);
+        setLoading(false);
+        return;
+      }
+      const url = `/api/story/chapters?server_id=${encodeURIComponent(selected_server_id)}`;
       const d = await apiCall(url);
       setData(d);
     } catch(e){} finally { setLoading(false); }
@@ -68,6 +72,22 @@ export default function StoryScreen() {
   };
 
   if (loading) return <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}><ActivityIndicator size="large" color="#ff6b35" /></LinearGradient>;
+
+  // Pre-QA Stabilization 115C — stato server-required (no fallback account-wide).
+  if (!selected_server_id) {
+    return (
+      <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1, padding: 24, alignItems: 'center', justifyContent: 'center'}}>
+        <Text style={{ color: '#FFD27F', fontSize: 18, fontWeight: '700', marginBottom: 12, textAlign: 'center' }}>Server richiesto</Text>
+        <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, textAlign: 'center', marginBottom: 24 }}>
+          La campagna storia richiede un server selezionato. Le superfici account-wide sono disabilitate in pre-QA.
+        </Text>
+        <TouchableOpacity onPress={() => router.push('/servers' as any)} activeOpacity={0.85}
+          style={{ backgroundColor: '#7B2CBF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 10 }}>
+          <Text style={{ color: '#fff', fontWeight: '700' }}>Scegli un server</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    );
+  }
 
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}>

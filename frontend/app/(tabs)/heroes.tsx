@@ -35,10 +35,14 @@ export default function HeroesTab() {
 
   const load = async () => {
     try {
-      // Pack 92 — passa server_id se disponibile (no silent s1 fallback).
-      const url = selected_server_id
-        ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
-        : '/api/user/heroes';
+      // Pre-QA Stabilization 115C — fail-closed se manca server_id:
+      // NON chiamare /api/user/heroes account-wide. Mostra stato server-required.
+      if (!selected_server_id) {
+        setHeroes([]);
+        setLoading(false);
+        return;
+      }
+      const url = `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`;
       const d = await apiCall(url);
       setHeroes(Array.isArray(d) ? d : (d?.heroes || []));
     } catch(e){} finally { setLoading(false); }
@@ -93,6 +97,30 @@ export default function HeroesTab() {
       <ActivityIndicator size="large" color={COLORS.accent} />
     </LinearGradient>
   );
+
+  // Pre-QA Stabilization 115C — stato server-required (no fallback account-wide).
+  if (!selected_server_id) {
+    return (
+      <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.c}>
+        <ScreenHeader title="Collezione Eroi" />
+        <View style={{ padding: 24, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+          <Text style={{ color: '#FFD27F', fontSize: 18, fontWeight: '700', marginBottom: 12, textAlign: 'center' }}>
+            Server richiesto
+          </Text>
+          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, textAlign: 'center', marginBottom: 24 }}>
+            Per consultare la collezione eroi devi prima selezionare un server. Le superfici account-wide sono disabilitate in pre-QA.
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push('/servers' as any)}
+            activeOpacity={0.85}
+            style={{ backgroundColor: '#7B2CBF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 10 }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '700' }}>Scegli un server</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    );
+  }
 
   return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.c}>

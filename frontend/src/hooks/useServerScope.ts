@@ -11,7 +11,8 @@
 // - nessuna mutazione DB
 // - no silent s1 fallback: se non c'e' server selezionato, ritorniamo null
 //   e NO_SERVER_SELECTED come token canonico.
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type ServerScope = {
@@ -49,42 +50,50 @@ export function useServerScope(): ServerScope {
   });
   const lastIdRef = useRef<string | null>(null);
 
+  // Pre-QA Stabilization 115C — refresh helper: rilegge le keys AsyncStorage e
+  // aggiorna lo stato (incrementando refreshToken se l'ID cambia).
+  const refresh = useCallback(async () => {
+    try {
+      const id = await AsyncStorage.getItem('v101_selected_server_id');
+      const name = await AsyncStorage.getItem('v102_selected_server_name');
+      const changed = id !== lastIdRef.current;
+      lastIdRef.current = id;
+      setState((prev) => ({
+        selected_server_id: id,
+        selected_server_name: name,
+        serverId: id,
+        serverName: name,
+        no_silent_s1_fallback: true,
+        noServerSelectedToken: 'NO_SERVER_SELECTED',
+        is_isolation_pending: false,
+        isolation_pending_token: 'SERVER_DATA_ISOLATION_BACKEND_PENDING',
+        loading: false,
+        refreshToken: changed ? prev.refreshToken + 1 : prev.refreshToken,
+        isReady: true,
+      }));
+    } catch (_e) {
+      setState((s) => ({ ...s, loading: false, isReady: false }));
+    }
+  }, []);
+
   useEffect(() => {
     let alive = true;
     (async () => {
-      try {
-        const id = await AsyncStorage.getItem('v101_selected_server_id');
-        const name = await AsyncStorage.getItem('v102_selected_server_name');
-        if (!alive) return;
-        const changed = id !== lastIdRef.current;
-        lastIdRef.current = id;
-        setState((prev) => ({
-          selected_server_id: id,
-          selected_server_name: name,
-          // Alias canonici per i consumer Pack 98-106 / PlayableLoopConsumer.
-          serverId: id,
-          serverName: name,
-          no_silent_s1_fallback: true,
-          noServerSelectedToken: 'NO_SERVER_SELECTED',
-          // Pre-QA Stabilization 110: il backend e' progressivamente
-          // server-scoped via PSP/Pack 91+. Il flag isolation_pending resta
-          // a true SOLO se davvero non e' implementato; ora l'isolamento
-          // server-side esiste per tower/economy/controlled rewards/guild
-          // strict/playable-loop, quindi marchiamo come false a riposo.
-          is_isolation_pending: false,
-          isolation_pending_token: 'SERVER_DATA_ISOLATION_BACKEND_PENDING',
-          loading: false,
-          refreshToken: changed ? prev.refreshToken + 1 : prev.refreshToken,
-          isReady: true,
-        }));
-      } catch (_e) {
-        if (alive) setState((s) => ({ ...s, loading: false, isReady: false }));
-      }
+      if (!alive) return;
+      await refresh();
     })();
+    // Pre-QA Stabilization 115C — refresh on app active (AppState).
+    const sub = AppState.addEventListener('change', (next: AppStateStatus) => {
+      if (next === 'active') {
+        // best-effort: ignora errori
+        refresh().catch(() => {});
+      }
+    });
     return () => {
       alive = false;
+      try { (sub as any)?.remove?.(); } catch (_e) {}
     };
-  }, []);
+  }, [refresh]);
 
   return state;
 }

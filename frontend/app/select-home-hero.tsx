@@ -61,16 +61,23 @@ export default function SelectHomeHeroScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const heroesUrl = selected_server_id
-          ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`
-          : '/api/user/heroes';
-        const [uh, hh] = await Promise.all([
-          apiCall(heroesUrl).catch(() => []),
-          apiCall('/api/sanctuary/home-hero').catch(() => null),
-        ]);
+        // Pre-QA Stabilization 115C — fail-closed se manca server_id.
+        // NO chiamata account-wide a /api/user/heroes.
+        // NO read player-facing /api/sanctuary/home-hero in pre-QA.
+        if (!selected_server_id) {
+          setOwned([]);
+          setCurrentHomeId(null);
+          setInTutorial(false);
+          return;
+        }
+        const heroesUrl = `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`;
+        const uh = await apiCall(heroesUrl).catch(() => []);
         setOwned(Array.isArray(uh) ? uh : []);
-        if (hh?.hero?.id) setCurrentHomeId(hh.hero.id);
-        setInTutorial(!!hh?.in_tutorial);
+        // NOTA 115C: in pre-QA NON leggiamo piu' /api/sanctuary/home-hero
+        // perche' e' account-wide e non strict server-scoped. Lo stato corrente
+        // resta null finche' una versione server-bound non sara' autorizzata.
+        setCurrentHomeId(null);
+        setInTutorial(false);
       } finally {
         setLoading(false);
       }
@@ -88,23 +95,14 @@ export default function SelectHomeHeroScreen() {
 
   const selectHero = async (h: OwnedHero) => {
     if (acting) return;
-    setActing(h.hero_id);
-    try {
-      await apiCall('/api/sanctuary/home-hero', {
-        method: 'POST',
-        body: JSON.stringify({ hero_id: h.hero_id }),
-      });
-      setCurrentHomeId(h.hero_id);
-      setJustSelectedId(h.hero_id);
-      // Piccolo delay visivo poi torna indietro
-      setTimeout(() => {
-        router.back();
-      }, 700);
-    } catch (e: any) {
-      Alert.alert('Errore', e?.message || 'Impossibile impostare eroe homepage');
-    } finally {
-      setActing(null);
-    }
+    // Pre-QA Stabilization 115C — POST /api/sanctuary/home-hero account-wide
+    // BLOCCATA in pre-QA: nessuna mutazione lato server. Mostriamo messaggio
+    // onesto. La versione server-bound sara' abilitata in un pack successivo.
+    Alert.alert(
+      'Selezione in preparazione',
+      'SANCTUARY_HOME_HERO_DEFERRED_PRE_QA: la selezione dell\'eroe homepage server-bound sara\' abilitata in un pack successivo (115D+). Nessuna mutazione applicata.'
+    );
+    return;
   };
 
   if (loading) {
@@ -112,6 +110,36 @@ export default function SelectHomeHeroScreen() {
       <SafeAreaView style={st.root}>
         <View style={st.loading}>
           <ActivityIndicator size="large" color="#FFD700" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Pre-QA Stabilization 115C — stato server-required.
+  if (!selected_server_id) {
+    return (
+      <SafeAreaView style={st.root} edges={['top']}>
+        <LinearGradient colors={['#1a0e2e', '#0a0612']} style={st.header}>
+          <View style={st.headerRow}>
+            <TouchableOpacity onPress={() => router.back()} style={st.backBtn}>
+              <Text style={st.backTxt}>{'\u2190'} Indietro</Text>
+            </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <Text style={st.title}>{'\uD83C\uDFE0'} Eroe Homepage</Text>
+            </View>
+          </View>
+        </LinearGradient>
+        <View style={{ flex: 1, padding: 24, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#FFD27F', fontSize: 18, fontWeight: '700', marginBottom: 12, textAlign: 'center' }}>
+            Server richiesto
+          </Text>
+          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, textAlign: 'center', marginBottom: 24 }}>
+            La selezione dell'eroe homepage richiede un server selezionato. Le superfici account-wide sono disabilitate in pre-QA.
+          </Text>
+          <TouchableOpacity onPress={() => router.push('/servers' as any)} activeOpacity={0.85}
+            style={{ backgroundColor: '#7B2CBF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 10 }}>
+            <Text style={{ color: '#fff', fontWeight: '700' }}>Scegli un server</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );

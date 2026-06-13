@@ -99,21 +99,24 @@ export default function HeroCollection() {
         setLoading(false);
       });
 
-    apiCall(selected_server_id ? `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}` : '/api/user/heroes')
-      .then((owned) => {
-        if (cancelled) return;
-        const ids = new Set<string>(
-          (Array.isArray(owned) ? owned : [])
-            .map((u: any) => u.hero_id || u.id)
-            .filter(Boolean),
-        );
-        setOwnedIds(ids);
-      })
-      .catch((e) => {
-        if (cancelled) return;
-        console.warn('[HeroCollection] user heroes fetch failed', e);
-        // ownedIds resta Set() vuoto → tutti gli eroi mostrati come locked.
-      });
+    // Pre-QA Stabilization 115C — fail-closed se manca server_id (no fallback account-wide).
+    if (selected_server_id) {
+      apiCall(`/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`)
+        .then((owned) => {
+          if (cancelled) return;
+          const ids = new Set<string>(
+            (Array.isArray(owned) ? owned : [])
+              .map((u: any) => u.hero_id || u.id)
+              .filter(Boolean),
+          );
+          setOwnedIds(ids);
+        })
+        .catch((e) => {
+          if (cancelled) return;
+          console.warn('[HeroCollection] user heroes fetch failed', e);
+          // ownedIds resta Set() vuoto → tutti gli eroi mostrati come locked.
+        });
+    }
 
     return () => {
       cancelled = true;
