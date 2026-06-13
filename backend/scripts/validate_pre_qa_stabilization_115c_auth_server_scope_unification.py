@@ -208,6 +208,49 @@ def check_11_prior_packs_preserved():
     return _ok(name, "Pack 113/114B/115A/115B markers tutti preservati")
 
 
+def check_12_soul_forge_no_account_wide_wallet_call():
+    """Pack 115C-FIX-A — soul-forge.tsx NON deve mai chiamare /api/wallet senza server_id."""
+    src = _read("frontend/app/soul-forge.tsx")
+    name = "12_SOUL_FORGE_NO_ACCOUNT_WIDE_WALLET_CALL"
+    # Cerca qualsiasi apiCall('/api/wallet') o apiCall("/api/wallet") senza
+    # query string. Pattern stringente: apiCall + (whitespace) + ('/api/wallet').
+    # NON deve esserci `?server_id=` o backtick template literal in qualunque
+    # chiamata wallet.
+    for m in re.finditer(r"apiCall\(\s*['\"]/api/wallet['\"]\s*\)", src):
+        return _fail(name, f"trovata chiamata raw apiCall('/api/wallet') senza server_id (offset {m.start()})")
+    # Pattern stringa template senza server_id: `/api/wallet`  (no query)
+    for m in re.finditer(r"apiCall\(\s*`/api/wallet`\s*\)", src):
+        return _fail(name, f"trovata chiamata template raw apiCall(`/api/wallet`) (offset {m.start()})")
+    # Pattern ternary: `/api/wallet?...` : '/api/wallet' — vietato il path account-wide come fallback
+    if re.search(r"['\"]/api/wallet['\"](?!\?)", src):
+        # Permette comunque la stringa solo se costituisce parte di una URL completa server-scoped.
+        # Verifica: ogni occorrenza di '/api/wallet' (no query) deve essere preceduta da
+        # un check `selected_server_id ?` (template) o ignorata come commento.
+        for m in re.finditer(r"['\"]/api/wallet['\"]", src):
+            # Skip se preceduta da backtick (template literal con query subito dopo)
+            ctx = src[max(0, m.start() - 60):m.end() + 30]
+            # Se il match e' seguito da `?server_id` o e' parte di un template `${...}/api/wallet?server_id`, ok
+            following = src[m.end():m.end() + 30]
+            if "?server_id=" in following:
+                continue
+            # Se il pattern e' "/api/wallet?" all'interno di un template, ok
+            if "?server_id=" in ctx and "`" in ctx:
+                continue
+            # Altrimenti, e' un fallback account-wide
+            # tollera solo se la riga e' un commento (// or /*)
+            line_start = src.rfind('\n', 0, m.start()) + 1
+            line = src[line_start:m.end()]
+            stripped = line.strip()
+            if stripped.startswith('//') or stripped.startswith('*') or stripped.startswith('/*'):
+                continue
+            # Se la riga contiene 'Promise.reject' o 'NO_SERVER_SELECTED' significa
+            # che e' lo skip esplicito fail-closed, ok
+            if 'NO_SERVER_SELECTED' in line or 'Promise.reject' in line:
+                continue
+            return _fail(name, f"trovata stringa raw '/api/wallet' non server-scoped (riga: {line.strip()[:80]})")
+    return _ok(name, "soul-forge.tsx: nessuna chiamata wallet account-wide (initial load + post-success refresh entrambi server-scoped)")
+
+
 CHECKS = [
     check_1_apicall_uses_auth_token_compat,
     check_2_backendurl_helper_exists,
@@ -220,6 +263,7 @@ CHECKS = [
     check_9_battle_no_update_formation_save,
     check_10_select_home_hero_no_post_sanctuary,
     check_11_prior_packs_preserved,
+    check_12_soul_forge_no_account_wide_wallet_call,
 ]
 
 

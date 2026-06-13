@@ -376,7 +376,12 @@ export default function SoulForgeScreen() {
         setPostSuccessWarn('Forge riuscita. Aggiornamento profilo fallito \u2014 riapri la schermata per sincronizzare.');
       }
       Promise.allSettled([
-        apiCall('/api/wallet'),
+        // Pre-QA Stabilization 115C-FIX-A — wallet read DEVE essere server-scoped.
+        // Se manca selected_server_id, salta il refresh wallet (fail-closed):
+        // nessuna chiamata account-wide /api/wallet.
+        selected_server_id
+          ? apiCall(`/api/wallet?server_id=${encodeURIComponent(selected_server_id)}`)
+          : Promise.reject(new Error('NO_SERVER_SELECTED_WALLET_REFRESH_SKIPPED')),
         apiCall('/api/soul-forge'),
       ]).then((res) => {
         const [w, sf] = res;
