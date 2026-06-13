@@ -63,7 +63,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 |------|------|------|
 | POST | `/guest` | `backend/routes/v96_auth.py` |
 
-## legacy_quarantined (41)
+## legacy_quarantined (22)
 
 | Verb | Path | File |
 |------|------|------|
@@ -71,42 +71,23 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/affinity/gift-spend` | `backend/routes/affinity_gift_spend.py` |
 | POST | `/api/gacha/pull` | `backend/server.py` |
 | POST | `/api/gacha/pull10` | `backend/server.py` |
-| POST | `/currency/earn-dimension` | `backend/routes/soul_forge.py` |
-| POST | `/currency/earn-guild` | `backend/routes/soul_forge.py` |
-| POST | `/currency/earn-mission` | `backend/routes/soul_forge.py` |
-| POST | `/currency/earn-pvp` | `backend/routes/soul_forge.py` |
 | POST | `/equipment/unequip/{equipment_id}` | `backend/routes/equipment.py` |
 | POST | `/events/battle` | `backend/routes/combat.py` |
 | POST | `/faction/join` | `backend/routes/guild.py` |
-| POST | `/forge/fuse` | `backend/routes/forge.py` |
-| POST | `/forge/upgrade` | `backend/routes/forge.py` |
 | POST | `/gacha/pull` | `backend/routes/heroes.py` |
 | POST | `/gacha/pull10` | `backend/routes/heroes.py` |
 | POST | `/guild/create` | `backend/routes/guild.py` |
 | POST | `/guild/join/{guild_id}` | `backend/routes/guild.py` |
 | POST | `/guild/leave` | `backend/routes/guild.py` |
 | POST | `/guild/strict/preflight` | `backend/routes/guild_strict.py` |
-| POST | `/hero/reincarnate` | `backend/routes/hero_progression.py` |
-| POST | `/hero/skill-upgrade` | `backend/routes/items.py` |
-| POST | `/inventory/use-exp` | `backend/routes/items.py` |
-| POST | `/item-shop/buy` | `backend/routes/items.py` |
-| POST | `/materials/buy` | `backend/routes/hero_progression.py` |
 | POST | `/pvp/battle` | `backend/routes/combat.py` |
-| POST | `/runes/craft` | `backend/routes/forge.py` |
-| POST | `/runes/craft-premium` | `backend/routes/forge.py` |
-| POST | `/runes/equip` | `backend/routes/forge.py` |
-| POST | `/runes/fuse` | `backend/routes/forge.py` |
 | POST | `/sanctuary/affinity/gain` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/complete-tutorial` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/constellation/attempt` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/constellation/skip/{hero_id}` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/home-hero` | `backend/routes/sanctuary.py` |
-| POST | `/shops/buy` | `backend/routes/soul_forge.py` |
-| POST | `/soul-forge/retire` | `backend/routes/soul_forge.py` |
 | POST | `/story/battle` | `backend/routes/combat.py` |
 | POST | `/team/update-formation` | `backend/battle_engine.py` |
-| POST | `/unique-items/craft` | `backend/routes/unique_items.py` |
-| POST | `/unique-items/equip` | `backend/routes/unique_items.py` |
 | POST | `/wallet/spend` | `backend/routes/soul_forge.py` |
 
 ## deferred_blocker (0)
@@ -114,7 +95,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | Verb | Path | File |
 |------|------|------|
 
-## requires_future_pack (21)
+## requires_future_pack (16)
 
 | Verb | Path | File |
 |------|------|------|
@@ -129,14 +110,9 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/dm/threads` | `backend/routes/social.py` |
 | POST | `/dm/threads/{thread_id}/messages` | `backend/routes/social.py` |
 | POST | `/dm/threads/{thread_id}/read` | `backend/routes/social.py` |
-| POST | `/fragments/add` | `backend/routes/hero_progression.py` |
-| POST | `/fragments/combine` | `backend/routes/hero_progression.py` |
 | POST | `/friends/accept` | `backend/routes/social.py` |
 | POST | `/friends/remove/{friend_id}` | `backend/routes/social.py` |
 | POST | `/friends/request` | `backend/routes/social.py` |
-| POST | `/level-sharing/assign` | `backend/routes/level_sharing.py` |
-| POST | `/level-sharing/remove/{slot_number}` | `backend/routes/level_sharing.py` |
-| POST | `/level-sharing/unlock` | `backend/routes/level_sharing.py` |
 | POST | `/plaza/chat` | `backend/routes/social.py` |
 | POST | `/user/faction-v2/select` | `backend/routes/player_faction_v2.py` |
 

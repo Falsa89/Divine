@@ -33,17 +33,13 @@
 | POST | `/tower/strict/battle/preview` | `backend/routes/tower_strict.py` |
 | POST | `/tower/strict/preflight` | `backend/routes/tower_strict.py` |
 
-## legacy_quarantined (20)
+## legacy_quarantined (14)
 
 | Verb | Path | File |
 |------|------|------|
 | POST | `/achievements/claim` | `backend/routes/achievements.py` |
 | POST | `/api/gacha/pull` | `backend/server.py` |
 | POST | `/api/gacha/pull10` | `backend/server.py` |
-| POST | `/currency/earn-dimension` | `backend/routes/soul_forge.py` |
-| POST | `/currency/earn-guild` | `backend/routes/soul_forge.py` |
-| POST | `/currency/earn-mission` | `backend/routes/soul_forge.py` |
-| POST | `/currency/earn-pvp` | `backend/routes/soul_forge.py` |
 | POST | `/events/battle` | `backend/routes/combat.py` |
 | POST | `/faction/join` | `backend/routes/guild.py` |
 | POST | `/gacha/pull` | `backend/routes/heroes.py` |
@@ -53,8 +49,6 @@
 | POST | `/guild/leave` | `backend/routes/guild.py` |
 | POST | `/guild/strict/preflight` | `backend/routes/guild_strict.py` |
 | POST | `/pvp/battle` | `backend/routes/combat.py` |
-| POST | `/shops/buy` | `backend/routes/soul_forge.py` |
-| POST | `/soul-forge/retire` | `backend/routes/soul_forge.py` |
 | POST | `/story/battle` | `backend/routes/combat.py` |
 | POST | `/team/update-formation` | `backend/battle_engine.py` |
 
@@ -71,7 +65,7 @@
 |------|------|------|
 | POST | `/guest` | `backend/routes/v96_auth.py` |
 
-## uncategorized (104)
+## uncategorized (86)
 
 | Verb | Path | File |
 |------|------|------|
@@ -99,10 +93,6 @@
 | POST | `/enchant/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/enhance/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/equipment/unequip/{equipment_id}` | `backend/routes/equipment.py` |
-| POST | `/forge/fuse` | `backend/routes/forge.py` |
-| POST | `/forge/upgrade` | `backend/routes/forge.py` |
-| POST | `/fragments/add` | `backend/routes/hero_progression.py` |
-| POST | `/fragments/combine` | `backend/routes/hero_progression.py` |
 | POST | `/friends/accept` | `backend/routes/social.py` |
 | POST | `/friends/remove/{friend_id}` | `backend/routes/social.py` |
 | POST | `/friends/request` | `backend/routes/social.py` |
@@ -116,8 +106,6 @@
 | POST | `/guard-plan-preview` | `backend/routes/gem_socket_commit_safety_preview.py` |
 | POST | `/guard-plan-preview` | `backend/routes/mail_claim_safety_preview.py` |
 | POST | `/guard-plan-preview` | `backend/routes/rune_scroll_talisman_safety_preview.py` |
-| POST | `/hero/reincarnate` | `backend/routes/hero_progression.py` |
-| POST | `/hero/skill-upgrade` | `backend/routes/items.py` |
 | POST | `/idempotency-preview` | `backend/routes/artifact_upgrade_safety_preview.py` |
 | POST | `/idempotency-preview` | `backend/routes/battle_pass_claim_safety_preview.py` |
 | POST | `/idempotency-preview` | `backend/routes/divine_weapon_upgrade_safety_preview.py` |
@@ -128,15 +116,9 @@
 | POST | `/idempotency-preview` | `backend/routes/rune_scroll_talisman_safety_preview.py` |
 | POST | `/instance/preview` | `backend/routes/v108_authoritative_pre_instance.py` |
 | POST | `/instance/resolve-preview` | `backend/routes/v108_authoritative_runtime_resolve.py` |
-| POST | `/inventory/use-exp` | `backend/routes/items.py` |
-| POST | `/item-shop/buy` | `backend/routes/items.py` |
 | POST | `/launch` | `backend/routes/v107a_battle_launch.py` |
-| POST | `/level-sharing/assign` | `backend/routes/level_sharing.py` |
-| POST | `/level-sharing/remove/{slot_number}` | `backend/routes/level_sharing.py` |
-| POST | `/level-sharing/unlock` | `backend/routes/level_sharing.py` |
 | POST | `/logout` | `backend/routes/v96_auth.py` |
 | POST | `/logout-all` | `backend/routes/v96_auth.py` |
-| POST | `/materials/buy` | `backend/routes/hero_progression.py` |
 | POST | `/notifications/read-all` | `backend/routes/push_notifications.py` |
 | POST | `/playback-preview` | `backend/routes/battle_replay_preview.py` |
 | POST | `/playback-preview` | `backend/routes/generic_visual_battle_runner_preview.py` |
@@ -148,10 +130,6 @@
 | POST | `/refresh` | `backend/routes/v96_auth.py` |
 | POST | `/replace-preview` | `backend/routes/gem_socket_preview.py` |
 | POST | `/reward-preview` | `backend/routes/material_raid_preview.py` |
-| POST | `/runes/craft` | `backend/routes/forge.py` |
-| POST | `/runes/craft-premium` | `backend/routes/forge.py` |
-| POST | `/runes/equip` | `backend/routes/forge.py` |
-| POST | `/runes/fuse` | `backend/routes/forge.py` |
 | POST | `/sanctuary/affinity/gain` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/complete-tutorial` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/constellation/attempt` | `backend/routes/sanctuary.py` |
@@ -161,8 +139,6 @@
 | POST | `/socket-preview` | `backend/routes/gem_socket_preview.py` |
 | POST | `/title/set` | `backend/routes/combat.py` |
 | POST | `/tower/battle` | `backend/routes/combat.py` |
-| POST | `/unique-items/craft` | `backend/routes/unique_items.py` |
-| POST | `/unique-items/equip` | `backend/routes/unique_items.py` |
 | POST | `/unsocket-preview` | `backend/routes/gem_socket_preview.py` |
 | POST | `/user/faction-v2/select` | `backend/routes/player_faction_v2.py` |
 | POST | `/validate-claim-request` | `backend/routes/material_raid_claim_safety_preview.py` |
