@@ -159,6 +159,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_115g_skill_artifact_semantic_cleanup.py',
     },
+    # Pack 116A — Battle Power foundation (read-only, derived, server-scoped)
+    {
+        'name': 'Validator 116A Battle Power Foundation',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_116a_battle_power_foundation.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

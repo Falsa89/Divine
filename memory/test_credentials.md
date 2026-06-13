@@ -61,3 +61,9 @@ curl http://localhost:8001/api/team/get-formation -H "Authorization: Bearer $TOK
 curl -X POST http://localhost:8001/api/auth/logout -H "Authorization: Bearer $TOKEN"
 ```
 
+
+## Pack 116A QA — ephemeral test user
+- Email: qa116a_1781391350@test.com
+- Password: `(see /tmp/qa116a_password.txt during this run; ephemeral)`
+- Username: qa116a
+- Notes: created via /api/register for Battle Power 116A curl evidence. No PSP, no team.

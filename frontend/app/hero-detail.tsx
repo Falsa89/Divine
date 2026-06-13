@@ -176,7 +176,13 @@ export default function HeroDetailScreen() {
         rightContent={
           <View style={s.powerBadge}>
             <Text style={s.powerIcon}>{'\u26A1'}</Text>
-            <Text style={s.powerVal}>{data.power?.toLocaleString()}</Text>
+            <Text style={s.powerVal}>
+              {/* Pre-QA Stabilization 116A — fallback display coerente:
+                  `—` se data.power non e' un numero, mai undefined/0 falso. */}
+              {typeof data.power === 'number' && data.power > 0
+                ? data.power.toLocaleString()
+                : '\u2014'}
+            </Text>
           </View>
         }
       />

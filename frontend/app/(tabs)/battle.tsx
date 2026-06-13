@@ -8,6 +8,7 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { apiCall } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import useServerScope from '../../src/hooks/useServerScope';
+import useBattlePowerSummary from '../../src/hooks/useBattlePowerSummary';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
 import StarDisplay from '../../components/ui/StarDisplay';
 import TranscendenceStars from '../../components/ui/TranscendenceStars';
@@ -44,7 +45,10 @@ export default function BattleTab() {
   const [grid, setGrid] = useState<(any | null)[][]>([[null, null, null], [null, null, null], [null, null, null]]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [power, setPower] = useState(0);
+  // Pre-QA Stabilization 116A — Battle Power foundation (read-only, derived,
+  // server-scoped). Sostituisce `team.total_power` (legacy, computed lato
+  // backend ma non versionato) con il summary 116A. Mai falso `0`.
+  const bp = useBattlePowerSummary();
   const [activeCell, setActiveCell] = useState<{ col: number; row: number } | null>(null);
   const [elemFilter, setElemFilter] = useState('all');
   const [sortBy, setSortBy] = useState<SortKey>('rarity');
@@ -167,7 +171,9 @@ export default function BattleTab() {
           if (!ng[ci][ri]) ng[ci][ri] = h;
         });
         setGrid(ng);
-        setPower(team.total_power || 0);
+        // Pre-QA Stabilization 116A — il power NON viene piu' letto da
+        // `team.total_power` (sorgente legacy non versionata). Lo prendiamo
+        // dall'hook 116A (`useBattlePowerSummary`) per coerenza pre-QA.
       }
     } catch (e) {} finally { setLoading(false); }
   };
@@ -303,7 +309,7 @@ export default function BattleTab() {
         <View style={s.headerMid}>
           <View style={s.powerBadge}>
             <Text style={s.powerIcon}>{'\u26A1'}</Text>
-            <Text style={s.powerVal}>{power.toLocaleString()}</Text>
+            <Text style={s.powerVal}>{bp.displayTeamPowerLabel}</Text>
           </View>
           <Text style={s.teamCount}>{filledCount}/9</Text>
         </View>

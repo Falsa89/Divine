@@ -39,6 +39,7 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
 import { apiCall } from '../../utils/api';
 import { registerForPushNotifications } from '../../utils/pushNotifications';
+import useBattlePowerSummary from '../../src/hooks/useBattlePowerSummary';
 import HomeHeroSplash from '../../components/home/HomeHeroSplash';
 import ChatComposer from '../../components/chat/ChatComposer';
 import ChannelSelector from '../../components/chat/ChannelSelector';
@@ -621,7 +622,12 @@ function HomeBackground({ scene, phase }: { scene: HomeScene; phase: TimePhase }
  * ═══════════════════════════════════════════════════════════════════ */
 function HomeProfilePanel({ user, router }: any) {
   const name    = user?.nickname || user?.name || 'Player';
-  const power   = user?.power || user?.total_power || 0;
+  // Pre-QA Stabilization 116A — Battle Power foundation (read-only, derived,
+  // server-scoped). NIENTE piu' falso `Power 0` da `user?.power || ... || 0`:
+  // mostriamo il valore reale da `/api/battle-power/summary` o un placeholder
+  // onesto ("Server richiesto" / "Team non impostato" / "—").
+  const bp = useBattlePowerSummary();
+  const powerLabel = bp.displayTeamPowerLabel;
   const level   = user?.level || 1;
   const exp     = user?.exp || 0;
   const expMax  = user?.exp_to_next || 1000;
@@ -1012,7 +1018,7 @@ function HomeProfilePanel({ user, router }: any) {
               <Text style={[s.powerIcon, { fontSize: pwrFS + 1, marginRight: 4 }]}>{'\u26A1'}</Text>
               <Text style={[s.powerLbl, { fontSize: pwrLblFS, marginRight: 6 }]}>POWER</Text>
               <Text style={[s.powerVal, { fontSize: pwrFS }]} numberOfLines={1}>
-                {Number(power).toLocaleString()}
+                {powerLabel}
               </Text>
             </TouchableOpacity>
 
@@ -1083,7 +1089,7 @@ function HomeProfilePanel({ user, router }: any) {
             >
               <Text style={[s.powerIcon, { fontSize: pwrFS + 1 }]}>{'\u26A1'}</Text>
               <Text style={[s.powerLbl, { fontSize: pwrLblFS }]}>POWER</Text>
-              <Text style={[s.powerVal, { fontSize: pwrFS }]}>{Number(power).toLocaleString()}</Text>
+              <Text style={[s.powerVal, { fontSize: pwrFS }]}>{powerLabel}</Text>
             </TouchableOpacity>
 
             {/* ROW 3 — Status pills + title badge */}

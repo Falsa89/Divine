@@ -1001,6 +1001,15 @@ except Exception as _v96_tf_err:
     import logging
     logging.getLogger(__name__).warning("v96_team_formation router import failed: %s", _v96_tf_err)
 
+# Pre-QA Stabilization 116A — Battle Power foundation (read-only, derived,
+# server-scoped). NO DB writes. NO combat authoritative. NO reward.
+try:
+    from routes.battle_power import create_battle_power_router
+    app.include_router(create_battle_power_router(db, get_current_user))
+except Exception as _bp_116a_err:
+    import logging
+    logging.getLogger(__name__).warning("battle_power 116a router import failed: %s", _bp_116a_err)
+
 # MEGA_RELEASE_ACCELERATION_47_v98 — Admin server-actors status (read-only)
 # + GDPR data export + hard-delete-confirm (runtime gated).
 try:
