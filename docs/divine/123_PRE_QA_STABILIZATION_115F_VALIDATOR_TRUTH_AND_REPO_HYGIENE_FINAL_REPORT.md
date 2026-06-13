@@ -6,7 +6,7 @@
 ## Commit SHAs
 - Baseline (pre-115F): `539872ec25c213d4d400a8b688b6deeacd67bd95`
 - Pack 115F commit:    `19c6eab7c494109b529d3eeba31b3344ce863795`
-- Report/self-ref:     *aggiornato dopo l'eventuale commit del report 123.*
+- Report/self-ref:     `b53831659cf3e8518b759918749f5437f49d7297`
 
 > Nota Commit policy: il commit del Pack 115F segue il vincolo esplicito utente: **MAI `git add -A` / `git add .`**. Tutti i file sono stati aggiunti con `git add -- <path>` esplicito file-by-file. Il git index e' stato ripulito da bytecode tracciato tramite `git rm --cached -- <path>` esplicito (lista materializzata in `/tmp/tracked_pyc.txt` per audit).
 
