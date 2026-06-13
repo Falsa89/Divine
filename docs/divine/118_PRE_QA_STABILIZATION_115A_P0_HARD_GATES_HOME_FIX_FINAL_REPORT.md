@@ -11,7 +11,7 @@ Manual QA **remains paused until Game Master re-audit.**
 ## Commit
 
 - Branch: `master`
-- Commit SHA (Pack 115A code+validators+smoke+report): *vedi sezione "HEAD finale" dopo questo report*
+- Commit SHA (Pack 115A code+validators+smoke+report): `0fda3f5a3574d45c6f3171afe2a0b45d781c30f5`
 - Pre-Pack-115A baseline tip: `774a95ac23504dffb9c5fa7a609a82c2fae68592` (Pack 114C cleanup HEAD)
 
 ---
@@ -293,11 +293,16 @@ Closed Alpha QA **non sbloccata**. Nessun bug intake è stato eseguito durante i
 
 ## HEAD finale
 
-Sarà inserito post-commit. Comando di verifica per il Game Master:
+- **Pack 115A code+validators+smoke commit:** `0fda3f5a3574d45c6f3171afe2a0b45d781c30f5`
+- **Pack 115A report SHA self-ref commit:** *prossimo commit (questo update)*
+
+Comando di verifica per il Game Master:
 ```bash
 git diff --stat 774a95ac23504dffb9c5fa7a609a82c2fae68592 HEAD
 git diff --name-only 774a95ac23504dffb9c5fa7a609a82c2fae68592 HEAD
-# atteso: 12 file (9 modificati + 3 creati). Nessun data/design/**.
+# atteso: 12 file autorizzati + .emergent/emergent.yml (timestamp auto-gen, accettato).
+# Verifica zero data/design/**:
+git diff --name-only 774a95ac23504dffb9c5fa7a609a82c2fae68592 HEAD -- 'data/design/' | wc -l   # → 0
 ```
 
 ---
