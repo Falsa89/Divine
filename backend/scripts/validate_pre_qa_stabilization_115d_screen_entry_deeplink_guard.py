@@ -170,7 +170,8 @@ def check_7_forbidden_files_untouched():
     name = "7_FORBIDDEN_FILES_UNTOUCHED_BY_115D"
     forbidden_no_ref = [
         "frontend/app/combat.tsx",
-        "frontend/app/tower.tsx",
+        # NOTE: tower.tsx era forbidden in Pack 115D, ma e' in scope autorizzato del
+        # Pack 115E (legacy hardening con PreQaScreenGate). Escluso da questo check.
         "backend/battle_engine.py",
     ]
     for f in forbidden_no_ref:

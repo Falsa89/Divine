@@ -4357,6 +4357,9 @@ OPTIONAL = [
     # Pre-QA Stabilization 115D — Screen-entry/deeplink guard.
     ('PROJECT-PRE-QA-115D-SCREEN-ENTRY-DEEPLINK-GUARD', 'validate_pre_qa_stabilization_115d_screen_entry_deeplink_guard.py'),
 
+    # Pre-QA Stabilization 115E — Combat/Tower legacy hardening.
+    ('PROJECT-PRE-QA-115E-COMBAT-TOWER-LEGACY-HARDENING', 'validate_pre_qa_stabilization_115e_combat_tower_legacy_hardening.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

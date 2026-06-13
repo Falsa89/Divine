@@ -63,6 +63,8 @@ export const PRE_QA_BLOCKED_PLAYER_ROUTES: ReadonlySet<string> = new Set<string>
   '/arena',
   '/blessings',
   '/profile',
+  // Pre-QA Stabilization 115E — Tower legacy route fail-closed.
+  '/tower',
   // Pre-QA Stabilization 115A — HomeOverflow dead-link `/research` (no research.tsx).
   '/research',
 ]);

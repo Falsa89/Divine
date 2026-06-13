@@ -339,6 +339,16 @@ export default function CombatScreen() {
   };
 
   const startBattle = async () => {
+    // Pre-QA Stabilization 115E — LEGACY_COMBAT_ENTRY_BLOCKED_PRE_QA fail-closed.
+    // Se il combat parte senza launch_context valido, il path legacy
+    // /api/battle/simulate e' mutante backend. In pre-QA lo BLOCCHIAMO senza
+    // alcun reward/EXP/gold/drop/progress/affinity grant.
+    // Token canonico: LEGACY_COMBAT_ENTRY_BLOCKED_PRE_QA, PRE_QA_COMBAT_REQUIRES_LAUNCH_CONTEXT.
+    if (LEGACY_COMBAT_ENTRY_MUTATING) {
+      if (__DEV__) console.log('[v115E] LEGACY_COMBAT_ENTRY_BLOCKED_PRE_QA: skipping simulate (PRE_QA_COMBAT_REQUIRES_LAUNCH_CONTEXT)');
+      setPhase('legacy_blocked' as any); setError(''); setLogLines([]); logLinesRef.current = [];
+      return;
+    }
     // v108_POSTQA_A — Se il combat parte da un launch_context preview valido,
     // BLOCCHIAMO la chiamata al simulate endpoint (mutante lato backend).
     // Mostriamo schermata preview-locked onesta senza alcun reward/EXP/gold/drop.
@@ -947,6 +957,40 @@ export default function CombatScreen() {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showLog, logTab, logLines, battleChat]);
+
+  // Pre-QA Stabilization 115E — LEGACY_COMBAT_ENTRY_BLOCKED_PRE_QA render branch.
+  // Mostra schermata bloccata onesta quando combat parte senza launch_context valido.
+  // NESSUN reward/EXP/drop/progress/affinity grant.
+  if (phase === ('legacy_blocked' as any) || (LEGACY_COMBAT_ENTRY_MUTATING && phase !== 'preview_locked')) {
+    return (
+      <LinearGradient colors={[COLORS.bgPrimary, '#1A0A2E', '#0A0820']} style={st.fc}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+          <Text style={{ fontSize: 48, marginBottom: 16 }}>{'\uD83D\uDD12'}</Text>
+          <Text style={{ color: '#FFD27F', fontSize: 20, fontWeight: '700', marginBottom: 16, textAlign: 'center' }}>
+            Battaglia legacy bloccata
+          </Text>
+          <Text style={{ color: 'rgba(255,255,255,0.78)', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 14 }}>
+            La combat senza launch_context valido userebbe il path legacy mutante backend.
+            In pre-QA è disattivato. Nessun reward, EXP, drop, progression o affinity grant
+            può essere applicato.
+          </Text>
+          <Text style={{ color: '#7B2CBF', fontSize: 12, fontFamily: 'monospace', marginBottom: 4, textAlign: 'center' }}>
+            LEGACY_COMBAT_ENTRY_BLOCKED_PRE_QA
+          </Text>
+          <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, fontFamily: 'monospace', marginBottom: 28, textAlign: 'center' }}>
+            PRE_QA_COMBAT_REQUIRES_LAUNCH_CONTEXT
+          </Text>
+          <TouchableOpacity
+            onPress={() => { try { router.canGoBack?.() ? router.back() : router.replace('/(tabs)/home' as any); } catch (_e) {} }}
+            activeOpacity={0.85}
+            style={{ backgroundColor: '#7B2CBF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 10 }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '700' }}>{'\u2190'} Indietro</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    );
+  }
 
   // LOADING — preload reale con progress bar
   if (phase === 'loading') {
