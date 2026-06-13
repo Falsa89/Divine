@@ -11,7 +11,7 @@ Manual QA **remains paused until Game Master re-audit.**
 ## Commit SHAs
 
 - Pre-Pack-115C baseline: `ac4cb465806be65703dcd827caa678080570ed1f` (Pack 115B report HEAD)
-- Pack 115C commit: *post-commit (vedi HEAD finale)*
+- **Pack 115C commit (14 file autorizzati esatti):** `3fdcd9f9f7b976cc6f816e286e79904c37c6c9f5`
 
 ---
 
