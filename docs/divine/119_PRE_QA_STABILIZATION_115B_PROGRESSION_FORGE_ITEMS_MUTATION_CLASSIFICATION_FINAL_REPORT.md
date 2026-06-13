@@ -11,8 +11,19 @@ Manual QA **remains paused until Game Master re-audit.**
 ## Commit SHAs
 
 - Pre-Pack-115B baseline: `bdb71e8b1dc3108ea3f0636a84885629c688a9f3` (Pack 115A report HEAD)
-- Pack 115B commit: *vedi sezione finale post-commit*
-- Pack 115B report SHA self-ref: *vedi sezione finale post-commit*
+- **Pack 115B commit (12 file autorizzati esatti):** `001a3e47c0dd4ef4b7a80fea5f745ae42badee6b`
+- Pack 115B report SHA self-ref: *post-commit (questo update)*
+
+### Nota sul diff cumulativo
+
+`git diff --name-only bdb71e8b1 HEAD` mostra **15 file** ma il mio Pack 115B (`001a3e47`) ne contiene **esattamente 12** (verificabile con `git show --name-only --format="" 001a3e47`). I 3 file extra appartengono a **2 commit auto-generated del sistema host fra Pack 115A e Pack 115B**, non al Pack 115B:
+
+| Commit | Tipo | File extra |
+|---|---|---|
+| `4328b6c3d` | `auto-commit for 1ec8c156-...` (host) | `docs/divine/112_PRE_QA_STABILIZATION_110_MUTATING_ROUTE_ALLOWLIST.md`, `docs/divine/113_PRE_QA_STABILIZATION_111_ROUTE_CLASSIFICATION_FULL.md` |
+| `a0750fe9b` | `Auto-generated changes` (host) | `.emergent/emergent.yml` (timestamp auto-gen accettato dal Game Master) |
+
+Lo scope autorizzato del Pack 115B è rispettato al 100%.
 
 ---
 
@@ -229,11 +240,13 @@ Dopo il commit, mi fermo. Non procedo con Pack 115C.
 
 ## HEAD finale
 
-Compilato post-commit. Comando di verifica:
+- **Pack 115B commit:** `001a3e47c0dd4ef4b7a80fea5f745ae42badee6b` (12 file autorizzati esatti)
+- **Pack 115B report SHA self-ref:** *commit di questo update*
+
+Comando di verifica per il Game Master:
 ```bash
-git diff --stat bdb71e8b1dc3108ea3f0636a84885629c688a9f3 HEAD
-git diff --name-only bdb71e8b1dc3108ea3f0636a84885629c688a9f3 HEAD
-# atteso: 12 file autorizzati + .emergent/emergent.yml (auto-gen, accettato)
+git show --name-only --format="" 001a3e47c0dd4ef4b7a80fea5f745ae42badee6b
+# atteso: ESATTAMENTE 12 file autorizzati (no data/design, no auto-gen).
 ```
 
 *Report generato in italiano. Tutti i risultati riproducibili eseguendo gli script citati. Nessun valore inventato.*
