@@ -18,9 +18,9 @@ Closed Alpha QA resta **bloccata** in attesa del responso del Final Deep Re-Audi
 
 ## Commit SHA
 
-`d7ee3103d826cd65fca98012ad68632dad6888d4`
-
-(branch: `master`; previous tip prima del pack: `1da83d9430695f85dd1b1fa200c9a785b3ee0cd0`)
+- **Codice + validator + smoke (Pack 114B cleanup):** `d7ee3103d826cd65fca98012ad68632dad6888d4`
+- **Report finale 116 (questo file):** `14ca508016e9954c4800ea7ab1d95fd5d03b0ac7`
+- Branch: `master`. Previous tip prima del pack: `1da83d9430695f85dd1b1fa200c9a785b3ee0cd0`.
 
 ---
 
