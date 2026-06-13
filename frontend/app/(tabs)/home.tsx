@@ -1016,7 +1016,7 @@ function HomeProfilePanel({ user, router }: any) {
               pointerEvents="box-none"
             >
               <TouchableOpacity style={[s.vipPill, { marginRight: 6 }]} activeOpacity={0.7}
-                onPress={() => router.push('/vip' as any)}>
+                onPress={() => { try { const _g = require('../../src/utils/preQaNavGuard'); if (!_g.isRouteAllowedInPreQa('/vip')) { Alert?.alert?.('Surface in preparazione', 'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED'); return; } } catch (_e) {} router.push('/vip' as any); }}>
                 <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
                 <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
               </TouchableOpacity>
@@ -1078,7 +1078,7 @@ function HomeProfilePanel({ user, router }: any) {
             {/* ROW 3 — Status pills + title badge */}
             <View style={[s.pillsRow, { flexWrap: 'nowrap' }, dbg('rgba(255,0,0,0.25)')]}>
               <TouchableOpacity style={s.vipPill} activeOpacity={0.7}
-                onPress={() => router.push('/vip' as any)}>
+                onPress={() => { try { const _g = require('../../src/utils/preQaNavGuard'); if (!_g.isRouteAllowedInPreQa('/vip')) { Alert?.alert?.('Surface in preparazione', 'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED'); return; } } catch (_e) {} router.push('/vip' as any); }}>
                 <Text style={[s.vipStar, { fontSize: pillFS - 1 }]}>{'\u2605'}</Text>
                 <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
               </TouchableOpacity>
@@ -1950,37 +1950,53 @@ function PlayShield({ onPress, width = 72, height = 86, bottom = 10 }: PlayShiel
 type OverflowItem = { key: string; label: string; icon: string; onPress: () => void };
 
 function HomeOverflowPanel({ open, onClose, router }: any) {
-  const items: OverflowItem[] = [
-    { key: 'story',      label: 'Storia',           icon: '\uD83D\uDCDC', onPress: () => { onClose(); router.push('/story' as any); } },
-    // PROJECT_HOME_MENU_REWIRING v20: legacy '/tower' link redirected to canonical TEST MVP '/tower-of-the-hells'. Tower gameplay/progress/AsyncStorage NOT touched in this pack.
-    { key: 'tower',      label: 'Torre',            icon: '\uD83C\uDFEF', onPress: () => { onClose(); router.push('/tower-of-the-hells' as any); } },
-    // PROJECT_HOME_MENU_REWIRING v20: discoverability per Guida/Codex aggiunta. Route /guide gia' esistente (runtime read-only).
-    { key: 'guide',      label: 'Guida',            icon: '\uD83D\uDCD6', onPress: () => { onClose(); router.push('/guide' as any); } },
-    { key: 'raid',       label: 'Raid',             icon: '\uD83D\uDD25', onPress: () => { onClose(); router.push('/raid' as any); } },
-    { key: 'events',     label: 'Eventi',           icon: '\uD83C\uDF1F', onPress: () => { onClose(); router.push('/events' as any); } },
-    { key: 'auras',      label: 'Aure',             icon: '\u2728',       onPress: () => { onClose(); router.push('/(tabs)/cosmetics' as any); } },
-    // SF_MERGE Track F \u2014 Exclusive rimosso dall'HomeOverflowPanel (legacy non-canonical).
-    { key: 'equip',      label: 'Equipaggiamento',  icon: '\u2694\uFE0F', onPress: () => { onClose(); router.push('/equipment' as any); } },
-    { key: 'battlepass', label: 'Battle Pass',      icon: '\uD83C\uDFC6', onPress: () => { onClose(); router.push('/battlepass' as any); } },
-    { key: 'achievements', label: 'Obiettivi',      icon: '\uD83C\uDFC5', onPress: () => { onClose(); router.push('/achievements' as any); } },
-    { key: 'mail',       label: 'Posta',            icon: '\u2709\uFE0F', onPress: () => { onClose(); router.push('/mail' as any); } },
-    { key: 'friends',    label: 'Amici',            icon: '\uD83D\uDC65', onPress: () => { onClose(); router.push('/friends' as any); } },
-    { key: 'quests',     label: 'Quest',            icon: '\u2705',       onPress: () => { onClose(); router.push('/quests' as any); } },
-    { key: 'blessing',   label: 'Benedizioni',      icon: '\uD83D\uDCFF', onPress: () => { onClose(); router.push('/blessings' as any); } },
-    { key: 'research',   label: 'Ricerca',          icon: '\uD83D\uDD2C', onPress: () => { onClose(); router.push('/research' as any); } },
-    { key: 'collection', label: 'Collezione Eroi',  icon: '\uD83D\uDCDA', onPress: () => { onClose(); router.push('/hero-collection' as any); } },
-    { key: 'sanctuary',  label: 'Santuario',        icon: '\u26E9\uFE0F', onPress: () => { onClose(); router.push('/sanctuary' as any); } },
-    { key: 'gvg',        label: 'Conquista',        icon: '\uD83C\uDFF0', onPress: () => { onClose(); router.push('/gvg' as any); } },
-    { key: 'plaza',      label: 'Piazza',           icon: '\uD83C\uDFDB\uFE0F', onPress: () => { onClose(); router.push('/plaza' as any); } },
-    { key: 'dm',         label: 'Messaggi',         icon: '\uD83D\uDCEC',       onPress: () => { onClose(); router.push('/dm' as any); } },
-    { key: 'territory',  label: 'Territorio',       icon: '\uD83D\uDDFA\uFE0F', onPress: () => { onClose(); router.push('/territory' as any); } },
-    { key: 'rankings',   label: 'Classifiche',      icon: '\uD83D\uDCCA', onPress: () => { onClose(); router.push('/rankings' as any); } },
-    { key: 'servers',    label: 'Server',           icon: '\uD83C\uDF10', onPress: () => { onClose(); router.push('/servers' as any); } },
-    { key: 'pvp',        label: 'Arena PVP',        icon: '\uD83E\uDD4A', onPress: () => { onClose(); router.push('/pvp' as any); } },
-    // SF_MERGE Track D+F \u2014 Economy consolidato in Soul Forge.
-    { key: 'economy',    label: 'Hub Anime',        icon: '\uD83D\uDD25', onPress: () => { onClose(); router.push('/soul-forge' as any); } },
-    { key: 'spoffer',    label: 'SP Offer',         icon: '\uD83D\uDCB3', onPress: () => { onClose(); router.push('/shop' as any); } },
+  // Pre-QA Stabilization 113 — Shared nav guard wrapper.
+  // Tutte le route player-facing unsafe/deferred passano dal guard canonico.
+  // Default OFF: items mappati su route bloccate vengono FILTRATI fuori.
+  // Reenable richiede EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE=true.
+  const _navGuard = require('../../src/utils/preQaNavGuard');
+  const _pushPreQaGuarded = (route: string) => {
+    onClose();
+    if (!_navGuard.isRouteAllowedInPreQa(route)) {
+      try {
+        Alert?.alert?.(
+          'Surface in preparazione',
+          'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED: questa surface e\' bloccata nel closed alpha pre-QA. Sara\' abilitata da un pack futuro autorizzato.'
+        );
+      } catch (_e) { /* best-effort */ }
+      return;
+    }
+    router.push(route as any);
+  };
+  const _allItemsRaw: Array<OverflowItem & { route: string }> = [
+    { key: 'story',      label: 'Storia',           icon: '\uD83D\uDCDC', route: '/story',            onPress: () => _pushPreQaGuarded('/story') },
+    { key: 'tower',      label: 'Torre',            icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', onPress: () => _pushPreQaGuarded('/tower-of-the-hells') },
+    { key: 'guide',      label: 'Guida',            icon: '\uD83D\uDCD6', route: '/guide',            onPress: () => _pushPreQaGuarded('/guide') },
+    { key: 'raid',       label: 'Raid',             icon: '\uD83D\uDD25', route: '/raid',             onPress: () => _pushPreQaGuarded('/raid') },
+    { key: 'events',     label: 'Eventi',           icon: '\uD83C\uDF1F', route: '/events',           onPress: () => _pushPreQaGuarded('/events') },
+    { key: 'auras',      label: 'Aure',             icon: '\u2728',       route: '/cosmetics',        onPress: () => _pushPreQaGuarded('/cosmetics') },
+    { key: 'equip',      label: 'Equipaggiamento',  icon: '\u2694\uFE0F', route: '/equipment',        onPress: () => _pushPreQaGuarded('/equipment') },
+    { key: 'battlepass', label: 'Battle Pass',      icon: '\uD83C\uDFC6', route: '/battlepass',       onPress: () => _pushPreQaGuarded('/battlepass') },
+    { key: 'achievements', label: 'Obiettivi',      icon: '\uD83C\uDFC5', route: '/achievements',     onPress: () => _pushPreQaGuarded('/achievements') },
+    { key: 'mail',       label: 'Posta',            icon: '\u2709\uFE0F', route: '/mail',             onPress: () => _pushPreQaGuarded('/mail') },
+    { key: 'friends',    label: 'Amici',            icon: '\uD83D\uDC65', route: '/friends',          onPress: () => _pushPreQaGuarded('/friends') },
+    { key: 'quests',     label: 'Quest',            icon: '\u2705',       route: '/quests',           onPress: () => _pushPreQaGuarded('/quests') },
+    { key: 'blessing',   label: 'Benedizioni',      icon: '\uD83D\uDCFF', route: '/blessings',        onPress: () => _pushPreQaGuarded('/blessings') },
+    { key: 'research',   label: 'Ricerca',          icon: '\uD83D\uDD2C', route: '/research',         onPress: () => _pushPreQaGuarded('/research') },
+    { key: 'collection', label: 'Collezione Eroi',  icon: '\uD83D\uDCDA', route: '/hero-collection',  onPress: () => _pushPreQaGuarded('/hero-collection') },
+    { key: 'sanctuary',  label: 'Santuario',        icon: '\u26E9\uFE0F', route: '/sanctuary',        onPress: () => _pushPreQaGuarded('/sanctuary') },
+    { key: 'gvg',        label: 'Conquista',        icon: '\uD83C\uDFF0', route: '/gvg',              onPress: () => _pushPreQaGuarded('/gvg') },
+    { key: 'plaza',      label: 'Piazza',           icon: '\uD83C\uDFDB\uFE0F', route: '/plaza',      onPress: () => _pushPreQaGuarded('/plaza') },
+    { key: 'dm',         label: 'Messaggi',         icon: '\uD83D\uDCEC', route: '/dm',               onPress: () => _pushPreQaGuarded('/dm') },
+    { key: 'territory',  label: 'Territorio',       icon: '\uD83D\uDDFA\uFE0F', route: '/territory',  onPress: () => _pushPreQaGuarded('/territory') },
+    { key: 'rankings',   label: 'Classifiche',      icon: '\uD83D\uDCCA', route: '/rankings',         onPress: () => _pushPreQaGuarded('/rankings') },
+    { key: 'servers',    label: 'Server',           icon: '\uD83C\uDF10', route: '/servers',          onPress: () => _pushPreQaGuarded('/servers') },
+    { key: 'pvp',        label: 'Arena PVP',        icon: '\uD83E\uDD4A', route: '/pvp',              onPress: () => _pushPreQaGuarded('/pvp') },
+    { key: 'economy',    label: 'Hub Anime',        icon: '\uD83D\uDD25', route: '/soul-forge',       onPress: () => _pushPreQaGuarded('/soul-forge') },
+    { key: 'spoffer',    label: 'SP Offer',         icon: '\uD83D\uDCB3', route: '/shop',             onPress: () => _pushPreQaGuarded('/shop') },
   ];
+  // Default OFF: filtra le route bloccate dallo shared guard.
+  const items: OverflowItem[] = _allItemsRaw.filter((it) => _navGuard.isRouteAllowedInPreQa(it.route));
 
   // v16.15 — MODAL → IN-TREE OVERLAY (CRASH FIX)
   // ─────────────────────────────────────────────────────────────────

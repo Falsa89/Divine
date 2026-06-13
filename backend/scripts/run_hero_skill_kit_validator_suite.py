@@ -4334,6 +4334,10 @@ OPTIONAL = [
     ('PROJECT-PRE-QA-112-HEROES-GACHA-DEAD-CODE', 'validate_pre_qa_stabilization_112_heroes_gacha_dead_code.py'),
     ('PRE-QA-STABILIZATION-112-ROLLUP', 'validate_pre_qa_stabilization_112_home_battle_entrypoint_cleanup_rollup.py'),
 
+    # Pre-QA Stabilization 113 — HomeOverflow Nav Guard Fix.
+    ('PROJECT-PRE-QA-113-HOME-OVERFLOW-GUARD', 'validate_pre_qa_stabilization_113_home_overflow_guard.py'),
+    ('PRE-QA-STABILIZATION-113-ROLLUP', 'validate_pre_qa_stabilization_113_home_overflow_nav_guard_fix_rollup.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),
