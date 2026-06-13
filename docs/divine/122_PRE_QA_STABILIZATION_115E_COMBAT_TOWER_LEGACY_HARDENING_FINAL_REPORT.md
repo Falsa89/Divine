@@ -11,11 +11,11 @@ Manual QA **remains paused until Game Master re-audit.**
 ## Commit SHAs
 
 - Pre-Pack-115E baseline: `5290546e019e12142d9d760da88be1d2216d36f4` (Pack 115D HEAD)
-- Pack 115E commit: *post-commit (HEAD finale)*
+- **Pack 115E commit (7 file autorizzati):** `14a3b7eed67f627a8954a33e295a087b48993345`
 
 ---
 
-## Files modificati / creati (6 totali)
+## Files modificati / creati (7 totali)
 
 | Tipo | File |
 |---|---|
