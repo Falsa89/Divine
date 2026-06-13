@@ -4345,6 +4345,9 @@ OPTIONAL = [
     # Pre-QA Stabilization 114B — Gacha/Combat/Lobby guard repair cleanup.
     ('PROJECT-PRE-QA-114B-GACHA-COMBAT-LOBBY-GUARD', 'validate_pre_qa_stabilization_114_gacha_combat_lobby_guard.py'),
 
+    # Pre-QA Stabilization 115A — P0 hard gates + Home /profile, /research fix.
+    ('PROJECT-PRE-QA-115A-P0-HARD-GATES-HOME-FIX', 'validate_pre_qa_stabilization_115a_p0_hard_gates_home_fix.py'),
+
     ('RM1.31-C', 'validate_status_resolver_contract.py'),
     ('RM1.32-C', 'audit_balance_foundation_boss_pvp_caps.py'),
     ('RM1.33-A', 'audit_skill_kit_runtime_adapter_safety.py'),

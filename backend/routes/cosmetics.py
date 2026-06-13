@@ -7,6 +7,15 @@ from fastapi import HTTPException, Depends
 from pydantic import BaseModel
 from .game_data import AURAS, AVATAR_FRAMES, TERRITORIES
 
+# Pre-QA Stabilization 115A: legacy mutation gate (default-OFF) per
+# /api/cosmetics/buy, /api/cosmetics/equip, /api/territory/attack.
+# Nota su /cosmetics/equip: marcato NEEDS_DECISION nel report 118 (puramente
+# cosmetico? autorizzato server-bound?). In assenza di decisione canonica,
+# Pack 115A lo blocca di default come da pack instructions.
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 
 def register_cosmetics_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -28,7 +37,17 @@ def register_cosmetics_routes(router, db, get_current_user, serialize_doc, calcu
         type: str
         item_id: str
 
-    @router.post("/cosmetics/buy")
+    @router.post(
+        "/cosmetics/buy",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_COSMETICS_MUTATIONS",
+                    "/api/cosmetics/buy",
+                )
+            )
+        ],
+    )
     async def buy_cosmetic(req: BuyCosmeticRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         items = AURAS if req.type == "aura" else AVATAR_FRAMES
@@ -54,7 +73,17 @@ def register_cosmetics_routes(router, db, get_current_user, serialize_doc, calcu
         type: str
         item_id: str
 
-    @router.post("/cosmetics/equip")
+    @router.post(
+        "/cosmetics/equip",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_COSMETICS_MUTATIONS",
+                    "/api/cosmetics/equip",
+                )
+            )
+        ],
+    )
     async def equip_cosmetic(req: SetCosmeticRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         field = "active_aura" if req.type == "aura" else "active_frame"
@@ -82,7 +111,17 @@ def register_cosmetics_routes(router, db, get_current_user, serialize_doc, calcu
             })
         return {"territories": territories}
 
-    @router.post("/territory/attack")
+    @router.post(
+        "/territory/attack",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_TERRITORY_MUTATIONS",
+                    "/api/territory/attack",
+                )
+            )
+        ],
+    )
     async def attack_territory(req: TerritoryAttackRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         guild_id = current_user.get("guild_id")

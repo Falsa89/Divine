@@ -1006,7 +1006,7 @@ function HomeProfilePanel({ user, router }: any) {
                   flexDirection: 'row', alignItems: 'center' },
                 DEBUG ? { borderWidth: 1.5, borderColor: '#FF8800' } : null,
               ]}
-              onPress={() => router.push('/profile' as any)}
+              onPress={() => { try { const _g = require('../../src/utils/preQaNavGuard'); if (!_g.isRouteAllowedInPreQa('/profile')) { Alert?.alert?.('Surface in preparazione', 'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED'); return; } } catch (_e) {} router.push('/profile' as any); }}
               activeOpacity={0.8}
             >
               <Text style={[s.powerIcon, { fontSize: pwrFS + 1, marginRight: 4 }]}>{'\u26A1'}</Text>
@@ -1032,7 +1032,7 @@ function HomeProfilePanel({ user, router }: any) {
                 <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
-                onPress={() => router.push('/profile' as any)}>
+                onPress={() => { try { const _g = require('../../src/utils/preQaNavGuard'); if (!_g.isRouteAllowedInPreQa('/profile')) { Alert?.alert?.('Surface in preparazione', 'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED'); return; } } catch (_e) {} router.push('/profile' as any); }}>
                 <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
                 <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
               </TouchableOpacity>
@@ -1078,7 +1078,7 @@ function HomeProfilePanel({ user, router }: any) {
             {/* ROW 2 — POWER */}
             <TouchableOpacity
               style={[s.powerRow, dbg('rgba(255,165,0,0.28)')]}
-              onPress={() => router.push('/profile' as any)}
+              onPress={() => { try { const _g = require('../../src/utils/preQaNavGuard'); if (!_g.isRouteAllowedInPreQa('/profile')) { Alert?.alert?.('Surface in preparazione', 'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED'); return; } } catch (_e) {} router.push('/profile' as any); }}
               activeOpacity={0.8}
             >
               <Text style={[s.powerIcon, { fontSize: pwrFS + 1 }]}>{'\u26A1'}</Text>
@@ -1094,7 +1094,7 @@ function HomeProfilePanel({ user, router }: any) {
                 <Text style={[s.vipTxt, { fontSize: pillFS }]}>VIP {vip}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={s.spiritoPill} activeOpacity={0.7}
-                onPress={() => router.push('/profile' as any)}>
+                onPress={() => { try { const _g = require('../../src/utils/preQaNavGuard'); if (!_g.isRouteAllowedInPreQa('/profile')) { Alert?.alert?.('Surface in preparazione', 'PRE_QA_ROUTE_BLOCKED_LEGACY_OR_DEFERRED'); return; } } catch (_e) {} router.push('/profile' as any); }}>
                 <Text style={[s.spiritoIco, { fontSize: pillFS - 1 }]}>{'\uD83D\uDD2E'}</Text>
                 <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
               </TouchableOpacity>

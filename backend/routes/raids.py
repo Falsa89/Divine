@@ -9,6 +9,12 @@ from pydantic import BaseModel
 from .game_data import RAID_BOSSES, EXCLUSIVE_ITEMS
 from utils.server_scope import ensure_server_scope
 
+# Pre-QA Stabilization 115A: legacy mutation gate (default-OFF) per
+# /api/raid/create, /api/raid/attack/{boss_id}, /api/exclusive-items/craft.
+# PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
+from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+from fastapi import Depends as _Depends_postqa_d
+
 
 def register_raids_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
 
@@ -33,7 +39,17 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
     class CreateRaidRequest(BaseModel):
         boss_id: str
 
-    @router.post("/raid/create")
+    @router.post(
+        "/raid/create",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_RAID_MUTATIONS",
+                    "/api/raid/create",
+                )
+            )
+        ],
+    )
     async def create_raid(req: CreateRaidRequest, current_user: dict = Depends(get_current_user)):
         boss = next((b for b in RAID_BOSSES if b["id"] == req.boss_id), None)
         if not boss:
@@ -55,7 +71,17 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
         await db.active_raids.insert_one(raid)
         return {"success": True, "action": "created", "raid_id": raid["id"]}
 
-    @router.post("/raid/attack/{boss_id}")
+    @router.post(
+        "/raid/attack/{boss_id}",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_RAID_MUTATIONS",
+                    "/api/raid/attack/{boss_id}",
+                )
+            )
+        ],
+    )
     async def attack_raid_boss(boss_id: str, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         boss = next((b for b in RAID_BOSSES if b["id"] == boss_id), None)
@@ -124,7 +150,17 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
     class CraftExclusiveRequest(BaseModel):
         hero_name: str
 
-    @router.post("/exclusive-items/craft")
+    @router.post(
+        "/exclusive-items/craft",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_RAID_MUTATIONS",
+                    "/api/exclusive-items/craft",
+                )
+            )
+        ],
+    )
     async def craft_exclusive_item(req: CraftExclusiveRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         ei = next((e for e in EXCLUSIVE_ITEMS if e["hero_name"] == req.hero_name), None)

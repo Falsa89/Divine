@@ -137,7 +137,17 @@ def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_h
             "created_at": str(war.get("created_at", "")),
         }
 
-    @router.post("/gvg/matchmake")
+    @router.post(
+        "/gvg/matchmake",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_GVG_PLAYER_MUTATIONS",
+                    "/api/gvg/matchmake",
+                )
+            )
+        ],
+    )
     async def gvg_matchmake(current_user: dict = Depends(get_current_user)):
         """Find or create a GvG match."""
         guild_id = current_user.get("guild_id")
@@ -221,7 +231,17 @@ def register_gvg_routes(router, db, get_current_user, serialize_doc, calculate_h
 
         return {"success": True, "war_id": war["id"], "opponent": opponent.get("name", "???")}
 
-    @router.post("/gvg/attack")
+    @router.post(
+        "/gvg/attack",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_GVG_PLAYER_MUTATIONS",
+                    "/api/gvg/attack",
+                )
+            )
+        ],
+    )
     async def gvg_attack(current_user: dict = Depends(get_current_user)):
         """Contribute an attack in the active GvG war."""
         uid = current_user["id"]

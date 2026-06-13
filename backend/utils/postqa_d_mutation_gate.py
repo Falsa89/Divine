@@ -72,6 +72,63 @@ LEGACY_MUTATION_GATES: Final[dict] = {
         "default": False,
         "category": "equipment",
     },
+    # Pre-QA Stabilization 115A — nuovi gate hard-OFF per cintura P0/P1 legacy economy/PVE/cosmetic mutations.
+    "DIVINE_ALLOW_LEGACY_SHOP_MUTATIONS": {
+        "endpoints": ["/api/shop/buy", "/api/shop/claim-daily/{item_id}"],
+        "default": False,
+        "category": "shop",
+    },
+    "DIVINE_ALLOW_LEGACY_MAIL_MUTATIONS": {
+        "endpoints": ["/api/mail/claim/{mail_id}"],
+        "default": False,
+        "category": "mail",
+    },
+    "DIVINE_ALLOW_LEGACY_BATTLEPASS_PROGRESS_MUTATIONS": {
+        "endpoints": [
+            "/api/battlepass/claim/{level}",
+            "/api/battlepass/add-exp",
+            "/api/battlepass",  # GET legacy that performs insert_one when missing — gated via is_legacy_mutation_gate_enabled
+        ],
+        "default": False,
+        "category": "battlepass_progress",
+    },
+    "DIVINE_ALLOW_LEGACY_SERVER_SELECT_MUTATIONS": {
+        "endpoints": ["/api/server/select"],
+        "default": False,
+        "category": "server_select",
+    },
+    "DIVINE_ALLOW_LEGACY_VIP_DAILY_MUTATIONS": {
+        "endpoints": [
+            "/api/vip/claim-daily",
+            "/api/vip",  # GET legacy that performs insert_one when missing
+        ],
+        "default": False,
+        "category": "vip_daily",
+    },
+    "DIVINE_ALLOW_LEGACY_GVG_PLAYER_MUTATIONS": {
+        "endpoints": ["/api/gvg/matchmake", "/api/gvg/attack"],
+        "default": False,
+        "category": "gvg_player",
+    },
+    "DIVINE_ALLOW_LEGACY_RAID_MUTATIONS": {
+        "endpoints": [
+            "/api/raid/create",
+            "/api/raid/attack/{boss_id}",
+            "/api/exclusive-items/craft",
+        ],
+        "default": False,
+        "category": "raid",
+    },
+    "DIVINE_ALLOW_LEGACY_COSMETICS_MUTATIONS": {
+        "endpoints": ["/api/cosmetics/buy", "/api/cosmetics/equip"],
+        "default": False,
+        "category": "cosmetics",
+    },
+    "DIVINE_ALLOW_LEGACY_TERRITORY_MUTATIONS": {
+        "endpoints": ["/api/territory/attack"],
+        "default": False,
+        "category": "territory",
+    },
 }
 
 _TRUTHY: Final[set] = {"true", "1", "yes", "on"}
@@ -86,6 +143,21 @@ def _is_enabled(gate_name: str) -> bool:
     if raw is None:
         return False
     return raw.strip().lower() in _TRUTHY
+
+
+def is_legacy_mutation_gate_enabled(gate_name: str) -> bool:
+    """Public read-only helper per i GET legacy che eseguivano insert_one quando
+    il doc mancava. In pre-QA i GET DEVONO restare read-only: i routes
+    importano questo helper e, se ritorna False (default), saltano l'insert
+    e rispondono con un doc default in-memory.
+
+    Non solleva mai HTTP. Mai usare per controllare scrittura di state
+    sensibile (gold/gems/exp): per quelle usa make_legacy_mutation_gate_dep.
+
+    Introdotto da Pre-QA Stabilization 115A per chiudere il GET-write leak
+    di /api/battlepass e /api/vip.
+    """
+    return _is_enabled(gate_name)
 
 
 def make_legacy_mutation_gate_dep(gate_name: str, endpoint: str):
@@ -154,4 +226,5 @@ __all__ = [
     "LEGACY_MUTATION_GATES",
     "check_legacy_mutation_gate",
     "make_legacy_mutation_gate_dep",
+    "is_legacy_mutation_gate_enabled",
 ]

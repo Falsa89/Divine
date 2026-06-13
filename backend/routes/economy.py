@@ -12,7 +12,14 @@ from .game_data import SHOP_ITEMS, DAILY_FREE, BATTLE_PASS_REWARDS, SERVERS, VIP
 # v108_POSTQA_D: legacy mutation gate (default-OFF) per /api/battlepass/buy-premium,
 # /api/vip/add-spend.
 # PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
-from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
+# Pre-QA Stabilization 115A: estesi i gate a shop/buy, shop/claim-daily, mail/claim,
+# battlepass/claim, battlepass/add-exp, server/select legacy, vip/claim-daily.
+# I GET legacy /battlepass e /vip vengono resi NO-WRITE in pre-QA via
+# is_legacy_mutation_gate_enabled() default OFF (skip insert_one, doc default in-memory).
+from utils.postqa_d_mutation_gate import (
+    make_legacy_mutation_gate_dep,
+    is_legacy_mutation_gate_enabled,
+)
 from fastapi import Depends as _Depends_postqa_d
 
 
@@ -38,7 +45,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
     class ShopBuyRequest(BaseModel):
         item_id: str
 
-    @router.post("/shop/buy")
+    @router.post(
+        "/shop/buy",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SHOP_MUTATIONS",
+                    "/api/shop/buy",
+                )
+            )
+        ],
+    )
     async def shop_buy(req: ShopBuyRequest, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         item = next((i for i in SHOP_ITEMS if i["id"] == req.item_id), None)
@@ -62,7 +79,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
         await db.shop_purchases.insert_one({"user_id": uid, "item_id": req.item_id, "date": today, "timestamp": datetime.utcnow()})
         return {"success": True, "item": item["name"], "reward": reward}
 
-    @router.post("/shop/claim-daily/{item_id}")
+    @router.post(
+        "/shop/claim-daily/{item_id}",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SHOP_MUTATIONS",
+                    "/api/shop/claim-daily/{item_id}",
+                )
+            )
+        ],
+    )
     async def claim_daily(item_id: str, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         item = next((d for d in DAILY_FREE if d["id"] == item_id), None)
@@ -86,7 +113,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
         mails = await db.user_mail.find({"user_id": current_user["id"]}).sort("timestamp", -1).limit(50).to_list(50)
         return [serialize_doc(m) for m in mails]
 
-    @router.post("/mail/claim/{mail_id}")
+    @router.post(
+        "/mail/claim/{mail_id}",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_MAIL_MUTATIONS",
+                    "/api/mail/claim/{mail_id}",
+                )
+            )
+        ],
+    )
     async def claim_mail(mail_id: str, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         mail = await db.user_mail.find_one({"id": mail_id, "user_id": uid})
@@ -109,8 +146,12 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
     async def get_battle_pass(current_user: dict = Depends(get_current_user)):
         bp = await db.battle_pass.find_one({"user_id": current_user["id"]})
         if not bp:
+            # Pre-QA Stabilization 115A: GET legacy NO-WRITE in pre-QA.
+            # In assenza di gate attivo, ritorna doc default in-memory senza
+            # eseguire insert_one. Nessuna mutazione DB.
             bp = {"user_id": current_user["id"], "exp": 0, "level": 1, "is_premium": False, "claimed_free": [], "claimed_premium": [], "season": 1}
-            await db.battle_pass.insert_one(bp)
+            if is_legacy_mutation_gate_enabled("DIVINE_ALLOW_LEGACY_BATTLEPASS_PROGRESS_MUTATIONS"):
+                await db.battle_pass.insert_one(bp)
         return {
             "rewards": BATTLE_PASS_REWARDS,
             "current_level": bp.get("level", 1),
@@ -122,7 +163,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
             "season": bp.get("season", 1),
         }
 
-    @router.post("/battlepass/claim/{level}")
+    @router.post(
+        "/battlepass/claim/{level}",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_BATTLEPASS_PROGRESS_MUTATIONS",
+                    "/api/battlepass/claim/{level}",
+                )
+            )
+        ],
+    )
     async def claim_bp_reward(level: int, current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         bp = await db.battle_pass.find_one({"user_id": uid})
@@ -184,7 +235,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
         )
         return {"success": True}
 
-    @router.post("/battlepass/add-exp")
+    @router.post(
+        "/battlepass/add-exp",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_BATTLEPASS_PROGRESS_MUTATIONS",
+                    "/api/battlepass/add-exp",
+                )
+            )
+        ],
+    )
     async def add_bp_exp(current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         bp = await db.battle_pass.find_one({"user_id": uid})
@@ -219,7 +280,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
     class SelectServerRequest(BaseModel):
         server_id: str
 
-    @router.post("/server/select")
+    @router.post(
+        "/server/select",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_SERVER_SELECT_MUTATIONS",
+                    "/api/server/select",
+                )
+            )
+        ],
+    )
     async def select_server(req: SelectServerRequest, current_user: dict = Depends(get_current_user)):
         # V7 BLOCK_A DEPRECATION NOTICE (legacy endpoint; superseded by SLC-H server-profiles when live).
         # See: /app/docs/divine/120D_LEGACY_SERVER_SELECT_REMOVAL_PLAN.md (4-phase removal plan, phase 1).
@@ -246,8 +317,11 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
     async def get_vip_status(current_user: dict = Depends(get_current_user)):
         vip_data = await db.vip_data.find_one({"user_id": current_user["id"]})
         if not vip_data:
+            # Pre-QA Stabilization 115A: GET legacy NO-WRITE in pre-QA.
+            # Senza gate attivo, ritorna doc default in-memory senza insert_one.
             vip_data = {"user_id": current_user["id"], "total_spend": 0, "vip_level": 0, "last_daily_claim": None}
-            await db.vip_data.insert_one(vip_data)
+            if is_legacy_mutation_gate_enabled("DIVINE_ALLOW_LEGACY_VIP_DAILY_MUTATIONS"):
+                await db.vip_data.insert_one(vip_data)
         current_lvl = 0
         for vl in VIP_LEVELS:
             if vip_data.get("total_spend", 0) >= vl["min_spend"]:
@@ -274,7 +348,17 @@ def register_economy_routes(router, db, get_current_user, serialize_doc, calcula
             return True
         return (datetime.utcnow() - last).days >= 1
 
-    @router.post("/vip/claim-daily")
+    @router.post(
+        "/vip/claim-daily",
+        dependencies=[
+            _Depends_postqa_d(
+                make_legacy_mutation_gate_dep(
+                    "DIVINE_ALLOW_LEGACY_VIP_DAILY_MUTATIONS",
+                    "/api/vip/claim-daily",
+                )
+            )
+        ],
+    )
     async def claim_vip_daily(current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         vip_data = await db.vip_data.find_one({"user_id": uid})
