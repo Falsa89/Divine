@@ -6,7 +6,7 @@
 ## Commit SHAs
 - Baseline (pre-115G): `3804a3e46626d23b24366947d52a6a5595e62120`
 - Pack 115G commit:    `ce767d2c2d18d217f7c6ce61173e842aa8c9cf7e`
-- Report/self-ref:     *aggiornato dopo il commit del self-ref del report 124.*
+- Report/self-ref:     `02bf607525c20f87b8ccd4bdd3c16af18cf41c5d`
 
 > **Commit policy**: il commit del Pack 115G segue il vincolo esplicito utente: **MAI `git add -A` / `git add .`**. Tutti i file sono stati aggiunti con `git add -- <path>` esplicito file-by-file.
 
