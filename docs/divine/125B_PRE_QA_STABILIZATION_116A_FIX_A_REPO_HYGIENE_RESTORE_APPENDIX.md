@@ -12,7 +12,7 @@ Game Master local-ZIP re-audit su Pack 116A:
 
 ## Commit SHAs
 - Baseline (pre-116A FIX-A): `7b3d1744e59f7e0916b3f76cfaa6192a74eec19c`
-- 116A FIX-A commit:         *aggiornato al momento del commit esplicito file-by-file (vedi sezione "Commit policy").*
+- 116A FIX-A commit:         `5e7b8d1d607cf6331977ef41b78491361191ba99`
 - Self-ref appendice:        *aggiornato dopo il commit del self-ref.*
 
 > **Commit policy** (preservata da Pack 115F): MAI `git add -A` / `git add .`. Tutti i file aggiunti con `git add -- <path>` esplicito.
