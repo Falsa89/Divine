@@ -1,5 +1,9 @@
 # ============================================================
-# .gitignore — Repository hygiene (consolidato in Pack 115F)
+# .gitignore — Repository hygiene
+# - Pack 115F: regole di base per Python bytecode + duplicati eliminati
+# - Pack 116A FIX-A: defense-in-depth — pattern espliciti per i
+#   percorsi piu' caldi (`backend/**/__pycache__`), pattern globali
+#   `**/*.pyc`, e cache aggiuntive (`htmlcov`, `coverage`, etc.).
 # ============================================================
 
 # Environment and credential files
@@ -20,8 +24,9 @@ backend/reports/
 !backend/reports/.gitkeep
 
 # ------------------------------------------------------------
-# Pack 115F — Repo hygiene: Python bytecode / cache artifacts
+# Python bytecode / cache artifacts — DEFENSE-IN-DEPTH
 # ------------------------------------------------------------
+# Pattern di base (Pack 115F)
 __pycache__/
 *.py[cod]
 *$py.class
@@ -29,8 +34,41 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
+# Pattern globali aggiuntivi (Pack 116A FIX-A) — coprono anche path-prefixed
+# match dove alcuni client `git add` non risolvono il pattern relativo.
+**/__pycache__/
+**/__pycache__/**
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Pattern espliciti per i percorsi piu' caldi (backend) — defensive.
+backend/__pycache__/
+backend/**/__pycache__/
+backend/routes/__pycache__/
+backend/utils/__pycache__/
+backend/scripts/__pycache__/
+backend/data/__pycache__/
+backend/game_logic/__pycache__/
+
+# Coverage / profiling
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.cache/
+
+# Build / dist artefatti Python
+build/
+dist/
+*.egg-info/
+*.egg
+
 # OS / editor noise
 .DS_Store
 Thumbs.db
 *.swp
 *~
+.idea/
+.vscode/
