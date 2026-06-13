@@ -71,7 +71,7 @@
 |------|------|------|
 | POST | `/guest` | `backend/routes/v96_auth.py` |
 
-## uncategorized (119)
+## uncategorized (104)
 
 | Verb | Path | File |
 |------|------|------|
@@ -87,15 +87,11 @@
 | POST | `/artifacts/pull` | `backend/routes/artifacts.py` |
 | POST | `/artifacts/pull10` | `backend/routes/artifacts.py` |
 | POST | `/battle/simulate` | `backend/battle_engine.py` |
-| POST | `/battlepass/add-exp` | `backend/routes/economy.py` |
-| POST | `/battlepass/claim/{level}` | `backend/routes/economy.py` |
 | POST | `/clear-preview` | `backend/routes/material_raid_preview.py` |
 | POST | `/constellations/equip` | `backend/routes/artifacts.py` |
 | POST | `/constellations/fuse` | `backend/routes/artifacts.py` |
 | POST | `/constellations/pull` | `backend/routes/artifacts.py` |
 | POST | `/constellations/pull10` | `backend/routes/artifacts.py` |
-| POST | `/cosmetics/buy` | `backend/routes/cosmetics.py` |
-| POST | `/cosmetics/equip` | `backend/routes/cosmetics.py` |
 | POST | `/create-preview` | `backend/routes/story_battle_instance_preview.py` |
 | POST | `/dm/threads` | `backend/routes/social.py` |
 | POST | `/dm/threads/{thread_id}/messages` | `backend/routes/social.py` |
@@ -103,7 +99,6 @@
 | POST | `/enchant/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/enhance/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/equipment/unequip/{equipment_id}` | `backend/routes/equipment.py` |
-| POST | `/exclusive-items/craft` | `backend/routes/raids.py` |
 | POST | `/forge/fuse` | `backend/routes/forge.py` |
 | POST | `/forge/upgrade` | `backend/routes/forge.py` |
 | POST | `/fragments/add` | `backend/routes/hero_progression.py` |
@@ -121,8 +116,6 @@
 | POST | `/guard-plan-preview` | `backend/routes/gem_socket_commit_safety_preview.py` |
 | POST | `/guard-plan-preview` | `backend/routes/mail_claim_safety_preview.py` |
 | POST | `/guard-plan-preview` | `backend/routes/rune_scroll_talisman_safety_preview.py` |
-| POST | `/gvg/attack` | `backend/routes/gvg.py` |
-| POST | `/gvg/matchmake` | `backend/routes/gvg.py` |
 | POST | `/hero/reincarnate` | `backend/routes/hero_progression.py` |
 | POST | `/hero/skill-upgrade` | `backend/routes/items.py` |
 | POST | `/idempotency-preview` | `backend/routes/artifact_upgrade_safety_preview.py` |
@@ -143,7 +136,6 @@
 | POST | `/level-sharing/unlock` | `backend/routes/level_sharing.py` |
 | POST | `/logout` | `backend/routes/v96_auth.py` |
 | POST | `/logout-all` | `backend/routes/v96_auth.py` |
-| POST | `/mail/claim/{mail_id}` | `backend/routes/economy.py` |
 | POST | `/materials/buy` | `backend/routes/hero_progression.py` |
 | POST | `/notifications/read-all` | `backend/routes/push_notifications.py` |
 | POST | `/playback-preview` | `backend/routes/battle_replay_preview.py` |
@@ -152,8 +144,6 @@
 | POST | `/power-preview` | `backend/routes/gem_socket_preview.py` |
 | POST | `/push/register` | `backend/routes/push_notifications.py` |
 | POST | `/push/test` | `backend/routes/push_notifications.py` |
-| POST | `/raid/attack/{boss_id}` | `backend/routes/raids.py` |
-| POST | `/raid/create` | `backend/routes/raids.py` |
 | POST | `/reforge/preview` | `backend/routes/gear_forge_preview.py` |
 | POST | `/refresh` | `backend/routes/v96_auth.py` |
 | POST | `/replace-preview` | `backend/routes/gem_socket_preview.py` |
@@ -168,11 +158,7 @@
 | POST | `/sanctuary/constellation/skip/{hero_id}` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/home-hero` | `backend/routes/sanctuary.py` |
 | POST | `/select` | `backend/routes/server_profiles.py` |
-| POST | `/server/select` | `backend/routes/economy.py` |
-| POST | `/shop/buy` | `backend/routes/economy.py` |
-| POST | `/shop/claim-daily/{item_id}` | `backend/routes/economy.py` |
 | POST | `/socket-preview` | `backend/routes/gem_socket_preview.py` |
-| POST | `/territory/attack` | `backend/routes/cosmetics.py` |
 | POST | `/title/set` | `backend/routes/combat.py` |
 | POST | `/tower/battle` | `backend/routes/combat.py` |
 | POST | `/unique-items/craft` | `backend/routes/unique_items.py` |
@@ -190,7 +176,6 @@
 | POST | `/validate-request` | `backend/routes/gem_socket_commit_safety_preview.py` |
 | POST | `/validate-request` | `backend/routes/mail_claim_safety_preview.py` |
 | POST | `/validate-request` | `backend/routes/rune_scroll_talisman_safety_preview.py` |
-| POST | `/vip/claim-daily` | `backend/routes/economy.py` |
 | POST | `/wallet/spend` | `backend/routes/soul_forge.py` |
 | POST | `/{hero_id}/upgrade/preview` | `backend/routes/gear_cap_preview.py` |
 | POST | `/{hero_id}/upgrade/preview` | `backend/routes/hero_elevation_preview.py` |

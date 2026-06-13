@@ -4,7 +4,7 @@ Classifier deterministico. Categorie canoniche:
 allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, requires_future_pack, not_player_facing_readonly, duplicate_or_dead_route, needs_manual_review_non_blocking.
 
 
-## allowed_safe (41)
+## allowed_safe (40)
 
 | Verb | Path | File |
 |------|------|------|
@@ -44,7 +44,6 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/rewards/claim` | `backend/routes/reward_claim.py` |
 | POST | `/rewards/claim/preflight` | `backend/routes/reward_claim.py` |
 | POST | `/select` | `backend/routes/server_profiles.py` |
-| POST | `/server/select` | `backend/routes/economy.py` |
 | POST | `/title/set` | `backend/routes/combat.py` |
 | POST | `/tower/strict/battle/execute` | `backend/routes/tower_strict.py` |
 | POST | `/tower/strict/battle/preview` | `backend/routes/tower_strict.py` |
@@ -64,7 +63,7 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 |------|------|------|
 | POST | `/guest` | `backend/routes/v96_auth.py` |
 
-## legacy_quarantined (48)
+## legacy_quarantined (41)
 
 | Verb | Path | File |
 |------|------|------|
@@ -72,15 +71,12 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/affinity/gift-spend` | `backend/routes/affinity_gift_spend.py` |
 | POST | `/api/gacha/pull` | `backend/server.py` |
 | POST | `/api/gacha/pull10` | `backend/server.py` |
-| POST | `/cosmetics/buy` | `backend/routes/cosmetics.py` |
-| POST | `/cosmetics/equip` | `backend/routes/cosmetics.py` |
 | POST | `/currency/earn-dimension` | `backend/routes/soul_forge.py` |
 | POST | `/currency/earn-guild` | `backend/routes/soul_forge.py` |
 | POST | `/currency/earn-mission` | `backend/routes/soul_forge.py` |
 | POST | `/currency/earn-pvp` | `backend/routes/soul_forge.py` |
 | POST | `/equipment/unequip/{equipment_id}` | `backend/routes/equipment.py` |
 | POST | `/events/battle` | `backend/routes/combat.py` |
-| POST | `/exclusive-items/craft` | `backend/routes/raids.py` |
 | POST | `/faction/join` | `backend/routes/guild.py` |
 | POST | `/forge/fuse` | `backend/routes/forge.py` |
 | POST | `/forge/upgrade` | `backend/routes/forge.py` |
@@ -94,7 +90,6 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/hero/skill-upgrade` | `backend/routes/items.py` |
 | POST | `/inventory/use-exp` | `backend/routes/items.py` |
 | POST | `/item-shop/buy` | `backend/routes/items.py` |
-| POST | `/mail/claim/{mail_id}` | `backend/routes/economy.py` |
 | POST | `/materials/buy` | `backend/routes/hero_progression.py` |
 | POST | `/pvp/battle` | `backend/routes/combat.py` |
 | POST | `/runes/craft` | `backend/routes/forge.py` |
@@ -106,15 +101,12 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/sanctuary/constellation/attempt` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/constellation/skip/{hero_id}` | `backend/routes/sanctuary.py` |
 | POST | `/sanctuary/home-hero` | `backend/routes/sanctuary.py` |
-| POST | `/shop/buy` | `backend/routes/economy.py` |
-| POST | `/shop/claim-daily/{item_id}` | `backend/routes/economy.py` |
 | POST | `/shops/buy` | `backend/routes/soul_forge.py` |
 | POST | `/soul-forge/retire` | `backend/routes/soul_forge.py` |
 | POST | `/story/battle` | `backend/routes/combat.py` |
 | POST | `/team/update-formation` | `backend/battle_engine.py` |
 | POST | `/unique-items/craft` | `backend/routes/unique_items.py` |
 | POST | `/unique-items/equip` | `backend/routes/unique_items.py` |
-| POST | `/vip/claim-daily` | `backend/routes/economy.py` |
 | POST | `/wallet/spend` | `backend/routes/soul_forge.py` |
 
 ## deferred_blocker (0)
@@ -122,15 +114,13 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | Verb | Path | File |
 |------|------|------|
 
-## requires_future_pack (28)
+## requires_future_pack (21)
 
 | Verb | Path | File |
 |------|------|------|
 | POST | `/artifacts/fuse` | `backend/routes/artifacts.py` |
 | POST | `/artifacts/pull` | `backend/routes/artifacts.py` |
 | POST | `/artifacts/pull10` | `backend/routes/artifacts.py` |
-| POST | `/battlepass/add-exp` | `backend/routes/economy.py` |
-| POST | `/battlepass/claim/{level}` | `backend/routes/economy.py` |
 | POST | `/constellations/equip` | `backend/routes/artifacts.py` |
 | POST | `/constellations/fuse` | `backend/routes/artifacts.py` |
 | POST | `/constellations/pull` | `backend/routes/artifacts.py` |
@@ -144,15 +134,10 @@ allowed_safe, internal_only, dev_only, legacy_quarantined, deferred_blocker, req
 | POST | `/friends/accept` | `backend/routes/social.py` |
 | POST | `/friends/remove/{friend_id}` | `backend/routes/social.py` |
 | POST | `/friends/request` | `backend/routes/social.py` |
-| POST | `/gvg/attack` | `backend/routes/gvg.py` |
-| POST | `/gvg/matchmake` | `backend/routes/gvg.py` |
 | POST | `/level-sharing/assign` | `backend/routes/level_sharing.py` |
 | POST | `/level-sharing/remove/{slot_number}` | `backend/routes/level_sharing.py` |
 | POST | `/level-sharing/unlock` | `backend/routes/level_sharing.py` |
 | POST | `/plaza/chat` | `backend/routes/social.py` |
-| POST | `/raid/attack/{boss_id}` | `backend/routes/raids.py` |
-| POST | `/raid/create` | `backend/routes/raids.py` |
-| POST | `/territory/attack` | `backend/routes/cosmetics.py` |
 | POST | `/user/faction-v2/select` | `backend/routes/player_faction_v2.py` |
 
 ## not_player_facing_readonly (48)
