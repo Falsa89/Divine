@@ -6,7 +6,7 @@
 ## Commit SHAs
 - Baseline (pre-116A-EXT): `05511cbf779ad567795025b94856fbdaa947f31b`
 - Pack 116A-EXT commit:    `f30bfe11d4e3419d6e2349731eb3f424875a2550`
-- Report/self-ref:         *aggiornato dopo il commit del self-ref del report 126.*
+- Report/self-ref:         `0ce087f8a2f7d1d61f069731ed6303042ebb20e7`
 
 > **Commit policy** (preservata da 115F/116A FIX-A): MAI `git add -A` / `git add .`. Tutti i file aggiunti con `git add -- <path>` esplicito.
 
