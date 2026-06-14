@@ -1,0 +1,78 @@
+{
+  "_meta": {
+    "id": "red_dot_notification_badge_source_map_v1",
+    "purpose": "Pre-QA Stabilization 116C — Source-of-truth map per il sistema Red Dot / Notification Badge. Documenta quali sorgenti possono mostrare un dot ORA (read-only safe), e quali sono deferred. NON e' un sistema runtime.",
+    "scope": "design_only_read_only",
+    "is_runtime": false,
+    "red_dot_summary_version": "red_dot_v1_preqa_read_only_foundation",
+    "do_not_use_for_runtime_resolution": true,
+    "no_mutations": true,
+    "no_push_notification": true,
+    "no_toast": true,
+    "no_claim_activation": true,
+    "no_read_all": true
+  },
+
+  "active_safe_read_only_sources_now": [
+    {
+      "source_id": "server_profile_required",
+      "display_name_it": "Profilo server da impostare",
+      "category": "system_warning",
+      "route": "/home",
+      "aggregation_parent": "home",
+      "scope": "per_player_per_server",
+      "runtime_state": "active_read_only_warning",
+      "read_strategy": "check_psp_exists_for_selected_server",
+      "active_in_116c": true,
+      "requires_future_resolver": false,
+      "mutation_forbidden": true,
+      "may_show_dot_when_locked": true,
+      "max_count_policy": "binary_dot_only",
+      "source_refs": ["backend/routes/battle_power.py"],
+      "notes": "Se PSP mancante per il server selezionato, mostra warning dot non-actionable (utente deve fare onboarding)."
+    },
+    {
+      "source_id": "team_missing_warning",
+      "display_name_it": "Team non impostato",
+      "category": "system_warning",
+      "route": "/battle",
+      "aggregation_parent": "battle",
+      "scope": "per_player_per_server",
+      "runtime_state": "active_read_only_warning",
+      "read_strategy": "battle_power_summary.team_missing",
+      "active_in_116c": true,
+      "requires_future_resolver": false,
+      "mutation_forbidden": true,
+      "may_show_dot_when_locked": false,
+      "max_count_policy": "binary_dot_only",
+      "source_refs": ["backend/routes/battle_power.py"],
+      "notes": "Solo warning. Nessun claim. Il valore deriva da /api/battle-power/summary."
+    }
+  ],
+
+  "locked_or_deferred_sources": [
+    {"source_id": "mail_unread", "display_name_it": "Mail non lette", "category": "rewards_actionable", "route": "/mail", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "deferred_no_safe_read_only_resolver", "read_strategy": "deferred_requires_unread_count_endpoint_no_read_all", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "count_capped_99plus", "source_refs": ["backend/routes/mail_claim_safety_preview.py", "docs/divine/110_MAIL_ACHIEVEMENTS_DAILY_WEEKLY_CONTROLLED_REWARDS_SOT.md"], "notes": "Richiede endpoint COUNT-only senza mark-read. Non disponibile in 116C."},
+    {"source_id": "daily_login_claimable", "display_name_it": "Daily login da reclamare", "category": "rewards_actionable", "route": "/daily-hub", "aggregation_parent": "home", "scope": "per_player_per_server", "runtime_state": "deferred", "read_strategy": "deferred_requires_can_claim_query_no_mutation", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "binary_dot_only", "source_refs": ["backend/routes/daily_login_claim.py", "docs/divine/117_DAILY_LOGIN_CLAIM_SOT.md"], "notes": "Deferred: serve query can-claim read-only."},
+    {"source_id": "daily_quest_claimable", "display_name_it": "Quest giornaliere da reclamare", "category": "rewards_actionable", "route": "/daily-hub", "aggregation_parent": "home", "scope": "per_player_per_server", "runtime_state": "deferred", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "count_capped_9plus", "source_refs": ["backend/routes/daily_quest_claim.py", "backend/routes/daily_quest_tracker.py", "docs/divine/118_DAILY_QUEST_CLAIM_SOT.md", "docs/divine/119_DAILY_QUEST_RUNTIME_TRACKER_SOT.md"], "notes": "Deferred."},
+    {"source_id": "achievements_claimable", "display_name_it": "Achievement da reclamare", "category": "rewards_actionable", "route": "/achievements", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "deferred", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "count_capped_99plus", "source_refs": ["backend/routes/achievements.py", "docs/divine/110_MAIL_ACHIEVEMENTS_DAILY_WEEKLY_CONTROLLED_REWARDS_SOT.md"], "notes": "Deferred."},
+    {"source_id": "battle_pass_claimable", "display_name_it": "Battle Pass da reclamare", "category": "rewards_actionable", "route": "/battlepass", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "deferred", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "count_capped_9plus", "source_refs": ["backend/routes/battle_pass_claim_safety_preview.py"], "notes": "Deferred."},
+    {"source_id": "events_active_claimable", "display_name_it": "Eventi attivi/reclamabili", "category": "rewards_actionable", "route": "/events", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "deferred_locked_pre_qa", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "binary_dot_only", "source_refs": [], "notes": "Eventi non live in pre-QA."},
+    {"source_id": "shop_free_claim", "display_name_it": "Shop free claim", "category": "rewards_actionable", "route": "/shop", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "deferred_locked_pre_qa", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "binary_dot_only", "source_refs": ["frontend/app/shop.tsx", "frontend/app/item-shop.tsx"], "notes": "Shop non live pre-QA."},
+    {"source_id": "gacha_free_summon_or_ticket", "display_name_it": "Gacha free summon", "category": "rewards_actionable", "route": "/gacha", "aggregation_parent": "home", "scope": "per_player_per_server", "runtime_state": "deferred_gacha_locked_115a", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "binary_dot_only", "source_refs": [], "notes": "Gacha gated da Pack 115A."},
+    {"source_id": "hero_upgrade_available", "display_name_it": "Eroe potenziabile", "category": "progression", "route": "/heroes", "aggregation_parent": "home", "scope": "per_hero_per_server", "runtime_state": "deferred_no_resolver_yet", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "count_capped_99plus", "source_refs": ["backend/routes/heroes.py", "backend/routes/hero_progression.py", "data/design/battle_power/battle_power_bonus_source_map_v1.json"], "notes": "Deferred: serve resolver can-upgrade read-only."},
+    {"source_id": "gear_rune_artifact_divine_alert", "display_name_it": "Equipaggiamento/Rune/Artefatti/Armi divine", "category": "progression_advanced", "route": "/heroes", "aggregation_parent": "home", "scope": "per_player_per_server", "runtime_state": "deferred_canonical_resolver_required", "read_strategy": "deferred", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "binary_dot_only", "source_refs": ["data/design/battle_power/battle_power_bonus_source_map_v1.json"], "notes": "Deferred: aspetta resolver Pack 117+ (gear, rune, artifact_global, divine_weapon)."}
+  ],
+
+  "future_resolver_sources": [
+    {"source_id": "guild_messages_or_war", "display_name_it": "Gilda / GvG", "category": "social", "route": "/guild", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "future", "read_strategy": "future_requires_guild_isolation_pack", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "binary_dot_only", "source_refs": [], "notes": "Future."}
+  ],
+
+  "non_actionable_system_warning_sources": [
+    {"source_id": "chat_pre_qa_locked", "display_name_it": "Chat in preparazione", "category": "system_info", "route": "/plaza", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "locked_by_pack_116b", "read_strategy": "no_dot_when_locked", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "no_dot", "source_refs": ["data/design/server_actors/v116b_bot_chat_quality_contract_v1.json"], "notes": "Mai dot actionable quando chat e' locked (Pack 116B)."},
+    {"source_id": "dm_pre_qa_locked", "display_name_it": "Messaggi privati in preparazione", "category": "system_info", "route": "/dm", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "locked_by_pack_116b", "read_strategy": "no_dot_when_locked", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "no_dot", "source_refs": ["data/design/server_actors/v116b_bot_chat_quality_contract_v1.json"], "notes": "Mai dot actionable quando DM e' locked."}
+  ],
+
+  "unknown_requires_source_confirmation": [
+    {"source_id": "vip_or_subscription_alert", "display_name_it": "VIP / Subscription", "category": "monetization", "route": "/vip", "aggregation_parent": "menu", "scope": "per_player_per_server", "runtime_state": "unknown_pending_bible", "read_strategy": "unknown", "active_in_116c": false, "requires_future_resolver": true, "mutation_forbidden": true, "may_show_dot_when_locked": false, "max_count_policy": "binary_dot_only", "source_refs": [], "notes": "Richiede chiarimento Game Master."}
+  ]
+}

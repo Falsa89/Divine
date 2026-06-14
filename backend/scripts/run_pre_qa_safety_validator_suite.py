@@ -183,6 +183,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_116b_chat_bot_quality_and_legacy_chat_cleanup.py',
     },
+    # Pack 116C — Red Dot notification badge foundation (read-only)
+    {
+        'name': 'Validator 116C Red Dot Notification Badge Foundation',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_116c_red_dot_notification_badge_foundation.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

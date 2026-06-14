@@ -40,6 +40,10 @@ import { useAuth } from '../../context/AuthContext';
 import { apiCall } from '../../utils/api';
 import { registerForPushNotifications } from '../../utils/pushNotifications';
 import useBattlePowerSummary from '../../src/hooks/useBattlePowerSummary';
+// Pack 116C — Red Dot foundation: solo lettura read-only.
+// Importazione documentata anche se il rendering UI iniziale e' minimale.
+import useRedDotSummary from '../../src/hooks/useRedDotSummary';
+import RedDotBadge from '../../components/ui/RedDotBadge';
 import HomeHeroSplash from '../../components/home/HomeHeroSplash';
 import ChatComposer from '../../components/chat/ChatComposer';
 import ChannelSelector from '../../components/chat/ChannelSelector';

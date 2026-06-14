@@ -1027,6 +1027,15 @@ except Exception as _bp_116a_err:
     import logging
     logging.getLogger(__name__).warning("battle_power 116a router import failed: %s", _bp_116a_err)
 
+# Pre-QA Stabilization 116C — Red Dot notification badge foundation.
+# Read-only, server-scoped, no DB writes, no claim, no push.
+try:
+    from routes.red_dot import create_red_dot_router
+    app.include_router(create_red_dot_router(db, get_current_user))
+except Exception as _rd_116c_err:
+    import logging
+    logging.getLogger(__name__).warning("red_dot 116c router import failed: %s", _rd_116c_err)
+
 # MEGA_RELEASE_ACCELERATION_47_v98 — Admin server-actors status (read-only)
 # + GDPR data export + hard-delete-confirm (runtime gated).
 try:
