@@ -79,6 +79,11 @@ def create_battle_power_router(db, get_current_user):
                 "psp_present_for_server": False,
                 "active_team_power": 0,
                 "team_missing": True,
+                "team_missing_reason": "PLAYER_SERVER_PROFILE_REQUIRED",
+                "team_source": "none",
+                "team_slot_count": 0,
+                "valid_team_slot_count": 0,
+                "invalid_team_slot_count": 0,
                 "team_slots": [],
                 "owned_hero_count": 0,
                 "max_owned_hero_power": 0,
@@ -122,14 +127,25 @@ def create_battle_power_router(db, get_current_user):
         max_owned_hero_power = max((h["power"] for h in owned_hero_powers), default=0)
 
         # ---- 5) Active team (PSP-scoped). NO account-wide fallback. ----
+        # Pack 116A-EXT FIX-A — Truth on team source/slot validity:
+        # - team_slot_count = numero totale di slot in PSP.team_formation
+        # - valid_team_slot_count = slot risolti verso (user_heroes server-scoped
+        #   posseduto E hero catalog visibile in collection)
+        # - invalid_team_slot_count = slot non risolti / fantasma / stale
+        # - se team_formation esiste ma 0 valid → team_missing=True, power=0
+        #   (no falso team)
         psp_team = psp.get("team_formation") or []
         team_slots = []
-        team_missing = True
         active_team_power = 0
-        if isinstance(psp_team, list) and len(psp_team) > 0:
-            team_missing = False
+        team_slot_count = len(psp_team) if isinstance(psp_team, list) else 0
+        valid_team_slot_count = 0
+        invalid_team_slot_count = 0
+        team_source = "player_server_profile" if isinstance(psp_team, list) and team_slot_count > 0 else "none"
+
+        if isinstance(psp_team, list) and team_slot_count > 0:
             for slot_idx, entry in enumerate(psp_team, start=1):
-                # entry puo' essere user_hero_id, hero_id, o dict {"user_hero_id": ..., "hero_id": ...}
+                # entry puo' essere user_hero_id (str), hero_id (str), o
+                # dict con qualunque sottoinsieme di {user_hero_id, id, hero_id, slot_index, x, y}.
                 user_hero_id = None
                 hero_id = None
                 if isinstance(entry, str):
@@ -148,17 +164,53 @@ def create_battle_power_router(db, get_current_user):
                         hero_id = uh_by_id[user_hero_id].get("hero_id")
                 uh_doc = uh_by_id.get(user_hero_id) if user_hero_id else None
                 hero_doc = hero_by_id.get(hero_id) if hero_id else None
+                # Truth: la "validita'" richiede ANCHE che il hero catalog sia
+                # visibile (no eroi quarantened/deactivated/non-obtainable).
+                is_valid = False
                 if uh_doc and hero_doc:
-                    p = compute_hero_battle_power_v1(hero_doc, uh_doc)
+                    # Read-only sanity: hero catalog flags. Default conservativi:
+                    # se i flag mancano, l'eroe e' considerato valid SOLO se
+                    # `obtainable=True` o se non c'e' un esplicito deactivated_at.
+                    deactivated = hero_doc.get("deactivated_at")
+                    show_in_catalog = hero_doc.get("show_in_catalog")
+                    obtainable = hero_doc.get("obtainable")
+                    # Validita' pre-QA: NON deactivated. (show_in_catalog/obtainable
+                    # possono mancare nei seed; non sono blocker hard qui).
+                    is_valid = not bool(deactivated)
+                    if is_valid:
+                        p = compute_hero_battle_power_v1(hero_doc, uh_doc)
+                    else:
+                        p = 0
                 else:
                     p = 0
+                if is_valid:
+                    valid_team_slot_count += 1
+                else:
+                    invalid_team_slot_count += 1
                 team_slots.append({
                     "slot": slot_idx,
                     "user_hero_id": str(user_hero_id or ""),
                     "hero_id": str(hero_id or ""),
                     "power": p,
+                    "valid": is_valid,
+                    "resolved_user_hero": uh_doc is not None,
+                    "resolved_hero_catalog": hero_doc is not None,
                 })
-                active_team_power += p
+                if is_valid:
+                    active_team_power += p
+
+        # Truth: se nessuno slot e' valido (anche se PSP team_formation esiste)
+        # → team_missing=True e active_team_power=0 (no falso team).
+        if valid_team_slot_count == 0:
+            team_missing = True
+            active_team_power = 0
+            if team_slot_count == 0:
+                team_missing_reason = "TEAM_FORMATION_EMPTY"
+            else:
+                team_missing_reason = "TEAM_FORMATION_PRESENT_BUT_NO_VALID_SLOTS"
+        else:
+            team_missing = False
+            team_missing_reason = None
 
         return {
             "status": "ok",
@@ -167,6 +219,11 @@ def create_battle_power_router(db, get_current_user):
             "psp_present_for_server": True,
             "active_team_power": active_team_power,
             "team_missing": team_missing,
+            "team_missing_reason": team_missing_reason,
+            "team_source": team_source,
+            "team_slot_count": team_slot_count,
+            "valid_team_slot_count": valid_team_slot_count,
+            "invalid_team_slot_count": invalid_team_slot_count,
             "team_slots": team_slots,
             "owned_hero_count": owned_hero_count,
             "max_owned_hero_power": max_owned_hero_power,

@@ -161,14 +161,49 @@ export default function BattleTab() {
 
       if (team?.formation?.length) {
         const ng: (any | null)[][] = [[null, null, null], [null, null, null], [null, null, null]];
-        team.formation.forEach((f: any) => {
+        // Pre-QA Stabilization 116A-EXT FIX-A — Truth on team source/slot:
+        // i team formati dallo starter flow (Pack 87) hanno `slot_index`
+        // (0,1,2,...) ma NON `x`/`y`. Il mapping vecchio `(f.x||0, f.y||0)`
+        // collassava tutti gli starter su grid[0][0] e ne visualizzava solo
+        // uno. Risolviamo con una assegnazione truthful:
+        //   1) se sono presenti x/y validi (1-based 1..9), usali (legacy);
+        //   2) altrimenti usa `slot_index` (0..8) e mappa a (col, row) via
+        //      Math.floor(slot_index/3), slot_index%3;
+        //   3) altrimenti incrementa un cursor sequenziale.
+        let cursor = 0;
+        team.formation.forEach((f: any, i: number) => {
           if (!f.user_hero_id) return;
           const h = uh.find((x: any) => x.id === f.user_hero_id);
           if (!h) return;
-          // Map x to column: x<=2 → 0 (Support), x<=5 → 1 (DPS), x<=8 → 2 (Tank)
-          const ci = (f.x || 0) <= 2 ? 0 : (f.x || 0) <= 5 ? 1 : 2;
-          const ri = (f.y || 0) <= 2 ? 0 : (f.y || 0) <= 5 ? 1 : 2;
-          if (!ng[ci][ri]) ng[ci][ri] = h;
+          let ci: number, ri: number;
+          if (typeof f.x === 'number' && typeof f.y === 'number' && (f.x > 0 || f.y > 0)) {
+            // Legacy 1-based grid (Pack pre-87).
+            ci = f.x <= 2 ? 0 : f.x <= 5 ? 1 : 2;
+            ri = f.y <= 2 ? 0 : f.y <= 5 ? 1 : 2;
+          } else if (typeof f.slot_index === 'number') {
+            const si = f.slot_index;
+            ci = Math.max(0, Math.min(2, Math.floor(si / 3)));
+            ri = Math.max(0, Math.min(2, si % 3));
+          } else {
+            ci = Math.max(0, Math.min(2, Math.floor(cursor / 3)));
+            ri = Math.max(0, Math.min(2, cursor % 3));
+            cursor++;
+          }
+          // Se la cella e' gia' occupata, scorri sequenzialmente fino a una
+          // libera (truth: mai sovrascrivere un eroe gia' piazzato).
+          if (ng[ci][ri]) {
+            let placed = false;
+            for (let cc = 0; cc < 3 && !placed; cc++) {
+              for (let rr = 0; rr < 3 && !placed; rr++) {
+                if (!ng[cc][rr]) {
+                  ng[cc][rr] = h;
+                  placed = true;
+                }
+              }
+            }
+          } else {
+            ng[ci][ri] = h;
+          }
         });
         setGrid(ng);
         // Pre-QA Stabilization 116A — il power NON viene piu' letto da

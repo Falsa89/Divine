@@ -171,6 +171,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_116a_ext_hero_card_power_and_bonus_source_map.py',
     },
+    # Pack 116A-EXT FIX-A — Team power source truth
+    {
+        'name': 'Validator 116A-EXT FIX-A Team Power Source Truth',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_116a_ext_fix_a_team_power_source_truth.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.
