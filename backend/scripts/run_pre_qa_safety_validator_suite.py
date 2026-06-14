@@ -177,6 +177,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_116a_ext_fix_a_team_power_source_truth.py',
     },
+    # Pack 116B — Chat/Bot quality + legacy chat cleanup
+    {
+        'name': 'Validator 116B Chat/Bot Quality + Legacy Chat Cleanup',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_116b_chat_bot_quality_and_legacy_chat_cleanup.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

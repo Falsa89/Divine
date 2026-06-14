@@ -16,6 +16,19 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { apiCall } from '../utils/api';
+import { isRouteAllowedInPreQa } from '../src/utils/preQaNavGuard';
+
+// Pre-QA Stabilization 116B — Hook-level fail-close per DM.
+// Anche se l'host surface NON e' un PreQaScreenGate, il hook deve rifiutare
+// ogni api call verso /api/dm/* finche' /dm e' gated. Defense-in-depth oltre
+// lo screen gate.
+function _dmPreQaBlocked(): boolean {
+  try {
+    return !isRouteAllowedInPreQa('/dm');
+  } catch (_e) {
+    return true;
+  }
+}
 
 export interface DMThread {
   id: string;
@@ -63,6 +76,9 @@ export function useDM(opts?: { pollingMs?: number }): UseDMResult {
   const reqIdRef = useRef(0);
 
   const refreshThreads = useCallback(async () => {
+    // Pre-QA Stabilization 116B — hook-level fail-close: se /dm e' gated,
+    // NESSUNA chiamata /api/dm/* viene effettuata (defense-in-depth).
+    if (_dmPreQaBlocked()) { setThreads([]); return; }
     setLoadingThreads(true);
     try {
       const r = await apiCall('/api/dm/threads');
@@ -83,6 +99,8 @@ export function useDM(opts?: { pollingMs?: number }): UseDMResult {
 
   // Load messages when active thread changes
   const refreshMessages = useCallback(async () => {
+    // Pre-QA Stabilization 116B — hook-level fail-close.
+    if (_dmPreQaBlocked()) { setActiveMessages([]); return; }
     const tid = activeThreadId;
     if (!tid) { setActiveMessages([]); return; }
     const myReq = ++reqIdRef.current;
@@ -104,6 +122,8 @@ export function useDM(opts?: { pollingMs?: number }): UseDMResult {
   }, [activeThreadId, refreshMessages]);
 
   const openWithUser = useCallback(async (peerUserId: string): Promise<string | null> => {
+    // Pre-QA Stabilization 116B — hook-level fail-close.
+    if (_dmPreQaBlocked()) return null;
     try {
       const r = await apiCall('/api/dm/threads', {
         method: 'POST',
@@ -122,6 +142,8 @@ export function useDM(opts?: { pollingMs?: number }): UseDMResult {
   }, [refreshThreads]);
 
   const sendMessage = useCallback(async (msg: string) => {
+    // Pre-QA Stabilization 116B — hook-level fail-close.
+    if (_dmPreQaBlocked()) return;
     if (!activeThreadId) return;
     try {
       await apiCall(`/api/dm/threads/${activeThreadId}/messages`, {
@@ -135,6 +157,8 @@ export function useDM(opts?: { pollingMs?: number }): UseDMResult {
   }, [activeThreadId, refreshMessages, refreshThreads]);
 
   const markRead = useCallback(async () => {
+    // Pre-QA Stabilization 116B — hook-level fail-close.
+    if (_dmPreQaBlocked()) return;
     if (!activeThreadId) return;
     try { await apiCall(`/api/dm/threads/${activeThreadId}/read`, { method: 'POST' }); } catch {}
   }, [activeThreadId]);

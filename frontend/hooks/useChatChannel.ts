@@ -25,6 +25,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { apiCall } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { isRouteAllowedInPreQa } from '../src/utils/preQaNavGuard';
+
+// Pre-QA Stabilization 116B — Hook-level fail-close. Anche se l'host
+// surface NON e' un PreQaScreenGate (es. un componente embedded), il hook
+// deve rifiutare api call verso /api/plaza/chat finche' /plaza e' gated.
+// Fail-closed: se in dubbio (eccezione/route inattesa), blocca.
+function _chatPreQaBlocked(): boolean {
+  try {
+    return !isRouteAllowedInPreQa('/plaza');
+  } catch (_e) {
+    return true;
+  }
+}
 
 export type ChannelKey = 'global' | 'system' | 'faction' | 'guild' | 'dm';
 
@@ -113,6 +126,13 @@ export function useChatChannel(opts?: UseChatChannelOptions): UseChatChannelResu
   const reqIdRef = useRef(0);
 
   const load = useCallback(async (ch: ChannelKey) => {
+    // Pre-QA Stabilization 116B — hook-level fail-close: se /plaza e' gated,
+    // NESSUNA chiamata `/api/plaza/chat` viene effettuata, indipendentemente
+    // dall'host surface (defense-in-depth oltre allo screen gate).
+    if (_chatPreQaBlocked()) {
+      setMessages([]);
+      return;
+    }
     // v16.20 — DM è un canale speciale gestito da DMPanel/useDM, non
     // dallo stream broadcast. Short-circuit: nessuna chiamata GET, nessun
     // setMessages → l'host surface saprà renderizzare <DMPanel/> al posto
@@ -149,6 +169,8 @@ export function useChatChannel(opts?: UseChatChannelOptions): UseChatChannelResu
   }, [enabled, pollingMs, active, load]);
 
   const send = useCallback(async (msg: string) => {
+    // Pre-QA Stabilization 116B — hook-level fail-close anche su SEND.
+    if (_chatPreQaBlocked()) return;
     if (!activeMeta?.available || activeMeta?.readonly) return;
     try {
       await apiCall('/api/plaza/chat', {

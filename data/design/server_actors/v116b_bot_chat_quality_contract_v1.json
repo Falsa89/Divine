@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "id": "v116b_bot_chat_quality_contract_v1",
+    "purpose": "Pre-QA Stabilization 116B — Contract qualita' bot chat (design-only). NESSUNA attivazione runtime: il contract enumera le invarianti che devono essere soddisfatte PRIMA che bot chat / DM bot possano essere abilitati live. Pack 116B NON attiva chat live, NON crea bot account, NON muta bot state.",
+    "scope": "design_only_pre_qa_locked",
+    "is_runtime": false,
+    "do_not_use_for_runtime_activation": true,
+    "non_authoritative_for_balance": true,
+    "supersedes_partial": [
+      "v97_contextual_bot_chat_policy_v1.json (parziale: estende le invarianti pre-QA)",
+      "v98_bot_chat_runtime_intent_classifier_v1.json (parziale: aggiunge constraint qualita')"
+    ],
+    "must_read_first": [
+      "docs/divine/97_CONTEXTUAL_BOT_CHAT.md",
+      "docs/divine/98_BOT_CHAT_RUNTIME_INTENT_CLASSIFIER.md",
+      "docs/divine/104_CHAT_SERVER_ISOLATION.md",
+      "data/design/v109_server_isolation/v109_chat_guild_gvg_rankings_isolation_v1.json",
+      "data/design/v109_server_isolation/v109_bot_server_actor_isolation_v1.json"
+    ]
+  },
+
+  "runtime_state": "design_only_pre_qa_locked",
+
+  "live_activation_flags": {
+    "bot_chat_live": false,
+    "dm_bot_live": false,
+    "plaza_chat_live": false,
+    "fake_users_presented_as_real": false
+  },
+
+  "forbidden_bot_behaviors": {
+    "manual_ultimate_advice_forbidden": true,
+    "real_iap_recommendation_forbidden": true,
+    "real_pii_forbidden": true,
+    "toxicity_forbidden": true,
+    "competing_game_ads_forbidden": true,
+    "out_of_context_response_forbidden": true,
+    "invented_kit_or_banner_or_event_claim_forbidden": true,
+    "pressure_to_spend_forbidden": true,
+    "pii_collection_forbidden": true,
+    "personal_political_religious_topics_forbidden": true,
+    "moderation_bypass_forbidden": true,
+    "impersonation_of_real_player_forbidden": true,
+    "pretending_to_be_admin_or_dev_forbidden": true
+  },
+
+  "forbidden_topics_examples": [
+    "ti consiglio di usare l'ultimate ora",
+    "tap manuale dell'ultimate ti fa vincere",
+    "compra il pacchetto premium ora",
+    "spendi soldi reali per X",
+    "dimmi il tuo numero di telefono",
+    "dammi il tuo indirizzo",
+    "qual e' la tua email vera",
+    "vai a giocare a <competitor game>",
+    "<competitor game> e' meglio",
+    "ho un drop top-tier che tu non hai",
+    "rate boostato segreto se fai X",
+    "evento esclusivo nascosto questa settimana"
+  ],
+
+  "required_safety_invariants_before_live": {
+    "server_scope_required": true,
+    "moderation_required_before_live": true,
+    "rate_limits_required_before_live": true,
+    "admin_kill_switch_required": true,
+    "audit_log_required_before_live": true,
+    "bot_isolation_required_before_live": true,
+    "fake_users_must_be_distinguishable_from_real_players": true,
+    "intent_classifier_must_be_versioned": true,
+    "fixture_dryrun_must_pass_quality_gates": true,
+    "min_human_review_pass_count": 1
+  },
+
+  "fixture_dryrun_quality_gates": {
+    "no_manual_ultimate_advice": true,
+    "no_iap_pressure": true,
+    "no_pii_request": true,
+    "no_toxicity": true,
+    "no_competing_game_ads": true,
+    "no_invented_claims": true,
+    "no_out_of_context_response": true,
+    "max_response_length_chars": 280,
+    "must_use_italian_when_user_uses_italian": true,
+    "must_indicate_bot_nature_in_admin_inspector": true
+  },
+
+  "ui_truth_requirements": {
+    "must_not_imply_chat_live_if_gated": true,
+    "must_not_imply_dm_live_if_gated": true,
+    "must_not_invite_to_talk_with_player_or_bot_while_locked": true,
+    "must_not_present_bot_as_real_player_in_lists": true,
+    "must_disclose_pre_qa_lock_state_to_player": true,
+    "preferred_copy_examples_it": [
+      "Chat in preparazione",
+      "Messaggi privati in preparazione",
+      "Richiede server scope e moderazione",
+      "Non disponibile in Pre-QA"
+    ],
+    "forbidden_copy_examples_it": [
+      "apri una chat privata in piazza o in chat (se la piazza/DM e' gated)",
+      "globale sempre disponibile (se non e' live)",
+      "parla con un bot (se bot chat e' locked)"
+    ]
+  },
+
+  "preserved_pre_qa_locks": {
+    "plaza_screen_gated_via_preqascreengate": true,
+    "dm_screen_gated_via_preqascreengate": true,
+    "chat_hook_must_fail_close_when_plaza_gated": true,
+    "dm_hook_must_fail_close_when_dm_gated": true,
+    "bot_startup_disabled_via_env_BOTS_DISABLED": true,
+    "no_account_wide_chat_endpoint_introduced": true
+  },
+
+  "stop_condition": "Pack 116B NON sblocca alcun attivazione live. Tutte le invarianti sopra DEVONO essere soddisfatte e Game Master deve esplicitamente ri-auditare prima che bot chat / DM bot possano essere considerati per live activation in Pack futuri (>= 117)."
+}
