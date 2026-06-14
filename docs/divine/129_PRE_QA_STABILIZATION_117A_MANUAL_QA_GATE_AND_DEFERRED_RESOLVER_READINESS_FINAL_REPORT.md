@@ -311,8 +311,7 @@ Sblocca badge actionable in /heroes senza nuovi endpoint backend.
 ## 11. Commit SHAs
 
 - **Baseline pre-117A:** `3b69c548d` (Auto-generated changes su master)
-- **Pack commit 117A:** (vedi git log dopo questo report; commit con verdetto
-  `PRE_QA_STABILIZATION_117A_MANUAL_QA_GATE_AND_DEFERRED_RESOLVER_READINESS_READY_FOR_GAME_MASTER_REAUDIT`)
+- **Pack commit 117A:** `890d8df2a` — verdetto `PRE_QA_STABILIZATION_117A_MANUAL_QA_GATE_AND_DEFERRED_RESOLVER_READINESS_READY_FOR_GAME_MASTER_REAUDIT` (6 file, +1381 inserzioni, 0 cancellazioni).
 
 ---
 
