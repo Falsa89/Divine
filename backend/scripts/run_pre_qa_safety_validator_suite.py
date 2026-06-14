@@ -189,6 +189,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_116c_red_dot_notification_badge_foundation.py',
     },
+    # Pack 117A — Manual QA gate + deferred resolver readiness (diagnostic)
+    {
+        'name': 'Validator 117A Manual QA Gate + Deferred Resolver Readiness',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_117a_manual_qa_gate_and_deferred_resolver_readiness.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

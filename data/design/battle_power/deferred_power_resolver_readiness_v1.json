@@ -1,0 +1,277 @@
+{
+  "_meta": {
+    "id": "deferred_power_resolver_readiness_v1",
+    "purpose": "Pre-QA Stabilization 117A — Classifica readiness dei deferred canonical Battle Power sources mappati in battle_power_bonus_source_map_v1. NON attiva alcuna sorgente, NON modifica la formula 116A.",
+    "pack_origin": "117A",
+    "scope": "design_only_read_only",
+    "is_runtime": false,
+    "do_not_use_for_runtime_resolution": true,
+    "non_authoritative_for_balance": true,
+    "battle_power_formula_version_invariant": "battle_power_v1_preqa_derived",
+    "source_map_ref": "data/design/battle_power/battle_power_bonus_source_map_v1.json",
+    "readiness_bands": [
+      "safe_read_only_resolver_candidate",
+      "design_ready_runtime_blocked",
+      "requires_backend_contract",
+      "requires_economy_or_balance_gate",
+      "requires_manual_design_confirmation",
+      "not_ready"
+    ],
+    "invariant_can_affect_battle_power_now": false
+  },
+
+  "deferred_resolvers": [
+    {
+      "source_id": "ascension",
+      "readiness_band": "requires_economy_or_balance_gate",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "118_ASCENSION_READ_ONLY_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Definizione cap massimo ascensione + curva moltiplicativa coerente con I_bp_delta_and_guide_tutorial_integration_v1",
+        "Decisione balance: additive vs multiplicative",
+        "Read-only resolver che legge user_heroes.ascension_level senza scrivere"
+      ],
+      "required_validator_checks": [
+        "resolver e' pure function (no DB writes)",
+        "server-scoped per_hero_per_server",
+        "battle_power formula_version invariata o bumpata esplicitamente da Game Master",
+        "BP delta entro cap dichiarato"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json", "data/design/hero_gear_progression_bible/I_bp_delta_and_guide_tutorial_integration_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Documentata in Bible B. Richiede gate balance prima di entrare in formula."
+    },
+    {
+      "source_id": "skill_upgrade_non_final_numbers",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "119_SKILL_TIER_LEVEL_READ_ONLY_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Vincolo Pack 115G: NON usare skill_package.*.final_numbers come final balance",
+        "Resolver per tier/level separato dai final_numbers",
+        "Tabella canonical bonus tier→delta_power"
+      ],
+      "required_validator_checks": [
+        "no usage di skill_package.*.final_numbers per power",
+        "resolver letture-only su tier/level",
+        "BP delta cap"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Vincolato dal cleanup semantico 115G."
+    },
+    {
+      "source_id": "hero_elevation_quality_frame",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "120_QUALITY_FRAME_READ_ONLY_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Tabella canonical R/SR/SSR/UR + custom → moltiplicatore",
+        "Mapping user_heroes → quality_frame_level"
+      ],
+      "required_validator_checks": [
+        "resolver pure function",
+        "no DB writes",
+        "BP delta cap"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Pulito read-only se Bible disponibile."
+    },
+    {
+      "source_id": "constellations",
+      "readiness_band": "requires_backend_contract",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "121_CONSTELLATIONS_CANONICAL_ENDPOINT_REINTRO",
+      "blocking_requirements": [
+        "Reintroduzione endpoint canonical (legacy GET /api/constellations neutralizzato 115G → HTTP 423)",
+        "Contract read-only nuovo prima di power resolver"
+      ],
+      "required_validator_checks": [
+        "nessuna mutazione su artifacts.py",
+        "legacy 423 preservato fino a nuovo endpoint",
+        "BP delta cap"
+      ],
+      "source_refs": ["backend/routes/artifacts.py"],
+      "mutation_risk": "none_read_only_after_endpoint",
+      "notes": "Bloccato finche' non esiste endpoint canonical sostitutivo."
+    },
+    {
+      "source_id": "reincarnation",
+      "readiness_band": "requires_economy_or_balance_gate",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "122_REINCARNATION_BALANCE_GATE_PROBE",
+      "blocking_requirements": [
+        "boosted_stats potrebbe gonfiare power senza balance final",
+        "Decisione cap reincarnation",
+        "Resolver read-only su is_reincarnated + boosted_stats"
+      ],
+      "required_validator_checks": [
+        "resolver pure function",
+        "cap dichiarato e applicato",
+        "no DB writes"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Endgame loop. Pericoloso senza balance gate."
+    },
+    {
+      "source_id": "gear_level",
+      "readiness_band": "requires_backend_contract",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "123_GEAR_INVENTORY_READ_ONLY_CONTRACT",
+      "blocking_requirements": [
+        "Inventario gear server-scoped read-only (8 tier + level)",
+        "Endpoint canonical /api/gear-inventory (TBD)"
+      ],
+      "required_validator_checks": [
+        "no scrittura inventory",
+        "server-scoped per_hero_per_server",
+        "BP delta cap per tier"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/D_gear_progression_bible_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Pre-requisito per Pack 124 (gear_quality_fusion)."
+    },
+    {
+      "source_id": "gear_quality_fusion",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "124_GEAR_QUALITY_FUSION_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Pre-requisito Pack 123 (gear inventory contract)",
+        "Multiplier per quality tier definito in Bible D"
+      ],
+      "required_validator_checks": [
+        "resolver pure function",
+        "BP delta cap quality"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/D_gear_progression_bible_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Dipende da gear inventory contract."
+    },
+    {
+      "source_id": "gem_socket",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "125_GEM_SOCKET_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Pre-requisito gear inventory contract",
+        "Mapping gem rarity → stat bonus"
+      ],
+      "required_validator_checks": [
+        "resolver pure function",
+        "BP delta cap socket"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/E_gem_socket_system_bible_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Bible E completo."
+    },
+    {
+      "source_id": "rune_equip",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "126_RUNE_SCROLL_TALISMAN_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Inventario rune server-scoped",
+        "Tabella canonical rune set bonus"
+      ],
+      "required_validator_checks": [
+        "resolver pure function",
+        "set bonus capped"
+      ],
+      "source_refs": ["data/design/hero_gear_progression_bible/F_rune_scroll_talisman_system_bible_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Bible F completo."
+    },
+    {
+      "source_id": "artifact_global",
+      "readiness_band": "requires_backend_contract",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "127_ARTIFACT_GLOBAL_CANONICAL_ENDPOINT_REINTRO",
+      "blocking_requirements": [
+        "Legacy GET /api/artifacts neutralizzato 115G",
+        "Endpoint canonical artifact-global read-only",
+        "player-global scope (NON per-hero)"
+      ],
+      "required_validator_checks": [
+        "scope=per_player_per_server, NOT per-hero",
+        "BP delta cap",
+        "legacy 423 preservato fino a nuovo endpoint"
+      ],
+      "source_refs": ["data/design/artifacts/artifact_system_direction_v1.json", "data/design/hero_gear_progression_bible/G_artifact_divine_weapon_separation_rules_v1.json"],
+      "mutation_risk": "none_read_only_after_endpoint",
+      "notes": "Separazione Bible G: artifacts != divine weapons."
+    },
+    {
+      "source_id": "divine_weapon",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "128_DIVINE_WEAPON_PER_HERO_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Catalog statico divine weapons già presente",
+        "Resolver per-hero (NO player-global buff)",
+        "Mapping user_heroes → divine_weapon_id equipped"
+      ],
+      "required_validator_checks": [
+        "scope=per_hero_per_server",
+        "no player-global buff",
+        "BP delta cap"
+      ],
+      "source_refs": ["data/design/divine_weapons/divine_weapons_catalog_v1.json", "data/design/hero_gear_progression_bible/G_artifact_divine_weapon_separation_rules_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Catalog gia' pronto; manca solo resolver per-hero."
+    },
+    {
+      "source_id": "team_synergy",
+      "readiness_band": "requires_economy_or_balance_gate",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "129_TEAM_SYNERGY_BP_DELTA_GATE",
+      "blocking_requirements": [
+        "Decisione design: synergy in BP o solo combat?",
+        "Balance pass team-completo",
+        "Resolver letture team formation + element/class"
+      ],
+      "required_validator_checks": [
+        "resolver pure function",
+        "team-completo (no parziale)",
+        "BP delta cap synergy"
+      ],
+      "source_refs": ["data/design/team_synergies_v2_initial_10.json", "backend/utils/team_synergy_v2_calculator.py"],
+      "mutation_risk": "none_read_only",
+      "notes": "Calcolatore esistente ma NON collegato a BP."
+    },
+    {
+      "source_id": "cosmetics_skins_titles_capped",
+      "readiness_band": "requires_manual_design_confirmation",
+      "can_affect_battle_power_now": false,
+      "recommended_pack": "130_COSMETIC_CAPPED_BONUS_RESOLVER_PROBE",
+      "blocking_requirements": [
+        "Conferma policy no-pay-to-win + cap esplicito",
+        "Mapping skin/title.gives_power_bonus → delta",
+        "Cap aggregato cosmetici"
+      ],
+      "required_validator_checks": [
+        "skin/title display_only never contribute",
+        "cap aggregato applicato",
+        "BP delta cap cosmetico"
+      ],
+      "source_refs": ["data/design/cosmetics/cosmetic_power_cap_policy_v1.json", "data/design/cosmetics/cosmetic_rarity_bonus_table_v1.json"],
+      "mutation_risk": "none_read_only",
+      "notes": "Solo skin/title con flag gives_power_bonus=true."
+    }
+  ],
+
+  "summary_by_band": {
+    "safe_read_only_resolver_candidate": 0,
+    "design_ready_runtime_blocked": 5,
+    "requires_backend_contract": 3,
+    "requires_economy_or_balance_gate": 3,
+    "requires_manual_design_confirmation": 1,
+    "not_ready": 0,
+    "total": 13
+  },
+
+  "recommended_next_pack": "120_QUALITY_FRAME_READ_ONLY_RESOLVER_PROBE",
+  "recommended_next_pack_rationale": "Tra i deferred, quality_frame e' design_ready_runtime_blocked con minore dipendenza da contract backend (read da Bible B + mapping diretto user_heroes). Avvio conservativo prima dei gear-inventory packs."
+}

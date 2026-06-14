@@ -1,0 +1,230 @@
+{
+  "_meta": {
+    "id": "deferred_red_dot_resolver_readiness_v1",
+    "purpose": "Pre-QA Stabilization 117A — Classifica readiness dei deferred/future Red Dot sources mappati in red_dot_notification_badge_source_map_v1. NON attiva alcuna sorgente actionable oltre quelle gia' attive in 116C.",
+    "pack_origin": "117A",
+    "scope": "design_only_read_only",
+    "is_runtime": false,
+    "do_not_use_for_runtime_resolution": true,
+    "red_dot_summary_version_invariant": "red_dot_v1_preqa_read_only_foundation",
+    "source_map_ref": "data/design/red_dot/red_dot_notification_badge_source_map_v1.json",
+    "readiness_bands": [
+      "safe_read_only_resolver_candidate",
+      "design_ready_runtime_blocked",
+      "requires_backend_contract",
+      "requires_economy_or_balance_gate",
+      "requires_manual_design_confirmation",
+      "not_ready"
+    ],
+    "invariant_can_show_actionable_dot_now_for_deferred": false
+  },
+
+  "deferred_resolvers": [
+    {
+      "source_id": "mail_unread",
+      "readiness_band": "requires_backend_contract",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "131_MAIL_UNREAD_COUNT_READ_ONLY_ENDPOINT",
+      "blocking_requirements": [
+        "Endpoint COUNT-only mail unread (no /read-all, no mark-read)",
+        "Cap policy '99+' rispettato"
+      ],
+      "mutation_risk": "high_if_endpoint_marks_read",
+      "source_refs": ["backend/routes/mail_claim_safety_preview.py", "docs/divine/110_MAIL_ACHIEVEMENTS_DAILY_WEEKLY_CONTROLLED_REWARDS_SOT.md"],
+      "notes": "Anti read-all assoluto."
+    },
+    {
+      "source_id": "daily_login_claimable",
+      "readiness_band": "requires_backend_contract",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "132_DAILY_LOGIN_CAN_CLAIM_QUERY_READ_ONLY",
+      "blocking_requirements": [
+        "Query can-claim read-only (no mutation)",
+        "Server-scoped per_player_per_server"
+      ],
+      "mutation_risk": "high_if_query_marks_claimed",
+      "source_refs": ["backend/routes/daily_login_claim.py", "docs/divine/117_DAILY_LOGIN_CLAIM_SOT.md"],
+      "notes": "Binary dot only."
+    },
+    {
+      "source_id": "daily_quest_claimable",
+      "readiness_band": "requires_backend_contract",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "133_DAILY_QUEST_CAN_CLAIM_QUERY_READ_ONLY",
+      "blocking_requirements": [
+        "Query can-claim count-only",
+        "No /claim activation"
+      ],
+      "mutation_risk": "high_if_query_marks_claimed",
+      "source_refs": ["backend/routes/daily_quest_claim.py", "backend/routes/daily_quest_tracker.py"],
+      "notes": "Cap '9+'."
+    },
+    {
+      "source_id": "achievements_claimable",
+      "readiness_band": "requires_backend_contract",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "134_ACHIEVEMENTS_CAN_CLAIM_QUERY_READ_ONLY",
+      "blocking_requirements": [
+        "Query can-claim count-only",
+        "Cap '99+'"
+      ],
+      "mutation_risk": "medium",
+      "source_refs": ["backend/routes/achievements.py"],
+      "notes": "Deferred."
+    },
+    {
+      "source_id": "battle_pass_claimable",
+      "readiness_band": "requires_economy_or_balance_gate",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "135_BATTLE_PASS_CAN_CLAIM_QUERY_READ_ONLY",
+      "blocking_requirements": [
+        "Battle Pass economy gate",
+        "Query can-claim read-only"
+      ],
+      "mutation_risk": "high_if_query_marks_claimed",
+      "source_refs": ["backend/routes/battle_pass_claim_safety_preview.py"],
+      "notes": "Cap '9+'."
+    },
+    {
+      "source_id": "events_active_claimable",
+      "readiness_band": "not_ready",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "136_EVENTS_ACTIVE_DESIGN_CONFIRMATION",
+      "blocking_requirements": [
+        "Eventi non live in pre-QA",
+        "Manca design SoT eventi pre-QA"
+      ],
+      "mutation_risk": "unknown",
+      "source_refs": [],
+      "notes": "Bloccato design-side."
+    },
+    {
+      "source_id": "shop_free_claim",
+      "readiness_band": "requires_economy_or_balance_gate",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "137_SHOP_FREE_CLAIM_DESIGN_GATE",
+      "blocking_requirements": [
+        "Shop non live pre-QA",
+        "Definizione free-claim policy"
+      ],
+      "mutation_risk": "high_if_buy_activated",
+      "source_refs": ["frontend/app/shop.tsx", "frontend/app/item-shop.tsx"],
+      "notes": "Shop gated. No buy."
+    },
+    {
+      "source_id": "gacha_free_summon_or_ticket",
+      "readiness_band": "not_ready",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "138_GACHA_FREE_SUMMON_GATE",
+      "blocking_requirements": [
+        "Gacha gated 115A",
+        "Conferma rates non in scope 117"
+      ],
+      "mutation_risk": "high_if_summon_activated",
+      "source_refs": [],
+      "notes": "No gacha rates change."
+    },
+    {
+      "source_id": "hero_upgrade_available",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "139_HERO_UPGRADE_CAN_UPGRADE_QUERY_READ_ONLY",
+      "blocking_requirements": [
+        "Resolver can-upgrade read-only su user_heroes (no DB writes)",
+        "Mapping bonus/cost dal source map BP"
+      ],
+      "mutation_risk": "low_if_pure_read",
+      "source_refs": ["backend/routes/heroes.py", "backend/routes/hero_progression.py", "data/design/battle_power/battle_power_bonus_source_map_v1.json"],
+      "notes": "Pre-requisito per badge actionable."
+    },
+    {
+      "source_id": "gear_rune_artifact_divine_alert",
+      "readiness_band": "design_ready_runtime_blocked",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "140_GEAR_PROGRESSION_ALERTS_AFTER_BP_RESOLVERS",
+      "blocking_requirements": [
+        "Dipende da deferred_power_resolver_readiness Pack 123-128",
+        "Aggregato dot dopo resolver BP attivi"
+      ],
+      "mutation_risk": "low_if_pure_read",
+      "source_refs": ["data/design/battle_power/battle_power_bonus_source_map_v1.json"],
+      "notes": "Dipende dai resolver Battle Power."
+    },
+    {
+      "source_id": "guild_messages_or_war",
+      "readiness_band": "not_ready",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "141_GUILD_ISOLATION_PACK",
+      "blocking_requirements": [
+        "Guild isolation pack non ancora pianificato"
+      ],
+      "mutation_risk": "unknown",
+      "source_refs": [],
+      "notes": "Future."
+    },
+    {
+      "source_id": "chat_pre_qa_locked",
+      "readiness_band": "not_ready",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "N/A_locked_by_pack_116b",
+      "blocking_requirements": [
+        "Chat live activation gate (Pack 116B preservato)",
+        "Bot quality contract live_ready=false"
+      ],
+      "mutation_risk": "high_if_chat_live_activated",
+      "source_refs": ["data/design/server_actors/v116b_bot_chat_quality_contract_v1.json"],
+      "notes": "Mai dot actionable mentre chat e' locked."
+    },
+    {
+      "source_id": "dm_pre_qa_locked",
+      "readiness_band": "not_ready",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "N/A_locked_by_pack_116b",
+      "blocking_requirements": [
+        "DM live activation gate"
+      ],
+      "mutation_risk": "high_if_dm_live_activated",
+      "source_refs": ["data/design/server_actors/v116b_bot_chat_quality_contract_v1.json"],
+      "notes": "Mai dot actionable mentre DM e' locked."
+    },
+    {
+      "source_id": "vip_or_subscription_alert",
+      "readiness_band": "requires_manual_design_confirmation",
+      "can_show_actionable_dot_now": false,
+      "recommended_pack": "142_VIP_SUBSCRIPTION_DESIGN_CONFIRMATION",
+      "blocking_requirements": [
+        "Conferma Game Master / Character Bible su esistenza VIP",
+        "Definizione policy actionable"
+      ],
+      "mutation_risk": "unknown",
+      "source_refs": [],
+      "notes": "Unknown nel source map 116C."
+    }
+  ],
+
+  "active_safe_warnings_preserved_from_116c": [
+    {
+      "source_id": "server_profile_required",
+      "status": "active_safe_read_only_warning",
+      "notes": "Gia' attiva in 116C. Read-only. Nessuna azione automatica."
+    },
+    {
+      "source_id": "team_missing_warning",
+      "status": "active_safe_read_only_warning",
+      "notes": "Gia' attiva in 116C. Derivata da team_formation list. Read-only."
+    }
+  ],
+
+  "summary_by_band": {
+    "safe_read_only_resolver_candidate": 0,
+    "design_ready_runtime_blocked": 2,
+    "requires_backend_contract": 4,
+    "requires_economy_or_balance_gate": 2,
+    "requires_manual_design_confirmation": 1,
+    "not_ready": 5,
+    "total": 14
+  },
+
+  "recommended_next_pack": "139_HERO_UPGRADE_CAN_UPGRADE_QUERY_READ_ONLY",
+  "recommended_next_pack_rationale": "hero_upgrade_available e' design_ready_runtime_blocked con basso mutation_risk (pure read su user_heroes). Avvio conservativo. Mail/daily/achievements/battlepass richiedono nuovi endpoint backend canonical (Pack 131-135)."
+}
