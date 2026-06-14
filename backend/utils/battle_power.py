@@ -46,8 +46,44 @@ BATTLE_POWER_REWARD_AUTHORITATIVE = False
 BATTLE_POWER_BALANCE_FINAL = False
 BATTLE_POWER_SERVER_SCOPED = True
 
-# Campi sorgenti esplicitamente esclusi da 116A (dichiarati nell'output
-# dell'endpoint cosi' il client/QA lo vede chiaramente).
+# ----------------------------------------------------------------------------
+# Pack 116A-EXT — Source classification (semantic clarity, NO numerical change)
+# ----------------------------------------------------------------------------
+# Le tre categorie sotto NON cambiano la formula numerica 116A. Servono SOLO a
+# chiarire al cliente/QA quali sorgenti contribuiscono ORA e quali sono
+# canoniche-ma-differite. Ground truth e' in:
+#   data/design/battle_power/battle_power_bonus_source_map_v1.json
+# Le bonus deferred richiedono resolver runtime-safe (Pack 117+) prima di
+# essere attivati.
+BATTLE_POWER_ACTIVE_POWER_SOURCES_NOW = (
+    "hero_base_stats",
+    "hero_level",
+    "hero_rarity_native",
+    "hero_stars_user",
+)
+BATTLE_POWER_DEFERRED_CANONICAL_POWER_SOURCES = (
+    "ascension",
+    "skill_upgrade_non_final_numbers",
+    "hero_elevation_quality_frame",
+    "constellations",
+    "reincarnation",
+    "gear_level",
+    "gear_quality_fusion",
+    "gem_socket",
+    "rune_equip",
+    "artifact_global",
+    "divine_weapon",
+    "team_synergy",
+    "cosmetics_skins_titles_capped",
+)
+
+# Campi sorgenti esplicitamente NON inclusi nella FORMULA CORRENTE 116A.
+# **IMPORTANTE**: "excluded_from_current_formula_only" NON significa "esclusi
+# per sempre". Significa "non applicati nel calcolo della formula 116A perche'
+# non hanno ancora un resolver runtime-safe". Le sorgenti canoniche differite
+# sono documentate nella source map.
+# Preservato il nome legacy `BATTLE_POWER_EXCLUDED_SOURCES` per compatibilita'
+# con il validator 116A (Pack 116A).
 BATTLE_POWER_EXCLUDED_SOURCES = (
     "artifacts",
     "divine_weapons",
@@ -63,6 +99,15 @@ BATTLE_POWER_EXCLUDED_SOURCES = (
     "server_bonuses",
     "affinity_bonuses",
     "sanctuary_bonuses",
+)
+# Nuovo alias semantico canonico (Pack 116A-EXT). Stesso contenuto di
+# BATTLE_POWER_EXCLUDED_SOURCES ma con naming che riflette la verita': "esclusi
+# dalla formula CORRENTE", non "esclusi per sempre".
+BATTLE_POWER_EXCLUDED_FROM_CURRENT_FORMULA_ONLY = BATTLE_POWER_EXCLUDED_SOURCES
+
+# Path della source map per audit/Game Master review.
+BATTLE_POWER_BONUS_SOURCE_MAP_PATH = (
+    "data/design/battle_power/battle_power_bonus_source_map_v1.json"
 )
 
 # Campi base eroe utilizzati (dichiarati per audit).
@@ -186,6 +231,12 @@ def build_battle_power_metadata() -> dict:
         "reward_authoritative": BATTLE_POWER_REWARD_AUTHORITATIVE,
         "balance_final": BATTLE_POWER_BALANCE_FINAL,
         "server_scoped": BATTLE_POWER_SERVER_SCOPED,
+        # ---- Pack 116A-EXT — categorizzazione semantica ----
+        "active_power_sources_now": list(BATTLE_POWER_ACTIVE_POWER_SOURCES_NOW),
+        "deferred_canonical_power_sources": list(BATTLE_POWER_DEFERRED_CANONICAL_POWER_SOURCES),
+        "excluded_from_current_formula_only": list(BATTLE_POWER_EXCLUDED_FROM_CURRENT_FORMULA_ONLY),
+        "bonus_source_map_path": BATTLE_POWER_BONUS_SOURCE_MAP_PATH,
+        # ---- Pack 116A legacy fields (preserved for backward compat) ----
         "excluded_power_sources": list(BATTLE_POWER_EXCLUDED_SOURCES),
         "included_hero_fields": list(BATTLE_POWER_INCLUDED_HERO_FIELDS),
         "included_user_hero_fields": list(BATTLE_POWER_INCLUDED_USER_HERO_FIELDS),

@@ -1,0 +1,404 @@
+{
+  "_meta": {
+    "id": "battle_power_bonus_source_map_v1",
+    "purpose": "Pre-QA Stabilization 116A-EXT — Source-of-truth map per Battle Power. Documenta quali sorgenti contribuiscono al Battle Power AL MOMENTO (formula 116A) e quali sono sorgenti canoniche differite in attesa di resolver runtime-safe.",
+    "scope": "design_only_read_only",
+    "is_runtime": false,
+    "battle_power_formula_version": "battle_power_v1_preqa_derived",
+    "do_not_use_for_runtime_resolution": true,
+    "non_authoritative_for_balance": true,
+    "categories_explained": {
+      "active_power_sources_now": "Sorgente attualmente inclusa nel calcolo numerico della formula 116A (vedi backend/utils/battle_power.py).",
+      "deferred_canonical_power_sources": "Sorgente canonica gia' definita nelle Bible: contribuira' a Battle Power, ma NON e' attiva nella formula corrente; richiede un resolver runtime-safe in pack futuri (Pack 117+).",
+      "non_power_or_display_only_sources": "Sorgente esplicitamente display-only o non destinata a Battle Power (cosmetic puro, etc.).",
+      "unknown_requires_source_confirmation": "Sorgente menzionata in passato ma non confermata da Bible attuali: richiede chiarimento Game Master."
+    }
+  },
+
+  "active_power_sources_now": [
+    {
+      "source_id": "hero_base_stats",
+      "display_name_it": "Statistiche base eroe",
+      "category": "hero_intrinsic",
+      "scope": "per_hero",
+      "battle_power_role": "primary_additive_base",
+      "runtime_state": "active_in_formula_116a",
+      "source_refs": [
+        "data/design/hero_stats_schema.json"
+      ],
+      "active_in_formula_116a_ext": true,
+      "requires_future_resolver": false,
+      "may_affect": ["hp", "physical_damage", "magic_damage", "physical_defense", "magic_defense", "speed", "healing"],
+      "notes": "Letti da hero.base_stats: hp/10 + phys_damage + magic_damage + phys_defense + magic_defense + speed + healing/2. Determina la base power dell'eroe."
+    },
+    {
+      "source_id": "hero_level",
+      "display_name_it": "Livello eroe",
+      "category": "hero_progression_base",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "multiplicative_5pct_per_level",
+      "runtime_state": "active_in_formula_116a",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": true,
+      "requires_future_resolver": false,
+      "may_affect": ["power"],
+      "notes": "Moltiplicatore (1 + (level-1)*0.05). Server-scoped via user_heroes.level."
+    },
+    {
+      "source_id": "hero_rarity_native",
+      "display_name_it": "Rarita' nativa eroe",
+      "category": "hero_intrinsic",
+      "scope": "per_hero_catalog",
+      "battle_power_role": "multiplicative_20pct_per_rarity",
+      "runtime_state": "active_in_formula_116a",
+      "source_refs": [
+        "data/design/hero_stats_schema.json"
+      ],
+      "active_in_formula_116a_ext": true,
+      "requires_future_resolver": false,
+      "may_affect": ["power"],
+      "notes": "Moltiplicatore (1 + rarity*0.2). Rarity nativa del catalogo, non quella user-promossa."
+    },
+    {
+      "source_id": "hero_stars_user",
+      "display_name_it": "Stelle utente (server-scoped)",
+      "category": "hero_progression_base",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "additive_star_bonus_capped",
+      "runtime_state": "active_in_formula_116a",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json",
+        "data/design/hero_gear_progression_bible/I_bp_delta_and_guide_tutorial_integration_v1.json"
+      ],
+      "active_in_formula_116a_ext": true,
+      "requires_future_resolver": false,
+      "may_affect": ["power"],
+      "notes": "Bonus +3% per stella OLTRE la rarity nativa, capped a +15% (foundation only, no balance final)."
+    }
+  ],
+
+  "deferred_canonical_power_sources": [
+    {
+      "source_id": "ascension",
+      "display_name_it": "Ascensione",
+      "category": "hero_progression_advanced",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_additive_or_multiplicative_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json",
+        "data/design/hero_gear_progression_bible/I_bp_delta_and_guide_tutorial_integration_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["hp", "physical_damage", "magic_damage", "physical_defense", "magic_defense", "power"],
+      "notes": "Documentata in Bible B (progression layer). NON attiva in 116A. Richiede resolver runtime-safe e cap chiari (Pack 117+)."
+    },
+    {
+      "source_id": "skill_upgrade_non_final_numbers",
+      "display_name_it": "Upgrade skill (no final_numbers)",
+      "category": "skill_progression",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_skill_tier_or_level_bonus_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["power"],
+      "notes": "Upgrade skill (tier/level), MA non usare `skill_package.*.final_numbers` come final balance (vincolo Pack 115G). final_numbers e' foundation_draft preview-only. Richiede resolver tier separato."
+    },
+    {
+      "source_id": "hero_elevation_quality_frame",
+      "display_name_it": "Elevazione / Quality Frame",
+      "category": "hero_progression_advanced",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_quality_frame_multiplier_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["power"],
+      "notes": "Quality frame (R/SR/SSR/UR + custom) → moltiplicatore base. Richiede resolver runtime."
+    },
+    {
+      "source_id": "constellations",
+      "display_name_it": "Costellazioni",
+      "category": "team_progression",
+      "scope": "per_team_per_server",
+      "battle_power_role": "deferred_equipped_constellation_buff_resolver_required",
+      "runtime_state": "deferred_legacy_locked",
+      "source_refs": [
+        "backend/routes/artifacts.py"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["hp", "physical_damage", "magic_damage", "power"],
+      "notes": "Legacy GET `/api/constellations` neutralizzato in Pack 115G (HTTP 423). Costellazione equipped + livello → buff team. Richiede resolver runtime-safe + reintroduzione canonical endpoint."
+    },
+    {
+      "source_id": "reincarnation",
+      "display_name_it": "Reincarnazione",
+      "category": "hero_progression_endgame",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_boosted_stats_multiplier_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet_for_power",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/B_hero_progression_layer_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["power"],
+      "notes": "user_hero.boosted_stats e is_reincarnated esistono ma NON entrano nella formula 116A (potrebbero gonfiare power senza balance final). Richiede resolver canonical pre-QA-safe."
+    },
+    {
+      "source_id": "gear_level",
+      "display_name_it": "Livello gear (T1-T8)",
+      "category": "gear_progression",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_gear_tier_level_stat_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/D_gear_progression_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["hp", "physical_damage", "magic_damage", "physical_defense", "magic_defense", "power"],
+      "notes": "Bible D: 8 tier + level. NON attivo ora. Richiede inventario gear server-scoped read-only-safe."
+    },
+    {
+      "source_id": "gear_quality_fusion",
+      "display_name_it": "Fusione qualita' gear",
+      "category": "gear_progression_advanced",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_gear_quality_multiplier_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/D_gear_progression_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["power"],
+      "notes": "Quality tier dal D Bible. Multiplier su stats gear. Deferred."
+    },
+    {
+      "source_id": "gem_socket",
+      "display_name_it": "Sockets gemma",
+      "category": "gear_socket_system",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_gem_socket_stat_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/E_gem_socket_system_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["hp", "physical_damage", "magic_damage", "physical_defense", "magic_defense", "power"],
+      "notes": "Bible E. Gem socket level + gem rarity. Deferred."
+    },
+    {
+      "source_id": "rune_equip",
+      "display_name_it": "Rune / Scroll / Talisman",
+      "category": "gear_rune_system",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_rune_set_bonus_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/hero_gear_progression_bible/F_rune_scroll_talisman_system_bible_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["power"],
+      "notes": "Bible F: set bonus + livello rune. Deferred."
+    },
+    {
+      "source_id": "artifact_global",
+      "display_name_it": "Artefatti (global player buff)",
+      "category": "artifact_system",
+      "scope": "per_player_per_server",
+      "battle_power_role": "deferred_global_player_artifact_buff_resolver_required",
+      "runtime_state": "deferred_legacy_locked_post_pack_115g",
+      "source_refs": [
+        "data/design/artifacts/artifact_system_direction_v1.json",
+        "data/design/artifacts/artifact_bible_schema_v1.json",
+        "data/design/artifacts/artifact_bible_launch_draft_v1.json",
+        "data/design/hero_gear_progression_bible/G_artifact_divine_weapon_separation_rules_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["hp", "physical_damage", "magic_damage", "physical_defense", "magic_defense", "power"],
+      "notes": "Bible G: artifacts sono player-global (NON per-hero). Legacy GET neutralizzato in Pack 115G (HTTP 423). Richiede resolver canonical + reintroduzione runtime-safe."
+    },
+    {
+      "source_id": "divine_weapon",
+      "display_name_it": "Armi divine (per-hero, no buff globale)",
+      "category": "divine_weapon_system",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "deferred_divine_weapon_per_hero_stat_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/divine_weapons/divine_weapon_requirements_v1.json",
+        "data/design/divine_weapons/divine_weapon_schema_v1.json",
+        "data/design/divine_weapons/divine_weapons_catalog_v1.json",
+        "data/design/hero_gear_progression_bible/G_artifact_divine_weapon_separation_rules_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["physical_damage", "magic_damage", "power"],
+      "notes": "Bible G: divine weapons sono per-hero (per ID eroe). Catalog statico, NESSUN buff player-global. Deferred."
+    },
+    {
+      "source_id": "team_synergy",
+      "display_name_it": "Sinergie team",
+      "category": "team_synergy_system",
+      "scope": "per_team_per_server",
+      "battle_power_role": "deferred_team_synergy_buff_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet_for_battle_power",
+      "source_refs": [
+        "data/design/team_synergies_v2_initial_10.json",
+        "data/design/synergy_codex_ui_requirements.json",
+        "backend/utils/team_synergy_v2_calculator.py",
+        "backend/synergy_system.py"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["power"],
+      "notes": "Sinergie attive solo a livello combat/balance, NON attive in 116A perche' richiedono valutazione team-completo + balance pass."
+    },
+    {
+      "source_id": "cosmetics_skins_titles_capped",
+      "display_name_it": "Cosmetici / Skin / Titoli (cappati)",
+      "category": "cosmetic_progression",
+      "scope": "per_player_per_server",
+      "battle_power_role": "deferred_capped_cosmetic_bonus_resolver_required",
+      "runtime_state": "deferred_no_resolver_yet",
+      "source_refs": [
+        "data/design/cosmetics/cosmetic_system_policy_v1.json",
+        "data/design/cosmetics/cosmetic_bonus_schema_v1.json",
+        "data/design/cosmetics/cosmetic_power_cap_policy_v1.json",
+        "data/design/cosmetics/cosmetic_rarity_bonus_table_v1.json",
+        "data/design/cosmetics/title_catalog_schema_v1.json",
+        "data/design/cosmetics/skin_catalog_schema_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": ["power"],
+      "notes": "Bible cosmetics: skin/titoli possono dare piccoli bonus CAPPATI (no pay-to-win). Solo display NON-power skins NON contribuiscono. Deferred."
+    }
+  ],
+
+  "non_power_or_display_only_sources": [
+    {
+      "source_id": "skin_pure_display",
+      "display_name_it": "Skin puramente display",
+      "category": "cosmetic_pure_visual",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "none_display_only",
+      "runtime_state": "display_only",
+      "source_refs": [
+        "data/design/cosmetics/cosmetic_system_policy_v1.json",
+        "data/design/cosmetics/skin_catalog_schema_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": false,
+      "may_affect": [],
+      "notes": "Skin con `gives_power_bonus=false` per policy: solo aspetto visivo, mai contribuisce a Battle Power."
+    },
+    {
+      "source_id": "title_decorative_only",
+      "display_name_it": "Titolo decorativo",
+      "category": "cosmetic_pure_text",
+      "scope": "per_player",
+      "battle_power_role": "none_display_only",
+      "runtime_state": "display_only",
+      "source_refs": [
+        "data/design/cosmetics/title_catalog_schema_v1.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": false,
+      "may_affect": [],
+      "notes": "Titoli con `gives_power_bonus=false` per policy: solo decorativi."
+    },
+    {
+      "source_id": "hero_class",
+      "display_name_it": "Classe eroe (DPS/Tank/Support)",
+      "category": "hero_taxonomy",
+      "scope": "per_hero_catalog",
+      "battle_power_role": "none_taxonomy_only",
+      "runtime_state": "display_only",
+      "source_refs": [
+        "data/design/hero_stats_schema.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": false,
+      "may_affect": [],
+      "notes": "Classe usata per filtri/sort, non per modificare Battle Power."
+    },
+    {
+      "source_id": "hero_element",
+      "display_name_it": "Elemento eroe",
+      "category": "hero_taxonomy",
+      "scope": "per_hero_catalog",
+      "battle_power_role": "none_taxonomy_for_filter_and_synergy_input_only",
+      "runtime_state": "input_for_deferred_team_synergy",
+      "source_refs": [
+        "data/design/hero_stats_schema.json",
+        "data/design/team_synergies_v2_initial_10.json"
+      ],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": false,
+      "may_affect": [],
+      "notes": "Elemento e' input per team_synergy (deferred), ma di per se' non aggiunge power diretto."
+    }
+  ],
+
+  "unknown_requires_source_confirmation": [
+    {
+      "source_id": "guild_or_server_bonus",
+      "display_name_it": "Bonus gilda / server (PvE)",
+      "category": "social_progression",
+      "scope": "per_player_per_server",
+      "battle_power_role": "unknown_pending_bible",
+      "runtime_state": "unknown_no_bible_yet",
+      "source_refs": [],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": [],
+      "notes": "Non c'e' Bible canonica per bonus gilda Battle Power. Richiede chiarimento Game Master prima di Pack futuri."
+    },
+    {
+      "source_id": "affinity_or_sanctuary_bonus",
+      "display_name_it": "Bonus affinity / sanctuary",
+      "category": "hero_engagement_progression",
+      "scope": "per_hero_per_server",
+      "battle_power_role": "unknown_pending_bible",
+      "runtime_state": "unknown_no_bible_yet",
+      "source_refs": [],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": true,
+      "may_affect": [],
+      "notes": "Sanctuary/affinity esistono come gameplay loop ma non c'e' Bible canonica che li agganci esplicitamente a Battle Power. Richiede conferma."
+    },
+    {
+      "source_id": "prestige_or_account_wide_bonus",
+      "display_name_it": "Bonus prestige / account-wide",
+      "category": "meta_progression",
+      "scope": "account_wide",
+      "battle_power_role": "explicitly_forbidden_pre_qa",
+      "runtime_state": "explicitly_forbidden",
+      "source_refs": [],
+      "active_in_formula_116a_ext": false,
+      "requires_future_resolver": false,
+      "may_affect": [],
+      "notes": "Bonus account-wide sono ESPLICITAMENTE VIETATI nel pre-QA design (server-scope is canonical). Anche se in futuro venissero introdotti, NON dovranno gonfiare Battle Power server-scoped."
+    }
+  ],
+
+  "implementation_roadmap_ref": "data/design/hero_gear_progression_bible/J_implementation_roadmap_and_release_gates_v1.json",
+  "bp_delta_guide_ref": "data/design/hero_gear_progression_bible/I_bp_delta_and_guide_tutorial_integration_v1.json"
+}

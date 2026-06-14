@@ -87,6 +87,15 @@ export default function HeroesTab() {
         const diff = (a.hero_class || '').localeCompare(b.hero_class || '');
         return diff !== 0 ? diff : (b.stars || b.hero_rarity || 0) - (a.stars || a.hero_rarity || 0);
       }
+      // Pack 116A-EXT — sort per "Potenza" (Battle Power 116A read-only).
+      // Usa `h.power` gia' restituito da /api/user/heroes (no chiamate N+1).
+      // Eroi senza power valido (es. fallback 0) finiscono in coda.
+      if (sortBy === 'power') {
+        const pa = (typeof a.power === 'number' && a.power > 0) ? a.power : -1;
+        const pb = (typeof b.power === 'number' && b.power > 0) ? b.power : -1;
+        const diff = pb - pa;
+        return diff !== 0 ? diff : (b.stars || b.hero_rarity || 0) - (a.stars || a.hero_rarity || 0);
+      }
       return 0;
     });
     return list;
@@ -154,14 +163,14 @@ export default function HeroesTab() {
             )}
           </View>
           <View style={s.sortRow}>
-            {(['rarity', 'level', 'class'] as string[]).map(sb => (
+            {(['rarity', 'level', 'class', 'power'] as string[]).map(sb => (
               <TouchableOpacity
                 key={sb}
                 style={[s.sortBtn, sortBy === sb && s.sortBtnA]}
                 onPress={() => setSortBy(sb)}
               >
                 <Text style={[s.sortTxt, sortBy === sb && s.sortTxtA]}>
-                  {sb === 'rarity' ? 'Stelle' : sb === 'level' ? 'Livello' : 'Classe'}
+                  {sb === 'rarity' ? 'Stelle' : sb === 'level' ? 'Livello' : sb === 'class' ? 'Classe' : 'Potenza'}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -256,6 +265,15 @@ export default function HeroesTab() {
                     </View>
                   )}
                   <Text style={s.cardLvl}>Lv.{h.level || 1}</Text>
+                  {/* Pack 116A-EXT — badge ⚡ Battle Power 116A read-only. */}
+                  <View style={s.cardPower}>
+                    <Text style={s.cardPowerIcon}>{'\u26A1'}</Text>
+                    {typeof h.power === 'number' && h.power > 0 ? (
+                      <Text style={s.cardPowerVal}>{Number(h.power).toLocaleString()}</Text>
+                    ) : (
+                      <Text style={s.cardPowerEmpty}>{'\u2014'}</Text>
+                    )}
+                  </View>
                 </TouchableOpacity>
               </Animated.View>
             );
@@ -458,6 +476,12 @@ const s = StyleSheet.create({
   },
   starBadgeTxt: { color: '#000', fontSize: 7, fontWeight: '900' },
   cardLvl: { color: COLORS.textMuted, fontSize: 8, marginTop: 1, fontWeight: '600' },
+  // Pack 116A-EXT — badge Battle Power 116A read-only sulla card eroe.
+  // Mostra `⚡ <power>` o `⚡ —` se power assente. Mai falso `0`.
+  cardPower: { flexDirection: 'row', alignItems: 'center', marginTop: 1 },
+  cardPowerIcon: { color: COLORS.gold, fontSize: 8, marginRight: 2 },
+  cardPowerVal: { color: COLORS.gold, fontSize: 8, fontWeight: '700' },
+  cardPowerEmpty: { color: COLORS.textDim, fontSize: 8, fontWeight: '700' },
   emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 40 },
   emptyIcon: { fontSize: 32, marginBottom: 8 },
   emptyText: { color: COLORS.textDim, fontSize: 12 },

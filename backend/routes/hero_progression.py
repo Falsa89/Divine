@@ -21,6 +21,15 @@ from utils.server_scope import ensure_server_scope
 from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
 from fastapi import Depends as _Depends_postqa_d
 
+# Pack 116A-EXT — Hero Detail full-detail usa la formula 116A read-only
+# (battle_power_v1_preqa_derived) per il campo `power`. Non sostituisce
+# `calculate_hero_power` legacy ovunque, solo nel path player-facing.
+from utils.battle_power import (
+    BATTLE_POWER_FORMULA_VERSION as _BP_FORMULA_VERSION_116A,
+    BATTLE_POWER_SOURCE as _BP_SOURCE_116A,
+    compute_hero_battle_power_v1 as _compute_hero_bp_v1,
+)
+
 # ===================== LEVEL CAPS PER STAR (max 15 stars) =====================
 STAR_LEVEL_CAPS = {
     1: 30, 2: 50, 3: 70, 4: 90, 5: 110,
@@ -590,7 +599,11 @@ def register_hero_progression_routes(router, db, get_current_user, serialize_doc
             "base_stats": base_stats,
             "effective_stats": effective_stats,
             "skills": skills,
-            "power": calculate_hero_power(hero, uh),
+            # Pack 116A-EXT — usa la formula 116A read-only (no
+            # `calculate_hero_power` legacy come final source player-facing).
+            "power": _compute_hero_bp_v1(hero, uh),
+            "battle_power_formula_version": _BP_FORMULA_VERSION_116A,
+            "battle_power_source": _BP_SOURCE_116A,
         }
 
     # ==================== ENCYCLOPEDIA (catalog base hero, not instance) ====================

@@ -593,12 +593,25 @@ async def get_user_heroes(
         server_player_exp = int(psp.get("player_exp") or 0)
         # Filtro REALE su {user_id, server_id} — niente fallback account-wide.
         user_heroes = await db.user_heroes.find({"user_id": uid, "server_id": sid}).to_list(1000)
+        # Pack 116A-EXT — batch-load del catalog heroes per evitare N+1 +
+        # arricchimento `power` derived 116A read-only (no DB writes).
+        from utils.battle_power import (
+            BATTLE_POWER_FORMULA_VERSION as _BP_FV_SS,
+            BATTLE_POWER_SOURCE as _BP_SRC_SS,
+            compute_hero_battle_power_v1 as _compute_bp_ss,
+        )
+        _hero_ids_ss = list({uh.get("hero_id") for uh in user_heroes if uh.get("hero_id")})
+        _hero_docs_ss = []
+        if _hero_ids_ss:
+            _hero_docs_ss = await db.heroes.find({"id": {"$in": _hero_ids_ss}}).to_list(2000)
+        _hero_by_id_ss = {h["id"]: h for h in _hero_docs_ss}
         result = []
         for uh in user_heroes:
-            hero = await db.heroes.find_one({"id": uh["hero_id"]})
+            hero = _hero_by_id_ss.get(uh.get("hero_id"))
             if hero:
                 if not should_show_in_collection(hero, owned=True):
                     continue
+                _power_ss = _compute_bp_ss(hero, uh)
                 merged = {
                     **serialize_doc(uh),
                     "hero_name": hero.get("name"),
@@ -607,6 +620,10 @@ async def get_user_heroes(
                     "hero_image": hero.get("image_url") or hero.get("image_base64") or hero.get("image"),
                     "hero_stats": hero.get("base_stats"),
                     "hero_class": hero.get("hero_class"),
+                    # Pack 116A-EXT — Battle Power derivato per la card eroe.
+                    "power": _power_ss,
+                    "battle_power_formula_version": _BP_FV_SS,
+                    "battle_power_source": _BP_SRC_SS,
                 }
                 result.append(merged)
         response.headers["X-Server-Scope"] = "server_scoped"
