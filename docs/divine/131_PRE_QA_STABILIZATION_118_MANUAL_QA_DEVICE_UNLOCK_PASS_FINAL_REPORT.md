@@ -212,7 +212,7 @@ Tutti i flag invarianti delle foundation precedenti confermati.
 ## 12. Commit SHAs
 
 - **Baseline pre-118:** `064ce9dfc` (master, post-117B)
-- **Pack commit 118:** (riempire dopo commit di chiusura)
+- **Pack commit 118:** `1fc034180` — verdetto `PRE_QA_STABILIZATION_118_MANUAL_QA_DEVICE_UNLOCK_PASS_READY_FOR_GAME_MASTER_REAUDIT` (7 file NEW, 1 MOD suite).
 
 ---
 
