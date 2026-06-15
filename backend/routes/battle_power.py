@@ -240,6 +240,77 @@ def create_battle_power_router(db, get_current_user):
             **build_battle_power_metadata(),
         }
 
+    @router.get("/breakdown")
+    async def get_battle_power_breakdown():
+        """Pre-QA Stabilization 117B — Battle Power breakdown metadata foundation.
+
+        ENDPOINT METADATA-ONLY. Nessun calcolo per-user, nessuna lettura DB,
+        nessuna mutation. Enumera le categorie canonical che CONTRIBUISCONO
+        oggi alla formula 116A (`derived_active`) e quelle DEFERRED (per le
+        quali non esiste resolver runtime-safe). La formula ufficiale
+        `battle_power_v1_preqa_derived` resta INVARIATA.
+        """
+        return {
+            "status": "ok",
+            "breakdown_version": "battle_power_breakdown_v1_preqa_metadata_only",
+            **build_battle_power_metadata(),
+            "active_categories": [
+                {
+                    "category": "base_stats_level_rarity_stars",
+                    "contributes_to_formula_now": True,
+                    "formula_version": BATTLE_POWER_FORMULA_VERSION,
+                    "notes": "Formula 116A invariata: base_stats * level * rarity * stars.",
+                },
+            ],
+            "deferred_categories": [
+                {"category": "ascension", "contributes_to_formula_now": False,
+                 "blocked_reason": "ECONOMY_SOURCE_NOT_SAFE_FOR_READINESS"},
+                {"category": "skill_upgrade_non_final_numbers",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "SKILL_UPGRADE_RESOLVER_NOT_RUNTIME_SAFE_YET"},
+                {"category": "hero_elevation_quality_frame",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "QUALITY_FRAME_SOURCE_NOT_RUNTIME_SAFE_YET"},
+                {"category": "constellations",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "CONSTELLATIONS_CANONICAL_ENDPOINT_REQUIRED"},
+                {"category": "reincarnation",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "ECONOMY_SOURCE_NOT_SAFE_FOR_READINESS"},
+                {"category": "gear_level",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "GEAR_INVENTORY_CONTRACT_REQUIRED"},
+                {"category": "gear_quality_fusion",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "GEAR_INVENTORY_CONTRACT_REQUIRED"},
+                {"category": "gem_socket",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "GEAR_INVENTORY_CONTRACT_REQUIRED"},
+                {"category": "rune_equip",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "RUNE_INVENTORY_CONTRACT_REQUIRED"},
+                {"category": "artifact_global",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "ARTIFACT_GLOBAL_CANONICAL_ENDPOINT_REQUIRED"},
+                {"category": "divine_weapon",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "DIVINE_WEAPON_RESOLVER_NOT_RUNTIME_SAFE_YET"},
+                {"category": "team_synergy",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "TEAM_SYNERGY_BALANCE_GATE_REQUIRED"},
+                {"category": "cosmetics_skins_titles_capped",
+                 "contributes_to_formula_now": False,
+                 "blocked_reason": "COSMETIC_POLICY_MANUAL_DESIGN_CONFIRMATION_REQUIRED"},
+            ],
+            "formula_version_invariant": BATTLE_POWER_FORMULA_VERSION,
+            "metadata_only": True,
+            "no_per_user_data": True,
+            "no_db_reads": True,
+            "no_db_writes": True,
+            "block_outcome_117b_block_b": "metadata_only_COMPLETE",
+            "block_outcome_117b_block_b_reason": "QUALITY_FRAME_SOURCE_NOT_RUNTIME_SAFE_YET",
+        }
+
     # Sanity: il modulo dichiara la formula version come export per il
     # validator 116A.
     router.battle_power_formula_version = BATTLE_POWER_FORMULA_VERSION  # type: ignore[attr-defined]

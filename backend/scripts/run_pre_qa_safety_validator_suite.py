@@ -195,6 +195,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_117a_manual_qa_gate_and_deferred_resolver_readiness.py',
     },
+    # Pack 117B — Mega read-only resolver sprint (hero-upgrade readiness + bp breakdown)
+    {
+        'name': 'Validator 117B Mega Read-Only Resolver Sprint',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_117b_mega_read_only_resolver_sprint.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

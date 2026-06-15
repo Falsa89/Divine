@@ -1036,6 +1036,15 @@ except Exception as _rd_116c_err:
     import logging
     logging.getLogger(__name__).warning("red_dot 116c router import failed: %s", _rd_116c_err)
 
+# Pre-QA Stabilization 117B — Hero Upgrade Readiness (read-only).
+# Server-scoped, no DB writes, no upgrade activation, no material consume.
+try:
+    from routes.hero_upgrade_readiness import create_hero_upgrade_readiness_router
+    app.include_router(create_hero_upgrade_readiness_router(db, get_current_user))
+except Exception as _hu_117b_err:
+    import logging
+    logging.getLogger(__name__).warning("hero_upgrade_readiness 117b router import failed: %s", _hu_117b_err)
+
 # MEGA_RELEASE_ACCELERATION_47_v98 — Admin server-actors status (read-only)
 # + GDPR data export + hard-delete-confirm (runtime gated).
 try:
