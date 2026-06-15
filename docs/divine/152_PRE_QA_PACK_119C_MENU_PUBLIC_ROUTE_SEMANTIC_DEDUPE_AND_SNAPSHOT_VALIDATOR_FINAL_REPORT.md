@@ -260,4 +260,4 @@ snapshot statico è verificabile via validator riproducibile in CI/manuale.
 
 ## 9. Commit SHA
 
-Verrà aggiornato dopo `git commit` (vedi sezione finale).
+`dfa823ed7` — `Pack 119C: dedupe semantico /soul-forge + Avventura vs Battaglia + snapshot validator`
