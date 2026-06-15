@@ -145,7 +145,7 @@ Background top -56 · floor lift · BAG/FORGE/SKILL/TEAM · avatar fix · Player
 ## 10. Commit SHAs
 
 - **Baseline pre-119A-FIX-C:** `2411b6642` (Pack 119A-FIX-B)
-- **Pack commit 119A-FIX-C:** (riempire dopo commit)
+- **Pack commit 119A-FIX-C:** `304eada75d005a1fdad3990a8697ca414d00ccdc` — 2 file (1 MOD home.tsx + 1 NEW report).
 
 ---
 
