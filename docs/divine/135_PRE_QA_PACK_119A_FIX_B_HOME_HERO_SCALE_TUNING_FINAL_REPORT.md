@@ -152,7 +152,7 @@ Background top -56 · BAG/FORGE/SKILL/TEAM · avatar fix · Player/title behavio
 ## 10. Commit SHAs
 
 - **Baseline pre-119A-FIX-B:** `487cb2d14` (Pack 119A-FIX-A)
-- **Pack commit 119A-FIX-B:** (riempire dopo commit)
+- **Pack commit 119A-FIX-B:** `2411b66422db8e9297c1603c8c8eeb8eb83c0164` — 2 file (1 MOD home.tsx + 1 NEW report).
 
 ---
 
