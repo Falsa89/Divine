@@ -468,15 +468,16 @@ export default function HomeTab() {
               il castello/cielo che arriva fino al bordo fisico del device) */}
           <HomeBackground scene={CURRENT_SCENE} phase={phase} />
 
-          {/* BLOCCO 2 — HERO LAYER full-bleed (hero centrato nello schermo,
-              anche lui può "respirare" sotto il dynamic island) */}
+          {/* BLOCCO 2 — HERO LAYER (Pack 119A-FIX-A grounding perspective repair).
+              Hero ridimensionato + ancorato realmente al pavimento della piazza
+              con occlusione naturale del bottom nav su lower-legs/feet. */}
           <View style={s.heroLayer} pointerEvents="box-none">
             <HomeHeroSplash
               hero={homeHero}
               source={homeSource}
               inTutorial={inTutorial}
-              width={Math.min(W * 0.55, 420)}
-              height={Math.min(H * 0.80, 600)}
+              width={Math.min(W * 0.42, 320)}     /* Pack 119A-FIX-A: 0.55→0.42, 420→320 (hero meno gigante) */
+              height={Math.min(H * 0.62, 460)}    /* Pack 119A-FIX-A: 0.80→0.62, 600→460 */
               onPress={onHeroTap}
             />
           </View>
@@ -610,12 +611,28 @@ function HomeBackground({ scene, phase }: { scene: HomeScene; phase: TimePhase }
       />
     );
   }
+  // Pack 119A-FIX-A — Background floor lift (cross-background).
+  // I background Home hanno il pavimento/piazza renderizzato troppo basso
+  // rispetto al punto di vista dell'hero. Applichiamo uno shift verticale
+  // negativo (-56px) alla ImageBackground per ALZARE visivamente il floor
+  // verso il centro dello schermo, in modo che il personaggio (ora
+  // grounded con translateY:+48) appaia coerente col piano della piazza.
+  // Logica screen-relative → vale per tutti gli asset di background
+  // (faction, time-phase, fallback) senza rigenerazione asset.
   return (
-    <View style={StyleSheet.absoluteFill}>
-      <ImageBackground source={asset} style={StyleSheet.absoluteFill} resizeMode="cover">
-        {/* Overlay minimale per leggibilit\u00e0 UI. Nessun bloom decorativo. */}
-        <View style={s.bgReadabilityOverlay} />
-      </ImageBackground>
+    <View style={[StyleSheet.absoluteFill, { overflow: 'hidden' }]}>
+      <View
+        style={{
+          position: 'absolute',
+          top: -56,        // pack 119A-FIX-A: floor lift cross-background
+          left: 0, right: 0, bottom: 0,
+        }}
+      >
+        <ImageBackground source={asset} style={StyleSheet.absoluteFill} resizeMode="cover">
+          {/* Overlay minimale per leggibilità UI. Nessun bloom decorativo. */}
+          <View style={s.bgReadabilityOverlay} />
+        </ImageBackground>
+      </View>
     </View>
   );
 }
@@ -2166,21 +2183,27 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: NIGHT_0, justifyContent: 'center', alignItems: 'center' },
 
-  /* HERO LAYER — Pack 119A grounding fix.
+  /* HERO LAYER — Pack 119A-FIX-A grounding perspective repair.
    * Cross-background (faction/time-phase/fallback): l'hero ora si ANCORA al
-   * bottom dello schermo (justifyContent: 'flex-end' + paddingBottom basso).
-   * Con `bottom: 0` (era 68), il layer si estende fino al bordo inferiore
-   * fisico: la HomeBottomNav (zIndex superiore) occlude naturalmente la
-   * lower-leg/feet area del personaggio → effetto "poggiato sul terreno"
-   * invece di "ritaglio appiccicato sopra lo sfondo". Vale per tutti i
-   * background (faction / orario / fallback) perché la logica è
-   * screen-relative, non background-relative.
+   * bottom dello schermo CON OFFSET NEGATIVO che spinge la splash box sotto
+   * la baseline visibile, in modo che la HomeBottomNav (zIndex superiore)
+   * OCCLUDA REALMENTE lower-legs/piedi dell'eroe. Il fix precedente
+   * (paddingBottom: 28) non era sufficiente: l'hero appariva ancora
+   * fluttuante e troppo dominante. Ora:
+   *   - `transform: translateY(+48)` spinge l'intera splash box giu' di
+   *     48px → la parte inferiore dell'hero finisce sotto la baseline del
+   *     bottom nav (~120px alto) → ginocchia/sotto-ginocchia occlusi.
+   *   - `paddingBottom: 0` perche' lo spostamento e' ora gestito dal transform.
+   *   - `justifyContent: 'flex-end'` mantiene l'ancoraggio al bottom della
+   *     layer, screen-relative → vale cross-background.
    */
   heroLayer: {
     position: 'absolute',
     top: 0, bottom: 0, left: 0, right: 0,
-    alignItems: 'center', justifyContent: 'flex-end',
-    paddingBottom: 28,    // ground anchor: feet a ~28px da bottom → occlusi dal nav bar
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 0,
+    transform: [{ translateY: 48 }],
     zIndex: 1,
   },
 
