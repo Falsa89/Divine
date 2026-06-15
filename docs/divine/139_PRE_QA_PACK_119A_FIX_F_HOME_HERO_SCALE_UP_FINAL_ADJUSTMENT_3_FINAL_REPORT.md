@@ -36,6 +36,6 @@ File: `backend/reports/pre_qa_safety_validator_suite_20260615T212847Z.json`
 
 ## Commit SHA
 - Baseline: `e3c3297d4` (119A-FIX-E)
-- Pack commit: (riempire dopo commit)
+- Pack commit: `3c48f16a0f2c8526b692dfbd39f73d7bc523a55d` — 2 file (1 MOD home.tsx + 1 NEW report).
 
 🛑 Stop. Pack 119A-FIX-F applicato. Attendo device retest del Game Master.
