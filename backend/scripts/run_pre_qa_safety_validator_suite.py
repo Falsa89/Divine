@@ -201,6 +201,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_117b_mega_read_only_resolver_sprint.py',
     },
+    # Pack 118 — Manual QA Device Unlock Pass (diagnostic, controlled QA gate)
+    {
+        'name': 'Validator 118 Manual QA Device Unlock Pass',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_118_manual_qa_device_unlock_pass.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

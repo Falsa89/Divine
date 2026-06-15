@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "id": "pre_qa_119_post_qa_triage_buckets_v1",
+    "purpose": "Pre-QA Stabilization 118 — Triage buckets per il prossimo Pack 119 POST-QA Fix and Polish. Categorizza le tipologie di issue che il Manual QA su device 118 puo' rilevare, e definisce la policy di fix sicuro.",
+    "pack_origin": "118_prep_for_119",
+    "scope": "design_only_read_only",
+    "is_runtime": false,
+    "do_not_use_for_runtime_resolution": true,
+    "buckets_version": "pre_qa_119_post_qa_triage_buckets_v1"
+  },
+
+  "triage_buckets": [
+    {
+      "bucket_id": "B1_ui_copy_or_label_fix",
+      "description": "Errori di copy in italiano, label tradotti male, hint UI fuorvianti, badge/dot grafici scoordinati.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "frontend-only string change. No backend. No DB. No formula change.",
+      "examples": [
+        "Label 'Potenza' invece di 'Battle Power' inconsistente",
+        "Warning copy non chiaro su /battle",
+        "Badge color severity scoordinato"
+      ],
+      "requires_validator_update": false
+    },
+    {
+      "bucket_id": "B2_ui_layout_or_safe_area_fix",
+      "description": "Overflow, safe area mancante, touch target < 44pt, gesture handler conflict.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "frontend-only layout fix. StyleSheet only. No business logic.",
+      "examples": [
+        "Hero card overflow su iPhone SE",
+        "Menu item troppo piccolo su Android",
+        "Safe area mancante su /home"
+      ],
+      "requires_validator_update": false
+    },
+    {
+      "bucket_id": "B3_read_only_endpoint_payload_polish",
+      "description": "Endpoint read-only restituisce campo opzionale mancante, ordine inconsistente, payload non chiaro. NO change semantico.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "backend additive only (no rimozione campi, no rename). Validator 118 deve continuare a passare.",
+      "examples": [
+        "battle-power/breakdown ordina deferred_categories alfabeticamente",
+        "hero-upgrade/readiness aggiunge campo opzionale notes per categoria"
+      ],
+      "requires_validator_update": true
+    },
+    {
+      "bucket_id": "B4_locked_route_copy_polish",
+      "description": "Schermata gated mostra copy fuorviante (es. 'in arrivo presto') che promette cose non promesse.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "frontend-only copy change. Mantenere PreQaScreenGate intatto.",
+      "examples": [
+        "Plaza dice 'arrivo bot a breve' (non promettere bot, 116B contract)",
+        "Mail dice 'claim coming soon' (deferred)"
+      ],
+      "requires_validator_update": false
+    },
+    {
+      "bucket_id": "B5_red_dot_aggregation_polish",
+      "description": "Red Dot mostra count actionable per source deferred. Anti-fakedot violazione.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "frontend hook polish o backend find_one polish. Source 117B/116C invariata.",
+      "examples": [
+        "Menu mostra '3' su mail anche se mail_unread e' deferred",
+        "Home dot pulsa anche senza warning safe attiva"
+      ],
+      "requires_validator_update": true
+    },
+    {
+      "bucket_id": "B6_observability_or_log_polish",
+      "description": "Log noisy, warning ripetuti, log troppo verbose. NO sensitive data.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "backend logging cleanup. Mai sopprimere errori reali.",
+      "examples": [
+        "Suppression warning import duplicato",
+        "Log debug rimossi da production path"
+      ],
+      "requires_validator_update": false
+    },
+    {
+      "bucket_id": "B7_security_or_auth_minor_issue",
+      "description": "Auth check mancante su endpoint nuovo read-only. Token validation lieve.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "backend additive auth Depends. Validator 118 verifica.",
+      "examples": [
+        "Endpoint dimentica Depends(get_current_user)",
+        "server_id query non sanitizzato"
+      ],
+      "requires_validator_update": true
+    },
+    {
+      "bucket_id": "B8_blocked_until_future_pack",
+      "description": "Issue richiede attivazione live di sistema deferred (gacha, shop, mail claim, push, chat live). NON sicuro in 119.",
+      "safe_to_fix_in_pack_119": false,
+      "fix_policy": "Documentare in audit ledger. Attendere Pack 120+ Controlled Live Unlock Prep o pack dedicated.",
+      "examples": [
+        "User chiede 'attivare claim mail'",
+        "User chiede 'sblocca chat live'",
+        "User chiede 'fix gacha rates'"
+      ],
+      "requires_validator_update": false
+    },
+    {
+      "bucket_id": "B9_safety_violation_blocker",
+      "description": "Issue espone DB write, claim attivato, push attivato, mutation senza authorization. PACK 119 BLOCKER se rilevato.",
+      "safe_to_fix_in_pack_119": true,
+      "fix_policy": "P0 fix immediato. Revert + harden + nuovo validator step.",
+      "examples": [
+        "Endpoint inattesamente fa db.update_one",
+        "Frontend chiama /claim senza intenzione user",
+        "Push notification arriva su dispositivo"
+      ],
+      "requires_validator_update": true
+    }
+  ],
+
+  "global_invariants": {
+    "pack_119_must_preserve": [
+      "Pack 115A P0 hard gates",
+      "Pack 115B progression/forge/items locked",
+      "Pack 115C auth/server scope",
+      "Pack 115D screen-entry/deeplink guard",
+      "Pack 115E combat/tower legacy hardening",
+      "Pack 115F repo hygiene + validator truth",
+      "Pack 115G skill/artifact semantic cleanup",
+      "Pack 116A battle power foundation",
+      "Pack 116A-EXT FIX-A team power source truth",
+      "Pack 116B chat/bot quality contract + legacy chat cleanup",
+      "Pack 116C red dot notification badge foundation",
+      "Pack 117A manual QA gate + deferred resolver readiness",
+      "Pack 117B mega read-only resolver sprint (block A COMPLETE + block B metadata_only_COMPLETE)"
+    ],
+    "pack_119_must_not": [
+      "introdurre attivazione live di gacha/shop/mail/daily/achievement/battle-pass",
+      "toccare battle_engine.py / combat / tower runtime",
+      "riscrivere Character Bible",
+      "modificare gacha rates",
+      "introdurre push notification",
+      "attivare chat/DM/bot live",
+      "cambiare formula 'battle_power_v1_preqa_derived'",
+      "cambiare 'red_dot_v1_preqa_read_only_foundation'",
+      "cambiare 'hero_upgrade_readiness_v1_preqa_read_only' verso can_upgrade_now=true",
+      "introdurre broad refactor",
+      "tracciare .pyc/__pycache__ in git",
+      "usare git add -A o git add ."
+    ]
+  }
+}
