@@ -26,11 +26,13 @@ else:
 for c in ('Playability & Announcements QA', 'Modalit'):
     assert c in menu, f'QA category not blocklisted: {c}'
 # Frontend env: default OFF (anche se file assente).
+# Pack 118B-FIX-A: EXPO_PUBLIC_DEV_QA_SURFACES_VISIBLE puo' essere enabled
+# in preview per esporre /qa-manual-118 (QA-only deeplink read-only).
+# Pack 110 verifica solo i flag player-facing che devono restare OFF.
 import re
 env_path = os.path.join(R, 'frontend/.env')
 env = open(env_path).read() if os.path.exists(env_path) else ''
-for f in ('EXPO_PUBLIC_GACHA_UI_ENABLED', 'EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE',
-          'EXPO_PUBLIC_DEV_QA_SURFACES_VISIBLE'):
+for f in ('EXPO_PUBLIC_GACHA_UI_ENABLED', 'EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE'):
     if not env:
         # Assenza file = default OFF: accettato come safe-by-default.
         continue
