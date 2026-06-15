@@ -270,7 +270,7 @@ Si raccomanda **Pack 118** come prossimo: minore dipendenza da contract backend 
 ## 12. Commit SHAs
 
 - **Baseline pre-117B:** `5e289bcbd` (master, post-117A)
-- **Pack commit 117B:** (riempire dopo commit di chiusura)
+- **Pack commit 117B:** `b9836982c` — verdetto `PRE_QA_STABILIZATION_117B_MEGA_READ_ONLY_RESOLVER_SPRINT_READY_FOR_GAME_MASTER_REAUDIT` (8 file, 5 NEW + 3 MOD).
 
 ---
 
