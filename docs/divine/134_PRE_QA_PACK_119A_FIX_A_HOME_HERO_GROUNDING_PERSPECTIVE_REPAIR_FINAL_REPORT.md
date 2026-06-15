@@ -167,7 +167,7 @@ Avatar fix · BAG routing · FORGE routing · SKILL routing · TEAM · Player/ti
 ## 10. Commit SHAs
 
 - **Baseline pre-119A-FIX-A:** `02e2cd5d7` (Pack 119A)
-- **Pack commit 119A-FIX-A:** (riempire dopo commit)
+- **Pack commit 119A-FIX-A:** `487cb2d14` — 2 file (1 MOD home.tsx + 1 NEW report).
 
 ---
 
