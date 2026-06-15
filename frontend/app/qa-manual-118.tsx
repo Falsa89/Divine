@@ -72,8 +72,12 @@ export default function QaManual118Screen() {
   const [busy, setBusy] = useState<boolean>(false);
 
   const baseUrl = useMemo(() => {
-    // Read-only: usa env Expo. Nessun hardcoding.
-    return (process.env.EXPO_BACKEND_URL as string | undefined) || '';
+    // Pack 118B-FIX-A: usa env client-side EXPO_PUBLIC_BACKEND_URL se presente,
+    // altrimenti fallback same-origin '' → fetch relativo /api/... gestito dal
+    // proxy ingress che redireziona /api/* a backend:8001.
+    return (
+      (process.env.EXPO_PUBLIC_BACKEND_URL as string | undefined) || ''
+    );
   }, []);
 
   const runProbe = useCallback(async (
@@ -82,10 +86,7 @@ export default function QaManual118Screen() {
     requiresServerId: boolean,
     requiresAuth: boolean,
   ) => {
-    if (!baseUrl) {
-      setResults((r) => ({ ...r, [epId]: { error: 'EXPO_BACKEND_URL non configurato' } }));
-      return;
-    }
+    // Pack 118B-FIX-A: baseUrl puo' essere '' (same-origin /api). Non bloccare.
     const qp = requiresServerId && serverId ? `?server_id=${encodeURIComponent(serverId)}` : '';
     const url = `${baseUrl}${path}${qp}`;
     const headers: Record<string, string> = { Accept: 'application/json' };

@@ -72,7 +72,21 @@ def c2():
     assert 'READ-ONLY' in p
     assert 'NO MUTATIONS' in p
     assert 'NO LIVE SYSTEMS' in p
-    print('[2] Page QA-only banner + dev-QA gate hook OK')
+    # Pack 118B-FIX-A: base URL deve usare prefisso EXPO_PUBLIC_ (env
+    # client-side Expo). Non deve dipendere da EXPO_BACKEND_URL (senza
+    # prefisso PUBLIC) come unico requisito bloccante. Default same-origin.
+    assert 'EXPO_PUBLIC_BACKEND_URL' in p, \
+        'page must read EXPO_PUBLIC_BACKEND_URL (client-side env)'
+    # Non deve esserci early-return bloccante se baseUrl e'' '' (same-origin).
+    # Cerchiamo il pattern dell'errore "EXPO_BACKEND_URL non configurato" ed
+    # equivalenti: deve essere stato rimosso.
+    assert 'EXPO_BACKEND_URL non configurato' not in p, \
+        'page non deve avere blocking error "EXPO_BACKEND_URL non configurato"'
+    # Verifica che NON ci sia il guard "if (!baseUrl) { ... return; }" attorno
+    # alle probe (consente same-origin '').
+    assert 'if (!baseUrl)' not in p or 'non configurato' not in p, \
+        'page non deve bloccare i probe quando baseUrl vuoto (same-origin)'
+    print('[2] Page QA-only banner + dev-QA gate hook + same-origin baseUrl fix-A OK')
 
 
 def c3():
