@@ -240,7 +240,7 @@ git ls-files | grep -E '\.pyc$|\.pyo$|__pycache__' → vuoto
 ## 9. Commit SHAs
 
 - **Baseline pre-119A:** `a360b7434` (master, post-118B-FIX-A public verified)
-- **Pack commit 119A:** (riempire dopo commit di chiusura)
+- **Pack commit 119A:** `02e2cd5d7` — verdetto `PRE_QA_PACK_119A_HOME_FUNCTIONAL_ROUTING_AND_GROUNDING_FIX_READY_FOR_GAME_MASTER_REAUDIT` (3 file: 2 MOD frontend + 1 NEW report).
 
 ---
 
