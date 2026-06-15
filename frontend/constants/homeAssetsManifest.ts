@@ -393,13 +393,20 @@ export const HOME_ROUTES: Partial<Record<ButtonKey | NavKey | 'heroTap' | 'mainB
   gemsPlus: '/shop',
 
   chat:     '',            // '' = apre pannello chat in-home
-  bag:      '/equipment',
+  // Pack 119A — Home functional routing fix:
+  //   bag   → /inventory  (era /equipment: Inventory e' la vera "Borsa" player)
+  //   forge → /equipment  (era /soul-forge: Equipment hub e' il Forge primario;
+  //                        Soul Forge resta accessibile come sub-system dedicato)
+  //   skill → ''          (resta vuoto: il bottone HomeBottomNav lo intercetta
+  //                        localmente con feedback locked/deferred, evitando
+  //                        l'overflow menu su tap)
+  bag:      '/inventory',
   artifact: '/artifacts',
-  skill:    '',            // overflow
+  skill:    '',            // overflow / locked feedback nel HomeBottomNav (Pack 119A)
   team:     '/(tabs)/battle',  // v16.30 — TEAM porta al formation editor (battle prep / 9-grid). La collezione eroi resta su /(tabs)/heroes raggiungibile dal tab bar nativo.
   guild:    '/guild',
   shop:     '/shop',
-  forge:    '/soul-forge',
+  forge:    '/equipment',
   menu:     '',            // apre overflow
 
   heroTap:    '/sanctuary',

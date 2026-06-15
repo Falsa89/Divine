@@ -755,8 +755,27 @@ function HomeProfilePanel({ user, router }: any) {
           pointerEvents="box-none"
         >
           <TouchableOpacity
-            onPress={() => setSelectorOpen('avatar')}
-            onLongPress={() => setSelectorOpen('frame')}
+            onPress={() => {
+              // Pack 119A — Avatar crash P0 fix:
+              // Il modal AvatarFrameSelector apriva ma causava crash su device
+              // reale (P0). Finché il sistema avatar/cornici non è stabile,
+              // mostriamo un feedback locked/deferred chiaro invece di aprire
+              // il modal. Mantiene il tap reattivo, zero crash, zero red screen.
+              try {
+                Alert?.alert?.(
+                  'Personalizzazione profilo',
+                  'Sistema avatar e cornici in arrivo. Disponibile in un prossimo aggiornamento.'
+                );
+              } catch (_e) { /* best-effort, no crash */ }
+            }}
+            onLongPress={() => {
+              try {
+                Alert?.alert?.(
+                  'Personalizzazione profilo',
+                  'Sistema avatar e cornici in arrivo. Disponibile in un prossimo aggiornamento.'
+                );
+              } catch (_e) { /* best-effort, no crash */ }
+            }}
             activeOpacity={0.85}
             style={{
               position: 'absolute',
@@ -955,9 +974,24 @@ function HomeProfilePanel({ user, router }: any) {
               ]}
               pointerEvents="box-none"
             >
-              <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>
-                {name}
-              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  // Pack 119A — Nickname tap: sistema profilo full non ancora pronto.
+                  // Mostra feedback locked/deferred chiaro, zero crash.
+                  try {
+                    Alert?.alert?.(
+                      'Profilo giocatore',
+                      'La schermata profilo completa è in arrivo. Disponibile in un prossimo aggiornamento.'
+                    );
+                  } catch (_e) { /* best-effort */ }
+                }}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              >
+                <Text style={[s.profName, { fontSize: nameFS }]} numberOfLines={1}>
+                  {name}
+                </Text>
+              </TouchableOpacity>
             </View>
 
             {/* TITLE SLOT — lime (v15.1 revert: baseline v14.4 left=180, top=12, width=70) */}
@@ -969,9 +1003,25 @@ function HomeProfilePanel({ user, router }: any) {
               ]}
               pointerEvents="box-none"
             >
-              <Text style={[s.titleTxt, { fontSize: pillFS - 1 }]} numberOfLines={1}>
-                {'\u2756'} {title}
-              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  // Pack 119A — Title tap: sistema titoli equipaggiabili non ancora
+                  // implementato. Non puntare ad /achievements (non e' il sistema
+                  // titoli). Feedback locked/deferred chiaro.
+                  try {
+                    Alert?.alert?.(
+                      'Titoli giocatore',
+                      'La lista titoli equipaggiabili è in arrivo. Disponibile in un prossimo aggiornamento.'
+                    );
+                  } catch (_e) { /* best-effort */ }
+                }}
+                hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              >
+                <Text style={[s.titleTxt, { fontSize: pillFS - 1 }]} numberOfLines={1}>
+                  {'\u2756'} {title}
+                </Text>
+              </TouchableOpacity>
             </View>
 
             {/* EXP SLOT — blu (barra + valore numerico, stesso blocco visivo)
@@ -1062,7 +1112,22 @@ function HomeProfilePanel({ user, router }: any) {
             <View style={[s.profileRow1, { minWidth: 0 }, dbg('rgba(0,255,0,0.35)')]}>
               <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'baseline', flexWrap: 'nowrap', minWidth: 0 }}>
-                  <Text style={[s.profName, { fontSize: nameFS, flexShrink: 1 }]} numberOfLines={1}>{name}</Text>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      // Pack 119A — Nickname tap (tablet/desktop branch): locked feedback.
+                      try {
+                        Alert?.alert?.(
+                          'Profilo giocatore',
+                          'La schermata profilo completa è in arrivo. Disponibile in un prossimo aggiornamento.'
+                        );
+                      } catch (_e) { /* best-effort */ }
+                    }}
+                    hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                    style={{ flexShrink: 1 }}
+                  >
+                    <Text style={[s.profName, { fontSize: nameFS, flexShrink: 1 }]} numberOfLines={1}>{name}</Text>
+                  </TouchableOpacity>
                 </View>
                 <View style={s.expWrap}>
                   <View style={[s.expBarBg, { height: expH, borderRadius: expH / 2 }]}>
@@ -1109,7 +1174,16 @@ function HomeProfilePanel({ user, router }: any) {
                 <Text style={[s.spiritoTxt, { fontSize: pillFS }]}>SP {spirito}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={s.titleBadge} activeOpacity={0.7}
-                onPress={() => router.push('/achievements' as any)}>
+                onPress={() => {
+                  // Pack 119A — Title tap (tablet/desktop): non puntare ad
+                  // /achievements (non e' il sistema titoli). Feedback locked.
+                  try {
+                    Alert?.alert?.(
+                      'Titoli giocatore',
+                      'La lista titoli equipaggiabili è in arrivo. Disponibile in un prossimo aggiornamento.'
+                    );
+                  } catch (_e) { /* best-effort */ }
+                }}>
                 <Text style={[s.titleTxt, { fontSize: pillFS }]} numberOfLines={1}>
                   {'\u2756'} {title}
                 </Text>
@@ -1687,7 +1761,16 @@ function HomeBottomNav({ goTo, onChat, onMenu }: any) {
     { key: 'chat',     label: 'CHAT',                          ico: '\uD83D\uDCAC', onPress: onChat },
     { key: 'bag',      label: 'BAG',                           ico: '\uD83C\uDF92', onPress: () => goTo('bag') },
     { key: 'artifact', label: mkLabel('ARTIFACT', 'ARTI'),     ico: '\uD83D\uDD2E', onPress: () => goTo('artifact') },
-    { key: 'skill',    label: 'SKILL',                         ico: '\uD83D\uDCDA', onPress: () => goTo('skill') },
+    { key: 'skill',    label: 'SKILL',                         ico: '\uD83D\uDCDA', onPress: () => {
+      // Pack 119A — SKILL non deve aprire overflow su tap (route '' apriva
+      // un menu non pertinente). Feedback locked/deferred chiaro.
+      try {
+        Alert?.alert?.(
+          'Skill',
+          'Sistema Skill in arrivo. Disponibile in un prossimo aggiornamento.'
+        );
+      } catch (_e) { /* best-effort */ }
+    } },
     { key: 'team',     label: 'TEAM',                          ico: '\uD83D\uDC65', onPress: () => goTo('team') },
   ];
   const right: Array<{ key: any; label: string; ico: string; onPress: () => void }> = [
@@ -2083,11 +2166,21 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: NIGHT_0, justifyContent: 'center', alignItems: 'center' },
 
-  /* HERO LAYER — leggermente a destra per far respirare il lato sinistro (profilo/chat) */
+  /* HERO LAYER — Pack 119A grounding fix.
+   * Cross-background (faction/time-phase/fallback): l'hero ora si ANCORA al
+   * bottom dello schermo (justifyContent: 'flex-end' + paddingBottom basso).
+   * Con `bottom: 0` (era 68), il layer si estende fino al bordo inferiore
+   * fisico: la HomeBottomNav (zIndex superiore) occlude naturalmente la
+   * lower-leg/feet area del personaggio → effetto "poggiato sul terreno"
+   * invece di "ritaglio appiccicato sopra lo sfondo". Vale per tutti i
+   * background (faction / orario / fallback) perché la logica è
+   * screen-relative, non background-relative.
+   */
   heroLayer: {
     position: 'absolute',
-    top: 0, bottom: 68, left: 0, right: 0,
-    alignItems: 'center', justifyContent: 'center',
+    top: 0, bottom: 0, left: 0, right: 0,
+    alignItems: 'center', justifyContent: 'flex-end',
+    paddingBottom: 28,    // ground anchor: feet a ~28px da bottom → occlusi dal nav bar
     zIndex: 1,
   },
 
