@@ -19,9 +19,15 @@ const MENU_BOTTOM_SAFETY_MARGIN = 38;
 
 const CATEGORIES = [
   {
-    title: 'Combattimento',
+    // Pack 119C: rinominata categoria hub di avvio modalita' da "Combattimento" a
+    // "Avventura" per distinguerla semanticamente dalla categoria "Battaglia"
+    // (che invece e' la pre-battle-lobby canonica che instrada al renderer reale).
+    // Le voci qui sono hub-mode entrypoint (capitoli/torre), non avvio battaglia.
+    title: 'Avventura',
     items: [
-      { label: 'Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
+      // Pack 119C: "Storia" -> "Capitoli Storia" per disambiguare dall'omonima
+      // voce "Storia" della categoria "Battaglia" (che lancia pre-battle-lobby).
+      { label: 'Capitoli Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
       // PROJECT_HOME_MENU_REWIRING v20: legacy '/tower' link redirected to canonical TEST MVP '/tower-of-the-hells'. Tower gameplay/progress/AsyncStorage NOT touched in this pack.
       // Pack 119B: label tecnico "(TEST)" rimosso (player-facing copy pulita).
       { label: 'Torre degli Inferi', icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', gradient: ['#8844FF', '#5522CC'] as const },
@@ -41,7 +47,11 @@ const CATEGORIES = [
       { label: 'Fucina di Efesto', icon: '\u2692\uFE0F', route: '/equipment', gradient: ['#FFAA44', '#CC6622'] as const },
       { label: 'Santuario', icon: '\u26E9\uFE0F', route: '/sanctuary', gradient: ['#FF77CC', '#CC5599'] as const },
       { label: 'Artefatti & Costellazioni', icon: '\uD83D\uDC8E', route: '/artifacts-preview', gradient: ['#BB55FF', '#8833CC'] as const },
-      { label: 'Soul Forge', icon: '\uD83D\uDC80', route: '/soul-forge', gradient: ['#9944FF', '#6622CC'] as const },
+      // Pack 119C: rinominata da "Soul Forge" (label tecnica EN) a "Forgia dell'Anima"
+      // (label canonica IT, allineata alla scelta prodotto post 119B). Questa e' la
+      // SOLA voce player-facing che punta a /soul-forge; la vecchia voce duplicata
+      // in Economia e' stata rimossa per evitare doppione route.
+      { label: 'Forgia dell\u2019Anima', icon: '\uD83D\uDD25', route: '/soul-forge', gradient: ['#9944FF', '#6622CC'] as const },
       { label: 'Aure & Cosmetici', icon: '\u2728', route: '/cosmetics', gradient: ['#FFD700', '#DD9900'] as const },
       { label: 'Achievement', icon: '\uD83C\uDFC5', route: '/achievements', gradient: ['#FFD700', '#CC9900'] as const },
       { label: 'Battle Pass', icon: '\u2B50', route: '/battlepass', gradient: ['#FF6B35', '#DD4422'] as const },
@@ -51,10 +61,9 @@ const CATEGORIES = [
     title: 'Economia',
     items: [
       { label: 'Tesoreria', icon: '\uD83C\uDFE6', route: '/treasury', gradient: ['#FFD700', '#4499FF'] as const },
-      // SF_MERGE Track D+F — Economia consolidata dentro Soul Forge.
-      // Pack 119B: label "Hub Anime (Soul Forge)" rinominata in "Forgia dell'Anima"
-      // (label pulita player-facing, no terminologie tecniche/provvisorie).
-      { label: 'Forgia dell\u2019Anima', icon: '\uD83D\uDD25', route: '/soul-forge', gradient: ['#C877FF', '#9944FF'] as const },
+      // Pack 119C: rimossa voce duplicata "Forgia dell'Anima" -> /soul-forge.
+      // L'unica voce player-facing per /soul-forge resta in Progressione.
+      // La schermata /soul-forge e la sua economia interna NON sono toccate.
       { label: 'Inventario', icon: '\uD83C\uDF92', route: '/inventory', gradient: ['#FF8844', '#CC6622'] as const },
       { label: 'Negozio Oggetti', icon: '\uD83D\uDED2', route: '/item-shop', gradient: ['#44DD88', '#22AA66'] as const },
       { label: 'Negozio', icon: '\uD83C\uDFEA', route: '/shop', gradient: ['#44AAFF', '#2288CC'] as const },
