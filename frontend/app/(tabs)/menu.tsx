@@ -2,10 +2,20 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../../context/AuthContext';
 import ResourceBadge from '../../components/ui/ResourceBadge';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { COLORS } from '../../constants/theme';
+
+// Pack 119B: altezza canonica della bottom tab bar custom (vedi (tabs)/_layout.tsx → st.tabBar.height = 58).
+// Manteniamo il valore allineato in un singolo punto per evitare drift visivo
+// quando l'altezza della tab bar viene aggiornata.
+const TAB_BAR_HEIGHT = 58;
+// Pack 119B: margine di sicurezza sopra la tab bar per garantire che l'ultima
+// voce del menu (Logout / Cambia Server) resti sempre completamente scrollabile
+// e mai coperta. Valore generoso a copertura di indicator + ombra.
+const MENU_BOTTOM_SAFETY_MARGIN = 38;
 
 const CATEGORIES = [
   {
@@ -13,9 +23,10 @@ const CATEGORIES = [
     items: [
       { label: 'Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
       // PROJECT_HOME_MENU_REWIRING v20: legacy '/tower' link redirected to canonical TEST MVP '/tower-of-the-hells'. Tower gameplay/progress/AsyncStorage NOT touched in this pack.
-      { label: 'Torre degli Inferi (TEST)', icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', gradient: ['#8844FF', '#5522CC'] as const },
+      // Pack 119B: label tecnico "(TEST)" rimosso (player-facing copy pulita).
+      { label: 'Torre degli Inferi', icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', gradient: ['#8844FF', '#5522CC'] as const },
       { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pvp', gradient: ['#FF4444', '#CC2222'] as const },
-      { label: 'Fucina di Efesto', icon: '\u2692\uFE0F', route: '/equipment', gradient: ['#FFAA44', '#CC6622'] as const },
+      // Pack 119B: Fucina di Efesto spostata in Progressione (non e' una modalita' di combattimento).
       // SF_MERGE Track F \u2014 Oggetti Esclusivi rimosso dal menu player.
       // \u00c8 una schermata legacy con disclaimer; non rappresenta il sistema
       // canonico delle Divine Weapons. Mantenuto come deep link informativo.
@@ -26,6 +37,8 @@ const CATEGORIES = [
     items: [
       { label: 'Collezione Eroi', icon: '\uD83D\uDCDA', route: '/hero-collection', gradient: ['#FFD700', '#CC9900'] as const },
       { label: 'Addestramento Eroico', icon: '\u2694\uFE0F', route: '/hero-training', gradient: ['#FFD700', '#BB55FF'] as const },
+      // Pack 119B: Fucina di Efesto spostata qui (da Combattimento). Hub forging/equipaggiamento.
+      { label: 'Fucina di Efesto', icon: '\u2692\uFE0F', route: '/equipment', gradient: ['#FFAA44', '#CC6622'] as const },
       { label: 'Santuario', icon: '\u26E9\uFE0F', route: '/sanctuary', gradient: ['#FF77CC', '#CC5599'] as const },
       { label: 'Artefatti & Costellazioni', icon: '\uD83D\uDC8E', route: '/artifacts-preview', gradient: ['#BB55FF', '#8833CC'] as const },
       { label: 'Soul Forge', icon: '\uD83D\uDC80', route: '/soul-forge', gradient: ['#9944FF', '#6622CC'] as const },
@@ -38,8 +51,10 @@ const CATEGORIES = [
     title: 'Economia',
     items: [
       { label: 'Tesoreria', icon: '\uD83C\uDFE6', route: '/treasury', gradient: ['#FFD700', '#4499FF'] as const },
-      // SF_MERGE Track D+F \u2014 Economia consolidata dentro Soul Forge (\"Anime Hub\").
-      { label: 'Hub Anime (Soul Forge)', icon: '\uD83D\uDD25', route: '/soul-forge', gradient: ['#C877FF', '#9944FF'] as const },
+      // SF_MERGE Track D+F — Economia consolidata dentro Soul Forge.
+      // Pack 119B: label "Hub Anime (Soul Forge)" rinominata in "Forgia dell'Anima"
+      // (label pulita player-facing, no terminologie tecniche/provvisorie).
+      { label: 'Forgia dell\u2019Anima', icon: '\uD83D\uDD25', route: '/soul-forge', gradient: ['#C877FF', '#9944FF'] as const },
       { label: 'Inventario', icon: '\uD83C\uDF92', route: '/inventory', gradient: ['#FF8844', '#CC6622'] as const },
       { label: 'Negozio Oggetti', icon: '\uD83D\uDED2', route: '/item-shop', gradient: ['#44DD88', '#22AA66'] as const },
       { label: 'Negozio', icon: '\uD83C\uDFEA', route: '/shop', gradient: ['#44AAFF', '#2288CC'] as const },
@@ -127,13 +142,15 @@ const CATEGORIES = [
     // che mostra source canonica deterministica + team avversario + team player
     // salvato + bottoni Modifica Team / Avvia Battaglia → /combat reale.
     // db_writes=0 / reward_live=false / endpoint_live=false / random_opponents_allowed=false.
-    title: 'Battaglia (Renderer Reale v90)',
+    // Pack 119B: titolo player-facing pulito (era "Battaglia (Renderer Reale v90)").
+    // Marker tecnico v90 rimosso dalla UI; logica renderer reale + pre-battle-lobby preservata.
+    title: 'Battaglia',
     items: [
-      { label: 'Storia · Battaglia', icon: '\uD83D\uDCDC', route: '/pre-battle-lobby?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
-      { label: 'Torre · Battaglia', icon: '\uD83C\uDFEF', route: '/pre-battle-lobby?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
-      { label: 'Arena PvP · Battaglia', icon: '\uD83E\uDD4A', route: '/pre-battle-lobby?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
-      { label: 'Addestramento · Battaglia', icon: '\u2694\uFE0F', route: '/pre-battle-lobby?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
-      { label: 'Raid · Battaglia', icon: '\uD83D\uDC32', route: '/pre-battle-lobby?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
+      { label: 'Storia', icon: '\uD83D\uDCDC', route: '/pre-battle-lobby?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
+      { label: 'Torre', icon: '\uD83C\uDFEF', route: '/pre-battle-lobby?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
+      { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pre-battle-lobby?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
+      { label: 'Addestramento', icon: '\u2694\uFE0F', route: '/pre-battle-lobby?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
+      { label: 'Raid', icon: '\uD83D\uDC32', route: '/pre-battle-lobby?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
     ],
   },
   {
@@ -155,6 +172,13 @@ const CATEGORIES = [
 export default function MenuTab() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  // Pack 119B: usa safe-area insets reali del device per calcolare il
+  // paddingBottom della ScrollView. Garantisce che la bottom tab bar non copra
+  // mai l'ultima voce (Logout/Cambia Server) anche su device con home indicator
+  // (iPhone notch/Dynamic Island) o gesture bar Android.
+  // Fallback robusto: insets.bottom + TAB_BAR_HEIGHT(58) + MENU_BOTTOM_SAFETY_MARGIN(38) = ~96.
+  const insets = useSafeAreaInsets();
+  const _menuListPaddingBottom = insets.bottom + TAB_BAR_HEIGHT + MENU_BOTTOM_SAFETY_MARGIN;
   // Pre-QA Stabilization 112 — usa il SHARED nav guard canonico.
   const _navGuard = require('../../src/utils/preQaNavGuard');
   const _showLegacyUnsafe = _navGuard.preQaUnsafeVisible();
@@ -192,7 +216,10 @@ export default function MenuTab() {
         </View>
       </LinearGradient>
 
-      <ScrollView contentContainerStyle={s.list} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={[s.list, { paddingBottom: _menuListPaddingBottom }]}
+        showsVerticalScrollIndicator={false}
+      >
         {_filteredCategories.map((cat, ci) => (
           <Animated.View key={cat.title} entering={FadeInDown.delay(ci * 60).duration(300)}>
             <Text style={s.catTitle}>{cat.title.toUpperCase()}</Text>
@@ -302,6 +329,8 @@ const s = StyleSheet.create({
   pLvl: { color: COLORS.gold, fontSize: 10, marginTop: 1 },
   resources: { flexDirection: 'row', gap: 6 },
   // List
+  // Pack 119B: paddingBottom statico mantenuto come fallback (override runtime via
+  // inline style su contentContainerStyle in MenuTab usando useSafeAreaInsets).
   list: { padding: 10, paddingBottom: 70, gap: 10 },
   catTitle: {
     color: COLORS.textMuted,

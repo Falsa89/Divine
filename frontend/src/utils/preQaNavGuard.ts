@@ -67,12 +67,23 @@ export const PRE_QA_BLOCKED_PLAYER_ROUTES: ReadonlySet<string> = new Set<string>
   '/tower',
   // Pre-QA Stabilization 115A — HomeOverflow dead-link `/research` (no research.tsx).
   '/research',
+  // Pre-QA Pack 119B — Catalog/internal/dev-only routes nascoste dal menu pubblico.
+  // Le pagine restano accessibili via deep link interno per QA, ma non
+  // appaiono in /(tabs)/menu come voci player-facing.
+  '/skill-status-vfx-catalogs',
+  '/hero-skill-kits-catalog',
+  '/safe-previews',
+  '/playable-mode-battle-preview',
 ]);
 
 // Set canonico di categorie QA/dev nascoste di default.
 export const PRE_QA_BLOCKED_CATEGORIES: ReadonlySet<string> = new Set<string>([
   'Playability & Announcements QA (v93)',
   'Modalit\u00e0 Live & Guild QA (v92)',
+  // Pre-QA Pack 119B — sezione deprecated Battle Preview wireframe (v88/v90).
+  // Le voci collegate (`/playable-mode-battle-preview?mode=...`) restano
+  // disponibili in dev/QA gated; nascoste dal menu pubblico.
+  'Battle Preview QA (v88) \u2014 Wireframe Deprecato v90',
 ]);
 
 export function preQaUnsafeVisible(): boolean {
