@@ -189,7 +189,7 @@ Web preview: `GET http://localhost:3000/qa-manual-118` → **HTTP 200** (pagina 
 ## 9. Commit SHAs
 
 - **Baseline pre-118B:** `462f214ad` (master, post-118)
-- **Pack commit 118B:** (riempire dopo commit di chiusura)
+- **Pack commit 118B:** `86c24ed20` — verdetto `PRE_QA_STABILIZATION_118B_WEB_QA_ACCESS_HARNESS_READY_FOR_GAME_MASTER_REAUDIT` (6 NEW + 1 MOD suite).
 
 ---
 
