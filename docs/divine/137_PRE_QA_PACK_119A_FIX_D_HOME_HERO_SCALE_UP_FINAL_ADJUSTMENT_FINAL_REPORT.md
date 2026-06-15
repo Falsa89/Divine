@@ -96,7 +96,7 @@ Background top -56 · floor lift · grounding logic (flex-end / paddingBottom 0)
 ## 8. Commit SHAs
 
 - **Baseline pre-119A-FIX-D:** `304eada75` (Pack 119A-FIX-C)
-- **Pack commit 119A-FIX-D:** (riempire dopo commit)
+- **Pack commit 119A-FIX-D:** `d9b96516bcd908ec6033e3469b2780abc87ad26b` — 2 file (1 MOD home.tsx + 1 NEW report).
 
 ---
 
