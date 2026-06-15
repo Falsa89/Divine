@@ -207,6 +207,12 @@ SUITE = [
         'kind': 'validator',
         'script': 'validate_pre_qa_stabilization_118_manual_qa_device_unlock_pass.py',
     },
+    # Pack 118B — Web QA Access Harness (QA-only deeplink page + snapshots)
+    {
+        'name': 'Validator 118B Web QA Access Harness',
+        'kind': 'validator',
+        'script': 'validate_pre_qa_stabilization_118b_web_qa_access_harness.py',
+    },
 ]
 
 MAX_TAIL = 1500  # caratteri di stdout/stderr da preservare nel JSON.

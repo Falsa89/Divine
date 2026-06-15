@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>118B · Web QA Access Harness Snapshot</title>
+<style>
+  :root { color-scheme: dark light; }
+  body { font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+         background: #0f1115; color: #e8eaed; margin: 0; padding: 24px;
+         line-height: 1.45; }
+  .banner { background: #3a1f1f; border: 1px solid #aa4444; border-radius: 8px;
+            padding: 12px 16px; margin-bottom: 16px; }
+  .banner h1 { margin: 0 0 6px; font-size: 16px; color: #ffd9d9; }
+  .banner p { margin: 2px 0; font-size: 12px; color: #f6c9c9; }
+  h2 { font-size: 14px; margin: 18px 0 8px; color: #cfd3dc; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px;
+          background: #161a22; border: 1px solid #222733; border-radius: 6px;
+          overflow: hidden; }
+  th, td { padding: 8px 10px; border-top: 1px solid #222733;
+           text-align: left; vertical-align: top; }
+  th { background: #1b1f27; color: #9aa0a6; font-weight: 600; }
+  code { background: #1b1f27; padding: 1px 6px; border-radius: 3px;
+         color: #cfd3dc; font-size: 11px; }
+  ul { margin: 6px 0 0 18px; padding: 0; }
+  li { font-size: 12px; color: #9aa0a6; margin: 2px 0; }
+  .meta { font-size: 11px; color: #6e7480; margin-top: 16px; }
+  .red { color: #e07b7b; }
+  .ok  { color: #7bd07b; }
+</style>
+</head>
+<body>
+
+  <div class="banner">
+    <h1>118B · Web QA Access Harness Snapshot</h1>
+    <p><b>QA-ONLY · READ-ONLY · DEEPLINK-ONLY · DEV/QA-GATED · NO CLAIMS · NO MUTATIONS · NO LIVE SYSTEMS</b></p>
+    <p>Gate environment: <code>EXPO_PUBLIC_DEV_QA_SURFACES_VISIBLE=true</code> (default <b>false</b>).</p>
+    <p>Route: <code>/qa-manual-118</code> · File: <code>frontend/app/qa-manual-118.tsx</code></p>
+    <p>Harness version: <code>pre_qa_118b_web_qa_access_harness_v1</code></p>
+  </div>
+
+  <h2>Endpoint autorizzati (GET, read-only)</h2>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Label</th><th>Path</th><th>Auth</th><th>server_id</th><th>Invariant chiave</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>bp_metadata</td><td>Battle Power · metadata</td><td><code>/api/battle-power/metadata</code></td><td>no</td><td>no</td><td><code>battle_power_v1_preqa_derived</code></td></tr>
+      <tr><td>bp_summary</td><td>Battle Power · summary</td><td><code>/api/battle-power/summary?server_id=&lt;sid&gt;</code></td><td><b>yes</b></td><td><b>yes</b></td><td>server-scoped find_one PSP, no DB writes</td></tr>
+      <tr><td>bp_breakdown</td><td>Battle Power · breakdown</td><td><code>/api/battle-power/breakdown</code></td><td>no</td><td>no</td><td><code>battle_power_breakdown_v1_preqa_metadata_only</code> / <code>metadata_only_COMPLETE</code></td></tr>
+      <tr><td>rd_metadata</td><td>Red Dot · metadata</td><td><code>/api/red-dot/metadata</code></td><td>no</td><td>no</td><td><code>red_dot_v1_preqa_read_only_foundation</code></td></tr>
+      <tr><td>rd_summary</td><td>Red Dot · summary</td><td><code>/api/red-dot/summary?server_id=&lt;sid&gt;</code></td><td><b>yes</b></td><td><b>yes</b></td><td>actionable_now=false su sources non-warning safe</td></tr>
+      <tr><td>hu_metadata</td><td>Hero Upgrade · metadata</td><td><code>/api/hero-upgrade/metadata</code></td><td>no</td><td>no</td><td><code>hero_upgrade_readiness_v1_preqa_read_only</code> / <code>ECONOMY_SOURCE_NOT_SAFE_FOR_READINESS</code></td></tr>
+      <tr><td>hu_readiness</td><td>Hero Upgrade · readiness</td><td><code>/api/hero-upgrade/readiness?server_id=&lt;sid&gt;</code></td><td><b>yes</b></td><td><b>yes</b></td><td><code>any_red_dot_candidate=false</code> · <code>can_upgrade_now=false</code></td></tr>
+      <tr><td>user_heroes</td><td>User Heroes</td><td><code>/api/user/heroes?server_id=&lt;sid&gt;</code></td><td><b>yes</b></td><td><b>yes</b></td><td>read-only roster server-scoped</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="red">Vietato in harness</h2>
+  <ul>
+    <li class="red">DB writes · POST/PUT/DELETE/PATCH · reward grants</li>
+    <li class="red">Claim / read-all / spend / buy / summon / gacha activation</li>
+    <li class="red">Daily / achievement / mail / Battle Pass claim activation</li>
+    <li class="red">Shop / item-shop / VIP live activation</li>
+    <li class="red">Push notification activation</li>
+    <li class="red">Chat / DM / bot live activation</li>
+    <li class="red">Hero Upgrade mutation · material consume · equip/fuse/forge mutation</li>
+    <li class="red">Battle Power formula change</li>
+    <li class="red">Red Dot actionable resolver activation beyond existing safe warnings</li>
+    <li class="red">Combat authoritative activation · battle_engine.py changes · combat/tower runtime changes</li>
+    <li class="red">Character Bible rewrite · gacha rates changes</li>
+    <li class="red">Broad refactor · package/dependency upgrade churn</li>
+  </ul>
+
+  <h2 class="ok">Flusso QA raccomandato</h2>
+  <ol>
+    <li>Imposta <code>EXPO_PUBLIC_DEV_QA_SURFACES_VISIBLE=true</code> nell'ambiente QA.</li>
+    <li>Apri <code>/qa-manual-118</code> via deeplink (web preview o build dev/QA).</li>
+    <li>Inserisci <code>server_id</code> (default <code>s1</code>) e opzionalmente <code>bearer_token</code>.</li>
+    <li>Premi <i>Run all read-only probes</i> oppure <i>Probe</i> per singolo endpoint.</li>
+    <li>Confronta HTTP status + invariant chiave per ogni endpoint.</li>
+    <li>Cattura screenshot/output JSON per evidence Pack 118.</li>
+  </ol>
+
+  <p class="meta">Snapshot statico generato da Pack 118B — design_only_read_only. Non eseguire da production.</p>
+
+</body>
+</html>

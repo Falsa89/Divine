@@ -1,0 +1,140 @@
+{
+  "_meta": {
+    "id": "pre_qa_118b_web_qa_access_harness_snapshot_v1",
+    "purpose": "Pre-QA Stabilization 118B — Snapshot statico (design-only) della pagina QA web /qa-manual-118. Documenta gli 8 endpoint GET autorizzati e le regole di accesso. NON e' un runtime resolver.",
+    "pack_origin": "118B",
+    "scope": "design_only_read_only",
+    "is_runtime": false,
+    "do_not_use_for_runtime_resolution": true,
+    "no_mutations": true,
+    "no_claim_activation": true,
+    "no_push_notification": true,
+    "server_scoped": true,
+    "harness_version": "pre_qa_118b_web_qa_access_harness_v1"
+  },
+
+  "page": {
+    "route": "/qa-manual-118",
+    "file": "frontend/app/qa-manual-118.tsx",
+    "access_kind": "deeplink_only_dev_qa_gated",
+    "gate_env_var": "EXPO_PUBLIC_DEV_QA_SURFACES_VISIBLE",
+    "gate_default": false,
+    "player_facing": false,
+    "linked_from_player_routes": false
+  },
+
+  "allowed_get_endpoints": [
+    {
+      "id": "bp_metadata",
+      "label": "Battle Power · metadata",
+      "method": "GET",
+      "path": "/api/battle-power/metadata",
+      "requires_server_id": false,
+      "requires_auth": false,
+      "expected_keys": ["status", "formula_version", "source", "runtime_attached", "combat_authoritative", "reward_authoritative", "balance_final", "server_scoped"],
+      "invariant": "formula_version='battle_power_v1_preqa_derived'"
+    },
+    {
+      "id": "bp_summary",
+      "label": "Battle Power · summary",
+      "method": "GET",
+      "path": "/api/battle-power/summary?server_id=<sid>",
+      "requires_server_id": true,
+      "requires_auth": true,
+      "expected_keys": ["status", "server_id", "formula_version", "team_source", "team_missing", "slot_count", "valid_slot_count", "invalid_slot_count", "active_team_power"],
+      "invariant": "server-scoped via PSP find_one. No DB writes."
+    },
+    {
+      "id": "bp_breakdown",
+      "label": "Battle Power · breakdown (metadata-only)",
+      "method": "GET",
+      "path": "/api/battle-power/breakdown",
+      "requires_server_id": false,
+      "requires_auth": false,
+      "expected_keys": ["status", "breakdown_version", "formula_version_invariant", "active_categories", "deferred_categories", "metadata_only", "no_per_user_data", "no_db_reads", "block_outcome_117b_block_b"],
+      "invariant": "breakdown_version='battle_power_breakdown_v1_preqa_metadata_only', block_outcome_117b_block_b='metadata_only_COMPLETE'"
+    },
+    {
+      "id": "rd_metadata",
+      "label": "Red Dot · metadata",
+      "method": "GET",
+      "path": "/api/red-dot/metadata",
+      "requires_server_id": false,
+      "requires_auth": false,
+      "expected_keys": ["status", "red_dot_summary_version", "no_db_writes", "no_claim_activation", "no_read_all", "no_push_notification", "no_toast", "server_scoped", "max_count_display_cap"],
+      "invariant": "red_dot_summary_version='red_dot_v1_preqa_read_only_foundation'"
+    },
+    {
+      "id": "rd_summary",
+      "label": "Red Dot · summary",
+      "method": "GET",
+      "path": "/api/red-dot/summary?server_id=<sid>",
+      "requires_server_id": true,
+      "requires_auth": true,
+      "expected_keys": ["status", "server_id", "red_dot_summary_version", "psp_present_for_server", "sources", "by_screen", "home_total", "active_sources_count"],
+      "invariant": "actionable_now=false su ogni source non-warning safe."
+    },
+    {
+      "id": "hu_metadata",
+      "label": "Hero Upgrade · metadata",
+      "method": "GET",
+      "path": "/api/hero-upgrade/metadata",
+      "requires_server_id": false,
+      "requires_auth": false,
+      "expected_keys": ["status", "source_version", "safe_read_only", "no_db_writes", "no_upgrade_activation", "no_material_consume", "no_claim_activation", "no_reward_activation", "server_scoped", "all_categories_deferred_in_117b", "canonical_upgrade_categories", "global_blocker"],
+      "invariant": "source_version='hero_upgrade_readiness_v1_preqa_read_only', global_blocker='ECONOMY_SOURCE_NOT_SAFE_FOR_READINESS'"
+    },
+    {
+      "id": "hu_readiness",
+      "label": "Hero Upgrade · readiness",
+      "method": "GET",
+      "path": "/api/hero-upgrade/readiness?server_id=<sid>",
+      "requires_server_id": true,
+      "requires_auth": true,
+      "expected_keys": ["status", "server_id", "source_version", "safe_read_only", "no_db_writes", "heroes", "heroes_count", "any_red_dot_candidate", "global_blocker"],
+      "invariant": "any_red_dot_candidate=false, can_upgrade_now=false su tutti gli eroi (Pack 117B Block A)."
+    },
+    {
+      "id": "user_heroes",
+      "label": "User Heroes",
+      "method": "GET",
+      "path": "/api/user/heroes?server_id=<sid>",
+      "requires_server_id": true,
+      "requires_auth": true,
+      "expected_keys": [],
+      "invariant": "Lettura read-only del roster server-scoped. No mutation."
+    }
+  ],
+
+  "forbidden_in_harness": [
+    "DB writes",
+    "POST/PUT/DELETE/PATCH",
+    "reward grants",
+    "claim/read-all/spend/buy/summon/gacha activation",
+    "daily/achievement/mail/Battle Pass claim activation",
+    "shop/item-shop/VIP live activation",
+    "push notification activation",
+    "chat/DM/bot live activation",
+    "Hero Upgrade mutation",
+    "material consume",
+    "equip/fuse/forge mutation",
+    "Battle Power formula change",
+    "Red Dot actionable resolver activation beyond existing safe warnings",
+    "combat authoritative activation",
+    "battle_engine.py changes",
+    "combat/tower runtime changes",
+    "Character Bible rewrite",
+    "gacha rates changes",
+    "broad refactor",
+    "package/dependency upgrade churn"
+  ],
+
+  "recommended_qa_flow": [
+    "Imposta EXPO_PUBLIC_DEV_QA_SURFACES_VISIBLE=true nell'ambiente di build QA.",
+    "Apri /qa-manual-118 via deeplink dal web preview o build dev/QA.",
+    "Inserisci server_id (default s1) e opzionalmente bearer_token.",
+    "Premi 'Run all read-only probes' oppure 'Probe' per singolo endpoint.",
+    "Confronta HTTP status + invariant chiave per ogni endpoint.",
+    "Cattura screenshot e/o JSON output per evidence Pack 118."
+  ]
+}
