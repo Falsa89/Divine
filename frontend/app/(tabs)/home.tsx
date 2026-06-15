@@ -476,8 +476,8 @@ export default function HomeTab() {
               hero={homeHero}
               source={homeSource}
               inTutorial={inTutorial}
-              width={Math.min(W * 0.61, 470)}     /* Pack 119A-FIX-D: 0.55→0.61, 420→470 (scale-up finale aggiuntivo) */
-              height={Math.min(H * 0.88, 660)}    /* Pack 119A-FIX-D: 0.80→0.88, 600→660 */
+              width={Math.min(W * 0.67, 520)}     /* Pack 119A-FIX-E: 0.61→0.67, 470→520 (scale-up step 2) */
+              height={Math.min(H * 0.96, 720)}    /* Pack 119A-FIX-E: 0.88→0.96, 660→720 */
               onPress={onHeroTap}
             />
           </View>
@@ -2203,7 +2203,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 0,
-    transform: [{ translateY: 76 }],    /* Pack 119A-FIX-D: 64→76 per compensare lo scale-up aggiuntivo (W*0.61/H*0.88) e mantenere occlusione lower-body */
+    transform: [{ translateY: 88 }],    /* Pack 119A-FIX-E: 76→88 per compensare scale-up step 2 e mantenere occlusione lower-body */
     zIndex: 1,
   },
 
