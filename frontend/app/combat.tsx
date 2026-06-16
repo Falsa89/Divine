@@ -13,8 +13,11 @@ import { readLaunchContextFromRouterParams } from '../src/battle_launch/consumer
 // Pack 123 — Preview Team Fallback (no-write, no-DB, no-grant).
 // Iniezione minimale: SOLO render visualizzazione in preview_locked.
 // Fail-closed: nessun side-effect se non in contesto preview coerente.
+// Pack 124 — Real Combat Preview: buildPreviewCombatSnapshot fornisce
+// teamA/teamB COMPLETI per il renderer reale (no simulate, no reward).
 import {
   buildPreviewLocalTeamSnapshot,
+  buildPreviewCombatSnapshot,
   previewContextFromParams,
 } from '../src/utils/previewBattleTeam';
 // v108_POSTQA_A — Preview reward lock + Legacy mutating entry watchdog.
@@ -368,12 +371,66 @@ export default function CombatScreen() {
       setPhase('legacy_blocked' as any); setError(''); setLogLines([]); logLinesRef.current = [];
       return;
     }
-    // v108_POSTQA_A — Se il combat parte da un launch_context preview valido,
-    // BLOCCHIAMO la chiamata al simulate endpoint (mutante lato backend).
-    // Mostriamo schermata preview-locked onesta senza alcun reward/EXP/gold/drop.
+    // v108_POSTQA_A → Pack 124 — Preview combat REALE (no-write, no-simulate, no-reward).
+    // Se il combat parte da un launch_context preview valido, BLOCCHIAMO la chiamata
+    // al simulate endpoint (mutante lato backend) e costruiamo teamA/teamB locali
+    // deterministici con eroi canonici reali. Procediamo al renderer reale
+    // (`phase='preparing'` → `phase='fighting'`) cosi' il device QA puo' vedere
+    // sprite/HUD/battlefield. NESSUN reward, NESSUN EXP, NESSUN progress, NESSUN
+    // DB write. battle_log resta vuoto: la combat scene e' visualizzazione pura.
     if (PREVIEW_REWARD_LOCK_ACTIVE) {
-      if (__DEV__) console.log('[v108_POSTQA_A] PREVIEW_REWARD_LOCK_ACTIVE: skipping simulate');
-      setPhase('preview_locked' as any); setError(''); setLogLines([]); logLinesRef.current = [];
+      if (__DEV__) console.log('[pack_124] PREVIEW_COMBAT_REAL: building local snapshot, skipping simulate');
+      const previewCtxLocal = previewContextFromParams(params as Record<string, unknown>);
+      const snap = buildPreviewCombatSnapshot(previewCtxLocal);
+      if (!snap) {
+        // fail-closed: ctx incoerente → manteniamo schermata preview_locked legacy.
+        setPhase('preview_locked' as any); setError(''); setLogLines([]); logLinesRef.current = [];
+        return;
+      }
+      setPhase('loading'); setError(''); setLogLines([]); logLinesRef.current = [];
+      // Result locale fake-safe: nessun winner, nessun reward; usato solo per
+      // far funzionare il post-battle adapter senza dare grant.
+      const localResult = {
+        team_a_final: snap.teamA,
+        team_b_final: snap.teamB,
+        battle_log: [],
+        winner: 'preview' as any,
+        is_preview_local: true,
+      };
+      setResult(localResult as any);
+      setTeamA(snap.teamA as any);
+      setTeamB(snap.teamB as any);
+      // Battle background (deterministico per preview).
+      const bg = pickBattleBackground({
+        campaignFaction: null,
+        teamA: snap.teamA as any,
+        teamB: snap.teamB as any,
+      });
+      setBattleBg(bg);
+      // Init sprite states minimi
+      const states: Record<string, SpriteData> = {};
+      [...snap.teamA, ...snap.teamB].forEach(c => { states[c.id] = initSpriteState(c.id); });
+      setSpriteStates(states);
+      setPhase('preparing');
+      // VS animation
+      vsScale.value = 0; vsOp.value = 0;
+      vsScale.value = withSequence(withTiming(1.3, { duration: 300 }), withTiming(1, { duration: 200 }));
+      vsOp.value = withSequence(withTiming(1, { duration: 200 }), withDelay(600, withTiming(0, { duration: 200 })));
+      safeTimeout(() => {
+        setPhase('fighting');
+        // NB: battle_log e' vuoto → playLog non parte. Lo scopo del preview e'
+        // visualizzare il battlefield + HUD + sprite reali, NON simulare azioni.
+        startBannerOp.value = 0;
+        startBannerScale.value = 0.85;
+        startBannerOp.value = withSequence(
+          withTiming(1, { duration: 200 }),
+          withDelay(1700, withTiming(0, { duration: 400 })),
+        );
+        startBannerScale.value = withSequence(
+          withTiming(1, { duration: 220 }),
+          withDelay(1900, withTiming(0.92, { duration: 360 })),
+        );
+      }, 1400);
       return;
     }
     setPhase('loading'); setError(''); setLogLines([]); logLinesRef.current = [];
@@ -1143,6 +1200,34 @@ export default function CombatScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#060614', overflow: 'hidden' }}>
+      {/* Pack 124 — Real Combat Preview: overlay "Esci Preview" sempre visibile
+          quando preview attivo + fase visiva (preparing/fighting/result).
+          Permette al QA device di tornare alla lobby senza dipendere dal
+          battle_log (che in preview e' vuoto). NESSUN reward, NESSUN commit. */}
+      {PREVIEW_REWARD_LOCK_ACTIVE && (phase === 'preparing' || phase === 'fighting' || phase === 'result') ? (
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Esci dalla preview combat"
+          onPress={() => { try { router.canGoBack?.() ? router.back() : router.replace('/(tabs)/home' as any); } catch (_e) {} }}
+          activeOpacity={0.85}
+          style={{
+            position: 'absolute',
+            top: 28,
+            right: 10,
+            zIndex: 1500,
+            paddingHorizontal: 12,
+            paddingVertical: 6,
+            borderRadius: 6,
+            borderWidth: 1,
+            borderColor: 'rgba(255,176,0,0.85)',
+            backgroundColor: 'rgba(0,0,0,0.55)',
+          }}
+        >
+          <Text style={{ color: '#ffd54f', fontSize: 10, fontWeight: '900', letterSpacing: 1 }}>
+            {'\u2715  ESCI PREVIEW'}
+          </Text>
+        </TouchableOpacity>
+      ) : null}
       {/* v108_pre — Banner preview non-authoritative quando combat parte da Battle Launch Contract v1. Default OFF: si attiva solo se i router params contengono un payload valido. */}
       {v108LaunchEnvelope.is_valid ? (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, paddingHorizontal: 10, paddingVertical: 4, backgroundColor: 'rgba(255,193,7,0.18)', borderBottomWidth: 1, borderBottomColor: 'rgba(255,193,7,0.45)', zIndex: 999 }}>

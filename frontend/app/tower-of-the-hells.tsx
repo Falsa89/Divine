@@ -187,10 +187,24 @@ export default function TowerOfTheHellsScreen() {
           accessibilityLabel={`Floor ${item.id} ${state} (TEST) — apri preview lobby`}
           activeOpacity={0.8}
           disabled={disabled}
-          // Pack 123 — Tap principale: apri il dettaglio (modal sicuro).
-          // Il modal contiene il bottone "Avvia Preview (Lobby)" che effettua
-          // il routing a /pre-battle-lobby?mode=tower&floor_id=X (no crash).
-          onPress={() => setSelectedFloor(item)}
+          // Pack 124 — Tap diretto: naviga immediatamente alla lobby
+          // preview (no modal intermedio, no crash device). I piani locked
+          // restano disabilitati.
+          onPress={() => {
+            if (disabled) return;
+            try {
+              const url = buildPreviewLobbyUrl({
+                mode: 'tower',
+                encounter_id: `enc_tower_floor_${item.id}`,
+                enemy_source_id: `tower_floor_${item.id}_preview`,
+                enemy_source_type: 'authored',
+                floor_id: item.id,
+              });
+              router.push(url as any);
+            } catch (_e) {
+              // fail-closed: nessuna apertura modal in caso di errore
+            }
+          }}
           style={[
             styles.floorCard,
             { backgroundColor: cardBg, borderColor },
@@ -218,7 +232,7 @@ export default function TowerOfTheHellsScreen() {
         </TouchableOpacity>
       );
     },
-    [totalCleared],
+    [totalCleared, router],
   );
 
   const headerNode = useMemo(
@@ -296,10 +310,13 @@ export default function TowerOfTheHellsScreen() {
         showsVerticalScrollIndicator
       />
 
+      {/* Pack 124 — Modal Floor dettaglio: DEV-ONLY (player tap diretto
+          → lobby). selectedFloor in produzione resta sempre null (nessun
+          handler player-facing lo setta). Guardia anti-undefined doppia. */}
       <Modal
         animationType="fade"
         transparent
-        visible={selectedFloor != null}
+        visible={__DEV__ && selectedFloor != null}
         onRequestClose={() => setSelectedFloor(null)}
       >
         <View style={styles.modalBackdrop}>

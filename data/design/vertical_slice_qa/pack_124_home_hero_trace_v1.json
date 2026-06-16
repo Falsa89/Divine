@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_PACK_124",
+  "track": "F_HOME_HERO_TRACE",
+  "endpoint_used": "/api/sanctuary/home-hero",
+  "endpoint_status": "live_existing_route_not_modified_in_pack_124",
+  "trace_method": "static_audit_only",
+  "frontend_consumer_files": [
+    "frontend/app/(tabs)/home.tsx",
+    "frontend/components/sanctuary/SanctuaryHomeHero.tsx"
+  ],
+  "asset_fields_observed_in_code": [
+    "asset_splash",
+    "asset_base",
+    "image_url",
+    "hero_id",
+    "hero_name"
+  ],
+  "determinable_from_github_static_audit": false,
+  "needs_updated_zip_or_device_screenshot": true,
+  "rationale": "Il payload runtime di /api/sanctuary/home-hero dipende dallo stato corrente del DB (collezione sanctuary o equivalente) ed e' selezionato server-side. Senza eseguire la chiamata su un account device reale, non e' possibile dichiarare staticamente se l'hero_id e' `borea` / `greek_borea` / altro, ne' se asset_splash/asset_base puntano alla versione vecchia o nuova di Borea. Pack 124 non modifica asset ne endpoint live: il presente trace e' un placeholder di policy che richiede screenshot device o cattura payload JSON da console di rete (browser dev tools o supervisor backend logs) per chiusura.",
+  "investigative_steps_required": [
+    "1. Aprire l'app su device test e catturare la Home.",
+    "2. In console di rete del client (Expo dev tools / browser web preview), filtrare la chiamata GET /api/sanctuary/home-hero.",
+    "3. Estrarre il payload JSON e annotare i campi `hero_id`, `asset_splash`, `asset_base`, `image_url`.",
+    "4. Confrontare il path asset con il file fisico corrispondente in `frontend/assets/heroes/` o `data/design/assets_registry.json` per determinare versione (vecchia vs nuova).",
+    "5. Aggiornare questo trace JSON con i valori reali e settare `needs_updated_zip_or_device_screenshot=false`."
+  ],
+  "no_touch_confirmation": {
+    "asset_files": false,
+    "backend_routes": false,
+    "character_bible": false,
+    "heroes_master": false
+  },
+  "pack_124_invariants_respected": true
+}

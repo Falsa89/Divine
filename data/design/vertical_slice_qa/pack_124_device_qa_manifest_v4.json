@@ -1,0 +1,143 @@
+{
+  "schema_version": 4,
+  "pack": "PRE_QA_PACK_124",
+  "goal": "PRE_QA_ALPHA_REAL_COMBAT_PREVIEW_AND_QA_TEAM_DEVICE_TEST_READY",
+  "checklist": [
+    {
+      "id": 1,
+      "step": "Home / Menu carica senza crash",
+      "expected": "PASS (no regression from Pack 122/123)",
+      "owner": "device QA"
+    },
+    {
+      "id": 2,
+      "step": "Home hero trace: cattura payload /api/sanctuary/home-hero e identifica Borea vecchia vs nuova",
+      "expected": "Trace JSON aggiornato (pack_124_home_hero_trace_v1.json), needs_updated_zip_or_device_screenshot=false dopo cattura",
+      "owner": "device QA"
+    },
+    {
+      "id": 3,
+      "step": "QA team seed: eseguire `QA_SEED_ENABLED=true python3 backend/scripts/qa_team_seed_canonical_heroes.py --allow-account <user_id>` per assegnare 10 eroi canonici",
+      "expected": "Report JSON in backend/scripts/reports/pack_124_qa_team_seed_*.json con 10 hero_id granted; rollback disponibile via qa_team_seed_clear.py",
+      "owner": "dev manuale + device QA"
+    },
+    {
+      "id": 4,
+      "step": "Team editor: aprire collection/formation e modificare team",
+      "expected": "UI permette selezione/sostituzione tra i 10 eroi assegnati",
+      "owner": "device QA",
+      "blocked_if": "QA team seed non eseguito"
+    },
+    {
+      "id": 5,
+      "step": "Salvare team formato",
+      "expected": "Endpoint team save risponde 200 e team persiste",
+      "owner": "device QA",
+      "note": "Se non testabile per assenza endpoint sicuro: dichiarare BLOCKED_QA_TEAM_SAVE_NOT_TESTABLE"
+    },
+    {
+      "id": 6,
+      "step": "Story → lobby → real combat visual preview",
+      "expected": "Lobby con team reale (o team preview se no seed); combat entra in phase preparing → fighting con sprite/HUD/battlefield visibili",
+      "owner": "device QA"
+    },
+    {
+      "id": 7,
+      "step": "Tower → tap floor (no crash) → lobby → real combat visual preview",
+      "expected": "Tap diretto su un piano UNLOCKED naviga in /pre-battle-lobby?mode=tower&floor_id=N senza modal; piani LOCKED disabilitati; combat reale come step 6",
+      "owner": "device QA"
+    },
+    {
+      "id": 8,
+      "step": "Training Preview Trial → lobby → real combat visual preview",
+      "expected": "Card Training Preview Trial visibile in hero-training; CTA naviga in lobby preview; combat reale come step 6",
+      "owner": "device QA"
+    },
+    {
+      "id": 9,
+      "step": "Arena Preview → opponent → lobby → real combat visual preview",
+      "expected": "Hub Arena con back button; tap opponent naviga lobby; combat reale come step 6",
+      "owner": "device QA"
+    },
+    {
+      "id": 10,
+      "step": "Boss Preview → boss → lobby → real combat visual preview",
+      "expected": "Hub Boss con back button; tap boss naviga lobby; combat reale come step 6",
+      "owner": "device QA"
+    },
+    {
+      "id": 11,
+      "step": "Arena/Boss back button presente e funzionante",
+      "expected": "Top bar con bottone '\u2190 Indietro' chiama router.back() con fallback safe a /(tabs)/home",
+      "owner": "device QA"
+    },
+    {
+      "id": 12,
+      "step": "Nessun reward/EXP/progress/ranking/materiale/drop",
+      "expected": "Dopo combat preview: nessuna mutazione su user.gold/diamonds/exp/items; affinity NON granted (PREVIEW_REWARD_LOCK_ACTIVE attivo)",
+      "owner": "device QA + backend log review"
+    },
+    {
+      "id": 13,
+      "step": "Shop/gacha/VIP/BP/IAP non pubblici",
+      "expected": "Menu legacy unsafe non visibile, surfaces sealed da preQaNavGuard",
+      "owner": "device QA"
+    },
+    {
+      "id": 14,
+      "step": "Back navigation globale OK",
+      "expected": "Tutte le schermate hanno back/Indietro; nessun dead-end",
+      "owner": "device QA"
+    },
+    {
+      "id": 15,
+      "step": "Nessun crash su iOS/Android device",
+      "expected": "Sessione QA completa senza force quit",
+      "owner": "device QA"
+    }
+  ],
+  "invariants_respected_pack_124": {
+    "no_reward_live": true,
+    "no_exp_live": true,
+    "no_progress_commit": true,
+    "no_ranking_mmr": true,
+    "no_authoritative_battle_result_commit": true,
+    "no_gacha_live": true,
+    "no_shop_live": true,
+    "no_vip_live": true,
+    "no_battle_pass_live": true,
+    "no_iap": true,
+    "no_premium_currency_grant_spend": true,
+    "no_mail_claim_live": true,
+    "no_guild_pvp_raid_live_reward": true,
+    "no_production_db_mutation": true,
+    "no_uncontrolled_db_write": true,
+    "no_account_reset_reale": true,
+    "no_systems_live_unlock": true
+  },
+  "forbidden_files_untouched": {
+    "battle_engine_py": true,
+    "battle_core_py": true,
+    "economy_gacha_shop_vip_bp_iap_runtime": true,
+    "reward_claim_live_routes": true,
+    "premium_currency_logic": true,
+    "character_bible": true,
+    "roster_heroes_master": true,
+    "skill_kits_final_numbers": true,
+    "assets_audio": true,
+    "env_file": true,
+    "supervisor": true,
+    "migrations_apply": true,
+    "destructive_db_scripts": true,
+    "live_reward_progress_ranking_commit": true
+  },
+  "files_touched_pack_124": [
+    "frontend/src/utils/previewBattleTeam.ts (EXTENDED — buildPreviewCombatSnapshot + CANONICAL_PREVIEW_ENEMY_IDS)",
+    "frontend/app/combat.tsx (PATCHED — PREVIEW path enters real renderer, exit button)",
+    "frontend/app/tower-of-the-hells.tsx (PATCHED — tap diretto a lobby, modal DEV-ONLY)",
+    "frontend/app/arena-preview.tsx (PATCHED — back button + top bar)",
+    "frontend/app/boss-raid-preview.tsx (PATCHED — back button + top bar)",
+    "backend/scripts/qa_team_seed_canonical_heroes.py (NEW — dev manual only)",
+    "backend/scripts/qa_team_seed_clear.py (NEW — rollback)"
+  ]
+}

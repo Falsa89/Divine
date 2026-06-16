@@ -319,3 +319,156 @@ export function previewContextFromParams(
     mode,
   };
 }
+
+// =========================================================================
+// Pack 124 — Real Combat Preview Snapshot Builder.
+// Genera teamA + teamB completi per il renderer combat (sprite/HUD reali)
+// in modalita' PREVIEW. NESSUNA chiamata a `/api/battle/simulate`,
+// NESSUN reward/EXP/progress.
+//
+// Caratteri compatibili con il rendering esistente di `combat.tsx`:
+//   id, hero_id, hero_name, name, hero_image, rarity, element, level,
+//   stars, role, max_hp, current_hp, max_hp_battle, is_alive, atk, def,
+//   spd, grid_x, grid_y.
+// =========================================================================
+
+export type PreviewCombatUnit = {
+  id: string;
+  hero_id: string;
+  hero_name: string;
+  name: string;
+  hero_image: null;
+  image: null;
+  rarity: number;
+  element: string;
+  level: number;
+  stars: number;
+  role: 'tank' | 'dps' | 'support' | 'healer';
+  max_hp: number;
+  current_hp: number;
+  max_hp_battle: number;
+  is_alive: true;
+  atk: number;
+  def: number;
+  spd: number;
+  rage: number;
+  max_rage: number;
+  grid_x: number;
+  grid_y: number;
+};
+
+// Mappa hero_id canonico → archetipo enemy preview deterministico.
+// Tutti gli ID elencati esistono in `heroes_master.json` (launch_base, 3*).
+export const CANONICAL_PREVIEW_ENEMY_IDS: ReadonlyArray<{
+  hero_id: string;
+  name_it: string;
+  role: 'tank' | 'dps' | 'support' | 'healer';
+  rarity: number;
+  element: string;
+}> = [
+  { hero_id: 'creature_coral_guardian', name_it: 'Guardiana di Corallo', role: 'tank', rarity: 3, element: 'Acqua' },
+  { hero_id: 'norse_thunder_spear', name_it: 'Lancia del Tuono', role: 'dps', rarity: 3, element: 'Fulmine' },
+  { hero_id: 'tides_corsair', name_it: 'Corsara delle Maree', role: 'dps', rarity: 3, element: 'Acqua' },
+  { hero_id: 'egyptian_tide_sibyl', name_it: 'Sibilla delle Maree', role: 'dps', rarity: 3, element: 'Acqua' },
+  { hero_id: 'celtic_moor_druidess', name_it: 'Druida della Brughiera', role: 'support', rarity: 3, element: 'Terra' },
+  { hero_id: 'tides_healer', name_it: 'Guaritrice delle Maree', role: 'healer', rarity: 3, element: 'Acqua' },
+] as const;
+
+function slotToCombatUnit(
+  slot: PreviewHeroSlot,
+  idx: number,
+  side: 'A' | 'B',
+): PreviewCombatUnit {
+  // Stat baseline deterministica per consentire al renderer di funzionare.
+  // Tutti i valori sono LOCAL-ONLY e non impattano alcuna logica live.
+  const baseHp = slot.role === 'tank' ? 16000 : slot.role === 'healer' ? 11000 : 12000;
+  const baseAtk = slot.role === 'dps' ? 1600 : slot.role === 'healer' ? 900 : 1100;
+  const baseDef = slot.role === 'tank' ? 1100 : slot.role === 'support' ? 800 : 700;
+  // Formation grid 3x3: col = idx % 3, row = floor(idx / 3).
+  const col = idx % 3;
+  const row = Math.floor(idx / 3);
+  return {
+    id: `pack124_${side}_${slot.hero_id}_${idx}`,
+    hero_id: slot.hero_id,
+    hero_name: slot.name_it,
+    name: slot.name_it,
+    hero_image: null,
+    image: null,
+    rarity: slot.rarity,
+    element: slot.element,
+    level: slot.level,
+    stars: slot.stars,
+    role: slot.role,
+    max_hp: baseHp,
+    current_hp: baseHp,
+    max_hp_battle: baseHp,
+    is_alive: true,
+    atk: baseAtk,
+    def: baseDef,
+    spd: 100 + idx,
+    rage: 0,
+    max_rage: 100,
+    grid_x: col,
+    grid_y: row,
+  };
+}
+
+export type PreviewCombatSnapshot = {
+  is_preview_combat: true;
+  reward_allowed: false;
+  progress_allowed: false;
+  db_write: false;
+  simulate_endpoint_called: false;
+  teamA: PreviewCombatUnit[];
+  teamB: PreviewCombatUnit[];
+  source: 'pack_124_preview_combat_snapshot';
+  mode: string;
+};
+
+/**
+ * Costruisce uno snapshot COMPLETO di combat preview con teamA (eroi canonici
+ * preview) e teamB (avversari canonici preview). Fail-closed: ritorna null se
+ * il contesto non e' preview-coerente.
+ *
+ * Output utilizzato in `combat.tsx` per popolare teamA/teamB e procedere al
+ * renderer reale (`phase='preparing'` → `phase='fighting'`) SENZA chiamare
+ * il backend `/api/battle/simulate`.
+ */
+export function buildPreviewCombatSnapshot(
+  ctx: PreviewContext,
+): PreviewCombatSnapshot | null {
+  const teamSnapshot = buildPreviewLocalTeamSnapshot(ctx);
+  if (!teamSnapshot) return null;
+  const teamA = teamSnapshot.slots.map((s, i) => slotToCombatUnit(s, i, 'A'));
+  // teamB: usa CANONICAL_PREVIEW_ENEMY_IDS — sono hero_id stub per visualizzare
+  // il battlefield. NOTA: questi ID sono indicativi; se non esistono nel roster
+  // canonico il renderer cade su placeholder iniziali (vedi renderHudCard).
+  const teamB = CANONICAL_PREVIEW_ENEMY_IDS.map((e, i) =>
+    slotToCombatUnit(
+      {
+        hero_id: e.hero_id,
+        name_it: e.name_it,
+        role: e.role,
+        role_display: e.role,
+        rarity: e.rarity,
+        element: e.element,
+        level: 10,
+        stars: 3,
+        power: 2500,
+      },
+      i,
+      'B',
+    ),
+  );
+  return {
+    is_preview_combat: true,
+    reward_allowed: false,
+    progress_allowed: false,
+    db_write: false,
+    simulate_endpoint_called: false,
+    teamA,
+    teamB,
+    source: 'pack_124_preview_combat_snapshot',
+    mode: ctx.mode,
+  };
+}
