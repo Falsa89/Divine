@@ -5657,6 +5657,21 @@ OPTIONAL = [
     ('PRE-QA-P0-VALIDATOR-PATH-RELOCATABILITY-AUDIT', 'validate_validator_path_relocatability_audit_v1.py'),
     ('PRE-QA-P0-STALE-MD5-SUPERSEDENCE-AUDIT', 'validate_stale_md5_supersedence_audit_v1.py'),
     ('PRE-QA-P0-CURRENT-PUBLIC-GUARDRAIL-SNAPSHOT', 'validate_current_public_guardrail_snapshot_v1.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_TAG_PRE_QA_ULTRA_ACCELERATION_121_VERTICAL_SLICE_PLAYABLE_PREVIEW_AND_QA_REBASELINE_COMBO
+    # ------------------------------------------------------------------------
+    # Ultra-combo pack: 5 OPTIONAL validator (vertical slice preview + route
+    # flow + device QA manifest + report completeness + current-unsafe
+    # validator triage). Tier = OPTIONAL (never REQUIRED). Tuple count = 1
+    # ciascuno. Nessun REQUIRED toccato/indebolito/rimosso. Nessun runtime
+    # change. Nessun unlock live. Nessun DB write. Nessun reward/gacha/shop/
+    # VIP/BP/IAP live opened.
+    # ========================================================================
+    ('PRE-QA-ULTRA-121-NO-WRITE-INVARIANTS', 'validate_pre_qa_ultra_121_no_write_invariants.py'),
+    ('PRE-QA-ULTRA-121-ROUTE-FLOW', 'validate_pre_qa_ultra_121_route_flow.py'),
+    ('PRE-QA-ULTRA-121-DEVICE-QA-MANIFEST', 'validate_pre_qa_ultra_121_device_qa_manifest.py'),
+    ('PRE-QA-ULTRA-121-REPORT-COMPLETENESS', 'validate_pre_qa_ultra_121_report_completeness.py'),
+    ('PRE-QA-ULTRA-121-CURRENT-UNSAFE-VALIDATOR-TRIAGE', 'validate_pre_qa_ultra_121_current_unsafe_validator_triage.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

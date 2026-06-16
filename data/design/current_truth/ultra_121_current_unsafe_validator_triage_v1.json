@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_ULTRA_ACCELERATION_121",
+  "track": "F_CURRENT_UNSAFE_VALIDATOR_TRIAGE",
+  "policy": "No runtime change. No fake PASS. No REQUIRED validator weakening. No historical doc deletion.",
+  "decisions_enum": [
+    "UPDATE_BASELINE_NOW",
+    "MARK_SUPERSEDED_HISTORICAL",
+    "SPLIT_ENVIRONMENTAL_CHECK",
+    "DEFER_TO_DEDICATED_PACK"
+  ],
+  "entries": [
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_a_baseline_v1.py",
+      "current_state_119d_known_issue": "MD5 invariant stale per battle_engine.py (atteso 151ca35...; current 8b7f55d4...).",
+      "decision_121": "DEFER_TO_DEDICATED_PACK",
+      "decision_rationale": "Aggiornare il baseline richiede tocchere file Python che storicamente includono MD5 invariant come constant. Modificarli ora senza un test pack dedicato rischia di mascherare drift legittimo o introdurre fake PASS. Lasciamo intatto + documentato.",
+      "blocks_device_qa_now": false,
+      "blocks_release": false
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_c_soul_forge_regression_v1.py",
+      "current_state_119d_known_issue": "MD5 invariant stale per soul-forge.tsx (current MD5 a36818389...).",
+      "decision_121": "DEFER_TO_DEDICATED_PACK",
+      "decision_rationale": "Stesso ragionamento del track A. Riallineare MD5 baseline in un pack dedicato che certifica anche che il diff intermedio non ha introdotto write live.",
+      "blocks_device_qa_now": false,
+      "blocks_release": false
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_f_redis_v1.py",
+      "current_state_119d_known_issue": "Dipende da Redis locale non garantito nel container Pre-QA.",
+      "decision_121": "SPLIT_ENVIRONMENTAL_CHECK",
+      "decision_rationale": "Va separato in due validator: uno statico (config / wiring) eseguibile sempre, e uno smoke runtime classificato come 'smoke_runtime' che skip-pa pulito se Redis non e' raggiungibile. Operazione delegata a pack dedicato.",
+      "blocks_device_qa_now": false,
+      "blocks_release": false
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_g_reporting_v1.py",
+      "current_state_119d_known_issue": "Path assoluti /app + MD5 baseline stale.",
+      "decision_121": "DEFER_TO_DEDICATED_PACK",
+      "decision_rationale": "MAKE_RELOCATABLE + UPDATE_BASELINE simultaneo richiede refactor mirato. Lasciamo nel filesystem come historical evidence e lo marchiamo nel validator_truth_status_matrix.",
+      "blocks_device_qa_now": false,
+      "blocks_release": false
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_i_completion_v1.py",
+      "current_state_119d_known_issue": "Path assoluti /app + MD5 baseline stale + presupposti ambientali.",
+      "decision_121": "DEFER_TO_DEDICATED_PACK",
+      "decision_rationale": "Stesso ragionamento del track G.",
+      "blocks_device_qa_now": false,
+      "blocks_release": false
+    },
+    {
+      "validator_path": "backend/scripts/validate_project_full_runtime_feature_reality_audit_v1.py",
+      "current_state_119d_known_issue": "Usa MD5 invariants vecchi come 'current' (battle_engine 151ca35...).",
+      "decision_121": "MARK_SUPERSEDED_HISTORICAL",
+      "decision_rationale": "E' un audit storico di reality. Il P0 ha gia' dichiarato il nuovo current truth source. Il validator resta come audit trail ma NON va piu' usato come prova current-state.",
+      "blocks_device_qa_now": false,
+      "blocks_release": false,
+      "applies_already_in_validator_truth_status_matrix_v1": true
+    }
+  ],
+  "summary": {
+    "total_unsafe_targeted": 6,
+    "update_baseline_now": 0,
+    "mark_superseded_historical": 1,
+    "split_environmental_check": 1,
+    "defer_to_dedicated_pack": 4,
+    "runtime_changes_introduced_by_triage": 0,
+    "fake_pass_introduced": 0,
+    "required_validator_weakened": 0,
+    "historical_doc_deleted": 0
+  },
+  "honesty_statement": {
+    "no_runtime_change": true,
+    "no_fake_pass": true,
+    "no_required_validator_weakening": true,
+    "no_historical_doc_deletion": true,
+    "deferred_count": 4,
+    "explicitly_documented_in_report": true
+  }
+}

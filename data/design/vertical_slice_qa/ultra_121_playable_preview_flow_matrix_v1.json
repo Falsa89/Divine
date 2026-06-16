@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_ULTRA_ACCELERATION_121_VERTICAL_SLICE_PLAYABLE_PREVIEW_AND_QA_REBASELINE_COMBO",
+  "track": "A_PLAYABLE_PREVIEW_FLOW_MATRIX",
+  "global_invariants": {
+    "preview_only": true,
+    "no_write": true,
+    "no_reward": true,
+    "no_progress": true,
+    "no_exp": true,
+    "no_ranking": true,
+    "no_db_mutation": true,
+    "no_authoritative_battle_commit": true,
+    "battle_engine_mode_runtime_expected": "preview",
+    "is_preview_runtime_expected": true
+  },
+  "modes": [
+    {
+      "mode": "story",
+      "entry_route": "/story",
+      "public_menu_entries": [
+        "Avventura -> Capitoli Storia -> /story",
+        "Battaglia -> Storia -> /pre-battle-lobby?mode=story"
+      ],
+      "expected_lobby_route": "/pre-battle-lobby?mode=story",
+      "expected_combat_preview_route": "/combat (con launch_context preview)",
+      "required_query_params": ["mode=story"],
+      "preview_only": true,
+      "no_write": true,
+      "reward_policy": "preview",
+      "progress_policy": "preview",
+      "battle_engine_mode": "preview",
+      "expected_missing_server_behavior": "blocked_no_team_for_server (UI mostra prompt to choose server)",
+      "expected_missing_team_behavior": "blocked_no_team_for_server (UI consente di proseguire come preview senza commit)",
+      "expected_missing_encounter_behavior": "deterministic_local_payload (no random; nessun reward grant)",
+      "player_facing_copy_expected": "Etichetta 'Storia' / 'Capitoli Storia'. Banner preview-only se attivo.",
+      "device_qa_steps": [
+        "Apri Menu -> Avventura -> Capitoli Storia oppure Menu -> Battaglia -> Storia",
+        "Attendi rendering lobby",
+        "Tocca avvia (se abilitato) per visualizzare preview combat",
+        "Verifica assenza reward popup / EXP popup / progress commit",
+        "Torna indietro - back navigation deve riportare al menu o alla schermata precedente"
+      ],
+      "pass_criteria": [
+        "Nessun crash",
+        "Nessun reward grant",
+        "battle_engine_mode = preview a runtime",
+        "Nessuna DB write osservata via network log",
+        "Lobby mostra preview / no-write disclosure"
+      ],
+      "fail_criteria": [
+        "Crash app",
+        "Reward popup live",
+        "Progress/EXP visibile e cumulato",
+        "battle_engine_mode != preview",
+        "DB write rilevato lato backend"
+      ]
+    },
+    {
+      "mode": "tower",
+      "entry_route": "/tower-of-the-hells",
+      "public_menu_entries": [
+        "Avventura -> Torre degli Inferi -> /tower-of-the-hells",
+        "Battaglia -> Torre -> /pre-battle-lobby?mode=tower"
+      ],
+      "expected_lobby_route": "/pre-battle-lobby?mode=tower",
+      "expected_combat_preview_route": "/combat (preview launch_context)",
+      "required_query_params": ["mode=tower"],
+      "preview_only": true,
+      "no_write": true,
+      "reward_policy": "preview",
+      "progress_policy": "preview",
+      "battle_engine_mode": "preview",
+      "expected_missing_server_behavior": "blocked_no_team_for_server",
+      "expected_missing_team_behavior": "blocked_no_team_for_server (preview senza floor commit)",
+      "expected_missing_encounter_behavior": "deterministic_local_payload",
+      "player_facing_copy_expected": "Etichetta 'Torre degli Inferi'. Floor commit disabled.",
+      "device_qa_steps": [
+        "Menu -> Avventura -> Torre degli Inferi oppure Menu -> Battaglia -> Torre",
+        "Attendi lobby",
+        "Tap su avvia se abilitato (preview)",
+        "Verifica nessun floor commit (Torre progress non cumula)"
+      ],
+      "pass_criteria": [
+        "Nessun floor commit",
+        "battle_engine_mode = preview",
+        "Nessun reward grant"
+      ],
+      "fail_criteria": [
+        "Floor progress committed",
+        "Reward grant",
+        "Crash"
+      ]
+    },
+    {
+      "mode": "training",
+      "entry_route": "/hero-training",
+      "public_menu_entries": [
+        "Progressione -> Addestramento Eroico -> /hero-training",
+        "Battaglia -> Addestramento -> /pre-battle-lobby?mode=training"
+      ],
+      "expected_lobby_route": "/pre-battle-lobby?mode=training",
+      "expected_combat_preview_route": "/combat (preview)",
+      "required_query_params": ["mode=training"],
+      "preview_only": true,
+      "no_write": true,
+      "reward_policy": "preview",
+      "progress_policy": "preview",
+      "battle_engine_mode": "preview",
+      "expected_missing_server_behavior": "blocked_no_team_for_server",
+      "expected_missing_team_behavior": "blocked_no_team_for_server (stub screen STRICT CONSTRAINTS)",
+      "expected_missing_encounter_behavior": "deterministic_local_payload",
+      "player_facing_copy_expected": "Etichetta 'Addestramento Eroico'. STRICT CONSTRAINTS header garantisce read-only.",
+      "device_qa_steps": [
+        "Menu -> Progressione -> Addestramento Eroico oppure Menu -> Battaglia -> Addestramento",
+        "Verifica pulsanti disabled (STRICT CONSTRAINTS)",
+        "Verifica assenza claim / purchase / state mutation"
+      ],
+      "pass_criteria": [
+        "Pulsanti visivamente disabled o preview-only",
+        "Nessun backend call mutante",
+        "Nessun reward grant"
+      ],
+      "fail_criteria": [
+        "Pulsanti diventano attivi e producono mutazioni",
+        "Reward grant",
+        "Crash"
+      ]
+    },
+    {
+      "mode": "arena",
+      "entry_route": "/pre-battle-lobby?mode=arena",
+      "public_menu_entries": [
+        "Battaglia -> Arena PvP -> /pre-battle-lobby?mode=arena"
+      ],
+      "expected_lobby_route": "/pre-battle-lobby?mode=arena",
+      "expected_combat_preview_route": "/combat (preview, NESSUN matchmaking live)",
+      "required_query_params": ["mode=arena"],
+      "preview_only": true,
+      "no_write": true,
+      "reward_policy": "preview",
+      "progress_policy": "preview",
+      "battle_engine_mode": "preview",
+      "expected_missing_server_behavior": "blocked_no_team_for_server",
+      "expected_missing_team_behavior": "blocked_no_team_for_server",
+      "expected_missing_encounter_behavior": "deterministic_local_payload (no random PvP)",
+      "player_facing_copy_expected": "Etichetta 'Arena PvP'. Nessun ranking live, no MMR mutation.",
+      "device_qa_steps": [
+        "Menu -> Battaglia -> Arena PvP",
+        "Verifica lobby preview",
+        "Verifica assenza matchmaking live (no real opponent fetch)",
+        "Verifica nessun MMR/ranking mutation"
+      ],
+      "pass_criteria": [
+        "battle_engine_mode = preview",
+        "Nessun MMR/ranking commit",
+        "Nessun reward grant"
+      ],
+      "fail_criteria": [
+        "MMR/ranking commit live",
+        "Reward grant",
+        "Matchmaking live"
+      ]
+    },
+    {
+      "mode": "boss",
+      "entry_route": "/pre-battle-lobby?mode=boss",
+      "public_menu_entries": [
+        "Battaglia -> Raid -> /pre-battle-lobby?mode=boss"
+      ],
+      "expected_lobby_route": "/pre-battle-lobby?mode=boss",
+      "expected_combat_preview_route": "/combat (preview boss encounter)",
+      "required_query_params": ["mode=boss"],
+      "preview_only": true,
+      "no_write": true,
+      "reward_policy": "preview",
+      "progress_policy": "preview",
+      "battle_engine_mode": "preview",
+      "expected_missing_server_behavior": "blocked_no_team_for_server",
+      "expected_missing_team_behavior": "blocked_no_team_for_server",
+      "expected_missing_encounter_behavior": "deterministic_local_payload",
+      "player_facing_copy_expected": "Etichetta 'Raid' (boss preview). Nessun drop live, nessun raid reward live.",
+      "device_qa_steps": [
+        "Menu -> Battaglia -> Raid",
+        "Verifica lobby preview boss",
+        "Verifica assenza drop/raid reward"
+      ],
+      "pass_criteria": [
+        "Nessun drop/raid reward",
+        "battle_engine_mode = preview"
+      ],
+      "fail_criteria": [
+        "Drop/raid reward live",
+        "Crash"
+      ]
+    }
+  ]
+}

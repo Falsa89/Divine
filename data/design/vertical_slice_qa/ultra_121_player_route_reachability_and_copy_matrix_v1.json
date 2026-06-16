@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_ULTRA_ACCELERATION_121",
+  "track": "B_ROUTE_REACHABILITY_AND_COPY_MATRIX",
+  "category_enum": [
+    "reachable_visual",
+    "preview_only",
+    "locked_deferred",
+    "mutation_sensitive_but_gated",
+    "blocked_hidden",
+    "needs_device_qa"
+  ],
+  "verified_invariants": {
+    "no_public_route_missing_import": true,
+    "no_live_blocked_route_in_public_menu": true,
+    "no_technical_qa_dev_label_in_public_menu": true,
+    "locked_deferred_screens_have_copy": true,
+    "shop_gacha_vip_bp_iap_not_publicly_accessible": true
+  },
+  "routes": [
+    {"category": "Avventura", "label": "Capitoli Storia", "route": "/story", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok (label IT, no marker tecnico)", "notes": "Hub Storia preview, instrada a /pre-battle-lobby?mode=story"},
+    {"category": "Avventura", "label": "Torre degli Inferi", "route": "/tower-of-the-hells", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok", "notes": "Hub Torre preview MVP"},
+    {"category": "Progressione", "label": "Collezione Eroi", "route": "/hero-collection", "classification": "locked_deferred", "copy_quality": "ok"},
+    {"category": "Progressione", "label": "Addestramento Eroico", "route": "/hero-training", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok (header STRICT CONSTRAINTS)"},
+    {"category": "Progressione", "label": "Fucina di Efesto", "route": "/equipment", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok"},
+    {"category": "Progressione", "label": "Artefatti & Costellazioni", "route": "/artifacts-preview", "classification": "locked_deferred", "copy_quality": "ok"},
+    {"category": "Progressione", "label": "Forgia dell'Anima", "route": "/soul-forge", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok"},
+    {"category": "Progressione", "label": "Achievement", "route": "/achievements", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok (claim endpoint resta 423)"},
+    {"category": "Economia", "label": "Tesoreria", "route": "/treasury", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok"},
+    {"category": "Economia", "label": "Inventario", "route": "/inventory", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok"},
+    {"category": "Sociale", "label": "Fazione del Giocatore", "route": "/player-faction", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok"},
+    {"category": "Altro", "label": "Guida / Codex", "route": "/guide", "classification": "locked_deferred", "copy_quality": "ok"},
+    {"category": "Altro", "label": "Classifiche", "route": "/rankings", "classification": "reachable_visual", "copy_quality": "ok"},
+    {"category": "Altro", "label": "Seleziona Server", "route": "/servers", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok (server select runtime safe)", "hygiene_note": "WARN dal run_player_route_static_audit: marker lock/preview non match _LOCKED_V2/legacy/preview. Non e' P0 runtime leak; e' hygiene tag drift. Documentato qui come known WARN non-blocking. Nessuna modifica runtime applicata."},
+    {"category": "Altro", "label": "Guida Giornaliera", "route": "/daily-hub", "classification": "mutation_sensitive_but_gated", "copy_quality": "ok (link aggregator, no claim diretto)"},
+    {"category": "Altro", "label": "Armi Divine", "route": "/divine-weapons-catalog", "classification": "preview_only", "copy_quality": "ok"},
+    {"category": "Altro", "label": "Sinergie Collezione", "route": "/collection-synergies-preview", "classification": "preview_only", "copy_quality": "ok"},
+    {"category": "Battaglia", "label": "Storia", "route": "/pre-battle-lobby?mode=story", "classification": "preview_only", "copy_quality": "ok"},
+    {"category": "Battaglia", "label": "Torre", "route": "/pre-battle-lobby?mode=tower", "classification": "preview_only", "copy_quality": "ok"},
+    {"category": "Battaglia", "label": "Arena PvP", "route": "/pre-battle-lobby?mode=arena", "classification": "preview_only", "copy_quality": "ok"},
+    {"category": "Battaglia", "label": "Addestramento", "route": "/pre-battle-lobby?mode=training", "classification": "preview_only", "copy_quality": "ok"},
+    {"category": "Battaglia", "label": "Raid", "route": "/pre-battle-lobby?mode=boss", "classification": "preview_only", "copy_quality": "ok"}
+  ],
+  "blocked_hidden_routes": [
+    "/shop", "/vip", "/battlepass", "/gacha", "/pvp", "/guild", "/gvg",
+    "/raid", "/territory", "/plaza", "/dm", "/events", "/mail", "/friends",
+    "/playable-mode-battle-preview", "/skill-status-vfx-catalogs",
+    "/hero-skill-kits-catalog", "/safe-previews"
+  ],
+  "totals": {
+    "public_routes": 22,
+    "reachable_visual": 1,
+    "preview_only": 7,
+    "locked_deferred": 3,
+    "mutation_sensitive_but_gated": 11,
+    "blocked_hidden": 18,
+    "needs_device_qa": 22
+  },
+  "known_non_blocking_warnings": [
+    {
+      "id": "WARN_SERVERS_LOCK_MARKER_DRIFT",
+      "source": "backend/scripts/run_player_route_static_audit.py",
+      "route": "/servers",
+      "description": "servers.tsx missing lock marker matching _LOCKED_V2 / legacy / preview. UI gia' contiene 'locked', 'disabled', 'fallback', 'deferred' come termini interni; il pattern atteso e' specifico ad altri pack precedenti.",
+      "severity": "P3",
+      "blocks_pack": false,
+      "blocks_device_qa": false,
+      "remediation_plan": "Pack futuro dedicato a hygiene markers; nessuna modifica runtime in 121."
+    }
+  ]
+}

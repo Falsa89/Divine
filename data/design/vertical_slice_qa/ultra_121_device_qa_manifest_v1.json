@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_ULTRA_ACCELERATION_121",
+  "track": "E_DEVICE_QA_MANIFEST",
+  "manifest_version": 1,
+  "intended_for": "device QA controllata su iOS/Android con build preview",
+  "scope_invariants": {
+    "no_purchase_test": true,
+    "no_claim_reward_test": true,
+    "no_env_flag_override": true,
+    "no_dev_qa_hidden_route_use": true,
+    "asset_audio_placeholder_not_blocking": true,
+    "device_qa_must_remain_no_write": true
+  },
+  "preconditions": [
+    "Build preview compilata senza modifiche al runtime di questo pack.",
+    "Server backend raggiungibile (probe /api/health).",
+    "Account QA con permessi standard (no admin, no dev).",
+    "DB di test (NON production)."
+  ],
+  "checklist_ordered": [
+    {"step": 1,  "action": "Avvia app",                                  "expected": "Splash + Home renderizzata senza crash."},
+    {"step": 2,  "action": "Apri Home",                                  "expected": "Hero grounding + scale OK (Pack 119A)."},
+    {"step": 3,  "action": "Apri Menu (tab)",                            "expected": "6 categorie visibili: Avventura, Progressione, Economia, Sociale, Altro, Battaglia."},
+    {"step": 4,  "action": "Verifica 22 voci pubbliche presenti",        "expected": "Conteggio voci = 22 (vedi route reachability matrix)."},
+    {"step": 5,  "action": "Verifica assenza label QA/TEST/V88/V90/Renderer/Wireframe/Deprecato", "expected": "Nessuna label tecnica visibile."},
+    {"step": 6,  "action": "Tocca Avventura -> Capitoli Storia",         "expected": "Naviga a /story senza crash."},
+    {"step": 7,  "action": "Tocca Battaglia -> Storia",                  "expected": "Naviga a /pre-battle-lobby?mode=story. Banner preview/no-write visibile o disabled state."},
+    {"step": 8,  "action": "Avvia combat visual preview Story",          "expected": "Render combat preview, NESSUN reward popup, NESSUN EXP/progress."},
+    {"step": 9,  "action": "Back navigation -> Menu",                    "expected": "Torna a Menu senza route dev/QA in cronologia."},
+    {"step": 10, "action": "Tocca Battaglia -> Torre",                   "expected": "Lobby preview tower."},
+    {"step": 11, "action": "Avvia combat visual preview Tower",          "expected": "Preview render, nessun floor commit."},
+    {"step": 12, "action": "Tocca Battaglia -> Addestramento",           "expected": "Lobby preview training. Pulsanti disabled coerenti."},
+    {"step": 13, "action": "Avvia combat visual preview Training",       "expected": "Preview render, zero reward/EXP."},
+    {"step": 14, "action": "Tocca Battaglia -> Arena PvP",               "expected": "Lobby preview arena. Nessun matchmaking live."},
+    {"step": 15, "action": "Avvia combat visual preview Arena",          "expected": "Preview render, NESSUN MMR/ranking commit."},
+    {"step": 16, "action": "Tocca Battaglia -> Raid",                    "expected": "Lobby preview boss. Nessun drop live."},
+    {"step": 17, "action": "Avvia combat visual preview Boss",           "expected": "Preview render, nessun raid reward live."},
+    {"step": 18, "action": "Verifica banner / copy preview / no reward / no progress", "expected": "UI dichiara preview o disabled in modo comprensibile."},
+    {"step": 19, "action": "Verifica accessibilita' shop/gacha/VIP/BP",  "expected": "NESSUNA voce shop/gacha/VIP/BP/IAP raggiungibile dal menu pubblico."},
+    {"step": 20, "action": "Verifica locked/deferred (Hero Collection, Artefatti, Guida)", "expected": "Schermate consultive comprensibili, no crash."},
+    {"step": 21, "action": "Verifica back navigation globale",           "expected": "Back consistente, no dead-end."},
+    {"step": 22, "action": "Verifica assenza crash su tutte le 22 route", "expected": "Nessun crash registrato."},
+    {"step": 23, "action": "Verifica reward/EXP/progress NON aumentano dopo i test", "expected": "Stato account identico al pre-test."}
+  ],
+  "dont_do_in_device_qa": [
+    "NON testare acquisti reali (no IAP).",
+    "NON testare claim reward.",
+    "NON forzare env flag.",
+    "NON usare route dev/QA nascoste.",
+    "NON intercettare network per simulare reward live.",
+    "Placeholder asset/audio non sono blocker di questo pack."
+  ],
+  "pass_criteria": [
+    "Tutti i 23 step completati senza crash.",
+    "Nessun reward/EXP/progress osservato (account immutato).",
+    "Nessuna route bloccata esposta.",
+    "Nessuna label tecnica visibile.",
+    "battle_engine_mode = preview a runtime (verifica via debug log o telemetry)."
+  ],
+  "fail_criteria": [
+    "Crash su qualsiasi route.",
+    "Reward popup live.",
+    "EXP/progress committed.",
+    "MMR/ranking committed (Arena).",
+    "Floor commit (Torre).",
+    "Shop/gacha/VIP/BP accessibili pubblicamente."
+  ]
+}
