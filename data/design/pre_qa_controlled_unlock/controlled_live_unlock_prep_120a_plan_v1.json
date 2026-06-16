@@ -1,0 +1,676 @@
+{
+  "pack": "PRE_QA_PACK_120A_CONTROLLED_LIVE_UNLOCK_PREP_PLAN_ONLY_FROM_119D_MATRIX",
+  "version": 1,
+  "mode": "plan_only",
+  "runtime_unlock_applied": false,
+  "db_write_allowed": false,
+  "reward_live_allowed": false,
+  "gacha_shop_vip_bp_allowed": false,
+  "source_pack": "119D",
+  "source_report": "docs/divine/153_PRE_QA_PACK_119D_PUBLIC_MENU_ROUTE_TARGET_HEALTH_AND_MUTATION_CLASSIFICATION_FINAL_REPORT.md",
+  "source_json_latest": "backend/reports/pre_qa_pack_119d_public_menu_route_health_latest.json",
+  "generated_at_utc_note": "Aggiornato a runtime dal validator se necessario; il piano e' statico/plan_only.",
+
+  "tier_definitions": {
+    "tier_0_already_safe": "Route gia' read-only / safe: nessun unlock necessario.",
+    "tier_1_visual_qa": "Route candidate per QA visivo/manuale (no write).",
+    "tier_2_controlled_gated": "Route con mutazione potenziale ma con gating; unlock controllato richiede approval per-route.",
+    "tier_3_battle_preview": "Pre-battle-lobby / battle preview senza reward/EXP/progress/DB write.",
+    "tier_4_hard_blocked": "Sistemi che restano bloccati finche' non esiste pack dedicato (gacha, shop, VIP, BP, PvP live, guild live, raid live reward, mail claim, events reward, social live, economy-spend live)."
+  },
+
+  "route_candidates": [
+    {
+      "route": "/rankings",
+      "category": "Altro",
+      "label": "Classifiche",
+      "file_target": "frontend/app/rankings.tsx",
+      "classification_119d": "safe_read_only",
+      "tier": 0,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Nessuna chiamata HTTP mutante.",
+        "Nessuna keyword di mutazione strong/weak.",
+        "Nessuna evidenza di gating, ma non e' necessaria: pagina classifiche read-only."
+      ],
+      "preconditions": ["Conferma assenza di endpoint scrittura nei prossimi audit."],
+      "static_tests_required": ["119D validator", "manual visual read-only smoke"],
+      "device_tests_required": ["nessuno specifico oltre smoke"],
+      "rollback_requirement": "N/A (nessuno unlock applicato)",
+      "future_gate": "Nessun pack futuro richiesto"
+    },
+    {
+      "route": "/hero-collection",
+      "category": "Progressione",
+      "label": "Collezione Eroi",
+      "file_target": "frontend/app/hero-collection.tsx",
+      "classification_119d": "locked_deferred",
+      "tier": 1,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Nessuna chiamata HTTP mutante rilevata.",
+        "Gating evidence presente nei marker preview/locked."
+      ],
+      "preconditions": ["Conferma read-only", "Conferma nessun toggle equip live"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["QA visivo navigazione collezione"],
+      "rollback_requirement": "N/A",
+      "future_gate": "Pack dedicato hero detail/equip read-only se serve"
+    },
+    {
+      "route": "/artifacts-preview",
+      "category": "Progressione",
+      "label": "Artefatti & Costellazioni",
+      "file_target": "frontend/app/artifacts-preview.tsx",
+      "classification_119d": "locked_deferred",
+      "tier": 1,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Preview catalog dichiarato locked/deferred.",
+        "Nessuna mutazione HTTP."
+      ],
+      "preconditions": ["Conferma nessun activate/equip live"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["QA visivo lista artefatti"],
+      "rollback_requirement": "N/A",
+      "future_gate": "Pack futuro Artifact runtime (fuori scope Pre-QA)"
+    },
+    {
+      "route": "/guide",
+      "category": "Altro",
+      "label": "Guida / Codex",
+      "file_target": "frontend/app/guide.tsx",
+      "classification_119d": "locked_deferred",
+      "tier": 1,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": ["Guida/Codex consultivo, nessun write."],
+      "preconditions": ["Conferma assenza form submit"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["QA visivo navigazione guida"],
+      "rollback_requirement": "N/A",
+      "future_gate": "Nessun pack futuro richiesto"
+    },
+    {
+      "route": "/divine-weapons-catalog",
+      "category": "Altro",
+      "label": "Armi Divine",
+      "file_target": "frontend/app/divine-weapons-catalog.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 1,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Catalogo read-only delle Armi Divine.",
+        "Keyword 'gacha' presenti come termine tematico, ma file mostra evidenza di gating (preview=16, gating=8)."
+      ],
+      "preconditions": ["Conferma assenza pull/equip live"],
+      "static_tests_required": ["119D validator", "scan keyword sui prossimi commit"],
+      "device_tests_required": ["QA visivo catalogo (no tap su 'attiva')"],
+      "rollback_requirement": "N/A (read-only)",
+      "future_gate": "Divine Weapon runtime fuori scope Pre-QA"
+    },
+    {
+      "route": "/collection-synergies-preview",
+      "category": "Altro",
+      "label": "Sinergie Collezione",
+      "file_target": "frontend/app/collection-synergies-preview.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 1,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Preview sinergie collezione design-only.",
+        "Weak keyword 'equip' presente ma gating + preview marker dominanti."
+      ],
+      "preconditions": ["Conferma assenza activate/equip live"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["QA visivo card sinergie"],
+      "rollback_requirement": "N/A",
+      "future_gate": "Collection Synergy runtime fuori scope Pre-QA"
+    },
+    {
+      "route": "/story",
+      "category": "Avventura",
+      "label": "Capitoli Storia",
+      "file_target": "frontend/app/story.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Hub modalita' Storia con bottone 'play' che instrada al Pre-Battle Lobby (preview, gated).",
+        "HTTP=1 (fetch GET), gating=6."
+      ],
+      "preconditions": [
+        "Battle Launch Contract v1 deve rimanere preview-only.",
+        "Nessun commit progress/EXP/reward."
+      ],
+      "static_tests_required": ["119D validator", "audit di doBattle/launchBattleViaLobby"],
+      "device_tests_required": ["device QA: aprire Storia, NON avviare battaglie live"],
+      "rollback_requirement": "Flag-gated; rollback via revert dell'eventuale futuro pack di unlock.",
+      "future_gate": "Pack dedicato unlock Storia (incluso reward live = TIER 4 separato)"
+    },
+    {
+      "route": "/tower-of-the-hells",
+      "category": "Avventura",
+      "label": "Torre degli Inferi",
+      "file_target": "frontend/app/tower-of-the-hells.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Hub Torre, weak keyword 'reward'/'progress' presenti ma gating dominante.",
+        "Test MVP, non runtime live."
+      ],
+      "preconditions": ["Conferma nessun progress permanente"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA: aprire Torre, no commit floor"],
+      "rollback_requirement": "Flag-gated",
+      "future_gate": "Pack futuro Torre runtime (con reward live = TIER 4)"
+    },
+    {
+      "route": "/hero-training",
+      "category": "Progressione",
+      "label": "Addestramento Eroico",
+      "file_target": "frontend/app/hero-training.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Stub screen esplicitamente READ-ONLY (STRICT CONSTRAINTS: No backend calls, No state mutation, No purchases / claim, Buttons are visually disabled).",
+        "Gating=16, preview=8."
+      ],
+      "preconditions": ["Conferma costante: stub screen, no backend"],
+      "static_tests_required": ["119D validator", "grep STRICT CONSTRAINTS"],
+      "device_tests_required": ["QA visivo: bottoni disabled"],
+      "rollback_requirement": "N/A (gia' read-only)",
+      "future_gate": "Pack futuro Hero Training runtime (TIER 4)"
+    },
+    {
+      "route": "/equipment",
+      "category": "Progressione",
+      "label": "Fucina di Efesto",
+      "file_target": "frontend/app/equipment.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Hub forge/equipaggiamento con HTTP=1 e keyword upgrade/equip.",
+        "Gating=2: limitato; servono test mirati prima di qualsiasi unlock."
+      ],
+      "preconditions": [
+        "Conferma: endpoint upgrade/equip restano 423 o disabled.",
+        "Nessun spend currency live."
+      ],
+      "static_tests_required": ["119D validator", "audit endpoint scrittura equip/upgrade"],
+      "device_tests_required": ["device QA: aprire Fucina, non confermare upgrade"],
+      "rollback_requirement": "Flag-gated + kill-switch",
+      "future_gate": "Pack dedicato Equipment/Forge runtime live (TIER 4)"
+    },
+    {
+      "route": "/soul-forge",
+      "category": "Progressione",
+      "label": "Forgia dell'Anima",
+      "file_target": "frontend/app/soul-forge.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Importa postqa_d_locked_endpoints (gating esplicito).",
+        "HTTP=1, forge:18, shop:2, gating=14."
+      ],
+      "preconditions": [
+        "postqa_d_locked_endpoints deve restare attivo.",
+        "Nessuna soul-essence spend live."
+      ],
+      "static_tests_required": ["119D validator", "audit postqa_d_locked"],
+      "device_tests_required": ["device QA: aprire Forgia, non eseguire forge live"],
+      "rollback_requirement": "Flag-gated + kill-switch",
+      "future_gate": "Pack dedicato Soul Forge runtime live (TIER 4)"
+    },
+    {
+      "route": "/achievements",
+      "category": "Progressione",
+      "label": "Achievement",
+      "file_target": "frontend/app/achievements.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Strong keyword 'claim' (3) + HTTP=1.",
+        "Gating presente ma limitato (2)."
+      ],
+      "preconditions": [
+        "Endpoint claim achievement deve restare 423 finche' Pack reward live non dedicato.",
+        "Nessun grant premium / nessun account flag mutation."
+      ],
+      "static_tests_required": ["119D validator", "audit endpoint /api/achievements/claim"],
+      "device_tests_required": ["device QA: aprire achievements, non tappare claim live"],
+      "rollback_requirement": "Flag-gated, kill-switch su /api/achievements/claim",
+      "future_gate": "Pack dedicato Achievement Reward Live (TIER 4)"
+    },
+    {
+      "route": "/treasury",
+      "category": "Economia",
+      "label": "Tesoreria",
+      "file_target": "frontend/app/treasury.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Strong claim:1, summon:1; weak shop:8; gating=4, preview=9.",
+        "Hub valute con preview disponibili, no claim/spend live."
+      ],
+      "preconditions": ["Nessuna purchase live", "Nessun grant currency"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA visivo wallet"],
+      "rollback_requirement": "Flag-gated",
+      "future_gate": "Treasury read-only e' OK; treasury write live = TIER 4"
+    },
+    {
+      "route": "/inventory",
+      "category": "Economia",
+      "label": "Inventario",
+      "file_target": "frontend/app/inventory.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "HTTP=1 (read), weak shop:1; gating=2.",
+        "Inventory read-only di base, no use/spend live."
+      ],
+      "preconditions": ["Conferma assenza endpoint use/destroy live"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA: aprire inventory, no use/destroy"],
+      "rollback_requirement": "Flag-gated",
+      "future_gate": "Inventory mutate (use/destroy) = TIER 4"
+    },
+    {
+      "route": "/player-faction",
+      "category": "Sociale",
+      "label": "Fazione del Giocatore",
+      "file_target": "frontend/app/player-faction.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "HTTP=1 (read), gating=5, preview=3.",
+        "Fazione del giocatore consultiva."
+      ],
+      "preconditions": ["Conferma assenza join/leave faction live"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA visivo"],
+      "rollback_requirement": "Flag-gated",
+      "future_gate": "Faction join/switch runtime = TIER 4"
+    },
+    {
+      "route": "/servers",
+      "category": "Altro",
+      "label": "Seleziona Server",
+      "file_target": "frontend/app/servers.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "HTTP=2, strong claim:2 (claim = 'reclama slot server', non claim reward).",
+        "Gating=7. Funzione esistente e necessaria al login flow."
+      ],
+      "preconditions": [
+        "Conferma che claim slot server non abbia side-effect su gacha/wallet/reward.",
+        "Conferma idempotenza claim slot."
+      ],
+      "static_tests_required": ["119D validator", "audit endpoint /api/servers/*"],
+      "device_tests_required": ["device QA: selezione server gia' nota safe"],
+      "rollback_requirement": "Server slot rollback gia' supportato dal backend",
+      "future_gate": "Nessun nuovo unlock richiesto; funzione esistente"
+    },
+    {
+      "route": "/daily-hub",
+      "category": "Altro",
+      "label": "Guida Giornaliera",
+      "file_target": "frontend/app/daily-hub.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 2,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Strong claim:1 (daily claim aggregator); weak battlepass:2, shop:2.",
+        "Aggregatore Daily Hub: deep link aggregator senza claim diretto."
+      ],
+      "preconditions": [
+        "Aggregator deve restare link-only.",
+        "Nessun endpoint /api/daily/claim live finche' Pack reward live non dedicato."
+      ],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA: navigare Guida Giornaliera, non claim live"],
+      "rollback_requirement": "Flag-gated",
+      "future_gate": "Pack dedicato Daily Reward Live (TIER 4)"
+    },
+    {
+      "route": "/pre-battle-lobby?mode=story",
+      "category": "Battaglia",
+      "label": "Storia",
+      "file_target": "frontend/app/pre-battle-lobby.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 3,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Pre-battle lobby preview-only (gating=21, preview=14).",
+        "startBattle keyword presente: la lobby instrada al renderer reale ma source canonica deterministica + no random opponents + no reward live."
+      ],
+      "preconditions": [
+        "blocked_no_team_for_server resta valido.",
+        "reward_live=false, ranking_live=false, db_writes=0, endpoint_live=false."
+      ],
+      "static_tests_required": ["119D validator", "audit blocked_no_team_for_server"],
+      "device_tests_required": ["device QA visivo lobby preview"],
+      "rollback_requirement": "Flag-gated + kill-switch su /api/battle/start",
+      "future_gate": "Pack dedicato Battle Real Reward Live (TIER 4)"
+    },
+    {
+      "route": "/pre-battle-lobby?mode=tower",
+      "category": "Battaglia",
+      "label": "Torre",
+      "file_target": "frontend/app/pre-battle-lobby.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 3,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": ["Stesse condizioni del mode=story; differiscono solo per encounter canonico."],
+      "preconditions": ["Stesse di mode=story"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA visivo lobby preview Torre"],
+      "rollback_requirement": "Flag-gated",
+      "future_gate": "Pack dedicato Tower Reward Live (TIER 4)"
+    },
+    {
+      "route": "/pre-battle-lobby?mode=arena",
+      "category": "Battaglia",
+      "label": "Arena PvP",
+      "file_target": "frontend/app/pre-battle-lobby.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 3,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Stesse condizioni del mode=story.",
+        "Arena PvP runtime live e' bloccato a livello di sistema (TIER 4)."
+      ],
+      "preconditions": ["Stesse di mode=story; PvP matchmaking live resta TIER 4"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA visivo lobby preview Arena"],
+      "rollback_requirement": "Flag-gated + kill-switch",
+      "future_gate": "Pack dedicato PvP Live (TIER 4)"
+    },
+    {
+      "route": "/pre-battle-lobby?mode=training",
+      "category": "Battaglia",
+      "label": "Addestramento",
+      "file_target": "frontend/app/pre-battle-lobby.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 3,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": ["Stesse condizioni del mode=story."],
+      "preconditions": ["Stesse di mode=story"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA visivo lobby preview Training"],
+      "rollback_requirement": "Flag-gated",
+      "future_gate": "Pack dedicato Training Reward Live (TIER 4)"
+    },
+    {
+      "route": "/pre-battle-lobby?mode=boss",
+      "category": "Battaglia",
+      "label": "Raid",
+      "file_target": "frontend/app/pre-battle-lobby.tsx",
+      "classification_119d": "mutation_sensitive_but_gated",
+      "tier": 3,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Stesse condizioni del mode=story.",
+        "Raid live reward resta TIER 4."
+      ],
+      "preconditions": ["Stesse di mode=story; raid live reward resta TIER 4"],
+      "static_tests_required": ["119D validator"],
+      "device_tests_required": ["device QA visivo lobby preview Raid"],
+      "rollback_requirement": "Flag-gated + kill-switch",
+      "future_gate": "Pack dedicato Raid Reward Live (TIER 4)"
+    }
+  ],
+
+  "stage_plan": [
+    {
+      "stage": "S0_VISUAL_QA_ONLY",
+      "description": "QA visivo manuale sulle Tier 0 + Tier 1. Nessuna scrittura. Nessun click su 'claim'/'avvia'.",
+      "candidate_routes": [
+        "/rankings",
+        "/hero-collection",
+        "/artifacts-preview",
+        "/guide",
+        "/divine-weapons-catalog",
+        "/collection-synergies-preview"
+      ],
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "exit_criteria": "Game Master conferma QA visivo OK su tutte le 6 route."
+    },
+    {
+      "stage": "S1_CONTROLLED_GATED_INTERACTION_DRY_RUN",
+      "description": "Test mirato sulle Tier 2 senza eseguire write effettive: tap UI, conferma che endpoint scrittura rispondano 423/disabled/preview-only. Nessun spend, nessun grant.",
+      "candidate_routes": [
+        "/story",
+        "/tower-of-the-hells",
+        "/hero-training",
+        "/equipment",
+        "/soul-forge",
+        "/achievements",
+        "/treasury",
+        "/inventory",
+        "/player-faction",
+        "/servers",
+        "/daily-hub"
+      ],
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "exit_criteria": "Per ogni route, audit statico + device QA conferma: zero write reali, zero side-effect su DB/wallet/reward."
+    },
+    {
+      "stage": "S2_BATTLE_PREVIEW_VISUAL_PASS",
+      "description": "Test visivo Pre-Battle Lobby (5 mode) senza reward/EXP/progress/DB write. Renderer reale resta preview-only.",
+      "candidate_routes": [
+        "/pre-battle-lobby?mode=story",
+        "/pre-battle-lobby?mode=tower",
+        "/pre-battle-lobby?mode=arena",
+        "/pre-battle-lobby?mode=training",
+        "/pre-battle-lobby?mode=boss"
+      ],
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "exit_criteria": "Game Master conferma visivo: lobby OK + nessuna battaglia commit-rewarded."
+    },
+    {
+      "stage": "S3_PER_ROUTE_LIVE_UNLOCK_DESIGN",
+      "description": "Pack futuri DEDICATI per ogni candidate Tier 2 con scrittura live (es. Hero Training runtime, Soul Forge runtime, Equipment runtime, Achievement reward live, Daily Reward live). Ogni pack include design, flag, kill-switch, rollback, audit dedicato. Niente in questo pack.",
+      "candidate_routes": [],
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "exit_criteria": "Pack futuri creati uno per volta con scope ristretto."
+    }
+  ],
+
+  "hard_blockers": [
+    {
+      "id": "BLOCK_GACHA_LIVE",
+      "description": "Gacha (summon) live: DB write + currency spend. Resta bloccato finche' pack dedicato non viene creato.",
+      "routes_affected": ["/gacha"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_SHOP_LIVE",
+      "description": "Shop / Item Shop purchase live: DB write + currency spend + inventory grant.",
+      "routes_affected": ["/shop", "/item-shop"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_VIP_LIVE",
+      "description": "VIP subscription / premium grant live: account flag mutation.",
+      "routes_affected": ["/vip"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_BATTLEPASS_LIVE",
+      "description": "Battle Pass purchase / claim live: account flag + reward grant.",
+      "routes_affected": ["/battlepass"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_PVP_LIVE",
+      "description": "PvP matchmaking live + reward live: ranking + reward mutation.",
+      "routes_affected": ["/pvp"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_GUILD_LIVE",
+      "description": "Guild create/join/contribute live: guild DB mutation + currency.",
+      "routes_affected": ["/guild", "/gvg"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_RAID_LIVE_REWARD",
+      "description": "Raid Cooperativi reward live: drop + currency + inventory grant.",
+      "routes_affected": ["/raid"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_MAIL_CLAIM_LIVE",
+      "description": "Mail attachments claim live: inventory grant + flag mutation.",
+      "routes_affected": ["/mail"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_EVENTS_REWARD_LIVE",
+      "description": "Eventi giornalieri reward live: reward grant + flag mutation.",
+      "routes_affected": ["/events"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_SOCIAL_LIVE",
+      "description": "Friends / DM / Plaza / Territory live: social DB write + chat persistence.",
+      "routes_affected": ["/friends", "/dm", "/plaza", "/territory"],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_ECONOMY_SPEND_LIVE",
+      "description": "Qualsiasi spend currency/gem/soul-essence live esposto al giocatore in pre-QA.",
+      "routes_affected": [],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_REWARD_LIVE",
+      "description": "Qualsiasi grant reward live (achievement claim, daily claim, raid drop, etc.).",
+      "routes_affected": [],
+      "status": "blocked"
+    },
+    {
+      "id": "BLOCK_DB_WRITE_PRE_QA",
+      "description": "Nessuna DB write live in pre-QA salvo flussi auth/session gia' approvati (login/server slot).",
+      "routes_affected": [],
+      "status": "blocked"
+    }
+  ],
+
+  "safety_gates": [
+    {
+      "id": "GATE_A_STATIC_ROUTE_SAFETY",
+      "description": "Target file esiste, route non e' live-blocked, no unsafe_exposed, no unknown_needs_review.",
+      "evidence_source": "validator 119D + validator 119C"
+    },
+    {
+      "id": "GATE_B_MUTATION_CONTAINMENT",
+      "description": "POST/PUT/PATCH/DELETE assenti oppure gated (423/disabled/preview-only); nessun grant premium; nessun spend currency; nessuna inventory mutation non autorizzata.",
+      "evidence_source": "validator 119D classification + audit endpoint backend (statico)"
+    },
+    {
+      "id": "GATE_C_ECONOMY_ISOLATION",
+      "description": "Shop/Gacha/VIP/BP non esposti nel menu pubblico; nessuna purchase route player-facing; nessun claim reale; nessun reward live.",
+      "evidence_source": "validator 119C + 119D blocked_route_checks"
+    },
+    {
+      "id": "GATE_D_BATTLE_ISOLATION",
+      "description": "Nessun authoritative battle result commit; no EXP/progress/reward; pre-battle-lobby resta preview/no-write finche' non autorizzato per-pack.",
+      "evidence_source": "validator 119D classification pre-battle-lobby"
+    },
+    {
+      "id": "GATE_E_MANUAL_QA_CONTROLLED",
+      "description": "Screenshot/flow QA solo dopo audit statico; device test mirato (NON esplorativo cieco), un solo Tier alla volta.",
+      "evidence_source": "stage_plan S0 -> S1 -> S2"
+    },
+    {
+      "id": "GATE_F_ROLLBACK_AND_KILL_SWITCH",
+      "description": "Ogni futuro unlock deve essere flag-gated, avere kill-switch, essere reversibile senza DB migration distruttiva.",
+      "evidence_source": "future per-route pack design"
+    }
+  ],
+
+  "rollback_requirements": [
+    "Tutti i futuri unlock devono essere flag-gated via env (EXPO_PUBLIC_*) o feature flag backend.",
+    "Ogni unlock deve avere kill-switch documentato (variabile env o endpoint /api/admin/feature-flag).",
+    "Nessun unlock deve richiedere migration DB distruttiva.",
+    "Ogni unlock deve essere revertibile via revert del singolo commit / spegnimento flag senza data loss."
+  ],
+
+  "manual_qa_requirements": [
+    "QA visivo Tier 0/1 (6 route): scroll, navigazione, nessun tap su CTA write-like.",
+    "QA Tier 2 (11 route): aprire ogni route, verificare disabled state, NON tappare 'avvia/claim/upgrade/forge/equip' live.",
+    "QA Tier 3 (5 mode pre-battle-lobby): aprire lobby, verificare preview/no-write, source canonica deterministica.",
+    "Tutti i test devono essere registrati nel report del pack QA dedicato successivo."
+  ],
+
+  "next_recommended_packs": [
+    "PRE_QA_PACK_120B_VISUAL_QA_EVIDENCE_TIER0_TIER1",
+    "PRE_QA_PACK_120C_CONTROLLED_GATED_INTERACTION_DRY_RUN_TIER2",
+    "PRE_QA_PACK_120D_BATTLE_PREVIEW_VISUAL_PASS_TIER3",
+    "PRE_QA_PACK_121_PER_ROUTE_LIVE_UNLOCK_DESIGN_TIER4_INDIVIDUAL"
+  ]
+}
