@@ -147,7 +147,10 @@ def main() -> int:
         _fail("MONGO_URL non trovato in backend/.env")
 
     client = MongoClient(mongo_url)  # type: ignore[arg-type]
-    db = client.get_default_database()
+    try:
+        db = client.get_default_database()
+    except Exception:
+        db = None
     if db is None:
         # Fallback al primo db disponibile
         names = client.list_database_names()

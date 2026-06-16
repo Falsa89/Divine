@@ -1,0 +1,113 @@
+{
+  "schema_version": 5,
+  "pack": "PACK_125",
+  "goal": "PACK_125_COMBAT_ACTION_HOME_BOREA_QA_TEAM_SAVE_FIX_COMPLETE",
+  "checklist": [
+    {
+      "id": 1,
+      "step": "Home / Menu carica senza crash",
+      "expected": "PASS (no regression)",
+      "owner": "device QA"
+    },
+    {
+      "id": 2,
+      "step": "Home hero Borea visualizzata con asset locale greek_borea",
+      "expected": "Asset greek_borea/transparent.png o splash.png visibile, non gradient blu/emoji vento",
+      "owner": "device QA"
+    },
+    {
+      "id": 3,
+      "step": "QA seed applicato a test@test.com (UUID 651253e2-da8d-466b-98f3-82f008d158ed)",
+      "expected": "Account vede i 10 eroi canonici in /battle (Tank/DPS/Support/Healer mix)",
+      "owner": "device QA",
+      "evidence": "backend/scripts/reports/pack_124_qa_team_seed_1781647180.json — granted=4, skipped=6 (idempotent)"
+    },
+    {
+      "id": 4,
+      "step": "Team editor: aprire /battle, drag eroi nei 9 slot della formation grid",
+      "expected": "UI responsive, sprite caricati per ogni hero_id seedato",
+      "owner": "device QA"
+    },
+    {
+      "id": 5,
+      "step": "Salvare team via POST /api/team/save-formation",
+      "expected": "Con QA_TEAM_SAVE_ENABLED=true + account in allowlist: 200 OK + team persistito in player_server_profiles.team_formation. Altrimenti 403 QA_TEAM_SAVE_DISABLED.",
+      "owner": "device QA + dev manuale env"
+    },
+    {
+      "id": 6,
+      "step": "Re-open /battle: team persiste via GET /api/team/get-formation?server_id=...",
+      "expected": "Grid mostra il team appena salvato",
+      "owner": "device QA"
+    },
+    {
+      "id": 7,
+      "step": "Combat preview NON resta in idle: sprite attaccano/subiscono hit",
+      "expected": "battle_log locale con 3 turni avanza in playLog; almeno una skill + un heal visibili",
+      "owner": "device QA"
+    },
+    {
+      "id": 8,
+      "step": "Preview preload PRIMA di phase='fighting'",
+      "expected": "In device QA gli sprite NON compaiono in ritardo dopo l'inizio; nessuna schermata nera/crash",
+      "owner": "device QA"
+    },
+    {
+      "id": 9,
+      "step": "Tower → tap floor → lobby → real combat con action loop",
+      "expected": "PASS",
+      "owner": "device QA"
+    },
+    {
+      "id": 10,
+      "step": "Training/Arena/Boss preview → real combat con action loop",
+      "expected": "PASS",
+      "owner": "device QA"
+    },
+    {
+      "id": 11,
+      "step": "Nessun reward/EXP/progress/ranking/materiale/drop",
+      "expected": "Affinity NON granted, gold/diamonds invariati, no item drop, no progress commit",
+      "owner": "device QA + backend log review"
+    },
+    {
+      "id": 12,
+      "step": "Shop/gacha/VIP/BP/IAP non pubblici, no live unlock",
+      "expected": "Surfaces sealed",
+      "owner": "device QA"
+    },
+    {
+      "id": 13,
+      "step": "Back navigation OK (incluso Arena/Boss back button)",
+      "expected": "PASS (Pack 124 fix preservato)",
+      "owner": "device QA"
+    },
+    {
+      "id": 14,
+      "step": "Nessun crash su iOS/Android device",
+      "expected": "Sessione QA completa senza force quit",
+      "owner": "device QA"
+    }
+  ],
+  "rollback_seed": "QA_SEED_ENABLED=true python3 backend/scripts/qa_team_seed_clear.py --allow-account 651253e2-da8d-466b-98f3-82f008d158ed",
+  "enable_team_save": "QA_TEAM_SAVE_ENABLED=true QA_TEAM_SAVE_ALLOWLIST=651253e2-da8d-466b-98f3-82f008d158ed sudo supervisorctl restart backend",
+  "invariants_respected_pack_125": {
+    "no_reward_live": true,
+    "no_exp_live": true,
+    "no_progress_commit": true,
+    "no_ranking_mmr": true,
+    "no_authoritative_battle_result_commit": true,
+    "no_gacha_live": true,
+    "no_shop_live": true,
+    "no_vip_live": true,
+    "no_battle_pass_live": true,
+    "no_iap": true,
+    "no_premium_currency_grant_spend": true,
+    "no_mail_claim_live": true,
+    "no_account_wide_team_write": true,
+    "no_borea_ownership_grant": true,
+    "no_borea_unlock_live": true,
+    "no_character_bible_change": true,
+    "no_roster_mutation": true
+  }
+}

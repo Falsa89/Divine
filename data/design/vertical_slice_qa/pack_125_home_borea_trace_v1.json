@@ -1,0 +1,24 @@
+{
+  "schema_version": 2,
+  "pack": "PRE_QA_PACK_125",
+  "track": "C_HOME_BOREA_FIX",
+  "endpoint_used": "/api/sanctuary/home-hero",
+  "fix_applied_pack_125": true,
+  "fix_summary": "HomeHeroSplash.tsx ora mappa visualmente legacy `borea` e canonical `greek_borea` all'asset locale `frontend/assets/heroes/greek_borea/transparent.png`. Il branch isBorea viene renderizzato come PRIMARY path PRIMA di useUiContract / fallback gradient, evitando il blocco blu/vento.",
+  "hero_id_aliases": ["borea", "greek_borea"],
+  "canonical_asset_path_local": "frontend/assets/heroes/greek_borea/transparent.png",
+  "canonical_asset_path_fallback": "frontend/assets/heroes/greek_borea/splash.png",
+  "tutorial_only": true,
+  "no_ownership_grant": true,
+  "no_borea_unlock": true,
+  "no_roster_mutation": true,
+  "no_character_bible_change": true,
+  "asset_exists": true,
+  "rendering_change_summary": "Prima: legacy borea → LinearGradient blu + emoji 🌬. Dopo: legacy borea o greek_borea → <RNImage source={require('greek_borea/transparent.png')} resizeMode='contain' />.",
+  "fallback_gradient_still_present_for_other_heroes": true,
+  "notes": [
+    "Asset directory `/app/frontend/assets/heroes/greek_borea/` esiste con transparent.png, splash.png, card.png, detail.png.",
+    "Nessuna modifica al backend /api/sanctuary/home-hero: il fix e' puramente frontend/visuale.",
+    "Borea NON e' equipaggiabile/ottenibile: solo visualizzazione tutorial della home hero card."
+  ]
+}

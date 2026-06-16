@@ -15,9 +15,12 @@ import { readLaunchContextFromRouterParams } from '../src/battle_launch/consumer
 // Fail-closed: nessun side-effect se non in contesto preview coerente.
 // Pack 124 — Real Combat Preview: buildPreviewCombatSnapshot fornisce
 // teamA/teamB COMPLETI per il renderer reale (no simulate, no reward).
+// Pack 125 — buildPreviewBattleLog fornisce battle_log locale deterministico
+// (3 turni con attack/skill/heal) cosi' gli sprite NON restano in idle.
 import {
   buildPreviewLocalTeamSnapshot,
   buildPreviewCombatSnapshot,
+  buildPreviewBattleLog,
   previewContextFromParams,
 } from '../src/utils/previewBattleTeam';
 // v108_POSTQA_A — Preview reward lock + Legacy mutating entry watchdog.
@@ -371,15 +374,17 @@ export default function CombatScreen() {
       setPhase('legacy_blocked' as any); setError(''); setLogLines([]); logLinesRef.current = [];
       return;
     }
-    // v108_POSTQA_A → Pack 124 — Preview combat REALE (no-write, no-simulate, no-reward).
-    // Se il combat parte da un launch_context preview valido, BLOCCHIAMO la chiamata
-    // al simulate endpoint (mutante lato backend) e costruiamo teamA/teamB locali
-    // deterministici con eroi canonici reali. Procediamo al renderer reale
-    // (`phase='preparing'` → `phase='fighting'`) cosi' il device QA puo' vedere
-    // sprite/HUD/battlefield. NESSUN reward, NESSUN EXP, NESSUN progress, NESSUN
-    // DB write. battle_log resta vuoto: la combat scene e' visualizzazione pura.
+    // v108_POSTQA_A → Pack 124 → Pack 125 — Preview combat REALE con preload + action loop.
+    // Se il combat parte da un launch_context preview valido:
+    //   - BLOCCHIAMO la chiamata al simulate endpoint (mutante backend).
+    //   - Costruiamo teamA/teamB locali deterministici (eroi canonici).
+    //   - PRELOAD asset minimi (background + sprite-sheets) PRIMA del fighting.
+    //   - Costruiamo un battle_log locale deterministico (3 turni: attack/skill/heal).
+    //   - Procediamo al renderer reale (`phase='preparing'` → `phase='fighting'`).
+    //   - playLog avanza con il log locale → gli sprite attaccano/subiscono hit.
+    // NESSUN reward, NESSUN EXP, NESSUN progress, NESSUN DB write.
     if (PREVIEW_REWARD_LOCK_ACTIVE) {
-      if (__DEV__) console.log('[pack_124] PREVIEW_COMBAT_REAL: building local snapshot, skipping simulate');
+      if (__DEV__) console.log('[pack_125] PREVIEW_COMBAT_REAL: action loop + preload, skipping simulate');
       const previewCtxLocal = previewContextFromParams(params as Record<string, unknown>);
       const snap = buildPreviewCombatSnapshot(previewCtxLocal);
       if (!snap) {
@@ -387,39 +392,77 @@ export default function CombatScreen() {
         setPhase('preview_locked' as any); setError(''); setLogLines([]); logLinesRef.current = [];
         return;
       }
-      setPhase('loading'); setError(''); setLogLines([]); logLinesRef.current = [];
-      // Result locale fake-safe: nessun winner, nessun reward; usato solo per
-      // far funzionare il post-battle adapter senza dare grant.
+      // Pack 125 — Action loop: costruisce 3 turni di battle_log compatibile con playLog.
+      const previewLog = buildPreviewBattleLog(snap.teamA as any, snap.teamB as any);
       const localResult = {
         team_a_final: snap.teamA,
         team_b_final: snap.teamB,
-        battle_log: [],
+        battle_log: previewLog,
         winner: 'preview' as any,
         is_preview_local: true,
       };
       setResult(localResult as any);
-      setTeamA(snap.teamA as any);
-      setTeamB(snap.teamB as any);
-      // Battle background (deterministico per preview).
+      const tA = snap.teamA as any[];
+      const tB = snap.teamB as any[];
+      setTeamA(tA);
+      setTeamB(tB);
+      // Battle background deterministico.
       const bg = pickBattleBackground({
         campaignFaction: null,
-        teamA: snap.teamA as any,
-        teamB: snap.teamB as any,
+        teamA: tA,
+        teamB: tB,
       });
       setBattleBg(bg);
-      // Init sprite states minimi
+      setPhase('loading'); setError(''); setLogLines([]); logLinesRef.current = [];
+
+      // Pack 125 FIX B — Preload asset MINIMI prima di phase='fighting'.
+      // Riutilizziamo lo stesso pipeline del path live (Promise.allSettled +
+      // safety timeout) per garantire che gli sprite siano pronti quando
+      // entriamo in fighting.
+      const preloadAssets: any[] = [];
+      if (bg.source) preloadAssets.push({ src: bg.source, label: `bg \u00B7 ${bg.faction || 'neutral'}` });
+      preloadAssets.push({ src: GREEK_HOPLITE_COMBAT_BASE, label: 'hoplite \u00B7 combat_base' });
+      HOPLITE_BATTLE_ASSET_MANIFEST.forEach((src, idx) => {
+        preloadAssets.push({ src, label: `hoplite \u00B7 asset #${idx + 1}` });
+      });
+      [...tA, ...tB].forEach((c) => {
+        const heroId = c.hero_id || c.id;
+        const heroName = c.hero_name || c.name;
+        const img = c.hero_image || c.image;
+        try {
+          getHeroBattlePreloadAssets(heroId, heroName, img).forEach((src: any, idx: number) => {
+            preloadAssets.push({ src, label: `${heroName || heroId || 'hero'} \u00B7 battle asset #${idx + 1}` });
+          });
+        } catch (_e) { /* fallback silenzioso */ }
+      });
+      setPreloadTotal(preloadAssets.length);
+      setPreloadLoaded(0);
+      setPreloadLabel('Preview \u00B7 Inizializzazione asset...');
+      let loadedCount = 0;
+      const loadOnePrev = async (item: { src: any; label: string }) => {
+        try { await preloadBattleAsset(item.src); } catch { /* asset mancante: fallback */ }
+        finally { loadedCount += 1; setPreloadLoaded(loadedCount); setPreloadLabel(item.label); }
+      };
+      const preloadAllPrev = Promise.allSettled(preloadAssets.map(loadOnePrev)).then(() => undefined);
+      const preloadTimeoutPrev = new Promise<void>(res => setTimeout(() => {
+        if (__DEV__) console.warn('[pack_125] preload timeout 7000ms');
+        res();
+      }, 7000));
+      await Promise.race([preloadAllPrev, preloadTimeoutPrev]);
+
+      // Init sprite states minimi.
       const states: Record<string, SpriteData> = {};
-      [...snap.teamA, ...snap.teamB].forEach(c => { states[c.id] = initSpriteState(c.id); });
+      [...tA, ...tB].forEach(c => { states[c.id] = initSpriteState(c.id); });
       setSpriteStates(states);
       setPhase('preparing');
-      // VS animation
+      // VS animation.
       vsScale.value = 0; vsOp.value = 0;
       vsScale.value = withSequence(withTiming(1.3, { duration: 300 }), withTiming(1, { duration: 200 }));
       vsOp.value = withSequence(withTiming(1, { duration: 200 }), withDelay(600, withTiming(0, { duration: 200 })));
       safeTimeout(() => {
         setPhase('fighting');
-        // NB: battle_log e' vuoto → playLog non parte. Lo scopo del preview e'
-        // visualizzare il battlefield + HUD + sprite reali, NON simulare azioni.
+        // Pack 125 — playLog avanza con battle_log locale (3 turni).
+        if (previewLog.length > 0) playLog(localResult as any, 0, 0);
         startBannerOp.value = 0;
         startBannerScale.value = 0.85;
         startBannerOp.value = withSequence(

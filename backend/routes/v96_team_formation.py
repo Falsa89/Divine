@@ -1,5 +1,5 @@
 """
-v96 — Team formation read-only endpoint.
+v96 — Team formation endpoints.
 
 Chiude il blocker v95: /api/team/get-formation.
 
@@ -13,15 +13,31 @@ Pack 88 — STRICT SERVER-SCOPED:
   Quando server_id NON è fornito, è la legacy/compat path account-wide
   esposta come deprecated, non player-facing.
 
+Pack 125 — QA TEAM SAVE SERVER-SCOPED (POST /api/team/save-formation):
+  Endpoint DEV/QA SOLO gated da `QA_TEAM_SAVE_ENABLED=true` env var +
+  allowlist account via `QA_TEAM_SAVE_ALLOWLIST` (comma-separated user_ids
+  oppure '*' per ambiente test). Quando gate fail-closed:
+    - server_id obbligatorio (no account-wide write).
+    - PSP deve esistere per (user_id, server_id).
+    - Tutti gli hero_id devono essere in user_heroes con quel server_id.
+    - Massimo 6 eroi per formazione.
+    - Posizioni col 0..2 row 0..2 valide.
+  Write SOLO su player_server_profiles.team_formation (no users update,
+  no economy, no reward, no gacha, no shop, no VIP, no BP, no IAP).
+  Idempotente: stesso payload → stesso risultato finale.
+
 Invarianti garantiti:
 - NO writes a users.team_formation nel flow server-scoped.
 - NO fallback a user.team_formation account-wide quando server_id presente.
 - NO fake team, NO global roster.
 - NO copia S1→S2.
 - Pack 87 starter team flow preservato (team init via starter claim).
+- Pack 125: NO economy, NO reward, NO progress mutation.
 """
-from typing import Optional
-from fastapi import APIRouter, Depends, Header
+from typing import Optional, List, Any
+import os
+from fastapi import APIRouter, Depends, Header, HTTPException
+from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/api/team", tags=["v96_team_formation"])
 
@@ -184,6 +200,181 @@ def create_team_formation_router(db, get_current_user):
             "team_formation": legacy_team_formation,
             "blocker": None,
             "_slc_pack_88_legacy_path_warning": "This path is non-player-facing. Use server_id for player-facing reads.",
+        }
+
+    # =========================================================================
+    # Pack 125 — POST /api/team/save-formation (QA dev gated, server-scoped).
+    # =========================================================================
+    class TeamSlot(BaseModel):
+        hero_id: str = Field(..., min_length=1, max_length=128)
+        col: int = Field(..., ge=0, le=2)
+        row: int = Field(..., ge=0, le=2)
+
+    class SaveFormationRequest(BaseModel):
+        server_id: str = Field(..., min_length=1)
+        team_formation: List[TeamSlot] = Field(default_factory=list)
+
+    def _qa_save_gate_state() -> dict:
+        """Stato del gate: enabled + allowlist. Read fresh ad ogni call."""
+        enabled = os.environ.get("QA_TEAM_SAVE_ENABLED", "").strip().lower() == "true"
+        allowlist_raw = os.environ.get("QA_TEAM_SAVE_ALLOWLIST", "").strip()
+        return {
+            "enabled": enabled,
+            "allowlist_raw": allowlist_raw,
+            "allowlist": [a.strip() for a in allowlist_raw.split(",") if a.strip()] if allowlist_raw else [],
+            "wildcard": allowlist_raw == "*",
+        }
+
+    @router.post("/save-formation")
+    async def save_formation(
+        body: SaveFormationRequest,
+        current_user: Optional[dict] = Depends(get_current_user),
+    ):
+        """
+        Salva la team_formation server-scoped per il player autenticato.
+        DEV/QA-only: gated da QA_TEAM_SAVE_ENABLED env var + allowlist.
+
+        NO economy mutation, NO reward, NO progress, NO gacha, NO shop,
+        NO VIP, NO BP, NO IAP. Write SOLO su
+        player_server_profiles.team_formation.
+        """
+        gate = _qa_save_gate_state()
+        if not gate["enabled"]:
+            raise HTTPException(
+                status_code=403,
+                detail={
+                    "blocker": "QA_TEAM_SAVE_DISABLED",
+                    "message": "Team save server-scoped e' un endpoint QA dev gated. Impostare QA_TEAM_SAVE_ENABLED=true per abilitarlo.",
+                },
+            )
+        if not current_user:
+            raise HTTPException(status_code=401, detail={"blocker": "AUTHENTICATION_REQUIRED"})
+        uid_uuid = current_user.get("id")
+        if not uid_uuid:
+            raise HTTPException(status_code=401, detail={"blocker": "AUTHENTICATION_INVALID"})
+        # Allowlist check (wildcard '*' consentito SOLO se env esplicito).
+        if not gate["wildcard"]:
+            if not gate["allowlist"]:
+                raise HTTPException(
+                    status_code=403,
+                    detail={
+                        "blocker": "QA_TEAM_SAVE_ALLOWLIST_EMPTY",
+                        "message": "QA_TEAM_SAVE_ALLOWLIST env var deve contenere user_id allowlisted (o '*').",
+                    },
+                )
+            if uid_uuid not in gate["allowlist"]:
+                raise HTTPException(
+                    status_code=403,
+                    detail={
+                        "blocker": "QA_TEAM_SAVE_ACCOUNT_NOT_ALLOWED",
+                        "message": "Questo account non e' nell'allowlist QA team save.",
+                    },
+                )
+        server_id = body.server_id
+        # Max 6 eroi (6v6).
+        if len(body.team_formation) > 6:
+            raise HTTPException(
+                status_code=400,
+                detail={"blocker": "TEAM_TOO_LARGE", "max": 6, "received": len(body.team_formation)},
+            )
+        # Posizioni uniche per slot (col, row).
+        positions = [(s.col, s.row) for s in body.team_formation]
+        if len(set(positions)) != len(positions):
+            raise HTTPException(
+                status_code=400,
+                detail={"blocker": "DUPLICATE_POSITIONS", "positions": positions},
+            )
+        # Hero IDs unici (no duplicate hero nello stesso team).
+        hero_ids = [s.hero_id for s in body.team_formation]
+        if len(set(hero_ids)) != len(hero_ids):
+            raise HTTPException(
+                status_code=400,
+                detail={"blocker": "DUPLICATE_HEROES", "hero_ids": hero_ids},
+            )
+        # PSP fail-closed: deve esistere per (uid, server_id).
+        psp_doc = await db.player_server_profiles.find_one(
+            {"user_id": uid_uuid, "server_id": server_id}
+        )
+        if not psp_doc:
+            raise HTTPException(
+                status_code=404,
+                detail={
+                    "blocker": "PLAYER_SERVER_PROFILE_REQUIRED",
+                    "server_id": server_id,
+                    "message": "PSP non trovato per questo (user_id, server_id). Crea il profilo server prima del save.",
+                },
+            )
+        # Ownership: tutti gli hero_id devono essere in user_heroes con quel server_id
+        # (o tagged QA seed). Pack 125: accettiamo ownership cross-server SOLO se
+        # tagged _qa_seed (per consentire device QA con seed).
+        if hero_ids:
+            owned_cursor = db.user_heroes.find(
+                {
+                    "user_id": uid_uuid,
+                    "hero_id": {"$in": hero_ids},
+                },
+                projection={"hero_id": 1, "server_id": 1, "_qa_seed": 1},
+            )
+            owned_docs = await owned_cursor.to_list(length=200)
+            owned_ids_for_server: set = set()
+            for d in owned_docs:
+                hid = d.get("hero_id")
+                d_sid = d.get("server_id")
+                if not hid:
+                    continue
+                # Accetta se server_id matcha O se e' QA seed (cross-server tollerato).
+                if d_sid == server_id or d.get("_qa_seed"):
+                    owned_ids_for_server.add(hid)
+            missing = [h for h in hero_ids if h not in owned_ids_for_server]
+            if missing:
+                raise HTTPException(
+                    status_code=400,
+                    detail={
+                        "blocker": "OWNERSHIP_VALIDATION_FAILED",
+                        "missing_hero_ids": missing,
+                        "message": "Almeno un hero_id non e' posseduto dall'account su questo server (o non e' QA seed).",
+                    },
+                )
+        # Save: SOLO player_server_profiles.team_formation. NO users update.
+        # NO economy mutation. NO reward. NO progress.
+        team_formation_payload: List[dict] = [
+            {"hero_id": s.hero_id, "col": s.col, "row": s.row}
+            for s in body.team_formation
+        ]
+        await db.player_server_profiles.update_one(
+            {"user_id": uid_uuid, "server_id": server_id},
+            {
+                "$set": {
+                    "team_formation": team_formation_payload,
+                    "_pack_125_qa_team_save_ts": __import__("time").time(),
+                    "_pack_125_qa_team_save_source": "qa_dev_gated_endpoint",
+                }
+            },
+        )
+        return {
+            "v96_team_formation": True,
+            "pack_125_qa_save": True,
+            "status": "OK",
+            "server_id": server_id,
+            "team_formation": team_formation_payload,
+            "team_size": len(team_formation_payload),
+            "qa_gate": {
+                "enabled": True,
+                "wildcard": gate["wildcard"],
+                "allowlist_size": len(gate["allowlist"]),
+            },
+            "invariants_respected": {
+                "no_economy_mutation": True,
+                "no_reward": True,
+                "no_progress": True,
+                "no_gacha": True,
+                "no_shop": True,
+                "no_vip": True,
+                "no_battlepass": True,
+                "no_iap": True,
+                "no_account_wide_write": True,
+                "scoped_to_player_server_profile": True,
+            },
         }
 
     return router

@@ -293,14 +293,83 @@ export default function BattleTab() {
   };
 
   const saveTeam = async () => {
-    // Pre-QA Stabilization 115C — save deferred. Non chiamiamo piu' alcun
-    // /api/team/update-formation: il path strict server-scoped non e' ancora
-    // implementato e quello legacy e' account-wide. Mostriamo messaggio onesto.
-    Alert.alert(
-      'Salvataggio formazione in preparazione',
-      'TEAM_FORMATION_SAVE_DEFERRED_PRE_QA: il save server-scoped sara\' abilitato in un pack successivo (115D+). Per ora la formazione resta locale e non viene persistita.'
-    );
-    return;
+    // Pack 125 FIX D — Team save server-scoped QA dev gated.
+    // Endpoint POST /api/team/save-formation richiede:
+    //   - server_id (no account-wide save)
+    //   - QA_TEAM_SAVE_ENABLED=true env var lato backend
+    //   - QA_TEAM_SAVE_ALLOWLIST contenente l'user_id corrente (o '*')
+    //   - PSP esistente per (user_id, server_id)
+    //   - ownership di tutti gli hero_id su quel server (o tag _qa_seed)
+    //   - max 6 eroi, posizioni uniche, no duplicate hero
+    // NO economy mutation, NO reward, NO progress: write SOLO su
+    // player_server_profiles.team_formation.
+    if (!selected_server_id) {
+      Alert.alert(
+        'Server richiesto',
+        'Seleziona un server prima di salvare la formazione.'
+      );
+      return;
+    }
+    // Costruisce il payload dalla griglia attuale (col 0=Support, 1=DPS, 2=Tank, row 0..2).
+    const team_formation: Array<{ hero_id: string; col: number; row: number }> = [];
+    for (let col = 0; col < 3; col++) {
+      for (let row = 0; row < 3; row++) {
+        const h = grid[col]?.[row];
+        if (h && h.id) team_formation.push({ hero_id: h.id, col, row });
+      }
+    }
+    if (team_formation.length === 0) {
+      Alert.alert('Squadra vuota', 'Aggiungi almeno un eroe prima di salvare.');
+      return;
+    }
+    if (team_formation.length > 6) {
+      Alert.alert('Squadra troppo grande', `Massimo 6 eroi (hai ${team_formation.length}).`);
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await apiCall('/api/team/save-formation', {
+        method: 'POST',
+        body: JSON.stringify({ server_id: selected_server_id, team_formation }),
+      });
+      if (res?.status === 'OK') {
+        Alert.alert(
+          'Formazione salvata',
+          `Team server-scoped salvato (server=${res.server_id}, ${res.team_size} eroi). Nessuna ricompensa, nessuna mutazione economy.`
+        );
+      } else {
+        // Risposta inattesa: fallback a messaggio generico.
+        Alert.alert('Salvataggio riuscito', 'Formazione persistita server-scoped.');
+      }
+    } catch (e: any) {
+      // Gate disabilitato o blocker: messaggio chiaro per device QA.
+      const status = e?.status || e?.response?.status;
+      const detail = e?.data?.detail || e?.response?.data?.detail || e?.detail;
+      const blocker = (detail && typeof detail === 'object' && detail.blocker) || null;
+      if (status === 403 && blocker === 'QA_TEAM_SAVE_DISABLED') {
+        Alert.alert(
+          'Salvataggio formazione in preparazione',
+          'TEAM_FORMATION_SAVE_DEFERRED_PRE_QA: l\'endpoint QA dev gated non e\' abilitato in questo ambiente. Per abilitarlo: QA_TEAM_SAVE_ENABLED=true + QA_TEAM_SAVE_ALLOWLIST. Per ora la formazione resta locale.'
+        );
+      } else if (status === 403 && blocker === 'QA_TEAM_SAVE_ACCOUNT_NOT_ALLOWED') {
+        Alert.alert(
+          'Account non in allowlist',
+          'Questo account non e\' abilitato per QA team save. Contatta il dev per aggiungerlo alla allowlist.'
+        );
+      } else if (status === 404 && blocker === 'PLAYER_SERVER_PROFILE_REQUIRED') {
+        Alert.alert('PSP mancante', 'Profilo server non trovato. Crea il PSP prima del save.');
+      } else if (status === 400 && blocker === 'OWNERSHIP_VALIDATION_FAILED') {
+        const missing = (detail.missing_hero_ids || []).join(', ');
+        Alert.alert('Ownership non valida', `Eroi non posseduti su questo server: ${missing}`);
+      } else {
+        Alert.alert(
+          'Errore salvataggio',
+          (typeof detail === 'string' ? detail : detail?.message) || `Errore (${status || 'unknown'}).`
+        );
+      }
+    } finally {
+      setSaving(false);
+    }
   };
 
   const clearAll = () => { setGrid([[null, null, null], [null, null, null], [null, null, null]]); setActiveCell({ col: 0, row: 0 }); };

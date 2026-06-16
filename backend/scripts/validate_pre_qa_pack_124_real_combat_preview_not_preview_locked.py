@@ -23,8 +23,11 @@ TARGET = REPO_ROOT / "frontend" / "app" / "combat.tsx"
 REQUIRED = [
     ("buildPreviewCombatSnapshot", "import buildPreviewCombatSnapshot"),
     ("PREVIEW_COMBAT_REAL", "pack 124 preview combat REAL marker"),
-    ("setTeamA(snap.teamA", "setTeamA from snapshot"),
-    ("setTeamB(snap.teamB", "setTeamB from snapshot"),
+    # Pack 125: usa tA/tB local vars derivati da snap.teamA/teamB
+    ("const tA = snap.teamA", "tA local var from snapshot"),
+    ("const tB = snap.teamB", "tB local var from snapshot"),
+    ("setTeamA(tA)", "setTeamA from snapshot tA"),
+    ("setTeamB(tB)", "setTeamB from snapshot tB"),
     ("setPhase('preparing')", "phase preparing"),
     ("setPhase('fighting')", "phase fighting"),
 ]

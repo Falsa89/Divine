@@ -472,3 +472,161 @@ export function buildPreviewCombatSnapshot(
     mode: ctx.mode,
   };
 }
+
+// =========================================================================
+// Pack 125 — Preview Battle Log Builder (deterministico, frontend-only).
+// Genera un battle_log compatibile con `playLog(res, ti, ai)` di combat.tsx
+// con almeno 3 turni e azioni reali (attack base / skill / heal) cosi' che
+// gli sprite NON restino in idle. NESSUNA chiamata `/api/battle/simulate`,
+// NESSUN reward/progress/DB write.
+// =========================================================================
+
+export type PreviewBattleAction = {
+  type: 'attack' | 'heal' | 'dot' | 'dodge' | 'skip';
+  skill_type?: 'nad' | 'sad' | 'sp';
+  actor_id: string;
+  actor: string;
+  team: 'A' | 'B';
+  element?: string;
+  skill?: { name: string };
+  total_damage?: number;
+  crit?: boolean;
+  amount?: number;
+  target_id?: string;
+  target?: string;
+  damage?: number;
+  targets?: Array<{
+    id: string;
+    name: string;
+    killed: boolean;
+    hp_before: number;
+    hp_after: number;
+  }>;
+};
+
+export type PreviewBattleTurn = {
+  turn: number;
+  actions: PreviewBattleAction[];
+};
+
+/**
+ * Costruisce un battle_log deterministico minimo che fa scattare:
+ *   - 3 turni
+ *   - attacchi base 'nad' (Normal Attack Damage)
+ *   - una skill 'sad' (Strong Active Damage)
+ *   - un heal
+ *   - reazioni hit/killed compatibili con renderer
+ *
+ * IMPORTANTE: i target referenziano `teamA[i].id` e `teamB[i].id` reali,
+ * cosi' `updateHP(a)` aggiorna lo state corretto e gli sprite reagiscono.
+ * Tutti i damage/heal sono finti ma proporzionati ai max_hp dei membri.
+ */
+export function buildPreviewBattleLog(
+  teamA: PreviewCombatUnit[],
+  teamB: PreviewCombatUnit[],
+): PreviewBattleTurn[] {
+  if (!teamA?.length || !teamB?.length) return [];
+  // Slot references (deterministic indexing).
+  const aTank = teamA[0];
+  const aMelee = teamA[1];
+  const aRanged = teamA[2];
+  const aMage = teamA[3];
+  const aSupport = teamA[4];
+  const aHealer = teamA[5];
+  const bTank = teamB[0];
+  const bMelee = teamB[1];
+  const bRanged = teamB[2];
+  const bMage = teamB[3];
+  const bSupport = teamB[4];
+  const bHealer = teamB[5];
+  // Helper: damage proporzionato al max_hp del target (no crit, no kill).
+  const dmg = (target: PreviewCombatUnit, ratio: number) =>
+    Math.round((target.max_hp || 10000) * ratio);
+  const heal = (target: PreviewCombatUnit, ratio: number) =>
+    Math.round((target.max_hp || 10000) * ratio);
+  const target = (u: PreviewCombatUnit, dealt: number, prevHp: number) => ({
+    id: u.id,
+    name: u.hero_name || u.name,
+    killed: false,
+    hp_before: prevHp,
+    hp_after: Math.max(1, prevHp - dealt),
+  });
+
+  // Turn 1: attacchi base reciproci (tank/melee/ranged).
+  const t1: PreviewBattleAction[] = [
+    {
+      type: 'attack', skill_type: 'nad',
+      actor_id: aTank.id, actor: aTank.hero_name, team: 'A', element: aTank.element,
+      skill: { name: 'Affondo di Falange' },
+      total_damage: dmg(bTank, 0.10), crit: false,
+      targets: [target(bTank, dmg(bTank, 0.10), bTank.max_hp)],
+    },
+    {
+      type: 'attack', skill_type: 'nad',
+      actor_id: aMelee.id, actor: aMelee.hero_name, team: 'A', element: aMelee.element,
+      skill: { name: 'Furia del Nord' },
+      total_damage: dmg(bMelee, 0.12), crit: false,
+      targets: [target(bMelee, dmg(bMelee, 0.12), bMelee.max_hp)],
+    },
+    {
+      type: 'attack', skill_type: 'nad',
+      actor_id: bTank.id, actor: bTank.hero_name, team: 'B', element: bTank.element,
+      skill: { name: 'Carapace di Corallo' },
+      total_damage: dmg(aTank, 0.08), crit: false,
+      targets: [target(aTank, dmg(aTank, 0.08), aTank.max_hp)],
+    },
+  ];
+  // Turn 2: skill + heal.
+  const t2: PreviewBattleAction[] = [
+    {
+      type: 'attack', skill_type: 'sad',
+      actor_id: aMage.id, actor: aMage.hero_name, team: 'A', element: aMage.element,
+      skill: { name: 'Tempesta di Folgore' },
+      total_damage: dmg(bMage, 0.18), crit: true,
+      targets: [target(bMage, dmg(bMage, 0.18), bMage.max_hp)],
+    },
+    {
+      type: 'heal',
+      actor_id: aHealer.id, actor: aHealer.hero_name, team: 'A', element: aHealer.element,
+      skill: { name: 'Benedizione Divina' },
+      amount: heal(aTank, 0.15),
+      target_id: aTank.id, target: aTank.hero_name,
+    },
+    {
+      type: 'attack', skill_type: 'nad',
+      actor_id: aRanged.id, actor: aRanged.hero_name, team: 'A', element: aRanged.element,
+      skill: { name: 'Tiro Preciso' },
+      total_damage: dmg(bRanged, 0.11), crit: false,
+      targets: [target(bRanged, dmg(bRanged, 0.11), bRanged.max_hp)],
+    },
+  ];
+  // Turn 3: enemy skill + chiusura.
+  const t3: PreviewBattleAction[] = [
+    {
+      type: 'attack', skill_type: 'sad',
+      actor_id: bMelee.id, actor: bMelee.hero_name, team: 'B', element: bMelee.element,
+      skill: { name: 'Lancia del Tuono' },
+      total_damage: dmg(aMelee, 0.16), crit: false,
+      targets: [target(aMelee, dmg(aMelee, 0.16), aMelee.max_hp)],
+    },
+    {
+      type: 'heal',
+      actor_id: bHealer.id, actor: bHealer.hero_name, team: 'B', element: bHealer.element,
+      skill: { name: 'Marea Curativa' },
+      amount: heal(bTank, 0.12),
+      target_id: bTank.id, target: bTank.hero_name,
+    },
+    {
+      type: 'attack', skill_type: 'nad',
+      actor_id: aSupport.id, actor: aSupport.hero_name, team: 'A', element: aSupport.element,
+      skill: { name: 'Canto del Santuario' },
+      total_damage: dmg(bSupport, 0.10), crit: false,
+      targets: [target(bSupport, dmg(bSupport, 0.10), bSupport.max_hp)],
+    },
+  ];
+  return [
+    { turn: 1, actions: t1 },
+    { turn: 2, actions: t2 },
+    { turn: 3, actions: t3 },
+  ];
+}

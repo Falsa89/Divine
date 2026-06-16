@@ -24,6 +24,23 @@ import HeroPortrait, { isHopliteHero } from '../ui/HeroPortrait';
 import HeroFramedImage from '../ui/HeroFramedImage';
 import { isHeroAssetSentinel, hasHeroUiContract } from '../ui/hopliteAssets';
 
+// Pack 125 FIX C — Asset canonico greek_borea tutorial.
+// Mappa legacy hero_id `borea` → asset locale `greek_borea/transparent.png`.
+// IMPORTANTE: questo e' SOLO un render visuale. Nessun grant di ownership,
+// nessuna unlock di Borea, nessuna modifica al roster/Character Bible.
+// Tutorial-only: l'eroe NON e' assegnato all'account, NON e' equipaggiabile.
+const GREEK_BOREA_TRANSPARENT = require('../../assets/heroes/greek_borea/transparent.png');
+const GREEK_BOREA_SPLASH = require('../../assets/heroes/greek_borea/splash.png');
+
+// Pack 125 — Hero id alias canonici per Borea (legacy + canonical).
+// Qualsiasi payload server con uno di questi id viene visualizzato con
+// l'asset locale greek_borea, NON con il fallback gradient blu/vento.
+const BOREA_HERO_ID_ALIASES = new Set<string>(['borea', 'greek_borea']);
+function isBoreaLikeId(heroId: string | null | undefined): boolean {
+  if (!heroId) return false;
+  return BOREA_HERO_ID_ALIASES.has(String(heroId).toLowerCase());
+}
+
 type Props = {
   hero: {
     id: string;
@@ -50,7 +67,8 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
   }
 
   const isHop = isHopliteHero(hero.id, hero.name);
-  const isBorea = hero.id === 'borea';
+  // Pack 125 FIX C — Rilevamento Borea legacy+canonical (no ownership grant).
+  const isBorea = isBoreaLikeId(hero.id);
   // RM1.17-E: preferenza ordine — sentinel locale (asset:*) batte image_url
   // remoto null. Se presente, usiamo il resolver che ritorna il cutout
   // trasparente locale (variant transparent/card/detail) mantenendo la
@@ -68,7 +86,17 @@ export default function HomeHeroSplash({ hero, width, height, onPress }: Props) 
       onPress={onPress}
       style={{ width, height, backgroundColor: 'transparent' }}
     >
-      {useUiContract ? (
+      {isBorea ? (
+        // Pack 125 FIX C — Borea (legacy `borea` o canonical `greek_borea`):
+        // render asset locale tutorial. NESSUN grant ownership, NESSUNA unlock,
+        // NESSUNA modifica roster/Character Bible. Tutorial-only.
+        <RNImage
+          accessibilityLabel="Borea (tutorial)"
+          source={GREEK_BOREA_TRANSPARENT}
+          style={{ width, height }}
+          resizeMode="contain"
+        />
+      ) : useUiContract ? (
         // RM1.17-S — Eroi con UI contract (Hoplite, Berserker, future):
         // framing home contract-driven (contain, no crop testa).
         <HeroFramedImage
