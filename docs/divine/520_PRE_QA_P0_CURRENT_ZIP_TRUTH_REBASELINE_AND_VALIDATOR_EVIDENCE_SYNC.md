@@ -316,4 +316,4 @@ $ python3 backend/scripts/sweep_repo_hygiene.py
 
 ## 14. Commit SHA
 
-Verrà aggiornato dopo `git commit`.
+`f7c4a7079` — `PRE_QA_P0: current ZIP truth rebaseline + validator evidence sync`
