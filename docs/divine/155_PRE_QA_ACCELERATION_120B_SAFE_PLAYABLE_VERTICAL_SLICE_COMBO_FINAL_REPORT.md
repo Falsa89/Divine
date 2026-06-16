@@ -292,4 +292,4 @@ rispettivo modo (visual / dry-run / battle preview).
 
 ## 14. Commit SHA
 
-Verrà aggiornato dopo `git commit`.
+`0e29b83ec` — `Pack 120B: safe playable vertical slice combo (Track A+B+C+D unified harness)`
