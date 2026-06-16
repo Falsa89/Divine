@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_P0_CURRENT_ZIP_TRUTH_REBASELINE_AND_VALIDATOR_EVIDENCE_SYNC",
+  "purpose": "Snapshot del current state del guardrail pubblico (menu/route/blocked-routes/tier/battle preview) ottenuto rieseguendo logicamente 119C/119D/120A/120B. NESSUN unlock applicato. NESSUN flag runtime cambiato.",
+  "snapshot_source_pack_chain": [
+    "119C: menu public route semantic dedupe + snapshot validator",
+    "119D: public menu route target health + mutation classification",
+    "120A: controlled live unlock prep plan-only",
+    "120B: safe playable vertical slice combo unified harness"
+  ],
+  "public_menu": {
+    "visible_categories_count": 6,
+    "visible_items_count": 22,
+    "categories": [
+      "Avventura", "Progressione", "Economia", "Sociale", "Altro", "Battaglia"
+    ]
+  },
+  "classification_119d": {
+    "safe_read_only": 1,
+    "safe_preview_only": 0,
+    "locked_deferred": 3,
+    "mutation_sensitive_but_gated": 18,
+    "unsafe_exposed": 0,
+    "unknown_needs_review": 0
+  },
+  "tier_counts_120a": {
+    "tier_0_visual": 1,
+    "tier_1_visual": 5,
+    "tier_2_dry_run": 11,
+    "tier_3_battle_preview": 5,
+    "tier_4_hard_blocked_in_blockers": 13
+  },
+  "unsafe_exposed_count": 0,
+  "unknown_needs_review_count": 0,
+  "leaked_blocked_routes_count": 0,
+  "live_blocked_routes_remain_blocked": [
+    "/shop", "/vip", "/battlepass", "/gacha", "/pvp", "/guild", "/gvg",
+    "/raid", "/territory", "/plaza", "/dm", "/events", "/mail", "/friends",
+    "/playable-mode-battle-preview", "/skill-status-vfx-catalogs",
+    "/hero-skill-kits-catalog", "/safe-previews"
+  ],
+  "battle_preview_modes": [
+    "/pre-battle-lobby?mode=story",
+    "/pre-battle-lobby?mode=tower",
+    "/pre-battle-lobby?mode=arena",
+    "/pre-battle-lobby?mode=training",
+    "/pre-battle-lobby?mode=boss"
+  ],
+  "battle_preview_guards": {
+    "pre_battle_lobby_tokens_required": [
+      "is_preview", "reward_policy", "preview",
+      "blocked_no_team_for_server", "battle_engine_mode"
+    ],
+    "pre_battle_lobby_tokens_present_in_current_zip": true,
+    "combat_tokens_required": [
+      "PREVIEW_REWARD_LOCK_ACTIVE", "PREVIEW_NON_AUTHORITATIVE"
+    ],
+    "combat_tokens_present_in_current_zip": true,
+    "reward_grant_disabled": true,
+    "exp_progress_commit_disabled": true,
+    "ranking_commit_disabled": true,
+    "battle_result_db_write_disabled": true,
+    "authoritative_battle_runtime_disabled": true
+  },
+  "economy_isolation": {
+    "shop_route_exposed_in_public_menu": false,
+    "item_shop_route_exposed_in_public_menu": false,
+    "gacha_route_exposed_in_public_menu": false,
+    "vip_route_exposed_in_public_menu": false,
+    "battlepass_route_exposed_in_public_menu": false,
+    "iap_open": false,
+    "any_currency_spend_live_exposed": false,
+    "any_grant_premium_live_exposed": false
+  },
+  "claim_isolation": {
+    "achievement_claim_endpoint_state_in_plan_120a": "423 / disabled finche' pack reward live non dedicato",
+    "daily_hub_state": "link aggregator, no claim diretto",
+    "any_reward_grant_live_exposed": false
+  },
+  "no_unlock_applied_in_this_pack": {
+    "runtime_unlock_applied": false,
+    "db_write_performed": false,
+    "live_unlock_performed": false,
+    "reward_live_allowed": false,
+    "gacha_shop_vip_bp_allowed": false,
+    "env_flag_changed": false
+  }
+}

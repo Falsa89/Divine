@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_P0_CURRENT_ZIP_TRUTH_REBASELINE_AND_VALIDATOR_EVIDENCE_SYNC",
+  "purpose": "Inventario completo dei riferimenti al MD5 STALE noto 151ca35ad3bc35f0a6209cb3744ed440 (vecchio battle_engine.py). Classifica ogni riferimento in: historical_acceptable | current_unsafe | file_self_historical_comment.",
+  "stale_md5_target": "151ca35ad3bc35f0a6209cb3744ed440",
+  "current_md5_for_battle_engine": "8b7f55d4f58605138daa8bbace23f514",
+  "totals": {
+    "total_files_with_stale_ref": 257,
+    "backend_scripts_files": 93,
+    "data_design_files": 98,
+    "docs_divine_files": 65,
+    "runtime_file_with_self_historical_comment": 1
+  },
+  "category_breakdown": {
+    "historical_acceptable": {
+      "definition": "Riferimento al vecchio MD5 in contesto storico (report del pack che l'aveva calcolato come current al tempo). Conservato per audit trail. NON e' prova current-state.",
+      "scopes": ["docs/divine/*.md", "data/design/**/*.json (storici)"],
+      "approx_count": 163,
+      "action": "KEEP_AS_HISTORICAL_RECORD"
+    },
+    "current_unsafe_validator_baseline": {
+      "definition": "Validator/script che usa 151ca35... come baseline 'current_invariant' o 'md5_invariant'. Producono FAIL su current ZIP perche' il MD5 reale e' cambiato.",
+      "scopes": ["backend/scripts/validate_*.py"],
+      "examples_known_fail": [
+        "backend/scripts/validate_beta_testing_track_a_baseline_v1.py",
+        "backend/scripts/validate_beta_testing_track_c_soul_forge_regression_v1.py",
+        "backend/scripts/validate_beta_testing_track_g_reporting_v1.py",
+        "backend/scripts/validate_beta_testing_track_i_completion_v1.py",
+        "backend/scripts/validate_project_full_runtime_feature_reality_audit_v1.py"
+      ],
+      "approx_count": 93,
+      "action": "MARK_SUPERSEDED_HISTORICAL or UPDATE_BASELINE (su base validator-per-validator)"
+    },
+    "file_self_historical_comment": {
+      "definition": "Il file runtime stesso include un commento storico che cita il vecchio MD5 (es. battle_engine.py riga ~1455). E' un'annotazione interna, non implica regressione runtime.",
+      "files": ["backend/battle_engine.py"],
+      "count": 1,
+      "action": "KEEP (commento interno legittimo)"
+    }
+  },
+  "policy": {
+    "delete_historical_docs": false,
+    "rewrite_historical_md_reports": false,
+    "alter_historical_design_json": false,
+    "supersede_validators_with_stale_invariant": true,
+    "supersede_method": "Markare nel validator_truth_status_matrix_v1.json come MARK_SUPERSEDED_HISTORICAL oppure UPDATE_BASELINE. Non eseguire come prova current-state finche' non riallineati."
+  },
+  "honesty_statement": {
+    "no_fake_pass": true,
+    "no_doc_deletion": true,
+    "no_meaning_change_of_historical_reports": true,
+    "current_state_truth_source": "data/design/current_truth/current_code_md5_snapshot_v1.json"
+  }
+}

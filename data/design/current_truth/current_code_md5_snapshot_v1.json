@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_P0_CURRENT_ZIP_TRUTH_REBASELINE_AND_VALIDATOR_EVIDENCE_SYNC",
+  "purpose": "Snapshot canonico dei MD5 reali current-state dei 15 file critici. Sostituisce qualunque baseline MD5 dichiarato come 'current invariant' in report/validator precedenti. I report storici restano storici e NON devono essere usati come prova current-state.",
+  "files": {
+    "backend/battle_engine.py": "8b7f55d4f58605138daa8bbace23f514",
+    "backend/battle_core.py": "80d94afba9eb2930e63b06cfed645b77",
+    "backend/server.py": "ab011b0b3e788d48f13dd389aeb2033d",
+    "backend/game_systems.py": "1a27bbcb26e353c783757081e8c657dd",
+    "frontend/app/combat.tsx": "8ec731cabd965fdd542ed47840c09740",
+    "frontend/app/pre-battle-lobby.tsx": "fef34e1eff31b7f30238dca6c7dd9e07",
+    "frontend/app/story.tsx": "6325888d2efaf7176255a38b5d505519",
+    "frontend/app/(tabs)/menu.tsx": "89e2f641e21cba537741d9749767dce6",
+    "frontend/src/utils/preQaNavGuard.ts": "430f9bc72048a4138532634cc9373d15",
+    "frontend/app/(tabs)/gacha.tsx": "6a28ad5338b6bdd776f4f794100657b2",
+    "frontend/app/shop.tsx": "1fc3dde180993b878b3e881d6fa41970",
+    "frontend/app/item-shop.tsx": "8af80875fa68a7a9f939acf526cba0ee",
+    "frontend/app/vip.tsx": "a91485ac6863118544a2d5c075ed107f",
+    "frontend/app/battlepass.tsx": "da23bff32388375106236392cd94cdd4",
+    "frontend/app/soul-forge.tsx": "a36818389c6c1d0bf72114d6d4ef942b"
+  },
+  "policy": {
+    "this_file_is_truth_source": true,
+    "supersedes": "qualsiasi 'current_md5' o 'md5_invariant' dichiarato nei validator/report precedenti come *current-state proof*",
+    "historical_docs_preserved": true,
+    "historical_docs_usage": "READ-ONLY; non sono prova current-state",
+    "runtime_changed_by_this_snapshot": false,
+    "gameplay_changed_by_this_snapshot": false
+  }
+}

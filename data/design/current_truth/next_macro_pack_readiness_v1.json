@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_P0_CURRENT_ZIP_TRUTH_REBASELINE_AND_VALIDATOR_EVIDENCE_SYNC",
+  "purpose": "Dichiarazione formale se, dopo questo P0, e' lecito procedere con il prossimo macro-pack PRE_QA_VERTICAL_SLICE_RUNTIME_DEVICE_QA_AND_NO_WRITE_PLAYTEST_PACK. Elenca blocker residui esplicitamente.",
+  "next_macro_pack_candidate": "PRE_QA_VERTICAL_SLICE_RUNTIME_DEVICE_QA_AND_NO_WRITE_PLAYTEST_PACK",
+  "ready_to_proceed": true,
+  "ready_to_proceed_caveats": [
+    "Questo P0 sblocca solo il fronte 'verita' di codice + validator'. Il macro-pack successivo deve restare no-write, no-reward, no-live: stessi vincoli di 120A/120B.",
+    "Il macro-pack successivo DEVE riusare i quattro current-state-truth validator (119C/119D/120A/120B) come gate di non regressione.",
+    "Il macro-pack successivo NON deve abilitare alcun reward/gacha/shop/VIP/BP/IAP/DB-write."
+  ],
+  "residual_blockers": [
+    {
+      "id": "BLOCKER_DEVICE_QA_RUN",
+      "description": "Device QA su iOS/Android non e' stato ancora eseguito su un device reale con la current build; finora solo audit statico. E' richiesto QA visivo Tier 0/1, dry-run Tier 2, battle-preview Tier 3 (cfr. piano 120A stage S0/S1/S2).",
+      "severity": "P1",
+      "blocks_next_macro_pack": false,
+      "blocks_full_release": true,
+      "remediation": "Eseguire device QA controllato (no-tap su CTA write-like, no commit reward) nel pack successivo."
+    },
+    {
+      "id": "BLOCKER_ROUTE_VISUAL_SMOKE",
+      "description": "Smoke visivo route-per-route (screenshot/Playwright contro preview URL stabile) non e' parte di questo P0.",
+      "severity": "P2",
+      "blocks_next_macro_pack": false,
+      "blocks_full_release": false,
+      "remediation": "Pack successivo: capture screenshot ogni route, archivio in backend/reports/qa_screenshots/."
+    },
+    {
+      "id": "BLOCKER_PLAYWRIGHT_EXECUTION",
+      "description": "Esecuzione Playwright contro preview URL stabile non eseguita in questo P0 (richiede preview URL e harness Playwright).",
+      "severity": "P2",
+      "blocks_next_macro_pack": false,
+      "blocks_full_release": false,
+      "remediation": "Wire-up Playwright harness in pack successivo; pre-condizione: preview URL stabile."
+    },
+    {
+      "id": "BLOCKER_ASSET_AUDIO_PLACEHOLDER_REGISTRY",
+      "description": "Registry placeholder asset/audio non e' parte di questo P0; non blocca il macro-pack successivo se rimaniamo in modalita' read-only.",
+      "severity": "P2",
+      "blocks_next_macro_pack": false,
+      "blocks_full_release": false,
+      "remediation": "Pack futuro dedicato a placeholder registry (out-of-scope qui)."
+    },
+    {
+      "id": "BLOCKER_REWARD_PROGRESS_LOCKED",
+      "description": "Reward / EXP / progress / DB write restano disabled by design. NON va sbloccato nel pack successivo: vincolo invariant.",
+      "severity": "INVARIANT",
+      "blocks_next_macro_pack": false,
+      "blocks_full_release": true,
+      "remediation": "Pack dedicato Tier 4 unlock pack-per-pack (es. PRE_QA_PACK_121_PER_ROUTE_LIVE_UNLOCK_DESIGN_TIER4_INDIVIDUAL)."
+    },
+    {
+      "id": "BLOCKER_STALE_BASELINE_VALIDATORS",
+      "description": "5 validator listati come current_unsafe nel validator_truth_status_matrix (beta tracks A/C/G/I + project_full_runtime_feature_reality_audit) restano da riallineare; vanno UPDATE_BASELINE o marcati SUPERSEDED per non confondere reaudit.",
+      "severity": "P1",
+      "blocks_next_macro_pack": false,
+      "blocks_full_release": false,
+      "remediation": "Pack dedicato beta-tracks-rebaseline (out-of-scope qui; questo P0 li ha solo documentati)."
+    },
+    {
+      "id": "BLOCKER_HARDCODED_APP_PATH_AUDIT",
+      "description": "Molti validator legacy usano path assoluti /app. Validator path relocatability audit ne registra il volume.",
+      "severity": "P2",
+      "blocks_next_macro_pack": false,
+      "blocks_full_release": false,
+      "remediation": "Refactor incrementale in pack dedicato MAKE_RELOCATABLE."
+    }
+  ],
+  "next_pack_recommendations": [
+    "PRE_QA_VERTICAL_SLICE_RUNTIME_DEVICE_QA_AND_NO_WRITE_PLAYTEST_PACK (raccomandato come prossimo step)"
+  ]
+}

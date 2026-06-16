@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_P0_CURRENT_ZIP_TRUTH_REBASELINE_AND_VALIDATOR_EVIDENCE_SYNC",
+  "purpose": "Decision record formale del rebaseline P0. Dichiara cosa cambia come 'truth source' e cosa viene marcato come historical/superseded. Non altera codice runtime.",
+  "battle_engine_md5_decision": {
+    "old_md5": "151ca35ad3bc35f0a6209cb3744ed440",
+    "current_md5_in_zip": "8b7f55d4f58605138daa8bbace23f514",
+    "drift_explained_by_subsequent_packs": true,
+    "drift_attribution": [
+      "v95 status normalization",
+      "second slice production stage packs",
+      "various rollup/RC packs successivi al 120B (es. mega release acceleration N>=38)"
+    ],
+    "drift_attribution_confidence": "medium-high (diff coerente con scope dei pack successivi citati; non c'e' evidenza di regressione runtime per Pre-QA, ma serve audit per-pack per attribuzione completa, non bloccante per questo P0)",
+    "runtime_regression_detected_by_this_pack": false,
+    "runtime_change_introduced_by_this_pack": false,
+    "policy": "Il MD5 8b7f55d4f58605138daa8bbace23f514 e' il NUOVO current-state truth per backend/battle_engine.py. Qualsiasi validator/report che dichiara 151ca35... come 'current invariant' deve essere riallineato (UPDATE_BASELINE) o marcato SUPERSEDED HISTORICAL."
+  },
+  "validator_and_report_supersedence_policy": {
+    "historical_docs_md_in_docs_divine": "READ-ONLY storici. Non vengono cancellati ne' riscritti. NON sono prova current-state.",
+    "historical_design_jsons_in_data_design": "READ-ONLY storici. Non vengono cancellati ne' riscritti. NON sono prova current-state.",
+    "stale_baseline_validators_in_backend_scripts": "Restano nel filesystem (audit trail) ma vengono marcati SUPERSEDED o UPDATE_BASELINE nel validator_truth_status_matrix_v1.json. NON devono essere usati come prova current-state finche' non aggiornati.",
+    "no_required_validator_weakened": true,
+    "no_required_validator_removed": true
+  },
+  "new_current_state_truth_source": {
+    "primary_md5_snapshot": "data/design/current_truth/current_code_md5_snapshot_v1.json",
+    "primary_guardrail_snapshot": "data/design/current_truth/public_guardrail_current_snapshot_v1.json",
+    "primary_validator_matrix": "data/design/current_truth/validator_truth_status_matrix_v1.json",
+    "primary_stale_inventory": "data/design/current_truth/stale_md5_reference_inventory_v1.json",
+    "primary_readiness_record": "data/design/current_truth/next_macro_pack_readiness_v1.json",
+    "primary_rebaseline_decision": "data/design/current_truth/rebaseline_decision_record_v1.json (questo file)",
+    "current_state_truth_validators": [
+      "backend/scripts/validate_pre_qa_pack_119c_menu_public_snapshot.py",
+      "backend/scripts/validate_pre_qa_pack_119d_public_menu_route_health.py",
+      "backend/scripts/validate_pre_qa_pack_120a_controlled_unlock_prep.py",
+      "backend/scripts/validate_pre_qa_acceleration_120b_safe_playable_vertical_slice_combo.py",
+      "backend/scripts/validate_v89_home_battle_flow_audit.py",
+      "backend/scripts/validate_v89_no_asset_final_import_no_character_bible.py",
+      "backend/scripts/validate_v89_real_battlefield_tsx.py",
+      "backend/scripts/validate_mega_release_acceleration_38_v89_rollup.py",
+      "backend/scripts/validate_current_zip_truth_rebaseline_v1.py",
+      "backend/scripts/validate_validator_path_relocatability_audit_v1.py",
+      "backend/scripts/validate_stale_md5_supersedence_audit_v1.py",
+      "backend/scripts/validate_current_public_guardrail_snapshot_v1.py"
+    ]
+  },
+  "hard_invariants_dichiarati_da_questo_pack": {
+    "runtime_changed_by_this_pack": false,
+    "gameplay_changed_by_this_pack": false,
+    "db_write_performed": false,
+    "live_unlock_performed": false,
+    "reward_live_opened": false,
+    "gacha_live_opened": false,
+    "shop_live_opened": false,
+    "vip_live_opened": false,
+    "battlepass_live_opened": false,
+    "iap_opened": false,
+    "battle_result_commit_opened": false,
+    "exp_progress_commit_opened": false,
+    "ranking_live_opened": false,
+    "character_bible_changed": false,
+    "asset_changed": false,
+    "env_flag_changed": false,
+    "required_validator_weakened": false,
+    "required_validator_removed": false,
+    "historical_docs_deleted": false,
+    "historical_docs_meaning_changed": false
+  }
+}

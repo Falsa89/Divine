@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_P0_CURRENT_ZIP_TRUTH_REBASELINE_AND_VALIDATOR_EVIDENCE_SYNC",
+  "purpose": "Matrix di affidabilita' dei validator rilevanti dopo rebaseline current ZIP. Ogni voce dichiara: path, status corrente, fail/pass/warn, motivo, dipendenze hardcoded /app, MD5 stale, dipendenze ambientali, azione raccomandata.",
+  "recommended_action_enum": [
+    "KEEP_CURRENT",
+    "MAKE_RELOCATABLE",
+    "UPDATE_BASELINE",
+    "MARK_SUPERSEDED_HISTORICAL",
+    "SPLIT_ENVIRONMENTAL_CHECK",
+    "NEEDS_MANUAL_DEVICE_QA_ONLY"
+  ],
+  "entries": [
+    {
+      "validator_path": "backend/scripts/validate_pre_qa_pack_119c_menu_public_snapshot.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": false,
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_pre_qa_pack_119d_public_menu_route_health.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": false,
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_pre_qa_pack_120a_controlled_unlock_prep.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": false,
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_pre_qa_acceleration_120b_safe_playable_vertical_slice_combo.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": false,
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_v89_home_battle_flow_audit.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_v89_no_asset_final_import_no_character_bible.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_v89_real_battlefield_tsx.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_mega_release_acceleration_38_v89_rollup.py",
+      "status_current_zip": "current_state_truth_source",
+      "pass_fail_warn": "PASS",
+      "failure_reason_if_any": null,
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/run_player_route_static_audit.py",
+      "status_current_zip": "current_with_warnings",
+      "pass_fail_warn": "WARN",
+      "failure_reason_if_any": "servers.tsx: missing lock marker matching _LOCKED_V2 / legacy / preview. Non e' P0 runtime leak, e' hygiene drift.",
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": false,
+      "environment_dependency": null,
+      "recommended_action": "KEEP_CURRENT"
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_a_baseline_v1.py",
+      "status_current_zip": "current_unsafe",
+      "pass_fail_warn": "FAIL",
+      "failure_reason_if_any": "MD5 invariant stale per battle_engine.py (151ca35... vs current 8b7f55d4...). Drift e' spiegato dai pack successivi v95/status/second-slice, ma il validator non riconosce il nuovo MD5.",
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": true,
+      "environment_dependency": null,
+      "recommended_action": "UPDATE_BASELINE"
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_c_soul_forge_regression_v1.py",
+      "status_current_zip": "current_unsafe",
+      "pass_fail_warn": "FAIL",
+      "failure_reason_if_any": "MD5 stale su soul-forge.tsx (current MD5 a36818389...).",
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": true,
+      "environment_dependency": null,
+      "recommended_action": "UPDATE_BASELINE"
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_f_redis_v1.py",
+      "status_current_zip": "environment_dependent_unreliable",
+      "pass_fail_warn": "FAIL",
+      "failure_reason_if_any": "Dipende da Redis locale; nel container Pre-QA Redis non e' garantito.",
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": false,
+      "environment_dependency": "redis",
+      "recommended_action": "SPLIT_ENVIRONMENTAL_CHECK"
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_g_reporting_v1.py",
+      "status_current_zip": "current_unsafe",
+      "pass_fail_warn": "FAIL",
+      "failure_reason_if_any": "Path assoluti /app e/o MD5 baseline stale.",
+      "hardcoded_app_path": true,
+      "stale_md5_dependency": true,
+      "environment_dependency": null,
+      "recommended_action": "MAKE_RELOCATABLE"
+    },
+    {
+      "validator_path": "backend/scripts/validate_beta_testing_track_i_completion_v1.py",
+      "status_current_zip": "current_unsafe",
+      "pass_fail_warn": "FAIL",
+      "failure_reason_if_any": "Path assoluti /app e/o presupposti ambientali stale; MD5 baseline.",
+      "hardcoded_app_path": true,
+      "stale_md5_dependency": true,
+      "environment_dependency": null,
+      "recommended_action": "MAKE_RELOCATABLE"
+    },
+    {
+      "validator_path": "backend/scripts/validate_project_full_runtime_feature_reality_audit_v1.py",
+      "status_current_zip": "current_unsafe",
+      "pass_fail_warn": "FAIL",
+      "failure_reason_if_any": "Usa ancora MD5 invariants vecchi (battle_engine.py 151ca35...) come 'current'.",
+      "hardcoded_app_path": "to_verify",
+      "stale_md5_dependency": true,
+      "environment_dependency": null,
+      "recommended_action": "MARK_SUPERSEDED_HISTORICAL"
+    }
+  ],
+  "summary": {
+    "current_state_truth_validators": [
+      "validate_pre_qa_pack_119c_menu_public_snapshot.py",
+      "validate_pre_qa_pack_119d_public_menu_route_health.py",
+      "validate_pre_qa_pack_120a_controlled_unlock_prep.py",
+      "validate_pre_qa_acceleration_120b_safe_playable_vertical_slice_combo.py",
+      "validate_v89_home_battle_flow_audit.py",
+      "validate_v89_no_asset_final_import_no_character_bible.py",
+      "validate_v89_real_battlefield_tsx.py",
+      "validate_mega_release_acceleration_38_v89_rollup.py"
+    ],
+    "warn_validators": ["run_player_route_static_audit.py"],
+    "current_unsafe_validators": [
+      "validate_beta_testing_track_a_baseline_v1.py",
+      "validate_beta_testing_track_c_soul_forge_regression_v1.py",
+      "validate_beta_testing_track_g_reporting_v1.py",
+      "validate_beta_testing_track_i_completion_v1.py",
+      "validate_project_full_runtime_feature_reality_audit_v1.py"
+    ],
+    "environment_dependent_validators": ["validate_beta_testing_track_f_redis_v1.py"],
+    "no_fake_pass_dichiarato": true,
+    "no_required_validator_weakened": true,
+    "no_required_validator_removed": true
+  }
+}

@@ -5643,6 +5643,20 @@ OPTIONAL = [
     # PROJECT_J REQUIRED-CANDIDATE entries previously here have been PROMOTED to REQUIRED (see REQUIRED block above).
     # The 5 RC validators (resolver-pure-deterministic, no-tick-loop-touch, caps-respect, pvp-fairness-audit, rollback-runbook)
     # are now executed as part of the REQUIRED tier — authorized by PROJECT_K Track C.
+    # ========================================================================
+    # PUBLIC_SYNC_TAG_PRE_QA_P0_CURRENT_ZIP_TRUTH_REBASELINE_AND_VALIDATOR_EVIDENCE_SYNC
+    # ------------------------------------------------------------------------
+    # PRE_QA_P0 truth rebaseline pack. Registra 4 OPTIONAL validator senza
+    # toccare REQUIRED ne' indebolire ne' rimuovere alcun validator esistente.
+    # Tuple count = 1 per ciascuno. Tier = OPTIONAL (never REQUIRED).
+    # Nessun runtime change, nessun DB write, nessun reward/gacha/shop/VIP/BP
+    # live opened. Validator dichiarano current-state truth source per MD5 +
+    # path relocatability + stale MD5 supersedence + public guardrail snapshot.
+    # ========================================================================
+    ('PRE-QA-P0-CURRENT-ZIP-TRUTH-REBASELINE', 'validate_current_zip_truth_rebaseline_v1.py'),
+    ('PRE-QA-P0-VALIDATOR-PATH-RELOCATABILITY-AUDIT', 'validate_validator_path_relocatability_audit_v1.py'),
+    ('PRE-QA-P0-STALE-MD5-SUPERSEDENCE-AUDIT', 'validate_stale_md5_supersedence_audit_v1.py'),
+    ('PRE-QA-P0-CURRENT-PUBLIC-GUARDRAIL-SNAPSHOT', 'validate_current_public_guardrail_snapshot_v1.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 
