@@ -300,4 +300,4 @@ controllato a partire dalla colonna `mutation_sensitive_but_gated`.
 
 ## 12. Commit SHA
 
-Verrà aggiornato dopo `git commit`.
+`f4faa6c2d` — `Pack 119D: route target health & mutation classification (read-only validator)`
