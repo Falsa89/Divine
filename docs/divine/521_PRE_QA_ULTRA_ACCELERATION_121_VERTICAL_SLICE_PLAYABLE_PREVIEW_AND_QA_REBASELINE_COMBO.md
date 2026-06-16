@@ -336,4 +336,4 @@ Pack successivi a quello (per ordine logico, ognuno dedicato):
 
 ## 18. Commit SHA
 
-Verrà aggiornato dopo `git commit`.
+`44638ba07` — `PRE_QA_ULTRA_121: vertical slice playable preview + QA rebaseline combo`
