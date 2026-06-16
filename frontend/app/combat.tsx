@@ -407,10 +407,13 @@ export default function CombatScreen() {
       setTeamA(tA);
       setTeamB(tB);
       // Battle background deterministico.
+      // Pack 126 FIX C — passiamo `mode` per il fallback faction-themed
+      // (garantisce bg visibile in Training/Arena/Boss anche con team mixed).
       const bg = pickBattleBackground({
         campaignFaction: null,
         teamA: tA,
         teamB: tB,
+        mode: previewCtxLocal.mode || (params.mode as string) || 'story',
       });
       setBattleBg(bg);
       setPhase('loading'); setError(''); setLogLines([]); logLinesRef.current = [];
@@ -1166,12 +1169,35 @@ export default function CombatScreen() {
       teamB || [],
       0, // duration_sec — backend non lo espone ancora; sample 0 fino a future feature
     );
+    // Pack 126 FIX E — Banner esplicito "no reward / no progress" in preview.
+    const isPreviewResult = !!(PREVIEW_REWARD_LOCK_ACTIVE || (result as any)?.is_preview_local);
     return (
-      <PostBattleSummary
-        summary={summary}
-        onRetry={startBattle}
-        onExit={() => router.back()}
-      />
+      <View style={{ flex: 1, backgroundColor: '#060614' }}>
+        {isPreviewResult ? (
+          <View style={{
+            position: 'absolute', top: 28, left: 12, right: 12, zIndex: 1600,
+            padding: 12, borderRadius: 10,
+            borderWidth: 1, borderColor: 'rgba(255,176,0,0.85)',
+            backgroundColor: 'rgba(0,0,0,0.75)',
+            alignItems: 'center',
+          }}>
+            <Text style={{ color: '#ffd54f', fontSize: 11, fontWeight: '900', letterSpacing: 1, marginBottom: 4 }}>
+              {'PREVIEW COMPLETATA'}
+            </Text>
+            <Text style={{ color: '#fff3cd', fontSize: 10, textAlign: 'center', lineHeight: 14 }}>
+              {'Nessuna EXP \u00B7 Nessun reward \u00B7 Nessun progresso salvato.'}
+            </Text>
+            <Text style={{ color: '#cfd8dc', fontSize: 8.5, textAlign: 'center', marginTop: 4, fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }) }}>
+              {'no_hero_exp \u00B7 no_account_exp \u00B7 no_gold \u00B7 no_drop \u00B7 no_affinity \u00B7 no_ranking'}
+            </Text>
+          </View>
+        ) : null}
+        <PostBattleSummary
+          summary={summary}
+          onRetry={startBattle}
+          onExit={() => router.back()}
+        />
+      </View>
     );
   }
 

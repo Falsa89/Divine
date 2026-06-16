@@ -104,6 +104,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Pack 124 QA team seed (dev manual).")
     parser.add_argument("--allow-account", dest="account", default=None,
                         help="ID account allowlisted (obbligatorio)")
+    parser.add_argument("--server-id", dest="server_id", default=None,
+                        help="Server scope per il seed (es. 's1'). Pack 126: obbligatorio per il device QA.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Non scrive su DB, solo valida e logga.")
     parser.add_argument("--validate-only", action="store_true",
@@ -167,9 +169,13 @@ def main() -> int:
 
     for hid in QA_TEAM_SEED_HERO_IDS:
         hero_def = by_id[hid]
-        existing = user_heroes_col.find_one({"user_id": args.account, "hero_id": hid})
+        # Pack 126 — idempotency scoped by (user_id, hero_id, server_id) se fornito.
+        query: dict = {"user_id": args.account, "hero_id": hid}
+        if args.server_id:
+            query["server_id"] = args.server_id
+        existing = user_heroes_col.find_one(query)
         if existing:
-            skipped.append({"hero_id": hid, "reason": "already_owned"})
+            skipped.append({"hero_id": hid, "reason": "already_owned", "server_id": args.server_id})
             continue
         doc = {
             "_id": f"qa_seed_{args.account}_{hid}_{uuid.uuid4().hex[:8]}",
@@ -187,11 +193,13 @@ def main() -> int:
             "_qa_seed_ts": ts,
             "_qa_seed_pack": "pack_124",
         }
+        if args.server_id:
+            doc["server_id"] = args.server_id
         if args.dry_run:
-            granted.append({"hero_id": hid, "dry_run": True})
+            granted.append({"hero_id": hid, "dry_run": True, "server_id": args.server_id})
         else:
             user_heroes_col.insert_one(doc)
-            granted.append({"hero_id": hid, "doc_id": doc["_id"]})
+            granted.append({"hero_id": hid, "doc_id": doc["_id"], "server_id": args.server_id})
 
     out_dir = REPO_ROOT / "backend" / "scripts" / "reports"
     out_dir.mkdir(parents=True, exist_ok=True)

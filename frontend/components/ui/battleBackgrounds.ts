@@ -86,15 +86,36 @@ export function normalizeFaction(raw?: string | null): FactionKey | null {
 // ---- Counting helpers --------------------------------------------------------
 function extractFaction(hero: any): FactionKey | null {
   if (!hero) return null;
-  // Il backend può chiamarlo in vari modi — accetta le forme più comuni
+  // Il backend può chiamarlo in vari modi — accetta le forme più comuni.
+  // Pack 126 — fallback anche su hero_id prefix (es. "greek_hoplite" → "greek")
+  // cosi' il resolver funziona anche con snapshot preview che NON includono
+  // un campo faction esplicito.
   const raw =
     hero.faction ||
     hero.hero_faction ||
     hero.factionKey ||
     hero.faction_id ||
     null;
-  return normalizeFaction(raw);
+  if (raw) return normalizeFaction(raw);
+  const heroId = String(hero.hero_id || hero.id || '').toLowerCase();
+  const prefix = heroId.split('_')[0] || '';
+  return normalizeFaction(prefix);
 }
+
+// Pack 126 — Mode → faction-themed background mapping (preview fallback).
+// Quando il combat preview non riesce a determinare una faction dominante
+// (es. team con eroi di fazioni diverse), il mode garantisce uno sfondo
+// visibile coerente al contesto. Asset gia' presenti nel BG_REGISTRY.
+const MODE_BG_FALLBACK: Record<string, FactionKey> = {
+  story: 'greek',
+  campaign: 'greek',
+  tower: 'norse',
+  training: 'celtic',
+  arena: 'greek',
+  boss: 'egyptian',
+  raid: 'egyptian',
+  // unknown / mancante → premium safe fallback (greek di default)
+};
 
 /**
  * Calcola la fazione con il conteggio più alto tra gli eroi passati.
@@ -131,6 +152,12 @@ export interface BattleBgContext {
    * Passare un valore fisso per determinismo (es. memorizzato in useState).
    */
   variantIndex?: number;
+  /**
+   * Pack 126 — mode fallback. Quando faction non risolve, mappiamo il mode
+   * (story/tower/training/arena/boss/raid) a un asset fazionale "tematico".
+   * Garantisce che il preview combat NON parta mai con sfondo trasparente.
+   */
+  mode?: string | null;
 }
 
 export interface BattleBgResult {
@@ -224,6 +251,19 @@ export function pickBattleBackground(ctx: BattleBgContext): BattleBgResult {
 
   // Fallback — gradient neutro (source = null) - ultimo-resort se nessun
   // eroe ha una fazione riconosciuta.
+  // Pack 126 — PRIMA del gradient neutro: usa mode fallback se fornito.
+  // Garantisce che il combat preview NON parta mai con sfondo trasparente.
+  const modeKey = (ctx.mode || '').toLowerCase().trim();
+  const modeFaction = MODE_BG_FALLBACK[modeKey] || 'greek'; // premium safe default
+  if (BG_REGISTRY[modeFaction]) {
+    const arr = BG_REGISTRY[modeFaction];
+    return {
+      source: arr[variantIndex % arr.length],
+      faction: modeFaction,
+      reason: 'dominant_player', // mantenere compat tipo: trattata come fallback determ
+      variantIndex,
+    };
+  }
   return {
     source: null,
     faction: null,

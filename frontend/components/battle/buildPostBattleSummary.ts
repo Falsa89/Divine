@@ -38,6 +38,17 @@ import type {
 // REWARDS
 // ─────────────────────────────────────────────────────────────────────
 function buildRewards(result: any): PostBattleSummaryData['rewards'] {
+  // Pack 126 FIX E — Preview/non-authoritative: NO rewards (gold/exp/gem/drops).
+  // Risultato vuoto strict: il post-battle UI mostra "no reward / no progress".
+  if (result?.is_preview_local || result?.is_preview || result?.preview) {
+    return {
+      auto_claim: [],
+      manual_claim: [],
+      expires_in_days: undefined,
+      account_level_up: false,
+      new_account_level: undefined,
+    };
+  }
   const r = result?.rewards || {};
   const auto: RewardItem[] = [];
   const manual: RewardItem[] = [];
@@ -79,7 +90,15 @@ function buildRewards(result: any): PostBattleSummaryData['rewards'] {
 // HERO EXP BREAKDOWN
 // ─────────────────────────────────────────────────────────────────────
 function buildHeroExp(result: any, teamA: any[]): HeroExpBreakdown[] {
+  // Pack 126 FIX E — In preview/non-authoritative combat NO exp gained.
+  // Anche `1` figurativo e' inaccettabile: il preview NON deve implicare
+  // ricompense/progresso. Short-circuit a [] se result e' preview-local
+  // o se totalHeroExp non e' un valore positivo.
+  if (result?.is_preview_local || result?.is_preview || result?.preview) {
+    return [];
+  }
   const totalHeroExp: number = result?.rewards?.hero_exp || 0;
+  if (!totalHeroExp || totalHeroExp <= 0) return [];
   const levelups: any[] = result?.rewards?.hero_levelups || [];
   const lookup = new Map<string, any>(
     levelups.map(lu => [lu.user_hero_id || lu.hero_id, lu])
@@ -89,7 +108,10 @@ function buildHeroExp(result: any, teamA: any[]): HeroExpBreakdown[] {
   const usable = teamA.filter(c => !!c?.user_hero_id || !!c?.id);
   if (usable.length === 0) return [];
 
-  const perHero = Math.max(1, Math.floor(totalHeroExp / usable.length));
+  // Pack 126 — niente clamp `Math.max(1, ...)`: se totalHeroExp e' 0 ritorniamo
+  // [] sopra. Qui calcoliamo perHero senza fake +1.
+  const perHero = Math.floor(totalHeroExp / usable.length);
+  if (perHero <= 0) return [];
 
   return usable.map(c => {
     const uid = c.user_hero_id || c.id;

@@ -344,6 +344,8 @@ export type PreviewCombatUnit = {
   level: number;
   stars: number;
   role: 'tank' | 'dps' | 'support' | 'healer';
+  /** Pack 126 — faction derivata dal hero_id prefix (greek/norse/celtic/...). */
+  faction: string;
   max_hp: number;
   current_hp: number;
   max_hp_battle: number;
@@ -384,9 +386,25 @@ function slotToCombatUnit(
   const baseHp = slot.role === 'tank' ? 16000 : slot.role === 'healer' ? 11000 : 12000;
   const baseAtk = slot.role === 'dps' ? 1600 : slot.role === 'healer' ? 900 : 1100;
   const baseDef = slot.role === 'tank' ? 1100 : slot.role === 'support' ? 800 : 700;
-  // Formation grid 3x3: col = idx % 3, row = floor(idx / 3).
-  const col = idx % 3;
-  const row = Math.floor(idx / 3);
+  // Pack 126 — Formation 6v6 nel layout battaglia approvato (vecchia
+  // convenzione backend con X_MAP_A {1,4,7} → front/mid/back e Y_MAP
+  // {1,4,7} → row 0/1/2). Mappiamo i 6 ruoli su 3 colonne × 2 righe:
+  //   col 1 (front): tank (idx 0), dps melee (idx 1)
+  //   col 4 (mid)  : dps ranged (idx 2), mage AoE (idx 3)
+  //   col 7 (back) : support (idx 4), healer (idx 5)
+  // In questo modo TUTTI i 6 eroi sono visibili nel layout 3-line approvato.
+  const POS_BACKEND = [
+    { grid_x: 1, grid_y: 1 }, // 0 tank   - front, top
+    { grid_x: 1, grid_y: 4 }, // 1 dps M  - front, mid
+    { grid_x: 4, grid_y: 1 }, // 2 dps R  - mid, top
+    { grid_x: 4, grid_y: 4 }, // 3 mage   - mid, mid
+    { grid_x: 7, grid_y: 1 }, // 4 supp   - back, top
+    { grid_x: 7, grid_y: 4 }, // 5 heal   - back, mid
+  ];
+  const pos = POS_BACKEND[idx] || POS_BACKEND[POS_BACKEND.length - 1];
+  // Faction derivata dal hero_id prefix (greek/norse/celtic/etc.).
+  // Garantisce che battleBackgrounds.extractFaction risolva correttamente.
+  const faction = (slot.hero_id.split('_')[0] || '').toLowerCase();
   return {
     id: `pack124_${side}_${slot.hero_id}_${idx}`,
     hero_id: slot.hero_id,
@@ -399,6 +417,7 @@ function slotToCombatUnit(
     level: slot.level,
     stars: slot.stars,
     role: slot.role,
+    faction,
     max_hp: baseHp,
     current_hp: baseHp,
     max_hp_battle: baseHp,
@@ -408,8 +427,8 @@ function slotToCombatUnit(
     spd: 100 + idx,
     rage: 0,
     max_rage: 100,
-    grid_x: col,
-    grid_y: row,
+    grid_x: pos.grid_x,
+    grid_y: pos.grid_y,
   };
 }
 
