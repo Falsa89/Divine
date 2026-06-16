@@ -269,4 +269,4 @@ la conformità. Pronto per il re-audit del Game Master.
 
 ## 14. Commit SHA
 
-Verrà aggiornato dopo `git commit`.
+`2ae93117c` — `Pack 120A: controlled live unlock prep (plan-only, no runtime flip)`
