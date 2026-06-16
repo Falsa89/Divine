@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_ULTRA_122",
+  "track": "C_PREVIEW_TEAM_FALLBACK_POLICY",
+  "policy_name": "preview_local_team_snapshot",
+  "enabled_only_for_preview": true,
+  "persistent": false,
+  "db_write": false,
+  "reward_allowed": false,
+  "progress_allowed": false,
+  "account_roster_mutation": false,
+  "live_mode_allowed": false,
+  "banner_required": true,
+  "banner_text_it": "Team temporaneo preview — nessun eroe aggiunto all'account",
+  "allowed_modes": ["story", "tower", "training", "arena", "boss"],
+  "fail_closed_conditions": [
+    "reward_policy != 'preview'",
+    "progress_policy != 'preview'",
+    "battle_engine_mode != 'preview'",
+    "is_preview != true",
+    "any backend save call detected",
+    "any DB mutation attempt"
+  ],
+  "wiring_status_in_122": {
+    "policy_declared_only": true,
+    "runtime_wiring_implemented_in_122": false,
+    "rationale": "Implementare la chiamata runtime di fallback team in pre-battle-lobby.tsx + combat.tsx in Pack 122 e' rischio P0 di toccare combat runtime. Politica dichiarata qui; wiring runtime delegato a pack futuro dedicato (123) con design review + flag-gated.",
+    "blocks_combat_preview_for_no_team_accounts_now": true,
+    "documented_as_blocker": true
+  }
+}

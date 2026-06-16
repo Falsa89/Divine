@@ -5672,6 +5672,18 @@ OPTIONAL = [
     ('PRE-QA-ULTRA-121-DEVICE-QA-MANIFEST', 'validate_pre_qa_ultra_121_device_qa_manifest.py'),
     ('PRE-QA-ULTRA-121-REPORT-COMPLETENESS', 'validate_pre_qa_ultra_121_report_completeness.py'),
     ('PRE-QA-ULTRA-121-CURRENT-UNSAFE-VALIDATOR-TRIAGE', 'validate_pre_qa_ultra_121_current_unsafe_validator_triage.py'),
+    # ========================================================================
+    # PUBLIC_SYNC_TAG_PRE_QA_ULTRA_122_DEVICE_QA_FLOW_FIX_BATCH_AND_ALPHA_PREVIEW_UNLOCK
+    # ------------------------------------------------------------------------
+    # Pack 122 device QA flow fix. 6 OPTIONAL validator. Nessun REQUIRED
+    # toccato. Tier OPTIONAL.
+    # ========================================================================
+    ('PRE-QA-ULTRA-122-ENTRYPOINT-SEMANTIC-FIX', 'validate_pre_qa_ultra_122_entrypoint_semantic_fix.py'),
+    ('PRE-QA-ULTRA-122-MODE-SELECTION-HUBS', 'validate_pre_qa_ultra_122_mode_selection_hubs.py'),
+    ('PRE-QA-ULTRA-122-PREVIEW-TEAM-FALLBACK-NO-WRITE', 'validate_pre_qa_ultra_122_preview_team_fallback_no_write.py'),
+    ('PRE-QA-ULTRA-122-DEVICE-MANIFEST-V2', 'validate_pre_qa_ultra_122_device_manifest_v2.py'),
+    ('PRE-QA-ULTRA-122-TOWER-FLOOR-NO-CRASH-CONTRACT', 'validate_pre_qa_ultra_122_tower_floor_no_crash_contract.py'),
+    ('PRE-QA-ULTRA-122-REPORT-COMPLETENESS', 'validate_pre_qa_ultra_122_report_completeness.py'),
 ]
 BASELINE_DIFF = ('RM1.32-PRE', 'validate_hero_skill_kit_catalog_baseline_diff.py')
 

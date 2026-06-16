@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "pack": "PRE_QA_ULTRA_122",
+  "track": "G_DEVICE_QA_MANIFEST_V2",
+  "manifest_version": 2,
+  "scope_invariants": {
+    "no_purchase_test": true,
+    "no_claim_reward_test": true,
+    "no_env_flag_override": true,
+    "no_dev_qa_hidden_route_use": true,
+    "device_qa_must_remain_no_write": true
+  },
+  "checklist_ordered": [
+    {"step": 1,  "action": "Avvia app",                                                       "expected": "Home senza crash"},
+    {"step": 2,  "action": "Apri Menu",                                                       "expected": "6 categorie, 22 voci"},
+    {"step": 3,  "action": "Menu -> Battaglia -> Storia",                                     "expected": "Naviga a /story (hub) — NON direttamente alla lobby"},
+    {"step": 4,  "action": "Da /story seleziona uno stage/capitolo",                          "expected": "Naviga a /pre-battle-lobby?mode=story (con eventuali param stage/chapter)"},
+    {"step": 5,  "action": "Menu -> Battaglia -> Torre",                                      "expected": "Naviga a /tower-of-the-hells (hub)"},
+    {"step": 6,  "action": "Da /tower-of-the-hells seleziona un piano",                        "expected": "Naviga a /pre-battle-lobby?mode=tower (con floor_id) — NO CRASH"},
+    {"step": 7,  "action": "Menu -> Battaglia -> Addestramento",                              "expected": "Naviga a /hero-training (hub)"},
+    {"step": 8,  "action": "Da /hero-training seleziona Training Preview Trial",              "expected": "Naviga a /pre-battle-lobby?mode=training&trial_id=..."},
+    {"step": 9,  "action": "Menu -> Battaglia -> Arena PvP",                                  "expected": "Naviga a /arena-preview (selection hub)"},
+    {"step": 10, "action": "Da /arena-preview seleziona opponent preview",                    "expected": "Naviga a /pre-battle-lobby?mode=arena&opponent_id=..."},
+    {"step": 11, "action": "Menu -> Battaglia -> Raid",                                       "expected": "Naviga a /boss-raid-preview (selection hub)"},
+    {"step": 12, "action": "Da /boss-raid-preview seleziona boss preview",                    "expected": "Naviga a /pre-battle-lobby?mode=boss&boss_id=..."},
+    {"step": 13, "action": "Verifica preview team fallback se account senza team",            "expected": "Se policy wired: banner 'Team temporaneo preview'. Se NON wired (Pack 122): documentato come BLOCKED_NO_TEAM_PREVIEW_NOT_AVAILABLE"},
+    {"step": 14, "action": "Tenta avvio combat preview almeno in story o training",            "expected": "Se team o fallback disponibili: render combat preview no-write. Altrimenti: messaggio blocco chiaro"},
+    {"step": 15, "action": "Verifica nessun reward/EXP/progress/ranking dopo i test",          "expected": "Stato account immutato"},
+    {"step": 16, "action": "Verifica shop/gacha/VIP/BP/IAP non pubblici",                     "expected": "Nessuna voce reachable"},
+    {"step": 17, "action": "Verifica back navigation globale",                                "expected": "Consistente, no dead-end"},
+    {"step": 18, "action": "Verifica locked/deferred screens",                                "expected": "OK"},
+    {"step": 19, "action": "Verifica assenza crash",                                          "expected": "Nessun crash"}
+  ],
+  "dont_do_in_device_qa": [
+    "NON testare acquisti reali",
+    "NON testare claim reward",
+    "NON forzare env flag",
+    "NON usare route dev/QA nascoste"
+  ],
+  "pass_criteria": [
+    "I 5 menu Battaglia non portano piu' direttamente alla lobby",
+    "Story/Tower/Training/Arena/Boss vanno a hub/selection screen",
+    "Tap piano Torre non crasha (statico OK; runtime crash fix delegato a pack futuro se persiste)",
+    "Arena/Boss preview hub selezionano opponent/boss deterministico",
+    "Combat preview avviabile almeno se team disponibile",
+    "Nessun reward/EXP/progress/ranking commit"
+  ],
+  "fail_criteria": [
+    "Direct lobby entry player-facing ancora presente",
+    "Crash su tap piano Torre (runtime)",
+    "Reward/EXP/progress commit live",
+    "Shop/gacha/VIP/BP/IAP accessibili pubblicamente"
+  ]
+}

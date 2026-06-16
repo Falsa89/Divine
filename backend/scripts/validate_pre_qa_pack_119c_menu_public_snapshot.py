@@ -86,8 +86,17 @@ LIVE_BLOCKED_ROUTES_EXPECTED = [
     '/mail',
     '/friends',
 ]
-# Eccezioni esplicite per route duplicate "lecite". Nessuna ammessa per Pack 119C.
-ALLOWED_DUPLICATE_ROUTES: set = set()
+# Eccezioni esplicite per route duplicate "lecite".
+# Pack 122 Track A: dopo il device QA 121 le voci "Storia/Torre/Addestramento"
+# in "Battaglia" sono state rimappate sugli hub canonici (gia' presenti in
+# Avventura/Progressione). I tre route che seguono compaiono due volte
+# nel menu pubblico in modo INTENZIONALE e documentato. Non e' un drift di
+# pulizia; serve a impedire i direct lobby entry player-facing.
+ALLOWED_DUPLICATE_ROUTES: set = {
+    '/story',
+    '/tower-of-the-hells',
+    '/hero-training',
+}
 
 # Decoder utility: trasforma escape JS \uXXXX -> char Python.
 _UESC_RE = re.compile(r'\\u([0-9A-Fa-f]{4})')

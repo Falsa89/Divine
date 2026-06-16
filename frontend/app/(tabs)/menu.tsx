@@ -153,13 +153,19 @@ const CATEGORIES = [
     // db_writes=0 / reward_live=false / endpoint_live=false / random_opponents_allowed=false.
     // Pack 119B: titolo player-facing pulito (era "Battaglia (Renderer Reale v90)").
     // Marker tecnico v90 rimosso dalla UI; logica renderer reale + pre-battle-lobby preservata.
+    // Pack 122 Track A — entrypoint semantic fix dopo Device QA 121.
+    // Le voci "Storia/Torre/Addestramento" NON puntano piu' direttamente alla
+    // pre-battle-lobby. Ora portano agli hub canonici (gia' raggiungibili da
+    // Avventura/Progressione). Arena/Raid passano dai nuovi hub di selezione
+    // preview (arena-preview / boss-raid-preview) deterministici no-write.
+    // Nessun direct lobby entry player-facing per i 5 mode.
     title: 'Battaglia',
     items: [
-      { label: 'Storia', icon: '\uD83D\uDCDC', route: '/pre-battle-lobby?mode=story', gradient: ['#FF6B35', '#CC4422'] as const },
-      { label: 'Torre', icon: '\uD83C\uDFEF', route: '/pre-battle-lobby?mode=tower', gradient: ['#8844FF', '#5522CC'] as const },
-      { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pre-battle-lobby?mode=arena', gradient: ['#FF4444', '#CC2222'] as const },
-      { label: 'Addestramento', icon: '\u2694\uFE0F', route: '/pre-battle-lobby?mode=training', gradient: ['#FFD700', '#BB55FF'] as const },
-      { label: 'Raid', icon: '\uD83D\uDC32', route: '/pre-battle-lobby?mode=boss', gradient: ['#FF5544', '#CC3322'] as const },
+      { label: 'Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
+      { label: 'Torre', icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', gradient: ['#8844FF', '#5522CC'] as const },
+      { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/arena-preview', gradient: ['#FF4444', '#CC2222'] as const },
+      { label: 'Addestramento', icon: '\u2694\uFE0F', route: '/hero-training', gradient: ['#FFD700', '#BB55FF'] as const },
+      { label: 'Raid', icon: '\uD83D\uDC32', route: '/boss-raid-preview', gradient: ['#FF5544', '#CC3322'] as const },
     ],
   },
   {

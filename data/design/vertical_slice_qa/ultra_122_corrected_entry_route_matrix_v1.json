@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "pack": "PRE_QA_ULTRA_122_DEVICE_QA_FLOW_FIX_BATCH_AND_ALPHA_PREVIEW_UNLOCK",
+  "track": "H_CORRECTED_ENTRY_ROUTE_MATRIX",
+  "mode_entries_corrected": {
+    "story":    {"public_menu_entry": "/story",               "hub_screen": "frontend/app/story.tsx",                "leads_to": "stage/chapter selection then /pre-battle-lobby?mode=story"},
+    "tower":    {"public_menu_entry": "/tower-of-the-hells",  "hub_screen": "frontend/app/tower-of-the-hells.tsx",   "leads_to": "floor selection then /pre-battle-lobby?mode=tower"},
+    "training": {"public_menu_entry": "/hero-training",       "hub_screen": "frontend/app/hero-training.tsx",        "leads_to": "trial selection then /pre-battle-lobby?mode=training"},
+    "arena":    {"public_menu_entry": "/arena-preview",       "hub_screen": "frontend/app/arena-preview.tsx",        "leads_to": "opponent selection then /pre-battle-lobby?mode=arena&opponent_id=..."},
+    "boss":     {"public_menu_entry": "/boss-raid-preview",   "hub_screen": "frontend/app/boss-raid-preview.tsx",    "leads_to": "boss selection then /pre-battle-lobby?mode=boss&boss_id=..."}
+  },
+  "removed_direct_lobby_entries_player_facing": [
+    "/pre-battle-lobby?mode=story",
+    "/pre-battle-lobby?mode=tower",
+    "/pre-battle-lobby?mode=arena",
+    "/pre-battle-lobby?mode=training",
+    "/pre-battle-lobby?mode=boss"
+  ],
+  "rule": "No direct lobby entry player-facing in the menu. All access via hub.",
+  "duplicate_routes_documented": [
+    {"route": "/story", "appears_in": ["Avventura -> Capitoli Storia", "Battaglia -> Storia"], "rationale": "Pack 122 intentional: both entries lead to same hub"},
+    {"route": "/tower-of-the-hells", "appears_in": ["Avventura -> Torre degli Inferi", "Battaglia -> Torre"], "rationale": "Pack 122 intentional"},
+    {"route": "/hero-training", "appears_in": ["Progressione -> Addestramento Eroico", "Battaglia -> Addestramento"], "rationale": "Pack 122 intentional"}
+  ]
+}

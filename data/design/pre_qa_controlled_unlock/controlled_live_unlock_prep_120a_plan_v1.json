@@ -472,6 +472,46 @@
       "device_tests_required": ["device QA visivo lobby preview Raid"],
       "rollback_requirement": "Flag-gated + kill-switch",
       "future_gate": "Pack dedicato Raid Reward Live (TIER 4)"
+    },
+    {
+      "route": "/arena-preview",
+      "category": "Battaglia",
+      "label": "Arena PvP",
+      "file_target": "frontend/app/arena-preview.tsx",
+      "classification_119d": "safe_preview_only",
+      "tier": 1,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Pack 122 Track E: hub selezione avversario preview-only.",
+        "3 avversari deterministici. No matchmaking live, no MMR/ranking."
+      ],
+      "preconditions": ["Mantenere preview-only, nessun matchmaking live"],
+      "static_tests_required": ["119D validator", "validator 122 entrypoint semantic"],
+      "device_tests_required": ["device QA: aprire arena-preview, selezionare opponent"],
+      "rollback_requirement": "N/A (preview hub statico)",
+      "future_gate": "Pack futuro Arena live matchmaking (TIER 4)"
+    },
+    {
+      "route": "/boss-raid-preview",
+      "category": "Battaglia",
+      "label": "Raid",
+      "file_target": "frontend/app/boss-raid-preview.tsx",
+      "classification_119d": "safe_preview_only",
+      "tier": 1,
+      "apply_now": false,
+      "live_reward_enabled": false,
+      "economy_live_enabled": false,
+      "risk_notes": [
+        "Pack 122 Track F: hub selezione boss preview-only.",
+        "3 boss deterministici. No drop, no ingresso consumato."
+      ],
+      "preconditions": ["Mantenere preview-only, nessun drop/raid live"],
+      "static_tests_required": ["119D validator", "validator 122 entrypoint semantic"],
+      "device_tests_required": ["device QA: aprire boss-raid-preview, selezionare boss"],
+      "rollback_requirement": "N/A (preview hub statico)",
+      "future_gate": "Pack futuro Raid live reward (TIER 4)"
     }
   ],
 
