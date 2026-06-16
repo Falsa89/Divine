@@ -211,4 +211,4 @@ Onesto rispetto al contratto: il combat preview per account senza team resta blo
 
 ## 18. Commit SHA
 
-Verrà aggiornato dopo `git commit`.
+`db3f52fa6` — `Pack 122: device QA flow fix batch + alpha preview unlock (HONEST BLOCKED verdict)`
