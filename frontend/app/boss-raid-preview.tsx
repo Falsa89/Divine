@@ -13,6 +13,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// Pack 123 — Preview lobby URL builder (no-write, no-DB, no-grant).
+import { buildPreviewLobbyUrl } from '../src/utils/previewBattleTeam';
 
 const PREVIEW_BOSSES = [
   { id: 'preview_boss_001', name: 'Drago Preview', tier: 'Tier 1 (preview)', power: 32000 },
@@ -37,7 +39,13 @@ export default function BossRaidPreviewScreen() {
           <TouchableOpacity
             key={b.id}
             style={s.card}
-            onPress={() => router.push(`/pre-battle-lobby?mode=boss&boss_id=${b.id}`)}
+            onPress={() => router.push(buildPreviewLobbyUrl({
+              mode: 'boss',
+              encounter_id: `enc_boss_preview_${b.id}`,
+              enemy_source_id: b.id,
+              enemy_source_type: 'boss',
+              boss_id: b.id,
+            }) as any)}
           >
             <Text style={s.cardName}>{b.name}</Text>
             <Text style={s.cardMeta}>{b.tier} · Power {b.power}</Text>

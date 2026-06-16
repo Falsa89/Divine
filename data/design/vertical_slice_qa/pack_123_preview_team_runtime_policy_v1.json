@@ -1,0 +1,110 @@
+{
+  "schema_version": 2,
+  "pack": "PRE_QA_PACK_123",
+  "track": "G_PREVIEW_TEAM_RUNTIME_POLICY",
+  "runtime_wired": true,
+  "wiring_status_rationale": "Pack 123 finalizzato: utility frontend/src/utils/previewBattleTeam.ts ESPOSTA E CABLATA in tutti i 6 consumer (pre-battle-lobby.tsx, combat.tsx, tower-of-the-hells.tsx, hero-training.tsx, arena-preview.tsx, boss-raid-preview.tsx). Hero IDs canonici reali da heroes_master.json (3*, launch_base, no Borea, no 6*, no hidden, no placeholder). Fail-closed: ogni consumer chiama canUsePreviewTeamFallback() / previewContextFromParams() e disattiva il fallback se i flag preview non sono tutti coerenti.",
+  "enabled_only_for_preview": true,
+  "persistent": false,
+  "db_write": false,
+  "reward_allowed": false,
+  "progress_allowed": false,
+  "account_roster_mutation": false,
+  "gacha_mutation": false,
+  "shop_mutation": false,
+  "vip_mutation": false,
+  "bp_mutation": false,
+  "iap_mutation": false,
+  "live_mode_allowed": false,
+  "banner_required": true,
+  "banner_text_it": "TEAM PREVIEW LOCALE — nessun eroe aggiunto all'account, nessun salvataggio, nessuna ricompensa",
+  "allowed_modes": ["story", "tower", "training", "arena", "boss", "raid"],
+  "fail_closed_conditions": [
+    "is_preview !== true",
+    "reward_policy !== 'preview'",
+    "progress_policy !== 'preview'",
+    "battle_engine_mode !== 'preview'",
+    "mode not in allowed_modes",
+    "qualsiasi tentativo di save team o roster grant"
+  ],
+  "canonical_preview_team_composition_6v6": [
+    {
+      "slot": 1,
+      "role": "Tank",
+      "hero_id": "greek_hoplite",
+      "name_it": "Hoplite",
+      "rarity": 3,
+      "element": "Terra",
+      "release_group": "launch_base"
+    },
+    {
+      "slot": 2,
+      "role": "DPS Melee",
+      "hero_id": "norse_berserker",
+      "name_it": "Berserker",
+      "rarity": 3,
+      "element": "Fuoco",
+      "release_group": "launch_base"
+    },
+    {
+      "slot": 3,
+      "role": "DPS Ranged",
+      "hero_id": "celtic_archer",
+      "name_it": "Arciera",
+      "rarity": 3,
+      "element": "Vento",
+      "release_group": "launch_base"
+    },
+    {
+      "slot": 4,
+      "role": "Mage AoE",
+      "hero_id": "arcane_lightning_enchantress",
+      "name_it": "Incantatrice della Folgore",
+      "rarity": 3,
+      "element": "Fulmine",
+      "release_group": "launch_base"
+    },
+    {
+      "slot": 5,
+      "role": "Support / Buffer",
+      "hero_id": "greek_sanctuary_muse",
+      "name_it": "Musa del Santuario",
+      "rarity": 3,
+      "element": "Luce",
+      "release_group": "launch_base"
+    },
+    {
+      "slot": 6,
+      "role": "Healer",
+      "hero_id": "angelic_priestess",
+      "name_it": "Sacerdotessa",
+      "rarity": 3,
+      "element": "Luce",
+      "release_group": "launch_base"
+    }
+  ],
+  "source_files_modified": [
+    "frontend/src/utils/previewBattleTeam.ts (REWRITTEN)",
+    "frontend/app/pre-battle-lobby.tsx (WIRED — banner preview + bypass blocker preview-only)",
+    "frontend/app/combat.tsx (WIRED — render preview team snapshot in preview_locked phase)",
+    "frontend/app/tower-of-the-hells.tsx (WIRED — fix crash tap, navigate to lobby con mode=tower&floor_id)",
+    "frontend/app/hero-training.tsx (WIRED — Training Preview Trial card)",
+    "frontend/app/arena-preview.tsx (WIRED — buildPreviewLobbyUrl)",
+    "frontend/app/boss-raid-preview.tsx (WIRED — buildPreviewLobbyUrl)"
+  ],
+  "validators": [
+    "backend/scripts/validate_pre_qa_pack_123_preview_team_runtime_wiring.py",
+    "backend/scripts/validate_pre_qa_pack_123_canonical_hero_ids.py",
+    "backend/scripts/validate_pre_qa_pack_123_tower_floor_tap_no_crash.py",
+    "backend/scripts/validate_pre_qa_pack_123_no_db_write_invariant.py",
+    "backend/scripts/validate_pre_qa_pack_123_preview_hubs_complete.py"
+  ],
+  "how_to_verify": [
+    "1. Eseguire i 5 validatori in backend/scripts/ — tutti devono ritornare exit 0 / PASS.",
+    "2. Aprire l'app Expo, navigare a Torre degli Inferi, tap su un piano sbloccato → no crash → modal con bottone 'Avvia Preview Lobby' → navigazione a /pre-battle-lobby?mode=tower&floor_id=N.",
+    "3. Nella lobby in modalita' preview, deve apparire il banner 'PACK 123 — PREVIEW TEAM FALLBACK ATTIVO' con i 6 eroi canonici.",
+    "4. Tap 'Avvia Preview (Team Locale)' → entra in /combat in preview_locked: viene mostrato il pannello PACK 123 con i 6 hero_id reali del roster, nessuna ricompensa, nessun simulate.",
+    "5. Hub Arena e Boss Raid: tap su un opponent/boss → naviga in lobby con tutti i flag preview coerenti.",
+    "6. Hero Training: visibile la card 'Training Preview Trial' con CTA 'Avvia Preview Trial'."
+  ]
+}

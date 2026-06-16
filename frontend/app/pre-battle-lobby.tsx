@@ -40,6 +40,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter';
 // v108_POSTQA_A — AsyncStorage per leggere selected server reale (NO hardcoded 's1').
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// Pack 123 — Preview Team Fallback runtime wiring (no-write, no-DB, no-grant).
+import {
+  buildPreviewLocalTeamSnapshot,
+  buildPreviewCombatUrl,
+  previewContextFromParams,
+  PREVIEW_TEAM_BANNER_IT,
+} from '../src/utils/previewBattleTeam';
 // Pre-QA Stabilization 114B — Bearer token bridged via dynamic authTokenCompat.
 // Direct expo-secure-store import rimosso (dead code). Vedi src/utils/authTokenCompat.ts.
 
@@ -287,9 +294,22 @@ function SourceBadge({ enc }: { enc: ModeEncounter }) {
 
 export default function PreBattleLobbyScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ mode?: string; source_id?: string; encounter_id?: string; enemy_source_id?: string; enemy_source_type?: string; v108_pre?: string }>();
+  const params = useLocalSearchParams<{ mode?: string; source_id?: string; encounter_id?: string; enemy_source_id?: string; enemy_source_type?: string; v108_pre?: string; is_preview?: string; reward_policy?: string; progress_policy?: string; battle_engine_mode?: string; floor_id?: string; opponent_id?: string; boss_id?: string; trial_id?: string; server_id?: string }>();
   const modeParam = (params.mode || 'story').toString();
   const mode = (CANONICAL_ENCOUNTERS[modeParam] ? modeParam : 'story') as keyof typeof CANONICAL_ENCOUNTERS;
+  // Pack 123 — Preview context fail-closed: TRUE solo se TUTTI i flag preview
+  // coerenti sono presenti nei router params. In ogni dubbio: FALSE → fallback
+  // disattivato, blocker chain onesti restano attivi.
+  const previewCtx = useMemo(
+    () => previewContextFromParams(params as Record<string, unknown>),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [params.is_preview, params.reward_policy, params.progress_policy, params.battle_engine_mode, params.mode],
+  );
+  const previewTeamSnapshot = useMemo(
+    () => buildPreviewLocalTeamSnapshot(previewCtx),
+    [previewCtx],
+  );
+  const previewFallbackActive = previewTeamSnapshot != null;
   // v108_pre — compatibility: story.tsx passa encounter_id / enemy_source_id;
   // legacy passa source_id. Normalizziamo qui senza riscrivere il flow.
   const v108EncounterId = (params.encounter_id || params.source_id || '').toString();
@@ -306,7 +326,21 @@ export default function PreBattleLobbyScreen() {
     source: initialFormation.source,
     fallback_used: initialFormation.fallback_used,
   });
-  const playerTeam = playerFormation.team;
+  // Pack 123 — Quando preview fallback e' attivo, il team da renderizzare e
+  // da passare a combat e' il preview team locale (no DB write, no save team).
+  // Quando NON e' attivo: comportamento originale (real fetch + blocker chain).
+  const playerTeam = useMemo<EnemyUnit[]>(() => {
+    if (previewFallbackActive && previewTeamSnapshot) {
+      return previewTeamSnapshot.slots.map((s) => ({
+        hero_id: s.hero_id,
+        role: s.role,
+        level: s.level,
+        stars: s.stars,
+        power: s.power,
+      }));
+    }
+    return playerFormation.team;
+  }, [previewFallbackActive, previewTeamSnapshot, playerFormation.team]);
 
   // v108_POSTQA_A — Selected server reale da AsyncStorage. NO hardcoded 's1'.
   // Pack 80: dichiarazione anticipata per evitare temporal dead zone con v107D useEffect.
@@ -520,8 +554,29 @@ export default function PreBattleLobbyScreen() {
   if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
   const launchAllowedNormal = blockerReasons.length === 0;
   const qaFallbackEnabled = process.env.EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH === 'true';
+  // Pack 123 — Preview fallback bypassa la blocker chain SOLO quando tutti
+  // i flag preview sono coerenti (fail-closed in `previewContextFromParams`).
+  // Non altera reward_policy/progress_policy: tutto resta preview-only.
+  const launchAllowedPreviewFallback = previewFallbackActive;
 
   const startBattle = () => {
+    // Pack 123 — Preview fallback: usa URL canonica preview-only.
+    // NESSUN reward, NESSUN progress, NESSUN save team, NESSUN DB write.
+    if (previewFallbackActive) {
+      const target = buildPreviewCombatUrl({
+        mode: previewCtx.mode as any,
+        encounter_id: (params.encounter_id || encounter.encounter_id || `enc_${previewCtx.mode}_preview`).toString(),
+        enemy_source_id: (params.enemy_source_id || encounter.source_id || `${previewCtx.mode}_preview_enemy`).toString(),
+        enemy_source_type: 'authored',
+        server_id: 'preview_local',
+        floor_id: params.floor_id ? String(params.floor_id) : undefined,
+        opponent_id: params.opponent_id ? String(params.opponent_id) : undefined,
+        boss_id: params.boss_id ? String(params.boss_id) : undefined,
+        trial_id: params.trial_id ? String(params.trial_id) : undefined,
+      });
+      router.push(target as any);
+      return;
+    }
     // v108_POSTQA_A — Bloccatore onesto: se non e' tutto reale, NON entrare in /combat
     // con fallback team/enemy spacciati per reali. Mostriamo i blocker.
     if (!launchAllowedNormal && !qaFallbackEnabled) {
@@ -574,6 +629,22 @@ export default function PreBattleLobbyScreen() {
 
           {/* Source canonica */}
           <SourceBadge enc={encounter} />
+
+          {/* Pack 123 — Banner Preview Team Locale (no-save, no-DB, no-grant). */}
+          {previewFallbackActive ? (
+            <View style={s.previewFallbackBanner}>
+              <Text style={s.previewFallbackBannerTitle}>
+                {'\u26A0\uFE0F  PACK 123 — PREVIEW TEAM FALLBACK ATTIVO'}
+              </Text>
+              <Text style={s.previewFallbackBannerText}>{PREVIEW_TEAM_BANNER_IT}</Text>
+              <Text style={s.previewFallbackBannerMeta}>
+                {`mode=${previewCtx.mode} \u00b7 reward_policy=preview \u00b7 progress_policy=preview \u00b7 battle_engine_mode=preview`}
+              </Text>
+              <Text style={s.previewFallbackBannerMeta}>
+                {`db_write=false \u00b7 save_team=false \u00b7 grant_hero=false \u00b7 roster_mutation=false`}
+              </Text>
+            </View>
+          ) : null}
 
           {/* v95 — Catalog source status (endpoint runtime vs fallback locale) */}
           <View style={s.section}>
@@ -639,12 +710,18 @@ export default function PreBattleLobbyScreen() {
               <Text style={s.actionTxt}>✎ Modifica Team</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[s.actionBtn, s.actionStart, (!launchAllowedNormal && !qaFallbackEnabled) ? { opacity: 0.4 } : null]}
+              style={[s.actionBtn, s.actionStart, (!launchAllowedNormal && !qaFallbackEnabled && !launchAllowedPreviewFallback) ? { opacity: 0.4 } : null]}
               onPress={startBattle}
               activeOpacity={0.85}
-              disabled={!launchAllowedNormal && !qaFallbackEnabled}
+              disabled={!launchAllowedNormal && !qaFallbackEnabled && !launchAllowedPreviewFallback}
             >
-              <Text style={s.actionTxt}>{(!launchAllowedNormal && !qaFallbackEnabled) ? '⛔ Launch bloccato' : (qaFallbackEnabled && !launchAllowedNormal ? '▶ Avvia (QA Fallback)' : '▶ Avvia Battaglia')}</Text>
+              <Text style={s.actionTxt}>{
+                launchAllowedPreviewFallback
+                  ? '\u25B6 Avvia Preview (Team Locale)'
+                  : (!launchAllowedNormal && !qaFallbackEnabled)
+                    ? '\u26D4 Launch bloccato'
+                    : (qaFallbackEnabled && !launchAllowedNormal ? '\u25B6 Avvia (QA Fallback)' : '\u25B6 Avvia Battaglia')
+              }</Text>
             </TouchableOpacity>
           </View>
 
@@ -754,5 +831,33 @@ const s = StyleSheet.create({
     fontSize: 9,
     textAlign: 'center',
     fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
+  },
+  // Pack 123 — Preview fallback banner styles (visibilita' chiara, no fake real).
+  previewFallbackBanner: {
+    backgroundColor: 'rgba(255,176,0,0.12)',
+    borderColor: '#ffb000',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 12,
+  },
+  previewFallbackBannerTitle: {
+    color: '#ffd54f',
+    fontSize: 12,
+    fontWeight: '900',
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  previewFallbackBannerText: {
+    color: '#fff3cd',
+    fontSize: 11,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  previewFallbackBannerMeta: {
+    color: '#cfd8dc',
+    fontSize: 9,
+    fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
+    marginTop: 2,
   },
 });

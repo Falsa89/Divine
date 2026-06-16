@@ -15,6 +15,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// Pack 123 — Preview lobby URL builder (no-write, no-DB, no-grant).
+import { buildPreviewLobbyUrl } from '../src/utils/previewBattleTeam';
 
 const PREVIEW_OPPONENTS = [
   { id: 'preview_arena_001', name: 'Guerriero Preview A', power: 12500, rank: 'Bronzo (preview)' },
@@ -39,7 +41,13 @@ export default function ArenaPreviewScreen() {
           <TouchableOpacity
             key={o.id}
             style={s.card}
-            onPress={() => router.push(`/pre-battle-lobby?mode=arena&opponent_id=${o.id}`)}
+            onPress={() => router.push(buildPreviewLobbyUrl({
+              mode: 'arena',
+              encounter_id: `enc_arena_preview_${o.id}`,
+              enemy_source_id: o.id,
+              enemy_source_type: 'authored',
+              opponent_id: o.id,
+            }) as any)}
           >
             <Text style={s.cardName}>{o.name}</Text>
             <Text style={s.cardMeta}>{o.rank} · Power {o.power}</Text>

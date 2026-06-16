@@ -36,6 +36,10 @@ import {
   TOWER_OF_THE_HELLS_MODE_ID,
 } from '../constants/towerOfTheHellsFloors';
 import type { TowerFloorTestPlaceholder } from '../constants/towerOfTheHellsFloors';
+// Pack 123 — Preview lobby URL builder (no-write, no-DB, no-grant).
+// Garantisce navigazione deterministica `mode=tower&floor_id=X` senza crash
+// e senza chiamate live al backend.
+import { buildPreviewLobbyUrl } from '../src/utils/previewBattleTeam';
 
 type FloorState = 'locked' | 'unlocked' | 'completed';
 
@@ -125,6 +129,30 @@ export default function TowerOfTheHellsScreen() {
     [progress.highest_cleared_floor, saveProgress],
   );
 
+  // Pack 123 — Fix crash al tap del piano.
+  // Apre la pre-battle-lobby in modalita' preview deterministica con
+  // mode=tower e floor_id propagato. NESSUN reward, NESSUN DB write.
+  const handleOpenPreviewLobby = useCallback(
+    (floor: TowerFloorTestPlaceholder) => {
+      try {
+        const url = buildPreviewLobbyUrl({
+          mode: 'tower',
+          encounter_id: `enc_tower_floor_${floor.id}`,
+          enemy_source_id: `tower_floor_${floor.id}_preview`,
+          enemy_source_type: 'authored',
+          floor_id: floor.id,
+        });
+        setSelectedFloor(null);
+        router.push(url as any);
+      } catch (_e) {
+        // fail-closed: in caso di errore non navigare, semplicemente chiudi
+        // il modal per evitare crash UI.
+        setSelectedFloor(null);
+      }
+    },
+    [router],
+  );
+
   const handleResetProgress = useCallback(async () => {
     await saveProgress(INITIAL_PROGRESS);
     setShowFirstClearBanner(false);
@@ -156,9 +184,12 @@ export default function TowerOfTheHellsScreen() {
       return (
         <TouchableOpacity
           accessibilityRole="button"
-          accessibilityLabel={`Floor ${item.id} ${state} (TEST)`}
+          accessibilityLabel={`Floor ${item.id} ${state} (TEST) — apri preview lobby`}
           activeOpacity={0.8}
           disabled={disabled}
+          // Pack 123 — Tap principale: apri il dettaglio (modal sicuro).
+          // Il modal contiene il bottone "Avvia Preview (Lobby)" che effettua
+          // il routing a /pre-battle-lobby?mode=tower&floor_id=X (no crash).
           onPress={() => setSelectedFloor(item)}
           style={[
             styles.floorCard,
@@ -323,17 +354,30 @@ export default function TowerOfTheHellsScreen() {
               >
                 <Text style={styles.modalBtnGhostText}>{'Annulla'}</Text>
               </Pressable>
+              {/* Pack 123 — Avvia Preview Lobby (no crash, no DB write). */}
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel="Test Clear floor"
-                onPress={() => selectedFloor && handleTestClear(selectedFloor)}
+                accessibilityLabel="Avvia preview lobby per questo piano"
+                onPress={() => selectedFloor && handleOpenPreviewLobby(selectedFloor)}
                 style={({ pressed }) => [
                   styles.modalBtn,
                   styles.modalBtnPrimary,
                   pressed ? { opacity: 0.7 } : null,
                 ]}
               >
-                <Text style={styles.modalBtnPrimaryText}>{'Test Clear (TEST)'}</Text>
+                <Text style={styles.modalBtnPrimaryText}>{'Avvia Preview Lobby'}</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Test Clear floor"
+                onPress={() => selectedFloor && handleTestClear(selectedFloor)}
+                style={({ pressed }) => [
+                  styles.modalBtn,
+                  styles.modalBtnGhost,
+                  pressed ? { opacity: 0.7 } : null,
+                ]}
+              >
+                <Text style={styles.modalBtnGhostText}>{'Test Clear (TEST)'}</Text>
               </Pressable>
             </View>
           </View>

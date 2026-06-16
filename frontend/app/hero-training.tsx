@@ -29,6 +29,9 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import { useRouter } from 'expo-router';
+// Pack 123 — Preview lobby URL builder per Training Preview Trial (no-write, no-DB).
+import { buildPreviewLobbyUrl } from '../src/utils/previewBattleTeam';
 
 import ScreenHeader from '../components/ui/ScreenHeader';
 import { COLORS, SPACING, BORDER_RADIUS, FONT_SIZES } from '../constants/theme';
@@ -426,11 +429,30 @@ function TrialCard({
 // ── Screen ───────────────────────────────────────────────────────
 export default function HeroTrainingScreen() {
   const flag = PROTOTYPE_FLAGS.hero_training;
+  const router = useRouter();
 
   const releasePhaseLabel = useMemo(() => {
     if (!flag) return 'foundation';
     return flag.releasePhase ?? 'foundation';
   }, [flag]);
+
+  // Pack 123 — Avvio Training Preview Trial (no-write, no-DB, no-grant).
+  // Naviga a /pre-battle-lobby?mode=training&... con tutti i flag preview
+  // coerenti. Fail-closed: in errore non navigare.
+  const openTrainingPreviewTrial = React.useCallback(() => {
+    try {
+      const url = buildPreviewLobbyUrl({
+        mode: 'training',
+        encounter_id: 'enc_training_preview_trial',
+        enemy_source_id: 'training_preview_trial_v1',
+        enemy_source_type: 'training_preset',
+        trial_id: 'training_preview_trial_v1',
+      });
+      router.push(url as any);
+    } catch (_e) {
+      // best-effort: nessun crash UI
+    }
+  }, [router]);
 
   return (
     <LinearGradient
@@ -480,6 +502,58 @@ export default function HeroTrainingScreen() {
             <TrialCard key={cfg.modeId} config={cfg} index={i} />
           ))}
         </View>
+
+        {/* Pack 123 — Training Preview Trial card.
+            CTA reale verso /pre-battle-lobby?mode=training in preview-only.
+            NO-DB / NO-REWARD / NO-PROGRESS / NO-GRANT. */}
+        <Animated.View
+          entering={FadeInDown.delay(280).duration(300)}
+          style={s.pack123TrialOuter}
+        >
+          <LinearGradient
+            colors={['rgba(255, 176, 0, 0.12)', 'rgba(255, 107, 53, 0.06)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={s.pack123TrialCard}
+          >
+            <Text style={s.pack123TrialBadge}>
+              {'PACK 123 \u00B7 TRAINING PREVIEW TRIAL'}
+            </Text>
+            <Text style={s.pack123TrialTitle}>
+              {'\uD83C\uDFAF Trial Preview Locale'}
+            </Text>
+            <Text style={s.pack123TrialDesc}>
+              Avvia una battle preview deterministica con team locale 6v6
+              (6 eroi canonici 3{'\u2605'} launch_base). Nessuna ricompensa,
+              nessun consumo di ingressi, nessuna scrittura sul database.
+            </Text>
+            <View style={s.pack123TrialMetaRow}>
+              <View style={s.pack123TrialMetaPill}>
+                <Text style={s.pack123TrialMetaPillTxt}>{'NO-DB'}</Text>
+              </View>
+              <View style={s.pack123TrialMetaPill}>
+                <Text style={s.pack123TrialMetaPillTxt}>{'NO-REWARD'}</Text>
+              </View>
+              <View style={s.pack123TrialMetaPill}>
+                <Text style={s.pack123TrialMetaPillTxt}>{'NO-GRANT'}</Text>
+              </View>
+              <View style={s.pack123TrialMetaPill}>
+                <Text style={s.pack123TrialMetaPillTxt}>{'NO-PROGRESS'}</Text>
+              </View>
+            </View>
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel="Avvia Training Preview Trial (preview-only)"
+              activeOpacity={0.85}
+              onPress={openTrainingPreviewTrial}
+              style={s.pack123TrialCta}
+            >
+              <Text style={s.pack123TrialCtaTxt}>
+                {'\u25B6  Avvia Preview Trial'}
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </Animated.View>
 
         {/* Footer disclaimer */}
         <View style={s.footer}>
@@ -771,5 +845,71 @@ const s = StyleSheet.create({
     color: COLORS.textDim,
     fontSize: FONT_SIZES.xs,
     fontStyle: 'italic',
+  },
+
+  // Pack 123 — Training Preview Trial card styles (preview-only).
+  pack123TrialOuter: {
+    marginTop: SPACING.md,
+    borderRadius: BORDER_RADIUS.lg,
+    overflow: 'hidden',
+  },
+  pack123TrialCard: {
+    padding: SPACING.lg,
+    borderRadius: BORDER_RADIUS.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(255,176,0,0.55)',
+  },
+  pack123TrialBadge: {
+    color: '#ffd54f',
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1.2,
+    marginBottom: 6,
+  },
+  pack123TrialTitle: {
+    color: COLORS.textPrimary,
+    fontSize: FONT_SIZES.md,
+    fontWeight: '900',
+    marginBottom: 6,
+  },
+  pack123TrialDesc: {
+    color: COLORS.textSecondary,
+    fontSize: FONT_SIZES.sm,
+    lineHeight: 18,
+    marginBottom: 10,
+  },
+  pack123TrialMetaRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginBottom: 12,
+  },
+  pack123TrialMetaPill: {
+    backgroundColor: 'rgba(255,176,0,0.18)',
+    borderColor: 'rgba(255,176,0,0.6)',
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  pack123TrialMetaPillTxt: {
+    color: '#ffd54f',
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 0.8,
+  },
+  pack123TrialCta: {
+    backgroundColor: 'rgba(255,176,0,0.22)',
+    borderColor: '#ffb000',
+    borderWidth: 1,
+    borderRadius: BORDER_RADIUS.md,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  pack123TrialCtaTxt: {
+    color: '#ffd54f',
+    fontSize: FONT_SIZES.sm,
+    fontWeight: '900',
+    letterSpacing: 1.2,
   },
 });

@@ -1,0 +1,32 @@
+{
+  "pack": "PRE_QA_PACK_123",
+  "manifest_version": 3,
+  "checklist_ordered": [
+    {"step":1,"action":"Home apre"},
+    {"step":2,"action":"Menu apre"},
+    {"step":3,"action":"Storia -> /story"},
+    {"step":4,"action":"Stage selection -> lobby story"},
+    {"step":5,"action":"Se no team, banner preview team temporaneo locale visibile (DEPENDE da wiring runtime 123-FIX-A)"},
+    {"step":6,"action":"Combat preview story avviabile (con team o fallback wired)"},
+    {"step":7,"action":"Torre -> /tower-of-the-hells"},
+    {"step":8,"action":"Tap piano non crasha (DEFER 123-FIX-A: richiede runtime fix tower-of-the-hells.tsx)"},
+    {"step":9,"action":"Lobby tower con floor_id"},
+    {"step":10,"action":"Combat preview tower"},
+    {"step":11,"action":"Addestramento -> /hero-training"},
+    {"step":12,"action":"Training Preview Trial visibile (DEFER 123-FIX-A: richiede modifica hero-training.tsx)"},
+    {"step":13,"action":"Tap Training Preview Trial -> lobby"},
+    {"step":14,"action":"Combat preview training"},
+    {"step":15,"action":"Arena -> /arena-preview (gia' implementato 122)"},
+    {"step":16,"action":"Selezione opponent -> lobby arena"},
+    {"step":17,"action":"Combat preview arena"},
+    {"step":18,"action":"Raid -> /boss-raid-preview (gia' implementato 122)"},
+    {"step":19,"action":"Selezione boss -> lobby boss"},
+    {"step":20,"action":"Combat preview boss"},
+    {"step":21,"action":"Nessun reward/EXP/progress/ranking"},
+    {"step":22,"action":"Shop/gacha/VIP/BP/IAP non pubblici"},
+    {"step":23,"action":"Back navigation OK"},
+    {"step":24,"action":"Nessun crash"}
+  ],
+  "pass_criteria":["No reward/EXP/progress","No DB write","Banner preview se no team"],
+  "fail_criteria":["Reward grant","DB write","Crash tower"]
+}

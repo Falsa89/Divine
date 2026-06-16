@@ -10,6 +10,13 @@ import { apiCall } from '../utils/api';
 // dai router params, marca il run come PREVIEW_NON_AUTHORITATIVE e logga in dev.
 // Non sostituisce il renderer, non chiama reward live, non scrive progress.
 import { readLaunchContextFromRouterParams } from '../src/battle_launch/consumers/combatLaunchParser';
+// Pack 123 — Preview Team Fallback (no-write, no-DB, no-grant).
+// Iniezione minimale: SOLO render visualizzazione in preview_locked.
+// Fail-closed: nessun side-effect se non in contesto preview coerente.
+import {
+  buildPreviewLocalTeamSnapshot,
+  previewContextFromParams,
+} from '../src/utils/previewBattleTeam';
 // v108_POSTQA_A — Preview reward lock + Legacy mutating entry watchdog.
 // PREVIEW_REWARD_LOCK_ACTIVE: se launch_context valido in modalita' preview,
 // blocchiamo /api/battle/simulate, refreshUser e grantAffinity. NESSUN reward,
@@ -73,7 +80,7 @@ interface SpriteData {
 
 export default function CombatScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string; launch_context?: string; battle_launch?: string; battle_launch_id?: string; mode?: string }>();
+  const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string; launch_context?: string; battle_launch?: string; battle_launch_id?: string; mode?: string; is_preview?: string; reward_policy?: string; progress_policy?: string; battle_engine_mode?: string }>();
   // v108_pre — leggi (senza mutare) il Battle Launch Contract v1 dai router params.
   // Etichetta sempre il run come PREVIEW_NON_AUTHORITATIVE. Se assente, legacy.
   const v108LaunchEnvelope = React.useMemo(() => readLaunchContextFromRouterParams(params as any), [params?.launch_context, params?.battle_launch, params?.battle_launch_id]);
@@ -87,6 +94,18 @@ export default function CombatScreen() {
   // PREVIEW_REWARD_LOCK_ACTIVE token literal — usato dai runtime-invariant validators.
   const PREVIEW_REWARD_LOCK_ACTIVE = isPreviewNonAuthoritative;
   const LEGACY_COMBAT_ENTRY_MUTATING = isLegacyCombatEntryMutating;
+  // Pack 123 — Snapshot deterministico del team preview LOCALE (fail-closed).
+  // Disponibile SOLO se il run e' preview coerente. Usato in render
+  // `preview_locked` per visualizzare il team senza alcuna chiamata backend.
+  const pack123PreviewCtx = React.useMemo(
+    () => previewContextFromParams(params as Record<string, unknown>),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [params?.is_preview, params?.reward_policy, params?.progress_policy, params?.battle_engine_mode, params?.mode],
+  );
+  const pack123PreviewTeam = React.useMemo(
+    () => buildPreviewLocalTeamSnapshot(pack123PreviewCtx),
+    [pack123PreviewCtx],
+  );
   React.useEffect(() => { if (__DEV__) console.log('[v108_pre] combat launch envelope:', { is_valid: v108LaunchEnvelope.is_valid, source: v108LaunchEnvelope.source, badge: v108LaunchBadge }); }, [v108LaunchEnvelope.is_valid, v108LaunchEnvelope.source, v108LaunchBadge]);
   React.useEffect(() => { if (__DEV__) console.log('[v108_POSTQA_A] preview_reward_lock:', { PREVIEW_REWARD_LOCK_ACTIVE, LEGACY_COMBAT_ENTRY_MUTATING }); }, [PREVIEW_REWARD_LOCK_ACTIVE, LEGACY_COMBAT_ENTRY_MUTATING]);
   const { refreshUser } = useAuth();
@@ -1141,6 +1160,26 @@ export default function CombatScreen() {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, zIndex: 998 }}>
           <Text style={{ color: '#ffd54f', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginBottom: 8, textAlign: 'center' }}>PREVIEW_REWARD_LOCK_ACTIVE</Text>
           <Text style={{ color: '#bbb', fontSize: 11, lineHeight: 16, textAlign: 'center', maxWidth: 320 }}>Questa battaglia parte da un Battle Launch Contract in modalita' preview non-authoritative. Nessuna ricompensa, nessuna esperienza, nessun drop, nessun progresso, nessuna affinity verranno concessi. La conversione authoritative e' in roadmap (v108 / v109).</Text>
+          {/* Pack 123 — Preview Team snapshot visualization (no-write, no-DB). */}
+          {pack123PreviewTeam ? (
+            <View style={{ marginTop: 16, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(255,176,0,0.5)', backgroundColor: 'rgba(255,176,0,0.10)', maxWidth: 380 }}>
+              <Text style={{ color: '#ffd54f', fontSize: 11, fontWeight: '900', letterSpacing: 1, marginBottom: 6, textAlign: 'center' }}>
+                {'PACK 123 \u00B7 TEAM PREVIEW LOCALE 6v6 (NO-DB \u00B7 NO-SAVE \u00B7 NO-GRANT)'}
+              </Text>
+              <Text style={{ color: '#fff3cd', fontSize: 10, marginBottom: 8, textAlign: 'center' }}>
+                {pack123PreviewTeam.banner}
+              </Text>
+              {pack123PreviewTeam.slots.map((slot, i) => (
+                <View key={`pack123_slot_${i}`} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 3, borderBottomWidth: i < pack123PreviewTeam.slots.length - 1 ? 1 : 0, borderBottomColor: 'rgba(255,255,255,0.08)' }}>
+                  <Text style={{ color: '#ffe082', fontSize: 10, fontWeight: '700' }}>{`${i + 1}. ${slot.role_display}`}</Text>
+                  <Text style={{ color: '#cfd8dc', fontSize: 10, fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }) }}>{`${slot.hero_id} \u00B7 \u2605${slot.stars} \u00B7 PWR ${slot.power}`}</Text>
+                </View>
+              ))}
+              <Text style={{ color: '#888', fontSize: 9, marginTop: 8, textAlign: 'center', fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }) }}>
+                {`mode=${pack123PreviewCtx.mode} \u00B7 total_power=${pack123PreviewTeam.total_power}`}
+              </Text>
+            </View>
+          ) : null}
           <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 16, paddingHorizontal: 18, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' }}>
             <Text style={{ color: '#fff', fontWeight: '700', fontSize: 11, letterSpacing: 1 }}>TORNA INDIETRO</Text>
           </TouchableOpacity>
