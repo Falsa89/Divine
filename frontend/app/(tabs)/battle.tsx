@@ -151,7 +151,7 @@ export default function BattleTab() {
       const teamUrl = `/api/team/get-formation?server_id=${encodeURIComponent(selected_server_id)}`;
       const [uh, team, constData] = await Promise.all([
         apiCall(heroesUrl),
-        apiCall(teamUrl).catch(() => ({ formation: [], total_power: 0 })),
+        apiCall(teamUrl).catch(() => ({ team_formation: [], formation: [], total_power: 0 })),
         apiCall('/api/constellations').catch(() => ({ constellations: [] })),
       ]);
       setHeroes(uh);
@@ -159,24 +159,45 @@ export default function BattleTab() {
       setConstellations(owned);
       if (team?.constellation_id) setSelectedConstellation(team.constellation_id);
 
-      if (team?.formation?.length) {
+      // Pack 126 FIX-A — Team formation contract repair (frontend adapter).
+      // Backend POST /api/team/save-formation persiste come `team_formation`
+      // con slot `{ hero_id, col, row }`. La risposta di GET /api/team/get-formation
+      // puo' contenere `team_formation` (Pack 125+) o `formation` (legacy/Pack 87).
+      // Normalizziamo entrambi e ricostruiamo la griglia con fallback robusto.
+      const savedFormation: any[] = (team?.team_formation || team?.formation || []) as any[];
+      if (savedFormation.length) {
         const ng: (any | null)[][] = [[null, null, null], [null, null, null], [null, null, null]];
-        // Pre-QA Stabilization 116A-EXT FIX-A — Truth on team source/slot:
-        // i team formati dallo starter flow (Pack 87) hanno `slot_index`
-        // (0,1,2,...) ma NON `x`/`y`. Il mapping vecchio `(f.x||0, f.y||0)`
-        // collassava tutti gli starter su grid[0][0] e ne visualizzava solo
-        // uno. Risolviamo con una assegnazione truthful:
-        //   1) se sono presenti x/y validi (1-based 1..9), usali (legacy);
-        //   2) altrimenti usa `slot_index` (0..8) e mappa a (col, row) via
-        //      Math.floor(slot_index/3), slot_index%3;
-        //   3) altrimenti incrementa un cursor sequenziale.
+        // Pre-QA Stabilization 116A-EXT FIX-A + Pack 126 FIX-A — Truth on team source/slot:
+        //   - Pack 87 starter: `slot_index`.
+        //   - Legacy pre-87: `x`/`y` (1-based).
+        //   - Pack 125+ save: `hero_id` + `col`/`row` (0..2).
+        //   - In tutti i casi: lookup hero per chiave (user_hero_id | hero_id | canonical_id).
         let cursor = 0;
-        team.formation.forEach((f: any, i: number) => {
-          if (!f.user_hero_id) return;
-          const h = uh.find((x: any) => x.id === f.user_hero_id);
+        savedFormation.forEach((f: any, _i: number) => {
+          // Pack 126 FIX-A — chiave eroe robusta: priorita' user_hero_id (legacy)
+          // poi hero_id (Pack 125+) poi canonical_id (fallback).
+          const savedHeroKey = f?.user_hero_id || f?.hero_id || f?.canonical_id;
+          if (!savedHeroKey) return;
+          // Pack 126 FIX-A — lookup eroe nel roster `uh` con triplo fallback:
+          //   1. uh[].id === savedHeroKey         (Pack 87 ownership id)
+          //   2. uh[].hero_id === savedHeroKey    (Pack 125+ canonical id)
+          //   3. uh[].canonical_id === savedHeroKey (eventuale alias)
+          const h = (uh || []).find((x: any) =>
+            x?.id === savedHeroKey ||
+            x?.hero_id === savedHeroKey ||
+            x?.canonical_id === savedHeroKey
+          );
           if (!h) return;
           let ci: number, ri: number;
-          if (typeof f.x === 'number' && typeof f.y === 'number' && (f.x > 0 || f.y > 0)) {
+          // Pack 126 FIX-A — supporto formati di posizione (in priorita'):
+          //   1. col/row (Pack 125+): valori 0..2 diretti.
+          //   2. x/y legacy: 1-based 1..9.
+          //   3. slot_index: 0..8.
+          //   4. fallback sequenziale.
+          if (typeof f.col === 'number' && typeof f.row === 'number') {
+            ci = Math.max(0, Math.min(2, f.col));
+            ri = Math.max(0, Math.min(2, f.row));
+          } else if (typeof f.x === 'number' && typeof f.y === 'number' && (f.x > 0 || f.y > 0)) {
             // Legacy 1-based grid (Pack pre-87).
             ci = f.x <= 2 ? 0 : f.x <= 5 ? 1 : 2;
             ri = f.y <= 2 ? 0 : f.y <= 5 ? 1 : 2;
