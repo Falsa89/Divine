@@ -231,7 +231,23 @@ export default function BattleTab() {
         // `team.total_power` (sorgente legacy non versionata). Lo prendiamo
         // dall'hook 116A (`useBattlePowerSummary`) per coerenza pre-QA.
       }
-    } catch (e) {} finally { setLoading(false); }
+      // Pack 126-FIX-B — QA debug trace (dev only, no PII).
+      if (__DEV__) {
+        try {
+          console.log('[pack_126_fix_b][battle.tsx] loadTeamData', {
+            selected_server_id,
+            heroes_count: Array.isArray(uh) ? uh.length : 'n/a',
+            saved_formation_count: ((team?.team_formation || team?.formation) || []).length,
+            constellations: (constData?.constellations || []).length,
+            team_keys: team ? Object.keys(team) : [],
+          });
+        } catch (_logE) {}
+      }
+    } catch (e: any) {
+      // Pack 126-FIX-B — no more silent catch. Show readable error in dev log + state.
+      if (__DEV__) console.warn('[pack_126_fix_b][battle.tsx] loadTeamData failed:', e?.message || e);
+      try { setHeroes([]); } catch (_se) {}
+    } finally { setLoading(false); }
   };
 
   const placedIds = useMemo(() => {

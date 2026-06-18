@@ -67,7 +67,9 @@ export default function HeroCollection() {
   const router = useRouter();
   const { token, userHeroesVersion } = useAuth();
   // Pack 92 — server scope sweep su roster reader player-facing.
-  const { selected_server_id } = useServerScope();
+  // Pack 126-FIX-B — selected_server_id + refreshToken nelle deps per
+  // forzare refetch al cambio server (device QA: bug di lista eroi stale).
+  const { selected_server_id, refreshToken } = useServerScope();
   const [loading, setLoading] = useState(true);
   const [allHeroes, setAllHeroes] = useState<Hero[]>([]);
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set());
@@ -123,7 +125,10 @@ export default function HeroCollection() {
       clearTimeout(safetyTimer);
     };
     // RM1.16-B: re-fetch quando userHeroesVersion bumpa (post-summon).
-  }, [token, userHeroesVersion]);
+    // Pack 126-FIX-B: aggiunti selected_server_id + refreshToken cosi' la
+    // lista si refresha quando il device cambia server (era un bug:
+    // device su qa-eu-01 vedeva ancora i 3 eroi legacy).
+  }, [token, userHeroesVersion, selected_server_id, refreshToken]);
 
   // Ordina per rarità desc, poi per posseduti prima
   const filtered = useMemo(() => {

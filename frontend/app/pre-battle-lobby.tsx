@@ -38,6 +38,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 // v107D — Battle Launch Contract real binding (MD5 supersede authorized).
 // Adopts launchFromLobby() helper as a non-destructive telemetry call.
 import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter';
+// Pack 126-FIX-B FIX D — resolver URL backend canonico.
+import getCanonicalBackendUrl from '../src/utils/backendUrl';
 // v108_POSTQA_A — AsyncStorage per leggere selected server reale (NO hardcoded 's1').
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Pack 123 — Preview Team Fallback runtime wiring (no-write, no-DB, no-grant).
@@ -383,7 +385,10 @@ export default function PreBattleLobbyScreen() {
   //  - endpoint_fetch_failed_fallback_local_readonly=true → fallback inline locale dichiarato
   // NESSUNA modifica al dato visualizzato: il fetch serve a confermare che
   // l'endpoint v95 risponde. I mirror inline restano come safe fallback dichiarato.
-  const backendUrl = (process.env.EXPO_BACKEND_URL || '').toString();
+  // Pack 126-FIX-B FIX D — Resolver URL backend canonico (web=empty, mobile=EXPO_BACKEND_URL
+  // con fallback su Constants.expoConfig.extra). Garantisce consistenza con il resto
+  // dell'app e impedisce bug di "backend URL vuoto" su Expo mobile.
+  const backendUrl = React.useMemo(() => getCanonicalBackendUrl(), []);
   const [v95SourceStatus, setV95SourceStatus] = useState<'unknown' | 'endpoint_active' | 'endpoint_fetch_failed_fallback_local_readonly'>('unknown');
 
   // Pack 86 — Defensive UI ensure guard. Se la lobby viene aperta con un
@@ -492,23 +497,41 @@ export default function PreBattleLobbyScreen() {
           const rh = await fetch(`${backendUrl}/api/user/heroes?server_id=${encodeURIComponent(selectedServerId)}`, { signal: ctrl.signal, headers });
           if (rh.ok) heroes = await rh.json();
         } catch (_) { /* tolerated, best-effort */ }
+        // Pack 126-FIX-B — heroMap include sia id che hero_id come chiavi
+        // per lookup unificato (Pack 87 ownership + Pack 125+ canonical).
         const heroMap: Record<string, any> = {};
-        (Array.isArray(heroes) ? heroes : []).forEach((h: any) => { if (h && h.id) heroMap[String(h.id)] = h; });
-        const tf = Array.isArray(d.team_formation) ? d.team_formation : [];
+        (Array.isArray(heroes) ? heroes : []).forEach((h: any) => {
+          if (!h) return;
+          if (h.id) heroMap[String(h.id)] = h;
+          if (h.hero_id) heroMap[String(h.hero_id)] = h;
+          if (h.canonical_id) heroMap[String(h.canonical_id)] = h;
+        });
+        const tf = Array.isArray(d.team_formation) ? d.team_formation : (Array.isArray((d as any).formation) ? (d as any).formation : []);
         const slots: EnemyUnit[] = tf
-          .filter((e: any) => e && e.user_hero_id)
+          // Pack 126-FIX-B — adapter contract robusto:
+          //   - filtra per chiave eroe non-vuota tra user_hero_id | hero_id | canonical_id;
+          //   - lookup nel roster con triplo predicato (id | hero_id | canonical_id);
+          //   - posizioni: col/row (Pack 125+) o x/y (legacy).
+          .filter((e: any) => e && (e.user_hero_id || e.hero_id || e.canonical_id))
           .slice(0, PLAYER_SLOT_COUNT)
           .map((e: any) => {
-            const uhid = String(e.user_hero_id);
-            const h = heroMap[uhid] || {};
+            const heroKey = String(e.user_hero_id || e.hero_id || e.canonical_id);
+            // Lookup robusto: id (Pack 87), hero_id (Pack 125+), canonical_id.
+            const h = (heroMap[heroKey] || (heroes as any[]).find((hh: any) =>
+              hh?.id === heroKey || hh?.hero_id === heroKey || hh?.canonical_id === heroKey
+            )) || {};
             const role = (h.role || h.class || 'dps').toString().toLowerCase();
             return {
-              hero_id: uhid,
+              hero_id: h.hero_id || heroKey,
               role: ROLE_COLOR[role] ? role : 'dps',
               level: Number(h.level || 1),
               stars: Number(h.stars || 1),
               power: Number(h.power || 0),
-            };
+              // Pack 126-FIX-B / FIX E — usa nome reale dell'eroe, mai placeholder
+              // per il player team. Se mancante, marca esplicitamente "—".
+              name: String(h.hero_name || h.name || '\u2014'),
+              hero_image: h.hero_image || h.image || null,
+            } as any;
           });
         const isBlocked = !!(d.blocker || d.source === 'blocked_no_team_for_server');
         setPlayerFormation({
