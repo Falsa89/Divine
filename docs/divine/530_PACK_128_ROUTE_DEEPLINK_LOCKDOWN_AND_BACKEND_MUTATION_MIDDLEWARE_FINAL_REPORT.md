@@ -24,7 +24,7 @@ Motivazione del verdetto prudente:
 | Starting SHA Pack 128 | `39fce2da7e07f3b428ad5aabaee54f587b29ad06` |
 | Pack 127 close anchor | `b9b516b3334fa95a4c079af089570a278724a7af` |
 | Pack 128 content commit | `538461fc8a37b03c43d9f32302e0cbd209f06210` |
-| Final SHA (post-audit truth sync) | _(aggiornato al commit di fix \u2014 vedi sezione 18 in fondo)_ |
+| Final SHA (post-audit truth sync) | `56b4e563e69399224aeb810e183e21047d070812` |
 | Branch | `main` |
 
 ## 2. Git status
@@ -323,6 +323,8 @@ CODEX_WEB_PACK_128_PUBLIC_REAUDIT_FAIL_ADDITIONAL_FIXES_REQUIRED
 ```
 
 Fix applicati in questo truth-sync commit (zero modifiche runtime/gameplay):
+
+**Truth-sync commit:** `56b4e563e69399224aeb810e183e21047d070812`
 
 | # | Issue | Fix |
 |---|---|---|
