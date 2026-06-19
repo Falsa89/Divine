@@ -1,0 +1,29 @@
+{
+  "pack": "PACK_129_FRONTEND_STRUCTURED_ERROR_MAPPING",
+  "status": "PASS",
+  "errors": [],
+  "notes": [
+    "helper NOT mountato in screens esistenti (battle.tsx ha handler ad-hoc su blocker). Adozione futura opt-in."
+  ],
+  "required_codes": [
+    "AUTH_REQUIRED",
+    "SERVER_CONTEXT_REQUIRED",
+    "SERVER_CONTEXT_INVALID",
+    "SERVER_NOT_READY",
+    "SERVER_PROFILE_MISSING",
+    "SERVER_SCOPE_UNAVAILABLE",
+    "SERVER_MISMATCH",
+    "TEAM_SAVE_DISABLED_PRE_QA",
+    "TEAM_INVALID_PAYLOAD",
+    "TEAM_INVALID_SIZE",
+    "TEAM_INVALID_SLOT",
+    "TEAM_DUPLICATE_HERO",
+    "TEAM_HERO_NOT_OWNED",
+    "TEAM_HERO_NOT_AVAILABLE",
+    "TEAM_FORMATION_BLOCKED_PRE_QA",
+    "PRE_QA_MUTATION_BLOCKED",
+    "FEATURE_LOCKED_PRE_QA"
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "VALIDATED_ONLY_HELPER_PRESENT_NOT_YET_MOUNTED_IN_EXISTING_SCREENS"
+}

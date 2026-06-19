@@ -1,0 +1,41 @@
+{
+  "pack": "PACK_129",
+  "marker_kind": "teamformation_server_scope",
+  "verdict": "PACK_129_TEAMFORMATION_SERVER_READY_STRUCTURED_ERRORS_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "server_scope_status": "ENFORCED_VIA_EXISTING_PACK_125_ENDPOINT_AUDITED_AND_VALIDATED",
+  "team_save_status": "ENFORCED_QA_GATED_VIA_QA_TEAM_SAVE_ENABLED_AND_ALLOWLIST_NO_ACCOUNT_WIDE_FALLBACK",
+  "endpoint": "POST /api/team/save-formation",
+  "file": "backend/routes/v96_team_formation.py",
+  "db_write_scope": {
+    "collection": "player_server_profiles",
+    "filter": "{user_id, server_id}",
+    "set_fields": ["team_formation", "_pack_125_qa_team_save_ts", "_pack_125_qa_team_save_source"],
+    "forbidden_fields_not_touched": ["hero stats", "battle result", "damage", "reward", "EXP", "currency", "inventory", "drop", "mission progress", "arena score", "guild score"]
+  },
+  "validations_enforced": [
+    "auth required (current_user)",
+    "PSP lookup (user_id, server_id) fail-closed",
+    "team size max 6",
+    "slot (col,row) unique",
+    "hero_id unique",
+    "ownership via user_heroes filter by server_id OR _qa_seed marker"
+  ],
+  "qa_team_save_env_state": {
+    "QA_TEAM_SAVE_ENABLED": "unset_in_pod_backend_env_intoccato",
+    "QA_TEAM_SAVE_ALLOWLIST": "unset_in_pod_backend_env_intoccato",
+    "behavior_when_unset": "endpoint risponde 403 TEAM_SAVE_DISABLED_PRE_QA — fail-closed safe default"
+  },
+  "interaction_with_pack128_middleware": {
+    "route_in_pack128_allowlist": true,
+    "middleware_currently": "DORMANT (PRE_QA_MUTATION_GUARD_ENABLED unset in pod)",
+    "if_middleware_active_route_would_pass": "yes, already in allowlist (data/design/system_safety/pack_128_backend_mutation_allowlist.json)"
+  },
+  "device_qa_status": "BLOCKED",
+  "next_pack_required": "PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT",
+  "known_gaps": [
+    "Endpoint Pack 125 ritorna `detail: {blocker, message}` (legacy contract). Pack 129 fornisce helpers per emettere structured `{detail, code, category, route, method, next_gate, recoverable}`, ma il route Pack 125 NON e' stato modificato in questo pack (preserva contratto frontend Pack 125/126). Il mapping legacy_blocker_to_code e' disponibile sia backend (helpers/structured_errors.py) sia frontend (structuredErrorMap.ts) per future migration.",
+    "frontend battle.tsx ha già il suo handler ad-hoc basato su blocker; il nuovo helper structuredErrorMap.ts NON e' montato per non rompere UX esistente.",
+    "smoke autenticato server-scope completo deferred a Pack 132."
+  ],
+  "forbidden_areas_untouched": true
+}

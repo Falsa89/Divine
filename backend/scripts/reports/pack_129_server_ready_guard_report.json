@@ -1,0 +1,34 @@
+{
+  "pack": "PACK_129_SERVER_READY_GUARD",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "unit_runtime_smoke_pairs": [
+    {
+      "expected": "SERVER_CONTEXT_MISSING",
+      "actual": "SERVER_CONTEXT_MISSING"
+    },
+    {
+      "expected": "SERVER_CONTEXT_INVALID",
+      "actual": "SERVER_CONTEXT_INVALID"
+    },
+    {
+      "expected": "SERVER_PROFILE_MISSING",
+      "actual": "SERVER_PROFILE_MISSING"
+    },
+    {
+      "expected": "SERVER_READY",
+      "actual": "SERVER_READY"
+    },
+    {
+      "expected": "SERVER_MISMATCH",
+      "actual": "SERVER_MISMATCH"
+    },
+    {
+      "expected": "SERVER_SCOPE_UNAVAILABLE",
+      "actual": "SERVER_SCOPE_UNAVAILABLE"
+    }
+  ],
+  "validation_kind": "STATIC+UNIT_RUNTIME",
+  "enforcement": "ENFORCED_HELPER_PRESENT_LOGIC_VERIFIED"
+}

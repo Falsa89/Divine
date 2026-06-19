@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Pack 128 — No Pack 129/130/131/132/133 leak (STATIC + git check).
+"""Pack 128 — No Pack 130/131/132/133 leak (STATIC + git check).
 
-Verifica che NESSUN file Pack 129+ sia stato creato/modificato in questo branch.
+Verifica che NESSUN file Pack 130+ sia stato creato/modificato in questo branch.
+Pack 129 è il pack successivo a Pack 128 e in Pack 129 (chiuso) viene aggiornato
+questo validator per rimuovere `pack_129/PACK_129` dalla forbidden list — Pack
+129 è ora pack precedente, non un future-pack leak.
 """
 from __future__ import annotations
 import json, subprocess, sys
@@ -9,8 +12,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-FORBIDDEN_PATTERNS = ['pack_129', 'pack_130', 'pack_131', 'pack_132', 'pack_133',
-                      'PACK_129', 'PACK_130', 'PACK_131', 'PACK_132', 'PACK_133']
+FORBIDDEN_PATTERNS = ['pack_130', 'pack_131', 'pack_132', 'pack_133',
+                      'PACK_130', 'PACK_131', 'PACK_132', 'PACK_133']
 
 
 def main() -> int:

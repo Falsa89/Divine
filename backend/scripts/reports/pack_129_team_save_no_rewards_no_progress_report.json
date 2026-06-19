@@ -1,0 +1,32 @@
+{
+  "pack": "PACK_129_TEAM_SAVE_NO_REWARDS_NO_PROGRESS",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "forbidden_mutations": [
+    "db.users.update_one",
+    "db.users.insert",
+    "db.user_heroes.update_one",
+    "db.user_heroes.insert",
+    "db.user_heroes.delete",
+    "db.gacha_pulls.insert",
+    "db.transactions.insert",
+    "db.inventory.update",
+    "db.wallets.update",
+    "db.mail.insert",
+    "db.shop.",
+    "db.vip.",
+    "db.battle_pass.",
+    "grant_reward(",
+    "grant_currency(",
+    "add_exp(",
+    "spend_currency(",
+    "apply_reward(",
+    "sanctuary_affinity_mutation",
+    "tower_reward",
+    "arena_reward",
+    "raid_reward"
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "ENFORCED_WRITE_TARGET_IS_PLAYER_SERVER_PROFILES_TEAM_FORMATION_ONLY"
+}

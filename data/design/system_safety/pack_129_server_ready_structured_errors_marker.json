@@ -1,0 +1,72 @@
+{
+  "pack": "PACK_129",
+  "marker_kind": "server_ready_structured_errors",
+  "verdict": "PACK_129_TEAMFORMATION_SERVER_READY_STRUCTURED_ERRORS_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "server_ready_guard": {
+    "helper_file": "backend/helpers/server_ready_guard.py",
+    "function": "check_server_ready(db, user_id, server_id, auth_context_server_id=None)",
+    "states": [
+      "SERVER_READY",
+      "SERVER_CONTEXT_MISSING",
+      "SERVER_CONTEXT_INVALID",
+      "SERVER_PROFILE_MISSING",
+      "SERVER_SCOPE_UNAVAILABLE",
+      "SERVER_MISMATCH"
+    ],
+    "properties": [
+      "read-only (NON crea PSP, NON modifica user_heroes/inventory/reward/progress)",
+      "valida server_id format (alphanum + _ -, max 64 char)",
+      "PSP lookup tramite motor.AsyncIOMotorDatabase",
+      "defense-in-depth se user_id mancante → SERVER_SCOPE_UNAVAILABLE"
+    ],
+    "adoption_status": "AVAILABLE_FOR_PACK_130_PLUS_NOT_YET_MOUNTED_IN_EXISTING_ROUTES"
+  },
+  "structured_errors": {
+    "helper_file": "backend/helpers/structured_errors.py",
+    "frontend_mapping_file": "frontend/src/utils/structuredErrorMap.ts",
+    "shape": {
+      "detail": "Human readable Italian message",
+      "code": "STRUCTURED_ERROR_CODE",
+      "category": "auth|server|team|pre_qa|validation|locked|not_found",
+      "route": "/api/...",
+      "method": "POST",
+      "next_gate": "PACK_129_OR_LATER",
+      "recoverable": true
+    },
+    "codes_defined": [
+      "AUTH_REQUIRED",
+      "SERVER_CONTEXT_REQUIRED",
+      "SERVER_CONTEXT_INVALID",
+      "SERVER_NOT_READY",
+      "SERVER_PROFILE_MISSING",
+      "SERVER_SCOPE_UNAVAILABLE",
+      "SERVER_MISMATCH",
+      "TEAM_SAVE_DISABLED_PRE_QA",
+      "TEAM_INVALID_PAYLOAD",
+      "TEAM_INVALID_SIZE",
+      "TEAM_INVALID_SLOT",
+      "TEAM_DUPLICATE_HERO",
+      "TEAM_HERO_NOT_OWNED",
+      "TEAM_HERO_NOT_AVAILABLE",
+      "TEAM_FORMATION_BLOCKED_PRE_QA",
+      "PRE_QA_MUTATION_BLOCKED",
+      "FEATURE_LOCKED_PRE_QA"
+    ],
+    "legacy_aliases": {
+      "AUTHENTICATION_REQUIRED": "AUTH_REQUIRED",
+      "AUTHENTICATION_INVALID": "AUTH_REQUIRED",
+      "QA_TEAM_SAVE_DISABLED": "TEAM_SAVE_DISABLED_PRE_QA",
+      "QA_TEAM_SAVE_ALLOWLIST_EMPTY": "FEATURE_LOCKED_PRE_QA",
+      "QA_TEAM_SAVE_ACCOUNT_NOT_ALLOWED": "FEATURE_LOCKED_PRE_QA",
+      "PLAYER_SERVER_PROFILE_REQUIRED": "SERVER_PROFILE_MISSING",
+      "TEAM_TOO_LARGE": "TEAM_INVALID_SIZE",
+      "DUPLICATE_POSITIONS": "TEAM_INVALID_SLOT",
+      "DUPLICATE_HEROES": "TEAM_DUPLICATE_HERO",
+      "OWNERSHIP_VALIDATION_FAILED": "TEAM_HERO_NOT_OWNED"
+    },
+    "frontend_mount_status": "VALIDATED_ONLY_HELPER_PURE_NOT_MOUNTED_TO_AVOID_BREAKING_EXISTING_BATTLE_TSX_BLOCKER_HANDLER"
+  },
+  "device_qa_status": "BLOCKED",
+  "next_pack_required": "PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT",
+  "forbidden_areas_untouched": true
+}

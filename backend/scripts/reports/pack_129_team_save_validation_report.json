@@ -1,0 +1,17 @@
+{
+  "pack": "PACK_129_TEAM_SAVE_VALIDATION",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "required_validations": [
+    "auth required",
+    "team size max 6",
+    "slot (col,row) unique",
+    "hero_id unique",
+    "PSP fail-closed",
+    "ownership check",
+    "col range 0-2"
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "ENFORCED_ALL_REQUIRED_VALIDATIONS_PRESENT_IN_PACK_125_ENDPOINT"
+}

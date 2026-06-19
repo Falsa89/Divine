@@ -1,0 +1,19 @@
+{
+  "pack": "PACK_129_STRUCTURED_ERRORS_CONTRACT",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "sample_payload": {
+    "detail": "test",
+    "code": "TEAM_INVALID_SIZE",
+    "category": "validation",
+    "route": "/api/x",
+    "method": "POST",
+    "next_gate": "PACK_129_OR_LATER",
+    "recoverable": true
+  },
+  "required_codes_count": 17,
+  "required_legacy_aliases_count": 7,
+  "validation_kind": "STATIC+UNIT_RUNTIME",
+  "enforcement": "ENFORCED_HELPER_LIBRARY_AVAILABLE_OPT_IN_ADOPTION_IN_ROUTES"
+}
