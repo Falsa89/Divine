@@ -2,6 +2,8 @@
 
 > Verdetto: **PACK_131_COMBAT_CONSUMES_REAL_SNAPSHOT_POST_BATTLE_PREVIEW_SAFE_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED**
 >
+> Codex Web public re-audit (read-only) — range `26c5085b259f73f63c7b3fc23858051b537b3eb9..9b731e8885d0986acc4df5e7813f8553dbd5a866` — verdetto: `CODEX_WEB_PACK_131_PUBLIC_REAUDIT_PASS_DOC_SYNC_ONLY_REQUIRED`. Current public HEAD pubblico finale verificato: **`9b731e8885d0986acc4df5e7813f8553dbd5a866`**.
+>
 > Lingua: italiano. Documento prodotto in ambiente Emergent (branch locale `master`, nessun remote pubblico configurato — sync verso `Falsa89/Divine#main` avviene fuori dallo scope dell'agente, tramite il sistema di publish Emergent).
 
 ---
@@ -16,7 +18,8 @@
 | Auto-commit/HEAD pre-report Pack 131 | `b01774dafc3b60809d902aebdd9a6a4879c5a9ba` |
 | Pack 131 content range | `26c5085b259f73f63c7b3fc23858051b537b3eb9..b01774dafc3b60809d902aebdd9a6a4879c5a9ba` |
 | Final SHA (commit report + fix validator) | `b6e697a8d` *(commit `feat(pack131): combat preview consumes snapshot safely + final report`)* |
-| Truth-sync SHA (questo commit) | `66e2418fc` *(micro-commit `docs(pack131): truth sync final SHA`, identico alla procedura Pack 129/130)* |
+| Truth-sync #1 SHA | `66e2418fc6565d1f56bde879ca4c3aeb2cb691fa` *(micro-commit `docs(pack131): truth sync final SHA`)* |
+| Truth-sync #2 / **current public HEAD verified by Codex Web** | `9b731e8885d0986acc4df5e7813f8553dbd5a866` *(micro-commit `docs(pack131): resolve truth-sync placeholder to 66e2418fc` — HEAD finale pubblico su `Falsa89/Divine#main` confermato da Codex Web)* |
 | Branch ambiente | `master` (locale Emergent). Repo pubblico atteso `Falsa89/Divine#main`. Nessun `git remote` configurato in container — caveat dichiarato. |
 | Device QA | **BLOCKED** |
 | Sicurezza scope | NESSUNA mutazione su `battle_engine.py`, `battle_core.py`, `game_systems.py`, frontend live, economia, gacha, reward, shop, VIP, BP, mail, DB schema, migrations. ZERO DB write. |
@@ -47,7 +50,12 @@ In questi auto-commit risiede l'intera infrastruttura Pack 131 (helper + route +
 
 `b6e697a8d` — `feat(pack131): combat preview consumes snapshot safely + final report`.
 
-> Successivo micro-commit di truth-sync che sostituisce il placeholder con il SHA reale di questo report: `66e2418fc` (procedura identica ai Pack 129 e 130).
+> Catena dei truth-sync (procedura identica ai Pack 129 e 130):
+>
+> - **Truth-sync #1**: `66e2418fc6565d1f56bde879ca4c3aeb2cb691fa` — `docs(pack131): truth sync final SHA (b6e697a8d)`.
+> - **Truth-sync #2 / current public HEAD verified by Codex Web**: `9b731e8885d0986acc4df5e7813f8553dbd5a866` — `docs(pack131): resolve truth-sync placeholder to 66e2418fc`.
+>
+> Il commit `9b731e8885d0986acc4df5e7813f8553dbd5a866` è l'HEAD pubblico finale del Pack 131 su `Falsa89/Divine#main`, confermato dall'audit read-only di Codex Web (range `26c5085b259f73f63c7b3fc23858051b537b3eb9..9b731e8885d0986acc4df5e7813f8553dbd5a866`).
 
 ## 4. Git status before/after
 
@@ -66,7 +74,7 @@ $ git remote -v
 
 Working tree clean. Nessun upstream. Solo branch locale `master`. Tutti i file Pack 131 già tracciati negli auto-commit `bace55f09..b01774daf`.
 
-**After (post fix validator + report)** — `HEAD = b6e697a8d` (poi truth-sync `66e2418fc`):
+**After (post fix validator + report)** — `HEAD = b6e697a8d` → truth-sync #1 `66e2418fc6565d1f56bde879ca4c3aeb2cb691fa` → truth-sync #2 / **current public HEAD verified by Codex Web** `9b731e8885d0986acc4df5e7813f8553dbd5a866`:
 
 ```
 $ git status --short --untracked-files=all
@@ -299,7 +307,10 @@ Conferme esplicite:
 3. **`FULL_HTTP_AUTHENTICATED_SMOKE = NOT_EXECUTED`** — il Pack 131 non include un harness HTTP autenticato end-to-end con seeding; è pianificato per Pack 132 (Master Device QA Gate Suite).
 4. **`TEAM_B_PLACEHOLDER`** — `team_b` resta un placeholder deterministico (`PACK_131_PLACEHOLDER_DUMMY`). Generazione enemy reale rinviata.
 5. **Branch publishing**: il container Emergent espone solo branch locale `master` senza `git remote`. Il sync verso `Falsa89/Divine#main` avviene fuori dallo scope dell'agente (Emergent Publish). Verificare su GitHub dopo publish.
-6. **Final SHA truth-sync**: questo report aveva inizialmente placeholder `{{FINAL_SHA_TRUTH_SYNC_PENDING}}`, ora risolto a `b6e697a8d` per il commit feat e a `66e2418fc` per il commit di truth-sync (identico ai Pack 129 e 130).
+6. **Final SHA truth-sync (catena pubblica)**: questo report aveva inizialmente placeholder `{{FINAL_SHA_TRUTH_SYNC_PENDING}}`. Risolto in tre passi:
+   - commit feat: `b6e697a8d` (`feat(pack131): ...`);
+   - truth-sync #1: `66e2418fc6565d1f56bde879ca4c3aeb2cb691fa`;
+   - truth-sync #2 / **current public HEAD verified by Codex Web**: `9b731e8885d0986acc4df5e7813f8553dbd5a866` (HEAD finale pubblico su `Falsa89/Divine#main`).
 
 ## 19. Device QA status
 
