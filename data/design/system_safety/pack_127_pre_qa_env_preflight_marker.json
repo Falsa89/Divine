@@ -1,0 +1,35 @@
+{
+  "pack": "PACK_127",
+  "marker_kind": "pre_qa_env_preflight_proof",
+  "verdict_target": "PACK_127_PRE_QA_ENV_PREFLIGHT_AND_MUTATION_ALLOWLIST_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "enforcement": {
+    "runtime_middleware": "NOT_IMPLEMENTED_DEFERRED_TO_PACK_128",
+    "declarative_validators": "IMPLEMENTED",
+    "runtime_smoke_battle_simulate": "IMPLEMENTED_IN_VALIDATOR",
+    "static_safety_checks": "IMPLEMENTED"
+  },
+  "device_qa_status": "BLOCKED",
+  "next_required_pack": "PACK_128_ROUTE_DEEPLINK_LOCKDOWN",
+  "forbidden_areas_untouched": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "backend/game_systems.py",
+    "frontend/app/combat.tsx",
+    "data/design/heroes_master.json",
+    "backend/.env",
+    "supervisor configs",
+    "Character Bible",
+    "final_numbers",
+    "assets/audio"
+  ],
+  "validators": [
+    "validate_pack_127_pre_qa_env_preflight.py",
+    "validate_pack_127_backend_no_startup_writes.py",
+    "validate_pack_127_bot_system_disabled.py",
+    "validate_pack_127_battle_simulate_fail_closed.py",
+    "validate_pack_127_backend_mutation_allowlist.py",
+    "validate_pack_127_no_mutating_get.py",
+    "validate_pack_127_borea_hidden_runtime_invariant.py",
+    "validate_pack_127_stale_ready_pass_declassification.py"
+  ]
+}
