@@ -12,9 +12,11 @@ def main():
     src=f.read_text(encoding='utf-8')
     for forbidden in ['authoritative=True','"authoritative": True',"'authoritative': True"]:
       if forbidden in src: errs.append(f'{f.name}: claims authoritative=True')
-    if 'claim_enabled' in src and 'claim_enabled': False' not in src and '"claim_enabled": False' not in src and "claim_enabled': False" not in src:
-      # tolerate Python dict syntax
-      pass
+    # claim_enabled, se presente, deve essere False (preview-only). Verifica preview-safe.
+    if 'claim_enabled' in src:
+      claim_false_variants = ['claim_enabled": False', "claim_enabled': False", 'claim_enabled=False']
+      if not any(v in src for v in claim_false_variants):
+        errs.append(f'{f.name}: claim_enabled present but not pinned to False')
   return _emit(errs)
 def _emit(errs):
   report={'pack':'PACK_131_NO_AUTHORITATIVE_COMBAT_RESULT','status':'PASS' if not errs else 'FAIL','errors':errs,'validation_kind':'STATIC','enforcement':'ENFORCED_AUTHORITATIVE_FALSE_ALWAYS'}
