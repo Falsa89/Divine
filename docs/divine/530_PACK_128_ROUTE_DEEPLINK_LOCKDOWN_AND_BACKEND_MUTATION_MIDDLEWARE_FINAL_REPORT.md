@@ -21,9 +21,10 @@ Motivazione del verdetto prudente:
 
 | Campo | Valore |
 |---|---|
-| Starting SHA | `39fce2da7e07f3b428ad5aabaee54f587b29ad06` |
+| Starting SHA Pack 128 | `39fce2da7e07f3b428ad5aabaee54f587b29ad06` |
 | Pack 127 close anchor | `b9b516b3334fa95a4c079af089570a278724a7af` |
-| Final SHA | _(da aggiornare al commit di chiusura Pack 128)_ |
+| Pack 128 content commit | `538461fc8a37b03c43d9f32302e0cbd209f06210` |
+| Final SHA (post-audit truth sync) | _(aggiornato al commit di fix \u2014 vedi sezione 18 in fondo)_ |
 | Branch | `main` |
 
 ## 2. Git status
@@ -55,8 +56,8 @@ Motivazione del verdetto prudente:
 - `backend/server.py` — diff minimo: import + `app.add_middleware(PreQaMutationGuardMiddleware)` con commento esplicativo. **Default DORMANT** (env-gated).
 - `frontend/src/utils/preQaNavGuard.ts` — diff minimo, **append-only**: aggiunti `PRE_QA_ROUTE_ALLOWLIST`, `isRouteInPreQaAllowlist`, `classifyDeeplink`, type `DeeplinkDisposition`. **Zero modifiche** al comportamento esistente (`isRouteAllowedInPreQa` invariato).
 
-### Creati (23 totali)
-- **Backend middleware (2):** `backend/middleware/__init__.py`, `backend/middleware/pre_qa_mutation_guard.py`
+### Creati (26 totali)
+- **Backend middleware package (2):** `backend/middleware/__init__.py`, `backend/middleware/pre_qa_mutation_guard.py`
 - **Frontend deeplink helper (1):** `frontend/src/utils/preQaDeeplinkGuard.ts` (non mountato)
 - **Markers system_safety (2):** `pack_128_route_deeplink_lockdown_marker.json`, `pack_128_backend_mutation_middleware_marker.json`
 - **Allowlist runtime (1):** `data/design/system_safety/pack_128_backend_mutation_allowlist.json`
@@ -64,6 +65,8 @@ Motivazione del verdetto prudente:
 - **Suite runner (1):** `backend/scripts/run_pack_127_128_safety_suite.py`
 - **Reports JSON (9):** vedi §10
 - **Report finale Markdown (1):** questo file
+
+Totale = 2 + 1 + 2 + 1 + 9 + 1 + 9 + 1 = **26 nuovi file**.
 
 ## 4. Route / Deeplink lockdown — summary (Track A)
 
@@ -173,14 +176,16 @@ Quando `PRE_QA_MUTATION_GUARD_ENABLED=true`, sono bloccati con HTTP 423 (campion
 
 ## 9. Mutating GET hardening (Track C)
 
-Classificazione dei 26 GET sospetti di Pack 127:
+Classificazione dei 26 GET sospetti di Pack 127 (numeri aggiornati post-truth-fix):
 
 | Categoria | Count | Esempio |
 |---|---|---|
-| `INIT_ENSURE_ONLY` (idempotent create-on-first-read) | 14 | `economy.py /shop`, `hero_progression.py /fragments` |
+| `INIT_ENSURE_ONLY` (idempotent create-on-first-read) | 13 | `economy.py /shop`, `hero_progression.py /fragments`, `soul_forge.py /wallet`, `v96_auth.py /me` |
 | `CACHE_ANALYTICS` (analytics/cache, non player-data critical) | 2 | `controlled_rewards.py /controlled-rewards/health`, `equipment.py /equipment/templates` |
 | `TRUE_SIDE_EFFECT` (mutazione user-data via GET — P0 hardening) | 1 | `hero_progression.py /hero/reincarnation-info/{user_hero_id}` |
-| `DEFERRED` (review Pack 129+) | 9 | `social.py /plaza`, `social.py /dm/threads`, `guild.py /guild/info` |
+| `DEFERRED` (review Pack 129+) | 10 | `items.py /item-shop`, `social.py /plaza`, `social.py /dm/threads`, `raids.py /raids`, `forge.py /forge`, `cosmetics.py /cosmetics`, `guild.py /guild/info` |
+
+Totale **13 + 2 + 1 + 10 = 26**, coerente con `flagged_count: 26` di `pack_127_no_mutating_get_report.json` (post-truth-fix: la lista completa è ora pubblicata, prima era erroneamente truncata a 20 a causa di `flagged[:20]` slice nel validator Pack 127).
 
 **Pack 128 → AUDIT_ONLY**. Runtime guards (riconvertire GET mutativi a POST, o silenziarli pre-QA) sono deferred a Pack 128.x / Pack 129.
 
@@ -306,4 +311,71 @@ Con sub-task suggeriti per chiudere i gap residui Pack 128:
 
 ---
 
-_Report generato senza fake PASS. Ogni controllo categorizzato onestamente. Tutti i numeri/path sono verificabili nei report JSON in `backend/scripts/reports/pack_128_*_report.json`, nei marker in `data/design/system_safety/pack_128_*.json`, e nel suite report `backend/reports/pack_127_128_safety_suite_latest.json`._
+## 18. Post-audit truth sync commit (Codex Web reaudit fix)
+
+Codex Web ha eseguito audit pubblico read-only sul commit Pack 128
+`538461fc8a37b03c43d9f32302e0cbd209f06210` e ha rilevato **truth/count/validator
+hygiene issues** (no scope drift, no forbidden areas, no Pack 129 leak — solo
+incoerenze documentali e validator). Verdetto Codex Web:
+
+```text
+CODEX_WEB_PACK_128_PUBLIC_REAUDIT_FAIL_ADDITIONAL_FIXES_REQUIRED
+```
+
+Fix applicati in questo truth-sync commit (zero modifiche runtime/gameplay):
+
+| # | Issue | Fix |
+|---|---|---|
+| 1 | Final SHA placeholder nel report | Sostituito con `538461fc8` (Pack 128 content commit) + riferimento al truth-sync SHA |
+| 2 | Count "23 totali" file creati | Corretto a **26 totali** (2+1+2+1+9+1+9+1=26) con somma esplicita |
+| 3 | `flagged_count: 26` ma lista pubblicata 20 in `pack_127_no_mutating_get_report.json` | Bug nel validator `validate_pack_127_no_mutating_get.py` (`flagged[:20]` slice). Rimosso il slicing → ora la lista pubblicata ha **26 elementi reali**, coerente con `flagged_count`. |
+| 4 | Pack 128 hardening: classified totale 20 (13/2/1/4) vs MD diceva 26 (14/2/1/9) | Rigenerato `pack_128_mutating_get_hardening_report.json` dopo il fix #3 → ora classifica **26 reali**: 13 INIT_ENSURE_ONLY / 2 CACHE_ANALYTICS / 1 TRUE_SIDE_EFFECT / 10 DEFERRED = 26. MD aggiornato con questi numeri reali. |
+| 5 | `validate_pack_128_route_allowlist_registry.py` passava per string-match su commenti (`/safe-previews` era in MIN_ALLOWED ma in commento) | Riscritto validator: ora **parsa la `PRE_QA_ROUTE_ALLOWLIST` reale** (`new Set<string>([...])`) ignorando commenti `//`. `/safe-previews` rimosso da `MIN_ALLOWED` (è dev/QA-gated in blocklist Pack 119B, non player-facing). Report ora include `real_allowlist_size: 23` e `real_allowlist: sorted([...])` per verifica. |
+| 6 | Pretesa che `pack_127_128_safety_suite_latest.json` fosse verificabile su GitHub | Corretto: dichiarato esplicitamente che il file è artefatto di esecuzione locale **NON tracciato** su `main`. Riproducibilità garantita rieseguendo lo script. |
+
+### Verdetto truth-sync
+
+```
+PACK_128_TRUTH_COUNT_VALIDATOR_HYGIENE_FIX_COMPLETE_REAUDIT_REQUIRED
+```
+
+### File toccati dal truth-sync (allow-listed da prompt utente)
+
+- `docs/divine/530_PACK_128_..._FINAL_REPORT.md` (questo file)
+- `backend/scripts/validate_pack_127_no_mutating_get.py` (fix `flagged[:20]` slice)
+- `backend/scripts/validate_pack_128_route_allowlist_registry.py` (parsing reale, no string-match su commenti)
+- `backend/scripts/reports/pack_127_no_mutating_get_report.json` (rigenerato)
+- `backend/scripts/reports/pack_128_mutating_get_hardening_report.json` (rigenerato)
+- `backend/scripts/reports/pack_128_route_allowlist_registry_report.json` (rigenerato)
+
+### File **NON** toccati dal truth-sync
+
+- `backend/server.py` ✅
+- `backend/middleware/pre_qa_mutation_guard.py` ✅
+- `frontend/src/utils/preQaNavGuard.ts` ✅
+- `frontend/src/utils/preQaDeeplinkGuard.ts` ✅
+- `frontend/app/**` ✅
+- `battle_engine.py`, `battle_core.py`, `game_systems.py` ✅
+- `backend/.env` ✅
+- Character Bible / final_numbers / assets / supervisor configs ✅
+- Gacha / Economy / Reward / Shop / VIP / Battle Pass / Mail logic ✅
+- DB schema / migrazioni ✅
+
+### Suite post-truth-sync
+
+```
+backend/scripts/run_pack_127_128_safety_suite.py
+TOTAL: 17 | PASS: 17 | FAIL: 0
+```
+
+### Stato invariato (P2 mantenuti)
+
+- `DEVICE_QA_STATUS: BLOCKED` ✅
+- Pack 129/130/131/132/133 **NON iniziati** ✅
+- Verdetto Pack 128 invariato: `PACK_128_ROUTE_DEEPLINK_LOCKDOWN_AND_BACKEND_MUTATION_MIDDLEWARE_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED` ✅
+- Middleware runtime-enforceable solo con `PRE_QA_MUTATION_GUARD_ENABLED=true` (DORMANT nel pod) ✅
+- Full HTTP smoke autenticato `/api/battle/simulate` resta **NOT_EXECUTED** (Pack 132) ✅
+
+_Report generato senza fake PASS. Ogni controllo categorizzato onestamente. Tutti i numeri/path sono verificabili nei report JSON in `backend/scripts/reports/pack_128_*_report.json` (tracciati su GitHub) e nei marker in `data/design/system_safety/pack_128_*.json`. Il suite report locale (`backend/reports/pack_127_128_safety_suite_*.json`) **NON è tracciato** su `main` (artefatto di esecuzione locale): la riproducibilità è garantita rieseguendo `python3 backend/scripts/run_pack_127_128_safety_suite.py` dopo checkout del commit Pack 128._
+
+---

@@ -3,6 +3,37 @@
   "status": "PASS",
   "errors": [],
   "notes": [],
+  "min_allowed_required": [
+    "/login",
+    "/servers",
+    "/(tabs)/home"
+  ],
+  "real_allowlist_size": 23,
+  "real_allowlist": [
+    "/",
+    "/(tabs)/battle",
+    "/(tabs)/heroes",
+    "/(tabs)/home",
+    "/(tabs)/menu",
+    "/alpha-codex",
+    "/alpha-guide",
+    "/alpha-preview-hub",
+    "/combat",
+    "/divine-weapons-catalog",
+    "/guide",
+    "/hero-collection",
+    "/hero-detail",
+    "/hero-encyclopedia",
+    "/hero-viewer",
+    "/index",
+    "/login",
+    "/pre-battle-lobby",
+    "/register",
+    "/select-home-hero",
+    "/servers",
+    "/status-codex",
+    "/synergy-codex"
+  ],
   "validation_kind": "STATIC",
-  "enforcement": "ENFORCED_STATIC_REGISTRY_PRESENT"
+  "enforcement": "ENFORCED_STATIC_REGISTRY_PRESENT_PARSED_REAL_NOT_STRING_MATCH"
 }

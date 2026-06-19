@@ -36,7 +36,10 @@ def main()->int:
 
 def _emit(errors,flagged):
     print('\n'+'='*72)
-    report={'pack':'PACK_127_NO_MUTATING_GET','status':'PASS' if not errors else 'FAIL','errors':errors,'flagged_count':len(flagged),'flagged':flagged[:20],'validation_kind':'STATIC','enforcement':'audit_only_runtime_block_deferred_to_PACK_128'}
+    # Truth: flagged_count == len(flagged) e flagged contiene TUTTI gli elementi
+    # (non slicing). Il bug precedente (flagged[:20]) generava mismatch tra
+    # flagged_count e la lista pubblicata.
+    report={'pack':'PACK_127_NO_MUTATING_GET','status':'PASS' if not errors else 'FAIL','errors':errors,'flagged_count':len(flagged),'flagged':flagged,'validation_kind':'STATIC','enforcement':'audit_only_runtime_block_deferred_to_PACK_128'}
     out=REPO_ROOT/'backend'/'scripts'/'reports'; out.mkdir(parents=True,exist_ok=True)
     (out/'pack_127_no_mutating_get_report.json').write_text(json.dumps(report,indent=2,ensure_ascii=False),encoding='utf-8')
     if errors:

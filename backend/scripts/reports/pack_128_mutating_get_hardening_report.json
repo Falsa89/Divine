@@ -8,23 +8,8 @@
   "classified": {
     "INIT_ENSURE_ONLY": [
       {
-        "file": "push_notifications.py",
-        "snippet": "@router.get(\"/push/status\")",
-        "pattern": ".insert_one("
-      },
-      {
-        "file": "hero_progression.py",
-        "snippet": "@router.get(\"/fragments\")",
-        "pattern": ".insert_one("
-      },
-      {
-        "file": "hero_progression.py",
-        "snippet": "@router.get(\"/materials\")",
-        "pattern": ".insert_one("
-      },
-      {
-        "file": "soul_forge.py",
-        "snippet": "@router.get(\"/wallet\")",
+        "file": "level_sharing.py",
+        "snippet": "@router.get(\"/level-sharing\")",
         "pattern": ".insert_one("
       },
       {
@@ -40,6 +25,26 @@
       {
         "file": "economy.py",
         "snippet": "@router.get(\"/servers\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "hero_progression.py",
+        "snippet": "@router.get(\"/fragments\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "hero_progression.py",
+        "snippet": "@router.get(\"/materials\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "push_notifications.py",
+        "snippet": "@router.get(\"/push/status\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "v96_auth.py",
+        "snippet": "@router.get(\"/me\")",
         "pattern": ".insert_one("
       },
       {
@@ -63,25 +68,20 @@
         "pattern": ".update_one("
       },
       {
-        "file": "v96_auth.py",
-        "snippet": "@router.get(\"/me\")",
-        "pattern": ".insert_one("
-      },
-      {
-        "file": "level_sharing.py",
-        "snippet": "@router.get(\"/level-sharing\")",
+        "file": "soul_forge.py",
+        "snippet": "@router.get(\"/wallet\")",
         "pattern": ".insert_one("
       }
     ],
     "CACHE_ANALYTICS": [
       {
-        "file": "controlled_rewards.py",
-        "snippet": "@router.get(\"/controlled-rewards/health\")",
+        "file": "equipment.py",
+        "snippet": "@router.get(\"/equipment/templates\")",
         "pattern": ".update_one("
       },
       {
-        "file": "equipment.py",
-        "snippet": "@router.get(\"/equipment/templates\")",
+        "file": "controlled_rewards.py",
+        "snippet": "@router.get(\"/controlled-rewards/health\")",
         "pattern": ".update_one("
       }
     ],
@@ -93,6 +93,11 @@
       }
     ],
     "DEFERRED": [
+      {
+        "file": "items.py",
+        "snippet": "@router.get(\"/item-shop\")",
+        "pattern": ".update_one("
+      },
       {
         "file": "social.py",
         "snippet": "@router.get(\"/plaza\")",
@@ -106,6 +111,31 @@
       {
         "file": "social.py",
         "snippet": "@router.get(\"/dm/threads\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "raids.py",
+        "snippet": "@router.get(\"/raids\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "raids.py",
+        "snippet": "@router.get(\"/exclusive-items\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "cosmetics.py",
+        "snippet": "@router.get(\"/cosmetics\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "forge.py",
+        "snippet": "@router.get(\"/forge\")",
+        "pattern": ".update_one("
+      },
+      {
+        "file": "forge.py",
+        "snippet": "@router.get(\"/runes\")",
         "pattern": ".insert_one("
       },
       {
