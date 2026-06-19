@@ -16,12 +16,32 @@ PACK_127_PRE_QA_ENV_PREFLIGHT_AND_MUTATION_ALLOWLIST_PARTIAL_ENFORCEMENT_REAUDIT
 | Campo | Valore |
 |---|---|
 | Starting SHA | `5e8ef0284a879ba33b7bce7da94c333fa62bd873` |
-| Final SHA | _(da aggiornare al commit di chiusura del Pack 127)_ |
-| Branch | `master` |
-| Working tree prima | clean (`nothing to commit`) — gli stub dei validator erano già presenti dall'iterazione precedente come untracked |
-| Working tree dopo | vedi §2 |
+| Final SHA | `c645fbb74a7696aee9b3e2840c0d2789544e3d9a` |
+| Branch | `main` |
+| Working tree pre-anchor | file Pack 127 presenti prima della chiusura semantica (vedi §2 — stato osservato durante l'iterazione, prima dell'auto-commit `28260e3a3` e dell'anchor `c645fbb74`) |
+| Working tree post-anchor | **clean** (`nothing to commit, working tree clean`) |
 
-## 2. Stato git dopo Pack 127
+### Mini-chain commit Pack 127
+
+```text
+Content commit Pack 127:
+5233371a439f8c1d0191678bc6a9c0a6d256e8fc
+
+Pre-anchor auto commit:
+28260e3a3beea47adeccc2cff36b2137ecc30113
+
+Final semantic anchor:
+c645fbb74a7696aee9b3e2840c0d2789544e3d9a
+
+Anchor commit message:
+feat(pack127): pre-qa env preflight and mutation allowlist audit
+```
+
+Il commit `c645fbb74` è un **empty semantic anchor commit rispetto a `28260e3a3`**. Il contenuto effettivo Pack 127 (12 file, 463 inserzioni) è stato persistito nel **content commit `5233371a4`**, già verificato indipendentemente da Codex Web.
+
+## 2. Stato git durante / dopo Pack 127
+
+### Stato osservato durante l'iterazione (pre-anchor, prima del content commit `5233371a4`)
 
 ```text
  M backend/scripts/validate_pack_127_backend_no_startup_writes.py
@@ -36,6 +56,12 @@ PACK_127_PRE_QA_ENV_PREFLIGHT_AND_MUTATION_ALLOWLIST_PARTIAL_ENFORCEMENT_REAUDIT
 ?? data/design/system_safety/pack_127_backend_mutation_allowlist.json
 ?? data/design/system_safety/pack_127_stale_ready_pass_declassification.json
 ?? docs/divine/529_PACK_127_PRE_QA_ENV_PREFLIGHT_AND_MUTATION_ALLOWLIST_FINAL_REPORT.md
+```
+
+### Stato finale post-anchor (`c645fbb74`)
+
+```text
+clean — nothing to commit, working tree clean
 ```
 
 > NB: nessun file in `backend/.env`, `battle_engine.py`, `battle_core.py`, `frontend/`, Character Bible, `assets/`, supervisor configs è stato modificato (vedi §11).
