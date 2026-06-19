@@ -17,7 +17,7 @@ PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT_PARTIAL_ENFORCEMENT_REAUDIT_R
 |---|---|
 | Starting SHA | `872010a3b5694684607673efe3ed2328a79e041c` |
 | Pack 129 close anchor | `bcd72f45751d875edfc2d65a6a4b5dcbce966356` |
-| Final SHA | _(da aggiornare al commit di chiusura Pack 130)_ |
+| Final SHA (Pack 130 content commit auditato da Codex Web) | `2f490421e07fc119e17000a29628b0ffbbc77d19` |
 | Branch | `main` |
 
 ## 2. Git status
@@ -43,14 +43,14 @@ PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT_PARTIAL_ENFORCEMENT_REAUDIT_R
 ?? docs/divine/532_PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT_FINAL_REPORT.md
 ```
 
-## 3. Files changed (29 totali)
+## 3. Files changed (32 totali)
 
 ### Modificati (3)
 - `backend/server.py` — diff minimo: 1 import + 1 `include_router` per Pack 130 (commentato)
 - `backend/scripts/validate_pack_128_no_pack129_130_131_leak.py` — rimosso `pack_130/PACK_130` da `FORBIDDEN_PATTERNS` (Pack 130 è pack corrente/chiuso; validator continua a bloccare Pack 131+)
 - `backend/scripts/validate_pack_129_no_pack130_131_132_133_leak.py` — rimosso `pack_130/PACK_130` da `FORBIDDEN` (stesso pattern)
 
-### Creati (26 nuovi file)
+### Creati (29 nuovi file)
 - **Backend helpers (2):** `helpers/real_player_snapshot.py`, `helpers/lobby_launch_context.py`
 - **Backend route (1):** `routes/v130_lobby_launch_context.py`
 - **Markers (2):** `pack_130_lobby_launch_context_marker.json`, `pack_130_real_player_snapshot_marker.json`
@@ -59,7 +59,7 @@ PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT_PARTIAL_ENFORCEMENT_REAUDIT_R
 - **Suite runner (1):** `run_pack_127_128_129_130_safety_suite.py`
 - **Report finale MD (1):** questo file
 
-Totale = 2 + 1 + 2 + 11 + 11 + 1 + 1 = **29 file** (3 modificati + 26 creati).
+Totale = 2 + 1 + 2 + 11 + 11 + 1 + 1 = **29 nuovi file** + 3 modificati = **32 file totali nel commit Pack 130**.
 
 ## 4. Lobby Launch Context summary (Track A)
 
@@ -104,7 +104,7 @@ Totale = 2 + 1 + 2 + 11 + 11 + 1 + 1 = **29 file** (3 modificati + 26 creati).
 - `heroes` (canonical) → display_name, rarity, element, role, faction, asset_key, asset_status
 
 **Hero sanitization (`_sanitize_hero`):**
-- Espone solo `SAFE_HERO_FIELDS` (15 campi listati nel marker)
+- Espone solo `SAFE_HERO_FIELDS` (campi esposti totali nel marker: 15; `SAFE_HERO_FIELDS` base nel codice: 13 + `snapshot_status`/`slot` aggiunti dal builder)
 - Esclude `FORBIDDEN_HERO_FIELDS` (drop_table, reward_rate, admin_flags, debug, secret, battle_power_client_computed, raw_stats_authoritative, gacha_rate, shop_price, economy_internal)
 - Esclude eroi `pending_assets` / `pending_contract` (Borea hidden invariant preservato)
 - Esclude `FORBIDDEN_HERO_KEYS = ('greek_borea',)`
