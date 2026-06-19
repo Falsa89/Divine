@@ -1,0 +1,110 @@
+{
+  "pack": "PACK_127_NO_MUTATING_GET",
+  "status": "PASS",
+  "errors": [],
+  "flagged_count": 26,
+  "flagged": [
+    {
+      "file": "push_notifications.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/push/status\")"
+    },
+    {
+      "file": "hero_progression.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/hero/reincarnation-info/{user_hero_id}\")"
+    },
+    {
+      "file": "hero_progression.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/fragments\")"
+    },
+    {
+      "file": "hero_progression.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/materials\")"
+    },
+    {
+      "file": "social.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/plaza\")"
+    },
+    {
+      "file": "social.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/plaza/channels\")"
+    },
+    {
+      "file": "social.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/dm/threads\")"
+    },
+    {
+      "file": "controlled_rewards.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/controlled-rewards/health\")"
+    },
+    {
+      "file": "soul_forge.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/wallet\")"
+    },
+    {
+      "file": "equipment.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/equipment/templates\")"
+    },
+    {
+      "file": "guild.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/guild/info\")"
+    },
+    {
+      "file": "economy.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/shop\")"
+    },
+    {
+      "file": "economy.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/mail\")"
+    },
+    {
+      "file": "economy.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/servers\")"
+    },
+    {
+      "file": "combat.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/story/chapters\")"
+    },
+    {
+      "file": "combat.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/tower/status\")"
+    },
+    {
+      "file": "combat.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/events/daily\")"
+    },
+    {
+      "file": "combat.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/titles\")"
+    },
+    {
+      "file": "v96_auth.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/me\")"
+    },
+    {
+      "file": "level_sharing.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/level-sharing\")"
+    }
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "audit_only_runtime_block_deferred_to_PACK_128"
+}

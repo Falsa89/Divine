@@ -1,0 +1,12 @@
+{
+  "pack": "PACK_127_BACKEND_NO_STARTUP_WRITES",
+  "status": "PASS",
+  "errors": [],
+  "warnings": [
+    "startup handler #2: catalog mutation `db.heroes.insert` without env gate (Pack 128 hardening required)",
+    "startup handler #2: catalog mutation `db.heroes.delete` without env gate (Pack 128 hardening required)",
+    "startup handler #2: catalog mutation `db.heroes.update` without env gate (Pack 128 hardening required)"
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "forbidden_user_data_writes_blocked_catalog_seed_pending_pack_128"
+}

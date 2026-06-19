@@ -1,0 +1,13 @@
+{
+  "pack": "PACK_127",
+  "declaration": "Old READY/PASS reports are historical unless rerun under Pack 127+ gates.",
+  "explicit_declassified": [
+    "PACK_118_DEVICE_READY",
+    "PACK_126_FIX_*",
+    "FASE_G_AUDIT_COVERAGE",
+    "FASE_H_CLASSIFICATION"
+  ],
+  "rationale": "Audit coverage/classification ≠ runtime readiness. Device QA remains BLOCKED until PACK 127–133 pass.",
+  "device_qa_status": "BLOCKED",
+  "next_required_pack": "PACK_128_ROUTE_DEEPLINK_LOCKDOWN"
+}

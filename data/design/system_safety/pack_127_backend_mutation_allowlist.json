@@ -1,0 +1,14 @@
+{
+  "pack": "PACK_127",
+  "allowlist": [
+    "POST /api/register",
+    "POST /api/login",
+    "POST /api/auth/refresh",
+    "POST /api/psp/ensure",
+    "POST /api/psp/starter/claim",
+    "POST /api/team/save-formation",
+    "POST /api/battle/launch"
+  ],
+  "classification": "pre_qa_safe_mutations_only",
+  "notes": "All other mutative routes are blocked/legacy/deferred. Validation is declarative; runtime middleware enforcement deferred to PACK 128+."
+}
