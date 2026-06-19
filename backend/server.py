@@ -49,6 +49,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# PACK 128 — Pre-QA Backend Mutation Allowlist Middleware (RUNTIME).
+# Montato di default in modalita' DORMANT: l'enforcement diventa attivo solo se
+# l'env var `PRE_QA_MUTATION_GUARD_ENABLED=true` e' settata nel supervisor QA.
+# Default OFF per non rompere il QA flow corrente (vincolo: backend/.env non
+# modificato in Pack 128). Quando attivo, blocca con HTTP 423
+# PRE_QA_MUTATION_BLOCKED ogni mutazione (POST/PUT/PATCH/DELETE) su /api/*
+# che non sia nella allowlist Pack 128.
+# Vedi: backend/middleware/pre_qa_mutation_guard.py
+#       data/design/system_safety/pack_128_backend_mutation_allowlist.json
+from middleware.pre_qa_mutation_guard import PreQaMutationGuardMiddleware
+app.add_middleware(PreQaMutationGuardMiddleware)
+
 @app.on_event("startup")
 async def ops_c_wiring_startup_check():
     """OPS-C-WIRING — Non-invasive boot hook for the Expo wrapper.

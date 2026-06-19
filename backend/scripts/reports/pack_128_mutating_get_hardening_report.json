@@ -1,0 +1,120 @@
+{
+  "pack": "PACK_128_MUTATING_GET_HARDENING",
+  "status": "PASS",
+  "errors": [],
+  "notes": [
+    "TRUE_SIDE_EFFECT GET to harden: hero_progression.py @router.get(\"/hero/reincarnation-info/{user_hero_id}\")"
+  ],
+  "classified": {
+    "INIT_ENSURE_ONLY": [
+      {
+        "file": "push_notifications.py",
+        "snippet": "@router.get(\"/push/status\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "hero_progression.py",
+        "snippet": "@router.get(\"/fragments\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "hero_progression.py",
+        "snippet": "@router.get(\"/materials\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "soul_forge.py",
+        "snippet": "@router.get(\"/wallet\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "economy.py",
+        "snippet": "@router.get(\"/shop\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "economy.py",
+        "snippet": "@router.get(\"/mail\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "economy.py",
+        "snippet": "@router.get(\"/servers\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "combat.py",
+        "snippet": "@router.get(\"/story/chapters\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "combat.py",
+        "snippet": "@router.get(\"/tower/status\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "combat.py",
+        "snippet": "@router.get(\"/events/daily\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "combat.py",
+        "snippet": "@router.get(\"/titles\")",
+        "pattern": ".update_one("
+      },
+      {
+        "file": "v96_auth.py",
+        "snippet": "@router.get(\"/me\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "level_sharing.py",
+        "snippet": "@router.get(\"/level-sharing\")",
+        "pattern": ".insert_one("
+      }
+    ],
+    "CACHE_ANALYTICS": [
+      {
+        "file": "controlled_rewards.py",
+        "snippet": "@router.get(\"/controlled-rewards/health\")",
+        "pattern": ".update_one("
+      },
+      {
+        "file": "equipment.py",
+        "snippet": "@router.get(\"/equipment/templates\")",
+        "pattern": ".update_one("
+      }
+    ],
+    "TRUE_SIDE_EFFECT": [
+      {
+        "file": "hero_progression.py",
+        "snippet": "@router.get(\"/hero/reincarnation-info/{user_hero_id}\")",
+        "pattern": ".update_one("
+      }
+    ],
+    "DEFERRED": [
+      {
+        "file": "social.py",
+        "snippet": "@router.get(\"/plaza\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "social.py",
+        "snippet": "@router.get(\"/plaza/channels\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "social.py",
+        "snippet": "@router.get(\"/dm/threads\")",
+        "pattern": ".insert_one("
+      },
+      {
+        "file": "guild.py",
+        "snippet": "@router.get(\"/guild/info\")",
+        "pattern": ".update_one("
+      }
+    ]
+  },
+  "validation_kind": "STATIC_CLASSIFICATION",
+  "enforcement": "AUDIT_ONLY_CLASSIFICATION_PRESENT_RUNTIME_GUARDS_DEFERRED"
+}

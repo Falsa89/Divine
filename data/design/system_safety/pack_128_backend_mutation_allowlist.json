@@ -1,0 +1,26 @@
+{
+  "pack": "PACK_128",
+  "version": "1.0",
+  "classification": "pre_qa_safe_mutations_only_runtime_enforced_when_env_enabled",
+  "env_flag": "PRE_QA_MUTATION_GUARD_ENABLED",
+  "http_block_status": 423,
+  "block_code": "PRE_QA_MUTATION_BLOCKED",
+  "allowlist": [
+    "POST /api/register",
+    "POST /api/login",
+    "POST /api/auth/refresh",
+    "POST /api/psp/ensure",
+    "POST /api/psp/starter/claim",
+    "POST /api/team/save-formation",
+    "POST /api/battle/launch",
+    "POST /api/logout",
+    "POST /api/logout-all"
+  ],
+  "notes": [
+    "Allowlist runtime per pre-QA. Tutte le altre mutazioni /api/* sono bloccate quando il middleware è attivo (env PRE_QA_MUTATION_GUARD_ENABLED=true).",
+    "/api/team/save-formation richiede in aggiunta QA_TEAM_SAVE_ENABLED=true + UUID utente in QA_TEAM_SAVE_ALLOWLIST (controllato a livello di route, non middleware).",
+    "/api/battle/launch deve restare no-write preview-echo only — verificato staticamente, NON live-executed da questo middleware.",
+    "OPTIONS / GET / HEAD non sono soggetti a questo middleware (Track C copre mutating-GET).",
+    "Default env OFF: middleware DORMANT a meno che supervisor QA non setti PRE_QA_MUTATION_GUARD_ENABLED=true. Questo è esplicito e voluto: backend/.env non è modificabile in Pack 128."
+  ]
+}

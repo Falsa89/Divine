@@ -1,0 +1,15 @@
+{
+  "pack": "PACK_128",
+  "marker_kind": "route_deeplink_lockdown",
+  "route_lockdown_status": "ENFORCED_VIA_EXISTING_PRE_QA_NAV_GUARD_EXTENDED_WITH_ALLOWLIST",
+  "deeplink_lockdown_status": "VALIDATED_ONLY_HELPER_NOT_MOUNTED_RUNTIME_INTERCEPT_DEFERRED",
+  "existing_blocklist_source": "frontend/src/utils/preQaNavGuard.ts (PRE_QA_BLOCKED_PLAYER_ROUTES, già usato da home/menu)",
+  "new_allowlist_source": "frontend/src/utils/preQaNavGuard.ts (PRE_QA_ROUTE_ALLOWLIST + isRouteInPreQaAllowlist) — aggiunto in Pack 128 senza alterare comportamento esistente",
+  "new_deeplink_helper": "frontend/src/utils/preQaDeeplinkGuard.ts — helper puro per intercettare deeplink in pre-QA. NON ancora montato in _layout.tsx (zero behavioural change frontend).",
+  "device_qa_status": "BLOCKED",
+  "next_pack_required": "PACK_129_TEAM_FORMATION_V1_SERVER_READY_STRUCTURED_ERRORS",
+  "known_gaps": [
+    "Deeplink runtime intercept non mountato in _layout.tsx (helper presente, mount deferred per minimizzare touch frontend).",
+    "Allowlist frontend è coerente con blocklist esistente ma il guard runtime principale resta blocklist-based (esistente Pack 112+)."
+  ]
+}

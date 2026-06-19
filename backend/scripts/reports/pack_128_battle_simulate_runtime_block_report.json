@@ -1,0 +1,10 @@
+{
+  "pack": "PACK_128_BATTLE_SIMULATE_RUNTIME_BLOCK",
+  "status": "PASS",
+  "errors": [],
+  "notes": [
+    "AUTHENTICATED_RUNTIME_SMOKE_NOT_EXECUTED: smoke con JWT QA reale sul backend del pod richiederebbe (a) seed account QA, (b) body senza marker preview, (c) env PRE_QA_MUTATION_GUARD_ENABLED=true nel pod. Tutti deferred a Pack 132 (Device QA Gate Suite)."
+  ],
+  "validation_kind": "STATIC+RUNTIME_INPROCESS",
+  "enforcement": "ENFORCED_INPROCESS_BLOCKED_BY_MIDDLEWARE_FULL_AUTHENTICATED_SMOKE_NOT_EXECUTED"
+}

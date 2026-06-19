@@ -1,0 +1,21 @@
+{
+  "pack": "PACK_128",
+  "marker_kind": "backend_mutation_middleware_runtime",
+  "runtime_enforcement_status": "ENFORCED_CODE_PRESENT_ENV_GATED_DORMANT_BY_DEFAULT",
+  "middleware_file": "backend/middleware/pre_qa_mutation_guard.py",
+  "mounted_in": "backend/server.py (env-gated, default DORMANT)",
+  "env_flag": "PRE_QA_MUTATION_GUARD_ENABLED",
+  "current_env_value_in_pod": "unset",
+  "behaviour_when_dormant": "middleware è caricato ma non intercetta; request passa inalterata (default OFF per non rompere QA flow esistente)",
+  "behaviour_when_active": "deny-by-default su /api/* per metodi POST/PUT/PATCH/DELETE non allowlisted → HTTP 423 PRE_QA_MUTATION_BLOCKED",
+  "allowlist_source": "data/design/system_safety/pack_128_backend_mutation_allowlist.json",
+  "runtime_unit_test_status": "EXECUTED_VIA_VALIDATOR",
+  "runtime_full_http_smoke_status": "NOT_EXECUTED_REQUIRES_ENV_FLAG_TRUE_IN_QA_SUPERVISOR",
+  "device_qa_status": "BLOCKED",
+  "next_pack_required": "PACK_129_TEAM_FORMATION_V1_SERVER_READY_STRUCTURED_ERRORS",
+  "known_gaps": [
+    "PRE_QA_MUTATION_GUARD_ENABLED non set in backend/.env (vincolo utente: file intoccato). Attivazione in QA è azione esplicita di supervisor.",
+    "Smoke HTTP autenticato completo non eseguito; runtime test programmatico via validator copre la logica di matching (is_allowed + middleware dispatch).",
+    "/api/battle/simulate resta gated solo da auth+preview-marker (battle_engine.py:1145, intoccabile in questo pack). Il middleware Pack 128 lo bloccherebbe se attivo, perché non è in allowlist."
+  ]
+}

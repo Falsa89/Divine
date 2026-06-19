@@ -1,0 +1,11 @@
+{
+  "pack": "PACK_128_BACKEND_MUTATION_MIDDLEWARE_RUNTIME",
+  "status": "PASS",
+  "errors": [],
+  "notes": [
+    "ENV_FLAG name = `PRE_QA_MUTATION_GUARD_ENABLED`",
+    "mutating methods enforced = ['DELETE', 'PATCH', 'POST', 'PUT']"
+  ],
+  "validation_kind": "STATIC+UNIT_RUNTIME",
+  "enforcement": "ENFORCED_CODE_AND_UNIT_RUNTIME_FULL_HTTP_SMOKE_REQUIRES_ENV_TRUE"
+}
