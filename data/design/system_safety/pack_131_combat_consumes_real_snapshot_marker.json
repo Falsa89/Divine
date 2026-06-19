@@ -1,0 +1,20 @@
+{
+  "pack": "PACK_131",
+  "verdict": "PACK_131_COMBAT_CONSUMES_REAL_SNAPSHOT_POST_BATTLE_PREVIEW_SAFE_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "combat_snapshot_consumption_status": "ENFORCED_HELPER_AND_ROUTE_PRESENT_PREVIEW_ONLY",
+  "battle_engine_execution_status": "BATTLE_ENGINE_EXECUTION_DEFERRED",
+  "post_battle_preview_status": "ENFORCED_NO_CLAIM_NO_GRANT_NO_MUTATION",
+  "endpoint": "GET /api/combat/preview",
+  "reward_status": "DISABLED",
+  "exp_status": "DISABLED",
+  "progress_status": "DISABLED",
+  "db_write_scope": "NONE",
+  "device_qa_status": "BLOCKED",
+  "forbidden_areas_untouched": true,
+  "next_pack_required": "PACK_132_MASTER_DEVICE_QA_GATE_SUITE",
+  "known_gaps": [
+    "battle_engine.py NOT eseguito — Pack 131 produce solo preview input/output, no simulazione live",
+    "frontend combat consumer non implementato — FRONTEND_COMBAT_CONSUMER_DEFERRED",
+    "full HTTP smoke autenticato NOT_EXECUTED (Pack 132)"
+  ]
+}

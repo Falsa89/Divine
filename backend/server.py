@@ -953,6 +953,10 @@ app.include_router(v107a_battle_launch_router)
 from routes.v130_lobby_launch_context import router as v130_lobby_launch_router
 app.include_router(v130_lobby_launch_router)
 
+# Pack 131 — Combat Preview (GET, read-only, consumes Pack 130 launch context).
+from routes.v131_combat_preview import router as v131_combat_preview_router
+app.include_router(v131_combat_preview_router)
+
 # v108_AUTHORITATIVE_PRE — Battle Instance Envelope preview endpoint.
 # POST /api/battle/instance/preview returns the authoritative-pre envelope.
 # authoritative_live=false sempre; nessuna scrittura DB; nessun reward/progress.

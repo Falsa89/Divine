@@ -12,8 +12,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-FORBIDDEN_PATTERNS = ['pack_131', 'pack_132', 'pack_133',
-                      'PACK_131', 'PACK_132', 'PACK_133']
+FORBIDDEN_PATTERNS = ['pack_132', 'pack_133',
+                      'PACK_132', 'PACK_133']
 
 
 def main() -> int:

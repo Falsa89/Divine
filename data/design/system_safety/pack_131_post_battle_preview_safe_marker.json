@@ -1,0 +1,19 @@
+{
+  "pack": "PACK_131",
+  "marker_kind": "post_battle_preview_safe",
+  "verdict": "PACK_131_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "helper": "backend/helpers/combat_preview_adapter.py:build_post_battle_preview()",
+  "properties": {
+    "preview_only": true,
+    "authoritative": false,
+    "claim_enabled": false,
+    "inventory_mutation": false,
+    "economy_mutation": false,
+    "hero_progression_mutation": false,
+    "reward_status": "DISABLED",
+    "exp_status": "DISABLED",
+    "progress_status": "DISABLED"
+  },
+  "device_qa_status": "BLOCKED",
+  "next_pack_required": "PACK_132_MASTER_DEVICE_QA_GATE_SUITE"
+}
