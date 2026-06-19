@@ -1,0 +1,59 @@
+{
+  "pack": "PACK_130_LOBBY_LAUNCH_CONTEXT_CONTRACT",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "smoke_pairs": [
+    [
+      "no_auth",
+      "AUTH_REQUIRED"
+    ],
+    [
+      "invalid_mode",
+      "LOBBY_MODE_INVALID"
+    ],
+    [
+      "missing_server",
+      "SERVER_CONTEXT_REQUIRED"
+    ],
+    [
+      "success_ok",
+      true,
+      true
+    ],
+    [
+      "snapshot_team_size",
+      1
+    ],
+    [
+      "combat_consumption",
+      "COMBAT_CONSUMPTION_DEFERRED_TO_PACK_131"
+    ],
+    [
+      "reward_status",
+      "DISABLED"
+    ],
+    [
+      "progress_status",
+      "DISABLED"
+    ],
+    [
+      "device_qa_status",
+      "BLOCKED"
+    ]
+  ],
+  "required_response_fields": [
+    "launch_context_id",
+    "mode",
+    "server_id",
+    "user_id",
+    "player_snapshot",
+    "enemy_snapshot_status",
+    "combat_consumption_status",
+    "reward_status",
+    "progress_status",
+    "device_qa_status"
+  ],
+  "validation_kind": "STATIC+UNIT_RUNTIME",
+  "enforcement": "ENFORCED_CONTRACT_AND_UNIT_RUNTIME_VERIFIED"
+}

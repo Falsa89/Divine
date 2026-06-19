@@ -1,0 +1,11 @@
+{
+  "pack": "PACK_130_FRONTEND_LOBBY_INTEGRATION_SAFE",
+  "status": "PASS",
+  "errors": [],
+  "notes": [
+    "Pack 130 lobby integration frontend = VALIDATED_ONLY: il launch context endpoint è disponibile via GET /api/lobby/launch-context/preview ma NESSUNA schermata frontend lo consuma ancora (deferred a Pack 131+)."
+  ],
+  "frontend_app_files_touched_in_pack_130": [],
+  "validation_kind": "STATIC+GIT_DIFF",
+  "enforcement": "VALIDATED_ONLY_BACKEND_ENDPOINT_AVAILABLE_NO_FRONTEND_CONSUMER_YET"
+}

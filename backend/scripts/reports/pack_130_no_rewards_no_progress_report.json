@@ -1,0 +1,24 @@
+{
+  "pack": "PACK_130_NO_REWARDS_NO_PROGRESS",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "forbidden_patterns": [
+    "grant_reward",
+    "add_exp",
+    "grant_currency",
+    "spend_currency",
+    "apply_reward",
+    "tower_reward",
+    "arena_reward",
+    "raid_reward",
+    "db.transactions.",
+    "db.gacha_pulls.",
+    "db.mail.insert",
+    "db.inventory.update",
+    "db.wallets.update",
+    "sanctuary_affinity_mutation"
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "ENFORCED_NO_REWARD_NO_PROGRESS_NO_ECONOMY_NO_INVENTORY_IN_PACK_130"
+}

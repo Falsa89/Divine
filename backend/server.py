@@ -946,6 +946,13 @@ app.include_router(v103_server_profiles_router)
 from routes.v107a_battle_launch import router as v107a_battle_launch_router
 app.include_router(v107a_battle_launch_router)
 
+# Pack 130 — Lobby Launch Context (read-only, server-scoped, no DB write).
+# Vedi: backend/routes/v130_lobby_launch_context.py,
+#       backend/helpers/lobby_launch_context.py,
+#       backend/helpers/real_player_snapshot.py
+from routes.v130_lobby_launch_context import router as v130_lobby_launch_router
+app.include_router(v130_lobby_launch_router)
+
 # v108_AUTHORITATIVE_PRE — Battle Instance Envelope preview endpoint.
 # POST /api/battle/instance/preview returns the authoritative-pre envelope.
 # authoritative_live=false sempre; nessuna scrittura DB; nessun reward/progress.

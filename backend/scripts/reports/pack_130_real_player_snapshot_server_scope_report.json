@@ -1,0 +1,63 @@
+{
+  "pack": "PACK_130_REAL_PLAYER_SNAPSHOT_SERVER_SCOPE",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "sample_snapshot": {
+    "source": "server_scoped_team_formation",
+    "user_id": "u1",
+    "server_id": "s1",
+    "team_size": 1,
+    "heroes": [
+      {
+        "user_hero_id": "uh1",
+        "hero_id": "h1",
+        "canonical_id": "h1",
+        "level": 5,
+        "stars": 1,
+        "ascension": 0,
+        "rarity": "RARE",
+        "element": "NONE",
+        "role": "NONE",
+        "faction": "NONE",
+        "display_name": "Test",
+        "asset_key": "",
+        "asset_status": "unknown",
+        "snapshot_status": "OK",
+        "slot": {
+          "col": null,
+          "row": null,
+          "position": null
+        }
+      }
+    ],
+    "battle_power_status": "DEFERRED",
+    "snapshot_status": "OK",
+    "player_snapshot_hash": "ea36fb454e4b8327"
+  },
+  "db_ops_captured": [
+    {
+      "op": "find_one",
+      "query_keys": [
+        "user_id",
+        "server_id"
+      ]
+    },
+    {
+      "op": "find",
+      "query_keys": [
+        "user_id",
+        "server_id",
+        "$or"
+      ]
+    },
+    {
+      "op": "find",
+      "query_keys": [
+        "$or"
+      ]
+    }
+  ],
+  "validation_kind": "STATIC+UNIT_RUNTIME",
+  "enforcement": "ENFORCED_ALL_DB_QUERIES_SERVER_SCOPED_NO_WRITE_OPS_IN_HELPER"
+}

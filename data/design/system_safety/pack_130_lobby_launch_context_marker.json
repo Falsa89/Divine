@@ -1,0 +1,54 @@
+{
+  "pack": "PACK_130",
+  "marker_kind": "lobby_launch_context",
+  "verdict": "PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "launch_context_status": "ENFORCED_BACKEND_ROUTE_AND_HELPER_PRESENT_FRONTEND_INTEGRATION_DEFERRED",
+  "endpoint": "GET /api/lobby/launch-context/preview",
+  "files": {
+    "route": "backend/routes/v130_lobby_launch_context.py",
+    "helper": "backend/helpers/lobby_launch_context.py",
+    "server_mount": "backend/server.py (1 import + 1 include_router, diff minimo)"
+  },
+  "properties": [
+    "GET only (read-only) — nessuna esposizione a Pack 128 mutation middleware",
+    "auth-required (Bearer JWT, stesso schema server.get_current_user)",
+    "server-scoped via Pack 129 server_ready_guard.check_server_ready",
+    "structured errors via Pack 129 build_structured_detail",
+    "NO DB write",
+    "NO reward / NO progress / NO inventory / NO economy mutation",
+    "NO battle_engine execution"
+  ],
+  "allowed_modes": ["training", "story", "boss", "tower", "event", "arena"],
+  "structured_codes_used": [
+    "AUTH_REQUIRED",
+    "SERVER_CONTEXT_REQUIRED",
+    "SERVER_CONTEXT_INVALID",
+    "SERVER_PROFILE_MISSING",
+    "SERVER_SCOPE_UNAVAILABLE",
+    "SERVER_MISMATCH",
+    "LOBBY_MODE_INVALID",
+    "TEAM_FORMATION_MISSING",
+    "TEAM_FORMATION_EMPTY",
+    "SNAPSHOT_BUILD_FAILED",
+    "COMBAT_CONSUMPTION_DEFERRED_TO_PACK_131"
+  ],
+  "combat_consumption_status": "DEFERRED_TO_PACK_131",
+  "enemy_snapshot_status": "DEFERRED_TO_PACK_131_OR_LATER",
+  "reward_status": "DISABLED",
+  "progress_status": "DISABLED",
+  "device_qa_status": "BLOCKED",
+  "db_write_scope": "NONE",
+  "forbidden_areas_untouched": true,
+  "interaction_with_pack128_middleware": {
+    "route_is_get": true,
+    "requires_allowlist_modification": false,
+    "middleware_currently": "DORMANT (PRE_QA_MUTATION_GUARD_ENABLED unset in pod)"
+  },
+  "next_pack_required": "PACK_131_COMBAT_CONSUMES_REAL_SNAPSHOT_POST_BATTLE_PREVIEW_SAFE",
+  "known_gaps": [
+    "Frontend lobby integration NON eseguita in Pack 130 (zero frontend/app/** changes) — VALIDATED_ONLY.",
+    "Full HTTP smoke con JWT QA reale deferred a Pack 132.",
+    "Battle Power deferred (battle_power_status: DEFERRED) finché non c'è source-of-truth derivata safe.",
+    "Combat runtime non consuma snapshot (Pack 131)."
+  ]
+}

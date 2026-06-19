@@ -1,0 +1,10 @@
+{
+  "pack": "PACK_130_PACK128_MUTATION_GUARD_INTERACTION",
+  "status": "PASS",
+  "errors": [],
+  "notes": [
+    "Pack 128 middleware DORMANT by default in pod (PRE_QA_MUTATION_GUARD_ENABLED unset). When active, it intercepts only POST/PUT/PATCH/DELETE — Pack 130 GET passes naturally."
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "ENFORCED_PACK_130_IS_GET_ONLY_BYPASSES_POST_MIDDLEWARE"
+}

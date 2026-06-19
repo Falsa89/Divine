@@ -1,0 +1,27 @@
+{
+  "pack": "PACK_130_FORBIDDEN_AREAS_UNTOUCHED",
+  "status": "PASS",
+  "errors": [],
+  "notes": [],
+  "files_changed_since_pack129_anchor": [
+    ".emergent/emergent.yml"
+  ],
+  "forbidden_paths": [
+    "backend/battle_engine.py",
+    "backend/battle_core.py",
+    "backend/game_systems.py",
+    "backend/.env",
+    "data/design/heroes_master.json",
+    "frontend/app/combat.tsx",
+    "frontend/app/story.tsx",
+    "backend/routes/v96_team_formation.py"
+  ],
+  "forbidden_prefixes": [
+    "data/design/final_numbers/",
+    "frontend/assets/audio/",
+    "frontend/assets/images/"
+  ],
+  "pack129_anchor": "bcd72f45751d875edfc2d65a6a4b5dcbce966356",
+  "validation_kind": "STATIC+GIT_DIFF",
+  "enforcement": "ENFORCED_GIT_DIFF"
+}

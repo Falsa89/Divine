@@ -1,0 +1,31 @@
+{
+  "pack": "PACK_130",
+  "marker_kind": "real_player_snapshot",
+  "verdict": "PACK_130_LOBBY_LAUNCH_CONTEXT_REAL_PLAYER_SNAPSHOT_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "real_player_snapshot_status": "ENFORCED_HELPER_PRESENT_SERVER_SCOPED_READ_ONLY",
+  "helper_file": "backend/helpers/real_player_snapshot.py",
+  "snapshot_source": "server_scoped_team_formation",
+  "db_reads": [
+    "player_server_profiles.find_one({user_id, server_id}) projection: team_formation",
+    "user_heroes.find({user_id, server_id, user_hero_id|id IN [...]}) projection: -_id",
+    "heroes.find({id|hero_id IN [...]}) projection: display/asset fields"
+  ],
+  "db_writes": [],
+  "hero_safe_fields_exposed": [
+    "user_hero_id", "hero_id", "canonical_id", "level", "stars", "ascension",
+    "rarity", "element", "role", "faction", "display_name",
+    "asset_key", "asset_status", "snapshot_status", "slot"
+  ],
+  "hero_forbidden_fields_excluded": [
+    "drop_table", "reward_rate", "admin_flags", "debug", "secret",
+    "battle_power_client_computed", "raw_stats_authoritative",
+    "gacha_rate", "shop_price", "economy_internal"
+  ],
+  "hidden_heroes_excluded": ["greek_borea (pending_assets / pending_contract)"],
+  "battle_power_status": "DEFERRED",
+  "hash_status": "player_snapshot_hash sha256[:16] deterministico",
+  "client_trust": false,
+  "device_qa_status": "BLOCKED",
+  "next_pack_required": "PACK_131_COMBAT_CONSUMES_REAL_SNAPSHOT_POST_BATTLE_PREVIEW_SAFE",
+  "forbidden_areas_untouched": true
+}
