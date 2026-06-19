@@ -23,7 +23,7 @@ Motivazione del verdetto prudente:
 |---|---|
 | Starting SHA | `a4c1fd207e432da635d1f1f6495f472b8675ae28` |
 | Pack 128 close anchor | `bb58cedd2bce2bf39030be1e6cc5ac5353fa2945` |
-| Final SHA | _(da aggiornare al commit di chiusura Pack 129)_ |
+| Final SHA (Pack 129 content commit auditato da Codex Web) | `42619c7f38cdb15fe341f92cf86d1840eede7dbf` |
 | Branch | `main` |
 
 ## 2. Git status
@@ -51,7 +51,7 @@ Motivazione del verdetto prudente:
 ## 3. Files changed / created
 
 ### Modificati (1)
-- `backend/scripts/validate_pack_128_no_pack129_130_131_leak.py` — rimossi `pack_129/PACK_129` da `FORBIDDEN_PATTERNS` (Pack 129 è ora pack precedente/chiuso). Validator ora blocca solo Pack 130+ leak. Diff +6/-3, no logic weakening.
+- `backend/scripts/validate_pack_128_no_pack129_130_131_leak.py` — rimossi `pack_129/PACK_129` da `FORBIDDEN_PATTERNS` (Pack 129 è ora pack precedente/chiuso). Validator ora blocca solo Pack 130+ leak. Diff +7/-4, no logic weakening.
 
 ### Creati (28 totali)
 - **Backend helpers package (3):** `backend/helpers/__init__.py`, `helpers/structured_errors.py`, `helpers/server_ready_guard.py`
