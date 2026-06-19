@@ -255,7 +255,7 @@ Validator `validate_pack_128_forbidden_areas_untouched.py` → **PASS** (zero vi
 | G1 | `PRE_QA_MUTATION_GUARD_ENABLED` non set nel pod → middleware DORMANT a runtime | **MANUAL** in supervisor QA quando si attiva sessione QA. `.env` intoccato per design. |
 | G2 | Deeplink intercept helper presente ma NON mountato in `_layout.tsx` | **PACK 128.x** o **PACK 129** (mount + smoke test) |
 | G3 | Full HTTP smoke autenticato `/api/battle/simulate` | **PACK 132** (Device QA Gate Suite) |
-| G4 | 26 mutating-GET: 1 TRUE_SIDE_EFFECT + 9 DEFERRED → runtime guards | **PACK 128.x** / **PACK 129** |
+| G4 | 26 mutating-GET: 1 TRUE_SIDE_EFFECT + 10 DEFERRED → runtime guards | **PACK 128.x** / **PACK 129** |
 | G5 | `/api/battle/simulate` autenticato senza marker preview esegue ancora legacy mutating engine se middleware DORMANT | **PACK 131** (Combat Real Snapshot) |
 | G6 | Catalog auto-seed startup (`db.heroes.*` in `server.py:1437`) senza env gate | **PACK 128.x** / **PACK 129** |
 
@@ -282,7 +282,7 @@ Device QA resta `BLOCKED` fino a chiusura Pack 129 → 130 → 131 → 132 → 1
 
 Con sub-task suggeriti per chiudere i gap residui Pack 128:
 1. Mountare `interceptDeeplink` in `_layout.tsx` con smoke test.
-2. Hardening dei 9 DEFERRED + 1 TRUE_SIDE_EFFECT mutating-GET.
+2. Hardening dei 10 DEFERRED + 1 TRUE_SIDE_EFFECT mutating-GET.
 3. Gate env esplicito su `seed_database` startup handler.
 4. Structured errors API (formalizzazione del set `locked/blocked/pre_qa_blocked/...`).
 
