@@ -16,7 +16,7 @@
 | Titolo | Device QA Evidence Harness |
 | Baseline Pack 132 FINAL (micro doc fix) | `a15915ca16c31332df35b89f0f365d48fcffc7ca` |
 | Auto-commit/HEAD pre-Pack 133 | `369dfc23b2004f4fe163e9c9dddb7c98524ee4e6` *(solo report JSON runtime + `.emergent/emergent.yml` timestamp)* |
-| Final SHA (commit principale Pack 133) | *(da risolvere al commit — placeholder dichiarato `{{PACK_133_FINAL_SHA}}`)* |
+| Final SHA (commit principale Pack 133) | *(da risolvere al commit — placeholder dichiarato `8ba091b3f4d07282773e9a068668896792253174`)* |
 | Branch ambiente | `master` (locale Emergent), nessun `git remote` configurato |
 | Public branch atteso | `Falsa89/Divine#main` |
 | Device QA Status | **`MANUAL_REQUIRED`** (BLOCKED_OR_MANUAL_REQUIRED_UNTIL_EVIDENCE) |
@@ -42,7 +42,7 @@ Pack 133 produce l'evidence harness safe-by-default, il builder del manifest, la
 
 ## 3. Final SHA
 
-`{{PACK_133_FINAL_SHA}}` — placeholder dichiarato. Sarà risolto in micro-commit truth-sync identico a Pack 129/130/131/132.
+`8ba091b3f4d07282773e9a068668896792253174` — placeholder dichiarato. Sarà risolto in micro-commit truth-sync identico a Pack 129/130/131/132.
 
 ## 4. Git status before/after
 
@@ -55,7 +55,7 @@ $ git remote -v
 ```
 ✅ NO_PACK_133_FILES_TRACKED, ✅ NO_PACK_133_FILES_LOOSE, working tree clean, Pack 132 final ancestor di HEAD.
 
-**After** — HEAD=`{{PACK_133_FINAL_SHA}}`: working tree clean (a parte report JSON runtime in `backend/scripts/reports/` rigenerati dalla suite).
+**After** — HEAD=`8ba091b3f4d07282773e9a068668896792253174`: working tree clean (a parte report JSON runtime in `backend/scripts/reports/` rigenerati dalla suite).
 
 ## 5. Files changed
 
@@ -319,7 +319,7 @@ Validatori `validate_pack_133_forbidden_areas_untouched.py` + `validate_pack_133
 5. **`FRONTEND_COMBAT_CONSUMER_DEFERRED`** — eredità Pack 131, fuori scope Pack 133.
 6. **`BATTLE_ENGINE_EXECUTION_DEFERRED`** — eredità Pack 131, fuori scope Pack 133.
 7. **Branch publishing**: container espone solo `master` locale; sync verso `Falsa89/Divine#main` via Emergent Publish (fuori scope agente).
-8. **Final SHA placeholder**: `{{PACK_133_FINAL_SHA}}` — sarà truth-syncato con micro-commit identico a Pack 129/130/131/132.
+8. **Final SHA placeholder**: `8ba091b3f4d07282773e9a068668896792253174` — sarà truth-syncato con micro-commit identico a Pack 129/130/131/132.
 
 Nessun gap è scope violation. Tutti sono classificati onestamente come `MANUAL_REQUIRED` / `NOT_EXECUTED` / `DEFERRED`.
 
