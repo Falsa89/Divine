@@ -5,14 +5,29 @@
   "flagged_count": 26,
   "flagged": [
     {
-      "file": "push_notifications.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/push/status\")"
+      "file": "items.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/item-shop\")"
     },
     {
-      "file": "equipment.py",
-      "pattern": ".update_one(",
-      "snippet": "@router.get(\"/equipment/templates\")"
+      "file": "economy.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/shop\")"
+    },
+    {
+      "file": "economy.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/mail\")"
+    },
+    {
+      "file": "economy.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/servers\")"
+    },
+    {
+      "file": "cosmetics.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/cosmetics\")"
     },
     {
       "file": "forge.py",
@@ -40,51 +55,6 @@
       "snippet": "@router.get(\"/dm/threads\")"
     },
     {
-      "file": "items.py",
-      "pattern": ".update_one(",
-      "snippet": "@router.get(\"/item-shop\")"
-    },
-    {
-      "file": "hero_progression.py",
-      "pattern": ".update_one(",
-      "snippet": "@router.get(\"/hero/reincarnation-info/{user_hero_id}\")"
-    },
-    {
-      "file": "hero_progression.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/fragments\")"
-    },
-    {
-      "file": "hero_progression.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/materials\")"
-    },
-    {
-      "file": "level_sharing.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/level-sharing\")"
-    },
-    {
-      "file": "soul_forge.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/wallet\")"
-    },
-    {
-      "file": "raids.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/raids\")"
-    },
-    {
-      "file": "raids.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/exclusive-items\")"
-    },
-    {
-      "file": "guild.py",
-      "pattern": ".update_one(",
-      "snippet": "@router.get(\"/guild/info\")"
-    },
-    {
       "file": "combat.py",
       "pattern": ".insert_one(",
       "snippet": "@router.get(\"/story/chapters\")"
@@ -105,24 +75,14 @@
       "snippet": "@router.get(\"/titles\")"
     },
     {
-      "file": "economy.py",
+      "file": "raids.py",
       "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/shop\")"
+      "snippet": "@router.get(\"/raids\")"
     },
     {
-      "file": "economy.py",
+      "file": "raids.py",
       "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/mail\")"
-    },
-    {
-      "file": "economy.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/servers\")"
-    },
-    {
-      "file": "v96_auth.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/me\")"
+      "snippet": "@router.get(\"/exclusive-items\")"
     },
     {
       "file": "controlled_rewards.py",
@@ -130,9 +90,49 @@
       "snippet": "@router.get(\"/controlled-rewards/health\")"
     },
     {
-      "file": "cosmetics.py",
+      "file": "push_notifications.py",
       "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/cosmetics\")"
+      "snippet": "@router.get(\"/push/status\")"
+    },
+    {
+      "file": "v96_auth.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/me\")"
+    },
+    {
+      "file": "guild.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/guild/info\")"
+    },
+    {
+      "file": "hero_progression.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/hero/reincarnation-info/{user_hero_id}\")"
+    },
+    {
+      "file": "hero_progression.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/fragments\")"
+    },
+    {
+      "file": "hero_progression.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/materials\")"
+    },
+    {
+      "file": "soul_forge.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/wallet\")"
+    },
+    {
+      "file": "level_sharing.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/level-sharing\")"
+    },
+    {
+      "file": "equipment.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/equipment/templates\")"
     }
   ],
   "validation_kind": "STATIC",

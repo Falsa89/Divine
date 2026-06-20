@@ -1,0 +1,67 @@
+{
+  "pack": "PRE_DEVICE_QA_AUTHENTICATED_SMOKE_HARNESS",
+  "AUTHENTICATED_SMOKE_STATUS": "MANUAL_REQUIRED",
+  "MANUAL_REQUIRED_reason": "Missing env: ['QA_TEST_JWT', 'QA_TEST_BASE_URL']. Authenticated smoke NOT_EXECUTED. Provide QA env vars to run.",
+  "NOT_EXECUTED_endpoints_under_auth": [
+    "/api/health",
+    "/api/lobby/launch-context/preview",
+    "/api/combat/preview"
+  ],
+  "env_required": [
+    "QA_TEST_JWT",
+    "QA_TEST_BASE_URL"
+  ],
+  "env_optional": [
+    "QA_TEST_SERVER_ID",
+    "QA_TEST_USER_ID"
+  ],
+  "safe_get_endpoints": [
+    "/api/health",
+    "/api/lobby/launch-context/preview",
+    "/api/combat/preview"
+  ],
+  "forbidden_endpoints_never_called": [
+    "/api/team/save-formation",
+    "/api/battle/simulate",
+    "/api/reward/claim",
+    "/api/mail/claim",
+    "/api/shop/purchase",
+    "/api/gacha/pull",
+    "/api/hero/upgrade",
+    "/api/affinity/gift"
+  ],
+  "phase_1_unauth_probes": [
+    {
+      "endpoint": "/api/health",
+      "method": "GET",
+      "auth": "none",
+      "status_code": 200,
+      "expected": "any (liveness)",
+      "result": "OK",
+      "error": null
+    },
+    {
+      "endpoint": "/api/lobby/launch-context/preview",
+      "method": "GET",
+      "auth": "none",
+      "status_code": 401,
+      "expected": "401",
+      "result": "PASS",
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "endpoint": "/api/lobby/launch-context/preview",
+      "method": "GET",
+      "auth": "fake_token",
+      "status_code": 401,
+      "expected": "401",
+      "result": "PASS",
+      "error": "HTTP Error 401: Unauthorized"
+    }
+  ],
+  "phase_2_auth_probes": [],
+  "db_write_scope": "NONE",
+  "device_qa_status": "BLOCKED",
+  "enforcement": "SAFE_BY_DEFAULT",
+  "note": "GET-only harness. NEVER mutates state. Pack 132 gate."
+}
