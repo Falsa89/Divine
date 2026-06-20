@@ -1,0 +1,46 @@
+{
+  "pack": 132,
+  "marker_kind": "master_device_qa_gate",
+  "verdict": "PACK_132_MASTER_DEVICE_QA_GATE_SUITE_DOCS_TRUTH_CLEANUP_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED",
+  "device_qa_status": "BLOCKED",
+  "device_qa_gate_status": "BLOCKED_PENDING_PACK_133_EVIDENCE",
+  "max_allowed_progress_verdict": "READY_FOR_PACK_133_DEVICE_QA_EVIDENCE_HARNESS",
+  "pack_127_status": "CLOSED_PUBLIC_REPO_METADATA_SYNCED",
+  "pack_128_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_129_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_130_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_131_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_132_status": "MASTER_GATE_PREPARED",
+  "pack_133_required_for_device_qa": true,
+  "pack_133_started": false,
+  "db_write_scope": "NONE",
+  "runtime_mutation_scope": "NONE",
+  "reward_status": "DISABLED",
+  "exp_status": "DISABLED",
+  "progress_status": "DISABLED",
+  "claim_enabled": false,
+  "authenticated_smoke_status": "MANUAL_REQUIRED",
+  "authenticated_smoke_env_required": ["QA_TEST_JWT", "QA_TEST_SERVER_ID", "QA_TEST_USER_ID", "QA_TEST_BASE_URL"],
+  "forbidden_areas_untouched": true,
+  "battle_engine_execution_status": "BATTLE_ENGINE_EXECUTION_DEFERRED",
+  "frontend_runtime_changes": false,
+  "manual_required": [
+    "AUTHENTICATED_FULL_HTTP_SMOKE_WITH_REAL_JWT",
+    "DEVICE_QA_EVIDENCE_HARNESS (Pack 133)",
+    "PHYSICAL_DEVICE_SCREENSHOTS_OR_EXPO_GO_EVIDENCE (Pack 133)",
+    "FINAL_MANUAL_QA_SIGNOFF (Pack 133)"
+  ],
+  "not_executed": [
+    "FULL_HTTP_AUTHENTICATED_SMOKE_END_TO_END",
+    "DEVICE_QA_EVIDENCE_HARNESS_RUN",
+    "PHYSICAL_DEVICE_RUNTIME_VALIDATION"
+  ],
+  "known_blockers": [
+    "NO_QA_ENV_CREDENTIALS_IN_CONTAINER",
+    "NO_PHYSICAL_DEVICE_HARNESS_YET",
+    "PACK_133_NOT_STARTED"
+  ],
+  "next_required_pack": "PACK 133 — Device QA Evidence Harness",
+  "base_pack_131_final_sha": "588f1bfca1da7e190f642a1892897e4c5d99aa6d",
+  "public_branch": "Falsa89/Divine#main"
+}
