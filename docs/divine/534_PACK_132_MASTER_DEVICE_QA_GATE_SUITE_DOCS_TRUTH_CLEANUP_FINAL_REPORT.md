@@ -2,6 +2,8 @@
 
 > Verdetto: **PACK_132_MASTER_DEVICE_QA_GATE_SUITE_DOCS_TRUTH_CLEANUP_PARTIAL_ENFORCEMENT_REAUDIT_REQUIRED**
 >
+> Codex Web public re-audit (read-only) — range `588f1bfca1da7e190f642a1892897e4c5d99aa6d..d6df62b200d243b16b26410700ff393189d0ecfa` — verdetto: `CODEX_WEB_PACK_132_PUBLIC_REAUDIT_PASS_DOC_SYNC_ONLY_REQUIRED`. Current public HEAD pubblico finale verificato: **`d6df62b200d243b16b26410700ff393189d0ecfa`**.
+>
 > Pack 132 è un **gate di controllo**, non una release. Non sblocca Device QA. Device QA resta **BLOCKED**. Pack 133 non iniziato.
 >
 > Lingua: italiano. Documento prodotto in ambiente Emergent (branch locale `master`, nessun `git remote` configurato — sync verso `Falsa89/Divine#main` avviene tramite Emergent Publish, fuori scope agente).
@@ -17,7 +19,8 @@
 | Baseline Pack 131 FINAL (micro doc fix) | `588f1bfca1da7e190f642a1892897e4c5d99aa6d` |
 | Auto-commit/HEAD pre-Pack 132 | `634412de67eb80ed50b6b242a14ff9ed62cab4c8` *(solo `.emergent/emergent.yml` timestamp non-funzionale)* |
 | Final SHA (commit principale Pack 132) | `b63548dffce9267b392064e4b6b9f6668932fe86` *(commit `feat(pack132): master device QA gate suite + docs truth cleanup`)* |
-| Truth-sync SHA | *(da risolvere a questo micro-commit)* |
+| Truth-sync SHA | `d6df62b200d243b16b26410700ff393189d0ecfa` *(micro-commit `docs(pack132): truth sync final SHA (b63548dff)`)* |
+| Current public HEAD verified by Codex Web | `d6df62b200d243b16b26410700ff393189d0ecfa` *(range pubblico re-audit: `588f1bfca..d6df62b20`)* |
 | Branch ambiente | `master` (locale Emergent). Repo pubblico atteso `Falsa89/Divine#main`. Sync via Emergent Publish. |
 | Device QA Status | **BLOCKED** |
 | Device QA Gate Status | **BLOCKED_PENDING_PACK_133_EVIDENCE** |
@@ -42,7 +45,9 @@ Pack 132 costruisce un gate cumulativo Pack 127→132 con suite 61/61 PASS, mark
 
 ## 3. Final SHA
 
-`b63548dffce9267b392064e4b6b9f6668932fe86` — placeholder dichiarato. Sarà risolto in micro-commit truth-sync identico ai Pack 129/130/131.
+- **Commit principale Pack 132**: `b63548dffce9267b392064e4b6b9f6668932fe86` (`feat(pack132): master device QA gate suite + docs truth cleanup`).
+- **Truth-sync documentale Pack 132**: `d6df62b200d243b16b26410700ff393189d0ecfa` (`docs(pack132): truth sync final SHA (b63548dff)`).
+- **Current public HEAD verified by Codex Web**: `d6df62b200d243b16b26410700ff393189d0ecfa` (range pubblico audit: `588f1bfca1da7e190f642a1892897e4c5d99aa6d..d6df62b200d243b16b26410700ff393189d0ecfa`).
 
 ## 4. Git status before/after
 
@@ -92,7 +97,7 @@ $ git status --short --untracked-files=all
 **Report MD (1)**
 - `docs/divine/534_PACK_132_MASTER_DEVICE_QA_GATE_SUITE_DOCS_TRUTH_CLEANUP_FINAL_REPORT.md` (questo file)
 
-### 5.2 File modificati (3)
+### 5.2 File modificati funzionali / docs-validator (4)
 
 | File | Patch | Motivazione |
 | --- | --- | --- |
@@ -111,6 +116,19 @@ $ git status --short --untracked-files=all
 - `backend/.env` ✅ INTATTO
 - gacha/economy/reward/shop/VIP/Battle Pass/mail logic ✅ INTATTI
 - DB schema/migrations ✅ INTATTI
+
+### 5.4 Conteggio totale range pubblico Pack 132
+
+Range Codex Web verificato: `588f1bfca1da7e190f642a1892897e4c5d99aa6d..d6df62b200d243b16b26410700ff393189d0ecfa`.
+
+| Categoria | Conteggio | Note |
+| --- | --- | --- |
+| File aggiunti Pack 132 | **16** | 11 validatori + 1 harness + 1 suite runner + 2 marker JSON + 1 report MD |
+| File modificati funzionali / docs-validator | **4** | i 4 validator no-leak Pack 128/129/130/131 (rimosso `pack_132/PACK_132` dai FORBIDDEN_PATTERNS) |
+| File modificato non-funzionale | **1** | `.emergent/emergent.yml` (solo timestamp `created_at`, auto-commit Emergent) |
+| **Totale range pubblico** | **21** | 16 aggiunti + 4 modificati funzionali + 1 non-funzionale |
+
+Equivalente formulato come **scope dichiarato Pack 132**: 20 file Pack 132 dichiarati (16 aggiunti + 4 modificati funzionali) + 1 auto-timestamp `.emergent/emergent.yml` = **21 file totali nel range pubblico**.
 
 ## 6. Master Device QA Gate Matrix summary
 
@@ -315,7 +333,7 @@ Validatore `validate_pack_132_forbidden_areas_untouched.py` ⇒ **PASS** (ENFORC
 4. **`FRONTEND_COMBAT_CONSUMER_DEFERRED`** — Eredità Pack 131. Nessun consumer FE wired a `GET /api/combat/preview`. Rinviato.
 5. **`BATTLE_ENGINE_EXECUTION_DEFERRED`** — Eredità Pack 131. `battle_engine.py` non eseguito.
 6. **Branch publishing**: container Emergent espone solo `master` locale; sync verso `Falsa89/Divine#main` via Emergent Publish (fuori scope agente). Verificare post-publish.
-7. **Final SHA placeholder**: questo report referenzia `b63548dffce9267b392064e4b6b9f6668932fe86` — sarà truth-syncato con micro-commit identico a Pack 129/130/131.
+7. **Final SHA truth-sync (catena pubblica completata)**: commit principale `b63548dffce9267b392064e4b6b9f6668932fe86` + truth-sync `d6df62b200d243b16b26410700ff393189d0ecfa`. **Truth-sync già avvenuto**, nessun placeholder residuo.
 
 Nessuno di questi gap costituisce una violazione dello scope Pack 132.
 
