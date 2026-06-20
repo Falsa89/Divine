@@ -16,7 +16,9 @@
 | Pass | **POST_CHAIN_REPO_HYGIENE_PASS_1** |
 | Tipo | Repo hygiene + artifact policy + future pack leak guard |
 | Baseline Pack 133 FINAL (micro doc fix) | `1735a03c7562a18a255503eac8a95defcf16f92b` |
-| Final SHA pass | *(da risolvere al commit — placeholder dichiarato `41125fd14d1fe57e90acc36feccdb65317f2f792`)* |
+| Commit principale hygiene pass | `41125fd14d1fe57e90acc36feccdb65317f2f792` *(`chore(post-chain): repo hygiene pass 1 - artifact policy + future pack leak guard`)* |
+| Truth-sync SHA | `57bf5f7a95979c772642d42e98b104638e060afb` *(`docs(post-chain): truth sync final SHA (41125fd14)`)* |
+| Public HEAD verificato da Game Master prima del micro-fix | `57bf5f7a95979c772642d42e98b104638e060afb` |
 | Branch ambiente | `master` (locale Emergent) |
 | Branch pubblico atteso | `Falsa89/Divine#main` |
 | Pre-QA chain status | `STRUCTURALLY_COMPLETE_PUBLIC_REPO_TRUTH_SYNCED` (invariato) |
@@ -42,7 +44,10 @@ Hygiene pass eseguito con artifact policy documentata, `.emergent` noise policy 
 
 ## 3. Final SHA
 
-`41125fd14d1fe57e90acc36feccdb65317f2f792` — placeholder dichiarato. Sarà risolto in micro-commit truth-sync (procedura identica ai Pack 129/130/131/132/133).
+- **Commit principale hygiene pass**: `41125fd14d1fe57e90acc36feccdb65317f2f792` (`chore(post-chain): repo hygiene pass 1 - artifact policy + future pack leak guard`).
+- **Truth-sync documentale hygiene pass**: `57bf5f7a95979c772642d42e98b104638e060afb` (`docs(post-chain): truth sync final SHA (41125fd14)`).
+
+La catena SHA del pass è stata truth-synced; nessun placeholder SHA resta aperto nel report.
 
 ## 4. Files changed
 
@@ -175,7 +180,7 @@ Massimo verdetto futuro consentito (post-evidence manuale Pack 133): `READY_FOR_
 
 ## 13. Known risks / gaps
 
-1. **Final SHA placeholder**: questo report referenzia `41125fd14d1fe57e90acc36feccdb65317f2f792` — sarà truth-syncato come da Pack 129→133.
+1. **Final SHA truth-sync completato**: commit principale `41125fd14d1fe57e90acc36feccdb65317f2f792`, truth-sync `57bf5f7a95979c772642d42e98b104638e060afb`. Nessun placeholder SHA residuo.
 2. **Report JSON tracked**: 115+ file `backend/scripts/reports/*.json` restano tracked. Proposta opzionale di `.gitignore` rimandata (richiede ok Game Master e migrazione baseline).
 3. **`.emergent/emergent.yml`**: continuerà a comparire nei range futuri come timestamp Emergent. Contabilizzazione documentata, non azione risolutiva richiesta.
 4. **Branch publishing**: sync verso `Falsa89/Divine#main` via Emergent Publish, fuori scope agente.
