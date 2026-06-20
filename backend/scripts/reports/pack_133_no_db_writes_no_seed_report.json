@@ -1,0 +1,26 @@
+{
+  "pack": "PACK_133_NO_DB_WRITES_NO_SEED",
+  "status": "PASS",
+  "errors": [],
+  "scanned_files": [
+    "backend/scripts/device_qa_evidence_harness.py",
+    "backend/scripts/device_qa_evidence_manifest_builder.py",
+    "backend/scripts/run_pack_127_128_129_130_131_132_133_safety_suite.py",
+    "backend/scripts/validate_pack_133_evidence_manifest_truth.py",
+    "backend/scripts/validate_pack_133_final_chain_marker.py",
+    "backend/scripts/validate_pack_133_forbidden_areas_untouched.py",
+    "backend/scripts/validate_pack_133_manual_checklist_exists.py",
+    "backend/scripts/validate_pack_133_no_runtime_frontend_backend_changes.py"
+  ],
+  "excluded_introspective": [
+    "validate_pack_133_authenticated_smoke_truth.py",
+    "validate_pack_133_device_qa_evidence_harness_contract.py",
+    "validate_pack_133_device_qa_status_not_false_ready.py",
+    "validate_pack_133_no_db_writes_no_seed.py",
+    "validate_pack_133_no_release_ready_claim.py",
+    "validate_pack_133_no_reward_exp_progress_mutation.py",
+    "validate_pack_133_secret_redaction_policy.py"
+  ],
+  "validation_kind": "STATIC",
+  "enforcement": "ENFORCED"
+}

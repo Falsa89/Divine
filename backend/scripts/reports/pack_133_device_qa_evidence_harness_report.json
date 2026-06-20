@@ -1,0 +1,88 @@
+{
+  "pack": "PACK_133_DEVICE_QA_EVIDENCE_HARNESS",
+  "timestamp_utc": "2026-06-20T18:11:18.881500+00:00",
+  "AUTHENTICATED_SMOKE_STATUS": "MANUAL_REQUIRED",
+  "AUTHENTICATED_SMOKE_NOT_RUN_REASON": "Missing env: ['QA_TEST_JWT', 'QA_TEST_BASE_URL']. Phase 2 NOT_EXECUTED.",
+  "DEVICE_EVIDENCE_STATUS": "MANUAL_REQUIRED",
+  "SCREENSHOT_EVIDENCE_STATUS": "MANUAL_REQUIRED",
+  "MANUAL_SIGNOFF_STATUS": "MANUAL_REQUIRED",
+  "env_required": [
+    "QA_TEST_JWT",
+    "QA_TEST_BASE_URL"
+  ],
+  "env_optional": [
+    "QA_TEST_SERVER_ID",
+    "QA_TEST_USER_ID",
+    "QA_DEVICE_PLATFORM",
+    "QA_DEVICE_LABEL",
+    "QA_EVIDENCE_DIR"
+  ],
+  "qa_jwt_fingerprint": null,
+  "qa_test_server_id": null,
+  "qa_device_platform": null,
+  "qa_device_label": null,
+  "safe_get_endpoints": [
+    "/api/health",
+    "/api/lobby/launch-context/preview",
+    "/api/combat/preview"
+  ],
+  "forbidden_endpoints_never_called": [
+    "/api/team/save-formation",
+    "/api/battle/simulate",
+    "/api/reward/claim",
+    "/api/mail/claim",
+    "/api/shop/purchase",
+    "/api/gacha/pull",
+    "/api/hero/upgrade",
+    "/api/affinity/gift",
+    "/api/battlepass/claim",
+    "/api/vip/claim"
+  ],
+  "phase_1_unauth_probes": [
+    {
+      "endpoint": "/api/health",
+      "method": "GET",
+      "auth": "none",
+      "status_code": 200,
+      "expected": "200",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "endpoint": "/api/lobby/launch-context/preview",
+      "method": "GET",
+      "auth": "none",
+      "status_code": 401,
+      "expected": "401/403",
+      "result": "PASS",
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "endpoint": "/api/lobby/launch-context/preview",
+      "method": "GET",
+      "auth": "fake_token",
+      "status_code": 401,
+      "expected": "401/403",
+      "result": "PASS",
+      "error": "HTTP Error 401: Unauthorized"
+    }
+  ],
+  "phase_2_auth_probes": [],
+  "db_write_scope": "NONE",
+  "runtime_mutation_scope": "NONE",
+  "reward_progress_scope": "NONE",
+  "release_ready": false,
+  "device_qa_status": "MANUAL_REQUIRED",
+  "enforcement": "SAFE_BY_DEFAULT",
+  "secret_redaction_policy": {
+    "never_persist_raw_jwt": true,
+    "never_print_raw_jwt": true,
+    "jwt_fingerprint_only": true,
+    "sanitize_headers_in_logs": true
+  },
+  "notes": [
+    "GET-only harness. No DB writes. No seed. No reward/EXP/progress.",
+    "Device QA pass is NEVER auto-declared by this harness.",
+    "Manual evidence (screenshot/video/signoff) is REQUIRED to advance."
+  ]
+}
