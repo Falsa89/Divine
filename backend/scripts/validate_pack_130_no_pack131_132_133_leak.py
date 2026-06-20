@@ -5,7 +5,7 @@ import json, sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-FORBIDDEN = ['pack_133', 'PACK_133']
+FORBIDDEN = []  # Pack 133 \u00e8 l'ultimo della catena Pre-QA; nessun pack futuro da forbidire qui.
 IGNORE = ['.git/', 'node_modules/', '__pycache__/', '.expo/']
 
 

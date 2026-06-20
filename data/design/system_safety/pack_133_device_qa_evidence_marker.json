@@ -1,0 +1,69 @@
+{
+  "pack": 133,
+  "marker_kind": "device_qa_evidence",
+  "verdict": "PACK_133_DEVICE_QA_EVIDENCE_HARNESS_PARTIAL_EVIDENCE_MANUAL_REQUIRED_REAUDIT_REQUIRED",
+  "device_qa_status": "MANUAL_REQUIRED",
+  "device_qa_evidence_status": "HARNESS_READY_EVIDENCE_PENDING",
+  "authenticated_smoke_status": "MANUAL_REQUIRED",
+  "screenshot_evidence_status": "MANUAL_REQUIRED",
+  "physical_device_status": "MANUAL_REQUIRED",
+  "manual_signoff_status": "MANUAL_REQUIRED",
+  "release_ready": false,
+  "public_release_ready": false,
+  "commercial_release_ready": false,
+  "production_ready": false,
+  "db_write_scope": "NONE",
+  "runtime_mutation_scope": "NONE",
+  "reward_progress_scope": "NONE",
+  "reward_status": "DISABLED",
+  "exp_status": "DISABLED",
+  "progress_status": "DISABLED",
+  "secret_redaction_policy": {
+    "enabled": true,
+    "redact_tokens": ["Authorization", "Bearer", "refresh_token", "access_token", "password", "secret", "JWT"],
+    "never_log_raw_jwt": true,
+    "never_persist_raw_jwt": true,
+    "screenshot_redaction_required_for_sensitive_data": true
+  },
+  "endpoint_evidence_summary": {
+    "safe_get_endpoints": [
+      "/api/health",
+      "/api/lobby/launch-context/preview",
+      "/api/combat/preview"
+    ],
+    "forbidden_endpoints_never_called": [
+      "/api/team/save-formation (POST)",
+      "/api/battle/simulate (mutating)",
+      "/api/reward/claim",
+      "/api/mail/claim",
+      "/api/shop/purchase",
+      "/api/gacha/pull",
+      "/api/hero/upgrade",
+      "/api/affinity/gift",
+      "/api/battlepass/claim",
+      "/api/vip/claim"
+    ]
+  },
+  "known_gaps": [
+    "NO_QA_TEST_JWT_IN_CONTAINER",
+    "NO_QA_TEST_BASE_URL_OVERRIDE",
+    "NO_PHYSICAL_DEVICE_HARNESS_RUN",
+    "NO_EXPO_GO_SCREENSHOT_EVIDENCE_COLLECTED",
+    "NO_MANUAL_QA_SIGNOFF_RECORDED"
+  ],
+  "manual_required": [
+    "AUTHENTICATED_FULL_HTTP_SMOKE_WITH_REAL_JWT",
+    "PHYSICAL_DEVICE_OR_EXPO_GO_SMOKE_RUN",
+    "SCREENSHOT_OR_VIDEO_EVIDENCE",
+    "MANUAL_QA_SIGNOFF"
+  ],
+  "not_executed": [
+    "FULL_HTTP_AUTHENTICATED_SMOKE_END_TO_END",
+    "PHYSICAL_DEVICE_RUNTIME_VALIDATION",
+    "COMMERCIAL_RELEASE_GATE"
+  ],
+  "chain_complete": true,
+  "chain_decision": "PRE_QA_CHAIN_127_133_HARNESS_READY_AWAITING_MANUAL_EVIDENCE",
+  "base_pack_132_final_sha": "a15915ca16c31332df35b89f0f365d48fcffc7ca",
+  "public_branch": "Falsa89/Divine#main"
+}

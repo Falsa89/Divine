@@ -12,7 +12,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-FORBIDDEN_PATTERNS = ['pack_133', 'PACK_133']
+FORBIDDEN_PATTERNS = []  # Pack 133 \u00e8 l'ultimo della catena Pre-QA; nessun pack futuro da forbidire qui.
 
 
 def main() -> int:

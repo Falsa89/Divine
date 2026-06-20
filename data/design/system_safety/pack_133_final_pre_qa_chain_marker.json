@@ -1,0 +1,39 @@
+{
+  "pack": 133,
+  "marker_kind": "final_pre_qa_chain",
+  "pre_qa_chain_status": "PACK_127_133_CHAIN_COMPLETE_REAUDIT_REQUIRED",
+  "pack_127_status": "CLOSED_PUBLIC_REPO_METADATA_SYNCED",
+  "pack_128_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_129_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_130_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_131_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_132_status": "CLOSED_PUBLIC_REPO_TRUTH_SYNCED",
+  "pack_133_status": "DEVICE_QA_EVIDENCE_HARNESS_PREPARED",
+  "device_qa_status": "BLOCKED_OR_MANUAL_REQUIRED_UNTIL_EVIDENCE",
+  "release_ready": false,
+  "public_release_ready": false,
+  "commercial_release_ready": false,
+  "production_ready": false,
+  "db_write_scope": "NONE",
+  "runtime_mutation_scope": "NONE",
+  "reward_progress_scope": "NONE",
+  "battle_engine_execution_status": "BATTLE_ENGINE_EXECUTION_DEFERRED",
+  "frontend_runtime_changes": false,
+  "known_gaps": [
+    "AUTHENTICATED_SMOKE_NOT_RUN_END_TO_END",
+    "NO_DEVICE_QA_EVIDENCE_COLLECTED",
+    "NO_MANUAL_SIGNOFF_RECORDED",
+    "FRONTEND_COMBAT_CONSUMER_DEFERRED (inherited from Pack 131)",
+    "BATTLE_ENGINE_EXECUTION_DEFERRED (inherited from Pack 131)"
+  ],
+  "manual_required": [
+    "FULL_HTTP_AUTHENTICATED_SMOKE",
+    "PHYSICAL_DEVICE_EVIDENCE",
+    "MANUAL_QA_SIGNOFF"
+  ],
+  "max_allowed_progress_verdict": "READY_FOR_MANUAL_DEVICE_QA_REVIEW",
+  "next_required_step": "MANUAL_DEVICE_QA_REVIEW_AND_EVIDENCE_COLLECTION",
+  "chain_decision": "PRE_QA_CHAIN_127_133_HARNESS_COMPLETE_AWAITING_HUMAN_EVIDENCE",
+  "base_pack_132_final_sha": "a15915ca16c31332df35b89f0f365d48fcffc7ca",
+  "public_branch": "Falsa89/Divine#main"
+}
