@@ -1,0 +1,21 @@
+{
+  "pack": "POST_CHAIN_NO_RUNTIME_SCOPE_DRIFT",
+  "status": "PASS",
+  "errors": [],
+  "changed_since_pack133_final": [
+    ".emergent/emergent.yml",
+    "backend/scripts/run_post_chain_repo_hygiene_pass_1_suite.py",
+    "backend/scripts/validate_post_chain_artifact_policy_doc.py",
+    "backend/scripts/validate_post_chain_future_pack_leak_guard.py",
+    "backend/scripts/validate_post_chain_marker_truth.py",
+    "backend/scripts/validate_post_chain_no_release_ready_claim.py",
+    "backend/scripts/validate_post_chain_no_runtime_scope_drift.py",
+    "backend/scripts/validate_post_chain_no_secret_leak_in_reports.py",
+    "data/design/system_safety/post_chain_repo_hygiene_pass_1_marker.json",
+    "docs/divine/536_POST_CHAIN_REPO_HYGIENE_PASS_1_ARTIFACT_POLICY.md",
+    "docs/divine/536_POST_CHAIN_REPO_HYGIENE_PASS_1_FINAL_REPORT.md"
+  ],
+  "anchor": "1735a03c7562a18a255503eac8a95defcf16f92b",
+  "validation_kind": "STATIC+GIT_DIFF",
+  "enforcement": "ENFORCED_GIT_DIFF"
+}
