@@ -16,7 +16,8 @@
 | Titolo | Master Device QA Gate Suite + Docs Truth Cleanup |
 | Baseline Pack 131 FINAL (micro doc fix) | `588f1bfca1da7e190f642a1892897e4c5d99aa6d` |
 | Auto-commit/HEAD pre-Pack 132 | `634412de67eb80ed50b6b242a14ff9ed62cab4c8` *(solo `.emergent/emergent.yml` timestamp non-funzionale)* |
-| Final SHA (commit principale Pack 132) | *(da risolvere al commit — placeholder dichiarato `{{PACK_132_FINAL_SHA}}`)* |
+| Final SHA (commit principale Pack 132) | `b63548dffce9267b392064e4b6b9f6668932fe86` *(commit `feat(pack132): master device QA gate suite + docs truth cleanup`)* |
+| Truth-sync SHA | *(da risolvere a questo micro-commit)* |
 | Branch ambiente | `master` (locale Emergent). Repo pubblico atteso `Falsa89/Divine#main`. Sync via Emergent Publish. |
 | Device QA Status | **BLOCKED** |
 | Device QA Gate Status | **BLOCKED_PENDING_PACK_133_EVIDENCE** |
@@ -41,7 +42,7 @@ Pack 132 costruisce un gate cumulativo Pack 127→132 con suite 61/61 PASS, mark
 
 ## 3. Final SHA
 
-`{{PACK_132_FINAL_SHA}}` — placeholder dichiarato. Sarà risolto in micro-commit truth-sync identico ai Pack 129/130/131.
+`b63548dffce9267b392064e4b6b9f6668932fe86` — placeholder dichiarato. Sarà risolto in micro-commit truth-sync identico ai Pack 129/130/131.
 
 ## 4. Git status before/after
 
@@ -55,7 +56,7 @@ $ git remote -v
 ```
 ✅ NO_PACK_132_FILES_TRACKED, ✅ NO_PACK_132_FILES_LOOSE, ✅ NO_PACK_133, working tree clean. Pack 131 final è ancestor di HEAD.
 
-**After (post implementazione + suite)** — HEAD=`{{PACK_132_FINAL_SHA}}`:
+**After (post implementazione + suite)** — HEAD=`b63548dffce9267b392064e4b6b9f6668932fe86`:
 ```
 $ git status --short --untracked-files=all
 (vuoto — tutto committato, eccetto artefatti runtime in backend/scripts/reports/*.json)
@@ -314,7 +315,7 @@ Validatore `validate_pack_132_forbidden_areas_untouched.py` ⇒ **PASS** (ENFORC
 4. **`FRONTEND_COMBAT_CONSUMER_DEFERRED`** — Eredità Pack 131. Nessun consumer FE wired a `GET /api/combat/preview`. Rinviato.
 5. **`BATTLE_ENGINE_EXECUTION_DEFERRED`** — Eredità Pack 131. `battle_engine.py` non eseguito.
 6. **Branch publishing**: container Emergent espone solo `master` locale; sync verso `Falsa89/Divine#main` via Emergent Publish (fuori scope agente). Verificare post-publish.
-7. **Final SHA placeholder**: questo report referenzia `{{PACK_132_FINAL_SHA}}` — sarà truth-syncato con micro-commit identico a Pack 129/130/131.
+7. **Final SHA placeholder**: questo report referenzia `b63548dffce9267b392064e4b6b9f6668932fe86` — sarà truth-syncato con micro-commit identico a Pack 129/130/131.
 
 Nessuno di questi gap costituisce una violazione dello scope Pack 132.
 
