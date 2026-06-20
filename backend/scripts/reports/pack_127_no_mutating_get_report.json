@@ -5,29 +5,29 @@
   "flagged_count": 26,
   "flagged": [
     {
+      "file": "raids.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/raids\")"
+    },
+    {
+      "file": "raids.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/exclusive-items\")"
+    },
+    {
+      "file": "level_sharing.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/level-sharing\")"
+    },
+    {
       "file": "items.py",
       "pattern": ".update_one(",
       "snippet": "@router.get(\"/item-shop\")"
     },
     {
-      "file": "economy.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/shop\")"
-    },
-    {
-      "file": "economy.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/mail\")"
-    },
-    {
-      "file": "economy.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/servers\")"
-    },
-    {
-      "file": "cosmetics.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/cosmetics\")"
+      "file": "equipment.py",
+      "pattern": ".update_one(",
+      "snippet": "@router.get(\"/equipment/templates\")"
     },
     {
       "file": "forge.py",
@@ -75,24 +75,14 @@
       "snippet": "@router.get(\"/titles\")"
     },
     {
-      "file": "raids.py",
+      "file": "soul_forge.py",
       "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/raids\")"
+      "snippet": "@router.get(\"/wallet\")"
     },
     {
-      "file": "raids.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/exclusive-items\")"
-    },
-    {
-      "file": "controlled_rewards.py",
+      "file": "guild.py",
       "pattern": ".update_one(",
-      "snippet": "@router.get(\"/controlled-rewards/health\")"
-    },
-    {
-      "file": "push_notifications.py",
-      "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/push/status\")"
+      "snippet": "@router.get(\"/guild/info\")"
     },
     {
       "file": "v96_auth.py",
@@ -100,9 +90,9 @@
       "snippet": "@router.get(\"/me\")"
     },
     {
-      "file": "guild.py",
-      "pattern": ".update_one(",
-      "snippet": "@router.get(\"/guild/info\")"
+      "file": "push_notifications.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/push/status\")"
     },
     {
       "file": "hero_progression.py",
@@ -120,19 +110,29 @@
       "snippet": "@router.get(\"/materials\")"
     },
     {
-      "file": "soul_forge.py",
+      "file": "economy.py",
       "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/wallet\")"
+      "snippet": "@router.get(\"/shop\")"
     },
     {
-      "file": "level_sharing.py",
+      "file": "economy.py",
       "pattern": ".insert_one(",
-      "snippet": "@router.get(\"/level-sharing\")"
+      "snippet": "@router.get(\"/mail\")"
     },
     {
-      "file": "equipment.py",
+      "file": "economy.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/servers\")"
+    },
+    {
+      "file": "controlled_rewards.py",
       "pattern": ".update_one(",
-      "snippet": "@router.get(\"/equipment/templates\")"
+      "snippet": "@router.get(\"/controlled-rewards/health\")"
+    },
+    {
+      "file": "cosmetics.py",
+      "pattern": ".insert_one(",
+      "snippet": "@router.get(\"/cosmetics\")"
     }
   ],
   "validation_kind": "STATIC",
