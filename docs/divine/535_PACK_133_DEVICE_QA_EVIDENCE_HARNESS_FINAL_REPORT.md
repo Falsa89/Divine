@@ -2,6 +2,8 @@
 
 > Verdetto: **`PACK_133_DEVICE_QA_EVIDENCE_HARNESS_PARTIAL_EVIDENCE_MANUAL_REQUIRED_REAUDIT_REQUIRED`**
 >
+> Codex Web public re-audit (read-only) — range `a15915ca16c31332df35b89f0f365d48fcffc7ca..5ee22846581ef6e7b9b7da92f82d13c980eee012` — verdetto: `CODEX_WEB_PACK_133_PUBLIC_REAUDIT_PASS_DOC_SYNC_ONLY_REQUIRED`. Current public HEAD verified by Codex Web: **`5ee22846581ef6e7b9b7da92f82d13c980eee012`**.
+>
 > Pack 133 è un **evidence harness**, non una release. Pack 133 NON dichiara `RELEASE_READY` / `PUBLIC_RELEASE_READY` / `COMMERCIAL_RELEASE_READY` / `DEVICE_QA_PASS` / `DEVICE_QA_READY` / `PRODUCTION_READY`. Massimo verdetto futuro consentito: `READY_FOR_MANUAL_DEVICE_QA_REVIEW`.
 >
 > Lingua: italiano. Branch ambiente locale: `master` (sync verso `Falsa89/Divine#main` via Emergent Publish — fuori scope agente).
@@ -16,7 +18,9 @@
 | Titolo | Device QA Evidence Harness |
 | Baseline Pack 132 FINAL (micro doc fix) | `a15915ca16c31332df35b89f0f365d48fcffc7ca` |
 | Auto-commit/HEAD pre-Pack 133 | `369dfc23b2004f4fe163e9c9dddb7c98524ee4e6` *(solo report JSON runtime + `.emergent/emergent.yml` timestamp)* |
-| Final SHA (commit principale Pack 133) | *(da risolvere al commit — placeholder dichiarato `8ba091b3f4d07282773e9a068668896792253174`)* |
+| Final SHA / commit principale Pack 133 | `8ba091b3f4d07282773e9a068668896792253174` *(`feat(pack133): device QA evidence harness + final pre-QA chain 127-133`)* |
+| Truth-sync SHA | `5ee22846581ef6e7b9b7da92f82d13c980eee012` *(`docs(pack133): truth sync final SHA (8ba091b3f)`)* |
+| Current public HEAD verified by Codex Web | `5ee22846581ef6e7b9b7da92f82d13c980eee012` *(range pubblico audit: `a15915ca16c..5ee22846581`)* |
 | Branch ambiente | `master` (locale Emergent), nessun `git remote` configurato |
 | Public branch atteso | `Falsa89/Divine#main` |
 | Device QA Status | **`MANUAL_REQUIRED`** (BLOCKED_OR_MANUAL_REQUIRED_UNTIL_EVIDENCE) |
@@ -42,7 +46,9 @@ Pack 133 produce l'evidence harness safe-by-default, il builder del manifest, la
 
 ## 3. Final SHA
 
-`8ba091b3f4d07282773e9a068668896792253174` — placeholder dichiarato. Sarà risolto in micro-commit truth-sync identico a Pack 129/130/131/132.
+- **Commit principale Pack 133**: `8ba091b3f4d07282773e9a068668896792253174` (`feat(pack133): device QA evidence harness + final pre-QA chain 127-133`).
+- **Truth-sync documentale Pack 133**: `5ee22846581ef6e7b9b7da92f82d13c980eee012` (`docs(pack133): truth sync final SHA (8ba091b3f)`).
+- **Current public HEAD verified by Codex Web**: `5ee22846581ef6e7b9b7da92f82d13c980eee012` (range pubblico audit `a15915ca16c31332df35b89f0f365d48fcffc7ca..5ee22846581ef6e7b9b7da92f82d13c980eee012`).
 
 ## 4. Git status before/after
 
@@ -55,11 +61,11 @@ $ git remote -v
 ```
 ✅ NO_PACK_133_FILES_TRACKED, ✅ NO_PACK_133_FILES_LOOSE, working tree clean, Pack 132 final ancestor di HEAD.
 
-**After** — HEAD=`8ba091b3f4d07282773e9a068668896792253174`: working tree clean (a parte report JSON runtime in `backend/scripts/reports/` rigenerati dalla suite).
+**After** — HEAD=`5ee22846581ef6e7b9b7da92f82d13c980eee012` (commit principale `8ba091b3f` + truth-sync `5ee228465`): working tree clean (a parte report JSON runtime in `backend/scripts/reports/` rigenerati dalla suite, contabilizzati come artefatti — vedi §5.4).
 
 ## 5. Files changed
 
-### 5.1 File aggiunti Pack 133 (19)
+### 5.1 File aggiunti Pack 133 (20)
 
 **Harness e builder (2)**
 - `backend/scripts/device_qa_evidence_harness.py` — GET-only, env-gated, redaction policy applicata, mai chiama endpoint mutativi.
@@ -91,7 +97,7 @@ $ git remote -v
 - `docs/divine/device_qa_evidence_manifest_PACK_133.md`
 - `docs/divine/device_qa_manual_checklist_PACK_133.md`
 
-### 5.2 File modificati (5)
+### 5.2 File modificati funzionali (5)
 
 | File | Patch |
 | --- | --- |
@@ -111,6 +117,29 @@ $ git remote -v
 - `heroes_master.json`, `final_numbers/`, `assets/**` ✅ INTATTI
 - supervisor configs, gacha/economy/reward/shop/VIP/BP/mail ✅ INTATTI
 - DB schema/migrations ✅ INTATTI
+
+### 5.4 Artifact accounting e conteggio totale range pubblico
+
+Range Codex Web verificato: `a15915ca16c31332df35b89f0f365d48fcffc7ca..5ee22846581ef6e7b9b7da92f82d13c980eee012`.
+
+**Commit principale Pack 133** (`369dfc23b..8ba091b3f`):
+
+| Categoria | Conteggio |
+| --- | --- |
+| File aggiunti Pack 133 | **20** (2 harness/builder + 1 suite runner + 12 validatori + 2 marker JSON + 3 docs MD) |
+| File modificati funzionali | **5** (validator no-leak Pack 128/129/130/131/132 — `FORBIDDEN = []`) |
+| **Subtotale commit principale** | **25** |
+
+**Range pubblico completo** (`a15915ca16c..5ee22846581`):
+
+| Categoria | Conteggio | Note |
+| --- | --- | --- |
+| Commit principale Pack 133 (file count) | **25** | (20 aggiunti + 5 modificati funzionali) |
+| Report JSON runtime / build artifacts | **9** | `backend/scripts/reports/*.json` rigenerati pre-Pack 133 dagli auto-commit Emergent (esecuzioni suite Pack 132) |
+| File non-funzionale | **1** | `.emergent/emergent.yml` (solo timestamp `created_at`, auto-commit Emergent) |
+| **Totale range pubblico** | **35** | 25 commit principale + 9 report JSON artefatti + 1 `.emergent` |
+
+**Nota artifact accounting (obbligatoria)**: nel range pubblico completo sono presenti 9 modifiche a `backend/scripts/reports/*.json` generate come runtime/build artifacts pre-Pack 133 (eseguite dagli auto-commit Emergent che eseguivano la suite Pack 132). Sono contabilizzate nel range pubblico, ma **non rappresentano runtime/gameplay change, né DB write, né Pack 133 functional scope drift**. Pack 133 non le modifica, non le include nei suoi commit dedicati (`8ba091b3f`, `5ee228465`, e questo micro doc fix).
 
 ## 6. Device QA Evidence Harness summary
 
@@ -319,7 +348,7 @@ Validatori `validate_pack_133_forbidden_areas_untouched.py` + `validate_pack_133
 5. **`FRONTEND_COMBAT_CONSUMER_DEFERRED`** — eredità Pack 131, fuori scope Pack 133.
 6. **`BATTLE_ENGINE_EXECUTION_DEFERRED`** — eredità Pack 131, fuori scope Pack 133.
 7. **Branch publishing**: container espone solo `master` locale; sync verso `Falsa89/Divine#main` via Emergent Publish (fuori scope agente).
-8. **Final SHA placeholder**: `8ba091b3f4d07282773e9a068668896792253174` — sarà truth-syncato con micro-commit identico a Pack 129/130/131/132.
+8. **Final SHA truth-sync (catena pubblica completata)**: commit principale `8ba091b3f4d07282773e9a068668896792253174` + truth-sync `5ee22846581ef6e7b9b7da92f82d13c980eee012`. **Truth-sync già avvenuto**, nessun placeholder residuo.
 
 Nessun gap è scope violation. Tutti sono classificati onestamente come `MANUAL_REQUIRED` / `NOT_EXECUTED` / `DEFERRED`.
 
