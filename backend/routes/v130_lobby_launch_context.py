@@ -22,7 +22,8 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query
 
 router = APIRouter(prefix="/api/lobby", tags=["lobby_launch_v130"])
 
-_JWT_SECRET = os.getenv("JWT_SECRET", "divine_waifus_secret_key_2025")
+from helpers.jwt_secret_preflight import resolve_jwt_secret  # SECURITY_HOTFIX_A
+_JWT_SECRET = resolve_jwt_secret()
 
 
 async def _resolve_user(authorization: Optional[str]) -> Optional[dict]:

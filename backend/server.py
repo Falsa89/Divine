@@ -38,7 +38,8 @@ from utils.hero_visibility import (
 # ===================== CONFIG =====================
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.getenv("DB_NAME", "divine_waifus")
-JWT_SECRET = os.getenv("JWT_SECRET", "divine_waifus_secret_key_2025")
+from helpers.jwt_secret_preflight import resolve_jwt_secret  # SECURITY_HOTFIX_A
+JWT_SECRET = resolve_jwt_secret()
 
 app = FastAPI(title="Divine Waifus API", version="1.0.0")
 app.add_middleware(

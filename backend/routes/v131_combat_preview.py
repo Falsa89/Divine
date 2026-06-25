@@ -8,7 +8,8 @@ import jwt
 from fastapi import APIRouter, Header, HTTPException, Query
 
 router = APIRouter(prefix="/api/combat", tags=["combat_preview_v131"])
-_JWT_SECRET = os.getenv("JWT_SECRET", "divine_waifus_secret_key_2025")
+from helpers.jwt_secret_preflight import resolve_jwt_secret  # SECURITY_HOTFIX_A
+_JWT_SECRET = resolve_jwt_secret()
 
 
 async def _resolve_user(authorization: Optional[str]):

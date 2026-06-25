@@ -40,7 +40,8 @@ router = APIRouter(prefix="/api/auth", tags=["v96_auth"])
 # ─────────────────────────────────────────────────────────────────────────
 # Config
 # ─────────────────────────────────────────────────────────────────────────
-JWT_SECRET = os.getenv("JWT_SECRET", "divine_waifus_secret_key_2025")
+from helpers.jwt_secret_preflight import resolve_jwt_secret  # SECURITY_HOTFIX_A
+JWT_SECRET = resolve_jwt_secret()
 JWT_ALGO = "HS256"
 JWT_EXP_DAYS = int(os.getenv("V96_JWT_EXP_DAYS", "7"))
 

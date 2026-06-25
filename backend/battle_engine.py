@@ -1145,13 +1145,24 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
     async def simulate_battle_endpoint(request: Request, current_user: dict = Depends(get_current_user)):
         """Simulate a battle with the user's active team.
 
-        v108_POSTQA_A — Preview guard: se il body contiene marker preview
-        (battle_engine_mode=preview, preview=true, reward_policy=preview,
-        progress_policy=preview), blocchiamo esplicitamente la chiamata con
-        HTTP 409 PREVIEW_SIMULATE_MUTATION_BLOCKED. Nessuna scrittura DB
-        nemmeno parziale. Nessuna formula battle modificata.
+        SECURITY_HOTFIX_A — Fail-closed guard PRIMA di qualsiasi DB read/write.
+        L'endpoint legacy resta DISABLED in pre-QA: concedeva gold/EXP/inventory drops
+        in modo non server-scoped, non idempotente, senza ledger. Riabilitabile solo
+        via env esplicito BATTLE_SIMULATE_LIVE_ENABLED=true, e SOLO transitoriamente
+        finche' non esiste un runtime authoritative server-scoped.
+
+        v108_POSTQA_A preview guard: kept as defense in depth dopo il primo gate.
         """
-        # v108_POSTQA_A — Preview guard.
+        # SECURITY_HOTFIX_A — fail-closed PRIMA di tutto (no body parse, no DB).
+        if os.getenv('BATTLE_SIMULATE_LIVE_ENABLED', '').strip().lower() not in ('true', '1', 'yes', 'on'):
+            raise HTTPException(status_code=423, detail={
+                'code': 'BATTLE_SIMULATE_LIVE_DISABLED_PRE_QA',
+                'message': 'Legacy live battle simulate is disabled before authoritative server-scoped battle runtime.',
+                'status': 'blocked',
+                'device_qa_status': 'blocked',
+                'hotfix': 'SECURITY_HOTFIX_A',
+            })
+        # v108_POSTQA_A — Preview guard (defense in depth).
         try:
             body = await request.json()
         except Exception:
