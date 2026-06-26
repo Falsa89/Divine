@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { apiCall } from '../../utils/api';
+import { apiCall, apiCallWithMeta, ApiError, ApiDiagnostics } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import useServerScope from '../../src/hooks/useServerScope';
 import useBattlePowerSummary from '../../src/hooks/useBattlePowerSummary';
@@ -41,6 +41,15 @@ export default function BattleTab() {
   // Pack 92 — server scope sweep su roster reader player-facing.
   const { selected_server_id } = useServerScope();
   const [heroes, setHeroes] = useState<any[]>([]);
+  // HOTFIX B — diagnostic state per il roster reader della formazione.
+  // Sostituisce il catch silenzioso che azzerava `heroes` mascherando
+  // qualsiasi blocker server-side come "Nessun eroe disponibile".
+  const [rosterDiag, setRosterDiag] = useState<{
+    status: number | null;
+    diagnostics: ApiDiagnostics | null;
+    error_code: string | null;
+    error_detail: string | null;
+  }>({ status: null, diagnostics: null, error_code: null, error_detail: null });
   // grid[col][row] = hero | null  (col: 0=Support, 1=DPS, 2=Tank; row: 0,1,2)
   const [grid, setGrid] = useState<(any | null)[][]>([[null, null, null], [null, null, null], [null, null, null]]);
   const [loading, setLoading] = useState(true);
@@ -143,18 +152,36 @@ export default function BattleTab() {
       if (!selected_server_id) {
         setHeroes([]);
         setConstellations([]);
+        setRosterDiag({
+          status: null,
+          diagnostics: null,
+          error_code: 'SERVER_REQUIRED',
+          error_detail: 'Nessun server selezionato (pre-QA gate).',
+        });
         setLoading(false);
         return;
       }
       const heroesUrl = `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`;
       // Pre-QA Stabilization 115C — strict team read: get-formation server-scoped.
       const teamUrl = `/api/team/get-formation?server_id=${encodeURIComponent(selected_server_id)}`;
-      const [uh, team, constData] = await Promise.all([
-        apiCall(heroesUrl),
+      // HOTFIX B — leggiamo gli header diagnostici sul roster reader principale
+      // (`/api/user/heroes`). Gli altri due endpoint restano gestiti con
+      // fallback locale già in essere (team formation + constellations).
+      const [uhMeta, team, constData] = await Promise.all([
+        apiCallWithMeta<any>(heroesUrl),
         apiCall(teamUrl).catch(() => ({ team_formation: [], formation: [], total_power: 0 })),
         apiCall('/api/constellations').catch(() => ({ constellations: [] })),
       ]);
+      const uh = Array.isArray(uhMeta.data)
+        ? uhMeta.data
+        : ((uhMeta.data && (uhMeta.data as any).heroes) || []);
       setHeroes(uh);
+      setRosterDiag({
+        status: uhMeta.status,
+        diagnostics: uhMeta.diagnostics,
+        error_code: null,
+        error_detail: null,
+      });
       const owned = (constData.constellations || []).filter((c: any) => c.owned);
       setConstellations(owned);
       if (team?.constellation_id) setSelectedConstellation(team.constellation_id);
@@ -244,9 +271,26 @@ export default function BattleTab() {
         } catch (_logE) {}
       }
     } catch (e: any) {
-      // Pack 126-FIX-B — no more silent catch. Show readable error in dev log + state.
-      if (__DEV__) console.warn('[pack_126_fix_b][battle.tsx] loadTeamData failed:', e?.message || e);
+      // HOTFIX B — non azzeriamo silenziosamente: surfaciamo status / code /
+      // diagnostics così l'empty state del roster espone la causa (blocker,
+      // server_scope, psp_lookup_mode, roster_count) invece di "Nessun eroe".
+      if (__DEV__) console.warn('[hotfix_b][battle.tsx] loadTeamData failed:', e?.message || e);
       try { setHeroes([]); } catch (_se) {}
+      if (e instanceof ApiError) {
+        setRosterDiag({
+          status: e.status,
+          diagnostics: e.diagnostics,
+          error_code: e.code,
+          error_detail: e.detail,
+        });
+      } else {
+        setRosterDiag({
+          status: null,
+          diagnostics: null,
+          error_code: 'NETWORK_ERROR',
+          error_detail: (e && e.message) || 'Errore di rete sconosciuto.',
+        });
+      }
     } finally { setLoading(false); }
   };
 
@@ -694,9 +738,39 @@ export default function BattleTab() {
           {/* Hero list */}
           <ScrollView style={s.heroScroll} contentContainerStyle={s.heroScrollContent} showsVerticalScrollIndicator={false}>
             {filteredHeroes.length === 0 ? (
-              <Text style={s.noHeroes}>
-                {activeClassFilter ? `Nessun ${activeClassFilter} disponibile` : 'Nessun eroe disponibile'}
-              </Text>
+              <View style={s.noHeroesBox}>
+                <Text style={s.noHeroes}>
+                  {activeClassFilter ? `Nessun ${activeClassFilter} disponibile` : 'Nessun eroe disponibile'}
+                </Text>
+                {/* HOTFIX B — diagnostic visibility: blocker, scope, status,
+                    psp_lookup_mode, roster_count. Sostituisce il fallback
+                    silenzioso "lista vuota" quando la causa è un blocker. */}
+                {(rosterDiag.error_code || rosterDiag.error_detail || rosterDiag.status !== null || rosterDiag.diagnostics) && (
+                  <View style={s.diagBox}>
+                    {rosterDiag.status !== null && (
+                      <Text style={s.diagLine}>HTTP {rosterDiag.status}</Text>
+                    )}
+                    {rosterDiag.error_code && (
+                      <Text style={s.diagLineErr}>blocker/code: {rosterDiag.error_code}</Text>
+                    )}
+                    {rosterDiag.error_detail && (
+                      <Text style={s.diagLine}>{rosterDiag.error_detail}</Text>
+                    )}
+                    {rosterDiag.diagnostics?.blocker && (
+                      <Text style={s.diagLineErr}>X-Blocker: {rosterDiag.diagnostics.blocker}</Text>
+                    )}
+                    {rosterDiag.diagnostics?.server_scope && (
+                      <Text style={s.diagLine}>server_scope: {rosterDiag.diagnostics.server_scope}</Text>
+                    )}
+                    {rosterDiag.diagnostics?.psp_lookup_mode && (
+                      <Text style={s.diagLine}>psp_lookup_mode: {rosterDiag.diagnostics.psp_lookup_mode}</Text>
+                    )}
+                    {rosterDiag.diagnostics?.roster_count !== null && rosterDiag.diagnostics?.roster_count !== undefined && (
+                      <Text style={s.diagLine}>roster_count: {rosterDiag.diagnostics.roster_count}</Text>
+                    )}
+                  </View>
+                )}
+              </View>
             ) : (
               <View style={s.heroGrid}>
                 {filteredHeroes.map((h: any) => {
@@ -921,6 +995,21 @@ const s = StyleSheet.create({
   heroScrollContent: { paddingBottom: 8 },
   heroGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 3 },
   noHeroes: { color: COLORS.textDim, fontSize: 9, textAlign: 'center', padding: 16 },
+  // HOTFIX B — wrapper per empty state + diagnostic box.
+  noHeroesBox: { alignItems: 'center', justifyContent: 'flex-start', paddingTop: 8 },
+  diagBox: {
+    marginTop: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(255,180,80,0.35)',
+    backgroundColor: 'rgba(255,180,80,0.06)',
+    alignSelf: 'center',
+    maxWidth: 220,
+  },
+  diagLine: { color: COLORS.textMuted, fontSize: 8, fontWeight: '700', marginTop: 1 },
+  diagLineErr: { color: '#FFB347', fontSize: 8, fontWeight: '800', marginTop: 1 },
   heroCard: {
     width: 105, flexDirection: 'row', alignItems: 'center', gap: 4,
     padding: 4, borderRadius: 6, borderWidth: 1, backgroundColor: 'rgba(255,255,255,0.02)',

@@ -6,7 +6,11 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useFocusEffect } from 'expo-router';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
-import { apiCall } from '../../utils/api';
+// HOTFIX B — API ERROR CONTRACT + BLOCKER VISIBILITY.
+// Usiamo `apiCallWithMeta` per leggere gli header diagnostici (anche su
+// 200 OK con roster vuoto) e `ApiError` per preservare status/code/headers
+// su risposte non-ok, evitando il fallback "team vuoto" silenzioso.
+import { apiCallWithMeta, ApiError, ApiDiagnostics } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import useServerScope from '../../src/hooks/useServerScope';
 import AnimatedHeroPortrait from '../../components/AnimatedHeroPortrait';
@@ -26,6 +30,15 @@ export default function HeroesTab() {
   const { selected_server_id } = useServerScope();
   const [heroes, setHeroes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  // HOTFIX B — diagnostic state: cattura status + diagnostics anche su 200 OK
+  // e l'eventuale ApiError su 4xx/5xx. Esposto nell'empty state per non
+  // mascherare i blocker come "Nessun eroe trovato".
+  const [rosterDiag, setRosterDiag] = useState<{
+    status: number | null;
+    diagnostics: ApiDiagnostics | null;
+    error_code: string | null;
+    error_detail: string | null;
+  }>({ status: null, diagnostics: null, error_code: null, error_detail: null });
   const [selected, setSelected] = useState<any>(null);
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('rarity');
@@ -39,13 +52,50 @@ export default function HeroesTab() {
       // NON chiamare /api/user/heroes account-wide. Mostra stato server-required.
       if (!selected_server_id) {
         setHeroes([]);
+        setRosterDiag({
+          status: null,
+          diagnostics: null,
+          error_code: 'SERVER_REQUIRED',
+          error_detail: 'Nessun server selezionato (pre-QA gate).',
+        });
         setLoading(false);
         return;
       }
       const url = `/api/user/heroes?server_id=${encodeURIComponent(selected_server_id)}`;
-      const d = await apiCall(url);
+      // HOTFIX B — leggiamo data+meta: gli header X-Blocker / X-Roster-Count /
+      // X-PSP-Lookup-Mode / X-Server-Scope sono mostrati nell'empty state
+      // per smettere di mascherare blocker reali come "roster vuoto generico".
+      const meta = await apiCallWithMeta<any>(url);
+      const d = meta.data;
       setHeroes(Array.isArray(d) ? d : (d?.heroes || []));
-    } catch(e){} finally { setLoading(false); }
+      setRosterDiag({
+        status: meta.status,
+        diagnostics: meta.diagnostics,
+        error_code: null,
+        error_detail: null,
+      });
+    } catch (e: any) {
+      // HOTFIX B — non azzeriamo la UI silenziosamente: persistiamo status,
+      // code e diagnostics (header preservati da ApiError) per renderli
+      // visibili nell'empty state.
+      if (e instanceof ApiError) {
+        setHeroes([]);
+        setRosterDiag({
+          status: e.status,
+          diagnostics: e.diagnostics,
+          error_code: e.code,
+          error_detail: e.detail,
+        });
+      } else {
+        setHeroes([]);
+        setRosterDiag({
+          status: null,
+          diagnostics: null,
+          error_code: 'NETWORK_ERROR',
+          error_detail: (e && e.message) || 'Errore di rete sconosciuto.',
+        });
+      }
+    } finally { setLoading(false); }
   };
 
   // RM1.16-B: refresh on focus + on userHeroesVersion bump (post-summon).
@@ -282,6 +332,32 @@ export default function HeroesTab() {
             <View style={s.emptyState}>
               <Text style={s.emptyIcon}>{'\u2694\uFE0F'}</Text>
               <Text style={s.emptyText}>Nessun eroe trovato</Text>
+              {/* HOTFIX B — visibilità blocker/diagnostici invece di banner generico. */}
+              {(rosterDiag.error_code || rosterDiag.error_detail || rosterDiag.status !== null || rosterDiag.diagnostics) && (
+                <View style={s.diagBox}>
+                  {rosterDiag.status !== null && (
+                    <Text style={s.diagLine}>HTTP {rosterDiag.status}</Text>
+                  )}
+                  {rosterDiag.error_code && (
+                    <Text style={s.diagLineErr}>blocker/code: {rosterDiag.error_code}</Text>
+                  )}
+                  {rosterDiag.error_detail && (
+                    <Text style={s.diagLine}>{rosterDiag.error_detail}</Text>
+                  )}
+                  {rosterDiag.diagnostics?.blocker && (
+                    <Text style={s.diagLineErr}>X-Blocker: {rosterDiag.diagnostics.blocker}</Text>
+                  )}
+                  {rosterDiag.diagnostics?.server_scope && (
+                    <Text style={s.diagLine}>server_scope: {rosterDiag.diagnostics.server_scope}</Text>
+                  )}
+                  {rosterDiag.diagnostics?.psp_lookup_mode && (
+                    <Text style={s.diagLine}>psp_lookup_mode: {rosterDiag.diagnostics.psp_lookup_mode}</Text>
+                  )}
+                  {rosterDiag.diagnostics?.roster_count !== null && rosterDiag.diagnostics?.roster_count !== undefined && (
+                    <Text style={s.diagLine}>roster_count: {rosterDiag.diagnostics.roster_count}</Text>
+                  )}
+                </View>
+              )}
             </View>
           )}
         </ScrollView>
@@ -485,6 +561,21 @@ const s = StyleSheet.create({
   emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 40 },
   emptyIcon: { fontSize: 32, marginBottom: 8 },
   emptyText: { color: COLORS.textDim, fontSize: 12 },
+  // HOTFIX B — diagnostic box: surface blocker / status / server scope /
+  // psp lookup mode / roster count quando l'empty state ha una causa nota.
+  diagBox: {
+    marginTop: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(255,180,80,0.35)',
+    backgroundColor: 'rgba(255,180,80,0.06)',
+    alignSelf: 'center',
+    maxWidth: 320,
+  },
+  diagLine: { color: COLORS.textMuted, fontSize: 9, fontWeight: '700', marginTop: 1 },
+  diagLineErr: { color: '#FFB347', fontSize: 9, fontWeight: '800', marginTop: 1 },
   // Detail panel
   detailOuter: { width: 180 },
   detail: {
