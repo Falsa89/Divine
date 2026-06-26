@@ -12,8 +12,8 @@
 | DB writes              | NO (zero)                                                              |
 | Endpoint mutativi      | NO (POST `/api/psp/ensure`, `/api/psp/starter/claim`, `/api/team/save-formation` NON chiamati né modificati) |
 | Generated at (UTC)     | `2026-06-26T14:41:26Z`                                                 |
-| Baseline HEAD          | `b1ca96ab1180bd8a2d66a8eae8c8ee7946d76f1e` (placeholder pre-commit)    |
-| Commit SHA             | `<TRUTH_SYNC_PENDING>`                                                 |
+| Baseline (Hotfix A)    | `d0461f806b7cd55d375ecbc95a703bc4c66a7b48`                             |
+| Commit SHA (HOTFIX B)  | `99d9cd38d6e8748d3103e964a044db15779381e7`                             |
 | Classificazione finale | `PASS` (3/3 validator HOTFIX B verde, zero scope drift, py_compile OK) |
 
 ---
@@ -233,12 +233,14 @@ La patch è observability-only, statica, frontend-only (più 3 validator). Il
 re-audit Game Master/Codex Web resta dovuto per Hotfix A + Hotfix B
 congiuntamente.
 
-## 19) Truth-sync TODO
+## 19) Truth-sync
 
-Dopo il commit di questo pack:
-
-- sostituire `<TRUTH_SYNC_PENDING>` con lo SHA reale;
-- aggiornare l'indice `docs/divine/` con il riferimento al file `537`.
+- Baseline (Hotfix A): `d0461f806b7cd55d375ecbc95a703bc4c66a7b48`
+- Commit HOTFIX B (contenuto patch): `99d9cd38d6e8748d3103e964a044db15779381e7`
+- Truth-sync commit (sostituzione placeholder in questo report):
+  vedi `git log` posteriore (SHA emesso dal commit di chiusura).
+- Indice `docs/divine/` aggiornabile al prossimo passaggio di documentazione
+  (fuori scope di questa patch).
 
 ## 20) Comandi di replay esatti
 
