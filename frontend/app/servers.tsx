@@ -51,6 +51,11 @@ type ServerProfile = {
 
 // Pre-QA Stabilization 115C — uso helper canonico condiviso con apiCall.
 import { getCanonicalBackendUrl } from '../src/utils/backendUrl';
+// HOTFIX C — uso ApiError + apiCallWithMeta (introdotti da HOTFIX B) per
+// rendere il server-select fail-closed e diagnostico. PSP ensure / starter
+// claim / roster verify non sono più best-effort: ogni step deve passare
+// prima di salvare `v101_selected_server_id` e navigare in Home.
+import { apiCallWithMeta, ApiError, ApiDiagnostics } from '../utils/api';
 const BACKEND_URL = getCanonicalBackendUrl();
 
 // SERVER PROFILE FALLBACK — dichiarato. Lista safe locale, marcata [QA] esplicito.
@@ -120,12 +125,32 @@ const STATUS_COLOR: Record<ServerStatus, string> = {
   locked: '#888',
 };
 
+// HOTFIX C — diagnostic state per il flow server-select fail-closed.
+// Ogni phase (psp_ensure, starter_claim, roster_verify) può produrre un
+// diagError che blocca la navigazione e mostra una card diagnostica.
+type DiagError = {
+  phase:
+    | 'no_auth_token'
+    | 'psp_ensure'
+    | 'starter_claim'
+    | 'roster_verify'
+    | 'network';
+  code: string;
+  status: number | null;
+  detail: string | null;
+  diagnostics: ApiDiagnostics | null;
+  server_id: string;
+  server_name: string;
+};
+
 export default function ServerSelectScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [servers, setServers] = useState<ServerProfile[]>([]);
   const [isFallback, setIsFallback] = useState<boolean>(true);
   const [entering, setEntering] = useState<string | null>(null);
+  // HOTFIX C — diagError visibile come modal diagnostica con Riprova/Cambia server.
+  const [diagError, setDiagError] = useState<DiagError | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -179,40 +204,51 @@ export default function ServerSelectScreen() {
     return { recommended, lastPlayed, withCharacter, others };
   }, [servers]);
 
+  // HOTFIX C — helper per costruire un DiagError da ApiError o eccezione generica.
+  const apiErrorToDiag = (
+    e: any,
+    phase: DiagError['phase'],
+    fallbackCode: string,
+    s: ServerProfile,
+  ): DiagError => {
+    if (e instanceof ApiError) {
+      return {
+        phase,
+        code: e.code || fallbackCode,
+        status: e.status,
+        detail: e.detail,
+        diagnostics: e.diagnostics,
+        server_id: s.server_id,
+        server_name: s.server_name,
+      };
+    }
+    return {
+      phase: 'network',
+      code: fallbackCode,
+      status: null,
+      detail: (e && (e.message as string)) || 'Errore di rete sconosciuto.',
+      diagnostics: null,
+      server_id: s.server_id,
+      server_name: s.server_name,
+    };
+  };
+
+  // HOTFIX C — server-select FAIL-CLOSED.
+  // Step 1: token disponibile.
+  // Step 2: POST /api/psp/ensure server-scoped, success solo se v110_psp_ensure=true.
+  // Step 3: POST /api/psp/starter/claim server-scoped, success se v110_starter_claim=true
+  //         (entrambi created:true e already_claimed:true sono idempotency-valid).
+  // Step 4: GET /api/user/heroes?server_id=<sid> con apiCallWithMeta, roster_count > 0
+  //         e nessun X-Blocker.
+  // Step 5: solo dopo TUTTI gli step verde, salva v101_selected_server_id e naviga Home.
+  // FAIL in qualunque step: resta su servers.tsx, popola diagError (card diagnostica).
   const onEnter = async (s: ServerProfile) => {
     if (!s.can_enter) return;
     setEntering(s.server_id);
-    try {
-      await AsyncStorage.setItem('v101_selected_server_id', s.server_id);
-      await AsyncStorage.setItem('v102_selected_server_name', s.server_name);
-      await AsyncStorage.setItem(
-        'v102_selected_server_has_character',
-        s.has_character ? 'true' : 'false',
-      );
-    } catch (_e) {
-      // non logghiamo dettagli sensibili
-    }
+    setDiagError(null);
 
-    // Pack 86 — UI -> POST /api/psp/ensure?server_id=<sid>
-    // Quando l'utente entra in un server, il frontend chiama il backend
-    // ensure idempotente (Pack 85) per garantire che esista un PSP
-    // fresh-start (player_level=1, player_exp=0, roster vuoto, NESSUNA
-    // copia S1->S2). Bearer token reale da SecureStore (v96_auth_token).
-    // Se ensure fallisce/no-auth, NON facciamo fallback global roster:
-    // semplicemente proseguiamo e il lobby downstream mostrera' blocker
-    // onesti (PLAYER_SERVER_PROFILE_REQUIRED / SELECTED_SERVER_REQUIRED).
-    // Nessun silent 's1', nessuna mutation oltre PSP fresh-start.
-    //
-    // Pack 87 — Subito dopo ensure, chiamiamo idempotentemente
-    // POST /api/psp/starter/claim?server_id=<sid> per assegnare lo starter
-    // roster server-scoped (3 heroes low-rarity non-premium) se non ancora
-    // reclamato. Idempotente (claim_once_per_server). NO global fallback.
-    // NO premium currency. NO inventory/equipment/story reward.
     try {
-      // Pre-QA Stabilization 111 — R-01: usa authTokenCompat per leggere il
-      // token sia da SecureStore (v96_auth_token canonico) sia da AsyncStorage
-      // (token login default), senza security downgrade. Se il token manca,
-      // blocker onesto NO_AUTH_TOKEN_PSP_ENSURE_DEFERRED.
+      // ── Step 1: auth token (no token logging) ─────────────────────────
       const { getAuthTokenCompat } = await import('../src/utils/authTokenCompat');
       const _tokenLookup = await getAuthTokenCompat();
       const token = _tokenLookup.token;
@@ -223,71 +259,187 @@ export default function ServerSelectScreen() {
             'no_auth_token_psp_ensure_deferred',
           );
         } catch (_e) { /* best-effort */ }
+        setDiagError({
+          phase: 'no_auth_token',
+          code: 'NO_AUTH_TOKEN_SERVER_SELECT_BLOCKED',
+          status: null,
+          detail:
+            'Token di autenticazione assente: impossibile preparare il server. Effettua nuovamente il login.',
+          diagnostics: null,
+          server_id: s.server_id,
+          server_name: s.server_name,
+        });
+        setEntering(null);
+        return;
       }
-      if (token && BACKEND_URL) {
-        const ensureUrl = `${BACKEND_URL}/api/psp/ensure?server_id=${encodeURIComponent(s.server_id)}`;
-        await fetch(ensureUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'X-Pack-86-Frontend-Ensure': 'true',
-          },
-        }).then(async (r) => {
-          // Best-effort: salva flag onboarding stato per UI
-          if (r.ok) {
-            try {
-              const j = await r.json();
-              if (j && j.v110_psp_ensure === true) {
-                await AsyncStorage.setItem(
-                  'pack86_psp_ensure_last_mode',
-                  j.created ? 'fresh_start_created' : 'already_exists_no_write',
-                );
-                await AsyncStorage.setItem(
-                  'pack86_psp_ensure_last_server_id',
-                  s.server_id,
-                );
-              }
-            } catch (_e) { /* best-effort */ }
-          }
-        }).catch(() => { /* tolerated: lobby blocker honest downstream */ });
 
-        // Pack 87 — Starter claim post-ensure (idempotente, server-scoped).
-        const claimUrl = `${BACKEND_URL}/api/psp/starter/claim?server_id=${encodeURIComponent(s.server_id)}`;
-        await fetch(claimUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'X-Pack-87-Frontend-Starter-Claim': 'true',
+      // ── Step 2: PSP ensure (decisive, NON best-effort) ────────────────
+      let ensureMeta;
+      try {
+        ensureMeta = await apiCallWithMeta<any>(
+          `/api/psp/ensure?server_id=${encodeURIComponent(s.server_id)}`,
+          {
+            method: 'POST',
+            headers: { 'X-Pack-86-Frontend-Ensure': 'true' },
           },
-        }).then(async (r) => {
-          if (r.ok) {
-            try {
-              const j = await r.json();
-              if (j && j.v110_starter_claim === true) {
-                await AsyncStorage.setItem(
-                  'pack87_starter_claim_last_mode',
-                  j.created ? 'starter_claimed_first_time' : 'already_claimed_no_write',
-                );
-                await AsyncStorage.setItem(
-                  'pack87_starter_claim_last_server_id',
-                  s.server_id,
-                );
-                if (Array.isArray(j.starter_user_hero_ids)) {
-                  await AsyncStorage.setItem(
-                    'pack87_starter_user_hero_ids',
-                    JSON.stringify(j.starter_user_hero_ids),
-                  );
-                }
-              }
-            } catch (_e) { /* best-effort */ }
-          }
-        }).catch(() => { /* tolerated: lobby blocker honest downstream, no global fallback */ });
+        );
+      } catch (e: any) {
+        setDiagError(apiErrorToDiag(e, 'psp_ensure', 'PSP_ENSURE_FAILED', s));
+        setEntering(null);
+        return;
       }
-    } catch (_e) { /* best-effort, no global fallback */ }
+      const eData: any = ensureMeta.data || {};
+      if (!eData.v110_psp_ensure) {
+        setDiagError({
+          phase: 'psp_ensure',
+          code: (eData.blocker as string) || 'PSP_ENSURE_FAILED',
+          status: ensureMeta.status,
+          detail: (eData.hint as string) || (eData.detail as string) || null,
+          diagnostics: ensureMeta.diagnostics,
+          server_id: s.server_id,
+          server_name: s.server_name,
+        });
+        setEntering(null);
+        return;
+      }
+      // Telemetria locale post-success (idempotente). No PII, no token.
+      try {
+        await AsyncStorage.setItem(
+          'pack86_psp_ensure_last_mode',
+          eData.created ? 'fresh_start_created' : 'already_exists_no_write',
+        );
+        await AsyncStorage.setItem(
+          'pack86_psp_ensure_last_server_id',
+          s.server_id,
+        );
+      } catch (_e) { /* best-effort */ }
 
-    router.replace('/(tabs)/home');
+      // ── Step 3: Starter claim (decisive, idempotency-aware) ───────────
+      // Idempotent-success path (already_claimed=true) è OK perché significa
+      // che lo starter è stato già reclamato in passato: il roster deve
+      // comunque esistere e verrà verificato allo step 4.
+      let claimMeta;
+      try {
+        claimMeta = await apiCallWithMeta<any>(
+          `/api/psp/starter/claim?server_id=${encodeURIComponent(s.server_id)}`,
+          {
+            method: 'POST',
+            headers: { 'X-Pack-87-Frontend-Starter-Claim': 'true' },
+          },
+        );
+      } catch (e: any) {
+        setDiagError(apiErrorToDiag(e, 'starter_claim', 'STARTER_CLAIM_FAILED', s));
+        setEntering(null);
+        return;
+      }
+      const cData: any = claimMeta.data || {};
+      if (!cData.v110_starter_claim) {
+        setDiagError({
+          phase: 'starter_claim',
+          code: (cData.blocker as string) || 'STARTER_CLAIM_FAILED',
+          status: claimMeta.status,
+          detail: (cData.hint as string) || (cData.detail as string) || null,
+          diagnostics: claimMeta.diagnostics,
+          server_id: s.server_id,
+          server_name: s.server_name,
+        });
+        setEntering(null);
+        return;
+      }
+      try {
+        await AsyncStorage.setItem(
+          'pack87_starter_claim_last_mode',
+          cData.created ? 'starter_claimed_first_time' : 'already_claimed_no_write',
+        );
+        await AsyncStorage.setItem(
+          'pack87_starter_claim_last_server_id',
+          s.server_id,
+        );
+        if (Array.isArray(cData.starter_user_hero_ids)) {
+          await AsyncStorage.setItem(
+            'pack87_starter_user_hero_ids',
+            JSON.stringify(cData.starter_user_hero_ids),
+          );
+        }
+      } catch (_e) { /* best-effort */ }
+
+      // ── Step 4: Roster verify (GET /api/user/heroes server-scoped) ────
+      let rosterMeta;
+      try {
+        rosterMeta = await apiCallWithMeta<any>(
+          `/api/user/heroes?server_id=${encodeURIComponent(s.server_id)}`,
+        );
+      } catch (e: any) {
+        setDiagError(apiErrorToDiag(e, 'roster_verify', 'ROSTER_FETCH_FAILED', s));
+        setEntering(null);
+        return;
+      }
+      const rosterData: any = rosterMeta.data;
+      const heroes: any[] = Array.isArray(rosterData)
+        ? rosterData
+        : (rosterData && rosterData.heroes) || [];
+      const blockerHeader = rosterMeta.diagnostics.blocker;
+      const rosterCountHeader = rosterMeta.diagnostics.roster_count;
+      const rosterEmpty =
+        heroes.length === 0 ||
+        rosterCountHeader === 0 ||
+        !!blockerHeader;
+      if (rosterEmpty) {
+        setDiagError({
+          phase: 'roster_verify',
+          code: blockerHeader || 'ROSTER_EMPTY_AFTER_SERVER_PREP',
+          status: rosterMeta.status,
+          detail:
+            heroes.length === 0
+              ? 'Roster iniziale non creato su questo server.'
+              : 'Roster bloccato da diagnostico server.',
+          diagnostics: rosterMeta.diagnostics,
+          server_id: s.server_id,
+          server_name: s.server_name,
+        });
+        setEntering(null);
+        return;
+      }
+
+      // ── Step 5: PASS — persisti selected_server_id e naviga ───────────
+      // HOTFIX C — la persistenza avviene SOLO dopo tutti gli step verde.
+      try {
+        await AsyncStorage.setItem('v101_selected_server_id', s.server_id);
+        await AsyncStorage.setItem('v102_selected_server_name', s.server_name);
+        await AsyncStorage.setItem(
+          'v102_selected_server_has_character',
+          s.has_character ? 'true' : 'false',
+        );
+      } catch (_e) {
+        // Se AsyncStorage fallisce, blocchiamo: lo state server-scoped a valle
+        // diventa incoerente. Mostriamo diagError invece di navigare.
+        setDiagError({
+          phase: 'network',
+          code: 'PERSIST_SELECTED_SERVER_FAILED',
+          status: null,
+          detail: 'Impossibile salvare la selezione server in locale.',
+          diagnostics: null,
+          server_id: s.server_id,
+          server_name: s.server_name,
+        });
+        setEntering(null);
+        return;
+      }
+      router.replace('/(tabs)/home');
+    } catch (e: any) {
+      // Catch generico (no silent): mai navigare in Home.
+      setDiagError({
+        phase: 'network',
+        code: 'UNEXPECTED_SERVER_SELECT_ERROR',
+        status: null,
+        detail: (e && (e.message as string)) || 'Errore inatteso.',
+        diagnostics: null,
+        server_id: s.server_id,
+        server_name: s.server_name,
+      });
+    } finally {
+      setEntering(null);
+    }
   };
 
   const renderCard = (s: ServerProfile, key: string) => {
@@ -442,6 +594,100 @@ export default function ServerSelectScreen() {
 
         <View style={{ height: 32 }} />
       </ScrollView>
+
+      {/* HOTFIX C — Card diagnostica modale: server-select fail-closed.
+          Mostrata quando una qualunque phase (auth/ensure/claim/roster) fallisce.
+          Bottoni: Riprova (stesso server) / Cambia server (chiude la card).
+          Nessun retry automatico. Nessuna navigazione Home in failure. */}
+      {diagError && (
+        <View style={diagStyles.overlay} pointerEvents="auto">
+          <View style={diagStyles.card}>
+            <Text style={diagStyles.title}>Server non pronto</Text>
+            <View style={diagStyles.row}>
+              <Text style={diagStyles.label}>Codice</Text>
+              <Text style={diagStyles.valueErr}>{diagError.code}</Text>
+            </View>
+            <View style={diagStyles.row}>
+              <Text style={diagStyles.label}>Fase</Text>
+              <Text style={diagStyles.value}>{diagError.phase}</Text>
+            </View>
+            {diagError.status !== null && (
+              <View style={diagStyles.row}>
+                <Text style={diagStyles.label}>HTTP</Text>
+                <Text style={diagStyles.value}>{diagError.status}</Text>
+              </View>
+            )}
+            <View style={diagStyles.row}>
+              <Text style={diagStyles.label}>Server</Text>
+              <Text style={diagStyles.value} numberOfLines={1}>
+                {diagError.server_id}
+              </Text>
+            </View>
+            {diagError.diagnostics?.roster_count !== null &&
+              diagError.diagnostics?.roster_count !== undefined && (
+                <View style={diagStyles.row}>
+                  <Text style={diagStyles.label}>Roster count</Text>
+                  <Text style={diagStyles.value}>
+                    {diagError.diagnostics.roster_count}
+                  </Text>
+                </View>
+              )}
+            {diagError.diagnostics?.psp_lookup_mode && (
+              <View style={diagStyles.row}>
+                <Text style={diagStyles.label}>PSP lookup</Text>
+                <Text style={diagStyles.value}>
+                  {diagError.diagnostics.psp_lookup_mode}
+                </Text>
+              </View>
+            )}
+            {diagError.diagnostics?.server_scope && (
+              <View style={diagStyles.row}>
+                <Text style={diagStyles.label}>Scope</Text>
+                <Text style={diagStyles.value}>
+                  {diagError.diagnostics.server_scope}
+                </Text>
+              </View>
+            )}
+            {diagError.diagnostics?.blocker && (
+              <View style={diagStyles.row}>
+                <Text style={diagStyles.label}>X-Blocker</Text>
+                <Text style={diagStyles.valueErr}>
+                  {diagError.diagnostics.blocker}
+                </Text>
+              </View>
+            )}
+            {diagError.detail && (
+              <View style={diagStyles.detailWrap}>
+                <Text style={diagStyles.label}>Dettaglio</Text>
+                <Text style={diagStyles.detailTxt}>{diagError.detail}</Text>
+              </View>
+            )}
+            <View style={diagStyles.actionRow}>
+              <TouchableOpacity
+                style={[diagStyles.btn, diagStyles.btnSecondary]}
+                onPress={() => setDiagError(null)}
+                activeOpacity={0.8}
+              >
+                <Text style={diagStyles.btnSecondaryTxt}>Cambia server</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[diagStyles.btn, diagStyles.btnPrimary]}
+                onPress={() => {
+                  // HOTFIX C — Retry SOLO user-triggered, nessun loop automatico.
+                  const target = servers.find(
+                    (x) => x.server_id === diagError.server_id,
+                  );
+                  setDiagError(null);
+                  if (target) onEnter(target);
+                }}
+                activeOpacity={0.8}
+              >
+                <Text style={diagStyles.btnPrimaryTxt}>Riprova</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -509,4 +755,65 @@ const cardStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   enterBtnTxt: { color: '#fff', fontSize: 13, fontWeight: '900', letterSpacing: 3 },
+});
+
+// HOTFIX C — Stili della card diagnostica fail-closed.
+const diagStyles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 18,
+  },
+  card: {
+    width: '100%',
+    maxWidth: 380,
+    backgroundColor: '#13133A',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,180,80,0.5)',
+    padding: 16,
+  },
+  title: {
+    color: '#FFB347',
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 1,
+    marginBottom: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'rgba(255,255,255,0.08)',
+  },
+  label: { color: 'rgba(255,255,255,0.65)', fontSize: 11, fontWeight: '700' },
+  value: { color: '#fff', fontSize: 11, fontWeight: '700', maxWidth: 220, textAlign: 'right' },
+  valueErr: { color: '#FFB347', fontSize: 11, fontWeight: '900', maxWidth: 220, textAlign: 'right' },
+  detailWrap: { marginTop: 10 },
+  detailTxt: { color: 'rgba(255,255,255,0.85)', fontSize: 11, marginTop: 4, lineHeight: 16 },
+  actionRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 16,
+  },
+  btn: {
+    flex: 1,
+    height: 44,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnPrimary: { backgroundColor: '#FF6B35' },
+  btnPrimaryTxt: { color: '#fff', fontSize: 12, fontWeight: '900', letterSpacing: 2 },
+  btnSecondary: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
+  },
+  btnSecondaryTxt: { color: '#fff', fontSize: 12, fontWeight: '800', letterSpacing: 2 },
 });
