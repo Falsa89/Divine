@@ -1,8 +1,39 @@
 {
   "pack": "SECURITY_HOTFIX_A_NO_SCOPE_DRIFT",
-  "status": "PASS",
-  "errors": [],
-  "changed": [],
+  "status": "FAIL",
+  "errors": [
+    "scope drift: frontend/app/(tabs)/battle.tsx",
+    "scope drift: frontend/app/(tabs)/heroes.tsx",
+    "scope drift: frontend/app/servers.tsx",
+    "scope drift: frontend/utils/api.ts"
+  ],
+  "changed": [
+    ".emergent/emergent.yml",
+    "backend/battle_engine.py",
+    "backend/helpers/jwt_secret_preflight.py",
+    "backend/routes/v130_lobby_launch_context.py",
+    "backend/routes/v131_combat_preview.py",
+    "backend/routes/v96_auth.py",
+    "backend/scripts/reports/post_chain_no_secret_leak_in_reports_report.json",
+    "backend/scripts/reports/security_hotfix_a_battle_simulate_guard_report.json",
+    "backend/scripts/reports/security_hotfix_a_jwt_secret_preflight_report.json",
+    "backend/scripts/reports/security_hotfix_a_no_scope_drift_report.json",
+    "backend/scripts/validate_hotfix_b_api_error_contract.py",
+    "backend/scripts/validate_hotfix_b_blocker_visibility.py",
+    "backend/scripts/validate_hotfix_b_no_scope_drift.py",
+    "backend/scripts/validate_hotfix_c_no_scope_drift.py",
+    "backend/scripts/validate_hotfix_c_server_select_fail_closed.py",
+    "backend/scripts/validate_security_hotfix_a_battle_simulate_guard.py",
+    "backend/scripts/validate_security_hotfix_a_jwt_secret_preflight.py",
+    "backend/scripts/validate_security_hotfix_a_no_scope_drift.py",
+    "backend/server.py",
+    "docs/divine/537_HOTFIX_B_API_ERROR_CONTRACT.md",
+    "docs/divine/538_HOTFIX_C_SERVER_SELECT_FAIL_CLOSED.md",
+    "frontend/app/(tabs)/battle.tsx",
+    "frontend/app/(tabs)/heroes.tsx",
+    "frontend/app/servers.tsx",
+    "frontend/utils/api.ts"
+  ],
   "anchor": "dd36905a8",
   "enforcement": "ENFORCED_GIT_DIFF"
 }
