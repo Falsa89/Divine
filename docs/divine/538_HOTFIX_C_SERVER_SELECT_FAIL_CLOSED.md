@@ -25,9 +25,11 @@ pipeline `.emergent/emergent.yml`, non-code).
 
 ## 3) HEAD finale
 
-`<TRUTH_SYNC_PENDING>` — sarà popolato dopo il commit HOTFIX C; in caso di
-auto-commit pipeline simile a HOTFIX B, sarà documentato in un report di
-truth-sync successivo.
+- Commit HOTFIX C (contenuto patch): `3b56fff1516ea1e168a97a57be2648303346e104`
+- Auto-pipeline post-HOTFIX C: `0c2d0944750c4968c65986e67995eb53756014a3`
+  (`.emergent/emergent.yml` bump non-code)
+- Truth-sync di questo report: SHA emesso dal commit di chiusura (vedi
+  `git log` posteriore).
 
 ## 4) Files changed
 
@@ -270,8 +272,9 @@ best-effort). HOTFIX C **non introduce alcun nuovo endpoint mutativo**.
 
 ## 20) Next recommended step
 
-1. Commit HOTFIX C (auto-pipeline o manuale) e truth-sync di questo report
-   sostituendo `<TRUTH_SYNC_PENDING>` con lo SHA reale.
+1. Commit HOTFIX C (auto-pipeline o manuale) e truth-sync di questo report:
+   commit contenuto = `3b56fff1516ea1e168a97a57be2648303346e104`,
+   baseline HOTFIX B = `b1ee3386c085eed2163c8d62ad623f7f34dbc76c`.
 2. Game Master + Codex Web re-audit Hotfix A + B + C.
 3. Se promosso, fork dedicato per affrontare il bug fuori scope
    `heroes.tsx filtered.map(...)` (HOTFIX D candidato — read-only safety
