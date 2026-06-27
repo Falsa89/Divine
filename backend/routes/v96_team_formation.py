@@ -39,6 +39,23 @@ import os
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 
+# HOTFIX E — contratto TeamFormation V1 centralizzato (read-only helper).
+from helpers.team_formation_contract import (
+    normalize_team_formation_to_v1,
+    validate_v1_team_for_save,
+    TEAM_FORMATION_V1_MAX_MEMBERS,
+    TEAM_FORMATION_CONTRACT_VERSION,
+    TEAM_FORMATION_V1_REQUIRED,
+    TEAM_FORMATION_USER_HERO_ID_REQUIRED,
+    TEAM_FORMATION_CANONICAL_ID_REQUIRED,
+    TEAM_FORMATION_OWNED_HERO_NOT_FOUND,
+    TEAM_FORMATION_SERVER_SCOPE_MISMATCH,
+    TEAM_FORMATION_CANONICAL_MISMATCH,
+    TEAM_FORMATION_DUPLICATE_USER_HERO,
+    TEAM_FORMATION_DUPLICATE_CELL,
+    TEAM_FORMATION_TOO_MANY_MEMBERS,
+)
+
 router = APIRouter(prefix="/api/team", tags=["v96_team_formation"])
 
 
@@ -156,6 +173,26 @@ def create_team_formation_router(db, get_current_user):
                     "blocker": "PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER",
                 }
             # Happy path: team_formation strict da PSP.
+            # HOTFIX E — normalize-on-read a V1 senza DB writes.
+            # Build lookup maps su user_heroes server-scoped per disambiguazione
+            # legacy `hero_id` (potrebbe matchare user_heroes.id OR hero_id).
+            uid_for_lookup = uid_uuid
+            uh_docs = await db.user_heroes.find(
+                {"user_id": uid_for_lookup, "server_id": server_id},
+                projection={"id": 1, "user_hero_id": 1, "hero_id": 1, "server_id": 1, "_qa_seed": 1},
+            ).to_list(length=200)
+            owned_by_user_hero_id: dict = {}
+            owned_by_canonical_id: dict = {}
+            for d in uh_docs:
+                owned_uh_id = d.get("user_hero_id") or d.get("id")
+                if owned_uh_id:
+                    owned_by_user_hero_id[str(owned_uh_id)] = d
+                c = d.get("hero_id")
+                if c:
+                    owned_by_canonical_id.setdefault(str(c), []).append(d)
+            v1_slots, v1_warnings = normalize_team_formation_to_v1(
+                psp_team, owned_by_user_hero_id, owned_by_canonical_id
+            )
             return {
                 **base_response,
                 "authenticated": True,
@@ -167,7 +204,15 @@ def create_team_formation_router(db, get_current_user):
                 "legacy_account_team_used": False,
                 "source": "saved_formation_server_scoped",
                 "fallback_used": False,
-                "team_formation": psp_team,
+                # HOTFIX E — esposizione duale:
+                #   - `team_formation`: forma canonica V1 normalizzata
+                #     (consumata da frontend e snapshot Pack 130).
+                #   - `team_formation_raw`: forma raw persistita (utile per QA
+                #     per ispezionare drift legacy senza DB query).
+                "team_formation": v1_slots,
+                "team_formation_raw": psp_team,
+                "team_formation_contract_version": TEAM_FORMATION_CONTRACT_VERSION,
+                "team_formation_v1_warnings": v1_warnings,
                 "psp_team_initialized_pack_87": psp_team_initialized_pack_87,
                 "blocker": None,
             }
@@ -203,16 +248,23 @@ def create_team_formation_router(db, get_current_user):
         }
 
     # =========================================================================
-    # Pack 125 — POST /api/team/save-formation (QA dev gated, server-scoped).
+    # Pack 125 / HOTFIX E — POST /api/team/save-formation (QA dev gated,
+    # server-scoped, contratto TeamFormation V1).
     # =========================================================================
-    class TeamSlot(BaseModel):
-        hero_id: str = Field(..., min_length=1, max_length=128)
+    class TeamSlotV1(BaseModel):
+        """HOTFIX E — slot canonico V1.
+        - user_hero_id: owned user_heroes.id (NON canonical/catalog id).
+        - canonical_id: catalog hero id = user_heroes.hero_id.
+        - col/row: 0..2 (3x3 visiva).
+        """
+        user_hero_id: str = Field(..., min_length=1, max_length=128)
+        canonical_id: str = Field(..., min_length=1, max_length=128)
         col: int = Field(..., ge=0, le=2)
         row: int = Field(..., ge=0, le=2)
 
     class SaveFormationRequest(BaseModel):
         server_id: str = Field(..., min_length=1)
-        team_formation: List[TeamSlot] = Field(default_factory=list)
+        team_formation: List[TeamSlotV1] = Field(default_factory=list)
 
     def _qa_save_gate_state() -> dict:
         """Stato del gate: enabled + allowlist. Read fresh ad ogni call."""
@@ -271,25 +323,15 @@ def create_team_formation_router(db, get_current_user):
                     },
                 )
         server_id = body.server_id
-        # Max 6 eroi (6v6).
-        if len(body.team_formation) > 6:
+        # HOTFIX E — Cap dim dal contratto centralizzato (Pack 125 cap = 6).
+        if len(body.team_formation) > TEAM_FORMATION_V1_MAX_MEMBERS:
             raise HTTPException(
                 status_code=400,
-                detail={"blocker": "TEAM_TOO_LARGE", "max": 6, "received": len(body.team_formation)},
-            )
-        # Posizioni uniche per slot (col, row).
-        positions = [(s.col, s.row) for s in body.team_formation]
-        if len(set(positions)) != len(positions):
-            raise HTTPException(
-                status_code=400,
-                detail={"blocker": "DUPLICATE_POSITIONS", "positions": positions},
-            )
-        # Hero IDs unici (no duplicate hero nello stesso team).
-        hero_ids = [s.hero_id for s in body.team_formation]
-        if len(set(hero_ids)) != len(hero_ids):
-            raise HTTPException(
-                status_code=400,
-                detail={"blocker": "DUPLICATE_HEROES", "hero_ids": hero_ids},
+                detail={
+                    "blocker": TEAM_FORMATION_TOO_MANY_MEMBERS,
+                    "max": TEAM_FORMATION_V1_MAX_MEMBERS,
+                    "received": len(body.team_formation),
+                },
             )
         # PSP fail-closed: deve esistere per (uid, server_id).
         psp_doc = await db.player_server_profiles.find_one(
@@ -304,43 +346,46 @@ def create_team_formation_router(db, get_current_user):
                     "message": "PSP non trovato per questo (user_id, server_id). Crea il profilo server prima del save.",
                 },
             )
-        # Ownership: tutti gli hero_id devono essere in user_heroes con quel server_id
-        # (o tagged QA seed). Pack 125: accettiamo ownership cross-server SOLO se
-        # tagged _qa_seed (per consentire device QA con seed).
-        if hero_ids:
-            owned_cursor = db.user_heroes.find(
-                {
-                    "user_id": uid_uuid,
-                    "hero_id": {"$in": hero_ids},
-                },
-                projection={"hero_id": 1, "server_id": 1, "_qa_seed": 1},
-            )
-            owned_docs = await owned_cursor.to_list(length=200)
-            owned_ids_for_server: set = set()
-            for d in owned_docs:
-                hid = d.get("hero_id")
-                d_sid = d.get("server_id")
-                if not hid:
-                    continue
-                # Accetta se server_id matcha O se e' QA seed (cross-server tollerato).
-                if d_sid == server_id or d.get("_qa_seed"):
-                    owned_ids_for_server.add(hid)
-            missing = [h for h in hero_ids if h not in owned_ids_for_server]
-            if missing:
-                raise HTTPException(
-                    status_code=400,
-                    detail={
-                        "blocker": "OWNERSHIP_VALIDATION_FAILED",
-                        "missing_hero_ids": missing,
-                        "message": "Almeno un hero_id non e' posseduto dall'account su questo server (o non e' QA seed).",
-                    },
-                )
-        # Save: SOLO player_server_profiles.team_formation. NO users update.
-        # NO economy mutation. NO reward. NO progress.
-        team_formation_payload: List[dict] = [
-            {"hero_id": s.hero_id, "col": s.col, "row": s.row}
+        # HOTFIX E — Carica owned user_heroes per (uid, server_id) e costruisci
+        # lookup `user_heroes.id → doc`. Le validazioni ownership + canonical
+        # mismatch sono delegate a `validate_v1_team_for_save` (helper
+        # centralizzato), refuse-by-default.
+        uh_docs = await db.user_heroes.find(
+            {"user_id": uid_uuid},
+            projection={"id": 1, "user_hero_id": 1, "hero_id": 1, "server_id": 1, "_qa_seed": 1},
+        ).to_list(length=500)
+        owned_by_user_hero_id: dict = {}
+        for d in uh_docs:
+            owned_uh_id = d.get("user_hero_id") or d.get("id")
+            if owned_uh_id:
+                owned_by_user_hero_id[str(owned_uh_id)] = d
+        slots_input = [
+            {
+                "user_hero_id": s.user_hero_id,
+                "canonical_id": s.canonical_id,
+                "col": s.col,
+                "row": s.row,
+            }
             for s in body.team_formation
         ]
+        validated, err = validate_v1_team_for_save(
+            slots_input, owned_by_user_hero_id, server_id
+        )
+        if err:
+            # Mappiamo blocker → HTTP status code coerente con Hotfix B:
+            # 400 default per validazione, 404 per owned-not-found,
+            # 409 per server-scope mismatch.
+            blocker_code = err.get("blocker", TEAM_FORMATION_V1_REQUIRED)
+            if blocker_code == TEAM_FORMATION_OWNED_HERO_NOT_FOUND:
+                http_status = 404
+            elif blocker_code == TEAM_FORMATION_SERVER_SCOPE_MISMATCH:
+                http_status = 409
+            else:
+                http_status = 400
+            raise HTTPException(status_code=http_status, detail=err)
+        # Save: SOLO player_server_profiles.team_formation. NO users update.
+        # NO economy mutation. NO reward. NO progress.
+        team_formation_payload: List[dict] = validated  # già forma V1
         await db.player_server_profiles.update_one(
             {"user_id": uid_uuid, "server_id": server_id},
             {
@@ -348,12 +393,15 @@ def create_team_formation_router(db, get_current_user):
                     "team_formation": team_formation_payload,
                     "_pack_125_qa_team_save_ts": __import__("time").time(),
                     "_pack_125_qa_team_save_source": "qa_dev_gated_endpoint",
+                    "_hotfix_e_team_formation_contract_version": TEAM_FORMATION_CONTRACT_VERSION,
                 }
             },
         )
         return {
             "v96_team_formation": True,
             "pack_125_qa_save": True,
+            "hotfix_e_team_formation_v1": True,
+            "team_formation_contract_version": TEAM_FORMATION_CONTRACT_VERSION,
             "status": "OK",
             "server_id": server_id,
             "team_formation": team_formation_payload,

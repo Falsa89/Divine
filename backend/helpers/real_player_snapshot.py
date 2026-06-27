@@ -160,14 +160,43 @@ async def build_real_player_snapshot(
         base['player_snapshot_hash'] = _hash_snapshot(base)
         return base
 
-    # Estrai user_hero_ids dalla team_formation
-    uh_ids: List[str] = []
-    for entry in team_formation:
-        if isinstance(entry, dict):
-            uh = entry.get('user_hero_id') or entry.get('hero_id')
-            if uh: uh_ids.append(str(uh))
+    # HOTFIX E — Estrai user_hero_ids dalla team_formation **dopo
+    # normalizzazione a V1**. Il contratto V1 garantisce che `user_hero_id`
+    # sia l'owned id primario; mai trattare `canonical_id` come owned id.
+    # Per la disambiguazione di legacy `{hero_id, col, row}` costruiamo
+    # lookup map dagli user_heroes server-scoped (no DB extra: viene già
+    # fatto sotto, ma per la normalizzazione serve PRIMA quindi qui
+    # eseguiamo un'unica find condivisa).
+    try:
+        owned_cursor_pre = db.user_heroes.find(
+            {'user_id': user_id, 'server_id': server_id},
+            projection={'_id': 0, 'id': 1, 'user_hero_id': 1, 'hero_id': 1, 'server_id': 1, '_qa_seed': 1},
+        )
+        owned_docs_pre = await owned_cursor_pre.to_list(length=500)
+    except Exception:
+        owned_docs_pre = []
+    owned_by_user_hero_id_pre: Dict[str, Dict[str, Any]] = {}
+    owned_by_canonical_id_pre: Dict[str, List[Dict[str, Any]]] = {}
+    for d in owned_docs_pre:
+        owned_uh_id = d.get('user_hero_id') or d.get('id')
+        if owned_uh_id:
+            owned_by_user_hero_id_pre[str(owned_uh_id)] = d
+        cid = d.get('hero_id')
+        if cid:
+            owned_by_canonical_id_pre.setdefault(str(cid), []).append(d)
+
+    try:
+        from helpers.team_formation_contract import normalize_team_formation_to_v1 as _hf_e_normalize
+        v1_team, v1_warnings = _hf_e_normalize(
+            team_formation, owned_by_user_hero_id_pre, owned_by_canonical_id_pre,
+        )
+    except Exception:
+        v1_team = []
+        v1_warnings = []
+    uh_ids: List[str] = [str(entry.get('user_hero_id')) for entry in v1_team if entry.get('user_hero_id')]
     if not uh_ids:
         base['snapshot_status'] = 'TEAM_FORMATION_EMPTY'
+        base['team_formation_v1_warnings'] = v1_warnings
         base['player_snapshot_hash'] = _hash_snapshot(base)
         return base
 
@@ -205,17 +234,18 @@ async def build_real_player_snapshot(
     except Exception:
         canonical_by_id = {}
 
-    # Mappa user_hero_id → slot dalla team_formation
+    # Mappa user_hero_id → slot dalla team_formation NORMALIZZATA V1.
+    # HOTFIX E — user_hero_id è SEMPRE l'owned id primario; canonical_id
+    # è cross-check / metadata, mai owned id.
     slot_by_uh_id: Dict[str, Any] = {}
-    for entry in team_formation:
-        if isinstance(entry, dict):
-            uh = str(entry.get('user_hero_id') or entry.get('hero_id') or '')
-            if uh:
-                slot_by_uh_id[uh] = {
-                    'col': entry.get('col') if entry.get('col') is not None else entry.get('column'),
-                    'row': entry.get('row'),
-                    'position': entry.get('position'),
-                }
+    for entry in v1_team:
+        uh = str(entry.get('user_hero_id') or '')
+        if uh:
+            slot_by_uh_id[uh] = {
+                'col': entry.get('col'),
+                'row': entry.get('row'),
+                'canonical_id': entry.get('canonical_id'),
+            }
 
     # Build sanitized snapshot list
     snapshot_heroes: List[Dict[str, Any]] = []
@@ -243,6 +273,10 @@ async def build_real_player_snapshot(
 
     base['heroes'] = snapshot_heroes
     base['team_size'] = len([h for h in snapshot_heroes if h.get('snapshot_status') == 'OK'])
+    # HOTFIX E — esposizione del team_formation V1 normalizzato + warnings
+    # per QA / re-audit downstream (snapshot resta read-only).
+    base['team_formation_v1'] = v1_team
+    base['team_formation_v1_warnings'] = v1_warnings
     if any(h.get('snapshot_status') in ('TEAM_HERO_NOT_OWNED', 'TEAM_HERO_NOT_AVAILABLE') for h in snapshot_heroes):
         base['snapshot_status'] = 'PARTIAL'
     base['player_snapshot_hash'] = _hash_snapshot(base)

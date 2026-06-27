@@ -201,9 +201,16 @@ export default function BattleTab() {
         //   - In tutti i casi: lookup hero per chiave (user_hero_id | hero_id | canonical_id).
         let cursor = 0;
         savedFormation.forEach((f: any, _i: number) => {
-          // Pack 126 FIX-A — chiave eroe robusta: priorita' user_hero_id (legacy)
-          // poi hero_id (Pack 125+) poi canonical_id (fallback).
-          const savedHeroKey = f?.user_hero_id || f?.hero_id || f?.canonical_id;
+          // HOTFIX E — chiave eroe robusta V1-aware (priorità in ordine):
+          //   1. user_hero_id  (V1 canonico Pack 125+ post HOTFIX E)
+          //   2. user_hero_id_legacy (alias Pack 87 starter)
+          //   3. hero_id      (pre-V1 ambiguo: matchato come owned id legacy)
+          //   4. canonical_id (fallback finale, usato solo se nulla matcha)
+          const savedHeroKey =
+            f?.user_hero_id ||
+            f?.user_hero_id_legacy ||
+            f?.hero_id ||
+            f?.canonical_id;
           if (!savedHeroKey) return;
           // Pack 126 FIX-A — lookup eroe nel roster `uh` con triplo fallback:
           //   1. uh[].id === savedHeroKey         (Pack 87 ownership id)
@@ -391,12 +398,29 @@ export default function BattleTab() {
       );
       return;
     }
-    // Costruisce il payload dalla griglia attuale (col 0=Support, 1=DPS, 2=Tank, row 0..2).
-    const team_formation: Array<{ hero_id: string; col: number; row: number }> = [];
+    // HOTFIX E — Payload TeamFormation V1.
+    // Distinguiamo esplicitamente:
+    //   - user_hero_id = h.id          (owned user_heroes.id)
+    //   - canonical_id = h.hero_id     (catalog id = user_heroes.hero_id)
+    // Backend (`POST /api/team/save-formation`) ora richiede entrambi i
+    // campi V1. Niente più ambiguità `hero_id` (Pack 125 ratificato).
+    const team_formation: {
+      user_hero_id: string;
+      canonical_id: string;
+      col: number;
+      row: number;
+    }[] = [];
     for (let col = 0; col < 3; col++) {
       for (let row = 0; row < 3; row++) {
         const h = grid[col]?.[row];
-        if (h && h.id) team_formation.push({ hero_id: h.id, col, row });
+        if (h && h.id) {
+          team_formation.push({
+            user_hero_id: h.id,
+            canonical_id: h.hero_id || h.canonical_id || h.id,
+            col,
+            row,
+          });
+        }
       }
     }
     if (team_formation.length === 0) {

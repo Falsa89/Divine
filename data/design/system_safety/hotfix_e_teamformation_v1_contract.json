@@ -1,0 +1,57 @@
+{
+  "manifest_id": "hotfix_e_teamformation_v1_contract_v1",
+  "purpose": "HOTFIX E — Documentazione READ-ONLY del contratto TeamFormation V1 introdotto da backend/helpers/team_formation_contract.py. Sostituisce il contratto ambiguo Pack 125 ({hero_id, col, row}) e il contratto starter Pack 87 ({slot_index, user_hero_id}) con una forma canonica unica.",
+  "contract_version": "hotfix_e_team_formation_v1",
+  "contract_module": "backend/helpers/team_formation_contract.py",
+  "canonical_slot_shape": {
+    "user_hero_id": "owned user_heroes.id / owned copy id (NOT canonical/catalog)",
+    "canonical_id": "catalog hero id = user_heroes.hero_id",
+    "col": "grid column 0..2",
+    "row": "grid row 0..2"
+  },
+  "size_cap": {
+    "max_members": 6,
+    "rationale": "Pack 125 cap preserved by HOTFIX E. NO inflation to 9 despite 3x3 visual grid."
+  },
+  "ui_visual_vs_save_note": "La UI mostra una griglia 3x3 (9 celle visive). Il save backend rimane a max 6 membri. HOTFIX E NON ridisegna la UI.",
+  "legacy_read_compat": {
+    "starter_pack_87": "{slot_index, user_hero_id} → normalized to V1 via slot_index_to_grid()",
+    "pack_125": "{hero_id, col, row} → disambiguated via owned lookup; if hero_id matches user_heroes.id treated as owned id; if matches user_heroes.hero_id with unique owned record, used; if ambiguous → TEAM_FORMATION_LEGACY_AMBIGUOUS blocker"
+  },
+  "blocker_codes": [
+    "TEAM_FORMATION_V1_REQUIRED",
+    "TEAM_FORMATION_USER_HERO_ID_REQUIRED",
+    "TEAM_FORMATION_CANONICAL_ID_REQUIRED",
+    "TEAM_FORMATION_OWNED_HERO_NOT_FOUND",
+    "TEAM_FORMATION_SERVER_SCOPE_MISMATCH",
+    "TEAM_FORMATION_CANONICAL_MISMATCH",
+    "TEAM_FORMATION_DUPLICATE_USER_HERO",
+    "TEAM_FORMATION_DUPLICATE_CELL",
+    "TEAM_FORMATION_TOO_MANY_MEMBERS",
+    "TEAM_FORMATION_LEGACY_AMBIGUOUS",
+    "PLAYER_SERVER_PROFILE_REQUIRED"
+  ],
+  "consumers": {
+    "save": "POST /api/team/save-formation (backend/routes/v96_team_formation.py)",
+    "read": "GET /api/team/get-formation (backend/routes/v96_team_formation.py)",
+    "snapshot": "backend/helpers/real_player_snapshot.py (Pack 130 read-only)",
+    "frontend_save_payload": "frontend/app/(tabs)/battle.tsx (saveTeam)"
+  },
+  "policy": {
+    "db_writes_during_hotfix_e_test": "FORBIDDEN",
+    "endpoint_mutativi_during_test": "FORBIDDEN (POST /api/team/save-formation, POST /api/psp/ensure, POST /api/psp/starter/claim, POST /api/battle/simulate)",
+    "db_migrations": "NONE in HOTFIX E (normalize-on-read only)",
+    "live_team_rewrite_on_get": "FORBIDDEN (read-only normalization)"
+  },
+  "not_in_scope_of_hotfix_e": [
+    "battle engine authoritative runtime",
+    "lobby/combat full runtime",
+    "rewards / gacha / shop / VIP / BP / mail",
+    "starter claim backend logic",
+    "PSP schema",
+    "heroes.tsx filtered.map bug",
+    "Catalogo / I Miei Eroi / Formazione naming",
+    "BATTLE_SIMULATE_LIVE_ENABLED residual P1",
+    "DB migration for team_formation legacy"
+  ]
+}
