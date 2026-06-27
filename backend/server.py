@@ -427,13 +427,16 @@ async def psp_starter_claim(
             "no_reward_grant": True,
             "no_player_level_mutation": True,
         }
-    # Carica config starter approvato Pack 87.
-    starter_set = [
-        # (hero_id, role)
-        ("greek_phalanx_recruit", "tank"),
-        ("celtic_forest_archer", "dps"),
-        ("angelic_sanctuary_acolyte", "support"),
-    ]
+    # HOTFIX D — Carica il set starter dal contratto centralizzato
+    # (`backend/helpers/starter_roster_contract.py`). Sostituisce la lista
+    # hardcoded Pack 87 con una sorgente unica importata sia dal claim sia
+    # dall'esposizione `/api/user/heroes`. Semantica invariata: stessi
+    # IDs, stessi ruoli, stessi flag richiesti, stessa idempotenza.
+    from helpers.starter_roster_contract import (
+        starter_set_for_claim,
+        STARTER_REQUIRED_FLAGS,
+    )
+    starter_set = starter_set_for_claim()
     # Verifica che TUTTI gli heroes siano eligible (catalogabili, non-premium, low-rarity, esistenti).
     approved_heroes = []
     for hero_id, role in starter_set:
@@ -446,24 +449,25 @@ async def psp_starter_claim(
                 "blocker": "STARTER_ROSTER_NOT_CATALOGED",
                 "missing_hero_id": hero_id,
             }
-        # Eligibility checks (refuse-by-default, NO silent invention).
-        if int(h.get("rarity") or 0) > 2:
+        # HOTFIX D — eligibility checks gated dal contratto centralizzato
+        # (refuse-by-default, NO silent invention). Mappa 1-1 con i blocker
+        # ratificati Pack 87. Soglia `high_rarity_threshold` dal contratto.
+        if STARTER_REQUIRED_FLAGS["high_rarity_forbidden"] and int(h.get("rarity") or 0) > STARTER_REQUIRED_FLAGS["high_rarity_threshold"]:
             response.status_code = 409
             return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_HIGH_RARITY", "hero_id": hero_id}
-        if h.get("is_official") is not True:
+        if STARTER_REQUIRED_FLAGS["is_official_required"] and h.get("is_official") is not True:
             response.status_code = 409
             return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_NOT_OFFICIAL", "hero_id": hero_id}
-        if h.get("obtainable") is not True:
+        if STARTER_REQUIRED_FLAGS["obtainable_required"] and h.get("obtainable") is not True:
             response.status_code = 409
             return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_NOT_OBTAINABLE", "hero_id": hero_id}
-        if h.get("show_in_catalog") is not True:
+        if STARTER_REQUIRED_FLAGS["show_in_catalog_required"] and h.get("show_in_catalog") is not True:
             response.status_code = 409
             return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_NOT_CATALOG_VISIBLE", "hero_id": hero_id}
-        if h.get("deactivated_at"):
+        if STARTER_REQUIRED_FLAGS["deactivated_forbidden"] and h.get("deactivated_at"):
             response.status_code = 409
             return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_DEACTIVATED", "hero_id": hero_id}
-        # NO premium check
-        if h.get("is_premium") is True:
+        if STARTER_REQUIRED_FLAGS["premium_forbidden"] and h.get("is_premium") is True:
             response.status_code = 409
             return {"v110_starter_claim": False, "blocker": "STARTER_ROSTER_PREMIUM_FORBIDDEN", "hero_id": hero_id}
         approved_heroes.append((h, role))
@@ -619,8 +623,20 @@ async def get_user_heroes(
             _hero_docs_ss = await db.heroes.find({"id": {"$in": _hero_ids_ss}}).to_list(2000)
         _hero_by_id_ss = {h["id"]: h for h in _hero_docs_ss}
         result = []
+        # HOTFIX D — import contratto starter per fallback exposure.
+        # Quando il merge col catalog produce hero_class mancante per uno
+        # starter canonico, applichiamo backfill da `starter_fallback_exposure`
+        # senza sovrascrivere campi già valorizzati. NESSUN DB read extra,
+        # NESSUN /api/heroes usage: il contratto è pure data importata.
+        from helpers.starter_roster_contract import (
+            is_starter_id as _hd_is_starter_id,
+            starter_fallback_exposure as _hd_starter_fallback_exposure,
+        )
+        starter_fallback_applied = 0
+        starter_catalog_missing_ids: list[str] = []
         for uh in user_heroes:
-            hero = _hero_by_id_ss.get(uh.get("hero_id"))
+            uh_hero_id = uh.get("hero_id")
+            hero = _hero_by_id_ss.get(uh_hero_id)
             if hero:
                 if not should_show_in_collection(hero, owned=True):
                     continue
@@ -638,7 +654,43 @@ async def get_user_heroes(
                     "battle_power_formula_version": _BP_FV_SS,
                     "battle_power_source": _BP_SRC_SS,
                 }
+                # HOTFIX D — fallback hero_class per starter canonici quando
+                # il catalog espone l'eroe ma `hero_class` è None/missing.
+                # Backfill solo se il campo non è già valorizzato.
+                if _hd_is_starter_id(uh_hero_id) and not merged.get("hero_class"):
+                    _fb = _hd_starter_fallback_exposure(uh_hero_id, uh)
+                    if _fb:
+                        # Backfill ONLY i campi mancanti / falsy nel merge corrente.
+                        for _k, _v in _fb.items():
+                            if not merged.get(_k):
+                                merged[_k] = _v
+                        starter_fallback_applied += 1
                 result.append(merged)
+            elif _hd_is_starter_id(uh_hero_id):
+                # HOTFIX D — starter canonico posseduto (user_heroes esiste)
+                # ma NON trovato in `db.heroes` catalog: esponiamo comunque
+                # con fallback minimale dal contratto, mai inventando lore.
+                # Header `X-Starter-Catalog-Missing` lo elencherà per QA.
+                if uh_hero_id:
+                    starter_catalog_missing_ids.append(uh_hero_id)
+                _fb = _hd_starter_fallback_exposure(uh_hero_id, uh)
+                merged = {
+                    **serialize_doc(uh),
+                    "hero_name": uh_hero_id,  # placeholder: nessuna lore inventata.
+                    "hero_element": _fb.get("hero_element"),
+                    "hero_rarity": _fb.get("hero_rarity"),
+                    "hero_image": None,
+                    "hero_stats": None,
+                    "hero_class": _fb.get("hero_class"),
+                    "starter_role": _fb.get("starter_role"),
+                    "power": 0,
+                    "battle_power_formula_version": _BP_FV_SS,
+                    "battle_power_source": _BP_SRC_SS,
+                    "_hotfix_d_starter_fallback_applied": True,
+                    "_hotfix_d_catalog_missing": True,
+                }
+                result.append(merged)
+                starter_fallback_applied += 1
         response.headers["X-Server-Scope"] = "server_scoped"
         response.headers["X-Filter-Applied"] = "true"
         response.headers["X-Server-Id"] = sid
@@ -651,6 +703,10 @@ async def get_user_heroes(
         response.headers["X-Player-Level"] = str(server_player_level)
         response.headers["X-Player-Exp"] = str(server_player_exp)
         response.headers["X-Server-Progression-State"] = "psp_present_server_scoped"
+        # HOTFIX D — diagnostica esposizione starter per QA (read-only).
+        response.headers["X-Starter-Fallback-Applied"] = str(starter_fallback_applied)
+        if starter_catalog_missing_ids:
+            response.headers["X-Starter-Catalog-Missing"] = ",".join(starter_catalog_missing_ids)
         return result
     # Nessun server_id -> legacy account-wide DEPRECATED. UI player-facing
     # devono passare server_id o bloccare onestamente.

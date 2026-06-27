@@ -1,0 +1,86 @@
+{
+  "manifest_id": "hotfix_d_starter_roster_db_requirements_v1",
+  "purpose": "HOTFIX D — Elenco read-only dei documenti db.heroes che devono esistere con i flag richiesti perché /api/psp/starter/claim possa procedere senza emettere blocker. Questo manifest NON esegue migrazioni: documenta solo lo stato atteso del catalog runtime. Se il catalog manca/non rispetta i flag, classificare come MANUAL_DB_SYNC_REQUIRED senza eseguire writes.",
+  "authorization": "AUTORIZZO_V110_SERVER_SCOPED_STARTER_FLOW_PACK_87",
+  "contract_module": "backend/helpers/starter_roster_contract.py",
+  "contract_version": "hotfix_d_starter_roster_contract_v1",
+  "policy": {
+    "db_writes": "FORBIDDEN_DURING_HOTFIX_D",
+    "live_migrations": "FORBIDDEN",
+    "destructive_changes": "FORBIDDEN",
+    "fallback_when_missing": "expose via starter_fallback_exposure with X-Starter-Catalog-Missing header"
+  },
+  "required_flags_per_starter": {
+    "is_official": true,
+    "obtainable": true,
+    "show_in_catalog": true,
+    "is_premium": false,
+    "deactivated_at": null,
+    "rarity_max_inclusive": 2
+  },
+  "starters": [
+    {
+      "starter_id": "greek_phalanx_recruit",
+      "expected_role": "tank",
+      "expected_hero_class": "Tank",
+      "expected_rarity": 1,
+      "expected_element": "earth",
+      "db_heroes_doc_required_keys": [
+        "id == \"greek_phalanx_recruit\"",
+        "is_official == true",
+        "obtainable == true",
+        "show_in_catalog == true",
+        "is_premium != true",
+        "deactivated_at == null",
+        "rarity in {1, 2}"
+      ]
+    },
+    {
+      "starter_id": "celtic_forest_archer",
+      "expected_role": "dps",
+      "expected_hero_class": "DPS",
+      "expected_rarity": 1,
+      "expected_element": "wind",
+      "db_heroes_doc_required_keys": [
+        "id == \"celtic_forest_archer\"",
+        "is_official == true",
+        "obtainable == true",
+        "show_in_catalog == true",
+        "is_premium != true",
+        "deactivated_at == null",
+        "rarity in {1, 2}"
+      ]
+    },
+    {
+      "starter_id": "angelic_sanctuary_acolyte",
+      "expected_role": "support",
+      "expected_hero_class": "Support",
+      "expected_rarity": 1,
+      "expected_element": "light",
+      "db_heroes_doc_required_keys": [
+        "id == \"angelic_sanctuary_acolyte\"",
+        "is_official == true",
+        "obtainable == true",
+        "show_in_catalog == true",
+        "is_premium != true",
+        "deactivated_at == null",
+        "rarity in {1, 2}"
+      ]
+    }
+  ],
+  "blocker_mapping_on_violation": {
+    "doc_missing": "STARTER_ROSTER_NOT_CATALOGED",
+    "rarity_above_threshold": "STARTER_ROSTER_HIGH_RARITY",
+    "is_official_false": "STARTER_ROSTER_NOT_OFFICIAL",
+    "obtainable_false": "STARTER_ROSTER_NOT_OBTAINABLE",
+    "show_in_catalog_false": "STARTER_ROSTER_NOT_CATALOG_VISIBLE",
+    "deactivated_at_set": "STARTER_ROSTER_DEACTIVATED",
+    "is_premium_true": "STARTER_ROSTER_PREMIUM_FORBIDDEN"
+  },
+  "manual_db_sync_procedure": "Se il catalog runtime non rispetta i requisiti, NON eseguire writes in questo hotfix. Aprire un fork dedicato MANUAL_DB_SYNC_REQUIRED con scope ratificato dal Game Master.",
+  "notes": [
+    "I tre starter sono ratificati Pack 87 e non sono modificati da HOTFIX D.",
+    "HOTFIX D centralizza il contratto e introduce fallback di esposizione coerente in /api/user/heroes quando hero_class manca dal catalog.",
+    "Nessuna nuova lore / nuova rarità / nuovo personaggio è stato inventato."
+  ]
+}
