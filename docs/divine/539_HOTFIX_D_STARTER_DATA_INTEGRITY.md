@@ -16,6 +16,32 @@ Release ready = NO
 Secure / anti-hack safe = NO
 ```
 
+### 1.bis) Root cause sintetica (CODEX_AUDIT2_STARTER_DATA_P0_CONFIRMED)
+
+```text
+Starter esistenti e eligible nel DB, ma hero_class=None.
+Il problema Team/Formazione era quindi causato dal merge /api/user/heroes
+che esponeva hero_class:null, nascosto dai filtri frontend Tank/DPS/Support.
+HOTFIX D risolve con fallback API dal contratto starter,
+senza scrivere nel DB.
+```
+
+Evidence runtime (DB inspection read-only, nessuna scrittura):
+
+```text
+greek_phalanx_recruit:     rarity=1, is_official=True, obtainable=True,
+                            show_in_catalog=True, is_premium=False, hero_class=None ⚠
+celtic_forest_archer:      rarity=1, is_official=True, obtainable=True,
+                            show_in_catalog=True, is_premium=False, hero_class=None ⚠
+angelic_sanctuary_acolyte: rarity=1, is_official=True, obtainable=True,
+                            show_in_catalog=True, is_premium=False, hero_class=None ⚠
+```
+
+→ 6/6 flag di eligibility CONFORMI; l'unico gap era `hero_class=None`.
+Il backfill HOTFIX D in `/api/user/heroes` ripristina `Tank/DPS/Support`
+dal contratto centralizzato `backend/helpers/starter_roster_contract.py`,
+**senza alcuna scrittura DB**.
+
 ## 2) HEAD iniziale
 
 ```text
@@ -24,15 +50,13 @@ Secure / anti-hack safe = NO
 
 (chiusura HOTFIX C truth-sync, baseline confermata da prompt).
 
-## 3) HEAD finale / pre-commit
+## 3) HEAD finale / commit contenuto
 
-```text
-6d65c2c5f8352aed2e7d80445d8863c5e3d49420
-```
-
-(working tree contiene i file scope HOTFIX D pronti per commit; truth-sync
-del campo `<TRUTH_SYNC_PENDING>` di questo report seguirà il commit, come
-per Hotfix B/C.)
+- Commit HOTFIX D (contenuto patch): `bd1acd5f5f2260e47331cea30738ca73990240d4`
+- Auto-pipeline post-HOTFIX D (`.emergent/emergent.yml` bump non-code):
+  `2dcc5b196edf104de4fb8c79bfc54b82e77379b8`
+- Truth-sync di questo report: SHA emesso dal commit di chiusura (vedi
+  `git log` posteriore).
 
 ## 4) Files changed
 
@@ -364,7 +388,10 @@ Nessun nuovo endpoint mutativo è stato introdotto da HOTFIX D.
 
 ## 20) Next recommended step
 
-1. Commit HOTFIX D (auto-pipeline o manuale) e truth-sync di questo report.
+1. Commit HOTFIX D già creato (auto-pipeline): contenuto patch
+   `bd1acd5f5f2260e47331cea30738ca73990240d4`; baseline HOTFIX C
+   `9593a7c5bd79e8c0f29331f3a57c01170fb61f21`. Questo report è stato
+   truth-synced col SHA reale.
 2. Game Master + Codex Web re-audit Hotfix A + B + C + D.
 3. Se promosso, valutare un fork **MANUAL_DB_SYNC_REQUIRED** per
    popolare `db.heroes.hero_class` dei tre starter così da rendere il
