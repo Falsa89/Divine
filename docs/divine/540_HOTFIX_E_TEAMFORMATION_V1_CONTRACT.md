@@ -39,10 +39,58 @@ be87f54140488bdd75bd7f95dff2e7ef8c6fea1f
 
 (chiusura HOTFIX D truth-sync, baseline confermata dal prompt).
 
-## 3) HEAD finale / pre-commit
+## 3) HEAD finale / commit contenuto
 
-`<TRUTH_SYNC_PENDING>` — sarà popolato dopo il commit HOTFIX E, come
-per Hotfix B/C/D.
+- Commit HOTFIX E (contenuto patch): `2b55dde67a9ba8f0a745d65a304213cb39bcdc3d`
+  (auto-commit pipeline, 10 file di scope, 1336 insertions / 79 deletions)
+- Auto-pipeline pre-HOTFIX E (`.emergent/emergent.yml` bump non-code):
+  `67afb59fce334a76b1e6aff51c9ef4958904ab92`
+- Auto-pipeline post-HOTFIX E (`.emergent/emergent.yml` bump non-code):
+  `62259242550ae724c578639280fb4ca88647c321`
+- Truth-sync di questo report: SHA emesso dal commit di chiusura (vedi
+  `git log` posteriore).
+
+### 3.bis) Chiarimento "10 file vs 8 file" (richiesto da Game Master)
+
+Discrepanza spiegata:
+
+- **10 file** = totale files cambiati / aggiunti dal patch (incluso il
+  manifest JSON `data/design/system_safety/hotfix_e_teamformation_v1_contract.json`
+  E questo report Markdown `docs/divine/540_HOTFIX_E_TEAMFORMATION_V1_CONTRACT.md`).
+- **8 file** = quelli che il `validate_hotfix_e_no_scope_drift.py`
+  vede a **runtime di esecuzione validator** via
+  `git diff --name-only HEAD` + `git ls-files --others`. Il validator viene
+  eseguito durante la fase di sviluppo, **prima** che il manifest JSON e il
+  report MD venissero scritti come ultimi file di scope. Subito dopo la loro
+  creazione il working tree contiene tutti e 10, ma lo snapshot del log
+  riportato nel report 540 punto §16 era stato cristallizzato all'iterazione
+  precedente quando i validator giravano per la prima volta.
+- **Non è scope drift**: i 10 file finali sono **tutti** dentro l'allowed
+  scope del validator (`ALLOWED_PATTERNS` include
+  `docs/divine/540_HOTFIX_E_TEAMFORMATION_V1_CONTRACT*.md` e
+  `data/design/system_safety/hotfix_e_teamformation_v1_contract*.json`).
+- **Fonte di verità**: il `git diff --name-only be87f54..2b55dde67` riportato
+  in §5 di questo report — 10 file, tutti in scope, 0 file fuori scope.
+
+### 3.ter) Root contract — TeamFormation V1 (per re-audit)
+
+```text
+TeamFormation V1:
+  user_hero_id = owned user_heroes.id           (owned copy id)
+  canonical_id = catalog/user_heroes.hero_id    (catalog id)
+  col/row      = posizione griglia (0..2, 0..2)
+
+Nuovi save (POST /api/team/save-formation) devono usare V1 e SOLO V1.
+Get (GET /api/team/get-formation) normalizza legacy senza DB rewrite
+  (normalize-on-read da: starter Pack 87 `{slot_index, user_hero_id}`,
+   Pack 125 `{hero_id, col, row}`, V1 nativo).
+Snapshot (real_player_snapshot Pack 130) consuma SEMPRE V1 normalizzato.
+`hero_id` ambiguo NON deve più essere usato come owned id nel nuovo
+contratto: dove appare in record legacy viene disambiguato via
+owned-lookup (matcha `user_heroes.id` ⇒ owned id; matcha
+`user_heroes.hero_id` con univocità ⇒ canonical id derivato; multi-match
+⇒ blocker `TEAM_FORMATION_LEGACY_AMBIGUOUS`).
+```
 
 ## 4) Files changed
 
@@ -349,8 +397,10 @@ Nessun nuovo endpoint mutativo introdotto da HOTFIX E.
 
 ## 20) Next recommended step
 
-1. Commit HOTFIX E (auto-pipeline o manuale) e truth-sync di questo report
-   sostituendo `<TRUTH_SYNC_PENDING>` con lo SHA reale.
+1. Commit HOTFIX E già creato (auto-pipeline): contenuto patch
+   `2b55dde67a9ba8f0a745d65a304213cb39bcdc3d`; baseline HOTFIX D
+   `be87f54140488bdd75bd7f95dff2e7ef8c6fea1f`. Questo report è stato
+   truth-synced col SHA reale.
 2. Game Master + Codex Web re-audit Hotfix A+B+C+D+E.
 3. Se promosso, fork dedicato per estendere il consumo di
    `team_formation_v1` in `combat_preview_adapter` /
