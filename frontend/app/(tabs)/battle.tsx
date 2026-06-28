@@ -39,7 +39,19 @@ export default function BattleTab() {
   const router = useRouter();
   const { refreshUser, userHeroesVersion } = useAuth();
   // Pack 92 — server scope sweep su roster reader player-facing.
-  const { selected_server_id } = useServerScope();
+  // FIX 543 — Aspettiamo che useServerScope sia pronto prima di emettere
+  // SERVER_REQUIRED: lo stato iniziale del hook è { loading:true,
+  // isReady:false, selected_server_id:null } perchè la lettura di
+  // AsyncStorage (`v101_selected_server_id`) è asincrona. Senza guard,
+  // `loadData()` partirebbe immediatamente e mostrerebbe SERVER_REQUIRED
+  // anche se l'utente aveva già selezionato il server. Refuse-by-default
+  // sul flag `serverScopeReady`.
+  const {
+    selected_server_id,
+    loading: serverScopeLoading,
+    isReady: serverScopeReady,
+    refreshToken: serverScopeRefreshToken,
+  } = useServerScope();
   const [heroes, setHeroes] = useState<any[]>([]);
   // HOTFIX B — diagnostic state per il roster reader della formazione.
   // Sostituisce il catch silenzioso che azzerava `heroes` mascherando
@@ -107,10 +119,20 @@ export default function BattleTab() {
   // così la formation picker mostra subito i nuovi eroi pullati senza
   // richiedere restart dell'app. La grid già piazzata viene preservata se
   // tutti i suoi user_hero_id risolvono ancora nel nuovo `uh`.
+  // FIX 543 — Dipendenze estese: serverScopeLoading/serverScopeReady/
+  // serverScopeRefreshToken/selected_server_id, così loadData() viene
+  // ri-eseguito appena useServerScope termina la lettura di AsyncStorage
+  // o l'utente cambia server.
   useFocusEffect(
     useCallback(() => {
       loadData();
-    }, [userHeroesVersion]),
+    }, [
+      userHeroesVersion,
+      selected_server_id,
+      serverScopeLoading,
+      serverScopeReady,
+      serverScopeRefreshToken,
+    ]),
   );
 
   // Load synergies whenever grid changes
@@ -148,7 +170,21 @@ export default function BattleTab() {
 
   const loadData = async () => {
     try {
+      // FIX 543 — Server scope readiness gate.
+      // useServerScope legge `v101_selected_server_id` da AsyncStorage in
+      // modo asincrono. Allo startup il primo render ha
+      // `loading=true / isReady=false / selected_server_id=null` anche se
+      // il server era già selezionato. Senza questo guard mostreremmo
+      // SERVER_REQUIRED erroneamente. Restiamo in loading finché lo scope
+      // non è pronto; il useFocusEffect ri-eseguirà loadData quando i flag
+      // serverScopeLoading/serverScopeReady/serverScopeRefreshToken
+      // cambiano.
+      if (serverScopeLoading || !serverScopeReady) {
+        setLoading(true);
+        return;
+      }
       // Pre-QA Stabilization 115C — fail-closed se manca server_id.
+      // Ora valutato SOLO dopo che useServerScope ha terminato la lettura.
       if (!selected_server_id) {
         setHeroes([]);
         setConstellations([]);
@@ -481,13 +517,18 @@ export default function BattleTab() {
 
   const selConst = constellations.find(c => c.id === selectedConstellation);
 
-  if (loading) return (
+  // FIX 543 — Render gate: aspettiamo che useServerScope sia pronto prima
+  // di valutare `selected_server_id`. Al primo render lo scope è ancora in
+  // caricamento (lettura asincrona di AsyncStorage), quindi senza questo
+  // gate la UI mostrava "Server richiesto" anche con server già scelto.
+  if (serverScopeLoading || !serverScopeReady || loading) return (
     <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B']} style={s.container}>
       <ActivityIndicator size="large" color={COLORS.accent} />
     </LinearGradient>
   );
 
   // Pre-QA Stabilization 115C — stato server-required (no fallback account-wide).
+  // Ora valutato SOLO dopo che useServerScope ha terminato la lettura.
   if (!selected_server_id) {
     return (
       <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={s.container}>
