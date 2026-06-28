@@ -16,25 +16,89 @@ Release ready = NO
 Secure / anti-hack safe = NO
 ```
 
-## 2) HEAD iniziale
+## 2) Baseline ufficiale e catena commit HOTFIX G
+
+**Baseline ufficiale (HOTFIX F truth-sync):**
 
 ```text
-cd230e7f519269efcbbd10d012331badc41d0757
+195c604329a0e29f2b65954240332466d96d1597
 ```
 
-(chiusura HOTFIX F truth-sync, baseline da prompt).
+**Catena commit fra baseline e HEAD finale HOTFIX G:**
+
+```text
+195c604329a0e29f2b65954240332466d96d1597  HOTFIX F truth-sync (BASELINE ufficiale)
+  ↓
+ca7b7d8e2                                  Auto-pipeline .emergent/emergent.yml (+1/-1, non-code)
+  ↓
+91a4b7725                                  Auto-pipeline .emergent/emergent.yml (+1/-1, non-code)
+  ↓
+cd230e7f519269efcbbd10d012331badc41d0757   AUTO-COMMIT contenente CODICE HOTFIX G iniziale
+                                           (agente precedente, pre-job corrente):
+                                           - frontend/app/pre-battle-lobby.tsx +37/-2
+                                             (state hotfixGTeamV1 + guard fail-closed +
+                                              propagazione team_formation_v1 nel launch_context)
+                                           - frontend/app/combat.tsx +21
+                                             (log diagnostico V1, lettura ERRATA da previewCtxLocal)
+                                           - .emergent/emergent.yml +1/-1
+  ↓
+b93582af1eae8024d99a3d503df378682885de3c   AUTO-COMMIT di QUESTO job — COMMIT CONTENUTO HOTFIX G:
+                                           - frontend/app/combat.tsx +64/-10
+                                             (fix: parse JSON launch_context, 4 blocker
+                                              fail-closed, early-return preview_locked)
+                                           - 4 validator statici nuovi (540 righe totali)
+                                           - 1 manifest JSON nuovo (64 righe)
+                                           - 1 report MD nuovo (502 righe, con TRUTH_SYNC_PENDING)
+  ↓
+6f9887adbb791f36139f38484edb49ef14c068d1   Auto-pipeline .emergent/emergent.yml (+1/-1, non-code)
+  ↓
+[truth-sync commit]                        Truth-sync di questo report (commit
+                                           docs-only che ha già sostituito
+                                           tutti i TRUTH_SYNC_PENDING con i
+                                           SHA reali del contenuto). Il proprio
+                                           SHA è visibile in `git log` post-commit
+                                           come HEAD finale HOTFIX G.
+```
+
+### 2.bis) Risposte di riconciliazione
+
+1. **Cos'è `cd230e7f519269efcbbd10d012331badc41d0757`?** Auto-pipeline
+   commit "Auto-generated changes" del 28 giu 2026 17:15:36 UTC, autore
+   "Emergent Pack 125 Agent". 3 file modificati, 59 inserzioni / 3
+   cancellazioni.
+2. **È un auto-pipeline commit successivo a HOTFIX F?** Sì, parte di
+   una sequenza di 3 auto-commit dopo `195c60432` (HOTFIX F truth-sync).
+3. **Contiene solo metadata/non-code?** **NO.** Contiene il **CODICE
+   frontend HOTFIX G iniziale** applicato dall'agente precedente
+   (pre-battle-lobby.tsx +37/-2 di vero codice React State + guard +
+   payload propagation; combat.tsx +21 di codice log diagnostico V1;
+   .emergent/emergent.yml +1/-1 non-code).
+4. **Diff `195c60432..cd230e7f`:**
+   ```text
+   .emergent/emergent.yml            |  6 +-   (3 bump auto-pipeline non-code)
+   frontend/app/combat.tsx           | 21 +    (log diagnostico V1 iniziale)
+   frontend/app/pre-battle-lobby.tsx | 39 +-   (state + guard + propagazione V1)
+   3 files changed, 59 insertions(+), 3 deletions(-)
+   ```
+5. **Vera baseline contenuto per HOTFIX G:**
+   - **Baseline ufficiale di codice:** `195c604329a0e29f2b65954240332466d96d1597` (HOTFIX F truth-sync).
+   - **Catena commit CODICE HOTFIX G:** `cd230e7f5` (parte 1, frontend iniziale, agente precedente) + `b93582af1` (parte 2, fix combat.tsx parsing + 4 validator + manifest + report, questo job).
+   - `frontend/app/pre-battle-lobby.tsx` appartiene a `cd230e7f5`, NON a `b93582af1`. È **incluso nella catena HOTFIX G** ma è stato committato PRIMA dell'esecuzione di questo job.
 
 ## 3) HEAD finale / commit contenuto
 
-- Commit HOTFIX G (contenuto patch): `<TRUTH_SYNC_PENDING>`
-  (pipeline auto-commit: 6 file di scope — combat.tsx +96/-43, 4 validator
-   scripts, manifest JSON, report MD)
-- Auto-pipeline pre-HOTFIX G (`.emergent/emergent.yml` bump non-code):
-  `<TRUTH_SYNC_PENDING>`
-- Auto-pipeline post-HOTFIX G (`.emergent/emergent.yml` bump non-code):
-  `<TRUTH_SYNC_PENDING>`
-- Truth-sync di questo report: SHA emesso dal commit di chiusura (vedi
-  `git log` posteriore).
+- **HEAD finale HOTFIX G (pre truth-sync):** `6f9887adbb791f36139f38484edb49ef14c068d1`
+- **Commit contenuto HOTFIX G (parte 1 — frontend iniziale, pre-job):**
+  `cd230e7f519269efcbbd10d012331badc41d0757`
+- **Commit contenuto HOTFIX G (parte 2 — completamento, questo job):**
+  `b93582af1eae8024d99a3d503df378682885de3c`
+- **Auto-pipeline intermedi non-code:**
+  - `ca7b7d8e2` (.emergent/emergent.yml +1/-1)
+  - `91a4b7725` (.emergent/emergent.yml +1/-1)
+  - `6f9887adb` (.emergent/emergent.yml +1/-1) ← post commit contenuto parte 2
+- **SHA finale truth-sync di questo report:** visibile in `git log` come
+  HEAD post-commit del truth-sync (sostituzione placeholder già completata
+  in questo file con SHA reali del contenuto).
 
 ### 3.bis) Pipeline TeamFormation V1 ora completamente coperta end-to-end
 
@@ -79,41 +143,66 @@ Garantito da:
   `setPhase('preview_locked')` — niente `buildPreviewCombatSnapshot`,
   niente `/api/battle/simulate`, niente `refreshUser/grantAffinity`.
 
-## 4) Files changed
+## 4) Files changed (catena HOTFIX G completa)
+
+Commit `cd230e7f519269efcbbd10d012331badc41d0757` (parte 1, pre-job):
 
 ```text
-frontend/app/combat.tsx                                                           (modified)
-backend/scripts/validate_hotfix_g_frontend_lobby_to_combat_v1_payload.py          (new)
-backend/scripts/validate_hotfix_g_combat_requires_v1_preview.py                   (new)
-backend/scripts/validate_hotfix_g_no_live_battle_or_reward_path.py                (new)
-backend/scripts/validate_hotfix_g_no_scope_drift.py                               (new)
-data/design/system_safety/hotfix_g_frontend_lobby_combat_v1.json                  (new)
-docs/divine/542_HOTFIX_G_FRONTEND_LOBBY_COMBAT_V1.md                              (this file)
+frontend/app/pre-battle-lobby.tsx           +37 / -2   (state V1 + guard + payload propagation)
+frontend/app/combat.tsx                     +21 / -0   (log diagnostico V1 iniziale)
+.emergent/emergent.yml                      +1  / -1   (non-code)
 ```
 
-`frontend/app/pre-battle-lobby.tsx` era già stato committato in HEAD
-`cd230e7f...` con state `hotfixGTeamV1` + payload V1 + guard fail-closed
-prima di questo job. Pertanto il diff in working-tree contiene solo le
-modifiche di `combat.tsx` necessarie per *consumare* davvero il V1 dal
-JSON di `launch_context` (HEAD precedente lo leggeva erroneamente da
-`previewCtxLocal`, che NON contiene V1).
+Commit `b93582af1eae8024d99a3d503df378682885de3c` (parte 2, questo job):
 
+```text
+frontend/app/combat.tsx                                                           (modified +64 / -10)
+backend/scripts/validate_hotfix_g_frontend_lobby_to_combat_v1_payload.py          (new, 130 righe)
+backend/scripts/validate_hotfix_g_combat_requires_v1_preview.py                   (new, 114 righe)
+backend/scripts/validate_hotfix_g_no_live_battle_or_reward_path.py                (new, 169 righe)
+backend/scripts/validate_hotfix_g_no_scope_drift.py                               (new, 127 righe)
+data/design/system_safety/hotfix_g_frontend_lobby_combat_v1.json                  (new,  64 righe)
+docs/divine/542_HOTFIX_G_FRONTEND_LOBBY_COMBAT_V1.md                              (this file, 502+ righe)
+```
+
+**Diff cumulativo baseline → HEAD finale (`195c60432..6f9887adb`):**
+
+```text
+.emergent/emergent.yml                             |   2 +-
+backend/scripts/validate_hotfix_g_combat_requires_v1_preview.py          |  114 +
+backend/scripts/validate_hotfix_g_frontend_lobby_to_combat_v1_payload.py |  130 +
+backend/scripts/validate_hotfix_g_no_live_battle_or_reward_path.py       |  169 +
+backend/scripts/validate_hotfix_g_no_scope_drift.py                      |  127 +
+data/design/system_safety/hotfix_g_frontend_lobby_combat_v1.json         |   64 +
+docs/divine/542_HOTFIX_G_FRONTEND_LOBBY_COMBAT_V1.md                     |  502 +
+frontend/app/combat.tsx                                                  |   77 +-
+frontend/app/pre-battle-lobby.tsx                                        |   39 +-
+9 files changed, 1215 insertions(+), 9 deletions(-)
+```
+
+**Files fuori scope NON toccati** (verifica content-side):
 `backend/helpers/real_player_snapshot.py`, `backend/helpers/team_formation_contract.py`,
+`backend/helpers/jwt_secret_preflight.py`, `backend/routes/v96_auth.py`,
 `backend/routes/v96_team_formation.py`, `backend/routes/v130_lobby_launch_context.py`,
 `backend/routes/v131_combat_preview.py`, `backend/server.py`,
-`backend/battle_engine.py`, `backend/helpers/jwt_secret_preflight.py`,
-`backend/routes/v96_auth.py`, `frontend/utils/api.ts`,
+`backend/battle_engine.py`, `frontend/utils/api.ts`,
 `frontend/app/servers.tsx`, `frontend/app/(tabs)/battle.tsx`,
-`frontend/app/(tabs)/heroes.tsx`: **non toccati**.
+`frontend/app/(tabs)/heroes.tsx`, `data/design/heroes_master.json`,
+`backend/data/character_bible.py`: **nessuna riga modificata** vs baseline.
 
 ## 5) Diff summary
 
+Combat.tsx evoluzione in 2 step:
+
 ```text
-frontend/app/combat.tsx                       +96 −43   (parse launch_context JSON, 4 blocker V1, early-return fail-closed)
-+ 4 validator nuovi, 1 manifest JSON, 1 report MD
+cd230e7f5 (pre-job) → +21 righe: log diagnostico V1 dalla
+                       fonte SBAGLIATA (previewCtxLocal NON contiene V1)
+
+b93582af1 (questo job) → +64/-10 righe: parsing JSON di params.launch_context,
+                                         4 blocker fail-closed + early-return.
 ```
 
-Pre-battle-lobby.tsx (già in HEAD):
+Pre-battle-lobby.tsx (commit `cd230e7f5`):
 
 ```text
 + const [hotfixGTeamV1, setHotfixGTeamV1] = useState<TeamFormationV1Slot[]>([]);
@@ -435,27 +524,31 @@ validate_hotfix_f_no_live_battle_or_reward_path                   PASS
 
 ## 17) Scope guard confirmation
 
-`validate_hotfix_g_no_scope_drift.py` ha rilevato 6 file di
-codice/scripts modificati in working-tree vs HEAD `cd230e7f...`:
+`validate_hotfix_g_no_scope_drift.py` rilevazione finale (post commit):
+working-tree clean vs HEAD finale (`6f9887adb`). Tutti i file di scope
+HOTFIX G risultano committati nella catena:
 
 ```text
-+ backend/scripts/validate_hotfix_g_combat_requires_v1_preview.py
-+ backend/scripts/validate_hotfix_g_frontend_lobby_to_combat_v1_payload.py
-+ backend/scripts/validate_hotfix_g_no_live_battle_or_reward_path.py
-+ backend/scripts/validate_hotfix_g_no_scope_drift.py
-+ data/design/system_safety/hotfix_g_frontend_lobby_combat_v1.json
-+ frontend/app/combat.tsx
+cd230e7f5  (parte 1, pre-job)
++ frontend/app/pre-battle-lobby.tsx     (allowed)
++ frontend/app/combat.tsx               (allowed, parziale)
+
+b93582af1  (parte 2, questo job)
++ frontend/app/combat.tsx               (allowed, completamento)
++ backend/scripts/validate_hotfix_g_frontend_lobby_to_combat_v1_payload.py  (allowed)
++ backend/scripts/validate_hotfix_g_combat_requires_v1_preview.py            (allowed)
++ backend/scripts/validate_hotfix_g_no_live_battle_or_reward_path.py         (allowed)
++ backend/scripts/validate_hotfix_g_no_scope_drift.py                         (allowed)
++ data/design/system_safety/hotfix_g_frontend_lobby_combat_v1.json           (allowed)
++ docs/divine/542_HOTFIX_G_FRONTEND_LOBBY_COMBAT_V1.md                       (allowed)
 ```
 
-`pre-battle-lobby.tsx` non appare nel diff working-tree perché le sue
-modifiche HOTFIX G erano già state committate in HEAD baseline. Verifica
-content-side da Validator 1 (PASS).
-
-`EXPLICIT_FORBIDDEN` list copre 16 file critici (battle_engine,
+Tutti gli `EXPLICIT_FORBIDDEN` (16 file critici: battle_engine,
 real_player_snapshot, team_formation_contract, server.py, api.ts,
 servers.tsx, battle.tsx, heroes.tsx, jwt_secret_preflight, v96_auth,
 v96_team_formation, v130/v131 backend routes, heroes_master.json,
-character_bible.py). Nessuno appare nel diff.
+character_bible.py): **non toccati** in tutta la catena
+`195c60432..6f9887adb`.
 
 ## 18) DB writes durante test
 
@@ -480,9 +573,13 @@ POST /api/battle/simulate         ← non chiamato (gated da HOTFIX A
 
 ## 20) Next recommended step
 
-1. Commit HOTFIX G (TBD): contenuto patch `<TRUTH_SYNC_PENDING>`;
-   baseline HOTFIX F `cd230e7f519269efcbbd10d012331badc41d0757`. Truth-sync
-   atteso col SHA reale dopo l'auto-pipeline commit.
+1. Commit truth-sync di questo report (questo commit) ha sostituito tutti
+   i `<TRUTH_SYNC_PENDING>` con SHA reali della catena HOTFIX G:
+   - Baseline ufficiale: `195c604329a0e29f2b65954240332466d96d1597` (HOTFIX F).
+   - Commit contenuto HOTFIX G parte 1: `cd230e7f519269efcbbd10d012331badc41d0757`.
+   - Commit contenuto HOTFIX G parte 2: `b93582af1eae8024d99a3d503df378682885de3c`.
+   - Auto-pipeline post-job: `6f9887adbb791f36139f38484edb49ef14c068d1`.
+   - SHA finale truth-sync: HEAD post-commit, visibile in `git log`.
 2. Game Master + Codex Web re-audit Hotfix A+B+C+D+E+F+G.
 3. Se promosso, candidato HOTFIX H read-only: hardening esplicito di
    `combat_preview_adapter.build_combat_preview_input` con marker V1
