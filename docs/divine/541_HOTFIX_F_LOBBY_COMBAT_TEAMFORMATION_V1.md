@@ -23,9 +23,58 @@ Secure / anti-hack safe = NO
 
 (chiusura HOTFIX E truth-sync, baseline da prompt).
 
-## 3) HEAD finale / pre-commit
+## 3) HEAD finale / commit contenuto
 
-`<TRUTH_SYNC_PENDING>` — sarà popolato dopo commit, come per Hotfix B/C/D/E.
+- Commit HOTFIX F (contenuto patch): `25c301137b5a192174953b88d94a4ba29b67a709`
+  (auto-commit pipeline, 10 file di scope: backend/routes/v130 +50, v131 +55,
+   4 validator scripts, manifest JSON, report MD, combat.tsx +39, pre-battle-lobby.tsx +71)
+- Auto-pipeline pre-HOTFIX F (`.emergent/emergent.yml` bump non-code):
+  `b0dc33502bb58e7a96903a36c6e5b2f2d8eca5f2`
+- Auto-pipeline post-HOTFIX F (`.emergent/emergent.yml` bump non-code):
+  `53f684429c3a848f9a7e4e6bfbeef5fe503fe59e`
+- Truth-sync di questo report: SHA emesso dal commit di chiusura (vedi
+  `git log` posteriore).
+
+### 3.bis) Pipeline TeamFormation V1 ora completamente coperta
+
+```text
+Team Save V1 (HOTFIX E)
+  ↓
+GET /api/team/get-formation V1 normalize-on-read (HOTFIX E)
+  ↓
+real_player_snapshot exposes team_formation_v1 (HOTFIX E)
+  ↓
+Lobby launch context preview consumes/exposes/blocks on team_formation_v1 (HOTFIX F)
+  ↓
+Combat preview consumes/exposes/blocks on team_formation_v1 (HOTFIX F)
+  ↓
+pre-battle-lobby.tsx prefers team_formation_v1 (HOTFIX F)
+  ↓
+combat.tsx surfaces V1 diagnostics (HOTFIX F)
+```
+
+### 3.ter) Root invariant (per re-audit)
+
+```text
+owned id primario  = user_hero_id
+catalog metadata   = canonical_id
+canonical_id / hero_id non devono essere trattati come owned id.
+```
+
+Garantito da:
+
+- `backend/helpers/team_formation_contract.py` (HOTFIX E): contratto canonico
+  V1, normalize-on-read, validate_v1_team_for_save refuse-by-default.
+- `backend/helpers/real_player_snapshot.py` (HOTFIX E): consuma forma V1
+  normalizzata, `uh_ids` costruito SOLO da `user_hero_id`.
+- `backend/routes/v130_lobby_launch_context.py` (HOTFIX F): blocca su
+  missing/empty/ambiguous V1, espone V1 al top-level.
+- `backend/routes/v131_combat_preview.py` (HOTFIX F): idem + preview-lock
+  metadata (reward DISABLED, progress DISABLED, battle_simulate BLOCKED).
+- `frontend/app/pre-battle-lobby.tsx` (HOTFIX F): `ownedKey` con priorità
+  esplicita `user_hero_id`, `canonicalHint` come fallback separato.
+- `frontend/app/combat.tsx` (HOTFIX F): logging diagnostico V1, nessuna
+  riattivazione del branch `/api/battle/simulate`.
 
 ## 4) Files changed
 
@@ -328,8 +377,10 @@ POST /api/battle/simulate         ← non chiamato (Hotfix A backend fail-closed
 
 ## 20) Next recommended step
 
-1. Commit HOTFIX F (auto-pipeline) e truth-sync di questo report sostituendo
-   `<TRUTH_SYNC_PENDING>` con lo SHA reale.
+1. Commit HOTFIX F già creato (auto-pipeline): contenuto patch
+   `25c301137b5a192174953b88d94a4ba29b67a709`; baseline HOTFIX E
+   `6db79bfe265e6e4446d2c5617419d174da8403d8`. Questo report è stato
+   truth-synced col SHA reale.
 2. Game Master + Codex Web re-audit Hotfix A+B+C+D+E+F.
 3. Se promosso, fork per il bug fuori scope `heroes.tsx:230 filtered.map(...)`
    (HOTFIX G candidato).
