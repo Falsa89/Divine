@@ -368,6 +368,11 @@ export default function PreBattleLobbyScreen() {
   // Se manca, mostriamo blocker SELECTED_SERVER_REQUIRED e disabilitiamo launch.
   const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
   const [selectedServerLoaded, setSelectedServerLoaded] = useState<boolean>(false);
+  // HOTFIX G — state per propagazione V1 verso /combat. Popolato dal
+  // fetch GET /api/team/get-formation (HOTFIX E backend) e propagato nel
+  // launch_context. Owned id primario = user_hero_id; canonical_id metadata.
+  const [hotfixGTeamV1, setHotfixGTeamV1] = useState<TeamFormationV1Slot[]>([]);
+  const [hotfixGTeamV1Warnings, setHotfixGTeamV1Warnings] = useState<TeamFormationV1Warning[]>([]);
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -537,6 +542,9 @@ export default function PreBattleLobbyScreen() {
           Array.isArray((d as any).team_formation_v1_warnings)
             ? (d as any).team_formation_v1_warnings
             : [];
+        // HOTFIX G — persisti V1 in state per propagazione verso /combat.
+        setHotfixGTeamV1(tfV1Raw || []);
+        setHotfixGTeamV1Warnings(tfWarnings);
         const tfLegacy = Array.isArray(d.team_formation)
           ? d.team_formation
           : Array.isArray((d as any).formation)
@@ -649,8 +657,29 @@ export default function PreBattleLobbyScreen() {
       if (__DEV__) console.log('[v108_POSTQA_A] launch blocked:', blockerReasons);
       return;
     }
-    // v108_POSTQA_A — passare a /combat un launch_context valido (Battle Launch Contract v1)
-    // affinche' combat.tsx possa applicare PREVIEW_REWARD_LOCK_ACTIVE. Default preview.
+    // HOTFIX G — Guard fail-closed: blocca la navigazione a /combat se
+    // team_formation_v1 è missing/empty/ambiguous. Refuse-by-default,
+    // no fake team locale, no canonical-as-owned id.
+    const hgAmbiguous = hotfixGTeamV1Warnings.filter(
+      (w: any) => w?.blocker === 'TEAM_FORMATION_LEGACY_AMBIGUOUS',
+    );
+    if (!Array.isArray(hotfixGTeamV1) || hotfixGTeamV1.length === 0) {
+      if (__DEV__) console.warn('[hotfix_g][pre-battle-lobby] V1 missing/empty:', {
+        blocker: 'FRONTEND_LOBBY_TEAMFORMATION_V1_REQUIRED',
+        warnings: hotfixGTeamV1Warnings,
+      });
+      return;
+    }
+    if (hgAmbiguous.length > 0) {
+      if (__DEV__) console.warn('[hotfix_g][pre-battle-lobby] V1 ambiguous:', {
+        blocker: 'FRONTEND_LOBBY_TEAMFORMATION_V1_AMBIGUOUS',
+        ambiguous: hgAmbiguous,
+      });
+      return;
+    }
+    // v108_POSTQA_A / HOTFIX G — launch_context Battle Launch Contract v1
+    // ESTESO con team_formation_v1 (HOTFIX E contract) per consumo da
+    // combat.tsx senza fallback su snapshot locale.
     const launchContext = {
       battle_engine_mode: 'preview',
       is_preview: true,
@@ -662,6 +691,12 @@ export default function PreBattleLobbyScreen() {
       source_id: encounter.source_id,
       source_type: encounter.source_type,
       qa_fallback_used: qaFallbackEnabled && !launchAllowedNormal,
+      // HOTFIX G — V1 propagation: user_hero_id resta owned id primario;
+      // canonical_id solo metadata.
+      team_formation_v1: hotfixGTeamV1,
+      team_formation_v1_warnings: hotfixGTeamV1Warnings,
+      team_formation_v1_size: hotfixGTeamV1.length,
+      hotfix_g_frontend_v1_propagation: true,
     };
     const battle_launch_id = `v108_postqa_${Date.now()}`;
     const target = `/combat?mode=${encodeURIComponent(mode)}&encounter_id=${encodeURIComponent(

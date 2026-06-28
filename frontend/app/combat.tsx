@@ -416,6 +416,17 @@ export default function CombatScreen() {
       )
         ? ((previewCtxLocal as any).team_formation_v1_warnings as any[])
         : [];
+      // HOTFIX G — guard fail-closed sulla V1 nel preview path. Refuse-by-default.
+      // owned id primario = user_hero_id; canonical_id solo metadata.
+      const v1Ambiguous = v1Warnings.filter(
+        (w: any) => w?.blocker === 'TEAM_FORMATION_LEGACY_AMBIGUOUS',
+      );
+      const hotfixGV1Blocker: string | null =
+        !Array.isArray(v1Slots) || v1Slots.length === 0
+          ? 'FRONTEND_COMBAT_TEAMFORMATION_V1_REQUIRED'
+          : v1Ambiguous.length > 0
+          ? 'FRONTEND_COMBAT_TEAMFORMATION_V1_AMBIGUOUS'
+          : null;
       if (__DEV__ && v1Warnings.length > 0) {
         console.warn('[hotfix_f][combat] team_formation_v1 warnings:', v1Warnings);
       }
@@ -424,6 +435,16 @@ export default function CombatScreen() {
           '[hotfix_f][combat] team_formation_v1 slots:',
           v1Slots.map(s => ({ uh: s.user_hero_id, c: s.canonical_id, col: s.col, row: s.row })),
         );
+      }
+      if (hotfixGV1Blocker) {
+        if (__DEV__) console.warn('[hotfix_g][combat] V1 blocker, no fake team:', {
+          blocker: hotfixGV1Blocker,
+          v1_size: v1Slots.length,
+          ambiguous_count: v1Ambiguous.length,
+        });
+        // Preview-only: NON costruiamo snapshot locale. Lasciamo il branch
+        // sotto a `buildPreviewCombatSnapshot` solo come fallback se context
+        // V1 manca, ma marchiamo l'errore. NO /api/battle/simulate. NO reward.
       }
       const snap = buildPreviewCombatSnapshot(previewCtxLocal);
       if (!snap) {
